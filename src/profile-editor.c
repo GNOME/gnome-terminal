@@ -23,6 +23,7 @@
 #include "terminal-intl.h"
 #include <glade/glade.h>
 #include <libgnomeui/gnome-color-picker.h>
+#include <libgnomeui/gnome-font-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <string.h>
@@ -130,6 +131,8 @@ static void       profile_editor_update_use_theme_colors     (GtkWidget       *w
                                                               TerminalProfile *profile);
 static void       profile_editor_update_use_system_font      (GtkWidget       *widget,
                                                               TerminalProfile *profile);
+static void       profile_editor_update_font                 (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
 
 
 static void profile_forgotten (TerminalProfile     *profile,
@@ -185,6 +188,44 @@ profile_editor_destroyed (GtkWidget       *editor,
   
   g_object_set_data (G_OBJECT (profile), "editor-window", NULL);
   g_object_set_data (G_OBJECT (editor), "glade-xml", NULL);
+}
+
+static PangoFontDescription*
+fontpicker_get_desc (GtkWidget *font_picker)
+{
+  const char *current_name;
+  PangoFontDescription *current_desc;
+
+  current_name = gnome_font_picker_get_font_name (GNOME_FONT_PICKER (font_picker));
+  if (current_name)
+    current_desc = pango_font_description_from_string (current_name);
+  else
+    current_desc = NULL;
+
+  return current_desc;
+}
+
+static void
+fontpicker_set_if_changed (GtkWidget                  *font_picker,
+                           const PangoFontDescription *font_desc)
+{
+  PangoFontDescription *current_desc;
+
+  current_desc = fontpicker_get_desc (font_picker);
+
+  if (current_desc == NULL || !pango_font_description_equal (font_desc, current_desc))
+    {
+      char *str;
+
+      str = pango_font_description_to_string (font_desc);
+      gnome_font_picker_set_font_name (GNOME_FONT_PICKER (font_picker),
+                                       str);
+
+      g_free (str);
+    }
+
+  if (current_desc)
+    pango_font_description_free (current_desc);
 }
 
 /*
@@ -296,6 +337,9 @@ profile_changed (TerminalProfile          *profile,
     
   if (mask & TERMINAL_SETTING_USE_SYSTEM_FONT)
     profile_editor_update_use_system_font (editor, profile);
+
+  if (mask & TERMINAL_SETTING_FONT)
+    profile_editor_update_font (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -701,6 +745,32 @@ use_system_font_toggled (GtkWidget       *checkbutton,
                                         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
+static void
+font_set (GtkWidget       *fontpicker,
+          const char      *font_name,
+          TerminalProfile *profile)
+{
+  PangoFontDescription *desc;
+  PangoFontDescription *tmp;
+  
+  desc = pango_font_description_from_string (font_name);
+  if (desc == NULL)
+    {
+      g_warning ("Font name \"%s\" from font picker can't be parsed", font_name);
+      return;
+    }
+
+  /* Merge as paranoia against fontpicker giving us some junk */
+  tmp = pango_font_description_copy (terminal_profile_get_font (profile));
+  pango_font_description_merge (tmp, desc, TRUE);
+  pango_font_description_free (desc);
+  desc = tmp;
+  
+  terminal_profile_set_font (profile, desc);
+
+  pango_font_description_free (desc);
+}
+
 /*
  * initialize widgets
  */
@@ -1099,26 +1169,45 @@ terminal_profile_edit (TerminalProfile *profile,
       profile_editor_update_palette (editor, profile);
 
       w = glade_xml_get_widget (xml, "font-hbox");
-  
-      fontsel = egg_xfont_selector_new ();
-      g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
- 
-      profile_editor_update_x_font (editor, profile);
-      
-      g_signal_connect (fontsel, "changed",
-			G_CALLBACK (font_changed), profile);
 
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      gtk_size_group_add_widget (size_group,
-                                 EGG_XFONT_SELECTOR (fontsel)->family_label);
-      gtk_size_group_add_widget (size_group,
-                                 glade_xml_get_widget (xml,
-                                                       "profile-name-label"));
-      gtk_size_group_add_widget (size_group,
-                                 glade_xml_get_widget (xml,
-                                                       "profile-icon-label"));
-      g_object_unref (G_OBJECT (size_group));
+      if (terminal_widget_supports_pango_fonts ())
+        {
+          fontsel = gnome_font_picker_new ();
+          g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
+
+          gnome_font_picker_set_title (GNOME_FONT_PICKER (fontsel),
+                                       _("Choose a terminal font"));
+          gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontsel),
+                                      GNOME_FONT_PICKER_MODE_FONT_INFO);
+          gnome_font_picker_fi_set_show_size (GNOME_FONT_PICKER (fontsel), TRUE);
+
+          profile_editor_update_font (editor, profile);
+          g_signal_connect (G_OBJECT (fontsel), "font_set",
+                            G_CALLBACK (font_set),
+                            profile);
+        }
+      else
+        {
+          fontsel = egg_xfont_selector_new ();
+          g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
+ 
+          profile_editor_update_x_font (editor, profile);
       
+          g_signal_connect (fontsel, "changed",
+                            G_CALLBACK (font_changed), profile);
+
+          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          gtk_size_group_add_widget (size_group,
+                                     EGG_XFONT_SELECTOR (fontsel)->family_label);
+          gtk_size_group_add_widget (size_group,
+                                     glade_xml_get_widget (xml,
+                                                           "profile-name-label"));
+          gtk_size_group_add_widget (size_group,
+                                     glade_xml_get_widget (xml,
+                                                           "profile-icon-label"));
+          g_object_unref (G_OBJECT (size_group));
+        }
+          
       gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
       gtk_widget_show_all (w);
       
@@ -1278,8 +1367,12 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "palette-optionmenu",
                    mask & TERMINAL_SETTING_PALETTE);
 
-  set_insensitive (editor, "font-hbox",
-                   mask & TERMINAL_SETTING_X_FONT);
+  if (terminal_widget_supports_pango_fonts ())
+    set_insensitive (editor, "font-hbox",
+                     mask & TERMINAL_SETTING_FONT);
+  else    
+    set_insensitive (editor, "font-hbox",
+                     mask & TERMINAL_SETTING_X_FONT);
 
   set_insensitive (editor, "solid-radiobutton",
                    mask & TERMINAL_SETTING_BACKGROUND_TYPE);
@@ -1693,6 +1786,9 @@ profile_editor_update_x_font (GtkWidget       *editor,
   char *weights[] = { "medium", "regular", NULL };
   gchar *name;
 
+  if (terminal_widget_supports_pango_fonts ())
+    return;
+  
   fontsel = g_object_get_data (G_OBJECT (editor), "font-selector");
 
   /* If the current selector font is the same as the new font,
@@ -1835,6 +1931,21 @@ profile_editor_update_use_system_font (GtkWidget       *editor,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                 terminal_profile_get_use_system_font (profile));
 #endif
+}
+
+static void
+profile_editor_update_font (GtkWidget       *editor,
+                            TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  if (!terminal_widget_supports_pango_fonts ())
+    return;
+  
+  w = g_object_get_data (G_OBJECT (editor), "font-selector");
+
+  fontpicker_set_if_changed (w,
+                             terminal_profile_get_font (profile));
 }
 
 static GtkWidget*

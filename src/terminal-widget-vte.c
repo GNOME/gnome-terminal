@@ -23,7 +23,7 @@
 
 #include <vte/vte.h>
 
-#define UNIMPLEMENTED g_warning (G_STRLOC": unimplemented")
+#define UNIMPLEMENTED /* g_warning (G_STRLOC": unimplemented") */
 
 typedef struct
 {
@@ -192,7 +192,11 @@ terminal_widget_set_background_image_file (GtkWidget  *widget,
 					   const char *fname)
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_background_image_file(VTE_TERMINAL(widget), fname);
+
+  if (fname)
+    vte_terminal_set_background_image_file(VTE_TERMINAL(widget), fname);
+  else
+    vte_terminal_set_background_image(VTE_TERMINAL(widget), NULL);
 }
 
 void
@@ -247,7 +251,7 @@ terminal_widget_set_colors (GtkWidget      *widget,
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
   vte_terminal_set_colors(VTE_TERMINAL(widget), foreground, background,
-			  palette_entries, 16);
+			  palette_entries, TERMINAL_PALETTE_SIZE);
 }
 
 void
@@ -415,6 +419,22 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
   UNIMPLEMENTED;
 }
 
+void
+terminal_widget_set_pango_font (GtkWidget                  *widget,
+                                const PangoFontDescription *font_desc)
+{
+  VteTerminal *terminal;
 
+  g_return_if_fail (font_desc != NULL);
+  
+  terminal = VTE_TERMINAL (widget);
 
+  vte_terminal_set_font (terminal, font_desc);
+}
+
+gboolean
+terminal_widget_supports_pango_fonts (void)
+{
+  return TRUE;
+}
 

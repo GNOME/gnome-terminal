@@ -67,6 +67,7 @@
 #define KEY_DELETE_BINDING "delete_binding"
 #define KEY_USE_THEME_COLORS "use_theme_colors"
 #define KEY_USE_SYSTEM_FONT "use_system_font"
+#define KEY_FONT "font"
 
 struct _TerminalProfilePrivate
 {
@@ -107,6 +108,8 @@ struct _TerminalProfilePrivate
   double background_darkness;
   TerminalEraseBinding backspace_binding;
   TerminalEraseBinding delete_binding;
+
+  PangoFontDescription *font;
   
   guint icon_load_failed : 1;
   guint background_load_failed : 1;
@@ -284,6 +287,11 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
   profile->priv->use_theme_colors = TRUE;
   profile->priv->use_system_font = TRUE;
+  profile->priv->font = pango_font_description_new ();
+  pango_font_description_set_family (profile->priv->font,
+                                     "monospace");
+  pango_font_description_set_size (profile->priv->font,
+                                   PANGO_SCALE * 12);
 }
 
 static void
@@ -342,6 +350,8 @@ terminal_profile_finalize (GObject *object)
   g_free (profile->priv->background_image_file);
   if (profile->priv->background_image)
     g_object_unref (G_OBJECT (profile->priv->background_image));
+
+  pango_font_description_free (profile->priv->font);
   
   g_free (profile->priv);
   
@@ -1423,6 +1433,41 @@ terminal_profile_set_use_system_font (TerminalProfile *profile,
   g_free (key);
 }
 
+
+const PangoFontDescription*
+terminal_profile_get_font (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->font;
+}
+
+void
+terminal_profile_set_font (TerminalProfile            *profile,
+                           const PangoFontDescription *font_desc)
+{
+  char *key;
+  char *str;
+
+  g_return_if_fail (font_desc != NULL);
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_FONT);
+
+  str = pango_font_description_to_string (font_desc);
+  g_return_if_fail (str);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           str,
+                           NULL);
+
+  g_free (str);
+  g_free (key);
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -1764,6 +1809,45 @@ set_delete_binding (TerminalProfile *profile,
   else
     {
       return FALSE;
+    }
+}
+
+static gboolean
+set_font (TerminalProfile *profile,
+          const char      *candidate_font_name)
+{
+  PangoFontDescription *desc;
+  PangoFontDescription *tmp;
+  
+  if (candidate_font_name == NULL)
+    return FALSE; /* leave old font */
+
+  desc = pango_font_description_from_string (candidate_font_name);
+  if (desc == NULL)
+    {
+      g_printerr (_("GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"),
+                  candidate_font_name);
+      return FALSE; /* leave the old font */
+    }
+
+  /* Merge in case the new string isn't complete enough to
+   * load a font
+   */
+  tmp = pango_font_description_copy (profile->priv->font);
+  pango_font_description_merge (tmp, desc, TRUE);
+  pango_font_description_free (desc);
+  desc = tmp;
+  
+  if (pango_font_description_equal (profile->priv->font, desc))
+    {
+      pango_font_description_free (desc);
+      return FALSE;
+    }
+  else
+    {
+      pango_font_description_free (profile->priv->font);
+      profile->priv->font = desc;
+      return TRUE;
     }
 }
 
@@ -2262,6 +2346,21 @@ terminal_profile_update (TerminalProfile *profile)
     locked |= TERMINAL_SETTING_USE_SYSTEM_FONT;
   
   g_free (key);
+
+  /* KEY_FONT */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_FONT);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_font (profile, str_val))
+    mask |= TERMINAL_SETTING_FONT;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_FONT;
+  
+  g_free (key);
   
   /* Update state and emit signals */
   
@@ -2755,6 +2854,19 @@ profile_change_notify (GConfClient *client,
         }
 
       UPDATE_LOCKED (TERMINAL_SETTING_USE_SYSTEM_FONT);
+    }
+  else if (strcmp (key, KEY_FONT) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_font (profile, str_val))
+        mask |= TERMINAL_SETTING_FONT;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_FONT);
     }
   
   if (mask != 0 || old_locked != profile->priv->locked)
@@ -3469,6 +3581,17 @@ terminal_profile_create (TerminalProfile *base_profile,
   gconf_client_set_bool (base_profile->priv->conf,
                          key, base_profile->priv->use_system_font,
                          &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_FONT);
+  s = pango_font_description_to_string (base_profile->priv->font);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, s,
+                           &err);
+  g_free (s);
+  
   BAIL_OUT_CHECK ();
   
   

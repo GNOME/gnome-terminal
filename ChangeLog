@@ -1,3 +1,19 @@
+2002-04-22  Havoc Pennington  <hp@redhat.com>
+
+	* src/profile-editor.c: support choosing a pango font for terminal
+	widget implementations that handle it
+
+	* src/terminal-screen.c (terminal_screen_update_on_realize): set
+	pango font
+
+	* src/terminal-profile.c: add the pango font setting
+
+	* src/profterm.schemas: add setting for Pango font name
+
+	* src/terminal-widget-vte.c (terminal_widget_set_colors): use
+	TERMINAL_PALETTE_SIZE instead of hardcoded "16" for the number of
+	palette entries
+
 2002-04-21  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-window.c (terminal_window_set_size): use

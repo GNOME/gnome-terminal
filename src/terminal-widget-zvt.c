@@ -1083,3 +1083,16 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
 {
   zvt_term_writechild (ZVT_TERM (widget), (char*) data, len);
 }
+
+void
+terminal_widget_set_pango_font (GtkWidget                  *widget,
+                                const PangoFontDescription *font_desc)
+{
+  ; /* does nothing */
+}
+
+gboolean
+terminal_widget_supports_pango_fonts (void)
+{
+  return FALSE;
+}

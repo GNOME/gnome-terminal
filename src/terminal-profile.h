@@ -63,9 +63,11 @@ typedef enum
   TERMINAL_SETTING_BACKSPACE_BINDING    = 1 << 27,
   TERMINAL_SETTING_DELETE_BINDING       = 1 << 28,
   TERMINAL_SETTING_USE_THEME_COLORS     = 1 << 29,
-  TERMINAL_SETTING_USE_SYSTEM_FONT       = 1 << 30
+  TERMINAL_SETTING_USE_SYSTEM_FONT      = 1 << 30,
+  TERMINAL_SETTING_FONT                 = 1 << 31
 
-  /* When we get to 31 we need to do something else ;-) */
+  /* Out of bits! To add a setting you have to write a bunch of code ;-) */
+  
 } TerminalSettingMask;
 
 typedef enum
@@ -183,6 +185,7 @@ TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfi
 
 gboolean               terminal_profile_get_use_theme_colors      (TerminalProfile *profile);
 gboolean               terminal_profile_get_use_system_font        (TerminalProfile *profile);
+const PangoFontDescription* terminal_profile_get_font             (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -254,6 +257,9 @@ void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile
 
 void terminal_profile_set_use_system_font        (TerminalProfile        *profile,
                                                   gboolean                setting);
+
+void terminal_profile_set_font                   (TerminalProfile            *profile,
+                                                  const PangoFontDescription *font_desc);
 
 void terminal_profile_reset_compat_defaults     (TerminalProfile        *profile);
 

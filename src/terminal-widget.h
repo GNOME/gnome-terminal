@@ -143,6 +143,12 @@ void terminal_widget_write_data_to_child (GtkWidget  *widget,
                                           const char *data,
                                           int         len);
 
+void terminal_widget_set_pango_font (GtkWidget                  *widget,
+                                     const PangoFontDescription *font_desc);
+
+gboolean terminal_widget_supports_pango_fonts (void);
+
+
 G_END_DECLS
 
 #endif /* TERMINAL_WIDGET_H */

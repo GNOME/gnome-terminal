@@ -488,34 +488,51 @@ terminal_screen_update_on_realize (GtkWidget      *term,
   
   update_color_scheme (screen);
 
-  if (FALSE && /* Disabled until there's GUI for it and it sucks less. */
-      terminal_profile_get_use_system_font (profile))
+  if (terminal_widget_supports_pango_fonts ())
     {
-#if 0
-      /* This doesn't work, because the system font isn't monospace. */
-      font = gtk_style_get_font (term->style);
-      if (font == NULL)
-        g_warning ("Could not get system font from widget style");
-#endif
-      font = gdk_fontset_load ("-misc-fixed-medium-r-semicondensed--*-120-*-*-c-*-*-*");
+      if (FALSE && /* disabled until we have GUI for it */
+          terminal_profile_get_use_system_font (profile))
+        {
+          terminal_widget_set_pango_font (term,
+                                          term->style->font_desc);
+        }
+      else
+        {
+          terminal_widget_set_pango_font (term,
+                                          terminal_profile_get_font (profile));
+        }
     }
   else
     {
-      font = gdk_fontset_load (terminal_profile_get_x_font (profile));
-      if (font == NULL)
-        {      
-          g_printerr (_("Could not load font \"%s\"\n"),
-                      terminal_profile_get_x_font (profile));
+      if (FALSE && /* Disabled until there's GUI for it and it sucks less. */
+          terminal_profile_get_use_system_font (profile))
+        {
+#if 0
+          /* This doesn't work, because the system font isn't monospace. */
+          font = gtk_style_get_font (term->style);
+          if (font == NULL)
+            g_warning ("Could not get system font from widget style");
+#endif
+          font = gdk_fontset_load ("-misc-fixed-medium-r-semicondensed--*-120-*-*-c-*-*-*");
+        }
+      else
+        {
+          font = gdk_fontset_load (terminal_profile_get_x_font (profile));
+          if (font == NULL)
+            {      
+              g_printerr (_("Could not load font \"%s\"\n"),
+                          terminal_profile_get_x_font (profile));
+            }
+        }
+
+      if (font)
+        {
+          terminal_widget_set_normal_gdk_font (term, font);
+          terminal_widget_set_bold_gdk_font (term, font);
+          gdk_font_unref (font);
         }
     }
-
-  if (font)
-    {
-      terminal_widget_set_normal_gdk_font (term, font);
-      terminal_widget_set_bold_gdk_font (term, font);
-      gdk_font_unref (font);
-    }
-
+  
   terminal_widget_set_allow_bold (term,
                                   terminal_profile_get_allow_bold (profile));
 
