@@ -1086,7 +1086,7 @@ parse_options_callback (poptContext              ctx,
       break;
       
     case OPTION_COMPAT:
-      g_printerr (_("Option given which is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"));
+      g_printerr (_("Option --%s is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"), opt->longName);
       break;
 
     case OPTION_STARTUP_ID:
@@ -3187,7 +3187,8 @@ terminal_app_get_clone_command (TerminalApp *app,
   
   argc = 1; /* argv[0] */
 
-  argc += 1; /* --use-factory or --disable-factory */
+  if (terminal_factory_disabled)
+    argc += 1; /* --disable-factory */
   
   argc += n_windows; /* one --with-window-profile-internal-id per window,
                       * for the first tab in that window
@@ -3217,10 +3218,10 @@ terminal_app_get_clone_command (TerminalApp *app,
   ++i;
 
   if (terminal_factory_disabled)
-    argv[i] = g_strdup ("--disable-factory");
-  else
-    argv[i] = g_strdup ("--use-factory");
-  ++i;
+    {
+      argv[i] = g_strdup ("--disable-factory");
+      ++i;
+    }
   
   tmp = app->windows;
   while (tmp != NULL)

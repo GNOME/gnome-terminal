@@ -2153,14 +2153,15 @@ new_window_callback (GtkWidget      *menuitem,
 
   if (!terminal_profile_get_forgotten (profile))
     {
-      char *name;
+      char *name, *dir;
       
       name = gdk_screen_make_display_name (gtk_widget_get_screen (menuitem));
+      dir = terminal_screen_get_working_dir (window->priv->active_term);
 
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  NULL,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                                 FALSE, FALSE, NULL, NULL, NULL, dir, NULL, 1.0,
                                  NULL, name, -1);
 
       g_free (name);
@@ -2180,10 +2181,14 @@ new_tab_callback (GtkWidget      *menuitem,
 
   if (!terminal_profile_get_forgotten (profile))
     {
+      char *dir;
+
+      dir = terminal_screen_get_working_dir (window->priv->active_term);
+
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                                 FALSE, FALSE, NULL, NULL, NULL, dir, NULL, 1.0,
                                  NULL, NULL, -1);
     }
 }

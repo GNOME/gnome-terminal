@@ -1290,6 +1290,24 @@ terminal_screen_do_popup (TerminalScreen *screen,
                              GTK_WIDGET (screen->priv->term),
                              popup_menu_detach);
 
+  if (screen->priv->matched_string != NULL) 
+    {
+      menu_item = append_menuitem (screen->priv->popup_menu,
+                                   _("_Open Link"),
+                                   G_CALLBACK (open_url_callback),
+                                   screen);
+      
+      menu_item = append_menuitem (screen->priv->popup_menu,
+                                   _("_Copy Link Address"),
+                                   G_CALLBACK (copy_url_callback),
+                                   screen);
+  
+      menu_item = gtk_separator_menu_item_new ();
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
+                             menu_item);
+    }
+ 
   menu_item = append_menuitem (screen->priv->popup_menu,
                                _("_New Window"),
                                G_CALLBACK (new_window_callback),
@@ -1412,21 +1430,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
                    G_CALLBACK (secure_keyboard_callback),
                    screen);
 #endif
-
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("_Open Link"),
-                               G_CALLBACK (open_url_callback),
-                               screen);
-
-  gtk_widget_set_sensitive (menu_item, screen->priv->matched_string != NULL);
-  
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("_Copy Link Address"),
-                               G_CALLBACK (copy_url_callback),
-                               screen);
-
-  gtk_widget_set_sensitive (menu_item, screen->priv->matched_string != NULL);
-  
+ 
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
                   NULL, NULL, 

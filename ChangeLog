@@ -1,3 +1,18 @@
+2003-06-24  Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+	* src/terminal.c(parse_options_callback): Make `deprecated option'
+	message mention the option; fixes bug #109356.
+
+	* src/terminal.c(terminal_app_get_clone_command): Don't put
+	--use-factory in the clone command. From the patch given in #109356.
+
+	* src/terminal-screen.c(terminal_screen_do_popup): Don't show the 
+	`Open/Copy Link' items in the context menu, unless the click was on a
+	link, and in that case move then to the top. Fixes #110999.
+
+	* src/terminal-window.c(new_window_callback, new_tab_callback): Make
+	new windows/tabs start in the current directory as the current tab.
+	Fixes bug #89029.
+
 2003-06-17  Nalin Dahyabhai <nalin@redhat.com>
 	* src/terminal-widget-vte.c: correctly handle cases where we have
 	more than one URL or skey pattern (which we already do for URLs).
