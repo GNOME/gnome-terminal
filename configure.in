@@ -42,8 +42,21 @@ AM_GLIB_GNU_GETTEXT
 
 AC_PATH_XTRA
 
+GTK_REQUIRED=2.5.4
+GCONF_REQUIRED=1.1.9
+STARTUP_NOTIFICATION_REQUIRED=0.8
+VTE_REQUIRED=0.11.10
+GNOMEVFS_REQUIRED=2.4
+
 ## here we get the flags we'll actually use
-PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 2.5.4 gconf-2.0 >= 1.1.9 libglade-2.0 libgnomeui-2.0 libstartup-notification-1.0 >= 0.4 vte >= 0.11.10 gnome-vfs-2.0 >= 2.4)
+PKG_CHECK_MODULES(TERM, dnl
+ gtk+-2.0 >= $GTK_REQUIRED dnl
+ gconf-2.0 >= $GCONF_REQUIRED dnl
+ libglade-2.0 dnl
+ libgnomeui-2.0 dnl
+ libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED dnl
+ vte >= $VTE_REQUIRED dnl
+ gnome-vfs-2.0 >= $GNOMEVFS_REQUIRED)
 
 TERM_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $TERM_LIBS"
 TERM_CFLAGS="$X_CFLAGS $TERM_CFLAGS"
