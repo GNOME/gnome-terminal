@@ -618,6 +618,7 @@ egg_cell_renderer_keys_set_accelerator (EggCellRendererKeys *keys,
       celltext = GTK_CELL_RENDERER_TEXT (keys);
       text = convert_keysym_state_to_string (keys->accel_key, keys->accel_mask);
       g_object_set (keys, "text", text, NULL);
+      g_free (text);
     }
   
 }
