@@ -73,7 +73,6 @@ static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_update_on_realize (GtkWidget      *widget,
                                                TerminalScreen *screen);
-
 static void     terminal_screen_popup_menu         (GtkWidget      *term,
                                                     TerminalScreen *screen);
 static gboolean terminal_screen_button_press_event (GtkWidget      *term,
@@ -140,6 +139,16 @@ terminal_screen_get_type (void)
   return object_type;
 }
 
+
+static void
+style_set_callback (GtkWidget *widget,
+                    GtkStyle  *previous_style,
+                    void      *data)
+{
+  if (GTK_WIDGET_REALIZED (widget))
+    terminal_screen_update_on_realize (widget, TERMINAL_SCREEN (data));  
+}
+
 static void
 terminal_screen_init (TerminalScreen *screen)
 {
@@ -177,6 +186,11 @@ terminal_screen_init (TerminalScreen *screen)
                     screen);
 
   g_signal_connect (G_OBJECT (screen->priv->term),
+                    "style_set",
+                    G_CALLBACK (style_set_callback),
+                    screen);
+  
+  g_signal_connect (G_OBJECT (screen->priv->term),
                     "popup_menu",
                     G_CALLBACK (terminal_screen_popup_menu),
                     screen);
@@ -209,7 +223,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   parent_class = g_type_class_peek_parent (klass);
   
   object_class->finalize = terminal_screen_finalize;
-
+  
   signals[PROFILE_SET] =
     g_signal_new ("profile_set",
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -805,7 +819,7 @@ get_child_command (TerminalScreen *screen,
   else
     {
       const char *only_name;
-      const char *shell;
+      char *shell;
 
       shell = gnome_util_user_shell ();
 
