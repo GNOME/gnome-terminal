@@ -47,7 +47,8 @@ void terminal_app_new_terminal (TerminalApp     *app,
                                 const char      *geometry,
                                 const char      *title,
                                 const char      *working_dir,
-                                const char      *role);
+                                const char      *role,
+                                double           zoom);
 
 void terminal_app_manage_profiles (TerminalApp     *app,
                                    GtkWindow       *transient_parent);

@@ -56,6 +56,7 @@ struct _TerminalScreenPrivate
   GtkWidget *title_entry;
   char *working_dir;
   int child_pid;
+  double font_scale;
   guint recheck_working_dir_idle;
 };
 
@@ -164,6 +165,8 @@ terminal_screen_init (TerminalScreen *screen)
   screen->priv->recheck_working_dir_idle = 0;
   
   screen->priv->term = terminal_widget_new ();
+
+  screen->priv->font_scale = PANGO_SCALE_MEDIUM;
   
   g_object_ref (G_OBJECT (screen->priv->term));
   gtk_object_sink (GTK_OBJECT (screen->priv->term));
@@ -502,6 +505,9 @@ update_color_scheme (TerminalScreen *screen)
                               &fg, &bg, palette);
 }
 
+/* Note this can be called on style_set, on prefs changing,
+ * and on setting the font scale factor
+ */
 static void
 terminal_screen_update_on_realize (GtkWidget      *term,
                                    TerminalScreen *screen)
@@ -539,20 +545,33 @@ terminal_screen_update_on_realize (GtkWidget      *term,
                                                    pango_font_description_get_size (term->style->font_desc));
                 }
 
-              terminal_widget_set_pango_font (term,
-                                              terminal_profile_get_font (profile));
+              pango_font_description_set_size (desc,
+                                               screen->priv->font_scale *
+                                               pango_font_description_get_size (desc));
+              
+              terminal_widget_set_pango_font (term, desc);
 
               pango_font_description_free (desc);
             }
         }
       else
         {
-          terminal_widget_set_pango_font (term,
-                                          terminal_profile_get_font (profile));
+          PangoFontDescription *desc;
+
+          desc = pango_font_description_copy (terminal_profile_get_font (profile));
+          pango_font_description_set_size (desc,
+                                           screen->priv->font_scale *
+                                           pango_font_description_get_size (desc));          
+          
+          terminal_widget_set_pango_font (term, desc);
+
+          pango_font_description_free (desc);
         }
     }
   else
     {
+      /* font_scale is not supported in X fonts mode */
+      
       GdkFont *font;
 
       font = NULL;
@@ -975,7 +994,7 @@ new_window_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_profile_get_for_new_term (screen->priv->profile),
                              NULL,
-                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
 }
 
 static void
@@ -985,7 +1004,7 @@ new_tab_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_profile_get_for_new_term (screen->priv->profile),
                              screen->priv->window,
-                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
 }
 
 static void
@@ -1503,6 +1522,37 @@ queue_recheck_working_dir (TerminalScreen *screen)
                          screen,
                          NULL);
     }
+}
+
+
+void
+terminal_screen_set_font_scale (TerminalScreen *screen,
+                                double          factor)
+{
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+
+  if (factor < TERMINAL_SCALE_MINIMUM)
+    factor = TERMINAL_SCALE_MINIMUM;
+  if (factor > TERMINAL_SCALE_MAXIMUM)
+    factor = TERMINAL_SCALE_MAXIMUM;
+  
+  screen->priv->font_scale = factor;
+  
+  if (screen->priv->term &&
+      GTK_WIDGET_REALIZED (screen->priv->term))
+    {
+      /* Update the font */
+      terminal_screen_update_on_realize (screen->priv->term,
+                                         screen);
+    }
+}
+
+double
+terminal_screen_get_font_scale (TerminalScreen *screen)
+{
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), 1.0);
+  
+  return screen->priv->font_scale;
 }
 
 static void

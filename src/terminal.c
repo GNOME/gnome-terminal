@@ -149,6 +149,7 @@ enum {
   OPTION_DISABLE_FACTORY,
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
+  OPTION_ZOOM,
   OPTION_COMPAT,
   OPTION_LAST
 };  
@@ -281,6 +282,16 @@ struct poptOption options[] = {
     N_("DIRNAME")
   },
 
+  {
+    "zoom",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_ZOOM,
+    N_("Set the terminal's zoom factor (1.0 = normal size)"),
+    N_("ZOOMFACTOR")
+  },
+  
   /*
    * Crappy old compat args
    */
@@ -479,6 +490,8 @@ typedef struct
   char **exec_argv;
   char *title;
   char *working_dir;
+  double zoom;
+  guint zoom_set : 1;
 } InitialTab;
 
 typedef struct
@@ -506,6 +519,8 @@ initial_tab_new (const char *profile,
   it->exec_argv = NULL;
   it->title = NULL;
   it->working_dir = NULL;
+  it->zoom = 1.0;
+  it->zoom_set = FALSE;
   
   return it;
 }
@@ -942,6 +957,63 @@ parse_options_callback (poptContext              ctx,
       }
       break;
 
+    case OPTION_ZOOM:
+      {
+        InitialTab *it;            
+        double val;
+        char *end;
+        
+        if (arg == NULL)
+          {
+            g_printerr (_("Option --zoom requires an argument giving the zoom factor\n"));
+            exit (1);
+          }
+
+        it = ensure_top_tab (results);
+
+        if (it->zoom_set)
+          {
+            g_printerr (_("Two zoom factors given for one tab\n"));
+            exit (1);
+          }
+
+        /* Try reading a locale-style double first, in case it was
+         * typed by a person, then fall back to ascii_strtod (we
+         * always save session in C locale format)
+         */
+        end = NULL;
+        val = g_strtod (arg, &end);
+        if (end == NULL || *end != '\0')
+          {
+            val = g_ascii_strtod (arg, &end);
+            if (end == NULL || *end != '\0')
+              {
+                g_printerr (_("\"%s\" is not a valid zoom factor\n"),
+                            arg);
+                exit (1);
+              }
+          }
+
+        if (val < (TERMINAL_SCALE_MINIMUM + 1e-6))
+          {
+            g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
+                        val, TERMINAL_SCALE_MINIMUM);
+            val = TERMINAL_SCALE_MINIMUM;
+          }
+
+        if (val > (TERMINAL_SCALE_MAXIMUM - 1e-6))
+          {
+            g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
+                        val, TERMINAL_SCALE_MAXIMUM);
+            val = TERMINAL_SCALE_MAXIMUM;
+          }
+        
+        it->zoom = val;
+        it->zoom_set = TRUE;
+      }
+      break;
+
+      
     case OPTION_COMPAT:
       g_printerr (_("Option given which is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"));
       break;
@@ -1081,7 +1153,9 @@ new_terminal_with_options (OptionParsingResults *results)
                                          iw->geometry,
                                          it->title,
                                          it->working_dir,
-                                         iw->role);
+                                         iw->role,
+                                         it->zoom_set ?
+                                         it->zoom : 1.0);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -1095,7 +1169,9 @@ new_terminal_with_options (OptionParsingResults *results)
                                          NULL,
                                          it->title,
                                          it->working_dir,
-                                         NULL);
+                                         NULL,
+                                         it->zoom_set ?
+                                         it->zoom : 1.0);
             }
           
           tmp2 = tmp2->next;
@@ -1281,7 +1357,8 @@ terminal_app_new_terminal (TerminalApp     *app,
                            const char      *geometry,
                            const char      *title,
                            const char      *working_dir,
-                           const char      *role)
+                           const char      *role,
+                           double           zoom)
 {
   TerminalScreen *screen;
   gboolean window_created;
@@ -1308,7 +1385,7 @@ terminal_app_new_terminal (TerminalApp     *app,
           new_role = g_strdup_printf ("gnome-terminal-%d-%d-%d",
                                       getpid (),
                                       g_random_int (),
-                                      time (NULL));
+                                      (int) time (NULL));
           gtk_window_set_role (GTK_WINDOW (window), new_role);
           g_free (new_role);
         }
@@ -1335,6 +1412,8 @@ terminal_app_new_terminal (TerminalApp     *app,
   
   if (override_command)    
     terminal_screen_set_override_command (screen, override_command);
+
+  terminal_screen_set_font_scale (screen, zoom);
   
   terminal_window_add_screen (window, screen);
 
@@ -2763,6 +2842,8 @@ terminal_app_get_clone_command (TerminalApp *app,
   argc += n_tabs * 2; /* one "--title foo" per tab */
 
   argc += n_tabs * 2; /* one "--working-directory foo" per tab */
+
+  argc += n_tabs * 2; /* one "--zoom" per tab */
   
   argv = g_new0 (char*, argc + 1);
 
@@ -2792,6 +2873,7 @@ terminal_app_get_clone_command (TerminalApp *app,
           const char *profile_id;
           const char **override_command;
           const char *title;
+          double zoom;
           
           profile_id = terminal_profile_get_name (terminal_screen_get_profile (screen));
           
@@ -2844,6 +2926,19 @@ terminal_app_get_clone_command (TerminalApp *app,
           ++i;
           argv[i] = g_strdup (terminal_screen_get_working_dir (screen));
           ++i;
+
+          zoom = terminal_screen_get_font_scale (screen);
+          if (zoom < -1e-6 || zoom > 1e-6) /* if not 1.0 */
+            {
+              char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+              g_ascii_dtostr (buf, sizeof (buf), zoom);
+              
+              argv[i] = g_strdup ("--zoom");
+              ++i;
+              argv[i] = g_strdup (buf);
+              ++i;
+            }
           
           tmp2 = tmp2->next;
         }

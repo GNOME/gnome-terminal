@@ -52,6 +52,9 @@ struct _TerminalWindowPrivate
   GtkWidget *copy_menuitem;
   GtkWidget *paste_menuitem;
   GtkWidget *fullscreen_menuitem;
+  GtkWidget *zoom_in_menuitem;
+  GtkWidget *zoom_out_menuitem;
+  GtkWidget *zoom_normal_menuitem;
   GtkWidget *edit_config_menuitem;
   GtkWidget *delete_config_menuitem;
   GtkWidget *choose_config_menuitem;
@@ -145,6 +148,12 @@ static void toggle_menubar_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void fullscreen_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+static void zoom_in_callback              (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void zoom_out_callback             (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void zoom_normal_callback          (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
 static void set_title_callback            (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void change_encoding_callback      (GtkWidget      *menu_item,
@@ -172,6 +181,11 @@ static void set_menuitem_text (GtkWidget  *mi,
 
 static void terminal_menu_opened_callback (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+
+static gboolean find_larger_zoom_factor  (double  current,
+                                          double *found);
+static gboolean find_smaller_zoom_factor (double  current,
+                                          double *found);
 
 static gpointer parent_class;
 
@@ -604,6 +618,25 @@ terminal_menu_opened_callback (GtkWidget      *menuitem,
 }
 
 static void
+update_zoom_items (TerminalWindow *window)
+{
+  TerminalScreen *screen;
+  double ignored;
+  double current_zoom;
+  
+  screen = window->priv->active_term;
+  if (screen == NULL)
+    return;
+
+  current_zoom = terminal_screen_get_font_scale (screen);
+
+  gtk_widget_set_sensitive (window->priv->zoom_out_menuitem,
+                            find_smaller_zoom_factor (current_zoom, &ignored));
+  gtk_widget_set_sensitive (window->priv->zoom_in_menuitem,
+                            find_larger_zoom_factor (current_zoom, &ignored));
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
@@ -731,6 +764,20 @@ terminal_window_init (TerminalWindow *window)
   mi = append_menuitem (menu, _("_Full Screen"), ACCEL_PATH_FULL_SCREEN,
                         G_CALLBACK (fullscreen_callback), window);
   window->priv->fullscreen_menuitem = mi;
+
+  mi = append_menuitem (menu, _("_Zoom In"), ACCEL_PATH_ZOOM_IN,
+                        G_CALLBACK (zoom_in_callback), window);
+  window->priv->zoom_in_menuitem = mi;
+
+  mi = append_menuitem (menu, _("Zoom _Out"), ACCEL_PATH_ZOOM_OUT,
+                        G_CALLBACK (zoom_out_callback), window);
+  window->priv->zoom_out_menuitem = mi;
+
+  mi = append_menuitem (menu, _("_Normal Size"), ACCEL_PATH_ZOOM_NORMAL,
+                        G_CALLBACK (zoom_normal_callback), window);
+  window->priv->zoom_normal_menuitem = mi;
+  
+  update_zoom_items (window);
   
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
@@ -1402,6 +1449,7 @@ terminal_window_set_active (TerminalWindow *window,
 
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
+  update_zoom_items (window);
 }
 
 TerminalScreen*
@@ -1915,7 +1963,10 @@ terminal_window_set_fullscreen (TerminalWindow *window,
                                 gboolean        setting)
 {
   g_return_if_fail (GTK_WIDGET_REALIZED (window));
-  
+
+  /* FIXME the menuitem text needs to key off the event
+   * from the window manager. Easy with GTK 2.2
+   */
   if (setting)
     set_menuitem_text (window->priv->fullscreen_menuitem,
                        _("_Restore normal size"), FALSE);
@@ -1960,7 +2011,7 @@ new_window_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  NULL,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
     }
 }
 
@@ -1980,7 +2031,7 @@ new_tab_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
     }
 }
 
@@ -2127,6 +2178,126 @@ fullscreen_callback (GtkWidget      *menuitem,
   
   terminal_window_set_fullscreen (window,
                                   !terminal_window_get_fullscreen (window));
+}
+
+static double zoom_factors[] = {
+  TERMINAL_SCALE_MINIMUM,
+  TERMINAL_SCALE_XXXXX_SMALL,
+  TERMINAL_SCALE_XXXX_SMALL,
+  TERMINAL_SCALE_XXX_SMALL,
+  PANGO_SCALE_XX_SMALL,
+  PANGO_SCALE_X_SMALL,
+  PANGO_SCALE_SMALL,
+  PANGO_SCALE_MEDIUM,
+  PANGO_SCALE_LARGE,
+  PANGO_SCALE_X_LARGE,
+  PANGO_SCALE_XX_LARGE,
+  TERMINAL_SCALE_XXX_LARGE,
+  TERMINAL_SCALE_XXXX_LARGE,
+  TERMINAL_SCALE_XXXXX_LARGE,
+  TERMINAL_SCALE_MAXIMUM
+};
+
+static gboolean
+find_larger_zoom_factor (double  current,
+                         double *found)
+{
+  int i;
+  
+  i = 0;
+  while (i < (int) G_N_ELEMENTS (zoom_factors))
+    {
+      /* Find a font that's larger than this one */
+      if ((zoom_factors[i] - current) > 1e-6)
+        {
+          *found = zoom_factors[i];
+          return TRUE;
+        }
+      
+      ++i;
+    }
+  
+  return FALSE;
+}
+
+static gboolean
+find_smaller_zoom_factor (double  current,
+                          double *found)
+{
+  int i;
+  
+  i = (int) G_N_ELEMENTS (zoom_factors) - 1;
+  while (i >= 0)
+    {
+      /* Find a font that's smaller than this one */
+      if ((current - zoom_factors[i]) > 1e-6)
+        {
+          *found = zoom_factors[i];
+          return TRUE;
+        }
+      
+      --i;
+    }
+
+  return FALSE;
+}
+
+static void
+zoom_in_callback (GtkWidget      *menuitem,
+                  TerminalWindow *window)
+{
+  double current;
+  TerminalScreen *screen;
+  
+  screen = window->priv->active_term;
+
+  if (screen == NULL)
+    return;
+  
+  current = terminal_screen_get_font_scale (screen);
+
+  if (find_larger_zoom_factor (current, &current))
+    {
+      terminal_screen_set_font_scale (screen, current);
+      update_zoom_items (window);
+    }
+}
+
+static void
+zoom_out_callback (GtkWidget      *menuitem,
+                   TerminalWindow *window)
+{
+  double current;
+  TerminalScreen *screen;
+  
+  screen = window->priv->active_term;
+
+  if (screen == NULL)
+    return;
+  
+  current = terminal_screen_get_font_scale (screen);
+
+  if (find_smaller_zoom_factor (current, &current))
+    {
+      terminal_screen_set_font_scale (screen, current);
+      update_zoom_items (window);
+    }
+}
+
+static void
+zoom_normal_callback (GtkWidget      *menuitem,
+                      TerminalWindow *window)
+{
+  TerminalScreen *screen;
+  
+  screen = window->priv->active_term;
+
+  if (screen == NULL)
+    return;
+
+  terminal_screen_set_font_scale (screen,
+                                  PANGO_SCALE_MEDIUM);
+  update_zoom_items (window);
 }
 
 static void

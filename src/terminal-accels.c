@@ -45,6 +45,9 @@
 #define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 #define KEY_HELP CONF_KEYS_PREFIX"/help"
+#define KEY_ZOOM_IN CONF_KEYS_PREFIX"/zoom_in"
+#define KEY_ZOOM_OUT CONF_KEYS_PREFIX"/zoom_out"
+#define KEY_ZOOM_NORMAL CONF_KEYS_PREFIX"/zoom_normal"
 
 typedef struct
 {
@@ -94,6 +97,12 @@ static KeyEntry view_entries[] =
     KEY_TOGGLE_MENUBAR, ACCEL_PATH_TOGGLE_MENUBAR, 0, 0, NULL, FALSE },
   { N_("Full Screen"),
     KEY_FULL_SCREEN, ACCEL_PATH_FULL_SCREEN, 0, 0, NULL, FALSE },
+  { N_("Zoom In"),
+    KEY_ZOOM_IN, ACCEL_PATH_ZOOM_IN, 0, 0, NULL, FALSE },
+  { N_("Zoom Out"),
+    KEY_ZOOM_OUT, ACCEL_PATH_ZOOM_OUT, 0, 0, NULL, FALSE },
+  { N_("Normal Size"),
+    KEY_ZOOM_NORMAL, ACCEL_PATH_ZOOM_NORMAL, 0, 0, NULL, FALSE }
 };
 
 static KeyEntry terminal_entries[] =

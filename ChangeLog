@@ -1,3 +1,23 @@
+2002-10-04  Havoc Pennington  <hp@redhat.com>
+
+	* src/terminal.c: take --zoom command line option, save --zoom in
+	the session.
+
+	* src/gnome-terminal.schemas: add new keybindings
+
+	* src/terminal-accels.c: add Ctrl++ Ctrl+- Ctrl+= zoom shortcuts
+
+	* src/terminal.c (terminal_app_new_terminal): fix a warning about
+	printf format
+
+	* src/terminal-window.c: add font size menu items
+
+	* src/terminal-screen.c (terminal_screen_get_font_scale): new
+	function
+	(terminal_screen_set_font_scale): new function
+	(terminal_screen_update_on_realize): actually use the font size
+	derived from the system font, was broken before
+
 2002-09-29  Havoc Pennington  <hp@pobox.com>
 
 	* src/eggaccelerators.c: update from libegg, fixes

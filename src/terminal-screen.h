@@ -99,6 +99,20 @@ void        terminal_screen_set_working_dir   (TerminalScreen *screen,
                                                const char     *dirname);
 const char *terminal_screen_get_working_dir   (TerminalScreen *screen);
 
+void        terminal_screen_set_font_scale    (TerminalScreen *screen,
+                                               double          factor);
+double      terminal_screen_get_font_scale    (TerminalScreen *screen);
+
+/* Allow scales a bit smaller and a bit larger than the usual pango ranges */
+#define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)
+#define TERMINAL_SCALE_XXXX_SMALL  (TERMINAL_SCALE_XXX_SMALL/1.2)
+#define TERMINAL_SCALE_XXXXX_SMALL (TERMINAL_SCALE_XXXX_SMALL/1.2)
+#define TERMINAL_SCALE_XXX_LARGE   (PANGO_SCALE_XX_LARGE*1.2)
+#define TERMINAL_SCALE_XXXX_LARGE  (TERMINAL_SCALE_XXX_LARGE*1.2)
+#define TERMINAL_SCALE_XXXXX_LARGE (TERMINAL_SCALE_XXXX_LARGE*1.2)
+#define TERMINAL_SCALE_MINIMUM     (TERMINAL_SCALE_XXXXX_SMALL/1.2)
+#define TERMINAL_SCALE_MAXIMUM     (TERMINAL_SCALE_XXXXX_LARGE*1.2)
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_H */
