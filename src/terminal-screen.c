@@ -1202,7 +1202,7 @@ terminal_screen_button_press_event (GtkWidget      *zvt,
                                     GdkEventButton *event,
                                     TerminalScreen *screen)
 {
-  if (event->button == 1)
+  if (event->button == 1 || event->button == 2)
     {
       gtk_widget_grab_focus (zvt);
       return FALSE; /* pass thru the click */

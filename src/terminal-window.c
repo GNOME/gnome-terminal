@@ -766,6 +766,8 @@ terminal_window_set_active (TerminalWindow *window,
   /* set initial size of window if window isn't onscreen */
   if (!GTK_WIDGET_MAPPED (window))
     set_size (widget);
+
+  gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
 }
 
 TerminalScreen*
