@@ -39,6 +39,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 struct _TerminalScreenPrivate
 {
@@ -1513,26 +1514,77 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
 {
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
-  /* If we're on Linux and have a child PID, try to update
-   * the working dir
-   */
+  /* Try to update the working dir using various OS-specific mechanisms */
   if (screen->priv->child_pid >= 0)
     {
       char *file;
       char buf[PATH_MAX+1];
       int len;
-      
+
+      /* readlink (/proc/pid/cwd) will work on Linux */
       file = g_strdup_printf ("/proc/%d/cwd", screen->priv->child_pid);
 
       /* Silently ignore failure here, since we may not be on Linux */
       len = readlink (file, buf, sizeof (buf) - 1);
 
-      if (len >= 0)
+      /*
+       * If readlink fails, get the current working directory
+       * using the command 'pwdx'. This is specific to Solaris.
+       */
+      if (len > 0 && buf[0] == '/')
         {
           buf[len] = '\0';
           
           g_free (screen->priv->working_dir);
           screen->priv->working_dir = g_strdup (buf);
+        }
+      else
+        {
+          char *abs_command = NULL;
+          char *exec_command = NULL;
+          char *output = NULL;
+          int exit_status = 0;
+          
+          abs_command = g_find_program_in_path ("pwdx");
+          if (abs_command == NULL)
+            goto pwdx_out;
+
+          exec_command = g_strdup_printf ("%s %d", abs_command, 
+                                          screen->priv->child_pid);
+               
+          if (!g_spawn_command_line_sync (exec_command, &output, 
+                                          NULL, &exit_status, NULL))
+            goto pwdx_out;          
+               
+          if (WIFEXITED (exit_status) &&
+              WEXITSTATUS (exit_status) == 0 &&
+              output) 
+            {
+              /*
+               * 'pwdx' output format is:
+               * <pid>:\t<cwd>\n
+               */
+              char *p;
+
+              p = strstr (output, ":");
+              if (p == NULL)
+                goto pwdx_out;
+                   
+              while (*p == ' ' || *p == '\t')
+                ++p;
+              g_strchomp (p);
+                   
+              if (*p == '/')
+                {
+                  g_free (screen->priv->working_dir);
+                  screen->priv->working_dir = g_strdup (p);
+                }
+            }
+
+        pwdx_out:
+          g_free (abs_command);
+          g_free (exec_command);
+          g_free (output);
         }
       
       g_free (file);
