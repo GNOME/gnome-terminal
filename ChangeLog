@@ -1,5 +1,23 @@
 2002-05-01  Havoc Pennington  <hp@redhat.com>
 
+	* src/terminal-window.c (terminal_window_set_active): update the
+	choose-current-profile submenu when we change the active term
+	(fill_in_new_term_submenus): don't name the "new terminal" item
+	"Default", it was confusing. Just name it after the profile to be
+	used. Don't parse mnemonics on the profile name.
+	(profile_set_callback): update the choose-profile-for-this-tab
+	menu
+
+	* src/terminal.c (sync_profile_list): when profile list changes, 
+	have all the open windows reread the list.
+
+	* src/terminal-window.c (terminal_window_reread_profile_list): new
+	function to reload the profile list into the menus. #78904
+	(terminal_window_init): don't set up callbacks to demand-create
+	the profile list menus
+
+2002-05-01  Havoc Pennington  <hp@redhat.com>
+
 	* src/terminal-window.c (terminal_window_remove_screen): fix crash
 	on closing terminal (don't try to set size on active term 
 	if we just closed the last term)

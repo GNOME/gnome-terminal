@@ -1363,6 +1363,14 @@ sync_profile_list (gboolean use_this_list,
     refill_profile_treeview (app->manage_profiles_list);
   if (app->manage_profiles_default_menu)
     profile_optionmenu_refill (app->manage_profiles_default_menu);
+
+  tmp_list = app->windows;
+  while (tmp_list != NULL)
+    {
+      terminal_window_reread_profile_list (TERMINAL_WINDOW (tmp_list->data));
+
+      tmp_list = tmp_list->next;
+    }
 }
 
 static void

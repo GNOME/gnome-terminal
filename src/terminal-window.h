@@ -92,6 +92,7 @@ void     terminal_window_set_fullscreen (TerminalWindow *window,
                                          gboolean        setting);
 gboolean terminal_window_get_fullscreen (TerminalWindow *window);
 
+void terminal_window_reread_profile_list (TerminalWindow *window);
 
 G_END_DECLS
 

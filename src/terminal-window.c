@@ -341,16 +341,7 @@ fill_in_new_term_submenus (TerminalWindow *window)
       return;      
     }
 
-  /* FIXME profile name can have an underscore which breaks
-   * the mnemonic stuff
-   */
-  /* avoid "Default (Default)" but have "Default (foobar)" */
-  if (strcmp (terminal_profile_get_visible_name (default_profile),
-              "Default") == 0)
-    str = g_strdup (_("_Default"));
-  else
-    str = g_strdup_printf (_("_Default (%s)"),
-                           terminal_profile_get_visible_name (default_profile));
+  str = g_strdup (terminal_profile_get_visible_name (default_profile));
   
   gtk_widget_set_sensitive (window->priv->new_window_menuitem, TRUE);
   gtk_widget_set_sensitive (window->priv->new_tab_menuitem, TRUE);
@@ -364,7 +355,7 @@ fill_in_new_term_submenus (TerminalWindow *window)
                              new_window_menu);
 
   /* Add default menu item */
-  menu_item = gtk_menu_item_new_with_mnemonic (str);
+  menu_item = gtk_menu_item_new_with_label (str);
   gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (new_window_menu),
                          menu_item);
@@ -393,7 +384,7 @@ fill_in_new_term_submenus (TerminalWindow *window)
                              new_tab_menu);
 
   /* Add default menu item */
-  menu_item = gtk_menu_item_new_with_mnemonic (str);
+  menu_item = gtk_menu_item_new_with_label (str);
   gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (new_tab_menu),
                          menu_item);
@@ -480,20 +471,6 @@ fill_in_new_term_submenus (TerminalWindow *window)
 }
 
 static void
-terminal_menu_activated (GtkMenuItem    *menu_item,
-                         TerminalWindow *window)
-{
-  fill_in_config_picker_submenu (window);
-}
-
-static void
-file_menu_activated (GtkMenuItem    *menu_item,
-                     TerminalWindow *window)
-{
-  fill_in_new_term_submenus (window);
-}
-
-static void
 terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
@@ -541,12 +518,6 @@ terminal_window_init (TerminalWindow *window)
                         "", NULL,
                         NULL, NULL);
   window->priv->file_menuitem = mi;
-
-  /* Set up a callback to demand-create the New Window/New Tab submenus */
-  /* FIXME they need to be created in advance so accels work */
-  g_signal_connect (G_OBJECT (mi), "activate",
-                    G_CALLBACK (file_menu_activated),
-                    window);
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
@@ -630,12 +601,7 @@ terminal_window_init (TerminalWindow *window)
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
                         NULL, NULL);
-  window->priv->terminal_menuitem = mi;
-  
-  /* Set up a callback to demand-create the Profiles submenu */
-  g_signal_connect (G_OBJECT (mi), "activate",
-                    G_CALLBACK (terminal_menu_activated),
-                    window);  
+  window->priv->terminal_menuitem = mi;  
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
@@ -696,6 +662,8 @@ terminal_window_init (TerminalWindow *window)
                               G_CALLBACK (about_callback), window);
   set_menuitem_text (mi, _("_About GNOME Terminal"),
                      FALSE);
+
+  terminal_window_reread_profile_list (window);
   
   terminal_window_set_menubar_visible (window, TRUE);
   window->priv->use_default_menubar_visibility = TRUE;  
@@ -838,7 +806,8 @@ static void
 profile_set_callback (TerminalScreen *screen,
                       TerminalWindow *window)
 {
-  /* nothing anymore */
+  /* Redo the pick-a-profile menu */
+  fill_in_config_picker_submenu (window);
 }
 
 static void
@@ -1266,6 +1235,8 @@ terminal_window_set_active (TerminalWindow *window,
   terminal_window_set_size (window, screen, TRUE);
   
   gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
+
+  fill_in_config_picker_submenu (window);
 }
 
 TerminalScreen*
@@ -2126,3 +2097,61 @@ about_callback (GtkWidget      *menuitem,
   gtk_widget_show (about);
 }
 
+
+static void
+default_profile_changed (TerminalProfile    *profile,
+                         TerminalSettingMask mask,
+                         void               *data)
+{  
+  if (mask & TERMINAL_SETTING_IS_DEFAULT)
+    {
+      TerminalWindow *window;
+
+      window = TERMINAL_WINDOW (data);
+
+      /* When the default changes, we get a settings change
+       * on the old default and the new. We only rebuild
+       * the menu on the notify for the new default.
+       */
+      if (terminal_profile_get_is_default (profile))
+        fill_in_new_term_submenus (window);
+    }
+}
+
+static void
+monitor_profiles_for_is_default_change (TerminalWindow *window)
+{
+  GList *profiles;
+  GList *tmp;
+  
+  profiles = terminal_profile_get_list ();
+
+  tmp = profiles;
+  while (tmp != NULL)
+    {
+      TerminalProfile *profile = tmp->data;
+
+      g_signal_handlers_disconnect_by_func (G_OBJECT (profile),
+                                            G_CALLBACK (default_profile_changed),
+                                            window);
+      
+      g_signal_connect_object (G_OBJECT (profile),
+                               "changed",
+                               G_CALLBACK (default_profile_changed),
+                               G_OBJECT (window),
+                               0);
+      
+      tmp = tmp->next;
+    }
+
+  g_list_free (profiles);
+}
+
+void
+terminal_window_reread_profile_list (TerminalWindow *window)
+{
+  monitor_profiles_for_is_default_change (window);
+  
+  fill_in_config_picker_submenu (window);
+  fill_in_new_term_submenus (window);
+}
