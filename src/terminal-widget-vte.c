@@ -144,7 +144,8 @@ void
 terminal_widget_set_cursor_blinks (GtkWidget *widget,
 				   gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_cursor_blinks(VTE_TERMINAL(widget), setting);
 }
 
 void
@@ -362,9 +363,8 @@ terminal_widget_get_icon_title (GtkWidget *widget)
 gboolean
 terminal_widget_get_has_selection (GtkWidget *widget)
 {
-  UNIMPLEMENTED;
-
-  return FALSE;
+  g_return_val_if_fail(VTE_IS_TERMINAL(widget), FALSE);
+  return vte_terminal_get_has_selection(VTE_TERMINAL(widget));
 }
 
 
