@@ -188,7 +188,7 @@ terminal_widget_skey_check_match (GtkWidget *widget,
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
   match = vte_terminal_match_check(VTE_TERMINAL(widget), column, row, &tag);
-  for (tags = data->url_tags; tags != NULL; tags = g_slist_next(tags))
+  for (tags = data->skey_tags; tags != NULL; tags = g_slist_next(tags))
     if (GPOINTER_TO_INT(tags->data) == tag)
       return match;
 
