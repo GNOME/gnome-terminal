@@ -1048,7 +1048,7 @@ parse_options_callback (poptContext              ctx,
 
         if (results->default_working_dir)
           {
-            g_printerr (_("Two default working directories given for\n"));
+            g_printerr (_("Two --default-working-directories given\n"));
             exit (1);
           }
 
