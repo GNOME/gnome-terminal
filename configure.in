@@ -2,7 +2,7 @@ AC_INIT(src/terminal.c)
 
 AM_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(gnome-terminal, 2.0.0)
+AM_INIT_AUTOMAKE(gnome-terminal, 2.1.0)
 
 GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST(GETTEXT_PACKAGE)
@@ -79,6 +79,12 @@ if test x$with_widget = xvte; then
         echo "*** This is some highly unsupported crackrock"
         echo "***"
 fi
+
+echo "***"
+echo "*** WARNING WARNING WARNING WARNING WARNING"
+echo "*** This is the unstable branch of gnome-terminal"
+echo "*** The stable branch is version 2.0.x"
+echo "***"
 
 AC_OUTPUT([
 Makefile
