@@ -19,13 +19,12 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "terminal-intl.h"
 #include "terminal-window.h"
 #include "terminal.h"
 #include <string.h>
 #include <stdlib.h>
 #include <libzvt/libzvt.h>
-#include <libintl.h>
-#define _(x) gettext (x)
 
 struct _TerminalWindowPrivate
 {

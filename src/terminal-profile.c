@@ -19,13 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
+#include "terminal-intl.h"
 #include "terminal-profile.h"
 #include <gtk/gtk.h>
 #include <string.h>
 #include <stdlib.h>
-#include <libintl.h>
-#define _(x) gettext (x)
 
 /* If you add a key, you need to update code:
  *  - in the function that sets the key
