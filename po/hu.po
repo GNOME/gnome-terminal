@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm HEAD\n"
-"POT-Creation-Date: 2002-08-04 13:03-0400\n"
+"POT-Creation-Date: 2002-08-24 20:29+0200\n"
 "PO-Revision-Date: 2002-08-01 15:17+0200\n"
 "Last-Translator: DOMA Peter <zelin@pointernet.hu>\n"
 "Language-Team: Hungarian <hu@gnome.hu>\n"
@@ -18,28 +18,36 @@ msgid "Command line"
 msgstr "Parancssor"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:938
+#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:926
 msgid "Terminal"
 msgstr "Terminál"
 
-#: src/eggcellrendererkeys.c:159 src/eggcellrendererkeys.c:160
-msgid "Accelerator modifiers"
-msgstr "Gyorsbillentyű módosítók"
-
-#: src/eggcellrendererkeys.c:168 src/eggcellrendererkeys.c:169
+#: src/eggcellrendererkeys.c:160 src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Gyorsbillentyű"
 
-#: src/eggcellrendererkeys.c:207 src/gnome-terminal.glade2.h:18
+#: src/eggcellrendererkeys.c:170 src/eggcellrendererkeys.c:171
+msgid "Accelerator modifiers"
+msgstr "Gyorsbillentyű módosítók"
+
+#: src/eggcellrendererkeys.c:180
+msgid "Accel Mode"
+msgstr "Gyorsbillentyűmód"
+
+#: src/eggcellrendererkeys.c:181
+msgid "The type of accelerator."
+msgstr "A gyorsbillenytű típusa"
+
+#: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:18
 #: src/terminal-accels.c:707
 msgid "Disabled"
 msgstr "Tiltva"
 
-#: src/eggcellrendererkeys.c:318 src/eggcellrendererkeys.c:534
+#: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:563
 msgid "Type a new accelerator, or press Backspace to clear"
 msgstr "Írj be egy új gyorsbillentyűt vagy üss backspace-t a törléséhez"
 
-#: src/eggcellrendererkeys.c:537
+#: src/eggcellrendererkeys.c:566
 msgid "Type a new accelerator"
 msgstr "Írj be egy új gyorsbillentyűt"
 
@@ -428,7 +436,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Beállított"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2074 src/terminal.c:2267
+#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2255
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "A súgó megjelenítése közben hiba történt: %s"
@@ -525,7 +533,7 @@ msgstr "Új fül"
 msgid "New Window"
 msgstr "Új ablak"
 
-#: src/terminal-accels.c:75 src/terminal.c:1691
+#: src/terminal-accels.c:75 src/terminal.c:1679
 msgid "New Profile"
 msgstr "Új profil"
 
@@ -645,7 +653,7 @@ msgstr "Urgás"
 msgid "Help"
 msgstr "Súgó"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1168
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1156
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "A konfiguráció betöltése közben hiba történt (%s): %s\n"
@@ -737,7 +745,7 @@ msgstr ""
 msgid "_Action"
 msgstr "_Akció"
 
-#: src/terminal-accels.c:1173
+#: src/terminal-accels.c:1174
 msgid "Accelerator _Key"
 msgstr "Gyors_billentyű"
 
@@ -1031,7 +1039,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Fájl"
 
-#: src/terminal-window.c:1656 src/terminal.c:2298
+#: src/terminal-window.c:1656 src/terminal.c:2286
 msgid "_Edit"
 msgstr "_Szerkesztés"
 
@@ -1059,7 +1067,7 @@ msgstr "_Normális méret visszaállítása"
 msgid "_Full screen"
 msgstr "_Teljes képernyős nézet"
 
-#: src/terminal-window.c:1970
+#: src/terminal-window.c:1975
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1069,15 +1077,17 @@ msgstr ""
 " (Technikailag egy olyan ablakkezelőt kell futtatnod, ami támogatja a "
 "_NET_WM_STATE_FULLSCREEN tulajdonságot.)"
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2109
 msgid "translator_credits"
-msgstr "translator_credits"
+msgstr ""
+"Bán Szabolcs (Shooby) <shooby@gnome.hu>\n"
+"Doma Péter (Zelin) <zelin@pointernet.hu>"
 
-#: src/terminal-window.c:2117
+#: src/terminal-window.c:2122
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2118
+#: src/terminal-window.c:2123
 msgid "GNOME Terminal"
 msgstr "GNOME Terminál"
 
@@ -1188,16 +1198,16 @@ msgstr "DIRNAME"
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Az ikon (%s) betöltése sikertelen: %s\n"
 
-#: src/terminal.c:668
+#: src/terminal.c:666
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "A --command/-e opciónak szüksége van egy parancsra amit futtat\n"
 
-#: src/terminal.c:676
+#: src/terminal.c:674
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "A --command/-e paramétere: \"%s\" érvénytelen parancs\n"
 
-#: src/terminal.c:686 src/terminal.c:708
+#: src/terminal.c:684 src/terminal.c:706
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1205,58 +1215,58 @@ msgstr ""
 "A --command/-e/--execute/-x opció többször szerepel ugyanarra az ablakra "
 "vagy fülre\n"
 
-#: src/terminal.c:700
+#: src/terminal.c:698
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
 msgstr ""
 "A --execute/-x opciónak szüksége van a parancsra amit el kell indítania\n"
 
-#: src/terminal.c:727
+#: src/terminal.c:723
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
 msgstr "A --window-with-profile opcióból hiányzik a profilt megadó paraméter\n"
 
-#: src/terminal.c:746
+#: src/terminal.c:740
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
 msgstr "A --tab-with-profile opcióból hiányzik a profilt megadó paraméter\n"
 
-#: src/terminal.c:777
+#: src/terminal.c:771
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "A --show-menubar opció kétszer lett megadva ugyanarra az ablakra\n"
 
-#: src/terminal.c:803
+#: src/terminal.c:797
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "A --hide-menubar opció kétszer lett megadva ugyanarra az ablakra\n"
 
-#: src/terminal.c:828
+#: src/terminal.c:820
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "A --geometry opcióból hiányzik a geometriát megadó paraméter\n"
 
-#: src/terminal.c:837 src/terminal.c:847
+#: src/terminal.c:829 src/terminal.c:839
 msgid "Two geometries given for one window\n"
 msgstr "Két geometria lett megadva egy ablaknak\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:861
 msgid "Option --title requires an argument giving the title\n"
 msgstr "A -title opcióból hiányzik a címsort megadó paraméter\n"
 
-#: src/terminal.c:879
+#: src/terminal.c:869
 msgid "Two titles given for one tab\n"
 msgstr "Két címsor lett megadva egy fülnek\n"
 
-#: src/terminal.c:896
+#: src/terminal.c:884
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "A -working-directory opcióból hiányzik a könyvtárt megadó paraméter\n"
 
-#: src/terminal.c:904
+#: src/terminal.c:892
 msgid "Two working directories given for one tab\n"
 msgstr "Két munkakönyvtár lett megadva egy fülnek\n"
 
-#: src/terminal.c:913
+#: src/terminal.c:901
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1266,17 +1276,17 @@ msgstr ""
 "csinálj egy profilt a kívánt beállításokkat, és használd a -window-with-"
 "profile opciót\n"
 
-#: src/terminal.c:1033
+#: src/terminal.c:1021
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Nincs \"%s\" nevű profil, az alapértelmezettet használom helyette\n"
 
-#: src/terminal.c:1142
+#: src/terminal.c:1130
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Érvénytelen argumentum: \"%s\"\n"
 
-#: src/terminal.c:1184
+#: src/terminal.c:1172
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1285,106 +1295,106 @@ msgstr ""
 "Hiba történt a terminál profil lista változásainak értesítéséhez történő "
 "feliratkozáskor. (%s)\n"
 
-#: src/terminal.c:1292
+#: src/terminal.c:1280
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Érvénytelen geometria \"%s\"\n"
 
-#: src/terminal.c:1352
+#: src/terminal.c:1340
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Hiba a terminál profilok listájának lekérésekor. (%s)\n"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1573
 msgid "You have to name your profile."
 msgstr "Adj nevet a profilodnak"
 
-#: src/terminal.c:1595
+#: src/terminal.c:1583
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Már van \"%s\" nevű profilod"
 
-#: src/terminal.c:1632
+#: src/terminal.c:1620
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Az a profil, amit az új profilod alapjául választottál, már nem létezik"
 
-#: src/terminal.c:1696
+#: src/terminal.c:1684
 msgid "C_reate"
 msgstr "_Létrehozás"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1709
 msgid "Profile _name:"
 msgstr "Profil _neve:"
 
-#: src/terminal.c:1725
+#: src/terminal.c:1713
 msgid "Enter profile name"
 msgstr "Írd be a profil nevét"
 
-#: src/terminal.c:1740
+#: src/terminal.c:1728
 msgid "_Base on:"
 msgstr "_Alapuljon ezen:"
 
-#: src/terminal.c:1888
+#: src/terminal.c:1876
 msgid "Profile list"
 msgstr "Profil lista"
 
-#: src/terminal.c:1961
+#: src/terminal.c:1949
 msgid "You must select one or more profiles to delete."
 msgstr "Ki kell egy profilt jelölnöd hogy törölni tudd."
 
-#: src/terminal.c:1984
+#: src/terminal.c:1972
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Legalább egy profilodnak kell lennie, hogy legyen mit letörölni."
 
-#: src/terminal.c:2002
+#: src/terminal.c:1990
 msgid "Delete these two profiles?\n"
 msgstr "Töröljem ezt a két profilt?\n"
 
-#: src/terminal.c:2004
+#: src/terminal.c:1992
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Töröljem ezt a %d profilt?\n"
 
-#: src/terminal.c:2022
+#: src/terminal.c:2010
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Töröljem a profilt:%s ?"
 
-#: src/terminal.c:2044
+#: src/terminal.c:2032
 msgid "Delete Profile"
 msgstr "Profil törlése"
 
-#: src/terminal.c:2331
+#: src/terminal.c:2319
 msgid "Edit Profiles"
 msgstr "Profilok Szerkesztése"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2359
 msgid "Profile _used when launching a new terminal:"
 msgstr "Az új terminál indításakor használt profil:"
 
-#: src/terminal.c:2393
+#: src/terminal.c:2381
 msgid "_Profiles:"
 msgstr "_Profilok:"
 
-#: src/terminal.c:2442
+#: src/terminal.c:2430
 msgid "Click to open new profile dialog"
 msgstr "Kattints ide új profil hozzáadásához"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2443
 msgid "Click to open edit profile dialog"
 msgstr "Kattints ide a profilszerkesztő megnyitásához"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2453
 msgid "Click to delete selected profile"
 msgstr "Kattints ide a kiválasztott profil törléséhez"
 
-#: src/terminal.c:2514
+#: src/terminal.c:2502
 msgid "Click button to choose profile"
 msgstr "Kattints ide profil kiválasztásához"
 
-#: src/terminal.c:2954
+#: src/terminal.c:2942
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1392,7 +1402,7 @@ msgstr ""
 "Úgy tűnik, hogy nincs érvényes helyre gnome-terminál szervered telepítve. "
 "Factory mód tiltva.\n"
 
-#: src/terminal.c:2957
+#: src/terminal.c:2945
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1400,7 +1410,7 @@ msgstr ""
 "Hiba a terminál aktivációs szolgáltatásba regisztrálásánál: factory mód "
 "letilva.\n"
 
-#: src/terminal.c:2992
+#: src/terminal.c:2980
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Hiba a terminál szerver aktivációs szerverből való lekérésekor\n"
 
