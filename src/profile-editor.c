@@ -27,9 +27,10 @@
 
 /* Bytes in a line of scrollback, rough estimate, including
  * data structure to hold the line. Based on reading
- * vt_newline in vt.c in libzvt
+ * vt_newline in vt.c in libzvt. Each char in 80 columns
+ * is a 32-bit int.
  */
-#define BYTES_PER_LINE (sizeof (void*) * 6 + 80.0)
+#define BYTES_PER_LINE (sizeof (void*) * 6 + (80.0 * 4))
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
