@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm 1.0\n"
-"POT-Creation-Date: 2002-05-17 01:07+0200\n"
-"PO-Revision-Date: 2002-05-17 01:08+0200\n"
+"POT-Creation-Date: 2002-06-01 12:37+0200\n"
+"PO-Revision-Date: 2002-06-01 12:39+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Kommandolinje"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:272 src/terminal-window.c:480 src/terminal.c:877
+#: src/terminal-profile.c:272 src/terminal-window.c:480 src/terminal.c:878
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -397,39 +397,44 @@ msgstr "_linjer"
 msgid "kilobytes"
 msgstr "kilobytes"
 
-#: src/profile-editor.c:46
+#: src/profile-editor.c:47
 msgid "Black on light yellow"
 msgstr "Sort på lys gul"
 
-#: src/profile-editor.c:48
+#: src/profile-editor.c:49
 msgid "White on black"
 msgstr "Hvitt på sort"
 
-#: src/profile-editor.c:50
+#: src/profile-editor.c:51
 msgid "Black on white"
 msgstr "Sort på hvitt"
 
-#: src/profile-editor.c:52
+#: src/profile-editor.c:53
 msgid "Green on black"
 msgstr "Grønn på sort"
 
-#: src/profile-editor.c:65
+#: src/profile-editor.c:66
 msgid "Linux console"
 msgstr "Linux konsoll"
 
-#: src/profile-editor.c:66
+#: src/profile-editor.c:67
 msgid "XTerm"
 msgstr "XTerm"
 
-#: src/profile-editor.c:67
+#: src/profile-editor.c:68
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: src/profile-editor.c:806 src/profile-editor.c:836
+#: src/profile-editor.c:807 src/profile-editor.c:837
 msgid "Custom"
 msgstr "Egendefinert"
 
-#: src/profile-editor.c:905
+#: src/profile-editor.c:883 src/terminal-window.c:2047 src/terminal.c:2227
+#, c-format
+msgid "There was an error displaying help: %s"
+msgstr "Det oppsto en feil under visning av hjelp: %s"
+
+#: src/profile-editor.c:947
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -438,11 +443,11 @@ msgstr ""
 "Filen «%s» mangler. Dette indikerer at applikasjonen ikke er installert "
 "riktig, og at profilredigering ikke kan vises."
 
-#: src/profile-editor.c:1210
+#: src/profile-editor.c:1253
 msgid "Choose a terminal font"
 msgstr "Velg en skrift for terminalen"
 
-#: src/profile-editor.c:1475
+#: src/profile-editor.c:1518
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Redigerer profil «%s»"
@@ -479,7 +484,7 @@ msgstr "kursiv"
 #: src/simple-x-font-selector.c:661 src/x-font-selector.c:1214
 #: src/x-font-selector.c:1966
 msgid "oblique"
-msgstr ""
+msgstr "hellende"
 
 #: src/simple-x-font-selector.c:662 src/x-font-selector.c:1215
 #: src/x-font-selector.c:1967
@@ -489,7 +494,7 @@ msgstr "omvendt kursiv"
 #: src/simple-x-font-selector.c:663 src/x-font-selector.c:1216
 #: src/x-font-selector.c:1968
 msgid "reverse oblique"
-msgstr ""
+msgstr "omvendt hellende"
 
 #: src/simple-x-font-selector.c:664 src/x-font-selector.c:1217
 #: src/x-font-selector.c:1969
@@ -632,7 +637,7 @@ msgstr "Vis"
 msgid "Go"
 msgstr "Start"
 
-#: src/terminal-accels.c:247 src/terminal-profile.c:388 src/terminal.c:1007
+#: src/terminal-accels.c:247 src/terminal-profile.c:388 src/terminal.c:1129
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Det oppsto en feil under lasting av konfigurasjon fra %s. (%s)\n"
@@ -747,21 +752,21 @@ msgstr "Kunne ikke finne et ikon med navn «%s» for terminalprofil «%s»\n"
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "Feil under lasting av ikon «%s» for terminalprofil «%s»: %s\n"
 
-#: src/terminal-profile.c:1187
+#: src/terminal-profile.c:1189
 #, c-format
 msgid ""
 "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
 msgstr ""
 "Kunne ikke finne et bakgrunnsbilde med navn «%s» for terminalprofil «%s»\n"
 
-#: src/terminal-profile.c:1201
+#: src/terminal-profile.c:1203
 #, c-format
 msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
 "Feil under lasting av bakgrunnsbilde «%s» for terminalprofil «%s»: %s\n"
 
-#: src/terminal-profile.c:1828
+#: src/terminal-profile.c:1830
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -769,27 +774,27 @@ msgstr ""
 "GNOME terminal: skriftnavn «%s» satt i konfigurasjonsdatabasen men er ikke "
 "gyldig\n"
 
-#: src/terminal-profile.c:2894
+#: src/terminal-profile.c:2913
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Feil under henting av forvalgt verdi for %s: %s\n"
 
-#: src/terminal-profile.c:2900
+#: src/terminal-profile.c:2919
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Fant ingen forvalgt verdi for %s\n"
 
-#: src/terminal-profile.c:2915
+#: src/terminal-profile.c:2934
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Feil under setting av nøkkel %s tilbake til forvalg: %s\n"
 
-#: src/terminal-profile.c:3108
+#: src/terminal-profile.c:3127
 #, c-format
 msgid "There was an error forgetting profile dir %s. (%s)\n"
 msgstr "Det oppsto en feil under glemming av profilkatalog %s. (%s)\n"
 
-#: src/terminal-profile.c:3165
+#: src/terminal-profile.c:3184
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -798,25 +803,25 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for forvalgt "
 "profil. (%s)\n"
 
-#: src/terminal-profile.c:3210
+#: src/terminal-profile.c:3229
 msgid "_Details"
 msgstr "_Detaljer"
 
-#: src/terminal-profile.c:3645
+#: src/terminal-profile.c:3664
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Det oppsto en feil under oppretting av profilen «%s»"
 
-#: src/terminal-profile.c:3725
+#: src/terminal-profile.c:3744
 msgid "There was an error deleting the profiles"
 msgstr "Det oppsto en feil under sletting av profiler"
 
-#: src/terminal-profile.c:3791
+#: src/terminal-profile.c:3810
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Kunne ikke tolke streng «%s» som en fargepalett\n"
 
-#: src/terminal-profile.c:3800
+#: src/terminal-profile.c:3819
 #, c-format
 msgid "Palette had %d entries instead of %d\n"
 msgstr "Paletten hadde %d oppføringer i stedet for %d\n"
@@ -831,7 +836,7 @@ msgstr "Kunne ikke laste skrift «%s»\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det oppsto et problem med kommandoen for denne terminalen: %s"
 
-#: src/terminal-screen.c:1072
+#: src/terminal-screen.c:1074
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -840,79 +845,79 @@ msgstr ""
 "Kunne ikke åpne adresse «%s»:\n"
 "%s"
 
-#: src/terminal-screen.c:1193 src/terminal-window.c:528
+#: src/terminal-screen.c:1195 src/terminal-window.c:528
 msgid "_New Window"
 msgstr "_Nytt vindu"
 
-#: src/terminal-screen.c:1200 src/terminal-window.c:531
+#: src/terminal-screen.c:1202 src/terminal-window.c:531
 msgid "New _Tab"
 msgstr "Ny _fane"
 
-#: src/terminal-screen.c:1224 src/terminal-window.c:613
+#: src/terminal-screen.c:1226 src/terminal-window.c:613
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1274
+#: src/terminal-screen.c:1276
 msgid "_Edit Current Profile..."
 msgstr "R_ediger aktiv profil..."
 
-#: src/terminal-screen.c:1281
+#: src/terminal-screen.c:1283
 msgid "Hide _Menubar"
 msgstr "Skjul _menylinjen"
 
-#: src/terminal-screen.c:1286
+#: src/terminal-screen.c:1288
 msgid "Show _Menubar"
 msgstr "Vis _menylinje"
 
-#: src/terminal-screen.c:1295
+#: src/terminal-screen.c:1297
 msgid "Secure _Keyboard"
 msgstr "_Sikre tastaturet"
 
-#: src/terminal-screen.c:1301
+#: src/terminal-screen.c:1303
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: src/terminal-screen.c:1308
+#: src/terminal-screen.c:1310
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkeadresse"
 
-#: src/terminal-screen.c:1561
+#: src/terminal-screen.c:1563
 msgid "Change terminal title"
 msgstr "Endre tittel på terminalen"
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1590
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: src/terminal-screen.c:1707
+#: src/terminal-screen.c:1709
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain som ble sluppet på terminal hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: src/terminal-screen.c:1730
+#: src/terminal-screen.c:1732
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Farge som ble sluppet på terminalen hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: src/terminal-screen.c:1773
+#: src/terminal-screen.c:1775
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla URL som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: src/terminal-screen.c:1822
+#: src/terminal-screen.c:1824
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-liste som ble sluppet på terminalen hadde feil format (%d) eller lengde "
 "(%d)\n"
 
-#: src/terminal-screen.c:1876
+#: src/terminal-screen.c:1878
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -920,7 +925,7 @@ msgstr ""
 "Bilde-filnavn som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: src/terminal-screen.c:1902
+#: src/terminal-screen.c:1904
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Feil under konvertering av URI «%s» til filnavn: %s\n"
@@ -1047,15 +1052,15 @@ msgstr "_Start"
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: src/terminal-window.c:1753
+#: src/terminal-window.c:1756
 msgid "_Restore normal size"
 msgstr "Gjenopp_rett normal størrelse"
 
-#: src/terminal-window.c:1757
+#: src/terminal-window.c:1760
 msgid "_Full screen"
 msgstr "_Full skjerm"
 
-#: src/terminal-window.c:1940
+#: src/terminal-window.c:1943
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1065,32 +1070,27 @@ msgstr ""
 " (Teknisk betyr dette at du må ha en vindushåndterer med støtte for "
 "_NET_WM_STATE_FULLSCREEN-egenskapen.)"
 
-#: src/terminal-window.c:2044
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Det oppsto en feil under visning av hjelp: %s"
-
-#: src/terminal-window.c:2074
+#: src/terminal-window.c:2077
 msgid "translator_credits"
 msgstr "Kjartan Maraas"
 
-#: src/terminal-window.c:2087
+#: src/terminal-window.c:2090
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Opphavsrett 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2088
+#: src/terminal-window.c:2091
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
-#: src/terminal.c:162
+#: src/terminal.c:163
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Kjør argumentet til dette flagget inne i terminalen."
 
-#: src/terminal.c:171
+#: src/terminal.c:172
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Kjør resten av kommandolinjen inne i terminalen."
 
-#: src/terminal.c:180
+#: src/terminal.c:181
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1098,11 +1098,11 @@ msgstr ""
 "Åpne et nytt vindu som inneholder en fane med en gitt profil. Mer en ett av "
 "disse alternativene kan oppgis."
 
-#: src/terminal.c:181 src/terminal.c:190
+#: src/terminal.c:182 src/terminal.c:191
 msgid "PROFILENAME"
 msgstr "PROFILNAVN"
 
-#: src/terminal.c:189
+#: src/terminal.c:190
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1110,7 +1110,7 @@ msgstr ""
 "Åpne en ny fane i det sist-åpnede vinduet med gitt profil. Mer en ett av "
 "disse alternativene kan oppgis."
 
-#: src/terminal.c:198
+#: src/terminal.c:199
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1118,11 +1118,11 @@ msgstr ""
 "Åpne et nytt vindu med en fane med gitt profil-ID. Brukes internt for å "
 "lagre sesjoner."
 
-#: src/terminal.c:199 src/terminal.c:208
+#: src/terminal.c:200 src/terminal.c:209
 msgid "PROFILEID"
 msgstr "PROFILID"
 
-#: src/terminal.c:207
+#: src/terminal.c:208
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1130,7 +1130,7 @@ msgstr ""
 "Åpne en ny fane i det sist-åpnede vinduet med gitt profil-ID. Brukes internt "
 "for å lagre sesjoner."
 
-#: src/terminal.c:216
+#: src/terminal.c:217
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1139,7 +1139,7 @@ msgstr ""
 "Aktiver menylinje for sist-spesifisert vindu; brukes kun på ett vindu; kan "
 "spesifiseres én gang for hvert vindu som du oppretter fra kommandolinjen."
 
-#: src/terminal.c:225
+#: src/terminal.c:226
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1148,7 +1148,7 @@ msgstr ""
 "Deaktiver menylinjen for sist-spesifisert vindu; brukes kun på ett vindu; "
 "kan spesifiseres én gang for hvert vindu du oppretter fra kommandolinjen."
 
-#: src/terminal.c:234
+#: src/terminal.c:235
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1156,11 +1156,11 @@ msgstr ""
 "X-geometri spesifikasjon (se manualsiden for «X»), kan spesifiseres én gang "
 "per vindu som åpnes."
 
-#: src/terminal.c:235
+#: src/terminal.c:236
 msgid "GEOMETRY"
 msgstr "GEOMETRI"
 
-#: src/terminal.c:243
+#: src/terminal.c:244
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1168,38 +1168,38 @@ msgstr ""
 "Ikke registrer hos navnetjeneren for aktivering, ikke gjenbruk en aktiv "
 "terminal"
 
-#: src/terminal.c:252
+#: src/terminal.c:253
 msgid "Set the terminal's title"
 msgstr "Sett tittel på terminalen"
 
-#: src/terminal.c:253
+#: src/terminal.c:254
 msgid "TITLE"
 msgstr "TITTEL"
 
-#: src/terminal.c:261
+#: src/terminal.c:262
 msgid "Set the terminal's working directory"
 msgstr "Sett arbeidskatalog for terminalen"
 
-#: src/terminal.c:262
+#: src/terminal.c:263
 msgid "DIRNAME"
 msgstr "KATALOG"
 
-#: src/terminal.c:563
+#: src/terminal.c:564
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Kunne ikke laste ikon «%s»: %s\n"
 
-#: src/terminal.c:606
+#: src/terminal.c:607
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr ""
 "Flagg --command/-e krever at du spesifiserer kommandolinjen som skal kjøres\n"
 
-#: src/terminal.c:614
+#: src/terminal.c:615
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Argument til --command/-e er ikke en gyldig kommando: %s\n"
 
-#: src/terminal.c:624 src/terminal.c:646
+#: src/terminal.c:625 src/terminal.c:647
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1207,7 +1207,7 @@ msgstr ""
 "--command/-e/--execute/-x spesifisert mer enn en gang for samme vindu eller "
 "fane\n"
 
-#: src/terminal.c:638
+#: src/terminal.c:639
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1215,7 +1215,7 @@ msgstr ""
 "Flagg --execute/-x krever at du spesifiserer kommandoen som skal kjøres på "
 "resten av kommandolinjen\n"
 
-#: src/terminal.c:665
+#: src/terminal.c:666
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1223,7 +1223,7 @@ msgstr ""
 "Flagg --tab-with-profile krever et argument som spesifiserer hvilken profil "
 "som skal brukes\n"
 
-#: src/terminal.c:686
+#: src/terminal.c:687
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1231,35 +1231,35 @@ msgstr ""
 "Flagg --tab-with-profile krever et argument som spesifiserer hvilken profil "
 "som skal brukes\n"
 
-#: src/terminal.c:716 src/terminal.c:742
+#: src/terminal.c:717 src/terminal.c:743
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Flagg --show-menubar ble gitt to ganger for samme vindu\n"
 
-#: src/terminal.c:767
+#: src/terminal.c:768
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Flagg --geometry krever et argument som oppgir geometrien\n"
 
-#: src/terminal.c:776 src/terminal.c:786
+#: src/terminal.c:777 src/terminal.c:787
 msgid "Two geometries given for one window\n"
 msgstr "To geometrier oppgitt for ett vindu\n"
 
-#: src/terminal.c:810
+#: src/terminal.c:811
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Flagg --title krever et argument som oppgir tittelen\n"
 
-#: src/terminal.c:818
+#: src/terminal.c:819
 msgid "Two titles given for one tab\n"
 msgstr "To titler oppgitt for en fane\n"
 
-#: src/terminal.c:835
+#: src/terminal.c:836
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "Flagg --working-directory krever et argument som oppgir katalogen\n"
 
-#: src/terminal.c:843
+#: src/terminal.c:844
 msgid "Two working directories given for one tab\n"
 msgstr "To arbeidskataloger oppgitt for en fane\n"
 
-#: src/terminal.c:852
+#: src/terminal.c:853
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1269,12 +1269,24 @@ msgstr ""
 "terminal; du vil kanskje å opprette en profil med ønsket innstilling, og "
 "bruke det nye --window-with-profile flagget\n"
 
-#: src/terminal.c:983
+#: src/terminal.c:972
+#, c-format
+msgid "No such profile '%s', using default profile\n"
+msgstr "Ingen slik profil «%s», bruker forvalgt profil\n"
+
+#: src/terminal.c:1029
+msgid ""
+"--geometry given prior to options that create a new window, must be given "
+"after\n"
+msgstr ""
+"--geometri oppgitt før flagg som oppretter et nytt vindu må oppgis etter\n"
+
+#: src/terminal.c:1103
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Ugyldig argument: «%s»\n"
 
-#: src/terminal.c:1023
+#: src/terminal.c:1145
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1283,138 +1295,126 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for listen over "
 "terminalprofiler. (%s)\n"
 
-#: src/terminal.c:1068
-#, c-format
-msgid "No such profile '%s', using default profile\n"
-msgstr "Ingen slik profil «%s», bruker forvalgt profil\n"
-
-#: src/terminal.c:1125
-msgid ""
-"--geometry given prior to options that create a new window, must be given "
-"after\n"
-msgstr ""
-"--geometri oppgitt før flagg som oppretter et nytt vindu må oppgis etter\n"
-
-#: src/terminal.c:1219
+#: src/terminal.c:1253
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ugyldig geometristreng «%s»\n"
 
-#: src/terminal.c:1279
+#: src/terminal.c:1313
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Det oppsto en feil under henting av listen over terminalprofiler. (%s)\n"
 
-#: src/terminal.c:1509
+#: src/terminal.c:1545
 msgid "You have to name your profile."
 msgstr "Du må gi din profil et navn."
 
-#: src/terminal.c:1519
+#: src/terminal.c:1555
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Det finnes allerede en profil med navn «%s»"
 
-#: src/terminal.c:1556
+#: src/terminal.c:1592
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profilen du valgte som basis for din nye profil eksisterer ikke lenger"
 
-#: src/terminal.c:1615
+#: src/terminal.c:1651
 msgid "New terminal profile"
 msgstr "Ny terminalprofil"
 
-#: src/terminal.c:1620
+#: src/terminal.c:1656
 msgid "C_reate"
 msgstr "Opp_rett"
 
-#: src/terminal.c:1645
+#: src/terminal.c:1681
 msgid "Profile _Name:"
 msgstr "Profil_navn:"
 
-#: src/terminal.c:1649
+#: src/terminal.c:1685
 msgid "Enter profile name"
 msgstr "Oppgi profilnavn:"
 
-#: src/terminal.c:1664
+#: src/terminal.c:1700
 msgid "_Base new profile on:"
 msgstr "_Baser ny profil på:"
 
-#: src/terminal.c:1812
+#: src/terminal.c:1848
 msgid "Profile list"
 msgstr "Profilliste"
 
-#: src/terminal.c:1885
+#: src/terminal.c:1921
 msgid "You must select one or more profiles to delete."
 msgstr "Du må velge en eller flere profiler som skal slettes."
 
-#: src/terminal.c:1908
+#: src/terminal.c:1944
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Du må ha minst en profil; du kan ikke slette alle sammen."
 
-#: src/terminal.c:1926
+#: src/terminal.c:1962
 msgid "Delete these two profiles?\n"
 msgstr "Slett disse to profilene?\n"
 
-#: src/terminal.c:1928
+#: src/terminal.c:1964
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Slett disse %d profilene?\n"
 
-#: src/terminal.c:1946
+#: src/terminal.c:1982
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Slett profil «%s»?"
 
-#: src/terminal.c:1960
+#: src/terminal.c:1996
 msgid "_No"
 msgstr "_Nei"
 
-#: src/terminal.c:1962
+#: src/terminal.c:1998
 msgid "_Delete"
 msgstr "_Slett"
 
-#: src/terminal.c:2185
+#: src/terminal.c:2268
 msgid "Manage terminal profiles"
 msgstr "Håndter terminalprofiler"
 
-#: src/terminal.c:2223
+#: src/terminal.c:2308
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profil som _brukes ved start av en ny terminal:"
 
-#: src/terminal.c:2245
+#: src/terminal.c:2330
 msgid "_Profiles:"
 msgstr "_Profiler:"
 
-#: src/terminal.c:2286
+#: src/terminal.c:2371
 msgid "_New..."
 msgstr "_Ny..."
 
-#: src/terminal.c:2294
+#: src/terminal.c:2379
 msgid "Click to open new profile dialog"
 msgstr "Klikk for å åpne en ny profildialog"
 
-#: src/terminal.c:2297
+#: src/terminal.c:2382
 msgid "_Edit..."
 msgstr "R_ediger..."
 
-#: src/terminal.c:2305
+#: src/terminal.c:2390
 msgid "Click to open edit profile dialog"
 msgstr "Klikk for å åpne dialog for å redigere profil"
 
-#: src/terminal.c:2307
+#: src/terminal.c:2392
 msgid "_Delete..."
 msgstr "_Slett..."
 
-#: src/terminal.c:2315
+#: src/terminal.c:2400
 msgid "Click to delete selected profile"
 msgstr "Klikk for å slette valgt profil"
 
-#: src/terminal.c:2364
+#: src/terminal.c:2449
 msgid "Click button to choose profile"
 msgstr "Klikk knappen for å velge profil"
 
-#: src/terminal.c:2780
+#: src/terminal.c:2890
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1422,7 +1422,7 @@ msgstr ""
 "Set ser ut som om du ikke har gnome-terminal.server installert i en gyldig "
 "lokasjon. Factory-modus deaktivert.\n"
 
-#: src/terminal.c:2783
+#: src/terminal.c:2893
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1430,13 +1430,13 @@ msgstr ""
 "Feil under registrering av terminal hos aktiveringstjenesten; factory-modus "
 "deaktivert.\n"
 
-#: src/terminal.c:2823
+#: src/terminal.c:2928
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Feil under henting av terminaltjener fra aktiveringstjeneren\n"
 
 #: src/x-font-selector.c:201
 msgid "Foundry:"
-msgstr ""
+msgstr "Produsent:"
 
 #: src/x-font-selector.c:202
 msgid "Family:"
