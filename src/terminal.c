@@ -2289,9 +2289,15 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       
       new_profile = terminal_profile_lookup_by_visible_name (name);
 
-      g_assert (new_profile != NULL);
-
-      terminal_profile_edit (new_profile, transient_parent);
+      if (new_profile == NULL)
+        {
+          terminal_util_show_error_dialog (transient_parent, NULL, 
+                                           _("There was an error creating the profile \"%s\""), name);
+        }
+      else 
+        {
+          terminal_profile_edit (new_profile, transient_parent);
+        }
 
     cleanup:
       g_free (name);
