@@ -55,6 +55,22 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/gnome-terminal/global/use_menu_accelerators</key>
+      <applyto>/apps/gnome-terminal/global/use_menu_accelerators</applyto>
+      <owner>gnome-terminal</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether the standard GTK shortcut for menubar access is enabled</short>
+         <long>
+          Normally you can access the menubar with F10. This can also
+          be customized via gtkrc (gtk-menu-bar-accel =
+          "whatever"). This option allows the standard menubar
+          accelerator to be disabled.
+         </long>
+      </locale>
+    </schema>
 
     <!-- Per-profile settings -->
 
@@ -764,7 +780,7 @@
       <applyto>/apps/gnome-terminal/keybindings/prev_tab</applyto>
       <owner>gnome-terminal</owner>
       <type>string</type>
-      <default>&lt;Shift&gt;&lt;Alt&gt;minus</default>
+      <default>&lt;Control&gt;Page_Up</default>
       <locale name="C">
          <short>Accelerator to switch to the previous tab.</short>
          <long>
@@ -781,7 +797,7 @@
       <applyto>/apps/gnome-terminal/keybindings/next_tab</applyto>
       <owner>gnome-terminal</owner>
       <type>string</type>
-      <default>&lt;Shift&gt;&lt;Alt&gt;plus</default>
+      <default>&lt;Control&gt;Page_Down</default>
       <locale name="C">
          <short>Accelerator to switch to the next tab.</short>
          <long>

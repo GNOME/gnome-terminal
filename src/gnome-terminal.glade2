@@ -74,9 +74,9 @@
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char" translatable="yes">*</property>
 		      <property name="activates_default">False</property>
-                      <accessibility>
-                        <atkrelation target="profile-name-label" type="labelled-by"/>
-                      </accessibility>
+		      <accessibility>
+			<atkrelation target="profile-name-label" type="labelled-by"/>
+		      </accessibility>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -237,9 +237,9 @@
 		      <property name="has_frame">True</property>
 		      <property name="invisible_char" translatable="yes">*</property>
 		      <property name="activates_default">False</property>
-                      <accessibility>
-                        <atkrelation target="word-chars-entry-label" type="labelled-by" />
-                      </accessibility>
+		      <accessibility>
+			<atkrelation target="word-chars-entry-label" type="labelled-by"/>
+		      </accessibility>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -469,7 +469,7 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">8</property>
 			  <property name="ypad">0</property>
-                          <property name="mnemonic_widget">title-mode-optionmenu</property>
+			  <property name="mnemonic_widget">title-mode-optionmenu</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -516,9 +516,9 @@
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char" translatable="yes">*</property>
 			  <property name="activates_default">False</property>
-                          <accessibility>
-                          <atkrelation target="title-entry-label" type="labelled-by"/>
-                          </accessibility> 
+			  <accessibility>
+			    <atkrelation target="title-entry-label" type="labelled-by"/>
+			  </accessibility>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -542,12 +542,9 @@
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="history">0</property>
-                              <accessibility>
-                              <atkproperty name="AtkObject::accessible-description">
-                                Click to choose the title.
-                              </atkproperty>
-                              <atkrelation target="title-mode-option-menu-label" type="labelled-by"/>
-                              </accessibility>
+			      <accessibility>
+				<atkrelation target="title-mode-option-menu-label" type="labelled-by"/>
+			      </accessibility>
 
 			      <child internal-child="menu">
 				<widget class="GtkMenu" id="convertwidget5">
@@ -643,9 +640,9 @@
 			      <property name="active">False</property>
 			      <property name="inconsistent">False</property>
 			      <property name="draw_indicator">True</property>
-                              <accessibility>
-                                <atkrelation target="custom-command-entry" type="controller-for"/>
-                              </accessibility>
+			      <accessibility>
+				<atkrelation target="custom-command-entry" type="controller-for"/>
+			      </accessibility>
 			    </widget>
 			  </child>
 			</widget>
@@ -669,11 +666,10 @@
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char" translatable="yes">*</property>
 			  <property name="activates_default">False</property>
-                          <accessibility>
-                           <atkrelation target="custom-command-entry-label" type="labelled-by"/>
-                           <atkrelation target="use-custom-command-checkbutton" type="controlled-by"/>
-                          </accessibility>
-
+			  <accessibility>
+			    <atkrelation target="use-custom-command-checkbutton" type="controlled-by"/>
+			    <atkrelation target="custom-command-entry-label" type="labelled-by"/>
+			  </accessibility>
 			</widget>
 			<packing>
 			  <property name="left_attach">1</property>
@@ -784,7 +780,7 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">8</property>
 			  <property name="ypad">0</property>
-                          <property name="mnemonic_widget">exit-action-optionmenu</property>
+			  <property name="mnemonic_widget">exit-action-optionmenu</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -809,12 +805,9 @@
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="history">0</property>
-                              <accessibility>
-                                <atkproperty name="AtkObject::accessible-description">
-                                  Click to choose the command while exiting
-                                </atkproperty>
-                                <atkrelation target="exit-action-optionmenu-label" type="labelled-by"/>
-                              </accessibility>
+			      <accessibility>
+				<atkrelation target="exit-action-optionmenu-label" type="labelled-by"/>
+			      </accessibility>
 
 			      <child internal-child="menu">
 				<widget class="GtkMenu" id="convertwidget10">
@@ -951,7 +944,7 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">8</property>
 			  <property name="ypad">0</property>
-                          <property name="mnemonic_widget">foreground-colorpicker</property>
+			  <property name="mnemonic_widget">foreground-colorpicker</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -976,7 +969,7 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">8</property>
 			  <property name="ypad">0</property>
-                          <property name="mnemonic_widget">background-colorpicker</property>
+			  <property name="mnemonic_widget">background-colorpicker</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -993,12 +986,9 @@
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="history">-1</property>
-                          <accessibility>
-                            <atkproperty name="AtkObject::accessible-description">
-                             click to choose color scheme.
-                            </atkproperty>
-                            <atkrelation target="color-scheme-optionmenu-label" type="labelled-by"/>
-                           </accessibility>
+			  <accessibility>
+			    <atkrelation target="color-scheme-optionmenu-label" type="labelled-by"/>
+			  </accessibility>
 
 			  <child internal-child="menu">
 			    <widget class="GtkMenu" id="convertwidget13">
@@ -1133,7 +1123,7 @@
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">8</property>
 			  <property name="ypad">0</property>
-                          <property name="mnemonic_widget">palette-optionmenu</property>
+			  <property name="mnemonic_widget">palette-optionmenu</property>
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -1181,11 +1171,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-1">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 1</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 1</property>
-                              <property name="tooltip" translatable="yes">Palette entry 1</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -1200,11 +1190,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-2">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 2</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 2</property>
-                              <property name="tooltip" translatable="yes">Palette entry 2</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1219,11 +1209,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-3">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 3</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 3</property>
-                              <property name="tooltip" translatable="yes">Palette entry 3</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -1238,11 +1228,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-4">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 4</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 4</property>
-                              <property name="tooltip" translatable="yes">Palette entry 4</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">3</property>
@@ -1257,11 +1247,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-5">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 5</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 5</property>
-                              <property name="tooltip" translatable="yes">Palette entry 5</property> 
 			    </widget>
 			    <packing>
 			      <property name="left_attach">4</property>
@@ -1276,11 +1266,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-6">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 6</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 6</property>
-                              <property name="tooltip" translatable="yes">Palette entry 6</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">5</property>
@@ -1295,11 +1285,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-8">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 8</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 8</property>
-                              <property name="tooltip" translatable="yes">Palette entry 8</property>   
 			    </widget>
 			    <packing>
 			      <property name="left_attach">7</property>
@@ -1314,11 +1304,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-9">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 9</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 9</property>
-                              <property name="tooltip" translatable="yes">Palette entry 9</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">0</property>
@@ -1333,11 +1323,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-10">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 10</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 10</property>
-                              <property name="tooltip" translatable="yes">Palette entry 10</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">1</property>
@@ -1352,11 +1342,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-12">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 12</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 12</property>
-                              <property name="tooltip" translatable="yes">Palette entry 12</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">3</property>
@@ -1371,11 +1361,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-11">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 11</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 11</property>
-                              <property name="tooltip" translatable="yes">Palette entry 11</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">2</property>
@@ -1390,11 +1380,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-13">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 13</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 13</property>
-                              <property name="tooltip" translatable="yes">Palette entry 13</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">4</property>
@@ -1409,11 +1399,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-16">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 16</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 16</property>
-                              <property name="tooltip" translatable="yes">Palette entry 16</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">7</property>
@@ -1428,11 +1418,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-14">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 14</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 14</property>
-                              <property name="tooltip" translatable="yes">Palette entry 14</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">5</property>
@@ -1447,11 +1437,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-7">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 7</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 7</property>
-                              <property name="tooltip" translatable="yes">Palette entry 7</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">6</property>
@@ -1466,11 +1456,11 @@
 			  <child>
 			    <widget class="GnomeColorPicker" id="palette-colorpicker-15">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">Palette entry 15</property>
 			      <property name="can_focus">True</property>
 			      <property name="dither">True</property>
 			      <property name="use_alpha">False</property>
 			      <property name="title" translatable="yes">Palette entry 15</property>
-                              <property name="tooltip" translatable="yes">Palette entry 15</property>
 			    </widget>
 			    <packing>
 			      <property name="left_attach">6</property>
@@ -1529,12 +1519,9 @@
 			      <property name="visible">True</property>
 			      <property name="can_focus">True</property>
 			      <property name="history">-1</property>
-                              <accessibility>
-                                <atkproperty name="AtkObject::accessible-description">
-                                  Click to choose terminal type
-                                </atkproperty>
-                                <atkrelation target="palette-optionmenu-label" type="labelled-by"/>
-                              </accessibility>
+			      <accessibility>
+				<atkrelation target="palette-optionmenu-label" type="labelled-by"/>
+			      </accessibility>
 
 			      <child internal-child="menu">
 				<widget class="GtkMenu" id="convertwidget14">
@@ -1648,7 +1635,6 @@
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">image-radiobutton</property>
-
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -1670,7 +1656,6 @@
 			  <property name="active">False</property>
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
-
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -1693,7 +1678,6 @@
 			  <property name="inconsistent">False</property>
 			  <property name="draw_indicator">True</property>
 			  <property name="group">image-radiobutton</property>
-
 			</widget>
 			<packing>
 			  <property name="left_attach">0</property>
@@ -1751,9 +1735,9 @@
 				  <property name="has_frame">True</property>
 				  <property name="invisible_char" translatable="yes">*</property>
 				  <property name="activates_default">False</property>
-                                  <accessibility>
-                                    <atkrelation target="background-image-entry-label" type="labelled-by"/>
-                                  </accessibility>
+				  <accessibility>
+				    <atkrelation target="background-image-entry-label" type="labelled-by"/>
+				  </accessibility>
 				</widget>
 			      </child>
 			    </widget>
@@ -1893,7 +1877,7 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">8</property>
 		      <property name="ypad">0</property>
-                      <property name="mnemonic_widget">scrollback-lines-spinbutton</property>
+		      <property name="mnemonic_widget">scrollback-lines-spinbutton</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -1918,13 +1902,9 @@
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="history">0</property>
-                          <accessibility>
-                            <atkrelation target="scrollbar-position-optionmenu-label" type="labelled-by"/>
-                            <atkproperty name="AtkObject::accessible-description">
-                               Click to choose scrollbar position
-                            </atkproperty>
-                          </accessibility>
-
+			  <accessibility>
+			    <atkrelation target="scrollbar-position-optionmenu-label" type="labelled-by"/>
+			  </accessibility>
 
 			  <child internal-child="menu">
 			    <widget class="GtkMenu" id="convertwidget1">
@@ -2039,12 +2019,9 @@
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
 		      <property name="adjustment">1 1 100000 1 5 0</property>
-                      <accessibility>
-                        <atkproperty name="AtkObject::accessible-description">
-                            Number of lines to scrollback
-                        </atkproperty>
-                        <atkrelation target="scrollback-lines-spinbutton-label" type="labelled-by"/>
-                      </accessibility>
+		      <accessibility>
+			<atkrelation target="scrollback-lines-spinbutton-label" type="labelled-by"/>
+		      </accessibility>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">1</property>
@@ -2117,12 +2094,7 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">3</property>
 		      <property name="ypad">0</property>
-                      <property name="mnemonic_widget">scrollback-kilobytes-spinbutton</property>
-                      <accessibility>
-                        <atkproperty name="AtkObject::accessible-description">
-                           Number of kilobytes to scrollback
-                        </atkproperty>
-                      </accessibility>
+		      <property name="mnemonic_widget">scrollback-kilobytes-spinbutton</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">8</property>
@@ -2145,10 +2117,9 @@
 		      <property name="snap_to_ticks">False</property>
 		      <property name="wrap">False</property>
 		      <property name="adjustment">1 1 100000 1 5 0</property>
-                      <accessibility>
-                        <atkrelation target="scrollback-kilobytes-spinbutton-label" type="labelled-by"/>
-                      </accessibility>
-
+		      <accessibility>
+			<atkrelation target="scrollback-kilobytes-spinbutton-label" type="labelled-by"/>
+		      </accessibility>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">5</property>
@@ -2238,7 +2209,7 @@ and operating sytems that expect different terminal behavior.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">8</property>
 		      <property name="ypad">0</property>
-                      <property name="mnemonic_widget">scrollback-kilobytes-spinbutton</property>
+		      <property name="mnemonic_widget">scrollback-kilobytes-spinbutton</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -2263,7 +2234,7 @@ and operating sytems that expect different terminal behavior.</property>
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">8</property>
 		      <property name="ypad">0</property>
-                      <property name="mnemonic_widget">backspace-binding-optionmenu</property>
+		      <property name="mnemonic_widget">backspace-binding-optionmenu</property>
 		    </widget>
 		    <packing>
 		      <property name="left_attach">0</property>
@@ -2288,12 +2259,9 @@ and operating sytems that expect different terminal behavior.</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="history">0</property>
-                          <accessibility>
-                            <atkproperty name="AtkObject::accessible-description">
-                              Click to choose terminal behaviour for BackSpace Key
-                            </atkproperty>
-                            <atkrelation target="backspace-binding-optionmenu-label" type="labelled-by"/>
-                          </accessibility>
+			  <accessibility>
+			    <atkrelation target="backspace-binding-optionmenu-label" type="labelled-by"/>
+			  </accessibility>
 
 			  <child internal-child="menu">
 			    <widget class="GtkMenu" id="convertwidget15">
@@ -2349,13 +2317,9 @@ and operating sytems that expect different terminal behavior.</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="history">0</property>
-                          <accessibility>
-                            <atkproperty name="AtkObject::accessible-description">
-                              Click to choose terminal behaviour for Delete key
-                            </atkproperty>
-                            <atkrelation target="delete-binding-optionmenu-label" type="labelled-by"/>
-                          </accessibility>
-
+			  <accessibility>
+			    <atkrelation target="delete-binding-optionmenu-label" type="labelled-by"/>
+			  </accessibility>
 
 			  <child internal-child="menu">
 			    <widget class="GtkMenu" id="convertwidget19">
@@ -2420,12 +2384,6 @@ and operating sytems that expect different terminal behavior.</property>
 		      <property name="label" translatable="yes">_Reset compatibility options to defaults</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
-                      <accessibility>
-                        <atkproperty name="AtkObject::accessible-description">
-                           Click to Reset compatibility to defaults
-                        </atkproperty>
-                      </accessibility>
-
 		    </widget>
 		  </child>
 		</widget>
@@ -2519,7 +2477,7 @@ and operating sytems that expect different terminal behavior.</property>
 	<widget class="GtkTable" id="table32">
 	  <property name="border_width">8</property>
 	  <property name="visible">True</property>
-	  <property name="n_rows">3</property>
+	  <property name="n_rows">4</property>
 	  <property name="n_columns">1</property>
 	  <property name="homogeneous">False</property>
 	  <property name="row_spacing">4</property>
@@ -2563,18 +2521,14 @@ and operating sytems that expect different terminal behavior.</property>
 		  <property name="rules_hint">True</property>
 		  <property name="reorderable">False</property>
 		  <property name="enable_search">True</property>
-                  <accessibility>
-                    <atkproperty name="AtkObject::accessible-name">Keybinding list</atkproperty>
-                  </accessibility>
-
 		</widget>
 	      </child>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">0</property>
 	      <property name="right_attach">1</property>
-	      <property name="top_attach">2</property>
-	      <property name="bottom_attach">3</property>
+	      <property name="top_attach">3</property>
+	      <property name="bottom_attach">4</property>
 	    </packing>
 	  </child>
 
@@ -2592,6 +2546,27 @@ and operating sytems that expect different terminal behavior.</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
 	      <property name="mnemonic_widget">accelerators-treeview</property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">0</property>
+	      <property name="right_attach">1</property>
+	      <property name="top_attach">2</property>
+	      <property name="bottom_attach">3</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkCheckButton" id="disable-menu-accel-checkbutton">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="label" translatable="yes">Disable menu access key (F10 by default)</property>
+	      <property name="use_underline">True</property>
+	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="active">False</property>
+	      <property name="inconsistent">False</property>
+	      <property name="draw_indicator">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">0</property>
