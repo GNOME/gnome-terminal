@@ -173,6 +173,7 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->scrollbar_position = TERMINAL_SCROLLBAR_RIGHT;
   profile->priv->scrollback_lines = 1000;
   profile->priv->allow_bold = TRUE;
+  profile->priv->word_chars = g_strdup ("");
 }
 
 static void
