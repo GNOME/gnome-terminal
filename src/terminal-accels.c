@@ -65,15 +65,15 @@ typedef struct
 
 static KeyEntry file_entries[] =
 {
-  { N_("New tab"),
+  { N_("New Tab"),
     KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, NULL, FALSE },
-  { N_("New window"),
+  { N_("New Window"),
     KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, NULL, FALSE },
-  { N_("New profile"),
+  { N_("New Profile"),
     KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE },
-  { N_("Close tab"),
+  { N_("Close Tab"),
     KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, 0, 0, NULL, FALSE },
-  { N_("Close window"),
+  { N_("Close Window"),
     KEY_CLOSE_WINDOW, ACCEL_PATH_CLOSE_WINDOW, 0, 0, NULL, FALSE },
 };
 
@@ -87,9 +87,9 @@ static KeyEntry edit_entries[] =
 
 static KeyEntry view_entries[] =
 {
-  { N_("Hide and show menubar"),
+  { N_("Hide and Show menubar"),
     KEY_TOGGLE_MENUBAR, ACCEL_PATH_TOGGLE_MENUBAR, 0, 0, NULL, FALSE },
-  { N_("Full screen"),
+  { N_("Full Screen"),
     KEY_FULL_SCREEN, ACCEL_PATH_FULL_SCREEN, 0, 0, NULL, FALSE },
 };
 
@@ -97,50 +97,50 @@ static KeyEntry terminal_entries[] =
 {
   { N_("Reset"),
     KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE },
-  { N_("Reset and clear"),
+  { N_("Reset and Clear"),
     KEY_RESET_AND_CLEAR, ACCEL_PATH_RESET_AND_CLEAR, 0, 0, NULL, FALSE },
 };
 
 static KeyEntry go_entries[] =
 {
-  { N_("Switch to previous tab"),
+  { N_("Switch to Previous Tab"),
     KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE },
-  { N_("Switch to next tab"),
+  { N_("Switch to Next Tab"),
     KEY_NEXT_TAB, ACCEL_PATH_NEXT_TAB, 0, 0, NULL, FALSE },
-  { N_("Switch to tab 1"),
+  { N_("Switch to Tab 1"),
     PREFIX_KEY_SWITCH_TO_TAB"1",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 2"),
+  { N_("Switch to Tab 2"),
     PREFIX_KEY_SWITCH_TO_TAB"2",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"2", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 3"),
+  { N_("Switch to Tab 3"),
     PREFIX_KEY_SWITCH_TO_TAB"3",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"3", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 4"),
+  { N_("Switch to Tab 4"),
     PREFIX_KEY_SWITCH_TO_TAB"4",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"4", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 5"),
+  { N_("Switch to Tab 5"),
     PREFIX_KEY_SWITCH_TO_TAB"5",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"5", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 6"),
+  { N_("Switch to Tab 6"),
     PREFIX_KEY_SWITCH_TO_TAB"6",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"6", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 7"),
+  { N_("Switch to Tab 7"),
     PREFIX_KEY_SWITCH_TO_TAB"7",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"7", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 8"),
+  { N_("Switch to Tab 8"),
     PREFIX_KEY_SWITCH_TO_TAB"8",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"8", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 9"),
+  { N_("Switch to Tab 9"),
     PREFIX_KEY_SWITCH_TO_TAB"9",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"9", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 10"),
+  { N_("Switch to Tab 10"),
     PREFIX_KEY_SWITCH_TO_TAB"10",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"10", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 11"),
+  { N_("Switch to Tab 11"),
     PREFIX_KEY_SWITCH_TO_TAB"11",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"11", 0, 0, NULL, FALSE },
-  { N_("Switch to tab 12"),
+  { N_("Switch to Tab 12"),
     PREFIX_KEY_SWITCH_TO_TAB"12",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, NULL, FALSE }
 };

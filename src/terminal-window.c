@@ -366,28 +366,28 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  append_menuitem (menu, _("_New window"), ACCEL_PATH_NEW_WINDOW,
+  append_menuitem (menu, _("_New Window"), ACCEL_PATH_NEW_WINDOW,
                    G_CALLBACK (new_window_callback),
                    window);
 
-  mi = append_menuitem (menu, _("New _tab"), ACCEL_PATH_NEW_TAB,
+  mi = append_menuitem (menu, _("New _Tab"), ACCEL_PATH_NEW_TAB,
                         G_CALLBACK (new_tab_callback),
                         window);
 
   /* This is fairly bogus to have here but I don't know
    * where else to put it really
    */
-  append_menuitem (menu, _("New _profile..."), ACCEL_PATH_NEW_PROFILE,
+  append_menuitem (menu, _("New _Profile..."), ACCEL_PATH_NEW_PROFILE,
 		   G_CALLBACK (new_configuration_callback), window);
   
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
-  append_menuitem (menu, _("_Close window"), ACCEL_PATH_CLOSE_WINDOW,
+  append_menuitem (menu, _("_Close Window"), ACCEL_PATH_CLOSE_WINDOW,
                    G_CALLBACK (close_window_callback),
                    window);
   
-  append_menuitem (menu, _("C_lose tab"), ACCEL_PATH_CLOSE_TAB,
+  append_menuitem (menu, _("C_lose Tab"), ACCEL_PATH_CLOSE_TAB,
                    G_CALLBACK (close_tab_callback),
                    window);
   
@@ -416,7 +416,7 @@ terminal_window_init (TerminalWindow *window)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
   
   window->priv->edit_config_menuitem =
-    append_menuitem (menu, _("C_urrent profile..."), NULL,
+    append_menuitem (menu, _("C_urrent Profile..."), NULL,
                      G_CALLBACK (edit_configuration_callback), window);
 
   append_menuitem (menu, _("_Keybindings..."), NULL,
@@ -435,10 +435,10 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
   
-  append_menuitem (menu, _("Hide menu_bar"), ACCEL_PATH_TOGGLE_MENUBAR,
+  append_menuitem (menu, _("Hide Menu_bar"), ACCEL_PATH_TOGGLE_MENUBAR,
                    G_CALLBACK (hide_menubar_callback), window);
 
-  mi = append_menuitem (menu, _("_Full screen"), ACCEL_PATH_FULL_SCREEN,
+  mi = append_menuitem (menu, _("_Full Screen"), ACCEL_PATH_FULL_SCREEN,
                         G_CALLBACK (fullscreen_callback), window);
   window->priv->fullscreen_menuitem = mi;
   
@@ -479,11 +479,11 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  mi = append_menuitem (menu, _("_Previous tab"), ACCEL_PATH_PREV_TAB,
+  mi = append_menuitem (menu, _("_Previous Tab"), ACCEL_PATH_PREV_TAB,
                         G_CALLBACK (previous_tab_callback), window);
   window->priv->previous_tab_menuitem = mi;
   
-  mi = append_menuitem (menu, _("_Next tab"), ACCEL_PATH_NEXT_TAB,
+  mi = append_menuitem (menu, _("_Next Tab"), ACCEL_PATH_NEXT_TAB,
                         G_CALLBACK (next_tab_callback), window);
   window->priv->next_tab_menuitem = mi;
 
@@ -500,8 +500,9 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  append_menuitem (menu, _("_Help Contents"), NULL,
-                   G_CALLBACK (help_callback), window);
+  mi = append_stock_menuitem (menu, GTK_STOCK_HELP, NULL,
+			      G_CALLBACK (help_callback), window);
+  set_menuitem_text (mi, _("_Help Contents"), FALSE);
   
   mi = append_stock_menuitem (menu, GNOME_STOCK_ABOUT, NULL,
                               G_CALLBACK (about_callback), window);

@@ -1033,14 +1033,14 @@ terminal_screen_do_popup (TerminalScreen *screen,
                              popup_menu_detach);
 
   menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("_New window"),
+                               _("_New Window"),
                                G_CALLBACK (new_window_callback),
                                screen);
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
                                 ACCEL_PATH_NEW_WINDOW);
   
   menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("New _tab"),
+                               _("New _Tab"),
                                G_CALLBACK (new_tab_callback),
                                screen);
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
@@ -1114,7 +1114,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   g_list_free (profiles);
 
   append_menuitem (screen->priv->popup_menu,
-		   _("_Edit current profile..."),
+		   _("_Edit Current Profile..."),
 		   G_CALLBACK (configuration_callback),
 		   screen);
 
