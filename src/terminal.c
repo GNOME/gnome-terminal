@@ -1380,6 +1380,8 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  g_set_application_name (_("Terminal"));
+  
   argc_copy = argc;
   /* we leave empty slots, for --startup-id and --display */
   argv_copy = g_new0 (char *, argc_copy + 5);
