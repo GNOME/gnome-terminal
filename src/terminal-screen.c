@@ -1114,20 +1114,24 @@ terminal_screen_do_popup (TerminalScreen *screen,
   g_list_free (profiles);
 
   append_menuitem (screen->priv->popup_menu,
-                   _("_Edit current profile..."),
-                   G_CALLBACK (configuration_callback),
-                   screen);
+		   _("_Edit current profile..."),
+		   G_CALLBACK (configuration_callback),
+		   screen);
+
   
   if (terminal_window_get_menubar_visible (screen->priv->window))
-    append_menuitem (screen->priv->popup_menu,
-                     _("Hide _Menubar"),
-                     G_CALLBACK (show_menubar_callback),
-                     screen);
+    menu_item = append_menuitem (screen->priv->popup_menu,
+				 _("Hide _Menubar"),
+				 G_CALLBACK (show_menubar_callback),
+				 screen);
   else
-    append_menuitem (screen->priv->popup_menu,
-                     _("Show _Menubar"),
-                     G_CALLBACK (show_menubar_callback),
-                     screen);
+    menu_item =append_menuitem (screen->priv->popup_menu,
+				_("Show _Menubar"),
+				G_CALLBACK (show_menubar_callback),
+				screen);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+				ACCEL_PATH_TOGGLE_MENUBAR);
+
 
 #if 0
   append_menuitem (screen->priv->popup_menu,

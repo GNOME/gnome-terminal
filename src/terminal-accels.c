@@ -30,10 +30,17 @@
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
+#define KEY_NEW_PROFILE CONF_KEYS_PREFIX"/new_profile"
 #define KEY_CLOSE_TAB CONF_KEYS_PREFIX"/close_tab"
 #define KEY_CLOSE_WINDOW CONF_KEYS_PREFIX"/close_window"
 #define KEY_COPY CONF_KEYS_PREFIX"/copy"
 #define KEY_PASTE CONF_KEYS_PREFIX"/paste"
+#define KEY_TOGGLE_MENUBAR CONF_KEYS_PREFIX"/toggle_menubar"
+#define KEY_FULL_SCREEN CONF_KEYS_PREFIX"/full_screen"
+#define KEY_RESET CONF_KEYS_PREFIX"/reset"
+#define KEY_RESET_AND_CLEAR CONF_KEYS_PREFIX"/reset_and_clear"
+#define KEY_PREV_TAB CONF_KEYS_PREFIX"/prev_tab"
+#define KEY_NEXT_TAB CONF_KEYS_PREFIX"/next_tab"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
@@ -49,20 +56,57 @@ typedef struct
   gboolean needs_gconf_sync;
 } KeyEntry;
 
-static KeyEntry entries[] =
+typedef struct
+{
+  KeyEntry *key_entry;
+  gint n_elements;
+  gchar *user_visible_name;
+} KeyEntryList;
+
+static KeyEntry file_entries[] =
 {
   { N_("New tab"),
     KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, NULL, FALSE },
   { N_("New window"),
     KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, NULL, FALSE },
+  { N_("New profile"),
+    KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE },
   { N_("Close tab"),
     KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, 0, 0, NULL, FALSE },
   { N_("Close window"),
     KEY_CLOSE_WINDOW, ACCEL_PATH_CLOSE_WINDOW, 0, 0, NULL, FALSE },
+};
+
+static KeyEntry edit_entries[] =
+{
   { N_("Copy"),
     KEY_COPY, ACCEL_PATH_COPY, 0, 0, NULL, FALSE },
   { N_("Paste"),
     KEY_PASTE, ACCEL_PATH_PASTE, 0, 0, NULL, FALSE },
+};
+
+static KeyEntry view_entries[] =
+{
+  { N_("Hide and show menubar"),
+    KEY_TOGGLE_MENUBAR, ACCEL_PATH_TOGGLE_MENUBAR, 0, 0, NULL, FALSE },
+  { N_("Full screen"),
+    KEY_FULL_SCREEN, ACCEL_PATH_FULL_SCREEN, 0, 0, NULL, FALSE },
+};
+
+static KeyEntry terminal_entries[] =
+{
+  { N_("Reset"),
+    KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE },
+  { N_("Reset and clear"),
+    KEY_RESET_AND_CLEAR, ACCEL_PATH_RESET_AND_CLEAR, 0, 0, NULL, FALSE },
+};
+
+static KeyEntry go_entries[] =
+{
+  { N_("Switch to previous tab"),
+    KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE },
+  { N_("Switch to next tab"),
+    KEY_NEXT_TAB, ACCEL_PATH_NEXT_TAB, 0, 0, NULL, FALSE },
   { N_("Switch to tab 1"),
     PREFIX_KEY_SWITCH_TO_TAB"1",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, NULL, FALSE },
@@ -99,6 +143,22 @@ static KeyEntry entries[] =
   { N_("Switch to tab 12"),
     PREFIX_KEY_SWITCH_TO_TAB"12",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, NULL, FALSE }
+};
+
+static KeyEntryList all_entries[] =
+{
+  { file_entries, G_N_ELEMENTS (file_entries), N_("File") },
+  { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
+  { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
+  { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
+  { go_entries, G_N_ELEMENTS (go_entries), N_("Go") }
+};
+
+enum
+{
+  ACTION_COLUMN,
+  KEYVAL_COLUMN,
+  N_COLUMNS
 };
 
 /*
@@ -157,8 +217,8 @@ void
 terminal_accels_init (GConfClient *conf)
 {
   GError *err;
-  int i;
-
+  int i, j;
+ 
   g_return_if_fail (conf != NULL);
   g_return_if_fail (global_conf == NULL);
   
@@ -191,58 +251,66 @@ terminal_accels_init (GConfClient *conf)
     }
   
   hack_group = gtk_accel_group_new ();
-
+  
   i = 0;
-  while (i < (int) G_N_ELEMENTS (entries))
+  while (i < (int) G_N_ELEMENTS (all_entries))
     {
-      char *str;
-      guint keyval;
-      GdkModifierType mask;
+      j = 0;
+
+      while (j < all_entries[i].n_elements)
+	{
+	  char *str;
+	  guint keyval;
+	  GdkModifierType mask;
+	  KeyEntry *key_entry;
+
+	  key_entry = &(all_entries[i].key_entry[j]);
+
+	  key_entry->closure = g_closure_new_simple (sizeof (GClosure), NULL);
+
+	  g_closure_ref (key_entry->closure);
+	  g_closure_sink (key_entry->closure);
+	  
+	  gtk_accel_group_connect_by_path (hack_group,
+					   key_entry->accel_path,
+					   key_entry->closure);
       
-      entries[i].closure = g_closure_new_simple (sizeof (GClosure),
-                                                 NULL);
-
-      g_closure_ref (entries[i].closure);
-      g_closure_sink (entries[i].closure);
-
-      gtk_accel_group_connect_by_path (hack_group,
-                                       entries[i].accel_path,
-                                       entries[i].closure);
+	  /* Copy from gconf to GTK */
       
-      /* Copy from gconf to GTK */
-      
-      /* FIXME handle whether the entry is writable
-       *  http://bugzilla.gnome.org/show_bug.cgi?id=73207
-       */
+	  /* FIXME handle whether the entry is writable
+	   *  http://bugzilla.gnome.org/show_bug.cgi?id=73207
+	   */
 
-      err = NULL;
-      str = gconf_client_get_string (conf, entries[i].gconf_key,
-                                     &err);
-      if (err != NULL)
-        {
-          g_printerr (_("There was an error loading a terminal keybinding. (%s)\n"),
-                      err->message);
-          g_error_free (err);
-        }
+	  err = NULL;
+	  str = gconf_client_get_string (conf, key_entry->gconf_key, &err);
 
-      if (binding_from_string (str, &keyval, &mask))
-        {
-          entries[i].gconf_keyval = keyval;
-          entries[i].gconf_mask = mask;
+	  if (err != NULL)
+	    {
+	      g_printerr (_("There was an error loading a terminal keybinding. (%s)\n"),
+			  err->message);
+	      g_error_free (err);
+	    }
+
+	  if (binding_from_string (str, &keyval, &mask))
+	    {
+	      key_entry->gconf_keyval = keyval;
+	      key_entry->gconf_mask = mask;
           
-          gtk_accel_map_change_entry (entries[i].accel_path,
-                                      keyval, mask,
-                                      TRUE);
-        }
-      else
-        {
-          g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
-                      entries[i].gconf_key,
-                      str ? str : "(null)");
-        }
+	      gtk_accel_map_change_entry (key_entry->accel_path,
+					  keyval, mask,
+					  TRUE);
+	    }
+	  else
+	    {
+	      g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
+			  key_entry->gconf_key,
+			  str ? str : "(null)");
+	    }
 
-      g_free (str);
-      
+	  g_free (str);
+	  
+	  ++j;
+	}
       ++i;
     }
   
@@ -302,6 +370,26 @@ terminal_accels_get_group_for_widget (GtkWidget *widget)
   return group;
 }
 
+static gboolean
+update_model_foreach (GtkTreeModel *model,
+		      GtkTreePath  *path,
+		      GtkTreeIter  *iter,
+		      gpointer      data)
+{
+  KeyEntry *key_entry = NULL;
+
+  gtk_tree_model_get (model, iter,
+		      KEYVAL_COLUMN, &key_entry,
+		      -1);
+
+  if (key_entry == (KeyEntry *)data)
+    {
+      gtk_tree_model_row_changed (model, path, iter);
+      return TRUE;
+    }
+  return FALSE;
+}
+
 static void
 keys_change_notify (GConfClient *client,
                     guint        cnxn_id,
@@ -333,38 +421,49 @@ keys_change_notify (GConfClient *client,
       int i;
 
       i = 0;
-      while (i < (int) G_N_ELEMENTS (entries))
+      while (i < (int) G_N_ELEMENTS (all_entries))
         {
-          if (strcmp (entries[i].gconf_key, gconf_entry_get_key (entry)) == 0)
-            {
-              GSList *tmp;
-              
-              /* found it */
-              entries[i].gconf_keyval = keyval;
-              entries[i].gconf_mask = mask;
+	  int j;
 
-              /* sync over to GTK */
-              D (g_print ("changing path %s to %s\n",
-                          entries[i].accel_path,
-                          binding_name (keyval, mask, FALSE))); /* memleak */
-              inside_gconf_notify += 1;
-              gtk_accel_map_change_entry (entries[i].accel_path,
-                                          keyval, mask,
-                                          TRUE);
-              inside_gconf_notify -= 1;
+	  j = 0;
+	  while (j < all_entries[i].n_elements)
+	    {
+	      KeyEntry *key_entry;
 
-              /* Notify tree views to repaint with new values */
-              tmp = living_treeviews;
-              while (tmp != NULL)
-                {
-                  gtk_widget_queue_resize (tmp->data);
-                  tmp = tmp->next;
-                }
+	      key_entry = &(all_entries[i].key_entry[j]);
+	      if (strcmp (key_entry->gconf_key, gconf_entry_get_key (entry)) == 0)
+		{
+		  GSList *tmp;
               
-              break;
-            }
-          
-          ++i;
+		  /* found it */
+		  key_entry->gconf_keyval = keyval;
+		  key_entry->gconf_mask = mask;
+
+		  /* sync over to GTK */
+		  D (g_print ("changing path %s to %s\n",
+			      key_entry->accel_path,
+			      binding_name (keyval, mask, FALSE))); /* memleak */
+		  inside_gconf_notify += 1;
+		  gtk_accel_map_change_entry (key_entry->accel_path,
+					      keyval, mask,
+					      TRUE);
+		  inside_gconf_notify -= 1;
+
+		  /* Notify tree views to repaint with new values */
+		  tmp = living_treeviews;
+		  while (tmp != NULL)
+		    {
+		      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (tmp->data)),
+					      update_model_foreach,
+					      key_entry);
+		      tmp = tmp->next;
+		    }
+              
+		  break;
+		}
+	      ++j;
+	    }
+	  ++i;
         }
     }
 }
@@ -397,15 +496,25 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
     }
 
   i = 0;
-  while (i < (int) G_N_ELEMENTS (entries))
+  while (i < (int) G_N_ELEMENTS (all_entries))
     {
-      if (entries[i].closure == accel_closure)
-        {
-          entries[i].needs_gconf_sync = TRUE;
-          queue_gconf_sync ();
-          break;
-        }
+      int j;
 
+      j = 0;
+      while (j < all_entries[i].n_elements)
+	{
+	  KeyEntry *key_entry;
+
+	  key_entry = &(all_entries[i].key_entry[j]);
+
+	  if (key_entry->closure == accel_closure)
+	    {
+	      key_entry->needs_gconf_sync = TRUE;
+	      queue_gconf_sync ();
+	      break;
+	    }
+	  j++;
+	}
       ++i;
     }
 }
@@ -506,58 +615,66 @@ static guint sync_idle = 0;
 static gboolean
 sync_handler (gpointer data)
 {
-  int i;
+  int i, j;
 
   D (g_print ("gconf sync handler\n"));
   
   sync_idle = 0;
 
   i = 0;
-  while (i < (int) G_N_ELEMENTS (entries))
+  while (i < (int) G_N_ELEMENTS (all_entries))
     {
-      if (entries[i].needs_gconf_sync)
-        {
-          GtkAccelKey gtk_key;
-          
-          entries[i].needs_gconf_sync = FALSE;
+      j = 0;
 
-          gtk_key.accel_key = 0;
-          gtk_key.accel_mods = 0;
-          
-          gtk_accel_map_lookup_entry (entries[i].accel_path,
-                                      &gtk_key);
-          
-          if (gtk_key.accel_key != entries[i].gconf_keyval ||
-              gtk_key.accel_mods != entries[i].gconf_mask)
-            {
-              GError *err;
-              char *accel_name;
+      while (j < all_entries[i].n_elements)
+	{
+	  KeyEntry *key_entry;
 
-              accel_name = binding_name (gtk_key.accel_key,
-                                         gtk_key.accel_mods,
-                                         FALSE);
+	  key_entry = &(all_entries[i].key_entry[j]);
 
-              D (g_print ("Setting gconf key %s to \"%s\"\n",
-                          entries[i].gconf_key, accel_name));
+	  if (key_entry->needs_gconf_sync)
+	    {
+	      GtkAccelKey gtk_key;
+          
+	      key_entry->needs_gconf_sync = FALSE;
+
+	      gtk_key.accel_key = 0;
+	      gtk_key.accel_mods = 0;
+          
+	      gtk_accel_map_lookup_entry (key_entry->accel_path, &gtk_key);
+          
+	      if (gtk_key.accel_key != key_entry->gconf_keyval ||
+		  gtk_key.accel_mods != key_entry->gconf_mask)
+		{
+		  GError *err;
+		  char *accel_name;
+
+		  accel_name = binding_name (gtk_key.accel_key,
+					     gtk_key.accel_mods,
+					     FALSE);
+
+		  D (g_print ("Setting gconf key %s to \"%s\"\n",
+			      key_entry->gconf_key, accel_name));
               
-              err = NULL;
-              gconf_client_set_string (global_conf,
-                                       entries[i].gconf_key,
-                                       accel_name,
-                                       &err);
+		  err = NULL;
+		  gconf_client_set_string (global_conf,
+					   key_entry->gconf_key,
+					   accel_name,
+					   &err);
 
-              g_free (accel_name);
+		  g_free (accel_name);
               
-              if (err != NULL)
-                {
-                  g_printerr (_("Error propagating accelerator change to configuration database: %s\n"),
-                              err->message);
+		  if (err != NULL)
+		    {
+		      g_printerr (_("Error propagating accelerator change to configuration database: %s\n"),
+				  err->message);
 
-                  g_error_free (err);
-                }
-            }
-        }
-      
+		      g_error_free (err);
+		    }
+		}
+	    }
+	  ++j;
+	}
       ++i;
     }  
   
@@ -575,29 +692,6 @@ queue_gconf_sync (void)
  * we only have two columns because we want to be able
  * to sort by either one of them.
  */
-enum
-{
-  COLUMN_NAME,
-  COLUMN_ACCEL
-};
-
-static void
-name_set_func (GtkTreeViewColumn *tree_column,
-               GtkCellRenderer   *cell,
-               GtkTreeModel      *model,
-               GtkTreeIter       *iter,
-               gpointer           data)
-{
-  KeyEntry *ke;
-  
-  gtk_tree_model_get (model, iter,
-                      COLUMN_NAME, &ke,
-                      -1);
-  
-  g_object_set (GTK_CELL_RENDERER (cell),
-                "text", _(ke->user_visible_name),
-                NULL);
-}
 
 static void
 accel_set_func (GtkTreeViewColumn *tree_column,
@@ -609,13 +703,19 @@ accel_set_func (GtkTreeViewColumn *tree_column,
   KeyEntry *ke;
   
   gtk_tree_model_get (model, iter,
-                      COLUMN_ACCEL, &ke,
+                      KEYVAL_COLUMN, &ke,
                       -1);
-  
-  g_object_set (G_OBJECT (cell),
-                "accel_key", ke->gconf_keyval,
-                "accel_mask", ke->gconf_mask,
-                NULL);
+
+  if (ke == NULL)
+    g_object_set (G_OBJECT (cell),
+		  "visible", FALSE,
+		  NULL);
+  else
+    g_object_set (G_OBJECT (cell),
+		  "visible", TRUE,
+		  "accel_key", ke->gconf_keyval,
+		  "accel_mask", ke->gconf_mask,
+		  NULL);
 }
 
 int
@@ -628,11 +728,11 @@ name_compare_func (GtkTreeModel *model,
   KeyEntry *ke_b;
   
   gtk_tree_model_get (model, a,
-                      COLUMN_NAME, &ke_a,
+                      ACTION_COLUMN, &ke_a,
                       -1);
 
   gtk_tree_model_get (model, b,
-                      COLUMN_NAME, &ke_b,
+                      ACTION_COLUMN, &ke_b,
                       -1);
 
   return g_utf8_collate (_(ke_a->user_visible_name),
@@ -652,20 +752,36 @@ accel_compare_func (GtkTreeModel *model,
   int result;
   
   gtk_tree_model_get (model, a,
-                      COLUMN_ACCEL, &ke_a,
+                      KEYVAL_COLUMN, &ke_a,
                       -1);
+  if (ke_a == NULL)
+    {
+      gtk_tree_model_get (model, a,
+			  ACTION_COLUMN, &name_a,
+			  -1);
+    }
+  else
+    {
+      name_a = binding_name (ke_a->gconf_keyval,
+			     ke_a->gconf_mask,
+			     TRUE);
+    }
 
   gtk_tree_model_get (model, b,
-                      COLUMN_ACCEL, &ke_b,
+                      KEYVAL_COLUMN, &ke_b,
                       -1);
-
-  name_a = binding_name (ke_a->gconf_keyval,
-                         ke_a->gconf_mask,
-                         TRUE);
-
-  name_b = binding_name (ke_b->gconf_keyval,
-                         ke_b->gconf_mask,
-                         TRUE);
+  if (ke_b == NULL)
+    {
+  gtk_tree_model_get (model, b,
+                      ACTION_COLUMN, &name_b,
+                      -1);
+    }
+  else
+    {
+      name_b = binding_name (ke_b->gconf_keyval,
+			     ke_b->gconf_mask,
+			     TRUE);
+    }
   
   result = g_utf8_collate (name_a, name_b);
 
@@ -698,7 +814,11 @@ accel_edited_callback (GtkCellRendererText *cell,
   char *str;
   
   gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, COLUMN_ACCEL, &ke, -1);
+  gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
+
+  /* sanity check */
+  if (ke == NULL)
+    return;
 
   str = binding_name (keyval, mask, FALSE);
 
@@ -761,9 +881,11 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   GtkWidget *w;
   GtkCellRenderer *cell_renderer;
   int i;
-  GtkListStore *list;
+  GtkTreeModel *sort_model;
+  GtkTreeStore *tree;
   GtkTreeViewColumn *column;
-  
+  GtkTreeIter parent_iter;
+
   if (g_file_test ("./"TERM_GLADE_FILE,
                    G_FILE_TEST_EXISTS))
     {
@@ -820,8 +942,9 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                     NULL);
   
   w = glade_xml_get_widget (xml, "accelerators-treeview");
-  
+
   living_treeviews = g_slist_prepend (living_treeviews, w);
+
   g_signal_connect (G_OBJECT (w), "destroy",
                     G_CALLBACK (remove_from_list_callback),
                     &living_treeviews);
@@ -829,68 +952,73 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (w)),
                                GTK_SELECTION_NONE);
 
-  /* FIXME two columns just so we can sort by two different things,
-   * is there a better way?
-   */
-  list = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_POINTER);
+
+  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
   
+  /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
-  
-  i = gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (w),
-                                                  -1,
-                                                  _("_Action"),
-                                                  cell_renderer,
-                                                  name_set_func,
-                                                  NULL,
-                                                  NULL);
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (w), i-1);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
-  
-  cell_renderer = egg_cell_renderer_keys_new ();
-  
+  column = gtk_tree_view_column_new_with_attributes (_("_Action"),
+						     cell_renderer,
+						     "text", ACTION_COLUMN,
+						     NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
+  gtk_tree_view_column_set_sort_column_id (column, ACTION_COLUMN);
+
+  /* Column 2 */
+  cell_renderer = g_object_new (EGG_TYPE_CELL_RENDERER_KEYS,
+				"editable", TRUE,
+				NULL);
   g_signal_connect (G_OBJECT (cell_renderer), "keys_edited",
                     G_CALLBACK (accel_edited_callback),
-                    list);
+                    tree);
   
   g_object_set (G_OBJECT (cell_renderer),
                 "editable", TRUE,
                 NULL);
-  
-  i = gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (w),
-                                                  -1,
-                                                  _("Accelerator _Key"),
-                                                  cell_renderer,
-                                                  accel_set_func,
-                                                  NULL,
-                                                  NULL);
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (w), i-1);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ACCEL);  
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Accelerator _Key"));
+  gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
+  gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func, NULL, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, KEYVAL_COLUMN);  
+  gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
+
+  /* Add the data */
 
   i = 0;
-  while (i < (int) G_N_ELEMENTS (entries))
+  while (i < (gint) G_N_ELEMENTS (all_entries))
     {
-      GtkTreeIter iter;
-      
-      gtk_list_store_append (list, &iter);
-      gtk_list_store_set (list, &iter,
-                          COLUMN_NAME, &entries[i],
-                          COLUMN_ACCEL, &entries[i],
-                          -1);
+      int j;
+      gtk_tree_store_append (tree, &parent_iter, NULL);
+      gtk_tree_store_set (tree, &parent_iter,
+			  ACTION_COLUMN, all_entries[i].user_visible_name,
+			  -1);
+      j = 0;
 
+      while (j < all_entries[i].n_elements)
+	{
+	  GtkTreeIter iter;
+	  KeyEntry *key_entry;
+
+	  key_entry = &(all_entries[i].key_entry[j]);
+	  gtk_tree_store_append (tree, &iter, &parent_iter);
+	  gtk_tree_store_set (tree, &iter,
+			      ACTION_COLUMN, _(key_entry->user_visible_name),
+			      KEYVAL_COLUMN, key_entry,
+			      -1);
+	  ++j;
+	}
       ++i;
     }
 
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (list),
-                                   COLUMN_NAME, name_compare_func,
-                                   NULL, NULL);
 
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (list),
-                                   COLUMN_ACCEL, accel_compare_func,
+  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sort_model),
+                                   KEYVAL_COLUMN, accel_compare_func,
                                    NULL, NULL);
-  
-  gtk_tree_view_set_model (GTK_TREE_VIEW (w), GTK_TREE_MODEL (list));
-  
-  g_object_unref (G_OBJECT (list));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (w));
+  g_object_unref (G_OBJECT (tree));
   
   w = glade_xml_get_widget (xml, "keybindings-dialog");
 

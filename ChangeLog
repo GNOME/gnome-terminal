@@ -1,3 +1,15 @@
+2002-03-11  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/profterm.schemas: Add a bunch of new keybindings
+	* src/terminal-accels.c: (terminal_accels_init),
+	(keys_change_notify), (accel_changed_callback), (sync_handler),
+	(accel_set_func), (name_compare_func), (accel_compare_func),
+	(accel_edited_callback), (terminal_edit_keys_dialog_new): Rewrite
+	tree code a lot.  Clean up some.  Add a bunch of new keybindings.
+	* src/terminal-accels.h: New keybindings
+	* src/terminal-screen.c: (terminal_screen_do_popup): Use keybindings
+	* src/terminal-window.c: (terminal_window_init): Use keybindings
+
 2002-03-11  Anders Carlsson  <andersca@gnu.org>
 
 	* src/terminal-widget-vte.c: Fill in some blanks.

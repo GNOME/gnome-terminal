@@ -376,8 +376,8 @@ terminal_window_init (TerminalWindow *window)
   /* This is fairly bogus to have here but I don't know
    * where else to put it really
    */
-  append_menuitem (menu, _("New _profile..."), NULL,
-                   G_CALLBACK (new_configuration_callback), window);
+  append_menuitem (menu, _("New _profile..."), ACCEL_PATH_NEW_PROFILE,
+		   G_CALLBACK (new_configuration_callback), window);
   
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
@@ -434,10 +434,10 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
   
-  append_menuitem (menu, _("Hide menu_bar"), NULL,
+  append_menuitem (menu, _("Hide menu_bar"), ACCEL_PATH_TOGGLE_MENUBAR,
                    G_CALLBACK (hide_menubar_callback), window);
 
-  mi = append_menuitem (menu, _("_Full screen"), NULL,
+  mi = append_menuitem (menu, _("_Full screen"), ACCEL_PATH_FULL_SCREEN,
                         G_CALLBACK (fullscreen_callback), window);
   window->priv->fullscreen_menuitem = mi;
   
@@ -461,10 +461,10 @@ terminal_window_init (TerminalWindow *window)
     append_menuitem (menu, _("_Profile"), NULL,
                      NULL, NULL);
   
-  append_menuitem (menu, _("_Reset"), NULL,
+  append_menuitem (menu, _("_Reset"), ACCEL_PATH_RESET,
                    G_CALLBACK (reset_callback), window);
 
-  append_menuitem (menu, _("Reset and C_lear"), NULL,
+  append_menuitem (menu, _("Reset and C_lear"), ACCEL_PATH_RESET_AND_CLEAR,
                    G_CALLBACK (reset_and_clear_callback), window);
 
   mi = append_menuitem (window->priv->menubar,
@@ -478,11 +478,11 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  mi = append_menuitem (menu, _("_Previous tab"), NULL,
+  mi = append_menuitem (menu, _("_Previous tab"), ACCEL_PATH_PREV_TAB,
                         G_CALLBACK (previous_tab_callback), window);
   window->priv->previous_tab_menuitem = mi;
   
-  mi = append_menuitem (menu, _("_Next tab"), NULL,
+  mi = append_menuitem (menu, _("_Next tab"), ACCEL_PATH_NEXT_TAB,
                         G_CALLBACK (next_tab_callback), window);
   window->priv->next_tab_menuitem = mi;
 

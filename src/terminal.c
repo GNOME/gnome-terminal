@@ -101,7 +101,7 @@ enum {
   OPTION_WINDOW_WITH_PROFILE_ID,
   OPTION_TAB_WITH_PROFILE_ID,
   OPTION_SHOW_MENUBAR,
-  OPTION_HIDE_MENUBAR,
+  OPTION_TOGGLE_MENUBAR,
   OPTION_GEOMETRY,
   OPTION_USE_FACTORY,
   OPTION_LAST
@@ -185,7 +185,7 @@ struct poptOption options[] = {
     '\0',
     POPT_ARG_NONE,
     NULL,
-    OPTION_HIDE_MENUBAR,
+    OPTION_TOGGLE_MENUBAR,
     N_("Turn off the menubar for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
     NULL
   },
@@ -538,7 +538,7 @@ main (int argc, char **argv)
           }
           break;
           
-        case OPTION_HIDE_MENUBAR:
+        case OPTION_TOGGLE_MENUBAR:
           {
             InitialWindow *iw;
             
