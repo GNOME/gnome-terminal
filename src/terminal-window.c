@@ -1693,8 +1693,6 @@ terminal_window_set_active (TerminalWindow *window,
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
   gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
 
-  update_copy_sensitivity (window);
-  
   gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
                                                         screen_get_hbox (screen)));
@@ -1704,6 +1702,8 @@ terminal_window_set_active (TerminalWindow *window,
   g_print ("setting size after flipping notebook pages\n");
 #endif
   terminal_window_set_size (window, screen, TRUE);
+  
+  update_copy_sensitivity (window);
   
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);

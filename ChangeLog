@@ -1,5 +1,13 @@
 2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal-window.c(terminal_window_set_active): move the call to
+	  update_copy_sensitivity to after the call to terminal_window_set_size.
+	  Otherwise new tabs resize the window to the default 80x24 size. See
+	  bug #142366.
+	* various .cvsignore files: add some more stuff.
+	
+2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-window.c(confirm_close_window): use the GConfClient in
 	  the window, instead of the (possibly different) default one.
 	* src/terminal-window.c(change_configuration_callback): wrap the call
