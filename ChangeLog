@@ -1,3 +1,11 @@
+2003-06-11  Nalin Dahyabhai <nalin@redhat.com>
+	* src/terminal-widget-vte.c(terminal_widget_check_match): prevent false
+	positives when the matched string matched the skey regex instead of the
+	URL regex.
+	* src/terminal-widget-vte.c(terminal_widget_get_estimated_bytes_per_scrollback_line):
+	tweak estimate to use sizeof(gunichar) instead of sizeof(wchar_t), the
+	terminal widget uses gunichars internally.
+
 2003-06-11  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-window.c: remove update_active_encoding_name() 
