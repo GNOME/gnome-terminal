@@ -432,7 +432,8 @@ terminal_widget_fork_command (GtkWidget   *widget,
 			      GError     **err)
 {
   *child_pid = vte_terminal_fork_command (VTE_TERMINAL (widget),
-		 			  path, argv, envp);
+		 			  path, argv, envp, working_dir,
+					  update_records, TRUE, TRUE);
   return (*child_pid != -1);
 }
 
