@@ -155,7 +155,6 @@ enum {
   OPTION_HIDE_MENUBAR,
   OPTION_GEOMETRY,
   OPTION_DISABLE_FACTORY,
-  OPTION_USE_FACTORY,
   OPTION_STARTUP_ID,
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
@@ -293,15 +292,6 @@ struct poptOption options[] = {
     NULL
   },
   {
-    "use-factory",
-    '\0',
-    POPT_ARG_NONE,
-    NULL,
-    OPTION_USE_FACTORY,
-    N_("Register with the activation nameserver [default]"),
-    NULL
-  },
-  {
     "startup-id",
     '\0',
     POPT_ARG_STRING,
@@ -351,6 +341,15 @@ struct poptOption options[] = {
   /*
    * Crappy old compat args
    */
+  {
+    "use-factory",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_COMPAT,
+    NULL,
+    NULL
+  },
   {
     "tclass",
     '\0',
@@ -975,10 +974,6 @@ parse_options_callback (poptContext              ctx,
 
     case OPTION_DISABLE_FACTORY:
       terminal_factory_disabled = TRUE;
-      break;
-
-    case OPTION_USE_FACTORY:
-      terminal_factory_disabled = FALSE;
       break;
 
     case OPTION_TITLE:
