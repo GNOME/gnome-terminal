@@ -2909,8 +2909,6 @@ terminal_app_get_clone_command (TerminalApp *app,
               flattened = g_strjoinv (" ", (char**) override_command);
               argv[i] = flattened;
               ++i;
-
-              g_free (flattened);
             }
 
           title = terminal_screen_get_dynamic_title (screen);
