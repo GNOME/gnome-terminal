@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal gnome 2.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-16 04:24+0200\n"
+"POT-Creation-Date: 2004-10-17 02:19+0200\n"
 "PO-Revision-Date: 2004-07-16 19:42+0300\n"
 "Last-Translator: Rostislav Raykov <zbrox@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -324,8 +324,8 @@ msgstr "Потребителска к_оманда:"
 #: src/gnome-terminal.glade2.h:30
 msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
 msgstr ""
-"Забранява всички клавишни _комбинации за меню (като Alt+f за отваряне на меню "
-"Файл)"
+"Забранява всички клавишни _комбинации за меню (като Alt+f за отваряне на "
+"меню Файл)"
 
 #: src/gnome-terminal.glade2.h:31
 msgid "Disable m_enu shortcut key (F10 by default)"
@@ -518,8 +518,7 @@ msgstr "Терминалните програми разполагат с тез
 #: src/gnome-terminal.glade2.h:79
 msgid ""
 "The command running inside the terminal may dynamically set a new title."
-msgstr ""
-"Командата в терминала може динамично да установи ново заглавие."
+msgstr "Командата в терминала може динамично да установи ново заглавие."
 
 #: src/gnome-terminal.glade2.h:80
 msgid ""
@@ -754,7 +753,8 @@ msgstr ""
 
 #: src/gnome-terminal.schemas.in.h:25
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Ако е включено, натискането на клавиш праща лентата за скролиране най-долу."
+msgstr ""
+"Ако е включено, натискането на клавиш праща лентата за скролиране най-долу."
 
 #: src/gnome-terminal.schemas.in.h:26
 msgid ""
@@ -1367,20 +1367,14 @@ msgstr "Дали да се използват цветовете от темат
 msgid "Whether to use the system font"
 msgstr "Дали да се използва системния шрифт"
 
-#. Translators: please note this is has to be a list of valid encodings (which are to
-#. be taken from the list in src/encoding.c) It has to include UTF-8 and the word 'current', which
-#. is not to be translated. This is provided for costumization of the default encoding menu; see
-#. bug 144810 for an use case. In most cases, this should be left alone.
-#: src/gnome-terminal.schemas.in.h:141
+#. Translators: Please note that this has to be a list of
+#. valid encodings (which are to be taken from the list in src/encoding.c).
+#. It has to include UTF-8 and the word 'current', which is not to be
+#. translated. This is provided for customization of the default encoding
+#. menu; see bug 144810 for an use case. In most cases, this should be
+#. left alone.
+#: src/gnome-terminal.schemas.in.h:143
 msgid "[UTF-8,current]"
-msgstr "[UTF-8,current,WINDOWS-1251,ISO-8859-5]"
-
-msgid ""
-"<!-- Translators: please note this is has to be a list of valid encodings "
-"(which are to be taken from the list in src/encoding.c) It has to include "
-"UTF-8 and the word 'current', which is not to be translated. This is "
-"provided for costumization of the default encoding menu; see bug 144810 for "
-"an use case. In most cases, this should be left alone. -->[UTF-8,current]"
 msgstr "[UTF-8,current,WINDOWS-1251,ISO-8859-5]"
 
 #: src/profile-editor.c:47
@@ -1660,8 +1654,8 @@ msgid ""
 "There was an error loading config value for whether to use menubar access "
 "keys. (%s)\n"
 msgstr ""
-"Има грешка при зареждане на конфигурационната стойност, определяща дали да се "
-"използват ускорители за менюто. (%s)\n"
+"Има грешка при зареждане на конфигурационната стойност, определяща дали да "
+"се използват ускорители за менюто. (%s)\n"
 
 #: src/terminal-accels.c:372
 #, c-format
@@ -1776,7 +1770,8 @@ msgstr "Няма подразбираща се стойност за %s\n"
 #: src/terminal-profile.c:2183
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
-msgstr "Грешка при установяване на ключа %s към стойността по подразбиране %s\n"
+msgstr ""
+"Грешка при установяване на ключа %s към стойността по подразбиране %s\n"
 
 #: src/terminal-profile.c:2386
 #, c-format
@@ -1812,9 +1807,11 @@ msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Не мога да анализирам низа \"%s\" като цветова палитра\n"
 
 #: src/terminal-profile.c:3115
-#, c-format
+#, fuzzy, c-format
 msgid "Palette had %d entry instead of %d\n"
-msgstr "Палитрата има %d цвята вместо %d\n"
+msgid_plural "Palette had %d entries instead of %d\n"
+msgstr[0] "Палитрата има %d цвята вместо %d\n"
+msgstr[1] "Палитрата има %d цвята вместо %d\n"
 
 #: src/terminal-screen.c:215
 #, c-format
@@ -2044,46 +2041,48 @@ msgstr ""
 "Имаше грешка при абониране за известяване на промяна в настройките на "
 "терминалния прозорец. (%s)\n"
 
-#: src/terminal-window.c:2090
+#: src/terminal-window.c:2091
 msgid "_File"
 msgstr "_Файл"
 
-#: src/terminal-window.c:2092 src/terminal.c:2827
+#: src/terminal-window.c:2093 src/terminal.c:2827
 msgid "_Edit"
 msgstr "_Редакция"
 
-#: src/terminal-window.c:2094
+#: src/terminal-window.c:2095
 msgid "_View"
 msgstr "_Изглед"
 
-#: src/terminal-window.c:2096
+#: src/terminal-window.c:2097
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2099
 msgid "Ta_bs"
 msgstr "Табове"
 
-#: src/terminal-window.c:2100
+#: src/terminal-window.c:2101
 msgid "_Help"
 msgstr "_Помощ"
 
-#: src/terminal-window.c:2281
+#: src/terminal-window.c:2282
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
+msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
-#: src/terminal-window.c:2286
+#: src/terminal-window.c:2287
 msgid "Close all tabs?"
 msgstr "Затваряне на всички табове?"
 
-#: src/terminal-window.c:2298
+#: src/terminal-window.c:2299
 msgid "Close All Tabs"
 msgstr "Затваряне на Всички Табове"
 
-#: src/terminal-window.c:2690
+#: src/terminal-window.c:2691
 msgid "translator_credits"
 msgstr ""
 "Борислав Александров <B.Aleksandrov@cnsys.bg>\n"
@@ -2091,7 +2090,7 @@ msgstr ""
 "Владимир Петков <vpetkov@i-space.org>\n"
 "Ростислав Райков <zbrox@i-space.org>"
 
-#: src/terminal-window.c:2702
+#: src/terminal-window.c:2703
 msgid "GNOME Terminal"
 msgstr "Терминал на GNOME"
 
@@ -2108,16 +2107,16 @@ msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
 msgstr ""
-"Отварне на нов прозорец с таб със зададения профил. Може да зададете "
-"повече от една от тези опции."
+"Отварне на нов прозорец с таб със зададения профил. Може да зададете повече "
+"от една от тези опции."
 
 #: src/terminal.c:214
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
-"Отваря нов прозорец с таб със зададения профил. Може да зададете "
-"повече от една от тези опции."
+"Отваря нов прозорец с таб със зададения профил. Може да зададете повече от "
+"една от тези опции."
 
 #: src/terminal.c:215 src/terminal.c:233
 msgid "PROFILENAME"
@@ -2128,16 +2127,16 @@ msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Отваряне на нов таб със зададения профил в последно отворения прозорец. "
-"Може да зададете повече от една от тези опции."
+"Отваряне на нов таб със зададения профил в последно отворения прозорец. Може "
+"да зададете повече от една от тези опции."
 
 #: src/terminal.c:232
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Отваряне на нов таб със зададения профил в последно отворения прозорец. "
-"Може да зададете повече от една от тези опции."
+"Отваряне на нов таб със зададения профил в последно отворения прозорец. Може "
+"да зададете повече от една от тези опции."
 
 #: src/terminal.c:241
 msgid ""
@@ -2280,15 +2279,14 @@ msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line\n"
 msgstr ""
-"Опцията \"%s\" изисква задаване на командата за изпълнение на остатъка "
-"от командния ред\n"
+"Опцията \"%s\" изисква задаване на командата за изпълнение на остатъка от "
+"командния ред\n"
 
 #: src/terminal.c:825 src/terminal.c:849
 #, c-format
 msgid "Option \"%s\" requires an argument specifying what profile to use\n"
 msgstr ""
-"Опцията \"%s\" изисква аргумент определящ профила, който да се "
-"използва\n"
+"Опцията \"%s\" изисква аргумент определящ профила, който да се използва\n"
 
 #: src/terminal.c:883 src/terminal.c:909
 #, c-format
@@ -2337,8 +2335,7 @@ msgstr "Опцията \"%s\" изисква аргумент даващ дир�
 msgid ""
 "Option --default-working-directory requires an argument giving the "
 "directory\n"
-msgstr ""
-"Опцията --default-working-directory изисква аргумент директория\n"
+msgstr "Опцията --default-working-directory изисква аргумент директория\n"
 
 #: src/terminal.c:1051
 msgid "Two --default-working-directories given\n"
@@ -2450,9 +2447,11 @@ msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Трябва да имате поне един профил. Не можете да изтриете всички."
 
 #: src/terminal.c:2559
-#, c-format
+#, fuzzy, c-format
 msgid "Delete this profile?\n"
-msgstr "Изтриване на този профил?\n"
+msgid_plural "Delete these %d profiles?\n"
+msgstr[0] "Изтриване на този профил?\n"
+msgstr[1] "Изтриване на този профил?\n"
 
 #: src/terminal.c:2580
 #, c-format
@@ -2523,6 +2522,15 @@ msgstr ""
 #: src/terminal.c:3732
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Не успях да получа терминален сървър от сървъра за активиране\n"
+
+#~ msgid ""
+#~ "<!-- Translators: please note this is has to be a list of valid encodings "
+#~ "(which are to be taken from the list in src/encoding.c) It has to include "
+#~ "UTF-8 and the word 'current', which is not to be translated. This is "
+#~ "provided for costumization of the default encoding menu; see bug 144810 "
+#~ "for an use case. In most cases, this should be left alone. -->[UTF-8,"
+#~ "current]"
+#~ msgstr "[UTF-8,current,WINDOWS-1251,ISO-8859-5]"
 
 #~ msgid "_Normal Size"
 #~ msgstr "_Възстанови нормалния размер"
