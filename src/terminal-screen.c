@@ -1735,10 +1735,6 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
       /* Silently ignore failure here, since we may not be on Linux */
       len = readlink (file, buf, sizeof (buf) - 1);
 
-      /*
-       * If readlink fails, get the current working directory
-       * using the command 'pwdx'. This is specific to Solaris.
-       */
       if (len > 0 && buf[0] == '/')
         {
           buf[len] = '\0';
@@ -1746,55 +1742,25 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
           g_free (screen->priv->working_dir);
           screen->priv->working_dir = g_strdup (buf);
         }
-      else
+      else if (len == 0)
         {
-          char *abs_command = NULL;
-          char *exec_command = NULL;
-          char *output = NULL;
-          int exit_status = 0;
-          
-          abs_command = g_find_program_in_path ("pwdx");
-          if (abs_command == NULL)
-            goto pwdx_out;
+          /* On Solaris, readlink returns an empty string, but the
+           * link can be used as a directory, including as a target
+           * of chdir().
+           */
+          char *cwd;
 
-          exec_command = g_strdup_printf ("%s %d", abs_command, 
-                                          screen->priv->child_pid);
-               
-          if (!g_spawn_command_line_sync (exec_command, &output, 
-                                          NULL, &exit_status, NULL))
-            goto pwdx_out;          
-               
-          if (WIFEXITED (exit_status) &&
-              WEXITSTATUS (exit_status) == 0 &&
-              output) 
+          cwd = g_get_current_dir ();
+          if (cwd != NULL)
             {
-              /*
-               * 'pwdx' output format is:
-               * <pid>:\t<cwd>\n
-               */
-              char *p;
-
-              p = strstr (output, ":");
-              if (p == NULL)
-                goto pwdx_out;
-
-              ++p;
-                   
-              while (*p == ' ' || *p == '\t')
-                ++p;
-              g_strchomp (p);
-                   
-              if (*p == '/')
+              if (chdir (file) == 0)
                 {
                   g_free (screen->priv->working_dir);
-                  screen->priv->working_dir = g_strdup (p);
+                  screen->priv->working_dir = g_get_current_dir ();
+                  chdir (cwd);
                 }
+              g_free (cwd);
             }
-
-        pwdx_out:
-          g_free (abs_command);
-          g_free (exec_command);
-          g_free (output);
         }
       
       g_free (file);
