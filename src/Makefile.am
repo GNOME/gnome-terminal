@@ -2,7 +2,7 @@
 INCLUDES=@PROFTERM_CFLAGS@ -DPROFTERM_PKGDATADIR=\"$(datadir)/profterm\" \
 	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\"
 
-noinst_PROGRAMS=profterm
+bin_PROGRAMS=profterm
 
 ## Terminal
 profterm_SOURCES=				\
