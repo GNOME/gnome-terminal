@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal 2.3.0\n"
+"Project-Id-Version: gnome-terminal 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-13 17:57+0200\n"
-"PO-Revision-Date: 2003-06-13 18:05+0200\n"
+"POT-Creation-Date: 2003-06-25 20:36+0200\n"
+"PO-Revision-Date: 2003-06-25 20:37+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -185,7 +185,7 @@ msgid "User Defined"
 msgstr "Definit per l'usuari"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal.c:2812
-#: src/terminal-window.c:2571
+#: src/terminal-window.c:2576
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "S'ha produït un error en mostrar l'ajuda: %s"
@@ -1314,7 +1314,10 @@ msgstr "Paleta per a les aplicacions de terminal"
 msgid ""
 "Popup a dialog when an s/key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
-msgstr "Mostra un diàleg quan es detecta i es fa clic a una consulta de resposta d'una comprovació d's/key. Si es tecleja una contrasenya al diàleg, s'enviarà al terminal."
+msgstr ""
+"Mostra un diàleg quan es detecta i es fa clic a una consulta de resposta "
+"d'una comprovació d's/key. Si es tecleja una contrasenya al diàleg, "
+"s'enviarà al terminal."
 
 #: src/gnome-terminal.schemas.in.h:100
 msgid "Position of the scrollbar"
@@ -1366,7 +1369,12 @@ msgid ""
 "character), \"escape-sequence\" for the escape sequence typically bound to "
 "backspace or delete. \"escape-sequence\" is normally considered the correct "
 "setting for the Delete key."
-msgstr "Estableix quin codi genera la tecla suprimeix. Els valors possibles són «ascii-del» per al caràcter ASCII DEL, «control-h» per a Control-H (també conegut com el caràcter ASCII BS), «escape-sequence» per a la seqüència d'escapament normalment associada a retrocés o suprimeix. «escape-sequence» és considerada normalment la configuració correcta de la tecla de retrocés."
+msgstr ""
+"Estableix quin codi genera la tecla suprimeix. Els valors possibles són "
+"«ascii-del» per al caràcter ASCII DEL, «control-h» per a Control-H (també "
+"conegut com el caràcter ASCII BS), «escape-sequence» per a la seqüència "
+"d'escapament normalment associada a retrocés o suprimeix. «escape-sequence» "
+"és considerada normalment la configuració correcta de la tecla de retrocés."
 
 # dingus, S/key challenge... no està clar. jm
 #: src/gnome-terminal.schemas.in.h:107
@@ -2113,14 +2121,12 @@ msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "El factor de zoom «%g» és massa gran, s'usarà %g\n"
 
 #: src/terminal.c:1089
+#, c-format
 msgid ""
-"Option given which is no longer supported in this version of gnome-terminal; "
-"you might want to create a profile with the desired setting, and use the new "
-"--window-with-profile option\n"
-msgstr ""
-"S'ha donat una opció que ja no està suportada per aquesta versió de gnome-"
-"terminal; podeu crear un perfil amb la configuració dessitjada i utilitzar "
-"la nova opció --window-with-profile\n"
+"Option --%s is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new --"
+"window-with-profile option\n"
+msgstr "L'opció --%s ja no està suportada per aquesta versió de gnome-terminal; podeu crear un perfil amb la configuració dessitjada i utilitzar la nova opció --window-with-profile\n"
 
 #: src/terminal.c:1095
 msgid "--startup-id option given twice\n"
@@ -2262,7 +2268,7 @@ msgstr "Feu clic per a eliminar el perfil seleccionat"
 msgid "Click button to choose profile"
 msgstr "Feu clic per a triar el perfil"
 
-#: src/terminal.c:3491
+#: src/terminal.c:3492
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2271,7 +2277,7 @@ msgstr ""
 "No es pot trobar el fitxer \"%s\". Això indica que la aplicació està mal "
 "instal·lada, per això el diàleg de la clau no es pot mostrar."
 
-#: src/terminal.c:3664
+#: src/terminal.c:3665
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2279,7 +2285,7 @@ msgstr ""
 "Pareix a ser que no teniu el gnome-terminal.server instal·lat a una ubicació "
 "vàlida. Mode de factoria inhabilitat.\n"
 
-#: src/terminal.c:3667
+#: src/terminal.c:3668
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2287,7 +2293,7 @@ msgstr ""
 "S'ha produït un error al registrar la terminal amb el servei d'activació; "
 "mode de factoria deshabilitat.\n"
 
-#: src/terminal.c:3703
+#: src/terminal.c:3704
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "No s'ha pogut recuperar el servidor del terminal del servidor d'activació\n"
@@ -2417,82 +2423,82 @@ msgstr ""
 "S'ha produït un error en carrer els valors de la configuració sobre si "
 "utilitzar imatges als menús. (%s)\n"
 
-#: src/terminal-screen.c:1294 src/terminal-window.c:735
-msgid "_New Window"
-msgstr "_Nova finestra"
-
-#: src/terminal-screen.c:1301 src/terminal-window.c:738
-msgid "New _Tab"
-msgstr "Nova pes_tanya"
-
-#: src/terminal-screen.c:1325 src/terminal-window.c:844
-msgid "_Profile"
-msgstr "_Perfil"
-
-#: src/terminal-screen.c:1375
-msgid "_Edit Current Profile..."
-msgstr "_Edita el perfil actual..."
-
-#: src/terminal-screen.c:1381
-msgid "_Input Methods"
-msgstr "Mètodes d'_entrada"
-
-#: src/terminal-screen.c:1397
-msgid "Hide _Menubar"
-msgstr "Amaga la barra del _menú"
-
-#: src/terminal-screen.c:1402
-msgid "Show _Menubar"
-msgstr "Mostra la barra del _menu"
-
-#: src/terminal-screen.c:1411
-msgid "Secure _Keyboard"
-msgstr "_Teclat segur"
-
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1296
 msgid "_Open Link"
 msgstr "_Obre l'enllaç"
 
-#: src/terminal-screen.c:1424
+#: src/terminal-screen.c:1301
 msgid "_Copy Link Address"
 msgstr "_Copia l'adresa de l'enllaç"
 
-#: src/terminal-screen.c:1773
+#: src/terminal-screen.c:1312 src/terminal-window.c:735
+msgid "_New Window"
+msgstr "_Nova finestra"
+
+#: src/terminal-screen.c:1319 src/terminal-window.c:738
+msgid "New _Tab"
+msgstr "Nova pes_tanya"
+
+#: src/terminal-screen.c:1343 src/terminal-window.c:844
+msgid "_Profile"
+msgstr "_Perfil"
+
+#: src/terminal-screen.c:1393
+msgid "_Edit Current Profile..."
+msgstr "_Edita el perfil actual..."
+
+#: src/terminal-screen.c:1399
+msgid "_Input Methods"
+msgstr "Mètodes d'_entrada"
+
+#: src/terminal-screen.c:1415
+msgid "Hide _Menubar"
+msgstr "Amaga la barra del _menú"
+
+#: src/terminal-screen.c:1420
+msgid "Show _Menubar"
+msgstr "Mostra la barra del _menu"
+
+#: src/terminal-screen.c:1429
+msgid "Secure _Keyboard"
+msgstr "_Teclat segur"
+
+#: src/terminal-screen.c:1777
 msgid "Change terminal title"
 msgstr "Canvia el títol del terminal"
 
-#: src/terminal-screen.c:1800
+#: src/terminal-screen.c:1804
 msgid "_Title:"
 msgstr "_Títol:"
 
-#: src/terminal-screen.c:1918
+#: src/terminal-screen.c:1922
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "El text/plain arrossegat al terminal tenia un format (%d) o mida (%d) "
 "erroni\n"
 
-#: src/terminal-screen.c:1941
+#: src/terminal-screen.c:1945
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "El color arrossegat al terminal tenia un format (%d) o mida (%d) erroni\n"
 
-#: src/terminal-screen.c:1984
+#: src/terminal-screen.c:1988
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "La url de Mozilla arrossegada al terminal tenia un format (%d) o mida (%d) "
 "erroni\n"
 
-#: src/terminal-screen.c:2033
+#: src/terminal-screen.c:2037
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "La llista d'URI arrossegada al terminal tenia un format (%d) o mida (%d) "
 "erroni\n"
 
-#: src/terminal-screen.c:2087
+#: src/terminal-screen.c:2091
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2500,7 +2506,7 @@ msgstr ""
 "El nom de fitxer d'imatge arrossegat al terminal tenia un format (%d) o mida "
 "(%d) erroni\n"
 
-#: src/terminal-screen.c:2113
+#: src/terminal-screen.c:2117
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "S'ha produït un error al convertir la URI «%s» al nom de fitxer: %s\n"
@@ -2659,7 +2665,7 @@ msgstr "_Restaura la mida"
 msgid "_Full screen"
 msgstr "_Pantalla completa"
 
-#: src/terminal-window.c:2317
+#: src/terminal-window.c:2322
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -2669,13 +2675,13 @@ msgstr ""
 " (En termes tècnics, necesita un gestor de finestres amb suport amb la "
 "propietat _NET_WM_STATE_FULLSCREEN.)"
 
-#: src/terminal-window.c:2601
+#: src/terminal-window.c:2606
 msgid "translator_credits"
 msgstr ""
 "Nada Nada <qk269@hotmail.com>\n"
 "Jordi Mallach <jordi@sindominio.net>"
 
-#: src/terminal-window.c:2615
+#: src/terminal-window.c:2620
 msgid "GNOME Terminal"
 msgstr "Terminal del GNOME"
 
