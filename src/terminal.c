@@ -2491,11 +2491,10 @@ profile_list_delete_selection (GtkWidget   *profile_list,
   if (count > 1)
     {
       str = g_string_new (NULL);
-      /* for languages with separate forms for 2 vs. many */
-      if (count == 2)
-        g_string_printf (str, _("Delete these two profiles?\n"));
-      else
-        g_string_printf (str, _("Delete these %d profiles?\n"), count);
+      g_string_printf (str, ngettext ("Delete this profile?\n", 
+                                      "Delete these %d profiles?\n",
+                                      count), 
+                       count);
 
       tmp = deleted_profiles;
       while (tmp != NULL)

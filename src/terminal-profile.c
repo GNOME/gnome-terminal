@@ -3077,7 +3077,9 @@ terminal_palette_from_string (const char     *str,
   if (n_colors < TERMINAL_PALETTE_SIZE)
     {
       if (warn)
-        g_printerr (_("Palette had %d entries instead of %d\n"),
+        g_printerr (ngettext ("Palette had %d entry instead of %d\n",
+                              "Palette had %d entries instead of %d\n",
+			      n_colors),
                     n_colors, TERMINAL_PALETTE_SIZE);
     }
                                                 

@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "terminal-intl.h"
 #include "terminal-widget.h"
 
 #include <string.h>
@@ -530,7 +531,18 @@ terminal_widget_fork_command (GtkWidget   *widget,
   *child_pid = vte_terminal_fork_command (VTE_TERMINAL (widget),
 		 			  path, argv, envp, working_dir,
 					  update_records, TRUE, TRUE);
-  return (*child_pid != -1);
+
+  if (*child_pid == -1)
+    {
+      g_set_error (err,
+                   G_SPAWN_ERROR,
+                   G_SPAWN_ERROR_FAILED,
+                   _("There was an error creating the child process for this terminal")
+                   );
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 

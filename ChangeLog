@@ -1,3 +1,12 @@
+2003-09-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-profile(terminal_paletter_from_string),
+	* src/terminal.c(profile_list_delete_selection): use ngettext, fixing
+	bug #106699.
+	* src/terminal-widget-vte.c(terminal_widget_fork_command): make this
+	actually g_set_error its GError argument when there is an error, as
+	seen on bug #123526.
+
 2003-09-22 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/.cvsignore: added gnome-terminal.schemas.
