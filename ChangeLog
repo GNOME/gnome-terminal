@@ -1,3 +1,11 @@
+2002-12-07  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (main): don't try to use an empty string
+	DESKTOP_STARTUP_ID (which is common since we set it to empty
+	instead of deleting it in GDK, due to rumored unportability of
+	unsetenv). Also fixes a crash since libstartup-notification was
+	barfing on empty startup ID; fixed in libstartup-notification CVS.
+
 2002-12-06  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal.c (terminal_app_get_clone_command): only add

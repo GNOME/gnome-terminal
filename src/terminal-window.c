@@ -973,7 +973,7 @@ terminal_window_show (GtkWidget *widget)
 
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
-
+  
   context = NULL;
   sn_display = NULL;
   if (window->priv->startup_id != NULL)
@@ -997,7 +997,7 @@ terminal_window_show (GtkWidget *widget)
                                         GDK_WINDOW_XWINDOW (widget->window));
     }
   
-  (* GTK_WIDGET_CLASS (parent_class)->show) (widget);
+  GTK_WIDGET_CLASS (parent_class)->show (widget);
 
   if (context != NULL)
     {

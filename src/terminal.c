@@ -1347,7 +1347,7 @@ main (int argc, char **argv)
 
   results = option_parsing_results_init (&argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id != NULL)
+  if (startup_id != NULL && *startup_id != '\0')
     {
       results->startup_id = g_strdup (startup_id);
       putenv ("DESKTOP_STARTUP_ID=");
