@@ -16,10 +16,16 @@ if test -z "$EGGFILES"; then
 fi
 
 for FILE in $EGGFILES; do
-  if cmp -s $EGGDIR/$FILE $FILE; then
+  SRCFILE=$EGGDIR/$FILE
+  if ! test -e $SRCFILE ; then
+      if test -e $EGGDIR/treeviewutils/$FILE ; then
+          SRCFILE=$EGGDIR/treeviewutils/$FILE
+      fi
+  fi
+  if cmp -s $SRCFILE $FILE; then
      echo "File $FILE is unchanged"
   else
-     cp $EGGDIR/$FILE $FILE || die "Could not move $EGGDIR/$FILE to $FILE"
+     cp $SRCFILE $FILE || die "Could not move $SRCFILE to $FILE"
      echo "Updated $FILE"
   fi
 done
