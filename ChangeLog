@@ -1,3 +1,9 @@
+2002-06-03  Kristian Rietveld  <kris@gtk.org>
+
+	* src/terminal.c (sync_profile_list): only free list data if
+	!use_this_list, it was freeing data twice in some cases (fixes
+	#83851).
+
 2002-06-03  Jesus Bravo Alvarez  <jba@pobox.com>
 
 	* configure.in: Added gl (Galician) to ALL_LINGUAS.

@@ -1338,7 +1338,8 @@ sync_profile_list (gboolean use_this_list,
           terminal_profile_update (profile);
         }
 
-      g_free (tmp_slist->data);
+      if (!use_this_list)
+        g_free (tmp_slist->data);
 
       tmp_slist = tmp_slist->next;
     }
