@@ -60,7 +60,11 @@ terminal_widget_set_size (GtkWidget *widget,
 			  int        width_chars,
 			  int        height_chars)
 {
-  UNIMPLEMENTED;
+  VteTerminal *terminal;
+
+  terminal = VTE_TERMINAL (widget);
+
+  vte_terminal_size_set(terminal, width_chars, height_chars);
 }
 
 void
