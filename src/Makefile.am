@@ -79,3 +79,5 @@ regenerate-built-sources:
 
 serverdir = $(libdir)/bonobo/servers
 server_DATA = gnome-terminal.server
+
+@INTLTOOL_SCHEMAS_RULE@
