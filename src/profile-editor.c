@@ -96,10 +96,10 @@ terminal_profile_edit (TerminalProfile *profile,
                                 NULL);
 
               g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
-                                         &no_glade_dialog);
+                                         (void**)&no_glade_dialog);
             }
 
-          gtk_window_present (no_glade_dialog);
+          gtk_window_present (GTK_WINDOW (no_glade_dialog));
 
           return;
         }
@@ -107,13 +107,6 @@ terminal_profile_edit (TerminalProfile *profile,
       old_transient_parent = NULL;
       
       editor = glade_xml_get_widget (xml, "profile-editor-dialog");
-
-      s = g_strdup_printf (_("Editing profile \"%s\""),
-                           terminal_profile_get_visible_name (profile));
-      
-      gtk_window_set_title (GTK_WINDOW (editor), s);
-
-      g_free (s);
       
       g_object_set_data (G_OBJECT (profile),
                          "editor-window",
@@ -128,6 +121,22 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (profile_forgotten), editor);
 
       gtk_window_set_destroy_with_parent (GTK_WINDOW (editor), TRUE);
+
+      
+      s = g_strdup_printf (_("Editing profile \"%s\""),
+                           terminal_profile_get_visible_name (profile));
+      
+      gtk_window_set_title (GTK_WINDOW (editor), s);
+
+      g_free (s);
+
+      /* Begin "we have no Glade 2" workarounds */
+      gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
+      
+      gtk_dialog_add_buttons (GTK_DIALOG (editor),
+                              _("_Done"), GTK_RESPONSE_ACCEPT,
+                              NULL);
+      /* End "we have no Glade 2" workarounds */
     }
   else
     {
