@@ -1326,8 +1326,12 @@ copy_url_callback (GtkWidget      *menu_item,
 {
   if (screen->priv->matched_string)
     {
-      gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), 
-                              screen->priv->matched_string, -1);
+      GdkDisplay *display;
+      GtkClipboard *clipboard;
+
+      display = gtk_widget_get_display (GTK_WIDGET (screen->priv->window));
+      clipboard = gtk_clipboard_get_for_display (display, GDK_NONE);
+      gtk_clipboard_set_text (clipboard, screen->priv->matched_string, -1);
       g_free (screen->priv->matched_string);
       screen->priv->matched_string = NULL;
     }

@@ -65,6 +65,7 @@ struct _TerminalWindowPrivate
   GList *terms;
   TerminalScreen *active_term;
   GdkPixbuf *icon;
+  GtkClipboard *clipboard;
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
@@ -744,6 +745,29 @@ update_zoom_items (TerminalWindow *window)
 }
 
 static void
+update_edit_menu (GtkClipboard *clipboard,
+                  const  gchar *text,
+                  gpointer     *user_data)
+{
+  TerminalWindow *window;
+
+  window = (TerminalWindow *) user_data;
+
+  gtk_widget_set_sensitive (window->priv->paste_menuitem, text != NULL);
+}
+
+static void
+edit_menu_activate_callback (GtkMenuItem *menuitem,
+                             gpointer     user_data)
+{
+  TerminalWindow *window;
+
+  window = (TerminalWindow *) user_data;
+
+  gtk_clipboard_request_text (window->priv->clipboard, (GtkClipboardTextReceivedFunc) update_edit_menu, window);
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
@@ -774,6 +798,9 @@ terminal_window_init (TerminalWindow *window)
   
   window->priv->use_mnemonics = TRUE;
   window->priv->using_mnemonics = FALSE;
+
+  /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
+  window->priv->clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GDK_NONE);
 
   error = NULL;
   menus_have_icons = gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_icons", &error);
@@ -871,6 +898,8 @@ terminal_window_init (TerminalWindow *window)
                            G_CALLBACK (paste_callback),
                            window);
   menuitem_icon_visibility (window->priv->paste_menuitem, menus_have_icons);
+  g_signal_connect (G_OBJECT (mi), "activate", 
+                    G_CALLBACK (edit_menu_activate_callback), window);
 
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
@@ -1236,20 +1265,12 @@ terminal_window_new (GConfClient *conf)
 static void
 update_notebook (TerminalWindow *window)
 {
-  if (g_list_length (window->priv->terms) > 1)
-    {
-      gtk_notebook_set_show_border (GTK_NOTEBOOK (window->priv->notebook),
-                                    TRUE);
-      gtk_notebook_set_show_tabs (GTK_NOTEBOOK (window->priv->notebook),
-                                  TRUE);
-    }
-  else
-    {
-      gtk_notebook_set_show_border (GTK_NOTEBOOK (window->priv->notebook),
-                                    FALSE);
-      gtk_notebook_set_show_tabs (GTK_NOTEBOOK (window->priv->notebook),
-                                  FALSE);
-    }
+  gboolean single;
+
+  single = g_list_length (window->priv->terms) == 1;
+    
+  gtk_notebook_set_show_border (GTK_NOTEBOOK (window->priv->notebook), !single);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (window->priv->notebook), !single);
 }
 
 static void

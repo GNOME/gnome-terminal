@@ -1,3 +1,14 @@
+2004-11-23  Mariano Suárez-Alvarez <mariano@gnome.org>
+
+	* src/terminal-screen.c(copy_url_callback): use the clipboard corresponding to the
+	  display of the window.
+	* src/terminal-window.c(update_edit_menu, edit_menu_activate_callback,
+	  terminal_window_init): watch for activations of the Edit menu, and set the
+	  sensitivity of the Paste menu item in the callback. Also when the window
+	  instance is created get the GtkClipboard for its display, so as not to lag too
+	  much the first time the user wants something with a Paste menu item.
+	* src/terminal-window.c(update_notebook): rewrite less verbosely.
+
 2004-11-21  Mariano Suárez-Alvarez <mariano@gnome.org>
 
 	* configure.in: depend on startup-notification 0.8, so that we get
