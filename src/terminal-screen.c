@@ -555,7 +555,7 @@ terminal_screen_update_on_realize (GtkWidget      *term,
               {
                 char *font_name;
                 
-                font_name = g_strdup (gdk_x11_font_get_name (font));
+                font_name = g_strdup (gdk_x11_font_get_name (from_desc));
             
                 if (!xfont_is_monospace (font_name));
                 {
