@@ -59,7 +59,7 @@ terminal_skey_do_popup (TerminalScreen *screen,
 
   if (!extract_seq_and_seed (skey_match, &seq, &seed))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), 
+      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
                                        _("The text you clicked doesn't seem to be an S/Key challenge."));
       return;
     }
