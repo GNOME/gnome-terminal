@@ -20,6 +20,7 @@
  */
 
 #include "terminal-intl.h"
+#include "terminal.h"
 
 #include "encoding.h"
 
@@ -691,50 +692,12 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   GtkTreeIter parent_iter;
   GtkTreeSelection *selection;
   GtkWidget *dialog;
-  
-  if (g_file_test ("./"TERM_GLADE_FILE,
-                   G_FILE_TEST_EXISTS))
-    {
-      /* Try current dir, for debugging */
-      xml = glade_xml_new ("./"TERM_GLADE_FILE,
-                           "encodings-dialog",
-                           GETTEXT_PACKAGE);
-    }
-  else
-    {
-      xml = glade_xml_new (TERM_GLADE_DIR"/"TERM_GLADE_FILE,
-                           "encodings-dialog",
-                           GETTEXT_PACKAGE);
-    }
 
+  xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
+                                       "encodings-dialog",
+                                       transient_parent);
   if (xml == NULL)
-    {
-      static GtkWidget *no_glade_dialog = NULL;
-          
-      if (no_glade_dialog == NULL)
-        {
-          no_glade_dialog =
-            gtk_message_dialog_new (transient_parent,
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_CLOSE,
-                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the %s can't be displayed."),
-                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE,
-                                    "encodings dialog");
-                                        
-          g_signal_connect (G_OBJECT (no_glade_dialog),
-                            "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-          
-          g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
-                                     (void**)&no_glade_dialog);
-        }
-
-      gtk_window_present (GTK_WINDOW (no_glade_dialog));
-
-      return NULL;
-    }  
+    return NULL;
 
   /* The dialog itself */
   dialog = glade_xml_get_widget (xml, "encodings-dialog");

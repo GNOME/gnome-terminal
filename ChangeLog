@@ -1,3 +1,16 @@
+2002-12-06  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (terminal_app_get_clone_command): only add
+	--working-directory if the working dir is actually available.
+	May fix #87046, though #87046 may have already been fixed.
+
+2002-12-04  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (terminal_util_load_glade_file): utility function 
+	for loading glade files, to fix up all the error handling 
+	I had all over the place for that, and fix the string for 
+	translators
+
 2002-12-05  Havoc Pennington  <hp@redhat.com>
 
 	* gnome-terminal.desktop.in (StartupNotify): enable startup

@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
+#include <glade/glade.h>
 #include "terminal-screen.h"
 
 typedef struct _TerminalApp TerminalApp;
@@ -66,7 +67,9 @@ void terminal_util_set_labelled_by          (GtkWidget  *widget,
 void terminal_util_set_atk_name_description (GtkWidget  *widget,
                                              const char *name,
                                              const char *desc);
-
+GladeXML* terminal_util_load_glade_file (const char *filename,
+                                         const char *widget_root,
+                                         GtkWindow  *error_dialog_parent);
 
 
 #endif /* TERMINAL_H */

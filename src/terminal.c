@@ -3168,10 +3168,19 @@ terminal_app_get_clone_command (TerminalApp *app,
               ++i;
             }
 
-          argv[i] = g_strdup ("--working-directory");
-          ++i;
-          argv[i] = g_strdup (terminal_screen_get_working_dir (screen));
-          ++i;
+          {
+            const char *dir;
+
+            dir = terminal_screen_get_working_dir (screen);
+
+            if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
+              {
+                argv[i] = g_strdup ("--working-directory");
+                ++i;
+                argv[i] = g_strdup (dir);
+                ++i;
+              }
+          }
 
           zoom = terminal_screen_get_font_scale (screen);
           if (zoom < -1e-6 || zoom > 1e-6) /* if not 1.0 */
@@ -3308,6 +3317,68 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
     atk_object_set_description (obj, desc);
   if (name)
     atk_object_set_name (obj, name);
+}
+
+GladeXML*
+terminal_util_load_glade_file (const char *filename,
+                               const char *widget_root,
+                               GtkWindow  *error_dialog_parent)
+{
+  char *path;
+  GladeXML *xml;
+
+  xml = NULL;
+  path = g_strconcat ("./", filename, NULL);
+  
+  if (g_file_test (path,
+                   G_FILE_TEST_EXISTS))
+    {
+      /* Try current dir, for debugging */
+      xml = glade_xml_new (path,
+                           widget_root,
+                           GETTEXT_PACKAGE);
+    }
+  
+  if (xml == NULL)
+    {
+      g_free (path);
+      
+      path = g_build_filename (TERM_GLADE_DIR, filename, NULL);
+
+      xml = glade_xml_new (path,
+                           widget_root,
+                           GETTEXT_PACKAGE);
+    }
+
+  if (xml == NULL)
+    {
+      static GtkWidget *no_glade_dialog = NULL;
+
+      if (no_glade_dialog != NULL)
+        gtk_widget_destroy (no_glade_dialog);
+      
+      no_glade_dialog =
+        gtk_message_dialog_new (error_dialog_parent,
+                                GTK_DIALOG_DESTROY_WITH_PARENT,
+                                GTK_MESSAGE_ERROR,
+                                GTK_BUTTONS_CLOSE,
+                                _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the dialog can't be displayed."),
+                                path);
+      
+      g_signal_connect (G_OBJECT (no_glade_dialog),
+                        "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+      
+      g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
+                                 (void**)&no_glade_dialog);
+  
+      gtk_window_present (GTK_WINDOW (no_glade_dialog));
+    }
+
+  g_free (path);
+
+  return xml;
 }
 
 /* Factory stuff */
