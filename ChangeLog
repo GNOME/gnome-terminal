@@ -1,3 +1,21 @@
+2002-04-15  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-screen.c: as a heuristic, re-read working dir in a
+	low-priority idle added when title is set. Should also 
+	later use got_output signal on zvt or other signal to 
+	catch working dir for people without magic shell prompts.
+
+	* src/terminal.c (terminal_app_get_clone_command): save working
+	dir in the session
+
+	* src/terminal-screen.c (terminal_screen_get_working_dir): add
+	linux-specific hack to keep track of child process's working 
+	directory.
+
+	* src/terminal-widget-zvt.c (terminal_widget_fork_command): 
+	add arg for working directory, return arg for child pid
+	(terminal_widget_write_data_to_child): fix compile warning
+
 2002-04-15  Abigail Brady  <morwen@evilmagic.org>
 
 	* configure.in: Added en_GB (British) translation.

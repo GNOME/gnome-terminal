@@ -1006,6 +1006,8 @@ terminal_widget_fork_command (GtkWidget   *widget,
                               const char  *path,
                               char       **argv,
                               char       **envp,
+                              const char  *working_dir,
+                              int         *child_pid,
                               GError     **err)
 {
   ZvtTerm *term;
@@ -1014,7 +1016,7 @@ terminal_widget_fork_command (GtkWidget   *widget,
   
   gdk_flush ();
   errno = 0;
-  switch (zvt_term_forkpty (term, update_records))
+  switch ((*child_pid = zvt_term_forkpty (term, update_records)))
     {
     case -1:
       g_set_error (err,
@@ -1033,6 +1035,13 @@ terminal_widget_fork_command (GtkWidget   *widget,
         for (i = 3; i < open_max; i++)
           fcntl (i, F_SETFD, FD_CLOEXEC);
 
+        if (working_dir)
+          {
+            if (chdir (working_dir) < 0)
+              g_printerr (_("Could not set working directory to \"%s\": %s\n"),
+                          working_dir, strerror (errno));
+          }
+        
         cnp_execute (path, argv, envp, TRUE);
         
         g_printerr (_("Could not execute command %s: %s\n"),
@@ -1072,5 +1081,5 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
                                      const char *data,
                                      int         len)
 {
-  zvt_term_writechild (ZVT_TERM (widget), data, len);
+  zvt_term_writechild (ZVT_TERM (widget), (char*) data, len);
 }

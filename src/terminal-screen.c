@@ -35,6 +35,7 @@
 #include <gdk/gdkx.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 struct _TerminalScreenPrivate
 {
@@ -51,6 +52,9 @@ struct _TerminalScreenPrivate
   char **override_command;
   GtkWidget *title_editor;
   GtkWidget *title_entry;
+  char *working_dir;
+  int child_pid;
+  guint recheck_working_dir_idle;
 };
 
 static GList* used_ids = NULL;
@@ -90,6 +94,8 @@ static void reread_profile (TerminalScreen *screen);
 
 static void rebuild_title  (TerminalScreen *screen);
 
+static void queue_recheck_working_dir (TerminalScreen *screen);
+
 static gpointer parent_class;
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -125,8 +131,17 @@ terminal_screen_get_type (void)
 
 static void
 terminal_screen_init (TerminalScreen *screen)
-{  
+{
+  char buf[PATH_MAX+1];
+  
   screen->priv = g_new0 (TerminalScreenPrivate, 1);
+
+  screen->priv->working_dir = g_strdup (getcwd (buf, sizeof (buf)));
+  if (screen->priv->working_dir == NULL) /* shouldn't ever happen */
+    screen->priv->working_dir = g_strdup (g_get_home_dir ());
+  screen->priv->child_pid = -1;
+
+  screen->priv->recheck_working_dir_idle = 0;
   
   screen->priv->term = terminal_widget_new ();
   
@@ -228,10 +243,14 @@ terminal_screen_finalize (GObject *object)
   
   g_object_unref (G_OBJECT (screen->priv->term));
 
+  if (screen->priv->recheck_working_dir_idle)
+    g_source_remove (screen->priv->recheck_working_dir_idle);
+  
   g_free (screen->priv->raw_title);
   g_free (screen->priv->cooked_title);
   g_free (screen->priv->matched_string);
   g_strfreev (screen->priv->override_command);
+  g_free (screen->priv->working_dir);
   
   g_free (screen->priv);
   
@@ -806,6 +825,8 @@ terminal_screen_launch_child (TerminalScreen *screen)
                                      path,
                                      argv,
                                      env,
+                                     terminal_screen_get_working_dir (screen),
+                                     &screen->priv->child_pid,
                                      &err))
     {
       show_fork_error_dialog (screen, err);
@@ -842,7 +863,7 @@ new_window_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              NULL,
-                             FALSE, FALSE, NULL, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
 
 static void
@@ -852,7 +873,7 @@ new_tab_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              screen->priv->window,
-                             FALSE, FALSE, NULL, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
 
 static void
@@ -1302,12 +1323,84 @@ terminal_screen_get_dynamic_title (TerminalScreen *screen)
   return screen->priv->raw_title;
 }
 
+void
+terminal_screen_set_working_dir (TerminalScreen *screen,
+                                 const char     *dirname)
+{
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));  
+
+  g_free (screen->priv->working_dir);
+  screen->priv->working_dir = g_strdup (dirname);
+}
+
+const char*
+terminal_screen_get_working_dir (TerminalScreen *screen)
+{
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+
+  /* If we're on Linux and have a child PID, try to update
+   * the working dir
+   */
+  if (screen->priv->child_pid >= 0)
+    {
+      char *file;
+      char buf[PATH_MAX+1];
+      int len;
+      
+      file = g_strdup_printf ("/proc/%d/cwd", screen->priv->child_pid);
+
+      /* Silently ignore failure here, since we may not be on Linux */
+      len = readlink (file, buf, sizeof (buf) - 1);
+
+      if (len >= 0)
+        {
+          buf[len] = '\0';
+          
+          g_free (screen->priv->working_dir);
+          screen->priv->working_dir = g_strdup (buf);
+        }
+      
+      g_free (file);
+    }
+  
+  return screen->priv->working_dir;
+}
+
+static gboolean
+recheck_dir (void *data)
+{
+  TerminalScreen *screen = data;
+
+  screen->priv->recheck_working_dir_idle = 0;
+  
+  /* called just for side effect */
+  terminal_screen_get_working_dir (screen);
+
+  /* remove idle */
+  return FALSE;
+}
+
+static void
+queue_recheck_working_dir (TerminalScreen *screen)
+{
+  if (screen->priv->recheck_working_dir_idle == 0)
+    {
+      screen->priv->recheck_working_dir_idle =
+        g_idle_add_full (G_PRIORITY_LOW + 50,
+                         recheck_dir,
+                         screen,
+                         NULL);
+    }
+}
+
 static void
 terminal_screen_widget_title_changed (GtkWidget      *widget,
                                       TerminalScreen *screen)
 {
   terminal_screen_set_dynamic_title (screen,
-                                     terminal_widget_get_title (widget));
+                                     terminal_widget_get_title (widget));  
+
+  queue_recheck_working_dir (screen);
 }
 
 static void
@@ -1316,6 +1409,8 @@ terminal_screen_widget_child_died (GtkWidget      *term,
 {
   TerminalExitAction action;
 
+  screen->priv->child_pid = -1;
+  
   action = TERMINAL_EXIT_CLOSE;
   if (screen->priv->profile)
     action = terminal_profile_get_exit_action (screen->priv->profile);

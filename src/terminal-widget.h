@@ -133,6 +133,8 @@ gboolean terminal_widget_fork_command      (GtkWidget   *widget,
                                             const char  *path,
                                             char       **argv,
                                             char       **envp,
+                                            const char  *working_dir,
+                                            int         *child_pid,
                                             GError     **err);
 
 int terminal_widget_get_estimated_bytes_per_scrollback_line (void);

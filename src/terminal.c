@@ -119,6 +119,7 @@ enum {
   OPTION_USE_FACTORY,
   OPTION_DISABLE_FACTORY,
   OPTION_TITLE,
+  OPTION_WORKING_DIRECTORY,
   OPTION_LAST
 };  
 
@@ -241,6 +242,15 @@ struct poptOption options[] = {
     N_("TITLE")
   },
   {
+    "working-directory",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_WORKING_DIRECTORY,
+    N_("Set the terminal's working directory"),
+    N_("DIRNAME")
+  },
+  {
     NULL,
     '\0',
     0,
@@ -257,6 +267,7 @@ typedef struct
   gboolean profile_is_id;
   char **exec_argv;
   char *title;
+  char *working_dir;
 } InitialTab;
 
 typedef struct
@@ -282,6 +293,7 @@ initial_tab_new (const char *profile,
   it->profile_is_id = is_id;
   it->exec_argv = NULL;
   it->title = NULL;
+  it->working_dir = NULL;
   
   return it;
 }
@@ -292,6 +304,7 @@ initial_tab_free (InitialTab *it)
   g_free (it->profile);
   g_strfreev (it->exec_argv);
   g_free (it->title);
+  g_free (it->working_dir);
   g_free (it);
 }
 
@@ -398,10 +411,9 @@ terminal_new_event (BonoboListener    *listener,
     printf ("  arg %d = '%s'\n", i, args->_buffer [i]);
 
   g_return_if_fail (app != NULL);
-  terminal_app_new_terminal (
-	  app,
-	  terminal_profile_get_for_new_term (),
-	  NULL, FALSE, FALSE, NULL, NULL, NULL);
+  terminal_app_new_terminal (app,
+                             terminal_profile_get_for_new_term (),
+                             NULL, FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
@@ -878,6 +890,31 @@ main (int argc, char **argv)
             it->title = g_strdup (title);
           }
           break;
+
+        case OPTION_WORKING_DIRECTORY:
+          {
+            const char *dir;
+            InitialTab *it;
+            
+            dir = poptGetOptArg (ctx);
+
+            if (dir == NULL)
+              {
+                g_printerr (_("Option --working-directory requires an argument giving the directory\n"));
+                return 1;
+              }
+
+            it = ensure_top_tab (&initial_windows);
+
+            if (it->working_dir)
+              {
+                g_printerr (_("Two working directories given for one tab\n"));
+                return 1;
+              }
+
+            it->working_dir = g_strdup (dir);
+          }
+          break;
           
         case OPTION_LAST:          
         default:
@@ -998,7 +1035,8 @@ main (int argc, char **argv)
                                          iw->menubar_state,
                                          it->exec_argv,
                                          iw->geometry,
-                                         it->title);
+                                         it->title,
+                                         it->working_dir);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -1010,7 +1048,8 @@ main (int argc, char **argv)
                                          FALSE, FALSE,
                                          it->exec_argv,
                                          NULL,
-                                         it->title);
+                                         it->title,
+                                         it->working_dir);
             }
           
           tmp2 = tmp2->next;
@@ -1033,6 +1072,7 @@ main (int argc, char **argv)
                                  default_window_menubar_state,
                                  NULL,
                                  default_geometry,
+                                 NULL,
                                  NULL);
 
       g_free (default_geometry);
@@ -1082,7 +1122,8 @@ terminal_app_new_terminal (TerminalApp     *app,
                            gboolean         forced_menubar_state,
                            char           **override_command,
                            const char      *geometry,
-                           const char      *title)
+                           const char      *title,
+                           const char      *working_dir)
 {
   TerminalScreen *screen;
 
@@ -1111,6 +1152,9 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   if (title)
     terminal_screen_set_dynamic_title (screen, title);
+
+  if (working_dir)
+    terminal_screen_set_working_dir (screen, working_dir);
   
   if (override_command)    
     terminal_screen_set_override_command (screen, override_command);
@@ -2339,6 +2383,8 @@ terminal_app_get_clone_command (TerminalApp *app,
   argc += n_tabs * 2; /* one "--command foo" per tab */
 
   argc += n_tabs * 2; /* one "--title foo" per tab */
+
+  argc += n_tabs * 2; /* one "--working-directory foo" per tab */
   
   argv = g_new0 (char*, argc + 1);
 
@@ -2412,6 +2458,11 @@ terminal_app_get_clone_command (TerminalApp *app,
               argv[i] = g_strdup (title);
               ++i;
             }
+
+          argv[i] = g_strdup ("--working-directory");
+          ++i;
+          argv[i] = g_strdup (terminal_screen_get_working_dir (screen));
+          ++i;
           
           tmp2 = tmp2->next;
         }

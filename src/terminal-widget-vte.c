@@ -385,10 +385,14 @@ terminal_widget_fork_command (GtkWidget   *widget,
 			      const char  *path,
 			      char       **argv,
 			      char       **envp,
+                              const char  *working_dir,
+                              int         *child_pid,
 			      GError     **err)
 {
   /* FIXME: Not sure if this is correct */
   vte_terminal_fork_command (VTE_TERMINAL (widget), path, argv);
+
+  *child_pid = 0; /* FIXME */
   
   return TRUE;
 }
