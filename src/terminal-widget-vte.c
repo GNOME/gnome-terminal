@@ -28,7 +28,7 @@
 
 typedef struct
 {
-  int foo;
+  int url_tag;
   int skey_tag;
 } VteData;
 
@@ -109,7 +109,11 @@ void
 terminal_widget_match_add                  (GtkWidget            *widget,
 					    const char           *regexp)
 {
-  vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
+  VteData *data;
+  
+  data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
+
+  data->url_tag = vte_terminal_match_add (VTE_TERMINAL (widget), regexp);
 }
 
 void
@@ -140,7 +144,18 @@ terminal_widget_check_match (GtkWidget *widget,
 			     int        column,
 			     int        row)
 {
-  return vte_terminal_match_check(VTE_TERMINAL(widget), column, row, NULL);
+  VteData *data;
+  gint tag;
+  char *match;
+   
+  data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
+
+  match = vte_terminal_match_check (VTE_TERMINAL (widget), column, row, &tag);
+  if (data->url_tag == tag)
+    return match;
+
+  g_free (match);
+  return NULL;
 }
 
 char*
@@ -504,7 +519,7 @@ terminal_widget_get_estimated_bytes_per_scrollback_line (void)
 {
   /* One slot in the ring buffer, plus the array which holds the data for
    * the line, plus about 80 vte_charcell structures. */
-  return sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(wchar_t) + 4));
+  return sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4));
 }
 
 void
