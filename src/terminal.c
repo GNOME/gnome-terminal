@@ -1169,11 +1169,14 @@ terminal_app_new_terminal (TerminalApp     *app,
                            const char      *working_dir)
 {
   TerminalScreen *screen;
-
-  g_return_if_fail (profile);
+  gboolean window_created;
   
+  g_return_if_fail (profile);
+
+  window_created = FALSE;
   if (window == NULL)
     {
+      window_created = TRUE;
       window = terminal_window_new (conf);
       g_object_ref (G_OBJECT (window));
 
@@ -1215,8 +1218,13 @@ terminal_app_new_terminal (TerminalApp     *app,
         g_printerr (_("Invalid geometry string \"%s\"\n"),
                     geometry);
     }
-  
-  gtk_window_present (GTK_WINDOW (window));
+
+  /* don't present on new tab, or we can accidentally make the
+   * terminal jump workspaces.
+   * http://bugzilla.gnome.org/show_bug.cgi?id=78253
+   */
+  if (window_created)
+    gtk_window_present (GTK_WINDOW (window));
 
   terminal_screen_launch_child (screen);
 }

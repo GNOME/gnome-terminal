@@ -556,7 +556,9 @@ terminal_screen_update_on_realize (GtkWidget      *term,
                 char *font_name;
                 
                 font_name = g_strdup (gdk_x11_font_get_name (from_desc));
-            
+
+                g_assert (font_name);
+                
                 if (!xfont_is_monospace (font_name));
                 {
                   /* Can't use the system font as-is */
@@ -564,6 +566,8 @@ terminal_screen_update_on_realize (GtkWidget      *term,
 
                   fallback = make_xfont_monospace (font_name);
 
+                  g_assert (fallback);
+                  
                   font = load_fonset_without_error (fallback);
 
                   if (font == NULL)
@@ -599,7 +603,6 @@ terminal_screen_update_on_realize (GtkWidget      *term,
                            terminal_profile_get_x_font (profile));
              }
          }
-
 
        if (font)
          {

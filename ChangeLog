@@ -1,5 +1,14 @@
 2002-05-12  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal.c (terminal_app_new_terminal): don't
+	gtk_window_present() the new window.
+
+	* src/terminal-screen.c (terminal_screen_update_on_realize): add
+	an assertion to fail if we end up with null X font name, so I can 
+	tell the crash is from a new version instead of old.
+
+2002-05-12  Havoc Pennington  <hp@pobox.com>
+
 	* src/Makefile.am: profterm.schemas -> gnome-terminal.schemas 
 	(accompanied by moving file on CVS server)
 
