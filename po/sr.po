@@ -9,21 +9,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-04 04:04+0200\n"
-"PO-Revision-Date: 2003-10-04 12:37+0200\n"
+"POT-Creation-Date: 2003-10-13 21:45+0200\n"
+"PO-Revision-Date: 2003-10-13 21:48+0200\n"
 "Last-Translator: Слободан Средојевић <ssl@uns.ns.ac.yu>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: gnome-terminal.desktop.in.h:1
 msgid "Command line"
 msgstr "Интерпретатор наредби"
 
 #: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
-#: src/terminal-accels.c:172 src/terminal.c:1142 src/terminal.c:1459
+#: src/terminal-accels.c:172 src/terminal.c:1171 src/terminal.c:1515
 #: src/terminal-profile.c:275 src/terminal-window.c:709
 msgid "Terminal"
 msgstr "Терминал"
@@ -190,21 +191,21 @@ msgstr "тајландски"
 msgid "User Defined"
 msgstr "Корисник дефинисао"
 
-#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2755
-#: src/terminal-window.c:2576
+#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2811
+#: src/terminal-window.c:2600
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Догодила се грешка при приказивању помоћи: %s"
 
-#: src/encoding.c:749 src/encoding.c:813
+#: src/encoding.c:751 src/encoding.c:815
 msgid "_Description"
 msgstr "_Опис"
 
-#: src/encoding.c:758 src/encoding.c:822
+#: src/encoding.c:760 src/encoding.c:824
 msgid "_Encoding"
 msgstr "_Запис"
 
-#: src/encoding.c:991
+#: src/encoding.c:993
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal encoding list "
@@ -878,7 +879,10 @@ msgid ""
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
-msgstr "Пречица за увећање слова. Изражава се као ниска на исти начин како се користи и у датотекама са Гтк+ ресурсима. Уколико поставите опцију на нарочиту ниску „disabled“, онда се неће доделити пречица овој акцији."
+msgstr ""
+"Пречица за увећање слова. Изражава се као ниска на исти начин како се "
+"користи и у датотекама са Гтк+ ресурсима. Уколико поставите опцију на "
+"нарочиту ниску „disabled“, онда се неће доделити пречица овој акцији."
 
 #: src/gnome-terminal.schemas.in.h:39
 msgid ""
@@ -886,7 +890,10 @@ msgid ""
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
-msgstr "Пречица за умањивање слова. Изражава се као ниска на исти начин како се користи и у датотекама са Гтк+ ресурсима. Уколико поставите опцију на нарочиту ниску „disabled“, онда се неће доделити пречица овој акцији."
+msgstr ""
+"Пречица за умањивање слова. Изражава се као ниска на исти начин како се "
+"користи и у датотекама са Гтк+ ресурсима. Уколико поставите опцију на "
+"нарочиту ниску „disabled“, онда се неће доделити пречица овој акцији."
 
 #: src/gnome-terminal.schemas.in.h:40
 msgid ""
@@ -928,7 +935,11 @@ msgid ""
 "terminal. Expressed as a string in the same format used for GTK+ resource "
 "files. If you set the option to the special string \"disabled\", then there "
 "will be no keyboard shortcut for this action."
-msgstr "Пречица за убацивање садржаја списка исечака у терминал. Изражава се као ниска на исти начин како се користи и у датотекама са Гтк+ ресурсима. Уколико поставите опцију на нарочиту ниску „disabled“, онда се неће доделити пречица овој акцији."
+msgstr ""
+"Пречица за убацивање садржаја списка исечака у терминал. Изражава се као "
+"ниска на исти начин како се користи и у датотекама са Гтк+ ресурсима. "
+"Уколико поставите опцију на нарочиту ниску „disabled“, онда се неће доделити "
+"пречица овој акцији."
 
 #: src/gnome-terminal.schemas.in.h:44
 msgid ""
@@ -1547,7 +1558,7 @@ msgstr "Изаберите слова за терминал"
 msgid "_Font:"
 msgstr "_Слова:"
 
-#: src/profile-editor.c:1500
+#: src/profile-editor.c:1502
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Уређивање скупа подешавања „%s“"
@@ -1748,8 +1759,8 @@ msgstr "Пређи на"
 msgid "Help"
 msgstr "Помоћ"
 
-#: src/terminal-accels.c:264 src/terminal.c:1547 src/terminal-profile.c:391
-#: src/terminal-screen.c:182
+#: src/terminal-accels.c:264 src/terminal.c:1612 src/terminal-profile.c:391
+#: src/terminal-screen.c:189
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Догодила се грешка при учитавању подешавања из %s. (%s)\n"
@@ -1832,15 +1843,15 @@ msgstr "_Радња"
 msgid "Shortcut _Key"
 msgstr "_Тастер за пречицу"
 
-#: src/terminal.c:184
+#: src/terminal.c:186
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Изврши аргумент ове опције унутар терминала."
 
-#: src/terminal.c:193
+#: src/terminal.c:195
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Изврши остатак наредбе унутар терминала."
 
-#: src/terminal.c:202
+#: src/terminal.c:204
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
@@ -1848,7 +1859,7 @@ msgstr ""
 "Отвори нови прозор са листом користећи наведени скуп подешавања. Можете "
 "задати више од једне опције."
 
-#: src/terminal.c:211
+#: src/terminal.c:213
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1856,11 +1867,11 @@ msgstr ""
 "Отвори нови прозор са језичком користећи наведену поставку. Можете задати "
 "више од једне опције."
 
-#: src/terminal.c:212 src/terminal.c:230
+#: src/terminal.c:214 src/terminal.c:232
 msgid "PROFILENAME"
 msgstr "ИМЕ СКУПА ПОДЕШАВАЊА"
 
-#: src/terminal.c:220
+#: src/terminal.c:222
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
@@ -1868,7 +1879,7 @@ msgstr ""
 "Отвори нови лист у последњем отвореном прозору користећи подразумевани скуп "
 "подешавања. Можете задати више од једне опције."
 
-#: src/terminal.c:229
+#: src/terminal.c:231
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1876,7 +1887,7 @@ msgstr ""
 "Отвори нови лист у последњем отвореном прозору користећи наведени скуп "
 "подешавања. Можете задати више од једне опције."
 
-#: src/terminal.c:238
+#: src/terminal.c:240
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1884,11 +1895,11 @@ msgstr ""
 "Отвори нови прозор са језичком са задатим јединственим бројем скупа "
 "подешавања. Користи се интерно како би се забележило стање."
 
-#: src/terminal.c:239 src/terminal.c:248
+#: src/terminal.c:241 src/terminal.c:250
 msgid "PROFILEID"
 msgstr "БРОЈ СКУПА ПОДЕШАВАЊА"
 
-#: src/terminal.c:247
+#: src/terminal.c:249
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1896,7 +1907,7 @@ msgstr ""
 "Отвори нови лист у последње отвореном прозору користећи јединствени број "
 "скупа подешавања. Користи се интерно како би се забележило стање."
 
-#: src/terminal.c:256
+#: src/terminal.c:258
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -1905,11 +1916,11 @@ msgstr ""
 "прозор; може да се зада само једном и да важи за сваки прозор који отворите "
 "из линије наредби."
 
-#: src/terminal.c:257
+#: src/terminal.c:259
 msgid "ROLE"
 msgstr "УЛОГА"
 
-#: src/terminal.c:265
+#: src/terminal.c:267
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1919,7 +1930,7 @@ msgstr ""
 "може да се зада само једном и да важи за сваки прозор који отворите из "
 "линије наредби."
 
-#: src/terminal.c:274
+#: src/terminal.c:276
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1929,7 +1940,7 @@ msgstr ""
 "може да се зада само једном и да важи за сваки прозор који отворите из "
 "линије наредби."
 
-#: src/terminal.c:283
+#: src/terminal.c:285
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1937,151 +1948,165 @@ msgstr ""
 "X геометријски захтеви (погледајте „X“ упутство), могу бити везани за прозор "
 "који се отвара."
 
-#: src/terminal.c:284
+#: src/terminal.c:286
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРИЈА"
 
-#: src/terminal.c:292
+#: src/terminal.c:294
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Не пријављуј се на сервер за покретање, не користи исти покренути терминал"
 
-#: src/terminal.c:301
+#: src/terminal.c:303
 msgid "Register with the activation nameserver [default]"
 msgstr "Пријави се на сервер имена за покретање [подразумевано]"
 
-#: src/terminal.c:310
+#: src/terminal.c:312
 msgid "ID for startup notification protocol."
 msgstr "Јединствени број за протокол о обавештењу покретања"
 
-#: src/terminal.c:319
+#: src/terminal.c:321
 msgid "Set the terminal's title"
 msgstr "Постави наслов прозора"
 
-#: src/terminal.c:320
+#: src/terminal.c:322
 msgid "TITLE"
 msgstr "НАСЛОВ"
 
-#: src/terminal.c:328
+#: src/terminal.c:330
 msgid "Set the terminal's working directory"
 msgstr "Постави радни директоријум терминала"
 
-#: src/terminal.c:329
+#: src/terminal.c:331 src/terminal.c:340
 msgid "DIRNAME"
 msgstr "Име директоријума"
 
-#: src/terminal.c:338
+#: src/terminal.c:339
+msgid "Set the default terminal's working directory. Used internally"
+msgstr "Постави подразумевани радни директоријум терминала. Користи се интерно"
+
+#: src/terminal.c:348
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Постави вредност увећања (1.0 = нормалан приказ)"
 
-#: src/terminal.c:339 src/terminal.c:348
+#: src/terminal.c:349 src/terminal.c:358
 msgid "ZOOMFACTOR"
 msgstr "Чинилац приказа"
 
-#: src/terminal.c:347
+#: src/terminal.c:357
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Постави последње наведени лист као активан у свом прозору"
 
-#: src/terminal.c:685
+#: src/terminal.c:695
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Не могу учитати иконицу „%s“: %s\n"
 
-#: src/terminal.c:750
+#: src/terminal.c:760
 #, c-format
 msgid "Option \"%s\" requires specifying the command to run\n"
 msgstr "Опција „%s“ захтева задавање наредбе која треба да се изврши\n"
 
-#: src/terminal.c:758
+#: src/terminal.c:768
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
 msgstr "Аргумент за „%s“ није исправна наредба: %s\n"
 
-#: src/terminal.c:768 src/terminal.c:792
+#: src/terminal.c:778 src/terminal.c:802
 #, c-format
 msgid "\"%s\" specified more than once for the same window or tab\n"
 msgstr "„%s“ је задато више пута за исти прозор или лист\n"
 
-#: src/terminal.c:783
+#: src/terminal.c:793
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line\n"
 msgstr "Опција „%s“ захтева задавање наредбе на крају линије за наредбе\n"
 
-#: src/terminal.c:814 src/terminal.c:838
+#: src/terminal.c:824 src/terminal.c:848
 #, c-format
 msgid "Option \"%s\" requires an argument specifying what profile to use\n"
 msgstr ""
 "Опција „%s“ захтева аргумент којим се задаје скуп подешавања који се "
 "користи\n"
 
-#: src/terminal.c:872 src/terminal.c:898
+#: src/terminal.c:882 src/terminal.c:908
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "„%s“ опција је наведена два пута за исти прозор\n"
 
-#: src/terminal.c:921
+#: src/terminal.c:931
 #, c-format
 msgid "Option \"%s\" requires an argument giving the role\n"
 msgstr "Опција „%s“ захтева аргумент којим се задаје улога\n"
 
-#: src/terminal.c:930
+#: src/terminal.c:940
 msgid "Two roles given for one window\n"
 msgstr "Две улоге наведене за један прозор\n"
 
-#: src/terminal.c:946
+#: src/terminal.c:956
 #, c-format
 msgid "Option \"%s\" requires an argument giving the geometry\n"
 msgstr "Опција „%s“ захтева аргумент којим се постављају димензије\n"
 
-#: src/terminal.c:955
+#: src/terminal.c:965
 #, c-format
 msgid "Two \"%s\" options given for one window\n"
 msgstr "Две опције „%s“ наведене за један прозор\n"
 
-#: src/terminal.c:965
+#: src/terminal.c:975
 msgid "Two geometries given for one window\n"
 msgstr "Две димензије наведене за један прозор\n"
 
-#: src/terminal.c:991
+#: src/terminal.c:1001
 #, c-format
 msgid "Option \"%s\" requires an argument giving the title\n"
 msgstr "Опција „%s“ захтева аргумент којим се поставља наслов\n"
 
-#: src/terminal.c:999 src/terminal.c:1022 src/terminal.c:1046
+#: src/terminal.c:1009 src/terminal.c:1032 src/terminal.c:1074
 #, c-format
 msgid "Two \"%s\" options given for one tab\n"
 msgstr "Две опције „%s“ дате за један лист\n"
 
-#: src/terminal.c:1014
+#: src/terminal.c:1024
 #, c-format
 msgid "Option \"%s\" requires an argument giving the directory\n"
 msgstr "Опција „%s“ захтева аргумент којим се задаје директоријум\n"
 
-#: src/terminal.c:1038
+#: src/terminal.c:1044
+msgid ""
+"Option --default-working-directory requires an argument giving the "
+"directory\n"
+msgstr "Опција --default-working-directory захтева име директоријума као аргумент\n"
+
+#: src/terminal.c:1050
+msgid "Two default working directories given for\n"
+msgstr "Задали сте два подразумевана радна директоријума за\n"
+
+#: src/terminal.c:1066
 #, c-format
 msgid "Option \"%s\" requires an argument giving the zoom factor\n"
 msgstr "Опција „%s“ захтева аргумент којим се поставља вредност увећања\n"
 
-#: src/terminal.c:1061
+#: src/terminal.c:1089
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "„%s“ није исправна вредност увећања\n"
 
-#: src/terminal.c:1069
+#: src/terminal.c:1097
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Вредност увећања „%g“ је премала, користим %g\n"
 
-#: src/terminal.c:1076
+#: src/terminal.c:1104
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Вредност увећања „%g“ је превелика, користим %g\n"
 
-#: src/terminal.c:1097
+#: src/terminal.c:1125
 #, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
@@ -2092,32 +2117,32 @@ msgstr ""
 "желите да направите скуп подешавања са жељеним подешавањима, и користите --"
 "window-with-profile опцију\n"
 
-#: src/terminal.c:1103
+#: src/terminal.c:1131
 #, c-format
 msgid "\"%s\" option given twice\n"
 msgstr "„%s“ опција је наведена два пута\n"
 
-#: src/terminal.c:1108 src/terminal.c:1247
+#: src/terminal.c:1136 src/terminal.c:1277
 #, c-format
 msgid "\"%s\" option requires an argument\n"
 msgstr "„%s“ опција захтева аргумент\n"
 
-#: src/terminal.c:1225
+#: src/terminal.c:1255
 #, c-format
 msgid "No argument given to \"%s\" option\n"
 msgstr "Нисте навели аргумент за „%s“ опцију\n"
 
-#: src/terminal.c:1333
+#: src/terminal.c:1389
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Не постоји скуп подешавања „%s“, користи уобичајен скуп подешавања\n"
 
-#: src/terminal.c:1509
+#: src/terminal.c:1565
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Нетачан аргумент: „%s“\n"
 
-#: src/terminal.c:1563
+#: src/terminal.c:1628
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2126,50 +2151,50 @@ msgstr ""
 "Догодила се грешка при преузимању обавештења о променама списка скупова "
 "подешавања терминала. (%s)\n"
 
-#: src/terminal.c:1799
+#: src/terminal.c:1853
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Нетачан податак о димензијама „%s“\n"
 
-#: src/terminal.c:1859
+#: src/terminal.c:1913
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Догодила се грешка при учитавању списка скупова подешавања терминала. (%s)\n"
 
-#: src/terminal.c:2158
+#: src/terminal.c:2212
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Већ постоји скуп подешавања са именом „%s“"
 
-#: src/terminal.c:2169
+#: src/terminal.c:2223
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Скуп подешавања који сте изабрали као основу за ваш нови скуп подешавања "
 "више не постоји"
 
-#: src/terminal.c:2256
+#: src/terminal.c:2312
 msgid "Enter profile name"
 msgstr "Унесите име скупа подешавања:"
 
-#: src/terminal.c:2267
+#: src/terminal.c:2323
 msgid "Choose base profile"
 msgstr "Изаберите основни скуп подешавања"
 
-#: src/terminal.c:2407
+#: src/terminal.c:2463
 msgid "Profile list"
 msgstr "Списак скупа подешавања"
 
-#: src/terminal.c:2476
+#: src/terminal.c:2532
 msgid "You must select one or more profiles to delete."
 msgstr "Морате изабрати један или више скупова подешавања за брисање."
 
-#: src/terminal.c:2487
+#: src/terminal.c:2543
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Морате имати барем један скуп подешавања; Не можете их све уклонити."
 
-#: src/terminal.c:2494
+#: src/terminal.c:2550
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
@@ -2177,55 +2202,55 @@ msgstr[0] "Да ли желите да уклоните %d скуп подеша
 msgstr[1] "Да ли желите да уклоните %d скупа подешавања?\n"
 msgstr[2] "Да ли желите да уклоните %d скупова подешавања?\n"
 
-#: src/terminal.c:2515
+#: src/terminal.c:2571
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Да ли желите да уклоните скуп подешавања „%s“?"
 
-#: src/terminal.c:2537
+#: src/terminal.c:2593
 msgid "Delete Profile"
 msgstr "Уклањање скупа подешавања"
 
-#: src/terminal.c:2777 src/terminal-window.c:2007
+#: src/terminal.c:2833 src/terminal-window.c:2031
 msgid "_Edit"
 msgstr "_Уређивање"
 
-#: src/terminal.c:2810
+#: src/terminal.c:2866
 msgid "Edit Profiles"
 msgstr "Уређење скупа подешавања"
 
-#: src/terminal.c:2850
+#: src/terminal.c:2908
 msgid "Profile _used when launching a new terminal:"
 msgstr "При покретању про_грама, користи овај скуп подешавања:"
 
-#: src/terminal.c:2872
+#: src/terminal.c:2930
 msgid "_Profiles:"
 msgstr "Скупови _подешавања:"
 
-#: src/terminal.c:2921
+#: src/terminal.c:2979
 msgid "Click to open new profile dialog"
 msgstr "Притисните да би отворили прозор за стварање новог скупа подешавања"
 
-#: src/terminal.c:2934
+#: src/terminal.c:2992
 msgid "Click to open edit profile dialog"
 msgstr "Притисните да би отворили прозор за уређење скупа подешавања"
 
-#: src/terminal.c:2944
+#: src/terminal.c:3002
 msgid "Click to delete selected profile"
 msgstr "Притисните да би уклонили изабрани скуп подешавања"
 
-#: src/terminal.c:2993
+#: src/terminal.c:3051
 msgid "Click button to choose profile"
 msgstr "Притисните дугме да би изабрали скуп подешавања"
 
-#: src/terminal.c:3476
+#: src/terminal.c:3543
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "Недостаје датотека „%s“. Ово говори да је програм погрешно инсталиран."
 
-#: src/terminal.c:3638
+#: src/terminal.c:3707
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2233,7 +2258,7 @@ msgstr ""
 "Изгледа да нисте инсталирали gnome-terminal.server у тачном директоријуму. "
 "Режим производње је искључен.\n"
 
-#: src/terminal.c:3641
+#: src/terminal.c:3710
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2241,7 +2266,7 @@ msgstr ""
 "Грешка при регистровању терминала са услугом покретања ; режим производње је "
 "искључен.\n"
 
-#: src/terminal.c:3677
+#: src/terminal.c:3746
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Не успевам да приступим терминал серверу из сервера за покретање\n"
 
@@ -2343,7 +2368,7 @@ msgstr[0] "Палета има %d ставку уместо %d\n"
 msgstr[1] "Палета има %d ставке уместо %d\n"
 msgstr[2] "Палета има %d ставки уместо %d\n"
 
-#: src/terminal-screen.c:198
+#: src/terminal-screen.c:205
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2352,17 +2377,17 @@ msgstr ""
 "Догодила се грешка при пријављивању на обавештења о променама слова утврђене "
 "ширине.(%s)\n"
 
-#: src/terminal-screen.c:737
+#: src/terminal-screen.c:809
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Не могу учитати слова „%s“\n"
 
-#: src/terminal-screen.c:865
+#: src/terminal-screen.c:937
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Догодио се проблем са наредбом за овај терминал: %s"
 
-#: src/terminal-screen.c:1188
+#: src/terminal-screen.c:1260
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2371,7 +2396,7 @@ msgstr ""
 "Не могу отворити адресу „%s“:\n"
 "%s"
 
-#: src/terminal-screen.c:1281 src/terminal-window.c:954
+#: src/terminal-screen.c:1353 src/terminal-window.c:954
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2380,86 +2405,86 @@ msgstr ""
 "Дошло је до грешке при учитавању вредности подешавања да ли се користе слике "
 "у менију. (%s)\n"
 
-#: src/terminal-screen.c:1331
+#: src/terminal-screen.c:1403
 msgid "_Open Link"
 msgstr "_Отвори везу"
 
-#: src/terminal-screen.c:1336
+#: src/terminal-screen.c:1408
 msgid "_Copy Link Address"
 msgstr "_Умножи адресу везе"
 
-#: src/terminal-screen.c:1347 src/terminal-window.c:758
+#: src/terminal-screen.c:1419 src/terminal-window.c:758
 msgid "_New Window"
 msgstr "Нови прозо_р"
 
-#: src/terminal-screen.c:1354 src/terminal-window.c:761
+#: src/terminal-screen.c:1426 src/terminal-window.c:761
 msgid "New _Tab"
 msgstr "Нови _лист"
 
-#: src/terminal-screen.c:1378 src/terminal-window.c:867
+#: src/terminal-screen.c:1450 src/terminal-window.c:867
 msgid "_Profile"
 msgstr "_Скуп подешавања"
 
-#: src/terminal-screen.c:1428
+#: src/terminal-screen.c:1500
 msgid "_Edit Current Profile..."
 msgstr "_Уреди поставку у употреби"
 
-#: src/terminal-screen.c:1434
+#: src/terminal-screen.c:1506
 msgid "_Input Methods"
 msgstr "_Начини уноса у терминал"
 
-#: src/terminal-screen.c:1450
+#: src/terminal-screen.c:1522
 msgid "Hide _Menubar"
 msgstr "Уклони _мени"
 
-#: src/terminal-screen.c:1455
+#: src/terminal-screen.c:1527
 msgid "Show _Menubar"
 msgstr "Прикажи м_ени"
 
-#: src/terminal-screen.c:1464
+#: src/terminal-screen.c:1536
 msgid "Secure _Keyboard"
 msgstr "Сигурна _тастатура"
 
-#: src/terminal-screen.c:1812
+#: src/terminal-screen.c:1919
 msgid "Change terminal title"
 msgstr "Промени наслов терминала"
 
-#: src/terminal-screen.c:1839
+#: src/terminal-screen.c:1948
 msgid "_Title:"
 msgstr "_Наслов:"
 
-#: src/terminal-screen.c:1957
+#: src/terminal-screen.c:2066
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Текст превучен на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:1980
+#: src/terminal-screen.c:2089
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Боја превучена на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2023
+#: src/terminal-screen.c:2132
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Адреса превучена из Мозиле (Mozilla) има неодговарајући формат (%d) или "
 "дужину (%d)\n"
 
-#: src/terminal-screen.c:2072
+#: src/terminal-screen.c:2181
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Списак превучених адреса има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2126
+#: src/terminal-screen.c:2235
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Превучено име слике има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2152
+#: src/terminal-screen.c:2261
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Грешка при претварању адресе „%s“ у назив датотеке: %s\n"
@@ -2590,35 +2615,35 @@ msgstr ""
 "Догодила се грешка при преузимању обавештења о променама у подешавањима "
 "терминалског прозора. (%s)\n"
 
-#: src/terminal-window.c:2005
+#: src/terminal-window.c:2029
 msgid "_File"
 msgstr "_Датотека"
 
-#: src/terminal-window.c:2009
+#: src/terminal-window.c:2033
 msgid "_View"
 msgstr "П_риказ"
 
-#: src/terminal-window.c:2011
+#: src/terminal-window.c:2035
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: src/terminal-window.c:2013
+#: src/terminal-window.c:2037
 msgid "_Go"
 msgstr "Пр_елазак"
 
-#: src/terminal-window.c:2015
+#: src/terminal-window.c:2039
 msgid "_Help"
 msgstr "_Помоћ"
 
-#: src/terminal-window.c:2140
+#: src/terminal-window.c:2164
 msgid "_Restore normal size"
 msgstr "Вр_ати на нормалну величину"
 
-#: src/terminal-window.c:2144
+#: src/terminal-window.c:2168
 msgid "_Full screen"
 msgstr "Пре_ко целог екрана"
 
-#: src/terminal-window.c:2340
+#: src/terminal-window.c:2364
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -2629,7 +2654,7 @@ msgstr ""
 "(Технички говорећи, потребан вам је управник прозорима који "
 "има_NET_WM_STATE_FULLSCREEN могућност.)"
 
-#: src/terminal-window.c:2596
+#: src/terminal-window.c:2620
 msgid "translator_credits"
 msgstr ""
 "Слободан Средојевић <ssl@uns.ns.ac.yu>\n"
@@ -2637,7 +2662,7 @@ msgstr ""
 "\n"
 "http://prevod.org/"
 
-#: src/terminal-window.c:2610
+#: src/terminal-window.c:2634
 msgid "GNOME Terminal"
 msgstr "Гномов терминал"
 
@@ -2674,13 +2699,6 @@ msgstr "Гномов терминал"
 
 #~ msgid "--hide-menubar option given twice for the same window\n"
 #~ msgstr "--hide-menubar опција је наведена два пута за исти прозор\n"
-
-#~ msgid ""
-#~ "Option --working-directory requires an argument giving the directory\n"
-#~ msgstr "Опција --working-directory захтева име директоријума као аргумент\n"
-
-#~ msgid "Two working directories given for one tab\n"
-#~ msgstr "Задали сте два радна директоријума за један лист\n"
 
 #~ msgid "Two zoom factors given for one tab\n"
 #~ msgstr "Навели сте две вредности увећања за један лист\n"
