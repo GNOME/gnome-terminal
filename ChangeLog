@@ -1,3 +1,10 @@
+2003-10-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal.c(main): free the argv_copy and the options results;
+	  leak reported in bug 124910. Also free argv_copy at the other early
+	  returns, to lighten valgrind output, as suggested in bug 124416.
+	* AUTHORS: added myself.
+
 2003-10-16 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c(main): free the popt context when it is no longer

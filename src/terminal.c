@@ -1562,8 +1562,8 @@ main (int argc, char **argv)
   args = poptGetArgs (ctx);
   if (args)
     {
-      g_printerr (_("Invalid argument: \"%s\"\n"),
-                  *args);
+      g_printerr (_("Invalid argument: \"%s\"\n"), *args);
+      g_strfreev (argv_copy);
       return 1;
     }
   poptFreeContext (ctx);
@@ -1592,7 +1592,11 @@ main (int argc, char **argv)
       g_free (cwd);
 
       if (terminal_invoke_factory (argc_copy, argv_copy))
-        return 0;
+        {
+          g_strfreev (argv_copy);
+          option_parsing_results_free (results);
+          return 0;
+        }
     }
 
   g_strfreev (argv_copy);
@@ -1648,7 +1652,10 @@ main (int argc, char **argv)
                     NULL);
 
   if (new_terminal_with_options (results))
-    return 1;
+    {
+      option_parsing_results_free (results);
+      return 1;
+    }
 
   option_parsing_results_free (results);
   results = NULL;
