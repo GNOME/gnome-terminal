@@ -1,8 +1,18 @@
 2004-05-07 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/gnome-terminal.schemas.in: added the
+	  /schemas/apps/gnome-terminal/global/confirm-close schema, a boolean
+	  which, when true, causes a confirmation dialog when closing a window
+	  with more than one tab.
+	* src/terminal-window.c(terminal_window_init,
+	  terminal_window_delete_event, confirm_close_window): implement the
+	  above key. This comes from bug #87771.
+
+2004-05-07 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-screen.c: make the Paste menu item in the popup be
-	insensitive when there is nothing in the clipboard. Caught by Madhan 
-	Raj M, with patch and all, on bug #142101. 
+	  insensitive when there is nothing in the clipboard. Caught by Madhan 
+	  Raj M, with patch and all, on bug #142101. 
 
 2004-04-27 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 

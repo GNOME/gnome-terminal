@@ -98,6 +98,10 @@ static void terminal_window_class_init  (TerminalWindowClass *klass);
 static void terminal_window_finalize    (GObject             *object);
 static void terminal_window_destroy     (GtkObject           *object);
 
+static gboolean terminal_window_delete_event (GtkWidget *widget,
+                                              GdkEvent *event,
+                                              gpointer data);
+
 static void       screen_set_scrollbar (TerminalScreen *screen,
                                         GtkWidget      *scrollbar);
 static void       screen_set_hbox      (TerminalScreen *screen,
@@ -205,6 +209,8 @@ static gboolean find_smaller_zoom_factor (double  current,
                                           double *found);
 
 static void terminal_window_show (GtkWidget *widget);
+
+static gboolean confirm_close_window (TerminalWindow *window);
 
 static gpointer parent_class;
 
@@ -748,7 +754,10 @@ terminal_window_init (TerminalWindow *window)
   GError *error;
   gboolean menus_have_icons;
 
-  
+  g_signal_connect (G_OBJECT (window), "delete_event", 
+                    G_CALLBACK(terminal_window_delete_event),
+                    NULL);
+
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
   client = gconf_client_get_default();
   
@@ -1084,6 +1093,14 @@ terminal_window_destroy (GtkObject *object)
   window->priv->encoding_menuitem = NULL;
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);  
+}
+
+static gboolean
+terminal_window_delete_event (GtkWidget *widget,
+                              GdkEvent *event,
+                              gpointer data)
+{
+   return !confirm_close_window (TERMINAL_WINDOW (widget));
 }
 
 static void
@@ -2244,11 +2261,57 @@ new_tab_callback (GtkWidget      *menuitem,
     }
 }
 
+static gboolean
+confirm_close_window (TerminalWindow *window)
+{
+  GtkWidget *dialog;
+  GError *error;
+  gboolean result;
+  char *msg, *msg1;
+  int n;
+
+  n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook));
+  if (n <= 1)
+    return TRUE;
+
+  client = gconf_client_get_default();
+  error = NULL;
+  if (!gconf_client_get_bool (client, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
+    return TRUE;
+
+  msg1 = g_strdup_printf (ngettext ("This window has one tab open. Closing the window will close it.",
+                                    "This window has %d tabs open. Closing the window will also close all its tabs.",
+                                    n),
+                          n);
+  msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n", 
+                         _("Close all tabs?"), 
+                         msg1);
+
+  dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_WARNING,
+                                   GTK_BUTTONS_NONE,
+                                   msg);
+  g_free (msg);
+  g_free (msg1);
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All Tabs"), GTK_RESPONSE_YES);
+
+  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+
+  result = gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES;
+  gtk_widget_destroy (dialog);
+
+  return result;
+}
+
 static void
 close_window_callback (GtkWidget      *menuitem,
                        TerminalWindow *window)
 {
-  gtk_widget_destroy (GTK_WIDGET (window));
+  if (confirm_close_window (window))
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 static void
