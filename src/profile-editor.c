@@ -617,16 +617,18 @@ x_font_clicked (GtkWidget       *button,
   {
     GtkWidget *fontsel;
     char *spacings[] = { "m", "c", NULL };
+    char *slants[] = { "r", "ot", NULL };
+    char *weights[] = { "medium", "regular", NULL };
 
     fontsel = egg_xfont_selector_new ();
-#if 0
+#if 1
     /* doesn't seem to work yet */
     egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
                                    EGG_XFONT_FILTER_BASE,
                                    EGG_XFONT_ALL,
                                    NULL,
-                                   NULL,
-                                   NULL,
+                                   weights,
+                                   slants,
                                    NULL,
                                    spacings,
                                    NULL);
