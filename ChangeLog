@@ -1,3 +1,22 @@
+2002-04-14  Havoc Pennington  <hp@pobox.com>
+
+	* src/gnome-terminal.glade2: remove max_saved property that spewed
+	warnings
+
+	* src/terminal.c (terminal_invoke_factory): use g_printerr for
+	errors
+	(strip_old_args): strip out old args that are no longer supported,
+	but warn about them. #76102
+	(main): add --title option equivalent to Set Title menu item
+	(main): scan for -x and --execute prior to gtk_init(), so you 
+	can run something containing gtk args after -x
+	(terminal_app_get_clone_command): save title and factory usage
+	in the session
+	(terminal_app_get_clone_command): do not shell quote the 
+	command to be restored, because this argv is not going 
+	to get shell-interpreted. (Titles and things would break 
+	if it did.)
+
 2002-04-11  Jacob Berkman  <jacob@ximian.com>
 
 	* src/Makefile.am (EXTRA_DIST): add .server file

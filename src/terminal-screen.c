@@ -810,7 +810,7 @@ new_window_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              NULL,
-                             FALSE, FALSE, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL);
 }
 
 static void
@@ -820,7 +820,7 @@ new_tab_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              screen->priv->window,
-                             FALSE, FALSE, NULL, NULL);
+                             FALSE, FALSE, NULL, NULL, NULL);
 }
 
 static void
@@ -1232,10 +1232,12 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     }
 }
 
-static void
-set_raw_title (TerminalScreen *screen,
-               const char     *title)
-{  
+void
+terminal_screen_set_dynamic_title (TerminalScreen *screen,
+                                   const char     *title)
+{
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+  
   if (screen->priv->raw_title && title &&
       strcmp (screen->priv->raw_title, title) == 0)
     return;
@@ -1260,11 +1262,20 @@ set_raw_title (TerminalScreen *screen,
     }
 }
 
+const char*
+terminal_screen_get_dynamic_title (TerminalScreen *screen)
+{
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+  
+  return screen->priv->raw_title;
+}
+
 static void
 terminal_screen_widget_title_changed (GtkWidget      *widget,
                                       TerminalScreen *screen)
-{      
-  set_raw_title (screen, terminal_widget_get_title (widget));
+{
+  terminal_screen_set_dynamic_title (screen,
+                                     terminal_widget_get_title (widget));
 }
 
 static void
@@ -1303,7 +1314,7 @@ title_entry_changed (GtkWidget      *entry,
 
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
   
-  set_raw_title (screen, text);
+  terminal_screen_set_dynamic_title (screen, text);
 
   g_free (text);
 }

@@ -75,6 +75,7 @@ struct _TerminalApp
 
 static GConfClient *conf = NULL;
 static TerminalApp *app = NULL;
+static gboolean terminal_factory_disabled = FALSE;
 
 static void         sync_profile_list            (gboolean use_this_list,
                                                   GSList  *this_list);
@@ -117,6 +118,7 @@ enum {
   OPTION_GEOMETRY,
   OPTION_USE_FACTORY,
   OPTION_DISABLE_FACTORY,
+  OPTION_TITLE,
   OPTION_LAST
 };  
 
@@ -230,6 +232,15 @@ struct poptOption options[] = {
     NULL
   },
   {
+    "title",
+    't',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_TITLE,
+    N_("Set the terminal's title"),
+    N_("TITLE")
+  },
+  {
     NULL,
     '\0',
     0,
@@ -245,6 +256,7 @@ typedef struct
   char *profile;
   gboolean profile_is_id;
   char **exec_argv;
+  char *title;
 } InitialTab;
 
 typedef struct
@@ -269,6 +281,7 @@ initial_tab_new (const char *profile,
   it->profile = g_strdup (profile);
   it->profile_is_id = is_id;
   it->exec_argv = NULL;
+  it->title = NULL;
   
   return it;
 }
@@ -278,6 +291,7 @@ initial_tab_free (InitialTab *it)
 {
   g_free (it->profile);
   g_strfreev (it->exec_argv);
+  g_free (it->title);
   g_free (it);
 }
 
@@ -387,7 +401,7 @@ terminal_new_event (BonoboListener    *listener,
   terminal_app_new_terminal (
 	  app,
 	  terminal_profile_get_for_new_term (),
-	  NULL, FALSE, FALSE, NULL, NULL);
+	  NULL, FALSE, FALSE, NULL, NULL, NULL);
 }
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
@@ -426,10 +440,10 @@ terminal_invoke_factory (int argc, char **argv)
 	/* we were the first terminal to register */
 	return FALSE;
       case Bonobo_ACTIVATION_REG_NOT_LISTED:
-	g_warning (_("It appears that you do not have gnome-terminal.server installed in a valid location. Factory mode disabled"));
+	g_printerr (_("It appears that you do not have gnome-terminal.server installed in a valid location. Factory mode disabled.\n"));
         return FALSE;
       case Bonobo_ACTIVATION_REG_ERROR:
-        g_warning (_("Error registering with the activation service Factory mode disabled"));
+        g_printerr (_("Error registering terminal with the activation service; factory mode disabled.\n"));
         return FALSE;
       case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
         /* lets use it then */
@@ -464,9 +478,71 @@ terminal_invoke_factory (int argc, char **argv)
       CORBA_exception_free (&ev);
     }
   else
-    g_warning ("Failed to retrieve listener from activation server");
+    g_printerr (_("Failed to retrieve terminal server from activation server\n"));
 
   return FALSE;
+}
+
+static void
+strip_old_args (int *argcp, char **argv)
+{
+  const char *old_args[] = {
+    "--tclass", /* =TCLASS             Terminal class name */
+    "--font", /* =FONT                 Specifies font name*/
+    "--nologin", /*                    Do not start up shells as login shells */
+    "--login", /*                      Start up shells as login shells */
+    "--foreground", /* =COLOR          Foreground color */
+    "--background", /* =COLOR          Background color */
+    "--solid",  /*                     Solid background */
+    "--pixmap", /* =PIXMAP             Background pixmap */
+    "--bgscroll", /*                   Background pixmap scrolls */
+    "--bgnoscroll",  /*                Background pixmap does not scroll */
+    "--shaded", /*                     Shade background */
+    "--noshaded", /*                   Do not shade background */
+    "--transparent", /*                Transparent background */
+    "--utmp",  /*                      Update utmp entry */
+    "--noutmp",  /*                    Do not update utmp entry */
+    "--wtmp",  /*                      Update wtmp entry */
+    "--nowtmp",  /*                    Do not update wtmp entry */
+    "--lastlog",  /*                   Update lastlog entry */
+    "--nolastlog",  /*                 Do not update lastlog entry */
+    "--icon", /* =ICON                 Set the window icon */
+    "--termname", /* =TERMNAME         Set the TERM variable */
+    "--start-factory-server"  /*      Try to start a TerminalFactory */
+  };
+  int i;
+  int j;
+  
+  i = 1;
+  while (i < *argcp)
+    {
+      /* don't scan past "--" */
+      if (strcmp (argv[i], "--") == 0)
+        return;
+
+      j = 0;
+      while (j < (int) G_N_ELEMENTS (old_args))
+        {
+          if (strstr (argv[i], old_args[j]) == argv[i])
+            {
+              /* Get rid of this option */
+              g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"),
+                          old_args[j]);
+
+              g_memmove (argv + i, argv + i + 1,
+                         sizeof (char*) * (*argcp - i - 1));
+              
+              *argcp -= 1;
+
+              goto next;
+            }
+          ++j;
+        }
+
+    next:
+      
+      ++i;
+    }
 }
 
 static GnomeModuleInfo module_info = {
@@ -490,7 +566,6 @@ main (int argc, char **argv)
   int next_opt;
   GList *initial_windows = NULL;
   GList *tmp;
-  gboolean disable_factory = FALSE;
   gboolean default_window_menubar_forced = FALSE;
   gboolean default_window_menubar_state = FALSE;
   int i;
@@ -506,25 +581,7 @@ main (int argc, char **argv)
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
-  
-  gtk_init (&argc, &argv);
 
-  module_info.requirements = reqs;
-  
-  gnome_program_init (PACKAGE, VERSION,
-                      &module_info,
-                      1, /* don't give it any args for now since option parsing doesn't go
-                          * through here
-                          */
-                      argv,
-                      GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
-                      GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
-                      GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
-                      GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
-                      NULL); 
-
-  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
-  
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   post_execute_args = NULL;
   i = 1;
@@ -558,6 +615,26 @@ main (int argc, char **argv)
       
       ++i;
     }
+  
+  gtk_init (&argc, &argv);
+  
+  module_info.requirements = reqs;
+  
+  gnome_program_init (PACKAGE, VERSION,
+                      &module_info,
+                      1, /* don't give it any args for now since option parsing doesn't go
+                          * through here
+                          */
+                      argv,
+                      GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
+                      GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
+                      GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
+                      GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
+                      NULL); 
+
+  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");  
+
+  strip_old_args (&argc, argv);
   
   ctx = poptGetContext (PACKAGE, argc, (const char **) argv, options, 0);
 
@@ -774,7 +851,32 @@ main (int argc, char **argv)
           break;
 
         case OPTION_DISABLE_FACTORY:
-          disable_factory = TRUE;
+          terminal_factory_disabled = TRUE;
+          break;
+
+        case OPTION_TITLE:
+          {
+            const char *title;
+            InitialTab *it;
+            
+            title = poptGetOptArg (ctx);
+
+            if (title == NULL)
+              {
+                g_printerr (_("Option --title requires an argument giving the title\n"));
+                return 1;
+              }
+
+            it = ensure_top_tab (&initial_windows);
+
+            if (it->title)
+              {
+                g_printerr (_("Two titles given for one tab\n"));
+                return 1;
+              }
+
+            it->title = g_strdup (title);
+          }
           break;
           
         case OPTION_LAST:          
@@ -784,7 +886,7 @@ main (int argc, char **argv)
         }
     }
 
-  if (!disable_factory)
+  if (!terminal_factory_disabled)
     {
       if (terminal_invoke_factory (argc, argv))
         return 0;
@@ -895,7 +997,8 @@ main (int argc, char **argv)
                                          iw->force_menubar_state,
                                          iw->menubar_state,
                                          it->exec_argv,
-                                         iw->geometry);
+                                         iw->geometry,
+                                         it->title);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -906,7 +1009,8 @@ main (int argc, char **argv)
                                          current_window,
                                          FALSE, FALSE,
                                          it->exec_argv,
-                                         NULL);
+                                         NULL,
+                                         it->title);
             }
           
           tmp2 = tmp2->next;
@@ -928,7 +1032,8 @@ main (int argc, char **argv)
                                  default_window_menubar_forced,
                                  default_window_menubar_state,
                                  NULL,
-                                 default_geometry);
+                                 default_geometry,
+                                 NULL);
 
       g_free (default_geometry);
     }
@@ -976,7 +1081,8 @@ terminal_app_new_terminal (TerminalApp     *app,
                            gboolean         force_menubar_state,
                            gboolean         forced_menubar_state,
                            char           **override_command,
-                           const char      *geometry)
+                           const char      *geometry,
+                           const char      *title)
 {
   TerminalScreen *screen;
 
@@ -1003,6 +1109,9 @@ terminal_app_new_terminal (TerminalApp     *app,
   
   terminal_screen_set_profile (screen, profile);
 
+  if (title)
+    terminal_screen_set_dynamic_title (screen, title);
+  
   if (override_command)    
     terminal_screen_set_override_command (screen, override_command);
   
@@ -2212,8 +2321,10 @@ terminal_app_get_clone_command (TerminalApp *app,
       
       tmp = tmp->next;
     }
-
+  
   argc = 1; /* argv[0] */
+
+  argc += 1; /* --use-factory or --disable-factory */
   
   argc += n_windows; /* one --with-window-profile-internal-id per window,
                       * for the first tab in that window
@@ -2226,11 +2337,19 @@ terminal_app_get_clone_command (TerminalApp *app,
                                */
 
   argc += n_tabs * 2; /* one "--command foo" per tab */
+
+  argc += n_tabs * 2; /* one "--title foo" per tab */
   
   argv = g_new0 (char*, argc + 1);
 
   i = 0;
   argv[i] = g_strdup (EXECUTABLE_NAME);
+  ++i;
+
+  if (terminal_factory_disabled)
+    argv[i] = g_strdup ("--disable-factory");
+  else
+    argv[i] = g_strdup ("--use-factory");
   ++i;
   
   tmp = app->windows;
@@ -2248,6 +2367,7 @@ terminal_app_get_clone_command (TerminalApp *app,
           TerminalScreen *screen = tmp2->data;
           const char *profile_id;
           const char **override_command;
+          const char *title;
           
           profile_id = terminal_profile_get_name (terminal_screen_get_profile (screen));
           
@@ -2278,10 +2398,19 @@ terminal_app_get_clone_command (TerminalApp *app,
               ++i;
               
               flattened = g_strjoinv (" ", (char**) override_command);
-              argv[i] = g_shell_quote (flattened);
+              argv[i] = flattened;
               ++i;
 
               g_free (flattened);
+            }
+
+          title = terminal_screen_get_dynamic_title (screen);
+          if (title)
+            {
+              argv[i] = g_strdup ("--title");
+              ++i;
+              argv[i] = g_strdup (title);
+              ++i;
             }
           
           tmp2 = tmp2->next;

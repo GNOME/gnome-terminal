@@ -91,6 +91,11 @@ gboolean terminal_screen_get_text_selected (TerminalScreen *screen);
 void terminal_screen_edit_title (TerminalScreen *screen,
                                  GtkWindow      *transient_parent);
 
+void        terminal_screen_set_dynamic_title (TerminalScreen *screen,
+                                               const char     *title);
+const char *terminal_screen_get_dynamic_title (TerminalScreen *screen);
+
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_H */
