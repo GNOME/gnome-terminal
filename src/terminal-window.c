@@ -26,6 +26,7 @@
 #include "terminal.h"
 #include <string.h>
 #include <stdlib.h>
+#include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gdk/gdkx.h>
@@ -1739,6 +1740,9 @@ about_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
   static GtkWidget *about = NULL;
+  GdkPixbuf *pixbuf = NULL;
+  gchar *file;
+
   const char *authors[] = {
     "Havoc Pennington <hp@redhat.com>",
     NULL
@@ -1746,21 +1750,25 @@ about_callback (GtkWidget      *menuitem,
   const char *documenters [] = {
     NULL
   };
-  const char *translator_credits = "";
+  const char *translator_credits = _("translator_credits");
 
   if (about)
     {
       gtk_window_present (GTK_WINDOW (about));
       return;
     }
+				     
+  file = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_PIXMAP, "gnome-terminal.png", TRUE, NULL);
+  pixbuf = gdk_pixbuf_new_from_file (file, NULL);
+  g_free(file);
 
   about = gnome_about_new (PACKAGE, VERSION,
                            _("Copyright 2002 Havoc Pennington"),
                            _("GNOME Terminal"),
                            (const char **)authors,
                            (const char **)documenters,
-                           (const char *)translator_credits,
-                           NULL);
+                           strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
+                           pixbuf);
   
   g_object_add_weak_pointer (G_OBJECT (about),
                              (void**) &about);
