@@ -1,5 +1,13 @@
 2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal-window.c(confirm_close_window): use the GConfClient in
+	  the window, instead of the (possibly different) default one.
+	* src/terminal-window.c(change_configuration_callback): wrap the call
+	  to terminal_screen_set_profile with g_signal_handlers_{,un}block_by_func
+	  to avoid a loop. This fixes a bug which I can't find anynmore...
+
+2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* configure.in: we need gtk+ >= 2.4.0 by now, and depend on vte
 	  0.11.10 at least.
 

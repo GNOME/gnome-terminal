@@ -2282,9 +2282,8 @@ confirm_close_window (TerminalWindow *window)
   if (n <= 1)
     return TRUE;
 
-  client = gconf_client_get_default();
   error = NULL;
-  if (!gconf_client_get_bool (client, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
+  if (!gconf_client_get_bool (window->priv->conf, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
     return TRUE;
 
   msg1 = g_strdup_printf (ngettext ("This window has one tab open. Closing the window will close it.",
@@ -2384,7 +2383,11 @@ change_configuration_callback (GtkWidget      *menu_item,
   g_assert (profile);
 
   if (!terminal_profile_get_forgotten (profile))
-    terminal_screen_set_profile (window->priv->active_term, profile);
+    {
+      g_signal_handlers_block_by_func (G_OBJECT (window->priv->active_term), G_CALLBACK (profile_set_callback), window);
+      terminal_screen_set_profile (window->priv->active_term, profile);
+      g_signal_handlers_unblock_by_func (G_OBJECT (window->priv->active_term), G_CALLBACK (profile_set_callback), window);
+    }
 }
 
 static void
