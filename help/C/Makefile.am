@@ -1,4 +1,4 @@
-figdir = 
+figdir = figures
 docname = gnome-terminal
 lang = C
 omffile = gnome-terminal-C.omf
