@@ -1752,13 +1752,30 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
         
         str = gtk_selection_data_get_text (selection_data);
 
-        /* FIXME should this be converted back to locale encoding
-         * before sending to the terminal? Most likely yes.
+        /*
+	 * converted back to locale encoding before sending to
+	 * the terminal.
          */
         if (str && *str)
           {
-            terminal_widget_write_data_to_child (screen->priv->term,
-                                                 str, strlen (str));
+	    gssize str_len = strlen (str);
+	    gchar *locale_str;
+	    GError *error = NULL;
+	    locale_str = g_locale_from_utf8 (str, str_len,
+					     NULL, NULL, &error);
+	    if (error)
+	      {
+		g_warning ("Error converting from utf8: %s\n", error->message);
+		g_error_free (error);
+	      }
+	    else
+	      {
+		if (locale_str && *locale_str)
+		  terminal_widget_write_data_to_child (screen->priv->term,
+						       locale_str,
+						       strlen (locale_str));
+	      }
+	    g_free (locale_str);
           }
 
         g_free (str);
