@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm 1.9.x\n"
-"POT-Creation-Date: 2002-02-28 00:20+0100\n"
-"PO-Revision-Date: 2002-02-28 00:19+0100\n"
+"POT-Creation-Date: 2002-03-03 20:51+0100\n"
+"PO-Revision-Date: 2002-03-03 20:50+0100\n"
 "Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -128,17 +128,19 @@ msgid "Custom co_mmand:"
 msgstr "Eigener _Befehl:"
 
 #: src/gnome-terminal.glade2.h:17
-msgid "Disable all accelerators"
-msgstr "Alle Tastenkürzel deaktivieren"
-
-#: src/gnome-terminal.glade2.h:18
 msgid "Disable all menu mnemonics (such as Alt+f to open File menu)"
 msgstr ""
 "Alle Menü-Mnemonics deaktivieren (z.B. Alt+f um das Datei-Menü zu öffnen)"
 
-#: src/gnome-terminal.glade2.h:19
+#: src/gnome-terminal.glade2.h:18
 msgid "Disabled"
 msgstr "Deaktiviert"
+
+#: src/gnome-terminal.glade2.h:19
+msgid "Don't bother to report bugs on this dialog yet, it isn't finished."
+msgstr ""
+"Verschwenden Sie nicht Ihre Zeit, Fehler über diesen Dialog zu melden. Er "
+"ist nocht nicht fertig."
 
 #: src/gnome-terminal.glade2.h:20
 msgid "Effects"
@@ -305,7 +307,7 @@ msgstr "Terminal-Klingel stummschalten"
 
 #: src/gnome-terminal.glade2.h:59
 msgid "Terminal applications have these colors available to them."
-msgstr ""
+msgstr "Terminal-Anwendungen dürfen diese Farben verwenden."
 
 #: src/gnome-terminal.glade2.h:60
 msgid ""
@@ -406,11 +408,11 @@ msgstr "fixed"
 msgid "kilobytes"
 msgstr "kilobyte"
 
-#: src/terminal-profile.c:265 src/terminal-window.c:267 src/terminal.c:308
+#: src/terminal-profile.c:265 src/terminal-window.c:324 src/terminal.c:310
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/terminal-profile.c:372 src/terminal.c:637
+#: src/terminal-profile.c:372 src/terminal.c:639
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -487,29 +489,29 @@ msgstr "Zeichenkette \"%s\" als Farbmuster konnte nicht geparst werden\n"
 msgid "Palette had %d entries instead of %d\n"
 msgstr "Palette hatte %d Einträge anstatt %d\n"
 
-#: src/terminal-screen.c:506
+#: src/terminal-screen.c:507
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Schrift \"%s\" konnte nicht geladen werden\n"
 
-#: src/terminal-screen.c:634
+#: src/terminal-screen.c:635
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
 msgstr ""
 "Es ist ein Fehler beim Erzeugen des Kindprozesses für das Terminal "
 "aufgetreten: %s"
 
-#: src/terminal-screen.c:659
+#: src/terminal-screen.c:660
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Es ist ein Problem mit dem Befehl für das Terminal aufgetreten: %s"
 
-#: src/terminal-screen.c:1023
+#: src/terminal-screen.c:1024
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Befehl %s konnte nicht ausgeführt werden: %s\n"
 
-#: src/terminal-screen.c:1181
+#: src/terminal-screen.c:1182
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -518,188 +520,269 @@ msgstr ""
 "Adresse \"%s\" konnte nicht geöffnet werden:\n"
 "%s"
 
-#: src/terminal-screen.c:1300 src/terminal-window.c:303
+#: src/terminal-screen.c:1303 src/terminal-window.c:369
 msgid "_New window"
 msgstr "_Neues Fenster"
 
-#: src/terminal-screen.c:1305 src/terminal-window.c:306
+#: src/terminal-screen.c:1310 src/terminal-window.c:373
 msgid "New _tab"
 msgstr "Neuer _Reiter"
 
-#: src/terminal-screen.c:1322 src/terminal-window.c:350
+#: src/terminal-screen.c:1334 src/terminal-window.c:462
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1372 src/terminal-window.c:354
+#: src/terminal-screen.c:1384
 msgid "_Edit current profile..."
 msgstr "_Aktuelles Profil bearbeiten..."
 
-#: src/terminal-screen.c:1378
+#: src/terminal-screen.c:1390
 msgid "Hide _Menubar"
 msgstr "_Menübalken verbergen"
 
-#: src/terminal-screen.c:1383
+#: src/terminal-screen.c:1395
 msgid "Show _Menubar"
 msgstr "Menübalken _zeigen"
 
-#: src/terminal-screen.c:1389
+#: src/terminal-screen.c:1401
 msgid "Secure _Keyboard"
 msgstr "_Sichere Tastatureingabe"
 
-#: src/terminal-screen.c:1395
+#: src/terminal-screen.c:1407
 msgid "_Open Link"
 msgstr "In Browser ö_ffnen"
 
-#: src/terminal-screen.c:1402
+#: src/terminal-screen.c:1414
 msgid "_Copy Link Address"
 msgstr "Zieladresse _kopieren"
 
-#: src/terminal-window.c:298
-msgid "_File"
-msgstr "_Datei"
+#. This is fairly bogus to have here but I don't know
+#. * where else to put it really
+#.
+#: src/terminal-window.c:380
+msgid "New _profile..."
+msgstr "Neues _Profil..."
 
-#: src/terminal-window.c:313
+#: src/terminal-window.c:386
 msgid "_Close window"
 msgstr "Fenster s_chließen"
 
-#: src/terminal-window.c:317
+#: src/terminal-window.c:390
 msgid "C_lose tab"
 msgstr "Reiter sch_ließen"
 
-#: src/terminal-window.c:322
-msgid "_Edit"
-msgstr "_Bearbeiten"
+#: src/terminal-window.c:419
+msgid "C_urrent profile..."
+msgstr "_Aktuelles Profil..."
 
-#: src/terminal-window.c:337
-msgid "_Terminal"
-msgstr "_Terminal"
+# CHECK
+#: src/terminal-window.c:422
+msgid "_Keybindings..."
+msgstr "_Tastenkombinationen..."
 
-#: src/terminal-window.c:357
-msgid "_New profile..."
-msgstr "_Neues Profil..."
+#: src/terminal-window.c:425
+msgid "P_rofiles..."
+msgstr "P_rofile..."
 
-#: src/terminal-window.c:360
-msgid "_Manage profiles..."
-msgstr "Profile _verwalten..."
-
-#: src/terminal-window.c:366
+#: src/terminal-window.c:438
 msgid "Hide menu_bar"
 msgstr "Menü_balken verbergen"
 
-#: src/terminal-window.c:369
-msgid "_Reset terminal"
-msgstr "Terminal _zurücksetzen"
+#: src/terminal-window.c:441 src/terminal-window.c:1452
+msgid "_Full screen"
+msgstr "_Ganzer Bildschirm"
 
-#: src/terminal-window.c:372
+# CHECK
+#: src/terminal-window.c:465
+msgid "_Reset"
+msgstr "_Zurücksetzen"
+
+#: src/terminal-window.c:468
 msgid "Reset and C_lear"
 msgstr "Zurücksetzen und _löschen"
 
-#: src/terminal-window.c:376
+#: src/terminal-window.c:482
+msgid "_Previous tab"
+msgstr "_Vorheriger Reiter"
+
+#: src/terminal-window.c:486
+msgid "_Next tab"
+msgstr "_Neuer Reiter"
+
+#: src/terminal-window.c:503
+msgid "_Help Contents"
+msgstr "_Hilfe"
+
+#: src/terminal-window.c:508
+msgid "_About GNOME Terminal"
+msgstr "_Info zum GNOME Terminal"
+
+#: src/terminal-window.c:599
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Es ist ein Fehler beim Laden des Konfigurationswertes, ob Mnemonics "
+"verwendet werden sollen. (%s)\n"
+
+#: src/terminal-window.c:618
+#, c-format
+msgid ""
+"There was an error subscribing to notification of terminal window "
+"configuration changes. (%s)\n"
+msgstr ""
+
+#: src/terminal-window.c:1322
+msgid "_File"
+msgstr "_Datei"
+
+#: src/terminal-window.c:1324
+msgid "_Edit"
+msgstr "_Bearbeiten"
+
+#: src/terminal-window.c:1326
+msgid "_View"
+msgstr "_Ansicht"
+
+#: src/terminal-window.c:1328
+msgid "_Terminal"
+msgstr "_Terminal"
+
+#: src/terminal-window.c:1330
+msgid "_Go"
+msgstr "_Gehe"
+
+#: src/terminal-window.c:1332
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: src/terminal-window.c:381
-msgid "_Help on GNOME terminal"
-msgstr "GNOME-_Terminal-Hilfe"
+#: src/terminal-window.c:1448
+msgid "_Restore normal size"
+msgstr "Normale Größe _wiederherstellen"
 
-#. FIXME use stock item
-#: src/terminal-window.c:385
-msgid "_About"
-msgstr "_Info"
+# CHECK
+#: src/terminal-window.c:1634
+msgid ""
+"Your current desktop environment does not support the full screen feature.\n"
+" (In technical terms, you need a window manager with support for the "
+"_NET_WM_STATE_FULLSCREEN property.)"
+msgstr ""
+"Ihr aktuelle Desktopumgebung unterstützt kein »Full screen«.\n"
+"(Technisch gesagt benötigen Sie einen Fenstermanager mit Unterstützung für "
+"NET_WM_STATE_FULLSCREEN.)"
 
-#: src/terminal-window.c:1208
+#: src/terminal-window.c:1741
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright 2002 Havoc Pennington"
 
-#: src/terminal-window.c:1209
+#: src/terminal-window.c:1742
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
-#: src/terminal.c:114
+#: src/terminal.c:116
 msgid "Help options"
 msgstr "Hilfe-Optionen"
 
-#: src/terminal.c:123
+#: src/terminal.c:125
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Das Argument dieser Option im Terminal ausführen"
 
-#: src/terminal.c:132
+#: src/terminal.c:134
 msgid "Execute the remainder of the command line inside the terminal."
-msgstr ""
+msgstr "Den Rest der Befehlszeile innerhalb des Terminals ausführen."
 
-#: src/terminal.c:141
+#: src/terminal.c:143
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
+"Ein neues Fenster das einen Reiter mit dem gegebenen Profil enthält. Mehr "
+"als eine dieser Optionen kann angeboten werden."
 
-#: src/terminal.c:142 src/terminal.c:151
+#: src/terminal.c:144 src/terminal.c:153
 msgid "PROFILENAME"
 msgstr "PROFILNAME"
 
-#: src/terminal.c:150
+#: src/terminal.c:152
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
 msgstr ""
+"Einen neuen Reiter in dem zuletzt geöffneten Fenster mit dem gegebenen "
+"Profil öffnen. Mehr als eine dieser Optionen kann angeboten werden."
 
-#: src/terminal.c:159
+#: src/terminal.c:161
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
+"Ein neues Fenster, das einen Reiter enthält mit der gegebenen Kennung "
+"öffnen. Wird intern für das Speichern der Sitzung verwendet."
 
-#: src/terminal.c:160 src/terminal.c:169
+#: src/terminal.c:162 src/terminal.c:171
 msgid "PROFILEID"
 msgstr "PROFILKENNUNG"
 
-#: src/terminal.c:168
+#: src/terminal.c:170
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
+"Einen neuen Reiter in dem zuletzt geöffneten Fenster mit der gegebenen "
+"Kennung öffnen. Wird intern für das Speichern der Sitzung verwendet."
 
-#: src/terminal.c:177
+#: src/terminal.c:179
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
+"Die Menüleiste für das zuletzt angegebene Fenster anzeigen. Gilt nur für ein "
+"Fenster. Kann einmal für jedes Fenster, das Sie von der Befehlszeile aus "
+"erstellen, angegeben werden"
 
-#: src/terminal.c:186
+#: src/terminal.c:188
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
+"Die Menüleiste für das zuletzt angegebene Fenster nicht anzeigen. Gilt nur "
+"für ein Fenster. Kann einmal für jedes Fenster, das Sie von der Befehlszeile "
+"aus erstellen, angegeben werden"
 
-#: src/terminal.c:195
+#: src/terminal.c:197
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
 msgstr ""
+"X-Geometrieangabe (siehe »X«-man page), kann einmal pro Fenster, das "
+"geöffnet werden soll, angegeben werden."
 
-#: src/terminal.c:196
+#: src/terminal.c:198
 msgid "GEOMETRY"
 msgstr "GEOMETRIE"
 
-#: src/terminal.c:204
+#: src/terminal.c:206
 msgid ""
 "Ask existing profterm process to open a new window, if possible. (Not yet "
 "implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"
 msgstr ""
+"Existierende profterm-Prozesse fragen, ein neues Fenster zu öffnen, falls "
+"das möglich ist. (Noch nicht implementiert, http://bugzilla.gnome.org/"
+"show_bug.cgi?id=71442)"
 
 # CHECK
-#: src/terminal.c:406
+#: src/terminal.c:408
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Option --command/-e benötigt die Angabe eines zu startenden Befehls\n"
 
-#: src/terminal.c:414
+#: src/terminal.c:416
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Argument --command/-e ist kein gültiger Befehl: %s\n"
 
-#: src/terminal.c:424 src/terminal.c:446
+#: src/terminal.c:426 src/terminal.c:448
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -708,7 +791,7 @@ msgstr ""
 "Reiter angegeben\n"
 
 # CHECK
-#: src/terminal.c:438
+#: src/terminal.c:440
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -716,7 +799,7 @@ msgstr ""
 "Option --execute/-x benötigt die Angabe eines Befehls, um für den Rest der "
 "Befehlszeile zu laufen\n"
 
-#: src/terminal.c:465
+#: src/terminal.c:467
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -724,7 +807,7 @@ msgstr ""
 "Option --window-with-profile benötigt ein Argument, das angibt welches "
 "Profil zu verwenden ist\n"
 
-#: src/terminal.c:486
+#: src/terminal.c:488
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -732,19 +815,19 @@ msgstr ""
 "Option --tab-with-profile benötigt ein Argument, das angibt welches Profil "
 "zu verwenden ist\n"
 
-#: src/terminal.c:516 src/terminal.c:542
+#: src/terminal.c:518 src/terminal.c:544
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Option --show-menubar zweimal für das gleiche Fenster angegeben\n"
 
-#: src/terminal.c:567
+#: src/terminal.c:569
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Option --geometry benötigt ein Argument das die Geometrie angibt\n"
 
-#: src/terminal.c:576 src/terminal.c:586
+#: src/terminal.c:578 src/terminal.c:588
 msgid "Two geometries given for one window\n"
 msgstr "Zwei Geometrien füer ein Fenster angegeben\n"
 
-#: src/terminal.c:610
+#: src/terminal.c:612
 #, c-format
 msgid ""
 "Error on option %s: %s.\n"
@@ -754,122 +837,124 @@ msgstr ""
 "Führen Sie '%s --help' aus, um eine vollständige Liste der verfügbaren "
 "Befehlszeilen- Optionen zu erhalten.\n"
 
-#: src/terminal.c:620
+#: src/terminal.c:622
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Ungültiges Argument \"%s\"\n"
 
-#: src/terminal.c:653
+#: src/terminal.c:655
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr ""
 
-#: src/terminal.c:690
+#: src/terminal.c:694
 #, c-format
 msgid "No such profile '%s', using default profile"
 msgstr "Profil '%s' existiert nicht, Vorgabe wird verwendet"
 
-#: src/terminal.c:746
+#: src/terminal.c:750
 msgid ""
 "--geometry given prior to options that create a new window, must be given "
 "after\n"
 msgstr ""
+"Vormals angegebenes --geometry, das ein neues Fenster erstellt, muss danach "
+"angegeben werden\n"
 
-#: src/terminal.c:830
+#: src/terminal.c:834
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ungültige Geometrie-Zeichenkette \"%s\"\n"
 
-#: src/terminal.c:887
+#: src/terminal.c:891
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Es ist ein Fehler beim Holen der Terminal-Profilliste aufgetreten. (%s)\n"
 
-#: src/terminal.c:1063
+#: src/terminal.c:1114
 msgid "You have to name your profile."
 msgstr "Ihr Profil benötigt einen Namen."
 
-#: src/terminal.c:1073
+#: src/terminal.c:1124
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Sie haben bereits ein Profil mit dem Namen \"%s\""
 
-#: src/terminal.c:1110
+#: src/terminal.c:1161
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Das Profil, das Sie als Basis für Ihr neues Profil ausgewählt haben, "
 "existiert nicht mehr"
 
-#: src/terminal.c:1169
+#: src/terminal.c:1220
 msgid "New terminal profile"
 msgstr "Neues Terminal-Profil"
 
-#: src/terminal.c:1174
+#: src/terminal.c:1225
 msgid "C_reate"
 msgstr "E_rzeugen"
 
-#: src/terminal.c:1199
+#: src/terminal.c:1250
 msgid "Profile _Name:"
 msgstr "Profil_name:"
 
-#: src/terminal.c:1215
+#: src/terminal.c:1266
 msgid "_Base new profile on:"
 msgstr "Neues Profil _basieren auf:"
 
-#: src/terminal.c:1434
+#: src/terminal.c:1485
 msgid "You must select one or more profiles to delete."
 msgstr "Sie müssen eines oder mehrere Profile zum löschen auswählen."
 
-#: src/terminal.c:1457
+#: src/terminal.c:1508
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Sie müssen zumindest ein Profil haben. Sie können nicht alle löschen."
 
-#: src/terminal.c:1475
+#: src/terminal.c:1526
 msgid "Delete these two profiles?\n"
 msgstr "Diese beiden Profile löschen?\n"
 
-#: src/terminal.c:1477
+#: src/terminal.c:1528
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Diese %d Profile löschen?\n"
 
-#: src/terminal.c:1495
+#: src/terminal.c:1546
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Profil \"%s\" löschen?"
 
-#: src/terminal.c:1509
+#: src/terminal.c:1560
 msgid "_No"
 msgstr "_Nein"
 
-#: src/terminal.c:1511
+#: src/terminal.c:1562
 msgid "_Delete"
 msgstr "_Löschen"
 
-#: src/terminal.c:1668
+#: src/terminal.c:1719
 msgid "Manage terminal profiles"
 msgstr "Terminal-Profile verwalten"
 
-#: src/terminal.c:1699
+#: src/terminal.c:1750
 msgid "Profile _used when launching a new terminal:"
 msgstr "_Verwendetes Profil wenn neues Terminal gestartet wird:"
 
-#: src/terminal.c:1719
+#: src/terminal.c:1770
 msgid "_Profiles:"
 msgstr "_Profile:"
 
-#: src/terminal.c:1752
+#: src/terminal.c:1803
 msgid "_New..."
 msgstr "_Neu..."
 
-#: src/terminal.c:1760
+#: src/terminal.c:1811
 msgid "_Edit..."
 msgstr "_Bearbeiten..."
 
-#: src/terminal.c:1768
+#: src/terminal.c:1819
 msgid "_Delete..."
 msgstr "_Löschen..."
