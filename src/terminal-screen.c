@@ -1335,7 +1335,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
                                  (void**) &screen->priv->title_editor);
 
       gtk_window_set_resizable (GTK_WINDOW (screen->priv->title_editor),
-                                FALSE);
+                                TRUE);
       
 #define PADDING 5
       
@@ -1350,11 +1350,13 @@ terminal_screen_edit_title (TerminalScreen *screen,
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       entry = gtk_entry_new ();
 
+      gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
+      
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
       
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
       
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);      
       
