@@ -7,35 +7,51 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-02-12 14:59+0100\n"
-"PO-Revision-Date: 2002-02-12 15:00+0100\n"
+"POT-Creation-Date: 2002-02-26 18:41+0100\n"
+"PO-Revision-Date: 2002-02-26 18:41+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/profile-editor.c:46
+#: src/profile-editor.c:47
 msgid "Black on light yellow"
 msgstr "Svart på ljusgult"
 
-#: src/profile-editor.c:48
+#: src/profile-editor.c:49
 msgid "White on black"
 msgstr "Vitt på svart"
 
-#: src/profile-editor.c:50
+#: src/profile-editor.c:51
 msgid "Black on white"
 msgstr "Svart på vitt"
 
-#: src/profile-editor.c:52
+#: src/profile-editor.c:53
 msgid "Green on black"
 msgstr "Grönt på svart"
 
-#: src/profile-editor.c:476
+#: src/profile-editor.c:66
+msgid "Linux console"
+msgstr "Linux-konsoll"
+
+#: src/profile-editor.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#: src/profile-editor.c:68
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#: src/profile-editor.c:593
+msgid "Choose a font"
+msgstr "Välj ett typsnitt"
+
+#: src/profile-editor.c:731 src/profile-editor.c:761
 msgid "Custom"
 msgstr "Anpassad"
 
-#: src/profile-editor.c:548
+#: src/profile-editor.c:830
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -44,7 +60,7 @@ msgstr ""
 "Filen \"%s\" saknas. Detta betyder att programmet inte installerades "
 "korrekt, vilket gör att profilredigeraren inte kan visas."
 
-#: src/profile-editor.c:903
+#: src/profile-editor.c:1301
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Redigerar profilen \"%s\""
@@ -67,8 +83,8 @@ msgid "_Font:"
 msgstr "_Typsnitt:"
 
 #: src/profterm.glade.h:10
-msgid "Choose..."
-msgstr "Välj..."
+msgid "fixed"
+msgstr "fixed"
 
 #: src/profterm.glade.h:11
 msgid "Select-by-_word characters:"
@@ -189,20 +205,20 @@ msgid "_Run command as a login shell"
 msgstr "_Kör kommando som ett inloggningsskal"
 
 #: src/profterm.glade.h:40
+msgid "_Update utmp/wtmp records when command is launched"
+msgstr "_Uppdatera utmp/wtmp-poster då kommandot startas"
+
+#: src/profterm.glade.h:41
 msgid "When command _exits:"
 msgstr "Då kommandot a_vslutar:"
 
-#: src/profterm.glade.h:41
+#: src/profterm.glade.h:42
 msgid "Exit the terminal"
 msgstr "Avsluta terminalfönstret"
 
-#: src/profterm.glade.h:42
+#: src/profterm.glade.h:43
 msgid "Restart the command"
 msgstr "Starta om kommandot"
-
-#: src/profterm.glade.h:43
-msgid "_Update utmp/wtmp records when command is launched"
-msgstr "_Uppdatera utmp/wtmp-poster då kommandot startas"
 
 #: src/profterm.glade.h:44
 msgid "Title and Command"
@@ -244,56 +260,111 @@ msgstr "Inbyggda _scheman:"
 msgid "Color palette:"
 msgstr "Färgpalett:"
 
-#: src/profterm.glade.h:54 src/profterm.glade.h:55 src/profterm.glade.h:56
-#: src/profterm.glade.h:57 src/profterm.glade.h:58 src/profterm.glade.h:59
-#: src/profterm.glade.h:60 src/profterm.glade.h:61 src/profterm.glade.h:62
-#: src/profterm.glade.h:63 src/profterm.glade.h:64 src/profterm.glade.h:65
-#: src/profterm.glade.h:66 src/profterm.glade.h:67 src/profterm.glade.h:68
-#: src/profterm.glade.h:69
-msgid "Pick a color"
-msgstr "Välj en färg"
+#: src/profterm.glade.h:54 src/profterm.glade.h:55
+msgid "Palette entry 1"
+msgstr "Palettpost 1"
 
-#: src/profterm.glade.h:70
+#: src/profterm.glade.h:56 src/profterm.glade.h:57
+msgid "Palette entry 2"
+msgstr "Palettpost 2"
+
+#: src/profterm.glade.h:58 src/profterm.glade.h:59
+msgid "Palette entry 3"
+msgstr "Palettpost 3"
+
+#: src/profterm.glade.h:60 src/profterm.glade.h:61
+msgid "Palette entry 4"
+msgstr "Palettpost 4"
+
+#: src/profterm.glade.h:62 src/profterm.glade.h:63
+msgid "Palette entry 5"
+msgstr "Palettpost 5"
+
+#: src/profterm.glade.h:64 src/profterm.glade.h:65
+msgid "Palette entry 6"
+msgstr "Palettpost 6"
+
+#: src/profterm.glade.h:66 src/profterm.glade.h:67
+msgid "Palette entry 8"
+msgstr "Palettpost 8"
+
+#: src/profterm.glade.h:68 src/profterm.glade.h:69
+msgid "Palette entry 9"
+msgstr "Palettpost 9"
+
+#: src/profterm.glade.h:70 src/profterm.glade.h:71
+msgid "Palette entry 10"
+msgstr "Palettpost 10"
+
+#: src/profterm.glade.h:72 src/profterm.glade.h:73
+msgid "Palette entry 12"
+msgstr "Palettpost 12"
+
+#: src/profterm.glade.h:74 src/profterm.glade.h:75
+msgid "Palette entry 11"
+msgstr "Palettpost 11"
+
+#: src/profterm.glade.h:76 src/profterm.glade.h:77
+msgid "Palette entry 13"
+msgstr "Palettpost 13"
+
+#: src/profterm.glade.h:78 src/profterm.glade.h:79
+msgid "Palette entry 16"
+msgstr "Palettpost 16"
+
+#: src/profterm.glade.h:80 src/profterm.glade.h:81
+msgid "Palette entry 14"
+msgstr "Palettpost 14"
+
+#: src/profterm.glade.h:82 src/profterm.glade.h:83
+msgid "Palette entry 7"
+msgstr "Palettpost 7"
+
+#: src/profterm.glade.h:84 src/profterm.glade.h:85
+msgid "Palette entry 15"
+msgstr "Palettpost 15"
+
+#: src/profterm.glade.h:86
 msgid "Terminal applications have these colors available to them."
 msgstr "Terminalprogram har dessa färger tillgängliga."
 
-#: src/profterm.glade.h:71
+#: src/profterm.glade.h:87
 msgid "Colors"
 msgstr "Färger"
 
-#: src/profterm.glade.h:72
+#: src/profterm.glade.h:88
 msgid "Background effect"
 msgstr "Bakgrundseffekt"
 
-#: src/profterm.glade.h:73
+#: src/profterm.glade.h:89
 msgid "_Background image"
 msgstr "_Bakgrundsbild"
 
-#: src/profterm.glade.h:74
+#: src/profterm.glade.h:90
 msgid "_None (use solid color)"
 msgstr "_Ingen (enfärgat)"
 
-#: src/profterm.glade.h:75
+#: src/profterm.glade.h:91
 msgid "Background image _scrolls"
 msgstr "Bakgrundsbilden _rullar"
 
-#: src/profterm.glade.h:76
+#: src/profterm.glade.h:92
 msgid "_Transparent background"
 msgstr "_Genomskinlig bakgrund"
 
-#: src/profterm.glade.h:77
+#: src/profterm.glade.h:93
 msgid "_Image file:"
 msgstr "_Bildfil:"
 
-#: src/profterm.glade.h:78
-msgid "Tint with background _color"
-msgstr "Färgsätt med bakgrunds_färg"
+#: src/profterm.glade.h:94
+msgid "_Darken transparent and image backgrounds"
+msgstr "_Förmörka genomskinliga bakgrunder och bildbakgrunder"
 
-#: src/profterm.glade.h:79
+#: src/profterm.glade.h:95
 msgid "Effects"
 msgstr "Effekter"
 
-#: src/profterm.glade.h:80
+#: src/profterm.glade.h:96
 msgid ""
 "These options may cause some applications to behave incorrectly.\n"
 "They are only here to allow you to work around certain applications\n"
@@ -303,47 +374,52 @@ msgstr ""
 "de ska. De finns endast här för att låta dig kunna använda vissa\n"
 "program och operativsystem som förväntar sig ett annat terminalbeteende."
 
-#: src/profterm.glade.h:83
+#: src/profterm.glade.h:99
 msgid "_Delete key generates:"
 msgstr "_Delete-tangenten genererar:"
 
-#: src/profterm.glade.h:84
+#: src/profterm.glade.h:100
 msgid "_Backspace key generates:"
 msgstr "_Backspace-tangenten genererar:"
 
-#: src/profterm.glade.h:85 src/profterm.glade.h:88
+#: src/profterm.glade.h:101 src/profterm.glade.h:104
 msgid "ASCII DEL"
 msgstr "ASCII-DEL"
 
-#: src/profterm.glade.h:86 src/profterm.glade.h:89
+#: src/profterm.glade.h:102 src/profterm.glade.h:105
 msgid "Escape sequence"
 msgstr "Kontrollsekvens"
 
-#: src/profterm.glade.h:87 src/profterm.glade.h:90
+#: src/profterm.glade.h:103 src/profterm.glade.h:106
 msgid "Control-H"
 msgstr "Control-H"
 
-#: src/profterm.glade.h:91
+#: src/profterm.glade.h:107
 msgid "_Allow fonts in wrong encoding"
 msgstr "_Tillåt typsnitt med fel kodning"
 
-#: src/profterm.glade.h:92
+#: src/profterm.glade.h:108
 msgid "Compatibility"
 msgstr "Kompatibilitet"
 
-#: src/profterm.glade.h:93
+#: src/profterm.glade.h:109
 msgid "_Disable all keybindings"
 msgstr "_Inaktivera alla tangentkombinationer"
 
-#: src/profterm.glade.h:94
+#: src/profterm.glade.h:110
 msgid "Keybindings"
 msgstr "Tangentkombinationer"
 
-#: src/terminal-profile.c:196 src/terminal-window.c:265 src/terminal.c:235
+#: src/terminal-profile.c:265 src/terminal-window.c:267 src/terminal.c:308
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/terminal-profile.c:291
+#: src/terminal-profile.c:372 src/terminal.c:637
+#, c-format
+msgid "There was an error loading config from %s. (%s)\n"
+msgstr "Det uppstod ett fel vid inläsning av konfigurationen från %s. (%s)\n"
+
+#: src/terminal-profile.c:387
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
@@ -352,144 +428,210 @@ msgstr ""
 "Det inträffade ett fel vid prenumeration på notifiering om "
 "terminalprofilsändringar. (%s)\n"
 
-#: src/terminal-profile.c:884
+#: src/terminal-profile.c:982
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
 msgstr "Kunde inte hitta en ikon vid namn \"%s\" för terminalprofilen \"%s\"\n"
 
-#: src/terminal-profile.c:898
+#: src/terminal-profile.c:996
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
 "Misslyckades med att läsa in ikonen \"%s\" för terminalprofilen \"%s\": %s\n"
 
-#: src/terminal-profile.c:1971
+#: src/terminal-profile.c:1164
+#, c-format
+msgid ""
+"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+msgstr ""
+"Kunde inte hitta en bakgrundsbild vid namn \"%s\" för terminalprofilen \"%s"
+"\"\n"
+
+#: src/terminal-profile.c:1178
+#, c-format
+msgid ""
+"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+msgstr ""
+"Misslyckades med att läsa in bakgrundsbilden \"%s\" för terminalprofilen \"%s"
+"\": %s\n"
+
+#: src/terminal-profile.c:2807
+#, c-format
+msgid "There was an error forgetting profile dir %s. (%s)\n"
+msgstr "Det uppstod ett fel vid bortglömmande av profilkatalogen %s. (%s)\n"
+
+#: src/terminal-profile.c:2864
+#, c-format
+msgid ""
+"There was an error subscribing to notification of changes to default "
+"profile. (%s)\n"
+msgstr ""
+"Det inträffade ett fel vid prenumeration på notifiering om ändringar i "
+"standardprofilen. (%s)\n"
+
+#: src/terminal-profile.c:2909
 msgid "_Details"
 msgstr "_Detaljer"
 
-#: src/terminal-profile.c:2309
+#: src/terminal-profile.c:3317
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Ett fel uppstod vid skapande av profilen \"%s\""
 
-#: src/terminal-profile.c:2392
+#: src/terminal-profile.c:3397
 msgid "There was an error deleting the profiles"
 msgstr "Ett fel uppstod vid borttagning av profilerna"
 
-#: src/terminal-screen.c:540
+#: src/terminal-profile.c:3463
+#, c-format
+msgid "Could not parse string \"%s\" as a color palette\n"
+msgstr "Kunde inte tolka strängen \"%s\" som en färgpalett\n"
+
+#: src/terminal-profile.c:3472
+#, c-format
+msgid "Palette had %d entries instead of %d\n"
+msgstr "Paletten hade %d poster istället för %d\n"
+
+#: src/terminal-screen.c:502
+#, c-format
+msgid "Could not load font \"%s\"\n"
+msgstr "Kunde inte läsa in typsnittet \"%s\"\n"
+
+#: src/terminal-screen.c:630
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
 msgstr "Ett fel uppstod vid skapande av barnprocessen för denna terminal: %s"
 
-#: src/terminal-screen.c:565
+#: src/terminal-screen.c:655
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det uppstod ett problem med kommandot för denna terminal: %s"
 
-#: src/terminal-screen.c:924
+#: src/terminal-screen.c:1019
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Kunde inte köra kommandot %s: %s\n"
 
-#: src/terminal-screen.c:1109 src/terminal-window.c:301
+#: src/terminal-screen.c:1177
+#, c-format
+msgid ""
+"Could not open the address \"%s\":\n"
+"%s"
+msgstr ""
+"Kunde inte öppna adressen \"%s\":\n"
+"%s"
+
+#: src/terminal-screen.c:1296 src/terminal-window.c:303
 msgid "_New window"
 msgstr "_Nytt fönster"
 
-#: src/terminal-screen.c:1114 src/terminal-window.c:304
+#: src/terminal-screen.c:1301 src/terminal-window.c:306
 msgid "New _tab"
 msgstr "Ny _flik"
 
-#: src/terminal-screen.c:1119 src/terminal-window.c:348
+#: src/terminal-screen.c:1318 src/terminal-window.c:350
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1169 src/terminal-window.c:352
+#: src/terminal-screen.c:1368 src/terminal-window.c:354
 msgid "_Edit current profile..."
 msgstr "_Redigera aktuell profil..."
 
-#: src/terminal-screen.c:1175
+#: src/terminal-screen.c:1374
 msgid "Hide _Menubar"
 msgstr "Dölj _menyrad"
 
-#: src/terminal-screen.c:1180
+#: src/terminal-screen.c:1379
 msgid "Show _Menubar"
 msgstr "Visa _menyrad"
 
-#: src/terminal-screen.c:1186
+#: src/terminal-screen.c:1385
 msgid "Secure _Keyboard"
 msgstr "Säkra _tangentbord"
 
+#: src/terminal-screen.c:1391
+msgid "_Open Link"
+msgstr "_Öppna länk"
+
+#: src/terminal-screen.c:1398
+msgid "_Copy Link Address"
+msgstr "_Kopiera länkadress"
+
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
-#: src/terminal-window.c:296
+#: src/terminal-window.c:298
 msgid "_File"
 msgstr "_Arkiv"
 
-#: src/terminal-window.c:311
+#: src/terminal-window.c:313
 msgid "_Close window"
 msgstr "_Stäng fönster"
 
-#: src/terminal-window.c:315
-msgid "C_lose tab"
-msgstr "S_täng flik"
+#: src/terminal-window.c:317
+msgid "_Close tab"
+msgstr "_Stäng flik"
 
-#: src/terminal-window.c:320
+#: src/terminal-window.c:322
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: src/terminal-window.c:335
+#: src/terminal-window.c:337
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: src/terminal-window.c:355
+#: src/terminal-window.c:357
 msgid "_New profile..."
 msgstr "_Ny profil..."
 
-#: src/terminal-window.c:359
-msgid "_Delete profile..."
-msgstr "Ta _bort profil..."
+#: src/terminal-window.c:360
+msgid "_Manage profiles..."
+msgstr "_Hantera profiler..."
 
-#: src/terminal-window.c:365
-msgid "Hide _menubar"
-msgstr "Dölj _menyrad"
+#: src/terminal-window.c:366
+msgid "Hide menu_bar"
+msgstr "Dölj meny_rad"
 
-#: src/terminal-window.c:368
+#: src/terminal-window.c:369
 msgid "_Reset terminal"
 msgstr "_Återställ terminal"
 
-#: src/terminal-window.c:371
+#: src/terminal-window.c:372
 msgid "Reset and C_lear"
 msgstr "Återställ och t_öm"
 
-#: src/terminal-window.c:375
+#: src/terminal-window.c:376
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: src/terminal-window.c:380
+#: src/terminal-window.c:381
 msgid "_Help on GNOME terminal"
 msgstr "_Hjälp om GNOME-terminalen"
 
 #. FIXME use stock item
-#: src/terminal-window.c:384
+#: src/terminal-window.c:385
 msgid "_About"
 msgstr "_Om"
 
-#: src/terminal-window.c:1181
+#: src/terminal-window.c:1208
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright 2002 Havoc Pennington"
 
-#: src/terminal-window.c:1182
+#: src/terminal-window.c:1209
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
-#: src/terminal.c:98
+#: src/terminal.c:114
 msgid "Help options"
 msgstr "Hjälpflaggor"
 
-#: src/terminal.c:107
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr "KÖr återstoden av kommandoraden inuti terminalen."
+#: src/terminal.c:123
+msgid "Execute the argument to this option inside the terminal."
+msgstr "Kör argumentet till denna flagga inuti terminalen."
 
-#: src/terminal.c:116
+#: src/terminal.c:132
+msgid "Execute the remainder of the command line inside the terminal."
+msgstr "Kör återstoden av kommandoraden inuti terminalen."
+
+#: src/terminal.c:141
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -497,7 +639,11 @@ msgstr ""
 "Öppna ett nytt fönster som innehåller en flik med den angivna profilen. Fler "
 "än en av dessa flaggor kan anges."
 
-#: src/terminal.c:125
+#: src/terminal.c:142 src/terminal.c:151
+msgid "PROFILENAME"
+msgstr "PROFILNAMN"
+
+#: src/terminal.c:150
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -505,7 +651,7 @@ msgstr ""
 "Öppna en ny flik i det senast öppnade fönstret med den angivna profilen. "
 "Fler än en av dessa flaggor kan anges."
 
-#: src/terminal.c:134
+#: src/terminal.c:159
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -513,7 +659,11 @@ msgstr ""
 "Öppna ett nytt fönster som innehåller en flik med angivet profil-ID. Används "
 "internt för att spara sessioner."
 
-#: src/terminal.c:143
+#: src/terminal.c:160 src/terminal.c:169
+msgid "PROFILEID"
+msgstr "PROFIL-ID"
+
+#: src/terminal.c:168
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -521,7 +671,7 @@ msgstr ""
 "Öppna en ny flik i det senast sparade fönstret med angivet profil-ID. "
 "Används internt för att spara sessioner."
 
-#: src/terminal.c:152
+#: src/terminal.c:177
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -530,7 +680,7 @@ msgstr ""
 "Aktivera menyraden för det senast sparade fönstret. Gäller endast ett "
 "fönster. Kan anges en gång för varje fönster du skapar från kommandoraden."
 
-#: src/terminal.c:161
+#: src/terminal.c:186
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -539,12 +689,52 @@ msgstr ""
 "Inaktivera menyraden för det senast sparade fönstret. Gäller endast ett "
 "fönster. Kan anges en gång för varje fönster du skapar från kommandoraden."
 
-#: src/terminal.c:285
-#, c-format
-msgid "There was an error loading config from %s. (%s)\n"
-msgstr "Det uppstod ett fel vid inläsning av konfigurationen från %s. (%s)\n"
+#: src/terminal.c:195
+msgid ""
+"X geometry specification (see \"X\" man page), can be specified once per "
+"window to be opened."
+msgstr ""
+"X-geometrispecifikation (se manualsidan för \"X\"), kan anges för varje "
+"fönster som öppnas."
 
-#: src/terminal.c:320
+#: src/terminal.c:196
+msgid "GEOMETRY"
+msgstr "GEOMETRI"
+
+#: src/terminal.c:204
+msgid ""
+"Ask existing profterm process to open a new window, if possible. (Not yet "
+"implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"
+msgstr ""
+"Be befintlig profterm-process att öppna ett nytt fönster om det är möjligt. "
+"(Inte implementerat än, http://bugzilla.gnome.org/show_bug.cgi?id=71442"
+
+#: src/terminal.c:406
+msgid "Option --command/-e requires specifying the command to run\n"
+msgstr "Flaggan --command/-e kräver att kommandot som ska köras anges\n"
+
+#: src/terminal.c:414
+#, c-format
+msgid "Argument to --command/-e is not a valid command: %s\n"
+msgstr "Argumentet till --command/-e är inte ett giltigt kommando: %s\n"
+
+#: src/terminal.c:424 src/terminal.c:446
+msgid ""
+"--command/-e/--execute/-x specified more than once for the same window or "
+"tab\n"
+msgstr ""
+"--command/-e/--execute/-x angavs mer än en gång för samma fönster eller "
+"flik\n"
+
+#: src/terminal.c:438
+msgid ""
+"Option --execute/-x requires specifying the command to run on the rest of "
+"the command line\n"
+msgstr ""
+"Flaggan --execute/-x kräver att det kommando som ska köras anges på resten "
+"av kommandoraden\n"
+
+#: src/terminal.c:465
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -552,7 +742,7 @@ msgstr ""
 "Flaggan --window-with-profile kräver ett argument som anger vilken profil "
 "som ska användas\n"
 
-#: src/terminal.c:341
+#: src/terminal.c:486
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -560,11 +750,19 @@ msgstr ""
 "Flaggan --tab-with-profile kräver ett argument som anger vilken profil som "
 "ska användas\n"
 
-#: src/terminal.c:371 src/terminal.c:397
+#: src/terminal.c:516 src/terminal.c:542
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Flaggan --show-menubar angavs två gånger för samma fönster\n"
 
-#: src/terminal.c:424
+#: src/terminal.c:567
+msgid "Option --geometry requires an argument giving the geometry\n"
+msgstr "Flaggan --geometry kräver ett argument som anger geometrin\n"
+
+#: src/terminal.c:576 src/terminal.c:586
+msgid "Two geometries given for one window\n"
+msgstr "Två geometrier angivna för ett fönster\n"
+
+#: src/terminal.c:610
 #, c-format
 msgid ""
 "Error on option %s: %s.\n"
@@ -574,7 +772,12 @@ msgstr ""
 "Kör \"%s --help\" för att se en fullständig lista över tillgängliga\n"
 "kommandoradsflaggor.\n"
 
-#: src/terminal.c:444
+#: src/terminal.c:620
+#, c-format
+msgid "Invalid argument: \"%s\"\n"
+msgstr "Ogiltigt argument: \"%s\"\n"
+
+#: src/terminal.c:653
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -583,61 +786,304 @@ msgstr ""
 "Det uppstod ett fel vid prenumeration på notifiering av ändringar i "
 "terminalprofilslistan. (%s)\n"
 
-#: src/terminal.c:476
+#: src/terminal.c:690
 #, c-format
 msgid "No such profile '%s', using default profile"
 msgstr "Det finns ingen profil \"%s\", använder standardprofilen"
 
-#: src/terminal.c:650
+#: src/terminal.c:746
+msgid ""
+"--geometry given prior to options that create a new window, must be given "
+"after\n"
+msgstr ""
+"--geometry angavs före flaggor som skapar ett nytt fönster, måste anges "
+"efter\n"
+
+#: src/terminal.c:830
+#, c-format
+msgid "Invalid geometry string \"%s\"\n"
+msgstr "Ogiltig geometristräng \"%s\"\n"
+
+#: src/terminal.c:887
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Ett fel uppstod vid hämtande av listan över terminalprofiler. (%s)\n"
 
-#: src/terminal.c:796
+#: src/terminal.c:1063
 msgid "You have to name your profile."
 msgstr "Du måste namnge din profil."
 
-#: src/terminal.c:808
+#: src/terminal.c:1073
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Du har redan en profil med namnet \"%s\""
 
-#: src/terminal.c:849
+#: src/terminal.c:1110
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profilen som du valde som bas för din nya profil finns inte längre"
 
-#: src/terminal.c:914
+#: src/terminal.c:1169
 msgid "New terminal profile"
 msgstr "Ny terminalprofil"
 
-#: src/terminal.c:919
+#: src/terminal.c:1174
 msgid "C_reate"
 msgstr "S_kapa"
 
-#: src/terminal.c:944
+#: src/terminal.c:1199
 msgid "Profile _Name:"
 msgstr "Profil_namn:"
 
-#: src/terminal.c:960
+#: src/terminal.c:1215
 msgid "_Base new profile on:"
 msgstr "_Basera ny profil på:"
 
-#: src/terminal.c:1155
-msgid "You must select one or more profiles to delete"
-msgstr "Du måste välja minst en profil att ta bort"
+#: src/terminal.c:1434
+msgid "You must select one or more profiles to delete."
+msgstr "Du måste välja minst en profil att ta bort."
 
-#: src/terminal.c:1207
-msgid "Deleting terminal profiles"
-msgstr "Tar bort terminalprofiler"
+#: src/terminal.c:1457
+msgid "You must have at least one profile; you can't delete all of them."
+msgstr "Du måste ha minst en profil; du kan inte ta bort alla profiler."
 
-#: src/terminal.c:1212
+#: src/terminal.c:1475
+msgid "Delete these two profiles?\n"
+msgstr "Ta bort dessa två profiler?\n"
+
+#: src/terminal.c:1477
+#, c-format
+msgid "Delete these %d profiles?\n"
+msgstr "Ta bort dessa %d profiler?\n"
+
+#: src/terminal.c:1495
+#, c-format
+msgid "Delete profile \"%s\"?"
+msgstr "Ta bort profilen \"%s\"?"
+
+#: src/terminal.c:1509
+msgid "_No"
+msgstr "_Nej"
+
+#: src/terminal.c:1511
 msgid "_Delete"
 msgstr "_Ta bort"
 
-#: src/terminal.c:1232
-msgid "_Select a profile or profiles to delete:"
-msgstr "_Välj en profil eller profiler att ta bort:"
+#: src/terminal.c:1668
+msgid "Manage terminal profiles"
+msgstr "Hantera terminalprofiler"
+
+#: src/terminal.c:1699
+msgid "Profile _used when launching a new terminal:"
+msgstr "Profil som _används vid start av en ny terminal:"
+
+#: src/terminal.c:1719
+msgid "_Profiles:"
+msgstr "_Profiler:"
+
+#: src/terminal.c:1752
+msgid "_New..."
+msgstr "_Ny..."
+
+#: src/terminal.c:1760
+msgid "_Edit..."
+msgstr "_Redigera..."
+
+#: src/terminal.c:1768
+msgid "_Delete..."
+msgstr "_Ta bort..."
+
+#~ msgid "Enter UNIX commands"
+#~ msgstr "Ange UNIX-kommandon"
+
+#~ msgid "01/01/00, 01:00 AM"
+#~ msgstr "01-01-00, 01.00"
+
+#~ msgid "1/1/00, 1:00 AM"
+#~ msgstr "01-01-00, 1.00"
+
+#~ msgid " 1/ 1/00,  1:00 AM"
+#~ msgstr " 1-1-00, 1.00"
+
+#~ msgid "Foundry:"
+#~ msgstr "Gjuteri:"
+
+#~ msgid "Family:"
+#~ msgstr "Familj:"
+
+#~ msgid "Weight:"
+#~ msgstr "Vikt:"
+
+#~ msgid "Slant:"
+#~ msgstr "Lutning:"
+
+#~ msgid "Set Width:"
+#~ msgstr "Ställ in bredd:"
+
+#~ msgid "Add Style:"
+#~ msgstr "Lägg till stil:"
+
+#~ msgid "Pixel Size:"
+#~ msgstr "Bildpunktsstorlek:"
+
+#~ msgid "Point Size:"
+#~ msgstr "Punktstorlek:"
+
+#~ msgid "Resolution X:"
+#~ msgstr "X-upplösning:"
+
+#~ msgid "Resolution Y:"
+#~ msgstr "Y-upplösning:"
+
+#~ msgid "Spacing:"
+#~ msgstr "Mellanrum:"
+
+#~ msgid "Average Width:"
+#~ msgstr "Medelbredd:"
+
+#~ msgid "Charset:"
+#~ msgstr "Teckentabell:"
+
+#~ msgid "Font Property"
+#~ msgstr "Typsnittsegenskap"
+
+#~ msgid "Requested Value"
+#~ msgstr "Begärt värde"
+
+#~ msgid "Actual Value"
+#~ msgstr "Verkligt värde"
+
+#~ msgid "Font"
+#~ msgstr "Typsnitt"
+
+#~ msgid "Font:"
+#~ msgstr "Typsnitt:"
+
+#~ msgid "Font Style:"
+#~ msgstr "Typsnittsstil:"
+
+#~ msgid "Size:"
+#~ msgstr "Storlek:"
+
+#~ msgid "Reset Filter"
+#~ msgstr "Återställ filter"
+
+#~ msgid "Metric:"
+#~ msgstr "Metrik:"
+
+#~ msgid "Points"
+#~ msgstr "Punkter"
+
+#~ msgid "Pixels"
+#~ msgstr "Bildpunkter"
+
+#~ msgid "Preview:"
+#~ msgstr "Förhandsgranskning:"
+
+#~ msgid "Font Information"
+#~ msgstr "Typsnittsinformation"
+
+#~ msgid "Requested Font Name:"
+#~ msgstr "Begärt typsnittsnamn:"
+
+#~ msgid "Actual Font Name:"
+#~ msgstr "Verkligt typsnittsnamn:"
+
+#~ msgid "%i fonts available with a total of %i styles."
+#~ msgstr "%i typsnitt är tillgängliga med sammanlagt %i stilar."
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Font Types:"
+#~ msgstr "Typsnittstyper:"
+
+#~ msgid "Bitmap"
+#~ msgstr "Bitmapp"
+
+#~ msgid "Scalable"
+#~ msgstr "Skalbar"
+
+#~ msgid "Scaled Bitmap"
+#~ msgstr "Skalad bitmapp"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "(nil)"
+#~ msgstr "(ingen)"
+
+#~ msgid "regular"
+#~ msgstr "normal"
+
+#~ msgid "italic"
+#~ msgstr "kursiv"
+
+#~ msgid "oblique"
+#~ msgstr "lutande"
+
+#~ msgid "reverse italic"
+#~ msgstr "omvänd kursiv"
+
+#~ msgid "reverse oblique"
+#~ msgstr "omvänd lutande"
+
+#~ msgid "other"
+#~ msgstr "annan"
+
+#~ msgid "[M]"
+#~ msgstr "[M]"
+
+#~ msgid "[C]"
+#~ msgstr "[C]"
+
+#~ msgid "The selected font is not available."
+#~ msgstr "Det markerade typsnittet är inte tillgängligt."
+
+#~ msgid "The selected font is not a valid font."
+#~ msgstr "Det markerade typsnittet är inte ett giltigt typsnitt."
+
+#~ msgid "This is a 2-byte font and may not be displayed correctly."
+#~ msgstr "Detta är ett tvåbytetypsnitt och kanske inte visas korrekt."
+
+#~ msgid "(unknown)"
+#~ msgstr "(okänd)"
+
+#~ msgid "roman"
+#~ msgstr "romersk"
+
+#~ msgid "proportional"
+#~ msgstr "proportionell"
+
+#~ msgid "monospaced"
+#~ msgstr "fast breddsteg"
+
+#~ msgid "char cell"
+#~ msgstr "teckencell"
+
+#~ msgid "Font: (Filter Applied)"
+#~ msgstr "Typsnitt: (Filter tillämpas)"
+
+#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
+#~ msgstr "MAX_FONTS överskreds. En del typsnitt kan saknas."
+
+#~ msgid "Font Selection"
+#~ msgstr "Typsnittsval"
+
+#~ msgid "Select a font"
+#~ msgstr "Välj ett typsnitt"
+
+#~ msgid "Choose..."
+#~ msgstr "Välj..."
+
+#~ msgid "Pick a color"
+#~ msgstr "Välj en färg"
+
+#~ msgid "Tint with background _color"
+#~ msgstr "Färgsätt med bakgrunds_färg"
+
+#~ msgid "_Select a profile or profiles to delete:"
+#~ msgstr "_Välj en profil eller profiler att ta bort:"
 
 #~ msgid "This is a terminal thing that isn't finished at all.  See TODO."
 #~ msgstr "Detta är en terminalgrej som inte alls är färdig. Se filen TODO."
