@@ -24,6 +24,7 @@
 
 #include <config.h>
 #include <libintl.h>
+#include <locale.h>
 #include <glib.h>
 
 G_BEGIN_DECLS

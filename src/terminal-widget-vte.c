@@ -177,7 +177,8 @@ void
 terminal_widget_set_scrollback_lines (GtkWidget *widget,
 				      int        lines)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_scrollback_lines(VTE_TERMINAL(widget), lines);
 }
 
 void
