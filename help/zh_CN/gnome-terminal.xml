@@ -1,0 +1,1122 @@
+<?xml version="1.0"?><!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "GNOME Terminal">  
+  <!ENTITY appversion "2.0.1">
+  <!ENTITY date "August 2002">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.3">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002 
+    
+  -->
+<article id="index" lang="zh_cn">
+  <articleinfo>
+     <title>&app; 手册 V&manrevision;</title>
+     <copyright> 
+        <year>2002</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year> 
+        <holder>Miguel de Icaza、Michael Zucchi 和 Alexander Kirillov</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>GNOME Documentation Project</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Sun</firstname> 
+          <surname>GNOME Documentation Team</surname> 
+          <affiliation> 
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup>
+     <revhistory>
+        <revision> 
+          <revnumber>&app; 手册 V&manrevision;</revnumber> 
+          <date>&date;</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 终端手册 V2.2</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 终端手册 V2.1</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 终端手册 V2.0</revnumber> 
+          <date>2002 年 4 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 终端用户指南</revnumber> 
+          <date>2000 年 5 月</date> 
+          <revdescription> 
+             <para role="author">
+                Miguel de Icaza、Michael Zucchi、Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+     </revhistory>
+     <releaseinfo>本手册介绍  &app; &appversion; 版。
+        </releaseinfo>
+     <legalnotice> 
+        <title>反馈</title>
+        <para>要报告关于 &app; 应用程序或本手册的错误或提出建议，请遵循 <ulink url="ghelp:gnome-feedback" type="help">GNOME 反馈页</ulink>中的指导。</para>
+     </legalnotice>
+  </articleinfo>
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>终端应用程序</primary> 
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction"> 
+     <title>简介</title>
+     <para>
+        <application>&app;</application> 是一个终端仿真应用程序，您可以使用它来执行以下操作：
+     </para>
+     <variablelist>
+        <varlistentry> 
+          <term>在 GNOME 环境中访问 UNIX Shell。</term> 
+          <listitem>
+             <para>Shell 是一种解释和执行您在命令行提示符下键入的命令的程序。在启动 <application>GNOME 终端</application>时，该应用程序会启动在您的系统帐号里指定的默认 Shell。您可以随时切换到不同的 Shell。
+             </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term>运行任何专门在 VT102、VT220 和 xterm 终端上运行的应用程序。</term> 
+          <listitem>
+             <para>
+                <application>&app;</application> 可以模仿由 X 联盟开发的 xterm 程序。而 xterm 程序可以模仿 DEC VT102 终端，而且还支持 DEC VT220 转义序列。转义序列是一串以 Esc 字符开头的字符串。
+                <application>&app;</application> 接受 VT102 和 VT220 终端用于定位光标和清除屏幕的函数的所有转义序列。
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started"> 
+     <title>入门</title>
+     <para>下面的部分介绍如何开始使用 <application>&app;</application>。 
+     </para>
+     <sect2 id="gnome-terminal-to-start"> 
+        <title>启动 &app;</title>
+        <para>可以通过以下方法启动 <application>&app;</application>：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>"应用程序"菜单</term> 
+             <listitem>
+                <para>
+                  选择<menuchoice><guimenu>"系统工具"</guimenu><guimenuitem>"终端"</guimenuitem></menuchoice>。</para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>命令行</term> 
+             <listitem>
+                <para>
+                  键入 <command>gnome-terminal</command>，然后按下<keycap>回车</keycap>键。 
+                </para>
+                <para>您可以使用命令行选项来修改运行 <application>&app;</application> 的方式。要查看命令行选项，请键入 <command>gnome-terminal --help</command>，然后按下<keycap>回车</keycap>键。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start"> 
+        <title>首次启动 &app;</title>
+        <para>当首次启动 <application>&app;</application> 时，该应用程序会打开一个具有一组默认设置的终端窗口。这组默认设置就叫做默认配置文件。该配置文件名称显示在 <application>&app;</application> 窗口的标题栏上。
+        </para>
+        <figure id="gnome-terminal_default"> 
+          <title>默认 &app; 窗口的实例</title>
+          <screenshot> 
+             <screeninfo>&app; 默认窗口</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>&app; 默认窗口</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>该终端窗口会显示一个命令提示符，您可以在其中键入 UNIX 命令。该命令提示符可以是 %、#、>、$ 或任意其它特殊字符。光标位于命令提示符处。如果键入一条 UNIX 命令然后按下<keycap>回车</keycap>键，计算机就会执行该命令。在默认情况下，<application>&app;</application> 会使用为启动该应用程序的用户指定的默认 Shell。
+        </para>
+        <para><application>&app;</application> 还可以设置下列环境变量：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <varname>TERM</varname></term> 
+             <listitem>
+                <para>默认情况下设置为 xterm。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>COLORTERM</varname></term> 
+             <listitem>
+                <para>默认情况下设置为 gnome-terminal。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>WINDOWID</varname></term> 
+             <listitem>
+                <para>默认情况下设置为 X11 窗口标识符。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+     <sect2 id="gnome-terminal-profiles"> 
+        <title>终端配置文件</title>
+        <para>您可以创建一个新的配置文件，并将新配置文件应用到终端，从而修改诸如字体、颜色和效果、卷动行为、窗口标题、兼容性以及键盘快捷键之类的特性。也可以在配置文件中定义启动 <application>&app;</application> 的命令。</para>
+          <para>可以在<guilabel>"编辑配置文件"</guilabel>对话框中定义每个终端配置文件，该对话框可以通过<guimenu>"编辑"</guimenu>菜单来访问。您可以根据需要定义任意数量的不同配置文件。在启动终端时，可以选择想用于该终端的配置文件，也可以在使用终端时更改终端配置文件。当您从命令行启动该应用程序时，若要为终端指定一个初始配置文件，可以使用下面的命令：
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile= 
+             <replaceable>profilename</replaceable></command> 
+        </para>
+        <para>当前配置文件的名称出现在 <application>&app;</application> 的标题栏上，除非您在<guilabel>"编辑配置文件"</guilabel>对话框中指定了不同的标题栏名称。
+        </para>
+        <para>有关如何定义和使用新的终端配置文件的信息，请参阅 <xref linkend="gnome-terminal-manage-profiles"/>。        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows"> 
+        <title>处理多个终端</title>
+        <para><application>&app;</application> 提供了选项卡功能，使您可以向窗口中添加额外的终端。单击相应的选项卡就可以在窗口中打开每个终端。窗口中的每个选项卡式终端都是一个单独的子进程，因此每个终端可以用于不同的工作。对于窗口中的每个选项卡式终端，您可以应用不同的配置文件。终端窗口的标题栏可以显示当前配置文件的名称，也可以显示当前配置文件指定的名称。<xref linkend="gnome-terminal-tabbed"/> 显示的是具有四个选项卡的 <application>&app;</application> 窗口。在本例中，这四个选项卡中的每一个都具有不同的配置文件。标题栏显示的是当前配置文件的名称（配置文件 1）。
+        </para>
+        <figure id="gnome-terminal-tabbed"> 
+          <title>带有选项卡的终端窗口的实例</title>
+          <screenshot> 
+             <screeninfo>&app; 默认窗口</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>&app; 默认窗口</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>有关如何打开新的选项卡式终端的信息，请参阅 <xref linkend="gnome-terminal-tabs"/>。
+        </para>
+     </sect2>
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-usage"> 
+     <title>用法</title>
+
+     <sect2 id="gnome-terminal-windows"> 
+        <title>打开和关闭终端</title>
+        <variablelist>
+          <varlistentry> 
+             <term>打开新的终端窗口：</term>
+             <listitem>
+                <para>
+                  选择<menuchoice><guimenu>"文件"</guimenu><guisubmenu>"新建窗口"</guisubmenu><guimenuitem>"默认"</guimenuitem></menuchoice>。
+                </para>
+                <para>新终端会启动一个子进程，该子进程的 PID 与您从中启动新终端的原始终端的 PID 相同。该子进程占用的系统资源要比从 GNOME 面板启动新 <application>&app;</application> 所需的系统资源少。新终端会从父终端继承应用程序设置和默认 Shell。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>关闭终端窗口：</term>
+             <listitem>
+                <para>
+                  选择<menuchoice><guimenu>"文件"</guimenu><guimenuitem>"关闭窗口"</guimenuitem></menuchoice>。
+                </para>
+                <para>此操作将关闭终端以及从该终端打开的所有子进程。如果关闭了最后一个终端窗口，<application>&app;</application> 程序就会退出。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>在同一窗口中添加新的选项卡式终端：</term>
+             <listitem>
+                <para>
+                  选择<menuchoice><guimenu>"文件"</guimenu><guisubmenu>"新建选项卡"</guisubmenu><guimenuitem>"默认"</guimenuitem></menuchoice>。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>打开选项卡式终端：</term>
+             <listitem>
+                <para>单击要打开的选项卡式终端的选项卡名称。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>关闭选项卡式终端：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>单击要关闭的选项卡式终端的选项卡名称。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          选择<menuchoice><guimenu>"文件"</guimenu><guimenuitem>"关闭选项卡"</guimenuitem></menuchoice>。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles"> 
+        <title>管理配置文件</title>
+        <variablelist>
+          <varlistentry> 
+             <term>添加新配置文件：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          选择<menuchoice><guimenu>"文件"</guimenu><guimenuitem>"新建配置文件"</guimenuitem></menuchoice>，显示<guilabel>"新建配置文件"</guilabel>对话框。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          在<guilabel>"配置文件名"</guilabel>文本框中键入新配置文件名。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          使用<guilabel>"基础配置文件"</guilabel>下拉列表框选择要让新配置文件以哪个配置文件为基础。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          单击<guibutton>"创建"</guibutton>。<application>&app;</application>
+会将该配置文件添加到<menuchoice><guimenu>"终端"</guimenu><guisubmenu>"配置文件"</guisubmenu></menuchoice>子菜单。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>更改选项卡式终端的配置文件：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>单击要更改其配置文件的选项卡式终端的选项卡名称。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>选择<menuchoice><guimenu>"终端"</guimenu><guisubmenu>"配置文件"</guisubmenu><guimenuitem>"<replaceable>profilename</replaceable>"</guimenuitem></menuchoice>。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>编辑配置文件：</term>
+             <listitem>
+                <para>您可以在<guilabel>"编辑配置文件"</guilabel>对话框中编辑配置文件。可以通过以下方法访问<guilabel>"编辑配置文件"</guilabel>对话框：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        选择<menuchoice><guimenu>"编辑"</guimenu><guisubmenu>"当前配置文件"</guisubmenu></menuchoice>。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        选择<menuchoice><guimenu>"编辑"</guimenu><guisubmenu>"配置文件"</guisubmenu></menuchoice>，然后选择您想编辑的配置文件，并单击<guibutton>"编辑"</guibutton>。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>右击终端窗口，然后从弹出菜单中选择<guimenuitem>"编辑当前配置文件"</guimenuitem>。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>删除配置文件：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"配置文件"</guimenuitem></menuchoice>。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>在<guilabel>"配置文件"</guilabel>列表中选择要删除的配置文件的名称，然后单击<guibutton>"删除"</guibutton>。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>在<guilabel>"删除配置文件"</guilabel>对话框中单击<guibutton>"删除"</guibutton>。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs"> 
+        <title>修改终端窗口</title>
+        <variablelist>
+          <varlistentry> 
+             <term>隐藏菜单栏：</term>
+             <listitem>
+                <para>右击终端窗口，然后从弹出菜单中选择<guimenuitem>"隐藏菜单栏"</guimenuitem>。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>显示隐藏的菜单栏：</term>
+             <listitem>
+                <para>右击终端窗口，然后从弹出菜单中选择<guimenuitem>"显示菜单栏"</guimenuitem>。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>更改滚动条的位置：</term>
+             <listitem>
+                <para>有关<guilabel>"编辑配置文件"</guilabel>对话框中可以选择用于显示滚动条的选项的更多信息，请参阅 <xref linkend="gnome-terminal-prefs"/>。                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents"> 
+        <title>处理终端窗口的内容</title>
+        <variablelist>
+          <varlistentry> 
+             <term>卷动浏览以前的命令和输出：</term>
+             <listitem>
+                <para>请执行以下操作之一：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>使用滚动条，它通常显示在终端窗口的右侧。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>按 <keycap>Page Up</keycap>、<keycap>Page Down</keycap>、<keycap>Home</keycap> 或者 <keycap>End</keycap> 键。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>在终端窗口中可以卷动的行数由<guilabel>"编辑配置文件"</guilabel>的<guilabel>"卷动"</guilabel>选项卡式部分中的<guilabel>"回卷"</guilabel>设置确定。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>选择并复制文本：</term>
+             <listitem>
+                <para>您可以使用以下任意一种方法来选择文本：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>要一次选择一个字符，请单击要选择的第一个字符，然后将鼠标拖到要选择的最后一个字符。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>要一次选择一个词，请双击要选择的第一个词，然后将鼠标拖到要选择的最后一个词。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>要一次选择一行，请三击要选择的第一行，然后将鼠标拖到要选择的最后一行。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>这些操作的结果是选择第一项和最后一项之间的所有文本。对于所有的文本选择情况，当您放开鼠标按钮后，<application>&app;</application> 都会将所有的文本复制到剪贴板上。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>将文本粘贴到终端中：</term>
+             <listitem>
+                <para>请执行以下操作之一：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>在命令提示符上单击鼠标中键。如果没有鼠标中键，请参阅 X 服务器文档，以获得关于如何模仿鼠标中键的信息。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"粘贴"</guimenuitem></menuchoice>，将文本粘贴到终端中。只有当您通过选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"复制"</guimenuitem></menuchoice>将选定文本复制到剪贴板之后，此功能才起作用。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>将文件名拖到终端窗口中：</term>
+             <listitem>
+                <para>您可以从其它应用程序（例如文件管理器）中将文件拖到终端中。终端会显示该文件的路径和完整的名称。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>访问链接：</term>
+             <listitem>
+                <para>要访问终端中显示的统一资源定位符 (URL)，请执行以下步骤：  </para>
+                  <orderedlist>
+                     <listitem>
+                        <para>将鼠标移动到 URL 上，直到该 URL 显示为带有下划线而且鼠标指针变成手形为止。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>右击该 URL 即可打开一个弹出菜单。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>选择<guimenuitem>"打开链接"</guimenuitem>，系统会启动链接应用程序，并且显示该 URL 定位的文件。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>查看键盘快捷键设置</title>
+        <para>要查看为 <application>&app;</application> 定义的键盘快捷键设置，请选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"键绑定"</guimenuitem></menuchoice>。<guilabel>"键绑定编辑器"</guilabel>对话框包含以下各项：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term><guilabel>禁用所有菜单助记标记</guilabel></term> 
+             <listitem>
+                <para>如果选中此复选框，系统将禁用为了使用键盘代替鼠标来选择菜单项而定义的快捷键。
+每个快捷键都由菜单或对话框选项上带下划线的字母标识。在某些情况下，您必须同时按下 <keycap>Alt</keycap> 键和快捷键才能执行相应的操作。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>禁用菜单访问键</guilabel></term> 
+             <listitem>
+                <para>选择此复选框可以禁用用于访问 <application>&app;</application> 菜单而定义的快捷键。
+访问该菜单的默认快捷键是 <keycap>F10</keycap>。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>加速键</guilabel></term> 
+             <listitem>
+                <para>该对话框的<guilabel>"加速键"</guilabel>部分列出了为每个菜单项定义的快捷键。
+这些快捷键使您可以使用键盘来选择菜单项，而不必使用鼠标来选择菜单项。这类快捷键通常是要同时按下的组合键。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-reset"> 
+        <title>恢复终端</title>
+        <para>如果您在使用终端时出现问题，下面的部分可以为您提供建议。
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>复位终端的状态：</term>
+             <listitem>
+                <para>选择<menuchoice><guimenu>"终端"</guimenu><guimenuitem>"复位"</guimenuitem></menuchoice>。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry> 
+             <term>复位终端并且清除屏幕：</term>
+             <listitem>
+                <para>选择<menuchoice><guimenu>"终端"</guimenu><guimenuitem>"复位并清除"</guimenuitem></menuchoice>。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+<!-- 
+<sect2 id="gnome-terminal-direct-input">
+<title>将所有键盘输入定向到终端</title>
+<para>
+   要将所有键盘输入定向到终端（即使该终端窗口不是聚焦窗口），请右击该终端窗口，显示一个弹出菜单，然后选择<guimenuitem>安全键盘</guimenuitem>。当多个用户使用同一台 X 服务器，并且该 X 服务器没有使用安全验证方法时，此选项十分有用。
+</para>
+</sect2>
+-->
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-prefs"> 
+     <title>首选项</title>
+     <para>
+        要配置 <application>&app;</application>，请选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"当前配置文件"</guimenuitem></menuchoice>。要配置您设置的另一个配置文件，请选择<menuchoice><guimenu>"编辑"</guimenu><guimenuitem>"配置文件"</guimenuitem></menuchoice>，选择您想编辑的配置文件，然后单击<guibutton>"编辑"</guibutton>。
+     </para>
+     <para>  
+        <guilabel>"编辑配置文件 <replaceable>profile name</replaceable>"</guilabel> 对话框包含您可以用于配置 <application>&app;</application> 的以下选项卡式部分：
+     </para>
+     <itemizedlist>
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
+     
+     <sect2 id="gnome-terminal-prefs-general"> 
+        <title>常规</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>配置文件名</guilabel> </term> 
+             <listitem>
+                <para>使用此文本框可以指定当前配置文件的名称。
+                </para>
+                <!-- <para>
+                  默认值： 
+                  <guilabel>Default</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>使用与其它应用程序相同的字体</guilabel> </term> 
+             <listitem>
+                <para>
+                  选择此选项可以使用在<application>"字体"</application>首选项工具中指定的标准应用程序字体。
+                </para>
+                <!-- <para>
+                  Default: selected.
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>字体</guilabel> </term> 
+             <listitem>
+                <para>
+                  单击此按钮可以为终端选择默认字体和字号。该按钮只有在取消选中<guilabel>"使用与其它应用程序相同的字体"</guilabel>选项时才可以使用。
+                </para>
+                <!-- <para>
+                  默认值：<guilabel>fixed (misc)</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>配置文件图标</guilabel> </term> 
+             <listitem>
+                <para>
+                  单击此按钮可以选择代表当前配置文件的图标。
+                </para>
+                <!-- <para>
+                  Default: gnome-terminal.png. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>允许粗体文字</guilabel> </term> 
+             <listitem>
+                <para>选择此选项可以使终端能够显示粗体文字。
+                </para>
+                <!-- <para>
+                  默认值：选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>光标闪烁</guilabel> </term> 
+             <listitem>
+                <para>选择此选项可以显示闪烁的光标。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>在新终端中默认显示菜单栏</guilabel>
+                </term> 
+             <listitem>
+                <para>选择此选项可以在新终端窗口中显示菜单栏。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>终端响铃</guilabel> </term> 
+             <listitem>
+                <para>选择此选项可以禁用终端响铃。
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>通过单词的字符选择</guilabel> </term> 
+             <listitem>
+                <para>使用此文本框可以指定一些字符或字符组，当您通过词选择文本时，<application>&app;</application> 会将这些字符或字符组认为是词。有关如何通过词选择文本的更多信息，请参阅 <xref linkend="gnome-terminal-contents"/>。
+                </para>
+                <!-- <para>
+                  默认值：-A-Za-z0-9,./?%&amp;#:_ 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title"> 
+        <title>标题和命令</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>初始标题</guilabel> </term> 
+             <listitem>
+                <para>使用此文本框可以指定配置文件的初始标题。
+从当前终端中启动的新终端就具有新的初始标题。
+                </para>
+                <!-- <para>
+                  默认值：Terminal。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>动态设置标题</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表可以将终端窗口的标题设置为当前的工作目录。
+                </para>
+                <!-- <para>
+                  默认值：<guilabel>替换初始标题</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>退出命令时</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表可以选择在终端退出时运行的命令。
+                </para>
+                <!-- <para>
+                  默认值：<guilabel>退出终端</guilabel>。
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>以登录 shell 运行命令</guilabel> </term> 
+             <listitem>
+                <para>选择此选项可以使在终端中运行的命令以登录 Shell 来运行。如果该命令不是 Shell，则该设置不起作用。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>启动命令时更新 utmp/wtmp 记录</guilabel> </term> 
+             <listitem>
+                <para>选择此选项可以在打开新 Shell 时向 utmp 和 wtmp 记录中插入新的条目。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>运行定制命令而不是我的 shell</guilabel>
+                </term> 
+             <listitem>
+                <para>选择此选项可以在终端中运行命令，而不是在正常的 Shell 中运行。请在<guilabel>"定制命令"</guilabel>文本框中指定定制命令。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors"> 
+        <title>颜色</title>
+        <variablelist>
+        <varlistentry> 
+             <term> 
+                <guilabel>使用系统主题颜色</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  选择此选项可以使用在 GNOME 主题中指定的颜色，该主题是在<application>"主题"</application>首选项工具中选定的。
+                </para>
+                <!-- <para>
+                  默认值：选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>内置方案 - 前景和背景</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表框可以指定终端的前景色和背景色。<application>&app;</application> 支持以下的前景色和背景色组合：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>淡黄底黑字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>黑底白字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>白底黑字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>黑底绿字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>定制</guilabel> 
+                     </para>
+                     <para>此选项使您可以选择那些不在备选颜色方案中的颜色。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>实际显示的前景色和背景色会根据所选择的颜色方案而变化。例如，如果选择<guilabel>"黑底白字"</guilabel>和<guilabel>"Linux 控制台"</guilabel>颜色方案，则该应用程序会将前景色和背景色显示为黑底淡灰字。
+                </para>
+                <!-- <para>
+                  默认值： 
+                  <guilabel>淡黄底黑字</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>文本颜色</guilabel> </term> 
+             <listitem>
+                <para>单击<guibutton>"文本颜色"</guibutton>按钮可以显示<guilabel>"选择终端文本颜色"</guilabel>对话框。从颜色调色板中选择要用作前景色的颜色。
+只有当您在<guilabel>"终端颜色"</guilabel>组框中的<guilabel>"内置方案"</guilabel>下拉列表框中指定了<guilabel>"定制颜色"</guilabel>选项的情况下，此按钮才可用。
+                </para>
+                <!-- <para>
+                  默认值：黑色。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>背景色</guilabel> </term> 
+             <listitem>
+                <para>单击<guibutton>"背景色"</guibutton>按钮可以显示<guilabel>"选择终端背景色"</guilabel>对话框。
+从颜色调色板中选择要用作背景色的颜色。只有当您在<guilabel>"终端颜色"</guilabel>组框中的<guilabel>"内置方案"</guilabel>下拉列表框中指定了<guilabel>"定制颜色"</guilabel>选项的情况下，此按钮才可用。
+                </para>
+                <!-- <para>
+                  默认值：淡黄色。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>内置方案 - 调色板</guilabel></term> 
+             <listitem>
+                <para>颜色方案是一个 16 种颜色的调色板。使用该下拉列表框可以选择要使用的颜色方案。
+                  <application>&app;</application> 支持以下颜色方案：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Linux 控制台</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Xterm</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Rxvt</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>定制</guilabel> 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>每种颜色方案都有少许不同之处。例如，<guilabel>"Linux 控制台"</guilabel>使用的是淡灰色，而不是白色。<guilabel>"定制"</guilabel>颜色方案使您可以创建定制的颜色调色板。
+                </para>
+                <!-- <para>
+                  默认值： 
+                  <guilabel>Linux 控制台</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+ 
+          <varlistentry> 
+             <term> 
+                <guilabel>颜色调色板</guilabel> </term> 
+             <listitem>
+                <para>只有当您在<guilabel>"应用程序调色板"</guilabel>组框中的<guilabel>"内置方案"</guilabel>下拉列表中指定了<guilabel>"定制"</guilabel>选项的情况下，<guilabel>"颜色调色板"</guilabel>才可用。使用<guilabel>"颜色调色板"</guilabel>可以在定制的颜色调色板中定制 16 种默认颜色。要定制颜色，请单击该颜色，从而显示<guilabel>"调色板项"</guilabel>对话框。使用颜色轮或滑块定制颜色，然后单击<guibutton>"确定"</guibutton>。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects"> 
+        <title>效果</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>背景</guilabel> </term> 
+             <listitem>
+                <para>选择终端窗口的背景显示选项。这些选项如下所示：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>无（使用纯色）</guilabel> 
+                     </para>
+                     <para>如果选择此选项，系统会使用<guilabel>"颜色"</guilabel>选项卡式部分中指定的背景色作为终端的背景色。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>背景图像</guilabel> 
+                     </para>
+                     <para>如果选择此选项，系统会使用一个图像文件作为终端的背景。使用<guilabel>"图像文件"</guilabel>下拉组合框可以指定该图像文件的位置和名称。另外，单击<guibutton>"浏览"</guibutton>可以搜索和选择图像文件。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>透明背景</guilabel> 
+                     </para>
+                     <para>选择此选项可以为终端应用透明的背景。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <!-- <para>
+                  默认值： 
+                  <guilabel>无（使用纯色）</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>背景图像卷动</guilabel>
+                </term> 
+             <listitem>
+                <para>如果选择此选项，系统就会在卷动终端时使背景图像随文字一起卷动。如果不选择此选项，背景图像就会在终端背景上保持固定，只会卷动文字。只有当您选择了<guilabel>"背景图像"</guilabel>选项的情况下，此选项才可用。
+                </para>
+                <!-- <para>默认值：未选中。</para>     -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>对透明和图像背景应用阴影</guilabel>
+                </term> 
+             <listitem>
+                <para>选择此滑块可以使终端的背景带有阴影或变暗。只有当您选择了<guilabel>"背景图像"</guilabel>或<guilabel>"透明背景"</guilabel>选项的情况下，此选项才可用。
+                </para>
+                <!-- <para>
+                  Default: 50%. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-scrolling">
+    <title>卷动</title>
+     <variablelist>
+     <varlistentry> 
+             <term> 
+                <guilabel>滚动条</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表框可以指定滚动条在终端窗口中的位置。
+                </para>
+                <!-- <para>
+                  默认值： 
+                  <guilabel>在右侧</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>回卷行数</guilabel> </term> 
+             <listitem>
+                <para>使用此旋转框可以指定使用滚动条能够回滚的行数。例如，如果指定了 100，则您就可以回卷终端上显示的最近 100 行。
+                </para>
+                <!-- <para>
+                  默认值：500 行。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>回卷千字节数</guilabel> </term> 
+             <listitem>
+                <para>使用此旋转框可以指定使用滚动条能够回滚的千字节数。例如，如果指定了 94，则您就可以回滚终端上显示的最近 94 千字节的文本。
+                </para>
+                <!-- <para>
+                  默认值：167 千字节。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>击键卷动</guilabel> </term> 
+             <listitem>
+                <para>选择此选项使您可以使用 <keycap>Page Up</keycap> 和 <keycap>Page Down</keycap> 键来卷动终端。
+                </para>
+                <!-- <para>
+                  默认值：选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>卷动输出</guilabel> </term> 
+             <listitem>
+                <para>选择此选项使您可以卷动终端上的输出，从而使终端可以继续显示某个命令的更多输出。
+                </para>
+                <!-- <para>
+                  默认值：未选中。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-compatibility"> 
+        <title>兼容性</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>退格键生成</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表可以选择想让<keycap>退格</keycap>键执行的功能。
+                </para>
+                <!-- <para>
+                  默认值：<guilabel>ASCII DEL</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Delete 键生成</guilabel> </term> 
+             <listitem>
+                <para>使用此下拉列表可以选择想让 <keycap>Delete</keycap> 键执行的功能。
+                </para>
+                <!-- <para>
+                  默认值：<guilabel>转义序列</guilabel>。 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guibutton>将兼容性选项复位为默认值</guibutton> </term> 
+             <listitem>
+                <para>单击此按钮可以将<guilabel>"兼容性"</guilabel>选项卡式部分上的选项复位到默认设置。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>

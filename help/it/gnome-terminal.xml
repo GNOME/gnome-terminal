@@ -1,0 +1,1307 @@
+<?xml version="1.0"?><!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "Terminale GNOME">  
+  <!ENTITY appversion "2.0.1">
+  <!ENTITY date "Agosto 2002">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.3">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002 
+    
+  -->
+<article id="index" lang="it">
+  <articleinfo>
+     <title>Manuale di &app; V&manrevision;</title>
+     <copyright> 
+        <year>2003</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year> 
+        <holder>Miguel de Icaza, Michael Zucchi, and Alexander Kirillov</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>GNOME Documentation Project</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Sun</firstname> 
+          <surname>GNOME Documentation Team</surname> 
+          <affiliation> 
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>GNOME Documentation Project</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup>
+     <revhistory>
+        <revision> 
+          <revnumber>Manuale di &app; V&manrevision;</revnumber> 
+          <date>&date;</date> 
+          <revdescription> 
+             <para role="author"> 
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher"> 
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manuale di GNOME Terminal V2.2</revnumber> 
+          <date>Agosto 2002</date> 
+          <revdescription> 
+             <para role="author"> 
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher"> 
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manuale di GNOME Terminal V2.1</revnumber> 
+          <date>Agosto 2002</date> 
+          <revdescription> 
+             <para role="author"> 
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher"> 
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manuale di GNOME Terminal V2.0</revnumber> 
+          <date>Aprile 2002</date> 
+          <revdescription> 
+             <para role="author"> 
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher"> 
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manuale utente del Terminale GNOME</revnumber> 
+          <date>Maggio 2000</date> 
+          <revdescription> 
+             <para role="author">
+                Miguel de Icaza, Michael Zucchi, Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para role="publisher"> 
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+     </revhistory>
+     <releaseinfo>Questo manuale descrive la versione &appversion; di &app;.
+        </releaseinfo>
+     <legalnotice> 
+        <title>Commenti</title>
+        <para> Per segnalare un problema o inviare suggerimenti sull'applicazione &app; o su questo manuale, seguire le istruzioni presenti alla <ulink url="ghelp:gnome-feedback" type="help">Pagina di commenti su GNOME</ulink>. </para>
+     </legalnotice>
+  </articleinfo>
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>applicazione di terminale</primary> 
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction">     <title>Introduzione</title>
+     <para>Il <application>Terminale GNOME</application> &egrave; un'applicazione di emulazione di terminale che pu&ograve; essere usata per eseguire le seguenti azioni:
+     </para>
+     <variablelist>
+        <varlistentry> 
+          <term>Accedere ad una shell UNIX nell'ambiente GNOME.</term> 
+          <listitem>
+             <para>
+                Le shell sono programmi che interpretano e eseguono i comandi che vengono digitati dall'utente nella riga di comando. Quando si avvia il <application>Terminale GNOME</application>, l'applicazione avvia la shell predefinita impostata nell'account di sistema dell'utente. &Egrave; possibile selezionare una shell differente in qualsiasi momento. 
+             </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term>Eseguire applicazioni progettate per i terminali VT102, VT220 e xterm. </term> 
+          <listitem>
+             <para>
+                Il <application>&app;</application> emula il programma xterm sviluppato dall'X Consortium. A sua volta, il programma xterm emula il terminale DEC VT102 e supporta anche le sequenze di escape del terminale DEC VT220. Le sequenze di escape sono serie di caratteri che iniziano con il carattere Esc.
+                Il <application>&app;</application> accetta tutte le sequenze di escape utilizzate dai terminali VT102 e VT220 per funzioni come il posizionamento del cursore e la cancellazione dello schermo. 
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started"> 
+     <title>Per iniziare</title>
+     <para>
+       Le sezioni seguenti forniscono un'introduzione all'utilizzo del <application>&app;</application>. 
+     </para>
+     <sect2 id="gnome-terminal-to-start"> 
+        <title>Avviare il &app;</title>
+        <para>
+          Sono disponibili i seguenti metodi per avviare il <application>&app;</application>:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>Menu Programmi</term> 
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>Sistema</guimenu> 
+                     <guimenuitem>Terminale</guimenuitem> 
+                  </menuchoice>.</para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Riga di comando</term> 
+             <listitem>
+                <para>
+                  Digitare 
+                  <command>gnome-terminal</command>, quindi premere
+                  <keycap>Return</keycap>. 
+                </para>
+                <para>
+                  &Egrave; possibile usare le opzioni dalla riga di comando per modificare la modalit&agrave; di esecuzione del <application>&app;</application>. Per visualizzare le opzioni disponibili, digitare 
+                  <command>gnome-terminal --help</command> e quindi premere <keycap>Return</keycap>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start"> 
+        <title>Primo avvio del &app;</title>
+        <para>
+          Al primo avvio del <application>&app;</application>, l'applicazione apre una finestra di terminale usando un insieme di impostazioni predefinite. Questo insieme di impostazioni predefinite &egrave; denominato Profilo predefinito. Il nome del profilo appare nella barra del titolo della finestra del  <application>&app;</application>. 
+        </para>
+        <figure id="gnome-terminal_default"> 
+          <title>Esempio di finestra predefinita del &app;</title>
+          <screenshot> 
+             <screeninfo>Finestra predefinita del &app;</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>Finestra predefinita del &app;</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          La finestra di terminale visualizza un prompt di comandi che pu&ograve; essere utilizzato per digitare comandi UNIX. Il prompt pu&ograve; essere rappresentato dal carattere %, #, >, $, o da qualsiasi altro carattere speciale. Il cursore viene posizionato automaticamente dopo il prompt dei comandi. Quando si digita un comando UNIX e si preme il tasto <keycap>Return</keycap>, il computer esegue il comando. Nell'impostazione predefinita, il <application>&app;</application> usa la shell predefinita dell'utente che ha avviato l'applicazione. 
+        </para>
+        <para>
+          Il <application>&app;</application> imposta anche le seguenti variabili d'ambiente:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <varname>TERM</varname></term> 
+             <listitem>
+                <para>
+                  Viene impostata su xterm nell'impostazione predefinita. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>COLORTERM</varname></term> 
+             <listitem>
+                <para>
+                  Viene impostata su gnome-terminal nell'impostazione predefinita. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>WINDOWID</varname></term> 
+             <listitem>
+                <para>
+                  Viene impostata sull'identificatore di finestra X11 nell'impostazione predefinita. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+     <sect2 id="gnome-terminal-profiles"> 
+        <title>Profili del terminale</title>
+        <para>
+          &Egrave; possibile creare un nuovo profilo di terminale per modificare caratteristiche come il tipo di carattere, il colore, le impostazioni di scorrimento, il titolo della finestra, la compatibilit&agrave; e le scelte rapide. &Egrave; anche possibile definire nel profilo il comando per avviare  il <application>&app;</application>. </para>
+          <para>I profili vengono definiti nella finestra di dialogo <guilabel>Modifica profili</guilabel> a cui &egrave; possibile accedere dal menu <guimenu>Modifica</guimenu>. &Egrave; possibile definire il numero di profili desiderato. Quando si avvia un terminale, &egrave; possibile scegliere il profilo di terminale desiderato oppure modificarlo durante l'utilizzo del terminale. Per specificare un profilo iniziale per il terminale quando si avvia l'applicazione dalla riga di comando usare la sintassi seguente:
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile=<replaceable>nome_profilo</replaceable></command> 
+        </para>
+        <para>
+          Il nome del profilo corrente appare nella barra del titolo del <application>&app;</application> se non &egrave; stato specificato un titolo differente nella finestra di dialogo <guilabel>Modifica del profilo</guilabel>. 
+        </para>
+        <para>
+          Vedere la sezione <xref linkend="gnome-terminal-manage-profiles"/> per informazioni su come definire e utilizzare un nuovo profilo di terminale. 
+        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows"> 
+        <title>Utilizzo di pi&ugrave; terminali</title>
+        <para>
+         Il <application>&app;</application> consente l'utilizzo di schede che permettono di aggiungere altri terminali alla stessa finestra. Fare clic sulla scheda appropriata per selezionare il terminale da visualizzare nella finestra. Ogni terminale presente in una scheda utilizza un sottoprocesso differente, &egrave; quindi possibile utilizzare i diversi terminali per diverse attivit&agrave;. &Egrave; anche possibile applicare un profilo differente a ciascuna scheda di terminale. La barra del titolo della finestra del terminale mostra il nome del profilo corrente o il nome specificato dal profilo corrente. La <xref linkend="gnome-terminal-tabbed"/>
+          mostra una finestra del <application>&app;</application> con quattro schede. In questo caso,
+          ognuna delle schede ha un profilo differente. Il nome del profilo corrente,
+          Profile 1, appare nella barra del titolo. 
+        </para>
+        <figure id="gnome-terminal-tabbed"> 
+          <title>Esempio di finestra di terminale con pi&ugrave; schede</title>
+          <screenshot> 
+             <screeninfo>Finestra predefinita del &app;</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>Finestra predefinita del &app;</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          Vedere <xref linkend="gnome-terminal-tabs"/> per informazioni sull'apertura di una nuova scheda di terminale. 
+        </para>
+     </sect2>
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-usage"> 
+     <title>Utilizzo</title>
+
+     <sect2 id="gnome-terminal-windows"> 
+        <title>Aprire e chiudere un terminale</title>
+        <variablelist>
+          <varlistentry> 
+             <term>Aprire una nuova finestra di terminale:</term>
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>File</guimenu> 
+                     <guisubmenu>Nuova finestra</guisubmenu>
+                     <guimenuitem>Predefinito</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+                <para>
+                  Il nuovo terminale avvia un sottoprocesso con lo stesso PID del terminale da cui &egrave; stato avviato. Questo nuovo sottoprocesso comporta un utilizzo minore delle risorse del sistema rispetto a un nuovo <application>&app;</application> avviato da uno dei pannelli di GNOME. Il nuovo terminale eredita le impostazioni e la shell predefinita dal terminale da cui &egrave; stato avviato. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Chiudere una finestra di terminale:</term>
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>File</guimenu> 
+                     <guimenuitem>Chiudi finestra</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+                <para>
+                  Questa azione chiude il terminale e tutti i sottoprocessi che sono stati aperti a partire da quel terminale. Quando viene chiusa l'ultima finestra di terminale, l'applicazione <application>&app;</application> termina. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Aggiungere una nuova scheda di terminale nella stessa finestra:</term>
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>File</guimenu> 
+                     <guisubmenu>Nuova scheda</guisubmenu>
+                     <guimenuitem>Predefinito</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Aprire una scheda di terminale:</term>
+             <listitem>
+                <para>
+                  Fare clic sul nome della scheda che si desidera aprire. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Chiudere una scheda di terminale:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                  Fare clic sul nome della scheda che si desidera chiudere. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Scegliere 
+                          <menuchoice> 
+                             <guimenu>File</guimenu> 
+                             <guimenuitem>Chiudi scheda</guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles"> 
+        <title>Gestire  i profili</title>
+        <variablelist>
+          <varlistentry> 
+             <term>Aggiungere un nuovo profilo:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Scegliere 
+                          <menuchoice> 
+                             <guimenu>File</guimenu> 
+                             <guimenuitem>Nuovo profilo</guimenuitem> 
+                          </menuchoice> per visualizzare la finestra di dialogo <guilabel>Nuovo profilo</guilabel>. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Digitare il nome del nuovo profilo nella casella di testo 
+                          <guilabel>Nome profilo</guilabel>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Usare la casella di riepilogo <guilabel>Basato su</guilabel> per selezionare il profilo sul quale deve basarsi il nuovo profilo.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Fare clic su <guibutton>Crea</guibutton>. <application>&app;</application>
+                          aggiunge il profilo al sottomenu  
+                          <menuchoice> 
+                             <guimenu>Terminale</guimenu> 
+                             <guisubmenu>Profilo</guisubmenu> 
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Modificare il profilo di una scheda di terminale:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                  Fare clic sul nome della scheda di terminale di cui modificare il profilo. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Scegliere 
+                          <menuchoice> 
+                             <guimenu>Terminale</guimenu> 
+                             <guisubmenu>Profilo</guisubmenu> 
+                             <guimenuitem> 
+                                <replaceable>nome_profilo</replaceable></guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Modificare un profilo:</term>
+             <listitem>
+                <para>
+                  A questo scopo, utilizzare la finestra di dialogo <guilabel>Modifica del profilo</guilabel>. &Egrave; possibile accedere alla finestra di dialogo <guilabel>Modifica del profilo</guilabel> nei seguenti modi:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Scegliere
+                        <menuchoice> 
+                          <guimenu>Modifica</guimenu> 
+                          <guisubmenu>Profilo corrente</guisubmenu> 
+                        </menuchoice>. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Scegliere 
+                        <menuchoice> 
+                          <guimenu>Modifica</guimenu> 
+                          <guisubmenu>Profili</guisubmenu> 
+                        </menuchoice>, quindi selezionare il profilo da modificare e fare clic su <guibutton>Modifica</guibutton>. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Fare clic con il pulsante destro del mouse nella finestra di terminale, quindi scegliere <guimenuitem>Modifica profilo corrente</guimenuitem> dal menu popup. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Eliminare un profilo:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Scegliere 
+                          <menuchoice> 
+                             <guimenu>Modifica</guimenu> 
+                             <guimenuitem>Profili</guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Selezionare il nome del profilo da eliminare nell'elenco <guilabel>Profili</guilabel>, quindi fare clic su <guibutton>Elimina</guibutton>.
+                        
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Fare clic su 
+	<guibutton>Elimina</guibutton> nella finestra di dialogo <guilabel>Elimina profili</guilabel>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs"> 
+        <title>Modificare una finestra di terminale</title>
+        <variablelist>
+          <varlistentry> 
+             <term>Nascondere la barra dei menu:</term>
+             <listitem>
+                <para>
+                  Fare clic con il pulsante destro del mouse nella finestra di terminale, quindi scegliere <guimenuitem>Nascondi barra dei menu</guimenuitem> dal menu popup. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Visualizzare una barra dei menu nascosta:</term>
+             <listitem>
+                <para>
+                  Fare clic con il pulsante destro del mouse nella finestra di terminale, quindi scegliere <guimenuitem>Mostra barra dei menu</guimenuitem> dal menu popup. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Modificare la posizione della barra di scorrimento:</term>
+             <listitem>
+                <para>Vedere  <xref linkend="gnome-terminal-prefs"/> per maggiori informazioni sulle opzioni che &egrave; possibile scegliere nella finestra di dialogo <guilabel>Modifica del profilo</guilabel> per visualizzare la barra di scorrimento.                 </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents"> 
+        <title>Usare il contenuto della finestra di terminale</title>
+        <variablelist>
+          <varlistentry> 
+             <term>Scorrere i comandi e l'output generato in precedenza:</term>
+             <listitem>
+                <para>
+                  Procedere in uno dei seguenti modi:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Utilizzare la barra di scorrimento, che in genere compare sulla destra della finestra di terminale. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Premere i tasti 
+                        <keycap>Page Up</keycap>, 
+                        <keycap>Page Down</keycap>, 
+                        <keycap> Home</keycap> o 
+                        <keycap>End</keycap>. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Il numero di righe di cui viene effettuato lo scorrimento all'indietro &egrave; stabilito nell'impostazione 
+                  <guilabel>Scorrimento all'indietro</guilabel> nella scheda <guilabel>Scorrimento</guilabel> della finestra di dialogo <guilabel>Modifica del profilo</guilabel>. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Selezionare e copiare il testo:</term>
+             <listitem>
+                <para>
+                  Il testo pu&ograve; essere selezionato con uno dei seguenti metodi:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Per selezionare un carattere per volta, fare clic sul primo carattere da selezionare e quindi trascinare il mouse fino all'ultimo carattere da selezionare. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Per selezionare una parola per volta, fare doppio clic sulla prima parola da selezionare e trascinare il mouse fino all'ultima parola da selezionare. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                       Per selezionare una riga per volta, fare triplo clic sulla prima riga da selezionare e trascinare il mouse fino all'ultima riga da selezionare. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                        Queste azioni selezionano tutto il testo compreso tra il primo e l'ultimo elemento. 
+                  Ogni volta che viene effettuata una selezione di testo, il <application>&app;</application> copia il testo selezionato negli appunti quando viene rilasciato il pulsante del mouse. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Incollare il testo in un terminale:</term>
+             <listitem>
+                <para>
+                  Procedere in uno dei seguenti modi:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Fare clic con il pulsante centrale del mouse al prompt dei comandi. Se il mouse non dispone di un pulsante centrale, consultare la documentazione del server X per informazioni su come emulare la pressione del pulsante centrale del mouse. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Scegliere  
+                        <menuchoice> 
+                          <guimenu>Modifica</guimenu> 
+                          <guimenuitem>Incolla</guimenuitem> 
+                        </menuchoice> per incollare il testo in un terminale. Questa funzione opera correttamente solo se il testo selezionato &egrave; stato copiato negli appunti con 
+                        <menuchoice>
+                          <guimenu>Modifica</guimenu> 
+                          <guimenuitem>Copia</guimenuitem> 
+                        </menuchoice>.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Trascinare un nome di file in un terminale:</term>
+             <listitem>
+                <para>
+                  &Egrave; possibile trascinare un file in un terminale da un'altra applicazione, come ad esempio un'applicazione di gestione dei file. Il terminale visualizza il percorso e il nome completo del file. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Accedere a un collegamento:</term>
+             <listitem>
+                <para>
+                  Per accedere a un URL visualizzato in un terminale, procedere come segue: </para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Spostare il mouse sull'URL fino a quando questo non appare sottolineato e il puntatore del mouse non assume l'aspetto di una mano. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Fare clic con il pulsante destro del mouse sull'URL per aprire il menu popup. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Scegliere <guimenuitem>Apri collegamento</guimenuitem> per avviare un'applicazione per il link e visualizzare la pagina indicata dall'URL. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>Visualizzare le scelte rapide della tastiera</title>
+        <para>
+          Per visualizzare le impostazioni delle scelte rapide definite per <application>&app;</application>,
+          scegliere 
+          <menuchoice> 
+               <guimenu>Modifica</guimenu> 
+               <guimenuitem>Associazioni di tasti</guimenuitem> 
+          </menuchoice>. La finestra di dialogo <guilabel>Editor associazioni di tasti</guilabel> contiene i seguenti elementi:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term><guilabel>Disabilita tutti gli mnemonici dei menu</guilabel></term> 
+             <listitem>
+                <para>
+                  Selezionare questa casella di controllo per disabilitare i caratteri mnemonici che consentono di utilizzare la tastiera al posto del mouse per selezionare le voci di menu. 
+                  Ogni carattere mnemonico &egrave; identificato da una lettera sottolineata nelle voci di menu o nelle opzioni delle finestre di dialogo. In alcuni casi, per eseguire l'azione &egrave; necessario premere il tasto <keycap>Alt</keycap> in combinazione con il carattere mnemonico. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>Disabilita il tasto di accesso ai menu</guilabel></term> 
+             <listitem>
+                <para>
+                  Selezionare questa casella di controllo per disabilitare la scelta rapida che consente l'accesso ai menu del <application>&app;</application>.
+                  La scelta rapida predefinita per l'accesso ai menu &egrave; <keycap>F10</keycap>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>Scelte rapide</guilabel></term> 
+             <listitem>
+                <para>
+                  La sezione <guilabel>Scelte rapide</guilabel> della finestra di dialogo elenca le scelte rapide definite per la varie voci di menu.
+                  Le combinazioni di scelta rapida consentono l'utilizzo della tastiera al posto del mouse per selezionare una voce di menu. La scelta rapida &egrave; in genere una combinazione di tasti che vengono premuti contemporaneamente.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-reset"> 
+        <title>Risolvere i problemi del terminale</title>
+        <para>
+          Le sezioni seguenti forniscono alcuni consigli utili quando si verificano problemi nel terminale. 
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>Ripristinare lo stato del terminale:</term>
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>Terminale</guimenu> 
+                     <guimenuitem>Ripristina</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry> 
+             <term>Ripristinare il terminale e cancellare lo schermo:</term>
+             <listitem>
+                <para>
+                  Scegliere 
+                  <menuchoice> 
+                     <guimenu>Terminale</guimenu> 
+                     <guimenuitem>Ripristina e cancella</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+<!-- 
+<sect2 id="gnome-terminal-direct-input">
+<title>To Direct All Keyboard Input to a Terminal</title>
+<para>
+   To direct all keyboard input to the terminal, even when the terminal window is
+   not in focus, right-click in the terminal window to display a popup menu, then
+   choose <guimenuitem>Secure keyboard</guimenuitem>. This option is useful when
+   several users use the same X server and the X server does not use secure authentication
+   methods.
+</para>
+</sect2>
+-->
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-prefs"> 
+     <title>Preferenze</title>
+     <para>
+        Per configurare il <application>&app;</application>, scegliere 
+        <menuchoice> 
+          <guimenu>Modifica</guimenu> 
+          <guimenuitem>Profilo corrente</guimenuitem> 
+        </menuchoice>. Per configurare un differente profilo, scegliere
+         <menuchoice> 
+          <guimenu>Modifica</guimenu> 
+          <guimenuitem>Profili</guimenuitem> 
+        </menuchoice>, selezionare il profilo desiderato e fare clic su <guibutton>Modifica</guibutton>.
+     </para>
+     <para>  
+        La finestra di dialogo <guilabel>Modifica del profilo "<replaceable>nome profilo</replaceable>"</guilabel> contiene le seguenti schede di configurazione del <application>&app;</application>:
+     </para>
+     <itemizedlist>
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
+     
+     <sect2 id="gnome-terminal-prefs-general"> 
+        <title>Generale</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Nome profilo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di testo per specificare il nome del profilo corrente. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Default</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Usa lo stesso tipo di carattere delle altre applicazioni</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per  usare il tipo di carattere standard per le applicazioni definito nella finestra di preferenze <application>Tipo di carattere</application>. 
+                </para>
+                <!-- <para>
+                  Default: selected.
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Carattere</guilabel> </term> 
+             <listitem>
+                <para>
+                  Fare clic sul pulsante per selezionare un tipo di carattere e una dimensione predefinita per il terminale. Questo pulsante &egrave; disponibile solo se l'opzione <guilabel>Usa lo stesso tipo di carattere delle altre applicazioni</guilabel> non &egrave; selezionata.
+                </para>
+                <!-- <para>
+                  Default: <guilabel>fixed (misc)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Icona profilo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Fare clic su questo pulsante per selezionare un'icona che rappresenti graficamente il profilo corrente. 
+                </para>
+                <!-- <para>
+                  Default: gnome-terminal.png. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Consenti grassetto</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per consentire al terminale di visualizzare il testo in grassetto. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Lampeggio cursore</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per visualizzare un cursore lampeggiante. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Mostra la barra dei menu nei nuovi terminali</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per visualizzare la barra dei menu nelle nuove finestre di terminale. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Segnale acustico terminale</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per disabilitare il segnale acustico del terminale. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Caratteri da includere nella selezione per parole</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di testo per specificare i caratteri o i gruppi di caratteri che il <application>&app;</application> deve considerare come parte di una parola quando si effettua una selezione per parola. Per maggiori informazioni sulla selezione del testo per parola, vedere la sezione <xref linkend="gnome-terminal-contents"/>. 
+                </para>
+                <!-- <para>
+                  Default: -A-Za-z0-9,./?%&amp;#:_ 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title"> 
+        <title>Titolo e comando</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Titolo iniziale</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di testo per specificare il titolo iniziale del profilo. 
+                  I nuovi terminali avviati dal terminale corrente utilizzeranno questo titolo iniziale. 
+                </para>
+                <!-- <para>
+                  Default: Terminal. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Il titolo impostato dinamicamente</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di riepilogo per impostare il titolo della finestra di terminale in base alla directory di lavoro corrente. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Replaces initial title</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Quando il comando termina</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questo elenco a discesa per scegliere il comando da eseguire quando si esce dal terminale. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Exit the terminal</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Esegui comando come shell di login</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per fare in modo che i comandi eseguiti nel terminale vengano eseguiti come shell di login. Se il comando non &egrave; una shell, questa impostazione non ha effetto. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Aggiorna record utmp/wtmp quando il comando viene lanciato</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per inserire una nuova voce nei record utmp e wtmp quando si apre una nuova shell. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Esegui comando personalizzato al posto della shell</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per eseguire un comando in un terminale diverso dalla normale shell. Specificare il comando personalizzato nella casella di testo <guilabel>Comando personalizzato</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors"> 
+        <title>Colori</title>
+        <variablelist>
+        <varlistentry> 
+             <term> 
+                <guilabel>Usa colori del tema del sistema</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per usare i colori specificati nel tema di GNOME selezionato nella finestra di preferenze <application>Tema</application>. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Schemi predefiniti - Primo piano e sfondo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di riepilogo per specificare i colori di sfondo e di primo piano del terminale. Il <application>&app;</application> supporta le seguenti combinazioni di colori di sfondo e di primo piano:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Nero su giallo chiaro</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Bianco su nero</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Nero su bianco</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Verde su nero</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Personalizzato</guilabel> 
+                     </para>
+                     <para>
+                        Questa opzione consente di selezionare colori che non sono inclusi nello schema di colori selezionato. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  La visualizzazione effettiva dei colori di sfondo e di primo piano pu&ograve; variare in base allo schema di colori selezionato. Ad esempio, scegliendo <guilabel> Bianco su nero</guilabel> con lo schema di colori <guilabel>Console Linux</guilabel>, l'applicazione visualizza i colori di primo piano e di sfondo come grigio chiaro su nero. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Black on light yellow</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Colore testo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Fare clic sul pulsante <guibutton>Colore testo</guibutton> per visualizzare la finestra di dialogo <guilabel>Scegli colore del testo per il terminale</guilabel>. Scegliere dalla tavolozza il colore da utilizzare come colore di primo piano. 
+                  Questo pulsante &egrave; disponibile solo se si specifica l'opzione <guilabel>Personalizzato</guilabel> nella casella di riepilogo  <guilabel>Schemi predefiniti</guilabel> nella casella di gruppo  <guilabel>Primo piano e sfondo</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: black. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Colore di sfondo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Fare clic sul pulsante <guibutton>Colore di sfondo</guibutton> per visualizzare la finestra di dialogo <guilabel>Scegli colore di sfondo per il terminale</guilabel>. 
+Scegliere dalla tavolozza il colore da utilizzare come colore di sfondo.                   Questo pulsante &egrave; disponibile solo se si specifica l'opzione <guilabel>Personalizzato</guilabel> nella casella di riepilogo  <guilabel>Schemi predefiniti</guilabel> nella casella di gruppo <guilabel>Primo piano e sfondo</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: light yellow. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Schemi predefiniti - Tavolozza</guilabel></term> 
+             <listitem>
+                <para>
+                  Lo schema di colori &egrave; una tavolozza di 16 colori. Usare la casella di riepilogo per scegliere lo schema di colori da utilizzare.
+                  Il <application>&app;</application> supporta i seguenti schemi di colori:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Console Linux</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Xterm</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Rxvt</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Personalizzato</guilabel> 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  I vari schemi di colori sono leggermente diversi uno dall'altro. Ad esempio, lo schema <guilabel>Console Linux</guilabel> usa il grigio chiaro al posto del bianco. Lo schema di colori <guilabel>Personalizzato</guilabel> permette di creare una tavolozza personalizzata. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Linux console</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+ 
+          <varlistentry> 
+             <term> 
+                <guilabel>Tavolozza</guilabel> </term> 
+             <listitem>
+                <para>
+                  La 
+                  <guilabel>Tavolozza colori</guilabel>&egrave; disponibile solo se si sceglie l'opzione 
+                  <guilabel>Personalizzato</guilabel> nella casella di riepilogo 
+                  <guilabel>Schemi predefiniti</guilabel> della casella di gruppo <guilabel>Tavolozza</guilabel>. Usare la <guilabel>Tavolozza</guilabel> per personalizzare i 16 colori predefiniti che fanno parte della tavolozza di colori personalizzata. Per personalizzare un colore, fare clic sul colore per visualizzare la finestra di dialogo <guilabel>Elemento della tavolozza</guilabel>. Usare la ruota dei colori o i cursori per personalizzare il colore, quindi fare clic su <guibutton>OK</guibutton>. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects"> 
+        <title>Effetti</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Sfondo</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare un'opzione per la visualizzazione dello sfondo della finestra di terminale. Le opzioni disponibili sono le seguenti:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Nessuno (solo tinte unite)</guilabel> 
+                     </para>
+                     <para>
+                        Selezionare questa opzione per usare il colore di sfondo specificato nella scheda <guilabel>Colori</guilabel> come colore di sfondo del terminale. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Immagine di sfondo</guilabel> 
+                     </para>
+                     <para>
+                        Selezionare questa opzione per usare un file immagine come sfondo del terminale. Usare la casella combinata <guilabel>File immagine</guilabel> per specificare la posizione e il nome del file immagine. In alternativa, fare clic sul pulsante <guibutton>Sfoglia</guibutton> per individuare e selezionare il file immagine. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Sfondo trasparente</guilabel> 
+                     </para>
+                     <para>
+                        Selezionare questa opzione per usare uno sfondo trasparente per il terminale. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <!-- <para>
+                  Default: 
+                  <guilabel>None (use solid color)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scorrimento immagine sfondo</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per abilitare lo scorrimento dell'immagine insieme al testo quando si scorre il terminale. Se questa opzione non viene selezionata, l'immagine resta fissa sullo sfondo mentre il testo scorre. L'opzione &egrave; disponibile solo se si seleziona l'opzione 
+                        <guilabel>Immagine di sfondo</guilabel>. 
+                </para>
+                <!-- <para>Default: unselected.</para>     -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Ombreggiatura  sfondo trasparente o immagine</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                        Usare questo cursore per ombreggiare o attenuare lo sfondo del terminale. Questa opzione &egrave; disponibile solo se si selezionano le opzioni 
+                  <guilabel>Immagine di sfondo</guilabel> o 
+                  <guilabel>Sfondo trasparente</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: 50%. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-scrolling">
+    <title>Scorrimento</title>
+     <variablelist>
+     <varlistentry> 
+             <term> 
+                <guilabel>Barra di scorrimento</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di riepilogo per specificare la posizione della barra di scorrimento nella finestra di terminale. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>On the right side</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scorrimento all'indietro ... righe</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare la casella di selezione per specificare il numero di righe di cui pu&ograve; essere eseguito lo scorrimento all'indietro con la barra di scorrimento. Ad esempio, se si specifica il valore 100 &egrave; possibile scorrere all'indietro le ultime 100 righe visualizzate sul terminale. 
+                </para>
+                <!-- <para>
+                  Default: 500 lines. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scorrimento all'indietro ... kilobyte</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare la casella di selezione per specificare il numero di kilobyte di cui pu&ograve; essere eseguito lo scorrimento all'indietro con la barra di scorrimento. Ad esempio, se si specifica il valore 94 &egrave; possibile scorrere all'indietro gli ultimi 94 kilobyte visualizzati sul terminale. 
+                </para>
+                <!-- <para>
+                  Default: 167 kilobytes. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scorre alla pressione di un tasto</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per abilitare l'utilizzo dei tasti <keycap>Page Up</keycap> e <keycap>Page Down</keycap> per scorrere il terminale. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scorre in presenza di output</guilabel> </term> 
+             <listitem>
+                <para>
+                  Selezionare questa opzione per abilitare lo scorrimento dell'output del terminale mentre altro testo viene visualizzato come output di un comando. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-compatibility"> 
+        <title>Compatibilit&agrave;</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Effetto del tasto Backspace</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di riepilogo per selezionare la funzione del tasto <keycap>Backspace</keycap>. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>ASCII DEL</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Effetto del tasto Delete</guilabel> </term> 
+             <listitem>
+                <para>
+                  Usare questa casella di riepilogo per selezionare la funzione del tasto <keycap>Delete</keycap>. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Escape sequence</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guibutton>Ripristina impostazioni predefinite di compatibilit&agrave;</guibutton> </term> 
+             <listitem>
+                <para>
+                  Fare clic sul pulsante per ripristinare le impostazioni predefinite della scheda <guilabel>Compatibilit&agrave;</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>

@@ -1,0 +1,1388 @@
+<?xml version="1.0"?><!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "GNOME 端末">  
+  <!ENTITY appversion "2.0.1">
+  <!ENTITY date "2002 年 8 月">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.3">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002 
+    
+  -->
+<article id="index" lang="ja">
+  <articleinfo>
+     <title>&app; のマニュアル V&manrevision;</title>
+     <copyright> 
+        <year>2002</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year> 
+        <holder>Miguel de Icaza, Michael Zucchi, and Alexander Kirillov</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>GNOME ドキュメンテーションプロジェクト</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Sun</firstname> 
+          <surname>GNOME ドキュメンテーションチーム</surname> 
+          <affiliation> 
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>GNOME ドキュメンテーションプロジェクト</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>GNOME ドキュメンテーションプロジェクト</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>GNOME ドキュメンテーションプロジェクト</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup>
+     <revhistory>
+        <revision> 
+          <revnumber>&app; のマニュアル V&manrevision;</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME ドキュメンテーションチーム
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME ドキュメンテーションプロジェクト</para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 端末のマニュアル V2.2</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME ドキュメンテーションチーム
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME ドキュメンテーションプロジェクト
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 端末のマニュアル V2.1</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME ドキュメンテーションチーム
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME ドキュメンテーションプロジェクト
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 端末のマニュアル V2.0</revnumber> 
+          <date>2002 年 4 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME ドキュメンテーションチーム
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME ドキュメンテーションプロジェクト
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 端末ユーザーズガイド</revnumber> 
+          <date>2000 年 5 月</date> 
+          <revdescription> 
+             <para role="author">
+                Miguel de Icaza, Michael Zucchi, Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription>
+        </revision>
+     </revhistory>
+     <releaseinfo>このマニュアルは &app; のバージョン &appversion; について説明します。
+        </releaseinfo>
+     <legalnotice> 
+      <title>フィードバック</title>
+        <para>&app; アプリケーションまたはこのマニュアルに関してバグやご意見をご報告いただく場合は、<ulink 
+url="ghelp:gnome-feedback" type="help">『GNOME フィードバックページ』</ulink> を参照してください </para>
+     </legalnotice>
+  </articleinfo>
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>端末 アプリケーション</primary> 
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction"> 
+	 <title>概要</title>
+     <para>
+        <application>&app;</application> は、次のアクションに使用できる端末エミュレーションアプリケーションです。
+     </para>
+     <variablelist>
+        <varlistentry> 
+          <term>GNOME 環境で UNIX シェルにアクセスする</term> 
+          <listitem>
+             <para>
+                シェルは、コマンドラインプロンプトに入力されたコマンドを解釈して実行するプログラムです。 
+<application>GNOME
+                端末</application> 
+を起動すると、システムアカウントで指定されたデフォルトのシェルが起動します。いつでも別のシェルに切り替えられます。
+             </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term>VT102、VT220、および xterm 端末用の任意のアプリケーションを実行する</term> 
+          <listitem>
+             <para>
+                <application>&app;</application> は、X Consortium が開発した xterm 
+プログラムをエミュレートします。xterm プログラムは DEC VT102 端末をエミュレートし、さらに DEC VT220 
+のエスケープシーケンスをサポートします。エスケープシーケンスは、Esc 文字から始まる一連の文字です。
+                <application>&app;</application> は、VT102 および VT220 
+端末がカーソルの位置づけ、画面消去などの機能に使用するすべてのエスケープシーケンスを受け付けます。
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started"> 
+        <title>基本的な使用方法</title>
+     <para>
+        この節では、<application>&app;</application> を起動する方法について説明します。
+     </para>
+     <sect2 id="gnome-terminal-to-start"> 
+        <title>&app; を起動する</title>
+        <para>
+          <application>&app;</application> を起動するには、次の手順に従います。
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>アプリケーションメニュー</term> 
+             <listitem>
+                <para>
+                  <menuchoice> 
+                     <guimenu>「システム」</guimenu> 
+                     <guimenuitem>「端末」</guimenuitem> 
+                  </menuchoice>を選択します。</para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>コマンドライン</term> 
+             <listitem>
+                <para>
+                  <command>gnome-terminal</command> を入力して、<keycap>リターン</keycap> キーを押します。
+                </para>
+                <para>
+                  コマンドラインオプションを使用すると、 <application>&app;</application> 
+の実行方法を変更できます。 コマンドラインオプションを表示するには、<command>gnome-terminal --help</command> 
+を入力し、<keycap>リターン</keycap> キーを押します。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start"> 
+        <title>&app; を初めて起動する場合</title>
+        <para>
+          <application>&app;</application> 
+の初回起動時には、端末に一連の初期設定値が表示されます。この一組の初期設定値をデフォルトプロファイルとい
+います。 <application>&app;</application> ウィンドウのタイトルバーにプロファイル名が表示されます。 
+        </para>
+        <figure id="gnome-terminal_default"> 
+          <title>デフォルトの &app; ウィンドウの例</title>
+          <screenshot> 
+             <screeninfo>&app; のデフォルトのウィンドウ</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>&app; のデフォルトのウィンドウ</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          端末に表示されたコマンドプロンプトに、UNIX 
+コマンドを入力できます。コマンドプロンプトは、%、#、>、$、または他の任意の特殊文字にできます。カーソルはコマンドプ
+ロンプトに位置づけられます。UNIX コマンドを入力して <keycap>リターン</keycap> 
+キーを押すと、そのコマンドが実行されます。<application>&app;</application> 
+はデフォルトで、アプリケーションを起動したユーザーに設定されているデフォルトのシェルを使用します。
+        </para>
+        <para>
+          <application>&app;</application> は、さらに、次の環境変数も設定します。
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <varname>TERM</varname></term> 
+             <listitem>
+                <para>
+                  初期値で xterm に設定されます。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>COLORTERM</varname></term> 
+             <listitem>
+                <para>
+                  初期値で gnome-terminal に設定されます。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>WINDOWID</varname></term> 
+             <listitem>
+                <para>
+                  初期値で X11 ウィンドウ識別子に設定されます。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+     <sect2 id="gnome-terminal-profiles"> 
+        <title>端末プロファイル</title>
+        <para>
+          
+新しいプロファイルを作成して端末に適用することによって、フォント、カラー、エフェクト、スクロール動作、ウィンドウタ
+イトル、互換性、キーボードショートカットなどの特性を変更できます。プロファイルで <application>&app;</application> 
+の起動コマンドを定義することもできます。</para>
+          <para>各端末プロファイルは、<guimenu>「編集」</guimenu>メニューから 
+<guilabel>「プロファイルの編集」</guilabel>ダイアログにアクセスして定義します。 
+プロファイルは必要なだけ、いくつでも定義できます。端末起動時に使用する端末プロファイルを選択することもできますし、
+端末使用中に端末プロファイルを変更することもできます。コマンド行からアプリケーションを起動したときの端末用の初期プ
+ロファイルを指定するには、次のコマンドを入力します。
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile= 
+             <replaceable>profilename</replaceable></command> 
+        </para>
+        <para>
+          
+<guilabel>「プロファイルの編集」</guilabel>ダイアログで別のタイトルバー名を指定しないかぎり、<application>&app;</application> のタイトルバーに現在のプロファイル名が表示されます。 
+        </para>
+        <para>
+          新しい端末プロファイルを定義して使用する方法については、<xref linkend="gnome-terminal-manage-profiles"/> 
+を参照してください。
+        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows"> 
+        <title>複数の端末を使用する場合</title>
+        <para>
+          <application>&app;</application> 
+のタブ機能を使用すると、ウィンドウに端末を追加できます。ウィンドウで各端末を開くには、該当するタブをクリックします
+。ウィンドウ内の各タブ付き端末は独立した別々のサブプロセスなので、各端末をそれぞれ別の作業に使用できます。ウィンド
+ウの各タブ付き端末ごとに、異なるプロファイルを適用できます。端末のタイトルバーに、現在のプロファイル名ま
+たは現在のプロファイルによって指定された名前が表示されます。<xref linkend="gnome-terminal-tabbed"/> に、タブが 4 
+つの <application>&app;</application> ウィンドウを示します。 この場合、4 
+つのタブにそれぞれ異なるプロファイルが与えられています。現在のプロファイル名プロファイル 1 
+がタイトルバーに表示されています。
+        </para>
+        <figure id="gnome-terminal-tabbed"> 
+          <title>タブ付き端末の例</title>
+          <screenshot> 
+             <screeninfo>デフォルトの &app; ウィンドウ</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>デフォルトの &app; ウィンドウ</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          新しいタブ付き端末を開く方法については、<xref linkend="gnome-terminal-tabs"/> を参照してください。
+        </para>
+     </sect2>
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-usage"> 
+     <title>使用方法</title>
+
+     <sect2 id="gnome-terminal-windows"> 
+        <title>端末を開く、または閉じる</title>
+        <variablelist>
+          <varlistentry> 
+             <term>新しい端末を開く</term>
+             <listitem>
+                <para> <menuchoice> 
+                     <guimenu>「ファイル」</guimenu> 
+                     <guisubmenu>「新規ウィンドウ」</guisubmenu>
+                     <guimenuitem>「デフォルト」</guimenuitem> 
+                  </menuchoice>を選択します。
+                </para>
+                <para>
+                  新しい端末は、新しい端末の起動元端末と同じ PID でサブプロセスを開始します。GNOME 
+パネルから新しい <application>&app;
+                  </application> 
+を起動する場合に比べて、サブプロセスはシステム資源の消費が少なくてすみます。新しい端末は、アプリケーションの設定と
+デフォルトのシェルを親端末から継承します。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>端末を閉じる</term>
+             <listitem>
+                <para>
+                  <menuchoice> 
+                     <guimenu>「ファイル」</guimenu> 
+                     <guimenuitem>「ウィンドウを閉じる」</guimenuitem> 
+                  </menuchoice>を選択します。 
+                </para>
+                <para>
+                  
+このアクションによって、端末とその端末から開いたあらゆるサブプロセスが閉じられます。最後の端末を閉じると
+、<application>&app;</application> プログラムが終了します。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>同一ウィンドウにタブ付き端末を新しく追加する</term>
+             <listitem>
+                <para> <menuchoice> 
+                     <guimenu>「ファイル」</guimenu> 
+                     <guisubmenu>「新規タブ」</guisubmenu>
+                     <guimenuitem>「デフォルト」</guimenuitem> 
+                  </menuchoice>を選択します。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>タブ付き端末を開く</term>
+             <listitem>
+                <para>
+                  開くべきタブ付き端末のタブ名をクリックします。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>タブ付き端末を閉じる</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                  閉じるべきタブ付き端末のタブ名をクリックします。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          <menuchoice> 
+                             <guimenu>「ファイル」</guimenu> 
+                             <guimenuitem>「タブを閉じる」</guimenuitem> 
+                          </menuchoice>を選択します。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles"> 
+        <title>プロファイルを管理する</title>
+        <variablelist>
+          <varlistentry> 
+             <term>新しいプロファイルを追加する</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para><menuchoice> 
+                             <guimenu>「ファイル」</guimenu> 
+                             <guimenuitem>「新規プロファイル」</guimenuitem> 
+                          
+</menuchoice>を選択して、<guilabel>「新しいプロファイル」</guilabel>ダイアログを表示します。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        
+<para><guilabel>「プロファイル名」</guilabel>テキストボックスに新しいプロファイル名を入力します。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        
+<para><guilabel>「プロファイルベース」</guilabel>ドロップダウンリストボックスを使用して、新しいプロファイルのベー
+スにするプロファイルを選択します。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para><guibutton>「作成」</guibutton>をクリックします。<application>&app;</application> 
+は、このプロファイルを
+                          <menuchoice> 
+                             <guimenu>「端末」</guimenu> 
+                             <guisubmenu>「プロファイル」</guisubmenu> 
+                          </menuchoice>サブメニューに追加します。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>タブ付き端末のプロファイルを変更する</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          プロファイルを変更するタブ付き端末の名前をクリックします。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          <menuchoice> 
+                             <guimenu>「端末」</guimenu> 
+                             <guisubmenu>「プロファイル」</guisubmenu> 
+                             <guimenuitem> 
+                                <replaceable>「プロファイル名」</replaceable></guimenuitem> 
+                          </menuchoice>を選択します。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>プロファイルを編集する</term>
+             <listitem>
+                <para>
+                  プロファイルは<guilabel>「プロファイル編集 "<replaceable>profile name</replaceable>"」</guilabel>ダイアログで編集します。 
+<guilabel>「プロファイル編集 "<replaceable>profile name</replaceable>"」</guilabel>ダイアログには、次の方法でアクセスできます。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <menuchoice> 
+                          <guimenu>「編集」</guimenu> 
+                          <guisubmenu>「現在のプロファイル」</guisubmenu> 
+                        </menuchoice>を選択します。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <menuchoice> 
+                          <guimenu>「編集」</guimenu> 
+                          <guisubmenu>「プロファイル」</guisubmenu> 
+                        </menuchoice>を選択し、さらに編集するプロファイルを選択してから 
+<guibutton>「編集」</guibutton>をクリックします。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                       
+端末を右クリックし、ポップアップメニューから<guimenuitem>「現在のプロファイルの編集」</guimenuitem>を選
+択します。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>プロファイルを削除する</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          <menuchoice> 
+                             <guimenu>「編集」</guimenu> 
+                             <guimenuitem>「プロファイル」</guimenuitem> 
+                          </menuchoice>を選択します。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          
+<guilabel>「プロファイル」</guilabel>リストで削除するプロファイル名を選択し、<guibutton>「削除」</guibutton> 
+をクリックします。
+                        
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          <guilabel>「プロファイルの削除」</guilabel> ダイアログで <guibutton>「削除」</guibutton> 
+をクリックします。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs"> 
+        <title>端末を変更する</title>
+        <variablelist>
+          <varlistentry> 
+             <term>メニューバーを隠す</term>
+             <listitem>
+                <para>
+                  
+端末で右クリックし、ポップアップメニューから<guimenuitem>「メニューバーを隠す」</guimenuitem>を選択しま
+す。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>隠れているメニューバーを表示する</term>
+             <listitem>
+                <para>
+                  
+端末で右クリックし、ポップアップメニューから<guimenuitem>「メニューバーを表示」</guimenuitem>を選択しま
+す。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>スクロールバーの位置を変更する</term>
+             <listitem>
+                
+<para>スクロールバーの表示に関して、<guilabel>「プロファイル編集 "<replaceable>profile name</replaceable>"」</guilabel>ダイアログで選択できるオプションの詳
+細は、 <xref linkend="gnome-terminal-prefs"/>を参照してください。                 </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents"> 
+        <title>端末の内容を操作する</title>
+        <variablelist>
+          <varlistentry> 
+             <term>前のコマンドおよび出力をスクロールする</term>
+             <listitem>
+                <para>
+                  次のアクションのどれか 1 つを実行します。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        通常は端末の右側に表示されるスクロールバーを使用します。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <keycap>Page Up キー</keycap>、
+                        <keycap>Page Down キー</keycap>、 
+                        <keycap> Home キー</keycap>、または 
+                        <keycap>End</keycap> キーを使用します。 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  端末でスクロールされる行数は、<guilabel>「プロファイルの編集」</guilabel>ダイアログの 
+<guilabel>「スクロール」</guilabel>タブセクションで設定された<guilabel>「スクロールバック」</guilabel>の値によって
+決まります。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>テキストを選択してコピーする</term>
+             <listitem>
+                <para>
+                 テキストを選択する方法は、次のとおりです。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        一回に 1 
+文字ずつ選択するには、対象となる先頭文字をクリックし、選択範囲の最後の文字までマウスをドラッグします。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        一回に単語を 1 
+つずつ選択するには、対象となる先頭の単語をダブルクリックし、選択範囲の最後の単語までマウスをドラッグします。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        一回に 1 
+行ずつ選択するには、対象となる先頭行をトリプルクリックし、選択範囲の最後の行までマウスをドラッグします。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                        
+この手順によって、最初の項目から最後の項目までの全テキストが選択されます。全テキストを選択した場合、マウスボタンを
+放した時点で、選択したテキストが <application>&app;</application> によってクリップボードにコピーされます。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>テキストを端末に貼り付けする</term>
+             <listitem>
+                <para>
+                  次のアクションのどれか 1 つを実行します。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        
+コマンドプロンプトでマウスのアジャストボタンをクリックします。マウスのアジャストボタンがない場合には、 X Server 
+のマニュアルを参照し、アジャストボタンのエミュレート方法を調べてください。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <menuchoice> 
+                          <guimenu>「編集」</guimenu> 
+                          <guimenuitem>「貼り付け」</guimenuitem> 
+                        </menuchoice>を選択し、端末にテキストをペーストします。この機能が動作するのは、
+                        <menuchoice>
+                          <guimenu>「編集」</guimenu> 
+                          <guimenuitem>「コピー」</guimenuitem> 
+                        </menuchoice>を選択して、選択したテキストをクリップボードにコピーしている場合だけです。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>ファイル名を端末にドラッグする</term>
+             <listitem>
+                <para>
+                  
+ファイルマネージャなど、別のアプリケーションから端末にファイルをドラッグできます。端末にファイルのパスとフルネーム
+が表示されます。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>リンクにアクセスする</term>
+             <listitem>
+                <para>
+                  端末に表示された Uniform Resource Locator (URL) にアクセスする手順は、次のとおりです。 </para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          URL に下線が表示され、マウスポインタが手の形になるまで、URL 上でマウスを移動させます。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          URL を右クリックし、ポップアップメニューを開きます。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          
+<guimenuitem>「リンクを開く」</guimenuitem>を選択し、リンクアプリケーションを起動して、URL 
+にあるファイルを表示します。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>キーボードショートカットの設定を表示する</title>
+        <para><application>&app;</application> 
+用に定義されたキーボードショートカットの設定を表示するには、<menuchoice> 
+               <guimenu>「編集」</guimenu> 
+               <guimenuitem>「キー割り当て」</guimenuitem> 
+          
+</menuchoice>を選択します。<guilabel>「キー割り当てエディタ」</guilabel>ダイアログには、次の項目が表示されます。
+        </para>
+        <variablelist>
+          <varlistentry> 
+             
+<term><guilabel>「メニューニーモック(Alt+Fによるファイルメニューのオープンなど)を無効にする」</guilabel></term> 
+             <listitem>
+                
+<para>マウスの代わりにキーボードを使用してメニュー項目を選択できるように定義されたアクセスキーを無効にする場合は、
+このチェックボックスを選択します。
+アクセスキーは、メニューまたはダイアログオプションにある下線付きの文字で示されています。アクセスキーは、<keycap>Al
+t</keycap> キーを組み合わせて使用することもあります。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>「アクセスキー(デフォルトはF10)を無効にする」</guilabel></term> 
+             <listitem>
+                <para><application>&app;</application> 
+メニューにアクセスできるように定義されたショートカットキーを無効する場合は、このチェックボックスを選択します。
+メニューにアクセスするためのデフォルトのショートカットキーは <keycap>F10</keycap> キーです。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>「アクセラレータ」</guilabel></term> 
+             <listitem>
+                
+<para>ダイアログの<guilabel>「アクセラレータ」</guilabel>セクションには、各メニュー項目に定義されたショートカット
+キーのリストが表示されます。
+ショートカットキーを使用すると、マウスの代わりにキーボードを使用してメニュー項目を選択できます。ショートカットキー
+は通常、いくつかのキーと組み合わせて (つまり、同時に押して) 使用します。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-reset"> 
+        <title>端末を復元する</title>
+        <para>
+          端末で問題が起きた場合に有効な処置は、次のとおりです。
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 端末の状態をリセットする</term>
+             <listitem>
+                <para>
+                  <menuchoice> 
+                     <guimenu>「端末」</guimenu> 
+                     <guimenuitem>「リセット」</guimenuitem> 
+                  </menuchoice>を選択します。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry> 
+             <term>端末をリセットして画面を消去する</term>
+             <listitem>
+                <para>
+                  <menuchoice> 
+                     <guimenu>「端末」</guimenu> 
+                     <guimenuitem>「リセットして消去」</guimenuitem> 
+                  </menuchoice>を選択します。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+<!-- 
+<sect2 id="gnome-terminal-direct-input">
+<title>To Direct All Keyboard Input to a Terminal</title>
+<para>
+   To direct all keyboard input to the terminal, even when the terminal window is
+   not in focus, right-click in the terminal window to display a popup menu, then
+   choose <guimenuitem>Secure keyboard</guimenuitem>. This option is useful when
+   several users use the same X server and the X server does not use secure authentication
+   methods.
+</para>
+</sect2>
+-->
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-prefs"> 
+     <title>設定</title>
+     <para><application>&app;</application> を設定するには、<menuchoice> 
+          <guimenu>「編集」</guimenu> 
+          <guimenuitem>「現在のプロファイル」</guimenuitem> 
+        </menuchoice>を選択します。(すでに設定している) 別のプロファイルを設定するには、<menuchoice> 
+          <guimenu>「編集」</guimenu> 
+          <guimenuitem>「プロファイル」</guimenuitem> 
+        
+</menuchoice>を選択して、編集したいプロファイルを選択して、<guibutton>「編集」</guibutton>をクリックします。
+     </para>
+     <para><guilabel>「プロファイル編集 "<replaceable>profile name</replaceable>"」</guilabel> 
+ダイアログには、次のタブ付きセクションが含まれており、これらのセクションを使用すると 
+<application>&app;</application> を設定できます。
+     </para>
+     <itemizedlist>
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
+     
+     <sect2 id="gnome-terminal-prefs-general"> 
+        <title>「一般」</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>「プロファイル名」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このテキストボックスを使用して、現在のプロファイル名を指定します。
+                </para>
+                <!-- <para>
+                  初期値: 
+                  <guilabel>デフォルト</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「他のアプリケーションと同じフォントを使用」</guilabel> </term> 
+             <listitem>
+                
+<para><application>「フォント」</application>設定ツールで指定した標準アプリケーションフォントを使用する場合は、こ
+のオプションを選択します。
+                </para>
+                <!-- <para>
+                  初期値: 選択
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「フォント」</guilabel> </term> 
+             <listitem>
+                
+<para>端末のデフォルトのフォントタイプとフォントサイズを選択する場合は、このボタンをクリックします。このボタンを使
+用できるのは、<guilabel>「他のアプリケーションと同じフォントを使用」</guilabel>オプションを選択していない場合だけ
+です。
+                </para>
+                <!-- <para>
+                  初期値: <guilabel>fixed (misc)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「プロファイルアイコン」</guilabel> </term> 
+             <listitem>
+                <para>現在のプロファイルを表すアイコンを選択する場合は、このボタンをクリックします。
+                </para>
+                <!-- <para>
+                  初期値: gnome-terminal.png. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「ボールドテキストを許可」</guilabel> </term> 
+             <listitem>
+                <para>
+                  テキストを太字で表示できるようにする場合は、このオプションを選択します。
+                </para>
+                <!-- <para>
+                  初期値: 選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「カーソルの点滅」</guilabel> </term> 
+             <listitem>
+                <para>
+                  カーソルを点滅させる場合は、このオプションを選択します。
+                </para>
+                <!-- <para>
+                  初期値: 未選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「新規端末にデフォルトでメニューバーを表示」</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  新しい端末にメニューバーを表示する場合は、このオプションを選択します。 
+                </para>
+                <!-- <para>
+                  初期値: 未選択  
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「端末ベル」</guilabel> </term> 
+             <listitem>
+                <para>
+                  端末のベルを無効にする場合は、このオプションを選択します。
+                </para>
+                <!-- <para>
+                  初期値: 未選択  
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「ワード単位で選択」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このテキストボックスを使用して、テキストを単語で選択する場合に、<application>&app;</application> 
+に単語として認識させる文字または文字グループを指定します。単語でテキストを選択する方法の詳細は、<xref 
+linkend="gnome-terminal-contents"/> を参照してください。
+                </para>
+                <!-- <para>
+                  初期値: -A-Za-z0-9,./?%&amp;#:_ 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title"> 
+        <title>「タイトルとコマンド」</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>「最初のタイトル」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このテキストボックスを使用して、プロファイルの初期タイトルを指定します。
+                  現在の端末から起動した新しい端末には、新しい初期タイトルが付けられます。
+                </para>
+                <!-- <para>
+                  初期値: 端末 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「タイトルの動的設定」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+このドロップダウンリストを使用して、端末のタイトルを現在の作業ディレクトリに設定します。
+                </para>
+                <!-- <para>
+                  初期値: <guilabel>最初のタイトルを置き換え</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「コマンドの終了時」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このドロップダウンリストを使用して、端末終了時に実行するコマンドを選択します。
+                </para>
+                <!-- <para>
+                  初期値: <guilabel>端末を終了</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「ログインシェルとしてコマンドを実行」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+このオプションは、端末内部で実行するコマンドがログインシェルとして実行されるようにする場合に選択します。コマンドが
+シェルではなかった場合、設定は無効です。
+                </para>
+                <!-- <para>
+                  初期値: 未選択  
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「コマンド起動時にutmp/wtmp レコードを更新」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このオプションは、新しいシェルを開いたときに、utmp および wtmp 
+に新しいエントリを追加する場合に選択します。
+                </para>
+                <!-- <para>
+                  初期値: 未選択  
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「シェルの代わりにカスタムコマンドを実行」</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  
+このオプションは、端末で標準シェル以外のコマンドを実行する場合に選択します。<guilabel>「カスタムコマンド」</guilabel>テキストボックスにカスタムコマンドを指定します。
+                </para>
+                <!-- <para>
+                  初期値: 未選択  
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors"> 
+        <title>「色」</title>
+        <variablelist>
+        <varlistentry> 
+             <term> 
+                <guilabel>「システムテーマ色を使用」</guilabel>
+                </term> 
+             <listitem>
+                <para><application>「テーマ」</application>設定ツールで選択した GNOME 
+テーマで指定した色を使用するには、このオプションを選択します。
+                </para>
+                <!-- <para>
+                  初期値: 選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「組み込みスキーマ &dash; フォアグラウンドとバックグラウンド」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+ドロップダウンリストボックスを使用して、端末の前景色および背景の色を指定します。<application>&app;</application> 
+がサポートする前景色および背景の色の組み合わせは、次のとおりです。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>「淡黄色に黒」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「黒に白」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「白に黒」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「黒に緑」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「カスタム」</guilabel> 
+                     </para>
+                     <para>
+                        このオプションを使用すると、選択したカラースキーマにないカラーを選択できます。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  
+実際に表示される前景色および背景の色は、選択したカラースキーマによって異なる場合があります。たとえば、<guilabel>「黒
+に白」</guilabel>および<guilabel>「Linux 
+コンソール」</guilabel>カラースキーマを選択した場合、前景色および背景の色はライトグレーおよびブラックとして表示され
+ます。
+                </para>
+                <!-- <para>
+                  初期値: 
+                  <guilabel>淡黄色に黒</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「文字の色」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+<guibutton>「文字の色」</guibutton>ボタンをクリックすると、<guilabel>「端末のテキストの色を選択」</guilabel>ダイア
+ログが表示されます。 カラーパレットから、フォアグラウンドカラーとして使用するカラーを選択します。
+                  
+このボタンを使用できるのは、<guilabel>「端末色」</guilabel>グループボックスの<guilabel>「組み込みスキーマ」</guilabel>ドロップダウンリストボックスで、<guilabel>「カスタム」</guilabel>オプションを指定した場合だけです。
+                </para>
+                <!-- <para>
+                  初期値: 黒 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「背景の色」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+<guibutton>「背景の色」</guibutton>ボタンをクリックすると、<guilabel>「端末の背景の色を選択」</guilabel>ダイアログが表
+示されます。
+                  カラーパレットから、背景の色として使用するカラーを選択します。                  
+このボタンを使用できるのは、<guilabel>「端末色」</guilabel>グループボックスの<guilabel>「組み込みスキーマ」</guilabel>ドロップダウンリストボックスで、<guilabel>「カスタム」</guilabel>オプションを指定した場合だけです。
+                </para>
+                <!-- <para>
+                  初期値: 淡黄色 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「組み込みスキーマ &dash; パレット」</guilabel></term> 
+             <listitem>
+                <para>
+                  カラースキーマは 16 
+色のパレットです。ドロップダウンリストボックスを使用して、使用するカラースキーマを選択します。
+                  <application>&app;</application> がサポートするカラースキーマは、次のとおりです。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>「Linux コンソール」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「Xterm」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「Rxvt」</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「カスタム」</guilabel> 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  カラースキーマごとに少しずつ異なります。たとえば、<guilabel>「Linux 
+コンソール」</guilabel>ではホワイトの代わりにライトグレーが使用されます。<guilabel>「カスタム」</guilabel>カラース
+キーマを使用すると、カスタマイズしたカラーパレットを作成できます。
+                </para>
+                <!-- <para>
+                  初期値: 
+                  <guilabel>Linux コンソール</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+ 
+          <varlistentry> 
+             <term> 
+                <guilabel>「色」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+<guilabel>「色」</guilabel>を使用できるのは、<guilabel>「アプリケーションパレット」</guilabel>の<guilabel>「組み込
+みスキーマ」</guilabel>ドロップダウンリストボックスで、<guilabel>「カスタム」</guilabel>オプションを指定した場合だ
+けです。<guilabel>「色」</guilabel>を使用して、カスタムカラーパレットのデフォルトの 16 
+色をカスタマイズします。カラーをカスタマイズするには、カラーをクリックし、<guilabel>「パレットエントリ」</guilabel
+>ダイアログを表示します。 
+カラーホイールまたはスライダを使用して、カラーをカスタマイズし、<guibutton>「了解」</guibutton> をクリックします。
+                </para>
+                <!-- <para>
+                  初期値: 未選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects"> 
+        <title>「効果」</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>「背景」</guilabel> </term> 
+             <listitem>
+                <para>
+                  端末の背景表示オプションを選択します。 オプションは次のとおりです。
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>「なし（塗りつぶす）」</guilabel> 
+                     </para>
+                     <para>
+                        
+このオプションは、端末の背景の色として、<guilabel>「色」</guilabel>タブセクションで指定した背景の色を使用する場合に選
+択します。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「背景の画像」</guilabel> 
+                     </para>
+                     <para>
+                        
+このオプションは、端末の背景として画像ファイルを使用する場合に選択します。<guilabel>「画像ファイル」</guilabel>ド
+ロップダウンコンビネーションボックスを使用して、画像ファイルの位置および名前を指定します。 
+または、「<guibutton>参照</guibutton>」をクリックし、画像ファイルを検索して選択します。
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>「背景を透明にする」</guilabel> 
+                     </para>
+                     <para>
+                        このオプションは、端末で背景を透明にするを使用する場合に選択します。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <!-- <para>
+                  初期値: 
+                  <guilabel>なし (塗りつぶす)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「背景のスクロール」</guilabel>
+                </term> 
+             <listitem>
+                
+<para>端末でスクロールしたときに、テキストと一緒に背景の画像もスクロールさせたい場合は、このオプションを選択します
+。このオプションを選択しない場合、背景の画像は端末の背景に固定され、テキストだけがスクロールします。このオプション
+を使用できるのは、<guilabel>「背景の画像」</guilabel>オプションを選択している場合だけです。
+                </para>
+                <!-- <para>初期値: 未選択</para>     -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「シェード付き透明または背景の画像」</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  
+このスライダは、端末の背景に陰影またはぼかしをつける場合に使用します。このオプションを使用できるのは、<guilabel>「
+背景の画像」</guilabel>または<guilabel>「背景を透明にする」</guilabel>オプションを選択した場合だけです。 
+                </para>
+                <!-- <para>
+                  初期値: 50%. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-scrolling">
+    <title>「スクロール」</title>
+     <variablelist>
+     <varlistentry> 
+             <term> 
+                <guilabel>「スクロールバーの動作」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このドロップダウンリストボックスを使用して、端末上のスクロール位置を指定します。
+                </para>
+                <!-- <para>
+                  初期値: 
+                  <guilabel>右側</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「スクロールバック &dash; 行」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このスピンボックスを使用して、スクロールバーの使用時にスクロールできる行数を指定します。 
+たとえば、100 を指定した場合、端末に表示された最後の 100 行をスクロールできます。
+                </para>
+                <!-- <para>
+                  初期値: 500 行 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「スクロールバック &dash; キロバイト (kb)」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+このスピンボックスを使用して、スクロールバーの使用時にスクロールできるバイト数を指定します。たとえば、94 
+を指定した場合、端末に表示された最後の 94 K バイトをスクロールできます。
+                </para>
+                <!-- <para>
+                  初期値: 167 キロバイト.
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「キーストロークでスクロール」</guilabel> </term> 
+             <listitem>
+                <para>
+                  このオプションは、<keycap>Page Up</keycap> キーおよび <keycap>Page Down</keycap> 
+キーを使用して端末をスクロールできるようにする場合に選択します。
+                </para>
+                <!-- <para>
+                  初期値: 選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「出力時にスクロール」</guilabel> </term> 
+             <listitem>
+                <para>
+                  
+このオプションは、コマンド出力の表示を続行しながら、端末出力をスクロールできるようにする場合に選択します。
+                </para>
+                <!-- <para>
+                  初期値: 未選択 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-compatibility"> 
+        <title>「互換性」</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>「Backspace キーの動作」</guilabel> </term> 
+             <listitem>
+                <para>
+                  ドロップダウンリストを使用して、<keycap>Backspace</keycap> キーの機能を選択します。
+                </para>
+                <!-- <para>
+                  初期値: <guilabel>ASCII DEL</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>「Delete キーの動作」</guilabel> </term> 
+             <listitem>
+                <para>
+                  ドロップダウンリストを使用して、<keycap>Delete</keycap> キーの機能を選択します。
+                </para>
+                <!-- <para>
+                  初期値: <guilabel>エスケープシーケンス</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term> 
+                <guibutton>「互換性オプションをデフォルトにリセット」</guibutton> </term> 
+             <listitem>
+                
+<para>このボタンは、<guilabel>「互換性」</guilabel>タブ付きセクションのオプションをデフォルトの設定にリセットする
+場合にクリックします。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>
