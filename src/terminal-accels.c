@@ -1144,7 +1144,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                 "editable", TRUE,
                 NULL);
   column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("Accelerator _Key"));
+  gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func, NULL, NULL);
   gtk_tree_view_column_set_sort_column_id (column, KEYVAL_COLUMN);  

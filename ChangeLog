@@ -1,3 +1,16 @@
+2003-06-29  Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+	* src/terminal-window.c(new_window_callback, new_tab_callback): 
+	* src/terminal.c(terminal_app_get_clone_command): 
+	* src/skey/btoe.c: Minor changes to appease gcc.
+	* src/terminal-window.c(fill_in_new_term_submenus): Handle underscores
+	in visible profile names, fixing bug #78903.
+	* src/terminal-screen.c(terminal_screen_init): Fix URL pattern, as in
+	bug #114597.
+	* src/gnome-terminal.glade2:
+	* src/terminal-accels.c(terminal_edit_keys_dialog_new):
+	* src/terminal-window.c(terminal_window_init): Higgify away the words
+	`keybinding', `mnemonic', `accelerator'. Bug #90720.
+
 2003-06-24  Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 	* src/terminal.c(parse_options_callback): Make `deprecated option'
 	message mention the option; fixes bug #109356.

@@ -3229,7 +3229,7 @@ terminal_app_get_clone_command (TerminalApp *app,
       GList *tabs;
       GList *tmp2;
       TerminalWindow *window = tmp->data;
-      TerminalWindow *active_screen;
+      TerminalScreen *active_screen;
 
       active_screen = terminal_window_get_active (window);
       

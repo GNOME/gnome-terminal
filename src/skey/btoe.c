@@ -244,7 +244,7 @@ char *md;
 {
         char cp[9];	/* 64 + 2 = 66 bits */
         int p, i;
-	static buf[BUFSIZ];
+	static int buf[BUFSIZ];
 	char *engout = (char *)buf;
 	
         memcpy(cp, md, 8);

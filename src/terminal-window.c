@@ -397,6 +397,28 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   g_list_free (profiles);  
 }
 
+static char *
+escape_underscores (const char *name)
+{
+  GString *escaped_name;
+
+  g_assert (name != NULL);
+
+  /* Who'd use more that 4 underscores in a profile name... */
+  escaped_name = g_string_sized_new (strlen (name) + 4 + 1);
+
+  while (*name)
+    {
+      if (*name == '_')
+        g_string_append (escaped_name, "__");
+      else
+        g_string_append_c (escaped_name, *name);
+      name++;
+    }
+
+  return g_string_free (escaped_name, FALSE);
+}
+
 static void
 fill_in_new_term_submenus (TerminalWindow *window)
 {
@@ -508,6 +530,7 @@ fill_in_new_term_submenus (TerminalWindow *window)
   while (tmp != NULL)
     {
       TerminalProfile *profile;
+      char *escaped_name;
       
       profile = tmp->data;
       
@@ -515,16 +538,16 @@ fill_in_new_term_submenus (TerminalWindow *window)
       g_object_ref (G_OBJECT (profile));
       g_object_ref (G_OBJECT (profile));
 
-      /* FIXME underscores in profile name result in badness */
+      escaped_name = escape_underscores (terminal_profile_get_visible_name (profile));
+
       if (i < 10)
-        str = g_strdup_printf (_("_%d. %s"),
-                               i, terminal_profile_get_visible_name (profile));
+        str = g_strdup_printf (_("_%d. %s"), i, escaped_name);
       else if (i < 36)
-        str = g_strdup_printf (_("_%c. %s"),
-                               ('A' + i - 10),
-                               terminal_profile_get_visible_name (profile));
+        str = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), escaped_name);
       else
-        str = g_strdup (terminal_profile_get_visible_name (profile));
+        str = g_strdup (escaped_name);
+
+      g_free (escaped_name);
       
       /* item for new window */
       menu_item = gtk_menu_item_new_with_mnemonic (str);
@@ -788,7 +811,7 @@ terminal_window_init (TerminalWindow *window)
     append_menuitem (menu, _("C_urrent Profile..."), NULL,
                      G_CALLBACK (edit_configuration_callback), window);
 
-  append_menuitem (menu, _("_Keybindings..."), NULL,
+  append_menuitem (menu, _("_Keyoard Shortcuts..."), NULL,
                    G_CALLBACK (edit_keybindings_callback), window);
 
   append_menuitem (menu, _("P_rofiles..."), NULL,
@@ -2153,7 +2176,8 @@ new_window_callback (GtkWidget      *menuitem,
 
   if (!terminal_profile_get_forgotten (profile))
     {
-      char *name, *dir;
+      char *name;
+      const char *dir;
       
       name = gdk_screen_make_display_name (gtk_widget_get_screen (menuitem));
       dir = terminal_screen_get_working_dir (window->priv->active_term);
@@ -2181,7 +2205,7 @@ new_tab_callback (GtkWidget      *menuitem,
 
   if (!terminal_profile_get_forgotten (profile))
     {
-      char *dir;
+      const char *dir;
 
       dir = terminal_screen_get_working_dir (window->priv->active_term);
 
