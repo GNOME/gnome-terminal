@@ -64,7 +64,7 @@ terminal_widget_set_size (GtkWidget *widget,
 
   terminal = VTE_TERMINAL (widget);
 
-  vte_terminal_size_set(terminal, width_chars, height_chars);
+  vte_terminal_set_size (terminal, width_chars, height_chars);
 }
 
 void
