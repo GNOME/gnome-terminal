@@ -23,7 +23,7 @@
 
 #include <vte/vte.h>
 
-#define UNIMPLEMENTED g_warning (G_STRLOC" :unimplemented")
+#define UNIMPLEMENTED g_warning (G_STRLOC": unimplemented")
 
 typedef struct
 {
@@ -151,21 +151,24 @@ void
 terminal_widget_set_audible_bell (GtkWidget *widget,
 				  gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_audible_bell(VTE_TERMINAL(widget), setting);
 }
 
 void
 terminal_widget_set_scroll_on_keystroke (GtkWidget *widget,
 					 gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(widget), setting);
 }
 
 void
 terminal_widget_set_scroll_on_output (GtkWidget *widget,
 				      gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_scroll_on_output(VTE_TERMINAL(widget), setting);
 }
 
 void
@@ -179,14 +182,16 @@ void
 terminal_widget_set_background_image (GtkWidget *widget,
 				      GdkPixbuf *pixbuf)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_background_image(VTE_TERMINAL(widget), pixbuf);
 }
 
 void
 terminal_widget_set_background_image_file (GtkWidget  *widget,
 					   const char *fname)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_background_image_file(VTE_TERMINAL(widget), fname);
 }
 
 void
@@ -201,7 +206,8 @@ void
 terminal_widget_set_background_darkness (GtkWidget *widget,
 					 double     factor)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_background_saturation(VTE_TERMINAL(widget), factor);
 }
 
 void
@@ -238,19 +244,23 @@ terminal_widget_set_colors (GtkWidget      *widget,
 			    const GdkColor *background,
 			    const GdkColor *palette_entries)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_colors(VTE_TERMINAL(widget), foreground, background,
+			  palette_entries, 16);
 }
 
 void
 terminal_widget_copy_clipboard (GtkWidget *widget)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_copy_clipboard(VTE_TERMINAL(widget));
 }
 
 void
 terminal_widget_paste_clipboard (GtkWidget *widget)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_paste_clipboard(VTE_TERMINAL(widget));
 }
 
 void
