@@ -4,10 +4,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm VERSION\n"
-"POT-Creation-Date: 2002-08-04 13:03-0400\n"
-"PO-Revision-Date: 2002-07-26 12:30+0700\n"
-"Last-Translator: pclouds <pclouds@gmx.net>\n"
-"Language-Team: GnomeVI <gnomevi-list@lists.sourceforge.net>\n"
+"POT-Creation-Date: 2002-08-31 05:18+0200\n"
+"PO-Revision-Date: 2002-08-31 18:46+0700\n"
+"Last-Translator: Trinh Minh Thanh <tmthanh@linuxmail.org>\n"
+"Language-Team: Gnome-Vi Team <Gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,28 +17,36 @@ msgid "Command line"
 msgstr "Dòng lệnh"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:938
+#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:926
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/eggcellrendererkeys.c:159 src/eggcellrendererkeys.c:160
-msgid "Accelerator modifiers"
-msgstr "Phím bổ trợ"
-
-#: src/eggcellrendererkeys.c:168 src/eggcellrendererkeys.c:169
+#: src/eggcellrendererkeys.c:160 src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Phím nóng"
 
-#: src/eggcellrendererkeys.c:207 src/gnome-terminal.glade2.h:18
+#: src/eggcellrendererkeys.c:170 src/eggcellrendererkeys.c:171
+msgid "Accelerator modifiers"
+msgstr "Phím bổ trợ"
+
+#: src/eggcellrendererkeys.c:180
+msgid "Accel Mode"
+msgstr "Chế độ Tăng tốc"
+
+#: src/eggcellrendererkeys.c:181
+msgid "The type of accelerator."
+msgstr "Loại trình tăng tốc."
+
+#: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:18
 #: src/terminal-accels.c:707
 msgid "Disabled"
 msgstr "Tắt"
 
-#: src/eggcellrendererkeys.c:318 src/eggcellrendererkeys.c:534
+#: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:563
 msgid "Type a new accelerator, or press Backspace to clear"
 msgstr "Gõ một phím nóng, hoặc nhấn Backspace để xoá"
 
-#: src/eggcellrendererkeys.c:537
+#: src/eggcellrendererkeys.c:566
 msgid "Type a new accelerator"
 msgstr "Gõ phím nóng mới"
 
@@ -148,7 +156,7 @@ msgstr "Chưa được hiển thị"
 
 #: src/gnome-terminal.glade2.h:28
 msgid "Keybindings Editor"
-msgstr ""
+msgstr "Trình biên soạn Tổ Hợp Phím"
 
 #: src/gnome-terminal.glade2.h:29
 msgid "On the left side"
@@ -228,11 +236,11 @@ msgstr "Mục 9"
 
 #: src/gnome-terminal.glade2.h:48
 msgid "Profile Editor"
-msgstr "Bộ biên soạn Profile"
+msgstr "Trình biên soạn Hồ Sơ"
 
 #: src/gnome-terminal.glade2.h:49
 msgid "Profile _icon:"
-msgstr "_Biểu tượng profile:"
+msgstr "_Biểu tượng Hồ Sơ:"
 
 #: src/gnome-terminal.glade2.h:50
 msgid "R_un a custom command instead of my shell"
@@ -263,9 +271,8 @@ msgid "Scrolling"
 msgstr "Cuộn"
 
 #: src/gnome-terminal.glade2.h:57
-#, fuzzy
 msgid "Select-by-_word characters:"
-msgstr "Select-by-_word characters:"
+msgstr "Các ký tự Chọn-bằng-từ:"
 
 #: src/gnome-terminal.glade2.h:58
 msgid "Show _menubar by default in new terminals"
@@ -280,8 +287,7 @@ msgid "Terminal applications have these colors available to them."
 msgstr "Ứng dụng terminal có thể dùng những màu này"
 
 #: src/gnome-terminal.glade2.h:61
-msgid ""
-"The command running inside the terminal may dynamically set a new title."
+msgid "The command running inside the terminal may dynamically set a new title."
 msgstr "Lệnh chạy bên trong terminal có thể đặt tựa đề terminal"
 
 #: src/gnome-terminal.glade2.h:62
@@ -348,7 +354,7 @@ msgstr "_Không (dùng màu đặc)"
 
 #: src/gnome-terminal.glade2.h:78
 msgid "_Profile name:"
-msgstr "Tên _profile:"
+msgstr "Tên _Hồ sơ (profile):"
 
 #: src/gnome-terminal.glade2.h:79
 msgid "_Reset compatibility options to defaults"
@@ -426,7 +432,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Tự chọn"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2074 src/terminal.c:2267
+#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2255
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Lỗi hiển thị trợ giúp: %s"
@@ -438,20 +444,20 @@ msgid ""
 "incorrectly, so the profile editor can't be displayed."
 msgstr ""
 "Thiếu tập tin \"%s\". Điều này có nghĩa là ứng dụng chưa được cài đặt đúng. "
-"Vì thế bộ biên soạn profile không thể hiển thị."
+"Vì thế trình biên soạn hồ sơ không thể hiển thị."
 
 #: src/profile-editor.c:1253
 msgid "Choose a terminal font"
-msgstr "Chọn font terminal"
+msgstr "Chọn phông của terminal"
 
 #: src/profile-editor.c:1518
 #, c-format
 msgid "Editing profile \"%s\""
-msgstr "Đang sửa profile \"%s\""
+msgstr "Biên soạn hồ sơ (profile) \"%s\""
 
 #: src/simple-x-font-selector.c:327
 msgid "_Font:"
-msgstr "_Font:"
+msgstr "_Phông:"
 
 #: src/simple-x-font-selector.c:332
 msgid "Si_ze:"
@@ -459,15 +465,15 @@ msgstr "_Kích thước:"
 
 #: src/simple-x-font-selector.c:334
 msgid "_Use bold version of font"
-msgstr "_Dùng font đậm"
+msgstr "_Dùng phông đậm"
 
 #: src/simple-x-font-selector.c:342
 msgid "Click to choose font type"
-msgstr "Nhấn để chọn kiểu font"
+msgstr "Nhấn để chọn kiểu phông"
 
 #: src/simple-x-font-selector.c:348
 msgid "Click to choose font size"
-msgstr "Nhấn để chọn kích thước font"
+msgstr "Nhấn để chọn kích thước phông"
 
 #: src/simple-x-font-selector.c:659 src/x-font-selector.c:1964
 msgid "roman"
@@ -480,20 +486,18 @@ msgstr "nghiêng"
 
 #: src/simple-x-font-selector.c:661 src/x-font-selector.c:1214
 #: src/x-font-selector.c:1966
-#, fuzzy
 msgid "oblique"
-msgstr "oblique"
+msgstr "chéo"
 
 #: src/simple-x-font-selector.c:662 src/x-font-selector.c:1215
 #: src/x-font-selector.c:1967
 msgid "reverse italic"
-msgstr "nghiêng ngược"
+msgstr "nghiêng ngược lại"
 
 #: src/simple-x-font-selector.c:663 src/x-font-selector.c:1216
 #: src/x-font-selector.c:1968
-#, fuzzy
 msgid "reverse oblique"
-msgstr "reverse oblique"
+msgstr "chéo ngược lại"
 
 #: src/simple-x-font-selector.c:664 src/x-font-selector.c:1217
 #: src/x-font-selector.c:1969
@@ -506,7 +510,7 @@ msgstr "co dãn"
 
 #: src/simple-x-font-selector.c:672 src/x-font-selector.c:1977
 msgid "monospaced"
-msgstr "cứng"
+msgstr "khổ cố định"
 
 #: src/simple-x-font-selector.c:673 src/x-font-selector.c:1978
 msgid "char cell"
@@ -514,27 +518,27 @@ msgstr "ô ký tự"
 
 #: src/simple-x-font-selector.c:1268 src/x-font-selector.c:2654
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "Vượt quá MAX_FONTS. Một vài font sẽ bị thiếu."
+msgstr "Vượt quá MAX_FONTS. Một vài phông sẽ bị thiếu."
 
 #: src/terminal-accels.c:71
 msgid "New Tab"
-msgstr "Tab mới"
+msgstr "Tab Mới"
 
 #: src/terminal-accels.c:73
 msgid "New Window"
-msgstr "Cửa sổ mới"
+msgstr "Cửa Sổ Mới"
 
-#: src/terminal-accels.c:75 src/terminal.c:1691
+#: src/terminal-accels.c:75 src/terminal.c:1679
 msgid "New Profile"
-msgstr "Profile mới"
+msgstr "Hồ Sơ (Profile) Mới"
 
 #: src/terminal-accels.c:77
 msgid "Close Tab"
-msgstr "Đóng tab"
+msgstr "Đóng Tab"
 
 #: src/terminal-accels.c:79
 msgid "Close Window"
-msgstr "Đóng cửa sổ"
+msgstr "Đóng Cửa Sổ"
 
 #: src/terminal-accels.c:85
 msgid "Copy"
@@ -546,7 +550,7 @@ msgstr "Dán"
 
 #: src/terminal-accels.c:93
 msgid "Hide and Show menubar"
-msgstr "Ẩn / Hiện thanh menu"
+msgstr "Ẩn và Hiện thanh menu"
 
 #: src/terminal-accels.c:95
 msgid "Full Screen"
@@ -554,7 +558,7 @@ msgstr "Toàn màn hình"
 
 #: src/terminal-accels.c:101
 msgid "Set Title"
-msgstr "Đặt tựa đề"
+msgstr "Đặt Tiêu Đề"
 
 #: src/terminal-accels.c:103
 msgid "Reset"
@@ -562,7 +566,7 @@ msgstr "Đặt lại"
 
 #: src/terminal-accels.c:105
 msgid "Reset and Clear"
-msgstr "Đặt lại và xoá"
+msgstr "Đặt lại và Xoá sạch"
 
 #: src/terminal-accels.c:111
 msgid "Switch to Previous Tab"
@@ -644,7 +648,7 @@ msgstr "Đi"
 msgid "Help"
 msgstr "Trợ giúp"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1168
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1156
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Gặp lỗi khi đang nạp cấu hình từ %s. (%s)\n"
@@ -668,8 +672,7 @@ msgstr "Giá trị của khóa cấu hình %s không hợp lệ; giá trị sẽ
 
 #: src/terminal-accels.c:348 src/terminal-window.c:773
 #, c-format
-msgid ""
-"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgid "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "Gặp lỗi khi nạp giá cấu hình có dùng phím gợi nhớ hay không (%s)\n"
 
 #: src/terminal-accels.c:362
@@ -689,7 +692,9 @@ msgstr "Gặp lỗi khi đang nạp giá trị có dùng phím nóng menu hay kh
 msgid ""
 "There was an error subscribing to notification for use_menu_accelerators (%"
 "s)\n"
-msgstr "Gặp lỗi khi đăng ký thông báo use_menu_accelertors (%s)\n"
+msgstr ""
+"Gặp lỗi khi đăng ký thông báo use_menu_accelertors (% "
+"s)\n"
 
 #: src/terminal-accels.c:767
 #, c-format
@@ -724,7 +729,7 @@ msgstr ""
 msgid "_Action"
 msgstr "_Hành động"
 
-#: src/terminal-accels.c:1173
+#: src/terminal-accels.c:1174
 msgid "Accelerator _Key"
 msgstr "_Phím nóng"
 
@@ -733,34 +738,31 @@ msgstr "_Phím nóng"
 msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
 "(%s)\n"
-msgstr "Lỗi đăng ký thông báo thay đổi terminal profile (%s)\n"
+msgstr "Lỗi đăng ký thông báo thay đổi hồ sơ của terminal (%s)\n"
 
 #: src/terminal-profile.c:998
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Không thể tìm thấy biểu tượng \"%s\" cho terminal profile \"%s\"\n"
+msgstr "Không thể tìm thấy biểu tượng \"%s\" cho hồ sơ của terminal \"%s\"\n"
 
 #: src/terminal-profile.c:1012
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Lỗi nạp biểu tượng \"%s\" cho terminal profile \"%s\": %s\n"
+msgstr "Lỗi nạp biểu tượng \"%s\" cho hồ sơ của terminal \"%s\": %s\n"
 
 #: src/terminal-profile.c:1189
 #, c-format
-msgid ""
-"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Không thể tìm thấy ảnh nền \"%s\" cho terminal profile \"%s\"\n"
+msgid "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+msgstr "Không thể tìm thấy ảnh nền \"%s\" cho hồ sơ của terminal \"%s\"\n"
 
 #: src/terminal-profile.c:1203
 #, c-format
-msgid ""
-"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Lỗi nạp ảnh nền \"%s\" cho terminal profile \"%s\": %s\n"
+msgid "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+msgstr "Lỗi nạp ảnh nền \"%s\" cho hồ sơ của terminal \"%s\": %s\n"
 
 #: src/terminal-profile.c:1830
 #, c-format
-msgid ""
-"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+msgid "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "Gnome Terminal: Thiết lập font tên \"%s\" trong cơ sở dữ liệu cấu hình là "
 "không hợp lệ\n"
@@ -783,14 +785,14 @@ msgstr "Lỗi thiết lập phím %s về mặc định: %s\n"
 #: src/terminal-profile.c:3127
 #, c-format
 msgid "There was an error forgetting profile dir %s. (%s)\n"
-msgstr "Lỗi quên thư mục profile %s. (%s)\n"
+msgstr "Lỗi bỏ quên thư mục hồ sơ %s. (%s)\n"
 
 #: src/terminal-profile.c:3184
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
-msgstr "Lỗi đăng ký thông báo thay đổi profile mặc định (%s)\n"
+msgstr "Lỗi đăng ký thông báo thay đổi hồ sơ mặc định (%s)\n"
 
 #: src/terminal-profile.c:3229
 msgid "_Details"
@@ -799,11 +801,11 @@ msgstr "_Chi tiết"
 #: src/terminal-profile.c:3664
 #, c-format
 msgid "There was an error creating the profile \"%s\""
-msgstr "Lỗi tạo profile \"%s\""
+msgstr "Lỗi tạo hồ sơ \"%s\""
 
 #: src/terminal-profile.c:3744
 msgid "There was an error deleting the profiles"
-msgstr "Lỗi xóa profile"
+msgstr "Có lỗi khi đang xóa hồ sơ"
 
 #: src/terminal-profile.c:3813
 #, c-format
@@ -844,11 +846,11 @@ msgstr "_Tab mới"
 
 #: src/terminal-screen.c:1240 src/terminal-window.c:625
 msgid "_Profile"
-msgstr "_Profile"
+msgstr "_Hồ Sơ"
 
 #: src/terminal-screen.c:1290
 msgid "_Edit Current Profile..."
-msgstr "_Sửa profile hiện tại..."
+msgstr "_Biên Soạn Hồ Sơ Hiện Thời..."
 
 #: src/terminal-screen.c:1297
 msgid "Hide _Menubar"
@@ -893,19 +895,16 @@ msgstr "Màu thả xuống terminal có dạng thức (%d) hoặc chiều dài (
 #: src/terminal-screen.c:1789
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"URL Mozilla thả xuống terminal có dạng thức (%d) hoặc chiều dài (%d) sai\n"
+msgstr "URL Mozilla thả xuống terminal có dạng thức (%d) hoặc chiều dài (%d) sai\n"
 
 #: src/terminal-screen.c:1838
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Danh sách URI thả xuống terminal có dạng thức (%d) hoặc chiều dài (%d) sai\n"
+msgstr "Danh sách URI thả xuống terminal có dạng thức (%d) hoặc chiều dài (%d) sai\n"
 
 #: src/terminal-screen.c:1892
 #, c-format
-msgid ""
-"Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
+msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Tên tập tin ảnh thả xuống terminal có dạng thức (%d) hoặc chiều dài (%d) "
 "sai\n"
@@ -913,7 +912,7 @@ msgstr ""
 #: src/terminal-screen.c:1918
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
-msgstr "Lỗi chuyển đổi URI \"%s\" vào tập tin: %s\n"
+msgstr "Lỗi chuyển đổi URI \"%s\" vào tên tập tin: %s\n"
 
 #: src/terminal-widget-zvt.c:1034
 #, c-format
@@ -945,7 +944,7 @@ msgstr "_%c. %s"
 #.
 #: src/terminal-window.c:547
 msgid "New _Profile..."
-msgstr "_Profile mới"
+msgstr "_Hồ Sơ Mới..."
 
 #: src/terminal-window.c:553
 msgid "_Close Window"
@@ -957,7 +956,7 @@ msgstr "Đó_ng tab"
 
 #: src/terminal-window.c:587
 msgid "C_urrent Profile..."
-msgstr "Profile _hiện thời..."
+msgstr "Hồ Sơ H_iện Thời..."
 
 #: src/terminal-window.c:590
 msgid "_Keybindings..."
@@ -965,7 +964,7 @@ msgstr "_Keybindings..."
 
 #: src/terminal-window.c:593
 msgid "P_rofiles..."
-msgstr "P_rofiles..."
+msgstr "_Hồ Sơ..."
 
 #: src/terminal-window.c:606
 msgid "Hide Menu_bar"
@@ -1012,9 +1011,9 @@ msgstr "Lỗi đăng ký thông báo thay đổi cấu hình cửa sổ terminal
 
 #: src/terminal-window.c:1654
 msgid "_File"
-msgstr "_Tập tin"
+msgstr "_Tệp"
 
-#: src/terminal-window.c:1656 src/terminal.c:2298
+#: src/terminal-window.c:1656 src/terminal.c:2286
 msgid "_Edit"
 msgstr "_Hiệu chỉnh"
 
@@ -1042,7 +1041,7 @@ msgstr "_Phục hồi kích thước bình thường"
 msgid "_Full screen"
 msgstr "Toàn _màn hình"
 
-#: src/terminal-window.c:1970
+#: src/terminal-window.c:1975
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1052,15 +1051,15 @@ msgstr ""
 " (Theo thuật ngữ kỹ thuật, bạn cần một trình quản lý cửa sổ hỗ trợ thuộc "
 "tính _NET_WM_STATE_FULLSCREEN)."
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2109
 msgid "translator_credits"
 msgstr "Nguyễn Thái Ngọc Duy"
 
-#: src/terminal-window.c:2117
+#: src/terminal-window.c:2122
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2118
+#: src/terminal-window.c:2123
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
@@ -1077,19 +1076,19 @@ msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
-"Mở cửa sổ mới chứa 1 tab với profile được cho. Có thể cung cấp nhiều hơn một "
+"Mở cửa sổ mới chứa 1 tab với hồ sơ được cho. Có thể cung cấp nhiều hơn một "
 "trong những tùy chọn này."
 
 #: src/terminal.c:183 src/terminal.c:192
 msgid "PROFILENAME"
-msgstr "TÊN PROFILE"
+msgstr "TÊN HỒ SƠ"
 
 #: src/terminal.c:191
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Mở tab mới trong cửa sổ được mở cuối cùng với profile được cho. Có thể dùng "
+"Mở tab mới trong cửa sổ được mở cuối cùng với hồ sơ được cho. Có thể dùng "
 "những tùy chọn này nhiều hơn một lần."
 
 #: src/terminal.c:200
@@ -1097,20 +1096,20 @@ msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
-"Mở cửa sổ mới chứa một tab với profile ID được cho. Được dùng nội tại để lưu "
-"session."
+"Mở cửa sổ mới chứa một tab với ID của hồ sơ được cho. Được dùng nội tại để lưu "
+"các phiên làm việc."
 
 #: src/terminal.c:201 src/terminal.c:210
 msgid "PROFILEID"
-msgstr "PROFILEID"
+msgstr "ID của HỒ SƠ"
 
 #: src/terminal.c:209
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
-"Mở tab mới trong cửa sổ được mở cuối cùng với profile ID được cho. Dùng nội "
-"tại để lưu session."
+"Mở tab mới trong cửa sổ được mở cuối cùng với ID của hồ sơ được cho. Dùng nội "
+"tại để lưu các phiên làm việc."
 
 #: src/terminal.c:218
 msgid ""
@@ -1171,16 +1170,16 @@ msgstr "TÊN THƯ MỤC"
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Không thể nạp biểu tượng \"%s\": %s\n"
 
-#: src/terminal.c:668
+#: src/terminal.c:666
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Tùy chọn --command/-e yêu cầu lệnh cần thực hiện.\n"
 
-#: src/terminal.c:676
+#: src/terminal.c:674
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Đối số của --command/-e không phải là lệnh hợp lệ: %s\n"
 
-#: src/terminal.c:686 src/terminal.c:708
+#: src/terminal.c:684 src/terminal.c:706
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1188,7 +1187,7 @@ msgstr ""
 "--command/-e/--excute/-x xác định nhiều hơn một lần cho cùng một cửa sổ hoặc "
 "tab\n"
 
-#: src/terminal.c:700
+#: src/terminal.c:698
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1196,177 +1195,175 @@ msgstr ""
 "Tùy chọn --excute/-x yêu cầu xác định lệnh cần chạy trên phần còn lại của "
 "dòng lệnh\n"
 
-#: src/terminal.c:727
+#: src/terminal.c:723
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
-msgstr ""
-"Tùy chọn --window-with-profile yêu cầu đối số là profile nào được dùng\n"
+msgstr "Tùy chọn --window-with-profile yêu cầu đối số là hồ sơ nào được dùng\n"
 
-#: src/terminal.c:746
+#: src/terminal.c:740
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
-msgstr "Tùy chọn --tab-with-profile yêu cầu đối số là profile cần dùng\n"
+msgstr "Tùy chọn --tab-with-profile yêu cầu đối số là hồ sơ cần dùng\n"
 
-#: src/terminal.c:777
+#: src/terminal.c:771
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Tùy chọn --show-menubar hai lần trên cùng cửa sổ\n"
 
-#: src/terminal.c:803
+#: src/terminal.c:797
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "Chọn tùy chọn --hide-menubar hai lần trên cùng cửa sổ\n"
 
-#: src/terminal.c:828
+#: src/terminal.c:820
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Tùy chọn --geometry yêu cầu đối số là vị trí\n"
 
-#: src/terminal.c:837 src/terminal.c:847
+#: src/terminal.c:829 src/terminal.c:839
 msgid "Two geometries given for one window\n"
 msgstr "Hai vị trí được cho trên cùng một cửa sổ\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:861
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Tùy chọn --title yêu cầu đối số là tựa đề\n"
 
-#: src/terminal.c:879
+#: src/terminal.c:869
 msgid "Two titles given for one tab\n"
 msgstr "Hai tựa đề trên cùng một tab\n"
 
-#: src/terminal.c:896
+#: src/terminal.c:884
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "Tùy chọn --working-directory yêu cầu đối số là thư mục\n"
 
-#: src/terminal.c:904
+#: src/terminal.c:892
 msgid "Two working directories given for one tab\n"
 msgstr "Hai thư mục làm việc cho cùng một tab\n"
 
-#: src/terminal.c:913
+#: src/terminal.c:901
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
 "--window-with-profile option\n"
 msgstr ""
 "Tùy chọn được cho không còn được hỗ trợ trong phiên bản gnome-terminal này; "
-"có lẽ bạn muốn tạo profile với các thiết lập thích hợp và dùng tùy chọn --"
+"có lẽ bạn muốn tạo hồ sơ với các thiết lập thích hợp và dùng tùy chọn --"
 "window-with-profile mới\n"
 
-#: src/terminal.c:1033
+#: src/terminal.c:1021
 #, c-format
 msgid "No such profile '%s', using default profile\n"
-msgstr "Không có profile '%s', dùng profile mặc định\n"
+msgstr "Không có hồ sơ '%s', dùng hồ sơ mặc định\n"
 
-#: src/terminal.c:1142
+#: src/terminal.c:1130
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Đối số không hợp lệ: \"%s\"\n"
 
-#: src/terminal.c:1184
+#: src/terminal.c:1172
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
-msgstr "Lỗi đăng ký thông báo thay đổi danh sách profile terminal (%s)\n"
+msgstr "Lỗi đăng ký thông báo thay đổi danh sách hồ sơ của terminal (%s)\n"
 
-#: src/terminal.c:1292
+#: src/terminal.c:1280
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Chuỗi vị trí không hợp lệ \"%s\"\n"
 
-#: src/terminal.c:1352
+#: src/terminal.c:1340
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
-msgstr "Lỗi lấy danh sách terminal profile (%s)\n"
+msgstr "Lỗi khi lấy danh sách hồ sơ của terminal (%s)\n"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1573
 msgid "You have to name your profile."
-msgstr "Bạn phải đặt tên profile."
+msgstr "Bạn phải đặt tên cho hồ sơ."
 
-#: src/terminal.c:1595
+#: src/terminal.c:1583
 #, c-format
 msgid "You already have a profile called \"%s\""
-msgstr "Bạn đã có profile \"%s\" rồi"
+msgstr "Bạn đã có hồ sơ có tên \"%s\" rồi"
 
-#: src/terminal.c:1632
-msgid ""
-"The profile you selected as a base for your new profile no longer exists"
-msgstr "Profile bạn chọn như là cơ sở cho profile mới không còn tồn tại nữa"
+#: src/terminal.c:1620
+msgid "The profile you selected as a base for your new profile no longer exists"
+msgstr "Hồ sơ bạn chọn như là cơ sở cho hồ sơ mới không còn tồn tại nữa"
 
-#: src/terminal.c:1696
+#: src/terminal.c:1684
 msgid "C_reate"
 msgstr "_Tạo"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1709
 msgid "Profile _name:"
-msgstr "Tên _profile:"
+msgstr "Tê_n Hồ Sơ:"
 
-#: src/terminal.c:1725
+#: src/terminal.c:1713
 msgid "Enter profile name"
-msgstr "Nhập tên profile"
+msgstr "Nhập tên hồ sơ"
 
-#: src/terminal.c:1740
+#: src/terminal.c:1728
 msgid "_Base on:"
 msgstr "_Dựa trên:"
 
-#: src/terminal.c:1888
+#: src/terminal.c:1876
 msgid "Profile list"
-msgstr "Danh sách profile"
+msgstr "Danh sách hồ sơ"
 
-#: src/terminal.c:1961
+#: src/terminal.c:1949
 msgid "You must select one or more profiles to delete."
-msgstr "Bạn phải chọn những profile cần xóa"
+msgstr "Bạn phải chọn những hồ sơ cần xóa."
 
-#: src/terminal.c:1984
+#: src/terminal.c:1972
 msgid "You must have at least one profile; you can't delete all of them."
-msgstr "Bạn phải có ít nhất một profile; bạn không thể xóa tất cả."
+msgstr "Bạn phải có ít nhất một hồ sơ; bạn không thể xóa tất cả."
 
-#: src/terminal.c:2002
+#: src/terminal.c:1990
 msgid "Delete these two profiles?\n"
-msgstr "Xoá hai profile này chứ?\n"
+msgstr "Xoá hai hồ sơ này không?\n"
 
-#: src/terminal.c:2004
+#: src/terminal.c:1992
 #, c-format
 msgid "Delete these %d profiles?\n"
-msgstr "Xoá %d profile này chứ?\n"
+msgstr "Xoá %d hồ sơ này không?\n"
 
-#: src/terminal.c:2022
+#: src/terminal.c:2010
 #, c-format
 msgid "Delete profile \"%s\"?"
-msgstr "Xoá profile \"%s\" chứ?"
+msgstr "Xoá hồ sơ \"%s\" không?"
 
-#: src/terminal.c:2044
+#: src/terminal.c:2032
 msgid "Delete Profile"
-msgstr "Xoá profile"
+msgstr "Xoá Hồ Sơ"
 
-#: src/terminal.c:2331
+#: src/terminal.c:2319
 msgid "Edit Profiles"
-msgstr "Sửa profile"
+msgstr "Biên Soạn Hồ Sơ"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2359
 msgid "Profile _used when launching a new terminal:"
-msgstr "Profile được dùng khi khởi động terminal mới:"
+msgstr "Hồ sơ được _dùng khi chạy một terminal mới:"
 
-#: src/terminal.c:2393
+#: src/terminal.c:2381
 msgid "_Profiles:"
-msgstr "_Profile:"
+msgstr "_Hồ sơ:"
 
-#: src/terminal.c:2442
+#: src/terminal.c:2430
 msgid "Click to open new profile dialog"
-msgstr "Nhấn để mở hộp thoại profile mới"
+msgstr "Nhấn để mở hộp thoại hồ sơ mới"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2443
 msgid "Click to open edit profile dialog"
-msgstr "Nhấn để mở hộp thoại sửa profile"
+msgstr "Nhấn để mở hộp thoại biên soạn hồ sơ"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2453
 msgid "Click to delete selected profile"
-msgstr "Nhấn để xóa các profile được chọn"
+msgstr "Nhấn để xóa các hồ sơ được chọn"
 
-#: src/terminal.c:2514
+#: src/terminal.c:2502
 msgid "Click button to choose profile"
-msgstr "Nhấn để chọn profile"
+msgstr "Nhấn để chọn hồ sơ"
 
-#: src/terminal.c:2954
+#: src/terminal.c:2942
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1374,14 +1371,13 @@ msgstr ""
 "Có lẽ bạn chưa cài đặt đúng vị trí gnome-terminal.server. Tắt chế độ "
 "factory.\n"
 
-#: src/terminal.c:2957
+#: src/terminal.c:2945
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
-msgstr ""
-"Lỗi đang ký terminal với dịch vụ kích hoạt; chế độ factory đã được tắt.\n"
+msgstr "Lỗi đang ký terminal với dịch vụ kích hoạt; chế độ factory đã được tắt.\n"
 
-#: src/terminal.c:2992
+#: src/terminal.c:2980
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Lỗi nhận server terminal từ server kích hoạt\n"
 
@@ -1610,3 +1606,4 @@ msgstr "Chọn font"
 
 #~ msgid "_Delete..."
 #~ msgstr "_Xoá..."
+
