@@ -925,6 +925,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
       w = glade_xml_get_widget (xml, "color-scheme-optionmenu");
       init_color_scheme_menu (w);
+      profile_editor_update_color_scheme_menu (editor, profile);
       profile_editor_update_palette (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (color_scheme_changed),
