@@ -24,7 +24,6 @@
 #include "terminal-intl.h"
 #include "terminal.h"
 #include <glade/glade.h>
-#include <libgnomeui/gnome-color-picker.h>
 #include <libgnomeui/gnome-font-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
@@ -166,19 +165,12 @@ static void
 colorpicker_set_if_changed (GtkWidget      *colorpicker,
                             const GdkColor *color)
 {
-  guint16 r, g, b;
+  GdkColor old_color;
 
-  gnome_color_picker_get_i16 (GNOME_COLOR_PICKER (colorpicker),
-                              &r, &g, &b, NULL);
+  gtk_color_button_get_color (GTK_COLOR_BUTTON (colorpicker), &old_color);
 
-  if (r != color->red ||
-      g != color->green ||
-      b != color->blue)
-    gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (colorpicker),
-                                color->red,
-                                color->green,
-                                color->blue,
-                                0xffff);
+  if (!gdk_color_equal (color, &old_color))
+    gtk_color_button_set_color (GTK_COLOR_BUTTON (colorpicker), color);
 }
 
 static void
@@ -400,36 +392,28 @@ show_menubar_toggled (GtkWidget       *checkbutton,
 
 static void
 foreground_color_set (GtkWidget       *colorpicker,
-                      guint r, guint g, guint b, guint a,
                       TerminalProfile *profile)
 {
   GdkColor color;
   GdkColor bg;
 
-  color.red = r;
-  color.green = g;
-  color.blue = b;
+  gtk_color_button_get_color (GTK_COLOR_BUTTON (colorpicker), &color);
 
-  terminal_profile_get_color_scheme (profile,
-                                     NULL, &bg);
+  terminal_profile_get_color_scheme (profile, NULL, &bg);
   
   terminal_profile_set_color_scheme (profile, &color, &bg);
 }
 
 static void
 background_color_set (GtkWidget       *colorpicker,
-                      guint r, guint g, guint b, guint a,
                       TerminalProfile *profile)
 {
   GdkColor color;
   GdkColor fg;
 
-  color.red = r;
-  color.green = g;
-  color.blue = b;
+  gtk_color_button_get_color (GTK_COLOR_BUTTON (colorpicker), &color);
 
-  terminal_profile_get_color_scheme (profile,
-                                     &fg, NULL);
+  terminal_profile_get_color_scheme (profile, &fg, NULL);
   
   terminal_profile_set_color_scheme (profile, &fg, &color);
 }
@@ -627,21 +611,16 @@ palette_scheme_changed (GtkWidget       *option_menu,
 
 static void
 palette_color_set (GtkWidget       *colorpicker,
-                   guint r, guint g, guint b, guint a,
                    TerminalProfile *profile)
 {
   int i;
   GdkColor color;
 
-  color.red = r;
-  color.green = g;
-  color.blue = b;
-  
-  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (colorpicker),
-                                          "palette-entry-index"));
+  gtk_color_button_get_color (GTK_COLOR_BUTTON (colorpicker), &color);
 
-  terminal_profile_set_palette_entry (profile, i,
-                                      &color);
+  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (colorpicker), "palette-entry-index"));
+
+  terminal_profile_set_palette_entry (profile, i, &color);
 }
 
 static void
