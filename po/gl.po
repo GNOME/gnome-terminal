@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-05-26 01:25+0200\n"
+"POT-Creation-Date: 2002-06-11 23:20-0400\n"
 "PO-Revision-Date: 2002-06-03 23:14+0200\n"
 "Last-Translator: Jesús Bravo Álvarez <suso@trasno.net>\n"
 "Language-Team: Galician <proxecto@trasno.net>\n"
@@ -23,7 +23,7 @@ msgid "Command line"
 msgstr "Liña de comandos"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:272 src/terminal-window.c:480 src/terminal.c:877
+#: src/terminal-profile.c:272 src/terminal-window.c:480 src/terminal.c:878
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -401,39 +401,44 @@ msgstr "_liñas"
 msgid "kilobytes"
 msgstr "kilobytes"
 
-#: src/profile-editor.c:46
+#: src/profile-editor.c:47
 msgid "Black on light yellow"
 msgstr "Negro sobre amarelo claro"
 
-#: src/profile-editor.c:48
+#: src/profile-editor.c:49
 msgid "White on black"
 msgstr "Branco sobre negro"
 
-#: src/profile-editor.c:50
+#: src/profile-editor.c:51
 msgid "Black on white"
 msgstr "Negro sobre branco"
 
-#: src/profile-editor.c:52
+#: src/profile-editor.c:53
 msgid "Green on black"
 msgstr "Verde sobre negro"
 
-#: src/profile-editor.c:65
+#: src/profile-editor.c:66
 msgid "Linux console"
 msgstr "Consola Linux"
 
-#: src/profile-editor.c:66
+#: src/profile-editor.c:67
 msgid "XTerm"
 msgstr "XTerm"
 
-#: src/profile-editor.c:67
+#: src/profile-editor.c:68
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: src/profile-editor.c:806 src/profile-editor.c:836
+#: src/profile-editor.c:807 src/profile-editor.c:837
 msgid "Custom"
 msgstr "Personalizado"
 
-#: src/profile-editor.c:905
+#: src/profile-editor.c:883 src/terminal-window.c:2047 src/terminal.c:2228
+#, c-format
+msgid "There was an error displaying help: %s"
+msgstr "Houbo un erro ao mostrar a axuda: %s"
+
+#: src/profile-editor.c:947
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -442,11 +447,11 @@ msgstr ""
 "Falta o ficheiro \"%s\". Isto indica que a aplicación non está instalada "
 "correctamente, polo que non se pode mostrar o editor de perfís."
 
-#: src/profile-editor.c:1210
+#: src/profile-editor.c:1253
 msgid "Choose a terminal font"
 msgstr "Escolla a fonte do terminal"
 
-#: src/profile-editor.c:1475
+#: src/profile-editor.c:1518
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Editando o perfil \"%s\""
@@ -636,7 +641,7 @@ msgstr "Ver"
 msgid "Go"
 msgstr "Ir"
 
-#: src/terminal-accels.c:247 src/terminal-profile.c:388 src/terminal.c:1007
+#: src/terminal-accels.c:247 src/terminal-profile.c:388 src/terminal.c:1129
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Houbo un erro ao cargar a configuración de %s. (%s)\n"
@@ -647,8 +652,8 @@ msgid ""
 "There was an error subscribing to notification of terminal keybinding "
 "changes. (%s)\n"
 msgstr ""
-"Houbo un erro na subscripción para notificar as modificacións dos atallos "
-"de teclado do terminal. (%s)\n"
+"Houbo un erro na subscripción para notificar as modificacións dos atallos de "
+"teclado do terminal. (%s)\n"
 
 #: src/terminal-accels.c:302
 #, c-format
@@ -658,16 +663,15 @@ msgstr "Houbo un erro cargando atallos de teclado do terminal. (%s)\n"
 #: src/terminal-accels.c:318
 #, c-format
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
-msgstr ""
-"O valor da clave de configuración %s non é válido; o valor é \"%s\"\n"
+msgstr "O valor da clave de configuración %s non é válido; o valor é \"%s\"\n"
 
 #: src/terminal-accels.c:341 src/terminal-window.c:756
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
-"Houbo un erro ao cargar o valor da configuración sobre o uso de nemónicos. "
-"(%s)\n"
+"Houbo un erro ao cargar o valor da configuración sobre o uso de nemónicos. (%"
+"s)\n"
 
 #: src/terminal-accels.c:355
 #, c-format
@@ -742,28 +746,30 @@ msgstr ""
 #: src/terminal-profile.c:998
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Non se atopou a icona chamada \"%s\" para o perfil de terminal \"%s\"\n"
+msgstr ""
+"Non se atopou a icona chamada \"%s\" para o perfil de terminal \"%s\"\n"
 
 #: src/terminal-profile.c:1012
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "Fallo ao cargar a icona \"%s\" para o perfil de terminal \"%s\": %s\n"
 
-#: src/terminal-profile.c:1187
+#: src/terminal-profile.c:1189
 #, c-format
 msgid ""
 "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
 msgstr ""
-"Non se atopou a imaxe de fondo chamada \"%s\" para o perfil de terminal \"%s\"\n"
+"Non se atopou a imaxe de fondo chamada \"%s\" para o perfil de terminal \"%s"
+"\"\n"
 
-#: src/terminal-profile.c:1201
+#: src/terminal-profile.c:1203
 #, c-format
 msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
 "Fallo a cargar a imaxe de fondo \"%s\" para o perfil de terminal \"%s\": %s\n"
 
-#: src/terminal-profile.c:1828
+#: src/terminal-profile.c:1830
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -771,27 +777,27 @@ msgstr ""
 "Terminal de GNOME: o nome de fonte \"%s\" na base de datos de configuración "
 "non é válido\n"
 
-#: src/terminal-profile.c:2894
+#: src/terminal-profile.c:2913
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Erro obtendo o valor predeterminado de %s: %s\n"
 
-#: src/terminal-profile.c:2900
+#: src/terminal-profile.c:2919
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Non hai un valor predeterminado para %s\n"
 
-#: src/terminal-profile.c:2915
+#: src/terminal-profile.c:2934
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Erro restablecendo a clave %s ao valor predeterminado: %s\n"
 
-#: src/terminal-profile.c:3108
+#: src/terminal-profile.c:3127
 #, c-format
 msgid "There was an error forgetting profile dir %s. (%s)\n"
 msgstr "Houbo un erro esquecendo o directorio de perfís %s. (%s)\n"
 
-#: src/terminal-profile.c:3165
+#: src/terminal-profile.c:3184
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -800,25 +806,25 @@ msgstr ""
 "Houbo un erro na subscripción para notificar as modificacións do perfil "
 "predeterminado. (%s)\n"
 
-#: src/terminal-profile.c:3210
+#: src/terminal-profile.c:3229
 msgid "_Details"
 msgstr "_Detalles"
 
-#: src/terminal-profile.c:3645
+#: src/terminal-profile.c:3664
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Houbo un erro ao crear o perfil \"%s\""
 
-#: src/terminal-profile.c:3725
+#: src/terminal-profile.c:3744
 msgid "There was an error deleting the profiles"
 msgstr "Houbo un erro ao borrar os perfís"
 
-#: src/terminal-profile.c:3791
+#: src/terminal-profile.c:3810
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Non é posible analizar a cadea \"%s\" como unha paleta de cores\n"
 
-#: src/terminal-profile.c:3800
+#: src/terminal-profile.c:3819
 #, c-format
 msgid "Palette had %d entries instead of %d\n"
 msgstr "A paleta ten %d entradas en vez de %d\n"
@@ -833,7 +839,7 @@ msgstr "Non foi posible cargar a fonte \"%s\"\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Houbo un problema co comando para este terminal: %s"
 
-#: src/terminal-screen.c:1072
+#: src/terminal-screen.c:1074
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -842,78 +848,78 @@ msgstr ""
 "Non foi posible abrir o enderezo \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1193 src/terminal-window.c:528
+#: src/terminal-screen.c:1195 src/terminal-window.c:528
 msgid "_New Window"
 msgstr "Nova _fiestra"
 
-#: src/terminal-screen.c:1200 src/terminal-window.c:531
+#: src/terminal-screen.c:1202 src/terminal-window.c:531
 msgid "New _Tab"
 msgstr "Nova _pestana"
 
-#: src/terminal-screen.c:1224 src/terminal-window.c:613
+#: src/terminal-screen.c:1226 src/terminal-window.c:613
 msgid "_Profile"
 msgstr "_Perfil"
 
-#: src/terminal-screen.c:1274
+#: src/terminal-screen.c:1276
 msgid "_Edit Current Profile..."
 msgstr "_Editar o perfil actual..."
 
-#: src/terminal-screen.c:1281
+#: src/terminal-screen.c:1283
 msgid "Hide _Menubar"
 msgstr "A_gochar a barra de menú"
 
-#: src/terminal-screen.c:1286
+#: src/terminal-screen.c:1288
 msgid "Show _Menubar"
 msgstr "A_mosar a barra de menú"
 
-#: src/terminal-screen.c:1295
+#: src/terminal-screen.c:1297
 msgid "Secure _Keyboard"
 msgstr "Teclado _seguro"
 
-#: src/terminal-screen.c:1301
+#: src/terminal-screen.c:1303
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
-#: src/terminal-screen.c:1308
+#: src/terminal-screen.c:1310
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: src/terminal-screen.c:1561
+#: src/terminal-screen.c:1563
 msgid "Change terminal title"
 msgstr "Mudar o título do terminal"
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1590
 msgid "_Title:"
 msgstr "_Título:"
 
-#: src/terminal-screen.c:1707
+#: src/terminal-screen.c:1709
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "O text/plain soltado no terminal tiña un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: src/terminal-screen.c:1730
+#: src/terminal-screen.c:1732
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A cor soltada no terminal tiña un formato (%d) ou lonxitude (%d) erróneo\n"
 
-#: src/terminal-screen.c:1773
+#: src/terminal-screen.c:1775
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "O URL de Mozilla soltado no terminal tiña un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: src/terminal-screen.c:1822
+#: src/terminal-screen.c:1824
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A lista de URI soltada no terminal tiña un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: src/terminal-screen.c:1876
+#: src/terminal-screen.c:1878
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -921,22 +927,22 @@ msgstr ""
 "O nome de ficheiro de imaxe soltado no terminal tiña un formato (%d) ou "
 "lonxitude (%d) erróneo\n"
 
-#: src/terminal-screen.c:1902
+#: src/terminal-screen.c:1904
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Erro ao converter o URI \"%s\" a nome de ficheiro: %s\n"
 
-#: src/terminal-widget-zvt.c:1030
+#: src/terminal-widget-zvt.c:1034
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
 msgstr "Houbo un erro ao crear o proceso fillo deste terminal: %s"
 
-#: src/terminal-widget-zvt.c:1046
+#: src/terminal-widget-zvt.c:1050
 #, c-format
 msgid "Could not set working directory to \"%s\": %s\n"
 msgstr "Non foi posible establecer o directorio de traballo a \"%s\": %s\n"
 
-#: src/terminal-widget-zvt.c:1052
+#: src/terminal-widget-zvt.c:1056
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Non foi posible executar o comando %s: %s\n"
@@ -1047,15 +1053,15 @@ msgstr "_Ir"
 msgid "_Help"
 msgstr "A_xuda"
 
-#: src/terminal-window.c:1753
+#: src/terminal-window.c:1756
 msgid "_Restore normal size"
 msgstr "_Restaurar o tamaño normal"
 
-#: src/terminal-window.c:1757
+#: src/terminal-window.c:1760
 msgid "_Full screen"
 msgstr "Pantalla _completa"
 
-#: src/terminal-window.c:1940
+#: src/terminal-window.c:1943
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1066,34 +1072,29 @@ msgstr ""
 " (En termos técnicos, precisa dun xestor de fiestras que soporte a "
 "propiedade _NET_WM_STATE_FULLSCREEN.)"
 
-#: src/terminal-window.c:2044
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Houbo un erro ao mostrar a axuda: %s"
-
-#: src/terminal-window.c:2074
+#: src/terminal-window.c:2077
 msgid "translator_credits"
 msgstr ""
 "Jesús Bravo Álvarez <suso@trasno.net>\n"
 "Proxecto Trasno - http://www.trasno.net"
 
-#: src/terminal-window.c:2087
+#: src/terminal-window.c:2090
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2088
+#: src/terminal-window.c:2091
 msgid "GNOME Terminal"
 msgstr "Terminal de GNOME"
 
-#: src/terminal.c:162
+#: src/terminal.c:163
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Executar o argumento desta opción no terminal."
 
-#: src/terminal.c:171
+#: src/terminal.c:172
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Executar o resto da liña de comandos no terminal."
 
-#: src/terminal.c:180
+#: src/terminal.c:181
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1101,11 +1102,11 @@ msgstr ""
 "Abrir unha nova fiestra cunha pestana co perfil indicado. Pódense indicar "
 "máis dunha destas opcións."
 
-#: src/terminal.c:181 src/terminal.c:190
+#: src/terminal.c:182 src/terminal.c:191
 msgid "PROFILENAME"
 msgstr "NOME_PERFIL"
 
-#: src/terminal.c:189
+#: src/terminal.c:190
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1113,7 +1114,7 @@ msgstr ""
 "Abrir unha nova pestana na última fiestra aberta co perfil indicado. Pódense "
 "indicar máis dunha destas opcións."
 
-#: src/terminal.c:198
+#: src/terminal.c:199
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1121,11 +1122,11 @@ msgstr ""
 "Abrir unha nova fiestra cunha pestana co ID de perfil indicado. Usado "
 "internamente para gardar sesións."
 
-#: src/terminal.c:199 src/terminal.c:208
+#: src/terminal.c:200 src/terminal.c:209
 msgid "PROFILEID"
 msgstr "ID_PERFIL"
 
-#: src/terminal.c:207
+#: src/terminal.c:208
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1133,17 +1134,17 @@ msgstr ""
 "Abrir unha nova pestana na última fiestra aberta co ID de perfil indicado. "
 "Usado internamente para gardar sesións."
 
-#: src/terminal.c:216
+#: src/terminal.c:217
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
-"Activar a barra de menú para a última fiestra indicada; aplícase só a "
-"unha fiestra; pódese indicar unha vez para cada fiestra creada na liña de "
+"Activar a barra de menú para a última fiestra indicada; aplícase só a unha "
+"fiestra; pódese indicar unha vez para cada fiestra creada na liña de "
 "comandos."
 
-#: src/terminal.c:225
+#: src/terminal.c:226
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1153,7 +1154,7 @@ msgstr ""
 "unha fiestra; pódese indicar unha vez para cada fiestra creada na liña de "
 "comandos."
 
-#: src/terminal.c:234
+#: src/terminal.c:235
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1161,11 +1162,11 @@ msgstr ""
 "Especificación da xeometría de X (mire a páxina man \"X\"), pódese indicar "
 "unha vez para cada fiestra aberta."
 
-#: src/terminal.c:235
+#: src/terminal.c:236
 msgid "GEOMETRY"
 msgstr "XEOMETRÍA"
 
-#: src/terminal.c:243
+#: src/terminal.c:244
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1173,37 +1174,37 @@ msgstr ""
 "Non rexistrar co servidor de nomes de activación, non reusar un terminal "
 "activo"
 
-#: src/terminal.c:252
+#: src/terminal.c:253
 msgid "Set the terminal's title"
 msgstr "Establecer o título do terminal"
 
-#: src/terminal.c:253
+#: src/terminal.c:254
 msgid "TITLE"
 msgstr "TÍTULO"
 
-#: src/terminal.c:261
+#: src/terminal.c:262
 msgid "Set the terminal's working directory"
 msgstr "Establecer o directorio de traballo do terminal"
 
-#: src/terminal.c:262
+#: src/terminal.c:263
 msgid "DIRNAME"
 msgstr "NOME_DIR"
 
-#: src/terminal.c:563
+#: src/terminal.c:564
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Non foi posible cargar a icona \"%s\": %s\n"
 
-#: src/terminal.c:606
+#: src/terminal.c:607
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "A opción --command/-e require indicar un comando para executar\n"
 
-#: src/terminal.c:614
+#: src/terminal.c:615
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "O argumento de --command/-e non é un comando válido: %s\n"
 
-#: src/terminal.c:624 src/terminal.c:646
+#: src/terminal.c:625 src/terminal.c:647
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1211,7 +1212,7 @@ msgstr ""
 "Indicouse máis dunha vez --command/-e/--execute/-x para a mesma fiestra ou "
 "pestana\n"
 
-#: src/terminal.c:638
+#: src/terminal.c:639
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1219,7 +1220,7 @@ msgstr ""
 "A opción --execute/-x require indicar o comando para executar no resto da "
 "liña de comandos\n"
 
-#: src/terminal.c:665
+#: src/terminal.c:666
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1227,7 +1228,7 @@ msgstr ""
 "A opción --window-with-profile require un argumento indicando o perfil para "
 "usar\n"
 
-#: src/terminal.c:686
+#: src/terminal.c:687
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1235,51 +1236,64 @@ msgstr ""
 "A opción --tab-with-profile require un argumento indicando o perfil para "
 "usar\n"
 
-#: src/terminal.c:716 src/terminal.c:742
+#: src/terminal.c:717 src/terminal.c:743
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Opción --show-menubar indicada dúas veces para a mesma fiestra\n"
 
-#: src/terminal.c:767
+#: src/terminal.c:768
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "A opción --geometry require un argumento indicando a xeometría\n"
 
-#: src/terminal.c:776 src/terminal.c:786
+#: src/terminal.c:777 src/terminal.c:787
 msgid "Two geometries given for one window\n"
 msgstr "Dúas xeometrías indicadas para unha fiestra\n"
 
-#: src/terminal.c:810
+#: src/terminal.c:811
 msgid "Option --title requires an argument giving the title\n"
 msgstr "A opción --title require un argumento indicando o título\n"
 
-#: src/terminal.c:818
+#: src/terminal.c:819
 msgid "Two titles given for one tab\n"
 msgstr "Dous títulos indicados para unha pestana\n"
 
-#: src/terminal.c:835
+#: src/terminal.c:836
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr ""
 "A opción --working-directory require un argumento indicando o directorio\n"
 
-#: src/terminal.c:843
+#: src/terminal.c:844
 msgid "Two working directories given for one tab\n"
 msgstr "Dous directorios de traballo indicados para unha pestana\n"
 
-#: src/terminal.c:852
+#: src/terminal.c:853
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
 "--window-with-profile option\n"
 msgstr ""
-"Indicouse unha opción que xa non está soportada nesta versión do "
-"gnome-terminal; pode que queira crear un perfil coa configuración desexada, e usar "
+"Indicouse unha opción que xa non está soportada nesta versión do gnome-"
+"terminal; pode que queira crear un perfil coa configuración desexada, e usar "
 "a nova opción --window-with-profile\n"
 
-#: src/terminal.c:983
+#: src/terminal.c:972
+#, c-format
+msgid "No such profile '%s', using default profile\n"
+msgstr "Non existe o perfil '%s', usando o predeterminado\n"
+
+#: src/terminal.c:1029
+msgid ""
+"--geometry given prior to options that create a new window, must be given "
+"after\n"
+msgstr ""
+"Opción --geometry indicada antes das opcións de crear unha nova fiestra, "
+"debería estar despois\n"
+
+#: src/terminal.c:1103
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Argumento non válido: \"%s\"\n"
 
-#: src/terminal.c:1023
+#: src/terminal.c:1145
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1288,138 +1302,125 @@ msgstr ""
 "Houbo un erro na subscripción para notificar as modificacións da lista de "
 "perfís de terminal. (%s)\n"
 
-#: src/terminal.c:1068
-#, c-format
-msgid "No such profile '%s', using default profile\n"
-msgstr "Non existe o perfil '%s', usando o predeterminado\n"
-
-#: src/terminal.c:1125
-msgid ""
-"--geometry given prior to options that create a new window, must be given "
-"after\n"
-msgstr ""
-"Opción --geometry indicada antes das opcións de crear unha nova fiestra, "
-"debería estar despois\n"
-
-#: src/terminal.c:1219
+#: src/terminal.c:1253
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Cadea de xeometría \"%s\" non válida\n"
 
-#: src/terminal.c:1279
+#: src/terminal.c:1313
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Houbo un erro obtendo a lista de perfís de terminal. (%s)\n"
 
-#: src/terminal.c:1509
+#: src/terminal.c:1546
 msgid "You have to name your profile."
 msgstr "Ten que lle dar un nome ao perfil."
 
-#: src/terminal.c:1519
+#: src/terminal.c:1556
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Xa ten un perfil chamado \"%s\""
 
-#: src/terminal.c:1556
+#: src/terminal.c:1593
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "O perfil que escolleu como base para o novo perfil xa non existe"
 
-#: src/terminal.c:1615
+#: src/terminal.c:1652
 msgid "New terminal profile"
 msgstr "Novo perfil de terminal"
 
-#: src/terminal.c:1620
+#: src/terminal.c:1657
 msgid "C_reate"
 msgstr "_Crear"
 
-#: src/terminal.c:1645
+#: src/terminal.c:1682
 msgid "Profile _Name:"
 msgstr "_Nome do perfil:"
 
-#: src/terminal.c:1649
+#: src/terminal.c:1686
 msgid "Enter profile name"
 msgstr "Escriba o nome do perfil"
 
-#: src/terminal.c:1664
+#: src/terminal.c:1701
 msgid "_Base new profile on:"
 msgstr "_Basear o novo perfil en:"
 
-#: src/terminal.c:1812
+#: src/terminal.c:1849
 msgid "Profile list"
 msgstr "Lista de perfís"
 
-#: src/terminal.c:1885
+#: src/terminal.c:1922
 msgid "You must select one or more profiles to delete."
 msgstr "Ten que seleccionar un ou máis perfís para borrar."
 
-#: src/terminal.c:1908
+#: src/terminal.c:1945
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Ten que ter polo menos un perfil; non pode borralos todos."
 
-#: src/terminal.c:1926
+#: src/terminal.c:1963
 msgid "Delete these two profiles?\n"
 msgstr "¿Borrar estes dous perfís?\n"
 
-#: src/terminal.c:1928
+#: src/terminal.c:1965
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "¿Borrar estes %d perfís?\n"
 
-#: src/terminal.c:1946
+#: src/terminal.c:1983
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "¿Borrar o perfil \"%s\"?"
 
-#: src/terminal.c:1960
+#: src/terminal.c:1997
 msgid "_No"
 msgstr "_Non"
 
-#: src/terminal.c:1962
+#: src/terminal.c:1999
 msgid "_Delete"
 msgstr "_Borrar"
 
-#: src/terminal.c:2185
+#: src/terminal.c:2269
 msgid "Manage terminal profiles"
 msgstr "Xestionar os perfís do terminal"
 
-#: src/terminal.c:2223
+#: src/terminal.c:2309
 msgid "Profile _used when launching a new terminal:"
 msgstr "Perfil _usado ao lanzar un novo terminal:"
 
-#: src/terminal.c:2245
+#: src/terminal.c:2331
 msgid "_Profiles:"
 msgstr "_Perfís:"
 
-#: src/terminal.c:2286
+#: src/terminal.c:2372
 msgid "_New..."
 msgstr "_Novo..."
 
-#: src/terminal.c:2294
+#: src/terminal.c:2380
 msgid "Click to open new profile dialog"
 msgstr "Prema para abrir o diálogo de novo perfil"
 
-#: src/terminal.c:2297
+#: src/terminal.c:2383
 msgid "_Edit..."
 msgstr "_Editar..."
 
-#: src/terminal.c:2305
+#: src/terminal.c:2391
 msgid "Click to open edit profile dialog"
 msgstr "Prema para abrir o diálogo de editar perfil"
 
-#: src/terminal.c:2307
+#: src/terminal.c:2393
 msgid "_Delete..."
 msgstr "_Borrar..."
 
-#: src/terminal.c:2315
+#: src/terminal.c:2401
 msgid "Click to delete selected profile"
 msgstr "Prema para borrar o perfil seleccionado"
 
-#: src/terminal.c:2364
+#: src/terminal.c:2450
 msgid "Click button to choose profile"
 msgstr "Prema o botón para escoller o perfil"
 
-#: src/terminal.c:2780
+#: src/terminal.c:2891
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1427,7 +1428,7 @@ msgstr ""
 "Semella que non ten o gnome-terminal.server instalado nunha localización "
 "válida. Modo de fábrica deshabilitado.\n"
 
-#: src/terminal.c:2783
+#: src/terminal.c:2894
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1435,7 +1436,7 @@ msgstr ""
 "Erro rexistrando o terminal co servicio de activación; modo de fábrica "
 "desactivado.\n"
 
-#: src/terminal.c:2823
+#: src/terminal.c:2929
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Fallo ao recibir o servidor de terminal do servidor de activación\n"
 
@@ -1607,7 +1608,8 @@ msgstr "A fonte seleccionada non é unha fonte válida."
 
 #: src/x-font-selector.c:1847
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Esta é unha fonte de 2 bytes e pode que non sexa mostrada correctamente."
+msgstr ""
+"Esta é unha fonte de 2 bytes e pode que non sexa mostrada correctamente."
 
 #: src/x-font-selector.c:1953
 msgid "(unknown)"
