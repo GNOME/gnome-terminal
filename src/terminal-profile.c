@@ -3048,10 +3048,44 @@ terminal_profile_get_for_new_term (TerminalProfile *current)
   return profile;
 }
 
+/* We need to do this ourselves, because the gtk_color_selection_palette_to_string 
+ * does not carry all the bytes, and xterm's palette is messed up...
+ */
+
+gchar*
+color_selection_palette_to_string (const GdkColor *colors, gint n_colors)
+{
+  gint i;
+  gchar **strs = NULL;
+  gchar *retval;
+  
+  if (n_colors == 0)
+    return g_strdup ("");
+
+  strs = g_new0 (gchar*, n_colors + 1);
+
+  for (i = 0; i < n_colors; ++i)
+    {
+      gchar *ptr;
+      
+      strs[i] = g_strdup_printf ("#%4X%4X%4X", colors[i].red, colors[i].green, colors[i].blue);
+
+      for (ptr = strs[i]; *ptr; ptr++)
+        if (*ptr == ' ')
+          *ptr = '0';
+    }
+
+  retval = g_strjoinv (":", strs);
+
+  g_strfreev (strs);
+
+  return retval;
+}
+
 char*
 terminal_palette_to_string (const GdkColor *palette)
 {
-  return gtk_color_selection_palette_to_string (palette,
+  return color_selection_palette_to_string (palette,
                                                 TERMINAL_PALETTE_SIZE);
 }
 

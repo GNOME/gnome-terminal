@@ -1,5 +1,12 @@
 2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal-profile(color_selection_palette_to_string,
+	  terminal_palette_to_string): we sadly need to use out own function
+	  to make strings from palettes because gtk's does not store all 16
+	  bits needed to exactly match xterm's palette.
+
+2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-window.c(terminal_window_set_active): move the call to
 	  update_copy_sensitivity to after the call to terminal_window_set_size.
 	  Otherwise new tabs resize the window to the default 80x24 size. See
