@@ -126,7 +126,13 @@ terminal_widget_skey_match_add             (GtkWidget            *widget,
 void
 terminal_widget_skey_match_remove          (GtkWidget            *widget)
 {
-  /* FIXME: fix vte */
+  VteData *data;
+  
+  data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
+
+  vte_terminal_match_remove(VTE_TERMINAL(widget), data->skey_tag);
+
+  data->skey_tag = -1;
 }
 
 char*
