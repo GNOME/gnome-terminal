@@ -1,3 +1,11 @@
+2003-10-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal.c: add a --default-working-directory and pass cwd as
+	its argument in factory calls so that starting terminals from command
+	lines preserves the current working directory.
+	* src/terminal-screen.c(screen_terminal_init): use g_get_current_dir
+	instead of getwcd.
+
 2003-10-02 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.schemas.in: Fix bug #113446, systematically 

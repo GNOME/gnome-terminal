@@ -95,6 +95,7 @@ typedef struct
   gboolean default_window_menubar_forced;
   gboolean default_window_menubar_state;
   char *default_geometry;
+  char *default_working_dir;
   char **post_execute_args;
 } OptionParsingResults;
 
@@ -159,6 +160,7 @@ enum {
   OPTION_STARTUP_ID,
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
+  OPTION_DEFAULT_WORKING_DIRECTORY,
   OPTION_ZOOM,
   OPTION_ACTIVE,
   OPTION_COMPAT,
@@ -328,7 +330,15 @@ struct poptOption options[] = {
     N_("Set the terminal's working directory"),
     N_("DIRNAME")
   },
-
+  {
+    "default-working-directory",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_DEFAULT_WORKING_DIRECTORY,
+    N_("Set the default terminal's working directory. Used internally"),
+    N_("DIRNAME")
+  },
   {
     "zoom",
     '\0',
@@ -1027,6 +1037,24 @@ parse_options_callback (poptContext              ctx,
       }
       break;
 
+    case OPTION_DEFAULT_WORKING_DIRECTORY:
+      {
+        if (arg == NULL)
+          {
+            g_printerr (_("Option --default-working-directory requires an argument giving the directory\n"));
+            exit (1);
+          }
+
+        if (results->default_working_dir)
+          {
+            g_printerr (_("Two default working directories given for\n"));
+            exit (1);
+          }
+
+        results->default_working_dir = g_strdup (arg);
+      }
+      break;
+
     case OPTION_ZOOM:
       {
         InitialTab *it;            
@@ -1128,6 +1156,7 @@ option_parsing_results_free (OptionParsingResults *results)
   g_list_free (results->initial_windows);
 
   g_free (results->default_geometry);
+  g_free (results->default_working_dir);
 
   if (results->post_execute_args)
     g_strfreev (results->post_execute_args);
@@ -1159,6 +1188,7 @@ option_parsing_results_init (int *argc, char **argv)
 
   results = g_new0 (OptionParsingResults, 1);
   results->screen_number = -1;
+  results->default_working_dir = NULL;
   
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   results->post_execute_args = NULL;
@@ -1286,6 +1316,32 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
       else
         {
           ++i;
+        }
+    }
+}
+
+static void
+option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
+{
+  GList *w, *t;
+
+  if (results->default_working_dir == NULL)
+    return;
+
+  for (w = results->initial_windows; w; w = w ->next)
+    {
+      InitialWindow *window;
+
+      window = (InitialWindow*) w->data;
+      
+      for (t = window->tabs; t ; t = t->next)
+        {
+          InitialTab *tab;
+
+          tab = (InitialTab*) t->data;
+
+          if (tab->working_dir == NULL)
+            tab->working_dir = g_strdup (results->default_working_dir);
         }
     }
 }
@@ -1459,8 +1515,8 @@ main (int argc, char **argv)
   g_set_application_name (_("Terminal"));
   
   argc_copy = argc;
-  /* we leave empty slots, for --startup-id and --display */
-  argv_copy = g_new0 (char *, argc_copy + 5);
+  /* we leave empty slots, for --startup-id, --display and --default-working-directory */
+  argv_copy = g_new0 (char *, argc_copy + 7);
   for (i = 0; i < argc_copy; i++)
     argv_copy [i] = g_strdup (argv [i]);
   argv_copy [i] = NULL;
@@ -1510,9 +1566,12 @@ main (int argc, char **argv)
                   *args);
       return 1;
     }
+
+  option_parsing_results_apply_directory_defaults (results);
   
   if (!terminal_factory_disabled)
     {
+      char *cwd;
       
       if (results->startup_id != NULL)
         {
@@ -1525,6 +1584,12 @@ main (int argc, char **argv)
       insert_args (&argc_copy, argv_copy,
                    "--display", results->display_name);
       
+      /* Forward out working directory */
+      cwd = g_get_current_dir ();
+      insert_args (&argc_copy, argv_copy,
+                   "--default-working-directory", cwd);
+      g_free (cwd);
+
       if (terminal_invoke_factory (argc_copy, argv_copy))
         return 0;
     }
@@ -3529,6 +3594,8 @@ handle_new_terminal_event (int          argc,
 
   poptFreeContext (ctx);
   options[0].descrip = store;
+
+  option_parsing_results_apply_directory_defaults (results);
 
   new_terminal_with_options (results);
 

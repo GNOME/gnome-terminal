@@ -206,11 +206,9 @@ connect_monospace_font_change (TerminalScreen *screen)
 static void
 terminal_screen_init (TerminalScreen *screen)
 {
-  char buf[PATH_MAX+1];
-  
   screen->priv = g_new0 (TerminalScreenPrivate, 1);
 
-  screen->priv->working_dir = g_strdup (getcwd (buf, sizeof (buf)));
+  screen->priv->working_dir = g_get_current_dir ();
   if (screen->priv->working_dir == NULL) /* shouldn't ever happen */
     screen->priv->working_dir = g_strdup (g_get_home_dir ());
   screen->priv->child_pid = -1;
