@@ -2134,9 +2134,8 @@ make_font_monospace (const PangoFontDescription *font)
   
   ret = pango_font_description_copy (font);
 
-  /* FIXME use a heuristic here such as getting width of "i" and
-   * "M" and if they match our font is monospace.
-   */
+  /* FIXME */
+  pango_font_description_set_family (ret, "monospace");
   
   return ret;
 }
