@@ -355,7 +355,7 @@ terminal_accels_init (GConfClient *conf)
                                            &err);
   if (err)
     {
-      g_printerr (_("There was an error loading config value for whether to use mnemonics. (%s)\n"),
+      g_printerr (_("There was an error loading config value for whether to use menubar access keys. (%s)\n"),
                   err->message);
       g_error_free (err);
     }
@@ -369,7 +369,7 @@ terminal_accels_init (GConfClient *conf)
   
   if (err)
     {
-      g_printerr (_("There was an error subscribing to notification for use_mnemonics (%s)\n"),
+      g_printerr (_("There was an error subscribing to notification on changes on whether to use menubar access keys (%s)\n"),
                   err->message);
       g_error_free (err);
     }
@@ -975,9 +975,7 @@ disable_mnemonics_toggled (GtkWidget *button,
                              &err);
       if (err != NULL)
         {
-          g_printerr (_("Error setting use_mnemonics key: %s\n"),
-                      err->message);
-          
+          g_printerr (_("Error setting %s config key: %s\n"), CONF_GLOBAL_PREFIX"/use_mnemonics", err->message);
           g_error_free (err);
         }
     }
