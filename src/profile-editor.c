@@ -944,8 +944,9 @@ terminal_profile_edit (TerminalProfile *profile,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
-                                        _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the profile editor can't be displayed."),
-                                        TERM_GLADE_DIR"/"TERM_GLADE_FILE);
+                                        _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the %s can't be displayed."),
+                                        TERM_GLADE_DIR"/"TERM_GLADE_FILE,
+                                        "profile editor");
                                         
               g_signal_connect (G_OBJECT (no_glade_dialog),
                                 "response",
@@ -1092,12 +1093,15 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (scrollbar_position_changed),
                         profile);
 
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      
       w = glade_xml_get_widget (xml, "scrollback-lines-spinbutton");
       profile_editor_update_scrollback_lines (editor, profile);
       g_signal_connect (G_OBJECT (w), "value_changed",
                         G_CALLBACK (scrollback_lines_value_changed),
                         profile);
-
+      gtk_size_group_add_widget (size_group, w);
+      
       gtk_spin_button_get_range (GTK_SPIN_BUTTON (w), &num1, &num2);
 
       w = glade_xml_get_widget (xml, "scrollback-kilobytes-spinbutton");
@@ -1111,6 +1115,9 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (w), "value_changed",
                         G_CALLBACK (scrollback_kilobytes_value_changed),
                         profile);
+      gtk_size_group_add_widget (size_group, w);
+
+      g_object_unref (G_OBJECT (size_group));
       
       w = glade_xml_get_widget (xml, "scroll-on-keystroke-checkbutton");
       profile_editor_update_scroll_on_keystroke (editor, profile);
@@ -1246,6 +1253,8 @@ terminal_profile_edit (TerminalProfile *profile,
 
       if (terminal_widget_supports_pango_fonts ())
         {
+          GtkWidget *font_label;
+          
           fontsel = gnome_font_picker_new ();
           g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
 
@@ -1259,6 +1268,25 @@ terminal_profile_edit (TerminalProfile *profile,
           g_signal_connect (G_OBJECT (fontsel), "font_set",
                             G_CALLBACK (font_set),
                             profile);
+
+          font_label = gtk_label_new_with_mnemonic (_("_Font:"));
+          gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
+
+          gtk_box_set_spacing (GTK_BOX (w), 12);
+          
+          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (font_label), FALSE, FALSE, 0);
+          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), FALSE, FALSE, 0);
+
+          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+          gtk_size_group_add_widget (size_group,
+                                     font_label);
+          gtk_size_group_add_widget (size_group,
+                                     glade_xml_get_widget (xml,
+                                                           "profile-name-label"));
+          gtk_size_group_add_widget (size_group,
+                                     glade_xml_get_widget (xml,
+                                                           "profile-icon-label"));
+          g_object_unref (G_OBJECT (size_group));
         }
       else
         {
@@ -1280,9 +1308,10 @@ terminal_profile_edit (TerminalProfile *profile,
                                      glade_xml_get_widget (xml,
                                                            "profile-icon-label"));
           g_object_unref (G_OBJECT (size_group));
+
+          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
         }
-          
-      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
+      
       gtk_widget_show_all (w);
       
       w = glade_xml_get_widget (xml, "reset-compat-defaults-button");

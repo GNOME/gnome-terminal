@@ -90,8 +90,9 @@ terminal_skey_do_popup (TerminalScreen *screen,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
-                                        _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the profile editor can't be displayed."),
-                                        TERM_GLADE_DIR"/"TERM_GLADE_FILE);
+                                        _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the %s can't be displayed."),
+                                        TERM_GLADE_DIR"/"TERM_GLADE_FILE,
+                                        "s/key dialog");
                                         
               g_signal_connect (G_OBJECT (no_glade_dialog),
                                 "response",
@@ -124,11 +125,13 @@ terminal_skey_do_popup (TerminalScreen *screen,
   gtk_widget_grab_default (ok_button);
   gtk_entry_set_text (GTK_ENTRY (entry), "");
 
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (dialog));
+  
   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
     {
       const gchar *password;
       gchar *response;
-
       
       password = gtk_entry_get_text (GTK_ENTRY (entry));
       response = skey (MD5, seq, seed, password);

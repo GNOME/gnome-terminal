@@ -718,8 +718,9 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                     GTK_MESSAGE_ERROR,
                                     GTK_BUTTONS_CLOSE,
-                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the encodings dialog can't be displayed."),
-                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE);
+                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the %s can't be displayed."),
+                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE,
+                                    "encodings dialog");
                                         
           g_signal_connect (G_OBJECT (no_glade_dialog),
                             "response",
@@ -953,12 +954,11 @@ terminal_encoding_init (GConfClient *conf)
 
   /* Initialize the sample text with all of the printing ASCII characters
    * from space (32) to the tilde (126), 95 in all. */ 
-  for (i = 0; i < sizeof(ascii_sample); i++) 
-    {
-      ascii_sample[i] = i + 32;
-    }
-  ascii_sample[sizeof(ascii_sample) - 1] = '\0';
+  for (i = 0; i < sizeof (ascii_sample); i++) 
+    ascii_sample[i] = i + 32;
 
+  ascii_sample[sizeof(ascii_sample) - 1] = '\0';
+  
   i = 0;
   while (i < TERMINAL_ENCODING_LAST)
     {
@@ -970,11 +970,12 @@ terminal_encoding_init (GConfClient *conf)
       /* Test that the encoding is a proper superset of ASCII (which naive
        * apps are going to use anyway) by attempting to validate the text
        * using the current encoding.  This also flushes out any encodings
-       * which the underlying GIConv implementation can't support. */
-      converted = g_convert (ascii_sample, sizeof(ascii_sample) - 1,
+       * which the underlying GIConv implementation can't support.
+       */
+      converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
 		             encodings[i].charset, encodings[i].charset,
 			     &bytes_read, &bytes_written, NULL);
-
+      
       /* The encoding is only valid if ASCII passes through cleanly. */
       if (i == TERMINAL_ENCODING_CURRENT_LOCALE)
         encodings[i].valid = TRUE;
@@ -994,9 +995,7 @@ terminal_encoding_init (GConfClient *conf)
 
       /* Discard the converted string. */
       if (converted != NULL)
-        {
-          g_free (converted);
-        }
+        g_free (converted);
 
       ++i;
     }

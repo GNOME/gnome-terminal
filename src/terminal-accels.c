@@ -1105,8 +1105,9 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                                     GTK_DIALOG_DESTROY_WITH_PARENT,
                                     GTK_MESSAGE_ERROR,
                                     GTK_BUTTONS_CLOSE,
-                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the keybindings dialog can't be displayed."),
-                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE);
+                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the %s can't be displayed."),
+                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE,
+                                    "keybindings dialog");
                                         
           g_signal_connect (G_OBJECT (no_glade_dialog),
                             "response",
