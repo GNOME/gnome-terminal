@@ -2193,8 +2193,6 @@ make_font_monospace (const PangoFontDescription *font)
 {
   PangoFontDescription *ret;
 
-  return NULL;
-  
   ret = pango_font_description_copy (font);
 
   /* FIXME */
