@@ -238,6 +238,15 @@ terminal_window_get_type (void)
   return object_type;
 }
 
+static gboolean
+can_activate_accel_callback (GtkWidget *widget,
+			     guint      signal_id,
+			     gpointer   user_data)
+{
+	/* Always allow accels to be activated. */ 
+	return TRUE;
+}
+
 static GtkWidget*
 append_menuitem (GtkWidget  *menu,
                  const char *text,
@@ -778,6 +787,11 @@ terminal_window_init (TerminalWindow *window)
       menus_have_icons = TRUE;
     }
  
+  g_signal_connect (window->priv->menubar,
+		    "can_activate_accel",
+		    G_CALLBACK (can_activate_accel_callback),
+		    window);
+  
   accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   
