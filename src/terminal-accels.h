@@ -42,6 +42,7 @@ GtkAccelGroup* terminal_accels_get_group_for_widget (GtkWidget *widget);
 #define ACCEL_PATH_RESET_AND_CLEAR ACCEL_PATH_ROOT"/reset_and_clear"
 #define ACCEL_PATH_PREV_TAB ACCEL_PATH_ROOT"/prev_tab"
 #define ACCEL_PATH_NEXT_TAB ACCEL_PATH_ROOT"/next_tab"
+#define ACCEL_PATH_SET_TERMINAL_TITLE ACCEL_PATH_ROOT"/set_terminal_title"
 
 #define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
 #define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"

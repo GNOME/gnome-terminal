@@ -88,6 +88,9 @@ void terminal_screen_close (TerminalScreen *screen);
 
 gboolean terminal_screen_get_text_selected (TerminalScreen *screen);
 
+void terminal_screen_edit_title (TerminalScreen *screen,
+                                 GtkWindow      *transient_parent);
+
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_H */

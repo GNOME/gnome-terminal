@@ -137,6 +137,8 @@ static void hide_menubar_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void fullscreen_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+static void set_title_callback            (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
 static void reset_callback                (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void reset_and_clear_callback      (GtkWidget      *menuitem,
@@ -461,6 +463,9 @@ terminal_window_init (TerminalWindow *window)
   window->priv->choose_config_menuitem =
     append_menuitem (menu, _("_Profile"), NULL,
                      NULL, NULL);
+  
+  append_menuitem (menu, _("_Set title..."), ACCEL_PATH_SET_TERMINAL_TITLE,
+                   G_CALLBACK (set_title_callback), window);
   
   append_menuitem (menu, _("_Reset"), ACCEL_PATH_RESET,
                    G_CALLBACK (reset_callback), window);
@@ -1693,6 +1698,15 @@ fullscreen_callback (GtkWidget      *menuitem,
   
   terminal_window_set_fullscreen (window,
                                   !terminal_window_get_fullscreen (window));
+}
+
+static void
+set_title_callback (GtkWidget      *menuitem,
+                    TerminalWindow *window)
+{
+  if (window->priv->active_term)
+    terminal_screen_edit_title (window->priv->active_term,
+                                GTK_WINDOW (window));
 }
 
 static void

@@ -327,7 +327,7 @@ set_default_icon (const char *filename)
   if (pixbuf == NULL)
     {
       g_printerr (_("Could not load icon \"%s\": %s\n"),
-                  err->message);
+                  filename, err->message);
       g_error_free (err);
 
       return;
@@ -1292,7 +1292,7 @@ terminal_app_new_profile (TerminalApp     *app,
       hbox = gtk_hbox_new (FALSE, PADDING);
 
       label = gtk_label_new_with_mnemonic (_("Profile _Name:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       entry = gtk_entry_new ();
       app->new_profile_name_entry = entry;
 
@@ -1308,7 +1308,7 @@ terminal_app_new_profile (TerminalApp     *app,
       hbox = gtk_hbox_new (FALSE, PADDING);
 
       label = gtk_label_new_with_mnemonic (_("_Base new profile on:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       app->new_profile_base_menu = profile_optionmenu_new ();
       option_menu = app->new_profile_base_menu;
       if (default_base_profile)

@@ -41,6 +41,7 @@
 #define KEY_RESET_AND_CLEAR CONF_KEYS_PREFIX"/reset_and_clear"
 #define KEY_PREV_TAB CONF_KEYS_PREFIX"/prev_tab"
 #define KEY_NEXT_TAB CONF_KEYS_PREFIX"/next_tab"
+#define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
@@ -95,6 +96,8 @@ static KeyEntry view_entries[] =
 
 static KeyEntry terminal_entries[] =
 {
+  { N_("Set title"),
+    KEY_SET_TERMINAL_TITLE, ACCEL_PATH_SET_TERMINAL_TITLE, 0, 0, NULL, FALSE },
   { N_("Reset"),
     KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE },
   { N_("Reset and Clear"),

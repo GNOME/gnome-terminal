@@ -44,6 +44,8 @@ struct _TerminalScreenPrivate
   char *cooked_title;
   char *matched_string;
   char **override_command;
+  GtkWidget *title_editor;
+  GtkWidget *title_entry;
 };
 
 static GList* used_ids = NULL;
@@ -209,6 +211,9 @@ terminal_screen_finalize (GObject *object)
   screen = TERMINAL_SCREEN (object);
   
   used_ids = g_list_remove (used_ids, GINT_TO_POINTER (screen->priv->id));  
+
+  if (screen->priv->title_editor)
+    gtk_widget_destroy (screen->priv->title_editor);
   
   terminal_screen_set_profile (screen, NULL);
   
@@ -1223,12 +1228,38 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 }
 
 static void
+set_raw_title (TerminalScreen *screen,
+               const char     *title)
+{  
+  if (screen->priv->raw_title && title &&
+      strcmp (screen->priv->raw_title, title) == 0)
+    return;
+
+  g_free (screen->priv->raw_title);
+  screen->priv->raw_title = g_strdup (title);
+  rebuild_title (screen);
+
+  if (screen->priv->title_entry &&
+      screen->priv->raw_title)
+    {
+      char *text;
+      
+      text = gtk_editable_get_chars (GTK_EDITABLE (screen->priv->title_entry),
+                                     0, -1);
+
+      if (strcmp (text, screen->priv->raw_title) != 0)
+        gtk_entry_set_text (GTK_ENTRY (screen->priv->title_entry),
+                            screen->priv->raw_title);
+      
+      g_free (text);
+    }
+}
+
+static void
 terminal_screen_widget_title_changed (GtkWidget      *widget,
                                       TerminalScreen *screen)
 {      
-  g_free (screen->priv->raw_title);
-  screen->priv->raw_title = g_strdup (terminal_widget_get_title (widget));
-  rebuild_title (screen);
+  set_raw_title (screen, terminal_widget_get_title (widget));
 }
 
 static void
@@ -1257,4 +1288,105 @@ terminal_screen_widget_selection_changed (GtkWidget      *term,
                                           TerminalScreen *screen)
 {
   g_signal_emit (G_OBJECT (screen), signals[SELECTION_CHANGED], 0);
+}
+
+static void
+title_entry_changed (GtkWidget      *entry,
+                     TerminalScreen *screen)
+{
+  char *text;
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  
+  set_raw_title (screen, text);
+
+  g_free (text);
+}
+
+void
+terminal_screen_edit_title (TerminalScreen *screen,
+                            GtkWindow      *transient_parent)
+{
+  GtkWindow *old_transient_parent;
+  
+  if (screen->priv->title_editor == NULL)
+    {
+      GtkWidget *vbox;
+      GtkWidget *hbox;
+      GtkWidget *entry;
+      GtkWidget *label;
+      
+      old_transient_parent = NULL;      
+      
+      screen->priv->title_editor =
+        gtk_dialog_new_with_buttons (_("Change terminal title"),
+                                     NULL,
+                                     GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_STOCK_CLOSE,
+                                     GTK_RESPONSE_ACCEPT,
+                                     NULL);
+      
+      g_signal_connect (G_OBJECT (screen->priv->title_editor),
+                        "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+
+      g_object_add_weak_pointer (G_OBJECT (screen->priv->title_editor),
+                                 (void**) &screen->priv->title_editor);
+
+      gtk_window_set_resizable (GTK_WINDOW (screen->priv->title_editor),
+                                FALSE);
+      
+#define PADDING 5
+      
+      vbox = gtk_vbox_new (FALSE, PADDING);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), PADDING);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (screen->priv->title_editor)->vbox),
+                          vbox, TRUE, TRUE, 0);
+      
+      hbox = gtk_hbox_new (FALSE, PADDING);
+
+      label = gtk_label_new_with_mnemonic (_("_Title:"));
+      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+      entry = gtk_entry_new ();
+
+      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+      
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_end (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+      
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);      
+      
+      gtk_widget_grab_focus (entry);
+      gtk_dialog_set_default_response (GTK_DIALOG (screen->priv->title_editor),
+                                       GTK_RESPONSE_ACCEPT);
+      
+      if (screen->priv->raw_title)
+        gtk_entry_set_text (GTK_ENTRY (entry), screen->priv->raw_title);
+      
+      g_signal_connect (G_OBJECT (entry), "changed",
+                        G_CALLBACK (title_entry_changed),
+                        screen);
+
+      screen->priv->title_entry = entry;
+      g_object_add_weak_pointer (G_OBJECT (screen->priv->title_entry),
+                                 (void**) &screen->priv->title_entry);
+
+    }
+  else
+    {
+      old_transient_parent =
+        gtk_window_get_transient_for (GTK_WINDOW (screen->priv->title_editor));
+    }
+    
+  if (old_transient_parent != transient_parent)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (screen->priv->title_editor),
+                                    transient_parent);
+      gtk_widget_hide (screen->priv->title_editor); /* re-show the window on its new parent */
+    }
+  
+  gtk_widget_show_all (screen->priv->title_editor);
+  gtk_window_present (GTK_WINDOW (screen->priv->title_editor));
 }
