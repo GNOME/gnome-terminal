@@ -1,5 +1,11 @@
 2003-10-14 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/Makefile.am: temporarily remove GNOME_DISABLE_DEPRECATED and
+	  GTK_DISABLE_DEPRECATED from CFLAGS so that we can build against 
+	  gtk+ and libgnomeui from HEAD. Fixes 124557.
+
+2003-10-14 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-window.c(terminal_window_init): don't listen to
 	  switch_page but to select_page. Also rename the corresponding
 	  callback accordingly. This fixes 98884.
