@@ -811,6 +811,7 @@ terminal_profile_edit (TerminalProfile *profile,
       gtk_dialog_add_buttons (GTK_DIALOG (editor),
                               GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
                               NULL);
+      gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_ACCEPT);
       /* End "we have no Glade 2" workarounds */
 
 
