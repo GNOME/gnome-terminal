@@ -23,6 +23,7 @@
 #include "terminal-accels.h"
 #include "terminal-window.h"
 #include "profile-editor.h"
+#include "encoding.h"
 #include <gconf/gconf-client.h>
 #include <bonobo-activation/bonobo-activation-activate.h>
 #include <bonobo-activation/bonobo-activation-register.h>
@@ -64,6 +65,7 @@ struct _TerminalApp
 {
   GList *windows;
   GtkWidget *edit_keys_dialog;
+  GtkWidget *edit_encodings_dialog;
   GtkWidget *new_profile_dialog;
   GtkWidget *new_profile_name_entry;
   GtkWidget *new_profile_base_menu;
@@ -1187,6 +1189,7 @@ main (int argc, char **argv)
     }  
 
   terminal_accels_init (conf);
+  terminal_encoding_init (conf);
   
   terminal_profile_initialize (conf);
   sync_profile_list (FALSE, NULL);
@@ -1556,6 +1559,52 @@ terminal_app_edit_keybindings (TerminalApp     *app,
   gtk_window_present (GTK_WINDOW (app->edit_keys_dialog));
 }
 
+static void
+edit_encodings_destroyed_callback (GtkWidget   *new_profile_dialog,
+                                   TerminalApp *app)
+{
+  app->edit_encodings_dialog = NULL;
+}
+
+void
+terminal_app_edit_encodings (TerminalApp     *app,
+                             GtkWindow       *transient_parent)
+{
+  GtkWindow *old_transient_parent;
+
+  if (app->edit_encodings_dialog == NULL)
+    {      
+      old_transient_parent = NULL;      
+
+      /* passing in transient_parent here purely for the
+       * glade error dialog
+       */
+      app->edit_encodings_dialog =
+        terminal_encoding_dialog_new (transient_parent);
+
+      if (app->edit_encodings_dialog == NULL)
+        return; /* glade file missing */
+      
+      g_signal_connect (G_OBJECT (app->edit_encodings_dialog),
+                        "destroy",
+                        G_CALLBACK (edit_encodings_destroyed_callback),
+                        app);
+    }
+  else 
+    {
+      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->edit_encodings_dialog));
+    }
+  
+  if (old_transient_parent != transient_parent)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (app->edit_encodings_dialog),
+                                    transient_parent);
+      gtk_widget_hide (app->edit_encodings_dialog); /* re-show the window on its new parent */
+    }
+  
+  gtk_widget_show_all (app->edit_encodings_dialog);
+  gtk_window_present (GTK_WINDOW (app->edit_encodings_dialog));
+}
 
 enum
 {

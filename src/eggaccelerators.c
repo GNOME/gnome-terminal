@@ -328,7 +328,7 @@ egg_accelerator_parse_virtual (const gchar            *accelerator,
   if (accelerator_mods)
     *accelerator_mods = mods;
 
-  return !bad_keyval && mods != 0;
+  return !bad_keyval;
 }
 
 
@@ -638,7 +638,6 @@ egg_keymap_get_modmap (GdkKeymap *keymap)
   if (modmap == NULL)
     {
       modmap = g_new0 (EggModmap, 1);
-
 
       /* FIXME modify keymap change events with an event filter
        * and force a reload if we get one

@@ -460,11 +460,40 @@ terminal_widget_set_pango_font (GtkWidget                  *widget,
                                 const PangoFontDescription *font_desc)
 {
   g_return_if_fail (font_desc != NULL);
-  vte_terminal_set_font (VTE_TERMINAL(widget), font_desc);
+  vte_terminal_set_font (VTE_TERMINAL (widget), font_desc);
 }
 
 gboolean
 terminal_widget_supports_pango_fonts (void)
+{
+  return TRUE;
+}
+
+const char*
+terminal_widget_get_encoding (GtkWidget *widget)
+{
+  return vte_terminal_get_encoding (VTE_TERMINAL (widget));
+}
+
+void
+terminal_widget_set_encoding (GtkWidget  *widget,
+                              const char *encoding)
+{
+  const char *old;
+
+  /* Short-circuit setting the same encoding twice. */
+  old = vte_terminal_get_encoding (VTE_TERMINAL (widget));
+  if ((old && encoding &&
+       strcmp (old, encoding) == 0) ||
+      (old == NULL && encoding == NULL))
+    return;
+  
+  vte_terminal_set_encoding (VTE_TERMINAL (widget),
+                             encoding);
+}
+
+gboolean
+terminal_widget_supports_dynamic_encoding (void)
 {
   return TRUE;
 }

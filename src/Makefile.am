@@ -31,6 +31,8 @@ endif
 
 ## Terminal
 gnome_terminal_SOURCES=				\
+	encoding.c				\
+	encoding.h				\
 	profile-editor.c			\
 	profile-editor.h			\
 	terminal.c				\

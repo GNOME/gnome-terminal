@@ -1105,3 +1105,24 @@ terminal_widget_supports_pango_fonts (void)
 {
   return FALSE;
 }
+
+const char*
+terminal_widget_get_encoding (GtkWidget *widget)
+{
+  const char *charset = NULL;
+  g_get_charset (&charset);
+  return charset;
+}
+
+void
+terminal_widget_set_encoding (GtkWidget  *widget,
+                              const char *encoding)
+{
+  ; /* does nothing */
+}
+
+gboolean
+terminal_widget_supports_dynamic_encoding (void)
+{
+  return FALSE;
+}

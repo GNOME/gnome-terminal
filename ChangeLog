@@ -1,3 +1,23 @@
+2002-07-14  Havoc Pennington  <hp@pobox.com>
+
+        Encoding stuff, not yet working.
+	
+	* src/terminal-widget-vte.c (terminal_widget_set_encoding): new
+	function
+
+	* src/update-from-egg.sh: adapt to libegg reorg
+
+	* src/terminal-accels.c (binding_from_string): fix to allow
+	no-accelerator shortcuts such as F1.
+
+	* src/terminal-window.c: add the encoding menu
+
+	* src/gnome-terminal.schemas: add active_encodings key
+
+	* src/Makefile.am (gnome_terminal_SOURCES): add encoding.[hc]
+
+	* src/encoding.c: new file for choose-an-encoding code
+
 2002-07-13  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-accels.c (binding_from_string): Use

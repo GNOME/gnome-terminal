@@ -24,6 +24,7 @@
 #include "terminal-widget.h"
 #include "terminal-window.h"
 #include "terminal.h"
+#include "encoding.h"
 #include <string.h>
 #include <stdlib.h>
 #include <libgnome/gnome-program.h>
@@ -57,6 +58,7 @@ struct _TerminalWindowPrivate
   GtkWidget *next_tab_menuitem;
   GtkWidget *previous_tab_menuitem;
   GtkWidget *go_menu;
+  GtkWidget *encoding_menuitem;
   GList *tab_menuitems;
   GList *terms;
   TerminalScreen *active_term;
@@ -144,6 +146,10 @@ static void hide_menubar_callback         (GtkWidget      *menuitem,
 static void fullscreen_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void set_title_callback            (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void change_encoding_callback      (GtkWidget      *menu_item,
+                                           TerminalWindow *window);
+static void add_encoding_callback         (GtkWidget      *menu_item,
                                            TerminalWindow *window);
 static void reset_callback                (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -478,7 +484,110 @@ fill_in_new_term_submenus (TerminalWindow *window)
       tmp = tmp->next;
     }
 
-  g_list_free (profiles);  
+  g_list_free (profiles);
+}
+
+static void
+update_active_encoding_name (TerminalWindow *window)
+{
+  GtkWidget *w;
+  const char *charset;
+  char *name;
+  
+  w = terminal_screen_get_widget (window->priv->active_term);
+  charset = terminal_widget_get_encoding (w);
+
+  name = terminal_encoding_get_name (charset);
+
+  gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (window->priv->encoding_menuitem))),
+                      name);
+
+  g_free (name);
+}
+
+static void
+fill_in_encoding_menu (TerminalWindow *window)
+{
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  GSList *group;
+  GSList *encodings;
+  GSList *tmp;
+  const char *charset;
+  GtkWidget *w;
+
+  if (!terminal_widget_supports_dynamic_encoding ())
+    return;
+  
+  if (window->priv->active_term == NULL)
+    {
+      gtk_widget_set_sensitive (window->priv->encoding_menuitem, FALSE);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->encoding_menuitem),
+                                 NULL);
+      return;
+    }
+  
+  gtk_widget_set_sensitive (window->priv->encoding_menuitem, TRUE);
+
+  menu = gtk_menu_new ();
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->encoding_menuitem),
+                             menu);
+
+  w = terminal_screen_get_widget (window->priv->active_term);
+  charset = terminal_widget_get_encoding (w);
+
+  update_active_encoding_name (window);
+  
+  group = NULL;
+  encodings = terminal_get_active_encodings ();
+  tmp = encodings;
+  while (tmp != NULL)
+    {
+      TerminalEncoding *e;
+      char *name;
+      
+      e = tmp->data;
+
+      name = g_strdup_printf ("%s (%s)", e->name, e->charset);
+      
+      menu_item = gtk_radio_menu_item_new_with_label (group, name);
+
+      g_free (name);
+
+      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                             menu_item);
+      
+      if (strcmp (e->charset, charset) == 0)
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
+                                        TRUE);
+      
+      g_signal_connect (G_OBJECT (menu_item),
+                        "toggled",
+                        G_CALLBACK (change_encoding_callback),
+                        window);
+
+      g_object_set_data_full (G_OBJECT (menu_item),
+                              "encoding",
+                              g_strdup (e->charset),
+                              (GDestroyNotify) g_free);
+      
+      tmp = tmp->next;
+    }
+
+  g_slist_foreach (encodings,
+                   (GFunc) terminal_encoding_free,
+                   NULL);
+  g_slist_free (encodings);
+
+  menu_item = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+  gtk_widget_show (menu_item);
+  
+  append_menuitem (menu, _("_Add or Remove..."), NULL,
+                   G_CALLBACK (add_encoding_callback),
+                   window);
 }
 
 static void
@@ -680,6 +789,20 @@ terminal_window_init (TerminalWindow *window)
   set_menuitem_text (mi, _("_About"),
                      FALSE);
 
+  if (terminal_widget_supports_dynamic_encoding ())
+    {
+      window->priv->encoding_menuitem =
+        append_menuitem (window->priv->menubar,
+                         _("_Encoding"), NULL, NULL, NULL);
+
+      gtk_menu_item_set_right_justified (GTK_MENU_ITEM (window->priv->encoding_menuitem),
+                                         TRUE);
+    }
+  else
+    {
+      window->priv->encoding_menuitem = NULL;
+    }
+  
   terminal_window_reread_profile_list (window);
   
   terminal_window_set_menubar_visible (window, TRUE);
@@ -748,6 +871,7 @@ terminal_window_destroy (GtkObject *object)
   window->priv->paste_menuitem = NULL;
   window->priv->edit_config_menuitem = NULL;
   window->priv->choose_config_menuitem = NULL;
+  window->priv->encoding_menuitem = NULL;
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);  
 }
@@ -1264,6 +1388,7 @@ terminal_window_set_active (TerminalWindow *window,
 
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
+  fill_in_encoding_menu (window);
 }
 
 TerminalScreen*
@@ -1993,6 +2118,38 @@ set_title_callback (GtkWidget      *menuitem,
   if (window->priv->active_term)
     terminal_screen_edit_title (window->priv->active_term,
                                 GTK_WINDOW (window));
+}
+
+static void
+change_encoding_callback (GtkWidget      *menu_item,
+                          TerminalWindow *window)
+{
+  const char *charset;
+  GtkWidget *widget;
+  
+  if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item)))
+    return;
+
+  if (window->priv->active_term == NULL)
+    return;
+
+  charset = g_object_get_data (G_OBJECT (menu_item),
+                               "encoding");
+
+  g_assert (charset);
+
+  widget = terminal_screen_get_widget (window->priv->active_term);
+  terminal_widget_set_encoding (widget, charset);
+
+  update_active_encoding_name (window);
+}
+
+static void
+add_encoding_callback (GtkWidget      *menu_item,
+                       TerminalWindow *window)
+{
+  terminal_app_edit_encodings (terminal_app_get (),
+                               GTK_WINDOW (window));
 }
 
 static void

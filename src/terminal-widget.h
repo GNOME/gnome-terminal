@@ -148,6 +148,11 @@ void terminal_widget_set_pango_font (GtkWidget                  *widget,
 
 gboolean terminal_widget_supports_pango_fonts (void);
 
+const char* terminal_widget_get_encoding (GtkWidget  *widget);
+void        terminal_widget_set_encoding (GtkWidget  *widget,
+                                          const char *encoding);
+
+gboolean terminal_widget_supports_dynamic_encoding (void);
 
 G_END_DECLS
 

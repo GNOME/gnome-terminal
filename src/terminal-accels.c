@@ -661,9 +661,10 @@ binding_from_string (const char      *str,
                                         accelerator_mods);
 
   /* Be sure the GTK accelerator system will be able to handle this
-   * accelerator
+   * accelerator. Be sure to allow no-accelerator accels like F1.
    */
-  if ((*accelerator_mods & gtk_accelerator_get_default_mod_mask ()) == 0)
+  if ((*accelerator_mods & gtk_accelerator_get_default_mod_mask ()) == 0 &&
+      *accelerator_mods != 0)
     return FALSE;
   
   if (*accelerator_key == 0)
