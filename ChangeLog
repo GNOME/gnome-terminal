@@ -1,5 +1,12 @@
 2002-07-12  Havoc Pennington  <hp@redhat.com>
 
+	* src/simple-x-font-selector.c
+	(egg_xfont_selector_get_xlfd_field): replace a g_ascii_strdown
+	with a manual loop - we were leaking memory big time after an
+	s/g_strdown/g_ascii_strdown. #84888
+
+2002-07-12  Havoc Pennington  <hp@redhat.com>
+
 	* src/terminal-screen.c (terminal_screen_init): add a style_set
 	handler to dynamically update in response to system font/color 
 	changes, completes #82979

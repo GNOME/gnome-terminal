@@ -1673,6 +1673,8 @@ egg_xfont_selector_get_xlfd_field (const gchar *fontname,
   
   if (t1 != t2)
     {
+      char *p;
+      
       /* Check we don't overflow the buffer */
       len = (long) t2 - (long) t1;
       if (len > XLFD_MAX_FIELD_LEN - 1)
@@ -1681,7 +1683,12 @@ egg_xfont_selector_get_xlfd_field (const gchar *fontname,
       buffer[len] = 0;
 
       /* Convert to lower case. */
-      g_ascii_strdown (buffer, -1);
+      p = buffer;
+      while (*p)
+        {
+          *p = g_ascii_tolower (*p);
+          ++p;
+        }
     }
   else
     strcpy(buffer, "(nil)");
