@@ -2122,7 +2122,7 @@ else if (strcmp (key, KName) == 0)                                      \
      UPDATE_STRING  (KEY_BACKGROUND_TYPE,        background_type,        NULL);
      UPDATE_STRING  (KEY_BACKGROUND_IMAGE,       background_image_file,  NULL);
      UPDATE_BOOLEAN (KEY_SCROLL_BACKGROUND,      scroll_background,      FALSE);
-     UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,    scroll_background,      0.5);
+     UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,    background_darkness,    0.5);
      UPDATE_STRING  (KEY_BACKSPACE_BINDING,      backspace_binding,      NULL);
      UPDATE_STRING  (KEY_DELETE_BINDING,         delete_binding,         NULL);
      UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,       use_theme_colors,       TRUE);
