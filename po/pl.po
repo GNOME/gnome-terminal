@@ -1,4 +1,4 @@
-# Copyright (C) 2001-2003 Free Software Foundation, Inc.
+# Copyright (C) 2001-2004 Free Software Foundation, Inc.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Aktualną wersję tego pliku możesz odnaleźć w repozytorium cvs.gnome.pl
 # (:pserver:anonymous@cvs.gnome.pl:/gnomepl, puste hasło)
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 14:09-0300\n"
+"POT-Creation-Date: 2004-06-21 20:33+0200\n"
 "PO-Revision-Date: 2003-11-15 11:26+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -20,11 +20,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: gnome-terminal.desktop.in.h:1
+#: gnome-terminal.desktop.in.in.h:1
 msgid "Command line"
 msgstr "Wiersz poleceń"
 
-#: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
+#: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
 #: src/terminal-window.c:761 src/terminal.c:1172 src/terminal.c:1518
 msgid "Terminal"
@@ -363,9 +363,8 @@ msgid "Goes before initial title"
 msgstr "Pojawia się przed początkowym tytułem"
 
 #: src/gnome-terminal.glade2.h:40
-#, fuzzy
 msgid "Hold the terminal open"
-msgstr "Zamknięcie terminala"
+msgstr "Zostawienie otwartego terminala"
 
 #: src/gnome-terminal.glade2.h:41
 msgid "Initial _title:"
@@ -1490,11 +1489,12 @@ msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 msgstr ""
+"Określa, czy pytać się o potwierdzenie przy zamykaniu okna terminala, które "
+"posiada więcej niż jedną zakładkę."
 
 #: src/gnome-terminal.schemas.in.h:124
-#, fuzzy
 msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "Określa czy aktualizowac wpisy utmp/wtmp przy uruchamianiu polecenia"
+msgstr "Określa, czy pytać się o potwierdzenie przy zamykaniu okna terminala"
 
 #: src/gnome-terminal.schemas.in.h:125
 msgid "Whether to blink the cursor"
@@ -1870,7 +1870,7 @@ msgstr ""
 #: src/terminal-accels.c:986
 #, c-format
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
-msgstr ""
+msgstr "Klawisz skrótu \"%s\" jest już przypisany do akcji \"%s\""
 
 #: src/terminal-accels.c:1018
 #, c-format
@@ -2267,17 +2267,20 @@ msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
 msgstr[0] ""
+"Okno posiada jedną otwartą zakładkę. Zamknięcie okna spowoduje jej "
+"zamknięcie."
 msgstr[1] ""
+"Okno posiada %d otwarte zakładki. Zamknięcie okna spowoduje ich zamknięcie."
+msgstr[2] ""
+"Okno posiada %d otwartych zakładek. Zamknięcie okna spowoduje ich zamknięcie."
 
 #: src/terminal-window.c:2294
-#, fuzzy
 msgid "Close all tabs?"
-msgstr "Zamknięcie zakładki"
+msgstr "Zamknąć wszystkie zakładki?"
 
 #: src/terminal-window.c:2306
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "Zamknięcie zakładki"
+msgstr "Zamknięcie wszystkich zakładek"
 
 #: src/terminal-window.c:2698
 msgid "translator_credits"
