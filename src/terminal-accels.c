@@ -96,7 +96,7 @@ static KeyEntry view_entries[] =
 
 static KeyEntry terminal_entries[] =
 {
-  { N_("Set title"),
+  { N_("Set Title"),
     KEY_SET_TERMINAL_TITLE, ACCEL_PATH_SET_TERMINAL_TITLE, 0, 0, NULL, FALSE },
   { N_("Reset"),
     KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE },

@@ -464,7 +464,7 @@ terminal_window_init (TerminalWindow *window)
     append_menuitem (menu, _("_Profile"), NULL,
                      NULL, NULL);
   
-  append_menuitem (menu, _("_Set title..."), ACCEL_PATH_SET_TERMINAL_TITLE,
+  append_menuitem (menu, _("_Set Title..."), ACCEL_PATH_SET_TERMINAL_TITLE,
                    G_CALLBACK (set_title_callback), window);
   
   append_menuitem (menu, _("_Reset"), ACCEL_PATH_RESET,
