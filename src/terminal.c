@@ -1905,7 +1905,7 @@ profile_optionmenu_set_selected (GtkWidget       *option_menu,
   if (menu == NULL)
     return;
   
-  children = gtk_container_children (GTK_CONTAINER (menu));
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
   i = 0;
   tmp = children;
   while (tmp != NULL)

@@ -72,7 +72,7 @@ egg_cell_renderer_keys_editing_done (GtkCellEditable *entry,
   path = g_object_get_data (G_OBJECT (entry), EGG_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));
 
-  gtk_signal_emit_by_name (GTK_OBJECT (data), "edited", path, new_text);
+  g_signal_emit_by_name (GTK_OBJECT (data), "edited", path, new_text);
 }
 
 static gchar *
@@ -179,17 +179,18 @@ egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
   entry = g_object_new (GTK_TYPE_ENTRY,
 			"has_frame", FALSE,
 			NULL);
-  g_signal_connect_after (G_OBJECT (entry), "realize", entry_realize, NULL);
+  g_signal_connect_after (G_OBJECT (entry), "realize",
+                          G_CALLBACK (entry_realize), NULL);
   gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
   g_object_set_data_full (G_OBJECT (entry), EGG_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
   
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   
   gtk_widget_show (entry);
-  gtk_signal_connect (GTK_OBJECT (entry),
-		      "editing_done",
-		      G_CALLBACK (egg_cell_renderer_keys_editing_done),
-		      celltext);
+  g_signal_connect (G_OBJECT (entry),
+                    "editing_done",
+                    G_CALLBACK (egg_cell_renderer_keys_editing_done),
+                    celltext);
   return GTK_CELL_EDITABLE (entry);
 
 }

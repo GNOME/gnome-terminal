@@ -19,6 +19,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#undef GDK_DISABLE_DEPRECATED
+#include <gdk/gdkfont.h>
+#define GDK_DISABLE_DEPRECATED
+
 #include "terminal-intl.h"
 #include "terminal-window.h"
 #include "terminal-profile.h"
@@ -492,7 +496,7 @@ terminal_screen_update_on_realize (ZvtTerm        *term,
   profile = screen->priv->profile;
   
   update_color_scheme (screen);
-
+  
   font = gdk_fontset_load (terminal_profile_get_x_font (profile));
   if (font == NULL)
     {
@@ -508,7 +512,7 @@ terminal_screen_update_on_realize (ZvtTerm        *term,
                       NULL : font);
 
   gdk_font_unref (font);
-
+  
   /* FIXME s/FALSE/TRUE/ if the font has changed */
   terminal_window_set_size (screen->priv->window, screen, FALSE);
 }

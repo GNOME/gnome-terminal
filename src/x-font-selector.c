@@ -28,6 +28,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#undef GTK_DISABLE_DEPRECATED
+#undef GDK_DISABLE_DEPRECATED
+
 /*
  * Limits:
  *
@@ -1202,24 +1205,24 @@ gnome_font_selection_show_available_styles (GnomeFontSelection *fontsel)
 	  spacing   = fontsel_info->properties[SPACING]  [spacing_index];
 	  
 	  /* Convert '(nil)' weights to 'regular', since it looks nicer. */
-	  if      (!g_strcasecmp(weight, N_("(nil)")))	weight = N_("regular");
+	  if      (!g_ascii_strcasecmp(weight, N_("(nil)")))	weight = N_("regular");
 	  
 	  /* We don't show default values or (nil) in the other properties. */
-	  if      (!g_strcasecmp(slant, "r"))        slant = NULL;
-	  else if (!g_strcasecmp(slant, "(nil)"))    slant = NULL;
-	  else if (!g_strcasecmp(slant, "i"))        slant = N_("italic");
-	  else if (!g_strcasecmp(slant, "o"))        slant = N_("oblique");
-	  else if (!g_strcasecmp(slant, "ri"))       slant = N_("reverse italic");
-	  else if (!g_strcasecmp(slant, "ro"))       slant = N_("reverse oblique");
-	  else if (!g_strcasecmp(slant, "ot"))       slant = N_("other");
+	  if      (!g_ascii_strcasecmp(slant, "r"))        slant = NULL;
+	  else if (!g_ascii_strcasecmp(slant, "(nil)"))    slant = NULL;
+	  else if (!g_ascii_strcasecmp(slant, "i"))        slant = N_("italic");
+	  else if (!g_ascii_strcasecmp(slant, "o"))        slant = N_("oblique");
+	  else if (!g_ascii_strcasecmp(slant, "ri"))       slant = N_("reverse italic");
+	  else if (!g_ascii_strcasecmp(slant, "ro"))       slant = N_("reverse oblique");
+	  else if (!g_ascii_strcasecmp(slant, "ot"))       slant = N_("other");
 	  
-	  if      (!g_strcasecmp(set_width, "normal")) set_width = NULL;
-	  else if (!g_strcasecmp(set_width, "(nil)"))  set_width = NULL;
+	  if      (!g_ascii_strcasecmp(set_width, "normal")) set_width = NULL;
+	  else if (!g_ascii_strcasecmp(set_width, "(nil)"))  set_width = NULL;
 	  
-	  if      (!g_strcasecmp(spacing, "p"))        spacing = NULL;
-	  else if (!g_strcasecmp(spacing, "(nil)"))    spacing = NULL;
-	  else if (!g_strcasecmp(spacing, "m"))        spacing = N_("[M]");
-	  else if (!g_strcasecmp(spacing, "c"))        spacing = N_("[C]");
+	  if      (!g_ascii_strcasecmp(spacing, "p"))        spacing = NULL;
+	  else if (!g_ascii_strcasecmp(spacing, "(nil)"))    spacing = NULL;
+	  else if (!g_ascii_strcasecmp(spacing, "m"))        spacing = N_("[M]");
+	  else if (!g_ascii_strcasecmp(spacing, "c"))        spacing = N_("[C]");
 	  
 	  /* Add the strings together, making sure there is 1 space between
 	     them */
@@ -1958,21 +1961,21 @@ gnome_font_selection_show_font_info (GnomeFontSelection *fontsel)
 static gchar*
 gnome_font_selection_expand_slant_code(gchar *slant)
 {
-  if      (!g_strcasecmp(slant, "r"))   return(_("roman"));
-  else if (!g_strcasecmp(slant, "i"))   return(_("italic"));
-  else if (!g_strcasecmp(slant, "o"))   return(_("oblique"));
-  else if (!g_strcasecmp(slant, "ri"))  return(_("reverse italic"));
-  else if (!g_strcasecmp(slant, "ro"))  return(_("reverse oblique"));
-  else if (!g_strcasecmp(slant, "ot"))  return(_("other"));
+  if      (!g_ascii_strcasecmp(slant, "r"))   return(_("roman"));
+  else if (!g_ascii_strcasecmp(slant, "i"))   return(_("italic"));
+  else if (!g_ascii_strcasecmp(slant, "o"))   return(_("oblique"));
+  else if (!g_ascii_strcasecmp(slant, "ri"))  return(_("reverse italic"));
+  else if (!g_ascii_strcasecmp(slant, "ro"))  return(_("reverse oblique"));
+  else if (!g_ascii_strcasecmp(slant, "ot"))  return(_("other"));
   return slant;
 }
 
 static gchar*
 gnome_font_selection_expand_spacing_code(gchar *spacing)
 {
-  if      (!g_strcasecmp(spacing, "p")) return(_("proportional"));
-  else if (!g_strcasecmp(spacing, "m")) return(_("monospaced"));
-  else if (!g_strcasecmp(spacing, "c")) return(_("char cell"));
+  if      (!g_ascii_strcasecmp(spacing, "p")) return(_("proportional"));
+  else if (!g_ascii_strcasecmp(spacing, "m")) return(_("monospaced"));
+  else if (!g_ascii_strcasecmp(spacing, "c")) return(_("char cell"));
   return spacing;
 }
 
@@ -3374,7 +3377,7 @@ gnome_font_selection_get_xlfd_field (const gchar *fontname,
       buffer[len] = 0;
 
       /* Convert to lower case. */
-      g_strdown (buffer);
+      g_ascii_strdown (buffer, -1);
     }
   else
     strcpy(buffer, "(nil)");

@@ -1,5 +1,29 @@
 2002-02-26  Havoc Pennington  <hp@pobox.com>
 
+        Deprecation fixes from Deepa Chacko Pillai
+	
+	* src/x-font-selector.c: undef
+	GTK_DISABLE_DEPRECATED/GDK_DISABLE_DEPRECATED in here, too hard to
+	fix. Leave G_DISABLE_DEPRECATED though and fix a couple things.
+
+	* src/eggcellrendererkeys.c
+	(egg_cell_renderer_keys_start_editing): deprecated fix
+
+	* src/terminal-screen.c (terminal_screen_update_on_realize): cheat 
+	and allow deprecated GdkFont in here
+
+	* src/terminal.c (profile_optionmenu_set_selected): fix deprecated
+	function use
+
+	* src/profile-editor.c (profile_editor_update_cursor_blink): fix
+	deprecated function use
+
+	* src/Makefile.am (INCLUDES): add -DGTK_DISABLE_DEPRECATED
+	-DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED
+	-DGNOME_DISABLE_DEPRECATED
+	
+2002-02-26  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-window.c (terminal_window_init): fix 
 	conflicting mnemonics for closewindow/closetab, 
 	#72121 from dpasupathi@yahoo.com

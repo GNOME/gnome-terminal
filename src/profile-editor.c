@@ -1318,8 +1318,8 @@ profile_editor_update_cursor_blink (GtkWidget       *editor,
   GtkWidget *w;
 
   w = profile_editor_get_widget (editor, "blink-cursor-checkbutton");
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_cursor_blink (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_cursor_blink (profile));
 }
 
 
@@ -1330,8 +1330,8 @@ profile_editor_update_default_show_menubar (GtkWidget       *editor,
   GtkWidget *w;
 
   w = profile_editor_get_widget (editor, "show-menubar-checkbutton");
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_default_show_menubar (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_default_show_menubar (profile));
 }
 
 static void
@@ -1411,8 +1411,8 @@ profile_editor_update_allow_bold (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "allow-bold-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_allow_bold (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_allow_bold (profile));
 }
 
 static void
@@ -1423,8 +1423,8 @@ profile_editor_update_silent_bell (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "silent-bell-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_silent_bell (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_silent_bell (profile));
 }
 
 static void
@@ -1477,8 +1477,8 @@ profile_editor_update_scroll_on_keystroke  (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "scroll-on-keystroke-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_scroll_on_keystroke (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_scroll_on_keystroke (profile));
 }
 
 static void
@@ -1489,8 +1489,8 @@ profile_editor_update_scroll_on_output (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "scroll-on-output-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_scroll_on_output (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_scroll_on_output (profile));
 }
 
 static void
@@ -1513,8 +1513,8 @@ profile_editor_update_login_shell (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "login-shell-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               terminal_profile_get_login_shell (profile));
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_login_shell (profile));
 }
 
 static void
@@ -1525,7 +1525,7 @@ profile_editor_update_update_records (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "update-records-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                terminal_profile_get_update_records (profile));
 
 }
@@ -1538,7 +1538,7 @@ profile_editor_update_use_custom_command (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "use-custom-command-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                terminal_profile_get_use_custom_command (profile));
 
 }
@@ -1692,7 +1692,7 @@ profile_editor_update_scroll_background (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                terminal_profile_get_scroll_background (profile));
 }
 
@@ -1707,8 +1707,8 @@ profile_editor_update_background_darkness (GtkWidget       *editor,
 
   v = terminal_profile_get_background_darkness (profile);
   
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
-                               v >= DARKNESS_THRESHOLD);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                v >= DARKNESS_THRESHOLD);
 }
 
 static void

@@ -9,7 +9,9 @@ INCLUDES=@TERM_CFLAGS@								\
 	-DTERM_LIBDIR=\"$(libdir)\"							\
 	-DTERM_PREFIX=\"$(prefix)\"							\
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
-	-DTERM_PKGDATADIR=\"$(pkgdatadir)\"
+	-DTERM_PKGDATADIR=\"$(pkgdatadir)\"						\
+	-DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED 	\
+	-DGNOME_DISABLE_DEPRECATED
 
 bin_PROGRAMS=gnome-terminal
 
