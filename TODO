@@ -1,9 +1,7 @@
 - wire up the whole configuration-editor dialog, 
   using the glade file for it
 - add --use-factory feature using Bonobo
-- write/install schema file
-- wire up a GnomeAbout dialog
-- wire up other missing menu items
+- wire up missing menu items
 - actually connect to session manager and send it the computed
   CloneCommand/RestartCommand
 - convert option parsing to use a callback since libgnome requires
@@ -27,9 +25,5 @@
   (problem here is that it's much easier to lose settings?)
   If we do this, the "manage profiles" dialog needs something like:
       The default profile is: [profile option menu]
-- have per-profile option for window title and relationship 
-  to dynamic window title (replace, prepend, append)
-- have per-profile option for default command to run in the terminal
-- wire up various ZvtTerm signals (child died, title changed)
 - go through gnome-terminal carefully and be sure all subtleties
   are handled
