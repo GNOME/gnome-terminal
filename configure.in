@@ -8,8 +8,6 @@ GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
 
-AC_ARG_WITH(widget, [  --with-widget=[zvt/vte] terminal widget to use])
-
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
@@ -46,7 +44,7 @@ AM_GLIB_GNU_GETTEXT
 AC_PATH_XTRA
 
 ## here we get the flags we'll actually use
-PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 2.2.0 gconf-2.0 >= 1.1.9 libglade-2.0 libgnomeui-2.0 libstartup-notification-1.0 >= 0.4)
+PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 2.2.0 gconf-2.0 >= 1.1.9 libglade-2.0 libgnomeui-2.0 libstartup-notification-1.0 >= 0.4 vte >= 0.10.22)
 
 TERM_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $TERM_LIBS"
 TERM_CFLAGS="$X_CFLAGS $TERM_CFLAGS"
@@ -62,17 +60,6 @@ AM_GCONF_SOURCE_2
 
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
-
-if test x$with_widget = xzvt; then
-	PKG_CHECK_MODULES(TERMINAL_WIDGET, libzvt-2.0 >= 1.115.2)
-else
-        with_widget=vte
-	PKG_CHECK_MODULES(TERMINAL_WIDGET, vte >= 0.10.4)
-fi
-
-CFLAGS="$TERMINAL_WIDGET_CFLAGS $CFLAGS"
-
-AM_CONDITIONAL(TERMINAL_WIDGET_VTE, test x$with_widget = xvte)
 
 if $PKG_CONFIG --atleast-version 2.0.0 xft && $PKG_CONFIG --atleast-version 1.1.1 pangoxft ; then
    using_xft2=yes
@@ -92,11 +79,7 @@ po/Makefile.in
 ])
 dnl ==========================================================================
 
-if test x$with_widget = xzvt; then
-        echo "*** WARNING WARNING WARNING WARNING WARNING"
-        echo "*** Building with Zvt widget instead of VTE"
-        echo "*** This is probably a bad idea"
- elif test x$using_xft2 = xno; then
+if test x$using_xft2 = xno; then
         echo "*** WARNING WARNING WARNING WARNING WARNING"
         echo "*** Building with VTE widget but not Xft2"
         echo "*** This won't be as optimal as fontconfig/Xft2"
@@ -113,6 +96,5 @@ gnome-terminal-$VERSION:
 	source code location:	${srcdir}
 	compiler:		${CC}
 
-        terminal widget:        ${with_widget}
         using fontconfig/Xft2:  ${using_xft2}
 "

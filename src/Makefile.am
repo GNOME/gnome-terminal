@@ -24,12 +24,6 @@ EGGFILES=			\
 	eggcellrendererkeys.h 	\
 	eggcellrendererkeys.c
 
-if TERMINAL_WIDGET_VTE
-terminal_widget_impl=terminal-widget-vte.c
-else
-terminal_widget_impl=terminal-widget-zvt.c
-endif
-
 ## Terminal
 gnome_terminal_SOURCES=				\
 	encoding.c				\
@@ -48,7 +42,7 @@ gnome_terminal_SOURCES=				\
 	terminal-screen.c			\
 	terminal-screen.h			\
 	terminal-widget.h			\
-	$(terminal_widget_impl)			\
+	terminal-widget-vte.c			\
 	terminal-window.c			\
 	terminal-window.h			\
 	x-font-selector.c			\
@@ -57,7 +51,7 @@ gnome_terminal_SOURCES=				\
 	simple-x-font-selector.h		\
 	$(EGGFILES)
 
-gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ @TERMINAL_WIDGET_LIBS@ eel/libeelcnp.la skey/libskey.la
+gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ eel/libeelcnp.la skey/libskey.la
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
@@ -77,7 +71,6 @@ EXTRA_DIST =				\
 	$(schema_DATA)			\
 	$(server_DATA)			\
 	update-from-egg.sh		\
-	terminal-widget-zvt.c		\
 	terminal-widget-vte.c
 
 
