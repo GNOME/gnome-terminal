@@ -1,13 +1,13 @@
 
-INCLUDES=@PROFTERM_CFLAGS@								\
-	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\"	\
-	-DPROFTERM_GLADE_DIR=\"$(gladedir)\"						\
-	-DPROFTERM_GLADE_FILE=\"profterm.glade2\"					\
-	-DPROFTERM_DATADIR=\"$(datadir)\"						\
-	-DPROFTERM_LIBDIR=\"$(libdir)\"							\
-	-DPROFTERM_PREFIX=\"$(prefix)\"							\
-	-DPROFTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
-	-DPROFTERM_PKGDATADIR=\"$(pkgdatadir)\"
+INCLUDES=@TERM_CFLAGS@								\
+	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\"	\
+	-DTERM_GLADE_DIR=\"$(gladedir)\"						\
+	-DTERM_GLADE_FILE=\"profterm.glade2\"					\
+	-DTERM_DATADIR=\"$(datadir)\"						\
+	-DTERM_LIBDIR=\"$(libdir)\"							\
+	-DTERM_PREFIX=\"$(prefix)\"							\
+	-DTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
+	-DTERM_PKGDATADIR=\"$(pkgdatadir)\"
 
 bin_PROGRAMS=profterm
 
@@ -25,10 +25,10 @@ profterm_SOURCES=				\
 	terminal-window.c			\
 	terminal-window.h
 
-profterm_LDADD= @PROFTERM_LIBS@
+profterm_LDADD= @TERM_LIBS@
 
 
-gladedir   = $(datadir)/profterm/glade
+gladedir   = $(pkgdatadir)/glade
 glade_DATA = profterm.glade2
 glade_src = profterm.glade
 glade_msgs = profterm.glade.h

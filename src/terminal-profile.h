@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 
-#define CONF_PREFIX "/apps/profterm"
+#define CONF_PREFIX "/apps/gnome-terminal"
 #define CONF_GLOBAL_PREFIX CONF_PREFIX"/global"
 #define CONF_PROFILES_PREFIX CONF_PREFIX"/profiles"
 #define DEFAULT_PROFILE "Default"

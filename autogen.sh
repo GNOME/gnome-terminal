@@ -6,7 +6,7 @@ test -z "$srcdir" && srcdir=.
 
 ORIGDIR=`pwd`
 cd $srcdir
-PROJECT=profterm
+PROJECT=gnome-terminal
 TEST_TYPE=-f
 FILE=src/terminal.c
 

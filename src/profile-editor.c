@@ -497,17 +497,17 @@ terminal_profile_edit (TerminalProfile *profile,
       GtkWidget *w;
       double num1, num2;
       
-      if (g_file_test ("./"PROFTERM_GLADE_FILE,
+      if (g_file_test ("./"TERM_GLADE_FILE,
                        G_FILE_TEST_EXISTS))
         {
           /* Try current dir, for debugging */
-          xml = glade_xml_new ("./"PROFTERM_GLADE_FILE,
+          xml = glade_xml_new ("./"TERM_GLADE_FILE,
                                "profile-editor-dialog",
                                GETTEXT_PACKAGE);
         }
       else
         {
-          xml = glade_xml_new (PROFTERM_GLADE_DIR"/"PROFTERM_GLADE_FILE,
+          xml = glade_xml_new (TERM_GLADE_DIR"/"TERM_GLADE_FILE,
                                "profile-editor-dialog",
                                GETTEXT_PACKAGE);
         }
@@ -524,7 +524,7 @@ terminal_profile_edit (TerminalProfile *profile,
                                         GTK_MESSAGE_ERROR,
                                         GTK_BUTTONS_CLOSE,
                                         _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the profile editor can't be displayed."),
-                                        PROFTERM_GLADE_DIR"/"PROFTERM_GLADE_FILE);
+                                        TERM_GLADE_DIR"/"TERM_GLADE_FILE);
                                         
               g_signal_connect (G_OBJECT (no_glade_dialog),
                                 "response",

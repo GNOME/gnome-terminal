@@ -29,8 +29,8 @@
 
 
 /* Settings storage works as follows:
- *   /apps/profterm/global/
- *   /apps/profterm/profiles/Foo/
+ *   /apps/gnome-terminal/global/
+ *   /apps/gnome-terminal/profiles/Foo/
  *
  * It's somewhat tricky to manage the profiles/ dir since we need to track
  * the list of profiles, but gconf doesn't have a concept of notifying that
@@ -256,7 +256,7 @@ main (int argc, char **argv)
   gboolean default_window_menubar_forced = FALSE;
   gboolean default_window_menubar_state = FALSE;
   
-  bindtextdomain (GETTEXT_PACKAGE, PROFTERM_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
   
@@ -268,10 +268,10 @@ main (int argc, char **argv)
                           * through here
                           */
                       argv,
-                      GNOME_PARAM_APP_PREFIX, PROFTERM_PREFIX,
-                      GNOME_PARAM_APP_SYSCONFDIR, PROFTERM_SYSCONFDIR,
-                      GNOME_PARAM_APP_DATADIR, PROFTERM_DATADIR,
-                      GNOME_PARAM_APP_LIBDIR, PROFTERM_LIBDIR,
+                      GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
+                      GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
+                      GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
+                      GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
                       NULL);
  
   conf = gconf_client_get_default ();
