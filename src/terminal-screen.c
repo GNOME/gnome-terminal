@@ -546,11 +546,12 @@ terminal_screen_update_on_realize (GtkWidget      *term,
        if (terminal_profile_get_use_system_font (screen->priv->profile))
          {
             GtkStyle *style;
+            GdkFont *from_desc;
 
             style = gtk_widget_get_style (GTK_WIDGET(term));
-            font = gdk_font_from_description (style->font_desc);
-
-            if (font != NULL)
+            from_desc = gdk_font_from_description (style->font_desc);
+            
+            if (from_desc != NULL)
               {
                 char *font_name;
                 
@@ -583,9 +584,9 @@ terminal_screen_update_on_realize (GtkWidget      *term,
                 
                   g_free (fallback);
                 }
-
+                
                 g_free (font_name);
-                g_object_unref (G_OBJECT (font));
+                gdk_font_unref (from_desc);
               }
          }
        
