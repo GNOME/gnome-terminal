@@ -101,9 +101,7 @@ terminal_widget_get_padding                (GtkWidget            *widget,
 					    int                  *xpad,
 					    int                  *ypad)
 {
-  /* We don't do padding! */
-  *xpad = 0;
-  *ypad = 0;
+  vte_terminal_get_padding(VTE_TERMINAL(widget), xpad, ypad);
 }
 
 void
