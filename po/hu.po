@@ -1,19 +1,19 @@
 # Hungarian translation of gnome-terminal.
-# Copyright (C) 2002, 2003, 2004 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2003, 2004, 2005 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gnome-terminal package.
 # Szabolcs Ban <shooby@gnome.hu>, 2002.
 # Peter Doma <zelin@pointernet.hu>, 2002.
 # Andras Timar <timar@gnome.hu>, 2002, 2003.
-# Gabor Kelemen <kelemeng@gnome.hu>, 2004.
 # Laszlo Dvornik <dvornik@gnome.hu>, 2004.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-03 04:37+0100\n"
-"PO-Revision-Date: 2004-11-03 11:49+0100\n"
-"Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
+"POT-Creation-Date: 2005-03-04 06:12+0100\n"
+"PO-Revision-Date: 2005-03-04 13:19+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,7 @@ msgstr "Parancssor"
 
 #: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
-#: src/terminal-window.c:761 src/terminal.c:1205 src/terminal.c:1553
+#: src/terminal-window.c:783 src/terminal.c:1205 src/terminal.c:1604
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -634,7 +634,6 @@ msgstr "kilo_bájt"
 msgid "kilobytes"
 msgstr "kilobájt"
 
-# FIXME locale
 #: src/gnome-terminal.schemas.in.h:1
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
@@ -722,7 +721,6 @@ msgstr "A Delete billentyű hatása"
 msgid "Filename of a background image."
 msgstr "Egy háttérkép fájlneve."
 
-# gnome-terminal/gnome-terminal.c:1127
 #: src/gnome-terminal.schemas.in.h:16
 msgid "Font"
 msgstr "Betűkészlet"
@@ -801,7 +799,6 @@ msgstr ""
 "Ha be van állítva, a rendszer-bejelentkezési bejegyzések (utmp és wtmp) "
 "frissítve lesznek, ha a terminálban elindítja a parancsot."
 
-# FIXME monospace
 #: src/gnome-terminal.schemas.in.h:29
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
@@ -1419,14 +1416,13 @@ msgstr ""
 "A kurzor villogásának engedélyezése az ezen profilt használó ablakokban/"
 "lapokon, amikor a terminál fókuszba kerül."
 
-# FIXME nem pontos
 #: src/gnome-terminal.schemas.in.h:114
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 msgstr ""
 "A menüsor megjelenítésének engedélyezése az ezen profilt használó új "
-"ablakokban."
+"ablakokban/lapokon."
 
 #: src/gnome-terminal.schemas.in.h:115
 msgid ""
@@ -1463,7 +1459,6 @@ msgstr ""
 "Hol legyen a terminál gördítősávja. Lehetőségek: \"left\", \"right\", és"
 "\"disabled\" (balra, jobbra, vagy kikapcsolás)."
 
-# FIXME access key=gyorsbillentyu?
 #: src/gnome-terminal.schemas.in.h:120
 msgid "Whether the menubar has access keys"
 msgstr "A menüsornak legyenek-e gyorsbillentyűi"
@@ -1533,7 +1528,6 @@ msgstr "Elnémítsa-e a terminálcsengőt"
 msgid "Whether to update login records when launching terminal command"
 msgstr "Frissítse-e a bejelentkezési bejegyzéseket terminálparancs indításakor"
 
-# FIXME widget
 #: src/gnome-terminal.schemas.in.h:135
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Használja-e a terminálelem témájának színeit"
@@ -1572,7 +1566,6 @@ msgstr "Zöld a feketén"
 msgid "White on black"
 msgstr "Fehér a feketén"
 
-# gnome-terminal/gnome-terminal.c:963
 #: src/profile-editor.c:68
 msgid "Linux console"
 msgstr "Linux konzol"
@@ -1593,7 +1586,6 @@ msgstr "Egyéni"
 msgid "Choose a terminal font"
 msgstr "Terminál betűkészlete"
 
-# gnome-terminal/gnome-terminal.c:1127
 #: src/profile-editor.c:1190 src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Betűkészlet:"
@@ -1707,7 +1699,7 @@ msgstr "Kicsinyítés"
 msgid "Normal Size"
 msgstr "Normál méret"
 
-#: src/terminal-accels.c:111 src/terminal-screen.c:1973
+#: src/terminal-accels.c:111 src/terminal-screen.c:1976
 msgid "Set Title"
 msgstr "Cím beállítása"
 
@@ -1800,7 +1792,7 @@ msgid "Help"
 msgstr "Súgó"
 
 #: src/terminal-accels.c:264 src/terminal-profile.c:392
-#: src/terminal-screen.c:199 src/terminal.c:1655
+#: src/terminal-screen.c:199 src/terminal.c:1721
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Hiba történt a konfiguráció betöltése közben (%s): %s\n"
@@ -1971,7 +1963,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Részletek"
 
-#: src/terminal-profile.c:2923 src/terminal.c:2295
+#: src/terminal-profile.c:2923 src/terminal.c:2361
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Hiba történt a(z) \"%s\" profil létrehozása közben"
@@ -2011,7 +2003,7 @@ msgstr "Nem lehet betölteni a betűkészletet: \"%s\"\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Valami probléma történt a terminál parancsával: %s"
 
-#: src/terminal-screen.c:1310
+#: src/terminal-screen.c:1301
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2020,7 +2012,7 @@ msgstr ""
 "Nem lehet a(z) \"%s\" címet megnyitni:\n"
 "%s"
 
-#: src/terminal-screen.c:1403 src/terminal-window.c:784
+#: src/terminal-screen.c:1398 src/terminal-window.c:809
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2028,87 +2020,83 @@ msgid ""
 msgstr ""
 "Hiba történt a képek használata menükben értékének betöltésekor. (%s)\n"
 
-#: src/terminal-screen.c:1474
+#: src/terminal-screen.c:1485
 msgid "_Open Link"
 msgstr "_Megnyitás böngészőben"
 
-#: src/terminal-screen.c:1479
+#: src/terminal-screen.c:1490
 msgid "_Copy Link Address"
 msgstr "_Cím másolása"
 
-#: src/terminal-screen.c:1490 src/terminal-window.c:827
+#: src/terminal-screen.c:1500 src/terminal-window.c:852
 msgid "Open _Terminal"
 msgstr "_Terminál megnyitása"
 
-#: src/terminal-screen.c:1495 src/terminal-window.c:830
+#: src/terminal-screen.c:1505 src/terminal-window.c:855
 msgid "Open Ta_b"
 msgstr "_Lap megnyitása"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:845
+#: src/terminal-screen.c:1515 src/terminal-window.c:870
 msgid "C_lose Tab"
 msgstr "Lap _bezárása"
 
-#: src/terminal-screen.c:1510 src/terminal-window.c:849
+#: src/terminal-screen.c:1515 src/terminal-window.c:874
 msgid "_Close Window"
 msgstr "_Ablak bezárása"
 
-#: src/terminal-screen.c:1538
+#: src/terminal-screen.c:1540
 msgid "Change P_rofile"
 msgstr "P_rofil megváltoztatása"
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1576
 msgid "_Edit Current Profile..."
 msgstr "A jelenlegi profil sz_erkesztése..."
 
-#: src/terminal-screen.c:1593
+#: src/terminal-screen.c:1581
 msgid "Show _Menubar"
 msgstr "_Menü megjelenítése"
 
-#: src/terminal-screen.c:1600
-msgid "Secure _Keyboard"
-msgstr "_Biztonságos billentyűzet"
-
-#: src/terminal-screen.c:1610
+#: src/terminal-screen.c:1591
 msgid "_Input Methods"
 msgstr "_Beviteli mód"
 
-#: src/terminal-screen.c:2002
+#: src/terminal-screen.c:2005
 msgid "_Title:"
 msgstr "_Cím:"
 
-#: src/terminal-screen.c:2119
+#: src/terminal-screen.c:2117
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A terminálra dobott text/plain-nek hibás a formátuma (%d) vagy a hossza (%"
 "d)\n"
 
-#: src/terminal-screen.c:2142
+#: src/terminal-screen.c:2140
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A terminálra dobott színnek hibás a formátuma (%d) vagy a hossza (%d)\n"
 
-#: src/terminal-screen.c:2185
+#: src/terminal-screen.c:2183
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A terminálra dobott Mozilla URL-nek hibás a formátuma (%d) vagy a hossza (%"
 "d)\n"
 
-#: src/terminal-screen.c:2234
+#: src/terminal-screen.c:2232
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A terminálra dobott URI-listának hibás a formátuma (%d) vagy a hossza (%d)\n"
 
-#: src/terminal-screen.c:2288
+#: src/terminal-screen.c:2286
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "A terminálra dobott képnek hibás a formátuma (%d) vagy a hossza (%d)\n"
 
-#: src/terminal-screen.c:2314
+#: src/terminal-screen.c:2312
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Hiba a(z) \"%s\" URI fájlnévvé konvertálásakor: %s\n"
@@ -2117,7 +2105,7 @@ msgstr "Hiba a(z) \"%s\" URI fájlnévvé konvertálásakor: %s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "Hiba történt a terminál gyermekfolyamatának létrehozásakor"
 
-#: src/terminal-window.c:336
+#: src/terminal-window.c:335
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2126,86 +2114,86 @@ msgstr ""
 "Hiba történt a menüikon láthatóság változásairól értesítésre való "
 "feliratkozás közben. (%s)\n"
 
-#: src/terminal-window.c:594
+#: src/terminal-window.c:593
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: src/terminal-window.c:596
+#: src/terminal-window.c:595
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: src/terminal-window.c:717
+#: src/terminal-window.c:716
 msgid "_Add or Remove..."
 msgstr "Hozzá_adás vagy eltávolítás..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:838
+#: src/terminal-window.c:863
 msgid "New _Profile..."
 msgstr "Új p_rofil..."
 
-#: src/terminal-window.c:880
+#: src/terminal-window.c:907
 msgid "P_rofiles..."
 msgstr "P_rofilok..."
 
-#: src/terminal-window.c:883
+#: src/terminal-window.c:910
 msgid "_Keyboard Shortcuts..."
 msgstr "_Gyorsbillentyűk..."
 
-#: src/terminal-window.c:887
+#: src/terminal-window.c:914
 msgid "C_urrent Profile..."
 msgstr "_Jelenlegi profil..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: src/terminal-window.c:902
+#: src/terminal-window.c:929
 msgid "Show Menu_bar"
 msgstr "_Menüsor megjelenítése"
 
-#: src/terminal-window.c:906
+#: src/terminal-window.c:933
 msgid "_Full Screen"
 msgstr "_Teljes képernyő"
 
-#: src/terminal-window.c:949
+#: src/terminal-window.c:976
 msgid "Change _Profile"
 msgstr "_Profil megváltoztatása"
 
-#: src/terminal-window.c:952
+#: src/terminal-window.c:979
 msgid "_Set Title..."
 msgstr "_Cím beállítása..."
 
-#: src/terminal-window.c:959
+#: src/terminal-window.c:986
 msgid "Set _Character Encoding"
 msgstr "_Karakterkódolás beállítása"
 
-#: src/terminal-window.c:969
+#: src/terminal-window.c:996
 msgid "_Reset"
 msgstr "_Visszaállítás"
 
-#: src/terminal-window.c:972
+#: src/terminal-window.c:999
 msgid "Reset and C_lear"
 msgstr "Visszaállítás és _törlés"
 
-#: src/terminal-window.c:986
+#: src/terminal-window.c:1013
 msgid "_Previous Tab"
 msgstr "_Előző lap"
 
-#: src/terminal-window.c:990
+#: src/terminal-window.c:1017
 msgid "_Next Tab"
 msgstr "_Következő lap"
 
-#: src/terminal-window.c:1009
+#: src/terminal-window.c:1036
 msgid "_Contents"
 msgstr "_Tartalom"
 
-#: src/terminal-window.c:1019
+#: src/terminal-window.c:1046
 msgid "_About"
 msgstr "_Névjegy"
 
-#: src/terminal-window.c:1191
+#: src/terminal-window.c:1235
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2213,7 +2201,7 @@ msgstr ""
 "Hiba történt a következő konfigurációérték töltése közben: hívóbillentyűk "
 "használata. (%s)\n"
 
-#: src/terminal-window.c:1210
+#: src/terminal-window.c:1254
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2222,31 +2210,31 @@ msgstr ""
 "Hiba történt a terminálablak beállításának változásairól értesítésre való "
 "feliratkozás közben. (%s)\n"
 
-#: src/terminal-window.c:2093
+#: src/terminal-window.c:2129
 msgid "_File"
 msgstr "_Fájl"
 
-#: src/terminal-window.c:2095 src/terminal.c:2874
+#: src/terminal-window.c:2131 src/terminal.c:2952
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: src/terminal-window.c:2097
+#: src/terminal-window.c:2133
 msgid "_View"
 msgstr "_Nézet"
 
-#: src/terminal-window.c:2099
+#: src/terminal-window.c:2135
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: src/terminal-window.c:2101
+#: src/terminal-window.c:2137
 msgid "Ta_bs"
 msgstr "_Lapok"
 
-#: src/terminal-window.c:2103
+#: src/terminal-window.c:2139
 msgid "_Help"
 msgstr "_Súgó"
 
-#: src/terminal-window.c:2286
+#: src/terminal-window.c:2322
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2259,26 +2247,26 @@ msgstr[1] ""
 "Ez az ablak %d megnyitott lappal rendelkezik. Az ablak bezárásával az összes "
 "lap is be fog záródni."
 
-#: src/terminal-window.c:2291
+#: src/terminal-window.c:2327
 msgid "Close all tabs?"
 msgstr "Bezárja az összes lapot?"
 
-#: src/terminal-window.c:2303
+#: src/terminal-window.c:2339
 msgid "Close All Tabs"
 msgstr "Összes lap bezárása"
 
-#: src/terminal-window.c:2695
-msgid "translator_credits"
+#: src/terminal-window.c:2739
+msgid "GNOME Terminal"
+msgstr "GNOME Terminál"
+
+#: src/terminal-window.c:2743
+msgid "translator-credits"
 msgstr ""
 "Bán Szabolcs <shooby@gnome.hu>\n"
 "Doma Péter <zelin@pointernet.hu>\n"
 "Dvornik László <dvornik@gnome.hu>\n"
 "Kelemen Gábor <kelemeng@gnome.hu>\n"
 "Tímár András <timar@gnome.hu>"
-
-#: src/terminal-window.c:2708
-msgid "GNOME Terminal"
-msgstr "GNOME Terminál"
 
 #: src/terminal.c:189
 msgid "Execute the argument to this option inside the terminal."
@@ -2586,12 +2574,12 @@ msgstr "Nem lett paraméter megadva a(z) \"%s\" opciónak\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "Nincs \"%s\" nevű profil, az alapértelmezettet használom helyette\n"
 
-#: src/terminal.c:1603
+#: src/terminal.c:1664
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Érvénytelen paraméter: \"%s\"\n"
 
-#: src/terminal.c:1671
+#: src/terminal.c:1737
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2600,97 +2588,97 @@ msgstr ""
 "Hiba történt a terminálprofil-lista változásairól értesítésre való "
 "feliratkozás közben. (%s)\n"
 
-#: src/terminal.c:1900
+#: src/terminal.c:1966
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Érvénytelen geometria-karakterlánc: \"%s\"\n"
 
-#: src/terminal.c:1965
+#: src/terminal.c:2031
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Hiba a terminálprofilok listájának lekérésekor. (%s)\n"
 
-#: src/terminal.c:2264
+#: src/terminal.c:2330
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Már van \"%s\" nevű profilja"
 
-#: src/terminal.c:2275
+#: src/terminal.c:2341
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Az a profil, amelyet az új profilja alapjául választott, már nem létezik"
 
-#: src/terminal.c:2370
+#: src/terminal.c:2436
 msgid "Enter profile name"
 msgstr "Írja be a profil nevét"
 
-#: src/terminal.c:2380
+#: src/terminal.c:2446
 msgid "Choose base profile"
 msgstr "Alap profil kiválasztása"
 
-#: src/terminal.c:2519
+#: src/terminal.c:2585
 msgid "Profile list"
 msgstr "Profil lista"
 
-#: src/terminal.c:2588
+#: src/terminal.c:2654
 msgid "You must select one or more profiles to delete."
 msgstr "Ki kell jelölnie egy profilt, hogy törölni tudjon."
 
-#: src/terminal.c:2599
+#: src/terminal.c:2665
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Legalább egy profiljának kell lennie, hogy legyen mit letörölni."
 
-#: src/terminal.c:2606
+#: src/terminal.c:2672
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Törli ezt a profilt?\n"
 msgstr[1] "Törli ezt a %d profilt?\n"
 
-#: src/terminal.c:2627
+#: src/terminal.c:2693
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Törli a(z) \"%s\" profilt?"
 
-#: src/terminal.c:2649
+#: src/terminal.c:2715
 msgid "Delete Profile"
 msgstr "Profil törlése"
 
-#: src/terminal.c:2907
+#: src/terminal.c:2988
 msgid "Profiles"
 msgstr "Profilok"
 
-#: src/terminal.c:2949
-msgid "Profile _used when launching a new terminal:"
-msgstr "Az új terminál _indításakor használt profil:"
-
-#: src/terminal.c:2969
+#: src/terminal.c:3029
 msgid "_Profiles:"
 msgstr "_Profilok:"
 
-#: src/terminal.c:3016
+#: src/terminal.c:3061
 msgid "Click to open new profile dialog"
 msgstr "Kattintson ide új profil hozzáadásához"
 
-#: src/terminal.c:3029
+#: src/terminal.c:3069
 msgid "Click to open edit profile dialog"
 msgstr "Kattintson ide a profilszerkesztő megnyitásához"
 
-#: src/terminal.c:3039
+#: src/terminal.c:3077
 msgid "Click to delete selected profile"
 msgstr "Kattintson ide a kiválasztott profil törléséhez"
 
-#: src/terminal.c:3088
+#: src/terminal.c:3082
+msgid "Profile _used when launching a new terminal:"
+msgstr "Az új terminál _indításakor használt profil:"
+
+#: src/terminal.c:3138
 msgid "Click button to choose profile"
 msgstr "Kattintson ide a profil kiválasztásához"
 
-#: src/terminal.c:3505
+#: src/terminal.c:3555
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Hiba történt a súgó megjelenítése közben: %s"
 
-#: src/terminal.c:3576
+#: src/terminal.c:3626
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2699,7 +2687,7 @@ msgstr ""
 "A(z) \"%s\" fájl hiányzik. Az alkalmazás valószínűleg helytelenül lett "
 "telepítve."
 
-#: src/terminal.c:3740
+#: src/terminal.c:3790
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2707,7 +2695,7 @@ msgstr ""
 "Úgy tűnik, hogy a gnome-terminal.server nem érvényes helyre van telepítve. "
 "Factory mód tiltva.\n"
 
-#: src/terminal.c:3743
+#: src/terminal.c:3793
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2715,6 +2703,6 @@ msgstr ""
 "Hiba a terminál aktivációs szolgáltatásba regisztrálásánál: factory mód "
 "letiltva.\n"
 
-#: src/terminal.c:3779
+#: src/terminal.c:3829
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Hiba a terminálkiszolgáló aktivációs kiszolgálóból való lekérésekor\n"
