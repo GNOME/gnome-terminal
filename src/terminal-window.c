@@ -28,6 +28,7 @@
 #include <libzvt/libzvt.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
+#include <gdk/gdkx.h>
 #include <eel/eel-ellipsizing-label.h>
 
 struct _TerminalWindowPrivate
@@ -43,6 +44,7 @@ struct _TerminalWindowPrivate
   GtkWidget *help_menuitem;
   GtkWidget *copy_menuitem;
   GtkWidget *paste_menuitem;
+  GtkWidget *fullscreen_menuitem;
   GtkWidget *edit_config_menuitem;
   GtkWidget *delete_config_menuitem;
   GtkWidget *choose_config_menuitem;
@@ -61,6 +63,12 @@ struct _TerminalWindowPrivate
   guint use_default_menubar_visibility : 1;
   guint use_mnemonics : 1;   /* config key value */
   guint using_mnemonics : 1; /* current menubar state */
+
+  /* FIXME we brokenly maintain this flag here instead of
+   * being event-driven, because it's too annoying to be
+   * event-driven while GTK doesn't support _NET_WM_STATE_FULLSCREEN
+   */
+  guint fullscreen : 1;
 };
 
 enum {
@@ -125,6 +133,8 @@ static void new_configuration_callback    (GtkWidget      *menuitem,
 static void manage_configurations_callback(GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void hide_menubar_callback         (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void fullscreen_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void reset_callback                (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -425,6 +435,10 @@ terminal_window_init (TerminalWindow *window)
   
   append_menuitem (menu, _("Hide menu_bar"), NULL,
                    G_CALLBACK (hide_menubar_callback), window);
+
+  mi = append_menuitem (menu, _("_Full screen"), NULL,
+                        G_CALLBACK (fullscreen_callback), window);
+  window->priv->fullscreen_menuitem = mi;
   
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
@@ -1392,6 +1406,65 @@ reset_tab_menuitems (TerminalWindow *window)
     }
 }
 
+static void
+wmspec_change_state (gboolean   add,
+                     GdkWindow *window,
+                     GdkAtom    state1,
+                     GdkAtom    state2)
+{
+  XEvent xev;
+
+#define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
+#define _NET_WM_STATE_ADD           1    /* add/set property */
+#define _NET_WM_STATE_TOGGLE        2    /* toggle property  */  
+  
+  xev.xclient.type = ClientMessage;
+  xev.xclient.serial = 0;
+  xev.xclient.send_event = True;
+  xev.xclient.display = gdk_display;
+  xev.xclient.window = GDK_WINDOW_XID (window);
+  xev.xclient.message_type = gdk_x11_get_xatom_by_name ("_NET_WM_STATE");
+  xev.xclient.format = 32;
+  xev.xclient.data.l[0] = add ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+  xev.xclient.data.l[1] = gdk_x11_atom_to_xatom (state1);
+  xev.xclient.data.l[2] = gdk_x11_atom_to_xatom (state2);
+  
+  XSendEvent (gdk_display, GDK_WINDOW_XID (gdk_get_default_root_window ()),
+              False,
+	      SubstructureRedirectMask | SubstructureNotifyMask,
+	      &xev);
+}
+
+void
+terminal_window_set_fullscreen (TerminalWindow *window,
+                                gboolean        setting)
+{
+  g_return_if_fail (GTK_WIDGET_REALIZED (window));
+  
+  if (setting)
+    set_menuitem_text (window->priv->fullscreen_menuitem,
+                       _("_Restore normal size"), FALSE);
+  
+  else
+    set_menuitem_text (window->priv->fullscreen_menuitem,
+                       _("_Full screen"), FALSE);
+
+  window->priv->fullscreen = setting;
+
+  wmspec_change_state (setting,
+                       GTK_WIDGET (window)->window,
+                       gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN",
+                                        FALSE),
+                       GDK_NONE);
+}
+
+gboolean
+terminal_window_get_fullscreen (TerminalWindow *window)
+{
+
+  return window->priv->fullscreen;
+}
+
 /*
  * Callbacks for the menus
  */
@@ -1541,6 +1614,41 @@ hide_menubar_callback (GtkWidget      *menuitem,
 }
 
 static void
+fullscreen_callback (GtkWidget      *menuitem,
+                     TerminalWindow *window)
+{
+  if (!gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN",
+                                             FALSE)))
+    {
+      static GtkWidget *no_fullscreen_dialog = NULL;
+
+      if (no_fullscreen_dialog == NULL)
+        {
+          no_fullscreen_dialog =
+            gtk_message_dialog_new (GTK_WINDOW (window),
+                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_CLOSE,
+                                    _("Your current desktop environment does not support the full screen feature.\n (In technical terms, you need a window manager with support for the _NET_WM_STATE_FULLSCREEN property.)"));
+          
+          g_object_add_weak_pointer (G_OBJECT (no_fullscreen_dialog),
+                                     (void**) &no_fullscreen_dialog);
+
+          g_signal_connect (G_OBJECT (no_fullscreen_dialog), "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+        }
+      
+      gtk_window_present (GTK_WINDOW (no_fullscreen_dialog));
+
+      return;
+    }
+  
+  terminal_window_set_fullscreen (window,
+                                  !terminal_window_get_fullscreen (window));
+}
+
+static void
 reset_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
@@ -1640,3 +1748,4 @@ about_callback (GtkWidget      *menuitem,
 
   gtk_widget_show (about);
 }
+

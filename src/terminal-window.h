@@ -83,6 +83,11 @@ void terminal_window_set_size         (TerminalWindow *window,
                                        TerminalScreen *screen,
                                        gboolean        even_if_mapped);
 
+void     terminal_window_set_fullscreen (TerminalWindow *window,
+                                         gboolean        setting);
+gboolean terminal_window_get_fullscreen (TerminalWindow *window);
+
+
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */
