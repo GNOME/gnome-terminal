@@ -46,7 +46,8 @@ void terminal_app_new_terminal (TerminalApp     *app,
                                 char           **override_command,
                                 const char      *geometry,
                                 const char      *title,
-                                const char      *working_dir);
+                                const char      *working_dir,
+                                const char      *role);
 
 void terminal_app_manage_profiles (TerminalApp     *app,
                                    GtkWindow       *transient_parent);

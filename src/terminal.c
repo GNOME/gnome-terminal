@@ -1,6 +1,8 @@
 /* terminal program */
 /*
- * Copyright (C) 2001 Havoc Pennington
+ * Copyright (C) 2001, 2002 Havoc Pennington
+ * Copyright (C) 2002 Red Hat, Inc.
+  * Copyright (C) 2002 Sun Microsystems
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +38,7 @@
 #include <popt.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <gdk/gdkx.h>
 
 
@@ -139,6 +142,7 @@ enum {
   OPTION_TAB_WITH_PROFILE,
   OPTION_WINDOW_WITH_PROFILE_ID,
   OPTION_TAB_WITH_PROFILE_ID,
+  OPTION_ROLE,
   OPTION_SHOW_MENUBAR,
   OPTION_HIDE_MENUBAR,
   OPTION_GEOMETRY,
@@ -212,6 +216,15 @@ struct poptOption options[] = {
     OPTION_TAB_WITH_PROFILE_ID,
     N_("Open a new tab in the last-opened window with the given profile ID. Used internally to save sessions."),
     N_("PROFILEID")
+  },
+  {
+    "role",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_ROLE,
+    N_("Set the role for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
+    N_("ROLE")
   },
   {
     "show-menubar",
@@ -476,6 +489,7 @@ typedef struct
   gboolean menubar_state;
 
   char *geometry;
+  char *role;
   
 } InitialWindow;
 
@@ -518,6 +532,7 @@ initial_window_new (const char *profile,
   iw->force_menubar_state = FALSE;
   iw->menubar_state = FALSE;
   iw->geometry = NULL;
+  iw->role = NULL;
   
   return iw;
 }
@@ -528,6 +543,7 @@ initial_window_free (InitialWindow *iw)
   g_list_foreach (iw->tabs, (GFunc) initial_tab_free, NULL);
   g_list_free (iw->tabs);
   g_free (iw->geometry);
+  g_free (iw->role);
   g_free (iw);
 }
 
@@ -814,6 +830,31 @@ parse_options_callback (poptContext              ctx,
       }
       break;
 
+    case OPTION_ROLE:
+      {
+        InitialWindow *iw;
+
+
+        if (arg == NULL)
+          {
+            g_printerr (_("Option --role requires an argument giving the role\n"));
+            exit (1);
+          }
+            
+        if (results->initial_windows)
+          {
+            iw = g_list_last (results->initial_windows)->data;
+            if (iw->role)
+              {
+                g_printerr (_("Two roles given for one window\n"));
+                exit (1);
+              }
+
+            iw->role = g_strdup (arg);
+          }
+      }
+      break;
+
     case OPTION_GEOMETRY:
       {
         InitialWindow *iw;
@@ -1039,7 +1080,8 @@ new_terminal_with_options (OptionParsingResults *results)
                                          it->exec_argv,
                                          iw->geometry,
                                          it->title,
-                                         it->working_dir);
+                                         it->working_dir,
+                                         iw->role);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -1052,7 +1094,8 @@ new_terminal_with_options (OptionParsingResults *results)
                                          it->exec_argv,
                                          NULL,
                                          it->title,
-                                         it->working_dir);
+                                         it->working_dir,
+                                         NULL);
             }
           
           tmp2 = tmp2->next;
@@ -1237,10 +1280,12 @@ terminal_app_new_terminal (TerminalApp     *app,
                            char           **override_command,
                            const char      *geometry,
                            const char      *title,
-                           const char      *working_dir)
+                           const char      *working_dir,
+                           const char      *role)
 {
   TerminalScreen *screen;
   gboolean window_created;
+  char *new_role;
   
   g_return_if_fail (profile);
 
@@ -1256,6 +1301,21 @@ terminal_app_new_terminal (TerminalApp     *app,
                         app);
       
       app->windows = g_list_append (app->windows, window);
+
+      if (role == NULL)
+        {
+          /* Invent a unique-enough number for the role */
+          new_role = g_strdup_printf ("gnome-terminal-%d-%d-%d",
+                                      getpid (),
+                                      g_random_int (),
+                                      time (NULL));
+          gtk_window_set_role (GTK_WINDOW (window), new_role);
+          g_free (new_role);
+        }
+      else
+        {
+          gtk_window_set_role (GTK_WINDOW (window), role);
+        }
     }
 
   if (force_menubar_state)
@@ -2692,6 +2752,7 @@ terminal_app_get_clone_command (TerminalApp *app,
                       */
   argc += n_windows; /* one --show-menubar or --hide-menubar per window */
 
+  argc += n_windows; /* one --role per window */
 
   argc += n_tabs - n_windows; /* one --with-tab-profile-internal-id
                                * per extra tab
@@ -2743,6 +2804,9 @@ terminal_app_get_clone_command (TerminalApp *app,
                 argv[i] = g_strdup ("--show-menubar");
               else
                 argv[i] = g_strdup ("--hide-menubar");
+              ++i;
+              argv[i] = g_strdup_printf ("--role=%s",
+                                         gtk_window_get_role (GTK_WINDOW (window)));
               ++i;
             }
           else

@@ -1960,7 +1960,7 @@ new_window_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  NULL,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
     }
 }
 
@@ -1980,7 +1980,7 @@ new_tab_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL);
     }
 }
 

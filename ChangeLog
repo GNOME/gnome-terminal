@@ -1,3 +1,24 @@
+2002-09-22  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (terminal_app_new_terminal): make the window role
+	slightly "more unique" by adding pid and time(NULL) to it.  Also,
+	put "gnome-terminal-" in the role to avoid possible confusion with
+	other apps in the case of a silly window manager.
+
+2002-08-14  Deepa Chacko Pillai <deepa.chacko@wipro.com>
+ 
+	* src/terminal.c: Set the role for each terminal window.
+	Added a new option '--role' to store the role information.
+
+	* src/terminal.h: Added one more parameter, ie. role, to
+	terminal_app_new_terminal ().
+
+	* src/terminal-screen.c: Added one more parameter, ie. role, to
+	terminal_app_new_terminal ().
+
+	* src/terminal-window.c: Added one more parameter, ie. role, to
+	terminal_app_new_terminal ().
+
 2002-09-20  Narayana Pattipati <narayana.pattipati@wipro.com>
 
         * src/terminal.c : Handled the "die" signal sent by master
