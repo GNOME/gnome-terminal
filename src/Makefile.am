@@ -9,10 +9,10 @@ INCLUDES=@TERM_CFLAGS@								\
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
 	-DTERM_PKGDATADIR=\"$(pkgdatadir)\"
 
-bin_PROGRAMS=profterm
+bin_PROGRAMS=gnome-terminal
 
 ## Terminal
-profterm_SOURCES=				\
+gnome_terminal_SOURCES=				\
 	profile-editor.c			\
 	profile-editor.h			\
 	terminal.c				\
@@ -27,7 +27,7 @@ profterm_SOURCES=				\
 	eggcellrendererkeys.c			\
 	eggcellrendererkeys.h
 
-profterm_LDADD= @TERM_LIBS@
+gnome_terminal_LDADD= @TERM_LIBS@
 
 
 gladedir   = $(pkgdatadir)/glade
@@ -49,6 +49,7 @@ install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
 
 EXTRA_DIST =				\
+	$(icon_DATA)			\
 	$(glade_DATA)			\
 	$(glade_src)			\
 	$(glade_msgs)			\

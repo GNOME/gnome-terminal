@@ -2,7 +2,7 @@ AC_INIT(src/terminal.c)
 
 AM_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(gnome-terminal, 1.9)
+AM_INIT_AUTOMAKE(gnome-terminal, 1.9.0)
 
 GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST(GETTEXT_PACKAGE)
@@ -37,8 +37,9 @@ if test "x$GCC" = "xyes"; then
 fi
 changequote([,])dnl
 
-ALL_LINGUAS=""
-AM_GLIB_GNU_GETTEXT
+## put back when we have translations
+## ALL_LINGUAS=""
+## AM_GLIB_GNU_GETTEXT
 
 ## here we get the flags we'll actually use
 PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 1.3.12 libzvt-2.0 gconf-2.0 >= 1.1.6 libglade-2.0 libgnomeui-2.0)
@@ -64,7 +65,9 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 AC_OUTPUT([
 Makefile
 src/Makefile
-po/Makefile.in
 ])
+
+## put back in output when we have translations
+## po/Makefile.in
 
 
