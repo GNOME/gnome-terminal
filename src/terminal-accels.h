@@ -32,6 +32,10 @@ GtkAccelGroup* terminal_accels_get_group_for_widget (GtkWidget *widget);
 #define ACCEL_PATH_NEW_TAB ACCEL_PATH_ROOT"/new_tab"
 #define ACCEL_PATH_NEW_WINDOW ACCEL_PATH_ROOT"/new_window"
 
+#define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
+#define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"
+#define N_TABS_WITH_ACCEL 11
+
 GtkWidget* terminal_edit_keys_dialog_new (GtkWindow *transient_parent);
 
 #endif /* TERMINAL_ACCELS_H */

@@ -79,9 +79,12 @@ static void       screen_set_hbox      (TerminalScreen *screen,
                                         GtkWidget      *hbox);
 static void       screen_set_label     (TerminalScreen *screen,
                                         GtkWidget      *label);
+static void       screen_set_menuitem  (TerminalScreen *screen,
+                                        GtkWidget      *menuitem);
 static GtkWidget* screen_get_scrollbar (TerminalScreen *screen);
 static GtkWidget* screen_get_hbox      (TerminalScreen *screen);
 static GtkWidget* screen_get_label     (TerminalScreen *screen);
+static GtkWidget* screen_get_menuitem  (TerminalScreen *screen);
 
 static TerminalScreen* find_screen_by_hbox (TerminalWindow *window,
                                             GtkWidget      *hbox);
@@ -466,6 +469,9 @@ terminal_window_init (TerminalWindow *window)
   mi = append_menuitem (menu, _("_Next tab"), NULL,
                         G_CALLBACK (next_tab_callback), window);
   window->priv->next_tab_menuitem = mi;
+
+  mi = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
   
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
@@ -598,6 +604,7 @@ terminal_window_new (GConfClient *conf)
     }
 
   reset_menubar_labels (window);
+  reset_tab_menuitems (window);
   
   return window;
 }
@@ -633,6 +640,7 @@ title_changed_callback (TerminalScreen *screen,
                         TerminalWindow *window)
 {
   GtkWidget *label;
+  GtkWidget *mi;
   
   if (screen == window->priv->active_term)
     gtk_window_set_title (GTK_WINDOW (window),
@@ -641,6 +649,11 @@ title_changed_callback (TerminalScreen *screen,
   label = screen_get_label (screen);
   eel_ellipsizing_label_set_text (EEL_ELLIPSIZING_LABEL (label),
                                   terminal_screen_get_title (screen));
+
+  mi = screen_get_menuitem (screen);
+  if (mi)
+    gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (mi))),
+                        terminal_screen_get_title (screen));
 }
 
 static void
@@ -733,6 +746,8 @@ terminal_window_add_screen (TerminalWindow *window,
                             hbox,
                             label);
 
+  reset_tab_menuitems (window);
+  
   /* Busting out the GtkNotebook crackrock features */
   gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (window->priv->notebook),
                                       hbox,
@@ -779,12 +794,14 @@ terminal_window_remove_screen (TerminalWindow *window,
   screen_set_hbox (screen, NULL);
   screen_set_label (screen, NULL);
   screen_set_scrollbar (screen, NULL);
+  screen_set_menuitem (screen, NULL);
   
   g_object_unref (G_OBJECT (screen));
+  
+  update_notebook (window);
+  reset_tab_menuitems (window);
 
   /* Put ourselves back in a sane state */
-  update_notebook (window);
-
   if (window->priv->active_term == NULL &&
       window->priv->terms)
     terminal_window_set_active (window, window->priv->terms->data);
@@ -963,6 +980,15 @@ screen_set_label (TerminalScreen *screen,
                      label);
 }
 
+static void
+screen_set_menuitem  (TerminalScreen *screen,
+                      GtkWidget      *menuitem)
+{
+  g_object_set_data (G_OBJECT (screen),
+                     "menuitem",
+                     menuitem);
+}
+
 static GtkWidget*
 screen_get_scrollbar (TerminalScreen *screen)
 {
@@ -979,6 +1005,12 @@ static GtkWidget*
 screen_get_label (TerminalScreen *screen)
 {
   return g_object_get_data (G_OBJECT (screen), "label");
+}
+
+static GtkWidget*
+screen_get_menuitem (TerminalScreen *screen)
+{
+  return g_object_get_data (G_OBJECT (screen), "menuitem");
 }
 
 static TerminalScreen*
@@ -1008,6 +1040,7 @@ notebook_page_switched_callback (GtkWidget       *notebook,
   GtkWidget* page_widget;
   TerminalScreen *screen;
   gboolean on_last_page;
+  GtkWidget *menu_item;
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
@@ -1031,6 +1064,12 @@ notebook_page_switched_callback (GtkWidget       *notebook,
   
   gtk_widget_set_sensitive (window->priv->next_tab_menuitem,
                             !on_last_page);
+
+  menu_item = screen_get_menuitem (screen);
+  if (menu_item &&
+      screen == window->priv->active_term)
+    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
+                                    TRUE);
 }
 
 void
@@ -1280,9 +1319,10 @@ static void
 reset_tab_menuitems (TerminalWindow *window)
 {
   GList *tmp;
-  GtkWidget *mi;
+  GtkWidget *menu_item;
   int i;
   TerminalScreen *screen;
+  GSList *group;
   
   tmp = window->priv->tab_menuitems;
   while (tmp != NULL)
@@ -1294,11 +1334,13 @@ reset_tab_menuitems (TerminalWindow *window)
   g_list_free (window->priv->tab_menuitems);
   window->priv->tab_menuitems = NULL;
 
+  group = NULL;
   i = 0;
-  while (TRUE)
+  while (TRUE) /* should probably make us somewhat nervous */
     {
       GtkWidget *page;
-
+      char *accel_path;
+      
       page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook),
                                         i);
 
@@ -1307,10 +1349,43 @@ reset_tab_menuitems (TerminalWindow *window)
       
       screen = find_screen_by_hbox (window, page);
 
-#if 0
-      mi = append_menuitem (menu, _("_Next tab"), NULL,
-                            G_CALLBACK (next_tab_callback), window);
-#endif
+      menu_item = gtk_radio_menu_item_new_with_label (group,
+                                                      terminal_screen_get_title (screen));
+      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
+      
+      if (i < N_TABS_WITH_ACCEL)
+        accel_path = g_strdup_printf (FORMAT_ACCEL_PATH_SWITCH_TO_TAB,
+                                      i + 1);
+      else
+        accel_path = NULL;
+      
+      if (accel_path)
+        gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                      accel_path);
+      
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (window->priv->go_menu),
+                             menu_item);
+
+      if (screen == window->priv->active_term)
+        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
+                                        TRUE);
+      
+      g_object_set_data (G_OBJECT (menu_item),
+                         "notebook-page",
+                         GINT_TO_POINTER (i));
+      
+      g_signal_connect (G_OBJECT (menu_item),
+                        "activate",
+                        G_CALLBACK (change_tab_callback),
+                        window);      
+
+      window->priv->tab_menuitems =
+        g_list_prepend (window->priv->tab_menuitems,
+                        menu_item);
+
+      /* so we can keep the title updated */
+      screen_set_menuitem (screen, menu_item);
       
       ++i;
     }
@@ -1510,13 +1585,17 @@ static void
 change_tab_callback (GtkWidget      *menuitem,
                      TerminalWindow *window)
 {
-  int page;
+  if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem)))
+    {
+      int page_num;
+      
+      page_num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem),
+                                                     "notebook-page"));
 
-  page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem),
-                                             "notebook-page"));
   
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
-                                 page);
+      gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
+                                     page_num);
+    }
 }
 
 static void
@@ -1554,6 +1633,7 @@ about_callback (GtkWidget      *menuitem,
                            (const char **)documenters,
                            (const char *)translator_credits,
                            NULL);
+  
   g_object_add_weak_pointer (G_OBJECT (about),
                              (void**) &about);
 

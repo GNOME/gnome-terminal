@@ -30,6 +30,7 @@
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
+#define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
 {
@@ -52,7 +53,43 @@ static KeyEntry entries[] =
   { N_("New tab"),
     KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, 0, 0, NULL, FALSE },
   { N_("New window"),
-    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, 0, 0, NULL, FALSE }
+    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 1"),
+    PREFIX_KEY_SWITCH_TO_TAB"1",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 2"),
+    PREFIX_KEY_SWITCH_TO_TAB"2",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"2", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 3"),
+    PREFIX_KEY_SWITCH_TO_TAB"3",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"3", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 4"),
+    PREFIX_KEY_SWITCH_TO_TAB"4",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"4", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 5"),
+    PREFIX_KEY_SWITCH_TO_TAB"5",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"5", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 6"),
+    PREFIX_KEY_SWITCH_TO_TAB"6",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"6", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 7"),
+    PREFIX_KEY_SWITCH_TO_TAB"7",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"7", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 8"),
+    PREFIX_KEY_SWITCH_TO_TAB"8",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"8", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 9"),
+    PREFIX_KEY_SWITCH_TO_TAB"9",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"9", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 10"),
+    PREFIX_KEY_SWITCH_TO_TAB"10",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"10", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 11"),
+    PREFIX_KEY_SWITCH_TO_TAB"11",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"11", 0, 0, 0, 0, NULL, FALSE },
+  { N_("Switch to tab 12"),
+    PREFIX_KEY_SWITCH_TO_TAB"12",
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, 0, 0, NULL, FALSE }
 };
 
 /*
@@ -791,6 +828,8 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   g_signal_connect (G_OBJECT (w), "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
+  gtk_window_set_default_size (GTK_WINDOW (w),
+                               -1, 350);
   
   return w;
 }
