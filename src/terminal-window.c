@@ -896,7 +896,7 @@ terminal_window_init (TerminalWindow *window)
   if (!gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE)))
     gtk_widget_set_sensitive (mi, FALSE);
   else
-    g_signal_connect (G_OBJECT (window), "window-state-event", G_CALLBACK (window_state_event_callback), NULL);
+    g_signal_connect (G_OBJECT (window), "window-state-event", G_CALLBACK (window_state_event_callback), mi);
 
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
