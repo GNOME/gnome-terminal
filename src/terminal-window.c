@@ -1416,15 +1416,9 @@ terminal_window_add_screen (TerminalWindow *window,
   {
     /* Match size to current active screen */
     int current_width, current_height;
-    GtkWidget *current_widget;
-
     if (window->priv->active_term)
-      current_widget = terminal_screen_get_widget (window->priv->active_term);
-    else
-      current_widget = NULL;
-    
-    if (current_widget)
-      terminal_widget_get_size (current_widget, &current_width, &current_height);
+      terminal_widget_get_size (terminal_screen_get_widget(window->priv->active_term), 
+                                &current_width, &current_height);
     else
       {
         current_width = 80;
@@ -2230,7 +2224,8 @@ new_window_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  NULL,
-                                 FALSE, FALSE, NULL, NULL, NULL, dir, NULL, 1.0,
+                                 FALSE, FALSE, FALSE,
+                                 NULL, NULL, NULL, dir, NULL, 1.0,
                                  NULL, name, -1);
 
       g_free (name);
@@ -2257,7 +2252,8 @@ new_tab_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
-                                 FALSE, FALSE, NULL, NULL, NULL, dir, NULL, 1.0,
+                                 FALSE, FALSE, FALSE,
+                                 NULL, NULL, NULL, dir, NULL, 1.0,
                                  NULL, NULL, -1);
     }
 }

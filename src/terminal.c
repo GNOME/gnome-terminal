@@ -95,6 +95,7 @@ typedef struct
   GList *initial_windows;
   gboolean default_window_menubar_forced;
   gboolean default_window_menubar_state;
+  gboolean default_start_fullscreen;
   char *default_geometry;
   char *default_working_dir;
   char **post_execute_args;
@@ -155,6 +156,7 @@ enum {
   OPTION_ROLE,
   OPTION_SHOW_MENUBAR,
   OPTION_HIDE_MENUBAR,
+  OPTION_FULLSCREEN,
   OPTION_GEOMETRY,
   OPTION_DISABLE_FACTORY,
   OPTION_USE_FACTORY,
@@ -275,6 +277,15 @@ struct poptOption options[] = {
     NULL,
     OPTION_HIDE_MENUBAR,
     N_("Turn off the menubar for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
+    NULL
+  },
+  {
+    "full-screen",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_FULLSCREEN,
+    N_("Set the last-specified window into fullscreen mode; applies to only one window; can be specified once for each window you create from the command line."),
     NULL
   },
   {
@@ -560,6 +571,8 @@ typedef struct
   gboolean force_menubar_state;
   gboolean menubar_state;
 
+  gboolean start_fullscreen;
+
   char *geometry;
   char *role;
   
@@ -606,6 +619,7 @@ initial_window_new (const char *profile,
   iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
   iw->force_menubar_state = FALSE;
   iw->menubar_state = FALSE;
+  iw->start_fullscreen = FALSE;
   iw->geometry = NULL;
   iw->role = NULL;
   
@@ -641,6 +655,8 @@ apply_defaults (OptionParsingResults *results,
 
       results->default_window_menubar_forced = FALSE;
     }
+
+  iw->start_fullscreen = results->default_start_fullscreen;
 }
 
 static InitialWindow*
@@ -918,6 +934,23 @@ parse_options_callback (poptContext              ctx,
           {
             results->default_window_menubar_forced = TRUE;
             results->default_window_menubar_state = FALSE;
+          }
+      }
+      break;
+
+    case OPTION_FULLSCREEN:
+      {
+        InitialWindow *iw;
+            
+        if (results->initial_windows)
+          {
+            iw = g_list_last (results->initial_windows)->data;
+
+            iw->start_fullscreen = TRUE;
+          }
+        else
+          {
+            results->default_start_fullscreen = TRUE;
           }
       }
       break;
@@ -1401,6 +1434,7 @@ new_terminal_with_options (OptionParsingResults *results)
                                          NULL,
                                          iw->force_menubar_state,
                                          iw->menubar_state,
+                                         iw->start_fullscreen,
                                          it->exec_argv,
                                          iw->geometry,
                                          it->title,
@@ -1420,6 +1454,7 @@ new_terminal_with_options (OptionParsingResults *results)
                                          profile,
                                          current_window,
                                          FALSE, FALSE,
+                                         FALSE/*not fullscreen*/,
                                          it->exec_argv,
                                          NULL,
                                          it->title,
@@ -1785,6 +1820,7 @@ terminal_app_new_terminal (TerminalApp     *app,
                            TerminalWindow  *window,
                            gboolean         force_menubar_state,
                            gboolean         forced_menubar_state,
+                           gboolean         start_fullscreen,
                            char           **override_command,
                            const char      *geometry,
                            const char      *title,
@@ -1863,6 +1899,11 @@ terminal_app_new_terminal (TerminalApp     *app,
                                       geometry))
         g_printerr (_("Invalid geometry string \"%s\"\n"),
                     geometry);
+    }
+
+  if (start_fullscreen)
+    {
+      terminal_window_set_fullscreen (window, TRUE);
     }
 
   /* don't present on new tab, or we can accidentally make the
