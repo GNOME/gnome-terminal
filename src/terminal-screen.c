@@ -480,7 +480,7 @@ reread_profile (TerminalScreen *screen)
   if (terminal_profile_get_use_skey (screen->priv->profile))
     {
       terminal_widget_skey_match_add (screen->priv->term,
-				      "s/key ([0-9]*) ([-A-Za-z0-9]*)");
+				      "s/key [0-9]* [-A-Za-z0-9]*");
     }
   else
     {
