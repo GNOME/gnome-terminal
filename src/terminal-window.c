@@ -1528,6 +1528,12 @@ terminal_window_list_screens (TerminalWindow *window)
   return g_list_copy (window->priv->terms);
 }
 
+int    
+terminal_window_get_screen_count (TerminalWindow *window)
+{
+  return g_list_length (window->priv->terms);
+}
+
 void
 terminal_window_set_menubar_visible (TerminalWindow *window,
                                      gboolean        setting)

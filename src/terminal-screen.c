@@ -1458,10 +1458,16 @@ terminal_screen_do_popup (TerminalScreen *screen,
   gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
 
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("C_lose Tab"),
-                               G_CALLBACK (close_tab_callback),
-                               screen);
+  if (terminal_window_get_screen_count (terminal_screen_get_window (screen)) > 1)
+    menu_item = append_menuitem (screen->priv->popup_menu,
+                                 _("C_lose Tab"),
+                                 G_CALLBACK (close_tab_callback),
+                                 screen);
+  else
+    menu_item = append_menuitem (screen->priv->popup_menu,
+                                 _("_Close Window"),
+                                 G_CALLBACK (close_tab_callback),
+                                 screen);
 
   menu_item = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_item);
