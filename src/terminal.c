@@ -3468,7 +3468,7 @@ terminal_util_load_glade_file (const char *filename,
       static GtkWidget *no_glade_dialog = NULL;
 
       terminal_util_show_error_dialog (error_dialog_parent, &no_glade_dialog, 
-                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the dialog can't be displayed."), path);
+                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly."), path);
     }
 
   g_free (path);

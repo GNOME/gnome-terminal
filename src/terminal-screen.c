@@ -224,11 +224,20 @@ terminal_screen_init (TerminalScreen *screen)
   g_object_ref (G_OBJECT (screen->priv->term));
   gtk_object_sink (GTK_OBJECT (screen->priv->term));
 
+#define USERCHARS "-A-Za-z0-9"
+#define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
+#define HOSTCHARS "-A-Za-z0-9"
+#define SCHEME    "(news|telnet|nttp|file|http|ftp|https)"
+#define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
+
   terminal_widget_match_add (screen->priv->term,
-                             "(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?");
+      "((" SCHEME "://(" USER "@)?)|(www|ftp)[" HOSTCHARS "]*\\.)[" HOSTCHARS ".]+(:[0-9]*)?");
   
   terminal_widget_match_add (screen->priv->term,
-                             "(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) \t\r\n,\\\"]");
+      "((" SCHEME "://(" USER "@)?)"  "|"  "(www|ftp)[" HOSTCHARS "]*\\.)"
+      "[" HOSTCHARS ".]+(:[0-9]+)?/"
+      "[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*"
+      "[^]'.}>) \t\r\n,\\\"]");
 
   terminal_screen_setup_dnd (screen);
   

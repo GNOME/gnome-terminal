@@ -2382,7 +2382,7 @@ terminal_profile_forget (TerminalProfile *profile)
                                &err);
       if (err)
         {
-          g_printerr (_("There was an error forgetting profile dir %s. (%s)\n"),
+          g_printerr (_("There was an error while removing the configuration directory %s. (%s)\n"),
                       profile->priv->profile_dir, err->message);
           g_error_free (err);
         }
