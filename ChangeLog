@@ -1,3 +1,18 @@
+2002-04-11  Michael Meeks  <michael@ximian.com>
+
+	* src/terminal.c (main): add disable_factory option
+	and call terminal_init_factory.
+	(terminal_invoke_factory): impl. to register and do
+	remote creation if appropriate.
+	(terminal_register_as_factory): impl.
+	(terminal_new_event): impl.
+
+	* src/gnome-terminal.server: add.
+
+	* src/Makefile.am (serverdir): add
+	gnome-terminal.server NB. it is imperative to have
+	this installed if you want the shared mode to work.
+
 2002-03-25 Pasupathi Duraisamy <pasupathi.duraisamy@wipro.com>
         
         * Fix to the Bug#76269

@@ -24,11 +24,16 @@
 #include "terminal-window.h"
 #include "profile-editor.h"
 #include <gconf/gconf-client.h>
+#include <bonobo-activation/bonobo-activation-activate.h>
+#include <bonobo-activation/bonobo-activation-register.h>
+#include <bonobo/bonobo-exception.h>
+#include <bonobo/bonobo-listener.h>
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-client.h>
 #include <popt.h>
 #include <string.h>
+#include <gdk/gdkx.h>
 
 
 /* Settings storage works as follows:
@@ -111,6 +116,7 @@ enum {
   OPTION_TOGGLE_MENUBAR,
   OPTION_GEOMETRY,
   OPTION_USE_FACTORY,
+  OPTION_DISABLE_FACTORY,
   OPTION_LAST
 };  
 
@@ -211,7 +217,16 @@ struct poptOption options[] = {
     POPT_ARG_NONE,
     NULL,
     OPTION_USE_FACTORY,
-    N_("Ask existing profterm process to open a new window, if possible. (Not yet implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"),
+    N_("Ask existing profterm process to open a new window, if possible. Defaults to true"),
+    NULL
+  },
+  {
+    "disable-factory",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_DISABLE_FACTORY,
+    N_("Do not register with the activation nameserver, do not re-use an active terminal"),
     NULL
   },
   {
@@ -342,6 +357,118 @@ set_default_icon (const char *filename)
   g_object_unref (G_OBJECT (pixbuf));
 }
 
+/*
+ *   Invoked remotely to instantiate a terminal with the
+ * given arguments.
+ */
+static void
+terminal_new_event (BonoboListener    *listener,
+		    const char        *event_name, 
+		    const CORBA_any   *any,
+		    CORBA_Environment *ev,
+		    gpointer           user_data)
+{
+  int i;
+  CORBA_sequence_CORBA_string *args;
+
+  if (strcmp (event_name, "new_terminal"))
+    {
+      g_warning ("Unknown event '%s' on terminal",
+		 event_name);
+      return;
+    }
+
+  printf ("Create new terminal with:\n");
+  args = any->_value;
+  for (i = 0; i < args->_length; i++)
+    printf ("  arg %d = '%s'\n", i, args->_buffer [i]);
+
+  g_return_if_fail (app != NULL);
+  terminal_app_new_terminal (
+	  app,
+	  terminal_profile_get_for_new_term (),
+	  NULL, FALSE, FALSE, NULL, NULL);
+}
+
+#define ACT_IID "OAFIID:GNOME_Terminal_Factory"
+
+static Bonobo_RegistrationResult
+terminal_register_as_factory (void)
+{
+  char *per_display_iid;
+  BonoboListener *listener;
+  Bonobo_RegistrationResult result;
+
+  listener = bonobo_listener_new (terminal_new_event, NULL);
+
+  per_display_iid = bonobo_activation_make_registration_id (
+    ACT_IID, DisplayString (gdk_display));
+
+  result = bonobo_activation_active_server_register (
+    per_display_iid, BONOBO_OBJREF (listener));
+
+  if (result != Bonobo_ACTIVATION_REG_SUCCESS)
+    bonobo_object_unref (BONOBO_OBJECT (listener));
+
+  g_free (per_display_iid);
+
+  return result;
+}
+
+static gboolean
+terminal_invoke_factory (int argc, char **argv)
+{
+  Bonobo_Listener listener;
+
+  switch (terminal_register_as_factory ())
+    {
+      case Bonobo_ACTIVATION_REG_SUCCESS:
+	/* we were the first terminal to register */
+	return FALSE;
+      case Bonobo_ACTIVATION_REG_NOT_LISTED:
+	g_warning (_("It appears that you do not have gnome-terminal.server installed in a valid location. Factory mode disabled"));
+        return FALSE;
+      case Bonobo_ACTIVATION_REG_ERROR:
+        g_warning (_("Error registering with the activation service Factory mode disabled"));
+        return FALSE;
+      case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
+        /* lets use it then */
+        break;
+    }
+
+  listener = bonobo_activation_activate_from_id (
+    ACT_IID, Bonobo_ACTIVATION_FLAG_EXISTING_ONLY, NULL, NULL);
+
+  if (listener != CORBA_OBJECT_NIL)
+    {
+      int i;
+      CORBA_any any;
+      CORBA_sequence_CORBA_string args;
+      CORBA_Environment ev;
+
+      CORBA_exception_init (&ev);
+
+      any._type = TC_CORBA_sequence_CORBA_string;
+      any._value = &args;
+
+      args._length = argc;
+      args._buffer = g_newa (CORBA_char *, args._length);
+      for (i = 0; i < args._length; i++)
+        args._buffer [i] = argv [i];
+
+      Bonobo_Listener_event (listener, "new_terminal", &any, &ev);
+      CORBA_Object_release (listener, &ev);
+      if (!BONOBO_EX (&ev))
+        return TRUE;
+
+      CORBA_exception_free (&ev);
+    }
+  else
+    g_warning ("Failed to retrieve listener from activation server");
+
+  return FALSE;
+}
+
 static GnomeModuleInfo module_info = {
   PACKAGE, VERSION, N_("Terminal"),
   NULL,
@@ -363,6 +490,7 @@ main (int argc, char **argv)
   int next_opt;
   GList *initial_windows = NULL;
   GList *tmp;
+  gboolean disable_factory = FALSE;
   gboolean default_window_menubar_forced = FALSE;
   gboolean default_window_menubar_state = FALSE;
   int i;
@@ -642,7 +770,11 @@ main (int argc, char **argv)
           break;
 
         case OPTION_USE_FACTORY:
-          /* FIXME */
+          /* this is a deprecated default anyway */
+          break;
+
+        case OPTION_DISABLE_FACTORY:
+          disable_factory = TRUE;
           break;
           
         case OPTION_LAST:          
@@ -651,7 +783,13 @@ main (int argc, char **argv)
           break;
         }
     }
-  
+
+  if (!disable_factory)
+    {
+      if (terminal_invoke_factory (argc, argv))
+        return 0;
+    }
+
   if (next_opt != -1)
     {
       g_printerr (_("Error on option %s: %s.\nRun '%s --help' to see a full list of available command line options.\n"),
