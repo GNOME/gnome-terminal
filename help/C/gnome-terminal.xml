@@ -1,16 +1,17 @@
-<?xml version="1.0" ?>
+<?xml version="1.0"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY app "GNOME Terminal">  
-  <!ENTITY appversion "1.9.6">
+  <!ENTITY appversion "2.0.1">
   <!ENTITY date "August 2002">
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY manrevision "2.2">
+  <!ENTITY manrevision "2.3">
 ]>
 <!-- (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
   Template version: 2.0 beta
-  Template last modified Jan 2, 2002   
+  Template last modified Jan 2, 2002 
+    
   -->
 <article id="index" lang="en"> 
   <articleinfo> 
@@ -70,6 +71,19 @@
              </para>
           </revdescription> 
         </revision> 
+        <revision> 
+          <revnumber>GNOME Terminal Manual V2.2</revnumber> 
+          <date>August 2002</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription> 
+        </revision>
         <revision> 
           <revnumber>GNOME Terminal Manual V2.1</revnumber> 
           <date>August 2002</date> 
@@ -208,8 +222,7 @@
           When you start <application>&app;</application> for the first time, the
           application opens a terminal window with a group of default settings. The group
           of default settings is called the Default profile. The profile name appears in
-          the titlebar of the <application>&app;</application> window. The Default
-          profile settings are specified in <xref linkend="gnome-terminal-prefs"/> 
+          the titlebar of the <application>&app;</application> window. 
         </para>
         <figure id="gnome-terminal_default"> 
           <title>Example of a Default &app; Window</title> 
@@ -275,14 +288,14 @@
           You can create a new profile, and apply the new profile to the terminal
           to modify characteristics such as font, color and effects, scrolling behavior,
           window title, compatibility, and keyboard shortcuts. You can also define the command
-          for starting <application>&app;</application> in the profile. You define each
-          terminal profile in the 
-          <guilabel>Editing profile</guilabel> dialog, which you access from the 
+          for starting <application>&app;</application> in the profile. </para>
+          <para>You define each terminal profile in the 
+          <guilabel>Edit Profiles</guilabel> dialog, which you access from the 
           <guimenu>Edit</guimenu> menu. You can define as many different
           profiles as you require. When you start a terminal, you can choose the profile
           that you want to use for the terminal or you can change the terminal profile
-          while you are using the terminal. You can specify an initial profile for a
-          terminal when you start the application from a command line using the following
+          while you are using the terminal. To specify an initial profile for a
+          terminal when you start the application from a command line, use the following
           command: 
         </para>
         <para>
@@ -439,17 +452,27 @@
                         <para>
                           Choose 
                           <menuchoice> 
-                             <guimenu>Filel</guimenu> 
+                             <guimenu>File</guimenu> 
                              <guimenuitem>New Profile</guimenuitem> 
                           </menuchoice> to display the 
-                          <guilabel>New terminal profile</guilabel> dialog. 
+                          <guilabel>New Profile</guilabel> dialog. 
                         </para>
                      </listitem> 
                      <listitem> 
                         <para>
                           Type the new profile name in the 
-                          <guilabel>Profile Name</guilabel> text box, then click 
-                          <guibutton>Create</guibutton>. <application>&app;</application>
+                          <guilabel>Profile Name</guilabel> text box.
+                        </para>
+                     </listitem> 
+                     <listitem> 
+                        <para>
+                          Use the <guilabel>Base on</guilabel> drop-down list box to select 
+                          the profile on which you want to base the new profile.
+                        </para>
+                     </listitem> 
+                     <listitem> 
+                        <para>
+                          Click <guibutton>Create</guibutton>. <application>&app;</application>
                           adds the profile to the 
                           <menuchoice> 
                              <guimenu>Terminal</guimenu> 
@@ -513,7 +536,7 @@
                         <menuchoice> 
                           <guimenu>Edit</guimenu> 
                           <guisubmenu>Profiles</guisubmenu> 
-                        </menuchoice>, then the select the profile you want to edit
+                        </menuchoice>, then select the profile you want to edit
                         and click 
                         <guibutton>Edit</guibutton>. 
                      </para>
@@ -521,7 +544,7 @@
                   <listitem> 
                      <para>
                         Right-click in the terminal window, then choose 
-                        <guimenuitem>Edit current profile</guimenuitem> from the
+                        <guimenuitem>Edit Current Profile</guimenuitem> from the
                         popup menu. 
                      </para>
                   </listitem> 
@@ -711,7 +734,7 @@
              </listitem> 
           </varlistentry> 
           <varlistentry> 
-             <term>To Access a Link</term> 
+             <term>To access a link:</term> 
              <listitem> 
                 <para>
                   To access a Uniform Resource Locator (URL) that is displayed in a
@@ -764,7 +787,6 @@
                   <keycap>Alt</keycap> key in combination with the access key to 
                   perform the action. 
                 </para>
-                <para>Default: unselected.</para>
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -775,7 +797,6 @@
                   enable you to access the <application>&app;</application> menus.
                   The default shortcut key for accessing the menus is <keycap>F10</keycap>.
                 </para>
-                <para>Default: unselected.</para>
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -858,9 +879,24 @@
         </menuchoice>, select the profile you want to edit, then click <guibutton>Edit</guibutton>.
      </para>
      <para>  
-        You can configure <application>&app;</application> using the following tabbed sections
-        in the <guilabel>Editing profile "<replaceable>profile name</replaceable>"</guilabel> dialog. 
+        The <guilabel>Editing profile "<replaceable>profile name</replaceable>"</guilabel> dialog
+        contains the following tabbed sections that you can use to configure <application>&app;</application>:
      </para>
+     <itemizedlist> 
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
      
      <sect2 id="gnome-terminal-prefs-general"> 
         <title>General</title> 
@@ -872,10 +908,10 @@
                 <para>
                   Use this text box to specify the name of the current profile. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 
                   <guilabel>Default</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -886,9 +922,9 @@
                   Select this option to use the standard application font that is specified in the 
                   <application>Font</application> preference tool. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: selected.
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry>
           <varlistentry> 
@@ -896,37 +932,15 @@
                 <guilabel>Font</guilabel> </term> 
              <listitem> 
                 <para>
-                  Use this drop-down list box to specify the default font type for the terminal. 
+                  Click on this button to select a default font type and font size for the terminal. This button is
+                  only available if the <guilabel>Use the same font as other applications</guilabel> option
+                  is unselected.
                 </para>
-                <para>
+                <!-- <para>
                   Default: <guilabel>fixed (misc)</guilabel>. 
-                </para>
-             </listitem> 
-          </varlistentry>
-          <varlistentry> 
-             <term> 
-                <guilabel>Size</guilabel> </term> 
-             <listitem> 
-                <para>
-                  Use this drop-down list box to specify the default font size for the terminal. 
-                </para>
-                <para>
-                  Default: <guilabel>13</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
-          <varlistentry> 
-             <term> 
-                <guilabel>Use bold version of font</guilabel> </term> 
-             <listitem> 
-                <para>
-                  Select this option to use a bold version of the font specified. 
-                </para>
-                <para>
-                  Default: unselected. 
-                </para>
-             </listitem> 
-          </varlistentry>
           <varlistentry> 
              <term> 
                 <guilabel>Profile icon</guilabel> </term> 
@@ -934,9 +948,9 @@
                 <para>
                   Click on this button to select an icon to represent the current profile. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: gnome-terminal.png. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -946,9 +960,9 @@
                 <para>
                   Select this option to enable the terminal to display bold text. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: selected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry>
           <varlistentry> 
@@ -958,9 +972,9 @@
                 <para>
                   Select this option to display a blinking cursor. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -971,9 +985,9 @@
                 <para>
                   Select this option to show the menubar on new terminal windows. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -983,9 +997,9 @@
                 <para>
                   Select this option to disable the terminal bell. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -998,9 +1012,9 @@
                   text by word. See <xref linkend="gnome-terminal-contents"/> for more
                   information about how to select text by word. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: -A-Za-z0-9,./?%&amp;#:_ 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           
@@ -1018,9 +1032,9 @@
                   New terminals that are started from the current terminal have the new initial
                   title. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: Terminal. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1031,9 +1045,9 @@
                   Use this drop-down list to set the title for the terminal window
                   to the current working directory. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: <guilabel>Replaces initial title</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1044,9 +1058,9 @@
                   Use this drop-down list to choose a command to run when the
                   terminal exits. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: <guilabel>Exit the terminal</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1058,9 +1072,9 @@
                   terminal to be run as a login shell. If the command is not a shell, then the
                   setting has no effect. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1072,9 +1086,9 @@
                   Select this option to insert a new entry in the utmp and wtmp
                   records when a new shell is opened. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1087,9 +1101,9 @@
                   the normal shell. Specify the custom command in the 
                   <guilabel>Custom command</guilabel> text box. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
         </variablelist> 
@@ -1106,9 +1120,9 @@
                   Select this option to use the colors that are specified in the GNOME theme that is selected 
                   in the <application>Theme</application> preference tool. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: selected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry>
           <varlistentry> 
@@ -1158,10 +1172,10 @@
                   <guilabel>Linux console</guilabel> color scheme, the application
                   displays the foreground and background colors as light gray on black. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 
                   <guilabel>Black on light yellow</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1174,13 +1188,13 @@
                   <guilabel>Choose terminal text color</guilabel> dialog. Choose
                   the color that you want to use as the foreground color from the color palette.
                   This button is only available if you specify the 
-                  <guilabel>Custom colors</guilabel>option on the 
+                  <guilabel>Custom colors</guilabel> option on the 
                   <guilabel>Built-in schemes</guilabel> drop-down list box in the 
                   <guilabel>Terminal Color</guilabel> group box. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: black. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1193,13 +1207,13 @@
                   <guilabel>Choose terminal background color</guilabel> dialog.
                   Choose the color that you want to use as the background color from the color
                   palette. This button is only available if you specify the 
-                  <guilabel>Custom colors</guilabel>option on the 
+                  <guilabel>Custom colors</guilabel> option on the 
                   <guilabel>Built-in schemes</guilabel> drop-down list box in the 
                   <guilabel>Terminal Color</guilabel> group box. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: light yellow. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1240,10 +1254,10 @@
                   <guilabel>Custom </guilabel>color scheme enables you to create a
                   customized color palette. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 
                   <guilabel>Linux console</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry>
  
@@ -1253,7 +1267,7 @@
              <listitem> 
                 <para>
                   The 
-                  <guilabel>Color palette</guilabel>is only available if you
+                  <guilabel>Color palette</guilabel> is only available if you
                   specify the 
                   <guilabel>Custom</guilabel> option on the 
                   <guilabel>Built-in schemes</guilabel> drop-down list box in the 
@@ -1265,9 +1279,9 @@
                   the sliders to customize the color, then click 
                   <guibutton>OK</guibutton>. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
         </variablelist> 
@@ -1291,7 +1305,7 @@
                      <para>
                         Select this option to use the background color that is
                         specified in the 
-                        <guilabel>Colors</guilabel>tabbed section as the background
+                        <guilabel>Colors</guilabel> tabbed section as the background
                         color for the terminal. 
                      </para>
                   </listitem> 
@@ -1318,10 +1332,10 @@
                      </para>
                   </listitem> 
                 </itemizedlist> 
-                <para>
+                <!-- <para>
                   Default: 
                   <guilabel>None (use solid color)</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry>
           <varlistentry> 
@@ -1335,7 +1349,7 @@
                      fixed on the terminal background and only the text scrolls. This option is only
                      available if you select the <guilabel>Background image</guilabel> option.
                 </para>
-                <para>Default: unselected.</para>     
+                <!-- <para>Default: unselected.</para>     -->
              </listitem>
           </varlistentry>        
           <varlistentry> 
@@ -1349,9 +1363,9 @@
                   <guilabel>Background image</guilabel> or 
                   <guilabel>Transparent background</guilabel> options. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 50%. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
         </variablelist> 
@@ -1368,10 +1382,10 @@
                   Use this drop-down list box to specify the position of the
                   scrollbar on the terminal window. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 
                   <guilabel>On the right side</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1383,9 +1397,9 @@
                   scroll back through using the scrollbar. For example, if you specify 100 you
                   can scroll back through the last 100 lines displayed in the terminal. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 500 lines. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1397,9 +1411,9 @@
                   scroll back through using the scrollbar. For example, if you specify 94 you can
                   scroll back through the last 94 kilobytes displayed in the terminal. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: 167 kilobytes. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1411,9 +1425,9 @@
                   <keycap>Page Up</keycap> and 
                   <keycap>Page Down</keycap> keys to scroll through the terminal. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: selected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1425,9 +1439,9 @@
                   the terminal while the terminal continues to display more output from a
                   command. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: unselected. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           </variablelist>
@@ -1444,9 +1458,9 @@
                   Use the drop-down list to select the function that you want the 
                   <keycap>Backspace</keycap> key to perform. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: <guilabel>ASCII DEL</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
@@ -1457,9 +1471,9 @@
                   Use the drop-down list to select the function that you want the 
                   <keycap>Delete</keycap> key to perform. 
                 </para>
-                <para>
+                <!-- <para>
                   Default: <guilabel>Escape sequence</guilabel>. 
-                </para>
+                </para> -->
              </listitem> 
           </varlistentry> 
           <varlistentry> 
