@@ -2090,6 +2090,7 @@ about_callback (GtkWidget      *menuitem,
                            (const char **)documenters,
                            strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
                            pixbuf);
+  gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
   
   g_object_add_weak_pointer (G_OBJECT (about),
                              (void**) &about);
