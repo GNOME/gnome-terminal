@@ -925,6 +925,9 @@ terminal_encoding_init (GConfClient *conf)
   i = 0;
   while (i < TERMINAL_ENCODING_LAST)
     {
+      bytes_read = 0;
+      bytes_written = 0;
+      
       g_assert (encodings[i].index == i);
 
       /* Translate the names */
@@ -943,9 +946,10 @@ terminal_encoding_init (GConfClient *conf)
       if (i == TERMINAL_ENCODING_CURRENT_LOCALE)
         encodings[i].valid = TRUE;
       else
-        encodings[i].valid = (bytes_read == (sizeof(ascii_sample) - 1)) &&
-			     (converted != NULL) &&
-			     (strcmp(converted, ascii_sample) == 0);
+        encodings[i].valid =
+          (bytes_read == (sizeof (ascii_sample) - 1)) &&
+          (converted != NULL) &&
+          (strcmp (converted, ascii_sample) == 0);
 
 #ifdef DEBUG_ENCODINGS
       if (!encodings[i].valid)

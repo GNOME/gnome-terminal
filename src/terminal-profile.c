@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2001 Havoc Pennington
+ * Copyright (C) 2002 Mathias Hasselmann
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -216,8 +217,8 @@ static void default_change_notify        (GConfClient *client,
 static void update_default_profile       (const char  *name,
                                           gboolean     locked);
 
-static void emit_changed (TerminalProfile    *profile,
-                          TerminalSettingMask mask);
+static void emit_changed (TerminalProfile           *profile,
+                          const TerminalSettingMask *mask);
 
 
 static gpointer parent_class;
@@ -259,7 +260,7 @@ terminal_profile_init (TerminalProfile *profile)
   g_return_if_fail (profiles != NULL);
   
   profile->priv = g_new0 (TerminalProfilePrivate, 1);
-  profile->priv->locked = 0;
+  terminal_setting_mask_clear (&profile->priv->locked);
   profile->priv->cursor_blink = FALSE;
   profile->priv->default_show_menubar = TRUE;
   profile->priv->visible_name = g_strdup ("<not named>");
@@ -312,9 +313,8 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalProfileClass, changed),
                   NULL, NULL,
-                  /* should be VOID__ENUM but I'm lazy */
-                  g_cclosure_marshal_VOID__INT,
-                  G_TYPE_NONE, 1, G_TYPE_INT);
+                  g_cclosure_marshal_VOID__POINTER,
+                  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
   signals[FORGOTTEN] =
     g_signal_new ("forgotten",
@@ -1715,8 +1715,8 @@ set_icon_file (TerminalProfile *profile,
 }
 
 static gboolean
-set_palette_string (TerminalProfile *profile,
-                    const char      *candidate_str)
+set_palette (TerminalProfile *profile,
+             const char      *candidate_str)
 {  
   if (candidate_str != NULL)
     {
@@ -1886,538 +1886,116 @@ set_font (TerminalProfile *profile,
 void
 terminal_profile_update (TerminalProfile *profile)
 {
-  char *key;
-  gboolean bool_val;
-  char *str_val;
-  int int_val;
-  double float_val;
-  TerminalSettingMask mask;
   TerminalSettingMask locked;
   TerminalSettingMask old_locked;
+  TerminalSettingMask mask;
   
-  mask = 0;
-  locked = 0;
+  terminal_setting_mask_clear (&mask);
+  terminal_setting_mask_clear (&locked);
 
-  /* KEY_CURSOR_BLINK */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_CURSOR_BLINK);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  /*   g_print ("cursor blink is now %d\n", bool_val); */
-  if (bool_val != profile->priv->cursor_blink)
-    {
-      mask |= TERMINAL_SETTING_CURSOR_BLINK;
-      profile->priv->cursor_blink = bool_val;
-    }  
+#define UPDATE_BOOLEAN(KName, FName)                                            \
+  {                                                                             \
+    char *key = gconf_concat_dir_and_key (profile->priv->profile_dir, KName);   \
+    gboolean val = gconf_client_get_bool (profile->priv->conf, key, NULL);      \
+                                                                                \
+    if (val != profile->priv->FName)                                            \
+      {                                                                         \
+        mask.FName = TRUE;                                                      \
+        profile->priv->FName = val;                                             \
+      }                                                                         \
+                                                                                \
+    locked.FName =                                                              \
+      !gconf_client_key_is_writable (profile->priv->conf, key, NULL);           \
+                                                                                \
+    g_free (key);                                                               \
+  }
 
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_CURSOR_BLINK;
-  
-  g_free (key);
+#define UPDATE_INTEGER(KName, FName)                                            \
+  {                                                                             \
+    char *key = gconf_concat_dir_and_key (profile->priv->profile_dir, KName);   \
+    int val = gconf_client_get_int (profile->priv->conf, key, NULL);            \
+                                                                                \
+    mask.FName = set_##FName (profile, val);                                    \
+                                                                                \
+    locked.FName =                                                              \
+      !gconf_client_key_is_writable (profile->priv->conf, key, NULL);           \
+                                                                                \
+    g_free (key);                                                               \
+  }
 
-  /* KEY_DEFAULT_SHOW_MENUBAR */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_DEFAULT_SHOW_MENUBAR);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
+#define UPDATE_FLOAT(KName, FName)                                              \
+  {                                                                             \
+    char *key = gconf_concat_dir_and_key (profile->priv->profile_dir, KName);   \
+    double val = gconf_client_get_float (profile->priv->conf, key, NULL);       \
+                                                                                \
+    if (val != profile->priv->FName)                                            \
+      {                                                                         \
+        mask.FName = TRUE;                                                      \
+        profile->priv->FName = val;                                             \
+      }                                                                         \
+                                                                                \
+    g_free (key);                                                               \
+  }
 
-  if (bool_val != profile->priv->default_show_menubar)
-    {
-      mask |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
-      profile->priv->default_show_menubar = bool_val;
-    }
+#define UPDATE_STRING(KName, FName)                                             \
+  {                                                                             \
+    char *key = gconf_concat_dir_and_key (profile->priv->profile_dir, KName);   \
+    char *val = gconf_client_get_string (profile->priv->conf, key, NULL);       \
+                                                                                \
+    mask.FName = set_##FName (profile, val);                                    \
+                                                                                \
+    locked.FName =                                                              \
+      !gconf_client_key_is_writable (profile->priv->conf, key, NULL);           \
+                                                                                \
+    g_free (val);                                                               \
+    g_free (key);                                                               \
+  }
 
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
+  UPDATE_BOOLEAN (KEY_CURSOR_BLINK,         cursor_blink);
+  UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR, default_show_menubar);
+  UPDATE_STRING  (KEY_VISIBLE_NAME,         visible_name);
+  UPDATE_STRING  (KEY_FOREGROUND_COLOR,     foreground_color);
+  UPDATE_STRING  (KEY_BACKGROUND_COLOR,     background_color);
+  UPDATE_STRING  (KEY_TITLE,                title);
+  UPDATE_STRING  (KEY_TITLE_MODE,           title_mode);
+  UPDATE_BOOLEAN (KEY_ALLOW_BOLD,           allow_bold);
+  UPDATE_BOOLEAN (KEY_SILENT_BELL,          silent_bell);
+  UPDATE_STRING  (KEY_WORD_CHARS,           word_chars);
+  UPDATE_STRING  (KEY_SCROLLBAR_POSITION,   scrollbar_position);
+  UPDATE_INTEGER (KEY_SCROLLBACK_LINES,     scrollback_lines);
+  UPDATE_BOOLEAN (KEY_SCROLL_ON_KEYSTROKE,  scroll_on_keystroke);
+  UPDATE_BOOLEAN (KEY_SCROLL_ON_OUTPUT,     scroll_on_output);
+  UPDATE_STRING  (KEY_EXIT_ACTION,          exit_action);
+  UPDATE_BOOLEAN (KEY_LOGIN_SHELL,          login_shell);
+  UPDATE_BOOLEAN (KEY_UPDATE_RECORDS,       update_records);
+  UPDATE_BOOLEAN (KEY_USE_CUSTOM_COMMAND,   use_custom_command);
+  UPDATE_STRING  (KEY_CUSTOM_COMMAND,       custom_command);
+  UPDATE_STRING  (KEY_ICON,                 icon_file);
+  UPDATE_STRING  (KEY_PALETTE,              palette);
+  UPDATE_STRING  (KEY_X_FONT,               x_font);
+  UPDATE_STRING  (KEY_BACKGROUND_TYPE,      background_type);
+  UPDATE_STRING  (KEY_BACKGROUND_IMAGE,     background_image_file);
+  UPDATE_BOOLEAN (KEY_SCROLL_BACKGROUND,    scroll_background);
+  UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,  background_darkness);
+  UPDATE_STRING  (KEY_BACKSPACE_BINDING,    backspace_binding);
+  UPDATE_STRING  (KEY_DELETE_BINDING,       delete_binding);
+  UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,     use_theme_colors);
+  UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,      use_system_font);
+  UPDATE_STRING  (KEY_FONT,                 font);
   
-  g_free (key);
+#undef UPDATE_BOOLEAN
+#undef UPDATE_INTEGER
+#undef UPDATE_FLOAT
+#undef UPDATE_STRING
 
-  /* KEY_VISIBLE_NAME */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_VISIBLE_NAME);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_visible_name (profile, str_val))
-    mask |= TERMINAL_SETTING_VISIBLE_NAME;
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_VISIBLE_NAME;
-
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_FOREGROUND_COLOR */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_FOREGROUND_COLOR);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_foreground_color (profile, str_val))
-    mask |= TERMINAL_SETTING_FOREGROUND_COLOR;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_FOREGROUND_COLOR;
-
-  g_free (str_val);
-  g_free (key);
-
-
-  /* KEY_BACKGROUND_COLOR */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_BACKGROUND_COLOR);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_background_color (profile, str_val))
-    mask |= TERMINAL_SETTING_BACKGROUND_COLOR;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_BACKGROUND_COLOR;
-  
-  g_free (str_val);
-  g_free (key);
-
-
-  /* KEY_TITLE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_TITLE);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_title (profile, str_val))
-    mask |= TERMINAL_SETTING_TITLE;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_TITLE;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_TITLE_MODE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_TITLE_MODE);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_title_mode (profile, str_val))
-    mask |= TERMINAL_SETTING_TITLE_MODE;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_TITLE_MODE;
-  
-  g_free (str_val);
-  g_free (key);
-
-
-  /* KEY_ALLOW_BOLD */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_ALLOW_BOLD);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->allow_bold)
-    {
-      mask |= TERMINAL_SETTING_ALLOW_BOLD;
-      profile->priv->allow_bold = bool_val;
-    }  
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_ALLOW_BOLD;
-  
-  g_free (key);
-
-  /* KEY_SILENT_BELL */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SILENT_BELL);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->silent_bell)
-    {
-      mask |= TERMINAL_SETTING_SILENT_BELL;
-      profile->priv->silent_bell = bool_val;
-    }  
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SILENT_BELL;
-  
-  g_free (key);
-
-  /* KEY_WORD_CHARS */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_WORD_CHARS);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_word_chars (profile, str_val))
-    mask |= TERMINAL_SETTING_WORD_CHARS;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_WORD_CHARS;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_SCROLLBAR_POSITION */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SCROLLBAR_POSITION);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_scrollbar_position (profile, str_val))
-    mask |= TERMINAL_SETTING_SCROLLBAR_POSITION;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SCROLLBAR_POSITION;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_SCROLLBACK_LINES */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SCROLLBACK_LINES);
-  int_val = gconf_client_get_int (profile->priv->conf,
-                                  key, NULL);
-  if (set_scrollback_lines (profile, int_val))
-    mask |= TERMINAL_SETTING_SCROLLBACK_LINES;
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
-  
-  g_free (key);
-
-  
-  /* KEY_SCROLL_ON_KEYSTROKE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SCROLL_ON_KEYSTROKE);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->scroll_on_keystroke)
-    {
-      mask |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
-      profile->priv->scroll_on_keystroke = bool_val;
-    }  
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
-  
-  g_free (key);
-
-  /* KEY_SCROLL_ON_OUTPUT */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SCROLL_ON_OUTPUT);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->scroll_on_output)
-    {
-      mask |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
-      profile->priv->scroll_on_output = bool_val;
-    }  
-
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
-  
-  g_free (key);
-
-  /* KEY_EXIT_ACTION */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_EXIT_ACTION);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_exit_action (profile, str_val))
-    mask |= TERMINAL_SETTING_EXIT_ACTION;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_EXIT_ACTION;
-  
-  g_free (str_val);
-  g_free (key);
-  
-  /* KEY_LOGIN_SHELL */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_LOGIN_SHELL);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->login_shell)
-    {
-      mask |= TERMINAL_SETTING_LOGIN_SHELL;
-      profile->priv->login_shell = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_LOGIN_SHELL;
-  
-  g_free (key);
-
-  /* KEY_UPDATE_RECORDS */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_UPDATE_RECORDS);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->update_records)
-    {
-      mask |= TERMINAL_SETTING_UPDATE_RECORDS;
-      profile->priv->update_records = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_UPDATE_RECORDS;
-  
-  g_free (key);
-
-  /* KEY_USE_CUSTOM_COMMAND */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_USE_CUSTOM_COMMAND);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->use_custom_command)
-    {
-      mask |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
-      profile->priv->use_custom_command = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
-  
-  g_free (key);
-
-  /* KEY_CUSTOM_COMMAND */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_CUSTOM_COMMAND);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_custom_command (profile, str_val))
-    mask |= TERMINAL_SETTING_CUSTOM_COMMAND;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_CUSTOM_COMMAND;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_ICON */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_ICON);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_icon_file (profile, str_val))
-    mask |= TERMINAL_SETTING_ICON;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_ICON;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_PALETTE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_PALETTE);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_palette_string (profile, str_val))
-    mask |= TERMINAL_SETTING_PALETTE;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_PALETTE;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_X_FONT */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_X_FONT);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_x_font (profile, str_val))
-    mask |= TERMINAL_SETTING_X_FONT;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_X_FONT;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_BACKGROUND_TYPE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_BACKGROUND_TYPE);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_background_type (profile, str_val))
-    mask |= TERMINAL_SETTING_BACKGROUND_TYPE;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_BACKGROUND_TYPE;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_BACKGROUND_IMAGE */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_BACKGROUND_IMAGE);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_background_image_file (profile, str_val))
-    mask |= TERMINAL_SETTING_BACKGROUND_IMAGE;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_BACKGROUND_IMAGE;
-
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_SCROLL_BACKGROUND */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_SCROLL_BACKGROUND);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->scroll_background)
-    {
-      mask |= TERMINAL_SETTING_SCROLL_BACKGROUND;
-      profile->priv->scroll_background = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_SCROLL_BACKGROUND;
-  
-  g_free (key);
-
-  /* KEY_BACKGROUND_DARKNESS */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_BACKGROUND_DARKNESS);
-  float_val = gconf_client_get_float (profile->priv->conf,
-                                      key, NULL);
-  if (float_val != profile->priv->background_darkness)
-    {
-      mask |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
-      profile->priv->background_darkness = float_val;
-    }
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
-  
-  g_free (key);
-  
-  /* KEY_BACKSPACE_BINDING */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_BACKSPACE_BINDING);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_backspace_binding (profile, str_val))
-    mask |= TERMINAL_SETTING_BACKSPACE_BINDING;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_BACKSPACE_BINDING;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_DELETE_BINDING */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_DELETE_BINDING);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_delete_binding (profile, str_val))
-    mask |= TERMINAL_SETTING_DELETE_BINDING;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_DELETE_BINDING;
-  
-  g_free (str_val);
-  g_free (key);
-
-  /* KEY_USE_THEME_COLORS */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_USE_THEME_COLORS);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->use_theme_colors)
-    {
-      mask |= TERMINAL_SETTING_USE_THEME_COLORS;
-      profile->priv->use_theme_colors = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_USE_THEME_COLORS;
-  
-  g_free (key);
-  
-  /* KEY_USE_SYSTEM_FONT */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_USE_SYSTEM_FONT);
-  bool_val = gconf_client_get_bool (profile->priv->conf,
-                                    key, NULL);
-  if (bool_val != profile->priv->use_system_font)
-    {
-      mask |= TERMINAL_SETTING_USE_SYSTEM_FONT;
-      profile->priv->use_system_font = bool_val;
-    }  
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_USE_SYSTEM_FONT;
-  
-  g_free (key);
-
-  /* KEY_FONT */
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_FONT);
-  str_val = gconf_client_get_string (profile->priv->conf,
-                                     key, NULL);
-
-  if (set_font (profile, str_val))
-    mask |= TERMINAL_SETTING_FONT;
-  
-  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
-    locked |= TERMINAL_SETTING_FONT;
-  
-  g_free (str_val);
-  g_free (key);
-  
   /* Update state and emit signals */
   
   old_locked = profile->priv->locked;
   profile->priv->locked = locked;
   
-  if (mask != 0 || locked != old_locked)
-    emit_changed (profile, mask);
+  if (!(terminal_setting_mask_is_empty (&mask) &&
+        terminal_setting_mask_equal (&locked, &old_locked)))
+    emit_changed (profile, &mask);
 }
 
 
@@ -2442,484 +2020,124 @@ profile_change_notify (GConfClient *client,
   TerminalProfile *profile;
   const char *key;
   GConfValue *val;
-  TerminalSettingMask mask;  
   TerminalSettingMask old_locked;
+  TerminalSettingMask mask;
   
   profile = TERMINAL_PROFILE (user_data);
 
-  mask = 0;
+  terminal_setting_mask_clear (&mask);
   old_locked = profile->priv->locked;
 
   val = gconf_entry_get_value (entry);
   
   key = find_key (gconf_entry_get_key (entry));
   
-  /*   g_print ("Key '%s' changed\n", key); */
+#define UPDATE_BOOLEAN(KName, FName, Preset)                            \
+  }                                                                     \
+else if (strcmp (key, KName) == 0)                                      \
+  {                                                                     \
+    gboolean setting = (Preset);                                        \
+                                                                        \
+    if (val && val->type == GCONF_VALUE_BOOL)                           \
+      setting = gconf_value_get_bool (val);                             \
+                                                                        \
+    if (setting != profile->priv->FName)                                \
+      {                                                                 \
+        mask.FName = TRUE;                                              \
+        profile->priv->FName = setting;                                 \
+      }                                                                 \
+                                                                        \
+    profile->priv->locked.FName = !gconf_entry_get_is_writable (entry);
 
-#define UPDATE_LOCKED(flag)                     \
-      if (gconf_entry_get_is_writable (entry))  \
-        profile->priv->locked &= ~(flag);        \
-      else                                      \
-        profile->priv->locked |= (flag);
+#define UPDATE_INTEGER(KName, FName, Preset)                            \
+  }                                                                     \
+else if (strcmp (key, KName) == 0)                                      \
+  {                                                                     \
+    int setting = (Preset);                                             \
+                                                                        \
+    if (val && val->type == GCONF_VALUE_INT)                            \
+      setting = gconf_value_get_int (val);                              \
+                                                                        \
+    mask.FName = set_##FName (profile, setting);                        \
+                                                                        \
+    profile->priv->locked.FName = !gconf_entry_get_is_writable (entry);
+
+#define UPDATE_FLOAT(KName, FName, Preset)                              \
+  }                                                                     \
+else if (strcmp (key, KName) == 0)                                      \
+  {                                                                     \
+    float setting = (Preset);                                           \
+                                                                        \
+    if (val && val->type == GCONF_VALUE_FLOAT)                          \
+      setting = gconf_value_get_float (val);                            \
+                                                                        \
+    if (setting != profile->priv->FName)                                \
+      {                                                                 \
+        mask.FName = TRUE;                                              \
+        profile->priv->FName = setting;                                 \
+      }                                                                 \
+                                                                        \
+    profile->priv->locked.FName = !gconf_entry_get_is_writable (entry);
+
+
+#define UPDATE_STRING(KName, FName, Preset)                             \
+  }                                                                     \
+else if (strcmp (key, KName) == 0)                                      \
+  {                                                                     \
+    const char * setting = (Preset);                                    \
+                                                                        \
+    if (val && val->type == GCONF_VALUE_STRING)                         \
+      setting = gconf_value_get_string (val);                           \
+                                                                        \
+    mask.FName = set_##FName (profile, setting);                        \
+                                                                        \
+    profile->priv->locked.FName = !gconf_entry_get_is_writable (entry);
+
+
+ if (0)
+   {
+     ;
+     UPDATE_BOOLEAN (KEY_CURSOR_BLINK,           cursor_blink,           FALSE);
+     UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR,   default_show_menubar,   FALSE);
+     UPDATE_STRING  (KEY_VISIBLE_NAME,           visible_name,           NULL);
+     UPDATE_STRING  (KEY_FOREGROUND_COLOR,       foreground_color,       NULL);
+     UPDATE_STRING  (KEY_BACKGROUND_COLOR,       background_color,       NULL);
+     UPDATE_STRING  (KEY_TITLE,                  title,                  NULL);
+     UPDATE_STRING  (KEY_TITLE_MODE,             title_mode,             NULL);
+     UPDATE_BOOLEAN (KEY_ALLOW_BOLD,             allow_bold,             FALSE);
+     UPDATE_BOOLEAN (KEY_SILENT_BELL,            silent_bell,            FALSE);
+     UPDATE_STRING  (KEY_WORD_CHARS,             word_chars,             NULL);
+     UPDATE_STRING  (KEY_SCROLLBAR_POSITION,     scrollbar_position,     NULL);
+     UPDATE_INTEGER (KEY_SCROLLBACK_LINES,       scrollback_lines,       profile->priv->scrollback_lines);
+     UPDATE_BOOLEAN (KEY_SCROLL_ON_KEYSTROKE, 	 scroll_on_keystroke,    FALSE);
+     UPDATE_BOOLEAN (KEY_SCROLL_ON_OUTPUT,       scroll_on_output,       FALSE);
+     UPDATE_STRING  (KEY_EXIT_ACTION,            exit_action,            NULL);
+     UPDATE_BOOLEAN (KEY_LOGIN_SHELL,            login_shell,            FALSE);
+     UPDATE_BOOLEAN (KEY_UPDATE_RECORDS,         update_records,         FALSE);
+     UPDATE_BOOLEAN (KEY_USE_CUSTOM_COMMAND,     use_custom_command,     FALSE);
+     UPDATE_STRING  (KEY_CUSTOM_COMMAND,         custom_command,         NULL);
+     UPDATE_STRING  (KEY_ICON,                   icon_file,              NULL);
+     UPDATE_STRING  (KEY_PALETTE,                palette,                NULL);
+     UPDATE_STRING  (KEY_X_FONT,                 x_font,                 NULL);
+     UPDATE_STRING  (KEY_BACKGROUND_TYPE,        background_type,        NULL);
+     UPDATE_STRING  (KEY_BACKGROUND_IMAGE,       background_image_file,  NULL);
+     UPDATE_BOOLEAN (KEY_SCROLL_BACKGROUND,      scroll_background,      FALSE);
+     UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,    scroll_background,      0.5);
+     UPDATE_STRING  (KEY_BACKSPACE_BINDING,      backspace_binding,      NULL);
+     UPDATE_STRING  (KEY_DELETE_BINDING,         delete_binding,         NULL);
+     UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,       use_theme_colors,       TRUE);
+     UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,        use_system_font,        TRUE);
+     UPDATE_STRING  (KEY_FONT,                   font,                   NULL);
+   }
   
-  if (strcmp (key, KEY_CURSOR_BLINK) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->cursor_blink)
-        {
-          mask |= TERMINAL_SETTING_CURSOR_BLINK;
-          profile->priv->cursor_blink = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_CURSOR_BLINK);
-    }
-  else if (strcmp (key, KEY_DEFAULT_SHOW_MENUBAR) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->default_show_menubar)
-        {
-          mask |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
-          profile->priv->default_show_menubar = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR);
-    }
-  else if (strcmp (key, KEY_VISIBLE_NAME) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_visible_name (profile, str_val))
-        mask |= TERMINAL_SETTING_VISIBLE_NAME;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_VISIBLE_NAME);
-    }
-  else if (strcmp (key, KEY_FOREGROUND_COLOR) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_foreground_color (profile, str_val))
-        mask |= TERMINAL_SETTING_FOREGROUND_COLOR;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_FOREGROUND_COLOR);
-    }
-  else if (strcmp (key, KEY_BACKGROUND_COLOR) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_background_color (profile, str_val))
-        mask |= TERMINAL_SETTING_BACKGROUND_COLOR;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_COLOR);
-    }
-  else if (strcmp (key, KEY_TITLE) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_title (profile, str_val))
-        mask |= TERMINAL_SETTING_TITLE;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_TITLE);
-    }
-  else if (strcmp (key, KEY_TITLE_MODE) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_title_mode (profile, str_val))
-        mask |= TERMINAL_SETTING_TITLE_MODE;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_TITLE_MODE);
-    }
-  else if (strcmp (key, KEY_ALLOW_BOLD) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->allow_bold)
-        {
-          mask |= TERMINAL_SETTING_ALLOW_BOLD;
-          profile->priv->allow_bold = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_ALLOW_BOLD);
-    }
-  else if (strcmp (key, KEY_SILENT_BELL) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->silent_bell)
-        {
-          mask |= TERMINAL_SETTING_SILENT_BELL;
-          profile->priv->silent_bell = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SILENT_BELL);
-    }
-  else if (strcmp (key, KEY_WORD_CHARS) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_word_chars (profile, str_val))
-        mask |= TERMINAL_SETTING_WORD_CHARS;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_WORD_CHARS);
-    }
-  else if (strcmp (key, KEY_SCROLLBAR_POSITION) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_scrollbar_position (profile, str_val))
-        mask |= TERMINAL_SETTING_SCROLLBAR_POSITION;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SCROLLBAR_POSITION);
-    }
-  else if (strcmp (key, KEY_SCROLLBACK_LINES) == 0)
-    {
-      int int_val;
-
-      int_val = profile->priv->scrollback_lines;
-      if (val && val->type == GCONF_VALUE_INT)
-        int_val = gconf_value_get_int (val);
-      
-      if (set_scrollback_lines (profile, int_val))
-        mask |= TERMINAL_SETTING_SCROLLBACK_LINES;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SCROLLBACK_LINES);
-    }
-  else if (strcmp (key, KEY_SCROLL_ON_KEYSTROKE) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->scroll_on_keystroke)
-        {
-          mask |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
-          profile->priv->scroll_on_keystroke = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_ON_KEYSTROKE);
-    }
-  else if (strcmp (key, KEY_SCROLL_ON_OUTPUT) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->scroll_on_output)
-        {
-          mask |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
-          profile->priv->scroll_on_output = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_ON_OUTPUT);
-    }  
-  else if (strcmp (key, KEY_EXIT_ACTION) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_exit_action (profile, str_val))
-        mask |= TERMINAL_SETTING_EXIT_ACTION;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_EXIT_ACTION);
-    }
-  else if (strcmp (key, KEY_LOGIN_SHELL) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->login_shell)
-        {
-          mask |= TERMINAL_SETTING_LOGIN_SHELL;
-          profile->priv->login_shell = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_LOGIN_SHELL);
-    }
-  else if (strcmp (key, KEY_UPDATE_RECORDS) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->update_records)
-        {
-          mask |= TERMINAL_SETTING_UPDATE_RECORDS;
-          profile->priv->update_records = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_UPDATE_RECORDS);
-    }
-  else if (strcmp (key, KEY_USE_CUSTOM_COMMAND) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->use_custom_command)
-        {
-          mask |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
-          profile->priv->use_custom_command = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_USE_CUSTOM_COMMAND);
-    }
-  else if (strcmp (key, KEY_CUSTOM_COMMAND) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_custom_command (profile, str_val))
-        mask |= TERMINAL_SETTING_CUSTOM_COMMAND;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_CUSTOM_COMMAND);
-    }
-  else if (strcmp (key, KEY_ICON) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_icon_file (profile, str_val))
-        mask |= TERMINAL_SETTING_ICON;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_ICON);
-    }
-  else if (strcmp (key, KEY_PALETTE) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_palette_string (profile, str_val))
-        mask |= TERMINAL_SETTING_PALETTE;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_PALETTE);
-    }
-  else if (strcmp (key, KEY_X_FONT) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_x_font (profile, str_val))
-        mask |= TERMINAL_SETTING_X_FONT;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_X_FONT);
-    }
-  else if (strcmp (key, KEY_BACKGROUND_TYPE) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_background_type (profile, str_val))
-        mask |= TERMINAL_SETTING_BACKGROUND_TYPE;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_TYPE);
-    }
-  else if (strcmp (key, KEY_BACKGROUND_IMAGE) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_background_image_file (profile, str_val))
-        mask |= TERMINAL_SETTING_BACKGROUND_IMAGE;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_IMAGE);
-    }
-  else if (strcmp (key, KEY_SCROLL_BACKGROUND) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = FALSE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->scroll_background)
-        {
-          mask |= TERMINAL_SETTING_SCROLL_BACKGROUND;
-          profile->priv->scroll_background = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_BACKGROUND);
-    }
-  else if (strcmp (key, KEY_BACKGROUND_DARKNESS) == 0)
-    {
-      double float_val;
-
-      float_val = 0.5;
-
-      if (val && val->type == GCONF_VALUE_FLOAT)
-        float_val = gconf_value_get_float (val);
-
-      if (float_val != profile->priv->background_darkness)
-        {
-          mask |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
-          profile->priv->background_darkness = float_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_DARKNESS);
-    }
-  else if (strcmp (key, KEY_BACKSPACE_BINDING) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_backspace_binding (profile, str_val))
-        mask |= TERMINAL_SETTING_BACKSPACE_BINDING;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_BACKSPACE_BINDING);
-    }
-  else if (strcmp (key, KEY_DELETE_BINDING) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_delete_binding (profile, str_val))
-        mask |= TERMINAL_SETTING_DELETE_BINDING;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_DELETE_BINDING);
-    }
-  else if (strcmp (key, KEY_USE_THEME_COLORS) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = TRUE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->use_theme_colors)
-        {
-          mask |= TERMINAL_SETTING_USE_THEME_COLORS;
-          profile->priv->use_theme_colors = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_USE_THEME_COLORS);
-    }
-  else if (strcmp (key, KEY_USE_SYSTEM_FONT) == 0)
-    {
-      gboolean bool_val;
-
-      bool_val = TRUE;
-
-      if (val && val->type == GCONF_VALUE_BOOL)
-        bool_val = gconf_value_get_bool (val);
-
-      if (bool_val != profile->priv->use_system_font)
-        {
-          mask |= TERMINAL_SETTING_USE_SYSTEM_FONT;
-          profile->priv->use_system_font = bool_val;
-        }
-
-      UPDATE_LOCKED (TERMINAL_SETTING_USE_SYSTEM_FONT);
-    }
-  else if (strcmp (key, KEY_FONT) == 0)
-    {
-      const char *str_val;
-
-      str_val = NULL;
-      if (val && val->type == GCONF_VALUE_STRING)
-        str_val = gconf_value_get_string (val);
-      
-      if (set_font (profile, str_val))
-        mask |= TERMINAL_SETTING_FONT;
-
-      UPDATE_LOCKED (TERMINAL_SETTING_FONT);
-    }
-  
-  if (mask != 0 || old_locked != profile->priv->locked)
-    emit_changed (profile, mask);
+#undef UPDATE_BOOLEAN
+#undef UPDATE_INTEGER
+#undef UPDATE_FLOAT
+#undef UPDATE_STRING
+
+  if (!(terminal_setting_mask_is_empty (&mask) &&
+        terminal_setting_mask_equal (&old_locked, &profile->priv->locked)))
+    emit_changed (profile, &mask);
 }
 
 static void
@@ -3008,7 +2226,11 @@ update_default_profile (const char *name,
       /* Need to emit changed on all profiles */
       GList *all_profiles;
       GList *tmp;
+      TerminalSettingMask mask;
 
+      terminal_setting_mask_clear (&mask);
+      mask.is_default = TRUE;
+      
       default_profile_locked = locked;
       
       all_profiles = terminal_profile_get_list ();
@@ -3017,7 +2239,7 @@ update_default_profile (const char *name,
         {
           TerminalProfile *p = tmp->data;
           
-          emit_changed (p, TERMINAL_SETTING_IS_DEFAULT);
+          emit_changed (p, &mask);
           tmp = tmp->next;
         }
 
@@ -3025,9 +2247,15 @@ update_default_profile (const char *name,
     }
   else if (changed)
     {
+      TerminalSettingMask mask;
+      
+      terminal_setting_mask_clear (&mask);
+      mask.is_default = TRUE;
+
       if (old_default)
-        emit_changed (old_default, TERMINAL_SETTING_IS_DEFAULT);
-      emit_changed (profile, TERMINAL_SETTING_IS_DEFAULT);
+        emit_changed (old_default, &mask);
+
+      emit_changed (profile, &mask);
     }
 }
 
@@ -3169,10 +2397,10 @@ terminal_profile_forget (TerminalProfile *profile)
     }
 }
 
-TerminalSettingMask
+const TerminalSettingMask*
 terminal_profile_get_locked_settings (TerminalProfile *profile)
 {
-  return profile->priv->locked;
+  return &profile->priv->locked;
 }
 
 TerminalProfile*
@@ -3230,8 +2458,8 @@ terminal_profile_initialize (GConfClient *conf)
 }
 
 static void
-emit_changed (TerminalProfile    *profile,
-              TerminalSettingMask mask)
+emit_changed (TerminalProfile           *profile,
+              const TerminalSettingMask *mask)
 {
   profile->priv->in_notification_count += 1;
   g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);  
@@ -3864,6 +3092,40 @@ terminal_palette_from_string (const char     *str,
   g_free (colors);
 
   return TRUE;
+}
+
+gboolean 
+terminal_setting_mask_is_empty (const TerminalSettingMask *mask)
+{
+  const unsigned int *p = (const unsigned int *) mask;
+  const unsigned int *end = p + (sizeof (TerminalSettingMask) / 
+                                 sizeof (unsigned int));
+
+  while (p < end)
+    {
+      if (*p != 0)
+        return FALSE;
+      ++p;
+    }
+
+  return TRUE;
+}
+
+void
+terminal_setting_mask_clear (TerminalSettingMask *mask)
+{
+  memset (mask, '\0', sizeof (*mask));
+}
+
+gboolean
+terminal_setting_mask_equal (const TerminalSettingMask *a,
+                             const TerminalSettingMask *b)
+{
+  /* This assumes the padding in the TerminalSettingMask
+   * struct is initialized to 0
+   */
+  
+  return memcmp (a, b, sizeof (*a)) == 0;
 }
 
 const GdkColor

@@ -1503,7 +1503,7 @@ find_screen_by_display_name (const char *display_name,
                              int         screen_number)
 {
   GdkScreen *screen;
-
+  
   /* --screen=screen_number overrides --display */
   
   screen = NULL;
@@ -1575,7 +1575,10 @@ find_screen_by_display_name (const char *display_name,
     }
 
   if (screen == NULL)
-    screen = gdk_screen_get_default ();
+    {
+      screen = gdk_screen_get_default ();
+      g_object_ref (G_OBJECT (screen));
+    }
   
   return screen;
 }
@@ -2549,11 +2552,11 @@ default_menu_changed (GtkWidget   *option_menu,
 }
 
 static void
-default_profile_changed (TerminalProfile    *profile,
-                         TerminalSettingMask mask,
-                         void               *profile_optionmenu)
+default_profile_changed (TerminalProfile           *profile,
+                         const TerminalSettingMask *mask,
+                         void                      *profile_optionmenu)
 {
-  if (mask & TERMINAL_SETTING_IS_DEFAULT)
+  if (mask->is_default)
     {
       if (terminal_profile_get_is_default (profile))
         profile_optionmenu_set_selected (GTK_WIDGET (profile_optionmenu),

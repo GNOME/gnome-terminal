@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2002 Havoc Pennington
+ * Copyright (C) 2002 Mathias Hasselmann
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -138,11 +139,12 @@ static void       profile_editor_update_font                 (GtkWidget       *w
                                                               TerminalProfile *profile);
 
 
-static void profile_forgotten (TerminalProfile     *profile,
-                               GtkWidget           *editor);
-static void profile_changed   (TerminalProfile     *profile,
-                               TerminalSettingMask  mask,
-                               GtkWidget           *editor);
+static void profile_forgotten (TerminalProfile           *profile,
+                               GtkWidget                 *editor);
+static void profile_changed   (TerminalProfile           *profile,
+                               const TerminalSettingMask *mask,
+                               GtkWidget                 *editor);
+
 
 
 static void
@@ -246,102 +248,102 @@ profile_forgotten (TerminalProfile *profile,
 }
 
 static void
-profile_changed (TerminalProfile          *profile,
-                 TerminalSettingMask       mask,
-                 GtkWidget                *editor)
+profile_changed (TerminalProfile           *profile,
+                 const TerminalSettingMask *mask,
+                 GtkWidget                 *editor)
 {
-  if (mask & TERMINAL_SETTING_VISIBLE_NAME)
+  if (mask->visible_name)
     profile_editor_update_visible_name (editor, profile);
 
-  if (mask & TERMINAL_SETTING_ICON)
+  if (mask->icon_file)
     profile_editor_update_icon (editor, profile);
   
-  if (mask & TERMINAL_SETTING_CURSOR_BLINK)
+  if (mask->cursor_blink)
     profile_editor_update_cursor_blink (editor, profile);
 
-  if (mask & TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR)
+  if (mask->default_show_menubar)
     profile_editor_update_default_show_menubar (editor, profile);
 
-  if ((mask & TERMINAL_SETTING_FOREGROUND_COLOR) ||
-      (mask & TERMINAL_SETTING_BACKGROUND_COLOR))
+  if ((mask->foreground_color) ||
+      (mask->background_color))
     {
       profile_editor_update_color_scheme_menu (editor, profile);
       profile_editor_update_color_pickers (editor, profile);
     }
 
-  if (mask & TERMINAL_SETTING_TITLE)
+  if (mask->title)
     profile_editor_update_title (editor, profile);
   
-  if (mask & TERMINAL_SETTING_TITLE_MODE)
+  if (mask->title_mode)
     profile_editor_update_title_mode (editor, profile);
 
-  if (mask & TERMINAL_SETTING_ALLOW_BOLD)
+  if (mask->allow_bold)
     profile_editor_update_allow_bold (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SILENT_BELL)
+  if (mask->silent_bell)
     profile_editor_update_silent_bell (editor, profile);
 
-  if (mask & TERMINAL_SETTING_WORD_CHARS)
+  if (mask->word_chars)
     profile_editor_update_word_chars (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SCROLLBAR_POSITION)
+  if (mask->scrollbar_position)
     profile_editor_update_scrollbar_position (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SCROLLBACK_LINES)
+  if (mask->scrollback_lines)
     profile_editor_update_scrollback_lines (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SCROLL_ON_KEYSTROKE)
+  if (mask->scroll_on_keystroke)
     profile_editor_update_scroll_on_keystroke (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT)
+  if (mask->scroll_on_output)
     profile_editor_update_scroll_on_output (editor, profile);
 
-  if (mask & TERMINAL_SETTING_EXIT_ACTION)
+  if (mask->exit_action)
     profile_editor_update_exit_action (editor, profile);
 
-  if (mask & TERMINAL_SETTING_LOGIN_SHELL)
+  if (mask->login_shell)
     profile_editor_update_login_shell (editor, profile);
 
-  if (mask & TERMINAL_SETTING_UPDATE_RECORDS)
+  if (mask->update_records)
     profile_editor_update_update_records (editor, profile);
 
-  if (mask & TERMINAL_SETTING_USE_CUSTOM_COMMAND)
+  if (mask->use_custom_command)
     profile_editor_update_use_custom_command (editor, profile);
 
-  if (mask & TERMINAL_SETTING_CUSTOM_COMMAND)
+  if (mask->custom_command)
     profile_editor_update_custom_command (editor, profile);
 
-  if (mask & TERMINAL_SETTING_PALETTE)
+  if (mask->palette)
     profile_editor_update_palette (editor, profile);
 
-  if (mask & TERMINAL_SETTING_X_FONT)
+  if (mask->x_font)
     profile_editor_update_x_font (editor, profile);
 
-  if (mask & TERMINAL_SETTING_BACKGROUND_TYPE)
+  if (mask->background_type)
     profile_editor_update_background_type (editor, profile);
   
-  if (mask & TERMINAL_SETTING_BACKGROUND_IMAGE)
+  if (mask->background_image_file)
     profile_editor_update_background_image (editor, profile);
 
-  if (mask & TERMINAL_SETTING_SCROLL_BACKGROUND)
+  if (mask->scroll_background)
     profile_editor_update_scroll_background (editor, profile);
 
-  if (mask & TERMINAL_SETTING_BACKGROUND_DARKNESS)
+  if (mask->background_darkness)
     profile_editor_update_background_darkness (editor, profile);
 
-  if (mask & TERMINAL_SETTING_BACKSPACE_BINDING)
+  if (mask->backspace_binding)
     profile_editor_update_backspace_binding (editor, profile);
 
-  if (mask & TERMINAL_SETTING_DELETE_BINDING)
+  if (mask->delete_binding)
     profile_editor_update_delete_binding (editor, profile);
 
-  if (mask & TERMINAL_SETTING_USE_THEME_COLORS)
+  if (mask->use_theme_colors)
     profile_editor_update_use_theme_colors (editor, profile);
     
-  if (mask & TERMINAL_SETTING_USE_SYSTEM_FONT)
+  if (mask->use_system_font)
     profile_editor_update_use_system_font (editor, profile);
 
-  if (mask & TERMINAL_SETTING_FONT)
+  if (mask->font)
     profile_editor_update_font (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
@@ -1314,16 +1316,19 @@ static void
 profile_editor_update_sensitivity (GtkWidget       *editor,
                                    TerminalProfile *profile)
 {
-  TerminalSettingMask mask;
-  TerminalSettingMask last_mask;
+  const TerminalSettingMask *mask;
   GtkWidget *w;
   
   /* the first time in this function the object data is unset
    * thus the last mask is 0, which means everything is sensitive,
    * which is what we want.
    */
+  /* disabled for now for testing */
+#if 0
+  TerminalSettingMask last_mask;
   last_mask = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (editor),
                                                   "cached-lock-mask"));
+#endif
   
   mask = terminal_profile_get_locked_settings (profile);
 
@@ -1332,21 +1337,21 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
    */
   w = profile_editor_get_widget (editor, "custom-command-entry");
   gtk_widget_set_sensitive (w,
-                            !((mask & TERMINAL_SETTING_CUSTOM_COMMAND) ||
+                            !((mask->custom_command) ||
                               !terminal_profile_get_use_custom_command (profile))); 
   if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE)
     {
       w = profile_editor_get_widget (editor, "background-image-fileentry");
-      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_IMAGE));
+      gtk_widget_set_sensitive (w, !(mask->background_image_file));
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
-      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_SCROLL_BACKGROUND));
+      gtk_widget_set_sensitive (w, !(mask->scroll_background));
       w = profile_editor_get_widget (editor, "darken-background-vbox");
-      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_DARKNESS));
+      gtk_widget_set_sensitive (w, !(mask->background_darkness));
     }
   else if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_TRANSPARENT) 
   {
       w = profile_editor_get_widget (editor, "darken-background-vbox");
-      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_DARKNESS));
+      gtk_widget_set_sensitive (w, !(mask->background_darkness));
       w = profile_editor_get_widget (editor, "background-image-fileentry");
       gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
@@ -1366,11 +1371,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   if (!terminal_profile_get_use_system_font (profile))
     {
       if (terminal_widget_supports_pango_fonts ())
-        set_insensitive (editor, "font-hbox",
-                     mask & TERMINAL_SETTING_FONT);
+        set_insensitive (editor, "font-hbox", mask->font);
       else
-        set_insensitive (editor, "font-hbox",
-                     mask & TERMINAL_SETTING_X_FONT);
+        set_insensitive (editor, "font-hbox", mask->x_font);
     }
   else
     {
@@ -1388,98 +1391,97 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   else
     {      
       set_insensitive (editor, "foreground-colorpicker",
-                       mask & TERMINAL_SETTING_FOREGROUND_COLOR);
+                       mask->foreground_color);
       
       set_insensitive (editor, "background-colorpicker",
-                       mask & TERMINAL_SETTING_BACKGROUND_COLOR);
+                       mask->background_color);
       
       set_insensitive (editor, "color-scheme-optionmenu",
-                       (mask & (TERMINAL_SETTING_BACKGROUND_COLOR |
-                                TERMINAL_SETTING_FOREGROUND_COLOR)));
+                       (mask->background_color) ||
+                       (mask->foreground_color));
     }
   
 #if 0 /* uncomment once we've tested the sensitivity code */
   if (mask == last_mask)
     return;
-#endif
-
   g_object_set_data (G_OBJECT (editor), "cached-lock-mask",
                      GINT_TO_POINTER (mask));
+#endif
   
   set_insensitive (editor, "profile-name-entry",
-                   mask & TERMINAL_SETTING_VISIBLE_NAME);
+                   mask->visible_name);
 
   set_insensitive (editor, "profile-icon-entry",
-                   mask & TERMINAL_SETTING_ICON);
+                   mask->icon_file);
   
   set_insensitive (editor, "blink-cursor-checkbutton",
-                   mask & TERMINAL_SETTING_CURSOR_BLINK);
+                   mask->cursor_blink);
 
   set_insensitive (editor, "show-menubar-checkbutton",
-                   mask & TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR);
+                   mask->default_show_menubar);
 
   set_insensitive (editor, "title-entry",
-                   mask & TERMINAL_SETTING_TITLE);
+                   mask->title);
   
   set_insensitive (editor, "title-mode-optionmenu",
-                   mask & TERMINAL_SETTING_TITLE_MODE);
+                   mask->title_mode);
 
   set_insensitive (editor, "allow-bold-checkbutton",
-                   mask & TERMINAL_SETTING_ALLOW_BOLD);
+                   mask->allow_bold);
 
   set_insensitive (editor, "bell-checkbutton",
-                   mask & TERMINAL_SETTING_SILENT_BELL);
+                   mask->silent_bell);
 
   set_insensitive (editor, "word-chars-entry",
-                   mask & TERMINAL_SETTING_WORD_CHARS);
+                   mask->word_chars);
 
   set_insensitive (editor, "scrollbar-position-optionmenu",
-                   mask & TERMINAL_SETTING_SCROLLBAR_POSITION);
+                   mask->scrollbar_position);
 
   set_insensitive (editor, "scrollback-lines-spinbutton",
-                   mask & TERMINAL_SETTING_SCROLLBACK_LINES);
+                   mask->scrollback_lines);
 
   set_insensitive (editor, "scrollback-kilobytes-spinbutton",
-                   mask & TERMINAL_SETTING_SCROLLBACK_LINES);
+                   mask->scrollback_lines);
   
   set_insensitive (editor, "scroll-on-keystroke-checkbutton",
-                   mask & TERMINAL_SETTING_SCROLL_ON_KEYSTROKE);
+                   mask->scroll_on_keystroke);
 
   set_insensitive (editor, "scroll-on-output-checkbutton",
-                   mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT);
+                   mask->scroll_on_output);
 
   set_insensitive (editor, "exit-action-optionmenu",
-                   mask & TERMINAL_SETTING_EXIT_ACTION);
+                   mask->exit_action);
 
   set_insensitive (editor, "login-shell-checkbutton",
-                   mask & TERMINAL_SETTING_LOGIN_SHELL);
+                   mask->login_shell);
 
   set_insensitive (editor, "update-records-checkbutton",
-                   mask & TERMINAL_SETTING_UPDATE_RECORDS);
+                   mask->update_records);
 
   set_insensitive (editor, "use-custom-command-checkbutton",
-                   mask & TERMINAL_SETTING_USE_CUSTOM_COMMAND);
+                   mask->use_custom_command);
 
   set_insensitive (editor, "palette-optionmenu",
-                   mask & TERMINAL_SETTING_PALETTE);
+                   mask->palette);
 
   set_insensitive (editor, "solid-radiobutton",
-                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+                   mask->background_type);
   set_insensitive (editor, "image-radiobutton",
-                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+                   mask->background_type);
   set_insensitive (editor, "transparent-radiobutton",
-                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+                   mask->background_type);
 
   set_insensitive (editor, "backspace-binding-optionmenu",
-                   mask & TERMINAL_SETTING_BACKSPACE_BINDING);
+                   mask->backspace_binding);
   set_insensitive (editor, "delete-binding-optionmenu",
-                   mask & TERMINAL_SETTING_DELETE_BINDING);
+                   mask->delete_binding);
 
   set_insensitive (editor, "use-theme-colors-checkbutton",
-                   mask & TERMINAL_SETTING_USE_THEME_COLORS);
+                   mask->use_theme_colors);
 
   set_insensitive (editor, "system-font-checkbutton",
-                   mask & TERMINAL_SETTING_USE_SYSTEM_FONT);
+                   mask->use_system_font);
 
   
   {
@@ -1490,7 +1492,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       {
         char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
 
-        set_insensitive (editor, s, mask & TERMINAL_SETTING_PALETTE);
+        set_insensitive (editor, s, mask->palette);
 
         g_free (s);
 

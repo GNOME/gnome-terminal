@@ -1,3 +1,24 @@
+2002-12-08  Havoc Pennington  <hp@pobox.com>
+
+	* src/gnome-terminal.glade2: change "use the same font" to "use
+	the same size font" - still a slight fib as we'll also copy
+	bold/italic, but keeps people from expecting the family to be
+	copied.
+
+2002-12-07  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (find_screen_by_display_name): ref the screen 
+	in the fallback gdk_screen_get_default() case
+
+	* src/encoding.c (terminal_encoding_init): indentation stuff
+
+	Patch from Mathias Hasselmann to allow more than 32 settings.
+
+	* src/terminal-profile.[hc]: use a struct instead of an 
+	int to store the flags in TerminalSettingMask
+	
+	* src/profile-editor.c: adapt to TerminalSettingMask changes
+
 2002-12-07  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal.c (main): don't try to use an empty string

@@ -2566,9 +2566,9 @@ about_callback (GtkWidget      *menuitem,
 
 
 static void
-default_profile_changed (TerminalProfile    *profile,
-                         TerminalSettingMask mask,
-                         void               *data)
+default_profile_changed (TerminalProfile           *profile,
+                         const TerminalSettingMask *mask,
+                         void                      *data)
 {
   /* This no longer applies, since our "new window" item
    * is based on the current profile, not the default profile

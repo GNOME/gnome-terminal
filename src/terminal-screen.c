@@ -498,9 +498,9 @@ rebuild_title  (TerminalScreen *screen)
 }
 
 static void
-profile_changed_callback (TerminalProfile          *profile,
-                          TerminalSettingMask       mask,
-                          TerminalScreen           *screen)
+profile_changed_callback (TerminalProfile           *profile,
+                          const TerminalSettingMask *mask,
+                          TerminalScreen            *screen)
 {
   reread_profile (screen);
 }

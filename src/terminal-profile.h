@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2001 Havoc Pennington
+ * Copyright (C) 2002 Mathias Hasselmann
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,43 +32,40 @@
 #define CONF_KEYS_PREFIX CONF_PREFIX"/keybindings"
 #define FALLBACK_PROFILE_ID "Default"
 
-typedef enum
+typedef struct
 {
-  TERMINAL_SETTING_VISIBLE_NAME         = 1 << 0,
-  TERMINAL_SETTING_CURSOR_BLINK         = 1 << 1,
-  TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR = 1 << 2,
-  TERMINAL_SETTING_FOREGROUND_COLOR     = 1 << 3,
-  TERMINAL_SETTING_BACKGROUND_COLOR     = 1 << 4,
-  TERMINAL_SETTING_TITLE                = 1 << 5,
-  TERMINAL_SETTING_TITLE_MODE           = 1 << 6,
-  TERMINAL_SETTING_ALLOW_BOLD           = 1 << 7,
-  TERMINAL_SETTING_SILENT_BELL          = 1 << 8,
-  TERMINAL_SETTING_WORD_CHARS           = 1 << 9,
-  TERMINAL_SETTING_SCROLLBAR_POSITION   = 1 << 10,
-  TERMINAL_SETTING_SCROLLBACK_LINES     = 1 << 11,
-  TERMINAL_SETTING_SCROLL_ON_KEYSTROKE  = 1 << 12,
-  TERMINAL_SETTING_SCROLL_ON_OUTPUT     = 1 << 13,
-  TERMINAL_SETTING_EXIT_ACTION          = 1 << 14,
-  TERMINAL_SETTING_LOGIN_SHELL          = 1 << 15,
-  TERMINAL_SETTING_UPDATE_RECORDS       = 1 << 16,
-  TERMINAL_SETTING_USE_CUSTOM_COMMAND   = 1 << 17,
-  TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18,
-  TERMINAL_SETTING_ICON                 = 1 << 19,
-  TERMINAL_SETTING_IS_DEFAULT           = 1 << 20,
-  TERMINAL_SETTING_PALETTE              = 1 << 21,
-  TERMINAL_SETTING_X_FONT               = 1 << 22,
-  TERMINAL_SETTING_BACKGROUND_TYPE      = 1 << 23,
-  TERMINAL_SETTING_BACKGROUND_IMAGE     = 1 << 24,
-  TERMINAL_SETTING_SCROLL_BACKGROUND    = 1 << 25,
-  TERMINAL_SETTING_BACKGROUND_DARKNESS  = 1 << 26,
-  TERMINAL_SETTING_BACKSPACE_BINDING    = 1 << 27,
-  TERMINAL_SETTING_DELETE_BINDING       = 1 << 28,
-  TERMINAL_SETTING_USE_THEME_COLORS     = 1 << 29,
-  TERMINAL_SETTING_USE_SYSTEM_FONT      = 1 << 30,
-  TERMINAL_SETTING_FONT                 = 1 << 31
-
-  /* Out of bits! To add a setting you have to write a bunch of code ;-) */
-  
+  unsigned int visible_name : 1;
+  unsigned int cursor_blink : 1;
+  unsigned int default_show_menubar : 1;
+  unsigned int foreground_color : 1;
+  unsigned int background_color : 1;
+  unsigned int title : 1;
+  unsigned int title_mode : 1;
+  unsigned int allow_bold : 1;
+  unsigned int silent_bell : 1;
+  unsigned int word_chars : 1;
+  unsigned int scrollbar_position : 1;
+  unsigned int scrollback_lines : 1;
+  unsigned int scroll_on_keystroke : 1;
+  unsigned int scroll_on_output : 1;
+  unsigned int exit_action : 1;
+  unsigned int login_shell : 1;
+  unsigned int update_records : 1;
+  unsigned int use_custom_command : 1;
+  unsigned int custom_command : 1;
+  unsigned int icon_file : 1;
+  unsigned int is_default : 1;
+  unsigned int palette : 1;
+  unsigned int x_font : 1;
+  unsigned int background_type : 1;
+  unsigned int background_image_file : 1;
+  unsigned int scroll_background : 1;
+  unsigned int background_darkness : 1;
+  unsigned int backspace_binding : 1;
+  unsigned int delete_binding : 1;
+  unsigned int use_theme_colors : 1;
+  unsigned int use_system_font : 1;
+  unsigned int font : 1;
 } TerminalSettingMask;
 
 typedef enum
@@ -135,7 +133,7 @@ struct _TerminalProfileClass
   GObjectClass parent_class;
 
   void (* changed)   (TerminalProfile           *profile,
-                      TerminalSettingMask        mask);
+                      const TerminalSettingMask *mask);
   void (* forgotten) (TerminalProfile           *profile);
 };
 
@@ -278,7 +276,7 @@ TerminalProfile* terminal_profile_lookup                 (const char      *name)
 TerminalProfile* terminal_profile_lookup_by_visible_name (const char      *name);
 void             terminal_profile_forget                 (TerminalProfile *profile);
 
-TerminalSettingMask terminal_profile_get_locked_settings (TerminalProfile *profile);
+const TerminalSettingMask* terminal_profile_get_locked_settings (TerminalProfile *profile);
 
 void terminal_profile_update (TerminalProfile *profile);
 
@@ -289,6 +287,12 @@ void terminal_profile_create (TerminalProfile *base_profile,
 void terminal_profile_delete_list (GConfClient *conf,
                                    GList      *list,
                                    GtkWindow  *transient_parent);
+
+gboolean terminal_setting_mask_is_empty (const TerminalSettingMask *mask);
+void     terminal_setting_mask_clear    (TerminalSettingMask       *mask);
+gboolean terminal_setting_mask_equal    (const TerminalSettingMask *a,
+                                         const TerminalSettingMask *b);
+
 
 extern const GdkColor terminal_palette_linux[TERMINAL_PALETTE_SIZE];
 extern const GdkColor terminal_palette_xterm[TERMINAL_PALETTE_SIZE];
