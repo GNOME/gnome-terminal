@@ -1,0 +1,33 @@
+- wire up the whole configuration-editor dialog, 
+  using the glade file for it
+- add --use-factory feature using Bonobo
+- write/install schema file
+- wire up a GnomeAbout dialog
+- wire up other missing menu items
+- actually connect to session manager and send it the computed
+  CloneCommand/RestartCommand
+- convert option parsing to use a callback since libgnome requires
+  that I think
+- call gnome_program_init()
+- have some way to close tabs
+- grep 'FIXME' and fix that stuff
+- we need to set the "role" hint for each window, and
+  restore it when we restore the window; I believe the role hint 
+  should probably be something like all the profiles for tabs
+  in the windows, concatenated, so that all windows which are not 
+  interchangeable have a different role hint. I think but am not sure
+  we are allowed to change the role hint on mapped windows, I hope so.
+  On restore, if a profile has disappeared so we fall back to default profile,
+  we still need to set the role hint to the command-line-requested profile
+  name rather than the default profile name.
+- change the new/delete profile menu items to "manage profile"; have a
+  dialog that lets you add/delete/edit profiles
+- change "specialness" of Default profile, so you can rename/delete it; 
+  but require that there's always at least one profile?
+  (problem here is that it's much easier to lose settings?)
+  If we do this, the "manage profiles" dialog needs something like:
+      The default profile is: [profile option menu]
+- have per-profile option for window title and relationship 
+  to dynamic window title (replace, prepend, append)
+- have per-profile option for default command to run in the terminal
+- wire up various ZvtTerm signals (child died, title changed)
