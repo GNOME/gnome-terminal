@@ -1046,7 +1046,7 @@ configuration_callback (GtkWidget      *menu_item,
   
   terminal_app_edit_profile (terminal_app_get (),
                              screen->priv->profile, 
-                             screen->priv->window);
+                             GTK_WINDOW (screen->priv->window));
 }
 
 static void

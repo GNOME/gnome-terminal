@@ -92,7 +92,7 @@ static void edit_configuration_callback   (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void new_configuration_callback    (GtkWidget      *menuitem,
                                            TerminalWindow *window);
-static void delete_configuration_callback (GtkWidget      *menuitem,
+static void manage_configurations_callback(GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void hide_menubar_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -356,14 +356,13 @@ terminal_window_init (TerminalWindow *window)
   append_menuitem (menu, _("_New profile..."),
                    G_CALLBACK (new_configuration_callback), window);
 
-  window->priv->delete_config_menuitem = 
-    append_menuitem (menu, _("_Delete profile..."),
-                     G_CALLBACK (delete_configuration_callback), window);
-
+  append_menuitem (menu, _("_Manage profiles..."),
+                   G_CALLBACK (manage_configurations_callback), window);
+  
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
   
-  append_menuitem (menu, _("Hide _menubar"),
+  append_menuitem (menu, _("Hide menu_bar"),
                    G_CALLBACK (hide_menubar_callback), window);
   
   append_menuitem (menu, _("_Reset terminal"),
@@ -437,7 +436,6 @@ terminal_window_destroy (GtkObject *object)
   window->priv->copy_menuitem = NULL;
   window->priv->paste_menuitem = NULL;
   window->priv->edit_config_menuitem = NULL;
-  window->priv->delete_config_menuitem = NULL;
   window->priv->choose_config_menuitem = NULL;
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);  
@@ -1101,7 +1099,7 @@ edit_configuration_callback (GtkWidget      *menuitem,
 {
   terminal_app_edit_profile (terminal_app_get (),
                              terminal_screen_get_profile (window->priv->active_term),
-                             window);
+                             GTK_WINDOW (window));
 }
 
 static void
@@ -1110,15 +1108,15 @@ new_configuration_callback (GtkWidget      *menuitem,
 {
   terminal_app_new_profile (terminal_app_get (),
                             terminal_screen_get_profile (window->priv->active_term),
-                            window);
+                            GTK_WINDOW (window));
 }
 
 static void
-delete_configuration_callback (GtkWidget      *menuitem,
-                               TerminalWindow *window)
+manage_configurations_callback (GtkWidget      *menuitem,
+                                TerminalWindow *window)
 {
-  terminal_app_delete_profiles (terminal_app_get (),
-                                window);
+  terminal_app_manage_profiles (terminal_app_get (),
+                                GTK_WINDOW (window));
 }
 
 static void

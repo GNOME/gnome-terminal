@@ -32,11 +32,11 @@ TerminalApp* terminal_app_get (void);
 
 void terminal_app_edit_profile (TerminalApp     *app,
                                 TerminalProfile *profile,
-                                TerminalWindow  *transient_parent);
+                                GtkWindow       *transient_parent);
 
 void terminal_app_new_profile (TerminalApp     *app,
                                TerminalProfile *default_base_profile,
-                               TerminalWindow  *transient_parent);
+                               GtkWindow       *transient_parent);
 
 void terminal_app_new_terminal (TerminalApp     *app,
                                 TerminalProfile *profile,
@@ -46,7 +46,8 @@ void terminal_app_new_terminal (TerminalApp     *app,
                                 char           **override_command,
                                 const char      *geometry);
 
-void terminal_app_delete_profiles (TerminalApp     *app,
-                                   TerminalWindow  *transient_parent);
+void terminal_app_manage_profiles (TerminalApp     *app,
+                                   GtkWindow       *transient_parent);
+
 
 #endif /* TERMINAL_H */

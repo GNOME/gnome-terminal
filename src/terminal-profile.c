@@ -2349,9 +2349,6 @@ terminal_profile_delete_list (GConfClient *conf,
       TerminalProfile *profile = tmp->data;
       
       current_profiles = g_list_remove (current_profiles, profile);
-
-      g_print ("Deleting profile '%s'\n",
-               terminal_profile_get_visible_name (profile));
       
       tmp = tmp->next;
     }
