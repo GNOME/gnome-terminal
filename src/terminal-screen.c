@@ -933,7 +933,7 @@ get_child_environment (GtkWidget      *term,
           (strncmp (*p, "TERM=", 5) == 0)    ||
           (strncmp (*p, "GNOME_DESKTOP_ICON=", 19) == 0) ||
           (strncmp (*p, "COLORTERM=", 10) == 0) ||
-	  (strncmp (*p, "DISPLAY=", 8)))
+	  (strncmp (*p, "DISPLAY=", 8) == 0))
         {
           /* nothing: do not copy */
         }
