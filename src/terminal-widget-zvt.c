@@ -1116,13 +1116,14 @@ void
 terminal_widget_set_pango_font (GtkWidget                  *widget,
                                 const PangoFontDescription *font_desc)
 {
-  ; /* does nothing */
+  g_return_if_fail (font_desc != NULL);
+  zvt_term_set_pango_font (ZVT_TERM (widget), font_desc);
 }
 
 gboolean
 terminal_widget_supports_pango_fonts (void)
 {
-  return FALSE;
+  return TRUE;
 }
 
 const char*
