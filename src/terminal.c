@@ -656,12 +656,10 @@ parse_options_callback (poptContext              ctx,
     {
     case OPTION_COMMAND:
       {
-        const char *arg;
         GError *err;
         InitialTab *it;
         char **exec_argv;
             
-        arg = poptGetOptArg (ctx);
 
         if (arg == NULL)
           {
@@ -718,17 +716,15 @@ parse_options_callback (poptContext              ctx,
     case OPTION_WINDOW_WITH_PROFILE_ID:
       {
         InitialWindow *iw;
-        const char *prof;
 
-        prof = poptGetOptArg (ctx);
 
-        if (prof == NULL)
+        if (arg == NULL)
           {
             g_printerr (_("Option --window-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
           }
 
-        iw = add_new_window (results, prof,
+        iw = add_new_window (results, arg,
                              opt->val == OPTION_WINDOW_WITH_PROFILE_ID);
       }
       break;
@@ -737,11 +733,9 @@ parse_options_callback (poptContext              ctx,
     case OPTION_TAB_WITH_PROFILE_ID:
       {
         InitialWindow *iw;
-        const char *prof;
 
-        prof = poptGetOptArg (ctx);
 
-        if (prof == NULL)
+        if (arg == NULL)
           {
             g_printerr (_("Option --tab-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
@@ -753,12 +747,12 @@ parse_options_callback (poptContext              ctx,
             iw = g_list_last (results->initial_windows)->data;
 
             iw->tabs = g_list_append (iw->tabs,
-                                      initial_tab_new (prof,
+                                      initial_tab_new (arg,
                                                        opt->val == OPTION_TAB_WITH_PROFILE_ID));
           }
         else
           {
-            iw = add_new_window (results, prof, 
+            iw = add_new_window (results, arg, 
                                  opt->val == OPTION_TAB_WITH_PROFILE_ID);
           }
       }
@@ -819,11 +813,9 @@ parse_options_callback (poptContext              ctx,
     case OPTION_GEOMETRY:
       {
         InitialWindow *iw;
-        const char *geometry;
 
-        geometry = poptGetOptArg (ctx);
 
-        if (geometry == NULL)
+        if (arg == NULL)
           {
             g_printerr (_("Option --geometry requires an argument giving the geometry\n"));
             exit (1);
@@ -838,7 +830,7 @@ parse_options_callback (poptContext              ctx,
                 exit (1);
               }
 
-            iw->geometry = g_strdup (geometry);
+            iw->geometry = g_strdup (arg);
           }
         else
           {
@@ -849,7 +841,7 @@ parse_options_callback (poptContext              ctx,
               }
             else
               {
-                results->default_geometry = g_strdup (geometry);
+                results->default_geometry = g_strdup (arg);
               }
           }
       }
@@ -861,12 +853,10 @@ parse_options_callback (poptContext              ctx,
 
     case OPTION_TITLE:
       {
-        const char *title;
         InitialTab *it;
             
-        title = poptGetOptArg (ctx);
 
-        if (title == NULL)
+        if (arg == NULL)
           {
             g_printerr (_("Option --title requires an argument giving the title\n"));
             exit (1);
@@ -880,18 +870,16 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it->title = g_strdup (title);
+        it->title = g_strdup (arg);
       }
       break;
 
     case OPTION_WORKING_DIRECTORY:
       {
-        const char *dir;
         InitialTab *it;
             
-        dir = poptGetOptArg (ctx);
 
-        if (dir == NULL)
+        if (arg == NULL)
           {
             g_printerr (_("Option --working-directory requires an argument giving the directory\n"));
             exit (1);
@@ -905,7 +893,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it->working_dir = g_strdup (dir);
+        it->working_dir = g_strdup (arg);
       }
       break;
 
