@@ -1484,7 +1484,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
 
   profile_menu = gtk_menu_new ();
-  menu_item = gtk_menu_item_new_with_mnemonic (_("Change _Profile"));
+  menu_item = gtk_menu_item_new_with_mnemonic (_("Change P_rofile"));
 
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
                              profile_menu);
