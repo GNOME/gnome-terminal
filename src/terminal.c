@@ -589,6 +589,19 @@ main (int argc, char **argv)
     { NULL, NULL }
   };
   GnomeClient *sm_client;
+
+  if (setlocale (LC_ALL, "") == NULL)
+    g_printerr ("GNOME Terminal: locale not understood by C library, internationalization will not work\n");
+
+#if 0
+  {
+    const char *charset;
+    g_get_charset (&charset);
+    
+    g_print ("Running in locale \"%s\" with encoding \"%s\"\n",
+             setlocale (LC_ALL, NULL), charset);
+  }
+#endif
   
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
