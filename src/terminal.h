@@ -62,6 +62,8 @@ void terminal_app_edit_keybindings (TerminalApp     *app,
 void terminal_app_edit_encodings   (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 
+void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
+
 void terminal_util_show_error_dialog (GtkWindow *transient_parent, 
                                       GtkWidget **weap_ptr, 
                                       const char *message_format, ...) G_GNUC_PRINTF(3, 4);

@@ -1786,7 +1786,6 @@ terminal_app_new_terminal (TerminalApp     *app,
 {
   TerminalScreen *screen;
   gboolean window_created;
-  char *new_role;
   
   g_return_if_fail (profile);
 
@@ -1816,19 +1815,9 @@ terminal_app_new_terminal (TerminalApp     *app,
         terminal_window_set_startup_id (window, startup_id);
       
       if (role == NULL)
-        {
-          /* Invent a unique-enough number for the role */
-          new_role = g_strdup_printf ("gnome-terminal-%d-%d-%d",
-                                      getpid (),
-                                      g_random_int (),
-                                      (int) time (NULL));
-          gtk_window_set_role (GTK_WINDOW (window), new_role);
-          g_free (new_role);
-        }
+        terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
       else
-        {
-          gtk_window_set_role (GTK_WINDOW (window), role);
-        }
+        gtk_window_set_role (GTK_WINDOW (window), role);
     }
 
   if (force_menubar_state)
@@ -2302,6 +2291,8 @@ terminal_app_new_profile (TerminalApp     *app,
 
       app->new_profile_dialog = glade_xml_get_widget (xml, "new-profile-dialog");
       g_signal_connect (G_OBJECT (app->new_profile_dialog), "response", G_CALLBACK (new_profile_response_callback), app);
+
+      terminal_util_set_unique_role (GTK_WINDOW (app->new_profile_dialog), "gnome-terminal-new-profile");
   
       g_object_add_weak_pointer (G_OBJECT (app->new_profile_dialog), (void**) &app->new_profile_dialog);
 
@@ -2891,7 +2882,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
                         "destroy",
                         G_CALLBACK (manage_profiles_destroyed_callback),
                         app);
-      
+
+      terminal_util_set_unique_role (GTK_WINDOW (app->manage_profiles_dialog), "gnome-terminal-profile-manager");
+
 #define PADDING 5
 
       vbox = gtk_vbox_new (FALSE, PADDING);
@@ -3381,6 +3374,15 @@ client_die_cb (GnomeClient        *client,
  * Utility stuff
  */
 
+void
+terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
+{
+  char *role;
+
+  role = g_strdup_printf ("%s-%d-%d-%d", prefix, getpid (), g_random_int (), (int) time (NULL));
+  gtk_window_set_role (window, role);
+  g_free (role);
+}
 
 /**
  * terminal_util_show_error_dialog:

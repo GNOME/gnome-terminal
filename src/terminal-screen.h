@@ -51,10 +51,11 @@ struct _TerminalScreenClass
 {
   GObjectClass parent_class;
 
-  void (* profile_set)       (TerminalScreen *screen);
-  void (* title_changed)     (TerminalScreen *screen);
-  void (* selection_changed) (TerminalScreen *screen);
-  void (* encoding_changed)  (TerminalScreen *screen);
+  void (* profile_set)        (TerminalScreen *screen);
+  void (* title_changed)      (TerminalScreen *screen);
+  void (* icon_title_changed) (TerminalScreen *screen);
+  void (* selection_changed)  (TerminalScreen *screen);
+  void (* encoding_changed)   (TerminalScreen *screen);
 };
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
@@ -83,7 +84,9 @@ int terminal_screen_get_id (TerminalScreen *screen);
 
 void terminal_screen_launch_child (TerminalScreen *screen);
 
-const char* terminal_screen_get_title (TerminalScreen *screen);
+const char* terminal_screen_get_title          (TerminalScreen *screen);
+const char* terminal_screen_get_icon_title     (TerminalScreen *screen);
+gboolean    terminal_screen_get_icon_title_set (TerminalScreen *screen);
 
 void terminal_screen_close (TerminalScreen *screen);
 
@@ -92,9 +95,12 @@ gboolean terminal_screen_get_text_selected (TerminalScreen *screen);
 void terminal_screen_edit_title (TerminalScreen *screen,
                                  GtkWindow      *transient_parent);
 
-void        terminal_screen_set_dynamic_title (TerminalScreen *screen,
-                                               const char     *title);
-const char *terminal_screen_get_dynamic_title (TerminalScreen *screen);
+void        terminal_screen_set_dynamic_title      (TerminalScreen *screen,
+                                                    const char     *title);
+void        terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
+                                                    const char     *title);
+const char *terminal_screen_get_dynamic_title      (TerminalScreen *screen);
+const char *terminal_screen_get_dynamic_icon_title (TerminalScreen *screen);
 
 void        terminal_screen_set_working_dir   (TerminalScreen *screen,
                                                const char     *dirname);

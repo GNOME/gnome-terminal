@@ -712,6 +712,8 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   /* The dialog itself */
   dialog = glade_xml_get_widget (xml, "encodings-dialog");
 
+  terminal_util_set_unique_role (GTK_WINDOW (dialog), "gnome-terminal-encodings");
+
   g_signal_connect (G_OBJECT (dialog), "response",
                     G_CALLBACK (response_callback),
                     NULL);

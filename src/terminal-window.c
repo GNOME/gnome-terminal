@@ -1186,9 +1186,15 @@ title_changed_callback (TerminalScreen *screen,
   GtkWidget *label;
   GtkWidget *mi;
   
-  if (screen == window->priv->active_term)
+  if (screen == window->priv->active_term) 
+    {
     gtk_window_set_title (GTK_WINDOW (window),
                           terminal_screen_get_title (screen));
+    if (terminal_screen_get_icon_title_set (screen))
+      gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+    else
+      gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_title (screen));
+    }
 
   label = screen_get_label (screen);
   eel_ellipsizing_label_set_text (EEL_ELLIPSIZING_LABEL (label),
@@ -1199,6 +1205,15 @@ title_changed_callback (TerminalScreen *screen,
     gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (mi))),
                         terminal_screen_get_title (screen));
 }
+
+static void
+icon_title_changed_callback (TerminalScreen *screen,
+                             TerminalWindow *window)
+{
+  if (screen == window->priv->active_term)
+    gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+}
+
 
 static void
 update_copy_sensitivity (TerminalWindow *window)
@@ -1294,12 +1309,17 @@ terminal_window_add_screen (TerminalWindow *window,
                     window);
 
   g_signal_connect (G_OBJECT (screen),
-                    "title_changed",
+                    "title-changed",
                     G_CALLBACK (title_changed_callback),
                     window);
 
   g_signal_connect (G_OBJECT (screen),
-                    "selection_changed",
+                    "icon-title-changed",
+                    G_CALLBACK (icon_title_changed_callback),
+                    window);
+
+  g_signal_connect (G_OBJECT (screen),
+                    "selection-changed",
                     G_CALLBACK (selection_changed_callback),
                     window);
   
@@ -1389,6 +1409,10 @@ terminal_window_remove_screen (TerminalWindow *window,
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (title_changed_callback),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
+                                        G_CALLBACK (icon_title_changed_callback),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
@@ -1595,8 +1619,8 @@ terminal_window_set_active (TerminalWindow *window,
       terminal_window_set_menubar_visible (window, setting);
     }
 
-  gtk_window_set_title (GTK_WINDOW (window),
-                        terminal_screen_get_title (screen));
+  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+  gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
 
   update_copy_sensitivity (window);
   
@@ -2613,6 +2637,8 @@ about_callback (GtkWidget      *menuitem,
                            strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
                            pixbuf);
   gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
+
+  terminal_util_set_unique_role (GTK_WINDOW (about), "gnome-terminal-about");
   
   g_object_add_weak_pointer (G_OBJECT (about),
                              (void**) &about);

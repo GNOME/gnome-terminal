@@ -1,3 +1,22 @@
+2003-10-12 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal.c(terminal_util_set_unique_role): new funtion, to be
+	  used when setting window roles.
+	* src/encoding.c(terminal_encoding_dialog_new):
+	* src/profile-editor.c(terminal_profile_edit):
+	* src/terminal-accels.c(terminal_edit_keys_dialog_new):
+	* src/terminal-screen.c(terminal_screen_edit_title):
+	* src/terminal-window.c(about_callback):
+	* src/terminal.c(terminal_app_new_term,terminal_app_new_profile,
+	  terminal_app_manage_profiles): set unique role on each dialog.
+	  Fix #90397.
+	* src/terminal-screen.{c,h}: introduce a new icon-title-changed signal,
+	  and handle icon and window titles separately.
+	* src/terminal-window.c(title_changed_callback, icon_title_changed_callback, 
+	  terminal_window_{add,remove}_screen, terminal_window_set_active): connect 
+	  to the new icon-title-changed on screens, and handle it appropriately.
+	  Now we handle icon name control sequences; fixed #84614.
+
 2003-10-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c: add a --default-working-directory and pass cwd as

@@ -1196,6 +1196,8 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   gtk_window_set_default_size (GTK_WINDOW (w),
                                -1, 350);
 
+  terminal_util_set_unique_role (GTK_WINDOW (w), "gnome-terminal-accels");
+
   g_object_unref (G_OBJECT (xml));
   
   return w;

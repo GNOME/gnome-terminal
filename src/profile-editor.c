@@ -1271,6 +1271,8 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (w), "clicked",
 			G_CALLBACK (reset_compat_defaults_clicked),
 			profile);
+
+      terminal_util_set_unique_role (GTK_WINDOW (editor), "gnome-terminal-profile-editor");
     }
   else
     {
