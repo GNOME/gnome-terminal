@@ -1300,7 +1300,7 @@ terminal_app_new_profile (TerminalApp     *app,
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
       
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
       
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);      
@@ -1317,7 +1317,7 @@ terminal_app_new_profile (TerminalApp     *app,
       
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
       
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), option_menu, FALSE, FALSE, 0);
 
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
