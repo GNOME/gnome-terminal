@@ -1610,8 +1610,6 @@ terminal_window_set_active (TerminalWindow *window,
 #endif
   terminal_window_set_size (window, screen, TRUE);
   
-  gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
-
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
   update_zoom_items (window);
@@ -2588,6 +2586,7 @@ about_callback (GtkWidget      *menuitem,
 
   const char *authors[] = {
     "Havoc Pennington <hp@redhat.com>",
+    "Mariano Su\303\241rez-Alvarez <msuarezalvarez@arnet.com.ar>",
     NULL
   };
   const char *documenters [] = {
@@ -2605,9 +2604,9 @@ about_callback (GtkWidget      *menuitem,
   pixbuf = gdk_pixbuf_new_from_file (file, NULL);
   g_free(file);
 
-  about = gnome_about_new (PACKAGE, VERSION,
+  about = gnome_about_new (_("GNOME Terminal"), VERSION,
                            "Copyright \xc2\xa9 2002 Havoc Pennington",
-                           _("GNOME Terminal"),
+                           NULL,
                            (const char **)authors,
                            (const char **)documenters,
                            strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,

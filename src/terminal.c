@@ -1501,10 +1501,11 @@ main (int argc, char **argv)
   args = poptGetArgs (ctx);
   if (args)
     {
-      g_printerr (_("Invalid argument: \"%s\"\n"),
-                  *args);
+      g_printerr (_("Invalid argument: \"%s\"\n"), *args);
+      g_strfreev (argv_copy);
       return 1;
     }
+  poptFreeContext (ctx);
   
   if (!terminal_factory_disabled)
     {
@@ -1521,7 +1522,11 @@ main (int argc, char **argv)
                    "--display", results->display_name);
       
       if (terminal_invoke_factory (argc_copy, argv_copy))
-        return 0;
+        {
+          g_strfreev (argv_copy);
+          option_parsing_results_free (results);
+          return 0;
+        }
     }
 
   g_strfreev (argv_copy);

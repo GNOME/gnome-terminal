@@ -1,3 +1,17 @@
+2003-11-06 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/Makefile.am: remove GNOME_DISABLE_DEPRECATED and
+	  GTK_DISABLE_DEPRECATED from CFLAGS so that we can build against 
+	  gtk+ and libgnomeui from HEAD.
+        * src/terminal.c(main): free the popt context when it is no longer
+  	  needed; suggested by bug #124416. Free a couple of other things in
+          early returns from main, too.
+        * AUTHORS: added myself.
+        * src/terminal-window.c(about_callback): added myself, and use
+          _("GNOME Terminal") and not PACKAGE for the app name in the call to
+          gnome_about_new, so that we get the translated app name and not the
+          tarball name.
+
 2003-11-06  Breda McColgan  <Breda.McColgan@sun.com>
 
 	* help/C/gnome-terminal.xml: Updated for GNOME 2.4.2
