@@ -251,7 +251,7 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   
   gtk_widget_set_sensitive (window->priv->choose_config_menuitem, TRUE);
 
-  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
+  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));  
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
@@ -330,6 +330,7 @@ terminal_window_init (TerminalWindow *window)
   window->priv->using_mnemonics = FALSE;
   
   accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook),
                                TRUE);                                      
