@@ -29,6 +29,7 @@
 #include <bonobo/bonobo-exception.h>
 #include <bonobo/bonobo-listener.h>
 #include <libgnome/gnome-program.h>
+#include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-client.h>
 #include <popt.h>
@@ -2161,6 +2162,53 @@ profile_activated_callback (GtkTreeView       *tree_view,
                                GTK_WINDOW (app->manage_profiles_dialog));
 }
 
+
+static void
+manage_profiles_response_cb (GtkDialog *dialog,
+                             int        id,
+                             void      *data)
+{
+  TerminalApp *app;
+
+  app = data;
+
+  g_assert (app->manage_profiles_dialog == GTK_WIDGET (dialog));
+  
+  if (id == GTK_RESPONSE_HELP)
+    {
+      GError *err;
+      err = NULL;
+      gnome_help_display ("gnome-terminal", "gnome-terminal-manage-profiles",
+                          &err);
+      
+      if (err)
+        {
+          GtkWidget *dialog;
+          
+          dialog = gtk_message_dialog_new (GTK_WINDOW (app->manage_profiles_dialog),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("There was an error displaying help: %s"),
+                                           err->message);
+          
+          g_signal_connect (G_OBJECT (dialog), "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+          
+          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+          
+          gtk_widget_show (dialog);
+          
+          g_error_free (err);
+        }
+    }
+  else
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+    }
+}
+
 void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
@@ -2185,14 +2233,16 @@ terminal_app_manage_profiles (TerminalApp     *app,
         gtk_dialog_new_with_buttons (_("Manage terminal profiles"),
                                      NULL,
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
+                                     GTK_STOCK_HELP,
+                                     GTK_RESPONSE_HELP,
                                      GTK_STOCK_CLOSE,
                                      GTK_RESPONSE_ACCEPT,
                                      NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (app->manage_profiles_dialog),
                                        GTK_RESPONSE_ACCEPT);
-      g_signal_connect (G_OBJECT (app->manage_profiles_dialog),
+      g_signal_connect (GTK_DIALOG (app->manage_profiles_dialog),
                         "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (manage_profiles_response_cb),
                         app);
 
       g_signal_connect (G_OBJECT (app->manage_profiles_dialog),
@@ -2824,3 +2874,4 @@ terminal_invoke_factory (OptionParsingResults *results)
 
   return FALSE;
 }
+
