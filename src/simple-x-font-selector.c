@@ -1,3 +1,33 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * GnomeFontSelection widget for Gtk+, by Damon Chaplin, May 1998.
+ * Based on the GnomeFontSelector widget, by Elliot Lee, but major changes.
+ * The GnomeFontSelector was derived from app/text_tool.c in the GIMP.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -26,16 +56,19 @@ static void egg_xfont_selector_get_property (GObject     *object,
 #define MAX_FONTS 32767
 
 /* This is the largest field length we will accept. If a fontname has a field
-   larger than this we will skip it. */
+ * larger than this we will skip it.
+ */
 #define XLFD_MAX_FIELD_LEN 64
 
 /* Initial font metric & size (Remember point sizes are in decipoints).
-   The font size should match one of those in the font_sizes array. */
+ *  The font size should match one of those in the font_sizes array.
+ */
 #define INITIAL_METRIC		  EGG_XFONT_METRIC_PIXELS
 #define INITIAL_FONT_SIZE	  14
 
 /* This is the number of fields in an X Logical Font Description font name.
-   Note that we count the registry & encoding as 1. */
+ * Note that we count the registry & encoding as 1.
+ */
 #define EGG_XLFD_NUM_FIELDS 13
 
 
@@ -44,8 +77,10 @@ typedef struct _FontInfo FontInfo;
 typedef struct _FontStyle FontStyle;
 
 /* This struct represents one family of fonts (with one foundry), e.g. adobe
-   courier or sony fixed. It stores the family name, the index of the foundry
-   name, and the index of and number of available styles. */
+ * courier or sony fixed. It stores the family name, the index of the foundry
+ * name, and the index of and number of available styles.
+ */
+
 struct _FontInfo
 {
   gchar   *family;
@@ -81,15 +116,17 @@ struct _GtkFontSelInfo {
   guint16 *point_sizes;
   
   /* These are the arrays of strings of all possible weights, slants, 
-     set widths, spacings, charsets & foundries, and the amount of space
-     allocated for each array. */
+   * set widths, spacings, charsets & foundries, and the amount of space
+   * allocated for each array.
+   */
   gchar **properties[EGG_NUM_FONT_PROPERTIES];
   guint16 nproperties[EGG_NUM_FONT_PROPERTIES];
   guint16 space_allocated[EGG_NUM_FONT_PROPERTIES];
 };
 
 /* These are the field numbers in the X Logical Font Description fontnames,
-   e.g. -adobe-courier-bold-o-normal--25-180-100-100-m-150-iso8859-1 */
+ * e.g. -adobe-courier-bold-o-normal--25-180-100-100-m-150-iso8859-1
+ */
 typedef enum
 {
   XLFD_FOUNDRY		= 0,
@@ -107,8 +144,6 @@ typedef enum
   XLFD_CHARSET		= 12
 } FontField;
 
-/* These are the array indices of the font properties used in several arrays,
-   and should match the xlfd_index array below. */
 typedef enum
 {
   WEIGHT	= 0,
@@ -120,7 +155,8 @@ typedef enum
 } PropertyIndexType;
 
 /* This is used to look up a field in a fontname given one of the above
-   property indices. */
+ * property indices.
+ */
 static const FontField xlfd_index[EGG_NUM_FONT_PROPERTIES] = {
   XLFD_WEIGHT,
   XLFD_SLANT,
@@ -130,12 +166,11 @@ static const FontField xlfd_index[EGG_NUM_FONT_PROPERTIES] = {
   XLFD_FOUNDRY
 };
 
+#define XLFD_WEIGHT_BOLD "bold"
+
 /* These are the positions of the properties in the filter table - x, y. */
 static const gint filter_positions[EGG_NUM_FONT_PROPERTIES][2] = {
   { 1, 0 }, { 0, 2 }, { 1, 2 }, { 2, 2 }, { 2, 0 }, { 0, 0 }
-};
-static const gint filter_heights[EGG_NUM_FONT_PROPERTIES] = {
-  100, 70, 70, 40, 100, 100
 };
 
 /* These are what we use as the standard font sizes */
@@ -150,21 +185,21 @@ static gchar* egg_xfont_selector_get_xlfd_field (const gchar *fontname,
 						   gchar       *buffer);
 static gboolean egg_xfont_selector_is_xlfd_font_name (const gchar *fontname);
 static void    egg_xfont_selector_get_fonts          (void);
-static void    egg_xfont_selector_insert_font        (GSList         *fontnames[],
-						      gint           *ntable,
-						      gchar          *fontname);
-static gint    egg_xfont_selector_insert_field       (gchar          *fontname,
-						      gint            prop);
+static void    egg_xfont_selector_insert_font     (GSList         *fontnames[],
+						   gint           *ntable,
+						   gchar          *fontname);
+static gint    egg_xfont_selector_insert_field    (gchar          *fontname,
+						   gint            prop);
 
-static gchar * egg_xfont_selector_create_xlfd        (gint            size,
-						      EggXFontMetricType metric,
-						      gchar          *foundry,
-						      gchar          *family,
-						      gchar          *weight,
-						      gchar          *slant,
-						      gchar          *set_width,
-						      gchar          *spacing,
-						      gchar	     *charset);
+static gchar * egg_xfont_selector_create_xlfd     (gint            size,
+						   EggXFontMetricType metric,
+						   gchar          *foundry,
+						   gchar          *family,
+						   gchar          *weight,
+						   gchar          *slant,
+						   gchar          *set_width,
+						   gchar          *spacing,
+						   gchar	     *charset);
 
 static gboolean egg_xfont_selector_style_visible(EggXFontSelector *fontsel,
 						 FontInfo         *font,
@@ -174,6 +209,7 @@ static gboolean egg_xfont_selector_style_visible(EggXFontSelector *fontsel,
 static void update_family_menu (EggXFontSelector *selector);
 static void update_size_menu (EggXFontSelector *selector);
 static void family_changed (GtkOptionMenu *opt, EggXFontSelector *selector);
+static void bold_toggled (GtkCheckButton *button, EggXFontSelector *selector);
 static void size_changed (GtkOptionMenu *opt, EggXFontSelector *selector);
 
 
@@ -211,7 +247,7 @@ egg_xfont_selector_get_type (void)
 	NULL
       };
 
-      selector_type = g_type_register_static (GTK_TYPE_HBOX, 
+      selector_type = g_type_register_static (GTK_TYPE_VBOX, 
 					      "EggXFontSelector",
 					      &selector_info, 0);
     }
@@ -245,7 +281,7 @@ egg_xfont_selector_class_init (EggXFontSelectorClass *class)
 static void
 egg_xfont_selector_init (EggXFontSelector *selector)
 {
-  GtkWidget *family_label, *size_label;
+  GtkWidget *family_label, *size_label, *hbox1, *hbox2;
   int prop;
 
   /* Initialize the EggXFontSelection struct. We do this here in case any
@@ -257,7 +293,9 @@ egg_xfont_selector_init (EggXFontSelector *selector)
   selector->size_options_map = NULL;
   selector->metric = INITIAL_METRIC;
   selector->size = INITIAL_FONT_SIZE;
-  
+  selector->want_bold = 0;
+  selector->can_bold = 1;
+
   selector->filters[EGG_XFONT_FILTER_BASE].font_type = EGG_XFONT_ALL;
   selector->filters[EGG_XFONT_FILTER_USER].font_type = EGG_XFONT_BITMAP
     | EGG_XFONT_SCALABLE;
@@ -275,10 +313,14 @@ egg_xfont_selector_init (EggXFontSelector *selector)
 
   gtk_widget_push_composite_child ();
 
+  hbox1 = gtk_hbox_new (FALSE, 0);
   selector->family_options = gtk_option_menu_new ();
   selector->size_options = gtk_option_menu_new ();
   family_label = gtk_label_new_with_mnemonic (_("_Family:"));
   size_label = gtk_label_new_with_mnemonic (_("Si_ze (pixels):"));
+  hbox2 = gtk_hbox_new (FALSE, 0);
+  selector->bold_check =
+    gtk_check_button_new_with_mnemonic ("Use _bold version of font");
 
   gtk_widget_pop_composite_child ();
 
@@ -287,19 +329,29 @@ egg_xfont_selector_init (EggXFontSelector *selector)
   gtk_label_set_mnemonic_widget (GTK_LABEL(size_label),
 				 selector->size_options);
 
-  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (family_label),
+  /* FIXME: figure out what spacing looks best */
+
+  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (family_label),
 		      FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (selector),
+  gtk_box_pack_start (GTK_BOX (hbox1),
 		      GTK_WIDGET (selector->family_options), FALSE, FALSE, 5);
-  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (size_label),
+  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (size_label),
 		      FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (selector->size_options),
+  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (selector->size_options),
 		      FALSE, FALSE, 5);
+
+  gtk_box_pack_start (GTK_BOX (hbox2), GTK_WIDGET (selector->bold_check),
+		      FALSE, FALSE, 0);
+
+  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (hbox1), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (hbox2), FALSE, FALSE, 0);
   
   g_signal_connect (selector->family_options, "changed",
 		    G_CALLBACK (family_changed), selector);
   g_signal_connect (selector->size_options, "changed",
 		    G_CALLBACK (size_changed), selector);
+  g_signal_connect (selector->bold_check, "toggled",
+		    G_CALLBACK (bold_toggled), selector);
 
   update_family_menu (selector);
 
@@ -446,7 +498,7 @@ egg_xfont_selector_set_font_name (EggXFontSelector *fontsel,
   
   g_return_val_if_fail (fontname != NULL, FALSE);
 
-  puts ("egg_xfont_selector_set_font_name");
+  /* puts ("egg_xfont_selector_set_font_name"); */
 
   /* Check it is a valid fontname. */
   if (!egg_xfont_selector_is_xlfd_font_name (fontname))
@@ -490,6 +542,11 @@ egg_xfont_selector_set_font_name (EggXFontSelector *fontsel,
     }
 
   fontsel->font_index = index;
+
+  /* Check if the font is bold */
+  field = egg_xfont_selector_get_xlfd_field (fontname, XLFD_WEIGHT,
+					     field_buffer);
+  fontsel->want_bold = strcmp (field, XLFD_WEIGHT_BOLD) == 0;
 
   /* Clear the filter and update the menus */
   egg_xfont_selector_clear_filter (fontsel);
@@ -536,6 +593,11 @@ egg_xfont_selector_get_font_name  (EggXFontSelector *fontsel)
       if (strcmp (property_str[prop], "(nil)") == 0)
 	property_str[prop] = "";
     }
+
+
+  /* Return a bold font if sensitive (a bold style exists) and selected */
+  if (fontsel->want_bold && fontsel->can_bold)
+    property_str[WEIGHT] = XLFD_WEIGHT_BOLD;
   
   return egg_xfont_selector_create_xlfd (fontsel->size,
 					 fontsel->metric,
@@ -588,9 +650,6 @@ egg_xfont_selector_set_filter	(EggXFontSelector *fontsel,
   gchar *filter_string;
   gchar *property, *property_alt;
   gint prop, nfilters, i, j, num_found;
-
-  g_free (fontsel->filtered_font_index);
-  fontsel->filtered_font_index = NULL;
 
   /* Put them into an array so we can use a simple loop. */
   filter_strings[FOUNDRY]   = foundries;
@@ -649,13 +708,46 @@ egg_xfont_selector_set_filter	(EggXFontSelector *fontsel,
   update_family_menu (fontsel);
 }
 
+static void
+bold_toggled (GtkCheckButton *check, EggXFontSelector *selector)
+{
+  selector->want_bold =
+    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (selector->bold_check));
+
+  g_signal_emit (G_OBJECT (selector), signals[CHANGED], 0);
+}
 
 static void
 family_changed (GtkOptionMenu *opt, EggXFontSelector *selector)
 {
-  puts ("family_changed");
+  FontInfo *info;
+  FontStyle *style;
+  char *prop;
+  int i;
+  
+  /* puts ("family_changed"); */
+
   selector->font_index = gtk_option_menu_get_history (GTK_OPTION_MENU (opt));
   selector->font_index = selector->filtered_font_index[selector->font_index];
+
+  info = &fontsel_info->font_info[selector->font_index];
+
+  /* Figure out if the font can be bolded and update the checkbox */
+  selector->can_bold = 0;
+  for (i = 0; i < info->nstyles; i++)
+    {
+      style = &fontsel_info->font_styles[info->style_index + i];
+      prop = fontsel_info->properties[WEIGHT][style->properties[WEIGHT]];
+
+      if (strcmp (prop, XLFD_WEIGHT_BOLD) == 0)
+	selector->can_bold = 1;
+    }
+
+  gtk_widget_set_sensitive (GTK_WIDGET (selector->bold_check),
+			    selector->can_bold);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selector->bold_check),
+				selector->want_bold);
+
   update_size_menu (selector);
 }
 
@@ -667,7 +759,7 @@ size_changed (GtkOptionMenu *opt, EggXFontSelector *selector)
   FontStyle *style;
   int i;
 
- puts ("size_changed");
+  /* puts ("size_changed"); */
 
   info = &fontsel_info->font_info[selector->font_index];
   style = &fontsel_info->font_styles[info->style_index];
@@ -676,9 +768,7 @@ size_changed (GtkOptionMenu *opt, EggXFontSelector *selector)
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (opt));
   selector->size = selector->size_options_map[i];
 
-  printf ("selected size: %d\n", selector->size_options_map[i]);
-
-  /* FIXME: for non-scalable fonts try to guess best size? */
+  /* printf ("selected size: %d\n", selector->size_options_map[i]); */
 
   g_signal_emit (G_OBJECT (selector), signals[CHANGED], 0);
 }
@@ -735,11 +825,12 @@ update_family_menu (EggXFontSelector *selector)
   FontInfo *info, *start_info;
   EggXFontFilter *filter;
 
-  puts ("update_family_menu");
+  /* puts ("update_family_menu"); */
 
   start_info = fontsel_info->font_info;
   nfonts = fontsel_info->nfonts;
 
+  g_free (selector->filtered_font_index);
   selector->filtered_font_index = g_new (gint, nfonts);
   filter_index = 0;
   selected_font_pos = -1;
@@ -804,9 +895,22 @@ update_family_menu (EggXFontSelector *selector)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), GTK_WIDGET (mi));
     }
 
+  /* Try to keep last selected font current and prevent more than one
+   * change signal being sent
+   */
+
+  if (selected_font_pos != -1) {
+    g_signal_handlers_block_by_func (selector->family_options, family_changed,
+				     selector);    
+  }
+
   gtk_option_menu_set_menu (GTK_OPTION_MENU (selector->family_options), menu);
 
-  /* Try to keep last selected font current */
+  if (selected_font_pos != -1) {
+    g_signal_handlers_unblock_by_func (selector->family_options,
+				       family_changed, selector);
+  }
+
   if (selected_font_pos != -1) {
     gtk_option_menu_set_history (GTK_OPTION_MENU (selector->family_options),
 				 selected_font_pos);
@@ -833,7 +937,7 @@ update_size_menu (EggXFontSelector *selector)
   int map_pos, num;
   int selected_size_pos;
 
-  puts ("update_size_menu");
+  /* puts ("update_size_menu"); */
 
   g_return_if_fail (selector->font_index != -1);
 
@@ -947,7 +1051,21 @@ update_size_menu (EggXFontSelector *selector)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), GTK_WIDGET (mi));
     }
 
+ /* Try to keep last selected size font current.
+  * and if we change the size, prevent more than one change signal being sent
+  */
+
+  if (selected_size_pos != -1) {
+    g_signal_handlers_block_by_func (selector->size_options, size_changed,
+				     selector);    
+  }
+
   gtk_option_menu_set_menu (GTK_OPTION_MENU (selector->size_options), menu);
+
+  if (selected_size_pos != -1) {
+    g_signal_handlers_unblock_by_func (selector->size_options, size_changed,
+				     selector);
+  }
 
   if (selected_size_pos != -1) {
     gtk_option_menu_set_history (GTK_OPTION_MENU (selector->size_options),
@@ -1545,3 +1663,6 @@ egg_xfont_selector_get_xlfd_field (const gchar *fontname,
   
   return buffer;
 }
+
+
+
