@@ -281,6 +281,45 @@ typedef struct
   
 } InitialWindow;
 
+/* This function is used to set LABLLED_BY relation between widgets
+ * and labels
+ */
+void
+widget_label_relation_set (GtkWidget *widget, GtkLabel *label)
+{
+  AtkObject *atkwidget;
+  AtkRelationSet *relation_set;
+  AtkRelation *relation;
+  AtkObject *targets[1];
+
+  atkwidget = gtk_widget_get_accessible (widget);
+  g_return_if_fail (GTK_IS_ACCESSIBLE (atkwidget));
+  relation_set = atk_object_ref_relation_set (atkwidget);
+  targets[0] = gtk_widget_get_accessible (GTK_WIDGET (label));
+
+  relation = atk_relation_new (targets, 1, ATK_RELATION_LABELLED_BY);
+  atk_relation_set_add (relation_set, relation);
+  g_object_unref (G_OBJECT (relation));
+
+}
+
+/* sets accessible name and description for the widget */
+
+void
+set_atk_name_description (GtkWidget *widget, const char *name, const char *desc)
+{
+        AtkObject *obj;
+
+        obj = gtk_widget_get_accessible (widget);
+        g_return_if_fail (GTK_IS_ACCESSIBLE (obj));
+
+        if ( desc )
+                atk_object_set_description (obj, desc);
+        if ( name )
+                atk_object_set_name (obj, name);
+}
+
+
 static InitialTab*
 initial_tab_new (const char *profile,
                  gboolean    is_id)
@@ -1586,10 +1625,13 @@ terminal_app_new_profile (TerminalApp     *app,
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       entry = gtk_entry_new ();
       app->new_profile_name_entry = entry;
+      set_atk_name_description (entry, _("Enter Profile Name"), NULL);
+
 
       gtk_entry_set_width_chars (GTK_ENTRY (entry), 14);
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+      widget_label_relation_set (entry, GTK_LABEL(label));
       
       gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
@@ -1607,6 +1649,7 @@ terminal_app_new_profile (TerminalApp     *app,
                                          default_base_profile);
       
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
+      widget_label_relation_set (option_menu, GTK_LABEL(label));
       
       gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), option_menu, FALSE, FALSE, 0);
@@ -1745,6 +1788,7 @@ create_profile_list (void)
                               G_TYPE_OBJECT);
   
   tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
+  set_atk_name_description (tree_view, _("Profile List"), NULL);
 
   g_object_unref (G_OBJECT (model));
   
@@ -2085,6 +2129,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
                                      GTK_STOCK_CLOSE,
                                      GTK_RESPONSE_ACCEPT,
                                      NULL);
+      gtk_dialog_set_default_response (app->manage_profiles_dialog, GTK_RESPONSE_ACCEPT);
       g_signal_connect (G_OBJECT (app->manage_profiles_dialog),
                         "response",
                         G_CALLBACK (gtk_widget_destroy),
@@ -2113,7 +2158,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
       gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                      app->manage_profiles_default_menu);
-      
+      widget_label_relation_set (GTK_WIDGET(app->manage_profiles_default_menu),                    
+                                 GTK_LABEL(label));
+
       gtk_box_pack_start (GTK_BOX (hbox),
                           label, TRUE, TRUE, 0);
             
@@ -2143,6 +2190,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
                         app);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
+      widget_label_relation_set (GTK_WIDGET(app->manage_profiles_list),                            
+                                 GTK_LABEL(label));
+      
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
@@ -2175,6 +2225,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       g_signal_connect (G_OBJECT (button), "clicked",
                         G_CALLBACK (new_button_clicked), app);
       app->manage_profiles_new_button = button;
+      set_atk_name_description (app->manage_profiles_new_button, NULL,                             
+                            _("Click to open New profile dialog"));
+
       
       button = gtk_button_new_with_mnemonic (_("_Edit..."));
       fix_button_align (button);
@@ -2183,6 +2236,8 @@ terminal_app_manage_profiles (TerminalApp     *app,
       g_signal_connect (G_OBJECT (button), "clicked",
                         G_CALLBACK (edit_button_clicked), app);
       app->manage_profiles_edit_button = button;
+      set_atk_name_description (app->manage_profiles_edit_button, NULL,                            
+                               _("Click to open edit profile dialog"));
       
       button = gtk_button_new_with_mnemonic (_("_Delete..."));
       fix_button_align (button);
@@ -2191,6 +2246,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       g_signal_connect (G_OBJECT (button), "clicked",
                         G_CALLBACK (delete_button_clicked), app);
       app->manage_profiles_delete_button = button;
+      set_atk_name_description (app->manage_profiles_delete_button, NULL,                          
+                               _("Click to delete selected profile"));
+
       
       /* Set default size of profile list */
       gtk_window_set_geometry_hints (GTK_WINDOW (app->manage_profiles_dialog),
@@ -2238,6 +2296,7 @@ profile_optionmenu_new (void)
   GtkWidget *option_menu;
   
   option_menu = gtk_option_menu_new ();
+  set_atk_name_description (option_menu, NULL, _("Click Button to choose Profile"));
 
   profile_optionmenu_refill (option_menu);
   

@@ -1497,6 +1497,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
       
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+      widget_label_relation_set (entry, GTK_LABEL (label));
       
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
       gtk_box_pack_end (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
