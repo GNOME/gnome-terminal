@@ -59,28 +59,8 @@ terminal_skey_do_popup (TerminalScreen *screen,
 
   if (!extract_seq_and_seed (skey_match, &seq, &seed))
     {
-#if 0
-      /* disabled for code freeze */
-      GtkWidget *err_dialog;
-          
-      err_dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-
-                                           /* FIXME _() once string freeze is over */
-                                           
-                                           "The text you clicked doesn't seem to be an S/Key challenge.");
-      
-      g_signal_connect (G_OBJECT (err_dialog), "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      gtk_window_set_resizable (GTK_WINDOW (err_dialog), FALSE);
-      
-      gtk_widget_show (err_dialog);
-#endif
-      
+      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), 
+                                       _("The text you clicked doesn't seem to be an S/Key challenge."));
       return;
     }
 

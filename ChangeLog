@@ -1,5 +1,20 @@
 2003-07-15 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* terminal.c(terminal_util_show_error_dialog): add this function, and
+	use it everywhere else to construct error dialogs (long list of affected
+	functions omitted...)
+	* terminal.c(new_profile_response_callback): move the New Profile
+	dialog to glade-land, making it more HIG-compliant and letting it open a
+	profile editor on the newly created profile.
+	* terminal-screen.c(show_fork_error_dialog): inline this, using
+	terminal_util_show_error_dialog, directly in
+	terminal_screen_launch_child.
+	* gnome-terminal.glade2: add the New Profile dialog.
+
+	Everything, from the patch in bug #117445.
+
+2003-07-15 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
  	* src/terminal-window.c(append_stock_menuitem): fix a typo (bug
  	#113443)
  	* src/gnome-terminal.glade2: s/sytems/systems/ from bug #102420.

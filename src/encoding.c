@@ -433,23 +433,8 @@ response_callback (GtkWidget *window,
       
       if (err)
         {
-          GtkWidget *dialog;
-          
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("There was an error displaying help: %s"),
-                                           err->message);
-          
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-          
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
-          gtk_widget_show (dialog);
-          
+          terminal_util_show_error_dialog (GTK_WINDOW (window), NULL,
+                                           _("There was an error displaying help: %s"), err->message);
           g_error_free (err);
         }
     }

@@ -781,50 +781,13 @@ terminal_screen_get_widget (TerminalScreen *screen)
 }
 
 static void
-show_fork_error_dialog (TerminalScreen *screen,
-                        GError         *err)
-{
-  GtkWidget *dialog;
-  
-  dialog = gtk_message_dialog_new ((GtkWindow*)
-                                   gtk_widget_get_ancestor (screen->priv->term,
-                                                            GTK_TYPE_WINDOW),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_CLOSE,
-                                   "%s", err->message);
-
-  g_signal_connect (G_OBJECT (dialog),
-                    "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-
-  gtk_widget_show (dialog);
-}
-
-static void
 show_command_error_dialog (TerminalScreen *screen,
-                        GError         *error)
+                           GError         *error)
 {
-  GtkWidget *dialog;
-
   g_return_if_fail (error != NULL);
   
-  dialog = gtk_message_dialog_new ((GtkWindow*)
-                                   gtk_widget_get_ancestor (screen->priv->term,
-                                                            GTK_TYPE_WINDOW),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_CLOSE,
-                                   _("There was a problem with the command for this terminal: %s"),
-                                   error->message);
-
-  g_signal_connect (G_OBJECT (dialog),
-                    "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-
-  gtk_widget_show (dialog);
+  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (screen->priv->term, GTK_TYPE_WINDOW), NULL,
+                                   _("There was a problem with the command for this terminal: %s"), error->message);
 }
 
 static gboolean
@@ -991,7 +954,9 @@ terminal_screen_launch_child (TerminalScreen *screen)
                                      &screen->priv->child_pid,
                                      &err))
     {
-      show_fork_error_dialog (screen, err);
+
+      terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (screen->priv->term, GTK_TYPE_WINDOW), NULL,
+                                       "%s", err->message);
       g_error_free (err);
     }
   
@@ -1117,7 +1082,6 @@ open_url (TerminalScreen *screen,
           const char     *orig_url)
 {
   GError *err;
-  GtkWidget *dialog;
   char *url;
   
   g_return_if_fail (orig_url != NULL);
@@ -1139,21 +1103,11 @@ open_url (TerminalScreen *screen,
       else
         window = NULL;
       
-      dialog = gtk_message_dialog_new (window ? GTK_WINDOW (window) : NULL,
-                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
+      terminal_util_show_error_dialog (window ? GTK_WINDOW (window) : NULL, NULL,
                                        _("Could not open the address \"%s\":\n%s"),
                                        url, err->message);
       
       g_error_free (err);
-      
-      g_signal_connect (G_OBJECT (dialog),
-                        "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      gtk_widget_show (dialog);
     }
 
   g_free (url);

@@ -71,8 +71,6 @@ struct _TerminalApp
   GtkWidget *edit_keys_dialog;
   GtkWidget *edit_encodings_dialog;
   GtkWidget *new_profile_dialog;
-  GtkWidget *new_profile_name_entry;
-  GtkWidget *new_profile_base_menu;
   GtkWidget *manage_profiles_dialog;
   GtkWidget *manage_profiles_list;
   GtkWidget *manage_profiles_new_button;
@@ -1941,8 +1939,13 @@ sync_profile_list (gboolean use_this_list,
 
   g_assert (terminal_profile_get_count () > 0);  
 
-  if (app->new_profile_base_menu)
-    profile_optionmenu_refill (app->new_profile_base_menu);
+  if (app->new_profile_dialog)
+    {
+      GtkWidget *new_profile_base_menu;
+
+      new_profile_base_menu = g_object_get_data (G_OBJECT (app->new_profile_dialog), "base_option_menu");
+      profile_optionmenu_refill (new_profile_base_menu);
+    }
   if (app->manage_profiles_list)
     refill_profile_treeview (app->manage_profiles_list);
   if (app->manage_profiles_default_menu)
@@ -2104,10 +2107,11 @@ terminal_app_edit_encodings (TerminalApp     *app,
 
 enum
 {
-  RESPONSE_CREATE,
+  RESPONSE_CREATE = GTK_RESPONSE_ACCEPT, /* Arghhh: Glade wants a GTK_RESPONSE_* for dialog buttons */
   RESPONSE_CANCEL,
   RESPONSE_DELETE
 };
+
 
 static void
 new_profile_response_callback (GtkWidget *new_profile_dialog,
@@ -2116,87 +2120,63 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
 {
   if (response_id == RESPONSE_CREATE)
     {
-      char *name = NULL;
+      GtkWidget *name_entry;
+      char *name;
+      GtkWidget *base_option_menu;
       TerminalProfile *base_profile = NULL;
-      char *bad_name_message = NULL;
-      GList *profiles = NULL;
+      TerminalProfile *new_profile;
+      GList *profiles;
       GList *tmp;
+      GSList n;
       GtkWindow *transient_parent;
       
-      name = gtk_editable_get_chars (GTK_EDITABLE (app->new_profile_name_entry),
-                                     0, -1);
-      
-      if (*name == '\0')
-        bad_name_message = g_strdup (_("You have to name your profile."));
+      name_entry = g_object_get_data (G_OBJECT (new_profile_dialog), "name_entry");
+      name = gtk_editable_get_chars (GTK_EDITABLE (name_entry), 0, -1);
+      g_strstrip (name); /* name will be non empty after stripping */
       
       profiles = terminal_profile_get_list ();
-      tmp = profiles;
-      while (tmp != NULL)
+      for (tmp = profiles; tmp != NULL; tmp = tmp->next)
         {
           TerminalProfile *profile = tmp->data;
 
           if (strcmp (name, terminal_profile_get_visible_name (profile)) == 0)
-            {
-              bad_name_message = g_strdup_printf (_("You already have a profile called \"%s\""),
-                                                  name);
-            }
-          
-          tmp = tmp->next;
+            break;
         }
-
-      if (bad_name_message)
+      if (tmp)
         {
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (new_profile_dialog),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           bad_name_message);
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
-          gtk_widget_show_all (dialog);
-
+          terminal_util_show_error_dialog (GTK_WINDOW (new_profile_dialog), NULL, 
+                                           _("You already have a profile called \"%s\""), name);
           goto cleanup;
         }
+      g_list_free (profiles);
 
-      base_profile = profile_optionmenu_get_selected (app->new_profile_base_menu);
+      base_option_menu = g_object_get_data (G_OBJECT (new_profile_dialog), "base_option_menu");
+      base_profile = profile_optionmenu_get_selected (base_option_menu);
       
       if (base_profile == NULL)
         {
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (new_profile_dialog),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("The profile you selected as a base for your new profile no longer exists"));
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
-          gtk_widget_show_all (dialog);
-          
+          terminal_util_show_error_dialog (GTK_WINDOW (new_profile_dialog), NULL, 
+                                          _("The profile you selected as a base for your new profile no longer exists"));
           goto cleanup;
         }
 
-      transient_parent =
-        gtk_window_get_transient_for (GTK_WINDOW (new_profile_dialog));
+      transient_parent = gtk_window_get_transient_for (GTK_WINDOW (new_profile_dialog));
       
       gtk_widget_destroy (new_profile_dialog);
       
-      terminal_profile_create (base_profile, name,
-                               transient_parent);
+      terminal_profile_create (base_profile, name, transient_parent);
+
+      n.next = NULL;
+      n.data = name;
+      sync_profile_list (TRUE, &n);
+      
+      new_profile = terminal_profile_lookup_by_visible_name (name);
+
+      g_assert (new_profile != NULL);
+
+      terminal_profile_edit (new_profile, transient_parent);
 
     cleanup:
-      g_list_free (profiles);
-      g_free (bad_name_message);
       g_free (name);
     }
   else
@@ -2206,12 +2186,22 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
 }
 
 static void
-new_profile_destroyed_callback (GtkWidget   *new_profile_dialog,
-                                TerminalApp *app)
+new_profile_name_entry_changed_callback (GtkEditable *editable, gpointer data)
 {
-  app->new_profile_dialog = NULL;
-  app->new_profile_name_entry = NULL;
-  app->new_profile_base_menu = NULL;
+  char *name, *saved_name;
+  GtkWidget *create_button;
+
+  create_button = (GtkWidget*) data;
+
+  saved_name = name = gtk_editable_get_chars (editable, 0, -1);
+
+  /* make the create button sensitive only if something other than space has been set */
+  while (*name != '\0' && g_ascii_isspace (*name))
+    name++;
+ 
+  gtk_widget_set_sensitive (create_button, *name != '\0' ? TRUE : FALSE);
+
+  g_free (saved_name);
 }
 
 void
@@ -2220,97 +2210,67 @@ terminal_app_new_profile (TerminalApp     *app,
                           GtkWindow       *transient_parent)
 {
   GtkWindow *old_transient_parent;
+  GtkWidget *create_button;
 
   if (app->new_profile_dialog == NULL)
     {
-      GtkWidget *vbox;
-      GtkWidget *hbox;
-      GtkWidget *entry;
-      GtkWidget *label;
-      GtkWidget *option_menu;
-      GtkSizeGroup *size_group;
-      
-      old_transient_parent = NULL;      
-      
-      app->new_profile_dialog =
-        gtk_dialog_new_with_buttons (_("New Profile"),
-                                     NULL,
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_STOCK_CANCEL,
-                                     RESPONSE_CANCEL,
-                                     _("C_reate"),
-                                     RESPONSE_CREATE,
-                                     NULL);
-      g_signal_connect (G_OBJECT (app->new_profile_dialog),
-                        "response",
-                        G_CALLBACK (new_profile_response_callback),
-                        app);
+      GladeXML *xml;
+      GtkWidget *w, *wl;
+      GtkWidget *create_button;
+      GtkSizeGroup *size_group, *size_group_labels;
 
-      g_signal_connect (G_OBJECT (app->new_profile_dialog),
-                        "destroy",
-                        G_CALLBACK (new_profile_destroyed_callback),
-                        app);
+      xml = terminal_util_load_glade_file (TERM_GLADE_FILE, "new-profile-dialog", transient_parent);
 
-      gtk_window_set_resizable (GTK_WINDOW (app->new_profile_dialog),
-                                FALSE);
-      
-#define PADDING 5
-      
-      vbox = gtk_vbox_new (FALSE, PADDING);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), PADDING);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (app->new_profile_dialog)->vbox),
-                          vbox, TRUE, TRUE, 0);
-      
-      hbox = gtk_hbox_new (FALSE, PADDING);
+      if (xml == NULL)
+        return;
 
-      label = gtk_label_new_with_mnemonic (_("Profile _name:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      entry = gtk_entry_new ();
-      app->new_profile_name_entry = entry;
-      terminal_util_set_atk_name_description (entry, _("Enter profile name"), NULL);
+      app->new_profile_dialog = glade_xml_get_widget (xml, "new-profile-dialog");
+      g_signal_connect (G_OBJECT (app->new_profile_dialog), "response", G_CALLBACK (new_profile_response_callback), app);
+  
+      g_object_add_weak_pointer (G_OBJECT (app->new_profile_dialog), (void**) &app->new_profile_dialog);
 
-
-      gtk_entry_set_width_chars (GTK_ENTRY (entry), 14);
-      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      terminal_util_set_labelled_by (entry, GTK_LABEL (label));
-      
-      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
-      
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);      
-      
-      hbox = gtk_hbox_new (FALSE, PADDING);
-
-      label = gtk_label_new_with_mnemonic (_("_Base on:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      app->new_profile_base_menu = profile_optionmenu_new ();
-      option_menu = app->new_profile_base_menu;
-      if (default_base_profile)
-        profile_optionmenu_set_selected (option_menu,
-                                         default_base_profile);
-      
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), option_menu);
-      terminal_util_set_labelled_by (option_menu, GTK_LABEL (label));
-      
-      gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), option_menu, FALSE, FALSE, 0);
-
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-      
-      gtk_widget_grab_focus (app->new_profile_name_entry);
-      gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog),
-                                       RESPONSE_CREATE);
+      create_button = glade_xml_get_widget (xml, "new-profile-create-button");
+      g_object_set_data (G_OBJECT (app->new_profile_dialog), "create_button", create_button);
+      gtk_widget_set_sensitive (create_button, FALSE);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      gtk_size_group_add_widget (size_group, entry);
-      gtk_size_group_add_widget (size_group, option_menu);
+      size_group_labels = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+      /* the name entry */
+      w = glade_xml_get_widget (xml, "new-profile-name-entry");
+      g_object_set_data (G_OBJECT (app->new_profile_dialog), "name_entry", w);
+      g_signal_connect (G_OBJECT (w), "changed", G_CALLBACK (new_profile_name_entry_changed_callback), create_button);
+      gtk_entry_set_activates_default (GTK_ENTRY (w), TRUE);
+      gtk_widget_grab_focus (w);
+      terminal_util_set_atk_name_description (w, _("Enter profile name"), NULL);
+      gtk_size_group_add_widget (size_group, w);
+
+      wl = glade_xml_get_widget (xml, "new-profile-name-label");
+      gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
+      terminal_util_set_labelled_by (w, GTK_LABEL (wl));
+      gtk_size_group_add_widget (size_group_labels, wl);
+ 
+      /* the base profile option menu */
+      w = glade_xml_get_widget (xml, "new-profile-base-option-menu");
+      g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", w);
+      terminal_util_set_atk_name_description (w, _("Choose base profile"), NULL);
+      profile_optionmenu_refill (w);
+      gtk_size_group_add_widget (size_group, w);
+
+      wl = glade_xml_get_widget (xml, "new-profile-base-label");
+      gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
+      terminal_util_set_labelled_by (w, GTK_LABEL (wl));
+      gtk_size_group_add_widget (size_group_labels, wl);
+
+      gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), RESPONSE_CREATE);
+
       g_object_unref (G_OBJECT (size_group));
+      g_object_unref (G_OBJECT (size_group_labels));
+
+      g_object_unref (G_OBJECT (xml));
     }
-  else 
-    {
-      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->new_profile_dialog));
-    }
+
+  old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->new_profile_dialog));
   
   if (old_transient_parent != transient_parent)
     {
@@ -2318,6 +2278,9 @@ terminal_app_new_profile (TerminalApp     *app,
                                     transient_parent);
       gtk_widget_hide (app->new_profile_dialog); /* re-show the window on its new parent */
     }
+
+  create_button = g_object_get_data (G_OBJECT (app->new_profile_dialog), "create_button");
+  gtk_widget_set_sensitive (create_button, FALSE);
   
   gtk_widget_show_all (app->new_profile_dialog);
   gtk_window_present (GTK_WINDOW (app->new_profile_dialog));
@@ -2499,20 +2462,7 @@ profile_list_delete_selection (GtkWidget   *profile_list,
 
   if (deleted_profiles == NULL)
     {
-      dialog = gtk_message_dialog_new (transient_parent,
-                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("You must select one or more profiles to delete."));
-
-      g_signal_connect (G_OBJECT (dialog), "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-      
-      gtk_widget_show_all (dialog);
-      
+      terminal_util_show_error_dialog (transient_parent, NULL, _("You must select one or more profiles to delete."));
       return;
     }
   
@@ -2521,21 +2471,9 @@ profile_list_delete_selection (GtkWidget   *profile_list,
   if (count == terminal_profile_get_count ())
     {
       free_profiles_list (deleted_profiles);
-      
-      dialog = gtk_message_dialog_new (transient_parent,
-                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("You must have at least one profile; you can't delete all of them."));
 
-      g_signal_connect (G_OBJECT (dialog), "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-      
-      gtk_widget_show_all (dialog);
-      
+      terminal_util_show_error_dialog (transient_parent, NULL,
+                                       _("You must have at least one profile; you can't delete all of them."));
       return;
     }
   
@@ -2803,23 +2741,9 @@ manage_profiles_response_cb (GtkDialog *dialog,
       
       if (err)
         {
-          GtkWidget *dialog;
-          
-          dialog = gtk_message_dialog_new (GTK_WINDOW (app->manage_profiles_dialog),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
+          terminal_util_show_error_dialog (GTK_WINDOW (app->manage_profiles_dialog), NULL,
                                            _("There was an error displaying help: %s"),
                                            err->message);
-          
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-          
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
-          gtk_widget_show (dialog);
-          
           g_error_free (err);
         }
     }
@@ -3383,6 +3307,63 @@ client_die_cb (GnomeClient        *client,
  */
 
 
+/**
+ * terminal_util_show_error_dialog:
+ * @transient_parent: parent of the future dialog window;
+ * @weap_ptr: pointer to a #Widget pointer, to control the population.
+ * @message_format: printf() style format string
+ *
+ * Create a #GtkMessageDialog window with the message, and present it, handling its buttons.
+ * If @weap_ptr is not #NULL, only create the dialog if <literal>*weap_ptr</literal> is #NULL 
+ * (and in that * case, set @weap_ptr to be a weak pointer to the new dialog), otherwise just 
+ * present <literal>*weak_ptr</literal>. Note that in this last case, the message <emph>will</emph>
+ * be changed.
+ */
+
+void
+terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_ptr, const char *message_format, ...)
+{
+  char *message;
+  va_list args;
+
+  if (message_format)
+    {
+      va_start (args, message_format);
+      message = g_strdup_vprintf (message_format, args);
+      va_end (args);
+    }
+  else message = NULL;
+
+  if (weak_ptr == NULL || *weak_ptr == NULL)
+    {
+      GtkWidget *dialog;
+      dialog = gtk_message_dialog_new (transient_parent,
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       message);
+
+      g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
+
+      if (weak_ptr != NULL)
+        {
+        *weak_ptr = dialog;
+        g_object_add_weak_pointer (G_OBJECT (dialog), (void**)weak_ptr);
+        }
+
+      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+      
+      gtk_widget_show_all (dialog);
+    }
+  else 
+    {
+      g_return_if_fail (GTK_IS_MESSAGE_DIALOG (*weak_ptr));
+
+      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (*weak_ptr)->label), message);
+
+      gtk_window_present (GTK_WINDOW (*weak_ptr));
+    }
+  }
 
 /* This function is used to set LABLLED_BY relation between widgets
  * and labels
@@ -3481,26 +3462,8 @@ terminal_util_load_glade_file (const char *filename,
     {
       static GtkWidget *no_glade_dialog = NULL;
 
-      if (no_glade_dialog != NULL)
-        gtk_widget_destroy (no_glade_dialog);
-      
-      no_glade_dialog =
-        gtk_message_dialog_new (error_dialog_parent,
-                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                GTK_MESSAGE_ERROR,
-                                GTK_BUTTONS_CLOSE,
-                                _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the dialog can't be displayed."),
-                                path);
-      
-      g_signal_connect (G_OBJECT (no_glade_dialog),
-                        "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
-                                 (void**)&no_glade_dialog);
-  
-      gtk_window_present (GTK_WINDOW (no_glade_dialog));
+      terminal_util_show_error_dialog (error_dialog_parent, &no_glade_dialog, 
+                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the dialog can't be displayed."), path);
     }
 
   g_free (path);

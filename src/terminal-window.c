@@ -2336,30 +2336,11 @@ fullscreen_callback (GtkWidget      *menuitem,
     {
       static GtkWidget *no_fullscreen_dialog = NULL;
 
-      if (no_fullscreen_dialog == NULL)
-        {
-          no_fullscreen_dialog =
-            gtk_message_dialog_new (GTK_WINDOW (window),
-                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                    GTK_MESSAGE_ERROR,
-                                    GTK_BUTTONS_CLOSE,
+      terminal_util_show_error_dialog (GTK_WINDOW (window), &no_fullscreen_dialog,
                                     _("Your current desktop environment does not support the full screen feature.\n (In technical terms, you need a window manager with support for the _NET_WM_STATE_FULLSCREEN property.)"));
-          
-          g_object_add_weak_pointer (G_OBJECT (no_fullscreen_dialog),
-                                     (void**) &no_fullscreen_dialog);
-
-          g_signal_connect (G_OBJECT (no_fullscreen_dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-        }
-      
-      gtk_window_present (GTK_WINDOW (no_fullscreen_dialog));
-
-      return;
     }
-  
-  terminal_window_set_fullscreen (window,
-                                  !terminal_window_get_fullscreen (window));
+  else 
+    terminal_window_set_fullscreen (window, !terminal_window_get_fullscreen (window));
 }
 
 static double zoom_factors[] = {
@@ -2591,23 +2572,8 @@ help_callback (GtkWidget      *menuitem,
 
   if (err != NULL)
     {
-      GtkWidget *dialog;
-      
-      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("There was an error displaying help: %s"),
-                                       err->message);
-      
-      g_signal_connect (G_OBJECT (dialog), "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
-      
-      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-      
-      gtk_widget_show (dialog);
-
+      terminal_util_show_error_dialog (GTK_WINDOW (window), NULL,
+                                       _("There was an error displaying help: %s"), err->message);
       g_error_free (err);
     }
 }
