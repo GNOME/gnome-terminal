@@ -621,8 +621,10 @@ x_font_clicked (GtkWidget       *button,
     char *weights[] = { "medium", "regular", NULL };
 
     fontsel = egg_xfont_selector_new ();
-#if 1
-    /* doesn't seem to work yet */
+
+    egg_xfont_selector_set_font_name (EGG_XFONT_SELECTOR (fontsel),
+                                      terminal_profile_get_x_font (profile));
+
     egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
                                    EGG_XFONT_FILTER_BASE,
                                    EGG_XFONT_ALL,
@@ -632,7 +634,6 @@ x_font_clicked (GtkWidget       *button,
                                    NULL,
                                    spacings,
                                    NULL);
-#endif
     
     dialog = gtk_dialog_new_with_buttons (_("Choose a font"),
                                           GTK_WINDOW (parent),
