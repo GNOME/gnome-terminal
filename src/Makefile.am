@@ -56,15 +56,19 @@ gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
 
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
+schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
 
 icondir = $(datadir)/pixmaps
 icon_DATA = gnome-terminal.png
 
+CLEANFILES = gnome-terminal.schemas
+
 EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
 	$(schema_DATA)			\
+	$(schema_in_files)		\
 	$(server_DATA)			\
 	update-from-egg.sh		\
 	terminal-widget-vte.c
