@@ -1208,9 +1208,8 @@ terminal_window_update_geometry (TerminalWindow *window)
       
       hints.width_inc = term->charwidth;
       hints.height_inc = term->charheight;
-      /* FIXME we need to include the menubar/scrollbar in the
-       * min size.
-       */
+
+      /* min size is min size of just the geometry widget, remember. */
       hints.min_width = hints.base_width + hints.width_inc * MIN_WIDTH_CHARS;
       hints.min_height = hints.base_height + hints.height_inc * MIN_HEIGHT_CHARS;
       
@@ -1736,7 +1735,7 @@ about_callback (GtkWidget      *menuitem,
       gtk_window_present (GTK_WINDOW (about));
       return;
     }
-  
+
   about = gnome_about_new (PACKAGE, VERSION,
                            _("Copyright 2002 Havoc Pennington"),
                            _("GNOME Terminal"),
