@@ -52,11 +52,6 @@ TERM_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $TERM_LIBS"
 TERM_CFLAGS="$X_CFLAGS $TERM_CFLAGS"
 CFLAGS="$TERM_CFLAGS $CFLAGS"
 
-AC_PATH_PROG(LIBGLADE_CONVERT, libglade-convert)
-if test -z $LIBGLADE_CONVERT; then
-	AC_MSG_ERROR([libglade-convert (from libglade 2.0) is needed to build $PACKAGE.])
-fi
-
 AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
 
 if test x"$GCONFTOOL" = xno; then
