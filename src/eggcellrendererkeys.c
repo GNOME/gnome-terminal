@@ -270,8 +270,9 @@ grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	
   keys = EGG_CELL_RENDERER_KEYS (data);
 
-  g_print (" -> %s\n", convert_keysym_state_to_string (keys->edit_key,
-                                                       keys->edit_mask));
+  g_print (" prev key in renderer %s\n",
+           convert_keysym_state_to_string (keys->edit_key,
+                                           keys->edit_mask));
   
   keycode = xevent->xkey.keycode;
 
@@ -301,8 +302,7 @@ grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   
   gdk_keyboard_ungrab (xevent->xkey.time);
   gdk_pointer_ungrab (xevent->xkey.time);
-  gdk_window_remove_filter (keys->filter_window,
-			    grab_key_filter, data);
+  
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (keys->edit_widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (keys->edit_widget));
   keys->edit_widget = NULL;
@@ -315,6 +315,18 @@ grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   g_free (path);
   
   return GDK_FILTER_REMOVE;
+}
+
+static void
+ungrab_stuff (GtkWidget *widget, gpointer data)
+{
+  EggCellRendererKeys *keys = EGG_CELL_RENDERER_KEYS (data);
+
+  gdk_keyboard_ungrab (GDK_CURRENT_TIME);
+  gdk_pointer_ungrab (GDK_CURRENT_TIME);
+
+  gdk_window_remove_filter (keys->filter_window,
+			    grab_key_filter, data);
 }
 
 static void
@@ -433,6 +445,9 @@ egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
   
   gtk_widget_show_all (keys->edit_widget);
 
+  g_signal_connect (G_OBJECT (keys->edit_widget), "unrealize",
+                    G_CALLBACK (ungrab_stuff), keys);
+  
   keys->edit_key = keys->accel_key;
   keys->edit_mask = keys->accel_mask;
   

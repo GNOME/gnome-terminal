@@ -26,7 +26,7 @@
 #include <glade/glade.h>
 #include "eggcellrendererkeys.h"
 
-#define D(x) x
+#define D(x)
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
