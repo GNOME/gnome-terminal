@@ -105,6 +105,8 @@ static void copy_callback                 (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void paste_callback                (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+static void edit_keybindings_callback     (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
 static void change_configuration_callback (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void edit_configuration_callback   (GtkWidget      *menuitem,
@@ -333,7 +335,7 @@ terminal_window_init (TerminalWindow *window)
                             terminal_accels_get_accel_group ());
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  append_menuitem (menu, _("_New window"), NULL,
+  append_menuitem (menu, _("_New window"), ACCEL_PATH_NEW_WINDOW,
                    G_CALLBACK (new_window_callback),
                    window);
 
@@ -369,7 +371,18 @@ terminal_window_init (TerminalWindow *window)
   window->priv->paste_menuitem = append_stock_menuitem (menu,
                                                         GTK_STOCK_PASTE, NULL,
                                                         G_CALLBACK (paste_callback),
-                                                        window);  
+                                                        window);
+
+  mi = gtk_separator_menu_item_new ();
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+  
+  window->priv->edit_config_menuitem =
+    append_menuitem (menu, _("C_urrent profile..."), NULL,
+                     G_CALLBACK (edit_configuration_callback), window);
+
+  append_menuitem (menu, _("_Keybindings..."), NULL,
+                   G_CALLBACK (edit_keybindings_callback), window);
+  
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
                         NULL, NULL);
@@ -389,10 +402,6 @@ terminal_window_init (TerminalWindow *window)
   window->priv->choose_config_menuitem =
     append_menuitem (menu, _("_Profile"), NULL,
                      NULL, NULL);
-
-  window->priv->edit_config_menuitem =
-    append_menuitem (menu, _("_Edit current profile..."), NULL,
-                     G_CALLBACK (edit_configuration_callback), window);
   
   append_menuitem (menu, _("_New profile..."), NULL,
                    G_CALLBACK (new_configuration_callback), window);
@@ -1282,6 +1291,13 @@ paste_callback (GtkWidget      *menuitem,
     }  
 }
 
+static void
+edit_keybindings_callback (GtkWidget      *menuitem,
+                           TerminalWindow *window)
+{
+  terminal_app_edit_keybindings (terminal_app_get (),
+                                 GTK_WINDOW (window));
+}
 
 static void
 change_configuration_callback (GtkWidget      *menu_item,

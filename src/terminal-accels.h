@@ -30,5 +30,8 @@ GtkAccelGroup* terminal_accels_get_accel_group (void);
 
 #define ACCEL_PATH_ROOT "<terminal-accels>/menu"
 #define ACCEL_PATH_NEW_TAB ACCEL_PATH_ROOT"/new_tab"
+#define ACCEL_PATH_NEW_WINDOW ACCEL_PATH_ROOT"/new_window"
+
+GtkWidget* terminal_edit_keys_dialog_new (GtkWindow *transient_parent);
 
 #endif /* TERMINAL_ACCELS_H */

@@ -1,8 +1,7 @@
 <?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
 
 <glade-interface>
-
 <requires lib="gnome"/>
 
 <widget class="GtkDialog" id="profile-editor-dialog">
@@ -10,9 +9,9 @@
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="allow_grow">False</property>
-  <property name="allow_shrink">False</property>
-  <property name="has_separator">True</property>
+  <property name="resizable">False</property>
+  <property name="destroy_with_parent">False</property>
+  <property name="has_separator">False</property>
 
   <child internal-child="vbox">
     <widget class="GtkVBox" id="dialog-vbox1">
@@ -1931,19 +1930,6 @@
 				</widget>
 			      </child>
 
-			      <child internal-child="entry">
-				<widget class="GtkEntry" id="entry12">
-				  <property name="visible">True</property>
-				  <property name="can_focus">True</property>
-				  <property name="editable">True</property>
-				  <property name="visibility">True</property>
-				  <property name="max_length">0</property>
-				  <property name="text" translatable="yes"></property>
-				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
-				  <property name="activates_default">False</property>
-				</widget>
-			      </child>
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -2342,8 +2328,8 @@ and operating sytems that expect different terminal behavior.</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="allow_grow">True</property>
-  <property name="allow_shrink">True</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
   <property name="has_separator">True</property>
 
   <child internal-child="vbox">
@@ -2365,7 +2351,10 @@ and operating sytems that expect different terminal behavior.</property>
 	      <property name="visible">True</property>
 	      <property name="can_default">True</property>
 	      <property name="can_focus">True</property>
+	      <property name="label">gtk-close</property>
+	      <property name="use_stock">True</property>
 	      <property name="relief">GTK_RELIEF_NORMAL</property>
+	      <property name="response_id">-7</property>
 	    </widget>
 	  </child>
 	</widget>
@@ -2401,27 +2390,6 @@ and operating sytems that expect different terminal behavior.</property>
 	    <packing>
 	      <property name="left_attach">0</property>
 	      <property name="right_attach">1</property>
-	      <property name="top_attach">0</property>
-	      <property name="bottom_attach">1</property>
-	      <property name="x_options">fill</property>
-	      <property name="y_options"></property>
-	    </packing>
-	  </child>
-
-	  <child>
-	    <widget class="GtkCheckButton" id="disable-accelerators-checkbutton">
-	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label" translatable="yes">Disable all accelerators</property>
-	      <property name="use_underline">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="active">False</property>
-	      <property name="inconsistent">False</property>
-	      <property name="draw_indicator">True</property>
-	    </widget>
-	    <packing>
-	      <property name="left_attach">0</property>
-	      <property name="right_attach">1</property>
 	      <property name="top_attach">1</property>
 	      <property name="bottom_attach">2</property>
 	      <property name="x_options">fill</property>
@@ -2435,8 +2403,6 @@ and operating sytems that expect different terminal behavior.</property>
 	      <property name="can_focus">True</property>
 	      <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
 	      <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-	      <property name="hupdate_policy">GTK_UPDATE_CONTINUOUS</property>
-	      <property name="vupdate_policy">GTK_UPDATE_CONTINUOUS</property>
 	      <property name="shadow_type">GTK_SHADOW_IN</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
@@ -2479,6 +2445,30 @@ and operating sytems that expect different terminal behavior.</property>
 	      <property name="right_attach">1</property>
 	      <property name="top_attach">2</property>
 	      <property name="bottom_attach">3</property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options"></property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkLabel" id="label60">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">Don't bother to report bugs on this dialog yet, it isn't finished.</property>
+	      <property name="use_underline">False</property>
+	      <property name="use_markup">False</property>
+	      <property name="justify">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap">False</property>
+	      <property name="selectable">False</property>
+	      <property name="xalign">0</property>
+	      <property name="yalign">0.5</property>
+	      <property name="xpad">0</property>
+	      <property name="ypad">0</property>
+	    </widget>
+	    <packing>
+	      <property name="left_attach">0</property>
+	      <property name="right_attach">1</property>
+	      <property name="top_attach">0</property>
+	      <property name="bottom_attach">1</property>
 	      <property name="x_options">fill</property>
 	      <property name="y_options"></property>
 	    </packing>

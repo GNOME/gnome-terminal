@@ -54,6 +54,7 @@
 struct _TerminalApp
 {
   GList *windows;
+  GtkWidget *edit_keys_dialog;
   GtkWidget *new_profile_dialog;
   GtkWidget *new_profile_name_entry;
   GtkWidget *new_profile_base_menu;
@@ -1037,6 +1038,53 @@ terminal_app_edit_profile (TerminalApp     *app,
 {
   terminal_profile_edit (profile, transient_parent);
 }
+
+static void
+edit_keys_destroyed_callback (GtkWidget   *new_profile_dialog,
+                              TerminalApp *app)
+{
+  app->edit_keys_dialog = NULL;
+}
+
+void
+terminal_app_edit_keybindings (TerminalApp     *app,
+                               GtkWindow       *transient_parent)
+{
+  GtkWindow *old_transient_parent;
+
+  if (app->edit_keys_dialog == NULL)
+    {      
+      old_transient_parent = NULL;      
+
+      /* passing in transient_parent here purely for the
+       * glade error dialog
+       */
+      app->edit_keys_dialog = terminal_edit_keys_dialog_new (transient_parent);
+
+      if (app->edit_keys_dialog == NULL)
+        return; /* glade file missing */
+      
+      g_signal_connect (G_OBJECT (app->edit_keys_dialog),
+                        "destroy",
+                        G_CALLBACK (edit_keys_destroyed_callback),
+                        app);
+    }
+  else 
+    {
+      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->edit_keys_dialog));
+    }
+  
+  if (old_transient_parent != transient_parent)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (app->edit_keys_dialog),
+                                    transient_parent);
+      gtk_widget_hide (app->edit_keys_dialog); /* re-show the window on its new parent */
+    }
+  
+  gtk_widget_show_all (app->edit_keys_dialog);
+  gtk_window_present (GTK_WINDOW (app->edit_keys_dialog));
+}
+
 
 enum
 {

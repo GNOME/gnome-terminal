@@ -23,13 +23,17 @@
 #include "terminal-accels.h"
 #include "terminal-profile.h"
 #include <string.h>
+#include <glade/glade.h>
+#include "eggcellrendererkeys.h"
 
-#define D(x) x
+#define D(x)
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
+#define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
 
 typedef struct
 {
+  const char *user_visible_name;
   const char *gconf_key;
   const char *accel_path;
   /* last values received from gconf */
@@ -43,8 +47,12 @@ typedef struct
   gboolean needs_gconf_sync;
 } KeyEntry;
 
-static KeyEntry entries[] = {
-  { KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, 0, 0, NULL, FALSE }
+static KeyEntry entries[] =
+{
+  { N_("New tab"),
+    KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, 0, 0, NULL, FALSE },
+  { N_("New window"),
+    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, 0, 0, NULL, FALSE }
 };
 
 /*
@@ -368,4 +376,207 @@ queue_gconf_sync (void)
 {
   if (sync_idle == 0)
     sync_idle = g_idle_add (sync_handler, NULL);
+}
+
+/* We have the same KeyEntry* in both columns;
+ * we only have two columns because we want to be able
+ * to sort by either one of them.
+ */
+enum
+{
+  COLUMN_NAME,
+  COLUMN_ACCEL
+};
+
+static void
+name_set_func (GtkTreeViewColumn *tree_column,
+               GtkCellRenderer   *cell,
+               GtkTreeModel      *model,
+               GtkTreeIter       *iter,
+               gpointer           data)
+{
+  KeyEntry *ke;
+  
+  gtk_tree_model_get (model, iter,
+                      COLUMN_NAME, &ke,
+                      -1);
+  
+  g_object_set (GTK_CELL_RENDERER (cell),
+                "text", _(ke->user_visible_name),
+                NULL);
+}
+
+static void
+accel_set_func (GtkTreeViewColumn *tree_column,
+                GtkCellRenderer   *cell,
+                GtkTreeModel      *model,
+                GtkTreeIter       *iter,
+                gpointer           data)
+{
+  KeyEntry *ke;
+  
+  gtk_tree_model_get (model, iter,
+                      COLUMN_ACCEL, &ke,
+                      -1);
+  
+  g_object_set (GTK_CELL_RENDERER (cell),
+                "text", gtk_accelerator_name (ke->gconf_keyval,
+                                              ke->gconf_mask),
+                NULL);
+}
+
+int
+name_compare_func (GtkTreeModel *model,
+                   GtkTreeIter  *a,
+                   GtkTreeIter  *b,
+                   gpointer      user_data)
+{
+  KeyEntry *ke_a;
+  KeyEntry *ke_b;
+  
+  gtk_tree_model_get (model, a,
+                      COLUMN_NAME, &ke_a,
+                      -1);
+
+  gtk_tree_model_get (model, b,
+                      COLUMN_ACCEL, &ke_b,
+                      -1);
+
+  return g_utf8_collate (_(ke_a->user_visible_name),
+                         _(ke_b->user_visible_name));
+}
+
+int
+accel_compare_func (GtkTreeModel *model,
+                    GtkTreeIter  *a,
+                    GtkTreeIter  *b,
+                    gpointer      user_data)
+{
+  KeyEntry *ke_a;
+  KeyEntry *ke_b;
+  
+  gtk_tree_model_get (model, a,
+                      0, &ke_a,
+                      -1);
+
+  gtk_tree_model_get (model, b,
+                      0, &ke_b,
+                      -1);
+  
+  return g_utf8_collate (gtk_accelerator_name (ke_a->gconf_keyval,
+                                               ke_a->gconf_mask),
+                         gtk_accelerator_name (ke_b->gconf_keyval,
+                                               ke_b->gconf_mask));
+}
+
+GtkWidget*
+terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
+{
+  GladeXML *xml;
+  GtkWidget *w;
+  GtkCellRenderer *cell_renderer;
+  int i;
+  GtkListStore *list;
+  GtkTreeViewColumn *column;
+  
+  if (g_file_test ("./"TERM_GLADE_FILE,
+                   G_FILE_TEST_EXISTS))
+    {
+      /* Try current dir, for debugging */
+      xml = glade_xml_new ("./"TERM_GLADE_FILE,
+                           "keybindings-dialog",
+                           GETTEXT_PACKAGE);
+    }
+  else
+    {
+      xml = glade_xml_new (TERM_GLADE_DIR"/"TERM_GLADE_FILE,
+                           "keybindings-dialog",
+                           GETTEXT_PACKAGE);
+    }
+
+  if (xml == NULL)
+    {
+      static GtkWidget *no_glade_dialog = NULL;
+          
+      if (no_glade_dialog == NULL)
+        {
+          no_glade_dialog =
+            gtk_message_dialog_new (transient_parent,
+                                    GTK_DIALOG_DESTROY_WITH_PARENT,
+                                    GTK_MESSAGE_ERROR,
+                                    GTK_BUTTONS_CLOSE,
+                                    _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the keybindings dialog can't be displayed."),
+                                    TERM_GLADE_DIR"/"TERM_GLADE_FILE);
+                                        
+          g_signal_connect (G_OBJECT (no_glade_dialog),
+                            "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+
+          g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
+                                     (void**)&no_glade_dialog);
+        }
+
+      gtk_window_present (GTK_WINDOW (no_glade_dialog));
+
+      return NULL;
+    }
+      
+  w = glade_xml_get_widget (xml, "accelerators-treeview");
+  
+  cell_renderer = gtk_cell_renderer_text_new ();
+  
+  i = gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (w),
+                                                  -1,
+                                                  _("_Action"),
+                                                  cell_renderer,
+                                                  name_set_func,
+                                                  NULL,
+                                                  NULL);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (w), i-1);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
+  
+  cell_renderer = egg_cell_renderer_keys_new ();
+  
+  i = gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (w),
+                                                  -1,
+                                                  _("Accelerator _Key"),
+                                                  cell_renderer,
+                                                  accel_set_func,
+                                                  NULL,
+                                                  NULL);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (w), i-1);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ACCEL);
+  
+  /* FIXME two columns just so we can sort by two different things,
+   * is there a better way?
+   */
+  list = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_POINTER);
+  i = 0;
+  while (i < (int) G_N_ELEMENTS (entries))
+    {
+      GtkTreeIter iter;
+      
+      gtk_list_store_append (list, &iter);
+      gtk_list_store_set (list, &iter,
+                          COLUMN_NAME, &entries[i],
+                          COLUMN_ACCEL, &entries[i],
+                          -1);
+
+      ++i;
+    }
+
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (list),
+                                   COLUMN_NAME, name_compare_func,
+                                   NULL, NULL);
+
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (list),
+                                   COLUMN_ACCEL, accel_compare_func,
+                                   NULL, NULL);
+  
+  gtk_tree_view_set_model (GTK_TREE_VIEW (w), GTK_TREE_MODEL (list));
+  
+  g_object_unref (G_OBJECT (list));
+  
+  return glade_xml_get_widget (xml, "keybindings-dialog");
 }

@@ -49,5 +49,7 @@ void terminal_app_new_terminal (TerminalApp     *app,
 void terminal_app_manage_profiles (TerminalApp     *app,
                                    GtkWindow       *transient_parent);
 
+void terminal_app_edit_keybindings (TerminalApp     *app,
+                                    GtkWindow       *transient_parent);
 
 #endif /* TERMINAL_H */
