@@ -766,7 +766,6 @@ terminal_window_init (TerminalWindow *window)
   window->priv->active_term = NULL;
   window->priv->menubar = gtk_menu_bar_new ();
   window->priv->menubar_visible = FALSE;
-  g_object_ref (G_OBJECT (window->priv->menubar)); /* so we can add/remove */
   
   window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
   window->priv->notebook = gtk_notebook_new ();
@@ -805,6 +804,10 @@ terminal_window_init (TerminalWindow *window)
   
   gtk_container_add (GTK_CONTAINER (window),
                      window->priv->main_vbox);
+
+  gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
+		      window->priv->menubar,
+		      FALSE, FALSE, 0);
 
   gtk_box_pack_end (GTK_BOX (window->priv->main_vbox),
                     window->priv->notebook,
@@ -1075,9 +1078,6 @@ terminal_window_destroy (GtkObject *object)
 
   while (window->priv->terms)
     terminal_window_remove_screen (window, window->priv->terms->data);
-
-  if (window->priv->menubar)
-    g_object_unref (G_OBJECT (window->priv->menubar));
 
   g_list_free (window->priv->tab_menuitems);
   window->priv->tab_menuitems = NULL;
@@ -1551,15 +1551,11 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   
   if (window->priv->menubar_visible)
     {      
-      gtk_box_pack_start (GTK_BOX (window->priv->main_vbox),
-                          window->priv->menubar,
-                          FALSE, FALSE, 0);
       gtk_widget_show (window->priv->menubar);
     }
   else
-    {      
-      gtk_container_remove (GTK_CONTAINER (window->priv->main_vbox),
-                            window->priv->menubar);
+    {
+      gtk_widget_hide (window->priv->menubar);
     }
 
   if (window->priv->active_term)

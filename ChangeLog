@@ -1,5 +1,13 @@
 2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal-window.c(terminal_window_init,
+	  terminal_window_set_menubar_visible, terminal_window_destroy): 
+	  hide/show the menubar instead of removing/adding it to the main vbox.
+	  Also do not keep an extra reference on the menubar, since we don't
+	  need it anymore.
+
+2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-profile(exit_actions, TerminalExitAction,
 	  terminal_screen_widget_child_died): Add the possibility to hold the
 	  terminal when the command dies. From a patch by Kurt V. Hindenburg  
