@@ -1966,7 +1966,6 @@ terminal_screen_edit_title (TerminalScreen *screen,
   
   if (screen->priv->title_editor == NULL)
     {
-      GtkWidget *vbox;
       GtkWidget *hbox;
       GtkWidget *entry;
       GtkWidget *label;
@@ -1989,37 +1988,32 @@ terminal_screen_edit_title (TerminalScreen *screen,
       g_object_add_weak_pointer (G_OBJECT (screen->priv->title_editor),
                                  (void**) &screen->priv->title_editor);
 
-      gtk_window_set_resizable (GTK_WINDOW (screen->priv->title_editor),
-                                TRUE);
+      gtk_window_set_resizable (GTK_WINDOW (screen->priv->title_editor), FALSE);
       
       terminal_util_set_unique_role (GTK_WINDOW (screen->priv->title_editor), "gnome-terminal-change-title");
 
-#define PADDING 5
-      
-      vbox = gtk_vbox_new (FALSE, PADDING);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), PADDING);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (screen->priv->title_editor)->vbox),
-                          vbox, TRUE, TRUE, 0);
-      
-      hbox = gtk_hbox_new (FALSE, PADDING);
+      gtk_widget_set_name (screen->priv->title_editor, "set-title-dialog");
+      gtk_rc_parse_string ("widget \"set-title-dialog\" style \"hig-dialog\"\n");
+
+      gtk_dialog_set_has_separator (GTK_DIALOG (screen->priv->title_editor), FALSE);
+      gtk_container_set_border_width (GTK_CONTAINER (screen->priv->title_editor), 12);
+      gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (screen->priv->title_editor)->vbox), 12);
+
+      hbox = gtk_hbox_new (FALSE, 12);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (screen->priv->title_editor)->vbox), hbox, FALSE, FALSE, 0);      
 
       label = gtk_label_new_with_mnemonic (_("_Title:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
-      entry = gtk_entry_new ();
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
+      entry = gtk_entry_new ();
       gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
-      
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-      
-      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);      
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
       
       gtk_widget_grab_focus (entry);
-      gtk_dialog_set_default_response (GTK_DIALOG (screen->priv->title_editor),
-                                       GTK_RESPONSE_ACCEPT);
+      gtk_dialog_set_default_response (GTK_DIALOG (screen->priv->title_editor), GTK_RESPONSE_ACCEPT);
       
       if (screen->priv->raw_title)
         gtk_entry_set_text (GTK_ENTRY (entry), screen->priv->raw_title);
