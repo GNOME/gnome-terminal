@@ -275,7 +275,8 @@ void
 terminal_widget_set_allow_bold (GtkWidget *widget,
 				gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_allow_bold(VTE_TERMINAL(widget), setting);
 }
 
 void
