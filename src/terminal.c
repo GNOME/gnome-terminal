@@ -127,6 +127,8 @@ static void parse_options_callback (poptContext              ctx,
                                     const struct poptOption *opt,
                                     const char              *arg,
                                     void                    *data);
+static void client_die_cb          (GnomeClient             *client,
+                                    gpointer                 data);
 
 enum {
   OPTION_COMMAND = 1,
@@ -1184,6 +1186,11 @@ main (int argc, char **argv)
                     "save_yourself",
                     G_CALLBACK (save_yourself_callback),
                     app);
+
+  g_signal_connect (G_OBJECT (sm_client), "die",
+                    G_CALLBACK (client_die_cb),
+                    NULL);
+
 
   if (new_terminal_with_options (results))
     return 1;
@@ -2775,6 +2782,12 @@ save_yourself_callback (GnomeClient        *client,
   return TRUE;
 }
 
+static void
+client_die_cb (GnomeClient        *client,
+               gpointer            data)
+{
+  gtk_main_quit ();
+}
 
 /*
  * Utility stuff
