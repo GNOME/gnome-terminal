@@ -1,3 +1,12 @@
+2003-01-23 nalin
+	* src/terminal-screen.c(terminal_screen_button_press_event): Make
+	buttons 1 and 2 activate both URLs and S/Keys (previously, S/Key was
+	only handled for the first button).  Always check the event state
+	before grabbing focus or checking for matches.  Only pop up the
+	right-click menu if none of the regular three modifiers are pressed.
+	If the event wouldn't trigger dingus actions or pop up a menu, pass
+	it to the terminal widget for handling (part of #86943).
+
 2003-01-22  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "mn" to ALL_LINGUAS.

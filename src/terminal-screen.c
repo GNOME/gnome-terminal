@@ -83,7 +83,6 @@ static gboolean terminal_screen_button_press_event (GtkWidget      *term,
                                                     GdkEventButton *event,
                                                     TerminalScreen *screen);
 
-
 static void terminal_screen_widget_title_changed     (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
@@ -1419,6 +1418,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 {
   GtkWidget *term;
   int char_width, char_height;
+  gboolean dingus_button;
   
   term = screen->priv->term;
 
@@ -1429,17 +1429,18 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     terminal_widget_check_match (term,
                                  event->x / char_width,
                                  event->y / char_height);
+  dingus_button = ((event->button == 1) || (event->button == 2));
 
-  if (terminal_profile_get_use_skey (screen->priv->profile))
+  if (dingus_button &&
+      (event->state & GDK_CONTROL_MASK) &&
+      terminal_profile_get_use_skey (screen->priv->profile))
     {
       gchar *skey_match;
 
       skey_match = terminal_widget_skey_check_match (term,
 						     event->x / char_width,
 						     event->y / char_height);
-      if (skey_match != NULL &&
-	  event->button == 1 &&
-	  event->state & GDK_CONTROL_MASK)
+      if (skey_match != NULL)
 	{
 	  terminal_skey_do_popup (screen, GTK_WINDOW (terminal_screen_get_window (screen)), skey_match);
 	  g_free (skey_match);
@@ -1448,42 +1449,27 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 	}
     }
 
-  if (event->button == 1 || event->button == 2)
+  if (dingus_button &&
+      (event->state & GDK_CONTROL_MASK) &&
+      (screen->priv->matched_string != NULL))
     {
       gtk_widget_grab_focus (widget);
       
-      if (screen->priv->matched_string &&
-          (event->state & GDK_CONTROL_MASK))
-        {
-          open_url (screen, screen->priv->matched_string);
-          g_free (screen->priv->matched_string);
-          screen->priv->matched_string = NULL;
-          return TRUE; /* don't do anything else such as select with the click */
-        }
-      
-#if 0
-      /* old gnome-terminal had this code, but I'm not sure if
-       * it should be here. We always return FALSE, but
-       * sometimes old gnome-terminal didn't, so maybe that's
-       * why it had this.
-       */
-      if (event->button != 3
-          || (!(event->state & GDK_CONTROL_MASK) && term->vx->selected)
-          || (term->vx->vt.mode & VTMODE_SEND_MOUSE))
-        return FALSE;
-#endif      
-
-      return FALSE; /* pass thru the click */
+      open_url (screen, screen->priv->matched_string);
+      g_free (screen->priv->matched_string);
+      screen->priv->matched_string = NULL;
+      return TRUE; /* don't do anything else such as select with the click */
     }
-  else if (event->button == 3)
+      
+  if ((event->button == 3) &&
+      !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)))
     {
       terminal_screen_do_popup (screen, event);
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+
+  /* default behavior is to let the terminal widget deal with it */
+  return FALSE;
 }
 
 void
