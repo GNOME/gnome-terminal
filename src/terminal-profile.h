@@ -52,7 +52,8 @@ typedef enum
   TERMINAL_SETTING_USE_CUSTOM_COMMAND   = 1 << 17,
   TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18,
   TERMINAL_SETTING_ICON                 = 1 << 19,
-  TERMINAL_SETTING_IS_DEFAULT           = 1 << 20
+  TERMINAL_SETTING_IS_DEFAULT           = 1 << 20,
+  TERMINAL_SETTING_PALETTE              = 1 << 21
 } TerminalSettingMask;
 
 typedef enum
@@ -73,13 +74,7 @@ typedef enum
   TERMINAL_DELETE_ASCII_DEL
 } TerminalDeleteBinding;
 
-typedef enum
-{
-  TERMINAL_PALETTE_LINUX,
-  TERMINAL_PALETTE_XTERM,
-  TERMINAL_PALETTE_RXVT,
-  TERMINAL_PALETTE_CUSTOM
-} TerminalPaletteType;
+#define TERMINAL_PALETTE_SIZE 16
 
 typedef enum
 {
@@ -155,6 +150,8 @@ const char*               terminal_profile_get_custom_command       (TerminalPro
 const char*               terminal_profile_get_icon_file            (TerminalProfile *profile);
 GdkPixbuf*                terminal_profile_get_icon                 (TerminalProfile *profile);
 gboolean                  terminal_profile_get_is_default           (TerminalProfile *profile);
+void                      terminal_profile_get_palette              (TerminalProfile *profile,
+                                                                     GdkColor        *colors);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -199,6 +196,11 @@ void terminal_profile_set_icon_file            (TerminalProfile          *profil
                                                 const char               *filename);
 void terminal_profile_set_is_default           (TerminalProfile          *profile,
                                                 gboolean                  setting);
+void terminal_profile_set_palette              (TerminalProfile *profile,
+                                                const GdkColor  *colors);
+void terminal_profile_set_palette_entry        (TerminalProfile *profile,
+                                                int              i,
+                                                const GdkColor  *color);
 
 TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
 void             terminal_profile_initialize             (GConfClient     *conf);
@@ -223,6 +225,16 @@ void terminal_profile_create (TerminalProfile *base_profile,
 void terminal_profile_delete_list (GConfClient *conf,
                                    GList      *list,
                                    GtkWindow  *transient_parent);
+
+extern const GdkColor terminal_palette_linux[TERMINAL_PALETTE_SIZE];
+extern const GdkColor terminal_palette_xterm[TERMINAL_PALETTE_SIZE];
+extern const GdkColor terminal_palette_rxvt[TERMINAL_PALETTE_SIZE];
+
+char*    terminal_palette_to_string   (const GdkColor *palette);
+gboolean terminal_palette_from_string (const char     *str,
+                                       GdkColor       *palette,
+                                       gboolean        warn);
+
 
 G_END_DECLS
 

@@ -57,6 +57,7 @@
 #define KEY_USE_CUSTOM_COMMAND "use_custom_command"
 #define KEY_CUSTOM_COMMAND "custom_command"
 #define KEY_ICON "icon"
+#define KEY_PALETTE "palette"
 
 struct _TerminalProfilePrivate
 {
@@ -86,6 +87,9 @@ struct _TerminalProfilePrivate
 
   char *icon_file;
   GdkPixbuf *icon;
+
+  GdkColor palette[TERMINAL_PALETTE_SIZE];
+  
   guint icon_load_failed : 1;
   
   guint cursor_blink : 1;
@@ -99,6 +103,26 @@ struct _TerminalProfilePrivate
   guint use_custom_command : 1;
   guint forgotten : 1;
 };
+
+static gboolean
+constcorrect_string_to_enum (const GConfEnumStringPair *table,
+                             const char                *str,
+                             int                       *outp)
+{
+  return gconf_string_to_enum ((GConfEnumStringPair*)table, str, outp);
+}
+
+static const char*
+constcorrect_enum_to_string (const GConfEnumStringPair *table,
+                             int                        val)
+{
+  return gconf_enum_to_string ((GConfEnumStringPair*)table, val);
+}
+
+#define gconf_string_to_enum(table, str, outp) \
+   constcorrect_string_to_enum (table, str, outp)
+#define gconf_enum_to_string(table, val) \
+   constcorrect_enum_to_string (table, val)
 
 static const GConfEnumStringPair title_modes[] = {
   { TERMINAL_TITLE_REPLACE, "replace" },
@@ -213,6 +237,9 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->word_chars = g_strdup ("");
   profile->priv->custom_command = g_strdup ("");
   profile->priv->icon_file = g_strdup ("gnome-terminal.png");
+  memcpy (profile->priv->palette,
+          terminal_palette_linux,
+          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
 }
 
 static void
@@ -982,6 +1009,57 @@ terminal_profile_set_is_default (TerminalProfile *profile,
                            NULL);  
 }
 
+void
+terminal_profile_get_palette (TerminalProfile *profile,
+                              GdkColor        *colors)
+{
+  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
+  
+  memcpy (colors, profile->priv->palette,
+          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
+}
+
+void
+terminal_profile_set_palette (TerminalProfile *profile,
+                              const GdkColor  *colors)
+{
+  char *key;
+  char *str;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_PALETTE);
+
+  str = terminal_palette_to_string (colors);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key, str,
+                           NULL);
+
+  g_free (key);
+  g_free (str);
+}
+
+void
+terminal_profile_set_palette_entry (TerminalProfile *profile,
+                                    int              i,
+                                    const GdkColor  *color)
+{
+  GdkColor colors[TERMINAL_PALETTE_SIZE];
+
+  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
+  g_return_if_fail (i < TERMINAL_PALETTE_SIZE);
+  g_return_if_fail (color != NULL);
+  
+  memcpy (colors, profile->priv->palette,
+          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
+
+  colors[i] = *color;
+
+  terminal_profile_set_palette (profile, colors);
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -994,10 +1072,11 @@ set_visible_name (TerminalProfile *profile,
     {
       g_free (profile->priv->visible_name);
       profile->priv->visible_name = g_strdup (candidate_name);
+      return TRUE;
     }
   /* otherwise just leave the old name */
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
@@ -1048,15 +1127,16 @@ set_title (TerminalProfile *profile,
     {
       g_free (profile->priv->title);
       profile->priv->title = g_strdup (candidate_name);
+      return TRUE;
     }
   /* otherwise just leave the old name */
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
 set_title_mode (TerminalProfile *profile,
-                      const char      *str_val)
+                const char      *str_val)
 {
   int mode; /* TerminalTitleMode */
   
@@ -1085,10 +1165,11 @@ set_word_chars (TerminalProfile *profile,
     {
       g_free (profile->priv->word_chars);
       profile->priv->word_chars = g_strdup (candidate_chars);
+      return TRUE;
     }
   /* otherwise just leave the old chars */
   
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
@@ -1157,10 +1238,11 @@ set_custom_command (TerminalProfile *profile,
     {
       g_free (profile->priv->custom_command);
       profile->priv->custom_command = g_strdup (candidate_command);
+      return TRUE;
     }
   /* otherwise just leave the old command */
   
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
@@ -1184,10 +1266,38 @@ set_icon_file (TerminalProfile *profile,
         }
 
       profile->priv->icon_load_failed = FALSE; /* try again */
+
+      return TRUE;
     }
   /* otherwise just leave the old filename */
   
-  return TRUE;
+  return FALSE;
+}
+
+static gboolean
+set_palette_string (TerminalProfile *profile,
+                    const char      *candidate_str)
+{  
+  if (candidate_str != NULL)
+    {
+      GdkColor new_palette[TERMINAL_PALETTE_SIZE];
+
+      if (!terminal_palette_from_string (candidate_str,
+                                         new_palette,
+                                         TRUE))
+        return FALSE;
+
+      if (memcmp (profile->priv->palette, new_palette,
+                  TERMINAL_PALETTE_SIZE * sizeof (GdkColor)) == 0)
+        return FALSE;
+
+      memcpy (profile->priv->palette, new_palette,
+              TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
+
+      return TRUE;
+    }
+  
+  return FALSE;
 }
 
 void
@@ -1524,6 +1634,21 @@ terminal_profile_update (TerminalProfile *profile)
   
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_ICON;
+  
+  g_free (key);
+
+  /* KEY_PALETTE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_PALETTE);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_palette_string (profile, str_val))
+    mask |= TERMINAL_SETTING_PALETTE;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_PALETTE;
   
   g_free (key);
   
@@ -1873,7 +1998,20 @@ profile_change_notify (GConfClient *client,
         mask |= TERMINAL_SETTING_ICON;
 
       UPDATE_LOCKED (TERMINAL_SETTING_ICON);
-    }  
+    }
+  else if (strcmp (key, KEY_PALETTE) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_palette_string (profile, str_val))
+        mask |= TERMINAL_SETTING_PALETTE;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_PALETTE);
+    }
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -2447,6 +2585,16 @@ terminal_profile_create (TerminalProfile *base_profile,
                            key, base_profile->priv->icon_file,
                            &err);
   BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_PALETTE);
+  s = terminal_palette_to_string (base_profile->priv->palette);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, s,
+                           &err);
+  g_free (s);
+  BAIL_OUT_CHECK ();
   
   /* Add new profile to the profile list; the method for doing this has
    * a race condition where we and someone else set at the same time,
@@ -2619,3 +2767,113 @@ terminal_profile_get_for_new_term (void)
 
   return profile;
 }
+
+char*
+terminal_palette_to_string (const GdkColor *palette)
+{
+  return gtk_color_selection_palette_to_string (palette,
+                                                TERMINAL_PALETTE_SIZE);
+}
+
+gboolean
+terminal_palette_from_string (const char     *str,
+                              GdkColor       *palette,
+                              gboolean        warn)
+{
+  GdkColor *colors;
+  int n_colors;
+
+  colors = NULL;
+  n_colors = 0;
+  if (!gtk_color_selection_palette_from_string (str,
+                                                &colors, &n_colors))
+    {
+      if (warn)
+        g_printerr (_("Could not parse string \"%s\" as a color palette\n"),
+                    str);
+
+      return FALSE;
+    }
+
+  if (n_colors < TERMINAL_PALETTE_SIZE)
+    {
+      if (warn)
+        g_printerr (_("Palette had %d entries instead of %d\n"),
+                    n_colors, TERMINAL_PALETTE_SIZE);
+    }
+                                                
+  /* We continue even with a funky palette size, so we can change the
+   * palette size in future versions without causing too many issues.
+   */
+  if (TERMINAL_PALETTE_SIZE > n_colors)
+    memcpy (palette, terminal_palette_linux, TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
+  
+  memcpy (palette, colors, MIN (TERMINAL_PALETTE_SIZE, n_colors) * sizeof (GdkColor));
+
+  g_free (colors);
+
+  return TRUE;
+}
+
+const GdkColor
+terminal_palette_linux[TERMINAL_PALETTE_SIZE] =
+{
+  { 0, 0x0000, 0x0000, 0x0000 },
+  { 0, 0xaaaa, 0x0000, 0x0000 },
+  { 0, 0x0000, 0x0000, 0xaaaa },
+  { 0, 0xaaaa, 0x0000, 0x5555 },
+  { 0, 0x0000, 0xaaaa, 0x0000 },
+  { 0, 0xaaaa, 0xaaaa, 0x0000 },
+  { 0, 0x0000, 0xaaaa, 0xaaaa },
+  { 0, 0xaaaa, 0xaaaa, 0xaaaa },
+  { 0, 0x5555, 0x5555, 0x5555 },
+  { 0, 0xffff, 0x5555, 0x5555 },
+  { 0, 0x5555, 0x5555, 0xffff },
+  { 0, 0xffff, 0x5555, 0xffff },
+  { 0, 0x5555, 0xffff, 0x5555 },
+  { 0, 0xffff, 0xffff, 0x5555 },
+  { 0, 0x5555, 0xffff, 0xffff },
+  { 0, 0xffff, 0xffff, 0xffff }
+};
+
+const GdkColor
+terminal_palette_xterm[TERMINAL_PALETTE_SIZE] =
+{
+  { 0, 0x0000, 0x0000, 0x0000 },
+  { 0, 0x6767, 0x0000, 0x0000 },
+  { 0, 0x0000, 0x0000, 0x6767 },
+  { 0, 0x6767, 0x0000, 0x6767 },
+  { 0, 0x0000, 0x6767, 0x0000 },
+  { 0, 0x6767, 0x6767, 0x0000 },
+  { 0, 0x0000, 0x6767, 0x6767 },
+  { 0, 0x6868, 0x6868, 0x6868 },
+  { 0, 0x2a2a, 0x2a2a, 0x2a2a },
+  { 0, 0xffff, 0x0000, 0x0000 },
+  { 0, 0x0000, 0x0000, 0xffff },
+  { 0, 0xffff, 0x0000, 0xffff },
+  { 0, 0x0000, 0xffff, 0x0000 },
+  { 0, 0xffff, 0xffff, 0x0000 },
+  { 0, 0x0000, 0xffff, 0xffff },
+  { 0, 0xffff, 0xffff, 0xffff }
+};
+
+const GdkColor
+terminal_palette_rxvt[TERMINAL_PALETTE_SIZE] =
+{
+  { 0, 0x0000, 0x0000, 0x0000 },
+  { 0, 0xffff, 0x0000, 0x0000 },
+  { 0, 0x0000, 0x0000, 0xffff },
+  { 0, 0xffff, 0x0000, 0xffff },
+  { 0, 0x0000, 0xffff, 0x0000 },
+  { 0, 0xffff, 0xffff, 0x0000 },
+  { 0, 0x0000, 0xffff, 0xffff },
+  { 0, 0xffff, 0xffff, 0xffff },
+  { 0, 0x0000, 0x0000, 0x0000 },
+  { 0, 0xffff, 0x0000, 0x0000 },
+  { 0, 0x0000, 0x0000, 0xffff },
+  { 0, 0xffff, 0x0000, 0xffff },
+  { 0, 0x0000, 0xffff, 0x0000 },
+  { 0, 0xffff, 0xffff, 0x0000 },
+  { 0, 0x0000, 0xffff, 0xffff },
+  { 0, 0xffff, 0xffff, 0xffff }
+};

@@ -389,19 +389,6 @@ profile_changed_callback (TerminalProfile          *profile,
   reread_profile (screen);
 }
 
-
-/* FIXME temporary hack */
-static gushort xterm_red[] = { 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6868,
-                               0x2a2a, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff,
-                               0x0,    0x0 };
-
-static gushort xterm_green[] = { 0x0000, 0x0000, 0x6767, 0x6767, 0x0000, 0x0000, 0x6767, 0x6868,
-                                 0x2a2a, 0x0000, 0xffff, 0xffff, 0x0000, 0x0000, 0xffff, 0xffff,
-                                 0x0,    0x0 };
-static gushort xterm_blue[] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x6767, 0x6767, 0x6767, 0x6868,
-                                0x2a2a, 0x0000, 0x0000, 0x0000, 0xffff, 0xffff, 0xffff, 0xffff,
-                                0x0,    0x0 };
-
 static void
 update_color_scheme (TerminalScreen *screen)
 {
@@ -409,16 +396,26 @@ update_color_scheme (TerminalScreen *screen)
   gushort red[18],green[18],blue[18];
   ZvtTerm *term;
   GdkColor fg, bg;
+  int i;
+  GdkColor palette[TERMINAL_PALETTE_SIZE];
   
   if (screen->priv->zvt == NULL ||
       !GTK_WIDGET_REALIZED (screen->priv->zvt))
     return;
   
   term = ZVT_TERM (screen->priv->zvt);
+
+  terminal_profile_get_palette (screen->priv->profile,
+                                palette);
   
-  memcpy (red, xterm_red, sizeof (xterm_red));
-  memcpy (green, xterm_green, sizeof (xterm_green));
-  memcpy (blue, xterm_blue, sizeof (xterm_blue));
+  i = 0;
+  while (i < 16)
+    {
+      red[i] = palette[i].red;
+      green[i] = palette[i].green;
+      blue[i] = palette[i].blue;
+      ++i;
+    }
 
   terminal_profile_get_color_scheme (screen->priv->profile,
                                      &fg, &bg);
@@ -432,7 +429,7 @@ update_color_scheme (TerminalScreen *screen)
   blue[17] = bg.blue;
   
   zvt_term_set_color_scheme (term, red, green, blue);
-  c = term->colors [17];
+  c = term->colors[17];
 
   gdk_window_set_background (GTK_WIDGET (term)->window, &c);
   gtk_widget_queue_draw (GTK_WIDGET (term));

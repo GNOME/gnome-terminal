@@ -53,6 +53,20 @@ static TerminalColorScheme color_schemes[] = {
     { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 } }  
 };
 
+typedef struct _TerminalPaletteScheme TerminalPaletteScheme;
+
+struct _TerminalPaletteScheme
+{
+  const char *name;
+  const GdkColor *palette;
+};
+
+static TerminalPaletteScheme palette_schemes[] = {
+  { N_("Linux console"), terminal_palette_linux },
+  { N_("XTerm"), terminal_palette_xterm },
+  { N_("Rxvt"), terminal_palette_rxvt }
+};
+
 static GtkWidget* profile_editor_get_widget                  (GtkWidget       *editor,
                                                               const char      *widget_name);
 static void       profile_editor_update_sensitivity          (GtkWidget       *editor,
@@ -95,6 +109,8 @@ static void       profile_editor_update_use_custom_command   (GtkWidget       *w
                                                               TerminalProfile *profile);
 static void       profile_editor_update_custom_command       (GtkWidget       *widget,
                                                               TerminalProfile *profile);
+static void       profile_editor_update_palette              (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
 
 
 static void profile_forgotten (TerminalProfile     *profile,
@@ -115,6 +131,25 @@ entry_set_text_if_changed (GtkEntry   *entry,
     gtk_entry_set_text (GTK_ENTRY (entry), text);
 
   g_free (s);
+}
+
+static void
+colorpicker_set_if_changed (GtkWidget      *colorpicker,
+                            const GdkColor *color)
+{
+  guint16 r, g, b;
+
+  gnome_color_picker_get_i16 (GNOME_COLOR_PICKER (colorpicker),
+                              &r, &g, &b, NULL);
+
+  if (r != color->red ||
+      g != color->green ||
+      b != color->blue)
+    gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (colorpicker),
+                                color->red,
+                                color->green,
+                                color->blue,
+                                0xffff);
 }
 
 static void
@@ -209,6 +244,9 @@ profile_changed (TerminalProfile          *profile,
 
   if (mask & TERMINAL_SETTING_CUSTOM_COMMAND)
     profile_editor_update_custom_command (editor, profile);
+
+  if (mask & TERMINAL_SETTING_PALETTE)
+    profile_editor_update_palette (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -449,6 +487,40 @@ custom_command_changed (GtkWidget       *entry,
   g_free (text);
 }
 
+static void
+palette_scheme_changed (GtkWidget       *option_menu,
+                      TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  
+  if (i < G_N_ELEMENTS (palette_schemes))
+    terminal_profile_set_palette (profile,
+                                  palette_schemes[i].palette);
+  else
+    ; /* "custom" selected, no change */
+}
+
+static void
+palette_color_set (GtkWidget       *colorpicker,
+                   guint r, guint g, guint b, guint a,
+                   TerminalProfile *profile)
+{
+  int i;
+  GdkColor color;
+
+  color.red = r;
+  color.green = g;
+  color.blue = b;
+  
+  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (colorpicker),
+                                          "palette-entry-index"));
+
+  terminal_profile_set_palette_entry (profile, i,
+                                      &color);
+}
+
 /*
  * initialize widgets
  */
@@ -466,7 +538,8 @@ init_color_scheme_menu (GtkWidget *option_menu)
   while (i < G_N_ELEMENTS (color_schemes))
     {
       menu_item = gtk_menu_item_new_with_label (_(color_schemes[i].name));
-
+      gtk_widget_show (menu_item);
+      
       gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                              menu_item);
       
@@ -474,13 +547,44 @@ init_color_scheme_menu (GtkWidget *option_menu)
     }
 
   menu_item = gtk_menu_item_new_with_label (_("Custom"));
+  gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                          menu_item);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
                             menu);
 }
-                        
+
+static void
+init_palette_scheme_menu (GtkWidget *option_menu)
+{
+  GtkWidget *menu;
+  GtkWidget *menu_item;
+  int i;
+  
+  menu = gtk_menu_new ();
+
+  i = 0;
+  while (i < G_N_ELEMENTS (palette_schemes))
+    {
+      menu_item = gtk_menu_item_new_with_label (_(palette_schemes[i].name));
+      gtk_widget_show (menu_item);
+      
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                             menu_item);
+      
+      ++i;
+    }
+
+  menu_item = gtk_menu_item_new_with_label (_("Custom"));
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         menu_item);
+
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
+                            menu);
+}
+
 static void
 edited_cb (GtkCellRenderer *renderer,
 	   gchar           *path_text,
@@ -643,7 +747,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
       w = glade_xml_get_widget (xml, "color-scheme-optionmenu");
       init_color_scheme_menu (w);
-      profile_editor_update_color_scheme_menu (editor, profile);
+      profile_editor_update_palette (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (color_scheme_changed),
                         profile);
@@ -746,6 +850,36 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (custom_command_changed),
                         profile);
 
+      w = glade_xml_get_widget (xml, "palette-optionmenu");
+      g_assert (w);
+      init_palette_scheme_menu (w);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (palette_scheme_changed),
+                        profile);
+
+      i = 0;
+      while (i < TERMINAL_PALETTE_SIZE)
+        {
+          char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
+          
+          w = glade_xml_get_widget (xml, s);
+          g_assert (w);
+          
+          g_object_set_data (G_OBJECT (w),
+                             "palette-entry-index",
+                             GINT_TO_POINTER (i));
+
+          g_signal_connect (G_OBJECT (w), "color_set",
+                            G_CALLBACK (palette_color_set),
+                            profile);
+          
+          g_free (s);
+
+          ++i;
+        }
+
+      profile_editor_update_palette (editor, profile);
+      
       w = glade_xml_get_widget (xml, "bindings-swindow");
 
       model = (GtkTreeModel*) gtk_list_store_new (1, G_TYPE_STRING);
@@ -782,7 +916,7 @@ terminal_profile_edit (TerminalProfile *profile,
       gtk_widget_hide (editor); /* re-show the window on its new parent */
     }
   
-  gtk_widget_show_all (editor);
+  /*   gtk_widget_show_all (editor);*/
   gtk_window_present (GTK_WINDOW (editor));
 }
 
@@ -891,6 +1025,25 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   set_insensitive (editor, "use-custom-command-checkbutton",
                    mask & TERMINAL_SETTING_USE_CUSTOM_COMMAND);
+
+  set_insensitive (editor, "palette-optionmenu",
+                   mask & TERMINAL_SETTING_PALETTE);
+
+  {
+    int i;
+
+    i = 0;
+    while (i < TERMINAL_PALETTE_SIZE)
+      {
+        char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
+
+        set_insensitive (editor, s, mask & TERMINAL_SETTING_PALETTE);
+
+        g_free (s);
+
+        ++i;
+      }
+  }
 }
 
 
@@ -947,12 +1100,10 @@ profile_editor_update_color_pickers (GtkWidget       *editor,
   terminal_profile_get_color_scheme (profile, &color1, &color2);
   
   w = profile_editor_get_widget (editor, "foreground-colorpicker");
-  gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (w),
-                              color1.red, color1.green, color1.blue, 0);
+  colorpicker_set_if_changed (w, &color1);
   
   w = profile_editor_get_widget (editor, "background-colorpicker");
-  gnome_color_picker_set_i16 (GNOME_COLOR_PICKER (w),
-                              color2.red, color2.green, color2.blue, 0);
+  colorpicker_set_if_changed (w, &color2);
 }
 
 static void
@@ -1181,6 +1332,62 @@ profile_editor_update_custom_command (GtkWidget       *editor,
       gdk_color_parse ("red", &color);
       gtk_widget_modify_text (w, GTK_STATE_NORMAL, &color);
     }            
+}
+
+static void
+profile_editor_update_palette (GtkWidget       *editor,
+                               TerminalProfile *profile)
+{
+  GtkWidget *w;
+  int i;
+  GdkColor palette[TERMINAL_PALETTE_SIZE];
+
+  terminal_profile_get_palette (profile, palette);
+  
+  i = 0;
+  while (i < TERMINAL_PALETTE_SIZE)
+    {
+      char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
+      w = profile_editor_get_widget (editor, s);
+      g_free (s);
+      
+      colorpicker_set_if_changed (w, &palette[i]);
+      
+      ++i;
+    }
+
+  w = profile_editor_get_widget (editor, "palette-optionmenu");
+
+  i = 0;
+  while (i < G_N_ELEMENTS (palette_schemes))
+    {
+      int j;
+      gboolean match;
+
+      match = TRUE;
+      j = 0;
+      while (j < TERMINAL_PALETTE_SIZE)
+        {
+          if (!gdk_color_equal (&palette_schemes[i].palette[j],
+                                &palette[j]))
+            {
+              match = FALSE;
+              break;
+            }
+          
+          ++j;
+        }
+
+      if (match)
+        break;
+      
+      ++i;
+    }
+
+  /* If we didn't find a match, then we want the last option
+   * menu item which is "custom"
+   */
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w), i);
 }
 
 static GtkWidget*

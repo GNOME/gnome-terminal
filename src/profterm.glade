@@ -49,7 +49,6 @@
 
     <widget>
       <class>GtkNotebook</class>
-      <child_name>GnomePropertyBox:notebook</child_name>
       <name>notebook2</name>
       <can_focus>True</can_focus>
       <show_tabs>True</show_tabs>
@@ -1066,65 +1065,6 @@ Isn't displayed
 	    </widget>
 
 	    <widget>
-	      <class>GtkLabel</class>
-	      <name>label37</name>
-	      <label>When command _exits:</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
-	      <wrap>False</wrap>
-	      <xalign>1</xalign>
-	      <yalign>0.5</yalign>
-	      <xpad>8</xpad>
-	      <ypad>0</ypad>
-	      <child>
-		<left_attach>0</left_attach>
-		<right_attach>2</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkAlignment</class>
-	      <name>alignment19</name>
-	      <xalign>1.49012e-08</xalign>
-	      <yalign>0.5</yalign>
-	      <xscale>0</xscale>
-	      <yscale>1</yscale>
-	      <child>
-		<left_attach>2</left_attach>
-		<right_attach>4</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>True</yfill>
-	      </child>
-
-	      <widget>
-		<class>GtkOptionMenu</class>
-		<name>exit-action-optionmenu</name>
-		<can_focus>True</can_focus>
-		<items>Exit the terminal
-Restart the command
-</items>
-		<initial_choice>0</initial_choice>
-	      </widget>
-	    </widget>
-
-	    <widget>
 	      <class>GtkAlignment</class>
 	      <name>alignment27</name>
 	      <xalign>1.49012e-08</xalign>
@@ -1153,6 +1093,65 @@ Restart the command
 		<label>_Update utmp/wtmp records when command is launched</label>
 		<active>False</active>
 		<draw_indicator>True</draw_indicator>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label37</name>
+	      <label>When command _exits:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>8</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment19</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>True</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>exit-action-optionmenu</name>
+		<can_focus>True</can_focus>
+		<items>Exit the terminal
+Restart the command
+</items>
+		<initial_choice>0</initial_choice>
 	      </widget>
 	    </widget>
 	  </widget>
@@ -1488,11 +1487,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker5</name>
+		<name>palette-colorpicker-1</name>
+		<tooltip>Palette entry 1</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 1</title>
 		<child>
 		  <left_attach>0</left_attach>
 		  <right_attach>1</right_attach>
@@ -1511,11 +1511,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker6</name>
+		<name>palette-colorpicker-2</name>
+		<tooltip>Palette entry 2</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 2</title>
 		<child>
 		  <left_attach>1</left_attach>
 		  <right_attach>2</right_attach>
@@ -1534,11 +1535,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker7</name>
+		<name>palette-colorpicker-3</name>
+		<tooltip>Palette entry 3</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 3</title>
 		<child>
 		  <left_attach>2</left_attach>
 		  <right_attach>3</right_attach>
@@ -1557,11 +1559,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker8</name>
+		<name>palette-colorpicker-4</name>
+		<tooltip>Palette entry 4</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 4</title>
 		<child>
 		  <left_attach>3</left_attach>
 		  <right_attach>4</right_attach>
@@ -1580,11 +1583,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker9</name>
+		<name>palette-colorpicker-5</name>
+		<tooltip>Palette entry 5</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 5</title>
 		<child>
 		  <left_attach>4</left_attach>
 		  <right_attach>5</right_attach>
@@ -1603,11 +1607,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker10</name>
+		<name>palette-colorpicker-6</name>
+		<tooltip>Palette entry 6</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 6</title>
 		<child>
 		  <left_attach>5</left_attach>
 		  <right_attach>6</right_attach>
@@ -1626,11 +1631,11 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker11</name>
+		<name>palette-colorpicker-8</name>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 8</title>
 		<child>
 		  <left_attach>7</left_attach>
 		  <right_attach>8</right_attach>
@@ -1649,11 +1654,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker12</name>
+		<name>palette-colorpicker-9</name>
+		<tooltip>Palette entry 9</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 9</title>
 		<child>
 		  <left_attach>0</left_attach>
 		  <right_attach>1</right_attach>
@@ -1672,11 +1678,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker13</name>
+		<name>palette-colorpicker-10</name>
+		<tooltip>Palette entry 10</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 10</title>
 		<child>
 		  <left_attach>1</left_attach>
 		  <right_attach>2</right_attach>
@@ -1695,11 +1702,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker14</name>
+		<name>palette-colorpicker-12</name>
+		<tooltip>Palette entry 12</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 12</title>
 		<child>
 		  <left_attach>3</left_attach>
 		  <right_attach>4</right_attach>
@@ -1718,11 +1726,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker15</name>
+		<name>palette-colorpicker-11</name>
+		<tooltip>Palette entry 11</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 11</title>
 		<child>
 		  <left_attach>2</left_attach>
 		  <right_attach>3</right_attach>
@@ -1741,11 +1750,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker16</name>
+		<name>palette-colorpicker-13</name>
+		<tooltip>Palette entry 13</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 13</title>
 		<child>
 		  <left_attach>4</left_attach>
 		  <right_attach>5</right_attach>
@@ -1764,11 +1774,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker17</name>
+		<name>palette-colorpicker-16</name>
+		<tooltip>Palette entry 16</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 16</title>
 		<child>
 		  <left_attach>7</left_attach>
 		  <right_attach>8</right_attach>
@@ -1787,11 +1798,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker18</name>
+		<name>palette-colorpicker-14</name>
+		<tooltip>Palette entry 14</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 14</title>
 		<child>
 		  <left_attach>5</left_attach>
 		  <right_attach>6</right_attach>
@@ -1810,11 +1822,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker19</name>
+		<name>palette-colorpicker-7</name>
+		<tooltip>Palette entry 7</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 7</title>
 		<child>
 		  <left_attach>6</left_attach>
 		  <right_attach>7</right_attach>
@@ -1833,11 +1846,12 @@ Restart the command
 
 	      <widget>
 		<class>GnomeColorPicker</class>
-		<name>colorpicker20</name>
+		<name>palette-colorpicker-15</name>
+		<tooltip>Palette entry 15</tooltip>
 		<can_focus>True</can_focus>
 		<dither>True</dither>
 		<use_alpha>False</use_alpha>
-		<title>Pick a color</title>
+		<title>Palette entry 15</title>
 		<child>
 		  <left_attach>6</left_attach>
 		  <right_attach>7</right_attach>
@@ -1905,7 +1919,7 @@ Restart the command
 
 	      <widget>
 		<class>GtkOptionMenu</class>
-		<name>optionmenu8</name>
+		<name>palette-optionmenu</name>
 		<can_focus>True</can_focus>
 		<items></items>
 		<initial_choice>0</initial_choice>

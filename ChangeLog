@@ -1,5 +1,25 @@
 2002-02-16  Havoc Pennington  <hp@pobox.com>
 
+	* src/profile-editor.c: wire up palette stuff
+
+	* src/profterm.glade: remove bogus <child_name> from notebook 
+	widget that caused a libglade warning
+
+	* src/terminal-profile.c (set_visible_name): fix return value
+	(set_title): fix return value
+	(set_word_chars): fix return value
+	(set_custom_command): fix return value
+	(set_icon_file): fix return value
+	(gconf_string_to_enum): macro to remove const warnings
+	(gconf_enum_to_string): macro to remove const warnings
+
+	* src/terminal-profile.h: add palette setting
+
+	* src/terminal-screen.c (update_color_scheme): use color scheme
+	from profile instead of hardcoded
+
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal.c: silently accept --use-factory for now so 
 	launchers will work
 
