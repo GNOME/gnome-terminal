@@ -422,6 +422,15 @@ word_chars_changed (GtkWidget       *entry,
   g_free (text);
 }
 
+static void 
+font_changed (EggXFontSelector *selector, TerminalProfile *profile)
+{
+  gchar *name = egg_xfont_selector_get_font_name (selector);
+  if (name)
+    terminal_profile_set_x_font (profile, name);
+  g_free (name);
+}
+
 static void
 scrollbar_position_changed (GtkWidget       *option_menu,
                             TerminalProfile *profile)
@@ -552,132 +561,6 @@ palette_color_set (GtkWidget       *colorpicker,
 
   terminal_profile_set_palette_entry (profile, i,
                                       &color);
-}
-
-static void
-font_dialog_destroyed (GtkWidget *dialog,
-                       gpointer   data)
-{
-  GtkWidget *button;
-
-  button = data;
-
-  g_object_set_data (G_OBJECT (button), "font-selector", NULL);
-}
-
-static void
-font_response_callback (GtkWidget *dialog,
-                        int        response_id,
-                        void      *data)
-{
-  TerminalProfile *profile;
-  char *str;
-  GtkWidget *fontsel;
-  
-  profile = data;
-
-  fontsel = g_object_get_data (G_OBJECT (dialog),
-                               "font-selector");
-  
-  if (response_id == GTK_RESPONSE_ACCEPT)    
-    str = egg_xfont_selector_get_font_name (EGG_XFONT_SELECTOR (fontsel));  
-  else
-    str = NULL;
-
-  if (str)
-    {
-      terminal_profile_set_x_font (profile, str);
-      g_free (str);      
-    }
-
-  gtk_widget_destroy (dialog);
-}
-
-static void
-x_font_clicked (GtkWidget       *button,
-                TerminalProfile *profile)
-{
-  /* Pop up dialog, get new font, terminal_profile_set_x_font */
-  GtkWidget *dialog;
-  GtkWidget *parent;
-  
-  dialog = g_object_get_data (G_OBJECT (button),
-                              "font-selector");
-
-  if (dialog)
-    {
-      gtk_window_present (GTK_WINDOW (dialog));
-      return;
-    }
-  
-  parent = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
-  g_assert (parent);
-
-#if 1
-  {
-    GtkWidget *fontsel;
-    char *spacings[] = { "m", "c", NULL };
-    char *slants[] = { "r", "ot", NULL };
-    char *weights[] = { "medium", "regular", NULL };
-
-    fontsel = egg_xfont_selector_new ();
-
-    egg_xfont_selector_set_font_name (EGG_XFONT_SELECTOR (fontsel),
-                                      terminal_profile_get_x_font (profile));
-
-    egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
-                                   EGG_XFONT_FILTER_BASE,
-                                   EGG_XFONT_ALL,
-                                   NULL,
-                                   weights,
-                                   slants,
-                                   NULL,
-                                   spacings,
-                                   NULL);
-    
-    dialog = gtk_dialog_new_with_buttons (_("Choose a font"),
-                                          GTK_WINDOW (parent),
-                                          GTK_DIALOG_DESTROY_WITH_PARENT,
-                                          GTK_STOCK_CANCEL,
-                                          GTK_RESPONSE_REJECT,
-                                          GTK_STOCK_OK,
-                                          GTK_RESPONSE_ACCEPT,
-                                          NULL);    
-    
-    g_signal_connect (G_OBJECT (dialog), "response",
-                      G_CALLBACK (font_response_callback),
-                      profile);
-    
-    g_object_set_data (G_OBJECT (dialog), "font-selector",
-                       fontsel);
-
-    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-                        fontsel, TRUE, TRUE, 0);
-
-    gtk_widget_show (fontsel);
-  }
-#else
-  dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "Sadly, this button doesn't work. "
-                                   "To fix, repair x-font-selector.[hc] "
-                                   "then connect it up in %s (line %d, function %s); all "
-                                   "other parts of the font pref are already done.\n"
-                                   "http://bugzilla.gnome.org/show_bug.cgi?id=71744",
-                                   __FILE__, __LINE__,
-                                   G_GNUC_FUNCTION);
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-#endif
-
-  g_object_set_data (G_OBJECT (button), "font-selector", dialog);
-  g_signal_connect (G_OBJECT (dialog), "destroy",
-                    G_CALLBACK (font_dialog_destroyed), button);
-
-  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
@@ -840,9 +723,9 @@ void
 terminal_profile_edit (TerminalProfile *profile,
                        GtkWindow       *transient_parent)
 {
-  GtkWidget *editor;
+  GtkWidget *editor, *fontsel;
   GtkWindow *old_transient_parent;
-  
+
   editor = g_object_get_data (G_OBJECT (profile),
                               "editor-window");
 
@@ -1155,24 +1038,23 @@ terminal_profile_edit (TerminalProfile *profile,
 
       profile_editor_update_palette (editor, profile);
 
-      w = glade_xml_get_widget (xml, "font-button");
-      /* keep button from expanding the dialog, and truncate on
-       * the left not on either side; would really prefer to
-       * center until running out of space, but oh well.
-       */
-      gtk_misc_set_alignment (GTK_MISC (gtk_bin_get_child (GTK_BIN (w))),
-                              0.0, 0.5);
-      gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (w)),
-                                   0, -1);
+      w = glade_xml_get_widget (xml, "font-hbox");
+  
+      fontsel = egg_xfont_selector_new ();
+      g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
+ 
       profile_editor_update_x_font (editor, profile);
-      g_signal_connect (G_OBJECT (w), "clicked",
-                        G_CALLBACK (x_font_clicked),
-                        profile);
-
+      
+      g_signal_connect (fontsel, "changed",
+			G_CALLBACK (font_changed), profile);
+      
+      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
+      gtk_widget_show_all (w);
+      
       w = glade_xml_get_widget (xml, "reset-compat-defaults-button");
       g_signal_connect (G_OBJECT (w), "clicked",
-                        G_CALLBACK (reset_compat_defaults_clicked),
-                        profile);
+			G_CALLBACK (reset_compat_defaults_clicked),
+			profile);
     }
   else
     {
@@ -1313,7 +1195,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "palette-optionmenu",
                    mask & TERMINAL_SETTING_PALETTE);
 
-  set_insensitive (editor, "font-button",
+  set_insensitive (editor, "font-hbox",
                    mask & TERMINAL_SETTING_X_FONT);
 
   set_insensitive (editor, "solid-radiobutton",
@@ -1696,15 +1578,42 @@ static void
 profile_editor_update_x_font (GtkWidget       *editor,
                               TerminalProfile *profile)
 {
-  GtkWidget *w;
-  GtkWidget *child;
-  
-  w = profile_editor_get_widget (editor, "font-button");  
-  
-  child = gtk_bin_get_child (GTK_BIN (w));
+  GtkWidget *fontsel;
+  char *spacings[] = { "m", "c", NULL };
+  char *slants[] = { "r", "ot", NULL };
+  char *weights[] = { "medium", "regular", NULL };
+  gchar *name;
 
-  gtk_label_set_text (GTK_LABEL (child),
-                      terminal_profile_get_x_font (profile));
+  fontsel = g_object_get_data (G_OBJECT (editor), "font-selector");
+
+  /* If the current selector font is the same as the new font,
+   * don't do any work.
+   */
+  name = egg_xfont_selector_get_font_name (EGG_XFONT_SELECTOR (fontsel));
+  
+  if (name == NULL)
+    return;
+
+  if (strcmp (name, terminal_profile_get_x_font (profile)) == 0)
+    {
+      g_free (name);
+      return;
+    }
+  
+  g_free (name);
+  
+  egg_xfont_selector_set_font_name (EGG_XFONT_SELECTOR (fontsel),
+				    terminal_profile_get_x_font (profile));
+
+  egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
+				 EGG_XFONT_FILTER_BASE,
+				 EGG_XFONT_ALL,
+				 NULL,
+				 weights,
+				 slants,
+				 NULL,
+				 spacings,
+				 NULL);
 }
 
 static void

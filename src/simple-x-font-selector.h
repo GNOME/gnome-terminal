@@ -47,7 +47,8 @@ extern "C" {
 
 
 /* This is the number of properties which we keep in the properties array,
-   i.e. Weight, Slant, Set Width, Spacing, Charset & Foundry. */
+ * i.e. Weight, Slant, Set Width, Spacing, Charset & Foundry.
+ */
 #define EGG_NUM_FONT_PROPERTIES  6
 
 /* This is the number of properties each style has i.e. Weight, Slant,
@@ -149,6 +150,8 @@ GtkWidget* egg_xfont_selector_new              ();
 
 gboolean egg_xfont_selector_set_font_name (EggXFontSelector *selector,
 						const gchar *xlfd);
+
+/* The result must be freed */
 gchar* egg_xfont_selector_get_font_name (EggXFontSelector *selector);
 
 /* Restricts what can be selected by the user and the values returned by
@@ -173,3 +176,4 @@ void egg_xfont_selector_clear_filter (EggXFontSelector *selector);
 
 
 #endif /* __EGG_XFONT_SELECTOR_H__ */
+
