@@ -24,7 +24,6 @@
 #include "terminal-intl.h"
 #include "terminal.h"
 #include <glade/glade.h>
-#include <libgnomeui/gnome-font-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <string.h>
@@ -195,7 +194,7 @@ fontpicker_get_desc (GtkWidget *font_picker)
   const char *current_name;
   PangoFontDescription *current_desc;
 
-  current_name = gnome_font_picker_get_font_name (GNOME_FONT_PICKER (font_picker));
+  current_name = gtk_font_button_get_font_name (GTK_FONT_BUTTON (font_picker));
   if (current_name)
     current_desc = pango_font_description_from_string (current_name);
   else
@@ -217,7 +216,7 @@ fontpicker_set_if_changed (GtkWidget                  *font_picker,
       char *str;
 
       str = pango_font_description_to_string (font_desc);
-      gnome_font_picker_set_font_name (GNOME_FONT_PICKER (font_picker),
+      gtk_font_button_set_font_name (GTK_FONT_BUTTON (font_picker),
                                        str);
 
       g_free (str);
@@ -739,12 +738,13 @@ use_system_font_toggled (GtkWidget       *checkbutton,
 
 static void
 font_set (GtkWidget       *fontpicker,
-          const char      *font_name,
           TerminalProfile *profile)
 {
   PangoFontDescription *desc;
   PangoFontDescription *tmp;
+  const char *font_name;
   
+  font_name = gtk_font_button_get_font_name (GTK_FONT_BUTTON (fontpicker));
   desc = pango_font_description_from_string (font_name);
   if (desc == NULL)
     {
@@ -1172,14 +1172,14 @@ terminal_profile_edit (TerminalProfile *profile,
         {
           GtkWidget *font_label;
           
-          fontsel = gnome_font_picker_new ();
+          fontsel = gtk_font_button_new ();
           g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
 
-          gnome_font_picker_set_title (GNOME_FONT_PICKER (fontsel),
-                                       _("Choose a terminal font"));
-          gnome_font_picker_set_mode (GNOME_FONT_PICKER (fontsel),
-                                      GNOME_FONT_PICKER_MODE_FONT_INFO);
-          gnome_font_picker_fi_set_show_size (GNOME_FONT_PICKER (fontsel), TRUE);
+          gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose a terminal font"));
+          gtk_font_button_set_show_size (GTK_FONT_BUTTON (fontsel), TRUE);
+          gtk_font_button_set_show_style (GTK_FONT_BUTTON (fontsel), FALSE);
+          gtk_font_button_set_use_font (GTK_FONT_BUTTON (fontsel), TRUE);
+          gtk_font_button_set_use_size (GTK_FONT_BUTTON (fontsel), FALSE);
 
           profile_editor_update_font (editor, profile);
           g_signal_connect (G_OBJECT (fontsel), "font_set",
