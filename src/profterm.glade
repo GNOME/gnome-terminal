@@ -21,9 +21,9 @@
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
   <modal>False</modal>
-  <allow_shrink>True</allow_shrink>
-  <allow_grow>True</allow_grow>
-  <auto_shrink>False</auto_shrink>
+  <allow_shrink>False</allow_shrink>
+  <allow_grow>False</allow_grow>
+  <auto_shrink>True</auto_shrink>
 
   <widget>
     <class>GtkVBox</class>
@@ -39,7 +39,12 @@
       <border_width>10</border_width>
       <homogeneous>True</homogeneous>
       <spacing>5</spacing>
-
+      <child>
+	<padding>0</padding>
+	<expand>False</expand>
+	<fill>True</fill>
+	<pack>GTK_PACK_END</pack>
+      </child>
     </widget>
 
     <widget>
@@ -77,8 +82,8 @@
 	  <column_spacing>4</column_spacing>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
-	    <fill>True</fill>
+	    <expand>False</expand>
+	    <fill>False</fill>
 	  </child>
 
 	  <widget>
@@ -208,14 +213,14 @@
 	  <class>GtkTable</class>
 	  <name>table19</name>
 	  <border_width>4</border_width>
-	  <rows>5</rows>
+	  <rows>3</rows>
 	  <columns>2</columns>
 	  <homogeneous>False</homogeneous>
 	  <row_spacing>4</row_spacing>
 	  <column_spacing>0</column_spacing>
 	  <child>
 	    <padding>0</padding>
-	    <expand>True</expand>
+	    <expand>False</expand>
 	    <fill>True</fill>
 	  </child>
 
@@ -232,8 +237,8 @@
 	    <child>
 	      <left_attach>0</left_attach>
 	      <right_attach>1</right_attach>
-	      <top_attach>4</top_attach>
-	      <bottom_attach>5</bottom_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
 	      <xexpand>False</xexpand>
@@ -256,8 +261,8 @@
 	    <child>
 	      <left_attach>1</left_attach>
 	      <right_attach>2</right_attach>
-	      <top_attach>4</top_attach>
-	      <bottom_attach>5</bottom_attach>
+	      <top_attach>2</top_attach>
+	      <bottom_attach>3</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
 	      <xexpand>True</xexpand>
@@ -278,7 +283,7 @@
 	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>0</left_attach>
-	      <right_attach>2</right_attach>
+	      <right_attach>1</right_attach>
 	      <top_attach>0</top_attach>
 	      <bottom_attach>1</bottom_attach>
 	      <xpad>0</xpad>
@@ -309,18 +314,18 @@
 	    <xscale>0</xscale>
 	    <yscale>1</yscale>
 	    <child>
-	      <left_attach>0</left_attach>
+	      <left_attach>1</left_attach>
 	      <right_attach>2</right_attach>
-	      <top_attach>1</top_attach>
-	      <bottom_attach>2</bottom_attach>
+	      <top_attach>0</top_attach>
+	      <bottom_attach>1</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
+	      <xexpand>False</xexpand>
 	      <yexpand>False</yexpand>
 	      <xshrink>False</xshrink>
 	      <yshrink>False</yshrink>
 	      <xfill>True</xfill>
-	      <yfill>False</yfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
@@ -342,17 +347,17 @@
 	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>0</left_attach>
-	      <right_attach>2</right_attach>
-	      <top_attach>2</top_attach>
-	      <bottom_attach>3</bottom_attach>
+	      <right_attach>1</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
-	      <yexpand>False</yexpand>
+	      <xexpand>False</xexpand>
+	      <yexpand>True</yexpand>
 	      <xshrink>False</xshrink>
 	      <yshrink>False</yshrink>
 	      <xfill>True</xfill>
-	      <yfill>False</yfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
@@ -373,18 +378,18 @@
 	    <xscale>0</xscale>
 	    <yscale>1</yscale>
 	    <child>
-	      <left_attach>0</left_attach>
+	      <left_attach>1</left_attach>
 	      <right_attach>2</right_attach>
-	      <top_attach>3</top_attach>
-	      <bottom_attach>4</bottom_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
 	      <xpad>0</xpad>
 	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
+	      <xexpand>False</xexpand>
 	      <yexpand>False</yexpand>
 	      <xshrink>False</xshrink>
 	      <yshrink>False</yshrink>
 	      <xfill>True</xfill>
-	      <yfill>False</yfill>
+	      <yfill>True</yfill>
 	    </child>
 
 	    <widget>
@@ -394,6 +399,213 @@
 	      <label>Silence terminal bell</label>
 	      <active>False</active>
 	      <draw_indicator>True</draw_indicator>
+	    </widget>
+	  </widget>
+	</widget>
+
+	<widget>
+	  <class>GtkFrame</class>
+	  <name>frame11</name>
+	  <border_width>4</border_width>
+	  <label>Scrolling</label>
+	  <label_xalign>0</label_xalign>
+	  <shadow_type>GTK_SHADOW_ETCHED_IN</shadow_type>
+	  <child>
+	    <padding>0</padding>
+	    <expand>False</expand>
+	    <fill>False</fill>
+	  </child>
+
+	  <widget>
+	    <class>GtkTable</class>
+	    <name>table27</name>
+	    <border_width>4</border_width>
+	    <rows>3</rows>
+	    <columns>8</columns>
+	    <homogeneous>False</homogeneous>
+	    <row_spacing>0</row_spacing>
+	    <column_spacing>0</column_spacing>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label46</name>
+	      <label>Scrollback lines:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>8</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkLabel</class>
+	      <name>label47</name>
+	      <label>Scrollbar is:</label>
+	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <wrap>False</wrap>
+	      <xalign>1</xalign>
+	      <yalign>0.5</yalign>
+	      <xpad>8</xpad>
+	      <ypad>0</ypad>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>1</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment20</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>8</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>optionmenu9</name>
+		<can_focus>True</can_focus>
+		<items>On the left side
+On the right side
+Disabled
+</items>
+		<initial_choice>0</initial_choice>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkSpinButton</class>
+	      <name>spinbutton1</name>
+	      <can_focus>True</can_focus>
+	      <climb_rate>1</climb_rate>
+	      <digits>0</digits>
+	      <numeric>False</numeric>
+	      <update_policy>GTK_UPDATE_ALWAYS</update_policy>
+	      <snap>False</snap>
+	      <wrap>False</wrap>
+	      <value>1</value>
+	      <lower>1</lower>
+	      <upper>100000</upper>
+	      <step>1</step>
+	      <page>5</page>
+	      <page_size>0</page_size>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>8</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>4</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment14</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>4</left_attach>
+		<right_attach>7</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>True</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>checkbutton15</name>
+		<can_focus>True</can_focus>
+		<label>Scroll on output</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment13</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>checkbutton14</name>
+		<can_focus>True</can_focus>
+		<label>Scroll on keystroke</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -506,35 +718,10 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkOptionMenu</class>
-	      <name>optionmenu5</name>
-	      <can_focus>True</can_focus>
-	      <items>Replaces initial title
-Goes before initial title
-Goes after initial title
-</items>
-	      <initial_choice>0</initial_choice>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>2</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label35</name>
 	      <label>The command running inside the terminal may dynamically set a new title.</label>
-	      <justify>GTK_JUSTIFY_CENTER</justify>
+	      <justify>GTK_JUSTIFY_LEFT</justify>
 	      <wrap>True</wrap>
 	      <xalign>0</xalign>
 	      <yalign>0.5</yalign>
@@ -579,6 +766,41 @@ Goes after initial title
 		<yfill>False</yfill>
 	      </child>
 	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment18</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>dynamic-title-menu</name>
+		<can_focus>True</can_focus>
+		<items>Replaces initial title
+Goes before initial title
+Goes after initial title
+Isn't displayed
+</items>
+		<initial_choice>0</initial_choice>
+	      </widget>
+	    </widget>
 	  </widget>
 	</widget>
 
@@ -607,16 +829,72 @@ Goes after initial title
 	    <class>GtkTable</class>
 	    <name>table22</name>
 	    <border_width>5</border_width>
-	    <rows>3</rows>
-	    <columns>3</columns>
+	    <rows>5</rows>
+	    <columns>4</columns>
 	    <homogeneous>False</homogeneous>
 	    <row_spacing>4</row_spacing>
 	    <column_spacing>4</column_spacing>
 
 	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment23</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>custom-command-checkbutton</name>
+		<can_focus>True</can_focus>
+		<label>Run a custom command instead of my shell</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkEntry</class>
+	      <name>entry11</name>
+	      <can_focus>True</can_focus>
+	      <editable>True</editable>
+	      <text_visible>True</text_visible>
+	      <text_max_length>0</text_max_length>
+	      <text></text>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>True</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label36</name>
-	      <label>Run this command:</label>
+	      <label>Custom command:</label>
 	      <justify>GTK_JUSTIFY_CENTER</justify>
 	      <wrap>False</wrap>
 	      <xalign>1</xalign>
@@ -626,8 +904,8 @@ Goes after initial title
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -637,6 +915,38 @@ Goes after initial title
 		<xfill>True</xfill>
 		<yfill>False</yfill>
 	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment24</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>checkbutton13</name>
+		<can_focus>True</can_focus>
+		<label>Run command as a login shell</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
+	      </widget>
 	    </widget>
 
 	    <widget>
@@ -651,82 +961,11 @@ Goes after initial title
 	      <ypad>0</ypad>
 	      <child>
 		<left_attach>0</left_attach>
-		<right_attach>1</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkEntry</class>
-	      <name>entry11</name>
-	      <can_focus>True</can_focus>
-	      <editable>True</editable>
-	      <text_visible>True</text_visible>
-	      <text_max_length>0</text_max_length>
-	      <text></text>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>3</right_attach>
+		<right_attach>2</right_attach>
 		<top_attach>0</top_attach>
 		<bottom_attach>1</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
-		<xexpand>True</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkOptionMenu</class>
-	      <name>optionmenu6</name>
-	      <can_focus>True</can_focus>
-	      <items>Exit the terminal
-Restart the command
-</items>
-	      <initial_choice>0</initial_choice>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>3</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>True</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkCheckButton</class>
-	      <name>checkbutton13</name>
-	      <can_focus>True</can_focus>
-	      <label>Run command as a login shell</label>
-	      <active>False</active>
-	      <draw_indicator>True</draw_indicator>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>3</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
 		<xexpand>False</xexpand>
 		<yexpand>False</yexpand>
 		<xshrink>False</xshrink>
@@ -734,6 +973,39 @@ Restart the command
 		<xfill>True</xfill>
 		<yfill>False</yfill>
 	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment19</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>2</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>True</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>command-exit-menu</name>
+		<can_focus>True</can_focus>
+		<items>Exit the terminal
+Restart the command
+</items>
+		<initial_choice>0</initial_choice>
+	      </widget>
 	    </widget>
 	  </widget>
 	</widget>
@@ -775,7 +1047,7 @@ Restart the command
 	    <bottom_attach>1</bottom_attach>
 	    <xpad>0</xpad>
 	    <ypad>0</ypad>
-	    <xexpand>False</xexpand>
+	    <xexpand>True</xexpand>
 	    <yexpand>True</yexpand>
 	    <xshrink>False</xshrink>
 	    <yshrink>False</yshrink>
@@ -846,51 +1118,6 @@ Restart the command
 	    </widget>
 
 	    <widget>
-	      <class>GtkOptionMenu</class>
-	      <name>optionmenu7</name>
-	      <can_focus>True</can_focus>
-	      <items></items>
-	      <initial_choice>0</initial_choice>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>2</right_attach>
-		<top_attach>0</top_attach>
-		<bottom_attach>1</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>True</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GnomeColorPicker</class>
-	      <name>colorpicker3</name>
-	      <can_focus>True</can_focus>
-	      <dither>True</dither>
-	      <use_alpha>False</use_alpha>
-	      <title>Pick a color</title>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>2</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>True</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
 	      <class>GtkLabel</class>
 	      <name>label41</name>
 	      <label>Background color:</label>
@@ -938,6 +1165,51 @@ Restart the command
 		<yfill>False</yfill>
 	      </child>
 	    </widget>
+
+	    <widget>
+	      <class>GtkOptionMenu</class>
+	      <name>optionmenu7</name>
+	      <can_focus>True</can_focus>
+	      <items></items>
+	      <initial_choice>0</initial_choice>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>0</top_attach>
+		<bottom_attach>1</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
+
+	    <widget>
+	      <class>GnomeColorPicker</class>
+	      <name>colorpicker3</name>
+	      <can_focus>True</can_focus>
+	      <dither>True</dither>
+	      <use_alpha>False</use_alpha>
+	      <title>Pick a color</title>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+	    </widget>
 	  </widget>
 	</widget>
 
@@ -954,7 +1226,7 @@ Restart the command
 	    <bottom_attach>2</bottom_attach>
 	    <xpad>0</xpad>
 	    <ypad>0</ypad>
-	    <xexpand>False</xexpand>
+	    <xexpand>True</xexpand>
 	    <yexpand>True</yexpand>
 	    <xshrink>False</xshrink>
 	    <yshrink>False</yshrink>
@@ -985,28 +1257,6 @@ Restart the command
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
-		<top_attach>1</top_attach>
-		<bottom_attach>2</bottom_attach>
-		<xpad>0</xpad>
-		<ypad>0</ypad>
-		<xexpand>False</xexpand>
-		<yexpand>False</yexpand>
-		<xshrink>False</xshrink>
-		<yshrink>False</yshrink>
-		<xfill>True</xfill>
-		<yfill>False</yfill>
-	      </child>
-	    </widget>
-
-	    <widget>
-	      <class>GtkOptionMenu</class>
-	      <name>optionmenu8</name>
-	      <can_focus>True</can_focus>
-	      <items></items>
-	      <initial_choice>0</initial_choice>
-	      <child>
-		<left_attach>1</left_attach>
-		<right_attach>2</right_attach>
 		<top_attach>1</top_attach>
 		<bottom_attach>2</bottom_attach>
 		<xpad>0</xpad>
@@ -1463,6 +1713,37 @@ Restart the command
 		<yfill>False</yfill>
 	      </child>
 	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment17</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>1</left_attach>
+		<right_attach>2</right_attach>
+		<top_attach>1</top_attach>
+		<bottom_attach>2</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkOptionMenu</class>
+		<name>optionmenu8</name>
+		<can_focus>True</can_focus>
+		<items></items>
+		<initial_choice>0</initial_choice>
+	      </widget>
+	    </widget>
 	  </widget>
 	</widget>
       </widget>
@@ -1472,203 +1753,6 @@ Restart the command
 	<child_name>Notebook:tab</child_name>
 	<name>label45</name>
 	<label>Colors</label>
-	<justify>GTK_JUSTIFY_CENTER</justify>
-	<wrap>False</wrap>
-	<xalign>0.5</xalign>
-	<yalign>0.5</yalign>
-	<xpad>0</xpad>
-	<ypad>0</ypad>
-      </widget>
-
-      <widget>
-	<class>GtkTable</class>
-	<name>table27</name>
-	<border_width>4</border_width>
-	<rows>4</rows>
-	<columns>2</columns>
-	<homogeneous>False</homogeneous>
-	<row_spacing>0</row_spacing>
-	<column_spacing>0</column_spacing>
-
-	<widget>
-	  <class>GtkOptionMenu</class>
-	  <name>optionmenu9</name>
-	  <can_focus>True</can_focus>
-	  <items>On the left side
-On the right side
-Disabled
-</items>
-	  <initial_choice>0</initial_choice>
-	  <child>
-	    <left_attach>1</left_attach>
-	    <right_attach>2</right_attach>
-	    <top_attach>0</top_attach>
-	    <bottom_attach>1</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>4</ypad>
-	    <xexpand>True</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkSpinButton</class>
-	  <name>spinbutton1</name>
-	  <can_focus>True</can_focus>
-	  <climb_rate>1</climb_rate>
-	  <digits>0</digits>
-	  <numeric>False</numeric>
-	  <update_policy>GTK_UPDATE_ALWAYS</update_policy>
-	  <snap>False</snap>
-	  <wrap>False</wrap>
-	  <value>1</value>
-	  <lower>1</lower>
-	  <upper>100000</upper>
-	  <step>1</step>
-	  <page>5</page>
-	  <page_size>0</page_size>
-	  <child>
-	    <left_attach>1</left_attach>
-	    <right_attach>2</right_attach>
-	    <top_attach>1</top_attach>
-	    <bottom_attach>2</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>4</ypad>
-	    <xexpand>True</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label46</name>
-	  <label>Scrollback lines:</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>1</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>8</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <left_attach>0</left_attach>
-	    <right_attach>1</right_attach>
-	    <top_attach>1</top_attach>
-	    <bottom_attach>2</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <xexpand>False</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkLabel</class>
-	  <name>label47</name>
-	  <label>Scrollbar is:</label>
-	  <justify>GTK_JUSTIFY_CENTER</justify>
-	  <wrap>False</wrap>
-	  <xalign>1</xalign>
-	  <yalign>0.5</yalign>
-	  <xpad>8</xpad>
-	  <ypad>0</ypad>
-	  <child>
-	    <left_attach>0</left_attach>
-	    <right_attach>1</right_attach>
-	    <top_attach>0</top_attach>
-	    <bottom_attach>1</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <xexpand>False</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-	</widget>
-
-	<widget>
-	  <class>GtkAlignment</class>
-	  <name>alignment13</name>
-	  <xalign>1.49012e-08</xalign>
-	  <yalign>0.5</yalign>
-	  <xscale>0</xscale>
-	  <yscale>1</yscale>
-	  <child>
-	    <left_attach>0</left_attach>
-	    <right_attach>2</right_attach>
-	    <top_attach>2</top_attach>
-	    <bottom_attach>3</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <xexpand>True</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-
-	  <widget>
-	    <class>GtkCheckButton</class>
-	    <name>checkbutton14</name>
-	    <can_focus>True</can_focus>
-	    <label>Scroll on keystroke</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	  </widget>
-	</widget>
-
-	<widget>
-	  <class>GtkAlignment</class>
-	  <name>alignment14</name>
-	  <xalign>1.49012e-08</xalign>
-	  <yalign>0.5</yalign>
-	  <xscale>0</xscale>
-	  <yscale>1</yscale>
-	  <child>
-	    <left_attach>0</left_attach>
-	    <right_attach>2</right_attach>
-	    <top_attach>3</top_attach>
-	    <bottom_attach>4</bottom_attach>
-	    <xpad>0</xpad>
-	    <ypad>0</ypad>
-	    <xexpand>True</xexpand>
-	    <yexpand>False</yexpand>
-	    <xshrink>False</xshrink>
-	    <yshrink>False</yshrink>
-	    <xfill>True</xfill>
-	    <yfill>False</yfill>
-	  </child>
-
-	  <widget>
-	    <class>GtkCheckButton</class>
-	    <name>checkbutton15</name>
-	    <can_focus>True</can_focus>
-	    <label>Scroll on output</label>
-	    <active>False</active>
-	    <draw_indicator>True</draw_indicator>
-	  </widget>
-	</widget>
-      </widget>
-
-      <widget>
-	<class>GtkLabel</class>
-	<child_name>Notebook:tab</child_name>
-	<name>label48</name>
-	<label>Scrolling</label>
 	<justify>GTK_JUSTIFY_CENTER</justify>
 	<wrap>False</wrap>
 	<xalign>0.5</xalign>
@@ -2016,39 +2100,12 @@ and operating sytems that expect different terminal behavior.</label>
 	  </widget>
 
 	  <widget>
-	    <class>GtkOptionMenu</class>
-	    <name>optionmenu10</name>
-	    <can_focus>True</can_focus>
-	    <items>ASCII DEL
-Escape sequence
-Control-H
-</items>
-	    <initial_choice>0</initial_choice>
-	    <child>
-	      <left_attach>1</left_attach>
-	      <right_attach>3</right_attach>
-	      <top_attach>1</top_attach>
-	      <bottom_attach>2</bottom_attach>
-	      <xpad>0</xpad>
-	      <ypad>0</ypad>
-	      <xexpand>True</xexpand>
-	      <yexpand>False</yexpand>
-	      <xshrink>False</xshrink>
-	      <yshrink>False</yshrink>
-	      <xfill>True</xfill>
-	      <yfill>False</yfill>
-	    </child>
-	  </widget>
-
-	  <widget>
-	    <class>GtkOptionMenu</class>
-	    <name>optionmenu11</name>
-	    <can_focus>True</can_focus>
-	    <items>ASCII DEL
-Escape sequence
-Control-H
-</items>
-	    <initial_choice>0</initial_choice>
+	    <class>GtkAlignment</class>
+	    <name>alignment21</name>
+	    <xalign>1.49012e-08</xalign>
+	    <yalign>0.5</yalign>
+	    <xscale>0</xscale>
+	    <yscale>1</yscale>
 	    <child>
 	      <left_attach>1</left_attach>
 	      <right_attach>3</right_attach>
@@ -2063,6 +2120,51 @@ Control-H
 	      <xfill>True</xfill>
 	      <yfill>False</yfill>
 	    </child>
+
+	    <widget>
+	      <class>GtkOptionMenu</class>
+	      <name>optionmenu11</name>
+	      <can_focus>True</can_focus>
+	      <items>ASCII DEL
+Escape sequence
+Control-H
+</items>
+	      <initial_choice>0</initial_choice>
+	    </widget>
+	  </widget>
+
+	  <widget>
+	    <class>GtkAlignment</class>
+	    <name>alignment22</name>
+	    <xalign>1.49012e-08</xalign>
+	    <yalign>0.5</yalign>
+	    <xscale>0</xscale>
+	    <yscale>1</yscale>
+	    <child>
+	      <left_attach>1</left_attach>
+	      <right_attach>3</right_attach>
+	      <top_attach>1</top_attach>
+	      <bottom_attach>2</bottom_attach>
+	      <xpad>0</xpad>
+	      <ypad>0</ypad>
+	      <xexpand>True</xexpand>
+	      <yexpand>False</yexpand>
+	      <xshrink>False</xshrink>
+	      <yshrink>False</yshrink>
+	      <xfill>True</xfill>
+	      <yfill>False</yfill>
+	    </child>
+
+	    <widget>
+	      <class>GtkOptionMenu</class>
+	      <name>optionmenu10</name>
+	      <can_focus>True</can_focus>
+	      <items>ASCII DEL
+Escape sequence
+Control-H
+</items>
+	      <initial_choice>0</initial_choice>
+	    </widget>
 	  </widget>
 	</widget>
 
@@ -2119,6 +2221,52 @@ Control-H
 	<child_name>Notebook:tab</child_name>
 	<name>label54</name>
 	<label>Compatibility</label>
+	<justify>GTK_JUSTIFY_CENTER</justify>
+	<wrap>False</wrap>
+	<xalign>0.5</xalign>
+	<yalign>0.5</yalign>
+	<xpad>0</xpad>
+	<ypad>0</ypad>
+      </widget>
+
+      <widget>
+	<class>GtkTable</class>
+	<name>table32</name>
+	<rows>3</rows>
+	<columns>2</columns>
+	<homogeneous>False</homogeneous>
+	<row_spacing>0</row_spacing>
+	<column_spacing>0</column_spacing>
+
+	<widget>
+	  <class>GtkCheckButton</class>
+	  <name>checkbutton19</name>
+	  <can_focus>True</can_focus>
+	  <label>Disable all keybindings</label>
+	  <active>False</active>
+	  <draw_indicator>True</draw_indicator>
+	  <child>
+	    <left_attach>0</left_attach>
+	    <right_attach>1</right_attach>
+	    <top_attach>0</top_attach>
+	    <bottom_attach>1</bottom_attach>
+	    <xpad>0</xpad>
+	    <ypad>0</ypad>
+	    <xexpand>False</xexpand>
+	    <yexpand>False</yexpand>
+	    <xshrink>False</xshrink>
+	    <yshrink>False</yshrink>
+	    <xfill>True</xfill>
+	    <yfill>False</yfill>
+	  </child>
+	</widget>
+      </widget>
+
+      <widget>
+	<class>GtkLabel</class>
+	<child_name>Notebook:tab</child_name>
+	<name>label55</name>
+	<label>Keybindings</label>
 	<justify>GTK_JUSTIFY_CENTER</justify>
 	<wrap>False</wrap>
 	<xalign>0.5</xalign>
