@@ -1399,15 +1399,14 @@ main (int argc, char **argv)
           /* we allocated argv_copy with extra space so we could do this */
           argv_copy[argc_copy++] = g_strdup ("--startup-id");
           argv_copy[argc_copy++] = g_strdup (results->startup_id);
-          argv_copy[argc_copy++] = NULL;
         }
 
       /* Forward our display to the child */
       /* we allocated argv_copy with extra space so we could do this */
       argv_copy[argc_copy++] = g_strdup ("--display");
       argv_copy[argc_copy++] = g_strdup (results->display_name);
-      argv_copy[argc_copy++] = NULL;
-      
+      argv_copy[argc_copy] = NULL;
+
       if (terminal_invoke_factory (argc_copy, argv_copy))
         return 0;
     }
