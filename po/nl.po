@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: profterm cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-06-21 12:40+0200\n"
+"POT-Creation-Date: 2003-07-07 12:54+0200\n"
 "PO-Revision-Date: 2003-06-08 16:00+0200\n"
 "Last-Translator: Daniel van Eeden <daniel_e@ds.nl>\n"
 "Language-Team: NL <vertaling@nl.linux.org>\n"
@@ -23,7 +23,7 @@ msgid "Command line"
 msgstr "Opdrachtregel"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1134
-#: src/terminal.c:1451 src/terminal-profile.c:275 src/terminal-window.c:686
+#: src/terminal.c:1451 src/terminal-profile.c:275 src/terminal-window.c:709
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -188,7 +188,7 @@ msgid "User Defined"
 msgstr "Gebruiker-gedefinieerd"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal.c:2812
-#: src/terminal-window.c:2571
+#: src/terminal-window.c:2600
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Er is een fout opgetreden bij het afbeelden van hulp: %s"
@@ -307,13 +307,15 @@ msgid "Custom co_mmand:"
 msgstr "Aangepaste _opdracht:"
 
 #: src/gnome-terminal.glade2.h:25
-msgid "Disable all menu m_nemonics (such as Alt+f to open File menu)"
+#, fuzzy
+msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
 msgstr ""
 "Alle menu-s_neltoetsen uitschakelen (zoals Alt+b om het Bestand-menu te "
 "openen)"
 
 #: src/gnome-terminal.glade2.h:26
-msgid "Disable menu acc_ess key (F10 by default)"
+#, fuzzy
+msgid "Disable m_enu shortcut key (F10 by default)"
 msgstr "M_enu-toegangstoets uitschakelen (standaard F10)"
 
 #: src/gnome-terminal.glade2.h:28
@@ -353,7 +355,8 @@ msgid "Isn't displayed"
 msgstr "Is niet weergegeven"
 
 #: src/gnome-terminal.glade2.h:37
-msgid "Keybindings Editor"
+#, fuzzy
+msgid "Keyboard Shortcuts Editor"
 msgstr "Toetsenkoppelingen-editor"
 
 #: src/gnome-terminal.glade2.h:38
@@ -518,64 +521,64 @@ msgid "When command _exits:"
 msgstr "Wanneer opdracht _eindigt:"
 
 #: src/gnome-terminal.glade2.h:78
-msgid "_Accelerators:"
-msgstr "S_neltoetsen:"
-
-#: src/gnome-terminal.glade2.h:79
 msgid "_Allow bold text"
 msgstr "Vette tekst toest_aan"
 
-#: src/gnome-terminal.glade2.h:80
+#: src/gnome-terminal.glade2.h:79
 msgid "_Background color:"
 msgstr "_Achtergrondkleur:"
 
-#: src/gnome-terminal.glade2.h:81
+#: src/gnome-terminal.glade2.h:80
 msgid "_Background image"
 msgstr "_Achtergrondafbeelding"
 
-#: src/gnome-terminal.glade2.h:82
+#: src/gnome-terminal.glade2.h:81
 msgid "_Backspace key generates:"
 msgstr "_Backspace-toets genereert:"
 
-#: src/gnome-terminal.glade2.h:83
+#: src/gnome-terminal.glade2.h:82
 msgid "_Cursor blinks"
 msgstr "Cursor _knippert"
 
-#: src/gnome-terminal.glade2.h:84
+#: src/gnome-terminal.glade2.h:83
 msgid "_Delete key generates:"
 msgstr "_Delete-toets genereert:"
 
-#: src/gnome-terminal.glade2.h:85
+#: src/gnome-terminal.glade2.h:84
 msgid "_Dynamically-set title:"
 msgstr "_Dynamisch titel instellen:"
 
-#: src/gnome-terminal.glade2.h:86
+#: src/gnome-terminal.glade2.h:85
 msgid "_Image file:"
 msgstr "_Afbeeldingsbestand:"
 
-#: src/gnome-terminal.glade2.h:87
+#: src/gnome-terminal.glade2.h:86
 msgid "_None (use solid color)"
 msgstr "Gee_n (gebruik effen kleur)"
 
-#: src/gnome-terminal.glade2.h:88
+#: src/gnome-terminal.glade2.h:87
 msgid "_Profile name:"
 msgstr "_Profielnaam:"
 
-#: src/gnome-terminal.glade2.h:89
+#: src/gnome-terminal.glade2.h:88
 msgid "_Reset compatibility options to defaults"
 msgstr "Compabiliteitsopties te_rugzetten naar standaardinstellingen"
 
-#: src/gnome-terminal.glade2.h:90
+#: src/gnome-terminal.glade2.h:89
 msgid "_Run command as a login shell"
 msgstr "Opdracht _uitvoeren als aanmeldshell"
 
-#: src/gnome-terminal.glade2.h:91
+#: src/gnome-terminal.glade2.h:90
 msgid "_Scrollbar is:"
 msgstr "_Schuifbalk is:"
 
-#: src/gnome-terminal.glade2.h:92
+#: src/gnome-terminal.glade2.h:91
 msgid "_Shade transparent or image background:"
 msgstr "Transparante- of afbeeldingsachtergronden _donker tinten"
+
+#: src/gnome-terminal.glade2.h:92
+msgid "_Shortcut Keys:"
+msgstr ""
 
 #: src/gnome-terminal.glade2.h:93
 msgid "_Text color:"
@@ -1595,7 +1598,7 @@ msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr ""
 "De waarde van de configuratiesleutel %s is niet geldig; waarde is \"%s\"\n"
 
-#: src/terminal-accels.c:358 src/terminal-window.c:1100
+#: src/terminal-accels.c:358 src/terminal-window.c:1123
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -1655,8 +1658,8 @@ msgid "_Action"
 msgstr "_Actie"
 
 #: src/terminal-accels.c:1147
-msgid "Accelerator _Key"
-msgstr "_Sneltoets"
+msgid "Shortcut _Key"
+msgstr ""
 
 #: src/terminal.c:185
 msgid "Execute the argument to this option inside the terminal."
@@ -1918,10 +1921,11 @@ msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Zoomfactor \"%g\" is te groot, gebruik %g\n"
 
 #: src/terminal.c:1089
+#, fuzzy, c-format
 msgid ""
-"Option given which is no longer supported in this version of gnome-terminal; "
-"you might want to create a profile with the desired setting, and use the new "
-"--window-with-profile option\n"
+"Option --%s is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new --"
+"window-with-profile option\n"
 msgstr ""
 "De gegeven optie wordt niet langer ondersteund in deze versie van gnome-"
 "terminal; u zou een profiel kunnen creÃ«ren met de gewenste instelling en de "
@@ -2070,7 +2074,7 @@ msgstr "Klik om geselecteerd profiel te wissen"
 msgid "Click button to choose profile"
 msgstr "Klik op de knop om een profiel te kiezen"
 
-#: src/terminal.c:3491
+#: src/terminal.c:3492
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2079,7 +2083,7 @@ msgstr ""
 "Het bestand \"%s\" ontbreekt. Dit geeft aan dat de toepassing incorrect is "
 "geÃ¯nstalleerd, waardoor het dialoogvenster niet weergegeven kan worden."
 
-#: src/terminal.c:3664
+#: src/terminal.c:3665
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2087,7 +2091,7 @@ msgstr ""
 "Het schijnt dat u gnome-terminal.server niet hebt geÃ¯nstalleerd in een "
 "geldige locatie. Fabrieksmodus uitgeschakeld.\n"
 
-#: src/terminal.c:3667
+#: src/terminal.c:3668
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2095,7 +2099,7 @@ msgstr ""
 "Fout bij registreren van de terminal bij de activatiedienst; fabrieksmodus "
 "uitgeschakeld.\n"
 
-#: src/terminal.c:3703
+#: src/terminal.c:3704
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Niet gelukt om terminal server op te halen van de activatieserver\n"
 
@@ -2213,7 +2217,7 @@ msgstr ""
 "Kan het adres \"%s\" niet openen:\n"
 "%s"
 
-#: src/terminal-screen.c:1246 src/terminal-window.c:931
+#: src/terminal-screen.c:1246 src/terminal-window.c:954
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2222,47 +2226,47 @@ msgstr ""
 "Er is een fout opgetreden bij het laden van configuratiewaarde voor het "
 "gebruik van afbeeldingen in menu's. (%s)\n"
 
-#: src/terminal-screen.c:1294 src/terminal-window.c:735
-msgid "_New Window"
-msgstr "_Nieuw venster"
-
-#: src/terminal-screen.c:1301 src/terminal-window.c:738
-msgid "New _Tab"
-msgstr "Nieuw _tabblad"
-
-#: src/terminal-screen.c:1325 src/terminal-window.c:844
-msgid "_Profile"
-msgstr "_Profiel"
-
-#: src/terminal-screen.c:1375
-msgid "_Edit Current Profile..."
-msgstr "Huidig_e profiel bewerken..."
-
-#: src/terminal-screen.c:1381
-msgid "_Input Methods"
-msgstr "_Invoermethoden"
-
-#: src/terminal-screen.c:1397
-msgid "Hide _Menubar"
-msgstr "_Menubalk verbergen"
-
-#: src/terminal-screen.c:1402
-msgid "Show _Menubar"
-msgstr "_Menubalk tonen"
-
-#: src/terminal-screen.c:1411
-msgid "Secure _Keyboard"
-msgstr "_Toetsenbord beveiligen"
-
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1296
 msgid "_Open Link"
 msgstr "Koppeling _openen"
 
-#: src/terminal-screen.c:1424
+#: src/terminal-screen.c:1301
 msgid "_Copy Link Address"
 msgstr "Koppelingsadres _kopiÃ«ren"
 
-#: src/terminal-screen.c:1773
+#: src/terminal-screen.c:1312 src/terminal-window.c:758
+msgid "_New Window"
+msgstr "_Nieuw venster"
+
+#: src/terminal-screen.c:1319 src/terminal-window.c:761
+msgid "New _Tab"
+msgstr "Nieuw _tabblad"
+
+#: src/terminal-screen.c:1343 src/terminal-window.c:867
+msgid "_Profile"
+msgstr "_Profiel"
+
+#: src/terminal-screen.c:1393
+msgid "_Edit Current Profile..."
+msgstr "Huidig_e profiel bewerken..."
+
+#: src/terminal-screen.c:1399
+msgid "_Input Methods"
+msgstr "_Invoermethoden"
+
+#: src/terminal-screen.c:1415
+msgid "Hide _Menubar"
+msgstr "_Menubalk verbergen"
+
+#: src/terminal-screen.c:1420
+msgid "Show _Menubar"
+msgstr "_Menubalk tonen"
+
+#: src/terminal-screen.c:1429
+msgid "Secure _Keyboard"
+msgstr "_Toetsenbord beveiligen"
+
+#: src/terminal-screen.c:1777
 msgid "Change terminal title"
 msgstr "Terminaltitel wijzigen"
 
@@ -2270,34 +2274,34 @@ msgstr "Terminaltitel wijzigen"
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/terminal-screen.c:1918
+#: src/terminal-screen.c:1922
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: src/terminal-screen.c:1941
+#: src/terminal-screen.c:1945
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Kleur gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%d)\n"
 
-#: src/terminal-screen.c:1984
+#: src/terminal-screen.c:1988
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla-url gesleept naar de terminal heeft verkeerd formaat (%d) of lengte "
 "(%d)\n"
 
-#: src/terminal-screen.c:2033
+#: src/terminal-screen.c:2037
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-lijst gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: src/terminal-screen.c:2087
+#: src/terminal-screen.c:2091
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2305,7 +2309,7 @@ msgstr ""
 "Afbeeldingsnaam gesleept naar de terminal heeft verkeerd formaat (%d) of "
 "lengte (%d)\n"
 
-#: src/terminal-screen.c:2113
+#: src/terminal-screen.c:2117
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr ""
@@ -2338,100 +2342,100 @@ msgstr ""
 "Er is een fout opgetreden bij het abonneren op mededelingen bij "
 "veranderingen van de menu-pictogram zichtbaarheid. (%s)\n"
 
-#: src/terminal-window.c:520
+#: src/terminal-window.c:544
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: src/terminal-window.c:523
+#: src/terminal-window.c:546
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: src/terminal-window.c:644
+#: src/terminal-window.c:667
 msgid "_Add or Remove..."
 msgstr "Toe_voegen of verwijderen..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:743
+#: src/terminal-window.c:766
 msgid "New _Profile..."
 msgstr "Nieuw _profiel..."
 
-#: src/terminal-window.c:749
+#: src/terminal-window.c:772
 msgid "_Close Window"
 msgstr "Venster _sluiten"
 
-#: src/terminal-window.c:754
+#: src/terminal-window.c:777
 msgid "C_lose Tab"
 msgstr "Tabblad s_luiten"
 
-#: src/terminal-window.c:788
+#: src/terminal-window.c:811
 msgid "C_urrent Profile..."
 msgstr "H_uidige profiel..."
 
-#: src/terminal-window.c:791
-msgid "_Keybindings..."
-msgstr "_Toetsenkoppelingen"
+#: src/terminal-window.c:814
+msgid "_Keyboard Shortcuts..."
+msgstr ""
 
-#: src/terminal-window.c:794
+#: src/terminal-window.c:817
 msgid "P_rofiles..."
 msgstr "P_rofielen"
 
-#: src/terminal-window.c:807
+#: src/terminal-window.c:830
 msgid "Hide Menu_bar"
 msgstr "Menu_balk verbergen"
 
-#: src/terminal-window.c:810
+#: src/terminal-window.c:833
 msgid "_Full Screen"
 msgstr "_Volledig scherm"
 
-#: src/terminal-window.c:814
+#: src/terminal-window.c:837
 msgid "_Zoom In"
 msgstr "In_zoomen"
 
-#: src/terminal-window.c:818
+#: src/terminal-window.c:841
 msgid "Zoom _Out"
 msgstr "_Uitzoomen"
 
-#: src/terminal-window.c:822
+#: src/terminal-window.c:845
 msgid "_Normal Size"
 msgstr "_Normale grootte"
 
-#: src/terminal-window.c:847
+#: src/terminal-window.c:870
 msgid "_Set Title..."
 msgstr "Titel in_stellen..."
 
-#: src/terminal-window.c:854
+#: src/terminal-window.c:877
 msgid "_Character Coding"
 msgstr "Karakter_codering"
 
-#: src/terminal-window.c:861
+#: src/terminal-window.c:884
 msgid "_Reset"
 msgstr "He_rinitialiseren"
 
-#: src/terminal-window.c:864
+#: src/terminal-window.c:887
 msgid "Reset and C_lear"
 msgstr "Herinitia_liseren en wissen"
 
-#: src/terminal-window.c:878
+#: src/terminal-window.c:901
 msgid "_Previous Tab"
 msgstr "_Vorige tabblad"
 
-#: src/terminal-window.c:882
+#: src/terminal-window.c:905
 msgid "_Next Tab"
 msgstr "Volge_nde tabblad"
 
-#: src/terminal-window.c:903
+#: src/terminal-window.c:926
 msgid "_Contents"
 msgstr "_Inhoud"
 
-#: src/terminal-window.c:914
+#: src/terminal-window.c:937
 msgid "_About"
 msgstr "_Info"
 
-#: src/terminal-window.c:1119
+#: src/terminal-window.c:1142
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2448,27 +2452,27 @@ msgstr "_Bestand"
 msgid "_View"
 msgstr "Beel_d"
 
-#: src/terminal-window.c:1988
+#: src/terminal-window.c:2011
 msgid "_Terminal"
 msgstr "_Terminal"
 
 #: src/terminal-window.c:1990
 msgid "_Go"
-msgstr "_Ga"
+msgstr "_Ga naar"
 
 #: src/terminal-window.c:1992
 msgid "_Help"
 msgstr "_Hulp"
 
-#: src/terminal-window.c:2117
+#: src/terminal-window.c:2140
 msgid "_Restore normal size"
 msgstr "No_rmale grootte herstellen"
 
-#: src/terminal-window.c:2121
+#: src/terminal-window.c:2144
 msgid "_Full screen"
 msgstr "_Volledig scherm"
 
-#: src/terminal-window.c:2317
+#: src/terminal-window.c:2346
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -2479,13 +2483,22 @@ msgstr ""
 "(In technische termen, u heeft een window manager nodig met ondersteuning "
 "van de _NET_WM_STATE_FULLSCREEN eigenschap.)"
 
-#: src/terminal-window.c:2601
+#: src/terminal-window.c:2630
 msgid "translator_credits"
 msgstr ""
 "Bruce Smit\n"
 "Ronald Hummelink\n"
 "Reinout van Schouwen"
 
-#: src/terminal-window.c:2615
+#: src/terminal-window.c:2644
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
+
+#~ msgid "_Accelerators:"
+#~ msgstr "S_neltoetsen:"
+
+#~ msgid "Accelerator _Key"
+#~ msgstr "_Sneltoets"
+
+#~ msgid "_Keybindings..."
+#~ msgstr "_Toetsenkoppelingen"
