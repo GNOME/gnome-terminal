@@ -124,7 +124,7 @@ void
 terminal_widget_set_word_characters (GtkWidget  *widget,
                                      const char *str)
 {
-  UNIMPLEMENTED;
+  vte_terminal_set_word_chars(VTE_TERMINAL(widget), str);
 }
 
 void
@@ -395,12 +395,8 @@ terminal_widget_fork_command (GtkWidget   *widget,
                               int         *child_pid,
 			      GError     **err)
 {
-  /* FIXME: Not sure if this is correct */
-  vte_terminal_fork_command (VTE_TERMINAL (widget), path, argv);
-
-  *child_pid = 0; /* FIXME */
-  
-  return TRUE;
+  *child_pid = vte_terminal_fork_command (VTE_TERMINAL (widget), path, argv);
+  return (*child_pid != -1);
 }
 
 
@@ -408,9 +404,9 @@ terminal_widget_fork_command (GtkWidget   *widget,
 int
 terminal_widget_get_estimated_bytes_per_scrollback_line (void)
 {
-  UNIMPLEMENTED;
-
-  return sizeof (void*) * 6 + (80.0 * 4);
+  /* One slot in the ring buffer, plust the array which holds the data for
+   * the line, plus about 80 vte_charcell structures. */
+  return sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(wchar_t) + 4));
 }
 
 void
@@ -418,20 +414,15 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
                                      const char *data,
                                      int         len)
 {
-  UNIMPLEMENTED;
+  vte_terminal_feed_child(VTE_TERMINAL(widget), data, len);
 }
 
 void
 terminal_widget_set_pango_font (GtkWidget                  *widget,
                                 const PangoFontDescription *font_desc)
 {
-  VteTerminal *terminal;
-
   g_return_if_fail (font_desc != NULL);
-  
-  terminal = VTE_TERMINAL (widget);
-
-  vte_terminal_set_font (terminal, font_desc);
+  vte_terminal_set_font (VTE_TERMINAL(widget), font_desc);
 }
 
 gboolean
@@ -439,4 +430,3 @@ terminal_widget_supports_pango_fonts (void)
 {
   return TRUE;
 }
-
