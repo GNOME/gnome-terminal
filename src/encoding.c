@@ -48,6 +48,7 @@
  * predetermined table, then that encoding is
  * labeled "user defined" but still appears in the menu.
  */
+static GConfClient *default_client = NULL;
 
 static TerminalEncoding encodings[] = {
 
@@ -215,6 +216,8 @@ static TerminalEncoding encodings[] = {
 static GSList *active_encodings = NULL;
 
 static void update_active_encodings_from_string_list (GSList *strings);
+static void update_active_encoding_tree_models  (void);
+static void register_active_encoding_tree_model (GtkListStore *store);
 
 static void
 encodings_change_notify (GConfClient *client,
@@ -325,7 +328,7 @@ update_active_encodings_from_string_list (GSList *strings)
       const TerminalEncoding *e;
       const char *charset = tmp->data;
       TerminalEncoding *encoding;
-
+      
       if (strcmp (charset, "current") == 0)
         g_get_charset (&charset);
       
@@ -349,14 +352,21 @@ update_active_encodings_from_string_list (GSList *strings)
       tmp = tmp->next;
     }
 
+  /* Put it back in order, order is significant */
+  active_encodings = g_slist_reverse (active_encodings);
+  
   if (active_encodings == NULL)
     {
       /* Emergency fallbacks */
       active_encodings = g_slist_prepend (active_encodings,
                                           terminal_encoding_copy (&encodings[TERMINAL_ENCODING_CURRENT_LOCALE]));
-      active_encodings = g_slist_prepend (active_encodings,
-                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_UTF_8]));
+      if (strcmp (encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset,
+                  "UTF-8") != 0)
+        active_encodings = g_slist_prepend (active_encodings,
+                                            terminal_encoding_copy (&encodings[TERMINAL_ENCODING_UTF_8]));
     }
+  
+  update_active_encoding_tree_models ();
 }
 
 GSList*
@@ -374,6 +384,9 @@ terminal_get_active_encodings (void)
       
       tmp = tmp->next;
     }
+
+  /* They should appear in order in the menus */
+  copy = g_slist_reverse (copy);
 
   return copy;
 }
@@ -425,6 +438,244 @@ enum
   N_COLUMNS
 };
 
+static void
+count_selected_items_func (GtkTreeModel      *model,
+                           GtkTreePath       *path,
+                           GtkTreeIter       *iter,
+                           gpointer           data)
+{
+  int *count = data;
+
+  *count += 1;
+}
+
+static void
+available_selection_changed_callback (GtkTreeSelection *selection,
+                                      void             *data)
+{
+  int count;
+  GtkWidget *add_button;
+  GtkWidget *dialog;
+
+  dialog = data;
+  
+  count = 0;
+  gtk_tree_selection_selected_foreach (selection,
+                                       count_selected_items_func,
+                                       &count);
+
+  add_button = g_object_get_data (G_OBJECT (dialog), "encoding-dialog-add");
+  
+  gtk_widget_set_sensitive (add_button, count > 0);
+}
+
+static void
+displayed_selection_changed_callback (GtkTreeSelection *selection,
+                                      void             *data)
+{
+  int count;
+  GtkWidget *remove_button;
+  GtkWidget *dialog;
+
+  dialog = data;
+  
+  count = 0;
+  gtk_tree_selection_selected_foreach (selection,
+                                       count_selected_items_func,
+                                       &count);
+
+  remove_button = g_object_get_data (G_OBJECT (dialog), "encoding-dialog-remove");
+  
+  gtk_widget_set_sensitive (remove_button, count > 0);
+}
+
+static void
+get_selected_encodings_func (GtkTreeModel      *model,
+                             GtkTreePath       *path,
+                             GtkTreeIter       *iter,
+                             gpointer           data)
+{
+  GSList **list = data;
+  char *charset;
+
+  charset = NULL;
+  gtk_tree_model_get (model,
+                      iter,
+                      COLUMN_CHARSET,
+                      &charset,
+                      -1);
+
+  *list = g_slist_prepend (*list, charset);
+}
+
+static gboolean
+charset_in_encoding_list (GSList     *list,
+                          const char *str)
+{
+  GSList *tmp;
+
+  tmp = list;
+  while (tmp != NULL)
+    {
+      const TerminalEncoding *enc = tmp->data;
+      
+      if (strcmp (enc->charset, str) == 0)
+        return TRUE;
+
+      tmp = tmp->next;
+    }
+
+  return FALSE;
+}
+
+static GSList*
+remove_string_from_list (GSList     *list,
+                         const char *str)
+{
+  GSList *tmp;
+
+  tmp = list;
+  while (tmp != NULL)
+    {
+      if (strcmp (tmp->data, str) == 0)
+        break;
+
+      tmp = tmp->next;
+    }
+
+  if (tmp != NULL)
+    {
+      g_free (tmp->data);
+      list = g_slist_remove (list, tmp->data);
+    }
+  
+  return list;
+}
+
+static GSList*
+encoding_list_to_charset_list (GSList *src)
+{
+  GSList *list;
+  GSList *tmp;
+  
+  list = NULL;
+  tmp = src;
+  while (tmp != NULL)
+    {
+      const TerminalEncoding *enc = tmp->data;
+      
+      list = g_slist_prepend (list, g_strdup (enc->charset));
+      tmp = tmp->next;
+    }
+  list = g_slist_reverse (list);
+
+  return list;
+}
+
+
+static void
+add_button_clicked_callback (GtkWidget *button,
+                             void      *data)
+{
+  GtkWidget *dialog;
+  GtkWidget *treeview;
+  GtkTreeSelection *selection;
+  GSList *encodings;
+  GSList *tmp;
+  GSList *new_active_list;
+  
+  dialog = data;
+
+  treeview = g_object_get_data (G_OBJECT (dialog),
+                                "encoding-dialog-available-treeview");
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+
+  encodings = NULL;
+  gtk_tree_selection_selected_foreach (selection,
+                                       get_selected_encodings_func,
+                                       &encodings);
+
+  new_active_list = encoding_list_to_charset_list (active_encodings);
+  tmp = encodings;
+  while (tmp != NULL)
+    {
+      /* appending is less efficient but produces user-expected
+       * result
+       */
+      if (!charset_in_encoding_list (active_encodings, tmp->data))
+        new_active_list = g_slist_append (new_active_list,
+                                          g_strdup (tmp->data));
+      
+      tmp = tmp->next;
+    }
+
+  /* this is reentrant, but only after it's done using the list
+   * values, so should be safe
+   */
+  gconf_client_set_list (default_client,
+                         CONF_GLOBAL_PREFIX"/active_encodings",
+                         GCONF_VALUE_STRING,
+                         new_active_list,
+                         NULL);
+
+  g_slist_foreach (new_active_list, (GFunc) g_free, NULL);
+  g_slist_free (new_active_list);
+  
+  g_slist_foreach (encodings, (GFunc) g_free, NULL);
+  g_slist_free (encodings);
+}
+
+static void
+remove_button_clicked_callback (GtkWidget *button,
+                                void      *data)
+{
+  GtkWidget *dialog;
+  GtkWidget *treeview;
+  GtkTreeSelection *selection;
+  GSList *encodings;
+  GSList *tmp;
+  GSList *new_active_list;
+  
+  dialog = data;
+
+  treeview = g_object_get_data (G_OBJECT (dialog),
+                                "encoding-dialog-displayed-treeview");
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+
+  encodings = NULL;
+  gtk_tree_selection_selected_foreach (selection,
+                                       get_selected_encodings_func,
+                                       &encodings);
+
+  new_active_list = encoding_list_to_charset_list (active_encodings);
+  tmp = encodings;
+  while (tmp != NULL)
+    {
+      /* appending is less efficient but produces user-expected
+       * result
+       */
+      new_active_list =
+        remove_string_from_list (new_active_list, tmp->data);
+      
+      tmp = tmp->next;
+    }
+
+  /* this is reentrant, but only after it's done using the list
+   * values, so should be safe
+   */
+  gconf_client_set_list (default_client,
+                         CONF_GLOBAL_PREFIX"/active_encodings",
+                         GCONF_VALUE_STRING,
+                         new_active_list,
+                         NULL);
+
+  g_slist_foreach (new_active_list, (GFunc) g_free, NULL);
+  g_slist_free (new_active_list);  
+  
+  g_slist_foreach (encodings, (GFunc) g_free, NULL);
+  g_slist_free (encodings);
+}
+
 GtkWidget*
 terminal_encoding_dialog_new (GtkWindow *transient_parent)
 {
@@ -433,10 +684,11 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   GtkCellRenderer *cell_renderer;
   int i;
   GtkTreeModel *sort_model;
-  GtkTreeStore *tree;
+  GtkListStore *tree;
   GtkTreeViewColumn *column;
   GtkTreeIter parent_iter;
-  GSList *tmp;
+  GtkTreeSelection *selection;
+  GtkWidget *dialog;
   
   if (g_file_test ("./"TERM_GLADE_FILE,
                    G_FILE_TEST_EXISTS))
@@ -481,11 +733,40 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
       return NULL;
     }  
 
+  /* The dialog itself */
+  dialog = glade_xml_get_widget (xml, "encodings-dialog");
+
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (response_callback),
+                    NULL);
+
+  /* buttons */
+  w = glade_xml_get_widget (xml, "add-button");
+  g_object_set_data (G_OBJECT (dialog),
+                     "encoding-dialog-add",
+                     w);
+
+  g_signal_connect (G_OBJECT (w), "clicked",
+                    G_CALLBACK (add_button_clicked_callback),
+                    dialog);
+
+  w = glade_xml_get_widget (xml, "remove-button");
+  g_object_set_data (G_OBJECT (dialog),
+                     "encoding-dialog-remove",
+                     w);
+
+  g_signal_connect (G_OBJECT (w), "clicked",
+                    G_CALLBACK (remove_button_clicked_callback),
+                    dialog);
+  
   /* Tree view of available encodings */
   
   w = glade_xml_get_widget (xml, "available-treeview");
-
-  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+  g_object_set_data (G_OBJECT (dialog),
+                     "encoding-dialog-available-treeview",
+                     w);
+  
+  tree = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -510,8 +791,8 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   i = 0;
   while (i < (int) G_N_ELEMENTS (encodings))
     {
-      gtk_tree_store_append (tree, &parent_iter, NULL);
-      gtk_tree_store_set (tree, &parent_iter,
+      gtk_list_store_append (tree, &parent_iter);
+      gtk_list_store_set (tree, &parent_iter,
                           COLUMN_CHARSET,
                           encodings[i].charset,
                           COLUMN_NAME,
@@ -531,12 +812,23 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
   g_object_unref (G_OBJECT (tree));
 
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));    
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
+			       GTK_SELECTION_MULTIPLE);
+
+  available_selection_changed_callback (selection, dialog);
+  g_signal_connect (G_OBJECT (selection), "changed",                    
+                    G_CALLBACK (available_selection_changed_callback),
+                    dialog);
 
   /* Tree view of selected encodings */
   
   w = glade_xml_get_widget (xml, "displayed-treeview");
-
-  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+  g_object_set_data (G_OBJECT (dialog),
+                     "encoding-dialog-displayed-treeview",
+                     w);
+  
+  tree = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -557,22 +849,7 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);  
 
   /* Add the data */
-
-  tmp = active_encodings;
-  while (tmp != NULL)
-    {
-      TerminalEncoding *e = tmp->data;
-      
-      gtk_tree_store_append (tree, &parent_iter, NULL);
-      gtk_tree_store_set (tree, &parent_iter,
-                          COLUMN_CHARSET,
-                          e->charset,
-                          COLUMN_NAME,
-                          e->name,
-                          -1);
-
-      tmp = tmp->next;
-    }
+  register_active_encoding_tree_model (tree);
 
   /* Sort model */
   sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
@@ -583,15 +860,71 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   
   gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
   g_object_unref (G_OBJECT (tree));  
-  
-  /* The dialog itself */
-  w = glade_xml_get_widget (xml, "encodings-dialog");
 
-  g_signal_connect (G_OBJECT (w), "response",
-                    G_CALLBACK (response_callback),
-                    NULL);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));    
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
+			       GTK_SELECTION_MULTIPLE);
+
+  displayed_selection_changed_callback (selection, dialog);
+  g_signal_connect (G_OBJECT (selection), "changed",
+                    G_CALLBACK (displayed_selection_changed_callback),
+                    dialog);
   
-  return w;
+  return dialog;
+}
+
+static void
+update_single_tree_model (GtkListStore *store)
+{
+  GSList *tmp;
+  GtkTreeIter parent_iter;
+
+  gtk_list_store_clear (store);
+  
+  tmp = active_encodings;
+  while (tmp != NULL)
+    {
+      TerminalEncoding *e = tmp->data;
+      
+      gtk_list_store_append (store, &parent_iter);
+      gtk_list_store_set (store, &parent_iter,
+                          COLUMN_CHARSET,
+                          e->charset,
+                          COLUMN_NAME,
+                          e->name,
+                          -1);
+
+      tmp = tmp->next;
+    }
+}
+
+static GSList *stores = NULL;
+
+static void
+unregister_store (void    *data,
+                  GObject *where_object_was)
+{
+  stores = g_slist_remove (stores, where_object_was);
+}
+
+static void
+update_active_encoding_tree_models (void)
+{
+  GSList *tmp;
+  tmp = stores;
+  while (tmp != NULL)
+    {
+      update_single_tree_model (tmp->data);
+      tmp = tmp->next;
+    }
+}
+
+static void
+register_active_encoding_tree_model (GtkListStore *store)
+{
+  update_single_tree_model (store);
+  stores = g_slist_prepend (stores, store);
+  g_object_weak_ref (G_OBJECT (store), unregister_store, NULL);
 }
 
 void
@@ -602,6 +935,9 @@ terminal_encoding_init (GConfClient *conf)
   GSList *strings;
   
   g_return_if_fail (GCONF_IS_CLIENT (conf));
+
+  default_client = conf;
+  g_object_ref (G_OBJECT (default_client));
   
   g_get_charset ((const char**)
                  &encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset);

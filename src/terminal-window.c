@@ -170,6 +170,9 @@ static void set_menuitem_text (GtkWidget  *mi,
                                const char *text,
                                gboolean    strip_mnemonic);
 
+static void terminal_menu_opened_callback (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+
 static gpointer parent_class;
 
 GType
@@ -499,9 +502,12 @@ update_active_encoding_name (TerminalWindow *window)
 
   name = terminal_encoding_get_name (charset);
 
+#if 0
+  /* doesn't make sense anymore */
   gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (window->priv->encoding_menuitem))),
                       name);
-
+#endif
+  
   g_free (name);
 }
 
@@ -588,6 +594,13 @@ fill_in_encoding_menu (TerminalWindow *window)
   append_menuitem (menu, _("_Add or Remove..."), NULL,
                    G_CALLBACK (add_encoding_callback),
                    window);
+}
+
+static void
+terminal_menu_opened_callback (GtkWidget      *menuitem,
+                               TerminalWindow *window)
+{
+  fill_in_encoding_menu (window);
 }
 
 static void
@@ -723,6 +736,10 @@ terminal_window_init (TerminalWindow *window)
                         "", NULL,
                         NULL, NULL);
   window->priv->terminal_menuitem = mi;  
+
+  g_signal_connect (G_OBJECT (mi), "activate",
+                    G_CALLBACK (terminal_menu_opened_callback),
+                    window);
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
@@ -736,7 +753,18 @@ terminal_window_init (TerminalWindow *window)
   
   append_menuitem (menu, _("_Set Title..."), ACCEL_PATH_SET_TERMINAL_TITLE,
                    G_CALLBACK (set_title_callback), window);
-  
+
+  if (terminal_widget_supports_dynamic_encoding ())
+    {
+      window->priv->encoding_menuitem =
+        append_menuitem (menu,
+                         _("_Character Coding"), NULL, NULL, NULL);
+    }
+  else
+    {
+      window->priv->encoding_menuitem = NULL;
+    }
+
   append_menuitem (menu, _("_Reset"), ACCEL_PATH_RESET,
                    G_CALLBACK (reset_callback), window);
 
@@ -788,20 +816,6 @@ terminal_window_init (TerminalWindow *window)
                               G_CALLBACK (about_callback), window);
   set_menuitem_text (mi, _("_About"),
                      FALSE);
-
-  if (terminal_widget_supports_dynamic_encoding ())
-    {
-      window->priv->encoding_menuitem =
-        append_menuitem (window->priv->menubar,
-                         _("_Encoding"), NULL, NULL, NULL);
-
-      gtk_menu_item_set_right_justified (GTK_MENU_ITEM (window->priv->encoding_menuitem),
-                                         TRUE);
-    }
-  else
-    {
-      window->priv->encoding_menuitem = NULL;
-    }
   
   terminal_window_reread_profile_list (window);
   
@@ -1388,7 +1402,6 @@ terminal_window_set_active (TerminalWindow *window,
 
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
-  fill_in_encoding_menu (window);
 }
 
 TerminalScreen*
