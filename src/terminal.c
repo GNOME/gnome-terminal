@@ -746,7 +746,7 @@ parse_options_callback (poptContext              ctx,
 
         if (arg == NULL)
           {
-            g_printerr (_("Option --command/-e requires specifying the command to run\n"));
+            g_printerr (_("Option \"%s\" requires specifying the command to run\n"), "--command/-e");
             exit (1);
           }
             
@@ -754,8 +754,8 @@ parse_options_callback (poptContext              ctx,
         exec_argv = NULL;
         if (!g_shell_parse_argv (arg, NULL, &exec_argv, &err))
           {
-            g_printerr (_("Argument to --command/-e is not a valid command: %s\n"),
-                        err->message);
+            g_printerr (_("Argument to \"%s\" is not a valid command: %s\n"),
+                        "--command/-e", err->message);
             g_error_free (err);
             exit (1);
           }
@@ -764,7 +764,8 @@ parse_options_callback (poptContext              ctx,
 
         if (it->exec_argv != NULL)
           {
-            g_printerr (_("--command/-e/--execute/-x specified more than once for the same window or tab\n"));
+            g_printerr (_("\"%s\" specified more than once for the same window or tab\n"),
+                        "--command/-e/--execute/-x");
             exit (1);
           }
 
@@ -778,7 +779,8 @@ parse_options_callback (poptContext              ctx,
             
         if (results->post_execute_args == NULL)
           {
-            g_printerr (_("Option --execute/-x requires specifying the command to run on the rest of the command line\n"));
+            g_printerr (_("Option \"%s\" requires specifying the command to run on the rest of the command line\n"),
+                        "--execute/-x");
             exit (1);
           }
 
@@ -786,7 +788,8 @@ parse_options_callback (poptContext              ctx,
 
         if (it->exec_argv != NULL)
           {
-            g_printerr (_("--command/-e/--execute/-x specified more than once for the same window or tab\n"));
+            g_printerr (_("\"%s\" specified more than once for the same window or tab\n"),
+                        "--command/-e/--execute/-x");
             exit (1);
           }
 
@@ -807,7 +810,8 @@ parse_options_callback (poptContext              ctx,
           profile = NULL;
         else if (arg == NULL)
           {
-            g_printerr (_("Option --window-with-profile requires an argument specifying what profile to use\n"));
+            g_printerr (_("Option \"%s\" requires an argument specifying what profile to use\n"),
+                        "--window-with-profile");
             exit (1);
           }
         else
@@ -830,7 +834,8 @@ parse_options_callback (poptContext              ctx,
           profile = NULL;
         else if (arg == NULL)
           {
-            g_printerr (_("Option --tab-with-profile requires an argument specifying what profile to use\n"));
+            g_printerr (_("Option \"%s\" requires an argument specifying what profile to use\n"),
+                        "--tab-with-profile");
             exit (1);
           }
         else
@@ -863,7 +868,7 @@ parse_options_callback (poptContext              ctx,
 
             if (iw->force_menubar_state)
               {
-                g_printerr (_("--show-menubar option given twice for the same window\n"));
+                g_printerr (_("\"%s\" option given twice for the same window\n"), "--show-menubar");
 
                 exit (1);
               }
@@ -889,7 +894,7 @@ parse_options_callback (poptContext              ctx,
 
             if (iw->force_menubar_state)
               {
-                g_printerr (_("--hide-menubar option given twice for the same window\n"));
+                g_printerr (_("\"%s\" option given twice for the same window\n"), "--hide-menubar");
 
                 exit (1);
               }
@@ -912,7 +917,7 @@ parse_options_callback (poptContext              ctx,
 
         if (arg == NULL)
           {
-            g_printerr (_("Option --role requires an argument giving the role\n"));
+            g_printerr (_("Option \"%s\" requires an argument giving the role\n"), "--role");
             exit (1);
           }
             
@@ -937,7 +942,7 @@ parse_options_callback (poptContext              ctx,
 
         if (arg == NULL)
           {
-            g_printerr (_("Option --geometry requires an argument giving the geometry\n"));
+            g_printerr (_("Option \"%s\" requires an argument giving the geometry\n"), "--geometry");
             exit (1);
           }
             
@@ -946,7 +951,7 @@ parse_options_callback (poptContext              ctx,
             iw = g_list_last (results->initial_windows)->data;
             if (iw->geometry)
               {
-                g_printerr (_("Two geometries given for one window\n"));
+                g_printerr (_("Two \"%s\" options given for one window\n"), "--geometry");
                 exit (1);
               }
 
@@ -978,7 +983,7 @@ parse_options_callback (poptContext              ctx,
 
         if (arg == NULL)
           {
-            g_printerr (_("Option --title requires an argument giving the title\n"));
+            g_printerr (_("Option \"%s\" requires an argument giving the title\n"), "--title");
             exit (1);
           }
 
@@ -986,7 +991,7 @@ parse_options_callback (poptContext              ctx,
 
         if (it->title)
           {
-            g_printerr (_("Two titles given for one tab\n"));
+            g_printerr (_("Two \"%s\" options given for one tab\n"), "--title");
             exit (1);
           }
 
@@ -1001,7 +1006,7 @@ parse_options_callback (poptContext              ctx,
 
         if (arg == NULL)
           {
-            g_printerr (_("Option --working-directory requires an argument giving the directory\n"));
+            g_printerr (_("Option \"%s\" requires an argument giving the directory\n"), "--working-directory");
             exit (1);
           }
 
@@ -1009,7 +1014,7 @@ parse_options_callback (poptContext              ctx,
 
         if (it->working_dir)
           {
-            g_printerr (_("Two working directories given for one tab\n"));
+            g_printerr (_("Two \"%s\" options given for one tab\n"), "--working-directory");
             exit (1);
           }
 
@@ -1025,7 +1030,7 @@ parse_options_callback (poptContext              ctx,
         
         if (arg == NULL)
           {
-            g_printerr (_("Option --zoom requires an argument giving the zoom factor\n"));
+            g_printerr (_("Option \"%s\" requires an argument giving the zoom factor\n"), "--zoom");
             exit (1);
           }
 
@@ -1033,7 +1038,7 @@ parse_options_callback (poptContext              ctx,
 
         if (it->zoom_set)
           {
-            g_printerr (_("Two zoom factors given for one tab\n"));
+            g_printerr (_("Two \"%s\" options given for one tab\n"), "--zoom");
             exit (1);
           }
 
@@ -1090,12 +1095,12 @@ parse_options_callback (poptContext              ctx,
     case OPTION_STARTUP_ID:
       if (results->startup_id != NULL)
         {
-          g_printerr (_("--startup-id option given twice\n"));
+          g_printerr (_("\"%s\" option given twice\n"), "--startup-id");
           exit (1);
         }
       else if (arg == NULL)
         {
-          g_printerr (_("--startup-id option requires an argument\n"));
+          g_printerr (_("\"%s\" option requires an argument\n"), "--startup-id");
           exit (1);
         }
       else
@@ -1212,7 +1217,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
         {          
           if ((i + 1) >= *argc)
             {
-              g_printerr (_("No argument given to --display option\n"));
+              g_printerr (_("No argument given to \"%s\" option\n"), "--display");
               return; /* popt will die on this later, plus it shouldn't happen
                        * because normally gtk_init() parses --display
                        * when not using factory mode.
@@ -1234,7 +1239,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
           
           if ((i + 1) >= *argc)
             {
-              g_printerr (_("No argument given to --screen option\n"));
+              g_printerr (_("\"%s\" option requires an argument\n"), "--screen");
               return; /* popt will die on this later, plus it shouldn't happen
                        * because normally gtk_init() parses --display
                        * when not using factory mode.
