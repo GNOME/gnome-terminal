@@ -1,3 +1,14 @@
+2002-02-14  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-screen.c (secure_keyboard_callback): disable the
+	secure keyboard thing, until someone gives a compelling
+	justification for this feature.
+	(terminal_screen_do_popup): add copy/paste and copyurl/openurl 
+	to the popup menu
+	(terminal_screen_init): add match regexps for URLs
+	(terminal_screen_button_press_event): control-click to open 
+	a URL
+
 Thu Feb 14 15:53:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* src/terminal-screen.c (reread_profile): For now, just hardwire

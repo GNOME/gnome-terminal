@@ -25,6 +25,7 @@
 #include "terminal.h"
 #include <libzvt/libzvt.h>
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
+#include <libgnome/gnome-url.h> /* gnome_url_show */
 #include <gdk/gdkx.h>
 #include <string.h>
 #include <stdlib.h>
@@ -43,6 +44,7 @@ struct _TerminalScreenPrivate
   GtkWidget *popup_menu;
   char *raw_title;
   char *cooked_title;
+  char *matched_string;
 };
 
 static GList* used_ids = NULL;
@@ -125,6 +127,13 @@ terminal_screen_init (TerminalScreen *screen)
   gtk_object_sink (GTK_OBJECT (screen->priv->zvt));
 
   zvt_term_set_auto_window_hint (ZVT_TERM (screen->priv->zvt), FALSE);
+
+  zvt_term_match_add (ZVT_TERM (screen->priv->zvt),
+                     "(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?",
+                     VTATTR_UNDERLINE, "host only url");
+  zvt_term_match_add (ZVT_TERM (screen->priv->zvt),
+                      "(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]",
+                      VTATTR_UNDERLINE, "full url");
   
   g_object_set_data (G_OBJECT (screen->priv->zvt),
                      "terminal-screen",
@@ -213,6 +222,7 @@ terminal_screen_finalize (GObject *object)
 
   g_free (screen->priv->raw_title);
   g_free (screen->priv->cooked_title);
+  g_free (screen->priv->matched_string);
   
   g_free (screen->priv);
   
@@ -292,7 +302,7 @@ reread_profile (TerminalScreen *screen)
 
   rebuild_title (screen);
 
-  /* For now, just hardwire the backspace and delete keys correctly
+  /* FIXME For now, just hardwire the backspace and delete keys correctly
    * Needs to be wired up for people that expect brokenness later.
    */
   zvt_term_set_del_key_swap (term, TRUE);
@@ -540,7 +550,7 @@ show_pty_error_dialog (TerminalScreen *screen,
   dialog = gtk_message_dialog_new ((GtkWindow*)
                                    gtk_widget_get_ancestor (screen->priv->zvt,
                                                             GTK_TYPE_WINDOW),
-                                   0,
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_CLOSE,
                                    _("There was an error creating the child process for this terminal: %s"),
@@ -565,7 +575,7 @@ show_command_error_dialog (TerminalScreen *screen,
   dialog = gtk_message_dialog_new ((GtkWindow*)
                                    gtk_widget_get_ancestor (screen->priv->zvt,
                                                             GTK_TYPE_WINDOW),
-                                   0,
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_CLOSE,
                                    _("There was a problem with the command for this terminal: %s"),
@@ -969,25 +979,6 @@ terminal_screen_get_text_selected (TerminalScreen *screen)
 }
 
 static void
-not_implemented (void)
-{
-  GtkWidget *dialog;
-
-  dialog = gtk_message_dialog_new (NULL,
-                                   0,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_CLOSE,
-                                   "Didn't implement this item yet, sorry");
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  
-  gtk_widget_show (dialog);
-}
-
-static void
 new_window_callback (GtkWidget      *menu_item,
                      TerminalScreen *screen)
 {
@@ -1005,6 +996,20 @@ new_tab_callback (GtkWidget      *menu_item,
                              screen->priv->profile,
                              screen->priv->window,
                              FALSE, FALSE);
+}
+
+static void
+copy_callback (GtkWidget      *menu_item,
+               TerminalScreen *screen)
+{
+  zvt_term_copy_clipboard (ZVT_TERM (screen->priv->zvt));
+}
+
+static void
+paste_callback (GtkWidget      *menu_item,
+                TerminalScreen *screen)
+{
+  zvt_term_paste_clipboard (ZVT_TERM (screen->priv->zvt));
 }
 
 static void
@@ -1050,12 +1055,88 @@ show_menubar_callback (GtkWidget      *menu_item,
                                          TRUE);
 }
 
+#if 0
 static void
 secure_keyboard_callback (GtkWidget      *menu_item,
                           TerminalScreen *screen)
 {
   not_implemented ();
 }
+#endif
+
+static void
+open_url (TerminalScreen *screen,
+          const char     *orig_url)
+{
+  GError *err;
+  GtkWidget *dialog;
+  char *url;
+  
+  g_return_if_fail (orig_url != NULL);
+
+  /* this is to handle gnome_url_show reentrancy */
+  url = g_strdup (orig_url);
+  g_object_ref (G_OBJECT (screen));
+  
+  err = NULL;
+  gnome_url_show (url, &err);
+
+  if (err)
+    {
+      GtkWidget *window;
+
+      if (screen->priv->zvt)
+        window = gtk_widget_get_ancestor (screen->priv->zvt,
+                                          GTK_TYPE_WINDOW);
+      else
+        window = NULL;
+      
+      dialog = gtk_message_dialog_new (window ? GTK_WINDOW (window) : NULL,
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("Could not open the address \"%s\":\n%s"),
+                                       url, err->message);
+      
+      g_error_free (err);
+      
+      g_signal_connect (G_OBJECT (dialog),
+                        "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+      
+      gtk_widget_show (dialog);
+    }
+
+  g_free (url);
+  g_object_unref (G_OBJECT (screen));
+}
+
+static void
+open_url_callback (GtkWidget      *menu_item,
+                   TerminalScreen *screen)
+{
+  if (screen->priv->matched_string)
+    {
+      open_url (screen, screen->priv->matched_string);
+      g_free (screen->priv->matched_string);
+      screen->priv->matched_string = NULL;
+    }
+}
+
+static void
+copy_url_callback (GtkWidget      *menu_item,
+                   TerminalScreen *screen)
+{
+  if (screen->priv->matched_string)
+    {
+      gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE), 
+                              screen->priv->matched_string, -1);
+      g_free (screen->priv->matched_string);
+      screen->priv->matched_string = NULL;
+    }
+}
+
 
 static void
 popup_menu_detach (GtkWidget *attach_widget,
@@ -1086,6 +1167,27 @@ append_menuitem (GtkWidget  *menu,
   g_signal_connect (G_OBJECT (menu_item),
                     "activate",
                     callback, data);
+
+  return menu_item;
+}
+
+static GtkWidget*
+append_stock_menuitem (GtkWidget  *menu,
+                       const char *text,
+                       GCallback   callback,
+                       gpointer    data)
+{
+  GtkWidget *menu_item;
+  
+  menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         menu_item);
+
+  if (callback)
+    g_signal_connect (G_OBJECT (menu_item),
+                      "activate",
+                      callback, data);
 
   return menu_item;
 }
@@ -1121,6 +1223,18 @@ terminal_screen_do_popup (TerminalScreen *screen,
                    G_CALLBACK (new_tab_callback),
                    screen);
 
+  menu_item = append_stock_menuitem (screen->priv->popup_menu,
+                                     GTK_STOCK_COPY,
+                                     G_CALLBACK (copy_callback),
+                                     screen);
+  if (!terminal_screen_get_text_selected (screen))
+    gtk_widget_set_sensitive (menu_item, FALSE);
+
+  menu_item = append_stock_menuitem (screen->priv->popup_menu,
+                                     GTK_STOCK_PASTE,
+                                     G_CALLBACK (paste_callback),
+                                     screen);
+  
   profile_menu = gtk_menu_new ();
   menu_item = gtk_menu_item_new_with_mnemonic (_("_Profile"));
 
@@ -1187,12 +1301,26 @@ terminal_screen_do_popup (TerminalScreen *screen,
                      G_CALLBACK (show_menubar_callback),
                      screen);
 
-  
+#if 0
   append_menuitem (screen->priv->popup_menu,
                    _("Secure _Keyboard"),
                    G_CALLBACK (secure_keyboard_callback),
-                   screen);  
-  
+                   screen);
+#endif
+
+  if (screen->priv->matched_string)
+    {
+      append_menuitem (screen->priv->popup_menu,
+                       _("_Open Link"),
+                       G_CALLBACK (open_url_callback),
+                       screen);
+
+      append_menuitem (screen->priv->popup_menu,
+                       _("_Copy Link Address"),
+                       G_CALLBACK (copy_url_callback),
+                       screen);
+    }
+      
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
@@ -1208,13 +1336,46 @@ terminal_screen_popup_menu (GtkWidget      *zvt,
 }
 
 static gboolean
-terminal_screen_button_press_event (GtkWidget      *zvt,
+terminal_screen_button_press_event (GtkWidget      *widget,
                                     GdkEventButton *event,
                                     TerminalScreen *screen)
 {
+  ZvtTerm *term;
+  
+  term = ZVT_TERM (widget);
+
+  g_free (screen->priv->matched_string);
+  screen->priv->matched_string =
+    g_strdup (zvt_term_match_check (term,
+                                    event->x / term->charwidth,
+                                    event->y / term->charheight,
+                                    0));
+  
   if (event->button == 1 || event->button == 2)
     {
-      gtk_widget_grab_focus (zvt);
+      gtk_widget_grab_focus (widget);
+      
+      if (screen->priv->matched_string &&
+          (event->state & GDK_CONTROL_MASK))
+        {
+          open_url (screen, screen->priv->matched_string);
+          g_free (screen->priv->matched_string);
+          screen->priv->matched_string = NULL;
+          return TRUE; /* don't do anything else such as select with the click */
+        }
+      
+#if 0
+      /* old gnome-terminal had this code, but I'm not sure if
+       * it should be here. We always return FALSE, but
+       * sometimes old gnome-terminal didn't, so maybe that's
+       * why it had this.
+       */
+      if (event->button != 3
+          || (!(event->state & GDK_CONTROL_MASK) && term->vx->selected)
+          || (term->vx->vt.mode & VTMODE_SEND_MOUSE))
+        return FALSE;
+#endif      
+
       return FALSE; /* pass thru the click */
     }
   else if (event->button == 3)

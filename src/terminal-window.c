@@ -991,7 +991,7 @@ not_implemented (void)
   GtkWidget *dialog;
 
   dialog = gtk_message_dialog_new (NULL,
-                                   0,
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_ERROR,
                                    GTK_BUTTONS_CLOSE,
                                    "Didn't implement this item yet, sorry");
