@@ -393,7 +393,7 @@ static void
 update_color_scheme (TerminalScreen *screen)
 {
   GdkColor c;
-  gushort red[18],green[18],blue[18];
+  gushort red[18], green[18], blue[18];
   ZvtTerm *term;
   GdkColor fg, bg;
   int i;
