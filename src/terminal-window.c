@@ -141,7 +141,7 @@ static void new_configuration_callback    (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void manage_configurations_callback(GtkWidget      *menuitem,
                                            TerminalWindow *window);
-static void hide_menubar_callback         (GtkWidget      *menuitem,
+static void toggle_menubar_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void fullscreen_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -713,7 +713,7 @@ terminal_window_init (TerminalWindow *window)
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
   
   append_menuitem (menu, _("Hide Menu_bar"), ACCEL_PATH_TOGGLE_MENUBAR,
-                   G_CALLBACK (hide_menubar_callback), window);
+                   G_CALLBACK (toggle_menubar_callback), window);
 
   mi = append_menuitem (menu, _("_Full Screen"), ACCEL_PATH_FULL_SCREEN,
                         G_CALLBACK (fullscreen_callback), window);
@@ -2070,10 +2070,15 @@ manage_configurations_callback (GtkWidget      *menuitem,
 }
 
 static void
-hide_menubar_callback (GtkWidget      *menuitem,
+toggle_menubar_callback (GtkWidget      *menuitem,
                        TerminalWindow *window)
 {
-  terminal_window_set_menubar_visible (window, FALSE);
+  if (terminal_window_get_menubar_visible (window))
+    terminal_window_set_menubar_visible (window,
+                                         FALSE);
+  else
+    terminal_window_set_menubar_visible (window,
+                                         TRUE);
 }
 
 static void
