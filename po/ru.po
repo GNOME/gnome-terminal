@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-04-12 09:29-0400\n"
+"POT-Creation-Date: 2002-03-24 15:57-0500\n"
 "PO-Revision-Date: 2002-04-14 19:49+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Командная строка"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:265 src/terminal-window.c:326 src/terminal.c:473
+#: src/terminal-profile.c:265 src/terminal-window.c:326 src/terminal.c:346
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -422,10 +422,10 @@ msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly, so the profile editor can't be displayed."
 msgstr ""
-"Файл \"%s\" повреждён. Это означает, что приложение было установлено неправильно, "
-"поэтому редактор профилей не может быть отображён."
+"Файл \"%s\" повреждён. Это означает, что приложение было установлено "
+"неправильно, поэтому редактор профилей не может быть отображён."
 
-#: src/profile-editor.c:1283
+#: src/profile-editor.c:1282
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Изменение профиля \"%s\""
@@ -607,7 +607,7 @@ msgstr "Вид"
 msgid "Go"
 msgstr "Переход"
 
-#: src/terminal-accels.c:237 src/terminal-profile.c:372 src/terminal.c:822
+#: src/terminal-accels.c:237 src/terminal-profile.c:372 src/terminal.c:684
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "При загрузке настроек из %s возникла ошибка. (%s)\n"
@@ -635,8 +635,7 @@ msgstr "Значение ключа конфигурации %s не прави�
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr ""
-"При загрузке значения использования мнемоник возникла ошибка. (%s)\n"
+msgstr "При загрузке значения использования мнемоник возникла ошибка. (%s)\n"
 
 #: src/terminal-accels.c:345
 #, c-format
@@ -654,8 +653,7 @@ msgstr ""
 #: src/terminal-accels.c:841
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
-msgstr ""
-"Ошибка установки нового ускорителя в базе данных конфигурации: %s\n"
+msgstr "Ошибка установки нового ускорителя в базе данных конфигурации: %s\n"
 
 #: src/terminal-accels.c:872
 #, c-format
@@ -708,8 +706,7 @@ msgstr "Не удалось найти фоновое изображение \"%
 #, c-format
 msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
-msgstr ""
-"Сбой при загрузке фонового изображения \"%s\" для профиля \"%s\": %s\n"
+msgstr "Сбой при загрузке фонового изображения \"%s\" для профиля \"%s\": %s\n"
 
 #: src/terminal-profile.c:2656
 #, c-format
@@ -737,8 +734,8 @@ msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr ""
-"При подписке на уведомление об изменении профиля по умолчанию возникла ошибка."
-" (%s)\n"
+"При подписке на уведомление об изменении профиля по умолчанию возникла "
+"ошибка. (%s)\n"
 
 #: src/terminal-profile.c:2972
 msgid "_Details"
@@ -954,7 +951,9 @@ msgstr ""
 
 #: src/terminal-window.c:1794
 msgid "translator_credits"
-msgstr "Валек Филиппов\nДмитрий Мастрюков"
+msgstr ""
+"Валек Филиппов\n"
+"Дмитрий Мастрюков"
 
 #: src/terminal-window.c:1807
 msgid "Copyright 2002 Havoc Pennington"
@@ -964,19 +963,19 @@ msgstr "Авторское право (С) 2002 Havoc Pennington"
 msgid "GNOME Terminal"
 msgstr "Терминал GNOME"
 
-#: src/terminal.c:130
+#: src/terminal.c:124
 msgid "Help options"
 msgstr "Параметры справки"
 
-#: src/terminal.c:139
+#: src/terminal.c:133
 msgid "Execute the argument to this option inside the terminal."
 msgstr ""
 
-#: src/terminal.c:148
+#: src/terminal.c:142
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr ""
 
-#: src/terminal.c:157
+#: src/terminal.c:151
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -984,11 +983,11 @@ msgstr ""
 "Открыть новое окно содержащее лист с заданным профилем. Можно задать "
 "несколько таких параметров."
 
-#: src/terminal.c:158 src/terminal.c:167
+#: src/terminal.c:152 src/terminal.c:161
 msgid "PROFILENAME"
 msgstr "НАИМЕНОВАНИЕ ПРОФИЛЯ"
 
-#: src/terminal.c:166
+#: src/terminal.c:160
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -996,7 +995,7 @@ msgstr ""
 "Открыть новую вкладку в последнем открытом окне с заданным профилем. Можно "
 "задать несколько таких параметров."
 
-#: src/terminal.c:175
+#: src/terminal.c:169
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1004,11 +1003,11 @@ msgstr ""
 "Открыть новое окно, содержащее вкладку с идентификатором заданного профиля. "
 "Используется внутри для сохранения сеансов."
 
-#: src/terminal.c:176 src/terminal.c:185
+#: src/terminal.c:170 src/terminal.c:179
 msgid "PROFILEID"
 msgstr "ID ПРОФИЛЯ"
 
-#: src/terminal.c:184
+#: src/terminal.c:178
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1016,7 +1015,7 @@ msgstr ""
 "Открыть новую вкладку в последнем открытом окне с заданным идентификатором "
 "профиля. Используется внутри для сохранения сеансов."
 
-#: src/terminal.c:193
+#: src/terminal.c:187
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1026,7 +1025,7 @@ msgstr ""
 "окну; может быть указано только один раз для каждого окна создаваемого из "
 "командной строки."
 
-#: src/terminal.c:202
+#: src/terminal.c:196
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1036,7 +1035,7 @@ msgstr ""
 "окну; может быть указано только один раз для каждого окна создаваемого из "
 "командной строки."
 
-#: src/terminal.c:211
+#: src/terminal.c:205
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1044,49 +1043,34 @@ msgstr ""
 "Параметры окна (см. страницу руководства /man/  по \"X\"), может быть "
 "указано по одному для каждого открываемого окна."
 
-#: src/terminal.c:212
+#: src/terminal.c:206
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРИЯ"
 
-#: src/terminal.c:220
+#: src/terminal.c:214
+#, fuzzy
 msgid ""
-"Ask existing profterm process to open a new window, if possible. Defaults to "
-"true"
+"Ask existing profterm process to open a new window, if possible. (Not yet "
+"implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"
 msgstr ""
 "Запросить у существующего процесса profterm открытие нового окна, если это "
 "возможно. По умолчанию включено"
 
-#: src/terminal.c:229
-msgid ""
-"Do not register with the activation nameserver, do not re-use an active "
-"terminal"
-msgstr ""
-
-#: src/terminal.c:344
+#: src/terminal.c:329
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Не удалось загрузить пиктограмму \"%s\": %s\n"
 
-#: src/terminal.c:429
-msgid ""
-"It appears that you do not have gnome-terminal.server installed in a valid "
-"location. Factory mode disabled"
-msgstr ""
-
-#: src/terminal.c:432
-msgid "Error registering with the activation service Factory mode disabled"
-msgstr ""
-
-#: src/terminal.c:581
+#: src/terminal.c:453
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Параметр --command/-e требует указания запускаемой команды\n"
 
-#: src/terminal.c:589
+#: src/terminal.c:461
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Аргумент для --command/-e не является допустимой командой: %s\n"
 
-#: src/terminal.c:599 src/terminal.c:621
+#: src/terminal.c:471 src/terminal.c:493
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1094,7 +1078,7 @@ msgstr ""
 "--command/-e/--execute/-x указано больше одного раза для одного и того же "
 "окна или листа\n"
 
-#: src/terminal.c:613
+#: src/terminal.c:485
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1102,7 +1086,7 @@ msgstr ""
 "Параметр --execute/-x требует указания команды для запуска в оставшейся "
 "части командной строки\n"
 
-#: src/terminal.c:640
+#: src/terminal.c:512
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1110,7 +1094,7 @@ msgstr ""
 "Параметр --window-with-profile требует аргумента указывающего какой профиль "
 "использовать\n"
 
-#: src/terminal.c:661
+#: src/terminal.c:533
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1118,20 +1102,20 @@ msgstr ""
 "Параметр --tab-with-profile требует аргумента указывающего какой профиль "
 "использовать\n"
 
-#: src/terminal.c:691 src/terminal.c:717
+#: src/terminal.c:563 src/terminal.c:589
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Параметр --show-menubar задан дважды для одного окна\n"
 
-#: src/terminal.c:742
+#: src/terminal.c:614
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr ""
 "Параметр --geometry требует указания аргумента задающего геометрию окна\n"
 
-#: src/terminal.c:751 src/terminal.c:761
+#: src/terminal.c:623 src/terminal.c:633
 msgid "Two geometries given for one window\n"
 msgstr "Для одного окна заданы два набора размеров\n"
 
-#: src/terminal.c:795
+#: src/terminal.c:657
 #, c-format
 msgid ""
 "Error on option %s: %s.\n"
@@ -1141,24 +1125,24 @@ msgstr ""
 "Запустите \"%s --help\" чтобы увидеть полный список доступных параметров "
 "командной строки.\n"
 
-#: src/terminal.c:805
+#: src/terminal.c:667
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Недопустимый аргумент: \"%s\"\n"
 
-#: src/terminal.c:838
+#: src/terminal.c:700
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr ""
 
-#: src/terminal.c:883
+#: src/terminal.c:745
 #, c-format
 msgid "No such profile '%s', using default profile"
 msgstr "Профиль \"%s\" не существует, используется профиль по умолчанию"
 
-#: src/terminal.c:939
+#: src/terminal.c:801
 msgid ""
 "--geometry given prior to options that create a new window, must be given "
 "after\n"
@@ -1166,98 +1150,98 @@ msgstr ""
 "Параметр --geometry задан до параметра создающего новое окно, а должен быть "
 "задан после\n"
 
-#: src/terminal.c:1019
+#: src/terminal.c:881
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Неправильная строка размеров \"%s\"\n"
 
-#: src/terminal.c:1074
+#: src/terminal.c:936
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Возникла ошибка при получении списка профилей терминала. (%s)\n"
 
-#: src/terminal.c:1296
+#: src/terminal.c:1158
 msgid "You have to name your profile."
 msgstr "Необходимо назвать профиль."
 
-#: src/terminal.c:1306
+#: src/terminal.c:1168
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Профиль названный \"%s\" уже существует"
 
-#: src/terminal.c:1343
+#: src/terminal.c:1205
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Профиль выбранный в качестве основы для создаваемого больше не существует"
 
-#: src/terminal.c:1402
+#: src/terminal.c:1264
 msgid "New terminal profile"
 msgstr "Создать профиль терминала"
 
-#: src/terminal.c:1407
+#: src/terminal.c:1269
 msgid "C_reate"
 msgstr "Создать"
 
-#: src/terminal.c:1432
+#: src/terminal.c:1294
 msgid "Profile _Name:"
 msgstr "Наименование профиля:"
 
-#: src/terminal.c:1448
+#: src/terminal.c:1310
 msgid "_Base new profile on:"
 msgstr "Основывать новый профиль на:"
 
-#: src/terminal.c:1667
+#: src/terminal.c:1529
 msgid "You must select one or more profiles to delete."
 msgstr "Вы должны выбрать один или более профилей для удаления."
 
-#: src/terminal.c:1690
+#: src/terminal.c:1552
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Необходим хотя бы один профиль; нельзя удалить их все."
 
-#: src/terminal.c:1708
+#: src/terminal.c:1570
 msgid "Delete these two profiles?\n"
 msgstr "Удалить эти два профиля?\n"
 
-#: src/terminal.c:1710
+#: src/terminal.c:1572
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Удалить эти %d профилей?\n"
 
-#: src/terminal.c:1728
+#: src/terminal.c:1590
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Удалить профиль \"%s\"?"
 
-#: src/terminal.c:1742
+#: src/terminal.c:1604
 msgid "_No"
 msgstr "Нет"
 
-#: src/terminal.c:1744
+#: src/terminal.c:1606
 msgid "_Delete"
 msgstr "Удалить"
 
-#: src/terminal.c:1929
+#: src/terminal.c:1791
 msgid "Manage terminal profiles"
 msgstr "Управление профилями терминала"
 
-#: src/terminal.c:1960
+#: src/terminal.c:1822
 msgid "Profile _used when launching a new terminal:"
 msgstr "Профиль, используемый при запуске нового терминала:"
 
-#: src/terminal.c:1980
+#: src/terminal.c:1842
 msgid "_Profiles:"
 msgstr "Профили:"
 
-#: src/terminal.c:2018
+#: src/terminal.c:1880
 msgid "_New..."
 msgstr "Создать..."
 
-#: src/terminal.c:2026
+#: src/terminal.c:1888
 msgid "_Edit..."
 msgstr "Изменить..."
 
-#: src/terminal.c:2034
+#: src/terminal.c:1896
 msgid "_Delete..."
 msgstr "Удалить..."
 
