@@ -2563,11 +2563,7 @@ terminal_util_set_labelled_by (GtkWidget *widget,
     }
 
   if (!GTK_IS_ACCESSIBLE (atkwidget))
-    {
-      g_warning ("%s: type of accessible is %s not GtkAccessible",
-                 G_GNUC_FUNCTION, g_type_name_from_instance ((GTypeInstance*)atkwidget));
-      return;
-    }
+    return; /* This means GAIL is not loaded so we have the NoOp accessible */
   
   relation_set = atk_object_ref_relation_set (atkwidget);
   targets[0] = gtk_widget_get_accessible (GTK_WIDGET (label));
@@ -2596,12 +2592,9 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
       return;
     }
 
+  
   if (!GTK_IS_ACCESSIBLE (obj))
-    {
-      g_warning ("%s: type of accessible is %s not GtkAccessible",
-                 G_GNUC_FUNCTION, g_type_name_from_instance ((GTypeInstance*)obj));
-      return;
-    }
+    return; /* This means GAIL is not loaded so we have the NoOp accessible */
       
   g_return_if_fail (GTK_IS_ACCESSIBLE (obj));  
   if (desc)
