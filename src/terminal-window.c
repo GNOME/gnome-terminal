@@ -2550,7 +2550,7 @@ about_callback (GtkWidget      *menuitem,
   g_free(file);
 
   about = gnome_about_new (PACKAGE, VERSION,
-                           _("Copyright 2002 Havoc Pennington"),
+                           "Copyright \xc2\xa9 2002 Havoc Pennington",
                            _("GNOME Terminal"),
                            (const char **)authors,
                            (const char **)documenters,
