@@ -59,7 +59,7 @@ egg_cell_renderer_keys_get_type (void)
         (GClassInitFunc)egg_cell_renderer_keys_class_init,
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
-        sizeof (GtkCellRendererText),
+        sizeof (EggCellRendererKeys),
 	0,              /* n_preallocs */
         (GInstanceInitFunc) egg_cell_renderer_keys_init
       };
@@ -497,22 +497,20 @@ egg_cell_renderer_keys_set_accelerator (EggCellRendererKeys *keys,
   if (mask != keys->accel_mask)
     {
       keys->accel_mask = mask;
+
       g_object_notify (G_OBJECT (keys), "accel_mask");
       changed = TRUE;
     }  
+  g_object_thaw_notify (G_OBJECT (keys));
 
   if (changed)
     {
       /* sync string to the key values */
       celltext = GTK_CELL_RENDERER_TEXT (keys);
-      
       text = convert_keysym_state_to_string (keys->accel_key, keys->accel_mask);
-      g_free (celltext->text);
-      celltext->text = text;
-      g_object_notify (G_OBJECT (keys), "text");
+      g_object_set (keys, "text", text, NULL);
     }
   
-  g_object_thaw_notify (G_OBJECT (keys));
 }
 
 
