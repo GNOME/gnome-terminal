@@ -1161,6 +1161,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   /* Column 2 */
   cell_renderer = g_object_new (EGG_TYPE_CELL_RENDERER_KEYS,
 				"editable", TRUE,
+				"accel_mode", EGG_CELL_RENDERER_KEYS_MODE_GTK,
 				NULL);
   g_signal_connect (G_OBJECT (cell_renderer), "keys_edited",
                     G_CALLBACK (accel_edited_callback),
