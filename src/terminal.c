@@ -1016,6 +1016,7 @@ create_profile_list (void)
   GtkTreeIter iter;
   GList *tmp;
   GList *profiles;
+  GtkTreePath *path;
   
   model = gtk_list_store_new (COLUMN_LAST,
                               G_TYPE_STRING,
@@ -1069,6 +1070,12 @@ create_profile_list (void)
 			       GTK_TREE_VIEW_COLUMN (column));
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+
+  /* Select first row */
+  path = gtk_tree_path_new ();
+  gtk_tree_path_append_index (path, 0);
+  gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)), path);
+  gtk_tree_path_free (path);
   
   return tree_view;
 }
@@ -1204,6 +1211,8 @@ terminal_app_delete_profiles (TerminalApp     *app,
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_AUTOMATIC);
+      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
+					   GTK_SHADOW_IN);
       
       gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
 
