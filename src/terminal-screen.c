@@ -1594,6 +1594,8 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
               p = strstr (output, ":");
               if (p == NULL)
                 goto pwdx_out;
+
+              ++p;
                    
               while (*p == ' ' || *p == '\t')
                 ++p;
