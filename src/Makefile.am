@@ -69,7 +69,9 @@ EXTRA_DIST =				\
 	$(glade_DATA)			\
 	$(schema_DATA)			\
 	$(server_DATA)			\
-	update-from-egg.sh
+	update-from-egg.sh		\
+	terminal-widget-zvt.c		\
+	terminal-widget-vte.c
 
 
 EGGDIR=$(srcdir)/../../libegg/libegg
