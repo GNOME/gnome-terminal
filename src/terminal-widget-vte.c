@@ -307,7 +307,8 @@ void
 terminal_widget_reset (GtkWidget *widget,
 		       gboolean   also_clear_afterward)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_reset (VTE_TERMINAL(widget), TRUE, also_clear_afterward);
 }
 
 
@@ -367,7 +368,8 @@ terminal_widget_connect_selection_changed (GtkWidget *widget,
 					   GCallback  callback,
 					   void      *data)
 {
-  UNIMPLEMENTED;
+  g_signal_connect (widget, "selection-changed",
+		    G_CALLBACK (callback), data);
 }
 
 void
@@ -375,7 +377,7 @@ terminal_widget_disconnect_selection_changed (GtkWidget *widget,
 					      GCallback  callback,
 					      void      *data)
 {
-  UNIMPLEMENTED;
+  g_signal_handlers_disconnect_by_func (widget, callback, data);
 }
 
 
