@@ -1011,7 +1011,7 @@ new_window_callback (GtkWidget      *menuitem,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_screen_get_profile (window->priv->active_term),
                              NULL,
-                             FALSE, FALSE);
+                             FALSE, FALSE, NULL);
 }
 
 static void
@@ -1021,7 +1021,7 @@ new_tab_callback (GtkWidget      *menuitem,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_screen_get_profile (window->priv->active_term),
                              window,
-                             FALSE, FALSE);
+                             FALSE, FALSE, NULL);
 }
 
 static void

@@ -70,6 +70,12 @@ void terminal_screen_set_profile (TerminalScreen *screen,
                                   TerminalProfile *profile);
 TerminalProfile* terminal_screen_get_profile (TerminalScreen *screen);
 
+void         terminal_screen_set_override_command (TerminalScreen  *screen,
+                                                   char           **argv);
+const char** terminal_screen_get_override_command (TerminalScreen  *screen);
+
+
+
 GtkWidget* terminal_screen_get_widget (TerminalScreen *screen);
 
 int terminal_screen_get_id (TerminalScreen *screen);

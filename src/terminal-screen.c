@@ -45,6 +45,7 @@ struct _TerminalScreenPrivate
   char *raw_title;
   char *cooked_title;
   char *matched_string;
+  char **override_command;
 };
 
 static GList* used_ids = NULL;
@@ -223,6 +224,7 @@ terminal_screen_finalize (GObject *object)
   g_free (screen->priv->raw_title);
   g_free (screen->priv->cooked_title);
   g_free (screen->priv->matched_string);
+  g_strfreev (screen->priv->override_command);
   
   g_free (screen->priv);
   
@@ -535,6 +537,25 @@ terminal_screen_get_profile (TerminalScreen *screen)
   return screen->priv->profile;
 }
 
+void
+terminal_screen_set_override_command (TerminalScreen *screen,
+                                      char          **argv)
+{
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+
+  g_strfreev (screen->priv->override_command);
+  screen->priv->override_command = g_strdupv (argv);
+}
+
+const char**
+terminal_screen_get_override_command (TerminalScreen *screen)
+{
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+
+  return (const char**) screen->priv->override_command;
+}
+
+
 GtkWidget*
 terminal_screen_get_widget (TerminalScreen *screen)
 {
@@ -792,8 +813,13 @@ get_child_command (TerminalScreen *screen,
     *file_p = NULL;
   if (argv_p)
     *argv_p = NULL;
-  
-  if (terminal_profile_get_use_custom_command (profile))
+
+  if (screen->priv->override_command)
+    {
+      file = g_strdup (screen->priv->override_command[0]);
+      argv = g_strdupv (screen->priv->override_command);
+    }
+  else if (terminal_profile_get_use_custom_command (profile))
     {
       if (!g_shell_parse_argv (terminal_profile_get_custom_command (profile),
                                NULL, &argv,
@@ -985,7 +1011,7 @@ new_window_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              NULL,
-                             FALSE, FALSE);
+                             FALSE, FALSE, NULL);
 }
 
 static void
@@ -995,7 +1021,7 @@ new_tab_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              screen->priv->window,
-                             FALSE, FALSE);
+                             FALSE, FALSE, NULL);
 }
 
 static void

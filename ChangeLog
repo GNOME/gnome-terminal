@@ -1,3 +1,16 @@
+2002-02-15  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (main): make option parsing accept exactly the
+	same --command/-e/--execute/-x options as gnome-terminal and
+	handle them the same way.
+	(terminal_app_get_clone_command): record the --command or
+	--execute argv for each tab in the session
+
+	* src/terminal-screen.c (get_child_command): use override command
+	if any
+	(terminal_screen_set_override_command): allow setting an override
+	command
+
 2002-02-14  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-screen.c (secure_keyboard_callback): disable the

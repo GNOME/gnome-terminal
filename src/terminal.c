@@ -78,7 +78,8 @@ static void terminal_app_get_clone_command   (TerminalApp *app,
 static void spew_restart_command             (TerminalApp *app);
 
 enum {
-  OPTION_EXECUTE = 1,
+  OPTION_COMMAND = 1,
+  OPTION_EXECUTE,
   OPTION_WINDOW_WITH_PROFILE,
   OPTION_TAB_WITH_PROFILE,
   OPTION_WINDOW_WITH_PROFILE_ID,
@@ -99,8 +100,17 @@ struct poptOption options[] = {
     NULL 
   },
   {
-    "execute",
+    "command",
     'e',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_COMMAND,
+    N_("Execute the argument to this option inside the terminal."),
+    NULL
+  },
+  {
+    "execute",
+    'x',
     POPT_ARG_NONE,
     NULL,
     OPTION_EXECUTE,
@@ -114,7 +124,7 @@ struct poptOption options[] = {
     NULL,
     OPTION_WINDOW_WITH_PROFILE,
     N_("Open a new window containing a tab with the given profile. More than one of these options can be provided."),
-    NULL
+    N_("PROFILENAME")
   },
   {
     "tab-with-profile",
@@ -123,7 +133,7 @@ struct poptOption options[] = {
     NULL,
     OPTION_TAB_WITH_PROFILE,
     N_("Open a new tab in the last-opened window with the given profile. More than one of these options can be provided."),
-    NULL
+    N_("PROFILENAME")
   },
   {
     "window-with-profile-internal-id",
@@ -132,7 +142,7 @@ struct poptOption options[] = {
     NULL,
     OPTION_WINDOW_WITH_PROFILE,
     N_("Open a new window containing a tab with the given profile ID. Used internally to save sessions."),
-    NULL
+    N_("PROFILEID")
   },
   {
     "tab-with-profile-internal-id",
@@ -141,7 +151,7 @@ struct poptOption options[] = {
     NULL,
     OPTION_TAB_WITH_PROFILE,
     N_("Open a new tab in the last-opened window with the given profile ID. Used internally to save sessions."),
-    NULL
+    N_("PROFILEID")
   },
   {
     "show-menubar",
@@ -176,6 +186,7 @@ typedef struct
 {
   char *profile;
   gboolean profile_is_id;
+  char **exec_argv;
 } InitialTab;
 
 typedef struct
@@ -197,7 +208,8 @@ initial_tab_new (const char *profile,
 
   it->profile = g_strdup (profile);
   it->profile_is_id = is_id;
-
+  it->exec_argv = NULL;
+  
   return it;
 }
 
@@ -205,6 +217,7 @@ static void
 initial_tab_free (InitialTab *it)
 {
   g_free (it->profile);
+  g_strfreev (it->exec_argv);
   g_free (it);
 }
 
@@ -231,6 +244,29 @@ initial_window_free (InitialWindow *iw)
   g_free (iw);
 }
 
+static InitialTab*
+ensure_top_tab (GList **initial_windows_p)
+{
+  InitialWindow *iw;
+  InitialTab *it;
+  
+  if (*initial_windows_p == NULL)
+    {
+      iw = initial_window_new (NULL, FALSE);
+      *initial_windows_p = g_list_append (*initial_windows_p, iw);
+    }
+  else
+    {
+      iw = g_list_last (*initial_windows_p)->data;
+    }
+
+  g_assert (iw->tabs);
+  
+  it = g_list_last (iw->tabs)->data;
+
+  return it;
+}
+
 static GnomeModuleInfo module_info = {
   PACKAGE, VERSION, N_("Terminal"),
   NULL,
@@ -250,18 +286,20 @@ main (int argc, char **argv)
   GError *err;
   poptContext ctx;
   int next_opt;
-  char **exec_argv = NULL;
   GList *initial_windows = NULL;
   GList *tmp;
   gboolean default_window_menubar_forced = FALSE;
   gboolean default_window_menubar_state = FALSE;
+  int i;
+  char **post_execute_args;
+  const char **args;
   
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
   
   gtk_init (&argc, &argv);
-
+  
   gnome_program_init (PACKAGE, VERSION,
                       &module_info,
                       1, /* don't give it any args for now since option parsing doesn't go
@@ -272,19 +310,40 @@ main (int argc, char **argv)
                       GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
                       GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
                       GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
-                      NULL);
- 
-  conf = gconf_client_get_default ();
-
-  err = NULL;  
-  gconf_client_add_dir (conf, CONF_PREFIX,
-                        GCONF_CLIENT_PRELOAD_RECURSIVE,
-                        &err);
-  if (err)
+                      NULL); 
+  
+  /* pre-scan for -x and --execute options (code from old gnome-terminal) */
+  post_execute_args = NULL;
+  i = 1;
+  while (i < argc)
     {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  CONF_PREFIX, err->message);
-      g_error_free (err);
+      if (strcmp (argv[i], "-x") == 0 ||
+          strcmp (argv[i], "--execute") == 0)
+        {
+          int last;
+          int j;
+
+          ++i;
+          last = i;
+          if (i == argc)
+            break; /* we'll complain about this later. */
+          
+          post_execute_args = g_new0 (char*, argc - i + 1);
+          j = 0;
+          while (i < argc)
+            {
+              post_execute_args[j] = g_strdup (argv[i]);
+
+              i++; 
+              j++;
+            }
+          post_execute_args[j] = NULL;
+
+          /* strip the args we used up, also ends the loop since i >= last */
+          argc = last;
+        }
+      
+      ++i;
     }
   
   ctx = poptGetContext (PACKAGE, argc, (const char **) argv, options, 0);
@@ -295,18 +354,66 @@ main (int argc, char **argv)
     {
       switch (next_opt)
         {
-        case OPTION_EXECUTE:
+        case OPTION_COMMAND:
           {
-            const char **remaining_args;
+            const char *arg;
+            GError *err;
+            InitialTab *it;
+            char **exec_argv;
             
-            remaining_args = poptGetArgs (ctx);
+            arg = poptGetOptArg (ctx);
 
-            exec_argv = g_strdupv ((char **)remaining_args);
-            next_opt = -1;
-            goto done_parsing_args;
+            if (arg == NULL)
+              {
+                g_printerr (_("Option --command/-e requires specifying the command to run\n"));
+                return 1;
+              }
+            
+            err = NULL;
+            exec_argv = NULL;
+            if (!g_shell_parse_argv (arg, NULL, &exec_argv, &err))
+              {
+                g_printerr (_("Argument to --command/-e is not a valid command: %s\n"),
+                            err->message);
+                g_error_free (err);
+                return 1;
+              }
+
+            it = ensure_top_tab (&initial_windows);
+
+            if (it->exec_argv != NULL)
+              {
+                g_printerr (_("--command/-e/--execute/-x specified more than once for the same window or tab\n"));
+                return 1;
+              }
+
+            it->exec_argv = exec_argv;
           }
           break;
 
+        case OPTION_EXECUTE:
+          {
+            InitialTab *it;
+            
+            if (post_execute_args == NULL)
+              {
+                g_printerr (_("Option --execute/-x requires specifying the command to run on the rest of the command line\n"));
+                return 1;
+              }
+
+            it = ensure_top_tab (&initial_windows);
+
+            if (it->exec_argv != NULL)
+              {
+                g_printerr (_("--command/-e/--execute/-x specified more than once for the same window or tab\n"));
+                return 1;
+              }
+
+            it->exec_argv = post_execute_args;
+            post_execute_args = NULL;
+          }
+          break;
+          
         case OPTION_WINDOW_WITH_PROFILE:
         case OPTION_WINDOW_WITH_PROFILE_ID:
           {
@@ -416,8 +523,6 @@ main (int argc, char **argv)
           break;
         }
     }
-
- done_parsing_args:
   
   if (next_opt != -1)
     {
@@ -427,8 +532,31 @@ main (int argc, char **argv)
                   argv[0]);
       return 1;
     }
+
+  args = poptGetArgs (ctx);
+  if (args)
+    {
+      g_printerr (_("Invalid argument: \"%s\"\n"),
+                  *args);
+      return 1;
+    }
   
   poptFreeContext (ctx);
+
+  g_assert (post_execute_args == NULL);
+
+  conf = gconf_client_get_default ();
+
+  err = NULL;  
+  gconf_client_add_dir (conf, CONF_PREFIX,
+                        GCONF_CLIENT_PRELOAD_RECURSIVE,
+                        &err);
+  if (err)
+    {
+      g_printerr (_("There was an error loading config from %s. (%s)\n"),
+                  CONF_PREFIX, err->message);
+      g_error_free (err);
+    }
   
   app = terminal_app_new ();
 
@@ -466,15 +594,20 @@ main (int argc, char **argv)
         {
           InitialTab *it = tmp2->data;
 
-          if (it->profile_is_id)
-            profile = terminal_profile_lookup (it->profile);
-          else
-            profile = terminal_profile_lookup_by_visible_name (it->profile);
+          profile = NULL;
+          if (it->profile)
+            {
+              if (it->profile_is_id)
+                profile = terminal_profile_lookup (it->profile);
+              else
+                profile = terminal_profile_lookup_by_visible_name (it->profile);
+            }
           
           if (profile == NULL)
             {
-              g_printerr (_("No such profile '%s', using default profile"),
-                          it->profile);
+              if (it->profile)
+                g_printerr (_("No such profile '%s', using default profile"),
+                            it->profile);
               profile = terminal_profile_lookup (DEFAULT_PROFILE);
             }
           
@@ -486,7 +619,8 @@ main (int argc, char **argv)
                                          profile,
                                          NULL,
                                          iw->force_menubar_state,
-                                         iw->menubar_state);
+                                         iw->menubar_state,
+                                         it->exec_argv);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -495,7 +629,8 @@ main (int argc, char **argv)
               terminal_app_new_terminal (app,
                                          profile,
                                          current_window,
-                                         FALSE, FALSE);
+                                         FALSE, FALSE,
+                                         it->exec_argv);
             }
           
           tmp2 = tmp2->next;
@@ -515,7 +650,8 @@ main (int argc, char **argv)
                                  terminal_profile_lookup (DEFAULT_PROFILE),
                                  NULL,
                                  default_window_menubar_forced,
-                                 default_window_menubar_state);
+                                 default_window_menubar_state,
+                                 NULL);
     }
   
   gtk_main ();
@@ -563,7 +699,8 @@ terminal_app_new_terminal (TerminalApp     *app,
                            TerminalProfile *profile,
                            TerminalWindow  *window,
                            gboolean         force_menubar_state,
-                           gboolean         forced_menubar_state)
+                           gboolean         forced_menubar_state,
+                           char           **override_command)
 {
   TerminalScreen *screen;
 
@@ -589,6 +726,9 @@ terminal_app_new_terminal (TerminalApp     *app,
   screen = terminal_screen_new ();
   
   terminal_screen_set_profile (screen, profile);
+
+  if (override_command)    
+    terminal_screen_set_override_command (screen, override_command);
   
   terminal_window_add_screen (window, screen);
 
@@ -1319,6 +1459,8 @@ terminal_app_get_clone_command (TerminalApp *app,
                                * per extra tab
                                */
 
+  argc += n_tabs * 2; /* one "--command foo" per tab */
+  
   argv = g_new0 (char*, argc + 1);
 
   i = 0;
@@ -1339,7 +1481,8 @@ terminal_app_get_clone_command (TerminalApp *app,
         {
           TerminalScreen *screen = tmp2->data;
           const char *profile_id;
-
+          const char **override_command;
+          
           profile_id = terminal_profile_get_name (terminal_screen_get_profile (screen));
           
           if (tmp2 == tabs)
@@ -1358,6 +1501,21 @@ terminal_app_get_clone_command (TerminalApp *app,
               argv[i] = g_strdup_printf ("--tab-with-profile-internal-id=%s",
                                          profile_id);
               ++i;
+            }
+
+          override_command = terminal_screen_get_override_command (screen);
+          if (override_command)
+            {
+              char *flattened;
+
+              argv[i] = g_strdup ("--command");
+              ++i;
+              
+              flattened = g_strjoinv (" ", (char**) override_command);
+              argv[i] = g_shell_quote (flattened);
+              ++i;
+
+              g_free (flattened);
             }
           
           tmp2 = tmp2->next;
