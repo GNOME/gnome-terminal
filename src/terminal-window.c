@@ -25,6 +25,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libzvt/libzvt.h>
+#include <libgnomeui/gnome-about.h>
 
 struct _TerminalWindowPrivate
 {
@@ -1088,6 +1089,29 @@ static void
 about_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
-  not_implemented ();
+  static GtkWidget *about;
+  gchar *authors[] = {
+    "Havoc Pennington <hp@redhat.com>",
+    NULL
+  };
+  gchar *documenters [] = {
+    NULL
+  };
+  gchar *translator_credits = _("");
 
+  if (about) {
+    gtk_window_present (GTK_WINDOW (about));
+    return;
+  }
+  
+  about = gnome_about_new (PACKAGE, VERSION,
+			  "(C) 2002 Havoc Pennington",
+			  _("This is a terminal thing that isn't finished at all.  See TODO."),
+		       	  (const char **)authors,
+			  (const char **)documenters,
+			  (const char *)translator_credits,
+			  NULL);
+  g_signal_connect (G_OBJECT (about), "destroy",
+		    G_CALLBACK (g_object_add_weak_pointer), &about);
+  gtk_widget_show (about);
 }
