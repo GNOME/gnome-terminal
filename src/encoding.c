@@ -315,6 +315,8 @@ static void
 update_active_encodings_from_string_list (GSList *strings)
 {
   GSList *tmp;
+  GHashTable *table;
+  const char *charset;
 
 #if 1
   g_slist_foreach (active_encodings, (GFunc) terminal_encoding_free,
@@ -322,18 +324,50 @@ update_active_encodings_from_string_list (GSList *strings)
   g_slist_free (active_encodings);
 #endif
   active_encodings = NULL;
+
+  table = g_hash_table_new (g_direct_hash, g_direct_equal);
   
-  tmp = strings;
-  while (tmp != NULL)
+  /* First add the local encoding. */
+  charset = encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset;
+  if (g_hash_table_lookup (table, GINT_TO_POINTER (g_quark_from_string (charset))) == NULL)
+    {
+      active_encodings = g_slist_prepend (active_encodings,
+                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_CURRENT_LOCALE]));
+      g_hash_table_insert (table,
+		           GINT_TO_POINTER (g_quark_from_string (charset)),
+		           GINT_TO_POINTER (g_quark_from_string (charset)));
+    }
+
+  /* Always ensure that UTF-8 is available. */
+  charset = encodings[TERMINAL_ENCODING_UTF_8].charset;
+  if (g_hash_table_lookup (table, GINT_TO_POINTER (g_quark_from_string (charset))) == NULL)
+    {
+      active_encodings = g_slist_prepend (active_encodings,
+                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_UTF_8]));
+      g_hash_table_insert (table,
+		           GINT_TO_POINTER (g_quark_from_string (charset)),
+		           GINT_TO_POINTER (g_quark_from_string (charset)));
+    }
+
+  for (tmp = strings; tmp != NULL; tmp = tmp->next)
     {
       const TerminalEncoding *e;
-      const char *charset = tmp->data;
+      charset = tmp->data;
       TerminalEncoding *encoding;
       
       if (strcmp (charset, "current") == 0)
         g_get_charset (&charset);
       
       e = find_encoding_by_charset (charset);
+
+      if (g_hash_table_lookup (table, GINT_TO_POINTER (g_quark_from_string (charset))) != NULL)
+        {
+	  continue;
+        }
+
+      g_hash_table_insert (table,
+		           GINT_TO_POINTER (g_quark_from_string (charset)),
+		           GINT_TO_POINTER (g_quark_from_string (charset)));
       
       if (e == NULL)
         {
@@ -353,23 +387,12 @@ update_active_encodings_from_string_list (GSList *strings)
         {
           active_encodings = g_slist_prepend (active_encodings, encoding);
         }
-      
-      tmp = tmp->next;
     }
 
   /* Put it back in order, order is significant */
   active_encodings = g_slist_reverse (active_encodings);
   
-  if (active_encodings == NULL)
-    {
-      /* Emergency fallbacks */
-      active_encodings = g_slist_prepend (active_encodings,
-                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_CURRENT_LOCALE]));
-      if (strcmp (encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset,
-                  "UTF-8") != 0)
-        active_encodings = g_slist_prepend (active_encodings,
-                                            terminal_encoding_copy (&encodings[TERMINAL_ENCODING_UTF_8]));
-    }
+  g_hash_table_destroy (table);
   
   update_active_encoding_tree_models ();
 }

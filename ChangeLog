@@ -1,3 +1,9 @@
+2003-01-09  Nalin Dahyabhai  <nsdahya1@pobox.com>
+
+	* src/encodings.c (update_active_encodings_from_string_list): filter
+	out duplicates, sort so that the current locale encoding is first and
+	UTF-8 (if not the current locale encoding) is second (Red Hat #80604).
+
 2003-01-05  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in: GTK 2.2.0 is required
