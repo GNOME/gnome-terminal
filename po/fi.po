@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm 1.9.0\n"
-"POT-Creation-Date: 2002-04-16 22:45-0400\n"
-"PO-Revision-Date: 2002-03-28 11:43+0200\n"
+"POT-Creation-Date: 2002-04-19 20:09+0300\n"
+"PO-Revision-Date: 2002-04-19 20:09+0300\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "Command line"
 msgstr "Komentorivi"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:269 src/terminal-window.c:326 src/terminal.c:561
+#: src/terminal-profile.c:269 src/terminal-window.c:501 src/terminal.c:561
 msgid "Terminal"
 msgstr "Pääte"
 
@@ -304,7 +304,7 @@ msgstr "Otsikko ja komento"
 
 #: src/gnome-terminal.glade2.h:66
 msgid "Use colors from system theme"
-msgstr ""
+msgstr "Käytä järjestelmän teeman värejä"
 
 #: src/gnome-terminal.glade2.h:67
 msgid "When command _exits:"
@@ -637,7 +637,7 @@ msgstr "Tapahtui virhe ladatessa päätteen pikanäppäintä. (%s)\n"
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "Asetusavaimen %s arvo ei ole kelvollinen. Se on \"%s\"\n"
 
-#: src/terminal-accels.c:331 src/terminal-window.c:605
+#: src/terminal-accels.c:331 src/terminal-window.c:785
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -787,15 +787,15 @@ msgstr ""
 "Ei voinut avata osoitetta \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1097 src/terminal-window.c:371
+#: src/terminal-screen.c:1097 src/terminal-window.c:554
 msgid "_New Window"
 msgstr "_Uusi ikkuna"
 
-#: src/terminal-screen.c:1104 src/terminal-window.c:375
+#: src/terminal-screen.c:1104 src/terminal-window.c:557
 msgid "New _Tab"
 msgstr "Uusi _välilehti"
 
-#: src/terminal-screen.c:1128 src/terminal-window.c:464
+#: src/terminal-screen.c:1128 src/terminal-window.c:644
 msgid "_Profile"
 msgstr "_Profiili"
 
@@ -835,32 +835,39 @@ msgstr "_Otsikko:"
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Päätteelle pudotetun pelkän tekstin muoto (%d) tai pituus (%d) oli "
+"virheellinen\n"
 
 #: src/terminal-screen.c:1633
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
+msgstr "Päätteelle pudotetun värin muoto (%d) tai pituus (%d) oli väärä\n"
 
 #: src/terminal-screen.c:1676
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Päätteelle pudotetun Mozillan URL:n muoto (%d) tai pituus (%d) oli "
+"virheellinen\n"
 
 #: src/terminal-screen.c:1725
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Päätteelle pudotetun URI-listan muoto (%d) tai pituus (%d) oli virheellinen\n"
 
 #: src/terminal-screen.c:1779
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Päätteelle pudotetun kuvatiedostonimen muoto (%d) tai pituus (%d) oli "
+"virheellinen\n"
 
 #: src/terminal-screen.c:1805
-#, fuzzy, c-format
+#, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
-msgstr "Virhe asettaessa avainta %s takaisin oletukseksi: %s\n"
+msgstr "Virhe muuntaessa URI:a \"%s\" tiedostonimeksi: %s\n"
 
 #: src/terminal-widget-zvt.c:1025
 #, c-format
@@ -869,79 +876,98 @@ msgstr "Virhe luodessa lapsiprosessia tätä päätettä varten: %s"
 
 # , c-format
 #: src/terminal-widget-zvt.c:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Could not set working directory to \"%s\": %s\n"
-msgstr "Ei voinut ladata kuvaketta \"%s\": %s\n"
+msgstr "Ei voinut asettaa työhakemistoksi \"%s\": %s\n"
 
 #: src/terminal-widget-zvt.c:1047
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Ei voinut suorittaa komentoa %s: %s\n"
 
+#: src/terminal-window.c:348
+msgid "_Default"
+msgstr "_Oletus"
+
+#: src/terminal-window.c:350
+#, c-format
+msgid "_Default (%s)"
+msgstr "_Oletus (%s)"
+
+#: src/terminal-window.c:434
+#, c-format
+msgid "_%d. %s"
+msgstr "_%d. %s"
+
+#: src/terminal-window.c:437
+#, c-format
+msgid "_%c. %s"
+msgstr "_%c. %s"
+
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:382
+#: src/terminal-window.c:562
 msgid "New _Profile..."
 msgstr "_Uusi profiili..."
 
-#: src/terminal-window.c:388
+#: src/terminal-window.c:568
 msgid "_Close Window"
 msgstr "_Sulje ikkuna"
 
-#: src/terminal-window.c:392
+#: src/terminal-window.c:572
 msgid "C_lose Tab"
 msgstr "S_ulje välilehti"
 
-#: src/terminal-window.c:421
+#: src/terminal-window.c:601
 msgid "C_urrent Profile..."
 msgstr "_Nykyinen profiili..."
 
-#: src/terminal-window.c:424
+#: src/terminal-window.c:604
 msgid "_Keybindings..."
 msgstr "_Pikanäppäimet..."
 
-#: src/terminal-window.c:427
+#: src/terminal-window.c:607
 msgid "P_rofiles..."
 msgstr "Pro_fiilit..."
 
-#: src/terminal-window.c:440
+#: src/terminal-window.c:620
 msgid "Hide Menu_bar"
 msgstr "Piilota _valikkopalkki"
 
-#: src/terminal-window.c:443
+#: src/terminal-window.c:623
 msgid "_Full Screen"
 msgstr "_Koko ruutu"
 
-#: src/terminal-window.c:467
+#: src/terminal-window.c:647
 msgid "_Set Title..."
 msgstr "_Aseta otsikko..."
 
-#: src/terminal-window.c:470
+#: src/terminal-window.c:650
 msgid "_Reset"
 msgstr "_Alusta"
 
-#: src/terminal-window.c:473
+#: src/terminal-window.c:653
 msgid "Reset and C_lear"
 msgstr "Alusta ja t_yhjennä"
 
-#: src/terminal-window.c:487
+#: src/terminal-window.c:667
 msgid "_Previous Tab"
 msgstr "_Edellinen välilehti"
 
-#: src/terminal-window.c:491
+#: src/terminal-window.c:671
 msgid "_Next Tab"
 msgstr "_Seuraava välilehti"
 
-#: src/terminal-window.c:510
+#: src/terminal-window.c:690
 msgid "_Help Contents"
 msgstr "_Ohjeen sisältö"
 
-#: src/terminal-window.c:514
+#: src/terminal-window.c:694
 msgid "_About GNOME Terminal"
 msgstr "_Gnome-pääteestä"
 
-#: src/terminal-window.c:624
+#: src/terminal-window.c:804
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -950,39 +976,39 @@ msgstr ""
 "Tapahtui virhe listautuessa huomautettavaksi pääteikkunan asetusten "
 "muutoksista. (%s)\n"
 
-#: src/terminal-window.c:1372
+#: src/terminal-window.c:1552
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: src/terminal-window.c:1374
+#: src/terminal-window.c:1554
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: src/terminal-window.c:1376
+#: src/terminal-window.c:1556
 msgid "_View"
 msgstr "_Näytä"
 
-#: src/terminal-window.c:1378
+#: src/terminal-window.c:1558
 msgid "_Terminal"
 msgstr "_Pääte"
 
-#: src/terminal-window.c:1380
+#: src/terminal-window.c:1560
 msgid "_Go"
 msgstr "_Siirry"
 
-#: src/terminal-window.c:1382
+#: src/terminal-window.c:1562
 msgid "_Help"
 msgstr "_Ohje"
 
-#: src/terminal-window.c:1498
+#: src/terminal-window.c:1678
 msgid "_Restore normal size"
 msgstr "_Palauta tavallinen koko"
 
-#: src/terminal-window.c:1502
+#: src/terminal-window.c:1682
 msgid "_Full screen"
 msgstr "_Koko ruutu"
 
-#: src/terminal-window.c:1684
+#: src/terminal-window.c:1884
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -992,15 +1018,15 @@ msgstr ""
 " (Teknisesti sanoen tarvitset ikkunointiohjelman, joka tukee "
 "_NET_WM_STATE_FULLSCREEN-ominaisuutta.)"
 
-#: src/terminal-window.c:1794
+#: src/terminal-window.c:1994
 msgid "translator_credits"
 msgstr "Suomennos: http://gnome-fi.sourceforge.net/"
 
-#: src/terminal-window.c:1807
+#: src/terminal-window.c:2007
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright © 2002 Havoc Pennington"
 
-#: src/terminal-window.c:1808
+#: src/terminal-window.c:2008
 msgid "GNOME Terminal"
 msgstr "Gnomen pääte"
 
@@ -1089,37 +1115,35 @@ msgid "GEOMETRY"
 msgstr "MITAT"
 
 #: src/terminal.c:223
-#, fuzzy
 msgid ""
 "Ask existing profterm process to open a new window, if possible. Defaults to "
 "true"
 msgstr ""
 "Pyydä olemassaolevaa profterm-prosessia avaamaan uuden ikkunan, jos "
-"mahdollista. (Tämä ei vielä toimi: http://bugzilla.gnome.org/show_bug.cgi?"
-"id=71442)"
+"mahdollista. Tämä on oletus."
 
 #: src/terminal.c:232
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
+"Älä rekisteröidy aktivointinimipalvelimeen tai käytä jo aktiivista päätettä"
 
 #: src/terminal.c:241
-#, fuzzy
 msgid "Set the terminal's title"
-msgstr "Vaihda päätteen otsikko"
+msgstr "Aseta päätteen otsikko"
 
 #: src/terminal.c:242
 msgid "TITLE"
-msgstr ""
+msgstr "OTSIKKO"
 
 #: src/terminal.c:250
 msgid "Set the terminal's working directory"
-msgstr ""
+msgstr "Aseta päätteen työhakemisto"
 
 #: src/terminal.c:251
 msgid "DIRNAME"
-msgstr ""
+msgstr "TYÖHAKEMISTO"
 
 # , c-format
 #: src/terminal.c:371
@@ -1132,16 +1156,20 @@ msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
+"Ilmeisesti gnome-terminal.server ei ole asennettu oikeaan paikkaan. "
+"Tehdastila on pois käytöstä.\n"
 
 #: src/terminal.c:458
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
+"Virhe rekisteröidessä päätettä aktivointipalveluun: tehdastila ei ole "
+"käytössä.\n"
 
 #: src/terminal.c:493
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr ""
+msgstr "Päätepalvelimen haku aktivointipalvelimelta epäonnistui.\n"
 
 #. Get rid of this option
 #: src/terminal.c:541
@@ -1151,6 +1179,9 @@ msgid ""
 "might want to create a profile with the desired setting, and use the new --"
 "window-with-profile option\n"
 msgstr ""
+"Valitsin \"%s\" ei ole enää tuettu tässä Gnome-päätteen versiossa. Halunnet "
+"luoda uuden profiilin, jossa on tämä asetus, tai käyttää uutta valitsinta --"
+"window-with-profile\n"
 
 #: src/terminal.c:670
 msgid "Option --command/-e requires specifying the command to run\n"
@@ -1206,24 +1237,21 @@ msgid "Two geometries given for one window\n"
 msgstr "Kahdet mitat annettu samalle ikkunalle\n"
 
 #: src/terminal.c:878
-#, fuzzy
 msgid "Option --title requires an argument giving the title\n"
-msgstr "Valitsin --geometry vaatii parametrin, joka määrää ikkunan mitat\n"
+msgstr "Valitsin --title vaatii parametrin, joka määrää ikkunan otsikon\n"
 
 #: src/terminal.c:886
-#, fuzzy
 msgid "Two titles given for one tab\n"
-msgstr "Kahdet mitat annettu samalle ikkunalle\n"
+msgstr "Annoit samalle välilehdelle kaksi otsikkoa\n"
 
 #: src/terminal.c:903
-#, fuzzy
 msgid "Option --working-directory requires an argument giving the directory\n"
-msgstr "Valitsin --geometry vaatii parametrin, joka määrää ikkunan mitat\n"
+msgstr ""
+"Valitsin --working-directory vaatii parametrin, joka määrää työhakemiston\n"
 
 #: src/terminal.c:911
-#, fuzzy
 msgid "Two working directories given for one tab\n"
-msgstr "Kahdet mitat annettu samalle ikkunalle\n"
+msgstr "Annoit samalle välilehdelle kaksi työhakemistoa\n"
 
 #: src/terminal.c:934
 #, c-format
