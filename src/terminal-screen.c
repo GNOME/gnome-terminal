@@ -271,46 +271,11 @@ terminal_screen_get_title (TerminalScreen *screen)
     return "";
 }
 
-static gushort xterm_red[] = { 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6868,
-                               0x2a2a, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff,
-                               0x0,    0x0 };
-
-static gushort xterm_green[] = { 0x0000, 0x0000, 0x6767, 0x6767, 0x0000, 0x0000, 0x6767, 0x6868,
-                                 0x2a2a, 0x0000, 0xffff, 0xffff, 0x0000, 0x0000, 0xffff, 0xffff,
-                                 0x0,    0x0 };
-static gushort xterm_blue[] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x6767, 0x6767, 0x6767, 0x6868,
-                                0x2a2a, 0x0000, 0x0000, 0x0000, 0xffff, 0xffff, 0xffff, 0xffff,
-                                0x0,    0x0 };
-
-static void
-set_color_scheme (ZvtTerm *term)
-{
-  GdkColor c;
-  gushort red[18],green[18],blue[18];
-  
-  memcpy (red, xterm_red, sizeof (xterm_red));
-  memcpy (green, xterm_green, sizeof (xterm_green));
-  memcpy (blue, xterm_blue, sizeof (xterm_blue));
-  
-  red   [16] = 0;
-  green [16] = 0;
-  blue  [16] = 0;
-  red   [17] = 0xffff;
-  green [17] = 0xffff;
-  blue  [17] = 0xdddd;
-  
-  zvt_term_set_color_scheme (term, red, green, blue);
-  c = term->colors [17];
-
-  gdk_window_set_background (GTK_WIDGET (term)->window, &c);
-  gtk_widget_queue_draw (GTK_WIDGET (term));
-}
-
 static void
 reread_profile (TerminalScreen *screen)
 {
   TerminalProfile *profile;
-
+  
   profile = screen->priv->profile;
 
   if (profile == NULL)
@@ -355,11 +320,60 @@ profile_changed_callback (TerminalProfile          *profile,
   reread_profile (screen);
 }
 
+
+/* FIXME temporary hack */
+static gushort xterm_red[] = { 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6767, 0x0000, 0x6868,
+                               0x2a2a, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff, 0x0000, 0xffff,
+                               0x0,    0x0 };
+
+static gushort xterm_green[] = { 0x0000, 0x0000, 0x6767, 0x6767, 0x0000, 0x0000, 0x6767, 0x6868,
+                                 0x2a2a, 0x0000, 0xffff, 0xffff, 0x0000, 0x0000, 0xffff, 0xffff,
+                                 0x0,    0x0 };
+static gushort xterm_blue[] = { 0x0000, 0x0000, 0x0000, 0x0000, 0x6767, 0x6767, 0x6767, 0x6868,
+                                0x2a2a, 0x0000, 0x0000, 0x0000, 0xffff, 0xffff, 0xffff, 0xffff,
+                                0x0,    0x0 };
+
+static void
+update_color_scheme (TerminalScreen *screen)
+{
+  GdkColor c;
+  gushort red[18],green[18],blue[18];
+  ZvtTerm *term;
+  GdkColor fg, bg;
+  
+  if (screen->priv->zvt == NULL ||
+      !GTK_WIDGET_REALIZED (screen->priv->zvt))
+    return;
+  
+  term = ZVT_TERM (screen->priv->zvt);
+  
+  memcpy (red, xterm_red, sizeof (xterm_red));
+  memcpy (green, xterm_green, sizeof (xterm_green));
+  memcpy (blue, xterm_blue, sizeof (xterm_blue));
+
+  terminal_profile_get_color_scheme (screen->priv->profile,
+                                     &fg, &bg);
+
+  /* fg is at pos 16, bg at 17, zvt should have #defines for this crap */
+  red[16] = fg.red;
+  green[16] = fg.green;
+  blue[16] = fg.blue;
+  red[17] = bg.red;
+  green[17] = bg.green;
+  blue[17] = bg.blue;
+  
+  zvt_term_set_color_scheme (term, red, green, blue);
+  c = term->colors [17];
+
+  gdk_window_set_background (GTK_WIDGET (term)->window, &c);
+  gtk_widget_queue_draw (GTK_WIDGET (term));
+}
+
 static void
 terminal_screen_update_on_realize (ZvtTerm        *term,
                                    TerminalScreen *screen)
 {
-  set_color_scheme (ZVT_TERM (screen->priv->zvt));
+  update_color_scheme (screen);
 }
 
 static void

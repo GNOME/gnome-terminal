@@ -38,6 +38,8 @@
 #define KEY_VISIBLE_NAME "visible_name"
 #define KEY_CURSOR_BLINK "cursor_blink"
 #define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
+#define KEY_FOREGROUND_COLOR "foreground_color"
+#define KEY_BACKGROUND_COLOR "background_color"
 
 struct _TerminalProfilePrivate
 {
@@ -47,12 +49,24 @@ struct _TerminalProfilePrivate
   guint notify_id;
   TerminalSettingMask locked;
   char *visible_name;
+  GdkColor foreground;
+  GdkColor background;
+  /* can't set keys when reporting a key changed,
+   * avoids a bunch of pesky signal handler blocks
+   * in profile-editor.c.
+   *
+   * As backup, we don't emit "changed" when values
+   * didn't really change.
+   */
+  int in_notification_count;
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
   guint forgotten : 1;
 };
 
 static GHashTable *profiles = NULL;
+
+#define RETURN_IF_NOTIFYING(profile) if ((profile)->priv->in_notification_count) return
 
 enum {
   CHANGED,
@@ -69,6 +83,8 @@ static void profile_change_notify        (GConfClient *client,
                                           GConfEntry  *entry,
                                           gpointer     user_data);
 
+static void emit_changed (TerminalProfile    *profile,
+                          TerminalSettingMask mask);
 
 
 static gpointer parent_class;
@@ -112,6 +128,13 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->cursor_blink = FALSE;
   profile->priv->default_show_menubar = TRUE;
   profile->priv->visible_name = g_strdup ("");
+  profile->priv->foreground.red = 0;
+  profile->priv->foreground.green = 0;
+  profile->priv->foreground.blue = 0;
+  profile->priv->background.red = 0xFFFF;
+  profile->priv->background.green = 0xFFFF;
+  profile->priv->background.blue = 0xDDDD;
+  profile->priv->in_notification_count = 0;
 }
 
 static void
@@ -224,6 +247,25 @@ terminal_profile_get_visible_name (TerminalProfile *profile)
     return profile->priv->visible_name;
 }
 
+void
+terminal_profile_set_visible_name (TerminalProfile *profile,
+                                   const char      *name)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_VISIBLE_NAME);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           name,
+                           NULL);
+
+  g_free (key);
+}
+
 gboolean
 terminal_profile_get_forgotten (TerminalProfile *profile)
 {
@@ -246,6 +288,8 @@ terminal_profile_set_cursor_blink (TerminalProfile *profile,
                                    gboolean         setting)
 {
   char *key;
+
+  RETURN_IF_NOTIFYING (profile);
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_CURSOR_BLINK);
@@ -254,23 +298,6 @@ terminal_profile_set_cursor_blink (TerminalProfile *profile,
                          key,
                          setting,
                          NULL);
-
-  g_free (key);
-}
-
-void
-terminal_profile_set_visible_name (TerminalProfile *profile,
-                                   const char      *name)
-{
-  char *key;
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_VISIBLE_NAME);
-  
-  gconf_client_set_string (profile->priv->conf,
-                           key,
-                           name,
-                           NULL);
 
   g_free (key);
 }
@@ -319,12 +346,73 @@ gboolean
 terminal_profile_get_update_records     (TerminalProfile  *profile)
 {
 }
+
 void
-terminal_profile_get_color_scheme       (TerminalProfile  *profile,
-                                         GdkColor         *foreground,
-                                         GdkColor         *background)
+terminal_profile_get_color_scheme (TerminalProfile  *profile,
+                                   GdkColor         *foreground,
+                                   GdkColor         *background)
 {
+  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
+  
+  if (foreground)
+    *foreground = profile->priv->foreground;
+  if (background)
+    *background = profile->priv->background;
 }
+
+static char*
+color_to_string (const GdkColor *color)
+{
+  char *s;
+  char *ptr;
+  
+  s = g_strdup_printf ("#%2X%2X%2X",
+                       color->red / 256,
+                       color->green / 256,
+                       color->blue / 256);
+  
+  for (ptr = s; *ptr; ptr++)
+    if (*ptr == ' ')
+      *ptr = '0';
+
+  return s;
+}
+
+void
+terminal_profile_set_color_scheme (TerminalProfile  *profile,
+                                   const GdkColor   *foreground,
+                                   const GdkColor   *background)
+{
+  char *fg_key;
+  char *bg_key;
+  char *str;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  fg_key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                     KEY_FOREGROUND_COLOR);
+
+  bg_key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                     KEY_BACKGROUND_COLOR);
+
+  str = color_to_string (foreground);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           fg_key, str, NULL);
+
+  g_free (str);
+
+  str = color_to_string (background);
+
+  gconf_client_set_string (profile->priv->conf,
+                           bg_key, str, NULL);
+
+  g_free (str);
+  
+  g_free (fg_key);
+  g_free (bg_key);
+}
+
 void
 terminal_profile_get_palette            (TerminalProfile  *profile,
                                          GdkColor        **colors,
@@ -378,6 +466,8 @@ terminal_profile_set_default_show_menubar (TerminalProfile *profile,
                                            gboolean         setting)
 {
   char *key;
+
+  RETURN_IF_NOTIFYING (profile);
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_DEFAULT_SHOW_MENUBAR);
@@ -398,31 +488,62 @@ set_visible_name (TerminalProfile *profile,
       strcmp (profile->priv->visible_name, candidate_name) == 0)
     return FALSE;
   
-  g_free (profile->priv->visible_name);
-  
-  if (candidate_name == NULL)
+  if (candidate_name != NULL)
     {
-      profile->priv->visible_name = g_strdup ("");
+      g_free (profile->priv->visible_name);
+      profile->priv->visible_name = g_strdup (candidate_name);
+    }
+  /* otherwise just leave the old name */
+
+  return TRUE;
+}
+
+static gboolean
+set_foreground_color (TerminalProfile *profile,
+                      const char      *str_val)
+{
+  GdkColor color;
+  
+  if (str_val && gdk_color_parse (str_val, &color) &&
+      !gdk_color_equal (&color, &profile->priv->foreground))
+    {
+      profile->priv->foreground = color;
+      return TRUE;
     }
   else
     {
-      profile->priv->visible_name = g_strdup (candidate_name);
+      return FALSE;
     }
+}
 
-  return TRUE;
+static gboolean
+set_background_color (TerminalProfile *profile,
+                      const char      *str_val)
+{
+  GdkColor color;
+  
+  if (str_val && gdk_color_parse (str_val, &color) &&
+      !gdk_color_equal (&color, &profile->priv->background))
+    {
+      profile->priv->background = color;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
 }
 
 void
 terminal_profile_update (TerminalProfile *profile)
 {
   char *key;
-  gboolean changed;
   gboolean bool_val;
   char *str_val;
   TerminalSettingMask mask;
   TerminalSettingMask locked;
   TerminalSettingMask old_locked;
-
+  
   mask = 0;
   locked = 0;
 
@@ -477,11 +598,45 @@ terminal_profile_update (TerminalProfile *profile)
   
   g_free (key);
 
+  /* KEY_FOREGROUND_COLOR */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_FOREGROUND_COLOR);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_foreground_color (profile, str_val))
+    mask |= TERMINAL_SETTING_FOREGROUND_COLOR;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_FOREGROUND_COLOR;
+  
+  g_free (key);
+
+
+  /* KEY_BACKGROUND_COLOR */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_COLOR);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_background_color (profile, str_val))
+    mask |= TERMINAL_SETTING_BACKGROUND_COLOR;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_BACKGROUND_COLOR;
+  
+  g_free (key);
+
+  
+  /* Update state and emit signals */
+  
   old_locked = profile->priv->locked;
   profile->priv->locked = locked;
   
   if (mask != 0 || locked != old_locked)
-    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);
+    emit_changed (profile, mask);
 }
 
 
@@ -506,7 +661,6 @@ profile_change_notify (GConfClient *client,
   TerminalProfile *profile;
   const char *key;
   GConfValue *val;
-  gboolean changed;
   TerminalSettingMask mask;  
   TerminalSettingMask old_locked;
   
@@ -574,9 +728,35 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_VISIBLE_NAME);
     }
+  else if (strcmp (key, KEY_FOREGROUND_COLOR) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_foreground_color (profile, str_val))
+        mask |= TERMINAL_SETTING_FOREGROUND_COLOR;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_FOREGROUND_COLOR);
+    }
+  else if (strcmp (key, KEY_BACKGROUND_COLOR) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_background_color (profile, str_val))
+        mask |= TERMINAL_SETTING_BACKGROUND_COLOR;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_COLOR);
+    }
   
   if (mask != 0 || old_locked != profile->priv->locked)
-    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);
+    emit_changed (profile, mask);
 }
 
 static void
@@ -672,7 +852,10 @@ terminal_profile_forget (TerminalProfile *profile)
 TerminalSettingMask
 terminal_profile_get_locked_settings (TerminalProfile *profile)
 {
-  return profile->priv->locked;
+  if (strcmp (profile->priv->name, DEFAULT_PROFILE) == 0)
+    return profile->priv->locked | TERMINAL_SETTING_VISIBLE_NAME;
+  else
+    return profile->priv->locked;
 }
 
 void
@@ -683,6 +866,15 @@ terminal_profile_setup_default (GConfClient *conf)
   profile = terminal_profile_new (DEFAULT_PROFILE, conf);
 
   terminal_profile_update (profile);
+}
+
+static void
+emit_changed (TerminalProfile    *profile,
+              TerminalSettingMask mask)
+{
+  profile->priv->in_notification_count += 1;
+  g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);  
+  profile->priv->in_notification_count -= 1;
 }
 
 /* Function I'm cut-and-pasting everywhere, this is from msm */
@@ -814,6 +1006,28 @@ terminal_profile_create (TerminalProfile *base_profile,
                          key,
                          base_profile->priv->default_show_menubar,
                          &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_FOREGROUND_COLOR);
+  s = color_to_string (&base_profile->priv->foreground);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, s,                           
+                           &err);
+  g_free (s);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_BACKGROUND_COLOR);
+  s = color_to_string (&base_profile->priv->background);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, s,                           
+                           &err);
+  g_free (s);
 
   BAIL_OUT_CHECK ();
   
