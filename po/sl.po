@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-04-23 12:09+0200\n"
+"POT-Creation-Date: 2002-04-25 15:21-0400\n"
 "PO-Revision-Date: 2001-07-29 12:32+0200\n"
 "Last-Translator: Andraz Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Ukazna vrstica"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:269 src/terminal-window.c:502 src/terminal.c:561
+#: src/terminal-profile.c:272 src/terminal-window.c:503 src/terminal.c:561
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -386,39 +386,39 @@ msgstr "_vrstice"
 msgid "kilobytes"
 msgstr "kilobajti"
 
-#: src/profile-editor.c:44
+#: src/profile-editor.c:45
 msgid "Black on light yellow"
 msgstr "Črno na svetlo rumenem"
 
-#: src/profile-editor.c:46
+#: src/profile-editor.c:47
 msgid "White on black"
 msgstr "Belo na črnem"
 
-#: src/profile-editor.c:48
+#: src/profile-editor.c:49
 msgid "Black on white"
 msgstr "Črno na belem"
 
-#: src/profile-editor.c:50
+#: src/profile-editor.c:51
 msgid "Green on black"
 msgstr "Zeleno na črnem"
 
-#: src/profile-editor.c:63
+#: src/profile-editor.c:64
 msgid "Linux console"
 msgstr "Linux konzola"
 
-#: src/profile-editor.c:64
+#: src/profile-editor.c:65
 msgid "XTerm"
 msgstr "XTerm"
 
-#: src/profile-editor.c:65
+#: src/profile-editor.c:66
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: src/profile-editor.c:729 src/profile-editor.c:759
+#: src/profile-editor.c:799 src/profile-editor.c:829
 msgid "Custom"
 msgstr "Prikrojeno"
 
-#: src/profile-editor.c:812
+#: src/profile-editor.c:882
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -427,7 +427,12 @@ msgstr ""
 "Datoteka \"%s\" manjka. To kaže, da je program nameščen nepravilno, zato "
 "urejevalnik profilov ne more biti prikazan."
 
-#: src/profile-editor.c:1327
+#: src/profile-editor.c:1179
+#, fuzzy
+msgid "Choose a terminal font"
+msgstr "Izberi pisavo"
+
+#: src/profile-editor.c:1420
 #, c-format
 msgid "Editing profile \"%s\""
 msgstr "Urejam profil \"%s\""
@@ -617,7 +622,7 @@ msgstr "Pogled"
 msgid "Go"
 msgstr "Pojdi"
 
-#: src/terminal-accels.c:237 src/terminal-profile.c:378 src/terminal.c:961
+#: src/terminal-accels.c:237 src/terminal-profile.c:388 src/terminal.c:974
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Ob nalaganju nastavitev iz %s se je zgodila napaka. (%s)\n"
@@ -642,7 +647,7 @@ msgstr ""
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "Vrednost nastavitvenega ključa %s ni veljavna; vrednost je \"%s\"\n"
 
-#: src/terminal-accels.c:331 src/terminal-window.c:786
+#: src/terminal-accels.c:331 src/terminal-window.c:788
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -692,7 +697,7 @@ msgstr "_Dejanje"
 msgid "Accelerator _Key"
 msgstr "_Pospeševalna tipka"
 
-#: src/terminal-profile.c:393
+#: src/terminal-profile.c:403
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
@@ -701,50 +706,58 @@ msgstr ""
 "Ob prijavljanju na obvestila o spremembah profila terminala se je zgodila "
 "napaka. (%s)\n"
 
-#: src/terminal-profile.c:988
+#: src/terminal-profile.c:998
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
 msgstr "Nisem mogel najti ikone z imenom \"%s\" za profil terminala \"%s\"\n"
 
-#: src/terminal-profile.c:1002
+#: src/terminal-profile.c:1012
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "Nisem uspel naložiti ikone \"%s\" za profil terminala \"%s\": %s\n"
 
-#: src/terminal-profile.c:1177
+#: src/terminal-profile.c:1187
 #, c-format
 msgid ""
 "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
 msgstr "Nisem našel slike ozadja imenovane \"%s\" za profil terminala \"%s\"\n"
 
-#: src/terminal-profile.c:1191
+#: src/terminal-profile.c:1201
 #, c-format
 msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
 "Nisem uspel naložiti slike ozadja \"%s\" za profil terminala \"%s\": %s\n"
 
-#: src/terminal-profile.c:2782
+#: src/terminal-profile.c:1828
+#, fuzzy, c-format
+msgid ""
+"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+msgstr ""
+"Napaka ob nastavljanju novega pospeševalnika v zbirki nastavitvenih "
+"podatkov: %s\n"
+
+#: src/terminal-profile.c:2894
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Napaka ob pridobivanju privzete vrednosti za %s: %s\n"
 
-#: src/terminal-profile.c:2788
+#: src/terminal-profile.c:2900
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Za %s ni bilo privzete vrednosti\n"
 
-#: src/terminal-profile.c:2803
+#: src/terminal-profile.c:2915
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Napaka ob nastavljanju tipke %s nazaj na privzeto: %s\n"
 
-#: src/terminal-profile.c:2996
+#: src/terminal-profile.c:3108
 #, c-format
 msgid "There was an error forgetting profile dir %s. (%s)\n"
 msgstr "Ob pozabljanju imenika profila %s se je zgodila napaka. (%s)\n"
 
-#: src/terminal-profile.c:3053
+#: src/terminal-profile.c:3165
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -753,40 +766,40 @@ msgstr ""
 "Ob prijavljanju na obvestila o spremembah privzetega profila se je zgodila "
 "napaka. (%s)\n"
 
-#: src/terminal-profile.c:3098
+#: src/terminal-profile.c:3210
 msgid "_Details"
 msgstr "_Podrobnosti"
 
-#: src/terminal-profile.c:3522
+#: src/terminal-profile.c:3645
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Ob ustvarjanju profila \"%s\" se je zgodila napaka"
 
-#: src/terminal-profile.c:3602
+#: src/terminal-profile.c:3725
 msgid "There was an error deleting the profiles"
 msgstr "Ob brisanju profilov se je zgodila napaka"
 
-#: src/terminal-profile.c:3668
+#: src/terminal-profile.c:3791
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Nisem mogel razčleniti niza \"%s\" kot barvo s palete\n"
 
-#: src/terminal-profile.c:3677
+#: src/terminal-profile.c:3800
 #, c-format
 msgid "Palette had %d entries instead of %d\n"
 msgstr "Paleta je imela %d vnosov namesto %d\n"
 
-#: src/terminal-screen.c:507
+#: src/terminal-screen.c:523
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Nisem mogel naložiti pisave \"%s\"\n"
 
-#: src/terminal-screen.c:663
+#: src/terminal-screen.c:680
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Ukaz za ta terminal je povzročil napako: %s"
 
-#: src/terminal-screen.c:976
+#: src/terminal-screen.c:993
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -795,77 +808,83 @@ msgstr ""
 "Nisem mogel odpreti naslova \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1097 src/terminal-window.c:555
+#: src/terminal-screen.c:1114 src/terminal-window.c:557
 msgid "_New Window"
 msgstr "_Novo okno"
 
-#: src/terminal-screen.c:1104 src/terminal-window.c:558
+#: src/terminal-screen.c:1121 src/terminal-window.c:560
 msgid "New _Tab"
 msgstr "Nov u_helj"
 
-#: src/terminal-screen.c:1128 src/terminal-window.c:645
+#: src/terminal-screen.c:1145 src/terminal-window.c:647
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1178
+#: src/terminal-screen.c:1195
 msgid "_Edit Current Profile..."
 msgstr "_Uredi trenutni profil..."
 
-#: src/terminal-screen.c:1185
+#: src/terminal-screen.c:1202
 msgid "Hide _Menubar"
 msgstr "Skrij vrstico _menujev"
 
-#: src/terminal-screen.c:1190
+#: src/terminal-screen.c:1207
 msgid "Show _Menubar"
 msgstr "Kaži menujsko vrstico"
 
-#: src/terminal-screen.c:1199
+#: src/terminal-screen.c:1216
 msgid "Secure _Keyboard"
 msgstr "Varna _tipkovnica"
 
-#: src/terminal-screen.c:1205
+#: src/terminal-screen.c:1222
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
-#: src/terminal-screen.c:1212
+#: src/terminal-screen.c:1229
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: src/terminal-screen.c:1465
+#: src/terminal-screen.c:1482
 msgid "Change terminal title"
 msgstr "Spremeni naziv terminala"
 
-#: src/terminal-screen.c:1492
+#: src/terminal-screen.c:1509
 msgid "_Title:"
 msgstr "_Naziv:"
 
-#: src/terminal-screen.c:1611
+#: src/terminal-screen.c:1628
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr "text/plain (besedilo), ki je bilo spuščeno v terminal je imelo napačno obliko (%d) ali dolžino (%d)\n"
+msgstr ""
+"text/plain (besedilo), ki je bilo spuščeno v terminal je imelo napačno "
+"obliko (%d) ali dolžino (%d)\n"
 
-#: src/terminal-screen.c:1634
+#: src/terminal-screen.c:1651
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr "Barva spuščena na terminal je imela napačno obliko (%d) ali dolžino (%d)\n"
+msgstr ""
+"Barva spuščena na terminal je imela napačno obliko (%d) ali dolžino (%d)\n"
 
-#: src/terminal-screen.c:1677
+#: src/terminal-screen.c:1694
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URL spuščen na terminal je imel napačno obliko (%d) ali dolžino (%d)\n"
 
-#: src/terminal-screen.c:1726
+#: src/terminal-screen.c:1743
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI spuščen na terminal je imel napačno obliko (%d) ali dolžino (%d)\n"
 
-#: src/terminal-screen.c:1780
+#: src/terminal-screen.c:1797
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr "Ime slikovne datoteke spuščeno na terminal je imelo napačno obliko (%d) ali dolžino (%d)\n"
+msgstr ""
+"Ime slikovne datoteke spuščeno na terminal je imelo napačno obliko (%d) ali "
+"dolžino (%d)\n"
 
-#: src/terminal-screen.c:1806
+#: src/terminal-screen.c:1823
+#, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Napaka ob pretvarjanju URIja \"%s\" v ime datoteke: %s\n"
 
@@ -876,6 +895,7 @@ msgstr ""
 "Ob ustvarjanju otroških procesov tega terminala se je zgodila napaka: %s"
 
 #: src/terminal-widget-zvt.c:1041
+#, c-format
 msgid "Could not set working directory to \"%s\": %s\n"
 msgstr "Nisem mogel nastaviti delovnega imenika na \"%s\": %s\n"
 
@@ -884,21 +904,21 @@ msgstr "Nisem mogel nastaviti delovnega imenika na \"%s\": %s\n"
 msgid "Could not execute command %s: %s\n"
 msgstr "Nisem mogel izvesti ukaza %s: %s\n"
 
-#: src/terminal-window.c:349
+#: src/terminal-window.c:350
 msgid "_Default"
 msgstr "_Privzeto"
 
-#: src/terminal-window.c:351
+#: src/terminal-window.c:352
 #, c-format
 msgid "_Default (%s)"
 msgstr "_Privzeto (%s)"
 
-#: src/terminal-window.c:435
+#: src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: src/terminal-window.c:438
+#: src/terminal-window.c:439
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
@@ -906,67 +926,67 @@ msgstr "_%c. %s"
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:563
+#: src/terminal-window.c:565
 msgid "New _Profile..."
 msgstr "_Nov profil..."
 
-#: src/terminal-window.c:569
+#: src/terminal-window.c:571
 msgid "_Close Window"
 msgstr "_Zapri okno"
 
-#: src/terminal-window.c:573
+#: src/terminal-window.c:575
 msgid "C_lose Tab"
 msgstr "Zapri _uhelj"
 
-#: src/terminal-window.c:602
+#: src/terminal-window.c:604
 msgid "C_urrent Profile..."
 msgstr "T_renutni profil..."
 
-#: src/terminal-window.c:605
+#: src/terminal-window.c:607
 msgid "_Keybindings..."
 msgstr "_Tipkovnične povezave..."
 
-#: src/terminal-window.c:608
+#: src/terminal-window.c:610
 msgid "P_rofiles..."
 msgstr "P_rofili..."
 
-#: src/terminal-window.c:621
+#: src/terminal-window.c:623
 msgid "Hide Menu_bar"
 msgstr "Skrij _menujsko vrstico"
 
-#: src/terminal-window.c:624
+#: src/terminal-window.c:626
 msgid "_Full Screen"
 msgstr "Če_z cel zaslon"
 
-#: src/terminal-window.c:648
+#: src/terminal-window.c:650
 msgid "_Set Title..."
 msgstr "_Nastavi naziv..."
 
-#: src/terminal-window.c:651
+#: src/terminal-window.c:653
 msgid "_Reset"
 msgstr "_Ponastavi"
 
-#: src/terminal-window.c:654
+#: src/terminal-window.c:656
 msgid "Reset and C_lear"
 msgstr "Ponastavi in _zbriši"
 
-#: src/terminal-window.c:668
+#: src/terminal-window.c:670
 msgid "_Previous Tab"
 msgstr "_Prejšnji uhelj"
 
-#: src/terminal-window.c:672
+#: src/terminal-window.c:674
 msgid "_Next Tab"
 msgstr "_Naslednji uhelj"
 
-#: src/terminal-window.c:691
+#: src/terminal-window.c:693
 msgid "_Help Contents"
 msgstr "Vsebina _pomoči"
 
-#: src/terminal-window.c:695
+#: src/terminal-window.c:697
 msgid "_About GNOME Terminal"
 msgstr "_O Terminalu GNOME"
 
-#: src/terminal-window.c:805
+#: src/terminal-window.c:807
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -975,39 +995,39 @@ msgstr ""
 "Ob prijavljanju na obvestila o spremembah nastavitev terminalnega okna se je "
 "zgodila napaka. (%s)\n"
 
-#: src/terminal-window.c:1583
+#: src/terminal-window.c:1587
 msgid "_File"
 msgstr "_Datoteka"
 
-#: src/terminal-window.c:1585
+#: src/terminal-window.c:1589
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: src/terminal-window.c:1587
+#: src/terminal-window.c:1591
 msgid "_View"
 msgstr "Po_gled"
 
-#: src/terminal-window.c:1589
+#: src/terminal-window.c:1593
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: src/terminal-window.c:1591
+#: src/terminal-window.c:1595
 msgid "_Go"
 msgstr "_Pojdi"
 
-#: src/terminal-window.c:1593
+#: src/terminal-window.c:1597
 msgid "_Help"
 msgstr "_Pomoč"
 
-#: src/terminal-window.c:1709
+#: src/terminal-window.c:1713
 msgid "_Restore normal size"
 msgstr "_Povrni običajno velikost"
 
-#: src/terminal-window.c:1713
+#: src/terminal-window.c:1717
 msgid "_Full screen"
 msgstr "če_z cel zaslon"
 
-#: src/terminal-window.c:1896
+#: src/terminal-window.c:1900
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1017,19 +1037,20 @@ msgstr ""
 " (v tehničnem smislu to pomeni, da potrebujete upravljalnik oken, ki podpira "
 "lastnost _NET_WM_STATE_FULLSCREEN.)"
 
-#: src/terminal-window.c:2000
+#: src/terminal-window.c:2004
+#, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Ob prikazu pomoči se je zgodila napaka: %s"
 
-#: src/terminal-window.c:2030
+#: src/terminal-window.c:2034
 msgid "translator_credits"
 msgstr "Prevedel: Andraž Tori"
 
-#: src/terminal-window.c:2043
+#: src/terminal-window.c:2047
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Avtorske pravice pridržane 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2044
+#: src/terminal-window.c:2048
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
 
@@ -1129,7 +1150,8 @@ msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
-"Ne registriraj se pri aktivacijskem imenskem strežniku, ne recikliraj aktivnega terminala"
+"Ne registriraj se pri aktivacijskem imenskem strežniku, ne recikliraj "
+"aktivnega terminala"
 
 #: src/terminal.c:241
 msgid "Set the terminal's title"
@@ -1148,6 +1170,7 @@ msgid "DIRNAME"
 msgstr "IMEIMENIKA"
 
 #: src/terminal.c:371
+#, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Nisem mogel naložiti ikone \"%s\": %s\n"
 
@@ -1156,19 +1179,21 @@ msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
-"Zdi se, da datoteke gnome-terminal.server nimate nameščene na veljavni lokaciji. "
-"Tovarniški način izključen.\n"
+"Zdi se, da datoteke gnome-terminal.server nimate nameščene na veljavni "
+"lokaciji. Tovarniški način izključen.\n"
 
 #: src/terminal.c:458
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
-"Napaka ob registraciji terminala pri aktivacijski storitvi; tovarniški način izključen.\n"
+"Napaka ob registraciji terminala pri aktivacijski storitvi; tovarniški način "
+"izključen.\n"
 
 #: src/terminal.c:493
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "Nisem uspel dobiti terminalskega strežnika od aktivacijskega strežnika\n"
+msgstr ""
+"Nisem uspel dobiti terminalskega strežnika od aktivacijskega strežnika\n"
 
 #. Get rid of this option
 #: src/terminal.c:541
@@ -1179,26 +1204,26 @@ msgid ""
 "window-with-profile option\n"
 msgstr ""
 "Možnost \"%s\" v tej različici gnome-terminal ni več podprta; morda boste "
-"želeli ustvariti profil z želeno nastavitvijo in uporabiti novo možnost "
-"--window-with-profile\n"
+"želeli ustvariti profil z želeno nastavitvijo in uporabiti novo možnost --"
+"window-with-profile\n"
 
-#: src/terminal.c:670
+#: src/terminal.c:683
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Možnost --command/-e zahteva navedbo ukaza za zagon\n"
 
-#: src/terminal.c:678
+#: src/terminal.c:691
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Argument za --command/-e ni veljaven ukaz: %s\n"
 
-#: src/terminal.c:688 src/terminal.c:710
+#: src/terminal.c:701 src/terminal.c:723
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
 msgstr ""
 "--command/-e/--execute/-x naveden več kot enkrat za enako okno ali uhelj\n"
 
-#: src/terminal.c:702
+#: src/terminal.c:715
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1206,7 +1231,7 @@ msgstr ""
 "Možnost --execute/-x zahteva navedbo ukaza, ki naj se požene na preostanku "
 "ukazne vrstice\n"
 
-#: src/terminal.c:729
+#: src/terminal.c:742
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1214,7 +1239,7 @@ msgstr ""
 "Možnost --window-with-profile zahteva argument, ki navaja kater profil naj "
 "se uporabi\n"
 
-#: src/terminal.c:750
+#: src/terminal.c:763
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1222,35 +1247,35 @@ msgstr ""
 "Možnost --tab-with-profile zahteva argument, ki navaja kater profil naj se "
 "uporabi\n"
 
-#: src/terminal.c:780 src/terminal.c:806
+#: src/terminal.c:793 src/terminal.c:819
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Možnost --show-menubar je za isto okno podana dvakrat\n"
 
-#: src/terminal.c:831
+#: src/terminal.c:844
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Možnost --geometry zahteva argument, ki podaja geometrijo\n"
 
-#: src/terminal.c:840 src/terminal.c:850
+#: src/terminal.c:853 src/terminal.c:863
 msgid "Two geometries given for one window\n"
 msgstr "Dani sta dve geometriji za eno okno\n"
 
-#: src/terminal.c:878
+#: src/terminal.c:891
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Možnost --title zahteva argument, ki podaja naziv\n"
 
-#: src/terminal.c:886
+#: src/terminal.c:899
 msgid "Two titles given for one tab\n"
 msgstr "Dana sta dva naziva za en uhelj\n"
 
-#: src/terminal.c:903
+#: src/terminal.c:916
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "Možnost --working-directory zahteva argument, ki podaja imenik\n"
 
-#: src/terminal.c:911
+#: src/terminal.c:924
 msgid "Two working directories given for one tab\n"
 msgstr "Dana sta bila dva delovna imenika za en uhelj\n"
 
-#: src/terminal.c:934
+#: src/terminal.c:947
 #, c-format
 msgid ""
 "Error on option %s: %s.\n"
@@ -1260,12 +1285,12 @@ msgstr ""
 "Poženite '%s --help', če želite videti popoln seznam možnosti ukazne "
 "vrstice.\n"
 
-#: src/terminal.c:944
+#: src/terminal.c:957
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Neveljaven argument: \"%s\"\n"
 
-#: src/terminal.c:977
+#: src/terminal.c:990
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1274,12 +1299,12 @@ msgstr ""
 "Ob prijavljanju na obvestila o spremembah seznama profilov terminala se je "
 "zgodila napaka. (%s)\n"
 
-#: src/terminal.c:1022
+#: src/terminal.c:1035
 #, c-format
 msgid "No such profile '%s', using default profile"
 msgstr "Tak profil ne obstaja '%s', uporabljam privzetega"
 
-#: src/terminal.c:1084
+#: src/terminal.c:1097
 msgid ""
 "--geometry given prior to options that create a new window, must be given "
 "after\n"
@@ -1287,122 +1312,122 @@ msgstr ""
 "Možnost --geometry je bila podana pred možnostmi, ki ustvarijo okno; podana "
 "mora biti kasneje\n"
 
-#: src/terminal.c:1172
+#: src/terminal.c:1185
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Neveljaven niz geometrije \"%s\"\n"
 
-#: src/terminal.c:1227
+#: src/terminal.c:1240
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Ob dobivanju seznama profilov terminala se je zgodila napaka. (%s)\n"
 
-#: src/terminal.c:1449
+#: src/terminal.c:1462
 msgid "You have to name your profile."
 msgstr "Svoj profil morate poimenovati."
 
-#: src/terminal.c:1459
+#: src/terminal.c:1472
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Profil imenovan \"%s\" že imate"
 
-#: src/terminal.c:1496
+#: src/terminal.c:1509
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Profil, ki ste ga izbrali za osnovo svojemu novemu profilu, ne obstaja več"
 
-#: src/terminal.c:1555
+#: src/terminal.c:1568
 msgid "New terminal profile"
 msgstr "Nov profil terminala"
 
-#: src/terminal.c:1560
+#: src/terminal.c:1573
 msgid "C_reate"
 msgstr "_Ustvari"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1598
 msgid "Profile _Name:"
 msgstr "I_me profila:"
 
-#: src/terminal.c:1589
+#: src/terminal.c:1602
 msgid "Enter profile name"
 msgstr "Vpišite ime profila"
 
-#: src/terminal.c:1604
+#: src/terminal.c:1617
 msgid "_Base new profile on:"
 msgstr "Nov profil naj _temelji na:"
 
-#: src/terminal.c:1752
+#: src/terminal.c:1765
 msgid "Profile list"
 msgstr "Seznam profilov"
 
-#: src/terminal.c:1825
+#: src/terminal.c:1838
 msgid "You must select one or more profiles to delete."
 msgstr "Izbrati morate enega ali več profilov za izbris."
 
-#: src/terminal.c:1848
+#: src/terminal.c:1861
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Imeti morate vsaj en profil; ne morete zbrisati vseh."
 
-#: src/terminal.c:1866
+#: src/terminal.c:1879
 msgid "Delete these two profiles?\n"
 msgstr "Zbriši ta dva profila?\n"
 
-#: src/terminal.c:1868
+#: src/terminal.c:1881
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Zbriši teh %d profilov?\n"
 
-#: src/terminal.c:1886
+#: src/terminal.c:1899
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Zbriši profil \"%s\"?"
 
-#: src/terminal.c:1900
+#: src/terminal.c:1913
 msgid "_No"
 msgstr "_Ne"
 
-#: src/terminal.c:1902
+#: src/terminal.c:1915
 msgid "_Delete"
 msgstr "_Zbriši"
 
-#: src/terminal.c:2087
+#: src/terminal.c:2100
 msgid "Manage terminal profiles"
 msgstr "Upravljal s profili terminala"
 
-#: src/terminal.c:2120
+#: src/terminal.c:2133
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profil, ki naj se _uporabi ob zagonu novega terminala:"
 
-#: src/terminal.c:2142
+#: src/terminal.c:2155
 msgid "_Profiles:"
 msgstr "_Profili:"
 
-#: src/terminal.c:2183
+#: src/terminal.c:2196
 msgid "_New..."
 msgstr "_Nov..."
 
-#: src/terminal.c:2191
+#: src/terminal.c:2204
 msgid "Click to open new profile dialog"
 msgstr "Kliknite za odprtje dialoga novega profila"
 
-#: src/terminal.c:2194
+#: src/terminal.c:2207
 msgid "_Edit..."
 msgstr "_Uredi..."
 
-#: src/terminal.c:2202
+#: src/terminal.c:2215
 msgid "Click to open edit profile dialog"
 msgstr "Kliknite za odprtje dialoga urejanja profila"
 
-#: src/terminal.c:2204
+#: src/terminal.c:2217
 msgid "_Delete..."
 msgstr "_Zbriši..."
 
-#: src/terminal.c:2212
+#: src/terminal.c:2225
 msgid "Click to delete selected profile"
 msgstr "Kliknite za zbris izbranega profila"
 
-#: src/terminal.c:2261
+#: src/terminal.c:2274
 msgid "Click button to choose profile"
 msgstr "Kliknite gumb za izbiro profila"
 
@@ -1606,9 +1631,6 @@ msgstr "Izberi pisavo"
 
 #~ msgid "fixed"
 #~ msgstr "nespremenljivo"
-
-#~ msgid "Choose a font"
-#~ msgstr "Izberi pisavo"
 
 #~ msgid "_Family:"
 #~ msgstr "_Družina:"
