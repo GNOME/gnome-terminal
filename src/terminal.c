@@ -25,6 +25,7 @@
 #include "terminal.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
+#include "terminal-widget.h"
 #include "profile-editor.h"
 #include "encoding.h"
 #include <gconf/gconf-client.h>
@@ -3198,6 +3199,8 @@ terminal_app_get_clone_command (TerminalApp *app,
 
   argc += n_tabs * 2; /* one "--zoom" per tab */
   
+  argc += 2; /* one "--geometry" per active tab */
+  
   argv = g_new0 (char*, argc + 1);
 
   i = 0;
@@ -3256,7 +3259,15 @@ terminal_app_get_clone_command (TerminalApp *app,
 
           if (screen == active_screen)
             {
+              int w, h;
+
+              /* FIXME saving the geometry is not great :-/ */
               argv[i] = g_strdup ("--active");
+              ++i;
+              argv[i] = g_strdup ("--geometry");
+              ++i;
+              terminal_widget_get_size (terminal_screen_get_widget (screen), &w, &h);
+              argv[i] = g_strdup_printf ("%dx%d", w, h);
               ++i;
             }
 
