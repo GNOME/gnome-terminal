@@ -281,9 +281,10 @@ egg_xfont_selector_class_init (EggXFontSelectorClass *class)
 static void
 egg_xfont_selector_init (EggXFontSelector *selector)
 {
-  GtkWidget *family_label, *size_label, *hbox1, *hbox2;
-  int prop;
-
+  GtkWidget *size_label;
+  GtkWidget *table;
+  int prop;  
+  
   /* Initialize the EggXFontSelection struct. We do this here in case any
    * callbacks are triggered while creating the interface.
    */
@@ -312,39 +313,69 @@ egg_xfont_selector_init (EggXFontSelector *selector)
     selector->property_values[prop] = 0;
 
   gtk_widget_push_composite_child ();
-
-  hbox1 = gtk_hbox_new (FALSE, 0);
+  
+  table = gtk_table_new (2, 6, FALSE);
+  gtk_table_set_row_spacings (GTK_TABLE (table), 4);
+  gtk_table_set_col_spacings (GTK_TABLE (table), 4);
   selector->family_options = gtk_option_menu_new ();
   selector->size_options = gtk_option_menu_new ();
-  family_label = gtk_label_new_with_mnemonic (_("_Font name:"));
+  selector->family_label = gtk_label_new_with_mnemonic (_("_Font:"));
+  gtk_misc_set_alignment (GTK_MISC (selector->family_label),
+                          1.0, 0.5);
+  gtk_misc_set_padding (GTK_MISC (selector->family_label),
+                        4, 0);
   size_label = gtk_label_new_with_mnemonic (_("Si_ze:"));
-  hbox2 = gtk_hbox_new (FALSE, 0);
   selector->bold_check =
-    gtk_check_button_new_with_mnemonic ("Use _bold version of font");
+    gtk_check_button_new_with_mnemonic (_("_Use bold version of font"));
 
   gtk_widget_pop_composite_child ();
 
-  gtk_label_set_mnemonic_widget (GTK_LABEL(family_label),
+  gtk_label_set_mnemonic_widget (GTK_LABEL(selector->family_label),
 				 selector->family_options);
   gtk_label_set_mnemonic_widget (GTK_LABEL(size_label),
 				 selector->size_options);
 
   /* FIXME: figure out what spacing looks best */
 
-  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (family_label),
-		      FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox1),
-		      GTK_WIDGET (selector->family_options), FALSE, FALSE, 5);
-  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (size_label),
-		      FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox1), GTK_WIDGET (selector->size_options),
-		      FALSE, FALSE, 5);
+  gtk_table_attach (GTK_TABLE (table),
+                    selector->family_label,
+                    /* X direction */          /* Y direction */
+                    0, 1,                      0, 1,
+                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         0);
 
-  gtk_box_pack_start (GTK_BOX (hbox2), GTK_WIDGET (selector->bold_check),
-		      FALSE, FALSE, 0);
+  gtk_table_attach (GTK_TABLE (table),
+                    selector->family_options,
+                    /* X direction */          /* Y direction */
+                    1, 3,                      0, 1,
+                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         0);
 
-  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (hbox1), FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (hbox2), FALSE, FALSE, 0);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    size_label,
+                    /* X direction */          /* Y direction */
+                    3, 4,                      0, 1,
+                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         0);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    selector->size_options,
+                    /* X direction */          /* Y direction */
+                    4, 5,                      0, 1,
+                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         0);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    selector->bold_check,
+                    /* X direction */          /* Y direction */
+                    1, 3,                      1, 2,
+                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         0);
+
+
+  gtk_box_pack_start (GTK_BOX (selector), GTK_WIDGET (table),
+                      FALSE, FALSE, 0);
   
   g_signal_connect (selector->family_options, "changed",
 		    G_CALLBACK (family_changed), selector);

@@ -105,6 +105,7 @@ struct _EggXFontSelector
 {
   GtkVBox vbox;
 
+  GtkWidget *family_label;
   GtkWidget *family_options;
   GtkWidget *size_options;
   GtkWidget *bold_check;

@@ -735,6 +735,7 @@ terminal_profile_edit (TerminalProfile *profile,
       GtkWidget *w;
       double num1, num2;
       gint i;
+      GtkSizeGroup *size_group;
       
       if (g_file_test ("./"TERM_GLADE_FILE,
                        G_FILE_TEST_EXISTS))
@@ -1047,6 +1048,14 @@ terminal_profile_edit (TerminalProfile *profile,
       
       g_signal_connect (fontsel, "changed",
 			G_CALLBACK (font_changed), profile);
+
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      gtk_size_group_add_widget (size_group,
+                                 EGG_XFONT_SELECTOR (fontsel)->family_label);
+      gtk_size_group_add_widget (size_group,
+                                 glade_xml_get_widget (xml,
+                                                       "profile-name-label"));
+      g_object_unref (G_OBJECT (size_group));
       
       gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
       gtk_widget_show_all (w);

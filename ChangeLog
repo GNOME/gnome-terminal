@@ -1,7 +1,22 @@
 2002-03-17  Havoc Pennington  <hp@pobox.com>
 
+	* src/simple-x-font-selector.c (egg_xfont_selector_init): don't
+	use "b" for mnemonic, already used twice. Translate the bold
+	checkbutton. Pack everything in a table so we can align the
+	checkbutton with the option menu. Tweak paddings and things.
+
+	* src/gnome-terminal.glade2: fix up a bit to make stuff 
+	align well with the fontsel.
+
+	* src/profile-editor.c: add lame hack to put "Profile name"
+	label in a size group with one of the labels in the font 
+	selector.
+
+2002-03-17  Havoc Pennington  <hp@pobox.com>
+
 	* src/gnome-terminal.glade2: Get rid of pointless Font label
-	around font selector, just leave an empty hbox
+	around font selector, just leave an empty hbox. Packing 
+	still needs a bit more help, about to do that.
 
 	* src/simple-x-font-selector.c (update_family_menu): show menu
 	items before adding them to option menu, to avoid size request
