@@ -67,6 +67,7 @@
 #define KEY_DELETE_BINDING "delete_binding"
 #define KEY_USE_THEME_COLORS "use_theme_colors"
 #define KEY_USE_SYSTEM_FONT "use_system_font"
+#define KEY_USE_SKEY "use_skey"
 #define KEY_FONT "font"
 
 struct _TerminalProfilePrivate
@@ -126,6 +127,7 @@ struct _TerminalProfilePrivate
   guint scroll_background : 1;
   guint use_theme_colors : 1;
   guint use_system_font : 1;
+  guint use_skey : 1;
   guint forgotten : 1;
 };
 
@@ -287,6 +289,7 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
   profile->priv->use_theme_colors = TRUE;
   profile->priv->use_system_font = TRUE;
+  profile->priv->use_skey = TRUE;
   profile->priv->font = pango_font_description_new ();
   pango_font_description_set_family (profile->priv->font,
                                      "monospace");
@@ -1426,6 +1429,33 @@ terminal_profile_set_use_system_font (TerminalProfile *profile,
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_USE_SYSTEM_FONT);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_use_skey (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->use_skey;
+}
+
+void
+terminal_profile_set_use_skey (TerminalProfile *profile,
+			       gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_SKEY);
   
   gconf_client_set_bool (profile->priv->conf,
                          key,

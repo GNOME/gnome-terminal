@@ -33,6 +33,7 @@
 #include "terminal-widget.h"
 #include "terminal-profile.h"
 #include "terminal.h"
+#include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 #include <libgnome/gnome-url.h> /* gnome_url_show */
 #include <string.h>
@@ -389,6 +390,15 @@ reread_profile (TerminalScreen *screen)
   terminal_widget_set_scrollback_lines (term,
                                         terminal_profile_get_scrollback_lines (profile));
 
+  if (terminal_profile_get_use_skey (screen->priv->profile))
+    {
+      terminal_widget_skey_match_add (screen->priv->term,
+				      "s/key ([0-9]*) ([-A-Za-z0-9]*)");
+    }
+  else
+    {
+      terminal_widget_skey_match_remove (screen->priv->term);
+    }
   bg_type = terminal_profile_get_background_type (profile);
   
   if (bg_type == TERMINAL_BACKGROUND_IMAGE)
@@ -1393,7 +1403,25 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     terminal_widget_check_match (term,
                                  event->x / char_width,
                                  event->y / char_height);
-  
+
+  if (terminal_profile_get_use_skey (screen->priv->profile))
+    {
+      gchar *skey_match;
+
+      skey_match = terminal_widget_skey_check_match (term,
+						     event->x / char_width,
+						     event->y / char_height);
+      if (skey_match != NULL &&
+	  event->button == 1 &&
+	  event->state & GDK_CONTROL_MASK)
+	{
+	  terminal_skey_do_popup (screen, GTK_WINDOW (terminal_screen_get_window (screen)), skey_match);
+	  g_free (skey_match);
+
+	  return TRUE;
+	}
+    }
+
   if (event->button == 1 || event->button == 2)
     {
       gtk_widget_grab_focus (widget);

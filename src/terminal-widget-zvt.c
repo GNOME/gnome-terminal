@@ -358,6 +358,12 @@ terminal_widget_match_add (GtkWidget            *widget,
                       VTATTR_UNDERLINE, NULL);  
 }
 
+void
+terminal_widget_skey_match_add (GtkWidget            *widget,
+				const char           *regexp)
+{
+}
+
 char*
 terminal_widget_check_match (GtkWidget            *widget,
                              int                   column,
@@ -365,6 +371,19 @@ terminal_widget_check_match (GtkWidget            *widget,
 {
   return g_strdup (zvt_term_match_check (ZVT_TERM (widget),
                                          column, row, 0));
+}
+
+char*
+terminal_widget_skey_check_match (GtkWidget            *widget,
+				  int                   column,
+				  int                   row)
+{
+	return NULL;
+}
+
+void
+terminal_widget_skey_match_remove (GtkWidget            *widget)
+{
 }
 
 void

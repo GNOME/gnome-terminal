@@ -184,7 +184,8 @@ TerminalEraseBinding   terminal_profile_get_backspace_binding     (TerminalProfi
 TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfile *profile);
 
 gboolean               terminal_profile_get_use_theme_colors      (TerminalProfile *profile);
-gboolean               terminal_profile_get_use_system_font        (TerminalProfile *profile);
+gboolean               terminal_profile_get_use_system_font       (TerminalProfile *profile);
+gboolean               terminal_profile_get_use_skey              (TerminalProfile *profile);
 const PangoFontDescription* terminal_profile_get_font             (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
@@ -255,9 +256,11 @@ void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile
                                                  gboolean                setting);
 
 
-void terminal_profile_set_use_system_font        (TerminalProfile        *profile,
-                                                  gboolean                setting);
+void terminal_profile_set_use_system_font       (TerminalProfile        *profile,
+						 gboolean                setting);
 
+void terminal_profile_set_use_skey              (TerminalProfile        *profile,
+						 gboolean                setting);
 void terminal_profile_set_font                   (TerminalProfile            *profile,
                                                   const PangoFontDescription *font_desc);
 

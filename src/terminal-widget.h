@@ -52,9 +52,15 @@ void       terminal_widget_get_padding                (GtkWidget            *wid
                                                        int                  *ypad);
 void       terminal_widget_match_add                  (GtkWidget            *widget,
                                                        const char           *regexp);
+void       terminal_widget_skey_match_add             (GtkWidget            *widget,
+                                                       const char           *regexp);
 char*      terminal_widget_check_match                (GtkWidget            *widget,
                                                        int                   column,
                                                        int                   row);
+char*      terminal_widget_skey_check_match           (GtkWidget            *widget,
+                                                       int                   column,
+                                                       int                   row);
+void       terminal_widget_skey_match_remove          (GtkWidget            *widget);
 void       terminal_widget_set_word_characters        (GtkWidget            *widget,
                                                        const char           *str);
 void       terminal_widget_set_delete_binding         (GtkWidget            *widget,

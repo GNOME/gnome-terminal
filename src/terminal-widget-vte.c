@@ -29,6 +29,7 @@
 typedef struct
 {
   int foo;
+  int skey_tag;
 } VteData;
 
 static void
@@ -111,12 +112,49 @@ terminal_widget_match_add                  (GtkWidget            *widget,
   vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
 }
 
+void
+terminal_widget_skey_match_add             (GtkWidget            *widget,
+					    const char           *regexp)
+{
+  VteData *data;
+  
+  data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
+
+  data->skey_tag = vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
+}
+
+void
+terminal_widget_skey_match_remove          (GtkWidget            *widget)
+{
+  /* FIXME: fix vte */
+}
+
 char*
 terminal_widget_check_match (GtkWidget *widget,
 			     int        column,
 			     int        row)
 {
   return vte_terminal_match_check(VTE_TERMINAL(widget), column, row, NULL);
+}
+
+char*
+terminal_widget_skey_check_match (GtkWidget *widget,
+				  int        column,
+				  int        row)
+{
+  VteData *data;
+  gint tag;
+  char *match;
+   
+  data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
+
+  match = vte_terminal_match_check(VTE_TERMINAL(widget), column, row, &tag);
+  if (data->skey_tag == tag)
+    return match;
+
+  g_free (match);
+  return NULL;
+      
 }
 
 void

@@ -1,0 +1,23 @@
+
+INCLUDES=@TERM_CFLAGS@ -I$(srcdir)/..
+
+SKEYFILES =	\
+	btoe.c		\
+	config.h	\
+	skey.h		\
+	donkey.c	\
+	md.c		\
+	md2.c		\
+	md4.c		\
+	md5.c		\
+	skey.c		\
+	skey.h		\
+	tailor.h
+
+CFLAGS	=  -DSTDC_HEADERS=1 -DHAVE_FCNTL_H=1 -DHAVE_SYS_IOCTL_H=1 -DHAVE_TERMIOS_H=1 -DHAVE_TERMIO_H=1 -DHAVE_SGTTY_H=1 -DSIZEOF_CHAR=1 -DSIZEOF_SHORT=2 -DSIZEOF_INT=4 -DSIZEOF_LONG=4 -DRETSIGTYPE=void -DHAVE_STRCHR=1 -DHAVE_MEMCPY=1 -DHAVE_GETHOSTNAME=1 -DHAVE_STRFTIME=1 -DHAVE_UNAME=1 -Wall
+
+noinst_LTLIBRARIES=libskey.la
+
+libskey_la_SOURCES=$(SKEYFILES)
+
+libskey_la_LDFLAGS= @TERM_LIBS@
