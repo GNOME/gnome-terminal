@@ -1,5 +1,10 @@
 2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
 
+	* src/terminal-window.c(about_callback): do not leak the pixbuf in the about dialog.
+	  Caught by the venerable champion of finding leaks, Kjartan; bug #151813.
+
+2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
+
 	* src/terminal-window.c(terminal_window_new): make each terminal window be the
 	  window group leader of its group. This goes better with the illusion that
 	  different terminal windows are different instances of the application. This will
