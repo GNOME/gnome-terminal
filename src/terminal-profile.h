@@ -297,12 +297,6 @@ gboolean terminal_palette_from_string (const char     *str,
                                        gboolean        warn);
 
 
-/* Used to convert the double "darkness" setting into a bool.
- * Temporary hack.
- */
-#define DARKNESS_THRESHOLD 0.25
-#define DARKNESS_TRUE  0.5
-#define DARKNESS_FALSE 0.0
 
 G_END_DECLS
 

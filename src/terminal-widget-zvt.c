@@ -461,16 +461,21 @@ reset_bg (ZvtTerm *zvt,
   int bgflags;
   
   bgflags = 0;
+
   if (zd->bg_scrolls)
-    bgflags |= ZVT_BACKGROUND_SCROLL;
-  if (zd->bg_darkness >= DARKNESS_THRESHOLD)
+    bgflags |= ZVT_BACKGROUND_SCROLL;  
+
+  /* avoid enabling shading if the shading is invisibly small */
+  if (zd->bg_darkness >= 0.02) 
     bgflags |= ZVT_BACKGROUND_SHADED;
-  
-  zvt_term_set_background (zvt,
-                           zd->bg_file,
-                           zd->bg_transparent,
-                           bgflags);
-}         
+
+  zvt_term_set_background_with_shading (zvt,
+                                        zd->bg_file,
+                                        zd->bg_transparent,
+                                        bgflags,
+                                        0, 0, 0,
+                                        zd->bg_darkness * 65535);
+}
 
 void
 terminal_widget_set_background_image (GtkWidget *widget,

@@ -27,6 +27,7 @@
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <string.h>
+#include <math.h>
 #include "simple-x-font-selector.h"
 #include "terminal-widget.h"
 
@@ -692,12 +693,18 @@ scroll_background_toggled (GtkWidget       *checkbutton,
 }
 
 static void
-darken_background_toggled (GtkWidget       *checkbutton,
-                           TerminalProfile *profile)
+darken_background_value_changed (GtkWidget       *scale,
+                                 TerminalProfile *profile)
 {
-  terminal_profile_set_background_darkness (profile,
-                                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)) ?
-                                            DARKNESS_TRUE : DARKNESS_FALSE);
+  double new_val;
+  double old_val;
+
+  new_val = gtk_range_get_value (GTK_RANGE (scale));
+  old_val = terminal_profile_get_background_darkness (profile);
+
+  /* The epsilon here is some anti-infinite-loop paranoia */
+  if (fabs (new_val - old_val) > 1e-6)
+    terminal_profile_set_background_darkness (profile, new_val);
 }
 
 static void
@@ -833,6 +840,22 @@ init_palette_scheme_menu (GtkWidget *option_menu)
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
                             menu);
+}
+
+static char*
+format_percent_value (GtkScale *scale,
+                      double    val,
+                      void     *data)
+{
+  return g_strdup_printf ("%d%%", (int) rint (val * 100.0));
+}
+
+static void
+init_background_darkness_scale (GtkWidget *scale)
+{
+  g_signal_connect (G_OBJECT (scale), "format_value",
+                    G_CALLBACK (format_percent_value),
+                    NULL);
 }
 
 void
@@ -1121,10 +1144,11 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (scroll_background_toggled),
                         profile);
       
-      w = glade_xml_get_widget (xml, "darken-background-checkbutton");
+      w = glade_xml_get_widget (xml, "darken-background-scale");
+      init_background_darkness_scale (w);
       profile_editor_update_background_darkness (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (darken_background_toggled),
+      g_signal_connect (G_OBJECT (w), "value_changed",
+                        G_CALLBACK (darken_background_value_changed),
                         profile);
 
       w = glade_xml_get_widget (xml, "backspace-binding-optionmenu");
@@ -1281,12 +1305,26 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_IMAGE));
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_SCROLL_BACKGROUND));
+      w = profile_editor_get_widget (editor, "darken-background-vbox");
+      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_DARKNESS));
+    }
+  else if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_TRANSPARENT) 
+  {
+      w = profile_editor_get_widget (editor, "darken-background-vbox");
+      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_DARKNESS));
+      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      gtk_widget_set_sensitive (w, FALSE);
+      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
+      gtk_widget_set_sensitive (w, FALSE);
+      
     }
   else
     {
       w = profile_editor_get_widget (editor, "background-image-fileentry");
       gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
+      gtk_widget_set_sensitive (w, FALSE);
+      w = profile_editor_get_widget (editor, "darken-background-vbox");
       gtk_widget_set_sensitive (w, FALSE);
     }
 
@@ -1396,9 +1434,6 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
                    mask & TERMINAL_SETTING_BACKGROUND_TYPE);
   set_insensitive (editor, "transparent-radiobutton",
                    mask & TERMINAL_SETTING_BACKGROUND_TYPE);
-
-  set_insensitive (editor, "darken-background-checkbutton",
-                   mask & TERMINAL_SETTING_BACKGROUND_DARKNESS);
 
   set_insensitive (editor, "backspace-binding-optionmenu",
                    mask & TERMINAL_SETTING_BACKSPACE_BINDING);
@@ -1895,12 +1930,11 @@ profile_editor_update_background_darkness (GtkWidget       *editor,
   GtkWidget *w;
   double v;
 
-  w = profile_editor_get_widget (editor, "darken-background-checkbutton");
+  w = profile_editor_get_widget (editor, "darken-background-scale");
 
   v = terminal_profile_get_background_darkness (profile);
   
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
-                                v >= DARKNESS_THRESHOLD);
+  gtk_range_set_value (GTK_RANGE (w), v);
 }
 
 static void

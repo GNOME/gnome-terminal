@@ -985,6 +985,7 @@ main (int argc, char **argv)
       return 1;
     }
 
+  terminal_factory_disabled = TRUE; /* FIXME until it works */
   if (!terminal_factory_disabled)
     {
       if (terminal_invoke_factory (results))

@@ -130,7 +130,7 @@
 		  <property name="draw_indicator">True</property>
 		</widget>
 		<packing>
-		  <property name="padding">8</property>
+		  <property name="padding">5</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
 		</packing>
@@ -147,8 +147,8 @@
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
-		  <property name="expand">True</property>
+		  <property name="padding">1</property>
+		  <property name="expand">False</property>
 		  <property name="fill">True</property>
 		</packing>
 	      </child>
@@ -172,7 +172,7 @@
 		      <property name="yalign">0.5</property>
 		      <property name="xpad">4</property>
 		      <property name="ypad">0</property>
-                      <property name="mnemonic_widget">profile-icon-entry</property>
+		      <property name="mnemonic_widget">profile-icon-entry</property>
 		    </widget>
 		    <packing>
 		      <property name="padding">0</property>
@@ -204,7 +204,7 @@
 		  </child>
 		</widget>
 		<packing>
-		  <property name="padding">0</property>
+		  <property name="padding">2</property>
 		  <property name="expand">False</property>
 		  <property name="fill">False</property>
 		</packing>
@@ -705,8 +705,8 @@
 			  <property name="invisible_char" translatable="yes">*</property>
 			  <property name="activates_default">False</property>
 			  <accessibility>
-			    <atkrelation target="custom-command-entry-label" type="labelled-by"/>
 			    <atkrelation target="use-custom-command-checkbutton" type="controlled-by"/>
+			    <atkrelation target="custom-command-entry-label" type="labelled-by"/>
 			  </accessibility>
 			</widget>
 			<packing>
@@ -1855,21 +1855,56 @@
 		      <child>
 			<widget class="GtkAlignment" id="alignment15">
 			  <property name="visible">True</property>
-			  <property name="xalign">7.45058e-09</property>
+			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.9</property>
-			  <property name="xscale">0</property>
+			  <property name="xscale">0.95</property>
 			  <property name="yscale">0</property>
 
 			  <child>
-			    <widget class="GtkCheckButton" id="darken-background-checkbutton">
+			    <widget class="GtkVBox" id="darken-background-vbox">
 			      <property name="visible">True</property>
-			      <property name="can_focus">True</property>
-			      <property name="label" translatable="yes">_Darken transparent and image backgrounds</property>
-			      <property name="use_underline">True</property>
-			      <property name="relief">GTK_RELIEF_NORMAL</property>
-			      <property name="active">False</property>
-			      <property name="inconsistent">False</property>
-			      <property name="draw_indicator">True</property>
+			      <property name="homogeneous">False</property>
+			      <property name="spacing">0</property>
+
+			      <child>
+				<widget class="GtkLabel" id="darken-background-scale-label">
+				  <property name="visible">True</property>
+				  <property name="label" translatable="yes">_Shade transparent or image background:</property>
+				  <property name="use_underline">True</property>
+				  <property name="use_markup">False</property>
+				  <property name="justify">GTK_JUSTIFY_LEFT</property>
+				  <property name="wrap">False</property>
+				  <property name="selectable">False</property>
+				  <property name="xalign">0</property>
+				  <property name="yalign">0.5</property>
+				  <property name="xpad">0</property>
+				  <property name="ypad">0</property>
+				  <property name="mnemonic_widget">darken-background-scale</property>
+				</widget>
+				<packing>
+				  <property name="padding">1</property>
+				  <property name="expand">False</property>
+				  <property name="fill">False</property>
+				</packing>
+			      </child>
+
+			      <child>
+				<widget class="GtkHScale" id="darken-background-scale">
+				  <property name="visible">True</property>
+				  <property name="can_focus">True</property>
+				  <property name="draw_value">True</property>
+				  <property name="value_pos">GTK_POS_BOTTOM</property>
+				  <property name="digits">2</property>
+				  <property name="update_policy">GTK_UPDATE_DELAYED</property>
+				  <property name="inverted">False</property>
+				  <property name="adjustment">0 0 1 0 0 0</property>
+				</widget>
+				<packing>
+				  <property name="padding">1</property>
+				  <property name="expand">True</property>
+				  <property name="fill">True</property>
+				</packing>
+			      </child>
 			    </widget>
 			  </child>
 			</widget>
