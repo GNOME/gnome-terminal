@@ -825,6 +825,8 @@ get_child_command (TerminalScreen *screen,
         argv[0] = g_strdup (only_name);
 
       argv[1] = NULL;
+
+      g_free (shell);
     }
 
   if (file_p)

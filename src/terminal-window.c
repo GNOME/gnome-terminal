@@ -1682,8 +1682,11 @@ reset_tab_menuitems (TerminalWindow *window)
         accel_path = NULL;
       
       if (accel_path)
-        gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                      accel_path);
+        {
+          gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+					accel_path);
+	  g_free (accel_path);
+	}
       
       gtk_widget_show (menu_item);
       gtk_menu_shell_append (GTK_MENU_SHELL (window->priv->go_menu),

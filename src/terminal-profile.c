@@ -1023,6 +1023,8 @@ terminal_profile_get_icon (TerminalProfile *profile)
         }
 
       profile->priv->icon = pixbuf;
+
+      g_free (filename);
     }
 
  out:
@@ -1914,7 +1916,8 @@ terminal_profile_update (TerminalProfile *profile)
 
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_VISIBLE_NAME;
-  
+
+  g_free (str_val);
   g_free (key);
 
   /* KEY_FOREGROUND_COLOR */
@@ -1929,7 +1932,8 @@ terminal_profile_update (TerminalProfile *profile)
   
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_FOREGROUND_COLOR;
-  
+
+  g_free (str_val);
   g_free (key);
 
 
@@ -1946,6 +1950,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_BACKGROUND_COLOR;
   
+  g_free (str_val);
   g_free (key);
 
 
@@ -1962,6 +1967,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_TITLE;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_TITLE_MODE */
@@ -1977,6 +1983,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_TITLE_MODE;
   
+  g_free (str_val);
   g_free (key);
 
 
@@ -2027,6 +2034,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_WORD_CHARS;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_SCROLLBAR_POSITION */
@@ -2042,6 +2050,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_SCROLLBAR_POSITION;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_SCROLLBACK_LINES */
@@ -2106,6 +2115,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_EXIT_ACTION;
   
+  g_free (str_val);
   g_free (key);
   
   /* KEY_LOGIN_SHELL */
@@ -2172,6 +2182,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_CUSTOM_COMMAND;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_ICON */
@@ -2187,6 +2198,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_ICON;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_PALETTE */
@@ -2202,6 +2214,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_PALETTE;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_X_FONT */
@@ -2217,6 +2230,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_X_FONT;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_BACKGROUND_TYPE */
@@ -2232,6 +2246,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_BACKGROUND_TYPE;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_BACKGROUND_IMAGE */
@@ -2246,7 +2261,8 @@ terminal_profile_update (TerminalProfile *profile)
   
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_BACKGROUND_IMAGE;
-  
+
+  g_free (str_val);
   g_free (key);
 
   /* KEY_SCROLL_BACKGROUND */
@@ -2296,6 +2312,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_BACKSPACE_BINDING;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_DELETE_BINDING */
@@ -2311,6 +2328,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_DELETE_BINDING;
   
+  g_free (str_val);
   g_free (key);
 
   /* KEY_USE_THEME_COLORS */
@@ -2360,6 +2378,7 @@ terminal_profile_update (TerminalProfile *profile)
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_FONT;
   
+  g_free (str_val);
   g_free (key);
   
   /* Update state and emit signals */

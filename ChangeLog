@@ -1,3 +1,30 @@
+2002-05-24  Michael Meeks  <michael@ximian.com>
+
+	* src/terminal.c (sync_profile_list): don't
+	leak the string gconf keys.
+
+	* src/terminal-window.c (reset_tab_menuitems):
+	don't leak the accel_path.
+
+	* src/terminal-screen.c (get_child_command):
+	don't leak the user's shell.
+
+	* src/terminal-profile.c
+	(terminal_profile_update): don't leak all the
+	string values we get from gconf.
+	(terminal_profile_get_icon): don't leak the filename.
+
+2002-05-24  Michael Meeks  <michael@ximian.com>
+
+	* src/terminal.c (main): copy the args before
+	we start, re-enable the terminal factory, and pass
+	it the args.
+	(option_parsing_results_init): split out of main.
+	(new_terminal_with_options): split out of main,
+	always create 1 new window.
+	(terminal_new_event): create a new popt context
+	re-parse the args, use new_terminal_with_option.
+
 2002-05-26  Havoc Pennington  <hp@pobox.com>
 
 	* src/profile-editor.c (terminal_profile_edit): add help to the

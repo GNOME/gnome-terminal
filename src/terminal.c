@@ -117,7 +117,7 @@ static gboolean save_yourself_callback (GnomeClient        *client,
                                         gboolean            fast,
                                         void               *data);
 
-static gboolean terminal_invoke_factory (OptionParsingResults *results);
+static gboolean terminal_invoke_factory (int argc, char **argv);
 static void option_parsing_results_free (OptionParsingResults *results);
 
 
@@ -887,45 +887,18 @@ static GnomeModuleInfo module_info = {
   NULL
 };
 
-int
-main (int argc, char **argv)
+static OptionParsingResults *
+option_parsing_results_init (int *argc, char **argv)
 {
-  GError *err;
-  poptContext ctx;
-  GList *tmp;
   int i;
-  const char **args;
-  GnomeModuleRequirement reqs[] = {
-    { "1.102.0", LIBGNOMEUI_MODULE },
-    { NULL, NULL }
-  };
-  GnomeClient *sm_client;
   OptionParsingResults *results;
-  GnomeProgram *program;
-  
-  if (setlocale (LC_ALL, "") == NULL)
-    g_printerr ("GNOME Terminal: locale not understood by C library, internationalization will not work\n");
-
-#if 0
-  {
-    const char *charset;
-    g_get_charset (&charset);
-    
-    g_print ("Running in locale \"%s\" with encoding \"%s\"\n",
-             setlocale (LC_ALL, NULL), charset);
-  }
-#endif
-  
-  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
 
   results = g_new0 (OptionParsingResults, 1);
   
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   results->post_execute_args = NULL;
   i = 1;
-  while (i < argc)
+  while (i < *argc)
     {
       if (strcmp (argv[i], "-x") == 0 ||
           strcmp (argv[i], "--execute") == 0)
@@ -935,12 +908,12 @@ main (int argc, char **argv)
 
           ++i;
           last = i;
-          if (i == argc)
+          if (i == *argc)
             break; /* we'll complain about this later. */
           
-          results->post_execute_args = g_new0 (char*, argc - i + 1);
+          results->post_execute_args = g_new0 (char*, *argc - i + 1);
           j = 0;
-          while (i < argc)
+          while (i < *argc)
             {
               results->post_execute_args[j] = g_strdup (argv[i]);
 
@@ -950,93 +923,23 @@ main (int argc, char **argv)
           results->post_execute_args[j] = NULL;
 
           /* strip the args we used up, also ends the loop since i >= last */
-          argc = last;
+          *argc = last;
         }
       
       ++i;
     }
-  
-  gtk_init (&argc, &argv);
-  
-  module_info.requirements = reqs;
 
-  options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
-                                         * mutant spawn
-                                         */
-  program = gnome_program_init (PACKAGE, VERSION,
-                                &module_info,
-                                argc,
-                                argv,
-                                GNOME_PARAM_POPT_TABLE, options,
-                                GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
-                                GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
-                                GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
-                                GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
-                                NULL); 
-  
-  g_object_get (G_OBJECT (program),
-                GNOME_PARAM_POPT_CONTEXT, &ctx,
-                NULL);
-  
-  args = poptGetArgs (ctx);
-  if (args)
-    {
-      g_printerr (_("Invalid argument: \"%s\"\n"),
-                  *args);
-      return 1;
-    }
+  return results;
+}
 
-  terminal_factory_disabled = TRUE; /* FIXME until it works */
-  if (!terminal_factory_disabled)
-    {
-      if (terminal_invoke_factory (results))
-        return 0;
-    }
+static int
+new_terminal_with_options (OptionParsingResults *results)
+{
+  GList *tmp;
+  int init_windows;
 
-  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
- 
-  g_assert (results->post_execute_args == NULL);
-  
-  conf = gconf_client_get_default ();
+  init_windows = g_list_length (app->windows);
 
-  err = NULL;
-  gconf_client_add_dir (conf, CONF_GLOBAL_PREFIX,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  CONF_GLOBAL_PREFIX, err->message);
-      g_error_free (err);
-    }
-  
-  app = terminal_app_new ();
-
-  err = NULL;
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/profile_list",
-                           profile_list_notify,
-                           app,
-                           NULL, &err);
-
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal profile list changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }  
-
-  terminal_accels_init (conf);
-  
-  terminal_profile_initialize (conf);
-  sync_profile_list (FALSE, NULL);
-
-  sm_client = gnome_master_client ();
-  g_signal_connect (G_OBJECT (sm_client),
-                    "save_yourself",
-                    G_CALLBACK (save_yourself_callback),
-                    app);
-  
   tmp = results->initial_windows;
   while (tmp != NULL)
     {
@@ -1105,7 +1008,7 @@ main (int argc, char **argv)
       tmp = tmp->next;
     }
 
-  if (app->windows == NULL)
+  if (g_list_length (app->windows) <= init_windows)
     {
       /* Open a default terminal */      
 
@@ -1127,6 +1030,136 @@ main (int argc, char **argv)
           return 1;
         }
     }
+  return 0;
+}
+
+int
+main (int argc, char **argv)
+{
+  GError *err;
+  poptContext ctx;
+  int i;
+  int argc_copy;
+  char **argv_copy;
+  const char **args;
+  GnomeModuleRequirement reqs[] = {
+    { "1.102.0", LIBGNOMEUI_MODULE },
+    { NULL, NULL }
+  };
+  GnomeClient *sm_client;
+  OptionParsingResults *results;
+  GnomeProgram *program;
+  
+  if (setlocale (LC_ALL, "") == NULL)
+    g_printerr ("GNOME Terminal: locale not understood by C library, internationalization will not work\n");
+
+#if 0
+  {
+    const char *charset;
+    g_get_charset (&charset);
+    
+    g_print ("Running in locale \"%s\" with encoding \"%s\"\n",
+             setlocale (LC_ALL, NULL), charset);
+  }
+#endif
+  
+  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  textdomain (GETTEXT_PACKAGE);
+
+  argc_copy = argc;
+  argv_copy = g_new (char *, argc_copy + 1);
+  for (i = 0; i < argc_copy; i++)
+    argv_copy [i] = g_strdup (argv [i]);
+  argv_copy [i] = NULL;
+
+  results = option_parsing_results_init (&argc, argv);
+
+  gtk_init (&argc, &argv);
+  
+  module_info.requirements = reqs;
+
+  options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
+                                         * mutant spawn
+                                         */
+  program = gnome_program_init (PACKAGE, VERSION,
+                                &module_info,
+                                argc,
+                                argv,
+                                GNOME_PARAM_POPT_TABLE, options,
+                                GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
+                                GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
+                                GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
+                                GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
+                                NULL); 
+  
+  g_object_get (G_OBJECT (program),
+                GNOME_PARAM_POPT_CONTEXT, &ctx,
+                NULL);
+  
+  args = poptGetArgs (ctx);
+  if (args)
+    {
+      g_printerr (_("Invalid argument: \"%s\"\n"),
+                  *args);
+      return 1;
+    }
+
+  if (!terminal_factory_disabled)
+    {
+      if (terminal_invoke_factory (argc_copy, argv_copy))
+        return 0;
+    }
+
+  g_strfreev (argv_copy);
+  argv_copy = NULL;
+
+  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
+ 
+  g_assert (results->post_execute_args == NULL);
+  
+  conf = gconf_client_get_default ();
+
+  err = NULL;
+  gconf_client_add_dir (conf, CONF_GLOBAL_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        &err);
+  if (err)
+    {
+      g_printerr (_("There was an error loading config from %s. (%s)\n"),
+                  CONF_GLOBAL_PREFIX, err->message);
+      g_error_free (err);
+    }
+  
+  app = terminal_app_new ();
+
+  err = NULL;
+  gconf_client_notify_add (conf,
+                           CONF_GLOBAL_PREFIX"/profile_list",
+                           profile_list_notify,
+                           app,
+                           NULL, &err);
+
+  if (err)
+    {
+      g_printerr (_("There was an error subscribing to notification of terminal profile list changes. (%s)\n"),
+                  err->message);
+      g_error_free (err);
+    }  
+
+  terminal_accels_init (conf);
+  
+  terminal_profile_initialize (conf);
+  sync_profile_list (FALSE, NULL);
+
+  sm_client = gnome_master_client ();
+  g_signal_connect (G_OBJECT (sm_client),
+                    "save_yourself",
+                    G_CALLBACK (save_yourself_callback),
+                    app);
+
+  if (new_terminal_with_options (results))
+    return 1;
 
   option_parsing_results_free (results);
   results = NULL;
@@ -1304,6 +1337,8 @@ sync_profile_list (gboolean use_this_list,
 
           terminal_profile_update (profile);
         }
+
+      g_free (tmp_slist->data);
 
       tmp_slist = tmp_slist->next;
     }
@@ -2771,6 +2806,11 @@ terminal_new_event (BonoboListener    *listener,
 		    gpointer           user_data)
 {
   int i;
+  int argc;
+  int nextopt;
+  poptContext ctx;
+  const void *store;
+  OptionParsingResults *results;
   CORBA_sequence_CORBA_string *args;
 
   if (strcmp (event_name, "new_terminal"))
@@ -2780,15 +2820,35 @@ terminal_new_event (BonoboListener    *listener,
       return;
     }
 
-  printf ("Create new terminal with:\n");
   args = any->_value;
-  for (i = 0; i < args->_length; i++)
-    printf ("  arg %d = '%s'\n", i, args->_buffer [i]);
+  argc = args->_length;
+  results = option_parsing_results_init (&argc, args->_buffer);
 
+  store = options[0].descrip;
+  options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
+                                         * mutant spawn
+                                         */
+  ctx = poptGetContext (PACKAGE, argc,
+			(const char **)args->_buffer,
+			options, 0);
+  
   g_return_if_fail (app != NULL);
-  terminal_app_new_terminal (app,
-                             terminal_profile_get_for_new_term (),
-                             NULL, FALSE, FALSE, NULL, NULL, NULL, NULL);
+
+  while ((nextopt = poptGetNextOpt (ctx)) > 0 ||
+	 nextopt == POPT_ERROR_BADOPT)
+    /* do nothing */ ;
+
+  if (nextopt != -1)
+    g_warning ("Error on option %s: %s, passed from terminal child",
+	       poptBadOption (ctx, 0),
+	       poptStrerror (nextopt));
+
+  poptFreeContext (ctx);
+  options[0].descrip = store;
+
+  new_terminal_with_options (results);
+
+  option_parsing_results_free (results);
 }
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
@@ -2817,7 +2877,7 @@ terminal_register_as_factory (void)
 }
 
 static gboolean
-terminal_invoke_factory (OptionParsingResults *results)
+terminal_invoke_factory (int argc, char **argv)
 {
   Bonobo_Listener listener;
 
@@ -2852,15 +2912,10 @@ terminal_invoke_factory (OptionParsingResults *results)
       any._type = TC_CORBA_sequence_CORBA_string;
       any._value = &args;
 
-#if 0
       args._length = argc;
       args._buffer = g_newa (CORBA_char *, args._length);
       for (i = 0; i < args._length; i++)
         args._buffer [i] = argv [i];
-#else
-      args._length = 0;
-      args._buffer = NULL;
-#endif
       
       Bonobo_Listener_event (listener, "new_terminal", &any, &ev);
       CORBA_Object_release (listener, &ev);
