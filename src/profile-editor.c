@@ -96,6 +96,11 @@ static void       profile_editor_update_custom_command       (GtkWidget       *w
                                                               TerminalProfile *profile);
 
 
+static void profile_forgotten (TerminalProfile     *profile,
+                               GtkWidget           *editor);
+static void profile_changed   (TerminalProfile     *profile,
+                               TerminalSettingMask  mask,
+                               GtkWidget           *editor);
 
 
 static void
@@ -115,6 +120,14 @@ static void
 profile_editor_destroyed (GtkWidget       *editor,
                           TerminalProfile *profile)
 {
+  g_signal_handlers_disconnect_by_func (G_OBJECT (profile),
+                                        G_CALLBACK (profile_forgotten),
+                                        editor);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (profile),
+                                        G_CALLBACK (profile_changed),
+                                        editor);
+  
   g_object_set_data (G_OBJECT (profile), "editor-window", NULL);
   g_object_set_data (G_OBJECT (editor), "glade-xml", NULL);
 }
