@@ -13,6 +13,14 @@ FILE=src/terminal.c
 
 DIE=0
 
+AUTOMAKE=automake-1.6
+ACLOCAL=aclocal-1.6
+
+($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
+        AUTOMAKE=automake
+        ACLOCAL=aclocal
+}
+
 (autoconf --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have autoconf installed to compile $PROJECT."
@@ -21,10 +29,10 @@ DIE=0
 	DIE=1
 }
 
-(automake --version) < /dev/null > /dev/null 2>&1 || {
+($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have automake installed to compile $PROJECT."
-	echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.4.tar.gz"
+	echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.6.3.tar.gz"
 	echo "(or a newer version if it is available)"
 	DIE=1
 }
@@ -113,14 +121,14 @@ do
 	echo "Running libtoolize..."
 	libtoolize --force --copy
       fi
-      echo "Running aclocal $aclocalinclude ..."
-      aclocal $aclocalinclude
+      echo "Running $ACLOCAL $aclocalinclude ..."
+      $ACLOCAL $aclocalinclude
       if grep "^AM_CONFIG_HEADER" configure.in >/dev/null; then
 	echo "Running autoheader..."
 	autoheader
       fi
-      echo "Running automake --gnu $am_opt ..."
-      automake --add-missing --gnu $am_opt
+      echo "Running $AUTOMAKE --gnu $am_opt ..."
+      $AUTOMAKE --add-missing --gnu $am_opt
       echo "Running autoconf ..."
       autoconf
     )
