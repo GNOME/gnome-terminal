@@ -811,6 +811,8 @@ update_family_menu (EggXFontSelector *selector)
     gtk_option_menu_set_history (GTK_OPTION_MENU (selector->family_options),
 				 selected_font_pos);
   }
+
+  gtk_widget_show_all (GTK_WIDGET (selector->family_options));
 }
 
 static void
