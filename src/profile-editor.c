@@ -22,6 +22,7 @@
 #include "profile-editor.h"
 #include "terminal-intl.h"
 #include <glade/glade.h>
+#include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-color-picker.h>
 #include <libgnomeui/gnome-font-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
@@ -858,6 +859,47 @@ init_background_darkness_scale (GtkWidget *scale)
                     NULL);
 }
 
+
+static void
+editor_response_cb (GtkDialog *editor,
+                    int        id,
+                    void      *data)
+{  
+  if (id == GTK_RESPONSE_HELP)
+    {
+      GError *err;
+      err = NULL;
+      gnome_help_display ("gnome-terminal", "gnome-terminal-prefs",
+                          &err);
+      
+      if (err)
+        {
+          GtkWidget *dialog;
+          
+          dialog = gtk_message_dialog_new (GTK_WINDOW (editor),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("There was an error displaying help: %s"),
+                                           err->message);
+          
+          g_signal_connect (G_OBJECT (dialog), "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+          
+          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+          
+          gtk_widget_show (dialog);
+          
+          g_error_free (err);
+        }
+    }
+  else
+    {
+      gtk_widget_destroy (GTK_WIDGET (editor));
+    }
+}
+
 void
 terminal_profile_edit (TerminalProfile *profile,
                        GtkWindow       *transient_parent)
@@ -928,6 +970,7 @@ terminal_profile_edit (TerminalProfile *profile,
       gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
       
       gtk_dialog_add_buttons (GTK_DIALOG (editor),
+                              GTK_STOCK_HELP, GTK_RESPONSE_HELP,
                               GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
                               NULL);
       gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_ACCEPT);
@@ -951,7 +994,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
       g_signal_connect (G_OBJECT (editor),
                         "response",
-                        G_CALLBACK (gtk_widget_destroy),
+                        G_CALLBACK (editor_response_cb),
                         NULL);
       
       gtk_window_set_destroy_with_parent (GTK_WINDOW (editor), TRUE);
