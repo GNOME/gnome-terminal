@@ -51,6 +51,7 @@ struct _EggCellRendererKeysClass
   GtkCellRendererTextClass parent_class;
 
   void (* keys_edited) (EggCellRendererKeys *keys,
+                        const char          *path_string,
                         guint                keyval,
                         GdkModifierType      mask,
 			guint                hardware_keycode);

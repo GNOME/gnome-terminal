@@ -881,6 +881,7 @@ accel_edited_callback (GtkCellRendererText *cell,
                        const char          *path_string,
                        guint                keyval,
                        GdkModifierType      mask,
+                       guint                hardware_keycode,
                        gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
