@@ -29,8 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgnome/gnome-program.h>
-#include <libgnomeui/gnome-about.h>
-#include <libgnomeui/gnome-stock-icons.h>
 #include <gtk/gtklabel.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
@@ -1014,7 +1012,7 @@ terminal_window_init (TerminalWindow *window)
                                 ACCEL_PATH_HELP);
 
   
-  mi = append_stock_menuitem (menu, GNOME_STOCK_ABOUT, NULL,
+  mi = append_stock_menuitem (menu, GTK_STOCK_ABOUT, NULL,
                               G_CALLBACK (about_callback), window);
   set_menuitem_text (mi, _("_About"), FALSE);
   menuitem_icon_visibility (mi, menus_have_icons);
@@ -2698,18 +2696,15 @@ about_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
   static GtkWidget *about = NULL;
-  GdkPixbuf *pixbuf = NULL;
-  gchar *file;
 
-  const char *authors[] = {
+  const char *copyright =
+    "Copyright \xc2\xa9 2002-2004 Havoc Pennington\n"
+    "Copyright \xc2\xa9 2003-2004 Mariano Su\303\241rez-Alvarez";
+  char *authors[] = {
     "Havoc Pennington <hp@redhat.com>",
-    "Mariano Su\303\241rez-Alvarez <msuarezalvarez@arnet.com.ar>",
+    "Mariano Su\303\241rez-Alvarez <mariano@gnome.org>",
     NULL
   };
-  const char *documenters [] = {
-    NULL
-  };
-  const char *translator_credits = _("translator_credits");
 
   if (about)
     {
@@ -2718,21 +2713,15 @@ about_callback (GtkWidget      *menuitem,
       return;
     }
 				     
-  file = gnome_program_locate_file (NULL, GNOME_FILE_DOMAIN_PIXMAP, "gnome-terminal.png", TRUE, NULL);
-  pixbuf = gdk_pixbuf_new_from_file (file, NULL);
-  g_free(file);
+  about = gtk_about_dialog_new ();
 
-  about = gnome_about_new (_("GNOME Terminal"), VERSION,
-                           "Copyright \xc2\xa9 2002 Havoc Pennington",
-                           NULL,
-                           (const char **)authors,
-                           (const char **)documenters,
-                           strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
-                           pixbuf);
-  if (pixbuf)
-    {
-      g_object_unref (G_OBJECT (pixbuf));
-    }
+  gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), _("GNOME Terminal"));
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
+  gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), copyright);
+  gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
+  gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about), _("translator-credits"));
+  gtk_about_dialog_set_logo_icon_name (GTK_ABOUT_DIALOG (about), "gnome-terminal");
+
   gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
   gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
 
