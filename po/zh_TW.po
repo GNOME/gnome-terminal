@@ -4,9 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal 2.3.1\n"
-"POT-Creation-Date: 2003-09-10 15:04-0400\n"
-"PO-Revision-Date: 2003-06-04 10:29+0800\n"
+"Project-Id-Version: gnome-terminal 2.4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-09-10 07:09+0800\n"
+"PO-Revision-Date: 2003-09-11 02:20+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -244,7 +245,7 @@ msgstr "<b>標題</b>"
 
 #: src/gnome-terminal.glade2.h:10
 msgid "<big>S/Key Challenge Response</big>"
-msgstr ""
+msgstr "<big>回應 S/Key Challenge(暗號)</big>"
 
 #: src/gnome-terminal.glade2.h:11
 msgid "<small><i>Maximum</i></small>"
@@ -303,14 +304,12 @@ msgid "Custom co_mmand:"
 msgstr "自選指令(_M)："
 
 #: src/gnome-terminal.glade2.h:25
-#, fuzzy
 msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
-msgstr "關閉所有選單的助憶鍵 (m_nemonics，例如 Alt+F 可開啟「檔案」選單)"
+msgstr "關閉所有使用選單時的按鍵[例如 _Alt+F 可開啟「檔案」選單]"
 
 #: src/gnome-terminal.glade2.h:26
-#, fuzzy
 msgid "Disable m_enu shortcut key (F10 by default)"
-msgstr "關閉用來啟動選單的按鍵 [預設為 F10] (_E)"
+msgstr "關閉選單捷徑鍵[預設為 _F10]"
 
 #: src/gnome-terminal.glade2.h:28
 msgid "E_ncodings shown in menu:"
@@ -349,9 +348,8 @@ msgid "Isn't displayed"
 msgstr "不會顯示"
 
 #: src/gnome-terminal.glade2.h:37
-#, fuzzy
 msgid "Keyboard Shortcuts Editor"
-msgstr "按鍵組合編輯器"
+msgstr "捷徑鍵編輯器"
 
 #: src/gnome-terminal.glade2.h:38 src/terminal-accels.c:79
 msgid "New Profile"
@@ -499,7 +497,6 @@ msgid ""
 msgstr "在終端機內執行的指令可即時設定新的視窗標題。"
 
 #: src/gnome-terminal.glade2.h:74
-#, fuzzy
 msgid ""
 "These options may cause some applications to behave incorrectly.\n"
 "They are only here to allow you to work around certain applications\n"
@@ -542,9 +539,8 @@ msgid "_Base on:"
 msgstr "根據(_B)："
 
 #: src/gnome-terminal.glade2.h:85
-#, fuzzy
 msgid "_Create"
-msgstr "完成(_R)"
+msgstr "完成(_C)"
 
 #: src/gnome-terminal.glade2.h:86
 msgid "_Cursor blinks"
@@ -588,7 +584,7 @@ msgstr "透明背景或背景圖案變暗的程度(_S)："
 
 #: src/gnome-terminal.glade2.h:96
 msgid "_Shortcut Keys:"
-msgstr ""
+msgstr "捷徑鍵(_S)："
 
 #: src/gnome-terminal.glade2.h:97
 msgid "_Text color:"
@@ -603,9 +599,8 @@ msgid "_Update utmp/wtmp records when command is launched"
 msgstr "當啟動指令時更新 utmp/wtmp 紀錄檔(_U)"
 
 #: src/gnome-terminal.glade2.h:100
-#, fuzzy
 msgid "_Use the system terminal font"
-msgstr "請選取終端機字型"
+msgstr "使用系統指定的終端機字型(_U)"
 
 #: src/gnome-terminal.glade2.h:101
 msgid "_kilobytes"
@@ -1126,6 +1121,9 @@ msgid ""
 "configured title, go before it, go after it, or replace it. The possible "
 "values are \"replace\", \"before\", \"after\", and \"ignore\"."
 msgstr ""
+"如果終端機中執行的程式設定了終端機視窗的標題 (一般上指令解譯器都會這樣做)，"
+"這個標題可以取代您自行設定的視窗標題，附加在前面或後面，或者完全無效。可接受"
+"的值為“replace”、“before”、“after”和“ignore”。"
 
 #: src/gnome-terminal.schemas.in.h:82
 msgid "If true, allow applications in the terminal to make text boldface."
@@ -1154,6 +1152,8 @@ msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
 msgstr ""
+"如選用本選項，在終端機中執行指令時會先載入登入所需的設定檔。(即是說 argv[0] "
+"前會加上減號。)"
 
 #: src/gnome-terminal.schemas.in.h:87
 msgid ""
@@ -1238,6 +1238,8 @@ msgid ""
 "Popup a dialog when an s/key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
 msgstr ""
+"當偵測到終端機出現 s/key challenge(暗號) 而且用戶點選這個暗號後，顯示對話方塊，"
+"要求用戶輸入密碼。然後這個密碼會被送出至終端機。"
 
 #: src/gnome-terminal.schemas.in.h:100
 msgid "Position of the scrollbar"
@@ -1295,7 +1297,7 @@ msgstr ""
 
 #: src/gnome-terminal.schemas.in.h:107
 msgid "Support skey dingus clicking"
-msgstr ""
+msgstr "可點選 s/key 暗號"
 
 #: src/gnome-terminal.schemas.in.h:109
 msgid ""
@@ -1316,6 +1318,8 @@ msgid ""
 "by or combined with the title set by the application inside the terminal, "
 "depending on the title_mode setting."
 msgstr ""
+"這個是在終端機視窗或分頁中顯示的標題。由執行中程式所設定的視窗標題可以取代"
+"這個標題或者和它合併，取決於 title_mode 設定。"
 
 #: src/gnome-terminal.schemas.in.h:112
 msgid ""
@@ -1384,10 +1388,12 @@ msgid ""
 "with some applications run inside the terminal so it's possible to turn them "
 "off."
 msgstr ""
+"是否使用 Alt + 字母來使用選單列中的項目。終端機執行程式時，某些程式可能需要"
+"使用這些按鍵組合，因此允許終端機不截取這類按鍵。"
 
 #: src/gnome-terminal.schemas.in.h:124
 msgid "Whether to launch the command in the terminal as a login shell"
-msgstr ""
+msgstr "在終端機中啟動指令時是否讀入所有登入時的組態檔案"
 
 #: src/gnome-terminal.schemas.in.h:125
 msgid "Whether to run a custom command instead of the shell"
@@ -1532,7 +1538,7 @@ msgstr "已超過 MAX_FONTS 上限。可能有一部分字型無法選用。"
 
 #: src/skey-popup.c:63
 msgid "The text you clicked doesn't seem to be an S/Key challenge."
-msgstr ""
+msgstr "您點選的文字不像是 S/Key challenge。"
 
 #: src/terminal-accels.c:75
 msgid "New Tab"
@@ -1749,15 +1755,15 @@ msgstr "行動(_A)"
 
 #: src/terminal-accels.c:1147
 msgid "Shortcut _Key"
-msgstr ""
+msgstr "捷徑鍵(_K)"
 
 #: src/terminal.c:183
 msgid "Execute the argument to this option inside the terminal."
-msgstr "在終端機中執行此參數後的指令字串。"
+msgstr "在終端機中執行這個參數後的指令字串。"
 
 #: src/terminal.c:192
 msgid "Execute the remainder of the command line inside the terminal."
-msgstr ""
+msgstr "隨後的所有參數都是要在終端機中執行的指令。"
 
 #: src/terminal.c:201
 msgid ""
@@ -1899,79 +1905,81 @@ msgid "Could not load icon \"%s\": %s\n"
 msgstr "無法載入圖示“%s”：%s\n"
 
 #: src/terminal.c:749
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires specifying the command to run\n"
-msgstr "--command/-e 選項後需要指定將會執行的指令\n"
+msgstr "“%s”選項後需要指定準備執行的指令\n"
 
 #: src/terminal.c:757
-#, fuzzy, c-format
+#, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "--command/-e 後的參數不是有效的指令：%s\n"
+msgstr "“%s”選項後的參數不是一個有效的指令：%s\n"
 
 #: src/terminal.c:767 src/terminal.c:791
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" specified more than once for the same window or tab\n"
-msgstr "在同一個視窗或分頁內使用了 --command/-e/--execute/-x 多於一次\n"
+msgstr "在同一個視窗或分頁內使用了“%s”多於一次\n"
 
+# "on the rest of command line" is not significant here for "-x" option
+# and is difficult to translate -- Abel
 #: src/terminal.c:782
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line\n"
-msgstr "--command/-e 選項後需要指定將會執行的指令\n"
+msgstr "“%s”選項後需要指定準備執行的指令\n"
 
 #: src/terminal.c:813 src/terminal.c:837
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument specifying what profile to use\n"
-msgstr "選項 --tab-with-profile 後需要指定準備使用的設定組合作為參數\n"
+msgstr "選項“%s”後需要指定準備使用的設定組合作為參數\n"
 
 #: src/terminal.c:871 src/terminal.c:897
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" option given twice for the same window\n"
-msgstr "同一個視窗中使用了兩次 --show-menubar 選項\n"
+msgstr "同一個視窗中使用了兩次“%s”選項\n"
 
 #: src/terminal.c:920
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument giving the role\n"
-msgstr "選項 --role 後需要指定視窗識別碼作為參數\n"
+msgstr "選項“%s”後需要指定視窗識別碼作為參數\n"
 
 #: src/terminal.c:929
 msgid "Two roles given for one window\n"
 msgstr "同一個視窗指定了兩次視窗識別碼\n"
 
 #: src/terminal.c:945
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument giving the geometry\n"
-msgstr "--geometry 選項後需要指定視窗位置及尺寸作為參數\n"
+msgstr "“%s”選項後需要指定視窗位置及尺寸作為參數\n"
 
 #: src/terminal.c:954
-#, fuzzy, c-format
+#, c-format
 msgid "Two \"%s\" options given for one window\n"
-msgstr "同一個視窗指定了兩次視窗識別碼\n"
+msgstr "同一個視窗使用了兩次“%s”選項\n"
 
 #: src/terminal.c:964
 msgid "Two geometries given for one window\n"
 msgstr "同一個視窗指定了兩次位置及尺寸\n"
 
 #: src/terminal.c:986
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument giving the title\n"
-msgstr "--title 選項後需要指定一個視窗標題作為參數\n"
+msgstr "“%s”選項後需要指定一個視窗標題作為參數\n"
 
 #: src/terminal.c:994 src/terminal.c:1017 src/terminal.c:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Two \"%s\" options given for one tab\n"
-msgstr "一個終端機分頁中指定了兩次視窗標題\n"
+msgstr "同一個終端機分頁中使用了兩次“%s”選項\n"
 
 #: src/terminal.c:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument giving the directory\n"
-msgstr "選項 --role 後需要指定視窗識別碼作為參數\n"
+msgstr "選項“%s”後需要指定目錄作為參數\n"
 
 #: src/terminal.c:1033
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires an argument giving the zoom factor\n"
-msgstr "--zoom 選項後需要指定縮放倍率作為參數\n"
+msgstr "“%s”選項後需要指定縮放倍率作為參數\n"
 
 #: src/terminal.c:1056
 #, c-format
@@ -1989,29 +1997,29 @@ msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "縮放倍率“%g”太大，改為使用 %g\n"
 
 #: src/terminal.c:1092
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
 "might want to create a profile with the desired setting, and use the new --"
 "window-with-profile option\n"
 msgstr ""
-"使用了此版本的 gnome-terminal 不再支援的選項；請建立需要的設定組合，然後使用"
-"新的 --window-with-profile 選項\n"
+"這個版本的 gnome-terminal 不再支援“--%s”選項；請建立您需要的設定組合，"
+"然後使用新的 --window-with-profile 選項\n"
 
 #: src/terminal.c:1098
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" option given twice\n"
-msgstr "指定了兩次 --startup-id 選項\n"
+msgstr "使用了兩次“%s”選項\n"
 
 #: src/terminal.c:1103 src/terminal.c:1242
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" option requires an argument\n"
-msgstr "--startup-id 選項需要指定參數\n"
+msgstr "“%s”選項後需要指定參數\n"
 
 #: src/terminal.c:1220
-#, fuzzy, c-format
+#, c-format
 msgid "No argument given to \"%s\" option\n"
-msgstr "--screen 選項後沒有指定參數\n"
+msgstr "“%s”選項後沒有指定參數\n"
 
 #: src/terminal.c:1328
 #, c-format
@@ -2058,7 +2066,7 @@ msgstr "請輸入設定組合名稱"
 
 #: src/terminal.c:2261
 msgid "Choose base profile"
-msgstr ""
+msgstr "選取基礎的設定組合"
 
 #: src/terminal.c:2401
 msgid "Profile list"
@@ -2123,11 +2131,11 @@ msgid "Click button to choose profile"
 msgstr "按下本按鈕可選取設定組合"
 
 #: src/terminal.c:3471
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
-msgstr "找不到檔案“%s”。這表示此程式安裝不完整，令對話方塊無法顯示。"
+msgstr "找不到檔案“%s”。這表示本程式並未正確地安裝。"
 
 #: src/terminal.c:3633
 msgid ""
@@ -2144,7 +2152,7 @@ msgstr "當向 activation 服務登記終端機時發生錯誤；關閉工廠模
 
 #: src/terminal.c:3672
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr ""
+msgstr "activation 伺服程式無法產生終端機伺服程式\n"
 
 #: src/terminal-profile.c:406
 #, c-format
@@ -2199,10 +2207,10 @@ msgid "Error setting key %s back to default: %s\n"
 msgstr "將設定鍵 %s 的值重設為預設值時出現錯誤：%s\n"
 
 #: src/terminal-profile.c:2385
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
-msgstr "從 %s 載入設定時出現錯誤。(%s)\n"
+msgstr "移除載有組態的目錄 %s 時出現錯誤。(%s)\n"
 
 #: src/terminal-profile.c:2442
 #, c-format
@@ -2237,13 +2245,13 @@ msgid "Palette had %d entries instead of %d\n"
 msgstr "調色盤有 %d 種顏色，但應該是 %d 種\n"
 
 #: src/terminal-screen.c:198
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr ""
-"當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和終端機設定組合有關。(%"
-"s)\n"
+"當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和終端機使用的固定寬度"
+"字型有關。(%s)\n"
 
 #: src/terminal-screen.c:737
 #, c-format
@@ -2269,7 +2277,7 @@ msgstr ""
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
-msgstr ""
+msgstr "載入組態時出現錯誤；該組態決定是否在選單中顯示圖示。(%s)\n"
 
 #: src/terminal-screen.c:1325
 msgid "_Open Link"
@@ -2366,7 +2374,7 @@ msgid "Could not execute command %s: %s\n"
 msgstr "無法執行指令 %s：%s\n"
 
 #: src/terminal-window.c:314
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
@@ -2409,7 +2417,7 @@ msgstr "目前的設定組合(_U)..."
 
 #: src/terminal-window.c:814
 msgid "_Keyboard Shortcuts..."
-msgstr ""
+msgstr "捷徑鍵(_K)..."
 
 #: src/terminal-window.c:817
 msgid "P_rofiles..."
