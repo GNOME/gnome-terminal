@@ -1066,3 +1066,11 @@ terminal_widget_get_estimated_bytes_per_scrollback_line (void)
    */
   return sizeof (void*) * 6 + (80.0 * 4);
 }
+
+void
+terminal_widget_write_data_to_child (GtkWidget  *widget,
+                                     const char *data,
+                                     int         len)
+{
+  zvt_term_writechild (ZVT_TERM (widget), data, len);
+}

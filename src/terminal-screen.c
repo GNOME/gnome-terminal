@@ -79,6 +79,8 @@ static void terminal_screen_widget_child_died        (GtkWidget      *term,
 static void terminal_screen_widget_selection_changed (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
+static void terminal_screen_setup_dnd                (TerminalScreen *screen);
+
 static void reread_profile (TerminalScreen *screen);
 
 static void rebuild_title  (TerminalScreen *screen);
@@ -122,7 +124,7 @@ terminal_screen_init (TerminalScreen *screen)
   screen->priv = g_new0 (TerminalScreenPrivate, 1);
   
   screen->priv->term = terminal_widget_new ();
-
+  
   g_object_ref (G_OBJECT (screen->priv->term));
   gtk_object_sink (GTK_OBJECT (screen->priv->term));
 
@@ -131,6 +133,8 @@ terminal_screen_init (TerminalScreen *screen)
   
   terminal_widget_match_add (screen->priv->term,
                              "(((news|telnet|nttp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]");
+
+  terminal_screen_setup_dnd (screen);
   
   g_object_set_data (G_OBJECT (screen->priv->term),
                      "terminal-screen",
@@ -1407,4 +1411,261 @@ terminal_screen_edit_title (TerminalScreen *screen,
   
   gtk_widget_show_all (screen->priv->title_editor);
   gtk_window_present (GTK_WINDOW (screen->priv->title_editor));
+}
+
+enum
+{
+  TARGET_URI_LIST,
+  TARGET_UTF8_STRING,
+  TARGET_TEXT,
+  TARGET_COMPOUND_TEXT,
+  TARGET_STRING,
+  TARGET_COLOR,
+  TARGET_BGIMAGE,
+  TARGET_RESET_BG,
+  TARGET_TEXT_PLAIN
+};
+
+static void  
+drag_data_received  (GtkWidget *widget, GdkDragContext *context, 
+		     gint x, gint y,
+		     GtkSelectionData *selection_data, guint info,
+		     guint time,
+                     gpointer data)
+{
+  TerminalScreen *screen;
+
+  screen = TERMINAL_SCREEN (data);
+
+  switch (info)
+    {
+    case TARGET_STRING:
+    case TARGET_UTF8_STRING:
+    case TARGET_COMPOUND_TEXT:
+    case TARGET_TEXT:
+      {
+        char *str;
+        
+        str = gtk_selection_data_get_text (selection_data);
+
+        /* FIXME should this be converted back to locale encoding
+         * before sending to the terminal? Most likely yes.
+         */
+        if (str && *str)
+          {
+            terminal_widget_write_data_to_child (screen->priv->term,
+                                                 str, strlen (str));
+          }
+
+        g_free (str);
+      }
+      break;
+
+    case TARGET_TEXT_PLAIN:
+      {
+        if (selection_data->format != 8 ||
+            selection_data->length == 0)
+          {
+            g_printerr (_("text/plain dropped on terminal had wrong format (%d) or length (%d)\n"),
+                        selection_data->format,
+                        selection_data->length);
+            return;
+          }
+        
+        /* FIXME just brazenly ignoring encoding issues... */
+        terminal_widget_write_data_to_child (screen->priv->term,
+                                             selection_data->data,
+                                             selection_data->length);
+      }
+      break;
+      
+    case TARGET_COLOR:
+      {
+        guint16 *data = (guint16 *)selection_data->data;
+        GdkColor color;
+        GdkColor fg;
+        TerminalProfile *profile;
+
+        if (selection_data->format != 16 ||
+            selection_data->length != 8)
+          {
+            g_printerr (_("Color dropped on terminal had wrong format (%d) or length (%d)\n"),
+                        selection_data->format,
+                        selection_data->length);
+            return;
+          }
+
+        color.red = data[0];
+        color.green = data[1];
+        color.blue = data[2];
+
+        profile = terminal_screen_get_profile (screen);
+
+        if (profile)
+          {
+            terminal_profile_set_background_type (profile,
+                                                  TERMINAL_BACKGROUND_SOLID);
+            
+            terminal_profile_get_color_scheme (profile,
+                                               &fg, NULL);
+            
+            terminal_profile_set_color_scheme (profile, &fg, &color);
+          }
+      }
+      break;
+
+    case TARGET_URI_LIST:
+      {
+        char *uri_list;
+        char **uris;
+        int i;
+        
+        if (selection_data->format != 8 ||
+            selection_data->length == 0)
+          {
+            g_printerr (_("URI list dropped on terminal had wrong format (%d) or length (%d)\n"),
+                        selection_data->format,
+                        selection_data->length);
+            return;
+          }
+        
+        uri_list = g_strndup (selection_data->data,
+                              selection_data->length);
+
+	uris = g_strsplit (uri_list, "\r\n", 0);
+
+        i = 0;
+        while (uris && uris[i])
+          {
+            char *old;
+            
+            old = uris[i];
+
+            uris[i] = g_filename_from_uri (old, NULL, NULL);
+
+            /* If the URI wasn't a filename, then pass it through
+             * as a URI, so you can DND from Mozilla or whatever
+             */
+            if (uris[i] == NULL)
+              uris[i] = old;
+            else
+              g_free (old);
+            
+            ++i;
+          }
+
+        if (uris)
+          {
+            char *flat;
+            
+            flat = g_strjoinv (" ", uris);
+            terminal_widget_write_data_to_child (screen->priv->term,
+                                                 flat, strlen (flat));
+            g_free (flat);
+          }
+
+        g_strfreev (uris);
+      }
+      break;
+      
+    case TARGET_BGIMAGE:
+      {
+        char *uri_list;
+        char **uris;
+        gboolean exactly_one;
+        
+        if (selection_data->format != 8 ||
+            selection_data->length == 0)
+          {
+            g_printerr (_("Image filename dropped on terminal had wrong format (%d) or length (%d)\n"),
+                        selection_data->format,
+                        selection_data->length);
+            return;
+          }
+        
+        uri_list = g_strndup (selection_data->data,
+                              selection_data->length);
+
+	uris = g_strsplit (uri_list, "\r\n", 0);
+
+	exactly_one = uris[0] != NULL && (uris[1] == NULL || uris[1][0] == '\0');
+
+        if (exactly_one)
+          {
+            TerminalProfile *profile;
+            char *filename;
+            GError *err;
+
+            err = NULL;
+            filename = g_filename_from_uri (uris[0],
+                                            NULL,
+                                            &err);
+
+            if (err)
+              {
+                g_printerr (_("Error converting URI \"%s\" into filename: %s\n"),
+                            uris[0], err->message);
+
+                g_error_free (err);
+              }
+
+            profile = terminal_screen_get_profile (screen);
+            
+            if (filename && profile)
+              {
+                terminal_profile_set_background_type (profile,
+                                                      TERMINAL_BACKGROUND_IMAGE);
+                
+                terminal_profile_set_background_image_file (profile,
+                                                            filename);
+              }
+
+            g_free (filename);
+          }
+
+        g_strfreev (uris);
+        g_free (uri_list);
+      }
+      break;
+    case TARGET_RESET_BG:
+      {
+        TerminalProfile *profile;
+
+        profile = terminal_screen_get_profile (screen);
+        
+        if (profile)
+          {
+            terminal_profile_set_background_type (profile,
+                                                  TERMINAL_BACKGROUND_SOLID);
+          }
+      }
+      break;
+    }
+}
+
+static void
+terminal_screen_setup_dnd (TerminalScreen *screen)
+{
+  static GtkTargetEntry target_table[] = {
+    { "application/x-color", 0, TARGET_COLOR },
+    { "property/bgimage",    0, TARGET_BGIMAGE },
+    { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
+    { "text/uri-list",  0, TARGET_URI_LIST },
+    { "UTF8_STRING", 0, TARGET_UTF8_STRING },
+    { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
+    { "TEXT", 0, TARGET_TEXT },
+    { "STRING",     0, TARGET_STRING },
+    /* text/plain problematic, we don't know its encoding */
+    { "text/plain", 0, TARGET_TEXT_PLAIN }
+  };
+  
+  g_signal_connect (G_OBJECT (screen->priv->term), "drag_data_received",
+                    G_CALLBACK (drag_data_received), screen);
+  
+  gtk_drag_dest_set (GTK_WIDGET (screen->priv->term),
+                     GTK_DEST_DEFAULT_MOTION |
+                     GTK_DEST_DEFAULT_HIGHLIGHT |
+                     GTK_DEST_DEFAULT_DROP,
+                     target_table, G_N_ELEMENTS (target_table),
+                     GDK_ACTION_COPY);
 }

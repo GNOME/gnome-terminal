@@ -137,6 +137,10 @@ gboolean terminal_widget_fork_command      (GtkWidget   *widget,
 
 int terminal_widget_get_estimated_bytes_per_scrollback_line (void);
 
+void terminal_widget_write_data_to_child (GtkWidget  *widget,
+                                          const char *data,
+                                          int         len);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WIDGET_H */
