@@ -1702,6 +1702,34 @@ selection_changed_callback (GtkTreeSelection *selection,
                             count > 0);
 }
 
+static void
+profile_activated_callback (GtkTreeView       *tree_view,
+                            GtkTreePath       *path,
+                            GtkTreeViewColumn *column,
+                            TerminalApp       *app)
+{
+  TerminalProfile *profile;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+
+  model = gtk_tree_view_get_model (tree_view);
+
+  if (!gtk_tree_model_get_iter (model, &iter, path))
+    return;
+  
+  profile = NULL;
+  gtk_tree_model_get (model,
+                      &iter,
+                      COLUMN_PROFILE_OBJECT,
+                      &profile,
+                      -1);
+
+  if (profile)
+    terminal_app_edit_profile (app,
+                               profile,
+                               GTK_WINDOW (app->manage_profiles_dialog));
+}
+
 void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
@@ -1780,6 +1808,11 @@ terminal_app_manage_profiles (TerminalApp     *app,
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       app->manage_profiles_list = create_profile_list ();
+
+      g_signal_connect (G_OBJECT (app->manage_profiles_list),
+                        "row_activated",
+                        G_CALLBACK (profile_activated_callback),
+                        app);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
