@@ -2807,24 +2807,9 @@ manage_profiles_response_cb (GtkDialog *dialog,
   g_assert (app->manage_profiles_dialog == GTK_WIDGET (dialog));
   
   if (id == GTK_RESPONSE_HELP)
-    {
-      GError *err;
-      err = NULL;
-      gnome_help_display ("gnome-terminal", "gnome-terminal-manage-profiles",
-                          &err);
-      
-      if (err)
-        {
-          terminal_util_show_error_dialog (GTK_WINDOW (app->manage_profiles_dialog), NULL,
-                                           _("There was an error displaying help: %s"),
-                                           err->message);
-          g_error_free (err);
-        }
-    }
+    terminal_util_show_help ("gnome-terminal-manage-profiles", GTK_WINDOW (dialog));
   else
-    {
-      gtk_widget_destroy (GTK_WIDGET (dialog));
-    }
+    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -3450,6 +3435,25 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_p
     }
   }
 
+void
+terminal_util_show_help (const char *topic, 
+                         GtkWindow  *transient_parent)
+{
+  GError *err;
+
+  err = NULL;
+
+  gnome_help_display ("gnome-terminal", topic, &err);
+  
+  if (err)
+    {
+      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
+                                       _("There was an error displaying help: %s"),
+                                      err->message);
+      g_error_free (err);
+    }
+}
+ 
 /* This function is used to set LABLLED_BY relation between widgets
  * and labels
  */

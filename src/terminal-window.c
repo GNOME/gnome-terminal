@@ -29,7 +29,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgnome/gnome-program.h>
-#include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gdk/gdkx.h>
@@ -2598,17 +2597,7 @@ static void
 help_callback (GtkWidget      *menuitem,
                TerminalWindow *window)
 {
-  GError *err;
-
-  err = NULL;  
-  gnome_help_display ("gnome-terminal", NULL, &err);
-
-  if (err != NULL)
-    {
-      terminal_util_show_error_dialog (GTK_WINDOW (window), NULL,
-                                       _("There was an error displaying help: %s"), err->message);
-      g_error_free (err);
-    }
+  terminal_util_show_help (NULL, GTK_WINDOW (window));
 }
 
 static void

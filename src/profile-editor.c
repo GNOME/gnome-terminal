@@ -24,7 +24,6 @@
 #include "terminal-intl.h"
 #include "terminal.h"
 #include <glade/glade.h>
-#include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-color-picker.h>
 #include <libgnomeui/gnome-font-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
@@ -872,23 +871,9 @@ editor_response_cb (GtkDialog *editor,
                     void      *data)
 {  
   if (id == GTK_RESPONSE_HELP)
-    {
-      GError *err;
-      err = NULL;
-      gnome_help_display ("gnome-terminal", "gnome-terminal-prefs",
-                          &err);
-      
-      if (err)
-        {
-          terminal_util_show_error_dialog (GTK_WINDOW (editor), NULL,
-                                           _("There was an error displaying help: %s"), err->message);
-          g_error_free (err);
-        }
-    }
+    terminal_util_show_help ("gnome-terminal-prefs", GTK_WINDOW (editor));
   else
-    {
-      gtk_widget_destroy (GTK_WIDGET (editor));
-    }
+    gtk_widget_destroy (GTK_WIDGET (editor));
 }
 
 void

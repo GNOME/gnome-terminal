@@ -31,8 +31,6 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtktreestore.h>
 
-#include <libgnome/gnome-help.h>
-
 #include <string.h>
 
 /* Overview
@@ -425,23 +423,9 @@ response_callback (GtkWidget *window,
                    void      *data)
 {
   if (id == GTK_RESPONSE_HELP)
-    {
-      GError *err;
-      err = NULL;
-      gnome_help_display ("gnome-terminal", "gnome-terminal-encodings",
-                          &err);
-      
-      if (err)
-        {
-          terminal_util_show_error_dialog (GTK_WINDOW (window), NULL,
-                                           _("There was an error displaying help: %s"), err->message);
-          g_error_free (err);
-        }
-    }
+    terminal_util_show_help ("gnome-terminal-encodings", GTK_WINDOW (window));
   else
-    {
-      gtk_widget_destroy (GTK_WIDGET (window));
-    }
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 enum
