@@ -60,11 +60,12 @@ static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_update_on_realize (ZvtTerm        *term,
                                                TerminalScreen *screen);
 
-static void terminal_screen_popup_menu_keyboard (GtkWidget      *zvt,
-                                                 TerminalScreen *screen);
-static void terminal_screen_popup_menu_mouse    (GtkWidget      *zvt,
-                                                 GdkEventButton *event,
-                                                 TerminalScreen *screen);
+static void     terminal_screen_popup_menu_keyboard (GtkWidget      *zvt,
+                                                     TerminalScreen *screen);
+static gboolean terminal_screen_popup_menu_mouse    (GtkWidget      *zvt,
+                                                     GdkEventButton *event,
+                                                     TerminalScreen *screen);
+
 
 static void terminal_screen_zvt_title_changed   (GtkWidget      *zvt,
                                                  const char     *title,
@@ -710,13 +711,20 @@ terminal_screen_popup_menu_keyboard (GtkWidget      *zvt,
   terminal_screen_do_popup (screen, NULL);
 }
 
-static void
+static gboolean
 terminal_screen_popup_menu_mouse (GtkWidget      *zvt,
                                   GdkEventButton *event,
                                   TerminalScreen *screen)
 {
   if (event->button == 3)
-    terminal_screen_do_popup (screen, event);
+    {
+      terminal_screen_do_popup (screen, event);
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
 }
 
 static void
