@@ -1,5 +1,5 @@
 
-SUBDIRS=src po
+SUBDIRS=src po help
 
 desktopdir = $(datadir)/applications
 desktop_in_files = gnome-terminal.desktop.in

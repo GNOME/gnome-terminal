@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <libgnome/gnome-program.h>
+#include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gdk/gdkx.h>
@@ -1702,25 +1703,6 @@ terminal_window_get_fullscreen (TerminalWindow *window)
  */
 
 static void
-not_implemented (void)
-{
-  GtkWidget *dialog;
-
-  dialog = gtk_message_dialog_new (NULL,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_CLOSE,
-                                   "Didn't implement this item yet, sorry");
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  
-  gtk_widget_show (dialog);
-}
-
-static void
 new_window_callback (GtkWidget      *menuitem,
                      TerminalWindow *window)
 {
@@ -1972,8 +1954,32 @@ static void
 help_callback (GtkWidget      *menuitem,
                TerminalWindow *window)
 {
-  not_implemented ();
+  GError *err;
 
+  err = NULL;  
+  gnome_help_display ("gnome-terminal", NULL, &err);
+
+  if (err != NULL)
+    {
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_CLOSE,
+                                       _("There was an error displaying help: %s"),
+                                       err->message);
+      
+      g_signal_connect (G_OBJECT (dialog), "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+      
+      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+      
+      gtk_widget_show (dialog);
+
+      g_error_free (err);
+    }
 }
 
 static void
