@@ -1,6 +1,12 @@
 <gconfschemafile>
   <schemalist>
 
+
+
+    <!-- Global settings -->
+
+
+
     <schema>
       <key>/schemas/apps/gnome-terminal/global/profile_list</key>
       <applyto>/apps/gnome-terminal/global/profile_list</applyto>
@@ -32,6 +38,28 @@
          </long>
       </locale>
     </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-terminal/global/use_mnemonics</key>
+      <applyto>/apps/gnome-terminal/global/use_mnemonics</applyto>
+      <owner>gnome-terminal</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether the menubar has mnemonics</short>
+         <long>
+          Whether to have Alt+letter shortcuts for the menubar. 
+          They may interfere with some apps run inside the terminal
+          so it's possible to turn them off.
+         </long>
+      </locale>
+    </schema>
+
+
+    <!-- Per-profile settings -->
+
+
+
 
     <schema>
       <key>/schemas/apps/gnome-terminal/profiles/Default/visible_name</key>
@@ -478,6 +506,27 @@
          </long>
       </locale>
     </schema>
+
+
+
+
+    <!-- Keybindings -->
+
+    <schema>
+      <key>/schemas/apps/gnome-terminal/keybindings/new_tab</key>
+      <applyto>/apps/gnome-terminal/keybindings/new_tab</applyto>
+      <owner>gnome-terminal</owner>
+      <type>string</type>
+      <default>&lt;Ctrl&gt;t</default>
+      <locale name="C">
+         <short>Accelerator to open a new tab.</short>
+         <long>
+          Accelerator key for opening a new tab. Expressed as a string
+          in the same format used for GTK+ resource files.
+         </long>
+      </locale>
+    </schema>
+
 
   </schemalist>  
 </gconfschemafile>

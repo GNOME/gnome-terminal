@@ -28,6 +28,7 @@
 #define CONF_PREFIX "/apps/gnome-terminal"
 #define CONF_GLOBAL_PREFIX CONF_PREFIX"/global"
 #define CONF_PROFILES_PREFIX CONF_PREFIX"/profiles"
+#define CONF_KEYS_PREFIX CONF_PREFIX"/keybindings"
 #define FALLBACK_PROFILE_ID "Default"
 
 typedef enum

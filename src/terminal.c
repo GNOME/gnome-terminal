@@ -20,6 +20,7 @@
 
 #include "terminal-intl.h"
 #include "terminal.h"
+#include "terminal-accels.h"
 #include "terminal-window.h"
 #include "profile-editor.h"
 #include <gconf/gconf-client.h>
@@ -655,6 +656,8 @@ main (int argc, char **argv)
       g_error_free (err);
     }  
 
+  terminal_accels_init (conf);
+  
   terminal_profile_initialize (conf);
   sync_profile_list (FALSE, NULL);
 
@@ -795,7 +798,7 @@ terminal_app_new_terminal (TerminalApp     *app,
   
   if (window == NULL)
     {
-      window = terminal_window_new ();
+      window = terminal_window_new (conf);
       g_object_ref (G_OBJECT (window));
 
       g_signal_connect (G_OBJECT (window), "destroy",

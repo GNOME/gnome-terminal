@@ -24,6 +24,7 @@
 #define GDK_DISABLE_DEPRECATED
 
 #include "terminal-intl.h"
+#include "terminal-accels.h"
 #include "terminal-window.h"
 #include "terminal-profile.h"
 #include "terminal.h"
@@ -1291,6 +1292,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
   g_assert (screen->priv->popup_menu == NULL);
   
   screen->priv->popup_menu = gtk_menu_new ();
+  gtk_menu_set_accel_group (GTK_MENU (screen->priv->popup_menu),
+                            terminal_accels_get_accel_group ());
   
   gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
                              GTK_WIDGET (screen->priv->zvt),
@@ -1301,10 +1304,12 @@ terminal_screen_do_popup (TerminalScreen *screen,
                    G_CALLBACK (new_window_callback),
                    screen);
 
-  append_menuitem (screen->priv->popup_menu,
-                   _("New _tab"),
-                   G_CALLBACK (new_tab_callback),
-                   screen);
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               _("New _tab"),
+                               G_CALLBACK (new_tab_callback),
+                               screen);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                ACCEL_PATH_NEW_TAB);
 
   menu_item = append_stock_menuitem (screen->priv->popup_menu,
                                      GTK_STOCK_COPY,

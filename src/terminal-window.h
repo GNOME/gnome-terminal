@@ -52,7 +52,7 @@ struct _TerminalWindowClass
 
 GType terminal_window_get_type (void) G_GNUC_CONST;
 
-TerminalWindow* terminal_window_new (void);
+TerminalWindow* terminal_window_new (GConfClient *conf);
 
 void terminal_window_add_screen (TerminalWindow *window,
                                  TerminalScreen *screen);

@@ -21,6 +21,8 @@ gnome_terminal_SOURCES=				\
 	profile-editor.h			\
 	terminal.c				\
 	terminal.h				\
+	terminal-accels.c			\
+	terminal-accels.h			\
 	terminal-intl.h				\
 	terminal-profile.c			\
 	terminal-profile.h			\
