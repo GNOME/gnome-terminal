@@ -2688,6 +2688,7 @@ about_callback (GtkWidget      *menuitem,
 
   if (about)
     {
+      gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
       gtk_window_present (GTK_WINDOW (about));
       return;
     }
@@ -2704,11 +2705,11 @@ about_callback (GtkWidget      *menuitem,
                            strcmp (translator_credits, "translator_credits") != 0 ? translator_credits : NULL,
                            pixbuf);
   gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
 
   terminal_util_set_unique_role (GTK_WINDOW (about), "gnome-terminal-about");
   
-  g_object_add_weak_pointer (G_OBJECT (about),
-                             (void**) &about);
+  g_object_add_weak_pointer (G_OBJECT (about), (void**) &about);
 
   gtk_widget_show (about);
 }

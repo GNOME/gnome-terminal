@@ -80,7 +80,7 @@
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			</widget>
 			<packing>
@@ -267,7 +267,7 @@
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			</widget>
 			<packing>
@@ -588,7 +588,7 @@
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			  <accessibility>
 			    <atkrelation target="title-entry-label" type="labelled-by"/>
@@ -863,11 +863,11 @@
 			  <property name="max_length">0</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
-			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="invisible_char">*</property>
 			  <property name="activates_default">False</property>
 			  <accessibility>
-			    <atkrelation target="custom-command-entry-label" type="labelled-by"/>
 			    <atkrelation target="use-custom-command-checkbutton" type="controlled-by"/>
+			    <atkrelation target="custom-command-entry-label" type="labelled-by"/>
 			  </accessibility>
 			</widget>
 			<packing>
@@ -927,7 +927,6 @@
 				      <property name="use_underline">True</property>
 				    </widget>
 				  </child>
-
 				</widget>
 			      </child>
 			    </widget>
@@ -2131,6 +2130,8 @@
 			      <property name="max_saved">10</property>
 			      <property name="directory_entry">False</property>
 			      <property name="modal">False</property>
+			      <property name="use_filechooser">False</property>
+			      <property name="filechooser_action">GTK_FILE_CHOOSER_ACTION_OPEN</property>
 
 			      <child internal-child="entry">
 				<widget class="GtkEntry" id="background-image-entry">
@@ -2141,7 +2142,7 @@
 				  <property name="max_length">0</property>
 				  <property name="text" translatable="yes"></property>
 				  <property name="has_frame">True</property>
-				  <property name="invisible_char" translatable="yes">*</property>
+				  <property name="invisible_char">*</property>
 				  <property name="activates_default">False</property>
 				  <accessibility>
 				    <atkrelation target="background-image-entry-label" type="labelled-by"/>
@@ -2521,7 +2522,7 @@
 		  <child>
 		    <widget class="GtkLabel" id="scrollback-kilobytes-spinbutton-label">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_kilobytes</property>
+		      <property name="label" translatable="yes">kilo_bytes</property>
 		      <property name="use_underline">True</property>
 		      <property name="use_markup">False</property>
 		      <property name="justify">GTK_JUSTIFY_CENTER</property>
@@ -3485,7 +3486,7 @@ and operating systems that expect different terminal behavior.</property>
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">True</property>
 		    </widget>
 		    <packing>
@@ -3646,7 +3647,7 @@ and operating systems that expect different terminal behavior.</property>
 	  <property name="spacing">0</property>
 
 	  <child>
-            <widget class="GtkVBox" id="vbox77">
+	    <widget class="GtkVBox" id="vbox77">
 	      <property name="visible">True</property>
 	      <property name="homogeneous">False</property>
 	      <property name="spacing">6</property>
@@ -3688,7 +3689,7 @@ and operating systems that expect different terminal behavior.</property>
 		      <property name="max_length">0</property>
 		      <property name="text" translatable="yes"></property>
 		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="invisible_char">*</property>
 		      <property name="activates_default">False</property>
 		      <property name="width_chars">14</property>
 		    </widget>
