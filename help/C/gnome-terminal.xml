@@ -2,12 +2,12 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY app "GNOME Terminal">  
-  <!ENTITY appversion "2.1.4">
-  <!ENTITY date "May 2003">
+  <!ENTITY appversion "2.3.2">
+  <!ENTITY date "August 2003">
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY manrevision "2.5">
+  <!ENTITY manrevision "2.6">
 ]>
-<!-- (Do not remove this comment block.)
+<!--  (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
   Template version: 2.0 beta
   Template last modified Jan 2, 2002 
@@ -17,7 +17,8 @@
   <articleinfo> 
      <title>&app; Manual V&manrevision;</title> 
      <copyright> 
-        <year>2002-2003</year> 
+        <year>2002</year> 
+        <year>2003</year> 
         <holder>Sun Microsystems</holder> 
      </copyright> 
      <copyright> 
@@ -70,6 +71,18 @@
              </para>
           </revdescription> 
         </revision> 
+			<revision> 
+          <revnumber>GNOME Terminal Manual V2.5</revnumber> 
+          <date>May 2003</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription> 
+        </revision>
 			<revision> 
           <revnumber>GNOME Terminal Manual V2.4</revnumber> 
           <date>January 2003</date> 
@@ -362,7 +375,7 @@
           </screenshot> 
         </figure> 
         <para>
-          See <xref linkend="gnome-terminal-tabs"/> for information about how to
+          See <xref linkend="gnome-terminal-windows"/> for information about how to
           open a new tabbed terminal. 
         </para>
      </sect2> 
@@ -481,7 +494,7 @@
                      <listitem> 
                         <para>
                           Type the new profile name in the 
-                          <guilabel>Profile Name</guilabel> text box.
+                          <guilabel>Profile name</guilabel> text box.
                         </para>
                      </listitem> 
                      <listitem> 
@@ -791,13 +804,13 @@
           choose 
           <menuchoice> 
                <guimenu>Edit</guimenu> 
-               <guimenuitem>Keybindings</guimenuitem> 
-          </menuchoice>. The <guilabel>Keybindings Editor</guilabel> dialog contains
+               <guimenuitem>Keyboard Shortcuts</guimenuitem> 
+          </menuchoice>. The <guilabel>Keyboard Shortcuts Editor</guilabel> dialog contains
           the following items:
         </para>
         <variablelist> 
           <varlistentry> 
-             <term><guilabel>Disable all menu mnemonics</guilabel></term> 
+             <term><guilabel>Disable all menu access keys</guilabel></term> 
              <listitem> 
                 <para>
                   Select this check box to disable the access keys that are defined to
@@ -810,7 +823,7 @@
              </listitem> 
           </varlistentry> 
           <varlistentry> 
-             <term><guilabel>Disable menu access key</guilabel></term> 
+             <term><guilabel>Disable menu shortcut key</guilabel></term> 
              <listitem> 
                 <para>
                   Select this check box to disable the shortcut key that is defined to
@@ -820,10 +833,10 @@
              </listitem> 
           </varlistentry> 
           <varlistentry> 
-             <term><guilabel>Accelerators</guilabel></term> 
+             <term><guilabel>Shortcut Keys</guilabel></term> 
              <listitem> 
                 <para>
-                  The <guilabel>Accelerators</guilabel> section of the dialog
+                  The <guilabel>Shortcut Keys</guilabel> section of the dialog
                   lists the shortcut keys that are defined for each menu item.
                   The shortcut keys enable you to use the keyboard to choose
                   a menu item rather than using the mouse. The shortcut key is
@@ -932,7 +945,7 @@
           </varlistentry> 
           <varlistentry> 
              <term> 
-                <guilabel>Use the same font as other applications</guilabel> </term> 
+                <guilabel>Use the system terminal font</guilabel> </term> 
              <listitem> 
                 <para>
                   Select this option to use the standard application font that is specified in the 
@@ -1038,16 +1051,6 @@
           </varlistentry> 
           <varlistentry> 
              <term> 
-                <guilabel>When command exits</guilabel> </term> 
-             <listitem> 
-                <para>
-                  Use this drop-down list to choose a command to run when the
-                  terminal exits. 
-                </para>
-             </listitem> 
-          </varlistentry> 
-          <varlistentry> 
-             <term> 
                 <guilabel>Run command as a login shell</guilabel> </term> 
              <listitem> 
                 <para>
@@ -1056,7 +1059,7 @@
                   setting has no effect. 
                 </para>
              </listitem> 
-          </varlistentry> 
+          </varlistentry>
           <varlistentry> 
              <term> 
                 <guilabel>Update utmp/wtmp records when command is
@@ -1080,6 +1083,16 @@
                 </para>
              </listitem> 
           </varlistentry> 
+          <varlistentry> 
+             <term> 
+                <guilabel>When command exits</guilabel> </term> 
+             <listitem> 
+                <para>
+                  Use this drop-down list to choose a command to run when the
+                  terminal exits. 
+                </para>
+             </listitem> 
+          </varlistentry> 
         </variablelist> 
      </sect2> 
      <sect2 id="gnome-terminal-prefs-colors"> 
@@ -1098,7 +1111,7 @@
           </varlistentry>
           <varlistentry> 
              <term> 
-                <guilabel>Built in schemes - Foreground and Background</guilabel> </term> 
+                <guilabel>Built-in schemes - Foreground and Background</guilabel> </term> 
              <listitem> 
                 <para>
                   Use the drop-down list box to specify the foreground and
@@ -1113,19 +1126,24 @@
                   </listitem>
                   <listitem> 
                      <para>
-                        <guilabel>White on black</guilabel> 
-                     </para>
-                  </listitem> 
-                  <listitem> 
-                     <para>
                         <guilabel>Black on white</guilabel> 
                      </para>
-                  </listitem> 
+                  </listitem>
+                  <listitem> 
+                     <para>
+                        <guilabel>Gray on black</guilabel> 
+                     </para>
+                  </listitem>
                   <listitem> 
                      <para>
                         <guilabel>Green on black</guilabel> 
                      </para>
-                  </listitem>             
+                  </listitem> 
+                  <listitem> 
+                     <para>
+                        <guilabel>White on black</guilabel> 
+                     </para>
+                  </listitem> 
                   <listitem> 
                      <para>
                         <guilabel>Custom</guilabel> 
@@ -1157,7 +1175,7 @@
                   This button is only available if you specify the 
                   <guilabel>Custom colors</guilabel> option on the 
                   <guilabel>Built-in schemes</guilabel> drop-down list box in the 
-                  <guilabel>Terminal Color</guilabel> group box. 
+                  <guilabel>Foreground and Background</guilabel> group box. 
                 </para>
              </listitem> 
           </varlistentry> 
@@ -1173,7 +1191,7 @@
                   palette. This button is only available if you specify the 
                   <guilabel>Custom colors</guilabel> option on the 
                   <guilabel>Built-in schemes</guilabel> drop-down list box in the 
-                  <guilabel>Terminal Color</guilabel> group box. 
+                  <guilabel>Foreground and Background</guilabel> group box. 
                 </para>
              </listitem> 
           </varlistentry> 
@@ -1211,8 +1229,7 @@
                 <para>
                   Each color scheme is slightly different. For example, 
                   <guilabel>Linux console</guilabel> uses light gray instead of
-                  white. The 
-                  <guilabel>Custom </guilabel>color scheme enables you to create a
+                  white. The <guilabel>Custom</guilabel> color scheme enables you to create a
                   customized color palette. 
                 </para>
              </listitem> 
@@ -1298,7 +1315,7 @@
           </varlistentry>        
           <varlistentry> 
              <term> 
-                <guilabel>Shade transparent and image backgrounds</guilabel>
+                <guilabel>Shade transparent or image backgrounds</guilabel>
                 </term> 
              <listitem> 
                 <para>
@@ -1346,7 +1363,18 @@
                   scroll back through the last 94 kilobytes displayed in the terminal. 
                 </para>
              </listitem> 
-          </varlistentry> 
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Scroll on output</guilabel> </term> 
+             <listitem> 
+                <para>
+                  Select this option to enable you to scroll through the output on
+                  the terminal while the terminal continues to display more output from a
+                  command. 
+                </para>
+             </listitem> 
+          </varlistentry>  
           <varlistentry> 
              <term> 
                 <guilabel>Scroll on keystroke</guilabel> </term> 
@@ -1356,17 +1384,6 @@
 						  to scroll down the terminal window to the command prompt. This 
 						  action only applies if you scrolled up the terminal window and
                   you want to return to the command prompt. 	 
-                </para>
-             </listitem> 
-          </varlistentry> 
-          <varlistentry> 
-             <term> 
-                <guilabel>Scroll on output</guilabel> </term> 
-             <listitem> 
-                <para>
-                  Select this option to enable you to scroll through the output on
-                  the terminal while the terminal continues to display more output from a
-                  command. 
                 </para>
              </listitem> 
           </varlistentry> 
