@@ -79,6 +79,7 @@ static GConfClient *conf = NULL;
 static TerminalApp *app = NULL;
 static gboolean terminal_factory_disabled = FALSE;
 
+#define TERMINAL_STOCK_EDIT "terminal-edit"
 typedef struct
 {
   GList *initial_windows;
@@ -1687,7 +1688,7 @@ terminal_app_new_profile (TerminalApp     *app,
       old_transient_parent = NULL;      
       
       app->new_profile_dialog =
-        gtk_dialog_new_with_buttons (_("New terminal profile"),
+        gtk_dialog_new_with_buttons (_("New Profile"),
                                      NULL,
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_STOCK_CANCEL,
@@ -1717,7 +1718,7 @@ terminal_app_new_profile (TerminalApp     *app,
       
       hbox = gtk_hbox_new (FALSE, PADDING);
 
-      label = gtk_label_new_with_mnemonic (_("Profile _Name:"));
+      label = gtk_label_new_with_mnemonic (_("Profile _name:"));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       entry = gtk_entry_new ();
       app->new_profile_name_entry = entry;
@@ -1736,7 +1737,7 @@ terminal_app_new_profile (TerminalApp     *app,
       
       hbox = gtk_hbox_new (FALSE, PADDING);
 
-      label = gtk_label_new_with_mnemonic (_("_Base new profile on:"));
+      label = gtk_label_new_with_mnemonic (_("_Base on:"));
       gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
       app->new_profile_base_menu = profile_optionmenu_new ();
       option_menu = app->new_profile_base_menu;
@@ -2028,19 +2029,19 @@ profile_list_delete_selection (GtkWidget   *profile_list,
                                    GTK_BUTTONS_NONE,
                                    "%s", 
                                    str->str);
-
   g_string_free (str, TRUE);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          _("_No"),
+                          GTK_STOCK_CANCEL,
                           GTK_RESPONSE_REJECT,
-                          _("_Delete"),
+			  GTK_STOCK_DELETE,
                           GTK_RESPONSE_ACCEPT,
                           NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                   GTK_RESPONSE_REJECT);
-  
+                                   GTK_RESPONSE_ACCEPT);
+ 
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile")); 
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
   g_object_set_data_full (G_OBJECT (dialog), "deleted-profiles-list",
@@ -2283,6 +2284,29 @@ manage_profiles_response_cb (GtkDialog *dialog,
     }
 }
 
+static void
+terminal_app_register_stock (void)
+{
+  static gboolean registered = FALSE;
+
+  if (!registered)
+    {
+      GtkIconFactory *factory;
+      GtkIconSet     *icons;
+
+      static GtkStockItem edit_item [] = {
+	{ TERMINAL_STOCK_EDIT, N_("_Edit"), 0, 0, GETTEXT_PACKAGE },
+      };
+
+      icons = gtk_icon_factory_lookup_default (GTK_STOCK_PREFERENCES);
+      factory = gtk_icon_factory_new ();
+      gtk_icon_factory_add (factory, TERMINAL_STOCK_EDIT, icons);
+      gtk_icon_factory_add_default (factory);
+      gtk_stock_add_static (edit_item, 1);
+      registered = TRUE;
+    }
+}
+
 void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
@@ -2304,7 +2328,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       old_transient_parent = NULL;      
       
       app->manage_profiles_dialog =
-        gtk_dialog_new_with_buttons (_("Manage terminal profiles"),
+        gtk_dialog_new_with_buttons (_("Edit Profiles"),
                                      NULL,
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_STOCK_HELP,
@@ -2407,7 +2431,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       gtk_box_pack_start (GTK_BOX (vbox),
                           spacer, FALSE, FALSE, 0);
       
-      button = gtk_button_new_from_stock (_("_New..."));
+      button = gtk_button_new_from_stock (GTK_STOCK_NEW);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox),
                           button, FALSE, FALSE, 0);
@@ -2417,8 +2441,10 @@ terminal_app_manage_profiles (TerminalApp     *app,
       terminal_util_set_atk_name_description (app->manage_profiles_new_button, NULL,                             
                                               _("Click to open new profile dialog"));
 
+
+      terminal_app_register_stock ();
       
-      button = gtk_button_new_with_mnemonic (_("_Edit..."));
+      button = gtk_button_new_from_stock (TERMINAL_STOCK_EDIT);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox),
                           button, FALSE, FALSE, 0);
@@ -2428,7 +2454,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       terminal_util_set_atk_name_description (app->manage_profiles_edit_button, NULL,                            
                                               _("Click to open edit profile dialog"));
       
-      button = gtk_button_new_with_mnemonic (_("_Delete..."));
+      button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox),
                           button, FALSE, FALSE, 0);

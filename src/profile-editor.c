@@ -478,11 +478,11 @@ allow_bold_toggled (GtkWidget       *checkbutton,
 }
 
 static void
-silent_bell_toggled (GtkWidget       *checkbutton,
-                     TerminalProfile *profile)
+bell_toggled (GtkWidget       *checkbutton,
+              TerminalProfile *profile)
 {
   terminal_profile_set_silent_bell (profile,
-                                    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+                                    !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
@@ -1074,10 +1074,10 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (allow_bold_toggled),
                         profile);
       
-      w = glade_xml_get_widget (xml, "silent-bell-checkbutton");
+      w = glade_xml_get_widget (xml, "bell-checkbutton");
       profile_editor_update_silent_bell (editor, profile);
       g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (silent_bell_toggled),
+                        G_CALLBACK (bell_toggled),
                         profile);
 
       w = glade_xml_get_widget (xml, "word-chars-entry");
@@ -1435,7 +1435,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "allow-bold-checkbutton",
                    mask & TERMINAL_SETTING_ALLOW_BOLD);
 
-  set_insensitive (editor, "silent-bell-checkbutton",
+  set_insensitive (editor, "bell-checkbutton",
                    mask & TERMINAL_SETTING_SILENT_BELL);
 
   set_insensitive (editor, "word-chars-entry",
@@ -1661,7 +1661,7 @@ profile_editor_update_silent_bell (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "silent-bell-checkbutton");
+  w = profile_editor_get_widget (editor, "bell-checkbutton");
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                 terminal_profile_get_silent_bell (profile));

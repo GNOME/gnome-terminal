@@ -31,6 +31,7 @@
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gdk/gdkx.h>
+#include <gdk/gdkkeysyms.h>
 #include <eel/eel-ellipsizing-label.h>
 
 struct _TerminalWindowPrivate
@@ -46,6 +47,7 @@ struct _TerminalWindowPrivate
   GtkWidget *help_menuitem;
   GtkWidget *new_window_menuitem;
   GtkWidget *new_tab_menuitem;
+  GtkWidget *close_tab_menuitem;
   GtkWidget *copy_menuitem;
   GtkWidget *paste_menuitem;
   GtkWidget *fullscreen_menuitem;
@@ -552,9 +554,10 @@ terminal_window_init (TerminalWindow *window)
                    G_CALLBACK (close_window_callback),
                    window);
   
-  append_menuitem (menu, _("C_lose Tab"), ACCEL_PATH_CLOSE_TAB,
-                   G_CALLBACK (close_tab_callback),
-                   window);
+  window->priv->close_tab_menuitem = 
+    append_menuitem (menu, _("C_lose Tab"), ACCEL_PATH_CLOSE_TAB,
+                     G_CALLBACK (close_tab_callback),
+                     window);
   
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
@@ -665,11 +668,16 @@ terminal_window_init (TerminalWindow *window)
 
   mi = append_stock_menuitem (menu, GTK_STOCK_HELP, NULL,
 			      G_CALLBACK (help_callback), window);
-  set_menuitem_text (mi, _("_Help Contents"), FALSE);
+  set_menuitem_text (mi, _("_Contents"), FALSE);
+
+  gtk_accel_map_add_entry (ACCEL_PATH_HELP, GDK_F1, 0);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (mi),
+                                ACCEL_PATH_HELP);
+
   
   mi = append_stock_menuitem (menu, GNOME_STOCK_ABOUT, NULL,
                               G_CALLBACK (about_callback), window);
-  set_menuitem_text (mi, _("_About GNOME Terminal"),
+  set_menuitem_text (mi, _("_About"),
                      FALSE);
 
   terminal_window_reread_profile_list (window);
@@ -868,11 +876,18 @@ update_tab_sensitivity (TerminalWindow *window)
   gtk_widget_set_sensitive (window->priv->previous_tab_menuitem,
                             page_num > 0);
 
+
   /* FIXME
    * http://bugzilla.gnome.org/show_bug.cgi?id=73229
    */
   on_last_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                             page_num + 1) == NULL;
+
+  /* If there's only one tab, Close Tab is insensitive */
+  if (page_num == 0 && on_last_page)
+    gtk_widget_set_sensitive (window->priv->close_tab_menuitem, FALSE);
+  else
+    gtk_widget_set_sensitive (window->priv->close_tab_menuitem, TRUE);
   
   gtk_widget_set_sensitive (window->priv->next_tab_menuitem,
                             !on_last_page);
