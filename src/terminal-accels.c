@@ -43,6 +43,7 @@
 #define KEY_NEXT_TAB CONF_KEYS_PREFIX"/next_tab"
 #define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
+#define KEY_HELP CONF_KEYS_PREFIX"/help"
 
 typedef struct
 {
@@ -148,13 +149,18 @@ static KeyEntry go_entries[] =
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, NULL, FALSE }
 };
 
+static KeyEntry help_entries[] = {
+  { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, 0, 0, NULL, FALSE}
+};
+
 static KeyEntryList all_entries[] =
 {
   { file_entries, G_N_ELEMENTS (file_entries), N_("File") },
   { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
-  { go_entries, G_N_ELEMENTS (go_entries), N_("Go") }
+  { go_entries, G_N_ELEMENTS (go_entries), N_("Go") },
+  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
 };
 
 enum
