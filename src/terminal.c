@@ -100,6 +100,7 @@ enum {
   OPTION_SHOW_MENUBAR,
   OPTION_HIDE_MENUBAR,
   OPTION_GEOMETRY,
+  OPTION_USE_FACTORY,
   OPTION_LAST
 };  
 
@@ -193,6 +194,15 @@ struct poptOption options[] = {
     OPTION_GEOMETRY,
     N_("X geometry specification (see \"X\" man page), can be specified once per window to be opened."),
     N_("GEOMETRY")
+  },
+  {
+    "use-factory",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_USE_FACTORY,
+    N_("Ask existing profterm process to open a new window, if possible. (Not yet implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"),
+    NULL
   },
   {
     NULL,
@@ -582,6 +592,10 @@ main (int argc, char **argv)
                   }
               }
           }
+          break;
+
+        case OPTION_USE_FACTORY:
+          /* FIXME */
           break;
           
         case OPTION_LAST:          
