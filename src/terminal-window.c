@@ -119,7 +119,7 @@ static GtkWidget* screen_get_menuitem  (TerminalScreen *screen);
 static TerminalScreen* find_screen_by_hbox (TerminalWindow *window,
                                             GtkWidget      *hbox);
 
-static void notebook_page_switched_callback (GtkWidget *notebook,
+static void notebook_page_selected_callback (GtkWidget *notebook,
                                              GtkNotebookPage *useless_crap,
                                              int              page_num,
                                              TerminalWindow  *window);
@@ -733,8 +733,8 @@ terminal_window_init (TerminalWindow *window)
                                TRUE);                                      
   
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "switch_page",
-                          G_CALLBACK (notebook_page_switched_callback),
+                          "select_page",
+                          G_CALLBACK (notebook_page_selected_callback),
                           window);
   
   gtk_container_add (GTK_CONTAINER (window),
@@ -1727,7 +1727,7 @@ find_screen_by_hbox (TerminalWindow *window,
 }
 
 static void
-notebook_page_switched_callback (GtkWidget       *notebook,
+notebook_page_selected_callback (GtkWidget       *notebook,
                                  GtkNotebookPage *useless_crap,
                                  int              page_num,
                                  TerminalWindow  *window)
