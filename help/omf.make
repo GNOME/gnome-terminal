@@ -4,11 +4,11 @@
 # This file contains the build instructions for installing OMF files.  It is
 # generally called from the makefiles for particular formats of documentation.
 #
-# Note that you must configure your package with --localstatedir=/var/lib
+# Note that you must configure your package with --localstatedir=/var
 # so that the scrollkeeper-update command below will update the database
 # in the standard scrollkeeper directory.
 #
-# If it is impossible to configure with --localstatedir=/var/lib, then
+# If it is impossible to configure with --localstatedir=/var, then
 # modify the definition of scrollkeeper_localstate_dir so that
 # it points to the correct location. Note that you must still use 
 # $(localstatedir) in this or when people build RPMs it will update
@@ -19,22 +19,25 @@
 #       and the makefiles for these formats should also include this file.
 #
 # About this file:
-#	This file was taken from scrollkeeper_example2, a package illustrating
-#	how to install documentation and OMF files for use with ScrollKeeper
-#	0.3.x and 0.4.x.  For more information, see:
+#	This file was derived from scrollkeeper_example2, a package
+#	illustrating how to install documentation and OMF files for use with
+#	ScrollKeeper 0.3.x and 0.4.x.  For more information, see:
 #		http://scrollkeeper.sourceforge.net/	
-# 	Version: 0.1.2 (last updated: March 20, 2002)
+# 	Version: 0.1.3 (last updated: March 20, 2002)
 #
 
 omf_dest_dir=$(datadir)/omf/@PACKAGE@
 scrollkeeper_localstate_dir = $(localstatedir)/scrollkeeper
+
+# At some point, it may be wise to change to something like this:
+# scrollkeeper_localstate_dir = @SCROLLKEEPER_STATEDIR@
 
 omf: omf_timestamp
 
 omf_timestamp: $(omffile)
 	-for file in $(omffile); do \
 	  scrollkeeper-preinstall $(docdir)/$(docname).xml $(srcdir)/$$file $$file.out; \
-	done
+	done; \
 	touch omf_timestamp
 
 install-data-hook-omf:
@@ -51,3 +54,8 @@ uninstall-local-omf:
 	done
 	-rmdir $(omf_dest_dir)
 	-scrollkeeper-update -p $(scrollkeeper_localstate_dir)
+
+clean-local-omf:
+	-for file in $(omffile); do \
+		rm -f $$file.out; \
+	done
