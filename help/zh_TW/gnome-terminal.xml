@@ -1,0 +1,1212 @@
+<?xml version="1.0"?><!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "GNOME Terminal">  
+  <!ENTITY appversion "2.0.1">
+  <!ENTITY date "August 2002">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.3">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002 
+    
+  -->
+<article id="index" lang="zh_tw">
+  <articleinfo>
+     <title>&app; 手冊 V&manrevision;</title>
+     <copyright> 
+        <year>2002</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year> 
+        <holder>Miguel de Icaza、Michael Zucchi 及 Alexander Kirillov</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>GNOME 文件專案</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Sun</firstname> 
+          <surname>GNOME 文件小組</surname> 
+          <affiliation> 
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>GNOME 文件專案</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>GNOME 文件專案</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>GNOME 文件專案</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup>
+     <revhistory>
+        <revision> 
+          <revnumber>&app; 手冊 V&manrevision;</revnumber> 
+          <date>&date;</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME 文件小組
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME 文件專案 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 終端機手冊 V2.2</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME 文件小組
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME 文件專案 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 終端機手冊 V2.1</revnumber> 
+          <date>2002 年 8 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME 文件小組
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME 文件專案 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 終端機手冊 V2.0</revnumber> 
+          <date>2002 年 4 月</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME 文件小組
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME 文件專案 
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>GNOME 終端機使用者指南</revnumber> 
+          <date>2000 年 5 月</date> 
+          <revdescription> 
+             <para role="author">
+                Miguel de Icaza, Michael Zucchi, Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para role="publisher">
+                GNOME 文件專案 
+             </para>
+          </revdescription>
+        </revision>
+     </revhistory>
+     <releaseinfo>本手冊的內容是說明 &appversion; 版的 &app;。
+        </releaseinfo>
+     <legalnotice> 
+        <title>回饋</title>
+        <para>關於 &app; 應用程式或本手冊，如果要報告錯誤或提出建議，請遵照<ulink url="ghelp:gnome-feedback" type="help">GNOME Feedback Page</ulink> 的指示。 </para>
+     </legalnotice>
+  </articleinfo>
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>終端機應用程式</primary> 
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction"> 
+     <title>介紹</title>
+     <para>
+        <application>&app;</application> 是一個終端機模擬應用程式，您可以使用本應用程式來執行下列動作：
+     </para>
+     <variablelist>
+        <varlistentry> 
+          <term>在 GNOME 環境中存取 UNIX shell。</term> 
+          <listitem>
+             <para>
+                shell 是一個程式，可以解譯並執行您在指令行提示符號處所輸入的指令。當您啟動 <application>GNOME 終端機</application>時，本應用程式便會啟動系統帳戶中指定的預設 shell。 您可以隨時切換至不同的 shell。 
+             </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term>執行任何原本設計在 VT102、VT220 及 xterm 終端機上所執行的應用程式。</term> 
+          <listitem>
+             <para>
+                <application>&app;</application> 會模擬由 X Consortium 所開發的 xterm 程式。 同樣地，xterm 程式會模擬 DEC VT102 終端機，同時也支援 DEC VT220 逸出序列。 逸出序列是一系列以 Esc 字元開頭的字元。
+                <application>&app;</application> 接受所有 VT102 及 VT220 終端機用於各種功能的逸出序列，例如定位游標及清除螢幕。 
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started"> 
+    <title>入門</title>
+     <para>
+        下列章節會說明如何開始使用 <application>&app;</application>。 
+     </para>
+     <sect2 id="gnome-terminal-to-start"> 
+        <title>啟動 &app;</title>
+        <para>
+          您可以使用下列方式，啟動 <application>&app;</application>：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>應用程式功能表</term> 
+             <listitem>
+                <para>
+                  請選擇 <menuchoice> <guimenu>系統工具</guimenu> <guimenuitem>終端機</guimenuitem></menuchoice>。</para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>指令行</term> 
+             <listitem>
+                <para>
+                  鍵入 <command>gnome-terminal</command>， 然後按一下<keycap>Return</keycap> 鍵。 
+                </para>
+                <para>
+                  您可以使用指令行選項，修改 <application>&app;</application> 執行的方式，來符合您的需要。 如果要檢視指令行選項，請輸入 <command>gnome-terminal --help</command>，然後按一下 <keycap>Return</keycap> 鍵。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start"> 
+        <title>首次啟動 &app;</title>
+        <para>
+          當您第一次啟動 <application>&app;</application> 時，本應用程式會開啟一個終端機視窗，而其內會有一組預設設定。 這一組預設設定，稱為預設設定檔。 設定檔的名稱，會出現在 <application>&app;</application> 視窗的標題列中。 
+        </para>
+        <figure id="gnome-terminal_default"> 
+          <title>預設 &app; 視窗的範例</title>
+          <screenshot> 
+             <screeninfo>&app; 預設視窗</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>&app; 預設視窗</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          終端機視窗會顯示指令提示符號，您可以在該處輸入 UNIX 指令。 指令提示符號可以是 %、#、>、$，或其他任何特殊的字元。 游標會停留在指令提示符號處。 當您先輸入 UNIX 指令，再按一下 <keycap>Return</keycap> 鍵後，電腦就會執行該指令。 依預設值，<application>&app;</application> 使用的預設 shell，是啟動本應用程式的使用者所指定的。 
+        </para>
+        <para>
+          <application>&app;</application> 也會設定下列的環境變數：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <varname>TERM</varname></term> 
+             <listitem>
+                <para>
+                  依預設值為 xterm。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>COLORTERM</varname></term> 
+             <listitem>
+                <para>
+                  依預設值為 gnome-terminal。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>WINDOWID</varname></term> 
+             <listitem>
+                <para>
+                  依預設值為 X11 視窗識別碼。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+     <sect2 id="gnome-terminal-profiles"> 
+        <title>終端機設定檔</title>
+        <para>
+          您可以建立新的設定檔，並將新的設定檔套用至終端機，以便修正像是字型、色彩與效果、捲動行為、視窗標題、相容性，以及鍵盤捷徑鍵。 您也可以在設定檔中定義指令，用來啟動 <application>&app;</application> 。 </para>
+          <para>您可以在<guimenu>編輯</guimenu>功能表的<guilabel>編輯設定檔</guilabel>對話方塊中，定義每個終端機的設定檔。 
+            您可以依您的需要，定義多個不同的設定檔。 啟動終端機時，您可以選擇想要用於該終端機的設定檔；也可以在使用終端機時，變更終端機設定檔。 從指令行啟動本應用程式時，如果要為終端機指定某個初始設定檔的話，請使用下列指令：
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile= <replaceable>profilename</replaceable></command> 
+        </para>
+        <para>
+          目前設定檔的名稱會出現在<application>&app;</application> 的標題列中，否則您必須在 <guilabel>編輯設定檔</guilabel>對話方塊中，指定其他的標題列名稱。 
+        </para>
+        <para>
+          請參閱<xref linkend="gnome-terminal-manage-profiles"/>，以便獲得如何定義及使用新終端機設定檔的資訊。 
+        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows"> 
+        <title>使用多部終端機</title>
+        <para>
+          <application>&app;</application> 提供了標籤功能，可以讓您在視窗中新增其他的終端機。 請按一下適當的標籤，便可以在視窗中開啟各個終端機。 視窗中每個標籤終端機，都是各自獨立的子程序，因此您可以讓各個終端機從事不同的工作。您可以對視窗中各個標籤終端機，套用不同的設定檔。 終端機視窗的標題列，會顯示目前設定檔的名稱，或是目前設定檔所指定的名稱。 <xref linkend="gnome-terminal-tabbed"/>顯示一個有四個標籤的 <application>&app;</application> 視窗。 在這個例子中，四個標籤都各自有不同的設定檔。 目前設定檔的名稱是「Profile 1」，可以在標題列中看見。 
+        </para>
+        <figure id="gnome-terminal-tabbed"> 
+          <title>標籤終端機視窗的範例</title>
+          <screenshot> 
+             <screeninfo>&app; 預設視窗</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>&app; 預設視窗</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          請參閱<xref linkend="gnome-terminal-tabs"/>，以便獲得如何開啟新標籤終端機的資訊。 
+        </para>
+     </sect2>
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-usage"> 
+     <title>使用</title>
+
+     <sect2 id="gnome-terminal-windows"> 
+        <title>開啟及關閉終端機</title>
+        <variablelist>
+          <varlistentry> 
+             <term>開啟新的終端機視窗：</term>
+             <listitem>
+                <para>
+                  請選擇<menuchoice><guimenu>檔案</guimenu><guisubmenu>新視窗</guisubmenu><guimenuitem>預設</guimenuitem></menuchoice>。 
+                </para>
+                <para>
+                  新的終端機會啟動子程序，而其所使用的 PID，與您用來啟動新終端機的終端機相同。子程序所需要的系統資源，會比您從 GNOME 面板啟動新的 <application>&app;</application> 時所需要的資源要少。新終端機會繼承了應用程式設定以及夫終端機的 shell。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>關閉終端機視窗：</term>
+             <listitem>
+                <para>
+                  請選擇 <menuchoice><guimenu>檔案</guimenu> <guimenuitem>關閉視窗</guimenuitem></menuchoice>。 
+                </para>
+                <para>
+                  此動作會關閉終端機，包括任何您從終端機開啟的子程序。 如果您將最後一個終端機視窗關閉，<application>&app;</application> 程式也會結束執行。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>在同一個視窗中，加入新的有標籤終端機：</term>
+             <listitem>
+                <para>
+                  請選擇 <menuchoice><guimenu>檔案</guimenu><guisubmenu>新標籤</guisubmenu><guimenuitem>預設</guimenuitem></menuchoice>。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>開啟有標籤終端機：</term>
+             <listitem>
+                <para>
+                  請在您想要開啟的有標籤終端機其標籤名稱上按一下。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>關閉有標籤終端機：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          請在您想要關閉的有標籤終端機其標籤名稱上按一下。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請選擇<menuchoice><guimenu>檔案</guimenu><guimenuitem>關閉標籤</guimenuitem></menuchoice>。 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles"> 
+        <title>管理設定檔</title>
+        <variablelist>
+          <varlistentry> 
+             <term>新增設定檔：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          請選擇 <menuchoice> <guimenu>檔案</guimenu><guimenuitem>新設定檔</guimenuitem> </menuchoice>，顯示<guilabel>新設定檔</guilabel>對話方塊。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          將新設定檔的名稱，鍵入 <guilabel>設定檔名稱</guilabel>文字方塊中。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請使用<guilabel>基礎</guilabel>下拉式清單方塊，選取設定檔作為新設定檔的基礎。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          按一下<guibutton>建立</guibutton>。 <application>&app;</application>
+                          便會將設定檔加入<menuchoice><guimenu>終端機</guimenu> <guisubmenu>設定檔</guisubmenu></menuchoice>的子功能表中。
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>變更有標籤終端機的設定檔：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          請在您想要變更設定檔的有標籤終端機其標籤名稱上按一下。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請選擇 <menuchoice><guimenu>終端機</guimenu><guisubmenu>設定檔 </guisubmenu><guimenuitem><replaceable>profilename</replaceable></guimenuitem></menuchoice>。 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>編輯設定檔：</term>
+             <listitem>
+                <para>
+                  請在<guilabel>編輯設定檔</guilabel>對話方塊中，編輯設定檔。 您可以使用下列方式存取<guilabel>編輯設定檔</guilabel>對話方塊：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        請選擇 <menuchoice><guimenu>編輯 </guimenu><guisubmenu>目前設定檔</guisubmenu></menuchoice>。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        請選擇<menuchoice> <guimenu>編輯</guimenu> <guisubmenu>設定檔 </guisubmenu></menuchoice>，選取要編輯的設定檔，然後按一下 <guibutton>編輯</guibutton>。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        請在終端機視窗上按滑鼠右鍵，然後從即現式功能表中選擇<guimenuitem>編輯目前設定檔</guimenuitem>。
+                         
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>刪除設定檔：</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          請選擇 <menuchoice><guimenu>編輯</guimenu><guimenuitem>設定檔</guimenuitem></menuchoice>。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請在<guilabel>設定檔</guilabel>清單中，選取要刪除的設定檔名稱，然後按一下 <guibutton>刪除</guibutton>。
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          按一下<guilabel>刪除設定檔</guilabel>對話方塊中的<guibutton>刪除</guibutton>。 
+                           
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs"> 
+        <title>修改終端機視窗</title>
+        <variablelist>
+          <varlistentry> 
+             <term>隱藏功能表列：</term>
+             <listitem>
+                <para>
+                  請在終端機視窗上按滑鼠右鍵，然後從即現式功能表中，選擇 <guimenuitem>隱藏功能表列</guimenuitem>。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>顯示隱藏的功能表列：</term>
+             <listitem>
+                <para>
+                  請在終端機視窗上按滑鼠右鍵，然後從即現式功能表中，選擇 <guimenuitem>顯示功能表列</guimenuitem> 。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>變更捲軸的位置：</term>
+             <listitem>
+                <para>
+                  請參閱 <xref linkend="gnome-terminal-prefs"/>，取得顯示捲動軸時，在 <guilabel>編輯設定檔</guilabel>對話方塊中可選取選項的資訊。
+                   
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents"> 
+        <title>使用終端機視窗的內容</title>
+        <variablelist>
+          <varlistentry> 
+             <term>捲動至之前的指令及輸出：</term>
+             <listitem>
+                <para>
+                  請執行下列任一項動作：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        請使用捲軸，捲軸通常是位於終端機視窗的右邊。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        請按 <keycap>Page Up</keycap>、<keycap>Page Down</keycap>、<keycap> Home</keycap> 或<keycap>End</keycap> 鍵。 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  您在終端機視窗中往回捲動的行數，是由 <guilabel>編輯設定檔</guilabel>對話方塊中，<guilabel>捲動</guilabel>標籤區段的 <guilabel>往回捲動</guilabel>設定所決定。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>選取及複製文字：</term>
+             <listitem>
+                <para>
+                  您可以使用下列任一種方式來選取文字：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        如果要一次選取一個字元，請按一下想要選取的第一個字元，然後將滑鼠拖曳到想要選取的最後一個字元為止。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        如果要一次選取一個字，請按兩下想要選取的第一個字， 然後將滑鼠拖曳到想要選取的最後一個字為止。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        如果要一次選取一行，請按三下想要選取的第一行，然後將滑鼠拖曳到想要選取的最後一行為止。 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  這些動作會選取第一與最後一個項目之間的所有文字。 選取整個文字範圍時， 當您放開滑鼠按鍵後，<application>&app;</application> 會將選取的文字複製到剪貼簿中。
+                   
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>將文字貼上至終端機：</term>
+             <listitem>
+                <para>
+                  請執行下列任一項動作：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        請在指令提示符號處，按滑鼠中鍵。 如果您的滑鼠沒有中鍵，請參閱 X 伺服器文件，以便獲得如何模擬滑鼠中鍵的相關資訊。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        請選擇 <menuchoice><guimenu>編輯</guimenu><guimenuitem>貼上</guimenuitem></menuchoice>，將文字貼上至終端機。 這個功能只有在您已選擇 <menuchoice><guimenu>編輯</guimenu> <guimenuitem>複製</guimenuitem></menuchoice>，並將選取的文字複製到剪貼簿時才有效。
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>將檔案名稱拖曳到終端機視窗中：</term>
+             <listitem>
+                <para>
+                  您可以將檔案從另一個應用程式 (例如檔案管理員) 拖曳到終端機上。 終端機會顯示檔案的路徑及全名。 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>存取連結：</term>
+             <listitem>
+                <para>
+                  如果要存取顯示在終端機的統一資源位址 (URL)，請執行下列步驟：</para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          請將滑鼠移至 URL 上，此時 URL 會變成下有底線，而且滑鼠指標會變成手的圖樣。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請在 URL 上按滑鼠右鍵，開啟即現式功能表。 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          請選擇 <guimenuitem>開啟連結</guimenuitem>，開啟連結用應用程式，並顯示位於該 URL 的檔案。. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>檢視鍵盤捷徑鍵設定</title>
+        <para>
+          如果要檢視 <application>&app;</application> 所定義的鍵盤捷徑鍵設定，請選擇 <menuchoice><guimenu>編輯</guimenu> <guimenuitem>按鍵組合</guimenuitem></menuchoice>。 <guilabel>按鍵組合編輯器</guilabel>對話方塊含有下列項目：
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term><guilabel>停用所有功能表快捷鍵</guilabel></term> 
+             <listitem>
+                <para>
+                  選取這個核取方塊，可以停用存取鍵 (這些存取鍵可以使用鍵盤來代替滑鼠選取功能表項目)。在功能表或對話方塊選項上，每個存取鍵是以一個加底線的字母來識別。在某些情況下，您必須同時按下 <keycap>Alt</keycap> 鍵與存取鍵，才能執行動作。 
+                   
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>停用功能表便捷鍵</guilabel></term> 
+             <listitem>
+                <para>
+                  選取這個核取方塊，可以停用存取<application>&app;</application>功能表用的捷徑鍵。                  預設為存取功能表用的捷徑鍵是 <keycap>F10</keycap>。
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>快速鍵</guilabel></term> 
+             <listitem>
+                <para>
+                  對話方塊中的<guilabel>快速鍵</guilabel>區段，列出了每個功能表項目的捷徑鍵。捷徑鍵可以讓您使用鍵盤選擇功能表項目，而不必使用滑鼠。 捷徑鍵通常是一組鍵盤組合，您必須同時按下這些鍵。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-reset"> 
+        <title>回復您的終端機</title>
+        <para>
+          下列各節可以提供您一些建議，如何在終端機發生問題時，處理問題。 
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>重設終端機狀態：</term>
+             <listitem>
+                <para>
+                  請選擇 <menuchoice><guimenu>終端機</guimenu><guimenuitem>重設</guimenuitem></menuchoice>。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry> 
+             <term>重設終端機並清除螢幕：</term>
+             <listitem>
+                <para>
+                  請選擇<menuchoice> <guimenu>終端機</guimenu> <guimenuitem>重設並清除</guimenuitem></menuchoice>。 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+<!-- 
+<sect2 id="gnome-terminal-direct-input">
+<title>To Direct All Keyboard Input to a Terminal</title>
+<para>
+   To direct all keyboard input to the terminal, even when the terminal window is
+   not in focus, right-click in the terminal window to display a popup menu, then
+   choose <guimenuitem>Secure keyboard</guimenuitem>. This option is useful when
+   several users use the same X server and the X server does not use secure authentication
+   methods.
+</para>
+</sect2>
+-->
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-prefs"> 
+     <title>個人喜好</title>
+     <para>
+        如果要配置 <application>&app;</application>， 請選擇
+        <menuchoice><guimenu>編輯</guimenu><guimenuitem>目前設定檔</guimenuitem></menuchoice>。 如果要配置您所設定的其他設定檔，請選擇<menuchoice> <guimenu>編輯</guimenu> <guimenuitem>設定檔</guimenuitem></menuchoice>，選取要編輯的設定檔，然後按一下 <guibutton>編輯</guibutton>。
+     </para>
+     <para>  
+         在<guilabel>編輯設定檔「<replaceable>profile name</replaceable>」</guilabel> 對話方塊中，含有下列可用來配置 <application>&app;</application> 的標籤區段：
+     </para>
+     <itemizedlist>
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
+     
+     <sect2 id="gnome-terminal-prefs-general"> 
+        <title>一般</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>設定檔名稱</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個文字方塊，指定目前設定檔的名稱。 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Default</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>使用與其他應用程式相同的字型</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，可以使用 <application>字型</application>個人喜好工具中所指定的標準應用程式字型。 
+                </para>
+                <!-- <para>
+                  Default: selected.
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>字型</guilabel> </term> 
+             <listitem>
+                <para>
+                  按一下這個按鈕，可以選取終端機的預設字型與字型大小。 只有在取消選取<guilabel>使用與其他應用程式相同的字型</guilabel>選項時，才可以使用這個按鈕。
+                </para>
+                <!-- <para>
+                  Default: <guilabel>fixed (misc)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>設定檔圖示</guilabel> </term> 
+             <listitem>
+                <para>
+                  按一下這個按鈕，選取代表現有設定檔的圖示。 
+                </para>
+                <!-- <para>
+                  Default: gnome-terminal.png. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>允許粗體文字</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，終端機便可以顯示粗體字。 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>游標閃爍</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，便可以顯示閃爍的游標。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>預設在新終端機中顯示功能表列</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  選取這個選項，便可以在新終端機視窗中顯示功能表列。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>終端機響鈴l</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，便會停用終端機響鈴。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Select-by-word-characters</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個文字方塊，指定字元或字元群組數目；當您依字來選取文字時，<application>&app;</application> 便會依此來決定多少字元會被視為字。 請參閱<xref linkend="gnome-terminal-contents"/>，以便獲得如何依字選取文字的資訊。 
+                </para>
+                <!-- <para>
+                  Default: -A-Za-z0-9,./?%&amp;#:_ 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title"> 
+        <title>標題及指令</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>初始標題</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個文字方塊，指定設定檔的初始標題。由目前的終端機啟動的新終端機，會有新的初始標題。 
+                </para>
+                <!-- <para>
+                  Default: Terminal. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>即時設定的標題</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個下拉式清單，將終端機視窗的標題，設定為目前的工作目錄。 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Replaces initial title</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>指令結束時</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個下拉式清單，選擇退出終端機時，所要執行的指令。 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Exit the terminal</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>執行指令以登入 Shell</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，會讓在終端機內部執行的指令，成為登入 shell。 如果指令不是 shell，設定就沒有效果。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>當啟動指令時更新 utmp/wtmp 記錄檔</guilabel> </term> 
+             <listitem>
+                <para>
+                 選取這個選項，會在開啟新的 shell 時，將新的登錄插入 utmp 及 wtmp 記錄中。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>執行自訂指令而非我的 shell</guilabel>
+                </term> 
+             <listitem>
+                <para>
+            選取這個選項，便會執行終端機中的指令，而非一般的 shell。 請在 <guilabel>自訂指令</guilabel>文字方塊中，指定自訂指令。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors"> 
+        <title>色彩</title>
+        <variablelist>
+        <varlistentry> 
+             <term> 
+                <guilabel>使用系統主題的色彩</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  選取這個選項，會使用 <application>主題</application>個人喜好工具中所選之 GNOME 主題的色彩。 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>內建方案 - 前景和背景</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用下拉式清單方塊，指定終端機的前景及背景色彩。 <application>&app;</application> 支援下列的前景及背景色彩組合：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>淡黃底黑字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>黑底白字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>白底黑字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>黑底綠字</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>自訂</guilabel> 
+                     </para>
+                     <para>
+                        這個選項可以讓您選擇不在所選定色彩方案中的色彩。 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  前景及背景色彩的實際顯示，會依您所選擇的色彩方案而有所不同。 例如，如果您選擇 <guilabel>黑底白字</guilabel>及 <guilabel>Linux console</guilabel> 色彩方案，本應用程式便會將前景及背景的色彩顯示為黑底淺灰字。 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Black on light yellow</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>文字色彩</guilabel> </term> 
+             <listitem>
+                <para>
+                  請按一下 <guibutton>文字色彩</guibutton>按鈕，顯示 <guilabel>選擇終端機文字色彩</guilabel>對話方塊。 請從調色板中，選擇用來做為前景色彩的色彩。只有在指定了 <guilabel>終端機色彩</guilabel>群組方塊中， <guilabel>內建方案</guilabel> 下拉式清單方塊內的 <guilabel>自訂色彩</guilabel>選項時，您才能使用這個按鈕。 
+                </para>
+                <!-- <para>
+                  Default: black. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>背景顏色</guilabel> </term> 
+             <listitem>
+                <para>
+                  請按一下<guibutton>背景顏色</guibutton>按鈕，顯示 <guilabel>選擇終端機背景顏色</guilabel>對話方塊。請從調色板中，選擇用來做為背景色彩的色彩。 只有在指定了 <guilabel>終端機色彩</guilabel>群組方塊中，<guilabel>內建方案</guilabel>下拉式清單方塊內的 <guilabel>自訂色彩</guilabel>選項時，您才能使用這個按鈕。 
+                </para>
+                <!-- <para>
+                  Default: light yellow. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>內建方案 - 調色板</guilabel></term> 
+             <listitem>
+                <para>
+                  色彩方案是一個 16 色的調色板。 請使用這個下拉式清單方塊，選擇要使用的色彩方案。<application>&app;</application> 支援下列的色彩方案：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Linux console</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Xterm</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Rxvt</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>自訂</guilabel> 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  每一種色彩方案都有些許的不同。 例如，<guilabel>Linux console</guilabel> 是使用淺灰色來代替白色。<guilabel>自訂</guilabel>色彩方案，可以讓您建立自訂的調色板。 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Linux console</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+ 
+          <varlistentry> 
+             <term> 
+                <guilabel>調色板</guilabel> </term> 
+             <listitem>
+                <para>
+                  只有在指定了 <guilabel>應用調色板</guilabel> 群組方塊中，<guilabel>內建方案</guilabel>下拉式清單方塊上的<guilabel>自訂</guilabel> 選項，才能夠使用<guilabel>調色板</guilabel>。 請使用 <guilabel>調色板</guilabel>，在自訂調色板中，自訂 16 種預設色彩。 如果要自訂色彩，請按一下該色彩，顯示 <guilabel>調色板項目</guilabel>對話方塊。 請使用色輪或調整器來自訂色彩，然後按一下 <guibutton>確定</guibutton>。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects"> 
+        <title>效果</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>背景</guilabel> </term> 
+             <listitem>
+                <para>
+                  請為終端機視窗選擇背景顯示選項。選項如下：
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>無 (使用單色)</guilabel> 
+                     </para>
+                     <para>
+                        選取這個選項，會使用在<guilabel>色彩</guilabel>標籤區段中所指定的背景色彩，作為終端機的背景色彩。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>背景影像</guilabel> 
+                     </para>
+                     <para>
+                        選取這個選項，會使用影像檔案做為終端機的背景。 請使用 <guilabel>影像檔案</guilabel>下拉式組合方塊，指定影像檔案的位置及名稱。 或者，請按一下 <guibutton>瀏覽</guibutton>，搜尋並選取影像檔案。 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>透明背景</guilabel> 
+                     </para>
+                     <para>
+                        選取這個選項，可以在終端機上使用透明背景。 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <!-- <para>
+                  Default: 
+                  <guilabel>None (use solid color)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>捲動背景影像</guilabel>
+                </term> 
+             <listitem>
+                <para>選取這個選項，可以在捲動整個終端機時，讓背景影像與文字同時捲動。 如果未選取這個選項，背景影像就會固定在終端機背景上，捲動時只有文字會捲動而已。 只有在選取了<guilabel>背景影像</guilabel>選項時，才能使用這個選項。
+                </para>
+                <!-- <para>Default: unselected.</para>     -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>讓透明及影像背景變暗</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  請使用這個調整器，為終端機的背景加上陰影，或是讓其變得灰暗。 只有在選取了<guilabel>背景影像</guilabel>或 <guilabel>透明背景</guilabel>選項時，才能使用這個選項。
+                </para>
+                <!-- <para>
+                  Default: 50%. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-scrolling">
+    <title>捲動</title>
+     <variablelist>
+     <varlistentry> 
+             <term> 
+                <guilabel>捲軸為</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個下拉式清單方塊，指定捲動軸在終端機視窗中的位置。 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>On the right side</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>往回捲動的行數</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個旋轉方塊，指定您在使用捲動軸往回捲動時的行數。 例如，如果您指定 100，就可以往回捲動終端機上所顯示的最後 100 行。 
+                </para>
+                <!-- <para>
+                  Default: 500 lines. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>往回捲動的千位元數</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用這個旋轉方塊，指定您在使用捲動軸往回捲動時的千位元組數。 例如，如果您指定 94，就可以往回捲動終端機上所顯示的最後 94 個千位元組。 
+                </para>
+                <!-- <para>
+                  Default: 167 kilobytes. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>以按鍵捲動</guilabel> </term> 
+             <listitem>
+                <para>
+                 選取這個選項，您便可以使用 <keycap>Page Up</keycap> 及 <keycap>Page Down</keycap> 鍵在終端機中捲動。 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>在輸出中捲動</guilabel> </term> 
+             <listitem>
+                <para>
+                  選取這個選項，在終端機持續顯示更多來自於指令的輸出時，您仍然可以在終端機的輸出中捲動。 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-compatibility"> 
+        <title>相容性</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>由退格鍵產生</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用下拉式清單，選擇您希望由 <keycap>Backspace</keycap> 鍵執行的功能。
+                </para>
+                <!-- <para>
+                  Default: <guilabel>ASCII DEL</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>由 Delete 鍵產生</guilabel> </term> 
+             <listitem>
+                <para>
+                  請使用下拉式清單，選擇您希望由 <keycap>Delete</keycap> 鍵執行的功能。 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Escape sequence</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guibutton>將相容性選項重設為預設值</guibutton> </term> 
+             <listitem>
+                <para>
+                  按一下這個按鈕，可以將<guilabel>相容性</guilabel>標籤區段的選項，重設為預設值。
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>

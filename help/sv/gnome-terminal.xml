@@ -1,0 +1,1457 @@
+<?xml version="1.0"?><!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "GNOME Terminal">  
+  <!ENTITY appversion "2.0.1">
+  <!ENTITY date "August 2002">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.3">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002 
+    
+  -->
+<article id="index" lang="sv">
+  <articleinfo>
+     <title>Manual f&ouml;r &app;, version&nbsp;&manrevision;</title>
+     <copyright> 
+        <year>2003</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year> 
+        <holder>Miguel de Icaza, Michael Zucchi och Alexander Kirillov</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>Dokumentationsprojekt f&ouml;r GNOME</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Suns</firstname> 
+          <surname>GNOME-dokumentationsteam</surname> 
+          <affiliation> 
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>Dokumentationsprojekt f&ouml;r GNOME</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>Dokumentationsprojekt f&ouml;r GNOME</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>Dokumentationsprojekt f&ouml;r GNOME</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup>
+     <revhistory>
+        <revision> 
+          <revnumber>Manual f&ouml;r &app;, version&nbsp;&manrevision;</revnumber> 
+          <date>&date;</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOMEs dokumentationsteam
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                Dokumentationsprojekt f&ouml;r GNOME
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manual f&ouml;r GNOME-terminal version 2.2</revnumber> 
+          <date>Augusti 2002</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOMEs dokumentationsteam
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                Dokumentationsprojekt f&ouml;r GNOME
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manual f&ouml;r GNOME-terminal version 2.1</revnumber> 
+          <date>Augusti 2002</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOMEs dokumentationsteam
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                Dokumentationsprojekt f&ouml;r GNOME
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manual f&ouml;r GNOME-terminal version 2.0</revnumber> 
+          <date>April 2002</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOMEs dokumentationsteam
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                Dokumentationsprojekt f&ouml;r GNOME
+             </para>
+          </revdescription>
+        </revision>
+        <revision> 
+          <revnumber>Manual f&ouml;r GNOME-terminal</revnumber> 
+          <date>Maj 2000</date> 
+          <revdescription> 
+             <para role="author">
+                Miguel de Icaza, Michael Zucchi, Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para role="publisher">
+                Dokumentationsprojekt f&ouml;r GNOME
+             </para>
+          </revdescription>
+        </revision>
+     </revhistory>
+     <releaseinfo> I den h&auml;r manualen beskrivs version &appversion; av &app;.
+        </releaseinfo>
+     <legalnotice> 
+        <title>Feedback</title>
+        <para> Om du vill rapportera ett fel eller ge f&ouml;rslag om programmet &app; eller den h&auml;r manualen f&ouml;ljer du instruktionerna p&aring; 
+		  <ulink url="ghelp:gnome-feedback" type="help">GNOME:s feedbacksida</ulink>. </para>
+     </legalnotice>
+  </articleinfo>
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>terminalprogram</primary> 
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction"> 
+     <title>Introduktion</title>
+     <para>
+        <application>&app;</application> &auml;r ett terminalemuleringsprogram som
+        du kan anv&auml;nda i f&ouml;ljande syften:
+     </para>
+     <variablelist>
+        <varlistentry> 
+          <term>Ansluta till ett UNIX-skal i GNOME-milj&ouml;.</term> 
+          <listitem>
+             <para>
+                Ett skal &auml;r ett program som tolkar och utf&ouml;r de kommandon som du
+                anger p&aring; kommandoraden. N&auml;r du startar <application>GNOME-Terminal</application>,
+                startar programmet det standardskal som angetts
+                f&ouml;r ditt konto i systemet. Du kan n&auml;r som helst byta till ett annat
+                skal. 
+             </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term>K&ouml;ra valfritt program utformat f&ouml;r att k&ouml;ras p&aring; en VT102-, VT220-,
+             eller xterm-terminal. </term> 
+          <listitem>
+             <para>
+                <application>&app;</application> emulerar programmet xterm,
+                som har utvecklats av X Consortium. xterm, i sin tur, emulerar DEC-terminalen
+                VT102 och st&ouml;der &auml;ven kontrollsekvenserna f&ouml;r DEC VT220. En kontrollsekvens
+                &auml;r en serie tecken som startar med Esc-tecknet.
+                <application>&app;</application> accepterar samtliga kontrollsekvenser som
+                terminalerna VT102 och VT220 anv&auml;nder f&ouml;r mark&ouml;rspositionering och
+                f&ouml;r att rensa sk&auml;rmen. 
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started"> 
+     <title>Komma ig&aring;ng</title>
+     <para>
+        I F&ouml;ljande avsnitt beskrivs hur du kommer ig&aring;ng med
+        <application>&app;</application>. 
+     </para>
+     <sect2 id="gnome-terminal-to-start"> 
+        <title>S&aring; h&auml;r startar du &app;</title>
+        <para>
+          Du kan starta <application>&app;</application> p&aring; n&aring;got av f&ouml;ljande s&auml;tt:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term>Program-menyn</term> 
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Systemverktyg</guimenu> 
+                     <guimenuitem>Terminal</guimenuitem> 
+                  </menuchoice>. </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>Kommandoraden</term> 
+             <listitem>
+                <para>
+                  Skriv 
+                  <command>gnome-terminal</command> och tryck sedan p&aring;
+                  <keycap>Retur</keycap>. 
+                </para>
+                <para>
+                  Med hj&auml;lp av kommandoradsalternativ kan du anpassa hur
+                  <application>&app;</application> fungerar. Om du vill visa de tillg&auml;ngliga kommandoradsalternativen skriver du 
+                  <command>gnome-terminal --help</command> och trycker sedan p&aring; 
+                  <keycap>Retur</keycap>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start"> 
+        <title>F&ouml;rsta g&aring;ngen du startar &app;</title>
+        <para>
+          N&auml;r du startar <application>&app;</application> f&ouml;r f&ouml;rsta g&aring;ngen
+          &ouml;ppnas ett terminalf&ouml;nster med en grupp standardinst&auml;llningar. De h&auml;r
+          standardinst&auml;llningarna kallas f&ouml;r standardprofilen. Profilnamnet visas i
+          <application>&app;</application>-f&ouml;nstrets namnlist. 
+        </para>
+        <figure id="gnome-terminal_default"> 
+          <title>Exempel p&aring; ett standardf&ouml;nster f&ouml;r &app;</title>
+          <screenshot> 
+             <screeninfo>standardf&ouml;nster f&ouml;r &app;</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>standardf&ouml;nster f&ouml;r &app;</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          Terminalf&ouml;nstret visar en kommandorad d&auml;r du kan ange
+          UNIX-kommandon. Kommandoradens ledtext kan utg&ouml;ras av %, #,>, $, eller valfria andra
+          specialtecken. Mark&ouml;ren befinner sig vid kommandoradens ledtext. N&auml;r du anger ett
+          UNIX-kommando och trycker p&aring; 
+          <keycap>Retur</keycap> utf&ouml;r datorn kommandot. Som standard
+          anv&auml;nder <application>&app;</application> standardskalet f&ouml;r den anv&auml;ndare
+          som startar programmet. 
+        </para>
+        <para>
+          F&ouml;ljande milj&ouml;variabler anges av
+          <application>&app;</application>:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <varname>TERM</varname></term> 
+             <listitem>
+                <para>
+                  Standardinst&auml;llningen &auml;r xterm. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>COLORTERM</varname></term> 
+             <listitem>
+                <para>
+                  Standardinst&auml;llningen &auml;r gnome-terminal. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <varname>WINDOWID</varname></term> 
+             <listitem>
+                <para>
+                  Standardinst&auml;llningen &auml;r f&ouml;nsteridentifieraren f&ouml;r X11. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+     <sect2 id="gnome-terminal-profiles"> 
+        <title>Terminalprofiler</title>
+        <para>
+          Du kan skapa en ny profil och anv&auml;nda den med terminalen
+          f&ouml;r att &auml;ndra egenskaper som typsnitt, f&auml;rg och effekter, rullningsbeteende,
+          f&ouml;nstertitel, kompatibilitet och tangentbordsgenv&auml;gar. Du kan ocks&aring; definiera kommandot f&ouml;r
+          att starta <application>&app;</application> i profilen. </para>
+          <para>Terminalprofiler
+          definieras i dialogrutan 
+          <guilabel>Redigera profil</guilabel>, som du n&aring;r via 
+          <guimenu>Redigera</guimenu>-menyn. Du kan ange s&aring; m&aring;nga olika
+          profiler du beh&ouml;ver. Du kan ange vilken profil som ska anv&auml;ndas n&auml;r du startar
+          en terminal, eller byta terminalprofil medan du anv&auml;nder
+          terminalen. Med hj&auml;lp av f&ouml;ljande
+          kommandoradssyntax kan du ange vilken profil terminalen
+          ska starta med:
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile= 
+             <replaceable>profilnamn</replaceable></command> 
+        </para>
+        <para>
+          Namnet p&aring; den aktuella profilen visas i <application>&app;</application>-f&ouml;nstrets
+          namnlist, s&aring;vida inget annat namn har angetts f&ouml;r namnlisten i
+          dialogrutan 
+          <guilabel>Redigerar profilen</guilabel>. 
+        </para>
+        <para>
+          Mer information om hur du definierar och anv&auml;nder en
+          ny terminalprofil hittar du i <xref linkend="gnome-terminal-manage-profiles"/>. 
+        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows"> 
+        <title>Arbeta med flera terminaler</title>
+        <para>
+          En flikfunktion i <application>&app;</application> g&ouml;r att du
+          kan l&auml;gga till ytterligare terminaler i ett f&ouml;nster. F&ouml;r att &ouml;ppna en terminal i f&ouml;nstret
+          klickar du p&aring; motsvarande flik. Varje flikterminal i ett f&ouml;nster &auml;r en
+          separat underprocess, s&aring; varje terminal kan anv&auml;ndas i olika syften. Varje
+          flikterminal kan k&ouml;ras med egna profilinst&auml;llningar. Namnlisten
+          i terminalf&ouml;nstret visar antingen namnet p&aring; den aktuella profilen, eller det
+          namn som angetts i den aktuella profilen. <xref linkend="gnome-terminal-tabbed"/>
+          visar ett <application>&app;</application>-f&ouml;nster med fyra flikar. I det h&auml;r
+          fallet har samtliga fyra flikar olika profilinst&auml;llningar. Namnet p&aring; den aktuella fliken,
+          Profil 1, visas i namnlisten. 
+        </para>
+        <figure id="gnome-terminal-tabbed"> 
+          <title>Exempel p&aring; ett terminalf&ouml;nster med flikar</title>
+          <screenshot> 
+             <screeninfo>standardf&ouml;nster f&ouml;r &app;</screeninfo> 
+             <mediaobject> 
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/> 
+                </imageobject> 
+                <textobject> 
+                  <phrase>standardf&ouml;nster f&ouml;r &app;</phrase> 
+                </textobject> 
+             </mediaobject> 
+          </screenshot>
+        </figure>
+        <para>
+          Mer information om hur du &ouml;ppnar en ny
+          flikterminal hittar du i <xref linkend="gnome-terminal-tabs"/>. 
+        </para>
+     </sect2>
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-usage"> 
+     <title>Anv&auml;ndning</title>
+
+     <sect2 id="gnome-terminal-windows"> 
+        <title>&Ouml;ppna och st&auml;nga terminaler</title>
+        <variablelist>
+          <varlistentry> 
+             <term>S&aring; h&auml;r &ouml;ppnar du ett nytt terminalf&ouml;nster:</term>
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Fil</guimenu> 
+                     <guisubmenu>Nytt f&ouml;nster</guisubmenu>
+                     <guimenuitem>Standard</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+                <para>
+                  Den nya terminalen startas i en underprocess med samma process-id
+                  (PID) som den terminal som anv&auml;ndes f&ouml;r att starta den nya terminalen. Underprocessen f&ouml;rbrukar
+                  f&auml;rre systemresurser j&auml;mf&ouml;rt med om du skulle starta en ny
+                  instans av <application>&app;</application> fr&aring;n en GNOME-panel. Den nya terminalen 
+                  &auml;rver programinst&auml;llningar och standardskal fr&aring;n den &ouml;verordnade terminalen. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r st&auml;nger du ett terminalf&ouml;nster:</term>
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Fil</guimenu> 
+                     <guimenuitem>St&auml;ng f&ouml;nster</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+                <para>
+                  Den h&auml;r &aring;tg&auml;rden st&auml;nger terminalen och alla eventuella underprocesser
+                  som du startat fr&aring;n terminalen. Om det sista &ouml;ppna terminalf&ouml;nstret st&auml;ngs
+                  avslutas <application>&app;</application>. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r l&auml;gger du till fler flikterminaler i samma f&ouml;nster:</term>
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Fil</guimenu> 
+                     <guisubmenu>Ny flik</guisubmenu>
+                     <guimenuitem>Standard</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r &ouml;ppnar du en flikterminal:</term>
+             <listitem>
+                <para>
+                  Klicka p&aring; fliken med namnet p&aring; den terminal som du vill
+                  &ouml;ppna. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r st&auml;nger du en flikterminal:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Klicka p&aring; fliken med namnet p&aring; den terminal som du vill
+                          st&auml;nga. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          V&auml;lj 
+                          <menuchoice> 
+                             <guimenu>Fil</guimenu> 
+                             <guimenuitem>St&auml;ng flik</guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles"> 
+        <title>Hantera profiler</title>
+        <variablelist>
+          <varlistentry> 
+             <term>S&aring; h&auml;r l&auml;gger du till en ny profil:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          V&auml;lj 
+                          <menuchoice> 
+                             <guimenu>Fil</guimenu> 
+                             <guimenuitem>Ny profil</guimenuitem> 
+                          </menuchoice> f&ouml;r att visa 
+                          dialogrutan <guilabel>Ny profil</guilabel>. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Skriv ett namn p&aring; den nya profilen i textrutan <guilabel>Profilnamn</guilabel>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          I listrutan <guilabel>Basera p&aring;</guilabel> kan du v&auml;lja vilken profil som du vill basera den nya profilen p&aring;.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Klicka p&aring; <guibutton>Skapa</guibutton>. Profilen l&auml;ggs till p&aring; undermenyn <menuchoice> 
+                             <guimenu>Terminal</guimenu> 
+                             <guisubmenu>Profil</guisubmenu> 
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r redigerar du profilen f&ouml;r en flikterminal:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Klicka p&aring; fliken med namnet p&aring; den flikterminal vars
+                          profil du vill redigera. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          V&auml;lj 
+                          <menuchoice> 
+                             <guimenu>Terminal</guimenu> 
+                             <guisubmenu>Profil</guisubmenu> 
+                             <guimenuitem> 
+                                <replaceable>profilnamn</replaceable></guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r redigerar du en profil:</term>
+             <listitem>
+                <para>
+                  Du redigerar profiler i 
+                  dialogrutan <guilabel>Redigerar profil</guilabel>. Dialogrutan 
+                  <guilabel>Redigerar profil</guilabel> kan du n&aring; p&aring; flera
+                  s&auml;tt:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        V&auml;lj 
+                        <menuchoice> 
+                          <guimenu>Redigera</guimenu> 
+                          <guisubmenu>Aktuell profil</guisubmenu> 
+                        </menuchoice>. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        V&auml;lj 
+                        <menuchoice> 
+                          <guimenu>Redigera</guimenu> 
+                          <guisubmenu>Profiler</guisubmenu> 
+                        </menuchoice>, markera den profil som du vill redigera och
+                        klicka sedan p&aring; 
+                        <guibutton>Redigera</guibutton>. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        H&ouml;gerklicka i terminalf&ouml;nstret och v&auml;lj sedan 
+                        <guimenuitem>Redigera aktuell profil</guimenuitem> p&aring;
+                        popupmenyn. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r tar du bort en profil:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          V&auml;lj 
+                          <menuchoice> 
+                             <guimenu>Redigera</guimenu> 
+                             <guimenuitem>Profiler</guimenuitem> 
+                          </menuchoice>. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Markera den profil som du vill ta bort i
+listan 
+                          <guilabel>Profiler</guilabel> och klicka sedan p&aring; 
+                          <guibutton>Ta bort</guibutton>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Klicka p&aring; 
+                          <guibutton>Ta bort</guibutton> i 
+                          dialogrutan <guilabel>Ta bort profil</guilabel>. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs"> 
+        <title>Justera terminalf&ouml;nstret</title>
+        <variablelist>
+          <varlistentry> 
+             <term>S&aring; h&auml;r d&ouml;ljer du menyraden:</term>
+             <listitem>
+                <para>
+                  H&ouml;gerklicka i terminalf&ouml;nstret och v&auml;lj sedan 
+                  <guimenuitem>D&ouml;lj menyrad</guimenuitem> fr&aring;n popupmenyn. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r visar du en dold menyrad:</term>
+             <listitem>
+                <para>
+                  H&ouml;gerklicka i terminalf&ouml;nstret och v&auml;lj sedan 
+                  <guimenuitem>Visa menyrad</guimenuitem> fr&aring;n popupmenyn. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r &auml;ndrar du rullningslistens placering:</term>
+             <listitem>
+                <para>Mer 
+                  information om de alternativ du kan v&auml;lja mellan f&ouml;r rullningslistens
+                  placering i dialogrutan <guilabel>Redigerar profil</guilabel> 
+                  finns i <xref linkend="gnome-terminal-prefs"/>.                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents"> 
+        <title>Arbeta med inneh&aring;llet i terminalf&ouml;nster</title>
+        <variablelist>
+          <varlistentry> 
+             <term>S&aring; h&auml;r rullar du tidigare kommandon och utdata:</term>
+             <listitem>
+                <para>
+                  G&ouml;r n&aring;got av f&ouml;ljande:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Anv&auml;nd rullningslisten, normalt placerad p&aring; terminalf&ouml;nstrets
+                        h&ouml;gersida. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Tryck p&aring; tangenterna 
+                        <keycap>Page Up</keycap>, 
+                        <keycap>Page Down</keycap>, 
+                        <keycap> Home</keycap> eller 
+                        <keycap>End</keycap>. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Det antal rader som rullas tillbaka i terminalf&ouml;nstret
+                  avg&ouml;rs av inst&auml;llningen 
+                  <guilabel>Antal historikrader</guilabel> p&aring; fliken 
+                  <guilabel> Rullning</guilabel> i dialogrutan 
+                  <guilabel>Redigerar profiler</guilabel>. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r markerar och kopierar du text:</term>
+             <listitem>
+                <para>
+                  Du kan markera text p&aring; f&ouml;ljande s&auml;tt:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Om du vill markera tecken f&ouml;r tecken, klickar du p&aring; det
+                        f&ouml;rsta tecknet som du vill markera och drar sedan musen till det sista tecknet
+                        du vill markera. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Om du vill markera ord f&ouml;r ord, dubbelklickar du p&aring; det
+                        f&ouml;rsta ordet som du vill markera och drar sedan musen till det sista ordet du
+                        vill markera. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Om du vill markera radvis, trippelklickar du p&aring; den
+                        f&ouml;rsta raden som du vill markera och drar sedan musen till den sista raden du
+                        vill markera. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                        Med hj&auml;lp av de h&auml;r &aring;tg&auml;rderna markeras all text mellan
+                        elementen. F&ouml;r alla typer av textmarkeringar g&auml;ller att den markerade texten kopieras till urklipp av <application>&app;</application> n&auml;r du sl&auml;pper upp musknappen. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r klistrar du in text i ett terminalf&ouml;nster:</term>
+             <listitem>
+                <para>
+                  G&ouml;r n&aring;got av f&ouml;ljande:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Klicka p&aring; kommandoraden med den mellersta knappen. Om du inte har en mus
+                        med tre knappar finns det information i X-serverdokumentationen om hur du g&ouml;r
+                        f&ouml;r att emulera den mellersta knappen. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        V&auml;lj 
+                        <menuchoice> 
+                          <guimenu>Redigera</guimenu> 
+                          <guimenuitem>Klistra in</guimenuitem> 
+                        </menuchoice> om du vill klistra in text i ett terminalf&ouml;nster. Denna funktion fungerar bara om du v&auml;ljer 
+                        <menuchoice>
+                          <guimenu>Redigera</guimenu> 
+                          <guimenuitem>Kopiera</guimenuitem> 
+                        </menuchoice> f&ouml;r att kopiera den markerade texten till Urklipp.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r drar du filnamn till ett terminalf&ouml;nster:</term>
+             <listitem>
+                <para>
+                  Du kan dra filnamn fr&aring;n andra program, till exempel filhanterare,
+                  till terminalf&ouml;nstret. Filens fullst&auml;ndiga s&ouml;kv&auml;g och namn visas i
+                  terminalf&ouml;nstret. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term>S&aring; h&auml;r anv&auml;nder du en l&auml;nk:</term>
+             <listitem>
+                <para>
+                  Om du vill anv&auml;nda dig av en URL (Uniform Resource Locator) som visas i ett
+                  terminalf&ouml;nster, f&ouml;ljer du stegen nedan: </para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Flytta musen &ouml;ver URL:en tills den blir understruken och
+                          muspekaren &auml;ndras till en hand. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          H&ouml;gerklicka p&aring; URL:en f&ouml;r att &ouml;ppna en popupmeny. 
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          V&auml;lj 
+                          <guimenuitem>&Ouml;ppna l&auml;nk</guimenuitem> om du vill
+                          starta ett program och visa den fil URL:en pekar p&aring;. 
+                        </para>
+                     </listitem>
+                  </orderedlist>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>S&aring; h&auml;r visar du inst&auml;llningar f&ouml;r tangentbordsgenv&auml;gar</title>
+        <para>
+          Du kan visa inst&auml;llningar f&ouml;r tangentbordsgenv&auml;gar som definierats f&ouml;r <application>&app;</application> genom att v&auml;lja <menuchoice> 
+               <guimenu>Redigera</guimenu> 
+               <guimenuitem>Tangentkombinationer</guimenuitem> 
+          </menuchoice>. I dialogrutan <guilabel>Redigerare f&ouml;r tangentkombinationer</guilabel> finns f&ouml;ljande alternativ:
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term><guilabel>Inaktivera alla menysnabbtangenter</guilabel></term> 
+             <listitem>
+                <para>
+                  Markera den h&auml;r kryssrutan om du vill inaktivera alla tangenter som definierats f&ouml;r anv&auml;ndning av tangentbordet i st&auml;llet f&ouml;r musen f&ouml;r att v&auml;lja menyalternativ. 
+                  Tangenterna identifieras med en understruken bokstav p&aring; en meny eller ett alternativ i en dialogrutan. I vissa fall m&aring;ste du trycka p&aring; <keycap>Alt</keycap>-tangenten i samband med snabbtangenten f&ouml;r att utf&ouml;ra &aring;tg&auml;rden. 
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>Inaktivera tangent f&ouml;r meny&aring;tkomst</guilabel></term> 
+             <listitem>
+                <para>
+                  Markera denna kryssruta om du vill inaktivera den snabbtangent som ger dig tillg&aring;ng till <application>&app;</application>-menyer.
+                  Standardsnabbtangenten f&ouml;r meny&aring;tkomst &auml;r <keycap>F10</keycap>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term><guilabel>Snabbtangenter</guilabel></term> 
+             <listitem>
+                <para>
+                  I avsnittet <guilabel>Snabbtangenter</guilabel> i dialogrutan finns de snabbtangenter som definierats f&ouml;r de olika menyalternativen.
+                  Med snabbtangenterna kan du anv&auml;nda tangentbordet f&ouml;r att v&auml;lja ett menyalternativ i st&auml;llet f&ouml;r att anv&auml;nda musen. Snabbtangenten &auml;r vanligtvis en kombination av tangenter som du trycker ned samtidigt.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-reset"> 
+        <title>&Aring;terst&auml;ll din terminal</title>
+        <para>
+          F&ouml;ljande avsnitt ger r&aring;d om du skulle f&aring; problem med
+          en terminal. 
+        </para>
+        <variablelist>
+          <varlistentry> 
+             <term> S&aring; h&auml;r &aring;terst&auml;ller du en terminals l&auml;ge:</term>
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Terminal</guimenu> 
+                     <guimenuitem>&Aring;terst&auml;ll</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry> 
+             <term>S&aring; h&auml;r &aring;terst&auml;ller du terminalen och t&ouml;mmer sk&auml;rmen:</term>
+             <listitem>
+                <para>
+                  V&auml;lj 
+                  <menuchoice> 
+                     <guimenu>Terminal</guimenu> 
+                     <guimenuitem>&Aring;terst&auml;ll och t&ouml;m</guimenuitem> 
+                  </menuchoice>. 
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+<!-- 
+<sect2 id="gnome-terminal-direct-input">
+<title>To Direct All Keyboard Input to a Terminal</title>
+<para>
+   To direct all keyboard input to the terminal, even when the terminal window is
+   not in focus, right-click in the terminal window to display a popup menu, then
+   choose <guimenuitem>Secure keyboard</guimenuitem>. This option is useful when
+   several users use the same X server and the X server does not use secure authentication
+   methods.
+</para>
+</sect2>
+-->
+
+  </sect1>
+
+  <sect1 id="gnome-terminal-prefs"> 
+     <title>Inst&auml;llningar</title>
+     <para>
+        Du kan konfigurera <application>&app;</application> genom att v&auml;lja <menuchoice> 
+          <guimenu>Redigera</guimenu> 
+          <guimenuitem>Aktuell profil</guimenuitem> 
+        </menuchoice>. Om du vill konfigurera en annan profil som du skapat v&auml;ljer du <menuchoice> 
+          <guimenu>Redigera</guimenu> 
+          <guimenuitem>Profiler</guimenuitem> 
+        </menuchoice>, markerar &ouml;nskad profil och klickar sedan p&aring; <guibutton>Redigera</guibutton>.
+     </para>
+     <para>  
+        Dialogrutan <guilabel>Redigerar profil "<replaceable>profilnamn</replaceable>"</guilabel> inneh&aring;ller f&ouml;ljande flikar f&ouml;r konfigurering av <application>&app;</application>:
+     </para>
+     <itemizedlist>
+		<listitem><para><xref linkend="gnome-terminal-prefs-general"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-title"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-colors"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-effects"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-scrolling"/></para>
+		</listitem>
+		<listitem><para><xref linkend="gnome-terminal-prefs-compatibility"/></para>
+		</listitem>
+	 </itemizedlist>
+
+     
+     <sect2 id="gnome-terminal-prefs-general"> 
+        <title>Allm&auml;nt</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Profilnamn</guilabel> </term> 
+             <listitem>
+                <para>
+                  Den h&auml;r textrutan kan du anv&auml;nda om du vill ange ett namn f&ouml;r den aktuella profilen. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Default</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Anv&auml;nd samma typsnitt som andra program</guilabel> </term> 
+             <listitem>
+                <para>
+                  V&auml;lj detta alternativ om du vill anv&auml;nda standardprogramtypsnittet som anges i inst&auml;llningsverktyget <application>Typsnitt</application>. 
+                </para>
+                <!-- <para>
+                  Default: selected.
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Typsnitt</guilabel> </term> 
+             <listitem>
+                <para>
+                  Klicka p&aring; den h&auml;r knappen om du vill ange ett standardtypsnitt och standardteckenstorlek f&ouml;r terminalen. Den h&auml;r knappen &auml;r bara tillg&auml;nglig om alternativet <guilabel>Anv&auml;nd samma typsnitt som andra program</guilabel> &auml;r avmarkerat.
+                </para>
+                <!-- <para>
+                  Default: <guilabel>fixed (misc)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Profilikon</guilabel> </term> 
+             <listitem>
+                <para>
+                  Klicka p&aring; den h&auml;r knappen om du vill v&auml;lja en ikon som representerar den aktuella profilen. 
+                </para>
+                <!-- <para>
+                  Default: gnome-terminal.png. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Till&aring;t fet text</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill att terminalen ska kunna visa fet text. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Mark&ouml;rblink</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill att mark&ouml;ren ska blinka. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Visa menyrad som standard i nya terminalf&ouml;nster</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill visa menyraden f&ouml;r nya terminalf&ouml;nster. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Terminalljud</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill inaktivera terminalljudet. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Tecken f&ouml;r v&auml;lj-per-ord:</guilabel> </term> 
+             <listitem>
+                <para>
+                  Den h&auml;r textrutan anv&auml;nder du om du vill ange tecken eller grupper av
+                  tecken som ska betraktas som ord av <application>&app;</application> n&auml;r
+                  text markeras ord f&ouml;r ord. Mer information om hur du markerar text ord f&ouml;r ord finns i
+                  <xref linkend="gnome-terminal-contents"/> . 
+                </para>
+                <!-- <para>
+                  Default: -A-Za-z0-9,./?%&amp;#:_ 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title"> 
+        <title>Titel och kommando</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Starttitel</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r textrutan om du vill ange en starttitel f&ouml;r profilen.
+                  Nya terminaler som startas fr&aring;n den aktuella terminalen f&aring;r den nya
+                  starttiteln. 
+                </para>
+                <!-- <para>
+                  Default: Terminal. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Dynamiskt inst&auml;lld titel</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange att terminalf&ouml;nstrets titel
+                  ska vara aktuell arbetskatalog. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Replaces initial title</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>D&aring; kommandot avslutar</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange ett kommando som ska k&ouml;ras
+                  n&auml;r terminalen avslutas. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Exit the terminal</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>K&ouml;r kommando som ett inloggningsskal</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill att det kommando som k&ouml;rs i
+                  terminalen ska k&ouml;ras som ett inloggningsskal. Om kommandot inte &auml;r ett skal har
+                  inst&auml;llningen ingen effekt. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Uppdatera utmp/wtmp-poster d&aring; kommandot
+                  startas</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill infoga en ny post i utmp- och wtmp-
+                  registren varje g&aring;ng ett nytt skal &ouml;ppnas. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>K&ouml;r ett eget kommando i st&auml;llet f&ouml;r mitt skal</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill k&ouml;ra ett annat kommando i st&auml;llet
+                  f&ouml;r det vanliga skalet i terminalen. Ange kommandot i textrutan 
+                  <guilabel>Eget kommando</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors"> 
+        <title>F&auml;rger</title>
+        <variablelist>
+        <varlistentry> 
+             <term> 
+                <guilabel>Anv&auml;nd f&auml;rger fr&aring;n systemtemat</guilabel> </term> 
+             <listitem>
+                <para>
+                  V&auml;lj det &auml;r alternativet om du vill anv&auml;nda de f&auml;rger som anges i det valda GNOME-temat i inst&auml;llningsverktyget <application>Tema</application>. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Inbyggda scheman - F&ouml;rgrund och bakgrund</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange terminalens
+                  f&ouml;rgrundsf&auml;rg och bakgrundsf&auml;rg. F&ouml;ljande f&auml;rgkombinationer
+                  f&ouml;r f&ouml;rgrund och bakgrund st&ouml;ds av <application>&app;</application>:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Svart p&aring; ljusgult</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Vitt p&aring; svart</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Svart p&aring; vitt</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Gr&ouml;nt p&aring; svart</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Anpassad</guilabel> 
+                     </para>
+                     <para>
+                        Med hj&auml;lp av det h&auml;r alternativet kan du ange f&auml;rger som inte
+                        finns i det markerade f&auml;rgschemat. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Hur f&ouml;rgrundsf&auml;rgen och bakgrundsf&auml;rgen visas
+                  kan variera beroende p&aring; vilket f&auml;rgschema du valt. Om du till exempel v&auml;ljer 
+                  <guilabel>Vitt p&aring; svart</guilabel> samt f&auml;rgschemat 
+                  <guilabel>Linux-konsol</guilabel> visas f&ouml;rgrundsf&auml;rgen
+                  och bakgrundsf&auml;rgen som ljusgr&aring;tt p&aring; svart. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Black on light yellow</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Textf&auml;rg</guilabel> </term> 
+             <listitem>
+                <para>
+                  Klicka p&aring; knappen 
+                  <guibutton>Textf&auml;rg</guibutton> om du vill visa 
+                  dialogrutan <guilabel>V&auml;lj terminaltextf&auml;rg</guilabel>. V&auml;lj
+                  vilken f&auml;rg du vill anv&auml;nda som f&ouml;rgrundsf&auml;rg fr&aring;n f&auml;rgpaletten.
+                  Den h&auml;r knappen &auml;r endast tillg&auml;nglig om du har markerat 
+                  alternativet <guilabel>Egna f&auml;rger</guilabel> i 
+                  listrutan <guilabel>Inbyggda scheman</guilabel> i 
+                  grupprutan <guilabel>Terminalf&auml;rg</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: black. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Bakgrundsf&auml;rg</guilabel> </term> 
+             <listitem>
+                <para>
+                  Klicka p&aring; 
+                  knappen <guibutton>Bakgrundsf&auml;rg</guibutton> om du vill visa 
+                  dialogrutan <guilabel>V&auml;lj terminalbakgrundsf&auml;rg</guilabel>.
+                  V&auml;lj vilken f&auml;rg du vill anv&auml;nda som bakgrundsf&auml;rg fr&aring;n
+                  f&auml;rgpaletten. Den h&auml;r knappen &auml;r endast tillg&auml;nglig om du markerat 
+                  alternativet <guilabel>Egna f&auml;rger</guilabel> i 
+                  listrutan <guilabel>Inbyggda scheman</guilabel> i 
+                  grupprutan <guilabel>Terminalf&auml;rg</guilabel>. 
+                </para>
+                <!-- <para>
+                  Default: light yellow. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Inbyggda scheman - Palett</guilabel></term> 
+             <listitem>
+                <para>
+                  Ett f&auml;rgschema &auml;r en palett om 16 f&auml;rger. Anv&auml;nd listrutan
+                  f&ouml;r att ange vilka f&auml;rger du vill anv&auml;nda.
+                  F&ouml;ljande f&auml;rgscheman st&ouml;ds av <application>&app;</application>:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Linux-konsol</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Xterm</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Rxvt</guilabel> 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Anpassad</guilabel> 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Varje f&auml;rgschema skiljer sig lite fr&aring;n de andra. Till exempel, 
+                  anv&auml;nds ljusgr&aring;tt i st&auml;llet f&ouml;r vitt i f&auml;rgschemat
+                  <guilabel>Linux-konsol</guilabel>. Med 
+                  f&auml;rgschemat <guilabel>Anpassad</guilabel> kan du skapa en
+                  egen f&auml;rgpalett. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>Linux console</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+ 
+          <varlistentry> 
+             <term> 
+                <guilabel>F&auml;rgpalett</guilabel> </term> 
+             <listitem>
+                <para>
+                  <guilabel>F&auml;rgpalett</guilabel> 
+                  &auml;r bara tillg&auml;ngligt om
+                  alternativet 
+                  <guilabel>Anpassad</guilabel> &auml;r markerat i 
+                  listrutan <guilabel>Inbyggda scheman</guilabel> i 
+                  grupprutan <guilabel>Programpalett</guilabel>. Anv&auml;nd 
+                  <guilabel>F&auml;rgpalett</guilabel> f&ouml;r att anpassa de 16
+                  standardf&auml;rgerna i den anpassade f&auml;rgpaletten. Om du vill anpassa en f&auml;rg klickar du p&aring; f&auml;rgen f&ouml;r att
+                  visa 
+                  dialogrutan <guilabel>Palettpost</guilabel>. Anv&auml;nd f&auml;rghjulet eller
+                  reglagen f&ouml;r att anpassa f&auml;rgen och klicka sedan p&aring; 
+                  <guibutton>OK</guibutton>. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects"> 
+        <title>Effekter</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Bakgrund</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera ett visningsalternativ f&ouml;r terminalf&ouml;nstrets bakgrund. F&ouml;ljande
+                  alternativ &auml;r tillg&auml;ngliga:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Ingen (enf&auml;rgat)</guilabel> 
+                     </para>
+                     <para>
+                        Markera det h&auml;r alternativet om du vill anv&auml;nda den bakgrundsf&auml;rg som
+                        angivits p&aring; fliken 
+                        <guilabel>F&auml;rger</guilabel> som bakgrundsf&auml;rg
+                        f&ouml;r terminalen. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Bakgrundsbild</guilabel> 
+                     </para>
+                     <para>
+                        Markera det h&auml;r alternativet om du vill anv&auml;nda en bildfil som bakgrund i
+                        terminalf&ouml;nstret. Anv&auml;nd 
+                        kombirutan <guilabel>Bildfil</guilabel> f&ouml;r att ange
+                        s&ouml;kv&auml;g och namn f&ouml;r bildfilen. Du kan ocks&aring; 
+                        klicka p&aring; <guibutton>Bl&auml;ddra</guibutton> om du vill s&ouml;ka upp
+                        och markera bildfilen. 
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Genomskinlig bakgrund</guilabel> 
+                     </para>
+                     <para>
+                        Markera det h&auml;r alternativet om du vill anv&auml;nda en genomskinlig bakgrund i
+                        terminalf&ouml;nstret. 
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <!-- <para>
+                  Default: 
+                  <guilabel>None (use solid color)</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Bakgrundsbilden rullar</guilabel>
+                </term> 
+             <listitem>
+                <para>V&auml;lj detta alternativ om du vill att bakgrundsbilden ska rulla med texten n&auml;r du rullar i terminalen. Om du inte v&auml;ljer detta alternativ f&ouml;rblir terminalbakgrunden or&ouml;rlig medan texten rullas. Detta alternativ &auml;r endast tillg&auml;ngligt om du markerat alternativet <guilabel>Bakgrundsbild</guilabel>.
+                </para>
+                <!-- <para>Default: unselected.</para>     -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>F&ouml;rm&ouml;rka genomskinlig bakgrund eller bildbakgrund</guilabel>
+                </term> 
+             <listitem>
+                <para>
+                  Med det h&auml;r skjutreglaget kan du g&ouml;ra terminalf&ouml;nstrets
+                  bakgrund lite ljusare eller m&ouml;rkare. Det h&auml;r alternativet &auml;r endast tillg&auml;ngligt om n&aring;got av alternativen 
+                  <guilabel>Bakgrundsbild</guilabel> eller 
+                  <guilabel>Genomskinlig bakgrund</guilabel> &auml;r markerade. 
+                </para>
+                <!-- <para>
+                  Default: 50%. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-scrolling">
+    <title>Rullning</title>
+     <variablelist>
+     <varlistentry> 
+             <term> 
+                <guilabel>Rullningslisten &auml;r</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange rullningslistens placering
+                  i terminalf&ouml;nstret. 
+                </para>
+                <!-- <para>
+                  Default: 
+                  <guilabel>On the right side</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Antal historikrader</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r rotationsrutan om du vill ange hur m&aring;nga rader
+                  som ska kunna rullas tillbaka med hj&auml;lp av rullningslisten. Om du till exempel anger 100, kan
+                  du rulla tillbaka de 100 senaste raderna som har visats i terminalf&ouml;nstret. 
+                </para>
+                <!-- <para>
+                  Default: 500 lines. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Antal kilobyte</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r rotationsrutan om du vill ange hur m&aring;nga kilobyte
+                  som ska kunna rullas tillbaka med hj&auml;lp av rullningslisten. Om du till exempel anger 94, kan
+                  du rulla tillbaka 94 kilobyte i terminalf&ouml;nstret. 
+                </para>
+                <!-- <para>
+                  Default: 167 kilobytes. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Rulla vid tangentnedtryckning</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill kunna anv&auml;nda tangenterna
+                  <keycap>Page Up</keycap> och 
+                  <keycap>Page Down</keycap> f&ouml;r att rulla i terminalf&ouml;nstret. 
+                </para>
+                <!-- <para>
+                  Default: selected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Rulla vid utdata</guilabel> </term> 
+             <listitem>
+                <para>
+                  Markera det h&auml;r alternativet om du vill kunna rulla i utdata
+                  i terminalf&ouml;nstret, samtidigt som terminalen matar ut mer utdata fr&aring;n ett
+                  kommando. 
+                </para>
+                <!-- <para>
+                  Default: unselected. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          </variablelist>
+     </sect2>
+     
+     <sect2 id="gnome-terminal-prefs-compatibility"> 
+        <title>Kompatibilitet</title>
+        <variablelist>
+          <varlistentry> 
+             <term> 
+                <guilabel>Backspace-tangenten genererar</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange vilken funktion 
+                  tangenten <keycap>Backsteg</keycap> ska ha. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>ASCII DEL</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guilabel>Delete-tangenten genererar</guilabel> </term> 
+             <listitem>
+                <para>
+                  Anv&auml;nd den h&auml;r listrutan om du vill ange vilken funktion 
+                  tangenten <keycap>Delete</keycap> ska ha. 
+                </para>
+                <!-- <para>
+                  Default: <guilabel>Escape sequence</guilabel>. 
+                </para> -->
+             </listitem>
+          </varlistentry>
+          <varlistentry> 
+             <term> 
+                <guibutton>&Aring;terst&auml;ll kompatibilitetsalternativ till standardv&auml;rden</guibutton> </term> 
+             <listitem>
+                <para>Klicka p&aring; den h&auml;r knappen om du vill &aring;terst&auml;lla alternativen p&aring; fliken <guilabel>Kompatibilitet</guilabel>
+                  till standardv&auml;rden.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>
