@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-06-02 22:53-0400\n"
-"PO-Revision-Date: 2002-05-19 14:20+0400\n"
+"POT-Creation-Date: 2002-06-10 11:19+0400\n"
+"PO-Revision-Date: 2002-06-10 11:28+0400\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -429,7 +429,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Другой"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2047 src/terminal.c:2227
+#: src/profile-editor.c:883 src/terminal-window.c:2047 src/terminal.c:2228
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "При отображении справки возникла ошибка: %s"
@@ -696,7 +696,7 @@ msgstr ""
 #, c-format
 msgid "Error propagating accelerator change to configuration database: %s\n"
 msgstr ""
-"Ошибка распространения измения ускорителя в базе данных конфигурации: %s\n"
+"Ошибка распространения изменения ускорителя в базе данных конфигурации: %s\n"
 
 #: src/terminal-accels.c:915
 #, c-format
@@ -766,7 +766,7 @@ msgstr "Сбой при загрузке фонового изображения
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
-"Терминал GNOME: имя шрифта \"%s\", установленное в конфигурационной базе "
+"Терминал среды GNOME: имя шрифта \"%s\", установленное в конфигурационной базе "
 "данных, недопустимо\n"
 
 #: src/terminal-profile.c:2913
@@ -901,8 +901,8 @@ msgstr ""
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
-"URL из Mozilla, сброшенный на терминал, имел неверный формат (%d) или длину "
-"(%d)\n"
+"URL из браузера Mozilla, сброшенный на терминал, имел неверный формат (%d) "
+"или длину (%d)\n"
 
 #: src/terminal-screen.c:1824
 #, c-format
@@ -1067,7 +1067,7 @@ msgstr ""
 #: src/terminal-window.c:2077
 msgid "translator_credits"
 msgstr ""
-"Валек Филиппов\n"
+"Валёк Филиппов\n"
 "Дмитрий Мастрюков"
 
 #: src/terminal-window.c:2090
@@ -1264,6 +1264,9 @@ msgid ""
 "you might want to create a profile with the desired setting, and use the new "
 "--window-with-profile option\n"
 msgstr ""
+"Данный параметр больше не поддерживается программой gnome-terminal; "
+"вам следует создать профиль с желаемыми установками, и использовать "
+"новый параметр --window-with-profile\n"
 
 #: src/terminal.c:972
 #, c-format
@@ -1289,6 +1292,8 @@ msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr ""
+"Возникла ошибка при подписке на уведомление об изменении списка профилей "
+"терминала. (%s)\n"
 
 #: src/terminal.c:1253
 #, c-format
@@ -1300,130 +1305,133 @@ msgstr "Недопустимая строка размера \"%s\"\n"
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Возникла ошибка при получении списка профилей терминала. (%s)\n"
 
-#: src/terminal.c:1545
+#: src/terminal.c:1546
 msgid "You have to name your profile."
 msgstr "Необходимо наименовать профиль."
 
-#: src/terminal.c:1555
+#: src/terminal.c:1556
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Профиль, наименованный \"%s\", уже существует"
 
-#: src/terminal.c:1592
+#: src/terminal.c:1593
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Профиль, выбранный в качестве основы для создаваемого, больше не существует"
 
-#: src/terminal.c:1651
+#: src/terminal.c:1652
 msgid "New terminal profile"
 msgstr "Создать профиль терминала"
 
-#: src/terminal.c:1656
+#: src/terminal.c:1657
 msgid "C_reate"
 msgstr "_Создать"
 
-#: src/terminal.c:1681
+#: src/terminal.c:1682
 msgid "Profile _Name:"
 msgstr "Наименование _профиля:"
 
-#: src/terminal.c:1685
+#: src/terminal.c:1686
 msgid "Enter profile name"
 msgstr "Введите имя профиля"
 
-#: src/terminal.c:1700
+#: src/terminal.c:1701
 msgid "_Base new profile on:"
 msgstr "_Основать новый профиль на:"
 
-#: src/terminal.c:1848
+#: src/terminal.c:1849
 msgid "Profile list"
 msgstr "Список профилей"
 
-#: src/terminal.c:1921
+#: src/terminal.c:1922
 msgid "You must select one or more profiles to delete."
 msgstr "Следует выбрать один или более профилей для удаления."
 
-#: src/terminal.c:1944
+#: src/terminal.c:1945
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Необходим хотя бы один профиль; нельзя удалить их все."
 
-#: src/terminal.c:1962
+#: src/terminal.c:1963
 msgid "Delete these two profiles?\n"
 msgstr "Удалить эти два профиля?\n"
 
-#: src/terminal.c:1964
+#: src/terminal.c:1965
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Удалить эти %d профилей?\n"
 
-#: src/terminal.c:1982
+#: src/terminal.c:1983
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Удалить профиль \"%s\"?"
 
-#: src/terminal.c:1996
+#: src/terminal.c:1997
 msgid "_No"
 msgstr "_Нет"
 
-#: src/terminal.c:1998
+#: src/terminal.c:1999
 msgid "_Delete"
 msgstr "У_далить"
 
-#: src/terminal.c:2268
+#: src/terminal.c:2269
 msgid "Manage terminal profiles"
 msgstr "Управление профилями терминала"
 
-#: src/terminal.c:2308
+#: src/terminal.c:2309
 msgid "Profile _used when launching a new terminal:"
 msgstr "Профиль, _используемый при запуске нового терминала:"
 
-#: src/terminal.c:2330
+#: src/terminal.c:2331
 msgid "_Profiles:"
 msgstr "_Профили:"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2372
 msgid "_New..."
 msgstr "_Создать..."
 
-#: src/terminal.c:2379
+#: src/terminal.c:2380
 msgid "Click to open new profile dialog"
 msgstr "Щёлкните здесь, чтобы создать профиль"
 
-#: src/terminal.c:2382
+#: src/terminal.c:2383
 msgid "_Edit..."
 msgstr "_Изменить..."
 
-#: src/terminal.c:2390
+#: src/terminal.c:2391
 msgid "Click to open edit profile dialog"
 msgstr "Щёлкните здесь, чтобы изменить профиль"
 
-#: src/terminal.c:2392
+#: src/terminal.c:2393
 msgid "_Delete..."
 msgstr "У_далить..."
 
-#: src/terminal.c:2400
+#: src/terminal.c:2401
 msgid "Click to delete selected profile"
 msgstr "Щёлкните здесь, чтобы удалить выбранный профиль"
 
-#: src/terminal.c:2449
+#: src/terminal.c:2450
 msgid "Click button to choose profile"
 msgstr "Нажмите кнопку, чтобы выбрать профиль"
 
-#: src/terminal.c:2890
+#: src/terminal.c:2891
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
+"Похоже, файл gnome-terminal.server не установлен в допустимое местоположение. "
+"Режим фабрики отключён.\n"
 
-#: src/terminal.c:2893
+#: src/terminal.c:2894
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
+"Ошибка регистрации терминала в сервисе активации; режим фабрики отключён.\n"
 
-#: src/terminal.c:2928
+#: src/terminal.c:2929
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr ""
+msgstr "Сбой при вызове сервера терминала из сервера активации\n"
 
 #: src/x-font-selector.c:201
 msgid "Foundry:"
