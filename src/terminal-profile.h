@@ -32,6 +32,13 @@
 
 typedef enum
 {
+  TERMINAL_SETTING_VISIBLE_NAME         = 1 << 0,
+  TERMINAL_SETTING_CURSOR_BLINK         = 1 << 1,
+  TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR = 1 << 2
+} TerminalSettingMask;
+
+typedef enum
+{
   TERMINAL_DELETE_CONTROL_H,
   TERMINAL_DELETE_ESCAPE_SEQUENCE,
   TERMINAL_DELETE_ASCII_DEL
@@ -84,8 +91,9 @@ struct _TerminalProfileClass
 {
   GObjectClass parent_class;
 
-  void (* changed)   (TerminalProfile *profile);
-  void (* forgotten) (TerminalProfile *profile);
+  void (* changed)   (TerminalProfile           *profile,
+                      TerminalSettingMask        mask);
+  void (* forgotten) (TerminalProfile           *profile);
 };
 
 GType terminal_profile_get_type (void) G_GNUC_CONST;
@@ -130,6 +138,8 @@ void            terminal_profile_set_audible_bell       (TerminalProfile        
                                                         gboolean                   setting);
 void            terminal_profile_set_cursor_blink       (TerminalProfile            *profile,
                                                         gboolean                   setting);
+void            terminal_profile_set_visible_name       (TerminalProfile *profile,
+                                                         const char      *name);
 void            terminal_profile_set_scroll_on_keypress (TerminalProfile            *profile,
                                                         gboolean                   setting);
 void            terminal_profile_set_login_shell        (TerminalProfile            *profile,
@@ -179,6 +189,8 @@ GList*           terminal_profile_get_list (void);
 TerminalProfile* terminal_profile_lookup                 (const char      *name);
 TerminalProfile* terminal_profile_lookup_by_visible_name (const char      *name);
 void             terminal_profile_forget   (TerminalProfile *profile);
+
+TerminalSettingMask terminal_profile_get_locked_settings (TerminalProfile *profile);
 
 void terminal_profile_update (TerminalProfile *profile);
 

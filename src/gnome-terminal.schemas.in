@@ -1,0 +1,71 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/profterm/global/profile_list</key>
+      <applyto>/apps/profterm/global/profile_list</applyto>
+      <owner>profterm</owner>
+      <type>list</type>
+      <list_type>string</list_type>
+      <default>[Default]</default>
+      <locale name="C">
+         <short>List of profiles</short>
+         <long>
+           List of profiles known to profterm. The list contains 
+           strings naming subdirectories relative to
+          /apps/profterm/profiles.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/visible_name</key>
+      <applyto>/apps/profterm/profiles/Default/visible_name</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>Default</default>
+      <locale name="C">
+         <short>Human-readable name of the profile.</short>
+         <long>
+           Human-readable name of the profile.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/cursor_blink</key>
+      <applyto>/apps/profterm/profiles/Default/cursor_blink</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether to blink the cursor</short>
+         <long>
+           True if the cursor should blink when the terminal has focus, 
+           for windows/tabs with this profile.
+         </long>
+      </locale>
+    </schema>
+
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/default_show_menubar</key>
+      <applyto>/apps/profterm/profiles/Default/default_show_menubar</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether to show menubar in new windows/tabs</short>
+         <long>
+           True if the menubar should be shown in new windows, 
+           for windows/tabs with this profile.
+         </long>
+      </locale>
+    </schema>
+
+  </schemalist>  
+</gconfschemafile>
+
+
+
+

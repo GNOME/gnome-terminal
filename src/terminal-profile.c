@@ -26,9 +26,14 @@
 #include <stdlib.h>
 
 /* If you add a key, you need to update code:
+ * 
  *  - in the function that sets the key
- *  - in the function that reads the key
+ *  - in the update function that reads all keys on startup
+ *  - in the profile_change_notify function
  *  - in the function that copies base profiles to new profiles
+ *  - in terminal_profile_init() initial value
+ *
+ * This sucks. ;-)
  */
 #define KEY_VISIBLE_NAME "visible_name"
 #define KEY_CURSOR_BLINK "cursor_blink"
@@ -40,6 +45,7 @@ struct _TerminalProfilePrivate
   char *profile_dir;
   GConfClient *conf;
   guint notify_id;
+  TerminalSettingMask locked;
   char *visible_name;
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
@@ -102,6 +108,7 @@ static void
 terminal_profile_init (TerminalProfile *profile)
 {  
   profile->priv = g_new0 (TerminalProfilePrivate, 1);
+  profile->priv->locked = 0;
   profile->priv->cursor_blink = FALSE;
   profile->priv->default_show_menubar = TRUE;
   profile->priv->visible_name = g_strdup ("");
@@ -122,8 +129,9 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalProfileClass, changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  /* should be VOID__ENUM but I'm lazy */
+                  g_cclosure_marshal_VOID__INT,
+                  G_TYPE_NONE, 1, G_TYPE_INT);
 
   signals[FORGOTTEN] =
     g_signal_new ("forgotten",
@@ -246,6 +254,23 @@ terminal_profile_set_cursor_blink (TerminalProfile *profile,
                          key,
                          setting,
                          NULL);
+
+  g_free (key);
+}
+
+void
+terminal_profile_set_visible_name (TerminalProfile *profile,
+                                   const char      *name)
+{
+  char *key;
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_VISIBLE_NAME);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           name,
+                           NULL);
 
   g_free (key);
 }
@@ -394,8 +419,12 @@ terminal_profile_update (TerminalProfile *profile)
   gboolean changed;
   gboolean bool_val;
   char *str_val;
+  TerminalSettingMask mask;
+  TerminalSettingMask locked;
+  TerminalSettingMask old_locked;
 
-  changed = FALSE;
+  mask = 0;
+  locked = 0;
 
   /* KEY_CURSOR_BLINK */
   
@@ -406,10 +435,13 @@ terminal_profile_update (TerminalProfile *profile)
   /*   g_print ("cursor blink is now %d\n", bool_val); */
   if (bool_val != profile->priv->cursor_blink)
     {
-      changed = TRUE;
+      mask |= TERMINAL_SETTING_CURSOR_BLINK;
       profile->priv->cursor_blink = bool_val;
-    }
+    }  
 
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_CURSOR_BLINK;
+  
   g_free (key);
 
   /* KEY_DEFAULT_SHOW_MENUBAR */
@@ -421,10 +453,13 @@ terminal_profile_update (TerminalProfile *profile)
 
   if (bool_val != profile->priv->default_show_menubar)
     {
-      changed = TRUE;
+      mask |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
       profile->priv->default_show_menubar = bool_val;
     }
 
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
+  
   g_free (key);
 
   /* KEY_VISIBLE_NAME */
@@ -434,12 +469,19 @@ terminal_profile_update (TerminalProfile *profile)
   str_val = gconf_client_get_string (profile->priv->conf,
                                      key, NULL);
 
-  changed |= set_visible_name (profile, str_val);
+  if (set_visible_name (profile, str_val))
+    mask |= TERMINAL_SETTING_VISIBLE_NAME;
 
-  g_free (key);
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_VISIBLE_NAME;
   
-  if (changed)
-    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0);
+  g_free (key);
+
+  old_locked = profile->priv->locked;
+  profile->priv->locked = locked;
+  
+  if (mask != 0 || locked != old_locked)
+    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);
 }
 
 
@@ -465,16 +507,25 @@ profile_change_notify (GConfClient *client,
   const char *key;
   GConfValue *val;
   gboolean changed;
+  TerminalSettingMask mask;  
+  TerminalSettingMask old_locked;
   
   profile = TERMINAL_PROFILE (user_data);
 
-  changed = FALSE;
+  mask = 0;
+  old_locked = profile->priv->locked;
 
   val = gconf_entry_get_value (entry);
   
   key = find_key (gconf_entry_get_key (entry));
-
+  
   /*   g_print ("Key '%s' changed\n", key); */
+
+#define UPDATE_LOCKED(flag)                     \
+      if (gconf_entry_get_is_writable (entry))  \
+        profile->priv->locked &= ~(flag);        \
+      else                                      \
+        profile->priv->locked |= (flag);
   
   if (strcmp (key, KEY_CURSOR_BLINK) == 0)
     {
@@ -487,9 +538,11 @@ profile_change_notify (GConfClient *client,
 
       if (bool_val != profile->priv->cursor_blink)
         {
-          changed = TRUE;
+          mask |= TERMINAL_SETTING_CURSOR_BLINK;
           profile->priv->cursor_blink = bool_val;
         }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_CURSOR_BLINK);
     }
   else if (strcmp (key, KEY_DEFAULT_SHOW_MENUBAR) == 0)
     {
@@ -502,9 +555,11 @@ profile_change_notify (GConfClient *client,
 
       if (bool_val != profile->priv->default_show_menubar)
         {
-          changed = TRUE;
+          mask |= TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR;
           profile->priv->default_show_menubar = bool_val;
         }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR);
     }
   else if (strcmp (key, KEY_VISIBLE_NAME) == 0)
     {
@@ -514,11 +569,14 @@ profile_change_notify (GConfClient *client,
       if (val && val->type == GCONF_VALUE_STRING)
         str_val = gconf_value_get_string (val);
       
-      changed = set_visible_name (profile, str_val);
+      if (set_visible_name (profile, str_val))
+        mask |= TERMINAL_SETTING_VISIBLE_NAME;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_VISIBLE_NAME);
     }
   
-  if (changed)
-    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0);
+  if (mask != 0 || old_locked != profile->priv->locked)
+    g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);
 }
 
 static void
@@ -609,6 +667,12 @@ terminal_profile_forget (TerminalProfile *profile)
       profile->priv->forgotten = TRUE;
       g_signal_emit (G_OBJECT (profile), signals[FORGOTTEN], 0);
     }
+}
+
+TerminalSettingMask
+terminal_profile_get_locked_settings (TerminalProfile *profile)
+{
+  return profile->priv->locked;
 }
 
 void

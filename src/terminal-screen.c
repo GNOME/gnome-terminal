@@ -348,8 +348,9 @@ rebuild_title  (TerminalScreen *screen)
 }
 
 static void
-profile_changed_callback (TerminalProfile *profile,
-                          TerminalScreen  *screen)
+profile_changed_callback (TerminalProfile          *profile,
+                          TerminalSettingMask       mask,
+                          TerminalScreen           *screen)
 {
   reread_profile (screen);
 }
@@ -559,8 +560,7 @@ new_window_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              screen->priv->profile,
                              NULL,
-                             TRUE,
-                             terminal_window_get_menubar_visible (screen->priv->window));
+                             FALSE, FALSE);
 }
 
 static void

@@ -32,8 +32,15 @@ profterm.glade2: profterm.glade $(LIBGLADE_CONVERT)
 	$(LIBGLADE_CONVERT) $(srcdir)/profterm.glade > profterm.glade.tmp \
 	&& mv profterm.glade.tmp profterm.glade2
 
+schemadir   = @GCONF_SCHEMA_FILE_DIR@
+schema_DATA = profterm.schemas
+
+install-data-local:
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
+
 EXTRA_DIST =				\
 	$(glade_DATA)			\
 	$(glade_src)			\
-	$(glade_msgs)
+	$(glade_msgs)			\
+	$(schema_DATA)
 
