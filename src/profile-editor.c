@@ -44,16 +44,19 @@ struct _TerminalColorScheme
   GdkColor foreground;
   GdkColor background;
 };
-  
+
+/* alphabetized */
 static TerminalColorScheme color_schemes[] = {
   { N_("Black on light yellow"),
     { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xDDDD } },
-  { N_("White on black"),
-    { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 } },
   { N_("Black on white"),
     { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xFFFF } },
+  { N_("Gray on black"),
+    { 0, 0xAAAA, 0xAAAA, 0xAAAA }, { 0, 0x0000, 0x0000, 0x0000 } },
   { N_("Green on black"),
-    { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 } }  
+    { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 } },
+  { N_("White on black"),
+    { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 } }
 };
 
 typedef struct _TerminalPaletteScheme TerminalPaletteScheme;
