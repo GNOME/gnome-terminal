@@ -1566,6 +1566,7 @@ main (int argc, char **argv)
                   *args);
       return 1;
     }
+  poptFreeContext (ctx);
 
   option_parsing_results_apply_directory_defaults (results);
   
