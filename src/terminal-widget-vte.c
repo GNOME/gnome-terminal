@@ -333,6 +333,7 @@ terminal_widget_set_colors (GtkWidget      *widget,
   g_return_if_fail(VTE_IS_TERMINAL(widget));
   vte_terminal_set_colors(VTE_TERMINAL(widget), foreground, background,
 			  palette_entries, TERMINAL_PALETTE_SIZE);
+  vte_terminal_set_background_tint_color(VTE_TERMINAL(widget), background);
 }
 
 void
