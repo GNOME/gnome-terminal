@@ -1,0 +1,1403 @@
+<?xml version="1.0" ?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY app "Terminalul GNOME">  <!ENTITY appversion "1.9.0">
+  <!ENTITY date "Aprilie 2002">
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY manrevision "2.0">
+]>
+<!-- (Do not remove this comment block.)
+  Maintained by the GNOME Documentation Project
+  Template version: 2.0 beta
+  Template last modified Jan 2, 2002
+  -->
+<article id="index" lang="ro">
+  <articleinfo> 
+     <title>Manual pentru &app; V&manrevision;</title>
+     <copyright> 
+        <year>2002</year> 
+        <holder>Sun Microsystems</holder> 
+     </copyright> 
+     <copyright> 
+        <year>2000</year>
+        <holder>Miguel de Icaza, Michael Zucchi, şi Alexander Kirillov</holder>
+     </copyright> 
+       <copyright>
+   <year>2002</year>
+   <holder>Mugurel Tudor (traducerea în română)</holder>
+  </copyright>
+     <publisher> 
+        <publishername>Proiectul pentru Documentaţii GNOME</publishername>
+     </publisher> &legal;
+     <authorgroup>
+        <author>
+          <firstname></firstname>
+          <surname>Echipa Sun pentru Documentaţii GNOME</surname>
+          <affiliation>
+             <orgname>Sun Microsystems</orgname> 
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Miguel</firstname> 
+          <surname>de Icaza</surname> 
+          <affiliation> 
+             <orgname>Proiectul pentru Documentaţii GNOME</orgname>
+          </affiliation>
+        </author> 
+        <author> 
+          <firstname>Michael</firstname> 
+          <surname>Zucchi</surname> 
+          <affiliation> 
+             <orgname>Proiectul pentru Documentaţii GNOME</orgname>
+          </affiliation> 
+        </author> 
+        <author> 
+          <firstname>Alexander</firstname> 
+          <surname>Kirillov</surname> 
+          <affiliation> 
+             <orgname>Proiectul pentru Documentaţii GNOME</orgname>
+          </affiliation> 
+        </author> 
+	       <othercredit role="translator">
+	<firstname>Mugurel</firstname>
+	<surname>Tudor</surname>
+	<affiliation>
+	  <orgname><ulink url="http://gnomero.sourceforge.net" type="help">
+	  Proiectul de traducere GNOME în română</ulink></orgname>
+
+	  <address> <email>mugurelu@go.ro</email> </address>
+	</affiliation>
+	<contrib>Traducerea în română</contrib>
+      </othercredit>
+     </authorgroup> 
+     <revhistory> 
+        <revision>
+          <revnumber>Manual pentru &app; V&manrevision;</revnumber>
+          <date>&date;</date> 
+          <revdescription> 
+             <para>
+                Autor: Echipa Sun pentru Documentaţii GNOME
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para>
+                Editor: Proiectul pentru Documentaţii GNOME
+             </para>
+          </revdescription> 
+        </revision> 
+        <revision>
+          <revnumber>Ghidul Utilizatorului pentru Terminalul GNOME</revnumber>
+          <date>Mai 2000</date>
+          <revdescription>
+             <para>
+                Autori: Miguel de Icaza, Michael Zucchi, Alexander Kirollov
+                <email>docs@gnome.org</email> 
+             </para>
+             <para>
+                Editor: Proiectul pentru Documentaţii GNOME
+             </para>
+          </revdescription> 
+        </revision> 
+     </revhistory> 
+     <releaseinfo> Acest manual descrie  &app; versiunea &appversion;.
+        </releaseinfo>
+     <legalnotice> 
+		<title>Comentarii</title>
+		<para>Pentru a raporta un bug sau pentru a face o sugestie referitoare la aplicaţia
+		 &app;  sau la acest manual, urmăriţi instrucţiunile de la
+		<ulink url="ghelp:gnome-feedback" type="help">Pagina de sugestii GNOME</ulink>.
+      </para>
+     </legalnotice> 
+  </articleinfo> 
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>aplicaţie terminal</primary>
+  </indexterm> 
+  <sect1 id="gnome-terminal-introduction"> 
+     <title>Introducere</title>
+     <para>
+        <application>&app;</application> este o aplicaţie ce emulează terminalul, şi pe care
+        o puteţi folosi pentru a efectua următoarele acţiuni:
+     </para>
+     <variablelist>
+        <varlistentry>
+          <term>Pentru a accesa un shell UNIX din mediul GNOME.</term>
+          <listitem>
+             <para>
+                Un shell este o aplicaţie care interpretează şi execută comenzile pe care le
+		scrieţi în linia de comandă. Când porniţi <application>Terminalul
+                GNOME</application>, aplicaţia porneşte shellul implicit specificat pentru
+                contul dumneavoastră. Puteţi folosi un alt shell în orice moment.
+                </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>Pentru a rula orice aplicaţie care a fost construită pentru a rula pe
+	  terminale VT102, VT220 şi xterm. </term>
+          <listitem>
+             <para>
+                <application>&app;</application> emulează programul xterm dezvoltat de
+                X Consortium. La rândul său, xterm emulează terminalul DEC VT102 şi suportă
+               de asemenea secvenţele escape ale DEC VT220. O secvenţă escape reprezintă o
+                o serie de caractere care încep cu un caracter Esc.
+                <application>&app;</application> acceptă toate secvenţele escape pe care
+                terminalele VT102 şi VT220 le folosesc pentru a poziţiona cursorul sau a şterge
+                ecranul.
+             </para>
+          </listitem>
+        </varlistentry>
+     </variablelist>
+  </sect1>
+  <sect1 id="gnome-terminal-get-started">
+     <title>Primii paşi</title>
+     <para>
+        Următoarele secţiuni descriu cum să începeţi să lucraţi cu
+        <application>&app;</application>.
+     </para>
+     <sect2 id="gnome-terminal-to-start">
+        <title>Pentru a porni &app;</title>
+        <para>
+          Puteţi porni <application>&app;</application> în următoarele moduri:
+        </para>
+        <variablelist>
+          <varlistentry>
+             <term>Meniul Aplicaţii</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Unelte sistem</guimenu>
+                     <guimenuitem>Terminal</guimenuitem>
+                  </menuchoice>
+                .
+                </para>
+             </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+             <term>Linie de comandă</term>
+             <listitem> 
+                <para>
+                  Tastaţi
+                  <command>gnome-terminal</command> în linia de comandă, apoi apăsaţi
+
+                  <keycap>Return</keycap>.
+                </para>
+                <para>
+                 Puteţi folosi diverse opţiuni din linia de comandă pentru a modifica felul în care rulaţi
+                  <application>&app;</application>. Pentru a vedea opţiunile, tastaţi
+                  <command>gnome-terminal --help</command>, apoi apăsaţi
+                  <keycap>Return</keycap>.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-first-start">
+        <title>Când porniţi prima dată &app;</title>
+        <para>
+          Când porniţi <application>&app;</application> pentru prima dată, aplicaţia
+          deschide o fereastră terminal cu un grup de setări implicite. Grupul setărilor
+          implicite este numit profilul Implicit. Numele profilului apare în bara de titlu a ferestrei
+          <application>&app;</application>. Setările pentru profilul implicit sunt
+          specificate în <xref linkend="gnome-terminal-prefs"/>
+        </para>
+        <figure id="gnome-terminal_default">
+          <title>Exemplu de fereastră implicită pentru &app;</title>
+          <screenshot>
+             <screeninfo>&app; fereastră implicită</screeninfo>
+             <mediaobject>
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-default.png" format="PNG"/>
+                </imageobject>
+                <textobject>
+                  <phrase>&app; fereastră implicită</phrase>
+                </textobject>
+             </mediaobject>
+          </screenshot>
+        </figure>
+        <para>
+         Fereastra terminal afişează un prompt de comandă unde puteţi scrie comenzi UNIX.
+          Promptul de comandă poate fi un %, #, >, $, sau orice alt caracter special. Cursorul
+          este poziţionat la promptul de comandă. Când scrieţi o comandă UNIX şi apăsaţi
+          <keycap>Return</keycap>, computerul execută comanda. Implicit,
+          <application>&app;</application> foloseşte shellul care a fost specificat ca implicit
+          pentru utilizatorul care a pornit aplicaţia.
+        </para>
+        <para>
+          <application>&app;</application> setează de asemenea următoarele variabile de
+          mediu:
+        </para>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <varname>TERM</varname></term>
+             <listitem>
+                <para>
+                  Implicit setată la xterm.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <varname>COLORTERM</varname></term>
+             <listitem>
+                <para>
+                  Implicit setată la gnome-terminal.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <varname>WINDOWID</varname></term>
+             <listitem>
+                <para>
+                  Implicit setată la identificatorul ferestrei X11.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-profiles">
+        <title>Profiluri pentru terminale</title>
+        <para>
+          Puteţi crea un nou profil şi aplica apoi terminalului noile caracteristici pentru
+          font, culori şi efecte, comportamentul la defilare, titlul ferestrei, compatibilitate şi
+          combinaţii de tastatură. Puteţi de asemenea defini comanda pentru a porni
+          <application>&app;</application> cu acel profil. Definiţi fiecare profil
+          pentru terminal în dialogul
+          <guilabel>Editează profil</guilabel>, pe care îl puteţi accesa din meniul
+          <guimenu>Terminal</guimenu>. Puteţi defini oricât de multe profiluri.
+          În momentul pornirii terminalului, puteţi alege profilul care doriţi să fie utilizat
+          pentru terminal, sau puteţi schimba profilul terminalului în timp ce folosiţi terminalul.
+          Puteţi specifica un profil iniţial pentru terminal în momentul pornirii sale
+	  folosind următoarea comandă:
+        </para>
+        <para>
+          <command>gnome-terminal --window-with-profile=
+             <replaceable>nume_profil</replaceable></command>
+        </para>
+        <para>
+          Numele profilului curent va fi afişat în bara de titlu de către
+          <application>&app;</application>, exceptând cazul în care specificaţi
+          un nume diferit pentru bara de titlu în
+          dialogul <guilabel>Editare profiluri</guilabel>.
+        </para>
+        <para>
+          Citiţi <xref linkend="gnome-terminal-manage-profiles"/> pentru informaţii
+          referitoare la felul în care puteţi defini şi folosi profilurile.
+        </para>
+     </sect2>
+     <sect2 id="gnome-terminal-more-windows">
+        <title>Lucrând cu mai multe terminale</title>
+        <para>
+          <application>&app;</application> oferă posibilitatea folosirii taburilor pentru
+          a adăuga terminale suplimentare ferestrei. Clickând pe fiecare tab se va deschide
+          fereastra terminal corespunzătoare. Fiecare terminal asociat unui tab este un subproces
+          separat, aşa că puteţi folosi fiecare terminal pentru lucruri diferite. Puteţi aplica un profil
+          diferit fiecărui terminal corespunzător tabului din fereastră. Bara de titlu a ferestrei
+          terminal arată fie numele profilului curent, fie numele specificat de profilul curent.
+          <xref linkend="gnome-terminal-tabbed"/>
+          arată o fereastră deschisă de <application>&app;</application> cu patru taburi. În acest caz,
+          fiecare dintre cele patru taburi are un profil diferit. Numele profilului curent, Profil 1, apare în
+          bara de titlu.
+        </para>
+        <figure id="gnome-terminal-tabbed">
+          <title>Exemplu de fereastră terminal cu taburi</title>
+          <screenshot>
+             <screeninfo>&app; cu o fereastră implicită</screeninfo>
+             <mediaobject>
+                <imageobject>
+                  <imagedata fileref="figures/gnome-terminal-tabbed.png" format="PNG"/>
+                </imageobject>
+                <textobject>
+                  <phrase>&app; cu o fereastră implicită</phrase>
+                </textobject>
+             </mediaobject>
+          </screenshot>
+        </figure>
+        <para>
+          Citiţi <xref linkend="gnome-terminal-tabs"/> despre informaţii referitoare la felul în care
+          puteţi deschide un nou tab terminal.
+        </para>
+     </sect2>
+  </sect1>
+  <sect1 id="gnome-terminal-usage">
+     <title>Mod de utilizare</title>
+     <para>
+        Următoarele secţiuni descriu felul în care puteţi folosi
+        <application>&app;</application> pentru a realiza sarcini obişnuite.
+     </para>
+     <sect2 id="gnome-terminal-windows">
+        <title>Pentru a deschide şi a închide terminale</title>
+        <variablelist>
+          <varlistentry>
+             <term>Pentru a deschide o nouă fereastră terminal:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Fişier</guimenu>
+                     <guimenuitem>Fereastră nouă</guimenuitem>
+                  </menuchoice>.
+                </para>
+                <para>
+                  Noul terminal porneşte un subproces cu acelaşi PID ca al terminalului din care
+                  porniţi noul terminal. Subprocesul este mai puţin consumator de resurse de sistem
+                  decât în cazul pornirii unui  <application>Terminal GNOME
+                  </application> din panoul GNOME. Noul terminal moşteneşte setările aplicaţiei şi
+                  shelul implicit de la terminalul părinte.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a închide o fereastră terminal:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Fişier</guimenu>
+                     <guimenuitem>Închide fereastra</guimenuitem>
+                  </menuchoice>.
+                </para>
+                <para>
+                  Această acţiune va închide terminalul şi toate subprocesele deschise
+                  din terminal. Dacă închideţi ultima fereastră terminal,
+                  <application>&app;</application> va fi închis.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a adăuga un nou tab terminal aceleaşi ferestre:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Fişier</guimenu>
+                     <guimenuitem>Tab nou</guimenuitem>
+                  </menuchoice>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a deschide un terminal tab:</term>
+             <listitem>
+                <para>
+                  Click pe tabul terminal pe care doriţi să-l deschideţi.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a închide un tab terminal:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Click pe tabul terminalului pe care doriţi să-l închideţi.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Alegeţi
+                          <menuchoice>
+                             <guimenu>Fişier</guimenu>
+                             <guimenuitem>Închide tabul</guimenuitem>
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-manage-profiles">
+        <title>Pentru a gestiona profilele</title>
+        <variablelist>
+          <varlistentry>
+             <term>Pentru a adăuga un nou profil:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Alege
+                          <menuchoice>
+                             <guimenu>Fişier</guimenu>
+                             <guimenuitem>Profil nou</guimenuitem>
+                          </menuchoice> pentru a afişa dialogul
+                          <guilabel>Profil nou</guilabel>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Tastaţi numele noului profil în căsuţa de text
+                          <guilabel>Nume profil</guilabel>, apoi apăsaţi
+                          <guibutton>Crează</guibutton>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Alegeţi
+                          <menuchoice>
+                             <guimenu>Editare</guimenu>
+                             <guimenuitem>Profiluri</guimenuitem>
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Selectaţi numele noului profil din lista
+                          <guilabel>Profiluri</guilabel>, apoi apăsaţi
+                          <guibutton>Editare</guibutton>
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                         Specificaţi caracteristicile dorite pentru noul profil în dialogul
+                          <guilabel>Editează profilul</guilabel>.
+                        </para>
+                     </listitem> 
+                  </orderedlist> 
+                </para>
+             </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+             <term>Pentru a schimba profilul unui tab terminal:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Click pe pe tabul corespunzător terminalului tab căruia doriţi săi schimbaţi profilul.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Alegeţi
+                          <menuchoice>
+                             <guimenu>Terminal</guimenu>
+                             <guisubmenu>Profil</guisubmenu>
+                             <guimenuitem>
+                                <replaceable>nume_profil</replaceable></guimenuitem>
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a edita un profil:</term>
+             <listitem>
+                <para>
+                  Profilele pot fi editate în dialogul
+                  <guilabel>Editează profilul</guilabel>. Puteţi accesa dialogul
+                  <guilabel>Editează profilul</guilabel> în următoarele moduri:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Alegeţi
+                        <menuchoice>
+                          <guimenu>Editare</guimenu>
+                          <guisubmenu>Profilul curent</guisubmenu>
+                        </menuchoice>.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Alegeţi
+                        <menuchoice>
+                          <guimenu>Editare</guimenu>
+                          <guisubmenu>Profiluri</guisubmenu>
+                        </menuchoice>, apoi selectaţi profilul pe care doriţi să-l editaţi
+                         şi apăsaţi
+                        <guibutton>Editare</guibutton>.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Apăsaţi butonul din dreapta al mausului în fereastra terminal, apoi alegeţi
+                        <guimenuitem>Editează profilul curent</guimenuitem> din meniul
+                        popup.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a şterge un profil:</term>
+             <listitem>
+                <para>
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Alegeţi
+                          <menuchoice>
+                             <guimenu>Editare</guimenu>
+                             <guimenuitem>Profiluri</guimenuitem>
+                          </menuchoice>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Selectaţi numele profilului pe care doriţi să-l ştergeţi din lista
+                          <guilabel>Profiluri</guilabel>, apoi apăsaţi
+                          <guibutton>Şterge</guibutton>.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Apăsaţi
+                          <guibutton>Şterge</guibutton> în dialogul
+                          <guilabel> Întrebare</guilabel>.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-tabs">
+        <title>Pentru a modifica o fereastră terminal</title>
+        <variablelist>
+          <varlistentry>
+             <term>Pentru a ascunde bara de meniuri:</term>
+             <listitem>
+                <para>
+                 Click cu butonul din dreapta al mausului in fereastra terminal, apoi alegeţi
+                  <guimenuitem>Ascunde bara de meniu</guimenuitem> din meniul popup.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a arăta o bară de meniuri ascunsă:</term>
+             <listitem>
+                <para>
+                  Click cu butonul din dreapta al mausului in fereastra terminal, apoi alegeţi
+                  <guimenuitem>Arată bara de meniu</guimenuitem> din meniul popup.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a alege poziţia barei de scroll:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Editare</guimenu>
+                     <guimenuitem>Profilul curent</guimenuitem>
+                  </menuchoice>, apoi selectaţi poziţia barei de scroll din lista
+                  <guilabel>Defilare</guilabel> . Citiţi
+                  <link linkend="gnome-terminal-prefs">Preferinţe </link> pentru mai multe
+                  informaţii despre opţiunile pe care le puteţi alege din dialogul
+                  <guilabel>Editează profilul</guilabel> pentru a afişa bara de scroll.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-contents">
+        <title>Pentru a lucra cu conţinutul unei ferestre terminal</title>
+        <variablelist>
+          <varlistentry>
+             <term>Pentru a defila comenzile anterioare şi afişările lor:</term>
+             <listitem>
+                <para>
+                  Realizaţi una dintre următoarele acţiuni:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                       Folosiţi bara de scroll, care este afişată în mod obişnuit în dreapta
+                        ferestrei terminal.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Apăsaţi tastele
+                        <keycap>Page Up</keycap>,
+                        <keycap>Page Down</keycap>,
+                        <keycap> Home</keycap>, sau
+                        <keycap>End</keycap>.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Numărul de linii pe care îl puteţi defila înapoi în fereastra terminal
+                  este determinat de setarea
+                  <guilabel>Defilare înapoi</guilabel> din secţiunea
+                  <guilabel>Defilare</guilabel> a dialogului
+                  <guilabel>Editează profilul</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a selecta şi copia textul:</term>
+             <listitem>
+                <para>
+                  Puteţi selecta şi copia textul în unul dintre următoarele moduri:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        Pentru a selecta un singur caracter la un moment dat, efectuaţi click pe primul
+                        caracter pe care doriţi să-l selectaţi şi trageţi mausul până la ultimul caracter pe 
+			care doriţi să-l selectaţi.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Pentru a selecta un singur cuvânt la un moment dat, efectuaţi dublu-click pe
+                        primul cuvânt pe care doriţi să-l selectaţi şi trageţi mausul până la ultimul cuvânt
+                        pe care doriţi să-l selectaţi.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Pentru a selecta o singură linie la un moment dat, efectuaţi triplu-click cu mausul
+                        pe linia pe care doriţi să o selectaţi apoi trageţi mausul până la ultima linie pe care
+                        doriţi să o selectaţi.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Pentru a selecta o porţiune de text, efectuaţi următorii paşi:
+                     </para>
+                     <orderedlist>
+                        <listitem>
+                          <para>
+                             Efectuaţi click, dublu-click sau triplu-click pe primul element pe care doriţi
+			     să-l selectaţi, funcţie de cum doriţi să selectaţi textul, după caracter, după
+			     cuvânt sau după linie.
+                          </para>
+                        </listitem>
+                        <listitem>
+                          <para>
+                             Mutaţi mausul către ultimul element din text pe care doriţi să-l selectaţi
+                             şi efectuaţi un click cu butonul din dreapta al mausului.
+                          </para>
+                        </listitem>
+                     </orderedlist>
+                     <para>
+                        Aceste acţiuni vor avea ca rezultat selectarea tuturor elementelor dintre primul
+                        şi ultimul element.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Pentru toate selecţiile de text, <application>&app;</application> copiază
+                  textul selectat în memoria clipboard în momentul eliberării butonului de la maus.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a lipi text în terminal:</term>
+             <listitem>
+                <para>
+                  Realizaţi una dintre următoarele acţiuni:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                       Efectuaţi un click cu butonul din mijloc al mausului. Dacă nu aveţi un buton central
+		       la maus, citiţi documentaţia pentru Serverul X pentru a afla informaţii despre cum poate
+		       fi emulat acest buton.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        Alegeţi
+                        <menuchoice>
+                          <guimenu>Editare</guimenu>
+                          <guimenuitem>Lipeşte</guimenuitem>
+                        </menuchoice> pentru a lipi text în terminal.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a trage un nume de fişier în fereastra terminal:</term>
+             <listitem>
+                <para>
+                  Puteţi trage un fişier dintr-o altă aplicaţie cum ar fi un manager de fişiere către
+		  un terminal. Terminalul va afişa calea şi numele complet al fişierului.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>Pentru a accesa o legătură</term>
+             <listitem>
+                <para>
+                  Pentru a accesa o Legătură Uniformă de Resurse (URL) care este afişată
+		  în terminal, efectuaţi următorii paşi:
+                  <orderedlist>
+                     <listitem>
+                        <para>
+                          Mutaţi mausul deasupra URL-ului până în momentul în care URL-este este subliniat
+                          şi cursorul mausului se schimbă într-o mână.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Efectuaţi click cu butonul din drepta al mausului pe URL pentru a deschide un meniu popup.
+                        </para>
+                     </listitem>
+                     <listitem>
+                        <para>
+                          Alegeţi
+                          <guimenuitem>Deschide legătura</guimenuitem> pentru a porni o aplicaţie
+                          care va afişa fişierul corespunzător acelui URL.
+                        </para>
+                     </listitem>
+                  </orderedlist>
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-reset">
+        <title>Pentru a recupera terminalul</title>
+        <para>
+          Următoarele secţiuni vă oferă sfaturi folositoare în situaţia în care aveţi 
+	  probleme cu terminalele.
+        </para>
+        <variablelist>
+          <varlistentry>
+             <term> Pentru a reseta starea unui terminal:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Terminal</guimenu>
+                     <guimenuitem>Resetează</guimenuitem>
+                  </menuchoice>.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+        <variablelist>
+          <varlistentry>
+             <term>Pentru a reseta terminalul şi a şterge ecranul:</term>
+             <listitem>
+                <para>
+                  Alegeţi
+                  <menuchoice>
+                     <guimenu>Terminal</guimenu>
+                     <guimenuitem>Resetează şi şterge</guimenuitem>
+                  </menuchoice>.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+
+
+
+<!--
+<sect2 id="gnome-terminal-direct-input">
+<title>To Direct All Keyboard Input to a Terminal</title>
+<para>
+   To direct all keyboard input to the terminal, even when the terminal window is
+   not in focus, right-click in the terminal window to display a popup menu, then
+   choose <guimenuitem>Secure keyboard</guimenuitem>. This option is useful when
+   several users use the same X server and the X server does not use secure authentication
+   methods.
+</para>
+</sect2>
+-->
+  </sect1>
+  <sect1 id="gnome-terminal-prefs">
+     <title>Preferinţe</title>
+     <para>
+        Pentru a configura &app;, alegeţi
+        <menuchoice>
+          <guimenu>Editare</guimenu>
+          <guimenuitem>Profilul curent</guimenuitem>
+        </menuchoice>. Puteţi configura &app; folosind următoarele secţiuni
+        din dialogul
+        <guilabel>Editează profilul curent</guilabel>.
+     </para>
+     <sect2 id="gnome-terminal-prefs-general">
+        <title>General</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Nume profil</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi această căsuţă de text pentru a specifica numele profilului curent.
+                </para>
+                <para>
+                  Implicit:
+                  <guilabel>Default</guilabel>.
+                </para>
+             </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+             <term> 
+                <guilabel>Font</guilabel> </term> 
+             <listitem> 
+                <para>
+                  Folosiţi acest buton pentru a specifica fontul implicit pentru terminal.
+                </para>
+                <para>
+                  Implicit:
+                  -misc-fixed-medium-r-normal-20-200-75-75-c-100-iso8859-1.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Permite text aldin</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a permite terminalului afişarea textului aldin.
+                </para>
+                <para>
+                Implicit: selectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Cursorul clipeşte</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a permite cursorului să clipească.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Arată implicit bara de meniuri în terminale noi</guilabel>
+                </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a afişa bara de meniuri în noile ferestre de terminal deschise.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Dezactivează bipul</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a nu permite terminalului să producă bipuri.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Caractere selectează-după-cuvânt</guilabel> </term>
+             <listitem>
+                <para>
+		Folosiţi această căsuţă de text pentru a specifica caracterele sau grupurile de caractere
+                  pe care <application>&app;</application> le consideră a fi cuvinte când selectaţi
+                  textul după cuvânt. Citiţi <xref linkend="gnome-terminal-contents"/> pentru mai multe
+                  informaţii despre cum să selectaţi textul după cuvinte.
+                </para>
+                <para>
+                  Implicit: -A-Za-z0-9,./?%&amp;#
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Bara de scroll este</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi această listă pentru a specifica poziţia barei de scroll
+                  în fereastra terminal.
+                </para>
+                <para>
+                  Implicit:
+                  <guilabel>În partea dreaptă</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Defilare înapoi ... linii</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi săgeţile pentru a specifica numărul de linii pe care le puteţi defila înapoi
+                  folosind bara de scroll. De exemplu, dacă veţi specifica 100 veţi putea defila
+                  înapoi printre ultimele 100 de linii afişate în terminal.
+                </para>
+                <para>
+                  Implicit: 500 linii.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Defilare înapoi ... kilobytes</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi săgeţile pentru specifica numărul de kilobytes pe care îl puteţi defila înapoi
+                  folosind bara de scroll. De exemplu, dacă veţi specifica 94 veţi putea defila înapoi
+                  printre ultimii 94 de kilobytes afişaţi în terminal.
+                </para>
+                <para>
+                  Implicit: 168 kilobytes.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Defilează după apăsarea unei taste</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a putea folosi
+                  <keycap>Page Up</keycap> şi
+                  <keycap>Page Down</keycap> pentru a defila prin terminal.
+                </para>
+                <para>
+                  Implicit: selectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Defilează după ieşirea comenzii</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a vă permite defilarea prin terminal
+                  în timp ce terminalul continuă să afişeze date de la ieşirea comenzii
+		  rulate în acel moment.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-title">
+        <title>Titlu şi comandă</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Titlul iniţial</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi această căsuţă de text pentru a specifica titlul iniţial al profilului.
+                  Noile terminale care sunt pornite din terminalul curent vor avea noul titlu iniţial.
+                </para>
+                <para>
+                  Implicit: Implicit.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Titlul setat dinamic</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi lista pentru a seta titlul pentru fereastra terminalului la directorul curent
+                  de lucru.
+                </para>
+                <para>
+                  Implicit: Înlocuieşte titlul iniţial.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Când comanda se termină</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi lista pentru a alege comanda rulată la ieşirea terminalului.
+                </para>
+                <para>
+                  Implicit: Părăseşte terminalul.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Rulează comanda ca un shell de logare</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a face comanda rulată de terminal să fie rulată
+                  ca un shell de logare. Dacă această comandă nu este un shell, atunci această
+                  setare nu va avea nici un efect.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Actualizează înregistrările utmp/wtmp când comanda este
+                  lansată</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a insera o nouă intrare în înregistrările utmp
+                  şi wtmp când un nou shell este deschis.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Rulează o comandă personalizată în locul shell-ului meu</guilabel>
+                </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a rula o comandă în terminal alta decât
+                  shellul normal. Specificaţi comanda personalizată în căsuţa de text
+                  <guilabel>Comandă personalizată</guilabel>.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-colors">
+        <title>Culori</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Scheme predefinite</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi lista pentru a alege culoarea de fundal şi de prim plan pentru
+                  terminal. <application>&app;</application> suportă
+                  următoarele combinaţii de culori pentru fundal  şi prim plan:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Alb pe negru</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Negru pe alb</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Verde pe negru</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Negru pe galben deschis</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Personalizat</guilabel>
+                     </para>
+                     <para>
+                        Această setare vă permite să selectaţi culori care nu sunt în schema de culori
+			selectată.</para>
+                  </listitem> 
+                </itemizedlist> 
+                <para>
+                  Afişarea culorilor de fundal şi de prim plan poate varia funcţie de schema de culoare
+                  aleasă. Spre exemplu, dacă alegeţi
+                  <guilabel>Alb pe negru</guilabel> şi schema de culori
+                  <guilabel>Consolă linux</guilabel>, aplicaţia
+                  va afişa culorile de fundal şi de prim plan ca fiind gri deschis pe negru.
+                </para>
+                <para>
+                  Implicit:
+                  <guilabel>Alb pe negru</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Culoarea textului</guilabel> </term>
+             <listitem>
+                <para>
+                  Apăsaţi butonul
+                  <guibutton>Culoarea textului</guibutton> pentru a afişa dialogul
+                  <guilabel>Alege culoarea de text a terminalului</guilabel>. Alegeţi
+                  culoarea pe care doriţi să o folosiţi pentru prim plan din paleta de culori.
+                  Acest buton este disponibil doar dacă specificaţi opţiunea
+                  <guilabel>Personalizat</guilabel> în lista
+                  <guilabel>Scheme predefinite</guilabel>.
+                </para>
+                <para>
+                  Implicit: alb.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Culoarea de fundal</guilabel> </term>
+             <listitem>
+                <para>
+                  Apăsaţi butonul
+                  <guibutton>Culoarea de fundal</guibutton> pentru a afişa dialogul
+                  <guilabel>Alegeţi culoarea de fundal a terminalului</guilabel>.
+                  Alegeţi culoarea pe care doriţi să o folosiţi pentru fundal din paleta de culori.
+		Acest buton este disponibil doar dacă specificaţi opţiunea
+                  <guilabel>Personalizat</guilabel> din lista
+                  <guilabel>Scheme predefinite</guilabel>.
+                </para>
+                <para>
+                  Implicit: negru.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Paleta - Scheme predefinite</guilabel></term>
+             <listitem>
+                <para>
+                  O schema de culori este o paletă de 16 culori. Folosiţi lista pentru a alege
+                  schema de culori pe care doriţi să o alegeţi.
+                  <application>&app;</application> suportă următoarele scheme de culori:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Consolă linux</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Xterm</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Rxvt</guilabel>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Personalizat</guilabel>
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Fiecare schemă de culori este diferită. Spre exemplu,
+                  <guilabel>Consolă linux</guilabel> foloseşte gri deschis în loc de
+                  alb. Schema de culori
+                  <guilabel>Personalizat</guilabel> vă permite personalizarea paletei
+                  de culori.
+                </para>
+                <para>
+             		Implicit:
+                  <guilabel>Consolă linux</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+
+          <varlistentry>
+             <term>
+                <guilabel>Foloseşte culori din tema sistemului</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a folosi culori din tema sistemului.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+
+          <varlistentry>
+             <term>
+                <guilabel>Paleta de culori</guilabel> </term>
+             <listitem>
+                <para>
+                  <guilabel>Paleta de culori</guilabel> este disponibilă doar dacă
+                  veţi alege opţiunea
+                  <guilabel>Personalizat</guilabel> din lista
+                  <guilabel>Scheme predefinite</guilabel> aparţinând grupului
+                  <guilabel>Paleta</guilabel>. Folosiţi
+                  <guilabel>Paleta de culori</guilabel> pentru a personaliza cele 16 culori
+                  din paleta de culori personalizată. Pentru a personaliza o culoare, efectuaţi click
+                  pe culoare pentru a afişa dialogul
+                  <guilabel>Paleta</guilabel>. Folosiţi cercul de culori
+                  sau derulatorul pentru a personaliza culoarea, apoi apăsaţi
+                  <guibutton>OK</guibutton>.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-effects">
+        <title>Efecte</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Fundal</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi o opţiune pentru afişarea fundalului pentru fereastra terminal. Opţiunile
+                  sunt următoarele:
+                </para>
+                <itemizedlist>
+                  <listitem>
+                     <para>
+                        <guilabel>Nici unul (foloseşte o singură culoare)</guilabel>
+                     </para>
+                     <para>
+                        Selectaţi această opţiune pentru a folosi culoarea de fundal care este specificată
+                        în secţiunea
+                        <guilabel>Culori</guilabel> a preferinţelor drept culoare de fundal
+                        pentru terminal.
+                     </para>
+                  </listitem> 
+                  <listitem> 
+                     <para>
+                        <guilabel>Imagine de fundal</guilabel>
+                     </para>
+                     <para>
+                        Selectaţi această opţiune pentru a folosi un fişier imagine pentru fundalul
+                        terminalului. Apăsaţi săgeata din dreapta câmpului
+                        <guilabel>Fişierul imagine</guilabel> pentru a deschide o listă cu fişiere
+                        imagine din care puteţi alege. Alternativ, apăsaţi butonul
+                        <guibutton>Navigare</guibutton> pentru a căuta fişierul imagine dorit.
+                     </para>
+                  </listitem> 
+                  <listitem> 
+                     <para>
+                        <guilabel>Imaginea de fundal defilează</guilabel>
+                     </para>
+                     <para>
+                        Selectaţi această opţiune pentru a permite imaginii de fundal să defileze împreună
+                        cu textul în momentul în care defilaţi terminalul. Dacă nu selectaţi această opţiune,
+                        imaginea de fundal va rămâne fixă pe fundalul terminalului şi doar textul va defila.
+                        Această opţiune este disponibilă doar dacă selectaţi şi opţiunea
+                        <guilabel>Imagine de fundal</guilabel>.
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <guilabel>Fundal transparent</guilabel>
+                     </para>
+                     <para>
+                        Selectaţi această opţiune pentru a folosi un fundal transparent în terminal.
+                     </para>
+                  </listitem>
+                </itemizedlist>
+                <para>
+                  Implicit:
+                  <guilabel>Nici unul</guilabel>.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Umbreşte fundalul transparent sau imaginea</guilabel>
+                </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a umbri fundalul terminalului.
+                  Această opţiune este disponibilă doar dacă selectaţi opţiunea
+                  <guilabel>Imagine de fundal</guilabel> sau
+                  <guilabel>Fundal transparent</guilabel>.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-compatibility">
+        <title>Compatibilitate</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Tasta backspace generează</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi lista din dreapta pentru a selecta funcţia îndeplinită de tasta
+                  <keycap>Backspace</keycap>.
+                </para>
+                <para>
+                  Implicit: ASCII DEL.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Tasta delete generează</guilabel> </term>
+             <listitem>
+                <para>
+                  Folosiţi lista din dreapta pentru a selecta funcţia îndeplinită de tasta
+                  <keycap>Delete</keycap>.
+                </para>
+                <para>
+                  Implicit: ASCII DEL.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Permite codarea greşită a fonturilor</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a permite introducerea fonturilor ce folosesc
+                  codarea greşită.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+     <sect2 id="gnome-terminal-prefs-keybindings">
+        <title>Combinaţii de taste</title>
+        <variablelist>
+          <varlistentry>
+             <term>
+                <guilabel>Lista combinaţiilor de taste.</guilabel> </term>
+             <listitem>
+                <para>
+                  Această informaţie va fi inclusă într-o versiune viitoare de ajutor.
+                </para>
+                <para>
+                  Implicit: Informaţie care va fi inclusă în viitor.
+                </para>
+             </listitem>
+          </varlistentry>
+          <varlistentry>
+             <term>
+                <guilabel>Dezactivează toate combinaţiile de taste</guilabel> </term>
+             <listitem>
+                <para>
+                  Selectaţi această opţiune pentru a dezactiva toate combinaţiile de taste din profilul curent.
+                </para>
+                <para>
+                  Implicit: neselectat.
+                </para>
+             </listitem>
+          </varlistentry>
+        </variablelist>
+     </sect2>
+  </sect1>
+</article>
