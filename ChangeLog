@@ -1,5 +1,11 @@
 2002-02-15  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-screen.c (terminal_screen_update_on_realize): fix 
+	#71505 from frb, had set_fonts() backward so allow_bold setting 
+	was reversed
+
+2002-02-15  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal.c (main): make option parsing accept exactly the
 	same --command/-e/--execute/-x options as gnome-terminal and
 	handle them the same way.

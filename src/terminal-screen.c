@@ -457,7 +457,7 @@ terminal_screen_update_on_realize (ZvtTerm        *term,
 
   zvt_term_set_fonts (term, term->font,
                       terminal_profile_get_allow_bold (profile) ?
-                      term->font : NULL);
+                      NULL : term->font);
 
   gdk_font_unref (libzvt_workaround_hack);
 }
