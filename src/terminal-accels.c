@@ -990,7 +990,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
       int j;
       gtk_tree_store_append (tree, &parent_iter, NULL);
       gtk_tree_store_set (tree, &parent_iter,
-			  ACTION_COLUMN, all_entries[i].user_visible_name,
+			  ACTION_COLUMN, _(all_entries[i].user_visible_name),
 			  -1);
       j = 0;
 
