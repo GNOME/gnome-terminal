@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2003-07-16 19:24+0200\n"
-"PO-Revision-Date: 2003-07-16 19:25+0200\n"
+"POT-Creation-Date: 2003-07-29 22:47+0200\n"
+"PO-Revision-Date: 2003-07-29 22:48+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,8 +19,8 @@ msgstr ""
 msgid "Command line"
 msgstr "Kommandorad"
 
-#: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1132
-#: src/terminal.c:1449 src/terminal-profile.c:275 src/terminal-window.c:709
+#: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1137
+#: src/terminal.c:1454 src/terminal-profile.c:275 src/terminal-window.c:709
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -184,7 +184,7 @@ msgstr "Thai"
 msgid "User Defined"
 msgstr "Avändardefinierad"
 
-#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2745
+#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2750
 #: src/terminal-window.c:2576
 #, c-format
 msgid "There was an error displaying help: %s"
@@ -602,8 +602,8 @@ msgid "_Update utmp/wtmp records when command is launched"
 msgstr "_Uppdatera utmp/wtmp-poster då kommandot startas"
 
 #: src/gnome-terminal.glade2.h:100
-msgid "_Use the same size font as other applications"
-msgstr "_Använd samma typsnittsstorlek som andra program"
+msgid "_Use the system terminal font"
+msgstr "_Använd systemets terminaltypsnitt"
 
 #: src/gnome-terminal.glade2.h:101
 msgid "_kilobytes"
@@ -1773,7 +1773,8 @@ msgstr "Gå"
 msgid "Help"
 msgstr "Hjälp"
 
-#: src/terminal-accels.c:264 src/terminal.c:1537 src/terminal-profile.c:391
+#: src/terminal-accels.c:264 src/terminal.c:1542 src/terminal-profile.c:391
+#: src/terminal-screen.c:182
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -2012,110 +2013,99 @@ msgid "Could not load icon \"%s\": %s\n"
 msgstr "Kunde inte läsa in ikonen \"%s\": %s\n"
 
 #: src/terminal.c:749
-msgid "Option --command/-e requires specifying the command to run\n"
-msgstr "Flaggan --command/-e kräver att kommandot som ska köras anges\n"
+#, c-format
+msgid "Option \"%s\" requires specifying the command to run\n"
+msgstr "Flaggan \"%s\" kräver att kommandot som ska köras anges\n"
 
 #: src/terminal.c:757
 #, c-format
-msgid "Argument to --command/-e is not a valid command: %s\n"
-msgstr "Argumentet till --command/-e är inte ett giltigt kommando: %s\n"
+msgid "Argument to \"%s\" is not a valid command: %s\n"
+msgstr "Argumentet till \"%s\" är inte ett giltigt kommando: %s\n"
 
-#: src/terminal.c:767 src/terminal.c:789
+#: src/terminal.c:767 src/terminal.c:791
+#, c-format
+msgid "\"%s\" specified more than once for the same window or tab\n"
+msgstr "\"%s\" angavs mer än en gång för samma fönster eller flik\n"
+
+#: src/terminal.c:782
+#, c-format
 msgid ""
-"--command/-e/--execute/-x specified more than once for the same window or "
-"tab\n"
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line\n"
 msgstr ""
-"--command/-e/--execute/-x angavs mer än en gång för samma fönster eller "
-"flik\n"
+"Flaggan \"%s\" kräver att det kommando som ska köras anges på resten av "
+"kommandoraden\n"
 
-#: src/terminal.c:781
-msgid ""
-"Option --execute/-x requires specifying the command to run on the rest of "
-"the command line\n"
+#: src/terminal.c:813 src/terminal.c:837
+#, c-format
+msgid "Option \"%s\" requires an argument specifying what profile to use\n"
 msgstr ""
-"Flaggan --execute/-x kräver att det kommando som ska köras anges på resten "
-"av kommandoraden\n"
+"Flaggan \"%s\" kräver ett argument som anger vilken profil som ska användas\n"
 
-#: src/terminal.c:810
-msgid ""
-"Option --window-with-profile requires an argument specifying what profile to "
-"use\n"
-msgstr ""
-"Flaggan --window-with-profile kräver ett argument som anger vilken profil "
-"som ska användas\n"
+#: src/terminal.c:871 src/terminal.c:897
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "Flaggan \"%s\" angavs två gånger för samma fönster\n"
 
-#: src/terminal.c:833
-msgid ""
-"Option --tab-with-profile requires an argument specifying what profile to "
-"use\n"
-msgstr ""
-"Flaggan --tab-with-profile kräver ett argument som anger vilken profil som "
-"ska användas\n"
+#: src/terminal.c:920
+#, c-format
+msgid "Option \"%s\" requires an argument giving the role\n"
+msgstr "Flaggan \"%s\" kräver ett argument som anger rollen\n"
 
-#: src/terminal.c:866
-msgid "--show-menubar option given twice for the same window\n"
-msgstr "Flaggan --show-menubar angavs två gånger för samma fönster\n"
-
-#: src/terminal.c:892
-msgid "--hide-menubar option given twice for the same window\n"
-msgstr "Flaggan --hide-menubar angavs två gånger för samma fönster\n"
-
-#: src/terminal.c:915
-msgid "Option --role requires an argument giving the role\n"
-msgstr "Flaggan --role kräver ett argument som anger rollen\n"
-
-#: src/terminal.c:924
+#: src/terminal.c:929
 msgid "Two roles given for one window\n"
 msgstr "Två roller angivna för ett fönster\n"
 
-#: src/terminal.c:940
-msgid "Option --geometry requires an argument giving the geometry\n"
-msgstr "Flaggan --geometry kräver ett argument som anger geometrin\n"
+#: src/terminal.c:945
+#, c-format
+msgid "Option \"%s\" requires an argument giving the geometry\n"
+msgstr "Flaggan \"%s\" kräver ett argument som anger geometrin\n"
 
-#: src/terminal.c:949 src/terminal.c:959
+#: src/terminal.c:954
+#, c-format
+msgid "Two \"%s\" options given for one window\n"
+msgstr "Två \"%s\"-flaggor angivna för ett fönster\n"
+
+#: src/terminal.c:964
 msgid "Two geometries given for one window\n"
 msgstr "Två geometrier angivna för ett fönster\n"
 
-#: src/terminal.c:981
-msgid "Option --title requires an argument giving the title\n"
-msgstr "Flaggan --title kräver ett argument som anger titeln\n"
+#: src/terminal.c:986
+#, c-format
+msgid "Option \"%s\" requires an argument giving the title\n"
+msgstr "Flaggan \"%s\" kräver ett argument som anger titeln\n"
 
-#: src/terminal.c:989
-msgid "Two titles given for one tab\n"
-msgstr "Två titlar angivna för en flik\n"
+#: src/terminal.c:994 src/terminal.c:1017 src/terminal.c:1041
+#, c-format
+msgid "Two \"%s\" options given for one tab\n"
+msgstr "Två \"%s\"-flaggor angivna för en flik\n"
 
-#: src/terminal.c:1004
-msgid "Option --working-directory requires an argument giving the directory\n"
-msgstr "Flaggan --working-directory kräver ett argument som anger katalogen\n"
+#: src/terminal.c:1009
+#, c-format
+msgid "Option \"%s\" requires an argument giving the directory\n"
+msgstr "Flaggan \"%s\" kräver ett argument som anger rollen\n"
 
-#: src/terminal.c:1012
-msgid "Two working directories given for one tab\n"
-msgstr "Två arbetskataloger angivna för en flik\n"
+#: src/terminal.c:1033
+#, c-format
+msgid "Option \"%s\" requires an argument giving the zoom factor\n"
+msgstr "Flaggan \"%s\" kräver ett argument som anger zoomfaktorn\n"
 
-#: src/terminal.c:1028
-msgid "Option --zoom requires an argument giving the zoom factor\n"
-msgstr "Flaggan --zoom kräver ett argument som anger zoomfaktorn\n"
-
-#: src/terminal.c:1036
-msgid "Two zoom factors given for one tab\n"
-msgstr "Två zoomfaktorer angivna för en flik\n"
-
-#: src/terminal.c:1051
+#: src/terminal.c:1056
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "\"%s\" är inte en giltig zoomfaktor\n"
 
-#: src/terminal.c:1059
+#: src/terminal.c:1064
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Zoomfaktorn \"%g\" är för liten, använder %g\n"
 
-#: src/terminal.c:1066
+#: src/terminal.c:1071
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Zoomfaktorn \"%g\" är för stor, använder %g\n"
 
-#: src/terminal.c:1087
+#: src/terminal.c:1092
 #, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
@@ -2126,33 +2116,32 @@ msgstr ""
 "kanske prova att skapa en profil med den önskade inställningen och använda "
 "den nya flaggan --window-with-profile\n"
 
-#: src/terminal.c:1093
-msgid "--startup-id option given twice\n"
-msgstr "Alternativet --startup-id angivet två gånger\n"
-
 #: src/terminal.c:1098
-msgid "--startup-id option requires an argument\n"
-msgstr "Alternativet --startup-id kräver ett argument\n"
+#, c-format
+msgid "\"%s\" option given twice\n"
+msgstr "Flaggan \"%s\" angiven två gånger\n"
 
-#: src/terminal.c:1215
-msgid "No argument given to --display option\n"
-msgstr "Inget argument angivet till alternativet --display\n"
+#: src/terminal.c:1103 src/terminal.c:1242
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr "Flaggan \"%s\" kräver ett argument\n"
 
-#: src/terminal.c:1237
-msgid "No argument given to --screen option\n"
-msgstr "Inget argument angivet till alternativet --screen\n"
+#: src/terminal.c:1220
+#, c-format
+msgid "No argument given to \"%s\" option\n"
+msgstr "Inget argument angivet till flaggan \"%s\"\n"
 
-#: src/terminal.c:1323
+#: src/terminal.c:1328
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Det finns ingen profil \"%s\", använder standardprofilen\n"
 
-#: src/terminal.c:1499
+#: src/terminal.c:1504
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Ogiltigt argument: \"%s\"\n"
 
-#: src/terminal.c:1553
+#: src/terminal.c:1558
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2161,97 +2150,97 @@ msgstr ""
 "Det uppstod ett fel vid prenumeration på notifiering av ändringar i "
 "terminalprofilslistan. (%s)\n"
 
-#: src/terminal.c:1789
+#: src/terminal.c:1794
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ogiltig geometristräng \"%s\"\n"
 
-#: src/terminal.c:1849
+#: src/terminal.c:1854
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Ett fel uppstod vid hämtande av listan över terminalprofiler. (%s)\n"
 
-#: src/terminal.c:2148
+#: src/terminal.c:2153
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Du har redan en profil med namnet \"%s\""
 
-#: src/terminal.c:2159
+#: src/terminal.c:2164
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profilen som du valde som bas för din nya profil finns inte längre"
 
-#: src/terminal.c:2245
+#: src/terminal.c:2250
 msgid "Enter profile name"
 msgstr "Ange profilnamn"
 
-#: src/terminal.c:2256
+#: src/terminal.c:2261
 msgid "Choose base profile"
 msgstr "Välj basprofil"
 
-#: src/terminal.c:2396
+#: src/terminal.c:2401
 msgid "Profile list"
 msgstr "Profillista"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2470
 msgid "You must select one or more profiles to delete."
 msgstr "Du måste välja minst en profil att ta bort."
 
-#: src/terminal.c:2476
+#: src/terminal.c:2481
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Du måste ha minst en profil; du kan inte ta bort alla profiler."
 
-#: src/terminal.c:2485
+#: src/terminal.c:2490
 msgid "Delete these two profiles?\n"
 msgstr "Ta bort dessa två profiler?\n"
 
-#: src/terminal.c:2487
+#: src/terminal.c:2492
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Ta bort dessa %d profiler?\n"
 
-#: src/terminal.c:2505
+#: src/terminal.c:2510
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Ta bort profilen \"%s\"?"
 
-#: src/terminal.c:2527
+#: src/terminal.c:2532
 msgid "Delete Profile"
 msgstr "Ta bort profil"
 
-#: src/terminal.c:2767 src/terminal-window.c:2007
+#: src/terminal.c:2772 src/terminal-window.c:2007
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: src/terminal.c:2800
+#: src/terminal.c:2805
 msgid "Edit Profiles"
 msgstr "Redigera profiler"
 
-#: src/terminal.c:2840
+#: src/terminal.c:2845
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profil som _används vid start av en ny terminal:"
 
-#: src/terminal.c:2862
+#: src/terminal.c:2867
 msgid "_Profiles:"
 msgstr "_Profiler:"
 
-#: src/terminal.c:2911
+#: src/terminal.c:2916
 msgid "Click to open new profile dialog"
 msgstr "Klicka för att öppna dialogen ny profil"
 
-#: src/terminal.c:2924
+#: src/terminal.c:2929
 msgid "Click to open edit profile dialog"
 msgstr "Klicka för att öppna dialogen redigera profil"
 
-#: src/terminal.c:2934
+#: src/terminal.c:2939
 msgid "Click to delete selected profile"
 msgstr "Klicka för att ta bort den valda profilen"
 
-#: src/terminal.c:2983
+#: src/terminal.c:2988
 msgid "Click button to choose profile"
 msgstr "Klicka på knappen för att välja profil"
 
-#: src/terminal.c:3466
+#: src/terminal.c:3471
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2260,7 +2249,7 @@ msgstr ""
 "Filen \"%s\" saknas. Detta betyder att programmet inte installerades "
 "korrekt, vilket gör att dialogen inte kan visas."
 
-#: src/terminal.c:3628
+#: src/terminal.c:3633
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2268,7 +2257,7 @@ msgstr ""
 "Det verkar som om gnome-terminal.server inte är installerad på någon giltig "
 "plats. Fabriksläget är inaktiverat.\n"
 
-#: src/terminal.c:3631
+#: src/terminal.c:3636
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2276,7 +2265,7 @@ msgstr ""
 "Fel vid registrering av terminalen i aktiveringstjänsten; fabriksläget är "
 "inaktiverat.\n"
 
-#: src/terminal.c:3667
+#: src/terminal.c:3672
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Misslyckades med att hämta terminalserver från aktiveringsservern\n"
 
@@ -2376,17 +2365,26 @@ msgstr "Kunde inte tolka strängen \"%s\" som en färgpalett\n"
 msgid "Palette had %d entries instead of %d\n"
 msgstr "Paletten hade %d poster istället för %d\n"
 
-#: src/terminal-screen.c:662
+#: src/terminal-screen.c:198
+#, c-format
+msgid ""
+"There was an error subscribing to notification of monospace font changes. (%"
+"s)\n"
+msgstr ""
+"Det inträffade ett fel vid prenumeration på notifiering om ändringar i "
+"typsnitt med fast breddsteg. (%s)\n"
+
+#: src/terminal-screen.c:728
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Kunde inte läsa in typsnittet \"%s\"\n"
 
-#: src/terminal-screen.c:790
+#: src/terminal-screen.c:856
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det uppstod ett problem med kommandot för denna terminal: %s"
 
-#: src/terminal-screen.c:1107
+#: src/terminal-screen.c:1173
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2395,7 +2393,7 @@ msgstr ""
 "Kunde inte öppna adressen \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1200 src/terminal-window.c:954
+#: src/terminal-screen.c:1266 src/terminal-window.c:954
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2404,80 +2402,80 @@ msgstr ""
 "Det uppstod ett fel vid inläsning av konfigurationsvärdet om huruvida bild i "
 "menyer ska användas. (%s)\n"
 
-#: src/terminal-screen.c:1250
+#: src/terminal-screen.c:1316
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: src/terminal-screen.c:1255
+#: src/terminal-screen.c:1321
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: src/terminal-screen.c:1266 src/terminal-window.c:758
+#: src/terminal-screen.c:1332 src/terminal-window.c:758
 msgid "_New Window"
 msgstr "_Nytt fönster"
 
-#: src/terminal-screen.c:1273 src/terminal-window.c:761
+#: src/terminal-screen.c:1339 src/terminal-window.c:761
 msgid "New _Tab"
 msgstr "Ny _flik"
 
-#: src/terminal-screen.c:1297 src/terminal-window.c:867
+#: src/terminal-screen.c:1363 src/terminal-window.c:867
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1347
+#: src/terminal-screen.c:1413
 msgid "_Edit Current Profile..."
 msgstr "_Redigera aktuell profil..."
 
-#: src/terminal-screen.c:1353
+#: src/terminal-screen.c:1419
 msgid "_Input Methods"
 msgstr "_Inmatningsmetoder"
 
-#: src/terminal-screen.c:1369
+#: src/terminal-screen.c:1435
 msgid "Hide _Menubar"
 msgstr "Dölj _menyrad"
 
-#: src/terminal-screen.c:1374
+#: src/terminal-screen.c:1440
 msgid "Show _Menubar"
 msgstr "Visa _menyrad"
 
-#: src/terminal-screen.c:1383
+#: src/terminal-screen.c:1449
 msgid "Secure _Keyboard"
 msgstr "Säkra _tangentbord"
 
-#: src/terminal-screen.c:1731
+#: src/terminal-screen.c:1797
 msgid "Change terminal title"
 msgstr "Hantera terminaltitel"
 
-#: src/terminal-screen.c:1758
+#: src/terminal-screen.c:1824
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/terminal-screen.c:1876
+#: src/terminal-screen.c:1942
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain som släpptes på terminalen hade fel format (%d) eller längd (%d)\n"
 
-#: src/terminal-screen.c:1899
+#: src/terminal-screen.c:1965
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Färg som släpptes på terminalen hade fel format (%d) eller längd (%d)\n"
 
-#: src/terminal-screen.c:1942
+#: src/terminal-screen.c:2008
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla-url som släpptes på terminalen hade fel format (%d) eller längd (%"
 "d)\n"
 
-#: src/terminal-screen.c:1991
+#: src/terminal-screen.c:2057
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-lista som släpptes på terminalen hade fel format (%d) eller längd (%d)\n"
 
-#: src/terminal-screen.c:2045
+#: src/terminal-screen.c:2111
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2485,7 +2483,7 @@ msgstr ""
 "Bildfilnamn som släpptes på terminalen hade fel format (%d) eller längd (%"
 "d)\n"
 
-#: src/terminal-screen.c:2071
+#: src/terminal-screen.c:2137
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Fel vid konvertering av URI:n \"%s\" till filnamn: %s\n"
@@ -2664,6 +2662,45 @@ msgstr ""
 #: src/terminal-window.c:2610
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
+
+#~ msgid "Use the system terminal font"
+#~ msgstr "Använd systemets terminaltypsnitt"
+
+#~ msgid "_Use the same size font as other applications"
+#~ msgstr "_Använd samma typsnittsstorlek som andra program"
+
+#~ msgid ""
+#~ "Option --window-with-profile requires an argument specifying what profile "
+#~ "to use\n"
+#~ msgstr ""
+#~ "Flaggan --window-with-profile kräver ett argument som anger vilken profil "
+#~ "som ska användas\n"
+
+#~ msgid "--hide-menubar option given twice for the same window\n"
+#~ msgstr "Flaggan --hide-menubar angavs två gånger för samma fönster\n"
+
+#~ msgid ""
+#~ "Option --working-directory requires an argument giving the directory\n"
+#~ msgstr ""
+#~ "Flaggan --working-directory kräver ett argument som anger katalogen\n"
+
+#~ msgid "Two working directories given for one tab\n"
+#~ msgstr "Två arbetskataloger angivna för en flik\n"
+
+#~ msgid "Two zoom factors given for one tab\n"
+#~ msgstr "Två zoomfaktorer angivna för en flik\n"
+
+#~ msgid "--startup-id option given twice\n"
+#~ msgstr "Flaggan --startup-id angiven två gånger\n"
+
+#~ msgid "--startup-id option requires an argument\n"
+#~ msgstr "Flaggan --startup-id kräver ett argument\n"
+
+#~ msgid "No argument given to --display option\n"
+#~ msgstr "Inget argument angivet till flaggan --display\n"
+
+#~ msgid "No argument given to --screen option\n"
+#~ msgstr "Inget argument angivet till flaggan --screen\n"
 
 #~ msgid "C_reate"
 #~ msgstr "S_kapa"
@@ -2858,22 +2895,13 @@ msgstr "GNOME-terminal"
 #~ msgstr "_Använd samma typsnittsstorlek som andra program"
 
 #~ msgid "%s option given twice\n"
-#~ msgstr "Alternativet %s angivet två gånger\n"
+#~ msgstr "Flaggan %s angiven två gånger\n"
 
 #~ msgid "%s option requires an argument\n"
-#~ msgstr "Alternativet %s kräver ett argument\n"
-
-#~ msgid "\"%s\" option given twice\n"
-#~ msgstr "Alternativet \"%s\" angivet två gånger\n"
-
-#~ msgid "\"%s\" option requires an argument\n"
-#~ msgstr "Alternativet \"%s\" kräver ett argument\n"
+#~ msgstr "Flaggan %s kräver ett argument\n"
 
 #~ msgid "No argument given to %s option\n"
-#~ msgstr "Inget argument angivet till alternativet %s\n"
-
-#~ msgid "No argument given to \"%s\" option\n"
-#~ msgstr "Inget argument angivet till alternativet \"%s\"\n"
+#~ msgstr "Inget argument angivet till flaggan %s\n"
 
 #~ msgid ""
 #~ "The file \"%s\" is missing. This indicates that the application is "
