@@ -694,7 +694,8 @@ set_size (GtkWidget *widget)
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
-  
+
+#if 0  
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
   
@@ -708,6 +709,11 @@ set_size (GtkWidget *widget)
   h += term->charheight * term->grid_height;
   
   gtk_window_resize (GTK_WINDOW (app), w, h);
+#else
+  gtk_window_set_default_size (GTK_WINDOW (app),
+                               term->charwidth * term->grid_width,
+                               term->charheight * term->grid_height);
+#endif
 }
 
 void
@@ -1011,7 +1017,7 @@ new_window_callback (GtkWidget      *menuitem,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_screen_get_profile (window->priv->active_term),
                              NULL,
-                             FALSE, FALSE, NULL);
+                             FALSE, FALSE, NULL, NULL);
 }
 
 static void
@@ -1021,7 +1027,7 @@ new_tab_callback (GtkWidget      *menuitem,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_screen_get_profile (window->priv->active_term),
                              window,
-                             FALSE, FALSE, NULL);
+                             FALSE, FALSE, NULL, NULL);
 }
 
 static void

@@ -43,7 +43,8 @@ void terminal_app_new_terminal (TerminalApp     *app,
                                 TerminalWindow  *window,
                                 gboolean         force_menubar_state,
                                 gboolean         forced_menubar_state,
-                                char           **override_command);
+                                char           **override_command,
+                                const char      *geometry);
 
 void terminal_app_delete_profiles (TerminalApp     *app,
                                    TerminalWindow  *transient_parent);

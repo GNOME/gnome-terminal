@@ -1,3 +1,14 @@
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c: add and use --geometry option. You need 
+	very latest GTK for this to work since I just fixed 
+	gtk_window_parse_geometry().
+
+	* src/terminal-window.c (set_size): only set default size here, 
+	so we can parse_geometry later and have it work; but I don't 
+	really understand why gtk_window_resize() was used before, so this
+	might hose something.
+
 2002-02-15  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-screen.c (terminal_screen_update_on_realize): fix 

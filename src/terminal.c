@@ -86,6 +86,7 @@ enum {
   OPTION_TAB_WITH_PROFILE_ID,
   OPTION_SHOW_MENUBAR,
   OPTION_HIDE_MENUBAR,
+  OPTION_GEOMETRY,
   OPTION_LAST
 };  
 
@@ -172,6 +173,15 @@ struct poptOption options[] = {
     NULL
   },
   {
+    "geometry",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_GEOMETRY,
+    N_("X geometry specification (see \"X\" man page), can be specified once per window to be opened."),
+    N_("GEOMETRY")
+  },
+  {
     NULL,
     '\0',
     0,
@@ -196,6 +206,8 @@ typedef struct
   gboolean force_menubar_state;
   gboolean menubar_state;
 
+  char *geometry;
+  
 } InitialWindow;
 
 static InitialTab*
@@ -232,7 +244,8 @@ initial_window_new (const char *profile,
   iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
   iw->force_menubar_state = FALSE;
   iw->menubar_state = FALSE;
-
+  iw->geometry = NULL;
+  
   return iw;
 }
 
@@ -241,6 +254,7 @@ initial_window_free (InitialWindow *iw)
 {
   g_list_foreach (iw->tabs, (GFunc) initial_tab_free, NULL);
   g_list_free (iw->tabs);
+  g_free (iw->geometry);
   g_free (iw);
 }
 
@@ -293,6 +307,7 @@ main (int argc, char **argv)
   int i;
   char **post_execute_args;
   const char **args;
+  char *default_geometry = NULL;
   
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -516,6 +531,45 @@ main (int argc, char **argv)
               }
           }
           break;
+
+        case OPTION_GEOMETRY:
+          {
+            InitialWindow *iw;
+            const char *geometry;
+
+            geometry = poptGetOptArg (ctx);
+
+            if (geometry == NULL)
+              {
+                g_printerr (_("Option --geometry requires an argument giving the geometry\n"));
+                return 1;
+              }
+            
+            if (initial_windows)
+              {
+                iw = g_list_last (initial_windows)->data;
+                if (iw->geometry)
+                  {
+                    g_printerr (_("Two geometries given for one window\n"));
+                    return 1;
+                  }
+
+                iw->geometry = g_strdup (geometry);
+              }
+            else
+              {
+                if (default_geometry)
+                  {
+                    g_printerr (_("Two geometries given for one window\n"));
+                    return 1;
+                  }
+                else
+                  {
+                    default_geometry = g_strdup (geometry);
+                  }
+              }
+          }
+          break;
           
         case OPTION_LAST:          
         default:
@@ -620,7 +674,8 @@ main (int argc, char **argv)
                                          NULL,
                                          iw->force_menubar_state,
                                          iw->menubar_state,
-                                         it->exec_argv);
+                                         it->exec_argv,
+                                         iw->geometry);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -630,7 +685,8 @@ main (int argc, char **argv)
                                          profile,
                                          current_window,
                                          FALSE, FALSE,
-                                         it->exec_argv);
+                                         it->exec_argv,
+                                         NULL);
             }
           
           tmp2 = tmp2->next;
@@ -651,7 +707,18 @@ main (int argc, char **argv)
                                  NULL,
                                  default_window_menubar_forced,
                                  default_window_menubar_state,
-                                 NULL);
+                                 NULL,
+                                 default_geometry);
+
+      g_free (default_geometry);
+    }
+  else
+    {
+      if (default_geometry)
+        {
+          g_printerr (_("--geometry given prior to options that create a new window, must be given after\n"));
+          return 1;
+        }
     }
   
   gtk_main ();
@@ -700,7 +767,8 @@ terminal_app_new_terminal (TerminalApp     *app,
                            TerminalWindow  *window,
                            gboolean         force_menubar_state,
                            gboolean         forced_menubar_state,
-                           char           **override_command)
+                           char           **override_command,
+                           const char      *geometry)
 {
   TerminalScreen *screen;
 
@@ -735,6 +803,14 @@ terminal_app_new_terminal (TerminalApp     *app,
   g_object_unref (G_OBJECT (screen));
 
   terminal_window_set_active (window, screen);
+
+  if (geometry)
+    {
+      if (!gtk_window_parse_geometry (GTK_WINDOW (window),
+                                      geometry))
+        g_printerr (_("Invalid geometry string \"%s\"\n"),
+                    geometry);
+    }
   
   gtk_window_present (GTK_WINDOW (window));
 
