@@ -933,7 +933,7 @@ get_child_environment (GtkWidget      *term,
           (strncmp (*p, "TERM=", 5) == 0)    ||
           (strncmp (*p, "GNOME_DESKTOP_ICON=", 19) == 0) ||
           (strncmp (*p, "COLORTERM=", 10) == 0) ||
-		   (strncmp( *p, "DISPLAY=", 8)))
+	  (strncmp ( *p, "DISPLAY=", 8)))
         {
           /* nothing: do not copy */
         }
@@ -952,7 +952,7 @@ get_child_environment (GtkWidget      *term,
                                GDK_WINDOW_XWINDOW (term->window));
   ++i;
   retval[i] = g_strdup_printf ("DISPLAY=%s", 
-					gdk_display_get_name(gtk_widget_get_display(term)));
+			       gdk_display_get_name(gtk_widget_get_display(term)));
   ++i;
   
   retval[i] = NULL;
