@@ -396,6 +396,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
   

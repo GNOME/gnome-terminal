@@ -4,7 +4,7 @@ SUBDIRS=eel
 INCLUDES=@TERM_CFLAGS@								\
 	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\"	\
 	-DTERM_GLADE_DIR=\"$(gladedir)\"						\
-	-DTERM_GLADE_FILE=\"profterm.glade2\"					\
+	-DTERM_GLADE_FILE=\"gnome-terminal.glade2\"					\
 	-DTERM_DATADIR=\"$(datadir)\"						\
 	-DTERM_LIBDIR=\"$(libdir)\"							\
 	-DTERM_PREFIX=\"$(prefix)\"							\
@@ -34,13 +34,7 @@ gnome_terminal_SOURCES=				\
 gnome_terminal_LDADD= @TERM_LIBS@ eel/libeelcnp.la
 
 gladedir   = $(pkgdatadir)/glade
-glade_DATA = profterm.glade2
-glade_src = profterm.glade
-glade_msgs = profterm.glade.h
-
-profterm.glade2: profterm.glade $(LIBGLADE_CONVERT)
-	$(LIBGLADE_CONVERT) $(srcdir)/profterm.glade > profterm.glade.tmp \
-	&& mv profterm.glade.tmp profterm.glade2
+glade_DATA = gnome-terminal.glade2
 
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
 schema_DATA = profterm.schemas
@@ -54,8 +48,6 @@ install-data-local:
 EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
-	$(glade_src)			\
-	$(glade_msgs)			\
 	$(schema_DATA)
 
 

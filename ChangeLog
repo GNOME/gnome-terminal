@@ -1,3 +1,17 @@
+2002-02-24  Havoc Pennington  <hp@pobox.com>
+
+	* src/profile-editor.c (terminal_profile_edit): remove
+	keybindings-related stuff, will now be in a separate window
+
+	* src/profile-editor.c (profile_editor_get_widget): make it a
+	fatal error if a glade widget isn't found
+
+	* src/Makefile.am: switch to using native glade2 file. 
+	(cross fingers, pray to Damon)
+
+	* src/gnome-terminal.glade2: move Keybindings to a separate
+	dialog, since it won't be per-profile.	
+
 2002-02-24  Hasbullah Bin Pit <sebol@ikhlas.com>
 
 	* configure.in: Added Malay (ms)to ALL_LINGUAS.
@@ -9,7 +23,7 @@
 
 2002-02-21  Havoc Pennington  <hp@pobox.com>
 
-	* autogen.sh: check for and run intltool
+	* autogen.sh: check for and run intltoolize
 
 2002-02-21  Havoc Pennington  <hp@pobox.com>
 

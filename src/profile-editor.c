@@ -24,7 +24,6 @@
 #include <glade/glade.h>
 #include <libgnomeui/gnome-color-picker.h>
 #include <string.h>
-#include "eggcellrendererkeys.h"
 #include "x-font-selector.h"
 
 /* Bytes in a line of scrollback, rough estimate, including
@@ -683,10 +682,6 @@ terminal_profile_edit (TerminalProfile *profile,
       GladeXML *xml;
       GtkWidget *w;
       double num1, num2;
-      GtkWidget *view;
-      GtkCellRenderer *renderer;
-      GtkTreeModel *model;
-      GtkTreeIter iter;
       gint i;
       
       if (g_file_test ("./"TERM_GLADE_FILE,
@@ -959,31 +954,6 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (w), "clicked",
                         G_CALLBACK (x_font_clicked),
                         profile);
-      
-      w = glade_xml_get_widget (xml, "bindings-swindow");
-
-      model = (GtkTreeModel*) gtk_list_store_new (1, G_TYPE_STRING);
-      for (i = 0; i < 30; i++)
-	{
-	  gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-	  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			      0, "<control>-l",
-			      -1);
-	}
-      view = gtk_tree_view_new_with_model (model);
-      renderer = g_object_new (EGG_TYPE_CELL_RENDERER_KEYS,
-			       "editable", TRUE,
-			       NULL);
-      g_signal_connect (G_OBJECT (renderer), "edited",
-                        G_CALLBACK (edited_cb), model);
-      gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
-						   0,
-						   "Egg Test",
-						   renderer,
-						   "text", 0,
-						   NULL);
-      gtk_widget_show (view);
-      gtk_container_add (GTK_CONTAINER (w), view);
     }
   else
     {
@@ -1500,11 +1470,11 @@ profile_editor_get_widget (GtkWidget  *editor,
                            "glade-xml");
 
   g_return_val_if_fail (xml, NULL);
-
+  
   w = glade_xml_get_widget (xml, widget_name);
 
   if (w == NULL)
-    g_warning ("No such widget %s", widget_name);
+    g_error ("No such widget %s", widget_name);
   
   return w;
 }
