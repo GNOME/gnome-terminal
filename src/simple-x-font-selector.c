@@ -1701,10 +1701,22 @@ egg_xfont_selector_finalize (GObject *object)
 {
   GObjectClass *parent_class;
   EggXFontSelector *sel;
-  
+  EggXFontFilter *filter;
+  gint prop;
+
   sel = EGG_XFONT_SELECTOR (object);
   parent_class = g_type_class_ref (g_type_parent (G_OBJECT_TYPE (object)));
 
+  /* Clear the filter data. */
+  filter = &sel->filters[EGG_XFONT_FILTER_BASE];
+  
+  for (prop = 0; prop < EGG_NUM_FONT_PROPERTIES; prop++)
+    {
+      g_free(filter->property_filters[prop]);
+      filter->property_filters[prop] = NULL;
+      filter->property_nfilters[prop] = 0;
+    }
+  
   g_free (sel->filtered_font_index);
   g_free (sel->size_options_map);
 
@@ -1719,4 +1731,3 @@ egg_xfont_selector_finalize (GObject *object)
 
   g_type_class_unref (parent_class);
 }
-
