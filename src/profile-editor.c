@@ -1145,6 +1145,13 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (use_theme_colors_toggled),
                         profile);
       
+      w = glade_xml_get_widget (xml, "system-font-checkbutton");
+      profile_editor_update_use_system_font (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (use_system_font_toggled),
+                        profile);
+
+      
       i = 0;
       while (i < TERMINAL_PALETTE_SIZE)
         {
@@ -1283,6 +1290,22 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       gtk_widget_set_sensitive (w, FALSE);
     }
 
+  if (!terminal_profile_get_use_system_font (profile))
+    {
+      if (terminal_widget_supports_pango_fonts ())
+        set_insensitive (editor, "font-hbox",
+                     mask & TERMINAL_SETTING_FONT);
+      else
+        set_insensitive (editor, "font-hbox",
+                     mask & TERMINAL_SETTING_X_FONT);
+    }
+  else
+    {
+      w = profile_editor_get_widget (editor, "font-hbox");
+      gtk_widget_set_sensitive (w, FALSE);
+    }
+
+
   if (terminal_profile_get_use_theme_colors (profile))
     {
       set_insensitive (editor, "foreground-colorpicker", TRUE);
@@ -1367,13 +1390,6 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "palette-optionmenu",
                    mask & TERMINAL_SETTING_PALETTE);
 
-  if (terminal_widget_supports_pango_fonts ())
-    set_insensitive (editor, "font-hbox",
-                     mask & TERMINAL_SETTING_FONT);
-  else    
-    set_insensitive (editor, "font-hbox",
-                     mask & TERMINAL_SETTING_X_FONT);
-
   set_insensitive (editor, "solid-radiobutton",
                    mask & TERMINAL_SETTING_BACKGROUND_TYPE);
   set_insensitive (editor, "image-radiobutton",
@@ -1391,6 +1407,10 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   set_insensitive (editor, "use-theme-colors-checkbutton",
                    mask & TERMINAL_SETTING_USE_THEME_COLORS);
+
+  set_insensitive (editor, "system-font-checkbutton",
+                   mask & TERMINAL_SETTING_USE_SYSTEM_FONT);
+
   
   {
     int i;
@@ -1925,12 +1945,10 @@ profile_editor_update_use_system_font (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-#if 0
-  w = profile_editor_get_widget (editor, "use-system-font-checkbutton");
+  w = profile_editor_get_widget (editor, "system-font-checkbutton");
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
                                 terminal_profile_get_use_system_font (profile));
-#endif
 }
 
 static void

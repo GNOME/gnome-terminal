@@ -1064,7 +1064,7 @@ main (int argc, char **argv)
           if (profile == NULL)
             {
               if (it->profile)
-                g_printerr (_("No such profile '%s', using default profile"),
+                g_printerr (_("No such profile '%s', using default profile\n"),
                             it->profile);
               profile = terminal_profile_get_for_new_term ();
             }

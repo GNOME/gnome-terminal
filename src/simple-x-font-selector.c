@@ -349,7 +349,7 @@ egg_xfont_selector_init (EggXFontSelector *selector)
                     selector->family_label,
                     /* X direction */          /* Y direction */
                     0, 1,                      0, 1,
-                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         GTK_EXPAND | GTK_FILL,
                     0,                         0);
 
   gtk_table_attach (GTK_TABLE (table),
@@ -364,7 +364,7 @@ egg_xfont_selector_init (EggXFontSelector *selector)
                     size_label,
                     /* X direction */          /* Y direction */
                     3, 4,                      0, 1,
-                    GTK_EXPAND | GTK_FILL,     GTK_EXPAND | GTK_FILL,
+                    0,                         GTK_EXPAND | GTK_FILL,
                     0,                         0);
 
   gtk_table_attach (GTK_TABLE (table),
@@ -1649,8 +1649,6 @@ egg_xfont_selector_create_xlfd (gint		  size,
   fontname = g_strdup_printf("-%s-%s-%s-%s-%s-*-%s-%s-*-*-%s-*-%s",
 			     foundry, family, weight, slant, set_width,
 			     pixel_size, point_size, spacing, charset);
-
-  printf ("got fontname: %s\n", fontname);
 
   return fontname;
 }

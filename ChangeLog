@@ -1,3 +1,39 @@
+2002-05-02  Havoc Pennington  <hp@redhat.com>
+
+	* src/simple-x-font-selector.c (egg_xfont_selector_init): fool
+	around with packing options
+
+	* src/terminal.c (main): add newline to error message about
+	missing profile
+
+	* src/terminal-screen.c (load_fonset_without_error): function to
+	avoid error spew from gdk_fontset_load as we try the various
+	fallback fonts.
+
+	* src/gnome-terminal.glade2: change the option from "Use font from
+	system theme" to "Use the same font as other applications"; 
+	could probably still phrase this better.
+
+	* src/terminal-screen.c (terminal_util_check_font_spacing): rename
+	to font_is_monospace, don't use unportable strncasecmp(), use 
+	same filter for monospace as the font selector
+	(make_font_monospace): new function
+	(terminal_screen_update_on_realize): rather than a hardcoded
+	fallback, fall back to the font preference. But before 
+	falling back, try to come up with a monospace font similar to the
+	system font.
+
+	* src/simple-x-font-selector.c (egg_xfont_selector_create_xlfd):
+	remove debug spew
+
+2002-04-25 Pasupathi Duraisamy <pasupathi.duraisamy@wipro.com>
+
+        * Enabling the option to use system font.
+
+        * src/profile-editor.c: add checkbox to use system font.
+
+        * src/terminal-screen.c: wire up code to use system font.
+
 2002-05-02 John Fleck <jfleck@inkstain.net>
 
 	* help/C/gnome-terminal-C.omf
@@ -9,6 +45,7 @@
 	Adding Pat Costello's new docs
 
 2002-05-02  Nalin Dahyabhai <nalin@redhat.com>
+
 	* src/terminal-widget-vte.c: fix a spelling goof in a comment and
 	hook up backspace/delete bindings.
 
