@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-01 21:31-0300\n"
-"PO-Revision-Date: 2004-08-27 10:50+0800\n"
+"POT-Creation-Date: 2004-11-20 03:59+0100\n"
+"PO-Revision-Date: 2004-11-20 15:30+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "命令行"
 
 #: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
-#: src/terminal-window.c:761 src/terminal.c:1205 src/terminal.c:1553
+#: src/terminal-window.c:759 src/terminal.c:1205 src/terminal.c:1553
 msgid "Terminal"
 msgstr "终端"
 
@@ -258,9 +258,8 @@ msgid "Add or Remove Terminal Encodings"
 msgstr "添加或删除终端编码"
 
 #: src/gnome-terminal.glade2.h:15
-#, fuzzy
 msgid "Background _image"
-msgstr "背景图像"
+msgstr "背景图像(_I)"
 
 #: src/gnome-terminal.glade2.h:16
 msgid "Background image _scrolls"
@@ -283,9 +282,8 @@ msgid "Built-in palette schemes:"
 msgstr "内置方案："
 
 #: src/gnome-terminal.glade2.h:21
-#, fuzzy
 msgid "C_reate"
-msgstr "创建(_C)"
+msgstr "创建(_R)"
 
 #: src/gnome-terminal.glade2.h:22
 msgid "Choose terminal background color"
@@ -364,9 +362,8 @@ msgid "Hold the terminal open"
 msgstr "保持退出打开"
 
 #: src/gnome-terminal.glade2.h:42
-#, fuzzy
 msgid "Image _file:"
-msgstr "图像文件(_I)："
+msgstr "图像文件(_F)："
 
 #: src/gnome-terminal.glade2.h:43
 msgid "Initial _title:"
@@ -489,9 +486,8 @@ msgid "Ru_n a custom command instead of my shell"
 msgstr "运行自定义命令而不是 Shell(_N)"
 
 #: src/gnome-terminal.glade2.h:73
-#, fuzzy
 msgid "S_hade transparent or image background:"
-msgstr "加深透明和图像背景(_S)："
+msgstr "加深透明和图像背景(_H)："
 
 #: src/gnome-terminal.glade2.h:74
 msgid "Sc_roll on output"
@@ -621,9 +617,8 @@ msgid "_lines"
 msgstr "行(_L)"
 
 #: src/gnome-terminal.glade2.h:106
-#, fuzzy
 msgid "kilo_bytes"
-msgstr "K 字节"
+msgstr "K 字节(_B)"
 
 #: src/gnome-terminal.glade2.h:107
 msgid "kilobytes"
@@ -1902,7 +1897,7 @@ msgstr "无法加载字体“%s”\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "该终端的命令行有误：%s"
 
-#: src/terminal-screen.c:1310
+#: src/terminal-screen.c:1301
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1911,54 +1906,50 @@ msgstr ""
 "无法打开地址“%s”：\n"
 "%s"
 
-#: src/terminal-screen.c:1403 src/terminal-window.c:784
+#: src/terminal-screen.c:1394 src/terminal-window.c:782
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "装入是否在菜单中使用图像的配置值出错。(%s)\n"
 
-#: src/terminal-screen.c:1474
+#: src/terminal-screen.c:1481
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: src/terminal-screen.c:1479
+#: src/terminal-screen.c:1486
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: src/terminal-screen.c:1490 src/terminal-window.c:827
+#: src/terminal-screen.c:1496 src/terminal-window.c:825
 msgid "Open _Terminal"
 msgstr "打开终端(_T)"
 
-#: src/terminal-screen.c:1495 src/terminal-window.c:830
+#: src/terminal-screen.c:1501 src/terminal-window.c:828
 msgid "Open Ta_b"
 msgstr "打开标签(_B)"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:845
+#: src/terminal-screen.c:1511 src/terminal-window.c:843
 msgid "C_lose Tab"
 msgstr "关闭标签(_L)"
 
-#: src/terminal-screen.c:1510 src/terminal-window.c:849
+#: src/terminal-screen.c:1511 src/terminal-window.c:847
 msgid "_Close Window"
 msgstr "关闭窗口(_C)"
 
-#: src/terminal-screen.c:1538
+#: src/terminal-screen.c:1536
 msgid "Change P_rofile"
 msgstr "更改配置文件(_R)"
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1572
 msgid "_Edit Current Profile..."
 msgstr "编辑当前配置文件(_E)..."
 
-#: src/terminal-screen.c:1593
+#: src/terminal-screen.c:1577
 msgid "Show _Menubar"
 msgstr "显示菜单栏(_M)"
 
-#: src/terminal-screen.c:1600
-msgid "Secure _Keyboard"
-msgstr "安全键盘(_K)"
-
-#: src/terminal-screen.c:1610
+#: src/terminal-screen.c:1587
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
@@ -2001,130 +1992,130 @@ msgstr "将 URI“%s”转化为文件名时出错：%s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: src/terminal-window.c:336
+#: src/terminal-window.c:334
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
 msgstr "订阅菜单图标可见性更改通知时出错。(%s)\n"
 
-#: src/terminal-window.c:594
+#: src/terminal-window.c:592
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: src/terminal-window.c:596
+#: src/terminal-window.c:594
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: src/terminal-window.c:717
+#: src/terminal-window.c:715
 msgid "_Add or Remove..."
 msgstr "添加或删除(_A)..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:838
+#: src/terminal-window.c:836
 msgid "New _Profile..."
 msgstr "新建配置文件(_P)..."
 
-#: src/terminal-window.c:880
+#: src/terminal-window.c:878
 msgid "P_rofiles..."
 msgstr "配置文件(_R)..."
 
-#: src/terminal-window.c:883
+#: src/terminal-window.c:881
 msgid "_Keyboard Shortcuts..."
 msgstr "快捷键(_K)..."
 
-#: src/terminal-window.c:887
+#: src/terminal-window.c:885
 msgid "C_urrent Profile..."
 msgstr "当前配置文件(_U)..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: src/terminal-window.c:902
+#: src/terminal-window.c:900
 msgid "Show Menu_bar"
 msgstr "显示菜单栏(_B)"
 
-#: src/terminal-window.c:906
+#: src/terminal-window.c:904
 msgid "_Full Screen"
 msgstr "全屏(_F)"
 
-#: src/terminal-window.c:949
+#: src/terminal-window.c:947
 msgid "Change _Profile"
 msgstr "更改配置文件(_P)"
 
-#: src/terminal-window.c:952
+#: src/terminal-window.c:950
 msgid "_Set Title..."
 msgstr "设置标题(_S)..."
 
-#: src/terminal-window.c:959
+#: src/terminal-window.c:957
 msgid "Set _Character Encoding"
 msgstr "设定字符编码(_C)"
 
-#: src/terminal-window.c:969
+#: src/terminal-window.c:967
 msgid "_Reset"
 msgstr "复位(_R)"
 
-#: src/terminal-window.c:972
+#: src/terminal-window.c:970
 msgid "Reset and C_lear"
 msgstr "复位并清屏(_L)"
 
-#: src/terminal-window.c:986
+#: src/terminal-window.c:984
 msgid "_Previous Tab"
 msgstr "前一标签(_P)"
 
-#: src/terminal-window.c:990
+#: src/terminal-window.c:988
 msgid "_Next Tab"
 msgstr "后一标签(_N)"
 
-#: src/terminal-window.c:1009
+#: src/terminal-window.c:1007
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: src/terminal-window.c:1019
+#: src/terminal-window.c:1017
 msgid "_About"
 msgstr "关于(_A)"
 
-#: src/terminal-window.c:1191
+#: src/terminal-window.c:1206
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "载入是否使用记忆术的配置时出错。(%s)\n"
 
-#: src/terminal-window.c:1210
+#: src/terminal-window.c:1225
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "订阅终端窗口配置更改通知时出错。(%s)\n"
 
-#: src/terminal-window.c:2093
+#: src/terminal-window.c:2108
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/terminal-window.c:2095 src/terminal.c:2874
+#: src/terminal-window.c:2110 src/terminal.c:2874
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: src/terminal-window.c:2097
+#: src/terminal-window.c:2112
 msgid "_View"
 msgstr "查看(_V)"
 
-#: src/terminal-window.c:2099
+#: src/terminal-window.c:2114
 msgid "_Terminal"
 msgstr "终端(_T)"
 
-#: src/terminal-window.c:2101
+#: src/terminal-window.c:2116
 msgid "Ta_bs"
 msgstr "标签(_B)"
 
-#: src/terminal-window.c:2103
+#: src/terminal-window.c:2118
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: src/terminal-window.c:2286
+#: src/terminal-window.c:2301
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2132,23 +2123,23 @@ msgid_plural ""
 "tabs."
 msgstr[0] "此窗口仍打开了 %d 个标签。关闭窗口即将关闭其下的全部标签。"
 
-#: src/terminal-window.c:2291
+#: src/terminal-window.c:2306
 msgid "Close all tabs?"
 msgstr "关闭全部标签吗？"
 
-#: src/terminal-window.c:2303
+#: src/terminal-window.c:2318
 msgid "Close All Tabs"
 msgstr "关闭全部标签"
 
-#: src/terminal-window.c:2695
-msgid "translator_credits"
-msgstr ""
-"He Qiangqiang <carton@linux.net.cn>, 2002\n"
-"Funda Wang <fundawang@linux.net.cn>, 2003"
-
-#: src/terminal-window.c:2708
+#: src/terminal-window.c:2718
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
+
+#: src/terminal-window.c:2722
+msgid "translator-credits"
+msgstr ""
+"He Qiangqiang <carton@linux.net.cn>, 2002\n"
+"Funda Wang <fundawang@linux.net.cn>, 2003, 2004"
 
 #: src/terminal.c:189
 msgid "Execute the argument to this option inside the terminal."
@@ -2240,13 +2231,12 @@ msgstr ""
 "可以一次指定。"
 
 #: src/terminal.c:288
-#, fuzzy
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
-"设置最后指定的窗口的角色；仅应用到一个窗口；您从命令行创建的每一个窗口都可指"
+"将最后指定的窗口设置为全屏模式；仅应用到一个窗口；您从命令行创建的每一个窗口都可指"
 "定一次。"
 
 #: src/terminal.c:297
@@ -2563,26 +2553,3 @@ msgstr "在激活服务中注册终端时出错；禁用 Factory 模式。\n"
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "从激活服务器获取中断服务器失败\n"
 
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "_Background image"
-#~ msgstr "背景图像(_B)"
-
-#~ msgid "_kilobytes"
-#~ msgstr "_K 字节"
-
-#~ msgid "Farsi"
-#~ msgstr "波斯语"
-
-#~ msgid "Tamil"
-#~ msgstr "泰米尔语"
-
-#~ msgid ""
-#~ "<!-- Translators: please note this is has to be a list of valid encodings "
-#~ "(which are to be taken from the list in src/encoding.c) It has to include "
-#~ "UTF-8 and the word 'current', which is not to be translated. This is "
-#~ "provided for costumization of the default encoding menu; see bug 144810 "
-#~ "for an use case. In most cases, this should be left alone. -->[UTF-8,"
-#~ "current]"
-#~ msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
