@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-03-10 14:17+0100\n"
-"PO-Revision-Date: 2002-03-10 14:40+0100\n"
+"POT-Creation-Date: 2002-03-12 16:31+0100\n"
+"PO-Revision-Date: 2002-03-12 16:33+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -80,14 +80,6 @@ msgid "A_ccelerators:"
 msgstr "_Szybkie sekwencje:"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Allow bold text"
-msgstr "Wyświetlanie pogrubionego tekstu"
-
-#: src/gnome-terminal.glade2.h:1
-msgid "Allow fonts in wrong encoding"
-msgstr "Dopuszczanie czcionek z niepoprawnym kodowaniem"
-
-#: src/gnome-terminal.glade2.h:1
 msgid "Background image _scrolls"
 msgstr "P_rzewijanie obrazu w tle"
 
@@ -141,12 +133,6 @@ msgstr ""
 #: src/terminal-accels.c:1
 msgid "Disabled"
 msgstr "Brak"
-
-#: src/gnome-terminal.glade2.h:1
-msgid "Don't bother to report bugs on this dialog yet, it isn't finished."
-msgstr ""
-"Nie zgłaszaj błędów na temat tego okna dialogowego - nie jest ono jeszcze "
-"ukończone."
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Effects"
@@ -265,10 +251,6 @@ msgid "Replaces initial title"
 msgstr "Zastępuje początkowy tytuł"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Reset compatibility options to defaults"
-msgstr "Przywróć domyślne wartości opcji zgodności"
-
-#: src/gnome-terminal.glade2.h:1
 msgid "Restart the command"
 msgstr "Ponowne uruchomienie polecenia"
 
@@ -340,6 +322,10 @@ msgid "When command _exits:"
 msgstr "_Po zakończeniu polecenia:"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Allow bold text"
+msgstr "Wyświetlanie pogru_bionego tekstu"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_Background color:"
 msgstr "Kolor _tła:"
 
@@ -380,6 +366,10 @@ msgid "_Profile name:"
 msgstr "Nazwa p_rofilu:"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Reset compatibility options to defaults"
+msgstr "Przywróć _domyślne wartości opcji zgodności"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_Scrollbar is:"
 msgstr "Położenie p_aska przewijania:"
 
@@ -407,8 +397,8 @@ msgstr "fixed"
 msgid "kilobytes"
 msgstr "kilobajtów"
 
-#: gnome-terminal.desktop.in.h:1 src/terminal-profile.c:1
-#: src/terminal-window.c:1 src/terminal.c:1
+#: gnome-terminal.desktop.in.h:1 src/terminal-accels.c:1
+#: src/terminal-profile.c:1 src/terminal-window.c:1 src/terminal.c:1
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -451,6 +441,21 @@ msgid ""
 msgstr ""
 "Nie można odczytać obrazu tła o nazwie \"%s\", używanego przez profil "
 "\"%s\": %s\n"
+
+#: src/terminal-profile.c:1
+#, c-format
+msgid "Error getting default value of %s: %s\n"
+msgstr "Przy pobieraniu domyślnej wartości %s wystąpił błąd: %s\n"
+
+#: src/terminal-profile.c:1
+#, c-format
+msgid "There wasn't a default value for %s\n"
+msgstr "Brak domyślnej wartości dla %s\n"
+
+#: src/terminal-profile.c:1
+#, c-format
+msgid "Error setting key %s back to default: %s\n"
+msgstr "Przy ustawianiu domyślnej wartości klucza %s wystąpił błąd: %s\n"
 
 #: src/terminal-profile.c:1
 #, c-format
@@ -657,6 +662,10 @@ msgstr ""
 "Aktualnie używane środowisko nie daje możliwości pracy na pełnym ekranie.\n"
 "(używając określeń technicznych: menedżer okien nie obsługuje własności "
 "_NET_WM_STATE_FULLSCREEN)"
+
+#: src/terminal-window.c:1
+msgid "translator_credits"
+msgstr "GNOME PL Team <translators@gnome.pl>"
 
 #: src/terminal-window.c:1
 msgid "Copyright 2002 Havoc Pennington"
@@ -989,6 +998,10 @@ msgid "New window"
 msgstr "Nowe okno"
 
 #: src/terminal-accels.c:1
+msgid "New profile"
+msgstr "Nowy profil"
+
+#: src/terminal-accels.c:1
 msgid "Close tab"
 msgstr "Zamknięcie zakładki"
 
@@ -1003,6 +1016,30 @@ msgstr "Skopiowanie"
 #: src/terminal-accels.c:1
 msgid "Paste"
 msgstr "Wklejenie"
+
+#: src/terminal-accels.c:1
+msgid "Hide and show menubar"
+msgstr "Przełączenie wyświetlania paska menu"
+
+#: src/terminal-accels.c:1
+msgid "Full screen"
+msgstr "Pełny ekran"
+
+#: src/terminal-accels.c:1
+msgid "Reset"
+msgstr "Zresetowanie"
+
+#: src/terminal-accels.c:1
+msgid "Reset and clear"
+msgstr "Zresetowanie i wyczyszczenie"
+
+#: src/terminal-accels.c:1
+msgid "Switch to previous tab"
+msgstr "Przełączenie na poprzednią zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to next tab"
+msgstr "Przełączenie na następną zakładkę"
 
 #: src/terminal-accels.c:1
 msgid "Switch to tab 1"
@@ -1051,6 +1088,22 @@ msgstr "Przełączenie na 11. zakładkę"
 #: src/terminal-accels.c:1
 msgid "Switch to tab 12"
 msgstr "Przełączenie na 12. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "File"
+msgstr "Plik"
+
+#: src/terminal-accels.c:1
+msgid "Edit"
+msgstr "Edycja"
+
+#: src/terminal-accels.c:1
+msgid "View"
+msgstr "Widok"
+
+#: src/terminal-accels.c:1
+msgid "Go"
+msgstr "Przejdź"
 
 #: src/terminal-accels.c:1
 #, c-format
