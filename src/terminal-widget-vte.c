@@ -28,8 +28,8 @@
 
 typedef struct
 {
-  int url_tag;
-  int skey_tag;
+  GSList *url_tags;
+  GSList *skey_tags;
 } VteData;
 
 static void
@@ -38,6 +38,9 @@ free_vte_data (gpointer data)
   VteData *vte;
 
   vte = data;
+
+  g_slist_free(vte->url_tags);
+  g_slist_free(vte->skey_tags);
   
   g_free (vte);
 }
@@ -53,6 +56,10 @@ terminal_widget_new (void)
   vte_terminal_set_mouse_autohide(VTE_TERMINAL(terminal), TRUE);
   
   data = g_new0 (VteData, 1);
+
+  data->url_tags = NULL;
+  data->skey_tags = NULL;
+
   g_object_set_data_full (G_OBJECT (terminal), "terminal-widget-data",
                           data, free_vte_data);
   
@@ -110,10 +117,12 @@ terminal_widget_match_add                  (GtkWidget            *widget,
 					    const char           *regexp)
 {
   VteData *data;
+  int tag;
   
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
-  data->url_tag = vte_terminal_match_add (VTE_TERMINAL (widget), regexp);
+  tag = vte_terminal_match_add (VTE_TERMINAL (widget), regexp);
+  data->url_tags = g_slist_append(data->url_tags, GINT_TO_POINTER(tag));
 }
 
 void
@@ -121,22 +130,28 @@ terminal_widget_skey_match_add             (GtkWidget            *widget,
 					    const char           *regexp)
 {
   VteData *data;
+  int tag;
   
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
-  data->skey_tag = vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
+  tag = vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
+  data->skey_tags = g_slist_append (data->skey_tags, GINT_TO_POINTER(tag));
 }
 
 void
 terminal_widget_skey_match_remove          (GtkWidget            *widget)
 {
   VteData *data;
+  GSList *tags;
   
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
-  vte_terminal_match_remove(VTE_TERMINAL(widget), data->skey_tag);
+  for (tags = data->skey_tags; tags != NULL; tags = g_slist_next(tags))
+    vte_terminal_match_remove(VTE_TERMINAL(widget),
+   			      GPOINTER_TO_INT(tags->data));
 
-  data->skey_tag = -1;
+  g_slist_free(data->skey_tags);
+  data->skey_tags = NULL;
 }
 
 char*
@@ -145,14 +160,16 @@ terminal_widget_check_match (GtkWidget *widget,
 			     int        row)
 {
   VteData *data;
+  GSList *tags;
   gint tag;
   char *match;
    
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
   match = vte_terminal_match_check (VTE_TERMINAL (widget), column, row, &tag);
-  if (data->url_tag == tag)
-    return match;
+  for (tags = data->url_tags; tags != NULL; tags = g_slist_next(tags))
+    if (GPOINTER_TO_INT(tags->data) == tag)
+      return match;
 
   g_free (match);
   return NULL;
@@ -164,14 +181,16 @@ terminal_widget_skey_check_match (GtkWidget *widget,
 				  int        row)
 {
   VteData *data;
+  GSList *tags;
   gint tag;
   char *match;
    
   data = g_object_get_data (G_OBJECT (widget), "terminal-widget-data");
 
   match = vte_terminal_match_check(VTE_TERMINAL(widget), column, row, &tag);
-  if (data->skey_tag == tag)
-    return match;
+  for (tags = data->url_tags; tags != NULL; tags = g_slist_next(tags))
+    if (GPOINTER_TO_INT(tags->data) == tag)
+      return match;
 
   g_free (match);
   return NULL;
