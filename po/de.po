@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm 2.0.x\n"
-"POT-Creation-Date: 2002-08-11 14:00+0200\n"
-"PO-Revision-Date: 2002-08-11 05:41+0200\n"
-"Last-Translator: Jan Arne Petersen <jpetersen@uni-bonn.de>\n"
+"POT-Creation-Date: 2002-08-22 11:29+0200\n"
+"PO-Revision-Date: 2002-08-22 11:29+0100\n"
+"Last-Translator: Christian Neumair <christian-neumair@web.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Befehlszeile"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:938
+#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:926
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -438,7 +438,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Eigene"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2267
+#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2255
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Es ist ein Fehler beim Anzeigen der Hilfe aufgetreten: %s"
@@ -534,7 +534,7 @@ msgstr "Neuer Reiter"
 msgid "New Window"
 msgstr "Neues Fenster"
 
-#: src/terminal-accels.c:75 src/terminal.c:1691
+#: src/terminal-accels.c:75 src/terminal.c:1679
 msgid "New Profile"
 msgstr "Neues Profil"
 
@@ -556,7 +556,7 @@ msgstr "Einfügen"
 
 #: src/terminal-accels.c:93
 msgid "Hide and Show menubar"
-msgstr "Menübalken zeigen und verbergen"
+msgstr "Menüleiste zeigen und verbergen"
 
 #: src/terminal-accels.c:95
 msgid "Full Screen"
@@ -655,7 +655,7 @@ msgstr "Gehe"
 msgid "Help"
 msgstr "Hilfe"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1168
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1156
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -893,11 +893,11 @@ msgstr "_Aktuelles Profil bearbeiten..."
 
 #: src/terminal-screen.c:1297
 msgid "Hide _Menubar"
-msgstr "_Menübalken verbergen"
+msgstr "_Menüleiste verbergen"
 
 #: src/terminal-screen.c:1302
 msgid "Show _Menubar"
-msgstr "Menübalken _zeigen"
+msgstr "Menüleiste _zeigen"
 
 #: src/terminal-screen.c:1311
 msgid "Secure _Keyboard"
@@ -970,7 +970,7 @@ msgstr ""
 #: src/terminal-widget-zvt.c:1050
 #, c-format
 msgid "Could not set working directory to \"%s\": %s\n"
-msgstr "Arbeitsverzeichnis konnte nicht auf »%s« festgelegt werden: %s\n"
+msgstr "Arbeitsverzeichnis konnte nicht auf »%s« gesetzt werden: %s\n"
 
 #: src/terminal-widget-zvt.c:1056
 #, c-format
@@ -1017,7 +1017,7 @@ msgstr "P_rofile..."
 
 #: src/terminal-window.c:606
 msgid "Hide Menu_bar"
-msgstr "_Menübalken verbergen"
+msgstr "_Menüleiste verbergen"
 
 #: src/terminal-window.c:609
 msgid "_Full Screen"
@@ -1038,7 +1038,7 @@ msgstr "Zurücksetzen und _löschen"
 
 #: src/terminal-window.c:648
 msgid "_Previous Tab"
-msgstr "_Vorheriger Reiter"
+msgstr "_Voriger Reiter"
 
 #: src/terminal-window.c:652
 msgid "_Next Tab"
@@ -1065,7 +1065,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Datei"
 
-#: src/terminal-window.c:1656 src/terminal.c:2298
+#: src/terminal-window.c:1656 src/terminal.c:2286
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
@@ -1091,7 +1091,7 @@ msgstr "Normale Größe _wiederherstellen"
 
 #: src/terminal-window.c:1787
 msgid "_Full screen"
-msgstr "_Ganzer Bildschirm"
+msgstr "_Vollbild"
 
 # CHECK
 #: src/terminal-window.c:1975
@@ -1100,8 +1100,8 @@ msgid ""
 " (In technical terms, you need a window manager with support for the "
 "_NET_WM_STATE_FULLSCREEN property.)"
 msgstr ""
-"Ihr aktuelle Desktopumgebung unterstützt kein »Full screen«.\n"
-"(Technisch gesagt benötigen Sie einen Fenstermanager mit Unterstützung für "
+"Ihr aktuelle Desktopumgebung unterstützt den Vollbildmodus nicht.\n"
+" (Technisch gesagt benötigen Sie einen Fenstermanager mit Unterstützung für "
 "NET_WM_STATE_FULLSCREEN.)"
 
 #: src/terminal-window.c:2109
@@ -1112,7 +1112,7 @@ msgstr ""
 
 #: src/terminal-window.c:2122
 msgid "Copyright 2002 Havoc Pennington"
-msgstr "Copyright 2002 Havoc Pennington"
+msgstr "(c) 2002 Havoc Pennington"
 
 #: src/terminal-window.c:2123
 msgid "GNOME Terminal"
@@ -1228,16 +1228,16 @@ msgid "Could not load icon \"%s\": %s\n"
 msgstr "Icon »%s« konnte nicht geladen werden: %s\n"
 
 # CHECK
-#: src/terminal.c:668
+#: src/terminal.c:666
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Option --command/-e benötigt die Angabe eines zu startenden Befehls\n"
 
-#: src/terminal.c:676
+#: src/terminal.c:674
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Argument --command/-e ist kein gültiger Befehl: %s\n"
 
-#: src/terminal.c:686 src/terminal.c:708
+#: src/terminal.c:684 src/terminal.c:706
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1246,7 +1246,7 @@ msgstr ""
 "Reiter angegeben\n"
 
 # CHECK
-#: src/terminal.c:700
+#: src/terminal.c:698
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1254,7 +1254,7 @@ msgstr ""
 "Option --execute/-x benötigt die Angabe eines Befehls, um für den Rest der "
 "Befehlszeile zu laufen\n"
 
-#: src/terminal.c:727
+#: src/terminal.c:723
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1262,7 +1262,7 @@ msgstr ""
 "Option --window-with-profile benötigt ein Argument, das angibt welches "
 "Profil zu verwenden ist\n"
 
-#: src/terminal.c:746
+#: src/terminal.c:740
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1270,40 +1270,40 @@ msgstr ""
 "Option --tab-with-profile benötigt ein Argument, das angibt welches Profil "
 "zu verwenden ist\n"
 
-#: src/terminal.c:777
+#: src/terminal.c:771
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Option --show-menubar zweimal für das gleiche Fenster angegeben\n"
 
-#: src/terminal.c:803
+#: src/terminal.c:797
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "Option --hide-menubar zweimal für das gleiche Fenster angegeben\n"
 
-#: src/terminal.c:828
+#: src/terminal.c:820
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Option --geometry benötigt ein Argument das die Geometrie angibt\n"
 
-#: src/terminal.c:837 src/terminal.c:847
+#: src/terminal.c:829 src/terminal.c:839
 msgid "Two geometries given for one window\n"
 msgstr "Zwei Geometrien füer ein Fenster angegeben\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:861
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Option --title benötigt ein Argument das den Titel angibt\n"
 
-#: src/terminal.c:879
+#: src/terminal.c:869
 msgid "Two titles given for one tab\n"
 msgstr "Zwei Titel füer einen Reiter angegeben\n"
 
-#: src/terminal.c:896
+#: src/terminal.c:884
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr ""
 "Option --working-directory benötigt ein Argument das das Verzeichnis angibt\n"
 
-#: src/terminal.c:904
+#: src/terminal.c:892
 msgid "Two working directories given for one tab\n"
 msgstr "Zwei Arbeitsverzeichnisse für einen Reiter angegeben\n"
 
-#: src/terminal.c:913
+#: src/terminal.c:901
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1313,17 +1313,17 @@ msgstr ""
 "möglicherweise ein Profil mit den entsprechenden Einstellungen erstellen und "
 "die neue --window-with-profile Option verwenden\n"
 
-#: src/terminal.c:1033
+#: src/terminal.c:1021
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Profil »%s« existiert nicht, Vorgabe wird verwendet\n"
 
-#: src/terminal.c:1142
+#: src/terminal.c:1130
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Ungültiges Argument »%s«\n"
 
-#: src/terminal.c:1184
+#: src/terminal.c:1172
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1332,108 +1332,108 @@ msgstr ""
 "Es ist ein Fehler beim Registrieren einer Benachrichtung bei Änderungen der "
 "Terminal-Profilliste aufgetreten. (%s)\n"
 
-#: src/terminal.c:1292
+#: src/terminal.c:1280
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ungültige Geometrie-Zeichenkette »%s«\n"
 
-#: src/terminal.c:1352
+#: src/terminal.c:1340
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Es ist ein Fehler beim Holen der Terminal-Profilliste aufgetreten. (%s)\n"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1573
 msgid "You have to name your profile."
 msgstr "Ihr Profil benötigt einen Namen."
 
-#: src/terminal.c:1595
+#: src/terminal.c:1583
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Sie haben bereits ein Profil mit dem Namen »%s«"
 
-#: src/terminal.c:1632
+#: src/terminal.c:1620
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Das Profil, das Sie als Basis für Ihr neues Profil ausgewählt haben, "
 "existiert nicht mehr"
 
-#: src/terminal.c:1696
+#: src/terminal.c:1684
 msgid "C_reate"
 msgstr "E_rzeugen"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1709
 msgid "Profile _name:"
 msgstr "Profil_name:"
 
-#: src/terminal.c:1725
+#: src/terminal.c:1713
 msgid "Enter profile name"
-msgstr "Profilname eingeben"
+msgstr "Profilnamen eingeben"
 
-#: src/terminal.c:1740
+#: src/terminal.c:1728
 msgid "_Base on:"
 msgstr "_Basierend auf:"
 
-#: src/terminal.c:1888
+#: src/terminal.c:1876
 msgid "Profile list"
 msgstr "Profil-Liste"
 
-#: src/terminal.c:1961
+#: src/terminal.c:1949
 msgid "You must select one or more profiles to delete."
 msgstr "Sie müssen eines oder mehrere Profile zum löschen auswählen."
 
-#: src/terminal.c:1984
+#: src/terminal.c:1972
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Sie müssen zumindest ein Profil haben. Sie können nicht alle löschen."
 
-#: src/terminal.c:2002
+#: src/terminal.c:1990
 msgid "Delete these two profiles?\n"
 msgstr "Diese beiden Profile löschen?\n"
 
-#: src/terminal.c:2004
+#: src/terminal.c:1992
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Diese %d Profile löschen?\n"
 
-#: src/terminal.c:2022
+#: src/terminal.c:2010
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Profil »%s« löschen?"
 
-#: src/terminal.c:2044
+#: src/terminal.c:2032
 msgid "Delete Profile"
 msgstr "Profil löschen?"
 
-#: src/terminal.c:2331
+#: src/terminal.c:2319
 msgid "Edit Profiles"
 msgstr "Profile bearbeiten"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2359
 msgid "Profile _used when launching a new terminal:"
 msgstr "_Verwendetes Profil wenn neues Terminal gestartet wird:"
 
-#: src/terminal.c:2393
+#: src/terminal.c:2381
 msgid "_Profiles:"
 msgstr "_Profile:"
 
-#: src/terminal.c:2442
+#: src/terminal.c:2430
 msgid "Click to open new profile dialog"
 msgstr "Klicken, um einen neuen Profil-Dialog zu öffnen"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2443
 msgid "Click to open edit profile dialog"
 msgstr "Klicken, um Bearbeitungsprofil-Dialog zu öffnen"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2453
 msgid "Click to delete selected profile"
 msgstr "Klicken, um ausgewähltes Profil zu löschen"
 
-#: src/terminal.c:2514
+#: src/terminal.c:2502
 msgid "Click button to choose profile"
 msgstr "Knopf klicken, um Profil zu wählen"
 
-#: src/terminal.c:2954
+#: src/terminal.c:2942
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1441,7 +1441,7 @@ msgstr ""
 "Es scheint, dass Sie keine gnome-terminal.server an einem gültigen Ort "
 "installiert haben. Fabrik-Modus deaktiviert.\n"
 
-#: src/terminal.c:2957
+#: src/terminal.c:2945
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1449,7 +1449,7 @@ msgstr ""
 "Fehler beim Regisitrieren des Terminals beim Aktivierungsdienst; Fabrik-"
 "Modus wurde deaktiviert.\n"
 
-#: src/terminal.c:2992
+#: src/terminal.c:2980
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Holen des Terminalservers vom Aktivierungsserver fehlgeschlagen\n"
 
@@ -1463,7 +1463,7 @@ msgstr "Familie:"
 
 #: src/x-font-selector.c:203
 msgid "Weight:"
-msgstr "Wichtung:"
+msgstr "Gewicht:"
 
 #: src/x-font-selector.c:204
 msgid "Slant:"
@@ -1475,7 +1475,7 @@ msgstr "Satzbreite:"
 
 #: src/x-font-selector.c:206
 msgid "Add Style:"
-msgstr "Stil hinzu:"
+msgstr "Stil hinzufügen:"
 
 #: src/x-font-selector.c:207
 msgid "Pixel Size:"
@@ -1483,7 +1483,7 @@ msgstr "Pixelgröße:"
 
 #: src/x-font-selector.c:208
 msgid "Point Size:"
-msgstr "Punkt-Größe:"
+msgstr "Punktgröße:"
 
 #: src/x-font-selector.c:209
 msgid "Resolution X:"
@@ -1495,7 +1495,7 @@ msgstr "Y-Auflösung:"
 
 #: src/x-font-selector.c:211
 msgid "Spacing:"
-msgstr "Leerraum:"
+msgstr "Abstand:"
 
 #: src/x-font-selector.c:212
 msgid "Average Width:"
@@ -1542,7 +1542,7 @@ msgstr "Filter zurücksetzen"
 
 #: src/x-font-selector.c:651
 msgid "Metric:"
-msgstr "Metrik:"
+msgstr "Maßeinheit:"
 
 #: src/x-font-selector.c:655
 msgid "Points"
@@ -1601,7 +1601,7 @@ msgstr "(nichts)"
 
 #: src/x-font-selector.c:1208
 msgid "regular"
-msgstr "Regulär"
+msgstr "regulär"
 
 #: src/x-font-selector.c:1224
 msgid "[M]"
@@ -1613,11 +1613,11 @@ msgstr "[C]"
 
 #: src/x-font-selector.c:1785
 msgid "The selected font is not available."
-msgstr "Die ausgewählte Schrift ist nicht verfügbar."
+msgstr "Die gewählte Schrift ist nicht verfügbar."
 
 #: src/x-font-selector.c:1791
 msgid "The selected font is not a valid font."
-msgstr "Die ausgewählte Schrift ist keine gültige Schrift."
+msgstr "Die gewählte Schrift ist ungültig."
 
 #: src/x-font-selector.c:1847
 msgid "This is a 2-byte font and may not be displayed correctly."
