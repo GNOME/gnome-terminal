@@ -15,6 +15,10 @@ INCLUDES=@TERM_CFLAGS@								\
 
 bin_PROGRAMS=gnome-terminal
 
+EGGFILES=			\
+	eggcellrendererkeys.h 	\
+	eggcellrendererkeys.c
+
 ## Terminal
 gnome_terminal_SOURCES=				\
 	profile-editor.c			\
@@ -30,10 +34,9 @@ gnome_terminal_SOURCES=				\
 	terminal-screen.h			\
 	terminal-window.c			\
 	terminal-window.h			\
-	eggcellrendererkeys.c			\
-	eggcellrendererkeys.h			\
 	x-font-selector.c			\
-	x-font-selector.h
+	x-font-selector.h			\
+	$(EGGFILES)
 
 gnome_terminal_LDADD= @TERM_LIBS@ eel/libeelcnp.la
 
@@ -52,8 +55,11 @@ install-data-local:
 EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
-	$(schema_DATA)
+	$(schema_DATA)			\
+	update-from-egg.sh
 
 
+EGGDIR=$(srcdir)/../../libegg/libegg
 
-
+regenerate-built-sources:
+	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" update-from-egg.sh

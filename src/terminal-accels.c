@@ -74,6 +74,11 @@ static void keys_change_notify (GConfClient *client,
                                 GConfEntry  *entry,
                                 gpointer     user_data);
 
+static void mnemonics_change_notify (GConfClient *client,
+                                    guint        cnxn_id,
+                                    GConfEntry  *entry,
+                                    gpointer     user_data);
+
 static void accel_changed_callback (GtkAccelGroup  *accel_group,
                                     guint           keyval,
                                     GdkModifierType modifier,
@@ -92,6 +97,9 @@ static void      queue_gconf_sync (void);
 
 static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
 static GConfClient *global_conf;
+static GSList *living_treeviews = NULL;
+static GSList *living_mnemonics_checkbuttons = NULL;
+static gboolean using_mnemonics = TRUE;
 
 void
 terminal_accels_init (GConfClient *conf)
@@ -191,6 +199,31 @@ terminal_accels_init (GConfClient *conf)
                     "accel_changed",
                     G_CALLBACK (accel_changed_callback),
                     NULL);
+
+  err = NULL;
+  using_mnemonics = gconf_client_get_bool (global_conf,
+                                           CONF_GLOBAL_PREFIX"/use_mnemonics",
+                                           &err);
+  if (err)
+    {
+      g_printerr (_("There was an error loading config value for whether to use mnemonics. (%s)\n"),
+                  err->message);
+      g_error_free (err);
+    }
+
+  err = NULL;
+  gconf_client_notify_add (conf,
+                           CONF_GLOBAL_PREFIX"/use_mnemonics",
+                           mnemonics_change_notify,
+                           NULL, /* user_data */
+                           NULL, &err);
+  
+  if (err)
+    {
+      g_printerr (_("There was an error subscribing to notification for use_mnemonics (%s)\n"),
+                  err->message);
+      g_error_free (err);
+    }
 }
 
 GtkAccelGroup*
@@ -226,6 +259,8 @@ keys_change_notify (GConfClient *client,
         {
           if (strcmp (entries[i].gconf_key, gconf_entry_get_key (entry)) == 0)
             {
+              GSList *tmp;
+              
               /* found it */
               entries[i].gconf_keyval = keyval;
               entries[i].gconf_mask = mask;
@@ -234,6 +269,14 @@ keys_change_notify (GConfClient *client,
               gtk_accel_map_change_entry (entries[i].accel_path,
                                           keyval, mask,
                                           TRUE);
+
+              /* Notify tree views to repaint with new values */
+              tmp = living_treeviews;
+              while (tmp != NULL)
+                {
+                  gtk_widget_queue_resize (tmp->data);
+                  tmp = tmp->next;
+                }
               
               break;
             }
@@ -278,6 +321,40 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
         }
 
       ++i;
+    }
+}
+
+static void
+mnemonics_change_notify (GConfClient *client,
+                         guint        cnxn_id,
+                         GConfEntry  *entry,
+                         gpointer     user_data)
+{
+  GConfValue *val;
+  
+  val = gconf_entry_get_value (entry);  
+  
+  if (strcmp (gconf_entry_get_key (entry),
+              CONF_GLOBAL_PREFIX"/use_mnemonics") == 0)
+    {
+      if (val && val->type == GCONF_VALUE_BOOL)
+        {
+          if (using_mnemonics != gconf_value_get_bool (val))
+            {
+              GSList *tmp;
+              
+              using_mnemonics = !using_mnemonics;
+
+              /* Reset the checkbuttons */
+              tmp = living_mnemonics_checkbuttons;
+              while (tmp != NULL)
+                {
+                  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tmp->data),
+                                                !using_mnemonics);
+                  tmp = tmp->next;
+                }
+            }
+        }
     }
 }
 
@@ -469,6 +546,89 @@ accel_compare_func (GtkTreeModel *model,
                                                ke_b->gconf_mask));
 }
 
+static void
+remove_from_list_callback (GtkObject *object, gpointer data)
+{
+  GSList **listp = data;
+  
+  *listp = g_slist_remove (*listp, object);
+}
+
+static void
+accel_edited_callback (GtkCellRendererText *cell,
+                       const char          *path_string,
+                       const char          *new_text,
+                       gpointer             data)
+{
+  GtkTreeModel *model = (GtkTreeModel *)data;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+  GtkTreeIter iter;
+  KeyEntry *ke;
+  GdkModifierType mask;
+  guint keyval;
+  
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, COLUMN_ACCEL, &ke, -1);
+
+  if (!binding_from_string (new_text, &keyval, &mask))
+    {
+      /* FIXME, do better. (I'm not sure this ever happens though because
+       * the cell renderer validates stuff)
+       */
+      g_printerr ("Couldn't parse \"%s\" as an accelerator\n", new_text);
+      gdk_beep ();
+    }
+  else
+    {
+      GError *err;
+      
+      err = NULL;
+      gconf_client_set_string (global_conf,
+                               ke->gconf_key,
+                               new_text,
+                               &err);
+      if (err != NULL)
+        {
+          g_printerr (_("Error setting new accelerator in configuration database: %s\n"),
+                      err->message);
+          
+          g_error_free (err);
+        }
+    }
+  
+  gtk_tree_path_free (path);
+}
+
+static void
+disable_mnemonics_toggled (GtkWidget *button,
+                           gpointer   data)
+{
+  gboolean active;
+
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+
+  /* I confused myself by making the visible button opposite
+   * the gconf key
+   */
+  if (active != (!using_mnemonics))
+    {
+      GError *err;
+      
+      err = NULL;
+      gconf_client_set_bool (global_conf,
+                             CONF_GLOBAL_PREFIX"/use_mnemonics",
+                             !active,
+                             &err);
+      if (err != NULL)
+        {
+          g_printerr (_("Error setting use_mnemonics key: %s\n"),
+                      err->message);
+          
+          g_error_free (err);
+        }
+    }
+}
+
 GtkWidget*
 terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
 {
@@ -521,8 +681,32 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
 
       return NULL;
     }
-      
+
+  w = glade_xml_get_widget (xml, "disable-mnemonics-checkbutton");
+  living_mnemonics_checkbuttons = g_slist_prepend (living_mnemonics_checkbuttons,
+                                                   w);
+  g_signal_connect (G_OBJECT (w), "destroy",
+                    G_CALLBACK (remove_from_list_callback),
+                    &living_mnemonics_checkbuttons);
+
+  g_signal_connect (G_OBJECT (w), "toggled",
+                    G_CALLBACK (disable_mnemonics_toggled),
+                    NULL);
+  
   w = glade_xml_get_widget (xml, "accelerators-treeview");
+  
+  living_treeviews = g_slist_prepend (living_treeviews, w);
+  g_signal_connect (G_OBJECT (w), "destroy",
+                    G_CALLBACK (remove_from_list_callback),
+                    &living_treeviews);
+  
+  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (w)),
+                               GTK_SELECTION_NONE);
+
+  /* FIXME two columns just so we can sort by two different things,
+   * is there a better way?
+   */
+  list = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_POINTER);
   
   cell_renderer = gtk_cell_renderer_text_new ();
   
@@ -537,6 +721,14 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
   
   cell_renderer = egg_cell_renderer_keys_new ();
+
+  g_signal_connect (G_OBJECT (cell_renderer), "edited",
+                    G_CALLBACK (accel_edited_callback),
+                    list);
+  
+  g_object_set (G_OBJECT (cell_renderer),
+                "editable", TRUE,
+                NULL);
   
   i = gtk_tree_view_insert_column_with_data_func (GTK_TREE_VIEW (w),
                                                   -1,
@@ -546,12 +738,8 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                                                   NULL,
                                                   NULL);
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (w), i-1);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ACCEL);
-  
-  /* FIXME two columns just so we can sort by two different things,
-   * is there a better way?
-   */
-  list = gtk_list_store_new (2, G_TYPE_POINTER, G_TYPE_POINTER);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_ACCEL);  
+
   i = 0;
   while (i < (int) G_N_ELEMENTS (entries))
     {
@@ -578,5 +766,11 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   
   g_object_unref (G_OBJECT (list));
   
-  return glade_xml_get_widget (xml, "keybindings-dialog");
+  w = glade_xml_get_widget (xml, "keybindings-dialog");
+
+  g_signal_connect (G_OBJECT (w), "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+  
+  return w;
 }

@@ -157,7 +157,15 @@ entry_realize (GtkWidget   *widget,
   gdk_keyboard_grab (gdk_get_default_root_window (), FALSE, GDK_CURRENT_TIME);
   gdk_window_add_filter (gdk_get_default_root_window (), grab_key_filter, widget);
 }
-		 
+
+static void
+entry_unrealize (GtkWidget   *widget,
+                 gpointer     data)
+{
+  gdk_window_remove_filter (gdk_get_default_root_window (),
+			    grab_key_filter, data);
+}
+
 static GtkCellEditable *
 egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
@@ -181,6 +189,8 @@ egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
 			NULL);
   g_signal_connect_after (G_OBJECT (entry), "realize",
                           G_CALLBACK (entry_realize), NULL);
+  g_signal_connect_after (G_OBJECT (entry), "unrealize",
+                          G_CALLBACK (entry_unrealize), NULL);
   gtk_entry_set_text (GTK_ENTRY (entry), celltext->text);
   g_object_set_data_full (G_OBJECT (entry), EGG_CELL_RENDERER_TEXT_PATH, g_strdup (path), g_free);
   

@@ -1121,13 +1121,17 @@ config_change_notify (GConfClient *client,
   TerminalWindow *window;
 
   window = TERMINAL_WINDOW (user_data);
-  
-  val = gconf_entry_get_value (entry);
 
-  if (val && val->type == GCONF_VALUE_BOOL)
-    {
-      window->priv->use_mnemonics = gconf_value_get_bool (val);
-      reset_menubar_labels (window);
+  val = gconf_entry_get_value (entry);
+  
+  if (strcmp (gconf_entry_get_key (entry),
+              CONF_GLOBAL_PREFIX"/use_mnemonics") == 0)
+    {      
+      if (val && val->type == GCONF_VALUE_BOOL)
+        {
+          window->priv->use_mnemonics = gconf_value_get_bool (val);
+          reset_menubar_labels (window);
+        }
     }
 }
 
