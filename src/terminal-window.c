@@ -1699,6 +1699,7 @@ terminal_window_set_active (TerminalWindow *window,
   
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
+  fill_in_encoding_menu (window);
   update_zoom_items (window);
 }
 
