@@ -811,7 +811,7 @@ terminal_window_init (TerminalWindow *window)
     append_menuitem (menu, _("C_urrent Profile..."), NULL,
                      G_CALLBACK (edit_configuration_callback), window);
 
-  append_menuitem (menu, _("_Keyoard Shortcuts..."), NULL,
+  append_menuitem (menu, _("_Keyboard Shortcuts..."), NULL,
                    G_CALLBACK (edit_keybindings_callback), window);
 
   append_menuitem (menu, _("P_rofiles..."), NULL,
