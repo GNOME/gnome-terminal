@@ -1745,6 +1745,8 @@ notebook_page_switched_callback (GtkWidget       *notebook,
 
   g_assert (screen);
 
+  terminal_window_set_active (window, screen);
+
   /* This is so we maintain the same grid moving among tabs with
    * different fonts.
    */
@@ -1760,8 +1762,6 @@ notebook_page_switched_callback (GtkWidget       *notebook,
       screen == window->priv->active_term)
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
                                     TRUE);
-
-  terminal_window_set_active (window, screen);
 }
 
 void
