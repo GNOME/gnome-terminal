@@ -423,7 +423,7 @@ response_callback (GtkWidget *window,
                    void      *data)
 {
   if (id == GTK_RESPONSE_HELP)
-    terminal_util_show_help ("gnome-terminal-encodings", GTK_WINDOW (window));
+    terminal_util_show_help ("gnome-terminal-encoding-add", GTK_WINDOW (window));
   else
     gtk_widget_destroy (GTK_WIDGET (window));
 }
