@@ -1,3 +1,11 @@
+2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
+
+	* src/terminal-window.c(terminal_window_new): make each terminal window be the
+	  window group leader of its group. This goes better with the illusion that
+	  different terminal windows are different instances of the application. This will
+	  change the way window managers deal with terminal windows when there are several
+	  of them---we'll see what people think, I guess. Suggested on bug #115994.
+
 2004-10-31 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c(new_profile_response_callback): show a error dialog when lookup of the newly created

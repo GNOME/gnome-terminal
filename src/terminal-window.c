@@ -1162,6 +1162,13 @@ terminal_window_show (GtkWidget *widget)
     }
 }
 
+void terminal_window_realized_callback (GtkWidget *window,
+                                        gpointer   user_data)
+{
+  gdk_window_set_group (window->window, window->window);
+  g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
+}
+
 TerminalWindow*
 terminal_window_new (GConfClient *conf)
 {
@@ -1170,6 +1177,7 @@ terminal_window_new (GConfClient *conf)
   gboolean use_mnemonics;
   
   window = g_object_new (TERMINAL_TYPE_WINDOW, NULL);
+  g_signal_connect (G_OBJECT (window), "realize", G_CALLBACK (terminal_window_realized_callback), NULL);
 
   window->priv->conf = conf;
   g_object_ref (G_OBJECT (conf));
