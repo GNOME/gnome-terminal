@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-07 23:19+0100\n"
-"PO-Revision-Date: 2003-11-07 23:19+0100\n"
+"POT-Creation-Date: 2003-11-14 01:16+0100\n"
+"PO-Revision-Date: 2003-11-14 01:19+0100\n"
 "Last-Translator: Slobodan Sredojević <ssl@uns.ns.ac.yu>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1444,8 +1444,8 @@ msgstr ""
 "Gde da smesti klizač terminala. Moguće je „left“, „right“ i „disabled“."
 
 #: src/gnome-terminal.schemas.in.h:120
-msgid "Whether the menubar has mnemonics"
-msgstr "Da li glavni meni koristi prečice"
+msgid "Whether the menubar has access keys"
+msgstr "Da li glavni meni sadrži prečice"
 
 #: src/gnome-terminal.schemas.in.h:121
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
@@ -1461,12 +1461,10 @@ msgstr "Da li kurzor da trepće"
 
 #: src/gnome-terminal.schemas.in.h:124
 msgid ""
-"Whether to have Alt+letter shortcuts for the menubar. They may interfere "
+"Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
 "off."
-msgstr ""
-"Da li da koristi Alt+slovo prečice za meni. One mogu da se sudaraju sa nekim "
-"programima koji se pokreću unutar terminala pa ih je moguće isključiti."
+msgstr "Da li da koristi Alt+slovo prečice za glavni meni. One mogu da se sudaraju sa nekim programima koji se pokreću unutar terminala pa ih je moguće isključiti."
 
 #: src/gnome-terminal.schemas.in.h:125
 msgid "Whether to launch the command in the terminal as a login shell"
@@ -1778,18 +1776,19 @@ msgstr "Dogodila se greška pri učitavanju izbora tastera za terminal. (%s)\n"
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "Podešena vrednost %s nije ispravna; vrednost je „%s“\n"
 
-#: src/terminal-accels.c:358 src/terminal-window.c:1163
+#: src/terminal-accels.c:358
 #, c-format
 msgid ""
-"There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr ""
-"Došlo je do greške pri učitavanju vrednosti za korišćenje prečica. (%s)\n"
+"There was an error loading config value for whether to use menubar access "
+"keys. (%s)\n"
+msgstr "Došlo je do greške pri učitavanju podešavanja za korišćenje prečica u glavnom meniju. (%s)\n"
 
 #: src/terminal-accels.c:372
 #, c-format
-msgid "There was an error subscribing to notification for use_mnemonics (%s)\n"
-msgstr ""
-"Došlo je do greške pri preuzimanju obaveštenja za korišćenje prečica (%s)\n"
+msgid ""
+"There was an error subscribing to notification on changes on whether to use "
+"menubar access keys (%s)\n"
+msgstr "Dogodila se greška pri traženju obaveštavanja o izmenama da li se koriste prečice za pristup glavnom meniju (%s)\n"
 
 #: src/terminal-accels.c:383
 #, c-format
@@ -1821,19 +1820,19 @@ msgstr "Greška pri postavljanju tastera za brzi pristup u bazu podešavanja: %s
 
 #: src/terminal-accels.c:978
 #, c-format
-msgid "Error setting use_mnemonics key: %s\n"
-msgstr "Greška u postavljanju koristi prečice tastera: %s\n"
+msgid "Error setting %s config key: %s\n"
+msgstr "Greška pri postavljanju ključa podešavanja %s: %s\n"
 
-#: src/terminal-accels.c:1008
+#: src/terminal-accels.c:1006
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Greška u postavljanju tastera za brzi pristup meniju: %s\n"
 
-#: src/terminal-accels.c:1127
+#: src/terminal-accels.c:1125
 msgid "_Action"
 msgstr "_Radnja"
 
-#: src/terminal-accels.c:1147
+#: src/terminal-accels.c:1145
 msgid "Shortcut _Key"
 msgstr "_Taster za prečicu"
 
@@ -2163,6 +2162,13 @@ msgstr "_Sadržaj"
 #: src/terminal-window.c:1004
 msgid "_About"
 msgstr "_O programu"
+
+#: src/terminal-window.c:1163
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Došlo je do greške pri učitavanju vrednosti za korišćenje prečica. (%s)\n"
 
 #: src/terminal-window.c:1182
 #, c-format
@@ -2637,6 +2643,11 @@ msgstr ""
 #: src/terminal.c:3758
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Ne uspevam da pristupim terminal serveru iz servera za pokretanje\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification for use_mnemonics (%s)\n"
+#~ msgstr ""
+#~ "Došlo je do greške pri preuzimanju obaveštenja za korišćenje prečica (%s)\n"
 
 #~ msgid "Keyboard Shortcuts Editor"
 #~ msgstr "Uređivanje prečica sa tastature"
