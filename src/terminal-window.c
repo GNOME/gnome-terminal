@@ -61,6 +61,7 @@ struct _TerminalWindowPrivate
   GdkPixbuf *icon;
   int old_char_width;
   int old_char_height;
+  void *old_geometry_widget; /* only used for pointer value as it may be freed */
   GConfClient *conf;
   guint notify_id;
   guint menubar_visible : 1;
@@ -513,7 +514,8 @@ terminal_window_init (TerminalWindow *window)
   
   window->priv->old_char_width = -1;
   window->priv->old_char_height = -1;
-
+  window->priv->old_geometry_widget = NULL;
+  
   window->priv->use_mnemonics = TRUE;
   window->priv->using_mnemonics = FALSE;
   
@@ -1437,7 +1439,8 @@ terminal_window_update_geometry (TerminalWindow *window)
   terminal_widget_get_cell_size (widget, &char_width, &char_height);
   
   if (char_width != window->priv->old_char_width ||
-      char_height != window->priv->old_char_height)
+      char_height != window->priv->old_char_height ||
+      widget != (GtkWidget*) window->priv->old_geometry_widget)
     {
       int xpad, ypad;
       
@@ -1478,6 +1481,7 @@ terminal_window_update_geometry (TerminalWindow *window)
       
       window->priv->old_char_width = hints.width_inc;
       window->priv->old_char_height = hints.height_inc;
+      window->priv->old_geometry_widget = widget;
     }
 #ifdef DEBUG_GEOMETRY
   else

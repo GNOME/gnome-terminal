@@ -16,6 +16,12 @@
 
 2002-04-21  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-window.c (terminal_window_update_geometry): also 
+	reset geometry hints if geometry widget changes. May have 
+	something to do with #77529
+
+2002-04-21  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-window.c (terminal_window_set_size): use
 	gtk_widget_size_request not gtk_widget_get_child_requisition in
 	case the widget's requisition field hasn't been updated (however
