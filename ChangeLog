@@ -1,5 +1,17 @@
 2002-04-21  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-window.c (terminal_window_set_size): use
+	gtk_widget_size_request not gtk_widget_get_child_requisition in
+	case the widget's requisition field hasn't been updated (however
+	since we set usize on the widget it shouldn't matter right, but
+	just ensuring we're synced with old gnome-terminal)
+	(terminal_window_set_size): update the geometry hints in here
+	though they will often have been already updated, we want to be
+	sure they're done. Fixes shrinkage when toggling menubar on and
+	off.
+
+2002-04-21  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal.c (terminal_util_set_atk_name_description): remove
 	warnings for case where we have NoOp object, this is normal.
 

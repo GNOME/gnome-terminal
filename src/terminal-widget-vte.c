@@ -43,16 +43,16 @@ free_vte_data (gpointer data)
 GtkWidget *
 terminal_widget_new (void)
 {
-	GtkWidget *terminal;
-	VteData *data;
-	
-	terminal = vte_terminal_new ();
-
-	data = g_new0 (VteData, 1);
-	g_object_set_data_full (G_OBJECT (terminal), "terminal-widget-data",
-				data, free_vte_data);
-	
-	return terminal;
+  GtkWidget *terminal;
+  VteData *data;
+  
+  terminal = vte_terminal_new ();
+  
+  data = g_new0 (VteData, 1);
+  g_object_set_data_full (G_OBJECT (terminal), "terminal-widget-data",
+                          data, free_vte_data);
+  
+  return terminal;
 }
 
 void
@@ -414,3 +414,7 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
 {
   UNIMPLEMENTED;
 }
+
+
+
+

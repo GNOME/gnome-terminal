@@ -1124,6 +1124,9 @@ terminal_window_set_size (TerminalWindow *window,
   int grid_height;
   int xpad;
   int ypad;
+
+  /* be sure our geometry is up-to-date */
+  terminal_window_update_geometry (window);
   
   widget = terminal_screen_get_widget (screen);
   
@@ -1139,7 +1142,13 @@ terminal_window_set_size (TerminalWindow *window,
    */
   gtk_widget_set_size_request (widget, 2000, 2000);
   gtk_widget_size_request (app, &toplevel_request);
-  gtk_widget_get_child_requisition (widget, &widget_request);
+  gtk_widget_size_request (widget, &widget_request);
+
+#ifdef DEBUG_GEOMETRY
+  g_print ("set size: toplevel %dx%d widget %dx%d\n",
+           toplevel_request.width, toplevel_request.height,
+           widget_request.width, widget_request.height);
+#endif
   
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
@@ -1150,6 +1159,11 @@ terminal_window_set_size (TerminalWindow *window,
   
   w += xpad + char_width * grid_width;
   h += ypad + char_height * grid_height;
+
+#ifdef DEBUG_GEOMETRY
+  g_print ("set size: grid %dx%d setting %dx%d pixels\n",
+           grid_width, grid_height, w, h);
+#endif
   
   if (even_if_mapped)
     gtk_window_resize (GTK_WINDOW (app), w, h);
@@ -1452,9 +1466,25 @@ terminal_window_update_geometry (TerminalWindow *window)
                                      GDK_HINT_MIN_SIZE |
                                      GDK_HINT_BASE_SIZE);
 
+#ifdef DEBUG_GEOMETRY
+      g_print ("hints: base %dx%d min %dx%d inc %d %d\n",
+               hints.base_width,
+               hints.base_height,
+               hints.min_width,
+               hints.min_height,
+               hints.width_inc,
+               hints.height_inc);
+#endif
+      
       window->priv->old_char_width = hints.width_inc;
       window->priv->old_char_height = hints.height_inc;
     }
+#ifdef DEBUG_GEOMETRY
+  else
+    {
+      g_print ("hints: increment unchanged, not setting\n");
+    }
+#endif
 }
 
 /*
