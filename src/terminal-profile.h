@@ -78,9 +78,9 @@ typedef enum
 
 typedef enum
 {
-  TERMINAL_ERASE_CONTROL_H,
+  TERMINAL_ERASE_ASCII_DEL,
   TERMINAL_ERASE_ESCAPE_SEQUENCE,
-  TERMINAL_ERASE_ASCII_DEL
+  TERMINAL_ERASE_CONTROL_H
 } TerminalEraseBinding;
 
 #define TERMINAL_PALETTE_SIZE 16
@@ -276,6 +276,13 @@ gboolean terminal_palette_from_string (const char     *str,
                                        GdkColor       *palette,
                                        gboolean        warn);
 
+
+/* Used to convert the double "darkness" setting into a bool.
+ * Temporary hack.
+ */
+#define DARKNESS_THRESHOLD 0.25
+#define DARKNESS_TRUE  0.5
+#define DARKNESS_FALSE 0.0
 
 G_END_DECLS
 

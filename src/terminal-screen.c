@@ -291,6 +291,7 @@ reread_profile (TerminalScreen *screen)
 {
   TerminalProfile *profile;
   ZvtTerm *term;
+  int bgflags;
   
   profile = screen->priv->profile;  
   
@@ -328,6 +329,47 @@ reread_profile (TerminalScreen *screen)
   zvt_term_set_scrollback (term,
                            terminal_profile_get_scrollback_lines (profile));
 
+  bgflags = 0;
+  if (terminal_profile_get_scroll_background (profile))
+    bgflags |= ZVT_BACKGROUND_SCROLL;
+  if (terminal_profile_get_background_darkness (profile) > DARKNESS_THRESHOLD)
+    bgflags |= ZVT_BACKGROUND_SHADED;
+  
+  zvt_term_set_background (term,
+                           terminal_profile_get_background_type (profile) ==
+                           TERMINAL_BACKGROUND_IMAGE ?
+                           terminal_profile_get_background_image_file (profile) :
+                           NULL,
+                           terminal_profile_get_background_type (profile) ==
+                           TERMINAL_BACKGROUND_TRANSPARENT,
+                           bgflags);
+
+  switch (terminal_profile_get_backspace_binding (profile))
+    {
+    case TERMINAL_ERASE_CONTROL_H:
+      zvt_term_set_backspace_binding (term, ZVT_ERASE_CONTROL_H);
+      break;
+    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
+      zvt_term_set_backspace_binding (term, ZVT_ERASE_ESCAPE_SEQUENCE);
+      break;
+    case TERMINAL_ERASE_ASCII_DEL:
+      zvt_term_set_backspace_binding (term, ZVT_ERASE_ASCII_DEL);
+      break;
+    }
+
+  switch (terminal_profile_get_delete_binding (profile))
+    {
+    case TERMINAL_ERASE_CONTROL_H:
+      zvt_term_set_delete_binding (term, ZVT_ERASE_CONTROL_H);
+      break;
+    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
+      zvt_term_set_delete_binding (term, ZVT_ERASE_ESCAPE_SEQUENCE);
+      break;
+    case TERMINAL_ERASE_ASCII_DEL:
+      zvt_term_set_delete_binding (term, ZVT_ERASE_ASCII_DEL);
+      break;
+    }
+  
   if (screen->priv->window)
     {
       terminal_window_update_scrollbar (screen->priv->window, screen);

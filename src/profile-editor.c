@@ -23,6 +23,7 @@
 #include "terminal-intl.h"
 #include <glade/glade.h>
 #include <libgnomeui/gnome-color-picker.h>
+#include <libgnomeui/gnome-file-entry.h>
 #include <string.h>
 #include "x-font-selector.h"
 
@@ -113,6 +114,19 @@ static void       profile_editor_update_palette              (GtkWidget       *w
                                                               TerminalProfile *profile);
 static void       profile_editor_update_x_font               (GtkWidget       *widget,
                                                               TerminalProfile *profile);
+static void       profile_editor_update_background_type      (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_background_image     (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_scroll_background    (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_background_darkness  (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_backspace_binding    (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_delete_binding       (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+
 
 
 static void profile_forgotten (TerminalProfile     *profile,
@@ -252,6 +266,24 @@ profile_changed (TerminalProfile          *profile,
 
   if (mask & TERMINAL_SETTING_X_FONT)
     profile_editor_update_x_font (editor, profile);
+
+  if (mask & TERMINAL_SETTING_BACKGROUND_TYPE)
+    profile_editor_update_background_type (editor, profile);
+  
+  if (mask & TERMINAL_SETTING_BACKGROUND_IMAGE)
+    profile_editor_update_background_image (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SCROLL_BACKGROUND)
+    profile_editor_update_scroll_background (editor, profile);
+
+  if (mask & TERMINAL_SETTING_BACKGROUND_DARKNESS)
+    profile_editor_update_background_darkness (editor, profile);
+
+  if (mask & TERMINAL_SETTING_BACKSPACE_BINDING)
+    profile_editor_update_backspace_binding (editor, profile);
+
+  if (mask & TERMINAL_SETTING_DELETE_BINDING)
+    profile_editor_update_delete_binding (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -586,6 +618,91 @@ x_font_clicked (GtkWidget       *button,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
+static void
+solid_radio_toggled (GtkWidget       *radiobutton,
+                     TerminalProfile *profile)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radiobutton)))
+    terminal_profile_set_background_type (profile,
+                                          TERMINAL_BACKGROUND_SOLID);
+}
+
+static void
+image_radio_toggled (GtkWidget       *radiobutton,
+                     TerminalProfile *profile)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radiobutton)))
+    terminal_profile_set_background_type (profile,
+                                          TERMINAL_BACKGROUND_IMAGE);
+}
+
+static void
+transparent_radio_toggled (GtkWidget       *radiobutton,
+                           TerminalProfile *profile)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radiobutton)))
+    terminal_profile_set_background_type (profile,
+                                          TERMINAL_BACKGROUND_TRANSPARENT);
+}
+
+static void
+background_image_changed (GtkWidget       *entry,
+                          TerminalProfile *profile)
+{
+  char *text;
+
+  /* We don't use gnome_file_entry_get_full_path() since that would weirdly
+   * insert a directory in front of what the user was typing once the
+   * notify came back from gconf.
+   */
+  
+  text = gtk_editable_get_chars (GTK_EDITABLE (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (entry))),
+                                 0, -1);
+  
+  terminal_profile_set_background_image_file (profile, text);
+
+  g_free (text);
+}
+
+static void
+scroll_background_toggled (GtkWidget       *checkbutton,
+                           TerminalProfile *profile)
+{
+  terminal_profile_set_scroll_background (profile,
+                                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+darken_background_toggled (GtkWidget       *checkbutton,
+                           TerminalProfile *profile)
+{
+  terminal_profile_set_background_darkness (profile,
+                                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)) ?
+                                            DARKNESS_TRUE : DARKNESS_FALSE);
+}
+
+static void
+backspace_binding_changed (GtkWidget       *option_menu,
+                           TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+
+  terminal_profile_set_backspace_binding (profile, i);
+}
+
+static void
+delete_binding_changed (GtkWidget       *option_menu,
+                        TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+
+  terminal_profile_set_delete_binding (profile, i);
+}
+
 /*
  * initialize widgets
  */
@@ -918,6 +1035,50 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (palette_scheme_changed),
                         profile);
 
+      profile_editor_update_background_type (editor, profile);
+      w = glade_xml_get_widget (xml, "solid-radiobutton");
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (solid_radio_toggled),
+                        profile);
+      w = glade_xml_get_widget (xml, "image-radiobutton");
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (image_radio_toggled),
+                        profile);
+      w = glade_xml_get_widget (xml, "transparent-radiobutton");
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (transparent_radio_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "background-image-fileentry");
+      profile_editor_update_background_image (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (background_image_changed),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "scroll-background-checkbutton");
+      profile_editor_update_scroll_background (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (scroll_background_toggled),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "darken-background-checkbutton");
+      profile_editor_update_background_darkness (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (darken_background_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "backspace-binding-optionmenu");
+      profile_editor_update_backspace_binding (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (backspace_binding_changed),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "delete-binding-optionmenu");
+      profile_editor_update_delete_binding (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (delete_binding_changed),
+                        profile);
+      
       i = 0;
       while (i < TERMINAL_PALETTE_SIZE)
         {
@@ -1006,7 +1167,21 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   w = profile_editor_get_widget (editor, "custom-command-entry");
   gtk_widget_set_sensitive (w,
                             !((mask & TERMINAL_SETTING_CUSTOM_COMMAND) ||
-                              !terminal_profile_get_use_custom_command (profile)));    
+                              !terminal_profile_get_use_custom_command (profile))); 
+  if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE)
+    {
+      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_BACKGROUND_IMAGE));
+      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
+      gtk_widget_set_sensitive (w, !(mask & TERMINAL_SETTING_SCROLL_BACKGROUND));
+    }
+  else
+    {
+      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      gtk_widget_set_sensitive (w, FALSE);
+      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
+      gtk_widget_set_sensitive (w, FALSE);
+    }
   
 #if 0 /* uncomment once we've tested the sensitivity code */
   if (mask == last_mask)
@@ -1082,6 +1257,21 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   set_insensitive (editor, "font-button",
                    mask & TERMINAL_SETTING_X_FONT);
+
+  set_insensitive (editor, "solid-radiobutton",
+                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+  set_insensitive (editor, "image-radiobutton",
+                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+  set_insensitive (editor, "transparent-radiobutton",
+                   mask & TERMINAL_SETTING_BACKGROUND_TYPE);
+
+  set_insensitive (editor, "darken-background-checkbutton",
+                   mask & TERMINAL_SETTING_BACKGROUND_DARKNESS);
+
+  set_insensitive (editor, "backspace-binding-optionmenu",
+                   mask & TERMINAL_SETTING_BACKSPACE_BINDING);
+  set_insensitive (editor, "delete-binding-optionmenu",
+                   mask & TERMINAL_SETTING_DELETE_BINDING);
   
   {
     int i;
@@ -1457,6 +1647,92 @@ profile_editor_update_x_font (GtkWidget       *editor,
 
   gtk_label_set_text (GTK_LABEL (child),
                       terminal_profile_get_x_font (profile));
+}
+
+static void
+profile_editor_update_background_type (GtkWidget       *editor,
+                                       TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  switch (terminal_profile_get_background_type (profile))
+    {
+    case TERMINAL_BACKGROUND_SOLID:
+      w = profile_editor_get_widget (editor, "solid-radiobutton");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+      break;
+    case TERMINAL_BACKGROUND_IMAGE:
+      w = profile_editor_get_widget (editor, "image-radiobutton");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+      break;
+    case TERMINAL_BACKGROUND_TRANSPARENT:
+      w = profile_editor_get_widget (editor, "transparent-radiobutton");
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
+      break;
+    }
+}
+
+static void
+profile_editor_update_background_image (GtkWidget       *editor,
+                                        TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "background-image-fileentry");
+
+  entry_set_text_if_changed (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (w))),
+                             terminal_profile_get_background_image_file (profile));
+}
+
+static void
+profile_editor_update_scroll_background (GtkWidget       *editor,
+                                         TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_scroll_background (profile));
+}
+
+static void
+profile_editor_update_background_darkness (GtkWidget       *editor,
+                                           TerminalProfile *profile)
+{
+  GtkWidget *w;
+  double v;
+
+  w = profile_editor_get_widget (editor, "darken-background-checkbutton");
+
+  v = terminal_profile_get_background_darkness (profile);
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               v >= DARKNESS_THRESHOLD);
+}
+
+static void
+profile_editor_update_backspace_binding (GtkWidget       *editor,
+                                         TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "backspace-binding-optionmenu");
+  
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
+                               terminal_profile_get_backspace_binding (profile));
+}
+
+static void
+profile_editor_update_delete_binding (GtkWidget       *editor,
+                                      TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "delete-binding-optionmenu");
+  
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
+                               terminal_profile_get_delete_binding (profile));
 }
 
 static GtkWidget*
