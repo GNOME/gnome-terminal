@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-03-01 10:41+0100\n"
-"PO-Revision-Date: 2002-03-01 10:41+0100\n"
+"POT-Creation-Date: 2002-03-03 21:38+0100\n"
+"PO-Revision-Date: 2002-03-03 21:56+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -132,10 +132,6 @@ msgid "Custom co_mmand:"
 msgstr "D_owolne polecenie:"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Disable all accelerators"
-msgstr "Bez szybkich sekwencji"
-
-#: src/gnome-terminal.glade2.h:1
 msgid "Disable all menu mnemonics (such as Alt+f to open File menu)"
 msgstr ""
 "Unieaktywnia wszystkie mnemoniki menu (np. Alt+P, otwierający menu Plik)"
@@ -143,6 +139,12 @@ msgstr ""
 #: src/gnome-terminal.glade2.h:1
 msgid "Disabled"
 msgstr "Brak"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Don't bother to report bugs on this dialog yet, it isn't finished."
+msgstr ""
+"Nie zgłaszaj błędów na temat tego okna dialogowego - nie jest ono jeszcze "
+"ukończone."
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Effects"
@@ -525,7 +527,7 @@ msgstr "Nowa _zakładka"
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1 src/terminal-window.c:1
+#: src/terminal-screen.c:1
 msgid "_Edit current profile..."
 msgstr "Z_modyfikuj bieżący profil..."
 
@@ -549,9 +551,12 @@ msgstr "_Otwórz odnośnik"
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
+#. This is fairly bogus to have here but I don't know
+#. * where else to put it really
+#.
 #: src/terminal-window.c:1
-msgid "_File"
-msgstr "_Plik"
+msgid "New _profile..."
+msgstr "N_owy profil..."
 
 #: src/terminal-window.c:1
 msgid "_Close window"
@@ -562,45 +567,103 @@ msgid "C_lose tab"
 msgstr "Zamknij z_akładkę"
 
 #: src/terminal-window.c:1
-msgid "_Edit"
-msgstr "_Edycja"
+msgid "C_urrent profile..."
+msgstr "_Bieżący profil..."
 
 #: src/terminal-window.c:1
-msgid "_Terminal"
-msgstr "_Terminal"
+msgid "_Keybindings..."
+msgstr "Powiązania _klawiszy..."
 
 #: src/terminal-window.c:1
-msgid "_New profile..."
-msgstr "_Nowy profil..."
-
-#: src/terminal-window.c:1
-msgid "_Manage profiles..."
-msgstr "_Zarządzanie profilami..."
+msgid "P_rofiles..."
+msgstr "P_rofile..."
 
 #: src/terminal-window.c:1
 msgid "Hide menu_bar"
 msgstr "Ukryj pasek m_enu"
 
+#: src/terminal-window.c:1 src/terminal-window.c:1
+msgid "_Full screen"
+msgstr "P_ełny ekran"
+
 #: src/terminal-window.c:1
-msgid "_Reset terminal"
-msgstr "Z_resetuj terminal"
+msgid "_Reset"
+msgstr "Z_resetuj"
 
 #: src/terminal-window.c:1
 msgid "Reset and C_lear"
 msgstr "Zresetuj i _wyczyść"
 
 #: src/terminal-window.c:1
+msgid "_Previous tab"
+msgstr "P_oprzednia zakładka"
+
+#: src/terminal-window.c:1
+msgid "_Next tab"
+msgstr "N_astępna zakładka"
+
+#: src/terminal-window.c:1
+msgid "_Help Contents"
+msgstr "_Zawartość pomocy"
+
+#: src/terminal-window.c:1
+msgid "_About GNOME Terminal"
+msgstr "_Informacje o Terminalu GNOME"
+
+#: src/terminal-window.c:1
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Przy odczycie wartości konfiguracji określającej użycie mnemoników wystąpił "
+"błąd. (%s)\n"
+
+#: src/terminal-window.c:1
+#, c-format
+msgid ""
+"There was an error subscribing to notification of terminal window "
+"configuration changes. (%s)\n"
+msgstr ""
+"Przy rejestrowaniu się do powiadamiania o zmianach w konfiguracji termiala "
+"wystąpił błąd. (%s)\n"
+
+#: src/terminal-window.c:1
+msgid "_File"
+msgstr "_Plik"
+
+#: src/terminal-window.c:1
+msgid "_Edit"
+msgstr "_Edycja"
+
+#: src/terminal-window.c:1
+msgid "_View"
+msgstr "_Widok"
+
+#: src/terminal-window.c:1
+msgid "_Terminal"
+msgstr "_Terminal"
+
+#: src/terminal-window.c:1
+msgid "_Go"
+msgstr "P_rzejdź"
+
+#: src/terminal-window.c:1
 msgid "_Help"
 msgstr "Pomo_c"
 
 #: src/terminal-window.c:1
-msgid "_Help on GNOME terminal"
-msgstr "Pomoc na temat Terminala GNOME"
+msgid "_Restore normal size"
+msgstr "Przy_wróć zwykły rozmiar"
 
-#. FIXME use stock item
 #: src/terminal-window.c:1
-msgid "_About"
-msgstr "_Informacje o"
+msgid ""
+"Your current desktop environment does not support the full screen feature.\n"
+" (In technical terms, you need a window manager with support for the "
+"_NET_WM_STATE_FULLSCREEN property.)"
+msgstr ""
+"Aktualnie używane środowisko nie daje możliwości pracy na pełnym ekranie.\n"
+"(używając określeń technicznych: menedżer okien nie obsługuje własności "
+"_NET_WM_STATE_FULLSCREEN)"
 
 #: src/terminal-window.c:1
 msgid "Copyright 2002 Havoc Pennington"
