@@ -26,6 +26,7 @@
 #include <gconf/gconf-client.h>
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
+#include <libgnomeui/gnome-client.h>
 #include <popt.h>
 #include <string.h>
 
@@ -81,9 +82,8 @@ static void profile_list_notify   (GConfClient *client,
 static void refill_profile_treeview (GtkWidget *tree_view);
 
 static void terminal_app_get_clone_command   (TerminalApp *app,
+                                              int         *argc,
                                               char      ***argvp);
-
-static void spew_restart_command             (TerminalApp *app);
 
 static GtkWidget*       profile_optionmenu_new          (void);
 static void             profile_optionmenu_refill       (GtkWidget       *option_menu);
@@ -92,6 +92,13 @@ static void             profile_optionmenu_set_selected (GtkWidget       *option
                                                          TerminalProfile *profile);
 
 
+static gboolean save_yourself_callback (GnomeClient        *client,
+                                        gint                phase,
+                                        GnomeSaveStyle      save_style,
+                                        gboolean            shutdown,
+                                        GnomeInteractStyle  interact_style,
+                                        gboolean            fast,
+                                        void               *data);
 
 enum {
   OPTION_COMMAND = 1,
@@ -338,6 +345,7 @@ main (int argc, char **argv)
     { "1.102.0", LIBGNOMEUI_MODULE },
     { NULL, NULL }
   };
+  GnomeClient *sm_client;
   
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -669,6 +677,12 @@ main (int argc, char **argv)
   terminal_profile_initialize (conf);
   sync_profile_list (FALSE, NULL);
 
+  sm_client = gnome_master_client ();
+  g_signal_connect (G_OBJECT (sm_client),
+                    "save_yourself",
+                    G_CALLBACK (save_yourself_callback),
+                    app);
+  
   tmp = initial_windows;
   while (tmp != NULL)
     {
@@ -760,8 +774,6 @@ main (int argc, char **argv)
     }
   
   gtk_main ();
-
-  spew_restart_command (app);
   
   return 0;
 }
@@ -787,8 +799,6 @@ terminal_window_destroyed (TerminalWindow *window,
 
   if (app->windows == NULL)
     gtk_main_quit ();
-
-  spew_restart_command (app);
 }
 
 void
@@ -845,8 +855,6 @@ terminal_app_new_terminal (TerminalApp     *app,
   gtk_window_present (GTK_WINDOW (window));
 
   terminal_screen_launch_child (screen);
-
-  spew_restart_command (app);
 }
 
 static GList*
@@ -983,9 +991,8 @@ sync_profile_list (gboolean use_this_list,
       terminal_profile_set_is_default (new_default, TRUE);
     }
 
-  g_assert (terminal_profile_get_count () > 0);
-  
-  spew_restart_command (app);
+  g_assert (terminal_profile_get_count () > 0);  
+
   if (app->new_profile_base_menu)
     profile_optionmenu_refill (app->new_profile_base_menu);
   if (app->manage_profiles_list)
@@ -2013,6 +2020,7 @@ profile_optionmenu_set_selected (GtkWidget       *option_menu,
 
 static void
 terminal_app_get_clone_command (TerminalApp *app,
+                                int         *argcp,
                                 char      ***argvp)
 {
   int n_windows;
@@ -2117,21 +2125,42 @@ terminal_app_get_clone_command (TerminalApp *app,
     }
 
   *argvp = argv;
+  *argcp = i;
 }
 
-static void
-spew_restart_command (TerminalApp *app)
+static gboolean
+save_yourself_callback (GnomeClient        *client,
+                        gint                phase,
+                        GnomeSaveStyle      save_style,
+                        gboolean            shutdown,
+                        GnomeInteractStyle  interact_style,
+                        gboolean            fast,
+                        void               *data)
 {
-  char **argv;
+  char **clone_command;
+  TerminalApp *app;
+  int argc;
   int i;
   
-  terminal_app_get_clone_command (app, &argv);
+  app = data;
+  
+  terminal_app_get_clone_command (app, &argc, &clone_command);
 
+  /* GnomeClient builds the clone command from the restart command */
+  gnome_client_set_restart_command (client, argc, clone_command);
+
+  /* Debug spew */
+  g_print ("Saving session: ");
   i = 0;
-  while (argv[i])
+  while (clone_command[i])
     {
-      g_print ("%s ", argv[i]);
+      g_print ("%s ", clone_command[i]);
       ++i;
     }
   g_print ("\n");
+
+  g_strfreev (clone_command);
+  
+  /* success */
+  return TRUE;
 }
