@@ -28,4 +28,4 @@ DISTCLEANFILES =		\
 # hack from sound-juicer to get around scrollkeeper's leaving a big
 # mess behind.
 distuninstallcheck_listfiles = 	\
-        find -path ./var/scrollkeeper/\* -prune -or -type f -print
+        find -regex '.*/var/scrollkeeper/.*' -prune -or -type f -print
