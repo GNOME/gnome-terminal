@@ -25,7 +25,7 @@
 #include <libgnomeui/gnome-color-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <string.h>
-#include "x-font-selector.h"
+#include "simple-x-font-selector.h"
 #include "terminal-widget.h"
 
 #define BYTES_PER_LINE (terminal_widget_get_estimated_bytes_per_scrollback_line ())
@@ -566,6 +566,34 @@ font_dialog_destroyed (GtkWidget *dialog,
 }
 
 static void
+font_response_callback (GtkWidget *dialog,
+                        int        response_id,
+                        void      *data)
+{
+  TerminalProfile *profile;
+  char *str;
+  GtkWidget *fontsel;
+  
+  profile = data;
+
+  fontsel = g_object_get_data (G_OBJECT (dialog),
+                               "font-selector");
+  
+  if (response_id == GTK_RESPONSE_ACCEPT)    
+    str = egg_xfont_selector_get_font_name (EGG_XFONT_SELECTOR (fontsel));  
+  else
+    str = NULL;
+
+  if (str)
+    {
+      terminal_profile_set_x_font (profile, str);
+      g_free (str);      
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
 x_font_clicked (GtkWidget       *button,
                 TerminalProfile *profile)
 {
@@ -585,11 +613,46 @@ x_font_clicked (GtkWidget       *button,
   parent = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
   g_assert (parent);
 
+#if 1
+  {
+    GtkWidget *fontsel;
+    char *spacings[] = { "m", "c", NULL };
+
+    fontsel = egg_xfont_selector_new ();
 #if 0
-  dialog = gnome_font_selector_new (_("Choose a font"));
-  
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+    /* doesn't seem to work yet */
+    egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
+                                   EGG_XFONT_FILTER_BASE,
+                                   EGG_XFONT_ALL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   NULL,
+                                   spacings,
+                                   NULL);
+#endif
+    
+    dialog = gtk_dialog_new_with_buttons (_("Choose a font"),
+                                          GTK_WINDOW (parent),
+                                          GTK_DIALOG_DESTROY_WITH_PARENT,
+                                          GTK_STOCK_CANCEL,
+                                          GTK_RESPONSE_REJECT,
+                                          GTK_STOCK_OK,
+                                          GTK_RESPONSE_ACCEPT,
+                                          NULL);    
+    
+    g_signal_connect (G_OBJECT (dialog), "response",
+                      G_CALLBACK (font_response_callback),
+                      profile);
+    
+    g_object_set_data (G_OBJECT (dialog), "font-selector",
+                       fontsel);
+
+    gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+                        fontsel, TRUE, TRUE, 0);
+
+    gtk_widget_show (fontsel);
+  }
 #else
   dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
