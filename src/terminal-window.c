@@ -564,27 +564,6 @@ fill_in_new_term_submenus (TerminalWindow *window)
 }
 
 static void
-update_active_encoding_name (TerminalWindow *window)
-{
-  GtkWidget *w;
-  const char *charset;
-  char *name;
-  
-  w = terminal_screen_get_widget (window->priv->active_term);
-  charset = terminal_widget_get_encoding (w);
-
-  name = terminal_encoding_get_name (charset);
-
-#if 0
-  /* doesn't make sense anymore */
-  gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (window->priv->encoding_menuitem))),
-                      name);
-#endif
-  
-  g_free (name);
-}
-
-static void
 fill_in_encoding_menu (TerminalWindow *window)
 {
   GtkWidget *menu;
@@ -614,8 +593,6 @@ fill_in_encoding_menu (TerminalWindow *window)
 
   w = terminal_screen_get_widget (window->priv->active_term);
   charset = terminal_widget_get_encoding (w);
-
-  update_active_encoding_name (window);
   
   group = NULL;
   encodings = terminal_get_active_encodings ();
@@ -1250,13 +1227,6 @@ selection_changed_callback (TerminalScreen *screen,
   update_copy_sensitivity (window);
 }
 
-static void
-encoding_changed_callback (TerminalScreen *screen,
-			  TerminalWindow *window)
-{
-  update_active_encoding_name (window);
-}
-
 void
 terminal_window_add_screen (TerminalWindow *window,
                             TerminalScreen *screen)
@@ -1308,11 +1278,6 @@ terminal_window_add_screen (TerminalWindow *window,
   g_signal_connect (G_OBJECT (screen),
                     "selection_changed",
                     G_CALLBACK (selection_changed_callback),
-                    window);
-  
-  g_signal_connect (G_OBJECT (screen),
-                    "encoding_changed",
-                    G_CALLBACK (encoding_changed_callback),
                     window);
   
   term = terminal_screen_get_widget (screen);
@@ -2517,8 +2482,6 @@ change_encoding_callback (GtkWidget      *menu_item,
 
   widget = terminal_screen_get_widget (window->priv->active_term);
   terminal_widget_set_encoding (widget, charset);
-
-  update_active_encoding_name (window);
 }
 
 static void
