@@ -84,7 +84,7 @@ static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_update_on_realize (GtkWidget      *widget,
                                                TerminalScreen *screen);
-static void     terminal_screen_popup_menu         (GtkWidget      *term,
+static gboolean terminal_screen_popup_menu         (GtkWidget      *term,
                                                     TerminalScreen *screen);
 static gboolean terminal_screen_button_press_event (GtkWidget      *term,
                                                     GdkEventButton *event,
@@ -1577,11 +1577,12 @@ terminal_screen_do_popup (TerminalScreen *screen,
                   event ? event->time : gtk_get_current_event_time ());
 }
 
-static void
+static gboolean
 terminal_screen_popup_menu (GtkWidget      *term,
                             TerminalScreen *screen)
 {
   terminal_screen_do_popup (screen, NULL);
+  return TRUE;
 }
 
 static gboolean
