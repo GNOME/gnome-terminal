@@ -87,6 +87,9 @@ static gboolean terminal_factory_disabled = FALSE;
 #define TERMINAL_STOCK_EDIT "terminal-edit"
 typedef struct
 {
+  char *startup_id;
+  char *display_name;
+  int screen_number;
   GList *initial_windows;
   gboolean default_window_menubar_forced;
   gboolean default_window_menubar_state;
@@ -147,6 +150,7 @@ enum {
   OPTION_HIDE_MENUBAR,
   OPTION_GEOMETRY,
   OPTION_DISABLE_FACTORY,
+  OPTION_STARTUP_ID,
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
   OPTION_ZOOM,
@@ -261,6 +265,15 @@ struct poptOption options[] = {
     NULL,
     OPTION_DISABLE_FACTORY,
     N_("Do not register with the activation nameserver, do not re-use an active terminal"),
+    NULL
+  },
+  {
+    "startup-id",
+    '\0',
+    POPT_ARG_STRING,
+    NULL,
+    OPTION_STARTUP_ID,
+    N_("ID for startup notification protocol."),
     NULL
   },
   {
@@ -1017,11 +1030,28 @@ parse_options_callback (poptContext              ctx,
     case OPTION_COMPAT:
       g_printerr (_("Option given which is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"));
       break;
-          
-    case OPTION_LAST:          
-    default:
+
+    case OPTION_STARTUP_ID:
+      if (results->startup_id != NULL)
+        {
+          g_printerr (_("--startup-id option given twice\n"));
+          exit (1);
+        }
+      else if (arg == NULL)
+        {
+          g_printerr (_("--startup-id option requires an argument\n"));
+          exit (1);
+        }
+      else
+        {
+          results->startup_id = g_strdup (arg);
+        }
+      break;
+      
+    case OPTION_LAST:
       g_assert_not_reached ();
       break;
+      /* no default so we get warnings on missing items */
     }
 }
 
@@ -1035,6 +1065,9 @@ option_parsing_results_free (OptionParsingResults *results)
 
   if (results->post_execute_args)
     g_strfreev (results->post_execute_args);
+
+  g_free (results->display_name);
+  g_free (results->startup_id);
   
   g_free (results);
 }
@@ -1059,6 +1092,7 @@ option_parsing_results_init (int *argc, char **argv)
   OptionParsingResults *results;
 
   results = g_new0 (OptionParsingResults, 1);
+  results->screen_number = -1;
   
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   results->post_execute_args = NULL;
@@ -1095,6 +1129,86 @@ option_parsing_results_init (int *argc, char **argv)
     }
 
   return results;
+}
+
+static void
+option_parsing_results_check_for_display_name (OptionParsingResults *results,
+                                               int *argc, char **argv)
+{
+  int i;
+  
+  /* The point here is to strip --display, in the case where we
+   * aren't going via gtk_init()
+   */
+  i = 1;
+  while (i < *argc)
+    {
+      gboolean remove_two = FALSE;
+      
+      if (strcmp (argv[i], "--display") == 0)
+        {          
+          if ((i + 1) >= *argc)
+            {
+              g_printerr (_("No argument given to --display option\n"));
+              return; /* popt will die on this later, plus it shouldn't happen
+                       * because normally gtk_init() parses --display
+                       * when not using factory mode.
+                       */
+            }
+
+          if (results->display_name)
+            g_free (results->display_name);
+          results->display_name = g_strdup (argv[i+1]);
+          
+          remove_two = TRUE;
+        }
+      else if (strcmp (argv[i], "--screen") == 0)
+        {
+          int n;
+          char *end;
+          
+          if ((i + 1) >= *argc)
+            {
+              g_printerr (_("No argument given to --screen option\n"));
+              return; /* popt will die on this later, plus it shouldn't happen
+                       * because normally gtk_init() parses --display
+                       * when not using factory mode.
+                       */
+            }
+
+          errno = 0;
+          end = argv[i+1];
+          n = strtoul (argv[i+1], &end, 0);
+          if (errno == 0 && argv[i+1] != end)
+            results->screen_number = n;
+          
+          remove_two = TRUE;
+        }
+
+      if (remove_two)
+        {
+          int n_to_move;
+          
+          n_to_move = *argc - i - 2;
+          g_assert (n_to_move >= 0);
+          
+          if (n_to_move > 0)
+            {
+              g_memmove (&argv[i], &argv[i+2],
+                         sizeof (argv[0]) * n_to_move);
+            }
+          else
+            {
+              argv[i] = NULL;
+            }
+
+          *argc -= 2;
+        }
+      else
+        {
+          ++i;
+        }
+    }
 }
 
 static int
@@ -1155,7 +1269,10 @@ new_terminal_with_options (OptionParsingResults *results)
                                          it->working_dir,
                                          iw->role,
                                          it->zoom_set ?
-                                         it->zoom : 1.0);
+                                         it->zoom : 1.0,
+                                         results->startup_id,
+                                         results->display_name,
+                                         results->screen_number);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -1171,7 +1288,8 @@ new_terminal_with_options (OptionParsingResults *results)
                                          it->working_dir,
                                          NULL,
                                          it->zoom_set ?
-                                         it->zoom : 1.0);
+                                         it->zoom : 1.0,
+                                         NULL, NULL, -1);
             }
           
           tmp2 = tmp2->next;
@@ -1192,8 +1310,11 @@ main (int argc, char **argv)
   int argc_copy;
   char **argv_copy;
   const char **args;
+  const char *startup_id;
+  const char *display_name;
+  GdkDisplay *display;
   GnomeModuleRequirement reqs[] = {
-    { "1.102.0", LIBGNOMEUI_MODULE },
+    { "2.0.0", LIBGNOMEUI_MODULE },
     { NULL, NULL }
   };
   GnomeClient *sm_client;
@@ -1218,14 +1339,29 @@ main (int argc, char **argv)
   textdomain (GETTEXT_PACKAGE);
 
   argc_copy = argc;
-  argv_copy = g_new (char *, argc_copy + 1);
+  /* we leave empty slots, for --startup-id and --display */
+  argv_copy = g_new (char *, argc_copy + 5);
   for (i = 0; i < argc_copy; i++)
     argv_copy [i] = g_strdup (argv [i]);
   argv_copy [i] = NULL;
 
   results = option_parsing_results_init (&argc, argv);
-
+  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
+  if (startup_id != NULL)
+    {
+      results->startup_id = g_strdup (startup_id);
+      putenv ("DESKTOP_STARTUP_ID=");
+    }
+  
+  gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
+                                                     * to complicated factory setup
+                                                     */
+  
   gtk_init (&argc, &argv);
+
+  display = gdk_display_get_default ();
+  display_name = gdk_display_get_name (display);
+  results->display_name = g_strdup (display_name);
   
   module_info.requirements = reqs;
 
@@ -1257,6 +1393,21 @@ main (int argc, char **argv)
   
   if (!terminal_factory_disabled)
     {
+      
+      if (results->startup_id != NULL)
+        {
+          /* we allocated argv_copy with extra space so we could do this */
+          argv_copy[argc_copy++] = g_strdup ("--startup-id");
+          argv_copy[argc_copy++] = g_strdup (results->startup_id);
+          argv_copy[argc_copy++] = NULL;
+        }
+
+      /* Forward our display to the child */
+      /* we allocated argv_copy with extra space so we could do this */
+      argv_copy[argc_copy++] = g_strdup ("--display");
+      argv_copy[argc_copy++] = g_strdup (results->display_name);
+      argv_copy[argc_copy++] = NULL;
+      
       if (terminal_invoke_factory (argc_copy, argv_copy))
         return 0;
     }
@@ -1347,6 +1498,88 @@ terminal_window_destroyed (TerminalWindow *window,
     gtk_main_quit ();
 }
 
+static GdkScreen*
+find_screen_by_display_name (const char *display_name,
+                             int         screen_number)
+{
+  GdkScreen *screen;
+
+  /* --screen=screen_number overrides --display */
+  
+  screen = NULL;
+  
+  if (display_name == NULL)
+    {
+      if (screen_number >= 0)
+        screen = gdk_display_get_screen (gdk_display_get_default (), screen_number);
+
+      if (screen == NULL)
+        screen = gdk_screen_get_default ();
+
+      g_object_ref (G_OBJECT (screen));
+    }
+  else
+    {
+      GSList *displays;
+      GSList *tmp;
+      const char *period;
+      GdkDisplay *display;
+        
+      period = strrchr (display_name, '.');
+      if (period)
+        {
+          unsigned long n;
+          char *end;
+          
+          errno = 0;
+          end = (char*) period + 1;
+          n = strtoul (period + 1, &end, 0);
+          if (errno == 0 && (period + 1) != end)
+            screen_number = n;
+        }
+      
+      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+
+      display = NULL;
+      tmp = displays;
+      while (tmp != NULL)
+        {
+          const char *this_name;
+
+          display = tmp->data;
+          this_name = gdk_display_get_name (display);
+          
+          /* compare without the screen number part */
+          if (strncmp (this_name, display_name, period - display_name) == 0)
+            break;
+
+          tmp = tmp->next;
+        }
+      
+      g_slist_free (displays);
+
+      if (display == NULL)
+        display = gdk_display_open (display_name); /* FIXME we never close displays */
+      
+      if (display != NULL)
+        {
+          if (screen_number >= 0)
+            screen = gdk_display_get_screen (display, screen_number);
+          
+          if (screen == NULL)
+            screen = gdk_display_get_default_screen (display);
+
+          if (screen)
+            g_object_ref (G_OBJECT (screen));
+        }
+    }
+
+  if (screen == NULL)
+    screen = gdk_screen_get_default ();
+  
+  return screen;
+}
+
 void
 terminal_app_new_terminal (TerminalApp     *app,
                            TerminalProfile *profile,
@@ -1358,7 +1591,10 @@ terminal_app_new_terminal (TerminalApp     *app,
                            const char      *title,
                            const char      *working_dir,
                            const char      *role,
-                           double           zoom)
+                           double           zoom,
+                           const char      *startup_id,
+                           const char      *display_name,
+                           int              screen_number)
 {
   TerminalScreen *screen;
   gboolean window_created;
@@ -1369,16 +1605,28 @@ terminal_app_new_terminal (TerminalApp     *app,
   window_created = FALSE;
   if (window == NULL)
     {
+      GdkScreen *screen;
+      
       window_created = TRUE;
       window = terminal_window_new (conf);
       g_object_ref (G_OBJECT (window));
-
+      
       g_signal_connect (G_OBJECT (window), "destroy",
                         G_CALLBACK (terminal_window_destroyed),
                         app);
       
       app->windows = g_list_append (app->windows, window);
 
+      screen = find_screen_by_display_name (display_name, screen_number);
+      if (screen != NULL)
+        {
+          gtk_window_set_screen (GTK_WINDOW (window), screen);
+          g_object_unref (G_OBJECT (screen));
+        }
+
+      if (startup_id != NULL)
+        terminal_window_set_startup_id (window, startup_id);
+      
       if (role == NULL)
         {
           /* Invent a unique-enough number for the role */
@@ -3094,6 +3342,10 @@ terminal_new_event (BonoboListener    *listener,
   argc = args->_length;
   results = option_parsing_results_init (&argc, args->_buffer);
 
+  /* Find and parse --display */
+  option_parsing_results_check_for_display_name (results,
+                                                 &argc, args->_buffer);
+  
   store = options[0].descrip;
   options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
                                          * mutant spawn

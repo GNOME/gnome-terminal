@@ -2,6 +2,7 @@
 
 /*
  * Copyright (C) 2001 Havoc Pennington
+ * Copyright (C) 2002 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <eel/eel-ellipsizing-label.h>
+#include <libsn/sn-launchee.h>
 
 struct _TerminalWindowPrivate
 {  
@@ -71,6 +73,7 @@ struct _TerminalWindowPrivate
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
   GConfClient *conf;
   guint notify_id;
+  char *startup_id;
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
   guint use_mnemonics : 1;   /* config key value */
@@ -187,6 +190,8 @@ static gboolean find_larger_zoom_factor  (double  current,
 static gboolean find_smaller_zoom_factor (double  current,
                                           double *found);
 
+static void terminal_window_show (GtkWidget *widget);
+
 static gpointer parent_class;
 
 GType
@@ -213,7 +218,7 @@ terminal_window_get_type (void)
       
       object_type = g_type_register_static (GTK_TYPE_WINDOW,
                                             "TerminalWindow",
-                                            &object_info, 0);
+                                            &object_info, 0);      
     }
   
   return object_type;
@@ -879,11 +884,13 @@ terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
   
   object_class->finalize = terminal_window_finalize;
   gtk_object_class->destroy = terminal_window_destroy;
+  widget_class->show = terminal_window_show;
 }
 
 static void
@@ -902,6 +909,8 @@ terminal_window_finalize (GObject *object)
   
   if (window->priv->icon)
     g_object_unref (G_OBJECT (window->priv->icon));
+
+  g_free (window->priv->startup_id);
   
   g_free (window->priv);
   
@@ -935,6 +944,67 @@ terminal_window_destroy (GtkObject *object)
   window->priv->encoding_menuitem = NULL;
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);  
+}
+
+static void
+sn_error_trap_push (SnDisplay *display,
+                    Display   *xdisplay)
+{
+  gdk_error_trap_push ();
+}
+
+static void
+sn_error_trap_pop (SnDisplay *display,
+                   Display   *xdisplay)
+{
+  gdk_error_trap_pop ();
+}
+
+static void
+terminal_window_show (GtkWidget *widget)
+{
+  TerminalWindow *window;
+  SnDisplay *sn_display;
+  SnLauncheeContext *context;
+  GdkScreen *screen;
+  GdkDisplay *display;
+  
+  window = TERMINAL_WINDOW (widget);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    gtk_widget_realize (widget);
+
+  context = NULL;
+  sn_display = NULL;
+  if (window->priv->startup_id != NULL)
+    {
+      /* Set up window for launch notification */
+      /* FIXME In principle all transient children of this
+       * window should get the same startup_id
+       */
+      
+      screen = gtk_window_get_screen (GTK_WINDOW (window));
+      display = gdk_screen_get_display (screen);
+      
+      sn_display = sn_display_new (gdk_x11_display_get_xdisplay (display),
+                                   sn_error_trap_push,
+                                   sn_error_trap_pop);
+      
+      context = sn_launchee_context_new (sn_display,
+                                         gdk_screen_get_number (screen),
+                                         window->priv->startup_id);
+      sn_launchee_context_setup_window (context,
+                                        GDK_WINDOW_XWINDOW (widget->window));
+    }
+  
+  (* GTK_WIDGET_CLASS (parent_class)->show) (widget);
+
+  if (context != NULL)
+    {
+      sn_launchee_context_complete (context);
+      sn_launchee_context_unref (context);
+      sn_display_unref (sn_display);
+    }
 }
 
 TerminalWindow*
@@ -2020,10 +2090,17 @@ new_window_callback (GtkWidget      *menuitem,
 
   if (!terminal_profile_get_forgotten (profile))
     {
+      char *name;
+      
+      name = gdk_screen_make_display_name (gtk_widget_get_screen (menuitem));
+
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  NULL,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                                 NULL, name, -1);
+
+      g_free (name);
     }
 }
 
@@ -2043,7 +2120,8 @@ new_tab_callback (GtkWidget      *menuitem,
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
-                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
+                                 FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                                 NULL, NULL, -1);
     }
 }
 
@@ -2548,4 +2626,12 @@ terminal_window_reread_profile_list (TerminalWindow *window)
   
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
+}
+
+void
+terminal_window_set_startup_id (TerminalWindow *window,
+                                const char     *startup_id)
+{
+  g_free (window->priv->startup_id);
+  window->priv->startup_id = g_strdup (startup_id);
 }

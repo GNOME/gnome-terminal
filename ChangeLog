@@ -1,3 +1,19 @@
+2002-12-05  Havoc Pennington  <hp@redhat.com>
+
+	* gnome-terminal.desktop.in (StartupNotify): enable startup
+	notification
+
+	* src/terminal-window.c (terminal_window_set_startup_id): new
+	function
+	(terminal_window_show): set the startup ID on the window, 
+	and send the "launch complete" message after we open the 
+	window.
+
+	* src/terminal.c: add --startup-id option and pass --display and
+	--screen to child processes when using the factory
+
+	* configure.in: require startup-notification
+
 2002-12-03  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in: flip default to --with-widget=vte

@@ -1019,10 +1019,17 @@ static void
 new_window_callback (GtkWidget      *menu_item,
                      TerminalScreen *screen)
 {
+  char *name;
+
+  name = gdk_screen_make_display_name (gtk_widget_get_screen (menu_item));
+  
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_profile_get_for_new_term (screen->priv->profile),
                              NULL,
-                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                             NULL, name, -1);
+
+  g_free (name);
 }
 
 static void
@@ -1032,7 +1039,8 @@ new_tab_callback (GtkWidget      *menu_item,
   terminal_app_new_terminal (terminal_app_get (),
                              terminal_profile_get_for_new_term (screen->priv->profile),
                              screen->priv->window,
-                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0);
+                             FALSE, FALSE, NULL, NULL, NULL, NULL, NULL, 1.0,
+                             NULL, NULL, -1);
 }
 
 static void
