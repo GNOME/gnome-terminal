@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 14:09-0300\n"
-"PO-Revision-Date: 2004-02-26 23:49+0900\n"
+"POT-Creation-Date: 2004-06-09 23:36+0900\n"
+"PO-Revision-Date: 2004-06-09 23:31+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: gnome-terminal.desktop.in.h:1
+#: gnome-terminal.desktop.in.in.h:1
 msgid "Command line"
 msgstr "コマンド・ライン端末です"
 
-#: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
+#: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
 #: src/terminal-window.c:761 src/terminal.c:1172 src/terminal.c:1518
 msgid "Terminal"
@@ -46,7 +46,7 @@ msgstr "アクセラレータの種類です。"
 #: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:32
 #: src/terminal-accels.c:717
 msgid "Disabled"
-msgstr "無効"
+msgstr "無効にする"
 
 #: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:564
 msgid "Type a new accelerator, or press Backspace to clear"
@@ -323,12 +323,12 @@ msgstr "カスタム・コマンド(_M):"
 #: src/gnome-terminal.glade2.h:30
 msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
 msgstr ""
-"全てのメニュー・アクセス・キーを無効にする (例: \"ファイル\" メニューを開く際"
+"メニューのアクセス・キーを全て無効にする (例: \"ファイル\" メニューを開く際"
 "の [ALT]+F)(_N)"
 
 #: src/gnome-terminal.glade2.h:31
 msgid "Disable m_enu shortcut key (F10 by default)"
-msgstr "メニュー・ショートカット・キーを無効にする (デフォルト: [F10])(_E)"
+msgstr "メニューのショートカット・キーを無効にする (デフォルト: [F10])(_E)"
 
 #: src/gnome-terminal.glade2.h:33
 msgid "E_ncodings shown in menu:"
@@ -359,9 +359,8 @@ msgid "Goes before initial title"
 msgstr "初期タイトルの前に挿入する"
 
 #: src/gnome-terminal.glade2.h:40
-#, fuzzy
 msgid "Hold the terminal open"
-msgstr "端末を終了する"
+msgstr "端末を開いたままにする"
 
 #: src/gnome-terminal.glade2.h:41
 msgid "Initial _title:"
@@ -1507,11 +1506,12 @@ msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 msgstr ""
+"一つ以上のタブを開いている端末ウィンドウを閉じる際に確認ダイアログを表示する"
+"かどうかです。"
 
 #: src/gnome-terminal.schemas.in.h:124
-#, fuzzy
 msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "端末コマンドを実行したときに utmp/wtmp を更新するかどうか"
+msgstr "端末ウィンドウを閉じる際に確認するかどうか"
 
 #: src/gnome-terminal.schemas.in.h:125
 msgid "Whether to blink the cursor"
@@ -1880,6 +1880,7 @@ msgstr "アクセラレータの変更を設定データベースに伝搬中に
 #, c-format
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr ""
+"ショートカット・キー \"%s\" は既にアクション \"%s\" へ関連づけられています"
 
 #: src/terminal-accels.c:1018
 #, c-format
@@ -2262,14 +2263,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/terminal-window.c:2294
-#, fuzzy
 msgid "Close all tabs?"
-msgstr "タブを閉じる"
+msgstr "全てのタブを閉じますか？"
 
 #: src/terminal-window.c:2306
-#, fuzzy
 msgid "Close All Tabs"
-msgstr "タブを閉じる"
+msgstr "全てのタブを閉じる"
 
 #: src/terminal-window.c:2698
 msgid "translator_credits"
@@ -2703,12 +2702,3 @@ msgstr ""
 #: src/terminal.c:3732
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "活性化サーバから端末サーバの取得に失敗しました\n"
-
-#~ msgid "There was an error creating the child process for this terminal: %s"
-#~ msgstr "この端末の子プロセスを作成中にエラーが発生しました: %s"
-
-#~ msgid "Could not set working directory to \"%s\": %s\n"
-#~ msgstr "作業フォルダを \"%s\" へ設定できませんでした: %s\n"
-
-#~ msgid "Could not execute command %s: %s\n"
-#~ msgstr "コマンド %s を実行できませんでした: %s\n"
