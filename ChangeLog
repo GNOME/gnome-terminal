@@ -1,3 +1,15 @@
+2002-04-20  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal.c (widget_label_relation_set): 
+	(set_atk_name_description): move to end of file, and rename 
+	to have better names. Fix indentation (2 spaces not 8). 
+	Remove extra spaces in "if ( foo )"
+	(terminal_util_set_atk_name_description): add warnings about 
+	widgets with no GtkAccessible, why does this happen?
+
+	* src/gnome-terminal.glade2: add reasonable names instead of
+	"labelXX" for all labels referenced in labelled-by
+
 2002-04-19 Pasupathi Duraisamy <pasupathi.duraisamy@wipro.com>
 
         * src/terminal.c: added widget_label_relation_set() function to

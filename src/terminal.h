@@ -54,10 +54,12 @@ void terminal_app_manage_profiles (TerminalApp     *app,
 void terminal_app_edit_keybindings (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 
-void widget_label_relation_set (GtkWidget *widget, GtkLabel *label);
-void set_atk_name_description (GtkWidget  *widget,
-                               const char *name,
-                               const char *desc);
+void terminal_util_set_labelled_by          (GtkWidget  *widget,
+                                             GtkLabel   *label);
+void terminal_util_set_atk_name_description (GtkWidget  *widget,
+                                             const char *name,
+                                             const char *desc);
+
 
 
 #endif /* TERMINAL_H */
