@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2003-02-05 21:34-0500\n"
+"POT-Creation-Date: 2003-06-02 15:26-0400\n"
 "PO-Revision-Date: 2003-01-21 21:52+0200\n"
 "Last-Translator: Tõivo Leedjärv <toivo@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -19,6 +19,7 @@ msgstr "Käsurida"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172
 #: src/terminal-profile.c:275 src/terminal-window.c:651 src/terminal.c:1080
+#: src/terminal.c:1383
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -185,7 +186,7 @@ msgid "User Defined"
 msgstr "Kohandatud"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal-window.c:2510
-#: src/terminal.c:2742
+#: src/terminal.c:2744
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Abiinfo kuvamisel tekkis viga: %s"
@@ -715,7 +716,7 @@ msgstr "Uus sakk"
 msgid "New Window"
 msgstr "Uus aken"
 
-#: src/terminal-accels.c:79 src/terminal.c:2166
+#: src/terminal-accels.c:79 src/terminal.c:2168
 msgid "New Profile"
 msgstr "Uus profiil"
 
@@ -847,7 +848,7 @@ msgstr "Liigu"
 msgid "Help"
 msgstr "Abi"
 
-#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1469
+#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1471
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Konfiguratsiooni laadimisel %s-ist tekkis viga. (%s)\n"
@@ -1017,88 +1018,88 @@ msgstr "Ei saa laadida kirjatüüpi \"%s\"\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr ""
 
-#: src/terminal-screen.c:1142
+#: src/terminal-screen.c:1146
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
 "%s"
 msgstr ""
 
-#: src/terminal-screen.c:1264 src/terminal-window.c:699
+#: src/terminal-screen.c:1268 src/terminal-window.c:699
 msgid "_New Window"
 msgstr "_Uus aken"
 
-#: src/terminal-screen.c:1271 src/terminal-window.c:702
+#: src/terminal-screen.c:1275 src/terminal-window.c:702
 msgid "New _Tab"
 msgstr "Uus _sakk"
 
-#: src/terminal-screen.c:1295 src/terminal-window.c:803
+#: src/terminal-screen.c:1299 src/terminal-window.c:803
 msgid "_Profile"
 msgstr "_Profiil"
 
-#: src/terminal-screen.c:1345
+#: src/terminal-screen.c:1349
 msgid "_Edit Current Profile..."
 msgstr "_Muuda aktiivset profiili..."
 
-#: src/terminal-screen.c:1351
+#: src/terminal-screen.c:1355
 msgid "_Input Methods"
 msgstr ""
 
-#: src/terminal-screen.c:1367
+#: src/terminal-screen.c:1371
 msgid "Hide _Menubar"
 msgstr "Peida m_enüüriba"
 
-#: src/terminal-screen.c:1372
+#: src/terminal-screen.c:1376
 msgid "Show _Menubar"
 msgstr "Näita m_enüüriba"
 
-#: src/terminal-screen.c:1381
+#: src/terminal-screen.c:1385
 msgid "Secure _Keyboard"
 msgstr ""
 
-#: src/terminal-screen.c:1387
+#: src/terminal-screen.c:1391
 msgid "_Open Link"
 msgstr "A_va link"
 
-#: src/terminal-screen.c:1394
+#: src/terminal-screen.c:1398
 msgid "_Copy Link Address"
 msgstr "Kopeeri _lingi asukoht"
 
-#: src/terminal-screen.c:1743
+#: src/terminal-screen.c:1747
 msgid "Change terminal title"
 msgstr "Muuda terminali pealkirja"
 
-#: src/terminal-screen.c:1770
+#: src/terminal-screen.c:1774
 msgid "_Title:"
 msgstr "_Pealkiri:"
 
-#: src/terminal-screen.c:1888
+#: src/terminal-screen.c:1892
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/terminal-screen.c:1911
+#: src/terminal-screen.c:1915
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/terminal-screen.c:1954
+#: src/terminal-screen.c:1958
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/terminal-screen.c:2003
+#: src/terminal-screen.c:2007
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/terminal-screen.c:2057
+#: src/terminal-screen.c:2061
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 
-#: src/terminal-screen.c:2083
+#: src/terminal-screen.c:2087
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr ""
@@ -1222,7 +1223,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Fail"
 
-#: src/terminal-window.c:1924 src/terminal.c:2773
+#: src/terminal-window.c:1924 src/terminal.c:2775
 msgid "_Edit"
 msgstr "_Redaktor"
 
@@ -1504,117 +1505,117 @@ msgstr ""
 msgid "No such profile '%s', using default profile\n"
 msgstr ""
 
-#: src/terminal.c:1431
+#: src/terminal.c:1433
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr ""
 
-#: src/terminal.c:1485
+#: src/terminal.c:1487
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr ""
 
-#: src/terminal.c:1721
+#: src/terminal.c:1723
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr ""
 
-#: src/terminal.c:1781
+#: src/terminal.c:1783
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 
-#: src/terminal.c:2060
+#: src/terminal.c:2062
 msgid "You have to name your profile."
 msgstr "Sa pead profiilile nime andma."
 
-#: src/terminal.c:2070
+#: src/terminal.c:2072
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Sul juba on profiil nimega \"%s\""
 
-#: src/terminal.c:2107
+#: src/terminal.c:2109
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 
-#: src/terminal.c:2171
+#: src/terminal.c:2173
 msgid "C_reate"
 msgstr "_Loo"
 
-#: src/terminal.c:2196
+#: src/terminal.c:2198
 msgid "Profile _name:"
 msgstr "Profiili _nimi:"
 
-#: src/terminal.c:2200
+#: src/terminal.c:2202
 msgid "Enter profile name"
 msgstr "Sisesta profiili nimi"
 
-#: src/terminal.c:2215
+#: src/terminal.c:2217
 msgid "_Base on:"
 msgstr "_Mallina kasuta:"
 
-#: src/terminal.c:2363
+#: src/terminal.c:2365
 msgid "Profile list"
 msgstr "Profiilide nimekiri"
 
-#: src/terminal.c:2436
+#: src/terminal.c:2438
 msgid "You must select one or more profiles to delete."
 msgstr "Kustutamiseks pead sa ühe või rohkem profiile valima."
 
-#: src/terminal.c:2459
+#: src/terminal.c:2461
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Sul peab vähemalt üks profiil olema: sa ei saa kõiki kustutada."
 
-#: src/terminal.c:2477
+#: src/terminal.c:2479
 msgid "Delete these two profiles?\n"
 msgstr "Kustutada need kaks profiili?\n"
 
-#: src/terminal.c:2479
+#: src/terminal.c:2481
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Kustutada need %d profiili?\n"
 
-#: src/terminal.c:2497
+#: src/terminal.c:2499
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Kustutada profiil \"%s\"?"
 
-#: src/terminal.c:2519
+#: src/terminal.c:2521
 msgid "Delete Profile"
 msgstr "Profiili kustutamine"
 
-#: src/terminal.c:2806
+#: src/terminal.c:2808
 msgid "Edit Profiles"
 msgstr "Profiilide muutmine"
 
-#: src/terminal.c:2846
+#: src/terminal.c:2848
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profiil, mida _kasutatakse uue terminali avamisel:"
 
-#: src/terminal.c:2868
+#: src/terminal.c:2870
 msgid "_Profiles:"
 msgstr "_Profiilid:"
 
-#: src/terminal.c:2917
+#: src/terminal.c:2919
 msgid "Click to open new profile dialog"
 msgstr ""
 
-#: src/terminal.c:2930
+#: src/terminal.c:2932
 msgid "Click to open edit profile dialog"
 msgstr ""
 
-#: src/terminal.c:2940
+#: src/terminal.c:2942
 msgid "Click to delete selected profile"
 msgstr ""
 
-#: src/terminal.c:2989
+#: src/terminal.c:2991
 msgid "Click button to choose profile"
 msgstr ""
 
-#: src/terminal.c:3410
+#: src/terminal.c:3412
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -1623,19 +1624,19 @@ msgstr ""
 "Ei leia faili \"%s\". See tähendab, et rakendus pole korralikult installitud "
 "ja dialoogiakent ei saa kuvada."
 
-#: src/terminal.c:3583
+#: src/terminal.c:3585
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
 
-#: src/terminal.c:3586
+#: src/terminal.c:3588
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
 
-#: src/terminal.c:3622
+#: src/terminal.c:3624
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 

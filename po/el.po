@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.0.1\n"
-"POT-Creation-Date: 2003-02-05 21:34-0500\n"
+"POT-Creation-Date: 2003-06-02 15:26-0400\n"
 "PO-Revision-Date: 2003-01-07 14:45+0200\n"
 "Last-Translator: Kostas Papadimas <pkst@gmx.net>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -27,6 +27,7 @@ msgstr "Γραμμή εντολών"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172
 #: src/terminal-profile.c:275 src/terminal-window.c:651 src/terminal.c:1080
+#: src/terminal.c:1383
 msgid "Terminal"
 msgstr "Τερματικό"
 
@@ -201,7 +202,7 @@ msgid "User Defined"
 msgstr "Καθορισμένο από το χρήστη"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal-window.c:2510
-#: src/terminal.c:2742
+#: src/terminal.c:2744
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Σφάλμα κατά την προβολή βοήθειας: %s"
@@ -788,7 +789,7 @@ msgstr "Νέα Στήλη"
 msgid "New Window"
 msgstr "Νέο Παράθυρο"
 
-#: src/terminal-accels.c:79 src/terminal.c:2166
+#: src/terminal-accels.c:79 src/terminal.c:2168
 msgid "New Profile"
 msgstr "Νέο Προφίλ"
 
@@ -1029,7 +1030,7 @@ msgstr "Μετάβαση"
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1469
+#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1471
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Σφάλμα κατά την φόρτωση ρυθμίσεων από το %s. (%s)\n"
@@ -1218,7 +1219,7 @@ msgstr "Αδυναμία φόρτωσης γραμματοσειράς \"%s\"\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Υπήρξε πρόβλημα με την εντολή για αυτό το τερματικό: %s"
 
-#: src/terminal-screen.c:1142
+#: src/terminal-screen.c:1146
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1227,80 +1228,80 @@ msgstr ""
 "Αδυναμία ανοίγματος της διεύθυνσης \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1264 src/terminal-window.c:699
+#: src/terminal-screen.c:1268 src/terminal-window.c:699
 msgid "_New Window"
 msgstr "_Νέο Παράθυρο"
 
-#: src/terminal-screen.c:1271 src/terminal-window.c:702
+#: src/terminal-screen.c:1275 src/terminal-window.c:702
 msgid "New _Tab"
 msgstr "Νέα _Στήλη"
 
-#: src/terminal-screen.c:1295 src/terminal-window.c:803
+#: src/terminal-screen.c:1299 src/terminal-window.c:803
 msgid "_Profile"
 msgstr "_Προφίλ"
 
-#: src/terminal-screen.c:1345
+#: src/terminal-screen.c:1349
 msgid "_Edit Current Profile..."
 msgstr "_Επεξεργασία Τρέχοντος Προφίλ..."
 
-#: src/terminal-screen.c:1351
+#: src/terminal-screen.c:1355
 msgid "_Input Methods"
 msgstr "Μέθοδοι ε_ισαγωγής"
 
-#: src/terminal-screen.c:1367
+#: src/terminal-screen.c:1371
 msgid "Hide _Menubar"
 msgstr "Απόκρυψη _Μπάρας μενού"
 
-#: src/terminal-screen.c:1372
+#: src/terminal-screen.c:1376
 msgid "Show _Menubar"
 msgstr "Εμφάνιση _Μπάρας μενού"
 
-#: src/terminal-screen.c:1381
+#: src/terminal-screen.c:1385
 msgid "Secure _Keyboard"
 msgstr "Ασφαλές _Πληκτρολόγιο"
 
-#: src/terminal-screen.c:1387
+#: src/terminal-screen.c:1391
 msgid "_Open Link"
 msgstr "_Άνοιγμα Συνδέσμου"
 
-#: src/terminal-screen.c:1394
+#: src/terminal-screen.c:1398
 msgid "_Copy Link Address"
 msgstr "Αντιγρα_φή Διεύθυνσης Συνδέσμου"
 
-#: src/terminal-screen.c:1743
+#: src/terminal-screen.c:1747
 msgid "Change terminal title"
 msgstr "Αλλαγή τίτλου τερματικού"
 
-#: src/terminal-screen.c:1770
+#: src/terminal-screen.c:1774
 msgid "_Title:"
 msgstr "_Τίτλος:"
 
-#: src/terminal-screen.c:1888
+#: src/terminal-screen.c:1892
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "το text/plain που στάλθηκε στο τερματικό είχε λάθος μορφή (%d) ή μήκος (%d)\n"
 
-#: src/terminal-screen.c:1911
+#: src/terminal-screen.c:1915
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Το χρώμα που στάλθηκε στο τερματικό είχε λάθος μορφή (%d) ή μήκος (%d)\n"
 
-#: src/terminal-screen.c:1954
+#: src/terminal-screen.c:1958
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Το Mozilla url που στάλθηκε στο τερματικό είχε λάθος μορφή (%d) ή μήκος (%"
 "d)\n"
 
-#: src/terminal-screen.c:2003
+#: src/terminal-screen.c:2007
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Η λίστα URI που στάλθηκε στο τερματικό είχε λάθος μορφή (%d) ή μάκρος (%d)\n"
 
-#: src/terminal-screen.c:2057
+#: src/terminal-screen.c:2061
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -1308,7 +1309,7 @@ msgstr ""
 "Το όνομα αρχείου εικόνας που δόθηκε στο τερματικό είχε λάθος μορφή (%d) ή "
 "μήκος (%d)\n"
 
-#: src/terminal-screen.c:2083
+#: src/terminal-screen.c:2087
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Σφάλμα μετατροπής URI \"%s\" σε όνομα αρχείου: %s\n"
@@ -1464,7 +1465,7 @@ msgstr "_Αρχείο"
 #
 # #-#-#-#-#  mrproject-el.po (mrproject 0.5)  #-#-#-#-#
 #
-#: src/terminal-window.c:1924 src/terminal.c:2773
+#: src/terminal-window.c:1924 src/terminal.c:2775
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
@@ -1824,12 +1825,12 @@ msgstr "Δεν δόθηκε επιχείρημα στο --screen option\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "Δεν υπάρχει τέτοιο προφίλ '%s', χρήση εξ ορισμού προφίλ\n"
 
-#: src/terminal.c:1431
+#: src/terminal.c:1433
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Μη έγκυρο όρισμα: \"%s\"\n"
 
-#: src/terminal.c:1485
+#: src/terminal.c:1487
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1838,107 +1839,107 @@ msgstr ""
 "Σφάλμα συνδρομής στην ειδοποίηση για αλλαγές στη λίστα προφίλ τερματικού. (%"
 "s)\n"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1723
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Μη έγκυρο αλφαριθμητικό γεωμετρίας \"%s\"\n"
 
-#: src/terminal.c:1781
+#: src/terminal.c:1783
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Σφάλμα λήψης της λίστας προφίλ τερματικού. (%s)\n"
 
-#: src/terminal.c:2060
+#: src/terminal.c:2062
 msgid "You have to name your profile."
 msgstr "Θα πρέπει να ονομάσετε το προφίλ σας."
 
-#: src/terminal.c:2070
+#: src/terminal.c:2072
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Έχετε ήδη ένα προφίλ που ονομάζεται \"%s\""
 
-#: src/terminal.c:2107
+#: src/terminal.c:2109
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Το προφίλ που επιλέξατε ως βάση για το νέο σας προφίλ δεν υπάρχει"
 
-#: src/terminal.c:2171
+#: src/terminal.c:2173
 msgid "C_reate"
 msgstr "Δημιουρ_γία"
 
-#: src/terminal.c:2196
+#: src/terminal.c:2198
 msgid "Profile _name:"
 msgstr "Όνομα _προφίλ:"
 
-#: src/terminal.c:2200
+#: src/terminal.c:2202
 msgid "Enter profile name"
 msgstr "Εισάγετε όνομα προφίλ"
 
-#: src/terminal.c:2215
+#: src/terminal.c:2217
 msgid "_Base on:"
 msgstr "_Βασίζεται σε:"
 
-#: src/terminal.c:2363
+#: src/terminal.c:2365
 msgid "Profile list"
 msgstr "Λίστα από προφίλ"
 
-#: src/terminal.c:2436
+#: src/terminal.c:2438
 msgid "You must select one or more profiles to delete."
 msgstr "Θα πρέπει να επιλέξετε ένα ή περισσότερα προφίλ για διαγραφή."
 
-#: src/terminal.c:2459
+#: src/terminal.c:2461
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "Θα πρέπει να έχετε τουλάχιστον ένα προφίλ, δε μπορείτε να τα διαγράψετε όλα."
 
-#: src/terminal.c:2477
+#: src/terminal.c:2479
 msgid "Delete these two profiles?\n"
 msgstr "Διαγραφή αυτών των δύο προφίλ;\n"
 
-#: src/terminal.c:2479
+#: src/terminal.c:2481
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Διαγραφή αυτών των %d προφίλ;\n"
 
-#: src/terminal.c:2497
+#: src/terminal.c:2499
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Διαγραφή προφίλ \"%s\";"
 
-#: src/terminal.c:2519
+#: src/terminal.c:2521
 msgid "Delete Profile"
 msgstr "Διαγραφή Προφίλ"
 
-#: src/terminal.c:2806
+#: src/terminal.c:2808
 msgid "Edit Profiles"
 msgstr "Επεξεργασία Προφίλ"
 
-#: src/terminal.c:2846
+#: src/terminal.c:2848
 msgid "Profile _used when launching a new terminal:"
 msgstr "Προφίλ _που χρησιμοποιείται κατά την εκκίνηση ενός νέου τερματικού:"
 
-#: src/terminal.c:2868
+#: src/terminal.c:2870
 msgid "_Profiles:"
 msgstr "_Προφίλ:"
 
-#: src/terminal.c:2917
+#: src/terminal.c:2919
 msgid "Click to open new profile dialog"
 msgstr "Κλικ για να ανοίξετε ένα νέο διάλογο προφίλ"
 
-#: src/terminal.c:2930
+#: src/terminal.c:2932
 msgid "Click to open edit profile dialog"
 msgstr "Κλίκ για να ανοίξετε ένα νέο διάλογο επεξεργασίας προφίλ"
 
 #
-#: src/terminal.c:2940
+#: src/terminal.c:2942
 msgid "Click to delete selected profile"
 msgstr "Κάντε κλικ για να διαγράψετε το επιλεγμένο προφίλ"
 
-#: src/terminal.c:2989
+#: src/terminal.c:2991
 msgid "Click button to choose profile"
 msgstr "Κλίκ στο κουμπί για την επιλογή προφίλ"
 
-#: src/terminal.c:3410
+#: src/terminal.c:3412
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -1947,7 +1948,7 @@ msgstr ""
 "Το αρχείο \"%s\" λείπει. Αυτό σημαίνει ότι η εφαρμογή δεν έχει εγκατασταθεί "
 "σωστά, έτσι ο διάλογος δε μπορεί να εμφανιστεί."
 
-#: src/terminal.c:3583
+#: src/terminal.c:3585
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1955,7 +1956,7 @@ msgstr ""
 "Φαίνεται ότι δεν έχετε εγκαταστήσει το gnome-terminal.server σε έγκυρη "
 "τοποθεσία. Απενεργοποιήθηκε η κατάσταση εργοστασίου.\n"
 
-#: src/terminal.c:3586
+#: src/terminal.c:3588
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1963,7 +1964,7 @@ msgstr ""
 "Σφάλμα συνδρομής τερματικού με την υπηρεσία ενεργοποίησης, απενεργοποιήθηκε "
 "η κατάσταση εργοστασίου.\n"
 
-#: src/terminal.c:3622
+#: src/terminal.c:3624
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "Αποτυχία ανάληψης εξυπηρετητή τερματικού από τον εξυπηρετητή ενεργοποίησης\n"

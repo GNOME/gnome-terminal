@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2003-02-09 12:05+0100\n"
+"POT-Creation-Date: 2003-06-02 15:26-0400\n"
 "PO-Revision-Date: 2003-02-10 18:23+0200\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -21,6 +21,7 @@ msgstr "Komut Satırı"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172
 #: src/terminal-profile.c:275 src/terminal-window.c:651 src/terminal.c:1080
+#: src/terminal.c:1383
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -185,7 +186,7 @@ msgid "User Defined"
 msgstr "Kullanıcının Belirttiği"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal-window.c:2510
-#: src/terminal.c:2742
+#: src/terminal.c:2744
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Yardım gösterilirken hata oluştu: %s"
@@ -203,7 +204,9 @@ msgstr "_Kodlama"
 msgid ""
 "There was an error subscribing to notification of terminal encoding list "
 "changes. (%s)\n"
-msgstr "Konsol kodlama listesi değişikliikleri uyarılarına kaydolunurken hata oluştu (%s)\n"
+msgstr ""
+"Konsol kodlama listesi değişikliikleri uyarılarına kaydolunurken hata oluştu "
+"(%s)\n"
 
 #: src/gnome-terminal.glade2.h:1 src/x-font-selector.c:883
 msgid "*"
@@ -486,7 +489,8 @@ msgid "Terminal applications have these colors available to them."
 msgstr "Konsol uygulamaları için bu renkleri kullanılabilir yap."
 
 #: src/gnome-terminal.glade2.h:72
-msgid "The command running inside the terminal may dynamically set a new title."
+msgid ""
+"The command running inside the terminal may dynamically set a new title."
 msgstr "Konsol içinde çalıştırılan komutlar başlığı etkilesin."
 
 #: src/gnome-terminal.glade2.h:73
@@ -713,7 +717,7 @@ msgstr "Yeni _Sekme"
 msgid "New Window"
 msgstr "_Yeni Pencere"
 
-#: src/terminal-accels.c:79 src/terminal.c:2166
+#: src/terminal-accels.c:79 src/terminal.c:2168
 msgid "New Profile"
 msgstr "_Yeni Profil"
 
@@ -845,7 +849,7 @@ msgstr "Git"
 msgid "Help"
 msgstr "Yardım"
 
-#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1469
+#: src/terminal-accels.c:264 src/terminal-profile.c:391 src/terminal.c:1471
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "%s'den ayar yüklenirken hata oluştu: (%s)\n"
@@ -871,8 +875,10 @@ msgstr "%s anahtarının ayar değeri uygun bir değer değil, \"%s\"\n"
 
 #: src/terminal-accels.c:358 src/terminal-window.c:1028
 #, c-format
-msgid "There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr "Kısayol olarak kullanılacak ayar değerleri yüklenirken hata oluştu. (%s)\n"
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Kısayol olarak kullanılacak ayar değerleri yüklenirken hata oluştu. (%s)\n"
 
 #: src/terminal-accels.c:372
 #, c-format
@@ -885,8 +891,8 @@ msgid ""
 "There was an error loading config value for whether to use menu "
 "accelerators. (%s)\n"
 msgstr ""
-"Menü hızlandırıcı olarak kullanılacak ayar değerleri yüklenirken "
-"hata oluştu (%s)\n"
+"Menü hızlandırıcı olarak kullanılacak ayar değerleri yüklenirken hata oluştu "
+"(%s)\n"
 
 #: src/terminal-accels.c:399
 #, c-format
@@ -898,7 +904,8 @@ msgstr "use_menu_accelerators için uyarılara kaydolurken hata oluştu (%s)\n"
 #: src/terminal-accels.c:777
 #, c-format
 msgid "Error propagating accelerator change to configuration database: %s\n"
-msgstr "Hızlandırı değişiklikleri ayar veri tabanına yayılırken hata oluştu: %s\n"
+msgstr ""
+"Hızlandırı değişiklikleri ayar veri tabanına yayılırken hata oluştu: %s\n"
 
 #: src/terminal-accels.c:947
 #, c-format
@@ -928,7 +935,8 @@ msgstr "Kısayol _Tuşu"
 msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
 "(%s)\n"
-msgstr "Konsol profil değişikliği uyarılarına kaydolunurken hata oluştu (%s).\n"
+msgstr ""
+"Konsol profil değişikliği uyarılarına kaydolunurken hata oluştu (%s).\n"
 
 #: src/terminal-profile.c:1001
 #, c-format
@@ -942,18 +950,25 @@ msgstr "\"%2$s\" profili için \"%1$s\" simgesi yüklenemedi: %3$s\n"
 
 #: src/terminal-profile.c:1192
 #, c-format
-msgid "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
-msgstr "\"%2$s\" konsol profili için \"%1$s\" adında bir arkaplan resmi bulunamadı\n"
+msgid ""
+"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+msgstr ""
+"\"%2$s\" konsol profili için \"%1$s\" adında bir arkaplan resmi bulunamadı\n"
 
 #: src/terminal-profile.c:1206
 #, c-format
-msgid "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "\"%2$s\" konsol profili için \"%1$s\" arkaplanı yüklenirken hata oluştu: %3$s\n"
+msgid ""
+"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+msgstr ""
+"\"%2$s\" konsol profili için \"%1$s\" arkaplanı yüklenirken hata oluştu: %3"
+"$s\n"
 
 #: src/terminal-profile.c:1860
 #, c-format
-msgid "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
-msgstr "Gnome Konsolu: Ayar veritabanındaki \"%s\" yazı tipi kümesi adı hatalı\n"
+msgid ""
+"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+msgstr ""
+"Gnome Konsolu: Ayar veritabanındaki \"%s\" yazı tipi kümesi adı hatalı\n"
 
 #: src/terminal-profile.c:2161
 #, c-format
@@ -1015,7 +1030,7 @@ msgstr "\"%s\" yazı tipi yüklenemiyor\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Bu konsol için komutla ilgili bir hata oluştu: %s"
 
-#: src/terminal-screen.c:1142
+#: src/terminal-screen.c:1146
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1024,80 +1039,81 @@ msgstr ""
 "\"%s\" adresi açılamıyor:\n"
 "%s"
 
-#: src/terminal-screen.c:1264 src/terminal-window.c:699
+#: src/terminal-screen.c:1268 src/terminal-window.c:699
 msgid "_New Window"
 msgstr "_Yeni Pencere"
 
-#: src/terminal-screen.c:1271 src/terminal-window.c:702
+#: src/terminal-screen.c:1275 src/terminal-window.c:702
 msgid "New _Tab"
 msgstr "Yeni _Sekme"
 
-#: src/terminal-screen.c:1295 src/terminal-window.c:803
+#: src/terminal-screen.c:1299 src/terminal-window.c:803
 msgid "_Profile"
 msgstr "_Profil"
 
-#: src/terminal-screen.c:1345
+#: src/terminal-screen.c:1349
 msgid "_Edit Current Profile..."
 msgstr "_Güncel Profili Düzenle..."
 
-#: src/terminal-screen.c:1351
+#: src/terminal-screen.c:1355
 msgid "_Input Methods"
 msgstr "G_irdi Yönetemleri"
 
-#: src/terminal-screen.c:1367
+#: src/terminal-screen.c:1371
 msgid "Hide _Menubar"
 msgstr "Menü Çubuğunu _Gizle"
 
-#: src/terminal-screen.c:1372
+#: src/terminal-screen.c:1376
 msgid "Show _Menubar"
 msgstr "_Menü Çubuğunu Göster"
 
-#: src/terminal-screen.c:1381
+#: src/terminal-screen.c:1385
 msgid "Secure _Keyboard"
 msgstr "Güvenli _Klavye"
 
-#: src/terminal-screen.c:1387
+#: src/terminal-screen.c:1391
 msgid "_Open Link"
 msgstr "_Bağlantıyı Aç"
 
-#: src/terminal-screen.c:1394
+#: src/terminal-screen.c:1398
 msgid "_Copy Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
-#: src/terminal-screen.c:1743
+#: src/terminal-screen.c:1747
 msgid "Change terminal title"
 msgstr "Terminal başlığını değiştir"
 
-#: src/terminal-screen.c:1770
+#: src/terminal-screen.c:1774
 msgid "_Title:"
 msgstr "_Başlık:"
 
-#: src/terminal-screen.c:1888
+#: src/terminal-screen.c:1892
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Konsola düşen metin/düz yanlış biçimde (%d) veya uzunlukta (%d)\n"
 
-#: src/terminal-screen.c:1911
+#: src/terminal-screen.c:1915
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Konsola düşen renk yanlış biçimde veya (%d) veya uzunlukta (%d)\n"
 
-#: src/terminal-screen.c:1954
+#: src/terminal-screen.c:1958
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Konsola düşen Mozilla adresi yanlış biçimde (%d) veya uzunlukta (%d)\n"
 
-#: src/terminal-screen.c:2003
+#: src/terminal-screen.c:2007
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Konsola düşen URI listesi yanlış biçimde (%d) veya uzunlukta (%d)\n"
 
-#: src/terminal-screen.c:2057
+#: src/terminal-screen.c:2061
 #, c-format
-msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
+msgid ""
+"Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Konsola düşen resim adı yanlış biçimde (%d) veya uzunlukta (%d)\n"
 
-#: src/terminal-screen.c:2083
+#: src/terminal-screen.c:2087
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "\"%s\" URI dosya adına çevrilirken hata oluştu: %s\n"
@@ -1215,13 +1231,14 @@ msgstr "_Hakkında"
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
-msgstr "Konsol penceresi ayar değişikliği uyarılarına kaydolurken hata oluştu (%s)\n"
+msgstr ""
+"Konsol penceresi ayar değişikliği uyarılarına kaydolurken hata oluştu (%s)\n"
 
 #: src/terminal-window.c:1922
 msgid "_File"
 msgstr "_Dosya"
 
-#: src/terminal-window.c:1924 src/terminal.c:2773
+#: src/terminal-window.c:1924 src/terminal.c:2775
 msgid "_Edit"
 msgstr "Dü_zenle"
 
@@ -1256,8 +1273,8 @@ msgid ""
 "_NET_WM_STATE_FULLSCREEN property.)"
 msgstr ""
 "Masaüstü dağıtımınız tam ekran özelliğini desteklemiyor.\n"
-"(Teknik olarak _NET_WM_STATE_FULLSCREEN özelliğine sahip "
-"bir pencere yöneticisi kullanmanız gerekmektedir.)"
+"(Teknik olarak _NET_WM_STATE_FULLSCREEN özelliğine sahip bir pencere "
+"yöneticisi kullanmanız gerekmektedir.)"
 
 #: src/terminal-window.c:2540
 msgid "translator_credits"
@@ -1280,8 +1297,8 @@ msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
-"Verilen profille bir sekme içeren yeni bir pencere aç. Bu özelliklerden birde fazlası "
-"kullanılabilir."
+"Verilen profille bir sekme içeren yeni bir pencere aç. Bu özelliklerden "
+"birde fazlası kullanılabilir."
 
 #: src/terminal.c:200 src/terminal.c:209
 msgid "PROFILENAME"
@@ -1292,16 +1309,16 @@ msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Verilen profille son açılan pencerede yeni bir sekme aç. Bu özelliklerden birden "
-"fazlası uygulanabilir."
+"Verilen profille son açılan pencerede yeni bir sekme aç. Bu özelliklerden "
+"birden fazlası uygulanabilir."
 
 #: src/terminal.c:217
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
-"Verilen profil tanımıyla sekme içeren bir pencere aç. İlk olarak "
-"oturumları kaydetmek için kullanılır."
+"Verilen profil tanımıyla sekme içeren bir pencere aç. İlk olarak oturumları "
+"kaydetmek için kullanılır."
 
 #: src/terminal.c:218 src/terminal.c:227
 msgid "PROFILEID"
@@ -1320,8 +1337,8 @@ msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
 msgstr ""
-"Son belirtilen pencere için rol ata; Sadece bir pencere için uygulanır, "
-"her pencere için ayrı ayrı konsoldan uygulanabilir."
+"Son belirtilen pencere için rol ata; Sadece bir pencere için uygulanır, her "
+"pencere için ayrı ayrı konsoldan uygulanabilir."
 
 #: src/terminal.c:236
 msgid "ROLE"
@@ -1333,8 +1350,8 @@ msgid ""
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
-"Son belirtilen pencere için menü çubuğunu aç; tek bir pencere için uygulanır, "
-"komut satırından her pencere için ayrı ayrı uygulanabilir"
+"Son belirtilen pencere için menü çubuğunu aç; tek bir pencere için "
+"uygulanır, komut satırından her pencere için ayrı ayrı uygulanabilir"
 
 #: src/terminal.c:253
 msgid ""
@@ -1342,16 +1359,16 @@ msgid ""
 "window; can be specified once for each window you create from the command "
 "line."
 msgstr ""
-"Son belirtilen pencere için menü çubuğunu kapat; tek bir pencere için uygulanır, "
-"komut satırından her pencere için ayrı ayrı uygulanabilir"
+"Son belirtilen pencere için menü çubuğunu kapat; tek bir pencere için "
+"uygulanır, komut satırından her pencere için ayrı ayrı uygulanabilir"
 
 #: src/terminal.c:262
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
 msgstr ""
-"X yapısı belirtimi (Bknz: \"X\" kılavuz sayfaları), her açılacak pencere için "
-"uygulanabilir."
+"X yapısı belirtimi (Bknz: \"X\" kılavuz sayfaları), her açılacak pencere "
+"için uygulanabilir."
 
 #: src/terminal.c:263
 msgid "GEOMETRY"
@@ -1411,7 +1428,9 @@ msgstr "--command/-e'ye argüman uygun bir komut değil: %s\n"
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
-msgstr "--command/-e/--execute/-x bir pencere veya sekme için birden fazla belirtildi\n"
+msgstr ""
+"--command/-e/--execute/-x bir pencere veya sekme için birden fazla "
+"belirtildi\n"
 
 #: src/terminal.c:750
 msgid ""
@@ -1500,9 +1519,9 @@ msgid ""
 "you might want to create a profile with the desired setting, and use the new "
 "--window-with-profile option\n"
 msgstr ""
-"Bu gnome-terminal tarafından desteklenmeyen bir özellik verildi; "
-"İstenilen özellikle bir profil yaratmak istediniz ve --window-with-profile "
-"özelliğini kullandınız\n"
+"Bu gnome-terminal tarafından desteklenmeyen bir özellik verildi; İstenilen "
+"özellikle bir profil yaratmak istediniz ve --window-with-profile özelliğini "
+"kullandınız\n"
 
 #: src/terminal.c:1041
 msgid "--startup-id option given twice\n"
@@ -1525,116 +1544,117 @@ msgstr "--screnn özelliği için bir argüman verilmedi\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "%s profili yok, öntanımlı profil kullanılıyor\n"
 
-#: src/terminal.c:1431
+#: src/terminal.c:1433
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "hatalı argüman: \"%s\"\n"
 
-#: src/terminal.c:1485
+#: src/terminal.c:1487
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr "Konsol profil değişim uyarısına kaydolunurken hata oluştu. (%s)\n"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1723
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Hatalı yapı dizgesi \"%s\"\n"
 
-#: src/terminal.c:1781
+#: src/terminal.c:1783
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Konsol profillerinin listesi alınırken hata oluştu. (%s)\n"
 
-#: src/terminal.c:2060
+#: src/terminal.c:2062
 msgid "You have to name your profile."
 msgstr "Profilinize bir isim vermelisiniz."
 
-#: src/terminal.c:2070
+#: src/terminal.c:2072
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Zaten %s adında bir profiliniz var."
 
-#: src/terminal.c:2107
-msgid "The profile you selected as a base for your new profile no longer exists"
+#: src/terminal.c:2109
+msgid ""
+"The profile you selected as a base for your new profile no longer exists"
 msgstr "Yeni profilinize taban olması için seçtiğiniz profil artık yok"
 
-#: src/terminal.c:2171
+#: src/terminal.c:2173
 msgid "C_reate"
 msgstr "_Oluştur"
 
-#: src/terminal.c:2196
+#: src/terminal.c:2198
 msgid "Profile _name:"
 msgstr "_Profil adı:"
 
-#: src/terminal.c:2200
+#: src/terminal.c:2202
 msgid "Enter profile name"
 msgstr "Profil adı girin"
 
-#: src/terminal.c:2215
+#: src/terminal.c:2217
 msgid "_Base on:"
 msgstr "_Taban:"
 
-#: src/terminal.c:2363
+#: src/terminal.c:2365
 msgid "Profile list"
 msgstr "Profil listesi"
 
-#: src/terminal.c:2436
+#: src/terminal.c:2438
 msgid "You must select one or more profiles to delete."
 msgstr "Silmek için bir veya daha fazla profil seçmeniz gerekli."
 
-#: src/terminal.c:2459
+#: src/terminal.c:2461
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "En azından bir tane profiliniz olmalıdır, hepsini silemezsiniz."
 
-#: src/terminal.c:2477
+#: src/terminal.c:2479
 msgid "Delete these two profiles?\n"
 msgstr "Bu iki profil silinsin mi?\n"
 
-#: src/terminal.c:2479
+#: src/terminal.c:2481
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Bu %d profil silinsin mi?\n"
 
-#: src/terminal.c:2497
+#: src/terminal.c:2499
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "%s profili silinsin mi?"
 
-#: src/terminal.c:2519
+#: src/terminal.c:2521
 msgid "Delete Profile"
 msgstr "Profili Sil"
 
-#: src/terminal.c:2806
+#: src/terminal.c:2808
 msgid "Edit Profiles"
 msgstr "Profilleri Düzenle"
 
-#: src/terminal.c:2846
+#: src/terminal.c:2848
 msgid "Profile _used when launching a new terminal:"
 msgstr "Yeni bir terminal çalıştırıldığı zaman kullanılacak profil:"
 
-#: src/terminal.c:2868
+#: src/terminal.c:2870
 msgid "_Profiles:"
 msgstr "_Profiller:"
 
-#: src/terminal.c:2917
+#: src/terminal.c:2919
 msgid "Click to open new profile dialog"
 msgstr "Yeni profil penceresi açmak için tıkla"
 
-#: src/terminal.c:2930
+#: src/terminal.c:2932
 msgid "Click to open edit profile dialog"
 msgstr "Profile düzenleme penceresini açmak için tıklayın"
 
-#: src/terminal.c:2940
+#: src/terminal.c:2942
 msgid "Click to delete selected profile"
 msgstr "Seçilen profili silmek için tıklayın"
 
-#: src/terminal.c:2989
+#: src/terminal.c:2991
 msgid "Click button to choose profile"
 msgstr "Profili seçmek için tıklayın"
 
-#: src/terminal.c:3410
+#: src/terminal.c:3412
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -1643,19 +1663,22 @@ msgstr ""
 "\"%s\" dosyası bulunmaıyor. Uygulama düzgün yüklenmemiş olabilir, bu yüzden "
 "pencere gösterilemeyecek."
 
-#: src/terminal.c:3583
+#: src/terminal.c:3585
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
-msgstr "Gnome-terminal-server doğru konumda yüklü değil. Üretici kipi kapatıldı.\n"
+msgstr ""
+"Gnome-terminal-server doğru konumda yüklü değil. Üretici kipi kapatıldı.\n"
 
-#: src/terminal.c:3586
+#: src/terminal.c:3588
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
-msgstr "Etkinleştirici servis ile konsola kadolunurken hata oluştu; üretici kipi kapatıldı.\n"
+msgstr ""
+"Etkinleştirici servis ile konsola kadolunurken hata oluştu; üretici kipi "
+"kapatıldı.\n"
 
-#: src/terminal.c:3622
+#: src/terminal.c:3624
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Etkinleştirici sunucudan konsol sunucusu alınamadı\n"
 
@@ -1827,7 +1850,8 @@ msgstr "Seçilen yazı tipi uygun değil."
 
 #: src/x-font-selector.c:1847
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Bu 2 baytlık bir yazı tipi olduğundan dolayı düzgün görüntülenmeyebilir."
+msgstr ""
+"Bu 2 baytlık bir yazı tipi olduğundan dolayı düzgün görüntülenmeyebilir."
 
 #: src/x-font-selector.c:1953
 msgid "(unknown)"
@@ -1853,4 +1877,3 @@ msgstr "Bir yazıtipi seçin"
 
 #~ msgid "Title"
 #~ msgstr "_Başlık"
-
