@@ -23,7 +23,9 @@ profterm_SOURCES=				\
 	terminal-screen.c			\
 	terminal-screen.h			\
 	terminal-window.c			\
-	terminal-window.h
+	terminal-window.h			\
+	eggcellrendererkeys.c			\
+	eggcellrendererkeys.h
 
 profterm_LDADD= @TERM_LIBS@
 
