@@ -21,6 +21,7 @@
 
 #include "terminal-widget.h"
 
+#include <string.h>
 #include <vte/vte.h>
 
 #define UNIMPLEMENTED /* g_warning (G_STRLOC": unimplemented") */
@@ -193,7 +194,7 @@ terminal_widget_set_background_image_file (GtkWidget  *widget,
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
 
-  if (fname)
+  if ((fname != NULL) && (strlen(fname) > 0))
     vte_terminal_set_background_image_file(VTE_TERMINAL(widget), fname);
   else
     vte_terminal_set_background_image(VTE_TERMINAL(widget), NULL);
@@ -203,7 +204,7 @@ void
 terminal_widget_set_background_transparent (GtkWidget *widget,
 					    gboolean   setting)
 {
-  UNIMPLEMENTED;
+  vte_terminal_set_background_transparent(VTE_TERMINAL(widget), setting);
 }
 
 /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
@@ -212,7 +213,7 @@ terminal_widget_set_background_darkness (GtkWidget *widget,
 					 double     factor)
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_background_saturation(VTE_TERMINAL(widget), factor);
+  vte_terminal_set_background_saturation(VTE_TERMINAL(widget), 1.0 - factor);
 }
 
 void
