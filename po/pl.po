@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-06-20 15:29+0200\n"
-"PO-Revision-Date: 2002-06-20 15:31+0200\n"
+"POT-Creation-Date: 2002-07-08 12:25+0200\n"
+"PO-Revision-Date: 2002-07-07 12:28+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -56,10 +56,6 @@ msgid "ASCII DEL"
 msgstr "ASCII DEL"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "A_ccelerators:"
-msgstr "_Akceleratory:"
-
-#: src/gnome-terminal.glade2.h:1
 msgid "Background"
 msgstr "Tło"
 
@@ -102,6 +98,10 @@ msgstr "Zgodność"
 #: src/gnome-terminal.glade2.h:1
 msgid "Control-H"
 msgstr "Control-H"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Cursor _blinks"
+msgstr "_Mrugający kursor"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Custom co_mmand:"
@@ -276,8 +276,8 @@ msgid "Show _menubar by default in new terminals"
 msgstr "Domyślne wyświetlanie paska _menu w nowych terminalach"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Silence terminal _bell"
-msgstr "_Cichy dzwonek terminala"
+msgid "Terminal _bell"
+msgstr "D_zwonek terminala"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Terminal applications have these colors available to them."
@@ -319,6 +319,10 @@ msgid "When command _exits:"
 msgstr "_Po zakończeniu polecenia:"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Accelerators:"
+msgstr "_Akceleratory:"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_Allow bold text"
 msgstr "Wyświetlanie pogru_bionego tekstu"
 
@@ -333,10 +337,6 @@ msgstr "_Obraz w tle"
 #: src/gnome-terminal.glade2.h:1
 msgid "_Backspace key generates:"
 msgstr "Klawisz _Backspace generuje:"
-
-#: src/gnome-terminal.glade2.h:1
-msgid "_Blink cursor"
-msgstr "_Mrugający kursor"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "_Delete key generates:"
@@ -484,7 +484,7 @@ msgstr "roman"
 #: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
 #: src/x-font-selector.c:1
 msgid "italic"
-msgstr "italic"
+msgstr "kursywa"
 
 #: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
 #: src/x-font-selector.c:1
@@ -494,7 +494,7 @@ msgstr "pochylona"
 #: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
 #: src/x-font-selector.c:1
 msgid "reverse italic"
-msgstr "odwrócony italic"
+msgstr "odwrócona kursywa"
 
 #: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
 #: src/x-font-selector.c:1
@@ -530,7 +530,7 @@ msgstr "Nowa zakładka"
 msgid "New Window"
 msgstr "Nowe okno"
 
-#: src/terminal-accels.c:1
+#: src/terminal-accels.c:1 src/terminal.c:1
 msgid "New Profile"
 msgstr "Nowy profil"
 
@@ -627,6 +627,10 @@ msgid "Switch to Tab 12"
 msgstr "Przełączenie na 12. zakładkę"
 
 #: src/terminal-accels.c:1
+msgid "Contents"
+msgstr "Zawartość"
+
+#: src/terminal-accels.c:1
 msgid "File"
 msgstr "Plik"
 
@@ -641,6 +645,10 @@ msgstr "Widok"
 #: src/terminal-accels.c:1
 msgid "Go"
 msgstr "Przejdź"
+
+#: src/terminal-accels.c:1
+msgid "Help"
+msgstr "Pomoc"
 
 #: src/terminal-accels.c:1 src/terminal-profile.c:1 src/terminal.c:1
 #, c-format
@@ -1021,12 +1029,12 @@ msgid "_Next Tab"
 msgstr "N_astępna zakładka"
 
 #: src/terminal-window.c:1
-msgid "_Help Contents"
-msgstr "_Zawartość pomocy"
+msgid "_Contents"
+msgstr "_Zawartość"
 
 #: src/terminal-window.c:1
-msgid "_About GNOME Terminal"
-msgstr "_Informacje o Terminalu GNOME"
+msgid "_About"
+msgstr "_Informacje o"
 
 #: src/terminal-window.c:1
 #, c-format
@@ -1041,7 +1049,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Plik"
 
-#: src/terminal-window.c:1
+#: src/terminal-window.c:1 src/terminal.c:1
 msgid "_Edit"
 msgstr "_Edycja"
 
@@ -1164,7 +1172,7 @@ msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
 msgstr ""
-"Specyfikacja gemetrii X (patrz strona podręcznikowa \"X\"). Opcja może być "
+"Specyfikacja geometrii X (patrz strona podręcznikowa \"X\"). Opcja może być "
 "użyta raz dla każdego otwieranego okna."
 
 #: src/terminal.c:1
@@ -1280,7 +1288,7 @@ msgid ""
 "--window-with-profile option\n"
 msgstr ""
 "Podana opcja nie jest już obsługiwana przez tę wersję Terminala GNOME. "
-"Zamiast tego można stworzyć profil z odpowiednim ustawieniem i użyć opcji "
+"Zamiast tego można utworzyć profil z odpowiednim ustawieniem i użyć opcji "
 "--window-with-profile.\n"
 
 #: src/terminal.c:1
@@ -1327,24 +1335,20 @@ msgid ""
 msgstr "Profil wybrany jako bazowy dla nowego profilu już nie istnieje"
 
 #: src/terminal.c:1
-msgid "New terminal profile"
-msgstr "Nowy profil terminala"
-
-#: src/terminal.c:1
 msgid "C_reate"
 msgstr "S_twórz"
 
 #: src/terminal.c:1
-msgid "Profile _Name:"
-msgstr "_Nazwa profilu:"
+msgid "Profile _name:"
+msgstr "Nazwa p_rofilu:"
 
 #: src/terminal.c:1
 msgid "Enter profile name"
 msgstr "Wprowadź nazwę profilu"
 
 #: src/terminal.c:1
-msgid "_Base new profile on:"
-msgstr "_Oparcie nowego profilu na:"
+msgid "_Base on:"
+msgstr "W _oparciu o:"
 
 #: src/terminal.c:1
 msgid "Profile list"
@@ -1366,7 +1370,7 @@ msgstr "Czy usunąć te dwa profile?\n"
 #: src/terminal.c:1
 #, c-format
 msgid "Delete these %d profiles?\n"
-msgstr "Czy usunąć te %d profilli?\n"
+msgstr "Czy usunąć te %d profili?\n"
 
 #: src/terminal.c:1
 #, c-format
@@ -1374,16 +1378,12 @@ msgid "Delete profile \"%s\"?"
 msgstr "Czy usunąć profil \"%s\"?"
 
 #: src/terminal.c:1
-msgid "_No"
-msgstr "_Nie"
+msgid "Delete Profile"
+msgstr "Usunięcie profilu"
 
 #: src/terminal.c:1
-msgid "_Delete"
-msgstr "_Usuń"
-
-#: src/terminal.c:1
-msgid "Manage terminal profiles"
-msgstr "Zarządzanie profilami terminala"
+msgid "Edit Profiles"
+msgstr "Modyfikacja profili"
 
 #: src/terminal.c:1
 msgid "Profile _used when launching a new terminal:"
@@ -1394,24 +1394,12 @@ msgid "_Profiles:"
 msgstr "_Profile:"
 
 #: src/terminal.c:1
-msgid "_New..."
-msgstr "_Nowy..."
-
-#: src/terminal.c:1
 msgid "Click to open new profile dialog"
 msgstr "Kliknij, aby otworzyć okno nowego profilu"
 
 #: src/terminal.c:1
-msgid "_Edit..."
-msgstr "Z_modyfikuj..."
-
-#: src/terminal.c:1
 msgid "Click to open edit profile dialog"
 msgstr "Kliknij, aby otworzyć okno modyfikacji profilu"
-
-#: src/terminal.c:1
-msgid "_Delete..."
-msgstr "_Usuń..."
 
 #: src/terminal.c:1
 msgid "Click to delete selected profile"
@@ -1434,8 +1422,8 @@ msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
-"Przy rejestrowaniu terminala przy użyciu usługi aktywacji. Tryb generatora "
-"jest nieaktywny.\n"
+"Błąd przy rejestrowaniu terminala z użyciem usługi aktywacji. Tryb "
+"generatora jest nieaktywny.\n"
 
 #: src/terminal.c:1
 msgid "Failed to retrieve terminal server from activation server\n"
