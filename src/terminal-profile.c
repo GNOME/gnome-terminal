@@ -42,6 +42,13 @@
 #define KEY_BACKGROUND_COLOR "background_color"
 #define KEY_TITLE "title"
 #define KEY_TITLE_MODE "title_mode"
+#define KEY_ALLOW_BOLD "allow_bold"
+#define KEY_SILENT_BELL "silent_bell"
+#define KEY_WORD_CHARS "word_chars"
+#define KEY_SCROLLBAR_POSITION "scrollbar_position"
+#define KEY_SCROLLBACK_LINES "scrollback_lines"
+#define KEY_SCROLL_ON_KEYSTROKE "scroll_on_keystroke"
+#define KEY_SCROLL_ON_OUTPUT "scroll_on_output"
 
 struct _TerminalProfilePrivate
 {
@@ -50,11 +57,6 @@ struct _TerminalProfilePrivate
   GConfClient *conf;
   guint notify_id;
   TerminalSettingMask locked;
-  char *visible_name;
-  GdkColor foreground;
-  GdkColor background;
-  char *title;
-  TerminalTitleMode title_mode;
   /* can't set keys when reporting a key changed,
    * avoids a bunch of pesky signal handler blocks
    * in profile-editor.c.
@@ -63,8 +65,20 @@ struct _TerminalProfilePrivate
    * didn't really change.
    */
   int in_notification_count;
+  char *visible_name;
+  GdkColor foreground;
+  GdkColor background;
+  char *title;
+  TerminalTitleMode title_mode;
+  char *word_chars;
+  TerminalScrollbarPosition scrollbar_position;
+  int scrollback_lines;
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
+  guint allow_bold : 1;
+  guint silent_bell : 1;
+  guint scroll_on_keystroke : 1;
+  guint scroll_on_output : 1;
   guint forgotten : 1;
 };
 
@@ -73,6 +87,13 @@ static const GConfEnumStringPair title_modes[] = {
   { TERMINAL_TITLE_BEFORE, "before" },
   { TERMINAL_TITLE_AFTER, "after" },
   { TERMINAL_TITLE_IGNORE, "ignore" },
+  { -1, NULL }
+};
+
+static const GConfEnumStringPair scrollbar_positions[] = {
+  { TERMINAL_SCROLLBAR_LEFT, "left" },
+  { TERMINAL_SCROLLBAR_RIGHT, "right" },
+  { TERMINAL_SCROLLBAR_HIDDEN, "hidden" },  
   { -1, NULL }
 };
 
@@ -149,6 +170,9 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->in_notification_count = 0;
   profile->priv->title_mode = TERMINAL_TITLE_REPLACE;
   profile->priv->title = g_strdup (_("Terminal"));
+  profile->priv->scrollbar_position = TERMINAL_SCROLLBAR_RIGHT;
+  profile->priv->scrollback_lines = 1000;
+  profile->priv->allow_bold = TRUE;
 }
 
 static void
@@ -284,17 +308,42 @@ terminal_profile_set_visible_name (TerminalProfile *profile,
 gboolean
 terminal_profile_get_forgotten (TerminalProfile *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
   return profile->priv->forgotten;
 }
 
 gboolean
-terminal_profile_get_audible_bell       (TerminalProfile  *profile)
+terminal_profile_get_silent_bell (TerminalProfile  *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->silent_bell;
+}
+
+void
+terminal_profile_set_silent_bell (TerminalProfile  *profile,
+                                  gboolean          setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SILENT_BELL);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
 }
 
 gboolean
 terminal_profile_get_cursor_blink (TerminalProfile  *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+  
   return profile->priv->cursor_blink;
 }
 
@@ -318,48 +367,116 @@ terminal_profile_set_cursor_blink (TerminalProfile *profile,
 }
 
 gboolean
-terminal_profile_get_scroll_on_keypress (TerminalProfile  *profile)
+terminal_profile_get_scroll_on_keystroke (TerminalProfile  *profile)
 {
+    g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->scroll_on_keystroke;
 }
+
+
+void
+terminal_profile_set_scroll_on_keystroke (TerminalProfile  *profile,
+                                          gboolean          setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_ON_KEYSTROKE);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
 gboolean
-terminal_profile_get_login_shell        (TerminalProfile  *profile)
+terminal_profile_get_scroll_on_output (TerminalProfile  *profile)
 {
+    g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->scroll_on_output;
 }
-gboolean
-terminal_profile_get_scroll_background  (TerminalProfile  *profile)
+
+
+void
+terminal_profile_set_scroll_on_output (TerminalProfile  *profile,
+                                          gboolean          setting)
 {
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_ON_OUTPUT);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
 }
-gboolean
-terminal_profile_get_use_bold           (TerminalProfile  *profile)
-{
-}
-TerminalDeleteBinding
-terminal_profile_get_delete_key         (TerminalProfile  *profile)
-{
-}
-TerminalDeleteBinding
-terminal_profile_get_backspace_key      (TerminalProfile  *profile)
-{
-}
-TerminalPaletteType
-terminal_profile_get_palette_type       (TerminalProfile  *profile)
-{
-}
+
 TerminalScrollbarPosition
 terminal_profile_get_scrollbar_position (TerminalProfile  *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
+
+  return profile->priv->scrollbar_position;
 }
-const char*
-terminal_profile_get_font               (TerminalProfile  *profile)
+
+void
+terminal_profile_set_scrollbar_position (TerminalProfile *profile,
+                                         TerminalScrollbarPosition pos)
 {
+  char *key;
+  const char *pos_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLLBAR_POSITION);
+
+  pos_string = gconf_enum_to_string (scrollbar_positions, pos);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           pos_string,
+                           NULL);
+
+  g_free (key);
 }
+
 int
-terminal_profile_get_scrollback_lines   (TerminalProfile  *profile)
+terminal_profile_get_scrollback_lines (TerminalProfile *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 500);
+  
+  return profile->priv->scrollback_lines;  
 }
-gboolean
-terminal_profile_get_update_records     (TerminalProfile  *profile)
+
+void
+terminal_profile_set_scrollback_lines (TerminalProfile  *profile,
+                                       int               lines)
 {
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLLBACK_LINES);
+  
+  gconf_client_set_int (profile->priv->conf,
+                        key,
+                        lines,
+                        NULL);
+
+  g_free (key);
 }
 
 void
@@ -428,41 +545,31 @@ terminal_profile_set_color_scheme (TerminalProfile  *profile,
   g_free (bg_key);
 }
 
+const char*
+terminal_profile_get_word_chars (TerminalProfile  *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+    
+  return profile->priv->word_chars;
+}
+
 void
-terminal_profile_get_palette            (TerminalProfile  *profile,
-                                         GdkColor        **colors,
-                                         int               n_colors)
+terminal_profile_set_word_chars (TerminalProfile *profile,
+                                 const char      *word_chars)
 {
-}
+  char *key;
 
-gboolean
-terminal_profile_get_transparent        (TerminalProfile  *profile)
-{
-}
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_WORD_CHARS);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           word_chars,
+                           NULL);
 
-gboolean
-terminal_profile_get_shaded             (TerminalProfile  *profile)
-{
-}
-
-GdkPixmap*
-terminal_profile_get_background_pixmap  (TerminalProfile  *profile)
-{
-}
-
-const char*
-terminal_profile_get_word_class         (TerminalProfile  *profile)
-{
-}
-
-const char*
-terminal_profile_get_term_variable      (TerminalProfile  *profile)
-{
-}
-
-gboolean
-terminal_profile_get_lock_title         (TerminalProfile  *profile)
-{
+  g_free (key);
 }
 
 const char*
@@ -518,6 +625,34 @@ terminal_profile_set_title_mode (TerminalProfile *profile,
                            key,
                            mode_string,
                            NULL);
+
+  g_free (key);
+}
+
+
+gboolean
+terminal_profile_get_allow_bold (TerminalProfile  *profile)
+{
+    g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->allow_bold;
+}
+
+void
+terminal_profile_set_allow_bold (TerminalProfile  *profile,
+                                          gboolean          setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_ALLOW_BOLD);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
 
   g_free (key);
 }
@@ -640,12 +775,66 @@ set_title_mode (TerminalProfile *profile,
     }
 }
 
+static gboolean
+set_word_chars (TerminalProfile *profile,
+                const char      *candidate_chars)
+{
+  if (candidate_chars &&
+      strcmp (profile->priv->title, candidate_chars) == 0)
+    return FALSE;
+  
+  if (candidate_chars != NULL)
+    {
+      g_free (profile->priv->word_chars);
+      profile->priv->word_chars = g_strdup (candidate_chars);
+    }
+  /* otherwise just leave the old chars */
+  
+  return TRUE;
+}
+
+static gboolean
+set_scrollbar_position (TerminalProfile *profile,
+                        const char      *str_val)
+{
+  int pos; /* TerminalScrollbarPosition */
+  
+  if (str_val &&
+      gconf_string_to_enum (scrollbar_positions, str_val, &pos) &&
+      pos != profile->priv->scrollbar_position)
+    {
+      profile->priv->scrollbar_position = pos;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+set_scrollback_lines (TerminalProfile *profile,
+                      int              int_val)
+{
+  if (int_val >= 1 &&
+      int_val != profile->priv->scrollback_lines)
+    {
+      profile->priv->scrollback_lines = int_val;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
 void
 terminal_profile_update (TerminalProfile *profile)
 {
   char *key;
   gboolean bool_val;
   char *str_val;
+  int int_val;
   TerminalSettingMask mask;
   TerminalSettingMask locked;
   TerminalSettingMask old_locked;
@@ -765,6 +954,121 @@ terminal_profile_update (TerminalProfile *profile)
     locked |= TERMINAL_SETTING_TITLE_MODE;
   
   g_free (key);
+
+
+  /* KEY_ALLOW_BOLD */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_ALLOW_BOLD);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->allow_bold)
+    {
+      mask |= TERMINAL_SETTING_ALLOW_BOLD;
+      profile->priv->allow_bold = bool_val;
+    }  
+
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_ALLOW_BOLD;
+  
+  g_free (key);
+
+  /* KEY_SILENT_BELL */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SILENT_BELL);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->silent_bell)
+    {
+      mask |= TERMINAL_SETTING_SILENT_BELL;
+      profile->priv->silent_bell = bool_val;
+    }  
+
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SILENT_BELL;
+  
+  g_free (key);
+
+  /* KEY_WORD_CHARS */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_WORD_CHARS);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_word_chars (profile, str_val))
+    mask |= TERMINAL_SETTING_WORD_CHARS;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_WORD_CHARS;
+  
+  g_free (key);
+
+  /* KEY_SCROLLBAR_POSITION */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLLBAR_POSITION);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_scrollbar_position (profile, str_val))
+    mask |= TERMINAL_SETTING_SCROLLBAR_POSITION;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SCROLLBAR_POSITION;
+  
+  g_free (key);
+
+  /* KEY_SCROLLBACK_LINES */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLLBACK_LINES);
+  int_val = gconf_client_get_int (profile->priv->conf,
+                                  key, NULL);
+  if (set_scrollback_lines (profile, int_val))
+    mask |= TERMINAL_SETTING_SCROLLBACK_LINES;
+
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
+  
+  g_free (key);
+
+  
+  /* KEY_SCROLL_ON_KEYSTROKE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_ON_KEYSTROKE);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->scroll_on_keystroke)
+    {
+      mask |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
+      profile->priv->scroll_on_keystroke = bool_val;
+    }  
+
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
+  
+  g_free (key);
+
+  /* KEY_SCROLL_ON_OUTPUT */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_ON_OUTPUT);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->scroll_on_output)
+    {
+      mask |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
+      profile->priv->scroll_on_output = bool_val;
+    }  
+
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
+  
+  g_free (key);
+
   
   /* Update state and emit signals */
   
@@ -916,6 +1220,113 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_TITLE_MODE);
     }
+  else if (strcmp (key, KEY_ALLOW_BOLD) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->allow_bold)
+        {
+          mask |= TERMINAL_SETTING_ALLOW_BOLD;
+          profile->priv->allow_bold = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_ALLOW_BOLD);
+    }
+  else if (strcmp (key, KEY_SILENT_BELL) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->silent_bell)
+        {
+          mask |= TERMINAL_SETTING_SILENT_BELL;
+          profile->priv->silent_bell = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SILENT_BELL);
+    }
+  else if (strcmp (key, KEY_WORD_CHARS) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_word_chars (profile, str_val))
+        mask |= TERMINAL_SETTING_WORD_CHARS;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_WORD_CHARS);
+    }
+  else if (strcmp (key, KEY_SCROLLBAR_POSITION) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_scrollbar_position (profile, str_val))
+        mask |= TERMINAL_SETTING_SCROLLBAR_POSITION;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SCROLLBAR_POSITION);
+    }
+  else if (strcmp (key, KEY_SCROLLBACK_LINES) == 0)
+    {
+      int int_val;
+
+      int_val = profile->priv->scrollback_lines;
+      if (val && val->type == GCONF_VALUE_INT)
+        int_val = gconf_value_get_int (val);
+      
+      if (set_scrollback_lines (profile, int_val))
+        mask |= TERMINAL_SETTING_SCROLLBACK_LINES;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SCROLLBACK_LINES);
+    }
+  else if (strcmp (key, KEY_SCROLL_ON_KEYSTROKE) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->scroll_on_keystroke)
+        {
+          mask |= TERMINAL_SETTING_SCROLL_ON_KEYSTROKE;
+          profile->priv->scroll_on_keystroke = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_ON_KEYSTROKE);
+    }
+  else if (strcmp (key, KEY_SCROLL_ON_OUTPUT) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->scroll_on_output)
+        {
+          mask |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
+          profile->priv->scroll_on_output = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_ON_OUTPUT);
+    }  
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -1211,6 +1622,80 @@ terminal_profile_create (TerminalProfile *base_profile,
                            key, cs,
                            &err);
   BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_ALLOW_BOLD);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->allow_bold,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SILENT_BELL);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->silent_bell,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_WORD_CHARS);
+  /* default title is profile name, not copied from base */
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, base_profile->priv->word_chars,
+                           &err);
+  BAIL_OUT_CHECK ();
+  
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SCROLLBAR_POSITION);
+  cs = gconf_enum_to_string (scrollbar_positions,
+                             base_profile->priv->scrollbar_position);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
+  BAIL_OUT_CHECK ();
+  
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SCROLLBACK_LINES);
+  gconf_client_set_int (base_profile->priv->conf,
+                        key, base_profile->priv->scrollback_lines,
+                        &err);
+  BAIL_OUT_CHECK ();
+
+  
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SCROLL_ON_KEYSTROKE);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->scroll_on_keystroke,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SCROLL_ON_OUTPUT);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->scroll_on_output,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  
   
   /* Add new profile to the profile list; the method for doing this has
    * a race condition where we and someone else set at the same time,

@@ -23,6 +23,13 @@
 #include "terminal-intl.h"
 #include <glade/glade.h>
 #include <libgnomeui/gnome-color-picker.h>
+#include <string.h>
+
+/* Bytes in a line of scrollback, rough estimate, including
+ * data structure to hold the line. Based on reading
+ * vt_newline in vt.c in libzvt
+ */
+#define BYTES_PER_LINE (sizeof (void*) * 6 + 80.0)
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -63,6 +70,21 @@ static void       profile_editor_update_title                (GtkWidget       *e
                                                               TerminalProfile *profile);
 static void       profile_editor_update_title_mode           (GtkWidget       *editor,
                                                               TerminalProfile *profile);
+static void       profile_editor_update_allow_bold           (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_silent_bell           (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_word_chars           (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_scrollbar_position   (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_scrollback_lines     (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_scroll_on_keystroke  (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_scroll_on_output     (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+
 
 static void
 entry_set_text_if_changed (GtkEntry   *entry,
@@ -125,6 +147,27 @@ profile_changed (TerminalProfile          *profile,
   
   if (mask & TERMINAL_SETTING_TITLE_MODE)
     profile_editor_update_title_mode (editor, profile);
+
+  if (mask & TERMINAL_SETTING_ALLOW_BOLD)
+    profile_editor_update_allow_bold (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SILENT_BELL)
+    profile_editor_update_silent_bell (editor, profile);
+
+  if (mask & TERMINAL_SETTING_WORD_CHARS)
+    profile_editor_update_word_chars (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SCROLLBAR_POSITION)
+    profile_editor_update_scrollbar_position (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SCROLLBACK_LINES)
+    profile_editor_update_scrollback_lines (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SCROLL_ON_KEYSTROKE)
+    profile_editor_update_scroll_on_keystroke (editor, profile);
+
+  if (mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT)
+    profile_editor_update_scroll_on_output (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -238,6 +281,86 @@ title_mode_changed (GtkWidget       *option_menu,
   terminal_profile_set_title_mode (profile, i);
 }
 
+static void
+allow_bold_toggled (GtkWidget       *checkbutton,
+                    TerminalProfile *profile)
+{
+  terminal_profile_set_allow_bold (profile,
+                                   gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+silent_bell_toggled (GtkWidget       *checkbutton,
+                     TerminalProfile *profile)
+{
+  terminal_profile_set_silent_bell (profile,
+                                    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+word_chars_changed (GtkWidget       *entry,
+                    TerminalProfile *profile)
+{
+  char *text;
+  
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  
+  terminal_profile_set_word_chars (profile, text);
+
+  g_free (text);
+}
+
+static void
+scrollbar_position_changed (GtkWidget       *option_menu,
+                            TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+
+  terminal_profile_set_scrollbar_position (profile, i);
+}
+
+static void
+scrollback_lines_value_changed (GtkWidget       *spin,
+                                TerminalProfile *profile)
+{
+  double val;
+  
+  val = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spin));
+
+  terminal_profile_set_scrollback_lines (profile, val);
+}
+
+static void
+scrollback_kilobytes_value_changed (GtkWidget       *spin,
+                                    TerminalProfile *profile)
+{
+  double val;
+  
+  val = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spin));
+
+  terminal_profile_set_scrollback_lines (profile,
+                                         (val * 1024) / BYTES_PER_LINE);
+}
+
+static void
+scroll_on_keystroke_toggled (GtkWidget       *checkbutton,
+                             TerminalProfile *profile)
+{
+  terminal_profile_set_scroll_on_keystroke (profile,
+                                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+scroll_on_output_toggled (GtkWidget       *checkbutton,
+                          TerminalProfile *profile)
+{
+  terminal_profile_set_scroll_on_output (profile,
+                                         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+
 /*
  * initialize widgets
  */
@@ -285,6 +408,7 @@ terminal_profile_edit (TerminalProfile *profile,
     {
       GladeXML *xml;
       GtkWidget *w;
+      double num1, num2;
       
       if (g_file_test ("./"PROFTERM_GLADE_FILE,
                        G_FILE_TEST_EXISTS))
@@ -304,7 +428,7 @@ terminal_profile_edit (TerminalProfile *profile,
       if (xml == NULL)
         {
           static GtkWidget *no_glade_dialog = NULL;
-
+          
           if (no_glade_dialog == NULL)
             {
               no_glade_dialog =
@@ -427,6 +551,62 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (title_mode_changed),
                         profile);
 
+      w = glade_xml_get_widget (xml, "allow-bold-checkbutton");
+      profile_editor_update_allow_bold (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (allow_bold_toggled),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "silent-bell-checkbutton");
+      profile_editor_update_silent_bell (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (silent_bell_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "word-chars-entry");
+      profile_editor_update_word_chars (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (word_chars_changed),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "scrollbar-position-optionmenu");
+      profile_editor_update_scrollbar_position (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (scrollbar_position_changed),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "scrollback-lines-spinbutton");
+      profile_editor_update_scrollback_lines (editor, profile);
+      g_signal_connect (G_OBJECT (w), "value_changed",
+                        G_CALLBACK (scrollback_lines_value_changed),
+                        profile);
+
+      gtk_spin_button_get_range (GTK_SPIN_BUTTON (w), &num1, &num2);
+
+      w = glade_xml_get_widget (xml, "scrollback-kilobytes-spinbutton");
+
+      /* Sync kilobytes spinbutton range with the lines spinbutton */
+      gtk_spin_button_set_range (GTK_SPIN_BUTTON (w),
+                                 (num1 * BYTES_PER_LINE) / 1024,
+                                 (num2 * BYTES_PER_LINE) / 1024);
+      
+      profile_editor_update_scrollback_lines (editor, profile);      
+      g_signal_connect (G_OBJECT (w), "value_changed",
+                        G_CALLBACK (scrollback_kilobytes_value_changed),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "scroll-on-keystroke-checkbutton");
+      profile_editor_update_scroll_on_keystroke (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (scroll_on_keystroke_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "scroll-on-output-checkbutton");
+      profile_editor_update_scroll_on_output (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (scroll_on_output_toggled),
+                        profile);
+
     }
   else
     {
@@ -461,12 +641,25 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
                                    TerminalProfile *profile)
 {
   TerminalSettingMask mask;
+  TerminalSettingMask last_mask;
 
-  /* FIXME cache last mask, to avoid doing all the work
-   * if it hasn't changed
+  /* the first time in this function the object data is unset
+   * thus the last mask is 0, which means everything is sensitive,
+   * which is what we want.
    */
+  last_mask = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (editor),
+                                                  "cached-lock-mask"));
+  
   mask = terminal_profile_get_locked_settings (profile);
 
+#if 0 /* uncomment once we've tested the sensitivity code */
+  if (mask == last_mask)
+    return;
+#endif
+
+  g_object_set_data (G_OBJECT (editor), "cached-lock-mask",
+                     GINT_TO_POINTER (mask));
+  
   set_insensitive (editor, "profile-name-entry",
                    mask & TERMINAL_SETTING_VISIBLE_NAME);
   
@@ -491,6 +684,30 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   
   set_insensitive (editor, "title-mode-optionmenu",
                    mask & TERMINAL_SETTING_TITLE_MODE);
+
+  set_insensitive (editor, "allow-bold-checkbutton",
+                   mask & TERMINAL_SETTING_ALLOW_BOLD);
+
+  set_insensitive (editor, "silent-bell-checkbutton",
+                   mask & TERMINAL_SETTING_SILENT_BELL);
+
+  set_insensitive (editor, "word-chars-entry",
+                   mask & TERMINAL_SETTING_WORD_CHARS);
+
+  set_insensitive (editor, "scrollbar-position-optionmenu",
+                   mask & TERMINAL_SETTING_SCROLLBAR_POSITION);
+
+  set_insensitive (editor, "scrollback-lines-spinbutton",
+                   mask & TERMINAL_SETTING_SCROLLBACK_LINES);
+
+  set_insensitive (editor, "scrollback-kilobytes-spinbutton",
+                   mask & TERMINAL_SETTING_SCROLLBACK_LINES);
+  
+  set_insensitive (editor, "scroll-on-keystroke-checkbutton",
+                   mask & TERMINAL_SETTING_SCROLL_ON_KEYSTROKE);
+
+  set_insensitive (editor, "scroll-on-output-checkbutton",
+                   mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT);
 }
 
 
@@ -607,6 +824,97 @@ profile_editor_update_title_mode (GtkWidget       *editor,
   gtk_option_menu_set_history (GTK_OPTION_MENU (w),
                                terminal_profile_get_title_mode (profile));
 }
+
+static void
+profile_editor_update_allow_bold (GtkWidget       *editor,
+                                  TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "allow-bold-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_allow_bold (profile));
+}
+
+static void
+profile_editor_update_silent_bell (GtkWidget       *editor,
+                                   TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "silent-bell-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_silent_bell (profile));
+}
+
+static void
+profile_editor_update_word_chars (GtkWidget       *editor,
+                                  TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "word-chars-entry");
+
+  entry_set_text_if_changed (GTK_ENTRY (w),
+                             terminal_profile_get_word_chars (profile));
+}
+
+static void
+profile_editor_update_scrollbar_position   (GtkWidget       *editor,
+                                            TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "scrollbar-position-optionmenu");
+  
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
+                               terminal_profile_get_scrollbar_position (profile));
+}
+
+static void
+profile_editor_update_scrollback_lines (GtkWidget       *editor,
+                                        TerminalProfile *profile)
+{
+  GtkWidget *w;
+  int lines;
+
+  lines = terminal_profile_get_scrollback_lines (profile);
+  
+  w = profile_editor_get_widget (editor, "scrollback-lines-spinbutton");
+
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (w), lines);
+
+  w = profile_editor_get_widget (editor, "scrollback-kilobytes-spinbutton");
+  
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (w), (BYTES_PER_LINE * lines) / 1024);
+}
+
+static void
+profile_editor_update_scroll_on_keystroke  (GtkWidget       *editor,
+                                            TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "scroll-on-keystroke-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_scroll_on_keystroke (profile));
+}
+
+static void
+profile_editor_update_scroll_on_output (GtkWidget       *editor,
+                                        TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "scroll-on-output-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_scroll_on_output (profile));
+}
+
 
 static GtkWidget*
 profile_editor_get_widget (GtkWidget  *editor,

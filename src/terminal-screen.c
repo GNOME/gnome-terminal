@@ -277,24 +277,40 @@ static void
 reread_profile (TerminalScreen *screen)
 {
   TerminalProfile *profile;
+  ZvtTerm *term;
   
-  profile = screen->priv->profile;
-
+  profile = screen->priv->profile;  
+  
   if (profile == NULL)
     return;
+
+  term = ZVT_TERM (screen->priv->zvt);
   
   if (GTK_WIDGET_REALIZED (screen->priv->zvt))
-    terminal_screen_update_on_realize (ZVT_TERM (screen->priv->zvt),
-                                       screen);
-
-#if 0
-  g_print ("Setting blink to %d\n",
-           terminal_profile_get_cursor_blink (profile));
-#endif
-  zvt_term_set_blink (ZVT_TERM (screen->priv->zvt),
-                      terminal_profile_get_cursor_blink (profile));
+    terminal_screen_update_on_realize (term, screen);
 
   rebuild_title (screen);
+  
+  zvt_term_set_blink (term,
+                      terminal_profile_get_cursor_blink (profile));
+
+  zvt_term_set_bell (term,
+                     !terminal_profile_get_silent_bell (profile));
+
+  zvt_term_set_wordclass (term,
+                          terminal_profile_get_word_chars (profile));
+
+  zvt_term_set_scroll_on_keystroke (term,
+                                    terminal_profile_get_scroll_on_keystroke (profile));
+
+  zvt_term_set_scroll_on_output (term,
+                                 terminal_profile_get_scroll_on_output (profile));
+
+  zvt_term_set_scrollback (term,
+                           terminal_profile_get_scrollback_lines (profile));
+
+  if (screen->priv->window)
+    terminal_window_update_scrollbar (screen->priv->window, screen);
 }
 
 static void
@@ -321,7 +337,8 @@ rebuild_title  (TerminalScreen *screen)
       break;
     case TERMINAL_TITLE_BEFORE:
       screen->priv->cooked_title =
-        g_strconcat (screen->priv->raw_title,
+        g_strconcat (screen->priv->raw_title ?
+                     screen->priv->raw_title : "",
                      (screen->priv->raw_title && *(screen->priv->raw_title)) ?
                      " - " : "",
                      terminal_profile_get_title (screen->priv->profile),
@@ -402,7 +419,24 @@ static void
 terminal_screen_update_on_realize (ZvtTerm        *term,
                                    TerminalScreen *screen)
 {
+  TerminalProfile *profile;
+  GdkFont *libzvt_workaround_hack;
+  
+  profile = screen->priv->profile;
+  
   update_color_scheme (screen);
+
+  /* I fixed this zvt bug but working around it for a couple weeks.
+   * FIXME take this out.
+   */
+  libzvt_workaround_hack = term->font;
+  gdk_font_ref (libzvt_workaround_hack);
+
+  zvt_term_set_fonts (term, term->font,
+                      terminal_profile_get_allow_bold (profile) ?
+                      term->font : NULL);
+
+  gdk_font_unref (libzvt_workaround_hack);
 }
 
 static void

@@ -75,6 +75,9 @@ TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 /* In order of their tabs in the notebook */
 GList* terminal_window_list_screens (TerminalWindow *window);
 
+void terminal_window_update_scrollbar (TerminalWindow *window,
+                                       TerminalScreen *screen);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */

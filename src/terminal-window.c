@@ -553,14 +553,13 @@ terminal_window_add_screen (TerminalWindow *window,
                     G_CALLBACK (selection_changed_callback),
                     window);
   
-  term = ZVT_TERM (terminal_screen_get_widget (screen));  
-
-  gtk_box_pack_end (GTK_BOX (hbox),
-                    scrollbar, FALSE, FALSE, 0);
+  term = ZVT_TERM (terminal_screen_get_widget (screen));
 
   gtk_box_pack_start (GTK_BOX (hbox),
                       GTK_WIDGET (term), TRUE, TRUE, 0);
 
+  terminal_window_update_scrollbar (window, screen);
+  
   gtk_range_set_adjustment (GTK_RANGE (scrollbar),
                             term->adjustment);  
 
@@ -855,6 +854,55 @@ notebook_page_switched_callback (GtkWidget       *notebook,
   g_assert (screen);
 
   terminal_window_set_active (window, screen);
+}
+
+void
+terminal_window_update_scrollbar (TerminalWindow *window,
+                                  TerminalScreen *screen)
+{
+  GtkWidget *scrollbar;
+  GtkWidget *hbox;
+  TerminalProfile *profile;
+
+  profile = terminal_screen_get_profile (screen);
+
+  if (profile == NULL)
+    return;
+  
+  scrollbar = screen_get_scrollbar (screen);
+  hbox = screen_get_hbox (screen);
+  
+  g_object_ref (G_OBJECT (scrollbar));
+
+  if (scrollbar->parent)
+    gtk_container_remove (GTK_CONTAINER (hbox), scrollbar);
+  
+  switch (terminal_profile_get_scrollbar_position (profile))
+    {
+    case TERMINAL_SCROLLBAR_HIDDEN:
+      gtk_widget_hide (scrollbar);
+      /* pack just to hold refcount */
+      gtk_box_pack_end (GTK_BOX (hbox),
+                        scrollbar, FALSE, FALSE, 0);
+      break;
+    case TERMINAL_SCROLLBAR_RIGHT:
+      gtk_box_pack_end (GTK_BOX (hbox),
+                        scrollbar, FALSE, FALSE, 0);
+      gtk_box_reorder_child (GTK_BOX (hbox), scrollbar, -1);
+      gtk_widget_show (scrollbar);
+      break;
+    case TERMINAL_SCROLLBAR_LEFT:
+      gtk_box_pack_start (GTK_BOX (hbox),
+                          scrollbar, FALSE, FALSE, 0);
+      gtk_box_reorder_child (GTK_BOX (hbox), scrollbar, 0);
+      gtk_widget_show (scrollbar);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  g_object_unref (G_OBJECT (scrollbar));
 }
 
 /*

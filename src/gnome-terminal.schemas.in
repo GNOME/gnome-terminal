@@ -131,6 +131,115 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/allow_bold</key>
+      <applyto>/apps/profterm/profiles/Default/allow_bold</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether to allow bold text</short>
+         <long>
+          If true, allow applications in the terminal to make 
+          text boldface.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/silent_bell</key>
+      <applyto>/apps/profterm/profiles/Default/silent_bell</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to silence terminal bell</short>
+         <long>
+          If true, don't make a noise when applications send the 
+          escape sequence for the terminal bell.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/word_chars</key>
+      <applyto>/apps/profterm/profiles/Default/word_chars</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>-A-Za-z0-9,./?%&amp;#</default>
+      <locale name="C">
+         <short>Characters that are considered "part of a word"</short>
+         <long>
+           When selecting text by word, sequences of these characters
+           are considered single words. Ranges can be given as 
+           "A-Z". Literal hyphen (not expressing a range) should be
+           the first character given.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/scrollbar_position</key>
+      <applyto>/apps/profterm/profiles/Default/scrollbar_position</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>right</default>
+      <locale name="C">
+         <short>Position of the scrollbar</short>
+         <long>
+          Where to put the terminal scrollbar. Possibilities are 
+          "left", "right", and "disabled".
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/scrollback_lines</key>
+      <applyto>/apps/profterm/profiles/Default/scrollback_lines</applyto>
+      <owner>profterm</owner>
+      <type>int</type>
+      <default>500</default>
+      <locale name="C">
+         <short>Number of lines to keep in scrollback</short>
+         <long>
+           Number of scrollback lines to keep around. You can 
+           scroll back in the terminal by this number of lines; 
+           lines that don't fit in the scrollback are discarded.
+           Be careful with this setting; it's the primary factor 
+           in determining how much memory the terminal will use.      
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/scroll_on_keystroke</key>
+      <applyto>/apps/profterm/profiles/Default/scroll_on_keystroke</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Whether to scroll to the bottom when a key is pressed</short>
+         <long>
+          If true, pressing a key jumps the scrollbar to the bottom.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/scroll_on_output</key>
+      <applyto>/apps/profterm/profiles/Default/scroll_on_output</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to scroll to the bottom when there's new output</short>
+         <long>
+          If true, whenever there's new output the terminal will scroll
+          to the bottom.
+         </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
 

@@ -38,7 +38,14 @@ typedef enum
   TERMINAL_SETTING_FOREGROUND_COLOR     = 1 << 3,
   TERMINAL_SETTING_BACKGROUND_COLOR     = 1 << 4,
   TERMINAL_SETTING_TITLE                = 1 << 5,
-  TERMINAL_SETTING_TITLE_MODE           = 1 << 6
+  TERMINAL_SETTING_TITLE_MODE           = 1 << 6,
+  TERMINAL_SETTING_ALLOW_BOLD           = 1 << 7,
+  TERMINAL_SETTING_SILENT_BELL          = 1 << 8,
+  TERMINAL_SETTING_WORD_CHARS           = 1 << 9,
+  TERMINAL_SETTING_SCROLLBAR_POSITION   = 1 << 10,
+  TERMINAL_SETTING_SCROLLBACK_LINES     = 1 << 11,
+  TERMINAL_SETTING_SCROLL_ON_KEYSTROKE  = 1 << 12,
+  TERMINAL_SETTING_SCROLL_ON_OUTPUT     = 1 << 13
 } TerminalSettingMask;
 
 typedef enum
@@ -104,93 +111,56 @@ struct _TerminalProfileClass
 
 GType terminal_profile_get_type (void) G_GNUC_CONST;
 
-TerminalProfile*          terminal_profile_new                    (const char       *name,
+TerminalProfile* terminal_profile_new (const char  *name,
+                                       GConfClient *conf);
 
-                                                                   GConfClient *conf);
-const char*               terminal_profile_get_name               (TerminalProfile  *profile);
-const char*               terminal_profile_get_visible_name       (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_audible_bell       (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_cursor_blink       (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_scroll_on_keypress (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_login_shell        (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_scroll_background  (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_use_bold           (TerminalProfile  *profile);
-TerminalDeleteBinding     terminal_profile_get_delete_key         (TerminalProfile  *profile);
-TerminalDeleteBinding     terminal_profile_get_backspace_key      (TerminalProfile  *profile);
-TerminalPaletteType       terminal_profile_get_palette_type       (TerminalProfile  *profile);
-TerminalScrollbarPosition terminal_profile_get_scrollbar_position (TerminalProfile  *profile);
-const char*               terminal_profile_get_font               (TerminalProfile  *profile);
-int                       terminal_profile_get_scrollback_lines   (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_update_records     (TerminalProfile  *profile);
-void                      terminal_profile_get_color_scheme       (TerminalProfile  *profile,
-                                                                   GdkColor         *foreground,
-                                                                   GdkColor         *background);
-void                      terminal_profile_get_palette            (TerminalProfile  *profile,
-                                                                   GdkColor        **colors,
-                                                                   int               n_colors);
-gboolean                  terminal_profile_get_transparent        (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_shaded             (TerminalProfile  *profile);
-GdkPixmap*                terminal_profile_get_background_pixmap  (TerminalProfile  *profile);
-const char*               terminal_profile_get_word_class         (TerminalProfile  *profile);
-const char*               terminal_profile_get_term_variable      (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_lock_title         (TerminalProfile  *profile);
-const char*               terminal_profile_get_title              (TerminalProfile  *profile);
-TerminalTitleMode         terminal_profile_get_title_mode         (TerminalProfile  *profile);
-gboolean                  terminal_profile_get_forgotten          (TerminalProfile  *profile);
+const char*               terminal_profile_get_name                 (TerminalProfile *profile);
+const char*               terminal_profile_get_visible_name         (TerminalProfile *profile);
+gboolean                  terminal_profile_get_cursor_blink         (TerminalProfile *profile);
+gboolean                  terminal_profile_get_allow_bold           (TerminalProfile *profile);
+gboolean                  terminal_profile_get_silent_bell          (TerminalProfile *profile);
+TerminalScrollbarPosition terminal_profile_get_scrollbar_position   (TerminalProfile *profile);
+int                       terminal_profile_get_scrollback_lines     (TerminalProfile *profile);
+void                      terminal_profile_get_color_scheme         (TerminalProfile *profile,
+                                                                     GdkColor        *foreground,
+                                                                     GdkColor        *background);
+const char*               terminal_profile_get_word_chars           (TerminalProfile *profile);
+const char*               terminal_profile_get_title                (TerminalProfile *profile);
+TerminalTitleMode         terminal_profile_get_title_mode           (TerminalProfile *profile);
+gboolean                  terminal_profile_get_forgotten            (TerminalProfile *profile);
 gboolean                  terminal_profile_get_default_show_menubar (TerminalProfile *profile);
+gboolean                  terminal_profile_get_scroll_on_keystroke  (TerminalProfile *profile);
+gboolean                  terminal_profile_get_scroll_on_output     (TerminalProfile *profile);
 
-void            terminal_profile_set_keyboard_secured   (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_audible_bell       (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_cursor_blink       (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_visible_name       (TerminalProfile *profile,
-                                                         const char      *name);
-void            terminal_profile_set_scroll_on_keypress (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_login_shell        (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_scroll_background  (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_use_bold           (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_delete_key         (TerminalProfile            *profile,
-                                                        TerminalDeleteBinding      binding);
-void            terminal_profile_set_backspace_key      (TerminalProfile            *profile,
-                                                        TerminalDeleteBinding      binding);
-void            terminal_profile_set_scrollbar_position (TerminalProfile            *profile,
-                                                        TerminalScrollbarPosition  pos);
-void            terminal_profile_set_font               (TerminalProfile            *profile,
-                                                        const char                *str);
-void            terminal_profile_set_scrollback_lines   (TerminalProfile            *profile,
-                                                        int                        lines);
-void            terminal_profile_set_update_records     (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_color_scheme       (TerminalProfile            *profile,
-                                                        const GdkColor            *foreground,
-                                                        const GdkColor            *background);
-void            terminal_profile_set_transparent        (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_shaded             (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_background_pixmap  (TerminalProfile            *profile,
-                                                        GdkPixmap                 *pixmap);
-void            terminal_profile_set_title              (TerminalProfile            *profile,
-                                                        const char                *title);
-void            terminal_profile_set_title_mode         (TerminalProfile            *profile,
-                                                         TerminalTitleMode           mode);
-void            terminal_profile_set_lock_title         (TerminalProfile            *profile,
-                                                        gboolean                   setting);
-void            terminal_profile_set_word_class         (TerminalProfile            *profile,
-                                                        const char                *word_class);
-void            terminal_profile_set_term_variable      (TerminalProfile            *profile,
-                                                        const char                *term_variable);
-void            terminal_profile_set_palette            (TerminalProfile            *profile,
-                                                        const GdkColor            *palette,
-                                                        int                        n_colors);
-void            terminal_profile_set_default_show_menubar (TerminalProfile *profile,
-                                                           gboolean         setting);
+
+
+void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_visible_name         (TerminalProfile           *profile,
+                                                const char                *name);
+void terminal_profile_set_allow_bold           (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_silent_bell          (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_scrollbar_position   (TerminalProfile           *profile,
+                                                TerminalScrollbarPosition  pos);
+void terminal_profile_set_scrollback_lines     (TerminalProfile           *profile,
+                                                int                        lines);
+void terminal_profile_set_color_scheme         (TerminalProfile           *profile,
+                                                const GdkColor            *foreground,
+                                                const GdkColor            *background);
+void terminal_profile_set_title                (TerminalProfile           *profile,
+                                                const char                *title);
+void terminal_profile_set_title_mode           (TerminalProfile           *profile,
+                                                TerminalTitleMode          mode);
+void terminal_profile_set_word_chars           (TerminalProfile           *profile,
+                                                const char                *word_class);
+void terminal_profile_set_default_show_menubar (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_scroll_on_keystroke  (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_scroll_on_output     (TerminalProfile           *profile,
+                                                gboolean                   setting);
 
 
 void             terminal_profile_setup_default (GConfClient *conf);
