@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-07-21 01:10+0200\n"
+"POT-Creation-Date: 2003-07-23 10:03+0200\n"
 "PO-Revision-Date: 2003-07-17 11:26+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
@@ -22,8 +22,8 @@ msgstr ""
 msgid "Command line"
 msgstr "Wiersz poleceń"
 
-#: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1132
-#: src/terminal.c:1449 src/terminal-profile.c:275 src/terminal-window.c:709
+#: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1137
+#: src/terminal.c:1454 src/terminal-profile.c:275 src/terminal-window.c:709
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -187,7 +187,7 @@ msgstr "Tajski"
 msgid "User Defined"
 msgstr "Zdefiniowany"
 
-#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2745
+#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2750
 #: src/terminal-window.c:2576
 #, c-format
 msgid "There was an error displaying help: %s"
@@ -1753,7 +1753,7 @@ msgstr "Przejdź"
 msgid "Help"
 msgstr "Pomoc"
 
-#: src/terminal-accels.c:264 src/terminal.c:1537 src/terminal-profile.c:391
+#: src/terminal-accels.c:264 src/terminal.c:1542 src/terminal-profile.c:391
 #: src/terminal-screen.c:182
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
@@ -1999,110 +1999,98 @@ msgid "Could not load icon \"%s\": %s\n"
 msgstr "Nie można odczytać ikony \"%s\": %s\n"
 
 #: src/terminal.c:749
-msgid "Option --command/-e requires specifying the command to run\n"
-msgstr "Opcja --command/-e wymaga podania uruchamianego polecenia\n"
+#, c-format
+msgid "Option \"%s\" requires specifying the command to run\n"
+msgstr "Opcja \"%s\" wymaga podania uruchamianego polecenia\n"
 
 #: src/terminal.c:757
 #, c-format
-msgid "Argument to --command/-e is not a valid command: %s\n"
-msgstr "Argument opcji --command/-e nie jest poprawnym poleceniem: %s\n"
+msgid "Argument to \"%s\" is not a valid command: %s\n"
+msgstr "Argument opcji \"%s\" nie jest poprawnym poleceniem: %s\n"
 
-#: src/terminal.c:767 src/terminal.c:789
+#: src/terminal.c:767 src/terminal.c:791
+#, c-format
+msgid "\"%s\" specified more than once for the same window or tab\n"
+msgstr "Dla tego samego okna lub zakładki podano wiele opcji \"%s\"\n"
+
+#: src/terminal.c:782
+#, c-format
 msgid ""
-"--command/-e/--execute/-x specified more than once for the same window or "
-"tab\n"
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line\n"
 msgstr ""
-"Dla tego samego okna lub zakładki podano wiele opcji --command/-e/--execute/-"
-"x\n"
+"Opcja \"%s\" wymaga podania uruchamianego polecenia w pozostałej części "
+"wiersza polecenia\n"
 
-#: src/terminal.c:781
-msgid ""
-"Option --execute/-x requires specifying the command to run on the rest of "
-"the command line\n"
-msgstr ""
-"Opcja --execute/-x wymaga podania uruchamianego polecenia w pozostałej "
-"części wiersza polecenia\n"
+#: src/terminal.c:813 src/terminal.c:837
+#, c-format
+msgid "Option \"%s\" requires an argument specifying what profile to use\n"
+msgstr "Opcja \"%s\" wymaga podania jako argumentu nazwy używanego profilu\n"
 
-#: src/terminal.c:810
-msgid ""
-"Option --window-with-profile requires an argument specifying what profile to "
-"use\n"
-msgstr ""
-"Opcja --window-with-profile wymaga podania jako argumentu nazwy używanego "
-"profilu\n"
+#: src/terminal.c:871 src/terminal.c:897
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "Dla tego samego okna podano wiele opcji \"%s\"\n"
 
-#: src/terminal.c:833
-msgid ""
-"Option --tab-with-profile requires an argument specifying what profile to "
-"use\n"
-msgstr ""
-"Opcja --tab-with-profile wymaga podania jako argumentu nazwy używanego "
-"profilu\n"
+#: src/terminal.c:920
+#, c-format
+msgid "Option \"%s\" requires an argument giving the role\n"
+msgstr "Opcja \"%s\" wymaga argumentu zawierającego nazwę roli\n"
 
-#: src/terminal.c:866
-msgid "--show-menubar option given twice for the same window\n"
-msgstr "Dla tego samego okna podano wiele opcji --show-menubar\n"
-
-#: src/terminal.c:892
-msgid "--hide-menubar option given twice for the same window\n"
-msgstr "Dla tego samego okna podano wiele opcji --hide-menubar\n"
-
-#: src/terminal.c:915
-msgid "Option --role requires an argument giving the role\n"
-msgstr "Opcja --role wymaga argumentu zawierającego nazwę roli\n"
-
-#: src/terminal.c:924
+#: src/terminal.c:929
 msgid "Two roles given for one window\n"
 msgstr "Dla jednego okna podano dwie role\n"
 
-#: src/terminal.c:940
-msgid "Option --geometry requires an argument giving the geometry\n"
-msgstr "Opcja --geometry wymaga argumentu opisującego geometrię\n"
+#: src/terminal.c:945
+#, c-format
+msgid "Option \"%s\" requires an argument giving the geometry\n"
+msgstr "Opcja \"%s\" wymaga argumentu opisującego geometrię\n"
 
-#: src/terminal.c:949 src/terminal.c:959
+#: src/terminal.c:954
+#, c-format
+msgid "Two \"%s\" options given for one window\n"
+msgstr "Dla jednego okna podano dwie opcje \"%s\"\n"
+
+#: src/terminal.c:964
 msgid "Two geometries given for one window\n"
 msgstr "Dla jednego okna podano dwie specyfikacje geometrii\n"
 
-#: src/terminal.c:981
-msgid "Option --title requires an argument giving the title\n"
-msgstr "Opcja --title wymaga argumentu zawierającego tytuł\n"
+#: src/terminal.c:986
+#, c-format
+msgid "Option \"%s\" requires an argument giving the title\n"
+msgstr "Opcja \"%s\" wymaga argumentu zawierającego tytuł\n"
 
-#: src/terminal.c:989
-msgid "Two titles given for one tab\n"
-msgstr "Dla jednej zakładki podano dwa tytuły\n"
+#: src/terminal.c:994 src/terminal.c:1017 src/terminal.c:1041
+#, c-format
+msgid "Two \"%s\" options given for one tab\n"
+msgstr "Dla jednej zakładki podano dwie opcje \"%s\"\n"
 
-#: src/terminal.c:1004
-msgid "Option --working-directory requires an argument giving the directory\n"
-msgstr "Opcja --working-directory wymaga argumentu opisującego katalog\n"
+#: src/terminal.c:1009
+#, c-format
+msgid "Option \"%s\" requires an argument giving the directory\n"
+msgstr "Opcja \"%s\" wymaga argumentu zawierającego katalog\n"
 
-#: src/terminal.c:1012
-msgid "Two working directories given for one tab\n"
-msgstr "Dla jednej zakładki podano dwie specyfikacje katalogów roboczych\n"
+#: src/terminal.c:1033
+#, c-format
+msgid "Option \"%s\" requires an argument giving the zoom factor\n"
+msgstr "Opcja \"%s\" wymaga argumentu opisującego współczynnik powiększenia\n"
 
-#: src/terminal.c:1028
-msgid "Option --zoom requires an argument giving the zoom factor\n"
-msgstr "Opcja --zoom wymaga argumentu opisującego współczynnik powiększenia\n"
-
-#: src/terminal.c:1036
-msgid "Two zoom factors given for one tab\n"
-msgstr "Dla jednej zakładki podano dwa współczynniki powiększenia\n"
-
-#: src/terminal.c:1051
+#: src/terminal.c:1056
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "Wartość \"%s\" nie jest poprawnym współczynnikiem powiększenia\n"
 
-#: src/terminal.c:1059
+#: src/terminal.c:1064
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Współczynnik powiększenia \"%g\" jest zbyt mały; użyto %g\n"
 
-#: src/terminal.c:1066
+#: src/terminal.c:1071
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Współczynnik powiększenia \"%g\" jest zbyt duży; użyto %g\n"
 
-#: src/terminal.c:1087
+#: src/terminal.c:1092
 #, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
@@ -2113,33 +2101,32 @@ msgstr ""
 "tego można utworzyć profil z odpowiednim ustawieniem i użyć opcji --window-"
 "with-profile opcja\n"
 
-#: src/terminal.c:1093
-msgid "--startup-id option given twice\n"
-msgstr "Podano dwukrotnie opcję --startup-id\n"
-
 #: src/terminal.c:1098
-msgid "--startup-id option requires an argument\n"
-msgstr "Opcja --startup-id wymaga argumentu\n"
+#, c-format
+msgid "\"%s\" option given twice\n"
+msgstr "Podano dwukrotnie opcję \"%s\"\n"
 
-#: src/terminal.c:1215
-msgid "No argument given to --display option\n"
-msgstr "Nie podano argumentu dla opcji --display\n"
+#: src/terminal.c:1103 src/terminal.c:1242
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr "Opcja \"%s\" wymaga argumentu\n"
 
-#: src/terminal.c:1237
-msgid "No argument given to --screen option\n"
-msgstr "Nie podano argumentu dla opcji --screen\n"
+#: src/terminal.c:1220
+#, c-format
+msgid "No argument given to \"%s\" option\n"
+msgstr "Nie podano argumentu dla opcji \"%s\"\n"
 
-#: src/terminal.c:1323
+#: src/terminal.c:1328
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Profil \"%s\" nie istnieje, użyto domyślnego profilu.\n"
 
-#: src/terminal.c:1499
+#: src/terminal.c:1504
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Niepoprawny argument: \"%s\"\n"
 
-#: src/terminal.c:1553
+#: src/terminal.c:1558
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2148,98 +2135,98 @@ msgstr ""
 "Przy rejestrowaniu się do powiadamiania o zmianach na liście profili "
 "terminala wystąpił błąd. (%s)\n"
 
-#: src/terminal.c:1789
+#: src/terminal.c:1794
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Niepoprawny opis geometrii \"%s\"\n"
 
-#: src/terminal.c:1849
+#: src/terminal.c:1854
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Przy pobieraniu listy profili terminala wystąpił błąd. (%s)\n"
 
-#: src/terminal.c:2148
+#: src/terminal.c:2153
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Profil o nazwie \"%s\" już istnieje"
 
-#: src/terminal.c:2159
+#: src/terminal.c:2164
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profil wybrany jako bazowy dla nowego profilu już nie istnieje"
 
-#: src/terminal.c:2245
+#: src/terminal.c:2250
 msgid "Enter profile name"
 msgstr "Wprowadź nazwę profilu"
 
-#: src/terminal.c:2256
+#: src/terminal.c:2261
 msgid "Choose base profile"
 msgstr "Wybierz profil bazowy"
 
-#: src/terminal.c:2396
+#: src/terminal.c:2401
 msgid "Profile list"
 msgstr "Lista profili"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2470
 msgid "You must select one or more profiles to delete."
 msgstr "Należy wybrać przynajmniej jeden usuwany profil."
 
-#: src/terminal.c:2476
+#: src/terminal.c:2481
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "Należy pozostawić przynajmniej jeden profil, nie można usunąć wszystkich."
 
-#: src/terminal.c:2485
+#: src/terminal.c:2490
 msgid "Delete these two profiles?\n"
 msgstr "Czy usunąć te dwa profile?\n"
 
-#: src/terminal.c:2487
+#: src/terminal.c:2492
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Czy usunąć te %d profili?\n"
 
-#: src/terminal.c:2505
+#: src/terminal.c:2510
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Czy usunąć profil \"%s\"?"
 
-#: src/terminal.c:2527
+#: src/terminal.c:2532
 msgid "Delete Profile"
 msgstr "Usunięcie profilu"
 
-#: src/terminal.c:2767 src/terminal-window.c:2007
+#: src/terminal.c:2772 src/terminal-window.c:2007
 msgid "_Edit"
 msgstr "_Edycja"
 
-#: src/terminal.c:2800
+#: src/terminal.c:2805
 msgid "Edit Profiles"
 msgstr "Modyfikacja profili"
 
-#: src/terminal.c:2840
+#: src/terminal.c:2845
 msgid "Profile _used when launching a new terminal:"
 msgstr "P_rofil używany przy uruchamianiu nowego terminala:"
 
-#: src/terminal.c:2862
+#: src/terminal.c:2867
 msgid "_Profiles:"
 msgstr "_Profile:"
 
-#: src/terminal.c:2911
+#: src/terminal.c:2916
 msgid "Click to open new profile dialog"
 msgstr "Kliknij, aby otworzyć okno nowego profilu"
 
-#: src/terminal.c:2924
+#: src/terminal.c:2929
 msgid "Click to open edit profile dialog"
 msgstr "Kliknij, aby otworzyć okno modyfikacji profilu"
 
-#: src/terminal.c:2934
+#: src/terminal.c:2939
 msgid "Click to delete selected profile"
 msgstr "Kliknij, aby usunąć wybrany profil"
 
-#: src/terminal.c:2983
+#: src/terminal.c:2988
 msgid "Click button to choose profile"
 msgstr "Kliknij przycisk, aby wybrać profil"
 
-#: src/terminal.c:3466
+#: src/terminal.c:3471
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2248,7 +2235,7 @@ msgstr ""
 "Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji, w "
 "związku z czym nie można wyświetlić okna dialogowego."
 
-#: src/terminal.c:3628
+#: src/terminal.c:3633
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2256,7 +2243,7 @@ msgstr ""
 "Wygląda na to, że plik gnome-terminal.server nie został poprawnie "
 "zainstalowany. Tryb generatora jest nieaktywny.\n"
 
-#: src/terminal.c:3631
+#: src/terminal.c:3636
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2264,7 +2251,7 @@ msgstr ""
 "Błąd przy rejestrowaniu terminala z użyciem usługi aktywacji. Tryb "
 "generatora jest nieaktywny.\n"
 
-#: src/terminal.c:3667
+#: src/terminal.c:3672
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Nie można uzyskać serwera terminala od serwera aktywacji.\n"
 
@@ -2660,6 +2647,29 @@ msgstr "GNOME PL Team <translators@gnome.pl>"
 #: src/terminal-window.c:2610
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
+
+#~ msgid ""
+#~ "Option --window-with-profile requires an argument specifying what profile "
+#~ "to use\n"
+#~ msgstr ""
+#~ "Opcja --window-with-profile wymaga podania jako argumentu nazwy używanego "
+#~ "profilu\n"
+
+#~ msgid "--hide-menubar option given twice for the same window\n"
+#~ msgstr "Dla tego samego okna podano wiele opcji --hide-menubar\n"
+
+#~ msgid ""
+#~ "Option --working-directory requires an argument giving the directory\n"
+#~ msgstr "Opcja --working-directory wymaga argumentu opisującego katalog\n"
+
+#~ msgid "Two working directories given for one tab\n"
+#~ msgstr "Dla jednej zakładki podano dwie specyfikacje katalogów roboczych\n"
+
+#~ msgid "Two zoom factors given for one tab\n"
+#~ msgstr "Dla jednej zakładki podano dwa współczynniki powiększenia\n"
+
+#~ msgid "No argument given to --display option\n"
+#~ msgstr "Nie podano argumentu dla opcji --display\n"
 
 #~ msgid "_Use the same size font as other applications"
 #~ msgstr "_Ten sam rozmiar czcionki, co w innych aplikacjach"
