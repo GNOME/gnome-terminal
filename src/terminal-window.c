@@ -39,6 +39,9 @@ struct _TerminalWindowPrivate
   GtkWidget *choose_config_menuitem;
   GList *terms;
   TerminalScreen *active_term;
+  GdkPixbuf *icon;
+  int old_char_width;
+  int old_char_height;
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
 };
@@ -271,6 +274,9 @@ terminal_window_init (TerminalWindow *window)
   window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
   window->priv->notebook = gtk_notebook_new ();
 
+  window->priv->old_char_width = -1;
+  window->priv->old_char_height = -1;
+  
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook),
                                TRUE);
   
@@ -402,6 +408,9 @@ terminal_window_finalize (GObject *object)
   TerminalWindow *window;
 
   window = TERMINAL_WINDOW (object);
+
+  if (window->priv->icon)
+    g_object_unref (G_OBJECT (window->priv->icon));
   
   g_free (window->priv);
   
@@ -704,9 +713,9 @@ void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
 {
-  GdkGeometry hints;
   ZvtTerm *term;
   GtkWidget *widget;
+  TerminalProfile *profile;
   
   if (window->priv->active_term == screen)
     return;
@@ -714,36 +723,15 @@ terminal_window_set_active (TerminalWindow *window,
   widget = terminal_screen_get_widget (screen);
   term = ZVT_TERM (widget);
 
+  profile = terminal_screen_get_profile (screen);
+  
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget); /* we need this for the char width */
   
   window->priv->active_term = screen;
 
-  /* We set geometry hints from the active term; best thing
-   * I can think of to do. Other option would be to try to
-   * get some kind of union of all hints from all terms in the
-   * window, but that doesn't make too much sense.
-   */
-  
-  /* padding copied from zvt size request. */
-
-  /* FIXME Since we're using xthickness/ythickness we need to change
-   * the hints when the theme changes.
-   */
-  hints.base_width = (GTK_WIDGET (term)->style->xthickness * 2) + PADDING;
-  hints.base_height =  (GTK_WIDGET (term)->style->ythickness * 2);
-  
-  hints.width_inc = term->charwidth;
-  hints.height_inc = term->charheight;
-  hints.min_width = hints.base_width + hints.width_inc;
-  hints.min_height = hints.base_height + hints.height_inc;
-  
-  gtk_window_set_geometry_hints (GTK_WINDOW (window),
-                                 GTK_WIDGET (term),
-                                 &hints,
-                                 GDK_HINT_RESIZE_INC |
-                                 GDK_HINT_MIN_SIZE |
-                                 GDK_HINT_BASE_SIZE);
+  terminal_window_update_geometry (window);
+  terminal_window_update_icon (window);
   
   /* Override menubar setting if it wasn't restored from session */
   if (window->priv->use_default_menubar_visibility)
@@ -908,6 +896,88 @@ terminal_window_update_scrollbar (TerminalWindow *window,
     }
 
   g_object_unref (G_OBJECT (scrollbar));
+}
+
+void
+terminal_window_update_icon (TerminalWindow *window)
+{
+  GdkPixbuf *new_icon;
+  TerminalProfile *profile;
+
+  if (window->priv->active_term == NULL)
+    {
+      gtk_window_set_icon (GTK_WINDOW (window), NULL);
+      return;
+    }
+
+  profile = terminal_screen_get_profile (window->priv->active_term);
+  if (profile == NULL)
+    {
+      gtk_window_set_icon (GTK_WINDOW (window), NULL);
+      return;
+    }
+  
+  new_icon = terminal_profile_get_icon (profile);
+  
+  if (window->priv->icon != new_icon)
+    {
+      if (new_icon)
+        g_object_ref (G_OBJECT (new_icon));
+
+      if (window->priv->icon)
+        g_object_unref (G_OBJECT (window->priv->icon));
+
+      window->priv->icon = new_icon;
+
+      gtk_window_set_icon (GTK_WINDOW (window), window->priv->icon);
+    }
+}
+
+void
+terminal_window_update_geometry (TerminalWindow *window)
+{
+  GdkGeometry hints;
+  ZvtTerm *term;
+  GtkWidget *widget;  
+
+  if (window->priv->active_term == NULL)
+    return;
+  
+  widget = terminal_screen_get_widget (window->priv->active_term);
+  term = ZVT_TERM (widget);
+  
+  /* We set geometry hints from the active term; best thing
+   * I can think of to do. Other option would be to try to
+   * get some kind of union of all hints from all terms in the
+   * window, but that doesn't make too much sense.
+   */
+
+  if (term->charwidth != window->priv->old_char_width ||
+      term->charheight != window->priv->old_char_height)
+    {
+      /* padding copied from zvt size request. */
+      
+      /* FIXME Since we're using xthickness/ythickness we need to change
+       * the hints when the theme changes.
+       */  
+      hints.base_width = (GTK_WIDGET (term)->style->xthickness * 2) + PADDING;
+      hints.base_height =  (GTK_WIDGET (term)->style->ythickness * 2);
+      
+      hints.width_inc = term->charwidth;
+      hints.height_inc = term->charheight;
+      hints.min_width = hints.base_width + hints.width_inc;
+      hints.min_height = hints.base_height + hints.height_inc;
+      
+      gtk_window_set_geometry_hints (GTK_WINDOW (window),
+                                     GTK_WIDGET (term),
+                                     &hints,
+                                     GDK_HINT_RESIZE_INC |
+                                     GDK_HINT_MIN_SIZE |
+                                     GDK_HINT_BASE_SIZE);
+
+      window->priv->old_char_width = hints.width_inc;
+      window->priv->old_char_height = hints.height_inc;
+    }
 }
 
 /*

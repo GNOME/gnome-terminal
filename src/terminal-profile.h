@@ -50,7 +50,8 @@ typedef enum
   TERMINAL_SETTING_LOGIN_SHELL          = 1 << 15,
   TERMINAL_SETTING_UPDATE_RECORDS       = 1 << 16,
   TERMINAL_SETTING_USE_CUSTOM_COMMAND   = 1 << 17,
-  TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18
+  TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18,
+  TERMINAL_SETTING_ICON                 = 1 << 19
 } TerminalSettingMask;
 
 typedef enum
@@ -150,6 +151,9 @@ gboolean                  terminal_profile_get_update_records       (TerminalPro
 gboolean                  terminal_profile_get_use_custom_command   (TerminalProfile *profile);
 const char*               terminal_profile_get_custom_command       (TerminalProfile *profile);
 
+const char*               terminal_profile_get_icon_file            (TerminalProfile *profile);
+GdkPixbuf*                terminal_profile_get_icon                 (TerminalProfile *profile);
+
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
 void terminal_profile_set_visible_name         (TerminalProfile           *profile,
@@ -188,6 +192,9 @@ void terminal_profile_set_use_custom_command   (TerminalProfile           *profi
                                                 gboolean                   setting);
 void terminal_profile_set_custom_command       (TerminalProfile          *profile,
                                                 const char               *command);
+
+void terminal_profile_set_icon_file            (TerminalProfile          *profile,
+                                                const char               *filename);
 
 void             terminal_profile_setup_default (GConfClient *conf);
 GList*           terminal_profile_get_list (void);

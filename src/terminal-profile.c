@@ -22,6 +22,7 @@
 #include "terminal-intl.h"
 #include "terminal-profile.h"
 #include <gtk/gtk.h>
+#include <libgnome/gnome-program.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -55,6 +56,7 @@
 #define KEY_UPDATE_RECORDS "update_records"
 #define KEY_USE_CUSTOM_COMMAND "use_custom_command"
 #define KEY_CUSTOM_COMMAND "custom_command"
+#define KEY_ICON "icon"
 
 struct _TerminalProfilePrivate
 {
@@ -81,6 +83,11 @@ struct _TerminalProfilePrivate
   int scrollback_lines;
   TerminalExitAction exit_action;
   char *custom_command;
+
+  char *icon_file;
+  GdkPixbuf *icon;
+  guint icon_load_failed : 1;
+  
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
   guint allow_bold : 1;
@@ -192,6 +199,7 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->allow_bold = TRUE;
   profile->priv->word_chars = g_strdup ("");
   profile->priv->custom_command = g_strdup ("");
+  profile->priv->icon_file = g_strdup ("gnome-terminal.png");
 }
 
 static void
@@ -242,6 +250,9 @@ terminal_profile_finalize (GObject *object)
   g_free (profile->priv->name);
   g_free (profile->priv->title);
   g_free (profile->priv->profile_dir);
+  g_free (profile->priv->icon_file);
+  if (profile->priv->icon)
+    g_object_unref (G_OBJECT (profile->priv->icon));
   
   g_free (profile->priv);
   
@@ -842,6 +853,87 @@ terminal_profile_set_custom_command (TerminalProfile *profile,
   g_free (key);
 }
 
+const char*
+terminal_profile_get_icon_file (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+  
+  return profile->priv->icon_file;
+}
+
+GdkPixbuf*
+terminal_profile_get_icon (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+  
+  if (profile->priv->icon == NULL &&
+      !profile->priv->icon_load_failed)
+    {
+      GdkPixbuf *pixbuf;
+      GError *err;
+      char *filename;
+
+      filename = gnome_program_locate_file (gnome_program_get (),
+                                            /* FIXME should I use APP_PIXMAP? */
+                                            GNOME_FILE_DOMAIN_PIXMAP,
+                                            profile->priv->icon_file,
+                                            TRUE, NULL);
+
+      if (filename == NULL)
+        {
+          g_printerr (_("Could not find an icon called \"%s\" for terminal profile \"%s\"\n"),
+                      profile->priv->icon_file,
+                      terminal_profile_get_visible_name (profile));
+
+          profile->priv->icon_load_failed = TRUE;
+          
+          goto out;
+        }
+      
+      err = NULL;
+      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
+
+      if (pixbuf == NULL)
+        {
+          g_printerr (_("Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"),
+                      filename,
+                      terminal_profile_get_visible_name (profile),
+                      err->message);
+          g_error_free (err);
+
+          g_free (filename);
+
+          profile->priv->icon_load_failed = TRUE;
+          
+          goto out;
+        }
+
+      profile->priv->icon = pixbuf;
+    }
+
+ out:
+  return profile->priv->icon;
+}
+
+void
+terminal_profile_set_icon_file (TerminalProfile *profile,
+                                const char      *filename)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_ICON);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           filename,
+                           NULL);
+
+  g_free (key);
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -1019,6 +1111,33 @@ set_custom_command (TerminalProfile *profile,
       profile->priv->custom_command = g_strdup (candidate_command);
     }
   /* otherwise just leave the old command */
+  
+  return TRUE;
+}
+
+static gboolean
+set_icon_file (TerminalProfile *profile,
+               const char      *candidate_file)
+{
+  if (candidate_file &&
+      strcmp (profile->priv->icon_file, candidate_file) == 0)
+    return FALSE;
+  
+  if (candidate_file != NULL)
+    {
+      
+      g_free (profile->priv->icon_file);
+      profile->priv->icon_file = g_strdup (candidate_file);
+
+      if (profile->priv->icon != NULL)
+        {
+          g_object_unref (G_OBJECT (profile->priv->icon));
+          profile->priv->icon = NULL;
+        }
+
+      profile->priv->icon_load_failed = FALSE; /* try again */
+    }
+  /* otherwise just leave the old filename */
   
   return TRUE;
 }
@@ -1345,6 +1464,20 @@ terminal_profile_update (TerminalProfile *profile)
   
   g_free (key);
 
+  /* KEY_ICON */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_ICON);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_icon_file (profile, str_val))
+    mask |= TERMINAL_SETTING_ICON;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_ICON;
+  
+  g_free (key);
   
   /* Update state and emit signals */
   
@@ -1680,7 +1813,20 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_CUSTOM_COMMAND);
     }
+  else if (strcmp (key, KEY_ICON) == 0)
+    {
+      const char *str_val;
 
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_icon_file (profile, str_val))
+        mask |= TERMINAL_SETTING_ICON;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_ICON);
+    }
+  
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -2100,9 +2246,16 @@ terminal_profile_create (TerminalProfile *base_profile,
   g_free (key);
   key = gconf_concat_dir_and_key (profile_dir,
                                   KEY_CUSTOM_COMMAND);
-  /* default title is profile name, not copied from base */
   gconf_client_set_string (base_profile->priv->conf,
                            key, base_profile->priv->custom_command,
+                           &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_ICON);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, base_profile->priv->icon_file,
                            &err);
   BAIL_OUT_CHECK ();
   

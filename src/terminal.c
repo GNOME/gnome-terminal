@@ -23,6 +23,7 @@
 #include "terminal-window.h"
 #include "profile-editor.h"
 #include <gconf/gconf-client.h>
+#include <libgnome/gnome-program.h>
 #include <popt.h>
 #include <string.h>
 
@@ -230,6 +231,19 @@ initial_window_free (InitialWindow *iw)
   g_free (iw);
 }
 
+static GnomeModuleInfo module_info = {
+  PACKAGE, VERSION, N_("Terminal"),
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  NULL
+};
+
 int
 main (int argc, char **argv)
 {
@@ -247,6 +261,19 @@ main (int argc, char **argv)
   textdomain (GETTEXT_PACKAGE);
   
   gtk_init (&argc, &argv);
+
+  gnome_program_init (PACKAGE, VERSION,
+                      &module_info,
+                      1, /* don't give it any args for now since option parsing doesn't go
+                          * through here
+                          */
+                      argv,
+                      GNOME_PARAM_APP_PREFIX, PROFTERM_PREFIX,
+                      GNOME_PARAM_APP_SYSCONFDIR, PROFTERM_SYSCONFDIR,
+                      GNOME_PARAM_APP_DATADIR, PROFTERM_DATADIR,
+                      GNOME_PARAM_APP_LIBDIR, PROFTERM_LIBDIR,
+                      NULL);
+ 
   conf = gconf_client_get_default ();
 
   err = NULL;  

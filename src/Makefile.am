@@ -1,8 +1,13 @@
 
-INCLUDES=@PROFTERM_CFLAGS@ -DPROFTERM_PKGDATADIR=\"$(datadir)/profterm\"	  \
-	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\" \
-	-DPROFTERM_GLADE_DIR=\"$(gladedir)\"					  \
-	-DPROFTERM_GLADE_FILE=\"profterm.glade2\"
+INCLUDES=@PROFTERM_CFLAGS@								\
+	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\"	\
+	-DPROFTERM_GLADE_DIR=\"$(gladedir)\"						\
+	-DPROFTERM_GLADE_FILE=\"profterm.glade2\"					\
+	-DPROFTERM_DATADIR=\"$(datadir)\"						\
+	-DPROFTERM_LIBDIR=\"$(libdir)\"							\
+	-DPROFTERM_PREFIX=\"$(prefix)\"							\
+	-DPROFTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
+	-DPROFTERM_PKGDATADIR=\"$(pkgdatadir)\"
 
 bin_PROGRAMS=profterm
 
@@ -35,6 +40,9 @@ profterm.glade2: profterm.glade $(LIBGLADE_CONVERT)
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
 schema_DATA = profterm.schemas
 
+icondir = $(datadir)/pixmaps
+icon_DATA = gnome-terminal.png
+
 install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
 
@@ -43,4 +51,7 @@ EXTRA_DIST =				\
 	$(glade_src)			\
 	$(glade_msgs)			\
 	$(schema_DATA)
+
+
+
 

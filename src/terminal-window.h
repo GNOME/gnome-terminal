@@ -77,6 +77,8 @@ GList* terminal_window_list_screens (TerminalWindow *window);
 
 void terminal_window_update_scrollbar (TerminalWindow *window,
                                        TerminalScreen *screen);
+void terminal_window_update_icon      (TerminalWindow *window);
+void terminal_window_update_geometry  (TerminalWindow *window);
 
 G_END_DECLS
 

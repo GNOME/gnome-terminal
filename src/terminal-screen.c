@@ -311,7 +311,11 @@ reread_profile (TerminalScreen *screen)
                            terminal_profile_get_scrollback_lines (profile));
 
   if (screen->priv->window)
-    terminal_window_update_scrollbar (screen->priv->window, screen);
+    {
+      terminal_window_update_scrollbar (screen->priv->window, screen);
+      terminal_window_update_icon (screen->priv->window);
+      terminal_window_update_geometry (screen->priv->window);
+    }
 }
 
 static void
