@@ -699,6 +699,13 @@ delete_binding_changed (GtkWidget       *option_menu,
   terminal_profile_set_delete_binding (profile, i);
 }
 
+static void
+reset_compat_defaults_clicked (GtkWidget       *button,
+                               TerminalProfile *profile)
+{
+  terminal_profile_reset_compat_defaults (profile);
+}
+
 /*
  * initialize widgets
  */
@@ -1094,6 +1101,11 @@ terminal_profile_edit (TerminalProfile *profile,
       profile_editor_update_x_font (editor, profile);
       g_signal_connect (G_OBJECT (w), "clicked",
                         G_CALLBACK (x_font_clicked),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "reset-compat-defaults-button");
+      g_signal_connect (G_OBJECT (w), "clicked",
+                        G_CALLBACK (reset_compat_defaults_clicked),
                         profile);
     }
   else

@@ -244,6 +244,8 @@ void terminal_profile_set_backspace_binding     (TerminalProfile        *profile
 void terminal_profile_set_delete_binding        (TerminalProfile        *profile,
                                                  TerminalEraseBinding    binding);
 
+void terminal_profile_reset_compat_defaults     (TerminalProfile        *profile);
+
 TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
 void             terminal_profile_initialize             (GConfClient     *conf);
 GList*           terminal_profile_get_list               (void);

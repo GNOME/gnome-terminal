@@ -2629,6 +2629,62 @@ profile_change_notify (GConfClient *client,
 }
 
 static void
+set_key_to_default (TerminalProfile *profile,
+                    const char      *relative_key)
+{
+  char *key;
+  char *default_key;
+  GError *err;
+  GConfValue *val;
+
+  default_key = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX"/"FALLBACK_PROFILE_ID,
+                                          relative_key);
+
+  err = NULL;
+  val = gconf_client_get_default_from_schema (profile->priv->conf,
+                                              default_key,
+                                              &err);
+  if (err != NULL)
+    {
+      g_printerr (_("Error getting default value of %s: %s\n"),
+                  default_key, err->message);
+      g_error_free (err);
+    }
+
+  if (val == NULL)
+    g_printerr (_("There wasn't a default value for %s\n"),
+                default_key);
+  
+  g_free (default_key);
+  
+  if (val)
+    {
+      key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                      relative_key);
+      
+      err = NULL;      
+      gconf_client_set (profile->priv->conf,
+                        key, val, &err);
+      if (err != NULL)
+        {
+          g_printerr (_("Error setting key %s back to default: %s\n"),
+                      key, err->message);
+          g_error_free (err);
+        }
+
+      gconf_value_free (val);
+      g_free (key);
+    }
+}
+
+void
+terminal_profile_reset_compat_defaults (TerminalProfile *profile)
+{
+  set_key_to_default (profile, KEY_DELETE_BINDING);
+  set_key_to_default (profile, KEY_BACKSPACE_BINDING);
+}
+
+static void
 update_default_profile (const char *name,
                         gboolean    locked)
 {

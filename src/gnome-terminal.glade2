@@ -224,7 +224,7 @@
 			<widget class="GtkCheckButton" id="allow-bold-checkbutton">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Allow bold text</property>
+			  <property name="label" translatable="yes">_Allow bold text</property>
 			  <property name="use_underline">True</property>
 			  <property name="relief">GTK_RELIEF_NORMAL</property>
 			  <property name="active">False</property>
@@ -1913,6 +1913,7 @@
 			  <child>
 			    <widget class="GnomeFileEntry" id="background-image-fileentry">
 			      <property name="visible">True</property>
+			      <property name="max_saved">10</property>
 			      <property name="directory_entry">False</property>
 			      <property name="modal">False</property>
 
@@ -1929,7 +1930,6 @@
 				  <property name="activates_default">False</property>
 				</widget>
 			      </child>
-
 			    </widget>
 			    <packing>
 			      <property name="padding">0</property>
@@ -2210,53 +2210,6 @@ and operating sytems that expect different terminal behavior.</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
-		  <property name="expand">False</property>
-		  <property name="fill">True</property>
-		</packing>
-	      </child>
-
-	      <child>
-		<widget class="GtkTable" id="table31">
-		  <property name="visible">True</property>
-		  <property name="n_rows">1</property>
-		  <property name="n_columns">2</property>
-		  <property name="homogeneous">False</property>
-		  <property name="row_spacing">0</property>
-		  <property name="column_spacing">0</property>
-
-		  <child>
-		    <widget class="GtkAlignment" id="alignment16">
-		      <property name="visible">True</property>
-		      <property name="xalign">1.49012e-08</property>
-		      <property name="yalign">0.5</property>
-		      <property name="xscale">0</property>
-		      <property name="yscale">1</property>
-
-		      <child>
-			<widget class="GtkCheckButton" id="checkbutton18">
-			  <property name="visible">True</property>
-			  <property name="can_focus">True</property>
-			  <property name="label" translatable="yes">Allow fonts in wrong encoding</property>
-			  <property name="use_underline">True</property>
-			  <property name="relief">GTK_RELIEF_NORMAL</property>
-			  <property name="active">False</property>
-			  <property name="inconsistent">False</property>
-			  <property name="draw_indicator">True</property>
-			</widget>
-		      </child>
-		    </widget>
-		    <packing>
-		      <property name="left_attach">0</property>
-		      <property name="right_attach">2</property>
-		      <property name="top_attach">0</property>
-		      <property name="bottom_attach">1</property>
-		      <property name="x_options">fill</property>
-		      <property name="y_options"></property>
-		    </packing>
-		  </child>
-		</widget>
-		<packing>
-		  <property name="padding">0</property>
 		  <property name="expand">True</property>
 		  <property name="fill">True</property>
 		</packing>
@@ -2274,7 +2227,7 @@ and operating sytems that expect different terminal behavior.</property>
 		    <widget class="GtkButton" id="reset-compat-defaults-button">
 		      <property name="visible">True</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">Reset compatibility options to defaults</property>
+		      <property name="label" translatable="yes">_Reset compatibility options to defaults</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		    </widget>
@@ -2323,7 +2276,6 @@ and operating sytems that expect different terminal behavior.</property>
 </widget>
 
 <widget class="GtkDialog" id="keybindings-dialog">
-  <property name="visible">False</property>
   <property name="title" translatable="yes">Keybindings Editor</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
