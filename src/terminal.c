@@ -2361,7 +2361,7 @@ terminal_app_new_profile (TerminalApp     *app,
       g_signal_connect (G_OBJECT (w), "changed", G_CALLBACK (new_profile_name_entry_changed_callback), create_button);
       gtk_entry_set_activates_default (GTK_ENTRY (w), TRUE);
       gtk_widget_grab_focus (w);
-      terminal_util_set_atk_name_description (w, _("Enter profile name"), NULL);
+      terminal_util_set_atk_name_description (w, NULL, _("Enter profile name"));
       gtk_size_group_add_widget (size_group, w);
 
       wl = glade_xml_get_widget (xml, "new-profile-name-label");
@@ -2371,7 +2371,7 @@ terminal_app_new_profile (TerminalApp     *app,
       /* the base profile option menu */
       w = glade_xml_get_widget (xml, "new-profile-base-option-menu");
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", w);
-      terminal_util_set_atk_name_description (w, _("Choose base profile"), NULL);
+      terminal_util_set_atk_name_description (w, NULL, _("Choose base profile"));
       profile_optionmenu_refill (w);
       gtk_size_group_add_widget (size_group, w);
 
