@@ -31,9 +31,9 @@
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
+#include <gtk/gtklabel.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
-#include <eel/eel-ellipsizing-label.h>
 #include <libsn/sn-launchee.h>
 
 struct _TerminalWindowPrivate
@@ -1265,8 +1265,7 @@ title_changed_callback (TerminalScreen *screen,
     }
 
   label = screen_get_label (screen);
-  eel_ellipsizing_label_set_text (EEL_ELLIPSIZING_LABEL (label),
-                                  terminal_screen_get_title (screen));
+  gtk_label_set_text (GTK_LABEL (label), terminal_screen_get_title (screen));
 
   mi = screen_get_menuitem (screen);
   if (mi)
@@ -1363,7 +1362,8 @@ terminal_window_add_screen (TerminalWindow *window,
 
   hbox = gtk_hbox_new (FALSE, 0);
   scrollbar = gtk_vscrollbar_new (NULL);
-  label = eel_ellipsizing_label_new (terminal_screen_get_title (screen));
+  label = gtk_label_new (terminal_screen_get_title (screen));
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_widget_show (label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   

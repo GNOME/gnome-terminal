@@ -1,7 +1,7 @@
 
 EFENCE=
 
-SUBDIRS=eel skey
+SUBDIRS=skey
 
 INCLUDES=@TERM_CFLAGS@ \
 	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\" \
@@ -50,7 +50,7 @@ gnome_terminal_SOURCES=				\
 	simple-x-font-selector.h		\
 	$(EGGFILES)
 
-gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ eel/libeelcnp.la skey/libskey.la
+gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ skey/libskey.la
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2

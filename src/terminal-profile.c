@@ -1470,7 +1470,7 @@ terminal_profile_set_use_skey (TerminalProfile *profile,
 const PangoFontDescription*
 terminal_profile_get_font (TerminalProfile *profile)
 {
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
 
   return profile->priv->font;
 }

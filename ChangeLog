@@ -1,6 +1,16 @@
 2004-11-03  Mariano Suárez-Alvarez <mariano@gnome.org>
 
-	* terminal-screen.c(terminal_screen_do_popup): do not use gtk_clipboard_wait_is_text_available
+	* src/termnal-window.c(title_changed_callback, terminal_window_add_screen): use
+	  the new GtkLabel ellipsizing, instead of our own EelEllipsizingLabel.
+	* configure.in: require GTK+ >= 2.5.4 so that we actually have the ellipsizing
+	  stuff in GtkLabel.
+	* src/eel/*: remove this, as we do not need any more.
+	* src/terminal-profile.c(terminal_profile_get_font): fix the return value on the 
+	  g_return_val_if_fail call.
+
+2004-11-03  Mariano Suárez-Alvarez <mariano@gnome.org>
+
+	* src/terminal-screen.c(terminal_screen_do_popup): do not use gtk_clipboard_wait_is_text_available
 	  but explicitely do a gtk_clipboard_request_text, and build the popup in a new
 	  callback popup_clipboard_request_callback. Shoulf fix both bugs #157153 and #157151.
 
