@@ -1971,14 +1971,14 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
                      GDK_ACTION_COPY);
 }
 
-/* Indices of some xlfd string entries.  The first entry is 0 */
-#define XLFD_WEIGHT_INDEX			2
-#define XLFD_SLANT_INDEX			3
-#define XLFD_SIZE_IN_PIXELS_INDEX		6
-#define XLFD_SIZE_IN_POINTS_INDEX		7
-#define XLFD_HORIZONTAL_RESOLUTION_INDEX	8
-#define XLFD_VERTICAL_RESOLUTION_INDEX		9
-#define XLFD_SPACING_INDEX		        10
+/* Indices of some xlfd string entries.  The first entry is 1 */
+#define XLFD_WEIGHT_INDEX			3
+#define XLFD_SLANT_INDEX			4	
+#define XLFD_SIZE_IN_PIXELS_INDEX		7	
+#define XLFD_SIZE_IN_POINTS_INDEX		8	
+#define XLFD_HORIZONTAL_RESOLUTION_INDEX	9	
+#define XLFD_VERTICAL_RESOLUTION_INDEX		10	
+#define XLFD_SPACING_INDEX		        11
 
 #define XLFD_N_FIELDS 14
 
@@ -2098,7 +2098,7 @@ make_xfont_have_size_from_other_font (const char *fontname,
 
   ret = NULL;
   size_pixels = xlfd_get_nth_field (other_font, XLFD_SIZE_IN_PIXELS_INDEX);
-  size_points = xlfd_get_nth_field (other_font, XLFD_SIZE_IN_PIXELS_INDEX);
+  size_points = xlfd_get_nth_field (other_font, XLFD_SIZE_IN_POINTS_INDEX);
 
   if (size_pixels && size_points)
     {
