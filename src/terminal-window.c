@@ -311,7 +311,7 @@ append_stock_menuitem (GtkWidget  *menu,
                            NULL, &error);
   if (error)
     {
-      g_printerr (_("There was an error subscribing to notification of menu icon visibilty changes. (%s)\n"), error->message);
+      g_printerr (_("There was an error subscribing to notification of menu icon visibility changes. (%s)\n"), error->message);
       g_error_free (error);
     }
 

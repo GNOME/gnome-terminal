@@ -1,5 +1,3 @@
-/* dialog for editing a profile */
-
 /*
  * Copyright (C) 2002 Jonathan Blandford <jrb@redhat.com>
  *
