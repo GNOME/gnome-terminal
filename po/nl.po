@@ -1,24 +1,27 @@
 # Dutch translation of profterm.
-# Copyright (C) 2002 THE gnome-terminal'S COPYRIGHT HOLDER
+# Copyright (C) 2002 The gnome-terminal'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-terminal package.
 # Bruce Smit <brz@brz.nu>, 2002.
 # Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002
 # Reinout van Schouwen <reinout@cs.vu.nl>, 2002
 # Daniel van Eeden <daniel_e@dds.nl>, 2003
-# Daniel van Eeden <daniel_e@dds.nl>, 2003.
-# 
-# 
+# Vincent van Adrighem <adrighem@gnome.org> 2003.
+# Tino Meinen <a.t.meinen@chello.nl>, 2003.
+#
+# Voeg jezelf ook toe aan de translator_credits als je mee hebt geholpen
+# aan de vertaling van dit pakket.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-09-14 03:59+0200\n"
-"PO-Revision-Date: 2003-09-14 17:50+0200\n"
-"Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
+"POT-Creation-Date: 2003-09-22 04:16+0200\n"
+"PO-Revision-Date: 2003-09-23 01:41+0200\n"
+"Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gnome-terminal.desktop.in.h:1
 msgid "Command line"
@@ -190,7 +193,7 @@ msgstr "Thais"
 msgid "User Defined"
 msgstr "Gebruiker-gedefinieerd"
 
-#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2750
+#: src/encoding.c:437 src/profile-editor.c:884 src/terminal.c:2751
 #: src/terminal-window.c:2576
 #, c-format
 msgid "There was an error displaying help: %s"
@@ -1251,11 +1254,14 @@ msgid ""
 "If true, utmp/wtmp will be updated when the command inside the terminal is "
 "launched."
 msgstr ""
+"Indien waar, zal utmp/wtmp worden bijgewerkt wanneer de opdracht vanuit de "
+"terminal wordt uigevoerd."
 
 #: src/gnome-terminal.schemas.in.h:91
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
+"Indien waar, zal de terminal naar onderen schuiven als er nieuwe uitvoer is."
 
 #: src/gnome-terminal.schemas.in.h:92
 msgid "List of available encodings"
@@ -1295,6 +1301,10 @@ msgid ""
 "discarded. Be careful with this setting; it's the primary factor in "
 "determining how much memory the terminal will use."
 msgstr ""
+"Aantal regels in de schuifbuffer. U kunt dit aantal regels in de terminal "
+"terugschuiven; regels die niet meer in de buffer passen worden weggegooid. "
+"Wees zorgvuldig met deze instelling: het is de bepalende factor voor het "
+"geheugengebruik van de terminal."
 
 #: src/gnome-terminal.schemas.in.h:98
 msgid "Palette for terminal applications"
@@ -1305,6 +1315,9 @@ msgid ""
 "Popup a dialog when an s/key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
 msgstr ""
+"Een dialoogvenster tonen als een s/key challenge response query ontdekt en "
+"aangeklikt wordt. Het intypen van een wachtwoord in het dialoogvenster zal "
+"het wachtwoord doen verzenden aan de terminal."
 
 #: src/gnome-terminal.schemas.in.h:100
 msgid "Position of the scrollbar"
@@ -1363,9 +1376,11 @@ msgstr ""
 "normaalgesproken verbonden is met backspace of delete. \"escape-sequence\" "
 "is normaalgesproken de goede instelling voor de delete toets."
 
+# dingus komt oorspronkelijk uit het Nederlands (GUADEC-2003): dinges is
+# een onbenoemd iets, een ding.
 #: src/gnome-terminal.schemas.in.h:107
 msgid "Support skey dingus clicking"
-msgstr ""
+msgstr "skey dinges klikken ondersteunen"
 
 #: src/gnome-terminal.schemas.in.h:109
 msgid ""
@@ -1398,12 +1413,16 @@ msgid ""
 "True if the cursor should blink when the terminal has focus, for windows/"
 "tabs with this profile."
 msgstr ""
+"Waar, indien de cursor moet knipperen als de terminal focus heeft. Geldt "
+"voor vensters/tabs met dit profiel."
 
 #: src/gnome-terminal.schemas.in.h:113
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 msgstr ""
+"Waar indien de menubalk moet worden getoond in nieuwe vensters. Geldt voor "
+"vensters/tabs met dit profiel."
 
 #: src/gnome-terminal.schemas.in.h:114
 msgid ""
@@ -1427,12 +1446,18 @@ msgid ""
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
 "a range) should be the first character given."
 msgstr ""
+"Wanneer tekst per woord wordt geselecteerd, worden reeksen van deze tekens "
+"beschouwd als alleenstaande woorden. Reeksen kunnen worden gegevens als \"A-Z"
+"\". Een verbindingsstreepje (die geen reeks uitdrukt) moet als eerste teken "
+"worden gegeven."
 
 #: src/gnome-terminal.schemas.in.h:118
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
 msgstr ""
+"Waat de schuifbalk voor de terminal moet staan. Mogelijkheden zijjn \"left"
+"\", \"right\", en \"disabled\"."
 
 #: src/gnome-terminal.schemas.in.h:119
 msgid "Whether the menubar has mnemonics"
@@ -1456,6 +1481,9 @@ msgid ""
 "with some applications run inside the terminal so it's possible to turn them "
 "off."
 msgstr ""
+"De menubalk heeft sneltoetsen in de vorm Alt+letter. Deze zouden storen bij "
+"bepaalde toepassingen die in de terminal worden uitgevoerd. Vandaar de "
+"mogelijkheid om deze vorm van sneltoetsen uit te zetten."
 
 #: src/gnome-terminal.schemas.in.h:124
 msgid "Whether to launch the command in the terminal as a login shell"
@@ -1500,7 +1528,7 @@ msgstr ""
 
 #: src/gnome-terminal.schemas.in.h:132
 msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr ""
+msgstr "Kleuren van het thema gebruiken voor de terminal"
 
 #: src/gnome-terminal.schemas.in.h:133
 msgid "Whether to use the system font"
@@ -1611,9 +1639,10 @@ msgstr "karaktercel"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS overschreden. Sommige lettertypen kunnen ontbreken."
 
+# geen idee wat S/Key challenge is
 #: src/skey-popup.c:63
 msgid "The text you clicked doesn't seem to be an S/Key challenge."
-msgstr ""
+msgstr "De tekt die u heeft aangeklikt is schijnbaar geen S/Key challenge."
 
 #: src/terminal-accels.c:75
 msgid "New Tab"
@@ -2161,78 +2190,78 @@ msgstr ""
 "Het profiel dat u geselecteerd heeft als basis voor uw nieuwe profiel "
 "bestaat niet meer"
 
-#: src/terminal.c:2250
+#: src/terminal.c:2251
 msgid "Enter profile name"
 msgstr "Voer de profielnaam in"
 
-#: src/terminal.c:2261
+#: src/terminal.c:2262
 msgid "Choose base profile"
 msgstr "Kies basis profiel"
 
-#: src/terminal.c:2401
+#: src/terminal.c:2402
 msgid "Profile list"
 msgstr "Profielenlijst"
 
-#: src/terminal.c:2470
+#: src/terminal.c:2471
 msgid "You must select one or more profiles to delete."
 msgstr "U dient één of meerdere profielen te selecteren om te verwijderen."
 
-#: src/terminal.c:2481
+#: src/terminal.c:2482
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "U dient minimaal één profiel te hebben; u kunt ze niet allemaal verwijderen."
 
-#: src/terminal.c:2490
+#: src/terminal.c:2491
 msgid "Delete these two profiles?\n"
 msgstr "Deze twee profielen verwijderen?\n"
 
-#: src/terminal.c:2492
+#: src/terminal.c:2493
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Deze %d profielen verwijderen?\n"
 
-#: src/terminal.c:2510
+#: src/terminal.c:2511
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Profiel \"%s\" verwijderen?"
 
-#: src/terminal.c:2532
+#: src/terminal.c:2533
 msgid "Delete Profile"
 msgstr "Profiel verwijderen"
 
-#: src/terminal.c:2772 src/terminal-window.c:2007
+#: src/terminal.c:2773 src/terminal-window.c:2007
 msgid "_Edit"
 msgstr "Be_werken"
 
-#: src/terminal.c:2805
+#: src/terminal.c:2806
 msgid "Edit Profiles"
 msgstr "Profielen bewerken"
 
-#: src/terminal.c:2845
+#: src/terminal.c:2846
 msgid "Profile _used when launching a new terminal:"
 msgstr "Gebr_uikte profiel bij starten van een nieuwe terminal:"
 
-#: src/terminal.c:2867
+#: src/terminal.c:2868
 msgid "_Profiles:"
 msgstr "_Profielen:"
 
-#: src/terminal.c:2916
+#: src/terminal.c:2917
 msgid "Click to open new profile dialog"
 msgstr "Klik om nieuw profieldialoogvenster te openen"
 
-#: src/terminal.c:2929
+#: src/terminal.c:2930
 msgid "Click to open edit profile dialog"
 msgstr "Klik om profielbewerkingsdialoogvenster te openen"
 
-#: src/terminal.c:2939
+#: src/terminal.c:2940
 msgid "Click to delete selected profile"
 msgstr "Klik om geselecteerd profiel te wissen"
 
-#: src/terminal.c:2988
+#: src/terminal.c:2989
 msgid "Click button to choose profile"
 msgstr "Klik op de knop om een profiel te kiezen"
 
-#: src/terminal.c:3471
+#: src/terminal.c:3472
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2241,7 +2270,7 @@ msgstr ""
 "Het bestand \"%s\" ontbreekt. Dit geeft aan dat de toepassing incorrect is "
 "geïnstalleerd."
 
-#: src/terminal.c:3633
+#: src/terminal.c:3634
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2249,7 +2278,7 @@ msgstr ""
 "Het schijnt dat u gnome-terminal.server niet hebt geïnstalleerd in een "
 "geldige locatie. Fabrieksmodus uitgeschakeld.\n"
 
-#: src/terminal.c:3636
+#: src/terminal.c:3637
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2257,7 +2286,7 @@ msgstr ""
 "Fout bij registreren van de terminal bij de activatiedienst; fabrieksmodus "
 "uitgeschakeld.\n"
 
-#: src/terminal.c:3672
+#: src/terminal.c:3673
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Niet gelukt om terminal server op te halen van de activatieserver\n"
 
@@ -2378,7 +2407,7 @@ msgstr "Kan het lettertype \"%s\"  niet laden\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Er is een probleem opgetreden met de opdracht voor deze terminal: %s"
 
-#: src/terminal-screen.c:1182
+#: src/terminal-screen.c:1188
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2387,7 +2416,7 @@ msgstr ""
 "Kan het adres \"%s\" niet openen:\n"
 "%s"
 
-#: src/terminal-screen.c:1275 src/terminal-window.c:954
+#: src/terminal-screen.c:1281 src/terminal-window.c:954
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2396,82 +2425,82 @@ msgstr ""
 "Er is een fout opgetreden bij het laden van configuratiewaarde voor het "
 "gebruik van afbeeldingen in menu's. (%s)\n"
 
-#: src/terminal-screen.c:1325
+#: src/terminal-screen.c:1331
 msgid "_Open Link"
 msgstr "Koppeling _openen"
 
-#: src/terminal-screen.c:1330
+#: src/terminal-screen.c:1336
 msgid "_Copy Link Address"
 msgstr "Koppelingsadres _kopiëren"
 
-#: src/terminal-screen.c:1341 src/terminal-window.c:758
+#: src/terminal-screen.c:1347 src/terminal-window.c:758
 msgid "_New Window"
 msgstr "_Nieuw venster"
 
-#: src/terminal-screen.c:1348 src/terminal-window.c:761
+#: src/terminal-screen.c:1354 src/terminal-window.c:761
 msgid "New _Tab"
 msgstr "Nieuw _tabblad"
 
-#: src/terminal-screen.c:1372 src/terminal-window.c:867
+#: src/terminal-screen.c:1378 src/terminal-window.c:867
 msgid "_Profile"
 msgstr "_Profiel"
 
-#: src/terminal-screen.c:1422
+#: src/terminal-screen.c:1428
 msgid "_Edit Current Profile..."
 msgstr "Huidig_e profiel bewerken..."
 
-#: src/terminal-screen.c:1428
+#: src/terminal-screen.c:1434
 msgid "_Input Methods"
 msgstr "_Invoermethoden"
 
-#: src/terminal-screen.c:1444
+#: src/terminal-screen.c:1450
 msgid "Hide _Menubar"
 msgstr "_Menubalk verbergen"
 
-#: src/terminal-screen.c:1449
+#: src/terminal-screen.c:1455
 msgid "Show _Menubar"
 msgstr "_Menubalk tonen"
 
-#: src/terminal-screen.c:1458
+#: src/terminal-screen.c:1464
 msgid "Secure _Keyboard"
 msgstr "_Toetsenbord beveiligen"
 
-#: src/terminal-screen.c:1806
+#: src/terminal-screen.c:1812
 msgid "Change terminal title"
 msgstr "Terminaltitel wijzigen"
 
-#: src/terminal-screen.c:1833
+#: src/terminal-screen.c:1839
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/terminal-screen.c:1951
+#: src/terminal-screen.c:1957
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: src/terminal-screen.c:1974
+#: src/terminal-screen.c:1980
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Kleur gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%d)\n"
 
-#: src/terminal-screen.c:2017
+#: src/terminal-screen.c:2023
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla-url gesleept naar de terminal heeft verkeerd formaat (%d) of lengte "
 "(%d)\n"
 
-#: src/terminal-screen.c:2066
+#: src/terminal-screen.c:2072
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-lijst gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: src/terminal-screen.c:2120
+#: src/terminal-screen.c:2126
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2479,7 +2508,7 @@ msgstr ""
 "Afbeeldingsnaam gesleept naar de terminal heeft verkeerd formaat (%d) of "
 "lengte (%d)\n"
 
-#: src/terminal-screen.c:2146
+#: src/terminal-screen.c:2152
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr ""
@@ -2658,7 +2687,9 @@ msgid "translator_credits"
 msgstr ""
 "Bruce Smit\n"
 "Ronald Hummelink\n"
-"Reinout van Schouwen"
+"Reinout van Schouwen\n"
+"Vincent van Adrighem\n"
+"Tino Meinen"
 
 #: src/terminal-window.c:2610
 msgid "GNOME Terminal"
