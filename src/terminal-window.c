@@ -786,7 +786,7 @@ terminal_window_init (TerminalWindow *window)
                                TRUE);                                      
   
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "select_page",
+                          "switch_page",
                           G_CALLBACK (notebook_page_selected_callback),
                           window);
   
@@ -1676,8 +1676,6 @@ terminal_window_set_active (TerminalWindow *window,
 #endif
   terminal_window_set_size (window, screen, TRUE);
   
-  gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
-
   fill_in_config_picker_submenu (window);
   fill_in_new_term_submenus (window);
   update_zoom_items (window);
@@ -2623,6 +2621,7 @@ about_callback (GtkWidget      *menuitem,
 
   const char *authors[] = {
     "Havoc Pennington <hp@redhat.com>",
+    "Mariano Su\303\241rez-Alvarez <msuarezalvarez@arnet.com.ar>",
     NULL
   };
   const char *documenters [] = {

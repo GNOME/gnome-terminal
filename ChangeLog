@@ -1,3 +1,11 @@
+2003-10-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-window.c(about_callback): added myself.
+	* src/terminal-window.c(terminal_window_init,terminal_window_set_active): 
+	  listen to the switch_page signal on the notebook, but don't grab the
+	  focus when setting the active page: let the notebook do that. Fixes
+	  125282.
+	
 2003-10-22 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* configure.in: 2.5.0
