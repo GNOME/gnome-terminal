@@ -314,7 +314,7 @@ terminal_window_init (TerminalWindow *window)
                    G_CALLBACK (close_window_callback),
                    window);
   
-  append_menuitem (menu, _("_Close tab"),
+  append_menuitem (menu, _("C_lose tab"),
                    G_CALLBACK (close_tab_callback),
                    window);
   
