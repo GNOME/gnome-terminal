@@ -762,7 +762,9 @@ terminal_window_set_active (TerminalWindow *window,
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
                                                         screen_get_hbox (screen)));
 
-  set_size (widget);
+  /* set initial size of window if window isn't onscreen */
+  if (!GTK_WIDGET_MAPPED (window))
+    set_size (widget);
 }
 
 TerminalScreen*
