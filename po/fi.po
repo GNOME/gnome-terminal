@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm 1.9.0\n"
-"POT-Creation-Date: 2002-03-01 18:26+0200\n"
+"POT-Creation-Date: 2002-03-04 21:58-0500\n"
 "PO-Revision-Date: 2002-03-01 18:28+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -132,16 +132,16 @@ msgid "Custom co_mmand:"
 msgstr "Muu _komento:"
 
 #: src/gnome-terminal.glade2.h:17
-msgid "Disable all accelerators"
-msgstr "Älä käytä pikanäppäimiä"
-
-#: src/gnome-terminal.glade2.h:18
 msgid "Disable all menu mnemonics (such as Alt+f to open File menu)"
 msgstr "Älä käytä pikavalintoja (kuten Alt+t tiedostovalikossa)."
 
-#: src/gnome-terminal.glade2.h:19
+#: src/gnome-terminal.glade2.h:18
 msgid "Disabled"
 msgstr "Ei käytössä"
+
+#: src/gnome-terminal.glade2.h:19
+msgid "Don't bother to report bugs on this dialog yet, it isn't finished."
+msgstr ""
 
 #: src/gnome-terminal.glade2.h:20
 msgid "Effects"
@@ -398,11 +398,11 @@ msgstr ""
 msgid "kilobytes"
 msgstr "kilotavua"
 
-#: src/terminal-profile.c:265 src/terminal-window.c:267 src/terminal.c:308
+#: src/terminal-profile.c:265 src/terminal-window.c:324 src/terminal.c:310
 msgid "Terminal"
 msgstr "Pääte"
 
-#: src/terminal-profile.c:372 src/terminal.c:637
+#: src/terminal-profile.c:372 src/terminal.c:639
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Tapahtui virhe ladatessa asetuksia paikasta %s. (%s)\n"
@@ -476,27 +476,27 @@ msgid "Palette had %d entries instead of %d\n"
 msgstr "Paletissa oli %d kohtaa %d:n sijaan\n"
 
 # , c-format
-#: src/terminal-screen.c:506
+#: src/terminal-screen.c:507
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Ei voinut ladata kirjasinta \"%s\"\n"
 
-#: src/terminal-screen.c:634
+#: src/terminal-screen.c:635
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
 msgstr "Virhe luodessa lapsiprosessia tätä päätettä varten: %s"
 
-#: src/terminal-screen.c:659
+#: src/terminal-screen.c:660
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Virhe tämän päätteen komennossa: %s"
 
-#: src/terminal-screen.c:1023
+#: src/terminal-screen.c:1024
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Ei voinut suorittaa komentoa %s: %s\n"
 
-#: src/terminal-screen.c:1181
+#: src/terminal-screen.c:1182
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -505,116 +505,183 @@ msgstr ""
 "Ei voinut avata osoitetta \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1300 src/terminal-window.c:303
+#: src/terminal-screen.c:1303 src/terminal-window.c:369
 msgid "_New window"
 msgstr "_Uusi ikkuna"
 
-#: src/terminal-screen.c:1305 src/terminal-window.c:306
+#: src/terminal-screen.c:1310 src/terminal-window.c:373
 msgid "New _tab"
 msgstr "Uusi _välilehti"
 
-#: src/terminal-screen.c:1322 src/terminal-window.c:350
+#: src/terminal-screen.c:1334 src/terminal-window.c:462
 msgid "_Profile"
 msgstr "_Profiili"
 
-#: src/terminal-screen.c:1372 src/terminal-window.c:354
+#: src/terminal-screen.c:1384
 msgid "_Edit current profile..."
 msgstr "_Muokkaa nykyistä profiilia..."
 
-#: src/terminal-screen.c:1378
+#: src/terminal-screen.c:1390
 msgid "Hide _Menubar"
 msgstr "Piilota _valikkopalkki"
 
-#: src/terminal-screen.c:1383
+#: src/terminal-screen.c:1395
 msgid "Show _Menubar"
 msgstr "Näytä valikkopalkki"
 
-#: src/terminal-screen.c:1389
+#: src/terminal-screen.c:1401
 msgid "Secure _Keyboard"
 msgstr "_Turvallinen näppäimistö"
 
-#: src/terminal-screen.c:1395
+#: src/terminal-screen.c:1407
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: src/terminal-screen.c:1402
+#: src/terminal-screen.c:1414
 msgid "_Copy Link Address"
 msgstr "Kopioi _linkin kohde"
 
-#: src/terminal-window.c:298
-msgid "_File"
-msgstr "_Tiedosto"
+#. This is fairly bogus to have here but I don't know
+#. * where else to put it really
+#.
+#: src/terminal-window.c:380
+#, fuzzy
+msgid "New _profile..."
+msgstr "_Uusi profiili..."
 
-#: src/terminal-window.c:313
+#: src/terminal-window.c:386
 msgid "_Close window"
 msgstr "_Sulje ikkuna"
 
-#: src/terminal-window.c:317
+#: src/terminal-window.c:390
 msgid "C_lose tab"
 msgstr "S_ulje välilehti"
 
-#: src/terminal-window.c:322
-msgid "_Edit"
-msgstr "_Muokkaa"
+#: src/terminal-window.c:419
+#, fuzzy
+msgid "C_urrent profile..."
+msgstr "_Muokkaa nykyistä profiilia..."
 
-#: src/terminal-window.c:337
-msgid "_Terminal"
-msgstr "_Pääte"
+#: src/terminal-window.c:422
+#, fuzzy
+msgid "_Keybindings..."
+msgstr "Pikanäppäinmuokkain"
 
-#: src/terminal-window.c:357
-msgid "_New profile..."
+#: src/terminal-window.c:425
+#, fuzzy
+msgid "P_rofiles..."
 msgstr "_Uusi profiili..."
 
-#: src/terminal-window.c:360
-msgid "_Manage profiles..."
-msgstr "_Hallinnoi profiileja..."
-
-#: src/terminal-window.c:366
+#: src/terminal-window.c:438
 msgid "Hide menu_bar"
 msgstr "Piilota valikko_palkki"
 
-#: src/terminal-window.c:369
-msgid "_Reset terminal"
-msgstr "_Alusta pääte"
+#: src/terminal-window.c:441 src/terminal-window.c:1451
+msgid "_Full screen"
+msgstr ""
 
-#: src/terminal-window.c:372
+#: src/terminal-window.c:465
+#, fuzzy
+msgid "_Reset"
+msgstr "_Poista"
+
+#: src/terminal-window.c:468
 msgid "Reset and C_lear"
 msgstr "Alusta ja t_yhjennä"
 
-#: src/terminal-window.c:376
+#: src/terminal-window.c:482
+#, fuzzy
+msgid "_Previous tab"
+msgstr "S_ulje välilehti"
+
+#: src/terminal-window.c:486
+#, fuzzy
+msgid "_Next tab"
+msgstr "Uusi _välilehti"
+
+#: src/terminal-window.c:503
+#, fuzzy
+msgid "_Help Contents"
+msgstr "Ohjeasetukset"
+
+#: src/terminal-window.c:508
+#, fuzzy
+msgid "_About GNOME Terminal"
+msgstr "Gnomen pääte"
+
+#: src/terminal-window.c:599
+#, fuzzy, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr "Tapahtui virhe ladatessa asetuksia paikasta %s. (%s)\n"
+
+#: src/terminal-window.c:618
+#, fuzzy, c-format
+msgid ""
+"There was an error subscribing to notification of terminal window "
+"configuration changes. (%s)\n"
+msgstr ""
+"Tapahtui virhe listautuessa huomautettavaksi päätteen profiilin muutoksista. "
+"(%s)\n"
+
+#: src/terminal-window.c:1321
+msgid "_File"
+msgstr "_Tiedosto"
+
+#: src/terminal-window.c:1323
+msgid "_Edit"
+msgstr "_Muokkaa"
+
+#: src/terminal-window.c:1325
+#, fuzzy
+msgid "_View"
+msgstr "_Tiedosto"
+
+#: src/terminal-window.c:1327
+msgid "_Terminal"
+msgstr "_Pääte"
+
+#: src/terminal-window.c:1329
+#, fuzzy
+msgid "_Go"
+msgstr "_Ei"
+
+#: src/terminal-window.c:1331
 msgid "_Help"
 msgstr "_Ohje"
 
-#: src/terminal-window.c:381
-msgid "_Help on GNOME terminal"
-msgstr "Gnomen päätteen _ohje"
+#: src/terminal-window.c:1447
+msgid "_Restore normal size"
+msgstr ""
 
-#. FIXME use stock item
-#: src/terminal-window.c:385
-msgid "_About"
-msgstr "_Tietoja..."
+#: src/terminal-window.c:1633
+msgid ""
+"Your current desktop environment does not support the full screen feature.\n"
+" (In technical terms, you need a window manager with support for the "
+"_NET_WM_STATE_FULLSCREEN property.)"
+msgstr ""
 
-#: src/terminal-window.c:1208
+#: src/terminal-window.c:1740
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright © 2002 Havoc Pennington"
 
-#: src/terminal-window.c:1209
+#: src/terminal-window.c:1741
 msgid "GNOME Terminal"
 msgstr "Gnomen pääte"
 
-#: src/terminal.c:114
+#: src/terminal.c:116
 msgid "Help options"
 msgstr "Ohjeasetukset"
 
-#: src/terminal.c:123
+#: src/terminal.c:125
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Suorita tämän valitsimen parametri päätteessä."
 
-#: src/terminal.c:132
+#: src/terminal.c:134
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Suorita loppu komentorivi päätteessä."
 
-#: src/terminal.c:141
+#: src/terminal.c:143
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -622,11 +689,11 @@ msgstr ""
 "Avaa uusi ikkuna, jossa on annetun profiilin välilehti. Näitä valitsimia voi "
 "olla useita."
 
-#: src/terminal.c:142 src/terminal.c:151
+#: src/terminal.c:144 src/terminal.c:153
 msgid "PROFILENAME"
 msgstr "PROFIILINIMI"
 
-#: src/terminal.c:150
+#: src/terminal.c:152
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -634,7 +701,7 @@ msgstr ""
 "Avaa viimeksi avatussa ikkunassa uusi välilehti, jossa on annettu profiili. "
 "Näitä valitsimia voi olla useita."
 
-#: src/terminal.c:159
+#: src/terminal.c:161
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -642,11 +709,11 @@ msgstr ""
 "Avaa uusi ikkuna, jossa on annettu profiilin ID. Tätä käytetään sisäisesti "
 "istuntojen tallentamisessa."
 
-#: src/terminal.c:160 src/terminal.c:169
+#: src/terminal.c:162 src/terminal.c:171
 msgid "PROFILEID"
 msgstr "PROFIILI-ID"
 
-#: src/terminal.c:168
+#: src/terminal.c:170
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -654,7 +721,7 @@ msgstr ""
 "Avaa viimeksi avatussa ikkunassa uusi välilehti, jossa on annettu profiili-"
 "ID. Tätä käytetään sisäisesti istuntojen tallentamisessa."
 
-#: src/terminal.c:177
+#: src/terminal.c:179
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -664,7 +731,7 @@ msgstr ""
 "ikkunaan ja voi esiintyä kerran jokaista komentoriviltä luotua ikkunaa "
 "kohden."
 
-#: src/terminal.c:186
+#: src/terminal.c:188
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -674,7 +741,7 @@ msgstr ""
 "yhteen ikkunaan ja voi esiintyä kerran jokaista komentoriviltä luotua "
 "ikkunaa kohden."
 
-#: src/terminal.c:195
+#: src/terminal.c:197
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -682,11 +749,11 @@ msgstr ""
 "Ikkunan mitat (X, ks. \"X\"-manuaalisivu). Voi esiintyä kerran avattavaa "
 "ikkunaa kohden."
 
-#: src/terminal.c:196
+#: src/terminal.c:198
 msgid "GEOMETRY"
 msgstr "MITAT"
 
-#: src/terminal.c:204
+#: src/terminal.c:206
 msgid ""
 "Ask existing profterm process to open a new window, if possible. (Not yet "
 "implemented, http://bugzilla.gnome.org/show_bug.cgi?id=71442"
@@ -695,16 +762,16 @@ msgstr ""
 "mahdollista. (Tämä ei vielä toimi: http://bugzilla.gnome.org/show_bug.cgi?"
 "id=71442)"
 
-#: src/terminal.c:406
+#: src/terminal.c:408
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Valitsin --command/-e vaatii ajettavan komennon parametrina\n"
 
-#: src/terminal.c:414
+#: src/terminal.c:416
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Valitsimen --command/-e parametri ei ole kunnollinen komento: %s\n"
 
-#: src/terminal.c:424 src/terminal.c:446
+#: src/terminal.c:426 src/terminal.c:448
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -712,7 +779,7 @@ msgstr ""
 "--command/-e/--execute/-x annettu samalle ikkunalle tai välilehdelle "
 "useammin kuin kerran\n"
 
-#: src/terminal.c:438
+#: src/terminal.c:440
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -720,7 +787,7 @@ msgstr ""
 "Valitsin --execute/-x vaatii ajettavan komennon annettavaksi lopulla "
 "komentorivillä\n"
 
-#: src/terminal.c:465
+#: src/terminal.c:467
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -728,7 +795,7 @@ msgstr ""
 "Valitsin --window-with-profile vaatii parametrin, joka kertoo käytettävän "
 "profiilin\n"
 
-#: src/terminal.c:486
+#: src/terminal.c:488
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -736,19 +803,19 @@ msgstr ""
 "Valitsin --tab-with-profile vaatii parametrin, joka kertoo käytettävän "
 "profiilin\n"
 
-#: src/terminal.c:516 src/terminal.c:542
+#: src/terminal.c:518 src/terminal.c:544
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Valitsin --show-menubar annettu kahdesti samaa ikkunaa kohden\n"
 
-#: src/terminal.c:567
+#: src/terminal.c:569
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Valitsin --geometry vaatii parametrin, joka määrää ikkunan mitat\n"
 
-#: src/terminal.c:576 src/terminal.c:586
+#: src/terminal.c:578 src/terminal.c:588
 msgid "Two geometries given for one window\n"
 msgstr "Kahdet mitat annettu samalle ikkunalle\n"
 
-#: src/terminal.c:610
+#: src/terminal.c:612
 #, c-format
 msgid ""
 "Error on option %s: %s.\n"
@@ -758,12 +825,12 @@ msgstr ""
 "Aja \"%s --help\" nähdäksesi täydellisen luettelon mahdollisista "
 "valitsimista.\n"
 
-#: src/terminal.c:620
+#: src/terminal.c:622
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Virheellinen parametri: \"%s\"\n"
 
-#: src/terminal.c:653
+#: src/terminal.c:655
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -772,12 +839,12 @@ msgstr ""
 "Virhe listautuessa huomautettavaksi päätteen profiililuettelon muutoksista. "
 "(%s)\n"
 
-#: src/terminal.c:690
+#: src/terminal.c:694
 #, c-format
 msgid "No such profile '%s', using default profile"
 msgstr "Ei profiilia \"%s\", käyttää oletusta"
 
-#: src/terminal.c:746
+#: src/terminal.c:750
 msgid ""
 "--geometry given prior to options that create a new window, must be given "
 "after\n"
@@ -785,99 +852,114 @@ msgstr ""
 "--geometry annettu ennen valitsimia, jotka luovat ikkunoita, vaikka sen "
 "pitäisi olla jälkeen\n"
 
-#: src/terminal.c:830
+#: src/terminal.c:834
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Virheellinen mittamerkkijono \"%s\"\n"
 
-#: src/terminal.c:887
+#: src/terminal.c:891
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Virhe hakiessa luetteloa päätteen ominaisuuksista. (%s)\n"
 
-#: src/terminal.c:1063
+#: src/terminal.c:1114
 msgid "You have to name your profile."
 msgstr "Profiilille täytyy antaa nimi."
 
-#: src/terminal.c:1073
+#: src/terminal.c:1124
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Profiili nimeltä \"%s\" on jo olemassa"
 
-#: src/terminal.c:1110
+#: src/terminal.c:1161
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Uuden profiilin perustaksi valitsemasi profiili ei ole enää olemassa"
 
-#: src/terminal.c:1169
+#: src/terminal.c:1220
 msgid "New terminal profile"
 msgstr "Uusi pääteprofiili"
 
-#: src/terminal.c:1174
+#: src/terminal.c:1225
 msgid "C_reate"
 msgstr "_Luo"
 
-#: src/terminal.c:1199
+#: src/terminal.c:1250
 msgid "Profile _Name:"
 msgstr "Profiilin _nimi:"
 
-#: src/terminal.c:1215
+#: src/terminal.c:1266
 msgid "_Base new profile on:"
 msgstr "Uuden profiilin _perusta:"
 
-#: src/terminal.c:1434
+#: src/terminal.c:1485
 msgid "You must select one or more profiles to delete."
 msgstr "Valitse yksi tai useampi profiili poistettavaksi."
 
-#: src/terminal.c:1457
+#: src/terminal.c:1508
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Vähintään yksi profiili täytyy olla olemassa: et voi poistaa kaikkia."
 
-#: src/terminal.c:1475
+#: src/terminal.c:1526
 msgid "Delete these two profiles?\n"
 msgstr "Poista nämä kaksi profiilia?\n"
 
-#: src/terminal.c:1477
+#: src/terminal.c:1528
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Poista nämä %d profiilia?\n"
 
-#: src/terminal.c:1495
+#: src/terminal.c:1546
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Poista profiili \"%s\"?"
 
-#: src/terminal.c:1509
+#: src/terminal.c:1560
 msgid "_No"
 msgstr "_Ei"
 
-#: src/terminal.c:1511
+#: src/terminal.c:1562
 msgid "_Delete"
 msgstr "_Poista"
 
-#: src/terminal.c:1668
+#: src/terminal.c:1719
 msgid "Manage terminal profiles"
 msgstr "Hallinnoi pääteprofiileja"
 
-#: src/terminal.c:1699
+#: src/terminal.c:1750
 msgid "Profile _used when launching a new terminal:"
 msgstr "Uutta päätettä _käynnistäessä käytetty profiili:"
 
-#: src/terminal.c:1719
+#: src/terminal.c:1770
 msgid "_Profiles:"
 msgstr "_Profiilit:"
 
-#: src/terminal.c:1752
+#: src/terminal.c:1803
 msgid "_New..."
 msgstr "_Uusi..."
 
-#: src/terminal.c:1760
+#: src/terminal.c:1811
 msgid "_Edit..."
 msgstr "_Muokkaa..."
 
-#: src/terminal.c:1768
+#: src/terminal.c:1819
 msgid "_Delete..."
 msgstr "_Poista..."
+
+#~ msgid "Disable all accelerators"
+#~ msgstr "Älä käytä pikanäppäimiä"
+
+#~ msgid "_Manage profiles..."
+#~ msgstr "_Hallinnoi profiileja..."
+
+#~ msgid "_Reset terminal"
+#~ msgstr "_Alusta pääte"
+
+#~ msgid "_Help on GNOME terminal"
+#~ msgstr "Gnomen päätteen _ohje"
+
+#~ msgid "_About"
+#~ msgstr "_Tietoja..."
 
 #~ msgid "Scrolling"
 #~ msgstr "Vieritys"

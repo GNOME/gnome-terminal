@@ -1,5 +1,5 @@
 
-INCLUDES=@TERM_CFLAGS@ -I..
+INCLUDES=@TERM_CFLAGS@ -I$(srcdir)/..
 
 ## I can't believe we need all this just to get the ellipsizing code :-/
 ## but I don't want to modify the files I'm cut-and-pasting
