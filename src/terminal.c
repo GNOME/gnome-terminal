@@ -314,6 +314,34 @@ ensure_top_tab (GList **initial_windows_p)
   return it;
 }
 
+static void
+set_default_icon (const char *filename)
+{
+  GdkPixbuf *pixbuf;
+  GError *err;
+  GList *list;
+  
+  err = NULL;
+  pixbuf = gdk_pixbuf_new_from_file (filename, &err);
+
+  if (pixbuf == NULL)
+    {
+      g_printerr (_("Could not load icon \"%s\": %s\n"),
+                  err->message);
+      g_error_free (err);
+
+      return;
+    }
+
+  list = NULL;
+  list = g_list_prepend (list, pixbuf);
+
+  gtk_window_set_default_icon_list (list);
+
+  g_list_free (list);
+  g_object_unref (G_OBJECT (pixbuf));
+}
+
 static GnomeModuleInfo module_info = {
   PACKAGE, VERSION, N_("Terminal"),
   NULL,
@@ -366,6 +394,8 @@ main (int argc, char **argv)
                       GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
                       GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
                       NULL); 
+
+  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
   
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   post_execute_args = NULL;

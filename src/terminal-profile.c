@@ -1023,11 +1023,18 @@ terminal_profile_set_icon_file (TerminalProfile *profile,
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_ICON);
-  
-  gconf_client_set_string (profile->priv->conf,
-                           key,
-                           filename,
-                           NULL);
+
+  if (filename)
+    {
+      gconf_client_set_string (profile->priv->conf,
+                               key,
+                               filename,
+                               NULL);
+    }
+  else
+    {
+      gconf_client_unset (profile->priv->conf, key, NULL);
+    }
 
   g_free (key);
 }

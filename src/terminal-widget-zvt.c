@@ -555,6 +555,9 @@ static void
 reset_fonts (ZvtTerm *zvt,
              ZvtData *zd)
 {
+  if (zd->normal_font == NULL)
+    return; /* not font to set */
+  
   zvt_term_set_fonts (zvt, zd->normal_font,
                       zd->allow_bold ? NULL : zd->bold_font);
 }

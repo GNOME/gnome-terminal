@@ -24,6 +24,7 @@
 #include <glade/glade.h>
 #include <libgnomeui/gnome-color-picker.h>
 #include <libgnomeui/gnome-file-entry.h>
+#include <libgnomeui/gnome-icon-entry.h>
 #include <string.h>
 #include "simple-x-font-selector.h"
 #include "terminal-widget.h"
@@ -69,6 +70,8 @@ static GtkWidget* profile_editor_get_widget                  (GtkWidget       *e
 static void       profile_editor_update_sensitivity          (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_visible_name         (GtkWidget       *editor,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_icon                 (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_cursor_blink         (GtkWidget       *editor,
                                                               TerminalProfile *profile);
@@ -202,6 +205,9 @@ profile_changed (TerminalProfile          *profile,
   if (mask & TERMINAL_SETTING_VISIBLE_NAME)
     profile_editor_update_visible_name (editor, profile);
 
+  if (mask & TERMINAL_SETTING_ICON)
+    profile_editor_update_icon (editor, profile);
+  
   if (mask & TERMINAL_SETTING_CURSOR_BLINK)
     profile_editor_update_cursor_blink (editor, profile);
 
@@ -299,6 +305,20 @@ visible_name_changed (GtkWidget       *entry,
   terminal_profile_set_visible_name (profile, text);
 
   g_free (text);
+}
+
+static void
+icon_changed (GtkWidget       *icon_entry,
+              TerminalProfile *profile)
+{
+  char *filename;
+
+  filename = gnome_icon_entry_get_filename (GNOME_ICON_ENTRY (icon_entry));
+
+  /* NULL filename happens here to unset */
+  terminal_profile_set_icon_file (profile, filename);
+  
+  g_free (filename);
 }
 
 static void
@@ -835,6 +855,12 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (visible_name_changed),
                         profile);
 
+      w = glade_xml_get_widget (xml, "profile-icon-entry");
+      profile_editor_update_icon (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (icon_changed),
+                        profile);
+      
       w = glade_xml_get_widget (xml, "blink-cursor-checkbutton");
       profile_editor_update_cursor_blink (editor, profile);
       g_signal_connect (G_OBJECT (w), "toggled",
@@ -1055,6 +1081,9 @@ terminal_profile_edit (TerminalProfile *profile,
       gtk_size_group_add_widget (size_group,
                                  glade_xml_get_widget (xml,
                                                        "profile-name-label"));
+      gtk_size_group_add_widget (size_group,
+                                 glade_xml_get_widget (xml,
+                                                       "profile-icon-label"));
       g_object_unref (G_OBJECT (size_group));
       
       gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
@@ -1142,6 +1171,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   
   set_insensitive (editor, "profile-name-entry",
                    mask & TERMINAL_SETTING_VISIBLE_NAME);
+
+  set_insensitive (editor, "profile-icon-entry",
+                   mask & TERMINAL_SETTING_ICON);
   
   set_insensitive (editor, "blink-cursor-checkbutton",
                    mask & TERMINAL_SETTING_CURSOR_BLINK);
@@ -1258,6 +1290,29 @@ profile_editor_update_visible_name (GtkWidget       *editor,
 
   entry_set_text_if_changed (GTK_ENTRY (w),
                              terminal_profile_get_visible_name (profile));
+}
+
+static void
+profile_editor_update_icon (GtkWidget       *editor,
+                            TerminalProfile *profile)
+{
+  GtkWidget *w;
+  char *current_filename;
+  const char *profile_filename;
+  
+  w = profile_editor_get_widget (editor, "profile-icon-entry");
+
+  current_filename = gnome_icon_entry_get_filename (GNOME_ICON_ENTRY (w));
+
+  profile_filename = terminal_profile_get_icon_file (profile);
+  
+  if (current_filename && profile_filename &&
+      strcmp (current_filename, profile_filename) == 0)
+    return;
+
+  g_free (current_filename);
+  
+  gnome_icon_entry_set_filename (GNOME_ICON_ENTRY (w), profile_filename);
 }
 
 static void

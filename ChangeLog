@@ -1,5 +1,17 @@
 2002-03-17  Havoc Pennington  <hp@pobox.com>
 
+	* src/profile-editor.c: Hook up icon picker to set terminal icon
+
+	* src/terminal-profile.c (terminal_profile_set_icon_file): allow
+	NULL filename which means unset the icon
+
+	* src/terminal-widget-zvt.c (terminal_widget_new): increase
+	robustness vs. failure to load fonts
+
+	* src/terminal.c (main): set the default icon, #74600
+
+2002-03-17  Havoc Pennington  <hp@pobox.com>
+
 	* src/simple-x-font-selector.c (egg_xfont_selector_init): don't
 	use "b" for mnemonic, already used twice. Translate the bold
 	checkbutton. Pack everything in a table so we can align the
