@@ -925,8 +925,6 @@ terminal_window_init (TerminalWindow *window)
 
   mi = append_stock_menuitem (menu, GTK_STOCK_ZOOM_100, ACCEL_PATH_ZOOM_NORMAL,
                               G_CALLBACK (zoom_normal_callback), window);
-  /* the default label for GTK_STOCK_ZOOM_100 does not follow the HIG... */
-  set_menuitem_text (mi, _("_Normal Size"), FALSE);
   window->priv->zoom_normal_menuitem = mi;
   menuitem_icon_visibility (window->priv->zoom_normal_menuitem, menus_have_icons);
 
