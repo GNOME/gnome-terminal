@@ -38,12 +38,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_TYPE_XFONT_SELECTOR                (egg_xfont_selector_get_type ())
-#define EGG_XFONT_SELECTOR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_XFONT_SELECTOR, EggXFontSelector))
-#define EGG_XFONT_SELECTOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_XFONT_SELECTOR, EggXFontSelectorClass))
-#define GTK_IS_XFONT_SELECTOR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_XFONT_SELECTOR))
-#define GTK_IS_XFONT_SELECTOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_XFONT_SELECTOR))
-#define EGG_XFONT_SELECTOR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_XFONT_SELECTOR, EggXFontSelectorClass))
+#define EGG_TYPE_XFONT_SELECTOR                (egg_xfont_selector_get_type ())
+#define EGG_XFONT_SELECTOR(obj)                  (GTK_CHECK_CAST ((obj), EGG_TYPE_XFONT_SELECTOR, EggXFontSelector))
+#define EGG_XFONT_SELECTOR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), EGG_TYPE_XFONT_SELECTOR, EggXFontSelectorClass))
+#define GTK_IS_XFONT_SELECTOR(obj)               (GTK_CHECK_TYPE ((obj), EGG_TYPE_XFONT_SELECTOR))
+#define GTK_IS_XFONT_SELECTOR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), EGG_TYPE_XFONT_SELECTOR))
+#define EGG_XFONT_SELECTOR_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), EGG_TYPE_XFONT_SELECTOR, EggXFontSelectorClass))
 
 
 /* This is the number of properties which we keep in the properties array,

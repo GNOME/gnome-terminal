@@ -42,7 +42,10 @@
 #include "simple-x-font-selector.h"
 #include "terminal.h"
 
+
 static void egg_xfont_selector_class_init    (EggXFontSelectorClass  *klass);
+static void egg_xfont_selector_finalize       (GObject        *object);
+
 static void egg_xfont_selector_init          (EggXFontSelector       *frame);
 static void egg_xfont_selector_set_property (GObject      *object,
 				    guint         param_id,
@@ -224,8 +227,8 @@ enum {
   LAST_SIGNAL
 };
 
+static guint signals[LAST_SIGNAL];
 
-static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 egg_xfont_selector_get_type (void)
@@ -257,18 +260,19 @@ egg_xfont_selector_get_type (void)
 }
 
 static void
-egg_xfont_selector_class_init (EggXFontSelectorClass *class)
+egg_xfont_selector_class_init (EggXFontSelectorClass *klass)
 {
   GObjectClass *gobject_class;
 
-  gobject_class = (GObjectClass*) class;
+  gobject_class = (GObjectClass*) klass;
 
   gobject_class->set_property = egg_xfont_selector_set_property;
   gobject_class->get_property = egg_xfont_selector_get_property;
+  gobject_class->finalize = egg_xfont_selector_finalize;
 
   signals[CHANGED] =
     g_signal_new ("changed",
-                  G_OBJECT_CLASS_TYPE (class),
+                  G_OBJECT_CLASS_TYPE (klass),
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (EggXFontSelectorClass, changed),
                   NULL, NULL,
@@ -537,8 +541,6 @@ egg_xfont_selector_set_font_name (EggXFontSelector *fontsel,
   
   g_return_val_if_fail (fontname != NULL, FALSE);
 
-  /* puts ("egg_xfont_selector_set_font_name"); */
-
   /* Check it is a valid fontname. */
   if (!egg_xfont_selector_is_xlfd_font_name (fontname))
     return FALSE;
@@ -764,8 +766,6 @@ family_changed (GtkOptionMenu *opt, EggXFontSelector *selector)
   char *prop;
   int i;
   
-  /* puts ("family_changed"); */
-
   selector->font_index = gtk_option_menu_get_history (GTK_OPTION_MENU (opt));
   selector->font_index = selector->filtered_font_index[selector->font_index];
 
@@ -798,16 +798,12 @@ size_changed (GtkOptionMenu *opt, EggXFontSelector *selector)
   FontStyle *style;
   int i;
 
-  /* puts ("size_changed"); */
-
   info = &fontsel_info->font_info[selector->font_index];
   style = &fontsel_info->font_styles[info->style_index];
   pixel_sizes = &fontsel_info->pixel_sizes[style->pixel_sizes_index];
 
   i = gtk_option_menu_get_history (GTK_OPTION_MENU (opt));
   selector->size = selector->size_options_map[i];
-
-  /* printf ("selected size: %d\n", selector->size_options_map[i]); */
 
   g_signal_emit (G_OBJECT (selector), signals[CHANGED], 0);
 }
@@ -863,8 +859,6 @@ update_family_menu (EggXFontSelector *selector)
   gchar *foundry, *name;
   FontInfo *info, *start_info;
   EggXFontFilter *filter;
-
-  /* puts ("update_family_menu"); */
 
   start_info = fontsel_info->font_info;
   nfonts = fontsel_info->nfonts;
@@ -949,9 +943,6 @@ update_family_menu (EggXFontSelector *selector)
   if (selected_font_pos != -1) {
     g_signal_handlers_unblock_by_func (selector->family_options,
 				       family_changed, selector);
-  }
-
-  if (selected_font_pos != -1) {
     gtk_option_menu_set_history (GTK_OPTION_MENU (selector->family_options),
 				 selected_font_pos);
   }
@@ -976,8 +967,6 @@ update_size_menu (EggXFontSelector *selector)
   gint type_filter;
   int map_pos, num;
   int selected_size_pos;
-
-  /* puts ("update_size_menu"); */
 
   g_return_if_fail (selector->font_index != -1);
 
@@ -1106,9 +1095,6 @@ update_size_menu (EggXFontSelector *selector)
   if (selected_size_pos != -1) {
     g_signal_handlers_unblock_by_func (selector->size_options, size_changed,
 				     selector);
-  }
-
-  if (selected_size_pos != -1) {
     gtk_option_menu_set_history (GTK_OPTION_MENU (selector->size_options),
 				 selected_size_pos);
   }
@@ -1703,5 +1689,25 @@ egg_xfont_selector_get_xlfd_field (const gchar *fontname,
   return buffer;
 }
 
+static void
+egg_xfont_selector_finalize (GObject *object)
+{
+  GObjectClass *parent_class;
+  EggXFontSelector *sel;
 
+  sel = EGG_XFONT_SELECTOR (object);
+  parent_class = g_type_class_ref (g_type_parent (G_OBJECT_TYPE (object)));
+
+  g_free (sel->filtered_font_index);
+  g_free (sel->size_options_map);
+
+  /* FIXME: can finalize be called multiple times? */
+
+  sel->filtered_font_index = 0;
+  sel->size_options_map = 0;
+
+  if (parent_class->finalize) {
+    parent_class->finalize (object);
+  }
+}
 
