@@ -16,7 +16,6 @@
 #endif
 
 #define EGG_CELL_RENDERER_TEXT_PATH "egg-cell-renderer-text"
-#define USED_MODS (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)
 
 static void             egg_cell_renderer_keys_finalize      (GObject             *object);
 static void             egg_cell_renderer_keys_init          (EggCellRendererKeys *cell_keys);
@@ -316,63 +315,71 @@ egg_cell_renderer_keys_get_size (GtkCellRenderer *cell,
 }
 
 
-static GdkFilterReturn
-grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
+static gboolean
+grab_key_callback (GtkWidget    *widget,
+                   GdkEventKey  *event,
+                   void         *data)
 {
-  XEvent *xevent = (XEvent *)gdk_xevent;
-  guint keycode, state;
-  char buf[10];
-  KeySym keysym;
+  GdkModifierType accel_mods;
+  guint accel_keyval;
   EggCellRendererKeys *keys;
   char *path;
   gboolean edited;
-  
-  if (xevent->type != KeyPress)
-    return GDK_FILTER_CONTINUE;
+  GdkModifierType consumed_modifiers;  
 	
   keys = EGG_CELL_RENDERER_KEYS (data);
-  
-  keycode = xevent->xkey.keycode;
 
-  if (is_modifier (keycode))
-    return GDK_FILTER_CONTINUE;
+  if (is_modifier (event->hardware_keycode))
+    return FALSE;
 
   edited = FALSE;
+
+  consumed_modifiers = 0;
+  gdk_keymap_translate_keyboard_state (gdk_keymap_get_default (),
+				       event->hardware_keycode,
+                                       event->state,
+                                       event->group,
+				       NULL, NULL, NULL, &consumed_modifiers);
+
+  accel_keyval = gdk_keyval_to_lower (event->keyval);
+  accel_mods = event->state & gtk_accelerator_get_default_mod_mask () & ~consumed_modifiers;
   
-  state = xevent->xkey.state & USED_MODS;
-  
-  XLookupString ((XKeyEvent*)xevent, buf, sizeof (buf), &keysym, NULL);
-  
-  if (state == 0 && keysym == GDK_Escape)
+  if (accel_mods == 0 && accel_keyval == GDK_Escape)
     goto out; /* cancel */
 
   /* clear the accelerator on Backspace */
   if (keys->edit_key != 0 &&
-      state == 0 &&
-      keysym == GDK_BackSpace)
-    keysym = 0;
+      accel_mods == 0 &&
+      accel_keyval == GDK_BackSpace)
+    accel_keyval = 0;
 
+  if (!gtk_accelerator_valid (accel_keyval, accel_mods))
+    {
+      accel_keyval = 0;
+      accel_mods = 0;
+    }
+  
   edited = TRUE;
   
  out:
   path = g_strdup (g_object_get_data (G_OBJECT (keys->edit_widget),
                                       EGG_CELL_RENDERER_TEXT_PATH));
   
-  gdk_keyboard_ungrab (xevent->xkey.time);
-  gdk_pointer_ungrab (xevent->xkey.time);
+  gdk_keyboard_ungrab (event->time);
+  gdk_pointer_ungrab (event->time);
   
   gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (keys->edit_widget));
   gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (keys->edit_widget));
   keys->edit_widget = NULL;
-  keys->filter_window = NULL;
+  keys->grab_widget = NULL;
   
   if (edited)
     g_signal_emit_by_name (G_OBJECT (keys), "keys_edited", path,
-                           keysym, state);
+                           accel_keyval, accel_mods);
 
   g_free (path);
   
-  return GDK_FILTER_REMOVE;
+  return FALSE;
 }
 
 static void
@@ -383,13 +390,13 @@ ungrab_stuff (GtkWidget *widget, gpointer data)
   gdk_keyboard_ungrab (GDK_CURRENT_TIME);
   gdk_pointer_ungrab (GDK_CURRENT_TIME);
 
-  gdk_window_remove_filter (keys->filter_window,
-			    grab_key_filter, data);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (keys->grab_widget),
+                                        G_CALLBACK (grab_key_callback), data);
 }
 
 static void
 pointless_eventbox_start_editing (GtkCellEditable *cell_editable,
-                               GdkEvent        *event)
+                                  GdkEvent        *event)
 {
   /* do nothing, because we are pointless */
 }
@@ -470,9 +477,11 @@ egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
       return NULL;
     }
   
-  keys->filter_window = widget->window;
-  
-  gdk_window_add_filter (keys->filter_window, grab_key_filter, keys);
+  keys->grab_widget = widget;
+
+  g_signal_connect (G_OBJECT (widget), "key_press_event",
+                    G_CALLBACK (grab_key_callback),
+                    keys);
 
   eventbox = g_object_new (pointless_eventbox_subclass_get_type (),
                            NULL);

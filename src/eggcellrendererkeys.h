@@ -40,7 +40,7 @@ struct _EggCellRendererKeys
   guint accel_key;
   GdkModifierType accel_mask;
   GtkWidget *edit_widget;
-  GdkWindow *filter_window;
+  GtkWidget *grab_widget;
   guint edit_key;
   GdkModifierType edit_mask;
   GtkWidget *sizing_label;
