@@ -162,7 +162,7 @@ static TerminalEncoding encodings[] = {
   { TERMINAL_ENCODING_MAC_DEVANAGARI, FALSE,
     "MAC_DEVANAGARI", N_("Hindi") },
   { TERMINAL_ENCODING_MAC_FARSI, FALSE,
-    "MAC_FARSI", N_("Farsi") },
+    "MAC_FARSI", N_("Persian") },
   { TERMINAL_ENCODING_MAC_GREEK, FALSE,
     "MAC_GREEK", N_("Greek") },
   { TERMINAL_ENCODING_MAC_GUJARATI, FALSE,
