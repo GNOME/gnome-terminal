@@ -2026,6 +2026,44 @@ default_menu_changed (GtkWidget   *option_menu,
 }
 
 static void
+default_profile_changed (TerminalProfile    *profile,
+                         TerminalSettingMask mask,
+                         void               *profile_optionmenu)
+{
+  if (mask & TERMINAL_SETTING_IS_DEFAULT)
+    {
+      if (terminal_profile_get_is_default (profile))
+        profile_optionmenu_set_selected (GTK_WIDGET (profile_optionmenu),
+                                         profile);      
+    }
+}
+
+static void
+monitor_profiles_for_is_default_change (GtkWidget *profile_optionmenu)
+{
+  GList *profiles;
+  GList *tmp;
+  
+  profiles = terminal_profile_get_list ();
+
+  tmp = profiles;
+  while (tmp != NULL)
+    {
+      TerminalProfile *profile = tmp->data;
+
+      g_signal_connect_object (G_OBJECT (profile),
+                               "changed",
+                               G_CALLBACK (default_profile_changed),
+                               G_OBJECT (profile_optionmenu),
+                               0);
+      
+      tmp = tmp->next;
+    }
+
+  g_list_free (profiles);
+}
+
+static void
 manage_profiles_destroyed_callback (GtkWidget   *manage_profiles_dialog,
                                     TerminalApp *app)
 {
@@ -2157,9 +2195,14 @@ terminal_app_manage_profiles (TerminalApp     *app,
                         hbox, FALSE, FALSE, 0);
 
       app->manage_profiles_default_menu = profile_optionmenu_new ();
+      if (terminal_profile_get_default ())
+        profile_optionmenu_set_selected (app->manage_profiles_default_menu,
+                                         terminal_profile_get_default ());
       g_signal_connect (G_OBJECT (app->manage_profiles_default_menu),
                         "changed", G_CALLBACK (default_menu_changed),
                         app);
+      monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
+      
       label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
       gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                      app->manage_profiles_default_menu);

@@ -1,5 +1,20 @@
 2002-05-01  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-screen.c (new_tab_callback): use default profile,
+	not the profile from the current screen. part of #80166
+	(new_window_callback): ditto
+
+	* src/terminal-window.c (new_tab_callback): use the default
+	profile, not the profile from the active terminal. part of #80166
+	(new_window_callback): ditto
+
+	* src/terminal.c (terminal_app_manage_profiles): have 
+	option menu for setting default profile notice if the default
+	profile changes. Initialize the profile menu to the current
+	default. part of #80166
+
+2002-05-01  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-window.c (terminal_window_set_size): don't use
 	gtk_window_resize on unmapped windows, it broke --geometry.
 	#80063

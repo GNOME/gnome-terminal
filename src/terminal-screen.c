@@ -878,7 +878,7 @@ new_window_callback (GtkWidget      *menu_item,
                      TerminalScreen *screen)
 {
   terminal_app_new_terminal (terminal_app_get (),
-                             screen->priv->profile,
+                             terminal_profile_get_for_new_term (),
                              NULL,
                              FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
@@ -888,7 +888,7 @@ new_tab_callback (GtkWidget      *menu_item,
                   TerminalScreen *screen)
 {
   terminal_app_new_terminal (terminal_app_get (),
-                             screen->priv->profile,
+                             terminal_profile_get_for_new_term (),
                              screen->priv->window,
                              FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
