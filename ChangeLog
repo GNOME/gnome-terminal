@@ -1,3 +1,11 @@
+2004-06-21 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-window.c(update_copy_sensitivity): don't update the
+	Paste menu item sensitivity, thus reverting the patch from bug
+	#142290: this solved a very annoying poblem with lost mouse clicks due
+	to gtk_clipboard_wait_is_text_available running the main loop (I
+	think). This fixes bug #143990. (Rodd Clarskon, Alexander Winston)
+
 2004-06-07 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* po/POTFILES.in: gnome-terminal.desktop.in is no longer, long live

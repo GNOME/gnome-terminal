@@ -1280,20 +1280,14 @@ icon_title_changed_callback (TerminalScreen *screen,
 static void
 update_copy_sensitivity (TerminalWindow *window)
 {
-  GtkClipboard *clip = gtk_clipboard_get (GDK_NONE);
   gboolean can_copy = FALSE;
-  gboolean can_paste = FALSE;
 
   if (window->priv->active_term)
-    {
-      can_copy = terminal_screen_get_text_selected (window->priv->active_term);
-      can_paste = gtk_clipboard_wait_is_text_available (clip);
-    }
+    can_copy = terminal_screen_get_text_selected (window->priv->active_term);
   else
-    can_copy = can_paste = FALSE;
+    can_copy = FALSE;
 
   gtk_widget_set_sensitive (window->priv->copy_menuitem, can_copy);
-  gtk_widget_set_sensitive (window->priv->paste_menuitem, can_paste);
 }
 
 static void
