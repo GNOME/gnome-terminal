@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <libzvt/libzvt.h>
 #include <libgnomeui/gnome-about.h>
+#include <eel/eel-ellipsizing-label.h>
 
 struct _TerminalWindowPrivate
 {
@@ -274,12 +275,12 @@ terminal_window_init (TerminalWindow *window)
   
   window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
   window->priv->notebook = gtk_notebook_new ();
-
+  
   window->priv->old_char_width = -1;
   window->priv->old_char_height = -1;
   
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook),
-                               TRUE);
+                               TRUE);                                      
   
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
                           "switch_page",
@@ -308,12 +309,12 @@ terminal_window_init (TerminalWindow *window)
 
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-  
+
   append_menuitem (menu, _("_Close window"),
                    G_CALLBACK (close_window_callback),
                    window);
-
-  append_menuitem (menu, _("C_lose tab"),
+  
+  append_menuitem (menu, _("_Close tab"),
                    G_CALLBACK (close_tab_callback),
                    window);
   
@@ -488,7 +489,8 @@ title_changed_callback (TerminalScreen *screen,
                           terminal_screen_get_title (screen));
 
   label = screen_get_label (screen);
-  gtk_label_set_text (GTK_LABEL (label), terminal_screen_get_title (screen));
+  eel_ellipsizing_label_set_text (EEL_ELLIPSIZING_LABEL (label),
+                                  terminal_screen_get_title (screen));
 }
 
 static void
@@ -541,7 +543,8 @@ terminal_window_add_screen (TerminalWindow *window,
 
   hbox = gtk_hbox_new (FALSE, 0);
   scrollbar = gtk_vscrollbar_new (NULL);
-  label = gtk_label_new (terminal_screen_get_title (screen));
+  label = eel_ellipsizing_label_new (terminal_screen_get_title (screen));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   
   screen_set_hbox (screen, hbox);
   screen_set_scrollbar (screen, scrollbar);
@@ -575,6 +578,11 @@ terminal_window_add_screen (TerminalWindow *window,
   gtk_notebook_append_page (GTK_NOTEBOOK (window->priv->notebook),
                             hbox,
                             label);
+
+  /* Busting out the GtkNotebook crackrock features */
+  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (window->priv->notebook),
+                                      hbox,
+                                      TRUE, TRUE, GTK_PACK_START);
   
   /* ZvtTerm is a broken POS and requires this realize to get
    * the size request right.

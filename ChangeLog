@@ -1,5 +1,18 @@
 2002-02-16  Havoc Pennington  <hp@pobox.com>
 
+        * src/eel/*: semi-automated cut-and-paste of part of Eel. None of
+	the files are modified from the originals; there's a Makefile
+	target to update them from the Eel sources.
+	
+	* src/terminal-window.c (terminal_window_add_screen): set "tab
+	label packing" in the notebook so that tabs are EXPAND, so we 
+	can have an ellipsizing label with 0 width request
+	(terminal_window_add_screen): use EelEllipsizingLabel for the 
+	notebook tabs, to avoid ever scrolling, though you can get 
+	really small tabs...
+
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
         Throughout: destroy concept of "special" default profile, 
 	now any profile can be renamed/deleted.
 	

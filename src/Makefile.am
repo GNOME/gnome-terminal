@@ -1,4 +1,6 @@
 
+SUBDIRS=eel
+
 INCLUDES=@TERM_CFLAGS@								\
 	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\"	\
 	-DTERM_GLADE_DIR=\"$(gladedir)\"						\
@@ -27,8 +29,7 @@ gnome_terminal_SOURCES=				\
 	eggcellrendererkeys.c			\
 	eggcellrendererkeys.h
 
-gnome_terminal_LDADD= @TERM_LIBS@
-
+gnome_terminal_LDADD= @TERM_LIBS@ eel/libeelcnp.la
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = profterm.glade2
