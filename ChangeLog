@@ -1,17 +1,24 @@
 2004-10-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
-	* terminal.c(terminal_app_new_profile): Do not set accessibles names but 
+	* src/simplex-x-font-selector.c(egg_xfont_selector_finalize):
+	* src/simplex-x-font-selector.h(egg_xfont_selector_new):
+	* src/profile-editor.c(terminal_profile_edit):
+	  Cleanups, from a patch by Kjartan on bug #150347.
+
+2004-10-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal.c(terminal_app_new_profile): Do not set accessibles names but 
 	  descriptions on the New Profile dialog. Reported by Frances Keenan
 	  <frances.keenan@sun.com> on bug #147484.
 
 2004-10-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
-	* terminal-screen.c(new_window_callback, new_tab_callback):
-	* terminal-window.c(new_window_callback, new_tab_callback):
-	* terminal.c(parse_options_callback and related structures, terminal_app_new_terminal):
-	* terminal.h: Added --full-screen command line option; from Hylke <weary@gamebox.net> 
+	* src/terminal-screen.c(new_window_callback, new_tab_callback):
+	* src/terminal-window.c(new_window_callback, new_tab_callback):
+	* src/terminal.c(parse_options_callback and related structures, terminal_app_new_terminal):
+	* src/terminal.h: Added --full-screen command line option; from Hylke <weary@gamebox.net> 
 	  on bug #144189.
-	* terminal-window.c(terminal_window_add_screen): Clean up from Alexey Spiridonov 
+	* src/terminal-window.c(terminal_window_add_screen): Clean up from Alexey Spiridonov 
 	  <lesha@netman.ru> on bug #145596.
 
 2004-10-17  Kjartan Maraas  <kmaraas@gnome.org>

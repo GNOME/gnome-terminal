@@ -1719,8 +1719,8 @@ egg_xfont_selector_finalize (GObject *object)
 
   /* FIXME: can finalize be called multiple times? */
 
-  sel->filtered_font_index = 0;
-  sel->size_options_map = 0;
+  sel->filtered_font_index = NULL;
+  sel->size_options_map = NULL;
 
   if (parent_class->finalize) {
     parent_class->finalize (object);

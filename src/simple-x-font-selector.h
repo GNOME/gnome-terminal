@@ -145,7 +145,7 @@ struct _EggXFontSelectorClass
 
 
 GType    egg_xfont_selector_get_type         (void) G_GNUC_CONST;
-GtkWidget* egg_xfont_selector_new              ();
+GtkWidget* egg_xfont_selector_new              (const gchar *label);
 
 /* Setting the selected font also clears the filter. */
 
