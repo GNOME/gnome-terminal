@@ -25,6 +25,7 @@
 #include "profile-editor.h"
 #include <gconf/gconf-client.h>
 #include <libgnome/gnome-program.h>
+#include <libgnomeui/gnome-ui-init.h>
 #include <popt.h>
 #include <string.h>
 
@@ -333,12 +334,18 @@ main (int argc, char **argv)
   char **post_execute_args;
   const char **args;
   char *default_geometry = NULL;
+  GnomeModuleRequirement reqs[] = {
+    { "1.102.0", LIBGNOMEUI_MODULE },
+    { NULL, NULL }
+  };
   
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
   
   gtk_init (&argc, &argv);
+
+  module_info.requirements = reqs;
   
   gnome_program_init (PACKAGE, VERSION,
                       &module_info,
