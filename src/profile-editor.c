@@ -126,6 +126,10 @@ static void       profile_editor_update_backspace_binding    (GtkWidget       *w
 static void       profile_editor_update_delete_binding       (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 
+static void       profile_editor_update_use_theme_colors     (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_use_system_font      (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
 
 
 static void profile_forgotten (TerminalProfile     *profile,
@@ -286,6 +290,12 @@ profile_changed (TerminalProfile          *profile,
 
   if (mask & TERMINAL_SETTING_DELETE_BINDING)
     profile_editor_update_delete_binding (editor, profile);
+
+  if (mask & TERMINAL_SETTING_USE_THEME_COLORS)
+    profile_editor_update_use_theme_colors (editor, profile);
+    
+  if (mask & TERMINAL_SETTING_USE_SYSTEM_FONT)
+    profile_editor_update_use_system_font (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -675,6 +685,22 @@ reset_compat_defaults_clicked (GtkWidget       *button,
   terminal_profile_reset_compat_defaults (profile);
 }
 
+static void
+use_theme_colors_toggled (GtkWidget       *checkbutton,
+                          TerminalProfile *profile)
+{
+  terminal_profile_set_use_theme_colors (profile,
+                                         gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+use_system_font_toggled (GtkWidget       *checkbutton,
+                         TerminalProfile *profile)
+{
+  terminal_profile_set_use_system_font (profile,
+                                        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
 /*
  * initialize widgets
  */
@@ -1042,6 +1068,12 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (delete_binding_changed),
                         profile);
+
+      w = glade_xml_get_widget (xml, "use-theme-colors-checkbutton");
+      profile_editor_update_use_theme_colors (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (use_theme_colors_toggled),
+                        profile);
       
       i = 0;
       while (i < TERMINAL_PALETTE_SIZE)
@@ -1161,6 +1193,25 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, FALSE);
     }
+
+  if (terminal_profile_get_use_theme_colors (profile))
+    {
+      set_insensitive (editor, "foreground-colorpicker", TRUE);
+      set_insensitive (editor, "background-colorpicker", TRUE);
+      set_insensitive (editor, "color-scheme-optionmenu", TRUE);
+    }
+  else
+    {      
+      set_insensitive (editor, "foreground-colorpicker",
+                       mask & TERMINAL_SETTING_FOREGROUND_COLOR);
+      
+      set_insensitive (editor, "background-colorpicker",
+                       mask & TERMINAL_SETTING_BACKGROUND_COLOR);
+      
+      set_insensitive (editor, "color-scheme-optionmenu",
+                       (mask & (TERMINAL_SETTING_BACKGROUND_COLOR |
+                                TERMINAL_SETTING_FOREGROUND_COLOR)));
+    }
   
 #if 0 /* uncomment once we've tested the sensitivity code */
   if (mask == last_mask)
@@ -1181,16 +1232,6 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   set_insensitive (editor, "show-menubar-checkbutton",
                    mask & TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR);
-  
-  set_insensitive (editor, "foreground-colorpicker",
-                   mask & TERMINAL_SETTING_FOREGROUND_COLOR);
-
-  set_insensitive (editor, "background-colorpicker",
-                   mask & TERMINAL_SETTING_BACKGROUND_COLOR);
-
-  set_insensitive (editor, "color-scheme-optionmenu",
-                   (mask & (TERMINAL_SETTING_BACKGROUND_COLOR |
-                            TERMINAL_SETTING_FOREGROUND_COLOR)));
 
   set_insensitive (editor, "title-entry",
                    mask & TERMINAL_SETTING_TITLE);
@@ -1254,6 +1295,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
                    mask & TERMINAL_SETTING_BACKSPACE_BINDING);
   set_insensitive (editor, "delete-binding-optionmenu",
                    mask & TERMINAL_SETTING_DELETE_BINDING);
+
+  set_insensitive (editor, "use-theme-colors-checkbutton",
+                   mask & TERMINAL_SETTING_USE_THEME_COLORS);
   
   {
     int i;
@@ -1765,6 +1809,32 @@ profile_editor_update_delete_binding (GtkWidget       *editor,
   
   gtk_option_menu_set_history (GTK_OPTION_MENU (w),
                                terminal_profile_get_delete_binding (profile));
+}
+
+static void
+profile_editor_update_use_theme_colors (GtkWidget       *editor,
+                                        TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "use-theme-colors-checkbutton");
+  
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_use_theme_colors (profile));
+}
+
+static void
+profile_editor_update_use_system_font (GtkWidget       *editor,
+                                       TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+#if 0
+  w = profile_editor_get_widget (editor, "use-system-font-checkbutton");
+  
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
+                                terminal_profile_get_use_system_font (profile));
+#endif
 }
 
 static GtkWidget*

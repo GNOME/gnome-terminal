@@ -65,6 +65,8 @@
 #define KEY_BACKGROUND_DARKNESS "background_darkness"
 #define KEY_BACKSPACE_BINDING "backspace_binding"
 #define KEY_DELETE_BINDING "delete_binding"
+#define KEY_USE_THEME_COLORS "use_theme_colors"
+#define KEY_USE_SYSTEM_FONT "use_system_font"
 
 struct _TerminalProfilePrivate
 {
@@ -119,6 +121,8 @@ struct _TerminalProfilePrivate
   guint update_records : 1;
   guint use_custom_command : 1;
   guint scroll_background : 1;
+  guint use_theme_colors : 1;
+  guint use_system_font : 1;
   guint forgotten : 1;
 };
 
@@ -278,6 +282,8 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->background_darkness = 0.0;
   profile->priv->backspace_binding = TERMINAL_ERASE_ASCII_DEL;
   profile->priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
+  profile->priv->use_theme_colors = TRUE;
+  profile->priv->use_system_font = TRUE;
 }
 
 static void
@@ -1363,6 +1369,60 @@ terminal_profile_set_palette_entry (TerminalProfile *profile,
   terminal_profile_set_palette (profile, colors);
 }
 
+gboolean
+terminal_profile_get_use_theme_colors (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->use_theme_colors;
+}
+
+void
+terminal_profile_set_use_theme_colors (TerminalProfile *profile,
+                                       gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_THEME_COLORS);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_use_system_font (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->use_system_font;
+}
+
+void
+terminal_profile_set_use_system_font (TerminalProfile *profile,
+                                      gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_SYSTEM_FONT);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -2169,6 +2229,39 @@ terminal_profile_update (TerminalProfile *profile)
   
   g_free (key);
 
+  /* KEY_USE_THEME_COLORS */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_THEME_COLORS);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->use_theme_colors)
+    {
+      mask |= TERMINAL_SETTING_USE_THEME_COLORS;
+      profile->priv->use_theme_colors = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_USE_THEME_COLORS;
+  
+  g_free (key);
+  
+  /* KEY_USE_SYSTEM_FONT */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_SYSTEM_FONT);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->use_system_font)
+    {
+      mask |= TERMINAL_SETTING_USE_SYSTEM_FONT;
+      profile->priv->use_system_font = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_USE_SYSTEM_FONT;
+  
+  g_free (key);
   
   /* Update state and emit signals */
   
@@ -2629,7 +2722,40 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_DELETE_BINDING);
     }
-  
+  else if (strcmp (key, KEY_USE_THEME_COLORS) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = TRUE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->use_theme_colors)
+        {
+          mask |= TERMINAL_SETTING_USE_THEME_COLORS;
+          profile->priv->use_theme_colors = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_USE_THEME_COLORS);
+    }
+  else if (strcmp (key, KEY_USE_SYSTEM_FONT) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = TRUE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->use_system_font)
+        {
+          mask |= TERMINAL_SETTING_USE_SYSTEM_FONT;
+          profile->priv->use_system_font = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_USE_SYSTEM_FONT);
+    }
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -3329,6 +3455,22 @@ terminal_profile_create (TerminalProfile *base_profile,
                            &err);
   BAIL_OUT_CHECK ();
 
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_USE_THEME_COLORS);
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key, base_profile->priv->use_theme_colors,
+                         &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_USE_SYSTEM_FONT);
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key, base_profile->priv->use_system_font,
+                         &err);
+  BAIL_OUT_CHECK ();
+  
   
   /* Add new profile to the profile list; the method for doing this has
    * a race condition where we and someone else set at the same time,

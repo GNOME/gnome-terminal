@@ -61,7 +61,9 @@ typedef enum
   TERMINAL_SETTING_SCROLL_BACKGROUND    = 1 << 25,
   TERMINAL_SETTING_BACKGROUND_DARKNESS  = 1 << 26,
   TERMINAL_SETTING_BACKSPACE_BINDING    = 1 << 27,
-  TERMINAL_SETTING_DELETE_BINDING       = 1 << 28
+  TERMINAL_SETTING_DELETE_BINDING       = 1 << 28,
+  TERMINAL_SETTING_USE_THEME_COLORS     = 1 << 29,
+  TERMINAL_SETTING_USE_SYSTEM_FONT       = 1 << 30
 
   /* When we get to 31 we need to do something else ;-) */
 } TerminalSettingMask;
@@ -179,6 +181,8 @@ double                 terminal_profile_get_background_darkness   (TerminalProfi
 TerminalEraseBinding   terminal_profile_get_backspace_binding     (TerminalProfile *profile);
 TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfile *profile);
 
+gboolean               terminal_profile_get_use_theme_colors      (TerminalProfile *profile);
+gboolean               terminal_profile_get_use_system_font        (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -243,6 +247,13 @@ void terminal_profile_set_backspace_binding     (TerminalProfile        *profile
                                                  TerminalEraseBinding    binding);
 void terminal_profile_set_delete_binding        (TerminalProfile        *profile,
                                                  TerminalEraseBinding    binding);
+
+void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile,
+                                                 gboolean                setting);
+
+
+void terminal_profile_set_use_system_font        (TerminalProfile        *profile,
+                                                  gboolean                setting);
 
 void terminal_profile_reset_compat_defaults     (TerminalProfile        *profile);
 

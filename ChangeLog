@@ -1,5 +1,23 @@
 2002-04-14  Havoc Pennington  <hp@pobox.com>
 
+        Options/infrastructure to use system colors/fonts, except
+	fonts are kind of screwed still.
+	
+	* src/profile-editor.c: add checkbutton for use theme colors
+
+	* src/terminal-screen.c (update_color_scheme): wire up 
+	code to use theme colors when appropriate
+	(terminal_screen_update_on_realize): use system font 
+	when appropriate
+
+	* src/terminal-profile.c: set up the theme colors and system 
+	font settings
+
+	* src/profterm.schemas: add use_theme_colors and use_system_font
+	options
+
+2002-04-14  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-screen.c (drag_data_received): support x-moz-url
 	target, which allows us to strip off file:/// from mozilla drops.
 

@@ -19,6 +19,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/* grab gtk_style_get_font */
+#undef GTK_DISABLE_DEPRECATED
+#include <gtk/gtkstyle.h>
+#define GTK_DISABLE_DEPRECATED
+
 #include "terminal-intl.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
@@ -436,10 +441,18 @@ update_color_scheme (TerminalScreen *screen)
     return;
 
   terminal_profile_get_palette (screen->priv->profile,
-                                palette);  
+                                palette);
 
-  terminal_profile_get_color_scheme (screen->priv->profile,
-                                     &fg, &bg);
+  if (terminal_profile_get_use_theme_colors (screen->priv->profile))
+    {
+      fg = screen->priv->term->style->text[GTK_STATE_NORMAL];
+      bg = screen->priv->term->style->base[GTK_STATE_NORMAL];
+    }
+  else
+    {
+      terminal_profile_get_color_scheme (screen->priv->profile,
+                                         &fg, &bg);
+    }
 
   terminal_widget_set_colors (screen->priv->term,
                               &fg, &bg, palette);
@@ -455,14 +468,29 @@ terminal_screen_update_on_realize (GtkWidget      *term,
   profile = screen->priv->profile;
   
   update_color_scheme (screen);
-  
-  font = gdk_fontset_load (terminal_profile_get_x_font (profile));
-  if (font == NULL)
-    {      
-      g_printerr (_("Could not load font \"%s\"\n"),
-                  terminal_profile_get_x_font (profile));
+
+  if (FALSE && /* Disabled until there's GUI for it and it sucks less. */
+      terminal_profile_get_use_system_font (profile))
+    {
+#if 0
+      /* This doesn't work, because the system font isn't monospace. */
+      font = gtk_style_get_font (term->style);
+      if (font == NULL)
+        g_warning ("Could not get system font from widget style");
+#endif
+      font = gdk_fontset_load ("-misc-fixed-medium-r-semicondensed--*-120-*-*-c-*-*-*");
     }
   else
+    {
+      font = gdk_fontset_load (terminal_profile_get_x_font (profile));
+      if (font == NULL)
+        {      
+          g_printerr (_("Could not load font \"%s\"\n"),
+                      terminal_profile_get_x_font (profile));
+        }
+    }
+
+  if (font)
     {
       terminal_widget_set_normal_gdk_font (term, font);
       terminal_widget_set_bold_gdk_font (term, font);
@@ -1523,6 +1551,7 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
           {
             terminal_profile_set_background_type (profile,
                                                   TERMINAL_BACKGROUND_SOLID);
+            terminal_profile_set_use_theme_colors (profile, FALSE);
             
             terminal_profile_get_color_scheme (profile,
                                                &fg, NULL);
