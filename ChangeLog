@@ -1,5 +1,15 @@
 2002-03-09  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-window.c (terminal_window_remove_screen):
+	reset_tab_menuitems only after setting the active terminal
+	(terminal_window_remove_screen): update the sensitivity of the 
+	next/prev tab menu items #73969
+
+	* src/terminal-screen.c (reread_profile): only scroll if the
+	background is image, not if it's transparent #73757
+
+2002-03-09  Havoc Pennington  <hp@pobox.com>
+	
 	* src/profile-editor.c (terminal_profile_edit): set initial value
 	of color scheme menu, #73906
 

@@ -347,7 +347,8 @@ reread_profile (TerminalScreen *screen)
                            terminal_profile_get_scrollback_lines (profile));
 
   bgflags = 0;
-  if (terminal_profile_get_scroll_background (profile))
+  if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE &&
+      terminal_profile_get_scroll_background (profile))
     bgflags |= ZVT_BACKGROUND_SCROLL;
   if (terminal_profile_get_background_darkness (profile) > DARKNESS_THRESHOLD)
     bgflags |= ZVT_BACKGROUND_SHADED;

@@ -687,6 +687,29 @@ update_copy_sensitivity (TerminalWindow *window)
 }
 
 static void
+update_tab_sensitivity (TerminalWindow *window)
+{
+  int page_num;
+  GtkWidget *notebook;
+  gboolean on_last_page;
+
+  notebook = window->priv->notebook;
+  page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+  
+  gtk_widget_set_sensitive (window->priv->previous_tab_menuitem,
+                            page_num > 0);
+
+  /* FIXME
+   * http://bugzilla.gnome.org/show_bug.cgi?id=73229
+   */
+  on_last_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
+                                            page_num + 1) == NULL;
+  
+  gtk_widget_set_sensitive (window->priv->next_tab_menuitem,
+                            !on_last_page);
+}
+
+static void
 selection_changed_callback (TerminalScreen *screen,
                             TerminalWindow *window)
 {
@@ -764,6 +787,7 @@ terminal_window_add_screen (TerminalWindow *window,
                             label);
 
   reset_tab_menuitems (window);
+  update_tab_sensitivity (window);
   
   /* Busting out the GtkNotebook crackrock features */
   gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (window->priv->notebook),
@@ -816,13 +840,15 @@ terminal_window_remove_screen (TerminalWindow *window,
   g_object_unref (G_OBJECT (screen));
   
   update_notebook (window);
-  reset_tab_menuitems (window);
 
   /* Put ourselves back in a sane state */
   if (window->priv->active_term == NULL &&
       window->priv->terms)
     terminal_window_set_active (window, window->priv->terms->data);
 
+  reset_tab_menuitems (window);
+  update_tab_sensitivity (window);
+  
   /* Close window if no more terminals */
   if (window->priv->terms == NULL)
     gtk_widget_destroy (GTK_WIDGET (window));
@@ -1056,7 +1082,6 @@ notebook_page_switched_callback (GtkWidget       *notebook,
 {
   GtkWidget* page_widget;
   TerminalScreen *screen;
-  gboolean on_last_page;
   GtkWidget *menu_item;
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
@@ -1070,18 +1095,8 @@ notebook_page_switched_callback (GtkWidget       *notebook,
 
   terminal_window_set_active (window, screen);
 
-  gtk_widget_set_sensitive (window->priv->previous_tab_menuitem,
-                            page_num > 0);
-
-  /* FIXME
-   * http://bugzilla.gnome.org/show_bug.cgi?id=73229
-   */
-  on_last_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
-                                            page_num + 1) == NULL;
+  update_tab_sensitivity (window);
   
-  gtk_widget_set_sensitive (window->priv->next_tab_menuitem,
-                            !on_last_page);
-
   menu_item = screen_get_menuitem (screen);
   if (menu_item &&
       screen == window->priv->active_term)
