@@ -119,7 +119,7 @@ static TerminalEncoding encodings[] = {
   { TERMINAL_ENCODING_GBK, FALSE,
     "GBK", N_("Chinese Simplified") },
   { TERMINAL_ENCODING_GEOSTD8, FALSE,
-    "GEORGIAN-ACADEMY", N_("Georgian") }, /* FIXME GEOSTD8 ? */
+    "GEORGIAN-PS", N_("Georgian") },
   { TERMINAL_ENCODING_HZ, FALSE,
     "HZ", N_("Chinese Simplified") },
 
@@ -180,12 +180,16 @@ static TerminalEncoding encodings[] = {
   { TERMINAL_ENCODING_MAC_UKRAINIAN, FALSE,
     "MAC_UKRAINIAN", N_("Cyrillic/Ukrainian") },
   
+  { TERMINAL_ENCODING_ISIRI_3342, FALSE,
+    "ISIRI-3342", N_("Farsi") },
   { TERMINAL_ENCODING_SHIFT_JIS, FALSE,
     "SHIFT-JIS", N_("Japanese") },
   { TERMINAL_ENCODING_TCVN, FALSE,
     "TCVN", N_("Vietnamese") },
   { TERMINAL_ENCODING_TIS_620, FALSE,
     "TIS-620", N_("Thai") },
+  { TERMINAL_ENCODING_TSCII, FALSE,
+    "TSCII", N_("Tamil") },
   { TERMINAL_ENCODING_UHC, FALSE,
     "UHC", N_("Korean") },
   { TERMINAL_ENCODING_VISCII, FALSE,
