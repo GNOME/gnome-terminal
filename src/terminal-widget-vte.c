@@ -99,8 +99,7 @@ terminal_widget_get_padding                (GtkWidget            *widget,
 					    int                  *xpad,
 					    int                  *ypad)
 {
-  UNIMPLEMENTED;
-
+  /* We don't do padding! */
   *xpad = 0;
   *ypad = 0;
 }
@@ -131,14 +130,48 @@ void
 terminal_widget_set_delete_binding (GtkWidget           *widget,
 				    TerminalEraseBinding binding)
 {
-  UNIMPLEMENTED;
+  switch (binding) {
+    case TERMINAL_ERASE_ASCII_DEL:
+      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
+		      		      VTE_ERASE_ASCII_DELETE);
+      break;
+    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
+      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
+		      		      VTE_ERASE_DELETE_SEQUENCE);
+      break;
+    case TERMINAL_ERASE_CONTROL_H:
+      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
+		      		      VTE_ERASE_ASCII_BACKSPACE);
+      break;
+    default:
+      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
+		      		      VTE_ERASE_AUTO);
+      break;
+  }
 }
 
 void
 terminal_widget_set_backspace_binding (GtkWidget            *widget,
 				       TerminalEraseBinding  binding)
 {
-  UNIMPLEMENTED;
+  switch (binding) {
+    case TERMINAL_ERASE_ASCII_DEL:
+      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
+		      			 VTE_ERASE_ASCII_DELETE);
+      break;
+    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
+      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
+		      			 VTE_ERASE_DELETE_SEQUENCE);
+      break;
+    case TERMINAL_ERASE_CONTROL_H:
+      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
+		      			 VTE_ERASE_ASCII_BACKSPACE);
+      break;
+    default:
+      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
+		      			 VTE_ERASE_AUTO);
+      break;
+  }
 }
 
 void
@@ -404,7 +437,7 @@ terminal_widget_fork_command (GtkWidget   *widget,
 int
 terminal_widget_get_estimated_bytes_per_scrollback_line (void)
 {
-  /* One slot in the ring buffer, plust the array which holds the data for
+  /* One slot in the ring buffer, plus the array which holds the data for
    * the line, plus about 80 vte_charcell structures. */
   return sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(wchar_t) + 4));
 }
