@@ -353,7 +353,7 @@ terminal_widget_connect_child_died (GtkWidget *widget,
 				    GCallback  callback,
 				    void      *data)
 {
-  g_signal_connect (widget, "eof",
+  g_signal_connect (widget, "child-exited",
 		    G_CALLBACK (callback), data);
 }
 
