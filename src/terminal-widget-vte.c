@@ -298,7 +298,8 @@ void
 terminal_widget_set_background_scrolls (GtkWidget *widget,
 					gboolean   setting)
 {
-  UNIMPLEMENTED;
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_scroll_background(VTE_TERMINAL(widget), setting);
 }
 
 void
