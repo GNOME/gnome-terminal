@@ -68,6 +68,7 @@ EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
 	$(schema_DATA)			\
+	$(server_DATA)			\
 	update-from-egg.sh
 
 
