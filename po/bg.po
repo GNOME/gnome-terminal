@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-08-04 13:03-0400\n"
-"PO-Revision-Date: 2002-07-23 15:20+0300\n"
+"POT-Creation-Date: 2002-08-24 22:09+0300\n"
+"PO-Revision-Date: 2002-08-24 22:15+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,28 +20,36 @@ msgid "Command line"
 msgstr "Команден ред"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:938
+#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:926
 msgid "Terminal"
 msgstr "Терминал"
 
-#: src/eggcellrendererkeys.c:159 src/eggcellrendererkeys.c:160
-msgid "Accelerator modifiers"
-msgstr "Модификатори на ускорителя"
-
-#: src/eggcellrendererkeys.c:168 src/eggcellrendererkeys.c:169
+#: src/eggcellrendererkeys.c:160 src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Клавиш на ускорител"
 
-#: src/eggcellrendererkeys.c:207 src/gnome-terminal.glade2.h:18
+#: src/eggcellrendererkeys.c:170 src/eggcellrendererkeys.c:171
+msgid "Accelerator modifiers"
+msgstr "Модификатори на ускорителя"
+
+#: src/eggcellrendererkeys.c:180
+msgid "Accel Mode"
+msgstr "Режим на ускорителя"
+
+#: src/eggcellrendererkeys.c:181
+msgid "The type of accelerator."
+msgstr "Тип ускорител."
+
+#: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:18
 #: src/terminal-accels.c:707
 msgid "Disabled"
 msgstr "Забранен"
 
-#: src/eggcellrendererkeys.c:318 src/eggcellrendererkeys.c:534
+#: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:563
 msgid "Type a new accelerator, or press Backspace to clear"
 msgstr "Въведете нов ускорител, или натиснете 'Backspace' за изчистване"
 
-#: src/eggcellrendererkeys.c:537
+#: src/eggcellrendererkeys.c:566
 msgid "Type a new accelerator"
 msgstr "Въведете нов ускорител"
 
@@ -431,7 +439,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Потребителски"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2074 src/terminal.c:2267
+#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2255
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Има грешка при показване на помощ: %s"
@@ -527,7 +535,7 @@ msgstr "Нова Страница"
 msgid "New Window"
 msgstr "Нов Прозорец"
 
-#: src/terminal-accels.c:75 src/terminal.c:1691
+#: src/terminal-accels.c:75 src/terminal.c:1679
 msgid "New Profile"
 msgstr "Нов Профил"
 
@@ -647,7 +655,7 @@ msgstr "Отива"
 msgid "Help"
 msgstr "Помощ"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1168
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1156
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Има грешка при зареждане на конфигурация от %s. (%s)\n"
@@ -733,7 +741,7 @@ msgstr ""
 msgid "_Action"
 msgstr "_Действие"
 
-#: src/terminal-accels.c:1173
+#: src/terminal-accels.c:1174
 msgid "Accelerator _Key"
 msgstr "Клавиш _Ускорител"
 
@@ -1029,7 +1037,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Файл"
 
-#: src/terminal-window.c:1656 src/terminal.c:2298
+#: src/terminal-window.c:1656 src/terminal.c:2286
 msgid "_Edit"
 msgstr "_Редакция"
 
@@ -1057,7 +1065,7 @@ msgstr "_Възстановява нормалния размер"
 msgid "_Full screen"
 msgstr "_Пълен екран"
 
-#: src/terminal-window.c:1970
+#: src/terminal-window.c:1975
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -1067,15 +1075,15 @@ msgstr ""
 " (в технически смисъл вие се нуждаете от мениджър на прозорци който поддържа "
 "_NET_WM_STATE_FULLSCREEN правилно.)"
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2109
 msgid "translator_credits"
 msgstr "B.Aleksandrov@cnsys.bg"
 
-#: src/terminal-window.c:2117
+#: src/terminal-window.c:2122
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Авторски права 2002 Havoc Pennington"
 
-#: src/terminal-window.c:2118
+#: src/terminal-window.c:2123
 msgid "GNOME Terminal"
 msgstr "Терминал на ГНОМЕ"
 
@@ -1187,16 +1195,16 @@ msgstr "ДИРЕКТОРИЯ"
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Не мога да заредя икона \"%s\": %s\n"
 
-#: src/terminal.c:668
+#: src/terminal.c:666
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr "Опция --command/-e изисква задаване на команда за изпълнение\n"
 
-#: src/terminal.c:676
+#: src/terminal.c:674
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Аргумент за --command/-e не е валидна команда: %s\n"
 
-#: src/terminal.c:686 src/terminal.c:708
+#: src/terminal.c:684 src/terminal.c:706
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1204,7 +1212,7 @@ msgstr ""
 "--command/-e/--execute/-x задава повече от един път за същият прозорец или "
 "страница\n"
 
-#: src/terminal.c:700
+#: src/terminal.c:698
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1212,7 +1220,7 @@ msgstr ""
 "Опция --execute/-x изисква задаване на командата за изпълнение на остатъка "
 "от командния ред\n"
 
-#: src/terminal.c:727
+#: src/terminal.c:723
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1220,7 +1228,7 @@ msgstr ""
 "Опция --window-with-profile изисква задаване на аргумент определящ профила "
 "за използване\n"
 
-#: src/terminal.c:746
+#: src/terminal.c:740
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1228,39 +1236,39 @@ msgstr ""
 "Опця --tab-with-profile изисква задаване на аргумент определящ профила за "
 "използване\n"
 
-#: src/terminal.c:777
+#: src/terminal.c:771
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "--show-menubar опцията задава двукратно за съшият прозорец\n"
 
-#: src/terminal.c:803
+#: src/terminal.c:797
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "--hide-menubar опцията задава двукратно за съшият прозорец\n"
 
-#: src/terminal.c:828
+#: src/terminal.c:820
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Опция --geometry изисква аргумент задаващ геометрията\n"
 
-#: src/terminal.c:837 src/terminal.c:847
+#: src/terminal.c:829 src/terminal.c:839
 msgid "Two geometries given for one window\n"
 msgstr "Две геометрии зададени за един прозорец\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:861
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Опция --title изисква аргумент задаващ заглавие\n"
 
-#: src/terminal.c:879
+#: src/terminal.c:869
 msgid "Two titles given for one tab\n"
 msgstr "Две заглавия задават една страница\n"
 
-#: src/terminal.c:896
+#: src/terminal.c:884
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "Опция --working-directory изисква аргумент директория\n"
 
-#: src/terminal.c:904
+#: src/terminal.c:892
 msgid "Two working directories given for one tab\n"
 msgstr "Две работни директории за една страница\n"
 
-#: src/terminal.c:913
+#: src/terminal.c:901
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1270,17 +1278,17 @@ msgstr ""
 "може да искате да създадете профил с желаните параметри, и да използвате "
 "нова опция --window-with-profile\n"
 
-#: src/terminal.c:1033
+#: src/terminal.c:1021
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Няма такъв профил '%s', използвам подразбиращият се\n"
 
-#: src/terminal.c:1142
+#: src/terminal.c:1130
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Грешен аргумент: \"%s\"\n"
 
-#: src/terminal.c:1184
+#: src/terminal.c:1172
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1289,106 +1297,106 @@ msgstr ""
 "Има грешка в абонамента за известяване при промяна на терминалния списък. (%"
 "s)\n"
 
-#: src/terminal.c:1292
+#: src/terminal.c:1280
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Грешен низ с геометрия \"%s\"\n"
 
-#: src/terminal.c:1352
+#: src/terminal.c:1340
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Има грешка в списъка на профилите на терминал. (%s)\n"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1573
 msgid "You have to name your profile."
 msgstr "Вие трябва да именувате вашият профил"
 
-#: src/terminal.c:1595
+#: src/terminal.c:1583
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Вие имате вече профил с име \"%s\""
 
-#: src/terminal.c:1632
+#: src/terminal.c:1620
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Избраният профил като базов за вашият нов вече не съществува"
 
-#: src/terminal.c:1696
+#: src/terminal.c:1684
 msgid "C_reate"
 msgstr "С_ъздава"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1709
 msgid "Profile _name:"
 msgstr "_Име на профил:"
 
-#: src/terminal.c:1725
+#: src/terminal.c:1713
 msgid "Enter profile name"
 msgstr "Въведете име на профил"
 
-#: src/terminal.c:1740
+#: src/terminal.c:1728
 msgid "_Base on:"
 msgstr "_Базиран на:"
 
-#: src/terminal.c:1888
+#: src/terminal.c:1876
 msgid "Profile list"
 msgstr "Списък на профил"
 
-#: src/terminal.c:1961
+#: src/terminal.c:1949
 msgid "You must select one or more profiles to delete."
 msgstr "Вие трябва да изберете един или повече профили за изтриване"
 
-#: src/terminal.c:1984
+#: src/terminal.c:1972
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "Вие трябва да имате поне един профил; вие не може да изтриете всичките."
 
-#: src/terminal.c:2002
+#: src/terminal.c:1990
 msgid "Delete these two profiles?\n"
 msgstr "Да изтрия тези два профила?\n"
 
-#: src/terminal.c:2004
+#: src/terminal.c:1992
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Да изтрия тези %d профила?\n"
 
-#: src/terminal.c:2022
+#: src/terminal.c:2010
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Да изтрия профил \"%s\"?"
 
-#: src/terminal.c:2044
+#: src/terminal.c:2032
 msgid "Delete Profile"
 msgstr "Изтриване на профил"
 
-#: src/terminal.c:2331
+#: src/terminal.c:2319
 msgid "Edit Profiles"
 msgstr "Редактиране на профили"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2359
 msgid "Profile _used when launching a new terminal:"
 msgstr "Профил _използван при стартиране на нов терминал:"
 
-#: src/terminal.c:2393
+#: src/terminal.c:2381
 msgid "_Profiles:"
 msgstr "_Профили:"
 
-#: src/terminal.c:2442
+#: src/terminal.c:2430
 msgid "Click to open new profile dialog"
 msgstr "Кликнете за да отворите нов диалог за профил"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2443
 msgid "Click to open edit profile dialog"
 msgstr "Кликнете за да отворите диалог за редакция на профил"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2453
 msgid "Click to delete selected profile"
 msgstr "Кликнете за да изтриете избраният профил"
 
-#: src/terminal.c:2514
+#: src/terminal.c:2502
 msgid "Click button to choose profile"
 msgstr "Кликнете долу за да изберете профил"
 
-#: src/terminal.c:2954
+#: src/terminal.c:2942
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1396,7 +1404,7 @@ msgstr ""
 "Изглежда, че вие нямате gnome-terminal.server инсталиран на правилно място. "
 "Режима на първоначални настройки е изключен.\n"
 
-#: src/terminal.c:2957
+#: src/terminal.c:2945
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1404,7 +1412,7 @@ msgstr ""
 "Грешка при регистриране на терминал с активно обслужване; режима на "
 "първоначални настройки е изключен.\n"
 
-#: src/terminal.c:2992
+#: src/terminal.c:2980
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Неуспех при получаване на терминален сървър от сървъра за активиране\n"
 
