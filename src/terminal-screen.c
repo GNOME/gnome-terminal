@@ -253,9 +253,12 @@ terminal_screen_init (TerminalScreen *screen)
       "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+(:[0-9]+)?"
       "(/[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*[^]'.}>) \t\r\n,\\\"])?\\>", FLAVOR_DEFAULT_TO_HTTP);
 
-  terminal_widget_match_add (screen->priv->term, 
-      
-      "\\<(mailto:)?[a-z0-9]+@[a-z0-9][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_MAILTO);
+  terminal_widget_match_add (screen->priv->term,       
+      "\\<(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_MAILTO);
+	  
+  terminal_widget_match_add (screen->priv->term,
+      "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+@[" HOSTCHARS ".]+(:[0-9]+)?\\>", FLAVOR_AS_IS);
+
 
   terminal_screen_setup_dnd (screen);
   
@@ -1290,7 +1293,6 @@ open_url (TerminalScreen *screen,
       g_assert_not_reached ();
     }
 
-  g_printerr ("(%s)(%s)\n", orig_url, url);
   err = NULL;
   gnome_url_show (url, &err);
 

@@ -1,5 +1,12 @@
 2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
 
+	* src/terminal-screen.c(terminal_screen_init): match news: URIs. Modified form of
+	  a patch by Juha Sahakangas <voas0113@saunalahti.fi> on bug #137653. Also, allow
+	  periods in the user name for a mailto: URI. 
+	* src/terminal-screen.c(open_url): remove a g_printerr which should not be there.
+
+2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
+
 	* src/terminal-window.c(about_callback): do not leak the pixbuf in the about dialog.
 	  Caught by the venerable champion of finding leaks, Kjartan; bug #151813.
 
