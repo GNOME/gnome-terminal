@@ -3417,7 +3417,7 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_p
       dialog = gtk_message_dialog_new (transient_parent,
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
+                                       GTK_BUTTONS_OK,
                                        message);
 
       g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);

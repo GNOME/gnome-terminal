@@ -1,3 +1,14 @@
+2004-04-09 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal.c(terminal_util_show_error_dialog): make the error
+	  dialogs have an OK button, not a Close button, which seems to be
+	  more HIGgy.
+	* src/terminal-accels.c(accel_edited_callback,
+	  terminal_edit_keys_dialog_new, cb_check_for_uniqueness): check
+	  keyboard shortcuts for uniqueness before accepting them. Fixes
+	  #128033; essentially from the patch posted there by Kiran Kumar
+	  Immidi.
+
 2004-04-15 Iñaki Larrañaga  <dooteo@euskalgnu.org>
 
 	* configure.in: Added "eu" (Basque) to ALL_LINGUAS.
