@@ -1100,6 +1100,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         profile);
 
       w = glade_xml_get_widget (xml, "background-image-fileentry");
+      g_object_set (G_OBJECT (w), "use-filechooser", TRUE, NULL);
       profile_editor_update_background_image (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (background_image_changed),
