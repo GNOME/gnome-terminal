@@ -120,7 +120,7 @@ static void
 terminal_screen_init (TerminalScreen *screen)
 {  
   screen->priv = g_new0 (TerminalScreenPrivate, 1);
-
+  
   screen->priv->term = terminal_widget_new ();
 
   g_object_ref (G_OBJECT (screen->priv->term));
@@ -276,10 +276,12 @@ terminal_screen_set_window (TerminalScreen *screen,
 const char*
 terminal_screen_get_title (TerminalScreen *screen)
 {
+  if (screen->priv->cooked_title == NULL)
+    rebuild_title (screen);
+
+  /* cooked_title may still be NULL */
   if (screen->priv->cooked_title)
     return screen->priv->cooked_title;
-  else if (screen->priv->profile)
-    return terminal_profile_get_visible_name (screen->priv->profile);
   else
     return "";
 }
@@ -298,6 +300,8 @@ reread_profile (TerminalScreen *screen)
 
   term = screen->priv->term;
 
+  rebuild_title (screen);
+  
   if (screen->priv->window)
     {
       /* We need these in line for the set_size in
@@ -310,8 +314,6 @@ reread_profile (TerminalScreen *screen)
   
   if (GTK_WIDGET_REALIZED (screen->priv->term))
     terminal_screen_update_on_realize (term, screen);
-
-  rebuild_title (screen);
 
   terminal_widget_set_cursor_blinks (term,
                                      terminal_profile_get_cursor_blink (profile));
@@ -395,7 +397,10 @@ rebuild_title  (TerminalScreen *screen)
                      NULL);
       break;
     case TERMINAL_TITLE_REPLACE:
-      screen->priv->cooked_title = g_strdup (screen->priv->raw_title);
+      if (screen->priv->raw_title)
+        screen->priv->cooked_title = g_strdup (screen->priv->raw_title);
+      else
+        screen->priv->cooked_title = g_strdup (terminal_profile_get_title (screen->priv->profile));
       break;
     case TERMINAL_TITLE_IGNORE:
       screen->priv->cooked_title = g_strdup (terminal_profile_get_title (screen->priv->profile));

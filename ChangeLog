@@ -1,5 +1,16 @@
 2002-03-24  Havoc Pennington  <hp@pobox.com>
 
+        Fix issues that resulted in mangled terminal title.
+	
+	* src/terminal-screen.c
+	(terminal_screen_get_title): never fall back to profile name,
+	always build a real title
+	(reread_profile): rebuild the title earlier in this function
+	(rebuild_title): in REPLACE mode, use the initial title 
+	if we don't have a raw title yet.
+
+2002-03-24  Havoc Pennington  <hp@pobox.com>
+
 	* src/profterm.schemas: doh, change default profile name back to
 	Default, we have a separate title setting. If it's not getting 
 	displayed we have other issues.
