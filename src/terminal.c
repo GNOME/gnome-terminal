@@ -194,7 +194,7 @@ struct poptOption options[] = {
     '\0',
     POPT_ARG_STRING,
     NULL,
-    OPTION_WINDOW_WITH_PROFILE,
+    OPTION_WINDOW_WITH_PROFILE_ID,
     N_("Open a new window containing a tab with the given profile ID. Used internally to save sessions."),
     N_("PROFILEID")
   },
@@ -203,7 +203,7 @@ struct poptOption options[] = {
     '\0',
     POPT_ARG_STRING,
     NULL,
-    OPTION_TAB_WITH_PROFILE,
+    OPTION_TAB_WITH_PROFILE_ID,
     N_("Open a new tab in the last-opened window with the given profile ID. Used internally to save sessions."),
     N_("PROFILEID")
   },
@@ -1057,7 +1057,7 @@ main (int argc, char **argv)
             {
               if (it->profile_is_id)
                 profile = terminal_profile_lookup (it->profile);
-              else
+              else                
                 profile = terminal_profile_lookup_by_visible_name (it->profile);
             }
           
