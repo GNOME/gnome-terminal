@@ -1167,7 +1167,7 @@ terminal_window_set_size (TerminalWindow *window,
            grid_width, grid_height, w, h);
 #endif
   
-  if (even_if_mapped)
+  if (even_if_mapped && GTK_WIDGET_MAPPED (app))
     gtk_window_resize (GTK_WINDOW (app), w, h);
   else
     gtk_window_set_default_size (GTK_WINDOW (app), w, h);

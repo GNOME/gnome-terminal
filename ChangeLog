@@ -1,5 +1,11 @@
 2002-05-01  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-window.c (terminal_window_set_size): don't use
+	gtk_window_resize on unmapped windows, it broke --geometry.
+	#80063
+
+2002-05-01  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-accels.c: implement option for menu accels in the
 	keybindings dialog. String/screenshot change. #76845
 
