@@ -54,6 +54,8 @@ real_finalize (GObject *object)
 
 	g_free (label->details->full_text);
 	g_free (label->details);
+
+	EEL_CALL_PARENT (G_OBJECT_CLASS, finalize, (object));
 }
 
 GtkWidget*
