@@ -3767,13 +3767,16 @@ terminal_profile_get_default (void)
 }
 
 TerminalProfile*
-terminal_profile_get_for_new_term (void)
+terminal_profile_get_for_new_term (TerminalProfile *current)
 {
   GList *list;
   TerminalProfile *profile;
+
+  if (current)
+    return current;
   
   if (default_profile)
-    return default_profile;
+    return default_profile;	
 
   list = terminal_profile_get_list ();
   if (list)

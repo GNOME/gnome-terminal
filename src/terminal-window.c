@@ -324,13 +324,22 @@ fill_in_new_term_submenus (TerminalWindow *window)
   GSList *group;
   GtkAccelGroup *accel_group;
   char *str;
-  TerminalProfile *default_profile;
+  TerminalProfile *current_profile;
   int i;
-  
-  default_profile = terminal_profile_get_default ();
 
-  if (default_profile == NULL)
+  current_profile = NULL;
+  if (window->priv->active_term != NULL)
+    current_profile = terminal_screen_get_profile (window->priv->active_term);
+
+  /* if current_profile is null, this will change it to a default,
+   * otherwise do nothing
+   */
+  current_profile = terminal_profile_get_for_new_term (current_profile);
+  
+  if (current_profile == NULL)
     {
+      /* Well, this shouldn't happen */
+      
       gtk_widget_set_sensitive (window->priv->new_window_menuitem, FALSE);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_window_menuitem),
                                  NULL);
@@ -341,7 +350,7 @@ fill_in_new_term_submenus (TerminalWindow *window)
       return;      
     }
 
-  str = g_strdup (terminal_profile_get_visible_name (default_profile));
+  str = g_strdup (terminal_profile_get_visible_name (current_profile));
   
   gtk_widget_set_sensitive (window->priv->new_window_menuitem, TRUE);
   gtk_widget_set_sensitive (window->priv->new_tab_menuitem, TRUE);
@@ -362,10 +371,10 @@ fill_in_new_term_submenus (TerminalWindow *window)
   g_signal_connect (G_OBJECT (menu_item),
                     "activate",
                     G_CALLBACK (new_window_callback), window);
-  g_object_ref (G_OBJECT (default_profile));
+  g_object_ref (G_OBJECT (current_profile));
   g_object_set_data_full (G_OBJECT (menu_item),
                           "profile",
-                          default_profile,
+                          current_profile,
                           (GDestroyNotify) g_object_unref);  
 
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
@@ -391,10 +400,10 @@ fill_in_new_term_submenus (TerminalWindow *window)
   g_signal_connect (G_OBJECT (menu_item),
                     "activate",
                     G_CALLBACK (new_tab_callback), window);
-  g_object_ref (G_OBJECT (default_profile));
+  g_object_ref (G_OBJECT (current_profile));
   g_object_set_data_full (G_OBJECT (menu_item),
                           "profile",
-                          default_profile,
+                          current_profile,
                           (GDestroyNotify) g_object_unref);
 
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
@@ -808,6 +817,8 @@ profile_set_callback (TerminalScreen *screen,
 {
   /* Redo the pick-a-profile menu */
   fill_in_config_picker_submenu (window);
+  /* and the open-new-profile menu */
+  fill_in_new_term_submenus (window);
 }
 
 static void
@@ -1237,6 +1248,7 @@ terminal_window_set_active (TerminalWindow *window,
   gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
 
   fill_in_config_picker_submenu (window);
+  fill_in_new_term_submenus (window);
 }
 
 TerminalScreen*
@@ -2106,13 +2118,17 @@ static void
 default_profile_changed (TerminalProfile    *profile,
                          TerminalSettingMask mask,
                          void               *data)
-{  
+{
+  /* This no longer applies, since our "new window" item
+   * is based on the current profile, not the default profile
+   */
+#if 0
   if (mask & TERMINAL_SETTING_IS_DEFAULT)
     {
       TerminalWindow *window;
 
       window = TERMINAL_WINDOW (data);
-
+      
       /* When the default changes, we get a settings change
        * on the old default and the new. We only rebuild
        * the menu on the notify for the new default.
@@ -2120,6 +2136,7 @@ default_profile_changed (TerminalProfile    *profile,
       if (terminal_profile_get_is_default (profile))
         fill_in_new_term_submenus (window);
     }
+#endif
 }
 
 static void

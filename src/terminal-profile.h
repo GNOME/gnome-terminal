@@ -270,7 +270,7 @@ int              terminal_profile_get_count              (void);
 /* may return NULL */
 TerminalProfile* terminal_profile_get_default            (void);
 /* never returns NULL if any profiles exist, one is always supposed to */
-TerminalProfile* terminal_profile_get_for_new_term       (void);
+TerminalProfile* terminal_profile_get_for_new_term       (TerminalProfile *current);
 TerminalProfile* terminal_profile_lookup                 (const char      *name);
 TerminalProfile* terminal_profile_lookup_by_visible_name (const char      *name);
 void             terminal_profile_forget                 (TerminalProfile *profile);

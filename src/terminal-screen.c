@@ -625,7 +625,7 @@ profile_forgotten_callback (TerminalProfile *profile,
   TerminalProfile *new_profile;
 
   /* Revert to the new term profile if any */
-  new_profile = terminal_profile_get_for_new_term ();
+  new_profile = terminal_profile_get_for_new_term (NULL);
 
   if (new_profile)
     terminal_screen_set_profile (screen, new_profile);
@@ -959,7 +959,7 @@ new_window_callback (GtkWidget      *menu_item,
                      TerminalScreen *screen)
 {
   terminal_app_new_terminal (terminal_app_get (),
-                             terminal_profile_get_for_new_term (),
+                             terminal_profile_get_for_new_term (screen->priv->profile),
                              NULL,
                              FALSE, FALSE, NULL, NULL, NULL, NULL);
 }
@@ -969,7 +969,7 @@ new_tab_callback (GtkWidget      *menu_item,
                   TerminalScreen *screen)
 {
   terminal_app_new_terminal (terminal_app_get (),
-                             terminal_profile_get_for_new_term (),
+                             terminal_profile_get_for_new_term (screen->priv->profile),
                              screen->priv->window,
                              FALSE, FALSE, NULL, NULL, NULL, NULL);
 }

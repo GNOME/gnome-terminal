@@ -1023,7 +1023,7 @@ new_terminal_with_options (OptionParsingResults *results)
             }
           else if (it->profile == NULL)
             {
-              profile = terminal_profile_get_for_new_term ();
+              profile = terminal_profile_get_for_new_term (NULL);
             }
           
           if (profile == NULL)
@@ -1031,7 +1031,7 @@ new_terminal_with_options (OptionParsingResults *results)
               if (it->profile)
                 g_printerr (_("No such profile '%s', using default profile\n"),
                             it->profile);
-              profile = terminal_profile_get_for_new_term ();
+              profile = terminal_profile_get_for_new_term (NULL);
             }
           
           g_assert (profile);
