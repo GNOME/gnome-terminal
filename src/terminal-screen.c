@@ -1423,7 +1423,8 @@ enum
   TARGET_COLOR,
   TARGET_BGIMAGE,
   TARGET_RESET_BG,
-  TARGET_TEXT_PLAIN
+  TARGET_TEXT_PLAIN,
+  TARGET_MOZ_URL
 };
 
 static void  
@@ -1437,6 +1438,23 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
 
   screen = TERMINAL_SCREEN (data);
 
+#if 0
+  {
+    GList *tmp;
+    char *str;
+    
+    tmp = context->targets;
+    while (tmp != NULL)
+      {
+        GdkAtom atom = GPOINTER_TO_UINT (tmp->data);
+
+        g_print ("Target: %s\n", gdk_atom_name (atom));        
+        
+        tmp = tmp->next;
+      }
+  }
+#endif
+  
   switch (info)
     {
     case TARGET_STRING:
@@ -1514,6 +1532,63 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
       }
       break;
 
+    case TARGET_MOZ_URL:
+      {
+        GString *str;
+        int i;
+        const guint16 *char_data;
+        int char_len;
+        char *filename;
+        
+        /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
+         *
+         * The data contains the URL, a \n, then the
+         * title of the web page.
+         */
+        if (selection_data->format != 8 ||
+            selection_data->length == 0 ||
+            (selection_data->length % 2) != 0)
+          {
+            g_printerr (_("Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"),
+                        selection_data->format,
+                        selection_data->length);
+            return;
+          }
+
+        str = g_string_new (NULL);
+        
+        char_len = selection_data->length / 2;
+        char_data = (const guint16*) selection_data->data;
+        i = 0;
+        while (i < char_len)
+          {
+            if (char_data[i] == '\n')
+              break;
+            
+            g_string_append_unichar (str, (gunichar) char_data[i]);
+            
+            ++i;
+          }
+
+        /* drop file:///, else paste in URI literally */
+        filename = g_filename_from_uri (str->str, NULL, NULL);
+        
+        /* FIXME just brazenly ignoring encoding issues, sending
+         * child some UTF-8
+         */
+        if (filename)
+          terminal_widget_write_data_to_child (screen->priv->term,
+                                               filename, strlen (filename));
+        else
+          terminal_widget_write_data_to_child (screen->priv->term,
+                                               str->str,
+                                               str->len);
+
+        g_free (filename);        
+        g_string_free (str, TRUE);
+      }
+      break;
+      
     case TARGET_URI_LIST:
       {
         char *uri_list;
@@ -1651,12 +1726,15 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
     { "property/bgimage",    0, TARGET_BGIMAGE },
     { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
     { "text/uri-list",  0, TARGET_URI_LIST },
+    { "text/x-moz-url",  0, TARGET_MOZ_URL },
     { "UTF8_STRING", 0, TARGET_UTF8_STRING },
     { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
     { "TEXT", 0, TARGET_TEXT },
     { "STRING",     0, TARGET_STRING },
     /* text/plain problematic, we don't know its encoding */
     { "text/plain", 0, TARGET_TEXT_PLAIN }
+    /* add when gtk supports it perhaps */
+    /* { "text/unicode", 0, TARGET_TEXT_UNICODE } */
   };
   
   g_signal_connect (G_OBJECT (screen->priv->term), "drag_data_received",
