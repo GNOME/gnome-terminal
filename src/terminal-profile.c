@@ -59,6 +59,12 @@
 #define KEY_ICON "icon"
 #define KEY_PALETTE "palette"
 #define KEY_X_FONT "x_font"
+#define KEY_BACKGROUND_TYPE "background_type"
+#define KEY_BACKGROUND_IMAGE "background_image"
+#define KEY_SCROLL_BACKGROUND "scroll_background"
+#define KEY_BACKGROUND_DARKNESS "background_darkness"
+#define KEY_BACKSPACE_BINDING "backspace_binding"
+#define KEY_DELETE_BINDING "delete_binding"
 
 struct _TerminalProfilePrivate
 {
@@ -92,8 +98,16 @@ struct _TerminalProfilePrivate
   GdkColor palette[TERMINAL_PALETTE_SIZE];
 
   char *x_font;
+
+  TerminalBackgroundType background_type;
+  char *background_image_file;
+  GdkPixbuf *background_image;
+  double background_darkness;
+  TerminalEraseBinding backspace_binding;
+  TerminalEraseBinding delete_binding;
   
   guint icon_load_failed : 1;
+  guint background_load_failed : 1;
   
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
@@ -104,6 +118,7 @@ struct _TerminalProfilePrivate
   guint login_shell : 1;
   guint update_records : 1;
   guint use_custom_command : 1;
+  guint scroll_background : 1;
   guint forgotten : 1;
 };
 
@@ -145,6 +160,20 @@ static const GConfEnumStringPair scrollbar_positions[] = {
 static const GConfEnumStringPair exit_actions[] = {
   { TERMINAL_EXIT_CLOSE, "close" },
   { TERMINAL_EXIT_RESTART, "restart" },
+  { -1, NULL }
+};
+
+static const GConfEnumStringPair erase_bindings[] = {
+  { TERMINAL_ERASE_CONTROL_H, "control-h" },
+  { TERMINAL_ERASE_ESCAPE_SEQUENCE, "escape-sequence" },
+  { TERMINAL_ERASE_ASCII_DEL, "ascii-del" },
+  { -1, NULL }
+};
+
+static const GConfEnumStringPair background_types[] = {
+  { TERMINAL_BACKGROUND_SOLID, "solid" },
+  { TERMINAL_BACKGROUND_IMAGE, "image" },
+  { TERMINAL_BACKGROUND_TRANSPARENT, "transparent" },
   { -1, NULL }
 };
 
@@ -244,6 +273,11 @@ terminal_profile_init (TerminalProfile *profile)
           terminal_palette_linux,
           TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
   profile->priv->x_font = g_strdup ("fixed");
+  profile->priv->background_type = TERMINAL_BACKGROUND_SOLID;
+  profile->priv->background_image_file = g_strdup ("");
+  profile->priv->background_darkness = 0.0;
+  profile->priv->backspace_binding = TERMINAL_ERASE_ASCII_DEL;
+  profile->priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
 }
 
 static void
@@ -295,9 +329,13 @@ terminal_profile_finalize (GObject *object)
   g_free (profile->priv->title);
   g_free (profile->priv->profile_dir);
   g_free (profile->priv->icon_file);
-  g_free (profile->priv->x_font);
   if (profile->priv->icon)
     g_object_unref (G_OBJECT (profile->priv->icon));
+  g_free (profile->priv->x_font);
+
+  g_free (profile->priv->background_image_file);
+  if (profile->priv->background_image)
+    g_object_unref (G_OBJECT (profile->priv->background_image));
   
   g_free (profile->priv);
   
@@ -1011,7 +1049,7 @@ terminal_profile_set_is_default (TerminalProfile *profile,
   gconf_client_set_string (profile->priv->conf,
                            CONF_GLOBAL_PREFIX"/default_profile",
                            terminal_profile_get_name (profile),
-                           NULL);  
+                           NULL);
 }
 
 void
@@ -1068,6 +1106,232 @@ terminal_profile_set_x_font (TerminalProfile *profile,
   gconf_client_set_string (profile->priv->conf,
                            key,
                            name,
+                           NULL);
+
+  g_free (key);
+}
+
+TerminalBackgroundType
+terminal_profile_get_background_type (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_BACKGROUND_SOLID);
+
+  return profile->priv->background_type;
+}
+
+void
+terminal_profile_set_background_type (TerminalProfile        *profile,
+                                      TerminalBackgroundType  type)
+{
+  char *key;
+  const char *type_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_TYPE);
+
+  type_string = gconf_enum_to_string (background_types, type);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           type_string,
+                           NULL);
+
+  g_free (key);
+}
+
+GdkPixbuf*
+terminal_profile_get_background_image (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+  
+  if (profile->priv->background_image == NULL &&
+      !profile->priv->background_load_failed)
+    {
+      GdkPixbuf *pixbuf;
+      GError *err;
+      char *filename;
+
+      filename = gnome_program_locate_file (gnome_program_get (),
+                                            /* FIXME should I use APP_PIXMAP? */
+                                            GNOME_FILE_DOMAIN_PIXMAP,
+                                            profile->priv->background_image_file,
+                                            TRUE, NULL);
+
+      if (filename == NULL)
+        {
+          g_printerr (_("Could not find a background image called \"%s\" for terminal profile \"%s\"\n"),
+                      profile->priv->background_image_file,
+                      terminal_profile_get_visible_name (profile));
+
+          profile->priv->background_load_failed = TRUE;
+          
+          goto out;
+        }
+      
+      err = NULL;
+      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
+
+      if (pixbuf == NULL)
+        {
+          g_printerr (_("Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"),
+                      filename,
+                      terminal_profile_get_visible_name (profile),
+                      err->message);
+          g_error_free (err);
+
+          g_free (filename);
+
+          profile->priv->background_load_failed = TRUE;
+          
+          goto out;
+        }
+
+      profile->priv->background_image = pixbuf;
+    }
+
+ out:
+  return profile->priv->background_image;
+}
+
+const char*
+terminal_profile_get_background_image_file (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+
+  return profile->priv->background_image_file;
+}
+
+
+void
+terminal_profile_set_background_image_file (TerminalProfile *profile,
+                                            const char      *filename)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_IMAGE);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           filename,
+                           NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_scroll_background (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->scroll_background;
+}
+
+void
+terminal_profile_set_scroll_background (TerminalProfile *profile,
+                                        gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_BACKGROUND);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+double
+terminal_profile_get_background_darkness (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0.0);
+
+  return profile->priv->background_darkness;
+}
+
+void
+terminal_profile_set_background_darkness (TerminalProfile *profile,
+                                          double           setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_DARKNESS);
+  
+  gconf_client_set_float (profile->priv->conf,
+                          key,
+                          setting,
+                          NULL);
+
+  g_free (key);
+}
+
+TerminalEraseBinding
+terminal_profile_get_backspace_binding (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_ERASE_ASCII_DEL);
+
+  return profile->priv->backspace_binding;
+}
+
+void
+terminal_profile_set_backspace_binding (TerminalProfile        *profile,
+                                        TerminalEraseBinding    binding)
+{
+  char *key;
+  const char *binding_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKSPACE_BINDING);
+
+  binding_string = gconf_enum_to_string (erase_bindings, binding);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           binding_string,
+                           NULL);
+
+  g_free (key);
+}
+
+TerminalEraseBinding
+terminal_profile_get_delete_binding (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_ERASE_ESCAPE_SEQUENCE);
+
+  return profile->priv->delete_binding;
+}
+
+void
+terminal_profile_set_delete_binding (TerminalProfile      *profile,
+                                     TerminalEraseBinding  binding)
+{
+  char *key;
+  const char *binding_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_DELETE_BINDING);
+
+  binding_string = gconf_enum_to_string (erase_bindings, binding);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           binding_string,
                            NULL);
 
   g_free (key);
@@ -1351,6 +1615,91 @@ set_x_font (TerminalProfile *profile,
   return FALSE;
 }
 
+static gboolean
+set_background_type (TerminalProfile *profile,
+                     const char      *str_val)
+{
+  int type; /* TerminalBackgroundType */
+  
+  if (str_val &&
+      gconf_string_to_enum (background_types, str_val, &type) &&
+      type != profile->priv->background_type)
+    {
+      profile->priv->background_type = type;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+set_background_image_file (TerminalProfile *profile,
+                           const char      *candidate_file)
+{
+  if (candidate_file &&
+      strcmp (profile->priv->background_image_file, candidate_file) == 0)
+    return FALSE;
+  
+  if (candidate_file != NULL)
+    {
+      g_free (profile->priv->background_image_file);
+      profile->priv->background_image_file = g_strdup (candidate_file);
+
+      if (profile->priv->background_image != NULL)
+        {
+          g_object_unref (G_OBJECT (profile->priv->background_image));
+          profile->priv->background_image = NULL;
+        }
+
+      profile->priv->background_load_failed = FALSE; /* try again */
+
+      return TRUE;
+    }
+  /* otherwise just leave the old filename */
+  
+  return FALSE;
+}
+
+static gboolean
+set_backspace_binding (TerminalProfile *profile,
+                       const char      *str_val)
+{
+  int binding; /* TerminalEraseBinding */
+  
+  if (str_val &&
+      gconf_string_to_enum (erase_bindings, str_val, &binding) &&
+      binding != profile->priv->backspace_binding)
+    {
+      profile->priv->backspace_binding = binding;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+set_delete_binding (TerminalProfile *profile,
+                    const char      *str_val)
+{
+  int binding; /* TerminalEraseBinding */
+  
+  if (str_val &&
+      gconf_string_to_enum (erase_bindings, str_val, &binding) &&
+      binding != profile->priv->delete_binding)
+    {
+      profile->priv->delete_binding = binding;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
 void
 terminal_profile_update (TerminalProfile *profile)
 {
@@ -1358,6 +1707,7 @@ terminal_profile_update (TerminalProfile *profile)
   gboolean bool_val;
   char *str_val;
   int int_val;
+  double float_val;
   TerminalSettingMask mask;
   TerminalSettingMask locked;
   TerminalSettingMask old_locked;
@@ -1717,6 +2067,101 @@ terminal_profile_update (TerminalProfile *profile)
     locked |= TERMINAL_SETTING_X_FONT;
   
   g_free (key);
+
+  /* KEY_BACKGROUND_TYPE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_TYPE);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_background_type (profile, str_val))
+    mask |= TERMINAL_SETTING_BACKGROUND_TYPE;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_BACKGROUND_TYPE;
+  
+  g_free (key);
+
+  /* KEY_BACKGROUND_IMAGE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_IMAGE);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_background_image_file (profile, str_val))
+    mask |= TERMINAL_SETTING_BACKGROUND_IMAGE;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_BACKGROUND_IMAGE;
+  
+  g_free (key);
+
+  /* KEY_SCROLL_BACKGROUND */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_SCROLL_BACKGROUND);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->scroll_background)
+    {
+      mask |= TERMINAL_SETTING_SCROLL_BACKGROUND;
+      profile->priv->scroll_background = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_SCROLL_BACKGROUND;
+  
+  g_free (key);
+
+  /* KEY_BACKGROUND_DARKNESS */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKGROUND_DARKNESS);
+  float_val = gconf_client_get_float (profile->priv->conf,
+                                      key, NULL);
+  if (float_val != profile->priv->background_darkness)
+    {
+      mask |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
+      profile->priv->background_darkness = float_val;
+    }
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
+  
+  g_free (key);
+  
+  /* KEY_BACKSPACE_BINDING */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_BACKSPACE_BINDING);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_backspace_binding (profile, str_val))
+    mask |= TERMINAL_SETTING_BACKSPACE_BINDING;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_BACKSPACE_BINDING;
+  
+  g_free (key);
+
+  /* KEY_DELETE_BINDING */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_DELETE_BINDING);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_delete_binding (profile, str_val))
+    mask |= TERMINAL_SETTING_DELETE_BINDING;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_DELETE_BINDING;
+  
+  g_free (key);
+
   
   /* Update state and emit signals */
   
@@ -2091,6 +2536,93 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_X_FONT);
     }
+  else if (strcmp (key, KEY_BACKGROUND_TYPE) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_background_type (profile, str_val))
+        mask |= TERMINAL_SETTING_BACKGROUND_TYPE;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_TYPE);
+    }
+  else if (strcmp (key, KEY_BACKGROUND_IMAGE) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_background_image_file (profile, str_val))
+        mask |= TERMINAL_SETTING_BACKGROUND_IMAGE;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_IMAGE);
+    }
+  else if (strcmp (key, KEY_SCROLL_BACKGROUND) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->scroll_background)
+        {
+          mask |= TERMINAL_SETTING_SCROLL_BACKGROUND;
+          profile->priv->scroll_background = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_BACKGROUND);
+    }
+  else if (strcmp (key, KEY_BACKGROUND_DARKNESS) == 0)
+    {
+      double float_val;
+
+      float_val = 0.5;
+
+      if (val && val->type == GCONF_VALUE_FLOAT)
+        float_val = gconf_value_get_float (val);
+
+      if (float_val != profile->priv->background_darkness)
+        {
+          mask |= TERMINAL_SETTING_BACKGROUND_DARKNESS;
+          profile->priv->background_darkness = float_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_DARKNESS);
+    }
+  else if (strcmp (key, KEY_BACKSPACE_BINDING) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_backspace_binding (profile, str_val))
+        mask |= TERMINAL_SETTING_BACKSPACE_BINDING;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_BACKSPACE_BINDING);
+    }
+  else if (strcmp (key, KEY_DELETE_BINDING) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_delete_binding (profile, str_val))
+        mask |= TERMINAL_SETTING_DELETE_BINDING;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_DELETE_BINDING);
+    }
+  
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -2675,7 +3207,6 @@ terminal_profile_create (TerminalProfile *base_profile,
   g_free (s);
   BAIL_OUT_CHECK ();
 
-
   g_free (key);
   key = gconf_concat_dir_and_key (profile_dir,
                                   KEY_X_FONT);
@@ -2683,6 +3214,58 @@ terminal_profile_create (TerminalProfile *base_profile,
                            key, base_profile->priv->x_font,
                            &err);
   BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_BACKGROUND_TYPE);
+  cs = gconf_enum_to_string (background_types, base_profile->priv->background_type);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_BACKGROUND_IMAGE);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, base_profile->priv->background_image_file,
+                           &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_SCROLL_BACKGROUND);
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key, base_profile->priv->scroll_background,
+                         &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_BACKGROUND_DARKNESS);
+  gconf_client_set_float (base_profile->priv->conf,
+                          key, base_profile->priv->background_darkness,
+                          &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_BACKSPACE_BINDING);
+  cs = gconf_enum_to_string (erase_bindings, base_profile->priv->backspace_binding);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_DELETE_BINDING);
+  cs = gconf_enum_to_string (erase_bindings, base_profile->priv->delete_binding);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
+  BAIL_OUT_CHECK ();
+
   
   /* Add new profile to the profile list; the method for doing this has
    * a race condition where we and someone else set at the same time,

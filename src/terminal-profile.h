@@ -54,7 +54,15 @@ typedef enum
   TERMINAL_SETTING_ICON                 = 1 << 19,
   TERMINAL_SETTING_IS_DEFAULT           = 1 << 20,
   TERMINAL_SETTING_PALETTE              = 1 << 21,
-  TERMINAL_SETTING_X_FONT               = 1 << 22
+  TERMINAL_SETTING_X_FONT               = 1 << 22,
+  TERMINAL_SETTING_BACKGROUND_TYPE      = 1 << 23,
+  TERMINAL_SETTING_BACKGROUND_IMAGE     = 1 << 24,
+  TERMINAL_SETTING_SCROLL_BACKGROUND    = 1 << 25,
+  TERMINAL_SETTING_BACKGROUND_DARKNESS  = 1 << 26,
+  TERMINAL_SETTING_BACKSPACE_BINDING    = 1 << 27,
+  TERMINAL_SETTING_DELETE_BINDING       = 1 << 28
+
+  /* When we get to 31 we need to do something else ;-) */
 } TerminalSettingMask;
 
 typedef enum
@@ -70,10 +78,10 @@ typedef enum
 
 typedef enum
 {
-  TERMINAL_DELETE_CONTROL_H,
-  TERMINAL_DELETE_ESCAPE_SEQUENCE,
-  TERMINAL_DELETE_ASCII_DEL
-} TerminalDeleteBinding;
+  TERMINAL_ERASE_CONTROL_H,
+  TERMINAL_ERASE_ESCAPE_SEQUENCE,
+  TERMINAL_ERASE_ASCII_DEL
+} TerminalEraseBinding;
 
 #define TERMINAL_PALETTE_SIZE 16
 
@@ -89,6 +97,13 @@ typedef enum
   TERMINAL_EXIT_CLOSE,
   TERMINAL_EXIT_RESTART
 } TerminalExitAction;
+
+typedef enum
+{
+  TERMINAL_BACKGROUND_SOLID,
+  TERMINAL_BACKGROUND_IMAGE,
+  TERMINAL_BACKGROUND_TRANSPARENT
+} TerminalBackgroundType;
 
 G_BEGIN_DECLS
 
@@ -155,6 +170,15 @@ void                      terminal_profile_get_palette              (TerminalPro
                                                                      GdkColor        *colors);
 const char*               terminal_profile_get_x_font               (TerminalProfile *profile);
 
+TerminalBackgroundType terminal_profile_get_background_type       (TerminalProfile *profile);
+GdkPixbuf*             terminal_profile_get_background_image      (TerminalProfile *profile);
+const char*            terminal_profile_get_background_image_file (TerminalProfile *profile);
+gboolean               terminal_profile_get_scroll_background     (TerminalProfile *profile);
+double                 terminal_profile_get_background_darkness   (TerminalProfile *profile);
+TerminalEraseBinding   terminal_profile_get_backspace_binding     (TerminalProfile *profile);
+TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfile *profile);
+
+
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
 void terminal_profile_set_visible_name         (TerminalProfile           *profile,
@@ -205,6 +229,19 @@ void terminal_profile_set_palette_entry        (TerminalProfile *profile,
                                                 const GdkColor  *color);
 void terminal_profile_set_x_font               (TerminalProfile *profile,
                                                 const char      *name);
+
+void terminal_profile_set_background_type       (TerminalProfile        *profile,
+                                                 TerminalBackgroundType  type);
+void terminal_profile_set_background_image_file (TerminalProfile        *profile,
+                                                 const char             *filename);
+void terminal_profile_set_scroll_background     (TerminalProfile        *profile,
+                                                 gboolean                setting);
+void terminal_profile_set_background_darkness   (TerminalProfile        *profile,
+                                                 double                  setting);
+void terminal_profile_set_backspace_binding     (TerminalProfile        *profile,
+                                                 TerminalEraseBinding    binding);
+void terminal_profile_set_delete_binding        (TerminalProfile        *profile,
+                                                 TerminalEraseBinding    binding);
 
 TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
 void             terminal_profile_initialize             (GConfClient     *conf);
