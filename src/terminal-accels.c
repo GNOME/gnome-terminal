@@ -26,10 +26,14 @@
 #include <glade/glade.h>
 #include "eggcellrendererkeys.h"
 
-#define D(x)
+#define D(x) x
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
+#define KEY_CLOSE_TAB CONF_KEYS_PREFIX"/close_tab"
+#define KEY_CLOSE_WINDOW CONF_KEYS_PREFIX"/close_window"
+#define KEY_COPY CONF_KEYS_PREFIX"/copy"
+#define KEY_PASTE CONF_KEYS_PREFIX"/paste"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
@@ -40,9 +44,6 @@ typedef struct
   /* last values received from gconf */
   guint gconf_keyval;
   GdkModifierType gconf_mask;
-  /* last values received from gtk */
-  guint gtk_keyval;
-  GdkModifierType gtk_mask;
   GClosure *closure;
   /* have gotten a notification from gtk */
   gboolean needs_gconf_sync;
@@ -51,45 +52,53 @@ typedef struct
 static KeyEntry entries[] =
 {
   { N_("New tab"),
-    KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, 0, 0, NULL, FALSE },
+    KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, NULL, FALSE },
   { N_("New window"),
-    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, 0, 0, NULL, FALSE },
+    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, NULL, FALSE },
+  { N_("Close tab"),
+    KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, 0, 0, NULL, FALSE },
+  { N_("Close window"),
+    KEY_CLOSE_WINDOW, ACCEL_PATH_CLOSE_WINDOW, 0, 0, NULL, FALSE },
+  { N_("Copy"),
+    KEY_COPY, ACCEL_PATH_COPY, 0, 0, NULL, FALSE },
+  { N_("Paste"),
+    KEY_PASTE, ACCEL_PATH_PASTE, 0, 0, NULL, FALSE },
   { N_("Switch to tab 1"),
     PREFIX_KEY_SWITCH_TO_TAB"1",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, NULL, FALSE },
   { N_("Switch to tab 2"),
     PREFIX_KEY_SWITCH_TO_TAB"2",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"2", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"2", 0, 0, NULL, FALSE },
   { N_("Switch to tab 3"),
     PREFIX_KEY_SWITCH_TO_TAB"3",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"3", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"3", 0, 0, NULL, FALSE },
   { N_("Switch to tab 4"),
     PREFIX_KEY_SWITCH_TO_TAB"4",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"4", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"4", 0, 0, NULL, FALSE },
   { N_("Switch to tab 5"),
     PREFIX_KEY_SWITCH_TO_TAB"5",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"5", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"5", 0, 0, NULL, FALSE },
   { N_("Switch to tab 6"),
     PREFIX_KEY_SWITCH_TO_TAB"6",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"6", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"6", 0, 0, NULL, FALSE },
   { N_("Switch to tab 7"),
     PREFIX_KEY_SWITCH_TO_TAB"7",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"7", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"7", 0, 0, NULL, FALSE },
   { N_("Switch to tab 8"),
     PREFIX_KEY_SWITCH_TO_TAB"8",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"8", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"8", 0, 0, NULL, FALSE },
   { N_("Switch to tab 9"),
     PREFIX_KEY_SWITCH_TO_TAB"9",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"9", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"9", 0, 0, NULL, FALSE },
   { N_("Switch to tab 10"),
     PREFIX_KEY_SWITCH_TO_TAB"10",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"10", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"10", 0, 0, NULL, FALSE },
   { N_("Switch to tab 11"),
     PREFIX_KEY_SWITCH_TO_TAB"11",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"11", 0, 0, 0, 0, NULL, FALSE },
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"11", 0, 0, NULL, FALSE },
   { N_("Switch to tab 12"),
     PREFIX_KEY_SWITCH_TO_TAB"12",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, 0, 0, NULL, FALSE }
+    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, NULL, FALSE }
 };
 
 /*
@@ -129,6 +138,10 @@ static gboolean binding_from_string (const char      *str,
 static gboolean binding_from_value  (GConfValue       *value,
                                      guint           *accelerator_key,
                                      GdkModifierType *accelerator_mods);
+
+static char*    binding_name        (guint            keyval,
+                                     GdkModifierType  mask,
+                                     gboolean         translate);
 
 static void      queue_gconf_sync (void);
 
@@ -214,8 +227,6 @@ terminal_accels_init (GConfClient *conf)
         {
           entries[i].gconf_keyval = keyval;
           entries[i].gconf_mask = mask;
-          entries[i].gtk_keyval = keyval;
-          entries[i].gtk_mask = mask;
           
           gtk_accel_map_change_entry (entries[i].accel_path,
                                       keyval, mask,
@@ -360,7 +371,7 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
   int i;
   
   D (g_print ("Changed accel %s closure %p\n",
-              gtk_accelerator_name (keyval, modifier),
+              binding_name (keyval, modifier, FALSE), /* memleak */
               accel_closure));
 
 
@@ -370,8 +381,6 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
       if (entries[i].closure == accel_closure)
         {
           entries[i].needs_gconf_sync = TRUE;
-          entries[i].gtk_keyval = keyval;
-          entries[i].gtk_mask = modifier;
           queue_gconf_sync ();
           break;
         }
@@ -421,7 +430,7 @@ binding_from_string (const char      *str,
 {
   g_return_val_if_fail (accelerator_key != NULL, FALSE);
 
-  if (str == NULL)
+  if (str == NULL || (str && strcmp (str, "disabled") == 0))
     {
       *accelerator_key = 0;
       *accelerator_mods = 0;
@@ -459,6 +468,18 @@ binding_from_value (GConfValue       *value,
                               accelerator_mods);
 }
 
+static char*
+binding_name (guint            keyval,
+              GdkModifierType  mask,
+              gboolean         translate)
+{
+  if (keyval != 0)
+    return gtk_accelerator_name (keyval, mask);
+  else
+    return translate ? g_strdup (_("Disabled")) : g_strdup ("disabled");
+}
+
+
 static guint sync_idle = 0;
 
 static gboolean
@@ -475,19 +496,34 @@ sync_handler (gpointer data)
     {
       if (entries[i].needs_gconf_sync)
         {
-          entries[i].needs_gconf_sync = FALSE;
+          GtkAccelKey gtk_key;
           
-          if (entries[i].gtk_keyval != entries[i].gconf_keyval ||
-              entries[i].gtk_mask != entries[i].gconf_mask)
+          entries[i].needs_gconf_sync = FALSE;
+
+          gtk_key.accel_key = 0;
+          gtk_key.accel_mods = 0;
+          
+          gtk_accel_map_lookup_entry (entries[i].accel_path,
+                                      &gtk_key);
+          
+          if (gtk_key.accel_key != entries[i].gconf_keyval ||
+              gtk_key.accel_mods != entries[i].gconf_mask)
             {
               GError *err;
+              char *accel_name;
 
+              accel_name = binding_name (gtk_key.accel_key,
+                                         gtk_key.accel_mods,
+                                         FALSE);
+              
               err = NULL;
               gconf_client_set_string (global_conf,
                                        entries[i].gconf_key,
-                                       gtk_accelerator_name (entries[i].gtk_keyval,
-                                                             entries[i].gtk_mask),
+                                       accel_name,
                                        &err);
+
+              g_free (accel_name);
+              
               if (err != NULL)
                 {
                   g_printerr (_("Error propagating accelerator change to configuration database: %s\n"),
@@ -547,15 +583,21 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                 gpointer           data)
 {
   KeyEntry *ke;
+  char *accel_name;
   
   gtk_tree_model_get (model, iter,
                       COLUMN_ACCEL, &ke,
                       -1);
+
+  accel_name = binding_name (ke->gconf_keyval,
+                             ke->gconf_mask,
+                             TRUE);
   
   g_object_set (GTK_CELL_RENDERER (cell),
-                "text", gtk_accelerator_name (ke->gconf_keyval,
-                                              ke->gconf_mask),
+                "text", accel_name,
                 NULL);
+
+  g_free (accel_name);
 }
 
 int
@@ -587,6 +629,9 @@ accel_compare_func (GtkTreeModel *model,
 {
   KeyEntry *ke_a;
   KeyEntry *ke_b;
+  char *name_a;
+  char *name_b;
+  int result;
   
   gtk_tree_model_get (model, a,
                       0, &ke_a,
@@ -595,11 +640,21 @@ accel_compare_func (GtkTreeModel *model,
   gtk_tree_model_get (model, b,
                       0, &ke_b,
                       -1);
+
+  name_a = binding_name (ke_a->gconf_keyval,
+                         ke_a->gconf_mask,
+                         TRUE);
+
+  name_b = binding_name (ke_b->gconf_keyval,
+                         ke_b->gconf_mask,
+                         TRUE);
   
-  return g_utf8_collate (gtk_accelerator_name (ke_a->gconf_keyval,
-                                               ke_a->gconf_mask),
-                         gtk_accelerator_name (ke_b->gconf_keyval,
-                                               ke_b->gconf_mask));
+  result = g_utf8_collate (name_a, name_b);
+
+  g_free (name_a);
+  g_free (name_b);
+
+  return result;
 }
 
 static void

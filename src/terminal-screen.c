@@ -1303,7 +1303,9 @@ terminal_screen_do_popup (TerminalScreen *screen,
                    _("_New window"),
                    G_CALLBACK (new_window_callback),
                    screen);
-
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                ACCEL_PATH_NEW_WINDOW);
+  
   menu_item = append_menuitem (screen->priv->popup_menu,
                                _("New _tab"),
                                G_CALLBACK (new_tab_callback),
@@ -1315,6 +1317,9 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      GTK_STOCK_COPY,
                                      G_CALLBACK (copy_callback),
                                      screen);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                ACCEL_PATH_COPY);
+
   if (!terminal_screen_get_text_selected (screen))
     gtk_widget_set_sensitive (menu_item, FALSE);
 
@@ -1322,6 +1327,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      GTK_STOCK_PASTE,
                                      G_CALLBACK (paste_callback),
                                      screen);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                ACCEL_PATH_PASTE);
   
   profile_menu = gtk_menu_new ();
   menu_item = gtk_menu_item_new_with_mnemonic (_("_Profile"));

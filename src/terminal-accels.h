@@ -31,6 +31,10 @@ GtkAccelGroup* terminal_accels_get_group_for_widget (GtkWidget *widget);
 #define ACCEL_PATH_ROOT "<terminal-accels>/menu"
 #define ACCEL_PATH_NEW_TAB ACCEL_PATH_ROOT"/new_tab"
 #define ACCEL_PATH_NEW_WINDOW ACCEL_PATH_ROOT"/new_window"
+#define ACCEL_PATH_CLOSE_TAB ACCEL_PATH_ROOT"/close_tab"
+#define ACCEL_PATH_CLOSE_WINDOW ACCEL_PATH_ROOT"/close_window"
+#define ACCEL_PATH_COPY ACCEL_PATH_ROOT"/copy"
+#define ACCEL_PATH_PASTE ACCEL_PATH_ROOT"/paste"
 
 #define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
 #define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"

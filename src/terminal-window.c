@@ -377,17 +377,17 @@ terminal_window_init (TerminalWindow *window)
   /* This is fairly bogus to have here but I don't know
    * where else to put it really
    */
-  append_menuitem (menu, _("_New profile..."), NULL,
+  append_menuitem (menu, _("New _profile..."), NULL,
                    G_CALLBACK (new_configuration_callback), window);
   
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
-  append_menuitem (menu, _("_Close window"), NULL,
+  append_menuitem (menu, _("_Close window"), ACCEL_PATH_CLOSE_WINDOW,
                    G_CALLBACK (close_window_callback),
                    window);
   
-  append_menuitem (menu, _("C_lose tab"), NULL,
+  append_menuitem (menu, _("C_lose tab"), ACCEL_PATH_CLOSE_TAB,
                    G_CALLBACK (close_tab_callback),
                    window);
   
@@ -401,14 +401,16 @@ terminal_window_init (TerminalWindow *window)
                             accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
-  window->priv->copy_menuitem = append_stock_menuitem (menu,
-                                                       GTK_STOCK_COPY, NULL,
-                                                       G_CALLBACK (copy_callback),
-                                                       window);
-  window->priv->paste_menuitem = append_stock_menuitem (menu,
-                                                        GTK_STOCK_PASTE, NULL,
-                                                        G_CALLBACK (paste_callback),
-                                                        window);
+  window->priv->copy_menuitem =
+    append_stock_menuitem (menu,
+                           GTK_STOCK_COPY, ACCEL_PATH_COPY,
+                           G_CALLBACK (copy_callback),
+                           window);
+  window->priv->paste_menuitem =
+    append_stock_menuitem (menu,
+                           GTK_STOCK_PASTE, ACCEL_PATH_PASTE,
+                           G_CALLBACK (paste_callback),
+                           window);
 
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);

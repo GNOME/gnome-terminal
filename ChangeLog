@@ -1,3 +1,25 @@
+2002-03-03  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-accels.c: get rid of attempt to track our own copy
+	of gtk keyval/modmask because we don't get notification when 
+	a keybinding is removed. Instead, always re-query the GTK values
+	when syncing to gconf.
+
+	* src/terminal-screen.c (terminal_screen_do_popup): add missing
+	accel paths
+
+	* src/terminal-accels.c: add more accels
+	(binding_from_string): support "disabled" value for accelerators
+	to mean turned off
+	(sync_handler): don't leak accel name, and support 
+	"disabled" if the accel is unset.
+	(accel_set_func): fix mem leak
+	(accel_compare_func): fix mem leak
+
+	* src/terminal-window.c: add more accels
+	(terminal_window_init): fix conflicting mnemonic for "new
+	profile"/"new window"
+
 2002-03-02  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-window.c: add fullscreen mode, just for kicks
