@@ -98,7 +98,8 @@ typedef enum
 typedef enum 
 {
   TERMINAL_EXIT_CLOSE,
-  TERMINAL_EXIT_RESTART
+  TERMINAL_EXIT_RESTART,
+  TERMINAL_EXIT_HOLD
 } TerminalExitAction;
 
 typedef enum

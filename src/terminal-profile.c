@@ -170,6 +170,7 @@ static const GConfEnumStringPair scrollbar_positions[] = {
 static const GConfEnumStringPair exit_actions[] = {
   { TERMINAL_EXIT_CLOSE, "close" },
   { TERMINAL_EXIT_RESTART, "restart" },
+  { TERMINAL_EXIT_HOLD, "hold" },
   { -1, NULL }
 };
 

@@ -1878,6 +1878,8 @@ terminal_screen_widget_child_died (GtkWidget      *term,
     case TERMINAL_EXIT_RESTART:
       terminal_screen_launch_child (screen);
       break;
+    case TERMINAL_EXIT_HOLD:
+      break;
     }
 }
 

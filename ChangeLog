@@ -1,3 +1,15 @@
+2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-profile(exit_actions, TerminalExitAction,
+	  terminal_screen_widget_child_died): Add the possibility to hold the
+	  terminal when the command dies. From a patch by Kurt V. Hindenburg  
+	  on bug #110616.
+	* src/gnome-terminal.glade2: add the ui for the previous change, and
+	  fix a couple of repeated IDs on widgets, which incredibly glade does
+	  not catch...
+	* src/terminal-window.c(confirm_close_window): make the default action
+	  on the Cofirm Close dialog be Close, not Cancel.
+
 2004-05-09 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-profile-c(terminal_palette_xterm): fix this, as it was
@@ -9,7 +21,7 @@
 	  menu say 'Close Window' instead of 'Close Tab' when there is only
 	  one tab. Fixes bug 133960.
 	* src/terminal-window.{c,h}(terminal_window_get_screen_count): new
-	  function,used to implement the above change.
+	  function, used to implement the above change.
 
 2004-05-07 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 

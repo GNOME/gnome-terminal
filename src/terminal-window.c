@@ -2304,7 +2304,7 @@ confirm_close_window (TerminalWindow *window)
   gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All Tabs"), GTK_RESPONSE_YES);
 
-  gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
 
   result = gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES;
   gtk_widget_destroy (dialog);
