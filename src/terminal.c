@@ -3,6 +3,7 @@
  * Copyright (C) 2001, 2002 Havoc Pennington
  * Copyright (C) 2002 Red Hat, Inc.
  * Copyright (C) 2002 Sun Microsystems
+ * Copyright (C) 2003 Mariano Suarez-Alvarez
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -145,7 +146,9 @@ static void handle_new_terminal_events (void);
 enum {
   OPTION_COMMAND = 1,
   OPTION_EXECUTE,
+  OPTION_WINDOW,
   OPTION_WINDOW_WITH_PROFILE,
+  OPTION_TAB,
   OPTION_TAB_WITH_PROFILE,
   OPTION_WINDOW_WITH_PROFILE_ID,
   OPTION_TAB_WITH_PROFILE_ID,
@@ -158,6 +161,7 @@ enum {
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
   OPTION_ZOOM,
+  OPTION_ACTIVE,
   OPTION_COMPAT,
   OPTION_LAST
 };  
@@ -191,6 +195,15 @@ struct poptOption options[] = {
     NULL
   },
   {
+    "window",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_WINDOW,
+    N_("Open a new window containing a tab with the default profile. More than one of these options can be provided."),
+    NULL
+  },
+  {
     "window-with-profile",
     '\0',
     POPT_ARG_STRING,
@@ -198,6 +211,15 @@ struct poptOption options[] = {
     OPTION_WINDOW_WITH_PROFILE,
     N_("Open a new window containing a tab with the given profile. More than one of these options can be provided."),
     N_("PROFILENAME")
+  },
+  {
+    "tab",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_TAB,
+    N_("Open a new tab in the last-opened window with the default profile. More than one of these options can be provided."),
+    NULL
   },
   {
     "tab-with-profile",
@@ -306,6 +328,15 @@ struct poptOption options[] = {
     NULL,
     OPTION_ZOOM,
     N_("Set the terminal's zoom factor (1.0 = normal size)"),
+    N_("ZOOMFACTOR")
+  },
+  {
+    "active",
+    '\0',
+    POPT_ARG_NONE,
+    NULL,
+    OPTION_ACTIVE,
+    N_("Set the last specified tab as the active one in its window"),
     N_("ZOOMFACTOR")
   },
   
@@ -509,6 +540,7 @@ typedef struct
   char *working_dir;
   double zoom;
   guint zoom_set : 1;
+  guint active : 1;
 } InitialTab;
 
 typedef struct
@@ -538,6 +570,7 @@ initial_tab_new (const char *profile,
   it->working_dir = NULL;
   it->zoom = 1.0;
   it->zoom_set = FALSE;
+  it->active = FALSE;
   
   return it;
 }
@@ -764,34 +797,46 @@ parse_options_callback (poptContext              ctx,
       }
       break;
           
+    case OPTION_WINDOW:
     case OPTION_WINDOW_WITH_PROFILE:
     case OPTION_WINDOW_WITH_PROFILE_ID:
       {
         InitialWindow *iw;
+        const char *profile;
 
 
-        if (arg == NULL)
+        if (opt->val == OPTION_WINDOW)
+          profile = NULL;
+        else if (arg == NULL)
           {
             g_printerr (_("Option --window-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
           }
+        else
+          profile = arg;
 
-        iw = add_new_window (results, arg,
+        iw = add_new_window (results, profile,
                              opt->val == OPTION_WINDOW_WITH_PROFILE_ID);
       }
       break;
 
+    case OPTION_TAB:
     case OPTION_TAB_WITH_PROFILE:
     case OPTION_TAB_WITH_PROFILE_ID:
       {
         InitialWindow *iw;
+        const char *profile;
 
 
-        if (arg == NULL)
+        if (opt->val == OPTION_TAB)
+          profile = NULL;
+        else if (arg == NULL)
           {
             g_printerr (_("Option --tab-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
           }
+        else
+          profile = arg;
 
                 
         if (results->initial_windows)
@@ -799,12 +844,12 @@ parse_options_callback (poptContext              ctx,
             iw = g_list_last (results->initial_windows)->data;
 
             iw->tabs = g_list_append (iw->tabs,
-                                      initial_tab_new (arg,
+                                      initial_tab_new (profile,
                                                        opt->val == OPTION_TAB_WITH_PROFILE_ID));
           }
         else
           {
-            iw = add_new_window (results, arg, 
+            iw = add_new_window (results, profile, 
                                  opt->val == OPTION_TAB_WITH_PROFILE_ID);
           }
       }
@@ -1030,6 +1075,15 @@ parse_options_callback (poptContext              ctx,
       }
       break;
 
+    case OPTION_ACTIVE:
+      {
+        InitialTab *it;
+
+        it = ensure_top_tab (results);
+
+        it->active = TRUE;
+      }
+      break;
       
     case OPTION_COMPAT:
       g_printerr (_("Option given which is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"));
@@ -1239,12 +1293,14 @@ new_terminal_with_options (OptionParsingResults *results)
       TerminalProfile *profile;
       GList *tmp2;
       TerminalWindow *current_window;
+      TerminalScreen *active_screen;
       
       InitialWindow *iw = tmp->data;
 
       g_assert (iw->tabs);
 
       current_window = NULL;
+      active_screen = NULL;
       tmp2 = iw->tabs;
       while (tmp2 != NULL)
         {
@@ -1309,9 +1365,21 @@ new_terminal_with_options (OptionParsingResults *results)
                                          NULL, NULL, -1);
             }
           
+          if (it->active)
+            {
+              /* TerminalWindow's interface does not expose the list of TerminalScreens,
+               * so we use the fact that terminal_app_new_terminal() sets the new terminal
+               * to be the active one. Not nice.
+               */
+              active_screen = terminal_window_get_active (current_window);
+             }
+
           tmp2 = tmp2->next;
         }
       
+      if (active_screen)
+        terminal_window_set_active (current_window, active_screen);
+
       tmp = tmp->next;
     }
 
@@ -2848,7 +2916,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
       gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                      app->manage_profiles_default_menu);
-      terminal_util_set_labelled_by (GTK_WIDGET(app->manage_profiles_default_menu),                    
+      terminal_util_set_labelled_by (GTK_WIDGET (app->manage_profiles_default_menu),                    
                                      GTK_LABEL (label));
 
       gtk_box_pack_start (GTK_BOX (hbox),
@@ -2880,7 +2948,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
                         app);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
-      terminal_util_set_labelled_by (GTK_WIDGET(app->manage_profiles_list),                            
+      terminal_util_set_labelled_by (GTK_WIDGET (app->manage_profiles_list),                            
                                      GTK_LABEL (label));
       
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -3128,6 +3196,8 @@ terminal_app_get_clone_command (TerminalApp *app,
 
   argc += n_windows; /* one --role per window */
 
+  argc += n_windows; /* one --active per window */
+
   argc += n_tabs - n_windows; /* one --with-tab-profile-internal-id
                                * per extra tab
                                */
@@ -3158,6 +3228,9 @@ terminal_app_get_clone_command (TerminalApp *app,
       GList *tabs;
       GList *tmp2;
       TerminalWindow *window = tmp->data;
+      TerminalWindow *active_screen;
+
+      active_screen = terminal_window_get_active (window);
       
       tabs = terminal_window_list_screens (window);
 
@@ -3190,6 +3263,12 @@ terminal_app_get_clone_command (TerminalApp *app,
             {
               argv[i] = g_strdup_printf ("--tab-with-profile-internal-id=%s",
                                          profile_id);
+              ++i;
+            }
+
+          if (screen == active_screen)
+            {
+              argv[i] = g_strdup ("--active");
               ++i;
             }
 
