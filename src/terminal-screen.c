@@ -1247,15 +1247,6 @@ show_menubar_callback (GtkWidget      *menu_item,
                                          TRUE);
 }
 
-#if 0
-static void
-secure_keyboard_callback (GtkWidget      *menu_item,
-                          TerminalScreen *screen)
-{
-  not_implemented ();
-}
-#endif
-
 static void
 open_url (TerminalScreen *screen,
           const char     *orig_url,
@@ -1442,24 +1433,40 @@ append_check_menuitem (GtkWidget  *menu,
   return menu_item;
 }
 
+typedef struct 
+{
+  TerminalScreen *screen;
+  gint button;
+  guint time;
+} PopupInfo;
 
 static void
-terminal_screen_do_popup (TerminalScreen *screen,
-                          GdkEventButton *event)
+popup_clipboard_request_callback (GtkClipboard *clipboard,
+                                  const char   *text,
+                                  gpointer      user_data)
 {
+  PopupInfo *info = user_data;
+  TerminalScreen *screen;
   GtkWidget *profile_menu;
   GtkWidget *im_menu;
   GtkWidget *menu_item;
   GList *profiles;
   GList *tmp;
   GSList *group;
-  GtkClipboard *clip;
+  gboolean has_tabs;
   
-  if (screen->priv->popup_menu)
-    gtk_widget_destroy (screen->priv->popup_menu);
+  screen = info->screen;
 
-  g_assert (screen->priv->popup_menu == NULL);
-  
+  if (!GTK_WIDGET_REALIZED (screen->priv->term)) 
+    {
+      goto cleanup;
+    }
+
+  if (screen->priv->popup_menu)
+    {
+      gtk_widget_destroy (screen->priv->popup_menu);
+    }
+
   screen->priv->popup_menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (screen->priv->popup_menu),
                             terminal_accels_get_group_for_widget (screen->priv->popup_menu));
@@ -1482,8 +1489,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   
       menu_item = gtk_separator_menu_item_new ();
       gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
-                             menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
     }
  
   menu_item = append_menuitem (screen->priv->popup_menu,
@@ -1500,16 +1506,11 @@ terminal_screen_do_popup (TerminalScreen *screen,
   gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
 
-  if (terminal_window_get_screen_count (terminal_screen_get_window (screen)) > 1)
-    menu_item = append_menuitem (screen->priv->popup_menu,
-                                 _("C_lose Tab"),
-                                 G_CALLBACK (close_tab_callback),
-                                 screen);
-  else
-    menu_item = append_menuitem (screen->priv->popup_menu,
-                                 _("_Close Window"),
-                                 G_CALLBACK (close_tab_callback),
-                                 screen);
+  has_tabs = terminal_window_get_screen_count (terminal_screen_get_window (screen)) > 1;
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               has_tabs ? _("C_lose Tab") : _("_Close Window"),
+                               has_tabs ? G_CALLBACK (close_tab_callback) : G_CALLBACK (close_tab_callback),
+                               screen);
 
   menu_item = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_item);
@@ -1519,16 +1520,13 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      GTK_STOCK_COPY,
                                      G_CALLBACK (copy_callback),
                                      screen);
-
-  if (!terminal_screen_get_text_selected (screen))
-    gtk_widget_set_sensitive (menu_item, FALSE);
+  gtk_widget_set_sensitive (menu_item, terminal_screen_get_text_selected (screen));
 
   menu_item = append_stock_menuitem (screen->priv->popup_menu,
                                      GTK_STOCK_PASTE,
                                      G_CALLBACK (paste_callback),
                                      screen);
-  clip = gtk_clipboard_get (GDK_NONE);
-  gtk_widget_set_sensitive (menu_item, gtk_clipboard_wait_is_text_available (clip));
+  gtk_widget_set_sensitive (menu_item, text != NULL);
   
   menu_item = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_item);
@@ -1537,19 +1535,16 @@ terminal_screen_do_popup (TerminalScreen *screen,
   profile_menu = gtk_menu_new ();
   menu_item = gtk_menu_item_new_with_mnemonic (_("Change P_rofile"));
 
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                             profile_menu);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), profile_menu);
 
   gtk_widget_show (profile_menu);
   gtk_widget_show (menu_item);
   
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
-                         menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
 
   group = NULL;
   profiles = terminal_profile_get_list ();
-  tmp = profiles;
-  while (tmp != NULL)
+  for (tmp = profiles; tmp != NULL; tmp = tmp->next)
     {
       TerminalProfile *profile;
       
@@ -1558,30 +1553,19 @@ terminal_screen_do_popup (TerminalScreen *screen,
       /* Profiles can go away while the menu is up. */
       g_object_ref (G_OBJECT (profile));
 
-      menu_item = gtk_radio_menu_item_new_with_label (group,
-                                                      terminal_profile_get_visible_name (profile));
+      menu_item = gtk_radio_menu_item_new_with_label (group, terminal_profile_get_visible_name (profile));
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
       gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (profile_menu),
-                             menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (profile_menu), menu_item);
 
       if (profile == screen->priv->profile)
-        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-                                        TRUE);
+        {
+          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+        }
       
-      g_signal_connect (G_OBJECT (menu_item),
-                        "toggled",
-                        G_CALLBACK (choose_profile_callback),
-                        screen);
-      
-      g_object_set_data_full (G_OBJECT (menu_item),
-                              "profile",
-                              profile,
-                              (GDestroyNotify) g_object_unref);
-      
-      tmp = tmp->next;
+      g_signal_connect (G_OBJECT (menu_item), "toggled", G_CALLBACK (choose_profile_callback), screen);
+      g_object_set_data_full (G_OBJECT (menu_item), "profile", profile, (GDestroyNotify) g_object_unref);
     }
-
   g_list_free (profiles);
 
   append_menuitem (screen->priv->popup_menu,
@@ -1594,13 +1578,6 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      terminal_window_get_menubar_visible (screen->priv->window),
                                      G_CALLBACK (show_menubar_callback),
                                      screen);
-
-#if 0
-  append_menuitem (screen->priv->popup_menu,
-                   _("Secure _Keyboard"),
-                   G_CALLBACK (secure_keyboard_callback),
-                   screen);
-#endif
  
   menu_item = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_item);
@@ -1608,24 +1585,47 @@ terminal_screen_do_popup (TerminalScreen *screen,
 
   im_menu = gtk_menu_new ();
   menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
-
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
-                             im_menu);
-
-  terminal_widget_im_append_menuitems (screen->priv->term,
-		  		       GTK_MENU_SHELL (im_menu));
-
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), im_menu);
+  terminal_widget_im_append_menuitems (screen->priv->term, GTK_MENU_SHELL (im_menu));
   gtk_widget_show (im_menu);
   gtk_widget_show (menu_item);
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
-                         menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
  
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
-                  event ? event->button : 0,
-                  event ? event->time : gtk_get_current_event_time ());
+                  info->button,
+                  info->time);
+
+cleanup:
+  g_object_unref (G_OBJECT (info->screen));
+  g_free (info);
+}
+
+static void
+terminal_screen_do_popup (TerminalScreen *screen,
+                          GdkEventButton *event)
+{
+  PopupInfo *info;
+  GtkClipboard *clip;
+
+  info = g_new (PopupInfo, 1);
+
+  info->screen = g_object_ref (screen);
+
+  if (event != NULL)
+    {
+      info->button = event->button;
+      info->time = event->time;
+    }
+  else
+    {
+      info->button = 0;
+      info->time = gtk_get_current_event_time ();
+    }
+
+  clip = gtk_clipboard_get (GDK_NONE);
+  gtk_clipboard_request_text (clip, popup_clipboard_request_callback, info);
 }
 
 static gboolean

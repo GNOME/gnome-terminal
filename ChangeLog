@@ -1,3 +1,9 @@
+2004-11-03  Mariano Suárez-Alvarez <mariano@gnome.org>
+
+	* terminal-screen.c(terminal_screen_do_popup): do not use gtk_clipboard_wait_is_text_available
+	  but explicitely do a gtk_clipboard_request_text, and build the popup in a new
+	  callback popup_clipboard_request_callback. Shoulf fix both bugs #157153 and #157151.
+
 2004-11-01  Mariano Suárez-Alvarez <mariano@gnome.org>
 
 	* configure.in: Post release bump: Version 2.9.2
