@@ -43,6 +43,7 @@ struct _EggCellRendererKeys
   GdkWindow *filter_window;
   guint edit_key;
   GdkModifierType edit_mask;
+  GtkWidget *sizing_label;
 };
 
 struct _EggCellRendererKeysClass

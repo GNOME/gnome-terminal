@@ -25,14 +25,22 @@ static GtkCellEditable *egg_cell_renderer_keys_start_editing (GtkCellRenderer   
 							      GtkCellRendererState      flags);
 
 
-static void egg_cell_renderer_keys_get_property  (GObject                  *object,
-						  guint                     param_id,
-						  GValue                   *value,
-						  GParamSpec               *pspec);
-static void egg_cell_renderer_keys_set_property  (GObject                  *object,
-						  guint                     param_id,
-						  const GValue             *value,
-						  GParamSpec               *pspec);
+static void egg_cell_renderer_keys_get_property (GObject         *object,
+						 guint            param_id,
+						 GValue          *value,
+						 GParamSpec      *pspec);
+static void egg_cell_renderer_keys_set_property (GObject         *object,
+						 guint            param_id,
+						 const GValue    *value,
+						 GParamSpec      *pspec);
+static void egg_cell_renderer_keys_get_size     (GtkCellRenderer *cell,
+						 GtkWidget       *widget,
+						 GdkRectangle    *cell_area,
+						 gint            *x_offset,
+						 gint            *y_offset,
+						 gint            *width,
+						 gint            *height);
+
 
 enum {
   PROP_0,
@@ -120,15 +128,17 @@ static void
 egg_cell_renderer_keys_class_init (EggCellRendererKeysClass *cell_keys_class)
 {
   GObjectClass *object_class;
-  
-  object_class = G_OBJECT_CLASS (cell_keys_class);
+  GtkCellRendererClass *cell_renderer_class;
 
+  object_class = G_OBJECT_CLASS (cell_keys_class);
+  cell_renderer_class = GTK_CELL_RENDERER_CLASS (cell_keys_class);
   parent_class = g_type_class_peek_parent (object_class);
   
   GTK_CELL_RENDERER_CLASS (cell_keys_class)->start_editing = egg_cell_renderer_keys_start_editing;
 
   object_class->set_property = egg_cell_renderer_keys_set_property;
   object_class->get_property = egg_cell_renderer_keys_get_property;
+  cell_renderer_class->get_size = egg_cell_renderer_keys_get_size;
 
   object_class->finalize = egg_cell_renderer_keys_finalize;
   
@@ -275,6 +285,31 @@ is_modifier (guint keycode)
 
   return retval;
 }
+
+void
+egg_cell_renderer_keys_get_size (GtkCellRenderer *cell,
+				 GtkWidget       *widget,
+				 GdkRectangle    *cell_area,
+				 gint            *x_offset,
+				 gint            *y_offset,
+				 gint            *width,
+				 gint            *height)
+{
+  EggCellRendererKeys *keys = (EggCellRendererKeys *) cell;
+  GtkRequisition requisition;
+
+  if (keys->sizing_label == NULL)
+    keys->sizing_label = gtk_label_new (_("Type a new accelerator, or press Backspace to clear"));
+
+  gtk_widget_size_request (keys->sizing_label, &requisition);
+  (* GTK_CELL_RENDERER_CLASS (parent_class)->get_size) (cell, widget, cell_area, x_offset, y_offset, width, height);
+  /* FIXME: need to take the cell_area et al. into account */
+  if (width)
+    *width = MAX (*width, requisition.width);
+  if (height)
+    *height = MAX (*height, requisition.height);
+}
+
 
 static GdkFilterReturn
 grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
@@ -450,8 +485,8 @@ egg_cell_renderer_keys_start_editing (GtkCellRenderer      *cell,
                         &widget->style->fg[GTK_STATE_SELECTED]);
   
   if (keys->accel_key != 0)
-    gtk_label_set_markup (GTK_LABEL (label),
-                          _("Type a new accelerator, or press Backspace to clear"));
+    gtk_label_set_text (GTK_LABEL (label),
+			_("Type a new accelerator, or press Backspace to clear"));
   else
     gtk_label_set_text (GTK_LABEL (label),
                         _("Type a new accelerator"));
