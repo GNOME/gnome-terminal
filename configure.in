@@ -63,11 +63,11 @@ AM_GCONF_SOURCE_2
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
-if test x$with_widget = xvte; then
-	PKG_CHECK_MODULES(TERMINAL_WIDGET, vte >= 0.10.1)
-else
-        with_widget=zvt
+if test x$with_widget = xzvt; then
 	PKG_CHECK_MODULES(TERMINAL_WIDGET, libzvt-2.0 >= 1.115.2)
+else
+        with_widget=vte
+	PKG_CHECK_MODULES(TERMINAL_WIDGET, vte >= 0.10.4)
 fi
 
 CFLAGS="$TERMINAL_WIDGET_CFLAGS $CFLAGS"
@@ -100,7 +100,7 @@ if test x$with_widget = xzvt; then
         echo "*** WARNING WARNING WARNING WARNING WARNING"
         echo "*** Building with VTE widget but not Xft2"
         echo "*** This won't be as optimal as fontconfig/Xft2"
- fi
+fi
 
 echo "
 *** WARNING WARNING WARNING WARNING WARNING
