@@ -352,8 +352,8 @@ update_active_encodings_from_string_list (GSList *strings)
   for (tmp = strings; tmp != NULL; tmp = tmp->next)
     {
       const TerminalEncoding *e;
-      charset = tmp->data;
       TerminalEncoding *encoding;
+      charset = tmp->data;
       
       if (strcmp (charset, "current") == 0)
         g_get_charset (&charset);
