@@ -558,8 +558,6 @@ terminal_window_add_screen (TerminalWindow *window,
 
   gtk_box_pack_start (GTK_BOX (hbox),
                       GTK_WIDGET (term), TRUE, TRUE, 0);
-
-  terminal_window_update_scrollbar (window, screen);
   
   gtk_range_set_adjustment (GTK_RANGE (scrollbar),
                             term->adjustment);  
@@ -576,6 +574,8 @@ terminal_window_add_screen (TerminalWindow *window,
   gtk_widget_realize (GTK_WIDGET (term));
 
   gtk_widget_show_all (hbox);
+
+  terminal_window_update_scrollbar (window, screen);
   
   /* Make the first-added screen the active one */
   if (window->priv->terms == NULL)
