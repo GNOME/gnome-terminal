@@ -1,16 +1,16 @@
 # Lithuanian translation of gnome-terminal
-# Copyright (C) 2000-2004 Free Software Foundation, Inc.
+# Copyright (C) 2000-2005 Free Software Foundation, Inc.
 # Vaidrius Paulauskas <vaidrius@delfi.lt>, 2003.
 # Tomas Kuliavas <tokul@users.sourceforge.net>, 2003.
-# Žygimantas Beručka <uid0@akl.lt>, 2004.
+# Žygimantas Beručka <uid0@akl.lt>, 2004-2005.
 # 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-29 13:24+0200\n"
-"PO-Revision-Date: 2005-01-29 13:29+0200\n"
+"POT-Creation-Date: 2005-03-04 06:12+0100\n"
+"PO-Revision-Date: 2005-03-04 15:03+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgstr "Komandų eilutė"
 
 #: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
-#: src/terminal-window.c:783 src/terminal.c:1205 src/terminal.c:1553
+#: src/terminal-window.c:783 src/terminal.c:1205 src/terminal.c:1604
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -42,7 +42,7 @@ msgstr "Greitųjų klavišų režimas"
 
 #: src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
-msgstr "Greitųjų klašivų tipas."
+msgstr "Greitųjų klavišų tipas."
 
 #: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:33
 #: src/terminal-accels.c:717
@@ -51,7 +51,7 @@ msgstr "Išjungtas"
 
 #: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:564
 msgid "Type a new accelerator, or press Backspace to clear"
-msgstr "Nuspauskite naują greitąjį klavišą, arba Backspace išjungti"
+msgstr "Nuspauskite naują greitąjį klavišą (Backspace išvalo)"
 
 #: src/eggcellrendererkeys.c:567
 msgid "Type a new accelerator"
@@ -203,7 +203,7 @@ msgid ""
 "changes. (%s)\n"
 msgstr ""
 "Įvyko klaida bandant prisijungti prie terminalo koduočių sąrašo pasikeitimų "
-"pranešimo. (%s)\n"
+"pranešimų. (%s)\n"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "<b>Background</b>"
@@ -219,7 +219,7 @@ msgstr "<b>Suderinamumas</b>"
 
 #: src/gnome-terminal.glade2.h:4
 msgid "<b>Foreground and Background</b>"
-msgstr "<b>Priekinis planas ir fonas</b>"
+msgstr "<b>Tekstas ir fonas</b>"
 
 #: src/gnome-terminal.glade2.h:5
 msgid "<b>General</b>"
@@ -363,7 +363,7 @@ msgstr "Eina prieš pradinį pavadinimą"
 
 #: src/gnome-terminal.glade2.h:41
 msgid "Hold the terminal open"
-msgstr "Palikti terminalą atidarytą"
+msgstr "Palikti terminalą atvertą"
 
 #: src/gnome-terminal.glade2.h:42
 msgid "Image _file:"
@@ -395,7 +395,7 @@ msgstr "Dešinėje pusėje"
 
 #: src/gnome-terminal.glade2.h:49
 msgid "Open a dialog to specify the color"
-msgstr "Atidaryti langą spalvos nurodymui"
+msgstr "Atverti langą spalvos nurodymui"
 
 #: src/gnome-terminal.glade2.h:50
 msgid "Palette entry 1"
@@ -538,8 +538,8 @@ msgid ""
 "and operating systems that expect different terminal behavior."
 msgstr ""
 "Dėl šių nuostatų kai kurios programos gali elgtis nekorektiškai.\n"
-"Jos čia yra dėl to, kad būtų galima apeiti kai kurias programas ir\n"
-"operacines sistemas, kurios tikisi kitokio terminalo elgesio."
+"Jos čia yra dėl to, kad būtų galima apeiti kai kurių programų ir\n"
+"operacinių sistemų, kurios tikisi kitokio terminalo veikimo, elgseną."
 
 #: src/gnome-terminal.glade2.h:86
 msgid "Title and Command"
@@ -645,10 +645,10 @@ msgid ""
 "implementation, there are only two levels of darkness possible, so the "
 "setting behaves as a boolean, where 0.0 disables the darkening effect."
 msgstr ""
-"Reikšmė tarp 0,0 ir 1,0 nurodo, kiek reikia patamsinti foninį paveikslėlį. "
-"0,0 reiškia tamsinimo netaikymą, 1,0 - visišką užtamsinimą. Dabar turima "
+"Reikšmė tarp 0.0 ir 1.0 nurodo, kiek reikia patamsinti foninį paveikslėlį. "
+"0,0 reiškia tamsinimo netaikymą, 1.0 - visišką užtamsinimą. Dabar turima "
 "programos specifikacija leidžia tik du galimus tamsinimo atvejus ir reikšmė "
-"veikia kaip loginis kintamasis, kuris atjungia (0,0) arba įjungia (1,0) "
+"veikia kaip loginis kintamasis, kuris atjungia (0.0) arba įjungia (1.0) "
 "tamsinimą."
 
 #: src/gnome-terminal.schemas.in.h:3
@@ -707,15 +707,15 @@ msgstr ""
 
 #: src/gnome-terminal.schemas.in.h:13
 msgid "Effect of the Backspace key"
-msgstr "Backspace klavišo reakcija"
+msgstr "Backspace klavišo veiksmas"
 
 #: src/gnome-terminal.schemas.in.h:14
 msgid "Effect of the Delete key"
-msgstr "Delete klavišo reakcija"
+msgstr "Delete klavišo veiksmas"
 
 #: src/gnome-terminal.schemas.in.h:15
 msgid "Filename of a background image."
-msgstr "Byla, sauganti fono paveikslėlį"
+msgstr "Fono paveikslėlio byla"
 
 #: src/gnome-terminal.schemas.in.h:16
 msgid "Font"
@@ -739,7 +739,7 @@ msgstr "Terminalo lango ženklas"
 
 #: src/gnome-terminal.schemas.in.h:21
 msgid "Icon to use for tabs/windows containing this profile."
-msgstr "Ženklas, naudojamas kortelėms/langas su šiuo profiliu."
+msgstr "Ženklas, naudojamas kortelėms/langams su šiuo profiliu."
 
 #: src/gnome-terminal.schemas.in.h:22
 msgid ""
@@ -916,7 +916,7 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Greitasis klavišas, atidarantis naują kortelę. Nurodomas tuo pačiu formatu "
+"Greitasis klavišas, atveriantis naują kortelę. Nurodomas tuo pačiu formatu "
 "kaip GTK+ resursų bylose. Jei nustatoma speciali seka \"disabled\", su "
 "veiksmu nebus susieta jokia klavišų kombinacija."
 
@@ -927,7 +927,7 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Greitasis klavišas, atidarantis naują langą. Nurodomas tuo pačiu formatu "
+"Greitasis klavišas, atveriantis naują langą. Nurodomas tuo pačiu formatu "
 "kaip GTK+ resursų bylose. Jei nustatoma speciali seka \"disabled\", su "
 "veiksmu nebus susieta jokia klavišų kombinacija."
 
@@ -1176,7 +1176,7 @@ msgstr "Greitasis klavišas, sumažinantis šrifto dydį"
 
 #: src/gnome-terminal.schemas.in.h:71
 msgid "Keyboard shortcut to open a new tab"
-msgstr "Greitasis klavišas, atidarantis naują kortelę"
+msgstr "Greitasis klavišas, atveriantis naują kortelę"
 
 #: src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to open a new window"
@@ -1290,7 +1290,7 @@ msgstr ""
 
 #: src/gnome-terminal.schemas.in.h:97
 msgid "Number of lines to keep in scrollback"
-msgstr "Persukamų eilučių kiekis"
+msgstr "Saugomų teksto eilučių kiekis"
 
 #: src/gnome-terminal.schemas.in.h:98
 msgid ""
@@ -1299,7 +1299,7 @@ msgid ""
 "discarded. Be careful with this setting; it's the primary factor in "
 "determining how much memory the terminal will use."
 msgstr ""
-"Išsaugomų persukimo eilučių kiekis. Juos galite grįžti terminale per "
+"Išsaugomų teksto eilučių kiekis. Galite grįžti terminale per "
 "pasirinktą eilučių skaičių. Sistema nesaugos eilučių, kurios viršys nurodytą "
 "skaičių. Būkite atsargūs rinkdamiesi šį nustatymą. Jis lemia terminalo "
 "naudojamos atminties dydį."
@@ -1332,7 +1332,7 @@ msgstr ""
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
-"Profilis, naudojamas atidarant naują langą ar kortelę. Vardas turi būti tarp "
+"Profilis, naudojamas atveriant naują langą ar kortelę. Vardas turi būti iš "
 "profilių sąrašo."
 
 #: src/gnome-terminal.schemas.in.h:104
@@ -1385,7 +1385,7 @@ msgid ""
 msgstr ""
 "Terminalai turi 16-os spalvų paletę, kurią gali naudoti terminale esančios "
 "programos. Čia kabliataškiu atskirtų spalvų forma aprašoma ši paletė. Spalvų "
-"vardai turi būti šešioliktainiame formate, pvz. \"#FF00FF\""
+"vardai turi būti šešioliktainiai, pvz., \"#FF00FF\""
 
 #: src/gnome-terminal.schemas.in.h:111
 msgid "Title for terminal"
@@ -1448,7 +1448,7 @@ msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
 msgstr ""
-"Kur patalpinti terminalo persukimo juostą. Galimos reikšmės „left“, „right“ "
+"Kur rodyti terminalo slinkties juostą. Galimos reikšmės „left“, „right“ "
 "ir „disabled“."
 
 #: src/gnome-terminal.schemas.in.h:120
@@ -1468,7 +1468,7 @@ msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 msgstr ""
-"Ar klausti patvirtinimo, kai uždaromas terminalo langas turintis daugiau "
+"Ar klausti patvirtinimo, kai uždaromas terminalo langas, turintis daugiau "
 "negu vieną kortelę."
 
 #: src/gnome-terminal.schemas.in.h:124
@@ -1492,7 +1492,7 @@ msgstr ""
 #: src/gnome-terminal.schemas.in.h:127
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
-"Ar paleisti programa terminale naudojant prisijungimo aplinkos parametrus"
+"Ar paleisti programą terminale naudojant prisijungimo aplinkos parametrus"
 
 #: src/gnome-terminal.schemas.in.h:128
 msgid "Whether to run a custom command instead of the shell"
@@ -1500,7 +1500,7 @@ msgstr "Paleisti kitą komandą vietoj įprastos aplinkos"
 
 #: src/gnome-terminal.schemas.in.h:129
 msgid "Whether to scroll background image"
-msgstr "Ar persukti foninį paveikslėlį"
+msgstr "Ar stumti foninį paveikslėlį"
 
 #: src/gnome-terminal.schemas.in.h:130
 msgid "Whether to scroll to the bottom when a key is pressed"
@@ -1715,51 +1715,51 @@ msgstr "Pereiti į kitą kortelę"
 
 #: src/terminal-accels.c:125
 msgid "Switch to Tab 1"
-msgstr "Pereitį 1-ą kortelę"
+msgstr "Pereiti į 1-ą kortelę"
 
 #: src/terminal-accels.c:128
 msgid "Switch to Tab 2"
-msgstr "Pereitį 2-ą kortelę"
+msgstr "Pereiti į 2-ą kortelę"
 
 #: src/terminal-accels.c:131
 msgid "Switch to Tab 3"
-msgstr "Pereitį 3-ą kortelę"
+msgstr "Pereiti į 3-ą kortelę"
 
 #: src/terminal-accels.c:134
 msgid "Switch to Tab 4"
-msgstr "Pereitį 4-ą kortelę"
+msgstr "Pereiti į 4-ą kortelę"
 
 #: src/terminal-accels.c:137
 msgid "Switch to Tab 5"
-msgstr "Pereitį 5-ą kortelę"
+msgstr "Pereiti į 5-ą kortelę"
 
 #: src/terminal-accels.c:140
 msgid "Switch to Tab 6"
-msgstr "Pereitį 6-ą kortelę"
+msgstr "Pereiti į 6-ą kortelę"
 
 #: src/terminal-accels.c:143
 msgid "Switch to Tab 7"
-msgstr "Pereitį 7-ą kortelę"
+msgstr "Pereiti į 7-ą kortelę"
 
 #: src/terminal-accels.c:146
 msgid "Switch to Tab 8"
-msgstr "Pereitį 8-ą kortelę"
+msgstr "Pereiti į 8-ą kortelę"
 
 #: src/terminal-accels.c:149
 msgid "Switch to Tab 9"
-msgstr "Pereitį 9-ą kortelę"
+msgstr "Pereiti į 9-ą kortelę"
 
 #: src/terminal-accels.c:152
 msgid "Switch to Tab 10"
-msgstr "Pereitį 10-ą kortelę"
+msgstr "Pereiti į 10-ą kortelę"
 
 #: src/terminal-accels.c:155
 msgid "Switch to Tab 11"
-msgstr "Pereitį 11-ą kortelę"
+msgstr "Pereiti į 11-ą kortelę"
 
 #: src/terminal-accels.c:158
 msgid "Switch to Tab 12"
-msgstr "Pereitį 12-ą kortelę"
+msgstr "Pereiti į 12-ą kortelę"
 
 #: src/terminal-accels.c:164
 msgid "Contents"
@@ -1786,7 +1786,7 @@ msgid "Help"
 msgstr "Pagalba"
 
 #: src/terminal-accels.c:264 src/terminal-profile.c:392
-#: src/terminal-screen.c:199 src/terminal.c:1660
+#: src/terminal-screen.c:199 src/terminal.c:1721
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Įvyko klaida bandant įkelti nuostatas iš %s. (%s)\n"
@@ -1797,13 +1797,13 @@ msgid ""
 "There was an error subscribing to notification of terminal keybinding "
 "changes. (%s)\n"
 msgstr ""
-"Įvyko klaida bandant prisijungti prie terminalo karštųjų klavišų sąrašo "
+"Įvyko klaida bandant prisijungti prie terminalo greitųjų klavišų sąrašo "
 "pasikeitimų pranešimo. (%s)\n"
 
 #: src/terminal-accels.c:319
 #, c-format
 msgid "There was an error loading a terminal keybinding. (%s)\n"
-msgstr "Įvyko klaida bandant įkelti karštuosius klavišus. (%s)\n"
+msgstr "Įvyko klaida bandant įkelti greituosius klavišus. (%s)\n"
 
 #: src/terminal-accels.c:335
 #, c-format
@@ -1952,7 +1952,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Išsamiai"
 
-#: src/terminal-profile.c:2923 src/terminal.c:2300
+#: src/terminal-profile.c:2923 src/terminal.c:2361
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Kuriant profilį „%s“ įvyko klaida"
@@ -1998,7 +1998,7 @@ msgid ""
 "Could not open the address \"%s\":\n"
 "%s"
 msgstr ""
-"Nepavyko atidaryti adreso „%s“:\n"
+"Nepavyko atverti adreso „%s“:\n"
 "%s"
 
 #: src/terminal-screen.c:1398 src/terminal-window.c:809
@@ -2010,7 +2010,7 @@ msgstr "Įvyko klaida įkeliant ženklų naudojimo tarp meniu nustatymą. (%s)\n
 
 #: src/terminal-screen.c:1485
 msgid "_Open Link"
-msgstr "_Atidaryti nuorodą"
+msgstr "_Atverti nuorodą"
 
 #: src/terminal-screen.c:1490
 msgid "_Copy Link Address"
@@ -2205,7 +2205,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Byla"
 
-#: src/terminal-window.c:2131 src/terminal.c:2891
+#: src/terminal-window.c:2131 src/terminal.c:2952
 msgid "_Edit"
 msgstr "K_eisti"
 
@@ -2232,12 +2232,12 @@ msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
 msgstr[0] ""
-"Šis langas turi vieną atidarytą kortelę. Lango uždarymas ją uždarys."
+"Šis langas turi vieną atvertą kortelę. Lango uždarymas ją uždarys."
 msgstr[1] ""
-"Šiame lange yra %d atidarytos kortelės. Lango uždarymas uždarys šias "
+"Šiame lange yra %d atvertos kortelės. Lango uždarymas uždarys šias "
 "korteles."
 msgstr[2] ""
-"Šiame lange yra %d atidarytų kortelių. Lango uždarymas uždarys šias korteles."
+"Šiame lange yra %d atvertų kortelių. Lango uždarymas uždarys šias korteles."
 
 #: src/terminal-window.c:2327
 msgid "Close all tabs?"
@@ -2283,7 +2283,7 @@ msgid ""
 "these options can be provided."
 msgstr ""
 "Paleisti naują langą su kortele, naudojančia nurodytą profilį. Gali būti "
-"nurodytos kelios tokios opcijos."
+"nurodyti keli pasirinkimai."
 
 #: src/terminal.c:217 src/terminal.c:235
 msgid "PROFILENAME"
@@ -2294,8 +2294,8 @@ msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Paleisti naują kortelę paskutiniame lange, naudojant standartinį profilį. "
-"Gali būti nurodytos kelios tokios opcijos."
+"Atverti naują kortelę paskutiniame lange, naudojant standartinį profilį. "
+"Gali būti nurodyti keli pasirinkimai."
 
 #: src/terminal.c:234
 msgid ""
@@ -2303,7 +2303,7 @@ msgid ""
 "one of these options can be provided."
 msgstr ""
 "Paleisti naują kortelę paskutiniame lange, naudojant nurodytą profilį. Gali "
-"būti nurodytos kelios tokios opcijos."
+"būti nurodyti keli tokie pasirinkimai."
 
 #: src/terminal.c:243
 msgid ""
@@ -2345,8 +2345,8 @@ msgid ""
 "line."
 msgstr ""
 "Paskutiniame nurodytame lange įjungti meniu juostą. Galioja tik vienam "
-"langui. Gali būti priskirta kiekvienam langui, paleidžiam komandinėje "
-"eilutėje."
+"langui. Gali būti priskirta kiekvienam langui, sukuriamam iš komandinės "
+"eilutės."
 
 #: src/terminal.c:279
 msgid ""
@@ -2355,8 +2355,8 @@ msgid ""
 "line."
 msgstr ""
 "Paskutiniame nurodytame lange išjungti meniu juostą. Galioja tik vienam "
-"langui. Gali būti priskirta kiekvienam langui paleidžiam komandinėje "
-"eilutėje."
+"langui. Gali būti priskirta kiekvienam langui, sukuriamam iš komandinės "
+"eilutės."
 
 #: src/terminal.c:288
 msgid ""
@@ -2365,15 +2365,15 @@ msgid ""
 "line."
 msgstr ""
 "Nustatyti paskutinį nurodytą langą į pilno ekrano režimą; galioja tik vienam "
-"langui. Reikšmė gali būti priskirta kiekvienam langui paleidžiam komandinėje "
-"eilutėje."
+"langui. Gali būti priskirta kiekvienam langui, sukuriamam iš komandinės "
+"eilutės."
 
 #: src/terminal.c:297
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
 msgstr ""
-"X geometrija (žr. \"X\" pagalbos puslapį) gali būti nurodyta tik atidarant "
+"X geometrija (žr. „X“ pagalbos puslapį) gali būti nurodyta tik atveriant "
 "langą."
 
 #: src/terminal.c:298
@@ -2570,12 +2570,12 @@ msgstr "Nepateiktas parametro \"%s\" argumentas\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "Nėra profilio, pavadinto '%s', naudojamas standartinis profilis\n"
 
-#: src/terminal.c:1603
+#: src/terminal.c:1664
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Netinkamas argumentas: \"%s\"\n"
 
-#: src/terminal.c:1676
+#: src/terminal.c:1737
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2584,48 +2584,48 @@ msgstr ""
 "Įvyko klaida nustatant informaciją apie terminalo profilių sąrašo "
 "pasikeitimus. (%s)\n"
 
-#: src/terminal.c:1905
+#: src/terminal.c:1966
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
-msgstr "Klaidingas geometirijos aprašymas \"%s\"\n"
+msgstr "Klaidingas geometrijos aprašymas „%s“\n"
 
-#: src/terminal.c:1970
+#: src/terminal.c:2031
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Įvyko klaida, bandant gauti terminalo profilių sąrašą. (%s)\n"
 
-#: src/terminal.c:2269
+#: src/terminal.c:2330
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Profilis „%s“ jau yra."
 
-#: src/terminal.c:2280
+#: src/terminal.c:2341
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Jūsų pasirinktas pagrindinis profilis nebeegzistuoja."
 
-#: src/terminal.c:2375
+#: src/terminal.c:2436
 msgid "Enter profile name"
 msgstr "Įveskite profilio pavadinimą:"
 
-#: src/terminal.c:2385
+#: src/terminal.c:2446
 msgid "Choose base profile"
 msgstr "Pasirinkite pagrindinį profilį"
 
-#: src/terminal.c:2524
+#: src/terminal.c:2585
 msgid "Profile list"
 msgstr "Profilių sąrašas"
 
-#: src/terminal.c:2593
+#: src/terminal.c:2654
 msgid "You must select one or more profiles to delete."
 msgstr ""
 "Norėdami ištrinti vieną ar kelis profilius, Jūs turite juos pasirinkti."
 
-#: src/terminal.c:2604
+#: src/terminal.c:2665
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Turite turėti nors vieną profilį, negalima ištrinti jų visų."
 
-#: src/terminal.c:2611
+#: src/terminal.c:2672
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
@@ -2633,49 +2633,49 @@ msgstr[0] "Šalinti šį profilį?\n"
 msgstr[1] "Šalinti šiuos %d profilius?\n"
 msgstr[2] "Šalinti šiuos %d profilių?\n"
 
-#: src/terminal.c:2632
+#: src/terminal.c:2693
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Šalinti profilį \"%s\"?"
 
-#: src/terminal.c:2654
+#: src/terminal.c:2715
 msgid "Delete Profile"
 msgstr "Šalinti profilį"
 
-#: src/terminal.c:2927
+#: src/terminal.c:2988
 msgid "Profiles"
 msgstr "Profiliai"
 
-#: src/terminal.c:2968
+#: src/terminal.c:3029
 msgid "_Profiles:"
 msgstr "_Profiliai:"
 
-#: src/terminal.c:3000
+#: src/terminal.c:3061
 msgid "Click to open new profile dialog"
-msgstr "Paspauskite čia, norėdami iškviesti naujo profilio kūrimo langą"
+msgstr "Spragtelėkite čia, norėdami iškviesti naujo profilio kūrimo langą"
 
-#: src/terminal.c:3008
+#: src/terminal.c:3069
 msgid "Click to open edit profile dialog"
-msgstr "Paspauskite čia, norėdami iškviesti profilio taisymo langą"
+msgstr "Spragtelėkite čia, norėdami iškviesti profilio taisymo langą"
 
-#: src/terminal.c:3016
+#: src/terminal.c:3077
 msgid "Click to delete selected profile"
-msgstr "Spustelkite, norėdami pašalinti profilį"
+msgstr "Spragtelėkite, norėdami pašalinti profilį"
 
-#: src/terminal.c:3021
+#: src/terminal.c:3082
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profilis, na_udojamas paleidžiant naują terminalą:"
 
-#: src/terminal.c:3077
+#: src/terminal.c:3138
 msgid "Click button to choose profile"
-msgstr "Spustelkite, norėdami pasirinkti profilį"
+msgstr "Spragtelėkite, norėdami pasirinkti profilį"
 
-#: src/terminal.c:3494
+#: src/terminal.c:3555
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Įvyko klaida rodant pagalbą: %s"
 
-#: src/terminal.c:3565
+#: src/terminal.c:3626
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2683,7 +2683,7 @@ msgid ""
 msgstr ""
 "Trūksta bylos \"%s\". Tai rodo, kad programa nebuvo įdiegta tvarkingai."
 
-#: src/terminal.c:3729
+#: src/terminal.c:3790
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2691,7 +2691,7 @@ msgstr ""
 "Panašu, kad gnome-terminal serveris nėra įdiegtas. Gamyklos režimas "
 "atjungtas.\n"
 
-#: src/terminal.c:3732
+#: src/terminal.c:3793
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2699,7 +2699,7 @@ msgstr ""
 "Įvyko klaida registruojant terminalą aktyvavimo tarnyboje. Gamyklos režimas "
 "atjungtas.\n"
 
-#: src/terminal.c:3768
+#: src/terminal.c:3829
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "Nepavyko iš aktyvavimo tarnybos gauti terminalo serverio informacijos\n"
