@@ -7,8 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.0.0\n"
-"POT-Creation-Date: 2003-05-30 20:44+0200\n"
-"PO-Revision-Date: 2003-06-17 19:48+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-06-26 04:43+0200\n"
+"PO-Revision-Date: 2003-06-26 13:46+0200\n"
 "Last-Translator: Miloslav Trrmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +21,7 @@ msgid "Command line"
 msgstr "Příkazový řádek"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:172 src/terminal.c:1134
-#: src/terminal.c:1451 src/terminal-profile.c:275 src/terminal-window.c:709
+#: src/terminal.c:1451 src/terminal-profile.c:275 src/terminal-window.c:686
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -185,7 +186,7 @@ msgid "User Defined"
 msgstr "Uživatelem definované"
 
 #: src/encoding.c:442 src/profile-editor.c:889 src/terminal.c:2812
-#: src/terminal-window.c:2603
+#: src/terminal-window.c:2576
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Došlo k chybě při zobrazování nápovědy: %s"
@@ -1739,7 +1740,7 @@ msgstr "Došlo k chybě při načítání klávesových zkratek. (%s)\n"
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "Hodnota konfiguračního klíče %s není platná; hodnota je \"%s\".\n"
 
-#: src/terminal-accels.c:358 src/terminal-window.c:1123
+#: src/terminal-accels.c:358 src/terminal-window.c:1100
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2051,14 +2052,15 @@ msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Poměr zvětšení \"%g\" je příliš vysoký, použije se %g\n"
 
 #: src/terminal.c:1089
+#, c-format
 msgid ""
-"Option given which is no longer supported in this version of gnome-terminal; "
-"you might want to create a profile with the desired setting, and use the new "
-"--window-with-profile option\n"
+"Option --%s is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new --"
+"window-with-profile option\n"
 msgstr ""
-"Zadána volba, která touto verzí terminálu již není podporovaná. Možná chcete "
-"vytvořit profil s požadovaným nastavením a použít novou volbu --window-with-"
-"profile\n"
+"Volba --%s již není podporována touto verzí gnome-terminal; možná budete "
+"chtít vytvořit profil s požadovaným nastavením a použít novou volbu --window-"
+"with-profile\n"
 
 #: src/terminal.c:1095
 msgid "--startup-id option given twice\n"
@@ -2163,7 +2165,7 @@ msgstr "Odstranit profil \"%s\"?"
 msgid "Delete Profile"
 msgstr "Odstranit profil"
 
-#: src/terminal.c:2843 src/terminal-window.c:2017
+#: src/terminal.c:2843 src/terminal-window.c:1984
 msgid "_Edit"
 msgstr "_Upravit"
 
@@ -2195,7 +2197,7 @@ msgstr "Kliknutím odstraníte vybraný profil"
 msgid "Click button to choose profile"
 msgstr "Kliknutím vyberete profil"
 
-#: src/terminal.c:3491
+#: src/terminal.c:3492
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2204,7 +2206,7 @@ msgstr ""
 "Soubor \"%s\" chybí. To znamená, že aplikace je není správně nainstalována, "
 "a proto není možné zobrazit dialog."
 
-#: src/terminal.c:3664
+#: src/terminal.c:3665
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2212,7 +2214,7 @@ msgstr ""
 "Zdá se, že nemáte na správném místě nainstalovaný gnome-terminal.server. "
 "Režim factory bude vypnutý.\n"
 
-#: src/terminal.c:3667
+#: src/terminal.c:3668
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2220,7 +2222,7 @@ msgstr ""
 "Chyba při registraci terminálu u aktivační služby; režim factory bude "
 "vypnutý.\n"
 
-#: src/terminal.c:3703
+#: src/terminal.c:3704
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Od aktivačního serveru se nepodařilo získat terminálový server.\n"
 
@@ -2333,7 +2335,7 @@ msgstr ""
 "Nelze otevřít adresu \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1246 src/terminal-window.c:954
+#: src/terminal-screen.c:1246 src/terminal-window.c:931
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2342,82 +2344,82 @@ msgstr ""
 "Došlo k chybě při načítání konfigurační hodnoty pro používání obrázků v "
 "menu. (%s)\n"
 
-#: src/terminal-screen.c:1294 src/terminal-window.c:758
-msgid "_New Window"
-msgstr "_Nové okno"
-
-#: src/terminal-screen.c:1301 src/terminal-window.c:761
-msgid "New _Tab"
-msgstr "Nová _karta"
-
-#: src/terminal-screen.c:1325 src/terminal-window.c:867
-msgid "_Profile"
-msgstr "_Profil"
-
-#: src/terminal-screen.c:1375
-msgid "_Edit Current Profile..."
-msgstr "_Upravit aktuální profil..."
-
-#: src/terminal-screen.c:1381
-msgid "_Input Methods"
-msgstr "Vstupní metod_y"
-
-#: src/terminal-screen.c:1397
-msgid "Hide _Menubar"
-msgstr "Skrýt _menu"
-
-#: src/terminal-screen.c:1402
-msgid "Show _Menubar"
-msgstr "Zobrazit _menu"
-
-#: src/terminal-screen.c:1411
-msgid "Secure _Keyboard"
-msgstr "_Zabezpečit klávesnici"
-
-#: src/terminal-screen.c:1417
+#: src/terminal-screen.c:1296
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: src/terminal-screen.c:1424
+#: src/terminal-screen.c:1301
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: src/terminal-screen.c:1773
+#: src/terminal-screen.c:1312 src/terminal-window.c:735
+msgid "_New Window"
+msgstr "_Nové okno"
+
+#: src/terminal-screen.c:1319 src/terminal-window.c:738
+msgid "New _Tab"
+msgstr "Nová _karta"
+
+#: src/terminal-screen.c:1343 src/terminal-window.c:844
+msgid "_Profile"
+msgstr "_Profil"
+
+#: src/terminal-screen.c:1393
+msgid "_Edit Current Profile..."
+msgstr "_Upravit aktuální profil..."
+
+#: src/terminal-screen.c:1399
+msgid "_Input Methods"
+msgstr "Vstupní metod_y"
+
+#: src/terminal-screen.c:1415
+msgid "Hide _Menubar"
+msgstr "Skrýt _menu"
+
+#: src/terminal-screen.c:1420
+msgid "Show _Menubar"
+msgstr "Zobrazit _menu"
+
+#: src/terminal-screen.c:1429
+msgid "Secure _Keyboard"
+msgstr "_Zabezpečit klávesnici"
+
+#: src/terminal-screen.c:1777
 msgid "Change terminal title"
 msgstr "Změnit titulek terminálu"
 
-#: src/terminal-screen.c:1800
+#: src/terminal-screen.c:1804
 msgid "_Title:"
 msgstr "_Titulek:"
 
-#: src/terminal-screen.c:1918
+#: src/terminal-screen.c:1922
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Typ text/plain puštěný do okna terminálu má neplatný formát (%d) nebo délku "
 "(%d)\n"
 
-#: src/terminal-screen.c:1941
+#: src/terminal-screen.c:1945
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Barva puštěná do okna terminálu má neplatný formát (%d) nebo délku (%d)\n"
 
-#: src/terminal-screen.c:1984
+#: src/terminal-screen.c:1988
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URL Mozilla puštěné do okna terminálu má neplatný formát (%d) nebo délku (%"
 "d)\n"
 
-#: src/terminal-screen.c:2033
+#: src/terminal-screen.c:2037
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Seznam URI puštěný do okna terminálu má neplatný formát (%d) nebo délku (%"
 "d)\n"
 
-#: src/terminal-screen.c:2087
+#: src/terminal-screen.c:2091
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2425,7 +2427,7 @@ msgstr ""
 "Jméno souboru puštěné do okna terminálu má neplatný formát (%d) nebo délku (%"
 "d)\n"
 
-#: src/terminal-screen.c:2113
+#: src/terminal-screen.c:2117
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Chyba při převodu URI \"%s\" na jméno souboru: %s\n"
@@ -2463,90 +2465,90 @@ msgstr "_%d. %s"
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: src/terminal-window.c:667
+#: src/terminal-window.c:644
 msgid "_Add or Remove..."
 msgstr "_Přidat nebo odebrat..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:766
+#: src/terminal-window.c:743
 msgid "New _Profile..."
 msgstr "Nový _profil..."
 
-#: src/terminal-window.c:772
+#: src/terminal-window.c:749
 msgid "_Close Window"
 msgstr "_Zavřít okno"
 
-#: src/terminal-window.c:777
+#: src/terminal-window.c:754
 msgid "C_lose Tab"
 msgstr "_Zavřít kartu"
 
-#: src/terminal-window.c:811
+#: src/terminal-window.c:788
 msgid "C_urrent Profile..."
 msgstr "_Aktuální profil..."
 
-#: src/terminal-window.c:814
+#: src/terminal-window.c:791
 msgid "_Keybindings..."
 msgstr "_Klávesové zkratky..."
 
-#: src/terminal-window.c:817
+#: src/terminal-window.c:794
 msgid "P_rofiles..."
 msgstr "Pro_fily..."
 
-#: src/terminal-window.c:830
+#: src/terminal-window.c:807
 msgid "Hide Menu_bar"
 msgstr "Skrýt _menu"
 
-#: src/terminal-window.c:833
+#: src/terminal-window.c:810
 msgid "_Full Screen"
 msgstr "_Celá obrazovka"
 
-#: src/terminal-window.c:837
+#: src/terminal-window.c:814
 msgid "_Zoom In"
 msgstr "Z_většit"
 
-#: src/terminal-window.c:841
+#: src/terminal-window.c:818
 msgid "Zoom _Out"
 msgstr "Z_menšit"
 
-#: src/terminal-window.c:845
+#: src/terminal-window.c:822
 msgid "_Normal Size"
 msgstr "_Normální velikost"
 
-#: src/terminal-window.c:870
+#: src/terminal-window.c:847
 msgid "_Set Title..."
 msgstr "_Nastavit titulek..."
 
-#: src/terminal-window.c:877
+#: src/terminal-window.c:854
 msgid "_Character Coding"
 msgstr "_Kódování znaků"
 
-#: src/terminal-window.c:884
+#: src/terminal-window.c:861
 msgid "_Reset"
 msgstr "_Inicializovat"
 
-#: src/terminal-window.c:887
+#: src/terminal-window.c:864
 msgid "Reset and C_lear"
 msgstr "Inicializovat a _vymazat"
 
-#: src/terminal-window.c:901
+#: src/terminal-window.c:878
 msgid "_Previous Tab"
 msgstr "_Předchozí karta"
 
-#: src/terminal-window.c:905
+#: src/terminal-window.c:882
 msgid "_Next Tab"
 msgstr "_Následující karta"
 
-#: src/terminal-window.c:926
+#: src/terminal-window.c:903
 msgid "_Contents"
 msgstr "O_bsah"
 
-#: src/terminal-window.c:937
+#: src/terminal-window.c:914
 msgid "_About"
 msgstr "_O programu"
 
-#: src/terminal-window.c:1142
+#: src/terminal-window.c:1119
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2555,35 +2557,35 @@ msgstr ""
 "Nastala chyba při přihlášení ke sledování změn v konfiguraci okna terminálu. "
 "(%s)\n"
 
-#: src/terminal-window.c:2015
+#: src/terminal-window.c:1982
 msgid "_File"
 msgstr "_Soubor"
 
-#: src/terminal-window.c:2019
+#: src/terminal-window.c:1986
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: src/terminal-window.c:2021
+#: src/terminal-window.c:1988
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: src/terminal-window.c:2023
+#: src/terminal-window.c:1990
 msgid "_Go"
 msgstr "_Přejít"
 
-#: src/terminal-window.c:2025
+#: src/terminal-window.c:1992
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: src/terminal-window.c:2147
+#: src/terminal-window.c:2117
 msgid "_Restore normal size"
 msgstr "_Obnovit normální velikost"
 
-#: src/terminal-window.c:2151
+#: src/terminal-window.c:2121
 msgid "_Full screen"
 msgstr "_Celá obrazovka"
 
-#: src/terminal-window.c:2347
+#: src/terminal-window.c:2322
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -2592,10 +2594,10 @@ msgstr ""
 "Vaše aktuální prostředí nepodporuje celoobrazovkový režim.\n"
 "(Technicky potřebujete správce oken s podporou _NET-WM_STATE_FULLSCREEN.)"
 
-#: src/terminal-window.c:2633
+#: src/terminal-window.c:2606
 msgid "translator_credits"
 msgstr "Stanislav Brabec <utx@penguin.cz>"
 
-#: src/terminal-window.c:2647
+#: src/terminal-window.c:2620
 msgid "GNOME Terminal"
 msgstr "GNOME Terminál"
