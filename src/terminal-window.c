@@ -21,11 +21,11 @@
 
 #include "terminal-intl.h"
 #include "terminal-accels.h"
+#include "terminal-widget.h"
 #include "terminal-window.h"
 #include "terminal.h"
 #include <string.h>
 #include <stdlib.h>
-#include <libzvt/libzvt.h>
 #include <libgnomeui/gnome-about.h>
 #include <libgnomeui/gnome-stock-icons.h>
 #include <gdk/gdkx.h>
@@ -156,7 +156,6 @@ static void set_menuitem_text (GtkWidget  *mi,
                                gboolean    strip_mnemonic);
 
 static gpointer parent_class;
-static guint signals[LAST_SIGNAL] = { 0 };
 
 GType
 terminal_window_get_type (void)
@@ -721,7 +720,7 @@ terminal_window_add_screen (TerminalWindow *window,
                             TerminalScreen *screen)
 {
   TerminalWindow *old;
-  ZvtTerm *term;
+  GtkWidget *term;
   GtkWidget *hbox;
   GtkWidget *scrollbar;
   GtkWidget *label;
@@ -769,13 +768,13 @@ terminal_window_add_screen (TerminalWindow *window,
                     G_CALLBACK (selection_changed_callback),
                     window);
   
-  term = ZVT_TERM (terminal_screen_get_widget (screen));
+  term = terminal_screen_get_widget (screen);
 
   gtk_box_pack_start (GTK_BOX (hbox),
                       GTK_WIDGET (term), TRUE, TRUE, 0);
   
   gtk_range_set_adjustment (GTK_RANGE (scrollbar),
-                            term->adjustment);
+                            terminal_widget_get_scroll_adjustment (term));
 
   gtk_widget_show_all (hbox);
   terminal_window_update_scrollbar (window, screen);
@@ -894,23 +893,25 @@ terminal_window_get_menubar_visible (TerminalWindow *window)
   return window->priv->menubar_visible;
 }
 
-
-#define PADDING 0 /* from zvtterm.c */
 void
 terminal_window_set_size (TerminalWindow *window,
                           TerminalScreen *screen,
                           gboolean        even_if_mapped)
 {
   /* Owen's hack from gnome-terminal */
-  ZvtTerm *term;
   GtkWidget *widget;
   GtkWidget *app;
   GtkRequisition toplevel_request;
   GtkRequisition widget_request;
-  gint w, h;
+  int w, h;
+  int char_width;
+  int char_height;
+  int grid_width;
+  int grid_height;
+  int xpad;
+  int ypad;
   
   widget = terminal_screen_get_widget (screen);
-  term = ZVT_TERM (widget);
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
@@ -928,12 +929,13 @@ terminal_window_set_size (TerminalWindow *window,
   
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
+
+  terminal_widget_get_cell_size (widget, &char_width, &char_height);
+  terminal_widget_get_size (widget, &grid_width, &grid_height);
+  terminal_widget_get_padding (widget, &xpad, &ypad);
   
-  w += widget->style->xthickness * 2 + PADDING;
-  h += widget->style->ythickness * 2;
-  
-  w += term->charwidth * term->grid_width;
-  h += term->charheight * term->grid_height;
+  w += xpad + char_width * grid_width;
+  h += ypad + char_height * grid_height;
   
   if (even_if_mapped)
     gtk_window_resize (GTK_WINDOW (app), w, h);
@@ -945,7 +947,6 @@ void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
 {
-  ZvtTerm *term;
   GtkWidget *widget;
   TerminalProfile *profile;
   
@@ -953,7 +954,6 @@ terminal_window_set_active (TerminalWindow *window,
     return;
 
   widget = terminal_screen_get_widget (screen);
-  term = ZVT_TERM (widget);
 
   profile = terminal_screen_get_profile (screen);
   
@@ -1192,44 +1192,47 @@ void
 terminal_window_update_geometry (TerminalWindow *window)
 {
   GdkGeometry hints;
-  ZvtTerm *term;
   GtkWidget *widget;  
-
+  int char_width;
+  int char_height;
+  
   if (window->priv->active_term == NULL)
     return;
   
   widget = terminal_screen_get_widget (window->priv->active_term);
-  term = ZVT_TERM (widget);
   
   /* We set geometry hints from the active term; best thing
    * I can think of to do. Other option would be to try to
    * get some kind of union of all hints from all terms in the
    * window, but that doesn't make too much sense.
    */
-
-  if (term->charwidth != window->priv->old_char_width ||
-      term->charheight != window->priv->old_char_height)
+  terminal_widget_get_cell_size (widget, &char_width, &char_height);
+  
+  if (char_width != window->priv->old_char_width ||
+      char_height != window->priv->old_char_height)
     {
-      /* padding copied from zvt size request. */
+      int xpad, ypad;
       
-      /* FIXME Since we're using xthickness/ythickness we need to change
-       * the hints when the theme changes.
-       */  
-      hints.base_width = (GTK_WIDGET (term)->style->xthickness * 2) + PADDING;
-      hints.base_height =  (GTK_WIDGET (term)->style->ythickness * 2);
+      /* FIXME Since we're using xthickness/ythickness to compute
+       * padding we need to change the hints when the theme changes.
+       */
+      terminal_widget_get_padding (widget, &xpad, &ypad);
+      
+      hints.base_width = xpad;
+      hints.base_height = ypad;
 
 #define MIN_WIDTH_CHARS 4
 #define MIN_HEIGHT_CHARS 2
       
-      hints.width_inc = term->charwidth;
-      hints.height_inc = term->charheight;
+      hints.width_inc = char_width;
+      hints.height_inc = char_height;
 
       /* min size is min size of just the geometry widget, remember. */
       hints.min_width = hints.base_width + hints.width_inc * MIN_WIDTH_CHARS;
       hints.min_height = hints.base_height + hints.height_inc * MIN_HEIGHT_CHARS;
       
       gtk_window_set_geometry_hints (GTK_WINDOW (window),
-                                     GTK_WIDGET (term),
+                                     widget,
                                      &hints,
                                      GDK_HINT_RESIZE_INC |
                                      GDK_HINT_MIN_SIZE |
@@ -1549,7 +1552,7 @@ copy_callback (GtkWidget      *menuitem,
     {
       widget = terminal_screen_get_widget (window->priv->active_term);
       
-      zvt_term_copy_clipboard (ZVT_TERM (widget));
+      terminal_widget_copy_clipboard (widget);
     }
 }
 
@@ -1562,8 +1565,8 @@ paste_callback (GtkWidget      *menuitem,
   if (window->priv->active_term)
     {
       widget = terminal_screen_get_widget (window->priv->active_term);
-      
-      zvt_term_paste_clipboard (ZVT_TERM (widget));
+
+      terminal_widget_paste_clipboard (widget);
     }  
 }
 
@@ -1673,8 +1676,8 @@ reset_callback (GtkWidget      *menuitem,
   if (window->priv->active_term)
     {
       widget = terminal_screen_get_widget (window->priv->active_term);
-        
-      zvt_term_reset (ZVT_TERM (widget), FALSE);
+
+      terminal_widget_reset (widget, FALSE);
     }
 }
 
@@ -1687,8 +1690,8 @@ reset_and_clear_callback (GtkWidget      *menuitem,
   if (window->priv->active_term)
     {
       widget = terminal_screen_get_widget (window->priv->active_term);
-        
-      zvt_term_reset (ZVT_TERM (widget), TRUE);
+
+      terminal_widget_reset (widget, TRUE);
     }
 }
 

@@ -1,3 +1,20 @@
+2002-03-09  Havoc Pennington  <hp@pobox.com>
+
+	* src/profile-editor.c: clean up "edited_cb" from when the
+	keybindings stuff was in here
+
+	* src/terminal-window.c: adapt to abstraction
+
+	* src/profile-editor.c (BYTES_PER_LINE): adapt to abstraction
+
+	* src/terminal-screen.c: use terminal-widget.h abstract interface
+
+	* src/terminal-widget-zvt.c: wall libzvt off in this file, so we
+	can easily plug another terminal widget should one become
+	finished. Gives us redundancy, in case no one fixes zvt, makes it
+	easy to fool with other widgets, and organizes the code more
+	nicely anyhow.
+
 2002-03-09  Duarte Loreto <happyguy_pt@hotmail.com>
 
         * configure.in: Added Portuguese (pt) to ALL_LINGUAS.
@@ -5,7 +22,7 @@
 2002-03-09  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* src/gnome-terminal.glade2: s/menu bar/menubar.
-	
+
 2002-03-09  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal.c (main): init libgnomeui, patch from Johan

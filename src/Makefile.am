@@ -21,6 +21,12 @@ EGGFILES=			\
 	eggcellrendererkeys.h 	\
 	eggcellrendererkeys.c
 
+if TERMINAL_WIDGET_VTE
+terminal_widget_impl=terminal-widget-vte.c
+else
+terminal_widget_impl=terminal-widget-zvt.c
+endif
+
 ## Terminal
 gnome_terminal_SOURCES=				\
 	profile-editor.c			\
@@ -34,6 +40,8 @@ gnome_terminal_SOURCES=				\
 	terminal-profile.h			\
 	terminal-screen.c			\
 	terminal-screen.h			\
+	terminal-widget.h			\
+	$(terminal_widget_impl)			\
 	terminal-window.c			\
 	terminal-window.h			\
 	x-font-selector.c			\

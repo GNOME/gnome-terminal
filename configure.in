@@ -8,6 +8,8 @@ GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
 
+AC_ARG_WITH(widget, [  --with-widget=[zvt/vte] terminal widget to use])
+
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
@@ -61,6 +63,20 @@ AM_GCONF_SOURCE_2
 
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
+
+if test x$with_widget = xvte; then
+        AC_MSG_ERROR(Need to fill in src/terminal-widget-vte.c before this will work)
+        AC_CHECK_LIB(vte, vte_terminal_new, , [AC_MSG_ERROR(VTE requested but library not found)])
+fi
+
+AM_CONDITIONAL(TERMINAL_WIDGET_VTE, test x$with_widget = xvte)
+if test x$with_widget = xvte; then
+        echo "***"
+        echo "*** WARNING WARNING WARNING WARNING WARNING"
+        echo "*** Building with VTE widget instead of Zvt"
+        echo "*** This is some highly unsupported crackrock"
+        echo "***"
+fi
 
 AC_OUTPUT([
 Makefile

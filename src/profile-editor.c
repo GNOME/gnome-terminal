@@ -26,13 +26,9 @@
 #include <libgnomeui/gnome-file-entry.h>
 #include <string.h>
 #include "x-font-selector.h"
+#include "terminal-widget.h"
 
-/* Bytes in a line of scrollback, rough estimate, including
- * data structure to hold the line. Based on reading
- * vt_newline in vt.c in libzvt. Each char in 80 columns
- * is a 32-bit int.
- */
-#define BYTES_PER_LINE (sizeof (void*) * 6 + (80.0 * 4))
+#define BYTES_PER_LINE (terminal_widget_get_estimated_bytes_per_scrollback_line ())
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -765,23 +761,6 @@ init_palette_scheme_menu (GtkWidget *option_menu)
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
                             menu);
-}
-
-static void
-edited_cb (GtkCellRenderer *renderer,
-	   gchar           *path_text,
-	   gchar           *new_text,
-	   GtkTreeModel    *model)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-
-  path = gtk_tree_path_new_from_string (path_text);
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-		      0, new_text,
-		      -1);
-  gtk_tree_path_free (path);
 }
 
 void
