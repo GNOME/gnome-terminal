@@ -1,3 +1,17 @@
+2002-03-17  Havoc Pennington  <hp@pobox.com>
+
+	* src/gnome-terminal.glade2: Get rid of pointless Font label
+	around font selector, just leave an empty hbox
+
+	* src/simple-x-font-selector.c (update_family_menu): show menu
+	items before adding them to option menu, to avoid size request
+	screwups.
+	(egg_xfont_selector_init): don't put (pixels) after Size, it's
+	implied, say "Font name" not "Family"
+	(update_size_menu): don't put an asterisk after the bitmap sizes, 
+	no one will know what it means anyhow. We should just globally 
+	disable scaled bitmaps probably, if we haven't.
+
 2002-03-17  Mark Patton  <mpatton@jhu.edu>
 
         * src/gnome-terminal.glade2, src/profile-editor.c,

@@ -316,8 +316,8 @@ egg_xfont_selector_init (EggXFontSelector *selector)
   hbox1 = gtk_hbox_new (FALSE, 0);
   selector->family_options = gtk_option_menu_new ();
   selector->size_options = gtk_option_menu_new ();
-  family_label = gtk_label_new_with_mnemonic (_("_Family:"));
-  size_label = gtk_label_new_with_mnemonic (_("Si_ze (pixels):"));
+  family_label = gtk_label_new_with_mnemonic (_("_Font name:"));
+  size_label = gtk_label_new_with_mnemonic (_("Si_ze:"));
   hbox2 = gtk_hbox_new (FALSE, 0);
   selector->bold_check =
     gtk_check_button_new_with_mnemonic ("Use _bold version of font");
@@ -890,6 +890,7 @@ update_family_menu (EggXFontSelector *selector)
       name = g_strdup_printf ("%s (%s)", info->family, foundry);
       
       mi = gtk_menu_item_new_with_label (name);
+      gtk_widget_show (mi);
       g_free (name);
       
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), GTK_WIDGET (mi));
@@ -1006,7 +1007,7 @@ update_size_menu (EggXFontSelector *selector)
       if (can_match && nstandard_sizes && nbitmapped_sizes
           && *standard_sizes == bitmap_size)
         {
-          sprintf(buffer, "%i *", *standard_sizes);
+          sprintf(buffer, "%i", *standard_sizes);
           standard_sizes++;
           nstandard_sizes--;
           bitmapped_sizes++;
@@ -1025,14 +1026,14 @@ update_size_menu (EggXFontSelector *selector)
           if (selector->metric == EGG_XFONT_METRIC_POINTS)
             {
               if (*bitmapped_sizes % 10 == 0)
-                sprintf(buffer, "%i *", *bitmapped_sizes / 10);
+                sprintf(buffer, "%i", *bitmapped_sizes / 10);
               else
-                sprintf(buffer, "%i.%i *", *bitmapped_sizes / 10,
+                sprintf(buffer, "%i.%i", *bitmapped_sizes / 10,
                         *bitmapped_sizes % 10);
             }
           else
             {
-              sprintf(buffer, "%i *", *bitmapped_sizes);
+              sprintf(buffer, "%i", *bitmapped_sizes);
             }
           bitmapped_sizes++;
 	  nbitmapped_sizes--;
@@ -1048,6 +1049,7 @@ update_size_menu (EggXFontSelector *selector)
       selector->size_options_map[map_pos++] = num;
 
       mi = gtk_menu_item_new_with_label (buffer);
+      gtk_widget_show (mi);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), GTK_WIDGET (mi));
     }
 
