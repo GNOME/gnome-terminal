@@ -2871,7 +2871,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       old_transient_parent = NULL;      
       
       app->manage_profiles_dialog =
-        gtk_dialog_new_with_buttons (_("Edit Profiles"),
+        gtk_dialog_new_with_buttons (_("Profiles"),
                                      NULL,
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_STOCK_HELP,

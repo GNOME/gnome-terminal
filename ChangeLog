@@ -1,5 +1,31 @@
 2003-10-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/gnome-terminal.glade2: 
+	* src/terminal.c(terminal_app_manage_profiles):
+	* src/profile-editor.c(profile_editor_update_visible_name):
+	  Make the dialog titles match the unellipsisied labels of the 
+	  menuitems that make them pop.
+	* src/terminal-screen.c(terminal_screen_do_popup, close_tab_callback):
+	  Reorder items in popup, add a Close Tab item, and add a couple of 
+	  separators; s/New/Open/ in labels.
+	* src/terminal-window.c(menuitem_icon_visibility, append_stock_menuitem,
+	  append_check_menuitem, terminal_window_init,
+	  terminal_window_finalize): various fixes to the
+	  menu item labels, make them follow
+	  /desktop/gnome/interface/menus_have_icons, and change variable
+	  entries to checkbox menu items. 
+	* src/terminal_window.c(terminal_window_set_fullscreen, and related): 
+	  use gtk_window_{,un}fullscreen, and not our private implementation.
+	  Also listen for window_state_event events, so that the Fullscreen 
+	  menuitem reflects reality.
+	* src/terminal_window.c(about_callback): use _("GNOME Terminal") and
+	  not PACKAGE for the app name in the call to gnome_about_new, so that
+	  we get the translated app name and not the tarball name.
+
+	  Most of this comes from bug 76800 and my patch therein.
+	  
+2003-10-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal.c(main): free the argv_copy and the options results;
 	  leak reported in bug 124910. Also free argv_copy at the other early
 	  returns, to lighten valgrind output, as suggested in bug 124416.

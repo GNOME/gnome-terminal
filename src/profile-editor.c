@@ -1499,7 +1499,7 @@ profile_editor_update_visible_name (GtkWidget       *editor,
   char *s;
   GtkWidget *w;
   
-  s = g_strdup_printf (_("Editing profile \"%s\""),
+  s = g_strdup_printf (_("Editing Profile \"%s\""),
                        terminal_profile_get_visible_name (profile));
   
   gtk_window_set_title (GTK_WINDOW (editor), s);

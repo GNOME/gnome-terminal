@@ -1165,6 +1165,13 @@ new_tab_callback (GtkWidget      *menu_item,
 }
 
 static void
+close_tab_callback (GtkWidget      *menuitem,
+                    TerminalScreen *screen)
+{
+  terminal_screen_close (screen);
+}
+
+static void
 copy_callback (GtkWidget      *menu_item,
                TerminalScreen *screen)
 {
@@ -1373,6 +1380,26 @@ append_stock_menuitem (GtkWidget  *menu,
   return menu_item;
 }
 
+static GtkWidget*
+append_check_menuitem (GtkWidget  *menu,
+                       const char *text,
+                       gboolean    active,
+                       GCallback   callback,
+                       gpointer    data)
+{
+  GtkWidget *menu_item;
+  
+  menu_item = gtk_check_menu_item_new_with_mnemonic (text);
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), active);
+
+  g_signal_connect (G_OBJECT (menu_item), "toggled", callback, data);
+
+  return menu_item;
+}
+
+
 static void
 terminal_screen_do_popup (TerminalScreen *screen,
                           GdkEventButton *event)
@@ -1416,25 +1443,32 @@ terminal_screen_do_popup (TerminalScreen *screen,
     }
  
   menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("_New Window"),
+                               _("Open _Terminal"),
                                G_CALLBACK (new_window_callback),
                                screen);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_NEW_WINDOW);
   
   menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("New _Tab"),
+                               _("Open Ta_b"),
                                G_CALLBACK (new_tab_callback),
                                screen);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_NEW_TAB);
+
+  menu_item = gtk_separator_menu_item_new ();
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               _("C_lose Tab"),
+                               G_CALLBACK (close_tab_callback),
+                               screen);
+
+  menu_item = gtk_separator_menu_item_new ();
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
 
   menu_item = append_stock_menuitem (screen->priv->popup_menu,
                                      GTK_STOCK_COPY,
                                      G_CALLBACK (copy_callback),
                                      screen);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_COPY);
 
   if (!terminal_screen_get_text_selected (screen))
     gtk_widget_set_sensitive (menu_item, FALSE);
@@ -1443,11 +1477,13 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      GTK_STOCK_PASTE,
                                      G_CALLBACK (paste_callback),
                                      screen);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_PASTE);
   
+  menu_item = gtk_separator_menu_item_new ();
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+
   profile_menu = gtk_menu_new ();
-  menu_item = gtk_menu_item_new_with_mnemonic (_("_Profile"));
+  menu_item = gtk_menu_item_new_with_mnemonic (_("Change _Profile"));
 
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
                              profile_menu);
@@ -1501,7 +1537,23 @@ terminal_screen_do_popup (TerminalScreen *screen,
 		   G_CALLBACK (configuration_callback),
 		   screen);
 
-  
+  menu_item = append_check_menuitem (screen->priv->popup_menu, 
+                                     _("Show _Menubar"), 
+                                     terminal_window_get_menubar_visible (screen->priv->window),
+                                     G_CALLBACK (show_menubar_callback),
+                                     screen);
+
+#if 0
+  append_menuitem (screen->priv->popup_menu,
+                   _("Secure _Keyboard"),
+                   G_CALLBACK (secure_keyboard_callback),
+                   screen);
+#endif
+ 
+  menu_item = gtk_separator_menu_item_new ();
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+
   im_menu = gtk_menu_new ();
   menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
 
@@ -1516,27 +1568,6 @@ terminal_screen_do_popup (TerminalScreen *screen,
 
   gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
                          menu_item);
-
-  if (terminal_window_get_menubar_visible (screen->priv->window))
-    menu_item = append_menuitem (screen->priv->popup_menu,
-				 _("Hide _Menubar"),
-				 G_CALLBACK (show_menubar_callback),
-				 screen);
-  else
-    menu_item =append_menuitem (screen->priv->popup_menu,
-				_("Show _Menubar"),
-				G_CALLBACK (show_menubar_callback),
-				screen);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-				ACCEL_PATH_TOGGLE_MENUBAR);
-
-
-#if 0
-  append_menuitem (screen->priv->popup_menu,
-                   _("Secure _Keyboard"),
-                   G_CALLBACK (secure_keyboard_callback),
-                   screen);
-#endif
  
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
@@ -1916,7 +1947,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
       old_transient_parent = NULL;      
       
       screen->priv->title_editor =
-        gtk_dialog_new_with_buttons (_("Change terminal title"),
+        gtk_dialog_new_with_buttons (_("Set Title"),
                                      NULL,
                                      GTK_DIALOG_DESTROY_WITH_PARENT,
                                      GTK_STOCK_CLOSE,
