@@ -1664,7 +1664,7 @@ profile_editor_update_silent_bell (GtkWidget       *editor,
   w = profile_editor_get_widget (editor, "bell-checkbutton");
   
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
-                                terminal_profile_get_silent_bell (profile));
+                                !terminal_profile_get_silent_bell (profile));
 }
 
 static void
