@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm\n"
-"POT-Creation-Date: 2002-04-16 22:45-0400\n"
-"PO-Revision-Date: 2002-04-06 15:49+0200\n"
+"POT-Creation-Date: 2002-04-19 20:45+0200\n"
+"PO-Revision-Date: 2002-04-19 20:45+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Kommandolinje"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:156
-#: src/terminal-profile.c:269 src/terminal-window.c:326 src/terminal.c:561
+#: src/terminal-profile.c:269 src/terminal-window.c:501 src/terminal.c:561
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -306,7 +306,7 @@ msgstr "Titel og kommando"
 
 #: src/gnome-terminal.glade2.h:66
 msgid "Use colors from system theme"
-msgstr ""
+msgstr "Benyt farver fra systemtemaet"
 
 #: src/gnome-terminal.glade2.h:67
 msgid "When command _exits:"
@@ -639,7 +639,7 @@ msgstr "Der opstod en fejl under indlæsning af en tastebinding. %s\n"
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "Værdien af konfigurationsnøglen %s er ikke gyldig; værdien er \"%s\"\n"
 
-#: src/terminal-accels.c:331 src/terminal-window.c:605
+#: src/terminal-accels.c:331 src/terminal-window.c:785
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -792,15 +792,15 @@ msgstr ""
 "Kunne ikke åbne adressen \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1097 src/terminal-window.c:371
+#: src/terminal-screen.c:1097 src/terminal-window.c:554
 msgid "_New Window"
 msgstr "_Nyt vindue"
 
-#: src/terminal-screen.c:1104 src/terminal-window.c:375
+#: src/terminal-screen.c:1104 src/terminal-window.c:557
 msgid "New _Tab"
 msgstr "Nyt _faneblad"
 
-#: src/terminal-screen.c:1128 src/terminal-window.c:464
+#: src/terminal-screen.c:1128 src/terminal-window.c:644
 msgid "_Profile"
 msgstr "_Profil"
 
@@ -840,32 +840,41 @@ msgstr "_Title:"
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"\"text/plain\" sluppet på terminalen havde ugyldigt format (%d) eller længde "
+"(%d)\n"
 
 #: src/terminal-screen.c:1633
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Farve sluppet på terminalen havde ugyldigt format (%d) eller længde (%d)\n"
 
 #: src/terminal-screen.c:1676
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Mozilla-adresse sluppet på terminalen havde ugyldigt format (%d) eller "
+"længde (%d)\n"
 
 #: src/terminal-screen.c:1725
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"URI-liste sluppet på terminalen havde ugyldigt format (%d) eller længde (%"
+"d)\n"
 
 #: src/terminal-screen.c:1779
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
+"Billedfilnavn sluppet på terminalen havde ugyldigt format (%d) eller længde "
+"(%d)\n"
 
 #: src/terminal-screen.c:1805
-#, fuzzy, c-format
+#, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
-msgstr "Fejl ved tilbagestilling af nøglen %s til standardværdien: %s\n"
+msgstr "Fejl konvertering af URI'en \"%s\" til filnavn: %s\n"
 
 #: src/terminal-widget-zvt.c:1025
 #, c-format
@@ -874,79 +883,98 @@ msgstr ""
 "Der opstod en fejl under oprettelse af afkomsprocessen for denne terminal: %s"
 
 #: src/terminal-widget-zvt.c:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Could not set working directory to \"%s\": %s\n"
-msgstr "Kunne ikke indlæse ikonet \"%s\": %s\n"
+msgstr "Kunne ikke sætte arbejdsmappen til \"%s\": %s\n"
 
 #: src/terminal-widget-zvt.c:1047
 #, c-format
 msgid "Could not execute command %s: %s\n"
 msgstr "Kunne ikke udføre kommandoen %s: %s\n"
 
+#: src/terminal-window.c:348
+msgid "_Default"
+msgstr "_Standard"
+
+#: src/terminal-window.c:350
+#, c-format
+msgid "_Default (%s)"
+msgstr "_Standard (%s)"
+
+#: src/terminal-window.c:434
+#, c-format
+msgid "_%d. %s"
+msgstr "_%d. %s"
+
+#: src/terminal-window.c:437
+#, c-format
+msgid "_%c. %s"
+msgstr "_%c. %s"
+
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:382
+#: src/terminal-window.c:562
 msgid "New _Profile..."
 msgstr "Ny _profil..."
 
-#: src/terminal-window.c:388
+#: src/terminal-window.c:568
 msgid "_Close Window"
 msgstr "_Luk vindue"
 
-#: src/terminal-window.c:392
+#: src/terminal-window.c:572
 msgid "C_lose Tab"
 msgstr "L_uk faneblad"
 
-#: src/terminal-window.c:421
+#: src/terminal-window.c:601
 msgid "C_urrent Profile..."
 msgstr "_Aktuel profil..."
 
-#: src/terminal-window.c:424
+#: src/terminal-window.c:604
 msgid "_Keybindings..."
 msgstr "_Tastebindinger..."
 
-#: src/terminal-window.c:427
+#: src/terminal-window.c:607
 msgid "P_rofiles..."
 msgstr "P_rofiler..."
 
-#: src/terminal-window.c:440
+#: src/terminal-window.c:620
 msgid "Hide Menu_bar"
 msgstr "Skjul _menulinje"
 
-#: src/terminal-window.c:443
+#: src/terminal-window.c:623
 msgid "_Full Screen"
 msgstr "_Fuldskærm"
 
-#: src/terminal-window.c:467
+#: src/terminal-window.c:647
 msgid "_Set Title..."
 msgstr "Angiv _titel..."
 
-#: src/terminal-window.c:470
+#: src/terminal-window.c:650
 msgid "_Reset"
 msgstr "_Nulstil"
 
-#: src/terminal-window.c:473
+#: src/terminal-window.c:653
 msgid "Reset and C_lear"
 msgstr "Nulstil og r_yd"
 
-#: src/terminal-window.c:487
+#: src/terminal-window.c:667
 msgid "_Previous Tab"
 msgstr "_Foregående fane"
 
-#: src/terminal-window.c:491
+#: src/terminal-window.c:671
 msgid "_Next Tab"
 msgstr "_Næste fane"
 
-#: src/terminal-window.c:510
+#: src/terminal-window.c:690
 msgid "_Help Contents"
 msgstr "_Indhold"
 
-#: src/terminal-window.c:514
+#: src/terminal-window.c:694
 msgid "_About GNOME Terminal"
 msgstr "_Om Gnome-terminal"
 
-#: src/terminal-window.c:624
+#: src/terminal-window.c:804
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -955,39 +983,39 @@ msgstr ""
 "Der opstod en fejl under bestilling af underrettelser om "
 "konfigurationsændringer for terminalvindue. %s\n"
 
-#: src/terminal-window.c:1372
+#: src/terminal-window.c:1552
 msgid "_File"
 msgstr "_Fil"
 
-#: src/terminal-window.c:1374
+#: src/terminal-window.c:1554
 msgid "_Edit"
 msgstr "_Redigér"
 
-#: src/terminal-window.c:1376
+#: src/terminal-window.c:1556
 msgid "_View"
 msgstr "_Vis"
 
-#: src/terminal-window.c:1378
+#: src/terminal-window.c:1558
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: src/terminal-window.c:1380
+#: src/terminal-window.c:1560
 msgid "_Go"
 msgstr "_Navigation"
 
-#: src/terminal-window.c:1382
+#: src/terminal-window.c:1562
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/terminal-window.c:1498
+#: src/terminal-window.c:1678
 msgid "_Restore normal size"
 msgstr "_Gendan normal størrelse"
 
-#: src/terminal-window.c:1502
+#: src/terminal-window.c:1682
 msgid "_Full screen"
 msgstr "_Fuldskærm"
 
-#: src/terminal-window.c:1684
+#: src/terminal-window.c:1884
 msgid ""
 "Your current desktop environment does not support the full screen feature.\n"
 " (In technical terms, you need a window manager with support for the "
@@ -997,15 +1025,15 @@ msgstr ""
 "tekniske betegnelser har du brug for en vindueshåndtering som understøtter "
 "_NET_WM_STATE_FULLSCREEN-egenskaben)."
 
-#: src/terminal-window.c:1794
+#: src/terminal-window.c:1994
 msgid "translator_credits"
 msgstr "Ole Laursen <olau@hardworking.dk>"
 
-#: src/terminal-window.c:1807
+#: src/terminal-window.c:2007
 msgid "Copyright 2002 Havoc Pennington"
 msgstr "Copyright © 2002 Havoc Pennington"
 
-#: src/terminal-window.c:1808
+#: src/terminal-window.c:2008
 msgid "GNOME Terminal"
 msgstr "Gnome-terminal"
 
@@ -1092,36 +1120,35 @@ msgid "GEOMETRY"
 msgstr "GEOMETRI"
 
 #: src/terminal.c:223
-#, fuzzy
 msgid ""
 "Ask existing profterm process to open a new window, if possible. Defaults to "
 "true"
 msgstr ""
-"Bed eksisterende terminalproces om at åbne et vindue om muligt (endnu ikke "
-"implementeret: http://bugzilla.gnome.org/show_bug.cgi?id=71442 )"
+"Bed eksisterende terminalproces om at åbne et vindue om muligt - "
+"standardværdien er sand"
 
 #: src/terminal.c:232
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
+"Registrer ikke med aktiveringsnavneserveren, genbrug ikke en aktiv terminal"
 
 #: src/terminal.c:241
-#, fuzzy
 msgid "Set the terminal's title"
-msgstr "Skift terminaltitel"
+msgstr "Angiv terminalens titel"
 
 #: src/terminal.c:242
 msgid "TITLE"
-msgstr ""
+msgstr "TITEL"
 
 #: src/terminal.c:250
 msgid "Set the terminal's working directory"
-msgstr ""
+msgstr "Angiv terminalens arbejdsmappe"
 
 #: src/terminal.c:251
 msgid "DIRNAME"
-msgstr ""
+msgstr "MAPPENAVN"
 
 #: src/terminal.c:371
 #, c-format
@@ -1133,16 +1160,20 @@ msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
+"Det ser ud til at der ikke er en gnome-terminal.server installeret et "
+"gyldigt sted. Fabrikstilstand deaktiveret.\n"
 
 #: src/terminal.c:458
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
+"Fejl ved registrering af terminalen med aktiveringstjenesten; "
+"fabrikstilstand deaktiveret.\n"
 
 #: src/terminal.c:493
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr ""
+msgstr "Det mislykkedes at skaffe terminalserveren fra aktiveringsserveren\n"
 
 #. Get rid of this option
 #: src/terminal.c:541
@@ -1152,6 +1183,9 @@ msgid ""
 "might want to create a profile with the desired setting, and use the new --"
 "window-with-profile option\n"
 msgstr ""
+"Tilvalget \"%s\" understøttes ikke længere i denne version af terminalen; du "
+"kan i stedet oprette en profil med den ønskede indstilling og bruge "
+"tilvalget --window-with-profile\n"
 
 #: src/terminal.c:670
 msgid "Option --command/-e requires specifying the command to run\n"
@@ -1203,31 +1237,27 @@ msgstr "Tilvalget --show-menubar er angivet to gange for det samme vindue\n"
 
 #: src/terminal.c:831
 msgid "Option --geometry requires an argument giving the geometry\n"
-msgstr "Tilvalget --geometry kræver en parameter der angiver geomtrien\n"
+msgstr "Tilvalget --geometry kræver en parameter der angiver geometrien\n"
 
 #: src/terminal.c:840 src/terminal.c:850
 msgid "Two geometries given for one window\n"
-msgstr "To geometrier angiver for ét vindue\n"
+msgstr "To geometrier angivet for ét vindue\n"
 
 #: src/terminal.c:878
-#, fuzzy
 msgid "Option --title requires an argument giving the title\n"
-msgstr "Tilvalget --geometry kræver en parameter der angiver geomtrien\n"
+msgstr "Tilvalget --title kræver en parameter der angiver titlen\n"
 
 #: src/terminal.c:886
-#, fuzzy
 msgid "Two titles given for one tab\n"
-msgstr "To geometrier angiver for ét vindue\n"
+msgstr "To titler angivet for ét faneblad\n"
 
 #: src/terminal.c:903
-#, fuzzy
 msgid "Option --working-directory requires an argument giving the directory\n"
-msgstr "Tilvalget --geometry kræver en parameter der angiver geomtrien\n"
+msgstr "Tilvalget --working-directory kræver en parameter der angiver mappen\n"
 
 #: src/terminal.c:911
-#, fuzzy
 msgid "Two working directories given for one tab\n"
-msgstr "To geometrier angiver for ét vindue\n"
+msgstr "To arbejdsmapper angivet for ét faneblad\n"
 
 #: src/terminal.c:934
 #, c-format
@@ -1549,6 +1579,3 @@ msgstr "Vælg en skrifttype"
 
 #~ msgid "Enter UNIX commands"
 #~ msgstr "Indtast Unix-kommandoer"
-
-#~ msgid "Allow fonts in wrong encoding"
-#~ msgstr "Tillad skrifttyper i forkert kodning"
