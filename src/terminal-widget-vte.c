@@ -48,6 +48,8 @@ terminal_widget_new (void)
   VteData *data;
   
   terminal = vte_terminal_new ();
+
+  vte_terminal_set_mouse_autohide(VTE_TERMINAL(terminal), TRUE);
   
   data = g_new0 (VteData, 1);
   g_object_set_data_full (G_OBJECT (terminal), "terminal-widget-data",
@@ -108,7 +110,7 @@ void
 terminal_widget_match_add                  (GtkWidget            *widget,
 					    const char           *regexp)
 {
-  UNIMPLEMENTED;
+  vte_terminal_match_add(VTE_TERMINAL(widget), regexp);
 }
 
 char*
@@ -116,7 +118,7 @@ terminal_widget_check_match (GtkWidget *widget,
 			     int        column,
 			     int        row)
 {
-  return NULL;
+  return vte_terminal_match_check(VTE_TERMINAL(widget), column, row, NULL);
 }
 
 void
