@@ -58,6 +58,8 @@ static TerminalEncoding encodings[] = {
 
   { TERMINAL_ENCODING_ISO_8859_1, FALSE,
     "ISO-8859-1", N_("Western") },
+  { TERMINAL_ENCODING_ISO_8859_2, FALSE,
+    "ISO-8859-2", N_("Central European") },
   { TERMINAL_ENCODING_ISO_8859_3, FALSE,
     "ISO-8859-3", N_("South European") },
   { TERMINAL_ENCODING_ISO_8859_4, FALSE,
