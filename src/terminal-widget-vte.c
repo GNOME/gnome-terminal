@@ -425,6 +425,22 @@ terminal_widget_disconnect_selection_changed (GtkWidget *widget,
   g_signal_handlers_disconnect_by_func (widget, callback, data);
 }
 
+void
+terminal_widget_connect_encoding_changed      (GtkWidget *widget,
+                                               GCallback  callback,
+                                               void      *data)
+{
+  g_signal_connect (widget, "encoding-changed",
+		    G_CALLBACK (callback), data);
+}
+
+void
+terminal_widget_disconnect_encoding_changed   (GtkWidget *widget,
+                                               GCallback  callback,
+                                               void      *data)
+{
+  g_signal_handlers_disconnect_by_func (widget, callback, data);
+}
 
 const char*
 terminal_widget_get_title (GtkWidget *widget)

@@ -127,6 +127,12 @@ void terminal_widget_connect_selection_changed     (GtkWidget *widget,
 void terminal_widget_disconnect_selection_changed  (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
+void terminal_widget_connect_encoding_changed      (GtkWidget *widget,
+                                                    GCallback  callback,
+                                                    void      *data);
+void terminal_widget_disconnect_encoding_changed   (GtkWidget *widget,
+                                                    GCallback  callback,
+                                                    void      *data);
 
 const char* terminal_widget_get_title         (GtkWidget *widget);
 const char* terminal_widget_get_icon_title    (GtkWidget *widget);

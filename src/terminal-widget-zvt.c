@@ -810,6 +810,22 @@ terminal_widget_disconnect_selection_changed (GtkWidget *widget,
   zvt_data_remove_callback (zd, CB_SELECTION_CHANGED, callback, data);
 }
 
+void
+terminal_widget_connect_encoding_changed      (GtkWidget *widget,
+                                               GCallback  callback,
+                                               void      *data)
+{
+  ; /* does nothing */
+}
+
+void
+terminal_widget_disconnect_encoding_changed   (GtkWidget *widget,
+                                               GCallback  callback,
+                                               void      *data)
+{
+  ; /* does nothing */
+}
+
 const char*
 terminal_widget_get_title (GtkWidget *widget)
 {

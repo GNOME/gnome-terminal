@@ -1085,6 +1085,13 @@ selection_changed_callback (TerminalScreen *screen,
   update_copy_sensitivity (window);
 }
 
+static void
+encoding_changed_callback (TerminalScreen *screen,
+			  TerminalWindow *window)
+{
+  update_active_encoding_name (window);
+}
+
 void
 terminal_window_add_screen (TerminalWindow *window,
                             TerminalScreen *screen)
@@ -1136,6 +1143,11 @@ terminal_window_add_screen (TerminalWindow *window,
   g_signal_connect (G_OBJECT (screen),
                     "selection_changed",
                     G_CALLBACK (selection_changed_callback),
+                    window);
+  
+  g_signal_connect (G_OBJECT (screen),
+                    "encoding_changed",
+                    G_CALLBACK (encoding_changed_callback),
                     window);
   
   term = terminal_screen_get_widget (screen);

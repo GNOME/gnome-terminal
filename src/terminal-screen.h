@@ -54,6 +54,7 @@ struct _TerminalScreenClass
   void (* profile_set)       (TerminalScreen *screen);
   void (* title_changed)     (TerminalScreen *screen);
   void (* selection_changed) (TerminalScreen *screen);
+  void (* encoding_changed)  (TerminalScreen *screen);
 };
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;

@@ -1,3 +1,15 @@
+2002-12-02  Nalin Dahyabhai <nsdahya1@pobox.com>
+	* src/terminal-screen.c, src/terminal-screen.h: connect to the
+	terminal widget's encoding_changed signal.  Add an encoding_changed
+	signal which is emitted when we catch the terminal widget's signal.
+	* src/terminal-widget.h: declare connect_encoding_changed()
+	and disconnect_encoding_changed() functions.
+	* src/terminal-widget-vte.c, src/terminal-widget-zvt.c: implement
+	connect_encoding_changed() and disconnect_encoding_changed() functions.
+	* src/terminal-window.c: update the encodings menu when we receive an
+	encoding_changed signal from the terminal screen object, so that we
+	update properly when an application changes the terminal's encoding.
+
 2002-12-02  Havoc Pennington  <hp@pobox.com>
 
 	* src/profile-editor.c (terminal_profile_edit): improve font

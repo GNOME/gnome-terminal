@@ -68,6 +68,7 @@ enum {
   PROFILE_SET,
   TITLE_CHANGED,
   SELECTION_CHANGED,
+  ENCODING_CHANGED,
   LAST_SIGNAL
 };
 
@@ -90,6 +91,9 @@ static void terminal_screen_widget_child_died        (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
 static void terminal_screen_widget_selection_changed (GtkWidget      *term,
+                                                      TerminalScreen *screen);
+
+static void terminal_screen_widget_encoding_changed  (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
 static void terminal_screen_setup_dnd                (TerminalScreen *screen);
@@ -217,6 +221,10 @@ terminal_screen_init (TerminalScreen *screen)
                                              G_CALLBACK (terminal_screen_widget_selection_changed),
                                              screen);
 
+  terminal_widget_connect_encoding_changed (screen->priv->term,
+                                            G_CALLBACK (terminal_screen_widget_encoding_changed),
+                                            screen);
+
   gtk_widget_show (screen->priv->term);
 }
 
@@ -252,6 +260,15 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, selection_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);  
+
+  signals[ENCODING_CHANGED] =
+    g_signal_new ("encoding_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);  
@@ -1689,6 +1706,13 @@ terminal_screen_widget_selection_changed (GtkWidget      *term,
                                           TerminalScreen *screen)
 {
   g_signal_emit (G_OBJECT (screen), signals[SELECTION_CHANGED], 0);
+}
+
+static void
+terminal_screen_widget_encoding_changed (GtkWidget      *term,
+                                         TerminalScreen *screen)
+{
+  g_signal_emit (G_OBJECT (screen), signals[ENCODING_CHANGED], 0);
 }
 
 static void
