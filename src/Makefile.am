@@ -56,7 +56,7 @@ gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
 
 schemadir   = @GCONF_SCHEMA_FILE_DIR@
-schema_DATA = profterm.schemas
+schema_DATA = gnome-terminal.schemas
 
 icondir = $(datadir)/pixmaps
 icon_DATA = gnome-terminal.png
