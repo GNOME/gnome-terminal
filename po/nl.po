@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: profterm cvs\n"
-"POT-Creation-Date: 2002-08-07 01:26+0200\n"
-"PO-Revision-Date: 2002-08-07 04:16+0200\n"
+"POT-Creation-Date: 2002-11-22 05:06+0100\n"
+"PO-Revision-Date: 2002-11-23 18:11+0100\n"
 "Last-Translator: Reinout van Schouwen <reinout@cs.vu.nl>\n"
 "Language-Team: NL <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,28 +21,36 @@ msgid "Command line"
 msgstr "Opdrachtregel"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:938
+#: src/terminal-profile.c:272 src/terminal-window.c:491 src/terminal.c:928
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/eggcellrendererkeys.c:159 src/eggcellrendererkeys.c:160
-msgid "Accelerator modifiers"
-msgstr "Sneltoets aanpassing:"
-
-#: src/eggcellrendererkeys.c:168 src/eggcellrendererkeys.c:169
+#: src/eggcellrendererkeys.c:160 src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Sneltoets"
 
-#: src/eggcellrendererkeys.c:207 src/gnome-terminal.glade2.h:18
+#: src/eggcellrendererkeys.c:170 src/eggcellrendererkeys.c:171
+msgid "Accelerator modifiers"
+msgstr "Sneltoets aanpassing:"
+
+#: src/eggcellrendererkeys.c:180
+msgid "Accel Mode"
+msgstr "Versnellingsmodus"
+
+#: src/eggcellrendererkeys.c:181
+msgid "The type of accelerator."
+msgstr "Het soort sneltoets"
+
+#: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:18
 #: src/terminal-accels.c:707
 msgid "Disabled"
 msgstr "Uitgeschakeld"
 
-#: src/eggcellrendererkeys.c:318 src/eggcellrendererkeys.c:534
+#: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:563
 msgid "Type a new accelerator, or press Backspace to clear"
 msgstr "Geef een nieuwe sneltoets, of Backspace om te verwijderen"
 
-#: src/eggcellrendererkeys.c:537
+#: src/eggcellrendererkeys.c:566
 msgid "Type a new accelerator"
 msgstr "Geef een nieuwe sneltoets"
 
@@ -391,7 +399,7 @@ msgstr "_Zelfde lettertype gebruiken als in andere toepassingen"
 
 #: src/gnome-terminal.glade2.h:87
 msgid "_kilobytes"
-msgstr "_kilobytes"
+msgstr "_kilobyte"
 
 #: src/gnome-terminal.glade2.h:88
 msgid "_lines"
@@ -399,7 +407,7 @@ msgstr "_lijnen"
 
 #: src/gnome-terminal.glade2.h:89
 msgid "kilobytes"
-msgstr "kilobytes"
+msgstr "kilobyte"
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -433,7 +441,7 @@ msgstr "Rxvt"
 msgid "Custom"
 msgstr "Aangepast"
 
-#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2267
+#: src/profile-editor.c:883 src/terminal-window.c:2079 src/terminal.c:2262
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Er is een fout opgetreden bij het afbeelden van hulp: %s"
@@ -529,17 +537,17 @@ msgstr "Nieuw tabblad"
 msgid "New Window"
 msgstr "Nieuw venster"
 
-#: src/terminal-accels.c:75 src/terminal.c:1691
+#: src/terminal-accels.c:75 src/terminal.c:1686
 msgid "New Profile"
 msgstr "Nieuw profiel"
 
 #: src/terminal-accels.c:77
 msgid "Close Tab"
-msgstr "S_luit tabblad"
+msgstr "Tabblad sluiten"
 
 #: src/terminal-accels.c:79
 msgid "Close Window"
-msgstr "_Sluit venster"
+msgstr "Venster Sluiten"
 
 #: src/terminal-accels.c:85
 msgid "Copy"
@@ -551,11 +559,11 @@ msgstr "Plakken"
 
 #: src/terminal-accels.c:93
 msgid "Hide and Show menubar"
-msgstr "Verberg en toon de menubalk"
+msgstr "De menubalk tonen en verbergen"
 
 #: src/terminal-accels.c:95
 msgid "Full Screen"
-msgstr "Volledig scherm"
+msgstr "Schermvullend"
 
 #: src/terminal-accels.c:101
 msgid "Set Title"
@@ -563,11 +571,11 @@ msgstr "Titel instellen"
 
 #: src/terminal-accels.c:103
 msgid "Reset"
-msgstr "Reset"
+msgstr "Resetten"
 
 #: src/terminal-accels.c:105
 msgid "Reset and Clear"
-msgstr "Reset en leegmaken"
+msgstr "Resetten en wissen"
 
 #: src/terminal-accels.c:111
 msgid "Switch to Previous Tab"
@@ -649,7 +657,7 @@ msgstr "Ga"
 msgid "Help"
 msgstr "Hulp"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1168
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1158
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -661,33 +669,33 @@ msgid ""
 "There was an error subscribing to notification of terminal keybinding "
 "changes. (%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het aanmelden van notificatie bij terminal "
-"profiel veranderingen. (%s)\n"
+"Er is een fout opgetreden bij het instellen van: notificatie bij terminal "
+"profielveranderingen. (%s)\n"
 
 #: src/terminal-accels.c:309
 #, c-format
 msgid "There was an error loading a terminal keybinding. (%s)\n"
-msgstr "Er is een fout opgetreden bij het laden van de toetsverbinding. (%s)\n"
+msgstr "Er is een fout opgetreden bij het laden van de toetsbinding. (%s)\n"
 
 #: src/terminal-accels.c:325
 #, c-format
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr ""
-"De waarde van de configuratie sleutel %s is niet geldig; De waarde is \"%s\"\n"
+"De waarde van de configuratiesleutel %s is niet geldig; De waarde is \"%s\"\n"
 
 #: src/terminal-accels.c:348 src/terminal-window.c:773
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het laden van configuratie waarde voor het "
+"Er is een fout opgetreden bij het laden van configuratiewaarde voor het "
 "gebruik van sneltoetsen. (%s)\n"
 
 #: src/terminal-accels.c:362
 #, c-format
 msgid "There was an error subscribing to notification for use_mnemonics (%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het aanmelden van notificatie voor "
+"Er is een fout opgetreden bij het instellen van notificatie: voor "
 "use_mnemonics. (%s)\n"
 
 #: src/terminal-accels.c:373
@@ -696,7 +704,7 @@ msgid ""
 "There was an error loading config value for whether to use menu accelerators. "
 "(%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het laden van configuratiewaarde voor het "
+"Er is een fout opgetreden bij het laden van de configuratiewaarde voor het "
 "gebruik van menu-sneltoetsen. (%s)\n"
 
 #: src/terminal-accels.c:389
@@ -705,30 +713,30 @@ msgid ""
 "There was an error subscribing to notification for use_menu_accelerators "
 "(%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het aanmelden van notificatie voor "
+"Er is een fout opgetreden bij het instellen van notificatie voor "
 "use_menu_accelerators. (%s)\n"
 
 #: src/terminal-accels.c:767
 #, c-format
 msgid "Error propagating accelerator change to configuration database: %s\n"
-msgstr "Fout bij wijzigen van sneltoets in de configuratie database: %s\n"
+msgstr "Fout bij wijzigen van sneltoets in de configuratiedatabase: %s\n"
 
 #: src/terminal-accels.c:937
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
-msgstr "Fout bij toevoegen van sneltoets aan de configuratie database: %s\n"
+msgstr "Fout bij toevoegen van sneltoets aan de configuratiedatabase: %s\n"
 
 #: src/terminal-accels.c:968
 #, c-format
 msgid "Error setting use_mnemonics key: %s\n"
-msgstr "Fout bij aanpassen van de use_mnemonics sleutel: %s\n"
+msgstr "Fout bij aanpassen van de use_mnemonics-sleutel: %s\n"
 
 #: src/terminal-accels.c:998
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr ""
-"Er is een fout opgetreden bij het instellen van de use_menu_accelerators "
-"sleutel: %s\n"
+"Er is een fout opgetreden bij het instellen van de "
+"use_menu_accelerators-sleutel: %s\n"
 
 #: src/terminal-accels.c:1099
 #, c-format
@@ -737,15 +745,15 @@ msgid ""
 "incorrectly, so the keybindings dialog can't be displayed."
 msgstr ""
 "Het bestand \"%s\" ontbreekt. Dit geeft aan dat de applicatie incorrect is "
-"geinstalleerd, waardoor de profiel editor niet weer gegeven kan worden."
+"geïnstalleerd, waardoor de profiel-editor niet weergegeven kan worden."
 
 #: src/terminal-accels.c:1154
 msgid "_Action"
 msgstr "_Actie"
 
-#: src/terminal-accels.c:1173
+#: src/terminal-accels.c:1174
 msgid "Accelerator _Key"
-msgstr "Sneltoets"
+msgstr "_Sneltoets"
 
 #: src/terminal-profile.c:403
 #, c-format
@@ -753,18 +761,18 @@ msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
 "(%s)\n"
 msgstr ""
-"Er is een fout opgetreden bij het aanmelden van notificatie bij terminal "
-"profiel veranderingen. (%s)\n"
+"Er is een fout opgetreden bij het instellen van: notificatie bij terminal "
+"profielveranderingen. (%s)\n"
 
 #: src/terminal-profile.c:998
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Kan geen pictogram genaamd \"%s\" vinden voor terminal profiel \"%s\"\n"
+msgstr "Kan geen pictogram genaamd \"%s\" vinden voor terminalprofiel \"%s\"\n"
 
 #: src/terminal-profile.c:1012
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Icoon \"%s\" voor terminal profiel \"%s\" laden is mislukt: %s\n"
+msgstr "Icoon \"%s\" voor terminalprofiel \"%s\" laden is mislukt: %s\n"
 
 #: src/terminal-profile.c:1189
 #, c-format
@@ -779,7 +787,7 @@ msgstr ""
 msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
-"Achtergrond afbeelding \"%s\" voor terminal profiel \"%s\" laden is mislukt: "
+"Achtergrond afbeelding \"%s\" voor terminalprofiel \"%s\" laden is mislukt: "
 "%s\n"
 
 #: src/terminal-profile.c:1830
@@ -844,9 +852,7 @@ msgstr "Palet had %d items in plaats van %d\n"
 #: src/terminal-screen.c:616
 #, c-format
 msgid "Could not load font \"%s\"\n"
-msgstr ""
-"Kan het lettertype \"%s\"\n"
-" niet laden\n"
+msgstr "Kan het lettertype \"%s\"  niet laden\n"
 
 #: src/terminal-screen.c:773
 #, c-format
@@ -892,11 +898,11 @@ msgstr "_Toetsenbord beveiligen"
 
 #: src/terminal-screen.c:1317
 msgid "_Open Link"
-msgstr "_Open Koppeling"
+msgstr "Link _Openen"
 
 #: src/terminal-screen.c:1324
 msgid "_Copy Link Address"
-msgstr "Koppelingsadres _kopiëren"
+msgstr "Linkadres _kopiëren"
 
 #: src/terminal-screen.c:1577
 msgid "Change terminal title"
@@ -906,41 +912,41 @@ msgstr "Terminaltitel wijzigen"
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: src/terminal-screen.c:1723
+#: src/terminal-screen.c:1722
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain gesleept naar de terminal had verkeerd formaat (%d) of lengte "
 "(%d)\n"
 
-#: src/terminal-screen.c:1746
+#: src/terminal-screen.c:1745
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Kleur gesleept naar de terminal had verkeerd formaat (%d) of lengte (%d)\n"
 
-#: src/terminal-screen.c:1789
+#: src/terminal-screen.c:1788
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
-"Mozilla url gesleept naar de terminal had verkeerd formaat (%d) of lengte "
+"Mozilla-url gesleept naar de terminal had verkeerd formaat (%d) of lengte "
 "(%d)\n"
 
-#: src/terminal-screen.c:1838
+#: src/terminal-screen.c:1837
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URU lijst gesleept naar de terminal had verkeerd formaat (%d) of lengte (%d)\n"
 
-#: src/terminal-screen.c:1892
+#: src/terminal-screen.c:1891
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
-"Afbeeldings naam gesleept naar de terminal had verkeerd formaat (%d) of "
-"lengte (%d)\n"
+"Afbeeldingsnaam gesleept naar de terminal had verkeerd formaat (%d) of lengte "
+"(%d)\n"
 
-#: src/terminal-screen.c:1918
+#: src/terminal-screen.c:1917
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Fout bij converteren van URI \"%s\"  naar bestandsnaam: %s\n"
@@ -949,7 +955,7 @@ msgstr "Fout bij converteren van URI \"%s\"  naar bestandsnaam: %s\n"
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
 msgstr ""
-"Er is een fout opgetreden bij het aanmaken van de dochtertaak voor deze "
+"Er is een fout opgetreden bij het aanmaken van de dochterproces voor deze "
 "terminal: %s"
 
 #: src/terminal-widget-zvt.c:1050
@@ -981,7 +987,7 @@ msgstr "Nieuw _profiel..."
 
 #: src/terminal-window.c:553
 msgid "_Close Window"
-msgstr "_Sluit venster"
+msgstr "Venster _Sluiten"
 
 #: src/terminal-window.c:558
 msgid "C_lose Tab"
@@ -1013,11 +1019,11 @@ msgstr "Titel _instellen..."
 
 #: src/terminal-window.c:631
 msgid "_Reset"
-msgstr "_Reset"
+msgstr "_Resetten"
 
 #: src/terminal-window.c:634
 msgid "Reset and C_lear"
-msgstr "Reset en _leegmaken"
+msgstr "Resetten en _wissen"
 
 #: src/terminal-window.c:648
 msgid "_Previous Tab"
@@ -1048,7 +1054,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Bestand"
 
-#: src/terminal-window.c:1656 src/terminal.c:2298
+#: src/terminal-window.c:1656 src/terminal.c:2293
 msgid "_Edit"
 msgstr "Be_werken"
 
@@ -1099,15 +1105,15 @@ msgstr "Copyright 2002 Havoc Pennington"
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
-#: src/terminal.c:164
+#: src/terminal.c:166
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Voer het argument voor deze optie in de terminal uit."
 
-#: src/terminal.c:173
+#: src/terminal.c:175
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "De rest van de opdrachtregel in de terminal uitvoeren."
 
-#: src/terminal.c:182
+#: src/terminal.c:184
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1115,11 +1121,11 @@ msgstr ""
 "Open een nieuw venster met een tabblad met het gegeven profiel. Meer dan 1 "
 "van deze opties kan worden meegegeven."
 
-#: src/terminal.c:183 src/terminal.c:192
+#: src/terminal.c:185 src/terminal.c:194
 msgid "PROFILENAME"
 msgstr "PROFIELNAAM"
 
-#: src/terminal.c:191
+#: src/terminal.c:193
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1127,7 +1133,7 @@ msgstr ""
 "Open een nieuw tabblad in het laatst geopende venster met het gegeven "
 "profiel. Meer dan 1 van deze opties kan worden meegegeven."
 
-#: src/terminal.c:200
+#: src/terminal.c:202
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used internally "
 "to save sessions."
@@ -1135,11 +1141,11 @@ msgstr ""
 "Open een nieuw venster met een tabblad met het gegeven profiel ID. Wordt "
 "intern gebruikt om sessies op te slaan."
 
-#: src/terminal.c:201 src/terminal.c:210
+#: src/terminal.c:203 src/terminal.c:212
 msgid "PROFILEID"
 msgstr "PROFIELID"
 
-#: src/terminal.c:209
+#: src/terminal.c:211
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1147,7 +1153,7 @@ msgstr ""
 "Open een nieuw tabblad in het laatst geopende venster met het gegeven profiel "
 "ID. Wordt intern gebruikt om sessies op te slaan."
 
-#: src/terminal.c:218
+#: src/terminal.c:220
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1157,7 +1163,7 @@ msgstr ""
 "1 venster toegepast; kan eenmalig worden opgegeven voor elk venster dat u "
 "vanaf de opdrachtregel heeft aangemaakt."
 
-#: src/terminal.c:227
+#: src/terminal.c:229
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1167,7 +1173,7 @@ msgstr ""
 "1 venster toegepast; kan eenmalig worden opgegeven voor elk venster dat u "
 "vanaf de opdrachtregel heeft aangemaakt."
 
-#: src/terminal.c:236
+#: src/terminal.c:238
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1175,34 +1181,34 @@ msgstr ""
 "X geometrie specificatie (zie \"X\" man pagina), kan 1 keer per venster dat "
 "geopend word opgegeven worden."
 
-#: src/terminal.c:237
+#: src/terminal.c:239
 msgid "GEOMETRY"
 msgstr "GEOMETRIE"
 
-#: src/terminal.c:245
+#: src/terminal.c:247
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Registreer niet bij de activatie nameserver, hergebruik een actieve terminal"
 
-#: src/terminal.c:254
+#: src/terminal.c:256
 msgid "Set the terminal's title"
 msgstr "Titel van de terminal instellen"
 
-#: src/terminal.c:255
+#: src/terminal.c:257
 msgid "TITLE"
 msgstr "TITEL"
 
-#: src/terminal.c:263
+#: src/terminal.c:265
 msgid "Set the terminal's working directory"
 msgstr "Werkmap van de terminal instellen"
 
-#: src/terminal.c:264
+#: src/terminal.c:266
 msgid "DIRNAME"
 msgstr "MAPNAAM"
 
-#: src/terminal.c:601
+#: src/terminal.c:603
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Kon pictogram niet laden: \"%s\": %s\n"
@@ -1232,7 +1238,7 @@ msgstr ""
 "Optie --execute/-x vereist het opgeven van een opdracht die op de rest van de "
 "opdrachtregel uitgevoerd meot worden\n"
 
-#: src/terminal.c:727
+#: src/terminal.c:725
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1240,7 +1246,7 @@ msgstr ""
 "Optie --window-with-profile vereist een argument die aangeeft welk profiel "
 "gebruikt moet worden\n"
 
-#: src/terminal.c:746
+#: src/terminal.c:742
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1248,39 +1254,39 @@ msgstr ""
 "Optie --tab-with-profile vereist een argument die aangeeft welk profiel "
 "gebruikt moet worden\n"
 
-#: src/terminal.c:777
+#: src/terminal.c:773
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "--show-menubar optie is tweemaal opgegeven voor hetzelfde venster\n"
 
-#: src/terminal.c:803
+#: src/terminal.c:799
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "--hide-menubar optie is tweemaal opgegeven voor hetzelfde venster\n"
 
-#: src/terminal.c:828
+#: src/terminal.c:822
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Optie --geometry vereist een argument die de geometrie opgeeft\n"
 
-#: src/terminal.c:837 src/terminal.c:847
+#: src/terminal.c:831 src/terminal.c:841
 msgid "Two geometries given for one window\n"
 msgstr "Twee afmetingen opgegeven voor één venster\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:863
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Optie --title vereist de titel als argument\n"
 
-#: src/terminal.c:879
+#: src/terminal.c:871
 msgid "Two titles given for one tab\n"
 msgstr "Twee titels gegeven voor één tab\n"
 
-#: src/terminal.c:896
+#: src/terminal.c:886
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr "Optie --working-directory vereist een argument die de map opgeeft\n"
 
-#: src/terminal.c:904
+#: src/terminal.c:894
 msgid "Two working directories given for one tab\n"
 msgstr "Twee werkmappen gegeven voor één tab\n"
 
-#: src/terminal.c:913
+#: src/terminal.c:903
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1290,17 +1296,17 @@ msgstr ""
 "gnome-terminal; u zou een profiel kunnen creëren met de gewenste instelling "
 "en de nieuwe --window-with-profile optie gebruiken\n"
 
-#: src/terminal.c:1033
+#: src/terminal.c:1023
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Profiel '%s' bestaat niet, standaard profiel wordt gebruikt\n"
 
-#: src/terminal.c:1142
+#: src/terminal.c:1132
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Ongeldig argument: \"%s\"\n"
 
-#: src/terminal.c:1184
+#: src/terminal.c:1174
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1309,110 +1315,110 @@ msgstr ""
 "Er is een fout opgetreden bij het aanmelden van notificatie bij veranderingen "
 "van de terminal profielenlijst. (%s)\n"
 
-#: src/terminal.c:1292
+#: src/terminal.c:1287
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ongeldige geometrie tekenreeks \"%s\"\n"
 
-#: src/terminal.c:1352
+#: src/terminal.c:1347
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Er is een fout opgetreden bij het ophalen van een lijst met "
 "terminalprofielen. (%s)\n"
 
-#: src/terminal.c:1585
+#: src/terminal.c:1580
 msgid "You have to name your profile."
 msgstr "U moet uw profiel een naam geven."
 
-#: src/terminal.c:1595
+#: src/terminal.c:1590
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "U heeft al een profiel genaamd \"%s\""
 
-#: src/terminal.c:1632
+#: src/terminal.c:1627
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Het profiel dat u geselecteerd heeft als basis voor uw nieuwe profiel bestaat "
 "niet meer"
 
-#: src/terminal.c:1696
+#: src/terminal.c:1691
 msgid "C_reate"
 msgstr "C_reëren"
 
-#: src/terminal.c:1721
+#: src/terminal.c:1716
 msgid "Profile _name:"
 msgstr "_Profielnaam:"
 
-#: src/terminal.c:1725
+#: src/terminal.c:1720
 msgid "Enter profile name"
 msgstr "Voer de profielnaam in"
 
-#: src/terminal.c:1740
+#: src/terminal.c:1735
 msgid "_Base on:"
 msgstr "_Baseren op:"
 
-#: src/terminal.c:1888
+#: src/terminal.c:1883
 msgid "Profile list"
 msgstr "Profielenlijst"
 
-#: src/terminal.c:1961
+#: src/terminal.c:1956
 msgid "You must select one or more profiles to delete."
 msgstr "U moet een of meerdere profielen selecteren om te verwijderen."
 
-#: src/terminal.c:1984
+#: src/terminal.c:1979
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "U moet minimaal één profiel hebben; u kunt ze niet allemaal verwijderen."
 
-#: src/terminal.c:2002
+#: src/terminal.c:1997
 msgid "Delete these two profiles?\n"
 msgstr "Deze twee profielen verwijderen?\n"
 
-#: src/terminal.c:2004
+#: src/terminal.c:1999
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Deze %d profielen verwijderen?\n"
 
-#: src/terminal.c:2022
+#: src/terminal.c:2017
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Profiel \"%s\" verwijderen?"
 
-#: src/terminal.c:2044
+#: src/terminal.c:2039
 msgid "Delete Profile"
 msgstr "Profiel Verwijderen"
 
-#: src/terminal.c:2331
+#: src/terminal.c:2326
 msgid "Edit Profiles"
 msgstr "Profielen Bewerken"
 
-#: src/terminal.c:2371
+#: src/terminal.c:2366
 msgid "Profile _used when launching a new terminal:"
 msgstr "Gebr_uikte profiel wanneer er een nieuwe terminal word opgestart:"
 
-#: src/terminal.c:2393
+#: src/terminal.c:2388
 msgid "_Profiles:"
 msgstr "_Profielen"
 
-#: src/terminal.c:2442
+#: src/terminal.c:2437
 msgid "Click to open new profile dialog"
 msgstr "Klik om nieuw profieldialoogvenster te openen"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2450
 msgid "Click to open edit profile dialog"
 msgstr "Klik om profielbewerkingsdialoogvenster te openen"
 
-#: src/terminal.c:2465
+#: src/terminal.c:2460
 msgid "Click to delete selected profile"
 msgstr "Klik om geselecteerd profiel te wissen"
 
-#: src/terminal.c:2514
+#: src/terminal.c:2509
 msgid "Click button to choose profile"
 msgstr "Klik op de knop om een profiel te kiezen"
 
-#: src/terminal.c:2954
+#: src/terminal.c:2955
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1420,7 +1426,7 @@ msgstr ""
 "Het lijkt dat je gnome-terminal niet hebt. Server geinstalleerd in een "
 "geldige locatie. Fabrieks modus uitgeschakeld.\n"
 
-#: src/terminal.c:2957
+#: src/terminal.c:2958
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1428,7 +1434,7 @@ msgstr ""
 "Fout bij registreren van de terminal bij de activatie service; fabrieks modus "
 "uitgeschakeld.\n"
 
-#: src/terminal.c:2992
+#: src/terminal.c:2993
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Niet gelukt om terminal server op te halen van de activatie server\n"
 
