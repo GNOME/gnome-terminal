@@ -1,3 +1,13 @@
+2002-05-01  Havoc Pennington  <hp@redhat.com>
+
+	* src/terminal-window.c (notebook_page_switched_callback):
+	maintain the same grid as we switch between tabs, so at least
+	going from tab A to B to A doesn't resize the terminal 
+	in the end.
+	(terminal_window_remove_screen): apply the grid from the screen 
+	being removed to the newly-active screen, if the removed screen 
+	was active; fixes #79829
+
 2002-05-01  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-screen.c (new_tab_callback): use default profile,

@@ -1018,11 +1018,24 @@ void
 terminal_window_remove_screen (TerminalWindow *window,
                                TerminalScreen *screen)
 {
+  int old_grid_width;
+  int old_grid_height;
+  
   g_return_if_fail (terminal_screen_get_window (screen) == window);
+
+  old_grid_width = -1;
+  old_grid_height = -1;
   
   if (window->priv->active_term == screen)
-    window->priv->active_term = NULL;
+    {
+      GtkWidget *old_active_widget;
+      
+      window->priv->active_term = NULL;
 
+      old_active_widget = terminal_screen_get_widget (screen);
+      terminal_widget_get_size (old_active_widget, &old_grid_width, &old_grid_height);
+    }
+      
   window->priv->terms = g_list_remove (window->priv->terms, screen);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
@@ -1052,9 +1065,20 @@ terminal_window_remove_screen (TerminalWindow *window,
   update_notebook (window);
 
   /* Put ourselves back in a sane state */
+  /* FIXME this block never gets called because removing a notebook page
+   * already emitted switch_page and updated the active terminal.
+   */
   if (window->priv->active_term == NULL &&
       window->priv->terms)
-    terminal_window_set_active (window, window->priv->terms->data);
+    {
+      terminal_window_set_active (window, window->priv->terms->data);
+    }
+
+#ifdef DEBUG_GEOMETRY
+  g_print ("setting size with forced grid after removing a terminal\n");
+#endif
+  terminal_window_set_size_force_grid (window, window->priv->active_term,
+                                       TRUE, old_grid_width, old_grid_height);
 
   reset_tab_menuitems (window);
   update_tab_sensitivity (window);
@@ -1099,6 +1123,9 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
 
   if (window->priv->active_term)
     {
+#ifdef DEBUG_GEOMETRY
+      g_print ("setting size after toggling menubar visibility\n");
+#endif
       terminal_window_set_size (window, window->priv->active_term, TRUE);
     }
 }
@@ -1113,6 +1140,16 @@ void
 terminal_window_set_size (TerminalWindow *window,
                           TerminalScreen *screen,
                           gboolean        even_if_mapped)
+{
+  terminal_window_set_size_force_grid (window, screen, even_if_mapped, -1, -1);
+}
+
+void
+terminal_window_set_size_force_grid (TerminalWindow *window,
+                                     TerminalScreen *screen,
+                                     gboolean        even_if_mapped,
+                                     int             force_grid_width,
+                                     int             force_grid_height)
 {
   /* Owen's hack from gnome-terminal */
   GtkWidget *widget;
@@ -1157,14 +1194,20 @@ terminal_window_set_size (TerminalWindow *window,
 
   terminal_widget_get_cell_size (widget, &char_width, &char_height);
   terminal_widget_get_size (widget, &grid_width, &grid_height);
+
+  if (force_grid_width >= 0)
+    grid_width = force_grid_width;
+  if (force_grid_height >= 0)
+    grid_height = force_grid_height;
+  
   terminal_widget_get_padding (widget, &xpad, &ypad);
   
   w += xpad + char_width * grid_width;
   h += ypad + char_height * grid_height;
 
 #ifdef DEBUG_GEOMETRY
-  g_print ("set size: grid %dx%d setting %dx%d pixels\n",
-           grid_width, grid_height, w, h);
+  g_print ("set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
+           grid_width, grid_height, force_grid_width, force_grid_height, w, h);
 #endif
   
   if (even_if_mapped && GTK_WIDGET_MAPPED (app))
@@ -1214,6 +1257,9 @@ terminal_window_set_active (TerminalWindow *window,
                                                         screen_get_hbox (screen)));
 
   /* set size of window to current grid size */
+#ifdef DEBUG_GEOMETRY
+  g_print ("setting size after flipping notebook pages\n");
+#endif
   terminal_window_set_size (window, screen, TRUE);
   
   gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
@@ -1313,6 +1359,18 @@ notebook_page_switched_callback (GtkWidget       *notebook,
   GtkWidget* page_widget;
   TerminalScreen *screen;
   GtkWidget *menu_item;
+  int old_grid_width, old_grid_height;
+  GtkWidget *old_widget;
+  
+  old_widget = NULL;
+  old_grid_width = -1;
+  old_grid_height = -1;
+
+  if (window->priv->active_term)
+    {
+      old_widget = terminal_screen_get_widget (window->priv->active_term);
+      terminal_widget_get_size (old_widget, &old_grid_width, &old_grid_height);
+    }
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
@@ -1325,6 +1383,14 @@ notebook_page_switched_callback (GtkWidget       *notebook,
 
   terminal_window_set_active (window, screen);
 
+  /* This is so we maintain the same grid moving among tabs with
+   * different fonts.
+   */
+#ifdef DEBUG_GEOMETRY
+  g_print ("setting size in switch_page handler\n");
+#endif
+  terminal_window_set_size_force_grid (window, screen, TRUE, old_grid_width, old_grid_height);
+  
   update_tab_sensitivity (window);
   
   menu_item = screen_get_menuitem (screen);

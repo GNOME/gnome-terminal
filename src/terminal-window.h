@@ -82,6 +82,11 @@ void terminal_window_update_geometry  (TerminalWindow *window);
 void terminal_window_set_size         (TerminalWindow *window,
                                        TerminalScreen *screen,
                                        gboolean        even_if_mapped);
+void terminal_window_set_size_force_grid (TerminalWindow *window,
+                                          TerminalScreen *screen,
+                                          gboolean        even_if_mapped,
+                                          int             force_grid_width,
+                                          int             force_grid_height);
 
 void     terminal_window_set_fullscreen (TerminalWindow *window,
                                          gboolean        setting);
