@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:42-0300\n"
-"PO-Revision-Date: 2004-06-09 23:31+0900\n"
+"POT-Creation-Date: 2004-07-03 16:26+0900\n"
+"PO-Revision-Date: 2004-07-03 16:25+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -616,9 +616,8 @@ msgid "_Transparent background"
 msgstr "透過画像(_T)"
 
 #: src/gnome-terminal.glade2.h:104
-#, fuzzy
 msgid "_Update login records when command is launched"
-msgstr "コマンドを実行した時に utmp/wtmp 記録を更新する(_U)"
+msgstr "コマンドを実行した時にログイン記録を更新する(_U)"
 
 #: src/gnome-terminal.glade2.h:105
 msgid "_Use the system terminal font"
@@ -796,12 +795,12 @@ msgstr ""
 "その前にハイフンを付けます)。"
 
 #: src/gnome-terminal.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"TRUE にすると、端末内でコマンドが実行された時に utmp/wtmp を更新します。"
+"TRUE にすると、端末内でコマンドが実行された時に utmp と wtmp のシステム・ログ"
+"イン情報を記録します。"
 
 #: src/gnome-terminal.schemas.in.h:29
 msgid ""
@@ -1558,9 +1557,8 @@ msgid "Whether to silence terminal bell"
 msgstr "端末ベルを消すかどうか"
 
 #: src/gnome-terminal.schemas.in.h:134
-#, fuzzy
 msgid "Whether to update login records when launching terminal command"
-msgstr "端末コマンドを実行したときに utmp/wtmp を更新するかどうか"
+msgstr "端末内でコマンドを実行したときにログイン情報を更新するかどうか"
 
 #: src/gnome-terminal.schemas.in.h:135
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -1576,7 +1574,7 @@ msgstr "システム・フォントを使用するかどうか"
 #. bug 144810 for an use case. In most cases, this should be left alone.
 #: src/gnome-terminal.schemas.in.h:141
 msgid "[UTF-8,current]"
-msgstr ""
+msgstr "[UTF-8,EUC-JP,現在のロケール]"
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -2184,55 +2182,50 @@ msgstr "メニューバーの表示(_B)"
 msgid "_Full Screen"
 msgstr "フルスクリーン(_F)"
 
-#. the default label for GTK_STOCK_ZOOM_100 does not follow the HIG...
-#: src/terminal-window.c:929
-msgid "_Normal Size"
-msgstr "通常サイズ(_N)"
-
-#: src/terminal-window.c:951
+#: src/terminal-window.c:949
 msgid "Change _Profile"
 msgstr "プロファイルの変更(_P)"
 
-#: src/terminal-window.c:954
+#: src/terminal-window.c:952
 msgid "_Set Title..."
 msgstr "タイトルの設定(_S)..."
 
-#: src/terminal-window.c:961
+#: src/terminal-window.c:959
 msgid "Set _Character Encoding"
 msgstr "文字コードの設定(_C)"
 
-#: src/terminal-window.c:971
+#: src/terminal-window.c:969
 msgid "_Reset"
 msgstr "リセット(_R)"
 
-#: src/terminal-window.c:974
+#: src/terminal-window.c:972
 msgid "Reset and C_lear"
 msgstr "リセットとクリア(_L)"
 
-#: src/terminal-window.c:988
+#: src/terminal-window.c:986
 msgid "_Previous Tab"
 msgstr "前のタブへ(_P)"
 
-#: src/terminal-window.c:992
+#: src/terminal-window.c:990
 msgid "_Next Tab"
 msgstr "次のタブへ(_N)"
 
-#: src/terminal-window.c:1011
+#: src/terminal-window.c:1009
 msgid "_Contents"
 msgstr "目次(_C)"
 
-#: src/terminal-window.c:1021
+#: src/terminal-window.c:1019
 msgid "_About"
 msgstr "情報(_A)"
 
-#: src/terminal-window.c:1185
+#: src/terminal-window.c:1183
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
 "mnemonics の使用を判定する設定値を読み込む際にエラーが発生しました (%s)。\n"
 
-#: src/terminal-window.c:1204
+#: src/terminal-window.c:1202
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2240,48 +2233,52 @@ msgid ""
 msgstr ""
 "端末ウィンドウの設定変更通知を登録する際にエラーが発生しました (%s)。\n"
 
-#: src/terminal-window.c:2092
+#: src/terminal-window.c:2090
 msgid "_File"
 msgstr "ファイル(_F)"
 
-#: src/terminal-window.c:2094 src/terminal.c:2827
+#: src/terminal-window.c:2092 src/terminal.c:2827
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: src/terminal-window.c:2096
+#: src/terminal-window.c:2094
 msgid "_View"
 msgstr "表示(_V)"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2096
 msgid "_Terminal"
 msgstr "端末(_T)"
 
-#: src/terminal-window.c:2100
+#: src/terminal-window.c:2098
 msgid "Ta_bs"
 msgstr "タブ(_T)"
 
-#: src/terminal-window.c:2102
+#: src/terminal-window.c:2100
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: src/terminal-window.c:2283
+#: src/terminal-window.c:2281
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
 msgstr[0] ""
+"このウィンドウではタブが一つ開いています。ウィンドウを閉じるとそのタブも閉じ"
+"ることになります。"
 msgstr[1] ""
+"このウィンドウではタブが %d 個開いています。ウィンドウを閉じると全てのタブも"
+"閉じることになります。"
 
-#: src/terminal-window.c:2288
+#: src/terminal-window.c:2286
 msgid "Close all tabs?"
 msgstr "全てのタブを閉じますか？"
 
-#: src/terminal-window.c:2300
+#: src/terminal-window.c:2298
 msgid "Close All Tabs"
 msgstr "全てのタブを閉じる"
 
-#: src/terminal-window.c:2692
+#: src/terminal-window.c:2690
 msgid "translator_credits"
 msgstr ""
 "相花 毅 <aihana@gnome.gr.jp>\n"
@@ -2289,7 +2286,7 @@ msgstr ""
 "James Hashida <khashida@redhat.com>\n"
 "日本GNOMEユーザー会 <http://www.gnome.gr.jp>"
 
-#: src/terminal-window.c:2704
+#: src/terminal-window.c:2702
 msgid "GNOME Terminal"
 msgstr "GNOME 端末"
 
