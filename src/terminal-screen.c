@@ -1299,10 +1299,10 @@ terminal_screen_do_popup (TerminalScreen *screen,
                              GTK_WIDGET (screen->priv->zvt),
                              popup_menu_detach);
 
-  append_menuitem (screen->priv->popup_menu,
-                   _("_New window"),
-                   G_CALLBACK (new_window_callback),
-                   screen);
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               _("_New window"),
+                               G_CALLBACK (new_window_callback),
+                               screen);
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
                                 ACCEL_PATH_NEW_WINDOW);
   

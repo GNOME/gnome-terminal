@@ -847,7 +847,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
   
   cell_renderer = egg_cell_renderer_keys_new ();
-
+  
   g_signal_connect (G_OBJECT (cell_renderer), "keys_edited",
                     G_CALLBACK (accel_edited_callback),
                     list);

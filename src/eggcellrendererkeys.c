@@ -13,6 +13,7 @@
 #define EGG_CELL_RENDERER_TEXT_PATH "egg-cell-renderer-text"
 #define USED_MODS (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)
 
+static void             egg_cell_renderer_keys_finalize      (GObject             *object);
 static void             egg_cell_renderer_keys_init          (EggCellRendererKeys *cell_keys);
 static void             egg_cell_renderer_keys_class_init    (EggCellRendererKeysClass *cell_keys_class);
 static GtkCellEditable *egg_cell_renderer_keys_start_editing (GtkCellRenderer          *cell,
@@ -40,6 +41,8 @@ enum {
   PROP_ACCEL_KEY,
   PROP_ACCEL_MASK
 };
+
+static GtkCellRendererTextClass *parent_class = NULL;
 
 GType
 egg_cell_renderer_keys_get_type (void)
@@ -117,13 +120,17 @@ static void
 egg_cell_renderer_keys_class_init (EggCellRendererKeysClass *cell_keys_class)
 {
   GObjectClass *object_class;
-
+  
   object_class = G_OBJECT_CLASS (cell_keys_class);
+
+  parent_class = g_type_class_peek_parent (object_class);
   
   GTK_CELL_RENDERER_CLASS (cell_keys_class)->start_editing = egg_cell_renderer_keys_start_editing;
 
   object_class->set_property = egg_cell_renderer_keys_set_property;
   object_class->get_property = egg_cell_renderer_keys_get_property;
+
+  object_class->finalize = egg_cell_renderer_keys_finalize;
   
   /* FIXME if this gets moved to a real library, rename the properties
    * to match whatever the GTK convention is
@@ -167,6 +174,13 @@ egg_cell_renderer_keys_new (void)
   return GTK_CELL_RENDERER (g_object_new (EGG_TYPE_CELL_RENDERER_KEYS, NULL));
 }
 
+static void
+egg_cell_renderer_keys_finalize (GObject *object)
+{
+  
+  (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+}
+
 static gchar *
 convert_keysym_state_to_string (guint           keysym,
                                 GdkModifierType state)
@@ -183,7 +197,11 @@ egg_cell_renderer_keys_get_property  (GObject                  *object,
                                       GValue                   *value,
                                       GParamSpec               *pspec)
 {
-  EggCellRendererKeys *keys = EGG_CELL_RENDERER_KEYS (object);
+  EggCellRendererKeys *keys;
+
+  g_return_if_fail (EGG_IS_CELL_RENDERER_KEYS (object));
+
+  keys = EGG_CELL_RENDERER_KEYS (object);
   
   switch (param_id)
     {
@@ -206,7 +224,11 @@ egg_cell_renderer_keys_set_property  (GObject                  *object,
                                       const GValue             *value,
                                       GParamSpec               *pspec)
 {
-  EggCellRendererKeys *keys = EGG_CELL_RENDERER_KEYS (object);
+  EggCellRendererKeys *keys;
+
+  g_return_if_fail (EGG_IS_CELL_RENDERER_KEYS (object));
+
+  keys = EGG_CELL_RENDERER_KEYS (object);
   
   switch (param_id)
     {
@@ -269,10 +291,6 @@ grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
     return GDK_FILTER_CONTINUE;
 	
   keys = EGG_CELL_RENDERER_KEYS (data);
-
-  g_print (" prev key in renderer %s\n",
-           convert_keysym_state_to_string (keys->edit_key,
-                                           keys->edit_mask));
   
   keycode = xevent->xkey.keycode;
 
@@ -282,8 +300,8 @@ grab_key_filter (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
   edited = FALSE;
   
   state = xevent->xkey.state & USED_MODS;
-
-  XLookupString (xevent, buf, sizeof (buf), &keysym, NULL);
+  
+  XLookupString ((XKeyEvent*)xevent, buf, sizeof (buf), &keysym, NULL);
   
   if (state == 0 && keysym == GDK_Escape)
     goto out; /* cancel */
@@ -483,7 +501,7 @@ egg_cell_renderer_keys_set_accelerator (EggCellRendererKeys *keys,
       changed = TRUE;
     }  
 
-  if (TRUE)
+  if (changed)
     {
       /* sync string to the key values */
       celltext = GTK_CELL_RENDERER_TEXT (keys);

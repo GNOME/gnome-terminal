@@ -1,4 +1,6 @@
 
+EFENCE=
+
 SUBDIRS=eel
 
 INCLUDES=@TERM_CFLAGS@								\
@@ -38,7 +40,7 @@ gnome_terminal_SOURCES=				\
 	x-font-selector.h			\
 	$(EGGFILES)
 
-gnome_terminal_LDADD= @TERM_LIBS@ eel/libeelcnp.la
+gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ eel/libeelcnp.la
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
