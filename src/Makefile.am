@@ -45,8 +45,6 @@ gnome_terminal_SOURCES=				\
 	terminal-widget-vte.c			\
 	terminal-window.c			\
 	terminal-window.h			\
-	x-font-selector.c			\
-	x-font-selector.h			\
 	simple-x-font-selector.c		\
 	simple-x-font-selector.h		\
 	$(EGGFILES)

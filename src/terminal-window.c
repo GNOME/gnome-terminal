@@ -73,6 +73,10 @@ struct _TerminalWindowPrivate
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
   GConfClient *conf;
   guint notify_id;
+  guint copy_notify_id;
+  guint paste_notify_id;
+  guint help_notify_id;
+  guint about_notify_id;
   char *startup_id;
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
@@ -90,6 +94,9 @@ enum {
   dummy, /* remove this when you add more signals */
   LAST_SIGNAL
 };
+
+static GConfClient *client = NULL;
+static guint notify;
 
 static void terminal_window_init        (TerminalWindow      *window);
 static void terminal_window_class_init  (TerminalWindowClass *klass);
@@ -121,6 +128,14 @@ static void config_change_notify            (GConfClient *client,
                                              guint        cnxn_id,
                                              GConfEntry  *entry,
                                              gpointer     user_data);
+
+static void menuitem_icon_visibility_notify (GConfClient *client,
+                                             guint        cnxn_id,
+                                             GConfEntry  *entry,
+                                             gpointer     user_data);
+
+static void menuitem_icon_visibility        (GtkWidget *image,
+                                             gboolean   use_image);
 
 static void reset_menubar_labels          (TerminalWindow *window);
 static void reset_tab_menuitems           (TerminalWindow *window);
@@ -251,6 +266,28 @@ append_menuitem (GtkWidget  *menu,
   return menu_item;
 }
 
+static void
+menuitem_icon_visibility (GtkWidget *image, gboolean use_image)
+{
+  if (use_image)
+    gtk_widget_show (image);
+  else
+    gtk_widget_hide (image);
+}
+
+static void
+menuitem_icon_visibility_notify (GConfClient *client,
+                                 guint        cnxn_id,
+                                 GConfEntry  *entry,
+                                 gpointer     user_data)
+{
+  GConfValue *value = gconf_entry_get_value (entry);
+  
+  if (value && value->type == GCONF_VALUE_BOOL)
+    menuitem_icon_visibility (user_data, gconf_value_get_bool (value));
+}
+
+
 static GtkWidget*
 append_stock_menuitem (GtkWidget  *menu,
                        const char *text,
@@ -259,8 +296,25 @@ append_stock_menuitem (GtkWidget  *menu,
                        gpointer    data)
 {
   GtkWidget *menu_item;
-  
+  GtkWidget *image;
+  GError *error;
+
   menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
+  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (menu_item));
+
+  error = NULL;
+  notify = 0;
+
+  notify = gconf_client_notify_add (client, "/desktop/gnome/interface/menus_have_icons",
+                           menuitem_icon_visibility_notify,
+                           image,
+                           NULL, &error);
+  if (error)
+    {
+      g_printerr (_("There was an error subscribing to notification of menu icon visibilty changes. (%s)\n"), error->message);
+      g_error_free (error);
+    }
+
   if (accel_path)
     gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
                                   accel_path);
@@ -647,8 +701,13 @@ terminal_window_init (TerminalWindow *window)
   GtkWidget *mi;
   GtkWidget *menu;
   GtkAccelGroup *accel_group;
+  GtkWidget *copy_image, *paste_image, *contents_image, *about_image;
+  GError *error;
+  gboolean use_image;
+
   
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
+  client = gconf_client_get_default();
   
   window->priv = g_new0 (TerminalWindowPrivate, 1);
   window->priv->terms = NULL;
@@ -734,11 +793,16 @@ terminal_window_init (TerminalWindow *window)
                            GTK_STOCK_COPY, ACCEL_PATH_COPY,
                            G_CALLBACK (copy_callback),
                            window);
+  window->priv->copy_notify_id = notify;
+  copy_image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (window->priv->copy_menuitem));
+
   window->priv->paste_menuitem =
     append_stock_menuitem (menu,
                            GTK_STOCK_PASTE, ACCEL_PATH_PASTE,
                            G_CALLBACK (paste_callback),
                            window);
+  window->priv->paste_notify_id = notify;
+  paste_image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (window->priv->paste_menuitem));
 
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
@@ -857,6 +921,8 @@ terminal_window_init (TerminalWindow *window)
 
   mi = append_stock_menuitem (menu, GTK_STOCK_HELP, NULL,
 			      G_CALLBACK (help_callback), window);
+  window->priv->help_notify_id = notify;
+  contents_image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (mi));
   set_menuitem_text (mi, _("_Contents"), FALSE);
 
   gtk_accel_map_add_entry (ACCEL_PATH_HELP, GDK_F1, 0);
@@ -866,6 +932,8 @@ terminal_window_init (TerminalWindow *window)
   
   mi = append_stock_menuitem (menu, GNOME_STOCK_ABOUT, NULL,
                               G_CALLBACK (about_callback), window);
+  window->priv->about_notify_id = notify;
+  about_image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (mi));
   set_menuitem_text (mi, _("_About"),
                      FALSE);
   
@@ -877,6 +945,23 @@ terminal_window_init (TerminalWindow *window)
   reset_menubar_labels (window);
   
   gtk_widget_show_all (window->priv->main_vbox);
+  error = NULL;
+  use_image = gconf_client_get_bool (client,
+                                     "/desktop/gnome/interface/menus_have_icons",
+                                     &error);
+  if (error)
+    {
+      g_printerr (_("There was an error loading config value for whether to use image in menus. (%s)\n"),error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      menuitem_icon_visibility (copy_image, use_image);
+      menuitem_icon_visibility (paste_image, use_image);
+      menuitem_icon_visibility (contents_image, use_image);
+      menuitem_icon_visibility (about_image, use_image);
+    }
+
 }
 
 static void
@@ -903,6 +988,16 @@ terminal_window_finalize (GObject *object)
   gconf_client_notify_remove (window->priv->conf,
                               window->priv->notify_id);
   window->priv->notify_id = 0;
+
+  gconf_client_notify_remove (client, window->priv->copy_notify_id);
+  window->priv->copy_notify_id = 0;
+  gconf_client_notify_remove (client, window->priv->paste_notify_id);
+  window->priv->paste_notify_id = 0;
+  gconf_client_notify_remove (client, window->priv->help_notify_id);
+  window->priv->help_notify_id = 0;
+  gconf_client_notify_remove (client, window->priv->about_notify_id);
+  window->priv->about_notify_id = 0;
+
 
   if (window->priv->conf)
     g_object_unref (G_OBJECT (window->priv->conf));

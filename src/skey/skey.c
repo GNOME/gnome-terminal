@@ -7,6 +7,7 @@
 #include "config.h"
 #include "donkey.h"
 #include "md.h"
+#include <stdlib.h>
 
 private void sevenbit PROTO((char *s));
 

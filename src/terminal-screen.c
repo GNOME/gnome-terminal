@@ -1226,8 +1226,34 @@ append_stock_menuitem (GtkWidget  *menu,
                        gpointer    data)
 {
   GtkWidget *menu_item;
+  GtkWidget *image;
+  GConfClient *client;
+  GError *error;
+  gboolean use_image;
+
   
   menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
+  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (menu_item));
+
+  client = gconf_client_get_default ();
+  error = NULL;
+
+  use_image = gconf_client_get_bool (client,
+                                     "/desktop/gnome/interface/menus_have_icons",
+                                      &error);
+  if (error)
+    {
+      g_printerr (_("There was an error loading config value for whether to use image in menus. (%s)\n"),error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      if (use_image)
+        gtk_widget_show (image);
+      else
+        gtk_widget_hide (image);
+    }
+
   gtk_widget_show (menu_item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu),
                          menu_item);
