@@ -1411,6 +1411,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   GList *profiles;
   GList *tmp;
   GSList *group;
+  GtkClipboard *clip;
   
   if (screen->priv->popup_menu)
     gtk_widget_destroy (screen->priv->popup_menu);
@@ -1478,6 +1479,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
                                      GTK_STOCK_PASTE,
                                      G_CALLBACK (paste_callback),
                                      screen);
+  clip = gtk_clipboard_get (GDK_NONE);
+  gtk_widget_set_sensitive (menu_item, gtk_clipboard_wait_is_text_available (clip));
   
   menu_item = gtk_separator_menu_item_new ();
   gtk_widget_show (menu_item);
