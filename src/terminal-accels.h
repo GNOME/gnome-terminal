@@ -26,7 +26,7 @@
 #include <gconf/gconf-client.h>
 
 void terminal_accels_init (GConfClient *conf);
-GtkAccelGroup* terminal_accels_get_accel_group (void);
+GtkAccelGroup* terminal_accels_get_group_for_widget (GtkWidget *widget);
 
 #define ACCEL_PATH_ROOT "<terminal-accels>/menu"
 #define ACCEL_PATH_NEW_TAB ACCEL_PATH_ROOT"/new_tab"

@@ -1293,7 +1293,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   
   screen->priv->popup_menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (screen->priv->popup_menu),
-                            terminal_accels_get_accel_group ());
+                            terminal_accels_get_group_for_widget (screen->priv->popup_menu));
   
   gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
                              GTK_WIDGET (screen->priv->zvt),

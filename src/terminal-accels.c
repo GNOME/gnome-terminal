@@ -232,6 +232,25 @@ terminal_accels_get_accel_group (void)
   return hack_group;
 }
 
+GtkAccelGroup*
+terminal_accels_get_group_for_widget (GtkWidget *widget)
+{
+  GtkAccelGroup *group;
+
+  group = g_object_get_data (G_OBJECT (widget), "terminal-accel-group");
+
+  if (group == NULL)
+    {
+      group = gtk_accel_group_new ();
+      g_object_set_data_full (G_OBJECT (widget),
+                              "terminal-accel-group",
+                              group,
+                              (GDestroyNotify) g_object_unref);
+    }
+
+  return group;
+}
+
 static void
 keys_change_notify (GConfClient *client,
                     guint        cnxn_id,
@@ -689,6 +708,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                     G_CALLBACK (remove_from_list_callback),
                     &living_mnemonics_checkbuttons);
 
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), !using_mnemonics);
   g_signal_connect (G_OBJECT (w), "toggled",
                     G_CALLBACK (disable_mnemonics_toggled),
                     NULL);

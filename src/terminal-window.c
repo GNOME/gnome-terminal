@@ -37,14 +37,19 @@ struct _TerminalWindowPrivate
   GtkWidget *notebook;
   GtkWidget *file_menuitem;
   GtkWidget *edit_menuitem;
+  GtkWidget *view_menuitem;
   GtkWidget *terminal_menuitem;
-  GtkWidget *tabs_menuitem;
+  GtkWidget *go_menuitem;
   GtkWidget *help_menuitem;
   GtkWidget *copy_menuitem;
   GtkWidget *paste_menuitem;
   GtkWidget *edit_config_menuitem;
   GtkWidget *delete_config_menuitem;
   GtkWidget *choose_config_menuitem;
+  GtkWidget *next_tab_menuitem;
+  GtkWidget *previous_tab_menuitem;
+  GtkWidget *go_menu;
+  GList *tab_menuitems;
   GList *terms;
   TerminalScreen *active_term;
   GdkPixbuf *icon;
@@ -92,6 +97,7 @@ static void config_change_notify            (GConfClient *client,
                                              gpointer     user_data);
 
 static void reset_menubar_labels          (TerminalWindow *window);
+static void reset_tab_menuitems           (TerminalWindow *window);
 
 static void new_window_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -120,6 +126,12 @@ static void hide_menubar_callback         (GtkWidget      *menuitem,
 static void reset_callback                (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void reset_and_clear_callback      (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void next_tab_callback             (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void previous_tab_callback         (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
+static void change_tab_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void help_callback                 (GtkWidget      *menuitem,
                                            TerminalWindow *window);
@@ -224,6 +236,7 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   GList *profiles;
   GList *tmp;
   GSList *group;
+  GtkAccelGroup *accel_group;
 
   if (window->priv->active_term == NULL)
     {
@@ -235,9 +248,10 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   
   gtk_widget_set_sensitive (window->priv->choose_config_menuitem, TRUE);
 
+  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
+  
   menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (menu),
-                            terminal_accels_get_accel_group ());
+  gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->choose_config_menuitem),
                              menu);
   
@@ -292,7 +306,8 @@ terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
   GtkWidget *menu;
-
+  GtkAccelGroup *accel_group;
+  
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
   
   window->priv = g_new0 (TerminalWindowPrivate, 1);
@@ -310,6 +325,8 @@ terminal_window_init (TerminalWindow *window)
 
   window->priv->use_mnemonics = TRUE;
   window->priv->using_mnemonics = FALSE;
+  
+  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
   
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook),
                                TRUE);                                      
@@ -332,7 +349,7 @@ terminal_window_init (TerminalWindow *window)
   window->priv->file_menuitem = mi;
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
-                            terminal_accels_get_accel_group ());
+                            accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
   append_menuitem (menu, _("_New window"), ACCEL_PATH_NEW_WINDOW,
@@ -342,6 +359,12 @@ terminal_window_init (TerminalWindow *window)
   mi = append_menuitem (menu, _("New _tab"), ACCEL_PATH_NEW_TAB,
                         G_CALLBACK (new_tab_callback),
                         window);
+
+  /* This is fairly bogus to have here but I don't know
+   * where else to put it really
+   */
+  append_menuitem (menu, _("_New profile..."), NULL,
+                   G_CALLBACK (new_configuration_callback), window);
   
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
@@ -361,7 +384,7 @@ terminal_window_init (TerminalWindow *window)
 
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
-                            terminal_accels_get_accel_group ());
+                            accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
   window->priv->copy_menuitem = append_stock_menuitem (menu,
@@ -382,6 +405,22 @@ terminal_window_init (TerminalWindow *window)
 
   append_menuitem (menu, _("_Keybindings..."), NULL,
                    G_CALLBACK (edit_keybindings_callback), window);
+
+  append_menuitem (menu, _("P_rofiles..."), NULL,
+                   G_CALLBACK (manage_configurations_callback), window);
+  
+  mi = append_menuitem (window->priv->menubar,
+                        "", NULL,
+                        NULL, NULL);
+  window->priv->view_menuitem = mi;
+
+  menu = gtk_menu_new ();
+  gtk_menu_set_accel_group (GTK_MENU (menu),
+                            accel_group);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
+  
+  append_menuitem (menu, _("Hide menu_bar"), NULL,
+                   G_CALLBACK (hide_menubar_callback), window);
   
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
@@ -395,7 +434,7 @@ terminal_window_init (TerminalWindow *window)
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
-                            terminal_accels_get_accel_group ());
+                            accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
   /* submenu of this dynamically generated up above */
@@ -403,19 +442,7 @@ terminal_window_init (TerminalWindow *window)
     append_menuitem (menu, _("_Profile"), NULL,
                      NULL, NULL);
   
-  append_menuitem (menu, _("_New profile..."), NULL,
-                   G_CALLBACK (new_configuration_callback), window);
-
-  append_menuitem (menu, _("_Manage profiles..."), NULL,
-                   G_CALLBACK (manage_configurations_callback), window);
-  
-  mi = gtk_separator_menu_item_new ();
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
-  
-  append_menuitem (menu, _("Hide menu_bar"), NULL,
-                   G_CALLBACK (hide_menubar_callback), window);
-  
-  append_menuitem (menu, _("_Reset terminal"), NULL,
+  append_menuitem (menu, _("_Reset"), NULL,
                    G_CALLBACK (reset_callback), window);
 
   append_menuitem (menu, _("Reset and C_lear"), NULL,
@@ -424,11 +451,30 @@ terminal_window_init (TerminalWindow *window)
   mi = append_menuitem (window->priv->menubar,
                         "", NULL,
                         NULL, NULL);
+  window->priv->go_menuitem = mi;
+  
+  menu = gtk_menu_new ();
+  window->priv->go_menu = menu;
+  gtk_menu_set_accel_group (GTK_MENU (menu),
+                            accel_group);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
+
+  mi = append_menuitem (menu, _("_Previous tab"), NULL,
+                        G_CALLBACK (previous_tab_callback), window);
+  window->priv->previous_tab_menuitem = mi;
+  
+  mi = append_menuitem (menu, _("_Next tab"), NULL,
+                        G_CALLBACK (next_tab_callback), window);
+  window->priv->next_tab_menuitem = mi;
+  
+  mi = append_menuitem (window->priv->menubar,
+                        "", NULL,
+                        NULL, NULL);
   window->priv->help_menuitem = mi;
   
   menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (menu),
-                            terminal_accels_get_accel_group ());
+                            accel_group);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (mi), menu);
 
   append_menuitem (menu, _("_Help Contents"), NULL,
@@ -493,7 +539,11 @@ terminal_window_destroy (GtkObject *object)
 
   if (window->priv->menubar)
     g_object_unref (G_OBJECT (window->priv->menubar));
+
+  g_list_free (window->priv->tab_menuitems);
+  window->priv->tab_menuitems = NULL;
   
+  /* to handle multiple destroy, FIXME some fields are missing */
   window->priv->menubar = NULL;
   window->priv->notebook = NULL;
   window->priv->main_vbox = NULL;
@@ -957,6 +1007,7 @@ notebook_page_switched_callback (GtkWidget       *notebook,
 {
   GtkWidget* page_widget;
   TerminalScreen *screen;
+  gboolean on_last_page;
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
@@ -968,6 +1019,18 @@ notebook_page_switched_callback (GtkWidget       *notebook,
   g_assert (screen);
 
   terminal_window_set_active (window, screen);
+
+  gtk_widget_set_sensitive (window->priv->previous_tab_menuitem,
+                            page_num > 0);
+
+  /* FIXME
+   * http://bugzilla.gnome.org/show_bug.cgi?id=73229
+   */
+  on_last_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
+                                            page_num + 1) == NULL;
+  
+  gtk_widget_set_sensitive (window->priv->next_tab_menuitem,
+                            !on_last_page);
 }
 
 void
@@ -1203,10 +1266,54 @@ reset_menubar_labels (TerminalWindow *window)
                      _("_File"), !window->priv->using_mnemonics);
   set_menuitem_text (window->priv->edit_menuitem,
                      _("_Edit"), !window->priv->using_mnemonics);
+  set_menuitem_text (window->priv->view_menuitem,
+                     _("_View"), !window->priv->using_mnemonics);
   set_menuitem_text (window->priv->terminal_menuitem,
                      _("_Terminal"), !window->priv->using_mnemonics);
+  set_menuitem_text (window->priv->go_menuitem,
+                     _("_Go"), !window->priv->using_mnemonics);
   set_menuitem_text (window->priv->help_menuitem,
                      _("_Help"), !window->priv->using_mnemonics);
+}
+
+static void
+reset_tab_menuitems (TerminalWindow *window)
+{
+  GList *tmp;
+  GtkWidget *mi;
+  int i;
+  TerminalScreen *screen;
+  
+  tmp = window->priv->tab_menuitems;
+  while (tmp != NULL)
+    {
+      gtk_widget_destroy (tmp->data);
+      tmp = tmp->next;
+    }
+
+  g_list_free (window->priv->tab_menuitems);
+  window->priv->tab_menuitems = NULL;
+
+  i = 0;
+  while (TRUE)
+    {
+      GtkWidget *page;
+
+      page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook),
+                                        i);
+
+      if (page == NULL)
+        break;
+      
+      screen = find_screen_by_hbox (window, page);
+
+#if 0
+      mi = append_menuitem (menu, _("_Next tab"), NULL,
+                            G_CALLBACK (next_tab_callback), window);
+#endif
+      
+      ++i;
+    }
 }
 
 /*
@@ -1383,6 +1490,33 @@ reset_and_clear_callback (GtkWidget      *menuitem,
         
       zvt_term_reset (ZVT_TERM (widget), TRUE);
     }
+}
+
+static void
+next_tab_callback(GtkWidget      *menuitem,
+                  TerminalWindow *window)
+{
+  gtk_notebook_next_page (GTK_NOTEBOOK (window->priv->notebook));
+}
+
+static void
+previous_tab_callback (GtkWidget      *menuitem,
+                       TerminalWindow *window)
+{
+  gtk_notebook_prev_page (GTK_NOTEBOOK (window->priv->notebook));
+}
+
+static void
+change_tab_callback (GtkWidget      *menuitem,
+                     TerminalWindow *window)
+{
+  int page;
+
+  page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem),
+                                             "notebook-page"));
+  
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
+                                 page);
 }
 
 static void

@@ -1,5 +1,16 @@
 2002-03-02  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-window.c: rearrange the menus
+
+	* src/terminal-accels.c (terminal_edit_keys_dialog_new):
+	set initial state of "disable mnemonics" checkbutton
+
+	* src/terminal-window.c (terminal_window_init): create a new accel
+	group for each window, and the popup menu, to avoid doing things 
+	twice.
+
+2002-03-02  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-accels.c: wire things up to work, more or less
 
 	* src/Makefile.am: set up to do automated cut-and-paste from
