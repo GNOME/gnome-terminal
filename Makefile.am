@@ -18,3 +18,14 @@ EXTRA_DIST = 			\
 	intltool-update.in	\
 	xmldocs.make		\
 	omf.make
+
+DISTCLEANFILES =		\
+	intltool-extract	\
+	intltool-merge		\
+	intltool-update		\
+	$(desktop_DATA)		
+
+# hack from sound-juicer to get around scrollkeeper's leaving a big
+# mess behind.
+distuninstallcheck_listfiles = 	\
+        find -path ./var/scrollkeeper/\* -prune -or -type f -print

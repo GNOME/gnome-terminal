@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 14:09-0300\n"
+"POT-Creation-Date: 2004-06-29 19:42-0300\n"
 "PO-Revision-Date: 2004-03-23 03:39+0800\n"
 "Last-Translator: Anthony Tang <tkyanthony@yahoo.com.hk>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
 
-#: gnome-terminal.desktop.in.h:1
+#: gnome-terminal.desktop.in.in.h:1
 msgid "Command line"
 msgstr "指令列"
 
-#: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
+#: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
 #: src/terminal-window.c:761 src/terminal.c:1172 src/terminal.c:1518
 msgid "Terminal"
@@ -612,7 +612,8 @@ msgid "_Transparent background"
 msgstr "透明背景(_T)"
 
 #: src/gnome-terminal.glade2.h:104
-msgid "_Update utmp/wtmp records when command is launched"
+#, fuzzy
+msgid "_Update login records when command is launched"
 msgstr "當啟動指令時更新 _utmp/wtmp 紀錄檔"
 
 #: src/gnome-terminal.glade2.h:105
@@ -777,7 +778,16 @@ msgstr ""
 "如選用本選項，在終端機中執行指令時會先載入登入所需的設定檔。(即是說 argv[0] "
 "前會加上減號。)"
 
+# FIXME: Almost equivalent in practice, but not 100% identical to original
+# meaning -- Abel
 #: src/gnome-terminal.schemas.in.h:28
+#, fuzzy
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr "如選用本選項，開啟新的終端機視窗或分頁時都會更新 utmp/wtmp。"
+
+#: src/gnome-terminal.schemas.in.h:29
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -785,27 +795,19 @@ msgstr ""
 "如選用本選項，終端機會採用桌面整體指定的字型 (如果它是固定寬度字型；否則會使"
 "用最接近的字型)。"
 
-#: src/gnome-terminal.schemas.in.h:29
+#: src/gnome-terminal.schemas.in.h:30
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
 msgstr "如選用本選項，終端機會使用佈景主題提供的色彩，而不是使用者自選的色彩。"
 
-#: src/gnome-terminal.schemas.in.h:30
+#: src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
 "如選用本選項，啟動終端機時會執行 custom_command 設定所指定的指令，而不會執行 "
 "shell。"
-
-# FIXME: Almost equivalent in practice, but not 100% identical to original
-# meaning -- Abel
-#: src/gnome-terminal.schemas.in.h:31
-msgid ""
-"If true, utmp/wtmp will be updated when the command inside the terminal is "
-"launched."
-msgstr "如選用本選項，開啟新的終端機視窗或分頁時都會更新 utmp/wtmp。"
 
 #: src/gnome-terminal.schemas.in.h:32
 msgid ""
@@ -1464,7 +1466,8 @@ msgid "Whether to silence terminal bell"
 msgstr "終端機鈴聲是否不發出聲音"
 
 #: src/gnome-terminal.schemas.in.h:134
-msgid "Whether to update utmp/wtmp when launching terminal command"
+#, fuzzy
+msgid "Whether to update login records when launching terminal command"
 msgstr "啟動終端機時是否更新 utmp/wtmp"
 
 #: src/gnome-terminal.schemas.in.h:135
@@ -1474,6 +1477,14 @@ msgstr "在終端機元件是否使用佈景主題提供的色彩"
 #: src/gnome-terminal.schemas.in.h:136
 msgid "Whether to use the system font"
 msgstr "是否使用系統提供的字型設定"
+
+#. Translators: please note this is has to be a list of valid encodings (which are to
+#. be taken from the list in src/encoding.c) It has to include UTF-8 and the word 'current', which
+#. is not to be translated. This is provided for costumization of the default encoding menu; see
+#. bug 144810 for an use case. In most cases, this should be left alone.
+#: src/gnome-terminal.schemas.in.h:141
+msgid "[UTF-8,current]"
+msgstr ""
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -1628,7 +1639,7 @@ msgstr "縮小"
 msgid "Normal Size"
 msgstr "原來大小"
 
-#: src/terminal-accels.c:111 src/terminal-screen.c:1968
+#: src/terminal-accels.c:111 src/terminal-screen.c:1969
 msgid "Set Title"
 msgstr "設定標題"
 
@@ -1921,7 +1932,7 @@ msgstr "無法載入字型“%s”\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "本終端機執行的指令出現問題：%s"
 
-#: src/terminal-screen.c:1305
+#: src/terminal-screen.c:1306
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1930,93 +1941,93 @@ msgstr ""
 "無法開啟地址“%s”：\n"
 "%s"
 
-#: src/terminal-screen.c:1398 src/terminal-window.c:784
+#: src/terminal-screen.c:1399 src/terminal-window.c:784
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "載入組態時出現錯誤；該組態決定是否在選單中顯示圖示。(%s)\n"
 
-#: src/terminal-screen.c:1469
+#: src/terminal-screen.c:1470
 msgid "_Open Link"
 msgstr "開啟鏈結(_O)"
 
-#: src/terminal-screen.c:1474
+#: src/terminal-screen.c:1475
 msgid "_Copy Link Address"
 msgstr "複製鏈結地址(_C)"
 
-#: src/terminal-screen.c:1485 src/terminal-window.c:827
+#: src/terminal-screen.c:1486 src/terminal-window.c:827
 msgid "Open _Terminal"
 msgstr "開啟視窗(_T)"
 
-#: src/terminal-screen.c:1490 src/terminal-window.c:830
+#: src/terminal-screen.c:1491 src/terminal-window.c:830
 msgid "Open Ta_b"
 msgstr "開啟分頁(_B)"
 
-#: src/terminal-screen.c:1500 src/terminal-window.c:845
+#: src/terminal-screen.c:1501 src/terminal-window.c:845
 msgid "C_lose Tab"
 msgstr "關閉分頁(_L)"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:849
+#: src/terminal-screen.c:1506 src/terminal-window.c:849
 msgid "_Close Window"
 msgstr "關閉視窗(_C)"
 
-#: src/terminal-screen.c:1533
+#: src/terminal-screen.c:1534
 msgid "Change P_rofile"
 msgstr "更改設定組合(_R)"
 
-#: src/terminal-screen.c:1583
+#: src/terminal-screen.c:1584
 msgid "_Edit Current Profile..."
 msgstr "修改目前的設定組合(_E)..."
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1589
 msgid "Show _Menubar"
 msgstr "顯示選單列(_M)"
 
-#: src/terminal-screen.c:1595
+#: src/terminal-screen.c:1596
 msgid "Secure _Keyboard"
 msgstr "安全鍵盤(_K)"
 
-#: src/terminal-screen.c:1605
+#: src/terminal-screen.c:1606
 msgid "_Input Methods"
 msgstr "輸入法(_I)"
 
-#: src/terminal-screen.c:1997
+#: src/terminal-screen.c:1998
 msgid "_Title:"
 msgstr "標題(_T)："
 
-#: src/terminal-screen.c:2114
+#: src/terminal-screen.c:2115
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的文字格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: src/terminal-screen.c:2137
+#: src/terminal-screen.c:2138
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的顏色格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: src/terminal-screen.c:2180
+#: src/terminal-screen.c:2181
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的 Mozilla URL 的格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: src/terminal-screen.c:2229
+#: src/terminal-screen.c:2230
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的 URI 清單的格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: src/terminal-screen.c:2283
+#: src/terminal-screen.c:2284
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的圖片檔名稱格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: src/terminal-screen.c:2309
+#: src/terminal-screen.c:2310
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "將 URI“%s”轉換為檔案名稱時出現錯誤：%s\n"
 
-#: src/terminal-widget-vte.c:573
+#: src/terminal-widget-vte.c:574
 msgid "There was an error creating the child process for this terminal"
 msgstr "產生該終端機的副進程時出現錯誤"
 
@@ -2128,31 +2139,31 @@ msgstr ""
 "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和終端機視窗組態有關。(%"
 "s)\n"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2092
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: src/terminal-window.c:2100 src/terminal.c:2827
+#: src/terminal-window.c:2094 src/terminal.c:2827
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: src/terminal-window.c:2102
+#: src/terminal-window.c:2096
 msgid "_View"
 msgstr "顯示(_V)"
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2098
 msgid "_Terminal"
 msgstr "終端機(_T)"
 
-#: src/terminal-window.c:2106
+#: src/terminal-window.c:2100
 msgid "Ta_bs"
 msgstr "分頁(_B)"
 
-#: src/terminal-window.c:2108
+#: src/terminal-window.c:2102
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: src/terminal-window.c:2289
+#: src/terminal-window.c:2283
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2161,17 +2172,17 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/terminal-window.c:2294
+#: src/terminal-window.c:2288
 #, fuzzy
 msgid "Close all tabs?"
 msgstr "關閉終端機分頁"
 
-#: src/terminal-window.c:2306
+#: src/terminal-window.c:2300
 #, fuzzy
 msgid "Close All Tabs"
 msgstr "關閉終端機分頁"
 
-#: src/terminal-window.c:2698
+#: src/terminal-window.c:2692
 msgid "translator_credits"
 msgstr ""
 "i18n 程式中文化計劃\n"
@@ -2180,7 +2191,7 @@ msgstr ""
 "Anthony Tang <tkyanthony@yahoo.com.hk>, 2004\n"
 "Abel Cheung <maddog@linux.org.hk>, 2002-2004"
 
-#: src/terminal-window.c:2710
+#: src/terminal-window.c:2704
 msgid "GNOME Terminal"
 msgstr "GNOME 終端機"
 

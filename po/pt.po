@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 14:09-0300\n"
+"POT-Creation-Date: 2004-06-29 19:42-0300\n"
 "PO-Revision-Date: 2004-02-28 14:30+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gnome-terminal.desktop.in.h:1
+#: gnome-terminal.desktop.in.in.h:1
 msgid "Command line"
 msgstr "Linha de comando"
 
-#: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
+#: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
 #: src/terminal-window.c:761 src/terminal.c:1172 src/terminal.c:1518
 msgid "Terminal"
@@ -617,7 +617,8 @@ msgid "_Transparent background"
 msgstr "Fundo _transparente"
 
 #: src/gnome-terminal.glade2.h:104
-msgid "_Update utmp/wtmp records when command is launched"
+#, fuzzy
+msgid "_Update login records when command is launched"
 msgstr "Actualizar registos _utmp/wtmp ao executar comando"
 
 #: src/gnome-terminal.glade2.h:105
@@ -796,6 +797,15 @@ msgstr ""
 "início de sessão. (argv[0] terá um hífen à sua frente)."
 
 #: src/gnome-terminal.schemas.in.h:28
+#, fuzzy
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr ""
+"Se verdadeiro, utmp/wtmp será actualizado ao iniciar o comando dentro da "
+"consola."
+
+#: src/gnome-terminal.schemas.in.h:29
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -803,7 +813,7 @@ msgstr ""
 "Se verdadeiro, a consola irá utilizar a fonte por omissão do ambiente de "
 "trabalho, caso seja monoespaçada (caso contrário, a mais semelhante)."
 
-#: src/gnome-terminal.schemas.in.h:29
+#: src/gnome-terminal.schemas.in.h:30
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -811,21 +821,13 @@ msgstr ""
 "Se verdadeiro, o tema de cores utilizado para as caixas de introdução de "
 "texto será utilizado na consola, em vez das cores indicadas pelo utilizador."
 
-#: src/gnome-terminal.schemas.in.h:30
+#: src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
 "Se verdadeiro, o valor da definição de custom_command será utilizado em vez "
 "de iniciar uma consola."
-
-#: src/gnome-terminal.schemas.in.h:31
-msgid ""
-"If true, utmp/wtmp will be updated when the command inside the terminal is "
-"launched."
-msgstr ""
-"Se verdadeiro, utmp/wtmp será actualizado ao iniciar o comando dentro da "
-"consola."
 
 #: src/gnome-terminal.schemas.in.h:32
 msgid ""
@@ -1561,7 +1563,8 @@ msgid "Whether to silence terminal bell"
 msgstr "Se silenciar ou não a campainha de consola"
 
 #: src/gnome-terminal.schemas.in.h:134
-msgid "Whether to update utmp/wtmp when launching terminal command"
+#, fuzzy
+msgid "Whether to update login records when launching terminal command"
 msgstr "Se actualizar ou não utmp/wtmp ao iniciar comando de consola"
 
 #: src/gnome-terminal.schemas.in.h:135
@@ -1571,6 +1574,14 @@ msgstr "Se utilizar ou não as cores do tema para o widget de consola"
 #: src/gnome-terminal.schemas.in.h:136
 msgid "Whether to use the system font"
 msgstr "Se utilizar ou não a fonte de sistema"
+
+#. Translators: please note this is has to be a list of valid encodings (which are to
+#. be taken from the list in src/encoding.c) It has to include UTF-8 and the word 'current', which
+#. is not to be translated. This is provided for costumization of the default encoding menu; see
+#. bug 144810 for an use case. In most cases, this should be left alone.
+#: src/gnome-terminal.schemas.in.h:141
+msgid "[UTF-8,current]"
+msgstr ""
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -1725,7 +1736,7 @@ msgstr "Reduzir Zoom"
 msgid "Normal Size"
 msgstr "Tamanho Normal"
 
-#: src/terminal-accels.c:111 src/terminal-screen.c:1968
+#: src/terminal-accels.c:111 src/terminal-screen.c:1969
 msgid "Set Title"
 msgstr "Definir o Título"
 
@@ -2028,7 +2039,7 @@ msgstr "Incapaz de ler fonte \"%s\"\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Ocorreu um problema com o comando para esta consola: %s"
 
-#: src/terminal-screen.c:1305
+#: src/terminal-screen.c:1306
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2037,7 +2048,7 @@ msgstr ""
 "Incapaz de abrir o endereço \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1398 src/terminal-window.c:784
+#: src/terminal-screen.c:1399 src/terminal-window.c:784
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2046,82 +2057,82 @@ msgstr ""
 "Ocorreu um erro ao ler valor de configuração sobre se utilizar ou não "
 "imagens em menus. (%s)\n"
 
-#: src/terminal-screen.c:1469
+#: src/terminal-screen.c:1470
 msgid "_Open Link"
 msgstr "Abrir Lin_k"
 
-#: src/terminal-screen.c:1474
+#: src/terminal-screen.c:1475
 msgid "_Copy Link Address"
 msgstr "_Copiar Endereço do Link"
 
-#: src/terminal-screen.c:1485 src/terminal-window.c:827
+#: src/terminal-screen.c:1486 src/terminal-window.c:827
 msgid "Open _Terminal"
 msgstr "Abrir _Consola"
 
-#: src/terminal-screen.c:1490 src/terminal-window.c:830
+#: src/terminal-screen.c:1491 src/terminal-window.c:830
 msgid "Open Ta_b"
 msgstr "Abrir _Separador"
 
-#: src/terminal-screen.c:1500 src/terminal-window.c:845
+#: src/terminal-screen.c:1501 src/terminal-window.c:845
 msgid "C_lose Tab"
 msgstr "Fec_har Separador"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:849
+#: src/terminal-screen.c:1506 src/terminal-window.c:849
 msgid "_Close Window"
 msgstr "Fe_char Janela"
 
-#: src/terminal-screen.c:1533
+#: src/terminal-screen.c:1534
 msgid "Change P_rofile"
 msgstr "Alterar Pe_rfil"
 
-#: src/terminal-screen.c:1583
+#: src/terminal-screen.c:1584
 msgid "_Edit Current Profile..."
 msgstr "_Editar Perfil Actual..."
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1589
 msgid "Show _Menubar"
 msgstr "Apresentar Barra de _Menu"
 
-#: src/terminal-screen.c:1595
+#: src/terminal-screen.c:1596
 msgid "Secure _Keyboard"
 msgstr "Trancar _Teclado"
 
-#: src/terminal-screen.c:1605
+#: src/terminal-screen.c:1606
 msgid "_Input Methods"
 msgstr "Métodos de _Entrada"
 
-#: src/terminal-screen.c:1997
+#: src/terminal-screen.c:1998
 msgid "_Title:"
 msgstr "_Título:"
 
-#: src/terminal-screen.c:2114
+#: src/terminal-screen.c:2115
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain despejado na consola tinha formato (%d) ou tamanho (%d) "
 "incorrecto\n"
 
-#: src/terminal-screen.c:2137
+#: src/terminal-screen.c:2138
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Cor despejada na consola tinha formato (%d) ou comprimento (%d) incorrecto\n"
 
-#: src/terminal-screen.c:2180
+#: src/terminal-screen.c:2181
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URL Mozilla despejado na consola tinha formato (%d) ou comprimento (%d) "
 "incorrecto\n"
 
-#: src/terminal-screen.c:2229
+#: src/terminal-screen.c:2230
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Lista URI despejada na consola tinha formato (%d) ou comprimento (%d) "
 "incorrecto\n"
 
-#: src/terminal-screen.c:2283
+#: src/terminal-screen.c:2284
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2129,12 +2140,12 @@ msgstr ""
 "Nome de ficheiro de imagem despejado na consola tinha formato (%d) ou "
 "comprimento (%d) incorrecto\n"
 
-#: src/terminal-screen.c:2309
+#: src/terminal-screen.c:2310
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Erro ao converter URI \"%s\" em nome de ficheiro: %s\n"
 
-#: src/terminal-widget-vte.c:573
+#: src/terminal-widget-vte.c:574
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ocorreu um erro ao criar o processo filho para esta consola"
 
@@ -2248,31 +2259,31 @@ msgstr ""
 "Ocorreu um erro ao subscrever notificações de alterações de configuração de "
 "janela de consola. (%s)\n"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2092
 msgid "_File"
 msgstr "_Ficheiro"
 
-#: src/terminal-window.c:2100 src/terminal.c:2827
+#: src/terminal-window.c:2094 src/terminal.c:2827
 msgid "_Edit"
 msgstr "_Editar"
 
-#: src/terminal-window.c:2102
+#: src/terminal-window.c:2096
 msgid "_View"
 msgstr "_Ver"
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2098
 msgid "_Terminal"
 msgstr "_Consola"
 
-#: src/terminal-window.c:2106
+#: src/terminal-window.c:2100
 msgid "Ta_bs"
 msgstr "_Separadores"
 
-#: src/terminal-window.c:2108
+#: src/terminal-window.c:2102
 msgid "_Help"
 msgstr "_Ajuda"
 
-#: src/terminal-window.c:2289
+#: src/terminal-window.c:2283
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2281,21 +2292,21 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/terminal-window.c:2294
+#: src/terminal-window.c:2288
 #, fuzzy
 msgid "Close all tabs?"
 msgstr "Fechar Separador"
 
-#: src/terminal-window.c:2306
+#: src/terminal-window.c:2300
 #, fuzzy
 msgid "Close All Tabs"
 msgstr "Fechar Separador"
 
-#: src/terminal-window.c:2698
+#: src/terminal-window.c:2692
 msgid "translator_credits"
 msgstr "Duarte Loreto <happyguy_pt@hotmail.com>"
 
-#: src/terminal-window.c:2710
+#: src/terminal-window.c:2704
 msgid "GNOME Terminal"
 msgstr "Consola GNOME"
 

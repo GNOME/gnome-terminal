@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-2.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-07 14:09-0300\n"
+"POT-Creation-Date: 2004-06-29 19:42-0300\n"
 "PO-Revision-Date: 2004-02-21 07:23+0100\n"
 "Last-Translator: Слободан Средојевић <ssl@uns.ns.ac.yu>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=3;    plural=n%10==1 && n%100!=11 ? 0 :    n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: gnome-terminal.desktop.in.h:1
+#: gnome-terminal.desktop.in.in.h:1
 msgid "Command line"
 msgstr "Интерпретатор наредби"
 
-#: gnome-terminal.desktop.in.h:2 src/gnome-terminal.schemas.in.h:109
+#: gnome-terminal.desktop.in.in.h:2 src/gnome-terminal.schemas.in.h:109
 #: src/terminal-accels.c:172 src/terminal-profile.c:276
 #: src/terminal-window.c:761 src/terminal.c:1172 src/terminal.c:1518
 msgid "Terminal"
@@ -618,7 +618,8 @@ msgid "_Transparent background"
 msgstr "Провидна поз_адина"
 
 #: src/gnome-terminal.glade2.h:104
-msgid "_Update utmp/wtmp records when command is launched"
+#, fuzzy
+msgid "_Update login records when command is launched"
 msgstr "Допуни utmp/wtmp поља када се изда наредба"
 
 #: src/gnome-terminal.glade2.h:105
@@ -795,6 +796,15 @@ msgstr ""
 "љуска. (argv[0] ће садржати цртицу на почетку.)"
 
 #: src/gnome-terminal.schemas.in.h:28
+#, fuzzy
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr ""
+"Ако је постављено, utmp/wtmp ће се допуњавати када се покрене наредба унутар "
+"терминала."
+
+#: src/gnome-terminal.schemas.in.h:29
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -802,7 +812,7 @@ msgstr ""
 "Ако је постављено, терминал ће користити општа слова радне површине ако је "
 "он утврђене ширине (или најсличнији слова који пронађе у супротном)."
 
-#: src/gnome-terminal.schemas.in.h:29
+#: src/gnome-terminal.schemas.in.h:30
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -810,21 +820,13 @@ msgstr ""
 "Ако је постављено, користиће боје из теме за поља за унос текста у "
 "терминалу, уместо боја које је подесио корисник."
 
-#: src/gnome-terminal.schemas.in.h:30
+#: src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
 "Уколико је постављено, вредност custom_command ће се користити уместо "
 "покретања љуске."
-
-#: src/gnome-terminal.schemas.in.h:31
-msgid ""
-"If true, utmp/wtmp will be updated when the command inside the terminal is "
-"launched."
-msgstr ""
-"Ако је постављено, utmp/wtmp ће се допуњавати када се покрене наредба унутар "
-"терминала."
 
 #: src/gnome-terminal.schemas.in.h:32
 msgid ""
@@ -1530,7 +1532,8 @@ msgid "Whether to silence terminal bell"
 msgstr "Да ли да искључи терминалско звонце"
 
 #: src/gnome-terminal.schemas.in.h:134
-msgid "Whether to update utmp/wtmp when launching terminal command"
+#, fuzzy
+msgid "Whether to update login records when launching terminal command"
 msgstr "Да ли да освежава utmp/wtmp при покретању наредбе у терминалу"
 
 #: src/gnome-terminal.schemas.in.h:135
@@ -1540,6 +1543,14 @@ msgstr "Да ли да користи боје из теме за термина
 #: src/gnome-terminal.schemas.in.h:136
 msgid "Whether to use the system font"
 msgstr "Да ли да користи системска слова"
+
+#. Translators: please note this is has to be a list of valid encodings (which are to
+#. be taken from the list in src/encoding.c) It has to include UTF-8 and the word 'current', which
+#. is not to be translated. This is provided for costumization of the default encoding menu; see
+#. bug 144810 for an use case. In most cases, this should be left alone.
+#: src/gnome-terminal.schemas.in.h:141
+msgid "[UTF-8,current]"
+msgstr ""
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -1694,7 +1705,7 @@ msgstr "Умањи"
 msgid "Normal Size"
 msgstr "Нормална величина"
 
-#: src/terminal-accels.c:111 src/terminal-screen.c:1968
+#: src/terminal-accels.c:111 src/terminal-screen.c:1969
 msgid "Set Title"
 msgstr "Постави наслов"
 
@@ -1997,7 +2008,7 @@ msgstr "Не могу учитати слова „%s“\n"
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Догодио се проблем са наредбом за овај терминал: %s"
 
-#: src/terminal-screen.c:1305
+#: src/terminal-screen.c:1306
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2006,7 +2017,7 @@ msgstr ""
 "Не могу отворити адресу „%s“:\n"
 "%s"
 
-#: src/terminal-screen.c:1398 src/terminal-window.c:784
+#: src/terminal-screen.c:1399 src/terminal-window.c:784
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2015,91 +2026,91 @@ msgstr ""
 "Дошло је до грешке при учитавању вредности подешавања да ли се користе слике "
 "у менију. (%s)\n"
 
-#: src/terminal-screen.c:1469
+#: src/terminal-screen.c:1470
 msgid "_Open Link"
 msgstr "_Отвори везу"
 
-#: src/terminal-screen.c:1474
+#: src/terminal-screen.c:1475
 msgid "_Copy Link Address"
 msgstr "_Умножи адресу везе"
 
-#: src/terminal-screen.c:1485 src/terminal-window.c:827
+#: src/terminal-screen.c:1486 src/terminal-window.c:827
 msgid "Open _Terminal"
 msgstr "Отвори _терминал"
 
-#: src/terminal-screen.c:1490 src/terminal-window.c:830
+#: src/terminal-screen.c:1491 src/terminal-window.c:830
 msgid "Open Ta_b"
 msgstr "Отвори _лист"
 
-#: src/terminal-screen.c:1500 src/terminal-window.c:845
+#: src/terminal-screen.c:1501 src/terminal-window.c:845
 msgid "C_lose Tab"
 msgstr "За_твори лист"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:849
+#: src/terminal-screen.c:1506 src/terminal-window.c:849
 msgid "_Close Window"
 msgstr "_Затвори прозор"
 
-#: src/terminal-screen.c:1533
+#: src/terminal-screen.c:1534
 msgid "Change P_rofile"
 msgstr "Измени _скуп подешавања"
 
-#: src/terminal-screen.c:1583
+#: src/terminal-screen.c:1584
 msgid "_Edit Current Profile..."
 msgstr "_Уреди поставку у употреби"
 
-#: src/terminal-screen.c:1588
+#: src/terminal-screen.c:1589
 msgid "Show _Menubar"
 msgstr "Прикажи м_ени"
 
-#: src/terminal-screen.c:1595
+#: src/terminal-screen.c:1596
 msgid "Secure _Keyboard"
 msgstr "Сигурна _тастатура"
 
-#: src/terminal-screen.c:1605
+#: src/terminal-screen.c:1606
 msgid "_Input Methods"
 msgstr "_Начини уноса у терминал"
 
-#: src/terminal-screen.c:1997
+#: src/terminal-screen.c:1998
 msgid "_Title:"
 msgstr "_Наслов:"
 
-#: src/terminal-screen.c:2114
+#: src/terminal-screen.c:2115
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Текст превучен на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2137
+#: src/terminal-screen.c:2138
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Боја превучена на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2180
+#: src/terminal-screen.c:2181
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Адреса превучена из Мозиле (Mozilla) има неодговарајући формат (%d) или "
 "дужину (%d)\n"
 
-#: src/terminal-screen.c:2229
+#: src/terminal-screen.c:2230
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Списак превучених адреса има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2283
+#: src/terminal-screen.c:2284
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Превучено име слике има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: src/terminal-screen.c:2309
+#: src/terminal-screen.c:2310
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Грешка при претварању адресе „%s“ у назив датотеке: %s\n"
 
-#: src/terminal-widget-vte.c:573
+#: src/terminal-widget-vte.c:574
 msgid "There was an error creating the child process for this terminal"
 msgstr "Догодила се грешка при стварању подпроцеса овог терминала"
 
@@ -2212,31 +2223,31 @@ msgstr ""
 "Догодила се грешка при преузимању обавештења о променама у подешавањима "
 "терминалског прозора. (%s)\n"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2092
 msgid "_File"
 msgstr "_Датотека"
 
-#: src/terminal-window.c:2100 src/terminal.c:2827
+#: src/terminal-window.c:2094 src/terminal.c:2827
 msgid "_Edit"
 msgstr "_Уређивање"
 
-#: src/terminal-window.c:2102
+#: src/terminal-window.c:2096
 msgid "_View"
 msgstr "П_риказ"
 
-#: src/terminal-window.c:2104
+#: src/terminal-window.c:2098
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: src/terminal-window.c:2106
+#: src/terminal-window.c:2100
 msgid "Ta_bs"
 msgstr "_Листови"
 
-#: src/terminal-window.c:2108
+#: src/terminal-window.c:2102
 msgid "_Help"
 msgstr "_Помоћ"
 
-#: src/terminal-window.c:2289
+#: src/terminal-window.c:2283
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2245,17 +2256,17 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/terminal-window.c:2294
+#: src/terminal-window.c:2288
 #, fuzzy
 msgid "Close all tabs?"
 msgstr "Затвори лист"
 
-#: src/terminal-window.c:2306
+#: src/terminal-window.c:2300
 #, fuzzy
 msgid "Close All Tabs"
 msgstr "Затвори лист"
 
-#: src/terminal-window.c:2698
+#: src/terminal-window.c:2692
 msgid "translator_credits"
 msgstr ""
 "Слободан Средојевић <ssl@uns.ns.ac.yu>\n"
@@ -2263,7 +2274,7 @@ msgstr ""
 "\n"
 "http://prevod.org/"
 
-#: src/terminal-window.c:2710
+#: src/terminal-window.c:2704
 msgid "GNOME Terminal"
 msgstr "Гномов терминал"
 
