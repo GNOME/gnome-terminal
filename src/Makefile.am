@@ -13,7 +13,7 @@ INCLUDES=@TERM_CFLAGS@ \
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
 	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
 	-DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED	\
- 	-DGNOME_DISABLE_DEPRECATED \
+	-DGNOME_DISABLE_DEPRECATED \
 	-DSN_API_NOT_YET_FROZEN
 #	-DGTK_DISABLE_DEPRECATED 
 
@@ -61,9 +61,6 @@ schema_DATA = gnome-terminal.schemas
 icondir = $(datadir)/pixmaps
 icon_DATA = gnome-terminal.png
 
-install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
-
 EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
@@ -82,3 +79,8 @@ serverdir = $(libdir)/bonobo/servers
 server_DATA = gnome-terminal.server
 
 @INTLTOOL_SCHEMAS_RULE@
+
+if GCONF_SCHEMAS_INSTALL
+install-data-local:
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(schema_DATA)
+endif
