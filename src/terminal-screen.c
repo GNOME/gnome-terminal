@@ -440,23 +440,27 @@ terminal_screen_update_on_realize (ZvtTerm        *term,
                                    TerminalScreen *screen)
 {
   TerminalProfile *profile;
-  GdkFont *libzvt_workaround_hack;
+  GdkFont *font;
   
   profile = screen->priv->profile;
   
   update_color_scheme (screen);
 
-  /* I fixed this zvt bug but working around it for a couple weeks.
-   * FIXME take this out.
-   */
-  libzvt_workaround_hack = term->font;
-  gdk_font_ref (libzvt_workaround_hack);
-
-  zvt_term_set_fonts (term, term->font,
+  font = gdk_fontset_load (terminal_profile_get_x_font (profile));
+  if (font == NULL)
+    {
+      font = term->font; /* leave it unchanged */
+      gdk_font_ref (font);
+      
+      g_printerr (_("Could not load font \"%s\"\n"),
+                  terminal_profile_get_x_font (profile));
+    }
+  
+  zvt_term_set_fonts (term, font,
                       terminal_profile_get_allow_bold (profile) ?
-                      NULL : term->font);
+                      NULL : font);
 
-  gdk_font_unref (libzvt_workaround_hack);
+  gdk_font_unref (font);
 }
 
 static void

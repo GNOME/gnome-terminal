@@ -1,3 +1,19 @@
+2002-02-17  Havoc Pennington  <hp@pobox.com>
+
+	* src/profile-editor.c: do all the work, except that instead of 
+	popping up the fontsel dialog, pop up a message box explaining
+	what needs fixing.
+
+	* src/terminal-screen.c (terminal_screen_update_on_realize): load
+	font from the profile
+
+	* src/terminal-profile.c: add X font setting
+
+	* src/x-font-selector.h, src/x-font-selector.c:
+	copy in Michael's port of 1.2 X font selector to
+	GTK 2. This still needs a lot of work. :-/
+	http://bugzilla.gnome.org/show_bug.cgi?id=71744
+	
 2002-02-16  Havoc Pennington  <hp@pobox.com>
 
 	* src/profterm.glade: add missing tooltip to palette 

@@ -53,7 +53,8 @@ typedef enum
   TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18,
   TERMINAL_SETTING_ICON                 = 1 << 19,
   TERMINAL_SETTING_IS_DEFAULT           = 1 << 20,
-  TERMINAL_SETTING_PALETTE              = 1 << 21
+  TERMINAL_SETTING_PALETTE              = 1 << 21,
+  TERMINAL_SETTING_X_FONT               = 1 << 22
 } TerminalSettingMask;
 
 typedef enum
@@ -152,6 +153,7 @@ GdkPixbuf*                terminal_profile_get_icon                 (TerminalPro
 gboolean                  terminal_profile_get_is_default           (TerminalProfile *profile);
 void                      terminal_profile_get_palette              (TerminalProfile *profile,
                                                                      GdkColor        *colors);
+const char*               terminal_profile_get_x_font               (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -201,6 +203,8 @@ void terminal_profile_set_palette              (TerminalProfile *profile,
 void terminal_profile_set_palette_entry        (TerminalProfile *profile,
                                                 int              i,
                                                 const GdkColor  *color);
+void terminal_profile_set_x_font               (TerminalProfile *profile,
+                                                const char      *name);
 
 TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
 void             terminal_profile_initialize             (GConfClient     *conf);

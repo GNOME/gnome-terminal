@@ -7,7 +7,7 @@
 gchar *s = N_("Profile Editor");
 gchar *s = N_("_Profile name:");
 gchar *s = N_("_Font:");
-gchar *s = N_("Choose...");
+gchar *s = N_("fixed");
 gchar *s = N_("Select-by-_word characters:");
 gchar *s = N_("Allow _bold text");
 gchar *s = N_("Show _menu bar by default in new terminals");

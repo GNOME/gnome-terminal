@@ -58,6 +58,7 @@
 #define KEY_CUSTOM_COMMAND "custom_command"
 #define KEY_ICON "icon"
 #define KEY_PALETTE "palette"
+#define KEY_X_FONT "x_font"
 
 struct _TerminalProfilePrivate
 {
@@ -89,6 +90,8 @@ struct _TerminalProfilePrivate
   GdkPixbuf *icon;
 
   GdkColor palette[TERMINAL_PALETTE_SIZE];
+
+  char *x_font;
   
   guint icon_load_failed : 1;
   
@@ -240,6 +243,7 @@ terminal_profile_init (TerminalProfile *profile)
   memcpy (profile->priv->palette,
           terminal_palette_linux,
           TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
+  profile->priv->x_font = g_strdup ("fixed");
 }
 
 static void
@@ -291,6 +295,7 @@ terminal_profile_finalize (GObject *object)
   g_free (profile->priv->title);
   g_free (profile->priv->profile_dir);
   g_free (profile->priv->icon_file);
+  g_free (profile->priv->x_font);
   if (profile->priv->icon)
     g_object_unref (G_OBJECT (profile->priv->icon));
   
@@ -1041,6 +1046,33 @@ terminal_profile_set_palette (TerminalProfile *profile,
   g_free (str);
 }
 
+const char*
+terminal_profile_get_x_font (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+
+  return profile->priv->x_font;
+}
+
+void
+terminal_profile_set_x_font (TerminalProfile *profile,
+                             const char      *name)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_X_FONT);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           name,
+                           NULL);
+
+  g_free (key);
+}
+
 void
 terminal_profile_set_palette_entry (TerminalProfile *profile,
                                     int              i,
@@ -1296,6 +1328,25 @@ set_palette_string (TerminalProfile *profile,
 
       return TRUE;
     }
+  
+  return FALSE;
+}
+
+static gboolean
+set_x_font (TerminalProfile *profile,
+            const char      *candidate_font)
+{
+  if (candidate_font &&
+      strcmp (profile->priv->x_font, candidate_font) == 0)
+    return FALSE;
+  
+  if (candidate_font != NULL)
+    {
+      g_free (profile->priv->x_font);
+      profile->priv->x_font = g_strdup (candidate_font);
+      return TRUE;
+    }
+  /* otherwise just leave the old font */
   
   return FALSE;
 }
@@ -1649,6 +1700,21 @@ terminal_profile_update (TerminalProfile *profile)
   
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_PALETTE;
+  
+  g_free (key);
+
+  /* KEY_X_FONT */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_X_FONT);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_x_font (profile, str_val))
+    mask |= TERMINAL_SETTING_X_FONT;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_X_FONT;
   
   g_free (key);
   
@@ -2011,6 +2077,19 @@ profile_change_notify (GConfClient *client,
         mask |= TERMINAL_SETTING_PALETTE;
 
       UPDATE_LOCKED (TERMINAL_SETTING_PALETTE);
+    }
+  else if (strcmp (key, KEY_X_FONT) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_x_font (profile, str_val))
+        mask |= TERMINAL_SETTING_X_FONT;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_X_FONT);
     }
   
   if (mask != 0 || old_locked != profile->priv->locked)
@@ -2594,6 +2673,15 @@ terminal_profile_create (TerminalProfile *base_profile,
                            key, s,
                            &err);
   g_free (s);
+  BAIL_OUT_CHECK ();
+
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_X_FONT);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, base_profile->priv->x_font,
+                           &err);
   BAIL_OUT_CHECK ();
   
   /* Add new profile to the profile list; the method for doing this has

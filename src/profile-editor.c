@@ -25,6 +25,7 @@
 #include <libgnomeui/gnome-color-picker.h>
 #include <string.h>
 #include "eggcellrendererkeys.h"
+#include "x-font-selector.h"
 
 /* Bytes in a line of scrollback, rough estimate, including
  * data structure to hold the line. Based on reading
@@ -110,6 +111,8 @@ static void       profile_editor_update_use_custom_command   (GtkWidget       *w
 static void       profile_editor_update_custom_command       (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_palette              (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_x_font               (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 
 
@@ -247,6 +250,9 @@ profile_changed (TerminalProfile          *profile,
 
   if (mask & TERMINAL_SETTING_PALETTE)
     profile_editor_update_palette (editor, profile);
+
+  if (mask & TERMINAL_SETTING_X_FONT)
+    profile_editor_update_x_font (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -519,6 +525,66 @@ palette_color_set (GtkWidget       *colorpicker,
 
   terminal_profile_set_palette_entry (profile, i,
                                       &color);
+}
+
+static void
+font_dialog_destroyed (GtkWidget *dialog,
+                       gpointer   data)
+{
+  GtkWidget *button;
+
+  button = data;
+
+  g_object_set_data (G_OBJECT (button), "font-selector", NULL);
+}
+
+static void
+x_font_clicked (GtkWidget       *button,
+                TerminalProfile *profile)
+{
+  /* Pop up dialog, get new font, terminal_profile_set_x_font */
+  GtkWidget *dialog;
+  GtkWidget *parent;
+  
+  dialog = g_object_get_data (G_OBJECT (button),
+                              "font-selector");
+
+  if (dialog)
+    {
+      gtk_window_present (GTK_WINDOW (dialog));
+      return;
+    }
+  
+  parent = gtk_widget_get_ancestor (button, GTK_TYPE_WINDOW);
+  g_assert (parent);
+
+#if 0
+  dialog = gnome_font_selector_new (_("Choose a font"));
+  
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+#else
+  dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_INFO,
+                                   GTK_BUTTONS_CLOSE,
+                                   "Sadly, this button doesn't work. "
+                                   "To fix, repair x-font-selector.[hc] "
+                                   "then connect it up in %s (line %d, function %s); all "
+                                   "other parts of the font pref are already done.\n"
+                                   "http://bugzilla.gnome.org/show_bug.cgi?id=71744",
+                                   __FILE__, __LINE__,
+                                   G_GNUC_FUNCTION);
+  g_signal_connect (G_OBJECT (dialog), "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+#endif
+
+  g_object_set_data (G_OBJECT (button), "font-selector", dialog);
+  g_signal_connect (G_OBJECT (dialog), "destroy",
+                    G_CALLBACK (font_dialog_destroyed), button);
+
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 /*
@@ -879,6 +945,20 @@ terminal_profile_edit (TerminalProfile *profile,
         }
 
       profile_editor_update_palette (editor, profile);
+
+      w = glade_xml_get_widget (xml, "font-button");
+      /* keep button from expanding the dialog, and truncate on
+       * the left not on either side; would really prefer to
+       * center until running out of space, but oh well.
+       */
+      gtk_misc_set_alignment (GTK_MISC (gtk_bin_get_child (GTK_BIN (w))),
+                              0.0, 0.5);
+      gtk_widget_set_size_request (gtk_bin_get_child (GTK_BIN (w)),
+                                   0, -1);
+      profile_editor_update_x_font (editor, profile);
+      g_signal_connect (G_OBJECT (w), "clicked",
+                        G_CALLBACK (x_font_clicked),
+                        profile);
       
       w = glade_xml_get_widget (xml, "bindings-swindow");
 
@@ -902,6 +982,7 @@ terminal_profile_edit (TerminalProfile *profile,
 						   renderer,
 						   "text", 0,
 						   NULL);
+      gtk_widget_show (view);
       gtk_container_add (GTK_CONTAINER (w), view);
     }
   else
@@ -1029,6 +1110,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "palette-optionmenu",
                    mask & TERMINAL_SETTING_PALETTE);
 
+  set_insensitive (editor, "font-button",
+                   mask & TERMINAL_SETTING_X_FONT);
+  
   {
     int i;
 
@@ -1388,6 +1472,21 @@ profile_editor_update_palette (GtkWidget       *editor,
    * menu item which is "custom"
    */
   gtk_option_menu_set_history (GTK_OPTION_MENU (w), i);
+}
+
+static void
+profile_editor_update_x_font (GtkWidget       *editor,
+                              TerminalProfile *profile)
+{
+  GtkWidget *w;
+  GtkWidget *child;
+  
+  w = profile_editor_get_widget (editor, "font-button");  
+  
+  child = gtk_bin_get_child (GTK_BIN (w));
+
+  gtk_label_set_text (GTK_LABEL (child),
+                      terminal_profile_get_x_font (profile));
 }
 
 static GtkWidget*

@@ -27,7 +27,9 @@ gnome_terminal_SOURCES=				\
 	terminal-window.c			\
 	terminal-window.h			\
 	eggcellrendererkeys.c			\
-	eggcellrendererkeys.h
+	eggcellrendererkeys.h			\
+	x-font-selector.c			\
+	x-font-selector.h
 
 gnome_terminal_LDADD= @TERM_LIBS@ eel/libeelcnp.la
 
