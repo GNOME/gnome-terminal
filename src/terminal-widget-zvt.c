@@ -1126,3 +1126,9 @@ terminal_widget_supports_dynamic_encoding (void)
 {
   return FALSE;
 }
+
+void
+terminal_widget_im_append_menuitems(GtkWidget *widget, GtkMenuShell *menushell)
+{
+  ; /* does nothing */
+}

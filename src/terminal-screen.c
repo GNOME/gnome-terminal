@@ -1206,6 +1206,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
                           GdkEventButton *event)
 {
   GtkWidget *profile_menu;
+  GtkWidget *im_menu;
   GtkWidget *menu_item;
   GList *profiles;
   GList *tmp;
@@ -1311,6 +1312,21 @@ terminal_screen_do_popup (TerminalScreen *screen,
 		   screen);
 
   
+  im_menu = gtk_menu_new ();
+  menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
+
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item),
+                             im_menu);
+
+  terminal_widget_im_append_menuitems (screen->priv->term,
+		  		       GTK_MENU_SHELL (im_menu));
+
+  gtk_widget_show (im_menu);
+  gtk_widget_show (menu_item);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
+                         menu_item);
+
   if (terminal_window_get_menubar_visible (screen->priv->window))
     menu_item = append_menuitem (screen->priv->popup_menu,
 				 _("Hide _Menubar"),

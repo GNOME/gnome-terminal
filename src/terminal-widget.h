@@ -154,6 +154,9 @@ void        terminal_widget_set_encoding (GtkWidget  *widget,
 
 gboolean terminal_widget_supports_dynamic_encoding (void);
 
+void terminal_widget_im_append_menuitems(GtkWidget    *wiget,
+					 GtkMenuShell *menushell);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WIDGET_H */
