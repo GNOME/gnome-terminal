@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-03-18 00:43+0100\n"
-"PO-Revision-Date: 2002-03-18 00:46+0100\n"
+"POT-Creation-Date: 2002-03-21 00:00+0100\n"
+"PO-Revision-Date: 2002-03-21 00:00+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -26,23 +26,6 @@ msgstr "Narzędzie dające dostęp do powłoki uniksowej"
 msgid "Terminal"
 msgstr "Terminal"
 
-#. localizers: These strings are part of the strftime
-#. * self-check code and must be changed to match what strtfime
-#. * yields -- usually just omitting the AM part is all that's
-#. * needed.
-#.
-#: src/eel/eel-glib-extensions.c:1
-msgid "01/01/00, 01:00 AM"
-msgstr "01/01/00, 01:00"
-
-#: src/eel/eel-glib-extensions.c:1
-msgid "1/1/00, 1:00 AM"
-msgstr "1/1/00, 1:00"
-
-#: src/eel/eel-glib-extensions.c:1
-msgid " 1/ 1/00,  1:00 AM"
-msgstr " 1/ 1/00,  1:00"
-
 #: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
 msgid "Accelerator modifiers"
 msgstr "Modyfikatory akceleratora"
@@ -56,7 +39,7 @@ msgstr "Klawisz akceleratora"
 msgid "Disabled"
 msgstr "Brak"
 
-#: src/eggcellrendererkeys.c:1
+#: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
 msgid "Type a new accelerator, or press Backspace to clear"
 msgstr "Wpisz nowy akcelerator lub naciśnij Backspace, aby go wyczyścić."
 
@@ -141,11 +124,6 @@ msgstr "Sekwencja escape"
 #: src/gnome-terminal.glade2.h:1
 msgid "Exit the terminal"
 msgstr "Zamknięcie terminala"
-
-#: src/gnome-terminal.glade2.h:1 src/x-font-selector.c:1
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "Font:"
-msgstr "Czcionka:"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Foreground and Background"
@@ -254,6 +232,10 @@ msgstr "9. element palety"
 #: src/gnome-terminal.glade2.h:1
 msgid "Profile Editor"
 msgstr "Edytor profili"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Profile _icon:"
+msgstr "_Ikona profilu:"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "R_un a custom command instead of my shell"
@@ -457,12 +439,16 @@ msgid "Editing profile \"%s\""
 msgstr "Modyfikacja profilu \"%s\""
 
 #: src/simple-x-font-selector.c:1
-msgid "_Family:"
-msgstr "_Rodzina:"
+msgid "_Font:"
+msgstr "_Czcionka:"
 
 #: src/simple-x-font-selector.c:1
-msgid "Si_ze (pixels):"
-msgstr "R_ozmiar (piksele):"
+msgid "Si_ze:"
+msgstr "_Rozmiar:"
+
+#: src/simple-x-font-selector.c:1
+msgid "_Use bold version of font"
+msgstr "Użycie p_ogrubionej odmiany czcionki"
 
 #: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
 msgid "roman"
@@ -544,6 +530,10 @@ msgstr "Przełączenie wyświetlania paska menu"
 #: src/terminal-accels.c:1
 msgid "Full Screen"
 msgstr "Pełny ekran"
+
+#: src/terminal-accels.c:1
+msgid "Set Title"
+msgstr "Ustawienie tytułu"
 
 #: src/terminal-accels.c:1
 msgid "Reset"
@@ -843,6 +833,14 @@ msgstr "_Otwórz odnośnik"
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
+#: src/terminal-screen.c:1
+msgid "Change terminal title"
+msgstr "Zmiana tytułu terminala"
+
+#: src/terminal-screen.c:1
+msgid "_Title:"
+msgstr "_Tytuł:"
+
 #: src/terminal-widget-zvt.c:1
 #, c-format
 msgid "There was an error creating the child process for this terminal: %s"
@@ -887,6 +885,10 @@ msgstr "Ukryj pasek m_enu"
 #: src/terminal-window.c:1
 msgid "_Full Screen"
 msgstr "P_ełny ekran"
+
+#: src/terminal-window.c:1
+msgid "_Set Title..."
+msgstr "_Ustaw tytuł..."
 
 #: src/terminal-window.c:1
 msgid "_Reset"
@@ -1067,6 +1069,11 @@ msgstr ""
 "Zwraca się do istniejącego procesu profterma o otwarcie nowego okna, jeśli "
 "to możliwe. Jeszcze nie zaimplementowane, "
 "http://bugzilla.gnome.org/show_bug.cgi?id=71442"
+
+#: src/terminal.c:1
+#, c-format
+msgid "Could not load icon \"%s\": %s\n"
+msgstr "Nie można odczytać ikony \"%s\": %s\n"
 
 #: src/terminal.c:1
 msgid "Option --command/-e requires specifying the command to run\n"
@@ -1321,6 +1328,11 @@ msgstr "Rzeczywista wartość"
 #: src/x-font-selector.c:1
 msgid "Font"
 msgstr "Czcionka"
+
+#: src/x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "Font:"
+msgstr "Czcionka:"
 
 #: src/x-font-selector.c:1
 msgid "Font Style:"
