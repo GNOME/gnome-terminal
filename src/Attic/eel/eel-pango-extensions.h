@@ -44,11 +44,24 @@ void           eel_pango_layout_set_underline             (PangoLayout      *lay
 							   PangoUnderline    underline);
 void           eel_pango_layout_set_font_desc_from_string (PangoLayout      *layout,
 							   const char       *str);
+int eel_pango_font_description_get_largest_fitting_font_size (const PangoFontDescription *font_desc,
+							      PangoContext               *context,
+							      const char                 *text,
+							      int                         available_width,
+							      int                         minimum_acceptable_font_size,
+							      int                         maximum_acceptable_font_size);
+
+PangoRectangle eel_pango_layout_fit_to_dimensions         (PangoLayout      *layout,
+							   int               max_width,
+							   int               max_height);
 /* caution: this function is expensive. */
 void           eel_pango_layout_set_text_ellipsized       (PangoLayout      *layout,
 							   const char       *string,
 							   int               width,
 							   EelEllipsizeMode  mode);
 PangoContext * eel_pango_ft2_get_context                  (void);
+
+
+
 
 #endif /* EEL_PANGO_EXTENSIONS_H */

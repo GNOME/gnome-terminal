@@ -29,7 +29,9 @@
 #include <locale.h>
 #include <stdlib.h>
 
+#if !defined (EEL_OMIT_SELF_CHECK)
 #include "eel-lib-self-check-functions.h"
+#endif
 
 size_t
 eel_strlen (const char *string)

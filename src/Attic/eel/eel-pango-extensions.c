@@ -27,7 +27,10 @@
 #include <config.h>
 #include "eel-pango-extensions.h"
 
+#if !defined (EEL_OMIT_SELF_CHECK)
 #include "eel-lib-self-check-functions.h"
+#endif
+
 #include <gtk/gtkmain.h>
 #include <pango/pango-attributes.h>
 #include <pango/pango-break.h>
@@ -483,6 +486,90 @@ eel_pango_layout_set_text_ellipsized (PangoLayout  *layout,
 	
 	g_free (s);
 }
+
+/**
+ * eel_pango_layout_fit_to_dimensions:
+ * @layout: a pango layout
+ * @max_width: the maximum width allowed or -1 to match only height
+ * @max_height: the maximum height allowed or -1 to match only width
+ * 
+ *    This method adjusts the font attributes of the simple
+ * string in @layout until it fits inside the desired @max_size.
+ * 
+ * Return value: the resulting dimensions.
+ **/
+PangoRectangle
+eel_pango_layout_fit_to_dimensions (PangoLayout  *layout,
+				    int           max_width,
+				    int           max_height)
+{
+	gint size;
+	PangoContext *context;
+	PangoRectangle logical_rect = { 0 };
+	PangoFontDescription *font_desc;
+
+	g_return_val_if_fail (PANGO_IS_LAYOUT (layout), logical_rect);
+
+	context = pango_layout_get_context (layout);
+	font_desc = pango_context_get_font_description (context);
+
+	size = pango_font_description_get_size (font_desc);
+
+	do {
+		pango_font_description_set_size (font_desc, size--);
+
+		pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
+	} while (((max_width > 0 && logical_rect.width > max_width) || max_width < 0) &&
+		 ((max_height > 0 && logical_rect.height > max_height) || max_height < 0));
+
+	return logical_rect;
+}
+
+int
+eel_pango_font_description_get_largest_fitting_font_size (const PangoFontDescription *font_desc,
+							  PangoContext *context,
+							  const char   *text,
+							  int           available_width,
+							  int           minimum_acceptable_font_size,
+							  int           maximum_acceptable_font_size)
+{
+	int i;
+	int width;
+	PangoLayout *layout;
+	PangoFontDescription *font;
+
+	g_return_val_if_fail (text != NULL, 0);
+	g_return_val_if_fail (text[0] != '\0', 0);
+	g_return_val_if_fail (available_width > 0, 0);
+	g_return_val_if_fail (minimum_acceptable_font_size > 0, 0);
+	g_return_val_if_fail (maximum_acceptable_font_size > 0, 0);
+	g_return_val_if_fail (maximum_acceptable_font_size > minimum_acceptable_font_size, 0);
+
+	layout = pango_layout_new (context);
+	pango_layout_set_text (layout, text, -1);
+	pango_layout_set_font_description (layout, font_desc);
+	
+	font = pango_font_description_new ();
+
+	for (i = maximum_acceptable_font_size; i >= minimum_acceptable_font_size; i--) {
+
+		pango_font_description_set_size (font, i * PANGO_SCALE);
+		pango_layout_set_font_description (layout, font);
+		pango_layout_get_pixel_size (layout, &width, NULL);
+
+		if (width <= available_width) {
+			pango_font_description_free (font);
+			g_object_unref (layout);
+			return i;
+		}
+	}
+
+	pango_font_description_free (font);
+	g_object_unref (layout);
+	return i;
+}
+
 
 PangoContext *
 eel_pango_ft2_get_context (void)
