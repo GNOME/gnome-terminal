@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-06 03:45+0200\n"
-"PO-Revision-Date: 2004-08-06 10:12+0800\n"
+"POT-Creation-Date: 2004-08-27 03:49+0200\n"
+"PO-Revision-Date: 2004-08-27 10:50+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -45,7 +45,7 @@ msgstr "加速键类型。"
 #: src/eggcellrendererkeys.c:219 src/gnome-terminal.glade2.h:32
 #: src/terminal-accels.c:717
 msgid "Disabled"
-msgstr "禁用"
+msgstr "已禁用"
 
 #: src/eggcellrendererkeys.c:330 src/eggcellrendererkeys.c:564
 msgid "Type a new accelerator, or press Backspace to clear"
@@ -60,11 +60,11 @@ msgid "Current Locale"
 msgstr "当前区域"
 
 #: src/encoding.c:58 src/encoding.c:84 src/encoding.c:127 src/encoding.c:175
-#: src/encoding.c:199
+#: src/encoding.c:203
 msgid "Western"
 msgstr "西欧"
 
-#: src/encoding.c:60 src/encoding.c:129 src/encoding.c:155 src/encoding.c:195
+#: src/encoding.c:60 src/encoding.c:129 src/encoding.c:155 src/encoding.c:199
 msgid "Central European"
 msgstr "中欧"
 
@@ -72,20 +72,20 @@ msgstr "中欧"
 msgid "South European"
 msgstr "南欧"
 
-#: src/encoding.c:64 src/encoding.c:80 src/encoding.c:209
+#: src/encoding.c:64 src/encoding.c:80 src/encoding.c:213
 msgid "Baltic"
 msgstr "斜体"
 
 #: src/encoding.c:66 src/encoding.c:131 src/encoding.c:144 src/encoding.c:148
-#: src/encoding.c:159 src/encoding.c:197
+#: src/encoding.c:159 src/encoding.c:201
 msgid "Cyrillic"
 msgstr "西里尔语"
 
-#: src/encoding.c:68 src/encoding.c:137 src/encoding.c:153 src/encoding.c:207
+#: src/encoding.c:68 src/encoding.c:137 src/encoding.c:153 src/encoding.c:211
 msgid "Arabic"
 msgstr "阿拉伯语"
 
-#: src/encoding.c:70 src/encoding.c:165 src/encoding.c:201
+#: src/encoding.c:70 src/encoding.c:165 src/encoding.c:205
 msgid "Greek"
 msgstr "希腊语"
 
@@ -93,11 +93,11 @@ msgstr "希腊语"
 msgid "Hebrew Visual"
 msgstr "可视希伯来语"
 
-#: src/encoding.c:74 src/encoding.c:135 src/encoding.c:171 src/encoding.c:205
+#: src/encoding.c:74 src/encoding.c:135 src/encoding.c:171 src/encoding.c:209
 msgid "Hebrew"
 msgstr "希伯来语"
 
-#: src/encoding.c:76 src/encoding.c:133 src/encoding.c:179 src/encoding.c:203
+#: src/encoding.c:76 src/encoding.c:133 src/encoding.c:179 src/encoding.c:207
 msgid "Turkish"
 msgstr "土耳其语"
 
@@ -130,11 +130,11 @@ msgstr "繁体中文"
 msgid "Cyrillic/Russian"
 msgstr "西里尔语/俄语"
 
-#: src/encoding.c:109 src/encoding.c:140 src/encoding.c:184
+#: src/encoding.c:109 src/encoding.c:140 src/encoding.c:186
 msgid "Japanese"
 msgstr "日语"
 
-#: src/encoding.c:111 src/encoding.c:142 src/encoding.c:146 src/encoding.c:190
+#: src/encoding.c:111 src/encoding.c:142 src/encoding.c:146 src/encoding.c:194
 msgid "Korean"
 msgstr "朝鲜语"
 
@@ -174,27 +174,35 @@ msgstr "旁遮普语"
 msgid "Icelandic"
 msgstr "冰岛语"
 
-#: src/encoding.c:186 src/encoding.c:192 src/encoding.c:211
+#: src/encoding.c:184
+msgid "Farsi"
+msgstr "波斯语"
+
+#: src/encoding.c:188 src/encoding.c:196 src/encoding.c:215
 msgid "Vietnamese"
 msgstr "越南语"
 
-#: src/encoding.c:188
+#: src/encoding.c:190
 msgid "Thai"
 msgstr "泰语"
 
-#: src/encoding.c:377
+#: src/encoding.c:192
+msgid "Tamil"
+msgstr "泰米尔语"
+
+#: src/encoding.c:381
 msgid "User Defined"
 msgstr "用户定义"
 
-#: src/encoding.c:735 src/encoding.c:799
+#: src/encoding.c:739 src/encoding.c:803
 msgid "_Description"
 msgstr "描述(_D)"
 
-#: src/encoding.c:744 src/encoding.c:808
+#: src/encoding.c:748 src/encoding.c:812
 msgid "_Encoding"
 msgstr "编码(_E)"
 
-#: src/encoding.c:977
+#: src/encoding.c:981
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal encoding list "
@@ -1458,20 +1466,14 @@ msgstr "是否为终端部件使用主题中的颜色"
 msgid "Whether to use the system font"
 msgstr "是否使用系统字体"
 
-#. Translators: please note this is has to be a list of valid encodings (which are to
-#. be taken from the list in src/encoding.c) It has to include UTF-8 and the word 'current', which
-#. is not to be translated. This is provided for costumization of the default encoding menu; see
-#. bug 144810 for an use case. In most cases, this should be left alone.
-#: src/gnome-terminal.schemas.in.h:141
+#. Translators: Please note that this has to be a list of
+#. valid encodings (which are to be taken from the list in src/encoding.c).
+#. It has to include UTF-8 and the word 'current', which is not to be
+#. translated. This is provided for customization of the default encoding
+#. menu; see bug 144810 for an use case. In most cases, this should be
+#. left alone.
+#: src/gnome-terminal.schemas.in.h:143
 msgid "[UTF-8,current]"
-msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
-
-msgid ""
-"<!-- Translators: please note this is has to be a list of valid encodings "
-"(which are to be taken from the list in src/encoding.c) It has to include "
-"UTF-8 and the word 'current', which is not to be translated. This is "
-"provided for costumization of the default encoding menu; see bug 144810 for "
-"an use case. In most cases, this should be left alone. -->[UTF-8,current]"
 msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
 
 #: src/profile-editor.c:47
@@ -2105,31 +2107,31 @@ msgid ""
 "configuration changes. (%s)\n"
 msgstr "订阅终端窗口配置更改通知时出错。(%s)\n"
 
-#: src/terminal-window.c:2090
+#: src/terminal-window.c:2091
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/terminal-window.c:2092 src/terminal.c:2827
+#: src/terminal-window.c:2093 src/terminal.c:2827
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: src/terminal-window.c:2094
+#: src/terminal-window.c:2095
 msgid "_View"
 msgstr "查看(_V)"
 
-#: src/terminal-window.c:2096
+#: src/terminal-window.c:2097
 msgid "_Terminal"
 msgstr "终端(_T)"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2099
 msgid "Ta_bs"
 msgstr "标签(_B)"
 
-#: src/terminal-window.c:2100
+#: src/terminal-window.c:2101
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: src/terminal-window.c:2281
+#: src/terminal-window.c:2282
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2137,21 +2139,21 @@ msgid_plural ""
 "tabs."
 msgstr[0] "此窗口仍打开了 %d 个标签。关闭窗口即将关闭其下的全部标签。"
 
-#: src/terminal-window.c:2286
+#: src/terminal-window.c:2287
 msgid "Close all tabs?"
 msgstr "关闭全部标签吗？"
 
-#: src/terminal-window.c:2298
+#: src/terminal-window.c:2299
 msgid "Close All Tabs"
 msgstr "关闭全部标签"
 
-#: src/terminal-window.c:2690
+#: src/terminal-window.c:2691
 msgid "translator_credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
 "Funda Wang <fundawang@linux.net.cn>, 2003"
 
-#: src/terminal-window.c:2702
+#: src/terminal-window.c:2703
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
@@ -2558,3 +2560,11 @@ msgstr "在激活服务中注册终端时出错；禁用 Factory 模式。\n"
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "从激活服务器获取中断服务器失败\n"
 
+#~ msgid ""
+#~ "<!-- Translators: please note this is has to be a list of valid encodings "
+#~ "(which are to be taken from the list in src/encoding.c) It has to include "
+#~ "UTF-8 and the word 'current', which is not to be translated. This is "
+#~ "provided for costumization of the default encoding menu; see bug 144810 "
+#~ "for an use case. In most cases, this should be left alone. -->[UTF-8,"
+#~ "current]"
+#~ msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
