@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:42-0300\n"
-"PO-Revision-Date: 2004-03-04 20:44+0800\n"
+"POT-Creation-Date: 2004-08-06 03:45+0200\n"
+"PO-Revision-Date: 2004-08-06 10:12+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -354,9 +354,8 @@ msgid "Goes before initial title"
 msgstr "起始标题前"
 
 #: src/gnome-terminal.glade2.h:40
-#, fuzzy
 msgid "Hold the terminal open"
-msgstr "退出终端"
+msgstr "保持退出打开"
 
 #: src/gnome-terminal.glade2.h:41
 msgid "Initial _title:"
@@ -610,9 +609,8 @@ msgid "_Transparent background"
 msgstr "透明背景(_T)"
 
 #: src/gnome-terminal.glade2.h:104
-#, fuzzy
 msgid "_Update login records when command is launched"
-msgstr "执行命令时更新 utmp/wtmp 记录(_U)"
+msgstr "执行命令时更新登录记录(_U)"
 
 #: src/gnome-terminal.glade2.h:105
 msgid "_Use the system terminal font"
@@ -779,11 +777,10 @@ msgstr ""
 "符。)"
 
 #: src/gnome-terminal.schemas.in.h:28
-#, fuzzy
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
-msgstr "如果为 true，将会在终端内的命令调用时更新 utmp/wtmp。"
+msgstr "如果为 true，将会在终端内的命令调用时更新登录记录 utmp/wtmp。"
 
 #: src/gnome-terminal.schemas.in.h:29
 msgid ""
@@ -1402,12 +1399,11 @@ msgstr "是否允许粗体字"
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
-msgstr ""
+msgstr "是否在关闭打开了多个标签的终端窗口时请求确认。"
 
 #: src/gnome-terminal.schemas.in.h:124
-#, fuzzy
 msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "是否在调用终端命令时更新 utmp/wtmp"
+msgstr "是否在关闭终端窗口时请求确认"
 
 #: src/gnome-terminal.schemas.in.h:125
 msgid "Whether to blink the cursor"
@@ -1451,9 +1447,8 @@ msgid "Whether to silence terminal bell"
 msgstr "是否禁用终端铃声"
 
 #: src/gnome-terminal.schemas.in.h:134
-#, fuzzy
 msgid "Whether to update login records when launching terminal command"
-msgstr "是否在调用终端命令时更新 utmp/wtmp"
+msgstr "是否在调用终端命令时更新登录日志"
 
 #: src/gnome-terminal.schemas.in.h:135
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -1469,7 +1464,7 @@ msgstr "是否使用系统字体"
 #. bug 144810 for an use case. In most cases, this should be left alone.
 #: src/gnome-terminal.schemas.in.h:141
 msgid "[UTF-8,current]"
-msgstr ""
+msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
 
 #: src/profile-editor.c:47
 msgid "Black on light yellow"
@@ -1775,7 +1770,7 @@ msgstr "将加速键改动存入配置数据库时出错：%s\n"
 #: src/terminal-accels.c:986
 #, c-format
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
-msgstr ""
+msgstr "快捷键“%s”已经绑定到“%s”动作"
 
 #: src/terminal-accels.c:1018
 #, c-format
@@ -2053,110 +2048,102 @@ msgstr "显示菜单栏(_B)"
 msgid "_Full Screen"
 msgstr "全屏(_F)"
 
-#. the default label for GTK_STOCK_ZOOM_100 does not follow the HIG...
-#: src/terminal-window.c:929
-msgid "_Normal Size"
-msgstr "普通大小(_N)"
-
-#: src/terminal-window.c:951
+#: src/terminal-window.c:949
 msgid "Change _Profile"
 msgstr "更改配置文件(_P)"
 
-#: src/terminal-window.c:954
+#: src/terminal-window.c:952
 msgid "_Set Title..."
 msgstr "设置标题(_S)..."
 
-#: src/terminal-window.c:961
+#: src/terminal-window.c:959
 msgid "Set _Character Encoding"
 msgstr "设定字符编码(_C)"
 
-#: src/terminal-window.c:971
+#: src/terminal-window.c:969
 msgid "_Reset"
 msgstr "复位(_R)"
 
-#: src/terminal-window.c:974
+#: src/terminal-window.c:972
 msgid "Reset and C_lear"
 msgstr "复位并清屏(_L)"
 
-#: src/terminal-window.c:988
+#: src/terminal-window.c:986
 msgid "_Previous Tab"
 msgstr "前一标签(_P)"
 
-#: src/terminal-window.c:992
+#: src/terminal-window.c:990
 msgid "_Next Tab"
 msgstr "后一标签(_N)"
 
-#: src/terminal-window.c:1011
+#: src/terminal-window.c:1009
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: src/terminal-window.c:1021
+#: src/terminal-window.c:1019
 msgid "_About"
 msgstr "关于(_A)"
 
-#: src/terminal-window.c:1185
+#: src/terminal-window.c:1183
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "载入是否使用记忆术的配置时出错。(%s)\n"
 
-#: src/terminal-window.c:1204
+#: src/terminal-window.c:1202
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "订阅终端窗口配置更改通知时出错。(%s)\n"
 
-#: src/terminal-window.c:2092
+#: src/terminal-window.c:2090
 msgid "_File"
 msgstr "文件(_F)"
 
-#: src/terminal-window.c:2094 src/terminal.c:2827
+#: src/terminal-window.c:2092 src/terminal.c:2827
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: src/terminal-window.c:2096
+#: src/terminal-window.c:2094
 msgid "_View"
 msgstr "查看(_V)"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2096
 msgid "_Terminal"
 msgstr "终端(_T)"
 
-#: src/terminal-window.c:2100
+#: src/terminal-window.c:2098
 msgid "Ta_bs"
 msgstr "标签(_B)"
 
-#: src/terminal-window.c:2102
+#: src/terminal-window.c:2100
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: src/terminal-window.c:2283
+#: src/terminal-window.c:2281
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "此窗口仍打开了 %d 个标签。关闭窗口即将关闭其下的全部标签。"
 
-#: src/terminal-window.c:2288
-#, fuzzy
+#: src/terminal-window.c:2286
 msgid "Close all tabs?"
-msgstr "关闭标签"
+msgstr "关闭全部标签吗？"
 
-#: src/terminal-window.c:2300
-#, fuzzy
+#: src/terminal-window.c:2298
 msgid "Close All Tabs"
-msgstr "关闭标签"
+msgstr "关闭全部标签"
 
-#: src/terminal-window.c:2692
+#: src/terminal-window.c:2690
 msgid "translator_credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
 "Funda Wang <fundawang@linux.net.cn>, 2003"
 
-#: src/terminal-window.c:2704
+#: src/terminal-window.c:2702
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
@@ -2557,17 +2544,9 @@ msgstr "您没有将 gnome-terminal.server 安装到有效的位置。禁用 Fac
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
-msgstr "在激活服务中注册终端时出错。禁用 Factory 模式。\n"
+msgstr "在激活服务中注册终端时出错；禁用 Factory 模式。\n"
 
 #: src/terminal.c:3732
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "从激活服务器获取中断服务器失败。\n"
+msgstr "从激活服务器获取中断服务器失败\n"
 
-#~ msgid "There was an error creating the child process for this terminal: %s"
-#~ msgstr "创建此终端的子进程时出错：%s"
-
-#~ msgid "Could not set working directory to \"%s\": %s\n"
-#~ msgstr "无法设置工作目录为“%s”：%s\n"
-
-#~ msgid "Could not execute command %s: %s\n"
-#~ msgstr "无法执行命令 %s：%s\n"
