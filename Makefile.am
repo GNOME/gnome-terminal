@@ -12,7 +12,9 @@ EXTRA_DIST = 			\
 	HACKING			\
 	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
-	$(applications_DATA)   \
+	$(applications_DATA)    \
 	intltool-extract.in	\
 	intltool-merge.in	\
-	intltool-update.in
+	intltool-update.in	\
+	xmldocs.make		\
+	omf.make
