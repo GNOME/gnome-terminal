@@ -2700,7 +2700,7 @@ about_callback (GtkWidget      *menuitem,
   const char *copyright =
     "Copyright \xc2\xa9 2002-2004 Havoc Pennington\n"
     "Copyright \xc2\xa9 2003-2004 Mariano Su\303\241rez-Alvarez";
-  char *authors[] = {
+  const char *authors[] = {
     "Havoc Pennington <hp@redhat.com>",
     "Mariano Su\303\241rez-Alvarez <mariano@gnome.org>",
     NULL
