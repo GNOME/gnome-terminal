@@ -5,7 +5,7 @@
   <!ENTITY appversion "1.9.6">
   <!ENTITY date "August 2002">
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY manrevision "2.1">
+  <!ENTITY manrevision "2.2">
 ]>
 <!-- (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
@@ -70,6 +70,19 @@
              </para>
           </revdescription> 
         </revision> 
+        <revision> 
+          <revnumber>GNOME Terminal Manual V2.1</revnumber> 
+          <date>August 2002</date> 
+          <revdescription> 
+             <para role="author">
+                Sun GNOME Documentation Team
+                <email>gdocteam@sun.com</email> 
+             </para>
+             <para role="publisher">
+                GNOME Documentation Project 
+             </para>
+          </revdescription> 
+        </revision>
         <revision> 
           <revnumber>GNOME Terminal Manual V2.0</revnumber> 
           <date>April 2002</date> 
@@ -261,7 +274,7 @@
         <para>
           You can create a new profile, and apply the new profile to the terminal
           to modify characteristics such as font, color and effects, scrolling behavior,
-          window title, compatibility, and key bindings. You can also define the command
+          window title, compatibility, and keyboard shortcuts. You can also define the command
           for starting <application>&app;</application> in the profile. You define each
           terminal profile in the 
           <guilabel>Editing profile</guilabel> dialog, which you access from the 
@@ -343,9 +356,9 @@
                 <para>
                   The new terminal starts a subprocess with the same PID as the
                   terminal from which you start the new terminal. The subprocess is less
-                  intensive on the system resources than when you start a new <application>&app;
-                  </application> from a GNOME panel. The new terminal inherits the application
-                  settings and default shell from the parent terminal. 
+                  intensive on the system resources than when you start a new 
+                  <application>&app;</application> from a GNOME panel. The new terminal 
+                  inherits the application settings and default shell from the parent terminal. 
                 </para>
              </listitem> 
           </varlistentry> 
@@ -648,33 +661,10 @@
                         select. 
                      </para>
                   </listitem> 
-                  <listitem> 
-                     <para>
-                        To select a portion of text, perform the following steps: 
-                     </para>
-                     <orderedlist> 
-                        <listitem> 
-                          <para>
-                             Click, double-click, or triple-click on the first item of
-                             text that you want to select, depending on whether you want to select text by
-                             character, by word, or by line. 
-                          </para>
-                        </listitem> 
-                        <listitem> 
-                          <para>
-                             Move the mouse to the last item of text that you want to
-                             select and right-click. 
-                          </para>
-                        </listitem> 
-                     </orderedlist> 
-                     <para>
-                        These actions select all text between the first and last
-                        items. 
-                     </para>
-                  </listitem> 
                 </itemizedlist> 
                 <para>
-                  For all text selections, <application>&app;</application> copies
+                  These actions select all text between the first and last
+                  items. For all text selections, <application>&app;</application> copies
                   the selected text into the clipboard when you release the mouse button. 
                 </para>
              </listitem> 
@@ -699,7 +689,12 @@
                         <menuchoice> 
                           <guimenu>Edit</guimenu> 
                           <guimenuitem>Paste</guimenuitem> 
-                        </menuchoice> to paste text into a terminal. 
+                        </menuchoice> to paste text into a terminal. This function only works
+                        if you choose 
+                        <menuchoice>
+                          <guimenu>Edit</guimenu> 
+                          <guimenuitem>Copy</guimenuitem> 
+                        </menuchoice> to copy the selected text to the clipboard.
                      </para>
                   </listitem> 
                 </itemizedlist> 
@@ -720,7 +715,7 @@
              <listitem> 
                 <para>
                   To access a Uniform Resource Locator (URL) that is displayed in a
-                  terminal, perform the following steps: 
+                  terminal, perform the following steps: </para>
                   <orderedlist> 
                      <listitem> 
                         <para>
@@ -740,12 +735,64 @@
                           application and display the file located at the URL. 
                         </para>
                      </listitem> 
-                  </orderedlist> 
-                </para>
+                  </orderedlist>                
              </listitem> 
           </varlistentry> 
         </variablelist> 
      </sect2> 
+     
+     <sect2 id="gnome-terminal-shortcuts"> 
+        <title>To View the Keyboard Shortcut Settings</title> 
+        <para>
+          To view the keyboard shortcut settings that are defined for <application>&app;</application>,
+          choose 
+          <menuchoice> 
+               <guimenu>Edit</guimenu> 
+               <guimenuitem>Keybindings</guimenuitem> 
+          </menuchoice>. The <guilabel>Keybindings Editor</guilabel> dialog contains
+          the following items:
+        </para>
+        <variablelist> 
+          <varlistentry> 
+             <term><guilabel>Disable all menu mnemonics</guilabel></term> 
+             <listitem> 
+                <para>
+                  Select this check box to disable the access keys that are defined to
+                  enable you to use the keyboard instead of the mouse to select a menu item. 
+                  Each access key is identified by an underlined letter on 
+                  a menu or dialog option. In some cases, you must press the 
+                  <keycap>Alt</keycap> key in combination with the access key to 
+                  perform the action. 
+                </para>
+                <para>Default: unselected.</para>
+             </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+             <term><guilabel>Disable menu access key</guilabel></term> 
+             <listitem> 
+                <para>
+                  Select this check box to disable the shortcut key that is defined to
+                  enable you to access the <application>&app;</application> menus.
+                  The default shortcut key for accessing the menus is <keycap>F10</keycap>.
+                </para>
+                <para>Default: unselected.</para>
+             </listitem> 
+          </varlistentry> 
+          <varlistentry> 
+             <term><guilabel>Accelerators</guilabel></term> 
+             <listitem> 
+                <para>
+                  The <guilabel>Accelerators</guilabel> section of the dialog
+                  lists the shortcut keys that are defined for each menu item.
+                  The shortcut keys enable you to use the keyboard to choose
+                  a menu item rather than using the mouse. The shortcut key is
+                  usually a combination of keys that you press simultaneously.
+                </para>
+             </listitem> 
+          </varlistentry>
+        </variablelist> 
+     </sect2>
+     
      <sect2 id="gnome-terminal-reset"> 
         <title>To Recover Your Terminal</title> 
         <para>
@@ -1311,7 +1358,7 @@
      </sect2> 
      
      <sect2 id="gnome-terminal-prefs-scrolling">
-			 <title>Scrolling</title>
+    <title>Scrolling</title>
      <variablelist>
      <varlistentry> 
              <term> 
