@@ -1334,19 +1334,20 @@ terminal_screen_do_popup (TerminalScreen *screen,
                    screen);
 #endif
 
-  if (screen->priv->matched_string)
-    {
-      append_menuitem (screen->priv->popup_menu,
-                       _("_Open Link"),
-                       G_CALLBACK (open_url_callback),
-                       screen);
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               _("_Open Link"),
+                               G_CALLBACK (open_url_callback),
+                               screen);
 
-      append_menuitem (screen->priv->popup_menu,
-                       _("_Copy Link Address"),
-                       G_CALLBACK (copy_url_callback),
-                       screen);
-    }
-      
+  gtk_widget_set_sensitive (menu_item, screen->priv->matched_string != NULL);
+  
+  menu_item = append_menuitem (screen->priv->popup_menu,
+                               _("_Copy Link Address"),
+                               G_CALLBACK (copy_url_callback),
+                               screen);
+
+  gtk_widget_set_sensitive (menu_item, screen->priv->matched_string != NULL);
+  
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
