@@ -169,6 +169,8 @@ terminal_screen_init (TerminalScreen *screen)
                     "selection_changed",
                     G_CALLBACK (terminal_screen_zvt_selection_changed),
                     screen);
+
+  gtk_widget_show (screen->priv->zvt);
 }
 
 static void
@@ -299,6 +301,16 @@ reread_profile (TerminalScreen *screen)
     return;
 
   term = ZVT_TERM (screen->priv->zvt);
+
+  if (screen->priv->window)
+    {
+      /* We need these in line for the set_size in
+       * update_on_realize
+       */
+      terminal_window_update_scrollbar (screen->priv->window, screen);
+      terminal_window_update_icon (screen->priv->window);
+      terminal_window_update_geometry (screen->priv->window);
+    }
   
   if (GTK_WIDGET_REALIZED (screen->priv->zvt))
     terminal_screen_update_on_realize (term, screen);
@@ -368,13 +380,6 @@ reread_profile (TerminalScreen *screen)
     case TERMINAL_ERASE_ASCII_DEL:
       zvt_term_set_delete_binding (term, ZVT_ERASE_ASCII_DEL);
       break;
-    }
-  
-  if (screen->priv->window)
-    {
-      terminal_window_update_scrollbar (screen->priv->window, screen);
-      terminal_window_update_icon (screen->priv->window);
-      terminal_window_update_geometry (screen->priv->window);
     }
 }
 
@@ -503,6 +508,9 @@ terminal_screen_update_on_realize (ZvtTerm        *term,
                       NULL : font);
 
   gdk_font_unref (font);
+
+  /* FIXME s/FALSE/TRUE/ if the font has changed */
+  terminal_window_set_size (screen->priv->window, screen, FALSE);
 }
 
 static void

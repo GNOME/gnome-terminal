@@ -396,7 +396,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
   parent_class = g_type_class_peek_parent (klass);
   
@@ -545,6 +544,7 @@ terminal_window_add_screen (TerminalWindow *window,
   hbox = gtk_hbox_new (FALSE, 0);
   scrollbar = gtk_vscrollbar_new (NULL);
   label = eel_ellipsizing_label_new (terminal_screen_get_title (screen));
+  gtk_widget_show (label);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   
   screen_set_hbox (screen, hbox);
@@ -572,8 +572,11 @@ terminal_window_add_screen (TerminalWindow *window,
                       GTK_WIDGET (term), TRUE, TRUE, 0);
   
   gtk_range_set_adjustment (GTK_RANGE (scrollbar),
-                            term->adjustment);  
+                            term->adjustment);
 
+  gtk_widget_show_all (hbox);
+  terminal_window_update_scrollbar (window, screen);
+  
   update_notebook (window);
   
   gtk_notebook_append_page (GTK_NOTEBOOK (window->priv->notebook),
@@ -589,10 +592,6 @@ terminal_window_add_screen (TerminalWindow *window,
    * the size request right.
    */
   gtk_widget_realize (GTK_WIDGET (term));
-
-  gtk_widget_show_all (hbox);
-
-  terminal_window_update_scrollbar (window, screen);
   
   /* Make the first-added screen the active one */
   if (window->priv->terms == NULL)
@@ -685,26 +684,37 @@ terminal_window_get_menubar_visible (TerminalWindow *window)
   return window->priv->menubar_visible;
 }
 
-#define PADDING 2
-static void
-set_size (GtkWidget *widget)
+
+#define PADDING 0 /* from zvtterm.c */
+void
+terminal_window_set_size (TerminalWindow *window,
+                          TerminalScreen *screen,
+                          gboolean        even_if_mapped)
 {
   /* Owen's hack from gnome-terminal */
   ZvtTerm *term;
+  GtkWidget *widget;
   GtkWidget *app;
   GtkRequisition toplevel_request;
   GtkRequisition widget_request;
   gint w, h;
   
-  g_assert (widget != NULL);
+  widget = terminal_screen_get_widget (screen);
   term = ZVT_TERM (widget);
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
-
-#if 0  
+  
+  /* This set_size_request hack is because the extra size above base
+   * size should only include the width of widgets that intersect the
+   * term vertically and the height of widgets that intersect the term
+   * horizontally. It works around a GTK bug, GTK should handle
+   * this case. The size request can be huge without hosing
+   * anything because we set the MIN_SIZE geometry hint.
+   */
+  gtk_widget_set_size_request (widget, 2000, 2000);
   gtk_widget_size_request (app, &toplevel_request);
-  gtk_widget_size_request (widget, &widget_request);
+  gtk_widget_get_child_requisition (widget, &widget_request);
   
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
@@ -715,12 +725,10 @@ set_size (GtkWidget *widget)
   w += term->charwidth * term->grid_width;
   h += term->charheight * term->grid_height;
   
-  gtk_window_resize (GTK_WINDOW (app), w, h);
-#else
-  gtk_window_set_default_size (GTK_WINDOW (app),
-                               term->charwidth * term->grid_width,
-                               term->charheight * term->grid_height);
-#endif
+  if (even_if_mapped)
+    gtk_window_resize (GTK_WINDOW (app), w, h);
+  else
+    gtk_window_set_default_size (GTK_WINDOW (app), w, h);
 }
 
 void
@@ -765,9 +773,8 @@ terminal_window_set_active (TerminalWindow *window,
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
                                                         screen_get_hbox (screen)));
 
-  /* set initial size of window if window isn't onscreen */
-  if (!GTK_WIDGET_MAPPED (window))
-    set_size (widget);
+  /* set initial size of window */
+  terminal_window_set_size (window, screen, FALSE);
 
   gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
 }
@@ -976,11 +983,17 @@ terminal_window_update_geometry (TerminalWindow *window)
        */  
       hints.base_width = (GTK_WIDGET (term)->style->xthickness * 2) + PADDING;
       hints.base_height =  (GTK_WIDGET (term)->style->ythickness * 2);
+
+#define MIN_WIDTH_CHARS 4
+#define MIN_HEIGHT_CHARS 2
       
       hints.width_inc = term->charwidth;
       hints.height_inc = term->charheight;
-      hints.min_width = hints.base_width + hints.width_inc;
-      hints.min_height = hints.base_height + hints.height_inc;
+      /* FIXME we need to include the menubar/scrollbar in the
+       * min size.
+       */
+      hints.min_width = hints.base_width + hints.width_inc * MIN_WIDTH_CHARS;
+      hints.min_height = hints.base_height + hints.height_inc * MIN_HEIGHT_CHARS;
       
       gtk_window_set_geometry_hints (GTK_WINDOW (window),
                                      GTK_WIDGET (term),
