@@ -77,7 +77,7 @@ EXTRA_DIST =				\
 EGGDIR=$(srcdir)/../../libegg/libegg
 
 regenerate-built-sources:
-	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" update-from-egg.sh
+	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
 
 serverdir = $(libdir)/bonobo/servers
 server_DATA = gnome-terminal.server

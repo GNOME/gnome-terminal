@@ -5,8 +5,13 @@
 #include <gdk/gdkkeysyms.h>
 #include "eggcellrendererkeys.h"
 
+#ifndef EGG_COMPILATION
 #ifndef _
 #define _(x) dgettext (GETTEXT_PACKAGE, x)
+#define N_(x) x
+#endif
+#else
+#define _(x) x
 #define N_(x) x
 #endif
 
