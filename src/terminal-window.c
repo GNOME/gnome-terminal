@@ -1790,7 +1790,7 @@ new_window_callback (GtkWidget      *menuitem,
   if (!terminal_profile_get_forgotten (profile))
     {
       terminal_app_new_terminal (terminal_app_get (),
-                                 terminal_profile_get_for_new_term (),
+                                 profile,
                                  NULL,
                                  FALSE, FALSE, NULL, NULL, NULL, NULL);
     }
@@ -1810,7 +1810,7 @@ new_tab_callback (GtkWidget      *menuitem,
   if (!terminal_profile_get_forgotten (profile))
     {
       terminal_app_new_terminal (terminal_app_get (),
-                                 terminal_profile_get_for_new_term (),
+                                 profile,
                                  window,
                                  FALSE, FALSE, NULL, NULL, NULL, NULL);
     }

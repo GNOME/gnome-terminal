@@ -1,5 +1,11 @@
 2002-05-01  Havoc Pennington  <hp@redhat.com>
 
+	* src/terminal-window.c (new_tab_callback, new_window_callback):
+	oops, I had broken new-with-profile callbacks. Fix them again
+	to actually use the chosen profile.
+
+2002-05-01  Havoc Pennington  <hp@redhat.com>
+
 	* src/terminal-window.c (terminal_window_set_active): update the
 	choose-current-profile submenu when we change the active term
 	(fill_in_new_term_submenus): don't name the "new terminal" item
