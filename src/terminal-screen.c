@@ -1106,6 +1106,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
 
   err = NULL;
   if (!terminal_widget_fork_command (screen->priv->term,
+                                     terminal_profile_get_login_shell (profile),
                                      terminal_profile_get_update_records (profile),
                                      path,
                                      argv,

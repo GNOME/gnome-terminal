@@ -145,6 +145,7 @@ gboolean    terminal_widget_get_has_selection (GtkWidget *widget);
 GtkAdjustment* terminal_widget_get_scroll_adjustment (GtkWidget *widget);
 
 gboolean terminal_widget_fork_command      (GtkWidget   *widget,
+                                            gboolean     lastlog,
                                             gboolean     update_records,
                                             const char  *path,
                                             char       **argv,

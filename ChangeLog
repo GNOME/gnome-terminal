@@ -1,5 +1,17 @@
 2004-06-28 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	Correct the usage of lastlog/wtmp/utm according to comment #9 on bug #93906.
+
+	* src/gnome-terminal.glade: Don't say "utmp/wtmp" on our ui, but "login records".
+	* src/gnome-terminal.schemas.in: Ditto.
+	* src/terminal-widget-vte.c, src/terminal-widger.h: add a lastlog argument to 
+	terminal_widget_fork_command, and use the update_records correctly when telling vte to fork the
+	command.
+	* src/terminal-screen.c(terminal_screen_launch_child): call terminal_widget_fork_command with 
+	the correct lastlog setting.
+
+2004-06-28 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/gnome-terminal.schemas.in: translate the default value of 
 	/apps/gnome-terminal/global/active_encodings so that the default menu of encodings  
 	can be set by translators, and add a comment explaining this for translators.

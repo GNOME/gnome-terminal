@@ -553,6 +553,7 @@ terminal_widget_get_scroll_adjustment (GtkWidget *widget)
 
 gboolean
 terminal_widget_fork_command (GtkWidget   *widget,
+                              gboolean     lastlog,
 			      gboolean     update_records,
 			      const char  *path,
 			      char       **argv,
@@ -563,7 +564,7 @@ terminal_widget_fork_command (GtkWidget   *widget,
 {
   *child_pid = vte_terminal_fork_command (VTE_TERMINAL (widget),
 		 			  path, argv, envp, working_dir,
-					  update_records, TRUE, TRUE);
+					  lastlog, update_records, update_records);
 
   if (*child_pid == -1)
     {
