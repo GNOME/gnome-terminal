@@ -79,8 +79,6 @@ typedef enum
   TERMINAL_ENCODING_KOI8_R,
   TERMINAL_ENCODING_KOI8_U,
 
-#if 0
-  /* GLIBC iconv doesn't seem to have these mac things */
   TERMINAL_ENCODING_MAC_ARABIC,
   TERMINAL_ENCODING_MAC_CE,
   TERMINAL_ENCODING_MAC_CROATIAN,
@@ -96,7 +94,6 @@ typedef enum
   TERMINAL_ENCODING_MAC_ROMANIAN,
   TERMINAL_ENCODING_MAC_TURKISH,
   TERMINAL_ENCODING_MAC_UKRAINIAN,
-#endif
   
   TERMINAL_ENCODING_SHIFT_JIS,
   TERMINAL_ENCODING_TCVN,
@@ -120,9 +117,10 @@ typedef enum
 
 typedef struct
 {
-  int   index;
-  char *charset;
-  char *name;
+  int      index;
+  gboolean valid;
+  char    *charset;
+  char    *name;
 } TerminalEncoding;
 
 void terminal_encoding_init (GConfClient *conf);

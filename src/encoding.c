@@ -52,164 +52,161 @@ static GConfClient *default_client = NULL;
 
 static TerminalEncoding encodings[] = {
 
-  { TERMINAL_ENCODING_CURRENT_LOCALE,
+  { TERMINAL_ENCODING_CURRENT_LOCALE, TRUE,
     NULL, N_("Current Locale") },
 
-  { TERMINAL_ENCODING_ISO_8859_1,
+  { TERMINAL_ENCODING_ISO_8859_1, FALSE,
     "ISO-8859-1", N_("Western") },
-  { TERMINAL_ENCODING_ISO_8859_3,
+  { TERMINAL_ENCODING_ISO_8859_3, FALSE,
     "ISO-8859-3", N_("South European") },
-  { TERMINAL_ENCODING_ISO_8859_4,
+  { TERMINAL_ENCODING_ISO_8859_4, FALSE,
     "ISO-8859-4", N_("Baltic") },
-  { TERMINAL_ENCODING_ISO_8859_5,
+  { TERMINAL_ENCODING_ISO_8859_5, FALSE,
     "ISO-8859-5", N_("Cyrillic") },
-  { TERMINAL_ENCODING_ISO_8859_6,
+  { TERMINAL_ENCODING_ISO_8859_6, FALSE,
     "ISO-8859-6", N_("Arabic") },
-  { TERMINAL_ENCODING_ISO_8859_7,
+  { TERMINAL_ENCODING_ISO_8859_7, FALSE,
     "ISO-8859-7", N_("Greek") },
-  { TERMINAL_ENCODING_ISO_8859_8,
+  { TERMINAL_ENCODING_ISO_8859_8, FALSE,
     "ISO-8859-8", N_("Hebrew Visual") },
-  { TERMINAL_ENCODING_ISO_8859_8_I,
+  { TERMINAL_ENCODING_ISO_8859_8_I, FALSE,
     "ISO-8859-8-I", N_("Hebrew") },
-  { TERMINAL_ENCODING_ISO_8859_9,
+  { TERMINAL_ENCODING_ISO_8859_9, FALSE,
     "ISO-8859-9", N_("Turkish") },
-  { TERMINAL_ENCODING_ISO_8859_10,
+  { TERMINAL_ENCODING_ISO_8859_10, FALSE,
     "ISO-8859-10", N_("Nordic") },
-  { TERMINAL_ENCODING_ISO_8859_13,
+  { TERMINAL_ENCODING_ISO_8859_13, FALSE,
     "ISO-8859-13", N_("Baltic") },
-  { TERMINAL_ENCODING_ISO_8859_14,
+  { TERMINAL_ENCODING_ISO_8859_14, FALSE,
     "ISO-8859-14", N_("Celtic") },
-  { TERMINAL_ENCODING_ISO_8859_15,
+  { TERMINAL_ENCODING_ISO_8859_15, FALSE,
     "ISO-8859-15", N_("Western") },
-  { TERMINAL_ENCODING_ISO_8859_16,
+  { TERMINAL_ENCODING_ISO_8859_16, FALSE,
     "ISO-8859-16", N_("Romanian") },
 
-  { TERMINAL_ENCODING_UTF_7,
+  { TERMINAL_ENCODING_UTF_7, FALSE,
     "UTF-7", N_("Unicode") },
-  { TERMINAL_ENCODING_UTF_8,
+  { TERMINAL_ENCODING_UTF_8, FALSE,
     "UTF-8", N_("Unicode") },
-  { TERMINAL_ENCODING_UTF_16,
+  { TERMINAL_ENCODING_UTF_16, FALSE,
     "UTF-16", N_("Unicode") },
-  { TERMINAL_ENCODING_UCS_2,
+  { TERMINAL_ENCODING_UCS_2, FALSE,
     "UCS-2", N_("Unicode") },
-  { TERMINAL_ENCODING_UCS_4,
+  { TERMINAL_ENCODING_UCS_4, FALSE,
     "UCS-4", N_("Unicode") },
 
-  { TERMINAL_ENCODING_ARMSCII_8,
+  { TERMINAL_ENCODING_ARMSCII_8, FALSE,
     "ARMSCII-8", N_("Armenian") },
-  { TERMINAL_ENCODING_BIG5,
+  { TERMINAL_ENCODING_BIG5, FALSE,
     "BIG5", N_("Chinese Traditional") },
-  { TERMINAL_ENCODING_BIG5_HKSCS,
+  { TERMINAL_ENCODING_BIG5_HKSCS, FALSE,
     "BIG5-HKSCS", N_("Chinese Traditional") },
-  { TERMINAL_ENCODING_CP_866,
+  { TERMINAL_ENCODING_CP_866, FALSE,
     "CP866", N_("Cyrillic/Russian") },
 
-  { TERMINAL_ENCODING_EUC_JP,
+  { TERMINAL_ENCODING_EUC_JP, FALSE,
     "EUC-JP", N_("Japanese") },
-  { TERMINAL_ENCODING_EUC_KR,
+  { TERMINAL_ENCODING_EUC_KR, FALSE,
     "EUC-KR", N_("Korean") },
-  { TERMINAL_ENCODING_EUC_TW,
+  { TERMINAL_ENCODING_EUC_TW, FALSE,
     "EUC-TW", N_("Chinese Traditional") },
 
-  { TERMINAL_ENCODING_GB18030,
+  { TERMINAL_ENCODING_GB18030, FALSE,
     "GB18030", N_("Chinese Simplified") },
-  { TERMINAL_ENCODING_GB2312,
+  { TERMINAL_ENCODING_GB2312, FALSE,
     "GB2312", N_("Chinese Simplified") },
-  { TERMINAL_ENCODING_GBK,
+  { TERMINAL_ENCODING_GBK, FALSE,
     "GBK", N_("Chinese Simplified") },
-  { TERMINAL_ENCODING_GEOSTD8,
+  { TERMINAL_ENCODING_GEOSTD8, FALSE,
     "GEORGIAN-ACADEMY", N_("Georgian") }, /* FIXME GEOSTD8 ? */
-  { TERMINAL_ENCODING_HZ,
+  { TERMINAL_ENCODING_HZ, FALSE,
     "HZ", N_("Chinese Simplified") },
 
-  { TERMINAL_ENCODING_IBM_850,
+  { TERMINAL_ENCODING_IBM_850, FALSE,
     "IBM850", N_("Western") },
-  { TERMINAL_ENCODING_IBM_852,
+  { TERMINAL_ENCODING_IBM_852, FALSE,
     "IBM852", N_("Central European") },
-  { TERMINAL_ENCODING_IBM_855,
+  { TERMINAL_ENCODING_IBM_855, FALSE,
     "IBM855", N_("Cyrillic") },
-  { TERMINAL_ENCODING_IBM_857,
+  { TERMINAL_ENCODING_IBM_857, FALSE,
     "IBM857", N_("Turkish") },
-  { TERMINAL_ENCODING_IBM_862,
+  { TERMINAL_ENCODING_IBM_862, FALSE,
     "IBM862", N_("Hebrew") },
-  { TERMINAL_ENCODING_IBM_864,
+  { TERMINAL_ENCODING_IBM_864, FALSE,
     "IBM864", N_("Arabic") },
 
-  { TERMINAL_ENCODING_ISO_2022_JP,
+  { TERMINAL_ENCODING_ISO_2022_JP, FALSE,
     "ISO2022JP", N_("Japanese") },
-  { TERMINAL_ENCODING_ISO_2022_KR,
+  { TERMINAL_ENCODING_ISO_2022_KR, FALSE,
     "ISO2022KR", N_("Korean") },
-  { TERMINAL_ENCODING_ISO_IR_111,
+  { TERMINAL_ENCODING_ISO_IR_111, FALSE,
     "ISO-IR-111", N_("Cyrillic") },
-  { TERMINAL_ENCODING_JOHAB,
+  { TERMINAL_ENCODING_JOHAB, FALSE,
     "JOHAB", N_("Korean") },
-  { TERMINAL_ENCODING_KOI8_R,
+  { TERMINAL_ENCODING_KOI8_R, FALSE,
     "KOI8R", N_("Cyrillic") },
-  { TERMINAL_ENCODING_KOI8_U,
+  { TERMINAL_ENCODING_KOI8_U, FALSE,
     "KOI8U", N_("Cyrillic/Ukrainian") },
 
-#if 0
-  /* GLIBC iconv doesn't seem to have these mac things */
-  { TERMINAL_ENCODING_MAC_ARABIC,
+  { TERMINAL_ENCODING_MAC_ARABIC, FALSE,
     "MAC_ARABIC", N_("Arabic") },
-  { TERMINAL_ENCODING_MAC_CE,
+  { TERMINAL_ENCODING_MAC_CE, FALSE,
     "MAC_CE", N_("Central European") },
-  { TERMINAL_ENCODING_MAC_CROATIAN,
+  { TERMINAL_ENCODING_MAC_CROATIAN, FALSE,
     "MAC_CROATIAN", N_("Croatian") },
-  { TERMINAL_ENCODING_MAC_CYRILLIC,
+  { TERMINAL_ENCODING_MAC_CYRILLIC, FALSE,
     "MAC-CYRILLIC", N_("Cyrillic") },
-  { TERMINAL_ENCODING_MAC_DEVANAGARI,
+  { TERMINAL_ENCODING_MAC_DEVANAGARI, FALSE,
     "MAC_DEVANAGARI", N_("Hindi") },
-  { TERMINAL_ENCODING_MAC_FARSI,
+  { TERMINAL_ENCODING_MAC_FARSI, FALSE,
     "MAC_FARSI", N_("Farsi") },
-  { TERMINAL_ENCODING_MAC_GREEK,
+  { TERMINAL_ENCODING_MAC_GREEK, FALSE,
     "MAC_GREEK", N_("Greek") },
-  { TERMINAL_ENCODING_MAC_GUJARATI,
+  { TERMINAL_ENCODING_MAC_GUJARATI, FALSE,
     "MAC_GUJARATI", N_("Gujarati") },
-  { TERMINAL_ENCODING_MAC_GURMUKHI,
+  { TERMINAL_ENCODING_MAC_GURMUKHI, FALSE,
     "MAC_GURMUKHI", N_("Gurmukhi") },
-  { TERMINAL_ENCODING_MAC_HEBREW,
+  { TERMINAL_ENCODING_MAC_HEBREW, FALSE,
     "MAC_HEBREW", N_("Hebrew") },
-  { TERMINAL_ENCODING_MAC_ICELANDIC,
+  { TERMINAL_ENCODING_MAC_ICELANDIC, FALSE,
     "MAC_ICELANDIC", N_("Icelandic") },
-  { TERMINAL_ENCODING_MAC_ROMAN,
+  { TERMINAL_ENCODING_MAC_ROMAN, FALSE,
     "MAC_ROMAN", N_("Western") },
-  { TERMINAL_ENCODING_MAC_ROMANIAN,
+  { TERMINAL_ENCODING_MAC_ROMANIAN, FALSE,
     "MAC_ROMANIAN", N_("Romanian") },
-  { TERMINAL_ENCODING_MAC_TURKISH,
+  { TERMINAL_ENCODING_MAC_TURKISH, FALSE,
     "MAC_TURKISH", N_("Turkish") },
-  { TERMINAL_ENCODING_MAC_UKRAINIAN,
+  { TERMINAL_ENCODING_MAC_UKRAINIAN, FALSE,
     "MAC_UKRAINIAN", N_("Cyrillic/Ukrainian") },
-#endif
   
-  { TERMINAL_ENCODING_SHIFT_JIS,
+  { TERMINAL_ENCODING_SHIFT_JIS, FALSE,
     "SHIFT-JIS", N_("Japanese") },
-  { TERMINAL_ENCODING_TCVN,
+  { TERMINAL_ENCODING_TCVN, FALSE,
     "TCVN", N_("Vietnamese") },
-  { TERMINAL_ENCODING_TIS_620,
+  { TERMINAL_ENCODING_TIS_620, FALSE,
     "TIS-620", N_("Thai") },
-  { TERMINAL_ENCODING_UHC,
+  { TERMINAL_ENCODING_UHC, FALSE,
     "UHC", N_("Korean") },
-  { TERMINAL_ENCODING_VISCII,
+  { TERMINAL_ENCODING_VISCII, FALSE,
     "VISCII", N_("Vietnamese") },
 
-  { TERMINAL_ENCODING_WINDOWS_1250,
+  { TERMINAL_ENCODING_WINDOWS_1250, FALSE,
     "WINDOWS-1250", N_("Central European") },
-  { TERMINAL_ENCODING_WINDOWS_1251,
+  { TERMINAL_ENCODING_WINDOWS_1251, FALSE,
     "WINDOWS-1251", N_("Cyrillic") },
-  { TERMINAL_ENCODING_WINDOWS_1252,
+  { TERMINAL_ENCODING_WINDOWS_1252, FALSE,
     "WINDOWS-1252", N_("Western") },
-  { TERMINAL_ENCODING_WINDOWS_1253,
+  { TERMINAL_ENCODING_WINDOWS_1253, FALSE,
     "WINDOWS-1253", N_("Greek") },
-  { TERMINAL_ENCODING_WINDOWS_1254,
+  { TERMINAL_ENCODING_WINDOWS_1254, FALSE,
     "WINDOWS-1254", N_("Turkish") },
-  { TERMINAL_ENCODING_WINDOWS_1255,
+  { TERMINAL_ENCODING_WINDOWS_1255, FALSE,
     "WINDOWS-1255", N_("Hebrew") },
-  { TERMINAL_ENCODING_WINDOWS_1256,
+  { TERMINAL_ENCODING_WINDOWS_1256, FALSE,
     "WINDOWS-1256", N_("Arabic") },
-  { TERMINAL_ENCODING_WINDOWS_1257,
+  { TERMINAL_ENCODING_WINDOWS_1257, FALSE,
     "WINDOWS-1257", N_("Baltic") },
-  { TERMINAL_ENCODING_WINDOWS_1258,
+  { TERMINAL_ENCODING_WINDOWS_1258, FALSE,
     "WINDOWS-1258", N_("Vietnamese") }
 };
 
@@ -304,6 +301,7 @@ terminal_encoding_copy (const TerminalEncoding *src)
 
   c = g_new (TerminalEncoding, 1);
   c->index = src->index;
+  c->valid = src->valid;
   c->name = g_strdup (src->name);
   c->charset = g_strdup (src->charset);
   
@@ -339,15 +337,19 @@ update_active_encodings_from_string_list (GSList *strings)
           encoding = g_new0 (TerminalEncoding, 1);
           
           encoding->index = -1;
+          encoding->valid = TRUE; /* scary! */
           encoding->charset = g_strdup (charset);
           encoding->name = g_strdup (_("User Defined"));
         }
       else
         {
-          encoding = terminal_encoding_copy (e);
+          encoding = e->valid ? terminal_encoding_copy (e) : NULL;
         }
 
-      active_encodings = g_slist_prepend (active_encodings, encoding);
+      if (encoding != NULL)
+        {
+          active_encodings = g_slist_prepend (active_encodings, encoding);
+        }
       
       tmp = tmp->next;
     }
@@ -791,14 +793,16 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   i = 0;
   while (i < (int) G_N_ELEMENTS (encodings))
     {
-      gtk_list_store_append (tree, &parent_iter);
-      gtk_list_store_set (tree, &parent_iter,
-                          COLUMN_CHARSET,
-                          encodings[i].charset,
-                          COLUMN_NAME,
-                          encodings[i].name,
-                          -1);
-
+      if (encodings[i].valid)
+        {
+          gtk_list_store_append (tree, &parent_iter);
+          gtk_list_store_set (tree, &parent_iter,
+                              COLUMN_CHARSET,
+                              encodings[i].charset,
+                              COLUMN_NAME,
+                              encodings[i].name,
+                              -1);
+        }
       ++i;
     }
 
@@ -933,6 +937,9 @@ terminal_encoding_init (GConfClient *conf)
   int i;
   GError *err;
   GSList *strings;
+  gsize bytes_read, bytes_written;
+  gchar *converted;
+  gchar ascii_sample[96];
   
   g_return_if_fail (GCONF_IS_CLIENT (conf));
 
@@ -943,7 +950,15 @@ terminal_encoding_init (GConfClient *conf)
                  &encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset);
 
   g_assert (G_N_ELEMENTS (encodings) == TERMINAL_ENCODING_LAST);
-  
+
+  /* Initialize the sample text with all of the printing ASCII characters
+   * from space (32) to the tilde (126), 95 in all. */ 
+  for (i = 0; i < sizeof(ascii_sample); i++) 
+    {
+      ascii_sample[i] = i + 32;
+    }
+  ascii_sample[sizeof(ascii_sample) - 1] = '\0';
+
   i = 0;
   while (i < TERMINAL_ENCODING_LAST)
     {
@@ -951,7 +966,38 @@ terminal_encoding_init (GConfClient *conf)
 
       /* Translate the names */
       encodings[i].name = _(encodings[i].name);
-      
+
+      /* Test that the encoding is a proper superset of ASCII (which naive
+       * apps are going to use anyway) by attempting to validate the text
+       * using the current encoding.  This also flushes out any encodings
+       * which the underlying GIConv implementation can't support. */
+      converted = g_convert (ascii_sample, sizeof(ascii_sample) - 1,
+		             encodings[i].charset, encodings[i].charset,
+			     &bytes_read, &bytes_written, NULL);
+
+      /* The encoding is only valid if ASCII passes through cleanly. */
+      if (i == TERMINAL_ENCODING_CURRENT_LOCALE)
+        encodings[i].valid = TRUE;
+      else
+        encodings[i].valid = (bytes_read == (sizeof(ascii_sample) - 1)) &&
+			     (converted != NULL) &&
+			     (strcmp(converted, ascii_sample) == 0);
+
+#ifdef DEBUG_ENCODINGS
+      if (!encodings[i].valid)
+        {
+          g_print("Rejecting encoding %s as invalid:\n", encodings[i].charset);
+          g_print(" input  \"%s\"\n", ascii_sample);
+          g_print(" output \"%s\"\n\n", converted ? converted : "(null)");
+        }
+#endif
+
+      /* Discard the converted string. */
+      if (converted != NULL)
+        {
+          g_free (converted);
+        }
+
       ++i;
     }
 
