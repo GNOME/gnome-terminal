@@ -4,6 +4,7 @@
  *	      Kazuhiko Yamamoto <kazu@is.aist-nara.ac.jp>
  */
 
+#include "config.h"
 #define MD2 0
 #define MD4 1
 #define MD5 2

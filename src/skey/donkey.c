@@ -20,10 +20,6 @@
  * declaration of local functions
  */
 
-private void usage PROTO((char *progname));
-private void help PROTO((char *progname));
-private void version PROTO((char *progname));
-private int btoa8 PROTO((char *out, char *in));
 
 
 /*
@@ -31,23 +27,6 @@ private int btoa8 PROTO((char *out, char *in));
  */
 
 int MD = DefaultMD; 
-
-
-private int btoa8(out, in)
-char *out, *in;
-{
-	int i;
-	
-	if(in == NULL || out == NULL)
-		return -1;
-	
-	for(i=0; i < 8; i++){
-		sprintf(out, "%02x", *in++ & 0xff);
-		out += 2;
-	}
-	
-	return 0;
-}
 
 /*
  * main
