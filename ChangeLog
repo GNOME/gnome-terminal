@@ -3,7 +3,8 @@
 	* src/terminal-accels.c: get rid of attempt to track our own copy
 	of gtk keyval/modmask because we don't get notification when 
 	a keybinding is removed. Instead, always re-query the GTK values
-	when syncing to gconf.
+	when syncing to gconf. Also, avoid setting gconf keys out of gconf
+	notifier. Finally, adapt to EggCellRendererKeys changes.
 
 	* src/terminal-screen.c (terminal_screen_do_popup): add missing
 	accel paths

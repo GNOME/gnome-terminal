@@ -150,6 +150,8 @@ static GConfClient *global_conf;
 static GSList *living_treeviews = NULL;
 static GSList *living_mnemonics_checkbuttons = NULL;
 static gboolean using_mnemonics = TRUE;
+/* never set gconf keys in response to receiving a gconf notify. */
+static int inside_gconf_notify = 0;
 
 void
 terminal_accels_init (GConfClient *conf)
@@ -234,8 +236,9 @@ terminal_accels_init (GConfClient *conf)
         }
       else
         {
-          g_printerr (_("The value of configuration key %s is not valid\n"),
-                      entries[i].gconf_key);
+          g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
+                      entries[i].gconf_key,
+                      str ? str : "(null)");
         }
 
       g_free (str);
@@ -317,6 +320,14 @@ keys_change_notify (GConfClient *client,
   
   val = gconf_entry_get_value (entry);
 
+  D (if (val == NULL)
+     g_print (" changed to be unset\n");
+     else if (val->type != GCONF_VALUE_STRING)
+     g_print (" changed to non-string value\n");
+     else
+     g_print (" changed to \"%s\"\n",
+              gconf_value_get_string (val)));
+  
   if (binding_from_value (val, &keyval, &mask))
     {
       int i;
@@ -333,9 +344,14 @@ keys_change_notify (GConfClient *client,
               entries[i].gconf_mask = mask;
 
               /* sync over to GTK */
+              D (g_print ("changing path %s to %s\n",
+                          entries[i].accel_path,
+                          binding_name (keyval, mask, FALSE))); /* memleak */
+              inside_gconf_notify += 1;
               gtk_accel_map_change_entry (entries[i].accel_path,
                                           keyval, mask,
                                           TRUE);
+              inside_gconf_notify -= 1;
 
               /* Notify tree views to repaint with new values */
               tmp = living_treeviews;
@@ -374,6 +390,11 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
               binding_name (keyval, modifier, FALSE), /* memleak */
               accel_closure));
 
+  if (inside_gconf_notify)
+    {
+      D (g_print ("Ignoring change from gtk because we're inside a gconf notify\n"));
+      return;
+    }
 
   i = 0;
   while (i < (int) G_N_ELEMENTS (entries))
@@ -429,7 +450,7 @@ binding_from_string (const char      *str,
                      GdkModifierType *accelerator_mods)
 {
   g_return_val_if_fail (accelerator_key != NULL, FALSE);
-
+  
   if (str == NULL || (str && strcmp (str, "disabled") == 0))
     {
       *accelerator_key = 0;
@@ -515,6 +536,9 @@ sync_handler (gpointer data)
               accel_name = binding_name (gtk_key.accel_key,
                                          gtk_key.accel_mods,
                                          FALSE);
+
+              D (g_print ("Setting gconf key %s to \"%s\"\n",
+                          entries[i].gconf_key, accel_name));
               
               err = NULL;
               gconf_client_set_string (global_conf,
@@ -583,21 +607,15 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                 gpointer           data)
 {
   KeyEntry *ke;
-  char *accel_name;
   
   gtk_tree_model_get (model, iter,
                       COLUMN_ACCEL, &ke,
                       -1);
-
-  accel_name = binding_name (ke->gconf_keyval,
-                             ke->gconf_mask,
-                             TRUE);
   
-  g_object_set (GTK_CELL_RENDERER (cell),
-                "text", accel_name,
+  g_object_set (G_OBJECT (cell),
+                "accel_key", ke->gconf_keyval,
+                "accel_mask", ke->gconf_mask,
                 NULL);
-
-  g_free (accel_name);
 }
 
 int
@@ -614,7 +632,7 @@ name_compare_func (GtkTreeModel *model,
                       -1);
 
   gtk_tree_model_get (model, b,
-                      COLUMN_ACCEL, &ke_b,
+                      COLUMN_NAME, &ke_b,
                       -1);
 
   return g_utf8_collate (_(ke_a->user_visible_name),
@@ -634,11 +652,11 @@ accel_compare_func (GtkTreeModel *model,
   int result;
   
   gtk_tree_model_get (model, a,
-                      0, &ke_a,
+                      COLUMN_ACCEL, &ke_a,
                       -1);
 
   gtk_tree_model_get (model, b,
-                      0, &ke_b,
+                      COLUMN_ACCEL, &ke_b,
                       -1);
 
   name_a = binding_name (ke_a->gconf_keyval,
@@ -668,43 +686,39 @@ remove_from_list_callback (GtkObject *object, gpointer data)
 static void
 accel_edited_callback (GtkCellRendererText *cell,
                        const char          *path_string,
-                       const char          *new_text,
+                       guint                keyval,
+                       GdkModifierType      mask,
                        gpointer             data)
 {
   GtkTreeModel *model = (GtkTreeModel *)data;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
   GtkTreeIter iter;
   KeyEntry *ke;
-  GdkModifierType mask;
-  guint keyval;
+  GError *err;
+  char *str;
   
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (model, &iter, COLUMN_ACCEL, &ke, -1);
 
-  if (!binding_from_string (new_text, &keyval, &mask))
+  str = binding_name (keyval, mask, FALSE);
+
+  D (g_print ("Edited keyval %s, setting gconf to %s\n",
+              gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
+              str));
+  
+  err = NULL;
+  gconf_client_set_string (global_conf,
+                           ke->gconf_key,
+                           str,
+                           &err);
+  g_free (str);
+  
+  if (err != NULL)
     {
-      /* FIXME, do better. (I'm not sure this ever happens though because
-       * the cell renderer validates stuff)
-       */
-      g_printerr ("Couldn't parse \"%s\" as an accelerator\n", new_text);
-      gdk_beep ();
-    }
-  else
-    {
-      GError *err;
+      g_printerr (_("Error setting new accelerator in configuration database: %s\n"),
+                  err->message);
       
-      err = NULL;
-      gconf_client_set_string (global_conf,
-                               ke->gconf_key,
-                               new_text,
-                               &err);
-      if (err != NULL)
-        {
-          g_printerr (_("Error setting new accelerator in configuration database: %s\n"),
-                      err->message);
-          
-          g_error_free (err);
-        }
+      g_error_free (err);
     }
   
   gtk_tree_path_free (path);
@@ -834,7 +848,7 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   
   cell_renderer = egg_cell_renderer_keys_new ();
 
-  g_signal_connect (G_OBJECT (cell_renderer), "edited",
+  g_signal_connect (G_OBJECT (cell_renderer), "keys_edited",
                     G_CALLBACK (accel_edited_callback),
                     list);
   
