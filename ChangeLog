@@ -1,10 +1,14 @@
-2003-12-01 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-12-08 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* configure.in: 2.5.1
+
+2003-12-01 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/profile-editor.c(terminal_profile_edit): mark the fontsel label
 	as a mnemonic widget for the font selector. Fixes #126180, caught by
 	David Hawthorne, patch by Padraig Obriain.
 	
-2003-11-17 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-11-17 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-screen.c(open_url): pass the url through
 	gnome_vfs_make_uri_from_input, to fix things like `www.gnome.org'.
@@ -12,13 +16,13 @@
 	* configure.in: ask for gnome-vfs-2.0 to pkg-config.
 	* src/Makefile.am: remove some whitespace
 
-2003-11-12 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-11-12 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.schemas.in:
 	* src/terminal-accels.c(terminal_accels_init, disable_mnemonics_toggled): 
 	  Say `access key' instead of `mnemonic'. Fix #113442.
 
-2003-11-04 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-11-04 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.glade2: fix an accelerator key clash in the General
 	  page of the profile editor (_Cursor blinks -> Cursor blin_ks) reported
@@ -30,7 +34,7 @@
 	* help/C/gnome-terminal-C.omf : Updated to reflect new manual version number and date
 	* help/C/l10n.txt: Updated Summary of Changes section
 
-2003-11-04 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-11-04 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
         * src/terminal.c(terminal_util_show_help): new function to invoke help
           and show a dialog if that fails.
@@ -40,7 +44,7 @@
         * src/terminal.c(manage_profiles_response_cb): use the new
           terminal_util_show_help function.
 
-2003-10-30 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-window.c(about_callback): added myself.
 	* src/terminal-window.c(terminal_window_init,terminal_window_set_active): 
@@ -48,11 +52,11 @@
 	  focus when setting the active page: let the notebook do that. Fixes
 	  125282.
 	
-2003-10-22 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-22 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* configure.in: 2.5.0
 
-2003-10-20 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.glade2: 
 	* src/terminal.c(terminal_app_manage_profiles):
@@ -78,31 +82,31 @@
 
 	  Most of this comes from bug 76800 and my patch therein.
 	  
-2003-10-20 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c(main): free the argv_copy and the options results;
 	  leak reported in bug 124910. Also free argv_copy at the other early
 	  returns, to lighten valgrind output, as suggested in bug 124416.
 	* AUTHORS: added myself.
 
-2003-10-16 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-16 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c(main): free the popt context when it is no longer
   	  needed; suggested by bug #124416.
 
-2003-10-14 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-14 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/Makefile.am: temporarily remove GNOME_DISABLE_DEPRECATED and
 	  GTK_DISABLE_DEPRECATED from CFLAGS so that we can build against 
 	  gtk+ and libgnomeui from HEAD. Fixes 124557.
 
-2003-10-14 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-14 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-window.c(terminal_window_init): don't listen to
 	  switch_page but to select_page. Also rename the corresponding
 	  callback accordingly. This fixes 98884.
 
-2003-10-12 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-12 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c(terminal_util_set_unique_role): new funtion, to be
 	  used when setting window roles.
@@ -121,7 +125,7 @@
 	  to the new icon-title-changed on screens, and handle it appropriately.
 	  Now we handle icon name control sequences; fixed #84614.
 
-2003-10-10 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c: add a --default-working-directory and pass cwd as
 	its argument in factory calls so that starting terminals from command
@@ -129,14 +133,14 @@
 	* src/terminal-screen.c(screen_terminal_init): use g_get_current_dir
 	instead of getwcd.
 
-2003-10-02 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-10-02 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.schemas.in: Fix bug #113446, systematically 
 	do a systematic s/(accelerator|keybinding)/keyboard shortcut/, and
 	make usage of periods in messages consisten with the rest of GNOME,
 	fixing bug #123695.
 
-2003-09-30 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-09-30 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-profile(terminal_paletter_from_string),
 	* src/terminal.c(profile_list_delete_selection): use ngettext, fixing
@@ -145,14 +149,14 @@
 	actually g_set_error its GError argument when there is an error, as
 	seen on bug #123526.
 
-2003-09-22 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-09-22 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/.cvsignore: added gnome-terminal.schemas.
 	* src/terminal.c(parse_options_callback): undeprecate the
 	--use-factory option, which is the default anyways; fixes (half of) 
 	bug 101143.
 
-2003-09-20 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-09-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.schemas: removed, as this is a generated file.
 	* src/terminal-screen.c(new_window_callback, new_tab_callback): make
@@ -178,7 +182,7 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	* src/terminal-screen.c (reread_profile): remove grouping parens
 	from skey regexp
 
-2003-09-06 Mariano Su�rez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-09-06 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/Makefile.am: added INTLTOOL_SCHEMAS_RULE.
 	* src/gnome-terminal.schemas.in: moved the default value for
@@ -201,7 +205,7 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	  for L10N teams about how to set up screenshots for inclusion in 
 	  Help and about differences from one version of the Help to another.
 
-2003-07-29 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-29 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 
         * src/terminal-profile.c(terminal_profile_forget): fix error message,
         as suggested in bug 102423.
@@ -217,12 +221,12 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	* src/gnome-terminal.glade2: Allow only numeric values to spin
 	button. Fixes bug #115439.
 
-2003-07-22 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-22 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal.c: general make-over of error messages relating to
 	command line options, as suggested in bug 101484.
 
-2003-07-17 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-17 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-screen.c: make profiles use the system terminal font,
 	and not only its size. Essentially O. Taylor's patch from bug 106935.
@@ -230,12 +234,12 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	* src/gnome-terminal.glade2: update the profile editor dialog to
 	reflect the above change.
 
-2003-07-15 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-15 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 	
 	* src/skey-popup.c(terminal_skey_do_popup): forgot an argument in the
 	last commit.
 
-2003-07-15 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-15 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* terminal.c(terminal_util_show_error_dialog): add this function, and
 	use it everywhere else to construct error dialogs (long list of affected
@@ -250,7 +254,7 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	Everything, from the patch in bug #117445.
 
-2003-07-15 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-07-15 Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 
  	* src/terminal-window.c(append_stock_menuitem): fix a typo (bug
  	#113443)
@@ -281,7 +285,7 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	* po/id.po: Added Indonesian translation
 	* configure.in: Added "id" to ALL_LINGUAS
 
-2003-06-29  Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-06-29  Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 	* src/terminal-window.c(new_window_callback, new_tab_callback): 
 	* src/terminal.c(terminal_app_get_clone_command): 
 	* src/skey/btoe.c: Minor changes to appease gcc.
@@ -294,7 +298,7 @@ Wed Sep 10 15:03:51 2003  Jonathan Blandford  <jrb@redhat.com>
 	* src/terminal-window.c(terminal_window_init): Higgify away the words
 	`keybinding', `mnemonic', `accelerator'. Bug #90720.
 
-2003-06-24  Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+2003-06-24  Mariano SuÃ¡rez-Alvarez <msuarezalvarez@arnet.com.ar>
 	* src/terminal.c(parse_options_callback): Make `deprecated option'
 	message mention the option; fixes bug #109356.
 
@@ -366,7 +370,7 @@ Mon Jun  2 16:03:48 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* configure.in: bump to 2.3.1
 
-2003-05-06  Danilo Å egan  <dsegan@gmx.net>
+2003-05-06  Danilo ÃÂ egan  <dsegan@gmx.net>
 
 	* configure.in: Added "sr" and "sr@Latn" to ALL_LINGUAS.
 
@@ -2090,7 +2094,7 @@ Sun Mar 17 23:18:43 2002  Jonathan Blandford  <jrb@redhat.com>
 	(initially be "enable/disable mnemonics", currently nothing).
 	Set up accel map connections for keybindings.
 
-2002-03-02  Tivo Leedjï¿½v  <leedjarv@interest.ee>
+2002-03-02  Tivo LeedjÃ¯Â¿Â½v  <leedjarv@interest.ee>
 
 	* configure.in: Added et to ALL_LINGUAS.
 
