@@ -25,6 +25,7 @@
 #include <string.h>
 #include <glade/glade.h>
 #include "eggcellrendererkeys.h"
+#include "eggaccelerators.h"
 
 #define D(x)
 
@@ -641,6 +642,8 @@ binding_from_string (const char      *str,
                      guint           *accelerator_key,
                      GdkModifierType *accelerator_mods)
 {
+  EggVirtualModifierType virtual;
+  
   g_return_val_if_fail (accelerator_key != NULL, FALSE);
   
   if (str == NULL || (str && strcmp (str, "disabled") == 0))
@@ -650,8 +653,19 @@ binding_from_string (const char      *str,
       return TRUE;
     }
 
-  gtk_accelerator_parse (str, accelerator_key, accelerator_mods);
+  if (!egg_accelerator_parse_virtual (str, accelerator_key, &virtual))
+    return FALSE;
 
+  egg_keymap_resolve_virtual_modifiers (gdk_keymap_get_default (),
+                                        virtual,
+                                        accelerator_mods);
+
+  /* Be sure the GTK accelerator system will be able to handle this
+   * accelerator
+   */
+  if ((*accelerator_mods & gtk_accelerator_get_default_mod_mask ()) == 0)
+    return FALSE;
+  
   if (*accelerator_key == 0)
     return FALSE;
   else

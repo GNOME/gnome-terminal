@@ -18,6 +18,8 @@ INCLUDES=@TERM_CFLAGS@								\
 bin_PROGRAMS=gnome-terminal
 
 EGGFILES=			\
+	eggaccelerators.c	\
+	eggaccelerators.h	\
 	eggcellrendererkeys.h 	\
 	eggcellrendererkeys.c
 

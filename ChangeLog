@@ -1,3 +1,11 @@
+2002-07-13  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-accels.c (binding_from_string): Use
+	egg_accelerator_parse_virtual() to parse keybindings, so defaults
+	can contain <Meta> and such, except it doesn't work because 
+	the GTK accelerator system won't allow it. Also add a filter to 
+	barf on > Mod1 accels for now.
+
 2002-07-12  Havoc Pennington  <hp@redhat.com>
 
 	* src/simple-x-font-selector.c

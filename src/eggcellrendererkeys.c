@@ -4,6 +4,7 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include "eggcellrendererkeys.h"
+#include "eggaccelerators.h"
 
 #ifndef EGG_COMPILATION
 #ifndef _
@@ -205,7 +206,15 @@ convert_keysym_state_to_string (guint           keysym,
   if (keysym == 0)
     return g_strdup (_("Disabled"));
   else
-    return gtk_accelerator_name (keysym, state);
+    {
+      EggVirtualModifierType virtual;
+
+      /* FIXME multihead */
+      egg_keymap_virtualize_modifiers (gdk_keymap_get_default (),
+                                       state, &virtual);
+      
+      return egg_virtual_accelerator_name (keysym, virtual);
+    }
 }
 
 static void
@@ -329,7 +338,9 @@ grab_key_callback (GtkWidget    *widget,
   char *path;
   gboolean edited;
   GdkModifierType consumed_modifiers;  
-	
+  guint upper;
+  GdkModifierType ignored_modifiers;
+  
   keys = EGG_CELL_RENDERER_KEYS (data);
 
   if (is_modifier (event->hardware_keycode))
@@ -344,8 +355,25 @@ grab_key_callback (GtkWidget    *widget,
                                        event->group,
 				       NULL, NULL, NULL, &consumed_modifiers);
 
-  accel_keyval = gdk_keyval_to_lower (event->keyval);
-  accel_mods = event->state & gtk_accelerator_get_default_mod_mask () & ~consumed_modifiers;
+  upper = event->keyval;
+  accel_keyval = gdk_keyval_to_lower (upper);
+
+  /* Put shift back if it changed the case of the key, not otherwise.
+   */
+  if (upper != accel_keyval &&
+      (consumed_modifiers & GDK_SHIFT_MASK))
+    {
+      accel_mods |= GDK_SHIFT_MASK;
+      consumed_modifiers &= ~(GDK_SHIFT_MASK);
+    }
+
+  egg_keymap_resolve_virtual_modifiers (gdk_keymap_get_default (),
+                                        EGG_VIRTUAL_NUM_LOCK_MASK |
+                                        EGG_VIRTUAL_SCROLL_LOCK_MASK,
+                                        &ignored_modifiers);
+  
+  /* filter consumed/ignored modifiers */
+  accel_mods = event->state & ~(consumed_modifiers | ignored_modifiers);
   
   if (accel_mods == 0 && accel_keyval == GDK_Escape)
     goto out; /* cancel */
