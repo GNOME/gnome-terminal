@@ -924,7 +924,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
         /* so the error can be seen briefly, and infinite respawn
          * loops don't totally hose the system.
          */
-        sleep (5);
+        sleep (3);
         
         _exit (127);
       }
@@ -1262,8 +1262,6 @@ terminal_screen_zvt_child_died (GtkWidget      *zvt,
   action = TERMINAL_EXIT_CLOSE;
   if (screen->priv->profile)
     action = terminal_profile_get_exit_action (screen->priv->profile);
-
-  g_print ("Child died action %d\n", action);
   
   switch (action)
     {

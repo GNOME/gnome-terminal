@@ -681,7 +681,7 @@ set_size (GtkWidget *widget)
   g_assert (widget != NULL);
   term = ZVT_TERM (widget);
   
-  app = gtk_widget_get_toplevel(widget);
+  app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
   
   gtk_widget_size_request (app, &toplevel_request);
