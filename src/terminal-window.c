@@ -887,6 +887,11 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
       gtk_container_remove (GTK_CONTAINER (window->priv->main_vbox),
                             window->priv->menubar);
     }
+
+  if (window->priv->active_term)
+    {
+      terminal_window_set_size (window, window->priv->active_term, TRUE);
+    }
 }
 
 gboolean
@@ -985,9 +990,9 @@ terminal_window_set_active (TerminalWindow *window,
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
                                                         screen_get_hbox (screen)));
 
-  /* set initial size of window */
-  terminal_window_set_size (window, screen, FALSE);
-
+  /* set size of window to current grid size */
+  terminal_window_set_size (window, screen, TRUE);
+  
   gtk_widget_grab_focus (terminal_screen_get_widget (window->priv->active_term));
 }
 

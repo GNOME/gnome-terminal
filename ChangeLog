@@ -1,3 +1,22 @@
+2002-03-16  Havoc Pennington  <hp@pobox.com>
+
+        This doesn't work really, I'm not sure yet where the bug is.
+	
+	* src/terminal-screen.c (terminal_screen_update_on_realize): also
+	set size even if mapped here, so changing fonts puts our size
+	back where it should be.
+
+	* src/terminal-window.c (terminal_window_set_menubar_visible): set
+	size here so show/hide menubar doesn't break the grid size
+	(terminal_window_set_active): resize here even if we're already
+	mapped so that adding/removing notebook tabs doesn't break the
+	gridded size.
+
+2002-03-13  Havoc Pennington  <hp@pobox.com>
+
+	* src/profterm.schemas: change default accelerators to 
+	Ctrl+Shift to avoid conflicting with terminal apps.
+
 2002-03-16  Szabolcs Ban  <shooby@gnome.hu>
 
 	* configure.in: Added "hu" to ALL_LINGUAS.

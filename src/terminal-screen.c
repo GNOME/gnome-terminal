@@ -458,9 +458,7 @@ terminal_screen_update_on_realize (GtkWidget      *term,
   terminal_widget_set_allow_bold (term,
                                   terminal_profile_get_allow_bold (profile));
 
-  
-  /* FIXME s/FALSE/TRUE/ if the font has changed */
-  terminal_window_set_size (screen->priv->window, screen, FALSE);
+  terminal_window_set_size (screen->priv->window, screen, TRUE);
 }
 
 static void
