@@ -981,6 +981,61 @@ disable_menu_accels_toggled (GtkWidget *button,
     }
 }
 
+typedef struct
+{
+  GtkTreeView *tree_view;
+  GtkTreePath *path;
+} IdleData;
+
+static gboolean
+real_start_editing_cb (IdleData *idle_data)
+{
+  gtk_widget_grab_focus (GTK_WIDGET (idle_data->tree_view));
+  gtk_tree_view_set_cursor (idle_data->tree_view,
+                            idle_data->path,
+			    gtk_tree_view_get_column (idle_data->tree_view, 1),
+			    TRUE);
+
+  gtk_tree_path_free (idle_data->path);
+  g_free (idle_data);
+
+  return FALSE;
+}
+
+gboolean
+start_editing_cb (GtkTreeView    *tree_view,
+                  GdkEventButton *event,
+		  gpointer        data)
+{
+  GtkTreePath *path;
+
+  if (event->window != gtk_tree_view_get_bin_window (tree_view))
+    return FALSE;
+
+  if (gtk_tree_view_get_path_at_pos (tree_view,
+                                     (gint) event->x,
+				     (gint) event->y,
+				     &path, NULL,
+				     NULL, NULL))
+    {
+      IdleData *idle_data;
+
+      if (gtk_tree_path_get_depth (path) == 1)
+        {
+	  gtk_tree_path_free (path);
+	  return FALSE;
+	}
+
+      idle_data = g_new (IdleData, 1);
+      idle_data->tree_view = tree_view;
+      idle_data->path = path;
+      g_signal_stop_emission_by_name (G_OBJECT (tree_view), "button_press_event");
+      g_idle_add ((GSourceFunc) real_start_editing_cb, idle_data);
+    }
+
+  return TRUE;
+}
+
 GtkWidget*
 terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
 {
@@ -1064,13 +1119,11 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
 
   living_treeviews = g_slist_prepend (living_treeviews, w);
 
+  g_signal_connect (G_OBJECT (w), "button_press_event",
+		    G_CALLBACK (start_editing_cb), NULL);
   g_signal_connect (G_OBJECT (w), "destroy",
                     G_CALLBACK (remove_from_list_callback),
                     &living_treeviews);
-  
-  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (w)),
-                               GTK_SELECTION_NONE);
-
 
   tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
   

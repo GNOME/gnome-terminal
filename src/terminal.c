@@ -135,7 +135,7 @@ enum {
   OPTION_WINDOW_WITH_PROFILE_ID,
   OPTION_TAB_WITH_PROFILE_ID,
   OPTION_SHOW_MENUBAR,
-  OPTION_TOGGLE_MENUBAR,
+  OPTION_HIDE_MENUBAR,
   OPTION_GEOMETRY,
   OPTION_DISABLE_FACTORY,
   OPTION_TITLE,
@@ -148,7 +148,7 @@ struct poptOption options[] = {
   {
     NULL, 
     '\0', 
-    POPT_ARG_CALLBACK,
+    POPT_ARG_CALLBACK | POPT_CBFLAG_POST,
     parse_options_callback, 
     0, 
     NULL, 
@@ -222,7 +222,7 @@ struct poptOption options[] = {
     '\0',
     POPT_ARG_NONE,
     NULL,
-    OPTION_TOGGLE_MENUBAR,
+    OPTION_HIDE_MENUBAR,
     N_("Turn off the menubar for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
     NULL
   },
@@ -526,21 +526,57 @@ initial_window_free (InitialWindow *iw)
   g_free (iw);
 }
 
-static InitialTab*
-ensure_top_tab (GList **initial_windows_p)
+static void
+apply_defaults (OptionParsingResults *results,
+                InitialWindow        *iw)
+{
+  g_assert (iw->geometry == NULL);
+
+  if (results->default_geometry)
+    {
+      iw->geometry = results->default_geometry;
+      results->default_geometry = NULL;
+    }
+
+  if (results->default_window_menubar_forced)
+    {
+      iw->force_menubar_state = TRUE;
+      iw->menubar_state = results->default_window_menubar_state;
+
+      results->default_window_menubar_forced = FALSE;
+    }
+}
+
+static InitialWindow*
+ensure_top_window (OptionParsingResults *results)
 {
   InitialWindow *iw;
-  InitialTab *it;
   
-  if (*initial_windows_p == NULL)
+  if (results->initial_windows == NULL)
     {
       iw = initial_window_new (NULL, FALSE);
-      *initial_windows_p = g_list_append (*initial_windows_p, iw);
+      apply_defaults (results, iw);
+
+      results->initial_windows = g_list_append (results->initial_windows,
+                                                iw);
     }
   else
     {
-      iw = g_list_last (*initial_windows_p)->data;
+      iw = g_list_last (results->initial_windows)->data;
     }
+
+  g_assert (iw->tabs);
+  
+  return iw;
+}
+
+static InitialTab*
+ensure_top_tab (OptionParsingResults *results)
+{
+  InitialWindow *iw;
+  InitialTab *it;
+
+  iw = ensure_top_window (results);
 
   g_assert (iw->tabs);
   
@@ -577,6 +613,22 @@ set_default_icon (const char *filename)
   g_object_unref (G_OBJECT (pixbuf));
 }
 
+static InitialWindow*
+add_new_window (OptionParsingResults *results,
+                const char           *profile,
+                gboolean              is_id)
+{
+  InitialWindow *iw;
+
+  iw = initial_window_new (profile, is_id);
+  
+  apply_defaults (results, iw);
+
+  results->initial_windows = g_list_append (results->initial_windows, iw);
+  
+  return iw;
+}
+
 static void
 parse_options_callback (poptContext              ctx,
                         enum poptCallbackReason  reason,
@@ -587,8 +639,16 @@ parse_options_callback (poptContext              ctx,
   OptionParsingResults *results;
 
   results = data;
-  
-  if (reason != POPT_CALLBACK_REASON_OPTION)
+
+  if (reason == POPT_CALLBACK_REASON_POST)
+    {
+      /* Make sure we have some window */
+      if (results->initial_windows == NULL)
+        ensure_top_window (results);
+
+      return;
+    }
+  else if (reason != POPT_CALLBACK_REASON_OPTION)
     return;
 
   switch (opt->val & POPT_ARG_MASK)
@@ -618,7 +678,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (&results->initial_windows);
+        it = ensure_top_tab (results);
 
         if (it->exec_argv != NULL)
           {
@@ -640,7 +700,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (&results->initial_windows);
+        it = ensure_top_tab (results);
 
         if (it->exec_argv != NULL)
           {
@@ -666,11 +726,9 @@ parse_options_callback (poptContext              ctx,
             g_printerr (_("Option --window-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
           }
-            
-        iw = initial_window_new (prof,
-                                 opt->val == OPTION_WINDOW_WITH_PROFILE_ID);
-          
-        results->initial_windows = g_list_append (results->initial_windows, iw);
+
+        iw = add_new_window (results, prof,
+                             opt->val == OPTION_WINDOW_WITH_PROFILE_ID);
       }
       break;
 
@@ -687,19 +745,20 @@ parse_options_callback (poptContext              ctx,
             g_printerr (_("Option --tab-with-profile requires an argument specifying what profile to use\n"));
             exit (1);
           }
-            
+
+                
         if (results->initial_windows)
           {
             iw = g_list_last (results->initial_windows)->data;
+
             iw->tabs = g_list_append (iw->tabs,
                                       initial_tab_new (prof,
                                                        opt->val == OPTION_TAB_WITH_PROFILE_ID));
           }
         else
           {
-            iw = initial_window_new (prof,
-                                     opt->val == OPTION_TAB_WITH_PROFILE_ID);
-            results->initial_windows = g_list_append (results->initial_windows, iw);
+            iw = add_new_window (results, prof, 
+                                 opt->val == OPTION_TAB_WITH_PROFILE_ID);
           }
       }
       break;
@@ -730,7 +789,7 @@ parse_options_callback (poptContext              ctx,
       }
       break;
           
-    case OPTION_TOGGLE_MENUBAR:
+    case OPTION_HIDE_MENUBAR:
       {
         InitialWindow *iw;
             
@@ -740,7 +799,7 @@ parse_options_callback (poptContext              ctx,
 
             if (iw->force_menubar_state)
               {
-                g_printerr (_("--show-menubar option given twice for the same window\n"));
+                g_printerr (_("--hide-menubar option given twice for the same window\n"));
 
                 exit (1);
               }
@@ -812,7 +871,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (&results->initial_windows);
+        it = ensure_top_tab (results);
 
         if (it->title)
           {
@@ -837,7 +896,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (&results->initial_windows);
+        it = ensure_top_tab (results);
 
         if (it->working_dir)
           {
@@ -936,10 +995,7 @@ static int
 new_terminal_with_options (OptionParsingResults *results)
 {
   GList *tmp;
-  int init_windows;
-
-  init_windows = g_list_length (app->windows);
-
+  
   tmp = results->initial_windows;
   while (tmp != NULL)
     {
@@ -964,6 +1020,10 @@ new_terminal_with_options (OptionParsingResults *results)
                 profile = terminal_profile_lookup (it->profile);
               else                
                 profile = terminal_profile_lookup_by_visible_name (it->profile);
+            }
+          else if (it->profile == NULL)
+            {
+              profile = terminal_profile_get_for_new_term ();
             }
           
           if (profile == NULL)
@@ -1008,28 +1068,6 @@ new_terminal_with_options (OptionParsingResults *results)
       tmp = tmp->next;
     }
 
-  if (g_list_length (app->windows) <= init_windows)
-    {
-      /* Open a default terminal */      
-
-      terminal_app_new_terminal (app,
-                                 terminal_profile_get_for_new_term (),
-                                 NULL,
-                                 results->default_window_menubar_forced,
-                                 results->default_window_menubar_state,
-                                 NULL,
-                                 results->default_geometry,
-                                 NULL,
-                                 NULL);
-    }
-  else
-    {
-      if (results->default_geometry)
-        {
-          g_printerr (_("--geometry given prior to options that create a new window, must be given after\n"));
-          return 1;
-        }
-    }
   return 0;
 }
 
@@ -1104,7 +1142,7 @@ main (int argc, char **argv)
                   *args);
       return 1;
     }
-
+  
   if (!terminal_factory_disabled)
     {
       if (terminal_invoke_factory (argc_copy, argv_copy))
@@ -2806,7 +2844,6 @@ terminal_new_event (BonoboListener    *listener,
 		    CORBA_Environment *ev,
 		    gpointer           user_data)
 {
-  int i;
   int argc;
   int nextopt;
   poptContext ctx;

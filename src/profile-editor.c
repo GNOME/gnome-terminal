@@ -1881,7 +1881,7 @@ profile_editor_update_x_font (GtkWidget       *editor,
   GtkWidget *fontsel;
   char *spacings[] = { "m", "c", NULL };
   char *slants[] = { "r", "ot", NULL };
-  char *weights[] = { "medium", "regular", NULL };
+  char *weights[] = { "medium", "regular", "demibold", NULL };
   gchar *name;
 
   if (terminal_widget_supports_pango_fonts ())

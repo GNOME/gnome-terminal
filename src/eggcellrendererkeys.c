@@ -88,25 +88,26 @@ egg_cell_renderer_keys_init (EggCellRendererKeys *cell_keys)
 }
 
 /* FIXME setup stuff to generate this */
-/* VOID:STRING,UINT,FLAGS */
+/* VOID:STRING,UINT,FLAGS,UINT */
 static void
-marshal_VOID__STRING_UINT_FLAGS (GClosure     *closure,
-                                 GValue       *return_value,
-                                 guint         n_param_values,
-                                 const GValue *param_values,
-                                 gpointer      invocation_hint,
-                                 gpointer      marshal_data)
+marshal_VOID__STRING_UINT_FLAGS_UINT (GClosure     *closure,
+                                      GValue       *return_value,
+				      guint         n_param_values,
+				      const GValue *param_values,
+				      gpointer      invocation_hint,
+				      gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__STRING_UINT_FLAGS) (gpointer     data1,
-                                                        const char  *arg_1,
-                                                        guint        arg_2,
-                                                        int          arg_3,
-                                                        gpointer     data2);
-  register GMarshalFunc_VOID__STRING_UINT_FLAGS callback;
+  typedef void (*GMarshalFunc_VOID__STRING_UINT_FLAGS_UINT) (gpointer     data1,
+                                                             const char  *arg_1,
+							     guint        arg_2,
+							     int          arg_3,
+							     guint        arg_4,
+							     gpointer     data2);
+  register GMarshalFunc_VOID__STRING_UINT_FLAGS_UINT callback;
   register GCClosure *cc = (GCClosure*) closure;
   register gpointer data1, data2;
 
-  g_return_if_fail (n_param_values == 4);
+  g_return_if_fail (n_param_values == 5);
 
   if (G_CCLOSURE_SWAP_DATA (closure))
     {
@@ -119,12 +120,13 @@ marshal_VOID__STRING_UINT_FLAGS (GClosure     *closure,
       data2 = closure->data;
     }
   
-  callback = (GMarshalFunc_VOID__STRING_UINT_FLAGS) (marshal_data ? marshal_data : cc->callback);
+  callback = (GMarshalFunc_VOID__STRING_UINT_FLAGS_UINT) (marshal_data ? marshal_data : cc->callback);
 
   callback (data1,
             g_value_get_string (param_values + 1),
             g_value_get_uint (param_values + 2),
             g_value_get_flags (param_values + 3),
+	    g_value_get_uint (param_values + 4),
             data2);
 }
 
@@ -174,11 +176,12 @@ egg_cell_renderer_keys_class_init (EggCellRendererKeysClass *cell_keys_class)
                 G_SIGNAL_RUN_LAST,
                 G_STRUCT_OFFSET (EggCellRendererKeysClass, keys_edited),
                 NULL, NULL,
-                marshal_VOID__STRING_UINT_FLAGS,
-                G_TYPE_NONE, 3,
+                marshal_VOID__STRING_UINT_FLAGS_UINT,
+                G_TYPE_NONE, 4,
                 G_TYPE_STRING,
                 G_TYPE_UINT,
-                GDK_TYPE_MODIFIER_TYPE);
+                GDK_TYPE_MODIFIER_TYPE,
+		G_TYPE_UINT);
 }
 
 
@@ -330,7 +333,7 @@ grab_key_callback (GtkWidget    *widget,
   keys = EGG_CELL_RENDERER_KEYS (data);
 
   if (is_modifier (event->hardware_keycode))
-    return FALSE;
+    return TRUE;
 
   edited = FALSE;
 
@@ -375,11 +378,11 @@ grab_key_callback (GtkWidget    *widget,
   
   if (edited)
     g_signal_emit_by_name (G_OBJECT (keys), "keys_edited", path,
-                           accel_keyval, accel_mods);
+                           accel_keyval, accel_mods, event->hardware_keycode);
 
   g_free (path);
   
-  return FALSE;
+  return TRUE;
 }
 
 static void

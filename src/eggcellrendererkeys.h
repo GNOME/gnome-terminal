@@ -52,7 +52,8 @@ struct _EggCellRendererKeysClass
 
   void (* keys_edited) (EggCellRendererKeys *keys,
                         guint                keyval,
-                        GdkModifierType      mask);
+                        GdkModifierType      mask,
+			guint                hardware_keycode);
 };
 
 GType            egg_cell_renderer_keys_get_type (void);
