@@ -1,0 +1,52 @@
+
+Mailing list
+===
+
+Discussion of gnome-terminal should go to
+desktop-devel-list@gnome.org, gnome-list@gnome.org, or
+usability@gnome.org, depending on what sort of discussion it is. Or
+just file a bug report in http://bugzilla.gnome.org
+
+Remember that terminal emulation behavior is provided by the VTE
+widget.  The gnome-terminal product in bugzilla only covers the
+menubar, toolbar, and command line options, essentially. Everything
+about the actual terminal display is VTE.
+
+Coding Style
+===
+
+ - GNU coding conventions, with GLib-like extensions (e.g. lining up
+   function arguments). Basically the same as GTK+
+
+Making a release
+===
+
+To make a release of gnome-terminal, do the following:
+
+ - check out a fresh copy from CVS
+
+ - increment the version number in configure.in
+
+ - update the file NEWS based on the ChangeLog
+
+ - add a ChangeLog entry containing the version number 
+   you're releasing ("Released 0.3" or something)
+   so people can see which changes were before and after
+   a given release.
+
+ - "make distcheck" (DO NOT just "make dist" - pass the check!)
+
+ - if make distcheck fails, fix it.
+
+ - once distcheck succeeds, "cvs commit"
+
+ - if someone else made changes and the commit fails, 
+   you have to "cvs up" and run "make distcheck" again
+
+ - once the commit succeeds, "cvs tag GNOME_TERMINAL_X_Y_Z" where 
+   X_Y_Z map to version X.Y.Z
+
+ - scp the tarball to master.gnome.org
+
+ - run install-module on master.gnome.org to install the tarball 
+   on the ftp site. 

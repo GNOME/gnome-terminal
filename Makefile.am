@@ -9,10 +9,10 @@ applications_DATA = gnome-terminal.applications
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = 			\
+	HACKING			\
 	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
 	$(applications_DATA)   \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in
-
