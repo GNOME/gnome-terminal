@@ -64,6 +64,7 @@ gchar *s = N_("Palette entry 5");
 gchar *s = N_("Palette entry 6");
 gchar *s = N_("Palette entry 6");
 gchar *s = N_("Palette entry 8");
+gchar *s = N_("Palette entry 8");
 gchar *s = N_("Palette entry 9");
 gchar *s = N_("Palette entry 9");
 gchar *s = N_("Palette entry 10");
@@ -90,7 +91,7 @@ gchar *s = N_("_None (use solid color)");
 gchar *s = N_("Background image _scrolls");
 gchar *s = N_("_Transparent background");
 gchar *s = N_("_Image file:");
-gchar *s = N_("Tint with background _color");
+gchar *s = N_("_Darken transparent and image backgrounds");
 gchar *s = N_("Effects");
 gchar *s = N_("These options may cause some applications to behave incorrectly.\n"
               "They are only here to allow you to work around certain applications\n"
