@@ -2,7 +2,7 @@ AC_INIT(src/terminal.c)
 
 AM_CONFIG_HEADER(config.h)
 
-AM_INIT_AUTOMAKE(gnome-terminal, 2.1.0)
+AM_INIT_AUTOMAKE(gnome-terminal, 2.1.1)
 
 GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST(GETTEXT_PACKAGE)
@@ -66,25 +66,19 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 if test x$with_widget = xvte; then
 	PKG_CHECK_MODULES(TERMINAL_WIDGET, vte >= 0.10.1)
 else
+        with_widget=zvt
 	PKG_CHECK_MODULES(TERMINAL_WIDGET, libzvt-2.0 >= 1.115.2)
 fi
 
 CFLAGS="$TERMINAL_WIDGET_CFLAGS $CFLAGS"
 
 AM_CONDITIONAL(TERMINAL_WIDGET_VTE, test x$with_widget = xvte)
-if test x$with_widget = xvte; then
-        echo "***"
-        echo "*** WARNING WARNING WARNING WARNING WARNING"
-        echo "*** Building with VTE widget instead of Zvt"
-        echo "*** This is some highly unsupported crackrock"
-        echo "***"
-fi
 
-echo "***"
-echo "*** WARNING WARNING WARNING WARNING WARNING"
-echo "*** This is the unstable branch of gnome-terminal"
-echo "*** The stable branch is version 2.0.x"
-echo "***"
+if $PKG_CONFIG --atleast-version 2.0.0 xft && $PKG_CONFIG --atleast-version 1.1.1 pangoxft ; then
+   using_xft2=yes
+else
+   using_xft2=no
+fi
 
 AC_OUTPUT([
 Makefile
@@ -96,3 +90,29 @@ help/C/Makefile
 help/ro/Makefile
 po/Makefile.in
 ])
+dnl ==========================================================================
+
+if test x$with_widget = xzvt; then
+        echo "*** WARNING WARNING WARNING WARNING WARNING"
+        echo "*** Building with Zvt widget instead of VTE"
+        echo "*** This is probably a bad idea"
+ elif test x$using_xft2 = xno; then
+        echo "*** WARNING WARNING WARNING WARNING WARNING"
+        echo "*** Building with VTE widget but not Xft2"
+        echo "*** This won't be as optimal as fontconfig/Xft2"
+ fi
+
+echo "
+*** WARNING WARNING WARNING WARNING WARNING
+*** This is the unstable branch of gnome-terminal
+*** The stable branch is version 2.0.x
+
+gnome-terminal-$VERSION:
+
+	prefix:                 ${prefix}
+	source code location:	${srcdir}
+	compiler:		${CC}
+
+        terminal widget:        ${with_widget}
+        using fontconfig/Xft2:  ${using_xft2}
+"
