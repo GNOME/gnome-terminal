@@ -725,7 +725,7 @@ terminal_window_add_screen (TerminalWindow *window,
   GtkWidget *term;
   GtkWidget *hbox;
   GtkWidget *scrollbar;
-  GtkWidget *label;
+  GtkWidget *label;  
   
   old = terminal_screen_get_window (screen);
 
@@ -799,6 +799,27 @@ terminal_window_add_screen (TerminalWindow *window,
    * the size request right.
    */
   gtk_widget_realize (GTK_WIDGET (term));
+
+  {
+    /* Match size to current active screen */
+    int current_width, current_height;
+    GtkWidget *current_widget;
+
+    if (window->priv->active_term)
+      current_widget = terminal_screen_get_widget (window->priv->active_term);
+    else
+      current_widget = NULL;
+    
+    if (current_widget)
+      terminal_widget_get_size (current_widget, &current_width, &current_height);
+    else
+      {
+        current_width = 80;
+        current_height = 24;
+      }
+
+    terminal_widget_set_size (term, current_width, current_height);
+  }
   
   /* Make the first-added screen the active one */
   if (window->priv->terms == NULL)
@@ -959,9 +980,9 @@ terminal_window_set_active (TerminalWindow *window,
   
   if (window->priv->active_term == screen)
     return;
-
+  
   widget = terminal_screen_get_widget (screen);
-
+  
   profile = terminal_screen_get_profile (screen);
   
   if (!GTK_WIDGET_REALIZED (widget))
