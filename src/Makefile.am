@@ -3,18 +3,18 @@ EFENCE=
 
 SUBDIRS=eel skey
 
-INCLUDES=@TERM_CFLAGS@								\
-	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\"	\
-	-DTERM_GLADE_DIR=\"$(gladedir)\"						\
-	-DTERM_GLADE_FILE=\"gnome-terminal.glade2\"					\
-	-DTERM_DATADIR=\"$(datadir)\"						\
-	-DTERM_LIBDIR=\"$(libdir)\"							\
-	-DTERM_PREFIX=\"$(prefix)\"							\
-	-DTERM_SYSCONFDIR=\"$(sysconfdir)\"						\
-	-DTERM_PKGDATADIR=\"$(pkgdatadir)\"						\
-	-DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED 				\
+INCLUDES=@TERM_CFLAGS@ \
+	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\" \
+	-DTERM_GLADE_DIR=\"$(gladedir)\" \
+	-DTERM_GLADE_FILE=\"gnome-terminal.glade2\" \
+	-DTERM_DATADIR=\"$(datadir)\" \
+	-DTERM_LIBDIR=\"$(libdir)\" \
+	-DTERM_PREFIX=\"$(prefix)\" \
+	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
+	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
+	-DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED	\
 	-DSN_API_NOT_YET_FROZEN
-# 	-DGNOME_DISABLE_DEPRECATED							\
+# 	-DGNOME_DISABLE_DEPRECATED \
 #	-DGTK_DISABLE_DEPRECATED 
 
 bin_PROGRAMS=gnome-terminal

@@ -36,6 +36,7 @@
 #include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 #include <libgnome/gnome-url.h> /* gnome_url_show */
+#include <libgnomevfs/gnome-vfs-utils.h> /* gnome_vfs_make_uri_from_input */
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -1247,7 +1248,7 @@ open_url (TerminalScreen *screen,
   g_return_if_fail (orig_url != NULL);
 
   /* this is to handle gnome_url_show reentrancy */
-  url = g_strdup (orig_url);
+  url = gnome_vfs_make_uri_from_input (orig_url);
   g_object_ref (G_OBJECT (screen));
   
   err = NULL;

@@ -1,3 +1,11 @@
+2003-11-17 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-screen.c(open_url): pass the url through
+	gnome_vfs_make_uri_from_input, to fix things like `www.gnome.org'.
+	Bug 127107, Behdad Esfahbod. 
+	* configure.in: ask for gnome-vfs-2.0 to pkg-config.
+	* src/Makefile.am: remove some whitespace
+
 2003-11-12 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/gnome-terminal.schemas.in:
