@@ -2035,6 +2035,7 @@ reset_tab_menuitems (TerminalWindow *window)
   int i;
   TerminalScreen *screen;
   GSList *group;
+  gboolean single_page;
   
   tmp = window->priv->tab_menuitems;
   while (tmp != NULL)
@@ -2046,6 +2047,8 @@ reset_tab_menuitems (TerminalWindow *window)
   g_list_free (window->priv->tab_menuitems);
   window->priv->tab_menuitems = NULL;
 
+  single_page = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) == 1;
+  
   group = NULL;
   i = 0;
   while (TRUE) /* should probably make us somewhat nervous */
@@ -2065,7 +2068,7 @@ reset_tab_menuitems (TerminalWindow *window)
                                                       terminal_screen_get_title (screen));
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
       
-      if (i < N_TABS_WITH_ACCEL)
+      if (i < N_TABS_WITH_ACCEL && !single_page)
         accel_path = g_strdup_printf (FORMAT_ACCEL_PATH_SWITCH_TO_TAB,
                                       i + 1);
       else
