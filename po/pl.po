@@ -9,63 +9,60 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"POT-Creation-Date: 2002-03-12 16:31+0100\n"
-"PO-Revision-Date: 2002-03-12 16:33+0100\n"
+"POT-Creation-Date: 2002-03-18 00:43+0100\n"
+"PO-Revision-Date: 2002-03-18 00:46+0100\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/profile-editor.c:1
-msgid "Black on light yellow"
-msgstr "Czarne na jasnożółtym"
+#: gnome-terminal.desktop.in.h:1
+msgid "Enter UNIX commands"
+msgstr "Narzędzie dające dostęp do powłoki uniksowej"
 
-#: src/profile-editor.c:1
-msgid "White on black"
-msgstr "Białe na czarnym"
+#: gnome-terminal.desktop.in.h:1 src/terminal-accels.c:1
+#: src/terminal-profile.c:1 src/terminal-window.c:1 src/terminal.c:1
+msgid "Terminal"
+msgstr "Terminal"
 
-#: src/profile-editor.c:1
-msgid "Black on white"
-msgstr "Czarne na białym"
+#. localizers: These strings are part of the strftime
+#. * self-check code and must be changed to match what strtfime
+#. * yields -- usually just omitting the AM part is all that's
+#. * needed.
+#.
+#: src/eel/eel-glib-extensions.c:1
+msgid "01/01/00, 01:00 AM"
+msgstr "01/01/00, 01:00"
 
-#: src/profile-editor.c:1
-msgid "Green on black"
-msgstr "Zielone na czarnym"
+#: src/eel/eel-glib-extensions.c:1
+msgid "1/1/00, 1:00 AM"
+msgstr "1/1/00, 1:00"
 
-#: src/profile-editor.c:1
-msgid "Linux console"
-msgstr "Konsola Linux"
+#: src/eel/eel-glib-extensions.c:1
+msgid " 1/ 1/00,  1:00 AM"
+msgstr " 1/ 1/00,  1:00"
 
-#: src/profile-editor.c:1
-msgid "XTerm"
-msgstr "XTerm"
+#: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
+msgid "Accelerator modifiers"
+msgstr "Modyfikatory akceleratora"
 
-#: src/profile-editor.c:1
-msgid "Rxvt"
-msgstr "Rxvt"
+#: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
+msgid "Accelerator key"
+msgstr "Klawisz akceleratora"
 
-#: src/profile-editor.c:1
-msgid "Choose a font"
-msgstr "Wybór czcionki"
+#: src/eggcellrendererkeys.c:1 src/gnome-terminal.glade2.h:1
+#: src/terminal-accels.c:1
+msgid "Disabled"
+msgstr "Brak"
 
-#: src/profile-editor.c:1 src/profile-editor.c:1
-msgid "Custom"
-msgstr "Użytkownika"
+#: src/eggcellrendererkeys.c:1
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Wpisz nowy akcelerator lub naciśnij Backspace, aby go wyczyścić."
 
-#: src/profile-editor.c:1
-#, c-format
-msgid ""
-"The file \"%s\" is missing. This indicates that the application is installed "
-"incorrectly, so the profile editor can't be displayed."
-msgstr ""
-"Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji, w "
-"związku z czym nie można wyświetlić edytora profili."
-
-#: src/profile-editor.c:1
-#, c-format
-msgid "Editing profile \"%s\""
-msgstr "Modyfikacja profilu \"%s\""
+#: src/eggcellrendererkeys.c:1
+msgid "Type a new accelerator"
+msgstr "Wpisz nowy akcelerator"
 
 #: src/gnome-terminal.glade2.h:1 src/x-font-selector.c:1
 msgid "*"
@@ -80,12 +77,12 @@ msgid "A_ccelerators:"
 msgstr "_Szybkie sekwencje:"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Background image _scrolls"
-msgstr "P_rzewijanie obrazu w tle"
+msgid "Background"
+msgstr "Tło"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Blink cursor"
-msgstr "Mrugający kursor"
+msgid "Background image _scrolls"
+msgstr "P_rzewijanie obrazu w tle"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Built-_in schemes:"
@@ -104,12 +101,16 @@ msgid "Choose terminal text color"
 msgstr "Wybór koloru tekstu w terminalu"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Color palette:"
-msgstr "Paleta kolorów:"
+msgid "Color _palette:"
+msgstr "Paleta _kolorów:"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Colors"
 msgstr "Kolory"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Command"
+msgstr "Polecenie"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Compatibility"
@@ -129,11 +130,6 @@ msgstr ""
 "Unieaktywnienie wszystkich mnemoników menu (np. Alt+P, otwierającego menu "
 "Plik)"
 
-#: src/eggcellrendererkeys.c:1 src/gnome-terminal.glade2.h:1
-#: src/terminal-accels.c:1
-msgid "Disabled"
-msgstr "Brak"
-
 #: src/gnome-terminal.glade2.h:1
 msgid "Effects"
 msgstr "Efekty"
@@ -145,6 +141,15 @@ msgstr "Sekwencja escape"
 #: src/gnome-terminal.glade2.h:1
 msgid "Exit the terminal"
 msgstr "Zamknięcie terminala"
+
+#: src/gnome-terminal.glade2.h:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1 src/x-font-selector.c:1
+msgid "Font:"
+msgstr "Czcionka:"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Foreground and Background"
+msgstr "Napisy i tło"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "General"
@@ -177,6 +182,10 @@ msgstr "Po lewej stronie"
 #: src/gnome-terminal.glade2.h:1
 msgid "On the right side"
 msgstr "Po prawej stronie"
+
+#: src/gnome-terminal.glade2.h:1
+msgid "Palette"
+msgstr "Paleta"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Palette entry 1"
@@ -247,6 +256,10 @@ msgid "Profile Editor"
 msgstr "Edytor profili"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "R_un a custom command instead of my shell"
+msgstr "Uruchomienie _dowolnego polecenia zamiast powłoki"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "Replaces initial title"
 msgstr "Zastępuje początkowy tytuł"
 
@@ -255,36 +268,32 @@ msgid "Restart the command"
 msgstr "Ponowne uruchomienie polecenia"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Run a custom command instead of my shell"
-msgstr "Uruchomienie dowolnego polecenia zamiast powłoki"
+msgid "S_croll on keystroke"
+msgstr "Przewijanie przy _naciśnięciu klawisza"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Run command as a login shell"
-msgstr "Uruchomienie polecenia jako powłoki startowej"
+msgid "Sc_roll on output"
+msgstr "Przewijanie przy _wypisaniu znaku"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Scroll on keystroke"
-msgstr "Przewijanie przy naciśnięciu klawisza"
+msgid "Scr_ollback:"
+msgstr "_Obszar przewijania:"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Scroll on output"
-msgstr "Przewijanie przy wypisaniu znaku"
-
-#: src/gnome-terminal.glade2.h:1
-msgid "Scrollback:"
-msgstr "Obszar przewijania:"
+msgid "Scrolling"
+msgstr "Przewijanie"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Select-by-_word characters:"
 msgstr "Znaki należące do _słowa przy zaznaczaniu:"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Show menubar by default in new terminals"
-msgstr "Domyślne wyświetlanie paska menu w nowych terminalach"
+msgid "Show _menubar by default in new terminals"
+msgstr "Domyślne wyświetlanie paska _menu w nowych terminalach"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Silence terminal bell"
-msgstr "Cichy dzwonek terminala"
+msgid "Silence terminal _bell"
+msgstr "_Cichy dzwonek terminala"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "Terminal applications have these colors available to them."
@@ -310,12 +319,12 @@ msgstr ""
 "operacyjnymi, które oczekują innego zachowania się terminala."
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Title and Command"
-msgstr "Tytuł i polecenie"
+msgid "Title"
+msgstr "Nazwa"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "Update utmp/wtmp records when command is launched"
-msgstr "Aktualizacja wpisów w utmp/wtmp przy uruchamianiu polecenia"
+msgid "Title and Command"
+msgstr "Tytuł i polecenie"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "When command _exits:"
@@ -338,6 +347,10 @@ msgid "_Backspace key generates:"
 msgstr "Klawisz _Backspace generuje:"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Blink cursor"
+msgstr "_Mrugający kursor"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_Darken transparent and image backgrounds"
 msgstr "Przy_ciemnianie przezroczystości i obrazów w tle"
 
@@ -348,10 +361,6 @@ msgstr "Klawisz _Delete generuje:"
 #: src/gnome-terminal.glade2.h:1
 msgid "_Dynamically-set title:"
 msgstr "_Dynamicznie ustawiony tytuł:"
-
-#: src/gnome-terminal.glade2.h:1
-msgid "_Font:"
-msgstr "_Czcionka:"
 
 #: src/gnome-terminal.glade2.h:1
 msgid "_Image file:"
@@ -370,6 +379,10 @@ msgid "_Reset compatibility options to defaults"
 msgstr "Przywróć _domyślne wartości opcji zgodności"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Run command as a login shell"
+msgstr "_Uruchomienie polecenia jako powłoki startowej"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_Scrollbar is:"
 msgstr "Położenie p_aska przewijania:"
 
@@ -382,6 +395,10 @@ msgid "_Transparent background"
 msgstr "_Przezroczyste tło"
 
 #: src/gnome-terminal.glade2.h:1
+msgid "_Update utmp/wtmp records when command is launched"
+msgstr "_Aktualizacja wpisów w utmp/wtmp przy uruchamianiu polecenia"
+
+#: src/gnome-terminal.glade2.h:1
 msgid "_kilobytes"
 msgstr "_kilobajtów"
 
@@ -390,22 +407,299 @@ msgid "_lines"
 msgstr "_wierszy"
 
 #: src/gnome-terminal.glade2.h:1
-msgid "fixed"
-msgstr "fixed"
-
-#: src/gnome-terminal.glade2.h:1
 msgid "kilobytes"
 msgstr "kilobajtów"
 
-#: gnome-terminal.desktop.in.h:1 src/terminal-accels.c:1
-#: src/terminal-profile.c:1 src/terminal-window.c:1 src/terminal.c:1
-msgid "Terminal"
-msgstr "Terminal"
+#: src/profile-editor.c:1
+msgid "Black on light yellow"
+msgstr "Czarne na jasnożółtym"
+
+#: src/profile-editor.c:1
+msgid "White on black"
+msgstr "Białe na czarnym"
+
+#: src/profile-editor.c:1
+msgid "Black on white"
+msgstr "Czarne na białym"
+
+#: src/profile-editor.c:1
+msgid "Green on black"
+msgstr "Zielone na czarnym"
+
+#: src/profile-editor.c:1
+msgid "Linux console"
+msgstr "Konsola Linux"
+
+#: src/profile-editor.c:1
+msgid "XTerm"
+msgstr "XTerm"
+
+#: src/profile-editor.c:1
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#: src/profile-editor.c:1 src/profile-editor.c:1
+msgid "Custom"
+msgstr "Użytkownika"
+
+#: src/profile-editor.c:1
+#, c-format
+msgid ""
+"The file \"%s\" is missing. This indicates that the application is installed "
+"incorrectly, so the profile editor can't be displayed."
+msgstr ""
+"Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji, w "
+"związku z czym nie można wyświetlić edytora profili."
+
+#: src/profile-editor.c:1
+#, c-format
+msgid "Editing profile \"%s\""
+msgstr "Modyfikacja profilu \"%s\""
+
+#: src/simple-x-font-selector.c:1
+msgid "_Family:"
+msgstr "_Rodzina:"
+
+#: src/simple-x-font-selector.c:1
+msgid "Si_ze (pixels):"
+msgstr "R_ozmiar (piksele):"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+msgid "roman"
+msgstr "roman"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "italic"
+msgstr "italic"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "oblique"
+msgstr "pochylona"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "reverse italic"
+msgstr "odwrócony italic"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "reverse oblique"
+msgstr "odwrotnie pochylona"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+#: src/x-font-selector.c:1
+msgid "other"
+msgstr "inne"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+msgid "proportional"
+msgstr "proporcjonalne"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+msgid "monospaced"
+msgstr "równomierne"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+msgid "char cell"
+msgstr "rozmiaru znaku"
+
+#: src/simple-x-font-selector.c:1 src/x-font-selector.c:1
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "Przekroczono wartość MAX_FONTS. Może brakować pewnych czcionek."
+
+#: src/terminal-accels.c:1
+msgid "New Tab"
+msgstr "Nowa zakładka"
+
+#: src/terminal-accels.c:1
+msgid "New Window"
+msgstr "Nowe okno"
+
+#: src/terminal-accels.c:1
+msgid "New Profile"
+msgstr "Nowy profil"
+
+#: src/terminal-accels.c:1
+msgid "Close Tab"
+msgstr "Zamknięcie zakładki"
+
+#: src/terminal-accels.c:1
+msgid "Close Window"
+msgstr "Zamknięcie okna"
+
+#: src/terminal-accels.c:1
+msgid "Copy"
+msgstr "Skopiowanie"
+
+#: src/terminal-accels.c:1
+msgid "Paste"
+msgstr "Wklejenie"
+
+#: src/terminal-accels.c:1
+msgid "Hide and Show menubar"
+msgstr "Przełączenie wyświetlania paska menu"
+
+#: src/terminal-accels.c:1
+msgid "Full Screen"
+msgstr "Pełny ekran"
+
+#: src/terminal-accels.c:1
+msgid "Reset"
+msgstr "Zresetowanie"
+
+#: src/terminal-accels.c:1
+msgid "Reset and Clear"
+msgstr "Zresetowanie i wyczyszczenie"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Previous Tab"
+msgstr "Przełączenie na poprzednią zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Next Tab"
+msgstr "Przełączenie na następną zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 1"
+msgstr "Przełączenie na 1. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 2"
+msgstr "Przełączenie na 2. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 3"
+msgstr "Przełączenie na 3. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 4"
+msgstr "Przełączenie na 4. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 5"
+msgstr "Przełączenie na 5. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 6"
+msgstr "Przełączenie na 6. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 7"
+msgstr "Przełączenie na 7. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 8"
+msgstr "Przełączenie na 8. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 9"
+msgstr "Przełączenie na 9. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 10"
+msgstr "Przełączenie na 10. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 11"
+msgstr "Przełączenie na 11. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "Switch to Tab 12"
+msgstr "Przełączenie na 12. zakładkę"
+
+#: src/terminal-accels.c:1
+msgid "File"
+msgstr "Plik"
+
+#: src/terminal-accels.c:1
+msgid "Edit"
+msgstr "Edycja"
+
+#: src/terminal-accels.c:1
+msgid "View"
+msgstr "Widok"
+
+#: src/terminal-accels.c:1
+msgid "Go"
+msgstr "Przejdź"
 
 #: src/terminal-accels.c:1 src/terminal-profile.c:1 src/terminal.c:1
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Przy odczycie konfiguracji z %s wystąpił błąd. (%s)\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid ""
+"There was an error subscribing to notification of terminal keybinding "
+"changes. (%s)\n"
+msgstr ""
+"Przy rejestrowaniu się do powiadamiania o zmianach powiązań klawiszy "
+"termiala wystąpił błąd. (%s)\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "There was an error loading a terminal keybinding. (%s)\n"
+msgstr "Przy odczycie powiązań klawiszy terminala wystąpił błąd. (%s)\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
+msgstr ""
+"Wartość klucza konfiguracji %s jest niepoprawna; wartością jest \"%s\"\n"
+
+#: src/terminal-accels.c:1 src/terminal-window.c:1
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Przy odczycie wartości konfiguracji określającej użycie mnemoników wystąpił "
+"błąd. (%s)\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "There was an error subscribing to notification for use_mnemonics (%s)\n"
+msgstr ""
+"Przy rejestrowaniu się do powiadamiania o zmianach use_mnemonics wystąpił "
+"błąd. (%s)\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "Error propagating accelerator change to configuration database: %s\n"
+msgstr ""
+"Przy propagowaniu zmiany akceleratora do bazy danych konfiguracji wystąpił "
+"błąd: %s\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "Error setting new accelerator in configuration database: %s\n"
+msgstr ""
+"Przy ustawianiu nowego akceleratora w bazie danych konfiguracji wystąpił "
+"błąd: %s\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid "Error setting use_mnemonics key: %s\n"
+msgstr "Przy ustawianiu klucza use_mnemonics wystąpił błąd: %s\n"
+
+#: src/terminal-accels.c:1
+#, c-format
+msgid ""
+"The file \"%s\" is missing. This indicates that the application is installed "
+"incorrectly, so the keybindings dialog can't be displayed."
+msgstr ""
+"Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji, w "
+"związku z czym nie można wyświetlić okna powiązań klawiszy."
+
+#: src/terminal-accels.c:1
+msgid "_Action"
+msgstr "_Czynność"
+
+#: src/terminal-accels.c:1
+msgid "Accelerator _Key"
+msgstr "_Klawisz akceleratora"
 
 #: src/terminal-profile.c:1
 #, c-format
@@ -514,11 +808,11 @@ msgstr ""
 "%s"
 
 #: src/terminal-screen.c:1 src/terminal-window.c:1
-msgid "_New window"
+msgid "_New Window"
 msgstr "_Nowe okno"
 
 #: src/terminal-screen.c:1 src/terminal-window.c:1
-msgid "New _tab"
+msgid "New _Tab"
 msgstr "Nowa _zakładka"
 
 #: src/terminal-screen.c:1 src/terminal-window.c:1
@@ -526,7 +820,7 @@ msgid "_Profile"
 msgstr "_Profil"
 
 #: src/terminal-screen.c:1
-msgid "_Edit current profile..."
+msgid "_Edit Current Profile..."
 msgstr "Z_modyfikuj bieżący profil..."
 
 #: src/terminal-screen.c:1
@@ -549,23 +843,33 @@ msgstr "_Otwórz odnośnik"
 msgid "_Copy Link Address"
 msgstr "Skopiuj _adres odnośnika"
 
+#: src/terminal-widget-zvt.c:1
+#, c-format
+msgid "There was an error creating the child process for this terminal: %s"
+msgstr "Przy tworzeniu procesu potomnego dla terminala wystąpił błąd: %s"
+
+#: src/terminal-widget-zvt.c:1
+#, c-format
+msgid "Could not execute command %s: %s\n"
+msgstr "Nie można wykonać polecenia %s: %s\n"
+
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
 #: src/terminal-window.c:1
-msgid "New _profile..."
+msgid "New _Profile..."
 msgstr "N_owy profil..."
 
 #: src/terminal-window.c:1
-msgid "_Close window"
+msgid "_Close Window"
 msgstr "Za_mknij okno"
 
 #: src/terminal-window.c:1
-msgid "C_lose tab"
+msgid "C_lose Tab"
 msgstr "Zamknij z_akładkę"
 
 #: src/terminal-window.c:1
-msgid "C_urrent profile..."
+msgid "C_urrent Profile..."
 msgstr "_Bieżący profil..."
 
 #: src/terminal-window.c:1
@@ -577,11 +881,11 @@ msgid "P_rofiles..."
 msgstr "P_rofile..."
 
 #: src/terminal-window.c:1
-msgid "Hide menu_bar"
+msgid "Hide Menu_bar"
 msgstr "Ukryj pasek m_enu"
 
-#: src/terminal-window.c:1 src/terminal-window.c:1
-msgid "_Full screen"
+#: src/terminal-window.c:1
+msgid "_Full Screen"
 msgstr "P_ełny ekran"
 
 #: src/terminal-window.c:1
@@ -593,11 +897,11 @@ msgid "Reset and C_lear"
 msgstr "Zresetuj i _wyczyść"
 
 #: src/terminal-window.c:1
-msgid "_Previous tab"
+msgid "_Previous Tab"
 msgstr "P_oprzednia zakładka"
 
 #: src/terminal-window.c:1
-msgid "_Next tab"
+msgid "_Next Tab"
 msgstr "N_astępna zakładka"
 
 #: src/terminal-window.c:1
@@ -607,14 +911,6 @@ msgstr "_Zawartość pomocy"
 #: src/terminal-window.c:1
 msgid "_About GNOME Terminal"
 msgstr "_Informacje o Terminalu GNOME"
-
-#: src/terminal-accels.c:1 src/terminal-window.c:1
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr ""
-"Przy odczycie wartości konfiguracji określającej użycie mnemoników wystąpił "
-"błąd. (%s)\n"
 
 #: src/terminal-window.c:1
 #, c-format
@@ -652,6 +948,10 @@ msgstr "Pomo_c"
 #: src/terminal-window.c:1
 msgid "_Restore normal size"
 msgstr "Przy_wróć zwykły rozmiar"
+
+#: src/terminal-window.c:1
+msgid "_Full screen"
+msgstr "P_ełny ekran"
 
 #: src/terminal-window.c:1
 msgid ""
@@ -952,222 +1252,6 @@ msgstr "Z_modyfikuj..."
 msgid "_Delete..."
 msgstr "_Usuń..."
 
-#: gnome-terminal.desktop.in.h:1
-msgid "Enter UNIX commands"
-msgstr "Narzędzie dające dostęp do powłoki uniksowej"
-
-#. localizers: These strings are part of the strftime
-#. * self-check code and must be changed to match what strtfime
-#. * yields -- usually just omitting the AM part is all that's
-#. * needed.
-#.
-#: src/eel/eel-glib-extensions.c:1
-msgid "01/01/00, 01:00 AM"
-msgstr "01/01/00, 01:00"
-
-#: src/eel/eel-glib-extensions.c:1
-msgid "1/1/00, 1:00 AM"
-msgstr "1/1/00, 1:00"
-
-#: src/eel/eel-glib-extensions.c:1
-msgid " 1/ 1/00,  1:00 AM"
-msgstr " 1/ 1/00,  1:00"
-
-#: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
-msgid "Accelerator modifiers"
-msgstr "Modyfikatory akceleratora"
-
-#: src/eggcellrendererkeys.c:1 src/eggcellrendererkeys.c:1
-msgid "Accelerator key"
-msgstr "Klawisz akceleratora"
-
-#: src/eggcellrendererkeys.c:1
-msgid "Type a new accelerator, or press Backspace to clear"
-msgstr "Wpisz nowy akcelerator lub naciśnij Backspace, aby go wyczyścić."
-
-#: src/eggcellrendererkeys.c:1
-msgid "Type a new accelerator"
-msgstr "Wpisz nowy akcelerator"
-
-#: src/terminal-accels.c:1
-msgid "New tab"
-msgstr "Nowa zakładka"
-
-#: src/terminal-accels.c:1
-msgid "New window"
-msgstr "Nowe okno"
-
-#: src/terminal-accels.c:1
-msgid "New profile"
-msgstr "Nowy profil"
-
-#: src/terminal-accels.c:1
-msgid "Close tab"
-msgstr "Zamknięcie zakładki"
-
-#: src/terminal-accels.c:1
-msgid "Close window"
-msgstr "Zamknięcie okna"
-
-#: src/terminal-accels.c:1
-msgid "Copy"
-msgstr "Skopiowanie"
-
-#: src/terminal-accels.c:1
-msgid "Paste"
-msgstr "Wklejenie"
-
-#: src/terminal-accels.c:1
-msgid "Hide and show menubar"
-msgstr "Przełączenie wyświetlania paska menu"
-
-#: src/terminal-accels.c:1
-msgid "Full screen"
-msgstr "Pełny ekran"
-
-#: src/terminal-accels.c:1
-msgid "Reset"
-msgstr "Zresetowanie"
-
-#: src/terminal-accels.c:1
-msgid "Reset and clear"
-msgstr "Zresetowanie i wyczyszczenie"
-
-#: src/terminal-accels.c:1
-msgid "Switch to previous tab"
-msgstr "Przełączenie na poprzednią zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to next tab"
-msgstr "Przełączenie na następną zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 1"
-msgstr "Przełączenie na 1. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 2"
-msgstr "Przełączenie na 2. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 3"
-msgstr "Przełączenie na 3. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 4"
-msgstr "Przełączenie na 4. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 5"
-msgstr "Przełączenie na 5. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 6"
-msgstr "Przełączenie na 6. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 7"
-msgstr "Przełączenie na 7. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 8"
-msgstr "Przełączenie na 8. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 9"
-msgstr "Przełączenie na 9. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 10"
-msgstr "Przełączenie na 10. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 11"
-msgstr "Przełączenie na 11. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "Switch to tab 12"
-msgstr "Przełączenie na 12. zakładkę"
-
-#: src/terminal-accels.c:1
-msgid "File"
-msgstr "Plik"
-
-#: src/terminal-accels.c:1
-msgid "Edit"
-msgstr "Edycja"
-
-#: src/terminal-accels.c:1
-msgid "View"
-msgstr "Widok"
-
-#: src/terminal-accels.c:1
-msgid "Go"
-msgstr "Przejdź"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal keybinding "
-"changes. (%s)\n"
-msgstr ""
-"Przy rejestrowaniu się do powiadamiania o zmianach powiązań klawiszy "
-"termiala wystąpił błąd. (%s)\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "There was an error loading a terminal keybinding. (%s)\n"
-msgstr "Przy odczycie powiązań klawiszy terminala wystąpił błąd. (%s)\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
-msgstr ""
-"Wartość klucza konfiguracji %s jest niepoprawna; wartością jest \"%s\"\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "There was an error subscribing to notification for use_mnemonics (%s)\n"
-msgstr ""
-"Przy rejestrowaniu się do powiadamiania o zmianach use_mnemonics wystąpił "
-"błąd. (%s)\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "Error propagating accelerator change to configuration database: %s\n"
-msgstr ""
-"Przy propagowaniu zmiany akceleratora do bazy danych konfiguracji wystąpił "
-"błąd: %s\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "Error setting new accelerator in configuration database: %s\n"
-msgstr ""
-"Przy ustawianiu nowego akceleratora w bazie danych konfiguracji wystąpił "
-"błąd: %s\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid "Error setting use_mnemonics key: %s\n"
-msgstr "Przy ustawianiu klucza use_mnemonics wystąpił błąd: %s\n"
-
-#: src/terminal-accels.c:1
-#, c-format
-msgid ""
-"The file \"%s\" is missing. This indicates that the application is installed "
-"incorrectly, so the keybindings dialog can't be displayed."
-msgstr ""
-"Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji, w "
-"związku z czym nie można wyświetlić okna powiązań klawiszy."
-
-#: src/terminal-accels.c:1
-msgid "_Action"
-msgstr "_Czynność"
-
-#: src/terminal-accels.c:1
-msgid "Accelerator _Key"
-msgstr "_Klawisz akceleratora"
-
 #: src/x-font-selector.c:1
 msgid "Foundry:"
 msgstr "Druk:"
@@ -1237,11 +1321,6 @@ msgstr "Rzeczywista wartość"
 #: src/x-font-selector.c:1
 msgid "Font"
 msgstr "Czcionka"
-
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-#: src/x-font-selector.c:1
-msgid "Font:"
-msgstr "Czcionka:"
 
 #: src/x-font-selector.c:1
 msgid "Font Style:"
@@ -1318,26 +1397,6 @@ msgstr "(pusty)"
 msgid "regular"
 msgstr "zwykłe"
 
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "italic"
-msgstr "italic"
-
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "oblique"
-msgstr "pochylona"
-
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "reverse italic"
-msgstr "odwrócony italic"
-
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "reverse oblique"
-msgstr "odwrotnie pochylona"
-
-#: src/x-font-selector.c:1 src/x-font-selector.c:1
-msgid "other"
-msgstr "inne"
-
 #: src/x-font-selector.c:1
 msgid "[M]"
 msgstr "[M]"
@@ -1363,28 +1422,8 @@ msgid "(unknown)"
 msgstr "(nieznane)"
 
 #: src/x-font-selector.c:1
-msgid "roman"
-msgstr "roman"
-
-#: src/x-font-selector.c:1
-msgid "proportional"
-msgstr "proporcjonalne"
-
-#: src/x-font-selector.c:1
-msgid "monospaced"
-msgstr "równomierne"
-
-#: src/x-font-selector.c:1
-msgid "char cell"
-msgstr "rozmiaru znaku"
-
-#: src/x-font-selector.c:1
 msgid "Font: (Filter Applied)"
 msgstr "Czcionka: (z zastosowaniem filtra)"
-
-#: src/x-font-selector.c:1
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "Przekroczono wartość MAX_FONTS. Może brakować pewnych czcionek."
 
 #: src/x-font-selector.c:1
 msgid "Font Selection"
@@ -1393,13 +1432,3 @@ msgstr "Wybór czcionki"
 #: src/x-font-selector.c:1
 msgid "Select a font"
 msgstr "Wybór czcionki"
-
-#: src/terminal-widget-zvt.c:1
-#, c-format
-msgid "There was an error creating the child process for this terminal: %s"
-msgstr "Przy tworzeniu procesu potomnego dla terminala wystąpił błąd: %s"
-
-#: src/terminal-widget-zvt.c:1
-#, c-format
-msgid "Could not execute command %s: %s\n"
-msgstr "Nie można wykonać polecenia %s: %s\n"
