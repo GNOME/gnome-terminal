@@ -46,7 +46,7 @@ AM_GLIB_GNU_GETTEXT
 AC_PATH_XTRA
 
 ## here we get the flags we'll actually use
-PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 1.3.12 libzvt-2.0 gconf-2.0 >= 1.1.6 libglade-2.0 libgnomeui-2.0)
+PKG_CHECK_MODULES(TERM, gtk+-2.0 >= 1.3.12 gconf-2.0 >= 1.1.6 libglade-2.0 libgnomeui-2.0)
 
 TERM_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $TERM_LIBS"
 TERM_CFLAGS="$X_CFLAGS $TERM_CFLAGS"
@@ -69,9 +69,12 @@ AM_GCONF_SOURCE_2
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 if test x$with_widget = xvte; then
-        AC_MSG_ERROR(Need to fill in src/terminal-widget-vte.c before this will work)
-        AC_CHECK_LIB(vte, vte_terminal_new, , [AC_MSG_ERROR(VTE requested but library not found)], $TERM_LIBS)
+	PKG_CHECK_MODULES(TERMINAL_WIDGET, vte)
+else
+	PKG_CHECK_MODULES(TERMINAL_WIDGET, libzvt-2.0)
 fi
+
+CFLAGS="$TERMINAL_WIDGET_CFLAGS $CFLAGS"
 
 AM_CONDITIONAL(TERMINAL_WIDGET_VTE, test x$with_widget = xvte)
 if test x$with_widget = xvte; then

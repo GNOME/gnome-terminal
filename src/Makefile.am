@@ -50,7 +50,7 @@ gnome_terminal_SOURCES=				\
 	simple-x-font-selector.h		\
 	$(EGGFILES)
 
-gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ eel/libeelcnp.la
+gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ @TERMINAL_WIDGET_LIBS@ eel/libeelcnp.la
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
