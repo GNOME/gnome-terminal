@@ -40,6 +40,8 @@
 #define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
 #define KEY_FOREGROUND_COLOR "foreground_color"
 #define KEY_BACKGROUND_COLOR "background_color"
+#define KEY_TITLE "title"
+#define KEY_TITLE_MODE "title_mode"
 
 struct _TerminalProfilePrivate
 {
@@ -51,6 +53,8 @@ struct _TerminalProfilePrivate
   char *visible_name;
   GdkColor foreground;
   GdkColor background;
+  char *title;
+  TerminalTitleMode title_mode;
   /* can't set keys when reporting a key changed,
    * avoids a bunch of pesky signal handler blocks
    * in profile-editor.c.
@@ -62,6 +66,14 @@ struct _TerminalProfilePrivate
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
   guint forgotten : 1;
+};
+
+static const GConfEnumStringPair title_modes[] = {
+  { TERMINAL_TITLE_REPLACE, "replace" },
+  { TERMINAL_TITLE_BEFORE, "before" },
+  { TERMINAL_TITLE_AFTER, "after" },
+  { TERMINAL_TITLE_IGNORE, "ignore" },
+  { -1, NULL }
 };
 
 static GHashTable *profiles = NULL;
@@ -135,6 +147,8 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->background.green = 0xFFFF;
   profile->priv->background.blue = 0xDDDD;
   profile->priv->in_notification_count = 0;
+  profile->priv->title_mode = TERMINAL_TITLE_REPLACE;
+  profile->priv->title = g_strdup (_("Terminal"));
 }
 
 static void
@@ -183,6 +197,7 @@ terminal_profile_finalize (GObject *object)
 
   g_free (profile->priv->visible_name);
   g_free (profile->priv->name);
+  g_free (profile->priv->title);
   g_free (profile->priv->profile_dir);
   
   g_free (profile->priv);
@@ -451,13 +466,67 @@ terminal_profile_get_lock_title         (TerminalProfile  *profile)
 }
 
 const char*
-terminal_profile_get_title              (TerminalProfile  *profile)
+terminal_profile_get_title (TerminalProfile  *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+  
+  return profile->priv->title;
+}
+
+void
+terminal_profile_set_title (TerminalProfile *profile,
+                            const char      *title)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_TITLE);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           title,
+                           NULL);
+
+  g_free (key);
+}
+
+TerminalTitleMode
+terminal_profile_get_title_mode (TerminalProfile  *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
+  
+  return profile->priv->title_mode;
+}
+
+void
+terminal_profile_set_title_mode (TerminalProfile *profile,
+                                 TerminalTitleMode mode)
+{
+  char *key;
+  const char *mode_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_TITLE_MODE);
+
+  mode_string = gconf_enum_to_string (title_modes, mode);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           mode_string,
+                           NULL);
+
+  g_free (key);
 }
 
 gboolean
 terminal_profile_get_default_show_menubar (TerminalProfile *profile)
 {
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TRUE);
+  
   return profile->priv->default_show_menubar;
 }
 
@@ -526,6 +595,43 @@ set_background_color (TerminalProfile *profile,
       !gdk_color_equal (&color, &profile->priv->background))
     {
       profile->priv->background = color;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+set_title (TerminalProfile *profile,
+           const char      *candidate_name)
+{
+  if (candidate_name &&
+      strcmp (profile->priv->title, candidate_name) == 0)
+    return FALSE;
+  
+  if (candidate_name != NULL)
+    {
+      g_free (profile->priv->title);
+      profile->priv->title = g_strdup (candidate_name);
+    }
+  /* otherwise just leave the old name */
+
+  return TRUE;
+}
+
+static gboolean
+set_title_mode (TerminalProfile *profile,
+                      const char      *str_val)
+{
+  int mode; /* TerminalTitleMode */
+  
+  if (str_val &&
+      gconf_string_to_enum (title_modes, str_val, &mode) &&
+      mode != profile->priv->title_mode)
+    {
+      profile->priv->title_mode = mode;
       return TRUE;
     }
   else
@@ -629,6 +735,36 @@ terminal_profile_update (TerminalProfile *profile)
   
   g_free (key);
 
+
+  /* KEY_TITLE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_TITLE);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_title (profile, str_val))
+    mask |= TERMINAL_SETTING_TITLE;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_TITLE;
+  
+  g_free (key);
+
+  /* KEY_TITLE_MODE */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_TITLE_MODE);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_title_mode (profile, str_val))
+    mask |= TERMINAL_SETTING_TITLE_MODE;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_TITLE_MODE;
+  
+  g_free (key);
   
   /* Update state and emit signals */
   
@@ -753,6 +889,32 @@ profile_change_notify (GConfClient *client,
         mask |= TERMINAL_SETTING_BACKGROUND_COLOR;
 
       UPDATE_LOCKED (TERMINAL_SETTING_BACKGROUND_COLOR);
+    }
+  else if (strcmp (key, KEY_TITLE) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_title (profile, str_val))
+        mask |= TERMINAL_SETTING_TITLE;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_TITLE);
+    }
+  else if (strcmp (key, KEY_TITLE_MODE) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_title_mode (profile, str_val))
+        mask |= TERMINAL_SETTING_TITLE_MODE;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_TITLE_MODE);
     }
   
   if (mask != 0 || old_locked != profile->priv->locked)
@@ -940,6 +1102,7 @@ terminal_profile_create (TerminalProfile *base_profile,
   char *profile_dir = NULL;
   int i;
   char *s;
+  const char *cs;
   char *key = NULL;
   GError *err = NULL;
   GList *profiles = NULL;
@@ -1029,6 +1192,24 @@ terminal_profile_create (TerminalProfile *base_profile,
                            &err);
   g_free (s);
 
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_TITLE);
+  /* default title is profile name, not copied from base */
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, visible_name,
+                           &err);
+  BAIL_OUT_CHECK ();
+  
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_TITLE_MODE);
+  cs = gconf_enum_to_string (title_modes, base_profile->priv->title_mode);
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
   BAIL_OUT_CHECK ();
   
   /* Add new profile to the profile list; the method for doing this has

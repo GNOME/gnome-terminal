@@ -95,6 +95,42 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/title_mode</key>
+      <applyto>/apps/profterm/profiles/Default/title_mode</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>replace</default>
+      <locale name="C">
+         <short>What to do with dynamic title</short>
+         <long>
+           If the application in the terminal sets the title 
+           (most typically people have their shell set up to 
+           do this), the dynamically-set title can 
+           erase the configured title, go before it, go after it, 
+           or replace it. The possible values are "replace", 
+           "before", "after", and "ignore".
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/title</key>
+      <applyto>/apps/profterm/profiles/Default/title</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>Terminal</default>
+      <locale name="C">
+         <short>Title for terminal</short>
+         <long>
+           Title to display for the terminal window or tab. 
+           This title may be replaced by or combined with 
+           the title set by the app inside the terminal, 
+           depending on the title_mode setting.
+         </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
 

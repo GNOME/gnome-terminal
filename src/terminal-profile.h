@@ -36,8 +36,21 @@ typedef enum
   TERMINAL_SETTING_CURSOR_BLINK         = 1 << 1,
   TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR = 1 << 2,
   TERMINAL_SETTING_FOREGROUND_COLOR     = 1 << 3,
-  TERMINAL_SETTING_BACKGROUND_COLOR     = 1 << 4
+  TERMINAL_SETTING_BACKGROUND_COLOR     = 1 << 4,
+  TERMINAL_SETTING_TITLE                = 1 << 5,
+  TERMINAL_SETTING_TITLE_MODE           = 1 << 6
 } TerminalSettingMask;
+
+typedef enum
+{
+  /* this has to be kept in sync with the option menu in the
+   * glade file
+   */
+  TERMINAL_TITLE_REPLACE,
+  TERMINAL_TITLE_BEFORE,
+  TERMINAL_TITLE_AFTER,
+  TERMINAL_TITLE_IGNORE
+} TerminalTitleMode;
 
 typedef enum
 {
@@ -122,6 +135,7 @@ const char*               terminal_profile_get_word_class         (TerminalProfi
 const char*               terminal_profile_get_term_variable      (TerminalProfile  *profile);
 gboolean                  terminal_profile_get_lock_title         (TerminalProfile  *profile);
 const char*               terminal_profile_get_title              (TerminalProfile  *profile);
+TerminalTitleMode         terminal_profile_get_title_mode         (TerminalProfile  *profile);
 gboolean                  terminal_profile_get_forgotten          (TerminalProfile  *profile);
 gboolean                  terminal_profile_get_default_show_menubar (TerminalProfile *profile);
 
@@ -164,6 +178,8 @@ void            terminal_profile_set_background_pixmap  (TerminalProfile        
                                                         GdkPixmap                 *pixmap);
 void            terminal_profile_set_title              (TerminalProfile            *profile,
                                                         const char                *title);
+void            terminal_profile_set_title_mode         (TerminalProfile            *profile,
+                                                         TerminalTitleMode           mode);
 void            terminal_profile_set_lock_title         (TerminalProfile            *profile,
                                                         gboolean                   setting);
 void            terminal_profile_set_word_class         (TerminalProfile            *profile,

@@ -119,10 +119,12 @@ terminal_screen_init (TerminalScreen *screen)
 {  
   screen->priv = g_new0 (TerminalScreenPrivate, 1);
 
-  screen->priv->zvt = zvt_term_new ();
+  screen->priv->zvt = zvt_term_new_with_size (80, 24);
   g_object_ref (G_OBJECT (screen->priv->zvt));
   gtk_object_sink (GTK_OBJECT (screen->priv->zvt));
 
+  zvt_term_set_auto_window_hint (ZVT_TERM (screen->priv->zvt), FALSE);
+  
   g_object_set_data (G_OBJECT (screen->priv->zvt),
                      "terminal-screen",
                      screen);
@@ -298,16 +300,43 @@ reread_profile (TerminalScreen *screen)
 static void
 rebuild_title  (TerminalScreen *screen)
 {
-  /* FIXME this is supposed to be a combination of the title specified
-   * in the profile, plus the dynamic title appended/prepended/removed
-   */
+  TerminalTitleMode mode;
+
+  if (screen->priv->profile)
+    mode = terminal_profile_get_title_mode (screen->priv->profile);
+  else
+    mode = TERMINAL_TITLE_REPLACE;
+
+  g_free (screen->priv->cooked_title);
   
-  screen->priv->cooked_title =
-    g_strconcat (terminal_profile_get_visible_name (screen->priv->profile),
-                 (screen->priv->raw_title && *(screen->priv->raw_title)) ?
-                 " - " : "",
-                 screen->priv->raw_title,
-                 NULL);
+  switch (mode)
+    {
+    case TERMINAL_TITLE_AFTER:
+      screen->priv->cooked_title =
+        g_strconcat (terminal_profile_get_title (screen->priv->profile),
+                     (screen->priv->raw_title && *(screen->priv->raw_title)) ?
+                     " - " : "",
+                     screen->priv->raw_title,
+                     NULL);
+      break;
+    case TERMINAL_TITLE_BEFORE:
+      screen->priv->cooked_title =
+        g_strconcat (screen->priv->raw_title,
+                     (screen->priv->raw_title && *(screen->priv->raw_title)) ?
+                     " - " : "",
+                     terminal_profile_get_title (screen->priv->profile),
+                     NULL);
+      break;
+    case TERMINAL_TITLE_REPLACE:
+      screen->priv->cooked_title = g_strdup (screen->priv->raw_title);
+      break;
+    case TERMINAL_TITLE_IGNORE:
+      screen->priv->cooked_title = g_strdup (terminal_profile_get_title (screen->priv->profile));
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
       
   g_signal_emit (G_OBJECT (screen), signals[TITLE_CHANGED], 0);
 }

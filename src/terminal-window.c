@@ -668,17 +668,54 @@ terminal_window_get_menubar_visible (TerminalWindow *window)
   return window->priv->menubar_visible;
 }
 
+#define PADDING 2
+static void
+set_size (GtkWidget *widget)
+{
+  /* Owen's hack from gnome-terminal */
+  ZvtTerm *term;
+  GtkWidget *app;
+  GtkRequisition toplevel_request;
+  GtkRequisition widget_request;
+  gint w, h;
+  
+  g_assert (widget != NULL);
+  term = ZVT_TERM (widget);
+  
+  app = gtk_widget_get_toplevel(widget);
+  g_assert (app != NULL);
+  
+  gtk_widget_size_request (app, &toplevel_request);
+  gtk_widget_size_request (widget, &widget_request);
+  
+  w = toplevel_request.width - widget_request.width;
+  h = toplevel_request.height - widget_request.height;
+  
+  w += widget->style->xthickness * 2 + PADDING;
+  h += widget->style->ythickness * 2;
+  
+  w += term->charwidth * term->grid_width;
+  h += term->charheight * term->grid_height;
+  
+  gtk_window_resize (GTK_WINDOW (app), w, h);
+}
+
 void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
 {
   GdkGeometry hints;
   ZvtTerm *term;
+  GtkWidget *widget;
   
   if (window->priv->active_term == screen)
     return;
 
-  term = ZVT_TERM (terminal_screen_get_widget (screen));
+  widget = terminal_screen_get_widget (screen);
+  term = ZVT_TERM (widget);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    gtk_widget_realize (widget); /* we need this for the char width */
   
   window->priv->active_term = screen;
 
@@ -693,7 +730,6 @@ terminal_window_set_active (TerminalWindow *window,
   /* FIXME Since we're using xthickness/ythickness we need to change
    * the hints when the theme changes.
    */
-#define PADDING 2
   hints.base_width = (GTK_WIDGET (term)->style->xthickness * 2) + PADDING;
   hints.base_height =  (GTK_WIDGET (term)->style->ythickness * 2);
   
@@ -708,7 +744,7 @@ terminal_window_set_active (TerminalWindow *window,
                                  GDK_HINT_RESIZE_INC |
                                  GDK_HINT_MIN_SIZE |
                                  GDK_HINT_BASE_SIZE);
-
+  
   /* Override menubar setting if it wasn't restored from session */
   if (window->priv->use_default_menubar_visibility)
     {
@@ -725,7 +761,9 @@ terminal_window_set_active (TerminalWindow *window,
   
   gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
-                                                        screen_get_hbox (screen)));  
+                                                        screen_get_hbox (screen)));
+
+  set_size (widget);
 }
 
 TerminalScreen*

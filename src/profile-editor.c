@@ -48,7 +48,7 @@ static GtkWidget* profile_editor_get_widget                  (GtkWidget       *e
                                                               const char      *widget_name);
 static void       profile_editor_update_sensitivity          (GtkWidget       *editor,
                                                               TerminalProfile *profile);
-static void       profile_editor_update_title                (GtkWidget       *editor,
+static void       profile_editor_update_visible_name         (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_cursor_blink         (GtkWidget       *editor,
                                                               TerminalProfile *profile);
@@ -59,6 +59,23 @@ static void       profile_editor_update_color_pickers        (GtkWidget       *e
 static void       profile_editor_update_color_scheme_menu    (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 
+static void       profile_editor_update_title                (GtkWidget       *editor,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_title_mode           (GtkWidget       *editor,
+                                                              TerminalProfile *profile);
+
+static void
+entry_set_text_if_changed (GtkEntry   *entry,
+                           const char *text)
+{
+  char *s;
+
+  s = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  if (strcmp (s, text) != 0)
+    gtk_entry_set_text (GTK_ENTRY (entry), text);
+
+  g_free (s);
+}
 
 static void
 profile_editor_destroyed (GtkWidget       *editor,
@@ -88,7 +105,7 @@ profile_changed (TerminalProfile          *profile,
                  GtkWidget                *editor)
 {
   if (mask & TERMINAL_SETTING_VISIBLE_NAME)
-    profile_editor_update_title (editor, profile);
+    profile_editor_update_visible_name (editor, profile);
 
   if (mask & TERMINAL_SETTING_CURSOR_BLINK)
     profile_editor_update_cursor_blink (editor, profile);
@@ -103,6 +120,12 @@ profile_changed (TerminalProfile          *profile,
       profile_editor_update_color_pickers (editor, profile);
     }
 
+  if (mask & TERMINAL_SETTING_TITLE)
+    profile_editor_update_title (editor, profile);
+  
+  if (mask & TERMINAL_SETTING_TITLE_MODE)
+    profile_editor_update_title_mode (editor, profile);
+  
   profile_editor_update_sensitivity (editor, profile);
 }
 
@@ -189,6 +212,30 @@ color_scheme_changed (GtkWidget       *option_menu,
                                        &color_schemes[i].background);
   else
     ; /* "custom" selected, no change */
+}
+
+static void
+title_changed (GtkWidget       *entry,
+               TerminalProfile *profile)
+{
+  char *text;
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  
+  terminal_profile_set_title (profile, text);
+
+  g_free (text);
+}
+
+static void
+title_mode_changed (GtkWidget       *option_menu,
+                    TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+
+  terminal_profile_set_title_mode (profile, i);
 }
 
 /*
@@ -332,7 +379,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
       /* Autoconnect is just too scary for me. */
       w = glade_xml_get_widget (xml, "profile-name-entry");
-      profile_editor_update_title (editor, profile);
+      profile_editor_update_visible_name (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (visible_name_changed),
                         profile);
@@ -367,6 +414,19 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (color_scheme_changed),
                         profile);
+
+      w = glade_xml_get_widget (xml, "title-entry");
+      profile_editor_update_title (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (title_changed),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "title-mode-optionmenu");
+      profile_editor_update_title_mode (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (title_mode_changed),
+                        profile);
+
     }
   else
     {
@@ -425,12 +485,18 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "color-scheme-optionmenu",
                    (mask & (TERMINAL_SETTING_BACKGROUND_COLOR |
                             TERMINAL_SETTING_FOREGROUND_COLOR)));
+
+  set_insensitive (editor, "title-entry",
+                   mask & TERMINAL_SETTING_TITLE);
+  
+  set_insensitive (editor, "title-mode-optionmenu",
+                   mask & TERMINAL_SETTING_TITLE_MODE);
 }
 
 
 static void
-profile_editor_update_title (GtkWidget       *editor,
-                             TerminalProfile *profile)
+profile_editor_update_visible_name (GtkWidget       *editor,
+                                    TerminalProfile *profile)
 {
   char *s;
   GtkWidget *w;
@@ -444,8 +510,8 @@ profile_editor_update_title (GtkWidget       *editor,
 
   w = profile_editor_get_widget (editor, "profile-name-entry");
 
-  gtk_entry_set_text (GTK_ENTRY (w),
-                      terminal_profile_get_visible_name (profile));
+  entry_set_text_if_changed (GTK_ENTRY (w),
+                             terminal_profile_get_visible_name (profile));
 }
 
 static void
@@ -516,6 +582,30 @@ profile_editor_update_color_scheme_menu (GtkWidget       *editor,
    * menu item which is "custom"
    */
   gtk_option_menu_set_history (GTK_OPTION_MENU (w), i);
+}
+
+static void
+profile_editor_update_title (GtkWidget       *editor,
+                             TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "title-entry");
+
+  entry_set_text_if_changed (GTK_ENTRY (w),
+                             terminal_profile_get_title (profile));
+}
+
+static void
+profile_editor_update_title_mode (GtkWidget       *editor,
+                                  TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "title-mode-optionmenu");
+  
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
+                               terminal_profile_get_title_mode (profile));
 }
 
 static GtkWidget*
