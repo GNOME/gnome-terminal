@@ -1,3 +1,10 @@
+2003-01-31  Havoc Pennington  <hp@redhat.com>
+
+	* src/terminal.c: track whether we're done initializing, so we can
+	avoid handling new terminal events until we are.
+	(terminal_new_event): rearrange this to queue up new terminal
+	requests, and handle them only once we're fully initialized.
+
 2003-01-27  Laurent Dhima  <laurenti@alblinux.net>
 
 	* configure.in: Added "sq" to ALL_LINGUAS.

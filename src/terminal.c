@@ -83,6 +83,8 @@ struct _TerminalApp
 static GConfClient *conf = NULL;
 static TerminalApp *app = NULL;
 static gboolean terminal_factory_disabled = FALSE;
+static gboolean initialization_complete = FALSE;
+static GSList *pending_new_terminal_events = NULL;
 
 #define TERMINAL_STOCK_EDIT "terminal-edit"
 typedef struct
@@ -137,6 +139,8 @@ static void parse_options_callback (poptContext              ctx,
                                     void                    *data);
 static void client_die_cb          (GnomeClient             *client,
                                     gpointer                 data);
+
+static void handle_new_terminal_events (void);
 
 enum {
   OPTION_COMMAND = 1,
@@ -1504,6 +1508,9 @@ main (int argc, char **argv)
 
   option_parsing_results_free (results);
   results = NULL;
+
+  initialization_complete = TRUE;
+  handle_new_terminal_events ();
   
   gtk_main ();
   
@@ -3421,60 +3428,37 @@ terminal_util_load_glade_file (const char *filename,
 
 /* Factory stuff */
 
+typedef struct
+{
+  int argc;
+  char **argv;
+} NewTerminalEvent;
 
-/*
- *   Invoked remotely to instantiate a terminal with the
- * given arguments.
- */
 static void
-terminal_new_event (BonoboListener    *listener,
-		    const char        *event_name, 
-		    const CORBA_any   *any,
-		    CORBA_Environment *ev,
-		    gpointer           user_data)
+handle_new_terminal_event (int          argc,
+                           char       **argv)
 {
   int nextopt;
   poptContext ctx;
   const void *store;
   OptionParsingResults *results;
-  CORBA_sequence_CORBA_string *args;
-  char **tmp_argv;
-  int tmp_argc;
-  int i;
-  
-  if (strcmp (event_name, "new_terminal"))
-    {
-      g_warning ("Unknown event '%s' on terminal",
-		 event_name);
-      return;
-    }
 
-  args = any->_value;
+  g_assert (initialization_complete);
   
-  tmp_argv = g_new0 (char*, args->_length + 1);
-  i = 0;
-  while (i < args->_length)
-    {
-      tmp_argv[i] = g_strdup (((const char**)args->_buffer)[i]);
-      ++i;
-    }
-  tmp_argv[i] = NULL;
-  tmp_argc = i;
-  
-  results = option_parsing_results_init (&tmp_argc, tmp_argv);
+  results = option_parsing_results_init (&argc, argv);
   
   /* Find and parse --display */
   option_parsing_results_check_for_display_name (results,
-                                                 &tmp_argc,
-                                                 tmp_argv);
+                                                 &argc,
+                                                 argv);
   
   store = options[0].descrip;
   options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
                                          * mutant spawn
                                          */
   ctx = poptGetContext (PACKAGE,
-                        tmp_argc,
-                        (const char**)tmp_argv,
+                        argc,
+                        (const char**)argv,
 			options, 0);
   
   g_return_if_fail (app != NULL);
@@ -3494,8 +3478,70 @@ terminal_new_event (BonoboListener    *listener,
   new_terminal_with_options (results);
 
   option_parsing_results_free (results);
+}
 
-  g_strfreev (tmp_argv);
+static void
+handle_new_terminal_events (void)
+{
+  while (pending_new_terminal_events != NULL)
+    {
+      GSList *next = pending_new_terminal_events->next;
+      NewTerminalEvent *event = pending_new_terminal_events->data;
+
+      handle_new_terminal_event (event->argc, event->argv);
+
+      g_strfreev (event->argv);
+      g_free (event);
+      g_slist_free_1 (pending_new_terminal_events);
+      pending_new_terminal_events = next;
+    }
+}
+
+/*
+ *   Invoked remotely to instantiate a terminal with the
+ * given arguments.
+ */
+static void
+terminal_new_event (BonoboListener    *listener,
+		    const char        *event_name, 
+		    const CORBA_any   *any,
+		    CORBA_Environment *ev,
+		    gpointer           user_data)
+{
+  CORBA_sequence_CORBA_string *args;
+  char **tmp_argv;
+  int tmp_argc;
+  int i;
+  NewTerminalEvent *event;
+  
+  if (strcmp (event_name, "new_terminal"))
+    {
+      g_warning ("Unknown event '%s' on terminal",
+		 event_name);
+      return;
+    }
+
+  args = any->_value;
+  
+  tmp_argv = g_new0 (char*, args->_length + 1);
+  i = 0;
+  while (i < args->_length)
+    {
+      tmp_argv[i] = g_strdup (((const char**)args->_buffer)[i]);
+      ++i;
+    }
+  tmp_argv[i] = NULL;
+  tmp_argc = i;
+
+  event = g_new0 (NewTerminalEvent, 1);
+  event->argc = tmp_argc;
+  event->argv = tmp_argv;
+
+  pending_new_terminal_events = g_slist_append (pending_new_terminal_events,
+                                                event);
+
+  if (initialization_complete)
+    handle_new_terminal_events ();
 }
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
