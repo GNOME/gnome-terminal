@@ -839,6 +839,8 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   g_signal_connect (G_OBJECT (selection), "changed",
                     G_CALLBACK (displayed_selection_changed_callback),
                     dialog);
+
+  g_object_unref (G_OBJECT (xml));
   
   return dialog;
 }

@@ -1,5 +1,18 @@
 2003-01-05  Havoc Pennington  <hp@pobox.com>
 
+	* src/terminal-accels.c (terminal_edit_keys_dialog_new): don't
+	leak GladeXML object
+
+	* src/encoding.c (terminal_encoding_dialog_new): don't leak the
+	GladeXML object.
+
+	* src/skey-popup.c (terminal_skey_do_popup): destroy the skey
+	dialog in between uses, I believe this may fix some weirdness 
+	where it sometimes popped up in funny places. 
+	Also, don't leak the GladeXML object.
+
+2003-01-05  Havoc Pennington  <hp@pobox.com>
+
 	* src/encoding.h (enum): fix compilation by adding missing 
 	encoding to enum.
 

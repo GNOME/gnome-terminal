@@ -51,16 +51,38 @@ terminal_skey_do_popup (TerminalScreen *screen,
 			GtkWindow      *transient_parent,
 			const gchar    *skey_match)
 {
-  GtkWidget *dialog = NULL;
+  static GtkWidget *dialog = NULL;
   GtkWidget *entry;
   GtkWidget *ok_button;
   gint seq;
   gchar *seed;
 
   if (!extract_seq_and_seed (skey_match, &seq, &seed))
-    return;
+    {
+#if 0
+      /* disabled for code freeze */
+      GtkWidget *err_dialog;
+          
+      err_dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
 
-  dialog = g_object_get_data (G_OBJECT (transient_parent), "skey-dialog");
+                                           /* FIXME _() once string freeze is over */
+                                           
+                                           "The text you clicked doesn't seem to be an S/Key challenge.");
+      
+      g_signal_connect (G_OBJECT (err_dialog), "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+      
+      gtk_window_set_resizable (GTK_WINDOW (err_dialog), FALSE);
+      
+      gtk_widget_show (err_dialog);
+#endif
+      
+      return;
+    }
 
   if (dialog == NULL)
     {
@@ -76,10 +98,12 @@ terminal_skey_do_popup (TerminalScreen *screen,
       dialog = glade_xml_get_widget (xml, "skey-dialog");
       entry = glade_xml_get_widget (xml, "skey-entry");
       ok_button = glade_xml_get_widget (xml, "skey-ok-button");
-      g_object_set_data (G_OBJECT (transient_parent), "skey-dialog", dialog);      
       g_object_set_data (G_OBJECT (dialog), "skey-entry", entry);      
-      g_object_set_data (G_OBJECT (dialog), "skey-ok-button", ok_button);      
+      g_object_set_data (G_OBJECT (dialog), "skey-ok-button", ok_button);
 
+      g_object_add_weak_pointer (G_OBJECT (dialog), (void**) &dialog);
+
+      g_object_unref (G_OBJECT (xml));
     }
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog),
@@ -112,6 +136,6 @@ terminal_skey_do_popup (TerminalScreen *screen,
 	}
     }
 
-  gtk_widget_hide (dialog);
+  gtk_widget_destroy (dialog);
   g_free (seed);
 }

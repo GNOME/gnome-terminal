@@ -1195,6 +1195,8 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
                     NULL);
   gtk_window_set_default_size (GTK_WINDOW (w),
                                -1, 350);
+
+  g_object_unref (G_OBJECT (xml));
   
   return w;
 }
