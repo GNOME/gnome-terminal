@@ -177,7 +177,7 @@ egg_cell_renderer_keys_class_init (EggCellRendererKeysClass *cell_keys_class)
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODE,
                                    g_param_spec_int ("accel_mode",
-						     _("Accel Mode"),
+						     _("Accelerator Mode"),
 						     _("The type of accelerator."),
 						     0,
 						     2,
@@ -357,6 +357,7 @@ grab_key_callback (GtkWidget    *widget,
   GdkModifierType ignored_modifiers;
   
   keys = EGG_CELL_RENDERER_KEYS (data);
+  accel_mods = 0;
 
   if (is_modifier (event->hardware_keycode))
     return TRUE;
