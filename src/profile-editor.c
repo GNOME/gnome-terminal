@@ -1209,6 +1209,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
           font_label = gtk_label_new_with_mnemonic (_("_Font:"));
           gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
+          gtk_label_set_mnemonic_widget (GTK_LABEL (font_label), fontsel);
 
           gtk_box_set_spacing (GTK_BOX (w), 12);
           
