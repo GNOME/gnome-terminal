@@ -1,3 +1,12 @@
+2003-09-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/gnome-terminal.schemas: removed, as this is a generated file.
+	* src/terminal-screen.c(new_window_callback, new_tab_callback): make
+	context menu open new window/tabs in the current tab's working
+	directory. This fixes bug 122542.
+	* src/terminal.c(new_profile_response_callback): gconf-escape the new
+	profile name before creating the profile. This fixes bug 122349.
+
 2003-09-12  Fatih Demir <kabalak@gtranslator.org>
 
 	* configure.in: Added "ta" (Tamil) to the languages' list.

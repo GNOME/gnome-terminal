@@ -2172,8 +2172,9 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       terminal_profile_create (base_profile, name, transient_parent);
 
       n.next = NULL;
-      n.data = name;
+      n.data = gconf_escape_key (name, -1);
       sync_profile_list (TRUE, &n);
+      g_free (n.data);
       
       new_profile = terminal_profile_lookup_by_visible_name (name);
 
