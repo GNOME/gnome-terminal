@@ -1694,7 +1694,7 @@ egg_xfont_selector_finalize (GObject *object)
 {
   GObjectClass *parent_class;
   EggXFontSelector *sel;
-
+  
   sel = EGG_XFONT_SELECTOR (object);
   parent_class = g_type_class_ref (g_type_parent (G_OBJECT_TYPE (object)));
 
@@ -1709,5 +1709,7 @@ egg_xfont_selector_finalize (GObject *object)
   if (parent_class->finalize) {
     parent_class->finalize (object);
   }
+
+  g_type_class_unref (parent_class);
 }
 
