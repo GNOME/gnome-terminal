@@ -76,6 +76,8 @@ static void new_tab_callback              (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void close_window_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+static void close_tab_callback            (GtkWidget      *menuitem,
+                                           TerminalWindow *window);
 static void copy_callback                 (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void paste_callback                (GtkWidget      *menuitem,
@@ -269,6 +271,9 @@ terminal_window_init (TerminalWindow *window)
   window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
   window->priv->notebook = gtk_notebook_new ();
 
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook),
+                               TRUE);
+  
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
                           "switch_page",
                           G_CALLBACK (notebook_page_switched_callback),
@@ -301,6 +306,10 @@ terminal_window_init (TerminalWindow *window)
                    G_CALLBACK (close_window_callback),
                    window);
 
+  append_menuitem (menu, _("C_lose tab"),
+                   G_CALLBACK (close_tab_callback),
+                   window);
+  
   mi = append_menuitem (window->priv->menubar,
                         _("_Edit"),
                         NULL, NULL);
@@ -464,9 +473,34 @@ static void
 title_changed_callback (TerminalScreen *screen,
                         TerminalWindow *window)
 {
+  GtkWidget *label;
+  
   if (screen == window->priv->active_term)
     gtk_window_set_title (GTK_WINDOW (window),
                           terminal_screen_get_title (screen));
+
+  label = screen_get_label (screen);
+  gtk_label_set_text (GTK_LABEL (label), terminal_screen_get_title (screen));
+}
+
+static void
+update_copy_sensitivity (TerminalWindow *window)
+{
+  gboolean can_copy = FALSE;
+
+  if (window->priv->active_term)
+    can_copy = terminal_screen_get_text_selected (window->priv->active_term);
+  else
+    can_copy = FALSE;
+
+  gtk_widget_set_sensitive (window->priv->copy_menuitem, can_copy);
+}
+
+static void
+selection_changed_callback (TerminalScreen *screen,
+                            TerminalWindow *window)
+{
+  update_copy_sensitivity (window);
 }
 
 void
@@ -513,6 +547,11 @@ terminal_window_add_screen (TerminalWindow *window,
   g_signal_connect (G_OBJECT (screen),
                     "title_changed",
                     G_CALLBACK (title_changed_callback),
+                    window);
+
+  g_signal_connect (G_OBJECT (screen),
+                    "selection_changed",
+                    G_CALLBACK (selection_changed_callback),
                     window);
   
   term = ZVT_TERM (terminal_screen_get_widget (screen));  
@@ -562,6 +601,10 @@ terminal_window_remove_screen (TerminalWindow *window,
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (title_changed_callback),
                                         window);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
+                                        G_CALLBACK (selection_changed_callback),
+                                        window);
   
   terminal_screen_set_window (screen, NULL);
   
@@ -580,6 +623,10 @@ terminal_window_remove_screen (TerminalWindow *window,
   if (window->priv->active_term == NULL &&
       window->priv->terms)
     terminal_window_set_active (window, window->priv->terms->data);
+
+  /* Close window if no more terminals */
+  if (window->priv->terms == NULL)
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 GList*
@@ -674,6 +721,8 @@ terminal_window_set_active (TerminalWindow *window,
 
   gtk_window_set_title (GTK_WINDOW (window),
                         terminal_screen_get_title (screen));
+
+  update_copy_sensitivity (window);
   
   gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
                                  gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
@@ -818,23 +867,43 @@ static void
 close_window_callback (GtkWidget      *menuitem,
                        TerminalWindow *window)
 {
-  not_implemented ();
+  gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+static void
+close_tab_callback (GtkWidget      *menuitem,
+                    TerminalWindow *window)
+{
+  if (window->priv->active_term)
+    terminal_screen_close (window->priv->active_term);
 }
 
 static void
 copy_callback (GtkWidget      *menuitem,
                TerminalWindow *window)
 {
-  not_implemented ();
+  GtkWidget *widget;
 
+  if (window->priv->active_term)
+    {
+      widget = terminal_screen_get_widget (window->priv->active_term);
+      
+      zvt_term_copy_clipboard (ZVT_TERM (widget));
+    }
 }
 
 static void
 paste_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
-  not_implemented ();
+  GtkWidget *widget;
 
+  if (window->priv->active_term)
+    {
+      widget = terminal_screen_get_widget (window->priv->active_term);
+      
+      zvt_term_paste_clipboard (ZVT_TERM (widget));
+    }  
 }
 
 
@@ -896,15 +965,28 @@ static void
 reset_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
-  not_implemented ();
+  GtkWidget *widget;
 
+  if (window->priv->active_term)
+    {
+      widget = terminal_screen_get_widget (window->priv->active_term);
+        
+      zvt_term_reset (ZVT_TERM (widget), FALSE);
+    }
 }
 
 static void
 reset_and_clear_callback (GtkWidget      *menuitem,
                           TerminalWindow *window)
 {
-  not_implemented ();
+  GtkWidget *widget;
+
+  if (window->priv->active_term)
+    {
+      widget = terminal_screen_get_widget (window->priv->active_term);
+        
+      zvt_term_reset (ZVT_TERM (widget), TRUE);
+    }
 }
 
 static void

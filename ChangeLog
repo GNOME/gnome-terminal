@@ -1,3 +1,26 @@
+2001-12-12  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-screen.c (reread_profile): redo title if 
+	we switch profiles since title contains profile name.
+
+	* src/terminal-window.c (paste_callback): implement
+	(copy_callback): implement
+
+	* src/terminal-screen.c (terminal_screen_button_press_event):
+	focus terminal when it's clicked, so you can get out of the
+	I-focused-a-notebook-tab state
+
+	* src/terminal-window.c (terminal_window_remove_screen): close
+	window if no more terminals
+	(terminal_window_init): put the notebook in scroll-arrow mode.
+
+	* src/terminal-screen.c: hook up to child_died and handle that
+
+2001-12-11  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-screen.c (terminal_screen_zvt_title_changed):
+	handle title changes
+
 2001-12-11  Havoc Pennington  <hp@pobox.com>
 
 	* src/terminal-screen.c (terminal_screen_popup_menu_mouse): return

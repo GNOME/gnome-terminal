@@ -51,8 +51,9 @@ struct _TerminalScreenClass
 {
   GObjectClass parent_class;
 
-  void (* profile_set) (TerminalScreen *screen);
-  void (* title_changed) (TerminalScreen *screen);
+  void (* profile_set)       (TerminalScreen *screen);
+  void (* title_changed)     (TerminalScreen *screen);
+  void (* selection_changed) (TerminalScreen *screen);
 };
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
@@ -76,6 +77,10 @@ int terminal_screen_get_id (TerminalScreen *screen);
 void terminal_screen_launch_child (TerminalScreen *screen);
 
 const char* terminal_screen_get_title (TerminalScreen *screen);
+
+void terminal_screen_close (TerminalScreen *screen);
+
+gboolean terminal_screen_get_text_selected (TerminalScreen *screen);
 
 G_END_DECLS
 

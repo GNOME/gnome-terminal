@@ -51,6 +51,7 @@ static GList* used_ids = NULL;
 enum {
   PROFILE_SET,
   TITLE_CHANGED,
+  SELECTION_CHANGED,
   LAST_SIGNAL
 };
 
@@ -60,19 +61,27 @@ static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_update_on_realize (ZvtTerm        *term,
                                                TerminalScreen *screen);
 
-static void     terminal_screen_popup_menu_keyboard (GtkWidget      *zvt,
-                                                     TerminalScreen *screen);
-static gboolean terminal_screen_popup_menu_mouse    (GtkWidget      *zvt,
-                                                     GdkEventButton *event,
-                                                     TerminalScreen *screen);
+static void     terminal_screen_popup_menu         (GtkWidget      *zvt,
+                                                    TerminalScreen *screen);
+static gboolean terminal_screen_button_press_event (GtkWidget      *zvt,
+                                                    GdkEventButton *event,
+                                                    TerminalScreen *screen);
 
 
 static void terminal_screen_zvt_title_changed   (GtkWidget      *zvt,
-                                                 const char     *title,
                                                  VTTITLE_TYPE    type,
+                                                 const char     *title,
                                                  TerminalScreen *screen);
 
+static void terminal_screen_zvt_child_died      (GtkWidget      *zvt,
+                                                 TerminalScreen *screen);
+
+static void terminal_screen_zvt_selection_changed (GtkWidget      *zvt,
+                                                   TerminalScreen *screen);
+
 static void reread_profile (TerminalScreen *screen);
+
+static void rebuild_title  (TerminalScreen *screen);
 
 static gpointer parent_class;
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -127,17 +136,27 @@ terminal_screen_init (TerminalScreen *screen)
 
   g_signal_connect (G_OBJECT (screen->priv->zvt),
                     "popup_menu",
-                    G_CALLBACK (terminal_screen_popup_menu_keyboard),
+                    G_CALLBACK (terminal_screen_popup_menu),
                     screen);
 
   g_signal_connect (G_OBJECT (screen->priv->zvt),
                     "button_press_event",
-                    G_CALLBACK (terminal_screen_popup_menu_mouse),
+                    G_CALLBACK (terminal_screen_button_press_event),
                     screen);
 
   g_signal_connect (G_OBJECT (screen->priv->zvt),
                     "title_changed",
                     G_CALLBACK (terminal_screen_zvt_title_changed),
+                    screen);
+
+  g_signal_connect (G_OBJECT (screen->priv->zvt),
+                    "child_died",
+                    G_CALLBACK (terminal_screen_zvt_child_died),
+                    screen);
+
+  g_signal_connect (G_OBJECT (screen->priv->zvt),
+                    "selection_changed",
+                    G_CALLBACK (terminal_screen_zvt_selection_changed),
                     screen);
 }
 
@@ -167,7 +186,15 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-  
+
+  signals[SELECTION_CHANGED] =
+    g_signal_new ("selection_changed",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, selection_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);  
 }
 
 static void
@@ -301,6 +328,25 @@ reread_profile (TerminalScreen *screen)
 #endif
   zvt_term_set_blink (ZVT_TERM (screen->priv->zvt),
                       terminal_profile_get_cursor_blink (profile));
+
+  rebuild_title (screen);
+}
+
+static void
+rebuild_title  (TerminalScreen *screen)
+{
+  /* FIXME this is supposed to be a combination of the title specified
+   * in the profile, plus the dynamic title appended/prepended/removed
+   */
+  
+  screen->priv->cooked_title =
+    g_strconcat (terminal_profile_get_visible_name (screen->priv->profile),
+                 (screen->priv->raw_title && *(screen->priv->raw_title)) ?
+                 " - " : "",
+                 screen->priv->raw_title,
+                 NULL);
+      
+  g_signal_emit (G_OBJECT (screen), signals[TITLE_CHANGED], 0);
 }
 
 static void
@@ -469,6 +515,24 @@ terminal_screen_launch_child (TerminalScreen *screen)
       /* In the parent */
       break;
     }
+}
+
+void
+terminal_screen_close (TerminalScreen *screen)
+{
+  g_return_if_fail (screen->priv->window);
+
+  terminal_window_remove_screen (screen->priv->window, screen);
+  /* screen should be finalized here, do not touch it past this point */
+}
+
+gboolean
+terminal_screen_get_text_selected (TerminalScreen *screen)
+{
+  if (GTK_WIDGET_REALIZED (screen->priv->zvt))
+    return ZVT_TERM (screen->priv->zvt)->vx->selected != FALSE;
+  else
+    return FALSE;
 }
 
 static void
@@ -705,18 +769,23 @@ terminal_screen_do_popup (TerminalScreen *screen,
 }
 
 static void
-terminal_screen_popup_menu_keyboard (GtkWidget      *zvt,
-                                     TerminalScreen *screen)
+terminal_screen_popup_menu (GtkWidget      *zvt,
+                            TerminalScreen *screen)
 {
   terminal_screen_do_popup (screen, NULL);
 }
 
 static gboolean
-terminal_screen_popup_menu_mouse (GtkWidget      *zvt,
-                                  GdkEventButton *event,
-                                  TerminalScreen *screen)
+terminal_screen_button_press_event (GtkWidget      *zvt,
+                                    GdkEventButton *event,
+                                    TerminalScreen *screen)
 {
-  if (event->button == 3)
+  if (event->button == 1)
+    {
+      gtk_widget_grab_focus (zvt);
+      return FALSE; /* pass thru the click */
+    }
+  else if (event->button == 3)
     {
       terminal_screen_do_popup (screen, event);
       return TRUE;
@@ -729,23 +798,52 @@ terminal_screen_popup_menu_mouse (GtkWidget      *zvt,
 
 static void
 terminal_screen_zvt_title_changed (GtkWidget      *zvt,
-                                   const char     *title,
                                    VTTITLE_TYPE    type,
+                                   const char     *title,
                                    TerminalScreen *screen)
 {
-#if 0
-  /* Um, libzvt is fucked and gives us the title/type args in the wrong order.
-   * so this is commented out for now.
-   */
-  g_free (screen->raw_title);
-  screen->raw_title = g_strdup (title);
-#endif
+  switch (type)
+    {
+    case VTTITLE_WINDOW:
+    case VTTITLE_WINDOWICON:
+      
+      g_free (screen->priv->raw_title);
+      screen->priv->raw_title = g_strdup (title);
+      
+      rebuild_title (screen);
+      break;
 
-  /* FIXME this is supposed to be a combination of the title specified
-   * in the profile, plus the dynamic title appended/prepended/removed
+    case VTTITLE_ICON:
+      /* FIXME set WM_ICON_NAME? who cares really... */
+      break;
+      
+    case VTTITLE_XPROPERTY:
+      /* See gnome-terminal.c - this is supposed to
+       * be a "XPROPNAME=VALUE" pair to set XPROPNAME on the toplevel
+       * with VALUE as an XA_STRING, or if no "=VALUE" a way to delete
+       * the property. Does anything use this?
+       */
+      /* title is in UTF-8 but came from the terminal app
+       * as Latin-1 and was converted to UTF-8 by libzvt,
+       * here we convert back to Latin-1 to set it as an XA_STRING
+       */
+      break;
+  }    
+}
+
+static void
+terminal_screen_zvt_child_died (GtkWidget      *zvt,
+                                TerminalScreen *screen)
+{
+  /* FIXME make it configurable whether to kill the window/tab
+   * or restart the child
    */
-  
-  screen->priv->cooked_title = g_strdup (terminal_profile_get_visible_name (screen->priv->profile));
-  
-  g_signal_emit (G_OBJECT (screen), signals[TITLE_CHANGED], 0);
+  terminal_screen_close (screen);
+}
+
+static void
+terminal_screen_zvt_selection_changed (GtkWidget      *zvt,
+                                       TerminalScreen *screen)
+{
+  g_signal_emit (G_OBJECT (screen), signals[SELECTION_CHANGED], 0);
 }
