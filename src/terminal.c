@@ -120,6 +120,7 @@ enum {
   OPTION_DISABLE_FACTORY,
   OPTION_TITLE,
   OPTION_WORKING_DIRECTORY,
+  OPTION_COMPAT,
   OPTION_LAST
 };  
 
@@ -249,6 +250,179 @@ struct poptOption options[] = {
     OPTION_WORKING_DIRECTORY,
     N_("Set the terminal's working directory"),
     N_("DIRNAME")
+  },
+
+  /*
+   * Crappy old compat args
+   */
+
+  {
+    "tclass",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "font",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "nologin",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "login",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "foreground",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "background",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "solid",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "bgscroll",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "bgnoscroll",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "shaded",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "noshaded",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "transparent",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "utmp",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "noutmp",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "wtmp",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "nowtmp",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "lastlog",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "nolastlog",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "icon",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },  
+  {
+    "termname",
+    '\0',
+    POPT_ARG_STRING | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
+  },
+  {
+    "start-factory-server",
+    '\0',
+    POPT_ARG_NONE | POPT_ARGFLAG_DOC_HIDDEN,
+    NULL,
+    OPTION_COMPAT,
+    NULL, NULL
   },
   {
     NULL,
@@ -495,68 +669,6 @@ terminal_invoke_factory (int argc, char **argv)
   return FALSE;
 }
 
-static void
-strip_old_args (int *argcp, char **argv)
-{
-  const char *old_args[] = {
-    "--tclass", /* =TCLASS             Terminal class name */
-    "--font", /* =FONT                 Specifies font name*/
-    "--nologin", /*                    Do not start up shells as login shells */
-    "--login", /*                      Start up shells as login shells */
-    "--foreground", /* =COLOR          Foreground color */
-    "--background", /* =COLOR          Background color */
-    "--solid",  /*                     Solid background */
-    "--pixmap", /* =PIXMAP             Background pixmap */
-    "--bgscroll", /*                   Background pixmap scrolls */
-    "--bgnoscroll",  /*                Background pixmap does not scroll */
-    "--shaded", /*                     Shade background */
-    "--noshaded", /*                   Do not shade background */
-    "--transparent", /*                Transparent background */
-    "--utmp",  /*                      Update utmp entry */
-    "--noutmp",  /*                    Do not update utmp entry */
-    "--wtmp",  /*                      Update wtmp entry */
-    "--nowtmp",  /*                    Do not update wtmp entry */
-    "--lastlog",  /*                   Update lastlog entry */
-    "--nolastlog",  /*                 Do not update lastlog entry */
-    "--icon", /* =ICON                 Set the window icon */
-    "--termname", /* =TERMNAME         Set the TERM variable */
-    "--start-factory-server"  /*      Try to start a TerminalFactory */
-  };
-  int i;
-  int j;
-  
-  i = 1;
-  while (i < *argcp)
-    {
-      /* don't scan past "--" */
-      if (strcmp (argv[i], "--") == 0)
-        return;
-
-      j = 0;
-      while (j < (int) G_N_ELEMENTS (old_args))
-        {
-          if (strstr (argv[i], old_args[j]) == argv[i])
-            {
-              /* Get rid of this option */
-              g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"),
-                          old_args[j]);
-
-              g_memmove (argv + i, argv + i + 1,
-                         sizeof (char*) * (*argcp - i - 1));
-              
-              *argcp -= 1;
-
-              goto next;
-            }
-          ++j;
-        }
-
-    next:
-      
-      ++i;
-    }
-}
-
 static GnomeModuleInfo module_info = {
   PACKAGE, VERSION, N_("Terminal"),
   NULL,
@@ -657,9 +769,7 @@ main (int argc, char **argv)
                       GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
                       NULL); 
 
-  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");  
-
-  strip_old_args (&argc, argv);
+  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
   
   ctx = poptGetContext (PACKAGE, argc, (const char **) argv, options, 0);
 
@@ -927,6 +1037,10 @@ main (int argc, char **argv)
 
             it->working_dir = g_strdup (dir);
           }
+          break;
+
+        case OPTION_COMPAT:
+          g_printerr (_("Option given which is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new --window-with-profile option\n"));
           break;
           
         case OPTION_LAST:          
