@@ -291,6 +291,12 @@ reread_profile (TerminalScreen *screen)
     terminal_screen_update_on_realize (term, screen);
 
   rebuild_title (screen);
+
+  /* For now, just hardwire the backspace and delete keys correctly
+   * Needs to be wired up for people that expect brokenness later.
+   */
+  zvt_term_set_del_key_swap (term, TRUE);
+  zvt_term_set_del_is_del (term, FALSE);
   
   zvt_term_set_blink (term,
                       terminal_profile_get_cursor_blink (profile));
