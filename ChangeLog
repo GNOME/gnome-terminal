@@ -1,5 +1,11 @@
 2002-05-01  Havoc Pennington  <hp@redhat.com>
 
+	* src/terminal-window.c (terminal_window_remove_screen): fix crash
+	on closing terminal (don't try to set size on active term 
+	if we just closed the last term)
+
+2002-05-01  Havoc Pennington  <hp@redhat.com>
+
 	* src/eggcellrendererkeys.c: sync up to libegg, but contains no 
 	important fixes.
 

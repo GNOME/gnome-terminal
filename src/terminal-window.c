@@ -1074,11 +1074,14 @@ terminal_window_remove_screen (TerminalWindow *window,
       terminal_window_set_active (window, window->priv->terms->data);
     }
 
+  if (window->priv->active_term)
+    {
 #ifdef DEBUG_GEOMETRY
-  g_print ("setting size with forced grid after removing a terminal\n");
+      g_print ("setting size with forced grid after removing a terminal\n");
 #endif
-  terminal_window_set_size_force_grid (window, window->priv->active_term,
-                                       TRUE, old_grid_width, old_grid_height);
+      terminal_window_set_size_force_grid (window, window->priv->active_term,
+                                           TRUE, old_grid_width, old_grid_height);
+    }
 
   reset_tab_menuitems (window);
   update_tab_sensitivity (window);
