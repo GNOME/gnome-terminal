@@ -1,3 +1,18 @@
+2005-02-28  Elijah Newren  <newren@gmail.com>
+
+	Approximate the time that gnome-terminal was launched if not
+	launched with startup-notification.  Fixes #168812.
+
+	* src/terminal.c: (slowly_and_stupidly_obtain_timestamp): new
+	function, (main): get a timestamp from the xserver to approximate
+	launch time if no DESKTOP_STARTUP_ID is provided
+
+	* src/terminal-window.c: (terminal_window_show): only do
+	sn_launchee_context_setup_window() if the startup_id is valid,
+	remove an error that shouldn't happen (well, unless using an
+	out-of-date startup-notification launcher, but that's someone
+	else's problem)
+
 2004-12-01  Mariano Suárez-Alvarez <mariano@gnome.org>
 
 	* configure.in: Post release bump: Version 2.9.3
