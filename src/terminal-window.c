@@ -243,8 +243,8 @@ can_activate_accel_callback (GtkWidget *widget,
 			     guint      signal_id,
 			     gpointer   user_data)
 {
-	/* Always allow accels to be activated. */ 
-	return TRUE;
+  /* Always allow accels to be activated. */ 
+  return TRUE;
 }
 
 static GtkWidget*

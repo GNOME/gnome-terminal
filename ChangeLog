@@ -1,5 +1,10 @@
 2004-01-21 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal.c(main): move a non-constant initializer down to a more
+	C89ish place. Reported as bug #131614.
+
+2004-01-21 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-window.c (can_activate_accel_callback,
 	(terminal_window_init): Connect to can-activate-callback and
 	return TRUE to make accels work when the menubar is hidden. 

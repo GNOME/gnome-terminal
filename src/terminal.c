@@ -1488,13 +1488,15 @@ main (int argc, char **argv)
   const char *display_name;
   GdkDisplay *display;
   GnomeModuleRequirement reqs[] = {
-    { "2.0.0", LIBGNOMEUI_MODULE },
+    { "2.0.0", NULL },
     { NULL, NULL }
   };
   GnomeClient *sm_client;
   OptionParsingResults *results;
   GnomeProgram *program;
-  
+
+  reqs[0].module_info = LIBGNOMEUI_MODULE;
+
   if (setlocale (LC_ALL, "") == NULL)
     g_printerr ("GNOME Terminal: locale not understood by C library, internationalization will not work\n");
 
