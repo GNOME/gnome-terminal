@@ -546,43 +546,49 @@ terminal_screen_update_on_realize (GtkWidget      *term,
        if (terminal_profile_get_use_system_font (screen->priv->profile))
          {
             GtkStyle *style;
-            char *font_name;
 
             style = gtk_widget_get_style (GTK_WIDGET(term));
             font = gdk_font_from_description (style->font_desc);
-            font_name = g_strdup (gdk_x11_font_get_name (font));
-            
-            if (!xfont_is_monospace (font_name));
+
+            if (font != NULL)
               {
-                /* Can't use the system font as-is */
-                char *fallback;
-
-                fallback = make_xfont_monospace (font_name);
-
-                font = load_fonset_without_error (fallback);
-
-                if (font == NULL)
-                  {
-                    g_free (fallback);
-                    fallback = make_xfont_char_cell (font_name);
-                    font = load_fonset_without_error (fallback);
-                  }
+                char *font_name;
                 
-                if (font == NULL)
-                  {
-                    g_free (fallback);
-                    fallback =
-                      make_xfont_have_size_from_other_font (terminal_profile_get_x_font (profile),
-                                                            font_name);
-                    font = load_fonset_without_error (fallback);
-                  }
+                font_name = g_strdup (gdk_x11_font_get_name (font));
+            
+                if (!xfont_is_monospace (font_name));
+                {
+                  /* Can't use the system font as-is */
+                  char *fallback;
+
+                  fallback = make_xfont_monospace (font_name);
+
+                  font = load_fonset_without_error (fallback);
+
+                  if (font == NULL)
+                    {
+                      g_free (fallback);
+                      fallback = make_xfont_char_cell (font_name);
+                      font = load_fonset_without_error (fallback);
+                    }
                 
-                g_free (fallback);
+                  if (font == NULL)
+                    {
+                      g_free (fallback);
+                      fallback =
+                        make_xfont_have_size_from_other_font (terminal_profile_get_x_font (profile),
+                                                              font_name);
+                      font = load_fonset_without_error (fallback);
+                    }
+                
+                  g_free (fallback);
+                }
+
+                g_free (font_name);
+                g_object_unref (G_OBJECT (font));
               }
-
-            g_free (font_name);
          }
-
+       
        if (font == NULL)
          {
            font = gdk_fontset_load (terminal_profile_get_x_font (profile));

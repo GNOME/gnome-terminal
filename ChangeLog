@@ -1,3 +1,9 @@
+2002-05-04  Havoc Pennington  <hp@pobox.com>
+
+	* src/terminal-screen.c (terminal_screen_update_on_realize): check
+	for NULL return from gdk_font_from_description() (#80787), 
+	and unref the font when it's non-NULL to avoid leaking it.
+
 2002-05-03  Havoc Pennington  <hp@redhat.com>
 
 	* configure.in: 1.9.5
