@@ -1150,6 +1150,23 @@ terminal_window_show (GtkWidget *widget)
                                          window->priv->startup_id);
       sn_launchee_context_setup_window (context,
                                         GDK_WINDOW_XWINDOW (widget->window));
+
+      /* Now, set the _NET_WM_USER_TIME for the new window to the timestamp
+       * that caused the window to be launched.
+       */
+      if (sn_launchee_context_get_id_has_timestamp (context))
+        {
+          gulong timestamp;
+
+          timestamp = sn_launchee_context_get_timestamp (context);
+          gdk_x11_window_set_user_time (widget->window, timestamp);
+        }
+      else
+        {
+          g_warning ("Launched by a non-compliant or obsolete startup "
+                     "notification launcher.  Focus-stealing-prevention "
+                     "may fail.\n");
+        }
     }
   
   GTK_WIDGET_CLASS (parent_class)->show (widget);
