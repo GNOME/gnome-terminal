@@ -1,3 +1,14 @@
+2003-01-16  Havoc Pennington  <hp@redhat.com>
+
+	* src/terminal.c (option_parsing_results_check_for_display_name):
+	when deleting arguments, don't leave duplicate pointers in the 
+	array. Also, don't strip --display/--screen found after 
+	-x argument.
+
+	* src/terminal.c (main): when inserting a --display argument, 
+	do so at argv[1] instead of appending to argv, because appending
+	breaks when using -x
+
 2003-01-11  Christophe Fergeau  <teuf@users.sourceforge.net>
 
 	* src/encondings.c (update_active_encodings_from_string_list): fixed

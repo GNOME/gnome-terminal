@@ -1145,7 +1145,14 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
     {
       gboolean remove_two = FALSE;
       
-      if (strcmp (argv[i], "--display") == 0)
+      if (strcmp (argv[i], "-x") == 0 ||
+          strcmp (argv[i], "--execute") == 0)
+        {
+          return; /* We can't have --display or --screen past here,
+                   * unless intended for the child process.
+                   */
+        }
+      else if (strcmp (argv[i], "--display") == 0)
         {          
           if ((i + 1) >= *argc)
             {
@@ -1155,9 +1162,11 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
                        * when not using factory mode.
                        */
             }
-
+          
           if (results->display_name)
             g_free (results->display_name);
+
+          g_assert (i+1 < *argc);
           results->display_name = g_strdup (argv[i+1]);
           
           remove_two = TRUE;
@@ -1176,6 +1185,8 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
                        */
             }
 
+          g_assert (i+1 < *argc);
+          
           errno = 0;
           end = argv[i+1];
           n = strtoul (argv[i+1], &end, 0);
@@ -1196,6 +1207,8 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
             {
               g_memmove (&argv[i], &argv[i+2],
                          sizeof (argv[0]) * n_to_move);
+              argv[*argc-1] = NULL;
+              argv[*argc-2] = NULL;
             }
           else
             {
@@ -1301,6 +1314,31 @@ new_terminal_with_options (OptionParsingResults *results)
   return 0;
 }
 
+/* This assumes that argv already has room for the args,
+ * and inserts them just after argv[0]
+ */
+static void
+insert_args (int        *argc,
+             char      **argv,
+             const char *arg1,
+             const char *arg2)
+{
+  int i;
+
+  i = *argc;
+  while (i >= 1)
+    {
+      argv[i+2] = argv[i];
+      --i;
+    }
+
+  /* fill in 1 and 2 */
+  argv[1] = g_strdup (arg1);
+  argv[2] = g_strdup (arg2);
+  *argc += 2;
+  argv[*argc] = NULL;
+}
+
 int
 main (int argc, char **argv)
 {
@@ -1340,7 +1378,7 @@ main (int argc, char **argv)
 
   argc_copy = argc;
   /* we leave empty slots, for --startup-id and --display */
-  argv_copy = g_new (char *, argc_copy + 5);
+  argv_copy = g_new0 (char *, argc_copy + 5);
   for (i = 0; i < argc_copy; i++)
     argv_copy [i] = g_strdup (argv [i]);
   argv_copy [i] = NULL;
@@ -1397,16 +1435,14 @@ main (int argc, char **argv)
       if (results->startup_id != NULL)
         {
           /* we allocated argv_copy with extra space so we could do this */
-          argv_copy[argc_copy++] = g_strdup ("--startup-id");
-          argv_copy[argc_copy++] = g_strdup (results->startup_id);
+          insert_args (&argc_copy, argv_copy,
+                       "--startup-id", results->startup_id);
         }
 
       /* Forward our display to the child */
-      /* we allocated argv_copy with extra space so we could do this */
-      argv_copy[argc_copy++] = g_strdup ("--display");
-      argv_copy[argc_copy++] = g_strdup (results->display_name);
-      argv_copy[argc_copy] = NULL;
-
+      insert_args (&argc_copy, argv_copy,
+                   "--display", results->display_name);
+      
       if (terminal_invoke_factory (argc_copy, argv_copy))
         return 0;
     }
@@ -3397,13 +3433,15 @@ terminal_new_event (BonoboListener    *listener,
 		    CORBA_Environment *ev,
 		    gpointer           user_data)
 {
-  int argc;
   int nextopt;
   poptContext ctx;
   const void *store;
   OptionParsingResults *results;
   CORBA_sequence_CORBA_string *args;
-
+  char **tmp_argv;
+  int tmp_argc;
+  int i;
+  
   if (strcmp (event_name, "new_terminal"))
     {
       g_warning ("Unknown event '%s' on terminal",
@@ -3412,19 +3450,31 @@ terminal_new_event (BonoboListener    *listener,
     }
 
   args = any->_value;
-  argc = args->_length;
-  results = option_parsing_results_init (&argc, args->_buffer);
-
+  
+  tmp_argv = g_new0 (char*, args->_length + 1);
+  i = 0;
+  while (i < args->_length)
+    {
+      tmp_argv[i] = g_strdup (((const char**)args->_buffer)[i]);
+      ++i;
+    }
+  tmp_argv[i] = NULL;
+  tmp_argc = i;
+  
+  results = option_parsing_results_init (&tmp_argc, tmp_argv);
+  
   /* Find and parse --display */
   option_parsing_results_check_for_display_name (results,
-                                                 &argc, args->_buffer);
+                                                 &tmp_argc,
+                                                 tmp_argv);
   
   store = options[0].descrip;
   options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
                                          * mutant spawn
                                          */
-  ctx = poptGetContext (PACKAGE, argc,
-			(const char **)args->_buffer,
+  ctx = poptGetContext (PACKAGE,
+                        tmp_argc,
+                        (const char**)tmp_argv,
 			options, 0);
   
   g_return_if_fail (app != NULL);
@@ -3444,6 +3494,8 @@ terminal_new_event (BonoboListener    *listener,
   new_terminal_with_options (results);
 
   option_parsing_results_free (results);
+
+  g_strfreev (tmp_argv);
 }
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
@@ -3509,6 +3561,7 @@ terminal_invoke_factory (int argc, char **argv)
 
       args._length = argc;
       args._buffer = g_newa (CORBA_char *, args._length);
+
       for (i = 0; i < args._length; i++)
         args._buffer [i] = argv [i];
       
