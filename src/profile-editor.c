@@ -66,14 +66,13 @@ static void       profile_editor_update_color_pickers        (GtkWidget       *e
                                                               TerminalProfile *profile);
 static void       profile_editor_update_color_scheme_menu    (GtkWidget       *editor,
                                                               TerminalProfile *profile);
-
 static void       profile_editor_update_title                (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_title_mode           (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_allow_bold           (GtkWidget       *widget,
                                                               TerminalProfile *profile);
-static void       profile_editor_update_silent_bell           (GtkWidget       *widget,
+static void       profile_editor_update_silent_bell          (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_word_chars           (GtkWidget       *widget,
                                                               TerminalProfile *profile);
@@ -85,6 +84,18 @@ static void       profile_editor_update_scroll_on_keystroke  (GtkWidget       *w
                                                               TerminalProfile *profile);
 static void       profile_editor_update_scroll_on_output     (GtkWidget       *widget,
                                                               TerminalProfile *profile);
+static void       profile_editor_update_exit_action          (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_login_shell          (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_update_records       (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_use_custom_command   (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+static void       profile_editor_update_custom_command       (GtkWidget       *widget,
+                                                              TerminalProfile *profile);
+
+
 
 
 static void
@@ -169,6 +180,21 @@ profile_changed (TerminalProfile          *profile,
 
   if (mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT)
     profile_editor_update_scroll_on_output (editor, profile);
+
+  if (mask & TERMINAL_SETTING_EXIT_ACTION)
+    profile_editor_update_exit_action (editor, profile);
+
+  if (mask & TERMINAL_SETTING_LOGIN_SHELL)
+    profile_editor_update_login_shell (editor, profile);
+
+  if (mask & TERMINAL_SETTING_UPDATE_RECORDS)
+    profile_editor_update_update_records (editor, profile);
+
+  if (mask & TERMINAL_SETTING_USE_CUSTOM_COMMAND)
+    profile_editor_update_use_custom_command (editor, profile);
+
+  if (mask & TERMINAL_SETTING_CUSTOM_COMMAND)
+    profile_editor_update_custom_command (editor, profile);
   
   profile_editor_update_sensitivity (editor, profile);
 }
@@ -361,6 +387,53 @@ scroll_on_output_toggled (GtkWidget       *checkbutton,
                                          gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
+static void
+exit_action_changed (GtkWidget       *option_menu,
+                     TerminalProfile *profile)
+{
+  int i;
+  
+  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+
+  terminal_profile_set_exit_action (profile, i);
+}
+
+static void
+login_shell_toggled (GtkWidget       *checkbutton,
+                     TerminalProfile *profile)
+{
+  terminal_profile_set_login_shell (profile,
+                                    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+update_records_toggled (GtkWidget       *checkbutton,
+                        TerminalProfile *profile)
+{
+  terminal_profile_set_update_records (profile,
+                                       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+use_custom_command_toggled (GtkWidget       *checkbutton,
+                            TerminalProfile *profile)
+{
+  terminal_profile_set_use_custom_command (profile,
+                                           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
+}
+
+static void
+custom_command_changed (GtkWidget       *entry,
+                        TerminalProfile *profile)
+{
+  char *text;
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  
+  terminal_profile_set_custom_command (profile, text);
+
+  g_free (text);
+}
 
 /*
  * initialize widgets
@@ -463,8 +536,8 @@ terminal_profile_edit (TerminalProfile *profile,
       gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
       
       gtk_dialog_add_buttons (GTK_DIALOG (editor),
-                              _("_Done"), GTK_RESPONSE_ACCEPT,
-                              NULL);      
+                              GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
+                              NULL);
       /* End "we have no Glade 2" workarounds */
 
 
@@ -608,6 +681,36 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (scroll_on_output_toggled),
                         profile);
 
+      w = glade_xml_get_widget (xml, "exit-action-optionmenu");
+      profile_editor_update_exit_action (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (exit_action_changed),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "login-shell-checkbutton");
+      profile_editor_update_login_shell (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (login_shell_toggled),
+                        profile);
+      
+      w = glade_xml_get_widget (xml, "update-records-checkbutton");
+      profile_editor_update_update_records (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (update_records_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "use-custom-command-checkbutton");
+      profile_editor_update_use_custom_command (editor, profile);
+      g_signal_connect (G_OBJECT (w), "toggled",
+                        G_CALLBACK (use_custom_command_toggled),
+                        profile);
+
+      w = glade_xml_get_widget (xml, "custom-command-entry");
+      profile_editor_update_custom_command (editor, profile);
+      g_signal_connect (G_OBJECT (w), "changed",
+                        G_CALLBACK (custom_command_changed),
+                        profile);
+
     }
   else
     {
@@ -643,7 +746,8 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 {
   TerminalSettingMask mask;
   TerminalSettingMask last_mask;
-
+  GtkWidget *w;
+  
   /* the first time in this function the object data is unset
    * thus the last mask is 0, which means everything is sensitive,
    * which is what we want.
@@ -653,6 +757,14 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   
   mask = terminal_profile_get_locked_settings (profile);
 
+  /* This one can't be short-circuited by the cache, since
+   * it depends on settings
+   */
+  w = profile_editor_get_widget (editor, "custom-command-entry");
+  gtk_widget_set_sensitive (w,
+                            !((mask & TERMINAL_SETTING_CUSTOM_COMMAND) ||
+                              !terminal_profile_get_use_custom_command (profile)));    
+  
 #if 0 /* uncomment once we've tested the sensitivity code */
   if (mask == last_mask)
     return;
@@ -709,6 +821,18 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   set_insensitive (editor, "scroll-on-output-checkbutton",
                    mask & TERMINAL_SETTING_SCROLL_ON_OUTPUT);
+
+  set_insensitive (editor, "exit-action-optionmenu",
+                   mask & TERMINAL_SETTING_EXIT_ACTION);
+
+  set_insensitive (editor, "login-shell-checkbutton",
+                   mask & TERMINAL_SETTING_LOGIN_SHELL);
+
+  set_insensitive (editor, "update-records-checkbutton",
+                   mask & TERMINAL_SETTING_UPDATE_RECORDS);
+
+  set_insensitive (editor, "use-custom-command-checkbutton",
+                   mask & TERMINAL_SETTING_USE_CUSTOM_COMMAND);
 }
 
 
@@ -916,6 +1040,90 @@ profile_editor_update_scroll_on_output (GtkWidget       *editor,
                                terminal_profile_get_scroll_on_output (profile));
 }
 
+static void
+profile_editor_update_exit_action (GtkWidget       *editor,
+                                   TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "exit-action-optionmenu");
+  
+  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
+                               terminal_profile_get_exit_action (profile));
+}
+
+static void
+profile_editor_update_login_shell (GtkWidget       *editor,
+                                   TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "login-shell-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_login_shell (profile));
+}
+
+static void
+profile_editor_update_update_records (GtkWidget       *editor,
+                                      TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "update-records-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_update_records (profile));
+
+}
+
+static void
+profile_editor_update_use_custom_command (GtkWidget       *editor,
+                                          TerminalProfile *profile)
+{
+  GtkWidget *w;
+
+  w = profile_editor_get_widget (editor, "use-custom-command-checkbutton");
+  
+  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (w),
+                               terminal_profile_get_use_custom_command (profile));
+
+}
+
+static void
+profile_editor_update_custom_command (GtkWidget       *editor,
+                                      TerminalProfile *profile)
+{
+  GtkWidget *w;
+  const char *command;
+
+  w = profile_editor_get_widget (editor, "custom-command-entry");
+
+  command = terminal_profile_get_custom_command (profile);
+  
+  entry_set_text_if_changed (GTK_ENTRY (w), command);
+
+  /* FIXME get error from this and display it in a tooltip
+   * or label
+   */
+  if (g_shell_parse_argv (command, NULL, NULL, NULL))
+    {
+      GtkRcStyle *mod;
+
+      mod = gtk_widget_get_modifier_style (w);
+      if (mod)
+        mod->color_flags[GTK_STATE_NORMAL] &= ~GTK_RC_TEXT;
+
+      gtk_widget_modify_style (w, mod);
+      /* caution, mod destroyed at this point */
+    }
+  else
+    {
+      GdkColor color;
+      gdk_color_parse ("red", &color);
+      gtk_widget_modify_text (w, GTK_STATE_NORMAL, &color);
+    }            
+}
 
 static GtkWidget*
 profile_editor_get_widget (GtkWidget  *editor,

@@ -955,8 +955,8 @@ Isn't displayed
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>2</top_attach>
-		<bottom_attach>3</bottom_attach>
+		<top_attach>3</top_attach>
+		<bottom_attach>4</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -969,7 +969,7 @@ Isn't displayed
 
 	      <widget>
 		<class>GtkCheckButton</class>
-		<name>custom-command-checkbutton</name>
+		<name>use-custom-command-checkbutton</name>
 		<can_focus>True</can_focus>
 		<label>Run a custom command instead of my shell</label>
 		<active>False</active>
@@ -979,7 +979,7 @@ Isn't displayed
 
 	    <widget>
 	      <class>GtkEntry</class>
-	      <name>entry11</name>
+	      <name>custom-command-entry</name>
 	      <can_focus>True</can_focus>
 	      <editable>True</editable>
 	      <text_visible>True</text_visible>
@@ -988,8 +988,8 @@ Isn't displayed
 	      <child>
 		<left_attach>1</left_attach>
 		<right_attach>4</right_attach>
-		<top_attach>3</top_attach>
-		<bottom_attach>4</bottom_attach>
+		<top_attach>4</top_attach>
+		<bottom_attach>5</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>True</xexpand>
@@ -1014,8 +1014,8 @@ Isn't displayed
 	      <child>
 		<left_attach>0</left_attach>
 		<right_attach>1</right_attach>
-		<top_attach>3</top_attach>
-		<bottom_attach>4</bottom_attach>
+		<top_attach>4</top_attach>
+		<bottom_attach>5</bottom_attach>
 		<xpad>0</xpad>
 		<ypad>0</ypad>
 		<xexpand>False</xexpand>
@@ -1051,7 +1051,7 @@ Isn't displayed
 
 	      <widget>
 		<class>GtkCheckButton</class>
-		<name>checkbutton13</name>
+		<name>login-shell-checkbutton</name>
 		<can_focus>True</can_focus>
 		<label>Run command as a login shell</label>
 		<active>False</active>
@@ -1109,12 +1109,44 @@ Isn't displayed
 
 	      <widget>
 		<class>GtkOptionMenu</class>
-		<name>command-exit-menu</name>
+		<name>exit-action-optionmenu</name>
 		<can_focus>True</can_focus>
 		<items>Exit the terminal
 Restart the command
 </items>
 		<initial_choice>0</initial_choice>
+	      </widget>
+	    </widget>
+
+	    <widget>
+	      <class>GtkAlignment</class>
+	      <name>alignment27</name>
+	      <xalign>1.49012e-08</xalign>
+	      <yalign>0.5</yalign>
+	      <xscale>0</xscale>
+	      <yscale>1</yscale>
+	      <child>
+		<left_attach>0</left_attach>
+		<right_attach>4</right_attach>
+		<top_attach>2</top_attach>
+		<bottom_attach>3</bottom_attach>
+		<xpad>0</xpad>
+		<ypad>0</ypad>
+		<xexpand>False</xexpand>
+		<yexpand>False</yexpand>
+		<xshrink>False</xshrink>
+		<yshrink>False</yshrink>
+		<xfill>True</xfill>
+		<yfill>False</yfill>
+	      </child>
+
+	      <widget>
+		<class>GtkCheckButton</class>
+		<name>update-records-checkbutton</name>
+		<can_focus>True</can_focus>
+		<label>Update utmp/wtmp records when command is launched</label>
+		<active>False</active>
+		<draw_indicator>True</draw_indicator>
 	      </widget>
 	    </widget>
 	  </widget>

@@ -40,6 +40,7 @@ gchar *s = N_("Run command as a login shell");
 gchar *s = N_("When command exits:");
 gchar *s = N_("Exit the terminal");
 gchar *s = N_("Restart the command");
+gchar *s = N_("Update utmp/wtmp records when command is launched");
 gchar *s = N_("Title and Command");
 gchar *s = N_("Terminal Color");
 gchar *s = N_("Built-in schemes:");

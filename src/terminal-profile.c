@@ -31,7 +31,8 @@
  *  - in the update function that reads all keys on startup
  *  - in the profile_change_notify function
  *  - in the function that copies base profiles to new profiles
- *  - in terminal_profile_init() initial value
+ *  - in terminal_profile_init() initial value, sometimes
+ *    (only e.g. if the item is non-null by invariant)
  *
  * This sucks. ;-)
  */
@@ -49,6 +50,11 @@
 #define KEY_SCROLLBACK_LINES "scrollback_lines"
 #define KEY_SCROLL_ON_KEYSTROKE "scroll_on_keystroke"
 #define KEY_SCROLL_ON_OUTPUT "scroll_on_output"
+#define KEY_EXIT_ACTION "exit_action"
+#define KEY_LOGIN_SHELL "login_shell"
+#define KEY_UPDATE_RECORDS "update_records"
+#define KEY_USE_CUSTOM_COMMAND "use_custom_command"
+#define KEY_CUSTOM_COMMAND "custom_command"
 
 struct _TerminalProfilePrivate
 {
@@ -73,12 +79,17 @@ struct _TerminalProfilePrivate
   char *word_chars;
   TerminalScrollbarPosition scrollbar_position;
   int scrollback_lines;
+  TerminalExitAction exit_action;
+  char *custom_command;
   guint cursor_blink : 1;
   guint default_show_menubar : 1;
   guint allow_bold : 1;
   guint silent_bell : 1;
   guint scroll_on_keystroke : 1;
   guint scroll_on_output : 1;
+  guint login_shell : 1;
+  guint update_records : 1;
+  guint use_custom_command : 1;
   guint forgotten : 1;
 };
 
@@ -94,6 +105,12 @@ static const GConfEnumStringPair scrollbar_positions[] = {
   { TERMINAL_SCROLLBAR_LEFT, "left" },
   { TERMINAL_SCROLLBAR_RIGHT, "right" },
   { TERMINAL_SCROLLBAR_HIDDEN, "hidden" },  
+  { -1, NULL }
+};
+
+static const GConfEnumStringPair exit_actions[] = {
+  { TERMINAL_EXIT_CLOSE, "close" },
+  { TERMINAL_EXIT_RESTART, "restart" },
   { -1, NULL }
 };
 
@@ -174,6 +191,7 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->scrollback_lines = 1000;
   profile->priv->allow_bold = TRUE;
   profile->priv->word_chars = g_strdup ("");
+  profile->priv->custom_command = g_strdup ("");
 }
 
 static void
@@ -685,6 +703,145 @@ terminal_profile_set_default_show_menubar (TerminalProfile *profile,
   g_free (key);
 }
 
+
+TerminalExitAction
+terminal_profile_get_exit_action (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
+
+  return profile->priv->exit_action;
+}
+
+void
+terminal_profile_set_exit_action (TerminalProfile   *profile,
+                                  TerminalExitAction action)
+{
+  char *key;
+  const char *action_string;
+  
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_EXIT_ACTION);
+
+  action_string = gconf_enum_to_string (exit_actions, action);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           action_string,
+                           NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_login_shell (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->login_shell;
+}
+
+void
+terminal_profile_set_login_shell (TerminalProfile *profile,
+                                  gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_LOGIN_SHELL);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_update_records (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->update_records;
+}
+
+void
+terminal_profile_set_update_records (TerminalProfile *profile,
+                                     gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_UPDATE_RECORDS);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+gboolean
+terminal_profile_get_use_custom_command (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->use_custom_command;
+}
+
+void
+terminal_profile_set_use_custom_command (TerminalProfile *profile,
+                                         gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_CUSTOM_COMMAND);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+const char*
+terminal_profile_get_custom_command (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+
+  return profile->priv->custom_command;
+}
+
+void
+terminal_profile_set_custom_command (TerminalProfile *profile,
+                                     const char      *command)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_CUSTOM_COMMAND);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           key,
+                           command,
+                           NULL);
+
+  g_free (key);
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -781,7 +938,7 @@ set_word_chars (TerminalProfile *profile,
                 const char      *candidate_chars)
 {
   if (candidate_chars &&
-      strcmp (profile->priv->title, candidate_chars) == 0)
+      strcmp (profile->priv->word_chars, candidate_chars) == 0)
     return FALSE;
   
   if (candidate_chars != NULL)
@@ -827,6 +984,43 @@ set_scrollback_lines (TerminalProfile *profile,
     {
       return FALSE;
     }
+}
+
+static gboolean
+set_exit_action (TerminalProfile *profile,
+                 const char      *str_val)
+{
+  int action; /* TerminalExitAction */
+  
+  if (str_val &&
+      gconf_string_to_enum (exit_actions, str_val, &action) &&
+      action != profile->priv->exit_action)
+    {
+      profile->priv->exit_action = action;
+      return TRUE;
+    }
+  else
+    {
+      return FALSE;
+    }
+}
+
+static gboolean
+set_custom_command (TerminalProfile *profile,
+                    const char      *candidate_command)
+{
+  if (candidate_command &&
+      strcmp (profile->priv->custom_command, candidate_command) == 0)
+    return FALSE;
+  
+  if (candidate_command != NULL)
+    {
+      g_free (profile->priv->custom_command);
+      profile->priv->custom_command = g_strdup (candidate_command);
+    }
+  /* otherwise just leave the old command */
+  
+  return TRUE;
 }
 
 void
@@ -1067,6 +1261,87 @@ terminal_profile_update (TerminalProfile *profile)
 
   if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
     locked |= TERMINAL_SETTING_SCROLL_ON_OUTPUT;
+  
+  g_free (key);
+
+  /* KEY_EXIT_ACTION */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_EXIT_ACTION);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_exit_action (profile, str_val))
+    mask |= TERMINAL_SETTING_EXIT_ACTION;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_EXIT_ACTION;
+  
+  g_free (key);
+  
+  /* KEY_LOGIN_SHELL */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_LOGIN_SHELL);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->login_shell)
+    {
+      mask |= TERMINAL_SETTING_LOGIN_SHELL;
+      profile->priv->login_shell = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_LOGIN_SHELL;
+  
+  g_free (key);
+
+  /* KEY_UPDATE_RECORDS */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_UPDATE_RECORDS);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->update_records)
+    {
+      mask |= TERMINAL_SETTING_UPDATE_RECORDS;
+      profile->priv->update_records = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_UPDATE_RECORDS;
+  
+  g_free (key);
+
+  /* KEY_USE_CUSTOM_COMMAND */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_USE_CUSTOM_COMMAND);
+  bool_val = gconf_client_get_bool (profile->priv->conf,
+                                    key, NULL);
+  if (bool_val != profile->priv->use_custom_command)
+    {
+      mask |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
+      profile->priv->use_custom_command = bool_val;
+    }  
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
+  
+  g_free (key);
+
+  /* KEY_CUSTOM_COMMAND */
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_CUSTOM_COMMAND);
+  str_val = gconf_client_get_string (profile->priv->conf,
+                                     key, NULL);
+
+  if (set_custom_command (profile, str_val))
+    mask |= TERMINAL_SETTING_CUSTOM_COMMAND;
+  
+  if (!gconf_client_key_is_writable (profile->priv->conf, key, NULL))
+    locked |= TERMINAL_SETTING_CUSTOM_COMMAND;
   
   g_free (key);
 
@@ -1328,6 +1603,84 @@ profile_change_notify (GConfClient *client,
 
       UPDATE_LOCKED (TERMINAL_SETTING_SCROLL_ON_OUTPUT);
     }  
+  else if (strcmp (key, KEY_EXIT_ACTION) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_exit_action (profile, str_val))
+        mask |= TERMINAL_SETTING_EXIT_ACTION;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_EXIT_ACTION);
+    }
+  else if (strcmp (key, KEY_LOGIN_SHELL) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->login_shell)
+        {
+          mask |= TERMINAL_SETTING_LOGIN_SHELL;
+          profile->priv->login_shell = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_LOGIN_SHELL);
+    }
+  else if (strcmp (key, KEY_UPDATE_RECORDS) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->update_records)
+        {
+          mask |= TERMINAL_SETTING_UPDATE_RECORDS;
+          profile->priv->update_records = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_UPDATE_RECORDS);
+    }
+  else if (strcmp (key, KEY_USE_CUSTOM_COMMAND) == 0)
+    {
+      gboolean bool_val;
+
+      bool_val = FALSE;
+
+      if (val && val->type == GCONF_VALUE_BOOL)
+        bool_val = gconf_value_get_bool (val);
+
+      if (bool_val != profile->priv->use_custom_command)
+        {
+          mask |= TERMINAL_SETTING_USE_CUSTOM_COMMAND;
+          profile->priv->use_custom_command = bool_val;
+        }
+
+      UPDATE_LOCKED (TERMINAL_SETTING_USE_CUSTOM_COMMAND);
+    }
+  else if (strcmp (key, KEY_CUSTOM_COMMAND) == 0)
+    {
+      const char *str_val;
+
+      str_val = NULL;
+      if (val && val->type == GCONF_VALUE_STRING)
+        str_val = gconf_value_get_string (val);
+      
+      if (set_custom_command (profile, str_val))
+        mask |= TERMINAL_SETTING_CUSTOM_COMMAND;
+
+      UPDATE_LOCKED (TERMINAL_SETTING_CUSTOM_COMMAND);
+    }
+
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
@@ -1696,7 +2049,62 @@ terminal_profile_create (TerminalProfile *base_profile,
 
   BAIL_OUT_CHECK ();
 
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_EXIT_ACTION);
+
+  cs = gconf_enum_to_string (scrollbar_positions,
+                             base_profile->priv->exit_action);
   
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, cs,
+                           &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_LOGIN_SHELL);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->login_shell,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_UPDATE_RECORDS);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->update_records,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_USE_CUSTOM_COMMAND);
+
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key,
+                         base_profile->priv->use_custom_command,
+                         &err);
+
+  BAIL_OUT_CHECK ();
+
+  
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_CUSTOM_COMMAND);
+  /* default title is profile name, not copied from base */
+  gconf_client_set_string (base_profile->priv->conf,
+                           key, base_profile->priv->custom_command,
+                           &err);
+  BAIL_OUT_CHECK ();
   
   /* Add new profile to the profile list; the method for doing this has
    * a race condition where we and someone else set at the same time,

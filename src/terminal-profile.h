@@ -45,7 +45,12 @@ typedef enum
   TERMINAL_SETTING_SCROLLBAR_POSITION   = 1 << 10,
   TERMINAL_SETTING_SCROLLBACK_LINES     = 1 << 11,
   TERMINAL_SETTING_SCROLL_ON_KEYSTROKE  = 1 << 12,
-  TERMINAL_SETTING_SCROLL_ON_OUTPUT     = 1 << 13
+  TERMINAL_SETTING_SCROLL_ON_OUTPUT     = 1 << 13,
+  TERMINAL_SETTING_EXIT_ACTION          = 1 << 14,
+  TERMINAL_SETTING_LOGIN_SHELL          = 1 << 15,
+  TERMINAL_SETTING_UPDATE_RECORDS       = 1 << 16,
+  TERMINAL_SETTING_USE_CUSTOM_COMMAND   = 1 << 17,
+  TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18
 } TerminalSettingMask;
 
 typedef enum
@@ -74,11 +79,18 @@ typedef enum
   TERMINAL_PALETTE_CUSTOM
 } TerminalPaletteType;
 
-typedef enum {
-  TERMINAL_SCROLLBAR_LEFT   = 0,
-  TERMINAL_SCROLLBAR_RIGHT  = 1,
-  TERMINAL_SCROLLBAR_HIDDEN = 2
+typedef enum
+{
+  TERMINAL_SCROLLBAR_LEFT,
+  TERMINAL_SCROLLBAR_RIGHT,
+  TERMINAL_SCROLLBAR_HIDDEN
 } TerminalScrollbarPosition;
+
+typedef enum 
+{
+  TERMINAL_EXIT_CLOSE,
+  TERMINAL_EXIT_RESTART
+} TerminalExitAction;
 
 G_BEGIN_DECLS
 
@@ -132,7 +144,11 @@ gboolean                  terminal_profile_get_default_show_menubar (TerminalPro
 gboolean                  terminal_profile_get_scroll_on_keystroke  (TerminalProfile *profile);
 gboolean                  terminal_profile_get_scroll_on_output     (TerminalProfile *profile);
 
-
+TerminalExitAction        terminal_profile_get_exit_action          (TerminalProfile *profile);
+gboolean                  terminal_profile_get_login_shell          (TerminalProfile *profile);
+gboolean                  terminal_profile_get_update_records       (TerminalProfile *profile);
+gboolean                  terminal_profile_get_use_custom_command   (TerminalProfile *profile);
+const char*               terminal_profile_get_custom_command       (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -162,6 +178,16 @@ void terminal_profile_set_scroll_on_keystroke  (TerminalProfile           *profi
 void terminal_profile_set_scroll_on_output     (TerminalProfile           *profile,
                                                 gboolean                   setting);
 
+void terminal_profile_set_exit_action          (TerminalProfile           *profile,
+                                                TerminalExitAction         action);
+void terminal_profile_set_login_shell          (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_update_records       (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_use_custom_command   (TerminalProfile           *profile,
+                                                gboolean                   setting);
+void terminal_profile_set_custom_command       (TerminalProfile          *profile,
+                                                const char               *command);
 
 void             terminal_profile_setup_default (GConfClient *conf);
 GList*           terminal_profile_get_list (void);

@@ -24,6 +24,7 @@
 #include "terminal-profile.h"
 #include "terminal.h"
 #include <libzvt/libzvt.h>
+#include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 #include <gdk/gdkx.h>
 #include <string.h>
 #include <stdlib.h>
@@ -539,19 +540,368 @@ show_pty_error_dialog (TerminalScreen *screen,
                     "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
+
+  gtk_widget_show (dialog);
+}
+
+static void
+show_command_error_dialog (TerminalScreen *screen,
+                           GError         *error)
+{
+  GtkWidget *dialog;
+
+  g_return_if_fail (error != NULL);
+  
+  dialog = gtk_message_dialog_new ((GtkWindow*)
+                                   gtk_widget_get_ancestor (screen->priv->zvt,
+                                                            GTK_TYPE_WINDOW),
+                                   0,
+                                   GTK_MESSAGE_ERROR,
+                                   GTK_BUTTONS_CLOSE,
+                                   _("There was a problem with the command for this terminal: %s"),
+                                   error->message);
+
+  g_signal_connect (G_OBJECT (dialog),
+                    "response",
+                    G_CALLBACK (gtk_widget_destroy),
+                    NULL);
+
+  gtk_widget_show (dialog);
+}
+
+/* Cut-and-paste from gspawn.c in GLib */
+/* Based on execvp from GNU C Library */
+
+static void
+script_execute (const gchar *file,
+                gchar      **argv,
+                gchar      **envp,
+                gboolean     search_path)
+{
+  /* Count the arguments.  */
+  int argc = 0;
+  while (argv[argc])
+    ++argc;
+  
+  /* Construct an argument list for the shell.  */
+  {
+    gchar **new_argv;
+
+    new_argv = g_new0 (gchar*, argc + 2); /* /bin/sh and NULL */
+    
+    new_argv[0] = (char *) "/bin/sh";
+    new_argv[1] = (char *) file;
+    while (argc > 0)
+      {
+	new_argv[argc + 1] = argv[argc];
+	--argc;
+      }
+
+    /* Execute the shell. */
+    if (envp)
+      execve (new_argv[0], new_argv, envp);
+    else
+      execv (new_argv[0], new_argv);
+    
+    g_free (new_argv);
+  }
+}
+
+static gchar*
+my_strchrnul (const gchar *str, gchar c)
+{
+  gchar *p = (gchar*) str;
+  while (*p && (*p != c))
+    ++p;
+
+  return p;
+}
+
+static gint
+cnp_execute (const gchar *file,
+             gchar      **argv,
+             gchar      **envp,
+             gboolean     search_path)
+{
+  if (*file == '\0')
+    {
+      /* We check the simple case first. */
+      errno = ENOENT;
+      return -1;
+    }
+
+  if (!search_path || strchr (file, '/') != NULL)
+    {
+      /* Don't search when it contains a slash. */
+      if (envp)
+        execve (file, argv, envp);
+      else
+        execv (file, argv);
+      
+      if (errno == ENOEXEC)
+	script_execute (file, argv, envp, FALSE);
+    }
+  else
+    {
+      gboolean got_eacces = 0;
+      const gchar *path, *p;
+      gchar *name, *freeme;
+      size_t len;
+      size_t pathlen;
+
+      path = g_getenv ("PATH");
+      if (path == NULL)
+	{
+	  /* There is no `PATH' in the environment.  The default
+	   * search path in libc is the current directory followed by
+	   * the path `confstr' returns for `_CS_PATH'.
+           */
+
+          /* In GLib we put . last, for security, and don't use the
+           * unportable confstr(); UNIX98 does not actually specify
+           * what to search if PATH is unset. POSIX may, dunno.
+           */
+          
+          path = "/bin:/usr/bin:.";
+	}
+
+      len = strlen (file) + 1;
+      pathlen = strlen (path);
+      freeme = name = g_malloc (pathlen + len + 1);
+      
+      /* Copy the file name at the top, including '\0'  */
+      memcpy (name + pathlen + 1, file, len);
+      name = name + pathlen;
+      /* And add the slash before the filename  */
+      *name = '/';
+
+      p = path;
+      do
+	{
+	  char *startp;
+
+	  path = p;
+	  p = my_strchrnul (path, ':');
+
+	  if (p == path)
+	    /* Two adjacent colons, or a colon at the beginning or the end
+             * of `PATH' means to search the current directory.
+             */
+	    startp = name + 1;
+	  else
+	    startp = memcpy (name - (p - path), path, p - path);
+
+	  /* Try to execute this name.  If it works, execv will not return.  */
+          if (envp)
+            execve (startp, argv, envp);
+          else
+            execv (startp, argv);
+          
+	  if (errno == ENOEXEC)
+	    script_execute (startp, argv, envp, search_path);
+
+	  switch (errno)
+	    {
+	    case EACCES:
+	      /* Record the we got a `Permission denied' error.  If we end
+               * up finding no executable we can use, we want to diagnose
+               * that we did find one but were denied access.
+               */
+	      got_eacces = TRUE;
+
+              /* FALL THRU */
+              
+	    case ENOENT:
+#ifdef ESTALE
+	    case ESTALE:
+#endif
+#ifdef ENOTDIR
+	    case ENOTDIR:
+#endif
+	      /* Those errors indicate the file is missing or not executable
+               * by us, in which case we want to just try the next path
+               * directory.
+               */
+	      break;
+
+	    default:
+	      /* Some other error means we found an executable file, but
+               * something went wrong executing it; return the error to our
+               * caller.
+               */
+              g_free (freeme);
+	      return -1;
+	    }
+	}
+      while (*p++ != '\0');
+
+      /* We tried every element and none of them worked.  */
+      if (got_eacces)
+	/* At least one failure was due to permissions, so report that
+         * error.
+         */
+        errno = EACCES;
+
+      g_free (freeme);
+    }
+
+  /* Return the error from the last attempt (probably ENOENT).  */
+  return -1;
+}
+
+
+static gboolean
+get_child_command (TerminalScreen *screen,
+                   char          **file_p,
+                   char         ***argv_p,
+                   GError        **err)
+{
+  /* code from gnome-terminal */
+  ZvtTerm *term;
+  TerminalProfile *profile;
+  char  *file;
+  char **argv;
+  
+  term = ZVT_TERM (screen->priv->zvt);
+  profile = screen->priv->profile;
+
+  file = NULL;
+  argv = NULL;
+  
+  if (file_p)
+    *file_p = NULL;
+  if (argv_p)
+    *argv_p = NULL;
+  
+  if (terminal_profile_get_use_custom_command (profile))
+    {
+      if (!g_shell_parse_argv (terminal_profile_get_custom_command (profile),
+                               NULL, &argv,
+                               err))
+        return FALSE;
+
+      file = g_strdup (argv[0]);
+    }
+  else
+    {
+      const char *only_name;
+      const char *shell;
+
+      shell = gnome_util_user_shell ();
+
+      file = g_strdup (shell);
+      
+      only_name = strrchr (shell, '/');
+      if (only_name != NULL)
+        only_name++;
+      else
+        only_name = shell;
+
+      argv = g_new (char*, 2);
+
+      if (terminal_profile_get_login_shell (profile))
+        argv[0] = g_strconcat ("-", only_name, NULL);
+      else
+        argv[0] = g_strdup (only_name);
+
+      argv[1] = NULL;
+    }
+
+  if (file_p)
+    *file_p = file;
+  else
+    g_free (file);
+
+  if (argv_p)
+    *argv_p = argv;
+  else
+    g_strfreev (argv);
+
+  return TRUE;
+}
+
+extern char **environ;
+
+static char**
+get_child_environment (TerminalScreen *screen)
+{
+  /* code from gnome-terminal, sort of. */
+  ZvtTerm *term;
+  TerminalProfile *profile;
+  char **p;
+  int i;
+  char **retval;
+#define EXTRA_ENV_VARS 6
+  
+  term = ZVT_TERM (screen->priv->zvt);
+  profile = screen->priv->profile;
+
+  /* count env vars that are set */
+  for (p = environ; *p; p++)
+    ;
+  
+  i = p - environ;
+  retval = g_new (char *, i + 1 + EXTRA_ENV_VARS);
+
+  for (i = 0, p = environ; *p; p++)
+    {
+      /* Strip all these out, we'll replace some of them */
+      if ((strncmp (*p, "COLUMNS=", 8) == 0) ||
+          (strncmp (*p, "LINES=", 6) == 0)   ||
+          (strncmp (*p, "WINDOWID=", 9) == 0) ||
+          (strncmp (*p, "TERM=", 5) == 0)    ||
+          (strncmp (*p, "GNOME_DESKTOP_ICON=", 19) == 0) ||
+          (strncmp (*p, "COLORTERM=", 10) == 0))
+        {
+          /* nothing: do not copy */
+        }
+      else
+        {
+          retval[i] = g_strdup (*p);
+          ++i;
+        }
+    }
+
+  retval[i] = g_strdup ("COLORTERM="EXECUTABLE_NAME);
+  ++i;
+  retval[i] = g_strdup ("TERM=xterm"); /* FIXME configurable later? */
+  ++i;
+  retval[i] = g_strdup_printf ("WINDOWID=%ld",
+                               GDK_WINDOW_XWINDOW (GTK_WIDGET (term)->window));
+  ++i;
+  
+  retval[i] = NULL;
+  
+  return retval;
 }
 
 void
 terminal_screen_launch_child (TerminalScreen *screen)
 {
   ZvtTerm *term;
+  TerminalProfile *profile;
+  char **env;
+  char  *path;
+  char **argv;
+  GError *err;
+  
+  term = ZVT_TERM (screen->priv->zvt);
+  profile = screen->priv->profile;
+
+  err = NULL;
+  if (!get_child_command (screen, &path, &argv, &err))
+    {
+      show_command_error_dialog (screen, err);
+      g_error_free (err);
+      return;
+    }
+  
+  env = get_child_environment (screen);  
   
   gdk_flush ();
-
-  term = ZVT_TERM (screen->priv->zvt);
-  
   errno = 0;
-  switch (zvt_term_forkpty (term, FALSE /* FIXME update_records */))
+  switch (zvt_term_forkpty (term,
+                            terminal_profile_get_update_records (profile)))
     {
     case -1:
       show_pty_error_dialog (screen, errno);
@@ -561,28 +911,21 @@ terminal_screen_launch_child (TerminalScreen *screen)
       {
         int open_max = sysconf (_SC_OPEN_MAX);
         int i;
-        char buffer[64];
         
         for (i = 3; i < open_max; i++)
           fcntl (i, F_SETFD, FD_CLOEXEC);
 
-        /* set delayed env variables */
-        g_snprintf (buffer, sizeof (buffer),
-                    "WINDOWID=%ld",
-                    GDK_WINDOW_XWINDOW (GTK_WIDGET (term)->window));
-        putenv (buffer);
-
-        /* FIXME from config options */
-        putenv ("TERM=xterm");
-
-        /* FIXME putenv() DISPLAY */
+        cnp_execute (path, argv, env, TRUE);
         
-        execlp ("bash" /* FIXME configurable */, "bash", NULL);
-
-        /* FIXME print what command failed */
         g_printerr (_("Could not execute command %s: %s\n"),
-                    "bash" /* FIXME */,
+                    path,
                     g_strerror (errno));
+
+        /* so the error can be seen briefly, and infinite respawn
+         * loops don't totally hose the system.
+         */
+        sleep (5);
+        
         _exit (127);
       }
       break;
@@ -591,6 +934,10 @@ terminal_screen_launch_child (TerminalScreen *screen)
       /* In the parent */
       break;
     }
+
+  g_free (path);
+  g_strfreev (argv);
+  g_strfreev (env);
 }
 
 void
@@ -910,10 +1257,23 @@ static void
 terminal_screen_zvt_child_died (GtkWidget      *zvt,
                                 TerminalScreen *screen)
 {
-  /* FIXME make it configurable whether to kill the window/tab
-   * or restart the child
-   */
-  terminal_screen_close (screen);
+  TerminalExitAction action;
+
+  action = TERMINAL_EXIT_CLOSE;
+  if (screen->priv->profile)
+    action = terminal_profile_get_exit_action (screen->priv->profile);
+
+  g_print ("Child died action %d\n", action);
+  
+  switch (action)
+    {
+    case TERMINAL_EXIT_CLOSE:
+      terminal_screen_close (screen);
+      break;
+    case TERMINAL_EXIT_RESTART:
+      terminal_screen_launch_child (screen);
+      break;
+    }
 }
 
 static void

@@ -240,6 +240,81 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/exit_action</key>
+      <applyto>/apps/profterm/profiles/Default/exit_action</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default>close</default>
+      <locale name="C">
+         <short>What to do with the terminal when the child command exits</short>
+         <long>
+           Possible values are "close" to close the terminal, and
+           "restart" to restart the command.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/login_shell</key>
+      <applyto>/apps/profterm/profiles/Default/login_shell</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to launch the command in the terminal as a login shell</short>
+         <long>
+          If true, the command inside the terminal will be launched as 
+          a login shell. (argv[0] will have a hyphen in front of it.)
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/update_records</key>
+      <applyto>/apps/profterm/profiles/Default/update_records</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to update utmp/wtmp when launching terminal command</short>
+         <long>
+        If true, utmp/wtmp will be updated when the command inside the terminal
+        is launched.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/use_custom_command</key>
+      <applyto>/apps/profterm/profiles/Default/use_custom_command</applyto>
+      <owner>profterm</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to run a custom command instead of the shell</short>
+         <long>
+          If true, the value of the custom_command setting will 
+         be used in place of running a shell.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/profterm/profiles/Default/custom_command</key>
+      <applyto>/apps/profterm/profiles/Default/custom_command</applyto>
+      <owner>profterm</owner>
+      <type>string</type>
+      <default> </default>
+      <locale name="C">
+         <short>Custom command to use instead of the shell</short>
+         <long>
+          Run this command in place of the shell, if 
+          use_custom_command is true.
+         </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
 
