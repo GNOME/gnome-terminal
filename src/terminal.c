@@ -2,7 +2,7 @@
 /*
  * Copyright (C) 2001, 2002 Havoc Pennington
  * Copyright (C) 2002 Red Hat, Inc.
-  * Copyright (C) 2002 Sun Microsystems
+ * Copyright (C) 2002 Sun Microsystems
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
