@@ -1,3 +1,15 @@
+2004-06-07 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
+	* src/terminal-widget-zvt.c: remove this file, as it has not been used
+	in ages.
+	* src/terminal-widget.h, src/terminal-widget-vte.c(terminal_widget_match_add,
+	terminal_widget_skey_match_add, terminal_widget_check_match, 
+	terminal_widget_skey_check_match): add a ‘flavor’ on matches, so that we can 
+	tell them apart when we see them.
+	* src/terminal-screen.c(terminal_screen_init, open_url): rearrange the regexps
+	we use for urls, using the bew flavoring technology. In open_url, do
+	some fixups for mailto: uris missing the scheme and such.
+	
 2004-05-10 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
 	* src/terminal-profile(color_selection_palette_to_string,

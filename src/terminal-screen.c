@@ -58,6 +58,7 @@ struct _TerminalScreenPrivate
   char *cooked_title, *cooked_icon_title;
   gboolean icon_title_set;
   char *matched_string;
+  int matched_flavor;
   char **override_command;
   GtkWidget *title_editor;
   GtkWidget *title_entry;
@@ -77,6 +78,14 @@ enum {
   SELECTION_CHANGED,
   ENCODING_CHANGED,
   LAST_SIGNAL
+};
+
+enum
+{
+  FLAVOR_AS_IS = 0,
+  FLAVOR_DEFAULT_TO_HTTP,
+  FLAVOR_MAILTO,
+  FLAVOR_SKEY
 };
 
 static void terminal_screen_init        (TerminalScreen      *screen);
@@ -233,17 +242,20 @@ terminal_screen_init (TerminalScreen *screen)
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
-#define SCHEME    "(news|telnet|nttp|file|http|ftp|https)"
+#define SCHEME    "(news|telnet|nttp|file|https?|ftps?|webcal)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 
   terminal_widget_match_add (screen->priv->term,
-      "((" SCHEME "://(" USER "@)?)|(www|ftp)[" HOSTCHARS "]*\\.)[" HOSTCHARS ".]+(:[0-9]*)?");
-  
+      "\\<(" SCHEME "://(" USER "@)?)[" HOSTCHARS ".]+(:[0-9]+)?"
+      "(/[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*[^]'.}>) \t\r\n,\\\"])?\\>", FLAVOR_AS_IS);
+
   terminal_widget_match_add (screen->priv->term,
-      "((" SCHEME "://(" USER "@)?)"  "|"  "(www|ftp)[" HOSTCHARS "]*\\.)"
-      "[" HOSTCHARS ".]+(:[0-9]+)?/"
-      "[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*"
-      "[^]'.}>) \t\r\n,\\\"]");
+      "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+(:[0-9]+)?"
+      "(/[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*[^]'.}>) \t\r\n,\\\"])?\\>", FLAVOR_DEFAULT_TO_HTTP);
+
+  terminal_widget_match_add (screen->priv->term, 
+      
+      "\\<(mailto:)?[a-z0-9]+@[a-z0-9][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_MAILTO);
 
   terminal_screen_setup_dnd (screen);
   
@@ -522,7 +534,7 @@ reread_profile (TerminalScreen *screen)
   if (terminal_profile_get_use_skey (screen->priv->profile))
     {
       terminal_widget_skey_match_add (screen->priv->term,
-				      "s/key [0-9]* [-A-Za-z0-9]*");
+				      "s/key [0-9]* [-A-Za-z0-9]*", FLAVOR_SKEY);
     }
   else
     {
@@ -1240,7 +1252,8 @@ secure_keyboard_callback (GtkWidget      *menu_item,
 
 static void
 open_url (TerminalScreen *screen,
-          const char     *orig_url)
+          const char     *orig_url,
+          int             flavor)
 {
   GError *err;
   char *url;
@@ -1248,9 +1261,33 @@ open_url (TerminalScreen *screen,
   g_return_if_fail (orig_url != NULL);
 
   /* this is to handle gnome_url_show reentrancy */
-  url = gnome_vfs_make_uri_from_input (orig_url);
   g_object_ref (G_OBJECT (screen));
   
+  switch (flavor)
+    {
+    case FLAVOR_DEFAULT_TO_HTTP:
+      url = g_strdup_printf ("http:%s", orig_url);
+      break;
+    case FLAVOR_MAILTO:
+      if (strncmp ("mailto:", orig_url, 7) != 0)
+        {
+          url = g_strdup_printf ("mailto:%s", orig_url);
+        }
+      else
+        {
+          url = g_strdup (orig_url);
+        }
+      break;
+    case FLAVOR_AS_IS:
+    case FLAVOR_SKEY:
+      url = g_strdup (orig_url);
+      break;
+    default:
+      url = NULL;
+      g_assert_not_reached ();
+    }
+
+  g_printerr ("(%s)(%s)\n", orig_url, url);
   err = NULL;
   gnome_url_show (url, &err);
 
@@ -1281,7 +1318,7 @@ open_url_callback (GtkWidget      *menu_item,
 {
   if (screen->priv->matched_string)
     {
-      open_url (screen, screen->priv->matched_string);
+      open_url (screen, screen->priv->matched_string, screen->priv->matched_flavor);
       g_free (screen->priv->matched_string);
       screen->priv->matched_string = NULL;
     }
@@ -1611,7 +1648,8 @@ terminal_screen_button_press_event (GtkWidget      *widget,
   screen->priv->matched_string =
     terminal_widget_check_match (term,
                                  event->x / char_width,
-                                 event->y / char_height);
+                                 event->y / char_height,
+                                 &screen->priv->matched_flavor);
   dingus_button = ((event->button == 1) || (event->button == 2));
 
   if (dingus_button &&
@@ -1622,7 +1660,8 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 
       skey_match = terminal_widget_skey_check_match (term,
 						     event->x / char_width,
-						     event->y / char_height);
+						     event->y / char_height,
+                                                     NULL);
       if (skey_match != NULL)
 	{
 	  terminal_skey_do_popup (screen, GTK_WINDOW (terminal_screen_get_window (screen)), skey_match);
@@ -1638,7 +1677,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     {
       gtk_widget_grab_focus (widget);
       
-      open_url (screen, screen->priv->matched_string);
+      open_url (screen, screen->priv->matched_string, screen->priv->matched_flavor);
       g_free (screen->priv->matched_string);
       screen->priv->matched_string = NULL;
       return TRUE; /* don't do anything else such as select with the click */
