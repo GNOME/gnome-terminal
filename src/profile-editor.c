@@ -21,6 +21,7 @@
 
 #include "profile-editor.h"
 #include "terminal-intl.h"
+#include <glade/glade.h>
 
 static void
 profile_editor_destroyed (GtkWidget       *editor,
@@ -60,14 +61,52 @@ terminal_profile_edit (TerminalProfile *profile,
 
   if (editor == NULL)
     {
-      /* FIXME this is all just placeholder cruft, need to get glade
-       * file from gnome-terminal
-       */
       char *s;
+      GladeXML *xml;
 
+      xml = glade_xml_new (PROFTERM_GLADE_DIR"/"PROFTERM_GLADE_FILE,
+                           "profile-editor-dialog",
+                           GETTEXT_PACKAGE);
+
+      if (xml == NULL)
+        {
+          /* Try current dir, for debugging */
+          xml = glade_xml_new ("./"PROFTERM_GLADE_FILE,
+                               "profile-editor-dialog",
+                               GETTEXT_PACKAGE);      
+        }
+
+      if (xml == NULL)
+        {
+          static GtkWidget *no_glade_dialog = NULL;
+
+          if (no_glade_dialog == NULL)
+            {
+              no_glade_dialog =
+                gtk_message_dialog_new (transient_parent,
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_CLOSE,
+                                        _("The file \"%s\" is missing. This indicates that the application is installed incorrectly, so the profile editor can't be displayed."),
+                                        PROFTERM_GLADE_DIR"/"PROFTERM_GLADE_FILE);
+                                        
+              g_signal_connect (G_OBJECT (no_glade_dialog),
+                                "response",
+                                G_CALLBACK (gtk_widget_destroy),
+                                NULL);
+
+              g_object_add_weak_pointer (G_OBJECT (no_glade_dialog),
+                                         &no_glade_dialog);
+            }
+
+          gtk_window_present (no_glade_dialog);
+
+          return;
+        }
+      
       old_transient_parent = NULL;
       
-      editor = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      editor = glade_xml_get_widget (xml, "profile-editor-dialog");
 
       s = g_strdup_printf (_("Editing profile \"%s\""),
                            terminal_profile_get_visible_name (profile));
@@ -78,18 +117,7 @@ terminal_profile_edit (TerminalProfile *profile,
       
       g_object_set_data (G_OBJECT (profile),
                          "editor-window",
-                         editor);
-      
-      checkbutton = gtk_check_button_new_with_mnemonic (_("_Cursor blinks"));
-      gtk_container_add (GTK_CONTAINER (editor), checkbutton);
-  
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton),
-                                    terminal_profile_get_cursor_blink (profile));
-
-      g_signal_connect (G_OBJECT (checkbutton),
-                        "toggled",
-                        G_CALLBACK (cursor_blink_toggled),
-                        profile);
+                         editor);      
   
       g_signal_connect (G_OBJECT (editor),
                         "destroy",
@@ -98,9 +126,6 @@ terminal_profile_edit (TerminalProfile *profile,
       g_signal_connect (G_OBJECT (profile),
                         "forgotten",
                         G_CALLBACK (profile_forgotten), editor);
-
-      gtk_window_set_type_hint (GTK_WINDOW (editor),
-                                GDK_WINDOW_TYPE_HINT_DIALOG);
 
       gtk_window_set_destroy_with_parent (GTK_WINDOW (editor), TRUE);
     }

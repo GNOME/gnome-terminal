@@ -1,6 +1,8 @@
 
-INCLUDES=@PROFTERM_CFLAGS@ -DPROFTERM_PKGDATADIR=\"$(datadir)/profterm\" \
-	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\"
+INCLUDES=@PROFTERM_CFLAGS@ -DPROFTERM_PKGDATADIR=\"$(datadir)/profterm\"	  \
+	-DPROFTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"profterm\" \
+	-DPROFTERM_GLADE_DIR=\"$(gladedir)\"					  \
+	-DPROFTERM_GLADE_FILE=\"profterm.glade2\"
 
 bin_PROGRAMS=profterm
 
