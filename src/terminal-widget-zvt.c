@@ -1021,7 +1021,11 @@ terminal_widget_fork_command (GtkWidget   *widget,
   
   gdk_flush ();
   errno = 0;
-  switch ((*child_pid = zvt_term_forkpty (term, update_records)))
+  switch ((*child_pid = zvt_term_forkpty (term, update_records ?
+                                          (ZVT_TERM_DO_UTMP_LOG |
+                                           ZVT_TERM_DO_WTMP_LOG |
+                                           ZVT_TERM_DO_LASTLOG) :
+                                          0)))
     {
     case -1:
       g_set_error (err,
