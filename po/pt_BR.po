@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
-"POT-Creation-Date: 2002-09-15 13:13-0300\n"
+"POT-Creation-Date: 2002-10-02 22:58-0400\n"
 "PO-Revision-Date: 2002-09-15 13:11-0300\n"
 "Last-Translator: Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
 "Language-Team: Brazilian Portuguese <gnome-br@listas.cipsga.org.br>\n"
@@ -18,7 +18,7 @@ msgid "Command line"
 msgstr "Linha de Comando"
 
 #: gnome-terminal.desktop.in.h:2 src/terminal-accels.c:162
-#: src/terminal-profile.c:272 src/terminal-window.c:613 src/terminal.c:928
+#: src/terminal-profile.c:272 src/terminal-window.c:613 src/terminal.c:971
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -183,7 +183,7 @@ msgid "User Defined"
 msgstr "Definido pelo Usuário"
 
 #: src/encoding.c:414 src/profile-editor.c:883 src/terminal-window.c:2249
-#: src/terminal.c:2304
+#: src/terminal.c:2370
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Houve um erro ao exibir ajuda: %s"
@@ -703,7 +703,7 @@ msgstr "Nova Aba"
 msgid "New Window"
 msgstr "Nova Janela"
 
-#: src/terminal-accels.c:75 src/terminal.c:1728
+#: src/terminal-accels.c:75 src/terminal.c:1794
 msgid "New Profile"
 msgstr "Novo Perfil"
 
@@ -823,7 +823,7 @@ msgstr "Ir"
 msgid "Help"
 msgstr "Ajuda"
 
-#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1158
+#: src/terminal-accels.c:254 src/terminal-profile.c:388 src/terminal.c:1203
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Erro ao carregar configuração de %s. (%s)\n"
@@ -1218,7 +1218,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Arquivo"
 
-#: src/terminal-window.c:1794 src/terminal.c:2335
+#: src/terminal-window.c:1794 src/terminal.c:2401
 msgid "_Edit"
 msgstr "_Editar"
 
@@ -1268,15 +1268,15 @@ msgstr "Copyright 2002 Havoc Pennington"
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
 
-#: src/terminal.c:166
+#: src/terminal.c:172
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Executar o argumento para esta opção dentro do terminal."
 
-#: src/terminal.c:175
+#: src/terminal.c:181
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Executar o lembrete da linha de comando dentro do terminal."
 
-#: src/terminal.c:184
+#: src/terminal.c:190
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1284,11 +1284,11 @@ msgstr ""
 "Abrir uma nova janela contendo uma aba com o perfil especificado. Mais de "
 "uma destas opções pode ser utilizada."
 
-#: src/terminal.c:185 src/terminal.c:194
+#: src/terminal.c:191 src/terminal.c:200
 msgid "PROFILENAME"
 msgstr "PROFILENAME"
 
-#: src/terminal.c:193
+#: src/terminal.c:199
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1296,7 +1296,7 @@ msgstr ""
 "Abrir uma nova aba na últma janela aberta do perfil. Mais de uma destas "
 "opções pode ser utilizada."
 
-#: src/terminal.c:202
+#: src/terminal.c:208
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1304,11 +1304,11 @@ msgstr ""
 "Abrir uma nova janela contendo uma aba com o ID do perfil dado. Utilizado "
 "internamente para salvar sessões."
 
-#: src/terminal.c:203 src/terminal.c:212
+#: src/terminal.c:209 src/terminal.c:218
 msgid "PROFILEID"
 msgstr "PROFILEID"
 
-#: src/terminal.c:211
+#: src/terminal.c:217
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1316,7 +1316,22 @@ msgstr ""
 "Abrir uma nova aba na última janela aberta com o ID do perfil dado. "
 "Utilizado internamente para salvar sessões."
 
-#: src/terminal.c:220
+#: src/terminal.c:226
+#, fuzzy
+msgid ""
+"Set the role for the last-specified window; applies to only one window; can "
+"be specified once for each window you create from the command line."
+msgstr ""
+"Utilizar a barra de menu para a última janela especificada; aplica-se apenas "
+"para uma janela; pode ser especificado uma vez para cada janela criada a "
+"partir da linha de comando."
+
+#: src/terminal.c:227
+#, fuzzy
+msgid "ROLE"
+msgstr "PROFILEID"
+
+#: src/terminal.c:235
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1326,7 +1341,7 @@ msgstr ""
 "para uma janela; pode ser especificado uma vez para cada janela criada a "
 "partir da linha de comando."
 
-#: src/terminal.c:229
+#: src/terminal.c:244
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1336,7 +1351,7 @@ msgstr ""
 "apenas para uma janela; pode ser especificado uma vez para cada janela "
 "criada a partir da linha de comando."
 
-#: src/terminal.c:238
+#: src/terminal.c:253
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1344,11 +1359,11 @@ msgstr ""
 "Especificação da geometria do X (veja a man page \"X\"), pode ser "
 "especificada uma vez para cada janela aberta."
 
-#: src/terminal.c:239
+#: src/terminal.c:254
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: src/terminal.c:247
+#: src/terminal.c:262
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1356,38 +1371,38 @@ msgstr ""
 "Não registrar com o servidor de nomes de ativação, não reutilizar um "
 "terminal ativo"
 
-#: src/terminal.c:256
+#: src/terminal.c:271
 msgid "Set the terminal's title"
 msgstr "Definir o título do terminal"
 
-#: src/terminal.c:257
+#: src/terminal.c:272
 msgid "TITLE"
 msgstr "TITLE"
 
-#: src/terminal.c:265
+#: src/terminal.c:280
 msgid "Set the terminal's working directory"
 msgstr "Definir o diretório de trabalho do terminal"
 
-#: src/terminal.c:266
+#: src/terminal.c:281
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: src/terminal.c:603
+#: src/terminal.c:621
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "Não foi possível carregar o ícone \"%s\": %s\n"
 
-#: src/terminal.c:668
+#: src/terminal.c:686
 msgid "Option --command/-e requires specifying the command to run\n"
 msgstr ""
 "Opção --command/-e necessita que especifique o comando a ser executado\n"
 
-#: src/terminal.c:676
+#: src/terminal.c:694
 #, c-format
 msgid "Argument to --command/-e is not a valid command: %s\n"
 msgstr "Argumento para --comand/-e não é um comando válido: %s\n"
 
-#: src/terminal.c:686 src/terminal.c:708
+#: src/terminal.c:704 src/terminal.c:726
 msgid ""
 "--command/-e/--execute/-x specified more than once for the same window or "
 "tab\n"
@@ -1395,7 +1410,7 @@ msgstr ""
 "--command/-e/--execute/-x especificado mais de uma vez para a mesma janela "
 "ou aba\n"
 
-#: src/terminal.c:700
+#: src/terminal.c:718
 msgid ""
 "Option --execute/-x requires specifying the command to run on the rest of "
 "the command line\n"
@@ -1403,7 +1418,7 @@ msgstr ""
 "Opção --execute/-x requer a especificação do comando a executar no resto da "
 "linha de comando\n"
 
-#: src/terminal.c:725
+#: src/terminal.c:743
 msgid ""
 "Option --window-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1411,7 +1426,7 @@ msgstr ""
 "Opção --window-with-profile requer um argumento especificando qual perfil a "
 "utilizar\n"
 
-#: src/terminal.c:742
+#: src/terminal.c:760
 msgid ""
 "Option --tab-with-profile requires an argument specifying what profile to "
 "use\n"
@@ -1419,40 +1434,50 @@ msgstr ""
 "Opção --tab-with-profile requer um argumento especificando qual perfil a "
 "utilizar\n"
 
-#: src/terminal.c:773
+#: src/terminal.c:791
 msgid "--show-menubar option given twice for the same window\n"
 msgstr "Opção --show-menubar especificada duas vezes para a mesma janela\n"
 
-#: src/terminal.c:799
+#: src/terminal.c:817
 msgid "--hide-menubar option given twice for the same window\n"
 msgstr "Opção --hide-menubar especificada duas vezes para a mesma janela\n"
 
-#: src/terminal.c:822
+#: src/terminal.c:840
+#, fuzzy
+msgid "Option --role requires an argument giving the role\n"
+msgstr "Opção --title requer um argumento especificando o título\n"
+
+#: src/terminal.c:849
+#, fuzzy
+msgid "Two roles given for one window\n"
+msgstr "Duas geometrias especificadas para uma mesma janela\n"
+
+#: src/terminal.c:865
 msgid "Option --geometry requires an argument giving the geometry\n"
 msgstr "Opção --geometry requer um argumento definindo a geometria\n"
 
-#: src/terminal.c:831 src/terminal.c:841
+#: src/terminal.c:874 src/terminal.c:884
 msgid "Two geometries given for one window\n"
 msgstr "Duas geometrias especificadas para uma mesma janela\n"
 
-#: src/terminal.c:863
+#: src/terminal.c:906
 msgid "Option --title requires an argument giving the title\n"
 msgstr "Opção --title requer um argumento especificando o título\n"
 
-#: src/terminal.c:871
+#: src/terminal.c:914
 msgid "Two titles given for one tab\n"
 msgstr "Dois títulos definidos para uma mesma aba\n"
 
-#: src/terminal.c:886
+#: src/terminal.c:929
 msgid "Option --working-directory requires an argument giving the directory\n"
 msgstr ""
 "Opção --working-directory requer um argumento especificando o diretório\n"
 
-#: src/terminal.c:894
+#: src/terminal.c:937
 msgid "Two working directories given for one tab\n"
 msgstr "Dois diretórios de trabalho especificados para uma aba\n"
 
-#: src/terminal.c:903
+#: src/terminal.c:946
 msgid ""
 "Option given which is no longer supported in this version of gnome-terminal; "
 "you might want to create a profile with the desired setting, and use the new "
@@ -1462,17 +1487,17 @@ msgstr ""
 "criar um perfil com a configuração desejada, e utilizar a nova opção --"
 "window-with-profile\n"
 
-#: src/terminal.c:1023
+#: src/terminal.c:1066
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "Não existe o perfil '%s', usando o perfil padrão\n"
 
-#: src/terminal.c:1132
+#: src/terminal.c:1177
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Argumento inválido: \"%s\"\n"
 
-#: src/terminal.c:1174
+#: src/terminal.c:1219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -1481,106 +1506,106 @@ msgstr ""
 "Erro ao subscrever para notificação de alterações na lista de perfis do "
 "terminal. (%s)\n"
 
-#: src/terminal.c:1283
+#: src/terminal.c:1349
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Texto da geometria inválido \"%s\"\n"
 
-#: src/terminal.c:1343
+#: src/terminal.c:1409
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Ocorreu um erro ao obter a lista de perfis do terminal. (%s)\n"
 
-#: src/terminal.c:1622
+#: src/terminal.c:1688
 msgid "You have to name your profile."
 msgstr "Você precisa dar um nome ao perfil."
 
-#: src/terminal.c:1632
+#: src/terminal.c:1698
 #, c-format
 msgid "You already have a profile called \"%s\""
 msgstr "Você já tem um perfil chamado \"%s\""
 
-#: src/terminal.c:1669
+#: src/terminal.c:1735
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "O perfil que você selecionou como base para o seu novo perfil não existe mais"
 
-#: src/terminal.c:1733
+#: src/terminal.c:1799
 msgid "C_reate"
 msgstr "C_riar"
 
-#: src/terminal.c:1758
+#: src/terminal.c:1824
 msgid "Profile _name:"
 msgstr "_Nome do perfil:"
 
-#: src/terminal.c:1762
+#: src/terminal.c:1828
 msgid "Enter profile name"
 msgstr "Digite o nome do perfil"
 
-#: src/terminal.c:1777
+#: src/terminal.c:1843
 msgid "_Base on:"
 msgstr "_Baseado em:"
 
-#: src/terminal.c:1925
+#: src/terminal.c:1991
 msgid "Profile list"
 msgstr "Lista de perfis"
 
-#: src/terminal.c:1998
+#: src/terminal.c:2064
 msgid "You must select one or more profiles to delete."
 msgstr "Você precisa selecionar um ou mais perfis para apagar."
 
-#: src/terminal.c:2021
+#: src/terminal.c:2087
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Você precisa ter pelo menos um perfil; você não pode apagar todos."
 
-#: src/terminal.c:2039
+#: src/terminal.c:2105
 msgid "Delete these two profiles?\n"
 msgstr "Apagar estes dois perfis?\n"
 
-#: src/terminal.c:2041
+#: src/terminal.c:2107
 #, c-format
 msgid "Delete these %d profiles?\n"
 msgstr "Apagar estes %d perfis?\n"
 
-#: src/terminal.c:2059
+#: src/terminal.c:2125
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Apagar o perfil \"%s\"?"
 
-#: src/terminal.c:2081
+#: src/terminal.c:2147
 msgid "Delete Profile"
 msgstr "Apagar Perfil"
 
-#: src/terminal.c:2368
+#: src/terminal.c:2434
 msgid "Edit Profiles"
 msgstr "Editar Perfis"
 
-#: src/terminal.c:2408
+#: src/terminal.c:2474
 msgid "Profile _used when launching a new terminal:"
 msgstr "Perfil _utilizado quando iniciar um novo terminal:"
 
-#: src/terminal.c:2430
+#: src/terminal.c:2496
 msgid "_Profiles:"
 msgstr "_Perfis:"
 
-#: src/terminal.c:2479
+#: src/terminal.c:2545
 msgid "Click to open new profile dialog"
 msgstr "Clique para abrir diálogo Novo Perfil"
 
-#: src/terminal.c:2492
+#: src/terminal.c:2558
 msgid "Click to open edit profile dialog"
 msgstr "Clique para abrir diálogo Editar Perfil"
 
-#: src/terminal.c:2502
+#: src/terminal.c:2568
 msgid "Click to delete selected profile"
 msgstr "Clique para apagar o perfil selecionado"
 
-#: src/terminal.c:2551
+#: src/terminal.c:2617
 msgid "Click button to choose profile"
 msgstr "Clique o botão para escolher o perfil"
 
-#: src/terminal.c:2991
+#: src/terminal.c:3067
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -1588,7 +1613,7 @@ msgstr ""
 "Parece que você não tem gnome-terminal.server instalado em um local válido. "
 "Modo Factory desabilitado.\n"
 
-#: src/terminal.c:2994
+#: src/terminal.c:3070
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -1596,7 +1621,7 @@ msgstr ""
 "Erro ao registrar o terminal com o serviço de ativação; modo Factory "
 "desabilitado.\n"
 
-#: src/terminal.c:3029
+#: src/terminal.c:3105
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Erro ao recuperar servidor do terminal do ativador de servidores\n"
 

@@ -13,8 +13,8 @@ FILE=src/terminal.c
 
 DIE=0
 
-AUTOMAKE=automake-1.6
-ACLOCAL=aclocal-1.6
+AUTOMAKE=automake-1.4
+ACLOCAL=aclocal-1.4
 
 ($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
         AUTOMAKE=automake
@@ -32,7 +32,7 @@ ACLOCAL=aclocal-1.6
 ($AUTOMAKE --version) < /dev/null > /dev/null 2>&1 || {
 	echo
 	echo "You must have automake installed to compile $PROJECT."
-	echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.6.3.tar.gz"
+	echo "Get ftp://sourceware.cygnus.com/pub/automake/automake-1.4.3.tar.gz"
 	echo "(or a newer version if it is available)"
 	DIE=1
 }
