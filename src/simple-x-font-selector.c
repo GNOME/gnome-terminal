@@ -337,13 +337,10 @@ egg_xfont_selector_init (EggXFontSelector *selector)
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (selector->family_label),
 				 selector->family_options);
-  terminal_util_set_labelled_by (selector->family_options, GTK_LABEL(selector->family_label));
   terminal_util_set_atk_name_description (selector->family_options,
                                           NULL, _("Click to choose font type"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (size_label),
 				 selector->size_options);
-  terminal_util_set_labelled_by (selector->size_options,
-                                 GTK_LABEL (size_label));
   terminal_util_set_atk_name_description (selector->size_options,
                                           NULL, _("Click to choose font size"));
 

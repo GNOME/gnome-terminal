@@ -2325,7 +2325,6 @@ terminal_app_new_profile (TerminalApp     *app,
 
       wl = glade_xml_get_widget (xml, "new-profile-name-label");
       gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
-      terminal_util_set_labelled_by (w, GTK_LABEL (wl));
       gtk_size_group_add_widget (size_group_labels, wl);
  
       /* the base profile option menu */
@@ -2337,7 +2336,6 @@ terminal_app_new_profile (TerminalApp     *app,
 
       wl = glade_xml_get_widget (xml, "new-profile-base-label");
       gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
-      terminal_util_set_labelled_by (w, GTK_LABEL (wl));
       gtk_size_group_add_widget (size_group_labels, wl);
 
       gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), RESPONSE_CREATE);
@@ -2904,8 +2902,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
       label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
       gtk_label_set_mnemonic_widget (GTK_LABEL (label),
                                      app->manage_profiles_default_menu);
-      terminal_util_set_labelled_by (GTK_WIDGET (app->manage_profiles_default_menu),                    
-                                     GTK_LABEL (label));
 
       gtk_box_pack_start (GTK_BOX (hbox),
                           label, TRUE, TRUE, 0);
@@ -2936,8 +2932,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
                         app);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
-      terminal_util_set_labelled_by (GTK_WIDGET (app->manage_profiles_list),                            
-                                     GTK_LABEL (label));
       
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_AUTOMATIC,
@@ -3467,39 +3461,6 @@ terminal_util_show_help (const char *topic,
     }
 }
  
-/* This function is used to set LABLLED_BY relation between widgets
- * and labels
- */
-void
-terminal_util_set_labelled_by (GtkWidget *widget,
-                               GtkLabel  *label)
-{
-  AtkObject *atkwidget;
-  AtkRelationSet *relation_set;
-  AtkRelation *relation;
-  AtkObject *targets[1];
-
-  atkwidget = gtk_widget_get_accessible (widget);
-
-  if (atkwidget == NULL)
-    {
-      g_warning ("%s: for some reason widget has no GtkAccessible",
-                 G_GNUC_FUNCTION);
-      return;
-    }
-
-  if (!GTK_IS_ACCESSIBLE (atkwidget))
-    return; /* This means GAIL is not loaded so we have the NoOp accessible */
-  
-  relation_set = atk_object_ref_relation_set (atkwidget);
-  targets[0] = gtk_widget_get_accessible (GTK_WIDGET (label));
-
-  relation = atk_relation_new (targets, 1, ATK_RELATION_LABELLED_BY);
-  atk_relation_set_add (relation_set, relation);
-  g_object_unref (G_OBJECT (relation));
-
-}
-
 /* sets accessible name and description for the widget */
 
 void

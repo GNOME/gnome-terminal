@@ -1,5 +1,16 @@
 2004-02-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
 
+	* src/terminal.c(terminal_util_set_labelled_by): remove this function,
+	  since LABELLED_BY relations are now guessed correctly by gail.
+	* src/terminal_screen.c(terminal_screen_edit_title):
+	* src/terminal.c(terminal_app_new_profile, terminal_app_manage_profiles):
+	* src/simple-x-font-selector.c(egg_xfont_selector_init):
+	  remove calls to terminal_util_set_labelled_by.
+
+	  All this from a patch by Padraig O'Brian, bug #133982.
+
+2004-02-20 Mariano Suárez-Alvarez <msuarezalvarez@arnet.com.ar>
+
 	* src/terminal-screen.c(terminal_screen_do_popup): Fix an accelerator
 	clash in the popup menu. Reported by Ben Maurer, bug #134925.
 
