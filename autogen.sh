@@ -1,6 +1,7 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
+
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
@@ -43,6 +44,16 @@ grep "^AM_GLIB_GNU_GETTEXT" configure.in >/dev/null && {
   (glib-gettextize --version) < /dev/null > /dev/null 2>&1 || {
     echo
     echo "**Error**: You must have \`glib' installed to compile $PROJECT."
+    DIE=1
+  }
+}
+
+(grep "^AC_PROG_INTLTOOL" $srcdir/configure.in >/dev/null) && {
+  (intltoolize --version) < /dev/null > /dev/null 2>&1 || {
+    echo
+    echo "**Error**: You must have \`intltoolize' installed to compile $PKG_NAME."
+    echo "Get ftp://ftp.gnome.org/pub/GNOME/stable/sources/intltool/intltool-0.10.tar.gz"
+    echo "(or a newer version if it is available)"
     DIE=1
   }
 }
@@ -93,6 +104,10 @@ do
 	  echo "Making $dr/aclocal.m4 writable ..."
 	  test -r $dr/aclocal.m4 && chmod u+w $dr/aclocal.m4
         fi
+      fi
+      if grep "^AC_PROG_INTLTOOL" configure.in >/dev/null; then
+        echo "Running intltoolize..."
+	intltoolize --copy --force --automake
       fi
       if grep "^AM_PROG_LIBTOOL" configure.in >/dev/null; then
 	echo "Running libtoolize..."
