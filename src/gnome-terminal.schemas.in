@@ -2,26 +2,41 @@
   <schemalist>
 
     <schema>
-      <key>/schemas/apps/profterm/global/profile_list</key>
-      <applyto>/apps/profterm/global/profile_list</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/global/profile_list</key>
+      <applyto>/apps/gnome-terminal/global/profile_list</applyto>
+      <owner>gnome-terminal</owner>
       <type>list</type>
       <list_type>string</list_type>
       <default>[Default]</default>
       <locale name="C">
          <short>List of profiles</short>
          <long>
-           List of profiles known to profterm. The list contains 
+           List of profiles known to gnome-terminal. The list contains 
            strings naming subdirectories relative to
-          /apps/profterm/profiles.
+          /apps/gnome-terminal/profiles.
          </long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/visible_name</key>
-      <applyto>/apps/profterm/profiles/Default/visible_name</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/global/default_profile</key>
+      <applyto>/apps/gnome-terminal/global/default_profile</applyto>
+      <owner>gnome-terminal</owner>
+      <type>string</type>
+      <default>Default</default>
+      <locale name="C">
+         <short>Profile to use for new terminals</short>
+         <long>
+          Profile to be used when opening a new window or tab. 
+          Must be in profile_list.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/visible_name</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/visible_name</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>Default</default>
       <locale name="C">
@@ -33,9 +48,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/cursor_blink</key>
-      <applyto>/apps/profterm/profiles/Default/cursor_blink</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/cursor_blink</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/cursor_blink</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
@@ -49,9 +64,9 @@
 
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/default_show_menubar</key>
-      <applyto>/apps/profterm/profiles/Default/default_show_menubar</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/default_show_menubar</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/default_show_menubar</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
@@ -64,9 +79,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/foreground_color</key>
-      <applyto>/apps/profterm/profiles/Default/foreground_color</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/foreground_color</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/foreground_color</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>#000000</default>
       <locale name="C">
@@ -80,9 +95,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/background_color</key>
-      <applyto>/apps/profterm/profiles/Default/background_color</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/background_color</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/background_color</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>#FFFFDD</default>
       <locale name="C">
@@ -96,9 +111,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/title_mode</key>
-      <applyto>/apps/profterm/profiles/Default/title_mode</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/title_mode</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/title_mode</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>replace</default>
       <locale name="C">
@@ -115,9 +130,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/title</key>
-      <applyto>/apps/profterm/profiles/Default/title</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/title</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/title</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>Terminal</default>
       <locale name="C">
@@ -132,9 +147,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/allow_bold</key>
-      <applyto>/apps/profterm/profiles/Default/allow_bold</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/allow_bold</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/allow_bold</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
@@ -147,9 +162,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/silent_bell</key>
-      <applyto>/apps/profterm/profiles/Default/silent_bell</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/silent_bell</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/silent_bell</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
@@ -162,9 +177,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/word_chars</key>
-      <applyto>/apps/profterm/profiles/Default/word_chars</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/word_chars</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/word_chars</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>-A-Za-z0-9,./?%&amp;#</default>
       <locale name="C">
@@ -179,9 +194,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/scrollbar_position</key>
-      <applyto>/apps/profterm/profiles/Default/scrollbar_position</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/scrollbar_position</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/scrollbar_position</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>right</default>
       <locale name="C">
@@ -194,9 +209,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/scrollback_lines</key>
-      <applyto>/apps/profterm/profiles/Default/scrollback_lines</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/scrollback_lines</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/scrollback_lines</applyto>
+      <owner>gnome-terminal</owner>
       <type>int</type>
       <default>500</default>
       <locale name="C">
@@ -212,9 +227,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/scroll_on_keystroke</key>
-      <applyto>/apps/profterm/profiles/Default/scroll_on_keystroke</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/scroll_on_keystroke</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/scroll_on_keystroke</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
@@ -226,9 +241,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/scroll_on_output</key>
-      <applyto>/apps/profterm/profiles/Default/scroll_on_output</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/scroll_on_output</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/scroll_on_output</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
@@ -241,9 +256,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/exit_action</key>
-      <applyto>/apps/profterm/profiles/Default/exit_action</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/exit_action</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/exit_action</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>close</default>
       <locale name="C">
@@ -256,9 +271,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/login_shell</key>
-      <applyto>/apps/profterm/profiles/Default/login_shell</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/login_shell</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/login_shell</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
@@ -271,9 +286,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/update_records</key>
-      <applyto>/apps/profterm/profiles/Default/update_records</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/update_records</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/update_records</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
@@ -286,9 +301,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/use_custom_command</key>
-      <applyto>/apps/profterm/profiles/Default/use_custom_command</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/use_custom_command</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/use_custom_command</applyto>
+      <owner>gnome-terminal</owner>
       <type>bool</type>
       <default>false</default>
       <locale name="C">
@@ -301,9 +316,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/custom_command</key>
-      <applyto>/apps/profterm/profiles/Default/custom_command</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/custom_command</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/custom_command</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default> </default>
       <locale name="C">
@@ -316,9 +331,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/profterm/profiles/Default/icon</key>
-      <applyto>/apps/profterm/profiles/Default/icon</applyto>
-      <owner>profterm</owner>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/icon</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/icon</applyto>
+      <owner>gnome-terminal</owner>
       <type>string</type>
       <default>gnome-terminal.png</default>
       <locale name="C">

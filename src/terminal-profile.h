@@ -28,7 +28,7 @@
 #define CONF_PREFIX "/apps/gnome-terminal"
 #define CONF_GLOBAL_PREFIX CONF_PREFIX"/global"
 #define CONF_PROFILES_PREFIX CONF_PREFIX"/profiles"
-#define DEFAULT_PROFILE "Default"
+#define FALLBACK_PROFILE_ID "Default"
 
 typedef enum
 {
@@ -51,7 +51,8 @@ typedef enum
   TERMINAL_SETTING_UPDATE_RECORDS       = 1 << 16,
   TERMINAL_SETTING_USE_CUSTOM_COMMAND   = 1 << 17,
   TERMINAL_SETTING_CUSTOM_COMMAND       = 1 << 18,
-  TERMINAL_SETTING_ICON                 = 1 << 19
+  TERMINAL_SETTING_ICON                 = 1 << 19,
+  TERMINAL_SETTING_IS_DEFAULT           = 1 << 20
 } TerminalSettingMask;
 
 typedef enum
@@ -153,6 +154,7 @@ const char*               terminal_profile_get_custom_command       (TerminalPro
 
 const char*               terminal_profile_get_icon_file            (TerminalProfile *profile);
 GdkPixbuf*                terminal_profile_get_icon                 (TerminalProfile *profile);
+gboolean                  terminal_profile_get_is_default           (TerminalProfile *profile);
 
 void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
                                                 gboolean                   setting);
@@ -195,12 +197,20 @@ void terminal_profile_set_custom_command       (TerminalProfile          *profil
 
 void terminal_profile_set_icon_file            (TerminalProfile          *profile,
                                                 const char               *filename);
+void terminal_profile_set_is_default           (TerminalProfile          *profile,
+                                                gboolean                  setting);
 
-void             terminal_profile_setup_default (GConfClient *conf);
-GList*           terminal_profile_get_list (void);
+TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
+void             terminal_profile_initialize             (GConfClient     *conf);
+GList*           terminal_profile_get_list               (void);
+int              terminal_profile_get_count              (void);
+/* may return NULL */
+TerminalProfile* terminal_profile_get_default            (void);
+/* never returns NULL if any profiles exist, one is always supposed to */
+TerminalProfile* terminal_profile_get_for_new_term       (void);
 TerminalProfile* terminal_profile_lookup                 (const char      *name);
 TerminalProfile* terminal_profile_lookup_by_visible_name (const char      *name);
-void             terminal_profile_forget   (TerminalProfile *profile);
+void             terminal_profile_forget                 (TerminalProfile *profile);
 
 TerminalSettingMask terminal_profile_get_locked_settings (TerminalProfile *profile);
 

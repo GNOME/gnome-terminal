@@ -1,5 +1,20 @@
 2002-02-16  Havoc Pennington  <hp@pobox.com>
 
+        Throughout: destroy concept of "special" default profile, 
+	now any profile can be renamed/deleted.
+	
+	* src/profterm.schemas: s/profterm/gnome-terminal so we get schema 
+	defaults
+
+	* src/terminal-profile.c (terminal_profile_new): add profile dir
+	to the GConfClient
+	(terminal_profile_forget): remove profile dir
+
+	* src/terminal.c (main): only preload prefix/global not prefix/* 
+	so that old profile cruft won't slow things down
+
+2002-02-16  Havoc Pennington  <hp@pobox.com>
+
 	* src/terminal-profile.c (terminal_profile_delete_list): remove
 	debug spew
 

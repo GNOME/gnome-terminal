@@ -122,6 +122,9 @@ static const GConfEnumStringPair exit_actions[] = {
 };
 
 static GHashTable *profiles = NULL;
+static char* default_profile_id = NULL;
+static TerminalProfile *default_profile = NULL;
+static gboolean default_profile_locked = FALSE;
 
 #define RETURN_IF_NOTIFYING(profile) if ((profile)->priv->in_notification_count) return
 
@@ -139,6 +142,14 @@ static void profile_change_notify        (GConfClient *client,
                                           guint        cnxn_id,
                                           GConfEntry  *entry,
                                           gpointer     user_data);
+
+static void default_change_notify        (GConfClient *client,
+                                          guint        cnxn_id,
+                                          GConfEntry  *entry,
+                                          gpointer     user_data);
+
+static void update_default_profile       (const char  *name,
+                                          gboolean     locked);
 
 static void emit_changed (TerminalProfile    *profile,
                           TerminalSettingMask mask);
@@ -179,12 +190,14 @@ terminal_profile_get_type (void)
 
 static void
 terminal_profile_init (TerminalProfile *profile)
-{  
+{
+  g_return_if_fail (profiles != NULL);
+  
   profile->priv = g_new0 (TerminalProfilePrivate, 1);
   profile->priv->locked = 0;
   profile->priv->cursor_blink = FALSE;
   profile->priv->default_show_menubar = TRUE;
-  profile->priv->visible_name = g_strdup ("");
+  profile->priv->visible_name = g_strdup ("<not named>");
   profile->priv->foreground.red = 0;
   profile->priv->foreground.green = 0;
   profile->priv->foreground.blue = 0;
@@ -265,6 +278,10 @@ terminal_profile_new (const char *name,
 {
   TerminalProfile *profile;
   GError *err;
+
+  g_return_val_if_fail (profiles != NULL, NULL);
+  g_return_val_if_fail (terminal_profile_lookup (name) == NULL,
+                        NULL);
   
   profile = g_object_new (TERMINAL_TYPE_PROFILE, NULL);
 
@@ -276,7 +293,16 @@ terminal_profile_new (const char *name,
   profile->priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
                                                          profile->priv->name);
 
-  /*   g_print ("Watching dir %s\n", profile->priv->profile_dir); */
+  err = NULL;
+  gconf_client_add_dir (conf, profile->priv->profile_dir,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        &err);
+  if (err)
+    {
+      g_printerr (_("There was an error loading config from %s. (%s)\n"),
+                  profile->priv->profile_dir, err->message);
+      g_error_free (err);
+    }
   
   err = NULL;
   profile->priv->notify_id =
@@ -292,11 +318,16 @@ terminal_profile_new (const char *name,
                   err->message);
       g_error_free (err);
     }
-
-  if (profiles == NULL)
-    profiles = g_hash_table_new (g_str_hash, g_str_equal);
   
   g_hash_table_insert (profiles, profile->priv->name, profile);
+
+  if (default_profile == NULL &&
+      default_profile_id &&
+      strcmp (default_profile_id, profile->priv->name) == 0)
+    {
+      /* We are the default profile */
+      default_profile = profile;
+    }
   
   return profile;
 }
@@ -310,10 +341,7 @@ terminal_profile_get_name (TerminalProfile *profile)
 const char*
 terminal_profile_get_visible_name (TerminalProfile *profile)
 {
-  if (strcmp (profile->priv->name, DEFAULT_PROFILE) == 0)
-    return _(DEFAULT_PROFILE);
-  else
-    return profile->priv->visible_name;
+  return profile->priv->visible_name;
 }
 
 void
@@ -934,6 +962,26 @@ terminal_profile_set_icon_file (TerminalProfile *profile,
   g_free (key);
 }
 
+gboolean
+terminal_profile_get_is_default (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+  
+  return profile == default_profile;
+}
+
+void
+terminal_profile_set_is_default (TerminalProfile *profile,
+                                 gboolean         setting)
+{
+  RETURN_IF_NOTIFYING (profile);
+  
+  gconf_client_set_string (profile->priv->conf,
+                           CONF_GLOBAL_PREFIX"/default_profile",
+                           terminal_profile_get_name (profile),
+                           NULL);  
+}
+
 static gboolean
 set_visible_name (TerminalProfile *profile,
                   const char      *candidate_name)
@@ -1494,7 +1542,7 @@ find_key (const gchar* key)
 {
   const gchar* end;
   
-  end = strrchr(key, '/');
+  end = strrchr (key, '/');
 
   ++end;
 
@@ -1825,11 +1873,88 @@ profile_change_notify (GConfClient *client,
         mask |= TERMINAL_SETTING_ICON;
 
       UPDATE_LOCKED (TERMINAL_SETTING_ICON);
-    }
-  
+    }  
   
   if (mask != 0 || old_locked != profile->priv->locked)
     emit_changed (profile, mask);
+}
+
+static void
+update_default_profile (const char *name,
+                        gboolean    locked)
+{
+  TerminalProfile *profile;
+  gboolean changed;
+  TerminalProfile *old_default;
+  
+  changed = FALSE;
+  
+  g_free (default_profile_id);
+  default_profile_id = g_strdup (name);
+
+  old_default = default_profile;
+  profile = terminal_profile_lookup (name);
+  
+  if (profile)
+    {
+      if (profile != default_profile)
+        {
+          default_profile = profile;
+          changed = TRUE;
+        }
+    }
+
+  if (locked != default_profile_locked)
+    {
+      /* Need to emit changed on all profiles */
+      GList *all_profiles;
+      GList *tmp;
+
+      default_profile_locked = locked;
+      
+      all_profiles = terminal_profile_get_list ();
+      tmp = all_profiles;
+      while (tmp != NULL)
+        {
+          TerminalProfile *p = tmp->data;
+          
+          emit_changed (p, TERMINAL_SETTING_IS_DEFAULT);
+          tmp = tmp->next;
+        }
+
+      g_list_free (all_profiles);
+    }
+  else if (changed)
+    {
+      if (old_default)
+        emit_changed (old_default, TERMINAL_SETTING_IS_DEFAULT);
+      emit_changed (profile, TERMINAL_SETTING_IS_DEFAULT);
+    }
+}
+
+static void
+default_change_notify (GConfClient *client,
+                       guint        cnxn_id,
+                       GConfEntry  *entry,
+                       gpointer     user_data)
+{
+  GConfValue *val;
+  gboolean locked;
+  const char *name;
+  
+  val = gconf_entry_get_value (entry);  
+
+  if (val == NULL || val->type != GCONF_VALUE_STRING)
+    return;
+  
+  if (gconf_entry_get_is_writable (entry))  
+    locked = FALSE;
+  else
+    locked = TRUE;
+  
+  name = gconf_value_get_string (val);
+
+  update_default_profile (name, locked);
 }
 
 static void
@@ -1864,6 +1989,12 @@ terminal_profile_get_list (void)
   list = g_list_sort (list, alphabetic_cmp);
   
   return list;
+}
+
+int
+terminal_profile_get_count (void)
+{
+  return g_hash_table_size (profiles);
 }
 
 TerminalProfile*
@@ -1916,8 +2047,25 @@ terminal_profile_forget (TerminalProfile *profile)
 {
   if (!profile->priv->forgotten)
     {
+      GError *err;
+      
+      err = NULL;
+      gconf_client_remove_dir (profile->priv->conf,
+                               profile->priv->profile_dir,
+                               &err);
+      if (err)
+        {
+          g_printerr (_("There was an error forgetting profile dir %s. (%s)\n"),
+                      profile->priv->profile_dir, err->message);
+          g_error_free (err);
+        }
+
       g_hash_table_remove (profiles, profile->priv->name);
       profile->priv->forgotten = TRUE;
+
+      if (profile == default_profile)          
+        default_profile = NULL;
+      
       g_signal_emit (G_OBJECT (profile), signals[FORGOTTEN], 0);
     }
 }
@@ -1925,20 +2073,61 @@ terminal_profile_forget (TerminalProfile *profile)
 TerminalSettingMask
 terminal_profile_get_locked_settings (TerminalProfile *profile)
 {
-  if (strcmp (profile->priv->name, DEFAULT_PROFILE) == 0)
-    return profile->priv->locked | TERMINAL_SETTING_VISIBLE_NAME;
-  else
-    return profile->priv->locked;
+  return profile->priv->locked;
 }
 
-void
-terminal_profile_setup_default (GConfClient *conf)
+TerminalProfile*
+terminal_profile_ensure_fallback (GConfClient *conf)
 {
   TerminalProfile *profile;
 
-  profile = terminal_profile_new (DEFAULT_PROFILE, conf);
+  profile = terminal_profile_lookup (FALLBACK_PROFILE_ID);
 
-  terminal_profile_update (profile);
+  if (profile == NULL)
+    {
+      profile = terminal_profile_new (FALLBACK_PROFILE_ID, conf);  
+      
+      terminal_profile_update (profile);
+    }
+  
+  return profile;
+}
+
+void
+terminal_profile_initialize (GConfClient *conf)
+{
+  GError *err;
+  char *str;
+
+  g_return_if_fail (profiles == NULL);
+  
+  profiles = g_hash_table_new (g_str_hash, g_str_equal);
+  
+  err = NULL;
+  gconf_client_notify_add (conf,
+                           CONF_GLOBAL_PREFIX"/default_profile",
+                           default_change_notify,
+                           NULL,
+                           NULL, &err);
+  
+  if (err)
+    {
+      g_printerr (_("There was an error subscribing to notification of changes to default profile. (%s)\n"),
+                  err->message);
+      g_error_free (err);
+    }
+
+  str = gconf_client_get_string (conf,
+                                 CONF_GLOBAL_PREFIX"/default_profile",
+                                 NULL);
+  if (str)
+    {
+      update_default_profile (str,
+                              !gconf_client_key_is_writable (conf,
+                                                             CONF_GLOBAL_PREFIX"/default_profile",
+                                                             NULL));
+      g_free (str);
+    }
 }
 
 static void
@@ -2403,4 +2592,30 @@ terminal_profile_delete_list (GConfClient *conf,
     }
 
   g_object_unref (G_OBJECT (transient_parent));
+}
+
+TerminalProfile*
+terminal_profile_get_default (void)
+{
+  return default_profile;
+}
+
+TerminalProfile*
+terminal_profile_get_for_new_term (void)
+{
+  GList *list;
+  TerminalProfile *profile;
+  
+  if (default_profile)
+    return default_profile;
+
+  list = terminal_profile_get_list ();
+  if (list)
+    profile = list->data;
+  else
+    profile = NULL;
+
+  g_list_free (list);
+
+  return profile;
 }

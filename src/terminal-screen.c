@@ -466,13 +466,15 @@ static void
 profile_forgotten_callback (TerminalProfile *profile,
                             TerminalScreen  *screen)
 {
-  TerminalProfile *default_profile;
+  TerminalProfile *new_profile;
 
-  /* Revert to the default profile */
-  default_profile = terminal_profile_lookup (DEFAULT_PROFILE);
-  g_assert (default_profile);
+  /* Revert to the new term profile if any */
+  new_profile = terminal_profile_get_for_new_term ();
 
-  terminal_screen_set_profile (screen, default_profile);
+  if (new_profile)
+    terminal_screen_set_profile (screen, new_profile);
+  else
+    g_assert_not_reached (); /* FIXME ? */
 }
 
 void

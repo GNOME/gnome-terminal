@@ -492,7 +492,7 @@ edited_cb (GtkCellRenderer *renderer,
 
   path = gtk_tree_path_new_from_string (path_text);
   gtk_tree_model_get_iter (model, &iter, path);
-  gtk_list_store_set (model, &iter,
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
 		      0, new_text,
 		      -1);
   gtk_tree_path_free (path);
@@ -748,7 +748,7 @@ terminal_profile_edit (TerminalProfile *profile,
 
       w = glade_xml_get_widget (xml, "bindings-swindow");
 
-      model = gtk_list_store_new (1, G_TYPE_STRING);
+      model = (GtkTreeModel*) gtk_list_store_new (1, G_TYPE_STRING);
       for (i = 0; i < 30; i++)
 	{
 	  gtk_list_store_append (GTK_LIST_STORE (model), &iter);
@@ -760,7 +760,8 @@ terminal_profile_edit (TerminalProfile *profile,
       renderer = g_object_new (EGG_TYPE_CELL_RENDERER_KEYS,
 			       "editable", TRUE,
 			       NULL);
-      g_signal_connect (G_OBJECT (renderer), "edited", edited_cb, model);
+      g_signal_connect (G_OBJECT (renderer), "edited",
+                        G_CALLBACK (edited_cb), model);
       gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (view),
 						   0,
 						   "Egg Test",
