@@ -242,7 +242,7 @@ terminal_screen_init (TerminalScreen *screen)
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
-#define SCHEME    "(news|telnet|nttp|file|https?|ftps?|webcal)"
+#define SCHEME    "(news|telnet|nntp|file|https?|ftps?|webcal)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 
   terminal_widget_match_add (screen->priv->term,
