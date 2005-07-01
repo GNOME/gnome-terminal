@@ -2376,7 +2376,7 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
                      target_table, G_N_ELEMENTS (target_table),
-                     GDK_ACTION_COPY);
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
 /* Indices of some xlfd string entries.  The first entry is 1 */
