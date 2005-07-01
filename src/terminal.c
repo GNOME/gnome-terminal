@@ -2311,6 +2311,8 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       GList *tmp;
       GSList n;
       GtkWindow *transient_parent;
+      GtkWidget *confirm_dialog;
+      gint retval;
       
       name_entry = g_object_get_data (G_OBJECT (new_profile_dialog), "name_entry");
       name = gtk_editable_get_chars (GTK_EDITABLE (name_entry), 0, -1);
@@ -2326,9 +2328,15 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
         }
       if (tmp)
         {
-          terminal_util_show_error_dialog (GTK_WINDOW (new_profile_dialog), NULL, 
-                                           _("You already have a profile called \"%s\""), name);
-          goto cleanup;
+          confirm_dialog = gtk_message_dialog_new (GTK_WINDOW (new_profile_dialog), 
+						   GTK_DIALOG_DESTROY_WITH_PARENT,
+                	 			   GTK_MESSAGE_QUESTION, 
+						   GTK_BUTTONS_YES_NO, 
+			 			   _("You already have a profile called \"%s\". Do you want to create another profile with the same name?"), name);
+          retval = gtk_dialog_run (GTK_DIALOG (confirm_dialog));
+          gtk_widget_destroy (confirm_dialog);
+          if (retval == GTK_RESPONSE_NO)   
+            goto cleanup;
         }
       g_list_free (profiles);
 
