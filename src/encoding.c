@@ -145,9 +145,9 @@ static TerminalEncoding encodings[] = {
   { TERMINAL_ENCODING_JOHAB, FALSE,
     "JOHAB", N_("Korean") },
   { TERMINAL_ENCODING_KOI8_R, FALSE,
-    "KOI8R", N_("Cyrillic") },
+    "KOI8-R", N_("Cyrillic") },
   { TERMINAL_ENCODING_KOI8_U, FALSE,
-    "KOI8U", N_("Cyrillic/Ukrainian") },
+    "KOI8-U", N_("Cyrillic/Ukrainian") },
 
   { TERMINAL_ENCODING_MAC_ARABIC, FALSE,
     "MAC_ARABIC", N_("Arabic") },
