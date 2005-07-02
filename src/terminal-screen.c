@@ -242,16 +242,16 @@ terminal_screen_init (TerminalScreen *screen)
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
+#define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
 #define SCHEME    "(news|telnet|nntp|file|https?|ftps?|webcal)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
+#define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
 
   terminal_widget_match_add (screen->priv->term,
-      "\\<(" SCHEME "://(" USER "@)?)[" HOSTCHARS ".]+(:[0-9]+)?"
-      "(/[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*[^]'.}>) \t\r\n,\\\"])?\\>", FLAVOR_AS_IS);
+      "\\<(" SCHEME "://(" USER "@)?)[" HOSTCHARS ".]+(:[0-9]+)?(" URLPATH ")?", FLAVOR_AS_IS);
 
   terminal_widget_match_add (screen->priv->term,
-      "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+(:[0-9]+)?"
-      "(/[-A-Za-z0-9_$.+!*(),;:@&=?/~#%]*[^]'.}>) \t\r\n,\\\"])?\\>", FLAVOR_DEFAULT_TO_HTTP);
+      "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+(:[0-9]+)?(" URLPATH ")?", FLAVOR_DEFAULT_TO_HTTP);
 
   terminal_widget_match_add (screen->priv->term,       
       "\\<(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_MAILTO);
