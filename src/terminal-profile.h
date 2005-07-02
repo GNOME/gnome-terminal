@@ -305,6 +305,7 @@ gboolean terminal_palette_from_string (const char     *str,
                                        gboolean        warn);
 
 
+void profile_name_entry_notify (TerminalProfile *profile);
 
 G_END_DECLS
 
