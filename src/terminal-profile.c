@@ -3228,3 +3228,9 @@ terminal_palette_rxvt[TERMINAL_PALETTE_SIZE] =
   { 0, 0xffff, 0xffff, 0xffff }
 };
 
+void
+profile_name_entry_notify (TerminalProfile *profile)
+{
+  gconf_client_notify (profile->priv->conf,
+		       CONF_GLOBAL_PREFIX"/profile_list");
+}
