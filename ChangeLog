@@ -1,3 +1,20 @@
+2005-07-12  Michele Baldessari  <michele@pupazzo.org>
+
+	* configure.in: Added AC_C_BIGENDIAN check
+	* src/skey/donkey.h, src/skey/donkey.c, src/skey/md2.c
+	* src/skey/tailor.h, src/skey/config.h: Removed due to 
+	license issues (#305216)
+	* src/skey/md5.c, src/skey/md5.h, src/skey/md4.c
+	* src/skey/md4.h, src/skey/sha1.h, src/skey/sha1.c: 
+	Added new non-license violating implementations for these 
+	hashes algorithms. MD4 and MD5 are taken from the mhash library
+	which in turn are based on public domain implementations by Colin Plumb.
+	SHA1 is from the public domain implementation of Steve Reid.
+	* src/skey/skey.c, src/skey/skey.h, src/skey/skeyutil.c,
+	* src/skey/skeyutil.h: Reimplementation from scratch of the previous
+	S/Key support (RFC1760). Removed MD2 support and added SHA1 support, 
+	in order to be able one day to support RFC2289.
+
 2005-07-21  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "hy" to ALL_LINGUAS.

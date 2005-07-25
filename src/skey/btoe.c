@@ -1,13 +1,17 @@
 /*
- * btoe.c
- *		 Copyright (C) 1995 Kazuhiko Yamamoto
- *	      Kazuhiko Yamamoto <kazu@is.aist-nara.ac.jp>
+ * This code is imported from Bollcore's S/KEY + some simple glib adaptations
+ * (See rfc2289 and rfc1760)
  */
 
-#include "config.h"
-#include "donkey.h"
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <glib.h>
 
-static UINT4 extract PROTO((char *s, int start, int length));
+#include "skey.h"
+#include "btoe.h"
+
+static guint32 extract (char *s, int start, int length);
 
 /* Dictionary for integer-word translations */
 char Wp[2048][4] = { "A", "ABE", "ACE", "ACT", "AD", "ADA", "ADD",
@@ -239,15 +243,15 @@ char Wp[2048][4] = { "A", "ABE", "ACE", "ACT", "AD", "ADA", "ADD",
  * Returns a pointer to a static buffer
  */
 
-public char *btoe(md)
-char *md;
+char *btoe(md)
+unsigned char *md;
 {
         char cp[9];	/* 64 + 2 = 66 bits */
         int p, i;
 	static int buf[BUFSIZ];
 	char *engout = (char *)buf;
 	
-        memcpy(cp, md, 8);
+        memcpy(cp, md, SKEY_SIZE);
         /* compute parity */
         for(p = 0, i = 0; i < 64; i += 2)
                 p += extract(cp, i, 2);
@@ -276,31 +280,27 @@ char *md;
  * starting with bit 'start'
  */
 
-private UINT4 extract(s, start, length)
+guint32 extract(s, start, length)
 char *s;
 int start, length;
 {
-        UINT1 cl;
-        UINT1 cc;
-        UINT1 cr;
-        UINT4  x;
+        guint8 cl;
+        guint8 cc;
+        guint8 cr;
+        guint32 x;
 
 	/* 66 = 11 x 6 */
 	
-        assert(length >= 0);	
-        assert(length <= 11);
-        assert(start >= 0);
-        assert(start + length <= 66);
+        g_assert(length >= 0);	
+        g_assert(length <= 11);
+        g_assert(start >= 0);
+        g_assert(start + length <= 66);
 
         cl = s[start/8];
         cc = s[start/8 + 1];
         cr = s[start/8 + 2];
-        x = (UINT4) ((((cl << 8) | cc) << 8) | cr);	/* 24 bits */
+        x = (guint32) ((((cl << 8) | cc) << 8) | cr);	/* 24 bits */
         x = x >> (24 - (length + (start % 8)));	        /* cut tail */
         x = (x & (0xffff >> (16 - length)));		/* cut head */
         return(x);					/* length */
 }
-
-/*
- * This code is imported from Bollcore's S/KEY
- */
