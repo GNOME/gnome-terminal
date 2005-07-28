@@ -1,4 +1,4 @@
-# Copyright (C) 2001-20055555 Free Software Foundation, Inc.
+# Copyright (C) 2001-2005 Free Software Foundation, Inc.
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Aktualną wersję tego pliku możesz odnaleźć w repozytorium cvs.gnomepl.org
 # (:pserver:anonymous@cvs.gnomepl.org:/gnomepl, puste hasło)
@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-25 12:33+0100\n"
+"POT-Creation-Date: 2005-07-28 15:36+0200\n"
 "PO-Revision-Date: 2003-11-15 11:26+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -20,15 +20,15 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1
-msgid "Command line"
-msgstr "Wiersz poleceń"
-
-#: ../gnome-terminal.desktop.in.in.h:2 ../src/gnome-terminal.schemas.in.h:109
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:109
 #: ../src/terminal-accels.c:172 ../src/terminal-profile.c:276
-#: ../src/terminal-window.c:783 ../src/terminal.c:1205 ../src/terminal.c:1553
+#: ../src/terminal-window.c:783 ../src/terminal.c:1205 ../src/terminal.c:1604
 msgid "Terminal"
 msgstr "Terminal"
+
+#: ../gnome-terminal.desktop.in.in.h:2
+msgid "Use the command line"
+msgstr "Wiersz poleceń"
 
 #: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
@@ -1599,19 +1599,19 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:791 ../src/profile-editor.c:821
+#: ../src/profile-editor.c:792 ../src/profile-editor.c:822
 msgid "Custom"
 msgstr "Użytkownika"
 
-#: ../src/profile-editor.c:1179 ../src/profile-editor.c:1212
+#: ../src/profile-editor.c:1180 ../src/profile-editor.c:1213
 msgid "Choose a terminal font"
 msgstr "Wybór czcionki tekstu w terminalu"
 
-#: ../src/profile-editor.c:1190 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1191 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Czcionka:"
 
-#: ../src/profile-editor.c:1468
+#: ../src/profile-editor.c:1469
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Modyfikacja profilu \"%s\""
@@ -1813,7 +1813,7 @@ msgid "Help"
 msgstr "Pomoc"
 
 #: ../src/terminal-accels.c:264 ../src/terminal-profile.c:392
-#: ../src/terminal-screen.c:199 ../src/terminal.c:1660
+#: ../src/terminal-screen.c:199 ../src/terminal.c:1721
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Przy odczycie konfiguracji z %s wystąpił błąd. (%s)\n"
@@ -1988,7 +1988,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Szczegóły"
 
-#: ../src/terminal-profile.c:2923 ../src/terminal.c:2300
+#: ../src/terminal-profile.c:2923 ../src/terminal.c:2369
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Przy tworzeniu profilu \"%s\" wystąpił błąd"
@@ -2245,7 +2245,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Plik"
 
-#: ../src/terminal-window.c:2131 ../src/terminal.c:2891
+#: ../src/terminal-window.c:2131 ../src/terminal.c:2960
 msgid "_Edit"
 msgstr "_Edycja"
 
@@ -2601,12 +2601,12 @@ msgstr "Nie podano argumentu dla opcji \"%s\"\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "Profil \"%s\" nie istnieje, użyto domyślnego profilu.\n"
 
-#: ../src/terminal.c:1603
+#: ../src/terminal.c:1664
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Niepoprawny argument: \"%s\"\n"
 
-#: ../src/terminal.c:1676
+#: ../src/terminal.c:1737
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2615,48 +2615,52 @@ msgstr ""
 "Przy rejestrowaniu się do powiadamiania o zmianach na liście profili "
 "terminala wystąpił błąd. (%s)\n"
 
-#: ../src/terminal.c:1905
+#: ../src/terminal.c:1966
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Niepoprawny opis geometrii \"%s\"\n"
 
-#: ../src/terminal.c:1970
+#: ../src/terminal.c:2031
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Przy pobieraniu listy profili terminala wystąpił błąd. (%s)\n"
 
-#: ../src/terminal.c:2269
+#: ../src/terminal.c:2335
 #, c-format
-msgid "You already have a profile called \"%s\""
-msgstr "Profil o nazwie \"%s\" już istnieje"
+msgid ""
+"You already have a profile called \"%s\". Do you want to create another "
+"profile with the same name?"
+msgstr ""
+"Już istnieje profil o nazwie \"%s\". Czy chcesz utworzyć kolejny profil "
+"o tej samej nazwie?"
 
-#: ../src/terminal.c:2280
+#: ../src/terminal.c:2349
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profil wybrany jako bazowy dla nowego profilu już nie istnieje"
 
-#: ../src/terminal.c:2375
+#: ../src/terminal.c:2444
 msgid "Enter profile name"
 msgstr "Wprowadź nazwę profilu"
 
-#: ../src/terminal.c:2385
+#: ../src/terminal.c:2454
 msgid "Choose base profile"
 msgstr "Wybierz profil bazowy"
 
-#: ../src/terminal.c:2524
+#: ../src/terminal.c:2593
 msgid "Profile list"
 msgstr "Lista profili"
 
-#: ../src/terminal.c:2593
+#: ../src/terminal.c:2662
 msgid "You must select one or more profiles to delete."
 msgstr "Należy wybrać przynajmniej jeden usuwany profil."
 
-#: ../src/terminal.c:2604
+#: ../src/terminal.c:2673
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "Należy pozostawić przynajmniej jeden profil, nie można usunąć wszystkich."
 
-#: ../src/terminal.c:2611
+#: ../src/terminal.c:2680
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
@@ -2664,56 +2668,56 @@ msgstr[0] "Czy usunąć ten profil?\n"
 msgstr[1] "Czy usunąć te %d profile?\n"
 msgstr[2] "Czy usunąć te %d profili?\n"
 
-#: ../src/terminal.c:2632
+#: ../src/terminal.c:2701
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Czy usunąć profil \"%s\"?"
 
-#: ../src/terminal.c:2654
+#: ../src/terminal.c:2723
 msgid "Delete Profile"
 msgstr "Usunięcie profilu"
 
-#: ../src/terminal.c:2927
+#: ../src/terminal.c:2996
 msgid "Profiles"
 msgstr "Profile"
 
-#: ../src/terminal.c:2968
+#: ../src/terminal.c:3037
 msgid "_Profiles:"
 msgstr "_Profile:"
 
-#: ../src/terminal.c:3000
+#: ../src/terminal.c:3069
 msgid "Click to open new profile dialog"
 msgstr "Kliknij, aby otworzyć okno nowego profilu"
 
-#: ../src/terminal.c:3008
+#: ../src/terminal.c:3077
 msgid "Click to open edit profile dialog"
 msgstr "Kliknij, aby otworzyć okno modyfikacji profilu"
 
-#: ../src/terminal.c:3016
+#: ../src/terminal.c:3085
 msgid "Click to delete selected profile"
 msgstr "Kliknij, aby usunąć wybrany profil"
 
-#: ../src/terminal.c:3021
+#: ../src/terminal.c:3090
 msgid "Profile _used when launching a new terminal:"
 msgstr "P_rofil używany przy uruchamianiu nowego terminala:"
 
-#: ../src/terminal.c:3077
+#: ../src/terminal.c:3146
 msgid "Click button to choose profile"
 msgstr "Kliknij przycisk, aby wybrać profil"
 
-#: ../src/terminal.c:3494
+#: ../src/terminal.c:3563
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Przy wyświetlaniu pomocy wystąpił błąd: %s"
 
-#: ../src/terminal.c:3565
+#: ../src/terminal.c:3634
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "Brakuje pliku \"%s\". Wskazuje to na niepoprawną instalację aplikacji."
 
-#: ../src/terminal.c:3729
+#: ../src/terminal.c:3798
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2721,7 +2725,7 @@ msgstr ""
 "Wygląda na to, że plik gnome-terminal.server nie został poprawnie "
 "zainstalowany. Tryb generatora jest nieaktywny.\n"
 
-#: ../src/terminal.c:3732
+#: ../src/terminal.c:3801
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2729,9 +2733,12 @@ msgstr ""
 "Błąd przy rejestrowaniu terminala z użyciem usługi aktywacji. Tryb "
 "generatora jest nieaktywny.\n"
 
-#: ../src/terminal.c:3768
+#: ../src/terminal.c:3837
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Nie można uzyskać serwera terminala od serwera aktywacji.\n"
+
+#~ msgid "You already have a profile called \"%s\""
+#~ msgstr "Profil o nazwie \"%s\" już istnieje"
 
 #~ msgid "Farsi"
 #~ msgstr "Perski"
