@@ -2332,11 +2332,12 @@ confirm_close_window (TerminalWindow *window)
                                    GTK_MESSAGE_WARNING,
                                    GTK_BUTTONS_NONE,
                                    msg);
+  gtk_window_set_title (GTK_WINDOW(dialog), ""); 
   g_free (msg);
   g_free (msg1);
 
   gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All Tabs"), GTK_RESPONSE_YES);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All _Tabs"), GTK_RESPONSE_YES);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
 
