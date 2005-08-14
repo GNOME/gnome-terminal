@@ -9,14 +9,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-08 22:48+0000\n"
-"PO-Revision-Date: 2005-08-09 10:45+0800\n"
+"POT-Creation-Date: 2005-08-12 22:41+0000\n"
+"PO-Revision-Date: 2005-08-13 09:12+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese/Traditional <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:109
 #: ../src/terminal-accels.c:172 ../src/terminal-profile.c:276
@@ -95,12 +95,12 @@ msgstr "希臘文"
 
 #: ../src/encoding.c:72
 msgid "Hebrew Visual"
-msgstr "希伯來文"
+msgstr "希伯來文（左至右）"
 
 #: ../src/encoding.c:74 ../src/encoding.c:135 ../src/encoding.c:171
 #: ../src/encoding.c:205
 msgid "Hebrew"
-msgstr "希伯來文（左至右）"
+msgstr "希伯來文"
 
 #: ../src/encoding.c:76 ../src/encoding.c:133 ../src/encoding.c:179
 #: ../src/encoding.c:203
@@ -753,33 +753,33 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:23
 msgid "If true, allow applications in the terminal to make text boldface."
-msgstr "如選用本選項，則允許其它程式在終端機中顯示粗體字型"
+msgstr "如設定為‘true’，則允許其它程式在終端機中顯示粗體字型"
 
 #: ../src/gnome-terminal.schemas.in.h:24
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
-msgstr "如選用本選項，當程式產生終端機鈴聲字符時不要發出聲響。"
+msgstr "如設定為‘true’，當程式產生終端機鈴聲字符時不要發出聲響。"
 
 #: ../src/gnome-terminal.schemas.in.h:25
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "如選用本選項，按任何一個鍵都會自動將終端機內容捲動至底部"
+msgstr "如設定為‘true’，按任何一個鍵都會自動將終端機內容捲動至底部"
 
 #: ../src/gnome-terminal.schemas.in.h:26
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
 msgstr ""
-"如選用本選項，捲動文字內容時會令背景圖案同時捲動；否則只會捲動文字，圖案則保"
-"留在固定位置。"
+"如設定為‘true’，捲動文字內容時會令背景圖案同時捲動；否則只會捲動文字，圖案則"
+"保留在固定位置。"
 
 #: ../src/gnome-terminal.schemas.in.h:27
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
 msgstr ""
-"如選用本選項，在終端機中執行指令時會先載入登入所需的設定檔。(即是說 argv[0] "
-"前會加上減號。)"
+"如設定為‘true’，在終端機中執行指令時會先載入登入所需的設定檔。(即是說 argv"
+"[0] 前會加上減號。)"
 
 # FIXME: Almost equivalent in practice, but not 100% identical to original
 # meaning -- Abel
@@ -787,34 +787,35 @@ msgstr ""
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
-msgstr "如選用本選項，當在終端機中的指令執行後會更新 utmp 及 wtmp。"
+msgstr "如設定為‘true’，當在終端機中的指令執行後會更新 utmp 及 wtmp。"
 
 #: ../src/gnome-terminal.schemas.in.h:29
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
 msgstr ""
-"如選用本選項，終端機會採用桌面整體指定的字型 (如果它是固定寬度字型；否則會使"
-"用最接近的字型)。"
+"如設定為‘true’，終端機會採用桌面整體指定的字型 (如果它是固定寬度字型；否則會"
+"使用最接近的字型)。"
 
 #: ../src/gnome-terminal.schemas.in.h:30
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
-msgstr "如選用本選項，終端機會使用佈景主題提供的色彩，而不是使用者自選的色彩。"
+msgstr ""
+"如設定為‘true’，終端機會使用佈景主題提供的色彩，而不是使用者自選的色彩。"
 
 #: ../src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
-"如選用本選項，啟動終端機時會執行 custom_command 設定所指定的指令，而不會執行 "
-"shell。"
+"如設定為‘true’，啟動終端機時會執行 custom_command 設定所指定的指令，而不會執"
+"行 shell。"
 
 #: ../src/gnome-terminal.schemas.in.h:32
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr "如選用本選項，當終端機有任何新的內容輸出時都會將內容捲動至底部。"
+msgstr "如設定為‘true’，當終端機有任何新的內容輸出時都會將內容捲動至底部。"
 
 #: ../src/gnome-terminal.schemas.in.h:33
 msgid ""
@@ -823,9 +824,8 @@ msgid ""
 "you set the option to the special string \"disabled\", then there will be no "
 "keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會顯示產生設定組合的對話方塊。它的字串表示方式和其它 GTK+ 設定檔"
-"所用的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑"
-"鍵。"
+"顯示產生設定組合對話方塊的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:34
 msgid ""
@@ -833,8 +833,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會關閉終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。"
-"如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"關閉終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它"
+"的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
@@ -843,8 +843,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會關閉終端機視窗。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。"
-"如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"關閉終端機視窗的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它"
+"的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid ""
@@ -853,8 +853,8 @@ msgid ""
 "option to the special string \"disabled\", then there will be no keyboard "
 "shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會將選定的文字複製至剪貼簿。它的字串表示方式和其它 GTK+ 設定檔所"
-"用的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"將已選文字複製至剪貼簿的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
@@ -862,8 +862,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會顯示說明文件。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如"
-"果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"顯示說明文件的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它的"
+"設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
@@ -872,8 +872,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會令字型變大。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
-"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"令字型變大的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它的設"
+"定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
@@ -882,8 +882,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會令字型變小。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
-"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"令字型變小的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它的設"
+"定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
@@ -892,8 +892,8 @@ msgid ""
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會令字型大小回復正常。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"令字型大小回復正常的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如"
+"果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
@@ -902,8 +902,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會開啟新的終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"開啟新終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
+"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
@@ -912,8 +912,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會開啟新的終端機視窗。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"開啟新終端機視窗的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
+"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
@@ -922,8 +922,8 @@ msgid ""
 "files. If you set the option to the special string \"disabled\", then there "
 "will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會貼上剪貼簿中的內容。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"貼上剪貼簿中內容的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
+"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
@@ -931,8 +931,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 1 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 1 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
@@ -941,8 +941,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 10 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所"
-"用的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 10 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
@@ -951,8 +951,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 11 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所"
-"用的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 11 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
@@ -961,8 +961,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 12 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所"
-"用的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 12 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
@@ -970,8 +970,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 2 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 2 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
@@ -979,8 +979,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 3 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 3 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
@@ -988,8 +988,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 4 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 4 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
@@ -997,8 +997,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 5 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 5 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
@@ -1006,8 +1006,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 6 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 6 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
@@ -1015,8 +1015,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 7 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 7 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
@@ -1024,8 +1024,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 8 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 8 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
@@ -1033,8 +1033,8 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換至第 9 個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至第 9 個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
@@ -1043,8 +1043,8 @@ msgid ""
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換全螢幕模式。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。"
-"如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換全螢幕模式的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它"
+"的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
@@ -1053,8 +1053,8 @@ msgid ""
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會清除及重設終端機。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"清除及重設終端機的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
+"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
@@ -1063,8 +1063,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會重設終端機。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果"
-"它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"重設終端機的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它的設"
+"定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
@@ -1073,8 +1073,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會指定終端機的標題。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"指定終端機標題的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如果它"
+"的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
@@ -1083,8 +1083,8 @@ msgid ""
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換至下一個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至下一個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
@@ -1093,8 +1093,8 @@ msgid ""
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"按這個捷徑鍵會切換至上一個終端機分頁。它的字串表示方式和其它 GTK+ 設定檔所用"
-"的一樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換至上一個終端機分頁的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一"
+"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
@@ -1103,8 +1103,8 @@ msgid ""
 "option to the special string \"disabled\", then there will be no keyboard "
 "shortcut for this action."
 msgstr ""
-"按這個捷徑鍵會切換是否顯示選單列。它的字串表示方式和其它 GTK+ 設定檔所用的一"
-"樣。如果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
+"切換是否顯示選單列的捷徑鍵。它的字串表示方式和其它 GTK+ 設定檔所用的一樣。如"
+"果它的設定值是特殊字串“disabled”，則表示該操作程序不會有捷徑鍵。"
 
 #: ../src/gnome-terminal.schemas.in.h:63
 msgid "Keyboard shortcut to close a tab"
@@ -1521,7 +1521,7 @@ msgstr "Rxvt"
 
 #: ../src/profile-editor.c:792 ../src/profile-editor.c:822
 msgid "Custom"
-msgstr "自選"
+msgstr "自訂"
 
 #: ../src/profile-editor.c:1180 ../src/profile-editor.c:1213
 msgid "Choose a terminal font"
@@ -2156,10 +2156,11 @@ msgstr "求助(_H)"
 #: ../src/terminal-window.c:2322
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
+msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
-msgstr "這視窗已開啟了一個分頁，關閉視窗會將其關閉。"
-"這視窗已開啟了 %d 個分頁，關閉視窗會將所有分頁關閉。"
+msgstr[0] "本視窗已開啟了一個分頁，關閉視窗會將其關閉。"
+msgstr[1] "本視窗已開啟了 %d 個分頁，關閉視窗會將其關閉。"
 
 #: ../src/terminal-window.c:2327
 msgid "Close all tabs?"
@@ -2509,7 +2510,7 @@ msgstr "嘗試獲取終端機設定組合的清單時出現錯誤。(%s)\n"
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
 "profile with the same name?"
-msgstr "您已經有一個名為“%s”的設定組。您想建立一個相同的名字的設定組合？"
+msgstr "您已經有一個名為“%s”的設定組合。您想建立一個相同的名字的設定組合？"
 
 #: ../src/terminal.c:2349
 msgid ""
@@ -2608,4 +2609,3 @@ msgstr "當向 activation 服務登記終端機時發生錯誤；關閉工廠模
 #: ../src/terminal.c:3837
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "activation 伺服程式無法產生終端機伺服程式\n"
-
