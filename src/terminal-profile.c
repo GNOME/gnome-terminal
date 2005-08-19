@@ -1079,6 +1079,15 @@ terminal_profile_set_is_default (TerminalProfile *profile,
                            CONF_GLOBAL_PREFIX"/default_profile",
                            terminal_profile_get_name (profile),
                            NULL);
+
+  /* Even though the gconf change notification does this, it happens too late.
+   * In some cases, the default profile changes twice in quick succession,
+   * and update_default_profile must be called in sync with those changes.
+   */
+  update_default_profile (terminal_profile_get_name (profile),
+                          !gconf_client_key_is_writable (profile->priv->conf,
+                                                         CONF_GLOBAL_PREFIX"/default_profile",
+                                                         NULL));
 }
 
 void
