@@ -142,6 +142,9 @@ static void new_window_callback           (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void new_tab_callback              (GtkWidget      *menuitem,
                                            TerminalWindow *window);
+static gboolean key_press_callback	  (GtkWidget      *widget,
+					   GdkEventKey    *event,
+					   TerminalWindow *window);
 static void close_window_callback         (GtkWidget      *menuitem,
                                            TerminalWindow *window);
 static void close_tab_callback            (GtkWidget      *menuitem,
@@ -1018,6 +1021,10 @@ terminal_window_init (TerminalWindow *window)
                         G_CALLBACK (next_tab_callback), window);
   window->priv->next_tab_menuitem = mi;
 
+  /* Capture the key presses */
+  g_signal_connect (G_OBJECT(window), "key-press-event",
+		    G_CALLBACK (key_press_callback), window);
+
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
   
@@ -1334,25 +1341,21 @@ update_copy_sensitivity (TerminalWindow *window)
 static void
 update_tab_sensitivity (TerminalWindow *window)
 {
-  int page_num;
   GtkWidget *notebook;
+  int num_pages, page_num;
   gboolean on_last_page;
 
   notebook = window->priv->notebook;
+  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
   
   gtk_widget_set_sensitive (window->priv->previous_tab_menuitem,
                             page_num > 0);
 
-
-  /* FIXME
-   * http://bugzilla.gnome.org/show_bug.cgi?id=73229
-   */
-  on_last_page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
-                                            page_num + 1) == NULL;
+  on_last_page = (page_num >= num_pages - 1);
 
   /* If there's only one tab, Close Tab is insensitive */
-  if (page_num == 0 && on_last_page)
+  if (num_pages == 1)
     gtk_widget_set_sensitive (window->priv->close_tab_menuitem, FALSE);
   else
     gtk_widget_set_sensitive (window->priv->close_tab_menuitem, TRUE);
@@ -2673,6 +2676,61 @@ reset_and_clear_callback (GtkWidget      *menuitem,
 
       terminal_widget_reset (widget, TRUE);
     }
+}
+
+static gboolean
+accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
+{
+  GdkModifierType modifiers;
+
+  /* Compare the keyval */
+  if (event->keyval != key->accel_key)
+    return FALSE;
+
+  /* Compare the modifier keys */
+  modifiers = GDK_MODIFIER_MASK & event->state;
+
+  if (modifiers & GDK_LOCK_MASK)
+    modifiers -= GDK_LOCK_MASK;
+
+  if (modifiers != key->accel_mods)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+key_press_callback (GtkWidget *widget,
+		    GdkEventKey *event,
+		    TerminalWindow *window)
+{
+  GtkAccelKey key;
+
+  /* We just pass the keys when there's no tabs */
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook)) == 1)
+    return FALSE;
+
+  /* On first page? */
+  if (!GTK_WIDGET_IS_SENSITIVE (window->priv->previous_tab_menuitem))
+    {
+      if (gtk_accel_map_lookup_entry (ACCEL_PATH_PREV_TAB, &key))
+        {
+          if (accel_event_key_match (event, &key))
+	    return TRUE;
+	}
+    }
+
+  /* On last page? */
+  if (!GTK_WIDGET_IS_SENSITIVE (window->priv->next_tab_menuitem))
+    {
+      if (gtk_accel_map_lookup_entry (ACCEL_PATH_NEXT_TAB, &key))
+        {
+          if (accel_event_key_match (event, &key))
+	    return TRUE;
+	}
+    }
+
+  return FALSE;
 }
 
 static void
