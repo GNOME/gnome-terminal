@@ -2271,6 +2271,7 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
           }
 
         g_strfreev (uris);
+        g_free (uri_list);
       }
       break;
       
