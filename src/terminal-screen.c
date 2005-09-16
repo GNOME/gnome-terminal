@@ -1996,7 +1996,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
       gtk_rc_parse_string ("widget \"set-title-dialog\" style \"hig-dialog\"\n");
 
       gtk_dialog_set_has_separator (GTK_DIALOG (screen->priv->title_editor), FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (screen->priv->title_editor), 12);
+      gtk_container_set_border_width (GTK_CONTAINER (screen->priv->title_editor), 10);
       gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (screen->priv->title_editor)->vbox), 12);
 
       hbox = gtk_hbox_new (FALSE, 12);

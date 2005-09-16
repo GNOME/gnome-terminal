@@ -883,20 +883,7 @@ terminal_profile_edit (TerminalProfile *profile,
       old_transient_parent = NULL;
       
       editor = glade_xml_get_widget (xml, "profile-editor-dialog");
-
-      
-      /* Begin "we have no Glade 2" workarounds */
-      gtk_dialog_set_has_separator (GTK_DIALOG (editor), FALSE);
-      
-      gtk_dialog_add_buttons (GTK_DIALOG (editor),
-                              GTK_STOCK_HELP, GTK_RESPONSE_HELP,
-                              GTK_STOCK_CLOSE, GTK_RESPONSE_ACCEPT,
-                              NULL);
-      gtk_dialog_set_default_response (GTK_DIALOG (editor), GTK_RESPONSE_ACCEPT);
-      /* End "we have no Glade 2" workarounds */
-
-
-      
+	         
       g_object_set_data (G_OBJECT (profile),
                          "editor-window",
                          editor);      
@@ -1296,9 +1283,16 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   gtk_widget_set_sensitive (w,
                             !((mask->custom_command) ||
                               !terminal_profile_get_use_custom_command (profile))); 
+
+  w = profile_editor_get_widget (editor, "custom-command-entry-label");
+  gtk_widget_set_sensitive (w,
+                            !((mask->custom_command) ||
+                              !terminal_profile_get_use_custom_command (profile))); 
   if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE)
     {
       w = profile_editor_get_widget (editor, "background-image-fileentry");
+      gtk_widget_set_sensitive (w, !(mask->background_image_file));
+      w = profile_editor_get_widget (editor, "background-image-entry-label");
       gtk_widget_set_sensitive (w, !(mask->background_image_file));
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, !(mask->scroll_background));
@@ -1311,6 +1305,8 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       gtk_widget_set_sensitive (w, !(mask->background_darkness));
       w = profile_editor_get_widget (editor, "background-image-fileentry");
       gtk_widget_set_sensitive (w, FALSE);
+      w = profile_editor_get_widget (editor, "background-image-entry-label");
+      gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, FALSE);
       
@@ -1318,6 +1314,8 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   else
     {
       w = profile_editor_get_widget (editor, "background-image-fileentry");
+      gtk_widget_set_sensitive (w, FALSE);
+      w = profile_editor_get_widget (editor, "background-image-entry-label");
       gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, FALSE);
@@ -1342,20 +1340,34 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   if (terminal_profile_get_use_theme_colors (profile))
     {
       set_insensitive (editor, "foreground-colorpicker", TRUE);
+      set_insensitive (editor, "foreground-colorpicker-label", TRUE);
       set_insensitive (editor, "background-colorpicker", TRUE);
+      set_insensitive (editor, "background-colorpicker-label", TRUE);
       set_insensitive (editor, "color-scheme-optionmenu", TRUE);
+      set_insensitive (editor, "color-scheme-optionmenu-label", TRUE);
     }
   else
     {      
       set_insensitive (editor, "foreground-colorpicker",
                        mask->foreground_color);
       
+      set_insensitive (editor, "foreground-colorpicker-label",
+                       mask->foreground_color);
+		             
       set_insensitive (editor, "background-colorpicker",
                        mask->background_color);
       
+      set_insensitive (editor, "background-colorpicker-label",
+                       mask->background_color);      
+
       set_insensitive (editor, "color-scheme-optionmenu",
                        (mask->background_color) ||
                        (mask->foreground_color));
+
+      set_insensitive (editor, "color-scheme-optionmenu-label",
+                       (mask->background_color) ||
+                       (mask->foreground_color));		       
+		       
     }
   
 #if 0 /* uncomment once we've tested the sensitivity code */

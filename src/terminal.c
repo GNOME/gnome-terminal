@@ -3019,7 +3019,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       gtk_rc_parse_string ("widget \"profile-manager-dialog\" style \"hig-dialog\"\n");
 
       gtk_dialog_set_has_separator (GTK_DIALOG (app->manage_profiles_dialog), FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (app->manage_profiles_dialog), 12);
+      gtk_container_set_border_width (GTK_CONTAINER (app->manage_profiles_dialog), 10);
       gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (app->manage_profiles_dialog)->vbox), 12);
 
       main_vbox = gtk_vbox_new (FALSE, 12);
