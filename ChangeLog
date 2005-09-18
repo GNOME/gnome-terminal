@@ -1,5 +1,37 @@
 2005-09-18  Kjartan Maraas  <kmaraas@gnome.org>
 
+	* configure.in: Don't pass include flags to the link stage.
+	Patch from <dmacks@netspace.org>. Closes bug #313927.
+
+2005-09-18  Dennis Cranston  <dennis_cranston@yahoo.com>
+
+	* src/gnome-terminal.glade2:  Replace the deprecated 
+	GtkOptionMenu widgets with GtkComboBox widgets.  Replace the
+	deprecated GnomeFileEntry widget with a 
+	GtkFileChooserButton widget.
+	
+	* src/profile-editor.c: (color_scheme_changed),
+	(title_mode_changed), (scrollbar_position_changed),
+	(exit_action_changed), (palette_scheme_changed),
+	(background_image_changed), (backspace_binding_changed),
+	(delete_binding_changed), (init_color_scheme_menu),
+	(init_palette_scheme_menu), (create_preview_pixbuf),
+	(update_image_preview), (setup_background_filechooser),
+	(terminal_profile_edit), (profile_editor_update_sensitivity),
+	(profile_editor_update_color_scheme_menu),
+	(profile_editor_update_title_mode),
+	(profile_editor_update_scrollbar_position),
+	(profile_editor_update_exit_action),
+	(profile_editor_update_palette),
+	(profile_editor_update_background_image),
+	(profile_editor_update_backspace_binding),
+	(profile_editor_update_delete_binding):  Convert the GtkOptionMenu 
+	code to use a GtkComboBox.  Convert the GnomeFileEntry code to 
+	use a GtkFileChooserButton, and add a preview widget to the 
+	GtkFileChooser.
+
+2005-09-18  Kjartan Maraas  <kmaraas@gnome.org>
+
 	* src/terminal.c: (new_profile_response_callback): Don't
 	change profiles in all other windows when creating a new
 	profile. Closes bug #125660 and bug #164378. Patch from

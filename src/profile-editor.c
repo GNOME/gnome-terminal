@@ -26,6 +26,8 @@
 #include <glade/glade.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
+#include <libgnomeui/gnome-thumbnail.h>
+#include <libgnomevfs/gnome-vfs-mime-utils.h>
 #include <string.h>
 #include <math.h>
 #include "simple-x-font-selector.h"
@@ -419,12 +421,12 @@ background_color_set (GtkWidget       *colorpicker,
 }
 
 static void
-color_scheme_changed (GtkWidget       *option_menu,
+color_scheme_changed (GtkWidget       *combo_box,
                       TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
   
   if (i < G_N_ELEMENTS (color_schemes))
     terminal_profile_set_color_scheme (profile,
@@ -448,12 +450,12 @@ title_changed (GtkWidget       *entry,
 }
 
 static void
-title_mode_changed (GtkWidget       *option_menu,
+title_mode_changed (GtkWidget       *combo_box,
                     TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));  
 
   terminal_profile_set_title_mode (profile, i);
 }
@@ -497,12 +499,12 @@ font_changed (EggXFontSelector *selector, TerminalProfile *profile)
 }
 
 static void
-scrollbar_position_changed (GtkWidget       *option_menu,
+scrollbar_position_changed (GtkWidget       *combo_box,
                             TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
 
   terminal_profile_set_scrollbar_position (profile, i);
 }
@@ -547,12 +549,12 @@ scroll_on_output_toggled (GtkWidget       *checkbutton,
 }
 
 static void
-exit_action_changed (GtkWidget       *option_menu,
+exit_action_changed (GtkWidget       *combo_box,
                      TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
 
   terminal_profile_set_exit_action (profile, i);
 }
@@ -595,12 +597,12 @@ custom_command_changed (GtkWidget       *entry,
 }
 
 static void
-palette_scheme_changed (GtkWidget       *option_menu,
+palette_scheme_changed (GtkWidget       *combo_box,
                       TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
   
   if (i < G_N_ELEMENTS (palette_schemes))
     terminal_profile_set_palette (profile,
@@ -655,14 +657,8 @@ background_image_changed (GtkWidget       *entry,
                           TerminalProfile *profile)
 {
   char *text;
-
-  /* We don't use gnome_file_entry_get_full_path() since that would weirdly
-   * insert a directory in front of what the user was typing once the
-   * notify came back from gconf.
-   */
   
-  text = gtk_editable_get_chars (GTK_EDITABLE (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (entry))),
-                                 0, -1);
+  text = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (entry));
   
   terminal_profile_set_background_image_file (profile, text);
 
@@ -693,23 +689,23 @@ darken_background_value_changed (GtkWidget       *scale,
 }
 
 static void
-backspace_binding_changed (GtkWidget       *option_menu,
+backspace_binding_changed (GtkWidget       *combo_box,
                            TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
 
   terminal_profile_set_backspace_binding (profile, i);
 }
 
 static void
-delete_binding_changed (GtkWidget       *option_menu,
+delete_binding_changed (GtkWidget       *combo_box,
                         TerminalProfile *profile)
 {
   int i;
   
-  i = gtk_option_menu_get_history (GTK_OPTION_MENU (option_menu));
+  i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
 
   terminal_profile_set_delete_binding (profile, i);
 }
@@ -769,63 +765,29 @@ font_set (GtkWidget       *fontpicker,
  */
 
 static void
-init_color_scheme_menu (GtkWidget *option_menu)
+init_color_scheme_menu (GtkWidget *combo_box)
 {
-  GtkWidget *menu;
-  GtkWidget *menu_item;
   int i;
-  
-  menu = gtk_menu_new ();
 
-  i = 0;
-  while (i < G_N_ELEMENTS (color_schemes))
+  i = G_N_ELEMENTS (color_schemes);
+  while (i > 0)
     {
-      menu_item = gtk_menu_item_new_with_label (_(color_schemes[i].name));
-      gtk_widget_show (menu_item);
-      
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                             menu_item);
-      
-      ++i;
+      gtk_combo_box_prepend_text (GTK_COMBO_BOX (combo_box), 
+                                  _(color_schemes[--i].name));
     }
-
-  menu_item = gtk_menu_item_new_with_label (_("Custom"));
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
-                            menu);
 }
 
 static void
-init_palette_scheme_menu (GtkWidget *option_menu)
+init_palette_scheme_menu (GtkWidget *combo_box)
 {
-  GtkWidget *menu;
-  GtkWidget *menu_item;
   int i;
-  
-  menu = gtk_menu_new ();
 
-  i = 0;
-  while (i < G_N_ELEMENTS (palette_schemes))
+  i = G_N_ELEMENTS (palette_schemes);
+  while (i > 0)
     {
-      menu_item = gtk_menu_item_new_with_label (_(palette_schemes[i].name));
-      gtk_widget_show (menu_item);
-      
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                             menu_item);
-      
-      ++i;
+      gtk_combo_box_prepend_text (GTK_COMBO_BOX (combo_box), 
+                                  _(palette_schemes[--i].name));
     }
-
-  menu_item = gtk_menu_item_new_with_label (_("Custom"));
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu),
-                            menu);
 }
 
 static char*
@@ -854,6 +816,98 @@ editor_response_cb (GtkDialog *editor,
     terminal_util_show_help ("gnome-terminal-prefs", GTK_WINDOW (editor));
   else
     gtk_widget_destroy (GTK_WIDGET (editor));
+}
+
+static GdkPixbuf *
+create_preview_pixbuf (const gchar *file) 
+{
+  GdkPixbuf *pixbuf = NULL;
+
+  if (file != NULL) {
+
+    if (g_file_test (file, G_FILE_TEST_EXISTS) == TRUE) {
+
+      GnomeThumbnailFactory *thumbs;
+      gchar *mime_type;
+
+      mime_type = (gchar *)gnome_vfs_get_mime_type (file);
+      thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
+
+      pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
+                                                           file,
+                                                           mime_type);
+      g_free (mime_type);
+    }
+  }				
+  return pixbuf;
+}
+
+static void 
+update_image_preview (GtkFileChooser *chooser) 
+{
+  GtkWidget *image;
+  gchar *file;
+
+  image = gtk_file_chooser_get_preview_widget (GTK_FILE_CHOOSER (chooser));
+  file = gtk_file_chooser_get_preview_filename (chooser);
+  
+  if (file != NULL) {
+
+    GdkPixbuf *pixbuf = NULL;
+    
+    pixbuf = create_preview_pixbuf (file);
+
+    if (pixbuf != NULL) {
+      gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
+      g_object_unref (pixbuf);
+    }
+    else {
+      gtk_image_set_from_stock (GTK_IMAGE (image),
+                                "gtk-dialog-question",
+      	                        GTK_ICON_SIZE_DIALOG);
+    }
+  }				
+  gtk_file_chooser_set_preview_widget_active (chooser, TRUE);
+}
+
+static void
+setup_background_filechooser (GtkWidget *filechooser, 
+                              TerminalProfile *profile)
+{
+  GtkFileFilter *filter;
+  GtkWidget *image_preview;
+  GdkPixbuf *pixbuf = NULL;
+  
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_filter_set_name (filter, _("Images"));
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (filechooser), filter);
+
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("All Files"));
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (filechooser), filter);
+
+  image_preview = gtk_image_new ();
+  pixbuf = create_preview_pixbuf (terminal_profile_get_background_image_file (profile));
+  if (pixbuf != NULL) {
+    gtk_image_set_from_pixbuf (GTK_IMAGE (image_preview), pixbuf);
+  }
+  else {
+    gtk_image_set_from_stock (GTK_IMAGE (image_preview),
+                              "gtk-dialog-question",
+                              GTK_ICON_SIZE_DIALOG);
+  }
+  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (filechooser),
+                                       image_preview);
+  gtk_file_chooser_set_use_preview_label (GTK_FILE_CHOOSER (filechooser),
+                                          FALSE);
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (filechooser), TRUE);
+  gtk_widget_set_size_request (image_preview, 128, -1);  
+  gtk_widget_show (image_preview); 
+
+  g_signal_connect (filechooser, "update-preview",
+                    G_CALLBACK (update_image_preview), NULL);
 }
 
 void
@@ -954,7 +1008,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (background_color_set),
                         profile);
 
-      w = glade_xml_get_widget (xml, "color-scheme-optionmenu");
+      w = glade_xml_get_widget (xml, "color-scheme-combobox");
       init_color_scheme_menu (w);
       profile_editor_update_color_scheme_menu (editor, profile);
       profile_editor_update_palette (editor, profile);
@@ -968,7 +1022,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (title_changed),
                         profile);
 
-      w = glade_xml_get_widget (xml, "title-mode-optionmenu");
+      w = glade_xml_get_widget (xml, "title-mode-combobox");
       profile_editor_update_title_mode (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (title_mode_changed),
@@ -992,7 +1046,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (word_chars_changed),
                         profile);
       
-      w = glade_xml_get_widget (xml, "scrollbar-position-optionmenu");
+      w = glade_xml_get_widget (xml, "scrollbar-position-combobox");
       profile_editor_update_scrollbar_position (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (scrollbar_position_changed),
@@ -1036,7 +1090,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (scroll_on_output_toggled),
                         profile);
 
-      w = glade_xml_get_widget (xml, "exit-action-optionmenu");
+      w = glade_xml_get_widget (xml, "exit-action-combobox");
       profile_editor_update_exit_action (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (exit_action_changed),
@@ -1066,7 +1120,7 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (custom_command_changed),
                         profile);
 
-      w = glade_xml_get_widget (xml, "palette-optionmenu");
+      w = glade_xml_get_widget (xml, "palette-combobox");
       g_assert (w);
       init_palette_scheme_menu (w);
       g_signal_connect (G_OBJECT (w), "changed",
@@ -1087,12 +1141,12 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (transparent_radio_toggled),
                         profile);
 
-      w = glade_xml_get_widget (xml, "background-image-fileentry");
-      g_object_set (G_OBJECT (w), "use-filechooser", TRUE, NULL);
+      w = glade_xml_get_widget (xml, "background-image-filechooser");
       profile_editor_update_background_image (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
+      g_signal_connect (G_OBJECT (w), "selection-changed",
                         G_CALLBACK (background_image_changed),
                         profile);
+      setup_background_filechooser (w, profile);
 
       w = glade_xml_get_widget (xml, "scroll-background-checkbutton");
       profile_editor_update_scroll_background (editor, profile);
@@ -1107,13 +1161,13 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (darken_background_value_changed),
                         profile);
 
-      w = glade_xml_get_widget (xml, "backspace-binding-optionmenu");
+      w = glade_xml_get_widget (xml, "backspace-binding-combobox");
       profile_editor_update_backspace_binding (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (backspace_binding_changed),
                         profile);
 
-      w = glade_xml_get_widget (xml, "delete-binding-optionmenu");
+      w = glade_xml_get_widget (xml, "delete-binding-combobox");
       profile_editor_update_delete_binding (editor, profile);
       g_signal_connect (G_OBJECT (w), "changed",
                         G_CALLBACK (delete_binding_changed),
@@ -1290,9 +1344,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
                               !terminal_profile_get_use_custom_command (profile))); 
   if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE)
     {
-      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      w = profile_editor_get_widget (editor, "background-image-filechooser");
       gtk_widget_set_sensitive (w, !(mask->background_image_file));
-      w = profile_editor_get_widget (editor, "background-image-entry-label");
+      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
       gtk_widget_set_sensitive (w, !(mask->background_image_file));
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, !(mask->scroll_background));
@@ -1303,9 +1357,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   {
       w = profile_editor_get_widget (editor, "darken-background-vbox");
       gtk_widget_set_sensitive (w, !(mask->background_darkness));
-      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      w = profile_editor_get_widget (editor, "background-image-filechooser");
       gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "background-image-entry-label");
+      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
       gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, FALSE);
@@ -1313,9 +1367,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
     }
   else
     {
-      w = profile_editor_get_widget (editor, "background-image-fileentry");
+      w = profile_editor_get_widget (editor, "background-image-filechooser");
       gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "background-image-entry-label");
+      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
       gtk_widget_set_sensitive (w, FALSE);
       w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
       gtk_widget_set_sensitive (w, FALSE);
@@ -1343,8 +1397,8 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       set_insensitive (editor, "foreground-colorpicker-label", TRUE);
       set_insensitive (editor, "background-colorpicker", TRUE);
       set_insensitive (editor, "background-colorpicker-label", TRUE);
-      set_insensitive (editor, "color-scheme-optionmenu", TRUE);
-      set_insensitive (editor, "color-scheme-optionmenu-label", TRUE);
+      set_insensitive (editor, "color-scheme-combobox", TRUE);
+      set_insensitive (editor, "color-scheme-combobox-label", TRUE);
     }
   else
     {      
@@ -1360,11 +1414,11 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
       set_insensitive (editor, "background-colorpicker-label",
                        mask->background_color);      
 
-      set_insensitive (editor, "color-scheme-optionmenu",
+      set_insensitive (editor, "color-scheme-combobox",
                        (mask->background_color) ||
                        (mask->foreground_color));
 
-      set_insensitive (editor, "color-scheme-optionmenu-label",
+      set_insensitive (editor, "color-scheme-combobox-label",
                        (mask->background_color) ||
                        (mask->foreground_color));		       
 		       
@@ -1392,7 +1446,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "title-entry",
                    mask->title);
   
-  set_insensitive (editor, "title-mode-optionmenu",
+  set_insensitive (editor, "title-mode-combobox",
                    mask->title_mode);
 
   set_insensitive (editor, "allow-bold-checkbutton",
@@ -1404,7 +1458,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "word-chars-entry",
                    mask->word_chars);
 
-  set_insensitive (editor, "scrollbar-position-optionmenu",
+  set_insensitive (editor, "scrollbar-position-combobox",
                    mask->scrollbar_position);
 
   set_insensitive (editor, "scrollback-lines-spinbutton",
@@ -1419,7 +1473,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "scroll-on-output-checkbutton",
                    mask->scroll_on_output);
 
-  set_insensitive (editor, "exit-action-optionmenu",
+  set_insensitive (editor, "exit-action-combobox",
                    mask->exit_action);
 
   set_insensitive (editor, "login-shell-checkbutton",
@@ -1431,7 +1485,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "use-custom-command-checkbutton",
                    mask->use_custom_command);
 
-  set_insensitive (editor, "palette-optionmenu",
+  set_insensitive (editor, "palette-combobox",
                    mask->palette);
 
   set_insensitive (editor, "solid-radiobutton",
@@ -1441,9 +1495,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "transparent-radiobutton",
                    mask->background_type);
 
-  set_insensitive (editor, "backspace-binding-optionmenu",
+  set_insensitive (editor, "backspace-binding-combobox",
                    mask->backspace_binding);
-  set_insensitive (editor, "delete-binding-optionmenu",
+  set_insensitive (editor, "delete-binding-combobox",
                    mask->delete_binding);
 
   set_insensitive (editor, "use-theme-colors-checkbutton",
@@ -1561,7 +1615,7 @@ profile_editor_update_color_scheme_menu (GtkWidget       *editor,
   int i;
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "color-scheme-optionmenu");
+  w = profile_editor_get_widget (editor, "color-scheme-combobox");
   
   terminal_profile_get_color_scheme (profile, &fg, &bg);
 
@@ -1576,10 +1630,10 @@ profile_editor_update_color_scheme_menu (GtkWidget       *editor,
       ++i;
     }
 
-  /* If we didn't find a match, then we want the last option
-   * menu item which is "custom"
+  /* If we didn't find a match, then we want the last combo
+   * box item which is "custom"
    */
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w), i);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w), i);
 }
 
 static void
@@ -1600,10 +1654,10 @@ profile_editor_update_title_mode (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "title-mode-optionmenu");
+  w = profile_editor_get_widget (editor, "title-mode-combobox");
   
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
-                               terminal_profile_get_title_mode (profile));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w),
+                            terminal_profile_get_title_mode (profile));
 }
 
 static void
@@ -1648,10 +1702,10 @@ profile_editor_update_scrollbar_position   (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "scrollbar-position-optionmenu");
+  w = profile_editor_get_widget (editor, "scrollbar-position-combobox");
   
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
-                               terminal_profile_get_scrollbar_position (profile));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w),
+                            terminal_profile_get_scrollbar_position (profile));
 }
 
 static void
@@ -1702,10 +1756,10 @@ profile_editor_update_exit_action (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "exit-action-optionmenu");
+  w = profile_editor_get_widget (editor, "exit-action-combobox");
   
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
-                               terminal_profile_get_exit_action (profile));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w),
+                            terminal_profile_get_exit_action (profile));
 }
 
 static void
@@ -1803,7 +1857,7 @@ profile_editor_update_palette (GtkWidget       *editor,
       ++i;
     }
 
-  w = profile_editor_get_widget (editor, "palette-optionmenu");
+  w = profile_editor_get_widget (editor, "palette-combobox");
 
   i = 0;
   while (i < G_N_ELEMENTS (palette_schemes))
@@ -1831,10 +1885,10 @@ profile_editor_update_palette (GtkWidget       *editor,
       ++i;
     }
 
-  /* If we didn't find a match, then we want the last option
-   * menu item which is "custom"
+  /* If we didn't find a match, then we want the last combo
+   * box item which is "custom"
    */
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w), i);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w), i);
 }
 
 static void
@@ -1911,10 +1965,10 @@ profile_editor_update_background_image (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "background-image-fileentry");
+  w = profile_editor_get_widget (editor, "background-image-filechooser");
 
-  entry_set_text_if_changed (GTK_ENTRY (gnome_file_entry_gtk_entry (GNOME_FILE_ENTRY (w))),
-                             terminal_profile_get_background_image_file (profile));
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (w),
+                                 terminal_profile_get_background_image_file (profile));
 }
 
 static void
@@ -1949,10 +2003,10 @@ profile_editor_update_backspace_binding (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "backspace-binding-optionmenu");
+  w = profile_editor_get_widget (editor, "backspace-binding-combobox");
   
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
-                               terminal_profile_get_backspace_binding (profile));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w),
+                            terminal_profile_get_backspace_binding (profile));
 }
 
 static void
@@ -1961,10 +2015,10 @@ profile_editor_update_delete_binding (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = profile_editor_get_widget (editor, "delete-binding-optionmenu");
+  w = profile_editor_get_widget (editor, "delete-binding-combobox");
   
-  gtk_option_menu_set_history (GTK_OPTION_MENU (w),
-                               terminal_profile_get_delete_binding (profile));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (w),
+                            terminal_profile_get_delete_binding (profile));
 }
 
 static void
