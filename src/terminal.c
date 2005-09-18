@@ -2304,12 +2304,12 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
     {
       GtkWidget *name_entry;
       char *name;
+      char *escaped_name;
       GtkWidget *base_option_menu;
       TerminalProfile *base_profile = NULL;
       TerminalProfile *new_profile;
       GList *profiles;
       GList *tmp;
-      GSList n;
       GtkWindow *transient_parent;
       GtkWidget *confirm_dialog;
       gint retval;
@@ -2356,10 +2356,11 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       
       terminal_profile_create (base_profile, name, transient_parent);
 
-      n.next = NULL;
-      n.data = gconf_escape_key (name, -1);
-      sync_profile_list (TRUE, &n);
-      g_free (n.data);
+      escaped_name = gconf_escape_key (name, -1);
+      new_profile = terminal_profile_new (escaped_name, conf);
+      terminal_profile_update (new_profile);
+      sync_profile_list (FALSE, NULL);
+      g_free (escaped_name);
       
       new_profile = terminal_profile_lookup_by_visible_name (name);
 
