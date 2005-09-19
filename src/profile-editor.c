@@ -1219,7 +1219,7 @@ terminal_profile_edit (TerminalProfile *profile,
           fontsel = gtk_font_button_new ();
           g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
 
-          gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose a terminal font"));
+          gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose A Terminal Font"));
           gtk_font_button_set_show_size (GTK_FONT_BUTTON (fontsel), TRUE);
           gtk_font_button_set_show_style (GTK_FONT_BUTTON (fontsel), FALSE);
           gtk_font_button_set_use_font (GTK_FONT_BUTTON (fontsel), TRUE);
@@ -1252,7 +1252,7 @@ terminal_profile_edit (TerminalProfile *profile,
         }
       else
         {
-          fontsel = egg_xfont_selector_new (_("Choose a terminal font"));
+          fontsel = egg_xfont_selector_new (_("Choose A Terminal Font"));
           g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
  
           profile_editor_update_x_font (editor, profile);
