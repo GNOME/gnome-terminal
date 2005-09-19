@@ -856,6 +856,7 @@ update_image_preview (GtkFileChooser *chooser)
     GdkPixbuf *pixbuf = NULL;
     
     pixbuf = create_preview_pixbuf (file);
+    g_free (file);
 
     if (pixbuf != NULL) {
       gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
