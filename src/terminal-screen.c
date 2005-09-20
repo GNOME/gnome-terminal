@@ -2018,6 +2018,8 @@ terminal_screen_edit_title (TerminalScreen *screen,
       if (screen->priv->raw_title)
         gtk_entry_set_text (GTK_ENTRY (entry), screen->priv->raw_title);
       
+      gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+
       g_signal_connect (G_OBJECT (entry), "changed",
                         G_CALLBACK (title_entry_changed),
                         screen);
