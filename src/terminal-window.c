@@ -55,7 +55,6 @@ struct _TerminalWindowPrivate
   GtkWidget *zoom_out_menuitem;
   GtkWidget *zoom_normal_menuitem;
   GtkWidget *edit_config_menuitem;
-  GtkWidget *delete_config_menuitem;
   GtkWidget *choose_config_menuitem;
   GtkWidget *next_tab_menuitem;
   GtkWidget *previous_tab_menuitem;
@@ -393,7 +392,9 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   GSList *group;
   GtkAccelGroup *accel_group;
 
-  if (window->priv->active_term == NULL)
+  profiles = terminal_profile_get_list ();
+
+  if (window->priv->active_term == NULL || g_list_length (profiles) < 2)
     {
       gtk_widget_set_sensitive (window->priv->choose_config_menuitem, FALSE);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->choose_config_menuitem),
@@ -411,7 +412,6 @@ fill_in_config_picker_submenu (TerminalWindow *window)
                              menu);
   
   group = NULL;
-  profiles = terminal_profile_get_list ();
   tmp = profiles;
   while (tmp != NULL)
     {
@@ -472,170 +472,126 @@ escape_underscores (const char *name)
 }
 
 static void
-fill_in_new_term_submenus (TerminalWindow *window)
+fill_in_new_term_submenu_real(GtkWidget *menuitem, 
+                              TerminalWindow *window,
+                              const char *accel, 
+                              TerminalProfile *current_profile, 
+                              GCallback callback) 
 {
-  GtkWidget *new_window_menu;
-  GtkWidget *new_tab_menu;
-  GtkWidget *menu_item;
   GList *profiles;
-  GList *tmp;
-  GSList *group;
-  GtkAccelGroup *accel_group;
-  char *str;
-  TerminalProfile *current_profile;
-  int i;
 
-  current_profile = NULL;
-  if (window->priv->active_term != NULL)
-    current_profile = terminal_screen_get_profile (window->priv->active_term);
-
-  /* if current_profile is null, this will change it to a default,
-   * otherwise do nothing
-   */
-  current_profile = terminal_profile_get_for_new_term (current_profile);
+  gtk_widget_set_sensitive (menuitem, TRUE);
   
+  /* remove older signal handler and accelerator */
+  g_signal_handlers_disconnect_by_func (G_OBJECT (menuitem), G_CALLBACK (callback), window);
+  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menuitem), NULL);
+
+  profiles = terminal_profile_get_list ();
+
   if (current_profile == NULL)
     {
-      /* Well, this shouldn't happen */
-      
+      /* Well, this shouldn't happen: it'd mean there is no default profile */
       gtk_widget_set_sensitive (window->priv->new_window_menuitem, FALSE);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_window_menuitem),
                                  NULL);
-      gtk_widget_set_sensitive (window->priv->new_tab_menuitem, FALSE);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_tab_menuitem),
-                                 NULL);
-
-      return;      
     }
-
-  str = g_strdup (terminal_profile_get_visible_name (current_profile));
-  
-  gtk_widget_set_sensitive (window->priv->new_window_menuitem, TRUE);
-  gtk_widget_set_sensitive (window->priv->new_tab_menuitem, TRUE);
-  
-  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));  
-
-  /* New window submenu */
-  new_window_menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (new_window_menu), accel_group);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_window_menuitem),
-                             new_window_menu);
-
-  /* Add default menu item */
-  menu_item = gtk_menu_item_new_with_label (str);
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (new_window_menu),
-                         menu_item);
-  g_signal_connect (G_OBJECT (menu_item),
-                    "activate",
-                    G_CALLBACK (new_window_callback), window);
-  g_object_ref (G_OBJECT (current_profile));
-  g_object_set_data_full (G_OBJECT (menu_item),
-                          "profile",
-                          current_profile,
-                          (GDestroyNotify) g_object_unref);  
-
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_NEW_WINDOW);
-  
-  /* separator */
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (new_window_menu),
-                         menu_item);
-  
-  /* New tab submenu */
-  new_tab_menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (new_tab_menu), accel_group);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_tab_menuitem),
-                             new_tab_menu);
-
-  /* Add default menu item */
-  menu_item = gtk_menu_item_new_with_label (str);
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (new_tab_menu),
-                         menu_item);
-  g_signal_connect (G_OBJECT (menu_item),
-                    "activate",
-                    G_CALLBACK (new_tab_callback), window);
-  g_object_ref (G_OBJECT (current_profile));
-  g_object_set_data_full (G_OBJECT (menu_item),
-                          "profile",
-                          current_profile,
-                          (GDestroyNotify) g_object_unref);
-
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                ACCEL_PATH_NEW_TAB);
-  
-  /* separator */
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (new_tab_menu),
-                         menu_item);
-  
-  g_free (str);
-
-  i = 1;
-  group = NULL;
-  profiles = terminal_profile_get_list ();
-  tmp = profiles;
-  while (tmp != NULL)
+  else if (g_list_length (profiles) < 2)
     {
-      TerminalProfile *profile;
-      char *escaped_name;
-      
-      profile = tmp->data;
-      
-      /* Profiles can go away while the menu is up. */
-      g_object_ref (G_OBJECT (profile));
-      g_object_ref (G_OBJECT (profile));
+      if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (menuitem)))
+        gtk_menu_item_remove_submenu (GTK_MENU_ITEM (menuitem));
 
-      escaped_name = escape_underscores (terminal_profile_get_visible_name (profile));
-
-      if (i < 10)
-        str = g_strdup_printf (_("_%d. %s"), i, escaped_name);
-      else if (i < 36)
-        str = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), escaped_name);
-      else
-        str = g_strdup (escaped_name);
-
-      g_free (escaped_name);
-      
-      /* item for new window */
-      menu_item = gtk_menu_item_new_with_mnemonic (str);
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (new_window_menu),
-                             menu_item);      
-      g_signal_connect (G_OBJECT (menu_item),
-                        "activate",
-                        G_CALLBACK (new_window_callback),
-                        window);      
-      g_object_set_data_full (G_OBJECT (menu_item),
-                              "profile",
-                              profile,
-                              (GDestroyNotify) g_object_unref);
-
-      /* item for new tab */
-      menu_item = gtk_menu_item_new_with_mnemonic (str);
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (new_tab_menu),
-                             menu_item);      
-      g_signal_connect (G_OBJECT (menu_item),
-                        "activate",
-                        G_CALLBACK (new_tab_callback),
-                        window);      
-      g_object_set_data_full (G_OBJECT (menu_item),
-                              "profile",
-                              profile,
-                              (GDestroyNotify) g_object_unref);
-
-      g_free (str);
-
-      ++i;
-      tmp = tmp->next;
+      g_signal_connect (G_OBJECT (menuitem), "activate", G_CALLBACK (callback), window);
+      g_object_ref (G_OBJECT (current_profile));
+      g_object_set_data_full (G_OBJECT (menuitem), "profile", current_profile, (GDestroyNotify) g_object_unref);  
+      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menuitem), accel);
     }
+  else
+    {
+      GtkWidget *new_sub_menu;
+      GtkWidget *menu_item;
+      GtkAccelGroup *accel_group;
+      GList *tmp;
+      int i;
 
-  g_list_free (profiles);
+      accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));  
+
+      /* New submenu */
+      new_sub_menu = gtk_menu_new ();
+      gtk_menu_set_accel_group (GTK_MENU (new_sub_menu), accel_group);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), new_sub_menu);
+
+      /* Add default menu item */
+      menu_item = gtk_menu_item_new_with_label (terminal_profile_get_visible_name (current_profile));
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);
+      g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (callback), window);
+      g_object_ref (G_OBJECT (current_profile));
+      g_object_set_data_full (G_OBJECT (menu_item), "profile", current_profile, (GDestroyNotify) g_object_unref);  
+      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item), ACCEL_PATH_NEW_WINDOW);
+      
+      /* separator */
+      menu_item = gtk_separator_menu_item_new ();
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);
+
+      for (i = 1, tmp = profiles; tmp != NULL; i++, tmp = tmp->next)
+        {
+          TerminalProfile *profile;
+          char *escaped_name, *str;
+          
+          profile = tmp->data;
+          
+          /* Profiles can go away while the menu is up. */
+          g_object_ref (G_OBJECT (profile));
+
+          escaped_name = escape_underscores (terminal_profile_get_visible_name (profile));
+
+          if (i < 10)
+            str = g_strdup_printf (_("_%d. %s"), i, escaped_name);
+          else if (i < 36)
+            str = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), escaped_name);
+          else
+            str = g_strdup (escaped_name);
+
+          /* item for new window */
+          menu_item = gtk_menu_item_new_with_mnemonic (str);
+          gtk_widget_show (menu_item);
+          gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);      
+          g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (callback), window);      
+          g_object_set_data_full (G_OBJECT (menu_item), "profile", profile, (GDestroyNotify) g_object_unref);
+
+          g_free (str);
+          g_free (escaped_name);
+          
+        }
+
+      g_list_free (profiles);
+    }
+}
+
+static void
+fill_in_new_term_submenus (TerminalWindow *window)
+{
+  TerminalProfile *current_profile;
+
+  current_profile = NULL;
+
+  if (window->priv->active_term != NULL)
+    current_profile = terminal_screen_get_profile (window->priv->active_term);
+
+  /* if current_profile is still NULL, this will change it to a default */
+  current_profile = terminal_profile_get_for_new_term (current_profile);
+  
+  fill_in_new_term_submenu_real (window->priv->new_window_menuitem, 
+                                 window,
+                                 ACCEL_PATH_NEW_WINDOW,
+                                 current_profile,
+                                 G_CALLBACK (new_window_callback));
+  fill_in_new_term_submenu_real (window->priv->new_tab_menuitem, 
+                                 window,
+                                 ACCEL_PATH_NEW_TAB,
+                                 current_profile,
+                                 G_CALLBACK (new_tab_callback));
 }
 
 static void
