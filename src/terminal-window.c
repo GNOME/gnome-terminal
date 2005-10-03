@@ -527,7 +527,7 @@ fill_in_new_term_submenu_real(GtkWidget *menuitem,
       g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (callback), window);
       g_object_ref (G_OBJECT (current_profile));
       g_object_set_data_full (G_OBJECT (menu_item), "profile", current_profile, (GDestroyNotify) g_object_unref);  
-      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item), ACCEL_PATH_NEW_WINDOW);
+      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item), accel);
       
       /* separator */
       menu_item = gtk_separator_menu_item_new ();
