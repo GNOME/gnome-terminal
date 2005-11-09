@@ -14,7 +14,7 @@
 static guint32 extract (char *s, int start, int length);
 
 /* Dictionary for integer-word translations */
-char Wp[2048][4] = { "A", "ABE", "ACE", "ACT", "AD", "ADA", "ADD",
+static const char Wp[2048][4] = { "A", "ABE", "ACE", "ACT", "AD", "ADA", "ADD",
 "AGO", "AID", "AIM", "AIR", "ALL", "ALP", "AM", "AMY", "AN", "ANA",
 "AND", "ANN", "ANT", "ANY", "APE", "APS", "APT", "ARC", "ARE", "ARK",
 "ARM", "ART", "AS", "ASH", "ASK", "AT", "ATE", "AUG", "AUK", "AVE",
