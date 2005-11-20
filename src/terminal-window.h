@@ -76,8 +76,6 @@ TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 GList* terminal_window_list_screens (TerminalWindow *window);
 int    terminal_window_get_screen_count (TerminalWindow *window);
 
-void terminal_window_update_scrollbar (TerminalWindow *window,
-                                       TerminalScreen *screen);
 void terminal_window_update_icon      (TerminalWindow *window);
 void terminal_window_update_geometry  (TerminalWindow *window);
 void terminal_window_set_size         (TerminalWindow *window,
@@ -92,6 +90,8 @@ void terminal_window_set_size_force_grid (TerminalWindow *window,
 void     terminal_window_set_fullscreen (TerminalWindow *window,
                                          gboolean        setting);
 gboolean terminal_window_get_fullscreen (TerminalWindow *window);
+
+GtkWidget* terminal_window_get_notebook (TerminalWindow *window);
 
 void terminal_window_reread_profile_list (TerminalWindow *window);
 

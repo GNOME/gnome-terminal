@@ -47,6 +47,9 @@ GtkAccelGroup* terminal_accels_get_group_for_widget (GtkWidget *widget);
 #define ACCEL_PATH_ZOOM_IN ACCEL_PATH_ROOT"/zoom_in"
 #define ACCEL_PATH_ZOOM_OUT ACCEL_PATH_ROOT"/zoom_out"
 #define ACCEL_PATH_ZOOM_NORMAL ACCEL_PATH_ROOT"/zoom_normal"
+#define ACCEL_PATH_MOVE_TAB_LEFT ACCEL_PATH_ROOT"/move_tab_left"
+#define ACCEL_PATH_MOVE_TAB_RIGHT ACCEL_PATH_ROOT"/move_tab_right"
+#define ACCEL_PATH_DETACH_TAB ACCEL_PATH_ROOT"/detach_tab"
 
 #define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
 #define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"

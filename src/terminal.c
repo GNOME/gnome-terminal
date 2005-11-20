@@ -25,6 +25,7 @@
 #include "terminal.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
+#include "terminal-notebook.h"
 #include "terminal-widget.h"
 #include "profile-editor.h"
 #include "encoding.h"
@@ -1432,6 +1433,7 @@ new_terminal_with_options (OptionParsingResults *results)
               terminal_app_new_terminal (app,
                                          profile,
                                          NULL,
+                                         NULL,
                                          iw->force_menubar_state,
                                          iw->menubar_state,
                                          iw->start_fullscreen,
@@ -1453,6 +1455,7 @@ new_terminal_with_options (OptionParsingResults *results)
               terminal_app_new_terminal (app,
                                          profile,
                                          current_window,
+                                         NULL,
                                          FALSE, FALSE,
                                          FALSE/*not fullscreen*/,
                                          it->exec_argv,
@@ -1884,6 +1887,7 @@ void
 terminal_app_new_terminal (TerminalApp     *app,
                            TerminalProfile *profile,
                            TerminalWindow  *window,
+                           TerminalScreen  *screen,
                            gboolean         force_menubar_state,
                            gboolean         forced_menubar_state,
                            gboolean         start_fullscreen,
@@ -1897,15 +1901,15 @@ terminal_app_new_terminal (TerminalApp     *app,
                            const char      *display_name,
                            int              screen_number)
 {
-  TerminalScreen *screen;
   gboolean window_created;
+  gboolean screen_created;
   
   g_return_if_fail (profile);
 
   window_created = FALSE;
   if (window == NULL)
     {
-      GdkScreen *screen;
+      GdkScreen *gdk_screen;
       
       window_created = TRUE;
       window = terminal_window_new (conf);
@@ -1917,11 +1921,11 @@ terminal_app_new_terminal (TerminalApp     *app,
       
       app->windows = g_list_append (app->windows, window);
 
-      screen = find_screen_by_display_name (display_name, screen_number);
-      if (screen != NULL)
+      gdk_screen = find_screen_by_display_name (display_name, screen_number);
+      if (gdk_screen != NULL)
         {
-          gtk_window_set_screen (GTK_WINDOW (window), screen);
-          g_object_unref (G_OBJECT (screen));
+          gtk_window_set_screen (GTK_WINDOW (window), gdk_screen);
+          g_object_unref (G_OBJECT (gdk_screen));
         }
 
       if (startup_id != NULL)
@@ -1937,27 +1941,40 @@ terminal_app_new_terminal (TerminalApp     *app,
     {
       terminal_window_set_menubar_visible (window, forced_menubar_state);
     }
-  
-  screen = terminal_screen_new ();
-  
-  terminal_screen_set_profile (screen, profile);
 
-  if (title)
-    terminal_screen_set_dynamic_title (screen, title);
+  screen_created = FALSE;
+  if (screen == NULL)
+    {  
+      screen_created = TRUE;
+      screen = terminal_screen_new ();
+      
+      terminal_screen_set_profile (screen, profile);
+    
+      if (title)
+        terminal_screen_set_dynamic_title (screen, title);
+    
+      if (working_dir)
+        terminal_screen_set_working_dir (screen, working_dir);
+      
+      if (override_command)    
+        terminal_screen_set_override_command (screen, override_command);
+    
+      terminal_screen_set_font_scale (screen, zoom);
+    
+      terminal_window_add_screen (window, screen);
 
-  if (working_dir)
-    terminal_screen_set_working_dir (screen, working_dir);
-  
-  if (override_command)    
-    terminal_screen_set_override_command (screen, override_command);
-
-  terminal_screen_set_font_scale (screen, zoom);
-  
-  terminal_window_add_screen (window, screen);
-
-  g_object_unref (G_OBJECT (screen));
-
-  terminal_window_set_active (window, screen);
+      g_object_unref (G_OBJECT (screen));
+    
+      terminal_window_set_active (window, screen);
+    }
+  else
+   {
+      TerminalWindow *src_win = terminal_screen_get_window (screen);
+      TerminalNotebook *src_notebook = terminal_window_get_notebook (src_win);
+      TerminalNotebook *dest_notebook = terminal_window_get_notebook (window);
+      
+      terminal_notebook_move_tab (src_notebook, dest_notebook, screen, 0);
+    }
 
   if (geometry)
     {
@@ -1979,7 +1996,8 @@ terminal_app_new_terminal (TerminalApp     *app,
   if (window_created)
     gtk_window_present (GTK_WINDOW (window));
 
-  terminal_screen_launch_child (screen);
+  if (screen_created)
+    terminal_screen_launch_child (screen);
 }
 
 static GList*

@@ -43,6 +43,9 @@
 #define KEY_RESET_AND_CLEAR CONF_KEYS_PREFIX"/reset_and_clear"
 #define KEY_PREV_TAB CONF_KEYS_PREFIX"/prev_tab"
 #define KEY_NEXT_TAB CONF_KEYS_PREFIX"/next_tab"
+#define KEY_MOVE_TAB_LEFT CONF_KEYS_PREFIX"/move_tab_left"
+#define KEY_MOVE_TAB_RIGHT CONF_KEYS_PREFIX"/move_tab_right"
+#define KEY_DETACH_TAB CONF_KEYS_PREFIX"/detach_tab"
 #define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
 #define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 #define KEY_HELP CONF_KEYS_PREFIX"/help"
@@ -122,6 +125,12 @@ static KeyEntry go_entries[] =
     KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE },
   { N_("Switch to Next Tab"),
     KEY_NEXT_TAB, ACCEL_PATH_NEXT_TAB, 0, 0, NULL, FALSE },
+  { N_("Move Tab Left"),
+    KEY_MOVE_TAB_LEFT, ACCEL_PATH_MOVE_TAB_LEFT, 0, 0, NULL, FALSE },
+  { N_("Move Tab Right"),
+    KEY_MOVE_TAB_RIGHT, ACCEL_PATH_MOVE_TAB_RIGHT, 0, 0, NULL, FALSE },
+  { N_("Detach Tab"),
+    KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, 0, 0, NULL, FALSE },
   { N_("Switch to Tab 1"),
     PREFIX_KEY_SWITCH_TO_TAB"1",
     PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, NULL, FALSE },
