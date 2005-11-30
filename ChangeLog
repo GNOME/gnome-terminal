@@ -1,3 +1,18 @@
+2005-11-30  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* src/terminal-screen.c: (terminal_screen_init),
+	(terminal_screen_finalize), (get_child_environment),
+	(new_window_callback), (new_tab_callback),
+	(terminal_screen_set_working_dir), (terminal_screen_set_environ):
+	* src/terminal-screen.h:
+	* src/terminal-window.c: (new_window), (new_tab_callback):
+	* src/terminal.c: (new_terminal_with_options_and_environ),
+	(new_terminal_with_options), (terminal_app_new_terminal),
+	(handle_new_terminal_event), (handle_new_terminal_events),
+	(terminal_new_event), (terminal_invoke_factory):
+	* src/terminal.h: Don't lose environment variables on
+	startup. Closes bug #98715. Patch from Davyd Madeley.
+
 2005-11-09  Tony Tsui  <tsui.tony@gmail.com>
 
 	* gnome-terminal.schemas.in

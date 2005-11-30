@@ -2212,7 +2212,7 @@ new_window (TerminalWindow *window,
                              screen,
                              FALSE, FALSE, FALSE,
                              NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, name, -1);
+                             NULL, name, -1, NULL);
 }
 
 static void
@@ -2238,7 +2238,7 @@ new_tab_callback (GtkWidget      *menuitem,
                                  NULL,
                                  FALSE, FALSE, FALSE,
                                  NULL, NULL, NULL, dir, NULL, 1.0,
-                                 NULL, NULL, -1);
+                                 NULL, NULL, -1, NULL);
     }
 }
 
