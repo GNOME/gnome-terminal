@@ -1476,6 +1476,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
     {
       gtk_widget_hide (window->priv->menubar);
     }
+  reset_menubar_labels (window);
 
   if (window->priv->active_term)
     {
@@ -2047,11 +2048,13 @@ set_menuitem_text (GtkWidget  *mi,
 static void
 reset_menubar_labels (TerminalWindow *window)
 {
-  if (window->priv->use_mnemonics ==
-      window->priv->using_mnemonics)
+  gboolean want_mnemonics =
+	  window->priv->use_mnemonics && window->priv->menubar_visible;
+
+  if (want_mnemonics == window->priv->using_mnemonics)
     return;
 
-  window->priv->using_mnemonics = window->priv->use_mnemonics;
+  window->priv->using_mnemonics = want_mnemonics;
 
   set_menuitem_text (window->priv->file_menuitem,
                      _("_File"), !window->priv->using_mnemonics);
