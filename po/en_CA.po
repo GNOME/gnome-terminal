@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-09-30 16:34-0400\n"
+"POT-Creation-Date: 2005-12-03 15:46-0500\n"
 "PO-Revision-Date: 2005-08-08 10:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gnome-terminal.desktop.in.in.h:1 src/gnome-terminal.schemas.in.h:113
-#: src/terminal-accels.c:172 src/terminal-profile.c:276
-#: src/terminal-window.c:742 src/terminal.c:1205 src/terminal.c:1604
+#: gnome-terminal.desktop.in.in.h:1 src/gnome-terminal.schemas.in.h:119
+#: src/terminal-accels.c:181 src/terminal-profile.c:276
+#: src/terminal-window.c:765 src/terminal.c:1205 src/terminal.c:1615
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -43,7 +43,7 @@ msgstr "Accelerator Mode"
 msgid "The type of accelerator."
 msgstr "The type of accelerator."
 
-#: src/eggcellrendererkeys.c:219 src/terminal-accels.c:717
+#: src/eggcellrendererkeys.c:219 src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Disabled"
 
@@ -268,8 +268,8 @@ msgid ""
 msgstr ""
 "<small><i><b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behaviour.</"
-"i></small>"
+"applications and operating systems that expect different terminal behaviour."
+"</i></small>"
 
 #: src/gnome-terminal.glade2.h:14
 msgid "<small><i>Maximum</i></small>"
@@ -463,7 +463,7 @@ msgstr "Initial _title:"
 msgid "Keyboard Shortcuts"
 msgstr "Keyboard Shortcuts"
 
-#: src/gnome-terminal.glade2.h:63 src/terminal-accels.c:79
+#: src/gnome-terminal.glade2.h:63 src/terminal-accels.c:82
 msgid "New Profile"
 msgstr "New Profile"
 
@@ -720,10 +720,52 @@ msgstr ""
 "setting behaves as a boolean, where 0.0 disables the darkening effect."
 
 #: src/gnome-terminal.schemas.in.h:3
+msgid ""
+"Accelerator key to detach current tab. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+msgstr ""
+"Accelerator key to detach current tab. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+
+#: src/gnome-terminal.schemas.in.h:4
+msgid ""
+"Accelerator key to move current tab left. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+msgstr ""
+"Accelerator key to move current tab left. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+
+#: src/gnome-terminal.schemas.in.h:5
+msgid ""
+"Accelerator key to move current tab right. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+msgstr ""
+"Accelerator key to move current tab right. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keybinding for this action."
+
+#: src/gnome-terminal.schemas.in.h:6
+msgid "Accelerator to detach current tab."
+msgstr "Accelerator to detach current tab."
+
+#: src/gnome-terminal.schemas.in.h:7
+msgid "Accelerator to move current tab left."
+msgstr "Accelerator to move current tab left."
+
+#: src/gnome-terminal.schemas.in.h:8
+msgid "Accelerator to move current tab right."
+msgstr "Accelerator to move current tab right."
+
+#: src/gnome-terminal.schemas.in.h:9
 msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
 msgstr "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
 
-#: src/gnome-terminal.schemas.in.h:4
+#: src/gnome-terminal.schemas.in.h:10
 msgid ""
 "An X font name. See the X man page (type \"man X\") for more details on the "
 "format of X font names."
@@ -731,27 +773,27 @@ msgstr ""
 "An X font name. See the X man page (type \"man X\") for more details on the "
 "format of X font names."
 
-#: src/gnome-terminal.schemas.in.h:5
+#: src/gnome-terminal.schemas.in.h:11
 msgid "Background image"
 msgstr "Background image"
 
-#: src/gnome-terminal.schemas.in.h:6
+#: src/gnome-terminal.schemas.in.h:12
 msgid "Background type"
 msgstr "Background type"
 
-#: src/gnome-terminal.schemas.in.h:7
+#: src/gnome-terminal.schemas.in.h:13
 msgid "Characters that are considered \"part of a word\""
 msgstr "Characters that are considered \"part of a word\""
 
-#: src/gnome-terminal.schemas.in.h:8
+#: src/gnome-terminal.schemas.in.h:14
 msgid "Custom command to use instead of the shell"
 msgstr "Custom command to use instead of the shell"
 
-#: src/gnome-terminal.schemas.in.h:9
+#: src/gnome-terminal.schemas.in.h:15
 msgid "Default color of terminal background"
 msgstr "Default colour of terminal background"
 
-#: src/gnome-terminal.schemas.in.h:10
+#: src/gnome-terminal.schemas.in.h:16
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -759,11 +801,11 @@ msgstr ""
 "Default colour of terminal background, as a colour specification (can be "
 "HTML-style hex digits, or a colour name such as \"red\")."
 
-#: src/gnome-terminal.schemas.in.h:11
+#: src/gnome-terminal.schemas.in.h:17
 msgid "Default color of text in the terminal"
 msgstr "Default colour of text in the terminal"
 
-#: src/gnome-terminal.schemas.in.h:12
+#: src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -771,49 +813,49 @@ msgstr ""
 "Default colour of text in the terminal, as a colour specification (can be "
 "HTML-style hex digits, or a colour name such as \"red\")."
 
-#: src/gnome-terminal.schemas.in.h:13
+#: src/gnome-terminal.schemas.in.h:19
 msgid "Effect of the Backspace key"
 msgstr "Effect of the Backspace key"
 
-#: src/gnome-terminal.schemas.in.h:14
+#: src/gnome-terminal.schemas.in.h:20
 msgid "Effect of the Delete key"
 msgstr "Effect of the Delete key"
 
-#: src/gnome-terminal.schemas.in.h:15
+#: src/gnome-terminal.schemas.in.h:21
 msgid "Filename of a background image."
 msgstr "Filename of a background image."
 
-#: src/gnome-terminal.schemas.in.h:16
+#: src/gnome-terminal.schemas.in.h:22
 msgid "Font"
 msgstr "Font"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: src/gnome-terminal.schemas.in.h:19
+#: src/gnome-terminal.schemas.in.h:25
 msgid "Highlight S/Key challenges"
 msgstr "Highlight S/Key challenges"
 
-#: src/gnome-terminal.schemas.in.h:20
+#: src/gnome-terminal.schemas.in.h:26
 msgid "How much to darken the background image"
 msgstr "How much to darken the background image"
 
-#: src/gnome-terminal.schemas.in.h:21
+#: src/gnome-terminal.schemas.in.h:27
 msgid "Human-readable name of the profile"
 msgstr "Human-readable name of the profile"
 
-#: src/gnome-terminal.schemas.in.h:22
+#: src/gnome-terminal.schemas.in.h:28
 msgid "Human-readable name of the profile."
 msgstr "Human-readable name of the profile."
 
-#: src/gnome-terminal.schemas.in.h:23
+#: src/gnome-terminal.schemas.in.h:29
 msgid "Icon for terminal window"
 msgstr "Icon for terminal window"
 
-#: src/gnome-terminal.schemas.in.h:24
+#: src/gnome-terminal.schemas.in.h:30
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "Icon to use for tabs/windows containing this profile."
 
-#: src/gnome-terminal.schemas.in.h:25
+#: src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -825,11 +867,11 @@ msgstr ""
 "configured title, go before it, go after it, or replace it. The possible "
 "values are \"replace\", \"before\", \"after\", and \"ignore\"."
 
-#: src/gnome-terminal.schemas.in.h:26
+#: src/gnome-terminal.schemas.in.h:32
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "If true, allow applications in the terminal to make text boldface."
 
-#: src/gnome-terminal.schemas.in.h:27
+#: src/gnome-terminal.schemas.in.h:33
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -837,11 +879,11 @@ msgstr ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
 
-#: src/gnome-terminal.schemas.in.h:28
+#: src/gnome-terminal.schemas.in.h:34
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "If true, pressing a key jumps the scrollbar to the bottom."
 
-#: src/gnome-terminal.schemas.in.h:29
+#: src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -849,7 +891,7 @@ msgstr ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
 
-#: src/gnome-terminal.schemas.in.h:30
+#: src/gnome-terminal.schemas.in.h:36
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -857,7 +899,7 @@ msgstr ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
 
-#: src/gnome-terminal.schemas.in.h:31
+#: src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -865,7 +907,7 @@ msgstr ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 
-#: src/gnome-terminal.schemas.in.h:32
+#: src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -873,7 +915,7 @@ msgstr ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
 
-#: src/gnome-terminal.schemas.in.h:33
+#: src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -881,7 +923,7 @@ msgstr ""
 "If true, the theme colour scheme used for text entry boxes will be used for "
 "the terminal, instead of colours provided by the user."
 
-#: src/gnome-terminal.schemas.in.h:34
+#: src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -889,13 +931,13 @@ msgstr ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 
-#: src/gnome-terminal.schemas.in.h:35
+#: src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 
-#: src/gnome-terminal.schemas.in.h:36
+#: src/gnome-terminal.schemas.in.h:42
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -907,322 +949,322 @@ msgstr ""
 "you set the option to the special string \"disabled\", then there will be no "
 "keyboard shortcut for this action."
 
-#: src/gnome-terminal.schemas.in.h:37
-msgid ""
-"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-
-#: src/gnome-terminal.schemas.in.h:38
-msgid ""
-"Keyboard shortcut key for closing a window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Keyboard shortcut key for closing a window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-
-#: src/gnome-terminal.schemas.in.h:39
-msgid ""
-"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-
-#: src/gnome-terminal.schemas.in.h:40
-msgid ""
-"Keyboard shortcut key for launching help. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Keyboard shortcut key for launching help. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-
-#: src/gnome-terminal.schemas.in.h:41
-msgid ""
-"Keyboard shortcut key for making font larger. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Keyboard shortcut key for making font larger. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-
-#: src/gnome-terminal.schemas.in.h:42
-msgid ""
-"Keyboard shortcut key for making font smaller. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Keyboard shortcut key for making font smaller. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-
 #: src/gnome-terminal.schemas.in.h:43
 msgid ""
-"Keyboard shortcut key for making font the normal size. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for making font the normal size. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:44
 msgid ""
-"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
+"Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
+"Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 
 #: src/gnome-terminal.schemas.in.h:45
 msgid ""
-"Keyboard shortcut key for opening a new window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
+"as a string in the same format used for GTK+ resource files. If you set the "
+"option to the special string \"disabled\", then there will be no keyboard "
+"shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for opening a new window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
+"as a string in the same format used for GTK+ resource files. If you set the "
+"option to the special string \"disabled\", then there will be no keyboard "
+"shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:46
 msgid ""
-"Keyboard shortcut key for pasting the contents of the clipboard into the "
-"terminal. Expressed as a string in the same format used for GTK+ resource "
-"files. If you set the option to the special string \"disabled\", then there "
-"will be no keyboard shortcut for this action."
+"Keyboard shortcut key for launching help. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for pasting the contents of the clipboard into the "
-"terminal. Expressed as a string in the same format used for GTK+ resource "
-"files. If you set the option to the special string \"disabled\", then there "
-"will be no keyboard shortcut for this action."
+"Keyboard shortcut key for launching help. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:47
 msgid ""
-"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-
-#: src/gnome-terminal.schemas.in.h:48
-msgid ""
-"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"Keyboard shortcut key for making font larger. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:48
+msgid ""
+"Keyboard shortcut key for making font smaller. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 
 #: src/gnome-terminal.schemas.in.h:49
 msgid ""
-"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
+"Keyboard shortcut key for making font the normal size. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
+"Keyboard shortcut key for making font the normal size. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 
 #: src/gnome-terminal.schemas.in.h:50
 msgid ""
-"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 
 #: src/gnome-terminal.schemas.in.h:51
 msgid ""
-"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for opening a new window. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for opening a new window. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 
 #: src/gnome-terminal.schemas.in.h:52
 msgid ""
-"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for pasting the contents of the clipboard into the "
+"terminal. Expressed as a string in the same format used for GTK+ resource "
+"files. If you set the option to the special string \"disabled\", then there "
+"will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for pasting the contents of the clipboard into the "
+"terminal. Expressed as a string in the same format used for GTK+ resource "
+"files. If you set the option to the special string \"disabled\", then there "
+"will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:53
 msgid ""
-"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:54
 msgid ""
-"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 
 #: src/gnome-terminal.schemas.in.h:55
 msgid ""
-"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 
 #: src/gnome-terminal.schemas.in.h:56
 msgid ""
-"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 
 #: src/gnome-terminal.schemas.in.h:57
 msgid ""
-"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:58
 msgid ""
-"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:59
 msgid ""
-"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:60
 msgid ""
-"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:61
 msgid ""
-"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:62
 msgid ""
-"Keyboard shortcut key to set the terminal title. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key to set the terminal title. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:63
 msgid ""
-"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:64
 msgid ""
-"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 
 #: src/gnome-terminal.schemas.in.h:65
 msgid ""
+"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:66
+msgid ""
+"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:67
+msgid ""
+"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:68
+msgid ""
+"Keyboard shortcut key to set the terminal title. Expressed as a string in "
+"the same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key to set the terminal title. Expressed as a string in "
+"the same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:69
+msgid ""
+"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
+"the same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
+"the same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:70
+msgid ""
+"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+
+#: src/gnome-terminal.schemas.in.h:71
+msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
 "option to the special string \"disabled\", then there will be no keyboard "
@@ -1233,135 +1275,135 @@ msgstr ""
 "option to the special string \"disabled\", then there will be no keyboard "
 "shortcut for this action."
 
-#: src/gnome-terminal.schemas.in.h:66
+#: src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Keyboard shortcut to close a tab"
 
-#: src/gnome-terminal.schemas.in.h:67
+#: src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Keyboard shortcut to close a window"
 
-#: src/gnome-terminal.schemas.in.h:68
+#: src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Keyboard shortcut to copy text"
 
-#: src/gnome-terminal.schemas.in.h:69
+#: src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Keyboard shortcut to create a new profile"
 
-#: src/gnome-terminal.schemas.in.h:70
+#: src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to launch help"
 msgstr "Keyboard shortcut to launch help"
 
-#: src/gnome-terminal.schemas.in.h:71
+#: src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut to make font larger"
 msgstr "Keyboard shortcut to make font larger"
 
-#: src/gnome-terminal.schemas.in.h:72
+#: src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Keyboard shortcut to make font normal-size"
 
-#: src/gnome-terminal.schemas.in.h:73
+#: src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Keyboard shortcut to make font smaller"
 
-#: src/gnome-terminal.schemas.in.h:74
+#: src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Keyboard shortcut to open a new tab"
 
-#: src/gnome-terminal.schemas.in.h:75
+#: src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to open a new window"
 msgstr "Keyboard shortcut to open a new window"
 
-#: src/gnome-terminal.schemas.in.h:76
+#: src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to paste text"
 msgstr "Keyboard shortcut to paste text"
 
-#: src/gnome-terminal.schemas.in.h:77
+#: src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Keyboard shortcut to reset and clear the terminal"
 
-#: src/gnome-terminal.schemas.in.h:78
+#: src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Keyboard shortcut to reset the terminal"
 
-#: src/gnome-terminal.schemas.in.h:79
+#: src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Keyboard shortcut to set the terminal title"
 
-#: src/gnome-terminal.schemas.in.h:80
+#: src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "Keyboard shortcut to switch to tab 1"
 
-#: src/gnome-terminal.schemas.in.h:81
+#: src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "Keyboard shortcut to switch to tab 10"
 
-#: src/gnome-terminal.schemas.in.h:82
+#: src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "Keyboard shortcut to switch to tab 11"
 
-#: src/gnome-terminal.schemas.in.h:83
+#: src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "Keyboard shortcut to switch to tab 12"
 
-#: src/gnome-terminal.schemas.in.h:84
+#: src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "Keyboard shortcut to switch to tab 2"
 
-#: src/gnome-terminal.schemas.in.h:85
+#: src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "Keyboard shortcut to switch to tab 3"
 
-#: src/gnome-terminal.schemas.in.h:86
+#: src/gnome-terminal.schemas.in.h:92
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "Keyboard shortcut to switch to tab 4"
 
-#: src/gnome-terminal.schemas.in.h:87
+#: src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "Keyboard shortcut to switch to tab 5"
 
-#: src/gnome-terminal.schemas.in.h:88
+#: src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "Keyboard shortcut to switch to tab 6"
 
-#: src/gnome-terminal.schemas.in.h:89
+#: src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "Keyboard shortcut to switch to tab 7"
 
-#: src/gnome-terminal.schemas.in.h:90
+#: src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "Keyboard shortcut to switch to tab 8"
 
-#: src/gnome-terminal.schemas.in.h:91
+#: src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "Keyboard shortcut to switch to tab 9"
 
-#: src/gnome-terminal.schemas.in.h:92
+#: src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Keyboard shortcut to switch to the next tab"
 
-#: src/gnome-terminal.schemas.in.h:93
+#: src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Keyboard shortcut to switch to the previous tab"
 
-#: src/gnome-terminal.schemas.in.h:94
+#: src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Keyboard shortcut to toggle full screen mode"
 
-#: src/gnome-terminal.schemas.in.h:95
+#: src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Keyboard shortcut to toggle the visibility of the menubar"
 
-#: src/gnome-terminal.schemas.in.h:96
+#: src/gnome-terminal.schemas.in.h:102
 msgid "List of available encodings"
 msgstr "List of available encodings"
 
-#: src/gnome-terminal.schemas.in.h:97
+#: src/gnome-terminal.schemas.in.h:103
 msgid "List of profiles"
 msgstr "List of profiles"
 
-#: src/gnome-terminal.schemas.in.h:98
+#: src/gnome-terminal.schemas.in.h:104
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -1369,7 +1411,7 @@ msgstr ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
 
-#: src/gnome-terminal.schemas.in.h:99
+#: src/gnome-terminal.schemas.in.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -1379,11 +1421,11 @@ msgstr ""
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
 "standard menubar accelerator to be disabled."
 
-#: src/gnome-terminal.schemas.in.h:100
+#: src/gnome-terminal.schemas.in.h:106
 msgid "Number of lines to keep in scrollback"
 msgstr "Number of lines to keep in scrollback"
 
-#: src/gnome-terminal.schemas.in.h:101
+#: src/gnome-terminal.schemas.in.h:107
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -1395,13 +1437,13 @@ msgstr ""
 "discarded. Be careful with this setting; it's the primary factor in "
 "determining how much memory the terminal will use."
 
-#: src/gnome-terminal.schemas.in.h:102
+#: src/gnome-terminal.schemas.in.h:108
 msgid "Palette for terminal applications"
 msgstr "Palette for terminal applications"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: src/gnome-terminal.schemas.in.h:105
+#: src/gnome-terminal.schemas.in.h:111
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -1409,11 +1451,11 @@ msgstr ""
 "Pop up a dialogue when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialogue will send it to the terminal."
 
-#: src/gnome-terminal.schemas.in.h:106
+#: src/gnome-terminal.schemas.in.h:112
 msgid "Position of the scrollbar"
 msgstr "Position of the scrollbar"
 
-#: src/gnome-terminal.schemas.in.h:107
+#: src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -1421,21 +1463,21 @@ msgstr ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
 
-#: src/gnome-terminal.schemas.in.h:108
+#: src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 
-#: src/gnome-terminal.schemas.in.h:109
+#: src/gnome-terminal.schemas.in.h:115
 msgid "Profile to use for new terminals"
 msgstr "Profile to use for new terminals"
 
-#: src/gnome-terminal.schemas.in.h:110
+#: src/gnome-terminal.schemas.in.h:116
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "Run this command in place of the shell, if use_custom_command is true."
 
-#: src/gnome-terminal.schemas.in.h:111
+#: src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -1449,7 +1491,7 @@ msgstr ""
 "to backspace or delete. \"ascii-del\" is normally considered the correct "
 "setting for the Backspace key."
 
-#: src/gnome-terminal.schemas.in.h:112
+#: src/gnome-terminal.schemas.in.h:118
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -1463,7 +1505,7 @@ msgstr ""
 "backspace or delete. \"escape-sequence\" is normally considered the correct "
 "setting for the Delete key."
 
-#: src/gnome-terminal.schemas.in.h:114
+#: src/gnome-terminal.schemas.in.h:120
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -1473,11 +1515,11 @@ msgstr ""
 "use. This is that palette, in the form of a colon-separated list of colour "
 "names. Colour names should be in hex format e.g. \"#FF00FF\""
 
-#: src/gnome-terminal.schemas.in.h:115
+#: src/gnome-terminal.schemas.in.h:121
 msgid "Title for terminal"
 msgstr "Title for terminal"
 
-#: src/gnome-terminal.schemas.in.h:116
+#: src/gnome-terminal.schemas.in.h:122
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -1487,7 +1529,7 @@ msgstr ""
 "by or combined with the title set by the application inside the terminal, "
 "depending on the title_mode setting."
 
-#: src/gnome-terminal.schemas.in.h:117
+#: src/gnome-terminal.schemas.in.h:123
 msgid ""
 "True if the cursor should blink when the terminal has focus, for windows/"
 "tabs with this profile."
@@ -1495,7 +1537,7 @@ msgstr ""
 "True if the cursor should blink when the terminal has focus, for windows/"
 "tabs with this profile."
 
-#: src/gnome-terminal.schemas.in.h:118
+#: src/gnome-terminal.schemas.in.h:124
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -1503,7 +1545,7 @@ msgstr ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 
-#: src/gnome-terminal.schemas.in.h:119
+#: src/gnome-terminal.schemas.in.h:125
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for pseudo-transparency."
@@ -1511,15 +1553,15 @@ msgstr ""
 "Type of terminal background. May be \"solid\" for a solid colour, \"image\" "
 "for an image, or \"transparent\" for pseudo-transparency."
 
-#: src/gnome-terminal.schemas.in.h:120
+#: src/gnome-terminal.schemas.in.h:126
 msgid "What to do with dynamic title"
 msgstr "What to do with dynamic title"
 
-#: src/gnome-terminal.schemas.in.h:121
+#: src/gnome-terminal.schemas.in.h:127
 msgid "What to do with the terminal when the child command exits"
 msgstr "What to do with the terminal when the child command exits"
 
-#: src/gnome-terminal.schemas.in.h:122
+#: src/gnome-terminal.schemas.in.h:128
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -1529,7 +1571,7 @@ msgstr ""
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
 "a range) should be the first character given."
 
-#: src/gnome-terminal.schemas.in.h:123
+#: src/gnome-terminal.schemas.in.h:129
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
@@ -1537,19 +1579,19 @@ msgstr ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
 
-#: src/gnome-terminal.schemas.in.h:124
+#: src/gnome-terminal.schemas.in.h:130
 msgid "Whether the menubar has access keys"
 msgstr "Whether the menubar has access keys"
 
-#: src/gnome-terminal.schemas.in.h:125
+#: src/gnome-terminal.schemas.in.h:131
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Whether the standard GTK shortcut for menubar access is enabled"
 
-#: src/gnome-terminal.schemas.in.h:126
+#: src/gnome-terminal.schemas.in.h:132
 msgid "Whether to allow bold text"
 msgstr "Whether to allow bold text"
 
-#: src/gnome-terminal.schemas.in.h:127
+#: src/gnome-terminal.schemas.in.h:133
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -1557,15 +1599,15 @@ msgstr ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 
-#: src/gnome-terminal.schemas.in.h:128
+#: src/gnome-terminal.schemas.in.h:134
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Whether to ask for confirmation when closing terminal windows"
 
-#: src/gnome-terminal.schemas.in.h:129
+#: src/gnome-terminal.schemas.in.h:135
 msgid "Whether to blink the cursor"
 msgstr "Whether to blink the cursor"
 
-#: src/gnome-terminal.schemas.in.h:130
+#: src/gnome-terminal.schemas.in.h:136
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1575,43 +1617,43 @@ msgstr ""
 "with some applications run inside the terminal so it's possible to turn them "
 "off."
 
-#: src/gnome-terminal.schemas.in.h:131
+#: src/gnome-terminal.schemas.in.h:137
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Whether to launch the command in the terminal as a login shell"
 
-#: src/gnome-terminal.schemas.in.h:132
+#: src/gnome-terminal.schemas.in.h:138
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Whether to run a custom command instead of the shell"
 
-#: src/gnome-terminal.schemas.in.h:133
+#: src/gnome-terminal.schemas.in.h:139
 msgid "Whether to scroll background image"
 msgstr "Whether to scroll background image"
 
-#: src/gnome-terminal.schemas.in.h:134
+#: src/gnome-terminal.schemas.in.h:140
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Whether to scroll to the bottom when a key is pressed"
 
-#: src/gnome-terminal.schemas.in.h:135
+#: src/gnome-terminal.schemas.in.h:141
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Whether to scroll to the bottom when there's new output"
 
-#: src/gnome-terminal.schemas.in.h:136
+#: src/gnome-terminal.schemas.in.h:142
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Whether to show menubar in new windows/tabs"
 
-#: src/gnome-terminal.schemas.in.h:137
+#: src/gnome-terminal.schemas.in.h:143
 msgid "Whether to silence terminal bell"
 msgstr "Whether to silence terminal bell"
 
-#: src/gnome-terminal.schemas.in.h:138
+#: src/gnome-terminal.schemas.in.h:144
 msgid "Whether to update login records when launching terminal command"
 msgstr "Whether to update login records when launching terminal command"
 
-#: src/gnome-terminal.schemas.in.h:139
+#: src/gnome-terminal.schemas.in.h:145
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Whether to use the colours from the theme for the terminal widget"
 
-#: src/gnome-terminal.schemas.in.h:140
+#: src/gnome-terminal.schemas.in.h:146
 msgid "Whether to use the system font"
 msgstr "Whether to use the system font"
 
@@ -1621,7 +1663,7 @@ msgstr "Whether to use the system font"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: src/gnome-terminal.schemas.in.h:147
+#: src/gnome-terminal.schemas.in.h:153
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current]"
 
@@ -1738,149 +1780,161 @@ msgstr "MAX_FONTS exceeded. Some fonts may be missing."
 msgid "The text you clicked doesn't seem to be an S/Key challenge."
 msgstr "The text you clicked doesn't seem to be an S/Key challenge."
 
-#: src/terminal-accels.c:75
+#: src/terminal-accels.c:78
 msgid "New Tab"
 msgstr "New Tab"
 
-#: src/terminal-accels.c:77
+#: src/terminal-accels.c:80
 msgid "New Window"
 msgstr "New Window"
 
-#: src/terminal-accels.c:81
+#: src/terminal-accels.c:84
 msgid "Close Tab"
 msgstr "Close Tab"
 
-#: src/terminal-accels.c:83
+#: src/terminal-accels.c:86
 msgid "Close Window"
 msgstr "Close Window"
 
-#: src/terminal-accels.c:89
+#: src/terminal-accels.c:92
 msgid "Copy"
 msgstr "Copy"
 
-#: src/terminal-accels.c:91
+#: src/terminal-accels.c:94
 msgid "Paste"
 msgstr "Paste"
 
-#: src/terminal-accels.c:97
+#: src/terminal-accels.c:100
 msgid "Hide and Show menubar"
 msgstr "Hide and Show menubar"
 
-#: src/terminal-accels.c:99
+#: src/terminal-accels.c:102
 msgid "Full Screen"
 msgstr "Full Screen"
 
-#: src/terminal-accels.c:101
+#: src/terminal-accels.c:104
 msgid "Zoom In"
 msgstr "Zoom In"
 
-#: src/terminal-accels.c:103
+#: src/terminal-accels.c:106
 msgid "Zoom Out"
 msgstr "Zoom Out"
 
-#: src/terminal-accels.c:105
+#: src/terminal-accels.c:108
 msgid "Normal Size"
 msgstr "Normal Size"
 
-#: src/terminal-accels.c:111 src/terminal-screen.c:1976
+#: src/terminal-accels.c:114 src/terminal-screen.c:2058
 msgid "Set Title"
 msgstr "Set Title"
 
-#: src/terminal-accels.c:113
+#: src/terminal-accels.c:116
 msgid "Reset"
 msgstr "Reset"
 
-#: src/terminal-accels.c:115
+#: src/terminal-accels.c:118
 msgid "Reset and Clear"
 msgstr "Reset and Clear"
 
-#: src/terminal-accels.c:121
+#: src/terminal-accels.c:124
 msgid "Switch to Previous Tab"
 msgstr "Switch to Previous Tab"
 
-#: src/terminal-accels.c:123
+#: src/terminal-accels.c:126
 msgid "Switch to Next Tab"
 msgstr "Switch to Next Tab"
 
-#: src/terminal-accels.c:125
+#: src/terminal-accels.c:128
+msgid "Move Tab Left"
+msgstr "Move Tab Left"
+
+#: src/terminal-accels.c:130
+msgid "Move Tab Right"
+msgstr "Move Tab Right"
+
+#: src/terminal-accels.c:132 src/terminal-window.c:1041
+msgid "Detach Tab"
+msgstr "Detach Tab"
+
+#: src/terminal-accels.c:134
 msgid "Switch to Tab 1"
 msgstr "Switch to Tab 1"
 
-#: src/terminal-accels.c:128
+#: src/terminal-accels.c:137
 msgid "Switch to Tab 2"
 msgstr "Switch to Tab 2"
 
-#: src/terminal-accels.c:131
+#: src/terminal-accels.c:140
 msgid "Switch to Tab 3"
 msgstr "Switch to Tab 3"
 
-#: src/terminal-accels.c:134
+#: src/terminal-accels.c:143
 msgid "Switch to Tab 4"
 msgstr "Switch to Tab 4"
 
-#: src/terminal-accels.c:137
+#: src/terminal-accels.c:146
 msgid "Switch to Tab 5"
 msgstr "Switch to Tab 5"
 
-#: src/terminal-accels.c:140
+#: src/terminal-accels.c:149
 msgid "Switch to Tab 6"
 msgstr "Switch to Tab 6"
 
-#: src/terminal-accels.c:143
+#: src/terminal-accels.c:152
 msgid "Switch to Tab 7"
 msgstr "Switch to Tab 7"
 
-#: src/terminal-accels.c:146
+#: src/terminal-accels.c:155
 msgid "Switch to Tab 8"
 msgstr "Switch to Tab 8"
 
-#: src/terminal-accels.c:149
+#: src/terminal-accels.c:158
 msgid "Switch to Tab 9"
 msgstr "Switch to Tab 9"
 
-#: src/terminal-accels.c:152
+#: src/terminal-accels.c:161
 msgid "Switch to Tab 10"
 msgstr "Switch to Tab 10"
 
-#: src/terminal-accels.c:155
+#: src/terminal-accels.c:164
 msgid "Switch to Tab 11"
 msgstr "Switch to Tab 11"
 
-#: src/terminal-accels.c:158
+#: src/terminal-accels.c:167
 msgid "Switch to Tab 12"
 msgstr "Switch to Tab 12"
 
-#: src/terminal-accels.c:164
+#: src/terminal-accels.c:173
 msgid "Contents"
 msgstr "Contents"
 
-#: src/terminal-accels.c:169
+#: src/terminal-accels.c:178
 msgid "File"
 msgstr "File"
 
-#: src/terminal-accels.c:170
+#: src/terminal-accels.c:179
 msgid "Edit"
 msgstr "Edit"
 
-#: src/terminal-accels.c:171
+#: src/terminal-accels.c:180
 msgid "View"
 msgstr "View"
 
-#: src/terminal-accels.c:173
+#: src/terminal-accels.c:182
 msgid "Go"
 msgstr "Go"
 
-#: src/terminal-accels.c:174
+#: src/terminal-accels.c:183
 msgid "Help"
 msgstr "Help"
 
-#: src/terminal-accels.c:264 src/terminal-profile.c:392
-#: src/terminal-screen.c:199 src/terminal.c:1721
+#: src/terminal-accels.c:273 src/terminal-profile.c:392
+#: src/terminal-screen.c:207 src/terminal.c:1732
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "There was an error loading config from %s. (%s)\n"
 
-#: src/terminal-accels.c:278
+#: src/terminal-accels.c:287
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal keybinding "
@@ -1889,17 +1943,17 @@ msgstr ""
 "There was an error subscribing to notification of terminal keybinding "
 "changes. (%s)\n"
 
-#: src/terminal-accels.c:319
+#: src/terminal-accels.c:328
 #, c-format
 msgid "There was an error loading a terminal keybinding. (%s)\n"
 msgstr "There was an error loading a terminal keybinding. (%s)\n"
 
-#: src/terminal-accels.c:335
+#: src/terminal-accels.c:344
 #, c-format
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "The value of configuration key %s is not valid; value is \"%s\"\n"
 
-#: src/terminal-accels.c:358
+#: src/terminal-accels.c:367
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use menubar access "
@@ -1908,7 +1962,7 @@ msgstr ""
 "There was an error loading config value for whether to use menubar access "
 "keys. (%s)\n"
 
-#: src/terminal-accels.c:372
+#: src/terminal-accels.c:381
 #, c-format
 msgid ""
 "There was an error subscribing to notification on changes on whether to use "
@@ -1917,7 +1971,7 @@ msgstr ""
 "There was an error subscribing to notification on changes on whether to use "
 "menubar access keys (%s)\n"
 
-#: src/terminal-accels.c:383
+#: src/terminal-accels.c:392
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use menu "
@@ -1926,7 +1980,7 @@ msgstr ""
 "There was an error loading config value for whether to use menu "
 "accelerators. (%s)\n"
 
-#: src/terminal-accels.c:399
+#: src/terminal-accels.c:408
 #, c-format
 msgid ""
 "There was an error subscribing to notification for use_menu_accelerators (%"
@@ -1935,36 +1989,36 @@ msgstr ""
 "There was an error subscribing to notification for use_menu_accelerators (%"
 "s)\n"
 
-#: src/terminal-accels.c:777
+#: src/terminal-accels.c:786
 #, c-format
 msgid "Error propagating accelerator change to configuration database: %s\n"
 msgstr "Error propagating accelerator change to configuration database: %s\n"
 
-#: src/terminal-accels.c:986
+#: src/terminal-accels.c:995
 #, c-format
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "The shortcut key \"%s\" is already bound to the \"%s\" action"
 
-#: src/terminal-accels.c:1018
+#: src/terminal-accels.c:1027
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Error setting new accelerator in configuration database: %s\n"
 
-#: src/terminal-accels.c:1049
+#: src/terminal-accels.c:1058
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Error setting %s config key: %s\n"
 
-#: src/terminal-accels.c:1077
+#: src/terminal-accels.c:1086
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Error setting use_menu_accelerators key: %s\n"
 
-#: src/terminal-accels.c:1196
+#: src/terminal-accels.c:1205
 msgid "_Action"
 msgstr "_Action"
 
-#: src/terminal-accels.c:1216
+#: src/terminal-accels.c:1225
 msgid "Shortcut _Key"
 msgstr "Shortcut _Key"
 
@@ -2043,7 +2097,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Details"
 
-#: src/terminal-profile.c:2932 src/terminal.c:2370
+#: src/terminal-profile.c:2932 src/terminal.c:2400
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "There was an error creating the profile \"%s\""
@@ -2064,7 +2118,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Palette had %d entry instead of %d\n"
 msgstr[1] "Palette had %d entries instead of %d\n"
 
-#: src/terminal-screen.c:215
+#: src/terminal-screen.c:223
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2073,17 +2127,17 @@ msgstr ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 
-#: src/terminal-screen.c:825
+#: src/terminal-screen.c:888
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Could not load font \"%s\"\n"
 
-#: src/terminal-screen.c:953
+#: src/terminal-screen.c:1017
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "There was a problem with the command for this terminal: %s"
 
-#: src/terminal-screen.c:1301
+#: src/terminal-screen.c:1373
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2092,7 +2146,7 @@ msgstr ""
 "Could not open the address \"%s\":\n"
 "%s"
 
-#: src/terminal-screen.c:1398 src/terminal-window.c:768
+#: src/terminal-screen.c:1470 src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2101,78 +2155,78 @@ msgstr ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 
-#: src/terminal-screen.c:1485
+#: src/terminal-screen.c:1557
 msgid "_Open Link"
 msgstr "_Open Link"
 
-#: src/terminal-screen.c:1490
+#: src/terminal-screen.c:1562
 msgid "_Copy Link Address"
 msgstr "_Copy Link Address"
 
-#: src/terminal-screen.c:1500 src/terminal-window.c:811
+#: src/terminal-screen.c:1572 src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Open _Terminal"
 
-#: src/terminal-screen.c:1505 src/terminal-window.c:814
+#: src/terminal-screen.c:1577 src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Open Ta_b"
 
-#: src/terminal-screen.c:1515 src/terminal-window.c:829
+#: src/terminal-screen.c:1587 src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "C_lose Tab"
 
-#: src/terminal-screen.c:1515 src/terminal-window.c:833
+#: src/terminal-screen.c:1587 src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Close Window"
 
-#: src/terminal-screen.c:1540
+#: src/terminal-screen.c:1612
 msgid "Change P_rofile"
 msgstr "Change P_rofile"
 
-#: src/terminal-screen.c:1576
+#: src/terminal-screen.c:1648
 msgid "_Edit Current Profile..."
 msgstr "_Edit Current Profile..."
 
-#: src/terminal-screen.c:1581
+#: src/terminal-screen.c:1653
 msgid "Show _Menubar"
 msgstr "Show _Menubar"
 
-#: src/terminal-screen.c:1591
+#: src/terminal-screen.c:1663
 msgid "_Input Methods"
 msgstr "_Input Methods"
 
-#: src/terminal-screen.c:2005
+#: src/terminal-screen.c:2087
 msgid "_Title:"
 msgstr "_Title:"
 
-#: src/terminal-screen.c:2119
+#: src/terminal-screen.c:2201
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: src/terminal-screen.c:2142
+#: src/terminal-screen.c:2224
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Colour dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: src/terminal-screen.c:2185
+#: src/terminal-screen.c:2267
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: src/terminal-screen.c:2234
+#: src/terminal-screen.c:2316
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: src/terminal-screen.c:2289
+#: src/terminal-screen.c:2371
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: src/terminal-screen.c:2315
+#: src/terminal-screen.c:2397
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Error converting URI \"%s\" into filename: %s\n"
@@ -2181,7 +2235,7 @@ msgstr "Error converting URI \"%s\" into filename: %s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "There was an error creating the child process for this terminal"
 
-#: src/terminal-window.c:337
+#: src/terminal-window.c:360
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2190,93 +2244,101 @@ msgstr ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
 
-#: src/terminal-window.c:550
+#: src/terminal-window.c:573
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: src/terminal-window.c:552
+#: src/terminal-window.c:575
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: src/terminal-window.c:675
+#: src/terminal-window.c:698
 msgid "_Add or Remove..."
 msgstr "_Add or Remove..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: src/terminal-window.c:822
+#: src/terminal-window.c:865
 msgid "New _Profile..."
 msgstr "New _Profile..."
 
-#: src/terminal-window.c:866
+#: src/terminal-window.c:909
 msgid "P_rofiles..."
 msgstr "P_rofiles..."
 
-#: src/terminal-window.c:869
+#: src/terminal-window.c:912
 msgid "_Keyboard Shortcuts..."
 msgstr "_Keyboard Shortcuts..."
 
-#: src/terminal-window.c:873
+#: src/terminal-window.c:916
 msgid "C_urrent Profile..."
 msgstr "C_urrent Profile..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: src/terminal-window.c:888
+#: src/terminal-window.c:931
 msgid "Show Menu_bar"
 msgstr "Show Menu_bar"
 
-#: src/terminal-window.c:892
+#: src/terminal-window.c:935
 msgid "_Full Screen"
 msgstr "_Full Screen"
 
-#: src/terminal-window.c:935
+#: src/terminal-window.c:978
 msgid "Change _Profile"
 msgstr "Change _Profile"
 
-#: src/terminal-window.c:938
+#: src/terminal-window.c:981
 msgid "_Set Title..."
 msgstr "_Set Title..."
 
-#: src/terminal-window.c:945
+#: src/terminal-window.c:988
 msgid "Set _Character Encoding"
 msgstr "Set _Character Encoding"
 
-#: src/terminal-window.c:955
+#: src/terminal-window.c:998
 msgid "_Reset"
 msgstr "_Reset"
 
-#: src/terminal-window.c:958
+#: src/terminal-window.c:1001
 msgid "Reset and C_lear"
 msgstr "Reset and C_lear"
 
-#: src/terminal-window.c:972
+#: src/terminal-window.c:1015
 msgid "_Previous Tab"
 msgstr "_Previous Tab"
 
-#: src/terminal-window.c:976
+#: src/terminal-window.c:1019
 msgid "_Next Tab"
 msgstr "_Next Tab"
 
-#: src/terminal-window.c:999
+#: src/terminal-window.c:1030
+msgid "Move Tab _Left"
+msgstr "Move Tab _Left"
+
+#: src/terminal-window.c:1034
+msgid "Move Tab _Right"
+msgstr "Move Tab _Right"
+
+#: src/terminal-window.c:1060
 msgid "_Contents"
 msgstr "_Contents"
 
-#: src/terminal-window.c:1009
+#: src/terminal-window.c:1070
 msgid "_About"
 msgstr "_About"
 
-#: src/terminal-window.c:1198
+#: src/terminal-window.c:1259
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 
-#: src/terminal-window.c:1217
+#: src/terminal-window.c:1278
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2285,31 +2347,31 @@ msgstr ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 
-#: src/terminal-window.c:2088
+#: src/terminal-window.c:2060
 msgid "_File"
 msgstr "_File"
 
-#: src/terminal-window.c:2090 src/terminal.c:2961
+#: src/terminal-window.c:2062 src/terminal.c:2991
 msgid "_Edit"
 msgstr "_Edit"
 
-#: src/terminal-window.c:2092
+#: src/terminal-window.c:2064
 msgid "_View"
 msgstr "_View"
 
-#: src/terminal-window.c:2094
+#: src/terminal-window.c:2066
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: src/terminal-window.c:2096
+#: src/terminal-window.c:2068
 msgid "Ta_bs"
 msgstr "Ta_bs"
 
-#: src/terminal-window.c:2098
+#: src/terminal-window.c:2070
 msgid "_Help"
 msgstr "_Help"
 
-#: src/terminal-window.c:2281
+#: src/terminal-window.c:2265
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2320,19 +2382,19 @@ msgstr[1] ""
 "This window has %d tabs open. Closing the window will also close all its "
 "tabs."
 
-#: src/terminal-window.c:2286
+#: src/terminal-window.c:2270
 msgid "Close all tabs?"
 msgstr "Close all tabs?"
 
-#: src/terminal-window.c:2299
+#: src/terminal-window.c:2283
 msgid "Close All _Tabs"
 msgstr "Close All _Tabs"
 
-#: src/terminal-window.c:2754
+#: src/terminal-window.c:2828
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
-#: src/terminal-window.c:2758
+#: src/terminal-window.c:2832
 msgid "translator-credits"
 msgstr ""
 "Maintainer: Adam Weinberger <adamw@gnome.org>\n"
@@ -2639,17 +2701,17 @@ msgstr "\"%s\" option requires an argument\n"
 msgid "No argument given to \"%s\" option\n"
 msgstr "No argument given to \"%s\" option\n"
 
-#: src/terminal.c:1423
+#: src/terminal.c:1424
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "No such profile '%s', using default profile\n"
 
-#: src/terminal.c:1664
+#: src/terminal.c:1675
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Invalid argument: \"%s\"\n"
 
-#: src/terminal.c:1737
+#: src/terminal.c:1748
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2658,17 +2720,17 @@ msgstr ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 
-#: src/terminal.c:1966
+#: src/terminal.c:1995
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Invalid geometry string \"%s\"\n"
 
-#: src/terminal.c:2031
+#: src/terminal.c:2061
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "There was an error getting the list of terminal profiles. (%s)\n"
 
-#: src/terminal.c:2335
+#: src/terminal.c:2365
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2677,82 +2739,82 @@ msgstr ""
 "You already have a profile called \"%s\". Do you want to create another "
 "profile with the same name?"
 
-#: src/terminal.c:2349
+#: src/terminal.c:2379
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "The profile you selected as a base for your new profile no longer exists"
 
-#: src/terminal.c:2445
+#: src/terminal.c:2475
 msgid "Enter profile name"
 msgstr "Enter profile name"
 
-#: src/terminal.c:2455
+#: src/terminal.c:2485
 msgid "Choose base profile"
 msgstr "Choose base profile"
 
-#: src/terminal.c:2594
+#: src/terminal.c:2624
 msgid "Profile list"
 msgstr "Profile list"
 
-#: src/terminal.c:2663
+#: src/terminal.c:2693
 msgid "You must select one or more profiles to delete."
 msgstr "You must select one or more profiles to delete."
 
-#: src/terminal.c:2674
+#: src/terminal.c:2704
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "You must have at least one profile; you can't delete all of them."
 
-#: src/terminal.c:2681
+#: src/terminal.c:2711
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Delete this profile?\n"
 msgstr[1] "Delete these %d profiles?\n"
 
-#: src/terminal.c:2702
+#: src/terminal.c:2732
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Delete profile \"%s\"?"
 
-#: src/terminal.c:2724
+#: src/terminal.c:2754
 msgid "Delete Profile"
 msgstr "Delete Profile"
 
-#: src/terminal.c:2997
+#: src/terminal.c:3027
 msgid "Profiles"
 msgstr "Profiles"
 
-#: src/terminal.c:3038
+#: src/terminal.c:3068
 msgid "_Profiles:"
 msgstr "_Profiles:"
 
-#: src/terminal.c:3070
+#: src/terminal.c:3100
 msgid "Click to open new profile dialog"
 msgstr "Click to open new profile dialogue"
 
-#: src/terminal.c:3078
+#: src/terminal.c:3108
 msgid "Click to open edit profile dialog"
 msgstr "Click to open edit profile dialogue"
 
-#: src/terminal.c:3086
+#: src/terminal.c:3116
 msgid "Click to delete selected profile"
 msgstr "Click to delete selected profile"
 
-#: src/terminal.c:3091
+#: src/terminal.c:3121
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profile _used when launching a new terminal:"
 
-#: src/terminal.c:3147
+#: src/terminal.c:3177
 msgid "Click button to choose profile"
 msgstr "Click button to choose profile"
 
-#: src/terminal.c:3564
+#: src/terminal.c:3594
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "There was an error displaying help: %s"
 
-#: src/terminal.c:3635
+#: src/terminal.c:3665
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2761,7 +2823,7 @@ msgstr ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 
-#: src/terminal.c:3799
+#: src/terminal.c:3878
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2769,7 +2831,7 @@ msgstr ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 
-#: src/terminal.c:3802
+#: src/terminal.c:3881
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2777,6 +2839,6 @@ msgstr ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 
-#: src/terminal.c:3838
+#: src/terminal.c:3933
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Failed to retrieve terminal server from activation server\n"
