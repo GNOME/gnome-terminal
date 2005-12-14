@@ -1612,8 +1612,6 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
-  g_set_application_name (_("Terminal"));
-  
   argc_copy = argc;
   /* we leave empty slots, for --startup-id, --display and --default-working-directory */
   argv_copy = g_new0 (char *, argc_copy + 7);
@@ -1645,6 +1643,8 @@ main (int argc, char **argv)
                                              timestamp);
     }
 
+  g_set_application_name (_("Terminal"));
+  
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
   results->display_name = g_strdup (display_name);
