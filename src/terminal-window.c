@@ -2764,7 +2764,7 @@ detach_tab_callback(GtkWidget      *menuitem,
                     TerminalWindow *window)
 {
   GtkNotebook *notebook;
-  gint page_num,last_page;
+  gint page_num;
   GtkWidget *page; 
 
   notebook = GTK_NOTEBOOK (window->priv->notebook);

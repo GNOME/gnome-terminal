@@ -1560,7 +1560,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 		XChangeProperty (xdisplay, 
 				 xwindow, atom_name,
 				 atom_type,
-				 8, PropModeReplace, name, strlen (name));
+				 8, PropModeReplace, (unsigned char *)name, strlen (name));
 	}
 	
 	XWindowEvent (xdisplay,
@@ -1982,8 +1982,8 @@ terminal_app_new_terminal (TerminalApp     *app,
   else
    {
       TerminalWindow *src_win = terminal_screen_get_window (screen);
-      TerminalNotebook *src_notebook = terminal_window_get_notebook (src_win);
-      TerminalNotebook *dest_notebook = terminal_window_get_notebook (window);
+      TerminalNotebook *src_notebook = TERMINAL_NOTEBOOK (terminal_window_get_notebook (src_win));
+      TerminalNotebook *dest_notebook = TERMINAL_NOTEBOOK (terminal_window_get_notebook (window));
       
       terminal_notebook_move_tab (src_notebook, dest_notebook, screen, 0);
     }
