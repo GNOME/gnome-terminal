@@ -69,7 +69,6 @@ struct _TerminalScreenPrivate
   guint gconf_connection_id;
   GtkWidget *hbox;
   GtkWidget *scrollbar;
-  char **environ;
 };
 
 static GList* used_ids = NULL;
@@ -266,7 +265,6 @@ terminal_screen_init (TerminalScreen *screen)
   if (screen->priv->working_dir == NULL) /* shouldn't ever happen */
     screen->priv->working_dir = g_strdup (g_get_home_dir ());
   screen->priv->child_pid = -1;
-  screen->priv->environ = NULL;
 
   screen->priv->recheck_working_dir_idle = 0;
   
@@ -452,7 +450,6 @@ terminal_screen_finalize (GObject *object)
   g_free (screen->priv->matched_string);
   g_strfreev (screen->priv->override_command);
   g_free (screen->priv->working_dir);
-  g_strfreev (screen->priv->environ);
   
   g_free (screen->priv);
   
@@ -1103,24 +1100,18 @@ get_child_environment (GtkWidget      *term,
   char **p;
   int i;
   char **retval;
-  char **env;
 #define EXTRA_ENV_VARS 7
   
   profile = screen->priv->profile;
-  /* if screen->priv->environ is defined, we should use that instead */
-  if (screen->priv->environ)
-	  env = screen->priv->environ;
-  else
-	  env = environ;
 
   /* count env vars that are set */
-  for (p = env; *p; p++)
+  for (p = environ; *p; p++)
     ;
   
-  i = p - env;
+  i = p - environ;
   retval = g_new (char *, i + 1 + EXTRA_ENV_VARS);
 
-  for (i = 0, p = env; *p; p++)
+  for (i = 0, p = environ; *p; p++)
     {
       /* Strip all these out, we'll replace some of them */
       if ((strncmp (*p, "COLUMNS=", 8) == 0) ||
@@ -1233,7 +1224,7 @@ new_window_callback (GtkWidget      *menu_item,
                              NULL,
                              FALSE, FALSE, FALSE,
                              NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, name, -1, NULL);
+                             NULL, name, -1);
 
   g_free (name);
 }
@@ -1252,7 +1243,7 @@ new_tab_callback (GtkWidget      *menu_item,
                              NULL,
                              FALSE, FALSE, FALSE,
                              NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, NULL, -1, NULL);
+                             NULL, NULL, -1);
 }
 
 static void
@@ -1845,16 +1836,6 @@ terminal_screen_set_working_dir (TerminalScreen *screen,
 
   g_free (screen->priv->working_dir);
   screen->priv->working_dir = g_strdup (dirname);
-}
-
-void
-terminal_screen_set_environ (TerminalScreen *screen,
-                             char          **env)
-{
-  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
-
-  g_free (screen->priv->environ);
-  screen->priv->environ = g_strdupv (env);
 }
 
 const char*

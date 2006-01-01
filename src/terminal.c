@@ -44,6 +44,7 @@
 #include <time.h>
 #include <gdk/gdkx.h>
 
+
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -1381,8 +1382,7 @@ option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
 }
 
 static int
-new_terminal_with_options_and_environ (OptionParsingResults *results,
-                                       char                 **env)
+new_terminal_with_options (OptionParsingResults *results)
 {
   GList *tmp;
   
@@ -1446,8 +1446,7 @@ new_terminal_with_options_and_environ (OptionParsingResults *results,
                                          it->zoom : 1.0,
                                          results->startup_id,
                                          results->display_name,
-                                         results->screen_number,
-					 env);
+                                         results->screen_number);
 
               current_window = g_list_last (app->windows)->data;
             }
@@ -1466,8 +1465,7 @@ new_terminal_with_options_and_environ (OptionParsingResults *results,
                                          NULL,
                                          it->zoom_set ?
                                          it->zoom : 1.0,
-                                         NULL, NULL, -1,
-					 env);
+                                         NULL, NULL, -1);
             }
           
           if (it->active)
@@ -1489,12 +1487,6 @@ new_terminal_with_options_and_environ (OptionParsingResults *results,
     }
 
   return 0;
-}
-
-static inline int
-new_terminal_with_options (OptionParsingResults *results)
-{
-	return new_terminal_with_options_and_environ (results, NULL);
 }
 
 /* This assumes that argv already has room for the args,
@@ -1907,8 +1899,7 @@ terminal_app_new_terminal (TerminalApp     *app,
                            double           zoom,
                            const char      *startup_id,
                            const char      *display_name,
-                           int              screen_number,
-			   char           **env)
+                           int              screen_number)
 {
   gboolean window_created;
   gboolean screen_created;
@@ -1967,9 +1958,6 @@ terminal_app_new_terminal (TerminalApp     *app,
       
       if (override_command)    
         terminal_screen_set_override_command (screen, override_command);
-
-      if (env)
-        terminal_screen_set_environ (screen, env);
     
       terminal_screen_set_font_scale (screen, zoom);
     
@@ -3676,13 +3664,11 @@ typedef struct
 {
   int argc;
   char **argv;
-  char **environ;
 } NewTerminalEvent;
 
 static void
 handle_new_terminal_event (int          argc,
-                           char       **argv,
-			   char       **env)
+                           char       **argv)
 {
   int nextopt;
   poptContext ctx;
@@ -3690,7 +3676,7 @@ handle_new_terminal_event (int          argc,
   OptionParsingResults *results;
 
   g_assert (initialization_complete);
-
+  
   results = option_parsing_results_init (&argc, argv);
   
   /* Find and parse --display */
@@ -3723,7 +3709,7 @@ handle_new_terminal_event (int          argc,
 
   option_parsing_results_apply_directory_defaults (results);
 
-  new_terminal_with_options_and_environ (results, env);
+  new_terminal_with_options (results);
 
   option_parsing_results_free (results);
 }
@@ -3736,17 +3722,14 @@ handle_new_terminal_events (void)
       GSList *next = pending_new_terminal_events->next;
       NewTerminalEvent *event = pending_new_terminal_events->data;
 
-      handle_new_terminal_event (event->argc, event->argv, event->environ);
+      handle_new_terminal_event (event->argc, event->argv);
 
       g_strfreev (event->argv);
-      g_strfreev (event->environ);
       g_free (event);
       g_slist_free_1 (pending_new_terminal_events);
       pending_new_terminal_events = next;
     }
 }
-
-#define END_ENVIRON "END-ENVIRON"
 
 /*
  *   Invoked remotely to instantiate a terminal with the
@@ -3760,11 +3743,8 @@ terminal_new_event (BonoboListener    *listener,
 		    gpointer           user_data)
 {
   CORBA_sequence_CORBA_string *args;
-  char **tmp_strv;
   char **tmp_argv;
-  char **tmp_environ;
   int tmp_argc;
-  int tmp_lenviron;
   int i;
   NewTerminalEvent *event;
   
@@ -3777,60 +3757,19 @@ terminal_new_event (BonoboListener    *listener,
 
   args = any->_value;
   
-  /* the buffer contains [environ] END_ENVIRON [argv] */
-  tmp_strv = g_new0 (char*, args->_length);
+  tmp_argv = g_new0 (char*, args->_length + 1);
   i = 0;
-  tmp_lenviron = 0;
   while (i < args->_length)
     {
-      tmp_strv[i] = g_strdup (((const char**)args->_buffer)[i]);
-      if (i == tmp_lenviron && strcmp (END_ENVIRON, tmp_strv[i]))
-	      tmp_lenviron++;
+      tmp_argv[i] = g_strdup (((const char**)args->_buffer)[i]);
       ++i;
     }
+  tmp_argv[i] = NULL;
+  tmp_argc = i;
 
-  /* copy argv */
-  tmp_argc = i - tmp_lenviron - 1;
-  tmp_argv = g_new0 (char*, tmp_argc + 1);
-#if 0
-  g_print ("Got %d argv entries\n", tmp_argc);
-#endif
-  for (i = tmp_lenviron + 1; i < args->_length; i++)
-  {
-#if 0
-      g_print ("accessing argv[%d] and strv[%d] (= %s)\n",
-                      i - tmp_lenviron - 1, i, tmp_strv[i]);
-#endif
-      tmp_argv[i - tmp_lenviron - 1] = tmp_strv[i];
-  }
-  tmp_argv[tmp_argc+1] = NULL;
-#if 0
-  g_print ("---- dumping argv ----\n");
-  for (i = 0; i < tmp_argc; i++)
-      g_print ("%s\n", tmp_argv [i]);
-  g_print ("---- done ----\n");
-#endif
-  
-  /* copy environ */
-  tmp_environ = g_new0 (char*, tmp_lenviron + 1);
-  for (i = 0; i < tmp_lenviron; i++)
-  {
-      tmp_environ[i] = tmp_strv[i];
-  }
-#if 0
-  g_print ("---- dumping environ ----\n");
-  for (i = 0; i < tmp_lenviron; i++)
-      g_print ("%s\n", tmp_environ [i]);
-  g_print ("---- done ----\n");
-#endif
-
-  /* We don't free the strings, just the array */
-  g_free (tmp_strv);
-  
   event = g_new0 (NewTerminalEvent, 1);
   event->argc = tmp_argc;
   event->argv = tmp_argv;
-  event->environ = tmp_environ;
 
   pending_new_terminal_events = g_slist_append (pending_new_terminal_events,
                                                 event);
@@ -3890,9 +3829,7 @@ terminal_invoke_factory (int argc, char **argv)
 
   if (listener != CORBA_OBJECT_NIL)
     {
-      extern char **environ;
       int i;
-      int lenviron;
       CORBA_any any;
       CORBA_sequence_CORBA_string args;
       CORBA_Environment ev;
@@ -3902,26 +3839,12 @@ terminal_invoke_factory (int argc, char **argv)
       any._type = TC_CORBA_sequence_CORBA_string;
       any._value = &args;
 
-      lenviron = g_strv_length (environ);
-      /* we are packing [environ] END [argv] */
-      args._length = lenviron + argc + 1;
+      args._length = argc;
       args._buffer = g_newa (CORBA_char *, args._length);
 
-      /* copy environ into the buffer */
-      for (i = 0; i < lenviron; i++)
-        args._buffer[i] = environ[i];
-      args._buffer [lenviron] = END_ENVIRON;
-      /* copy argv into the buffer */
-      for (i = lenviron + 1; i < args._length; i++)
-        args._buffer [i] = argv [i - lenviron - 1];
-
-#if 0
-      g_print ("---- dumping array ----\n");
       for (i = 0; i < args._length; i++)
-	      g_print ("%s\n", args._buffer [i]);
-      g_print ("---- done ----\n");
-#endif
-		      
+        args._buffer [i] = argv [i];
+      
       Bonobo_Listener_event (listener, "new_terminal", &any, &ev);
       CORBA_Object_release (listener, &ev);
       if (!BONOBO_EX (&ev))

@@ -1,3 +1,19 @@
+2006-01-01  Olav Vitters  <olav@bkor.dhs.org>
+
+	* src/terminal-screen.c: (terminal_screen_init),
+	(terminal_screen_finalize), (get_child_environment),
+	(new_window_callback), (new_tab_callback),
+	(terminal_screen_set_working_dir):
+	* src/terminal-screen.h:
+	* src/terminal-window.c: (new_window), (new_tab_callback):
+	* src/terminal.c: (new_terminal_with_options),
+	(terminal_app_new_terminal), (handle_new_terminal_event),
+	(handle_new_terminal_events), (terminal_new_event),
+	(terminal_invoke_factory):
+	* src/terminal.h: Backout patch from bug #98715. Causes hangs when
+	starting gnome-terminal with extra arguments (-e or -x) and
+	gnome-terminal was already running.
+
 2005-12-16  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* src/terminal-window.c: (detach_tab_callback): Remove unused var.

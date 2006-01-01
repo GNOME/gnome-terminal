@@ -106,8 +106,6 @@ const char *terminal_screen_get_dynamic_icon_title (TerminalScreen *screen);
 
 void        terminal_screen_set_working_dir   (TerminalScreen *screen,
                                                const char     *dirname);
-void        terminal_screen_set_environ       (TerminalScreen *screen,
-                                               char          **env);
 const char *terminal_screen_get_working_dir   (TerminalScreen *screen);
 
 void        terminal_screen_set_font_scale    (TerminalScreen *screen,
