@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.11.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-17 12:47+0100\n"
-"PO-Revision-Date: 2005-12-16 17:08+0100\n"
+"POT-Creation-Date: 2006-01-02 15:16+0100\n"
+"PO-Revision-Date: 2006-01-02 15:18+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:276
-#: ../src/terminal-window.c:765 ../src/terminal.c:1205 ../src/terminal.c:1646
+#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -745,41 +745,38 @@ msgstr ""
 "assignació de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:4
-#, fuzzy
 msgid ""
 "Accelerator key to move current tab left. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keybinding for this action."
 msgstr ""
-"Tecla acceleradora per a establir el títol del terminal. S'expressa com una "
-"cadena en el mateix format que l'utilitzat en els fitxers de recursos de GTK"
-"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
-"assignació de tecla per a aquesta acció."
+"Tecla acceleradora per a moure la pestanya actual a l'esquerra. S'expressa "
+"com una cadena en el mateix format que l'utilitzat en els fitxers de "
+"recursos de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi "
+"haurà cap assignació de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:5
-#, fuzzy
 msgid ""
 "Accelerator key to move current tab right. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keybinding for this action."
 msgstr ""
-"Tecla acceleradora per a reiniciar el terminal. S'expressa com una cadena en "
-"el mateix format que l'utilitzat en els fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
+"Tecla acceleradora per a moure la pestanya actual a la dreta. S'expressa com "
+"una cadena en el mateix format que l'utilitzat en els fitxers de recursos de "
+"GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"assignació de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:6
 msgid "Accelerator to detach current tab."
 msgstr "Accelerador per a separar la pestanya actual."
 
 #: ../src/gnome-terminal.schemas.in.h:7
-#, fuzzy
 msgid "Accelerator to move current tab left."
-msgstr "Accelerador per a moure la pestanya actual."
+msgstr "Accelerador per a moure la pestanya actual a l'esquerra."
 
 #: ../src/gnome-terminal.schemas.in.h:8
 msgid "Accelerator to move current tab right."
-msgstr ""
+msgstr "Accelerador per a moure la pestanya actual a la dreta."
 
 #: ../src/gnome-terminal.schemas.in.h:9
 msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
@@ -856,9 +853,8 @@ msgstr "Font"
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
 #: ../src/gnome-terminal.schemas.in.h:25
-#, fuzzy
 msgid "Highlight S/Key challenges"
-msgstr "Ressalta els reptes d'S/Key"
+msgstr "Ressalta els desafiaments d'S/Key"
 
 #: ../src/gnome-terminal.schemas.in.h:26
 msgid "How much to darken the background image"
@@ -1488,14 +1484,13 @@ msgstr "Paleta per a les aplicacions de terminal"
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
 #: ../src/gnome-terminal.schemas.in.h:111
-#, fuzzy
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
 msgstr ""
 "Mostra un diàleg quan es detecta i es fa clic a una consulta de resposta "
-"d'una comprovació d's/key. Si es tecleja una contrasenya al diàleg, "
-"s'enviarà al terminal."
+"d'un desafiament d's/key. Si es tecleja una contrasenya al diàleg, s'enviarà "
+"al terminal."
 
 #: ../src/gnome-terminal.schemas.in.h:112
 msgid "Position of the scrollbar"
@@ -1883,7 +1878,7 @@ msgstr "Redueix el zoom"
 msgid "Normal Size"
 msgstr "Mida normal"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2058
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2039
 msgid "Set Title"
 msgstr "Estableix el títol"
 
@@ -1988,7 +1983,7 @@ msgid "Help"
 msgstr "Ajuda"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:392
-#: ../src/terminal-screen.c:207 ../src/terminal.c:1732
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "S'ha produït un error en carregar la configuració des de %s. (%s)\n"
@@ -2167,7 +2162,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Detalls"
 
-#: ../src/terminal-profile.c:2932 ../src/terminal.c:2400
+#: ../src/terminal-profile.c:2932 ../src/terminal.c:2388
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "S'ha produït un error en crear el perfil \"%s\""
@@ -2188,7 +2183,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "La paleta tenia %d entrada en lloc de %d\n"
 msgstr[1] "La paleta tenia %d entrades en lloc de %d\n"
 
-#: ../src/terminal-screen.c:223
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2197,17 +2192,17 @@ msgstr ""
 "S'ha produït un error en subscriure a la notificació de canvis del tipus de "
 "lletra d'amplada fixa. (%s)\n"
 
-#: ../src/terminal-screen.c:888
+#: ../src/terminal-screen.c:885
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "No es pot carregar \"%s\"\n"
 
-#: ../src/terminal-screen.c:1017
+#: ../src/terminal-screen.c:1014
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Hi ha un problema amb l'ordre per aquest terminal: %s"
 
-#: ../src/terminal-screen.c:1373
+#: ../src/terminal-screen.c:1364
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2216,7 +2211,7 @@ msgstr ""
 "No es pot obrir l'adreça «%s»:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1470 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1461 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2225,77 +2220,77 @@ msgstr ""
 "S'ha produït un error en carregar els valors de la configuració sobre si "
 "utilitzar imatges als menús. (%s)\n"
 
-#: ../src/terminal-screen.c:1557
+#: ../src/terminal-screen.c:1548
 msgid "_Open Link"
 msgstr "_Obre l'enllaç"
 
-#: ../src/terminal-screen.c:1562
+#: ../src/terminal-screen.c:1553
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: ../src/terminal-screen.c:1572 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1563 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Obre un _terminal"
 
-#: ../src/terminal-screen.c:1577 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1568 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Obre una _pestanya"
 
-#: ../src/terminal-screen.c:1587 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1578 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "Tanca _la pestanya"
 
-#: ../src/terminal-screen.c:1587 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1578 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "Tan_ca la finestra"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1603
 msgid "Change P_rofile"
 msgstr "Canvia de pe_rfil"
 
-#: ../src/terminal-screen.c:1648
+#: ../src/terminal-screen.c:1639
 msgid "_Edit Current Profile..."
 msgstr "_Edita el perfil actual..."
 
-#: ../src/terminal-screen.c:1653
+#: ../src/terminal-screen.c:1644
 msgid "Show _Menubar"
 msgstr "Mostra la barra del _menú"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1654
 msgid "_Input Methods"
 msgstr "Mètodes d'_entrada"
 
-#: ../src/terminal-screen.c:2087
+#: ../src/terminal-screen.c:2068
 msgid "_Title:"
 msgstr "_Títol:"
 
-#: ../src/terminal-screen.c:2201
+#: ../src/terminal-screen.c:2182
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "El text arrossegat al terminal tenia un format (%d) o mida (%d) erroni\n"
 
-#: ../src/terminal-screen.c:2224
+#: ../src/terminal-screen.c:2205
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "El color arrossegat al terminal tenia un format (%d) o mida (%d) erroni\n"
 
-#: ../src/terminal-screen.c:2267
+#: ../src/terminal-screen.c:2248
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "La url de Mozilla arrossegada al terminal tenia un format (%d) o mida (%d) "
 "erroni\n"
 
-#: ../src/terminal-screen.c:2316
+#: ../src/terminal-screen.c:2297
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "La llista d'URI arrossegada al terminal tenia un format (%d) o mida (%d) "
 "erroni\n"
 
-#: ../src/terminal-screen.c:2371
+#: ../src/terminal-screen.c:2352
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2303,7 +2298,7 @@ msgstr ""
 "El nom de fitxer d'imatge arrossegat al terminal tenia un format (%d) o mida "
 "(%d) erroni\n"
 
-#: ../src/terminal-screen.c:2397
+#: ../src/terminal-screen.c:2378
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "S'ha produït un error en convertir l'URI «%s» al nom de fitxer: %s\n"
@@ -2394,11 +2389,11 @@ msgstr "Pestanya següe_nt"
 
 #: ../src/terminal-window.c:1030
 msgid "Move Tab _Left"
-msgstr ""
+msgstr "Mou la pestanya a l'_esquerra"
 
 #: ../src/terminal-window.c:1034
 msgid "Move Tab _Right"
-msgstr ""
+msgstr "Mou la pestanya a la _dreta"
 
 #: ../src/terminal-window.c:1060
 msgid "_Contents"
@@ -2429,7 +2424,7 @@ msgstr ""
 msgid "_File"
 msgstr "_Fitxer"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2991
+#: ../src/terminal-window.c:2062 ../src/terminal.c:2979
 msgid "_Edit"
 msgstr "_Edita"
 
@@ -2481,15 +2476,15 @@ msgstr ""
 "Jordi Mallach <jordi@sindominio.net>\n"
 "Josep Puigdemont <josep@imatge-sintetica.com>"
 
-#: ../src/terminal.c:189
+#: ../src/terminal.c:190
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Executa l'argument a aquesta opció dins del terminal."
 
-#: ../src/terminal.c:198
+#: ../src/terminal.c:199
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Executa la resta de la línia d'ordres dins el terminal."
 
-#: ../src/terminal.c:207
+#: ../src/terminal.c:208
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
@@ -2497,7 +2492,7 @@ msgstr ""
 "Obre una finestra nova amb una pestanya amb el perfil predeterminat. Es "
 "poden proporcionar més d'una d'aquestes opcions."
 
-#: ../src/terminal.c:216
+#: ../src/terminal.c:217
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -2505,11 +2500,11 @@ msgstr ""
 "Obre una finestra nova amb una pestanya amb el perfil donat. Es poden "
 "proporcionar més d'una d'aquestes opcions."
 
-#: ../src/terminal.c:217 ../src/terminal.c:235
+#: ../src/terminal.c:218 ../src/terminal.c:236
 msgid "PROFILENAME"
 msgstr "NOM DEL PERFIL"
 
-#: ../src/terminal.c:225
+#: ../src/terminal.c:226
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
@@ -2517,7 +2512,7 @@ msgstr ""
 "Obre una pestanya nova a la darrera finestra oberta amb el perfil "
 "predeterminat. Es poden proporcionar més d'una d'aquestes opcions."
 
-#: ../src/terminal.c:234
+#: ../src/terminal.c:235
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -2525,7 +2520,7 @@ msgstr ""
 "Obre una pestanya nova a la darrera finestra oberta amb el perfil donat. Es "
 "poden donar més d'una d'aquestes opcions."
 
-#: ../src/terminal.c:243
+#: ../src/terminal.c:244
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -2533,11 +2528,11 @@ msgstr ""
 "Obre una finestra nova que contingui una pestanya amb la ID de perfil donat. "
 "S'empra internament per a desar sessions."
 
-#: ../src/terminal.c:244 ../src/terminal.c:253
+#: ../src/terminal.c:245 ../src/terminal.c:254
 msgid "PROFILEID"
 msgstr "ID DEL PERFIL"
 
-#: ../src/terminal.c:252
+#: ../src/terminal.c:253
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -2545,7 +2540,7 @@ msgstr ""
 "Obre una pestanya nova a la darrera finestra oberta amb la ID de perfil "
 "donat. S'empra internament per a desar sessions."
 
-#: ../src/terminal.c:261
+#: ../src/terminal.c:262
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -2554,11 +2549,11 @@ msgstr ""
 "una finestra; pot ser especificada una vegada pera cada finestra que es crei "
 "des de la línia d'ordres."
 
-#: ../src/terminal.c:262
+#: ../src/terminal.c:263
 msgid "ROLE"
 msgstr "ROL"
 
-#: ../src/terminal.c:270
+#: ../src/terminal.c:271
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2568,7 +2563,7 @@ msgstr ""
 "una finestra; pot ser especificada una vegada pera cada finestra que es "
 "vulgui crear des de la línia d'ordres."
 
-#: ../src/terminal.c:279
+#: ../src/terminal.c:280
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2578,7 +2573,7 @@ msgstr ""
 "només una finestra; pot ser especificada una vegada pera cada finestra que "
 "es vulgui crear des de la línia d'ordres."
 
-#: ../src/terminal.c:288
+#: ../src/terminal.c:289
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2588,7 +2583,7 @@ msgstr ""
 "s'aplica a només una finestra; pot ser especificada una vegada pera cada "
 "finestra que cree des de la línia d'ordres."
 
-#: ../src/terminal.c:297
+#: ../src/terminal.c:298
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -2596,11 +2591,11 @@ msgstr ""
 "Especificació de la geometria d'X (mireu la pàgina de manual «X»), pot ser "
 "especificada una vegada per a cada finestra en obrir."
 
-#: ../src/terminal.c:298
+#: ../src/terminal.c:299
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: ../src/terminal.c:306
+#: ../src/terminal.c:307
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -2608,71 +2603,71 @@ msgstr ""
 "No registris al servidor de noms d'activació, no reutilitzis un terminal "
 "actiu"
 
-#: ../src/terminal.c:315
+#: ../src/terminal.c:316
 msgid "Register with the activation nameserver [default]"
 msgstr "Registra al servidor de noms d'activació [per defecte]"
 
-#: ../src/terminal.c:324
+#: ../src/terminal.c:325
 msgid "ID for startup notification protocol."
 msgstr "ID per al protocol de notificació d'inici."
 
-#: ../src/terminal.c:333
+#: ../src/terminal.c:334
 msgid "Set the terminal's title"
 msgstr "Estableix el títol del terminal"
 
-#: ../src/terminal.c:334
+#: ../src/terminal.c:335
 msgid "TITLE"
 msgstr "TÍTOL"
 
-#: ../src/terminal.c:342
+#: ../src/terminal.c:343
 msgid "Set the terminal's working directory"
 msgstr "Estableix el directori de treball del terminal"
 
-#: ../src/terminal.c:343 ../src/terminal.c:352
+#: ../src/terminal.c:344 ../src/terminal.c:353
 msgid "DIRNAME"
 msgstr "DIRECTORI"
 
-#: ../src/terminal.c:351
+#: ../src/terminal.c:352
 msgid "Set the default terminal's working directory. Used internally"
 msgstr ""
 "Estableix el directori de treball del terminal per defecte. Utilitzat "
 "internament"
 
-#: ../src/terminal.c:360
+#: ../src/terminal.c:361
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Estableix el factor d'ampliació del terminal (1.0 = mida normal)"
 
-#: ../src/terminal.c:361 ../src/terminal.c:370
+#: ../src/terminal.c:362 ../src/terminal.c:371
 msgid "ZOOMFACTOR"
 msgstr "FACTORZOOM"
 
-#: ../src/terminal.c:369
+#: ../src/terminal.c:370
 msgid "Set the last specified tab as the active one in its window"
 msgstr ""
 "Estableix l'última pestanya especificada com a l'activa en la seva finestra"
 
-#: ../src/terminal.c:712
+#: ../src/terminal.c:713
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "No es pot carregar la icona «%s»: %s\n"
 
-#: ../src/terminal.c:777
+#: ../src/terminal.c:778
 #, c-format
 msgid "Option \"%s\" requires specifying the command to run\n"
 msgstr "L'opció «%s» requereix especificar l'ordre a executar\n"
 
-#: ../src/terminal.c:785
+#: ../src/terminal.c:786
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
 msgstr "L'argument per a «%s» no és una ordre vàlida: %s\n"
 
-#: ../src/terminal.c:795 ../src/terminal.c:819
+#: ../src/terminal.c:796 ../src/terminal.c:820
 #, c-format
 msgid "\"%s\" specified more than once for the same window or tab\n"
 msgstr ""
 "S'ha especificat «%s» més d'una vegada per a la mateixa finestra o pestanya\n"
 
-#: ../src/terminal.c:810
+#: ../src/terminal.c:811
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -2681,56 +2676,56 @@ msgstr ""
 "L'opció «%s» requereix especificar l'ordre a executar en la resta de la "
 "línia d'ordres\n"
 
-#: ../src/terminal.c:841 ../src/terminal.c:865
+#: ../src/terminal.c:842 ../src/terminal.c:866
 #, c-format
 msgid "Option \"%s\" requires an argument specifying what profile to use\n"
 msgstr ""
 "L'opció «%s» requereix un argument que especifiqui quin perfil s'ha d'usar\n"
 
-#: ../src/terminal.c:899 ../src/terminal.c:925
+#: ../src/terminal.c:900 ../src/terminal.c:926
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "S'ha donat l'opció «%s» dues vegades per a la mateixa finestra\n"
 
-#: ../src/terminal.c:965
+#: ../src/terminal.c:966
 #, c-format
 msgid "Option \"%s\" requires an argument giving the role\n"
 msgstr "L'opció «%s» requereix un argument indicant el rol\n"
 
-#: ../src/terminal.c:974
+#: ../src/terminal.c:975
 msgid "Two roles given for one window\n"
 msgstr "S'han donat dos rols per la mateixa finestra\n"
 
-#: ../src/terminal.c:990
+#: ../src/terminal.c:991
 #, c-format
 msgid "Option \"%s\" requires an argument giving the geometry\n"
 msgstr "La opció «%s» requereix un argument indicant la geometria\n"
 
-#: ../src/terminal.c:999
+#: ../src/terminal.c:1000
 #, c-format
 msgid "Two \"%s\" options given for one window\n"
 msgstr "S'han donat dues opcions «%s» per a la mateixa finestra\n"
 
-#: ../src/terminal.c:1009
+#: ../src/terminal.c:1010
 msgid "Two geometries given for one window\n"
 msgstr "S'han donat dues geometries per la mateixa finestra\n"
 
-#: ../src/terminal.c:1035
+#: ../src/terminal.c:1036
 #, c-format
 msgid "Option \"%s\" requires an argument giving the title\n"
 msgstr "L'opció «%s» requereix un argument indicant el títol\n"
 
-#: ../src/terminal.c:1043 ../src/terminal.c:1066 ../src/terminal.c:1108
+#: ../src/terminal.c:1044 ../src/terminal.c:1067 ../src/terminal.c:1109
 #, c-format
 msgid "Two \"%s\" options given for one tab\n"
 msgstr "S'han donat dues opcions «%s» per a una pestanya\n"
 
-#: ../src/terminal.c:1058
+#: ../src/terminal.c:1059
 #, c-format
 msgid "Option \"%s\" requires an argument giving the directory\n"
 msgstr "L'opció «%s» requereix un argument indicant el directori\n"
 
-#: ../src/terminal.c:1078
+#: ../src/terminal.c:1079
 msgid ""
 "Option --default-working-directory requires an argument giving the "
 "directory\n"
@@ -2738,31 +2733,31 @@ msgstr ""
 "L'opció --default-working-directori requereix un argument indicant el "
 "directori\n"
 
-#: ../src/terminal.c:1084
+#: ../src/terminal.c:1085
 msgid "Two --default-working-directories given\n"
 msgstr "S'han donat dos --default-working-directories\n"
 
-#: ../src/terminal.c:1100
+#: ../src/terminal.c:1101
 #, c-format
 msgid "Option \"%s\" requires an argument giving the zoom factor\n"
 msgstr "L'opció «%s» requereix un argument indicant el factor del zoom\n"
 
-#: ../src/terminal.c:1123
+#: ../src/terminal.c:1124
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "«%s» no és un factor de zoom vàlid\n"
 
-#: ../src/terminal.c:1131
+#: ../src/terminal.c:1132
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "El factor de zoom «%g» és massa petit, s'usarà %g\n"
 
-#: ../src/terminal.c:1138
+#: ../src/terminal.c:1139
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "El factor de zoom «%g» és massa gran, s'usarà %g\n"
 
-#: ../src/terminal.c:1159
+#: ../src/terminal.c:1160
 #, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
@@ -2773,17 +2768,17 @@ msgstr ""
 "podeu crear un perfil amb la configuració desitjada i utilitzar la nova "
 "opció --window-with-profile\n"
 
-#: ../src/terminal.c:1165
+#: ../src/terminal.c:1166
 #, c-format
 msgid "\"%s\" option given twice\n"
 msgstr "S'ha donat l'opció «%s» dues vegades\n"
 
-#: ../src/terminal.c:1170 ../src/terminal.c:1311
+#: ../src/terminal.c:1171 ../src/terminal.c:1312
 #, c-format
 msgid "\"%s\" option requires an argument\n"
 msgstr "L'opció «%s» requereix un argument\n"
 
-#: ../src/terminal.c:1289
+#: ../src/terminal.c:1290
 #, c-format
 msgid "No argument given to \"%s\" option\n"
 msgstr "No s'han donat arguments a l'opció «%s»\n"
@@ -2793,12 +2788,12 @@ msgstr "No s'han donat arguments a l'opció «%s»\n"
 msgid "No such profile '%s', using default profile\n"
 msgstr "No existeix el perfil «%s», s'usarà el perfil per defecte\n"
 
-#: ../src/terminal.c:1675
+#: ../src/terminal.c:1667
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "Argument invàlid: \"%s\"\n"
 
-#: ../src/terminal.c:1748
+#: ../src/terminal.c:1740
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
@@ -2807,18 +2802,18 @@ msgstr ""
 "S'ha produït un error en subscriure a la notificació dels canvis de la "
 "llista de perfils del terminal. (%s)\n"
 
-#: ../src/terminal.c:1995
+#: ../src/terminal.c:1983
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Cadena geomètrica invàlida \"%s\"\n"
 
-#: ../src/terminal.c:2061
+#: ../src/terminal.c:2049
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "S'ha produït un error en obtenir la llista de perfils del terminal. (%s)\n"
 
-#: ../src/terminal.c:2365
+#: ../src/terminal.c:2353
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2826,82 +2821,82 @@ msgid ""
 msgstr ""
 "Ja teniu un perfil anomenat «%s». Voleu crear-ne un altre amb el mateix nom?"
 
-#: ../src/terminal.c:2379
+#: ../src/terminal.c:2367
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "El perfil que heu seleccionat com a base per a perfils nous ja no existeix"
 
-#: ../src/terminal.c:2475
+#: ../src/terminal.c:2463
 msgid "Enter profile name"
 msgstr "Introduïu el nom del perfil"
 
-#: ../src/terminal.c:2485
+#: ../src/terminal.c:2473
 msgid "Choose base profile"
 msgstr "Seleccioneu el perfil base"
 
-#: ../src/terminal.c:2624
+#: ../src/terminal.c:2612
 msgid "Profile list"
 msgstr "Llista de perfils"
 
-#: ../src/terminal.c:2693
+#: ../src/terminal.c:2681
 msgid "You must select one or more profiles to delete."
 msgstr "Heu de triar un o més perfils a eliminar."
 
-#: ../src/terminal.c:2704
+#: ../src/terminal.c:2692
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Heu de tenir almenys un perfil; no els podeu eliminar tots."
 
-#: ../src/terminal.c:2711
+#: ../src/terminal.c:2699
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Voleu eliminar aquest perfil?\n"
 msgstr[1] "Voleu eliminar aquests %d perfils?\n"
 
-#: ../src/terminal.c:2732
+#: ../src/terminal.c:2720
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Voleu eliminar el perfil «%s»?"
 
-#: ../src/terminal.c:2754
+#: ../src/terminal.c:2742
 msgid "Delete Profile"
 msgstr "Elimina el perfil"
 
-#: ../src/terminal.c:3027
+#: ../src/terminal.c:3015
 msgid "Profiles"
 msgstr "Perfils"
 
-#: ../src/terminal.c:3068
+#: ../src/terminal.c:3056
 msgid "_Profiles:"
 msgstr "_Perfils:"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3088
 msgid "Click to open new profile dialog"
 msgstr "Feu clic per a obrir un nou diàleg de perfil"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3096
 msgid "Click to open edit profile dialog"
 msgstr "Feu clic per a obrir el diàleg de edició de perfils"
 
-#: ../src/terminal.c:3116
+#: ../src/terminal.c:3104
 msgid "Click to delete selected profile"
 msgstr "Feu clic per a eliminar el perfil seleccionat"
 
-#: ../src/terminal.c:3121
+#: ../src/terminal.c:3109
 msgid "Profile _used when launching a new terminal:"
 msgstr "Perfil _usat quan es llanci un terminal nou:"
 
-#: ../src/terminal.c:3177
+#: ../src/terminal.c:3165
 msgid "Click button to choose profile"
 msgstr "Feu clic per a triar el perfil"
 
-#: ../src/terminal.c:3594
+#: ../src/terminal.c:3582
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "S'ha produït un error en mostrar l'ajuda: %s"
 
-#: ../src/terminal.c:3665
+#: ../src/terminal.c:3653
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2910,7 +2905,7 @@ msgstr ""
 "No es pot trobar el fitxer «%s». Això indica que l'aplicació està mal "
 "instal·lada."
 
-#: ../src/terminal.c:3878
+#: ../src/terminal.c:3817
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2918,7 +2913,7 @@ msgstr ""
 "Sembla que no teniu el gnome-terminal.server instal·lat a una ubicació "
 "vàlida. S'ha inhabilitat el mode de factoria.\n"
 
-#: ../src/terminal.c:3881
+#: ../src/terminal.c:3820
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2926,7 +2921,7 @@ msgstr ""
 "S'ha produït un error en registrar el terminal al servei d'activació; s'ha "
 "deshabilitat el mode de factoria.\n"
 
-#: ../src/terminal.c:3933
+#: ../src/terminal.c:3856
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "No s'ha pogut recuperar el servidor del terminal del servidor d'activació\n"
