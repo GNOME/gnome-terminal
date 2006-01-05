@@ -1190,10 +1190,19 @@ terminal_profile_edit (TerminalProfile *profile,
       i = 0;
       while (i < TERMINAL_PALETTE_SIZE)
         {
-          char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
+	  gchar *t;
+          gchar *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
           
           w = glade_xml_get_widget (xml, s);
           g_assert (w);
+
+          t = g_strdup_printf (_("Choose Palette Color %d"), i+1);
+          gtk_color_button_set_title (GTK_COLOR_BUTTON (w), t);
+          g_free (t);
+
+          t = g_strdup_printf (_("Palette entry %d"), i+1);
+          gtk_tooltips_set_tip (gtk_tooltips_data_get(w)->tooltips, w, t, NULL);
+          g_free (t);
           
           g_object_set_data (G_OBJECT (w),
                              "palette-entry-index",
