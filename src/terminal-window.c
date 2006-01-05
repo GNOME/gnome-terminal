@@ -1027,11 +1027,11 @@ terminal_window_init (TerminalWindow *window)
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
-  mi = append_menuitem (menu, _("Move Tab _Left"), ACCEL_PATH_MOVE_TAB_LEFT,
+  mi = append_menuitem (menu, _("Move Tab to the _Left"), ACCEL_PATH_MOVE_TAB_LEFT,
                         G_CALLBACK (move_left_tab_callback), window);
   window->priv->move_left_tab_menuitem = mi;
   
-  mi = append_menuitem (menu, _("Move Tab _Right"), ACCEL_PATH_MOVE_TAB_RIGHT,
+  mi = append_menuitem (menu, _("Move Tab to the _Right"), ACCEL_PATH_MOVE_TAB_RIGHT,
                         G_CALLBACK (move_right_tab_callback), window);
   window->priv->move_right_tab_menuitem = mi;
 
