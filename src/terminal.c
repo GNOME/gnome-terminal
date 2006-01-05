@@ -1951,8 +1951,11 @@ terminal_app_new_terminal (TerminalApp     *app,
       terminal_screen_set_profile (screen, profile);
     
       if (title)
-        terminal_screen_set_dynamic_title (screen, title);
-    
+	{
+	  terminal_screen_set_dynamic_title (screen, title);
+	  terminal_screen_set_dynamic_icon_title (screen, title);
+	}
+
       if (working_dir)
         terminal_screen_set_working_dir (screen, working_dir);
       
