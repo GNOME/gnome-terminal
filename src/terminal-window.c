@@ -2826,6 +2826,7 @@ about_callback (GtkWidget      *menuitem,
   about = gtk_about_dialog_new ();
 
   gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), _("GNOME Terminal"));
+  gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(about), _("A terminal emulator for the GNOME desktop"));
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), copyright);
   gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
