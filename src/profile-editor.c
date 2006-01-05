@@ -1192,7 +1192,7 @@ terminal_profile_edit (TerminalProfile *profile,
         {
 	  gchar *t;
           gchar *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
-          
+
           w = glade_xml_get_widget (xml, s);
           g_assert (w);
 
@@ -1203,7 +1203,7 @@ terminal_profile_edit (TerminalProfile *profile,
           t = g_strdup_printf (_("Palette entry %d"), i+1);
           gtk_tooltips_set_tip (gtk_tooltips_data_get(w)->tooltips, w, t, NULL);
           g_free (t);
-          
+
           g_object_set_data (G_OBJECT (w),
                              "palette-entry-index",
                              GINT_TO_POINTER (i));
@@ -1211,7 +1211,7 @@ terminal_profile_edit (TerminalProfile *profile,
           g_signal_connect (G_OBJECT (w), "color_set",
                             G_CALLBACK (palette_color_set),
                             profile);
-          
+
           g_free (s);
 
           ++i;
