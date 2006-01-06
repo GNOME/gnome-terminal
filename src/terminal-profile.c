@@ -2972,8 +2972,6 @@ terminal_profile_delete_list (GConfClient *conf,
       gchar *dir;
       TerminalProfile *profile = tmp->data;
 
-      current_profiles = g_list_remove (current_profiles, profile);
-
       dir = g_strdup_printf (CONF_PREFIX"/profiles/%s",
 			     terminal_profile_get_name (profile));
       gconf_client_recursive_unset (conf, dir,
@@ -2983,7 +2981,9 @@ terminal_profile_delete_list (GConfClient *conf,
 
       if (err)
 	break;
-      
+
+      current_profiles = g_list_remove (current_profiles, profile);
+
       tmp = tmp->next;
     }
 
@@ -3011,7 +3011,7 @@ terminal_profile_delete_list (GConfClient *conf,
       g_slist_free (name_list);
     }
 
-  if (err)
+  else
     {
       if (GTK_WIDGET_VISIBLE (transient_parent))
         {
