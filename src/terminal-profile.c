@@ -2958,7 +2958,7 @@ terminal_profile_delete_list (GConfClient *conf,
   GList *current_profiles;
   GList *tmp;
   GSList *name_list;
-  GError *err;
+  GError *err = NULL;
 
   /* reentrancy paranoia */
   g_object_ref (G_OBJECT (transient_parent));
@@ -2969,35 +2969,47 @@ terminal_profile_delete_list (GConfClient *conf,
   tmp = deleted_profiles;
   while (tmp != NULL)
     {
+      gchar *dir;
       TerminalProfile *profile = tmp->data;
-      
+
       current_profiles = g_list_remove (current_profiles, profile);
+
+      dir = g_strdup_printf (CONF_PREFIX"/profiles/%s",
+			     terminal_profile_get_name (profile));
+      gconf_client_recursive_unset (conf, dir,
+				    GCONF_UNSET_INCLUDING_SCHEMA_NAMES,
+				    &err);
+      g_free (dir);
+
+      if (err)
+	break;
       
       tmp = tmp->next;
     }
 
-  /* make list of profile names */
-  name_list = NULL;
-  tmp = current_profiles;
-  while (tmp != NULL)
+  if (!err)
     {
-      name_list = g_slist_prepend (name_list,
-                                   g_strdup (terminal_profile_get_name (tmp->data)));
-      
-      tmp = tmp->next;
+      /* make list of profile names */
+      name_list = NULL;
+      tmp = current_profiles;
+      while (tmp != NULL)
+	{
+	  name_list = g_slist_prepend (name_list,
+				       g_strdup (terminal_profile_get_name (tmp->data)));
+	  tmp = tmp->next;
+	}
+
+      g_list_free (current_profiles);
+
+      gconf_client_set_list (conf,
+			     CONF_GLOBAL_PREFIX"/profile_list",
+			     GCONF_VALUE_STRING,
+			     name_list,
+			     &err);
+
+      g_slist_foreach (name_list, (GFunc) g_free, NULL);
+      g_slist_free (name_list);
     }
-
-  g_list_free (current_profiles);
-
-  err = NULL;
-  gconf_client_set_list (conf,
-                         CONF_GLOBAL_PREFIX"/profile_list",
-                         GCONF_VALUE_STRING,
-                         name_list,
-                         &err);
-
-  g_slist_foreach (name_list, (GFunc) g_free, NULL);
-  g_slist_free (name_list);
 
   if (err)
     {
@@ -3016,9 +3028,9 @@ terminal_profile_delete_list (GConfClient *conf,
 
           dialog_add_details (GTK_DIALOG (dialog),
                               err->message);
-          
+
           gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
+
           gtk_widget_show (dialog);
         }
 
