@@ -2699,10 +2699,7 @@ profile_list_delete_selection (GtkWidget   *profile_list,
   if (count > 1)
     {
       str = g_string_new (NULL);
-      g_string_printf (str, ngettext ("Delete this profile?\n", 
-                                      "Delete these %d profiles?\n",
-                                      count), 
-                       count);
+      g_string_printf (str, _("Delete these %d profiles?\n"), count);
 
       tmp = deleted_profiles;
       while (tmp != NULL)
@@ -2712,7 +2709,7 @@ profile_list_delete_selection (GtkWidget   *profile_list,
                            terminal_profile_get_visible_name (tmp->data));
           if (tmp->next)
             g_string_append (str, "\n");
-          
+
           tmp = tmp->next;
         }
     }
