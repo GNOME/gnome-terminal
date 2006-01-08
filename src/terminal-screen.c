@@ -2042,6 +2042,7 @@ title_entry_changed (GtkWidget      *entry,
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
   
   terminal_screen_set_dynamic_title (screen, text);
+  terminal_screen_set_dynamic_icon_title (screen, text);
 
   g_free (text);
 }

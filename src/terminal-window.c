@@ -2255,6 +2255,7 @@ confirm_close_window (TerminalWindow *window)
   int n;
 
   n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook));
+
   if (n <= 1)
     return TRUE;
 
@@ -2262,12 +2263,16 @@ confirm_close_window (TerminalWindow *window)
   if (!gconf_client_get_bool (window->priv->conf, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
     return TRUE;
 
-  msg1 = g_strdup_printf (_("This window has %d tabs open. Closing the window "
-			    "will also close all its tabs."), n);
+  msg1 = g_strdup_printf (ngettext ("This window has one tab open. Closing "
+				    "the window will close it.",
+				    "This window has %d tabs open. Closing "
+				    "the window will also close all of its "
+				    "tabs.",
+				    n),
+			  n);
 
-  msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n%s\n", 
-                         _("Close all tabs?"),
-                         msg1);
+  msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n"
+			 "%s\n", _("Close all tabs?"), msg1);
 
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,

@@ -2699,7 +2699,11 @@ profile_list_delete_selection (GtkWidget   *profile_list,
   if (count > 1)
     {
       str = g_string_new (NULL);
-      g_string_printf (str, _("Delete these %d profiles?\n"), count);
+      g_string_printf (str,
+		       ngettext ("Delete this profile?\n",
+				 "Delete these %d profiles?\n",
+				 count),
+		       count);
 
       tmp = deleted_profiles;
       while (tmp != NULL)
