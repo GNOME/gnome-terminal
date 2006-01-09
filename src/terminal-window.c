@@ -2169,7 +2169,6 @@ terminal_window_set_fullscreen (TerminalWindow *window,
 gboolean
 terminal_window_get_fullscreen (TerminalWindow *window)
 {
-
   return window->priv->fullscreen;
 }
 
