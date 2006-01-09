@@ -277,13 +277,17 @@ terminal_screen_init (TerminalScreen *screen)
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
 #define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
-#define SCHEME    "(news|telnet|nntp|file|https?|ftps?|webcal)"
+#define SCHEME    "(news|telnet|nntp|https?|ftps?|webcal)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 #define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<(" SCHEME "://(" USER "@)?)[" HOSTCHARS ".]+"
 			     "(:[0-9]+)?(" URLPATH ")?", FLAVOR_AS_IS);
+
+  terminal_widget_match_add (screen->priv->term,
+			     "\\<(file:///(" URLPATH ")?", FLAVOR_AS_IS);
+			     
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
