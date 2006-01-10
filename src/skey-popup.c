@@ -67,6 +67,8 @@ terminal_skey_do_popup (TerminalScreen *screen,
   if (dialog == NULL)
     {
       GladeXML *xml;
+      GtkWidget *title;
+      gchar *title_text;
 
       xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
                                            "skey-dialog",
@@ -76,8 +78,14 @@ terminal_skey_do_popup (TerminalScreen *screen,
         return;
       
       dialog = glade_xml_get_widget (xml, "skey-dialog");
+      title = glade_xml_get_widget (xml, "label61");
       entry = glade_xml_get_widget (xml, "skey-entry");
       ok_button = glade_xml_get_widget (xml, "skey-ok-button");
+
+      title_text = g_strdup_printf ("<big>%s</big>", gtk_label_get_text (title));
+      gtk_label_set_label (GTK_LABEL (title), title_text);
+      g_free (title_text);
+
       g_object_set_data (G_OBJECT (dialog), "skey-entry", entry);      
       g_object_set_data (G_OBJECT (dialog), "skey-ok-button", ok_button);
 
