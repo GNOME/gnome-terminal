@@ -155,7 +155,8 @@ terminal_skey_do_popup (TerminalScreen *screen,
       entry = glade_xml_get_widget (xml, "skey-entry");
       ok_button = glade_xml_get_widget (xml, "skey-ok-button");
 
-      title_text = g_strdup_printf ("<big>%s</big>", gtk_label_get_text (title));
+      title_text = g_strdup_printf ("<big><b>%s</b></big>",
+				    gtk_label_get_text (title));
       gtk_label_set_label (GTK_LABEL (title), title_text);
       g_free (title_text);
 
