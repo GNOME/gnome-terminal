@@ -20,7 +20,7 @@ DISTCLEANFILES =		\
 	intltool-extract	\
 	intltool-merge		\
 	intltool-update		\
-	$(desktop_DATA)		
+	$(desktop_DATA)
 
 # hack from sound-juicer to get around scrollkeeper's leaving a big
 # mess behind.
