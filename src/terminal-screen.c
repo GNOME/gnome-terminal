@@ -88,8 +88,6 @@ enum
   FLAVOR_DEFAULT_TO_HTTP,
   FLAVOR_MAILTO,
   FLAVOR_EMAIL,
-  FLAVOR_SKEY,
-  FLAVOR_OTP
 };
 
 static void terminal_screen_init        (TerminalScreen      *screen);
@@ -612,11 +610,11 @@ reread_profile (TerminalScreen *screen)
     {
       terminal_widget_skey_match_add (screen->priv->term,
 				      "s/key [0-9]* [-A-Za-z0-9]*",
-				      FLAVOR_SKEY);
+				      FLAVOR_AS_IS);
 
       terminal_widget_skey_match_add (screen->priv->term,
 				      "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
-				      FLAVOR_OTP);
+				      FLAVOR_AS_IS);
     }
   else
     {
@@ -1359,8 +1357,6 @@ open_url (TerminalScreen *screen,
         }
       break;
     case FLAVOR_AS_IS:
-    case FLAVOR_SKEY:
-    case FLAVOR_OTP:
       url = g_strdup (orig_url);
       break;
     default:
