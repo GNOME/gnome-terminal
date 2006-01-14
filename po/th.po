@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-11 21:12+0700\n"
-"PO-Revision-Date: 2006-01-11 21:13+0700\n"
+"POT-Creation-Date: 2006-01-14 23:49+0700\n"
+"PO-Revision-Date: 2006-01-14 23:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,33 +29,33 @@ msgstr "เทอร์มินัล"
 msgid "Use the command line"
 msgstr "สั่งการด้วยบรรทัดคำสั่ง"
 
-#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
+#: ../src/eggcellrendererkeys.c:25
+msgid "New accelerator..."
+msgstr "ปุ่มลัดใหม่..."
+
+#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
 msgid "Accelerator key"
 msgstr "ปุ่มลัด"
 
-#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
+#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
 msgid "Accelerator modifiers"
 msgstr "ตัวปรับแต่งปุ่มลัด"
 
-#: ../src/eggcellrendererkeys.c:180
-msgid "Accelerator Mode"
+#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
+msgid "Accelerator keycode"
+msgstr "รหัสปุ่มลัด"
+
+#: ../src/eggcellrendererkeys.c:197
+msgid "Accel Mode"
 msgstr "โหมดปุ่มลัด"
 
-#: ../src/eggcellrendererkeys.c:181
+#: ../src/eggcellrendererkeys.c:198
 msgid "The type of accelerator."
 msgstr "ชนิดของปุ่มลัด"
 
-#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "ยกเลิกการใช้งาน"
-
-#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
-msgid "Type a new accelerator, or press Backspace to clear"
-msgstr "พิมพ์ปุ่มลัดใหม่ หรือกดแบ็กสเปซเพื่อลบ"
-
-#: ../src/eggcellrendererkeys.c:567
-msgid "Type a new accelerator"
-msgstr "พิมพ์ปุ่มลัดใหม่"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -1641,7 +1641,7 @@ msgstr "ย่อ"
 msgid "Normal Size"
 msgstr "ขนาดปกติ"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2076
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2072
 msgid "Set Title"
 msgstr "ตั้งหัวเรื่อง"
 
@@ -1746,7 +1746,7 @@ msgid "Help"
 msgstr "ระบบช่วยเหลือ"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:392
-#: ../src/terminal-screen.c:208 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้จาก %s. (%s)\n"
@@ -1919,24 +1919,24 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "จานสีมีจำนวน %d รายการ แทนที่จะมี %d รายการ\n"
 msgstr[1] "จานสีมีจำนวน %d รายการ แทนที่จะมี %d รายการ\n"
 
-#: ../src/terminal-screen.c:224
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "เกิดข้อผิดพลาดในการลงทะเบียนการเตือนของการเปลี่ยนแบบอักษรช่องว่างเดี่ยว (%s)\n"
 
-#: ../src/terminal-screen.c:904
+#: ../src/terminal-screen.c:902
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "ไม่สามารถโหลดแบบอักษร \"%s\"\n"
 
-#: ../src/terminal-screen.c:1033
+#: ../src/terminal-screen.c:1031
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "เกิดปัญหากับคำสั่งสำหรับเทอร์มินัลนี้: %s"
 
-#: ../src/terminal-screen.c:1385
+#: ../src/terminal-screen.c:1381
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1945,93 +1945,93 @@ msgstr ""
 "ไม่สามารถเปิดฐานข้อมูล \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1482 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1478 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้สำหรับการเลือกใช้รูปภาพในเมนู (%s)\n"
 
-#: ../src/terminal-screen.c:1571
+#: ../src/terminal-screen.c:1567
 msgid "_Send Mail To..."
 msgstr "ส่งเ_มลถึง..."
 
-#: ../src/terminal-screen.c:1576
+#: ../src/terminal-screen.c:1572
 msgid "_Copy E-mail Address"
 msgstr "คัดลอก_ที่อยู่อีเมล"
 
-#: ../src/terminal-screen.c:1583
+#: ../src/terminal-screen.c:1579
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
-#: ../src/terminal-screen.c:1588
+#: ../src/terminal-screen.c:1584
 msgid "_Copy Link Address"
 msgstr "คัด_ลอกที่อยู่ลิงก์"
 
-#: ../src/terminal-screen.c:1599 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1595 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "เปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-screen.c:1604 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1600 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "แท็_บใหม่"
 
-#: ../src/terminal-screen.c:1614 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1610 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "ปิ_ดแท็บ"
 
-#: ../src/terminal-screen.c:1614 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1610 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "ปิดห_น้าต่าง"
 
-#: ../src/terminal-screen.c:1639
+#: ../src/terminal-screen.c:1635
 msgid "Change P_rofile"
 msgstr "เปลี่ย_นโพรไฟล์"
 
-#: ../src/terminal-screen.c:1675
+#: ../src/terminal-screen.c:1671
 msgid "_Edit Current Profile..."
 msgstr "แ_ก้ไขโพรไฟล์ปัจจุบัน..."
 
-#: ../src/terminal-screen.c:1680
+#: ../src/terminal-screen.c:1676
 msgid "Show _Menubar"
 msgstr "แสดงแถบเ_มนู"
 
-#: ../src/terminal-screen.c:1690
+#: ../src/terminal-screen.c:1686
 msgid "_Input Methods"
 msgstr "วิธี_ป้อนข้อมูล"
 
-#: ../src/terminal-screen.c:2105
+#: ../src/terminal-screen.c:2101
 msgid "_Title:"
 msgstr "_หัวเรื่อง:"
 
-#: ../src/terminal-screen.c:2219
+#: ../src/terminal-screen.c:2215
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ข้อความที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2242
+#: ../src/terminal-screen.c:2238
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "สีที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2285
+#: ../src/terminal-screen.c:2281
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla URL ที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2334
+#: ../src/terminal-screen.c:2330
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI ที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2389
+#: ../src/terminal-screen.c:2385
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ชื่อรูปภาพที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2415
+#: ../src/terminal-screen.c:2411
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "เกิดข้อผิดพลาดในการแปลง URL \"%s\" ไปเป็นชื่อแฟ้ม: %s\n"
@@ -2190,15 +2190,15 @@ msgstr "จะปิดแท็บทั้งหมดหรือไม่?"
 msgid "Close All _Tabs"
 msgstr "ปิดแ_ท็บทั้งหมด"
 
-#: ../src/terminal-window.c:2831
+#: ../src/terminal-window.c:2833
 msgid "GNOME Terminal"
 msgstr "เทอร์มินัล GNOME"
 
-#: ../src/terminal-window.c:2832
+#: ../src/terminal-window.c:2834
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "โปรแกรมจำลองเทอร์มินัลสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/terminal-window.c:2836
+#: ../src/terminal-window.c:2838
 msgid "translator-credits"
 msgstr ""
 "ชัชวาลย์ หาญสกุลบันเทิง <chatchawarnh@nectec.or.th>\n"
@@ -2620,6 +2620,9 @@ msgstr ""
 #: ../src/terminal.c:3860
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "ไม่สามารถอ่านเซิร์ฟเวอร์เทอร์มินัลจากเซิร์ฟเวอร์ activation\n"
+
+#~ msgid "Type a new accelerator, or press Backspace to clear"
+#~ msgstr "พิมพ์ปุ่มลัดใหม่ หรือกดแบ็กสเปซเพื่อลบ"
 
 #~ msgid "Choose Palette Color 10"
 #~ msgstr "เลือกสีในจานสีช่อง 10"
