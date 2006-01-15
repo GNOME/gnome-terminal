@@ -86,8 +86,7 @@ enum
 {
   FLAVOR_AS_IS = 0,
   FLAVOR_DEFAULT_TO_HTTP,
-  FLAVOR_MAILTO,
-  FLAVOR_EMAIL,
+  FLAVOR_EMAIL
 };
 
 static void terminal_screen_init        (TerminalScreen      *screen);
@@ -295,7 +294,7 @@ terminal_screen_init (TerminalScreen *screen)
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<mailto:[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*"
-			     "(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_MAILTO);
+			     "(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_AS_IS);
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*"
@@ -1346,15 +1345,7 @@ open_url (TerminalScreen *screen,
       url = g_strdup_printf ("http:%s", orig_url);
       break;
     case FLAVOR_EMAIL:
-    case FLAVOR_MAILTO:
-      if (strncmp ("mailto:", orig_url, 7) != 0)
-        {
-          url = g_strdup_printf ("mailto:%s", orig_url);
-        }
-      else
-        {
-          url = g_strdup (orig_url);
-        }
+      url = g_strdup_printf ("mailto:%s", orig_url);
       break;
     case FLAVOR_AS_IS:
       url = g_strdup (orig_url);
