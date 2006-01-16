@@ -44,6 +44,10 @@
 
 #define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
 #define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
+#define HTTP_PROXY_DIR "/system/http_proxy"
+#define HTTP_PROXY_HOST HTTP_PROXY_DIR "/host"
+#define HTTP_PROXY_PORT HTTP_PROXY_DIR "/port"
+#define HTTP_PROXY_USE_PROXY HTTP_PROXY_DIR "/use_http_proxy"
 
 struct _TerminalScreenPrivate
 {
@@ -1117,7 +1121,7 @@ get_child_environment (GtkWidget      *term,
   char **p;
   int i;
   char **retval;
-#define EXTRA_ENV_VARS 7
+#define EXTRA_ENV_VARS 8
   
   profile = screen->priv->profile;
 
@@ -1157,6 +1161,24 @@ get_child_environment (GtkWidget      *term,
   ++i;
   retval[i] = g_strdup_printf ("DISPLAY=%s", 
 			       gdk_display_get_name(gtk_widget_get_display(term)));
+  ++i;
+  
+  /* Setup HTTP proxy according to gconf */
+  GConfClient *conf = gconf_client_get_default ();
+  gchar *host = gconf_client_get_string (
+    conf, HTTP_PROXY_HOST, NULL);
+  gint port = gconf_client_get_int (
+    conf, HTTP_PROXY_PORT, NULL);
+  gboolean use_proxy = gconf_client_get_bool (
+    conf, HTTP_PROXY_USE_PROXY, NULL);
+
+  if (host && port && !getenv ("http_proxy") && use_proxy)
+    retval[i] = g_strdup_printf ("http_proxy=%s:%d", host, port);
+  else
+    retval[i] = g_strdup_printf ("");
+  
+  if (host)
+    g_free (host);
   ++i;
   
   retval[i] = NULL;
