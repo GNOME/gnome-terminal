@@ -655,6 +655,7 @@ reread_profile (TerminalScreen *screen)
   
   terminal_widget_set_delete_binding (term,
                                       terminal_profile_get_delete_binding (profile));
+
 }
 
 /**
@@ -833,7 +834,8 @@ terminal_screen_update_on_realize (GtkWidget      *term,
                                        screen->priv->font_scale *
                                        pango_font_description_get_size (desc));
 
-      terminal_widget_set_pango_font (term, desc);
+      terminal_widget_set_pango_font (term, desc,
+      					terminal_profile_get_no_aa_without_render(profile));
 
       pango_font_description_free (desc);
     }

@@ -70,6 +70,7 @@
 #define KEY_USE_SYSTEM_FONT "use_system_font"
 #define KEY_USE_SKEY "use_skey"
 #define KEY_FONT "font"
+#define KEY_NO_AA_WITHOUT_RENDER "no_aa_without_render" 
 
 struct _TerminalProfilePrivate
 {
@@ -128,6 +129,7 @@ struct _TerminalProfilePrivate
   guint scroll_background : 1;
   guint use_theme_colors : 1;
   guint use_system_font : 1;
+  guint no_aa_without_render : 1;
   guint use_skey : 1;
   guint forgotten : 1;
 };
@@ -291,6 +293,7 @@ terminal_profile_init (TerminalProfile *profile)
   profile->priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
   profile->priv->use_theme_colors = TRUE;
   profile->priv->use_system_font = TRUE;
+  profile->priv->no_aa_without_render = TRUE;
   profile->priv->use_skey = TRUE;
   profile->priv->font = pango_font_description_new ();
   pango_font_description_set_family (profile->priv->font,
@@ -1422,6 +1425,14 @@ terminal_profile_set_use_theme_colors (TerminalProfile *profile,
 }
 
 gboolean
+terminal_profile_get_no_aa_without_render (TerminalProfile *profile)
+{
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+
+  return profile->priv->no_aa_without_render;
+}
+
+gboolean
 terminal_profile_get_use_system_font (TerminalProfile *profile)
 {
   g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
@@ -1439,6 +1450,25 @@ terminal_profile_set_use_system_font (TerminalProfile *profile,
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_USE_SYSTEM_FONT);
+  
+  gconf_client_set_bool (profile->priv->conf,
+                         key,
+                         setting,
+                         NULL);
+
+  g_free (key);
+}
+
+void
+terminal_profile_set_no_aa_without_render (TerminalProfile *profile,
+                                      gboolean         setting)
+{
+  char *key;
+
+  RETURN_IF_NOTIFYING (profile);
+  
+  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
+                                  KEY_NO_AA_WITHOUT_RENDER);
   
   gconf_client_set_bool (profile->priv->conf,
                          key,
@@ -1991,6 +2021,7 @@ terminal_profile_update (TerminalProfile *profile)
   UPDATE_STRING  (KEY_DELETE_BINDING,       delete_binding);
   UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,     use_theme_colors);
   UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,      use_system_font);
+  UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,      no_aa_without_render);
   UPDATE_STRING  (KEY_FONT,                 font);
   
 #undef UPDATE_BOOLEAN
@@ -2137,6 +2168,7 @@ else if (strcmp (key, KName) == 0)                                      \
      UPDATE_STRING  (KEY_DELETE_BINDING,         delete_binding,         NULL);
      UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,       use_theme_colors,       TRUE);
      UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,        use_system_font,        TRUE);
+     UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,      no_aa_without_render,	TRUE);
      UPDATE_STRING  (KEY_FONT,                   font,                   NULL);
    }
   
@@ -2867,6 +2899,14 @@ terminal_profile_create (TerminalProfile *base_profile,
                                   KEY_USE_SYSTEM_FONT);
   gconf_client_set_bool (base_profile->priv->conf,
                          key, base_profile->priv->use_system_font,
+                         &err);
+  BAIL_OUT_CHECK ();
+
+  g_free (key);
+  key = gconf_concat_dir_and_key (profile_dir,
+                                  KEY_NO_AA_WITHOUT_RENDER);
+  gconf_client_set_bool (base_profile->priv->conf,
+                         key, base_profile->priv->no_aa_without_render,
                          &err);
   BAIL_OUT_CHECK ();
 

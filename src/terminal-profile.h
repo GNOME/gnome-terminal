@@ -65,6 +65,7 @@ typedef struct
   unsigned int delete_binding : 1;
   unsigned int use_theme_colors : 1;
   unsigned int use_system_font : 1;
+  unsigned int no_aa_without_render : 1;
   unsigned int font : 1;
 } TerminalSettingMask;
 
@@ -184,6 +185,7 @@ TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfi
 
 gboolean               terminal_profile_get_use_theme_colors      (TerminalProfile *profile);
 gboolean               terminal_profile_get_use_system_font       (TerminalProfile *profile);
+gboolean               terminal_profile_get_no_aa_without_render  (TerminalProfile *profile);
 gboolean               terminal_profile_get_use_skey              (TerminalProfile *profile);
 const PangoFontDescription* terminal_profile_get_font             (TerminalProfile *profile);
 
@@ -256,6 +258,9 @@ void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile
 
 
 void terminal_profile_set_use_system_font       (TerminalProfile        *profile,
+						 gboolean                setting);
+
+void terminal_profile_set_no_aa_without_render  (TerminalProfile        *profile,
 						 gboolean                setting);
 
 void terminal_profile_set_use_skey              (TerminalProfile        *profile,

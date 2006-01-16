@@ -161,7 +161,8 @@ void terminal_widget_write_data_to_child (GtkWidget  *widget,
                                           int         len);
 
 void terminal_widget_set_pango_font (GtkWidget                  *widget,
-                                     const PangoFontDescription *font_desc);
+                                     const PangoFontDescription *font_desc,
+				     gboolean 			anti_alias);
 
 gboolean terminal_widget_supports_pango_fonts (void);
 
