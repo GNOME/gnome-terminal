@@ -98,9 +98,12 @@ void terminal_screen_edit_title (TerminalScreen *screen,
                                  GtkWindow      *transient_parent);
 
 void        terminal_screen_set_dynamic_title      (TerminalScreen *screen,
-                                                    const char     *title);
+                                                    const char     *title,
+						    gboolean	   userset);
 void        terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
-                                                    const char     *title);
+                                                    const char     *title,
+						    gboolean	   userset);
+
 const char *terminal_screen_get_dynamic_title      (TerminalScreen *screen);
 const char *terminal_screen_get_dynamic_icon_title (TerminalScreen *screen);
 
