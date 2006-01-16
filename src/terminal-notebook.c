@@ -716,6 +716,15 @@ sync_label (TerminalScreen *screen, TerminalNotebook *nb)
   gtk_tooltips_set_tip (nb->priv->title_tips, ebox, title, NULL);
 }
 
+static void
+close_button_clicked_cb (GtkWidget *widget, TerminalScreen *screen)
+{
+  GtkWidget *notebook;
+
+  notebook = gtk_widget_get_parent (screen);
+  terminal_notebook_remove_tab (notebook, screen);
+}
+
 void
 terminal_notebook_add_tab (TerminalNotebook *nb,
                            TerminalScreen *screen,
@@ -723,9 +732,12 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
                            gboolean jump_to)
 {
   gchar *title;
-  GtkWidget *label, *label_ebox;
+  GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
+  GtkRcStyle *rcstyle;
 
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+
+  hbox = gtk_hbox_new (FALSE, 4);
 
   title = terminal_screen_get_title (screen);
 
@@ -738,14 +750,36 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
 
   gtk_container_add (GTK_CONTAINER (label_ebox), label);
+  gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
 
+  close_button = gtk_button_new ();
+  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+
+  rcstyle = gtk_rc_style_new ();
+  rcstyle->xthickness = rcstyle->ythickness = 0;
+  gtk_widget_modify_style (close_button, rcstyle);
+  gtk_rc_style_unref (rcstyle);
+
+  image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+  gtk_container_add (GTK_CONTAINER (close_button), image);
+  gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (close_button), "clicked",
+		    G_CALLBACK (close_button_clicked_cb),
+		    screen);
+    
   gtk_widget_show (label);
   gtk_widget_show (label_ebox);
+  gtk_widget_show (image);
+  gtk_widget_show (close_button);
+  gtk_widget_show (hbox);
 
   update_tabs_visibility (nb, TRUE);
 
   gtk_notebook_insert_page (GTK_NOTEBOOK (nb), GTK_WIDGET (screen),
-			    label_ebox, position);
+			    hbox, position);
 
   gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (nb),
                                       GTK_WIDGET (screen),
