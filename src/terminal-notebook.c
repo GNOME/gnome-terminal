@@ -703,12 +703,12 @@ terminal_notebook_finalize (GObject *object)
 static void
 sync_label (TerminalScreen *screen, TerminalNotebook *nb)
 {
-  GtkWidget *ebox, *label;
+  GtkWidget *hbox, *ebox, *label;
   const char *title;
 
-  ebox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), GTK_WIDGET (screen));
-  label =
-    g_list_first (gtk_container_get_children (GTK_CONTAINER (ebox)))->data;
+  hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), GTK_WIDGET (screen));
+  ebox = g_list_first (gtk_container_get_children (GTK_CONTAINER (hbox)))->data;
+  label = g_list_first (gtk_container_get_children (GTK_CONTAINER (ebox)))->data;
 
   title = terminal_screen_get_title (screen);
 
