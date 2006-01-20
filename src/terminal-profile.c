@@ -1459,25 +1459,6 @@ terminal_profile_set_use_system_font (TerminalProfile *profile,
   g_free (key);
 }
 
-void
-terminal_profile_set_no_aa_without_render (TerminalProfile *profile,
-                                      gboolean         setting)
-{
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_NO_AA_WITHOUT_RENDER);
-  
-  gconf_client_set_bool (profile->priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
 gboolean
 terminal_profile_get_use_skey (TerminalProfile *profile)
 {
@@ -2021,7 +2002,7 @@ terminal_profile_update (TerminalProfile *profile)
   UPDATE_STRING  (KEY_DELETE_BINDING,       delete_binding);
   UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,     use_theme_colors);
   UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,      use_system_font);
-  UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,      no_aa_without_render);
+  UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER, no_aa_without_render);
   UPDATE_STRING  (KEY_FONT,                 font);
   
 #undef UPDATE_BOOLEAN
@@ -2168,7 +2149,7 @@ else if (strcmp (key, KName) == 0)                                      \
      UPDATE_STRING  (KEY_DELETE_BINDING,         delete_binding,         NULL);
      UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,       use_theme_colors,       TRUE);
      UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,        use_system_font,        TRUE);
-     UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,      no_aa_without_render,	TRUE);
+     UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,	 no_aa_without_render,	 TRUE);
      UPDATE_STRING  (KEY_FONT,                   font,                   NULL);
    }
   

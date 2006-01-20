@@ -256,11 +256,7 @@ void terminal_profile_set_delete_binding        (TerminalProfile        *profile
 void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile,
                                                  gboolean                setting);
 
-
 void terminal_profile_set_use_system_font       (TerminalProfile        *profile,
-						 gboolean                setting);
-
-void terminal_profile_set_no_aa_without_render  (TerminalProfile        *profile,
 						 gboolean                setting);
 
 void terminal_profile_set_use_skey              (TerminalProfile        *profile,

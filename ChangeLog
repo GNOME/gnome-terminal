@@ -1,5 +1,41 @@
 2006-01-20  Guilherme de S. Pastore  <gpastore@gnome.org>
 
+	* src/terminal.c: enforce our coding style on some code copied
+	  from libnautilus.
+
+2006-01-20  Guilherme de S. Pastore  <gpastore@gnome.org>
+
+	* src/terminal-screen.c, src/terminal-screen.h: get rid of the
+	  unused screen ids, avoiding, among other things, some lists
+	  operations at screen initialization.
+
+2006-01-20  Guilherme de S. Pastore  <gpastore@gnome.org>
+
+	Fixes to patch submitted for bug #321952:
+
+	* src/terminal-screen.c (get_child_environment):
+	  - fixed the format of the http_proxy environment variable.
+	  - only query GConf for values we know we are going to use.
+	  - unref the GConfClient when nothing else from GConf is needed.
+	  - also set the no_proxy environment variable with ignore_hosts.
+	  - general code cleanups.
+
+2006-01-20  Guilherme de S. Pastore  <gpastore@gnome.org>
+
+	Fixes to patch submitted for bug #139332:
+
+	* src/gnome-terminal.schemas.in: reworded the descriptions.
+	  Fixes bug #327456.
+
+	* src/terminal-profile.c, src/terminal-profile.h,
+	  src/terminal-widget.h: removed unnecessary code and fixed
+	  indentation issues.
+
+	* src/terminal-widget-vte.c: better organized code to only do what
+	  might take long once simple checks have already been performed.
+
+2006-01-20  Guilherme de S. Pastore  <gpastore@gnome.org>
+
 	* src/terminal-notebook.c: fixed a tiny compiler warning.
 
 	* src/terminal-notebook.c: fixed the tabs height based on a patch

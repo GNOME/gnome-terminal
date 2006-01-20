@@ -1520,49 +1520,49 @@ insert_args (int        *argc,
 static Time
 slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 {
-	Window xwindow;
-	XEvent event;
-	
-	{
-		XSetWindowAttributes attrs;
-		Atom atom_name;
-		Atom atom_type;
-		char* name;
-		
-		attrs.override_redirect = True;
-		attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
-		
-		xwindow =
-			XCreateWindow (xdisplay,
-				       RootWindow (xdisplay, 0),
-				       -100, -100, 1, 1,
-				       0,
-				       CopyFromParent,
-				       CopyFromParent,
-				       CopyFromParent,
-				       CWOverrideRedirect | CWEventMask,
-				       &attrs);
-		
-		atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
-		g_assert (atom_name != None);
-		atom_type = XInternAtom (xdisplay, "STRING", TRUE);
-		g_assert (atom_type != None);
-		
-		name = "Fake Window";
-		XChangeProperty (xdisplay, 
-				 xwindow, atom_name,
-				 atom_type,
-				 8, PropModeReplace, (unsigned char *)name, strlen (name));
-	}
-	
-	XWindowEvent (xdisplay,
-		      xwindow,
-		      PropertyChangeMask,
-		      &event);
-	
-	XDestroyWindow(xdisplay, xwindow);
-	
-	return event.xproperty.time;
+  Window xwindow;
+  XEvent event;
+
+  {
+    XSetWindowAttributes attrs;
+    Atom atom_name;
+    Atom atom_type;
+    char *name;
+
+    attrs.override_redirect = True;
+    attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
+
+    xwindow =
+      XCreateWindow (xdisplay,
+		     RootWindow (xdisplay, 0),
+		     -100, -100, 1, 1,
+		     0,
+		     CopyFromParent,
+		     CopyFromParent,
+		     CopyFromParent,
+		     CWOverrideRedirect | CWEventMask,
+		     &attrs);
+
+    atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
+    g_assert (atom_name != None);
+    atom_type = XInternAtom (xdisplay, "STRING", TRUE);
+    g_assert (atom_type != None);
+
+    name = "Fake Window";
+    XChangeProperty (xdisplay, 
+		     xwindow, atom_name,
+		     atom_type,
+		     8, PropModeReplace, (unsigned char *)name, strlen (name));
+  }
+
+  XWindowEvent (xdisplay,
+		xwindow,
+		PropertyChangeMask,
+		&event);
+
+  XDestroyWindow(xdisplay, xwindow);
+
+  return event.xproperty.time;
 }
 
 int
