@@ -722,7 +722,7 @@ close_button_clicked_cb (GtkWidget *widget, TerminalScreen *screen)
   GtkWidget *notebook;
 
   notebook = gtk_widget_get_parent (screen);
-  terminal_notebook_remove_tab (notebook, screen);
+  terminal_notebook_remove_tab (TERMINAL_NOTEBOOK (notebook), screen);
 }
 
 void
@@ -734,6 +734,8 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   gchar *title;
   GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
   GtkRcStyle *rcstyle;
+  GtkSettings *settings;
+  gint w, h;
 
   g_return_if_fail (TERMINAL_IS_SCREEN (screen));
 
@@ -762,6 +764,10 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   gtk_widget_modify_style (close_button, rcstyle);
   gtk_rc_style_unref (rcstyle);
 
+  settings = gtk_widget_get_settings (GTK_WIDGET (label));
+  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &w, &h);
+  gtk_widget_set_size_request (close_button, w + 2, h + 2);
+
   image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
   gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
@@ -769,7 +775,7 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   g_signal_connect (G_OBJECT (close_button), "clicked",
 		    G_CALLBACK (close_button_clicked_cb),
 		    screen);
-    
+
   gtk_widget_show (label);
   gtk_widget_show (label_ebox);
   gtk_widget_show (image);
