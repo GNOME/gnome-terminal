@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-18 06:42+0200\n"
-"PO-Revision-Date: 2006-01-18:06:45+0200\n"
+"POT-Creation-Date: 2006-01-21 21:40+0200\n"
+"PO-Revision-Date: 2006-01-21 21:45+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -770,11 +770,13 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
-"If true, font anti aliasing will be disabled for X servers without the "
-"RENDER extension. This would give a large performance improvement."
+"If true, font anti-aliasing will be disabled when running without the X "
+"RENDER extension, which gives a considerable performance improvement in "
+"these situations."
 msgstr ""
-"Jos tosi, kirjasinten pehmennys poistetaan käytöstä, kun X-palvelin "
-"ei sisällä RENDER-laajennusta. Tämä nopeuttaa toimintaa suuresti."
+"Jos tosi, kirjasinten pehmennys poistetaan käytöstä, kun X-palvelin ei "
+"sisällä RENDER-laajennusta. Tämä nopeuttaa toimintaa suuresti näissä "
+"tilanteissa."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1517,7 +1519,7 @@ msgid "Whether to blink the cursor"
 msgstr "Vilkkuuko kohdistin"
 
 #: ../src/gnome-terminal.schemas.in.h:138
-msgid "Whether to disable anti aliasing without render extension"
+msgid "Whether to disable anti-aliasing without the X RENDER extension"
 msgstr "Poistetaanko kirjasinten pehmennys, jos RENDER-laajennosta ei ole"
 
 #: ../src/gnome-terminal.schemas.in.h:139
@@ -1751,7 +1753,7 @@ msgstr "Pienennä"
 msgid "Normal Size"
 msgstr "Tavallinen koko"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2097
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
 msgid "Set Title"
 msgstr "Aseta otsikko"
 
@@ -1856,7 +1858,7 @@ msgid "Help"
 msgstr "Ohje"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:210 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Ladatessa asetuksia paikasta %s tapahtui virhe. (%s)\n"
@@ -1981,35 +1983,35 @@ msgid ""
 msgstr ""
 "Pääteprofiilin \"%2$s\" taustakuvan \"%1$s\" lataus epäonnistui: %3$s\n"
 
-#: ../src/terminal-profile.c:1900
+#: ../src/terminal-profile.c:1881
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "GNOME-pääte: kirjasimen nimi \"%s\" asetustietokannassa on virheellinen\n"
 
-#: ../src/terminal-profile.c:2203
+#: ../src/terminal-profile.c:2184
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Virhe hakiessa avaimen %s oletusarvoa: %s\n"
 
-#: ../src/terminal-profile.c:2209
+#: ../src/terminal-profile.c:2190
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Avaimella %s ei ollut oletusarvoa\n"
 
-#: ../src/terminal-profile.c:2224
+#: ../src/terminal-profile.c:2205
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Virhe asettaessa avainta %s takaisin oletukseksi: %s\n"
 
-#: ../src/terminal-profile.c:2427
+#: ../src/terminal-profile.c:2408
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Asetuskansion %s poistamisessa tapahtui virhe. (%s)\n"
 
-#: ../src/terminal-profile.c:2484
+#: ../src/terminal-profile.c:2465
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2017,32 +2019,32 @@ msgid ""
 msgstr ""
 "Virhe listautuessa huomautettavaksi oletusprofiilin muutoksista. (%s)\n"
 
-#: ../src/terminal-profile.c:2529
+#: ../src/terminal-profile.c:2510
 msgid "_Details"
 msgstr "_Lisätiedot"
 
-#: ../src/terminal-profile.c:2972 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Profiilia \"%s\" luodessa tapahtui virhe."
 
-#: ../src/terminal-profile.c:3064
+#: ../src/terminal-profile.c:3045
 msgid "There was an error deleting the profiles"
 msgstr "Profiilien poistamisessa tapahtui virhe."
 
-#: ../src/terminal-profile.c:3167
+#: ../src/terminal-profile.c:3148
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Ei voinut jäsentää merkkijonoa \"%s\" väripaletiksi\n"
 
-#: ../src/terminal-profile.c:3176
+#: ../src/terminal-profile.c:3157
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletissa oli %d kohta %d:n sijaan\n"
 msgstr[1] "Paletissa oli %d kohtaa %d:n sijaan\n"
 
-#: ../src/terminal-screen.c:226
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2052,17 +2054,17 @@ msgstr ""
 "muutoksista. (%s)\n"
 
 # , c-format
-#: ../src/terminal-screen.c:908
+#: ../src/terminal-screen.c:873
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Ei voinut ladata kirjasinta \"%s\"\n"
 
-#: ../src/terminal-screen.c:1037
+#: ../src/terminal-screen.c:1002
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Virhe tämän päätteen komennossa: %s"
 
-#: ../src/terminal-screen.c:1397
+#: ../src/terminal-screen.c:1409
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2071,7 +2073,7 @@ msgstr ""
 "Ei voinut avata osoitetta \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1494 ../src/terminal-window.c:792
+#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:792
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2080,84 +2082,84 @@ msgstr ""
 "Tapahtui virhe ladatessa asetusta, joka määrää, näkyykö valikoissa kuvia. (%"
 "s)\n"
 
-#: ../src/terminal-screen.c:1583
+#: ../src/terminal-screen.c:1595
 msgid "_Send Mail To..."
 msgstr "_Lähetä sähköposti..."
 
-#: ../src/terminal-screen.c:1588
+#: ../src/terminal-screen.c:1600
 msgid "_Copy E-mail Address"
 msgstr "Kopioi _sähköpostiosoite"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1607
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1612
 msgid "_Copy Link Address"
 msgstr "Kopioi _linkin kohde"
 
-#: ../src/terminal-screen.c:1611 ../src/terminal-window.c:855
+#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:855
 msgid "Open _Terminal"
 msgstr "Avaa _pääte"
 
-#: ../src/terminal-screen.c:1616 ../src/terminal-window.c:858
+#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:858
 msgid "Open Ta_b"
 msgstr "Avaa _välilehti"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:873
+#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:873
 msgid "C_lose Tab"
 msgstr "S_ulje välilehti"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:877
+#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:877
 msgid "_Close Window"
 msgstr "_Sulje ikkuna"
 
-#: ../src/terminal-screen.c:1651
+#: ../src/terminal-screen.c:1663
 msgid "Change P_rofile"
 msgstr "Vaihda pro_fiilia"
 
-#: ../src/terminal-screen.c:1687
+#: ../src/terminal-screen.c:1699
 msgid "_Edit Current Profile..."
 msgstr "_Muokkaa nykyistä profiilia..."
 
-#: ../src/terminal-screen.c:1692
+#: ../src/terminal-screen.c:1704
 msgid "Show _Menubar"
 msgstr "Näytä valikkopalkki"
 
-#: ../src/terminal-screen.c:1702
+#: ../src/terminal-screen.c:1714
 msgid "_Input Methods"
 msgstr "Sy_öttötavat"
 
-#: ../src/terminal-screen.c:2126
+#: ../src/terminal-screen.c:2138
 msgid "_Title:"
 msgstr "_Otsikko:"
 
-#: ../src/terminal-screen.c:2240
+#: ../src/terminal-screen.c:2252
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun pelkän tekstin muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2263
+#: ../src/terminal-screen.c:2275
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Päätteelle pudotetun värin muoto (%d) tai pituus (%d) oli väärä\n"
 
-#: ../src/terminal-screen.c:2306
+#: ../src/terminal-screen.c:2318
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun Mozillan URL:n muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2355
+#: ../src/terminal-screen.c:2367
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun URI-listan muoto (%d) tai pituus (%d) oli virheellinen\n"
 
-#: ../src/terminal-screen.c:2410
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2165,7 +2167,7 @@ msgstr ""
 "Päätteelle pudotetun kuvatiedostonimen muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2436
+#: ../src/terminal-screen.c:2448
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Virhe muuntaessa URI:a \"%s\" tiedostonimeksi: %s\n"
