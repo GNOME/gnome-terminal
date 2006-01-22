@@ -7,15 +7,15 @@ msgid ""
 ""
 msgstr "Project-Id-Version: gnome-terminal 2.12.0 Gnome HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 07:05+0100\n"
-"PO-Revision-Date: 2006-01-17 23:14+1030\n"
+"POT-Creation-Date: 2006-01-21 23:05+0100\n"
+"PO-Revision-Date: 2006-01-22 15:39+1030\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: LocFactoryEditor 1.6b23\n"
+"X-Generator: LocFactoryEditor 1.6b30\n"
 
 #:../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #:../src/terminal-accels.c:181 ../src/terminal-profile.c:278
@@ -750,9 +750,11 @@ msgstr "Nếu đúng, đừng làm ồn khi ứng dụng gửi chuỗi thoát đ
 
 #:../src/gnome-terminal.schemas.in.h:35
 msgid ""
-"If true, font anti aliasing will be disabled for X servers without the "
-"RENDER extension. This would give a large performance improvement."
-msgstr "Nếu đúng, khả năng làm trơn phông chữ sẽ bị tắt cho trình phục vụ X không có phần mở rộng RENDER (vẽ). Làm như thế sẽ rất tăng tốc độ chạy."
+"If true, font anti-aliasing will be disabled when running without the X "
+"RENDER extension, which gives a considerable performance improvement in "
+"these situations."
+msgstr "Nếu đúng, khả năng làm trơn phông chữ sẽ bị tắt khi chạy không có "
+"phần mở rộng RENDER (vẽ), mà rất tăng tốc độ chạy trong những trường hợp này."
 
 #:../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1413,8 +1415,8 @@ msgid "Whether to blink the cursor"
 msgstr "Có nên nháy con trỏ hay không."
 
 #:../src/gnome-terminal.schemas.in.h:138
-msgid "Whether to disable anti aliasing without render extension"
-msgstr "Có nên tắt khả năng làm trơn không có phần mở rộng vẽ hay không"
+msgid "Whether to disable anti-aliasing without the X RENDER extension"
+msgstr "Có nên tắt khả năng làm trơn không có phần mở rộng RENDER (vẽ) hay không"
 
 #:../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1646,7 +1648,7 @@ msgstr "Thu nhỏ"
 msgid "Normal Size"
 msgstr "Cỡ bình thường"
 
-#:../src/terminal-accels.c:114 ../src/terminal-screen.c:2097
+#:../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
 msgid "Set Title"
 msgstr "Đặt tựa đề"
 
@@ -1751,7 +1753,7 @@ msgid "Help"
 msgstr "Trợ giúp"
 
 #:../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#:../src/terminal-screen.c:210 ../src/terminal.c:1724
+#:../src/terminal-screen.c:204 ../src/terminal.c:1724
 #,c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Gặp lỗi khi tải cấu hình từ « %s ». (%s)\n"
@@ -1866,83 +1868,83 @@ msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "Lỗi tải ảnh nền « %s » cho hồ sơ thiết bị cuối « %s »: %s\n"
 
-#:../src/terminal-profile.c:1900
+#:../src/terminal-profile.c:1881
 #,c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr "Thiết bị cuối GNOME: thiết lập phông tên « %s » trong cơ sở dữ liệu cấu hình "
 "là không hợp lệ.\n"
 
-#:../src/terminal-profile.c:2203
+#:../src/terminal-profile.c:2184
 #,c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Lỗi lấy giá trị mặc định của « %s »: %s\n"
 
-#:../src/terminal-profile.c:2209
+#:../src/terminal-profile.c:2190
 #,c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Không có giá trị mặc định cho « %s ».\n"
 
-#:../src/terminal-profile.c:2224
+#:../src/terminal-profile.c:2205
 #,c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Lỗi thiết lập phím « %s » về mặc định: %s\n"
 
-#:../src/terminal-profile.c:2427
+#:../src/terminal-profile.c:2408
 #,c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Gặp lỗi khi loại bỏ thư mục cấu hình « %s ». (%s)\n"
 
-#:../src/terminal-profile.c:2484
+#:../src/terminal-profile.c:2465
 #,c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "Lỗi đăng ký thông báo thay đổi hồ sơ mặc định (%s)\n"
 
-#:../src/terminal-profile.c:2529
+#:../src/terminal-profile.c:2510
 msgid "_Details"
 msgstr "_Chi tiết"
 
-#:../src/terminal-profile.c:2972 ../src/terminal.c:2391
+#:../src/terminal-profile.c:2953 ../src/terminal.c:2391
 #,c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Gặp lỗi khi tạo hồ sơ « %s »."
 
-#:../src/terminal-profile.c:3064
+#:../src/terminal-profile.c:3045
 msgid "There was an error deleting the profiles"
 msgstr "Gặp lỗi khi xóa bỏ hồ sơ."
 
-#:../src/terminal-profile.c:3167
+#:../src/terminal-profile.c:3148
 #,c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Không thể phân tích chuỗi « %s » như là bảng chọn màu.\n"
 
-#:../src/terminal-profile.c:3176
+#:../src/terminal-profile.c:3157
 #,c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Bảng chọn có %d mục thay vì %d.\n"
 
-#:../src/terminal-screen.c:226
+#:../src/terminal-screen.c:220
 #,c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "Gặp lỗi khi đăng ký thông báo thay đổi phông chữ đơn cách. (%s)\n"
 
-#:../src/terminal-screen.c:908
+#:../src/terminal-screen.c:873
 #,c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Không tải được phông chữ « %s ».\n"
 
-#:../src/terminal-screen.c:1037
+#:../src/terminal-screen.c:1002
 #,c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Lỗi với lệnh cho thiết bị cuối này: %s"
 
-#:../src/terminal-screen.c:1397
+#:../src/terminal-screen.c:1409
 #,c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1950,7 +1952,7 @@ msgid ""
 msgstr "Không mở được địa chỉ « %s »:\n"
 "%s"
 
-#:../src/terminal-screen.c:1494 ../src/terminal-window.c:791
+#:../src/terminal-screen.c:1506 ../src/terminal-window.c:791
 #,c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -1958,90 +1960,90 @@ msgid ""
 msgstr "Gặp lỗi khi tải giá trị cấu hình có dùng ảnh trong trình đơn hay không. (%"
 "s)\n"
 
-#:../src/terminal-screen.c:1583
+#:../src/terminal-screen.c:1595
 msgid "_Send Mail To..."
 msgstr "_Gởi thư cho..."
 
-#:../src/terminal-screen.c:1588
+#:../src/terminal-screen.c:1600
 msgid "_Copy E-mail Address"
 msgstr "_Chép địa chỉ thư"
 
-#:../src/terminal-screen.c:1595
+#:../src/terminal-screen.c:1607
 msgid "_Open Link"
 msgstr "Mở _liên kết"
 
-#:../src/terminal-screen.c:1600
+#:../src/terminal-screen.c:1612
 msgid "_Copy Link Address"
 msgstr "_Chép địa chỉ liên kết"
 
-#:../src/terminal-screen.c:1611 ../src/terminal-window.c:854
+#:../src/terminal-screen.c:1623 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "_Mở Thiết bị cuối"
 
-#:../src/terminal-screen.c:1616 ../src/terminal-window.c:857
+#:../src/terminal-screen.c:1628 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Mở _thanh"
 
-#:../src/terminal-screen.c:1626 ../src/terminal-window.c:872
+#:../src/terminal-screen.c:1638 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "Đó_ng thanh"
 
-#:../src/terminal-screen.c:1626 ../src/terminal-window.c:876
+#:../src/terminal-screen.c:1638 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Đóng cửa sổ"
 
-#:../src/terminal-screen.c:1651
+#:../src/terminal-screen.c:1663
 msgid "Change P_rofile"
 msgstr "Thay đổi _tồ sơ"
 
-#:../src/terminal-screen.c:1687
+#:../src/terminal-screen.c:1699
 msgid "_Edit Current Profile..."
 msgstr "_Sửa đổi hồ sơ hiện tại..."
 
-#:../src/terminal-screen.c:1692
+#:../src/terminal-screen.c:1704
 msgid "Show _Menubar"
 msgstr "Hiện thanh _trình đơn"
 
-#:../src/terminal-screen.c:1702
+#:../src/terminal-screen.c:1714
 msgid "_Input Methods"
 msgstr "_Kiểu gõ"
 
-#:../src/terminal-screen.c:2126
+#:../src/terminal-screen.c:2138
 msgid "_Title:"
 msgstr "_Tựa đề:"
 
-#:../src/terminal-screen.c:2240
+#:../src/terminal-screen.c:2252
 #,c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Dạng « text/plain » (chữ thô) thả xuống thiết bị cuối có dạng thức (%d) hoặc "
 "chiều dài (%d) không đúng.\n"
 
-#:../src/terminal-screen.c:2263
+#:../src/terminal-screen.c:2275
 #,c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Màu thả xuống thiết bị cuối có dạng thức (%d) hoặc chiều dài (%d) không "
 "đúng.\n"
 
-#:../src/terminal-screen.c:2306
+#:../src/terminal-screen.c:2318
 #,c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Địa chỉ Mạng Mozilla thả xuống thiết bị cuối có dạng thức (%d) hoặc chiều "
 "dài (%d) không đúng.\n"
 
-#:../src/terminal-screen.c:2355
+#:../src/terminal-screen.c:2367
 #,c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Danh sách địa chỉ Mạng thả xuống thiết bị cuối có dạng thức (%d) hoặc chiều "
 "dài (%d) không đung.\n"
 
-#:../src/terminal-screen.c:2410
+#:../src/terminal-screen.c:2422
 #,c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Tên tập tin ảnh thả xuống thiết bị cuối có dạng thức (%d) hoặc chiều dài (%"
 "d) không đúng.\n"
 
-#:../src/terminal-screen.c:2436
+#:../src/terminal-screen.c:2448
 #,c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Gặp lỗi khi chuyển đổi địa chỉ Mạng « %s » vào tên tập tin: %s\n"
