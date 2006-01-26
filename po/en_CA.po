@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-17 19:38-0500\n"
+"POT-Creation-Date: 2006-01-26 13:05-0500\n"
 "PO-Revision-Date: 2005-08-08 10:53-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: Canadian English <adamw@gnome.org>\n"
@@ -27,33 +27,33 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Use the command line"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "New accelerator..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Accelerator key"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Accelerator modifiers"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Accelerator keycode"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
+msgstr "Accelerator Mode"
 
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
-msgstr "Accel Mode"
-
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "The type of accelerator."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Disabled"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Type a new accelerator, or press Backspace to clear"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Type a new accelerator"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -767,11 +767,13 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
-"If true, font anti aliasing will be disabled for X servers without the "
-"RENDER extension. This would give a large performance improvement."
+"If true, font anti-aliasing will be disabled when running without the X "
+"RENDER extension, which gives a considerable performance improvement in "
+"these situations."
 msgstr ""
-"If true, font anti-aliasing will be disabled for X servers without the "
-"RENDER extension. This may give a large performance improvement."
+"If true, font anti-aliasing will be disabled when running without the X "
+"RENDER extension, which gives a considerable performance improvement in "
+"these situations."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1502,8 +1504,8 @@ msgid "Whether to blink the cursor"
 msgstr "Whether to blink the cursor"
 
 #: ../src/gnome-terminal.schemas.in.h:138
-msgid "Whether to disable anti aliasing without render extension"
-msgstr "Whether to disable anti-aliasing without RENDER extension"
+msgid "Whether to disable anti-aliasing without the X RENDER extension"
+msgstr "Whether to disable anti-aliasing without the X RENDER extension"
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1736,7 +1738,7 @@ msgstr "Zoom Out"
 msgid "Normal Size"
 msgstr "Normal Size"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2097
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
 msgid "Set Title"
 msgstr "Set Title"
 
@@ -1841,7 +1843,7 @@ msgid "Help"
 msgstr "Help"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:210 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "There was an error loading config from %s. (%s)\n"
@@ -1911,26 +1913,26 @@ msgstr "Error propagating accelerator change to configuration database: %s\n"
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "The shortcut key \"%s\" is already bound to the \"%s\" action"
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Error setting new accelerator in configuration database: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Error setting %s config key: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Error setting use_menu_accelerators key: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Action"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "Shortcut _Key"
 
@@ -1967,36 +1969,36 @@ msgid ""
 msgstr ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 
-#: ../src/terminal-profile.c:1900
+#: ../src/terminal-profile.c:1881
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 
-#: ../src/terminal-profile.c:2203
+#: ../src/terminal-profile.c:2184
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Error getting default value of %s: %s\n"
 
-#: ../src/terminal-profile.c:2209
+#: ../src/terminal-profile.c:2190
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "There wasn't a default value for %s\n"
 
-#: ../src/terminal-profile.c:2224
+#: ../src/terminal-profile.c:2205
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Error setting key %s back to default: %s\n"
 
-#: ../src/terminal-profile.c:2427
+#: ../src/terminal-profile.c:2408
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2484
+#: ../src/terminal-profile.c:2465
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2005,32 +2007,32 @@ msgstr ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 
-#: ../src/terminal-profile.c:2529
+#: ../src/terminal-profile.c:2510
 msgid "_Details"
 msgstr "_Details"
 
-#: ../src/terminal-profile.c:2972 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "There was an error creating the profile \"%s\""
 
-#: ../src/terminal-profile.c:3064
+#: ../src/terminal-profile.c:3045
 msgid "There was an error deleting the profiles"
 msgstr "There was an error deleting the profiles"
 
-#: ../src/terminal-profile.c:3167
+#: ../src/terminal-profile.c:3148
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Could not parse string \"%s\" as a colour palette\n"
 
-#: ../src/terminal-profile.c:3176
+#: ../src/terminal-profile.c:3157
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Palette had %d entry instead of %d\n"
 msgstr[1] "Palette had %d entries instead of %d\n"
 
-#: ../src/terminal-screen.c:226
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2039,17 +2041,17 @@ msgstr ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 
-#: ../src/terminal-screen.c:908
+#: ../src/terminal-screen.c:873
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Could not load font \"%s\"\n"
 
-#: ../src/terminal-screen.c:1037
+#: ../src/terminal-screen.c:1002
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "There was a problem with the command for this terminal: %s"
 
-#: ../src/terminal-screen.c:1397
+#: ../src/terminal-screen.c:1409
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2058,7 +2060,7 @@ msgstr ""
 "Could not open the address \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1494 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2067,86 +2069,86 @@ msgstr ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 
-#: ../src/terminal-screen.c:1583
+#: ../src/terminal-screen.c:1595
 msgid "_Send Mail To..."
 msgstr "_Send Mail To..."
 
-#: ../src/terminal-screen.c:1588
+#: ../src/terminal-screen.c:1600
 msgid "_Copy E-mail Address"
 msgstr "_Copy E-mail Address"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1607
 msgid "_Open Link"
 msgstr "_Open Link"
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1612
 msgid "_Copy Link Address"
 msgstr "_Copy Link Address"
 
-#: ../src/terminal-screen.c:1611 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Open _Terminal"
 
-#: ../src/terminal-screen.c:1616 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Open Ta_b"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "C_lose Tab"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Close Window"
 
-#: ../src/terminal-screen.c:1651
+#: ../src/terminal-screen.c:1663
 msgid "Change P_rofile"
 msgstr "Change P_rofile"
 
-#: ../src/terminal-screen.c:1687
+#: ../src/terminal-screen.c:1699
 msgid "_Edit Current Profile..."
 msgstr "_Edit Current Profile..."
 
-#: ../src/terminal-screen.c:1692
+#: ../src/terminal-screen.c:1704
 msgid "Show _Menubar"
 msgstr "Show _Menubar"
 
-#: ../src/terminal-screen.c:1702
+#: ../src/terminal-screen.c:1714
 msgid "_Input Methods"
 msgstr "_Input Methods"
 
-#: ../src/terminal-screen.c:2126
+#: ../src/terminal-screen.c:2138
 msgid "_Title:"
 msgstr "_Title:"
 
-#: ../src/terminal-screen.c:2240
+#: ../src/terminal-screen.c:2252
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: ../src/terminal-screen.c:2263
+#: ../src/terminal-screen.c:2275
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Colour dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: ../src/terminal-screen.c:2306
+#: ../src/terminal-screen.c:2318
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: ../src/terminal-screen.c:2355
+#: ../src/terminal-screen.c:2367
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: ../src/terminal-screen.c:2410
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 
-#: ../src/terminal-screen.c:2436
+#: ../src/terminal-screen.c:2448
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Error converting URI \"%s\" into filename: %s\n"
