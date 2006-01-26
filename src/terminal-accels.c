@@ -672,7 +672,7 @@ binding_from_string (const char      *str,
       return TRUE;
     }
 
-  if (!egg_accelerator_parse_virtual (str, accelerator_key, NULL, &virtual))
+  if (!egg_accelerator_parse_virtual (str, accelerator_key, &virtual))
     return FALSE;
 
   egg_keymap_resolve_virtual_modifiers (gdk_keymap_get_default (),
@@ -985,7 +985,7 @@ accel_edited_callback (GtkCellRendererText *cell,
           GtkWidget *dialog;
           char *name;
 
-          name = egg_virtual_accelerator_name (keyval, hardware_keycode, mask);
+          name = egg_virtual_accelerator_name (keyval, mask);
 
           dialog =
             gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view))),
@@ -1003,7 +1003,6 @@ accel_edited_callback (GtkCellRendererText *cell,
           /* set it back to its previous value. */
           egg_cell_renderer_keys_set_accelerator (EGG_CELL_RENDERER_KEYS (cell),
 						  ke->gconf_keyval,
-						  hardware_keycode,
 						  ke->gconf_mask);
           gtk_tree_path_free (path);
 
