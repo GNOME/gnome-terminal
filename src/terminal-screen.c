@@ -81,9 +81,8 @@ enum {
   LAST_SIGNAL
 };
 
-enum
-{
-  FLAVOR_AS_IS = 0,
+enum {
+  FLAVOR_AS_IS,
   FLAVOR_DEFAULT_TO_HTTP,
   FLAVOR_EMAIL
 };
@@ -274,17 +273,13 @@ terminal_screen_init (TerminalScreen *screen)
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
 #define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
-#define SCHEME    "(news|telnet|nntp|https?|ftps?|webcal)"
+#define SCHEME    "(news:|telnet:|nntp:|file:/|https?:|ftps?:|webcal:)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 #define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
 
   terminal_widget_match_add (screen->priv->term,
-			     "\\<(" SCHEME "://(" USER "@)?)[" HOSTCHARS ".]+"
+			     "\\<" SCHEME "//(" USER "@)?[" HOSTCHARS ".]+"
 			     "(:[0-9]+)?(" URLPATH ")?\\>", FLAVOR_AS_IS);
-
-  terminal_widget_match_add (screen->priv->term,
-			     "\\<file:///(" URLPATH ")?", FLAVOR_AS_IS);
-			     
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
@@ -292,12 +287,9 @@ terminal_screen_init (TerminalScreen *screen)
 			     FLAVOR_DEFAULT_TO_HTTP);
 
   terminal_widget_match_add (screen->priv->term,
-			     "\\<mailto:[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*"
-			     "(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_AS_IS);
-
-  terminal_widget_match_add (screen->priv->term,
-			     "\\<[a-z0-9][a-z0-9.-]*@[a-z0-9][a-z0-9-]*"
-			     "(\\.[a-z0-9][a-z0-9-]*)+\\>", FLAVOR_EMAIL);
+			     "\\<(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9]"
+			     "[a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>",
+			     FLAVOR_EMAIL);
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
@@ -1382,7 +1374,10 @@ open_url (TerminalScreen *screen,
       url = g_strdup_printf ("http:%s", orig_url);
       break;
     case FLAVOR_EMAIL:
-      url = g_strdup_printf ("mailto:%s", orig_url);
+      if (strncmp ("mailto:", orig_url, 7))
+	url = g_strdup_printf ("mailto:%s", orig_url);
+      else
+	url = g_strdup (orig_url);
       break;
     case FLAVOR_AS_IS:
       url = g_strdup (orig_url);
@@ -1570,19 +1565,15 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   screen = info->screen;
 
   if (!GTK_WIDGET_REALIZED (screen->priv->term)) 
-    {
-      goto cleanup;
-    }
+    goto cleanup;
 
   if (screen->priv->popup_menu)
-    {
-      gtk_widget_destroy (screen->priv->popup_menu);
-    }
+    gtk_widget_destroy (screen->priv->popup_menu);
 
   screen->priv->popup_menu = gtk_menu_new ();
   gtk_menu_set_accel_group (GTK_MENU (screen->priv->popup_menu),
                             terminal_accels_get_group_for_widget (screen->priv->popup_menu));
-  
+
   gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
                              GTK_WIDGET (screen->priv->term),
                              popup_menu_detach);
@@ -1591,39 +1582,42 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
     {
       if (screen->priv->matched_flavor == FLAVOR_EMAIL)
 	{
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Send Mail To..."),
-				       G_CALLBACK (open_url_callback),
-				       screen);
+	  if (strncmp ("mailto:", screen->priv->matched_string, 7))
+	    {
+	      menu_item = append_menuitem (screen->priv->popup_menu,
+					   _("_Send Mail To..."),
+					   G_CALLBACK (open_url_callback),
+					   screen);
 
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Copy E-mail Address"),
-				       G_CALLBACK (copy_url_callback),
-				       screen);
-  	}
-      else
-	{
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Open Link"),
-				       G_CALLBACK (open_url_callback),
-				       screen);
+	      menu_item = append_menuitem (screen->priv->popup_menu,
+					   _("_Copy E-mail Address"),
+					   G_CALLBACK (copy_url_callback),
+					   screen);
+	    }
+	  else
+	    {
+	      menu_item = append_menuitem (screen->priv->popup_menu,
+					   _("_Open Link"),
+					   G_CALLBACK (open_url_callback),
+					   screen);
 
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Copy Link Address"),
-				       G_CALLBACK (copy_url_callback),
-				       screen);
+	      menu_item = append_menuitem (screen->priv->popup_menu,
+					   _("_Copy Link Address"),
+					   G_CALLBACK (copy_url_callback),
+					   screen);
+	    }
 	}
 
       menu_item = gtk_separator_menu_item_new ();
       gtk_widget_show (menu_item);
       gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
     }
- 
+
   menu_item = append_menuitem (screen->priv->popup_menu,
                                _("Open _Terminal"),
                                G_CALLBACK (new_window_callback),
                                screen);
-  
+
   menu_item = append_menuitem (screen->priv->popup_menu,
                                _("Open Ta_b"),
                                G_CALLBACK (new_tab_callback),
