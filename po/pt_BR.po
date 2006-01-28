@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-20 16:16-0200\n"
-"PO-Revision-Date: 2006-01-26 16:05-0200\n"
+"POT-Creation-Date: 2006-01-28 09:54-0200\n"
+"PO-Revision-Date: 2006-01-28 09:55-0200\n"
 "Last-Translator: Guilherme de S. Pastore <gpastore@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -29,35 +29,34 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Use a linha de comando"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Novo atalho..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Tecla de atalho"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Modificadores de atalhos"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
+#: ../src/eggcellrendererkeys.c:180
 #, fuzzy
-msgid "Accelerator keycode"
+msgid "Accelerator Mode"
 msgstr "Tecla de atalho"
 
-#: ../src/eggcellrendererkeys.c:197
-#, fuzzy
-msgid "Accel Mode"
-msgstr "Modo de Atalho"
-
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "O tipo de atalho."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Desativado"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Digite um novo atalho, ou pressione Backspace para limpar"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Tecle um novo atalho"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -271,7 +270,11 @@ msgid ""
 "incorrectly.  They are only here to allow you to work around certain "
 "applications and operating systems that expect different terminal behavior.</"
 "i></small>"
-msgstr "<small><i><b>Nota:</b> Estas opções podem levar algumas aplicações a se comportarem incorretamente. Elas existem apenas para permitir que você contorne certas aplicações e sistemas operacionais que esperam um comportamento diferente do terminal.</i></small>"
+msgstr ""
+"<small><i><b>Nota:</b> Estas opções podem levar algumas aplicações a se "
+"comportarem incorretamente. Elas existem apenas para permitir que você "
+"contorne certas aplicações e sistemas operacionais que esperam um "
+"comportamento diferente do terminal.</i></small>"
 
 #: ../src/gnome-terminal.glade2.h:13
 msgid "<small><i>Maximum</i></small>"
@@ -451,7 +454,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.glade2.h:59
 msgid "Ru_n a custom command instead of my shell"
-msgstr "Executar um coma_ndo personalizado ao invés do shell padrão"
+msgstr "Executar um coma_ndo personalizado em vez da shell padrão"
 
 #: ../src/gnome-terminal.glade2.h:60
 msgid "S/Key Challenge Response"
@@ -673,7 +676,7 @@ msgstr "Caracteres que são considerados \"parte de uma palavra\""
 
 #: ../src/gnome-terminal.schemas.in.h:14
 msgid "Custom command to use instead of the shell"
-msgstr "Comando personalizado para usar ao invés do shell"
+msgstr "Comando personalizado para usar em vez da shell"
 
 #: ../src/gnome-terminal.schemas.in.h:15
 msgid "Default"
@@ -777,11 +780,16 @@ msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
-msgstr "Se verdadeiro, anti-aliasing de fontes será desabilitado quando rodando sem a extensão RENDER do X, o que resulta em um aumento considerável de desempenho nessas situações."
+msgstr ""
+"Se verdadeiro, anti-aliasing de fontes será desabilitado quando rodando sem "
+"a extensão RENDER do X, o que resulta em um aumento considerável de "
+"desempenho nessas situações."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Se verdadeiro, pressionar uma tecla pula a barra de rolagem para a última linha."
+msgstr ""
+"Se verdadeiro, pressionar uma tecla pula a barra de rolagem para a última "
+"linha."
 
 #: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
@@ -1388,8 +1396,7 @@ msgstr "Perfil utilizado para novos terminais"
 #: ../src/gnome-terminal.schemas.in.h:118
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
-"Executar este comando ao invés do shell, se use_custom_commando for "
-"verdadeiro."
+"Executar este comando em vez da shell se use_custom_commando for verdadeiro."
 
 #: ../src/gnome-terminal.schemas.in.h:119
 msgid ""
@@ -1543,7 +1550,7 @@ msgstr "Se deve executar o comando no terminal como shell de login"
 
 #: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether to run a custom command instead of the shell"
-msgstr "Se deve executar um comando personalizado ao invés do shell"
+msgstr "Se deve executar um comando personalizado em vez da shell"
 
 #: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether to scroll background image"
@@ -1759,7 +1766,7 @@ msgstr "Reduzir"
 msgid "Normal Size"
 msgstr "Tamanho Normal"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
 msgid "Set Title"
 msgstr "Definir Título"
 
@@ -1864,7 +1871,7 @@ msgid "Help"
 msgstr "Ajuda"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Erro ao carregar configuração de %s. (%s)\n"
@@ -1935,26 +1942,26 @@ msgstr ""
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "A tecla de atalho \"%s\" já está associada à ação \"%s\""
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Erro ao definir novo atalho no banco de dados de configurações: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Erro definindo chave de configuração %s: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Erro ao definir chave use_menu_accelerators: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Ação"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "Te_cla de Atalho"
 
@@ -2051,7 +2058,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paleta tinha %d entrada ao invés de %d\n"
 msgstr[1] "Paleta tinha %d entradas ao invés de %d\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2060,17 +2067,17 @@ msgstr ""
 "Ocorreu um erro ao subscrever para notificação de mudanças na fonte "
 "monoespaçada. (%s)\n"
 
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Não foi possível carregar fonte \"%s\"\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Houve um problema com o comando para este terminal: %s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2079,7 +2086,7 @@ msgstr ""
 "Não foi possível abrir o endereço \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2088,86 +2095,86 @@ msgstr ""
 "Ocorreu um erro ao carregar o valor de configuração sobre utilização de "
 "imagens em menus. (%s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1588
 msgid "_Send Mail To..."
 msgstr "_Enviar Mensagem Para..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1593
 msgid "_Copy E-mail Address"
 msgstr "_Copiar Endereço de E-mail"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1600
 msgid "_Open Link"
 msgstr "_Abrir Link"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1605
 msgid "_Copy Link Address"
 msgstr "_Copiar Endereço do Link"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Abrir _Terminal"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Abrir A_ba"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "F_echar Aba"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Fechar Janela"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1657
 msgid "Change P_rofile"
 msgstr "Mudar _Perfil"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1693
 msgid "_Edit Current Profile..."
 msgstr "_Editar Perfil Atual..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1698
 msgid "Show _Menubar"
 msgstr "Exibir Barra de _Menu"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1708
 msgid "_Input Methods"
 msgstr "Métodos de En_trada"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2140
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2254
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain arrastado para o terminal tinha formato (%d) ou tamanho (%d) "
 "incorretos\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2277
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Cor arrastada para o terminal tinha formato (%d) ou tamanho (%d) incorretos\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2320
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URL Mozilla arrastado para o terminal tinha formato (%d) ou tamanho (%d) "
 "incorretos\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2369
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Lista URI arrastada para o terminal tinha formato (%d) ou tamanho (%d) "
 "incorretos\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2424
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2175,7 +2182,7 @@ msgstr ""
 "Nome da imagem arrastada para o terminal tinha formato (%d) ou tamanho (%d)\n"
 " incorretos\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Erro ao converter URI \"%s\" para o nome de arquivo: %s\n"
@@ -2802,8 +2809,12 @@ msgstr ""
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Erro ao recuperar servidor do terminal do ativador de servidores\n"
 
-#~ msgid "Type a new accelerator, or press Backspace to clear"
-#~ msgstr "Digite um novo atalho, ou pressione Backspace para limpar"
+#~ msgid "New accelerator..."
+#~ msgstr "Novo atalho..."
+
+#, fuzzy
+#~ msgid "Accel Mode"
+#~ msgstr "Modo de Atalho"
 
 #~ msgid "Choose Palette Color 10"
 #~ msgstr "Escolha a Cor 10 da Paleta"
