@@ -2075,12 +2075,20 @@ title_entry_changed (GtkWidget      *entry,
                      TerminalScreen *screen)
 {
   char *text;
+  gboolean userset;
 
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
-  screen->priv->user_title = TRUE;  
-  terminal_screen_set_dynamic_title (screen, text, TRUE);
-  terminal_screen_set_dynamic_icon_title (screen, text, TRUE);
+  /* The user set the title to nothing, let's understand that as a
+     request to revert to dynamically setting the title again. */
+  if (G_UNLIKELY (*text == '\0'))
+    screen->priv->user_title = FALSE;
+  else
+    {
+      screen->priv->user_title = TRUE;
+      terminal_screen_set_dynamic_title (screen, text, TRUE);
+      terminal_screen_set_dynamic_icon_title (screen, text, TRUE);
+    }
 
   g_free (text);
 }
