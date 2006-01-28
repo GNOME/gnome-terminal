@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-23 14:58+0100\n"
-"PO-Revision-Date: 2006-01-23 19:34+0100\n"
+"POT-Creation-Date: 2006-01-28 07:07+0100\n"
+"PO-Revision-Date: 2006-01-28 22:55+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -34,34 +34,35 @@ msgstr "Terminalvenster"
 msgid "Use the command line"
 msgstr "Gebruik de opdrachtregel"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Nieuwe sneltoets..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Sneltoets"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Sneltoets-optietoetsen"
 
-# codegetal/code
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Sneltoets code"
+# sneltoetsstijl/modus
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
+msgstr "Sneltoets-modus"
 
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
-msgstr "Sneltoetsmodus"
-
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "Het soort sneltoets."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Uitgeschakeld"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Geef een nieuwe sneltoets, of Backspace om te wissen"
+
+# toets/typ/geef
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Geef een nieuwe sneltoets"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -797,7 +798,10 @@ msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
-msgstr "Indien waar, zullen, bij het ontbreken van de X RENDER extension, lettertekens geen anti-aliasing krijgen. Dat levert in die situatie een aanzienlijke snelheidswinst op."
+msgstr ""
+"Indien waar, zullen, bij het ontbreken van de X RENDER extension, "
+"lettertekens geen anti-aliasing krijgen. Dat levert in die situatie een "
+"aanzienlijke snelheidswinst op."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1768,7 +1772,7 @@ msgstr "Uitzoomen"
 msgid "Normal Size"
 msgstr "Normale grootte"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
 msgid "Set Title"
 msgstr "Titel instellen"
 
@@ -1873,7 +1877,7 @@ msgid "Help"
 msgstr "Hulp"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -1948,28 +1952,28 @@ msgstr "Fout bij wijzigen van sneltoets in de configuratiedatabase: %s\n"
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "De sneltoets \"%s\" is al gebonden aan de actie \"%s\""
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Fout bij toevoegen van sneltoets aan de configuratiedatabase: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Fout bij aanpassen van %s configuratie sleutel: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr ""
 "Er is een fout opgetreden bij het instellen van de use_menu_accelerators-"
 "sleutel: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Actie"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "_Sneltoets"
 
@@ -2073,7 +2077,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Palet had %d item in plaats van %d\n"
 msgstr[1] "Palet had %d items in plaats van %d\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2082,17 +2086,17 @@ msgstr ""
 "Er is een fout opgetreden bij het abonneren op mededelingen bij monospace "
 "lettertypeveranderingen. (%s)\n"
 
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Kan het lettertype \"%s\"  niet laden\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Er is een probleem opgetreden met de opdracht voor deze terminal: %s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2101,7 +2105,7 @@ msgstr ""
 "Kan het adres \"%s\" niet openen:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2110,86 +2114,86 @@ msgstr ""
 "Er is een fout opgetreden bij het laden van configuratiewaarde voor het "
 "gebruik van afbeeldingen in menu's. (%s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1588
 msgid "_Send Mail To..."
 msgstr "_E-mail verzenden naar..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1593
 msgid "_Copy E-mail Address"
 msgstr "E-mailadres _kopiëren"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1600
 msgid "_Open Link"
 msgstr "Koppeling _openen"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1605
 msgid "_Copy Link Address"
 msgstr "Koppelingsadres _kopiëren"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "_Terminal openen"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "_Nieuw tabblad"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "Ta_bblad sluiten"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "Venster sl_uiten"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1657
 msgid "Change P_rofile"
 msgstr "P_rofiel wijzigen"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1693
 msgid "_Edit Current Profile..."
 msgstr "Huidig_e profiel bewerken..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1698
 msgid "Show _Menubar"
 msgstr "_Menubalk tonen"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1708
 msgid "_Input Methods"
 msgstr "_Invoermethoden"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2140
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2254
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2277
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Kleur gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%d)\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2320
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla-url gesleept naar de terminal heeft verkeerd formaat (%d) of lengte "
 "(%d)\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2369
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-lijst gesleept naar de terminal heeft verkeerd formaat (%d) of lengte (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2424
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2197,7 +2201,7 @@ msgstr ""
 "Afbeeldingsnaam gesleept naar de terminal heeft verkeerd formaat (%d) of "
 "lengte (%d)\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr ""
@@ -2355,8 +2359,12 @@ msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all of its "
 "tabs."
-msgstr[0] "Dit venster heeft 1 tabblad. Bij het sluiten van het venster worden ook het tabblad gesloten."
-msgstr[1] "Dit venster heeft %d tabbladen. Bij het sluiten van het venster worden alle tabbladen gesloten."
+msgstr[0] ""
+"Dit venster heeft 1 tabblad. Bij het sluiten van het venster worden ook het "
+"tabblad gesloten."
+msgstr[1] ""
+"Dit venster heeft %d tabbladen. Bij het sluiten van het venster worden alle "
+"tabbladen gesloten."
 
 #: ../src/terminal-window.c:2274
 msgid "Close all tabs?"
@@ -2839,8 +2847,11 @@ msgstr ""
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Niet gelukt om terminal server op te halen van de activatieserver\n"
 
-#~ msgid "Type a new accelerator, or press Backspace to clear"
-#~ msgstr "Geef een nieuwe sneltoets, of Backspace om te wissen"
+#~ msgid "New accelerator..."
+#~ msgstr "Nieuwe sneltoets..."
+
+#~ msgid "Accel Mode"
+#~ msgstr "Sneltoetsmodus"
 
 # tekst wordt:
 # Schuifbalks staat: [aan de rechterkant/linkerkant/uitgeschakeld]
