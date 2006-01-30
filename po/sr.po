@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-18 02:54+0100\n"
-"PO-Revision-Date: 2006-01-18 02:34+0100\n"
+"POT-Creation-Date: 2006-01-30 21:27+0100\n"
+"PO-Revision-Date: 2006-01-30 21:31+0100\n"
 "Last-Translator: Слободан Д. Средојевић <slobo@akrep.be>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,35 +28,37 @@ msgstr "Терминал"
 
 #: ../gnome-terminal.desktop.in.in.h:2
 msgid "Use the command line"
-msgstr "Користи линију наредби"
+msgstr "Користите линију наредби"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Нова пречица..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Брзи приступ помоћу"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Тастери за брзи приступ"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Код пречице"
-
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
 msgstr "Режим за брзи приступ"
 
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "Врста тастера за брзи приступ."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Онемогућен"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr ""
+"Укуцајте нову комбинацију за брзи приступ, или притисните Backspace за њено "
+"уклањање"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Укуцајте један нови тастер за брзи приступ"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -773,11 +775,12 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
-"If true, font anti aliasing will be disabled for X servers without the "
-"RENDER extension. This would give a large performance improvement."
+"If true, font anti-aliasing will be disabled when running without the X "
+"RENDER extension, which gives a considerable performance improvement in "
+"these situations."
 msgstr ""
 "Ако је постављено, омекшавање слова биће искључено за Икс сервере који "
-"немају RENDER проширење. Ово даје велико убрзање."
+"немају RENDER проширење што тада даје велико убрзање."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1497,8 +1500,8 @@ msgid "Whether to blink the cursor"
 msgstr "Да ли курсор да трепће"
 
 #: ../src/gnome-terminal.schemas.in.h:138
-msgid "Whether to disable anti aliasing without render extension"
-msgstr "Да ли да искључим омекшавање слова ако нема „RENDER “проширења"
+msgid "Whether to disable anti-aliasing without the X RENDER extension"
+msgstr "Да ли да искључим омекшавање слова ако нема „X RENDER“ проширења"
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1732,7 +1735,7 @@ msgstr "Умањи"
 msgid "Normal Size"
 msgstr "Нормална величина"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2097
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
 msgid "Set Title"
 msgstr "Постави наслов"
 
@@ -1837,7 +1840,7 @@ msgid "Help"
 msgstr "Помоћ"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:210 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Догодила се грешка при учитавању подешавања из %s. (%s)\n"
@@ -1907,28 +1910,32 @@ msgstr "Грешка у преношењу измена за брзи прист
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "Пречица „%s“ је већ везана за акцију „%s“"
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Грешка при постављању тастера за брзи приступ у базу подешавања: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Грешка при постављању кључа подешавања %s: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Грешка у постављању тастера за брзи приступ менију: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Радња"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "_Тастер за пречицу"
+
+#: ../src/terminal-notebook.c:776
+msgid "Close tab"
+msgstr "Затвори лист"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -1963,36 +1970,36 @@ msgid ""
 msgstr ""
 "Не успевам учитати слику за позадину „%s“ за профил терминала „%s“: %s\n"
 
-#: ../src/terminal-profile.c:1900
+#: ../src/terminal-profile.c:1881
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "Гном Терминал: назив фонта „%s“ постављен у бази подешавања није исправан\n"
 
-#: ../src/terminal-profile.c:2203
+#: ../src/terminal-profile.c:2184
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Грешка при узимању подразумеване вредности за %s: %s\n"
 
-#: ../src/terminal-profile.c:2209
+#: ../src/terminal-profile.c:2190
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Није постојала подразумевана вредност за %s\n"
 
-#: ../src/terminal-profile.c:2224
+#: ../src/terminal-profile.c:2205
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Грешка код постављања %s на подразумевану вредност %s\n"
 
-#: ../src/terminal-profile.c:2427
+#: ../src/terminal-profile.c:2408
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr ""
 "Догодила се грешка при уклањању директоријума са подешавањима %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2484
+#: ../src/terminal-profile.c:2465
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2001,25 +2008,25 @@ msgstr ""
 "Догодила се грешка при преузимању обавештења о променама за подразумевани "
 "профил. (%s)\n"
 
-#: ../src/terminal-profile.c:2529
+#: ../src/terminal-profile.c:2510
 msgid "_Details"
 msgstr "_Детаљи"
 
-#: ../src/terminal-profile.c:2972 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Догодила се грешка при стварању профила „%s“"
 
-#: ../src/terminal-profile.c:3064
+#: ../src/terminal-profile.c:3045
 msgid "There was an error deleting the profiles"
 msgstr "Догодила се грешка при брисању профила"
 
-#: ../src/terminal-profile.c:3167
+#: ../src/terminal-profile.c:3148
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Не могу прихватити унети низ знакова „%s“ као палету боје\n"
 
-#: ../src/terminal-profile.c:3176
+#: ../src/terminal-profile.c:3157
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
@@ -2027,7 +2034,7 @@ msgstr[0] "Палета има %d ставку уместо %d\n"
 msgstr[1] "Палета има %d ставке уместо %d\n"
 msgstr[2] "Палета има %d ставки уместо %d\n"
 
-#: ../src/terminal-screen.c:226
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2036,17 +2043,17 @@ msgstr ""
 "Догодила се грешка при пријављивању на обавештења о променама фонта утврђене "
 "ширине.(%s)\n"
 
-#: ../src/terminal-screen.c:908
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Не могу учитати фонт „%s“\n"
 
-#: ../src/terminal-screen.c:1037
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Догодио се проблем са наредбом за овај терминал: %s"
 
-#: ../src/terminal-screen.c:1397
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2055,7 +2062,7 @@ msgstr ""
 "Не могу отворити адресу „%s“:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1494 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2064,90 +2071,90 @@ msgstr ""
 "Дошло је до грешке при учитавању вредности подешавања да ли се користе слике "
 "у менију. (%s)\n"
 
-#: ../src/terminal-screen.c:1583
+#: ../src/terminal-screen.c:1588
 msgid "_Send Mail To..."
 msgstr "Пошаљи е-поруку..."
 
-#: ../src/terminal-screen.c:1588
+#: ../src/terminal-screen.c:1593
 msgid "_Copy E-mail Address"
 msgstr "_Умножи адресу електронске поште"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1600
 msgid "_Open Link"
 msgstr "_Отвори везу"
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1605
 msgid "_Copy Link Address"
 msgstr "_Умножи адресу везе"
 
-#: ../src/terminal-screen.c:1611 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Отвори _терминал"
 
-#: ../src/terminal-screen.c:1616 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Отвори _лист"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "За_твори лист"
 
-#: ../src/terminal-screen.c:1626 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Затвори прозор"
 
-#: ../src/terminal-screen.c:1651
+#: ../src/terminal-screen.c:1657
 msgid "Change P_rofile"
 msgstr "Измени п_оставку"
 
-#: ../src/terminal-screen.c:1687
+#: ../src/terminal-screen.c:1693
 msgid "_Edit Current Profile..."
 msgstr "_Уреди текућу поставку..."
 
-#: ../src/terminal-screen.c:1692
+#: ../src/terminal-screen.c:1698
 msgid "Show _Menubar"
 msgstr "Прикажи м_ени"
 
-#: ../src/terminal-screen.c:1702
+#: ../src/terminal-screen.c:1708
 msgid "_Input Methods"
 msgstr "_Начини уноса"
 
-#: ../src/terminal-screen.c:2126
+#: ../src/terminal-screen.c:2140
 msgid "_Title:"
 msgstr "_Наслов:"
 
-#: ../src/terminal-screen.c:2240
+#: ../src/terminal-screen.c:2254
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Текст превучен на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: ../src/terminal-screen.c:2263
+#: ../src/terminal-screen.c:2277
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Боја превучена на терминал има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: ../src/terminal-screen.c:2306
+#: ../src/terminal-screen.c:2320
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Адреса превучена из Мозиле (Mozilla) има неодговарајући формат (%d) или "
 "дужину (%d)\n"
 
-#: ../src/terminal-screen.c:2355
+#: ../src/terminal-screen.c:2369
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Списак превучених адреса има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: ../src/terminal-screen.c:2410
+#: ../src/terminal-screen.c:2424
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Превучено име слике има неодговарајући формат (%d) или дужину (%d)\n"
 
-#: ../src/terminal-screen.c:2436
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Грешка при претварању адресе „%s“ у назив датотеке: %s\n"
@@ -2766,10 +2773,11 @@ msgstr ""
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Не успевам да приступим терминал серверу из сервера за покретање\n"
 
-#~ msgid "Type a new accelerator, or press Backspace to clear"
-#~ msgstr ""
-#~ "Укуцајте нову комбинацију за брзи приступ, или притисните Backspace за "
-#~ "њено уклањање"
+#~ msgid "New accelerator..."
+#~ msgstr "Нова пречица..."
+
+#~ msgid "Accel Mode"
+#~ msgstr "Режим за брзи приступ"
 
 #~ msgid "ASCII DEL"
 #~ msgstr "ASCII DEL"
