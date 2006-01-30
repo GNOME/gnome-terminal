@@ -21,6 +21,7 @@
 
 #include "terminal-notebook.h"
 #include "terminal-window.h"
+#include "terminal-intl.h"
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
