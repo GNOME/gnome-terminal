@@ -41,7 +41,7 @@ struct _TerminalNotebookPrivate
   gulong   toplevel_button_release_handler_id;
   gint     x_start, y_start;
   gboolean drag_in_progress;
-  GtkTooltips *title_tips;
+  GtkTooltips *tooltips;
 };
 
 static void terminal_notebook_init           (TerminalNotebook *notebook);
@@ -684,7 +684,7 @@ terminal_notebook_init (TerminalNotebook *notebook)
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
   gtk_notebook_set_show_border (GTK_NOTEBOOK (notebook), FALSE);
 
-  notebook->priv->title_tips = gtk_tooltips_new ();
+  notebook->priv->tooltips = gtk_tooltips_new ();
 
   g_signal_connect (notebook, "button-press-event",
                     (GCallback)button_press_cb, NULL);
@@ -713,7 +713,7 @@ sync_label (TerminalScreen *screen, TerminalNotebook *nb)
   title = terminal_screen_get_title (screen);
 
   gtk_label_set_text (GTK_LABEL (label), title);
-  gtk_tooltips_set_tip (nb->priv->title_tips, ebox, title, NULL);
+  gtk_tooltips_set_tip (nb->priv->tooltips, ebox, title, NULL);
 }
 
 static void
@@ -745,7 +745,7 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
 
   label_ebox = gtk_event_box_new ();
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
-  gtk_tooltips_set_tip (nb->priv->title_tips, label_ebox, title, NULL);
+  gtk_tooltips_set_tip (nb->priv->tooltips, label_ebox, title, NULL);
 
   label = gtk_label_new (title);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
@@ -771,6 +771,8 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
   gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+  gtk_tooltips_set_tip (nb->priv->tooltips, close_button, _("Close tab"), NULL);
 
   g_signal_connect (G_OBJECT (close_button), "clicked",
 		    G_CALLBACK (close_button_clicked_cb),
