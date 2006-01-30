@@ -13,10 +13,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-24 21:23+0100\n"
-"PO-Revision-Date: 2006-01-24 21:26+0100\n"
+"POT-Creation-Date: 2006-01-30 21:01+0100\n"
+"PO-Revision-Date: 2006-01-30 21:03+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
-"Language-Team: Galego\n"
+"Language-Team: Galego <trasno@ceu.fi.udc.es>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,33 +33,33 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Usar a liña de comandos"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Novo acelerador..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Tecla de atallo"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Modificadores de atallos"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Código de teclas do acelerador"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
+msgstr "Modo acelerador"
 
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
-msgstr "Modo do acelerador"
-
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "O tipo de atallo."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Deshabilitado"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Teclee un novo acelerador, ou prema Retroceso para limpar"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Teclee un novo acelerador"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -784,7 +784,10 @@ msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
-msgstr "Se é verdadeiro, o suavizado da fonte desactivarase cando se execute sen a extensión XRENDER, a cal produce produce unha mellora considerable de redemento nestes casos."
+msgstr ""
+"Se é verdadeiro, o suavizado da fonte desactivarase cando se execute sen a "
+"extensión XRENDER, a cal produce produce unha mellora considerable de "
+"redemento nestes casos."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1746,7 +1749,7 @@ msgstr "Reducir"
 msgid "Normal Size"
 msgstr "Tamaño normal"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
 msgid "Set Title"
 msgstr "Establecer o título"
 
@@ -1851,7 +1854,7 @@ msgid "Help"
 msgstr "Axuda"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Houbo un erro ao cargar a configuración de %s. (%s)\n"
@@ -1919,28 +1922,32 @@ msgstr "Erro propagando o cambio do atallo á base de datos de configuración: %
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "O atallo de teclado \"%s\" xa está asociado á acción \"%s\""
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Erro ao definir o novo atallo na base de datos de configuración: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Erro ao definir a clave de configuración %s: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Erro ao definir a clave use_menu_accelerators: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Acción"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "_Tecla de atallo"
+
+#: ../src/terminal-notebook.c:776
+msgid "Close tab"
+msgstr "Pechar separador"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -2036,7 +2043,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "A paleta ten %d entrada en vez de %d\n"
 msgstr[1] "A paleta ten %d entradas en vez de %d\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2045,17 +2052,17 @@ msgstr ""
 "Houbo un erro ao subscribir á notificación das modificacións no tipo de "
 "letra monoespazo (%s)\n"
 
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Non se puido cargar o tipo de letra \"%s\"\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Houbo un problema co comando para este terminal: %s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2064,7 +2071,7 @@ msgstr ""
 "Non se puido abrir o enderezo \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2073,92 +2080,92 @@ msgstr ""
 "Houbo un erro ao cargar o valor de configuración sobre o uso de imaxes nos "
 "menús (%s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1588
 msgid "_Send Mail To..."
 msgstr "_Enviar correo a..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1593
 msgid "_Copy E-mail Address"
 msgstr "_Copiar o enderezo do correo-e"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1600
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1605
 msgid "_Copy Link Address"
 msgstr "_Copiar o enderezo da ligazón"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "_Abrir terminal"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "A_brir separador"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "P_echar separador"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Pechar fiestra"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1657
 msgid "Change P_rofile"
 msgstr "Cambiar o _perfil"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1693
 msgid "_Edit Current Profile..."
 msgstr "_Editar o perfil actual..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1698
 msgid "Show _Menubar"
 msgstr "A_mosar a barra de menú"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1708
 msgid "_Input Methods"
 msgstr "Métodos de _entrada"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2140
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2254
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "O text/plain soltado no terminal ten un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2277
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "A cor soltada no terminal ten un formato (%d) ou lonxitude (%d) erróneo\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2320
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "O URL de Mozilla soltado no terminal ten un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2369
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "A lista de URIs soltada no terminal ten un formato (%d) ou lonxitude (%d) "
 "erróneo\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2424
 #, c-format
 msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "O nome de ficheiro de imaxe soltado no terminal ten un formato (%d) ou "
 "lonxitude (%d) erróneo\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Erro ao converter o URI \"%s\" a un nome de ficheiro: %s\n"
