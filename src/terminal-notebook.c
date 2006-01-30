@@ -722,7 +722,7 @@ close_button_clicked_cb (GtkWidget *widget, TerminalScreen *screen)
 {
   GtkWidget *notebook;
 
-  notebook = gtk_widget_get_parent (screen);
+  notebook = gtk_widget_get_parent (GTK_WIDGET (screen));
   terminal_notebook_remove_tab (TERMINAL_NOTEBOOK (notebook), screen);
 }
 
@@ -732,7 +732,7 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
                            int position,
                            gboolean jump_to)
 {
-  gchar *title;
+  const char *title;
   GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
   GtkRcStyle *rcstyle;
   GtkSettings *settings;
