@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-21 21:40+0200\n"
-"PO-Revision-Date: 2006-01-21 21:45+0200\n"
+"POT-Creation-Date: 2006-01-31 23:21+0200\n"
+"PO-Revision-Date: 2006-01-31 23:24+0200\n"
 "Last-Translator: Ilkka Tuohela <hile@iki.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:766 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Pääte"
 
@@ -30,33 +30,33 @@ msgstr "Pääte"
 msgid "Use the command line"
 msgstr "Käytä komentoriviä"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Uusi pikanäppäin..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Pikanäppäin"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Pikanäppäimen muunnosnäppäimet"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Pikanäppäimen näppäinkodi"
-
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
 msgstr "Pikanäppäintila"
 
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
-msgstr "Näppäile uusi pikanäppäin."
+msgstr "Pikanäppäimen tyyppi."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Ei käytössä"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Syötä uusi pikanäppäin tai tyhjennä painamalla askelpalautinta"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Syötä uusi pikanäppäin"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -1753,7 +1753,7 @@ msgstr "Pienennä"
 msgid "Normal Size"
 msgstr "Tavallinen koko"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
 msgid "Set Title"
 msgstr "Aseta otsikko"
 
@@ -1781,7 +1781,7 @@ msgstr "Siirrä välilehteä vasemmalle"
 msgid "Move Tab to the Right"
 msgstr "Siirrä välilehteä oikealle"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1042
+#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
 msgid "Detach Tab"
 msgstr "_Irrota välilehti"
 
@@ -1858,7 +1858,7 @@ msgid "Help"
 msgstr "Ohje"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Ladatessa asetuksia paikasta %s tapahtui virhe. (%s)\n"
@@ -1928,28 +1928,32 @@ msgstr "Virhe välittäessä pikanäppäimen muutosta asetustietokantaan: %s\n"
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "Pikanäppäin \"%s\" on jo kytketty toimintoon \"%s\""
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Virhe asettaessa uutta pikanäppäintä asetustietokantaan: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Virhe asettaessa asetusavainta \"%s\": %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Virhe asettaessa avainta use_menu_accelerators: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "_Toiminto"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "Pika_näppäin"
+
+#: ../src/terminal-notebook.c:776
+msgid "Close tab"
+msgstr "Sulje välilehti"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -2044,7 +2048,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletissa oli %d kohta %d:n sijaan\n"
 msgstr[1] "Paletissa oli %d kohtaa %d:n sijaan\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2054,17 +2058,17 @@ msgstr ""
 "muutoksista. (%s)\n"
 
 # , c-format
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Ei voinut ladata kirjasinta \"%s\"\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Virhe tämän päätteen komennossa: %s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2073,7 +2077,7 @@ msgstr ""
 "Ei voinut avata osoitetta \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:792
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2082,84 +2086,84 @@ msgstr ""
 "Tapahtui virhe ladatessa asetusta, joka määrää, näkyykö valikoissa kuvia. (%"
 "s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1588
 msgid "_Send Mail To..."
 msgstr "_Lähetä sähköposti..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1593
 msgid "_Copy E-mail Address"
 msgstr "Kopioi _sähköpostiosoite"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1600
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1605
 msgid "_Copy Link Address"
 msgstr "Kopioi _linkin kohde"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:855
+#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Avaa _pääte"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:858
+#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Avaa _välilehti"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:873
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "S_ulje välilehti"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:877
+#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "_Sulje ikkuna"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1657
 msgid "Change P_rofile"
 msgstr "Vaihda pro_fiilia"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1693
 msgid "_Edit Current Profile..."
 msgstr "_Muokkaa nykyistä profiilia..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1698
 msgid "Show _Menubar"
 msgstr "Näytä valikkopalkki"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1708
 msgid "_Input Methods"
 msgstr "Sy_öttötavat"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2140
 msgid "_Title:"
 msgstr "_Otsikko:"
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2254
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun pelkän tekstin muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2277
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Päätteelle pudotetun värin muoto (%d) tai pituus (%d) oli väärä\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2320
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun Mozillan URL:n muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2369
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Päätteelle pudotetun URI-listan muoto (%d) tai pituus (%d) oli virheellinen\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2424
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2167,7 +2171,7 @@ msgstr ""
 "Päätteelle pudotetun kuvatiedostonimen muoto (%d) tai pituus (%d) oli "
 "virheellinen\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Virhe muuntaessa URI:a \"%s\" tiedostonimeksi: %s\n"
@@ -2176,7 +2180,7 @@ msgstr "Virhe muuntaessa URI:a \"%s\" tiedostonimeksi: %s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "Virhe luodessa lapsiprosessia tätä päätettä varten"
 
-#: ../src/terminal-window.c:361
+#: ../src/terminal-window.c:360
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2185,94 +2189,94 @@ msgstr ""
 "Virhe listautuessa huomautettavaksi valikkokuvakkeiden näkyvyyden "
 "muutoksista. (%s)\n"
 
-#: ../src/terminal-window.c:574
+#: ../src/terminal-window.c:573
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:576
+#: ../src/terminal-window.c:575
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:699
+#: ../src/terminal-window.c:698
 msgid "_Add or Remove..."
 msgstr "_Lisää tai poista..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:866
+#: ../src/terminal-window.c:865
 msgid "New _Profile..."
 msgstr "_Uusi profiili..."
 
-#: ../src/terminal-window.c:910
+#: ../src/terminal-window.c:909
 msgid "P_rofiles..."
 msgstr "Pro_fiilit..."
 
-#: ../src/terminal-window.c:913
+#: ../src/terminal-window.c:912
 msgid "_Keyboard Shortcuts..."
 msgstr "P_ikanäppäimet..."
 
-#: ../src/terminal-window.c:917
+#: ../src/terminal-window.c:916
 msgid "C_urrent Profile..."
 msgstr "_Nykyinen profiili..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:932
+#: ../src/terminal-window.c:931
 msgid "Show Menu_bar"
 msgstr "Näytä valikko_palkki"
 
-#: ../src/terminal-window.c:936
+#: ../src/terminal-window.c:935
 msgid "_Full Screen"
 msgstr "_Koko ruutu"
 
-#: ../src/terminal-window.c:979
+#: ../src/terminal-window.c:978
 msgid "Change _Profile"
 msgstr "Vaihda pro_fiilia"
 
-#: ../src/terminal-window.c:982
+#: ../src/terminal-window.c:981
 msgid "_Set Title..."
 msgstr "_Aseta otsikko..."
 
-#: ../src/terminal-window.c:989
+#: ../src/terminal-window.c:988
 msgid "Set _Character Encoding"
 msgstr "Aseta _merkistö"
 
-#: ../src/terminal-window.c:999
+#: ../src/terminal-window.c:998
 msgid "_Reset"
 msgstr "_Alusta"
 
-#: ../src/terminal-window.c:1002
+#: ../src/terminal-window.c:1001
 msgid "Reset and C_lear"
 msgstr "Alusta ja t_yhjennä"
 
-#: ../src/terminal-window.c:1016
+#: ../src/terminal-window.c:1015
 msgid "_Previous Tab"
 msgstr "_Edellinen välilehti"
 
-#: ../src/terminal-window.c:1020
+#: ../src/terminal-window.c:1019
 msgid "_Next Tab"
 msgstr "_Seuraava välilehti"
 
-#: ../src/terminal-window.c:1031
+#: ../src/terminal-window.c:1030
 msgid "Move Tab to the _Left"
 msgstr "Siirrä välilehteä _vasemmalle"
 
-#: ../src/terminal-window.c:1035
+#: ../src/terminal-window.c:1034
 msgid "Move Tab to the _Right"
 msgstr "Siirrä välilehteä _oikealle"
 
-#: ../src/terminal-window.c:1061
+#: ../src/terminal-window.c:1060
 msgid "_Contents"
 msgstr "_Sisältö"
 
-#: ../src/terminal-window.c:1071
+#: ../src/terminal-window.c:1070
 msgid "_About"
 msgstr "_Tietoja"
 
-#: ../src/terminal-window.c:1262
+#: ../src/terminal-window.c:1259
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2280,7 +2284,7 @@ msgstr ""
 "Tapahtui virhe ladatessa asetusta, joka määrää, käytetäänkö pikavalintoja. (%"
 "s)\n"
 
-#: ../src/terminal-window.c:1281
+#: ../src/terminal-window.c:1278
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2289,31 +2293,31 @@ msgstr ""
 "Tapahtui virhe listautuessa huomautettavaksi pääteikkunan asetusten "
 "muutoksista. (%s)\n"
 
-#: ../src/terminal-window.c:2063
+#: ../src/terminal-window.c:2060
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: ../src/terminal-window.c:2065 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../src/terminal-window.c:2067
+#: ../src/terminal-window.c:2064
 msgid "_View"
 msgstr "_Näytä"
 
-#: ../src/terminal-window.c:2069
+#: ../src/terminal-window.c:2066
 msgid "_Terminal"
 msgstr "_Pääte"
 
-#: ../src/terminal-window.c:2071
+#: ../src/terminal-window.c:2068
 msgid "Ta_bs"
 msgstr "_Välilehdet"
 
-#: ../src/terminal-window.c:2073
+#: ../src/terminal-window.c:2070
 msgid "_Help"
 msgstr "O_hje"
 
-#: ../src/terminal-window.c:2268
+#: ../src/terminal-window.c:2265
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2326,23 +2330,23 @@ msgstr[1] ""
 "Tässä ikkunassa on %d välilehtiä avoinna. Ikkunan sulkeminen sulkee myös "
 "nämä välilehdet."
 
-#: ../src/terminal-window.c:2277
+#: ../src/terminal-window.c:2274
 msgid "Close all tabs?"
 msgstr "Haluatko sulkea kaikki välilehdet?"
 
-#: ../src/terminal-window.c:2289
+#: ../src/terminal-window.c:2286
 msgid "Close All _Tabs"
 msgstr "Sulje kaikki vä_lilehdet"
 
-#: ../src/terminal-window.c:2836
+#: ../src/terminal-window.c:2833
 msgid "GNOME Terminal"
 msgstr "Gnomen pääte"
 
-#: ../src/terminal-window.c:2837
+#: ../src/terminal-window.c:2834
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Pääteikkuna Gnome-työpöydälle"
 
-#: ../src/terminal-window.c:2841
+#: ../src/terminal-window.c:2838
 msgid "translator-credits"
 msgstr ""
 "Ilkka Tuohela, 2005\n"
@@ -2794,8 +2798,11 @@ msgstr ""
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Päätepalvelimen haku aktivointipalvelimelta epäonnistui.\n"
 
-#~ msgid "Type a new accelerator, or press Backspace to clear"
-#~ msgstr "Näppäile uusi pikanäppäin tai paina askelpalautinta tyhjentääksesi"
+#~ msgid "New accelerator..."
+#~ msgstr "Uusi pikanäppäin..."
+
+#~ msgid "Accel Mode"
+#~ msgstr "Pikanäppäintila"
 
 #~ msgid "Choose Palette Color 10"
 #~ msgstr "Valitse paletin väri 10"
