@@ -1580,37 +1580,35 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   if (screen->priv->matched_string != NULL) 
     {
-      if (screen->priv->matched_flavor == FLAVOR_EMAIL)
+      if (screen->priv->matched_flavor == FLAVOR_EMAIL &&
+	  strncmp ("mailto:", screen->priv->matched_string, 7))
 	{
-	  if (strncmp ("mailto:", screen->priv->matched_string, 7))
-	    {
-	      menu_item = append_menuitem (screen->priv->popup_menu,
-					   _("_Send Mail To..."),
-					   G_CALLBACK (open_url_callback),
-					   screen);
+	  menu_item = append_menuitem (screen->priv->popup_menu,
+				       _("_Send Mail To..."),
+				       G_CALLBACK (open_url_callback),
+				       screen);
 
-	      menu_item = append_menuitem (screen->priv->popup_menu,
-					   _("_Copy E-mail Address"),
-					   G_CALLBACK (copy_url_callback),
-					   screen);
-	    }
-	  else
-	    {
-	      menu_item = append_menuitem (screen->priv->popup_menu,
-					   _("_Open Link"),
-					   G_CALLBACK (open_url_callback),
-					   screen);
-
-	      menu_item = append_menuitem (screen->priv->popup_menu,
-					   _("_Copy Link Address"),
-					   G_CALLBACK (copy_url_callback),
-					   screen);
-	    }
+	  menu_item = append_menuitem (screen->priv->popup_menu,
+				       _("_Copy E-mail Address"),
+				       G_CALLBACK (copy_url_callback),
+				       screen);
 	}
+      else
+	{
+	  menu_item = append_menuitem (screen->priv->popup_menu,
+				       _("_Open Link"),
+				       G_CALLBACK (open_url_callback),
+				       screen);
 
+	  menu_item = append_menuitem (screen->priv->popup_menu,
+				       _("_Copy Link Address"),
+				       G_CALLBACK (copy_url_callback),
+				       screen);
+	}
       menu_item = gtk_separator_menu_item_new ();
       gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
+			     menu_item);
     }
 
   menu_item = append_menuitem (screen->priv->popup_menu,
@@ -2075,7 +2073,6 @@ title_entry_changed (GtkWidget      *entry,
                      TerminalScreen *screen)
 {
   char *text;
-  gboolean userset;
 
   text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
 
