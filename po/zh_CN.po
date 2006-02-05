@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-21 07:08+0100\n"
-"PO-Revision-Date: 2006-01-21 18:32+0800\n"
+"POT-Creation-Date: 2006-02-04 23:10+0100\n"
+"PO-Revision-Date: 2006-02-05 11:49+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
@@ -26,33 +26,33 @@ msgstr "终端"
 msgid "Use the command line"
 msgstr "使用命令行"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "新加速键..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "加速键"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "加速修饰键"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "加速键按键代码"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
+msgstr "加速键模式"
 
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
-msgstr "加速模式"
-
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "加速键类型。"
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "已禁用"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "输入新加速键，按 Backspace 可清除"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "输入新加速键"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -752,8 +752,8 @@ msgid ""
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
 msgstr ""
-"如果为 true，在没有 X RENDERE 扩展的情况下运行时将会禁用字体反锯齿，"
-"以便显著改进性能。"
+"如果为 true，在没有 X RENDERE 扩展的情况下运行时将会禁用字体反锯齿，以便显著"
+"改进性能。"
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1641,7 +1641,7 @@ msgstr "缩小"
 msgid "Normal Size"
 msgstr "普通大小"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
 msgid "Set Title"
 msgstr "设置标题"
 
@@ -1746,7 +1746,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "从 %s 中载入配置时出错。(%s)\n"
@@ -1806,28 +1806,32 @@ msgstr "将加速键改动存入配置数据库时出错：%s\n"
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "快捷键“%s”已经绑定到“%s”动作"
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "配置数据库中设置新加速键时出错：%s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "设置 %s 配置键时出错：%s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "设置使用菜单加速键时出错：%s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "动作(_A)"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "快捷键(_K)"
+
+#: ../src/terminal-notebook.c:776
+msgid "Close tab"
+msgstr "关闭标签"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -1916,24 +1920,24 @@ msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "调色板颜色数为%d而不是%d\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "订阅等宽字体更改通知时出错。(%s)\n"
 
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "无法加载字体“%s”\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "该终端的命令行有误：%s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1942,92 +1946,92 @@ msgstr ""
 "无法打开地址“%s”：\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "装入是否在菜单中使用图像的配置值出错。(%s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1587
 msgid "_Send Mail To..."
 msgstr "发送邮件给(_S)..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1592
 msgid "_Copy E-mail Address"
 msgstr "复制电子邮件地址(_C)"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1599
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1604
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "打开终端(_T)"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "打开标签(_B)"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "关闭标签(_L)"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "关闭窗口(_C)"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1655
 msgid "Change P_rofile"
 msgstr "更改配置文件(_R)"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1691
 msgid "_Edit Current Profile..."
 msgstr "编辑当前配置文件(_E)..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1696
 msgid "Show _Menubar"
 msgstr "显示菜单栏(_M)"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1706
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2137
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2251
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 text/plain 文本格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2274
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的颜色格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2317
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 Mozilla URL 格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2366
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 URI 列表格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2421
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的图片文件名格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2447
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "将 URI“%s”转化为文件名时出错：%s\n"
