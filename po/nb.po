@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-22 21:09+0100\n"
-"PO-Revision-Date: 2006-01-22 21:12+0100\n"
+"POT-Creation-Date: 2006-02-13 01:03+0100\n"
+"PO-Revision-Date: 2006-02-13 01:06+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -26,33 +26,33 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Bruk kommandolinjen"
 
-#: ../src/eggcellrendererkeys.c:25
-msgid "New accelerator..."
-msgstr "Ny snarveitast..."
-
-#: ../src/eggcellrendererkeys.c:167 ../src/eggcellrendererkeys.c:168
+#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
 msgstr "Snarveitast"
 
-#: ../src/eggcellrendererkeys.c:177 ../src/eggcellrendererkeys.c:178
+#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
 msgstr "Endringstast for snarvei"
 
-#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
-msgid "Accelerator keycode"
-msgstr "Tastekode for snarveitast"
-
-#: ../src/eggcellrendererkeys.c:197
-msgid "Accel Mode"
+#: ../src/eggcellrendererkeys.c:180
+msgid "Accelerator Mode"
 msgstr "Snarveimodus"
 
-#: ../src/eggcellrendererkeys.c:198
+#: ../src/eggcellrendererkeys.c:181
 msgid "The type of accelerator."
 msgstr "Type snarveitast."
 
-#: ../src/eggcellrendererkeys.c:246 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
 msgstr "Slått av"
+
+#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+msgid "Type a new accelerator, or press Backspace to clear"
+msgstr "Tast en ny snarvei eller trykk slettetast for å tømme"
+
+#: ../src/eggcellrendererkeys.c:567
+msgid "Type a new accelerator"
+msgstr "Tast en ny snarveitast"
 
 #: ../src/encoding.c:55
 msgid "Current Locale"
@@ -772,7 +772,7 @@ msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
-msgstr ""
+msgstr "Hvis denne settes til «true» vil fontutjevning slås av når RENDER-utvidelsen ikke er tilgjengelig. Dette gir en stor ytelsesforbedring i disse situasjonene."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1517,7 +1517,7 @@ msgstr "Om markøren skal blinke"
 
 #: ../src/gnome-terminal.schemas.in.h:138
 msgid "Whether to disable anti-aliasing without the X RENDER extension"
-msgstr ""
+msgstr "Om skrifttypeutjevning skal slås av når RENDER-utvidelsen for X ikke er tilgjengelig"
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1750,7 +1750,7 @@ msgstr "Zoom ut"
 msgid "Normal Size"
 msgstr "Normal størrelse"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2109
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
 msgid "Set Title"
 msgstr "Sett tittel"
 
@@ -1855,7 +1855,7 @@ msgid "Help"
 msgstr "Hjelp"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Det oppsto en feil under lasting av konfigurasjon fra %s. (%s)\n"
@@ -1928,28 +1928,32 @@ msgstr ""
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "Snarveitasten «%s» er allerede bundet til handlingen «%s»"
 
-#: ../src/terminal-accels.c:1029
+#: ../src/terminal-accels.c:1028
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
 msgstr "Feil under setting av ny snarveitast i konfigurasjonsdatabasen: %s\n"
 
-#: ../src/terminal-accels.c:1060
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Feil under setting av nøkkel %s: %s\n"
 
-#: ../src/terminal-accels.c:1088
+#: ../src/terminal-accels.c:1087
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Feil under setting av nøkkel «use_menu_accelerators»: %s\n"
 
-#: ../src/terminal-accels.c:1207
+#: ../src/terminal-accels.c:1206
 msgid "_Action"
 msgstr "H_andling"
 
-#: ../src/terminal-accels.c:1227
+#: ../src/terminal-accels.c:1226
 msgid "Shortcut _Key"
 msgstr "_Hurtigtast"
+
+#: ../src/terminal-notebook.c:776
+msgid "Close tab"
+msgstr "Lukk fane"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -2048,7 +2052,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletten hadde %d oppføring i stedet for %d\n"
 msgstr[1] "Paletten hadde %d oppføringer i stedet for %d\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:219
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2057,17 +2061,17 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for skrift med fast "
 "avstand. (%s)\n"
 
-#: ../src/terminal-screen.c:873
+#: ../src/terminal-screen.c:865
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Kunne ikke laste skrift «%s»\n"
 
-#: ../src/terminal-screen.c:1002
+#: ../src/terminal-screen.c:994
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det oppsto et problem med kommandoen for denne terminalen: %s"
 
-#: ../src/terminal-screen.c:1409
+#: ../src/terminal-screen.c:1404
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2076,7 +2080,7 @@ msgstr ""
 "Kunne ikke åpne adresse «%s»:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1506 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2085,87 +2089,87 @@ msgstr ""
 "Det oppsto en feil under lasting av konfigurasjonsverdi for bruk av bilder i "
 "menyer. (%s)\n"
 
-#: ../src/terminal-screen.c:1595
+#: ../src/terminal-screen.c:1587
 msgid "_Send Mail To..."
 msgstr "_Sett e-post til..."
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1592
 msgid "_Copy E-mail Address"
 msgstr "_Kopier e-postadresse"
 
-#: ../src/terminal-screen.c:1607
+#: ../src/terminal-screen.c:1599
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../src/terminal-screen.c:1612
+#: ../src/terminal-screen.c:1604
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
 msgid "Open _Terminal"
 msgstr "Åpne _terminal"
 
-#: ../src/terminal-screen.c:1628 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
 msgid "Open Ta_b"
 msgstr "Åpne _fane"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
 msgid "C_lose Tab"
 msgstr "_Lukk fane"
 
-#: ../src/terminal-screen.c:1638 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
 msgid "_Close Window"
 msgstr "L_ukk vindu"
 
-#: ../src/terminal-screen.c:1663
+#: ../src/terminal-screen.c:1655
 msgid "Change P_rofile"
 msgstr "Bytt p_rofil"
 
-#: ../src/terminal-screen.c:1699
+#: ../src/terminal-screen.c:1691
 msgid "_Edit Current Profile..."
 msgstr "R_ediger aktiv profil..."
 
-#: ../src/terminal-screen.c:1704
+#: ../src/terminal-screen.c:1696
 msgid "Show _Menubar"
 msgstr "Vis _menylinje"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1706
 msgid "_Input Methods"
 msgstr "_Inndatametoder"
 
-#: ../src/terminal-screen.c:2138
+#: ../src/terminal-screen.c:2137
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/terminal-screen.c:2252
+#: ../src/terminal-screen.c:2251
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain som ble sluppet på terminal hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2275
+#: ../src/terminal-screen.c:2274
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Farge som ble sluppet på terminalen hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2318
+#: ../src/terminal-screen.c:2317
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla URL som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: ../src/terminal-screen.c:2367
+#: ../src/terminal-screen.c:2366
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-liste som ble sluppet på terminalen hadde feil format (%d) eller lengde "
 "(%d)\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2421
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2173,7 +2177,7 @@ msgstr ""
 "Bilde-filnavn som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: ../src/terminal-screen.c:2448
+#: ../src/terminal-screen.c:2447
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Feil under konvertering av URI «%s» til filnavn: %s\n"
@@ -2326,7 +2330,8 @@ msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all of its "
 "tabs."
-msgstr[0] "Dette vinduet har en åpen fane. Hvis du lukker vinduet vil denne bli lukket."
+msgstr[0] ""
+"Dette vinduet har en åpen fane. Hvis du lukker vinduet vil denne bli lukket."
 msgstr[1] ""
 "Dette vinduet har %d åpne faner. Hvis du lukker vinduet vil alle faner "
 "lukkes."
