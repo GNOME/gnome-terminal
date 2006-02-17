@@ -2820,6 +2820,20 @@ about_callback (GtkWidget      *menuitem,
     "Mariano Su\303\241rez-Alvarez <mariano@gnome.org>",
     NULL
   };
+  const gchar *license[] = {
+    "GNOME Terminal is free software; you can redistribute it and/or modify \n"
+    "it under the terms of the GNU General Public License as published by \n"
+    "the Free Software Foundation; either version 2 of the License, or \n"
+    "(at your option) any later version.",
+    "GNOME Terminal is distributed in the hope that it will be useful, \n"
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of \n"
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the \n"
+    "GNU General Public License for more details.",
+    "You should have received a copy of the GNU General Public License \n"
+    "along with Nautilus; if not, write to the Free Software Foundation, Inc., \n"
+    "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+  };
+  const gchar *license_text;
 
   if (about)
     {
@@ -2829,6 +2843,11 @@ about_callback (GtkWidget      *menuitem,
     }
 				     
   about = gtk_about_dialog_new ();
+
+  license_text = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
+			      _(license[2]), "\n\n", NULL);
+
+  gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), license_text);
 
   gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), _("GNOME Terminal"));
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(about), _("A terminal emulator for the GNOME desktop"));
