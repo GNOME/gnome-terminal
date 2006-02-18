@@ -2844,8 +2844,8 @@ about_callback (GtkWidget      *menuitem,
 				     
   about = gtk_about_dialog_new ();
 
-  license_text = g_strconcat (_(license[0]), "\n\n", _(license[1]), "\n\n",
-			      _(license[2]), "\n\n", NULL);
+  license_text = g_strconcat (license[0], "\n\n", license[1], "\n\n",
+			      license[2], "\n\n", NULL);
 
   gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), license_text);
 
