@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-19 10:50+0900\n"
-"PO-Revision-Date: 2006-02-19 10:56+0900\n"
-"Last-Translator: Satoru SATOH <ss@gnome.gr.jp>\n"
+"POT-Creation-Date: 2006-02-21 00:21+0900\n"
+"PO-Revision-Date: 2006-02-21 00:20+0900\n"
+"Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -271,7 +271,7 @@ msgid ""
 msgstr ""
 "<small><i><b>注意:</b> これらのオプションが影響して、いくつかのアプリケーショ"
 "ンが正常に動作しなくなるかもしれません。これらのオプションは特定のアプリや "
-"OS 上で異なった動作になってしまう問題を解決ために提供されています。</i></"
+"OS 上で異なった動作になってしまう問題を解決するために提供されています。</i></"
 "small>"
 
 #: ../src/gnome-terminal.glade2.h:13
@@ -326,7 +326,7 @@ msgstr "作成(_R)"
 
 #: ../src/gnome-terminal.glade2.h:26
 msgid "Choose A Profile Icon"
-msgstr "プロファイルのアイコンの選択"
+msgstr "プロファイルで使用するアイコンの選択"
 
 #: ../src/gnome-terminal.glade2.h:27
 msgid "Choose Terminal Background Color"
@@ -398,7 +398,7 @@ msgstr "画像ファイル(_F):"
 
 #: ../src/gnome-terminal.glade2.h:44
 msgid "Initial _title:"
-msgstr "初期タイトル(_T)"
+msgstr "初期のタイトル(_T)"
 
 #: ../src/gnome-terminal.glade2.h:45
 msgid "Keyboard Shortcuts"
@@ -445,9 +445,9 @@ msgid ""
 "Goes after initial title\n"
 "Isn't displayed"
 msgstr ""
-"初期タイトルと入れ替える\n"
-"初期タイトルの前に挿入する\n"
-"初期タイトルの後ろに挿入する\n"
+"初期のタイトルと入れ替える\n"
+"初期のタイトルの前に挿入する\n"
+"初期のタイトルの後ろに挿入する\n"
 "表示しない"
 
 #: ../src/gnome-terminal.glade2.h:59
@@ -504,7 +504,7 @@ msgstr "システム・テーマの色を使用する(_Y)"
 
 #: ../src/gnome-terminal.glade2.h:72
 msgid "When command _exits:"
-msgstr "コマンドの実行が完了した時(_E):"
+msgstr "コマンドの実行が完了した後(_E):"
 
 #: ../src/gnome-terminal.glade2.h:73
 msgid "_Allow bold text"
@@ -779,9 +779,10 @@ msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
-msgstr "TRUE にすると、X RENDER 拡張なしで実行している場合にフォントの"
-"アンチエイリアス表示を無効にします。これによってそのような状況下での"
-"かなりのパフォーマンス向上が得られます。"
+msgstr ""
+"TRUE にすると、GNOME 端末を X RENDER 拡張を使わずに実行している際にフォントの"
+"アンチ・エイリアス表示を無効にします。これにより、そのような状況下でかなりの"
+"パフォーマンス向上が得られます。"
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1527,7 +1528,8 @@ msgstr "カーソルを点滅させるかどうか"
 
 #: ../src/gnome-terminal.schemas.in.h:138
 msgid "Whether to disable anti-aliasing without the X RENDER extension"
-msgstr "X RENDER 拡張なしの場合にアンチエイリアスを無効にするかどうか"
+msgstr ""
+"X RENDER 拡張を使用しない場合にアンチ・エイリアス効果を無効にするかどうか"
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1710,11 +1712,11 @@ msgstr "MAX_FONTS の上限を越えました。フォントの一部があり�
 
 #: ../src/skey-popup.c:122
 msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
-msgstr "クリックしたテキストは適切な S/Key チャレンジではないようです。"
+msgstr "クリックした文字列は適切な S/Key チャレンジではないようです。"
 
 #: ../src/skey-popup.c:133
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
-msgstr "クリックしたテキストは適切な OTP チャレンジではないようです。"
+msgstr "クリックした文字列は適切な OTP チャレンジではないようです。"
 
 #: ../src/terminal-accels.c:78
 msgid "New Tab"
@@ -1959,7 +1961,7 @@ msgstr "ショートカット・キー(_K)"
 
 #: ../src/terminal-notebook.c:776
 msgid "Close tab"
-msgstr "タブを閉じる"
+msgstr "タブを閉じます"
 
 #: ../src/terminal-profile.c:410
 #, c-format
@@ -2323,8 +2325,11 @@ msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all of its "
 "tabs."
 msgstr[0] ""
-"このウィンドウには %d 個のタブがあります。このウィンドウを閉じるとそれらのタ"
-"ブを全て閉じることになります。"
+"このウィンドウにはタブが 1個あります。このウィンドウを閉じるとそれらのタブを"
+"全て閉じることになります。"
+msgstr[1] ""
+"このウィンドウには %d個のタブがあります。このウィンドウを閉じるとそれらのタブ"
+"を全て閉じることになります。"
 
 #: ../src/terminal-window.c:2274
 msgid "Close all tabs?"
@@ -2345,6 +2350,7 @@ msgstr "GNOME デスクトップ向けの端末エミュレータです"
 #: ../src/terminal-window.c:2857
 msgid "translator-credits"
 msgstr ""
+"佐藤 暁 <ss@gnome.gr.jp>\n"
 "相花 毅 <aihana@gnome.gr.jp>\n"
 "KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "James Hashida <khashida@redhat.com>\n"
@@ -2495,7 +2501,7 @@ msgstr "DIRNAME"
 
 #: ../src/terminal.c:352
 msgid "Set the default terminal's working directory. Used internally"
-msgstr "デフォルトの端末の作業用ディレクトリを指定します。内部的に使用されます"
+msgstr "端末が使用するデフォルトの作業用フォルダ (内部的に使用する) を指定する"
 
 #: ../src/terminal.c:361
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
@@ -2710,7 +2716,8 @@ msgstr ""
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "これら %d 個のプロファイルを削除しますか？\n"
+msgstr[0] "このプロファイルを削除しますか？\n"
+msgstr[1] "これら %d個のプロファイルを削除しますか？\n"
 
 #: ../src/terminal.c:2724
 #, c-format
