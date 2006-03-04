@@ -3721,18 +3721,26 @@ handle_new_terminal_event (int          argc,
 static void
 handle_new_terminal_events (void)
 {
+  static gboolean currently_handling_events = FALSE;
+
+  if (currently_handling_events)
+    return;
+  currently_handling_events = TRUE;
+
   while (pending_new_terminal_events != NULL)
     {
-      GSList *next = pending_new_terminal_events->next;
+      GSList *next;
       NewTerminalEvent *event = pending_new_terminal_events->data;
 
       handle_new_terminal_event (event->argc, event->argv);
 
+      next = pending_new_terminal_events->next;
       g_strfreev (event->argv);
       g_free (event);
       g_slist_free_1 (pending_new_terminal_events);
       pending_new_terminal_events = next;
     }
+  currently_handling_events = FALSE;
 }
 
 /*
