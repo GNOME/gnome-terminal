@@ -1803,6 +1803,10 @@ notebook_tab_detached_callback (GtkWidget       *notebook,
                                 TerminalScreen  *screen,
                                 TerminalWindow  *window)
 {
+  /* Reset the tab menu before detaching the tab, in case the tab changed
+   * position before it was detached (bug #330246). */
+  reset_tab_menuitems (window);
+
   detach_tab (screen, window);
 }
 
@@ -2775,9 +2779,6 @@ detach_tab_callback(GtkWidget      *menuitem,
   page = gtk_notebook_get_nth_page (notebook, page_num);
   
   detach_tab (TERMINAL_SCREEN (page), window);
-  
-  update_tab_sensitivity (window);
-  reset_tab_menuitems (window);
 }
 
 static void
