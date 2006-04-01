@@ -2809,8 +2809,6 @@ static void
 about_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
-  static GtkWidget *about = NULL;
-
   const char *copyright =
     "Copyright \xc2\xa9 2002-2004 Havoc Pennington\n"
     "Copyright \xc2\xa9 2003-2004 Mariano Su\303\241rez-Alvarez\n"
@@ -2822,50 +2820,34 @@ about_callback (GtkWidget      *menuitem,
     NULL
   };
   const gchar *license[] = {
-    "GNOME Terminal is free software; you can redistribute it and/or modify \n"
-    "it under the terms of the GNU General Public License as published by \n"
-    "the Free Software Foundation; either version 2 of the License, or \n"
+    "GNOME Terminal is free software; you can redistribute it and/or modify "
+    "it under the terms of the GNU General Public License as published by "
+    "the Free Software Foundation; either version 2 of the License, or "
     "(at your option) any later version.",
-    "GNOME Terminal is distributed in the hope that it will be useful, \n"
-    "but WITHOUT ANY WARRANTY; without even the implied warranty of \n"
-    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the \n"
+    "GNOME Terminal is distributed in the hope that it will be useful, "
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
     "GNU General Public License for more details.",
-    "You should have received a copy of the GNU General Public License \n"
-    "along with Nautilus; if not, write to the Free Software Foundation, Inc., \n"
+    "You should have received a copy of the GNU General Public License "
+    "along with Nautilus; if not, write to the Free Software Foundation, Inc., "
     "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
   };
-  const gchar *license_text;
+  gchar *license_text;
 
-  if (about)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
-      gtk_window_present (GTK_WINDOW (about));
-      return;
-    }
-				     
-  about = gtk_about_dialog_new ();
+  license_text = g_strjoin ("\n\n",
+			    _(license[0]), _(license[1]), _(license[2]), NULL);
 
-  license_text = g_strconcat (license[0], "\n\n", license[1], "\n\n",
-			      license[2], "\n\n", NULL);
-
-  gtk_about_dialog_set_license (GTK_ABOUT_DIALOG (about), license_text);
-
-  gtk_about_dialog_set_name (GTK_ABOUT_DIALOG (about), _("GNOME Terminal"));
-  gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG(about), _("A terminal emulator for the GNOME desktop"));
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (about), VERSION);
-  gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (about), copyright);
-  gtk_about_dialog_set_authors (GTK_ABOUT_DIALOG (about), authors);
-  gtk_about_dialog_set_translator_credits (GTK_ABOUT_DIALOG (about), _("translator-credits"));
-  gtk_about_dialog_set_logo_icon_name (GTK_ABOUT_DIALOG (about), "gnome-terminal");
-
-  gtk_window_set_transient_for (GTK_WINDOW (about), GTK_WINDOW (window));
-  gtk_window_set_destroy_with_parent (GTK_WINDOW (about), TRUE);
-
-  terminal_util_set_unique_role (GTK_WINDOW (about), "gnome-terminal-about");
-  
-  g_object_add_weak_pointer (G_OBJECT (about), (void**) &about);
-
-  gtk_widget_show (about);
+  gtk_show_about_dialog (GTK_WINDOW (window),
+			 "name", _("GNOME Terminal"),
+			 "copyright", copyright,
+			 "comments", _("A terminal emulator for the GNOME desktop"),
+			 "version", VERSION,
+			 "authors", authors,
+			 "license", license_text,
+			 "wrap-license", TRUE,
+			 "translator-credits", _("translator-credits"),
+			 "logo-icon-name", "gnome-terminal",
+			 NULL);
 }
 
 
