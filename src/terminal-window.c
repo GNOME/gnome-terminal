@@ -1536,14 +1536,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
 
-  /* This set_size_request hack is because the extra size above base
-   * size should only include the width of widgets that intersect the
-   * term vertically and the height of widgets that intersect the term
-   * horizontally. It works around a GTK bug, GTK should handle
-   * this case. The size request can be huge without hosing
-   * anything because we set the MIN_SIZE geometry hint.
-   */
-  gtk_widget_set_size_request (widget, 2000, 2000);
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
 

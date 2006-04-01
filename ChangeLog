@@ -1,3 +1,10 @@
+2006-04-01  Behdad Esfahbod  <behdad@gnome.org>
+
+	* src/terminal-window.c (terminal_window_set_size_force_grid):
+	Remove the old hack that was causing superfluous resize when a tab is
+	drag-n-dropped to a separate window.  We'll see if regressions happen.
+	Closes bug #336325 (may open new ones ;).
+
 2006-04-01  Guilherme de S. Pastore  <gpastore@gnome.org>
 
 	* src/terminal-window.c: applied patch to fix the close button
