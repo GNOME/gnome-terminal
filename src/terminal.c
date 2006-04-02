@@ -3381,7 +3381,7 @@ terminal_app_get_clone_command (TerminalApp *app,
 
           if (screen == active_screen)
             {
-              int w, h;
+              int w, h, x, y;
 
               /* FIXME saving the geometry is not great :-/ */
               argv[i] = g_strdup ("--active");
@@ -3389,7 +3389,8 @@ terminal_app_get_clone_command (TerminalApp *app,
               argv[i] = g_strdup ("--geometry");
               ++i;
               terminal_widget_get_size (terminal_screen_get_widget (screen), &w, &h);
-              argv[i] = g_strdup_printf ("%dx%d", w, h);
+              gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+              argv[i] = g_strdup_printf ("%dx%d+%d+%d", w, h, x, y);
               ++i;
             }
 
