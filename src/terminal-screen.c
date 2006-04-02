@@ -279,11 +279,11 @@ terminal_screen_init (TerminalScreen *screen)
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<" SCHEME "//(" USER "@)?[" HOSTCHARS ".]+"
-			     "(:[0-9]+)?(" URLPATH ")?\\>", FLAVOR_AS_IS);
+			     "(:[0-9]+)?(" URLPATH ")?\\>/?", FLAVOR_AS_IS);
 
   terminal_widget_match_add (screen->priv->term,
 			     "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
-			     "(:[0-9]+)?(" URLPATH ")?\\>",
+			     "(:[0-9]+)?(" URLPATH ")?\\>/?",
 			     FLAVOR_DEFAULT_TO_HTTP);
 
   terminal_widget_match_add (screen->priv->term,
