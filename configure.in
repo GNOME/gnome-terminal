@@ -1,12 +1,14 @@
-AC_INIT(src/terminal.c)
+AC_INIT([GNOME Terminal],[2.14.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
+AC_CONFIG_SRCDIR([src/terminal.c])
+AC_CONFIG_MACRO_DIR([m4])
 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE(gnome-terminal, 2.14.0)
+AM_INIT_AUTOMAKE([1.9 foreign])
 
 GETTEXT_PACKAGE=gnome-terminal
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE")
+AC_SUBST([GETTEXT_PACKAGE])
+AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 
 AC_C_BIGENDIAN
 
@@ -81,13 +83,14 @@ else
    using_xft2=no
 fi
 
-AC_OUTPUT([
+GNOME_DOC_INIT
+
+AC_CONFIG_FILES([
 Makefile
 gnome-terminal.desktop.in
 src/Makefile
 src/skey/Makefile
 help/Makefile
-help/C/Makefile
 help/bg/Makefile
 help/ro/Makefile
 help/de/Makefile
@@ -102,6 +105,7 @@ help/zh_CN/Makefile
 help/zh_TW/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT
 dnl ==========================================================================
 
 if test x$using_xft2 = xno; then
