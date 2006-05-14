@@ -1078,7 +1078,6 @@ get_child_environment (GtkWidget      *term,
   gchar **p, **retval;
   gint i;
   GConfClient *conf;
-  gboolean use_proxy;
 #define EXTRA_ENV_VARS 8
 
   /* count env vars that are set */
@@ -1123,27 +1122,58 @@ get_child_environment (GtkWidget      *term,
   ++i;
   
   conf = gconf_client_get_default ();
-  use_proxy = gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy", NULL);
 
-  if (use_proxy && !getenv ("http_proxy"))
+  if (!getenv ("http_proxy") &&
+      gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy", NULL))
     {
-      gchar *host;
       gint port;
       GSList *ignore;
+      gchar *host, *auth = NULL;
 
       host = gconf_client_get_string (conf, HTTP_PROXY_DIR "/host", NULL);
       port = gconf_client_get_int (conf, HTTP_PROXY_DIR "/port", NULL);
       ignore = gconf_client_get_list (conf, HTTP_PROXY_DIR "/ignore_hosts",
 				      GCONF_VALUE_STRING, NULL);
 
+      if (gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_authentication", NULL))
+	{
+	  gchar *user, *password;
+
+	  user = gconf_client_get_string (conf,
+					  HTTP_PROXY_DIR "/authentication_user",
+					  NULL);
+
+	  password = gconf_client_get_string (conf,
+					      HTTP_PROXY_DIR
+					      "/authentication_password",
+					      NULL);
+
+	  if (user != '\0')
+	    auth = g_strdup_printf ("%s:%s", user, password);
+
+	  g_free (user);
+	  g_free (password);
+	}
+
       g_object_unref (conf);
 
-      if (host && port)
+      if (port && host && host != '\0')
 	{
-	  retval[i] = g_strdup_printf ("http_proxy=http://%s:%d/", host, port);
-	  g_free (host);
+	  if (auth)
+	    retval[i] = g_strdup_printf ("http_proxy=http://%s@%s:%d/",
+					 auth, host, port);
+	  else
+	    retval[i] = g_strdup_printf ("http_proxy=http://%s:%d/",
+					 host, port);
+
 	  ++i;
 	}
+
+      if (auth)
+	g_free (auth);
+
+      if (host)
+	g_free (host);
 
       if (ignore)
 	{
