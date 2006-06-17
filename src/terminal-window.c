@@ -2246,7 +2246,6 @@ confirm_close_window (TerminalWindow *window)
   GtkWidget *dialog;
   GError *error;
   gboolean result;
-  char *msg, *msg1;
   int n;
 
   n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook));
@@ -2258,32 +2257,26 @@ confirm_close_window (TerminalWindow *window)
   if (!gconf_client_get_bool (window->priv->conf, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
     return TRUE;
 
-  msg1 = g_strdup_printf (ngettext ("This window has one tab open. Closing "
-				    "the window will close it.",
-				    "This window has %d tabs open. Closing "
-				    "the window will also close all of its "
-				    "tabs.",
-				    n),
-			  n);
-
-  msg = g_strdup_printf ("<span weight=\"bold\" size=\"larger\">%s</span>\n\n"
-			 "%s\n", _("Close all tabs?"), msg1);
-
-  dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
+  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_WARNING,
-                                   GTK_BUTTONS_NONE,
-                                   msg);
+                                   GTK_BUTTONS_CANCEL,
+                                   "%s", _("Close all tabs?"));
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+			  		    ngettext ("This window has one tab open. Closing "
+						      "the window will close it.",
+						      "This window has %d tabs open. Closing "
+						      "the window will also close all of its "
+						      "tabs.",
+						      n),
+					    n);
+
   gtk_window_set_title (GTK_WINDOW(dialog), ""); 
-  g_free (msg);
-  g_free (msg1);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All _Tabs"), GTK_RESPONSE_YES);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All _Tabs"), GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_YES);
-
-  result = gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_YES;
+  result = gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT;
   gtk_widget_destroy (dialog);
 
   return result;
