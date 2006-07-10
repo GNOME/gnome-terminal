@@ -85,6 +85,9 @@ struct _TerminalWindowPrivate
    * event-driven while GTK doesn't support _NET_WM_STATE_FULLSCREEN
    */
   guint fullscreen : 1;
+
+  /* Compositing manager integration */
+  guint have_argb_visual : 1;
 };
 
 enum {
@@ -750,6 +753,34 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 }
 
 static void
+initialize_alpha_mode (TerminalWindow *window)
+{
+  GdkScreen *screen;
+  GdkColormap *colormap;
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  colormap = gdk_screen_get_rgba_colormap (screen);
+  if (colormap != NULL && gdk_screen_is_composited (screen))
+    {
+      /* Set RGBA colormap if possible so VTE can use real alpha
+       * channels for transparency. */
+
+      gtk_widget_set_colormap(GTK_WIDGET (window), colormap);
+      window->priv->have_argb_visual = TRUE;
+    }
+  else
+    {
+      window->priv->have_argb_visual = FALSE;
+    }
+}
+
+gboolean
+terminal_window_uses_argb_visual (TerminalWindow *window)
+{
+  return window->priv->have_argb_visual;
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
@@ -780,6 +811,8 @@ terminal_window_init (TerminalWindow *window)
   
   window->priv->use_mnemonics = TRUE;
   window->priv->using_mnemonics = FALSE;
+
+  initialize_alpha_mode (window);
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
   window->priv->clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GDK_NONE);

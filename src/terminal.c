@@ -1966,6 +1966,8 @@ terminal_app_new_terminal (TerminalApp     *app,
     
       terminal_window_add_screen (window, screen);
 
+      terminal_screen_reread_profile (screen);
+
       g_object_unref (G_OBJECT (screen));
     
       terminal_window_set_active (window, screen);

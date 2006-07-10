@@ -98,6 +98,8 @@ void terminal_window_reread_profile_list (TerminalWindow *window);
 void terminal_window_set_startup_id (TerminalWindow *window,
                                      const char     *startup_id);
 
+gboolean terminal_window_uses_argb_visual (TerminalWindow *window);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */

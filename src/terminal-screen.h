@@ -74,6 +74,8 @@ void terminal_screen_set_profile (TerminalScreen *screen,
                                   TerminalProfile *profile);
 TerminalProfile* terminal_screen_get_profile (TerminalScreen *screen);
 
+void terminal_screen_reread_profile (TerminalScreen *screen);
+
 void         terminal_screen_set_override_command (TerminalScreen  *screen,
                                                    char           **argv);
 const char** terminal_screen_get_override_command (TerminalScreen  *screen);

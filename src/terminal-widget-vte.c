@@ -351,6 +351,7 @@ void
 terminal_widget_set_background_transparent (GtkWidget *widget,
 					    gboolean   setting)
 {
+    /* FIXME: Don't enable this if we have a compmgr. */
   vte_terminal_set_background_transparent(VTE_TERMINAL(widget), setting);
 }
 
@@ -361,6 +362,14 @@ terminal_widget_set_background_darkness (GtkWidget *widget,
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
   vte_terminal_set_background_saturation(VTE_TERMINAL(widget), 1.0 - factor);
+}
+
+void
+terminal_widget_set_background_opacity (GtkWidget *widget,
+					double     factor)
+{
+  g_return_if_fail(VTE_IS_TERMINAL(widget));
+  vte_terminal_set_opacity(VTE_TERMINAL(widget), factor * 0xffff);
 }
 
 void

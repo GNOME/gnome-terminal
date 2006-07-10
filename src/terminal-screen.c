@@ -119,8 +119,6 @@ static void terminal_screen_widget_encoding_changed  (GtkWidget      *term,
 
 static void terminal_screen_setup_dnd                (TerminalScreen *screen);
 
-static void reread_profile (TerminalScreen *screen);
-
 static gboolean cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_title);
 
 static void terminal_screen_cook_title      (TerminalScreen *screen);
@@ -521,12 +519,13 @@ terminal_screen_get_icon_title_set (TerminalScreen *screen)
   return screen->priv->icon_title_set;
 }
 
-static void
-reread_profile (TerminalScreen *screen)
+void
+terminal_screen_reread_profile (TerminalScreen *screen)
 {
   TerminalProfile *profile;
   GtkWidget *term;
   TerminalBackgroundType bg_type;
+  TerminalWindow *window;
   
   profile = screen->priv->profile;  
   
@@ -600,13 +599,24 @@ reread_profile (TerminalScreen *screen)
 
   if (bg_type == TERMINAL_BACKGROUND_IMAGE ||
       bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
+    {
     terminal_widget_set_background_darkness (term,
                                              terminal_profile_get_background_darkness (profile));
+      terminal_widget_set_background_opacity (term,
+					      terminal_profile_get_background_darkness (profile));
+    }      
   else
+    {
     terminal_widget_set_background_darkness (term, 0.0); /* normal color */
+      terminal_widget_set_background_opacity (term, 1);
+    }
   
+  window = terminal_screen_get_window (screen);
+  if (window == NULL || !terminal_window_uses_argb_visual (window))
   terminal_widget_set_background_transparent (term,
                                               bg_type == TERMINAL_BACKGROUND_TRANSPARENT);
+  else
+    terminal_widget_set_background_transparent (term, FALSE);
 
   terminal_widget_set_backspace_binding (term,
                                          terminal_profile_get_backspace_binding (profile));
@@ -698,7 +708,7 @@ profile_changed_callback (TerminalProfile           *profile,
                           const TerminalSettingMask *mask,
                           TerminalScreen            *screen)
 {
-  reread_profile (screen);
+  terminal_screen_reread_profile (screen);
 }
 
 static void
@@ -946,7 +956,7 @@ terminal_screen_set_profile (TerminalScreen *screen,
 
   screen->priv->profile = profile;
 
-  reread_profile (screen);
+  terminal_screen_reread_profile (screen);
 
   if (screen->priv->profile)
     g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0);

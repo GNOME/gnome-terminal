@@ -1,3 +1,25 @@
+2006-07-10  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 345378 – real transparency
+	Patch from Kristian Høgsberg <krh redhat.com>
+
+	* src/terminal-screen.c (terminal_screen_reread_profile),
+	(profile_changed_callback), (terminal_screen_set_profile):
+	* src/terminal-screen.h:
+	* src/terminal-widget-vte.c
+	(terminal_widget_set_background_transparent),
+	(terminal_widget_set_background_darkness),
+	(terminal_widget_set_background_opacity):
+	* src/terminal-widget.h:
+	* src/terminal-window.c (initialize_alpha_mode),
+	(terminal_window_uses_argb_visual), (terminal_window_init):
+	* src/terminal-window.h:
+	* src/terminal.c (terminal_app_new_terminal):
+	Use real transparency when the X server supports it.
+
+	* configure.in: Require vte-0.13.3 that has the necessary bits
+	(vte_terminal_set_opacity)
+
 2006-06-17  Guilherme de S. Pastore  <gpastore@gnome.org>
 
 	* src/terminal-window.c: applied patch to improve the
