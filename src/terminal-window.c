@@ -1840,6 +1840,7 @@ notebook_tab_removed_callback (GtkWidget       *notebook,
                                TerminalScreen  *screen,
                                TerminalWindow  *window)
 {  
+  gboolean single;
   /* Called from terminal_notebook_move_tab() */
   if (find_screen (window, screen) != NULL) {
     g_assert (terminal_screen_get_window (screen) == window);
@@ -1870,6 +1871,11 @@ notebook_tab_removed_callback (GtkWidget       *notebook,
 
   reset_tab_menuitems (window);
   update_tab_sensitivity (window);
+
+  /* The tab bar may have disappeared */
+  single = g_list_length (window->priv->terms) == 1;
+  if (single)
+    terminal_window_set_size (window, window->priv->active_term, TRUE);
 
   /* Close window if no more terminals */
   if (window->priv->terms == NULL)
