@@ -1,3 +1,19 @@
+2006-07-24  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 336947 – [patch] Redundant vte_terminal_set_font_full() calls
+	Patch from Aivars Kalvans
+
+	* src/terminal-screen.c (style_set_callback),
+	(terminal_screen_reread_profile), (monospace_font_change_notify),
+	(terminal_screen_set_font), (terminal_screen_update_on_realize),
+	(terminal_screen_change_font), (terminal_screen_set_font_scale):
+	* src/terminal-screen.h:
+	* src/terminal.c (terminal_app_new_terminal):
+	AVoid redundant set_font_full and invalidate_all calls.
+
+	* configure.in: Require vte >= 0.13.4 that has the bits needed for
+	this change to work.
+
 2006-07-10  Behdad Esfahbod  <behdad@gnome.org>
 
 	* NEWS: updated.

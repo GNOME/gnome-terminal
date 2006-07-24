@@ -97,6 +97,7 @@ static void terminal_screen_size_request (GtkWidget *widget,
 static void terminal_screen_map         (GtkWidget           *widget);
 static void terminal_screen_update_on_realize (GtkWidget      *widget,
                                                TerminalScreen *screen);
+static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu         (GtkWidget      *term,
                                                     TerminalScreen *screen);
 static gboolean terminal_screen_button_press_event (GtkWidget      *term,
@@ -179,7 +180,7 @@ style_set_callback (GtkWidget *widget,
                     void      *data)
 {
   if (GTK_WIDGET_REALIZED (widget))
-    terminal_screen_update_on_realize (widget, TERMINAL_SCREEN (data));  
+    terminal_screen_change_font (TERMINAL_SCREEN (data));
 }
 
 static void
@@ -548,7 +549,7 @@ terminal_screen_reread_profile (TerminalScreen *screen)
     }
   
   if (GTK_WIDGET_REALIZED (screen->priv->term))
-    terminal_screen_update_on_realize (term, screen);
+    terminal_screen_change_font (screen);
 
   terminal_widget_set_cursor_blinks (term,
                                      terminal_profile_get_cursor_blink (profile));
@@ -753,7 +754,7 @@ monospace_font_change_notify (GConfClient *client,
   
   if (strcmp (entry->key, MONOSPACE_FONT_KEY) == 0 &&
       GTK_WIDGET_REALIZED (widget))
-    terminal_screen_update_on_realize (widget, screen);
+    terminal_screen_change_font (screen);
 }
 
 PangoFontDescription *
@@ -778,16 +779,15 @@ get_system_monospace_font (void)
   return desc;
 }
 
-static void
-terminal_screen_update_on_realize (GtkWidget      *term,
-                                   TerminalScreen *screen)
+void
+terminal_screen_set_font (TerminalScreen *screen)
 {
   TerminalProfile *profile;
+  GtkWidget *term;
   
+  term = screen->priv->term;
   profile = screen->priv->profile;
   
-  update_color_scheme (screen);
-
   if (terminal_widget_supports_pango_fonts ())
     {
       PangoFontDescription *desc;
@@ -885,10 +885,28 @@ terminal_screen_update_on_realize (GtkWidget      *term,
          }
     }
   
+}
+
+static void
+terminal_screen_update_on_realize (GtkWidget      *term,
+                                   TerminalScreen *screen)
+{
+  TerminalProfile *profile;
+
+  profile = screen->priv->profile;
+
+  update_color_scheme (screen);
+  
   terminal_widget_set_allow_bold (term,
                                   terminal_profile_get_allow_bold (profile));
-
   terminal_window_set_size (screen->priv->window, screen, TRUE);
+}
+
+static void
+terminal_screen_change_font (TerminalScreen *screen)
+{
+  terminal_screen_set_font (screen);
+  terminal_screen_update_on_realize (screen->priv->term, screen);
 }
 
 static void
@@ -2033,8 +2051,7 @@ terminal_screen_set_font_scale (TerminalScreen *screen,
       GTK_WIDGET_REALIZED (screen->priv->term))
     {
       /* Update the font */
-      terminal_screen_update_on_realize (screen->priv->term,
-                                         screen);
+      terminal_screen_change_font (screen);
     }
 }
 

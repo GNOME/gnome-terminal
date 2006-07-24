@@ -1963,6 +1963,7 @@ terminal_app_new_terminal (TerminalApp     *app,
         terminal_screen_set_override_command (screen, override_command);
     
       terminal_screen_set_font_scale (screen, zoom);
+      terminal_screen_set_font (screen);
     
       terminal_window_add_screen (window, screen);
 

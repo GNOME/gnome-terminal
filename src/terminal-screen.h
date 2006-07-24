@@ -111,6 +111,7 @@ void        terminal_screen_set_working_dir   (TerminalScreen *screen,
                                                const char     *dirname);
 const char *terminal_screen_get_working_dir   (TerminalScreen *screen);
 
+void        terminal_screen_set_font (TerminalScreen *screen);
 void        terminal_screen_set_font_scale    (TerminalScreen *screen,
                                                double          factor);
 double      terminal_screen_get_font_scale    (TerminalScreen *screen);
