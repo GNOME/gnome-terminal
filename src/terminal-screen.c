@@ -2432,22 +2432,26 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
 	uris = g_strsplit (uri_list, "\r\n", 0);
 
         i = 0;
-        while (uris && uris[i])
+	while (uris && uris[i])
           {
             char *old;
             
             old = uris[i];
-
+	    /* First, treat the dropped URI like it's a filename */
             uris[i] = g_filename_from_uri (old, NULL, NULL);
-
-            /* If the URI wasn't a filename, then pass it through
-             * as a URI, so you can DND from Mozilla or whatever
-             */
-            if (uris[i] == NULL)
-              uris[i] = old;
-            else
-              g_free (old);
-            
+	    /* if it's NULL, that means it wasn't a filename.
+	     * Pass it as a plain URI, then.
+	     */
+	    if (uris[i] == NULL)
+	      uris[i] = old;
+            else 
+	      {
+		/* OK, it's a file. Quote the shell characters. */
+		g_free(old);
+		old = uris[i];
+		uris[i] = g_shell_quote(uris[i]);
+		g_free(old);
+	      }
             ++i;
           }
 
