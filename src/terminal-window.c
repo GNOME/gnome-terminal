@@ -2639,6 +2639,8 @@ accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
 
   if (modifiers & GDK_LOCK_MASK)
     modifiers -= GDK_LOCK_MASK;
+  if (modifiers & GDK_MOD2_MASK)
+    modifiers -= GDK_MOD2_MASK;
 
   if (modifiers != key->accel_mods)
     return FALSE;
