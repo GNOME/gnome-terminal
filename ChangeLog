@@ -1,3 +1,10 @@
+2006-08-05  Bastien Nocera  <hadess@hadess.net>
+
+	* src/terminal-window.c: (accel_event_key_match):
+	Only send Previous tab/Next tab key events to the terminal if there's
+	no tab, and not when we reach the boundary with multiple tabs,
+	and ignore NumLock as well (Closes: #138609)
+
 2006-07-31  Behdad Esfahbod  <behdad@gnome.org>
 
 	* NEWS: updated.
