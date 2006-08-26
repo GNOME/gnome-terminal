@@ -2242,13 +2242,31 @@ new_window (TerminalWindow *window,
             char *name,
             const char *dir)
 {
+  char *geometry;
+
+  if (screen)
+    {
+      GtkWidget *term;
+      int width, height;
+
+      term = terminal_screen_get_widget (screen);
+      terminal_widget_get_size (term, &width, &height);
+      geometry = g_strdup_printf("%dx%d", width, height);
+    }
+  else
+    {
+      geometry = NULL;
+    }
+
   terminal_app_new_terminal (terminal_app_get (),
                              profile,
                              NULL,
                              screen,
                              FALSE, FALSE, FALSE,
-                             NULL, NULL, NULL, dir, NULL, 1.0,
+                             NULL, geometry, NULL, dir, NULL, 1.0,
                              NULL, name, -1);
+
+  g_free (geometry);
 }
 
 static void
