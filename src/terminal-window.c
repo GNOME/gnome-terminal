@@ -423,8 +423,8 @@ fill_in_config_picker_submenu (TerminalWindow *window)
   if (window->priv->active_term == NULL || g_list_length (profiles) < 2)
     {
       gtk_widget_set_sensitive (window->priv->choose_config_menuitem, FALSE);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->choose_config_menuitem),
-                                 NULL);
+      gtk_menu_item_remove_submenu (GTK_MENU_ITEM (window->priv->choose_config_menuitem));
+
       return;
     }
   
@@ -518,8 +518,7 @@ fill_in_new_term_submenu_real(GtkWidget *menuitem,
     {
       /* Well, this shouldn't happen: it'd mean there is no default profile */
       gtk_widget_set_sensitive (window->priv->new_window_menuitem, FALSE);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->new_window_menuitem),
-                                 NULL);
+      gtk_menu_item_remove_submenu (GTK_MENU_ITEM (window->priv->new_window_menuitem));
     }
   else if (g_list_length (profiles) < 2)
     {
@@ -637,8 +636,8 @@ fill_in_encoding_menu (TerminalWindow *window)
   if (window->priv->active_term == NULL)
     {
       gtk_widget_set_sensitive (window->priv->encoding_menuitem, FALSE);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (window->priv->encoding_menuitem),
-                                 NULL);
+      gtk_menu_item_remove_submenu (GTK_MENU_ITEM (window->priv->encoding_menuitem));
+
       return;
     }
   

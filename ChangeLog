@@ -1,3 +1,13 @@
+2006-08-26  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 336943 – Critical warning and crash in gnome-terminal
+	Patch from Mariano Suárez-Alvarez
+
+	* src/terminal-window.c (fill_in_config_picker_submenu),
+	(fill_in_new_term_submenu_real), (fill_in_encoding_menu):
+	Use gtk_menu_item_remove_submenu() instead of passing NULL to
+	gtk_menuitem_set_submenu().
+
 2006-08-15  Kjartan Maraas  <kmaraas@gnome.org>
 
 	* configure.in: Fix intltool req.
