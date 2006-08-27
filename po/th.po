@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-01-31 10:25+0700\n"
-"PO-Revision-Date: 2006-01-31 10:26+0700\n"
+"POT-Creation-Date: 2006-08-27 17:26+0700\n"
+"PO-Revision-Date: 2006-08-27 17:31+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <L10n@opentle.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:795 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "เทอร์มินัล"
 
@@ -561,7 +561,7 @@ msgstr "พื้นหลังโปร่งแ_สง"
 
 #: ../src/gnome-terminal.glade2.h:87
 msgid "_Update login records when command is launched"
-msgstr "_อัพเดตระเบียนล็อกอินเมื่อเรียกใช้งานคำสั่ง"
+msgstr "_ปรับข้อมูลระเบียนล็อกอินเมื่อเรียกใช้งานคำสั่ง"
 
 #: ../src/gnome-terminal.glade2.h:88
 msgid "_Use the system terminal font"
@@ -788,7 +788,7 @@ msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"ถ้าเลือก จะอัพเดตระเบียนล็อกอิน utmp และ wtmp ของระบบ เมื่อเรียกใช้คำสั่งภายในเทอร์มินัล"
+"ถ้าเลือก จะปรับข้อมูลระเบียนล็อกอิน utmp และ wtmp ของระบบ เมื่อเรียกใช้คำสั่งภายในเทอร์มินัล"
 
 #: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
@@ -1467,7 +1467,7 @@ msgstr "ปิดเสียงออดเตือนเทอร์มิน
 
 #: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to update login records when launching terminal command"
-msgstr "อัพเดตระเบียนล็อกอินเมื่อเรียกใช้คำสั่งเทอร์มินัลหรือไม่"
+msgstr "ปรับข้อมูลระเบียนล็อกอินเมื่อเรียกใช้คำสั่งเทอร์มินัลหรือไม่"
 
 #: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -1658,7 +1658,7 @@ msgstr "ย่อ"
 msgid "Normal Size"
 msgstr "ขนาดปกติ"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2111
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2165
 msgid "Set Title"
 msgstr "ตั้งหัวเรื่อง"
 
@@ -1686,7 +1686,7 @@ msgstr "ย้ายแท็บไปทางซ้าย"
 msgid "Move Tab to the Right"
 msgstr "ย้ายแท็บไปทางขวา"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1073
 msgid "Detach Tab"
 msgstr "ดึงแท็บออกมา"
 
@@ -1763,7 +1763,7 @@ msgid "Help"
 msgstr "ระบบช่วยเหลือ"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:202 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้จาก %s. (%s)\n"
@@ -1919,7 +1919,7 @@ msgstr "เกิดข้อผิดพลาดในการลงทะเ
 msgid "_Details"
 msgstr "ราย_ละเอียด"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2953 ../src/terminal.c:2394
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "เกิดข้อผิดพลาดในการสร้างโพรไฟล์ \"%s\""
@@ -1938,26 +1938,25 @@ msgstr "ไม่สามารถวิเคราะห์ข้อควา
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "จานสีมีจำนวน %d รายการ แทนที่จะมี %d รายการ\n"
-msgstr[1] "จานสีมีจำนวน %d รายการ แทนที่จะมี %d รายการ\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:218
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "เกิดข้อผิดพลาดในการลงทะเบียนการเตือนของการเปลี่ยนแบบอักษรช่องว่างเดี่ยว (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:875
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "ไม่สามารถโหลดแบบอักษร \"%s\"\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1022
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "เกิดปัญหากับคำสั่งสำหรับเทอร์มินัลนี้: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1462
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1966,102 +1965,102 @@ msgstr ""
 "ไม่สามารถเปิดฐานข้อมูล \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1559 ../src/terminal-window.c:823
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้สำหรับการเลือกใช้รูปภาพในเมนู (%s)\n"
 
-#: ../src/terminal-screen.c:1588
+#: ../src/terminal-screen.c:1645
 msgid "_Send Mail To..."
 msgstr "ส่งเ_มลถึง..."
 
-#: ../src/terminal-screen.c:1593
+#: ../src/terminal-screen.c:1650
 msgid "_Copy E-mail Address"
 msgstr "คัดลอก_ที่อยู่อีเมล"
 
-#: ../src/terminal-screen.c:1600
+#: ../src/terminal-screen.c:1657
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
-#: ../src/terminal-screen.c:1605
+#: ../src/terminal-screen.c:1662
 msgid "_Copy Link Address"
 msgstr "คัด_ลอกที่อยู่ลิงก์"
 
-#: ../src/terminal-screen.c:1617 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1673 ../src/terminal-window.c:886
 msgid "Open _Terminal"
 msgstr "เปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-screen.c:1622 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1678 ../src/terminal-window.c:889
 msgid "Open Ta_b"
 msgstr "แท็_บใหม่"
 
-#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:904
 msgid "C_lose Tab"
 msgstr "ปิ_ดแท็บ"
 
-#: ../src/terminal-screen.c:1632 ../src/terminal-window.c:876
+#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:908
 msgid "_Close Window"
 msgstr "ปิดห_น้าต่าง"
 
-#: ../src/terminal-screen.c:1657
+#: ../src/terminal-screen.c:1713
 msgid "Change P_rofile"
 msgstr "เปลี่ย_นโพรไฟล์"
 
-#: ../src/terminal-screen.c:1693
+#: ../src/terminal-screen.c:1749
 msgid "_Edit Current Profile..."
 msgstr "แ_ก้ไขโพรไฟล์ปัจจุบัน..."
 
-#: ../src/terminal-screen.c:1698
+#: ../src/terminal-screen.c:1754
 msgid "Show _Menubar"
 msgstr "แสดงแถบเ_มนู"
 
-#: ../src/terminal-screen.c:1708
+#: ../src/terminal-screen.c:1764
 msgid "_Input Methods"
 msgstr "วิธี_ป้อนข้อมูล"
 
-#: ../src/terminal-screen.c:2140
+#: ../src/terminal-screen.c:2194
 msgid "_Title:"
 msgstr "_หัวเรื่อง:"
 
-#: ../src/terminal-screen.c:2254
+#: ../src/terminal-screen.c:2308
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ข้อความที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2277
+#: ../src/terminal-screen.c:2331
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "สีที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2320
+#: ../src/terminal-screen.c:2374
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla URL ที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2369
+#: ../src/terminal-screen.c:2423
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI ที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2424
+#: ../src/terminal-screen.c:2482
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ชื่อรูปภาพที่ปล่อยลงบนเทอร์มินัลมีรูปแบบ (%d) ไม่ถูกต้อง หรือความยาว (%d) ไม่ถูกต้อง\n"
 
-#: ../src/terminal-screen.c:2450
+#: ../src/terminal-screen.c:2508
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "เกิดข้อผิดพลาดในการแปลง URL \"%s\" ไปเป็นชื่อแฟ้ม: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "เกิดข้อผิดพลาดขณะสร้างกระบวนการลูกสำหรับเทอร์มินัลนี้:"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:363
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2070,156 +2069,155 @@ msgstr ""
 "เกิดข้อผิดพลาดในการลงทะเบียนการเตือนของการเปลี่ยนความสามารถในการมองเห็นไอคอนเมนู (%"
 "s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:575
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:577
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:700
 msgid "_Add or Remove..."
 msgstr "เ_พิ่มหรือลด..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:897
 msgid "New _Profile..."
 msgstr "โ_พรไฟล์ใหม่..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:941
 msgid "P_rofiles..."
 msgstr "โ_พรไฟล์..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:944
 msgid "_Keyboard Shortcuts..."
 msgstr "ปุ่ม_ลัด..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:948
 msgid "C_urrent Profile..."
 msgstr "โพรไฟล์ปั_จจุบัน..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:963
 msgid "Show Menu_bar"
 msgstr "แสดงแถบเ_มนู"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:967
 msgid "_Full Screen"
 msgstr "เ_ต็มจอ"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1010
 msgid "Change _Profile"
 msgstr "เปลี่ยนโ_พรไฟล์"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1013
 msgid "_Set Title..."
 msgstr "ตั้ง_หัวเรื่อง..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1020
 msgid "Set _Character Encoding"
 msgstr "ตั้งค่า_รหัสอักขระ"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1030
 msgid "_Reset"
 msgstr "_คืนค่าเดิม"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1033
 msgid "Reset and C_lear"
 msgstr "คืนค่าเดิมและ_ลบจอ"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1047
 msgid "_Previous Tab"
 msgstr "แท็บ_ก่อน"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1051
 msgid "_Next Tab"
 msgstr "แท็บ_ถัดไป"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1062
 msgid "Move Tab to the _Left"
 msgstr "ย้ายแท็บไปทาง_ซ้าย"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Right"
 msgstr "ย้ายแท็บไปทาง_ขวา"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1092
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1102
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1291
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้สำหรับการเลือกใช้ mnemonics (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1310
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการลงทะเบียนการเตือนของการเปลี่ยนการตั้งค่าหน้าต่างเทอร์มินัล (%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2094
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2096 ../src/terminal.c:2986
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2098
 msgid "_View"
 msgstr "_มุมมอง"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2100
 msgid "_Terminal"
 msgstr "เ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2102
 msgid "Ta_bs"
 msgstr "แท็_บ"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2104
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2320
+msgid "Close all tabs?"
+msgstr "จะปิดแท็บทั้งหมดหรือไม่?"
+
+#: ../src/terminal-window.c:2322
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all of its "
 "tabs."
-msgstr[0] "หน้าต่างนี้เปิดแท็บไว้แท็บหนึ่ง การปิดหน้าต่างจะปิดแท็บดังกล่าว"
-msgstr[1] "หน้าต่างนี้เปิดแท็บไว้ %d แท็บ การปิดหน้าต่างจะปิดแท็บทั้งหมดในหน้าต่าง"
+msgstr[0] "หน้าต่างนี้เปิดแท็บไว้ %d แท็บ การปิดหน้าต่างจะปิดแท็บทั้งหมดในหน้าต่าง"
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "จะปิดแท็บทั้งหมดหรือไม่?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2332
 msgid "Close All _Tabs"
 msgstr "ปิดแ_ท็บทั้งหมด"
 
-#: ../src/terminal-window.c:2833
+#: ../src/terminal-window.c:2884
 msgid "GNOME Terminal"
 msgstr "เทอร์มินัล GNOME"
 
-#: ../src/terminal-window.c:2834
+#: ../src/terminal-window.c:2886
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "โปรแกรมจำลองเทอร์มินัลสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/terminal-window.c:2838
+#: ../src/terminal-window.c:2891
 msgid "translator-credits"
 msgstr ""
 "ชัชวาลย์ หาญสกุลบันเทิง <chatchawarnh@nectec.or.th>\n"
@@ -2524,105 +2522,104 @@ msgid ""
 "changes. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการลงทะเบียนการเตือนของการเปลี่ยนรายการโพรไฟล์เทอร์มินัล (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1989
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "ชุดอักขระเรขาคณิตไม่ถูกต้อง \"%s\"\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2055
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "เกิดข้อผิดพลาดในการรับรายการของโพรไฟล์เทอร์มินัล (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2359
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
 "profile with the same name?"
 msgstr "คุณมีโพรไฟล์ชื่อ \"%s\" อยู่แล้ว ต้องการสร้างโพรไฟล์ใหม่ด้วยชื่อเดียวกันหรือไม่?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2373
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "โพรไฟล์ที่คุณเลือกเป็นหลักสำหรับโพรไฟล์ใหม่ไม่ปรากฏอยู่อีกต่อไป"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2469
 msgid "Enter profile name"
 msgstr "ใส่ชื่อโพรไฟล์หลัก"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2479
 msgid "Choose base profile"
 msgstr "เลือกโพรไฟล์หลัก"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2618
 msgid "Profile list"
 msgstr "รายการโพรไฟล์"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2687
 msgid "You must select one or more profiles to delete."
 msgstr "คุณต้องเลือกโพรไฟล์อย่างน้อยหนึ่งโพรไฟล์หรือมากกว่าเพื่อลบ"
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2698
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "คุณต้องมีโพรไฟล์อย่างน้อยหนึ่งโพรไฟล์ คุณไม่สามารถลบโพรไฟล์ทั้งหมดได้"
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2706
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "ลบโพรไฟล์นี้หรือไม่?\n"
-msgstr[1] "ลบโพรไฟล์ทั้ง %d โพรไฟล์นี้หรือไม่?\n"
+msgstr[0] "ลบโพรไฟล์ %d โพรไฟล์นี้หรือไม่?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2727
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "ลบโพรไฟล์ \"%s\" หรือไม่?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2749
 msgid "Delete Profile"
 msgstr "ลบโพรไฟล์"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3022
 msgid "Profiles"
 msgstr "โพรไฟล์ "
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3063
 msgid "_Profiles:"
 msgstr "โ_พรไฟล์:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3095
 msgid "Click to open new profile dialog"
 msgstr "คลิกเพื่อเปิดกล่องโต้ตอบสำหรับสร้างโพรไฟล์ใหม่"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3103
 msgid "Click to open edit profile dialog"
 msgstr "คลิกเพื่อเปิดกล่องโต้ตอบสำหรับแก้ไขโพรไฟล์"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3111
 msgid "Click to delete selected profile"
 msgstr "คลิกเพื่อลบโพรไฟล์ที่เลือก"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3116
 msgid "Profile _used when launching a new terminal:"
 msgstr "โพรไฟล์สำหรับเปิดเ_ทอร์มินัลใหม่:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3172
 msgid "Click button to choose profile"
 msgstr "คลิกปุ่มเพื่อเลือกโพรไฟล์"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3590
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "เกิดข้อผิดพลาดในการแสดงข้อความช่วยเหลือ: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3661
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "แฟ้ม \"%s\" สูญหาย แสดงว่าโปรแกรมติดตั้งไม่ถูกต้อง"
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3833
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2630,7 +2627,7 @@ msgstr ""
 "ปรากฏว่าคุณไม่มีเทอร์มินัล gnome-terminal.server ติดตั้งไว้ในตำแหน่งที่ถูกต้อง "
 "ยกเลิกโหมดโรงงาน\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3836
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2638,7 +2635,7 @@ msgstr ""
 "เกิดข้อผิดพลาดขณะลงทะเบียนเทอร์มินัลเข้ากับบริการ activation  ดังนั้น "
 "จะปิดการใช้งานโหมดโรงงาน\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3872
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "ไม่สามารถอ่านเซิร์ฟเวอร์เทอร์มินัลจากเซิร์ฟเวอร์ activation\n"
 
