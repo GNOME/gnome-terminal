@@ -659,6 +659,11 @@ background_image_changed (GtkWidget       *entry,
   char *text;
   
   text = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (entry));
+
+  if (text == NULL)
+    {
+      return;
+    }
   
   terminal_profile_set_background_image_file (profile, text);
 
