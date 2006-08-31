@@ -1157,9 +1157,6 @@ terminal_window_destroy (GtkObject *object)
 
   window = TERMINAL_WINDOW (object);
 
-  while (window->priv->terms)
-    terminal_window_remove_screen (window, window->priv->terms->data);
-
   g_list_free (window->priv->tab_menuitems);
   window->priv->tab_menuitems = NULL;
   
