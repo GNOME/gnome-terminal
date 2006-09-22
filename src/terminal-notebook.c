@@ -43,10 +43,12 @@ struct _TerminalNotebookPrivate
   gint     x_start, y_start;
   gboolean drag_in_progress;
   GtkTooltips *tooltips;
+  GtkRcStyle *rcstyle;
 };
 
 static void terminal_notebook_init           (TerminalNotebook *notebook);
 static void terminal_notebook_class_init     (TerminalNotebookClass *klass);
+static void terminal_notebook_dispose        (GObject *object);
 static void terminal_notebook_finalize       (GObject *object);
 static void move_tab_to_another_notebook     (TerminalNotebook *src,
                                               TerminalNotebook *dest,
@@ -108,6 +110,7 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
 
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->dispose = terminal_notebook_dispose;
   object_class->finalize = terminal_notebook_finalize;
 
   signals[TAB_ADDED] =
@@ -686,6 +689,12 @@ terminal_notebook_init (TerminalNotebook *notebook)
   gtk_notebook_set_show_border (GTK_NOTEBOOK (notebook), FALSE);
 
   notebook->priv->tooltips = gtk_tooltips_new ();
+  g_object_ref (notebook->priv->tooltips);
+  gtk_object_sink (GTK_OBJECT (notebook->priv->tooltips));
+
+  notebook->priv->rcstyle = gtk_rc_style_new ();
+  notebook->priv->rcstyle->xthickness = 0;
+  notebook->priv->rcstyle->ythickness = 0;
 
   g_signal_connect (notebook, "button-press-event",
                     (GCallback)button_press_cb, NULL);
@@ -693,6 +702,26 @@ terminal_notebook_init (TerminalNotebook *notebook)
                     (GCallback)button_release_cb, NULL);
   gtk_widget_add_events (GTK_WIDGET (notebook), GDK_BUTTON1_MOTION_MASK);
 
+}
+
+static void
+terminal_notebook_dispose (GObject *object)
+{
+  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (object);
+
+  if (notebook->priv->tooltips)
+    {
+      g_object_unref (notebook->priv->tooltips);
+      notebook->priv->tooltips = NULL;
+    }
+
+  if (notebook->priv->rcstyle)
+    {
+      g_object_unref (notebook->priv->rcstyle);
+      notebook->priv->rcstyle = NULL;
+    }
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 static void
@@ -719,7 +748,11 @@ sync_label (TerminalScreen *screen, TerminalNotebook *nb)
   title = terminal_screen_get_title (screen);
 
   gtk_label_set_text (GTK_LABEL (label), title);
-  gtk_tooltips_set_tip (nb->priv->tooltips, ebox, title, NULL);
+
+  if (G_LIKELY (nb->priv->tooltips))
+    {
+      gtk_tooltips_set_tip (nb->priv->tooltips, ebox, title, NULL);
+    }
 }
 
 static void
@@ -739,7 +772,6 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
 {
   const char *title;
   GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
-  GtkRcStyle *rcstyle;
   GtkSettings *settings;
   gint w, h;
 
@@ -751,7 +783,10 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
 
   label_ebox = gtk_event_box_new ();
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
-  gtk_tooltips_set_tip (nb->priv->tooltips, label_ebox, title, NULL);
+  if (G_LIKELY (nb->priv->tooltips))
+    {
+      gtk_tooltips_set_tip (nb->priv->tooltips, label_ebox, title, NULL);
+    }
 
   label = gtk_label_new (title);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
@@ -765,10 +800,10 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
   gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
 
-  rcstyle = gtk_rc_style_new ();
-  rcstyle->xthickness = rcstyle->ythickness = 0;
-  gtk_widget_modify_style (close_button, rcstyle);
-  gtk_rc_style_unref (rcstyle);
+  if (G_LIKELY (nb->priv->rcstyle))
+    {
+      gtk_widget_modify_style (close_button, nb->priv->rcstyle);
+    }
 
   settings = gtk_widget_get_settings (GTK_WIDGET (label));
   gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &w, &h);
@@ -778,7 +813,10 @@ terminal_notebook_add_tab (TerminalNotebook *nb,
   gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-  gtk_tooltips_set_tip (nb->priv->tooltips, close_button, _("Close tab"), NULL);
+  if (G_LIKELY (nb->priv->tooltips))
+    {
+      gtk_tooltips_set_tip (nb->priv->tooltips, close_button, _("Close tab"), NULL);
+    }
 
   g_signal_connect (G_OBJECT (close_button), "clicked",
 		    G_CALLBACK (close_button_clicked_cb),
