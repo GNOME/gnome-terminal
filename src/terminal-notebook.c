@@ -705,11 +705,16 @@ static void
 sync_label (TerminalScreen *screen, TerminalNotebook *nb)
 {
   GtkWidget *hbox, *ebox, *label;
+  GList *children;
   const char *title;
 
   hbox = gtk_notebook_get_tab_label (GTK_NOTEBOOK (nb), GTK_WIDGET (screen));
-  ebox = g_list_first (gtk_container_get_children (GTK_CONTAINER (hbox)))->data;
-  label = g_list_first (gtk_container_get_children (GTK_CONTAINER (ebox)))->data;
+  children = gtk_container_get_children (GTK_CONTAINER (hbox));
+  ebox = g_list_first (children)->data;
+  g_list_free (children);
+  children = gtk_container_get_children (GTK_CONTAINER (ebox));
+  label = g_list_first (children)->data;
+  g_list_free (children);
 
   title = terminal_screen_get_title (screen);
 
