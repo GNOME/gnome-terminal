@@ -103,6 +103,8 @@ void        terminal_screen_set_dynamic_title      (TerminalScreen *screen,
 void        terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
                                                     const char     *title,
 						    gboolean	   userset);
+void        terminal_screen_set_title              (TerminalScreen *screen,
+                                                    const char     *title);
 
 const char *terminal_screen_get_dynamic_title      (TerminalScreen *screen);
 const char *terminal_screen_get_dynamic_icon_title (TerminalScreen *screen);

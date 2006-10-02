@@ -1952,6 +1952,7 @@ terminal_app_new_terminal (TerminalApp     *app,
     
       if (title)
 	{
+          terminal_screen_set_title (screen, title);
 	  terminal_screen_set_dynamic_title (screen, title, FALSE);
 	  terminal_screen_set_dynamic_icon_title (screen, title, FALSE);
 	}

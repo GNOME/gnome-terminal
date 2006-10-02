@@ -56,6 +56,7 @@ struct _TerminalScreenPrivate
   GtkWidget *popup_menu;
   char *raw_title, *raw_icon_title;
   char *cooked_title, *cooked_icon_title;
+  char *title_from_arg;
   gboolean icon_title_set;
   char *matched_string;
   int matched_flavor;
@@ -320,6 +321,7 @@ terminal_screen_init (TerminalScreen *screen)
                     G_CALLBACK (terminal_screen_button_press_event),
                     screen);
 
+  screen->priv->title_from_arg = NULL;
   screen->priv->user_title = FALSE;
   terminal_widget_connect_title_changed (screen->priv->term,
                                          G_CALLBACK (terminal_screen_widget_title_changed),
@@ -445,6 +447,7 @@ terminal_screen_finalize (GObject *object)
   
   g_free (screen->priv->raw_title);
   g_free (screen->priv->cooked_title);
+  g_free (screen->priv->title_from_arg);
   g_free (screen->priv->raw_icon_title);
   g_free (screen->priv->cooked_icon_title);
   g_free (screen->priv->matched_string);
@@ -642,6 +645,7 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
 {
   TerminalTitleMode mode;
   char *new_cooked_title = NULL;
+  char *static_title_piece = NULL;
 
   g_return_val_if_fail (old_cooked_title != NULL, FALSE);
 
@@ -650,11 +654,17 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
   else
     mode = TERMINAL_TITLE_REPLACE;
 
+  /* use --title argument if one was supplied, otherwise ask the profile */
+  if (screen->priv->title_from_arg)
+    static_title_piece = screen->priv->title_from_arg;
+  else
+    static_title_piece = terminal_profile_get_title (screen->priv->profile);
+
   switch (mode)
     {
     case TERMINAL_TITLE_AFTER:
       new_cooked_title =
-        g_strconcat (terminal_profile_get_title (screen->priv->profile),
+        g_strconcat (static_title_piece,
                      (raw_title && *raw_title) ? " - " : "",
                      raw_title,
                      NULL);
@@ -663,17 +673,17 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
       new_cooked_title =
         g_strconcat (raw_title ? raw_title : "",
                      (raw_title && *raw_title) ? " - " : "",
-                     terminal_profile_get_title (screen->priv->profile),
+                     static_title_piece,
                      NULL);
       break;
     case TERMINAL_TITLE_REPLACE:
       if (raw_title)
         new_cooked_title = g_strdup (raw_title);
       else
-        new_cooked_title = g_strdup (terminal_profile_get_title (screen->priv->profile));
+        new_cooked_title = g_strdup (static_title_piece);
       break;
     case TERMINAL_TITLE_IGNORE:
-      new_cooked_title = g_strdup (terminal_profile_get_title (screen->priv->profile));
+      new_cooked_title = g_strdup (static_title_piece);
     /* no default so we get missing cases statically */
     }
 
@@ -1926,6 +1936,15 @@ terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
   screen->priv->raw_icon_title = g_strdup (icon_title);
   screen->priv->icon_title_set = TRUE;
   terminal_screen_cook_icon_title (screen);
+}
+
+void
+terminal_screen_set_title (TerminalScreen *screen,
+			   const char     *title)
+{
+  if (screen->priv->title_from_arg)
+    g_free (screen->priv->title_from_arg);
+  screen->priv->title_from_arg = g_strdup (title);
 }
 
 const char*

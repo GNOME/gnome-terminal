@@ -1,3 +1,15 @@
+2006-10-02  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 342531 – --title option does nothing
+	Patch from Owen Swerkstrom
+
+	* src/terminal-screen.c (terminal_screen_init),
+	(terminal_screen_finalize), (cook_title),
+	(terminal_screen_set_dynamic_icon_title),
+	(terminal_screen_set_title):
+	* src/terminal-screen.h:
+	* src/terminal.c (terminal_app_new_terminal): Honor --title.
+
 2006-09-22  Guilherme de S. Pastore  <gpastore@gnome.org>
 
 	Bug 353732 – patch from Mariano Suárez-Alvarez
