@@ -5,10 +5,10 @@ DOC_MODULE = gnome-terminal
 DOC_ENTITIES = legal.xml
 DOC_INCLUDES = 
 DOC_FIGURES = figures/gnome-terminal-default.png \
-              figures/gnome-terminal-tabbed.png \
-              figures/terminal_window.png
+              figures/gnome-terminal-tabbed.png 
+#              figures/terminal_window.png   This image is not used anymore
 
-DOC_LINGUAS = fr sv
+DOC_LINGUAS = es fr sv
 
 # Move to DOC_LINGUAS in transition to gnome-doc-utils
-SUBDIRS = bg ro de es it ja ko uk zh_CN zh_TW
+SUBDIRS = bg ro de it ja ko uk zh_CN zh_TW
