@@ -2280,15 +2280,17 @@ new_tab_callback (GtkWidget      *menuitem,
   if (!terminal_profile_get_forgotten (profile))
     {
       const char *dir;
+      double zoom;
 
       dir = terminal_screen_get_working_dir (window->priv->active_term);
+      zoom = terminal_screen_get_font_scale (window->priv->active_term);
 
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
                                  NULL,
                                  FALSE, FALSE, FALSE,
-                                 NULL, NULL, NULL, dir, NULL, 1.0,
+                                 NULL, NULL, NULL, dir, NULL, zoom,
                                  NULL, NULL, -1);
     }
 }
