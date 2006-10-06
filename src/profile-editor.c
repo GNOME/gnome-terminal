@@ -69,7 +69,8 @@ struct _TerminalPaletteScheme
 static TerminalPaletteScheme palette_schemes[] = {
   { N_("Linux console"), terminal_palette_linux },
   { N_("XTerm"), terminal_palette_xterm },
-  { N_("Rxvt"), terminal_palette_rxvt }
+  { N_("Rxvt"), terminal_palette_rxvt },
+  { N_("Tango"), terminal_palette_tango }
 };
 
 static GtkWidget* profile_editor_get_widget                  (GtkWidget       *editor,

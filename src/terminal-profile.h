@@ -299,6 +299,7 @@ gboolean terminal_setting_mask_equal    (const TerminalSettingMask *a,
 extern const GdkColor terminal_palette_linux[TERMINAL_PALETTE_SIZE];
 extern const GdkColor terminal_palette_xterm[TERMINAL_PALETTE_SIZE];
 extern const GdkColor terminal_palette_rxvt[TERMINAL_PALETTE_SIZE];
+extern const GdkColor terminal_palette_tango[TERMINAL_PALETTE_SIZE];
 
 char*    terminal_palette_to_string   (const GdkColor *palette);
 gboolean terminal_palette_from_string (const char     *str,
