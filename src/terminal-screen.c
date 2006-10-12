@@ -1695,7 +1695,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   has_tabs = terminal_window_get_screen_count (terminal_screen_get_window (screen)) > 1;
   menu_item = append_menuitem (screen->priv->popup_menu,
-                               has_tabs ? _("C_lose Tab") : _("_Close Window"),
+                               has_tabs ? _("C_lose Tab") : _("C_lose Window"),
                                has_tabs ? G_CALLBACK (close_tab_callback) : G_CALLBACK (close_tab_callback),
                                screen);
 

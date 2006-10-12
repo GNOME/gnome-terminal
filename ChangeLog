@@ -1,5 +1,12 @@
 2006-10-12  Mariano Suárez-Alvarez  <msuarezalvarez@arnet.com.ar>
 
+	Bug 360385 – Context menu has two uses for "c" key
+
+	* src/terminal-screen.c (popup_clipboard_request_callback): don't have
+	clashing shortcuts for Close and Copy when there is only one tab.
+
+2006-10-12  Mariano Suárez-Alvarez  <msuarezalvarez@arnet.com.ar>
+
 	Bug 358267 – set_palette() compares uninitialized memory
 	Bug 124417 – Use of uninitialized value of size 4
 
