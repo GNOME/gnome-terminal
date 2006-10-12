@@ -1,3 +1,12 @@
+2006-10-12  Mariano Suárez-Alvarez  <msuarezalvarez@arnet.com.ar>
+
+	Bug 358267 – set_palette() compares uninitialized memory
+	Bug 124417 – Use of uninitialized value of size 4
+
+	* src/terminal-profile.c: do not compare GdkColors using memcmp,
+	as the pixel thingie gets in the way. I officially owe Mark Schreiber 
+	a beer.
+
 2006-10-06  Wouter Bolsterlee  <wbolster@gnome.org>
 
 	* src/terminal-window.c: (new_tab_callback):

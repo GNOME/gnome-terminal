@@ -1741,17 +1741,30 @@ set_palette (TerminalProfile *profile,
 {  
   if (candidate_str != NULL)
     {
+      int i;
       GdkColor new_palette[TERMINAL_PALETTE_SIZE];
 
       if (!terminal_palette_from_string (candidate_str,
                                          new_palette,
                                          TRUE))
-        return FALSE;
+        {
+          return FALSE;
+        }
 
-      if (memcmp (profile->priv->palette, new_palette,
-                  TERMINAL_PALETTE_SIZE * sizeof (GdkColor)) == 0)
-        return FALSE;
-
+      for (i = 0; i < TERMINAL_PALETTE_SIZE; i++)
+        {
+          if (!gdk_color_equal (&profile->priv->palette[i],
+                                &new_palette[i]))
+            {
+              break;
+            }
+        }
+      
+      if (i == TERMINAL_PALETTE_SIZE)
+        {
+          return FALSE;
+        }
+              
       memcpy (profile->priv->palette, new_palette,
               TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
 
