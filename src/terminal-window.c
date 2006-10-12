@@ -1613,8 +1613,22 @@ terminal_window_set_active (TerminalWindow *window,
   if (window->priv->active_term == screen)
     return;
   
+  /* Workaround to remove gtknotebook's feature of computing its size based on
+   * all pages. When the widget is hidden, its size will not be taken into
+   * account.
+   */
+  if (window->priv->active_term)
+  {
+    GtkWidget *old_widget;
+    old_widget = terminal_screen_get_widget (window->priv->active_term);
+    gtk_widget_hide (old_widget);
+  }
+  
   widget = terminal_screen_get_widget (screen);
   
+  /* Make sure that the widget is no longer hidden due to the workaround */
+  gtk_widget_show (widget);
+
   profile = terminal_screen_get_profile (screen);
 
   if (!GTK_WIDGET_REALIZED (widget))
@@ -1705,11 +1719,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   TerminalScreen *screen;
   GtkWidget *menu_item;
   int old_grid_width, old_grid_height;
-  GtkWidget *old_widget;
-  
-  old_widget = NULL;
-  old_grid_width = -1;
-  old_grid_height = -1;
+  GtkWidget *old_widget, *new_widget;
 
   if (window->priv->active_term == NULL)
     return;
@@ -1725,17 +1735,13 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   screen = TERMINAL_SCREEN (page_widget);
 
   g_assert (screen);
+  
+  /* This is so that we maintain the same grid */
+  new_widget = terminal_screen_get_widget (screen);
+  terminal_widget_set_size (new_widget, old_grid_width, old_grid_height);
 
   terminal_window_set_active (window, screen);
 
-  /* This is so we maintain the same grid moving among tabs with
-   * different fonts.
-   */
-#ifdef DEBUG_GEOMETRY
-  g_fprintf (stderr,"setting size in switch_page handler\n");
-#endif
-  terminal_window_set_size_force_grid (window, screen, TRUE, old_grid_width, old_grid_height);
-  
   update_tab_sensitivity (window);
   
   menu_item = screen_get_menuitem (screen);
