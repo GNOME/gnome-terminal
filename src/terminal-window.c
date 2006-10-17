@@ -2327,8 +2327,7 @@ confirm_close_window (TerminalWindow *window)
 			  		    ngettext ("This window has one tab open. Closing "
 						      "the window will close it.",
 						      "This window has %d tabs open. Closing "
-						      "the window will also close all of its "
-						      "tabs.",
+						      "the window will also close all tabs.",
 						      n),
 					    n);
 
