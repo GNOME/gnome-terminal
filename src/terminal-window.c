@@ -1070,7 +1070,7 @@ terminal_window_init (TerminalWindow *window)
   mi = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
 
-  mi = append_menuitem (menu, _("Detach Tab"), ACCEL_PATH_DETACH_TAB,
+  mi = append_menuitem (menu, _("_Detach Tab"), ACCEL_PATH_DETACH_TAB,
                         G_CALLBACK (detach_tab_callback), window);
   window->priv->detach_tab_menuitem = mi;
 
