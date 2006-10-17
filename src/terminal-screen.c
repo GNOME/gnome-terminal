@@ -2607,7 +2607,10 @@ terminal_screen_update_scrollbar (TerminalScreen *screen)
   g_object_ref (G_OBJECT (screen->priv->scrollbar));
 
   if (screen->priv->scrollbar->parent)
-    gtk_container_remove (GTK_CONTAINER (screen->priv->hbox), screen->priv->scrollbar);
+    {
+      gtk_container_remove (GTK_CONTAINER (screen->priv->hbox), 
+                            screen->priv->scrollbar);
+    }
   
   switch (terminal_profile_get_scrollbar_position (profile))
     {

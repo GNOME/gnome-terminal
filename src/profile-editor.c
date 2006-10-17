@@ -1315,6 +1315,21 @@ terminal_profile_edit (TerminalProfile *profile,
 }
 
 static void
+widget_and_labels_set_sensitive (GtkWidget *widget, gboolean sensitive)
+{
+  GList *labels, *i;
+
+  labels = gtk_widget_list_mnemonic_labels (widget);
+  for (i = labels; i; i = i->next)
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (i->data), sensitive);
+    }
+  g_list_free (labels);
+
+  gtk_widget_set_sensitive (widget, sensitive);
+}
+
+static void
 set_insensitive (GtkWidget  *editor,
                  const char *widget_name,
                  gboolean    setting)
@@ -1323,7 +1338,7 @@ set_insensitive (GtkWidget  *editor,
 
   w = profile_editor_get_widget (editor, widget_name);
 
-  gtk_widget_set_sensitive (w, !setting);
+  widget_and_labels_set_sensitive (w, !setting);
 }
 
 static void
@@ -1349,10 +1364,9 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   /* This one can't be short-circuited by the cache, since
    * it depends on settings
    */
-  w = profile_editor_get_widget (editor, "custom-command-entry");
-  gtk_widget_set_sensitive (w,
-                            !((mask->custom_command) ||
-                              !terminal_profile_get_use_custom_command (profile))); 
+  set_insensitive (editor, "custom-command-entry",
+                   mask->custom_command ||
+                     !terminal_profile_get_use_custom_command (profile));
 
   w = profile_editor_get_widget (editor, "custom-command-entry-label");
   gtk_widget_set_sensitive (w,
@@ -1360,37 +1374,21 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
                               !terminal_profile_get_use_custom_command (profile))); 
   if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_IMAGE)
     {
-      w = profile_editor_get_widget (editor, "background-image-filechooser");
-      gtk_widget_set_sensitive (w, !(mask->background_image_file));
-      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
-      gtk_widget_set_sensitive (w, !(mask->background_image_file));
-      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
-      gtk_widget_set_sensitive (w, !(mask->scroll_background));
-      w = profile_editor_get_widget (editor, "darken-background-vbox");
-      gtk_widget_set_sensitive (w, !(mask->background_darkness));
+      set_insensitive (editor, "background-image-filechooser", mask->background_image_file);
+      set_insensitive (editor, "scroll-background-checkbutton", mask->scroll_background);
+      set_insensitive (editor, "darken-background-vbox", mask->background_darkness);
     }
   else if (terminal_profile_get_background_type (profile) == TERMINAL_BACKGROUND_TRANSPARENT) 
-  {
-      w = profile_editor_get_widget (editor, "darken-background-vbox");
-      gtk_widget_set_sensitive (w, !(mask->background_darkness));
-      w = profile_editor_get_widget (editor, "background-image-filechooser");
-      gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
-      gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
-      gtk_widget_set_sensitive (w, FALSE);
-      
+    {
+      set_insensitive (editor, "background-image-filechooser", TRUE);
+      set_insensitive (editor, "scroll-background-checkbutton", TRUE);
+      set_insensitive (editor, "darken-background-vbox", mask->background_darkness);
     }
   else
     {
-      w = profile_editor_get_widget (editor, "background-image-filechooser");
-      gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "background-image-filechooser-label");
-      gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "scroll-background-checkbutton");
-      gtk_widget_set_sensitive (w, FALSE);
-      w = profile_editor_get_widget (editor, "darken-background-vbox");
-      gtk_widget_set_sensitive (w, FALSE);
+      set_insensitive (editor, "background-image-filechooser", TRUE);
+      set_insensitive (editor, "scroll-background-checkbutton", TRUE);
+      set_insensitive (editor, "darken-background-vbox", TRUE);
     }
 
   if (!terminal_profile_get_use_system_font (profile))
@@ -1402,8 +1400,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
     }
   else
     {
-      w = profile_editor_get_widget (editor, "font-hbox");
-      gtk_widget_set_sensitive (w, FALSE);
+      set_insensitive (editor, "font-hbox", TRUE);
     }
 
 
