@@ -1,5 +1,15 @@
 2006-10-17  Mariano Suárez-Alvarez  <msuarezalvarez@arnet.com.ar>
 
+	Bug 354234 – Don't ignore terminal default sizes, and copy zoom to 
+	new terminals
+
+	* src/terminal-window.c (notebook_tab_added_callback): do not hardcode
+	the 80x24 size but use the default provided by vte (which could be changed
+	in vte's termcap) Also, move the copy-zoom-from-active-terminal handling
+	from new_tab_callback to here.
+
+2006-10-17  Mariano Suárez-Alvarez  <msuarezalvarez@arnet.com.ar>
+
 	Bug 338613 – "Detach Tab" menu item is missing a mnemonic
 
 	* src/terminal-window (terminal_window_init): add a mnemonic to the Detach

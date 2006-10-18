@@ -1805,20 +1805,20 @@ notebook_tab_added_callback (GtkWidget       *notebook,
    */
   gtk_widget_realize (GTK_WIDGET (term));
 
-  {
-    /* Match size to current active screen */
-    int current_width, current_height;
-    if (window->priv->active_term)
-      terminal_widget_get_size (terminal_screen_get_widget(window->priv->active_term), 
-                                &current_width, &current_height);
-    else
-      {
-        current_width = 80;
-        current_height = 24;
-      }
+  /* If we have an active screen, match its size and zoom */
+  if (window->priv->active_term)
+    {
+      GtkWidget *widget;
+      int current_width, current_height;
+      double scale;
 
-    terminal_widget_set_size (term, current_width, current_height);
-  }
+      widget = terminal_screen_get_widget (window->priv->active_term);
+      terminal_widget_get_size (widget, &current_width, &current_height);
+      terminal_widget_set_size (term, current_width, current_height);
+
+      scale = terminal_screen_get_font_scale (window->priv->active_term);
+      terminal_screen_set_font_scale (screen, scale);
+    }
   
   /* Make the first-added screen the active one */
   if (window->priv->active_term == NULL)
@@ -2286,17 +2286,15 @@ new_tab_callback (GtkWidget      *menuitem,
   if (!terminal_profile_get_forgotten (profile))
     {
       const char *dir;
-      double zoom;
 
       dir = terminal_screen_get_working_dir (window->priv->active_term);
-      zoom = terminal_screen_get_font_scale (window->priv->active_term);
 
       terminal_app_new_terminal (terminal_app_get (),
                                  profile,
                                  window,
                                  NULL,
                                  FALSE, FALSE, FALSE,
-                                 NULL, NULL, NULL, dir, NULL, zoom,
+                                 NULL, NULL, NULL, dir, NULL, 1.0,
                                  NULL, NULL, -1);
     }
 }
