@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gnome-terminal 2.16\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-03-07 15:02+0100\n"
-"PO-Revision-Date: 2006-10-31 00:07+0200\n"
+"PO-Revision-Date: 2006-11-05 10:37+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -252,6 +252,8 @@ msgstr "_Kodeering"
 #, c-format
 msgid "There was an error subscribing to notification of terminal encoding list changes. (%s)\n"
 msgstr ""
+"Terminali kooditabelite nimekirja muutustest teavituste tellimisel tekkis "
+"viga. (%s)\n"
 
 #: ../src/gnome-terminal.glade2.h:1
 msgid "    "
@@ -389,7 +391,7 @@ msgstr "_Oma käsk:"
 
 #: ../src/gnome-terminal.glade2.h:35
 msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
-msgstr "Kõik _menüü kiirklahvid keelatud (näiteks Alt-F failimenüü jaoks)"
+msgstr "Kõik _menüü liikumisklahvid on keelatud (näiteks Alt-F failimenüü jaoks)"
 
 #: ../src/gnome-terminal.glade2.h:36
 msgid "Disable m_enu shortcut key (F10 by default)"
@@ -1182,7 +1184,7 @@ msgstr "Mida teha dünaamilise pealkirjaga"
 
 #: ../src/gnome-terminal.schemas.in.h:129
 msgid "What to do with the terminal when the child command exits"
-msgstr ""
+msgstr "Mida terminal peab ette võtma lapskäsu lõpetamise korral"
 
 #: ../src/gnome-terminal.schemas.in.h:130
 msgid "When selecting text by word, sequences of these characters are considered single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing a range) should be the first character given."
@@ -1191,10 +1193,12 @@ msgstr ""
 #: ../src/gnome-terminal.schemas.in.h:131
 msgid "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", and \"disabled\"."
 msgstr ""
+"Kuhu terminali kerimisriba paigutatakse. Võimalikud väärtused on \"left\" "
+"(vasakule), \"right\" (paremale), ja \"disabled\" (keelatud)."
 
 #: ../src/gnome-terminal.schemas.in.h:132
 msgid "Whether the menubar has access keys"
-msgstr "Kas menüüriba kasutab kiirklahve"
+msgstr "Kas menüüriba kasutab liikumisklahve"
 
 #: ../src/gnome-terminal.schemas.in.h:133
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
@@ -1222,7 +1226,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid "Whether to have Alt+letter access keys for the menubar. They may interfere with some applications run inside the terminal so it's possible to turn them off."
-msgstr "Kas menüüriba menüüsid saab avada Alt+märk klahvikombinatsioonide abil. See võib takistada mõne terminalis töödava rakenduse kasutamist ja seetõttu on seda võimalik välja lülitada."
+msgstr "Kas menüüriba menüüsid saab avada Alt+märk liikumisklahvide abil. See võib takistada mõne terminalis töödava rakenduse kasutamist ja seetõttu on seda võimalik välja lülitada."
 
 #: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether to launch the command in the terminal as a login shell"
@@ -1566,6 +1570,7 @@ msgstr "Konfiguratsiooni laadimisel %s-ist tekkis viga. (%s)\n"
 #, c-format
 msgid "There was an error subscribing to notification of terminal keybinding changes. (%s)\n"
 msgstr ""
+"Terminali klahviseoste muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-accels.c:328
 #, c-format
@@ -1581,21 +1586,27 @@ msgstr "Sätete võtme %s väärtus \"%s\" pole lubatud\n"
 #, c-format
 msgid "There was an error loading config value for whether to use menubar access keys. (%s)\n"
 msgstr ""
+"Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
+"kohta sätetest väärtuse laadimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-accels.c:381
 #, c-format
 msgid "There was an error subscribing to notification on changes on whether to use menubar access keys (%s)\n"
 msgstr ""
+"Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
+"muutustest teavituste tellimisel tekkis viga (%s)\n"
 
 #: ../src/terminal-accels.c:392
 #, c-format
 msgid "There was an error loading config value for whether to use menu accelerators. (%s)\n"
 msgstr ""
+"Menüüriba kiirklahvide kasutamise ja mittekasutamise vahel lülitumise "
+"kohta sätetest väärtuse laadimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-accels.c:408
 #, c-format
 msgid "There was an error subscribing to notification for use_menu_accelerators (%s)\n"
-msgstr ""
+msgstr "use_menu_accelerators tellimisel tekkis viga (%s)\n"
 
 #: ../src/terminal-accels.c:786
 #, c-format
@@ -1638,7 +1649,7 @@ msgstr "Saki sulgemine"
 #, c-format
 msgid "There was an error subscribing to notification of terminal profile changes. (%s)\n"
 msgstr ""
-"Terminali profiili muutuste teavituste tellimisel tekkis viga. (%s)\n"
+"Terminali profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-profile.c:1005
 #, c-format
@@ -1689,7 +1700,7 @@ msgstr "Seadistuste kataloogi %s eemaldamisel tekkis viga. (%s)\n"
 #, c-format
 msgid "There was an error subscribing to notification of changes to default profile. (%s)\n"
 msgstr ""
-"Vaikimisi profiili muutuste teavituste tellimisel tekkis viga. (%s)\n"
+"Vaikimisi profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-profile.c:2510
 msgid "_Details"
@@ -1721,7 +1732,7 @@ msgstr[1] "Paletil on %d kirjet %d asemel\n"
 #, c-format
 msgid "There was an error subscribing to notification of monospace font changes. (%s)\n"
 msgstr ""
-"Täheruudu kirjatüübi muutuste teavituste tellimisel tekkis viga. (%s)\n"
+"Täheruudu kirjatüübi muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-screen.c:865
 #, c-format
@@ -1854,6 +1865,7 @@ msgstr "Sellele terminalile lapsprotsessi loomisel tekkis viga"
 #, c-format
 msgid "There was an error subscribing to notification of menu icon visibility changes. (%s)\n"
 msgstr ""
+"Menüüikooni nähtavaloleku muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-window.c:573
 #, c-format
@@ -1951,6 +1963,7 @@ msgstr ""
 #, c-format
 msgid "There was an error subscribing to notification of terminal window configuration changes. (%s)\n"
 msgstr ""
+"Terminaliakna sätete muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
 #: ../src/terminal-window.c:2064
 msgid "_File"
@@ -2289,7 +2302,8 @@ msgstr "Lubamatu argument: \"%s\"\n"
 #, c-format
 msgid "There was an error subscribing to notification of terminal profile list changes. (%s)\n"
 msgstr ""
-"Terminali profiililoendi muutuste teavituse tellimisel tekkis viga (%s).\n"
+"Terminali profiililide nimekirja muutustest teavituste tellimisel tekkis "
+"viga (%s).\n"
 
 #: ../src/terminal.c:1986
 #, c-format
