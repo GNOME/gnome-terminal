@@ -1629,6 +1629,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   GList *tmp;
   GSList *group;
   gboolean has_tabs;
+  gboolean show_input_method_menu;
   
   screen = info->screen;
 
@@ -1766,18 +1767,25 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
                                      G_CALLBACK (show_menubar_callback),
                                      screen);
  
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (screen->priv->term)),
+                "gtk-show-input-method-menu", &show_input_method_menu,
+                NULL);
 
-  im_menu = gtk_menu_new ();
-  menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), im_menu);
-  terminal_widget_im_append_menuitems (screen->priv->term, GTK_MENU_SHELL (im_menu));
-  gtk_widget_show (im_menu);
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
- 
+  if (show_input_method_menu)
+    {
+      menu_item = gtk_separator_menu_item_new ();
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+
+      im_menu = gtk_menu_new ();
+      menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), im_menu);
+      terminal_widget_im_append_menuitems (screen->priv->term, GTK_MENU_SHELL (im_menu));
+      gtk_widget_show (im_menu);
+      gtk_widget_show (menu_item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
+    }
+
   gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
