@@ -1973,6 +1973,7 @@ terminal_app_new_terminal (TerminalApp     *app,
       g_object_unref (G_OBJECT (screen));
     
       terminal_window_set_active (window, screen);
+      gtk_widget_grab_focus (terminal_screen_get_widget (screen));
     }
   else
    {
