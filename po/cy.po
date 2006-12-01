@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.cy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-25 12:49+0000\n"
+"POT-Creation-Date: 2006-12-01 19:33+0000\n"
 "PO-Revision-Date: 2006-02-22 18:02-0000\n"
 "Last-Translator: Rhys Jones <rhys@sucs.org>\n"
 "Language-Team: Cymraeg <gnome-cy@lists.linux.org.uk>\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:795 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Terfynell"
 
@@ -568,8 +568,8 @@ msgid "_Update login records when command is launched"
 msgstr "_Diweddaru cofnodion mewngofnodi pan weithredir y gorchymyn"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "_Defnyddio ffont terfynell y system"
+msgid "_Use the system fixed width font"
+msgstr "_Defnyddio ffont lled-sefydlog y system"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -670,7 +670,7 @@ msgstr "Math cefndir"
 
 #: ../src/gnome-terminal.schemas.in.h:13
 msgid "Characters that are considered \"part of a word\""
-msgstr "Nodau fe ymdrinnir â hwy fel \"rhan gair\""
+msgstr "Nodau a ymdrinir â hwy fel \"rhan gair\""
 
 #: ../src/gnome-terminal.schemas.in.h:14
 msgid "Custom command to use instead of the shell"
@@ -1458,7 +1458,7 @@ msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 msgstr ""
-"Gwis os dylid dangos y bar dewislen mewn ffenestri newydd, ar gyfer "
+"Gwir os dylid dangos y bar dewislen mewn ffenestri newydd, ar gyfer "
 "ffenestri tabiau gyda'r proffeil hwn."
 
 #: ../src/gnome-terminal.schemas.in.h:127
@@ -1621,33 +1621,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Delweddau"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Pob ffeil"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Dewis Lliw Palet %d"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Cofnod palet %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Dewiswch Ffont y Derfynell"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Ffont:"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Golygu'r proffeil \"%s\""
@@ -1760,7 +1764,7 @@ msgstr "Crebachu"
 msgid "Normal Size"
 msgstr "Maint Arferol"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2192
 msgid "Set Title"
 msgstr "Gosod Teitl"
 
@@ -1788,7 +1792,7 @@ msgstr "Symud Tab i'r Chwith"
 msgid "Move Tab to the Right"
 msgstr "Symud Tab i'r Dde"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Datod Tab"
 
@@ -1958,7 +1962,7 @@ msgstr "_Gweithred"
 msgid "Shortcut _Key"
 msgstr "_Bysell Byrlwybr"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Cau Tab"
 
@@ -1999,7 +2003,7 @@ msgstr ""
 "Methu llwytho'r darlun cefndir \"%s\" ar gyfer y proffeil terfynell \"%s\": %"
 "s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -2007,28 +2011,28 @@ msgstr ""
 "Terfynell GNOME: enw ffont annilys \"%s\" wedi ei osod yn y gronfa data "
 "cyfluniad\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Gwall wrth estyn gwerth rhagosodedig %s: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Doedd dim gwerth rhagosodedig ar gyfer %s\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Gwall wrth osod gwerth %s i'w rhagosodiad: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Roedd gwall wrth lwytho'r cyfeiriadur cyfluniad %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2037,25 +2041,25 @@ msgstr ""
 "Roedd gwall wrth danysgrifio at hysbysiadau ynghylch newidiadau i'r proffeil "
 "rhagosodedig. (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Manylion"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Roedd gwall wrth greu'r proffeil \"%s\""
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Roedd gwall wrth ddileu'r proffiliau"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Methu adnabod y llinyn \"%s\" fel palet lliwiau\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
@@ -2071,17 +2075,17 @@ msgstr ""
 "Roedd gwall wrth gofrestru am hysbysiadau ynghylch newidiadau ffont unlled. "
 "(%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:885
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Methu llwytho'r ffont \"%s\"\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1032
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Roedd problem gyda'r gorchymyn ar gyfer y derfynell hon: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1472
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2090,7 +2094,7 @@ msgstr ""
 "Methu agor y cyfeiriad \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1569 ../src/terminal-window.c:823
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2099,87 +2103,87 @@ msgstr ""
 "Roedd gwall wrth lwytho gwerth cyfluniad ynghylch defnyddio delwedd mewn "
 "dewislenni. (%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1656
 msgid "_Send Mail To..."
 msgstr "_Anfon E-bost At..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1661
 msgid "_Copy E-mail Address"
 msgstr "_Copïo Cyfeiriad E-bost"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1668
 msgid "_Open Link"
 msgstr "_Agor y Cyswllt"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1673
 msgid "_Copy Link Address"
 msgstr "_Copïo Cyfeiriad y Cyswllt"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1684 ../src/terminal-window.c:886
 msgid "Open _Terminal"
 msgstr "Agor _Terfynell"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1689 ../src/terminal-window.c:889
 msgid "Open Ta_b"
 msgstr "Agor Ta_b"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1699 ../src/terminal-window.c:904
 msgid "C_lose Tab"
 msgstr "Cau'r _Tab"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "Cau'r _Ffenest"
+#: ../src/terminal-screen.c:1699
+msgid "C_lose Window"
+msgstr "_Cau'r Ffenestr"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1724
 msgid "Change P_rofile"
 msgstr "Newid _Proffeil"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1760
 msgid "_Edit Current Profile..."
 msgstr "_Golygu'r Proffeil Cyfredol"
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1765
 msgid "Show _Menubar"
 msgstr "Datguddio'r _Bar Dewislenni"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1781
 msgid "_Input Methods"
 msgstr "Moddau _Mewnbwn"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2221
 msgid "_Title:"
 msgstr "_Teitl:"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2335
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Roedd gan y data o'r math \"text/plain\" a ollyngwyd ar y derfynell fformat "
 "(%d) neu hyd (%d) anghywir\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2358
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Roedd gan y lliw a ollyngwyd ar y derfynell fformat (%d) neu hyd (%d) "
 "anghywir\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2401
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Roedd gan y LAU Mozilla a ollyngwyd ar y derfynell fformat (%d) neu hyd (%d) "
 "anghywir\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2450
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Roedd gan y rhestr URI a ollyngwyd ar y derfynell fformat (%d) neu hyd (%d) "
 "anghywir\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2509
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2187,16 +2191,16 @@ msgstr ""
 "Roedd gan yr enw ffeil delwedd a ollyngwyd ar y derfynell fformat (%d) neu "
 "hyd (%d) anghywir\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2535
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Gwall wrth droi'r URI \"%s\" i enw ffeil: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "Roedd gwall wrth greu'r proses plentyn ar gyfer y derfynell hon"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:363
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2205,94 +2209,102 @@ msgstr ""
 "Roedd gwall wrth danysgrifio i hysbysiadau ynghylch newidiadau i welededd "
 "eiconau dewislenni. (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:575
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:577
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:700
 msgid "_Add or Remove..."
 msgstr "_Ychwanegu neu Dynnu..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:897
 msgid "New _Profile..."
 msgstr "Proffeil _Newydd..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:908
+msgid "_Close Window"
+msgstr "Cau'r _Ffenest"
+
+#: ../src/terminal-window.c:941
 msgid "P_rofiles..."
 msgstr "_Proffiliau..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:944
 msgid "_Keyboard Shortcuts..."
 msgstr "Byrlwybrau'r _Bysellfwrdd..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:948
 msgid "C_urrent Profile..."
 msgstr "Proffeil _Cyfredol..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:963
 msgid "Show Menu_bar"
 msgstr "Dangos y _Bar Dewislen"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:967
 msgid "_Full Screen"
 msgstr "_Llenwi'r Sgrin"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1010
 msgid "Change _Profile"
 msgstr "Newid _Proffeil"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1013
 msgid "_Set Title..."
 msgstr "Gosod y _Teitl..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1020
 msgid "Set _Character Encoding"
 msgstr "Gosod yr Amgodiad _Nodau"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1030
 msgid "_Reset"
 msgstr "_Ailosod"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1033
 msgid "Reset and C_lear"
 msgstr "Ailosod a _Chlirio"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1047
 msgid "_Previous Tab"
 msgstr "I'r Tab _Blaenorol"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1051
 msgid "_Next Tab"
 msgstr "I'r Tab _Nesaf"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1062
 msgid "Move Tab to the _Left"
 msgstr "Symud Tab i'r _Chwith"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Right"
 msgstr "Symud Tab i'r _Dde"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1073
+msgid "_Detach Tab"
+msgstr "_Datod Tab"
+
+#: ../src/terminal-window.c:1092
 msgid "_Contents"
 msgstr "_Cynnwys"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1102
 msgid "_About"
 msgstr "_Ynghylch"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1288
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2300,7 +2312,7 @@ msgstr ""
 "Roedd gwall wrth lwytho'r gwerth cyfluniad ynghylch a ddylid defnyddio cof "
 "lythrennau. (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1307
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2309,59 +2321,58 @@ msgstr ""
 "Roedd gwall wrth danysgrifio at hysbysiadau ynghylch newidiadau i gyfluniad "
 "ffenest y derfynell. (%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2097
 msgid "_File"
 msgstr "_Ffeil"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2099 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "_Golygu"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2101
 msgid "_View"
 msgstr "_Golwg"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2103
 msgid "_Terminal"
 msgstr "_Terfynell"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2105
 msgid "Ta_bs"
 msgstr "Ta_biau"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2107
 msgid "_Help"
 msgstr "_Cymorth"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2323
+msgid "Close all tabs?"
+msgstr "Cau pob tab?"
+
+#: ../src/terminal-window.c:2325
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+"This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
 "Mae gan y ffenest hon un tab ar agor. Mi fydd cau'r ffenest yn cau hwnnw."
 msgstr[1] ""
 "Mae gan y ffenest hon %d tab ar agor. Mi fydd cau'r ffenest yn cau'r tabiau "
 "i gyd."
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "Cau pob tab?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2334
 msgid "Close All _Tabs"
 msgstr "Cau Pob _Tab"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2886
 msgid "GNOME Terminal"
 msgstr "Terfynell GNOME"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2888
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Efelychydd terfynell i fwrdd gwaith GNOME"
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2893
 msgid "translator-credits"
 msgstr ""
 "Owain Green\n"
@@ -2693,17 +2704,17 @@ msgstr ""
 "Roedd gwall wrth gofrestru am hysbysiadau ynghylch newidiadau i restr "
 "proffiliau’r derfynell. (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Llinyn geometreg annilys \"%s\"\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Roedd gwall wrth gyrchu'r rhestr o broffiliau terfynell. (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2712,83 +2723,83 @@ msgstr ""
 "Mae gennych broffil o'r enw \"%s\" eisoes. Hoffech chi greu proffil arall "
 "â'r un enw?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Nid yw'r proffeil y dewiswyd er mwyn seilio eich proffeil newydd arni yn "
 "bodoli bellach"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Rhowch enw proffeil"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Dewiswch broffil sail"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Rhestr proffiliau"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "Mae'n rhaid i chi ddewis o leiaf un proffeil i'w ddiddymu."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Mae'n rhaid cael o leiaf un proffeil; ni chewch eu diddymu nhw i gyd."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Diddymu'r %d proffil yma?\n"
 msgstr[1] "Diddymu'r %d broffil yma?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Diddymu'r proffeil \"%s\"?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Diddymu Proffeil"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Proffiliau"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "_Proffiliau:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Cliciwch er mwyn cychwyn y deialog creu proffeil"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Cliciwch er mwyn cychwyn y deialog golygu proffeil"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Cliciwch er mwyn dileu'r proffeil a ddewiswyd"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Y proffeil a _ddefnyddir wrth gychwyn terfynell newydd:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Cliciwch y botwm er mwyn dewis proffeil"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Roedd gwall wrth ddangos cymorth: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2797,7 +2808,7 @@ msgstr ""
 "Mae'r ffeil \"%s\" ar goll. Mae hyn yn arwyddo fod y rhaglen wedi ei cham-"
 "sefydlu."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2805,7 +2816,7 @@ msgstr ""
 "Ymddengys nad yw'r rhaglen gnome-terminal.server wedi ei osod mewn lleoliad "
 "dilys. Analluogwyd y modd ffatri.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2813,7 +2824,7 @@ msgstr ""
 "Gwall wrth gofrestru'r derfynell gyda'r gweinydd gweithredu. Analluogwyd y "
 "modd ffatri.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Methu canfod y gweinydd terfynell drwy'r gweinydd gweithredu\n"
 
