@@ -19,26 +19,7 @@ AC_HEADER_STDC
 AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([0.35.0])
 
-changequote(,)dnl
-if test "x$GCC" = "xyes"; then
-  case " $CFLAGS " in
-  *[\ \	]-Wall[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wall" ;;
-  esac
-
-  if test "x$enable_ansi" = "xyes"; then
-    case " $CFLAGS " in
-    *[\ \	]-ansi[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -ansi" ;;
-    esac
-
-    case " $CFLAGS " in
-    *[\ \	]-pedantic[\ \	]*) ;;
-    *) CFLAGS="$CFLAGS -pedantic" ;;
-    esac
-  fi
-fi
-changequote([,])dnl
+GNOME_COMPILE_WARNINGS([maximum])
 
 AM_GLIB_GNU_GETTEXT
 
