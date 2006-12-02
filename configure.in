@@ -56,9 +56,9 @@ AM_GCONF_SOURCE_2
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
-if $PKG_CONFIG --atleast-version 2.0.0 xft && $PKG_CONFIG --atleast-version 1.1.1 pangoxft ; then
+if $PKG_CONFIG 'xft >= 2.0.0 pangoxft >= 1.1.1'; then
    using_xft2=yes
-   CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` `$PKG_CONFIG --variable=xrenderlibs xft` $CFLAGS"
+   CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` `$PKG_CONFIG --variable=xrenderlibs xft` $CPPFLAGS"
    LIBS="`$PKG_CONFIG --libs xft pangoxft` $LIBS"
 else
    using_xft2=no
