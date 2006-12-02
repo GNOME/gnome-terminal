@@ -1,5 +1,14 @@
 2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
 
+	Bug 378243 – crash in Terminal: Copy item activated on a destroyed 
+	window popup.
+
+	* src/terminal_screen.c(terminal_screen_class_init, terminal_screen_unrealize):
+	override GtkWidget:unrealize so we destroy the popup upon unrealizing, just as
+	GtkEntry, say, does.
+
+2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+
 	* configure.in: the last commit left behind one instance of CFLAGS which should
 	have been CPPFLAGS.
 

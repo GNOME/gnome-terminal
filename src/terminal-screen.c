@@ -91,6 +91,7 @@ enum {
 static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_finalize    (GObject             *object);
+static void terminal_screen_unrealize   (GtkWidget *widget);
 static void terminal_screen_size_allocate (GtkWidget *widget,
                                            GtkAllocation *allocation);
 static void terminal_screen_size_request (GtkWidget *widget,
@@ -369,6 +370,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   
   object_class->finalize = terminal_screen_finalize;
 
+  widget_class->unrealize = terminal_screen_unrealize;
   widget_class->size_allocate = terminal_screen_size_allocate;
   widget_class->size_request = terminal_screen_size_request;
   widget_class->map = terminal_screen_map;
@@ -417,6 +419,25 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);  
+}
+
+static void
+terminal_screen_unrealize (GtkWidget *widget)
+{
+  TerminalScreen *screen;
+
+  screen = TERMINAL_SCREEN (widget);
+
+  if (screen->priv->popup_menu)
+    {
+      gtk_widget_destroy (screen->priv->popup_menu);
+      screen->priv->popup_menu = NULL;
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    {
+      (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+    }
 }
 
 static void
