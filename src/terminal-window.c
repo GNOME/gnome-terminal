@@ -35,6 +35,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>
 
+/* Parameters for the ellipsization in the Tabs menu */
+#define TAB_MENU_WIDTH_CHARS    35
+#define TAB_MENU_ELLIPSIZE      PANGO_ELLIPSIZE_END
+
 struct _TerminalWindowPrivate
 {  
   GtkWidget *main_vbox;
@@ -1339,22 +1343,34 @@ static void
 title_changed_callback (TerminalScreen *screen,
                         TerminalWindow *window)
 {
-  GtkWidget *mi;
+  GtkWidget *menu_item;
+  const char *title;
   
-  if (screen == window->priv->active_term) 
+  title = terminal_screen_get_title (screen);
+
+  menu_item = screen_get_menuitem (screen);
+  if (menu_item)
     {
-    gtk_window_set_title (GTK_WINDOW (window),
-                          terminal_screen_get_title (screen));
-    if (terminal_screen_get_icon_title_set (screen))
-      gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
-    else
-      gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_title (screen));
+      GtkWidget *label;
+
+      label = gtk_bin_get_child (GTK_BIN (menu_item));
+
+      gtk_label_set_use_underline (GTK_LABEL (label), FALSE);
+      gtk_label_set_ellipsize (GTK_LABEL (label), TAB_MENU_ELLIPSIZE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), TAB_MENU_WIDTH_CHARS); 
+      gtk_label_set_text (GTK_LABEL (label), title);
     }
 
-  mi = screen_get_menuitem (screen);
-  if (mi)
-    gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (mi))),
-                        terminal_screen_get_title (screen));
+  if (screen == window->priv->active_term) 
+    {
+      gtk_window_set_title (GTK_WINDOW (window), title);
+
+      if (terminal_screen_get_icon_title_set (screen))
+        {
+          title = terminal_screen_get_icon_title (screen);
+        }
+      gdk_window_set_icon_name (GTK_WIDGET (window)->window, title);
+    }
 }
 
 static void
@@ -2134,6 +2150,7 @@ reset_tab_menuitems (TerminalWindow *window)
   while (TRUE) /* should probably make us somewhat nervous */
     {
       GtkWidget *page;
+      GtkWidget *label;
       char *accel_path;
       
       page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (window->priv->notebook),
@@ -2146,6 +2163,11 @@ reset_tab_menuitems (TerminalWindow *window)
 
       menu_item = gtk_radio_menu_item_new_with_label (group,
                                                       terminal_screen_get_title (screen));
+      label = gtk_bin_get_child (GTK_BIN (menu_item));
+      gtk_label_set_use_underline (GTK_LABEL (label), FALSE);
+      gtk_label_set_ellipsize (GTK_LABEL (label), TAB_MENU_ELLIPSIZE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), TAB_MENU_WIDTH_CHARS); 
+
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
       
       if (i < N_TABS_WITH_ACCEL && !single_page)
