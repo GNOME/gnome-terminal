@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.13.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-18 13:27+0100\n"
-"PO-Revision-Date: 2006-02-18 13:28+0100\n"
+"POT-Creation-Date: 2006-12-11 01:47+0100\n"
+"PO-Revision-Date: 2006-12-11 01:48+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmal <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:799 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -565,8 +565,8 @@ msgid "_Update login records when command is launched"
 msgstr "_Oppdater påloggingsoppføringer når kommandoen startes"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "Br_uk systemets font for terminalen"
+msgid "_Use the system fixed width font"
+msgstr "Br_uk systemets skrift med fast bredde"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1616,33 +1616,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Bilder"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Alle filer"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Velg palettfarge %d"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Palettoppføring %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Velg en skrift for terminalen"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "Skri_ft:"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Redigerer profil «%s»"
@@ -1755,7 +1759,7 @@ msgstr "Zoom ut"
 msgid "Normal Size"
 msgstr "Normal størrelse"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2213
 msgid "Set Title"
 msgstr "Sett tittel"
 
@@ -1783,7 +1787,7 @@ msgstr "Flytt fane til venstre"
 msgid "Move Tab to the Right"
 msgstr "Flytt fane til høyre"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Riv løs fane"
 
@@ -1860,7 +1864,7 @@ msgid "Help"
 msgstr "Hjelp"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Det oppsto en feil under lasting av konfigurasjon fra %s. (%s)\n"
@@ -1956,7 +1960,7 @@ msgstr "H_andling"
 msgid "Shortcut _Key"
 msgstr "_Hurtigtast"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Lukk fane"
 
@@ -1993,7 +1997,7 @@ msgid ""
 msgstr ""
 "Feil under lasting av bakgrunnsbilde «%s» for terminalprofil «%s»: %s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -2001,29 +2005,29 @@ msgstr ""
 "GNOME terminal: skriftnavn «%s» satt i konfigurasjonsdatabasen men er ikke "
 "gyldig\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Feil under henting av forvalgt verdi for %s: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Fant ingen forvalgt verdi for %s\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Feil under setting av nøkkel %s tilbake til forvalg: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr ""
 "Det oppsto en feil under fjerning av konfigurasjonskatalogen %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2032,32 +2036,32 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for forvalgt "
 "profil. (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Detaljer"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Det oppsto en feil under oppretting av profilen «%s»"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Det oppsto en feil under sletting av profiler"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Kunne ikke tolke streng «%s» som en fargepalett\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletten hadde %d oppføring i stedet for %d\n"
 msgstr[1] "Paletten hadde %d oppføringer i stedet for %d\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2066,17 +2070,17 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for skrift med fast "
 "avstand. (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:906
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Kunne ikke laste skrift «%s»\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1053
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det oppsto et problem med kommandoen for denne terminalen: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1493
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2085,7 +2089,7 @@ msgstr ""
 "Kunne ikke åpne adresse «%s»:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1590 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2094,87 +2098,87 @@ msgstr ""
 "Det oppsto en feil under lasting av konfigurasjonsverdi for bruk av bilder i "
 "menyer. (%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1677
 msgid "_Send Mail To..."
 msgstr "_Sett e-post til..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1682
 msgid "_Copy E-mail Address"
 msgstr "_Kopier e-postadresse"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1689
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1694
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1705 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "Åpne _terminal"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1710 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "Åpne _fane"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1720 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "_Lukk fane"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "L_ukk vindu"
+#: ../src/terminal-screen.c:1720
+msgid "C_lose Window"
+msgstr "_Lukk vindu"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1745
 msgid "Change P_rofile"
 msgstr "Bytt p_rofil"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1781
 msgid "_Edit Current Profile..."
 msgstr "R_ediger aktiv profil..."
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1786
 msgid "Show _Menubar"
 msgstr "Vis _menylinje"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1802
 msgid "_Input Methods"
 msgstr "_Inndatametoder"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2242
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2356
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain som ble sluppet på terminal hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2379
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Farge som ble sluppet på terminalen hadde feil format (%d) eller lengde (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla URL som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2471
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-liste som ble sluppet på terminalen hadde feil format (%d) eller lengde "
 "(%d)\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2530
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2182,17 +2186,17 @@ msgstr ""
 "Bilde-filnavn som ble sluppet på terminalen hadde feil format (%d) eller "
 "lengde (%d)\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2556
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Feil under konvertering av URI «%s» til filnavn: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Det oppsto en feil under oppretting av underprosess for denne terminalen"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2201,94 +2205,102 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for synlighet av "
 "menyikoner. (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "_Legg til eller fjern..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "Ny _profil..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "L_ukk vindu"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "P_rofiler..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "_Tastatursnarveier..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "A_ktiv profil..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "Vis meny_linje"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "_Full skjerm"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "Bytt _profil"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "_Sett tittel..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "Sett _tegnkoding"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "_Nullstill"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "Nu_llstill og tøm"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "_Forrige fane"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "_Neste fane"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "Flytt fane til _venstre"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "Flytt fane til høy_re"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "_Riv løs fane"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "_Innhold"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "_Om"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2296,7 +2308,7 @@ msgstr ""
 "Det oppsto en feil under lasting av konfigurasjon for bruk av snarveier. (%"
 "s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2305,59 +2317,58 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for terminalvindu. "
 "(%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "_Fil"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2115 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "R_ediger"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "_Vis"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "_Faner"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2345
+msgid "Close all tabs?"
+msgstr "Lukk alle faner?"
+
+#: ../src/terminal-window.c:2347
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+"This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
 "Dette vinduet har en åpen fane. Hvis du lukker vinduet vil denne bli lukket."
 msgstr[1] ""
 "Dette vinduet har %d åpne faner. Hvis du lukker vinduet vil alle faner "
 "lukkes."
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "Lukk alle faner?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "Lukk alle _faner"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "En terminalemulator for GNOME"
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr "Kjartan Maraas <kmaraas@gnome.org>"
 
@@ -2679,18 +2690,18 @@ msgstr ""
 "Det oppsto en feil under abonnering på endringsmeldinger for listen over "
 "terminalprofiler. (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ugyldig geometristreng «%s»\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Det oppsto en feil under henting av listen over terminalprofiler. (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2699,81 +2710,81 @@ msgstr ""
 "Du har allerede en profil med navn «%s». Vil du opprette en ny profil med "
 "samme navn?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Profilen du valgte som basis for din nye profil eksisterer ikke lenger"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Oppgi profilnavn:"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Velg basisprofil"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Profilliste"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "Du må velge en eller flere profiler som skal slettes."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Du må ha minst en profil; du kan ikke slette alle sammen."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Slett denne profilen?\n"
 msgstr[1] "Slett disse %d profilene?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Slett profil «%s»?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Slett profil"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Profiler"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "_Profiler:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Klikk for å åpne en ny profildialog"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Klikk for å åpne dialog for å redigere profil"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Klikk for å slette valgt profil"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profil som _brukes ved start av en ny terminal:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Klikk knappen for å velge profil"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Det oppsto en feil under visning av hjelp: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2781,7 +2792,7 @@ msgid ""
 msgstr ""
 "Filen «%s» mangler. Dette indikerer at programmet ikke er korrekt installert."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2789,7 +2800,7 @@ msgstr ""
 "Set ser ut som om du ikke har gnome-terminal.server installert i en gyldig "
 "lokasjon. Factory-modus deaktivert.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2797,6 +2808,6 @@ msgstr ""
 "Feil under registrering av terminal hos aktiveringstjenesten; factory-modus "
 "deaktivert.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Feil under henting av terminaltjener fra aktiveringstjeneren\n"
