@@ -2,15 +2,15 @@
 # Copyright (C) 2002-2004 Free Software Foundation, Inc.
 # Christian Meyer <chrisime@gnome.org>, 2002.
 # Christian Neumair <chris@gnome-de.org>, 2002-2004.
-# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006.
+# Hendrik Richter <hendrikr@gnome.org>, 2004, 2005, 2006, 2007.
 # Hendrik Brandt <heb@gnome-de.org>, 2006
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-02 21:09+0100\n"
-"PO-Revision-Date: 2006-06-15 17:08+0200\n"
+"POT-Creation-Date: 2007-01-12 12:13+0100\n"
+"PO-Revision-Date: 2007-01-12 12:15+0100\n"
 "Last-Translator: Hendrik Richter <hendrikr@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:799 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -572,8 +572,8 @@ msgid "_Update login records when command is launched"
 msgstr "Login-Aufzeichnungen _aktualisieren, wenn Befehl ausgeführt wird"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "Die Terminal-S_ystemschrift verwenden"
+msgid "_Use the system fixed width font"
+msgstr "Die dicktengleiche S_ystemschrift verwenden"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -784,9 +784,9 @@ msgid ""
 "RENDER extension, which gives a considerable performance improvement in "
 "these situations."
 msgstr ""
-"Falls dieser Schlüssel wahr ist, wird Kantenglättung für Schrift "
-"deaktiviert wenn X ohne die RENDER-Erweiterung läuft, was zu spürbar "
-"besserer Performance in solchen Situationen führt."
+"Falls dieser Schlüssel wahr ist, wird Kantenglättung für Schrift deaktiviert "
+"wenn X ohne die RENDER-Erweiterung läuft, was zu spürbar besserer "
+"Performance in solchen Situationen führt."
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
@@ -1639,33 +1639,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Bilder"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Alle Dateien"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Palettenfarbe %d auswählen"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Paletteneintrag %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Terminal-Schrift auswählen"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Schrift:"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Profil »%s« bearbeiten"
@@ -1780,7 +1784,7 @@ msgstr "Ansicht verkleinern"
 msgid "Normal Size"
 msgstr "Normale Ansichtsgröße"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2213
 msgid "Set Title"
 msgstr "Titel festlegen"
 
@@ -1808,7 +1812,7 @@ msgstr "Reiter nach links verschieben"
 msgid "Move Tab to the Right"
 msgstr "Reiter nach rechts verschieben"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Reiter abtrennen"
 
@@ -1885,7 +1889,7 @@ msgid "Help"
 msgstr "Hilfe"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Beim Laden der Konfiguration von %s ist ein Fehler aufgetreten (%s).\n"
@@ -1984,7 +1988,7 @@ msgstr "_Aktion"
 msgid "Shortcut _Key"
 msgstr "Tasten_kombination"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Reiter schließen"
 
@@ -2026,7 +2030,7 @@ msgstr ""
 "Hintergrundbild mit Namen »%s« konnte nicht für Terminal-Profil »%s« geladen "
 "werden: %s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -2035,22 +2039,22 @@ msgstr ""
 "ungültig\n"
 
 # CHECK
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Fehler beim Abrufen des Vorgabewertes von %s: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Kein Vorgabewert für %s vorhanden\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Fehler beim Zurücksetzen des Schlüssels %s auf Vorgabewert: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
@@ -2058,7 +2062,7 @@ msgstr ""
 "Beim Entfernen des Konfigurationsverzeichnis %s ist ein Fehler aufgetreten (%"
 "s).\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -2067,32 +2071,32 @@ msgstr ""
 "Beim Registrieren einer Benachrichtung bei Änderungen am Vorgabeprofil ist "
 "ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Details"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Beim Anlegen des Profils »%s« ist ein Fehler aufgetreten"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Beim Löschen der Profile ist ein Fehler aufgetreten"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Zeichenkette »%s« konnte nicht als Farbmuster verarbeitet werden\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Palette hatte %d Eintrag und nicht %d\n"
 msgstr[1] "Palette hatte %d Einträge und nicht %d\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2101,17 +2105,17 @@ msgstr ""
 "Beim Registrieren einer Benachrichtung bei Änderungen an der dicktengleichen "
 "Schrift ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:906
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Schrift »%s« konnte nicht geladen werden\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1053
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Es ist ein Problem mit dem Befehl für das Terminal aufgetreten: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1493
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2120,7 +2124,7 @@ msgstr ""
 "Adresse »%s« konnte nicht geöffnet werden:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1590 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2129,87 +2133,87 @@ msgstr ""
 "Beim Laden des Konfigurationswertes, der festlegt, ob Bilder in Menüs "
 "verwendet werden sollen, ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1677
 msgid "_Send Mail To..."
 msgstr "E-_Mail senden an …"
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1682
 msgid "_Copy E-mail Address"
 msgstr "E-Mail-A_dresse kopieren"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1689
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1694
 msgid "_Copy Link Address"
 msgstr "Link-Adresse _kopieren"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1705 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "Neues _Terminal"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1710 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "Neuer _Reiter"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1720 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "Reiter _schließen"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "Fenster s_chließen"
+#: ../src/terminal-screen.c:1720
+msgid "C_lose Window"
+msgstr "Fenster _schließen"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1745
 msgid "Change P_rofile"
 msgstr "_Profil wechseln"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1781
 msgid "_Edit Current Profile..."
 msgstr "_Aktuelles Profil bearbeiten …"
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1786
 msgid "Show _Menubar"
 msgstr "Menü_leiste anzeigen"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1802
 msgid "_Input Methods"
 msgstr "_Eingabemethoden"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2242
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2356
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "»text/plain« auf Terminal verworfen, da das Format (%d) oder die Länge (%d) "
 "falsch war\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2379
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Farbe auf Terminal verworfen, da das Format (%d) oder die Länge (%d) falsch "
 "war\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla-URL auf Terminal verworfen, da das Format (%d) oder die Länge (%d) "
 "falsch war\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2471
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URI-Liste auf Terminal verworfen, da das Format (%d) oder die Länge (%d) "
 "falsch war\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2530
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2217,18 +2221,18 @@ msgstr ""
 "Dateiname des Bildes auf Terminal verworfen, da das Format (%d) oder die "
 "Länge (%d) falsch war\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2556
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Fehler beim Umwandeln der URI »%s« in einen Dateinamen: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Beim Erzeugen des Kindprozesses für dieses Terminal ist ein Fehler "
 "aufgetreten"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2237,94 +2241,102 @@ msgstr ""
 "Beim Registrieren einer Benachrichtung bei Änderungen an der Sichtbarkeit "
 "von Menüsymbolen ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "_Hinzufügen / entfernen …"
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "_Profil anlegen …"
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "Fenster s_chließen"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "_Profile …"
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "_Tastenkombinationen …"
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "_Momentan verwendetes Profil …"
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "Menü_leiste anzeigen"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "_Vollbild"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "_Profil wechseln"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "Titel _festlegen …"
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "_Zeichenkodierung festlegen"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "_Zurücksetzen"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "Zurücksetzen und _leeren"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "_Vorheriger Reiter"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "_Nächster Reiter"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "Reiter nach _links verschieben"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "Reiter nach _rechts verschieben"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "Reiter ab_trennen"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "I_nhalt"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "_Info"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2332,7 +2344,7 @@ msgstr ""
 "Beim Laden des Konfigurationswertes, der festlegt, ob Kürzelbuchstaben "
 "verwendet werden sollen, ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2341,36 +2353,39 @@ msgstr ""
 "Beim Registrieren einer Benachrichtung bei Änderungen an der Konfiguration "
 "des Terminal-Fensters ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "_Datei"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2115 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "_Bearbeiten"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "_Ansicht"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "_Reiter"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "_Hilfe"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2345
+msgid "Close all tabs?"
+msgstr "Alle Reiter schließen?"
+
+#: ../src/terminal-window.c:2347
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+"This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
 "Dieses Fenster hat einen offenen Reiter. Das Schließen dieses Fensters wird "
 "ihn schließen."
@@ -2378,23 +2393,19 @@ msgstr[1] ""
 "Dieses Fenster hat %d offene Reiter. Das Schließen dieses Fensters wird auch "
 "alle beinhalteten Reiter schließen."
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "Alle Reiter schließen?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "_Alle Reiter schließen"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "GNOME-Terminal"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Eine Terminalumgebung für den GNOME-Desktop."
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr ""
 "Christian Meyer <chrisime@gnome.org>\n"
@@ -2738,18 +2749,18 @@ msgstr ""
 "Beim Registrieren einer Benachrichtung bei Änderungen an der Terminal-"
 "Profilliste ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ungültige Geometrie-Zeichenkette »%s«\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 "Beim Abrufen der Terminal-Profilliste ist ein Fehler aufgetreten (%s).\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2758,83 +2769,83 @@ msgstr ""
 "Es existiert bereits ein Profil namens »%s«. Soll ein weiteres Profil mit "
 "diesem Namen erstellt werden?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Das Profil, das Sie als Basis für Ihr neues Profil ausgewählt haben, "
 "existiert nicht mehr"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Geben Sie einen Namen für das Profil ein"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Basisprofil wählen"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Profilliste"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "Sie müssen eines oder mehrere zu löschende Profile auswählen."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Sie müssen mindestens ein Profil haben. Sie können nicht alle löschen."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Möchten Sie dieses Profil löschen?\n"
 msgstr[1] "Möchten Sie diese %d Profile löschen?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Soll das Profil »%s« gelöscht werden?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Profil löschen"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Profile"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "_Profile:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Klicken Sie hier, um den Dialog »Profil anlegen« zu öffnen"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Klicken Sie hier, um den Dialog »Profil bearbeiten« zu öffnen"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Klicken Sie hier, um das gewählte Profil zu löschen"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Beim Starten eines neuen Terminals _verwendetes Profil:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Klicken Sie diesen Knopf, um ein Profil auszuwählen"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Beim Anzeigen der Hilfe ist ein Fehler aufgetreten: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2843,7 +2854,7 @@ msgstr ""
 "Die Datei »%s« fehlt. Dies bedeutet, dass die Anwendung nicht korrekt "
 "installiert wurde."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2851,7 +2862,7 @@ msgstr ""
 "Anscheinend haben Sie keine Datei mit Namen »gnome-terminal.server« an einem "
 "gültigen Speicherort installiert. Fabrik-Modus deaktiviert.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2859,10 +2870,7 @@ msgstr ""
 "Fehler beim Registrieren des Terminals am Aktivierungsdienst. Fabrik-Modus "
 "deaktiviert.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "Terminal-Server konnte nicht vom Aktivierungs-Server abgerufen werden\n"
-
-
-
