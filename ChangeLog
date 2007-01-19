@@ -1,9 +1,17 @@
+2007-01-19  Mariano Suárez-Alvarez  <mariano@gnome.org>
+
+	Bug 385519 – configure script doesn't recognize old GConf
+
+	* configure.in: require gconf 2.14.0
+	
+	Also fix my email in the last few changlog entries...
+
 2007-01-15  Christian Persch  <chpe@svn.gnome.org>
 
 	* configure.in: Remove help/it/Makefile from configure to fix the
 	build.
 
-2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+2006-11-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	Bug 335946 – tab menu needs to be shortened
 
@@ -11,7 +19,7 @@
 	Ellipsise the tab titles when putting them in the menubar menuitem.
 	Based on the patch attached on the bug by Diego Escalante Urrelo
 
-2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+2006-11-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	Bug 378243 – crash in Terminal: Copy item activated on a destroyed 
 	window popup.
@@ -20,18 +28,18 @@
 	terminal_screen_unrealize): override GtkWidget:unrealize so we
 	destroy the popup upon unrealizing, just as GtkEntry, say, does.
 
-2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+2006-11-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	* configure.in: the last commit left behind one instance of
 	CFLAGS which should have been CPPFLAGS.
 
-2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+2006-11-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	Bug 362256 – configure kills CPPFLAGS set on configure command line
 
 	* configure.in: add TERM_CFLAGS to CPPFLAGS, not CFLAGS.
 
-2006-11-23  Mariano Suárez-Alvarez  <msuarezalvarez@gnome.org>
+2006-11-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
 	* configure.in: use GNOME_COMPILE_WARNINGS instead of out own check.
 
