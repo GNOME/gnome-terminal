@@ -122,6 +122,8 @@ static void terminal_screen_widget_encoding_changed  (GtkWidget      *term,
 
 static void terminal_screen_setup_dnd                (TerminalScreen *screen);
 
+static void update_color_scheme                      (TerminalScreen *screen);
+
 static gboolean cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_title);
 
 static void terminal_screen_cook_title      (TerminalScreen *screen);
@@ -575,6 +577,8 @@ terminal_screen_reread_profile (TerminalScreen *screen)
   if (GTK_WIDGET_REALIZED (screen->priv->term))
     terminal_screen_change_font (screen);
 
+  update_color_scheme (screen);
+
   terminal_widget_set_cursor_blinks (term,
                                      terminal_profile_get_cursor_blink (profile));
 
@@ -749,8 +753,7 @@ update_color_scheme (TerminalScreen *screen)
   GdkColor fg, bg;
   GdkColor palette[TERMINAL_PALETTE_SIZE];
   
-  if (screen->priv->term == NULL ||
-      !GTK_WIDGET_REALIZED (screen->priv->term))
+  if (screen->priv->term == NULL)
     return;
 
   terminal_profile_get_palette (screen->priv->profile,
