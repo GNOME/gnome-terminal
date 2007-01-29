@@ -1,5 +1,13 @@
 2007-01-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
 
+	Bug 402051 – Memleak from callers of terminal_profile_get_list()
+
+	* src/terminal-window.c(fill_in_config_picker_submenu,
+	fill_in_new_term_submenu_real): free the list of profiles in all cases.
+	Patch from Chris Wilson.
+
+2007-01-23  Mariano Suárez-Alvarez  <mariano@gnome.org>
+
 	* HACKING: add a link to release instructions.
 
 2007-01-22  Mariano Suárez-Alvarez  <mariano@gnome.org>

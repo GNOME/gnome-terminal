@@ -428,6 +428,7 @@ fill_in_config_picker_submenu (TerminalWindow *window)
     {
       gtk_widget_set_sensitive (window->priv->choose_config_menuitem, FALSE);
       gtk_menu_item_remove_submenu (GTK_MENU_ITEM (window->priv->choose_config_menuitem));
+      g_list_free (profiles);
 
       return;
     }
@@ -594,8 +595,8 @@ fill_in_new_term_submenu_real(GtkWidget *menuitem,
           
         }
 
-      g_list_free (profiles);
     }
+  g_list_free (profiles);
 }
 
 static void
