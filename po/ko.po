@@ -1,13 +1,13 @@
 # gnome-terminal korean translation
 # This file is distributed under the same license as the gnome-terminal package.
-# Young-ho, Cha <ganadist at mizi.com>, 2002-2003.
+# Young-ho, Cha <ganadist at mizi.com>, 2002-2003, 2007.
 # Changwoo Ryu <cwryu at debian.org>, 2003.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal 2.13.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-26 12:36+0900\n"
-"PO-Revision-Date: 2006-02-26 12:35+0900\n"
+"POT-Creation-Date: 2007-01-25 23:41+0900\n"
+"PO-Revision-Date: 2007-01-25 23:42+0900\n"
 "Last-Translator: Young-Ho Cha <ganadist@gmail.com>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:799 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "터미널"
 
@@ -560,8 +560,8 @@ msgid "_Update login records when command is launched"
 msgstr "명령을 실행하면 로그인 기록을 업데이트(_U)"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "시스템 터미널 글꼴 사용(_U)"
+msgid "_Use the system fixed width font"
+msgstr "시스템 고정폭 글꼴 사용(_U)"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1562,33 +1562,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "탱고"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "그림"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "모든 파일"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "팔레트 색 %d(을)를 선택하십시오"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "팔레트 항목 %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "터미널 글꼴 선택"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "글꼴(_F):"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "프로파일 \"%s\" 편집"
@@ -1701,7 +1705,7 @@ msgstr "축소"
 msgid "Normal Size"
 msgstr "보통 크기"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "제목 설정"
 
@@ -1729,7 +1733,7 @@ msgstr "왼쪽으로 탭 옮기기"
 msgid "Move Tab to the Right"
 msgstr "오른쪽으로 탭 옮기기"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "탭 떼내기"
 
@@ -1806,7 +1810,7 @@ msgid "Help"
 msgstr "도움말"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "%s에서 설정을 읽는중 오류가 발생했습니다. (%s)\n"
@@ -1892,7 +1896,7 @@ msgstr "행동(_A)"
 msgid "Shortcut _Key"
 msgstr "바로가기 키(_K)"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "탭 닫기"
 
@@ -1927,7 +1931,7 @@ msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "터미널 프로파일 \"%2$s\"의 바탕 그림 \"%1$s\" 읽기 실패: %3$s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
@@ -1935,76 +1939,76 @@ msgstr ""
 "그놈 터미널: 설정 데이터 베이스에 설정된 글꼴 이름 \"%s\"이(가) 올바르지 않습"
 "니다\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "%s의 기본값 가져오기 오류: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "%s의 기본값 아닙니다\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "키 %s을(를) 기본값으로 되돌리는중 오류: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "설정 디렉토리 %s(을)를 지우는 중 오류가 발생했습니다. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "기본 프로파일이 바뀐것을 알리는 도중 오류가 발생했습니다. (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "자세히(_D)"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "프로파일 \"%s\"을(를) 만드는 중 오류가 발생했습니다"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "프로파일을 지우는 중 오류가 발생했습니다"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "색 팔레트로 문자열 \"%s\"을(를) 분석할 수 없습니다\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "팔레트가 %d개의 항목 대신 %d개의 항목을 가지고 있습니다\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "고정폭 글꼴 바뀌었을 때 알림을 등록하는 데 오류가 발생했습니다. (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "글꼴 \"%s\"을(를) 읽을 수 없습니다\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "이 터미널에서 명령에 문제가 있습니다: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2013,7 +2017,7 @@ msgstr ""
 "주소 \"%s\"을(를) 열 수 없습니다:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2022,86 +2026,86 @@ msgstr ""
 "메뉴에서 이미지를 사용할 지 여부에 대한 설정 값을 읽는 중 오류가 생겼습니다. "
 "(%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "메일 보내기(_S)..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "메일 주소 복사(_C)"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "바로가기 열기(_O)"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "바로가기 주소 복사(_C)"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "터미널 열기(_T)"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "탭 열기(_B)"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "탭 닫기(_L)"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "창 닫기(_C)"
+#: ../src/terminal-screen.c:1723
+msgid "C_lose Window"
+msgstr "창 닫기(_L)"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "프로파일 바꾸기(_R)"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "현재 프로파일 편집(_E)..."
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "메뉴 모음 보기(_M)"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "입력기(_I)"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "제목(_T):"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "터미널에 놓은 text/plain은 잘못된 형식 (%d) 또는 길이 (%d)(으)로 되어 있습니"
 "다\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "터미널에 놓은 색은 잘못된 형식 (%d) 또는 길이 (%d)(으)로 되어 있습니다\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "터미널에 놓은 모질라 url은 잘못된 형식 (%d) 또는 길이 (%d)(으)로 되어 있습니"
 "다\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "터미널에 놓은 URI 목록은 잘못된 형식 (%d) 또는 길이 (%d)(으)로 되어 있습니"
 "다\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2109,172 +2113,179 @@ msgstr ""
 "터미널에 놓은 그림 파일 이름은 잘못된 형식 (%d) 또는 길이 (%d)(으)로 되어 있"
 "습니다\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "URI \"%s\"을(를) 파일 이름 으로 바꾸는중 오류: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "터미널을 만들기 위해 자식 프로세스를 만드는 도중 오류가 발생했습니다"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
 msgstr "메뉴 아이콘 보여주기 알림을 등록하는 데 오류가 발생했습니다. (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "더하기/지우기(_A)..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "새 프로파일(_P)..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "창 닫기(_C)"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "프로파일(_R)..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "단축 키(_K)..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "현재 프로파일(_U)..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "메뉴 모음 보기(_B)"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "전체 화면(_F)"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "프로파일 바꾸기(_P)"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "제목 설정(_S)..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "글자 코딩(_C)"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "리셋(_R)"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "리셋하고 비움(_L)"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "이전 탭(_P)"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "다음 탭(_N)"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "탭 왼쪽으로 옮기기(_L)"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "탭 오른쪽으로 옮기기(_R)"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "탭 떼내기(_D)"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "차례(_C)"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "정보(_A)"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "mnemonics을 사용하기 위해 설정 값을 읽는 중 오류가 생겼습니다. (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "터미널 창의 설정 바뀜 알림 받기에 오류가 생겼습니다. (%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "파일(_F)"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2115 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "편집(_E)"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "보기(_V)"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "터미널(_T)"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "탭(_B)"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "도움말(_H)"
 
-#: ../src/terminal-window.c:2265
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
-msgstr[0] ""
-"이 창에는 %d개의 탭이 열려 있습니다. 창을 닫으면 이 탭을 모두 닫게 됩니다."
-
-#: ../src/terminal-window.c:2274
+#: ../src/terminal-window.c:2345
 msgid "Close all tabs?"
 msgstr "탭을 모두 닫을까요?"
 
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2347
+#, c-format
+msgid "This window has one tab open. Closing the window will close it."
+msgid_plural ""
+"This window has %d tabs open. Closing the window will also close all tabs."
+msgstr[0] ""
+"이 창에는 %d개의 탭이 열려 있습니다. 창을 닫으면 이 탭을 모두 닫게 됩니다."
+
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "모든 탭 닫기(_T)"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "그놈 터미널"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "그놈 바탕환경의 터미널 에물레이터"
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr ""
 "차영호 <ganadist@gmail.com>\n"
@@ -2588,17 +2599,17 @@ msgid ""
 "changes. (%s)\n"
 msgstr "터미널 프로파일 목록 바뀜 알림 받기에 오류가 생겼습니다. (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "잘못된 위치 문자열 \"%s\"\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "터미널 프로파일의 목록을 가져오는중 오류가 발생했습니다. (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2607,87 +2618,87 @@ msgstr ""
 "\"%s\"(이)라는 프로파일이 이미 있습니다. 같은 이름을 가지는 또 다른 프로파일"
 "을 만들려고 싶습니까?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "새 프로파일로 가져올 선택한 프로파일이 존재하지 않습니다"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "프로파일 이름을 입력하십시오"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "기본 프로파일을 선택하십시오"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "프로파일 목록"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "지울 프로파일을 한 개 이상 선택해야 합니다."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "적어도 하나의 프로파일은 남아있어야 합니다. 모두를 지울 수 없습니다."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "%d개의 프로파일을 지우시겠습니까?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "\"%s\" 프로파일을 지우시겠습니까?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "프로파일 지우기"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "프로파일"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "프로파일(_P):"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "새 프로파일 대화상자를 열려면 누르십시오"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "프로파일 편집 대화상자를 열려면 누르십시오"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "선택한 프로파일을 지우려면 누르십시오"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "새 터미널을 실행할 때 사용할 프로파일(_U):"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "프로파일을 선택하려면 누르십시오"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "도움말을 보여주는 데 오류가 발생했습니다: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "파일 \"%s\"이(가) 없습니다. 응용프로그램이 잘못 설치된 것 같습니다."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2695,12 +2706,12 @@ msgstr ""
 "gnome-terminal.server가 올바른 위치에 설치되지 않은것 같습니다. 팩토리 모드"
 "를 사용하지 못합니다.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr "활성 서비스로 터미널을 등록하는 중 오류; 팩토리 모드 사용불가.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "활성 서버로 부터 터미널 서버를 가져오기 실패\n"
