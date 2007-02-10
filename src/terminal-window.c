@@ -1903,9 +1903,10 @@ notebook_tab_removed_callback (GtkWidget       *notebook,
 
 static void
 notebook_tabs_reordered_callback (GtkWidget       *notebook,
-                                 TerminalWindow  *window)
+                                  TerminalWindow  *window)
 {
-	reset_tab_menuitems(window);
+	reset_tab_menuitems (window);
+        update_tab_sensitivity (window);
 }
 
 void
