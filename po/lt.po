@@ -1,16 +1,16 @@
 # Lithuanian translation of gnome-terminal
-# Copyright (C) 2000-2006 Free Software Foundation, Inc.
+# Copyright (C) 2000-2007 Free Software Foundation, Inc.
 # Vaidrius Paulauskas <vaidrius@delfi.lt>, 2003.
 # Tomas Kuliavas <tokul@users.sourceforge.net>, 2003.
-# Žygimantas Beručka <zygis@gnome.org>, 2004-2006.
+# Žygimantas Beručka <zygis@gnome.org>, 2004-2007.
 # 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-25 10:14+0200\n"
-"PO-Revision-Date: 2006-02-25 10:25+0200\n"
+"POT-Creation-Date: 2007-02-18 15:51+0200\n"
+"PO-Revision-Date: 2007-02-18 15:57+0200\n"
 "Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:800 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -354,23 +354,24 @@ msgstr "Ž_ymeklis mirksi"
 
 #: ../src/gnome-terminal.glade2.h:33
 msgid "Custom"
-msgstr "Kita"
+msgstr "Pasirinktinė"
 
 #: ../src/gnome-terminal.glade2.h:34
 msgid "Custom co_mmand:"
-msgstr "Kita ko_manda:"
+msgstr "Pasirinktinė ko_manda:"
 
 #: ../src/gnome-terminal.glade2.h:35
 msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
-msgstr "Išjungti visus sparčiuosius me_niu klavišus (kaip Alt-b - meniu Byla)"
+msgstr ""
+"Išjungti visus sparčiuosius me_niu klavišus (pvz., Alt-R – meniu Rinkmena)"
 
 #: ../src/gnome-terminal.glade2.h:36
 msgid "Disable m_enu shortcut key (F10 by default)"
-msgstr "Išjungti m_eniu pasiekimo klavišą (pradinis klavišas - F10)"
+msgstr "Išjungti m_eniu prieigos klavišą (numatytasis klavišas – F10)"
 
 #: ../src/gnome-terminal.glade2.h:37
 msgid "E_ncodings shown in menu:"
-msgstr "Me_niu rodomos koduotės:"
+msgstr "Koduotės, rodomos me_niu:"
 
 #: ../src/gnome-terminal.glade2.h:38
 msgid "Effects"
@@ -565,8 +566,8 @@ msgid "_Update login records when command is launched"
 msgstr "Atna_ujinti prisijungimų žurnalo įrašus, kai paleidžiama komanda"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "Na_udoti sisteminį terminalo šriftą"
+msgid "_Use the system fixed width font"
+msgstr "Na_udoti sistemos fiksuoto pločio šriftą"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1463,7 +1464,7 @@ msgstr "Ar meniu juosta palaiko sparčiuosius klavišus"
 
 #: ../src/gnome-terminal.schemas.in.h:133
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Ar įjungtas standartinis GTK meniu iškvietimo klavišų susiejimas"
+msgstr "Ar įjungtas standartinis GTK meniu prieigos klavišų susiejimas"
 
 #: ../src/gnome-terminal.schemas.in.h:134
 msgid "Whether to allow bold text"
@@ -1582,33 +1583,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Paveikslėliai"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Visos rinkmenos"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Pasirinkite %d-ą paletės spalvą"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Paletės %d-a spalva"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Pasirinkite terminalo šriftą"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "Šri_ftas:"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Keičiamas profilis „%s“"
@@ -1721,7 +1726,7 @@ msgstr "Sumažinti"
 msgid "Normal Size"
 msgstr "Normalus dydis"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "Nustatyti pavadinimą"
 
@@ -1749,7 +1754,7 @@ msgstr "Perkelti kortelę kairėn"
 msgid "Move Tab to the Right"
 msgstr "Perkelti kortelę dešinėn"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Atkabinti kortelę"
 
@@ -1807,7 +1812,7 @@ msgstr "Turinys"
 
 #: ../src/terminal-accels.c:178
 msgid "File"
-msgstr "Byla"
+msgstr "Rinkmena"
 
 #: ../src/terminal-accels.c:179
 msgid "Edit"
@@ -1826,7 +1831,7 @@ msgid "Help"
 msgstr "Pagalba"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Įvyko klaida bandant įkelti nuostatas iš %s. (%s)\n"
@@ -1918,7 +1923,7 @@ msgstr "Veiksm_as"
 msgid "Shortcut _Key"
 msgstr "Spartusis _klavišas"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Užverti kortelę"
 
@@ -1953,35 +1958,35 @@ msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "Nepavyko rasti fono paveikslėlio „%s“ terminalo profiliui „%s“: %s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "GNOME Terminal: konfigūracijoje nurodytas šriftas „%s“ netaisyklingas\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Įvyko klaida bandant gauti numatytąją %s reikšmę: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Nenustatyta numatytoji %s reikšmė\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Įvyko klaida atstatant numatytąją rakto %s reikšmę: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Įvyko klaida bandant pašalinti nustatymų aplanką %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
@@ -1990,25 +1995,25 @@ msgstr ""
 "Įvyko klaida nustatant informavimą apie standartinio profilio pakeitimus. (%"
 "s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Išsamiai"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Kuriant profilį „%s“ įvyko klaida"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Įvyko klaida pašalinant profilius"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Nepavyko apdoroti spalvų paletės aprašymo „%s“\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
@@ -2016,7 +2021,7 @@ msgstr[0] "Paletėje buvo %d įrašas vietoj %d\n"
 msgstr[1] "Paletėje buvo %d įrašai vietoj %d\n"
 msgstr[2] "Paletėje buvo %d įrašų vietoj %d\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2024,17 +2029,17 @@ msgid ""
 msgstr ""
 "Įvyko klaida nustatant informavimą apie lygiapločio šrifto pakeitimus. (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Nepavyko įkelti šrifto „%s“\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Terminale iškilo problema su nurodyta komanda: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2043,7 +2048,7 @@ msgstr ""
 "Nepavyko atverti adreso „%s“:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:828
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2052,87 +2057,87 @@ msgstr ""
 "Įvyko klaida įkeliant konfigūracijos reikšmę ar naudoti meniu paveikslėlius. "
 "(%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "_Siųsti laišką į..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "_Kopijuoti el.pašto adresą"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "_Kopijuoti nuorodos adresą"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:891
 msgid "Open _Terminal"
 msgstr "Naujas _terminalas"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:894
 msgid "Open Ta_b"
 msgstr "Nauja _kortelė"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:909
 msgid "C_lose Tab"
 msgstr "Už_verti kortelę"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
+#: ../src/terminal-screen.c:1723
+msgid "C_lose Window"
 msgstr "_Užverti langą"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "Pakeisti p_rofilį"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "_Keisti esamą profilį..."
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "Rodyti _meniu"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "Įved_imo metodai"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "_Pavadinimas:"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminale įterptas text/plain objektas buvo netinkamo formato (%d) arba "
 "netinkamo ilgio (%d)\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminale įterpta spalva buvo netinkamo formato (%d) arba netinkamo ilgio (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminale įterptas Mozilla adresas buvo netinkamo formato (%d) arba "
 "netinkamo ilgio (%d)\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminale įterptas URI sąrašas buvo netinkamo formato (%d) arba netinkamo "
 "ilgio (%d)\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2140,16 +2145,16 @@ msgstr ""
 "Terminale įterpta paveikslėlio rinkmena buvo netinkamamo formato (%d) arba "
 "netinkamo ilgio (%d)\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Klaida konvertuojant URI „%s“ į rinkmenos vardą: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "Klaida bandant sukurti šio terminalo antrinį procesą"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2158,101 +2163,109 @@ msgstr ""
 "Įvyko klaida užsisakant pranešimus apie meniu piktogramų matomumo "
 "pakeitimus. (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:580
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:582
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:705
 msgid "_Add or Remove..."
 msgstr "_Pridėti arba pašalinti..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:902
 msgid "New _Profile..."
 msgstr "Naujas _profilis..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:913
+msgid "_Close Window"
+msgstr "_Užverti langą"
+
+#: ../src/terminal-window.c:946
 msgid "P_rofiles..."
 msgstr "P_rofiliai..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:949
 msgid "_Keyboard Shortcuts..."
 msgstr "_Klavišų susiejimai..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:953
 msgid "C_urrent Profile..."
 msgstr "_Esamas profilis..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:968
 msgid "Show Menu_bar"
 msgstr "Rodyti _meniu"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:972
 msgid "_Full Screen"
 msgstr "_Visame ekrane"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1015
 msgid "Change _Profile"
 msgstr "_Pakeisti profilį"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1018
 msgid "_Set Title..."
 msgstr "_Nustatyti pavadinimą..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1025
 msgid "Set _Character Encoding"
 msgstr "N_ustatyti simbolių koduotę"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1035
 msgid "_Reset"
 msgstr "_Atstatyti"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1038
 msgid "Reset and C_lear"
 msgstr "Atstatyti ir išva_lyti"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1052
 msgid "_Previous Tab"
 msgstr "_Ankstesnė kortelė"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1056
 msgid "_Next Tab"
-msgstr "_Sekanti kortelė"
+msgstr "_Kita kortelė"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1067
 msgid "Move Tab to the _Left"
-msgstr "Perkelti kortelę _kairėn"
+msgstr "Perkelti kortelę kai_rėn"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1071
 msgid "Move Tab to the _Right"
 msgstr "Perkelti kortelę _dešinėn"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1078
+msgid "_Detach Tab"
+msgstr "Atka_binti kortelę"
+
+#: ../src/terminal-window.c:1097
 msgid "_Contents"
 msgstr "_Turinys"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1107
 msgid "_About"
 msgstr "_Apie"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1293
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
 "Įvyko klaida bandant įkelti greitųjų klavišų įjungimo nustatymus. (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1312
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2261,36 +2274,39 @@ msgstr ""
 "Įvyko klaida nustatant informavimą apie terminalo lango nustatymų "
 "pakeitimus. (%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2115
 msgid "_File"
 msgstr "_Rinkmena"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2117 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "K_eisti"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2119
 msgid "_View"
 msgstr "R_odymas"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2121
 msgid "_Terminal"
 msgstr "_Terminalas"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2123
 msgid "Ta_bs"
 msgstr "_Kortelės"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2125
 msgid "_Help"
 msgstr "_Žinynas"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2347
+msgid "Close all tabs?"
+msgstr "Užverti visas korteles?"
+
+#: ../src/terminal-window.c:2349
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+"This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
 "Šiame lange yra %d atverta kortelė. Užvėrus langą bus užvertos ir visos "
 "kortelės."
@@ -2301,23 +2317,19 @@ msgstr[2] ""
 "Šiame lange yra %d atvertų kortelių. Užvėrus langą bus užvertos ir visos "
 "kortelės."
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "Užverti visas korteles?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2358
 msgid "Close All _Tabs"
 msgstr "Užverti visas _korteles"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2910
 msgid "GNOME Terminal"
 msgstr "GNOME terminalas"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2912
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminalo emuliatorius GNOME darbo aplinkai"
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2917
 msgid "translator-credits"
 msgstr ""
 "Paskutinysis vertėjas:\n"
@@ -2647,17 +2659,17 @@ msgstr ""
 "Įvyko klaida nustatant informaciją apie terminalo profilių sąrašo "
 "pasikeitimus. (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Klaidingas geometrijos aprašymas „%s“\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Įvyko klaida, bandant gauti terminalo profilių sąrašą. (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2666,33 +2678,33 @@ msgstr ""
 "Jau yra profilis pavadinimu „%s“. Ar norite sukurti kitą profilį tokiu pat "
 "pavadinimu?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "Jūsų pasirinktas pagrindinis profilis nebeegzistuoja."
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Įveskite profilio pavadinimą:"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Pasirinkite pagrindinį profilį"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Profilių sąrašas"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr ""
 "Norėdami ištrinti vieną ar kelis profilius, Jūs turite juos pasirinkti."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Turite turėti nors vieną profilį, negalima ištrinti jų visų."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
@@ -2700,49 +2712,49 @@ msgstr[0] "Pašalinti šį %d profilį?\n"
 msgstr[1] "Pašalinti šiuos %d profilius?\n"
 msgstr[2] "Pašalinti šiuos %d profilių?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Pašalinti profilį „%s“?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Pašalinti profilį"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Profiliai"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "_Profiliai:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Spragtelėkite čia, norėdami iškviesti naujo profilio kūrimo langą"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Spragtelėkite čia, norėdami iškviesti profilio taisymo langą"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Spragtelėkite, norėdami pašalinti profilį"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Profilis, na_udojamas paleidžiant naują terminalą:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Spragtelėkite, norėdami pasirinkti profilį"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Įvyko klaida rodant pagalbą: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2750,7 +2762,7 @@ msgid ""
 msgstr ""
 "Trūksta rinkmenos „%s“. Tai rodo, kad programa nebuvo įdiegta tvarkingai."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2758,7 +2770,7 @@ msgstr ""
 "Panašu, kad gnome-terminal.server neįdiegtas reikiamoje vietoje. Gamyklos "
 "režimas atjungtas.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2766,7 +2778,7 @@ msgstr ""
 "Įvyko klaida registruojant terminalą aktyvavimo tarnyboje. Gamyklos režimas "
 "atjungtas.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
 "Nepavyko iš aktyvavimo tarnybos gauti terminalo serverio informacijos\n"
