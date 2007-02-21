@@ -58,8 +58,8 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 if $PKG_CONFIG 'xft >= 2.0.0 pangoxft >= 1.1.1'; then
    using_xft2=yes
-   CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` `$PKG_CONFIG --variable=xrenderlibs xft` $CPPFLAGS"
-   LIBS="`$PKG_CONFIG --libs xft pangoxft` $LIBS"
+   CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` $CPPFLAGS"
+   LIBS="`$PKG_CONFIG --libs xft pangoxft` `$PKG_CONFIG --variable=xrenderlibs xft` $LIBS"
 else
    using_xft2=no
 fi
