@@ -1,5 +1,14 @@
 2007-02-21  Behdad Esfahbod  <behdad@gnome.org>
 
+	Bug 410286 – discards qualifiers from pointer target type
+	Patch from Kouhei Sutou
+
+	* src/skey-popup.c (extract_hash_seq_and_seed):
+	* src/terminal-screen.c (cook_title):
+	s/gchar/const gchar/
+
+2007-02-21  Behdad Esfahbod  <behdad@gnome.org>
+
 	Bug 410281 – gcc: -lXrender -lX11 : linker input file unused because
 	linking not done
 	Patch from Kouhei Sutou

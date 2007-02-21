@@ -670,7 +670,7 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
 {
   TerminalTitleMode mode;
   char *new_cooked_title = NULL;
-  char *static_title_piece = NULL;
+  const char *static_title_piece = NULL;
 
   g_return_val_if_fail (old_cooked_title != NULL, FALSE);
 
