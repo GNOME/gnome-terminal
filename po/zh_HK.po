@@ -1,16 +1,16 @@
-# Traditional Chinese translation of gnome-terminal.
-# Copyright (C) 2002-05 Free Software Foundation, Inc.
+# Chinese (Hong Kong) translation of gnome-terminal.
+# Copyright (C) 2002, 03, 04, 05, 06, 07 Free Software Foundation, Inc.
 # Abel Cheung <abel@oaka.org>, 2002-2004
 # Anthony Tang <tkyanthony@yahoo.com.hk>, 2004
-# Woodman Tuen <wmtuen@gmail.com>, 2005
+# Woodman Tuen <wmtuen@gmail.com>, 2005-07
 # 
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal 2.15.4\n"
+"Project-Id-Version: gnome-terminal 2.17.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-02 07:11+0200\n"
-"PO-Revision-Date: 2006-08-24 01:02+0800\n"
+"POT-Creation-Date: 2007-02-20 03:20+0000\n"
+"PO-Revision-Date: 2007-02-21 21:48+0800\n"
 "Last-Translator: Woodman Tuen <wmtuen@gmail.com>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:796 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:800 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "終端機"
 
@@ -561,8 +561,8 @@ msgid "_Update login records when command is launched"
 msgstr "指令執行時更新登入記錄(_U)"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "使用系統指定的終端機字型(_U)"
+msgid "_Use the system fixed width font"
+msgstr "使用系統的固定闊度字型(_U)"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1413,33 +1413,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "圖片"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "所有檔案"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "選取調色盤色彩 %d"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "調色盤顏色 %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "請選取終端機字型"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "字型(_F)："
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "修改設定組合“%s”"
@@ -1552,7 +1556,7 @@ msgstr "拉遠"
 msgid "Normal Size"
 msgstr "原來大小"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2165
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "設定標題"
 
@@ -1580,7 +1584,7 @@ msgstr "分頁向左移動"
 msgid "Move Tab to the Right"
 msgstr "分頁向右移動"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1074
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "分頁脫離為獨立視窗"
 
@@ -1657,7 +1661,7 @@ msgid "Help"
 msgstr "求助"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:202 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "從 %s 載入設定時出現錯誤。(%s)\n"
@@ -1740,7 +1744,7 @@ msgstr "行動(_A)"
 msgid "Shortcut _Key"
 msgstr "捷徑鍵(_K)"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "關閉分頁"
 
@@ -1773,83 +1777,83 @@ msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "無法載入終端機設定組合“%2$s”所使用的背景圖案“%1$s”：%3$s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr "GNOME 終端機：組態資料庫中的字型名稱“%s”無效\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "擷取 %s 的預設值時出現錯誤：%s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "沒有 %s 的預設值\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "將設定鍵 %s 的值重設為預設值時出現錯誤：%s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "移除載有組態的目錄 %s 時出現錯誤。(%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和預設設定組合有關。(%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "詳細資料(_D)"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2394
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "建立設定組合“%s”時出現錯誤"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "刪除設定組合時出現錯誤"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "無法分析表示調色盤的設定字串“%s”\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "調色盤有 %d 種顏色，但應該是 %d 種\n"
 msgstr[1] "調色盤有 %d 種顏色，但應該是 %d 種\n"
 
-#: ../src/terminal-screen.c:218
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和終端機使用的固定闊度字型有關。(%s)\n"
 
-#: ../src/terminal-screen.c:875
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "無法載入字型“%s”\n"
 
-#: ../src/terminal-screen.c:1022
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "本終端機執行的指令出現問題：%s"
 
-#: ../src/terminal-screen.c:1462
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1858,92 +1862,92 @@ msgstr ""
 "無法開啟地址“%s”：\n"
 "%s"
 
-#: ../src/terminal-screen.c:1559 ../src/terminal-window.c:824
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:828
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "載入組態時出現錯誤；該組態決定是否在選單中顯示圖示。(%s)\n"
 
-#: ../src/terminal-screen.c:1645
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "傳送郵件給(_S)..."
 
-#: ../src/terminal-screen.c:1650
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "複製電郵地址(_C)"
 
-#: ../src/terminal-screen.c:1657
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
-#: ../src/terminal-screen.c:1662
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "複製連結地址(_C)"
 
-#: ../src/terminal-screen.c:1673 ../src/terminal-window.c:887
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:891
 msgid "Open _Terminal"
 msgstr "開啟視窗(_T)"
 
-#: ../src/terminal-screen.c:1678 ../src/terminal-window.c:890
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:894
 msgid "Open Ta_b"
 msgstr "開啟分頁(_B)"
 
-#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:905
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:909
 msgid "C_lose Tab"
 msgstr "關閉分頁(_L)"
 
-#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:909
-msgid "_Close Window"
-msgstr "關閉視窗(_C)"
+#: ../src/terminal-screen.c:1723
+msgid "C_lose Window"
+msgstr "關閉視窗(_L)"
 
-#: ../src/terminal-screen.c:1713
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "更改設定組合(_R)"
 
-#: ../src/terminal-screen.c:1749
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "修改目前的設定組合(_E)..."
 
-#: ../src/terminal-screen.c:1754
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "顯示選單列(_M)"
 
-#: ../src/terminal-screen.c:1764
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "輸入法(_I)"
 
-#: ../src/terminal-screen.c:2194
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "標題(_T)："
 
-#: ../src/terminal-screen.c:2308
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的文字格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: ../src/terminal-screen.c:2331
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的顏色格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: ../src/terminal-screen.c:2374
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的 Mozilla URL 的格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: ../src/terminal-screen.c:2423
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的 URI 清單的格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: ../src/terminal-screen.c:2482
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖曳至終端機的圖片檔名稱格式 (%d) 或長度 (%d) 出現錯誤\n"
 
-#: ../src/terminal-screen.c:2508
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "將 URI “%s” 轉換為檔案名稱時出現錯誤：%s\n"
@@ -1952,172 +1956,179 @@ msgstr "將 URI “%s” 轉換為檔案名稱時出現錯誤：%s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "產生該終端機的副進程時出現錯誤"
 
-#: ../src/terminal-window.c:363
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
 msgstr "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態決定是否在選單中顯示圖示。(%s)\n"
 
-#: ../src/terminal-window.c:576
+#: ../src/terminal-window.c:580
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:578
+#: ../src/terminal-window.c:582
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:701
+#: ../src/terminal-window.c:705
 msgid "_Add or Remove..."
 msgstr "新增或移除(_A)..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:898
+#: ../src/terminal-window.c:902
 msgid "New _Profile..."
 msgstr "新增設定組合(_P)..."
 
-#: ../src/terminal-window.c:942
+#: ../src/terminal-window.c:913
+msgid "_Close Window"
+msgstr "關閉視窗(_C)"
+
+#: ../src/terminal-window.c:946
 msgid "P_rofiles..."
 msgstr "設定組合(_R)..."
 
-#: ../src/terminal-window.c:945
+#: ../src/terminal-window.c:949
 msgid "_Keyboard Shortcuts..."
 msgstr "捷徑鍵(_K)..."
 
-#: ../src/terminal-window.c:949
+#: ../src/terminal-window.c:953
 msgid "C_urrent Profile..."
 msgstr "目前的設定組合(_U)..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:964
+#: ../src/terminal-window.c:968
 msgid "Show Menu_bar"
 msgstr "顯示選單列(_B)"
 
-#: ../src/terminal-window.c:968
+#: ../src/terminal-window.c:972
 msgid "_Full Screen"
 msgstr "全螢幕(_F)"
 
-#: ../src/terminal-window.c:1011
+#: ../src/terminal-window.c:1015
 msgid "Change _Profile"
 msgstr "更改設定組合(_P)"
 
-#: ../src/terminal-window.c:1014
+#: ../src/terminal-window.c:1018
 msgid "_Set Title..."
 msgstr "設定標題(_S)..."
 
-#: ../src/terminal-window.c:1021
+#: ../src/terminal-window.c:1025
 msgid "Set _Character Encoding"
 msgstr "設定字符編碼(_C)"
 
-#: ../src/terminal-window.c:1031
+#: ../src/terminal-window.c:1035
 msgid "_Reset"
 msgstr "重設(_R)"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1038
 msgid "Reset and C_lear"
 msgstr "重設並清除畫面(_L)"
 
-#: ../src/terminal-window.c:1048
+#: ../src/terminal-window.c:1052
 msgid "_Previous Tab"
 msgstr "上一個分頁(_P)"
 
-#: ../src/terminal-window.c:1052
+#: ../src/terminal-window.c:1056
 msgid "_Next Tab"
 msgstr "下一個分頁(_N)"
 
-#: ../src/terminal-window.c:1063
+#: ../src/terminal-window.c:1067
 msgid "Move Tab to the _Left"
 msgstr "分頁向左移動(_L)"
 
-#: ../src/terminal-window.c:1067
+#: ../src/terminal-window.c:1071
 msgid "Move Tab to the _Right"
 msgstr "分頁向右移動(_R)"
 
-#: ../src/terminal-window.c:1093
+#: ../src/terminal-window.c:1078
+msgid "_Detach Tab"
+msgstr "分頁脫離為獨立視窗(_D)"
+
+#: ../src/terminal-window.c:1097
 msgid "_Contents"
 msgstr "內容(_C)"
 
-#: ../src/terminal-window.c:1103
+#: ../src/terminal-window.c:1107
 msgid "_About"
 msgstr "關於(_A)"
 
-#: ../src/terminal-window.c:1292
+#: ../src/terminal-window.c:1293
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "當載入是否使用助鍵憶(mnemonics)的設定值時發生錯誤。(%s)\n"
 
-#: ../src/terminal-window.c:1311
+#: ../src/terminal-window.c:1312
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態和終端機視窗組態有關。(%s)\n"
 
-#: ../src/terminal-window.c:2095
+#: ../src/terminal-window.c:2115
 msgid "_File"
 msgstr "檔案(_F)"
 
-#: ../src/terminal-window.c:2097 ../src/terminal.c:2986
+#: ../src/terminal-window.c:2117 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../src/terminal-window.c:2099
+#: ../src/terminal-window.c:2119
 msgid "_View"
 msgstr "顯示(_V)"
 
-#: ../src/terminal-window.c:2101
+#: ../src/terminal-window.c:2121
 msgid "_Terminal"
 msgstr "終端機(_T)"
 
-#: ../src/terminal-window.c:2103
+#: ../src/terminal-window.c:2123
 msgid "Ta_bs"
 msgstr "分頁(_B)"
 
-#: ../src/terminal-window.c:2105
+#: ../src/terminal-window.c:2125
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/terminal-window.c:2303
+#: ../src/terminal-window.c:2347
 msgid "Close all tabs?"
 msgstr "關閉所有分頁？"
 
-#: ../src/terminal-window.c:2305
+#: ../src/terminal-window.c:2349
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
-msgstr[0] "本視窗已開啟了一個分頁，關閉視窗會將其關閉。"
-msgstr[1] "本視窗已開啟了 %d 個分頁，關閉視窗會將所有分頁關閉。"
+"This window has %d tabs open. Closing the window will also close all tabs."
+msgstr[0] "本視窗已開啟了 1 個分頁，關閉視窗會將其關閉。"
+msgstr[1] "本視窗已開啟了 %d 個分頁，關閉視窗會將其關閉。"
 
-#: ../src/terminal-window.c:2315
+#: ../src/terminal-window.c:2358
 msgid "Close All _Tabs"
 msgstr "關閉所有分頁(_T)"
 
-#: ../src/terminal-window.c:2865
+#: ../src/terminal-window.c:2910
 msgid "GNOME Terminal"
 msgstr "GNOME 終端機"
 
-#: ../src/terminal-window.c:2867
+#: ../src/terminal-window.c:2912
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME 桌面環境的終端機模擬器"
 
-#: ../src/terminal-window.c:2872
+#: ../src/terminal-window.c:2917
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電子郵件給\n"
 "以下地址，GNOME 翻譯隊伍會盡快回覆你：\n"
 "community@linuxhall.org\n"
 "\n"
-"Woodman Tuen <wmtuen@gmail.com>, 2004-2006\n"
+"Woodman Tuen <wmtuen@gmail.com>, 2004-07\n"
 "Anthony Tang <tkyanthony@yahoo.com.hk>, 2004\n"
-"Abel Cheung <abel@oaka.org>, 2002-2004"
+"Abel Cheung <abel@oaka.org>, 2002-04"
 
 #: ../src/terminal.c:190
 msgid "Execute the argument to this option inside the terminal."
@@ -2405,116 +2416,116 @@ msgid ""
 "changes. (%s)\n"
 msgstr "當嘗試接受 gconf 發出更改組態的通知時發生錯誤。該組態列出了所有終端機設定組合。(%s)\n"
 
-#: ../src/terminal.c:1989
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "指定位置及尺寸的字串“%s”無效\n"
 
-#: ../src/terminal.c:2055
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "嘗試獲取終端機設定組合的清單時出現錯誤。(%s)\n"
 
-#: ../src/terminal.c:2359
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
 "profile with the same name?"
 msgstr "名為“%s”的設定組合已經存在，你是否想建立另一個有相同名字的設定組合？"
 
-#: ../src/terminal.c:2373
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "選定作為新的設定組合的基礎設定組合已不存在"
 
-#: ../src/terminal.c:2469
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "請輸入設定組合名稱"
 
-#: ../src/terminal.c:2479
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "選取基礎設定組合"
 
-#: ../src/terminal.c:2618
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "設定組合清單"
 
-#: ../src/terminal.c:2687
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "你必須選取至少一個準備刪除的設定組合。"
 
-#: ../src/terminal.c:2698
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "你必須留下至少一個設定組合；不可以全部刪除。"
 
-#: ../src/terminal.c:2706
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "是否刪除這個設定組合？\n"
 msgstr[1] "是否刪除這 %d 個設定組合？\n"
 
-#: ../src/terminal.c:2727
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "是否刪除設定組合“%s”？"
 
-#: ../src/terminal.c:2749
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "刪除設定組合"
 
-#: ../src/terminal.c:3022
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "設定組合"
 
-#: ../src/terminal.c:3063
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "設定組合(_P)："
 
-#: ../src/terminal.c:3095
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "按下此處來開啟新增設定組合的對話視窗"
 
-#: ../src/terminal.c:3103
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "按下此處來開啟修改設定組合的對話視窗"
 
-#: ../src/terminal.c:3111
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "按下此處來刪除已選的設定組合"
 
-#: ../src/terminal.c:3116
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "當開啟新的終端機時使用的設定組合(_U)："
 
-#: ../src/terminal.c:3172
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "按下本按鈕來選取設定組合"
 
-#: ../src/terminal.c:3590
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "顯示說明文件時發生錯誤：%s"
 
-#: ../src/terminal.c:3661
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "找不到檔案“%s”。這表示本程式並未正確地安裝。"
 
-#: ../src/terminal.c:3833
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr "似乎 gnome-terminal.server 檔案沒有安裝在正確的位置。停止使用工廠模式。\n"
 
-#: ../src/terminal.c:3836
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr "當向 activation 服務登記終端機時發生錯誤；關閉工廠模式。\n"
 
-#: ../src/terminal.c:3872
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "activation 伺服程式無法產生終端機伺服程式\n"
