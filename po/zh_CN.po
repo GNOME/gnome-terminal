@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-02-04 23:10+0100\n"
-"PO-Revision-Date: 2006-02-05 11:49+0800\n"
-"Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
+"POT-Creation-Date: 2007-01-02 03:14+0000\n"
+"PO-Revision-Date: 2007-02-19 16:33+0800\n"
+"Last-Translator: Funda Wang <fundawang@gmail.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:799 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "终端"
 
@@ -556,8 +556,8 @@ msgid "_Update login records when command is launched"
 msgstr "执行命令时更新登录记录(_U)"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "使用系统终端字体(_U)"
+msgid "_Use the system fixed width font"
+msgstr "使用系统的等宽字体(_U)"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1502,33 +1502,37 @@ msgstr "Xterm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "图像"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "全部文件"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "选择调色板颜色 %d"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "调色板项 %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "选择终端字体"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "字体(_F)："
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "编辑配置文件“%s”"
@@ -1641,7 +1645,7 @@ msgstr "缩小"
 msgid "Normal Size"
 msgstr "普通大小"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2213
 msgid "Set Title"
 msgstr "设置标题"
 
@@ -1669,7 +1673,7 @@ msgstr "标签左移"
 msgid "Move Tab to the Right"
 msgstr "标签右移"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "漂移标签"
 
@@ -1746,7 +1750,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "从 %s 中载入配置时出错。(%s)\n"
@@ -1829,7 +1833,7 @@ msgstr "动作(_A)"
 msgid "Shortcut _Key"
 msgstr "快捷键(_K)"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "关闭标签"
 
@@ -1862,82 +1866,82 @@ msgid ""
 "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "未能载入终端配置文件“%2$s”需要的背景图像“%1$s”：%3$s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr "GNOME 终端：配置数据库中的字体名“%s”无效\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "取得 %s 的默认值时出错：%s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "%s 没有默认值\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "恢复键 %s 为默认值时出错：%s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "删除配置目录 %s 时出错。(%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "订阅默认终端配置文件更改通知时出错。(%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "详细信息(_D)"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "创建配置文件“%s”时出错"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "删除配置文件时出错"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "无法将字符串“%s”解析为颜色调色板\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "调色板颜色数为%d而不是%d\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "订阅等宽字体更改通知时出错。(%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:906
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "无法加载字体“%s”\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1053
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "该终端的命令行有误：%s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1493
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1946,256 +1950,263 @@ msgstr ""
 "无法打开地址“%s”：\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1590 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
 "s)\n"
 msgstr "装入是否在菜单中使用图像的配置值出错。(%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1677
 msgid "_Send Mail To..."
 msgstr "发送邮件给(_S)..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1682
 msgid "_Copy E-mail Address"
 msgstr "复制电子邮件地址(_C)"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1689
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1694
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1705 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "打开终端(_T)"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1710 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "打开标签(_B)"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1720 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "关闭标签(_L)"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "关闭窗口(_C)"
+#: ../src/terminal-screen.c:1720
+msgid "C_lose Window"
+msgstr "关闭窗口(_L)"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1745
 msgid "Change P_rofile"
 msgstr "更改配置文件(_R)"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1781
 msgid "_Edit Current Profile..."
 msgstr "编辑当前配置文件(_E)..."
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1786
 msgid "Show _Menubar"
 msgstr "显示菜单栏(_M)"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1802
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2242
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2356
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 text/plain 文本格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2379
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的颜色格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 Mozilla URL 格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2471
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的 URI 列表格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2530
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "拖到终端上的图片文件名格式错误(%d)或长度错误(%d)\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2556
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "将 URI“%s”转化为文件名时出错：%s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
 "changes. (%s)\n"
 msgstr "订阅菜单图标可见性更改通知时出错。(%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "添加或删除(_A)..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "新建配置文件(_P)..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "关闭窗口(_C)"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "配置文件(_R)..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "快捷键(_K)..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "当前配置文件(_U)..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "显示菜单栏(_B)"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "全屏(_F)"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "更改配置文件(_P)"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "设置标题(_S)..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "设定字符编码(_C)"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "复位(_R)"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "复位并清屏(_L)"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "前一标签(_P)"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "后一标签(_N)"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "标签左移(_L)"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "标签右移(_R)"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "漂移标签(_D)"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "关于(_A)"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "载入是否使用记忆术的配置时出错。(%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr "订阅终端窗口配置更改通知时出错。(%s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2115 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "终端(_T)"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "标签(_B)"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/terminal-window.c:2265
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
-msgstr[0] "此窗口仍打开了 %d 个标签。关闭窗口即将关闭其下的全部标签。"
-
-#: ../src/terminal-window.c:2274
+#: ../src/terminal-window.c:2345
 msgid "Close all tabs?"
 msgstr "关闭全部标签吗？"
 
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2347
+#, c-format
+msgid "This window has one tab open. Closing the window will close it."
+msgid_plural ""
+"This window has %d tabs open. Closing the window will also close all tabs."
+msgstr[0] "此窗口仍打开了 %d 个标签。关闭窗口即将关闭其下的全部标签。"
+
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "关闭全部标签(_T)"
 
-#: ../src/terminal-window.c:2833
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
-#: ../src/terminal-window.c:2834
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME 桌面的终端模拟器"
 
-#: ../src/terminal-window.c:2838
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
@@ -2502,17 +2513,17 @@ msgid ""
 "changes. (%s)\n"
 msgstr "订阅终端配置文件列表更改通知时出错。(%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "无效的几何属性字符串“%s”\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "获取终端配置文件列表时出错。(%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2520,99 +2531,98 @@ msgid ""
 msgstr ""
 "您已经有名为“%s”的配置文件。您是否想要使用相同的名称创建另外一个配置文件？"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "您选择作为新建的配置文件基础的配置文件已不存在"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "输入配置文件名"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "选择基础配置文件"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "配置文件列表"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "删除前必须至少选择一个配置文件。"
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "您必须至少拥有一个配置文件，而不能把它们全部删除。"
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "删除这%d个配置文件吗？\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "删除配置文件“%s”吗？"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "删除配置文件"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "配置文件"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "配置文件(_P)："
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "单击此处打开新配置文件对话框"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "单击此处打开编辑配置文件对话框"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "单击此处删除选中的配置文件"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "打开新终端时使用的配置文件(_U)："
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "单击此按钮以选择配置文件"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "显示帮助时出错：%s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr "文件“%s”已丢失。这表示应用程序没有正确安装。"
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr "您没有将 gnome-terminal.server 安装到有效的位置。禁用 Factory 模式。\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr "在激活服务中注册终端时出错；禁用 Factory 模式。\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "从激活服务器获取中断服务器失败\n"
-
