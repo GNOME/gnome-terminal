@@ -54,7 +54,7 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
 		           gchar       **seed)
 {
   gchar *end_ptr = NULL;
-  const gchar *p = otp_match + strlen (OTP_PREFIX);;
+  const gchar *p = otp_match + strlen (OTP_PREFIX);
   gint len = 3;
 
   if (strncmp (p, "md4", 3) == 0)
