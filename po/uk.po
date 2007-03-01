@@ -1,15 +1,15 @@
 # Ukrainian translation of profterm module.
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Yuriy Syrota <yuri@renome.rovno.ua>, 2002.
-# Maxim Dziumanenko <mvd@mylinux.ua>, 2003-2006.
+# Maxim Dziumanenko <dziumanenko@gmail.com>, 2003-2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terninal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-03-03 13:42+0200\n"
+"POT-Creation-Date: 2007-03-01 11:23+0200\n"
 "PO-Revision-Date: 2006-03-03 15:30+3200\n"
-"Last-Translator: Maxim Dziumanenko <mvd@mylinux.ua>\n"
+"Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:800 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Термінал"
 
@@ -29,11 +29,11 @@ msgstr "Командний рядок"
 
 #: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
 msgid "Accelerator key"
-msgstr "Клавіша-прискорювач"
+msgstr "Комбінації клавіш"
 
 #: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
 msgid "Accelerator modifiers"
-msgstr "Модифікатори клавіш"
+msgstr "Модифікатори комбінацій клавіш"
 
 #: ../src/eggcellrendererkeys.c:180
 msgid "Accelerator Mode"
@@ -45,7 +45,7 @@ msgstr "Тип прискорювача."
 
 #: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
 msgid "Disabled"
-msgstr "вимкнено"
+msgstr "Вимкнено"
 
 #: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
 msgid "Type a new accelerator, or press Backspace to clear"
@@ -162,7 +162,7 @@ msgstr "Хорватське"
 
 #: ../src/encoding.c:161
 msgid "Hindi"
-msgstr "Гінді"
+msgstr "Хінді"
 
 #: ../src/encoding.c:163
 msgid "Persian"
@@ -288,7 +288,8 @@ msgid ""
 "Control-H"
 msgstr ""
 "ASCII DEL\n"
-"Escape-послідовністьControl-H"
+"Escape-послідовність\n"
+"Control-H"
 
 #: ../src/gnome-terminal.glade2.h:18
 msgid "A_vailable encodings:"
@@ -564,7 +565,7 @@ msgid "_Update login records when command is launched"
 msgstr "_Оновлювати журнали utmp/wtmp при запуску команди"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
+msgid "_Use the system fixed width font"
 msgstr "_Використовувати системний термінальний шрифт"
 
 #: ../src/gnome-terminal.glade2.h:89
@@ -712,7 +713,7 @@ msgstr "Ефект натискання клавіші Delete"
 
 #: ../src/gnome-terminal.schemas.in.h:22
 msgid "Filename of a background image."
-msgstr "Ім'я файлу зображення тла."
+msgstr "Назва файлу зображення тла."
 
 #: ../src/gnome-terminal.schemas.in.h:23
 msgid "Font"
@@ -730,11 +731,11 @@ msgstr "Ступінь затемнення зображення тла"
 
 #: ../src/gnome-terminal.schemas.in.h:28
 msgid "Human-readable name of the profile"
-msgstr "Читабельна назва профілю"
+msgstr "Зрозуміла людині назва профілю"
 
 #: ../src/gnome-terminal.schemas.in.h:29
 msgid "Human-readable name of the profile."
-msgstr "Читабельна назва профілю."
+msgstr "Зрозуміла людині назва профілю."
 
 #: ../src/gnome-terminal.schemas.in.h:30
 msgid "Icon for terminal window"
@@ -1363,7 +1364,7 @@ msgid ""
 "clicked on. Typing a password into the dialog will send it to the terminal."
 msgstr ""
 "Показувати діалог при виявлені відповіді на запит s/key та натиснення на "
-"нього. Набирання паролю у діалозі призведе до відправки його у термінал."
+"нього. Набирання паролю у діалозі призведе до надсилання його у термінал."
 
 #: ../src/gnome-terminal.schemas.in.h:114
 msgid "Position of the scrollbar"
@@ -1536,8 +1537,8 @@ msgid ""
 "off."
 msgstr ""
 "Чи вмикати комбінації клавіш Alt+літера меню. Такі комбінації можуть "
-"співпадати з комбінаціями клавіш запущених у терміналі програм, тому їх "
-"можна вимкнути."
+"збігатись з комбінаціями клавіш запущених у терміналі програм, тому їх можна "
+"вимкнути."
 
 #: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether to launch the command in the terminal as a login shell"
@@ -1621,33 +1622,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Зображення"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Усі файли"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Вибір кольору палітри %d"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Елемент палітри %d"
 
-#: ../src/profile-editor.c:1231 ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Вибрати шрифт терміналу"
 
-#: ../src/profile-editor.c:1242 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Шрифт:"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Правка профілю \"%s\""
@@ -1760,7 +1765,7 @@ msgstr "Зменшити"
 msgid "Normal Size"
 msgstr "Звичайний розмір"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2108
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "Встановлення заголовка"
 
@@ -1788,7 +1793,7 @@ msgstr "Перемістити вкладку ліворуч"
 msgid "Move Tab to the Right"
 msgstr "Перемістити вкладку праворуч"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1041
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Від'єднати вкладку"
 
@@ -1865,7 +1870,7 @@ msgid "Help"
 msgstr "Довідка"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Помилка завантаження конфігурації з %s. (%s)\n"
@@ -1957,7 +1962,7 @@ msgstr "Д_ія"
 msgid "Shortcut _Key"
 msgstr "Комбінація к_лавіш"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Закрити вкладку"
 
@@ -1994,60 +1999,60 @@ msgstr ""
 "Не вдається завантажити зображення тла \"%s\" для термінального профілю \"%s"
 "\": %s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid ""
 "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "Термінал GNOME: назва шрифту встановлена в конфігурації \"%s\" не правильна\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Помилка отримання типового значення %s: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Не було типового значення для %s\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Помилка встановлення ключа %s у типове значення: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid ""
 "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Помилка видалення конфігураційного каталогу з %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "Помилка підписки на сповіщення про зміни типового профілю. (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Подробиці"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Помилка створення профілю \"%s\""
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Помилка стирання профілів"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Не вдається проаналізувати рядок \"%s\" як кольорову палітру\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
@@ -2055,24 +2060,24 @@ msgstr[0] "Палітра має %d елемент замість %d\n"
 msgstr[1] "Палітра має %d елемента замість %d\n"
 msgstr[2] "Палітра має %d елементів замість %d\n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "Помилка підписки на сповіщення про зміни моноширинного шрифту. (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Не вдається завантажити шрифт \"%s\"\n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Проблеми з командним рядком для цього терміналу: %s"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2081,7 +2086,7 @@ msgstr ""
 "Не вдається відкрити адресу \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1501 ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:828
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2090,85 +2095,85 @@ msgstr ""
 "Помилка завантаження з конфігурації ознаки використання значків у меню. (%"
 "s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "_Надіслати ел.пошту..."
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати E-mail адресу"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: ../src/terminal-screen.c:1615 ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:891
 msgid "Open _Terminal"
 msgstr "Відкрити _термінал"
 
-#: ../src/terminal-screen.c:1620 ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:894
 msgid "Open Ta_b"
 msgstr "Відкрити вк_ладку"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:909
 msgid "C_lose Tab"
 msgstr "Закр_ити вкладку"
 
-#: ../src/terminal-screen.c:1630 ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "_Закрити вікно"
+#: ../src/terminal-screen.c:1723
+msgid "C_lose Window"
+msgstr "Закр_ити вікно"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "Змінити _профіль"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "Правка пот_очний профілю..."
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "Показати _панель меню"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "Методи _вводу"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "За_головок:"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "text/plain, переданий в термінал, має неправильний формат (%d) чи довжину (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Колір, переданий терміналу, має неправильний формат (%d) чи довжину (%d)\n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "URL, переданий терміналу, має неправильний формат (%d) чи довжину (%d)\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Список URL, переданий терміналу, має неправильний формат (%d) чи довжину (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2176,16 +2181,16 @@ msgstr ""
 "Назва файла зображення, передана терміналу, має неправильний формат (%d) чи "
 "довжину (%d)\n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Помилка перетворення URI \"%s\" у назву файла: %s\n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "Помилка створення процесу-нащадка для цього терміналу"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2193,94 +2198,102 @@ msgid ""
 msgstr ""
 "Помилка підписки на сповіщення про зміни стану видимості значка меню. (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:580
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:582
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:705
 msgid "_Add or Remove..."
 msgstr "_Додати чи видалити..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:902
 msgid "New _Profile..."
 msgstr "_Створити профіль..."
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:913
+msgid "_Close Window"
+msgstr "_Закрити вікно"
+
+#: ../src/terminal-window.c:946
 msgid "P_rofiles..."
 msgstr "_Профілі..."
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:949
 msgid "_Keyboard Shortcuts..."
 msgstr "_Комбінації клавіш..."
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:953
 msgid "C_urrent Profile..."
 msgstr "Пот_очний профіль"
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:968
 msgid "Show Menu_bar"
 msgstr "Показувати панель м_еню"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:972
 msgid "_Full Screen"
 msgstr "_На весь екран"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1015
 msgid "Change _Profile"
 msgstr "Змінити _профіль"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1018
 msgid "_Set Title..."
 msgstr "_Встановити заголовок..."
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1025
 msgid "Set _Character Encoding"
 msgstr "Встановити _кодування символів"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1035
 msgid "_Reset"
 msgstr "_Скинути"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1038
 msgid "Reset and C_lear"
 msgstr "Скинути і о_чистити"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1052
 msgid "_Previous Tab"
 msgstr "_Попередня вкладка"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1056
 msgid "_Next Tab"
 msgstr "_Наступна вкладка"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1067
 msgid "Move Tab to the _Left"
 msgstr "Перемістити вкладку _ліворуч"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1071
 msgid "Move Tab to the _Right"
 msgstr "Перемістити вкладку _праворуч"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1078
+msgid "_Detach Tab"
+msgstr "Від'_єднати вкладку"
+
+#: ../src/terminal-window.c:1097
 msgid "_Contents"
 msgstr "_Зміст"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1107
 msgid "_About"
 msgstr "_Про програму"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1293
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -2288,7 +2301,7 @@ msgstr ""
 "Помилка завантаження з конфігурації ознаки використання швидкого доступу до "
 "меню. (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1312
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2297,36 +2310,39 @@ msgstr ""
 "Помилка підписки на сповіщення термінального вікна про зміни конфігурації. (%"
 "s)\n"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2115
 msgid "_File"
 msgstr "_Файл"
 
-#: ../src/terminal-window.c:2062 ../src/terminal.c:2983
+#: ../src/terminal-window.c:2117 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "_Правка"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2119
 msgid "_View"
 msgstr "_Вигляд"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2121
 msgid "_Terminal"
 msgstr "_Термінал"
 
-#: ../src/terminal-window.c:2068
+#: ../src/terminal-window.c:2123
 msgid "Ta_bs"
 msgstr "Вк_ладки"
 
-#: ../src/terminal-window.c:2070
+#: ../src/terminal-window.c:2125
 msgid "_Help"
 msgstr "_Довідка"
 
-#: ../src/terminal-window.c:2265
+#: ../src/terminal-window.c:2347
+msgid "Close all tabs?"
+msgstr "Закрити всі вкладки?"
+
+#: ../src/terminal-window.c:2349
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+"This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
 "У цьому вікні відкрито %d вкладка. Закривання вікна призведе до закриванні "
 "усіх його вкладок."
@@ -2337,27 +2353,23 @@ msgstr[2] ""
 "У цьому вікні відкрито %d вкладок. Закривання вікна призведе до закриванні "
 "усіх його вкладок."
 
-#: ../src/terminal-window.c:2274
-msgid "Close all tabs?"
-msgstr "Закрити всі вкладки?"
-
-#: ../src/terminal-window.c:2286
+#: ../src/terminal-window.c:2358
 msgid "Close All _Tabs"
 msgstr "Закрити всі _вкладки"
 
-#: ../src/terminal-window.c:2852
+#: ../src/terminal-window.c:2910
 msgid "GNOME Terminal"
 msgstr "Термінал GNOME"
 
-#: ../src/terminal-window.c:2853
+#: ../src/terminal-window.c:2912
 msgid "A terminal emulator for the GNOME desktop"
-msgstr "Емулятор терміналу для стільниці GNOME"
+msgstr "Емулятор терміналу для середовища GNOME"
 
-#: ../src/terminal-window.c:2857
+#: ../src/terminal-window.c:2917
 msgid "translator-credits"
 msgstr ""
 "Юрій Сирота\n"
-"Максим Дзюманенко <mvd@mylinux.com.ua>"
+"Максим Дзюманенко <dziumanenko@gmail.com>"
 
 #: ../src/terminal.c:190
 msgid "Execute the argument to this option inside the terminal."
@@ -2682,17 +2694,17 @@ msgid ""
 msgstr ""
 "Помилка підписки на сповіщення про зміни списку термінальних профілів. (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Неправильний рядок геометрії \"%s\"\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Помилка отримання списку термінальних профілів. (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2701,33 +2713,33 @@ msgstr ""
 "Профіль з назвою \"%s\" вже існує. Бажаєте створити інший профіль з такою "
 "самою назвою?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 "Профіль, що ви вибрали в якості базового для вашого нового профілю не існує."
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Введіть назву профілю"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Виберіть базовий профіль"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Список профілів"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "Необхідно вибрати один чи більше профілів для стирання."
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Необхідно мати хоча б один профіль; ви не можете стерти всі."
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
@@ -2735,49 +2747,49 @@ msgstr[0] "Видалити цей %d профіль?\n"
 msgstr[1] "Видалити ці %d профілі?\n"
 msgstr[2] "Видалити ці %d профілів?\n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Видалити профіль \"%s\"?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Видалення профілю"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Профілі"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "П_рофілі:"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Клацніть, щоб відкрити діалог нового профілю"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Клацніть, щоб відкрити діалог редагування профілю"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Клацніть, щоб стерти вибраний профіль"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Профіль, типовий для н_ових терміналів:"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Клацніть, щоб вибрати профіль"
 
-#: ../src/terminal.c:3586
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Помилка відображення довідки: %s"
 
-#: ../src/terminal.c:3657
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2786,7 +2798,7 @@ msgstr ""
 "Файл \"%s\" відсутній. Це свідчить про те, що програму встановлено "
 "некоректно, тож діалог неможливо відобразити."
 
-#: ../src/terminal.c:3821
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
@@ -2794,109 +2806,13 @@ msgstr ""
 "Здається, що файл gnome-terminal.server не встановлено у потрібному місці. "
 "Режим фабрики вимкнено.\n"
 
-#: ../src/terminal.c:3824
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
 "Помилка реєстрації термінала в сервісі активації; режим фабрики вимкнено.\n"
 
-#: ../src/terminal.c:3860
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Збій отримання термінального сервера з сервера активації\n"
-
-#~ msgid "ASCII DEL"
-#~ msgstr "ASCII DEL"
-
-#~ msgid "Built-in foreground and background color schemes:"
-#~ msgstr "Вбудовані схеми кольорів тесту та тла:"
-
-#~ msgid "Built-in palette schemes:"
-#~ msgstr "Вбудовані схеми палітри:"
-
-#~ msgid "Color Selector"
-#~ msgstr "Вибір кольору"
-
-#~ msgid "Control-H"
-#~ msgstr "Control-H"
-
-#~ msgid "Exit the terminal"
-#~ msgstr "вийти з терміналу"
-
-#~ msgid "Goes after initial title"
-#~ msgstr "розміщувати після початкового заголовка"
-
-#~ msgid "Goes before initial title"
-#~ msgstr "розміщувати перед початковим заголовком"
-
-#~ msgid "Hold the terminal open"
-#~ msgstr "залишати термінал відкритим"
-
-#~ msgid "Isn't displayed"
-#~ msgstr "не відображати"
-
-#~ msgid "On the left side"
-#~ msgstr "ліворуч"
-
-#~ msgid "On the right side"
-#~ msgstr "праворуч"
-
-#~ msgid "Open a dialog to specify the color"
-#~ msgstr "Відкрити діалогове вікно вибору кольору"
-
-#~ msgid "Palette entry 1"
-#~ msgstr "Елемент палітри 1"
-
-#~ msgid "Palette entry 10"
-#~ msgstr "Елемент палітри 10"
-
-#~ msgid "Palette entry 11"
-#~ msgstr "Елемент палітри 11"
-
-#~ msgid "Palette entry 12"
-#~ msgstr "Елемент палітри 12"
-
-#~ msgid "Palette entry 13"
-#~ msgstr "Елемент палітри 13"
-
-#~ msgid "Palette entry 14"
-#~ msgstr "Елемент палітри 14"
-
-#~ msgid "Palette entry 15"
-#~ msgstr "Елемент палітри 15"
-
-#~ msgid "Palette entry 16"
-#~ msgstr "Елемент палітри 16"
-
-#~ msgid "Palette entry 2"
-#~ msgstr "Елемент палітри 2"
-
-#~ msgid "Palette entry 3"
-#~ msgstr "Елемент палітри 3"
-
-#~ msgid "Palette entry 4"
-#~ msgstr "Елемент палітри 4"
-
-#~ msgid "Palette entry 5"
-#~ msgstr "Елемент палітри 5"
-
-#~ msgid "Palette entry 6"
-#~ msgstr "Елемент палітри 6"
-
-#~ msgid "Palette entry 7"
-#~ msgstr "Елемент палітри 7"
-
-#~ msgid "Palette entry 8"
-#~ msgstr "Елемент палітри 8"
-
-#~ msgid "Replaces initial title"
-#~ msgstr "замінювати початковий заголовок"
-
-#~ msgid "Restart the command"
-#~ msgstr "перезапустити команду"
-
-#~ msgid "kilobytes"
-#~ msgstr "кілобайт"
-
-#~ msgid "Support skey dingus clicking"
-#~ msgstr "Підтримка натискання skey dingus"
