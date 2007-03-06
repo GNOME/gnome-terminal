@@ -12,24 +12,24 @@
 # Ivan Dimitrov <ivan34mk@yahoo.com>, 2003.
 # Tomislav Markovski <herrera@users.sourceforge.net>, 2004.
 # Арангел Ангов <ufo@linux.net.mk>, 2005.
-# Jovan Naumovski <jovan@lugola.net>, 2006.
+# Jovan Naumovski <jovan@lugola.net>, 2006, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.mk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-30 21:15+0200\n"
-"PO-Revision-Date: 2006-08-31 00:07+0200\n"
+"POT-Creation-Date: 2007-01-02 03:14+0000\n"
+"PO-Revision-Date: 2007-03-06 19:41+0100\n"
 "Last-Translator: Jovan Naumovski <jovan@lugola.net>\n"
 "Language-Team: Macedonian <ossm-members@hedona.on.net.mk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural= n==1 || n%10==1 ? 0 : 1\n"
-"X-Generator: KBabel 1.11.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:795 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-window.c:799 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -577,8 +577,8 @@ msgid "_Update login records when command is launched"
 msgstr "_Обнови ги записите за најава по извршувањето на команда"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "_Користи го системскиот терминален фонт"
+msgid "_Use the system fixed width font"
+msgstr "_Користи го системскиот терминален фонт со фиксна широчина"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1622,33 +1622,37 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:889
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "Tango"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "Слики"
 
-#: ../src/profile-editor.c:893
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "Сите датотеки"
 
-#: ../src/profile-editor.c:1204
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Изберете боја од палетата %d"
 
-#: ../src/profile-editor.c:1208
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "Запис на палетата %d"
 
-#: ../src/profile-editor.c:1236 ../src/profile-editor.c:1269
+#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "Изберете фонт за терминалот"
 
-#: ../src/profile-editor.c:1247 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "_Фонт:"
 
-#: ../src/profile-editor.c:1550
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "Уредувам профил \"%s\""
@@ -1761,7 +1765,7 @@ msgstr "Намали"
 msgid "Normal Size"
 msgstr "Нормална големина"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2165
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2213
 msgid "Set Title"
 msgstr "Внеси наслов"
 
@@ -1789,7 +1793,7 @@ msgstr "Помести го јазичето налево"
 msgid "Move Tab to the Right"
 msgstr "Помести го јазичето надесно"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:1073
+#: ../src/terminal-accels.c:132
 msgid "Detach Tab"
 msgstr "Откачи јазиче"
 
@@ -1866,7 +1870,7 @@ msgid "Help"
 msgstr "Помош"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:202 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Се појави грешка при вчитување на конфигурацијата од %s. (%s)\n"
@@ -1959,7 +1963,7 @@ msgstr "_Акција"
 msgid "Shortcut _Key"
 msgstr "Копче _кратенка"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "Затвори јазиче"
 
@@ -1994,59 +1998,59 @@ msgstr ""
 "Не успеав да ја вчитам сликата за позадина \"%s\" за терминалниот профил \"%s"
 "\": %s\n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "GNOME Терминал: името на фонтот \"%s\" поставено во конфигурационата база на "
 "податоци не е валидно\n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Грешка при добивање на стандардната вредност на %s: %s\n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Не постои стандардната вредност за  %s\n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Грешка при поставувањето на копчето %s назад на стандардното: %s\n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Се појави грешка при вчитување на конфигурацијата од %s. (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr "Имаше грешка при ажурирањето на промените на основниот профил (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "_Детали"
 
-#: ../src/terminal-profile.c:2953 ../src/terminal.c:2394
+#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Се појави грешка при создавањето на профилот \"%s\""
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "Се појави грешка при бришењето на профилот"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Не можам да го парсирам стрингот \"%s\" како палета на бои\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
@@ -2054,24 +2058,24 @@ msgstr[0] "Во палетата имаше %d записи наместо %d\n"
 msgstr[1] "Во палетата имаше %d запис наместо %d\n"
 msgstr[2] "Во палетата имаше %d записи наместо %d\n"
 
-#: ../src/terminal-screen.c:218
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "Имаше грешка при ажурирањето на промените на профилите (%s)\n"
 
-#: ../src/terminal-screen.c:875
+#: ../src/terminal-screen.c:906
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Не можам да го вчитам фонтот \"%s\"\n"
 
-#: ../src/terminal-screen.c:1022
+#: ../src/terminal-screen.c:1053
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Имаше проблем со командата за овој терминал: %s"
 
-#: ../src/terminal-screen.c:1462
+#: ../src/terminal-screen.c:1493
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2080,7 +2084,7 @@ msgstr ""
 "Не можам да ја отворам адресата \"%s\":\n"
 "%s"
 
-#: ../src/terminal-screen.c:1559 ../src/terminal-window.c:823
+#: ../src/terminal-screen.c:1590 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2089,88 +2093,88 @@ msgstr ""
 "Се појави грешка при вчитување на конфигурационата вредност дали да се "
 "користат слики во мениата (%s)\n"
 
-#: ../src/terminal-screen.c:1645
+#: ../src/terminal-screen.c:1677
 msgid "_Send Mail To..."
 msgstr "_Испрати порака на..."
 
-#: ../src/terminal-screen.c:1650
+#: ../src/terminal-screen.c:1682
 msgid "_Copy E-mail Address"
 msgstr "_Копирај ја адресата"
 
-#: ../src/terminal-screen.c:1657
+#: ../src/terminal-screen.c:1689
 msgid "_Open Link"
 msgstr "_Отвори врска"
 
-#: ../src/terminal-screen.c:1662
+#: ../src/terminal-screen.c:1694
 msgid "_Copy Link Address"
 msgstr "_Копирај ја адресата"
 
-#: ../src/terminal-screen.c:1673 ../src/terminal-window.c:886
+#: ../src/terminal-screen.c:1705 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "Отвори _терминал"
 
-#: ../src/terminal-screen.c:1678 ../src/terminal-window.c:889
+#: ../src/terminal-screen.c:1710 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "Новo ја_зиче"
 
-#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:904
+#: ../src/terminal-screen.c:1720 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "З_атвори јазиче"
 
-#: ../src/terminal-screen.c:1688 ../src/terminal-window.c:908
-msgid "_Close Window"
-msgstr "_Затвори прозорец"
+#: ../src/terminal-screen.c:1720
+msgid "C_lose Window"
+msgstr "З_атвори прозорец"
 
-#: ../src/terminal-screen.c:1713
+#: ../src/terminal-screen.c:1745
 msgid "Change P_rofile"
 msgstr "Промени п_рофил"
 
-#: ../src/terminal-screen.c:1749
+#: ../src/terminal-screen.c:1781
 msgid "_Edit Current Profile..."
 msgstr "_Уреди го овој профил..."
 
-#: ../src/terminal-screen.c:1754
+#: ../src/terminal-screen.c:1786
 msgid "Show _Menubar"
 msgstr "Покажи ја _линијата со менито"
 
-#: ../src/terminal-screen.c:1764
+#: ../src/terminal-screen.c:1802
 msgid "_Input Methods"
 msgstr "_Методи на внесување"
 
-#: ../src/terminal-screen.c:2194
+#: ../src/terminal-screen.c:2242
 msgid "_Title:"
 msgstr "_Наслов:"
 
-#: ../src/terminal-screen.c:2308
+#: ../src/terminal-screen.c:2356
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "текстот спуштен во терминалот е во погрешен формат (%d) или е предолг (%d)\n"
 
-#: ../src/terminal-screen.c:2331
+#: ../src/terminal-screen.c:2379
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "Бојата спуштена во терминалот е во погрешен формат (%d) или е предолга (%d)\n"
 
-#: ../src/terminal-screen.c:2374
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Mozilla url-то спуштено во терминалот е во погрешен формат (%d) или е "
 "предолго (%d)\n"
 
-#: ../src/terminal-screen.c:2423
+#: ../src/terminal-screen.c:2471
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "URI листата на терминалот имаше погрешен формат (%d) или должина (%d)\n"
 
-#: ../src/terminal-screen.c:2482
+#: ../src/terminal-screen.c:2530
 #, c-format
 msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Името на сликатаа дадена на терминалот има погрешен формат (%d) или должина "
 "(%d)\n"
 
-#: ../src/terminal-screen.c:2508
+#: ../src/terminal-screen.c:2556
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Грешка при конвертирање на URI \"%s\" во име на датотека: %s\n"
@@ -2179,7 +2183,7 @@ msgstr "Грешка при конвертирање на URI \"%s\" во име
 msgid "There was an error creating the child process for this terminal"
 msgstr "Се појави грешка при создавањето на детски процес за овој терминал: "
 
-#: ../src/terminal-window.c:363
+#: ../src/terminal-window.c:367
 #, c-format
 msgid ""
 "There was an error subscribing to notification of menu icon visibility "
@@ -2188,101 +2192,109 @@ msgstr ""
 "Се појави грешка при пријавувањето промените на видливоста на иконите на "
 "терминалот. (%s)\n"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:577
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:700
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "_Додај или отстрани..."
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:897
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "Нов _профил..."
 
-#: ../src/terminal-window.c:941
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "_Затвори прозорец"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "П_рофили..."
 
-#: ../src/terminal-window.c:944
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "_Кратенки на тастатура"
 
-#: ../src/terminal-window.c:948
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "Сегашен профил..."
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:963
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "Покажи ја _линијата со менито"
 
-#: ../src/terminal-window.c:967
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "_На цел екран"
 
-#: ../src/terminal-window.c:1010
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "Промени _профил"
 
-#: ../src/terminal-window.c:1013
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "_Внеси наслов..."
 
-#: ../src/terminal-window.c:1020
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "Подеси _енкодирање на карактери"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "_Ресетирај"
 
-#: ../src/terminal-window.c:1033
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "Ресетирај и и_счисти"
 
-#: ../src/terminal-window.c:1047
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "_Претходно јазиче"
 
-#: ../src/terminal-window.c:1051
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "_Следно јазиче"
 
-#: ../src/terminal-window.c:1062
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "Помести го јазичето _налево"
 
-#: ../src/terminal-window.c:1066
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "Помести го јазичето _надесно"
 
-#: ../src/terminal-window.c:1092
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "_Откачи јазиче"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "_Содржина"
 
-#: ../src/terminal-window.c:1102
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "_За"
 
-#: ../src/terminal-window.c:1291
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr ""
 "Се појави грешка при вчитување на вредност за конфигурирање; дали да се "
 "користат менмоници (%s)\n"
 
-#: ../src/terminal-window.c:1310
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2291,42 +2303,40 @@ msgstr ""
 "Имаше грешка при пријавувањето на промените на кофигурацијата на прозорецот "
 "на терминалoт. (%s)\n"
 
-#: ../src/terminal-window.c:2094
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "_Датотека"
 
-#: ../src/terminal-window.c:2096 ../src/terminal.c:2986
+#: ../src/terminal-window.c:2115 ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "_Уреди"
 
-#: ../src/terminal-window.c:2098
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "_Поглед"
 
-#: ../src/terminal-window.c:2100
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: ../src/terminal-window.c:2102
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "Ја_зичиња"
 
-#: ../src/terminal-window.c:2104
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "_Помош"
 
-#: ../src/terminal-window.c:2320
+#: ../src/terminal-window.c:2345
 msgid "Close all tabs?"
 msgstr "Да ги затворам сите јазичиња?"
 
-#: ../src/terminal-window.c:2322
+#: ../src/terminal-window.c:2347
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
-msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all of its "
-"tabs."
+msgid_plural "This window has %d tabs open. Closing the window will also close all tabs."
 msgstr[0] ""
-"Прозорецот има само едно отворено јазиче. Со затворање на прозорецот ќе го "
+"Прозорецот има само %d отворено јазиче. Со затворање на прозорецот ќе го "
 "затворите и јазичето."
 msgstr[1] ""
 "Прозорецот има %d отворени јазичиња. Со затворање на прозорецот ќе ги "
@@ -2335,19 +2345,19 @@ msgstr[2] ""
 "Прозорецот има %d отворени јазичиња. Со затворање на прозорецот ќе ги "
 "затворите и јазичињата."
 
-#: ../src/terminal-window.c:2332
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "Затвори ги сите јазичиња"
 
-#: ../src/terminal-window.c:2884
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "GNOME терминал"
 
-#: ../src/terminal-window.c:2886
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Терминален емулатор за работната околина GNOME"
 
-#: ../src/terminal-window.c:2891
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr "Арангел Ангов <ufo@linux.net.mk>"
 
@@ -2665,17 +2675,17 @@ msgid ""
 "changes. (%s)\n"
 msgstr "Имаше грешка при ажурирањето на промените на листата на профили (%s)\n"
 
-#: ../src/terminal.c:1989
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Невалиден стринг за геометрија\"%s\"\n"
 
-#: ../src/terminal.c:2055
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "Се појави грешка при добивањето на листа за терминалските профили. (%s)\n"
 
-#: ../src/terminal.c:2359
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2684,81 +2694,81 @@ msgstr ""
 "Веќе имате профил кој што се вика \"%s\". Дали сакате да креирате друг "
 "профил со истото име?"
 
-#: ../src/terminal.c:2373
+#: ../src/terminal.c:2375
 msgid "The profile you selected as a base for your new profile no longer exists"
 msgstr "Профилот што го избравте за основа на вашиот нов профил повеќе не постои"
 
-#: ../src/terminal.c:2469
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "Внеси име за профилот"
 
-#: ../src/terminal.c:2479
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "Изберете основен профил"
 
-#: ../src/terminal.c:2618
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "Листа на профили"
 
-#: ../src/terminal.c:2687
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "Морате да изберете еден или повеќе профили за бришење."
 
-#: ../src/terminal.c:2698
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "Морате да имате најмалку еден профил; неможеш да ги избришеш сите."
 
-#: ../src/terminal.c:2706
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "Да го избришам овој профил?\n"
-msgstr[1] "Да ги избришам овие профили?\n"
-msgstr[2] "Да ги избришам овие профили?\n"
+msgstr[0] "Да го избришам овој %d профил?\n"
+msgstr[1] "Да ги избришам овие %d профили?\n"
+msgstr[2] "Да ги избришам овие %d профили?\n"
 
-#: ../src/terminal.c:2727
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Избриши профил \"%s\"?"
 
-#: ../src/terminal.c:2749
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "Избриши профил"
 
-#: ../src/terminal.c:3022
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "Профили:"
 
-#: ../src/terminal.c:3063
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "_Профили:"
 
-#: ../src/terminal.c:3095
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "Клики да отвориш нов профил дијалог"
 
-#: ../src/terminal.c:3103
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "Клики да отвориш уредување на дијалог за профил"
 
-#: ../src/terminal.c:3111
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "Клики да го избришеш избраниот профил"
 
-#: ../src/terminal.c:3116
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "Профил _користен за лансирање на нов терминал:"
 
-#: ../src/terminal.c:3172
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "Кликни на копчето за да избереш профил"
 
-#: ../src/terminal.c:3590
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Се појави грешка при прикажување на помошта: %s"
 
-#: ../src/terminal.c:3661
+#: ../src/terminal.c:3663
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2767,13 +2777,13 @@ msgstr ""
 "Датотеката \"%s\" недостасува. Изгледа дека апликацијата не е инсталирана "
 "како што треба."
 
-#: ../src/terminal.c:3833
+#: ../src/terminal.c:3835
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr "Немате инсталација на gnome-terminal сервер во валидна локација.\n"
 
-#: ../src/terminal.c:3836
+#: ../src/terminal.c:3838
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2781,7 +2791,7 @@ msgstr ""
 "Грешка при регистрирање на терминалот со сервисот за активација; режимот на "
 "фабрика е оневозможен.\n"
 
-#: ../src/terminal.c:3872
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Терминалниот сервер не успеа да се вчита од серверот за активирање\n"
 
