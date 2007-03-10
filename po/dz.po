@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.dz\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-05-03 22:50+0200\n"
-"PO-Revision-Date: 2006-05-18 11:10+0530\n"
-"Last-Translator: Mindu Dorji\n"
+"POT-Creation-Date: 2007-01-02 03:14+0000\n"
+"PO-Revision-Date: 2007-03-01 11:06+0530\n"
+"Last-Translator: norbu <nor_den@hotmail.com>\n"
 "Language-Team: DZONGKHA <pgeyleg@dit.gov.bt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:181
 #: ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:765
+#: ../src/terminal-window.c:799
 #: ../src/terminal.c:1206
 #: ../src/terminal.c:1638
 msgid "Terminal"
@@ -590,8 +590,8 @@ msgid "_Update login records when command is launched"
 msgstr "བརྡ་བཀོད་གསར་བཙུགས་འབདཝ་ད་ ནང་བསྐྱོད་དྲན་ཐོ་ཚུ་ དུས་མཐུན་བཟོ།(_U)"
 
 #: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system terminal font"
-msgstr "རིམ་ལུགས་ཊར་མི་ནཱལ་ཡིག་གཟུགས་ ལག་ལེན་འཐབ།(_U)"
+msgid "_Use the system fixed width font"
+msgstr "རིམ་ལུགས་གཏན་བཟོས་འབད་ཡོད་པའི་ རྒྱ་ཚད་ཡིག་གཟུགས་ ལག་ལེན་འཐབ།(_U)"
 
 #: ../src/gnome-terminal.glade2.h:89
 msgid "_lines"
@@ -1223,35 +1223,39 @@ msgstr "ཨེགསི་ཊམ།"
 msgid "Rxvt"
 msgstr "ཨར་ཨེགསི་ཝི་ཊི།"
 
-#: ../src/profile-editor.c:884
+#: ../src/profile-editor.c:73
+msgid "Tango"
+msgstr "ཊེང་གོ་"
+
+#: ../src/profile-editor.c:890
 msgid "Images"
 msgstr "གཟུགས་བརྙན་ཚུ།"
 
-#: ../src/profile-editor.c:888
+#: ../src/profile-editor.c:894
 msgid "All Files"
 msgstr "ཡིག་སྣོད་ཆ་མཉམ།"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:1205
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "པེ་ལེཊི་ཚོས་གཞི་%dགདམ་ཁ་རྐྱབས།"
 
-#: ../src/profile-editor.c:1203
+#: ../src/profile-editor.c:1209
 #, c-format
 msgid "Palette entry %d"
 msgstr "པེ་ལེཊི་ཐོ་བཀོད་%d།"
 
-#: ../src/profile-editor.c:1231
-#: ../src/profile-editor.c:1264
+#: ../src/profile-editor.c:1237
+#: ../src/profile-editor.c:1270
 msgid "Choose A Terminal Font"
 msgstr "ཊར་མི་ནཱལ་ཡིག་གཟུགས་ཅིག་གདམ་ཁ་རྐྱབས།"
 
-#: ../src/profile-editor.c:1242
+#: ../src/profile-editor.c:1248
 #: ../src/simple-x-font-selector.c:327
 msgid "_Font:"
 msgstr "ཡིག་གཟུགས་:(_F)"
 
-#: ../src/profile-editor.c:1545
+#: ../src/profile-editor.c:1548
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "ཞུན་དག་འབད་ནིའི་གསལ་སྡུད་\"%s\""
@@ -1365,7 +1369,7 @@ msgid "Normal Size"
 msgstr "སྤྱིར་བཏང་གི་ཚད།"
 
 #: ../src/terminal-accels.c:114
-#: ../src/terminal-screen.c:2108
+#: ../src/terminal-screen.c:2213
 msgid "Set Title"
 msgstr "མགོ་མིང་གཞི་སྒྲིག་འབད།"
 
@@ -1394,7 +1398,6 @@ msgid "Move Tab to the Right"
 msgstr "ཨེབ་ལྡེ་གཡས་ལུ་སྤོ།"
 
 #: ../src/terminal-accels.c:132
-#: ../src/terminal-window.c:1041
 msgid "Detach Tab"
 msgstr "ཨེབ་ལྡེ་ཁ་འཕྱལ།"
 
@@ -1472,7 +1475,7 @@ msgstr "གྲོགས་རམ།"
 
 #: ../src/terminal-accels.c:273
 #: ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:203
+#: ../src/terminal-screen.c:204
 #: ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
@@ -1546,7 +1549,7 @@ msgstr "བྱ་བ།(_A)"
 msgid "Shortcut _Key"
 msgstr "མགྱོགས་ཐབས་ལྡེ་མིག(_K)"
 
-#: ../src/terminal-notebook.c:776
+#: ../src/terminal-notebook.c:818
 msgid "Close tab"
 msgstr "ཨེབ་ལྡེ་ཁ་བསྡམས།"
 
@@ -1575,78 +1578,78 @@ msgstr "ཊར་མི་ནཱལ་གསལ་སྡུད་\"%s\"གི་
 msgid "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr "ཊར་མི་ནཱལ་གསལ་སྡུད་\"%s\": %sགི་དོན་ལུ་ རྒྱབ་གཞིའི་གཟུགས་བརྙན་\"%s\" མངོན་གསལ་འབད་མ་ཚུགས། \n"
 
-#: ../src/terminal-profile.c:1881
+#: ../src/terminal-profile.c:1894
 #, c-format
 msgid "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr "ཇི་ནོམ་ཊར་མི་ནཱལ་: རིམ་སྒྲིག་གཞི་རྟེན་གནད་སྡུད་ནང་ གཞི་སྒྲིག་འབད་མི་ ཡིག་གཟུགས་མིང་\"%s\" དེ་ ནུས་མེད་ཨིན་པས། \n"
 
-#: ../src/terminal-profile.c:2184
+#: ../src/terminal-profile.c:2197
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "སྔོན་སྒྲིག་བེ་ལུ་%s: %sལེན་ནི་ལུ་འཛོལ་བ། \n"
 
-#: ../src/terminal-profile.c:2190
+#: ../src/terminal-profile.c:2203
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "%sགི་དོན་ལུ་ སྔོན་སྒྲིག་བེ་ལུ་ཅིག་མིན་འདུག \n"
 
-#: ../src/terminal-profile.c:2205
+#: ../src/terminal-profile.c:2218
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "ལྡེ་མིག་%sལོག་སྟེ་སྔོན་སྒྲིག་: %sལུ་ གཞི་སྒྲིག་འབད་ནི་ལུ་འཛོལ་བ། \n"
 
-#: ../src/terminal-profile.c:2408
+#: ../src/terminal-profile.c:2421
 #, c-format
 msgid "There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "རིམ་སྒྲིག་སྣོད་ཐོ་%s རྩ་བསྐྲད་གཏང་བའི་སྐབས་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal-profile.c:2465
+#: ../src/terminal-profile.c:2478
 #, c-format
 msgid "There was an error subscribing to notification of changes to default profile. (%s)\n"
 msgstr "སྔོན་སྒྲིག་གསལ་སྡུད་ལུ་ བསྒྱུར་བཅོས་ཀྱི་བརྡ་བསྐུལ་ལུ་ མཁོ་མངགས་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal-profile.c:2510
+#: ../src/terminal-profile.c:2523
 msgid "_Details"
 msgstr "རྒྱས་བཤད་ཚུ།(_D)"
 
-#: ../src/terminal-profile.c:2953
-#: ../src/terminal.c:2391
+#: ../src/terminal-profile.c:2966
+#: ../src/terminal.c:2396
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "གསལ་སྡུད་\"%s\"གསར་བསྐྲུན་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག"
 
-#: ../src/terminal-profile.c:3045
+#: ../src/terminal-profile.c:3058
 msgid "There was an error deleting the profiles"
 msgstr "གསལ་སྡུད་བཏོན་གཏང་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག"
 
-#: ../src/terminal-profile.c:3148
+#: ../src/terminal-profile.c:3161
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "ཡིག་རྒྱུན་\"%s\" དེ་ ཚོས་གཞིའི་པེ་ལེཊི་ཅིག་སྦེ་ མིང་དཔྱད་འབད་མ་ཚུགས།\n"
 
-#: ../src/terminal-profile.c:3157
+#: ../src/terminal-profile.c:3170
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "པེ་ལེཊི་དེ་ལུ་ ཐོ་བཀོད་%dགི་ཚབ་ལུ་%dའདུག \n"
 msgstr[1] "པེ་ལེཊི་དེ་ལུ་ ཐོ་བཀོད་%dགི་ཚབ་ལུ་%dའདུག \n"
 
-#: ../src/terminal-screen.c:219
+#: ../src/terminal-screen.c:220
 #, c-format
 msgid "There was an error subscribing to notification of monospace font changes. (%s)\n"
 msgstr "མོ་ནོ་སི་པེསི་ ཡིག་གཟུགས་བསྒྱུར་བཅོས་ཀྱི་ བརྡ་བསྐུལ་ལུ་ མཁོ་མངགས་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal-screen.c:865
+#: ../src/terminal-screen.c:906
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "ཡིག་གཟུགས་\"%s\"མངོན་གསལ་འབད་མ་ཚུགས། \n"
 
-#: ../src/terminal-screen.c:994
+#: ../src/terminal-screen.c:1053
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "ཊར་མི་ནཱལ་: %sའདི་གི་ བརྡ་བཀོད་ལུ་ དཀའ་ངལ་ཅིག་བྱུང་འདུག"
 
-#: ../src/terminal-screen.c:1404
+#: ../src/terminal-screen.c:1493
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -1655,253 +1658,260 @@ msgstr ""
 "ཁ་བྱང་\"%s\"ཁ་ཕྱེ་མ་ཚུགས། \n"
 "%s"
 
-#: ../src/terminal-screen.c:1501
-#: ../src/terminal-window.c:791
+#: ../src/terminal-screen.c:1590
+#: ../src/terminal-window.c:827
 #, c-format
 msgid "There was an error loading config value for whether to use image in menus. (%s)\n"
 msgstr "དཀར་ཆག་ཚུ་ནང་ གཟུགས་བརྙན་ལག་ལེན་འཐབ་ནི་ཨིནམ་མེནམ་གི་དོན་ལུ་ རིམ་སྒྲིག་བེ་ལུ་ མངོན་གསལ་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག  (%s)\n"
 
-#: ../src/terminal-screen.c:1587
+#: ../src/terminal-screen.c:1677
 msgid "_Send Mail To..."
 msgstr "ཡིག་འཕྲིན་གཏང་ཡུལ་…(_S)"
 
-#: ../src/terminal-screen.c:1592
+#: ../src/terminal-screen.c:1682
 msgid "_Copy E-mail Address"
 msgstr "གློག་འཕྲིན་ཁ་བྱང་འདྲ་བཤུས་རྐྱབས།(_C)"
 
-#: ../src/terminal-screen.c:1599
+#: ../src/terminal-screen.c:1689
 msgid "_Open Link"
 msgstr "འབྲེལ་ལམ་ཁ་ཕྱེ།(_O)"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1694
 msgid "_Copy Link Address"
 msgstr "འབྲེལ་ལམ་ཁ་བྱང་ འདྲ་བཤུས་རྐྱབས།(_C)"
 
-#: ../src/terminal-screen.c:1615
-#: ../src/terminal-window.c:854
+#: ../src/terminal-screen.c:1705
+#: ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "ཊར་མི་ནཱལ་ཁ་ཕྱེ།(_T)"
 
-#: ../src/terminal-screen.c:1620
-#: ../src/terminal-window.c:857
+#: ../src/terminal-screen.c:1710
+#: ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "མཆོང་ལྡེ་ཁ་ཕྱེ།(_b)"
 
-#: ../src/terminal-screen.c:1630
-#: ../src/terminal-window.c:872
+#: ../src/terminal-screen.c:1720
+#: ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "མཆོང་ལྡེ་ཁ་བསྡམས།(_l)"
 
-#: ../src/terminal-screen.c:1630
-#: ../src/terminal-window.c:876
-msgid "_Close Window"
-msgstr "སྒོ་སྒྲིག་ཁ་བསྡམས།(_C)"
+#: ../src/terminal-screen.c:1720
+msgid "C_lose Window"
+msgstr "སྒོ་སྒྲིག་ཁ་བསྡམ་(_l)"
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1745
 msgid "Change P_rofile"
 msgstr "གསལ་སྡུད་བསྒྱུར་བཅོས་འབད།(_r)"
 
-#: ../src/terminal-screen.c:1691
+#: ../src/terminal-screen.c:1781
 msgid "_Edit Current Profile..."
 msgstr "ད་ལྟོའི་གསལ་སྡུད་ ཞུན་དག་རྐྱབས་…"
 
-#: ../src/terminal-screen.c:1696
+#: ../src/terminal-screen.c:1786
 msgid "Show _Menubar"
 msgstr "དཀར་ཆག་ཕྲ་རིང་སྟོན།(_M)"
 
-#: ../src/terminal-screen.c:1706
+#: ../src/terminal-screen.c:1802
 msgid "_Input Methods"
 msgstr "ཨིན་པུཊི་ཐབས་ཤེས།(_I)"
 
-#: ../src/terminal-screen.c:2137
+#: ../src/terminal-screen.c:2242
 msgid "_Title:"
 msgstr "མགོ་མིང་:(_T)"
 
-#: ../src/terminal-screen.c:2251
+#: ../src/terminal-screen.c:2356
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ཚིག་ཡིག་/སྟོང་རྐྱང་ ཊར་མི་ནཱལ་གི་ བཀོག་བཞག་མི་དེ་ལུ་ རྩ་སྒྲིག་(%d) ཡང་ན་ རིང་ཚད་(%d) ཕྱི་འགྱུར་འདུག \n"
 
-#: ../src/terminal-screen.c:2274
+#: ../src/terminal-screen.c:2379
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ཚོས་གཞི་ ཊར་མི་ནཱལ་གི་ བཀོག་བཞག་མི་དེ་ལུ་ རྩ་སྒྲིག་(%d) ཡང་ན་ རིང་ཚད་(%d) ཕྱི་འགྱུར་འདུག \n"
 
-#: ../src/terminal-screen.c:2317
+#: ../src/terminal-screen.c:2422
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "མོ་ཛི་ལ་ ཡུ་ཨར་ཨེལ་ ཊར་མི་ནཱལ་གུ་ བཀོག་བཞག་མི་དེ་ལུ་ རྩ་སྒྲིག་(%d) ཡང་ན་ རིང་ཚད་(%d) ཕྱི་འགྱུར་འདུག\n"
 
-#: ../src/terminal-screen.c:2366
+#: ../src/terminal-screen.c:2471
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "ཡུ་ཨར་ཨའི་ཐོ་ཡིག་ ཊར་མི་ནཱལ་གུ་ བཀོག་བཞག་མི་དེ་ལུ་ རྩ་སྒྲིག་(%d) ཡང་ན་ རིང་ཚད་(%d) ཕྱི་འགྱུར་འདུག\n"
 
-#: ../src/terminal-screen.c:2421
+#: ../src/terminal-screen.c:2530
 #, c-format
 msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "གཟུགས་བརྙན་ཡིག་སྣོད་མིང་ ཊར་མི་ནཱལ་གུ་ བཀོག་བཞག་མི་དེ་ལུ་ རྩ་སྒྲིག་(%d) ཡང་ན་ རིང་ཚད་(%d) ཕྱི་འགྱུར་འདུག \n"
 
-#: ../src/terminal-screen.c:2447
+#: ../src/terminal-screen.c:2556
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "ཡུ་ཨར་ཨའི་\"%s\" ཡིག་སྣོད་མིང་: %sལུ་ གཞི་བསྒྱུར་འབད་ནི་ལུ་འཛོལ་བ། \n"
 
-#: ../src/terminal-widget-vte.c:575
+#: ../src/terminal-widget-vte.c:584
 msgid "There was an error creating the child process for this terminal"
 msgstr "གསལ་སྡུད་འདི་གི་དོན་ལུ་ ཆ་ལག་ལས་སྦྱོར་ གསར་བསྐྲུན་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག"
 
-#: ../src/terminal-window.c:360
+#: ../src/terminal-window.c:367
 #, c-format
 msgid "There was an error subscribing to notification of menu icon visibility changes. (%s)\n"
 msgstr "དཀར་ཆག་ངོས་དཔར་གྱི་ མཐོང་གསལ་བསྒྱུར་བཅོས་ཀྱི་ བརྡ་བསྐུལ་ལུ་ མཁོ་མངགས་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal-window.c:573
+#: ../src/terminal-window.c:579
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:575
+#: ../src/terminal-window.c:581
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:698
+#: ../src/terminal-window.c:704
 msgid "_Add or Remove..."
 msgstr "ཁ་སྐོང་རྐྱབས་ ཡང་ན་ རྩ་བསྐྲད་གཏང་…(_A)"
 
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:865
+#: ../src/terminal-window.c:901
 msgid "New _Profile..."
 msgstr "གསལ་སྡུད་གསརཔ་…(_P)"
 
-#: ../src/terminal-window.c:909
+#: ../src/terminal-window.c:912
+msgid "_Close Window"
+msgstr "སྒོ་སྒྲིག་ཁ་བསྡམས།(_C)"
+
+#: ../src/terminal-window.c:945
 msgid "P_rofiles..."
 msgstr "གསལ་སྡུད་ཚུ་…(_r)"
 
-#: ../src/terminal-window.c:912
+#: ../src/terminal-window.c:948
 msgid "_Keyboard Shortcuts..."
 msgstr "ལྡེ་སྒྲོམ་གྱི་མགྱོགས་ཐབས་ཚུ་…(_K)"
 
-#: ../src/terminal-window.c:916
+#: ../src/terminal-window.c:952
 msgid "C_urrent Profile..."
 msgstr "ད་ལྟོའི་གསལ་སྡུད་…(_u)"
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:931
+#: ../src/terminal-window.c:967
 msgid "Show Menu_bar"
 msgstr "དཀར་ཆག་ཕྲ་རིང་སྟོན།(_b)"
 
-#: ../src/terminal-window.c:935
+#: ../src/terminal-window.c:971
 msgid "_Full Screen"
 msgstr "གསལ་གཞི་གངམ།(_F)"
 
-#: ../src/terminal-window.c:978
+#: ../src/terminal-window.c:1014
 msgid "Change _Profile"
 msgstr "གསལ་སྡུད་བསྒྱུར་བཅོས་འབད།(_P)"
 
-#: ../src/terminal-window.c:981
+#: ../src/terminal-window.c:1017
 msgid "_Set Title..."
 msgstr "མགོ་མིང་གཞི་སྒྲིག་འབད་…(_S)"
 
-#: ../src/terminal-window.c:988
+#: ../src/terminal-window.c:1024
 msgid "Set _Character Encoding"
 msgstr "ཡིག་འབྲུའི་ཨིན་ཀོ་ཌིང་ གཞི་སྒྲིག་འབད།(_C)"
 
-#: ../src/terminal-window.c:998
+#: ../src/terminal-window.c:1034
 msgid "_Reset"
 msgstr "སླར་སྒྲིག་འབད།(_R)"
 
-#: ../src/terminal-window.c:1001
+#: ../src/terminal-window.c:1037
 msgid "Reset and C_lear"
 msgstr "སླར་སྒྲིག་འབད་དེ་བསལ།(_l)"
 
-#: ../src/terminal-window.c:1015
+#: ../src/terminal-window.c:1051
 msgid "_Previous Tab"
 msgstr "ཧེ་མའི་མཆོང་ལྡེ།(_P)"
 
-#: ../src/terminal-window.c:1019
+#: ../src/terminal-window.c:1055
 msgid "_Next Tab"
 msgstr "ཤུལ་མའི་མཆོང་ལྡེ།(_N)"
 
-#: ../src/terminal-window.c:1030
+#: ../src/terminal-window.c:1066
 msgid "Move Tab to the _Left"
 msgstr "ཨེབ་ལྡེ་གཡོན་ལུ་སྤོ།(_L)"
 
-#: ../src/terminal-window.c:1034
+#: ../src/terminal-window.c:1070
 msgid "Move Tab to the _Right"
 msgstr "ཨེབ་ལྡེ་གཡས་ལུ་སྤོ།(_R)"
 
-#: ../src/terminal-window.c:1060
+#: ../src/terminal-window.c:1077
+msgid "_Detach Tab"
+msgstr "ཨེབ་ལྡེ་ཁ་འཕྱལ་(_D)"
+
+#: ../src/terminal-window.c:1096
 msgid "_Contents"
 msgstr "ནང་དོན་ཚུ།(_C)"
 
-#: ../src/terminal-window.c:1070
+#: ../src/terminal-window.c:1106
 msgid "_About"
 msgstr "སྐོར་ལས།(_A)"
 
-#: ../src/terminal-window.c:1259
+#: ../src/terminal-window.c:1292
 #, c-format
 msgid "There was an error loading config value for whether to use mnemonics. (%s)\n"
 msgstr "ནི་མོ་ནིཀསི་ ལག་ལེན་འཐབ་ནི་ཨིམན་མེནམ་གི་དོན་ལུ་ རིམ་སྒྲིག་བེ་ལུ་ མངོན་གསལ་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal-window.c:1278
+#: ../src/terminal-window.c:1311
 #, c-format
 msgid "There was an error subscribing to notification of terminal window configuration changes. (%s)\n"
 msgstr "ཊར་མི་ནཱལ་སྒོ་སྒྲིག་ རིམ་སྒྲིག་བསྒྱུར་བཅོས་ཀྱི་ བརྡ་བསྐུལ་ལུ་ མཁོ་མངགས་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག  (%s)\n"
 
-#: ../src/terminal-window.c:2056
+#: ../src/terminal-window.c:2113
 msgid "_File"
 msgstr "ཡིག་སྣོད།(_F)"
 
-#: ../src/terminal-window.c:2058
-#: ../src/terminal.c:2983
+#: ../src/terminal-window.c:2115
+#: ../src/terminal.c:2988
 msgid "_Edit"
 msgstr "ཞུན་དགོ(_E)"
 
-#: ../src/terminal-window.c:2060
+#: ../src/terminal-window.c:2117
 msgid "_View"
 msgstr "མཐོང་སྣང་།(_V)"
 
-#: ../src/terminal-window.c:2062
+#: ../src/terminal-window.c:2119
 msgid "_Terminal"
 msgstr "ཊར་མི་ནཱལ།(_T)"
 
-#: ../src/terminal-window.c:2064
+#: ../src/terminal-window.c:2121
 msgid "Ta_bs"
 msgstr "མཆོང་ལྡེ་ཚུ།(_b)"
 
-#: ../src/terminal-window.c:2066
+#: ../src/terminal-window.c:2123
 msgid "_Help"
 msgstr "གྲོགས་རམ།(_H)"
 
-#: ../src/terminal-window.c:2261
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural "This window has %d tabs open. Closing the window will also close all of its tabs."
-msgstr[0] "སྒོ་སྒྲིག་འདི་ལུ་ མཆོང་ལྡེ་གཅིག་ ཁ་ཕྱེ་སྟེ་འདུག སྒོ་སྒྲིག་དེ་ཁ་བསྡམ་ད་ ལྡེ་མིག་དེ་ཡང་ཁ་བསྡམ་འོང་།"
-msgstr[1] "སྒོ་སྒྲིག་འདི་ལུ་ མཆོང་ལྡེ་%d ཁ་ཕྱེ་སྟེ་འདུག སྒོ་སྒྲིག་དེ་ཁ་བསྡམ་ད་ དེ་གི་མཆོང་ལྡེ་ཚུ་ཆ་མཉམ་ ཁ་བསྡམ་འོང་།"
-
-#: ../src/terminal-window.c:2270
+#: ../src/terminal-window.c:2345
 msgid "Close all tabs?"
 msgstr "མཆོང་ལྡེ་ཆ་མཉམ་ཁ་བསྡམ།"
 
-#: ../src/terminal-window.c:2282
+#: ../src/terminal-window.c:2347
+#, c-format
+msgid "This window has one tab open. Closing the window will close it."
+msgid_plural "This window has %d tabs open. Closing the window will also close all tabs."
+msgstr[0] "སྒོ་སྒྲིག་འདི་ལུ་ མཆོང་ལྡེ་གཅིག་ ཁ་ཕྱེ་སྟེ་འདུག སྒོ་སྒྲིག་དེ་ཁ་བསྡམ་ད་ ལྡེ་མིག་དེ་ཡང་ཁ་བསྡམ་འོང་།"
+msgstr[1] "སྒོ་སྒྲིག་འདི་ལུ་ མཆོང་ལྡེ་%d ཁ་ཕྱེ་སྟེ་འདུག སྒོ་སྒྲིག་དེ་ཁ་བསྡམ་ད་ དེ་གི་མཆོང་ལྡེ་ཚུ་ཆ་མཉམ་ ཁ་བསྡམ་འོང་།"
+
+#: ../src/terminal-window.c:2356
 msgid "Close All _Tabs"
 msgstr "མཆོང་ལྡེ་ཆ་མཉམ་ཁ་བསྡམས།(_T)"
 
-#: ../src/terminal-window.c:2833
+#: ../src/terminal-window.c:2908
 msgid "GNOME Terminal"
 msgstr "ཇི་ནོམ་ ཊར་མི་ནཱལ་།"
 
-#: ../src/terminal-window.c:2835
+#: ../src/terminal-window.c:2910
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "ཇི་ནོམ་ཌེཀསི་ཊོཔ་གི་དོན་ལུ་ ཊར་མི་ནཱལ་ནུས་འཕྲུལ་ཅིག"
 
-#: ../src/terminal-window.c:2840
+#: ../src/terminal-window.c:2915
 msgid "translator-credits"
 msgstr "ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་ བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་གྱི་དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>/<pgeyleg@dit.gov.bt>"
 
@@ -2163,108 +2173,108 @@ msgstr "ནུས་མེད་སྒྲུབ་རྟགས་: \"%s\"\n"
 msgid "There was an error subscribing to notification of terminal profile list changes. (%s)\n"
 msgstr "ཊར་མི་ནཱལ་གསལ་སྡུད་ཐོ་ཡིག་བསྒྱུར་བཅོས་ཀྱི་ བརྡ་བསྐུལ་ལུ་ མཁོ་མངགས་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་ནུག (%s)\n"
 
-#: ../src/terminal.c:1986
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "ནུས་མེད་འཇལ་རྩིས་ཡིག་རྒྱུན་ \"%s\"\n"
 
-#: ../src/terminal.c:2052
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "ཊར་མི་ནཱལ་གསལ་སྡུད་ཀྱི་ ཐོ་ཡིག་ལེན་ནི་ལུ་ འཛོལ་བ་ཅིག་འབྱུང་ནུག (%s)\n"
 
-#: ../src/terminal.c:2356
+#: ../src/terminal.c:2361
 #, c-format
 msgid "You already have a profile called \"%s\". Do you want to create another profile with the same name?"
 msgstr "ཁྱོད་ལུ་ གསལ་སྡུད་མིང་\"%s\" ཟེར་མི་ཅིག་ ཧེ་མ་ལས་རང་འདུག ཁྱོད་ཀྱིས་གསལ་སྡུད་གཞན་མི་ཅིག་ མིང་དེ་དང་ཅོག་གཅིགཔ་སྦེ་རང་ གསར་བསྐྲུན་འབད་ནི་ཨིན་ན?"
 
-#: ../src/terminal.c:2370
+#: ../src/terminal.c:2375
 msgid "The profile you selected as a base for your new profile no longer exists"
 msgstr "ཁྱོད་ཀྱིས་ཁྱོད་རའི་ གསལ་སྡུད་གསར་པའི་ གཞི་རྟེན་བཟུམ་ཅིག་སྦེ་ སེལ་འཐུ་འབད་མི་ གསལ་སྡུད་དེ་ གནས་ཏེ་མིན་འདུག"
 
-#: ../src/terminal.c:2466
+#: ../src/terminal.c:2471
 msgid "Enter profile name"
 msgstr "གསལ་སྡུད་ཀྱི་མིང་བཙུགས།"
 
-#: ../src/terminal.c:2476
+#: ../src/terminal.c:2481
 msgid "Choose base profile"
 msgstr "གསལ་སྡུད་ཀྱི་གཞི་རྟེན་ གདམ་ཁ་རྐྱབས།"
 
-#: ../src/terminal.c:2615
+#: ../src/terminal.c:2620
 msgid "Profile list"
 msgstr "གསལ་སྡུད་ཀྱི་ཐོ་ཡིག"
 
-#: ../src/terminal.c:2684
+#: ../src/terminal.c:2689
 msgid "You must select one or more profiles to delete."
 msgstr "ཁྱོད་ཀྱིས་བཏོན་གཏང་ནིའི་དོན་ལུ་ གསལ་སྡུད་གཅིག་གམ་ དེ་ལས་མངམ་ སེལ་འཐུ་འབད་དགོ"
 
-#: ../src/terminal.c:2695
+#: ../src/terminal.c:2700
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr "ཁྱོད་ལུ་ཉུང་མཐའ་ལུ་ གསལ་སྡུད་གཅིག་དགོཔ་ལས་ ཆ་མཉམ་བཏོན་གཏང་ནི་མི་འོང་།"
 
-#: ../src/terminal.c:2703
+#: ../src/terminal.c:2708
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "གསལ་སྡུད་འདི་ བཏོན་གཏང་ནི་ཨིན་ན? \n"
 msgstr[1] "གསལ་སྡུད་%d དེ་ཚུ་བཏོན་གཏང་ནི་ཨིན་ན? \n"
 
-#: ../src/terminal.c:2724
+#: ../src/terminal.c:2729
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "གསལ་སྡུད་\"%s\"བཏོན་གཏང་ནི་ཨིན་ན?"
 
-#: ../src/terminal.c:2746
+#: ../src/terminal.c:2751
 msgid "Delete Profile"
 msgstr "གསལ་སྡུད་བཏོན་གཏང་།"
 
-#: ../src/terminal.c:3019
+#: ../src/terminal.c:3024
 msgid "Profiles"
 msgstr "གསལ་སྡུད་ཚུ།"
 
-#: ../src/terminal.c:3060
+#: ../src/terminal.c:3065
 msgid "_Profiles:"
 msgstr "གསལ་སྡུད་ཚུ་:(_P)"
 
-#: ../src/terminal.c:3092
+#: ../src/terminal.c:3097
 msgid "Click to open new profile dialog"
 msgstr "གསལ་སྡུད་གསར་པའི་ཌའི་ལོག་ ཁ་ཕྱེ་ནི་ལུ་ ཨེབ་གཏང་འབད།"
 
-#: ../src/terminal.c:3100
+#: ../src/terminal.c:3105
 msgid "Click to open edit profile dialog"
 msgstr "ཞུན་དག་གསལ་སྡུད་ཀྱི་ཌའི་ལོག་ ཁ་ཕྱེ་ནི་ལུ་ ཨེབ་གཏང་འབད།"
 
-#: ../src/terminal.c:3108
+#: ../src/terminal.c:3113
 msgid "Click to delete selected profile"
 msgstr "སེལ་འཐུ་འབད་མི་ གསལ་སྡུད་ཚུ་ བཏོན་གཏང་ནི་ལུ་ ཨེབ་གཏང་འབད།"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3118
 msgid "Profile _used when launching a new terminal:"
 msgstr "ཊར་མི་ནཱལ་གསརཔ་ཅིག་ གསར་བཙུགས་འབདཝ་ད་ ལག་ལེན་འཐབ་ནིའི་གསལ་སྡུད།(_u)"
 
-#: ../src/terminal.c:3169
+#: ../src/terminal.c:3174
 msgid "Click button to choose profile"
 msgstr "གསལ་སྡུད་གདམ་ཁ་བབརྐྱབ་ནིའི་ཨེབ་རྟ།"
 
-#: ../src/terminal.c:3587
+#: ../src/terminal.c:3592
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "གྲོགས་རམ་: %sབཀྲམ་སྟོན་འབད་ནི་ལུ་ འཛོལ་བ་ཅིག་བྱུང་འདུག"
 
-#: ../src/terminal.c:3658
+#: ../src/terminal.c:3663
 #, c-format
 msgid "The file \"%s\" is missing. This indicates that the application is installed incorrectly."
 msgstr "ཡིག་སྣོད་ \"%s\" བརླག་སྟོར་ཞུགས་ནུག འདི་གིས་གློག་རིམ་དེ་ ངེས་བདེན་སྦེ་ གཞི་བཙུགས་མ་འབད་བའི་ བརྡ་མཚོན་སྟོནམ་ཨིན་པས།"
 
-#: ../src/terminal.c:3830
+#: ../src/terminal.c:3835
 msgid "It appears that you do not have gnome-terminal.server installed in a valid location. Factory mode disabled.\n"
 msgstr "དེ་སྦེ་བལྟཝ་ད་ ཁྱོད་ལུ་ ནུས་ཅན་གནས་ཁོངས་ཅིག་ནང་ གཞི་བཙུགས་འབད་ཡོད་པའི་ ཇི་ནོམ་ཊར་མི་ནཱལ་སར་བར་ ནུས་ཅན་མེད་དོ་བཟུམ་ཅིག་འདུག འཕྲུལ་ཁང་ཐབས་ལམ་ ལྕོགས་མིན་ཨིན་པས། \n"
 
-#: ../src/terminal.c:3833
+#: ../src/terminal.c:3838
 msgid "Error registering terminal with the activation service; factory mode disabled.\n"
 msgstr "ཊར་མི་ནཱལ་དེ་ ཤུགས་བཟོ་ཞབས་ཏོག་དང་གཅིག་ཁར་ ཐོ་བཀོད་འབད་ནི་ལུ་འཛོལ་བ་འདུག འཕྲུལ་ཁང་གི་ཐབས་ལམ་ ལྕོགས་མིན་ཨིན་པས། \n"
 
-#: ../src/terminal.c:3869
+#: ../src/terminal.c:3874
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "ཊར་མི་ནཱལ་སར་བར་དེ་ ཤུགས་བཟོའི་སར་བར་ནང་ལས་ སླར་འདྲེན་འབད་མ་ཚུགས། \n"
 
