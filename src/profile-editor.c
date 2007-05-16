@@ -837,12 +837,15 @@ create_preview_pixbuf (const gchar *file)
       gchar *mime_type;
 
       mime_type = (gchar *)gnome_vfs_get_mime_type (file);
-      thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
+      if (mime_type != NULL) {
+        thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
 
-      pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
-                                                           file,
-                                                           mime_type);
-      g_free (mime_type);
+        pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
+                                                             file,
+                                                             mime_type);
+        g_free (mime_type);
+        g_object_unref (thumbs);
+      }
     }
   }				
   return pixbuf;
