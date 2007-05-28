@@ -2879,8 +2879,8 @@ about_callback (GtkWidget      *menuitem,
                 TerminalWindow *window)
 {
   const char *copyright =
-    "Copyright \xc2\xa9 2002-2004 Havoc Pennington\n"
-    "Copyright \xc2\xa9 2003-2004 Mariano Su\303\241rez-Alvarez\n"
+    "Copyright \xc2\xa9 2002,2003,2004 Havoc Pennington\n"
+    "Copyright \xc2\xa9 2003,2004,2007 Mariano Su\303\241rez-Alvarez\n"
     "Copyright \xc2\xa9 2006 Guilherme de S. Pastore";
   const char *authors[] = {
     "Guilherme de S. Pastore <gpastore@gnome.org> (maintainer)",
