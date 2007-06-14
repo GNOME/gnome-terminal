@@ -1980,11 +1980,13 @@ profile_editor_update_background_image (GtkWidget       *editor,
                                         TerminalProfile *profile)
 {
   GtkWidget *w;
+  const char *f;
 
   w = profile_editor_get_widget (editor, "background-image-filechooser");
 
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (w),
-                                 terminal_profile_get_background_image_file (profile));
+  f = terminal_profile_get_background_image_file (profile);
+  if (f && *f)
+    gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (w), f);
 }
 
 static void

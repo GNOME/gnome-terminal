@@ -1,3 +1,11 @@
+2007-06-14  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 353632 – crash on Terminal
+
+	* src/profile-editor.c (profile_editor_update_background_image):
+	Don't call gtk_file_chooser_set_filename() if file name is empty
+	string.
+
 2007-05-28  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 428825 – Wrong copyright info in the about dialog
