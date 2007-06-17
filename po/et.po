@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-01-02 03:14+0000\n"
-"PO-Revision-Date: 2007-01-26 18:39+0200\n"
+"POT-Creation-Date: 2007-01-27 16:07+0000\n"
+"PO-Revision-Date: 2007-06-09 13:20+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -587,9 +587,9 @@ msgid ""
 "is a list of encodings to appear there. The special encoding name \"current"
 "\" means to display the encoding of the current locale."
 msgstr ""
-"Võimalike kooditabelite alamhulk, mis on kasutatav \"Kodeering\" alammenüüst. "
-"Siinkirjeldatud loend ilmub selles alammenüüs. Kooditabelite erinimi \"current"
-"\" tähendab käesoleva lokaadi vaikimisi kooditabelit."
+"Võimalike kooditabelite alamhulk, mis on kasutatav \"Kodeering\" "
+"alammenüüst. Siinkirjeldatud loend ilmub selles alammenüüs. Kooditabelite "
+"erinimi \"current\" tähendab käesoleva lokaadi vaikimisi kooditabelit."
 
 #: ../src/gnome-terminal.schemas.in.h:2
 msgid ""
@@ -783,26 +783,30 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Kui tõene, siis klahvivajutusel hüpatakse kerimisriba allaossa."
+msgstr "Kui märgitud, siis klahvivajutusel hüpatakse kerimisriba allaossa."
 
 #: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
 msgstr ""
+"Kui märgitud, siis keritakse taustapilti koos tekstiga, vastasel juhul "
+"taustapilt teksti kerimise korral kaasa ei liigu."
 
 #: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
 msgstr ""
+"Kui märgitud, siis terminalis käivitatav käsk käivitatakse kestprogrammina "
+"(argv[0] ette lisatakse sidekriips)."
 
 #: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"Kui tõene, siis käsu käivitamisel terminal uuendatakse süsteemi "
+"Kui märgitud, siis terminalis käsu käivitamisel uuendatakse süsteemi "
 "sisselogimiskirjeid utmp ja wtmp."
 
 #: ../src/gnome-terminal.schemas.in.h:40
@@ -816,6 +820,8 @@ msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
 msgstr ""
+"Määramise korral kasutatakse terminali tekstisisestuskastides kasutaja poolt "
+"määratud värvuste asemel teema värviskeemi."
 
 #: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
@@ -1448,6 +1454,9 @@ msgid ""
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
 "a range) should be the first character given."
 msgstr ""
+"Teksti sõnahaaval valimisel arvestatakse osade märkide jadad sõnadeks. "
+"Vahemikku saab määrata vormingus \"A-Ü\". Poolitusmärk (mida ei kasutata "
+"vahemiku määramiseks) peab olema esimese märgina."
 
 #: ../src/gnome-terminal.schemas.in.h:131
 msgid ""
@@ -1725,7 +1734,7 @@ msgstr "Vähendamine"
 msgid "Normal Size"
 msgstr "Normaalsuurus"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2213
+#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "Pealkirja määramine"
 
@@ -1830,7 +1839,7 @@ msgid "Help"
 msgstr "Abi"
 
 #: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:204 ../src/terminal.c:1724
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Konfiguratsiooni laadimisel %s-ist tekkis viga. (%s)\n"
@@ -2017,7 +2026,7 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletil on %d kirje %d asemel\n"
 msgstr[1] "Paletil on %d kirjet %d asemel\n"
 
-#: ../src/terminal-screen.c:220
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
@@ -2025,17 +2034,17 @@ msgid ""
 msgstr ""
 "Täheruudu kirjatüübi muutustest teavituste tellimisel tekkis viga. (%s)\n"
 
-#: ../src/terminal-screen.c:906
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "Ei saa laadida kirjatüüpi \"%s\"\n"
 
-#: ../src/terminal-screen.c:1053
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Selle terminali käsuga tekkis probleem: %s"
 
-#: ../src/terminal-screen.c:1493
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2044,7 +2053,7 @@ msgstr ""
 "Aadressi \"%s\" pole võimalik avada:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1590 ../src/terminal-window.c:827
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:827
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2053,87 +2062,87 @@ msgstr ""
 "Menüüdes piltide kasutamiseks vajaliku sätte väärtuse laadimisel tekkis "
 "viga. (%s)\n"
 
-#: ../src/terminal-screen.c:1677
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "_Saada e-sõnum..."
 
-#: ../src/terminal-screen.c:1682
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "Kopeeri _a-posti aadress"
 
-#: ../src/terminal-screen.c:1689
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "A_va link"
 
-#: ../src/terminal-screen.c:1694
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "Kopeeri _lingi asukoht"
 
-#: ../src/terminal-screen.c:1705 ../src/terminal-window.c:890
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:890
 msgid "Open _Terminal"
 msgstr "Ava _terminal"
 
-#: ../src/terminal-screen.c:1710 ../src/terminal-window.c:893
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:893
 msgid "Open Ta_b"
 msgstr "Ava _sakk"
 
-#: ../src/terminal-screen.c:1720 ../src/terminal-window.c:908
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:908
 msgid "C_lose Tab"
 msgstr "Su_lge sakk"
 
-#: ../src/terminal-screen.c:1720
+#: ../src/terminal-screen.c:1723
 msgid "C_lose Window"
 msgstr "Su_lge aken"
 
-#: ../src/terminal-screen.c:1745
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "Muuda p_rofiili"
 
-#: ../src/terminal-screen.c:1781
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "_Muuda aktiivset profiili..."
 
-#: ../src/terminal-screen.c:1786
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "Näita m_enüüriba"
 
-#: ../src/terminal-screen.c:1802
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
 
-#: ../src/terminal-screen.c:2242
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "_Pealkiri:"
 
-#: ../src/terminal-screen.c:2356
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminaliaknasse kukutatud text/plain (lihttekst) on vigase vormingu (%d) "
 "või pikkusega (%d)\n"
 
-#: ../src/terminal-screen.c:2379
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminaliaknasse kukutatud värvus on vigase vormingu (%d) või pikkusega (%"
 "d)\n"
 
-#: ../src/terminal-screen.c:2422
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminaliaknasse kukutatud Mozilla URL on vigase vormingu (%d) või pikkusega "
 "(%d)\n"
 
-#: ../src/terminal-screen.c:2471
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminaliaknasse kukutatud URI-de loetelu on vigase vormingu (%d) või "
 "pikkusega (%d)\n"
 
-#: ../src/terminal-screen.c:2530
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
@@ -2141,7 +2150,7 @@ msgstr ""
 "Terminaliaknasse kukutatud pildi failinimi on vigase vormingu (%d) või "
 "pikkusega (%d)\n"
 
-#: ../src/terminal-screen.c:2556
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Viga URI \"%s\" teisendamisel failinimeks: %s\n"
@@ -2444,6 +2453,8 @@ msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
+"Aktiveerimise nimeserveris ei registreeruta, aktiivset terminali ei "
+"taaskasutata"
 
 #: ../src/terminal.c:316
 msgid "Register with the activation nameserver [default]"
