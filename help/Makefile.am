@@ -12,4 +12,4 @@ DOC_LINGUAS = de ca es fr it ko ru sv uk
 
 # Move to DOC_LINGUAS in transition to gnome-doc-utils
 
-SUBDIRS = bg ca ro ja zh_CN zh_TW
+SUBDIRS = bg ro ja zh_CN zh_TW
