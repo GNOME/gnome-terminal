@@ -39,6 +39,12 @@ void terminal_app_new_profile (TerminalApp     *app,
                                TerminalProfile *default_base_profile,
                                GtkWindow       *transient_parent);
 
+TerminalWindow * terminal_app_new_window   (TerminalApp *app,
+                                            const char *role,
+                                            const char *startup_id,
+                                            const char *display_name,
+                                            int screen_number);
+
 void terminal_app_new_terminal (TerminalApp     *app,
                                 TerminalProfile *profile,
                                 TerminalWindow  *window,

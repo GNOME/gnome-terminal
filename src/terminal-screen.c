@@ -144,39 +144,9 @@ static char*    make_xfont_have_size_from_other_font (const char *fontname,
 
 static GdkFont* load_fonset_without_error (const gchar *fontset_name);
 
-static GObjectClass *parent_class = NULL;
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
-GType
-terminal_screen_get_type (void)
-{
-  static GType object_type = 0;
-
-  g_type_init ();
-  
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (TerminalScreenClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) terminal_screen_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (TerminalScreen),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) terminal_screen_init,
-      };
-
-      object_type = g_type_register_static (GTK_TYPE_BIN,
-                                            "TerminalScreen",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
-
+G_DEFINE_TYPE (TerminalScreen, terminal_screen, GTK_TYPE_BIN)
 
 static void
 style_set_callback (GtkWidget *widget,
@@ -185,6 +155,29 @@ style_set_callback (GtkWidget *widget,
 {
   if (GTK_WIDGET_REALIZED (widget))
     terminal_screen_change_font (TERMINAL_SCREEN (data));
+}
+
+static void
+parent_set_callback (TerminalScreen *screen,
+                     GtkWidget      *old_parent)
+{
+  if (GTK_WIDGET (screen)->parent == NULL)
+    {
+      screen->priv->window = NULL;
+    }
+  else
+    {
+      GtkWidget *window;
+
+      g_return_if_fail (GTK_IS_NOTEBOOK (GTK_WIDGET (screen)->parent));
+
+      window = gtk_widget_get_toplevel (GTK_WIDGET (screen)->parent);
+
+      g_return_if_fail (window != NULL);
+      g_return_if_fail (TERMINAL_IS_WINDOW (window));
+
+      screen->priv->window = TERMINAL_WINDOW (gtk_widget_get_toplevel (window));
+    }
 }
 
 static void
@@ -257,9 +250,17 @@ terminal_screen_size_allocate (GtkWidget *widget,
 }
 
 static void
+terminal_screen_grab_focus (GtkWidget *widget)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+
+  gtk_widget_grab_focus (screen->priv->term);
+}
+
+static void
 terminal_screen_init (TerminalScreen *screen)
 {
-  screen->priv = g_new0 (TerminalScreenPrivate, 1);
+  screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
 
   screen->priv->working_dir = g_get_current_dir ();
   if (screen->priv->working_dir == NULL) /* shouldn't ever happen */
@@ -360,6 +361,10 @@ terminal_screen_init (TerminalScreen *screen)
   gtk_container_add (GTK_CONTAINER (screen), GTK_WIDGET (screen->priv->hbox));
 
   gtk_widget_show_all (screen->priv->hbox);
+
+  g_signal_connect (G_OBJECT (screen), "parent-set",
+                    G_CALLBACK (parent_set_callback), 
+                    NULL);
 }
 
 static void
@@ -368,14 +373,13 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
-  parent_class = g_type_class_peek_parent (klass);
-  
   object_class->finalize = terminal_screen_finalize;
 
   widget_class->unrealize = terminal_screen_unrealize;
   widget_class->size_allocate = terminal_screen_size_allocate;
   widget_class->size_request = terminal_screen_size_request;
   widget_class->map = terminal_screen_map;
+  widget_class->grab_focus = terminal_screen_grab_focus;
   
   signals[PROFILE_SET] =
     g_signal_new ("profile_set",
@@ -420,7 +424,9 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);  
+                  G_TYPE_NONE, 0);
+
+  g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 }
 
 static void
@@ -436,10 +442,7 @@ terminal_screen_unrealize (GtkWidget *widget)
       screen->priv->popup_menu = NULL;
     }
 
-  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
-    {
-      (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
-    }
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->unrealize (widget);
 }
 
 static void
@@ -476,10 +479,8 @@ terminal_screen_finalize (GObject *object)
   g_free (screen->priv->matched_string);
   g_strfreev (screen->priv->override_command);
   g_free (screen->priv->working_dir);
-  
-  g_free (screen->priv);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+
+  G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
 }
 
 TerminalScreen*
@@ -498,7 +499,7 @@ terminal_screen_map (GtkWidget *widget)
   child = GTK_BIN (widget)->child;
   g_assert (child != NULL);
 
-  GTK_WIDGET_CLASS (parent_class)->map (widget);
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->map (widget);
 }
 
 TerminalWindow*
@@ -2297,15 +2298,19 @@ enum
   TARGET_BGIMAGE,
   TARGET_RESET_BG,
   TARGET_TEXT_PLAIN,
-  TARGET_MOZ_URL
+  TARGET_MOZ_URL,
+  TARGET_TAB
 };
 
-static void  
-drag_data_received  (GtkWidget *widget, GdkDragContext *context, 
-		     gint x, gint y,
-		     GtkSelectionData *selection_data, guint info,
-		     guint time,
-                     gpointer data)
+void        
+drag_data_received (TerminalScreen   *widget,
+                    GdkDragContext   *context,
+                    gint              x,
+                    gint              y,
+                    GtkSelectionData *selection_data,
+                    guint             info,
+                    guint             time,
+                    gpointer          data)
 {
   TerminalScreen *screen;
 
@@ -2580,6 +2585,7 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
         g_free (uri_list);
       }
       break;
+
     case TARGET_RESET_BG:
       {
         TerminalProfile *profile;
@@ -2593,6 +2599,37 @@ drag_data_received  (GtkWidget *widget, GdkDragContext *context,
           }
       }
       break;
+
+    case TARGET_TAB:
+      {
+        TerminalScreen *moving_screen;
+        TerminalWindow *source_window;
+        TerminalWindow *dest_window;
+        GtkWidget *source_notebook;
+        GtkWidget *dest_notebook;
+        gint page_num;
+
+        moving_screen = *(TerminalScreen**) selection_data->data;
+
+        g_return_if_fail (TERMINAL_IS_SCREEN (moving_screen));
+
+        source_window = terminal_screen_get_window (moving_screen);
+        source_notebook = terminal_window_get_notebook (source_window);
+        dest_window = terminal_screen_get_window (screen);
+        dest_notebook = terminal_window_get_notebook (dest_window);
+        page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
+                                          GTK_WIDGET (screen));
+
+        g_object_ref (G_OBJECT (moving_screen));
+        terminal_window_add_screen (dest_window, moving_screen, page_num);
+        g_object_unref (G_OBJECT (moving_screen));
+
+        gtk_drag_finish (context, TRUE, TRUE, time);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
     }
 }
 
@@ -2600,6 +2637,7 @@ static void
 terminal_screen_setup_dnd (TerminalScreen *screen)
 {
   static GtkTargetEntry target_table[] = {
+    { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
     { "application/x-color", 0, TARGET_COLOR },
     { "property/bgimage",    0, TARGET_BGIMAGE },
     { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },

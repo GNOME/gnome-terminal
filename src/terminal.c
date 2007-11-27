@@ -25,7 +25,6 @@
 #include "terminal.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
-#include "terminal-notebook.h"
 #include "terminal-widget.h"
 #include "profile-editor.h"
 #include "encoding.h"
@@ -1883,6 +1882,43 @@ find_screen_by_display_name (const char *display_name,
   return screen;
 }
 
+TerminalWindow *
+terminal_app_new_window   (TerminalApp *app,
+                           const char *role,
+                           const char *startup_id,
+                           const char *display_name,
+                           int screen_number)
+{
+  GdkScreen *gdk_screen;
+  TerminalWindow *window;
+  
+  window = terminal_window_new ();
+  g_object_ref (G_OBJECT (window));
+  
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (terminal_window_destroyed),
+                    app);
+  
+  app->windows = g_list_append (app->windows, window);
+
+  gdk_screen = find_screen_by_display_name (display_name, screen_number);
+  if (gdk_screen != NULL)
+    {
+      gtk_window_set_screen (GTK_WINDOW (window), gdk_screen);
+      g_object_unref (G_OBJECT (gdk_screen));
+    }
+
+  if (startup_id != NULL)
+    terminal_window_set_startup_id (window, startup_id);
+  
+  if (role == NULL)
+    terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
+  else
+    gtk_window_set_role (GTK_WINDOW (window), role);
+
+  return window;
+}
+
 void
 terminal_app_new_terminal (TerminalApp     *app,
                            TerminalProfile *profile,
@@ -1910,31 +1946,9 @@ terminal_app_new_terminal (TerminalApp     *app,
   if (window == NULL)
     {
       GdkScreen *gdk_screen;
-      
+
+      window = terminal_app_new_window (app, role, startup_id, display_name, screen_number);
       window_created = TRUE;
-      window = terminal_window_new (conf);
-      g_object_ref (G_OBJECT (window));
-      
-      g_signal_connect (G_OBJECT (window), "destroy",
-                        G_CALLBACK (terminal_window_destroyed),
-                        app);
-      
-      app->windows = g_list_append (app->windows, window);
-
-      gdk_screen = find_screen_by_display_name (display_name, screen_number);
-      if (gdk_screen != NULL)
-        {
-          gtk_window_set_screen (GTK_WINDOW (window), gdk_screen);
-          g_object_unref (G_OBJECT (gdk_screen));
-        }
-
-      if (startup_id != NULL)
-        terminal_window_set_startup_id (window, startup_id);
-      
-      if (role == NULL)
-        terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
-      else
-        gtk_window_set_role (GTK_WINDOW (window), role);
     }
 
   if (force_menubar_state)
@@ -1966,22 +1980,12 @@ terminal_app_new_terminal (TerminalApp     *app,
       terminal_screen_set_font_scale (screen, zoom);
       terminal_screen_set_font (screen);
     
-      terminal_window_add_screen (window, screen);
+      terminal_window_add_screen (window, screen, -1);
 
       terminal_screen_reread_profile (screen);
-
-      g_object_unref (G_OBJECT (screen));
     
       terminal_window_set_active (window, screen);
-      gtk_widget_grab_focus (terminal_screen_get_widget (screen));
-    }
-  else
-   {
-      TerminalWindow *src_win = terminal_screen_get_window (screen);
-      TerminalNotebook *src_notebook = TERMINAL_NOTEBOOK (terminal_window_get_notebook (src_win));
-      TerminalNotebook *dest_notebook = TERMINAL_NOTEBOOK (terminal_window_get_notebook (window));
-      
-      terminal_notebook_move_tab (src_notebook, dest_notebook, screen, 0);
+      gtk_widget_grab_focus (GTK_WIDGET (screen));
     }
 
   if (geometry)

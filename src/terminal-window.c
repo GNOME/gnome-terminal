@@ -24,7 +24,6 @@
 #include "terminal-accels.h"
 #include "terminal-widget.h"
 #include "terminal-window.h"
-#include "terminal-notebook.h"
 #include "terminal.h"
 #include "encoding.h"
 #include <string.h>
@@ -69,10 +68,11 @@ struct _TerminalWindowPrivate
   GtkWidget *go_menu;
   GtkWidget *encoding_menuitem;
   GList *tab_menuitems;
-  GList *terms;
+  guint terms;
   TerminalScreen *active_term;
   GdkPixbuf *icon;
   GtkClipboard *clipboard;
+  GtkTooltips *tooltips;
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
@@ -92,6 +92,9 @@ struct _TerminalWindowPrivate
 
   /* Compositing manager integration */
   guint have_argb_visual : 1;
+
+  guint disposed : 1;
+  guint present_on_insert : 1;
 };
 
 enum {
@@ -99,13 +102,10 @@ enum {
   LAST_SIGNAL
 };
 
-static GConfClient *client = NULL;
-static guint notify;
-
 static void terminal_window_init        (TerminalWindow      *window);
 static void terminal_window_class_init  (TerminalWindowClass *klass);
+static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
-static void terminal_window_destroy     (GtkObject           *object);
 
 static gboolean terminal_window_delete_event (GtkWidget *widget,
                                               GdkEvent *event,
@@ -118,24 +118,21 @@ static GtkWidget* screen_get_menuitem  (TerminalScreen *screen);
 static TerminalScreen* find_screen (TerminalWindow *window,
                                     TerminalScreen *screen);
 
-static void notebook_page_selected_callback (GtkWidget *notebook,
-                                             GtkNotebookPage *useless_crap,
-                                             int              page_num,
-                                             TerminalWindow  *window);
-
-static void notebook_tab_added_callback     (GtkWidget       *notebook,
-                                             TerminalScreen  *screen,
-                                             TerminalWindow  *window);
-
-static void notebook_tab_detached_callback  (GtkWidget       *notebook,
-                                             TerminalScreen  *screen,
-                                             TerminalWindow  *window);
-
-static void notebook_tab_removed_callback   (GtkWidget       *notebook,
-                                             TerminalScreen  *screen,
-                                             TerminalWindow  *window);
-
-static void notebook_tabs_reordered_callback (GtkWidget      *notebook,
+static void notebook_page_selected_callback  (GtkWidget       *notebook,
+                                              GtkNotebookPage *useless_crap,
+                                              guint            page_num,
+                                              TerminalWindow  *window);
+static void notebook_page_added_callback     (GtkWidget       *notebook,
+                                              TerminalScreen  *screen,
+                                              guint            page_num,
+                                              TerminalWindow  *window);
+static void notebook_page_removed_callback   (GtkWidget       *notebook,
+                                              TerminalScreen  *screen,
+                                              guint            page_num,
+                                              TerminalWindow  *window);
+static void notebook_page_reordered_callback (GtkWidget      *notebook,
+                                              GtkWidget      *child,
+                                              guint           page_num,
                                               TerminalWindow *window);
 
 static void config_change_notify            (GConfClient *client,
@@ -243,37 +240,7 @@ static void terminal_window_show (GtkWidget *widget);
 
 static gboolean confirm_close_window (TerminalWindow *window);
 
-static gpointer parent_class;
-
-GType
-terminal_window_get_type (void)
-{
-  static GType object_type = 0;
-
-  g_type_init ();
-  
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (TerminalWindowClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) terminal_window_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (TerminalWindow),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) terminal_window_init,
-      };
-      
-      object_type = g_type_register_static (GTK_TYPE_WINDOW,
-                                            "TerminalWindow",
-                                            &object_info, 0);      
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
 static GtkWidget*
 append_menuitem (GtkWidget  *menu,
@@ -338,7 +305,11 @@ menuitem_icon_visibility_notify (GConfClient *client,
 void
 remove_notify (gpointer data)
 {
+  GConfClient *client;
+
+  client = gconf_client_get_default ();
   gconf_client_notify_remove (client, GPOINTER_TO_INT (data));
+  g_object_unref (client);
 }
 
 static GtkWidget*
@@ -351,17 +322,20 @@ append_stock_menuitem (GtkWidget  *menu,
   GtkWidget *menu_item;
   GtkWidget *image;
   GError *error;
+  GConfClient *client;
+  guint notify;
 
   menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
   image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (menu_item));
 
   error = NULL;
-  notify = 0;
 
+  client = gconf_client_get_default ();
   notify = gconf_client_notify_add (client, "/desktop/gnome/interface/menus_have_icons",
                            menuitem_icon_visibility_notify,
                            menu_item,
                            NULL, &error);
+  g_object_unref (client);
   if (error)
     {
       g_printerr (_("There was an error subscribing to notification of menu icon visibility changes. (%s)\n"), error->message);
@@ -785,6 +759,54 @@ terminal_window_uses_argb_visual (TerminalWindow *window)
 }
 
 static void
+update_tab_visibility (TerminalWindow *window,
+                        int             change)
+{
+  gboolean show_tabs;
+  guint num;
+
+  num = gtk_notebook_get_n_pages (GTK_NOTEBOOK (window->priv->notebook));
+
+  show_tabs = (num + change) > 1;
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (window->priv->notebook), show_tabs);
+}
+
+static GtkNotebook *
+handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
+                              GtkWidget   *child,
+                              gint         x,
+                              gint         y,
+                              gpointer     data)
+{
+  TerminalScreen *screen;
+  TerminalWindow *source_window;
+  TerminalWindow *dest_window;
+  double zoom;
+
+  screen = TERMINAL_SCREEN (child);
+  source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
+
+  g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
+
+  zoom = terminal_screen_get_font_scale (screen);
+
+  dest_window = terminal_app_new_window (terminal_app_get (), NULL, NULL, NULL, -1);
+  dest_window->priv->present_on_insert = TRUE;
+
+  update_tab_visibility (source_window, -1);
+  update_tab_visibility (dest_window, +1);
+
+  return GTK_NOTEBOOK (dest_window->priv->notebook);
+}
+
+void terminal_window_realized_callback (GtkWidget *window,
+                                        gpointer   user_data)
+{
+  gdk_window_set_group (window->window, window->window);
+  g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   GtkWidget *mi;
@@ -792,29 +814,72 @@ terminal_window_init (TerminalWindow *window)
   GtkAccelGroup *accel_group;
   GError *error;
   gboolean menus_have_icons;
+  gboolean use_mnemonics;
+
+  window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
   g_signal_connect (G_OBJECT (window), "delete_event", 
                     G_CALLBACK(terminal_window_delete_event),
                     NULL);
+  g_signal_connect (G_OBJECT (window), "realize",
+                    G_CALLBACK (terminal_window_realized_callback),
+                    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
-  client = gconf_client_get_default();
+
+  gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
   
-  window->priv = g_new0 (TerminalWindowPrivate, 1);
-  window->priv->terms = NULL;
+  window->priv->terms = 0;
   window->priv->active_term = NULL;
   window->priv->menubar = gtk_menu_bar_new ();
   window->priv->menubar_visible = FALSE;
   
   window->priv->main_vbox = gtk_vbox_new (FALSE, 0);
-  window->priv->notebook = terminal_notebook_new ();
+  window->priv->notebook = gtk_notebook_new ();
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (window->priv->notebook), TRUE);
+  gtk_notebook_set_show_border (GTK_NOTEBOOK (window->priv->notebook), FALSE);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (window->priv->notebook), FALSE);
+  gtk_notebook_set_group_id (GTK_NOTEBOOK (window->priv->notebook), 1);
   
   window->priv->old_char_width = -1;
   window->priv->old_char_height = -1;
   window->priv->old_geometry_widget = NULL;
   
-  window->priv->use_mnemonics = TRUE;
+  window->priv->conf = gconf_client_get_default ();
+
+  error = NULL;
+  window->priv->notify_id =
+    gconf_client_notify_add (window->priv->conf,
+                             CONF_GLOBAL_PREFIX,
+                             config_change_notify,
+                             window,
+                             NULL, &error);
+  
+  if (error)
+    {
+      g_printerr (_("There was an error subscribing to notification of terminal window configuration changes. (%s)\n"),
+                  error->message);
+      g_error_free (error);
+    }
+
+  error = NULL;
+  use_mnemonics = gconf_client_get_bool (window->priv->conf,
+                                         CONF_GLOBAL_PREFIX"/use_mnemonics",
+                                         &error);
+  if (error)
+    {
+      g_printerr (_("There was an error loading config value for whether to use mnemonics. (%s)\n"),
+                  error->message);
+      g_error_free (error);
+      use_mnemonics = TRUE;
+    }
+  window->priv->use_mnemonics = use_mnemonics;
+
   window->priv->using_mnemonics = FALSE;
+
+  window->priv->tooltips = gtk_tooltips_new ();
+  g_object_ref (window->priv->tooltips);
+  gtk_object_sink (GTK_OBJECT (window->priv->tooltips));
 
   initialize_alpha_mode (window);
 
@@ -822,11 +887,11 @@ terminal_window_init (TerminalWindow *window)
   window->priv->clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GDK_NONE);
 
   error = NULL;
-  menus_have_icons = gconf_client_get_bool (client, "/desktop/gnome/interface/menus_have_icons", &error);
+  menus_have_icons = gconf_client_get_bool (window->priv->conf, "/desktop/gnome/interface/menus_have_icons", &error);
   if (error)
     {
       g_printerr (_("There was an error loading config value for whether to use image in menus. (%s)\n"),error->message);
-      g_error_free (error);
+      g_clear_error (&error);
       menus_have_icons = TRUE;
     }
  
@@ -842,28 +907,23 @@ terminal_window_init (TerminalWindow *window)
                                TRUE);                                      
   
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "switch_page",
+                          "switch-page",
                           G_CALLBACK (notebook_page_selected_callback),
                           window);
 
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "tab_added",
-                          G_CALLBACK (notebook_tab_added_callback),
+                          "page-added",
+                          G_CALLBACK (notebook_page_added_callback),
                           window);
 
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "tab_detached",
-                          G_CALLBACK (notebook_tab_detached_callback),
-                          window);
-
-  g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "tab_removed",
-                          G_CALLBACK (notebook_tab_removed_callback),
+                          "page-removed",
+                          G_CALLBACK (notebook_page_removed_callback),
                           window);
   
   g_signal_connect_after (G_OBJECT (window->priv->notebook),
-                          "tabs_reordered",
-                          G_CALLBACK (notebook_tabs_reordered_callback),
+                          "page-reordered",
+                          G_CALLBACK (notebook_page_reordered_callback),
                           window);
 
   gtk_container_add (GTK_CONTAINER (window),
@@ -1113,7 +1173,8 @@ terminal_window_init (TerminalWindow *window)
   window->priv->use_default_menubar_visibility = TRUE;  
 
   reset_menubar_labels (window);
-  
+  reset_tab_menuitems (window);
+
   gtk_widget_show_all (window->priv->main_vbox);
 }
 
@@ -1121,16 +1182,32 @@ static void
 terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *gtk_object_class = GTK_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
-  
   object_class->finalize = terminal_window_finalize;
-  gtk_object_class->destroy = terminal_window_destroy;
+  object_class->dispose = terminal_window_dispose;
   widget_class->show = terminal_window_show;
+
+  g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 }
 
+static void
+terminal_window_dispose (GObject *object)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (object);
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (priv->notify_id != 0)
+    {
+      gconf_client_notify_remove (priv->conf, priv->notify_id);
+      priv->notify_id = 0;
+    }
+
+  priv->disposed = TRUE;
+
+  G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
+}
+   
 static void
 terminal_window_finalize (GObject *object)
 {
@@ -1138,44 +1215,29 @@ terminal_window_finalize (GObject *object)
 
   window = TERMINAL_WINDOW (object);
 
-  gconf_client_notify_remove (window->priv->conf,
-                              window->priv->notify_id);
-  window->priv->notify_id = 0;
-
   if (window->priv->conf)
-    g_object_unref (G_OBJECT (window->priv->conf));
+    {
+      g_object_unref (G_OBJECT (window->priv->conf));
+    }
   
   if (window->priv->icon)
-    g_object_unref (G_OBJECT (window->priv->icon));
+    {
+      g_object_unref (G_OBJECT (window->priv->icon));
+    }
+
+  if (window->priv->tooltips)
+    {
+      g_object_unref (G_OBJECT (window->priv->tooltips));
+    }
+
+  if (window->priv->tab_menuitems)
+    {
+      g_list_free (window->priv->tab_menuitems);
+    }
 
   g_free (window->priv->startup_id);
-  
-  g_free (window->priv);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
 
-static void
-terminal_window_destroy (GtkObject *object)
-{
-  TerminalWindow *window;
-
-  window = TERMINAL_WINDOW (object);
-
-  g_list_free (window->priv->tab_menuitems);
-  window->priv->tab_menuitems = NULL;
-  
-  /* to handle multiple destroy, FIXME some fields are missing */
-  window->priv->menubar = NULL;
-  window->priv->notebook = NULL;
-  window->priv->main_vbox = NULL;
-  window->priv->copy_menuitem = NULL;
-  window->priv->paste_menuitem = NULL;
-  window->priv->edit_config_menuitem = NULL;
-  window->priv->choose_config_menuitem = NULL;
-  window->priv->encoding_menuitem = NULL;
-  
-  GTK_OBJECT_CLASS (parent_class)->destroy (object);  
+  G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
 
 static gboolean
@@ -1254,7 +1316,7 @@ terminal_window_show (GtkWidget *widget)
         }
     }
   
-  GTK_WIDGET_CLASS (parent_class)->show (widget);
+  GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
 
   if (context != NULL)
     {
@@ -1264,60 +1326,10 @@ terminal_window_show (GtkWidget *widget)
     }
 }
 
-void terminal_window_realized_callback (GtkWidget *window,
-                                        gpointer   user_data)
-{
-  gdk_window_set_group (window->window, window->window);
-  g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
-}
-
 TerminalWindow*
-terminal_window_new (GConfClient *conf)
+terminal_window_new (void)
 {
-  TerminalWindow *window;
-  GError *err;
-  gboolean use_mnemonics;
-  
-  window = g_object_new (TERMINAL_TYPE_WINDOW, NULL);
-  g_signal_connect (G_OBJECT (window), "realize", G_CALLBACK (terminal_window_realized_callback), NULL);
-
-  window->priv->conf = conf;
-  g_object_ref (G_OBJECT (conf));
-
-  err = NULL;
-  use_mnemonics = gconf_client_get_bool (window->priv->conf,
-                                         CONF_GLOBAL_PREFIX"/use_mnemonics",
-                                         &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config value for whether to use mnemonics. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-  else
-    {
-      window->priv->use_mnemonics = use_mnemonics;
-    }
-  
-  err = NULL;
-  window->priv->notify_id =
-    gconf_client_notify_add (window->priv->conf,
-                             CONF_GLOBAL_PREFIX,
-                             config_change_notify,
-                             window,
-                             NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal window configuration changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-
-  reset_menubar_labels (window);
-  reset_tab_menuitems (window);
-  
-  return window;
+  return g_object_new (TERMINAL_TYPE_WINDOW, NULL);
 }
 
 static void
@@ -1325,7 +1337,7 @@ update_notebook (TerminalWindow *window)
 {
   gboolean single;
 
-  single = g_list_length (window->priv->terms) == 1;
+  single = window->priv->terms == 1;
     
   gtk_notebook_set_show_border (GTK_NOTEBOOK (window->priv->notebook), !single);
 }
@@ -1404,6 +1416,12 @@ update_tab_sensitivity (TerminalWindow *window)
   gboolean on_last_page;
 
   notebook = window->priv->notebook;
+
+  if (notebook == NULL)
+    {
+      return;
+    }
+
   num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
   
@@ -1441,11 +1459,100 @@ selection_changed_callback (TerminalScreen *screen,
   update_copy_sensitivity (window);
 }
 
+static void
+close_button_clicked_cb (GtkWidget *widget, GtkWidget *screen)
+{
+  GtkWidget *notebook;
+  guint page_num;
+
+  notebook = gtk_widget_get_parent (GTK_WIDGET (screen));
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), screen);
+  gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page_num);
+}
+
+static void
+sync_tab_label (TerminalScreen *screen,
+                GtkTooltips    *tooltips)
+{
+  GtkWidget *label;
+  GtkWidget *ebox;
+  const char *title;
+
+  title = terminal_screen_get_title (screen);
+
+  label = g_object_get_data (G_OBJECT (screen), "tab-label");
+  ebox = gtk_widget_get_parent (label);
+
+  gtk_label_set_text (GTK_LABEL (label), title);
+  gtk_tooltips_set_tip (tooltips, ebox, title, NULL);
+}
+
+static GtkWidget *
+contruct_tab_label (TerminalWindow *window, TerminalScreen *screen)
+{
+  const char *title;
+  GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
+  GtkRcStyle *rcstyle;
+  GtkSettings *settings;
+  gint w, h;
+
+  hbox = gtk_hbox_new (FALSE, 4);
+
+  title = terminal_screen_get_title (screen);
+
+  label_ebox = gtk_event_box_new ();
+  gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
+  gtk_tooltips_set_tip (window->priv->tooltips, label_ebox, title, NULL);
+
+  label = gtk_label_new (title);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (label_ebox), label);
+  gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
+
+  close_button = gtk_button_new ();
+  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
+  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+
+  rcstyle = gtk_rc_style_new ();
+  rcstyle->xthickness = rcstyle->ythickness = 0;
+  gtk_widget_modify_style (close_button, rcstyle);
+  gtk_rc_style_unref (rcstyle);
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (label));
+  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &w, &h);
+  gtk_widget_set_size_request (close_button, w + 2, h + 2);
+
+  image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+  gtk_container_add (GTK_CONTAINER (close_button), image);
+  gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
+
+  gtk_tooltips_set_tip (window->priv->tooltips, close_button, _("Close tab"), NULL);
+
+  g_signal_connect (G_OBJECT (close_button), "clicked",
+		    G_CALLBACK (close_button_clicked_cb),
+		    screen);
+
+  g_object_set_data (G_OBJECT (screen), "tab-label", label);
+  g_signal_connect (G_OBJECT (screen),
+                    "title-changed",
+                    G_CALLBACK (sync_tab_label),
+                    window->priv->tooltips);
+
+  gtk_widget_show_all (hbox);
+
+  return hbox;
+}
+
 void
 terminal_window_add_screen (TerminalWindow *window,
-                            TerminalScreen *screen)
+                            TerminalScreen *screen,
+                            gint            position)
 {
   TerminalWindow *old;
+  GtkWidget *tab_label;
  
   old = terminal_screen_get_window (screen);
 
@@ -1457,46 +1564,54 @@ terminal_window_add_screen (TerminalWindow *window,
   if (old)
     terminal_window_remove_screen (old, screen);
 
-  /* keep this list in same order as tabs in notebook,
-   * so that terminal_window_list_screens() returns screens
-   * in tab order
-   */
-  window->priv->terms = g_list_append (window->priv->terms, screen);
-
   terminal_screen_set_window (screen, window);
 
   gtk_widget_show_all (GTK_WIDGET (screen));
 
-  terminal_notebook_add_tab (TERMINAL_NOTEBOOK (window->priv->notebook),
-                             screen,
-                             -1,
-                             FALSE);
+  update_tab_visibility (window, +1);
+
+  tab_label = contruct_tab_label (window, screen);
+
+  gtk_notebook_insert_page (GTK_NOTEBOOK (window->priv->notebook),
+                            GTK_WIDGET (screen),
+                            tab_label,
+                            position);
+  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (window->priv->notebook),
+                                      GTK_WIDGET (screen),
+                                      TRUE, TRUE, GTK_PACK_START);
+  gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (window->priv->notebook),
+                                    GTK_WIDGET (screen),
+                                    TRUE);
+  gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (window->priv->notebook),
+                                   GTK_WIDGET (screen),
+                                   TRUE);
 }
 
 void
 terminal_window_remove_screen (TerminalWindow *window,
                                TerminalScreen *screen)
 {
+  guint num_page;
+
   g_return_if_fail (terminal_screen_get_window (screen) == window);
 
-  window->priv->terms = g_list_remove (window->priv->terms, screen);
-  
-  terminal_screen_set_window (screen, NULL);
-  
-  terminal_notebook_remove_tab (TERMINAL_NOTEBOOK (window->priv->notebook),
-                                screen);
+  update_tab_visibility (window, -1);
+
+  num_page = gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook), GTK_WIDGET (screen));
+  gtk_notebook_remove_page (GTK_NOTEBOOK (window->priv->notebook), num_page);
 }
 
 GList*
 terminal_window_list_screens (TerminalWindow *window)
 {
-  return g_list_copy (window->priv->terms);
+  /* We are trusting that GtkNotebook will return pages in order */
+  return gtk_container_get_children (GTK_CONTAINER (window->priv->notebook));
 }
 
 int    
 terminal_window_get_screen_count (TerminalWindow *window)
 {
-  return g_list_length (window->priv->terms);
+  return window->priv->terms;
 }
 
 void
@@ -1626,6 +1741,7 @@ terminal_window_set_active (TerminalWindow *window,
 {
   GtkWidget *widget;
   TerminalProfile *profile;
+  guint page_num;
   
   if (window->priv->active_term == screen)
     return;
@@ -1668,9 +1784,8 @@ terminal_window_set_active (TerminalWindow *window,
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
   gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook),
-                                 gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook),
-                                                        GTK_WIDGET (screen)));
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (window->priv->notebook), GTK_WIDGET (screen));
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (window->priv->notebook), page_num);
 
   /* set size of window to current grid size */
 #ifdef DEBUG_GEOMETRY
@@ -1708,28 +1823,10 @@ screen_get_menuitem (TerminalScreen *screen)
   return g_object_get_data (G_OBJECT (screen), "menuitem");
 }
 
-static TerminalScreen*
-find_screen (TerminalWindow *window,
-             TerminalScreen *screen)
-{
-  GList *tmp;
-
-  tmp = window->priv->terms;
-  while (tmp != NULL)
-    {
-      if (tmp->data == screen)
-        return tmp->data;
-
-      tmp = tmp->next;
-    }
-
-  return NULL;
-}
-
 static void
 notebook_page_selected_callback (GtkWidget       *notebook,
                                  GtkNotebookPage *useless_crap,
-                                 int              page_num,
+                                 guint            page_num,
                                  TerminalWindow  *window)
 {
   GtkWidget* page_widget;
@@ -1738,7 +1835,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   int old_grid_width, old_grid_height;
   GtkWidget *old_widget, *new_widget;
 
-  if (window->priv->active_term == NULL)
+  if (window->priv->active_term == NULL || window->priv->disposed)
     return;
 
   old_widget = terminal_screen_get_widget (window->priv->active_term);
@@ -1769,27 +1866,18 @@ notebook_page_selected_callback (GtkWidget       *notebook,
 }
 
 static void
-notebook_tab_added_callback (GtkWidget       *notebook,
-                               TerminalScreen  *screen,
-                               TerminalWindow  *window)
+notebook_page_added_callback (GtkWidget       *notebook,
+                              TerminalScreen  *screen,
+                              guint            page_num,
+                              TerminalWindow  *window)
 {
   GtkWidget *term;
 
-  /* Moved from another window */
-  if (find_screen (window, screen) == NULL) {
-    g_object_ref (G_OBJECT (screen)); /* make our own new refcount */
-  
-    /* keep this list in same order as tabs in notebook,
-     * so that terminal_window_list_screens() returns screens
-     * in tab order
-     */
-    window->priv->terms = g_list_append (window->priv->terms, screen);
-  
-    terminal_screen_set_window (screen, window);
-  }
-  
+  terminal_screen_set_window (screen, window);
+  window->priv->terms++;
+
   g_signal_connect (G_OBJECT (screen),
-                    "profile_set",
+                    "profile-set",
                     G_CALLBACK (profile_set_callback),
                     window);
 
@@ -1814,7 +1902,8 @@ notebook_tab_added_callback (GtkWidget       *notebook,
 
   reset_tab_menuitems (window);
   update_tab_sensitivity (window);
-  
+  update_tab_visibility (window, 0);
+
   term = terminal_screen_get_widget (screen);
 
   /* ZvtTerm is a broken POS and requires this realize to get
@@ -1840,34 +1929,25 @@ notebook_tab_added_callback (GtkWidget       *notebook,
   /* Make the first-added screen the active one */
   if (window->priv->active_term == NULL)
     terminal_window_set_active (window, screen);
+
+  if (window->priv->present_on_insert)
+    {
+      gtk_widget_show_all (GTK_WIDGET (window));
+      window->priv->present_on_insert = FALSE;
+    }
 }
 
 static void
-notebook_tab_detached_callback (GtkWidget       *notebook,
+notebook_page_removed_callback (GtkWidget       *notebook,
                                 TerminalScreen  *screen,
+                                guint            page_num,
                                 TerminalWindow  *window)
 {
-  /* Reset the tab menu before detaching the tab, in case the tab changed
-   * position before it was detached (bug #330246). */
-  reset_tab_menuitems (window);
+  int pages;
 
-  detach_tab (screen, window);
-}
+  if (window->priv->disposed)
+    return;
 
-static void
-notebook_tab_removed_callback (GtkWidget       *notebook,
-                               TerminalScreen  *screen,
-                               TerminalWindow  *window)
-{  
-  gboolean single;
-  /* Called from terminal_notebook_move_tab() */
-  if (find_screen (window, screen) != NULL) {
-    g_assert (terminal_screen_get_window (screen) == window);
-  
-    window->priv->terms = g_list_remove (window->priv->terms, screen);
-    terminal_screen_set_window (screen, NULL);
-  }
-  
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (profile_set_callback),
                                         window);
@@ -1884,29 +1964,38 @@ notebook_tab_removed_callback (GtkWidget       *notebook,
                                         G_CALLBACK (selection_changed_callback),
                                         window);
 
+  terminal_screen_set_window (screen, NULL);
+  window->priv->terms--;
+
   screen_set_menuitem (screen, NULL);
   
   update_notebook (window);
 
   reset_tab_menuitems (window);
   update_tab_sensitivity (window);
+  update_tab_visibility (window, 0);
 
-  /* The tab bar may have disappeared */
-  single = g_list_length (window->priv->terms) == 1;
-  if (single)
-    terminal_window_set_size (window, window->priv->active_term, TRUE);
-
-  /* Close window if no more terminals */
-  if (window->priv->terms == NULL)
-    gtk_widget_destroy (GTK_WIDGET (window));
+  pages = terminal_window_get_screen_count (window);
+  if (pages == 1)
+    {
+      terminal_window_set_size (window, window->priv->active_term, TRUE);
+    }
+  else if (pages == 0)
+    {
+      gtk_widget_destroy (GTK_WIDGET (window));
+    }
 }
 
 static void
-notebook_tabs_reordered_callback (GtkWidget       *notebook,
+notebook_page_reordered_callback (GtkWidget       *notebook,
+                                  GtkWidget       *child,
+                                  guint            page_num,
                                   TerminalWindow  *window)
 {
-	reset_tab_menuitems (window);
-        update_tab_sensitivity (window);
+  if (window->priv->disposed)
+    return;
+
+  reset_tab_menuitems(window);
 }
 
 void
@@ -2776,12 +2865,8 @@ move_left_tab_callback(GtkWidget      *menuitem,
   last_page = gtk_notebook_get_n_pages (notebook) - 1;
   page = gtk_notebook_get_nth_page (notebook, page_num);
   
-  if (page_num == 0)
-    terminal_notebook_move_tab (TERMINAL_NOTEBOOK (notebook), NULL,
-                                TERMINAL_SCREEN (page), last_page);
-  else
-    terminal_notebook_move_tab (TERMINAL_NOTEBOOK (notebook), NULL,
-                                TERMINAL_SCREEN (page), page_num-1);
+
+  gtk_notebook_reorder_child (notebook, page, page_num == 0 ? last_page : page_num - 1);
 
   update_tab_sensitivity (window);
   reset_tab_menuitems (window);
@@ -2800,12 +2885,7 @@ move_right_tab_callback(GtkWidget      *menuitem,
   last_page = gtk_notebook_get_n_pages (notebook) - 1;
   page = gtk_notebook_get_nth_page (notebook, page_num);
   
-  if (page_num == last_page)
-    terminal_notebook_move_tab (TERMINAL_NOTEBOOK (notebook), NULL,
-                                TERMINAL_SCREEN (page), 0);
-  else
-    terminal_notebook_move_tab (TERMINAL_NOTEBOOK (notebook), NULL,
-                                TERMINAL_SCREEN (page), page_num+1);
+  gtk_notebook_reorder_child (notebook, page, page_num == last_page ? 0 : page_num + 1);
 
   update_tab_sensitivity (window);
   reset_tab_menuitems (window);
