@@ -195,12 +195,15 @@ terminal_widget_check_match (GtkWidget *widget,
 
   match = vte_terminal_match_check(VTE_TERMINAL(widget), column, row, &tag);
   for (tags = data->url_tags; tags != NULL; tags = g_slist_next(tags))
-    if (GPOINTER_TO_INT(((TagData*)tags->data)->tag) == tag)
-      {
-        if (flavor)
-          *flavor = tag;
-        return match;
-      }
+    {
+      TagData *tag_data = (TagData*) tags->data;
+      if (GPOINTER_TO_INT(tag_data->tag) == tag)
+	{
+	  if (flavor)
+	    *flavor = tag_data->flavor;
+	  return match;
+	}
+    }
 
   g_free (match);
   return NULL;
@@ -221,12 +224,15 @@ terminal_widget_skey_check_match (GtkWidget *widget,
 
   match = vte_terminal_match_check(VTE_TERMINAL(widget), column, row, &tag);
   for (tags = data->skey_tags; tags != NULL; tags = g_slist_next(tags))
-    if (GPOINTER_TO_INT(((TagData*)tags->data)->tag) == tag)
-      {
-        if (flavor)
-          *flavor = tag;
-        return match;
-      }
+    {
+      TagData *tag_data = (TagData*) tags->data;
+      if (GPOINTER_TO_INT(tag_data->tag) == tag)
+	{
+	  if (flavor)
+	    *flavor = tag_data->flavor;
+	  return match;
+	}
+    }
 
   g_free (match);
   return NULL;
