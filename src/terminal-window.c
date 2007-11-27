@@ -140,14 +140,6 @@ static void config_change_notify            (GConfClient *client,
                                              GConfEntry  *entry,
                                              gpointer     user_data);
 
-static void menuitem_icon_visibility_notify (GConfClient *client,
-                                             guint        cnxn_id,
-                                             GConfEntry  *entry,
-                                             gpointer     user_data);
-
-static void menuitem_icon_visibility        (GtkWidget *item,
-                                             gboolean   use_image);
-
 static void reset_menubar_labels          (TerminalWindow *window);
 static void reset_tab_menuitems           (TerminalWindow *window);
 
@@ -243,121 +235,54 @@ static gboolean confirm_close_window (TerminalWindow *window);
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
 static GtkWidget*
+append_menuitem_common (GtkWidget  *menu,
+                        GtkWidget  *menu_item,
+                        const char *accel_path,
+                        GCallback   callback,
+                        gpointer    data)
+{
+  if (accel_path)
+    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
+                                  accel_path);
+  
+  gtk_widget_show (menu_item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
+                         menu_item);
+
+  if (callback)
+    g_signal_connect (G_OBJECT (menu_item),
+                      "activate",
+                      callback, data);
+
+  return menu_item;
+}
+
+static GtkWidget*
 append_menuitem (GtkWidget  *menu,
                  const char *text,
                  const char *accel_path,
                  GCallback   callback,
                  gpointer    data)
 {
-  GtkWidget *menu_item;
-  
-  menu_item = gtk_menu_item_new_with_mnemonic (text);
-
-  if (accel_path)
-    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                  accel_path);
-  
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  if (callback)
-    g_signal_connect (G_OBJECT (menu_item),
-                      "activate",
-                      callback, data);
-
-  return menu_item;
-}
-
-static void
-menuitem_icon_visibility (GtkWidget *item, gboolean use_image)
-{
-  GtkWidget *image;
-
-  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (item));
-  if (image && !g_object_get_data (G_OBJECT (item), "saved-image"))
-    g_object_set_data_full (G_OBJECT (item), "saved-image", g_object_ref (image), g_object_unref);
-
-  if (!image)
-    image = g_object_get_data (G_OBJECT (item), "saved-image");
-
-  if (!image)
-    return;
-
-  if (use_image)
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  else
-    gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), NULL);
-}
-
-static void
-menuitem_icon_visibility_notify (GConfClient *client,
-                                 guint        cnxn_id,
-                                 GConfEntry  *entry,
-                                 gpointer     user_data)
-{
-  GConfValue *value = gconf_entry_get_value (entry);
-  
-  if (value && value->type == GCONF_VALUE_BOOL)
-    menuitem_icon_visibility (user_data, gconf_value_get_bool (value));
-}
-
-void
-remove_notify (gpointer data)
-{
-  GConfClient *client;
-
-  client = gconf_client_get_default ();
-  gconf_client_notify_remove (client, GPOINTER_TO_INT (data));
-  g_object_unref (client);
+  return append_menuitem_common (menu,
+                                 gtk_menu_item_new_with_mnemonic (text),
+                                 accel_path,
+                                 callback,
+                                 data);
 }
 
 static GtkWidget*
 append_stock_menuitem (GtkWidget  *menu,
-                       const char *text,
+                       const char *stock_id,
                        const char *accel_path,
                        GCallback   callback,
                        gpointer    data)
 {
-  GtkWidget *menu_item;
-  GtkWidget *image;
-  GError *error;
-  GConfClient *client;
-  guint notify;
-
-  menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
-  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (menu_item));
-
-  error = NULL;
-
-  client = gconf_client_get_default ();
-  notify = gconf_client_notify_add (client, "/desktop/gnome/interface/menus_have_icons",
-                           menuitem_icon_visibility_notify,
-                           menu_item,
-                           NULL, &error);
-  g_object_unref (client);
-  if (error)
-    {
-      g_printerr (_("There was an error subscribing to notification of menu icon visibility changes. (%s)\n"), error->message);
-      g_error_free (error);
-    }
-
-  g_object_set_data_full (G_OBJECT (menu_item), "notify-id", GINT_TO_POINTER (notify), remove_notify);
-
-  if (accel_path)
-    gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item),
-                                  accel_path);
-
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  if (callback)
-    g_signal_connect (G_OBJECT (menu_item),
-                      "activate",
-                      callback, data);
-
-  return menu_item;
+  return append_menuitem_common (menu,
+                                 gtk_image_menu_item_new_from_stock (stock_id, NULL),
+                                 accel_path,
+                                 callback,
+                                 data);
 }
 
 static GtkWidget *
@@ -813,7 +738,6 @@ terminal_window_init (TerminalWindow *window)
   GtkWidget *menu;
   GtkAccelGroup *accel_group;
   GError *error;
-  gboolean menus_have_icons;
   gboolean use_mnemonics;
 
   window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
@@ -886,15 +810,6 @@ terminal_window_init (TerminalWindow *window)
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
   window->priv->clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GDK_NONE);
 
-  error = NULL;
-  menus_have_icons = gconf_client_get_bool (window->priv->conf, "/desktop/gnome/interface/menus_have_icons", &error);
-  if (error)
-    {
-      g_printerr (_("There was an error loading config value for whether to use image in menus. (%s)\n"),error->message);
-      g_clear_error (&error);
-      menus_have_icons = TRUE;
-    }
- 
   g_signal_connect (window->priv->menubar,
 		    "can_activate_accel",
 		    G_CALLBACK (gtk_true),
@@ -989,15 +904,13 @@ terminal_window_init (TerminalWindow *window)
                            GTK_STOCK_COPY, ACCEL_PATH_COPY,
                            G_CALLBACK (copy_callback),
                            window);
-  menuitem_icon_visibility (window->priv->copy_menuitem, menus_have_icons);
 
   window->priv->paste_menuitem =
     append_stock_menuitem (menu,
                            GTK_STOCK_PASTE, ACCEL_PATH_PASTE,
                            G_CALLBACK (paste_callback),
                            window);
-  menuitem_icon_visibility (window->priv->paste_menuitem, menus_have_icons);
-  g_signal_connect (G_OBJECT (mi), "activate", 
+  g_signal_connect (G_OBJECT (mi), "activate",
                     G_CALLBACK (edit_menu_activate_callback), window);
 
   mi = gtk_separator_menu_item_new ();
@@ -1042,17 +955,14 @@ terminal_window_init (TerminalWindow *window)
   mi = append_stock_menuitem (menu, GTK_STOCK_ZOOM_IN, ACCEL_PATH_ZOOM_IN,
                               G_CALLBACK (zoom_in_callback), window);
   window->priv->zoom_in_menuitem = mi;
-  menuitem_icon_visibility (window->priv->zoom_in_menuitem, menus_have_icons);
 
   mi = append_stock_menuitem (menu, GTK_STOCK_ZOOM_OUT, ACCEL_PATH_ZOOM_OUT,
                               G_CALLBACK (zoom_out_callback), window);
   window->priv->zoom_out_menuitem = mi;
-  menuitem_icon_visibility (window->priv->zoom_out_menuitem, menus_have_icons);
 
   mi = append_stock_menuitem (menu, GTK_STOCK_ZOOM_100, ACCEL_PATH_ZOOM_NORMAL,
                               G_CALLBACK (zoom_normal_callback), window);
   window->priv->zoom_normal_menuitem = mi;
-  menuitem_icon_visibility (window->priv->zoom_normal_menuitem, menus_have_icons);
 
   update_zoom_items (window);
   
@@ -1155,7 +1065,6 @@ terminal_window_init (TerminalWindow *window)
   mi = append_stock_menuitem (menu, GTK_STOCK_HELP, NULL,
 			      G_CALLBACK (help_callback), window);
   set_menuitem_text (mi, _("_Contents"), FALSE);
-  menuitem_icon_visibility (mi, menus_have_icons);
 
   gtk_accel_map_add_entry (ACCEL_PATH_HELP, GDK_F1, 0);
   gtk_menu_item_set_accel_path (GTK_MENU_ITEM (mi),
@@ -1165,7 +1074,6 @@ terminal_window_init (TerminalWindow *window)
   mi = append_stock_menuitem (menu, GTK_STOCK_ABOUT, NULL,
                               G_CALLBACK (about_callback), window);
   set_menuitem_text (mi, _("_About"), FALSE);
-  menuitem_icon_visibility (mi, menus_have_icons);
   
   terminal_window_reread_profile_list (window);
   
