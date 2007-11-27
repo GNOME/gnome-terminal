@@ -1923,6 +1923,8 @@ terminal_profile_update (TerminalProfile *profile)
   TerminalSettingMask locked;
   TerminalSettingMask old_locked;
   TerminalSettingMask mask;
+
+  g_return_if_fail (profile != NULL);
   
   terminal_setting_mask_clear (&mask);
   terminal_setting_mask_clear (&locked);
@@ -2334,11 +2336,18 @@ static int
 alphabetic_cmp (gconstpointer a,
                 gconstpointer b)
 {
+  int result;
+
   TerminalProfile *ap = (TerminalProfile*) a;
   TerminalProfile *bp = (TerminalProfile*) b;
 
-  return g_utf8_collate (terminal_profile_get_visible_name (ap),
-                         terminal_profile_get_visible_name (bp));
+  result =  g_utf8_collate (terminal_profile_get_visible_name (ap),
+			    terminal_profile_get_visible_name (bp));
+  if (!result)
+    result = strcmp (terminal_profile_get_name (ap),
+		     terminal_profile_get_name (bp));
+
+  return result;
 }
 
 GList*
@@ -2556,7 +2565,8 @@ dialog_add_details (GtkDialog  *dialog,
   gtk_widget_hide (label);
 }
 
-void
+/* returns actual name used for created profile */
+char *
 terminal_profile_create (TerminalProfile *base_profile,
                          const char      *visible_name,
                          GtkWindow       *transient_parent)
@@ -2941,7 +2951,6 @@ terminal_profile_create (TerminalProfile *base_profile,
   BAIL_OUT_CHECK ();
   
  cleanup:
-  g_free (profile_name);
   g_free (profile_dir);
   g_free (key);
 
@@ -2978,10 +2987,14 @@ terminal_profile_create (TerminalProfile *base_profile,
         }
 
       g_error_free (err);
+
+      g_free (profile_name);
+      profile_name = NULL;
     }
-  
+
   g_object_unref (G_OBJECT (base_profile));
   g_object_unref (G_OBJECT (transient_parent));
+  return profile_name;
 }
 
 void

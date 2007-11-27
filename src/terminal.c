@@ -769,9 +769,9 @@ parse_options_callback (poptContext              ctx,
     case OPTION_COMMAND:
       {
         GError *err;
-        InitialTab *it;
-        char **exec_argv;
-            
+  InitialTab *it;
+  char   **exec_argv;
+
 
         if (arg == NULL)
           {
@@ -780,7 +780,7 @@ parse_options_callback (poptContext              ctx,
           }
             
         err = NULL;
-        exec_argv = NULL;
+  exec_argv = NULL;
         if (!g_shell_parse_argv (arg, NULL, &exec_argv, &err))
           {
             g_printerr (_("Argument to \"%s\" is not a valid command: %s\n"),
@@ -792,27 +792,27 @@ parse_options_callback (poptContext              ctx,
         it = ensure_top_tab (results);
 
         if (it->exec_argv != NULL)
-          {
+    {
             g_printerr (_("\"%s\" specified more than once for the same window or tab\n"),
                         "--command/-e/--execute/-x");
             exit (1);
-          }
-
-        it->exec_argv = exec_argv;
+    }
+	
+  it->exec_argv = exec_argv;
       }
       break;
-
+	
     case OPTION_EXECUTE:
       {
         InitialTab *it;
-            
+
         if (results->post_execute_args == NULL)
           {
             g_printerr (_("Option \"%s\" requires specifying the command to run on the rest of the command line\n"),
                         "--execute/-x");
             exit (1);
           }
-
+	
         it = ensure_top_tab (results);
 
         if (it->exec_argv != NULL)
@@ -826,13 +826,13 @@ parse_options_callback (poptContext              ctx,
         results->post_execute_args = NULL;
       }
       break;
-          
+	
     case OPTION_WINDOW:
     case OPTION_WINDOW_WITH_PROFILE:
     case OPTION_WINDOW_WITH_PROFILE_ID:
       {
-        InitialWindow *iw;
-        const char *profile;
+  InitialWindow *iw;
+  const char *profile;
 
 
         if (opt->val == OPTION_WINDOW)
@@ -850,76 +850,76 @@ parse_options_callback (poptContext              ctx,
                              opt->val == OPTION_WINDOW_WITH_PROFILE_ID);
       }
       break;
-
+	
     case OPTION_TAB:
     case OPTION_TAB_WITH_PROFILE:
     case OPTION_TAB_WITH_PROFILE_ID:
       {
-        InitialWindow *iw;
-        const char *profile;
+  InitialWindow *iw;
+  const char *profile;
 
 
         if (opt->val == OPTION_TAB)
-          profile = NULL;
+  profile = NULL;
         else if (arg == NULL)
-          {
+    {
             g_printerr (_("Option \"%s\" requires an argument specifying what profile to use\n"),
                         "--tab-with-profile");
             exit (1);
-          }
-        else
+     }
+   else
           profile = arg;
-
-                
-        if (results->initial_windows)
-          {
-            iw = g_list_last (results->initial_windows)->data;
+	
+  
+  if (results->initial_windows)
+    {
+      iw = g_list_last (results->initial_windows)->data;
 
             iw->tabs = g_list_append (iw->tabs,
                                       initial_tab_new (profile,
                                                        opt->val == OPTION_TAB_WITH_PROFILE_ID));
-          }
-        else
-          {
+    }
+  else
+    {
             iw = add_new_window (results, profile, 
                                  opt->val == OPTION_TAB_WITH_PROFILE_ID);
-          }
-      }
+        }
+    } 
       break;
-          
+         
     case OPTION_SHOW_MENUBAR:
-      {
+    {
         InitialWindow *iw;
-            
+
         if (results->initial_windows)
-          {
+    {
             iw = g_list_last (results->initial_windows)->data;
 
             if (iw->force_menubar_state)
-              {
+         {
                 g_printerr (_("\"%s\" option given twice for the same window\n"), "--show-menubar");
 
                 exit (1);
-              }
-                
-            iw->force_menubar_state = TRUE;
-            iw->menubar_state = TRUE;
-          }
-        else
-          {
-            results->default_window_menubar_forced = TRUE;
-            results->default_window_menubar_state = TRUE;
-          }
-      }
+	  }
+
+          iw->force_menubar_state = TRUE;
+          iw->menubar_state = TRUE;
+        }
+      else
+        {
+          results->default_window_menubar_forced = TRUE;
+          results->default_window_menubar_state = TRUE;
+        }
+    }
       break;
-          
+   
     case OPTION_HIDE_MENUBAR:
-      {
+    {         
         InitialWindow *iw;
             
-        if (results->initial_windows)
-          {
-            iw = g_list_last (results->initial_windows)->data;
+      if (results->initial_windows)
+        {
+          iw = g_list_last (results->initial_windows)->data;
 
             if (iw->force_menubar_state)
               {
@@ -928,36 +928,36 @@ parse_options_callback (poptContext              ctx,
                 exit (1);
               }
                 
-            iw->force_menubar_state = TRUE;
-            iw->menubar_state = FALSE;                
-          }
-        else
-          {
-            results->default_window_menubar_forced = TRUE;
-            results->default_window_menubar_state = FALSE;
-          }
-      }
+          iw->force_menubar_state = TRUE;
+          iw->menubar_state = FALSE;                
+        }
+      else
+        {
+          results->default_window_menubar_forced = TRUE;
+          results->default_window_menubar_state = FALSE;
+        }
+    }
       break;
-
+      
     case OPTION_FULLSCREEN:
-      {
+    {           
         InitialWindow *iw;
             
-        if (results->initial_windows)
-          {
-            iw = g_list_last (results->initial_windows)->data;
+      if (results->initial_windows)
+        {
+          iw = g_list_last (results->initial_windows)->data;
 
-            iw->start_fullscreen = TRUE;
-          }
-        else
-          {
-            results->default_start_fullscreen = TRUE;
-          }
-      }
+          iw->start_fullscreen = TRUE;
+        }
+      else
+        {
+          results->default_start_fullscreen = TRUE;
+        }
+    }      
       break;
 
     case OPTION_ROLE:
-      {
+    {
         InitialWindow *iw;
 
 
@@ -967,9 +967,9 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
             
-        if (results->initial_windows)
-          {
-            iw = g_list_last (results->initial_windows)->data;
+      if (results->initial_windows)
+        {
+          iw = g_list_last (results->initial_windows)->data;
             if (iw->role)
               {
                 g_printerr (_("Two roles given for one window\n"));
@@ -977,8 +977,8 @@ parse_options_callback (poptContext              ctx,
               }
 
             iw->role = g_strdup (arg);
-          }
-      }
+        }
+    }
       break;
 
     case OPTION_GEOMETRY:
@@ -987,14 +987,14 @@ parse_options_callback (poptContext              ctx,
 
 
         if (arg == NULL)
-          {
+    {
             g_printerr (_("Option \"%s\" requires an argument giving the geometry\n"), "--geometry");
             exit (1);
           }
             
-        if (results->initial_windows)
-          {
-            iw = g_list_last (results->initial_windows)->data;
+      if (results->initial_windows)
+        {
+          iw = g_list_last (results->initial_windows)->data;
             if (iw->geometry)
               {
                 g_printerr (_("Two \"%s\" options given for one window\n"), "--geometry");
@@ -1002,14 +1002,14 @@ parse_options_callback (poptContext              ctx,
               }
 
             iw->geometry = g_strdup (arg);
-          }
-        else
+        }
+      else
           {
             if (results->default_geometry)
               {
                 g_printerr (_("Two geometries given for one window\n"));
                 exit (1);
-              }
+    }
             else
               {
                 results->default_geometry = g_strdup (arg);
@@ -1017,13 +1017,13 @@ parse_options_callback (poptContext              ctx,
           }
       }
       break;
-
+	
     case OPTION_DISABLE_FACTORY:
-      terminal_factory_disabled = TRUE;
+    terminal_factory_disabled = TRUE;
       break;
 
     case OPTION_USE_FACTORY:
-      terminal_factory_disabled = FALSE;
+    terminal_factory_disabled = FALSE;
       break;
 
     case OPTION_TITLE:
@@ -1032,12 +1032,12 @@ parse_options_callback (poptContext              ctx,
             
 
         if (arg == NULL)
-          {
+    {
             g_printerr (_("Option \"%s\" requires an argument giving the title\n"), "--title");
             exit (1);
           }
 
-        it = ensure_top_tab (results);
+      it = ensure_top_tab (results);
 
         if (it->title)
           {
@@ -1046,11 +1046,11 @@ parse_options_callback (poptContext              ctx,
           }
 
         it->title = g_strdup (arg);
-      }
+    }
       break;
 
     case OPTION_WORKING_DIRECTORY:
-      {
+    {
         InitialTab *it;
             
 
@@ -1060,13 +1060,13 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (results);
+      it = ensure_top_tab (results);
 
         if (it->working_dir)
           {
             g_printerr (_("Two \"%s\" options given for one tab\n"), "--working-directory");
             exit (1);
-          }
+	}
 
         it->working_dir = g_strdup (arg);
       }
@@ -1075,7 +1075,7 @@ parse_options_callback (poptContext              ctx,
     case OPTION_DEFAULT_WORKING_DIRECTORY:
       {
         if (arg == NULL)
-          {
+    {
             g_printerr (_("Option --default-working-directory requires an argument giving the directory\n"));
             exit (1);
           }
@@ -1093,8 +1093,8 @@ parse_options_callback (poptContext              ctx,
     case OPTION_ZOOM:
       {
         InitialTab *it;            
-        double val;
-        char *end;
+      double val;
+      char *end;
         
         if (arg == NULL)
           {
@@ -1102,7 +1102,7 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        it = ensure_top_tab (results);
+      it = ensure_top_tab (results);
 
         if (it->zoom_set)
           {
@@ -1110,40 +1110,40 @@ parse_options_callback (poptContext              ctx,
             exit (1);
           }
 
-        /* Try reading a locale-style double first, in case it was
-         * typed by a person, then fall back to ascii_strtod (we
-         * always save session in C locale format)
-         */
-        end = NULL;
+      /* Try reading a locale-style double first, in case it was
+       * typed by a person, then fall back to ascii_strtod (we
+       * always save session in C locale format)
+       */
+      end = NULL;
         val = g_strtod (arg, &end);
-        if (end == NULL || *end != '\0')
-          {
+      if (end == NULL || *end != '\0')
+        {
             val = g_ascii_strtod (arg, &end);
-            if (end == NULL || *end != '\0')
-              {
+          if (end == NULL || *end != '\0')
+            {
                 g_printerr (_("\"%s\" is not a valid zoom factor\n"),
                             arg);
                 exit (1);
-              }
-          }
+            }
+        }
 
-        if (val < (TERMINAL_SCALE_MINIMUM + 1e-6))
-          {
-            g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
+      if (val < (TERMINAL_SCALE_MINIMUM + 1e-6))
+        {
+          g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
                         val, TERMINAL_SCALE_MINIMUM);
-            val = TERMINAL_SCALE_MINIMUM;
-          }
+          val = TERMINAL_SCALE_MINIMUM;
+        }
 
-        if (val > (TERMINAL_SCALE_MAXIMUM - 1e-6))
-          {
-            g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
+      if (val > (TERMINAL_SCALE_MAXIMUM - 1e-6))
+        {
+          g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
                         val, TERMINAL_SCALE_MAXIMUM);
-            val = TERMINAL_SCALE_MAXIMUM;
-          }
+          val = TERMINAL_SCALE_MAXIMUM;
+        }
         
-        it->zoom = val;
-        it->zoom_set = TRUE;
-      }
+      it->zoom = val;
+      it->zoom_set = TRUE;
+	}
       break;
 
     case OPTION_ACTIVE:
@@ -1151,7 +1151,7 @@ parse_options_callback (poptContext              ctx,
         InitialTab *it;
 
         it = ensure_top_tab (results);
-
+	
         it->active = TRUE;
       }
       break;
@@ -1622,10 +1622,10 @@ main (int argc, char **argv)
   gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
                                                      * to complicated factory setup
                                                      */
-  
+
   gtk_init (&argc, &argv);
 
-  /* Do this here so that gdk_display is initialized */
+ /* Do this here so that gdk_display is initialized */
   if (results->startup_id == NULL)
     {
       /* Create a fake one containing a timestamp that we can use */
@@ -2380,16 +2380,12 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       
       gtk_widget_destroy (new_profile_dialog);
       
-      terminal_profile_create (base_profile, name, transient_parent);
-
-      escaped_name = gconf_escape_key (name, -1);
+      escaped_name = terminal_profile_create (base_profile, name, transient_parent);
       new_profile = terminal_profile_new (escaped_name, conf);
       terminal_profile_update (new_profile);
       sync_profile_list (FALSE, NULL);
       g_free (escaped_name);
       
-      new_profile = terminal_profile_lookup_by_visible_name (name);
-
       if (new_profile == NULL)
         {
           terminal_util_show_error_dialog (transient_parent, NULL, 
@@ -3693,7 +3689,7 @@ handle_new_terminal_event (int          argc,
   option_parsing_results_check_for_display_name (results,
                                                  &argc,
                                                  argv);
-  
+	
   store = options[0].descrip;
   options[0].descrip = (void*) results; /* I hate GnomeProgram, popt, and their
                                          * mutant spawn
@@ -3713,10 +3709,10 @@ handle_new_terminal_event (int          argc,
     g_warning ("Error on option %s: %s, passed from terminal child",
 	       poptBadOption (ctx, 0),
 	       poptStrerror (nextopt));
-
+	
   poptFreeContext (ctx);
   options[0].descrip = store;
-
+	
   option_parsing_results_apply_directory_defaults (results);
 
   new_terminal_with_options (results);

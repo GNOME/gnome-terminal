@@ -282,9 +282,9 @@ const TerminalSettingMask* terminal_profile_get_locked_settings (TerminalProfile
 
 void terminal_profile_update (TerminalProfile *profile);
 
-void terminal_profile_create (TerminalProfile *base_profile,
-                              const char      *visible_name,
-                              GtkWindow       *transient_parent);
+char* terminal_profile_create (TerminalProfile *base_profile,
+                               const char      *visible_name,
+                               GtkWindow       *transient_parent);
 
 void terminal_profile_delete_list (GConfClient *conf,
                                    GList      *list,

@@ -1,3 +1,21 @@
+2007-11-26  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 499797 – crash in Terminal: Creating a new profile b...
+
+	* src/terminal-profile.c (terminal_profile_update):
+	Return on NULL parameter.
+
+	* src/terminal-profile.c (alphabetic_cmp): Compare
+	profile names if visual names are equal.
+	
+	* src/terminal-profile.h:
+	* src/terminal-profile.c (terminal_profile_create):
+	Return actual name used.
+
+	* src/terminal.c (new_profile_response_callback):
+	Use actual name returned by terminal_profile_create() to avoid
+	crashing if profile with dup name is created.
+
 2007-11-09  Takao Fujiwara  <takao.fujiwara@sun.com>
 
 	Bug 471700 – gnome-terminal has an unlocalized license text.
