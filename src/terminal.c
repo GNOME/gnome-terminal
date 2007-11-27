@@ -3548,7 +3548,8 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_p
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_ERROR,
                                        GTK_BUTTONS_OK,
-                                       message);
+                                       message ? "%s" : NULL,
+				       message);
 
       g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
 

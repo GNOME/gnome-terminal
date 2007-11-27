@@ -1,3 +1,11 @@
+2007-11-12  Chris Wilson  <chris@chris-wilson.co.uk>
+
+	Bug 494828 – crash in Terminal: Using elinks in a termin...
+
+	* src/terminal.c (terminal_util_show_error_dialog):
+	    We were passing an unescaped tainted string as the format to
+	    printf via gtk_message_dialog_new()...
+
 2007-11-26  Behdad Esfahbod  <behdad@gnome.org>
 
 	Bug 499797 – crash in Terminal: Creating a new profile b...
