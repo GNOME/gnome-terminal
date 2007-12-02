@@ -3278,66 +3278,16 @@ terminal_app_get_clone_command (TerminalApp *app,
                                 int         *argcp,
                                 char      ***argvp)
 {
-  int n_windows;
-  int n_tabs;
   GList *tmp;
-  int argc;
-  char **argv;
-  int i;
+  GPtrArray* args;
   
-  n_windows = g_list_length (app->windows);
+  args = g_ptr_array_new ();
 
-  n_tabs = 0;
-  tmp = app->windows;
-  while (tmp != NULL)
-    {
-      GList *tabs = terminal_window_list_screens (tmp->data);
-
-      n_tabs += g_list_length (tabs);
-
-      g_list_free (tabs);
-      
-      tmp = tmp->next;
-    }
-  
-  argc = 1; /* argv[0] */
-
-  if (terminal_factory_disabled)
-    argc += 1; /* --disable-factory */
-  
-  argc += n_windows; /* one --with-window-profile-internal-id per window,
-                      * for the first tab in that window
-                      */
-  argc += n_windows; /* one --show-menubar or --hide-menubar per window */
-
-  argc += n_windows; /* one --role per window */
-
-  argc += n_windows; /* one --active per window */
-
-  argc += n_tabs - n_windows; /* one --with-tab-profile-internal-id
-                               * per extra tab
-                               */
-
-  argc += n_tabs * 2; /* one "--command foo" per tab */
-
-  argc += n_tabs * 2; /* one "--title foo" per tab */
-
-  argc += n_tabs * 2; /* one "--working-directory foo" per tab */
-
-  argc += n_tabs * 2; /* one "--zoom" per tab */
-  
-  argc += 2; /* one "--geometry" per active tab */
-  
-  argv = g_new0 (char*, argc + 1);
-
-  i = 0;
-  argv[i] = g_strdup (EXECUTABLE_NAME);
-  ++i;
+   g_ptr_array_add (args, g_strdup (EXECUTABLE_NAME));
 
   if (terminal_factory_disabled)
     {
-      argv[i] = g_strdup ("--disable-factory");
-      ++i;
+       g_ptr_array_add (args, g_strdup ("--disable-factory"));
     }
   
   tmp = app->windows;
@@ -3365,23 +3315,20 @@ terminal_app_get_clone_command (TerminalApp *app,
           
           if (tmp2 == tabs)
             {
-              argv[i] = g_strdup_printf ("--window-with-profile-internal-id=%s",
-                                         profile_id);
-              ++i;
+               g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
+                                                     profile_id));
               if (terminal_window_get_menubar_visible (window))
-                argv[i] = g_strdup ("--show-menubar");
+                 g_ptr_array_add (args, g_strdup ("--show-menubar"));
               else
-                argv[i] = g_strdup ("--hide-menubar");
-              ++i;
-              argv[i] = g_strdup_printf ("--role=%s",
-                                         gtk_window_get_role (GTK_WINDOW (window)));
-              ++i;
+                 g_ptr_array_add (args, g_strdup ("--hide-menubar"));
+
+               g_ptr_array_add (args, g_strdup_printf ("--role=%s",
+                                                     gtk_window_get_role (GTK_WINDOW (window))));
             }
           else
             {
-              argv[i] = g_strdup_printf ("--tab-with-profile-internal-id=%s",
-                                         profile_id);
-              ++i;
+               g_ptr_array_add (args, g_strdup_printf ("--tab-with-profile-internal-id=%s",
+                                                     profile_id));
             }
 
           if (screen == active_screen)
@@ -3389,14 +3336,13 @@ terminal_app_get_clone_command (TerminalApp *app,
               int w, h, x, y;
 
               /* FIXME saving the geometry is not great :-/ */
-              argv[i] = g_strdup ("--active");
-              ++i;
-              argv[i] = g_strdup ("--geometry");
-              ++i;
+               g_ptr_array_add (args, g_strdup ("--active"));
+
+               g_ptr_array_add (args, g_strdup ("--geometry"));
+
               terminal_widget_get_size (terminal_screen_get_widget (screen), &w, &h);
               gtk_window_get_position (GTK_WINDOW (window), &x, &y);
-              argv[i] = g_strdup_printf ("%dx%d+%d+%d", w, h, x, y);
-              ++i;
+              g_ptr_array_add (args, g_strdup_printf ("%dx%d+%d+%d", w, h, x, y));
             }
 
           override_command = terminal_screen_get_override_command (screen);
@@ -3404,21 +3350,17 @@ terminal_app_get_clone_command (TerminalApp *app,
             {
               char *flattened;
 
-              argv[i] = g_strdup ("--command");
-              ++i;
+               g_ptr_array_add (args, g_strdup ("--command"));
               
               flattened = g_strjoinv (" ", (char**) override_command);
-              argv[i] = flattened;
-              ++i;
+               g_ptr_array_add (args, flattened);
             }
 
           title = terminal_screen_get_dynamic_title (screen);
           if (title)
             {
-              argv[i] = g_strdup ("--title");
-              ++i;
-              argv[i] = g_strdup (title);
-              ++i;
+               g_ptr_array_add (args, g_strdup ("--title"));
+               g_ptr_array_add (args, g_strdup (title));
             }
 
           {
@@ -3428,10 +3370,8 @@ terminal_app_get_clone_command (TerminalApp *app,
 
             if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
               {
-                argv[i] = g_strdup ("--working-directory");
-                ++i;
-                argv[i] = g_strdup (dir);
-                ++i;
+                 g_ptr_array_add (args, g_strdup ("--working-directory"));
+                g_ptr_array_add (args, g_strdup (dir));
               }
           }
 
@@ -3442,10 +3382,8 @@ terminal_app_get_clone_command (TerminalApp *app,
 
               g_ascii_dtostr (buf, sizeof (buf), zoom);
               
-              argv[i] = g_strdup ("--zoom");
-              ++i;
-              argv[i] = g_strdup (buf);
-              ++i;
+               g_ptr_array_add (args, g_strdup ("--zoom"));
+              g_ptr_array_add (args, g_strdup (buf));
             }
           
           tmp2 = tmp2->next;
@@ -3456,8 +3394,8 @@ terminal_app_get_clone_command (TerminalApp *app,
       tmp = tmp->next;
     }
 
-  *argvp = argv;
-  *argcp = i;
+  *argcp = args->len;
+  *argvp = (char**) g_ptr_array_free (args, FALSE);
 }
 
 static gboolean
