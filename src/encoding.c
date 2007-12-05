@@ -937,7 +937,7 @@ terminal_encoding_init (GConfClient *conf)
        * which the underlying GIConv implementation can't support.
        */
       converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
-		             encodings[i].charset, encodings[i].charset,
+		             encodings[i].charset, "ASCII",
 			     &bytes_read, &bytes_written, NULL);
       
       /* The encoding is only valid if ASCII passes through cleanly. */
