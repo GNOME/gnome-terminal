@@ -1,5 +1,25 @@
 2007-12-04  Behdad Esfahbod  <behdad@gnome.org>
 
+	* src/encoding.c (terminal_encoding_free),
+	(terminal_encoding_copy), (terminal_encoding_init):
+	* src/profile-editor.c (color_scheme_changed),
+	(palette_scheme_changed),
+	(profile_editor_update_color_scheme_menu),
+	(profile_editor_update_palette), (profile_editor_update_x_font),
+	(profile_editor_update_background_type):
+	* src/skey/btoe.c (btoe), (extract):
+	* src/skey/skey.c (skey_test):
+	* src/skey/skeyutil.c:
+	* src/terminal-accels.c:
+	* src/terminal-profile.c:
+	* src/terminal-screen.c (terminal_screen_set_font):
+	* src/terminal-window.c (terminal_window_realized_callback):
+	* src/terminal.c (slowly_and_stupidly_obtain_timestamp), (main),
+	(terminal_app_new_terminal):
+	Fix bunch of compiler warnings.
+
+2007-12-04  Behdad Esfahbod  <behdad@gnome.org>
+
 	Bug 144000 – encodings other than the current encoding are not listed
 	in gnome-terminal on Solaris.
 

@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include "skeyutil.h"
 
 void skey_sevenbit(char *s)
 {

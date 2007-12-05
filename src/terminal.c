@@ -1526,7 +1526,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
     XSetWindowAttributes attrs;
     Atom atom_name;
     Atom atom_type;
-    char *name;
+    const char *name;
 
     attrs.override_redirect = True;
     attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
@@ -1615,7 +1615,7 @@ main (int argc, char **argv)
   if (startup_id != NULL && *startup_id != '\0')
     {
       results->startup_id = g_strdup (startup_id);
-      putenv ("DESKTOP_STARTUP_ID=");
+      putenv ((char *) "DESKTOP_STARTUP_ID=");
     }
   
   gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
@@ -1945,8 +1945,6 @@ terminal_app_new_terminal (TerminalApp     *app,
   window_created = FALSE;
   if (window == NULL)
     {
-      GdkScreen *gdk_screen;
-
       window = terminal_app_new_window (app, role, startup_id, display_name, screen_number);
       window_created = TRUE;
     }

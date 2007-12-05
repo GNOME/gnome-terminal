@@ -243,8 +243,7 @@ static const char Wp[2048][4] = { "A", "ABE", "ACE", "ACT", "AD", "ADA", "ADD",
  * Returns a pointer to a static buffer
  */
 
-char *btoe(md)
-unsigned char *md;
+char *btoe(unsigned char *md)
 {
         char cp[9];	/* 64 + 2 = 66 bits */
         int p, i;
@@ -280,9 +279,7 @@ unsigned char *md;
  * starting with bit 'start'
  */
 
-guint32 extract(s, start, length)
-char *s;
-int start, length;
+guint32 extract(char *s, int start, int length)
 {
         guint8 cl;
         guint8 cc;

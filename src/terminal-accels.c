@@ -411,12 +411,6 @@ terminal_accels_init (GConfClient *conf)
 }
 
 GtkAccelGroup*
-terminal_accels_get_accel_group (void)
-{
-  return hack_group;
-}
-
-GtkAccelGroup*
 terminal_accels_get_group_for_widget (GtkWidget *widget)
 {
   GtkAccelGroup *group;
@@ -834,28 +828,7 @@ accel_set_func (GtkTreeViewColumn *tree_column,
 		  NULL);
 }
 
-int
-name_compare_func (GtkTreeModel *model,
-                   GtkTreeIter  *a,
-                   GtkTreeIter  *b,
-                   gpointer      user_data)
-{
-  KeyEntry *ke_a;
-  KeyEntry *ke_b;
-  
-  gtk_tree_model_get (model, a,
-                      ACTION_COLUMN, &ke_a,
-                      -1);
-
-  gtk_tree_model_get (model, b,
-                      ACTION_COLUMN, &ke_b,
-                      -1);
-
-  return g_utf8_collate (_(ke_a->user_visible_name),
-                         _(ke_b->user_visible_name));
-}
-
-int
+static int
 accel_compare_func (GtkTreeModel *model,
                     GtkTreeIter  *a,
                     GtkTreeIter  *b,
@@ -1112,7 +1085,7 @@ real_start_editing_cb (IdleData *idle_data)
   return FALSE;
 }
 
-gboolean
+static gboolean
 start_editing_cb (GtkTreeView    *tree_view,
                   GdkEventButton *event,
 		  gpointer        data)

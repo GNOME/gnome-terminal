@@ -425,7 +425,7 @@ static void
 color_scheme_changed (GtkWidget       *combo_box,
                       TerminalProfile *profile)
 {
-  int i;
+  unsigned int i;
   
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
   
@@ -434,7 +434,9 @@ color_scheme_changed (GtkWidget       *combo_box,
                                        &color_schemes[i].foreground,
                                        &color_schemes[i].background);
   else
-    ; /* "custom" selected, no change */
+    {
+      /* "custom" selected, no change */
+    }
 }
 
 static void
@@ -601,7 +603,7 @@ static void
 palette_scheme_changed (GtkWidget       *combo_box,
                       TerminalProfile *profile)
 {
-  int i;
+  unsigned int i;
   
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo_box));
   
@@ -609,7 +611,9 @@ palette_scheme_changed (GtkWidget       *combo_box,
     terminal_profile_set_palette (profile,
                                   palette_schemes[i].palette);
   else
-    ; /* "custom" selected, no change */
+    {
+      /* "custom" selected, no change */
+    }
 }
 
 static void
@@ -1628,22 +1632,20 @@ profile_editor_update_color_scheme_menu (GtkWidget       *editor,
                                          TerminalProfile *profile)
 {
   GdkColor fg, bg;
-  int i;
+  unsigned int i;
   GtkWidget *w;
 
   w = profile_editor_get_widget (editor, "color-scheme-combobox");
   
   terminal_profile_get_color_scheme (profile, &fg, &bg);
 
-  i = 0;
-  while (i < G_N_ELEMENTS (color_schemes))
+  for (i = 0; i < G_N_ELEMENTS (color_schemes); i++)
     {
       if (gdk_color_equal (&color_schemes[i].foreground,
                            &fg) &&
           gdk_color_equal (&color_schemes[i].background,
                            &bg))
         break;
-      ++i;
     }
 
   /* If we didn't find a match, then we want the last combo
@@ -1856,27 +1858,23 @@ profile_editor_update_palette (GtkWidget       *editor,
                                TerminalProfile *profile)
 {
   GtkWidget *w;
-  int i;
+  unsigned int i;
   GdkColor palette[TERMINAL_PALETTE_SIZE];
 
   terminal_profile_get_palette (profile, palette);
   
-  i = 0;
-  while (i < TERMINAL_PALETTE_SIZE)
+  for (i = 0; i < TERMINAL_PALETTE_SIZE; i++)
     {
       char *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
       w = profile_editor_get_widget (editor, s);
       g_free (s);
       
       colorpicker_set_if_changed (w, &palette[i]);
-      
-      ++i;
     }
 
   w = profile_editor_get_widget (editor, "palette-combobox");
 
-  i = 0;
-  while (i < G_N_ELEMENTS (palette_schemes))
+  for (i = 0; i < G_N_ELEMENTS (palette_schemes); i++)
     {
       int j;
       gboolean match;
@@ -1897,8 +1895,6 @@ profile_editor_update_palette (GtkWidget       *editor,
 
       if (match)
         break;
-      
-      ++i;
     }
 
   /* If we didn't find a match, then we want the last combo
@@ -1912,9 +1908,9 @@ profile_editor_update_x_font (GtkWidget       *editor,
                               TerminalProfile *profile)
 {
   GtkWidget *fontsel;
-  char *spacings[] = { "m", "c", NULL };
-  char *slants[] = { "r", "ot", NULL };
-  char *weights[] = { "medium", "regular", "demibold", NULL };
+  const char *spacings[] = { "m", "c", NULL };
+  const char *slants[] = { "r", "ot", NULL };
+  const char *weights[] = { "medium", "regular", "demibold", NULL };
   gchar *name;
 
   if (terminal_widget_supports_pango_fonts ())
@@ -1972,6 +1968,8 @@ profile_editor_update_background_type (GtkWidget       *editor,
       w = profile_editor_get_widget (editor, "transparent-radiobutton");
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), TRUE);
       break;
+    default:
+      g_assert_not_reached ();
     }
 }
 

@@ -115,9 +115,6 @@ static void       screen_set_menuitem  (TerminalScreen *screen,
                                         GtkWidget      *menuitem);
 static GtkWidget* screen_get_menuitem  (TerminalScreen *screen);
 
-static TerminalScreen* find_screen (TerminalWindow *window,
-                                    TerminalScreen *screen);
-
 static void notebook_page_selected_callback  (GtkWidget       *notebook,
                                               GtkNotebookPage *useless_crap,
                                               guint            page_num,
@@ -724,8 +721,9 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   return GTK_NOTEBOOK (dest_window->priv->notebook);
 }
 
-void terminal_window_realized_callback (GtkWidget *window,
-                                        gpointer   user_data)
+static void
+terminal_window_realized_callback (GtkWidget *window,
+				   gpointer   user_data)
 {
   gdk_window_set_group (window->window, window->window);
   g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);

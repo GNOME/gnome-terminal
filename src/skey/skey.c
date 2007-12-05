@@ -82,7 +82,7 @@ static struct test_entry sha1_test_vector[] = {
 	{"OTP's are good",  "correct", 99, "4F29 6A74 FE15 67EC", "AURA ALOE HURL WING BERG WAIT"}
 };
 
-int skey_test()
+static int skey_test(void)
 {
 	int i, n;
 	int failed = 0;

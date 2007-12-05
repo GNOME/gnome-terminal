@@ -2512,7 +2512,7 @@ emit_changed (TerminalProfile           *profile,
 }
 
 /* Function I'm cut-and-pasting everywhere, this is from msm */
-void
+static void
 dialog_add_details (GtkDialog  *dialog,
                     const char *details)
 {
@@ -3120,7 +3120,7 @@ terminal_profile_get_for_new_term (TerminalProfile *current)
  * does not carry all the bytes, and xterm's palette is messed up...
  */
 
-gchar*
+static gchar*
 color_selection_palette_to_string (const GdkColor *colors, gint n_colors)
 {
   gint i;

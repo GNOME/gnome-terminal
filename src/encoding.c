@@ -292,7 +292,7 @@ terminal_encoding_free (TerminalEncoding *encoding)
 {
   g_free (encoding->name);
   g_free (encoding->charset);
-  g_free (encoding);
+  g_slice_free (TerminalEncoding, encoding);
 }
 
 static TerminalEncoding*
@@ -300,7 +300,7 @@ terminal_encoding_copy (const TerminalEncoding *src)
 {
   TerminalEncoding *c;
 
-  c = g_new (TerminalEncoding, 1);
+  c = g_slice_new (TerminalEncoding);
   c->index = src->index;
   c->valid = src->valid;
   c->name = g_strdup (src->name);
@@ -915,7 +915,7 @@ terminal_encoding_init (GConfClient *conf)
 
   /* Initialize the sample text with all of the printing ASCII characters
    * from space (32) to the tilde (126), 95 in all. */ 
-  for (i = 0; i < sizeof (ascii_sample); i++) 
+  for (i = 0; i < (int) sizeof (ascii_sample); i++) 
     ascii_sample[i] = i + 32;
 
   ascii_sample[sizeof(ascii_sample) - 1] = '\0';

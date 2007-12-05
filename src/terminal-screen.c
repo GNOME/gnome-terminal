@@ -792,7 +792,7 @@ monospace_font_change_notify (GConfClient *client,
     terminal_screen_change_font (screen);
 }
 
-PangoFontDescription *
+static PangoFontDescription *
 get_system_monospace_font (void)
 {
   GConfClient *conf;
@@ -865,7 +865,7 @@ terminal_screen_set_font (TerminalScreen *screen)
 
                 g_assert (font_name);
                 
-                if (!xfont_is_monospace (font_name));
+                if (!xfont_is_monospace (font_name))
                 {
                   /* Can't use the system font as-is */
                   char *fallback;
@@ -2302,7 +2302,7 @@ enum
   TARGET_TAB
 };
 
-void        
+static void        
 drag_data_received (TerminalScreen   *widget,
                     GdkDragContext   *context,
                     gint              x,
