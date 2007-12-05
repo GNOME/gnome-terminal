@@ -137,9 +137,9 @@ static TerminalEncoding encodings[] = {
     "IBM864", N_("Arabic") },
 
   { TERMINAL_ENCODING_ISO_2022_JP, FALSE,
-    "ISO2022JP", N_("Japanese") },
+    "ISO-2022-JP", N_("Japanese") },
   { TERMINAL_ENCODING_ISO_2022_KR, FALSE,
-    "ISO2022KR", N_("Korean") },
+    "ISO-2022-KR", N_("Korean") },
   { TERMINAL_ENCODING_ISO_IR_111, FALSE,
     "ISO-IR-111", N_("Cyrillic") },
   { TERMINAL_ENCODING_JOHAB, FALSE,
@@ -181,7 +181,7 @@ static TerminalEncoding encodings[] = {
     "MAC_UKRAINIAN", N_("Cyrillic/Ukrainian") },
   
   { TERMINAL_ENCODING_SHIFT_JIS, FALSE,
-    "SHIFT-JIS", N_("Japanese") },
+    "SHIFT_JIS", N_("Japanese") },
   { TERMINAL_ENCODING_TCVN, FALSE,
     "TCVN", N_("Vietnamese") },
   { TERMINAL_ENCODING_TIS_620, FALSE,
