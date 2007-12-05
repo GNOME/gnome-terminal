@@ -3380,7 +3380,7 @@ terminal_app_get_clone_command (TerminalApp *app,
 
               g_ascii_dtostr (buf, sizeof (buf), zoom);
               
-               g_ptr_array_add (args, g_strdup ("--zoom"));
+              g_ptr_array_add (args, g_strdup ("--zoom"));
               g_ptr_array_add (args, g_strdup (buf));
             }
           
@@ -3391,6 +3391,9 @@ terminal_app_get_clone_command (TerminalApp *app,
       
       tmp = tmp->next;
     }
+
+  /* final NULL */
+  g_ptr_array_add (args, NULL);
 
   *argcp = args->len;
   *argvp = (char**) g_ptr_array_free (args, FALSE);
