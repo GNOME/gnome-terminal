@@ -56,7 +56,6 @@ typedef struct
   unsigned int icon_file : 1;
   unsigned int is_default : 1;
   unsigned int palette : 1;
-  unsigned int x_font : 1;
   unsigned int background_type : 1;
   unsigned int background_image_file : 1;
   unsigned int scroll_background : 1;
@@ -173,7 +172,6 @@ GdkPixbuf*                terminal_profile_get_icon                 (TerminalPro
 gboolean                  terminal_profile_get_is_default           (TerminalProfile *profile);
 void                      terminal_profile_get_palette              (TerminalProfile *profile,
                                                                      GdkColor        *colors);
-const char*               terminal_profile_get_x_font               (TerminalProfile *profile);
 
 TerminalBackgroundType terminal_profile_get_background_type       (TerminalProfile *profile);
 GdkPixbuf*             terminal_profile_get_background_image      (TerminalProfile *profile);
@@ -237,8 +235,6 @@ void terminal_profile_set_palette              (TerminalProfile *profile,
 void terminal_profile_set_palette_entry        (TerminalProfile *profile,
                                                 int              i,
                                                 const GdkColor  *color);
-void terminal_profile_set_x_font               (TerminalProfile *profile,
-                                                const char      *name);
 
 void terminal_profile_set_background_type       (TerminalProfile        *profile,
                                                  TerminalBackgroundType  type);

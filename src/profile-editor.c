@@ -30,7 +30,6 @@
 #include <libgnomevfs/gnome-vfs-mime-utils.h>
 #include <string.h>
 #include <math.h>
-#include "simple-x-font-selector.h"
 #include "terminal-widget.h"
 
 #define BYTES_PER_LINE (terminal_widget_get_estimated_bytes_per_scrollback_line ())
@@ -118,8 +117,6 @@ static void       profile_editor_update_use_custom_command   (GtkWidget       *w
 static void       profile_editor_update_custom_command       (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_palette              (GtkWidget       *widget,
-                                                              TerminalProfile *profile);
-static void       profile_editor_update_x_font               (GtkWidget       *widget,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_background_type      (GtkWidget       *widget,
                                                               TerminalProfile *profile);
@@ -313,9 +310,6 @@ profile_changed (TerminalProfile           *profile,
   if (mask->palette)
     profile_editor_update_palette (editor, profile);
 
-  if (mask->x_font)
-    profile_editor_update_x_font (editor, profile);
-
   if (mask->background_type)
     profile_editor_update_background_type (editor, profile);
   
@@ -490,15 +484,6 @@ word_chars_changed (GtkWidget       *entry,
   terminal_profile_set_word_chars (profile, text);
 
   g_free (text);
-}
-
-static void 
-font_changed (EggXFontSelector *selector, TerminalProfile *profile)
-{
-  gchar *name = egg_xfont_selector_get_font_name (selector);
-  if (name)
-    terminal_profile_set_x_font (profile, name);
-  g_free (name);
 }
 
 static void
@@ -941,6 +926,7 @@ terminal_profile_edit (TerminalProfile *profile,
       double num1, num2;
       gint i;
       GtkSizeGroup *size_group;
+      GtkWidget *font_label;
 
       xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
                                            "profile-editor-dialog",
@@ -1234,67 +1220,39 @@ terminal_profile_edit (TerminalProfile *profile,
 
       w = glade_xml_get_widget (xml, "font-hbox");
 
-      if (terminal_widget_supports_pango_fonts ())
-        {
-          GtkWidget *font_label;
-          
-          fontsel = gtk_font_button_new ();
-          g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
+      fontsel = gtk_font_button_new ();
+      g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
 
-          gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose A Terminal Font"));
-          gtk_font_button_set_show_size (GTK_FONT_BUTTON (fontsel), TRUE);
-          gtk_font_button_set_show_style (GTK_FONT_BUTTON (fontsel), FALSE);
-          gtk_font_button_set_use_font (GTK_FONT_BUTTON (fontsel), TRUE);
-          gtk_font_button_set_use_size (GTK_FONT_BUTTON (fontsel), FALSE);
+      gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose A Terminal Font"));
+      gtk_font_button_set_show_size (GTK_FONT_BUTTON (fontsel), TRUE);
+      gtk_font_button_set_show_style (GTK_FONT_BUTTON (fontsel), FALSE);
+      gtk_font_button_set_use_font (GTK_FONT_BUTTON (fontsel), TRUE);
+      gtk_font_button_set_use_size (GTK_FONT_BUTTON (fontsel), FALSE);
 
-          profile_editor_update_font (editor, profile);
-          g_signal_connect (G_OBJECT (fontsel), "font_set",
-                            G_CALLBACK (font_set),
-                            profile);
+      profile_editor_update_font (editor, profile);
+      g_signal_connect (G_OBJECT (fontsel), "font_set",
+			G_CALLBACK (font_set),
+			profile);
 
-          font_label = gtk_label_new_with_mnemonic (_("_Font:"));
-          gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
-          gtk_label_set_mnemonic_widget (GTK_LABEL (font_label), fontsel);
+      font_label = gtk_label_new_with_mnemonic (_("_Font:"));
+      gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (font_label), fontsel);
 
-          gtk_box_set_spacing (GTK_BOX (w), 12);
-          
-          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (font_label), FALSE, FALSE, 0);
-          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), FALSE, FALSE, 0);
-
-          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-          gtk_size_group_add_widget (size_group,
-                                     font_label);
-          gtk_size_group_add_widget (size_group,
-                                     glade_xml_get_widget (xml,
-                                                           "profile-name-label"));
-          gtk_size_group_add_widget (size_group,
-                                     glade_xml_get_widget (xml,
-                                                           "profile-icon-label"));
-          g_object_unref (G_OBJECT (size_group));
-        }
-      else
-        {
-          fontsel = egg_xfont_selector_new (_("Choose A Terminal Font"));
-          g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
- 
-          profile_editor_update_x_font (editor, profile);
+      gtk_box_set_spacing (GTK_BOX (w), 12);
       
-          g_signal_connect (fontsel, "changed",
-                            G_CALLBACK (font_changed), profile);
+      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (font_label), FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), FALSE, FALSE, 0);
 
-          size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-          gtk_size_group_add_widget (size_group,
-                                     EGG_XFONT_SELECTOR (fontsel)->family_label);
-          gtk_size_group_add_widget (size_group,
-                                     glade_xml_get_widget (xml,
-                                                           "profile-name-label"));
-          gtk_size_group_add_widget (size_group,
-                                     glade_xml_get_widget (xml,
-                                                           "profile-icon-label"));
-          g_object_unref (G_OBJECT (size_group));
-
-          gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), TRUE, TRUE, 0);
-        }
+      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+      gtk_size_group_add_widget (size_group,
+				 font_label);
+      gtk_size_group_add_widget (size_group,
+				 glade_xml_get_widget (xml,
+						       "profile-name-label"));
+      gtk_size_group_add_widget (size_group,
+				 glade_xml_get_widget (xml,
+						       "profile-icon-label"));
+      g_object_unref (G_OBJECT (size_group));
       
       gtk_widget_show_all (w);
       
@@ -1400,10 +1358,7 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
 
   if (!terminal_profile_get_use_system_font (profile))
     {
-      if (terminal_widget_supports_pango_fonts ())
-        set_insensitive (editor, "font-hbox", mask->font);
-      else
-        set_insensitive (editor, "font-hbox", mask->x_font);
+      set_insensitive (editor, "font-hbox", mask->font);
     }
   else
     {
@@ -1904,51 +1859,6 @@ profile_editor_update_palette (GtkWidget       *editor,
 }
 
 static void
-profile_editor_update_x_font (GtkWidget       *editor,
-                              TerminalProfile *profile)
-{
-  GtkWidget *fontsel;
-  const char *spacings[] = { "m", "c", NULL };
-  const char *slants[] = { "r", "ot", NULL };
-  const char *weights[] = { "medium", "regular", "demibold", NULL };
-  gchar *name;
-
-  if (terminal_widget_supports_pango_fonts ())
-    return;
-  
-  fontsel = g_object_get_data (G_OBJECT (editor), "font-selector");
-
-  /* If the current selector font is the same as the new font,
-   * don't do any work.
-   */
-  name = egg_xfont_selector_get_font_name (EGG_XFONT_SELECTOR (fontsel));
-  
-  if (name == NULL)
-    return;
-
-  if (strcmp (name, terminal_profile_get_x_font (profile)) == 0)
-    {
-      g_free (name);
-      return;
-    }
-  
-  g_free (name);
-  
-  egg_xfont_selector_set_font_name (EGG_XFONT_SELECTOR (fontsel),
-				    terminal_profile_get_x_font (profile));
-
-  egg_xfont_selector_set_filter (EGG_XFONT_SELECTOR (fontsel),
-				 EGG_XFONT_FILTER_BASE,
-				 EGG_XFONT_ALL,
-				 NULL,
-				 weights,
-				 slants,
-				 NULL,
-				 spacings,
-				 NULL);
-}
-
-static void
 profile_editor_update_background_type (GtkWidget       *editor,
                                        TerminalProfile *profile)
 {
@@ -2067,9 +1977,6 @@ profile_editor_update_font (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  if (!terminal_widget_supports_pango_fonts ())
-    return;
-  
   w = g_object_get_data (G_OBJECT (editor), "font-selector");
 
   fontpicker_set_if_changed (w,

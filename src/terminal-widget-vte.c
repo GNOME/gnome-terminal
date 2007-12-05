@@ -642,12 +642,6 @@ terminal_widget_set_pango_font (GtkWidget                  *widget,
     }
 }
 
-gboolean
-terminal_widget_supports_pango_fonts (void)
-{
-  return TRUE;
-}
-
 const char*
 terminal_widget_get_encoding (GtkWidget *widget)
 {

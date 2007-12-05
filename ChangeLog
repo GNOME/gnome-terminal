@@ -1,5 +1,33 @@
 2007-12-04  Behdad Esfahbod  <behdad@gnome.org>
 
+	Bug 501665 – Remove simple-x-font-selector
+
+	* src/Makefile.am:
+	* src/profile-editor.c (profile_changed), (terminal_profile_edit),
+	(profile_editor_update_sensitivity), (profile_editor_update_font):
+	* src/simple-x-font-selector.c:
+	* src/simple-x-font-selector.h:
+	* src/terminal-profile.c (terminal_profile_init),
+	(terminal_profile_finalize), (terminal_profile_update),
+	(profile_change_notify), (terminal_profile_create):
+	* src/terminal-profile.h:
+	* src/terminal-screen.c (terminal_screen_set_font),
+	(terminal_screen_update_scrollbar):
+	* src/terminal-widget-vte.c:
+	Remove simple-x-font-selector:
+		Makefile.am              |    2 
+		profile-editor.c         |  155 ----
+		simple-x-font-selector.c | 1730
+		-----------------------------------------------
+		simple-x-font-selector.h |  180 ----
+		terminal-profile.c       |   61 -
+		terminal-profile.h       |    4 
+		terminal-screen.c        |  314 --------
+		terminal-widget-vte.c    |    6 
+		8 files changed, 41 insertions(+), 2411 deletions(-)
+
+2007-12-04  Behdad Esfahbod  <behdad@gnome.org>
+
 	* src/encoding.c (terminal_encoding_free),
 	(terminal_encoding_copy), (terminal_encoding_init):
 	* src/profile-editor.c (color_scheme_changed),
