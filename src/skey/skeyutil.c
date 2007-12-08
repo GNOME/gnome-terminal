@@ -1,3 +1,5 @@
+#include <config.h>
+
 #include <ctype.h>
 #include "skeyutil.h"
 
