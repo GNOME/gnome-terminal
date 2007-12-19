@@ -53,8 +53,8 @@ int SHA1Keycrunch(char *result, const char *seed, const char *passphrase)
 	char *buf;
         gsize len;
         GChecksum *checksum;
-        guint8 *digest = NULL;
-        gsize digest_len;
+        guint8 digest[20];
+        gsize digest_len = sizeof (digest);
 	guint32 *results;
 
 	len = strlen(seed) + strlen(passphrase);
@@ -70,7 +70,7 @@ int SHA1Keycrunch(char *result, const char *seed, const char *passphrase)
         g_checksum_update (checksum, (const guchar *) buf, len);
 	free(buf);
 
-        g_checksum_get_digest (checksum, &digest, &digest_len);
+        g_checksum_get_digest (checksum, digest, &digest_len);
         g_assert (digest_len == 20);
 
         results = (guint32 *) digest;
@@ -89,7 +89,6 @@ int SHA1Keycrunch(char *result, const char *seed, const char *passphrase)
 	memcpy((void *)result, (void *)results, SKEY_SIZE);
 
         g_checksum_free (checksum);
-        g_free (digest);
 
 	return 0;
 }
@@ -97,13 +96,13 @@ int SHA1Keycrunch(char *result, const char *seed, const char *passphrase)
 void SHA1SKey(char *x)
 {
         GChecksum *checksum;
-        guint8 *digest = NULL;
-        gsize digest_len;
+        guint8 digest[20];
+        gsize digest_len = sizeof (digest);
 	guint32 *results;
 
         checksum = g_checksum_new (G_CHECKSUM_SHA1);
         g_checksum_update (checksum, (const guchar *) x, SKEY_SIZE);
-        g_checksum_get_digest (checksum, &digest, &digest_len);
+        g_checksum_get_digest (checksum, digest, &digest_len);
         g_assert (digest_len == 20);
 
         results = (guint32 *) digest;
@@ -120,5 +119,4 @@ void SHA1SKey(char *x)
 	memcpy((void *)x, (void *)results, SKEY_SIZE);
 
         g_checksum_free (checksum);
-        g_free (digest);
 }
