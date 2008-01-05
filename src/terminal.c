@@ -1216,8 +1216,6 @@ main (int argc, char **argv)
                                 GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
                                 NULL); 
 
-  g_option_context_free (context);
-
  /* Do this here so that gdk_display is initialized */
   if (parsing_results->startup_id == NULL)
     {
@@ -3557,6 +3555,7 @@ get_goption_context (OptionParsingResults *parsing_results)
   };
 
   context = g_option_context_new (N_("GNOME Terminal Emulator"));
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   option_group = g_option_group_new ("gnome-terminal",
                                      N_("GNOME Terminal Emulator"),
                                      N_("Show GNOME Terminal options"),
