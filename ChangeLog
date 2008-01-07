@@ -1,43 +1,7 @@
-2007-12-01  Behdad Esfahbod  <behdad@gnome.org>
+2008-01-07  Behdad Esfahbod  <behdad@gnome.org>
 
-	Bug 499877 – Update terminal_app_get_clone_command() to use g_array
-	Patch from Dubon
-
-	* src/terminal.c (terminal_app_get_clone_command): Use GPtrArray to
-	simplify code.
-
-2007-11-27  Christian Perschhristian Persch  <chpe@gnome.org>
-
-	* src/terminal.c: Revert accidental whitespace changes from commit
-	2289.
-
-2007-11-27  Christian Persch  <chpe@gnome.org>
-
-	R src/terminal-notebook.c:
-	R src/terminal-notebook.h: And remove the obsolete files.
-
-2007-11-26  Behdad Esfahbod  <behdad@gnome.org>
-
-	Bug 499588 – remove menu icons handling code
-	Patch from Christian Persch
-
-	* src/terminal-window.c (append_menuitem_common),
-	(append_menuitem), (append_stock_menuitem), (terminal_window_init):
-	Gtk is taking care of the menus-have-icons setting itself. Remove this
-	totally crufty code to check the gconf setting and remove/re-add the
-	menu icons!
-
-2007-11-26  Behdad Esfahbod  <behdad@gnome.org>
-
-	Bug 353775 – Use GtkNotebook instead of TerminalNotebook
-	Patch from Christian Persch and Mariano Suárez-Alvarez
-
-	* src/Makefile.am:
-	* src/terminal-screen.c:
-	* src/terminal-window.h:
-	* src/terminal.c:
-	* src/terminal.h:
-	Do that.
+	* NEWS:
+	* configure.in: Released 2.18.4
 
 2007-11-26  Behdad Esfahbod  <behdad@gnome.org>
 
