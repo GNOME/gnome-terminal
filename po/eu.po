@@ -1,15 +1,15 @@
-# translation of eu.po to Basque
+# translation of gnome-terminal.HEAD.po to Basque
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
 #
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
-# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2004, 2006, 2007.
+# Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2004, 2006, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: eu\n"
+"Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-03-31 17:41+0200\n"
-"PO-Revision-Date: 2007-03-31 17:41+0200\n"
+"POT-Creation-Date: 2008-01-10 11:44+0100\n"
+"PO-Revision-Date: 2008-01-09 22:43+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,8 +19,8 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
-#: ../src/terminal-accels.c:181 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:800 ../src/terminal.c:1206 ../src/terminal.c:1638
+#: ../src/terminal-accels.c:180 ../src/terminal-profile.c:275
+#: ../src/terminal-window.c:750 ../src/terminal.c:1229
 msgid "Terminal"
 msgstr "Terminala"
 
@@ -28,31 +28,31 @@ msgstr "Terminala"
 msgid "Use the command line"
 msgstr "Erabili komando-lerroa"
 
-#: ../src/eggcellrendererkeys.c:160 ../src/eggcellrendererkeys.c:161
+#: ../src/eggcellrendererkeys.c:176 ../src/eggcellrendererkeys.c:177
 msgid "Accelerator key"
 msgstr "Laster-teklak"
 
-#: ../src/eggcellrendererkeys.c:170 ../src/eggcellrendererkeys.c:171
+#: ../src/eggcellrendererkeys.c:186 ../src/eggcellrendererkeys.c:187
 msgid "Accelerator modifiers"
 msgstr "Laster-teklen aldatzaileak"
 
-#: ../src/eggcellrendererkeys.c:180
+#: ../src/eggcellrendererkeys.c:196
 msgid "Accelerator Mode"
 msgstr "Laster-teklen modua"
 
-#: ../src/eggcellrendererkeys.c:181
+#: ../src/eggcellrendererkeys.c:197
 msgid "The type of accelerator."
 msgstr "Laster-teklen mota."
 
-#: ../src/eggcellrendererkeys.c:219 ../src/terminal-accels.c:726
+#: ../src/eggcellrendererkeys.c:235 ../src/terminal-accels.c:719
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: ../src/eggcellrendererkeys.c:330 ../src/eggcellrendererkeys.c:564
+#: ../src/eggcellrendererkeys.c:346 ../src/eggcellrendererkeys.c:580
 msgid "Type a new accelerator, or press Backspace to clear"
-msgstr "Idatzi laster-tekla berriak, edo sakatu 'Atzera' tekla garbitzeko"
+msgstr "Idatzi laster-tekla berriak, edo sakatu 'Atzera-tekla' garbitzeko"
 
-#: ../src/eggcellrendererkeys.c:567
+#: ../src/eggcellrendererkeys.c:583
 msgid "Type a new accelerator"
 msgstr "Idatzi laster-tekla berriak"
 
@@ -404,7 +404,7 @@ msgstr "Hasierako _titulua:"
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
 
-#: ../src/gnome-terminal.glade2.h:46 ../src/terminal-accels.c:82
+#: ../src/gnome-terminal.glade2.h:46 ../src/terminal-accels.c:81
 msgid "New Profile"
 msgstr "Profil berria"
 
@@ -472,7 +472,7 @@ msgstr "_Atzera korritu:"
 
 #: ../src/gnome-terminal.glade2.h:64
 msgid "Scroll on _keystroke"
-msgstr "_Tekla sakatutakoan korritu"
+msgstr "Korritu _tekla sakatutakoan"
 
 #: ../src/gnome-terminal.glade2.h:65
 msgid "Scrolling"
@@ -524,7 +524,7 @@ msgstr "_Oinarria:"
 
 #: ../src/gnome-terminal.glade2.h:77
 msgid "_Delete key generates:"
-msgstr "_Ezabatu tekla sakatutakoan:"
+msgstr "'_Ezabatu' tekla sakatutakoan:"
 
 #: ../src/gnome-terminal.glade2.h:78
 msgid "_Dynamically-set title:"
@@ -548,7 +548,7 @@ msgstr "_Exekutatu komandoa saioa hasteko shell gisa"
 
 #: ../src/gnome-terminal.glade2.h:83
 msgid "_Scrollbar is:"
-msgstr "_Korritze-barraren kokalekua:"
+msgstr "_Korritze-barraren posizioa:"
 
 #: ../src/gnome-terminal.glade2.h:84
 msgid "_Shortcut keys:"
@@ -586,7 +586,7 @@ msgid ""
 msgstr ""
 "Kodeketa posibleen azpimultzo bat Kodeketa azpimenuan ematen da. Hor "
 "azalduko diren kodeketen zerrenda da hau. \"unekoa\" izeneko kodeketa "
-"bereziak, hautatuta dagoen hizkuntza-ezarpena bistaratzeko esan nahi du."
+"bereziak, hautatuta dagoen hizkuntza-ezarpena bistaratzea esan nahi du."
 
 #: ../src/gnome-terminal.schemas.in.h:2
 msgid ""
@@ -595,7 +595,7 @@ msgid ""
 "implementation, there are only two levels of darkness possible, so the "
 "setting behaves as a boolean, where 0.0 disables the darkening effect."
 msgstr ""
-"Atzeko planoko irudia zenbat ilunsu behar den zehazteko, 0.0 eta 1.0 arteko "
+"Atzeko planoko irudia zenbat ilundu behar den zehazteko, 0.0 eta 1.0 arteko "
 "balio bat adierazi behar da. 0.0 balioak ez iluntzeko esan nahi du eta 1.0 "
 "balioak erabat iluntzeko. Oraingoz, bi maila besterik ez daude aukeran, eta, "
 "beraz, ezarpen boolearra da (0.0k itzaleztatzea desgaitzen du)."
@@ -636,7 +636,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:6
 msgid "Accelerator to detach current tab."
-msgstr "Bizkortzialea uneko fitxa desuztartzeko."
+msgstr "Bizkortzailea uneko fitxa desuztartzeko."
 
 #: ../src/gnome-terminal.schemas.in.h:7
 msgid "Accelerator to move the current tab to the left."
@@ -648,7 +648,8 @@ msgstr "Tekla bizkortzailea, uneko fitxa eskuinera eramateko."
 
 #: ../src/gnome-terminal.schemas.in.h:9
 msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
-msgstr "Pango letra-tipo baten izena. Adib., \"Sans 12\" edo \"Monospace Bold 14\"."
+msgstr ""
+"Pango letra-tipo baten izena. Adib., \"Sans 12\" edo \"Monospace Bold 14\"."
 
 #: ../src/gnome-terminal.schemas.in.h:10
 msgid ""
@@ -782,7 +783,8 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Hautatzen bada, tekla bat sakatzean korritze-barra beheraino joango da."
+msgstr ""
+"Hautatzen bada, tekla bat sakatzean korritze-barra beheraino joango da."
 
 #: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
@@ -806,8 +808,8 @@ msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"Hautatzen bada, sistemako saio-hasierako utmp eta wtmp erregistroak  "
-"eguneratu egingo da terminalean komando bat abiarazten denean."
+"Hautatzen bada, sistemako saio-hasierako utmp eta wtmp erregistroak "
+"eguneratu egingo dira terminalean komando bat abiarazten denean."
 
 #: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
@@ -835,8 +837,10 @@ msgstr ""
 "exekutatu beharrean."
 
 #: ../src/gnome-terminal.schemas.in.h:43
-msgid "If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr "Hautatzen bada, irteera berri bat dagoenean terminala beheraino korrituko da."
+msgid ""
+"If true, whenever there's new output the terminal will scroll to the bottom."
+msgstr ""
+"Hautatzen bada, irteera berri bat dagoenean terminala beheraino korrituko da."
 
 #: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
@@ -1207,7 +1211,7 @@ msgstr "Leiho berria irekitzeko laster-teklak."
 
 #: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to paste text"
-msgstr "Tewstua itsasteko laster-teklak."
+msgstr "Testua itsasteko laster-teklak."
 
 #: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to reset and clear the terminal"
@@ -1343,7 +1347,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:114
 msgid "Position of the scrollbar"
-msgstr "Korritze-barraren kokalekua"
+msgstr "Korritze-barraren posizioa"
 
 #: ../src/gnome-terminal.schemas.in.h:115
 msgid ""
@@ -1354,7 +1358,8 @@ msgstr ""
 "berrabiarazteko."
 
 #: ../src/gnome-terminal.schemas.in.h:116
-msgid "Profile to be used when opening a new window or tab. Must be in profile_list."
+msgid ""
+"Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Leiho edo fitxa berria irekitzean erabiliko den profila. Profilen zerrendan "
 "egon behar du."
@@ -1365,7 +1370,8 @@ msgstr "Terminal berrietan erabiltzeko profila"
 
 #: ../src/gnome-terminal.schemas.in.h:118
 msgid "Run this command in place of the shell, if use_custom_command is true."
-msgstr "Exekutatu hau komando hau shell-aren ordez, use_custom_command egiazkoa bada."
+msgstr ""
+"Exekutatu hau komando hau shell-aren ordez, use_custom_command egiazkoa bada."
 
 #: ../src/gnome-terminal.schemas.in.h:119
 msgid ""
@@ -1375,7 +1381,7 @@ msgid ""
 "to backspace or delete. \"ascii-del\" is normally considered the correct "
 "setting for the Backspace key."
 msgstr ""
-"Atzera-teklak sortuko duen kodea ezartzen du. Hauek dira balio posibleak: "
+"'Atzera-tekla'k sortuko duen kodea ezartzen du. Hauek dira balio posibleak: "
 "\"ascii-del\" (ASCII DEL karakterea), \"control-h\" (Ktrl+H, AKA ASCII BS "
 "karakterea), \"escape-sequence\" (normalean atzera-teklari edo ezabatzekoari "
 "lotutako ihes-sekuentzia). Atzera-teklarentzat \"ascii-del\" ezarpen "
@@ -1389,7 +1395,7 @@ msgid ""
 "backspace or delete. \"escape-sequence\" is normally considered the correct "
 "setting for the Delete key."
 msgstr ""
-"Ezabatu teklak sortuko duen kodea ezartzen du. Hauek dira balio posibleak: "
+"'Ezabatu' teklak sortuko duen kodea ezartzen du. Hauek dira balio posibleak: "
 "\"ascii-del\" (ASCII DEL karakterea), \"control-h\" (Ktrl+H, AKA ASCII BS "
 "karakterea), \"escape-sequence\" (normalean atzera-teklari edo ezabatzekoari "
 "lotutako ihes-sekuentzia). Ezabatu teklarentzat \"escape-sequence\" ezarpen "
@@ -1488,19 +1494,19 @@ msgid ""
 "more than one open tab."
 msgstr ""
 "Hainbat fitxa dituen terminal baten lehioa ixtean baieztapena eskatu behar "
-"duen ala ez."
+"den ala ez."
 
 #: ../src/gnome-terminal.schemas.in.h:136
 msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "Terminal baten lehioa ixtean baieztapena eskatu behar duen ala ez."
+msgstr "Terminal baten lehioa ixtean baieztapena eskatu behar den ala ez."
 
 #: ../src/gnome-terminal.schemas.in.h:137
 msgid "Whether to blink the cursor"
-msgstr "Kurtsorea keinuka erakutsi behar den"
+msgstr "Kurtsorea keinuka erakutsi behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:138
 msgid "Whether to disable anti-aliasing without the X RENDER extension"
-msgstr "X RENDER luzapenik gabe antialiasing-a desgaitu ala ez."
+msgstr "X RENDER luzapenik gabe antialiasing-a desgaitu ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:139
 msgid ""
@@ -1514,45 +1520,46 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Terminaleko komandoa saioa hasteko shell gisa abiarazi behar den"
+msgstr ""
+"Terminaleko komandoa saioa hasteko shell gisa abiarazi behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether to run a custom command instead of the shell"
-msgstr "Shell-aren ordez komando pertsonalizatu bat exekutatu behar den"
+msgstr "Shell-aren ordez komando pertsonalizatu bat exekutatu behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether to scroll background image"
-msgstr "Atzeko planoko irudia korritu behar den."
+msgstr "Atzeko planoko irudia korritu behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether to scroll to the bottom when a key is pressed"
-msgstr "Tekla bat sakatutakoan beheraino korritu behar den"
+msgstr "Tekla bat sakatutakoan beheraino korritu behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether to scroll to the bottom when there's new output"
-msgstr "Irteera berri bat dagoenean beheraino korritu behar den"
+msgstr "Irteera berri bat dagoenean beheraino korritu behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether to show menubar in new windows/tabs"
-msgstr "Leiho/fitxa berrietan menu-barra erakutsi behar den"
+msgstr "Leiho/fitxa berrietan menu-barra erakutsi behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to silence terminal bell"
-msgstr "Terminal-soinua isilarazi behar den"
+msgstr "Terminal-soinua isilarazi behar den ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Terminaleko komandoa abiaraztean saio-hasierako erregistroak eguneratu behar "
-"dituen ala ez."
+"diren ala ez."
 
 #: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr "Terminalean gaiaren koloreak erabili behar diren"
+msgstr "Terminalean gaiaren koloreak erabili behar diren ala ez"
 
 #: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to use the system font"
-msgstr "Sistemako letra-tipoa erabili behar den"
+msgstr "Sistemako letra-tipoa erabili behar den ala ez"
 
 #. Translators: Please note that this has to be a list of
 #. valid encodings (which are to be taken from the list in src/encoding.c).
@@ -1564,25 +1571,29 @@ msgstr "Sistemako letra-tipoa erabili behar den"
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current,ISO-8859-15]"
 
-#: ../src/profile-editor.c:49
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "Beltza hori argiaren gainean"
 
-#: ../src/profile-editor.c:51
+#: ../src/profile-editor.c:50
 msgid "Black on white"
 msgstr "Beltza zuriaren gainean"
 
-#: ../src/profile-editor.c:53
+#: ../src/profile-editor.c:52
 msgid "Gray on black"
 msgstr "Grisa beltzaren gainean"
 
-#: ../src/profile-editor.c:55
+#: ../src/profile-editor.c:54
 msgid "Green on black"
 msgstr "Berdea beltzaren gainean"
 
-#: ../src/profile-editor.c:57
+#: ../src/profile-editor.c:56
 msgid "White on black"
 msgstr "Zuria beltzaren gainean"
+
+#: ../src/profile-editor.c:69
+msgid "Tango"
+msgstr "Tango"
 
 #: ../src/profile-editor.c:70
 msgid "Linux console"
@@ -1596,96 +1607,36 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#: ../src/profile-editor.c:73
-msgid "Tango"
-msgstr "Tango"
-
-#: ../src/profile-editor.c:890
+#: ../src/profile-editor.c:882
 msgid "Images"
 msgstr "Irudiak"
 
-#: ../src/profile-editor.c:894
+#: ../src/profile-editor.c:886
 msgid "All Files"
 msgstr "Fitxategi guztiak"
 
-#: ../src/profile-editor.c:1205
+#: ../src/profile-editor.c:1198
 #, c-format
 msgid "Choose Palette Color %d"
-msgstr "Aukeratu %d paleta-kolore"
+msgstr "Aukeratu %d paleta-kolorea"
 
-#: ../src/profile-editor.c:1209
+#: ../src/profile-editor.c:1202
 #, c-format
 msgid "Palette entry %d"
 msgstr "%d paleta-sarrera"
 
-#: ../src/profile-editor.c:1237 ../src/profile-editor.c:1270
+#: ../src/profile-editor.c:1226
 msgid "Choose A Terminal Font"
 msgstr "Aukeratu terminalaren letra-tipoa"
 
-#: ../src/profile-editor.c:1248 ../src/simple-x-font-selector.c:327
+#: ../src/profile-editor.c:1237
 msgid "_Font:"
 msgstr "Letra-ti_poa:"
 
-#: ../src/profile-editor.c:1548
+#: ../src/profile-editor.c:1510
 #, c-format
 msgid "Editing Profile \"%s\""
 msgstr "\"%s\" profilaren edizioa"
-
-#: ../src/simple-x-font-selector.c:332
-msgid "Si_ze:"
-msgstr "Ta_maina:"
-
-#: ../src/simple-x-font-selector.c:334
-msgid "_Use bold version of font"
-msgstr "_Erabili letra-tipoaren bertsio lodia"
-
-#: ../src/simple-x-font-selector.c:341
-msgid "Click to choose font type"
-msgstr "Egin klik letra-tipoa aukeratzeko"
-
-#: ../src/simple-x-font-selector.c:345
-msgid "Click to choose font size"
-msgstr "Egin klik letra-tamaina aukeratzeko"
-
-#: ../src/simple-x-font-selector.c:656
-msgid "roman"
-msgstr "erromatarra"
-
-#: ../src/simple-x-font-selector.c:657
-msgid "italic"
-msgstr "etzana"
-
-#: ../src/simple-x-font-selector.c:658
-msgid "oblique"
-msgstr "zeiharra"
-
-#: ../src/simple-x-font-selector.c:659
-msgid "reverse italic"
-msgstr "alderantzizko etzana"
-
-#: ../src/simple-x-font-selector.c:660
-msgid "reverse oblique"
-msgstr "alderantzizko zeiharra"
-
-#: ../src/simple-x-font-selector.c:661
-msgid "other"
-msgstr "bestelakoa"
-
-#: ../src/simple-x-font-selector.c:668
-msgid "proportional"
-msgstr "proportzionala"
-
-#: ../src/simple-x-font-selector.c:669
-msgid "monospaced"
-msgstr "tarte bakarrekoa"
-
-#: ../src/simple-x-font-selector.c:670
-msgid "char cell"
-msgstr "karaktere-gelaxka"
-
-#: ../src/simple-x-font-selector.c:1265
-msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS gaindituta. Behar bada letra-tipo batzuk faltako dira."
 
 #: ../src/skey-popup.c:122
 msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
@@ -1695,180 +1646,180 @@ msgstr "Zuk klik egindako testuak ez dirudi S/Key erronka denik."
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "Zuk klik egindako testuak ez dirudi OTP erronka denik."
 
-#: ../src/terminal-accels.c:78
+#: ../src/terminal-accels.c:77
 msgid "New Tab"
 msgstr "Fitxa berria"
 
-#: ../src/terminal-accels.c:80
+#: ../src/terminal-accels.c:79
 msgid "New Window"
 msgstr "Leiho berria"
 
-#: ../src/terminal-accels.c:84
+#: ../src/terminal-accels.c:83
 msgid "Close Tab"
 msgstr "Itxi fitxa"
 
-#: ../src/terminal-accels.c:86
+#: ../src/terminal-accels.c:85
 msgid "Close Window"
 msgstr "Itxi leihoa"
 
-#: ../src/terminal-accels.c:92
+#: ../src/terminal-accels.c:91
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: ../src/terminal-accels.c:94
+#: ../src/terminal-accels.c:93
 msgid "Paste"
 msgstr "Itsatsi"
 
-#: ../src/terminal-accels.c:100
+#: ../src/terminal-accels.c:99
 msgid "Hide and Show menubar"
 msgstr "Ezkutatu eta erakutsi menu-barra"
 
-#: ../src/terminal-accels.c:102
+#: ../src/terminal-accels.c:101
 msgid "Full Screen"
 msgstr "Pantaila osoa"
 
-#: ../src/terminal-accels.c:104
+#: ../src/terminal-accels.c:103
 msgid "Zoom In"
 msgstr "Zooma handiagotu"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:105
 msgid "Zoom Out"
 msgstr "Zooma txikiagotu"
 
-#: ../src/terminal-accels.c:108
+#: ../src/terminal-accels.c:107
 msgid "Normal Size"
 msgstr "Tamaina normala"
 
-#: ../src/terminal-accels.c:114 ../src/terminal-screen.c:2216
+#: ../src/terminal-accels.c:113 ../src/terminal-screen.c:2126
 msgid "Set Title"
 msgstr "Ezarri titulua"
 
-#: ../src/terminal-accels.c:116
+#: ../src/terminal-accels.c:115
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: ../src/terminal-accels.c:118
+#: ../src/terminal-accels.c:117
 msgid "Reset and Clear"
 msgstr "Berrezarri eta garbitu"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:123
 msgid "Switch to Previous Tab"
 msgstr "Aldatu aurreko fitxara"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:125
 msgid "Switch to Next Tab"
 msgstr "Aldatu hurrengo fitxara"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:127
 msgid "Move Tab to the Left"
 msgstr "Eraman fitxa ezkerrera"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:129
 msgid "Move Tab to the Right"
 msgstr "Eraman fitxa eskuinera"
 
-#: ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:131
 msgid "Detach Tab"
 msgstr "Desuztartu fitxa"
 
-#: ../src/terminal-accels.c:134
+#: ../src/terminal-accels.c:133
 msgid "Switch to Tab 1"
 msgstr "Aldatu 1. fitxara"
 
-#: ../src/terminal-accels.c:137
+#: ../src/terminal-accels.c:136
 msgid "Switch to Tab 2"
 msgstr "Aldatu 2. fitxara"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:139
 msgid "Switch to Tab 3"
 msgstr "Aldatu 3. fitxara"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:142
 msgid "Switch to Tab 4"
 msgstr "Aldatu 4. fitxara"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:145
 msgid "Switch to Tab 5"
 msgstr "Aldatu 5. fitxara"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:148
 msgid "Switch to Tab 6"
 msgstr "Aldatu 6. fitxara"
 
-#: ../src/terminal-accels.c:152
+#: ../src/terminal-accels.c:151
 msgid "Switch to Tab 7"
 msgstr "Aldatu 7. fitxara"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:154
 msgid "Switch to Tab 8"
 msgstr "Aldatu 8. fitxara"
 
-#: ../src/terminal-accels.c:158
+#: ../src/terminal-accels.c:157
 msgid "Switch to Tab 9"
 msgstr "Aldatu 9. fitxara"
 
-#: ../src/terminal-accels.c:161
+#: ../src/terminal-accels.c:160
 msgid "Switch to Tab 10"
 msgstr "Aldatu 10. fitxara"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:163
 msgid "Switch to Tab 11"
 msgstr "Aldatu 11. fitxara"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:166
 msgid "Switch to Tab 12"
 msgstr "Aldatu 12. fitxara"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:172
 msgid "Contents"
 msgstr "Edukia"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:177
 msgid "File"
 msgstr "Fitxategia"
 
-#: ../src/terminal-accels.c:179
+#: ../src/terminal-accels.c:178
 msgid "Edit"
 msgstr "Editatu"
 
-#: ../src/terminal-accels.c:180
+#: ../src/terminal-accels.c:179
 msgid "View"
 msgstr "Ikusi"
 
-#: ../src/terminal-accels.c:182
+#: ../src/terminal-accels.c:181
 msgid "Go"
 msgstr "Joan"
 
-#: ../src/terminal-accels.c:183
+#: ../src/terminal-accels.c:182
 msgid "Help"
 msgstr "Laguntza"
 
-#: ../src/terminal-accels.c:273 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
+#: ../src/terminal-accels.c:272 ../src/terminal-profile.c:390
+#: ../src/terminal-screen.c:191 ../src/terminal.c:1288
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "Errorea %s(e)tik konfigurazioa kargatzean. (%s)\n"
 
-#: ../src/terminal-accels.c:287
+#: ../src/terminal-accels.c:286
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal keybinding "
 "changes. (%s)\n"
 msgstr ""
-"Errorea terminalaren laster-teklen aldaketen berri-ematean harpidetzean. (%"
+"Errorea terminalaren laster-teklen aldaketen berri-emateko harpidetzean. (%"
 "s)\n"
 
-#: ../src/terminal-accels.c:328
+#: ../src/terminal-accels.c:327
 #, c-format
 msgid "There was an error loading a terminal keybinding. (%s)\n"
 msgstr "Errorea terminalaren laster-tekla bat kargatzean. (%s)\n"
 
-#: ../src/terminal-accels.c:344
+#: ../src/terminal-accels.c:343
 #, c-format
 msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
 msgstr "%s konfigurazio-gakoaren balioa ez da baliozkoa; balioa \"%s\" da\n"
 
-#: ../src/terminal-accels.c:367
+#: ../src/terminal-accels.c:366
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use menubar access "
@@ -1877,7 +1828,7 @@ msgstr ""
 "Errorea menuetan laster-teklarik erabili behar den zehazteko konfigurazio-"
 "balioa kargatzean. (%s)\n"
 
-#: ../src/terminal-accels.c:381
+#: ../src/terminal-accels.c:380
 #, c-format
 msgid ""
 "There was an error subscribing to notification on changes on whether to use "
@@ -1886,7 +1837,7 @@ msgstr ""
 "Errorea menu-barrako sarbide-teklak aldatzean emango den abisuan "
 "harpidetzean (%s)\n"
 
-#: ../src/terminal-accels.c:392
+#: ../src/terminal-accels.c:391
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use menu "
@@ -1895,164 +1846,163 @@ msgstr ""
 "Errorea menuetan laster-teklarik erabili behar den zehazteko konfigurazio-"
 "balioa kargatzean. (%s)\n"
 
-#: ../src/terminal-accels.c:408
+#: ../src/terminal-accels.c:407
 #, c-format
 msgid ""
 "There was an error subscribing to notification for use_menu_accelerators (%"
 "s)\n"
-msgstr "Errorea use_menu_accelerators-en berri-ematean harpidetzean (%s)\n"
+msgstr "Errorea use_menu_accelerators-en berri-emateko harpidetzean (%s)\n"
 
-#: ../src/terminal-accels.c:786
+#: ../src/terminal-accels.c:779
 #, c-format
 msgid "Error propagating accelerator change to configuration database: %s\n"
 msgstr ""
 "Errorea laster-teklaren aldaketa konfigurazioaren datu-basera barreiatzean: %"
 "s\n"
 
-#: ../src/terminal-accels.c:995
+#: ../src/terminal-accels.c:967
 #, c-format
 msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
 msgstr "\"%s\" lasterbidea jadanik \"%s\" ekintzari lotuta dago"
 
-#: ../src/terminal-accels.c:1028
+#: ../src/terminal-accels.c:1000
 #, c-format
 msgid "Error setting new accelerator in configuration database: %s\n"
-msgstr "Errorea laster-tekla berria konfigurazioaren datu-basean ezartzean: %s\n"
+msgstr ""
+"Errorea laster-tekla berria konfigurazioaren datu-basean ezartzean: %s\n"
 
-#: ../src/terminal-accels.c:1059
+#: ../src/terminal-accels.c:1031
 #, c-format
 msgid "Error setting %s config key: %s\n"
 msgstr "Errorea %s gakoa ezartzean: %s\n"
 
-#: ../src/terminal-accels.c:1087
+#: ../src/terminal-accels.c:1059
 #, c-format
 msgid "Error setting use_menu_accelerators key: %s\n"
 msgstr "Errorea use_menu_accelerators gakoa ezartzean: %s\n"
 
-#: ../src/terminal-accels.c:1206
+#: ../src/terminal-accels.c:1178
 msgid "_Action"
 msgstr "_Ekintza"
 
-#: ../src/terminal-accels.c:1226
+#: ../src/terminal-accels.c:1198
 msgid "Shortcut _Key"
 msgstr "_Laster-teklak"
 
-#: ../src/terminal-notebook.c:818
-msgid "Close tab"
-msgstr "Itxi fitxa"
-
-#: ../src/terminal-profile.c:410
+#: ../src/terminal-profile.c:405
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile changes. "
 "(%s)\n"
-msgstr "Errorea terminalaren profil-aldaketen berri-ematean harpidetzean. (%s)\n"
+msgstr ""
+"Errorea terminalaren profil-aldaketen berri-ematean harpidetzean. (%s)\n"
 
-#: ../src/terminal-profile.c:1005
+#: ../src/terminal-profile.c:1000
 #, c-format
 msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Ezin izan da \"%s\" izeneko ikonorik aurkitu \"%s\" terminal-profilarentzat\n"
+msgstr ""
+"Ezin izan da \"%s\" izeneko ikonorik aurkitu \"%s\" terminal-profilarentzat\n"
 
-#: ../src/terminal-profile.c:1019
+#: ../src/terminal-profile.c:1014
 #, c-format
 msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Huts egin du \"%s\" ikonoa kargatzean \"%s\" terminal-profilarentzat: %s\n"
+msgstr ""
+"Huts egin du \"%s\" ikonoa kargatzean \"%s\" terminal-profilarentzat: %s\n"
 
-#: ../src/terminal-profile.c:1205
+#: ../src/terminal-profile.c:1173
 #, c-format
-msgid "Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+msgid ""
+"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
 msgstr ""
 "Ezin izan da \"%s\" izeneko atzeko planoko irudirik aurkitu \"%s\" terminal-"
 "profilarentzat\n"
 
-#: ../src/terminal-profile.c:1219
+#: ../src/terminal-profile.c:1187
 #, c-format
-msgid "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+msgid ""
+"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
 msgstr ""
 "Huts egin du \"%s\" atzeko planoko irudia kargatzean \"%s\" terminal-"
 "profilarentzat: %s\n"
 
-#: ../src/terminal-profile.c:1894
+#: ../src/terminal-profile.c:1843
 #, c-format
-msgid "GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+msgid ""
+"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
 msgstr ""
 "GNOME terminala: konfigurazioaren datu-basean ezarritako \"%s\" letra-"
 "tipoaren izena ez da baliozkoa\n"
 
-#: ../src/terminal-profile.c:2197
+#: ../src/terminal-profile.c:2146
 #, c-format
 msgid "Error getting default value of %s: %s\n"
 msgstr "Errorea '%s'(r)en balio lehenetsia lortzean: %s\n"
 
-#: ../src/terminal-profile.c:2203
+#: ../src/terminal-profile.c:2152
 #, c-format
 msgid "There wasn't a default value for %s\n"
 msgstr "Ez dago %s(r)en balio lehenetsirik\n"
 
-#: ../src/terminal-profile.c:2218
+#: ../src/terminal-profile.c:2167
 #, c-format
 msgid "Error setting key %s back to default: %s\n"
 msgstr "Errorea %s gakoari berriz ere balio lehenetsia ezartzean: %s\n"
 
-#: ../src/terminal-profile.c:2421
+#: ../src/terminal-profile.c:2377
 #, c-format
-msgid "There was an error while removing the configuration directory %s. (%s)\n"
+msgid ""
+"There was an error while removing the configuration directory %s. (%s)\n"
 msgstr "Errorea %s konfigurazio-direktorioa kentzean. (%s)\n"
 
-#: ../src/terminal-profile.c:2478
+#: ../src/terminal-profile.c:2434
 #, c-format
 msgid ""
 "There was an error subscribing to notification of changes to default "
 "profile. (%s)\n"
 msgstr ""
-"Errorea terminalaren profil lehenetsiaren aldaketen berri-ematean "
+"Errorea terminalaren profil lehenetsiaren aldaketen berri-emateko "
 "harpidetzean. (%s)\n"
 
-#: ../src/terminal-profile.c:2523
+#: ../src/terminal-profile.c:2479
 msgid "_Details"
 msgstr "_Xehetasunak"
 
-#: ../src/terminal-profile.c:2966 ../src/terminal.c:2396
+#: ../src/terminal-profile.c:2914 ../src/terminal.c:1959
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "Errorea \"%s\" profila sortzean"
 
-#: ../src/terminal-profile.c:3058
+#: ../src/terminal-profile.c:3010
 msgid "There was an error deleting the profiles"
 msgstr "Errorea profilak ezabatzean"
 
-#: ../src/terminal-profile.c:3161
+#: ../src/terminal-profile.c:3113
 #, c-format
 msgid "Could not parse string \"%s\" as a color palette\n"
 msgstr "Ezin izan da \"%s\" katea analizatu kolore-paleta gisa\n"
 
-#: ../src/terminal-profile.c:3170
+#: ../src/terminal-profile.c:3122
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
 msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "Paletak %d sarrera zituen %d izan ordez\n"
 msgstr[1] "Paletak %d sarrera zituen %d izan ordez\n"
 
-#: ../src/terminal-screen.c:222
+#: ../src/terminal-screen.c:207
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr ""
-"Errorea terminalaren tarte bakarreko letra-tipoaren aldaketen berri-ematean "
+"Errorea terminalaren tarte bakarreko letra-tipoaren aldaketen berri-emateko "
 "harpidetzean. (%s)\n"
 
-#: ../src/terminal-screen.c:909
-#, c-format
-msgid "Could not load font \"%s\"\n"
-msgstr "Ezin izan da \"%s\" letra-tipoa kargatu\n"
-
-#: ../src/terminal-screen.c:1056
+#: ../src/terminal-screen.c:966
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Problema bat izan da terminal honen komandoarekin: %s"
 
-#: ../src/terminal-screen.c:1496
+#: ../src/terminal-screen.c:1406
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2061,7 +2011,7 @@ msgstr ""
 "Ezin izan da ireki \"%s\" helbidea:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:828
+#: ../src/terminal-screen.c:1503
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2070,212 +2020,117 @@ msgstr ""
 "Errorea menuetan irudirik erabili behar den zehazteko konfigurazio-balioa "
 "kargatzean. (%s)\n"
 
-#: ../src/terminal-screen.c:1680
+#: ../src/terminal-screen.c:1590
 msgid "_Send Mail To..."
 msgstr "_Bidali posta hona..."
 
-#: ../src/terminal-screen.c:1685
+#: ../src/terminal-screen.c:1595
 msgid "_Copy E-mail Address"
 msgstr "_Kopiatu postaren helbidea"
 
-#: ../src/terminal-screen.c:1692
+#: ../src/terminal-screen.c:1602
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: ../src/terminal-screen.c:1697
+#: ../src/terminal-screen.c:1607
 msgid "_Copy Link Address"
 msgstr "_Kopiatu estekaren helbidea"
 
-#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:891
+#: ../src/terminal-screen.c:1618 ../src/terminal-window.c:864
 msgid "Open _Terminal"
 msgstr "Ireki _terminala"
 
-#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:894
+#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:867
 msgid "Open Ta_b"
 msgstr "Ireki _fitxa"
 
-#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:909
+#: ../src/terminal-screen.c:1633 ../src/terminal-window.c:882
 msgid "C_lose Tab"
 msgstr "I_txi fitxa"
 
-#: ../src/terminal-screen.c:1723
+#: ../src/terminal-screen.c:1633
 msgid "C_lose Window"
 msgstr "It_xi leihoa"
 
-#: ../src/terminal-screen.c:1748
+#: ../src/terminal-screen.c:1658
 msgid "Change P_rofile"
 msgstr "Aldatu p_rofila"
 
-#: ../src/terminal-screen.c:1784
+#: ../src/terminal-screen.c:1694
 msgid "_Edit Current Profile..."
 msgstr "_Editatu uneko profila..."
 
-#: ../src/terminal-screen.c:1789
+#: ../src/terminal-screen.c:1699
 msgid "Show _Menubar"
 msgstr "Erakutsi _menu-barra"
 
-#: ../src/terminal-screen.c:1805
+#: ../src/terminal-screen.c:1715
 msgid "_Input Methods"
 msgstr "_Sarrera-metodoak"
 
-#: ../src/terminal-screen.c:2245
+#: ../src/terminal-screen.c:2155
 msgid "_Title:"
 msgstr "_Titulua:"
 
-#: ../src/terminal-screen.c:2359
+#: ../src/terminal-screen.c:2273
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminalean jaregindako testu/arruntak okerreko formatua (%d) edo luzera (%"
 "d) du\n"
 
-#: ../src/terminal-screen.c:2382
+#: ../src/terminal-screen.c:2296
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr "Terminalean jaregindako koloreak okerreko formatua (%d) edo luzera (%d) du\n"
+msgstr ""
+"Terminalean jaregindako koloreak okerreko formatua (%d) edo luzera (%d) du\n"
 
-#: ../src/terminal-screen.c:2425
+#: ../src/terminal-screen.c:2339
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminalean jaregindako Mozilla URLak okerreko formatua (%d) edo luzera (%d) "
 "du\n"
 
-#: ../src/terminal-screen.c:2474
+#: ../src/terminal-screen.c:2388
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminalean jaregindako URL zerrendak okerreko formatua (%d) edo luzera (%d) "
 "du\n"
 
-#: ../src/terminal-screen.c:2533
+#: ../src/terminal-screen.c:2447
 #, c-format
-msgid "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
+msgid ""
+"Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "Terminalean jaregindako irudiaren fitxategi-izenak okerreko formatua (%d) "
 "edo luzera (%d) du\n"
 
-#: ../src/terminal-screen.c:2559
+#: ../src/terminal-screen.c:2473
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "Errorea \"%s\" URIa fitxategi-izen bihurtzean: %s\n"
 
-#: ../src/terminal-widget-vte.c:584
+#: ../src/terminal-widget-vte.c:590
 msgid "There was an error creating the child process for this terminal"
 msgstr "Errorea terminal honetako prozesu umea sortzean"
 
-#: ../src/terminal-window.c:367
-#, c-format
-msgid ""
-"There was an error subscribing to notification of menu icon visibility "
-"changes. (%s)\n"
-msgstr ""
-"Errorea terminalaren menu-ikonoaren ikusgaitasunaren aldaketen berri-ematean "
-"harpidetzean. (%s)\n"
-
-#: ../src/terminal-window.c:580
+#: ../src/terminal-window.c:476
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:582
+#: ../src/terminal-window.c:478
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:705
+#: ../src/terminal-window.c:601
 msgid "_Add or Remove..."
 msgstr "_Gehitu edo kendu..."
 
-#. This is fairly bogus to have here but I don't know
-#. * where else to put it really
-#.
-#: ../src/terminal-window.c:902
-msgid "New _Profile..."
-msgstr "_Profil berria..."
-
-#: ../src/terminal-window.c:913
-msgid "_Close Window"
-msgstr "_Itxi leihoa"
-
-#: ../src/terminal-window.c:946
-msgid "P_rofiles..."
-msgstr "P_rofilak..."
-
-#: ../src/terminal-window.c:949
-msgid "_Keyboard Shortcuts..."
-msgstr "_Laster-teklak..."
-
-#: ../src/terminal-window.c:953
-msgid "C_urrent Profile..."
-msgstr "_Uneko profila..."
-
-#. This is a check menu item so that the togglability is evident, but when it is not checked,
-#. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:968
-msgid "Show Menu_bar"
-msgstr "Erakutsi _menu-barra"
-
-#: ../src/terminal-window.c:972
-msgid "_Full Screen"
-msgstr "_Pantaila osoa"
-
-#: ../src/terminal-window.c:1015
-msgid "Change _Profile"
-msgstr "Aldatu p_rofila"
-
-#: ../src/terminal-window.c:1018
-msgid "_Set Title..."
-msgstr "_Ezarri titulua..."
-
-#: ../src/terminal-window.c:1025
-msgid "Set _Character Encoding"
-msgstr "Ezarri _karaktere-kodeketa"
-
-#: ../src/terminal-window.c:1035
-msgid "_Reset"
-msgstr "_Berrezarri"
-
-#: ../src/terminal-window.c:1038
-msgid "Reset and C_lear"
-msgstr "Berrezarri eta ga_rbitu"
-
-#: ../src/terminal-window.c:1052
-msgid "_Previous Tab"
-msgstr "_Aurreko fitxa"
-
-#: ../src/terminal-window.c:1056
-msgid "_Next Tab"
-msgstr "_Hurrengo fitxa"
-
-#: ../src/terminal-window.c:1067
-msgid "Move Tab to the _Left"
-msgstr "Eraman fitxa e_zkerrera"
-
-#: ../src/terminal-window.c:1071
-msgid "Move Tab to the _Right"
-msgstr "Eraman fitxa e_skuinera"
-
-#: ../src/terminal-window.c:1078
-msgid "_Detach Tab"
-msgstr "_Desuztartu fitxa"
-
-#: ../src/terminal-window.c:1097
-msgid "_Contents"
-msgstr "_Edukia"
-
-#: ../src/terminal-window.c:1107
-msgid "_About"
-msgstr "Honi _buruz"
-
-#: ../src/terminal-window.c:1293
-#, c-format
-msgid "There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr ""
-"Errorea mnemonikorik erabili behar den zehazteko konfigurazio-balioa "
-"kargatzean. (%s)\n"
-
-#: ../src/terminal-window.c:1312
+#: ../src/terminal-window.c:782
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2284,72 +2139,374 @@ msgstr ""
 "Errorea terminalaren leiho-konfigurazioaren aldaketen berri-ematean "
 "harpidetzean. (%s)\n"
 
-#: ../src/terminal-window.c:2115
+#: ../src/terminal-window.c:793
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"Errorea mnemonikorik erabili behar den zehazteko konfigurazio-balioa "
+"kargatzean. (%s)\n"
+
+#. This is fairly bogus to have here but I don't know
+#. * where else to put it really
+#.
+#: ../src/terminal-window.c:875
+msgid "New _Profile..."
+msgstr "_Profil berria..."
+
+#: ../src/terminal-window.c:886
+msgid "_Close Window"
+msgstr "_Itxi leihoa"
+
+#: ../src/terminal-window.c:917
+msgid "P_rofiles..."
+msgstr "P_rofilak..."
+
+#: ../src/terminal-window.c:920
+msgid "_Keyboard Shortcuts..."
+msgstr "_Laster-teklak..."
+
+#: ../src/terminal-window.c:924
+msgid "C_urrent Profile..."
+msgstr "_Uneko profila..."
+
+#. This is a check menu item so that the togglability is evident, but when it is not checked,
+#. * it won't be seen, of course, because the menubar will be then hidden.
+#: ../src/terminal-window.c:939
+msgid "Show Menu_bar"
+msgstr "Erakutsi _menu-barra"
+
+#: ../src/terminal-window.c:943
+msgid "_Full Screen"
+msgstr "_Pantaila osoa"
+
+#: ../src/terminal-window.c:983
+msgid "Change _Profile"
+msgstr "Aldatu p_rofila"
+
+#: ../src/terminal-window.c:986
+msgid "_Set Title..."
+msgstr "_Ezarri titulua..."
+
+#: ../src/terminal-window.c:993
+msgid "Set _Character Encoding"
+msgstr "Ezarri _karaktere-kodeketa"
+
+#: ../src/terminal-window.c:1003
+msgid "_Reset"
+msgstr "_Berrezarri"
+
+#: ../src/terminal-window.c:1006
+msgid "Reset and C_lear"
+msgstr "Berrezarri eta ga_rbitu"
+
+#: ../src/terminal-window.c:1020
+msgid "_Previous Tab"
+msgstr "_Aurreko fitxa"
+
+#: ../src/terminal-window.c:1024
+msgid "_Next Tab"
+msgstr "_Hurrengo fitxa"
+
+#: ../src/terminal-window.c:1035
+msgid "Move Tab to the _Left"
+msgstr "Eraman fitxa e_zkerrera"
+
+#: ../src/terminal-window.c:1039
+msgid "Move Tab to the _Right"
+msgstr "Eraman fitxa e_skuinera"
+
+#: ../src/terminal-window.c:1046
+msgid "_Detach Tab"
+msgstr "_Desuztartu fitxa"
+
+#: ../src/terminal-window.c:1065
+msgid "_Contents"
+msgstr "_Edukia"
+
+#: ../src/terminal-window.c:1074
+msgid "_About"
+msgstr "Honi _buruz"
+
+#: ../src/terminal-window.c:1438
+msgid "Close tab"
+msgstr "Itxi fitxa"
+
+#: ../src/terminal-window.c:2110
 msgid "_File"
 msgstr "_Fitxategia"
 
-#: ../src/terminal-window.c:2117 ../src/terminal.c:2988
+#: ../src/terminal-window.c:2112 ../src/terminal.c:2551
 msgid "_Edit"
 msgstr "_Editatu"
 
-#: ../src/terminal-window.c:2119
+#: ../src/terminal-window.c:2114
 msgid "_View"
 msgstr "_Ikusi"
 
-#: ../src/terminal-window.c:2121
+#: ../src/terminal-window.c:2116
 msgid "_Terminal"
 msgstr "_Terminala"
 
-#: ../src/terminal-window.c:2123
+#: ../src/terminal-window.c:2118
 msgid "Ta_bs"
 msgstr "_Fitxak"
 
-#: ../src/terminal-window.c:2125
+#: ../src/terminal-window.c:2120
 msgid "_Help"
-msgstr "L_aguntza"
+msgstr "_Laguntza"
 
-#: ../src/terminal-window.c:2347
+#: ../src/terminal-window.c:2342
 msgid "Close all tabs?"
 msgstr "Itxi fitxa guztiak?"
 
-#: ../src/terminal-window.c:2349
+#: ../src/terminal-window.c:2344
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
-msgid_plural "This window has %d tabs open. Closing the window will also close all tabs."
-msgstr[0] "Leiho honek fitxa bat irekita dauka. Leihoarekin batera fitxa ere itxiko da."
+msgid_plural ""
+"This window has %d tabs open. Closing the window will also close all tabs."
+msgstr[0] ""
+"Leiho honek fitxa bat irekita dauka. Leihoarekin batera fitxa ere itxiko da."
 msgstr[1] ""
 "Leiho honek %d fitxa irekita dauzka. Leihoarekin batera bere fitxak ere "
 "itxiko dira."
 
-#: ../src/terminal-window.c:2358
+#: ../src/terminal-window.c:2353
 msgid "Close All _Tabs"
 msgstr "Itxi _fitxa guztiak"
 
-#: ../src/terminal-window.c:2910
+#: ../src/terminal-window.c:2878
+msgid ""
+"GNOME Terminal is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+"GNOME Terminal librea da; birbana eta/edo alda dezakezu Software Foundation-"
+"ek argitaratutako GNU Lizentzia Publiko Orokorraren 2. bertsioan, edo "
+"(nahiago baduzu) beste berriago batean, jasotako baldintzak betez gero."
+
+#: ../src/terminal-window.c:2882
+msgid ""
+"GNOME Terminal is distributed in the hope that it will be useful, but "
+"WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
+"or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
+"more details."
+msgstr ""
+"GNOME Terminal erabilgarria izango delakoan banatzen da, baina, INOLAKO "
+"BERMERIK GABE; era berean, ez da bermatzen beraren EGOKITASUNA "
+"MERKATURATZEKO edo HELBURU PARTIKULARRETARAKO ERABILTZEKO. Argibide gehiago "
+"nahi izanez gero, ikus GNU Lizentzia Publiko Orokorra."
+
+#: ../src/terminal-window.c:2886
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
+"Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+msgstr ""
+"GNOME Terminal programarekin batera GNU Lizentzia Publiko Orokorraren kopia "
+"bat jasoko zenuen; hala ez bada, idatzi hona: Free SoftwareFoundation, Inc., "
+"59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
+
+#: ../src/terminal-window.c:2896
 msgid "GNOME Terminal"
 msgstr "GNOME terminala"
 
-#: ../src/terminal-window.c:2912
+#: ../src/terminal-window.c:2898
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminalaren emuladorea GNOMEren mahaigainerako"
 
-#: ../src/terminal-window.c:2917
+#: ../src/terminal-window.c:2903
 msgid "translator-credits"
 msgstr ""
-"Iñaki Larrañaga Murgoitio\n"
-"<dooteo@euskalgnu.org>\n"
-"Hizkuntza Politikarako Sailburuordetza\n"
-"<hizkpol@ej-gv.es>"
+"Hizkuntza Politikarako Sailburuordetza <hizkpol@ej-gv.es>\n"
+"Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>"
 
-#: ../src/terminal.c:190
+#: ../src/terminal.c:304
+#, c-format
+msgid "Could not load icon \"%s\": %s\n"
+msgstr "Ezin izan da \"%s\" ikonoa kargatu: %s\n"
+
+#: ../src/terminal.c:343
+#, c-format
+msgid ""
+"Option '%s' is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"window-with-profile' option\n"
+msgstr ""
+"'gnome-terminal'-en bertsio honek ez du '%s' aukera zaharra onartzen; profil "
+"bat sor dezakezu nahi duzun ezarpenarekin, eta '--window-with-profile' "
+"aukera berria erabili\n"
+
+#: ../src/terminal.c:368
+#, c-format
+msgid "Argument to \"%s\" is not a valid command: %s\n"
+msgstr "\"%s\"(r)en argumentua ez da baliozko komandoa: %s\n"
+
+#: ../src/terminal.c:536 ../src/terminal.c:570
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "\"%s\" aukera bi aldiz eman da leiho bererako\n"
+
+#: ../src/terminal.c:695
+#, c-format
+msgid ""
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line\n"
+msgstr ""
+"\"%s\" aukerak komando-lerroaren gainerako zatian exekutatu beharreko "
+"komandoa zehaztea eskatzen du\n"
+
+#: ../src/terminal.c:740
+#, c-format
+msgid "\"%s\" is not a valid zoom factor\n"
+msgstr "\"%s\" ez da baliozko zoom-faktorea\n"
+
+#: ../src/terminal.c:748
+#, c-format
+msgid "Zoom factor \"%g\" is too small, using %g\n"
+msgstr "\"%g\" zoom-faktorea txikiegia da, %g erabiliko da\n"
+
+#: ../src/terminal.c:756
+#, c-format
+msgid "Zoom factor \"%g\" is too large, using %g\n"
+msgstr "\"%g\" zoom-faktorea handiegia da, %g erabiliko da\n"
+
+#: ../src/terminal.c:875
+#, c-format
+msgid "No argument given to \"%s\" option\n"
+msgstr "Ez da argumenturik eman \"%s\" aukeran\n"
+
+#: ../src/terminal.c:897
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr "\"%s\" aukerak argumentua behar du\n"
+
+#: ../src/terminal.c:1009
+#, c-format
+msgid "No such profile '%s', using default profile\n"
+msgstr "Ez dago '%s' profilik, profil lehenetsia erabiliko da\n"
+
+#: ../src/terminal.c:1304
+#, c-format
+msgid ""
+"There was an error subscribing to notification of terminal profile list "
+"changes. (%s)\n"
+msgstr ""
+"Errorea terminalaren profil-zerrendaren aldaketen berri-emateko "
+"harpidetzean. (%s)\n"
+
+#: ../src/terminal.c:1558
+#, c-format
+msgid "Invalid geometry string \"%s\"\n"
+msgstr "\"%s\" geometria-kate baliogabea\n"
+
+#: ../src/terminal.c:1624
+#, c-format
+msgid "There was an error getting the list of terminal profiles. (%s)\n"
+msgstr "Errorea terminal-profilen zerrenda hartzean. (%s)\n"
+
+#: ../src/terminal.c:1928
+#, c-format
+msgid ""
+"You already have a profile called \"%s\". Do you want to create another "
+"profile with the same name?"
+msgstr ""
+"\"%s\" izeneko profila badago lehendik. Beste profila izen berdinarekin "
+"sortzea nahi duzu?"
+
+#: ../src/terminal.c:1942
+msgid ""
+"The profile you selected as a base for your new profile no longer exists"
+msgstr "Profil berriaren oinarri izateko aukeratu duzun profila ez dago jada"
+
+#: ../src/terminal.c:2034
+msgid "Enter profile name"
+msgstr "Idatzi profil-izena"
+
+#: ../src/terminal.c:2044
+msgid "Choose base profile"
+msgstr "Aukeratu oinarrizko profila"
+
+#: ../src/terminal.c:2183
+msgid "Profile list"
+msgstr "Profil-zerrenda"
+
+#: ../src/terminal.c:2252
+msgid "You must select one or more profiles to delete."
+msgstr "Profil bat edo gehiago hautatu behar dituzu ezabatzeko."
+
+#: ../src/terminal.c:2263
+msgid "You must have at least one profile; you can't delete all of them."
+msgstr "Profil bat behintzat izan behar duzu; ezin dituzu denak ezabatu."
+
+#: ../src/terminal.c:2271
+#, c-format
+msgid "Delete this profile?\n"
+msgid_plural "Delete these %d profiles?\n"
+msgstr[0] "Profil hau ezabatu?\n"
+msgstr[1] "%d profil hauek ezabatu?\n"
+
+#: ../src/terminal.c:2292
+#, c-format
+msgid "Delete profile \"%s\"?"
+msgstr "\"%s\" profila ezabatu?"
+
+#: ../src/terminal.c:2314
+msgid "Delete Profile"
+msgstr "Ezabatu profila"
+
+#: ../src/terminal.c:2587
+msgid "Profiles"
+msgstr "Profilak"
+
+#: ../src/terminal.c:2628
+msgid "_Profiles:"
+msgstr "_Profilak:"
+
+#: ../src/terminal.c:2660
+msgid "Click to open new profile dialog"
+msgstr "Egin klik profil berriaren elkarrizketa-koadroa irekitzeko"
+
+#: ../src/terminal.c:2668
+msgid "Click to open edit profile dialog"
+msgstr "Egin klik profila editatzeko elkarrizketa-koadroa irekitzeko"
+
+#: ../src/terminal.c:2676
+msgid "Click to delete selected profile"
+msgstr "Egin klik hautatutako profila ezabatzeko"
+
+#: ../src/terminal.c:2681
+msgid "Profile _used when launching a new terminal:"
+msgstr "_Terminal berria irekitzean erabiliko den profila:"
+
+#: ../src/terminal.c:2737
+msgid "Click button to choose profile"
+msgstr "Egin klik botoian profila aukeratzeko"
+
+#: ../src/terminal.c:3097
+#, c-format
+msgid "There was an error displaying help: %s"
+msgstr "Errorea gertatu da laguntza bistaratzean: %s"
+
+#: ../src/terminal.c:3168
+#, c-format
+msgid ""
+"The file \"%s\" is missing. This indicates that the application is installed "
+"incorrectly."
+msgstr ""
+"\"%s\" fitxategia falta da. Horrek esan nahi du aplikazioa ez dagoela behar "
+"den bezala instalatuta."
+
+#: ../src/terminal.c:3197
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Exekutatu aukera honen argumentua terminalaren barruan."
 
-#: ../src/terminal.c:199
+#: ../src/terminal.c:3206
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Exekutatu komando-lerroaren gainerako zatia terminalaren barruan."
 
-#: ../src/terminal.c:208
+#: ../src/terminal.c:3215
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
@@ -2357,7 +2514,7 @@ msgstr ""
 "Leiho berri bat irekitzen du profil lehenetsiko fitxa batekin. Aukera "
 "hauetako bat baino gehiago eman daitezke."
 
-#: ../src/terminal.c:217
+#: ../src/terminal.c:3224
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -2365,11 +2522,11 @@ msgstr ""
 "Leiho berri bat irekitzen du adierazitako profileko fitxa batekin. Aukera "
 "hauetako bat baino gehiago eman daitezke."
 
-#: ../src/terminal.c:218 ../src/terminal.c:236
+#: ../src/terminal.c:3225 ../src/terminal.c:3243
 msgid "PROFILENAME"
 msgstr "PROFILIZENA"
 
-#: ../src/terminal.c:226
+#: ../src/terminal.c:3233
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
@@ -2377,7 +2534,7 @@ msgstr ""
 "Fitxa berri bat irekitzen du profil lehenetsian azkena irekitako leihoan. "
 "Aukera hauetako bat baino gehiago eman daitezke."
 
-#: ../src/terminal.c:235
+#: ../src/terminal.c:3242
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -2385,7 +2542,7 @@ msgstr ""
 "Fitxa berri bat irekitzen du adierazitako profilean azkena irekitako "
 "leihoan. Aukera hauetako bat baino gehiago eman daitezke."
 
-#: ../src/terminal.c:244
+#: ../src/terminal.c:3251
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -2393,19 +2550,19 @@ msgstr ""
 "Leiho berri bat irekitzen du adierazitako profil-IDko fitxa batekin. Barnean "
 "erabiltzen da saioak gordetzeko."
 
-#: ../src/terminal.c:245 ../src/terminal.c:254
+#: ../src/terminal.c:3252 ../src/terminal.c:3261
 msgid "PROFILEID"
 msgstr "PROFILID"
 
-#: ../src/terminal.c:253
+#: ../src/terminal.c:3260
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
 msgstr ""
-"Fitxa berri bat irekitzen du adierazitako profil-Idan azkena irekitako "
+"Fitxa berri bat irekitzen du adierazitako profil-IDan azkena irekitako "
 "leihoan. Barnean erabiltzen da saioak gordetzeko."
 
-#: ../src/terminal.c:262
+#: ../src/terminal.c:3269
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -2414,11 +2571,11 @@ msgstr ""
 "aplikatzen zaio; komando-lerrotik sortzen den leiho bakoitzean behin zehatz "
 "daiteke."
 
-#: ../src/terminal.c:263
+#: ../src/terminal.c:3270
 msgid "ROLE"
 msgstr "EGITEKOA"
 
-#: ../src/terminal.c:271
+#: ../src/terminal.c:3278
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2428,7 +2585,7 @@ msgstr ""
 "aplikatzen zaio; komando-lerrotik sortzen den leiho bakoitzean behin zehatz "
 "daiteke."
 
-#: ../src/terminal.c:280
+#: ../src/terminal.c:3287
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2438,7 +2595,7 @@ msgstr ""
 "aplikatzen zaio; komando-lerrotik sortzen den leiho bakoitzean behin zehatz "
 "daiteke."
 
-#: ../src/terminal.c:289
+#: ../src/terminal.c:3296
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2448,7 +2605,7 @@ msgstr ""
 "bati aplikatzen zaio; komando-lerrotik sortzen den leiho bakoitzean behin "
 "zehatz daiteke."
 
-#: ../src/terminal.c:298
+#: ../src/terminal.c:3305
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -2456,11 +2613,11 @@ msgstr ""
 "X geometriaren zehaztapena (ikus \"X\" eskuliburuko orrialdea), ireki "
 "beharreko leiho bakoitzeko behin zehatz daiteke."
 
-#: ../src/terminal.c:299
+#: ../src/terminal.c:3306
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: ../src/terminal.c:307
+#: ../src/terminal.c:3314
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -2468,310 +2625,63 @@ msgstr ""
 "Ez da erregistratzen aktibazioko izen-zerbitzarian, ez du berrerabiltzen "
 "terminal aktiborik"
 
-#: ../src/terminal.c:316
+#: ../src/terminal.c:3323
 msgid "Register with the activation nameserver [default]"
 msgstr "Aktibazioko izen-zerbitzariarekin erregistratzea"
 
-#: ../src/terminal.c:325
+#: ../src/terminal.c:3332
 msgid "ID for startup notification protocol."
 msgstr "Abioaren berri emateko protokoloaren IDa."
 
-#: ../src/terminal.c:334
+#: ../src/terminal.c:3341
 msgid "Set the terminal's title"
 msgstr "Terminalaren titulua ezartzen du"
 
-#: ../src/terminal.c:335
+#: ../src/terminal.c:3342
 msgid "TITLE"
 msgstr "TITULUA"
 
-#: ../src/terminal.c:343
+#: ../src/terminal.c:3350
 msgid "Set the terminal's working directory"
 msgstr "Terminalaren laneko direktorioa ezartzen du"
 
-#: ../src/terminal.c:344 ../src/terminal.c:353
+#: ../src/terminal.c:3351 ../src/terminal.c:3360
 msgid "DIRNAME"
 msgstr "DIRIZENA"
 
-#: ../src/terminal.c:352
+#: ../src/terminal.c:3359
 msgid "Set the default terminal's working directory. Used internally"
 msgstr "Ezarri terminalaren laneko direktorioa. Barneki erabilia"
 
-#: ../src/terminal.c:361
+#: ../src/terminal.c:3368
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Terminalaren zoom-faktorea ezartzen du (1.0 = tamainan ormala)"
+msgstr "Terminalaren zoom-faktorea ezartzen du (1.0 = tamainan normala)"
 
-#: ../src/terminal.c:362 ../src/terminal.c:371
+#: ../src/terminal.c:3369 ../src/terminal.c:3378
 msgid "ZOOMFACTOR"
 msgstr "ZOOMFAKTOREA"
 
-#: ../src/terminal.c:370
+#: ../src/terminal.c:3377
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Azkena zehaztutako fitxa leiho honetako fitxa aktibo gisa ezartzen du"
 
-#: ../src/terminal.c:713
-#, c-format
-msgid "Could not load icon \"%s\": %s\n"
-msgstr "Ezin izan da \"%s\" ikonoa kargatu: %s\n"
+#: ../src/terminal.c:3557 ../src/terminal.c:3560
+msgid "GNOME Terminal Emulator"
+msgstr "GNOME terminalaren emulatzailea"
 
-#: ../src/terminal.c:778
-#, c-format
-msgid "Option \"%s\" requires specifying the command to run\n"
-msgstr "\"%s\" aukerak exekutatu beharreko komandoa zehaztea eskatzen du\n"
+#: ../src/terminal.c:3561
+msgid "Show GNOME Terminal options"
+msgstr "Erakutsi GNOME terminalaren aukerak"
 
-#: ../src/terminal.c:786
-#, c-format
-msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "\"%s\"(r)en argumentua ez da baliozko komandoa: %s\n"
-
-#: ../src/terminal.c:796 ../src/terminal.c:820
-#, c-format
-msgid "\"%s\" specified more than once for the same window or tab\n"
-msgstr "\"%s\" behin baino gehiagotan zehaztu da leiho edo fitxa berean\n"
-
-#: ../src/terminal.c:811
-#, c-format
-msgid ""
-"Option \"%s\" requires specifying the command to run on the rest of the "
-"command line\n"
-msgstr ""
-"\"%s\" aukerak komando-lerroaren gainerako zatian exekutatu beharreko "
-"komandoa zehaztea eskatzen du\n"
-
-#: ../src/terminal.c:842 ../src/terminal.c:866
-#, c-format
-msgid "Option \"%s\" requires an argument specifying what profile to use\n"
-msgstr "\"%s\" aukerak erabili beharreko profila zehazten duen argumentua behar du\n"
-
-#: ../src/terminal.c:900 ../src/terminal.c:926
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "\"%s\" aukera bi aldiz eman da leiho bererako\n"
-
-#: ../src/terminal.c:966
-#, c-format
-msgid "Option \"%s\" requires an argument giving the role\n"
-msgstr "\"%s\" aukerak egitekoa ematen duen argumentua behar du\n"
-
-#: ../src/terminal.c:975
-msgid "Two roles given for one window\n"
-msgstr "Bi egiteko eman dira leiho bererako\n"
-
-#: ../src/terminal.c:991
-#, c-format
-msgid "Option \"%s\" requires an argument giving the geometry\n"
-msgstr "\"%s\" aukerak geometria ematen duen argumentua behar du\n"
-
-#: ../src/terminal.c:1000
-#, c-format
-msgid "Two \"%s\" options given for one window\n"
-msgstr "Bi \"%s\" aukera eman dira leiho bererako\n"
-
-#: ../src/terminal.c:1010
-msgid "Two geometries given for one window\n"
-msgstr "Bi geometria eman dira leiho bererako\n"
-
-#: ../src/terminal.c:1036
-#, c-format
-msgid "Option \"%s\" requires an argument giving the title\n"
-msgstr "\"%s\" aukerak titulua ematen duen argumentua behar du\n"
-
-#: ../src/terminal.c:1044 ../src/terminal.c:1067 ../src/terminal.c:1109
-#, c-format
-msgid "Two \"%s\" options given for one tab\n"
-msgstr "Bi \"%s\" aukera eman dira fitxa bererako\n"
-
-#: ../src/terminal.c:1059
-#, c-format
-msgid "Option \"%s\" requires an argument giving the directory\n"
-msgstr "\"%s\" aukerak direktorioa ematen duen argumentua behar du\n"
-
-#: ../src/terminal.c:1079
-msgid ""
-"Option --default-working-directory requires an argument giving the "
-"directory\n"
-msgstr ""
-"--default-working-directory aukerak direktorioa ematen duen argumentua behar "
-"du\n"
-
-#: ../src/terminal.c:1085
-msgid "Two --default-working-directories given\n"
-msgstr "Deux --default-working-directories donnés\n"
-
-#: ../src/terminal.c:1101
-#, c-format
-msgid "Option \"%s\" requires an argument giving the zoom factor\n"
-msgstr "\"%s\" aukerak zoom-faktorea ematen duen argumentua behar du\n"
-
-#: ../src/terminal.c:1124
-#, c-format
-msgid "\"%s\" is not a valid zoom factor\n"
-msgstr "\"%s\" ez da baliozko zoom-faktorea\n"
-
-#: ../src/terminal.c:1132
-#, c-format
-msgid "Zoom factor \"%g\" is too small, using %g\n"
-msgstr "\"%g\" zoom-faktorea txikiegia da, %g erabiliko da\n"
-
-#: ../src/terminal.c:1139
-#, c-format
-msgid "Zoom factor \"%g\" is too large, using %g\n"
-msgstr "\"%g\" zoom-faktorea handiegia da, %g erabiliko da\n"
-
-#: ../src/terminal.c:1160
-#, c-format
-msgid ""
-"Option --%s is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new --"
-"window-with-profile option\n"
-msgstr ""
-"--%s aukera zaharra ez du onartzen gnome-terminal-en bertsio honek; profil "
-"bat sor dezakezu nahi duzun ezarpenarekin, eta --window-with-profile aukera "
-"berria erabili\n"
-
-#: ../src/terminal.c:1166
-#, c-format
-msgid "\"%s\" option given twice\n"
-msgstr "\"%s\" aukera birritan eman da\n"
-
-#: ../src/terminal.c:1171 ../src/terminal.c:1312
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr "\"%s\" aukerak argumentua behar du\n"
-
-#: ../src/terminal.c:1290
-#, c-format
-msgid "No argument given to \"%s\" option\n"
-msgstr "Ez da argumenturik eman \"%s\" aukeran\n"
-
-#: ../src/terminal.c:1424
-#, c-format
-msgid "No such profile '%s', using default profile\n"
-msgstr "Ez dago '%s' profilik, profil lehenetsia erabiliko da\n"
-
-#: ../src/terminal.c:1667
-#, c-format
-msgid "Invalid argument: \"%s\"\n"
-msgstr "Argumentu baliogabea: \"%s\"\n"
-
-#: ../src/terminal.c:1740
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal profile list "
-"changes. (%s)\n"
-msgstr ""
-"Errorea terminalaren profil-zerrendaren aldaketen berri-ematean "
-"harpidetzean. (%s)\n"
-
-#: ../src/terminal.c:1991
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "\"%s\" geometria-kate baliogabea\n"
-
-#: ../src/terminal.c:2057
-#, c-format
-msgid "There was an error getting the list of terminal profiles. (%s)\n"
-msgstr "Errorea terminal-profilen zerrenda hartzean. (%s)\n"
-
-#: ../src/terminal.c:2361
-#, c-format
-msgid ""
-"You already have a profile called \"%s\". Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"\"%s\" izeneko profila badago lehendik. Beste profila izen berdinarekin "
-"sortzea nahi duzu?"
-
-#: ../src/terminal.c:2375
-msgid "The profile you selected as a base for your new profile no longer exists"
-msgstr "Profil berriaren oinarri izateko aukeratu duzun profila ez dago jada"
-
-#: ../src/terminal.c:2471
-msgid "Enter profile name"
-msgstr "Idatzi profil-izena"
-
-#: ../src/terminal.c:2481
-msgid "Choose base profile"
-msgstr "Aukeratu oinarrizko profila"
-
-#: ../src/terminal.c:2620
-msgid "Profile list"
-msgstr "Profil-zerrenda"
-
-#: ../src/terminal.c:2689
-msgid "You must select one or more profiles to delete."
-msgstr "Profil bat edo gehiago hautatu behar dituzu ezabatzeko."
-
-#: ../src/terminal.c:2700
-msgid "You must have at least one profile; you can't delete all of them."
-msgstr "Profil bat behintzat izan behar duzu; ezin dituzu denak ezabatu."
-
-#: ../src/terminal.c:2708
-#, c-format
-msgid "Delete this profile?\n"
-msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "Profil hau ezabatu?\n"
-msgstr[1] "%d profil hauek ezabatu?\n"
-
-#: ../src/terminal.c:2729
-#, c-format
-msgid "Delete profile \"%s\"?"
-msgstr "\"%s\" profila ezabatu?"
-
-#: ../src/terminal.c:2751
-msgid "Delete Profile"
-msgstr "Ezabatu profila"
-
-#: ../src/terminal.c:3024
-msgid "Profiles"
-msgstr "Profilak"
-
-#: ../src/terminal.c:3065
-msgid "_Profiles:"
-msgstr "_Profilak:"
-
-#: ../src/terminal.c:3097
-msgid "Click to open new profile dialog"
-msgstr "Egin klik profil berriaren elkarrizketa-koadroa irekitzeko"
-
-#: ../src/terminal.c:3105
-msgid "Click to open edit profile dialog"
-msgstr "Egin klik profila editatzeko elkarrizketa-koadroa irekitzeko"
-
-#: ../src/terminal.c:3113
-msgid "Click to delete selected profile"
-msgstr "Egin klik hautatutako profila ezabatzeko"
-
-#: ../src/terminal.c:3118
-msgid "Profile _used when launching a new terminal:"
-msgstr "_Terminal berria irekitzean erabiliko den profila:"
-
-#: ../src/terminal.c:3174
-msgid "Click button to choose profile"
-msgstr "Egin klik botoian profila aukeratzeko"
-
-#: ../src/terminal.c:3592
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Errorea gertatu da laguntza bistaratzean: %s"
-
-#: ../src/terminal.c:3663
-#, c-format
-msgid ""
-"The file \"%s\" is missing. This indicates that the application is installed "
-"incorrectly."
-msgstr ""
-"\"%s\" fitxategia falta da. Horrek esan nahi du aplikazioa ez dagoela behar "
-"den bezala instalatuta."
-
-#: ../src/terminal.c:3835
+#: ../src/terminal.c:3718
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
-"badirudi gnome-terminal zerbitzaria ez daukazula kokaleku egokian "
+"Badirudi gnome-terminal zerbitzaria ez daukazula kokaleku egokian "
 "instalatuta. Fabrika-modua desgaituta.\n"
 
-#: ../src/terminal.c:3838
+#: ../src/terminal.c:3721
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
@@ -2779,7 +2689,7 @@ msgstr ""
 "Errorea terminala aktibazio-zerbitzuan erregistratzean; fabrika-modua "
 "desgaituta.\n"
 
-#: ../src/terminal.c:3874
+#: ../src/terminal.c:3757
 msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "Huts egin du aktibazio-zerbitzaritik terminal-zerbitzaria eskuratzean\n"
-
+msgstr ""
+"Huts egin du aktibazio-zerbitzaritik terminal-zerbitzaria eskuratzean\n"
