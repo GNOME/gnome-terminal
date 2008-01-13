@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal trunk\n"
+"Project-Id-Version: gnome-terminal gnome-2-20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-30 00:31+0900\n"
-"PO-Revision-Date: 2007-11-30 00:31+0900\n"
+"POT-Creation-Date: 2008-01-13 13:32+0900\n"
+"PO-Revision-Date: 2008-01-13 13:30+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:180 ../src/terminal-profile.c:278
-#: ../src/terminal-window.c:752 ../src/terminal.c:1205 ../src/terminal.c:1637
+#: ../src/terminal-window.c:800 ../src/terminal.c:1206 ../src/terminal.c:1638
 msgid "Terminal"
 msgstr "端末"
 
@@ -1766,7 +1766,7 @@ msgstr "縮小する"
 msgid "Normal Size"
 msgstr "通常のサイズに戻す"
 
-#: ../src/terminal-accels.c:113 ../src/terminal-screen.c:2217
+#: ../src/terminal-accels.c:113 ../src/terminal-screen.c:2216
 msgid "Set Title"
 msgstr "タイトルを設定する"
 
@@ -1871,7 +1871,7 @@ msgid "Help"
 msgstr "ヘルプ"
 
 #: ../src/terminal-accels.c:272 ../src/terminal-profile.c:395
-#: ../src/terminal-screen.c:199 ../src/terminal.c:1723
+#: ../src/terminal-screen.c:206 ../src/terminal.c:1724
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr "%s から設定を読み込む際にエラーが発生しました (%s)。\n"
@@ -1963,6 +1963,10 @@ msgstr "操作(_A)"
 msgid "Shortcut _Key"
 msgstr "ショートカット・キー(_K)"
 
+#: ../src/terminal-notebook.c:819
+msgid "Close tab"
+msgstr "タブを閉じます"
+
 #: ../src/terminal-profile.c:410
 #, c-format
 msgid ""
@@ -2036,7 +2040,7 @@ msgstr ""
 msgid "_Details"
 msgstr "詳細(_D)"
 
-#: ../src/terminal-profile.c:2975 ../src/terminal.c:2396
+#: ../src/terminal-profile.c:2975 ../src/terminal.c:2392
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr "プロファイル \"%s\" の作成中にエラーが発生しました"
@@ -2057,24 +2061,24 @@ msgid_plural "Palette had %d entries instead of %d\n"
 msgstr[0] "パレットには %2$d の代わりに %1$d 個のエントリがありました\n"
 msgstr[1] "パレットには %2$d の代わりに %1$d 個のエントリがありました\n"
 
-#: ../src/terminal-screen.c:215
+#: ../src/terminal-screen.c:222
 #, c-format
 msgid ""
 "There was an error subscribing to notification of monospace font changes. (%"
 "s)\n"
 msgstr "等幅フォントの変更通知を登録する際にエラーが発生しました (%s)。\n"
 
-#: ../src/terminal-screen.c:910
+#: ../src/terminal-screen.c:909
 #, c-format
 msgid "Could not load font \"%s\"\n"
 msgstr "フォント \"%s\"を読み込めませんでした\n"
 
-#: ../src/terminal-screen.c:1057
+#: ../src/terminal-screen.c:1056
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "この端末のコマンドに問題がありました: %s"
 
-#: ../src/terminal-screen.c:1497
+#: ../src/terminal-screen.c:1496
 #, c-format
 msgid ""
 "Could not open the address \"%s\":\n"
@@ -2083,7 +2087,7 @@ msgstr ""
 "アドレス \"%s\" を開けませんでした:\n"
 "%s"
 
-#: ../src/terminal-screen.c:1594
+#: ../src/terminal-screen.c:1593 ../src/terminal-window.c:828
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use image in menus. (%"
@@ -2092,89 +2096,89 @@ msgstr ""
 "メニューの中に画像を使用するかどうかの設定値を読み込む際にエラーが発生しまし"
 "た (%s)。\n"
 
-#: ../src/terminal-screen.c:1681
+#: ../src/terminal-screen.c:1680
 msgid "_Send Mail To..."
 msgstr "E-メールを送信する(_S)..."
 
-#: ../src/terminal-screen.c:1686
+#: ../src/terminal-screen.c:1685
 msgid "_Copy E-mail Address"
 msgstr "E-メール・アドレスのコピー(_C)"
 
-#: ../src/terminal-screen.c:1693
+#: ../src/terminal-screen.c:1692
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
-#: ../src/terminal-screen.c:1698
+#: ../src/terminal-screen.c:1697
 msgid "_Copy Link Address"
 msgstr "リンク・アドレスのコピー(_C)"
 
-#: ../src/terminal-screen.c:1709 ../src/terminal-window.c:866
+#: ../src/terminal-screen.c:1708 ../src/terminal-window.c:891
 msgid "Open _Terminal"
 msgstr "端末を開く(_T)"
 
-#: ../src/terminal-screen.c:1714 ../src/terminal-window.c:869
+#: ../src/terminal-screen.c:1713 ../src/terminal-window.c:894
 msgid "Open Ta_b"
 msgstr "新しいタブを開く(_B)"
 
-#: ../src/terminal-screen.c:1724 ../src/terminal-window.c:884
+#: ../src/terminal-screen.c:1723 ../src/terminal-window.c:909
 msgid "C_lose Tab"
 msgstr "タブを閉じる(_L)"
 
-#: ../src/terminal-screen.c:1724
+#: ../src/terminal-screen.c:1723
 msgid "C_lose Window"
 msgstr "ウィンドウを閉じる(_L)"
 
-#: ../src/terminal-screen.c:1749
+#: ../src/terminal-screen.c:1748
 msgid "Change P_rofile"
 msgstr "プロファイルの変更(_R)"
 
-#: ../src/terminal-screen.c:1785
+#: ../src/terminal-screen.c:1784
 msgid "_Edit Current Profile..."
 msgstr "このプロファイルの編集(_E)..."
 
-#: ../src/terminal-screen.c:1790
+#: ../src/terminal-screen.c:1789
 msgid "Show _Menubar"
 msgstr "メニューバーの表示(_M)"
 
-#: ../src/terminal-screen.c:1806
+#: ../src/terminal-screen.c:1805
 msgid "_Input Methods"
 msgstr "入力メソッド(_I)"
 
-#: ../src/terminal-screen.c:2246
+#: ../src/terminal-screen.c:2245
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: ../src/terminal-screen.c:2364
+#: ../src/terminal-screen.c:2359
 #, c-format
 msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "端末にドロップした text/plain は不正な形式 (%d) またはは長さ (%d) でした\n"
 
-#: ../src/terminal-screen.c:2387
+#: ../src/terminal-screen.c:2382
 #, c-format
 msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr "端末にドロップした色は不正な形式 (%d) または長さ (%d) でした\n"
 
-#: ../src/terminal-screen.c:2430
+#: ../src/terminal-screen.c:2425
 #, c-format
 msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "端末にドロップした Mozilla の URL は不正な形式 (%d) または長さ (%d) でした\n"
 
-#: ../src/terminal-screen.c:2479
+#: ../src/terminal-screen.c:2474
 #, c-format
 msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "端末にドロップした URI のリストは不正な形式 (%d) またはは長さ (%d) でした\n"
 
-#: ../src/terminal-screen.c:2538
+#: ../src/terminal-screen.c:2533
 #, c-format
 msgid ""
 "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
 msgstr ""
 "端末にドロップした画像のファイル名は不正な形式 (%d) または長さ (%d) でした\n"
 
-#: ../src/terminal-screen.c:2564
+#: ../src/terminal-screen.c:2559
 #, c-format
 msgid "Error converting URI \"%s\" into filename: %s\n"
 msgstr "URI \"%s\"をファイル名に変換中にエラー：%s\n"
@@ -2184,21 +2188,118 @@ msgstr "URI \"%s\"をファイル名に変換中にエラー：%s\n"
 msgid "There was an error creating the child process for this terminal"
 msgstr "この端末の子プロセスを作成中にエラーが発生しました"
 
-#: ../src/terminal-window.c:479
+#: ../src/terminal-window.c:367
+#, c-format
+msgid ""
+"There was an error subscribing to notification of menu icon visibility "
+"changes. (%s)\n"
+msgstr ""
+"メニューにアイコンを表示するかどうかの変更通知を登録する際にエラーが発生しま"
+"した: (%s)\n"
+
+#: ../src/terminal-window.c:580
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:481
+#: ../src/terminal-window.c:582
 #, c-format
 msgid "_%c. %s"
 msgstr " _%c. %s "
 
-#: ../src/terminal-window.c:604
+#: ../src/terminal-window.c:705
 msgid "_Add or Remove..."
 msgstr "追加と削除(_A)..."
 
-#: ../src/terminal-window.c:784
+#. This is fairly bogus to have here but I don't know
+#. * where else to put it really
+#.
+#: ../src/terminal-window.c:902
+msgid "New _Profile..."
+msgstr "新しいプロファイル(_P)..."
+
+#: ../src/terminal-window.c:913
+msgid "_Close Window"
+msgstr "ウィンドウを閉じる (_C)"
+
+#: ../src/terminal-window.c:946
+msgid "P_rofiles..."
+msgstr "プロファイル(_R)..."
+
+#: ../src/terminal-window.c:949
+msgid "_Keyboard Shortcuts..."
+msgstr "キーボード・ショートカット(_K)..."
+
+#: ../src/terminal-window.c:953
+msgid "C_urrent Profile..."
+msgstr "現在のプロファイル(_U)..."
+
+#. This is a check menu item so that the togglability is evident, but when it is not checked,
+#. * it won't be seen, of course, because the menubar will be then hidden.
+#: ../src/terminal-window.c:968
+msgid "Show Menu_bar"
+msgstr "メニューバーの表示(_B)"
+
+#: ../src/terminal-window.c:972
+msgid "_Full Screen"
+msgstr "フルスクリーン(_F)"
+
+#: ../src/terminal-window.c:1015
+msgid "Change _Profile"
+msgstr "プロファイルの変更(_P)"
+
+#: ../src/terminal-window.c:1018
+msgid "_Set Title..."
+msgstr "タイトルの設定(_S)..."
+
+#: ../src/terminal-window.c:1025
+msgid "Set _Character Encoding"
+msgstr "文字コードの設定(_C)"
+
+#: ../src/terminal-window.c:1035
+msgid "_Reset"
+msgstr "リセット(_R)"
+
+#: ../src/terminal-window.c:1038
+msgid "Reset and C_lear"
+msgstr "リセットとクリア(_L)"
+
+#: ../src/terminal-window.c:1052
+msgid "_Previous Tab"
+msgstr "前のタブへ(_P)"
+
+#: ../src/terminal-window.c:1056
+msgid "_Next Tab"
+msgstr "次のタブへ(_N)"
+
+#: ../src/terminal-window.c:1067
+msgid "Move Tab to the _Left"
+msgstr "タブを左へ(_L)"
+
+#: ../src/terminal-window.c:1071
+msgid "Move Tab to the _Right"
+msgstr "タブを右へ(_R)"
+
+#: ../src/terminal-window.c:1078
+msgid "_Detach Tab"
+msgstr "タブを閉じる(_D)"
+
+#: ../src/terminal-window.c:1097
+msgid "_Contents"
+msgstr "目次(_C)"
+
+#: ../src/terminal-window.c:1107
+msgid "_About"
+msgstr "情報(_A)"
+
+#: ../src/terminal-window.c:1293
+#, c-format
+msgid ""
+"There was an error loading config value for whether to use mnemonics. (%s)\n"
+msgstr ""
+"mnemonics の使用を判定する設定値を読み込む際にエラーが発生しました (%s)。\n"
+
+#: ../src/terminal-window.c:1312
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
@@ -2206,127 +2307,35 @@ msgid ""
 msgstr ""
 "端末ウィンドウの設定変更通知を登録する際にエラーが発生しました (%s)。\n"
 
-#: ../src/terminal-window.c:795
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use mnemonics. (%s)\n"
-msgstr ""
-"mnemonics の使用を判定する設定値を読み込む際にエラーが発生しました (%s)。\n"
-
-#. This is fairly bogus to have here but I don't know
-#. * where else to put it really
-#.
-#: ../src/terminal-window.c:877
-msgid "New _Profile..."
-msgstr "新しいプロファイル(_P)..."
-
-#: ../src/terminal-window.c:888
-msgid "_Close Window"
-msgstr "ウィンドウを閉じる (_C)"
-
-#: ../src/terminal-window.c:919
-msgid "P_rofiles..."
-msgstr "プロファイル(_R)..."
-
-#: ../src/terminal-window.c:922
-msgid "_Keyboard Shortcuts..."
-msgstr "キーボード・ショートカット(_K)..."
-
-#: ../src/terminal-window.c:926
-msgid "C_urrent Profile..."
-msgstr "現在のプロファイル(_U)..."
-
-#. This is a check menu item so that the togglability is evident, but when it is not checked,
-#. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:941
-msgid "Show Menu_bar"
-msgstr "メニューバーの表示(_B)"
-
-#: ../src/terminal-window.c:945
-msgid "_Full Screen"
-msgstr "フルスクリーン(_F)"
-
-#: ../src/terminal-window.c:985
-msgid "Change _Profile"
-msgstr "プロファイルの変更(_P)"
-
-#: ../src/terminal-window.c:988
-msgid "_Set Title..."
-msgstr "タイトルの設定(_S)..."
-
-#: ../src/terminal-window.c:995
-msgid "Set _Character Encoding"
-msgstr "文字コードの設定(_C)"
-
-#: ../src/terminal-window.c:1005
-msgid "_Reset"
-msgstr "リセット(_R)"
-
-#: ../src/terminal-window.c:1008
-msgid "Reset and C_lear"
-msgstr "リセットとクリア(_L)"
-
-#: ../src/terminal-window.c:1022
-msgid "_Previous Tab"
-msgstr "前のタブへ(_P)"
-
-#: ../src/terminal-window.c:1026
-msgid "_Next Tab"
-msgstr "次のタブへ(_N)"
-
-#: ../src/terminal-window.c:1037
-msgid "Move Tab to the _Left"
-msgstr "タブを左へ(_L)"
-
-#: ../src/terminal-window.c:1041
-msgid "Move Tab to the _Right"
-msgstr "タブを右へ(_R)"
-
-#: ../src/terminal-window.c:1048
-msgid "_Detach Tab"
-msgstr "タブを閉じる(_D)"
-
-#: ../src/terminal-window.c:1067
-msgid "_Contents"
-msgstr "目次(_C)"
-
-#: ../src/terminal-window.c:1076
-msgid "_About"
-msgstr "情報(_A)"
-
-#: ../src/terminal-window.c:1440
-msgid "Close tab"
-msgstr "タブを閉じます"
-
-#: ../src/terminal-window.c:2112
+#: ../src/terminal-window.c:2115
 msgid "_File"
 msgstr "ファイル(_F)"
 
-#: ../src/terminal-window.c:2114 ../src/terminal.c:2988
+#: ../src/terminal-window.c:2117 ../src/terminal.c:2984
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: ../src/terminal-window.c:2116
+#: ../src/terminal-window.c:2119
 msgid "_View"
 msgstr "表示(_V)"
 
-#: ../src/terminal-window.c:2118
+#: ../src/terminal-window.c:2121
 msgid "_Terminal"
 msgstr "端末(_T)"
 
-#: ../src/terminal-window.c:2120
+#: ../src/terminal-window.c:2123
 msgid "Ta_bs"
 msgstr "タブ(_B)"
 
-#: ../src/terminal-window.c:2122
+#: ../src/terminal-window.c:2125
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: ../src/terminal-window.c:2344
+#: ../src/terminal-window.c:2347
 msgid "Close all tabs?"
 msgstr "全てのタブを閉じますか？"
 
-#: ../src/terminal-window.c:2346
+#: ../src/terminal-window.c:2349
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2338,11 +2347,11 @@ msgstr[1] ""
 "このウィンドウには %d個のタブがあります。このウィンドウを閉じるとそれらのタブ"
 "を全て閉じることになります。"
 
-#: ../src/terminal-window.c:2355
+#: ../src/terminal-window.c:2358
 msgid "Close All _Tabs"
 msgstr "全てのタブを閉じる(_T)"
 
-#: ../src/terminal-window.c:2880
+#: ../src/terminal-window.c:2892
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2353,7 +2362,7 @@ msgstr ""
 "一般公衆利用許諾契約書の第二版、あるいはそれ以降の版が定める条項の下で本プロ"
 "グラムを再頒布または変更することができます。"
 
-#: ../src/terminal-window.c:2884
+#: ../src/terminal-window.c:2896
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2364,7 +2373,7 @@ msgstr ""
 "的、その適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細"
 "については GNU 一般公衆利用許諾契約書をご覧下さい。"
 
-#: ../src/terminal-window.c:2888
+#: ../src/terminal-window.c:2900
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2374,15 +2383,15 @@ msgstr ""
 "るはずです。そうでない場合は、Free Software Foundation, Inc., 51 Franklin "
 "St, Fifth Floor, Boston, MA  02110-1301 USA へ手紙を書いて下さい。"
 
-#: ../src/terminal-window.c:2898
+#: ../src/terminal-window.c:2910
 msgid "GNOME Terminal"
 msgstr "GNOME 端末"
 
-#: ../src/terminal-window.c:2900
+#: ../src/terminal-window.c:2912
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME デスクトップ向けの端末エミュレータです"
 
-#: ../src/terminal-window.c:2905
+#: ../src/terminal-window.c:2917
 msgid "translator-credits"
 msgstr ""
 "佐藤 暁 <ss@gnome.gr.jp>\n"
@@ -2391,15 +2400,15 @@ msgstr ""
 "James Hashida <khashida@redhat.com>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp"
 
-#: ../src/terminal.c:189
+#: ../src/terminal.c:190
 msgid "Execute the argument to this option inside the terminal."
 msgstr "端末内でこのオプションに対する引数を実行する"
 
-#: ../src/terminal.c:198
+#: ../src/terminal.c:199
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "端末内で残りのコマンド・ラインを実行する"
 
-#: ../src/terminal.c:207
+#: ../src/terminal.c:208
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
@@ -2407,18 +2416,18 @@ msgstr ""
 "デフォルトのプロファイルでタブを含む新しいウィンドウを開く (複数指定すること"
 "が可能)"
 
-#: ../src/terminal.c:216
+#: ../src/terminal.c:217
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
 "指定したプロファイルでタブを含む新しいウィンドウを開く (複数指定すること可能)"
 
-#: ../src/terminal.c:217 ../src/terminal.c:235
+#: ../src/terminal.c:218 ../src/terminal.c:236
 msgid "PROFILENAME"
 msgstr "PROFILENAME"
 
-#: ../src/terminal.c:225
+#: ../src/terminal.c:226
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
@@ -2426,7 +2435,7 @@ msgstr ""
 "デフォルトのプロファイルで最後に開いたウィンドウ内にタブを開く (複数指定する"
 "ことが可能)"
 
-#: ../src/terminal.c:234
+#: ../src/terminal.c:235
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -2434,7 +2443,7 @@ msgstr ""
 "指定したプロファイルで最後に開いたウィンドウ内にタブを開く (複数指定すること"
 "が可能)"
 
-#: ../src/terminal.c:243
+#: ../src/terminal.c:244
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -2442,11 +2451,11 @@ msgstr ""
 "指定したプロファイル ID でタブを含む新しいウィンドウを開く (セッションを保存"
 "する目的で内部的に使用)"
 
-#: ../src/terminal.c:244 ../src/terminal.c:253
+#: ../src/terminal.c:245 ../src/terminal.c:254
 msgid "PROFILEID"
 msgstr "PROFILEID"
 
-#: ../src/terminal.c:252
+#: ../src/terminal.c:253
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -2454,7 +2463,7 @@ msgstr ""
 "指定したプロファイル ID で最後に開いたウィンドウ内にタブを開く (セッションを"
 "保存する目的で内部的に使用)"
 
-#: ../src/terminal.c:261
+#: ../src/terminal.c:262
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -2462,11 +2471,11 @@ msgstr ""
 "最後に指定したウィンドウにロールを設定する (一つのウィンドウのみに適用; コマ"
 "ンド・ラインから生成した各ウィンドウにそれぞれ一回だけ指定可)"
 
-#: ../src/terminal.c:262
+#: ../src/terminal.c:263
 msgid "ROLE"
 msgstr "ROLE"
 
-#: ../src/terminal.c:270
+#: ../src/terminal.c:271
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2475,7 +2484,7 @@ msgstr ""
 "メニューバーを表示して最後に指定したウィンドウを開く (一つのウィンドウのみに"
 "適用; コマンド・ラインから生成した各ウィンドウにそれぞれ一回だけ指定可)"
 
-#: ../src/terminal.c:279
+#: ../src/terminal.c:280
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2484,7 +2493,7 @@ msgstr ""
 "メニューバーを表示せすに最後に指定したウィンドウを開く (一つのウィンドウのみ"
 "に適用; コマンド・ラインから生成した各ウィンドウにそれぞれ一回だけ指定可)\""
 
-#: ../src/terminal.c:288
+#: ../src/terminal.c:289
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -2493,84 +2502,84 @@ msgstr ""
 "最後に指定したウィンドウをフルスクリーン・モードに設定する (一つのウィンドウ"
 "のみに適用; コマンド・ラインから生成した各ウィンドウにそれぞれ一回だけ指定可)"
 
-#: ../src/terminal.c:297
+#: ../src/terminal.c:298
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
 msgstr ""
 "X ジオメトリの位置にウィンドウを開く (開くウィンドウ毎に一回のみ指定可)"
 
-#: ../src/terminal.c:298
+#: ../src/terminal.c:299
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: ../src/terminal.c:306
+#: ../src/terminal.c:307
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr "活性化したネームサーバで登録しない (起動中の端末を再使用しない)"
 
-#: ../src/terminal.c:315
+#: ../src/terminal.c:316
 msgid "Register with the activation nameserver [default]"
 msgstr "活性化したネームサーバで登録する [デフォルト]"
 
-#: ../src/terminal.c:324
+#: ../src/terminal.c:325
 msgid "ID for startup notification protocol."
 msgstr "スタートアップ通知プロトコルの ID"
 
-#: ../src/terminal.c:333
+#: ../src/terminal.c:334
 msgid "Set the terminal's title"
 msgstr "端末のタイトルを指定する"
 
-#: ../src/terminal.c:334
+#: ../src/terminal.c:335
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/terminal.c:342
+#: ../src/terminal.c:343
 msgid "Set the terminal's working directory"
 msgstr "端末の作業用ディレクトリを指定する"
 
-#: ../src/terminal.c:343 ../src/terminal.c:352
+#: ../src/terminal.c:344 ../src/terminal.c:353
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/terminal.c:351
+#: ../src/terminal.c:352
 msgid "Set the default terminal's working directory. Used internally"
 msgstr "端末が使用するデフォルトの作業用フォルダ (内部的に使用する) を指定する"
 
-#: ../src/terminal.c:360
+#: ../src/terminal.c:361
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "端末の拡大率を指定する (1.0 = 標準サイズ)"
 
-#: ../src/terminal.c:361 ../src/terminal.c:370
+#: ../src/terminal.c:362 ../src/terminal.c:371
 msgid "ZOOMFACTOR"
 msgstr "ZOOMFACTOR"
 
-#: ../src/terminal.c:369
+#: ../src/terminal.c:370
 msgid "Set the last specified tab as the active one in its window"
 msgstr "最後に指定したタブをそのウィンドの中で有効にする"
 
-#: ../src/terminal.c:712
+#: ../src/terminal.c:713
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr "アイコン \"%s\" を読み込めませんでした: %s\n"
 
-#: ../src/terminal.c:777
+#: ../src/terminal.c:778
 #, c-format
 msgid "Option \"%s\" requires specifying the command to run\n"
 msgstr "オプション \"%s\" には実行するコマンドが必要です\n"
 
-#: ../src/terminal.c:785
+#: ../src/terminal.c:786
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
 msgstr "\"%s\" への引数が正しいコマンドではありません: %s\n"
 
-#: ../src/terminal.c:795 ../src/terminal.c:819
+#: ../src/terminal.c:796 ../src/terminal.c:820
 #, c-format
 msgid "\"%s\" specified more than once for the same window or tab\n"
 msgstr "\"%s\" が同じウィンドウまたはタブに対して一つ以上指定されました\n"
 
-#: ../src/terminal.c:810
+#: ../src/terminal.c:811
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -2578,57 +2587,57 @@ msgid ""
 msgstr ""
 "オプション \"%s\" にはコマンド・ラインの中に実行するコマンドが必要です\n"
 
-#: ../src/terminal.c:841 ../src/terminal.c:865
+#: ../src/terminal.c:842 ../src/terminal.c:866
 #, c-format
 msgid "Option \"%s\" requires an argument specifying what profile to use\n"
 msgstr "オプション \"%s\" にはプロファイルを示す引数が必要です\n"
 
-#: ../src/terminal.c:899 ../src/terminal.c:925
+#: ../src/terminal.c:900 ../src/terminal.c:926
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "同じウィンドウに対してオプション \"%s\" が二回指定されました\n"
 
-#: ../src/terminal.c:965
+#: ../src/terminal.c:966
 #, c-format
 msgid "Option \"%s\" requires an argument giving the role\n"
 msgstr "オプション \"%s\" にはロールを示す引数が必要です\n"
 
-#: ../src/terminal.c:974
+#: ../src/terminal.c:975
 #, c-format
 msgid "Two roles given for one window\n"
 msgstr "一つのウィンドウに二つのロールが指定されました\n"
 
-#: ../src/terminal.c:990
+#: ../src/terminal.c:991
 #, c-format
 msgid "Option \"%s\" requires an argument giving the geometry\n"
 msgstr "オプション \"%s\" にはジオメトリを示す引数が必要です\n"
 
-#: ../src/terminal.c:999
+#: ../src/terminal.c:1000
 #, c-format
 msgid "Two \"%s\" options given for one window\n"
 msgstr "一つのウィンドウにオプション \"%s\" が二回指定されました\n"
 
-#: ../src/terminal.c:1009
+#: ../src/terminal.c:1010
 #, c-format
 msgid "Two geometries given for one window\n"
 msgstr "一つのウィンドウにジオメトリが二つ指定されました\n"
 
-#: ../src/terminal.c:1035
+#: ../src/terminal.c:1036
 #, c-format
 msgid "Option \"%s\" requires an argument giving the title\n"
 msgstr "オプション \"%s\" にはタイトルを示す引数が必要です\n"
 
-#: ../src/terminal.c:1043 ../src/terminal.c:1066 ../src/terminal.c:1108
+#: ../src/terminal.c:1044 ../src/terminal.c:1067 ../src/terminal.c:1109
 #, c-format
 msgid "Two \"%s\" options given for one tab\n"
 msgstr "一つのタブにオプション \"%s\" が二つ指定されました\n"
 
-#: ../src/terminal.c:1058
+#: ../src/terminal.c:1059
 #, c-format
 msgid "Option \"%s\" requires an argument giving the directory\n"
 msgstr "オプション \"%s\" にはディレクトリを示す引数が必要です\n"
 
-#: ../src/terminal.c:1078
+#: ../src/terminal.c:1079
 #, c-format
 msgid ""
 "Option --default-working-directory requires an argument giving the "
@@ -2636,32 +2645,32 @@ msgid ""
 msgstr ""
 "オプション --default-working-directory にはディレクトリを示す引数が必要です\n"
 
-#: ../src/terminal.c:1084
+#: ../src/terminal.c:1085
 #, c-format
 msgid "Two --default-working-directories given\n"
 msgstr "オプション --default-working-directory を二つ指定しました\n"
 
-#: ../src/terminal.c:1100
+#: ../src/terminal.c:1101
 #, c-format
 msgid "Option \"%s\" requires an argument giving the zoom factor\n"
 msgstr "オプション \"%s\" には拡大率を示す引数が必要です\n"
 
-#: ../src/terminal.c:1123
+#: ../src/terminal.c:1124
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "拡大率 \"%s\" が正しくありません\n"
 
-#: ../src/terminal.c:1131
+#: ../src/terminal.c:1132
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "拡大率 \"%g\" は小さすぎるので %g を使います\n"
 
-#: ../src/terminal.c:1138
+#: ../src/terminal.c:1139
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "拡大率 \"%g\" は大きすぎるので %g を使います\n"
 
-#: ../src/terminal.c:1159
+#: ../src/terminal.c:1160
 #, c-format
 msgid ""
 "Option --%s is no longer supported in this version of gnome-terminal; you "
@@ -2672,51 +2681,51 @@ msgstr ""
 "ん; ご所望の設定でプロファイルを一つ作成し、オプション \"--window-with-"
 "profile\" を使用してみて下さい。\n"
 
-#: ../src/terminal.c:1165
+#: ../src/terminal.c:1166
 #, c-format
 msgid "\"%s\" option given twice\n"
 msgstr "オプション \"%s\" が二回指定されています\n"
 
-#: ../src/terminal.c:1170 ../src/terminal.c:1311
+#: ../src/terminal.c:1171 ../src/terminal.c:1312
 #, c-format
 msgid "\"%s\" option requires an argument\n"
 msgstr "オプション \"%s\" には引数が必要です\n"
 
-#: ../src/terminal.c:1289
+#: ../src/terminal.c:1290
 #, c-format
 msgid "No argument given to \"%s\" option\n"
 msgstr ""
 "オプション \"%s\" に対する引数が指定されていません\n"
 "\n"
 
-#: ../src/terminal.c:1423
+#: ../src/terminal.c:1424
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr "プロファイル '%s' がありません。デフォルトのプロファイルを使用します\n"
 
-#: ../src/terminal.c:1666
+#: ../src/terminal.c:1667
 #, c-format
 msgid "Invalid argument: \"%s\"\n"
 msgstr "無効な引数: \"%s\"\n"
 
-#: ../src/terminal.c:1739
+#: ../src/terminal.c:1740
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr "端末プロファイル一覧の通知を登録する際にエラーが発生しました (%s)。\n"
 
-#: ../src/terminal.c:1995
+#: ../src/terminal.c:1991
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "無効なジオメトリ文字列 \"%s\"\n"
 
-#: ../src/terminal.c:2061
+#: ../src/terminal.c:2057
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr "端末プロファイルの一覧を取得する際にエラーが発生しました (%s)。\n"
 
-#: ../src/terminal.c:2365
+#: ../src/terminal.c:2361
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
@@ -2725,82 +2734,82 @@ msgstr ""
 "既に \"%s\" と同名のプロファイルが存在します。同じ名前で別のプロファイルを生"
 "成しますか？"
 
-#: ../src/terminal.c:2379
+#: ../src/terminal.c:2375
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr "新しいプロファイルのベースとして指定したプロファイルはもう存在しません"
 
-#: ../src/terminal.c:2471
+#: ../src/terminal.c:2467
 msgid "Enter profile name"
 msgstr "プロファイル名の入力"
 
-#: ../src/terminal.c:2481
+#: ../src/terminal.c:2477
 msgid "Choose base profile"
 msgstr "ベースとなるプロファイルの選択"
 
-#: ../src/terminal.c:2620
+#: ../src/terminal.c:2616
 msgid "Profile list"
 msgstr "プロファイルの一覧"
 
-#: ../src/terminal.c:2689
+#: ../src/terminal.c:2685
 msgid "You must select one or more profiles to delete."
 msgstr "削除するプロファイルを一つ以上選択して下さい。"
 
-#: ../src/terminal.c:2700
+#: ../src/terminal.c:2696
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 "少なくとも一つのプロファイルが必要です; 全てのプロファイルを削除できません。"
 
-#: ../src/terminal.c:2708
+#: ../src/terminal.c:2704
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "このプロファイルを削除しますか？\n"
 msgstr[1] "これら %d個のプロファイルを削除しますか？\n"
 
-#: ../src/terminal.c:2729
+#: ../src/terminal.c:2725
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "プロファイル \"%s\" を削除しますか？"
 
-#: ../src/terminal.c:2751
+#: ../src/terminal.c:2747
 msgid "Delete Profile"
 msgstr "プロファイルの削除"
 
-#: ../src/terminal.c:3024
+#: ../src/terminal.c:3020
 msgid "Profiles"
 msgstr "プロファイル"
 
-#: ../src/terminal.c:3065
+#: ../src/terminal.c:3061
 msgid "_Profiles:"
 msgstr "利用可能なプロファイル(_P):"
 
-#: ../src/terminal.c:3097
+#: ../src/terminal.c:3093
 msgid "Click to open new profile dialog"
 msgstr "クリックすると新しいプロファイル・ダイアログが開きます"
 
-#: ../src/terminal.c:3105
+#: ../src/terminal.c:3101
 msgid "Click to open edit profile dialog"
 msgstr "クリックするとプロファイル編集ダイアログが開きます"
 
-#: ../src/terminal.c:3113
+#: ../src/terminal.c:3109
 msgid "Click to delete selected profile"
 msgstr "クリックすると選択したプロファイルを削除します"
 
-#: ../src/terminal.c:3118
+#: ../src/terminal.c:3114
 msgid "Profile _used when launching a new terminal:"
 msgstr "新しい端末を起動する時に使用するプロファイル(_U):"
 
-#: ../src/terminal.c:3174
+#: ../src/terminal.c:3170
 msgid "Click button to choose profile"
 msgstr "ボタンをクリックしてプロファイルを選択して下さい"
 
-#: ../src/terminal.c:3593
+#: ../src/terminal.c:3589
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "ヘルプを表示する際にエラーが発生しました: %s"
 
-#: ../src/terminal.c:3664
+#: ../src/terminal.c:3660
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
@@ -2809,7 +2818,7 @@ msgstr ""
 "ファイル \"%s\" がありません。アプリケーションのインストールをチェックして下"
 "さい。"
 
-#: ../src/terminal.c:3836
+#: ../src/terminal.c:3832
 #, c-format
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
@@ -2818,7 +2827,7 @@ msgstr ""
 "gnome-terminal.server が正しく場所にインストールされていないようです。ファク"
 "トリ・モードは使用できません。\n"
 
-#: ../src/terminal.c:3839
+#: ../src/terminal.c:3835
 #, c-format
 msgid ""
 "Error registering terminal with the activation service; factory mode "
@@ -2827,7 +2836,7 @@ msgstr ""
 "活性化サービスで端末を登録する際にエラー; ファクトリ・モードは使用できませ"
 "ん。\n"
 
-#: ../src/terminal.c:3875
+#: ../src/terminal.c:3871
 #, c-format
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "活性化サーバから端末サーバの取得に失敗しました\n"
