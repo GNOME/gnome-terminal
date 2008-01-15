@@ -1200,7 +1200,7 @@ terminal_profile_edit (TerminalProfile *profile,
 	  g_free (t);
 
 	  t = g_strdup_printf (_("Palette entry %d"), i+1);
-	  gtk_tooltips_set_tip (gtk_tooltips_data_get(w)->tooltips, w, t, NULL);
+          gtk_widget_set_tooltip_text (w, t);
 	  g_free (t);
 
 	  g_object_set_data (G_OBJECT (w),

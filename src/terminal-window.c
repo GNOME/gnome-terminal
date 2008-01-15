@@ -72,7 +72,6 @@ struct _TerminalWindowPrivate
   TerminalScreen *active_term;
   GdkPixbuf *icon;
   GtkClipboard *clipboard;
-  GtkTooltips *tooltips;
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
@@ -799,10 +798,6 @@ terminal_window_init (TerminalWindow *window)
 
   window->priv->using_mnemonics = FALSE;
 
-  window->priv->tooltips = gtk_tooltips_new ();
-  g_object_ref (window->priv->tooltips);
-  gtk_object_sink (GTK_OBJECT (window->priv->tooltips));
-
   initialize_alpha_mode (window);
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
@@ -1141,11 +1136,6 @@ terminal_window_finalize (GObject *object)
   if (window->priv->icon)
     {
       g_object_unref (G_OBJECT (window->priv->icon));
-    }
-
-  if (window->priv->tooltips)
-    {
-      g_object_unref (G_OBJECT (window->priv->tooltips));
     }
 
   if (window->priv->tab_menuitems)
