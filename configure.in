@@ -1,9 +1,9 @@
-AC_INIT([GNOME Terminal],[2.21.4],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
+AC_INIT([GNOME Terminal],[2.21.5],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
 AC_CONFIG_SRCDIR([src/terminal.c])
 
 AC_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE([1.9 foreign])
+AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
 
 GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST([GETTEXT_PACKAGE])
@@ -25,8 +25,8 @@ AM_GLIB_GNU_GETTEXT
 
 AC_PATH_XTRA
 
-GLIB_REQUIRED=2.15.0
-GTK_REQUIRED=2.10.0
+GLIB_REQUIRED=2.15.2
+GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=2.14.0
 STARTUP_NOTIFICATION_REQUIRED=0.8
 VTE_REQUIRED=0.15.3
