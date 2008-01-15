@@ -1095,6 +1095,18 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->show = terminal_window_show;
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
+
+        
+  gtk_rc_parse_string ("style \"gnome-terminal-tab-close-button-style\"\n"
+                       "{\n"
+                          "GtkWidget::focus-padding = 0\n"
+                          "GtkWidget::focus-line-width = 0\n"
+                          "xthickness = 0\n"
+                          "ythickness = 0\n"
+                       "}\n"
+                       "widget \"*.gnome-terminal-tab-close-button\" style \"gnome-terminal-tab-close-button-style\"");
+
+
 }
 
 static void
@@ -1378,74 +1390,66 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *screen)
 
 static void
 sync_tab_label (TerminalScreen *screen,
-                GtkTooltips    *tooltips)
+                GtkWidget *label)
 {
-  GtkWidget *label;
-  GtkWidget *ebox;
+  GtkWidget *hbox;
   const char *title;
 
   title = terminal_screen_get_title (screen);
 
-  label = g_object_get_data (G_OBJECT (screen), "tab-label");
-  ebox = gtk_widget_get_parent (label);
+  hbox = gtk_widget_get_parent (label);
 
   gtk_label_set_text (GTK_LABEL (label), title);
-  gtk_tooltips_set_tip (tooltips, ebox, title, NULL);
+  gtk_widget_set_tooltip_text (hbox, title);
+}
+
+static void
+tab_label_style_set_cb (GtkWidget *hbox,
+                        GtkStyle *previous_style,
+                        GtkWidget *button)
+{
+        int h, w;
+
+        gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (button),
+                                           GTK_ICON_SIZE_MENU, &w, &h);
+        gtk_widget_set_size_request (button, w + 2, h + 2);
 }
 
 static GtkWidget *
 contruct_tab_label (TerminalWindow *window, TerminalScreen *screen)
 {
-  const char *title;
-  GtkWidget *hbox, *label, *label_ebox, *close_button, *image;
-  GtkRcStyle *rcstyle;
-  GtkSettings *settings;
-  gint w, h;
+  GtkWidget *hbox, *label, *close_button, *image;
 
   hbox = gtk_hbox_new (FALSE, 4);
 
-  title = terminal_screen_get_title (screen);
-
-  label_ebox = gtk_event_box_new ();
-  gtk_event_box_set_visible_window (GTK_EVENT_BOX (label_ebox), FALSE);
-  gtk_tooltips_set_tip (window->priv->tooltips, label_ebox, title, NULL);
-
-  label = gtk_label_new (title);
+  label = gtk_label_new (NULL);
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-
-  gtk_container_add (GTK_CONTAINER (label_ebox), label);
-  gtk_box_pack_start (GTK_BOX (hbox), label_ebox, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
   close_button = gtk_button_new ();
   gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
   gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
   gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-
-  rcstyle = gtk_rc_style_new ();
-  rcstyle->xthickness = rcstyle->ythickness = 0;
-  gtk_widget_modify_style (close_button, rcstyle);
-  gtk_rc_style_unref (rcstyle);
-
-  settings = gtk_widget_get_settings (GTK_WIDGET (label));
-  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &w, &h);
-  gtk_widget_set_size_request (close_button, w + 2, h + 2);
+  gtk_widget_set_name (close_button, "gnome-terminal-tab-close-button");
+  gtk_widget_set_tooltip_text (close_button, _("Close tab"));
 
   image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
   gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_start (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-  gtk_tooltips_set_tip (window->priv->tooltips, close_button, _("Close tab"), NULL);
-
   g_signal_connect (G_OBJECT (close_button), "clicked",
 		    G_CALLBACK (close_button_clicked_cb),
 		    screen);
 
-  g_object_set_data (G_OBJECT (screen), "tab-label", label);
+  sync_tab_label (screen, label);
   g_signal_connect (G_OBJECT (screen),
                     "title-changed",
                     G_CALLBACK (sync_tab_label),
-                    window->priv->tooltips);
+                    label);
+
+  g_signal_connect (G_OBJECT (hbox), "style-set",
+                    G_CALLBACK (tab_label_style_set_cb), close_button);
 
   gtk_widget_show_all (hbox);
 
