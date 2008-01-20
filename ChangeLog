@@ -1,3 +1,19 @@
+2008-01-20  Christian Persch  <chpe@gnome.org>
+
+	* src/gnome-terminal.glade2:
+	* src/gnome-terminal.schemas.in:
+	* src/profile-editor.c: (profile_changed), (terminal_profile_edit),
+	(profile_editor_update_sensitivity):
+	* src/terminal-profile.c: (terminal_profile_init),
+	(terminal_profile_update), (profile_change_notify),
+	(terminal_profile_create):
+	* src/terminal-profile.h:
+	* src/terminal-screen.c: (terminal_screen_sync_settings),
+	(terminal_screen_screen_changed), (terminal_screen_class_init),
+	(terminal_screen_finalize), (terminal_screen_reread_profile): Use the
+	gtk-cursor-blink setting, and remove the profile option. Bug #342921,
+	based on a patch by Mariano Suárez-Alvarez.
+
 2008-01-15  Christian Persch  <chpe@gnome.org>
 
 	=== Release 2.21.5 ===

@@ -39,7 +39,6 @@
  * This sucks. ;-)
  */
 #define KEY_VISIBLE_NAME "visible_name"
-#define KEY_CURSOR_BLINK "cursor_blink"
 #define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
 #define KEY_FOREGROUND_COLOR "foreground_color"
 #define KEY_BACKGROUND_COLOR "background_color"
@@ -114,7 +113,6 @@ struct _TerminalProfilePrivate
   guint icon_load_failed : 1;
   guint background_load_failed : 1;
   
-  guint cursor_blink : 1;
   guint default_show_menubar : 1;
   guint allow_bold : 1;
   guint silent_bell : 1;
@@ -261,7 +259,6 @@ terminal_profile_init (TerminalProfile *profile)
   
   profile->priv = g_new0 (TerminalProfilePrivate, 1);
   terminal_setting_mask_clear (&profile->priv->locked);
-  profile->priv->cursor_blink = FALSE;
   profile->priv->default_show_menubar = TRUE;
   profile->priv->visible_name = g_strdup ("<not named>");
   profile->priv->foreground.red = 0;
@@ -476,33 +473,6 @@ terminal_profile_set_silent_bell (TerminalProfile  *profile,
   
   key = gconf_concat_dir_and_key (profile->priv->profile_dir,
                                   KEY_SILENT_BELL);
-  
-  gconf_client_set_bool (profile->priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_cursor_blink (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-  
-  return profile->priv->cursor_blink;
-}
-
-void
-terminal_profile_set_cursor_blink (TerminalProfile *profile,
-                                   gboolean         setting)
-{
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (profile->priv->profile_dir,
-                                  KEY_CURSOR_BLINK);
   
   gconf_client_set_bool (profile->priv->conf,
                          key,
@@ -1936,7 +1906,6 @@ terminal_profile_update (TerminalProfile *profile)
     g_free (key);                                                               \
   }
 
-  UPDATE_BOOLEAN (KEY_CURSOR_BLINK,         cursor_blink);
   UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR, default_show_menubar);
   UPDATE_STRING  (KEY_VISIBLE_NAME,         visible_name);
   UPDATE_STRING  (KEY_FOREGROUND_COLOR,     foreground_color);
@@ -2082,7 +2051,6 @@ else if (strcmp (key, KName) == 0)                                      \
  if (0)
    {
      ;
-     UPDATE_BOOLEAN (KEY_CURSOR_BLINK,           cursor_blink,           FALSE);
      UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR,   default_show_menubar,   FALSE);
      UPDATE_STRING  (KEY_VISIBLE_NAME,           visible_name,           NULL);
      UPDATE_STRING  (KEY_FOREGROUND_COLOR,       foreground_color,       NULL);
@@ -2569,16 +2537,6 @@ terminal_profile_create (TerminalProfile *base_profile,
                            key,
                            visible_name,
                            &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_CURSOR_BLINK);
-
-  gconf_client_set_bool (base_profile->priv->conf,
-                         key,
-                         base_profile->priv->cursor_blink,
-                         &err);
   BAIL_OUT_CHECK ();
 
   g_free (key);

@@ -35,7 +35,6 @@
 typedef struct
 {
   unsigned int visible_name : 1;
-  unsigned int cursor_blink : 1;
   unsigned int default_show_menubar : 1;
   unsigned int foreground_color : 1;
   unsigned int background_color : 1;
@@ -145,7 +144,6 @@ TerminalProfile* terminal_profile_new (const char  *name,
 
 const char*               terminal_profile_get_name                 (TerminalProfile *profile);
 const char*               terminal_profile_get_visible_name         (TerminalProfile *profile);
-gboolean                  terminal_profile_get_cursor_blink         (TerminalProfile *profile);
 gboolean                  terminal_profile_get_allow_bold           (TerminalProfile *profile);
 gboolean                  terminal_profile_get_silent_bell          (TerminalProfile *profile);
 TerminalScrollbarPosition terminal_profile_get_scrollbar_position   (TerminalProfile *profile);
@@ -187,8 +185,6 @@ gboolean               terminal_profile_get_no_aa_without_render  (TerminalProfi
 gboolean               terminal_profile_get_use_skey              (TerminalProfile *profile);
 const PangoFontDescription* terminal_profile_get_font             (TerminalProfile *profile);
 
-void terminal_profile_set_cursor_blink         (TerminalProfile           *profile,
-                                                gboolean                   setting);
 void terminal_profile_set_visible_name         (TerminalProfile           *profile,
                                                 const char                *name);
 void terminal_profile_set_allow_bold           (TerminalProfile           *profile,

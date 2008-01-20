@@ -242,6 +242,48 @@ terminal_screen_size_allocate (GtkWidget *widget,
 }
 
 static void
+terminal_screen_sync_settings (GtkSettings *settings,
+                               GParamSpec *pspec,
+                               TerminalScreen *screen)
+{
+  gboolean blink;
+
+  g_object_get (G_OBJECT (settings),
+                "gtk-cursor-blink", &blink,
+                NULL);
+
+  terminal_widget_set_cursor_blinks (screen->priv->term, blink);
+}
+
+static void
+terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
+{
+  GdkScreen *screen;
+  GtkSettings *settings;
+
+  screen = gtk_widget_get_screen (widget);
+  if (previous_screen != NULL &&
+      (screen != previous_screen || screen == NULL)) {
+    settings = gtk_settings_get_for_screen (previous_screen);
+    g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
+                                          0, 0, NULL, NULL,
+                                          widget);
+  }
+
+  if (GTK_WIDGET_CLASS (terminal_screen_parent_class)->screen_changed) {
+    GTK_WIDGET_CLASS (terminal_screen_parent_class)->screen_changed (widget, previous_screen);
+  }
+
+  if (screen == previous_screen)
+    return;
+
+  settings = gtk_widget_get_settings (widget);
+  terminal_screen_sync_settings (settings, NULL, TERMINAL_SCREEN (widget));
+  g_signal_connect (settings, "notify::gtk-cursor-blink",
+                    G_CALLBACK (terminal_screen_sync_settings), widget);
+}
+
+static void
 terminal_screen_grab_focus (GtkWidget *widget)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
@@ -369,6 +411,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   widget_class->unrealize = terminal_screen_unrealize;
   widget_class->size_allocate = terminal_screen_size_allocate;
+  widget_class->screen_changed = terminal_screen_screen_changed;
   widget_class->size_request = terminal_screen_size_request;
   widget_class->map = terminal_screen_map;
   widget_class->grab_focus = terminal_screen_grab_focus;
@@ -441,9 +484,15 @@ static void
 terminal_screen_finalize (GObject *object)
 {
   TerminalScreen *screen;
+  GtkSettings *settings;
   GConfClient *conf;
 
   screen = TERMINAL_SCREEN (object);
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (screen));
+  g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
+                                        0, 0, NULL, NULL,
+                                        screen);
 
   conf = gconf_client_get_default ();
   
@@ -571,9 +620,6 @@ terminal_screen_reread_profile (TerminalScreen *screen)
     terminal_screen_change_font (screen);
 
   update_color_scheme (screen);
-
-  terminal_widget_set_cursor_blinks (term,
-                                     terminal_profile_get_cursor_blink (profile));
 
   terminal_widget_set_audible_bell (term,
                                     !terminal_profile_get_silent_bell (profile));

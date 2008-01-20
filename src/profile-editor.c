@@ -80,8 +80,6 @@ static void       profile_editor_update_visible_name         (GtkWidget       *e
                                                               TerminalProfile *profile);
 static void       profile_editor_update_icon                 (GtkWidget       *editor,
                                                               TerminalProfile *profile);
-static void       profile_editor_update_cursor_blink         (GtkWidget       *editor,
-                                                              TerminalProfile *profile);
 static void       profile_editor_update_default_show_menubar (GtkWidget       *editor,
                                                               TerminalProfile *profile);
 static void       profile_editor_update_color_pickers        (GtkWidget       *editor,
@@ -252,9 +250,6 @@ profile_changed (TerminalProfile           *profile,
   if (mask->icon_file)
     profile_editor_update_icon (editor, profile);
   
-  if (mask->cursor_blink)
-    profile_editor_update_cursor_blink (editor, profile);
-
   if (mask->default_show_menubar)
     profile_editor_update_default_show_menubar (editor, profile);
 
@@ -369,14 +364,6 @@ icon_changed (GtkWidget       *icon_entry,
   terminal_profile_set_icon_file (profile, filename);
   
   g_free (filename);
-}
-
-static void
-cursor_blink_toggled (GtkWidget       *checkbutton,
-                      TerminalProfile *profile)
-{
-  terminal_profile_set_cursor_blink (profile,
-                                     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
@@ -984,12 +971,6 @@ terminal_profile_edit (TerminalProfile *profile,
                         G_CALLBACK (icon_changed),
                         profile);
       
-      w = glade_xml_get_widget (xml, "blink-cursor-checkbutton");
-      profile_editor_update_cursor_blink (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (cursor_blink_toggled),
-                        profile);
-
       w = glade_xml_get_widget (xml, "show-menubar-checkbutton");
       profile_editor_update_default_show_menubar (editor, profile);
       g_signal_connect (G_OBJECT (w), "toggled",
@@ -1412,9 +1393,6 @@ profile_editor_update_sensitivity (GtkWidget       *editor,
   set_insensitive (editor, "profile-icon-entry",
                    mask->icon_file);
   
-  set_insensitive (editor, "blink-cursor-checkbutton",
-                   mask->cursor_blink);
-
   set_insensitive (editor, "show-menubar-checkbutton",
                    mask->default_show_menubar);
 
@@ -1542,18 +1520,6 @@ profile_editor_update_icon (GtkWidget       *editor,
   
   gnome_icon_entry_set_filename (GNOME_ICON_ENTRY (w), profile_filename);
 }
-
-static void
-profile_editor_update_cursor_blink (GtkWidget       *editor,
-                                    TerminalProfile *profile)
-{
-  GtkWidget *w;
-
-  w = profile_editor_get_widget (editor, "blink-cursor-checkbutton");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w),
-                                terminal_profile_get_cursor_blink (profile));
-}
-
 
 static void
 profile_editor_update_default_show_menubar (GtkWidget       *editor,
