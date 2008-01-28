@@ -3114,7 +3114,7 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
   if (obj == NULL)
     {
       g_warning ("%s: for some reason widget has no GtkAccessible",
-                 G_GNUC_FUNCTION);
+                 G_STRFUNC);
       return;
     }
 
