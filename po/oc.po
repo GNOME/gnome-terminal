@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-27 13:21+0100\n"
+"POT-Creation-Date: 2008-01-20 16:47+0100\n"
 "PO-Revision-Date: 2007-12-27 13:33+0100\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:121
 #: ../src/terminal-accels.c:180 ../src/terminal-profile.c:275
-#: ../src/terminal-window.c:750 ../src/terminal.c:1205 ../src/terminal.c:1637
+#: ../src/terminal-window.c:749 ../src/terminal.c:1229
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1567,7 +1567,7 @@ msgid "Help"
 msgstr "Ajuda"
 
 #: ../src/terminal-accels.c:272 ../src/terminal-profile.c:390
-#: ../src/terminal-screen.c:191 ../src/terminal.c:1723
+#: ../src/terminal-screen.c:191 ../src/terminal.c:1288
 #, c-format
 msgid "There was an error loading config from %s. (%s)\n"
 msgstr ""
@@ -1717,7 +1717,7 @@ msgstr ""
 msgid "_Details"
 msgstr "_Detalhs"
 
-#: ../src/terminal-profile.c:2914 ../src/terminal.c:2394
+#: ../src/terminal-profile.c:2914 ../src/terminal.c:1959
 #, c-format
 msgid "There was an error creating the profile \"%s\""
 msgstr ""
@@ -1734,7 +1734,9 @@ msgstr ""
 #: ../src/terminal-profile.c:3122
 #, c-format
 msgid "Palette had %d entry instead of %d\n"
-msgstr ""
+msgid_plural "Palette had %d entries instead of %d\n"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/terminal-screen.c:207
 #, c-format
@@ -1780,15 +1782,15 @@ msgstr "_Dobrir lo ligam"
 msgid "_Copy Link Address"
 msgstr "_Copiar l'adreça del ligam"
 
-#: ../src/terminal-screen.c:1618 ../src/terminal-window.c:864
+#: ../src/terminal-screen.c:1618 ../src/terminal-window.c:859
 msgid "Open _Terminal"
 msgstr "Dobrir dins un _terminal"
 
-#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:867
+#: ../src/terminal-screen.c:1623 ../src/terminal-window.c:862
 msgid "Open Ta_b"
 msgstr "Dobrir un _onglet"
 
-#: ../src/terminal-screen.c:1633 ../src/terminal-window.c:882
+#: ../src/terminal-screen.c:1633 ../src/terminal-window.c:877
 msgid "C_lose Tab"
 msgstr "Tampar l'_onglet"
 
@@ -1852,28 +1854,28 @@ msgstr ""
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 
-#: ../src/terminal-window.c:476
+#: ../src/terminal-window.c:475
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:478
+#: ../src/terminal-window.c:477
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
-#: ../src/terminal-window.c:601
+#: ../src/terminal-window.c:600
 msgid "_Add or Remove..."
 msgstr "_Apondre o suprimir..."
 
-#: ../src/terminal-window.c:782
+#: ../src/terminal-window.c:781
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal window "
 "configuration changes. (%s)\n"
 msgstr ""
 
-#: ../src/terminal-window.c:793
+#: ../src/terminal-window.c:792
 #, c-format
 msgid ""
 "There was an error loading config value for whether to use mnemonics. (%s)\n"
@@ -1882,127 +1884,129 @@ msgstr ""
 #. This is fairly bogus to have here but I don't know
 #. * where else to put it really
 #.
-#: ../src/terminal-window.c:875
+#: ../src/terminal-window.c:870
 msgid "New _Profile..."
 msgstr ""
 
-#: ../src/terminal-window.c:886
+#: ../src/terminal-window.c:881
 msgid "_Close Window"
 msgstr "_Tampar la fenèstra"
 
-#: ../src/terminal-window.c:917
+#: ../src/terminal-window.c:912
 msgid "P_rofiles..."
 msgstr "Pe_rfils..."
 
-#: ../src/terminal-window.c:920
+#: ../src/terminal-window.c:915
 msgid "_Keyboard Shortcuts..."
 msgstr ""
 
-#: ../src/terminal-window.c:924
+#: ../src/terminal-window.c:919
 msgid "C_urrent Profile..."
 msgstr ""
 
 #. This is a check menu item so that the togglability is evident, but when it is not checked,
 #. * it won't be seen, of course, because the menubar will be then hidden.
-#: ../src/terminal-window.c:939
+#: ../src/terminal-window.c:934
 msgid "Show Menu_bar"
 msgstr "Visualizar la _barra dels menuts"
 
-#: ../src/terminal-window.c:943
+#: ../src/terminal-window.c:938
 msgid "_Full Screen"
 msgstr ""
 
-#: ../src/terminal-window.c:983
+#: ../src/terminal-window.c:978
 msgid "Change _Profile"
 msgstr ""
 
-#: ../src/terminal-window.c:986
+#: ../src/terminal-window.c:981
 msgid "_Set Title..."
 msgstr ""
 
-#: ../src/terminal-window.c:993
+#: ../src/terminal-window.c:988
 msgid "Set _Character Encoding"
 msgstr ""
 
-#: ../src/terminal-window.c:1003
+#: ../src/terminal-window.c:998
 msgid "_Reset"
 msgstr ""
 
-#: ../src/terminal-window.c:1006
+#: ../src/terminal-window.c:1001
 msgid "Reset and C_lear"
 msgstr ""
 
-#: ../src/terminal-window.c:1020
+#: ../src/terminal-window.c:1015
 msgid "_Previous Tab"
 msgstr "Onglet _precedent"
 
-#: ../src/terminal-window.c:1024
+#: ../src/terminal-window.c:1019
 msgid "_Next Tab"
 msgstr "Onglet _seguent"
 
-#: ../src/terminal-window.c:1035
+#: ../src/terminal-window.c:1030
 msgid "Move Tab to the _Left"
 msgstr ""
 
-#: ../src/terminal-window.c:1039
+#: ../src/terminal-window.c:1034
 msgid "Move Tab to the _Right"
 msgstr ""
 
-#: ../src/terminal-window.c:1046
+#: ../src/terminal-window.c:1041
 msgid "_Detach Tab"
 msgstr ""
 
-#: ../src/terminal-window.c:1065
+#: ../src/terminal-window.c:1060
 msgid "_Contents"
 msgstr "_Somari"
 
-#: ../src/terminal-window.c:1074
+#: ../src/terminal-window.c:1069
 msgid "_About"
 msgstr "_A prepaus"
 
-#: ../src/terminal-window.c:1438
+#: ../src/terminal-window.c:1425
 msgid "Close tab"
 msgstr "Tampar l'onglet"
 
-#: ../src/terminal-window.c:2110
+#: ../src/terminal-window.c:2104
 msgid "_File"
 msgstr "_Fichièr"
 
-#: ../src/terminal-window.c:2112 ../src/terminal.c:2986
+#: ../src/terminal-window.c:2106 ../src/terminal.c:2551
 msgid "_Edit"
 msgstr "_Edicion"
 
-#: ../src/terminal-window.c:2114
+#: ../src/terminal-window.c:2108
 msgid "_View"
 msgstr "_Visualizacion"
 
-#: ../src/terminal-window.c:2116
+#: ../src/terminal-window.c:2110
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:2118
+#: ../src/terminal-window.c:2112
 msgid "Ta_bs"
 msgstr "_Onglets"
 
-#: ../src/terminal-window.c:2120
+#: ../src/terminal-window.c:2114
 msgid "_Help"
 msgstr "_Ajuda"
 
-#: ../src/terminal-window.c:2342
+#: ../src/terminal-window.c:2336
 msgid "Close all tabs?"
 msgstr "Tampar totes los onglets ?"
 
-#: ../src/terminal-window.c:2344
+#: ../src/terminal-window.c:2338
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
+msgid_plural ""
 "This window has %d tabs open. Closing the window will also close all tabs."
-msgstr ""
+msgstr[0] ""
+msgstr[1] ""
 
-#: ../src/terminal-window.c:2353
+#: ../src/terminal-window.c:2347
 msgid "Close All _Tabs"
 msgstr "Tampar totes los _onglets"
 
-#: ../src/terminal-window.c:2878
+#: ../src/terminal-window.c:2872
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2010,7 +2014,7 @@ msgid ""
 "any later version."
 msgstr ""
 
-#: ../src/terminal-window.c:2882
+#: ../src/terminal-window.c:2876
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2018,426 +2022,354 @@ msgid ""
 "more details."
 msgstr ""
 
-#: ../src/terminal-window.c:2886
+#: ../src/terminal-window.c:2880
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
 "Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgstr ""
 
-#: ../src/terminal-window.c:2896
+#: ../src/terminal-window.c:2890
 msgid "GNOME Terminal"
 msgstr "Terminal GNOME"
 
-#: ../src/terminal-window.c:2898
+#: ../src/terminal-window.c:2892
 msgid "A terminal emulator for the GNOME desktop"
 msgstr ""
 
-#: ../src/terminal-window.c:2903
+#: ../src/terminal-window.c:2897
 msgid "translator-credits"
 msgstr "Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>"
 
-#: ../src/terminal.c:189
-msgid "Execute the argument to this option inside the terminal."
-msgstr ""
-
-#: ../src/terminal.c:198
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr ""
-
-#: ../src/terminal.c:207
-msgid ""
-"Open a new window containing a tab with the default profile. More than one "
-"of these options can be provided."
-msgstr ""
-
-#: ../src/terminal.c:216
-msgid ""
-"Open a new window containing a tab with the given profile. More than one of "
-"these options can be provided."
-msgstr ""
-
-#: ../src/terminal.c:217 ../src/terminal.c:235
-msgid "PROFILENAME"
-msgstr ""
-
-#: ../src/terminal.c:225
-msgid ""
-"Open a new tab in the last-opened window with the default profile. More than "
-"one of these options can be provided."
-msgstr ""
-
-#: ../src/terminal.c:234
-msgid ""
-"Open a new tab in the last-opened window with the given profile. More than "
-"one of these options can be provided."
-msgstr ""
-
-#: ../src/terminal.c:243
-msgid ""
-"Open a new window containing a tab with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-
-#: ../src/terminal.c:244 ../src/terminal.c:253
-msgid "PROFILEID"
-msgstr ""
-
-#: ../src/terminal.c:252
-msgid ""
-"Open a new tab in the last-opened window with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-
-#: ../src/terminal.c:261
-msgid ""
-"Set the role for the last-specified window; applies to only one window; can "
-"be specified once for each window you create from the command line."
-msgstr ""
-
-#: ../src/terminal.c:262
-msgid "ROLE"
-msgstr "RÒTLE"
-
-#: ../src/terminal.c:270
-msgid ""
-"Turn on the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-
-#: ../src/terminal.c:279
-msgid ""
-"Turn off the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-
-#: ../src/terminal.c:288
-msgid ""
-"Set the last-specified window into fullscreen mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-
-#: ../src/terminal.c:297
-msgid ""
-"X geometry specification (see \"X\" man page), can be specified once per "
-"window to be opened."
-msgstr ""
-
-#: ../src/terminal.c:298
-msgid "GEOMETRY"
-msgstr "GEOMETRIA"
-
-#: ../src/terminal.c:306
-msgid ""
-"Do not register with the activation nameserver, do not re-use an active "
-"terminal"
-msgstr ""
-
-#: ../src/terminal.c:315
-msgid "Register with the activation nameserver [default]"
-msgstr ""
-
-#: ../src/terminal.c:324
-msgid "ID for startup notification protocol."
-msgstr ""
-
-#: ../src/terminal.c:333
-msgid "Set the terminal's title"
-msgstr ""
-
-#: ../src/terminal.c:334
-msgid "TITLE"
-msgstr "Títol"
-
-#: ../src/terminal.c:342
-msgid "Set the terminal's working directory"
-msgstr ""
-
-#: ../src/terminal.c:343 ../src/terminal.c:352
-msgid "DIRNAME"
-msgstr ""
-
-#: ../src/terminal.c:351
-msgid "Set the default terminal's working directory. Used internally"
-msgstr ""
-
-#: ../src/terminal.c:360
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr ""
-
-#: ../src/terminal.c:361 ../src/terminal.c:370
-msgid "ZOOMFACTOR"
-msgstr ""
-
-#: ../src/terminal.c:369
-msgid "Set the last specified tab as the active one in its window"
-msgstr ""
-
-#: ../src/terminal.c:712
+#: ../src/terminal.c:304
 #, c-format
 msgid "Could not load icon \"%s\": %s\n"
 msgstr ""
 
-#: ../src/terminal.c:777
+#: ../src/terminal.c:343
 #, c-format
-msgid "Option \"%s\" requires specifying the command to run\n"
+msgid ""
+"Option '%s' is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"window-with-profile' option\n"
 msgstr ""
 
-#: ../src/terminal.c:785
+#: ../src/terminal.c:368
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
 msgstr ""
 
-#: ../src/terminal.c:795 ../src/terminal.c:819
+#: ../src/terminal.c:536 ../src/terminal.c:570
 #, c-format
-msgid "\"%s\" specified more than once for the same window or tab\n"
+msgid "\"%s\" option given twice for the same window\n"
 msgstr ""
 
-#: ../src/terminal.c:810
+#: ../src/terminal.c:695
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line\n"
 msgstr ""
 
-#: ../src/terminal.c:841 ../src/terminal.c:865
-#, c-format
-msgid "Option \"%s\" requires an argument specifying what profile to use\n"
-msgstr ""
-
-#: ../src/terminal.c:899 ../src/terminal.c:925
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr ""
-
-#: ../src/terminal.c:965
-#, c-format
-msgid "Option \"%s\" requires an argument giving the role\n"
-msgstr ""
-
-#: ../src/terminal.c:974
-#, c-format
-msgid "Two roles given for one window\n"
-msgstr ""
-
-#: ../src/terminal.c:990
-#, c-format
-msgid "Option \"%s\" requires an argument giving the geometry\n"
-msgstr ""
-
-#: ../src/terminal.c:999
-#, c-format
-msgid "Two \"%s\" options given for one window\n"
-msgstr ""
-
-#: ../src/terminal.c:1009
-#, c-format
-msgid "Two geometries given for one window\n"
-msgstr ""
-
-#: ../src/terminal.c:1035
-#, c-format
-msgid "Option \"%s\" requires an argument giving the title\n"
-msgstr ""
-
-#: ../src/terminal.c:1043 ../src/terminal.c:1066 ../src/terminal.c:1108
-#, c-format
-msgid "Two \"%s\" options given for one tab\n"
-msgstr ""
-
-#: ../src/terminal.c:1058
-#, c-format
-msgid "Option \"%s\" requires an argument giving the directory\n"
-msgstr ""
-
-#: ../src/terminal.c:1078
-#, c-format
-msgid ""
-"Option --default-working-directory requires an argument giving the "
-"directory\n"
-msgstr ""
-
-#: ../src/terminal.c:1084
-#, c-format
-msgid "Two --default-working-directories given\n"
-msgstr ""
-
-#: ../src/terminal.c:1100
-#, c-format
-msgid "Option \"%s\" requires an argument giving the zoom factor\n"
-msgstr ""
-
-#: ../src/terminal.c:1123
+#: ../src/terminal.c:740
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr ""
 
-#: ../src/terminal.c:1131
+#: ../src/terminal.c:748
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr ""
 
-#: ../src/terminal.c:1138
+#: ../src/terminal.c:756
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr ""
 
-#: ../src/terminal.c:1159
-#, c-format
-msgid ""
-"Option --%s is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new --"
-"window-with-profile option\n"
-msgstr ""
-
-#: ../src/terminal.c:1165
-#, c-format
-msgid "\"%s\" option given twice\n"
-msgstr ""
-
-#: ../src/terminal.c:1170 ../src/terminal.c:1311
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr ""
-
-#: ../src/terminal.c:1289
+#: ../src/terminal.c:875
 #, c-format
 msgid "No argument given to \"%s\" option\n"
 msgstr ""
 
-#: ../src/terminal.c:1423
+#: ../src/terminal.c:897
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr ""
+
+#: ../src/terminal.c:1009
 #, c-format
 msgid "No such profile '%s', using default profile\n"
 msgstr ""
 
-#: ../src/terminal.c:1666
-#, c-format
-msgid "Invalid argument: \"%s\"\n"
-msgstr ""
-
-#: ../src/terminal.c:1739
+#: ../src/terminal.c:1304
 #, c-format
 msgid ""
 "There was an error subscribing to notification of terminal profile list "
 "changes. (%s)\n"
 msgstr ""
 
-#: ../src/terminal.c:1993
+#: ../src/terminal.c:1558
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr ""
 
-#: ../src/terminal.c:2059
+#: ../src/terminal.c:1624
 #, c-format
 msgid "There was an error getting the list of terminal profiles. (%s)\n"
 msgstr ""
 
-#: ../src/terminal.c:2363
+#: ../src/terminal.c:1928
 #, c-format
 msgid ""
 "You already have a profile called \"%s\". Do you want to create another "
 "profile with the same name?"
 msgstr ""
 
-#: ../src/terminal.c:2377
+#: ../src/terminal.c:1942
 msgid ""
 "The profile you selected as a base for your new profile no longer exists"
 msgstr ""
 
-#: ../src/terminal.c:2469
+#: ../src/terminal.c:2034
 msgid "Enter profile name"
 msgstr ""
 
-#: ../src/terminal.c:2479
+#: ../src/terminal.c:2044
 msgid "Choose base profile"
 msgstr ""
 
-#: ../src/terminal.c:2618
+#: ../src/terminal.c:2183
 msgid "Profile list"
 msgstr ""
 
-#: ../src/terminal.c:2687
+#: ../src/terminal.c:2252
 msgid "You must select one or more profiles to delete."
 msgstr ""
 
-#: ../src/terminal.c:2698
+#: ../src/terminal.c:2263
 msgid "You must have at least one profile; you can't delete all of them."
 msgstr ""
 
-#: ../src/terminal.c:2706
+#: ../src/terminal.c:2271
 #, c-format
 msgid "Delete this profile?\n"
 msgid_plural "Delete these %d profiles?\n"
 msgstr[0] "Suprimir lo perfil ?\n"
 msgstr[1] "Suprimir aquestes %d perfils ?\n"
 
-#: ../src/terminal.c:2727
+#: ../src/terminal.c:2292
 #, c-format
 msgid "Delete profile \"%s\"?"
 msgstr "Suprimir lo perfil \"%s\" ?"
 
-#: ../src/terminal.c:2749
+#: ../src/terminal.c:2314
 msgid "Delete Profile"
 msgstr "Suprimir lo perfil"
 
-#: ../src/terminal.c:3022
+#: ../src/terminal.c:2587
 msgid "Profiles"
 msgstr "Perfils"
 
-#: ../src/terminal.c:3063
+#: ../src/terminal.c:2628
 msgid "_Profiles:"
 msgstr "_Perfils :"
 
-#: ../src/terminal.c:3095
+#: ../src/terminal.c:2660
 msgid "Click to open new profile dialog"
 msgstr ""
 
-#: ../src/terminal.c:3103
+#: ../src/terminal.c:2668
 msgid "Click to open edit profile dialog"
 msgstr ""
 
-#: ../src/terminal.c:3111
+#: ../src/terminal.c:2676
 msgid "Click to delete selected profile"
 msgstr ""
 
-#: ../src/terminal.c:3116
+#: ../src/terminal.c:2681
 msgid "Profile _used when launching a new terminal:"
 msgstr ""
 
-#: ../src/terminal.c:3172
+#: ../src/terminal.c:2737
 msgid "Click button to choose profile"
 msgstr ""
 
-#: ../src/terminal.c:3532
+#: ../src/terminal.c:3097
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "I a aguda una error al moment de visualizar l'ajuda : %s"
 
-#: ../src/terminal.c:3603
+#: ../src/terminal.c:3168
 #, c-format
 msgid ""
 "The file \"%s\" is missing. This indicates that the application is installed "
 "incorrectly."
 msgstr ""
 
-#: ../src/terminal.c:3775
+#: ../src/terminal.c:3197
+msgid "Execute the argument to this option inside the terminal."
+msgstr ""
+
+#: ../src/terminal.c:3206
+msgid "Execute the remainder of the command line inside the terminal."
+msgstr ""
+
+#: ../src/terminal.c:3215
+msgid ""
+"Open a new window containing a tab with the default profile. More than one "
+"of these options can be provided."
+msgstr ""
+
+#: ../src/terminal.c:3224
+msgid ""
+"Open a new window containing a tab with the given profile. More than one of "
+"these options can be provided."
+msgstr ""
+
+#: ../src/terminal.c:3225 ../src/terminal.c:3243
+msgid "PROFILENAME"
+msgstr ""
+
+#: ../src/terminal.c:3233
+msgid ""
+"Open a new tab in the last-opened window with the default profile. More than "
+"one of these options can be provided."
+msgstr ""
+
+#: ../src/terminal.c:3242
+msgid ""
+"Open a new tab in the last-opened window with the given profile. More than "
+"one of these options can be provided."
+msgstr ""
+
+#: ../src/terminal.c:3251
+msgid ""
+"Open a new window containing a tab with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+
+#: ../src/terminal.c:3252 ../src/terminal.c:3261
+msgid "PROFILEID"
+msgstr ""
+
+#: ../src/terminal.c:3260
+msgid ""
+"Open a new tab in the last-opened window with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+
+#: ../src/terminal.c:3269
+msgid ""
+"Set the role for the last-specified window; applies to only one window; can "
+"be specified once for each window you create from the command line."
+msgstr ""
+
+#: ../src/terminal.c:3270
+msgid "ROLE"
+msgstr "RÒTLE"
+
+#: ../src/terminal.c:3278
+msgid ""
+"Turn on the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+
+#: ../src/terminal.c:3287
+msgid ""
+"Turn off the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+
+#: ../src/terminal.c:3296
+msgid ""
+"Set the last-specified window into fullscreen mode; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+
+#: ../src/terminal.c:3305
+msgid ""
+"X geometry specification (see \"X\" man page), can be specified once per "
+"window to be opened."
+msgstr ""
+
+#: ../src/terminal.c:3306
+msgid "GEOMETRY"
+msgstr "GEOMETRIA"
+
+#: ../src/terminal.c:3314
+msgid ""
+"Do not register with the activation nameserver, do not re-use an active "
+"terminal"
+msgstr ""
+
+#: ../src/terminal.c:3323
+msgid "Register with the activation nameserver [default]"
+msgstr ""
+
+#: ../src/terminal.c:3332
+msgid "ID for startup notification protocol."
+msgstr ""
+
+#: ../src/terminal.c:3341
+msgid "Set the terminal's title"
+msgstr ""
+
+#: ../src/terminal.c:3342
+msgid "TITLE"
+msgstr "Títol"
+
+#: ../src/terminal.c:3350
+msgid "Set the terminal's working directory"
+msgstr ""
+
+#: ../src/terminal.c:3351 ../src/terminal.c:3360
+msgid "DIRNAME"
+msgstr ""
+
+#: ../src/terminal.c:3359
+msgid "Set the default terminal's working directory. Used internally"
+msgstr ""
+
+#: ../src/terminal.c:3368
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr ""
+
+#: ../src/terminal.c:3369 ../src/terminal.c:3378
+msgid "ZOOMFACTOR"
+msgstr ""
+
+#: ../src/terminal.c:3377
+msgid "Set the last specified tab as the active one in its window"
+msgstr ""
+
+#: ../src/terminal.c:3557 ../src/terminal.c:3560
+#
+msgid "GNOME Terminal Emulator"
+msgstr ""
+
+#: ../src/terminal.c:3561
+#
+msgid "Show GNOME Terminal options"
+msgstr ""
+
+#: ../src/terminal.c:3718
 #, c-format
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
 "location. Factory mode disabled.\n"
 msgstr ""
 
-#: ../src/terminal.c:3778
+#: ../src/terminal.c:3721
 #, c-format
 msgid ""
 "Error registering terminal with the activation service; factory mode "
 "disabled.\n"
 msgstr ""
 
-#: ../src/terminal.c:3814
+#: ../src/terminal.c:3757
 #, c-format
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
