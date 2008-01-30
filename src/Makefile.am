@@ -65,7 +65,6 @@ CLEANFILES = gnome-terminal.schemas
 EXTRA_DIST =				\
 	$(icon_DATA)			\
 	$(glade_DATA)			\
-	$(schema_DATA)			\
 	$(schema_in_files)		\
 	$(server_DATA)			\
 	update-from-egg.sh		\
