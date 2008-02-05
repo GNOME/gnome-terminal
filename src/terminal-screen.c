@@ -90,6 +90,7 @@ enum {
 
 static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
+static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_unrealize   (GtkWidget *widget);
 static void terminal_screen_size_allocate (GtkWidget *widget,
@@ -407,6 +408,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
+  object_class->dispose = terminal_screen_dispose;
   object_class->finalize = terminal_screen_finalize;
 
   widget_class->unrealize = terminal_screen_unrealize;
@@ -481,11 +483,10 @@ terminal_screen_unrealize (GtkWidget *widget)
 }
 
 static void
-terminal_screen_finalize (GObject *object)
+terminal_screen_dispose (GObject *object)
 {
   TerminalScreen *screen;
   GtkSettings *settings;
-  GConfClient *conf;
 
   screen = TERMINAL_SCREEN (object);
 
@@ -493,6 +494,15 @@ terminal_screen_finalize (GObject *object)
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL, NULL,
                                         screen);
+
+  G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
+}
+
+static void
+terminal_screen_finalize (GObject *object)
+{
+  TerminalScreen *screen;
+  GConfClient *conf;
 
   conf = gconf_client_get_default ();
   
