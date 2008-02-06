@@ -360,6 +360,7 @@ option_command_callback (const gchar *option_name,
   error = NULL;
   exec_argv = NULL;
 
+  err = NULL;
   if (!g_shell_parse_argv (value, NULL, &exec_argv, &err))
     {
       g_set_error(error,

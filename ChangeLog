@@ -1,3 +1,10 @@
+2008-02-05  Behdad Esfahbod  <behdad@gnome.org>
+
+	Bug 514661 – crash launching g-t with specific args
+
+	* src/terminal.c (option_command_callback): Set err to NULL before
+	calling into GError-taking API.
+
 2008-02-05  Christian Persch  <chpe@gnome.org>
 
 	* src/terminal-screen.c: (terminal_screen_class_init),
