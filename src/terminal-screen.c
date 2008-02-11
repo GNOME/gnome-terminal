@@ -36,7 +36,6 @@
 #include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 #include <libgnome/gnome-url.h> /* gnome_url_show */
-#include <libgnomevfs/gnome-vfs-utils.h> /* gnome_vfs_make_uri_from_input */
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

@@ -30,8 +30,6 @@ GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=2.14.0
 STARTUP_NOTIFICATION_REQUIRED=0.8
 VTE_REQUIRED=0.15.3
-GNOMEVFS_REQUIRED=2.4
-GLIB_REQUIRED=2.12.0
 LIBGNOME_REQUIRED=2.14.0
 
 ## here we get the flags we'll actually use
@@ -39,13 +37,12 @@ PKG_CHECK_MODULES(TERM, dnl
  glib-2.0 >= $GLIB_REQUIRED dnl
  gtk+-2.0 >= $GTK_REQUIRED dnl
  gconf-2.0 >= $GCONF_REQUIRED dnl
+ gio-2.0 dnl
  libglade-2.0 dnl
  libgnomeui-2.0 dnl
  libgnome-2.0 >= $LIBGNOME_REQUIRED dnl
  libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED dnl
- vte >= $VTE_REQUIRED dnl
- gnome-vfs-2.0 >= $GNOMEVFS_REQUIRED dnl
- glib-2.0 >= $GLIB_REQUIRED)
+ vte >= $VTE_REQUIRED)
 
 TERM_LIBS="$X_LIBS $X_PRE_LIBS -lX11 $X_EXTRA_LIBS $TERM_LIBS"
 TERM_CFLAGS="$X_CFLAGS $TERM_CFLAGS"

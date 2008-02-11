@@ -24,10 +24,10 @@
 #include "terminal-intl.h"
 #include "terminal.h"
 #include <glade/glade.h>
+#include <gio/gio.h>
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <libgnomeui/gnome-thumbnail.h>
-#include <libgnomevfs/gnome-vfs-mime-utils.h>
 #include <string.h>
 #include <math.h>
 #include "terminal-widget.h"
@@ -810,18 +810,28 @@ create_preview_pixbuf (const gchar *file)
     if (g_file_test (file, G_FILE_TEST_EXISTS) == TRUE) {
 
       GnomeThumbnailFactory *thumbs;
-      gchar *mime_type;
+      const char *mime_type = NULL;
+      GFile *file1;
+      GFileInfo *file_info;
 
-      mime_type = (gchar *)gnome_vfs_get_mime_type (file);
+      file1 = g_file_new_for_uri (file);
+      file_info = g_file_query_info (file1, 
+                                     G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                     0, NULL, NULL);
+      if (file_info != NULL) {
+        mime_type = g_file_info_get_content_type (file_info);
+      }
+      g_object_unref (file1);
+
       if (mime_type != NULL) {
         thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
 
         pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
                                                              file,
                                                              mime_type);
-        g_free (mime_type);
         g_object_unref (thumbs);
       }
+      g_object_unref (file_info);
     }
   }				
   return pixbuf;
