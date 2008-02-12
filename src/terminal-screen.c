@@ -500,7 +500,7 @@ terminal_screen_dispose (GObject *object)
 static void
 terminal_screen_finalize (GObject *object)
 {
-  TerminalScreen *screen;
+  TerminalScreen *screen = TERMINAL_SCREEN (object);
   GConfClient *conf;
 
   conf = gconf_client_get_default ();
