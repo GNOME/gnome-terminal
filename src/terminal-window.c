@@ -795,8 +795,7 @@ terminal_window_init (TerminalWindow *window)
       use_mnemonics = TRUE;
     }
   window->priv->use_mnemonics = use_mnemonics;
-
-  window->priv->using_mnemonics = FALSE;
+  window->priv->using_mnemonics = !use_mnemonics; /* force a label update in reset_menubar_labels */
 
   initialize_alpha_mode (window);
 

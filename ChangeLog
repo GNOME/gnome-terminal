@@ -1,3 +1,11 @@
+2008-02-25  Christian Persch  <chpe@gnome.org>
+
+	Bug 516778 – Menu items not drawn at startup if use-mnemonics==false
+
+	* src/terminal-window.c: (terminal_window_init): Force rebuilding the
+	toplevel menuitem labels, so they don't end up empty when
+	use-mnemonics is false. Bug #516778.
+
 2008-02-23  Christian Persch  <chpe@gnome.org>
 
 	* src/gnome-terminal.glade2: Strip the invisible_char properties,
