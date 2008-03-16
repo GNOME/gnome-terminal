@@ -279,7 +279,7 @@ char *btoe(unsigned char *md)
  * starting with bit 'start'
  */
 
-guint32 extract(char *s, int start, int length)
+static guint32 extract(char *s, int start, int length)
 {
         guint8 cl;
         guint8 cc;

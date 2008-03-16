@@ -23,6 +23,8 @@
 #include "terminal-widget.h"
 
 #include <string.h>
+#include <X11/extensions/Xrender.h>
+
 #include <vte/vte.h>
 #include <gdk/gdkx.h>
 
@@ -631,7 +633,7 @@ terminal_widget_set_pango_font (GtkWidget                  *widget,
 
       dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
       has_render = (XRenderQueryExtension (dpy, &event_base, &error_base) &&
-		    (XRenderFindVisualFormat (dpy, DefaultVisual (dpy, DefaultScreen (dpy))) != 0));
+		    (XRenderFindVisualFormat (dpy, DefaultVisual (dpy, DefaultScreen (dpy))) != NULL));
 
       if (has_render)
 	vte_terminal_set_font (VTE_TERMINAL (widget), font_desc);

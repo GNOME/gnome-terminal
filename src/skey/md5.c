@@ -16,6 +16,7 @@
  */
 
 #include <config.h>
+#include <stdlib.h>
 
 #include <glib/gchecksum.h>
 
