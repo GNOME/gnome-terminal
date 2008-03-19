@@ -566,7 +566,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       priv->encodings_action_group = NULL;
     }
 
-  /* FIXMEchpe */
   if (priv->active_term == NULL)
     return;
 
@@ -1334,11 +1333,6 @@ terminal_window_init (TerminalWindow *window)
 
   /* Add tabs menu */
   priv->tabs_menu = terminal_tabs_menu_new (window);
-
-  /* FIXMEchpe remove this*/
-  g_signal_connect (priv->menubar, "can-activate-accel",
-		    G_CALLBACK (gtk_true),
-		    NULL);
 
   terminal_window_reread_profile_list (window);
   
