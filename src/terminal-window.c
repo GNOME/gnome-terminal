@@ -1070,6 +1070,9 @@ terminal_window_screen_changed (GtkWidget *widget,
   if (screen_changed)
     screen_changed (widget, previous_screen);
 
+  if (previous_screen == gtk_widget_get_screen (widget))
+    return;
+
   terminal_window_settings_update (widget);
 }
 
