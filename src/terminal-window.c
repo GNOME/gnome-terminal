@@ -211,10 +211,10 @@ static void
 menuitem_set_mnemonic (GtkBin *menu_item,
                        gpointer data)
 {
+  gboolean enable = GPOINTER_TO_UINT (data);
   GtkWidget *label;
   GtkAction *action;
   char *text;
-  gboolean enable = GPOINTER_TO_UINT (data);
 
   if (!GTK_IS_MENU_ITEM (menu_item))
     return;
@@ -231,7 +231,6 @@ menuitem_set_mnemonic (GtkBin *menu_item,
     {
       char *src, *dest;
 
-      g_print ("text: %s\n", text);
       src = dest = text;
       while (*src)
         {
@@ -244,7 +243,6 @@ menuitem_set_mnemonic (GtkBin *menu_item,
           ++src;
         }
       *dest = '\0';
-      g_print ("dest: %s\n", text);
 
       gtk_label_set_text (GTK_LABEL (label), text);
     }
