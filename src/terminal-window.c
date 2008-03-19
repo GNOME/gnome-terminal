@@ -429,6 +429,98 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   g_list_free (profiles);
 }
 
+#if 0
+static void
+terminal_window_update_new_terminal_menus (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GList *profiles, *p;
+  GSList *group;
+  guint n;
+
+  /* Remove the old UI */
+  if (priv->new_terminal_ui_id != 0)
+    {
+      gtk_ui_manager_remove_ui (priv->ui_manager, priv->new_terminal_ui_id);
+      priv->new_terminal_ui_id = 0;
+    }
+
+  if (priv->new_terminal_action_group != NULL)
+    {
+      gtk_ui_manager_remove_action_group (priv->ui_manager,
+                                          priv->new_terminal_action_group);
+      priv->new_terminal_action_group = NULL;
+    }
+
+    /* FIXMEchpe */
+  if (priv->active_term == NULL)
+    return;
+
+  profiles = terminal_profile_get_list ();
+  if (profiles == NULL)
+    return;
+
+  action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
+  gtk_action_set_sensitive (action, profiles->next != NULL /* list length >= 2 */);
+
+  action_group = priv->new_terminal_action_group = gtk_action_group_new ("Profiles");
+  gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
+  g_object_unref (action_group);
+
+  priv->new_terminal_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
+
+  group = NULL;
+  n = 0;
+  for (p = profiles; p != NULL; p = p->next)
+    {
+      TerminalProfile *profile = (TerminalProfile *) p->data;
+      GtkRadioAction *profile_action;
+      char name[32];
+      char *display_name;
+
+      g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
+      display_name = escape_underscores (terminal_profile_get_visible_name (profile));
+      profile_action = gtk_radio_action_new (name,
+                                             display_name,
+                                             NULL,
+                                             NULL,
+                                             n);
+      g_free (display_name);
+
+      /* FIXMEchpe: connect to "changed" on the profile */
+
+      gtk_radio_action_set_group (profile_action, group);
+      group = gtk_radio_action_get_group (profile_action);
+
+      if (profile == terminal_screen_get_profile (priv->active_term))
+        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (profile_action), TRUE);
+
+      g_object_set_data_full (G_OBJECT (profile_action),
+                              "Profile",
+                              g_object_ref (profile),
+                              (GDestroyNotify) g_object_unref);
+      g_signal_connect (profile_action, "toggled",
+                        G_CALLBACK (terminal_set_profile_toggled_callback), window);
+
+      gtk_action_group_add_action (action_group, GTK_ACTION (profile_action));
+      g_object_unref (profile_action);
+
+      gtk_ui_manager_add_ui (priv->ui_manager, priv->new_terminal_ui_id,
+                             PROFILES_UI_PATH,
+                             name, name,
+                             GTK_UI_MANAGER_MENUITEM, FALSE);
+      gtk_ui_manager_add_ui (priv->ui_manager, priv->new_terminal_ui_id,
+                             PROFILES_POPUP_UI_PATH,
+                             name, name,
+                             GTK_UI_MANAGER_MENUITEM, FALSE);
+    }
+
+  g_list_free (profiles);
+}
+#endif
+
 static void
 fill_in_new_term_submenu_real(GtkWidget *menuitem, 
                               TerminalWindow *window,
@@ -1326,7 +1418,7 @@ terminal_window_init (TerminalWindow *window)
   
   priv->use_mnemonics = use_mnemonics;
 
-  priv->using_mnemonics = FALSE;
+  priv->using_mnemonics = TRUE;
 
   initialize_alpha_mode (window);
 
