@@ -1315,7 +1315,11 @@ terminal_window_init (TerminalWindow *window)
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
                                                  TERM_PKGDATADIR "/terminal.ui",
                                                  &error);
-  if (error)g_print ("Error! %s\n", error->message);
+  if (error)
+    {
+      g_printerr ("Failed to load UI: %s\n", error->message);
+      g_error_free (error);
+    }
 
   priv->menubar = gtk_ui_manager_get_widget (manager, "/menubar");
   gtk_box_pack_start (GTK_BOX (main_vbox),
@@ -1351,7 +1355,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
   object_class->dispose = terminal_window_dispose;
   object_class->finalize = terminal_window_finalize;
 
-  g_print ("window class init\n");
   widget_class->show = terminal_window_show;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
