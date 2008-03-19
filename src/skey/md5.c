@@ -18,6 +18,7 @@
 #include <config.h>
 #include <stdlib.h>
 
+#include <string.h>
 #include <glib/gchecksum.h>
 
 #include "skey.h"
@@ -34,7 +35,7 @@ int MD5Keycrunch(char *result, const char *seed, const char *passhrase)
 	guint32 *results;
 
 	len = strlen(seed) + strlen(passhrase);
-	buf = (char *)malloc(len+1);
+	buf = (char *)g_try_malloc(len+1);
 	if (buf == NULL)
 		return -1;
 
@@ -45,7 +46,7 @@ int MD5Keycrunch(char *result, const char *seed, const char *passhrase)
 
         checksum = g_checksum_new (G_CHECKSUM_MD5);
         g_checksum_update (checksum, (const guchar *) buf, len);
-	free(buf);
+	g_free(buf);
 
         g_checksum_get_digest (checksum, digest, &digest_len);
         g_assert (digest_len == 16);
