@@ -627,7 +627,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
 /* Actions stuff */
 
 static void
-update_copy_sensitivity (TerminalWindow *window)
+terminal_window_update_copy_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
@@ -1565,13 +1565,6 @@ icon_title_changed_callback (TerminalScreen *screen,
     gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
 }
 
-static void
-selection_changed_callback (TerminalScreen *screen,
-                            TerminalWindow *window)
-{
-  update_copy_sensitivity (window);
-}
-
 /* Notebook callbacks */
 
 static void
@@ -1905,11 +1898,10 @@ terminal_window_set_active (TerminalWindow *window,
 #endif
   terminal_window_set_size (window, screen, TRUE);
   
-  update_copy_sensitivity (window);
-  
   terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
   terminal_window_update_new_terminal_menus (window);
   terminal_window_update_encoding_menu (window);
+  terminal_window_update_copy_sensitivity (window);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -1986,10 +1978,10 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (icon_title_changed_callback),
                     window);
 
-  g_signal_connect (G_OBJECT (screen),
-                    "selection-changed",
-                    G_CALLBACK (selection_changed_callback),
-                    window);
+  g_signal_connect_swapped (G_OBJECT (screen),
+                            "selection-changed",
+                            G_CALLBACK (terminal_window_update_copy_sensitivity),
+                            window);
 
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
@@ -2059,7 +2051,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
-                                        G_CALLBACK (selection_changed_callback),
+                                        G_CALLBACK (terminal_window_update_copy_sensitivity),
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,
