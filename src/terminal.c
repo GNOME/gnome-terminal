@@ -1337,7 +1337,9 @@ main (int argc, char **argv)
   handle_new_terminal_events ();
   
   gtk_main ();
-  
+
+  g_object_unref (program);
+
   return 0;
 }
 
