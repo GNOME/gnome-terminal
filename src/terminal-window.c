@@ -2712,28 +2712,6 @@ tabs_detach_tab_callback (GtkAction *action,
   detach_tab (TERMINAL_SCREEN (page), window);
 }
 
-// chpe: this is the tabs menu callback
-static void
-change_tab_callback (GtkAction *action,
-                     TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-
-  if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menuitem)))
-    {
-      int page_num;
-      
-      page_num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (menuitem),
-                                                     "notebook-page"));
-
-  
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook),
-                                     page_num);
-    }
-#endif
-}
-
 static void
 help_contents_callback (GtkAction *action,
                         TerminalWindow *window)
