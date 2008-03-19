@@ -18,7 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "terminal-intl.h"
+#include <glib/gi18n.h>
+
 #include "terminal-accels.h"
 #include "terminal-profile.h"
 #include "terminal.h"

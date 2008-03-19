@@ -20,7 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "terminal-intl.h"
+#include <glib/gi18n.h>
+
 #include "terminal-profile.h"
 #include <gtk/gtk.h>
 #include <libgnome/gnome-program.h>

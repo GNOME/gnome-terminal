@@ -19,6 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
+
 /* grab gtk_style_get_font and gdk_x11_get_font_name */
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED
@@ -27,7 +29,6 @@
 #define GTK_DISABLE_DEPRECATED
 #define GDK_DISABLE_DEPRECATED
 
-#include "terminal-intl.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
 #include "terminal-widget.h"

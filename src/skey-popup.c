@@ -18,7 +18,9 @@
  */
 
 #include <config.h>
-#include "terminal-intl.h"
+
+#include <glib/gi18n.h>
+
 #include "terminal.h"
 #include "terminal-widget.h"
 #include "skey-popup.h"

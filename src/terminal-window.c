@@ -23,7 +23,8 @@
 
 #include <config.h>
 
-#include "terminal-intl.h"
+#include <glib/gi18n.h>
+
 #include "terminal-accels.h"
 #include "terminal-widget.h"
 #include "terminal-window.h"

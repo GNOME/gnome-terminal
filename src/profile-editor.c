@@ -20,8 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <glib/gi18n.h>
+
 #include "profile-editor.h"
-#include "terminal-intl.h"
 #include "terminal.h"
 #include <glade/glade.h>
 #include <gio/gio.h>
