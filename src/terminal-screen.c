@@ -57,8 +57,6 @@ struct _TerminalScreenPrivate
   char *cooked_title, *cooked_icon_title;
   char *title_from_arg;
   gboolean icon_title_set;
-  char *matched_string;
-  int matched_flavor;
   char **override_command;
   GtkWidget *title_editor;
   GtkWidget *title_entry;
@@ -77,18 +75,13 @@ enum {
   ICON_TITLE_CHANGED,
   SELECTION_CHANGED,
   ENCODING_CHANGED,
+  SHOW_POPUP_MENU,
   LAST_SIGNAL
 };
 
 enum {
   PROP_0,
   PROP_TITLE
-};
-
-enum {
-  FLAVOR_AS_IS,
-  FLAVOR_DEFAULT_TO_HTTP,
-  FLAVOR_EMAIL
 };
 
 static void terminal_screen_init        (TerminalScreen      *screen);
@@ -477,6 +470,17 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  signals[SHOW_POPUP_MENU] =
+    g_signal_new ("show-popup-menu",
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__POINTER,
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_POINTER);
+
   g_object_class_install_property (object_class,
                                    PROP_TITLE,
                                    g_param_spec_string ("title", NULL, NULL,
@@ -548,7 +552,6 @@ terminal_screen_finalize (GObject *object)
   g_free (screen->priv->title_from_arg);
   g_free (screen->priv->raw_icon_title);
   g_free (screen->priv->cooked_icon_title);
-  g_free (screen->priv->matched_string);
   g_strfreev (screen->priv->override_command);
   g_free (screen->priv->working_dir);
 
@@ -1332,513 +1335,54 @@ terminal_screen_get_text_selected (TerminalScreen *screen)
     return FALSE;
 }
 
-static void
-new_window_callback (GtkWidget      *menu_item,
-                     TerminalScreen *screen)
+TerminalScreenPopupInfo *
+terminal_screen_popup_info_new (TerminalScreen *screen)
 {
-  char *name;
-  const char *dir;
+  TerminalScreenPopupInfo *info;
 
-  name = gdk_screen_make_display_name (gtk_widget_get_screen (menu_item));
-  dir = terminal_screen_get_working_dir (screen);
-  
-  terminal_app_new_terminal (terminal_app_get (),
-                             terminal_profile_get_for_new_term (screen->priv->profile),
-                             NULL,
-                             NULL,
-                             FALSE, FALSE, FALSE,
-                             NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, name, -1);
-
-  g_free (name);
-}
-
-static void
-new_tab_callback (GtkWidget      *menu_item,
-                  TerminalScreen *screen)
-{
-  const char *dir;
-
-  dir = terminal_screen_get_working_dir (screen);
-
-  terminal_app_new_terminal (terminal_app_get (),
-                             terminal_profile_get_for_new_term (screen->priv->profile),
-                             screen->priv->window,
-                             NULL,
-                             FALSE, FALSE, FALSE,
-                             NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, NULL, -1);
-}
-
-static void
-close_tab_callback (GtkWidget      *menuitem,
-                    TerminalScreen *screen)
-{
-  terminal_screen_close (screen);
-}
-
-static void
-copy_callback (GtkWidget      *menu_item,
-               TerminalScreen *screen)
-{
-  terminal_widget_copy_clipboard (screen->priv->term);
-}
-
-static void
-paste_callback (GtkWidget      *menu_item,
-                TerminalScreen *screen)
-{
-  terminal_widget_paste_clipboard (screen->priv->term);
-}
-
-static void
-configuration_callback (GtkWidget      *menu_item,
-                        TerminalScreen *screen)
-{
-  g_return_if_fail (screen->priv->profile);
-  
-  terminal_app_edit_profile (terminal_app_get (),
-                             screen->priv->profile, 
-                             GTK_WINDOW (screen->priv->window));
-}
-
-static void
-choose_profile_callback (GtkWidget      *menu_item,
-                         TerminalScreen *screen)
-{
-  TerminalProfile *profile;
-
-  if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item)))
-    return;
-  
-  profile = g_object_get_data (G_OBJECT (menu_item),
-                               "profile");
-
-  g_assert (profile);
-
-  if (!terminal_profile_get_forgotten (profile))
-    {
-      terminal_screen_set_profile (screen, profile);
-    }
-}
-
-static void
-show_menubar_callback (GtkWidget      *menu_item,
-                       TerminalScreen *screen)
-{
-  if (terminal_window_get_menubar_visible (screen->priv->window))
-    terminal_window_set_menubar_visible (screen->priv->window,
-                                         FALSE);
-  else
-    terminal_window_set_menubar_visible (screen->priv->window,
-                                         TRUE);
-}
-
-static void
-open_url (TerminalScreen *screen,
-          const char     *orig_url,
-          int             flavor)
-{
-  GError *err;
-  char *url;
-  
-  g_return_if_fail (orig_url != NULL);
-
-  /* this is to handle gnome_url_show reentrancy */
-  g_object_ref (G_OBJECT (screen));
-  
-  switch (flavor)
-    {
-    case FLAVOR_DEFAULT_TO_HTTP:
-      url = g_strdup_printf ("http:%s", orig_url);
-      break;
-    case FLAVOR_EMAIL:
-      if (strncmp ("mailto:", orig_url, 7))
-	url = g_strdup_printf ("mailto:%s", orig_url);
-      else
-	url = g_strdup (orig_url);
-      break;
-    case FLAVOR_AS_IS:
-      url = g_strdup (orig_url);
-      break;
-    default:
-      url = NULL;
-      g_assert_not_reached ();
-    }
-
-  err = NULL;
-  gnome_url_show (url, &err);
-
-  if (err)
-    {
-      GtkWidget *window;
-
-      if (screen->priv->term)
-        window = gtk_widget_get_ancestor (screen->priv->term,
-                                          GTK_TYPE_WINDOW);
-      else
-        window = NULL;
-      
-      terminal_util_show_error_dialog (window ? GTK_WINDOW (window) : NULL, NULL,
-                                       _("Could not open the address \"%s\":\n%s"),
-                                       url, err->message);
-      
-      g_error_free (err);
-    }
-
-  g_free (url);
-  g_object_unref (G_OBJECT (screen));
-}
-
-static void
-open_url_callback (GtkWidget      *menu_item,
-                   TerminalScreen *screen)
-{
-  if (screen->priv->matched_string)
-    {
-      open_url (screen, screen->priv->matched_string, screen->priv->matched_flavor);
-      g_free (screen->priv->matched_string);
-      screen->priv->matched_string = NULL;
-    }
-}
-
-static void
-copy_url_callback (GtkWidget      *menu_item,
-                   TerminalScreen *screen)
-{
-  if (screen->priv->matched_string)
-    {
-      GdkDisplay *display;
-      GtkClipboard *clipboard;
-
-      display = gtk_widget_get_display (GTK_WIDGET (screen->priv->window));
-      clipboard = gtk_clipboard_get_for_display (display, GDK_NONE);
-      gtk_clipboard_set_text (clipboard, screen->priv->matched_string, -1);
-      g_free (screen->priv->matched_string);
-      screen->priv->matched_string = NULL;
-    }
-}
-
-
-static void
-popup_menu_detach (GtkWidget *attach_widget,
-		   GtkMenu   *menu)
-{
-  TerminalScreen *screen;
-
-  screen = g_object_get_data (G_OBJECT (attach_widget), "terminal-screen");
-
-  g_assert (screen);
-
-  screen->priv->popup_menu = NULL;
-}
-
-static GtkWidget*
-append_menuitem (GtkWidget  *menu,
-		 const char *text,
-		 GCallback   callback,
-		 gpointer    data)
-{
-  GtkWidget *menu_item;
-  
-  menu_item = gtk_menu_item_new_with_mnemonic (text);
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  g_signal_connect (G_OBJECT (menu_item),
-                    "activate",
-                    callback, data);
-
-  return menu_item;
-}
-
-static GtkWidget*
-append_stock_menuitem (GtkWidget  *menu,
-                       const char *text,
-                       GCallback   callback,
-                       gpointer    data)
-{
-  GtkWidget *menu_item;
-  GtkWidget *image;
-  GConfClient *client;
-  GError *error;
-  gboolean use_image;
-
-  
-  menu_item = gtk_image_menu_item_new_from_stock (text, NULL);
-  image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (menu_item));
-
-  client = gconf_client_get_default ();
-  error = NULL;
-
-  use_image = gconf_client_get_bool (client,
-                                     "/desktop/gnome/interface/menus_have_icons",
-                                      &error);
-  if (error)
-    {
-      g_printerr (_("There was an error loading config value for whether to use image in menus. (%s)\n"),error->message);
-      g_error_free (error);
-    }
-  else
-    {
-      if (use_image)
-        gtk_widget_show (image);
-      else
-        gtk_widget_hide (image);
-    }
-
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                         menu_item);
-
-  if (callback)
-    g_signal_connect (G_OBJECT (menu_item),
-                      "activate",
-                      callback, data);
-
-  return menu_item;
-}
-
-static GtkWidget*
-append_check_menuitem (GtkWidget  *menu,
-                       const char *text,
-                       gboolean    active,
-                       GCallback   callback,
-                       gpointer    data)
-{
-  GtkWidget *menu_item;
-  
-  menu_item = gtk_check_menu_item_new_with_mnemonic (text);
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), active);
-
-  g_signal_connect (G_OBJECT (menu_item), "toggled", callback, data);
-
-  return menu_item;
-}
-
-typedef struct 
-{
-  TerminalScreen *screen;
-  gint button;
-  guint time;
-} PopupInfo;
-
-static void
-popup_clipboard_request_callback (GtkClipboard *clipboard,
-                                  const char   *text,
-                                  gpointer      user_data)
-{
-  PopupInfo *info = user_data;
-  TerminalScreen *screen;
-  GtkWidget *profile_menu;
-  GtkWidget *im_menu;
-  GtkWidget *menu_item;
-  GList *profiles;
-  GList *tmp;
-  GSList *group;
-  gboolean has_tabs;
-  gboolean show_input_method_menu;
-  
-  screen = info->screen;
-
-  if (!GTK_WIDGET_REALIZED (screen->priv->term)) 
-    goto cleanup;
-
-  if (screen->priv->popup_menu)
-    gtk_widget_destroy (screen->priv->popup_menu);
-
-  screen->priv->popup_menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (screen->priv->popup_menu),
-                            terminal_accels_get_group_for_widget (screen->priv->popup_menu));
-
-  gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
-                             GTK_WIDGET (screen->priv->term),
-                             popup_menu_detach);
-
-  if (screen->priv->matched_string != NULL) 
-    {
-      if (screen->priv->matched_flavor == FLAVOR_EMAIL &&
-	  strncmp ("mailto:", screen->priv->matched_string, 7))
-	{
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Send Mail To..."),
-				       G_CALLBACK (open_url_callback),
-				       screen);
-
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Copy E-mail Address"),
-				       G_CALLBACK (copy_url_callback),
-				       screen);
-	}
-      else
-	{
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Open Link"),
-				       G_CALLBACK (open_url_callback),
-				       screen);
-
-	  menu_item = append_menuitem (screen->priv->popup_menu,
-				       _("_Copy Link Address"),
-				       G_CALLBACK (copy_url_callback),
-				       screen);
-	}
-      menu_item = gtk_separator_menu_item_new ();
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu),
-			     menu_item);
-    }
-
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("Open _Terminal"),
-                               G_CALLBACK (new_window_callback),
-                               screen);
-
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               _("Open Ta_b"),
-                               G_CALLBACK (new_tab_callback),
-                               screen);
-
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-
-  has_tabs = terminal_window_get_screen_count (terminal_screen_get_window (screen)) > 1;
-  menu_item = append_menuitem (screen->priv->popup_menu,
-                               has_tabs ? _("C_lose Tab") : _("C_lose Window"),
-                               has_tabs ? G_CALLBACK (close_tab_callback) : G_CALLBACK (close_tab_callback),
-                               screen);
-
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-
-  menu_item = append_stock_menuitem (screen->priv->popup_menu,
-                                     GTK_STOCK_COPY,
-                                     G_CALLBACK (copy_callback),
-                                     screen);
-  gtk_widget_set_sensitive (menu_item, terminal_screen_get_text_selected (screen));
-
-  menu_item = append_stock_menuitem (screen->priv->popup_menu,
-                                     GTK_STOCK_PASTE,
-                                     G_CALLBACK (paste_callback),
-                                     screen);
-  gtk_widget_set_sensitive (menu_item, text != NULL);
-  
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-
-  profile_menu = gtk_menu_new ();
-  menu_item = gtk_menu_item_new_with_mnemonic (_("Change P_rofile"));
-
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), profile_menu);
-
-  gtk_widget_show (profile_menu);
-  gtk_widget_show (menu_item);
-  
-  gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-
-  group = NULL;
-  profiles = terminal_profile_get_list ();
-  for (tmp = profiles; tmp != NULL; tmp = tmp->next)
-    {
-      TerminalProfile *profile;
-      
-      profile = tmp->data;
-      
-      /* Profiles can go away while the menu is up. */
-      g_object_ref (G_OBJECT (profile));
-
-      menu_item = gtk_radio_menu_item_new_with_label (group, terminal_profile_get_visible_name (profile));
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (profile_menu), menu_item);
-
-      if (profile == screen->priv->profile)
-        {
-          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-        }
-      
-      g_signal_connect (G_OBJECT (menu_item), "toggled", G_CALLBACK (choose_profile_callback), screen);
-      g_object_set_data_full (G_OBJECT (menu_item), "profile", profile, (GDestroyNotify) g_object_unref);
-    }
-  g_list_free (profiles);
-
-  append_menuitem (screen->priv->popup_menu,
-		   _("_Edit Current Profile..."),
-		   G_CALLBACK (configuration_callback),
-		   screen);
-
-  menu_item = append_check_menuitem (screen->priv->popup_menu, 
-                                     _("Show _Menubar"), 
-                                     terminal_window_get_menubar_visible (screen->priv->window),
-                                     G_CALLBACK (show_menubar_callback),
-                                     screen);
- 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (screen->priv->term)),
-                "gtk-show-input-method-menu", &show_input_method_menu,
-                NULL);
-
-  if (show_input_method_menu)
-    {
-      menu_item = gtk_separator_menu_item_new ();
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-
-      im_menu = gtk_menu_new ();
-      menu_item = gtk_menu_item_new_with_mnemonic (_("_Input Methods"));
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), im_menu);
-      terminal_widget_im_append_menuitems (screen->priv->term, GTK_MENU_SHELL (im_menu));
-      gtk_widget_show (im_menu);
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (screen->priv->popup_menu), menu_item);
-    }
-
-  gtk_menu_popup (GTK_MENU (screen->priv->popup_menu),
-                  NULL, NULL,
-                  NULL, NULL, 
-                  info->button,
-                  info->time);
-
-cleanup:
-  g_object_unref (G_OBJECT (info->screen));
-  g_free (info);
-}
-
-static void
-terminal_screen_do_popup (TerminalScreen *screen,
-                          GdkEventButton *event)
-{
-  PopupInfo *info;
-  GtkClipboard *clip;
-
-  info = g_new (PopupInfo, 1);
-
+  info = g_slice_new0 (TerminalScreenPopupInfo);
+  info->ref_count = 1;
   info->screen = g_object_ref (screen);
+  info->window = screen->priv->window;
 
-  if (event != NULL)
-    {
-      info->button = event->button;
-      info->time = event->time;
-    }
-  else
-    {
-      info->button = 0;
-      info->time = gtk_get_current_event_time ();
-    }
+  return info;
+}
 
-  clip = gtk_clipboard_get (GDK_NONE);
-  gtk_clipboard_request_text (clip, popup_clipboard_request_callback, info);
+TerminalScreenPopupInfo *
+terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info)
+{
+  g_return_val_if_fail (info != NULL, NULL);
+
+  info->ref_count++;
+  return info;
+}
+
+void
+terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
+{
+  g_return_if_fail (info != NULL);
+
+  if (--info->ref_count > 0)
+    return;
+
+  g_object_unref (info->screen);
+  g_free (info->string);
+  g_slice_free (TerminalScreenPopupInfo, info);
 }
 
 static gboolean
 terminal_screen_popup_menu (GtkWidget      *term,
                             TerminalScreen *screen)
 {
-  terminal_screen_do_popup (screen, NULL);
+  TerminalScreenPopupInfo *info;
+
+  info = terminal_screen_popup_info_new (screen);
+  info->button = 0;
+  info->timestamp = gtk_get_current_event_time ();
+
+  g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
+  terminal_screen_popup_info_unref (info);
+
   return TRUE;
 }
 
@@ -1850,21 +1394,25 @@ terminal_screen_button_press_event (GtkWidget      *widget,
   GtkWidget *term;
   int char_width, char_height;
   gboolean dingus_button;
-  
+  char *matched_string;
+  int matched_flavor;
+  guint state;
+
+  state = event->state & gtk_accelerator_get_default_mod_mask ();
+
   term = screen->priv->term;
 
   terminal_widget_get_cell_size (term, &char_width, &char_height);
-  
-  g_free (screen->priv->matched_string);
-  screen->priv->matched_string =
+
+  matched_string =
     terminal_widget_check_match (term,
                                  event->x / char_width,
                                  event->y / char_height,
-                                 &screen->priv->matched_flavor);
+                                 &matched_flavor);
   dingus_button = ((event->button == 1) || (event->button == 2));
 
   if (dingus_button &&
-      (event->state & GDK_CONTROL_MASK) &&
+      (state & GDK_CONTROL_MASK) &&
       terminal_profile_get_use_skey (screen->priv->profile))
     {
       gchar *skey_match;
@@ -1877,27 +1425,38 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 	{
 	  terminal_skey_do_popup (screen, GTK_WINDOW (terminal_screen_get_window (screen)), skey_match);
 	  g_free (skey_match);
+          g_free (matched_string);
 
 	  return TRUE;
 	}
     }
 
   if (dingus_button &&
-      (event->state & GDK_CONTROL_MASK) &&
-      (screen->priv->matched_string != NULL))
+      (state & GDK_CONTROL_MASK) != 0 &&
+      matched_string != NULL)
     {
       gtk_widget_grab_focus (widget);
       
-      open_url (screen, screen->priv->matched_string, screen->priv->matched_flavor);
-      g_free (screen->priv->matched_string);
-      screen->priv->matched_string = NULL;
+      terminal_util_open_url (GTK_WIDGET (screen->priv->window), matched_string, matched_flavor);
+      g_free (matched_string);
+
       return TRUE; /* don't do anything else such as select with the click */
     }
       
-  if ((event->button == 3) &&
-      !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)))
+  if (event->button == 3 &&
+      (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) == 0)
     {
-      terminal_screen_do_popup (screen, event);
+      TerminalScreenPopupInfo *info;
+
+      info = terminal_screen_popup_info_new (screen);
+      info->button = event->button;
+      info->timestamp = event->time;
+      info->string = matched_string; /* adopted */
+      info->flavour = matched_flavor;
+
+      g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
+      terminal_screen_popup_info_unref (info);
+
       return TRUE;
     }
 

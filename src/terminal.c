@@ -3190,6 +3190,47 @@ terminal_util_load_glade_file (const char *filename,
   return xml;
 }
 
+void
+terminal_util_open_url (GtkWidget *parent,
+                        const char *orig_url,
+                        TerminalURLFlavour flavor)
+{
+  GError *error = NULL;
+  char *url;
+  
+  g_return_if_fail (orig_url != NULL);
+
+  switch (flavor)
+    {
+    case FLAVOR_DEFAULT_TO_HTTP:
+      url = g_strdup_printf ("http:%s", orig_url);
+      break;
+    case FLAVOR_EMAIL:
+      if (strncmp ("mailto:", orig_url, 7))
+	url = g_strdup_printf ("mailto:%s", orig_url);
+      else
+	url = g_strdup (orig_url);
+      break;
+    case FLAVOR_AS_IS:
+      url = g_strdup (orig_url);
+      break;
+    default:
+      url = NULL;
+      g_assert_not_reached ();
+    }
+
+  if (!gnome_url_show_on_screen (url, gtk_widget_get_screen (parent), &error))
+    {
+      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
+                                       _("Could not open the address \"%s\":\n%s"),
+                                       url, error->message);
+      
+      g_error_free (error);
+    }
+
+  g_free (url);
+}
+
 /* Factory stuff */
 
 typedef struct

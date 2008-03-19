@@ -25,6 +25,13 @@
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 #include <glade/glade.h>
+
+typedef enum {
+  FLAVOR_AS_IS,
+  FLAVOR_DEFAULT_TO_HTTP,
+  FLAVOR_EMAIL
+} TerminalURLFlavour;
+
 #include "terminal-screen.h"
 
 typedef struct _TerminalApp TerminalApp;
@@ -86,6 +93,10 @@ void terminal_util_set_atk_name_description (GtkWidget  *widget,
 GladeXML* terminal_util_load_glade_file (const char *filename,
                                          const char *widget_root,
                                          GtkWindow  *error_dialog_parent);
+
+void terminal_util_open_url (GtkWidget *parent,
+                             const char *orig_url,
+                             TerminalURLFlavour flavor);
 
 
 #endif /* TERMINAL_H */

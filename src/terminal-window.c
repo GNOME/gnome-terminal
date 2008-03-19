@@ -56,6 +56,9 @@ struct _TerminalWindowPrivate
 
   TerminalTabsMenu *tabs_menu;
 
+  TerminalScreenPopupInfo *popup_info;
+  guint remove_popup_info_idle;
+
   GtkWidget *menubar;
   GtkWidget *notebook;
   guint terms;
@@ -268,6 +271,7 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
 }
 
 #define PROFILES_UI_PATH "/menubar/Terminal/TerminalProfiles"
+#define PROFILES_POPUP_UI_PATH "/Popup/TerminalProfiles"
 
 static void
 terminal_window_update_set_profile_menu (TerminalWindow *window)
@@ -348,6 +352,10 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
 
       gtk_ui_manager_add_ui (priv->ui_manager, priv->profiles_ui_id,
                              PROFILES_UI_PATH,
+                             name, name,
+                             GTK_UI_MANAGER_MENUITEM, FALSE);
+      gtk_ui_manager_add_ui (priv->ui_manager, priv->profiles_ui_id,
+                             PROFILES_POPUP_UI_PATH,
                              name, name,
                              GTK_UI_MANAGER_MENUITEM, FALSE);
     }
@@ -750,6 +758,225 @@ terminal_window_realized_callback (GtkWidget *window,
   g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
 }
 
+/* Terminal screen popup menu handling */
+
+static void
+popup_open_url_callback (GtkAction *action,
+                         TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalScreenPopupInfo *info = priv->popup_info;
+
+  if (info == NULL)
+    return;
+
+  terminal_util_open_url (GTK_WIDGET (window), info->string, info->flavour);
+}
+
+static void
+popup_copy_url_callback (GtkAction *action,
+                         TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalScreenPopupInfo *info = priv->popup_info;
+  GdkDisplay *display;
+  GtkClipboard *clipboard;
+
+  if (info == NULL)
+    return;
+
+  if (info->string == NULL)
+    return;
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
+  gtk_clipboard_set_text (clipboard, info->string, -1);
+}
+
+/*static void
+popup_menu_detach (GtkWidget *attach_widget,
+		   GtkMenu   *menu)
+{
+  TerminalScreen *screen;
+
+  screen = g_object_get_data (G_OBJECT (attach_widget), "terminal-screen");
+
+  g_assert (screen);
+
+  screen->priv->popup_menu = NULL;
+}
+*/
+
+static void
+remove_popup_info (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (priv->remove_popup_info_idle != 0)
+    {
+      g_source_remove (priv->remove_popup_info_idle);
+      priv->remove_popup_info_idle = 0;
+    }
+
+  if (priv->popup_info != NULL)
+    {
+      terminal_screen_popup_info_unref (priv->popup_info);
+      priv->popup_info = NULL;
+    }
+}
+
+static gboolean
+idle_remove_popup_info (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  priv->remove_popup_info_idle = 0;
+  remove_popup_info (window);
+  return FALSE;
+}
+
+static void
+unset_popup_info (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  /* Unref the event from idle since we still need it
+    * from the action callbacks which will run before idle.
+    */
+  if (priv->remove_popup_info_idle == 0 &&
+      priv->popup_info != NULL)
+    {
+      priv->remove_popup_info_idle =
+        g_idle_add ((GSourceFunc) idle_remove_popup_info, window);
+    }
+}
+
+static void
+popup_menu_deactivate_callback (GtkWidget *popup,
+                                TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *im_menu_item;
+
+  g_signal_handlers_disconnect_by_func
+    (popup, G_CALLBACK (popup_menu_deactivate_callback), window);
+
+  im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
+                                            "/Popup/PopupInputMethods");
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), NULL);
+
+  unset_popup_info (window);
+}
+
+static void
+popup_clipboard_request_callback (GtkClipboard *clipboard,
+                                  const char   *text,
+                                  gpointer      user_data)
+{
+  TerminalScreenPopupInfo *info = user_data;
+  TerminalWindow *window = info->window;
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalScreen *screen = info->screen;
+  GtkWidget *popup_menu, *im_menu, *im_menu_item;
+  GtkAction *action;
+  gboolean show_link, show_email_link, show_input_method_menu;
+  
+  remove_popup_info (window);
+
+  if (!GTK_WIDGET_REALIZED (terminal_screen_get_widget (info->screen)))
+    {
+      terminal_screen_popup_info_unref (info);
+      return;
+    }
+
+  priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
+
+  show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL;
+  show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
+
+  action = gtk_action_group_get_action (priv->action_group, "PopupSendEmail");
+  gtk_action_set_visible (action, show_email_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCopyEmailAddress");
+  gtk_action_set_visible (action, show_email_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupOpenLink");
+  gtk_action_set_visible (action, show_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCopyLinkAddress");
+  gtk_action_set_visible (action, show_link);
+
+  action = gtk_action_group_get_action (priv->action_group, "PopupCloseWindow");
+  gtk_action_set_visible (action, priv->terms <= 1);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCloseTab");
+  gtk_action_set_visible (action, priv->terms > 1);
+
+  action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
+  gtk_action_set_sensitive (action, terminal_screen_get_text_selected (screen));
+  action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
+  gtk_action_set_sensitive (action, text != NULL);
+  
+//   profile_menu = gtk_menu_new ();
+//   menu_item = gtk_menu_item_new_with_mnemonic (_("Change P_rofile"));
+// 
+//   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), profile_menu);
+
+//   append_menuitem (screen->priv->popup_menu,
+// 		   _("_Edit Current Profile..."),
+// 		   G_CALLBACK (configuration_callback),
+// 		   screen);
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
+                "gtk-show-input-method-menu", &show_input_method_menu,
+                NULL);
+
+  action = gtk_action_group_get_action (priv->action_group, "PopupInputMethods");
+  gtk_action_set_visible (action, show_input_method_menu);
+
+  im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
+                                            "/Popup/PopupInputMethods");
+  /* FIXME: fix this when gtk+ bug #500065 is done */
+  if (show_input_method_menu)
+    {
+      im_menu = gtk_menu_new ();
+      terminal_widget_im_append_menuitems (terminal_screen_get_widget (screen),
+                                           GTK_MENU_SHELL (im_menu));
+      gtk_widget_show (im_menu);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), im_menu);
+    }
+  else
+    {
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), NULL);
+    }
+
+  popup_menu = gtk_ui_manager_get_widget (priv->ui_manager, "/Popup");
+  g_signal_connect (popup_menu, "deactivate",
+                    G_CALLBACK (popup_menu_deactivate_callback), window);
+
+  gtk_menu_popup (GTK_MENU (popup_menu),
+                  NULL, NULL,
+                  NULL, NULL, 
+                  info->button,
+                  info->timestamp);
+  /* FIXMEchpe? */
+//   gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
+//                              GTK_WIDGET (screen->priv->term),
+//                              popup_menu_detach);
+}
+
+static void
+screen_show_popup_menu_callback (TerminalScreen *screen,
+                                 TerminalScreenPopupInfo *info,
+                                 TerminalWindow *window)
+{
+  GtkClipboard *clipboard;
+
+  g_return_if_fail (info->window == window);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE /* FIXMEchpe ? */);
+  gtk_clipboard_request_text (clipboard, popup_clipboard_request_callback,
+                              terminal_screen_popup_info_ref (info));
+}
+
+/*****************************************/
+
+
 static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
@@ -925,6 +1152,39 @@ terminal_window_init (TerminalWindow *window)
       { "HelpAbout", GTK_STOCK_ABOUT, N_("_About"), NULL,
         NULL,
         G_CALLBACK (help_about_callback) },
+
+      /* Popup menu */
+      { "PopupSendEmail", NULL, N_("_Send Mail To..."), NULL,
+        NULL,
+        G_CALLBACK (popup_open_url_callback) },
+      { "PopupCopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
+        NULL,
+        G_CALLBACK (popup_copy_url_callback) },
+      { "PopupOpenLink", NULL, N_("_Open Link"), NULL,
+        NULL,
+        G_CALLBACK (popup_open_url_callback) },
+      { "PopupCopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
+        NULL,
+        G_CALLBACK (popup_copy_url_callback) },
+      { "PopupCopy", GTK_STOCK_COPY, NULL, NULL,
+        NULL,
+        G_CALLBACK (edit_copy_callback) },
+      { "PopupPaste", GTK_STOCK_PASTE, NULL, NULL,
+        NULL,
+        G_CALLBACK (edit_paste_callback) },
+      { "PopupNewTerminal", NULL, N_("Open _Terminal"), NULL,
+        NULL,
+        G_CALLBACK (file_new_window_callback) },
+      { "PopupNewTab", NULL, N_("Open Ta_b"), NULL,
+        NULL,
+        G_CALLBACK (file_new_tab_callback) },
+      { "PopupCloseWindow", NULL, N_("C_lose Window"), NULL,
+        NULL,
+        G_CALLBACK (file_close_window_callback) },
+      { "PopupCloseTab", NULL, N_("C_lose Tab"), NULL,
+        NULL,
+        G_CALLBACK (file_close_tab_callback) },
+      { "PopupInputMethods", NULL, N_("_Input Methods") }
     };
   
   const GtkToggleActionEntry toggle_menu_entries[] =
@@ -1131,6 +1391,8 @@ terminal_window_dispose (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
+
+  remove_popup_info (window);
 
   if (priv->notify_id != 0)
     {
@@ -1527,7 +1789,7 @@ terminal_window_list_screens (TerminalWindow *window)
   return gtk_container_get_children (GTK_CONTAINER (priv->notebook));
 }
 
-int    
+int
 terminal_window_get_screen_count (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
@@ -1659,6 +1921,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   }
 }
 
+/* FIXMEchpe make this also switch tabs! */
 void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
@@ -1804,6 +2067,9 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (selection_changed_callback),
                     window);
 
+  g_signal_connect (screen, "show-popup-menu",
+                    G_CALLBACK (screen_show_popup_menu_callback), window);
+
   terminal_screen_update_scrollbar (screen);
 
   update_notebook (window);
@@ -1872,6 +2138,11 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         G_CALLBACK (selection_changed_callback),
                                         window);
 
+  g_signal_handlers_disconnect_by_func (screen,
+                                        G_CALLBACK (screen_show_popup_menu_callback),
+                                        window);
+
+  /* FIXMEchpe this should have been done by the parent-set handler already! */
   terminal_screen_set_window (screen, NULL);
   priv->terms--;
 

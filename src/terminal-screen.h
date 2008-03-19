@@ -29,6 +29,7 @@
 G_BEGIN_DECLS
 
 /* Forward decls */
+typedef struct _TerminalScreenPopupInfo TerminalScreenPopupInfo;
 typedef struct _TerminalWindow        TerminalWindow;
 
 #define TERMINAL_TYPE_SCREEN              (terminal_screen_get_type ())
@@ -57,6 +58,8 @@ struct _TerminalScreenClass
   void (* icon_title_changed) (TerminalScreen *screen);
   void (* selection_changed)  (TerminalScreen *screen);
   void (* encoding_changed)   (TerminalScreen *screen);
+  void (* show_popup_menu)    (TerminalScreen *screen,
+                               TerminalScreenPopupInfo *info);
 };
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
@@ -128,6 +131,22 @@ void terminal_screen_update_scrollbar (TerminalScreen *screen);
 #define TERMINAL_SCALE_XXXXX_LARGE (TERMINAL_SCALE_XXXX_LARGE*1.2)
 #define TERMINAL_SCALE_MINIMUM     (TERMINAL_SCALE_XXXXX_SMALL/1.2)
 #define TERMINAL_SCALE_MAXIMUM     (TERMINAL_SCALE_XXXXX_LARGE*1.2)
+
+#include "terminal.h"
+
+struct _TerminalScreenPopupInfo {
+  int ref_count;
+  TerminalWindow *window;
+  TerminalScreen *screen;
+  char *string;
+  TerminalURLFlavour flavour;
+  guint button;
+  guint32 timestamp;
+};
+
+TerminalScreenPopupInfo *terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info);
+
+void terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info);
 
 G_END_DECLS
 
