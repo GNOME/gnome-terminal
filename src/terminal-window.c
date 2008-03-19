@@ -1223,20 +1223,12 @@ terminal_window_init (TerminalWindow *window)
   
   priv->conf = gconf_client_get_default ();
 
-  error = NULL;
   priv->notify_id =
     gconf_client_notify_add (priv->conf,
                              CONF_GLOBAL_PREFIX,
                              config_change_notify,
                              window,
-                             NULL, &error);
-  
-  if (error)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal window configuration changes. (%s)\n"),
-                  error->message);
-      g_error_free (error);
-    }
+                             NULL, NULL);
 
   error = NULL;
   use_mnemonics = gconf_client_get_bool (priv->conf,
@@ -1244,8 +1236,6 @@ terminal_window_init (TerminalWindow *window)
                                          &error);
   if (error)
     {
-      g_printerr (_("There was an error loading config value for whether to use mnemonics. (%s)\n"),
-                  error->message);
       g_error_free (error);
       use_mnemonics = TRUE;
     }
