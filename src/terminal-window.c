@@ -68,8 +68,6 @@ struct _TerminalWindowPrivate
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
-  GConfClient *conf;
-  guint notify_id;
   char *startup_id;
 
   guint menubar_visible : 1;
@@ -1277,8 +1275,6 @@ terminal_window_init (TerminalWindow *window)
   priv->old_char_height = -1;
   priv->old_geometry_widget = NULL;
   
-  priv->conf = gconf_client_get_default ();
-
   initialize_alpha_mode (window);
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
@@ -1384,12 +1380,6 @@ terminal_window_dispose (GObject *object)
 
   remove_popup_info (window);
 
-  if (priv->notify_id != 0)
-    {
-      gconf_client_notify_remove (priv->conf, priv->notify_id);
-      priv->notify_id = 0;
-    }
-
   priv->disposed = TRUE;
 
   if (priv->tabs_menu)
@@ -1407,11 +1397,6 @@ terminal_window_finalize (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
 
-  if (priv->conf)
-    {
-      g_object_unref (G_OBJECT (priv->conf));
-    }
-  
   if (priv->icon)
     {
       g_object_unref (G_OBJECT (priv->icon));
@@ -2280,8 +2265,8 @@ confirm_close_window (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *dialog;
-  GError *error;
-  gboolean result;
+  GConfClient *client;
+  gboolean result, do_confirm;
   int n;
 
   n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
@@ -2289,8 +2274,10 @@ confirm_close_window (TerminalWindow *window)
   if (n <= 1)
     return TRUE;
 
-  error = NULL;
-  if (!gconf_client_get_bool (priv->conf, CONF_GLOBAL_PREFIX "/confirm_window_close", &error))
+  client = gconf_client_get_default ();
+  do_confirm = gconf_client_get_bool (client, CONF_GLOBAL_PREFIX "/confirm_window_close", NULL);
+  g_object_unref (client);
+  if (!do_confirm)
     return TRUE;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
