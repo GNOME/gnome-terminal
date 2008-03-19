@@ -697,7 +697,8 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   int num_pages, page_num;
   gboolean not_first, not_last;
 
-  g_return_if_fail (!priv->disposed);
+  if (priv->disposed)
+    return;
 
   num_pages = gtk_notebook_get_n_pages (notebook);
   page_num = gtk_notebook_get_current_page (notebook);
@@ -1974,7 +1975,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_notebook (window);
 
-  terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
   term = terminal_screen_get_widget (screen);
@@ -2008,6 +2008,8 @@ notebook_page_added_callback (GtkWidget       *notebook,
       gtk_widget_show_all (GTK_WIDGET (window));
       priv->present_on_insert = FALSE;
     }
+
+  terminal_window_update_tabs_menu_sensitivity (window);
 }
 
 static void
