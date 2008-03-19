@@ -119,13 +119,6 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
                                               guint            page_num,
                                               TerminalWindow  *window);
 
-static void config_change_notify            (GConfClient *client,
-                                             guint        cnxn_id,
-                                             GConfEntry  *entry,
-                                             gpointer     user_data);
-
-static void reset_menubar_labels          (TerminalWindow *window);
-
 static void new_window                    (TerminalWindow  *window,
                                            TerminalScreen  *screen,
                                            TerminalProfile *profile,
@@ -215,6 +208,99 @@ profile_set_callback (TerminalScreen *screen,
                       TerminalWindow *window);
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
+
+/* Menubar mnemonics settings handling */
+
+static void
+menuitem_set_mnemonic (GtkBin *menu_item,
+                       gpointer data)
+{
+  GtkWidget *label;
+  GtkAction *action;
+  char *text;
+  gboolean enable = GPOINTER_TO_UINT (data);
+
+  if (!GTK_IS_MENU_ITEM (menu_item))
+    return;
+
+  label = gtk_bin_get_child (menu_item);
+
+  action = gtk_widget_get_action (GTK_WIDGET (menu_item));
+  g_assert (action != NULL);
+
+  g_object_get (action, "label", &text, NULL);
+  if (enable)
+    gtk_label_set_text_with_mnemonic (GTK_LABEL (label), text);
+  else
+    {
+      char *src, *dest, *new_text;
+
+      src = text;
+      new_text = dest = g_new (char, strlen (text) + 1);
+
+      while (*src)
+        {
+          if (*src != '_')
+            {
+              *dest = *src;
+              ++dest;
+            }
+
+          ++src;
+        }
+      *dest = '\0';
+
+      gtk_label_set_text (GTK_LABEL (label), new_text);
+      g_free (new_text);
+    }
+  g_free (text);
+}
+
+static void
+mnemonics_setting_apply (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  gboolean want_mnemonics, enable_mnemonics;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
+                "gtk-enable-mnemonics", &enable_mnemonics,
+                NULL);
+  want_mnemonics = enable_mnemonics && priv->use_mnemonics;
+
+  if (want_mnemonics == priv->using_mnemonics)
+    return;
+
+  priv->using_mnemonics = want_mnemonics;
+  gtk_container_foreach (GTK_CONTAINER (priv->menubar),
+                         (GtkCallback) menuitem_set_mnemonic,
+                         GUINT_TO_POINTER (want_mnemonics));
+}
+
+/* FIXMEchpe: also update this when the gtk setting changes! */
+static void
+mnemonics_gconf_change_notify (GConfClient *client,
+                               guint        cnxn_id,
+                               GConfEntry  *entry,
+                               gpointer     user_data)
+{
+  GConfValue *val;
+  TerminalWindow *window = TERMINAL_WINDOW (user_data);
+  TerminalWindowPrivate *priv = window->priv;
+
+  val = gconf_entry_get_value (entry);
+  
+  if (strcmp (gconf_entry_get_key (entry),
+              CONF_GLOBAL_PREFIX"/use_mnemonics") == 0)
+    {      
+      if (val && val->type == GCONF_VALUE_BOOL)
+        {
+          priv->use_mnemonics = gconf_value_get_bool (val);
+          mnemonics_setting_apply (window);
+        }
+    }
+}
+
+/* utility functions */
 
 static char *
 escape_underscores (const char *name)
@@ -1237,10 +1323,9 @@ terminal_window_init (TerminalWindow *window)
   priv->notify_id =
     gconf_client_notify_add (priv->conf,
                              CONF_GLOBAL_PREFIX,
-                             config_change_notify,
+                             mnemonics_gconf_change_notify,
                              window,
                              NULL, NULL);
-
   error = NULL;
   use_mnemonics = gconf_client_get_bool (priv->conf,
                                          CONF_GLOBAL_PREFIX"/use_mnemonics",
@@ -1324,7 +1409,7 @@ terminal_window_init (TerminalWindow *window)
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
 
-  reset_menubar_labels (window);
+  mnemonics_setting_apply (window);
 }
 
 static void
@@ -1779,8 +1864,6 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   
   g_object_set (priv->menubar, "visible", setting, NULL);
 
-  reset_menubar_labels (window);
-
   if (priv->active_term)
     {
 #ifdef DEBUG_GEOMETRY
@@ -2231,115 +2314,6 @@ terminal_window_update_geometry (TerminalWindow *window)
     {
       g_fprintf (stderr,"hints: increment unchanged, not setting\n");
     }
-#endif
-}
-
-/*
- * Config updates
- */
-
-static void
-config_change_notify (GConfClient *client,
-                      guint        cnxn_id,
-                      GConfEntry  *entry,
-                      gpointer     user_data)
-{
-  GConfValue *val;
-  TerminalWindow *window = TERMINAL_WINDOW (user_data);
-  TerminalWindowPrivate *priv = window->priv;
-
-  val = gconf_entry_get_value (entry);
-  
-  if (strcmp (gconf_entry_get_key (entry),
-              CONF_GLOBAL_PREFIX"/use_mnemonics") == 0)
-    {      
-      if (val && val->type == GCONF_VALUE_BOOL)
-        {
-          priv->use_mnemonics = gconf_value_get_bool (val);
-          reset_menubar_labels (window);
-        }
-    }
-}
-
-static void
-set_menuitem_text (GtkWidget  *mi,
-                   const char *text,
-                   gboolean    strip_mnemonic)
-{
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (mi));
-
-  if (child && GTK_IS_LABEL (child))
-    {
-      const char *label;
-      char *no_mnemonic;
-      
-      label = NULL;
-      no_mnemonic = NULL;
-      
-      if (strip_mnemonic)
-        {
-          const char *src;
-          char *dest;
-
-          no_mnemonic = g_strdup (text);
-          dest = no_mnemonic;
-          src = text;
-
-          while (*src)
-            {
-              if (*src != '_')
-                {
-                  *dest = *src;
-                  ++dest;
-                }
-              
-              ++src;
-            }
-          *dest = '\0';
-
-          label = no_mnemonic;
-        }
-      else
-        {
-          label = text;
-        }
-
-      if (strip_mnemonic)
-        gtk_label_set_text (GTK_LABEL (child), label);
-      else
-        gtk_label_set_text_with_mnemonic (GTK_LABEL (child), label);
-      
-      if (no_mnemonic)
-        g_free (no_mnemonic);
-    }
-}
-
-static void
-reset_menubar_labels (TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  gboolean want_mnemonics =
-	  priv->use_mnemonics && priv->menubar_visible;
-
-  if (want_mnemonics == priv->using_mnemonics)
-    return;
-
-  priv->using_mnemonics = want_mnemonics;
-  set_menuitem_text (priv->file_menuitem,
-                     _("_File"), !priv->using_mnemonics);
-  set_menuitem_text (priv->edit_menuitem,
-                     _("_Edit"), !priv->using_mnemonics);
-  set_menuitem_text (priv->view_menuitem,
-                     _("_View"), !priv->using_mnemonics);
-  set_menuitem_text (priv->terminal_menuitem,
-                     _("_Terminal"), !priv->using_mnemonics);
-  set_menuitem_text (priv->go_menuitem,
-                     _("Ta_bs"), !priv->using_mnemonics);
-  set_menuitem_text (priv->help_menuitem,
-                     _("_Help"), !priv->using_mnemonics);
 #endif
 }
 
