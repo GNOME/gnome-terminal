@@ -959,16 +959,6 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
   gtk_action_set_sensitive (action, text != NULL);
   
-//   profile_menu = gtk_menu_new ();
-//   menu_item = gtk_menu_item_new_with_mnemonic (_("Change P_rofile"));
-// 
-//   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), profile_menu);
-
-//   append_menuitem (screen->priv->popup_menu,
-// 		   _("_Edit Current Profile..."),
-// 		   G_CALLBACK (configuration_callback),
-// 		   screen);
-
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                 "gtk-show-input-method-menu", &show_input_method_menu,
                 NULL);
