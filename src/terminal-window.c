@@ -688,7 +688,7 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 }
 
 static void
-update_tabs_menu_sensitivity (TerminalWindow *window)
+terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
@@ -1266,6 +1266,9 @@ terminal_window_init (TerminalWindow *window)
                           G_CALLBACK (notebook_page_added_callback), window);
   g_signal_connect_after (priv->notebook, "page-removed",
                           G_CALLBACK (notebook_page_removed_callback), window);
+  g_signal_connect_data (priv->notebook, "page-reordered",
+                         G_CALLBACK (terminal_window_update_tabs_menu_sensitivity),
+                         window, NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER);
   
   gtk_box_pack_end (GTK_BOX (main_vbox), priv->notebook, TRUE, TRUE, 0);
   gtk_widget_show (priv->notebook);
@@ -1928,8 +1931,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   terminal_widget_set_size (new_widget, old_grid_width, old_grid_height);
 
   terminal_window_set_active (window, screen);
-
-  update_tabs_menu_sensitivity (window);
+  terminal_window_update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -1972,7 +1974,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_notebook (window);
 
-  update_tabs_menu_sensitivity (window);
+  terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
   term = terminal_screen_get_widget (screen);
@@ -2046,7 +2048,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   update_notebook (window);
 
-  update_tabs_menu_sensitivity (window);
+  terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
   pages = priv->terms;
@@ -2586,11 +2588,8 @@ tabs_move_left_callback (GtkAction *action,
   page_num = gtk_notebook_get_current_page (notebook);
   last_page = gtk_notebook_get_n_pages (notebook) - 1;
   page = gtk_notebook_get_nth_page (notebook, page_num);
-  
 
   gtk_notebook_reorder_child (notebook, page, page_num == 0 ? last_page : page_num - 1);
-
-  update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -2607,8 +2606,6 @@ tabs_move_right_callback (GtkAction *action,
   page = gtk_notebook_get_nth_page (notebook, page_num);
   
   gtk_notebook_reorder_child (notebook, page, page_num == last_page ? 0 : page_num + 1);
-
-  update_tabs_menu_sensitivity (window);
 }
 
 /* FIXMEchpe this is bogus bogus! */
