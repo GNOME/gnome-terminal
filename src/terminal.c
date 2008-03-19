@@ -2993,8 +2993,10 @@ save_yourself_callback (GnomeClient        *client,
   char **clone_command;
   TerminalApp *app;
   int argc;
+#ifdef GNOME_ENABLE_DEBUG
   int i;
-  
+#endif
+
   app = data;
   
   terminal_app_get_clone_command (app, &argc, &clone_command);
@@ -3002,6 +3004,7 @@ save_yourself_callback (GnomeClient        *client,
   /* GnomeClient builds the clone command from the restart command */
   gnome_client_set_restart_command (client, argc, clone_command);
 
+#ifdef GNOME_ENABLE_DEBUG
   /* Debug spew */
   g_print ("Saving session: ");
   i = 0;
@@ -3011,6 +3014,7 @@ save_yourself_callback (GnomeClient        *client,
       ++i;
     }
   g_print ("\n");
+#endif
 
   g_strfreev (clone_command);
   
