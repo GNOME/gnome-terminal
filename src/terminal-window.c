@@ -86,6 +86,8 @@ static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
                                              GdkEventWindowState  *event);
+static gboolean terminal_window_key_press_event (GtkWidget      *widget,
+                                                 GdkEventKey    *event);
 
 
 static gboolean terminal_window_delete_event (GtkWidget *widget,
@@ -126,9 +128,6 @@ static void new_window                    (TerminalWindow  *window,
                                            TerminalProfile *profile,
                                            char            *name,
                                            const char      *dir);
-static gboolean key_press_callback	  (GtkWidget      *widget,
-					   GdkEventKey    *event,
-					   TerminalWindow *window);
 static void detach_tab                    (TerminalScreen *screen,
                                            TerminalWindow *window);
 
@@ -644,9 +643,32 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   return GTK_NOTEBOOK (dest_priv->notebook);
 }
 
+static gboolean
+accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
+{
+  GdkModifierType modifiers;
+
+  /* Compare the keyval */
+  if (event->keyval != key->accel_key)
+    return FALSE;
+
+  /* Compare the modifier keys */
+  modifiers = GDK_MODIFIER_MASK & event->state;
+
+  if (modifiers & GDK_LOCK_MASK)
+    modifiers -= GDK_LOCK_MASK;
+  if (modifiers & GDK_MOD2_MASK)
+    modifiers -= GDK_MOD2_MASK;
+
+  if (modifiers != key->accel_mods)
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 terminal_window_realized_callback (GtkWidget *window,
-				   gpointer   user_data)
+                                   gpointer   user_data)
 {
   gdk_window_set_group (window->window, window->window);
   g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
@@ -670,6 +692,43 @@ terminal_window_state_event (GtkWidget            *widget,
   
   /* Call any other handlers there may be */
   return GTK_WIDGET_CLASS (terminal_window_parent_class)->window_state_event (widget, event);
+}
+
+static gboolean
+terminal_window_key_press_event (GtkWidget *widget,
+                                 GdkEventKey *event)
+{
+#if 0
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAccelKey key;
+
+  /* We just pass the keys when there's no tabs */
+  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook)) == 1)
+    return FALSE;
+
+  /* On first page? */
+  if (!GTK_WIDGET_IS_SENSITIVE (priv->previous_tab_menuitem))
+    {
+      if (gtk_accel_map_lookup_entry (ACCEL_PATH_PREV_TAB, &key))
+        {
+          if (accel_event_key_match (event, &key))
+	    return TRUE;
+	}
+    }
+
+  /* On last page? */
+  if (!GTK_WIDGET_IS_SENSITIVE (priv->next_tab_menuitem))
+    {
+      if (gtk_accel_map_lookup_entry (ACCEL_PATH_NEXT_TAB, &key))
+        {
+          if (accel_event_key_match (event, &key))
+	    return TRUE;
+	}
+    }
+#endif
+
+  return GTK_WIDGET_CLASS (terminal_window_parent_class)->key_press_event (widget, event);
 }
 
 static void
@@ -952,13 +1011,6 @@ terminal_window_init (TerminalWindow *window)
 
   /* FIXMEchpe remove */
   update_zoom_items (window);
-
-
-  /* Capture the key presses */
-    /* FIXMEchpe */
-  g_signal_connect (G_OBJECT(window), "key-press-event",
-		    G_CALLBACK (key_press_callback), window);
-
 
   terminal_window_reread_profile_list (window);
   
@@ -2607,66 +2659,6 @@ terminal_reset_clear_callback (GtkAction *action,
   widget = terminal_screen_get_widget (priv->active_term);
 
   terminal_widget_reset (widget, TRUE);
-}
-
-static gboolean
-accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
-{
-  GdkModifierType modifiers;
-
-  /* Compare the keyval */
-  if (event->keyval != key->accel_key)
-    return FALSE;
-
-  /* Compare the modifier keys */
-  modifiers = GDK_MODIFIER_MASK & event->state;
-
-  if (modifiers & GDK_LOCK_MASK)
-    modifiers -= GDK_LOCK_MASK;
-  if (modifiers & GDK_MOD2_MASK)
-    modifiers -= GDK_MOD2_MASK;
-
-  if (modifiers != key->accel_mods)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-key_press_callback (GtkWidget *widget,
-		    GdkEventKey *event,
-		    TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GtkAccelKey key;
-
-  /* We just pass the keys when there's no tabs */
-  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook)) == 1)
-    return FALSE;
-
-#if 0
-  /* On first page? */
-  if (!GTK_WIDGET_IS_SENSITIVE (priv->previous_tab_menuitem))
-    {
-      if (gtk_accel_map_lookup_entry (ACCEL_PATH_PREV_TAB, &key))
-        {
-          if (accel_event_key_match (event, &key))
-	    return TRUE;
-	}
-    }
-
-  /* On last page? */
-  if (!GTK_WIDGET_IS_SENSITIVE (priv->next_tab_menuitem))
-    {
-      if (gtk_accel_map_lookup_entry (ACCEL_PATH_NEXT_TAB, &key))
-        {
-          if (accel_event_key_match (event, &key))
-	    return TRUE;
-	}
-    }
-#endif
-
-  return FALSE;
 }
 
 static void
