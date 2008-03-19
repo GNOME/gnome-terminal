@@ -491,8 +491,7 @@ terminal_set_encoding_callback (GtkToggleAction *action,
                                 TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  const char *name;
-  const char *charset;
+  const char *name, *charset;
   GtkWidget *widget;
   
   if (!gtk_toggle_action_get_active (action))
@@ -516,8 +515,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkActionGroup *action_group;
-  GtkAction *action;
-  GList *profiles, *p;
   GSList *group;
   guint n;
   GSList *encodings, *l;
@@ -541,7 +538,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       priv->encodings_action_group = NULL;
     }
 
-    /* FIXMEchpe */
+  /* FIXMEchpe */
   if (priv->active_term == NULL)
     return;
 
@@ -603,6 +600,7 @@ static void
 terminal_menu_activate_callback (GtkAction *action,
                                  TerminalWindow *window)
 {
+  /* FIXMEchpe why? it's already updated when the active term changes */
   terminal_window_update_encoding_menu (window);
 }
 
