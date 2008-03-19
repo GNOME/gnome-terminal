@@ -1019,7 +1019,9 @@ terminal_window_state_event (GtkWidget            *widget,
     }
   
   if (window_state_event)
-    window_state_event (widget, event);
+    return window_state_event (widget, event);
+
+  return FALSE;
 }
 
 static void
