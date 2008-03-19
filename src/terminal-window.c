@@ -82,6 +82,9 @@ struct _TerminalWindowPrivate
   guint present_on_insert : 1;
 };
 
+#define I_(string) g_intern_static_string (string)
+#define PROFILE_DATA_KEY I_("Terminal::Profile")
+
 #define STOCK_NEW_WINDOW NULL
 #define STOCK_NEW_TAB NULL
  
@@ -120,9 +123,7 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
 
 static void new_window                    (TerminalWindow  *window,
                                            TerminalScreen  *screen,
-                                           TerminalProfile *profile,
-                                           char            *name,
-                                           const char      *dir);
+                                           TerminalProfile *profile);
 static void detach_tab                    (TerminalScreen *screen,
                                            TerminalWindow *window);
 
@@ -283,7 +284,7 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   if (priv->active_term == NULL)
     return;
   
-  profile = g_object_get_data (G_OBJECT (action), "Profile");
+  profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   g_assert (profile);
 
   if (terminal_profile_get_forgotten (profile))
@@ -365,7 +366,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (profile_action), TRUE);
 
       g_object_set_data_full (G_OBJECT (profile_action),
-                              "Profile",
+                              PROFILE_DATA_KEY,
                               g_object_ref (profile),
                               (GDestroyNotify) g_object_unref);
       g_signal_connect (profile_action, "toggled",
@@ -388,18 +389,58 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
 }
 
 static void
+terminal_window_create_new_terminal_action (TerminalWindow *window,
+                                            TerminalProfile *profile,
+                                            const char *name,
+                                            guint num,
+                                            GCallback callback)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+  char *profile_name, *display_name;
+
+  profile_name = escape_underscores (terminal_profile_get_visible_name (profile));
+  if (num < 10)
+    {
+      display_name = g_strdup_printf (_("_%d. %s"), num, profile_name);
+    }
+  else if (num < 36)
+    {
+      display_name = g_strdup_printf (_("_%c. %s"), ('A' + num - 10), profile_name);
+    }
+  else
+    {
+      display_name = profile_name;
+      profile_name = NULL;
+    }
+
+  action = gtk_action_new (name, display_name, NULL, NULL);
+  g_free (profile_name);
+  g_free (display_name);
+
+  /* FIXMEchpe: connect to "changed" on the profile */
+  g_object_set_data_full (G_OBJECT (action),
+                          PROFILE_DATA_KEY,
+                          g_object_ref (profile),
+                          (GDestroyNotify) g_object_unref);
+  g_signal_connect (action, "activate", callback, window);
+
+  gtk_action_group_add_action (priv->new_terminal_action_group, action);
+  g_object_unref (action);
+}
+
+#define FILE_NEW_TERMINAL_TAB_UI_PATH     "/menubar/File/FileNewTabProfiles"
+#define FILE_NEW_TERMINAL_WINDOW_UI_PATH  "/menubar/File/FileNewWindowProfiles"
+
+static void
 terminal_window_update_new_terminal_menus (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
   GList *profiles, *p;
-  GSList *group;
-  guint type, n;
-  static const char *types[][7] = {
-    "Window",
-    "Tab"
-  };
+  guint n;
+  gboolean have_single_profile;
 
   /* Remove the old UI */
   if (priv->new_terminal_ui_id != 0)
@@ -415,25 +456,23 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       priv->new_terminal_action_group = NULL;
     }
 
-    /* FIXMEchpe */
-  if (priv->active_term == NULL)
-    return;
-
   profiles = terminal_profile_get_list ();
-  if (profiles == NULL)
-    return;
+  have_single_profile = !profiles || !profiles->next;
 
-  action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
-  gtk_action_set_sensitive (action, profiles->next != NULL /* list length >= 2 */);
+  action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
+  gtk_action_set_visible (action, have_single_profile);
+  action = gtk_action_group_get_action (priv->action_group, "FileNewWindow");
+  gtk_action_set_visible (action, have_single_profile);
 
-  /* Only one profile exists; use that as the default and
-   * don't build the profiles submenus.
-   */
-  if (profiles->next == NULL) {
-    g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
-    g_list_free (profiles);
-    return;
-  }
+  if (have_single_profile)
+    {
+      g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
+      g_list_free (profiles);
+
+      return;
+    }
+
+  /* Now build the submenus */
 
   action_group = priv->new_terminal_action_group = gtk_action_group_new ("NewTerminal");
   gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
@@ -441,61 +480,38 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
   priv->new_terminal_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
 
-  group = NULL;
   n = 0;
   for (p = profiles; p != NULL; p = p->next)
     {
       TerminalProfile *profile = (TerminalProfile *) p->data;
-      GtkRadioAction *profile_action;
-      char name[32];
       char *profile_name, *display_name;
+      char name[32];
 
-      g_snprintf (name, sizeof (name), "TerminalNew%s%u", types[type], n++);
-
-      profile_name = escape_underscores (terminal_profile_get_visible_name (profile));
-      if (n < 10) {
-        display_name = g_strdup_printf (_("_%d. %s"), n, profile_name);
-      } else if (n < 36) {
-        display_name = g_strdup_printf (_("_%c. %s"), ('A' + n - 10), profile_name);
-      } else {
-        display_name = profile_name;
-        profile_name = NULL;
-      }
-
-      profile_action = gtk_radio_action_new (name,
-                                             display_name,
-                                             NULL,
-                                             NULL,
-                                             n);
-      g_free (profile_name);
-      g_free (display_name);
-
-      /* FIXMEchpe: connect to "changed" on the profile */
-
-      gtk_radio_action_set_group (profile_action, group);
-      group = gtk_radio_action_get_group (profile_action);
-
-      if (profile == terminal_screen_get_profile (priv->active_term))
-        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (profile_action), TRUE);
-
-      g_object_set_data_full (G_OBJECT (profile_action),
-                              "Profile",
-                              g_object_ref (profile),
-                              (GDestroyNotify) g_object_unref);
-      g_signal_connect (profile_action, "toggled",
-                        G_CALLBACK (terminal_set_profile_toggled_callback), window);
-
-      gtk_action_group_add_action (action_group, GTK_ACTION (profile_action));
-      g_object_unref (profile_action);
+      g_snprintf (name, sizeof (name), "FileNewTab%u", n);
+      terminal_window_create_new_terminal_action (window,
+                                                  profile,
+                                                  name,
+                                                  n,
+                                                  G_CALLBACK (file_new_tab_callback));
 
       gtk_ui_manager_add_ui (priv->ui_manager, priv->new_terminal_ui_id,
-                             PROFILES_UI_PATH,
+                             FILE_NEW_TERMINAL_TAB_UI_PATH,
                              name, name,
                              GTK_UI_MANAGER_MENUITEM, FALSE);
+
+      g_snprintf (name, sizeof (name), "FileNewWindow%u", n);
+      terminal_window_create_new_terminal_action (window,
+                                                  profile,
+                                                  name,
+                                                  n,
+                                                  G_CALLBACK (file_new_window_callback));
+
       gtk_ui_manager_add_ui (priv->ui_manager, priv->new_terminal_ui_id,
-                             PROFILES_POPUP_UI_PATH,
+                             FILE_NEW_TERMINAL_WINDOW_UI_PATH,
                              name, name,
                              GTK_UI_MANAGER_MENUITEM, FALSE);
+
+      ++n;
     }
 
   g_list_free (profiles);
@@ -1287,6 +1303,8 @@ terminal_window_init (TerminalWindow *window)
     {
       /* Toplevel */
       { "File", NULL, N_("_File") },
+      { "FileNewTabProfiles", NULL, N_("Open _Terminal") },
+      { "FileNewWindowProfiles", NULL, N_("Open Ta_b") },
       { "Edit", NULL, N_("_Edit") },
       { "View", NULL, N_("_View") },
       { "Terminal", NULL, N_("_Terminal") },
@@ -1298,7 +1316,7 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewWindow", STOCK_NEW_WINDOW, N_("Open _Terminal"), NULL,
         NULL,
         G_CALLBACK (file_new_window_callback) },
-      { "FileNewTab", STOCK_NEW_TAB, N_("Open T_ab"), "<shift><control>T",
+      { "FileNewTab", STOCK_NEW_TAB, N_("Open Ta_b"), "<shift><control>T",
         NULL,
         G_CALLBACK (file_new_tab_callback) },
       { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile…"), NULL,
@@ -1731,9 +1749,7 @@ profile_set_callback (TerminalScreen *screen,
                       TerminalWindow *window)
 {
   terminal_window_update_set_profile_menu (window);
-
-  /* and the open-new-profile menu */
-  fill_in_new_term_submenus (window);
+  terminal_window_update_new_terminal_menus (window);
 }
 
 static void
@@ -2112,7 +2128,7 @@ terminal_window_set_active (TerminalWindow *window,
   update_copy_sensitivity (window);
   
   terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
-  fill_in_new_term_submenus (window);
+  terminal_window_update_new_terminal_menus (window);
   terminal_window_update_encoding_menu (window);
   update_zoom_sensitivity (window);
 }
@@ -2401,48 +2417,37 @@ terminal_window_update_geometry (TerminalWindow *window)
 #endif
 }
 
-/*
- * Callbacks for the menus
- */
-
 static void
 file_new_window_callback (GtkAction *action,
                           TerminalWindow *window)
 {
-#if 0
   TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
 
-  /* FIXMechpe */
-  profile = g_object_get_data (G_OBJECT (menuitem),
-                               "profile");
+  profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
+  if (!profile)
+    profile = terminal_profile_get_default ();
+  if (!profile)
+    return;
 
-  g_assert (profile);
+  if (terminal_profile_get_forgotten (profile))
+    return;
 
-  if (!terminal_profile_get_forgotten (profile))
-    {
-      char *name;
-      const char *dir;
-      
-      name = gdk_screen_make_display_name (gtk_widget_get_screen (menuitem));
-      dir = terminal_screen_get_working_dir (priv->active_term);
-
-      new_window (window, NULL, profile, name, dir);
-
-      g_free (name);
-    }
-#endif
+  new_window (window, NULL, profile);
 }
 
 static void
 new_window (TerminalWindow *window,
             TerminalScreen *screen,
-            TerminalProfile *profile,
-            char *name,
-            const char *dir)
+            TerminalProfile *profile)
 {
   TerminalWindowPrivate *priv = window->priv;
-  char *geometry;
+  char *display_name, *geometry;
+  const char *dir;
+
+  display_name = gdk_screen_make_display_name (gtk_widget_get_screen (GTK_WIDGET (window)));
+
+  dir = terminal_screen_get_working_dir (priv->active_term);
 
   if (screen)
     {
@@ -2464,39 +2469,38 @@ new_window (TerminalWindow *window,
                              screen,
                              FALSE, FALSE, FALSE,
                              NULL, geometry, NULL, dir, NULL, 1.0,
-                             NULL, name, -1);
+                             NULL, display_name, -1);
 
   g_free (geometry);
+  g_free (display_name);
 }
 
 static void
 file_new_tab_callback (GtkAction *action,
                        TerminalWindow *window)
 {
-#if 0
   TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
-  
-  profile = g_object_get_data (G_OBJECT (menuitem),
-                               "profile");
+  const char *dir;
 
-  g_assert (profile);
+  profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
+  if (!profile)
+    profile = terminal_profile_get_default ();
+  if (!profile)
+    return;
 
-  if (!terminal_profile_get_forgotten (profile))
-    {
-      const char *dir;
+  if (terminal_profile_get_forgotten (profile))
+    return;
+      
+  dir = terminal_screen_get_working_dir (priv->active_term);
 
-      dir = terminal_screen_get_working_dir (priv->active_term);
-
-      terminal_app_new_terminal (terminal_app_get (),
-                                 profile,
-                                 window,
-                                 NULL,
-                                 FALSE, FALSE, FALSE,
-                                 NULL, NULL, NULL, dir, NULL, 1.0,
-                                 NULL, NULL, -1);
-    }
-#endif
+  terminal_app_new_terminal (terminal_app_get (),
+                             profile,
+                             window,
+                             NULL,
+                             FALSE, FALSE, FALSE,
+                             NULL, NULL, NULL, dir, NULL, 1.0,
+                             NULL, NULL, -1);
 }
 
 static gboolean
@@ -2870,6 +2874,7 @@ tabs_move_right_callback (GtkAction *action,
   update_tabs_menu_sensitivity (window);
 }
 
+/* FIXMEchpe this is bogus bogus! */
 static void
 detach_tab (TerminalScreen  *screen,
             TerminalWindow  *window)
@@ -2881,18 +2886,10 @@ detach_tab (TerminalScreen  *screen,
 
   g_assert (profile);
 
-  if (!terminal_profile_get_forgotten (profile))
-    {
-      char *name;
-      const char *dir;
-
-      name = gdk_screen_make_display_name (gtk_widget_get_screen (GTK_WIDGET (window)));
-      dir = terminal_screen_get_working_dir (priv->active_term);
-
-      new_window (window, screen, profile, name, dir);
-
-      g_free (name);
-    }
+  if (terminal_profile_get_forgotten (profile))
+    return;
+      
+  new_window (window, screen, profile);
 }
 
 static void
