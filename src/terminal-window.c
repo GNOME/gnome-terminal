@@ -1382,8 +1382,8 @@ terminal_window_class_init (TerminalWindowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   
-  object_class->finalize = terminal_window_finalize;
   object_class->dispose = terminal_window_dispose;
+  object_class->finalize = terminal_window_finalize;
 
   g_print ("window class init\n");
   widget_class->show = terminal_window_show;
@@ -1421,6 +1421,12 @@ terminal_window_dispose (GObject *object)
 
   priv->disposed = TRUE;
 
+  if (priv->tabs_menu)
+    {
+      g_object_unref (priv->tabs_menu);
+      priv->tabs_menu = NULL;
+    }
+
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
    
@@ -1441,8 +1447,6 @@ terminal_window_finalize (GObject *object)
     }
 
   g_free (priv->startup_id);
-
-  g_object_unref (priv->tabs_menu);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
