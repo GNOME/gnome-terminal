@@ -688,6 +688,8 @@ terminal_widget_im_merge_ui(GtkWidget *widget,
                             const char *ui_path,
                             GtkActionGroup **action_group)
 {
+#if 0
   return vte_terminal_im_merge_ui(VTE_TERMINAL(widget), manager, group_name,
                                   ui_path, action_group);
+#endif
 }
