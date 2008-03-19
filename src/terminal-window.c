@@ -641,7 +641,7 @@ update_copy_sensitivity (TerminalWindow *window)
 }
 
 static void
-update_zoom_sensitivity (TerminalWindow *window)
+terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen;
@@ -1336,10 +1336,6 @@ terminal_window_init (TerminalWindow *window)
 		    G_CALLBACK (gtk_true),
 		    NULL);
 
-
-  /* FIXMEchpe remove */
-  update_zoom_sensitivity (window);
-
   terminal_window_reread_profile_list (window);
   
   terminal_window_set_menubar_visible (window, TRUE);
@@ -1914,7 +1910,7 @@ terminal_window_set_active (TerminalWindow *window,
   terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
   terminal_window_update_new_terminal_menus (window);
   terminal_window_update_encoding_menu (window);
-  update_zoom_sensitivity (window);
+  terminal_window_update_zoom_sensitivity (window);
 }
 
 TerminalScreen*
@@ -2514,7 +2510,7 @@ view_zoom_in_callback (GtkAction *action,
   if (find_larger_zoom_factor (current, &current))
     {
       terminal_screen_set_font_scale (priv->active_term, current);
-      update_zoom_sensitivity (window);
+      terminal_window_update_zoom_sensitivity (window);
     }
 }
 
@@ -2534,7 +2530,7 @@ view_zoom_out_callback (GtkAction *action,
   if (find_smaller_zoom_factor (current, &current))
     {
       terminal_screen_set_font_scale (priv->active_term, current);
-      update_zoom_sensitivity (window);
+      terminal_window_update_zoom_sensitivity (window);
     }
 }
 
@@ -2548,7 +2544,7 @@ view_zoom_normal_callback (GtkAction *action,
     return;
 
   terminal_screen_set_font_scale (priv->active_term, PANGO_SCALE_MEDIUM);
-  update_zoom_sensitivity (window);
+  terminal_window_update_zoom_sensitivity (window);
 }
 
 static void
