@@ -56,6 +56,9 @@ struct _TerminalWindowPrivate
   TerminalScreenPopupInfo *popup_info;
   guint remove_popup_info_idle;
 
+  GtkActionGroup *new_terminal_action_group;
+  guint new_terminal_ui_id;
+
   GtkWidget *menubar;
   GtkWidget *notebook;
   guint terms;
@@ -71,8 +74,6 @@ struct _TerminalWindowPrivate
 
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
-  guint use_mnemonics : 1;   /* config key value */
-  guint using_mnemonics : 1; /* current menubar state */
 
   /* Compositing manager integration */
   guint have_argb_visual : 1;
@@ -189,10 +190,6 @@ static void help_contents_callback        (GtkAction *action,
 static void help_about_callback           (GtkAction *action,
                                            TerminalWindow *window);
 
-static void set_menuitem_text (GtkWidget  *mi,
-                               const char *text,
-                               gboolean    strip_mnemonic);
-
 static gboolean find_larger_zoom_factor  (double  current,
                                           double *found);
 static gboolean find_smaller_zoom_factor (double  current,
@@ -210,84 +207,43 @@ G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 /* Menubar mnemonics settings handling */
 
 static void
-menuitem_set_mnemonic (GtkBin *menu_item,
-                       gpointer data)
-{
-  gboolean enable = GPOINTER_TO_UINT (data);
-  GtkWidget *label;
-  GtkAction *action;
-  char *text;
-
-  if (!GTK_IS_MENU_ITEM (menu_item))
-    return;
-
-  label = gtk_bin_get_child (menu_item);
-
-  action = gtk_widget_get_action (GTK_WIDGET (menu_item));
-  g_assert (action != NULL);
-
-  g_object_get (action, "label", &text, NULL);
-  if (enable)
-    gtk_label_set_text_with_mnemonic (GTK_LABEL (label), text);
-  else
-    {
-      char *src, *dest;
-
-      src = dest = text;
-      while (*src)
-        {
-          if (*src != '_')
-            {
-              *dest = *src;
-              ++dest;
-            }
-
-          ++src;
-        }
-      *dest = '\0';
-
-      gtk_label_set_text (GTK_LABEL (label), text);
-    }
-  g_free (text);
-}
-
-static void
-mnemonics_setting_apply (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  gboolean want_mnemonics;
-
-  want_mnemonics = priv->use_mnemonics;
-  if (want_mnemonics == priv->using_mnemonics)
-    return;
-
-  priv->using_mnemonics = want_mnemonics;
-  gtk_container_foreach (GTK_CONTAINER (priv->menubar),
-                         (GtkCallback) menuitem_set_mnemonic,
-                         GUINT_TO_POINTER (want_mnemonics));
-}
-
-static void
 mnemonics_setting_change_notify (GConfClient *client,
                                  guint        cnxn_id,
                                  GConfEntry  *entry,
                                  gpointer     user_data)
 {
+  GdkScreen *screen;
+  GtkSettings *settings;
   GConfValue *val;
-  TerminalWindow *window = TERMINAL_WINDOW (user_data);
-  TerminalWindowPrivate *priv = window->priv;
 
-  val = gconf_entry_get_value (entry);
-  
   if (strcmp (gconf_entry_get_key (entry),
-              CONF_GLOBAL_PREFIX"/use_mnemonics") == 0)
-    {      
-      if (val && val->type == GCONF_VALUE_BOOL)
-        {
-          priv->use_mnemonics = gconf_value_get_bool (val);
-          mnemonics_setting_apply (window);
-        }
-    }
+              CONF_GLOBAL_PREFIX"/use_mnemonics") != 0)
+    return;
+ 
+  val = gconf_entry_get_value (entry);
+  if (!val || val->type != GCONF_VALUE_BOOL)
+    return;
+
+  screen = GDK_SCREEN (user_data);
+  settings = gtk_settings_get_for_screen (screen);
+  g_object_set (settings,
+                "gtk-enable-mnemonics",
+                gconf_value_get_bool (val),
+                NULL);
+}
+
+static void
+mnemonics_setting_change_destroy (GdkScreen *screen)
+{
+  GConfClient *client;
+  guint id;
+
+  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (screen), "terminal-settings-connection"));
+  g_assert (id != 0);
+
+  client = gconf_client_get_default ();
+  gconf_client_notify_remove (client, id);
+  g_object_unref (client);
 }
 
 /* utility functions */
@@ -431,7 +387,6 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   g_list_free (profiles);
 }
 
-#if 0
 static void
 terminal_window_update_new_terminal_menus (TerminalWindow *window)
 {
@@ -499,9 +454,9 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
       profile_name = escape_underscores (terminal_profile_get_visible_name (profile));
       if (n < 10) {
-        display_name = g_strdup_printf (_("_%d. %s"), i, profile_name);
+        display_name = g_strdup_printf (_("_%d. %s"), n, profile_name);
       } else if (n < 36) {
-        display_name = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), profile_name);
+        display_name = g_strdup_printf (_("_%c. %s"), ('A' + n - 10), profile_name);
       } else {
         display_name = profile_name;
         profile_name = NULL;
@@ -545,7 +500,6 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
   g_list_free (profiles);
 }
-#endif
 
 static void
 fill_in_new_term_submenu_real(GtkWidget *menuitem, 
@@ -1184,6 +1138,10 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   g_signal_connect (popup_menu, "deactivate",
                     G_CALLBACK (popup_menu_deactivate_callback), window);
 
+  /* Pseudo activation of the popup menu's action */
+  action = gtk_action_group_get_action (priv->action_group, "Popup");
+  gtk_action_activate (action);
+
   gtk_menu_popup (GTK_MENU (popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
@@ -1274,20 +1232,57 @@ terminal_window_key_press_event (GtkWidget *widget,
 }
 
 static void
+terminal_window_settings_update (GtkWidget *widget)
+{
+  GdkScreen *screen;
+  GConfClient *client;
+  gboolean use_mnemonics;
+  guint id;
+
+  if (!gtk_widget_has_screen (widget))
+    return;
+
+  screen = gtk_widget_get_screen (widget);
+  if (0 != GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (screen), "terminal-settings-connection")))
+    return;
+
+  client = gconf_client_get_default ();
+  id = gconf_client_notify_add (client,
+                                CONF_GLOBAL_PREFIX "/use_mnemonics",
+                                mnemonics_setting_change_notify,
+                                screen,
+                                NULL, NULL);
+  g_object_set_data_full (G_OBJECT (screen), "terminal-settings-connection",
+                          GUINT_TO_POINTER (id),
+                          (GDestroyNotify) mnemonics_setting_change_destroy);
+
+  use_mnemonics = gconf_client_get_bool (client,
+                                          CONF_GLOBAL_PREFIX "/use_mnemonics",
+                                          NULL);
+  g_object_unref (client);
+
+  g_object_set (gtk_settings_get_for_screen (screen),
+                "gtk-enable-mnemonics",
+                use_mnemonics,
+                NULL);
+}
+
+static void
+terminal_window_screen_changed (GtkWidget *widget,
+                                GdkScreen *previous_screen)
+{
+  void (* screen_changed) (GtkWidget *, GdkScreen *) =
+    GTK_WIDGET_CLASS (terminal_window_parent_class)->screen_changed;
+
+  if (screen_changed)
+    screen_changed (widget, previous_screen);
+
+  terminal_window_settings_update (widget);
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv;
-  GtkActionGroup *action_group;
-  GtkAction *action;
-  GtkUIManager *manager;
-  GtkWidget *main_vbox;
-
-  GtkWidget *mi;
-  GtkWidget *menu;
-  GtkAccelGroup *accel_group;
-  GError *error;
-  gboolean use_mnemonics;
-
   const GtkActionEntry menu_entries[] =
     {
       /* Toplevel */
@@ -1297,6 +1292,7 @@ terminal_window_init (TerminalWindow *window)
       { "Terminal", NULL, N_("_Terminal") },
       { "Tabs", NULL, N_("_Tabs") },
       { "Help", NULL, N_("_Help") },
+      { "Popup", NULL, NULL },
 
       /* File menu */
       { "FileNewWindow", STOCK_NEW_WINDOW, N_("Open _Terminal"), NULL,
@@ -1432,6 +1428,16 @@ terminal_window_init (TerminalWindow *window)
         G_CALLBACK (view_fullscreen_toggled_callback),
         FALSE }
     };
+  TerminalWindowPrivate *priv;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GtkUIManager *manager;
+  GtkWidget *main_vbox;
+  GtkWidget *mi;
+  GtkWidget *menu;
+  GtkAccelGroup *accel_group;
+  GError *error;
+
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
@@ -1474,26 +1480,6 @@ terminal_window_init (TerminalWindow *window)
   priv->old_geometry_widget = NULL;
   
   priv->conf = gconf_client_get_default ();
-
-  priv->notify_id =
-    gconf_client_notify_add (priv->conf,
-                             CONF_GLOBAL_PREFIX,
-                             mnemonics_setting_change_notify,
-                             window,
-                             NULL, NULL);
-  error = NULL;
-  use_mnemonics = gconf_client_get_bool (priv->conf,
-                                         CONF_GLOBAL_PREFIX"/use_mnemonics",
-                                         &error);
-  if (error)
-    {
-      g_error_free (error);
-      use_mnemonics = TRUE;
-    }
-  
-  priv->use_mnemonics = use_mnemonics;
-
-  priv->using_mnemonics = TRUE;
 
   initialize_alpha_mode (window);
 
@@ -1565,7 +1551,10 @@ terminal_window_init (TerminalWindow *window)
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
 
-  mnemonics_setting_apply (window);
+  /* We have to explicitly call this, since screen-changed is NOT
+   * emitted for the toplevel the first time!
+   */
+  terminal_window_settings_update (GTK_WIDGET (window));
 }
 
 static void
@@ -1577,8 +1566,10 @@ terminal_window_class_init (TerminalWindowClass *klass)
   object_class->finalize = terminal_window_finalize;
   object_class->dispose = terminal_window_dispose;
 
+  g_print ("window class init\n");
   widget_class->show = terminal_window_show;
   widget_class->window_state_event = terminal_window_state_event;
+  widget_class->screen_changed = terminal_window_screen_changed;
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
