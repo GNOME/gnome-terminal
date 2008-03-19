@@ -1216,7 +1216,18 @@ terminal_window_init (TerminalWindow *window)
   gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->notebook), FALSE);
   gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->notebook), FALSE);
   gtk_notebook_set_group_id (GTK_NOTEBOOK (priv->notebook), 1);
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook),
+                               TRUE);                                      
+  g_signal_connect_after (priv->notebook, "switch-page",
+                          G_CALLBACK (notebook_page_selected_callback), window);
+  g_signal_connect_after (priv->notebook, "page-added",
+                          G_CALLBACK (notebook_page_added_callback), window);
+  g_signal_connect_after (priv->notebook, "page-removed",
+                          G_CALLBACK (notebook_page_removed_callback), window);
   
+  gtk_box_pack_end (GTK_BOX (main_vbox), priv->notebook, TRUE, TRUE, 0);
+  gtk_widget_show (priv->notebook);
+
   priv->old_char_width = -1;
   priv->old_char_height = -1;
   priv->old_geometry_widget = NULL;
@@ -1253,30 +1264,6 @@ terminal_window_init (TerminalWindow *window)
   accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   
-  gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook),
-                               TRUE);                                      
-  
-  g_signal_connect_after (G_OBJECT (priv->notebook),
-                          "switch-page",
-                          G_CALLBACK (notebook_page_selected_callback),
-                          window);
-
-  g_signal_connect_after (G_OBJECT (priv->notebook),
-                          "page-added",
-                          G_CALLBACK (notebook_page_added_callback),
-                          window);
-
-  g_signal_connect_after (G_OBJECT (priv->notebook),
-                          "page-removed",
-                          G_CALLBACK (notebook_page_removed_callback),
-                          window);
-  
-  gtk_box_pack_end (GTK_BOX (main_vbox),
-                    priv->notebook,
-                    TRUE, TRUE, 0);
-  gtk_widget_show (priv->notebook);
-
-
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window),
