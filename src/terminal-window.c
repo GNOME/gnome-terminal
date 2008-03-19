@@ -23,7 +23,7 @@
 
 #include <config.h>
 
-#include <glib/gi18n.h>
+#include "terminal-intl.h"
 
 #include "terminal-accels.h"
 #include "terminal-widget.h"
@@ -82,7 +82,6 @@ struct _TerminalWindowPrivate
   guint present_on_insert : 1;
 };
 
-#define I_(string) g_intern_static_string (string)
 #define PROFILE_DATA_KEY I_("Terminal::Profile")
 
 #define STOCK_NEW_WINDOW NULL

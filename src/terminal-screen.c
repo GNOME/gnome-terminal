@@ -20,7 +20,7 @@
  */
 
 #include <config.h>
-#include <glib/gi18n.h>
+#include "terminal-intl.h"
 
 /* grab gtk_style_get_font and gdk_x11_get_font_name */
 #undef GTK_DISABLE_DEPRECATED

@@ -20,7 +20,7 @@
  */
 
 #include <config.h>
-#include <glib/gi18n.h>
+#include "terminal-intl.h"
 
 #include "terminal-widget.h"
 

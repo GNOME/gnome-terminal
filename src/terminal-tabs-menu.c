@@ -25,7 +25,7 @@
 #include "terminal-tabs-menu.h"
 #include "terminal-screen.h"
 
-#include <glib/gi18n.h>
+#include "terminal-intl.h"
 #include <gtk/gtklabel.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkaccelmap.h>

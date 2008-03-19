@@ -21,7 +21,7 @@
  */
 
 #include <config.h>
-#include <glib/gi18n.h>
+#include "terminal-intl.h"
 
 #include "terminal-profile.h"
 #include <gtk/gtk.h>
