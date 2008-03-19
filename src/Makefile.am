@@ -42,6 +42,8 @@ gnome_terminal_SOURCES=				\
 	terminal-profile.h			\
 	terminal-screen.c			\
 	terminal-screen.h			\
+	terminal-tabs-menu.c			\
+	terminal-tabs-menu.h			\
 	terminal-widget.h			\
 	terminal-widget-vte.c			\
 	terminal-window.c			\

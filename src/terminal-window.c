@@ -27,6 +27,7 @@
 #include "terminal-accels.h"
 #include "terminal-widget.h"
 #include "terminal-window.h"
+#include "terminal-tabs-menu.h"
 #include "terminal.h"
 #include "encoding.h"
 #include <string.h>
@@ -52,6 +53,8 @@ struct _TerminalWindowPrivate
 
   GtkActionGroup *encodings_action_group;
   guint encodings_ui_id;
+
+  TerminalTabsMenu *tabs_menu;
 
   GtkWidget *menubar;
   GtkWidget *notebook;
@@ -1085,6 +1088,9 @@ terminal_window_init (TerminalWindow *window)
 		      FALSE, FALSE, 0);
   gtk_widget_show (priv->menubar);
 
+  /* Add tabs menu */
+  priv->tabs_menu = terminal_tabs_menu_new (window);
+
   /* FIXMEchpe remove this*/
   g_signal_connect (priv->menubar, "can-activate-accel",
 		    G_CALLBACK (gtk_true),
@@ -1169,6 +1175,8 @@ terminal_window_finalize (GObject *object)
     }
 
   g_free (priv->startup_id);
+
+  g_object_unref (priv->tabs_menu);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
@@ -2937,4 +2945,12 @@ terminal_window_set_startup_id (TerminalWindow *window,
 
   g_free (priv->startup_id);
   priv->startup_id = g_strdup (startup_id);
+}
+
+GtkUIManager *
+terminal_window_get_ui_manager (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  return priv->ui_manager;
 }

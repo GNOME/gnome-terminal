@@ -23,6 +23,7 @@
 #define TERMINAL_WINDOW_H
 
 #include <gtk/gtkwindow.h>
+#include <gtk/gtkuimanager.h>
 #include "terminal-screen.h"
 
 G_BEGIN_DECLS
@@ -53,6 +54,8 @@ struct _TerminalWindowClass
 GType terminal_window_get_type (void) G_GNUC_CONST;
 
 TerminalWindow* terminal_window_new (void);
+
+GtkUIManager *terminal_window_get_ui_manager (TerminalWindow *window);
 
 void terminal_window_add_screen (TerminalWindow *window,
                                  TerminalScreen *screen,
