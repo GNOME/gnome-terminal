@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <config.h>
 #include <glib/gi18n.h>
 
 /* grab gtk_style_get_font and gdk_x11_get_font_name */

@@ -3,6 +3,7 @@
  * (See rfc2289 and rfc1760)
  */
 
+#include <config.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
