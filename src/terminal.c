@@ -36,6 +36,7 @@
 #include <libgnome/gnome-program.h>
 #include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-ui-init.h>
+#include <libgnomeui/gnome-url.h>
 #include <libgnomeui/gnome-client.h>
 #include <string.h>
 #include <stdlib.h>
