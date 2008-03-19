@@ -840,8 +840,8 @@ unset_popup_info (TerminalWindow *window)
   TerminalWindowPrivate *priv = window->priv;
 
   /* Unref the event from idle since we still need it
-    * from the action callbacks which will run before idle.
-    */
+   * from the action callbacks which will run before idle.
+   */
   if (priv->remove_popup_info_idle == 0 &&
       priv->popup_info != NULL)
     {
@@ -1789,13 +1789,6 @@ terminal_window_list_screens (TerminalWindow *window)
   return gtk_container_get_children (GTK_CONTAINER (priv->notebook));
 }
 
-int
-terminal_window_get_screen_count (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  return priv->terms;
-}
-
 void
 terminal_window_set_menubar_visible (TerminalWindow *window,
                                      gboolean        setting)
@@ -2151,13 +2144,14 @@ notebook_page_removed_callback (GtkWidget       *notebook,
   update_tab_sensitivity (window);
   update_tab_visibility (window, 0);
 
-  pages = terminal_window_get_screen_count (window);
+  pages = priv->terms;
   if (pages == 1)
     {
       terminal_window_set_size (window, priv->active_term, TRUE);
     }
   else if (pages == 0)
     {
+      /* FIXMEchpe!!! DO NOT DO THIS FROM THIS CALLBACK !!!!!!! */
       gtk_widget_destroy (GTK_WIDGET (window));
     }
 }

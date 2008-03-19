@@ -78,7 +78,6 @@ TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 
 /* In order of their tabs in the notebook */
 GList* terminal_window_list_screens (TerminalWindow *window);
-int    terminal_window_get_screen_count (TerminalWindow *window);
 
 void terminal_window_update_icon      (TerminalWindow *window);
 void terminal_window_update_geometry  (TerminalWindow *window);
