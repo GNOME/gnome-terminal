@@ -84,6 +84,12 @@ struct _TerminalWindowPrivate
 
 #define PROFILE_DATA_KEY I_("Terminal::Profile")
 
+
+#define FILE_NEW_TERMINAL_TAB_UI_PATH     "/menubar/File/FileNewTabProfiles"
+#define FILE_NEW_TERMINAL_WINDOW_UI_PATH  "/menubar/File/FileNewWindowProfiles"
+#define SET_ENCODING_ACTION_NAME_PREFIX "TerminalSetEncoding"
+#define SET_ENCODING_UI_PATH "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
+
 #define STOCK_NEW_WINDOW NULL
 #define STOCK_NEW_TAB NULL
  
@@ -93,9 +99,6 @@ static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
                                              GdkEventWindowState  *event);
-static gboolean terminal_window_key_press_event (GtkWidget      *widget,
-                                                 GdkEventKey    *event);
-
 
 static gboolean terminal_window_delete_event (GtkWidget *widget,
                                               GdkEvent *event,
@@ -428,9 +431,6 @@ terminal_window_create_new_terminal_action (TerminalWindow *window,
   g_object_unref (action);
 }
 
-#define FILE_NEW_TERMINAL_TAB_UI_PATH     "/menubar/File/FileNewTabProfiles"
-#define FILE_NEW_TERMINAL_WINDOW_UI_PATH  "/menubar/File/FileNewWindowProfiles"
-
 static void
 terminal_window_update_new_terminal_menus (TerminalWindow *window)
 {
@@ -517,136 +517,6 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 }
 
 static void
-fill_in_new_term_submenu_real(GtkWidget *menuitem, 
-                              TerminalWindow *window,
-                              const char *accel, 
-                              TerminalProfile *current_profile, 
-                              GCallback callback) 
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  GList *profiles;
-
-  gtk_widget_set_sensitive (menuitem, TRUE);
-  
-  /* remove older signal handler and accelerator */
-  g_signal_handlers_disconnect_by_func (G_OBJECT (menuitem), G_CALLBACK (callback), window);
-  gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menuitem), NULL);
-
-  profiles = terminal_profile_get_list ();
-
-  if (current_profile == NULL)
-    {
-      /* Well, this shouldn't happen: it'd mean there is no default profile */
-      gtk_widget_set_sensitive (priv->new_window_menuitem, FALSE);
-      gtk_menu_item_remove_submenu (GTK_MENU_ITEM (priv->new_window_menuitem));
-    }
-  else if (g_list_length (profiles) < 2)
-    {
-      if (gtk_menu_item_get_submenu (GTK_MENU_ITEM (menuitem)))
-        gtk_menu_item_remove_submenu (GTK_MENU_ITEM (menuitem));
-
-      g_signal_connect (G_OBJECT (menuitem), "activate", G_CALLBACK (callback), window);
-      g_object_ref (G_OBJECT (current_profile));
-      g_object_set_data_full (G_OBJECT (menuitem), "profile", current_profile, (GDestroyNotify) g_object_unref);  
-      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menuitem), accel);
-    }
-  else
-    {
-      GtkWidget *new_sub_menu;
-      GtkWidget *menu_item;
-      GtkAccelGroup *accel_group;
-      GList *tmp;
-      int i;
-
-      accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));  
-
-      /* New submenu */
-      new_sub_menu = gtk_menu_new ();
-      gtk_menu_set_accel_group (GTK_MENU (new_sub_menu), accel_group);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), new_sub_menu);
-
-      /* Add default menu item */
-      menu_item = gtk_menu_item_new_with_label (terminal_profile_get_visible_name (current_profile));
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);
-      g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (callback), window);
-      g_object_ref (G_OBJECT (current_profile));
-      g_object_set_data_full (G_OBJECT (menu_item), "profile", current_profile, (GDestroyNotify) g_object_unref);  
-      gtk_menu_item_set_accel_path (GTK_MENU_ITEM (menu_item), accel);
-      
-      /* separator */
-      menu_item = gtk_separator_menu_item_new ();
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);
-
-      for (i = 1, tmp = profiles; tmp != NULL; i++, tmp = tmp->next)
-        {
-          TerminalProfile *profile;
-          char *escaped_name, *str;
-          
-          profile = tmp->data;
-          
-          /* Profiles can go away while the menu is up. */
-          g_object_ref (G_OBJECT (profile));
-
-          escaped_name = escape_underscores (terminal_profile_get_visible_name (profile));
-
-          if (i < 10)
-            str = g_strdup_printf (_("_%d. %s"), i, escaped_name);
-          else if (i < 36)
-            str = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), escaped_name);
-          else
-            str = g_strdup (escaped_name);
-
-          /* item for new window */
-          menu_item = gtk_menu_item_new_with_mnemonic (str);
-          gtk_widget_show (menu_item);
-          gtk_menu_shell_append (GTK_MENU_SHELL (new_sub_menu), menu_item);      
-          g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (callback), window);      
-          g_object_set_data_full (G_OBJECT (menu_item), "profile", profile, (GDestroyNotify) g_object_unref);
-
-          g_free (str);
-          g_free (escaped_name);
-          
-        }
-
-    }
-  g_list_free (profiles);
-#endif
-}
-
-static void
-fill_in_new_term_submenus (TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  TerminalProfile *current_profile;
-
-  current_profile = NULL;
-
-  if (priv->active_term != NULL)
-    current_profile = terminal_screen_get_profile (priv->active_term);
-
-  /* if current_profile is still NULL, this will change it to a default */
-  current_profile = terminal_profile_get_for_new_term (current_profile);
-  
-  fill_in_new_term_submenu_real (priv->new_window_menuitem,
-                                 window,
-                                 ACCEL_PATH_NEW_WINDOW,
-                                 current_profile,
-                                 G_CALLBACK (new_window_callback));
-  fill_in_new_term_submenu_real (priv->new_tab_menuitem,
-                                 window,
-                                 ACCEL_PATH_NEW_TAB,
-                                 current_profile,
-                                 G_CALLBACK (new_tab_callback));
-#endif
-}
-
-#define SET_ENCODING_ACTION_NAME_PREFIX "TerminalSetEncoding"
-
-static void
 terminal_set_encoding_callback (GtkToggleAction *action,
                                 TerminalWindow *window)
 {
@@ -667,8 +537,6 @@ terminal_set_encoding_callback (GtkToggleAction *action,
   widget = terminal_screen_get_widget (priv->active_term);
   terminal_widget_set_encoding (widget, charset);
 }
-
-#define SET_ENCODING_UI_PATH "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
 
 static void
 terminal_window_update_encoding_menu (TerminalWindow *window)
@@ -929,31 +797,6 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   return GTK_NOTEBOOK (dest_priv->notebook);
 }
 
-#if 0
-static gboolean
-accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
-{
-  GdkModifierType modifiers;
-
-  /* Compare the keyval */
-  if (event->keyval != key->accel_key)
-    return FALSE;
-
-  /* Compare the modifier keys */
-  modifiers = GDK_MODIFIER_MASK & event->state;
-
-  if (modifiers & GDK_LOCK_MASK)
-    modifiers -= GDK_LOCK_MASK;
-  if (modifiers & GDK_MOD2_MASK)
-    modifiers -= GDK_MOD2_MASK;
-
-  if (modifiers != key->accel_mods)
-    return FALSE;
-
-  return TRUE;
-}
-#endif
-
 static void
 terminal_window_realized_callback (GtkWidget *window,
                                    gpointer   user_data)
@@ -1207,43 +1050,6 @@ terminal_window_state_event (GtkWidget            *widget,
   
   if (window_state_event)
     window_state_event (widget, event);
-}
-
-static gboolean
-terminal_window_key_press_event (GtkWidget *widget,
-                                 GdkEventKey *event)
-{
-#if 0
-  TerminalWindow *window = TERMINAL_WINDOW (widget);
-  TerminalWindowPrivate *priv = window->priv;
-  GtkAccelKey key;
-
-  /* We just pass the keys when there's no tabs */
-  if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook)) == 1)
-    return FALSE;
-
-  /* On first page? */
-  if (!GTK_WIDGET_IS_SENSITIVE (priv->previous_tab_menuitem))
-    {
-      if (gtk_accel_map_lookup_entry (ACCEL_PATH_PREV_TAB, &key))
-        {
-          if (accel_event_key_match (event, &key))
-	    return TRUE;
-	}
-    }
-
-  /* On last page? */
-  if (!GTK_WIDGET_IS_SENSITIVE (priv->next_tab_menuitem))
-    {
-      if (gtk_accel_map_lookup_entry (ACCEL_PATH_NEXT_TAB, &key))
-        {
-          if (accel_event_key_match (event, &key))
-	    return TRUE;
-	}
-    }
-#endif
-
-  return GTK_WIDGET_CLASS (terminal_window_parent_class)->key_press_event (widget, event);
 }
 
 static void
@@ -3045,7 +2851,7 @@ terminal_window_reread_profile_list (TerminalWindow *window)
   monitor_profiles_for_is_default_change (window);
   
   terminal_window_update_set_profile_menu (window);
-  fill_in_new_term_submenus (window);
+  terminal_window_update_new_terminal_menus (window);
 }
 
 void
