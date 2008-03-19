@@ -379,6 +379,10 @@ terminal_tabs_menu_class_init (TerminalTabsMenuClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (TerminalTabsMenuPrivate));
+
+
+        /* We don't want to save accels, so skip them */
+        gtk_accel_map_add_filter ("<Actions>/TabsActions/JmpTab*");
 }
 
 static void
