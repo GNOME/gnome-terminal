@@ -1730,23 +1730,23 @@ update_tabs_menu_sensitivity (TerminalWindow *window)
   GtkActionGroup *action_group = priv->action_group;
   GtkAction *action;
   int num_pages, page_num;
-  gboolean have_prev_tab, have_next_tab;
+  gboolean not_first, not_last;
 
   g_return_if_fail (!priv->disposed);
 
   num_pages = gtk_notebook_get_n_pages (notebook);
   page_num = gtk_notebook_get_current_page (notebook);
-  have_prev_tab = page_num > 0;
-  have_next_tab = page_num < num_pages - 1;
+  not_first = page_num > 0;
+  not_last = page_num + 1 < num_pages;
 
   action = gtk_action_group_get_action (action_group, "TabsPrevious");
-  gtk_action_set_sensitive (action, have_prev_tab);
+  gtk_action_set_sensitive (action, not_first);
   action = gtk_action_group_get_action (action_group, "TabsNext");
-  gtk_action_set_sensitive (action, have_next_tab);
+  gtk_action_set_sensitive (action, not_last);
   action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-  gtk_action_set_sensitive (action, have_prev_tab);
+  gtk_action_set_sensitive (action, not_first);
   action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-  gtk_action_set_sensitive (action, have_next_tab);
+  gtk_action_set_sensitive (action, not_last);
   action = gtk_action_group_get_action (action_group, "TabsDetach");
   gtk_action_set_sensitive (action, num_pages > 0);
   action = gtk_action_group_get_action (action_group, "FileCloseTab");
@@ -1762,8 +1762,11 @@ selection_changed_callback (TerminalScreen *screen,
   update_copy_sensitivity (window);
 }
 
+/* Notebook callbacks */
+
 static void
-close_button_clicked_cb (GtkWidget *widget, GtkWidget *screen)
+close_button_clicked_cb (GtkWidget *widget,
+                         GtkWidget *screen)
 {
   GtkWidget *notebook;
   guint page_num;
