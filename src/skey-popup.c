@@ -37,6 +37,7 @@ extract_seq_and_seed (const gchar  *skey_match,
 {
   gchar *end_ptr = NULL;
 
+  /* FIXME: use g_ascii_strtoll */
   *seq = strtol (skey_match + strlen (SKEY_PREFIX), &end_ptr, 0);
 
   if (end_ptr == NULL || *end_ptr == '\000')
@@ -83,6 +84,7 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
       p++;
     }
 
+  /* FIXME: use g_ascii_strtoll */
   *seq = strtol (p, &end_ptr, 0);
 
   if (end_ptr == NULL || *end_ptr == '\000')
@@ -97,6 +99,7 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
       p++;
     }
 
+  /* FIXME: allocator mismatch */
   *seed = strdup (p);
 
   return TRUE;
@@ -185,6 +188,7 @@ terminal_skey_do_popup (TerminalScreen *screen,
       gchar *response;
       
       password = gtk_entry_get_text (GTK_ENTRY (entry));
+      /* FIXME: fix skey to use g_malloc */
       response = skey (hash, seq, seed, password);
       if (response)
 	{
