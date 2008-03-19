@@ -761,16 +761,24 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   g_slist_free (encodings);
 }
 
+/* Actions stuff */
+
 static void
-terminal_menu_activate_callback (GtkAction *action,
-                                 TerminalWindow *window)
+update_copy_sensitivity (TerminalWindow *window)
 {
-  /* FIXMEchpe why? it's already updated when the active term changes */
-  terminal_window_update_encoding_menu (window);
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+  gboolean can_copy = FALSE;
+
+  if (priv->active_term)
+    can_copy = terminal_screen_get_text_selected (priv->active_term);
+
+  action = gtk_action_group_get_action (priv->action_group, "EditCopy");
+  gtk_action_set_sensitive (action, can_copy);
 }
 
 static void
-update_zoom_items (TerminalWindow *window)
+update_zoom_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen;
@@ -802,6 +810,14 @@ update_edit_menu (GtkClipboard *clipboard,
 }
 
 static void
+terminal_menu_activate_callback (GtkAction *action,
+                                 TerminalWindow *window)
+{
+  /* FIXMEchpe why? it's already updated when the active term changes */
+  terminal_window_update_encoding_menu (window);
+}
+
+static void
 edit_menu_activate_callback (GtkMenuItem *menuitem,
                              gpointer     user_data)
 {
@@ -809,6 +825,39 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
   TerminalWindowPrivate *priv = window->priv;
 
   gtk_clipboard_request_text (priv->clipboard, (GtkClipboardTextReceivedFunc) update_edit_menu, window);
+}
+
+static void
+update_tabs_menu_sensitivity (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
+  GtkActionGroup *action_group = priv->action_group;
+  GtkAction *action;
+  int num_pages, page_num;
+  gboolean not_first, not_last;
+
+  g_return_if_fail (!priv->disposed);
+
+  num_pages = gtk_notebook_get_n_pages (notebook);
+  page_num = gtk_notebook_get_current_page (notebook);
+  not_first = page_num > 0;
+  not_last = page_num + 1 < num_pages;
+
+  action = gtk_action_group_get_action (action_group, "TabsPrevious");
+  gtk_action_set_sensitive (action, not_first);
+  action = gtk_action_group_get_action (action_group, "TabsNext");
+  gtk_action_set_sensitive (action, not_last);
+  action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
+  gtk_action_set_sensitive (action, not_first);
+  action = gtk_action_group_get_action (action_group, "TabsMoveRight");
+  gtk_action_set_sensitive (action, not_last);
+  action = gtk_action_group_get_action (action_group, "TabsDetach");
+  gtk_action_set_sensitive (action, num_pages > 0);
+  action = gtk_action_group_get_action (action_group, "FileCloseTab");
+  gtk_action_set_sensitive (action, num_pages > 0);
+//   action = gtk_action_group_get_action (action_group, "PopupCloseTab");
+//   gtk_action_set_sensitive (action, page_num > 0);
 }
 
 static void
@@ -843,7 +892,7 @@ terminal_window_uses_argb_visual (TerminalWindow *window)
 
 static void
 update_tab_visibility (TerminalWindow *window,
-                        int             change)
+                       int             change)
 {
   TerminalWindowPrivate *priv = window->priv;
   gboolean show_tabs;
@@ -885,6 +934,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   return GTK_NOTEBOOK (dest_priv->notebook);
 }
 
+#if 0
 static gboolean
 accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
 {
@@ -907,6 +957,7 @@ accel_event_key_match (GdkEventKey *event, GtkAccelKey *key)
 
   return TRUE;
 }
+#endif
 
 static void
 terminal_window_realized_callback (GtkWidget *window,
@@ -1483,7 +1534,7 @@ terminal_window_init (TerminalWindow *window)
 
 
   /* FIXMEchpe remove */
-  update_zoom_items (window);
+  update_zoom_sensitivity (window);
 
   terminal_window_reread_profile_list (window);
   
@@ -1705,54 +1756,6 @@ icon_title_changed_callback (TerminalScreen *screen,
 
   if (screen == priv->active_term)
     gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
-}
-
-
-static void
-update_copy_sensitivity (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GtkAction *action;
-  gboolean can_copy = FALSE;
-
-  if (priv->active_term)
-    can_copy = terminal_screen_get_text_selected (priv->active_term);
-
-  action = gtk_action_group_get_action (priv->action_group, "EditCopy");
-  gtk_action_set_sensitive (action, can_copy);
-}
-
-static void
-update_tabs_menu_sensitivity (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
-  GtkActionGroup *action_group = priv->action_group;
-  GtkAction *action;
-  int num_pages, page_num;
-  gboolean not_first, not_last;
-
-  g_return_if_fail (!priv->disposed);
-
-  num_pages = gtk_notebook_get_n_pages (notebook);
-  page_num = gtk_notebook_get_current_page (notebook);
-  not_first = page_num > 0;
-  not_last = page_num + 1 < num_pages;
-
-  action = gtk_action_group_get_action (action_group, "TabsPrevious");
-  gtk_action_set_sensitive (action, not_first);
-  action = gtk_action_group_get_action (action_group, "TabsNext");
-  gtk_action_set_sensitive (action, not_last);
-  action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
-  gtk_action_set_sensitive (action, not_first);
-  action = gtk_action_group_get_action (action_group, "TabsMoveRight");
-  gtk_action_set_sensitive (action, not_last);
-  action = gtk_action_group_get_action (action_group, "TabsDetach");
-  gtk_action_set_sensitive (action, num_pages > 0);
-  action = gtk_action_group_get_action (action_group, "FileCloseTab");
-  gtk_action_set_sensitive (action, num_pages > 0);
-//   action = gtk_action_group_get_action (action_group, "PopupCloseTab");
-//   gtk_action_set_sensitive (action, page_num > 0);
 }
 
 static void
@@ -2100,7 +2103,7 @@ terminal_window_set_active (TerminalWindow *window,
   terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
   fill_in_new_term_submenus (window);
   terminal_window_update_encoding_menu (window);
-  update_zoom_items (window);
+  update_zoom_sensitivity (window);
 }
 
 TerminalScreen*
@@ -2712,7 +2715,7 @@ view_zoom_in_callback (GtkAction *action,
   if (find_larger_zoom_factor (current, &current))
     {
       terminal_screen_set_font_scale (priv->active_term, current);
-      update_zoom_items (window);
+      update_zoom_sensitivity (window);
     }
 }
 
@@ -2732,7 +2735,7 @@ view_zoom_out_callback (GtkAction *action,
   if (find_smaller_zoom_factor (current, &current))
     {
       terminal_screen_set_font_scale (priv->active_term, current);
-      update_zoom_items (window);
+      update_zoom_sensitivity (window);
     }
 }
 
@@ -2746,7 +2749,7 @@ view_zoom_normal_callback (GtkAction *action,
     return;
 
   terminal_screen_set_font_scale (priv->active_term, PANGO_SCALE_MEDIUM);
-  update_zoom_items (window);
+  update_zoom_sensitivity (window);
 }
 
 static void
