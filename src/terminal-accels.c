@@ -56,10 +56,6 @@
 #define ACCEL_PATH_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
 #define ACCEL_PATH_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
 
-#define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
-#define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"
-#define N_TABS_WITH_ACCEL 11
-
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
 #define KEY_NEW_PROFILE CONF_KEYS_PREFIX"/new_profile"
@@ -81,7 +77,6 @@
 #define KEY_ZOOM_IN CONF_KEYS_PREFIX"/zoom_in"
 #define KEY_ZOOM_OUT CONF_KEYS_PREFIX"/zoom_out"
 #define KEY_ZOOM_NORMAL CONF_KEYS_PREFIX"/zoom_normal"
-#define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
 {
@@ -161,42 +156,6 @@ static KeyEntry go_entries[] =
     KEY_MOVE_TAB_RIGHT, ACCEL_PATH_MOVE_TAB_RIGHT, 0, 0, NULL, FALSE },
   { N_("Detach Tab"),
     KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 1"),
-    PREFIX_KEY_SWITCH_TO_TAB"1",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"1", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 2"),
-    PREFIX_KEY_SWITCH_TO_TAB"2",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"2", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 3"),
-    PREFIX_KEY_SWITCH_TO_TAB"3",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"3", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 4"),
-    PREFIX_KEY_SWITCH_TO_TAB"4",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"4", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 5"),
-    PREFIX_KEY_SWITCH_TO_TAB"5",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"5", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 6"),
-    PREFIX_KEY_SWITCH_TO_TAB"6",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"6", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 7"),
-    PREFIX_KEY_SWITCH_TO_TAB"7",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"7", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 8"),
-    PREFIX_KEY_SWITCH_TO_TAB"8",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"8", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 9"),
-    PREFIX_KEY_SWITCH_TO_TAB"9",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"9", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 10"),
-    PREFIX_KEY_SWITCH_TO_TAB"10",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"10", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 11"),
-    PREFIX_KEY_SWITCH_TO_TAB"11",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"11", 0, 0, NULL, FALSE },
-  { N_("Switch to Tab 12"),
-    PREFIX_KEY_SWITCH_TO_TAB"12",
-    PREFIX_ACCEL_PATH_SWITCH_TO_TAB"12", 0, 0, NULL, FALSE }
 };
 
 static KeyEntry help_entries[] = {
