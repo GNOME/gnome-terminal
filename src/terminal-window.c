@@ -38,10 +38,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>
 
-/* Parameters for the ellipsization in the Tabs menu */
-#define TAB_MENU_WIDTH_CHARS    35
-#define TAB_MENU_ELLIPSIZE      PANGO_ELLIPSIZE_END
-
 struct _TerminalWindowPrivate
 {
   GtkActionGroup *action_group;
@@ -233,11 +229,10 @@ menuitem_set_mnemonic (GtkBin *menu_item,
     gtk_label_set_text_with_mnemonic (GTK_LABEL (label), text);
   else
     {
-      char *src, *dest, *new_text;
+      char *src, *dest;
 
-      src = text;
-      new_text = dest = g_new (char, strlen (text) + 1);
-
+      g_print ("text: %s\n", text);
+      src = dest = text;
       while (*src)
         {
           if (*src != '_')
@@ -249,9 +244,9 @@ menuitem_set_mnemonic (GtkBin *menu_item,
           ++src;
         }
       *dest = '\0';
+      g_print ("dest: %s\n", text);
 
-      gtk_label_set_text (GTK_LABEL (label), new_text);
-      g_free (new_text);
+      gtk_label_set_text (GTK_LABEL (label), text);
     }
   g_free (text);
 }
@@ -260,13 +255,9 @@ static void
 mnemonics_setting_apply (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  gboolean want_mnemonics, enable_mnemonics;
+  gboolean want_mnemonics;
 
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-enable-mnemonics", &enable_mnemonics,
-                NULL);
-  want_mnemonics = enable_mnemonics && priv->use_mnemonics;
-
+  want_mnemonics = priv->use_mnemonics;
   if (want_mnemonics == priv->using_mnemonics)
     return;
 
@@ -276,12 +267,11 @@ mnemonics_setting_apply (TerminalWindow *window)
                          GUINT_TO_POINTER (want_mnemonics));
 }
 
-/* FIXMEchpe: also update this when the gtk setting changes! */
 static void
-mnemonics_gconf_change_notify (GConfClient *client,
-                               guint        cnxn_id,
-                               GConfEntry  *entry,
-                               gpointer     user_data)
+mnemonics_setting_change_notify (GConfClient *client,
+                                 guint        cnxn_id,
+                                 GConfEntry  *entry,
+                                 gpointer     user_data)
 {
   GConfValue *val;
   TerminalWindow *window = TERMINAL_WINDOW (user_data);
@@ -1323,7 +1313,7 @@ terminal_window_init (TerminalWindow *window)
   priv->notify_id =
     gconf_client_notify_add (priv->conf,
                              CONF_GLOBAL_PREFIX,
-                             mnemonics_gconf_change_notify,
+                             mnemonics_setting_change_notify,
                              window,
                              NULL, NULL);
   error = NULL;
