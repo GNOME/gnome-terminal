@@ -678,3 +678,14 @@ terminal_widget_im_append_menuitems(GtkWidget *widget, GtkMenuShell *menushell)
 {
   vte_terminal_im_append_menuitems(VTE_TERMINAL(widget), menushell);
 }
+
+guint
+terminal_widget_im_merge_ui(GtkWidget *widget,
+                            GtkUIManager *manager,
+                            const char *group_name,
+                            const char *ui_path,
+                            GtkActionGroup **action_group)
+{
+  return vte_terminal_im_merge_ui(VTE_TERMINAL(widget), manager, group_name,
+                                  ui_path, action_group);
+}
