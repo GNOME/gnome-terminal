@@ -74,11 +74,15 @@ struct _TerminalScreenPrivate
 
 enum {
   PROFILE_SET,
-  TITLE_CHANGED,
   ICON_TITLE_CHANGED,
   SELECTION_CHANGED,
   ENCODING_CHANGED,
   LAST_SIGNAL
+};
+
+enum {
+  PROP_0,
+  PROP_TITLE
 };
 
 enum {
@@ -402,6 +406,25 @@ terminal_screen_init (TerminalScreen *screen)
 }
 
 static void
+terminal_screen_get_property (GObject *object,
+                              guint prop_id,
+                              GValue *value,
+                              GParamSpec *pspec)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (object);
+
+  switch (prop_id)
+    {
+      case PROP_TITLE:
+        g_value_set_string (value, terminal_screen_get_title (screen));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
 terminal_screen_class_init (TerminalScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -409,6 +432,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   object_class->dispose = terminal_screen_dispose;
   object_class->finalize = terminal_screen_finalize;
+  object_class->get_property = terminal_screen_get_property;
 
   widget_class->unrealize = terminal_screen_unrealize;
   widget_class->size_allocate = terminal_screen_size_allocate;
@@ -416,21 +440,12 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->size_request = terminal_screen_size_request;
   widget_class->map = terminal_screen_map;
   widget_class->grab_focus = terminal_screen_grab_focus;
-  
+
   signals[PROFILE_SET] =
     g_signal_new ("profile_set",
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, profile_set),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
-  signals[TITLE_CHANGED] =
-    g_signal_new ("title_changed",
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, title_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
@@ -461,6 +476,13 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  g_object_class_install_property (object_class,
+                                   PROP_TITLE,
+                                   g_param_spec_string ("title", NULL, NULL,
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 }
@@ -777,7 +799,7 @@ static void
 terminal_screen_cook_title (TerminalScreen *screen)
 {
   if (cook_title (screen, screen->priv->raw_title, &screen->priv->cooked_title))
-    g_signal_emit (G_OBJECT (screen), signals[TITLE_CHANGED], 0);
+    g_object_notify (G_OBJECT (screen), "title");
 }
 
 static void 

@@ -54,7 +54,6 @@ struct _TerminalScreenClass
   GtkBinClass parent_class;
 
   void (* profile_set)        (TerminalScreen *screen);
-  void (* title_changed)      (TerminalScreen *screen);
   void (* icon_title_changed) (TerminalScreen *screen);
   void (* selection_changed)  (TerminalScreen *screen);
   void (* encoding_changed)   (TerminalScreen *screen);

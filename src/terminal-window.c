@@ -1287,6 +1287,7 @@ profile_set_callback (TerminalScreen *screen,
 
 static void
 title_changed_callback (TerminalScreen *screen,
+                        GParamSpec *psepc,
                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
@@ -1412,6 +1413,7 @@ close_button_clicked_cb (GtkWidget *widget, GtkWidget *screen)
 
 static void
 sync_tab_label (TerminalScreen *screen,
+                GParamSpec *pspec,
                 GtkWidget *label)
 {
   GtkWidget *hbox;
@@ -1464,15 +1466,13 @@ contruct_tab_label (TerminalWindow *window, TerminalScreen *screen)
   gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
-  g_signal_connect (G_OBJECT (close_button), "clicked",
-		    G_CALLBACK (close_button_clicked_cb),
-		    screen);
+  sync_tab_label (screen, NULL, label);
+  g_signal_connect (screen, "notify::title",
+                    G_CALLBACK (sync_tab_label), label);
 
-  sync_tab_label (screen, label);
-  g_signal_connect (G_OBJECT (screen),
-                    "title-changed",
-                    G_CALLBACK (sync_tab_label),
-                    label);
+  g_signal_connect (close_button, "clicked",
+		    G_CALLBACK (close_button_clicked_cb), screen);
+
   g_signal_connect (hbox, "style-set",
                     G_CALLBACK (tab_label_style_set_cb), close_button);
 
@@ -1830,7 +1830,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     window);
 
   g_signal_connect (G_OBJECT (screen),
-                    "title-changed",
+                    "notify::title",
                     G_CALLBACK (title_changed_callback),
                     window);
 
