@@ -3,6 +3,7 @@
 /*
  * Copyright (C) 2001 Havoc Pennington
  * Copyright (C) 2002 Red Hat, Inc.
+ * Copyright (C) 2007 Christian Persch
  *
  * This file is part of gnome-terminal.
  *
@@ -19,6 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include <config.h>
 
 #include "terminal-intl.h"
 #include "terminal-accels.h"
@@ -43,6 +46,9 @@ struct _TerminalWindowPrivate
   GtkActionGroup *action_group;
   GtkUIManager *ui_manager;
   guint ui_id;
+
+  GtkActionGroup *profiles_action_group;
+  guint profiles_ui_id;
 
   GtkWidget *menubar;
   GtkWidget *notebook;
@@ -209,80 +215,13 @@ static gboolean find_smaller_zoom_factor (double  current,
 static void terminal_window_show (GtkWidget *widget);
 
 static gboolean confirm_close_window (TerminalWindow *window);
+static void
+profile_set_callback (TerminalScreen *screen,
+                      TerminalWindow *window);
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
-                    
-static void
-fill_in_config_picker_submenu (TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *menu;
-  GtkWidget *menu_item;
-  GList *profiles;
-  GList *tmp;
-  GSList *group;
-  GtkAccelGroup *accel_group;
-
-  profiles = terminal_profile_get_list ();
-
-  if (priv->active_term == NULL || g_list_length (profiles) < 2)
-    {
-      gtk_widget_set_sensitive (priv->choose_config_menuitem, FALSE);
-      gtk_menu_item_remove_submenu (GTK_MENU_ITEM (priv->choose_config_menuitem));
-      g_list_free (profiles);
-
-      return;
-    }
-  
-  gtk_widget_set_sensitive (priv->choose_config_menuitem, TRUE);
-
-  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));  
-  
-  menu = gtk_menu_new ();
-  gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->choose_config_menuitem),
-                             menu);
-  
-  group = NULL;
-  tmp = profiles;
-  while (tmp != NULL)
-    {
-      TerminalProfile *profile;
-      
-      profile = tmp->data;
-      
-      /* Profiles can go away while the menu is up. */
-      g_object_ref (G_OBJECT (profile));
-
-      menu_item = gtk_radio_menu_item_new_with_label (group,
-                                                      terminal_profile_get_visible_name (profile));
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_widget_show (menu_item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                             menu_item);
-      
-      if (profile == terminal_screen_get_profile (priv->active_term))
-        gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item),
-                                        TRUE);
-      
-      g_signal_connect (G_OBJECT (menu_item),
-                        "toggled",
-                        G_CALLBACK (change_configuration_callback),
-                        window);
-      
-      g_object_set_data_full (G_OBJECT (menu_item),
-                              "profile",
-                              profile,
-                              (GDestroyNotify) g_object_unref);
-      
-      tmp = tmp->next;
-    }
-
-  g_list_free (profiles);
-#endif
-}
+#define PROFILES_UI_PATH "/menubar/Terminal/TerminalProfiles/StartPH"
 
 static char *
 escape_underscores (const char *name)
@@ -304,6 +243,113 @@ escape_underscores (const char *name)
     }
 
   return g_string_free (escaped_name, FALSE);
+}
+
+static void
+terminal_set_profile_toggled_callback (GtkToggleAction *action,
+                                       TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalProfile *profile;
+
+  if (!gtk_toggle_action_get_active (action))
+    return;
+
+  if (priv->active_term == NULL)
+    return;
+  
+  profile = g_object_get_data (G_OBJECT (action), "Profile");
+  g_assert (profile);
+
+  if (terminal_profile_get_forgotten (profile))
+    return;
+      
+  g_signal_handlers_block_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
+  terminal_screen_set_profile (priv->active_term, profile);    
+  g_signal_handlers_unblock_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
+}
+
+static void
+terminal_window_update_set_profile_menu (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkActionGroup *action_group;
+  GtkAction *action;
+  GList *profiles, *p;
+  GSList *group;
+  guint n;
+
+  /* Remove the old UI */
+  if (priv->profiles_ui_id != 0)
+    {
+      gtk_ui_manager_remove_ui (priv->ui_manager, priv->profiles_ui_id);
+      priv->profiles_ui_id = 0;
+    }
+
+  if (priv->profiles_action_group != NULL)
+    {
+      gtk_ui_manager_remove_action_group (priv->ui_manager,
+                                          priv->profiles_action_group);
+      priv->profiles_action_group = NULL;
+    }
+
+    /* FIXMEchpe */
+  if (priv->active_term == NULL)
+    return;
+
+  profiles = terminal_profile_get_list ();
+  if (profiles == NULL)
+    return;
+
+  action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
+  gtk_action_set_sensitive (action, profiles->next != NULL /* list length >= 2 */);
+
+  action_group = priv->profiles_action_group = gtk_action_group_new ("Profiles");
+  gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
+  g_object_unref (action_group);
+
+  priv->profiles_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
+
+  group = NULL;
+  n = 0;
+  for (p = profiles; p != NULL; p = p->next)
+    {
+      TerminalProfile *profile = (TerminalProfile *) p->data;
+      GtkRadioAction *profile_action;
+      char name[32];
+      char *display_name;
+
+      g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
+      display_name = escape_underscores (terminal_profile_get_visible_name (profile));
+      profile_action = gtk_radio_action_new (name,
+                                             display_name,
+                                             NULL,
+                                             NULL,
+                                             n);
+      g_free (display_name);
+
+      /* FIXMEchpe: connect to "changed" on the profile */
+
+      gtk_radio_action_set_group (profile_action, group);
+      group = gtk_radio_action_get_group (profile_action);
+
+      if (profile == terminal_screen_get_profile (priv->active_term))
+        gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (profile_action), TRUE);
+
+      g_object_set_data_full (G_OBJECT (profile_action),
+                              "Profile",
+                              g_object_ref (profile),
+                              (GDestroyNotify) g_object_unref);
+      g_signal_connect (profile_action, "toggled",
+                        G_CALLBACK (terminal_set_profile_toggled_callback), window);
+
+      gtk_ui_manager_add_ui (priv->ui_manager, priv->profiles_ui_id,
+                             PROFILES_UI_PATH,
+                             name, name,
+                             GTK_UI_MANAGER_MENUITEM, FALSE);
+    }
+
+  g_list_free (profiles);
 }
 
 static void
@@ -678,6 +724,9 @@ static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
 {
+  gboolean (* window_state_event) (GtkWidget *, GdkEventWindowState *event) =
+      GTK_WIDGET_CLASS (terminal_window_parent_class)->window_state_event;
+
   if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
     {
       TerminalWindow *window = TERMINAL_WINDOW (widget);
@@ -690,8 +739,8 @@ terminal_window_state_event (GtkWidget            *widget,
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), priv->fullscreen);
     }
   
-  /* Call any other handlers there may be */
-  return GTK_WIDGET_CLASS (terminal_window_parent_class)->window_state_event (widget, event);
+  if (window_state_event)
+    window_state_event (widget, event);
 }
 
 static gboolean
@@ -1197,8 +1246,8 @@ static void
 profile_set_callback (TerminalScreen *screen,
                       TerminalWindow *window)
 {
-  /* Redo the pick-a-profile menu */
-  fill_in_config_picker_submenu (window);
+  terminal_window_update_set_profile_menu (window);
+
   /* and the open-new-profile menu */
   fill_in_new_term_submenus (window);
 }
@@ -1658,7 +1707,7 @@ terminal_window_set_active (TerminalWindow *window,
   
   update_copy_sensitivity (window);
   
-  fill_in_config_picker_submenu (window);
+  terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
   fill_in_new_term_submenus (window);
   fill_in_encoding_menu (window);
   update_zoom_items (window);
@@ -2398,34 +2447,6 @@ edit_keybindings_callback (GtkAction *action,
 }
 
 static void
-change_configuration_callback (GtkAction *action,
-                               TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  TerminalProfile *profile;
-
-  if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (menu_item)))
-    return;
-
-  if (priv->active_term == NULL)
-    return;
-  
-  profile = g_object_get_data (G_OBJECT (menu_item),
-                               "profile");
-
-  g_assert (profile);
-
-  if (!terminal_profile_get_forgotten (profile))
-    {
-      g_signal_handlers_block_by_func (G_OBJECT (priv->active_term), G_CALLBACK (profile_set_callback), window);
-      terminal_screen_set_profile (priv->active_term, profile);
-      g_signal_handlers_unblock_by_func (G_OBJECT (priv->active_term), G_CALLBACK (profile_set_callback), window);
-    }
-#endif
-}
-
-static void
 edit_current_profile_callback (GtkAction *action,
                                TerminalWindow *window)
 {
@@ -2896,7 +2917,7 @@ terminal_window_reread_profile_list (TerminalWindow *window)
   
   monitor_profiles_for_is_default_change (window);
   
-  fill_in_config_picker_submenu (window);
+  terminal_window_update_set_profile_menu (window);
   fill_in_new_term_submenus (window);
 }
 
