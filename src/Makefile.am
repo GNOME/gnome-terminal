@@ -60,6 +60,10 @@ schema_DATA = gnome-terminal.schemas
 icondir = $(datadir)/pixmaps
 icon_DATA = gnome-terminal.png
 
+uidir = $(pkgdatadir)
+ui_DATA = \
+	terminal.ui
+
 CLEANFILES = gnome-terminal.schemas
 
 EXTRA_DIST =				\
@@ -67,6 +71,7 @@ EXTRA_DIST =				\
 	$(glade_DATA)			\
 	$(schema_in_files)		\
 	$(server_DATA)			\
+	$(ui_DATA)			\
 	update-from-egg.sh		\
 	terminal-widget-vte.c
 
