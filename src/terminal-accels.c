@@ -412,25 +412,6 @@ terminal_accels_init (GConfClient *conf)
     }
 }
 
-GtkAccelGroup*
-terminal_accels_get_group_for_widget (GtkWidget *widget)
-{
-  GtkAccelGroup *group;
-
-  group = g_object_get_data (G_OBJECT (widget), "terminal-accel-group");
-
-  if (group == NULL)
-    {
-      group = gtk_accel_group_new ();
-      g_object_set_data_full (G_OBJECT (widget),
-                              "terminal-accel-group",
-                              group,
-                              (GDestroyNotify) g_object_unref);
-    }
-
-  return group;
-}
-
 static gboolean
 update_model_foreach (GtkTreeModel *model,
 		      GtkTreePath  *path,

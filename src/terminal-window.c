@@ -1487,10 +1487,6 @@ terminal_window_init (TerminalWindow *window)
   /* FIXMEchpe is that really true still ?? */
   priv->clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
 
-  /* FIXMEchpe !!!! */
-  accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
-  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
-  
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window),
