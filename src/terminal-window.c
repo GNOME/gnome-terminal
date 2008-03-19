@@ -3,7 +3,7 @@
 /*
  * Copyright (C) 2001 Havoc Pennington
  * Copyright (C) 2002 Red Hat, Inc.
- * Copyright (C) 2007 Christian Persch
+ * Copyright (C) 2007, 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *
@@ -67,6 +67,7 @@ struct _TerminalWindowPrivate
   GConfClient *conf;
   guint notify_id;
   char *startup_id;
+
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
   guint use_mnemonics : 1;   /* config key value */
@@ -438,7 +439,11 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
   GtkAction *action;
   GList *profiles, *p;
   GSList *group;
-  guint n;
+  guint type, n;
+  static const char *types[][7] = {
+    "Window",
+    "Tab"
+  };
 
   /* Remove the old UI */
   if (priv->new_terminal_ui_id != 0)
@@ -465,7 +470,16 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
   action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
   gtk_action_set_sensitive (action, profiles->next != NULL /* list length >= 2 */);
 
-  action_group = priv->new_terminal_action_group = gtk_action_group_new ("Profiles");
+  /* Only one profile exists; use that as the default and
+   * don't build the profiles submenus.
+   */
+  if (profiles->next == NULL) {
+    g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
+    g_list_free (profiles);
+    return;
+  }
+
+  action_group = priv->new_terminal_action_group = gtk_action_group_new ("NewTerminal");
   gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
   g_object_unref (action_group);
 
@@ -478,15 +492,26 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       TerminalProfile *profile = (TerminalProfile *) p->data;
       GtkRadioAction *profile_action;
       char name[32];
-      char *display_name;
+      char *profile_name, *display_name;
 
-      g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
-      display_name = escape_underscores (terminal_profile_get_visible_name (profile));
+      g_snprintf (name, sizeof (name), "TerminalNew%s%u", types[type], n++);
+
+      profile_name = escape_underscores (terminal_profile_get_visible_name (profile));
+      if (n < 10) {
+        display_name = g_strdup_printf (_("_%d. %s"), i, profile_name);
+      } else if (n < 36) {
+        display_name = g_strdup_printf (_("_%c. %s"), ('A' + i - 10), profile_name);
+      } else {
+        display_name = profile_name;
+        profile_name = NULL;
+      }
+
       profile_action = gtk_radio_action_new (name,
                                              display_name,
                                              NULL,
                                              NULL,
                                              n);
+      g_free (profile_name);
       g_free (display_name);
 
       /* FIXMEchpe: connect to "changed" on the profile */
@@ -1418,8 +1443,6 @@ terminal_window_init (TerminalWindow *window)
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
 
-  gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
-  
   priv->terms = 0;
   priv->active_term = NULL;
   priv->menubar_visible = FALSE;
@@ -1558,7 +1581,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
-        
   gtk_rc_parse_string ("style \"gnome-terminal-tab-close-button-style\"\n"
                        "{\n"
                           "GtkWidget::focus-padding = 0\n"
@@ -1569,6 +1591,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
                        "widget \"*.gnome-terminal-tab-close-button\" style \"gnome-terminal-tab-close-button-style\"");
 
 
+  gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
 }
 
 static void
