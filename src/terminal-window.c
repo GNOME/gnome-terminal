@@ -839,20 +839,6 @@ popup_copy_url_callback (GtkAction *action,
   gtk_clipboard_set_text (clipboard, info->string, -1);
 }
 
-/*static void
-popup_menu_detach (GtkWidget *attach_widget,
-		   GtkMenu   *menu)
-{
-  TerminalScreen *screen;
-
-  screen = g_object_get_data (G_OBJECT (attach_widget), "terminal-screen");
-
-  g_assert (screen);
-
-  screen->priv->popup_menu = NULL;
-}
-*/
-
 static void
 remove_popup_info (TerminalWindow *window)
 {
@@ -995,10 +981,6 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
                   NULL, NULL, 
                   info->button,
                   info->timestamp);
-  /* FIXMEchpe? */
-//   gtk_menu_attach_to_widget (GTK_MENU (screen->priv->popup_menu),
-//                              GTK_WIDGET (screen->priv->term),
-//                              popup_menu_detach);
 }
 
 static void
