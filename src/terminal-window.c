@@ -301,6 +301,7 @@ static void
 terminal_window_update_set_profile_menu (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalProfile *active_profile;
   GtkActionGroup *action_group;
   GtkAction *action;
   GList *profiles, *p;
@@ -321,16 +322,18 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
       priv->profiles_action_group = NULL;
     }
 
-    /* FIXMEchpe */
   if (priv->active_term == NULL)
     return;
 
   profiles = terminal_profile_get_list ();
+
+  action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
+  gtk_action_set_sensitive (action, profiles && profiles->next != NULL /* list length >= 2 */);
+
   if (profiles == NULL)
     return;
 
-  action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
-  gtk_action_set_sensitive (action, profiles->next != NULL /* list length >= 2 */);
+  active_profile = terminal_screen_get_profile (priv->active_term);
 
   action_group = priv->profiles_action_group = gtk_action_group_new ("Profiles");
   gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
@@ -361,7 +364,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
       gtk_radio_action_set_group (profile_action, group);
       group = gtk_radio_action_get_group (profile_action);
 
-      if (profile == terminal_screen_get_profile (priv->active_term))
+      if (profile == active_profile)
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (profile_action), TRUE);
 
       g_object_set_data_full (G_OBJECT (profile_action),
