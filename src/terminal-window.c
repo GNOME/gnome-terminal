@@ -1426,6 +1426,7 @@ terminal_window_init (TerminalWindow *window)
   /* FIXMEchpe is that really true still ?? */
   priv->clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
 
+  /* FIXMEchpe !!!! */
   accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   
@@ -1587,11 +1588,11 @@ static void
 terminal_window_show (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
   SnDisplay *sn_display;
   SnLauncheeContext *context;
   GdkScreen *screen;
   GdkDisplay *display;
-  TerminalWindowPrivate *priv = window->priv;
 
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
@@ -1722,50 +1723,36 @@ update_copy_sensitivity (TerminalWindow *window)
 }
 
 static void
-update_tab_sensitivity (TerminalWindow *window)
+update_tabs_menu_sensitivity (TerminalWindow *window)
 {
-#if 0
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *notebook;
+  GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
+  GtkActionGroup *action_group = priv->action_group;
+  GtkAction *action;
   int num_pages, page_num;
-  gboolean on_last_page;
+  gboolean have_prev_tab, have_next_tab;
 
-  notebook = priv->notebook;
+  g_return_if_fail (!priv->disposed);
 
-  if (notebook == NULL)
-    {
-      return;
-    }
+  num_pages = gtk_notebook_get_n_pages (notebook);
+  page_num = gtk_notebook_get_current_page (notebook);
+  have_prev_tab = page_num > 0;
+  have_next_tab = page_num < num_pages - 1;
 
-  num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
-  page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
-  
-  gtk_widget_set_sensitive (priv->previous_tab_menuitem,
-                            page_num > 0);
-
-  on_last_page = (page_num >= num_pages - 1);
-
-  /* If there's only one tab, Close Tab is insensitive */
-  if (page_num == 0 && on_last_page)
-    {
-      gtk_widget_set_sensitive (priv->close_tab_menuitem, FALSE);
-      gtk_widget_set_sensitive (priv->detach_tab_menuitem, FALSE);
-
-      gtk_widget_set_sensitive (priv->move_left_tab_menuitem, FALSE);
-      gtk_widget_set_sensitive (priv->move_right_tab_menuitem, FALSE);
-    }
-  else
-    {
-      gtk_widget_set_sensitive (priv->close_tab_menuitem, TRUE);
-      gtk_widget_set_sensitive (priv->detach_tab_menuitem, TRUE);
-
-      gtk_widget_set_sensitive (priv->move_left_tab_menuitem, TRUE);
-      gtk_widget_set_sensitive (priv->move_right_tab_menuitem, TRUE);
-    }
-
-  gtk_widget_set_sensitive (priv->next_tab_menuitem,
-                            !on_last_page);
-#endif
+  action = gtk_action_group_get_action (action_group, "TabsPrevious");
+  gtk_action_set_sensitive (action, have_prev_tab);
+  action = gtk_action_group_get_action (action_group, "TabsNext");
+  gtk_action_set_sensitive (action, have_next_tab);
+  action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
+  gtk_action_set_sensitive (action, have_prev_tab);
+  action = gtk_action_group_get_action (action_group, "TabsMoveRight");
+  gtk_action_set_sensitive (action, have_next_tab);
+  action = gtk_action_group_get_action (action_group, "TabsDetach");
+  gtk_action_set_sensitive (action, num_pages > 0);
+  action = gtk_action_group_get_action (action_group, "FileCloseTab");
+  gtk_action_set_sensitive (action, num_pages > 0);
+//   action = gtk_action_group_get_action (action_group, "PopupCloseTab");
+//   gtk_action_set_sensitive (action, page_num > 0);
 }
 
 static void
@@ -2155,7 +2142,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
 
   terminal_window_set_active (window, screen);
 
-  update_tab_sensitivity (window);
+  update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -2198,7 +2185,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_notebook (window);
 
-  update_tab_sensitivity (window);
+  update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
   term = terminal_screen_get_widget (screen);
@@ -2272,7 +2259,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   update_notebook (window);
 
-  update_tab_sensitivity (window);
+  update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
   pages = priv->terms;
@@ -2845,7 +2832,7 @@ tabs_move_left_callback (GtkAction *action,
 
   gtk_notebook_reorder_child (notebook, page, page_num == 0 ? last_page : page_num - 1);
 
-  update_tab_sensitivity (window);
+  update_tabs_menu_sensitivity (window);
 }
 
 static void
@@ -2863,7 +2850,7 @@ tabs_move_right_callback (GtkAction *action,
   
   gtk_notebook_reorder_child (notebook, page, page_num == last_page ? 0 : page_num + 1);
 
-  update_tab_sensitivity (window);
+  update_tabs_menu_sensitivity (window);
 }
 
 static void
