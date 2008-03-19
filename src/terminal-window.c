@@ -63,7 +63,6 @@ struct _TerminalWindowPrivate
   GtkWidget *notebook;
   guint terms;
   TerminalScreen *active_term;
-  GdkPixbuf *icon;
   GtkClipboard *clipboard;
   int old_char_width;
   int old_char_height;
@@ -1397,11 +1396,6 @@ terminal_window_finalize (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
 
-  if (priv->icon)
-    {
-      g_object_unref (G_OBJECT (priv->icon));
-    }
-
   g_free (priv->startup_id);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
@@ -2068,36 +2062,17 @@ void
 terminal_window_update_icon (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GdkPixbuf *new_icon;
   TerminalProfile *profile;
 
-  if (priv->active_term == NULL)
+  if (priv->active_term == NULL ||
+      !(profile = terminal_screen_get_profile (priv->active_term)))
     {
       gtk_window_set_icon (GTK_WINDOW (window), NULL);
       return;
     }
 
-  profile = terminal_screen_get_profile (priv->active_term);
-  if (profile == NULL)
-    {
-      gtk_window_set_icon (GTK_WINDOW (window), NULL);
-      return;
-    }
-  
-  new_icon = terminal_profile_get_icon (profile);
-  
-  if (priv->icon != new_icon)
-    {
-      if (new_icon)
-        g_object_ref (G_OBJECT (new_icon));
-
-      if (priv->icon)
-        g_object_unref (G_OBJECT (priv->icon));
-
-      priv->icon = new_icon;
-
-      gtk_window_set_icon (GTK_WINDOW (window), priv->icon);
-    }
+  gtk_window_set_icon (GTK_WINDOW (window),
+                       terminal_profile_get_icon (profile));
 }
 
 void
