@@ -89,11 +89,9 @@ struct _TerminalWindowPrivate
   guint present_on_insert : 1;
 };
 
-enum {
-  dummy, /* remove this when you add more signals */
-  LAST_SIGNAL
-};
-
+#define STOCK_NEW_WINDOW NULL
+#define STOCK_NEW_TAB NULL
+ 
 static void terminal_window_init        (TerminalWindow      *window);
 static void terminal_window_class_init  (TerminalWindowClass *klass);
 static void terminal_window_dispose     (GObject             *object);
@@ -1063,9 +1061,6 @@ terminal_window_init (TerminalWindow *window)
       { "Help", NULL, N_("_Help") },
 
       /* File menu */
-#define STOCK_NEW_WINDOW NULL
-#define STOCK_NEW_TAB NULL
- 
       { "FileNewWindow", STOCK_NEW_WINDOW, N_("Open _Terminal"), NULL,
         NULL,
         G_CALLBACK (file_new_window_callback) },
@@ -1267,7 +1262,8 @@ terminal_window_init (TerminalWindow *window)
   initialize_alpha_mode (window);
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
-  priv->clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (window)), GDK_NONE);
+  /* FIXMEchpe is that really true still ?? */
+  priv->clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
 
   accel_group = terminal_accels_get_group_for_widget (GTK_WIDGET (window));
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
