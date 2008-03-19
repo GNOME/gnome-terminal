@@ -4,6 +4,7 @@
  * Copyright (C) 2002 Red Hat, Inc.
  * Copyright (C) 2002 Sun Microsystems
  * Copyright (C) 2003 Mariano Suarez-Alvarez
+ * Copyright (C) 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *
