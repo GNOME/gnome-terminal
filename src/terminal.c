@@ -1578,7 +1578,7 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   if (start_fullscreen)
     {
-      terminal_window_set_fullscreen (window, TRUE);
+      gtk_window_fullscreen (GTK_WINDOW (window));
     }
 
   /* don't present on new tab, or we can accidentally make the

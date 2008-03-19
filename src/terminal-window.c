@@ -76,12 +76,6 @@ struct _TerminalWindowPrivate
   guint use_mnemonics : 1;   /* config key value */
   guint using_mnemonics : 1; /* current menubar state */
 
-  /* FIXME we brokenly maintain this flag here instead of
-   * being event-driven, because it's too annoying to be
-   * event-driven while GTK doesn't support _NET_WM_STATE_FULLSCREEN
-   */
-  guint fullscreen : 1;
-
   /* Compositing manager integration */
   guint have_argb_visual : 1;
 
@@ -987,11 +981,12 @@ terminal_window_state_event (GtkWidget            *widget,
       TerminalWindow *window = TERMINAL_WINDOW (widget);
       TerminalWindowPrivate *priv = window->priv;
       GtkAction *action;
+      gboolean is_fullscreen;
 
-      priv->fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
+      is_fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) != 0;
 
       action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), priv->fullscreen);
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_fullscreen);
     }
   
   if (window_state_event)
@@ -2371,30 +2366,6 @@ reset_menubar_labels (TerminalWindow *window)
 #endif
 }
 
-void
-terminal_window_set_fullscreen (TerminalWindow *window,
-                                gboolean        setting)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  
-  g_return_if_fail (GTK_WIDGET_REALIZED (window));
-
-  priv->fullscreen = setting;
-  
-  if (setting)
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  else
-    gtk_window_unfullscreen (GTK_WINDOW (window));
-}
-
-gboolean
-terminal_window_get_fullscreen (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  
-  return priv->fullscreen;
-}
-
 /*
  * Callbacks for the menus
  */
@@ -2632,7 +2603,14 @@ static void
 view_fullscreen_toggled_callback (GtkToggleAction *action,
                                  TerminalWindow *window)
 {
-  terminal_window_set_fullscreen (window, gtk_toggle_action_get_active (action));
+  TerminalWindowPrivate *priv = window->priv;
+
+  g_return_if_fail (GTK_WIDGET_REALIZED (window));
+
+  if (gtk_toggle_action_get_active (action))
+    gtk_window_fullscreen (GTK_WINDOW (window));
+  else
+    gtk_window_unfullscreen (GTK_WINDOW (window));
 }
 
 static const double zoom_factors[] = {
