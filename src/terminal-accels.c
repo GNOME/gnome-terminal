@@ -19,6 +19,7 @@
  */
 
 #include <config.h>
+
 #include <glib/gi18n.h>
 
 #include "terminal-accels.h"
@@ -30,6 +31,34 @@
 #include "eggaccelerators.h"
 
 #define D(x)
+
+
+#define ACCEL_PATH_ROOT "<Actions>/Main/"
+#define ACCEL_PATH_NEW_TAB              ACCEL_PATH_ROOT "FileNewTab"
+#define ACCEL_PATH_NEW_WINDOW           ACCEL_PATH_ROOT "FileNewWindow"
+#define ACCEL_PATH_NEW_PROFILE          ACCEL_PATH_ROOT "FileNewProfile"
+#define ACCEL_PATH_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
+#define ACCEL_PATH_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
+#define ACCEL_PATH_COPY                 ACCEL_PATH_ROOT "EditCopy"
+#define ACCEL_PATH_PASTE                ACCEL_PATH_ROOT "EditPaste"
+#define ACCEL_PATH_TOGGLE_MENUBAR       ACCEL_PATH_ROOT "ViewMenubar"
+#define ACCEL_PATH_FULL_SCREEN          ACCEL_PATH_ROOT "ViewFullscreen"
+#define ACCEL_PATH_RESET                ACCEL_PATH_ROOT "TerminalReset"
+#define ACCEL_PATH_RESET_AND_CLEAR      ACCEL_PATH_ROOT "TerminalResetClear"
+#define ACCEL_PATH_PREV_TAB             ACCEL_PATH_ROOT "TabsPrevious"
+#define ACCEL_PATH_NEXT_TAB             ACCEL_PATH_ROOT "TabsNext"
+#define ACCEL_PATH_SET_TERMINAL_TITLE   ACCEL_PATH_ROOT "TerminalSetTitle"
+#define ACCEL_PATH_HELP                 ACCEL_PATH_ROOT "HelpContents"
+#define ACCEL_PATH_ZOOM_IN              ACCEL_PATH_ROOT "ViewZoomIn"
+#define ACCEL_PATH_ZOOM_OUT             ACCEL_PATH_ROOT "ViewZoomOut"
+#define ACCEL_PATH_ZOOM_NORMAL          ACCEL_PATH_ROOT "ViewZoom100"
+#define ACCEL_PATH_MOVE_TAB_LEFT        ACCEL_PATH_ROOT "TabsMoveLeft"
+#define ACCEL_PATH_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
+#define ACCEL_PATH_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
+
+#define FORMAT_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_%d"
+#define PREFIX_ACCEL_PATH_SWITCH_TO_TAB ACCEL_PATH_ROOT"/switch_to_tab_"
+#define N_TABS_WITH_ACCEL 11
 
 #define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
 #define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
@@ -48,11 +77,11 @@
 #define KEY_MOVE_TAB_RIGHT CONF_KEYS_PREFIX"/move_tab_right"
 #define KEY_DETACH_TAB CONF_KEYS_PREFIX"/detach_tab"
 #define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
-#define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 #define KEY_HELP CONF_KEYS_PREFIX"/help"
 #define KEY_ZOOM_IN CONF_KEYS_PREFIX"/zoom_in"
 #define KEY_ZOOM_OUT CONF_KEYS_PREFIX"/zoom_out"
 #define KEY_ZOOM_NORMAL CONF_KEYS_PREFIX"/zoom_normal"
+#define PREFIX_KEY_SWITCH_TO_TAB CONF_KEYS_PREFIX"/switch_to_tab_"
 
 typedef struct
 {
