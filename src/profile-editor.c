@@ -803,39 +803,39 @@ editor_response_cb (GtkDialog *editor,
 }
 
 static GdkPixbuf *
-create_preview_pixbuf (const gchar *file) 
+create_preview_pixbuf (const gchar *filename)
 {
   GdkPixbuf *pixbuf = NULL;
+  GnomeThumbnailFactory *thumbs;
+  const char *mime_type = NULL;
+  GFile *gfile;
+  GFileInfo *file_info;
 
-  if (file != NULL) {
+  if (filename == NULL)
+    return NULL;
 
-    if (g_file_test (file, G_FILE_TEST_EXISTS) == TRUE) {
+  gfile = g_file_new_for_uri (filename);
+  file_info = g_file_query_info (gfile,
+                                  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                  0, NULL, NULL);
+  if (file_info != NULL)
+    mime_type = g_file_info_get_content_type (file_info);
 
-      GnomeThumbnailFactory *thumbs;
-      const char *mime_type = NULL;
-      GFile *file1;
-      GFileInfo *file_info;
+  g_object_unref (gfile);
 
-      file1 = g_file_new_for_uri (file);
-      file_info = g_file_query_info (file1, 
-                                     G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-                                     0, NULL, NULL);
-      if (file_info != NULL) {
-        mime_type = g_file_info_get_content_type (file_info);
-      }
-      g_object_unref (file1);
+  if (mime_type != NULL)
+    {
+      thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
 
-      if (mime_type != NULL) {
-        thumbs = gnome_thumbnail_factory_new (GNOME_THUMBNAIL_SIZE_NORMAL);
-
-        pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
-                                                             file,
-                                                             mime_type);
-        g_object_unref (thumbs);
-      }
-      g_object_unref (file_info);
+      pixbuf = gnome_thumbnail_factory_generate_thumbnail (thumbs,
+                                                           filename,
+                                                           mime_type);
+      g_object_unref (thumbs);
     }
-  }				
+
+  if (file_info != NULL)
+    g_object_unref (file_info);
+
   return pixbuf;
 }
 
@@ -888,14 +888,18 @@ setup_background_filechooser (GtkWidget *filechooser,
 
   image_preview = gtk_image_new ();
   pixbuf = create_preview_pixbuf (terminal_profile_get_background_image_file (profile));
-  if (pixbuf != NULL) {
-    gtk_image_set_from_pixbuf (GTK_IMAGE (image_preview), pixbuf);
-  }
-  else {
-    gtk_image_set_from_stock (GTK_IMAGE (image_preview),
-                              "gtk-dialog-question",
-                              GTK_ICON_SIZE_DIALOG);
-  }
+  if (pixbuf != NULL)
+    {
+      gtk_image_set_from_pixbuf (GTK_IMAGE (image_preview), pixbuf);
+      g_object_unref (pixbuf);
+    }
+  else
+    {
+      gtk_image_set_from_stock (GTK_IMAGE (image_preview),
+                                "gtk-dialog-question",
+                                GTK_ICON_SIZE_DIALOG);
+    }
+
   gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (filechooser),
                                        image_preview);
   gtk_file_chooser_set_use_preview_label (GTK_FILE_CHOOSER (filechooser),
