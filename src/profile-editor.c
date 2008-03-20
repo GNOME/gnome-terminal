@@ -831,7 +831,8 @@ create_preview_pixbuf (const gchar *file)
                                                              mime_type);
         g_object_unref (thumbs);
       }
-      g_object_unref (file_info);
+      if (file_info != NULL)
+        g_object_unref (file_info);
     }
   }				
   return pixbuf;
