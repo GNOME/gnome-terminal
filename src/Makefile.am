@@ -1,3 +1,4 @@
+NULL =
 
 EFENCE=
 
@@ -18,12 +19,6 @@ INCLUDES=@TERM_CFLAGS@ \
 #	-DGNOME_DISABLE_DEPRECATED 
 
 bin_PROGRAMS=gnome-terminal
-
-EGGFILES=			\
-	eggaccelerators.c	\
-	eggaccelerators.h	\
-	eggcellrendererkeys.h 	\
-	eggcellrendererkeys.c
 
 ## Terminal
 gnome_terminal_SOURCES=				\
@@ -48,7 +43,7 @@ gnome_terminal_SOURCES=				\
 	terminal-widget-vte.c			\
 	terminal-window.c			\
 	terminal-window.h			\
-	$(EGGFILES)
+	$(NULL)
 
 gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ skey/libskey.la
 
@@ -74,14 +69,8 @@ EXTRA_DIST =				\
 	$(schema_in_files)		\
 	$(server_DATA)			\
 	$(ui_DATA)			\
-	update-from-egg.sh		\
 	terminal-widget-vte.c
 
-
-EGGDIR=$(srcdir)/../../libegg/libegg
-
-regenerate-built-sources:
-	EGGFILES="$(EGGFILES)" EGGDIR="$(EGGDIR)" $(srcdir)/update-from-egg.sh
 
 serverdir = $(libdir)/bonobo/servers
 server_DATA = gnome-terminal.server

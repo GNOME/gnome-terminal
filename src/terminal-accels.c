@@ -27,8 +27,6 @@
 #include "terminal.h"
 #include <string.h>
 #include <glade/glade.h>
-#include "eggcellrendererkeys.h"
-#include "eggaccelerators.h"
 
 #define D(x)
 
@@ -625,35 +623,23 @@ binding_from_string (const char      *str,
                      guint           *accelerator_key,
                      GdkModifierType *accelerator_mods)
 {
-  EggVirtualModifierType virtual;
-  
-  g_return_val_if_fail (accelerator_key != NULL, FALSE);
-  
-  if (str == NULL || (str && strcmp (str, "disabled") == 0))
+  if (str == NULL ||
+      strcmp (str, "disabled") == 0)
     {
       *accelerator_key = 0;
       *accelerator_mods = 0;
       return TRUE;
     }
 
-  if (!egg_accelerator_parse_virtual (str, accelerator_key, &virtual))
+  gtk_accelerator_parse (str, accelerator_key, accelerator_mods);
+  if (*accelerator_key == 0 &&
+      *accelerator_mods == 0)
     return FALSE;
 
-  egg_keymap_resolve_virtual_modifiers (gdk_keymap_get_default (),
-                                        virtual,
-                                        accelerator_mods);
-
-  /* Be sure the GTK accelerator system will be able to handle this
-   * accelerator. Be sure to allow no-accelerator accels like F1.
-   */
-  if ((*accelerator_mods & gtk_accelerator_get_default_mod_mask ()) == 0 &&
-      *accelerator_mods != 0)
-    return FALSE;
-  
   if (*accelerator_key == 0)
     return FALSE;
-  else
-    return TRUE;
+    
+  return TRUE;
 }
 
 static gboolean
@@ -788,14 +774,15 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                       -1);
 
   if (ke == NULL)
-    g_object_set (G_OBJECT (cell),
-		  "visible", FALSE,
+    /* This is a title row */
+    g_object_set (cell,
+                  "visible", FALSE,
 		  NULL);
   else
-    g_object_set (G_OBJECT (cell),
-		  "visible", TRUE,
-		  "accel_key", ke->gconf_keyval,
-		  "accel_mask", ke->gconf_mask,
+    g_object_set (cell,
+                  "visible", TRUE,
+		  "accel-key", ke->gconf_keyval,
+		  "accel-mods", ke->gconf_mask,
 		  NULL);
 }
 
@@ -832,9 +819,9 @@ accel_compare_func (GtkTreeModel *model,
                       -1);
   if (ke_b == NULL)
     {
-  gtk_tree_model_get (model, b,
-                      ACTION_COLUMN, &name_b,
-                      -1);
+      gtk_tree_model_get (model, b,
+                          ACTION_COLUMN, &name_b,
+                          -1);
     }
   else
     {
@@ -865,10 +852,9 @@ cb_check_for_uniqueness (GtkTreeModel *model,
                          GtkTreeIter  *iter,
                          gpointer      user_data)
 {
-  KeyEntry *key_entry;
+  KeyEntry *key_entry = (KeyEntry *) user_data;
   KeyEntry *tmp_key_entry;
  
-  key_entry = (KeyEntry *) user_data;
   gtk_tree_model_get (model, iter,
                       KEYVAL_COLUMN, &tmp_key_entry,
                       -1);
@@ -889,24 +875,31 @@ cb_check_for_uniqueness (GtkTreeModel *model,
 }
 
 static void
-accel_edited_callback (GtkCellRendererText *cell,
-                       const char          *path_string,
-                       guint                keyval,
-                       GdkModifierType      mask,
-                       guint                hardware_keycode,
-                       gpointer             data)
+accel_edited_callback (GtkCellRendererAccel *cell,
+                       gchar                *path_string,
+                       guint                 keyval,
+                       GdkModifierType       mask,
+                       guint                 hardware_keycode,
+                       GtkTreeView          *view)
 {
-  GtkTreeView  *view = (GtkTreeView *) data;
   GtkTreeModel *model;
-  GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+  GtkTreePath *path;
   GtkTreeIter iter;
   KeyEntry *ke, tmp_key;
-  GError *err;
   char *str;
-  
+
   model = gtk_tree_view_get_model (view);
 
-  gtk_tree_model_get_iter (model, &iter, path);
+  path = gtk_tree_path_new_from_string (path_string);
+  if (!path)
+    return;
+
+  if (!gtk_tree_model_get_iter (model, &iter, path)) {
+    gtk_tree_path_free (path);
+    return;
+  }
+  gtk_tree_path_free (path);
+
   gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
 
   /* sanity check */
@@ -928,7 +921,7 @@ accel_edited_callback (GtkCellRendererText *cell,
           GtkWidget *dialog;
           char *name;
 
-          name = egg_virtual_accelerator_name (keyval, mask);
+          name = gtk_accelerator_get_label (keyval, mask);
 
           dialog =
             gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view))),
@@ -937,17 +930,11 @@ accel_edited_callback (GtkCellRendererText *cell,
                                     GTK_BUTTONS_OK,
                                     _("The shortcut key \"%s\" is already bound to the \"%s\" action"),
                                     name,
-                                    tmp_key.user_visible_name ? tmp_key.user_visible_name : tmp_key.gconf_key);
+                                    tmp_key.user_visible_name ? _(tmp_key.user_visible_name) : tmp_key.gconf_key);
           g_free (name);
 
-          gtk_dialog_run (GTK_DIALOG (dialog));
-          gtk_widget_destroy (dialog);
-
-          /* set it back to its previous value. */
-          egg_cell_renderer_keys_set_accelerator (EGG_CELL_RENDERER_KEYS (cell),
-						  ke->gconf_keyval,
-						  ke->gconf_mask);
-          gtk_tree_path_free (path);
+          g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_window_present (GTK_WINDOW (dialog));
 
           return;
         }
@@ -959,22 +946,53 @@ accel_edited_callback (GtkCellRendererText *cell,
               gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
               str));
   
-  err = NULL;
   gconf_client_set_string (global_conf,
                            ke->gconf_key,
                            str,
-                           &err);
+                           NULL);
   g_free (str);
-  
-  if (err != NULL)
-    {
-      g_printerr (_("Error setting new accelerator in configuration database: %s\n"),
-                  err->message);
-      
-      g_error_free (err);
-    }
-  
+}
+
+static void
+accel_cleared_callback (GtkCellRendererAccel *cell,
+                        gchar                *path_string,
+                        GtkTreeView          *view)
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  KeyEntry *ke, tmp_key;
+  char *str;
+
+  model = gtk_tree_view_get_model (view);
+
+  path = gtk_tree_path_new_from_string (path_string);
+  if (!path)
+    return;
+
+  if (!gtk_tree_model_get_iter (model, &iter, path)) {
+    gtk_tree_path_free (path);
+    return;
+  }
   gtk_tree_path_free (path);
+
+  gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
+
+  /* sanity check */
+  if (ke == NULL)
+    return;
+
+  ke->gconf_keyval = 0;
+  ke->gconf_mask = 0;
+  ke->needs_gconf_sync = TRUE;
+
+  str = binding_name (0, 0, FALSE);
+  D (g_print ("Cleared keybinding for gconf %s", ke->gconf_key));
+  gconf_client_set_string (global_conf,
+                           ke->gconf_key,
+                           str,
+                           NULL);
+  g_free (str);
 }
 
 static void
@@ -1154,17 +1172,16 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_column_set_sort_column_id (column, ACTION_COLUMN);
 
   /* Column 2 */
-  cell_renderer = g_object_new (EGG_TYPE_CELL_RENDERER_KEYS,
-				"editable", TRUE,
-				"accel_mode", EGG_CELL_RENDERER_KEYS_MODE_GTK,
-				NULL);
-  g_signal_connect (G_OBJECT (cell_renderer), "keys_edited",
-                    G_CALLBACK (accel_edited_callback),
-                    w);
-  
-  g_object_set (G_OBJECT (cell_renderer),
+  cell_renderer = gtk_cell_renderer_accel_new ();
+  g_object_set (cell_renderer,
                 "editable", TRUE,
+                "accel_mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                 NULL);
+  g_signal_connect (cell_renderer, "accel-edited",
+                    G_CALLBACK (accel_edited_callback), w);
+  g_signal_connect (cell_renderer, "accel-cleared",
+                    G_CALLBACK (accel_cleared_callback), w);
+  
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
