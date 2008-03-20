@@ -325,6 +325,15 @@ terminal_profile_constructor (GType type,
   
   g_hash_table_insert (profiles, priv->name, profile);
 
+  if (default_profile == NULL &&
+      default_profile_id &&
+      strcmp (default_profile_id,
+              terminal_profile_get_name (profile)) == 0)
+    {
+      /* We are the default profile */
+      default_profile = profile;
+    }
+  
   return object;
 }
 
@@ -444,26 +453,12 @@ terminal_profile_finalize (GObject *object)
 TerminalProfile*
 terminal_profile_new (const char *name)
 {
-  TerminalProfile *profile;
-
-  g_return_val_if_fail (profiles != NULL, NULL);
   g_return_val_if_fail (terminal_profile_lookup (name) == NULL,
                         NULL);
   
-  profile = g_object_new (TERMINAL_TYPE_PROFILE,
-                          "name", name,
-                          NULL);
-
-  if (default_profile == NULL &&
-      default_profile_id &&
-      strcmp (default_profile_id,
-              terminal_profile_get_name (profile)) == 0)
-    {
-      /* We are the default profile */
-      default_profile = profile;
-    }
-  
-  return profile;
+  return g_object_new (TERMINAL_TYPE_PROFILE,
+                       "name", name,
+                       NULL);
 }
 
 const char*
