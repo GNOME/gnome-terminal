@@ -465,9 +465,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
   if (have_single_profile)
     {
-      g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
       g_list_free (profiles);
-
       return;
     }
 
