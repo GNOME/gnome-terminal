@@ -2352,45 +2352,36 @@ default_change_notify (GConfClient *client,
   update_default_profile (name, locked);
 }
 
-static void
-listify_foreach (gpointer key,
-                 gpointer value,
-                 gpointer data)
-{
-  GList **listp = data;
-
-  *listp = g_list_prepend (*listp, value);
-}
-
 static int
 alphabetic_cmp (gconstpointer a,
                 gconstpointer b)
 {
-  int result;
-
   TerminalProfile *ap = (TerminalProfile*) a;
   TerminalProfile *bp = (TerminalProfile*) b;
+  int result;
 
   result =  g_utf8_collate (terminal_profile_get_visible_name (ap),
 			    terminal_profile_get_visible_name (bp));
-  if (!result)
+  if (result == 0)
     result = strcmp (terminal_profile_get_name (ap),
 		     terminal_profile_get_name (bp));
 
   return result;
 }
 
+/* FIXMEchpe: make this list contain ref'd objects */
+/**
+ * terminal_profile_get_list:
+ *
+ * Returns: a #GList containing all #TerminalProfile objects.
+ *   The content of the list is owned by the backend and
+ *   should not be modified or freed. Use g_list_free() when done
+ *   using the list.
+ */
 GList*
 terminal_profile_get_list (void)
 {
-  GList *list;
-
-  list = NULL;
-  g_hash_table_foreach (profiles, listify_foreach, &list);
-
-  list = g_list_sort (list, alphabetic_cmp);
-  
-  return list;
+  return g_list_sort (g_hash_table_get_values (profiles), alphabetic_cmp);
 }
 
 int
