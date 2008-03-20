@@ -324,16 +324,19 @@ terminal_profile_finalize (GObject *object)
 
   pango_font_description_free (priv->font);
 
+  g_object_unref (priv->conf);
+
   G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
 }
 
 TerminalProfile*
-terminal_profile_new (const char *name,
-                      GConfClient *conf)
+terminal_profile_new (const char *name)
 {
   TerminalProfile *profile;
   TerminalProfilePrivate *priv;
   GError *err;
+  GConfClient *conf;
+
 
   g_return_val_if_fail (profiles != NULL, NULL);
   g_return_val_if_fail (terminal_profile_lookup (name) == NULL,
@@ -342,9 +345,7 @@ terminal_profile_new (const char *name,
   profile = g_object_new (TERMINAL_TYPE_PROFILE, NULL);
   priv = profile->priv;
 
-  priv->conf = conf;
-  g_object_ref (G_OBJECT (conf));
-  
+  conf = priv->conf = gconf_client_get_default ();
   priv->name = g_strdup (name);
   
   priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
@@ -2421,7 +2422,7 @@ terminal_profile_ensure_fallback (GConfClient *conf)
 
   if (profile == NULL)
     {
-      profile = terminal_profile_new (FALLBACK_PROFILE_ID, conf);  
+      profile = terminal_profile_new (FALLBACK_PROFILE_ID);
       
       terminal_profile_update (profile);
     }

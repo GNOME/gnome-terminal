@@ -1670,7 +1670,7 @@ sync_profile_list (gboolean use_this_list,
         {
           TerminalProfile *profile;
           
-          profile = terminal_profile_new (tmp_slist->data, conf);
+          profile = terminal_profile_new (tmp_slist->data);
 
           terminal_profile_update (profile);
         }
@@ -1974,7 +1974,7 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       gtk_widget_destroy (new_profile_dialog);
       
       escaped_name = terminal_profile_create (base_profile, name, transient_parent);
-      new_profile = terminal_profile_new (escaped_name, conf);
+      new_profile = terminal_profile_new (escaped_name);
       terminal_profile_update (new_profile);
       sync_profile_list (FALSE, NULL);
       g_free (escaped_name);

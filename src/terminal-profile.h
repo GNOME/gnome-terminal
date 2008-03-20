@@ -139,8 +139,7 @@ struct _TerminalProfileClass
 
 GType terminal_profile_get_type (void) G_GNUC_CONST;
 
-TerminalProfile* terminal_profile_new (const char  *name,
-                                       GConfClient *conf);
+TerminalProfile* terminal_profile_new (const char  *name);
 
 const char*               terminal_profile_get_name                 (TerminalProfile *profile);
 const char*               terminal_profile_get_visible_name         (TerminalProfile *profile);
