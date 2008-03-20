@@ -1814,7 +1814,7 @@ terminal_app_edit_profile (TerminalApp     *app,
 }
 
 static void
-edit_keys_destroyed_callback (GtkWidget   *new_profile_dialog,
+edit_keys_destroyed_callback (GtkWidget   *edit_keys_dialog,
                               TerminalApp *app)
 {
   app->edit_keys_dialog = NULL;
@@ -1860,7 +1860,7 @@ terminal_app_edit_keybindings (TerminalApp     *app,
 }
 
 static void
-edit_encodings_destroyed_callback (GtkWidget   *new_profile_dialog,
+edit_encodings_destroyed_callback (GtkWidget   *edit_encodings_dialog,
                                    TerminalApp *app)
 {
   app->edit_encodings_dialog = NULL;
