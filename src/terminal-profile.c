@@ -221,47 +221,17 @@ static void emit_changed (TerminalProfile           *profile,
                           const TerminalSettingMask *mask);
 
 
-static gpointer parent_class;
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL];
 
-GType
-terminal_profile_get_type (void)
-{
-  static GType object_type = 0;
-
-  g_type_init ();
-  
-  if (!object_type)
-    {
-      static const GTypeInfo object_info =
-      {
-        sizeof (TerminalProfileClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) terminal_profile_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (TerminalProfile),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) terminal_profile_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "TerminalProfile",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (TerminalProfile, terminal_profile, G_TYPE_OBJECT)
 
 static void
 terminal_profile_init (TerminalProfile *profile)
 {
   TerminalProfilePrivate *priv;
 
-  g_return_if_fail (profiles != NULL);
-  
-  priv = profile->priv = g_new0 (TerminalProfilePrivate, 1);
+  priv = profile->priv = G_TYPE_INSTANCE_GET_PRIVATE (profile, TERMINAL_TYPE_PROFILE, TerminalProfilePrivate);
+
   terminal_setting_mask_clear (&priv->locked);
   priv->default_show_menubar = TRUE;
   priv->visible_name = g_strdup ("<not named>");
@@ -304,7 +274,7 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
-  parent_class = g_type_class_peek_parent (klass);
+  g_type_class_add_private (object_class, sizeof (TerminalProfilePrivate));
   
   object_class->finalize = terminal_profile_finalize;
 
@@ -353,10 +323,8 @@ terminal_profile_finalize (GObject *object)
     g_object_unref (G_OBJECT (priv->background_image));
 
   pango_font_description_free (priv->font);
-  
-  g_free (profile->priv);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+
+  G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
 }
 
 TerminalProfile*
