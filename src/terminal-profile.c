@@ -131,6 +131,11 @@ struct _TerminalProfilePrivate
   guint forgotten : 1;
 };
 
+enum {
+  PROP_0,
+  PROP_NAME
+};
+
 static gboolean
 constcorrect_string_to_enum (const GConfEnumStringPair *table,
                              const char                *str,
@@ -232,6 +237,8 @@ terminal_profile_init (TerminalProfile *profile)
 
   priv = profile->priv = G_TYPE_INSTANCE_GET_PRIVATE (profile, TERMINAL_TYPE_PROFILE, TerminalProfilePrivate);
 
+  priv->conf = gconf_client_get_default ();
+
   terminal_setting_mask_clear (&priv->locked);
   priv->default_show_menubar = TRUE;
   priv->visible_name = g_strdup ("<not named>");
@@ -269,6 +276,96 @@ terminal_profile_init (TerminalProfile *profile)
                                    PANGO_SCALE * 12);
 }
 
+static GObject *
+terminal_profile_constructor (GType type,
+                              guint n_construct_properties,
+                              GObjectConstructParam *construct_params)
+{
+  GObject *object;
+  TerminalProfile *profile;
+  TerminalProfilePrivate *priv;
+  GError *err;
+
+  object = G_OBJECT_CLASS (terminal_profile_parent_class)->constructor
+            (type, n_construct_properties, construct_params);
+
+  profile = TERMINAL_PROFILE (object);
+  priv = profile->priv;
+
+  priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
+                                                priv->name);
+
+  err = NULL;
+  gconf_client_add_dir (priv->conf, priv->profile_dir,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        &err);
+  if (err)
+    {
+      g_printerr (_("There was an error loading config from %s. (%s)\n"),
+                  priv->profile_dir, err->message);
+      g_error_free (err);
+    }
+  
+  err = NULL;
+  priv->notify_id =
+    gconf_client_notify_add (priv->conf,
+                             priv->profile_dir,
+                             profile_change_notify,
+                             profile,
+                             NULL, &err);
+  
+  if (err)
+    {
+      g_printerr (_("There was an error subscribing to notification of terminal profile changes. (%s)\n"),
+                  err->message);
+      g_error_free (err);
+    }
+  
+  g_hash_table_insert (profiles, priv->name, profile);
+
+  return object;
+}
+
+static void
+terminal_profile_get_property (GObject *object,
+                              guint prop_id,
+                              GValue *value,
+                              GParamSpec *pspec)
+{
+  TerminalProfile *profile = TERMINAL_PROFILE (object);
+
+  switch (prop_id)
+    {
+      case PROP_NAME:
+        g_value_set_string (value, terminal_profile_get_name (profile));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+terminal_profile_set_property (GObject *object,
+                              guint prop_id,
+                              const GValue *value,
+                              GParamSpec *pspec)
+{
+  TerminalProfile *profile = TERMINAL_PROFILE (object);
+  TerminalProfilePrivate *priv = profile->priv;
+
+  switch (prop_id)
+    {
+      case PROP_NAME:
+        g_assert (priv->name == NULL);
+        priv->name = g_value_dup_string (value);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
 static void
 terminal_profile_class_init (TerminalProfileClass *klass)
 {
@@ -276,7 +373,10 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   
   g_type_class_add_private (object_class, sizeof (TerminalProfilePrivate));
   
+  object_class->constructor = terminal_profile_constructor;
   object_class->finalize = terminal_profile_finalize;
+  object_class->get_property = terminal_profile_get_property;
+  object_class->set_property = terminal_profile_set_property;
 
   signals[CHANGED] =
     g_signal_new ("changed",
@@ -295,6 +395,18 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  g_object_class_install_property
+    (object_class,
+     PROP_NAME,
+     g_param_spec_string ("name", NULL, NULL,
+                          NULL,
+                          G_PARAM_READWRITE |
+                          G_PARAM_STATIC_NAME |
+                          G_PARAM_STATIC_NICK |
+                          G_PARAM_STATIC_BLURB |
+                          G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 static void
@@ -324,8 +436,6 @@ terminal_profile_finalize (GObject *object)
 
   pango_font_description_free (priv->font);
 
-  g_object_unref (priv->conf);
-
   G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
 }
 
@@ -333,55 +443,19 @@ TerminalProfile*
 terminal_profile_new (const char *name)
 {
   TerminalProfile *profile;
-  TerminalProfilePrivate *priv;
-  GError *err;
-  GConfClient *conf;
-
 
   g_return_val_if_fail (profiles != NULL, NULL);
   g_return_val_if_fail (terminal_profile_lookup (name) == NULL,
                         NULL);
   
-  profile = g_object_new (TERMINAL_TYPE_PROFILE, NULL);
-  priv = profile->priv;
-
-  conf = priv->conf = gconf_client_get_default ();
-  priv->name = g_strdup (name);
-  
-  priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
-                                                         priv->name);
-
-  err = NULL;
-  gconf_client_add_dir (conf, priv->profile_dir,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  priv->profile_dir, err->message);
-      g_error_free (err);
-    }
-  
-  err = NULL;
-  priv->notify_id =
-    gconf_client_notify_add (conf,
-                             priv->profile_dir,
-                             profile_change_notify,
-                             profile,
-                             NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal profile changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-  
-  g_hash_table_insert (profiles, priv->name, profile);
+  profile = g_object_new (TERMINAL_TYPE_PROFILE,
+                          "name", name,
+                          NULL);
 
   if (default_profile == NULL &&
       default_profile_id &&
-      strcmp (default_profile_id, priv->name) == 0)
+      strcmp (default_profile_id,
+              terminal_profile_get_name (profile)) == 0)
     {
       /* We are the default profile */
       default_profile = profile;
