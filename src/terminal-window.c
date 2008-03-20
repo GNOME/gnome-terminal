@@ -714,9 +714,9 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   action = gtk_action_group_get_action (action_group, "TabsMoveRight");
   gtk_action_set_sensitive (action, not_last);
   action = gtk_action_group_get_action (action_group, "TabsDetach");
-  gtk_action_set_sensitive (action, num_pages > 0);
+  gtk_action_set_sensitive (action, num_pages > 1);
   action = gtk_action_group_get_action (action_group, "FileCloseTab");
-  gtk_action_set_sensitive (action, num_pages > 0);
+  gtk_action_set_sensitive (action, num_pages > 1);
 }
 
 static void
