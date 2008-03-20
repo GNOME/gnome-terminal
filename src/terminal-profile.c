@@ -292,6 +292,8 @@ terminal_profile_constructor (GType type,
   profile = TERMINAL_PROFILE (object);
   priv = profile->priv;
 
+  g_assert (priv->name != NULL);
+
   priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
                                                 priv->name);
 
@@ -1707,10 +1709,8 @@ set_scrollback_lines (TerminalProfile *profile,
       priv->scrollback_lines = int_val;
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -1727,10 +1727,8 @@ set_exit_action (TerminalProfile *profile,
       priv->exit_action = action;
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -1840,10 +1838,8 @@ set_background_type (TerminalProfile *profile,
       priv->background_type = type;
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+      
+  return FALSE;
 }
 
 static gboolean
@@ -1890,10 +1886,8 @@ set_backspace_binding (TerminalProfile *profile,
       priv->backspace_binding = binding;
       return TRUE;
     }
-  else
-    {
-      return FALSE;
-    }
+      
+  return FALSE;
 }
 
 static gboolean
@@ -2412,8 +2406,8 @@ terminal_profile_lookup (const char *name)
 
   if (profiles)
     return g_hash_table_lookup (profiles, name);
-  else
-    return NULL;
+    
+  return NULL;
 }
 
 typedef struct
@@ -2446,8 +2440,8 @@ terminal_profile_lookup_by_visible_name (const char *name)
       g_hash_table_foreach (profiles, lookup_by_visible_name_foreach, &info);
       return info.result;
     }
-  else
-    return NULL;
+    
+  return NULL;
 }
 
 void
