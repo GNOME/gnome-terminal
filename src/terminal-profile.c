@@ -2774,7 +2774,7 @@ terminal_profile_create (TerminalProfile *base_profile,
   key = gconf_concat_dir_and_key (profile_dir,
                                   KEY_EXIT_ACTION);
 
-  cs = gconf_enum_to_string (scrollbar_positions,
+  cs = gconf_enum_to_string (exit_actions,
                              base_priv->exit_action);
   
   gconf_client_set_string (base_priv->conf,
