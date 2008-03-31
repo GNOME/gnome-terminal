@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-void terminal_accels_init (GConfClient *conf);
+void terminal_accels_init (void);
 
 GtkWidget* terminal_edit_keys_dialog_new (GtkWindow *transient_parent);
 

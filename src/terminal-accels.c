@@ -229,7 +229,6 @@ static void      queue_gconf_sync (void);
 static void      update_menu_accel_state (void);
 
 static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
-static GConfClient *global_conf;
 static GSList *living_treeviews = NULL;
 static GSList *living_mnemonics_checkbuttons = NULL;
 static GSList *living_menu_accel_checkbuttons = NULL;
@@ -240,16 +239,13 @@ static int inside_gconf_notify = 0;
 static char *saved_menu_accel = NULL;
 
 void
-terminal_accels_init (GConfClient *conf)
+terminal_accels_init (void)
 {
+  GConfClient *conf;
   GError *err;
   int i, j;
- 
-  g_return_if_fail (conf != NULL);
-  g_return_if_fail (global_conf == NULL);
-  
-  global_conf = conf;
-  g_object_ref (G_OBJECT (global_conf));
+
+  conf = gconf_client_get_default ();
   
   err = NULL;
   gconf_client_add_dir (conf, CONF_KEYS_PREFIX,
@@ -346,7 +342,7 @@ terminal_accels_init (GConfClient *conf)
                     NULL);
 
   err = NULL;
-  using_mnemonics = gconf_client_get_bool (global_conf,
+  using_mnemonics = gconf_client_get_bool (conf,
                                            CONF_GLOBAL_PREFIX"/use_mnemonics",
                                            &err);
   if (err)
@@ -371,7 +367,7 @@ terminal_accels_init (GConfClient *conf)
     }
 
   err = NULL;
-  using_menu_accels = gconf_client_get_bool (global_conf,
+  using_menu_accels = gconf_client_get_bool (conf,
                                              CONF_GLOBAL_PREFIX"/use_menu_accelerators",
                                              &err);
   if (err)
@@ -682,11 +678,14 @@ static guint sync_idle = 0;
 static gboolean
 sync_handler (gpointer data)
 {
+  GConfClient *conf;
   int i, j;
 
   D (g_print ("gconf sync handler\n"));
   
   sync_idle = 0;
+
+  conf = gconf_client_get_default ();
 
   i = 0;
   while (i < (int) G_N_ELEMENTS (all_entries))
@@ -724,7 +723,7 @@ sync_handler (gpointer data)
 			      key_entry->gconf_key, accel_name));
               
 		  err = NULL;
-		  gconf_client_set_string (global_conf,
+		  gconf_client_set_string (conf,
 					   key_entry->gconf_key,
 					   accel_name,
 					   &err);
@@ -745,6 +744,9 @@ sync_handler (gpointer data)
       ++i;
     }  
   
+              
+  g_object_unref (conf);
+
   return FALSE;
 }
 
@@ -887,6 +889,7 @@ accel_edited_callback (GtkCellRendererAccel *cell,
   GtkTreeIter iter;
   KeyEntry *ke, tmp_key;
   char *str;
+  GConfClient *conf;
 
   model = gtk_tree_view_get_model (view);
 
@@ -945,11 +948,13 @@ accel_edited_callback (GtkCellRendererAccel *cell,
   D (g_print ("Edited keyval %s, setting gconf to %s\n",
               gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
               str));
-  
-  gconf_client_set_string (global_conf,
+
+  conf = gconf_client_get_default ();
+  gconf_client_set_string (conf,
                            ke->gconf_key,
                            str,
                            NULL);
+  g_object_unref (conf);
   g_free (str);
 }
 
@@ -963,6 +968,7 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
   GtkTreeIter iter;
   KeyEntry *ke, tmp_key;
   char *str;
+  GConfClient *conf;
 
   model = gtk_tree_view_get_model (view);
 
@@ -988,10 +994,13 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
 
   str = binding_name (0, 0, FALSE);
   D (g_print ("Cleared keybinding for gconf %s", ke->gconf_key));
-  gconf_client_set_string (global_conf,
+
+  conf = gconf_client_get_default ();
+  gconf_client_set_string (conf,
                            ke->gconf_key,
                            str,
                            NULL);
+  g_object_unref (conf);
   g_free (str);
 }
 
@@ -1008,13 +1017,16 @@ disable_mnemonics_toggled (GtkWidget *button,
    */
   if (active != (!using_mnemonics))
     {
+      GConfClient *conf;
       GError *err;
       
       err = NULL;
-      gconf_client_set_bool (global_conf,
+      conf = gconf_client_get_default ();
+      gconf_client_set_bool (conf,
                              CONF_GLOBAL_PREFIX"/use_mnemonics",
                              !active,
                              &err);
+      g_object_unref (conf);
       if (err != NULL)
         {
           g_printerr (_("Error setting %s config key: %s\n"), CONF_GLOBAL_PREFIX"/use_mnemonics", err->message);
@@ -1036,13 +1048,16 @@ disable_menu_accels_toggled (GtkWidget *button,
    */
   if (active != (!using_menu_accels))
     {
+      GConfClient *conf;
       GError *err;
       
       err = NULL;
-      gconf_client_set_bool (global_conf,
+      conf = gconf_client_get_default ();
+      gconf_client_set_bool (conf,
                              CONF_GLOBAL_PREFIX"/use_menu_accelerators",
                              !active,
                              &err);
+      g_object_unref (conf);
       if (err != NULL)
         {
           g_printerr (_("Error setting use_menu_accelerators key: %s\n"),

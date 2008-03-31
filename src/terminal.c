@@ -1286,7 +1286,7 @@ main (int argc, char **argv)
       g_error_free (err);
     }  
 
-  terminal_accels_init (conf);
+  terminal_accels_init ();
   terminal_encoding_init (conf);
   
   terminal_profile_initialize (conf);
