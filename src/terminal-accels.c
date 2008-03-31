@@ -229,15 +229,15 @@ static void      queue_gconf_sync (void);
 static void      update_menu_accel_state (void);
 
 static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
-static GSList *living_treeviews = NULL;
-static GSList *living_mnemonics_checkbuttons = NULL;
-static GSList *living_menu_accel_checkbuttons = NULL;
 static gboolean using_mnemonics = TRUE;
 static gboolean using_menu_accels = TRUE;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
 static char *saved_menu_accel = NULL;
 static GtkWidget *edit_keys_dialog = NULL;
+static GtkWidget *edit_keys_dialog_treeview = NULL;
+static GtkWidget *edit_keys_dialog_mnemonics_checkbutton = NULL;
+static GtkWidget *edit_keys_dialog_menu_accel_checkbutton = NULL;
 
 void
 terminal_accels_init (void)
@@ -458,8 +458,6 @@ keys_change_notify (GConfClient *client,
 	      key_entry = &(all_entries[i].key_entry[j]);
 	      if (strcmp (key_entry->gconf_key, gconf_entry_get_key (entry)) == 0)
 		{
-		  GSList *tmp;
-              
 		  /* found it */
 		  key_entry->gconf_keyval = keyval;
 		  key_entry->gconf_mask = mask;
@@ -475,13 +473,11 @@ keys_change_notify (GConfClient *client,
 		  inside_gconf_notify -= 1;
 
 		  /* Notify tree views to repaint with new values */
-		  tmp = living_treeviews;
-		  while (tmp != NULL)
+		  if (edit_keys_dialog_treeview)
 		    {
-		      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (tmp->data)),
+		      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (edit_keys_dialog_treeview)),
 					      update_model_foreach,
 					      key_entry);
-		      tmp = tmp->next;
 		    }
               
 		  break;
@@ -561,17 +557,13 @@ mnemonics_change_notify (GConfClient *client,
         {
           if (using_mnemonics != gconf_value_get_bool (val))
             {
-              GSList *tmp;
-              
               using_mnemonics = !using_mnemonics;
 
               /* Reset the checkbuttons */
-              tmp = living_mnemonics_checkbuttons;
-              while (tmp != NULL)
+              if (edit_keys_dialog_mnemonics_checkbutton)
                 {
-                  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tmp->data),
+                  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (edit_keys_dialog_mnemonics_checkbutton),
                                                 !using_mnemonics);
-                  tmp = tmp->next;
                 }
             }
         }
@@ -595,17 +587,13 @@ menu_accels_change_notify (GConfClient *client,
         {
           if (using_menu_accels != gconf_value_get_bool (val))
             {
-              GSList *tmp;
-              
               using_menu_accels = !using_menu_accels;
 
               /* Reset the checkbuttons */
-              tmp = living_menu_accel_checkbuttons;
-              while (tmp != NULL)
+              if (edit_keys_dialog_menu_accel_checkbutton)
                 {
-                  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tmp->data),
+                  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (edit_keys_dialog_menu_accel_checkbutton),
                                                 !using_menu_accels);
-                  tmp = tmp->next;
                 }
 
               /* Reset the actual feature; super broken hack alert */
@@ -839,14 +827,6 @@ accel_compare_func (GtkTreeModel *model,
   g_free (name_b);
 
   return result;
-}
-
-static void
-remove_from_list_callback (GtkObject *object, gpointer data)
-{
-  GSList **listp = data;
-  
-  *listp = g_slist_remove (*listp, object);
 }
 
 static gboolean
@@ -1151,11 +1131,11 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
     return;
   
   w = glade_xml_get_widget (xml, "disable-mnemonics-checkbutton");
-  living_mnemonics_checkbuttons = g_slist_prepend (living_mnemonics_checkbuttons,
-                                                   w);
+
+  edit_keys_dialog_mnemonics_checkbutton = w;
   g_signal_connect (G_OBJECT (w), "destroy",
-                    G_CALLBACK (remove_from_list_callback),
-                    &living_mnemonics_checkbuttons);
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &edit_keys_dialog_mnemonics_checkbutton);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), !using_mnemonics);
   g_signal_connect (G_OBJECT (w), "toggled",
@@ -1163,11 +1143,11 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                     NULL);
 
   w = glade_xml_get_widget (xml, "disable-menu-accel-checkbutton");
-  living_mnemonics_checkbuttons = g_slist_prepend (living_menu_accel_checkbuttons,
-                                                   w);
+
+  edit_keys_dialog_menu_accel_checkbutton = w;
   g_signal_connect (G_OBJECT (w), "destroy",
-                    G_CALLBACK (remove_from_list_callback),
-                    &living_menu_accel_checkbuttons);
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &edit_keys_dialog_menu_accel_checkbutton);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), !using_menu_accels);
   g_signal_connect (G_OBJECT (w), "toggled",
@@ -1176,13 +1156,13 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   
   w = glade_xml_get_widget (xml, "accelerators-treeview");
 
-  living_treeviews = g_slist_prepend (living_treeviews, w);
-
   g_signal_connect (G_OBJECT (w), "button_press_event",
 		    G_CALLBACK (start_editing_cb), NULL);
-  g_signal_connect (G_OBJECT (w), "destroy",
-                    G_CALLBACK (remove_from_list_callback),
-                    &living_treeviews);
+  
+  edit_keys_dialog_treeview = w;
+  g_signal_connect (edit_keys_dialog_treeview, "destroy",
+                    G_CALLBACK (gtk_widget_destroyed),
+                    &edit_keys_dialog_treeview);
 
   tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
   
