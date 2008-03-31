@@ -54,9 +54,6 @@ schemadir   = @GCONF_SCHEMA_FILE_DIR@
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
 
-icondir = $(datadir)/pixmaps
-icon_DATA = gnome-terminal.png
-
 uidir = $(pkgdatadir)
 ui_DATA = \
 	terminal.ui

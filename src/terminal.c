@@ -296,34 +296,6 @@ ensure_top_tab (OptionParsingResults *results)
   return it;
 }
 
-static void
-set_default_icon (const char *filename)
-{
-  GdkPixbuf *pixbuf;
-  GError *err;
-  GList *list;
-  
-  err = NULL;
-  pixbuf = gdk_pixbuf_new_from_file (filename, &err);
-
-  if (pixbuf == NULL)
-    {
-      g_printerr (_("Could not load icon \"%s\": %s\n"),
-                  filename, err->message);
-      g_error_free (err);
-
-      return;
-    }
-
-  list = NULL;
-  list = g_list_prepend (list, pixbuf);
-
-  gtk_window_set_default_icon_list (list);
-
-  g_list_free (list);
-  g_object_unref (G_OBJECT (pixbuf));
-}
-
 static InitialWindow*
 add_new_window (OptionParsingResults *results,
                 const char           *profile,
@@ -1281,7 +1253,7 @@ main (int argc, char **argv)
   g_strfreev (argv_copy);
   argv_copy = NULL;
 
-  set_default_icon (TERM_DATADIR"/pixmaps/gnome-terminal.png");
+  gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
  
   g_assert (parsing_results->post_execute_args == NULL);
   

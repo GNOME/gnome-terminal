@@ -256,7 +256,7 @@ terminal_profile_init (TerminalProfile *profile)
   priv->allow_bold = TRUE;
   priv->word_chars = g_strdup ("");
   priv->custom_command = g_strdup ("");
-  priv->icon_file = g_strdup ("gnome-terminal.png");
+  priv->icon_file = NULL;
   memcpy (priv->palette,
           terminal_palette_linux,
           TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
@@ -1025,6 +1025,9 @@ terminal_profile_get_icon (TerminalProfile *profile)
   g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
 
   priv = profile->priv;
+  if (!priv->icon_file || !priv->icon_file[0])
+    return NULL;
+  
   if (priv->icon == NULL &&
       !priv->icon_load_failed)
     {
@@ -1753,7 +1756,8 @@ set_icon_file (TerminalProfile *profile,
 {
   TerminalProfilePrivate *priv = profile->priv;
   
-  if (candidate_file &&
+  if (priv->icon_file &&
+      candidate_file &&
       strcmp (priv->icon_file, candidate_file) == 0)
     return FALSE;
   
@@ -2829,7 +2833,7 @@ terminal_profile_create (TerminalProfile *base_profile,
   key = gconf_concat_dir_and_key (profile_dir,
                                   KEY_ICON);
   gconf_client_set_string (base_priv->conf,
-                           key, base_priv->icon_file,
+                           key, base_priv->icon_file ? base_priv->icon_file : "",
                            &err);
   BAIL_OUT_CHECK ();
 

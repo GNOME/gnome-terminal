@@ -34,6 +34,8 @@ typedef enum {
 
 #include "terminal-screen.h"
 
+#define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
+             
 typedef struct _TerminalApp TerminalApp;
 
 TerminalApp* terminal_app_get (void);

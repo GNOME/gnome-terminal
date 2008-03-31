@@ -2065,7 +2065,8 @@ terminal_window_update_icon (TerminalWindow *window)
   TerminalProfile *profile;
 
   if (priv->active_term == NULL ||
-      !(profile = terminal_screen_get_profile (priv->active_term)))
+      !(profile = terminal_screen_get_profile (priv->active_term)) ||
+      terminal_profile_get_icon_file (profile) == NULL)
     {
       gtk_window_set_icon (GTK_WINDOW (window), NULL);
       return;
@@ -2686,7 +2687,7 @@ help_about_callback (GtkAction *action,
 			 "license", license_text,
 			 "wrap-license", TRUE,
 			 "translator-credits", _("translator-credits"),
-			 "logo-icon-name", "gnome-terminal",
+			 "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
 			 NULL);
   g_free (license_text);
 }
