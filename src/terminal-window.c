@@ -1,5 +1,3 @@
-/* widget for a toplevel terminal window, possibly containing multiple terminals */
-
 /*
  * Copyright (C) 2001 Havoc Pennington
  * Copyright (C) 2002 Red Hat, Inc.
