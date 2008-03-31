@@ -237,6 +237,7 @@ static gboolean using_menu_accels = TRUE;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
 static char *saved_menu_accel = NULL;
+static GtkWidget *edit_keys_dialog = NULL;
 
 void
 terminal_accels_init (void)
@@ -1123,8 +1124,8 @@ start_editing_cb (GtkTreeView    *tree_view,
   return TRUE;
 }
 
-GtkWidget*
-terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
+void
+terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 {
   GladeXML *xml;
   GtkWidget *w;
@@ -1135,11 +1136,19 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
   GtkTreeViewColumn *column;
   GtkTreeIter parent_iter;
 
+  if (edit_keys_dialog != NULL)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
+      gtk_window_present (GTK_WINDOW (edit_keys_dialog));
+      return;
+    }
+
+  /* No keybindings editor yet, create one */
   xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
                                        "keybindings-dialog",
                                        transient_parent);
   if (xml == NULL)
-    return NULL;
+    return;
   
   w = glade_xml_get_widget (xml, "disable-mnemonics-checkbutton");
   living_mnemonics_checkbuttons = g_slist_prepend (living_mnemonics_checkbuttons,
@@ -1252,9 +1261,15 @@ terminal_edit_keys_dialog_new (GtkWindow *transient_parent)
 
   terminal_util_set_unique_role (GTK_WINDOW (w), "gnome-terminal-accels");
 
-  g_object_unref (G_OBJECT (xml));
-  
-  return w;
+  g_object_unref (xml);
+
+  edit_keys_dialog = w;
+
+  gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
+  g_signal_connect (edit_keys_dialog, "destroy",
+                    G_CALLBACK (gtk_widget_destroyed), &edit_keys_dialog);
+
+  gtk_window_present (GTK_WINDOW (edit_keys_dialog));
 }
 
 static void
