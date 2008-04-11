@@ -124,7 +124,7 @@ typedef struct
   char    *name;
 } TerminalEncoding;
 
-void terminal_encoding_init (GConfClient *conf);
+void terminal_encoding_init (void);
 
 GtkWidget* terminal_encoding_dialog_new (GtkWindow *transient_parent);
 

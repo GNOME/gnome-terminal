@@ -49,7 +49,6 @@
  * predetermined table, then that encoding is
  * labeled "user defined" but still appears in the menu.
  */
-static GConfClient *default_client = NULL;
 
 static TerminalEncoding encodings[] = {
 
@@ -582,6 +581,7 @@ add_button_clicked_callback (GtkWidget *button,
   GSList *encodings;
   GSList *tmp;
   GSList *new_active_list;
+  GConfClient *conf;
   
   dialog = data;
 
@@ -611,11 +611,13 @@ add_button_clicked_callback (GtkWidget *button,
   /* this is reentrant, but only after it's done using the list
    * values, so should be safe
    */
-  gconf_client_set_list (default_client,
+  conf = gconf_client_get_default ();
+  gconf_client_set_list (conf,
                          CONF_GLOBAL_PREFIX"/active_encodings",
                          GCONF_VALUE_STRING,
                          new_active_list,
                          NULL);
+  g_object_unref (conf);
 
   g_slist_foreach (new_active_list, (GFunc) g_free, NULL);
   g_slist_free (new_active_list);
@@ -634,6 +636,7 @@ remove_button_clicked_callback (GtkWidget *button,
   GSList *encodings;
   GSList *tmp;
   GSList *new_active_list;
+  GConfClient *conf;
   
   dialog = data;
 
@@ -662,11 +665,13 @@ remove_button_clicked_callback (GtkWidget *button,
   /* this is reentrant, but only after it's done using the list
    * values, so should be safe
    */
-  gconf_client_set_list (default_client,
+  conf = gconf_client_get_default ();
+  gconf_client_set_list (conf,
                          CONF_GLOBAL_PREFIX"/active_encodings",
                          GCONF_VALUE_STRING,
                          new_active_list,
                          NULL);
+  g_object_unref (conf);
 
   g_slist_foreach (new_active_list, (GFunc) g_free, NULL);
   g_slist_free (new_active_list);  
@@ -896,8 +901,9 @@ register_active_encoding_tree_model (GtkListStore *store)
 }
 
 void
-terminal_encoding_init (GConfClient *conf)
+terminal_encoding_init (void)
 {
+  GConfClient *conf;
   int i;
   GError *err;
   GSList *strings;
@@ -905,11 +911,8 @@ terminal_encoding_init (GConfClient *conf)
   gchar *converted;
   gchar ascii_sample[96];
   
-  g_return_if_fail (GCONF_IS_CLIENT (conf));
+  conf = gconf_client_get_default ();
 
-  default_client = conf;
-  g_object_ref (G_OBJECT (default_client));
-  
   g_get_charset ((const char**)
                  &encodings[TERMINAL_ENCODING_CURRENT_LOCALE].charset);
 
@@ -988,7 +991,9 @@ terminal_encoding_init (GConfClient *conf)
   update_active_encodings_from_string_list (strings);
 
   g_slist_foreach (strings, (GFunc) g_free, NULL);
-  g_slist_free (strings);                                   
+  g_slist_free (strings);
+
+  g_object_unref (conf);
 }
 
 char*

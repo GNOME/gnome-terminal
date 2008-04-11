@@ -1286,7 +1286,7 @@ main (int argc, char **argv)
     }  
 
   terminal_accels_init ();
-  terminal_encoding_init (conf);
+  terminal_encoding_init ();
   
   terminal_profile_initialize (conf);
   sync_profile_list (FALSE, NULL);
