@@ -416,7 +416,8 @@ terminal_tabs_menu_new (TerminalWindow *window)
 static void
 tab_set_action_accelerator (GtkActionGroup *action_group,
 			    GtkAction *action,
-			    guint tab_number)
+			    guint tab_number,
+			    gboolean is_single_tab)
 {
 	const char *verb;
 	char accel_path[ACCEL_PATH_FORMAT_LENGTH];
@@ -433,7 +434,7 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 	gtk_action_set_accel_path (action, accel_path);
 
 	/* Only the first ten tabs get accelerators starting from 1 through 0 */
-	if (tab_number < 10)
+	if (tab_number < 10 && !is_single_tab)
 	{
 		accel_key = 0;
 		accel_number = (tab_number + 1) % 10;
@@ -461,14 +462,18 @@ terminal_tabs_menu_update (TerminalTabsMenu *menu)
 	GtkUIManager *manager;
 	GtkAction *action;
 	GList *tabs = NULL, *l;
-	guint i = 0;
+	guint i = 0, n;
+	gboolean is_single_tab;
 	const char *verb;
 
 	terminal_tabs_menu_clean (menu);
 
 	tabs = terminal_window_list_screens (p->window);
 
-	if (g_list_length (tabs) == 0) return;
+	n = g_list_length (tabs);
+	if (n == 0) return;
+
+	is_single_tab = (n == 1);
 
 	manager =  GTK_UI_MANAGER (terminal_window_get_ui_manager (p->window));
 	p->ui_id = gtk_ui_manager_new_merge_id (manager);
@@ -480,7 +485,7 @@ terminal_tabs_menu_update (TerminalTabsMenu *menu)
   
 		verb = gtk_action_get_name (action);
 
-		tab_set_action_accelerator (p->action_group, action, i++);
+		tab_set_action_accelerator (p->action_group, action, i++, is_single_tab);
 
 		gtk_ui_manager_add_ui (manager, p->ui_id,
 				       UI_PATH,
