@@ -61,7 +61,6 @@ struct _TerminalWindowPrivate
   GtkWidget *notebook;
   guint terms;
   TerminalScreen *active_term;
-  GtkClipboard *clipboard;
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
@@ -686,8 +685,10 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 {
   TerminalWindow *window = (TerminalWindow *) user_data;
   TerminalWindowPrivate *priv = window->priv;
+  GtkClipboard *clipboard;
 
-  gtk_clipboard_request_contents (priv->clipboard,
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_contents (clipboard,
                                   gdk_atom_intern_static_string ("TARGETS"),
                                   (GtkClipboardReceivedFunc) update_edit_menu,
                                   g_object_ref (window));
@@ -837,7 +838,7 @@ popup_copy_url_callback (GtkAction *action,
   if (info->string == NULL)
     return;
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, info->string, -1);
 }
 
@@ -994,7 +995,7 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
 
   g_return_if_fail (info->window == window);
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE /* FIXMEchpe ? */);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_contents (clipboard,
                                   gdk_atom_intern_static_string("TARGETS"),
                                   (GtkClipboardReceivedFunc) popup_clipboard_request_callback,
@@ -1290,7 +1291,7 @@ terminal_window_init (TerminalWindow *window)
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
   /* FIXMEchpe is that really true still ?? */
-  priv->clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE);
+  gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
 
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
