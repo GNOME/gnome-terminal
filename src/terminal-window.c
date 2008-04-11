@@ -657,14 +657,19 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 
 static void
 update_edit_menu (GtkClipboard *clipboard,
-                  const  gchar *text,
+                  GtkSelectionData *data,
                   TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
+  gboolean can_paste;
 
+  can_paste = gtk_selection_data_targets_include_text (data);
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
-  gtk_action_set_sensitive (action, text != NULL);
+  gtk_action_set_sensitive (action, can_paste);
+
+  /* Ref was added in gtk_clipboard_request_contents below */
+  g_object_unref (window);
 }
 
 static void
@@ -682,7 +687,10 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
   TerminalWindow *window = (TerminalWindow *) user_data;
   TerminalWindowPrivate *priv = window->priv;
 
-  gtk_clipboard_request_text (priv->clipboard, (GtkClipboardTextReceivedFunc) update_edit_menu, window);
+  gtk_clipboard_request_contents (priv->clipboard,
+                                  gdk_atom_intern_static_string ("TARGETS"),
+                                  (GtkClipboardReceivedFunc) update_edit_menu,
+                                  g_object_ref (window));
 }
 
 static void
@@ -896,16 +904,15 @@ popup_menu_deactivate_callback (GtkWidget *popup,
 
 static void
 popup_clipboard_request_callback (GtkClipboard *clipboard,
-                                  const char   *text,
-                                  gpointer      user_data)
+                                  GtkSelectionData *data,
+                                  TerminalScreenPopupInfo *info)
 {
-  TerminalScreenPopupInfo *info = user_data;
   TerminalWindow *window = info->window;
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
-  gboolean show_link, show_email_link, show_input_method_menu;
+  gboolean can_paste, show_link, show_email_link, show_input_method_menu;
   
   remove_popup_info (window);
 
@@ -917,6 +924,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
+  can_paste = gtk_selection_data_targets_include_text (data);
   show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL;
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
 
@@ -937,7 +945,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
   gtk_action_set_sensitive (action, terminal_screen_get_text_selected (screen));
   action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
-  gtk_action_set_sensitive (action, text != NULL);
+  gtk_action_set_sensitive (action, can_paste);
   
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                 "gtk-show-input-method-menu", &show_input_method_menu,
@@ -987,8 +995,10 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
   g_return_if_fail (info->window == window);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_NONE /* FIXMEchpe ? */);
-  gtk_clipboard_request_text (clipboard, popup_clipboard_request_callback,
-                              terminal_screen_popup_info_ref (info));
+  gtk_clipboard_request_contents (clipboard,
+                                  gdk_atom_intern_static_string("TARGETS"),
+                                  (GtkClipboardReceivedFunc) popup_clipboard_request_callback,
+                                  terminal_screen_popup_info_ref (info));
 }
 
 /*****************************************/
