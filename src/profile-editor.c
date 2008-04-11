@@ -1215,34 +1215,18 @@ terminal_profile_edit (TerminalProfile *profile,
 
       profile_editor_update_palette (editor, profile);
 
-      w = glade_xml_get_widget (xml, "font-hbox");
-
-      fontsel = gtk_font_button_new ();
+      fontsel = glade_xml_get_widget (xml, "font-selector");
       g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
-
-      gtk_font_button_set_title (GTK_FONT_BUTTON (fontsel), _("Choose A Terminal Font"));
-      gtk_font_button_set_show_size (GTK_FONT_BUTTON (fontsel), TRUE);
-      gtk_font_button_set_show_style (GTK_FONT_BUTTON (fontsel), FALSE);
-      gtk_font_button_set_use_font (GTK_FONT_BUTTON (fontsel), TRUE);
-      gtk_font_button_set_use_size (GTK_FONT_BUTTON (fontsel), FALSE);
 
       profile_editor_update_font (editor, profile);
       g_signal_connect (G_OBJECT (fontsel), "font_set",
 			G_CALLBACK (font_set),
 			profile);
 
-      font_label = gtk_label_new_with_mnemonic (_("_Font:"));
-      gtk_misc_set_alignment (GTK_MISC (font_label), 0.0, 0.5);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (font_label), fontsel);
-
-      gtk_box_set_spacing (GTK_BOX (w), 12);
-      
-      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (font_label), FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (w), GTK_WIDGET (fontsel), FALSE, FALSE, 0);
-
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
       gtk_size_group_add_widget (size_group,
-				 font_label);
+				 glade_xml_get_widget (xml,
+                                                       "font-selector-label"));
       gtk_size_group_add_widget (size_group,
 				 glade_xml_get_widget (xml,
 						       "profile-name-label"));
@@ -1250,9 +1234,7 @@ terminal_profile_edit (TerminalProfile *profile,
 				 glade_xml_get_widget (xml,
 						       "profile-icon-label"));
       g_object_unref (G_OBJECT (size_group));
-      
-      gtk_widget_show_all (w);
-      
+
       w = glade_xml_get_widget (xml, "reset-compat-defaults-button");
       g_signal_connect (G_OBJECT (w), "clicked",
 			G_CALLBACK (reset_compat_defaults_clicked),
@@ -1260,19 +1242,9 @@ terminal_profile_edit (TerminalProfile *profile,
 
       terminal_util_set_unique_role (GTK_WINDOW (editor), "gnome-terminal-profile-editor");
     }
-  else
-    {
-      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (editor));
-    }
-
-  if (old_transient_parent != transient_parent)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (editor),
-                                    GTK_WINDOW (transient_parent));
-      gtk_widget_hide (editor); /* re-show the window on its new parent */
-    }
-  
-  /*   gtk_widget_show_all (editor);*/
+      
+  gtk_window_set_transient_for (GTK_WINDOW (editor),
+                                GTK_WINDOW (transient_parent));
   gtk_window_present (GTK_WINDOW (editor));
 }
 
