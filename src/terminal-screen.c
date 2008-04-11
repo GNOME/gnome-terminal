@@ -55,7 +55,6 @@ struct _TerminalScreenPrivate
   TerminalProfile *profile; /* may be NULL at times */
   guint profile_changed_id;
   guint profile_forgotten_id;
-  GtkWidget *popup_menu;
   char *raw_title, *raw_icon_title;
   char *cooked_title, *cooked_icon_title;
   char *title_from_arg;
@@ -91,7 +90,6 @@ static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
-static void terminal_screen_unrealize   (GtkWidget *widget);
 static void terminal_screen_size_allocate (GtkWidget *widget,
                                            GtkAllocation *allocation);
 static void terminal_screen_size_request (GtkWidget *widget,
@@ -436,7 +434,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->finalize = terminal_screen_finalize;
   object_class->get_property = terminal_screen_get_property;
 
-  widget_class->unrealize = terminal_screen_unrealize;
   widget_class->size_allocate = terminal_screen_size_allocate;
   widget_class->screen_changed = terminal_screen_screen_changed;
   widget_class->size_request = terminal_screen_size_request;
@@ -498,21 +495,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
-}
-
-static void
-terminal_screen_unrealize (GtkWidget *widget)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPrivate *priv = screen->priv;
-
-  if (priv->popup_menu)
-    {
-      gtk_widget_destroy (priv->popup_menu);
-      priv->popup_menu = NULL;
-    }
-
-  GTK_WIDGET_CLASS (terminal_screen_parent_class)->unrealize (widget);
 }
 
 static void
