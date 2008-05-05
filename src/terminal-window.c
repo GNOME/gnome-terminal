@@ -2660,15 +2660,17 @@ help_about_callback (GtkAction *action,
                      TerminalWindow *window)
 {
   static const char copyright[] =
-    "Copyright © 2002, 2003, 2004 Havoc Pennington\n"
-    "Copyright © 2003, 2004, 2007 Mariano Suárez-Alvarez\n"
+    "Copyright © 2002–2004 Havoc Pennington\n"
+    "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007, 2008 Christian Persch";
+    "Copyright © 2007–2008 Christian Persch";
   const char *authors[] = {
-    "Guilherme de S. Pastore <gpastore@gnome.org> (maintainer)",
+    "Behdad Esfahbod <behdad@gnome.org> (maintainer)",
+    "Christian Persch <chpe" "\100" "gnome" "." "org" "> (maintainer)",
+    "",
+    "Guilherme de S. Pastore <gpastore@gnome.org>",
     "Havoc Pennington <hp@redhat.com>",
     "Mariano Suárez-Alvarez <mariano@gnome.org>",
-    "Christian Persch <chpe" "\100" "gnome" "." "org" ">",
     NULL
   };
   const gchar *license[] = {
