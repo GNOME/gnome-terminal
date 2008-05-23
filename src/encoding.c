@@ -369,7 +369,7 @@ update_active_encodings_from_string_list (GSList *strings)
       
       if (e == NULL)
         {
-          encoding = g_new0 (TerminalEncoding, 1);
+          encoding = g_slice_new0 (TerminalEncoding);
           
           encoding->index = -1;
           encoding->valid = TRUE; /* scary! */
