@@ -1831,7 +1831,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   if (window->priv->present_on_insert)
     {
-      gtk_widget_show_all (GTK_WIDGET (window));
+      gtk_widget_show (GTK_WIDGET (window));
       window->priv->present_on_insert = FALSE;
     }
 }
