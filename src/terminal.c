@@ -3606,6 +3606,7 @@ handle_new_terminal_event (int          argc,
                                                  argv);
   
   context = get_goption_context (parsing_results);
+  g_option_context_set_ignore_unknown_options (context, TRUE);
   if(!g_option_context_parse (context, &argc, &argv, &error))
   {
       g_warning ("Error parsing options: %s, passed from terminal child",
@@ -3613,7 +3614,7 @@ handle_new_terminal_event (int          argc,
       g_error_free (error);
       g_option_context_free (context);
       option_parsing_results_free (parsing_results);
-      exit(1);
+      return;
   }
   g_option_context_free (context);
 
