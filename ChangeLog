@@ -1,3 +1,21 @@
+2008-05-22  Christian Persch  <chpe@gnome.org>
+
+	* src/encoding.c: (update_active_encodings_from_string_list): Use the
+	correct allocator.
+
+2008-05-10  Christian Persch  <chpe@gnome.org>
+
+	* src/terminal-window.c: (notebook_page_added_callback): Fix menubar
+	visibility in newly created windows from DND. Bug #528915, patch by
+	Gábor Szeder.
+
+2008-05-06  Christian Persch  <chpe@gnome.org>
+
+	* src/terminal.c: (handle_new_terminal_event): Ignore unknown options
+	when handling a new-terminal event from another instance. Don't call
+	exit() when parsing the passed options fail; instead just ignore the
+	request. Bug #531720.
+
 2008-04-07  Christian Persch  <chpe@gnome.org>
 
 	=== Release 2.22.1 ===
