@@ -1078,11 +1078,6 @@ terminal_profile_edit (TerminalProfile *profile,
   gtk_size_group_add_widget (size_group, w);
   g_object_unref (size_group);
 
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  gtk_size_group_add_widget (size_group, (GtkWidget *) gtk_builder_get_object  (builder, "font-selector-label"));
-  gtk_size_group_add_widget (size_group, (GtkWidget *) gtk_builder_get_object  (builder, "profile-name-label"));
-  g_object_unref (G_OBJECT (size_group));
-
   g_signal_connect (gtk_builder_get_object  (builder, "reset-compat-defaults-button"),
                     "clicked",
                     G_CALLBACK (reset_compat_defaults_cb),
