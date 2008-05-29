@@ -986,7 +986,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
-  gboolean can_paste, show_link, show_email_link, show_input_method_menu;
+  gboolean can_paste, show_link, show_email_link, show_call_link, show_input_method_menu;
   
   remove_popup_info (window);
 
@@ -999,13 +999,18 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
   can_paste = gtk_targets_include_text (targets, n_targets);
-  show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL;
+  show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL && info->flavour != FLAVOR_VOIP_CALL;
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
+  show_call_link = info->string != NULL && info->flavour == FLAVOR_VOIP_CALL;
 
   action = gtk_action_group_get_action (priv->action_group, "PopupSendEmail");
   gtk_action_set_visible (action, show_email_link);
   action = gtk_action_group_get_action (priv->action_group, "PopupCopyEmailAddress");
   gtk_action_set_visible (action, show_email_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCall");
+  gtk_action_set_visible (action, show_call_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupCopyCallAddress");
+  gtk_action_set_visible (action, show_call_link);
   action = gtk_action_group_get_action (priv->action_group, "PopupOpenLink");
   gtk_action_set_visible (action, show_link);
   action = gtk_action_group_get_action (priv->action_group, "PopupCopyLinkAddress");
@@ -1322,6 +1327,12 @@ terminal_window_init (TerminalWindow *window)
         NULL,
         G_CALLBACK (popup_open_url_callback) },
       { "PopupCopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
+        NULL,
+        G_CALLBACK (popup_copy_url_callback) },
+      { "PopupCall", NULL, N_("C_all To..."), NULL,
+        NULL,
+        G_CALLBACK (popup_open_url_callback) },
+      { "PopupCopyCallAddress", NULL, N_("_Copy Call Address"), NULL,
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
       { "PopupOpenLink", NULL, N_("_Open Link"), NULL,

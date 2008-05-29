@@ -177,11 +177,12 @@ terminal_util_open_url (GtkWidget *parent,
       uri = g_strdup_printf ("http:%s", orig_url);
       break;
     case FLAVOR_EMAIL:
-      if (strncmp ("mailto:", orig_url, 7))
+      if (g_ascii_strncasecmp ("mailto:", orig_url, 7) != 0)
 	uri = g_strdup_printf ("mailto:%s", orig_url);
       else
 	uri = g_strdup (orig_url);
       break;
+    case FLAVOR_VOIP_CALL:
     case FLAVOR_AS_IS:
       uri = g_strdup (orig_url);
       break;

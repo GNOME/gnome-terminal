@@ -329,28 +329,38 @@ terminal_screen_init (TerminalScreen *screen)
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9"
+#define HOST      "[" HOSTCHARS "]+(\\.[" HOSTCHARS "]+)*"
+#define PORT      "(:[0-9]{1,5})?"
 #define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
 #define SCHEME    "(news:|telnet:|nntp:|file:/|https?:|ftps?:|webcal:)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 #define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
 
   terminal_screen_match_add (screen,
-			     "\\<" SCHEME "//(" USER "@)?[" HOSTCHARS ".]+"
-			     "(:[0-9]+)?(" URLPATH ")?\\>/?", FLAVOR_AS_IS);
+                             "\\<" SCHEME "//(" USER "@)?" HOST
+                             PORT "(" URLPATH ")?\\>/?",
+                             FLAVOR_AS_IS);
 
   terminal_screen_match_add (screen,
-			     "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
-			     "(:[0-9]+)?(" URLPATH ")?\\>/?",
-			     FLAVOR_DEFAULT_TO_HTTP);
+                             "\\<(www|ftp)[" HOSTCHARS "]*\\." HOST
+                             PORT "(" URLPATH ")?\\>/?",
+                             FLAVOR_DEFAULT_TO_HTTP);
 
   terminal_screen_match_add (screen,
-			     "\\<(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9]"
-			     "[a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>",
-			     FLAVOR_EMAIL);
+                             "\\<(mailto:)?[" USERCHARS "][" USERCHARS ".]*@"
+                             "[" HOSTCHARS "]+\\." HOST "\\>",
+                             FLAVOR_EMAIL);
 
   terminal_screen_match_add (screen,
-			     "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
-			     "@[" HOSTCHARS ".]+(:[0-9]+)?\\>", FLAVOR_AS_IS);
+                             "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
+                             HOST PORT "\\>",
+                             FLAVOR_AS_IS);
+
+  terminal_screen_match_add (screen,
+                             "\\<(callto|h323|sip):[" USERCHARS "]"
+                             "[" USERCHARS ".]*(" PORT "/[a-z0-9]+)?"
+                             "@" HOST "\\>",
+                             FLAVOR_VOIP_CALL);
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
