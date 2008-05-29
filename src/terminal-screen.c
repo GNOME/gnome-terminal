@@ -159,6 +159,12 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
 static void
+free_tag_data (TagData *tagdata)
+{
+  g_slice_free (TagData, tagdata);
+}
+
+static void
 style_set_callback (GtkWidget *widget,
                     GtkStyle  *previous_style,
                     void      *data)
@@ -598,10 +604,10 @@ terminal_screen_finalize (GObject *object)
   g_strfreev (priv->override_command);
   g_free (priv->working_dir);
 
-  g_slist_foreach (priv->url_tags, (GFunc) g_free, NULL);
+  g_slist_foreach (priv->url_tags, (GFunc) free_tag_data, NULL);
   g_slist_free (priv->url_tags);
 
-  g_slist_foreach (priv->skey_tags, (GFunc) g_free, NULL);
+  g_slist_foreach (priv->skey_tags, (GFunc) free_tag_data, NULL);
   g_slist_free (priv->skey_tags);
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
@@ -2120,7 +2126,7 @@ terminal_screen_match_add (TerminalScreen            *screen,
   
   tag = vte_terminal_match_add (VTE_TERMINAL (screen), regexp);
 
-  tag_data = g_new0 (TagData, 1);
+  tag_data = g_slice_new (TagData);
   tag_data->tag = tag;
   tag_data->flavor = flavor;
 
@@ -2138,7 +2144,7 @@ terminal_screen_skey_match_add (TerminalScreen            *screen,
   
   tag = vte_terminal_match_add ( VTE_TERMINAL (screen), regexp);
 
-  tag_data = g_new0 (TagData, 1);
+  tag_data = g_slice_new (TagData);
   tag_data->tag = tag;
   tag_data->flavor = flavor;
 
@@ -2155,7 +2161,7 @@ terminal_screen_skey_match_remove (TerminalScreen *screen)
     vte_terminal_match_remove (VTE_TERMINAL (screen),
                                GPOINTER_TO_INT(((TagData*)tags->data)->tag));
 
-  g_slist_foreach (priv->skey_tags, (GFunc) g_free, NULL);
+  g_slist_foreach (priv->skey_tags, (GFunc) free_tag_data, NULL);
   g_slist_free (priv->skey_tags);
   priv->skey_tags = NULL;
 }

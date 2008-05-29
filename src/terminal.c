@@ -129,7 +129,7 @@ initial_tab_new (const char *profile,
 {
   InitialTab *it;
 
-  it = g_new (InitialTab, 1);
+  it = g_slice_new (InitialTab);
 
   it->profile = g_strdup (profile);
   it->profile_is_id = is_id;
@@ -150,7 +150,7 @@ initial_tab_free (InitialTab *it)
   g_strfreev (it->exec_argv);
   g_free (it->title);
   g_free (it->working_dir);
-  g_free (it);
+  g_slice_free (InitialTab, it);
 }
 
 static InitialWindow*
@@ -159,7 +159,7 @@ initial_window_new (const char *profile,
 {
   InitialWindow *iw;
   
-  iw = g_new (InitialWindow, 1);
+  iw = g_slice_new (InitialWindow);
   
   iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
   iw->force_menubar_state = FALSE;
@@ -178,7 +178,7 @@ initial_window_free (InitialWindow *iw)
   g_list_free (iw->tabs);
   g_free (iw->geometry);
   g_free (iw->role);
-  g_free (iw);
+  g_slice_free (InitialWindow, iw);
 }
 
 static void
@@ -1669,7 +1669,7 @@ handle_new_terminal_events (void)
 
       next = pending_new_terminal_events->next;
       g_strfreev (event->argv);
-      g_free (event);
+      g_slice_free (NewTerminalEvent, event);
       g_slist_free_1 (pending_new_terminal_events);
       pending_new_terminal_events = next;
     }
@@ -1706,7 +1706,7 @@ terminal_new_event (BonoboListener    *listener,
     tmp_argv[tmp_argc] = g_strdup (((const char**)args->_buffer)[tmp_argc]);
   tmp_argv[tmp_argc] = NULL;
 
-  event = g_new0 (NewTerminalEvent, 1);
+  event = g_slice_new0 (NewTerminalEvent);
   event->argc = tmp_argc;
   event->argv = tmp_argv;
 
