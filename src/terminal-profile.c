@@ -32,6 +32,12 @@
 #include "terminal-app.h"
 #include "terminal-type-builtins.h"
 
+#ifdef DEBUG_PROFILE
+#define NOTE(x) x
+#else
+#define NOTE(x)
+#endif
+
 /* To add a new key, you need to:
  *
  *  - add an entry to the enum below
@@ -445,7 +451,7 @@ ensure_pixbuf_property (TerminalProfile *profile,
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
   if (!pixbuf)
     {
-      g_printerr ("Failed to load image \"%s\": %s\n", filename_utf8, error->message);
+      NOTE (g_printerr ("Failed to load image \"%s\": %s\n", filename_utf8, error->message);)
       g_error_free (error);
       g_free (path);
       goto failed;
@@ -531,7 +537,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   if (!key || !g_str_has_prefix (key, priv->profile_dir))
     return;
 
-  g_print ("GCONF NOTIFY key %s\n", key);
+  NOTE (g_print ("GConf notification for key %s\n", key);)
 
   key += strlen (priv->profile_dir);
   if (!key[0])
@@ -666,8 +672,8 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   if (g_param_value_validate (pspec, &value))
     {
-      g_warning ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
-                 gconf_entry_get_key (entry), pspec->name);
+      NOTE (g_warning ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
+                       gconf_entry_get_key (entry), pspec->name);)
       force_write = TRUE;
     }
 
@@ -675,13 +681,13 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
    * so we don't go into an infinite loop.
    */
   equal = values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id));
-  if (!equal)
-    g_print ("Setting property %s to a different value\n"
-             "  now: %s\n"
-             "  new: %s\n",
-             pspec->name,
-             g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
-             g_strdup_value_contents (&value));
+  NOTE (if (!equal)
+        g_print ("Setting property %s to a different value\n"
+                "  now: %s\n"
+                "  new: %s\n",
+                pspec->name,
+                g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
+                g_strdup_value_contents (&value));)
 
   if (!equal)
     {
@@ -727,7 +733,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
   key = gconf_concat_dir_and_key (priv->profile_dir, gconf_key);
   value = g_value_array_get_nth (priv->properties, pspec->param_id);
 
-  g_print ("CHANGESET adding pspec %s with value %s\n", pspec->name, g_strdup_value_contents (value));
+  NOTE (g_print ("Adding pspec %s with value %s to the gconf changeset\n", pspec->name, g_strdup_value_contents (value));)
 
   if (G_IS_PARAM_SPEC_BOOLEAN (pspec))
     gconf_change_set_set_bool (changeset, key, g_value_get_boolean (value));
@@ -1152,7 +1158,7 @@ terminal_profile_notify (GObject *object,
 {
   void (* notify) (GObject *, GParamSpec *) = G_OBJECT_CLASS (terminal_profile_parent_class)->notify;
 
-  g_print ("-> GOBJECT NOTIFY prop %s\n", pspec->name);
+  NOTE (g_print ("Property notification for prop %s\n", pspec->name);)
   if (notify)
     notify (object, pspec);
 
