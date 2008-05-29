@@ -47,43 +47,6 @@
 #include <time.h>
 #include <gdk/gdkx.h>
 
-
-#define TERMINAL_PROFILE_ALLOW_BOLD             "allow-bold"
-#define TERMINAL_PROFILE_BACKGROUND_COLOR       "background-color"
-#define TERMINAL_PROFILE_BACKGROUND_DARKNESS    "background-darkness"
-#define TERMINAL_PROFILE_BACKGROUND_IMAGE       "background-image"
-#define TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE  "background-image-file"
-#define TERMINAL_PROFILE_BACKGROUND_TYPE        "background-type"
-#define TERMINAL_PROFILE_BACKSPACE_BINDING      "backspace-binding"
-#define TERMINAL_PROFILE_CUSTOM_COMMAND         "custom-command"
-#define TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR   "default-show-menubar"
-#define TERMINAL_PROFILE_DELETE_BINDING         "delete-binding"
-#define TERMINAL_PROFILE_EXIT_ACTION            "exit-action"
-#define TERMINAL_PROFILE_FONT                   "font"
-#define TERMINAL_PROFILE_FOREGROUND_COLOR       "foreground-color"
-#define TERMINAL_PROFILE_ICON_FILE              "icon-file"
-#define TERMINAL_PROFILE_ICON                   "icon"
-#define TERMINAL_PROFILE_IS_DEFAULT             "is-default"
-#define TERMINAL_PROFILE_LOGIN_SHELL            "login-shell"
-#define TERMINAL_PROFILE_NAME                   "name"
-#define TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER   "no-aa-without-render"
-#define TERMINAL_PROFILE_PALETTE                "palette"
-#define TERMINAL_PROFILE_SCROLL_BACKGROUND      "scroll-background"
-#define TERMINAL_PROFILE_SCROLLBACK_LINES       "scrollback-lines"
-#define TERMINAL_PROFILE_SCROLLBAR_POSITION     "scrollbar-position"
-#define TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE    "scroll-on-keystroke"
-#define TERMINAL_PROFILE_SCROLL_ON_OUTPUT       "scroll-on-output"
-#define TERMINAL_PROFILE_SILENT_BELL            "silent-bell"
-#define TERMINAL_PROFILE_TITLE_MODE             "title-mode"
-#define TERMINAL_PROFILE_TITLE                  "title"
-#define TERMINAL_PROFILE_UPDATE_RECORDS         "update-records"
-#define TERMINAL_PROFILE_USE_CUSTOM_COMMAND     "use-custom-command"
-#define TERMINAL_PROFILE_USE_SKEY               "use-skey"
-#define TERMINAL_PROFILE_USE_SYSTEM_FONT        "use-system-font"
-#define TERMINAL_PROFILE_USE_THEME_COLORS       "use-theme-colors"
-#define TERMINAL_PROFILE_VISIBLE_NAME           "visible-name"
-#define TERMINAL_PROFILE_WORD_CHARS             "word-chards"
-
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
