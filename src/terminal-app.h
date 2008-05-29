@@ -1,5 +1,3 @@
-/* application-wide commands */
-
 /*
  * Copyright © 2001 Havoc Pennington
  *

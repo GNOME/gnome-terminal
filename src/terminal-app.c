@@ -1,12 +1,9 @@
-/* terminal program */
 /*
  * Copyright © 2001, 2002 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
  * Copyright © 2008 Christian Persch
- *
- * This file is part of gnome-terminal.
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
