@@ -1372,7 +1372,7 @@ _terminal_profile_clone (TerminalProfile *base_profile,
   profile_num = 0;
   do
     {
-      g_snprintf (profile_name, sizeof (profile_name), "Profile%u", ++profile_num);
+      g_snprintf (profile_name, sizeof (profile_name), "Profile%u", profile_num++);
     }
   while (terminal_app_get_profile_by_name (app, profile_name) != NULL);
  
