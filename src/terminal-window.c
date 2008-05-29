@@ -112,8 +112,6 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
                                               TerminalWindow  *window);
 
 /* Menu action callbacks */
-static void terminal_menu_activate_callback (GtkAction *action,
-                                           TerminalWindow *window);
 static void file_new_window_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void file_new_tab_callback             (GtkAction *action,
@@ -624,16 +622,16 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       priv->encodings_action_group = NULL;
     }
 
-  if (priv->active_screen == NULL)
-    return;
-
   action_group = priv->encodings_action_group = gtk_action_group_new ("Encodings");
   gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
   g_object_unref (action_group);
 
   priv->encodings_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
 
-  charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
+  if (priv->active_screen)
+    charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
+  else
+    charset = NULL;
   
   encodings = terminal_get_active_encodings ();
 
@@ -661,7 +659,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       gtk_radio_action_set_group (encoding_action, group);
       group = gtk_radio_action_get_group (encoding_action);
 
-      if (strcmp (e->charset, charset) == 0)
+      if (charset && strcmp (e->charset, charset) == 0)
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (encoding_action), TRUE);
 
       g_signal_connect (encoding_action, "toggled",
@@ -678,6 +676,29 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
 
   g_slist_foreach (encodings, (GFunc) terminal_encoding_unref, NULL);
   g_slist_free (encodings);
+}
+
+static void
+terminal_window_update_encoding_menu_active_encoding (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+  char name[128];
+
+  if (!priv->active_screen)
+    return;
+  if (!priv->encodings_action_group)
+    return;
+
+  g_snprintf (name, sizeof (name), SET_ENCODING_ACTION_NAME_PREFIX "%s",
+              vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen)));
+  action = gtk_action_group_get_action (priv->encodings_action_group, name);
+  if (!action)
+    return;
+
+  g_signal_handlers_block_by_func (action, G_CALLBACK (terminal_set_encoding_callback), window);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+  g_signal_handlers_unblock_by_func (action, G_CALLBACK (terminal_set_encoding_callback), window);
 }
 
 /* Actions stuff */
@@ -732,16 +753,6 @@ update_edit_menu (GtkClipboard *clipboard,
 
   /* Ref was added in gtk_clipboard_request_targets below */
   g_object_unref (window);
-}
-
-static void
-terminal_menu_activate_callback (GtkAction *action,
-                                 TerminalWindow *window)
-{
-  /* FIXMEchpe: make the encoding list a prop on TerminalApp instead,
-   * and listen for notifications to update the menu instead of this hack.
-   */
-  terminal_window_update_encoding_menu (window);
 }
 
 static void
@@ -1409,9 +1420,6 @@ terminal_window_init (TerminalWindow *window)
   action = gtk_action_group_get_action (action_group, "Edit");
   g_signal_connect (action, "activate",
                     G_CALLBACK (edit_menu_activate_callback), window);
-  action = gtk_action_group_get_action (action_group, "Terminal");
-  g_signal_connect (action, "activate",
-                    G_CALLBACK (terminal_menu_activate_callback), window);
 
   action = gtk_action_group_get_action (action_group, "ViewFullscreen");
   gtk_action_set_sensitive (action,
@@ -2052,6 +2060,7 @@ terminal_window_set_active (TerminalWindow *window,
 #endif
   terminal_window_set_size (window, screen, TRUE);
 
+  terminal_window_update_encoding_menu_active_encoding (window);
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (window);
   terminal_window_update_zoom_sensitivity (window);
