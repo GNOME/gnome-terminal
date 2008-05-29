@@ -1779,7 +1779,7 @@ terminal_app_new_terminal (TerminalApp     *app,
     
       terminal_window_add_screen (window, screen, -1);
 
-      terminal_window_set_active (window, screen);
+      terminal_window_switch_screen (window, screen);
       gtk_widget_grab_focus (GTK_WIDGET (screen));
     }
   else
@@ -1794,7 +1794,7 @@ terminal_app_new_terminal (TerminalApp     *app,
           terminal_window_add_screen (window, screen, -1);
           g_object_unref (screen);
 
-          terminal_window_set_active (window, screen);
+          terminal_window_switch_screen (window, screen);
           gtk_widget_grab_focus (GTK_WIDGET (screen));
         }
     }

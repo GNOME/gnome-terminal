@@ -70,8 +70,8 @@ void terminal_window_set_menubar_visible     (TerminalWindow *window,
                                               gboolean        setting);
 gboolean terminal_window_get_menubar_visible (TerminalWindow *window);
 
-void            terminal_window_set_active (TerminalWindow *window,
-                                            TerminalScreen *screen);
+void            terminal_window_switch_screen (TerminalWindow *window,
+                                               TerminalScreen *screen);
 TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 
 /* In order of their tabs in the notebook */

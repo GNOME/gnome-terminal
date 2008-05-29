@@ -168,7 +168,7 @@ tab_action_activate_cb (GtkToggleAction *action,
 
 	if (terminal_window_get_active (priv->window) != screen)
 	{
-                terminal_window_set_active (priv->window, screen);
+                terminal_window_switch_screen (priv->window, screen);
 	}
 }
 

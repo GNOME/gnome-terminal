@@ -992,7 +992,7 @@ new_terminal_with_options (OptionParsingResults *results)
         }
       
       if (active_screen)
-        terminal_window_set_active (current_window, active_screen);
+        terminal_window_switch_screen (current_window, active_screen);
 
       tmp = tmp->next;
     }

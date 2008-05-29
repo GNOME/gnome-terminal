@@ -1921,14 +1921,13 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   }
 }
 
-void
+static void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *widget;
   TerminalProfile *profile;
-  guint page_num;
   
   if (priv->active_term == screen)
     return;
@@ -1966,10 +1965,6 @@ terminal_window_set_active (TerminalWindow *window,
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
   gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
 
-  /* FIXMEchpe this is highly suspect code, called from below notebook_page_selected_callback!!! */
-  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), GTK_WIDGET (screen)->parent);
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page_num);
-
   /* set size of window to current grid size */
 #ifdef DEBUG_GEOMETRY
   g_fprintf (stderr,"setting size after flipping notebook pages\n");
@@ -1979,6 +1974,18 @@ terminal_window_set_active (TerminalWindow *window,
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (window);
   terminal_window_update_zoom_sensitivity (window);
+}
+
+void
+terminal_window_switch_screen (TerminalWindow *window,
+                              TerminalScreen *screen)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  int page_num;
+
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
+                                    GTK_WIDGET (screen)->parent);
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page_num);
 }
 
 TerminalScreen*
@@ -2080,6 +2087,9 @@ notebook_page_added_callback (GtkWidget       *notebook,
     }
   
   /* Make the first-added screen the active one */
+  /* FIXMEchpe: this shouldn't be necessary since we'll immediately get
+   * page-selected callback.
+   */
   if (priv->active_term == NULL)
     terminal_window_set_active (window, screen);
 

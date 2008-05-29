@@ -1202,7 +1202,7 @@ get_child_environment (TerminalScreen *screen)
 
       if (gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_authentication", NULL))
 	{
-	  gchar *user, *password;
+	  char *user, *password;
 
 	  user = gconf_client_get_string (conf,
 					  HTTP_PROXY_DIR "/authentication_user",
