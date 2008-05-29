@@ -772,7 +772,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       
       if (bg_type == TERMINAL_BACKGROUND_IMAGE)
         {
-          /* FIXMEchpe: use the BACKGROUND property intead */
+          /* FIXME: use the BACKGROUND property intead */
           set_background_image_file (vte_terminal,
                                     terminal_profile_get_property_string (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
           vte_terminal_set_scroll_background (vte_terminal,
@@ -799,7 +799,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
         }
       
       /* FIXME: Don't enable this if we have a compmgr. */
-      /* FIXMEchpe: redo this on screen-changed! */
+      /* FIXME: redo this on screen-changed! */
       vte_terminal_set_background_transparent (vte_terminal,
                                                bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
                                                (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
@@ -1011,7 +1011,7 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
     return;
 
   if (!GTK_WIDGET_REALIZED (screen))
-    return; // FIXMEchpe still necessary??
+    return;
 
   if (!terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
     return;
@@ -1027,7 +1027,7 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
 
   update_color_scheme (screen);
 
-  /* FIXMEchpe: why do this on realize? */
+  /* FIXME: why do this on realize? */
   terminal_window_set_size (priv->window, screen, TRUE);
 }
 
@@ -1251,12 +1251,12 @@ get_child_environment (TerminalScreen *screen)
   retval[i] = g_strdup ("TERM=xterm"); /* FIXME configurable later? */
   ++i;
 
-  /* FIXMEchpe: moving the tab between windows, or the window between displays will make this invalid... */
+  /* FIXME: moving the tab between windows, or the window between displays will make this invalid... */
   retval[i] = g_strdup_printf ("WINDOWID=%ld",
                                GDK_WINDOW_XWINDOW (term->window));
   ++i;
 
-  /* FIXMEchpe: moving the window between displays will make this invalid... */
+  /* FIXME: moving the window between displays will make this invalid... */
   retval[i] = g_strdup_printf ("DISPLAY=%s", 
 			       gdk_display_get_name(gtk_widget_get_display(term)));
   ++i;
@@ -1905,7 +1905,7 @@ drag_data_received (TerminalScreen   *widget,
         color.red = data[0];
         color.green = data[1];
         color.blue = data[2];
-        /* FIXMEchpe: use opacity from data[3] */
+        /* FIXME: use opacity from data[3] */
 
         profile = terminal_screen_get_profile (screen);
 
@@ -2039,7 +2039,6 @@ drag_data_received (TerminalScreen   *widget,
         GtkWidget *dest_notebook;
         int page_num;
 
-        /* FIXMEchpe same-app only!? */
         container = *(GtkWidget**) selection_data->data;
         if (!GTK_IS_WIDGET (container))
           return;
