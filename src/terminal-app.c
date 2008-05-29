@@ -652,16 +652,6 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
 
   transient_parent = gtk_widget_get_toplevel (widget);
-
-  if (terminal_app_get_profile_count (terminal_app_get ()) == 1)
-    {
-      g_object_unref (selected_profile);
-
-      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
-                                       _("You must have at least one profile; you can't delete all of them."));
-      return;
-    }
-
   dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_QUESTION,
@@ -1187,7 +1177,6 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
   gboolean selected;
 
   selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
-  g_print ("selection %d\n", selected);
 
   gtk_widget_set_sensitive (app->manage_profiles_edit_button, selected);
   gtk_widget_set_sensitive (app->manage_profiles_delete_button,
