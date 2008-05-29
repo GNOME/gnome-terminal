@@ -19,15 +19,6 @@
 
 #include <config.h>
 
-#include "terminal-intl.h"
-
-#include "terminal-app.h"
-#include "terminal-accels.h"
-#include "terminal-window.h"
-#include "terminal-screen-container.h"
-#include "terminal-tabs-menu.h"
-#include "terminal-util.h"
-#include "encoding.h"
 #include <string.h>
 #include <stdlib.h>
 #include <libgnome/gnome-program.h>
@@ -35,6 +26,16 @@
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>
+
+#include "encoding.h"
+#include "skey-popup.h"
+#include "terminal-accels.h"
+#include "terminal-app.h"
+#include "terminal-intl.h"
+#include "terminal-screen-container.h"
+#include "terminal-tabs-menu.h"
+#include "terminal-util.h"
+#include "terminal-window.h"
 
 struct _TerminalWindowPrivate
 {
@@ -1072,6 +1073,33 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
 }
 
 static void
+screen_skey_clicked_cb (TerminalScreen *screen,
+                        const char *skey_challenge,
+                        TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (screen != priv->active_screen)
+    return;
+
+  terminal_skey_do_popup (GTK_WINDOW (window), screen, skey_challenge);
+}
+
+static void
+screen_url_clicked_cb (TerminalScreen *screen,
+                       const char *url,
+                       int flavour,
+                       TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (screen != priv->active_screen)
+    return;
+
+  terminal_util_open_url (GTK_WIDGET (window), url, flavour);
+}
+
+static void
 screen_close_cb (TerminalScreen *screen,
                  TerminalWindow *window)
 {
@@ -2089,6 +2117,10 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
+  g_signal_connect (screen, "skey-clicked",
+                    G_CALLBACK (screen_skey_clicked_cb), window);
+  g_signal_connect (screen, "url-clicked",
+                    G_CALLBACK (screen_url_clicked_cb), window);
 
   g_signal_connect (screen, "close-screen",
                     G_CALLBACK (screen_close_cb), window);
@@ -2169,6 +2201,14 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   g_signal_handlers_disconnect_by_func (screen,
                                         G_CALLBACK (screen_show_popup_menu_callback),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (screen,
+                                        G_CALLBACK (screen_skey_clicked_cb),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (screen,
+                                        G_CALLBACK (screen_url_clicked_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,

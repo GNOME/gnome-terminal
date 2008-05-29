@@ -62,6 +62,11 @@ struct _TerminalScreenClass
                                TerminalProfile *old_profile);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
+  void (* skey_clicked)       (TerminalScreen *screen,
+                               const char *skey_challenge);
+  void (* url_clicked)        (TerminalScreen *screen,
+                               const char *url,
+                               int flavour);
   void (* close_screen)       (TerminalScreen *screen);
 };
 

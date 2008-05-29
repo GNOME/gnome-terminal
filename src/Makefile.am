@@ -18,6 +18,8 @@ gnome_terminal_SOURCES= \
 	terminal-app.c \
 	terminal-app.h \
 	terminal-intl.h \
+	terminal-marshal.c \
+	terminal-marshal.h \
 	terminal-profile.c \
 	terminal-profile.h \
 	terminal-screen.c \
@@ -57,6 +59,8 @@ gnome_terminal_LDADD = \
 	$(TERM_LIBS)
 
 BUILT_SOURCES = \
+	terminal-marshal.c \
+	terminal-marshal.h \
 	terminal-type-builtins.c \
 	terminal-type-builtins.h \
 	$(NULL)
@@ -78,6 +82,21 @@ terminal-type-builtins.c: terminal-type-builtins.c.template $(TYPES_H_FILES)
 	$(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbc \
 	&& (cmp -s xgen-ttbc terminal-type-builtins.c || cp xgen-ttbc terminal-type-builtins.c ) \
 	&& rm -f xgen-ttbc
+
+terminal-marshal.h: $(srcdir)/terminal-marshal.list
+	( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
+			--header \
+			--internal > terminal-marshal.h.tmp \
+	&& mv terminal-marshal.h.tmp terminal-marshal.h ) \
+	|| ( rm -f terminal-marshal.h.tmp && exit 1 )
+
+terminal-marshal.c: $(srcdir)/terminal-marshal.list
+	( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
+				--header \
+				--body \
+				--internal > terminal-marshal.c.tmp \
+		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
+	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
@@ -107,6 +126,7 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
+	terminal-marshal.list \
 	$(icon_DATA) \
 	$(schema_in_files) \
 	$(server_DATA) \

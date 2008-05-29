@@ -51,6 +51,8 @@ gboolean terminal_util_load_builder_file (const char *filename,
                                           const char *object_name,
                                           ...);
 
+gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);
+
 typedef enum {
   FLAG_INVERT_BOOL  = 1 << 0,
 } PropertyChangeFlags;

@@ -34,11 +34,11 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
+#include "terminal-marshal.h"
 #include "terminal-profile.h"
 #include "terminal-screen-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
-#include "skey-popup.h"
 
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
@@ -72,6 +72,8 @@ enum
 {
   PROFILE_SET,
   SHOW_POPUP_MENU,
+  SKEY_CLICKED,
+  URL_CLICKED,
   CLOSE_SCREEN,
   LAST_SIGNAL
 };
@@ -457,6 +459,26 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   1,
                   G_TYPE_POINTER);
 
+  signals[SKEY_CLICKED] =
+    g_signal_new (I_("skey-clicked"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, skey_clicked),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__STRING,
+                  G_TYPE_NONE,
+                  1, G_TYPE_STRING);
+  
+  signals[URL_CLICKED] =
+    g_signal_new (I_("url-clicked"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, url_clicked),
+                  NULL, NULL,
+                  _terminal_marshal_VOID__STRING_INT,
+                  G_TYPE_NONE,
+                  2, G_TYPE_STRING, G_TYPE_INT);
+  
   signals[CLOSE_SCREEN] =
     g_signal_new (I_("close-screen"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -1450,7 +1472,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
                                                      NULL);
       if (skey_match != NULL)
 	{
-	  terminal_skey_do_popup (screen, skey_match);
+          g_signal_emit (screen, signals[SKEY_CLICKED], 0, skey_match);
 	  g_free (skey_match);
           g_free (matched_string);
 
@@ -1463,8 +1485,8 @@ terminal_screen_button_press_event (GtkWidget      *widget,
       matched_string != NULL)
     {
       gtk_widget_grab_focus (widget);
-      
-      terminal_util_open_url (GTK_WIDGET (priv->window), matched_string, matched_flavor);
+
+      g_signal_emit (screen, signals[URL_CLICKED], 0, matched_string, matched_flavor);
       g_free (matched_string);
 
       return TRUE; /* don't do anything else such as select with the click */

@@ -1,5 +1,6 @@
 /*
  * Copyright © 2002 Jonathan Blandford <jrb@gnome.org>
+ * Copyright © 2008 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +29,20 @@
 
 #define SKEY_PREFIX "s/key "
 #define OTP_PREFIX  "otp-"
+
+typedef struct {
+  TerminalScreen *screen;
+  char *seed;
+  int seq;
+  int hash;
+} SkeyData;
+
+static void
+skey_data_free (SkeyData *data)
+{
+  g_free (data->seed);
+  g_free (data);
+}
 
 static gboolean
 extract_seq_and_seed (const gchar  *skey_match,
@@ -99,27 +114,53 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
   return TRUE;
 }
 
+static void
+skey_challenge_response_cb (GtkWidget *dialog,
+                            int response_id,
+                            SkeyData *data)
+{  
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      GtkWidget *entry;
+      const char *password;
+      char *response;
+
+      entry = g_object_get_data (G_OBJECT (dialog), "skey-entry");
+      password = gtk_entry_get_text (GTK_ENTRY (entry));
+
+      /* FIXME: fix skey to use g_malloc */
+      response = skey (data->hash, data->seq, data->seed, password);
+      if (response)
+	{
+          VteTerminal *vte_terminal = VTE_TERMINAL (data->screen);
+          static const char newline[2] = "\n";
+
+	  vte_terminal_feed_child (vte_terminal, response, strlen (response));
+          vte_terminal_feed_child (vte_terminal, newline, strlen (newline));
+	  free (response);
+	}
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
 void
-terminal_skey_do_popup (TerminalScreen *screen,
+terminal_skey_do_popup (GtkWindow *window,
+                        TerminalScreen *screen,
 			const gchar    *skey_match)
 {
-  static GtkWidget *dialog = NULL;
-  GtkWidget *entry;
-  GtkWidget *transient_parent;
-  GtkWidget *ok_button;
-  gint seq;
-  gchar *seed;
-  gint hash = MD5;
-
-  transient_parent = gtk_widget_get_toplevel (GTK_WIDGET (screen));
-  if (!GTK_WIDGET_TOPLEVEL (transient_parent))
-    transient_parent = NULL;
+  GtkWidget *dialog, *label, *entry, *ok_button;
+  char *title_text;
+  char *seed;
+  int seq;
+  int hash = MD5;
+  SkeyData *data;
 
   if (strncmp (SKEY_PREFIX, skey_match, strlen (SKEY_PREFIX)) == 0)
     {
       if (!extract_seq_and_seed (skey_match, &seq, &seed))
 	{
-	  terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
+	  terminal_util_show_error_dialog (window, NULL,
 					   _("The text you clicked on doesn't "
 					     "seem to be a valid S/Key "
 					     "challenge."));
@@ -130,7 +171,7 @@ terminal_skey_do_popup (TerminalScreen *screen,
     {
       if (!extract_hash_seq_and_seed (skey_match, &hash, &seq, &seed))
 	{
-	  terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
+	  terminal_util_show_error_dialog (window, NULL,
 					   _("The text you clicked on doesn't "
 					     "seem to be a valid OTP "
 					     "challenge."));
@@ -138,60 +179,45 @@ terminal_skey_do_popup (TerminalScreen *screen,
 	}
     }
 
-  if (dialog == NULL)
+  if (!terminal_util_load_builder_file ("skey-challenge.ui",
+                                        "skey-dialog", &dialog,
+                                        "skey-entry", &entry,
+                                        "text-label", &label,
+                                        "skey-ok-button", &ok_button,
+                                        NULL))
     {
-      GtkWindow *label;
-      char *title_text;
-
-      if (!terminal_util_load_builder_file ("skey-challenge.ui",
-                                            "skey-dialog", &dialog,
-                                            "skey-entry", &entry,
-                                            "text-label", &label,
-                                            "skey-ok-button", &ok_button,
-                                            NULL))
-        return;
-
-      title_text = g_strdup_printf ("<big><b>%s</b></big>",
-				    gtk_label_get_text (GTK_LABEL (label)));
-      gtk_label_set_label (GTK_LABEL (label), title_text);
-      g_free (title_text);
-
-      g_object_set_data (G_OBJECT (dialog), "skey-entry", entry);      
-      g_object_set_data (G_OBJECT (dialog), "skey-ok-button", ok_button);
-
-      g_object_add_weak_pointer (G_OBJECT (dialog), (void**) &dialog);
+      g_free (seed);
+      return;
     }
 
-  gtk_window_set_transient_for (GTK_WINDOW (dialog),
-  				GTK_WINDOW (transient_parent));
-  entry = g_object_get_data (G_OBJECT (dialog), "skey-entry");
-  ok_button = g_object_get_data (G_OBJECT (dialog), "skey-ok-button");
+  title_text = g_strdup_printf ("<big><b>%s</b></big>",
+                                gtk_label_get_text (GTK_LABEL (label)));
+  gtk_label_set_label (GTK_LABEL (label), title_text);
+  g_free (title_text);
+
+  g_object_set_data (G_OBJECT (dialog), "skey-entry", entry);
+
   gtk_widget_grab_focus (entry);
   gtk_widget_grab_default (ok_button);
   gtk_entry_set_text (GTK_ENTRY (entry), "");
 
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), window);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+  /* FIXMEchpe: make this dialogue close if the screen closes! */
+
+  data = g_new (SkeyData, 1);
+  data->hash = hash;
+  data->seq = seq;
+  data->seed = seed;
+  data->screen = screen;
+
+  g_signal_connect_data (dialog, "response",
+                         G_CALLBACK (skey_challenge_response_cb),
+                         data, (GClosureNotify) skey_data_free, 0);
+  g_signal_connect (dialog, "delete-event",
+                    G_CALLBACK (terminal_util_dialog_response_on_delete), NULL);
+
   gtk_window_present (GTK_WINDOW (dialog));
-  
-  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
-    {
-      const gchar *password;
-      gchar *response;
-      
-      password = gtk_entry_get_text (GTK_ENTRY (entry));
-      /* FIXME: fix skey to use g_malloc */
-      response = skey (hash, seq, seed, password);
-      if (response)
-	{
-          VteTerminal *vte_terminal = VTE_TERMINAL (screen);
-          static const char newline[2] = "\n";
-
-	  vte_terminal_feed_child (vte_terminal, response, strlen (response));
-          vte_terminal_feed_child (vte_terminal, newline, strlen (newline));
-	  free (response);
-	}
-    }
-
-  gtk_widget_destroy (dialog);
-  g_free (seed);
 }

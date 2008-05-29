@@ -20,12 +20,14 @@
 #ifndef SKEY_POPUP_H
 #define SKEY_POPUP_H
 
-#include "terminal-screen.h"
 #include <gtk/gtk.h>
+
+#include "terminal-screen.h"
 
 G_BEGIN_DECLS
 
-void terminal_skey_do_popup (TerminalScreen *screen,
+void terminal_skey_do_popup (GtkWindow *window,
+                             TerminalScreen *screen,
 			     const gchar    *skey_match);
 
 G_END_DECLS

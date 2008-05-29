@@ -276,6 +276,13 @@ terminal_util_load_builder_file (const char *filename,
   return object_name == NULL;
 }
 
+gboolean
+terminal_util_dialog_response_on_delete (GtkWindow *widget)
+{
+  gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
+  return TRUE;
+}
+
 /* Bidirectional object/widget binding */
 
 typedef struct {
