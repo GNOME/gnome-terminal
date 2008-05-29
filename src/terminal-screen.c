@@ -1,5 +1,3 @@
-/* object representing one terminal window/tab with settings */
-
 /*
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2007, 2008 Christian Persch
@@ -1870,7 +1868,7 @@ drag_data_received (TerminalScreen   *widget,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (data);
 
-#if 1
+#if 0
   {
     GList *tmp;
 
@@ -1893,27 +1891,12 @@ drag_data_received (TerminalScreen   *widget,
     {
       char **uris;
       char *text;
-      guint i;
 
       uris = gtk_selection_data_get_uris (selection_data);
       if (!uris)
         return;
 
-      /* Replace file:/// URIS with shell-quoted filename strings */
-      for (i = 0; uris[i] != NULL; ++i)
-        {
-          char *uri = uris[i];
-          char *filename;
-
-          filename = g_filename_from_uri (uri, NULL, NULL);
-          if (!filename)
-            continue;
-              
-          uris[i] = g_shell_quote (filename);
-
-          g_free (uri);
-          g_free (filename);
-        }
+      terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
       text = g_strjoinv (" ", uris);
       vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
@@ -1971,7 +1954,8 @@ drag_data_received (TerminalScreen   *widget,
 
     case TARGET_MOZ_URL:
       {
-        char *utf8_data, *newline, *filename;
+        char *utf8_data, *newline;
+        char *uris[2];
         
         /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
          *
@@ -1981,12 +1965,7 @@ drag_data_received (TerminalScreen   *widget,
         if (selection_data->format != 8 ||
             selection_data->length == 0 ||
             (selection_data->length % 2) != 0)
-          {
-            g_printerr (_("Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"),
-                        selection_data->format,
-                        selection_data->length);
-            return;
-          }
+          return;
 
         utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data->data,
                                      selection_data->length / 2,
@@ -1998,26 +1977,19 @@ drag_data_received (TerminalScreen   *widget,
         if (newline)
           *newline = '\0';
 
-        /* If it's a file:/// URI, paste as quoted filename */
-        filename = g_filename_from_uri (utf8_data, NULL, NULL);
-        if (filename)
-          {
-            char *text;
+        uris[0] = utf8_data;
+        uris[1] = NULL;
+        terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
-            text = g_shell_quote (filename);
-            vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
-            g_free (filename);
-          }
-        else
-          vte_terminal_feed_child (VTE_TERMINAL (screen), utf8_data, strlen (utf8_data));
-          
-        g_free (utf8_data);
+        vte_terminal_feed_child (VTE_TERMINAL (screen), uris[0], strlen (uris[0]));
+        g_free (uris[0]);
       }
       break;
 
     case TARGET_NETSCAPE_URL:
       {
-        char *utf8_data, *newline, *filename;
+        char *utf8_data, *newline;
+        char *uris[2];
         
         /* The data contains the URL, a \n, then the
          * title of the web page.
@@ -2030,20 +2002,12 @@ drag_data_received (TerminalScreen   *widget,
         if (newline)
           *newline = '\0';
 
-        /* If it's a file:/// URI, paste as quoted filename */
-        filename = g_filename_from_uri (utf8_data, NULL, NULL);
-        if (filename)
-          {
-            char *text;
+        uris[0] = utf8_data;
+        uris[1] = NULL;
+        terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
-            text = g_shell_quote (filename);
-            vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
-            g_free (filename);
-          }
-        else
-          vte_terminal_feed_child (VTE_TERMINAL (screen), utf8_data, strlen (utf8_data));
-          
-        g_free (utf8_data);
+        vte_terminal_feed_child (VTE_TERMINAL (screen), uris[0], strlen (uris[0]));
+        g_free (uris[0]);
       }
       break;
        
@@ -2058,6 +2022,8 @@ drag_data_received (TerminalScreen   *widget,
         utf8_data = g_strndup ((char *) selection_data->data, selection_data->length);
         uris = g_uri_list_extract_uris (utf8_data);
         g_free (utf8_data);
+
+        /* FIXME: use terminal_util_transform_uris_to_quoted_fuse_paths? */
 
         if (uris && uris[0])
           {

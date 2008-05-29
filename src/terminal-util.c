@@ -1,4 +1,3 @@
-/* terminal program */
 /*
  * Copyright © 2001, 2002 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
@@ -245,4 +244,41 @@ terminal_util_open_url (GtkWidget *parent,
     }
 
   g_free (url);
+}
+
+/**
+ * terminal_util_transform_uris_to_quoted_fuse_paths:
+ * @uris:
+ *
+ * Transforms those URIs in @uris to shell-quoted paths that point to
+ * GIO fuse paths.
+ */
+void
+terminal_util_transform_uris_to_quoted_fuse_paths (char **uris)
+{
+  guint i;
+
+  if (!uris)
+    return;
+
+  for (i = 0; uris[i]; ++i)
+    {
+      GFile *file;
+      char *path;
+
+      file = g_file_new_for_uri (uris[i]);
+
+      if ((path = g_file_get_path (file)))
+        {
+          char *quoted;
+
+          quoted = g_shell_quote (path);
+          g_free (uris[i]);
+          g_free (path);
+
+          uris[i] = quoted;
+        }
+
+      g_object_unref (file);
+    }
 }

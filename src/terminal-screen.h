@@ -1,5 +1,3 @@
-/* object representing one Zvt widget and its properties */
-
 /*
  * Copyright © 2001 Havoc Pennington
  *

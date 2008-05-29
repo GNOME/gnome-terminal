@@ -1,5 +1,3 @@
-/* application-wide commands */
-
 /*
  * Copyright © 2001 Havoc Pennington
  *
@@ -49,5 +47,7 @@ void terminal_util_open_url (GtkWidget *parent,
                              const char *orig_url,
                              TerminalURLFlavour flavor);
 
+
+void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
 
 #endif /* TERMINAL_UTIL_H */
