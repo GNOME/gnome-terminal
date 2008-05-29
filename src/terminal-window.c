@@ -192,43 +192,25 @@ G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 /* Menubar mnemonics settings handling */
 
 static void
-mnemonics_setting_change_notify (GConfClient *client,
-                                 guint        cnxn_id,
-                                 GConfEntry  *entry,
-                                 gpointer     user_data)
+mnemonics_setting_change_notify_cb (TerminalApp *app,
+                                    GParamSpec *pspec,
+                                    GdkScreen *screen)
 {
-  GdkScreen *screen;
-  GtkSettings *settings;
-  GConfValue *val;
+  gboolean enable_mnemonics;
 
-  if (strcmp (gconf_entry_get_key (entry),
-              CONF_GLOBAL_PREFIX"/use_mnemonics") != 0)
-    return;
- 
-  val = gconf_entry_get_value (entry);
-  if (!val || val->type != GCONF_VALUE_BOOL)
-    return;
+  g_object_get (app, "enable-mnemonics", &enable_mnemonics, NULL);
 
-  screen = GDK_SCREEN (user_data);
-  settings = gtk_settings_get_for_screen (screen);
-  g_object_set (settings,
-                "gtk-enable-mnemonics",
-                gconf_value_get_bool (val),
+  g_object_set (gtk_settings_get_for_screen (screen),
+                "gtk-enable-mnemonics", enable_mnemonics,
                 NULL);
 }
 
 static void
 mnemonics_setting_change_destroy (GdkScreen *screen)
 {
-  GConfClient *client;
-  guint id;
-
-  id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (screen), "terminal-settings-connection"));
-  g_assert (id != 0);
-
-  client = gconf_client_get_default ();
-  gconf_client_notify_remove (client, id);
-  g_object_unref (client);
+  g_signal_handlers_disconnect_by_func (terminal_app_get (),
+                                        G_CALLBACK (mnemonics_setting_change_notify_cb),
+                                        screen);
 }
 
 /* utility functions */
@@ -1052,37 +1034,24 @@ terminal_window_state_event (GtkWidget            *widget,
 static void
 terminal_window_settings_update (GtkWidget *widget)
 {
+  TerminalApp *app;
   GdkScreen *screen;
-  GConfClient *client;
-  gboolean use_mnemonics;
-  guint id;
 
   if (!gtk_widget_has_screen (widget))
     return;
 
   screen = gtk_widget_get_screen (widget);
-  if (0 != GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (screen), "terminal-settings-connection")))
+  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
 
-  client = gconf_client_get_default ();
-  id = gconf_client_notify_add (client,
-                                CONF_GLOBAL_PREFIX "/use_mnemonics",
-                                mnemonics_setting_change_notify,
-                                screen,
-                                NULL, NULL);
-  g_object_set_data_full (G_OBJECT (screen), "terminal-settings-connection",
-                          GUINT_TO_POINTER (id),
+  g_object_set_data_full (G_OBJECT (screen), "GT::HasSettingsConnection",
+                          GINT_TO_POINTER (TRUE),
                           (GDestroyNotify) mnemonics_setting_change_destroy);
 
-  use_mnemonics = gconf_client_get_bool (client,
-                                          CONF_GLOBAL_PREFIX "/use_mnemonics",
-                                          NULL);
-  g_object_unref (client);
-
-  g_object_set (gtk_settings_get_for_screen (screen),
-                "gtk-enable-mnemonics",
-                use_mnemonics,
-                NULL);
+  app = terminal_app_get ();
+  mnemonics_setting_change_notify_cb (app, NULL, screen);
+  g_signal_connect (app, "notify::enable-mnemonics",
+                    G_CALLBACK (mnemonics_setting_change_notify_cb), screen);
 }
 
 static void

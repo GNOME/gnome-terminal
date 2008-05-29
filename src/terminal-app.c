@@ -91,6 +91,7 @@ struct _TerminalApp
   guint profile_list_notify_id;
   guint default_profile_notify_id;
   guint system_font_notify_id;
+  guint enable_mnemonics_notify_id;
 
   GHashTable *profiles;
   char* default_profile_id;
@@ -98,6 +99,7 @@ struct _TerminalApp
   gboolean default_profile_locked;
 
   PangoFontDescription *system_font_desc;
+  gboolean enable_mnemonics;
 
   gboolean use_factory;
 };
@@ -106,6 +108,7 @@ enum
 {
   PROP_0,
   PROP_DEFAULT_PROFILE,
+  PROP_ENABLE_MNEMONICS,
   PROP_SYSTEM_FONT,
 };
 
@@ -130,10 +133,15 @@ static TerminalApp *global_app = NULL;
 #define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
 #define DEFAULT_MONOSPACE_FONT ("Monospace 10")
 
+#define ENABLE_MNEMONICS_KEY CONF_GLOBAL_PREFIX "/use_mnemonics"
+#define DEFAULT_ENABLE_MNEMONICS (TRUE)
+
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
 
 /* Helper functions */
+
+/* Menubar mnemonics settings handling */
 
 static int
 profiles_alphabetic_cmp (gconstpointer pa,
@@ -917,6 +925,27 @@ terminal_app_system_font_notify_cb (GConfClient *client,
 }
 
 static void
+terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
+                                         guint        cnxn_id,
+                                         GConfEntry  *entry,
+                                         gpointer     user_data)
+{
+  TerminalApp *app = TERMINAL_APP (user_data);
+  GConfValue *gconf_value;
+
+  if (strcmp (gconf_entry_get_key (entry),
+              CONF_GLOBAL_PREFIX "/use_mnemonics") != 0)
+    return;
+
+  gconf_value = gconf_entry_get_value (entry);
+  if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
+    return;
+
+  app->enable_mnemonics = gconf_value_get_bool (gconf_value);
+  g_object_notify (G_OBJECT (app), "enable-mnemonics");
+}
+
+static void
 new_profile_response_cb (GtkWidget *new_profile_dialog,
                          int        response_id,
                          TerminalApp *app)
@@ -1417,9 +1446,16 @@ terminal_app_init (TerminalApp *app)
                              terminal_app_system_font_notify_cb,
                              app, NULL, NULL);
 
+  app->enable_mnemonics_notify_id =
+    gconf_client_notify_add (app->conf,
+                             ENABLE_MNEMONICS_KEY,
+                             terminal_app_enable_mnemonics_notify_cb,
+                             app, NULL, NULL);
+
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
   gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
+  gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
 
   terminal_accels_init ();
   terminal_encoding_init ();
@@ -1446,6 +1482,8 @@ terminal_app_finalize (GObject *object)
     gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
   if (app->system_font_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->system_font_notify_id);
+  if (app->enable_mnemonics_notify_id != 0)
+    gconf_client_notify_remove (app->conf, app->enable_mnemonics_notify_id);
 
   gconf_client_remove_dir (app->conf, CONF_GLOBAL_PREFIX, NULL);
   gconf_client_remove_dir (app->conf, MONOSPACE_FONT_DIR, NULL);
@@ -1480,6 +1518,12 @@ terminal_app_get_property (GObject *object,
         else
           g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_MONOSPACE_FONT));
         break;
+      case PROP_ENABLE_MNEMONICS:
+        g_value_set_boolean (value, app->enable_mnemonics);
+        break;
+      case PROP_DEFAULT_PROFILE:
+        g_value_set_object (value, app->default_profile);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -1511,6 +1555,13 @@ terminal_app_class_init (TerminalAppClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  g_object_class_install_property
+    (object_class,
+     PROP_ENABLE_MNEMONICS,
+     g_param_spec_boolean ("enable-mnemonics", NULL, NULL,
+                           DEFAULT_ENABLE_MNEMONICS,
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
