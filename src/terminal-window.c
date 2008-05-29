@@ -297,7 +297,7 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
 }
 
 #define PROFILES_UI_PATH "/menubar/Terminal/TerminalProfiles"
-#define PROFILES_POPUP_UI_PATH "/Popup/TerminalProfiles"
+#define PROFILES_POPUP_UI_PATH "/Popup/PopupTerminalProfiles/ProfilesPH"
 
 static void
 profile_visible_name_notify_cb (TerminalProfile *profile,
@@ -1266,6 +1266,7 @@ terminal_window_init (TerminalWindow *window)
       { "PopupCopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
+      { "PopupTerminalProfiles", NULL, N_("_Profiles") },
       { "PopupCopy", GTK_STOCK_COPY, NULL, NULL,
         NULL,
         G_CALLBACK (edit_copy_callback) },
