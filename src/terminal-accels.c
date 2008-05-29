@@ -28,7 +28,7 @@
 #include "terminal-app.h"
 #include <string.h>
 
-#define D(x) x
+#define D(x)
 
 
 #define ACCEL_PATH_ROOT "<Actions>/Main/"
@@ -227,6 +227,16 @@ static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
 static GtkWidget *edit_keys_dialog_treeview = NULL;
 static guint gconf_notify_id;
+static GHashTable *gconf_key_to_entry;
+
+static const char *
+key_from_gconf_key (const char *gconf_key)
+{
+  const char *last_slash = strrchr (gconf_key, '/');
+  if (last_slash)
+    return last_slash++;
+  return NULL;
+}
 
 void
 terminal_accels_init (void)
@@ -245,18 +255,24 @@ terminal_accels_init (void)
                            keys_change_notify,
                            NULL, NULL, NULL);
 
+  gconf_key_to_entry = g_hash_table_new (g_str_hash, g_str_equal);
+
   hack_group = gtk_accel_group_new ();
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
+          const char *gconf_key;
 	  char *str;
 	  guint keyval;
 	  GdkModifierType mask;
 	  KeyEntry *key_entry;
 
 	  key_entry = &(all_entries[i].key_entry[j]);
+
+          gconf_key = key_from_gconf_key (key_entry->gconf_key);
+          g_hash_table_insert (gconf_key_to_entry, (gpointer) gconf_key, key_entry);
 
 	  key_entry->closure = g_closure_new_simple (sizeof (GClosure), key_entry);
 
@@ -315,6 +331,8 @@ terminal_accels_shutdown (void)
       g_source_remove (sync_idle_id);
       sync_idle_cb (NULL);
     }
+
+  g_hash_table_destroy (gconf_key_to_entry);
 }
 
 static gboolean
@@ -344,8 +362,11 @@ keys_change_notify (GConfClient *client,
                     gpointer     user_data)
 {
   GConfValue *val;
+  KeyEntry *key_entry;
   GdkModifierType mask;
   guint keyval;
+  gboolean gconf_writable;
+  const char *gconf_key;
 
   D (g_print ("key %s changed\n", gconf_entry_get_key (entry)));
   
@@ -359,59 +380,49 @@ keys_change_notify (GConfClient *client,
      g_print (" changed to \"%s\"\n",
               gconf_value_get_string (val)));
 
-  if (binding_from_value (val, &keyval, &mask))
+  gconf_key = key_from_gconf_key (gconf_entry_get_key (entry));
+  key_entry = g_hash_table_lookup (gconf_key_to_entry, gconf_key);
+  if (!key_entry)
+    return; /* shouldn't really happen, but let's be safe */
+
+  if (!binding_from_value (val, &keyval, &mask))
     {
-      int i;
+      const char *str = val->type == GCONF_VALUE_STRING ? gconf_value_get_string (val) : NULL;
+      g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
+                  key_entry->gconf_key,
+                  str ? str : "(null)");
+      return;
+    }
 
-      for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
-        {
-	  int j;
+  key_entry->gconf_keyval = keyval;
+  key_entry->gconf_mask = mask;
 
-          for (j = 0; j < all_entries[i].n_elements; ++j)
-	    {
-	      KeyEntry *key_entry;
+  gconf_writable = gconf_entry_get_is_writable (entry);
+  if (gconf_writable != key_entry->gconf_writable)
+    {
+      if (gconf_writable)
+        gtk_accel_map_unlock_path (key_entry->accel_path);
+      else
+        gtk_accel_map_lock_path (key_entry->accel_path);
+    }
+  key_entry->gconf_writable = gconf_writable;
 
-	      key_entry = &(all_entries[i].key_entry[j]);
-	      if (strcmp (key_entry->gconf_key, gconf_entry_get_key (entry)) == 0)
-		{
-                  gboolean gconf_writable;
+  /* sync over to GTK */
+  D (g_print ("changing path %s to %s\n",
+              key_entry->accel_path,
+              binding_name (keyval, mask, FALSE))); /* memleak */
+  inside_gconf_notify += 1;
+  gtk_accel_map_change_entry (key_entry->accel_path,
+                              keyval, mask,
+                              TRUE);
+  inside_gconf_notify -= 1;
 
-		  /* found it */
-		  key_entry->gconf_keyval = keyval;
-		  key_entry->gconf_mask = mask;
-
-                  gconf_writable = gconf_entry_get_is_writable (entry);
-                  if (gconf_writable != key_entry->gconf_writable)
-                    {
-                      if (gconf_writable)
-                        gtk_accel_map_unlock_path (key_entry->accel_path);
-                      else
-                        gtk_accel_map_lock_path (key_entry->accel_path);
-                    }
-                  key_entry->gconf_writable = gconf_writable;
-
-		  /* sync over to GTK */
-		  D (g_print ("changing path %s to %s\n",
-			      key_entry->accel_path,
-			      binding_name (keyval, mask, FALSE))); /* memleak */
-		  inside_gconf_notify += 1;
-		  gtk_accel_map_change_entry (key_entry->accel_path,
-					      keyval, mask,
-					      TRUE);
-		  inside_gconf_notify -= 1;
-
-		  /* Notify tree views to repaint with new values */
-		  if (edit_keys_dialog_treeview)
-		    {
-		      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (edit_keys_dialog_treeview)),
-					      update_model_foreach,
-					      key_entry);
-		    }
-              
-		  break;
-		}
-	    }
-        }
+  /* Notify tree views to repaint with new values */
+  if (edit_keys_dialog_treeview)
+    {
+      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (edit_keys_dialog_treeview)),
+                              update_model_foreach,
+                              key_entry);
     }
 }
 
