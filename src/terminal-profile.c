@@ -1419,6 +1419,11 @@ _terminal_profile_clone (TerminalProfile *base_profile,
 
   g_slist_free (new_priv->dirty_pspecs);
   new_priv->dirty_pspecs = NULL;
+  if (new_priv->save_idle_id != 0)
+    {
+      g_source_remove (new_priv->save_idle_id);
+      new_priv->save_idle_id = 0;
+    }
 
   for (i = 0; i < n_pspecs; ++i)
     {
