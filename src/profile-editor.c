@@ -401,7 +401,7 @@ profile_change_notify_cb (PropertyChange *change)
 
       font_desc = terminal_profile_get_property_boxed (profile, profile_prop);
       if (!font_desc)
-        goto out; /* FIXMEchpe reset instead? */
+        goto out;
 
       font = pango_font_description_to_string (font_desc);
       gtk_font_button_set_font_name (GTK_FONT_BUTTON (widget), font);
@@ -410,17 +410,16 @@ profile_change_notify_cb (PropertyChange *change)
   else if (GTK_IS_FILE_CHOOSER (widget))
     {
       const char *name;
-      char *filename;
+      char *filename = NULL;
 
       name = terminal_profile_get_property_string (profile, profile_prop);
-      if (!name)
-        goto out;
+      if (name)
+        filename = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
 
-      filename = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
-      if (!filename)
-        goto out; /* FIXME set filechooser to no-selection instead? */
-
-      gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), filename);
+      if (filename)
+        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), filename);
+      else
+        gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (widget));
       g_free (filename);
     }
 
@@ -952,8 +951,7 @@ terminal_profile_edit (TerminalProfile *profile,
   double num1, num2;
   guint i;
 
-  editor = g_object_get_data (G_OBJECT (profile),
-                              "editor-window");
+  editor = g_object_get_data (G_OBJECT (profile), "editor-window");
   if (editor)
     {
       gtk_window_set_transient_for (GTK_WINDOW (editor),
@@ -977,7 +975,9 @@ terminal_profile_edit (TerminalProfile *profile,
   g_object_set_data_full (G_OBJECT (editor), "builder",
                           builder, (GDestroyNotify) g_object_unref);
 
-  /* FIXMEchpe */
+  /* Store the dialogue on the profile, so we can acccess it above to check if
+   * there's already a profile editor for this profile.
+   */
   g_object_set_data (G_OBJECT (profile), "editor-window", editor);
 
   g_signal_connect (editor, "destroy",
@@ -1113,7 +1113,7 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("use-custom-command-checkbutton", TERMINAL_PROFILE_USE_CUSTOM_COMMAND);
   CONNECT ("use-theme-colors-checkbutton", TERMINAL_PROFILE_USE_THEME_COLORS);
   CONNECT ("word-chars-entry", TERMINAL_PROFILE_WORD_CHARS);
-  CONNECT_WITH_FLAGS ("bell-checkbutton", TERMINAL_PROFILE_SILENT_BELL, FLAG_INVERT_BOOL /* FIXME? */);
+  CONNECT_WITH_FLAGS ("bell-checkbutton", TERMINAL_PROFILE_SILENT_BELL, FLAG_INVERT_BOOL);
   CONNECT_WITH_FLAGS ("scrollback-kilobytes-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES, FLAG_SCROLLBACK);
   CONNECT_WITH_FLAGS ("scrollback-lines-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES, 0);
 
