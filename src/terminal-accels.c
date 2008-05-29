@@ -282,7 +282,7 @@ terminal_accels_init (void)
 	  g_closure_sink (key_entry->closure);
 	  
 	  gtk_accel_group_connect_by_path (hack_group,
-					   key_entry->accel_path,
+					   I_(key_entry->accel_path),
 					   key_entry->closure);
 
           gconf_client_notify (conf, key_entry->gconf_key);
