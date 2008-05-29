@@ -124,6 +124,7 @@ static const struct {
 };
                            
 static GHashTable *encodings_hashtable;
+static gboolean encodings_writable;
 
 typedef struct {
   GtkWidget *dialog;
@@ -273,6 +274,8 @@ encodings_notify_cb (GConfClient *client,
   GSList *strings, *tmp;
   TerminalEncoding *encoding;
   const char *charset;
+
+  encodings_writable = gconf_entry_get_is_writable (entry);
 
   /* Mark all as non-active, then re-enable the active ones */
   g_hash_table_foreach (encodings_hashtable, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
