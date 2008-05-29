@@ -28,6 +28,15 @@
 
 G_BEGIN_DECLS
 
+#define CONF_PREFIX           "/apps/gnome-terminal"
+#define CONF_GLOBAL_PREFIX    CONF_PREFIX "/global"
+#define CONF_PROFILES_PREFIX  CONF_PREFIX "/profiles"
+#define CONF_KEYS_PREFIX      CONF_PREFIX "/keybindings"
+
+#define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
+
+/* TerminalApp */
+
 #define TERMINAL_TYPE_APP              (terminal_app_get_type ())
 #define TERMINAL_APP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_APP, TerminalApp))
 #define TERMINAL_APP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), TERMINAL_TYPE_APP, TerminalAppClass))
