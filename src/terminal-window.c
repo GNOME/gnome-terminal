@@ -284,6 +284,60 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
 #define PROFILES_POPUP_UI_PATH "/Popup/TerminalProfiles"
 
 static void
+profile_visible_name_notify_cb (TerminalProfile *profile,
+                                GParamSpec *pspec,
+                                GtkAction *action)
+{
+  const char *visible_name;
+  char *dot, *display_name;
+  guint num;
+
+  visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
+  display_name = escape_underscores (visible_name);
+
+  dot = strchr (gtk_action_get_name (action), '.');
+  if (dot != NULL)
+    {
+      char *free_me;
+
+      num = g_ascii_strtoll (dot + 1, NULL, 10);
+
+      free_me = display_name;
+      if (num < 10)
+        display_name = g_strdup_printf (_("_%d. %s"), num, display_name);
+      else if (num < 36)
+        display_name = g_strdup_printf (_("_%c. %s"), ('A' + num - 10), display_name);
+      else
+        free_me = NULL;
+
+      g_free (free_me);
+    }
+
+  g_object_set (action, "label", display_name, NULL);
+  g_free (display_name);
+}
+
+static void
+disconnect_profiles_from_actions_in_group (GtkActionGroup *action_group)
+{
+  GList *actions, *l;
+
+  actions = gtk_action_group_list_actions (action_group);
+  for (l = actions; l != NULL; l = l->next)
+    {
+      GObject *action= G_OBJECT (l->data);
+      TerminalProfile *profile;
+
+      profile = g_object_get_data (action, PROFILE_DATA_KEY);
+      if (!profile)
+        continue;
+
+      g_signal_handlers_disconnect_by_func (profile, G_CALLBACK (profile_visible_name_notify_cb), action);
+    }
+  g_list_free (actions);
+}
+
+static void
 terminal_window_update_set_profile_menu (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
@@ -303,6 +357,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
 
   if (priv->profiles_action_group != NULL)
     {
+      disconnect_profiles_from_actions_in_group (priv->profiles_action_group);
       gtk_ui_manager_remove_action_group (priv->ui_manager,
                                           priv->profiles_action_group);
       priv->profiles_action_group = NULL;
@@ -332,23 +387,16 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   for (p = profiles; p != NULL; p = p->next)
     {
       TerminalProfile *profile = (TerminalProfile *) p->data;
-      const char *visible_name;
       GtkRadioAction *profile_action;
       char name[32];
-      char *display_name;
 
       g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
 
-      visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
-      display_name = escape_underscores (visible_name);
       profile_action = gtk_radio_action_new (name,
-                                             display_name,
+                                             NULL,
                                              NULL,
                                              NULL,
                                              n);
-      g_free (display_name);
-
-      /* FIXMEchpe: connect to "changed" on the profile */
 
       gtk_radio_action_set_group (profile_action, group);
       group = gtk_radio_action_get_group (profile_action);
@@ -360,6 +408,9 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
                               PROFILE_DATA_KEY,
                               g_object_ref (profile),
                               (GDestroyNotify) g_object_unref);
+      profile_visible_name_notify_cb (profile, NULL, GTK_ACTION (profile_action));
+      g_signal_connect (profile, "notify::" TERMINAL_PROFILE_VISIBLE_NAME,
+                        G_CALLBACK (profile_visible_name_notify_cb), profile_action);
       g_signal_connect (profile_action, "toggled",
                         G_CALLBACK (terminal_set_profile_toggled_callback), window);
 
@@ -388,34 +439,16 @@ terminal_window_create_new_terminal_action (TerminalWindow *window,
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
-  const char *visible_name;
-  char *profile_name, *display_name;
 
-  visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
-  profile_name = escape_underscores (visible_name);
-  if (num < 10)
-    {
-      display_name = g_strdup_printf (_("_%d. %s"), num, profile_name);
-    }
-  else if (num < 36)
-    {
-      display_name = g_strdup_printf (_("_%c. %s"), ('A' + num - 10), profile_name);
-    }
-  else
-    {
-      display_name = profile_name;
-      profile_name = NULL;
-    }
+  action = gtk_action_new (name, NULL, NULL, NULL);
 
-  action = gtk_action_new (name, display_name, NULL, NULL);
-  g_free (profile_name);
-  g_free (display_name);
-
-  /* FIXMEchpe: connect to "changed" on the profile */
   g_object_set_data_full (G_OBJECT (action),
                           PROFILE_DATA_KEY,
                           g_object_ref (profile),
                           (GDestroyNotify) g_object_unref);
+  profile_visible_name_notify_cb (profile, NULL, action);
+  g_signal_connect (profile, "notify::" TERMINAL_PROFILE_VISIBLE_NAME,
+                    G_CALLBACK (profile_visible_name_notify_cb), action);
   g_signal_connect (action, "activate", callback, window);
 
   gtk_action_group_add_action (priv->new_terminal_action_group, action);
@@ -441,6 +474,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
   if (priv->new_terminal_action_group != NULL)
     {
+      disconnect_profiles_from_actions_in_group (priv->new_terminal_action_group);
       gtk_ui_manager_remove_action_group (priv->ui_manager,
                                           priv->new_terminal_action_group);
       priv->new_terminal_action_group = NULL;
@@ -474,7 +508,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       TerminalProfile *profile = (TerminalProfile *) p->data;
       char name[32];
 
-      g_snprintf (name, sizeof (name), "FileNewTab%u", n);
+      g_snprintf (name, sizeof (name), "FileNewTab.%u", n);
       terminal_window_create_new_terminal_action (window,
                                                   profile,
                                                   name,
@@ -486,7 +520,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
                              name, name,
                              GTK_UI_MANAGER_MENUITEM, FALSE);
 
-      g_snprintf (name, sizeof (name), "FileNewWindow%u", n);
+      g_snprintf (name, sizeof (name), "FileNewWindow.%u", n);
       terminal_window_create_new_terminal_action (window,
                                                   profile,
                                                   name,
@@ -654,7 +688,7 @@ update_edit_menu (GtkClipboard *clipboard,
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
   gtk_action_set_sensitive (action, can_paste);
 
-  /* Ref was added in gtk_clipboard_request_contents below */
+  /* Ref was added in gtk_clipboard_request_targets below */
   g_object_unref (window);
 }
 
@@ -1388,6 +1422,11 @@ terminal_window_dispose (GObject *object)
       priv->tabs_menu = NULL;
     }
 
+  if (priv->profiles_action_group != NULL)
+    disconnect_profiles_from_actions_in_group (priv->profiles_action_group);
+  if (priv->new_terminal_action_group != NULL)
+    disconnect_profiles_from_actions_in_group (priv->new_terminal_action_group);
+
   g_signal_handlers_disconnect_by_func (terminal_app_get (),
                                         G_CALLBACK (terminal_window_profile_list_changed_cb),
                                         window);
@@ -1402,6 +1441,8 @@ terminal_window_finalize (GObject *object)
   TerminalWindowPrivate *priv = window->priv;
 
   g_free (priv->startup_id);
+
+  g_object_unref (priv->ui_manager);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
