@@ -53,6 +53,12 @@
 #define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
+typedef struct
+{
+  int tag;
+  int flavor;
+} TagData;
+
 struct _TerminalScreenPrivate
 {
   GtkWidget *term;
@@ -73,6 +79,8 @@ struct _TerminalScreenPrivate
   guint recheck_working_dir_idle;
   guint gconf_connection_id;
   gboolean user_title; /* title was manually set */
+  GSList *url_tags;
+  GSList *skey_tags;
 };
 
 enum {
@@ -122,6 +130,22 @@ static void monospace_font_change_notify (GConfClient *client,
 					  guint        cnxn_id,
 					  GConfEntry  *entry,
 					  gpointer     user_data);
+
+static void  terminal_screen_match_add         (TerminalScreen            *screen,
+                                                const char           *regexp,
+                                                int                   flavor);
+static void  terminal_screen_skey_match_add    (TerminalScreen            *screen,
+                                                const char           *regexp,
+                                                int                   flavor);
+static char* terminal_screen_check_match       (TerminalScreen            *screen,
+                                                int                   column,
+                                                int                   row,
+                                                int                  *flavor);
+static char* terminal_screen_skey_check_match  (TerminalScreen            *screen,
+                                                int                   column,
+                                                int                   row,
+                                                int                  *flavor);
+static void  terminal_screen_skey_match_remove (TerminalScreen            *screen);
 
 static guint signals[LAST_SIGNAL];
 
@@ -289,6 +313,8 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
 
+  vte_terminal_set_mouse_autohide (VTE_TERMINAL (screen), TRUE);
+
   priv->working_dir = g_get_current_dir ();
   if (priv->working_dir == NULL) /* shouldn't ever happen */
     priv->working_dir = g_strdup (g_get_home_dir ());
@@ -297,7 +323,6 @@ terminal_screen_init (TerminalScreen *screen)
   priv->recheck_working_dir_idle = 0;
 
   priv->term = GTK_WIDGET (screen);
-  terminal_widget_set_implementation (priv->term);
 
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
@@ -309,21 +334,21 @@ terminal_screen_init (TerminalScreen *screen)
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
 #define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
 
-  terminal_widget_match_add (priv->term,
+  terminal_screen_match_add (screen,
 			     "\\<" SCHEME "//(" USER "@)?[" HOSTCHARS ".]+"
 			     "(:[0-9]+)?(" URLPATH ")?\\>/?", FLAVOR_AS_IS);
 
-  terminal_widget_match_add (priv->term,
+  terminal_screen_match_add (screen,
 			     "\\<(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
 			     "(:[0-9]+)?(" URLPATH ")?\\>/?",
 			     FLAVOR_DEFAULT_TO_HTTP);
 
-  terminal_widget_match_add (priv->term,
+  terminal_screen_match_add (screen,
 			     "\\<(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9]"
 			     "[a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+\\>",
 			     FLAVOR_EMAIL);
 
-  terminal_widget_match_add (priv->term,
+  terminal_screen_match_add (screen,
 			     "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
 			     "@[" HOSTCHARS ".]+(:[0-9]+)?\\>", FLAVOR_AS_IS);
 
@@ -491,6 +516,12 @@ terminal_screen_finalize (GObject *object)
   g_strfreev (priv->override_command);
   g_free (priv->working_dir);
 
+  g_slist_foreach (priv->url_tags, (GFunc) g_free, NULL);
+  g_slist_free (priv->url_tags);
+
+  g_slist_foreach (priv->skey_tags, (GFunc) g_free, NULL);
+  g_slist_free (priv->skey_tags);
+
   G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
 }
 
@@ -597,17 +628,17 @@ terminal_screen_reread_profile (TerminalScreen *screen)
 
   if (terminal_profile_get_use_skey (priv->profile))
     {
-      terminal_widget_skey_match_add (priv->term,
+      terminal_screen_skey_match_add (screen,
 				      "s/key [0-9]* [-A-Za-z0-9]*",
 				      FLAVOR_AS_IS);
 
-      terminal_widget_skey_match_add (priv->term,
+      terminal_screen_skey_match_add (screen,
 				      "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
 				      FLAVOR_AS_IS);
     }
   else
     {
-      terminal_widget_skey_match_remove (priv->term);
+      terminal_screen_skey_match_remove (screen);
     }
   bg_type = terminal_profile_get_background_type (profile);
   
@@ -1370,7 +1401,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
   matched_string =
-    terminal_widget_check_match (term,
+    terminal_screen_check_match (screen,
                                  event->x / char_width,
                                  event->y / char_height,
                                  &matched_flavor);
@@ -1382,7 +1413,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     {
       gchar *skey_match;
 
-      skey_match = terminal_widget_skey_check_match (term,
+      skey_match = terminal_screen_skey_check_match (screen,
 						     event->x / char_width,
 						     event->y / char_height,
                                                      NULL);
@@ -2240,4 +2271,109 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
 
   *cell_width_pixels = terminal->char_width;
   *cell_height_pixels = terminal->char_height;
+}
+
+static void
+terminal_screen_match_add (TerminalScreen            *screen,
+                           const char           *regexp,
+                           int                   flavor)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  TagData *tag_data;
+  int tag;
+  
+  tag = vte_terminal_match_add (VTE_TERMINAL (screen), regexp);
+
+  tag_data = g_new0 (TagData, 1);
+  tag_data->tag = tag;
+  tag_data->flavor = flavor;
+
+  priv->url_tags = g_slist_append (priv->url_tags, tag_data);
+}
+
+static void
+terminal_screen_skey_match_add (TerminalScreen            *screen,
+                                const char           *regexp,
+                                int                   flavor)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  TagData *tag_data;
+  int tag;
+  
+  tag = vte_terminal_match_add ( VTE_TERMINAL (screen), regexp);
+
+  tag_data = g_new0 (TagData, 1);
+  tag_data->tag = tag;
+  tag_data->flavor = flavor;
+
+  priv->skey_tags = g_slist_append (priv->skey_tags, tag_data);
+}
+
+static void
+terminal_screen_skey_match_remove (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  GSList *tags;
+  
+  for (tags = priv->skey_tags; tags != NULL; tags = tags->next)
+    vte_terminal_match_remove (VTE_TERMINAL (screen),
+                               GPOINTER_TO_INT(((TagData*)tags->data)->tag));
+
+  g_slist_foreach (priv->skey_tags, (GFunc) g_free, NULL);
+  g_slist_free (priv->skey_tags);
+  priv->skey_tags = NULL;
+}
+
+static char*
+terminal_screen_check_match (TerminalScreen *screen,
+			     int        column,
+			     int        row,
+                             int       *flavor)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  GSList *tags;
+  gint tag;
+  char *match;
+
+  match = vte_terminal_match_check (VTE_TERMINAL (screen), column, row, &tag);
+  for (tags = priv->url_tags; tags != NULL; tags = tags->next)
+    {
+      TagData *tag_data = (TagData*) tags->data;
+      if (GPOINTER_TO_INT(tag_data->tag) == tag)
+	{
+	  if (flavor)
+	    *flavor = tag_data->flavor;
+	  return match;
+	}
+    }
+
+  g_free (match);
+  return NULL;
+}
+
+static char*
+terminal_screen_skey_check_match (TerminalScreen *screen,
+				  int        column,
+				  int        row,
+                                  int       *flavor)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  GSList *tags;
+  gint tag;
+  char *match;
+
+  match = vte_terminal_match_check (VTE_TERMINAL (screen), column, row, &tag);
+  for (tags = priv->skey_tags; tags != NULL; tags = tags->next)
+    {
+      TagData *tag_data = (TagData*) tags->data;
+      if (GPOINTER_TO_INT(tag_data->tag) == tag)
+	{
+	  if (flavor)
+	    *flavor = tag_data->flavor;
+	  return match;
+	}
+    }
+
+  g_free (match);
+  return NULL;
 }

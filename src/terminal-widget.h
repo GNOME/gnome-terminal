@@ -37,22 +37,6 @@ G_BEGIN_DECLS
  *
  */
 
-void       terminal_widget_set_implementation         (GtkWidget            *widget);
-void       terminal_widget_match_add                  (GtkWidget            *widget,
-                                                       const char           *regexp,
-                                                       int                   flavor);
-void       terminal_widget_skey_match_add             (GtkWidget            *widget,
-                                                       const char           *regexp,
-                                                       int                   flavor);
-char*      terminal_widget_check_match                (GtkWidget            *widget,
-                                                       int                   column,
-                                                       int                   row,
-                                                       int                  *flavor);
-char*      terminal_widget_skey_check_match           (GtkWidget            *widget,
-                                                       int                   column,
-                                                       int                   row,
-                                                       int                  *flavor);
-void       terminal_widget_skey_match_remove          (GtkWidget            *widget);
 
 void       terminal_widget_set_colors                 (GtkWidget            *widget,
                                                        const GdkColor       *foreground,
