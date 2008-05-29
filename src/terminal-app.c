@@ -123,13 +123,6 @@ static guint signals[LAST_SIGNAL];
 
 enum
 {
-  RESPONSE_CREATE = GTK_RESPONSE_ACCEPT, /* Arghhh: Glade wants a GTK_RESPONSE_* for dialog buttons */
-  RESPONSE_CANCEL,
-  RESPONSE_DELETE
-};
-
-enum
-{
   COL_PROFILE,
   NUM_COLUMNS
 };
@@ -442,16 +435,14 @@ profile_combo_box_get_selected (GtkWidget *widget)
 }
 
 static void
-profile_combo_box_refill (GtkWidget *widget)
+profile_combo_box_refill (TerminalApp *app,
+                          GtkWidget *widget)
 {
   GtkComboBox *combo = GTK_COMBO_BOX (widget);
   GtkTreeIter iter;
   gboolean iter_set;
   TerminalProfile *selected_profile;
   GtkTreeModel *model;
-  TerminalApp *app;
-
-  app = terminal_app_get ();
 
   selected_profile = profile_combo_box_get_selected (widget);
   if (!selected_profile)
@@ -476,7 +467,7 @@ profile_combo_box_refill (GtkWidget *widget)
 }
 
 static GtkWidget*
-profile_combo_box_new (void)
+profile_combo_box_new (TerminalApp *app)
 {
   GtkWidget *combo;
   GtkCellRenderer *renderer;
@@ -490,7 +481,9 @@ profile_combo_box_new (void)
                                       (GtkCellLayoutDataFunc) terminal_app_profile_cell_data_func,
                                       NULL, NULL);
 
-  profile_combo_box_refill (combo);
+  profile_combo_box_refill (app, combo);
+  g_signal_connect (app, "profile-list-changed",
+                    G_CALLBACK (profile_combo_box_refill), combo);
   
   return combo;
 }
@@ -553,7 +546,8 @@ profile_combo_box_changed_cb (GtkWidget *widget,
 }
 
 static void
-profile_list_treeview_refill (GtkWidget *widget)
+profile_list_treeview_refill (TerminalApp *app,
+                              GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkTreeIter iter;
@@ -882,18 +876,6 @@ ensure_one_profile:
 
   g_assert (terminal_app_get_profile_count (app) > 0);
 
-  if (app->new_profile_dialog)
-    {
-      GtkWidget *new_profile_base_menu;
-
-      new_profile_base_menu = g_object_get_data (G_OBJECT (app->new_profile_dialog), "base_option_menu");
-      profile_combo_box_refill (new_profile_base_menu);
-    }
-  if (app->manage_profiles_list)
-    profile_list_treeview_refill (app->manage_profiles_list);
-  if (app->manage_profiles_default_menu)
-    profile_combo_box_refill (app->manage_profiles_default_menu);
-
   g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
 
   g_object_thaw_notify (object);
@@ -967,11 +949,11 @@ terminal_app_system_font_notify_cb (GConfClient *client,
 }
 
 static void
-new_profile_response_callback (GtkWidget *new_profile_dialog,
-                               int        response_id,
-                               TerminalApp *app)
+new_profile_response_cb (GtkWidget *new_profile_dialog,
+                         int        response_id,
+                         TerminalApp *app)
 {
-  if (response_id == RESPONSE_CREATE)
+  if (response_id == GTK_RESPONSE_ACCEPT)
     {
       GtkWidget *name_entry;
       char *name;
@@ -1054,22 +1036,30 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
 }
 
 static void
-new_profile_name_entry_changed_callback (GtkEditable *editable, gpointer data)
+new_profile_dialog_destroy_cb (GtkWidget *new_profile_dialog,
+                               TerminalApp *app)
 {
-  char *name, *saved_name;
-  GtkWidget *create_button;
+  GtkWidget *combo;
+      
+  combo = g_object_get_data (G_OBJECT (new_profile_dialog), "base_option_menu");
+  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_combo_box_refill), combo);
 
-  create_button = (GtkWidget*) data;
+  app->new_profile_dialog = NULL;
+}
 
-  saved_name = name = gtk_editable_get_chars (editable, 0, -1);
+static void
+new_profile_name_entry_changed_cb (GtkEntry *entry,
+                                   GtkDialog *dialog)
+{
+  const char *name;
+
+  name = gtk_entry_get_text (entry);
 
   /* make the create button sensitive only if something other than space has been set */
   while (*name != '\0' && g_ascii_isspace (*name))
-    name++;
- 
-  gtk_widget_set_sensitive (create_button, *name != '\0' ? TRUE : FALSE);
+    ++name;
 
-  g_free (saved_name);
+  gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, name[0] != '\0');
 }
 
 void
@@ -1077,8 +1067,6 @@ terminal_app_new_profile (TerminalApp     *app,
                           TerminalProfile *default_base_profile,
                           GtkWindow       *transient_parent)
 {
-  GtkWidget *create_button;
-
   if (app->new_profile_dialog == NULL)
     {
       GtkWidget *create_button, *table, *name_label, *name_entry, *base_label, *combo;
@@ -1093,81 +1081,36 @@ terminal_app_new_profile (TerminalApp     *app,
                                             NULL))
         return;
 
-      g_signal_connect (G_OBJECT (app->new_profile_dialog), "response", G_CALLBACK (new_profile_response_callback), app);
-      g_object_add_weak_pointer (G_OBJECT (app->new_profile_dialog), (void**) &app->new_profile_dialog);
+      g_signal_connect (G_OBJECT (app->new_profile_dialog), "response", G_CALLBACK (new_profile_response_cb), app);
+      g_signal_connect (app->new_profile_dialog, "destroy", G_CALLBACK (new_profile_dialog_destroy_cb), app);
 
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "create_button", create_button);
       gtk_widget_set_sensitive (create_button, FALSE);
 
       /* the name entry */
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "name_entry", name_entry);
-      g_signal_connect (name_entry, "changed", G_CALLBACK (new_profile_name_entry_changed_callback), create_button);
+      g_signal_connect (name_entry, "changed", G_CALLBACK (new_profile_name_entry_changed_cb), app->new_profile_dialog);
       gtk_entry_set_activates_default (GTK_ENTRY (name_entry), TRUE);
       gtk_widget_grab_focus (name_entry);
 
       gtk_label_set_mnemonic_widget (GTK_LABEL (name_label), name_entry);
 
       /* the base profile option menu */
-      combo = profile_combo_box_new ();
+      combo = profile_combo_box_new (app);
       gtk_table_attach_defaults (GTK_TABLE (table), combo, 1, 2, 1, 2);
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", combo);
       terminal_util_set_atk_name_description (combo, NULL, _("Choose base profile"));
 
       gtk_label_set_mnemonic_widget (GTK_LABEL (base_label), combo);
 
-      gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), RESPONSE_CREATE);
+      gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), GTK_RESPONSE_ACCEPT);
+      gtk_dialog_set_response_sensitive (GTK_DIALOG (app->new_profile_dialog), GTK_RESPONSE_ACCEPT, FALSE);
     }
 
   gtk_window_set_transient_for (GTK_WINDOW (app->new_profile_dialog),
                                 transient_parent);
 
-  create_button = g_object_get_data (G_OBJECT (app->new_profile_dialog), "create_button");
-  gtk_widget_set_sensitive (create_button, FALSE);
-  
-  gtk_widget_show_all (app->new_profile_dialog);
   gtk_window_present (GTK_WINDOW (app->new_profile_dialog));
-}
-
-#if 0
-static void
-default_profile_changed (TerminalProfile           *profile,
-                         const TerminalSettingMask *mask,
-                         void                      *profile_combo_box)
-{
-  if (mask->is_default)
-    {
-      if (terminal_profile_get_is_default (profile))
-        profile_combo_box_set_selected (GTK_WIDGET (profile_combo_box),
-                                         profile);      
-    }
-}
-#endif
-
-static void
-monitor_profiles_for_is_default_change (GtkWidget *profile_combo_box)
-{
-#if 0
-  GList *profiles;
-  GList *tmp;
-  
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
-
-  tmp = profiles;
-  while (tmp != NULL)
-    {
-      TerminalProfile *profile = tmp->data;
-
-      g_signal_connect_object (G_OBJECT (profile),
-                               "changed",
-                               G_CALLBACK (default_profile_changed),
-                               G_OBJECT (profile_combo_box),
-                               0);
-      
-      tmp = tmp->next;
-    }
-
-  g_list_free (profiles);
-#endif
 }
 
 static void
@@ -1204,6 +1147,9 @@ static void
 profile_list_destroyed_cb (GtkWidget   *manage_profiles_dialog,
                            TerminalApp *app)
 {
+  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_list_treeview_refill), app->manage_profiles_list);
+  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_combo_box_refill), app->manage_profiles_default_menu);
+
   app->manage_profiles_dialog = NULL;
   app->manage_profiles_list = NULL;
   app->manage_profiles_new_button = NULL;
@@ -1252,7 +1198,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
   g_signal_connect (selection, "changed", G_CALLBACK (profile_list_selection_changed_cb), app);
 
-  profile_list_treeview_refill (app->manage_profiles_list);
+  profile_list_treeview_refill (app, app->manage_profiles_list);
+  g_signal_connect (app, "profile-list-changed",
+                    G_CALLBACK (profile_list_treeview_refill), app->manage_profiles_list);
 
   g_signal_connect (app->manage_profiles_list, "row-activated",
                     G_CALLBACK (profile_list_row_activated_cb), app);
@@ -1270,7 +1218,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
                     G_CALLBACK (profile_list_delete_button_clicked_cb),
                     app->manage_profiles_list);
             
-  app->manage_profiles_default_menu = profile_combo_box_new ();
+  app->manage_profiles_default_menu = profile_combo_box_new (app);
   g_signal_connect (app->manage_profiles_default_menu, "changed",
                     G_CALLBACK (profile_combo_box_changed_cb), app);
 
@@ -1279,8 +1227,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), app->manage_profiles_default_menu);
 
-  monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
-      
   gtk_widget_grab_focus (app->manage_profiles_list);
 
   gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog),
