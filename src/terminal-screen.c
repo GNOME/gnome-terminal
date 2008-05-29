@@ -723,8 +723,8 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       
       /* FIXME: Don't enable this if we have a compmgr. */
       vte_terminal_set_background_transparent (vte_terminal,
-                                              bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                              (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
+                                               bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
+                                               (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING))
@@ -839,12 +839,12 @@ static void
 update_color_scheme (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  TerminalProfile *profile = priv->profile;
   GtkStyle *style;
   GdkColor colors[TERMINAL_PALETTE_SIZE];
-  GdkColor *fg_color, *bg_color;
+  const GdkColor *fg_color, *bg_color;
   GdkColor fg, bg;
   guint n_colors;
-  gboolean use_theme_colors;
 
   style = gtk_widget_get_style (GTK_WIDGET (screen));
   if (!style)
@@ -853,23 +853,15 @@ update_color_scheme (TerminalScreen *screen)
   fg = style->text[GTK_STATE_NORMAL];
   bg = style->base[GTK_STATE_NORMAL];
 
-  g_object_get (priv->profile,
-                TERMINAL_PROFILE_USE_THEME_COLORS, &use_theme_colors,
-                TERMINAL_PROFILE_FOREGROUND_COLOR, &fg_color,
-                TERMINAL_PROFILE_BACKGROUND_COLOR, &bg_color,
-                NULL);
+  fg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
+  bg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
 
-  if (fg_color)
+  if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS))
     {
-      if (!use_theme_colors)
+      if (fg_color)
         fg = *fg_color;
-      gdk_color_free (fg_color);
-    }
-  if (bg_color)
-    {
-      if (!use_theme_colors)
+      if (bg_color)
         bg = *bg_color;
-      gdk_color_free (bg_color);
     }
 
   n_colors = G_N_ELEMENTS (colors);
