@@ -140,17 +140,18 @@ struct _TerminalProfilePrivate
 enum {
   PROP_0,
   PROP_ALLOW_BOLD,
+  PROP_BACKGROUND_COLOR,
   PROP_BACKGROUND_DARKNESS,
   PROP_BACKGROUND_IMAGE,
   PROP_BACKGROUND_IMAGE_FILE,
   PROP_BACKGROUND_TYPE,
   PROP_BACKSPACE_BINDING,
-  PROP_COLOR_SCHEME,
   PROP_CUSTOM_COMMAND,
   PROP_DEFAULT_SHOW_MENUBAR,
   PROP_DELETE_BINDING,
   PROP_EXIT_ACTION,
   PROP_FONT,
+  PROP_FOREGROUND_COLOR,
   PROP_ICON,
   PROP_ICON_FILE,
   PROP_IS_DEFAULT,
@@ -397,11 +398,15 @@ terminal_profile_get_property (GObject *object,
                               GParamSpec *pspec)
 {
   TerminalProfile *profile = TERMINAL_PROFILE (object);
+  TerminalProfilePrivate *priv = profile->priv;
 
   switch (prop_id)
     {
       case PROP_ALLOW_BOLD:
         g_value_set_boolean (value, terminal_profile_get_allow_bold (profile));
+        break;
+      case PROP_BACKGROUND_COLOR:
+        g_value_set_boxed (value, &priv->background);
         break;
       case PROP_BACKGROUND_DARKNESS:
         g_value_set_double (value, terminal_profile_get_background_darkness (profile));
@@ -418,9 +423,6 @@ terminal_profile_get_property (GObject *object,
       case PROP_BACKSPACE_BINDING:
         g_value_set_enum (value, terminal_profile_get_backspace_binding (profile));
         break;
-      case PROP_COLOR_SCHEME:
-// FIXME        g_value_set (value, terminal_profile_get_ (profile));
-        break;
       case PROP_CUSTOM_COMMAND:
         g_value_set_string (value, terminal_profile_get_custom_command (profile));
         break;
@@ -435,6 +437,9 @@ terminal_profile_get_property (GObject *object,
         break;
       case PROP_FONT:
         g_value_set_boxed (value, terminal_profile_get_font (profile));
+        break;
+      case PROP_FOREGROUND_COLOR:
+        g_value_set_boxed (value, &priv->foreground);
         break;
       case PROP_ICON:
         g_value_set_object (value, terminal_profile_get_icon (profile));
@@ -522,6 +527,12 @@ terminal_profile_set_property (GObject *object,
       case PROP_ALLOW_BOLD:
         terminal_profile_set_allow_bold (profile, g_value_get_boolean (value));
         break;
+      case PROP_BACKGROUND_COLOR: {
+        GdkColor *color = g_value_get_boxed (value);
+        if (color)
+          priv->background = *color;
+        break;
+      }
       case PROP_BACKGROUND_DARKNESS:
         terminal_profile_set_background_darkness (profile, g_value_get_double (value));
         break;
@@ -536,9 +547,6 @@ terminal_profile_set_property (GObject *object,
         break;
       case PROP_BACKSPACE_BINDING:
         terminal_profile_set_backspace_binding (profile, g_value_get_enum (value));
-        break;
-      case PROP_COLOR_SCHEME:
-//         FIXME terminal_profile_set_ (profile, g_value_get_ (value));
         break;
       case PROP_CUSTOM_COMMAND:
         terminal_profile_set_custom_command (profile, g_value_get_string (value));
@@ -555,6 +563,12 @@ terminal_profile_set_property (GObject *object,
       case PROP_FONT:
         terminal_profile_set_font (profile, g_value_get_boxed (value));
         break;
+      case PROP_FOREGROUND_COLOR: {
+        GdkColor *color = g_value_get_boxed (value);
+        if (color)
+          priv->foreground = *color;
+        break;
+      }
       case PROP_ICON:
         /* not writable */
         break;
@@ -708,6 +722,14 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                          propDefault,\
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC))
 
+#define TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED(propId, propName, propElementName, propElementType)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_value_array (propName, NULL, NULL,\
+                              g_param_spec_boxed (propElementName, NULL, NULL,\
+                                                  propElementType, \
+                                                  G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC))
+
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_ALLOW_BOLD, "allow-bold", TRUE);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_DEFAULT_SHOW_MENUBAR, "default-show-menubar", TRUE);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_IS_DEFAULT, "is-default", FALSE /* FIXMEchpe? */);
@@ -723,7 +745,9 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_SYSTEM_FONT, "use-system-font", TRUE);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_THEME_COLORS, "use-theme-colors", TRUE);
 
+  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_BACKGROUND_COLOR, "background-color", GDK_TYPE_COLOR);
   TERMINAL_PROFILE_PROPERTY_BOXED (PROP_FONT, "font", PANGO_TYPE_FONT_DESCRIPTION);
+  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_FOREGROUND_COLOR, "foreground-color", GDK_TYPE_COLOR);
 
   /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
   TERMINAL_PROFILE_PROPERTY_DOUBLE (PROP_BACKGROUND_DARKNESS, "background-darkness", 0.0, 1.0, 0.0);
@@ -748,24 +772,7 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   TERMINAL_PROFILE_PROPERTY_STRING (PROP_VISIBLE_NAME, "visible-name", NULL);
   TERMINAL_PROFILE_PROPERTY_STRING (PROP_WORD_CHARS, "word-chards", "");
 
-//   g_object_class_install_property
-//     (object_class,
-//      PROP_COLOR_SCHEME,
-//      g_param_spec_ ("", NULL, NULL,
-//                         G_PARAM_READWRITE |
-//                         G_PARAM_STATIC_NAME |
-//                         G_PARAM_STATIC_NICK |
-//                         G_PARAM_STATIC_BLURB));
-
-//   g_object_class_install_property
-//     (object_class,
-//      PROP_PALETTE,
-//      g_param_spec_ ("", NULL, NULL,
-//                         G_PARAM_READWRITE |
-//                         G_PARAM_STATIC_NAME |
-//                         G_PARAM_STATIC_NICK |
-//                         G_PARAM_STATIC_BLURB));
-
+  TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED (PROP_PALETTE, "palette", "color", GDK_TYPE_COLOR);
 }
 
 static void
