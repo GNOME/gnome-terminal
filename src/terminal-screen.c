@@ -816,12 +816,12 @@ terminal_screen_set_font (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
-  GtkWidget *term;
   PangoFontDescription *desc;
-  
-  term = priv->term;
+  gboolean no_aa_without_render;
+
   profile = priv->profile;
   
+  /* FIXMEchpe make this use a get_font_desc on TerminalProfile */
   if (terminal_profile_get_use_system_font (profile))
     desc = get_system_monospace_font ();
   else
@@ -831,8 +831,29 @@ terminal_screen_set_font (TerminalScreen *screen)
 				   priv->font_scale *
 				   pango_font_description_get_size (desc));
 
-  terminal_widget_set_pango_font (term, desc,
-				  terminal_profile_get_no_aa_without_render (profile));
+  no_aa_without_render = terminal_profile_get_no_aa_without_render (profile);
+  if (!no_aa_without_render)
+    {
+      vte_terminal_set_font (VTE_TERMINAL (screen), desc);
+    }
+  else
+    {
+      Display *dpy;
+      gboolean has_render;
+      gint event_base, error_base;
+
+      /* FIXME multi-head/mult-screen! */
+      dpy = gdk_x11_display_get_xdisplay (gtk_widget_get_display (GTK_WIDGET (screen)));
+      has_render = (XRenderQueryExtension (dpy, &event_base, &error_base) &&
+		    (XRenderFindVisualFormat (dpy, DefaultVisual (dpy, DefaultScreen (dpy))) != NULL));
+
+      if (has_render)
+	vte_terminal_set_font (VTE_TERMINAL (screen), desc);
+      else 
+	vte_terminal_set_font_full (VTE_TERMINAL (screen),
+				    desc,
+				    VTE_ANTI_ALIAS_FORCE_DISABLE);
+    }
 
   pango_font_description_free (desc);
 }

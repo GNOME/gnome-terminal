@@ -513,32 +513,3 @@ terminal_widget_write_data_to_child (GtkWidget  *widget,
 {
   vte_terminal_feed_child(VTE_TERMINAL(widget), data, len);
 }
-
-void
-terminal_widget_set_pango_font (GtkWidget                  *widget,
-				const PangoFontDescription *font_desc,
-				gboolean no_aa_without_render)
-{
-  g_return_if_fail (font_desc != NULL);
-
-  if (!no_aa_without_render)
-    vte_terminal_set_font (VTE_TERMINAL (widget), font_desc);
-
-  else
-    {
-      Display *dpy;
-      gboolean has_render;
-      gint event_base, error_base;
-
-      dpy = gdk_x11_display_get_xdisplay (gdk_display_get_default ());
-      has_render = (XRenderQueryExtension (dpy, &event_base, &error_base) &&
-		    (XRenderFindVisualFormat (dpy, DefaultVisual (dpy, DefaultScreen (dpy))) != NULL));
-
-      if (has_render)
-	vte_terminal_set_font (VTE_TERMINAL (widget), font_desc);
-      else 
-	vte_terminal_set_font_full (VTE_TERMINAL (widget),
-				    font_desc,
-				    VTE_ANTI_ALIAS_FORCE_DISABLE);
-    }
-}
