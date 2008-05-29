@@ -293,7 +293,6 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  /* FIXMEchpe why block here? */
   g_signal_handlers_block_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
   terminal_screen_set_profile (priv->active_term, profile);    
   g_signal_handlers_unblock_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
