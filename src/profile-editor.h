@@ -1,5 +1,3 @@
-/* dialog for editing a profile */
-
 /*
  * Copyright © 2002 Havoc Pennington
  *
