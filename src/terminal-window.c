@@ -1602,7 +1602,6 @@ profile_set_callback (TerminalScreen *screen,
                       TerminalWindow *window)
 {
   terminal_window_update_set_profile_menu_active_profile (window);
-  terminal_window_update_new_terminal_menus (window);
 }
 
 static void
