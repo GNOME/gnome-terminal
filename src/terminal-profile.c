@@ -727,10 +727,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       const char *str;
 
       str = g_value_get_string (value);
-      if (!str)
-        str = "";
-    
-      gconf_change_set_set_string (changeset, key, str);
+      gconf_change_set_set_string (changeset, key, str ? str : "");
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
