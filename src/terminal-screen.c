@@ -604,6 +604,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
                                    TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  GObject *object = G_OBJECT (screen);
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   const char *prop_name;
   TerminalBackgroundType bg_type;
@@ -614,6 +615,8 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     prop_name = NULL;
 
   prop_name = NULL; // FIXMEchpe
+
+  g_object_freeze_notify (object);
 
   if (priv->window)
     {
@@ -738,6 +741,8 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 
 /*  if (GTK_WIDGET_REALIZED (screen))
     terminal_screen_change_font (screen);*/
+  
+  g_object_thaw_notify (object);
 }
 
 /**
