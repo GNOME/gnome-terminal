@@ -74,10 +74,6 @@ GType terminal_screen_get_type (void) G_GNUC_CONST;
 
 TerminalScreen* terminal_screen_new                    (void);
 
-/* Used in terminal-window.c only, others should call terminal_window_add_screen() */
-void terminal_screen_set_window (TerminalScreen *screen,
-                                 TerminalWindow *window);
-
 void terminal_screen_set_profile (TerminalScreen *screen,
                                   TerminalProfile *profile);
 TerminalProfile* terminal_screen_get_profile (TerminalScreen *screen);

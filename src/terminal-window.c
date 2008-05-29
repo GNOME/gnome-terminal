@@ -1796,9 +1796,6 @@ terminal_window_add_screen (TerminalWindow *window,
   screen_container = terminal_screen_container_new (screen);
   gtk_widget_show (screen_container);
 
-  // FIXMEchpe remove this once the parent-set handler in TerminalScreen works
-  terminal_screen_set_window (screen, window);
-
   update_tab_visibility (window, +1);
 
   tab_label = construct_tab_label (screen, screen_container);
@@ -2119,7 +2116,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   screen = terminal_screen_container_get_screen (container);
 
-  terminal_screen_set_window (screen, window);
   priv->terms++;
 
   g_signal_connect (G_OBJECT (screen),
@@ -2240,8 +2236,6 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         G_CALLBACK (screen_close_cb),
                                         window);
 
-  /* FIXMEchpe this should have been done by the parent-set handler already! */
-  terminal_screen_set_window (screen, NULL);
   priv->terms--;
 
   update_notebook (window);

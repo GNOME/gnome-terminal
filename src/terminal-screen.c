@@ -173,17 +173,46 @@ parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget 
 {
   g_print ("screen %p scrolled-window size req %d : %d\n", screen, req->width, req->height);
 }
+#endif
 
 static void
-parent_set_callback (TerminalScreen *screen,
-                     GtkWidget      *old_parent)
+parent_parent_set_cb (GtkWidget *widget,
+                      GtkWidget *old_parent,
+                      TerminalScreen *screen)
 {
+  TerminalScreenPrivate *priv = screen->priv;
+  GtkWidget *toplevel;
+
+  if (widget->parent)
+    {
+      g_return_if_fail (GTK_IS_NOTEBOOK (widget->parent));
+
+      toplevel = gtk_widget_get_toplevel (widget);
+      g_return_if_fail (GTK_WIDGET_TOPLEVEL (toplevel));
+
+      priv->window = TERMINAL_WINDOW (toplevel);
+    }
+  else
+    priv->window = NULL;
+}
+
+static void
+parent_set_callback (GtkWidget *widget,
+                     GtkWidget *old_parent)
+{
+  if (old_parent)
+    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_parent_set_cb), widget);
+
+  if (widget->parent)
+    g_signal_connect (widget->parent, "parent-set", G_CALLBACK (parent_parent_set_cb), widget);
+
+#ifdef DEBUG_GEOMETRY
   if (old_parent)
     g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), screen);
   if (GTK_WIDGET (screen)->parent)
     g_signal_connect (GTK_WIDGET (screen)->parent, "size-request", G_CALLBACK (parent_size_request), screen);
-}
 #endif
+}
 
 static void
 set_background_image_file (VteTerminal *terminal,
@@ -365,10 +394,11 @@ terminal_screen_init (TerminalScreen *screen)
   g_signal_connect (terminal_app_get (), "notify::system-font",
                     G_CALLBACK (terminal_screen_system_font_notify_cb), screen);
 
+  g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
+
 #ifdef DEBUG_GEOMETRY
   g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
   g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
-  g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
 #endif
 
   gtk_widget_show (GTK_WIDGET (screen)); /* FIXMEchpe remove this */
@@ -570,13 +600,6 @@ TerminalScreen*
 terminal_screen_new (void)
 {
   return g_object_new (TERMINAL_TYPE_SCREEN, NULL);
-}
-
-void
-terminal_screen_set_window (TerminalScreen *screen,
-                            TerminalWindow *window)
-{
-  screen->priv->window = window;
 }
 
 const char*
