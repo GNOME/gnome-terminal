@@ -350,6 +350,12 @@ terminal_screen_init (TerminalScreen *screen)
                              FLAVOR_DEFAULT_TO_HTTP);
 
   terminal_screen_match_add (screen,
+                             "\\<(callto|h323|sip):[" USERCHARS "]"
+                             "[" USERCHARS ".]*(" PORT "/[a-z0-9]+)?"
+                             "@" HOST "\\>",
+                             FLAVOR_VOIP_CALL);
+
+  terminal_screen_match_add (screen,
                              "\\<(mailto:)?[" USERCHARS "][" USERCHARS ".]*@"
                              "[" HOSTCHARS "]+\\." HOST "\\>",
                              FLAVOR_EMAIL);
@@ -358,12 +364,6 @@ terminal_screen_init (TerminalScreen *screen)
                              "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
                              HOST PORT "\\>",
                              FLAVOR_AS_IS);
-
-  terminal_screen_match_add (screen,
-                             "\\<(callto|h323|sip):[" USERCHARS "]"
-                             "[" USERCHARS ".]*(" PORT "/[a-z0-9]+)?"
-                             "@" HOST "\\>",
-                             FLAVOR_VOIP_CALL);
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
