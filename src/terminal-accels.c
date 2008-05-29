@@ -243,44 +243,23 @@ void
 terminal_accels_init (void)
 {
   GConfClient *conf;
-  GError *err;
   int i, j;
 
   conf = gconf_client_get_default ();
   
-  err = NULL;
   gconf_client_add_dir (conf, CONF_KEYS_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  CONF_KEYS_PREFIX, err->message);
-      g_error_free (err);
-    }
-
-  err = NULL;
+                        NULL);
   gconf_client_notify_add (conf,
                            CONF_KEYS_PREFIX,
                            keys_change_notify,
-                           NULL, /* user_data */
-                           NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal keybinding changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-  
-  hack_group = gtk_accel_group_new ();
-  
-  i = 0;
-  while (i < (int) G_N_ELEMENTS (all_entries))
-    {
-      j = 0;
+                           NULL, NULL, NULL);
 
-      while (j < all_entries[i].n_elements)
+  hack_group = gtk_accel_group_new ();
+
+  for (i = 0; i <G_N_ELEMENTS (all_entries); ++i)
+    {
+      for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
 	  char *str;
 	  guint keyval;
@@ -304,16 +283,7 @@ terminal_accels_init (void)
 	   *  http://bugzilla.gnome.org/show_bug.cgi?id=73207
 	   */
 
-	  err = NULL;
-	  str = gconf_client_get_string (conf, key_entry->gconf_key, &err);
-
-	  if (err != NULL)
-	    {
-	      g_printerr (_("There was an error loading a terminal keybinding. (%s)\n"),
-			  err->message);
-	      g_error_free (err);
-	    }
-
+	  str = gconf_client_get_string (conf, key_entry->gconf_key, NULL);
 	  if (binding_from_string (str, &keyval, &mask))
 	    {
 	      key_entry->gconf_keyval = keyval;
@@ -331,10 +301,7 @@ terminal_accels_init (void)
 	    }
 
 	  g_free (str);
-	  
-	  ++j;
 	}
-      ++i;
     }
   
   g_signal_connect (G_OBJECT (hack_group),
@@ -342,57 +309,19 @@ terminal_accels_init (void)
                     G_CALLBACK (accel_changed_callback),
                     NULL);
 
-  err = NULL;
-  using_mnemonics = gconf_client_get_bool (conf,
-                                           CONF_GLOBAL_PREFIX"/use_mnemonics",
-                                           &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config value for whether to use menubar access keys. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-
-  err = NULL;
+  using_mnemonics = gconf_client_get_bool (conf, CONF_GLOBAL_PREFIX"/use_mnemonics", NULL);
   gconf_client_notify_add (conf,
                            CONF_GLOBAL_PREFIX"/use_mnemonics",
                            mnemonics_change_notify,
-                           NULL, /* user_data */
-                           NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification on changes on whether to use menubar access keys (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
+                           NULL, NULL, NULL);
 
-  err = NULL;
-  using_menu_accels = gconf_client_get_bool (conf,
-                                             CONF_GLOBAL_PREFIX"/use_menu_accelerators",
-                                             &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config value for whether to use menu accelerators. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-
+  using_menu_accels = gconf_client_get_bool (conf, CONF_GLOBAL_PREFIX"/use_menu_accelerators", NULL);
   update_menu_accel_state ();
   
-  err = NULL;
   gconf_client_notify_add (conf,
                            CONF_GLOBAL_PREFIX"/use_menu_accelerators",
                            menu_accels_change_notify,
-                           NULL, /* user_data */
-                           NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification for use_menu_accelerators (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
+                           NULL, NULL, NULL);
 }
 
 static gboolean
@@ -999,20 +928,12 @@ disable_mnemonics_toggled (GtkWidget *button,
   if (active != (!using_mnemonics))
     {
       GConfClient *conf;
-      GError *err;
       
-      err = NULL;
       conf = gconf_client_get_default ();
       gconf_client_set_bool (conf,
                              CONF_GLOBAL_PREFIX"/use_mnemonics",
-                             !active,
-                             &err);
+                             !active, NULL);
       g_object_unref (conf);
-      if (err != NULL)
-        {
-          g_printerr (_("Error setting %s config key: %s\n"), CONF_GLOBAL_PREFIX"/use_mnemonics", err->message);
-          g_error_free (err);
-        }
     }
 }
 
@@ -1030,22 +951,12 @@ disable_menu_accels_toggled (GtkWidget *button,
   if (active != (!using_menu_accels))
     {
       GConfClient *conf;
-      GError *err;
       
-      err = NULL;
       conf = gconf_client_get_default ();
       gconf_client_set_bool (conf,
                              CONF_GLOBAL_PREFIX"/use_menu_accelerators",
-                             !active,
-                             &err);
+                             !active, NULL);
       g_object_unref (conf);
-      if (err != NULL)
-        {
-          g_printerr (_("Error setting use_menu_accelerators key: %s\n"),
-                      err->message);
-          
-          g_error_free (err);
-        }
     }
 }
 
