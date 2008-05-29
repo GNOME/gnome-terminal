@@ -559,7 +559,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   if (G_IS_PARAM_SPEC_BOOLEAN (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_BOOL)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_value_set_boolean (&value, gconf_value_get_bool (gconf_value));
     }
@@ -691,7 +691,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
     }
 
 out:
-  /* FIXMEchpe: if we arrive here through goto in the error cases,
+  /* FIXME: if we arrive here through goto in the error cases,
    * should we maybe reset the property to its default value?
    */
 
@@ -708,7 +708,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
   char *key;
   const GValue *value;
 
-  /* FIXMEchpe: do this? */
+  /* FIXME: do this? */
 #if 0
   if (priv->locked[pspec->param_id])
     return;

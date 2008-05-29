@@ -2192,7 +2192,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
   /* ZvtTerm is a broken POS and requires this realize to get
    * the size request right.
    */
-  /* FIXMEchpe: does this apply to VTE? */
+  /* FIXME: does this apply to VTE? */
   gtk_widget_realize (GTK_WIDGET (screen));
 
   /* If we have an active screen, match its size and zoom */
@@ -2209,7 +2209,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
     }
   
   /* Make the first-added screen the active one */
-  /* FIXMEchpe: this shouldn't be necessary since we'll immediately get
+  /* FIXME: this shouldn't be necessary since we'll immediately get
    * page-selected callback.
    */
   if (priv->active_screen == NULL)

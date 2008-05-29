@@ -1686,7 +1686,6 @@ terminal_app_edit_encodings (TerminalApp     *app,
 TerminalWindow *
 terminal_app_get_current_window (TerminalApp *app)
 {
-  /* FIXMEchpe take focus into account! */
   return g_list_last (app->windows)->data;
 }
 

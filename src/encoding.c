@@ -117,7 +117,7 @@ static const struct {
   { "WINDOWS-1258",	N_("Vietnamese") },
 #if 0
   /* These encodings do NOT pass-through ASCII, so are always rejected.
-   * FIXMEchpe: why are they in this table; or rather why do we need
+   * FIXME: why are they in this table; or rather why do we need
    * the ASCII pass-through requirement?
    */
   { "UTF-7",  N_("Unicode") },

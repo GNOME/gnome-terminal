@@ -1206,7 +1206,7 @@ main (int argc, char **argv)
           option_parsing_results_free (parsing_results);
           return 0;
         }
-      /* FIXMEchpe: else return 1; ? */
+      /* FIXME: else return 1; ? */
     }
 
   g_strfreev (argv_copy);
