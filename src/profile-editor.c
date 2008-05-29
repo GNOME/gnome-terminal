@@ -80,7 +80,6 @@ static void profile_palette_notify_colorpickers_cb (TerminalProfile *profile,
                                                     GParamSpec *pspec,
                                                     GtkWidget *editor);
 
-
 static GtkWidget*
 profile_editor_get_widget (GtkWidget  *editor,
                            const char *widget_name)
@@ -782,26 +781,6 @@ init_color_scheme_menu (GtkWidget *combo_box)
     }
 }
 
-static void
-init_palette_scheme_menu (GtkWidget *combo_box)
-{
-  /* Need to keep the same order as they're declared in terminal-profile.c */
-  const char *palette_schemes[] = {
-    N_("Tango"),
-    N_("Linux console"),
-    N_("XTerm"),
-    N_("Rxvt")
-  };
-  int i;
-
-  i = G_N_ELEMENTS (palette_schemes);
-  while (i > 0)
-    {
-      gtk_combo_box_prepend_text (GTK_COMBO_BOX (combo_box), 
-                                  _(palette_schemes[--i]));
-    }
-}
-
 static char*
 format_percent_value (GtkScale *scale,
                       double    val,
@@ -1017,9 +996,6 @@ terminal_profile_edit (TerminalProfile *profile,
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
-
-  w = (GtkWidget *) gtk_builder_get_object  (builder, "palette-combobox");
-  init_palette_scheme_menu (w);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "darken-background-scale");
   init_background_darkness_scale (w);
