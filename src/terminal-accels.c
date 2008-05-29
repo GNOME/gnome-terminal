@@ -466,13 +466,36 @@ binding_name (guint            keyval,
     return translate ? g_strdup (_("Disabled")) : g_strdup ("disabled");
 }
 
+static void
+add_key_entry_to_changeset (gpointer key,
+                            KeyEntry *key_entry,
+                            GConfChangeSet *changeset)
+{
+  GtkAccelKey gtk_key;
+
+  if (!key_entry->needs_gconf_sync)
+    return;
+
+  key_entry->needs_gconf_sync = FALSE;
+
+  if (gtk_accel_map_lookup_entry (key_entry->accel_path, &gtk_key) &&
+      (gtk_key.accel_key != key_entry->gconf_keyval ||
+       gtk_key.accel_mods != key_entry->gconf_mask))
+    {
+      char *accel_name;
+
+      accel_name = binding_name (gtk_key.accel_key, gtk_key.accel_mods, FALSE);
+      gconf_change_set_set_string (changeset,  key_entry->gconf_key, accel_name);
+      g_free (accel_name);
+    }
+}
+              
 static gboolean
 sync_idle_cb (gpointer data)
 {
   GConfClient *conf;
   GConfChangeSet *changeset;
   GError *error = NULL;
-  int i, j;
 
   D (g_print ("gconf sync handler\n"));
   
@@ -481,44 +504,7 @@ sync_idle_cb (gpointer data)
   conf = gconf_client_get_default ();
 
   changeset = gconf_change_set_new ();
-
-  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
-    {
-      for (j = 0; j < all_entries[i].n_elements; ++j)
-	{
-	  KeyEntry *key_entry;
-
-	  key_entry = &(all_entries[i].key_entry[j]);
-
-	  if (key_entry->needs_gconf_sync)
-	    {
-	      GtkAccelKey gtk_key;
-          
-	      key_entry->needs_gconf_sync = FALSE;
-
-	      gtk_key.accel_key = 0;
-	      gtk_key.accel_mods = 0;
-          
-	      gtk_accel_map_lookup_entry (key_entry->accel_path, &gtk_key);
-          
-	      if (gtk_key.accel_key != key_entry->gconf_keyval ||
-		  gtk_key.accel_mods != key_entry->gconf_mask)
-		{
-		  char *accel_name;
-
-		  accel_name = binding_name (gtk_key.accel_key,
-					     gtk_key.accel_mods,
-					     FALSE);
-
-		  D (g_print ("Setting gconf key %s to \"%s\"\n",
-			      key_entry->gconf_key, accel_name));
-                  gconf_change_set_set_string (changeset,  key_entry->gconf_key, accel_name);
-		  g_free (accel_name);
-		}
-	    }
-	}
-    }
-              
+  g_hash_table_foreach (gconf_key_to_entry, (GHFunc) add_key_entry_to_changeset, changeset);
   if (!gconf_client_commit_change_set (conf, changeset, TRUE, &error))
     {
       g_printerr ("Error committing the accelerator changeset: %s\n", error->message);
@@ -897,7 +883,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
-
 
 done:
   gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
