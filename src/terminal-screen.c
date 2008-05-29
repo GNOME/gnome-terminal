@@ -1895,8 +1895,7 @@ drag_data_received (TerminalScreen   *widget,
 	 * to perform the correct conversion.
          */
         if (str && *str)
-	  terminal_widget_write_data_to_child (priv->term,
-					       str, strlen (str));
+          vte_terminal_feed_child (VTE_TERMINAL (screen), str, strlen (str));
         g_free (str);
       }
       break;
@@ -1913,9 +1912,10 @@ drag_data_received (TerminalScreen   *widget,
           }
         
         /* FIXME just brazenly ignoring encoding issues... */
-        terminal_widget_write_data_to_child (priv->term,
-                                             selection_data->data,
-                                             selection_data->length);
+        /* FIXMEchpe: just use the text conversion routines in gtk! */
+        vte_terminal_feed_child (VTE_TERMINAL (screen),
+                                 selection_data->data,
+                                 selection_data->length);
       }
       break;
       
@@ -2000,12 +2000,10 @@ drag_data_received (TerminalScreen   *widget,
          * child some UTF-8
          */
         if (filename)
-          terminal_widget_write_data_to_child (priv->term,
-                                               filename, strlen (filename));
+          vte_terminal_feed_child (VTE_TERMINAL (screen),
+                                   filename, strlen (filename));
         else
-          terminal_widget_write_data_to_child (priv->term,
-                                               str->str,
-                                               str->len);
+          vte_terminal_feed_child (VTE_TERMINAL (screen), str->str, str->len);
 
         g_free (filename);        
         g_string_free (str, TRUE);
@@ -2061,8 +2059,7 @@ drag_data_received (TerminalScreen   *widget,
             char *flat;
             
             flat = g_strjoinv (" ", uris);
-            terminal_widget_write_data_to_child (priv->term,
-                                                 flat, strlen (flat));
+            vte_terminal_feed_child (VTE_TERMINAL (screen), flat, strlen (flat));
             g_free (flat);
           }
 

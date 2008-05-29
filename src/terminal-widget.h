@@ -37,11 +37,6 @@ G_BEGIN_DECLS
  *
  */
 
-
-void       terminal_widget_set_colors                 (GtkWidget            *widget,
-                                                       const GdkColor       *foreground,
-                                                       const GdkColor       *background,
-                                                       const GdkColor       *palette_entries);
 void terminal_widget_connect_child_died            (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
@@ -58,10 +53,6 @@ gboolean terminal_widget_fork_command      (GtkWidget   *widget,
                                             const char  *working_dir,
                                             int         *child_pid,
                                             GError     **err);
-
-void terminal_widget_write_data_to_child (GtkWidget  *widget,
-                                          const char *data,
-                                          int         len);
 
 G_END_DECLS
 

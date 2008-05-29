@@ -74,11 +74,3 @@ terminal_widget_fork_command (GtkWidget   *widget,
 
   return TRUE;
 }
-
-void
-terminal_widget_write_data_to_child (GtkWidget  *widget,
-                                     const char *data,
-                                     int         len)
-{
-  vte_terminal_feed_child(VTE_TERMINAL(widget), data, len);
-}

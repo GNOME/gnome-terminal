@@ -194,12 +194,11 @@ terminal_skey_do_popup (TerminalScreen *screen,
       response = skey (hash, seq, seed, password);
       if (response)
 	{
-	  terminal_widget_write_data_to_child (terminal_screen_get_widget (screen),
-					       response,
-					       strlen (response));
-	  terminal_widget_write_data_to_child (terminal_screen_get_widget (screen),
-					       "\n",
-					       strlen ("\n"));
+          VteTerminal *vte_terminal = VTE_TERMINAL (screen);
+          static const char newline[2] = "\n";
+
+	  vte_terminal_feed_child (vte_terminal, response, strlen (response));
+          vte_terminal_feed_child (vte_terminal, newline, strlen (newline));
 	  free (response);
 	}
     }
