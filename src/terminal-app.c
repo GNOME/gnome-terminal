@@ -74,7 +74,6 @@ struct _TerminalAppClass {
 
   void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
-  void (* default_profile_changed) (TerminalApp *app);
 };
 
 struct _TerminalApp
@@ -109,14 +108,14 @@ struct _TerminalApp
 enum
 {
   PROP_0,
-  PROP_SYSTEM_FONT
+  PROP_DEFAULT_PROFILE,
+  PROP_SYSTEM_FONT,
 };
 
 enum
 {
   QUIT,
-  PROFILES_LIST_CHANGED,
-  DEFAULT_PROFILE_CHANGED,
+  PROFILE_LIST_CHANGED,
   LAST_SIGNAL
 };
 
@@ -196,47 +195,6 @@ terminal_window_destroyed (TerminalWindow *window,
     gtk_main_quit ();
 }
 
-static void
-terminal_app_profile_forgotten_cb (TerminalProfile *profile,
-                                   TerminalApp *app)
-{
-  g_hash_table_remove (app->profiles, terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME));
-
-  if (profile == app->default_profile)
-    app->default_profile = NULL;
-    /* FIXMEchpe update default profile! */
-
-  /* FIXMEchpe emit profiles-list-changed signal */
-}
-
-static void
-terminal_app_set_default_profile (TerminalApp *app,
-                                  TerminalProfile *new_default)
-{
-  if (app->default_profile)
-    g_object_set (app->default_profile, TERMINAL_PROFILE_IS_DEFAULT, FALSE, NULL);
-    
-  gconf_client_set_string (app->conf,
-                           CONF_GLOBAL_PREFIX "/default_profile",
-                           terminal_profile_get_property_string (new_default, TERMINAL_PROFILE_NAME),
-                           NULL);
-
-  /* Even though the gconf change notification does this, it happens too late.
-   * In some cases, the default profile changes twice in quick succession,
-   * and update_default_profile must be called in sync with those changes.
-   */
-  g_object_set (new_default, TERMINAL_PROFILE_IS_DEFAULT, TRUE, NULL);
-        
-  /* FIXMEchpe */
-/*  update_default_profile (terminal_profile_get_name (profile),
-                          !gconf_client_key_is_writable (priv->conf,
-                                                         CONF_GLOBAL_PREFIX"/default_profile",
-                                                         NULL));*/
-
-      /* FIXMEchpe emit default-profile-changed signal */
-}
-
-      
 static TerminalProfile *
 terminal_app_create_profile (TerminalApp *app,
                              const char *name)
@@ -247,9 +205,6 @@ terminal_app_create_profile (TerminalApp *app,
   g_return_val_if_fail (profile == NULL, profile); /* FIXMEchpe can this happen? */
 
   profile = _terminal_profile_new (name);
-
-  g_signal_connect (profile, "forgotten",
-                    G_CALLBACK (terminal_app_profile_forgotten_cb), app);
 
   g_hash_table_insert (app->profiles,
                        g_strdup (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME)),
@@ -620,12 +575,20 @@ profile_combo_box_changed_cb (GtkWidget *widget,
   if (!profile)
     return;
 
-  if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_IS_DEFAULT))
-    terminal_app_set_default_profile (app, profile);
+  gconf_client_set_string (app->conf,
+                           CONF_GLOBAL_PREFIX "/default_profile",
+                           terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME),
+                           NULL);
+
+  /* Even though the gconf change notification does this, it happens too late.
+   * In some cases, the default profile changes twice in quick succession,
+   * and update_default_profile must be called in sync with those changes.
+   */
+  app->default_profile = profile;
+ 
+  g_object_notify (G_OBJECT (app), "default-profile");
 
   g_object_unref (profile);
-
-  /* FIXMEchpe */
 }
 
 static void
@@ -834,21 +797,18 @@ static GList*
 find_profile_link (GList      *profiles,
                    const char *name)
 {
-  GList *tmp;
+  GList *l;
 
-  tmp = profiles;
-  while (tmp != NULL)
+  for (l = profiles; l != NULL; l = l->next)
     {
       const char *profile_name;
 
-      profile_name = terminal_profile_get_property_string (TERMINAL_PROFILE (tmp->data), TERMINAL_PROFILE_NAME);
+      profile_name = terminal_profile_get_property_string (TERMINAL_PROFILE (l->data), TERMINAL_PROFILE_NAME);
       if (profile_name && strcmp (profile_name, name) == 0)
-        return tmp;
-      
-      tmp = tmp->next;
+        break;
     }
 
-  return NULL;
+  return l;
 }
 
 static void
@@ -858,16 +818,18 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
                                      gpointer     user_data)
 {
   TerminalApp *app = TERMINAL_APP (user_data);
+  GObject *object = G_OBJECT (app);
   GConfValue *val;
-  GSList *value_list, *tmp_slist;
-  GList *known, *tmp_list;
+  GSList *value_list, *sl;
+  GList *profiles_to_delete, *l;
   gboolean need_new_default;
   TerminalProfile *fallback;
   
-  known = terminal_app_get_profile_list (app);
+  g_object_freeze_notify (object);
+
+  profiles_to_delete = terminal_app_get_profile_list (app);
 
   val = gconf_entry_get_value (entry);
-
   if (val == NULL ||
       val->type != GCONF_VALUE_LIST ||
       gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
@@ -876,9 +838,9 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
   value_list = gconf_value_get_list (val);
 
   /* Add any new ones */
-  for (tmp_slist = value_list; tmp_slist != NULL; tmp_slist = tmp_slist->next)
+  for (sl = value_list; sl != NULL; sl = sl->next)
     {
-      GConfValue *listvalue = (GConfValue *) (tmp_slist->data);
+      GConfValue *listvalue = (GConfValue *) (sl->data);
       const char *profile_name;
       GList *link;
 
@@ -886,24 +848,19 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
       if (!profile_name)
         continue;
 
-      link = find_profile_link (known, profile_name);
-      
+      link = find_profile_link (profiles_to_delete, profile_name);
       if (link)
-        {
-          /* make known point to profiles we didn't find in the list */
-          known = g_list_delete_link (known, link);
-        }
+        /* make profiles_to_delete point to profiles we didn't find in the list */
+        profiles_to_delete = g_list_delete_link (profiles_to_delete, link);
       else
-        {
-          terminal_app_create_profile (app, profile_name);
-        }
+        terminal_app_create_profile (app, profile_name);
     }
 
 ensure_one_profile:
 
   fallback = NULL;
   if (terminal_app_get_profile_count (app) == 0 ||
-      terminal_app_get_profile_count (app) <= g_list_length (known))
+      terminal_app_get_profile_count (app) <= g_list_length (profiles_to_delete))
     {
       /* We are going to run out, so create the fallback
        * to be sure we always have one. Must be done
@@ -916,45 +873,58 @@ ensure_one_profile:
        * all profiles, the FALLBACK_ID profile returns as
        * the living dead.
        */
-      fallback = terminal_app_ensure_profile_fallback (app);
+      fallback = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
+      if (fallback == NULL)
+        fallback = terminal_app_create_profile (app, FALLBACK_PROFILE_ID);
+      g_assert (fallback != NULL);
     }
   
   /* Forget no-longer-existing profiles */
   need_new_default = FALSE;
-  tmp_list = known;
-  while (tmp_list != NULL)
+  for (l = profiles_to_delete; l != NULL; l = l->next)
     {
-      TerminalProfile *forgotten;
+      TerminalProfile *profile = TERMINAL_PROFILE (l->data);
+      const char *name;
 
-      forgotten = TERMINAL_PROFILE (tmp_list->data);
+      name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
+      if (strcmp (name, FALLBACK_PROFILE_ID) == 0)
+        continue;
 
-      /* don't allow deleting the fallback if appropriate. */
-      if (forgotten != fallback)
+      if (profile == app->default_profile)
         {
-          if (terminal_profile_get_property_boolean (forgotten, TERMINAL_PROFILE_IS_DEFAULT))
-            need_new_default = TRUE;
-
-          /* FIXMEchpe make this out of this loop! */
-          _terminal_profile_forget (forgotten);
+          app->default_profile = NULL;
+          need_new_default = TRUE;
         }
-      
-      tmp_list = tmp_list->next;
-    }
 
-  g_list_free (known);
+      g_object_add_weak_pointer (G_OBJECT (profile), (gpointer*)&profile);
+
+      _terminal_profile_forget (profile);
+      g_hash_table_remove (app->profiles, name);
+
+      /* |profile| should now be dead */
+      g_assert (profile == NULL);
+    }
+  g_list_free (profiles_to_delete);
   
   if (need_new_default)
     {
       TerminalProfile *new_default;
 
-      known = terminal_app_get_profile_list (app);
-      
-      g_assert (known);
-      new_default = known->data;
+      new_default = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
+      if (new_default == NULL)
+        {
+          GHashTableIter iter;
 
-      g_list_free (known);
+          g_hash_table_iter_init (&iter, app->profiles);
+          if (!g_hash_table_iter_next (&iter, NULL, (gpointer *) &new_default))
+            /* shouldn't really happen ever, but just to be safe */
+            new_default = terminal_app_create_profile (app, FALLBACK_PROFILE_ID); 
+        }
+      g_assert (new_default != NULL);
 
-      terminal_app_set_default_profile (app, new_default);
+      app->default_profile = new_default;
+    
+      g_object_notify (object, "default-profile");
     }
 
   g_assert (terminal_app_get_profile_count (app) > 0);
@@ -971,13 +941,9 @@ ensure_one_profile:
   if (app->manage_profiles_default_menu)
     profile_combo_box_refill (app->manage_profiles_default_menu);
 
-  tmp_list = app->windows;
-  while (tmp_list != NULL)
-    {
-      terminal_window_reread_profile_list (TERMINAL_WINDOW (tmp_list->data));
+  g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
 
-      tmp_list = tmp_list->next;
-    }
+  g_object_thaw_notify (object);
 }
 
 static void
@@ -987,13 +953,11 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
                                         gpointer     user_data)
 {
   TerminalApp *app = TERMINAL_APP (user_data);
-  TerminalProfile *profile;
-  TerminalProfile *old_default;
   GConfValue *val;
-  gboolean changed = FALSE;
-  gboolean locked;
   const char *name;
   
+  app->default_profile_locked = !gconf_entry_get_is_writable (entry);
+
   val = gconf_entry_get_value (entry);  
   if (val == NULL ||
       val->type != GCONF_VALUE_STRING)
@@ -1001,61 +965,14 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
   
   name = gconf_value_get_string (val);
   if (!name)
-    return; /* FIXMEchpe? */
-
-  locked = !gconf_entry_get_is_writable (entry);
+    name = FALLBACK_PROFILE_ID; /* FIXMEchpe? */
 
   g_free (app->default_profile_id);
   app->default_profile_id = g_strdup (name);
 
-  old_default = app->default_profile;
+  app->default_profile = terminal_app_get_profile_by_name (app, name);
 
-  profile = terminal_app_get_profile_by_name (app, name);
-  /* FIXMEchpe: what if |profile| is NULL here? */
-
-  if (profile != NULL &&
-      profile != app->default_profile)
-    {
-      app->default_profile = profile;
-      changed = TRUE;
-    }
-
-  if (locked != app->default_profile_locked)
-    {
-      /* Need to emit changed on all profiles */
-      GList *all_profiles;
-      GList *tmp;
-/*      TerminalSettingMask mask;
-
-      terminal_setting_mask_clear (&mask);
-      mask.is_default = TRUE;*/
-      
-      app->default_profile_locked = locked;
-      
-      all_profiles = terminal_app_get_profile_list (app);
-      for (tmp = all_profiles; tmp != NULL; tmp = tmp->next)
-        {
-//           TerminalProfile *p = tmp->data;
-          
-//           emit_changed (p, &mask);
-        }
-
-      g_list_free (all_profiles);
-    }
-  else if (changed)
-    {
-//       TerminalSettingMask mask;
-//       
-//       terminal_setting_mask_clear (&mask);
-//       mask.is_default = TRUE;
-
-//       if (old_default)
-//         emit_changed (old_default, &mask);
-
-//       emit_changed (profile, &mask);
-    }
-
-  /* FIXMEchpe: emit default-profile-changed signal */
+  g_object_notify (G_OBJECT (app), "default-profile");
 }
 
 static void
@@ -1723,12 +1640,29 @@ terminal_app_class_init (TerminalAppClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  signals[PROFILE_LIST_CHANGED] =
+    g_signal_new (I_("profile-list-changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalAppClass, profile_list_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
   g_object_class_install_property
     (object_class,
      PROP_SYSTEM_FONT,
      g_param_spec_boxed ("system-font", NULL, NULL,
                          PANGO_TYPE_FONT_DESCRIPTION,
                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  /* FIMXEchpe make rw prop */
+  g_object_class_install_property
+    (object_class,
+     PROP_DEFAULT_PROFILE,
+     g_param_spec_object ("default-profile", NULL, NULL,
+                          TERMINAL_TYPE_PROFILE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 /* Public API */
@@ -2002,21 +1936,6 @@ terminal_app_get_profile_by_visible_name (TerminalApp *app,
                         profiles_lookup_by_visible_name_foreach,
                         &info);
   return info.result;
-}
-
-
-TerminalProfile*
-terminal_app_ensure_profile_fallback (TerminalApp *app)
-{
-  TerminalProfile *profile;
-
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-
-  profile = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
-  if (profile == NULL)
-    profile = terminal_app_create_profile (app, FALLBACK_PROFILE_ID);
-  
-  return profile;
 }
 
 TerminalProfile*

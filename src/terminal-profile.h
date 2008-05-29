@@ -80,7 +80,6 @@ typedef enum
 #define TERMINAL_PROFILE_EXIT_ACTION            "exit-action"
 #define TERMINAL_PROFILE_FONT                   "font"
 #define TERMINAL_PROFILE_FOREGROUND_COLOR       "foreground-color"
-#define TERMINAL_PROFILE_IS_DEFAULT             "is-default"
 #define TERMINAL_PROFILE_LOGIN_SHELL            "login-shell"
 #define TERMINAL_PROFILE_NAME                   "name"
 #define TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER   "no-aa-without-render"

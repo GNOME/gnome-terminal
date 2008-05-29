@@ -59,7 +59,6 @@ enum
   PROP_EXIT_ACTION,
   PROP_FONT,
   PROP_FOREGROUND_COLOR,
-  PROP_IS_DEFAULT,
   PROP_LOGIN_SHELL,
   PROP_NAME,
   PROP_NO_AA_WITHOUT_RENDER,
@@ -127,7 +126,6 @@ enum
 #define DEFAULT_EXIT_ACTION           (TERMINAL_EXIT_CLOSE)
 #define DEFAULT_FONT                  ("Monospace 12")
 #define DEFAULT_FOREGROUND_COLOR      ("#000000")
-#define DEFAULT_IS_DEFAULT            (FALSE)
 #define DEFAULT_LOGIN_SHELL           (FALSE)
 #define DEFAULT_NAME                  (NULL)
 #define DEFAULT_NO_AA_WITHOUT_RENDER  (TRUE)
@@ -147,8 +145,6 @@ enum
 #define DEFAULT_USE_THEME_COLORS      (TRUE)
 #define DEFAULT_VISIBLE_NAME          (N_("Unnamed"))
 #define DEFAULT_WORD_CHARS            ("-A-Za-z0-9,./?%&#:_")
-
-#define PSPEC_GCONF_KEY_DATA "GT::GConfKey"
 
 struct _TerminalProfilePrivate
 {
@@ -278,6 +274,7 @@ static void terminal_profile_class_init  (TerminalProfileClass *klass);
 static void terminal_profile_finalize    (GObject              *object);
 
 static guint signals[LAST_SIGNAL];
+static GQuark gconf_key_quark;
 
 G_DEFINE_TYPE (TerminalProfile, terminal_profile, G_TYPE_OBJECT);
 
@@ -711,7 +708,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
     return;
 #endif
   
-  gconf_key = g_param_spec_get_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA));
+  gconf_key = g_param_spec_get_qdata (pspec, gconf_key_quark);
   if (!gconf_key)
     return;
 
@@ -991,7 +988,7 @@ terminal_profile_constructor (GType type,
       if (is_construct)
         continue;
 
-      gconf_key = g_param_spec_get_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA));
+      gconf_key = g_param_spec_get_qdata (pspec, gconf_key_quark);
       if (!gconf_key)
         continue;
 
@@ -1150,7 +1147,8 @@ terminal_profile_notify (GObject *object,
     notify (object, pspec);
 
   if (pspec->owner_type == TERMINAL_TYPE_PROFILE &&
-      (pspec->flags & G_PARAM_WRITABLE))
+      (pspec->flags & G_PARAM_WRITABLE) &&
+      g_param_spec_get_qdata (pspec, gconf_key_quark) != NULL)
     terminal_profile_schedule_save (TERMINAL_PROFILE (object), pspec);
 }
 
@@ -1159,6 +1157,8 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
+  gconf_key_quark = g_quark_from_static_string ("GT::GConfKey");
+
   g_type_class_add_private (object_class, sizeof (TerminalProfilePrivate));
 
   object_class->constructor = terminal_profile_constructor;
@@ -1188,7 +1188,7 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 \
   if (propGConf)\
     {\
-      g_param_spec_set_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA), propGConf);\
+      g_param_spec_set_qdata (pspec, gconf_key_quark, propGConf);\
       g_hash_table_insert (klass->gconf_keys, propGConf, pspec);\
     }\
 }
@@ -1261,7 +1261,6 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (ALLOW_BOLD, DEFAULT_ALLOW_BOLD, KEY_ALLOW_BOLD);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (DEFAULT_SHOW_MENUBAR, DEFAULT_DEFAULT_SHOW_MENUBAR, KEY_DEFAULT_SHOW_MENUBAR);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (IS_DEFAULT, DEFAULT_IS_DEFAULT, NULL);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (LOGIN_SHELL, DEFAULT_LOGIN_SHELL, KEY_LOGIN_SHELL);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (NO_AA_WITHOUT_RENDER, DEFAULT_NO_AA_WITHOUT_RENDER, KEY_NO_AA_WITHOUT_RENDER);
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (SCROLL_BACKGROUND, DEFAULT_SCROLL_BACKGROUND, KEY_SCROLL_BACKGROUND);

@@ -1070,6 +1070,14 @@ terminal_window_screen_changed (GtkWidget *widget,
 }
 
 static void
+terminal_window_profile_list_changed_cb (TerminalApp *app,
+                                         TerminalWindow *window)
+{
+  terminal_window_update_set_profile_menu (window);
+  terminal_window_update_new_terminal_menus (window);
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   const GtkActionEntry menu_entries[] =
@@ -1220,6 +1228,7 @@ terminal_window_init (TerminalWindow *window)
         FALSE }
     };
   TerminalWindowPrivate *priv;
+  TerminalApp *app;
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *manager;
@@ -1323,7 +1332,10 @@ terminal_window_init (TerminalWindow *window)
   /* Add tabs menu */
   priv->tabs_menu = terminal_tabs_menu_new (window);
 
-  terminal_window_reread_profile_list (window);
+  app = terminal_app_get ();
+  terminal_window_profile_list_changed_cb (app, window);
+  g_signal_connect (app, "profile-list-changed",
+                    G_CALLBACK (terminal_window_profile_list_changed_cb), window);
   
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
@@ -1377,6 +1389,10 @@ terminal_window_dispose (GObject *object)
       g_object_unref (priv->tabs_menu);
       priv->tabs_menu = NULL;
     }
+
+  g_signal_handlers_disconnect_by_func (terminal_app_get (),
+                                        G_CALLBACK (terminal_window_profile_list_changed_cb),
+                                        window);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
@@ -2668,74 +2684,6 @@ help_about_callback (GtkAction *action,
 			 "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
 			 NULL);
   g_free (license_text);
-}
-
-#if 0
-static void
-default_profile_changed (TerminalProfile           *profile,
-                         const TerminalSettingMask *mask,
-                         void                      *data)
-{
-  /* This no longer applies, since our "new window" item
-   * is based on the current profile, not the default profile
-   */
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  
-  if (mask & TERMINAL_SETTING_IS_DEFAULT)
-    {
-      TerminalWindow *window;
-
-      window = TERMINAL_WINDOW (data);
-      
-      /* When the default changes, we get a settings change
-       * on the old default and the new. We only rebuild
-       * the menu on the notify for the new default.
-       */
-      if (terminal_profile_get_is_default (profile))
-        fill_in_new_term_submenus (window);
-    }
-#endif
-}
-
-/* FIXMEchpe */
-static void
-monitor_profiles_for_is_default_change (TerminalWindow *window)
-{
-  GList *profiles;
-  GList *tmp;
-  
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
-
-  tmp = profiles;
-  while (tmp != NULL)
-    {
-      TerminalProfile *profile = tmp->data;
-
-      g_signal_handlers_disconnect_by_func (G_OBJECT (profile),
-                                            G_CALLBACK (default_profile_changed),
-                                            window);
-      
-      g_signal_connect_object (G_OBJECT (profile),
-                               "changed",
-                               G_CALLBACK (default_profile_changed),
-                               G_OBJECT (window),
-                               0);
-      
-      tmp = tmp->next;
-    }
-
-  g_list_free (profiles);
-}
-#endif
-
-void
-terminal_window_reread_profile_list (TerminalWindow *window)
-{
-//   monitor_profiles_for_is_default_change (window);
-  
-  terminal_window_update_set_profile_menu (window);
-  terminal_window_update_new_terminal_menus (window);
 }
 
 void
