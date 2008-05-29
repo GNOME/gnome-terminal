@@ -1,8 +1,10 @@
-#define MD4  0
-#define MD5  1
-#define SHA1 2
+typedef enum {
+  MD4,
+  MD5,
+  SHA1
+} SKeyAlgorithm;
 
 #define SKEY_SIZE	8
 
-char *skey(int algorithm, int seq, const char *seed, const char *passhrase);
+char *skey(SKeyAlgorithm algorithm, int seq, const char *seed, const char *passhrase);
 

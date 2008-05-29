@@ -22,7 +22,7 @@ static struct skey_hash hash_table[] = {
 };
 
 
-char *skey(int algorithm, int seq, const char *seed, const char *passphrase)
+char *skey(SKeyAlgorithm algorithm, int seq, const char *seed, const char *passphrase)
 {
 	char key[SKEY_SIZE];
 	int i;

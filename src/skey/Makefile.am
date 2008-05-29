@@ -32,7 +32,7 @@ libskey_la_LDFLAGS =
 libskey_la_LIBADD = \
 	$(TERM_LIBS)
 
-noinst_PROGRAMS = testskey
+check_PROGRAMS = testskey
 
 testskey_SOURCES = \
 	test.c \
@@ -53,3 +53,5 @@ testskey_LDFLAGS =
 testskey_LDADD = \
 	libskey.la \
 	$(TERM_LIBS)
+
+TESTS = testskey
