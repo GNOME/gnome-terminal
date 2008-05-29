@@ -373,33 +373,11 @@ terminal_widget_set_colors (GtkWidget      *widget,
 }
 
 void
-terminal_widget_copy_clipboard (GtkWidget *widget)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_copy_clipboard(VTE_TERMINAL(widget));
-}
-
-void
-terminal_widget_paste_clipboard (GtkWidget *widget)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_paste_clipboard(VTE_TERMINAL(widget));
-}
-
-void
 terminal_widget_reset (GtkWidget *widget,
 		       gboolean   also_clear_afterward)
 {
   g_return_if_fail(VTE_IS_TERMINAL(widget));
   vte_terminal_reset (VTE_TERMINAL(widget), TRUE, also_clear_afterward);
-}
-
-void
-terminal_widget_disconnect_title_changed (GtkWidget *widget,
-					  GCallback  callback,
-					  void      *data)
-{
-  g_signal_handlers_disconnect_by_func (widget, callback, data);
 }
 
 void
@@ -418,14 +396,6 @@ terminal_widget_disconnect_child_died (GtkWidget *widget,
 {
   g_signal_handlers_disconnect_by_func (widget, callback, data);
 }
-
-gboolean
-terminal_widget_get_has_selection (GtkWidget *widget)
-{
-  g_return_val_if_fail(VTE_IS_TERMINAL(widget), FALSE);
-  return vte_terminal_get_has_selection(VTE_TERMINAL(widget));
-}
-
 
 GtkAdjustment*
 terminal_widget_get_scroll_adjustment (GtkWidget *widget)

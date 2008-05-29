@@ -625,7 +625,7 @@ terminal_window_update_copy_sensitivity (TerminalWindow *window)
   gboolean can_copy = FALSE;
 
   if (priv->active_term)
-    can_copy = terminal_screen_get_text_selected (priv->active_term);
+    can_copy = vte_terminal_get_has_selection (VTE_TERMINAL (priv->active_term));
 
   action = gtk_action_group_get_action (priv->action_group, "EditCopy");
   gtk_action_set_sensitive (action, can_copy);
@@ -941,7 +941,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   gtk_action_set_visible (action, priv->terms > 1);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
-  gtk_action_set_sensitive (action, terminal_screen_get_text_selected (screen));
+  gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
   action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
   gtk_action_set_sensitive (action, can_paste);
   
@@ -2327,9 +2327,7 @@ edit_copy_callback (GtkAction *action,
   if (!priv->active_term)
     return;
       
-  widget = terminal_screen_get_widget (priv->active_term);
-      
-  terminal_widget_copy_clipboard (widget);
+  vte_terminal_copy_clipboard (VTE_TERMINAL (priv->active_term));
 }
 
 static void
@@ -2342,9 +2340,7 @@ edit_paste_callback (GtkAction *action,
   if (!priv->active_term)
     return;
       
-  widget = terminal_screen_get_widget (priv->active_term);
-
-  terminal_widget_paste_clipboard (widget);
+  vte_terminal_paste_clipboard (VTE_TERMINAL (priv->active_term));
 }
 
 static void

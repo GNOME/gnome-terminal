@@ -1291,17 +1291,6 @@ terminal_screen_close (TerminalScreen *screen)
   /* screen should be finalized here, do not touch it past this point */
 }
 
-gboolean
-terminal_screen_get_text_selected (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  if (GTK_WIDGET_REALIZED (priv->term))
-    return terminal_widget_get_has_selection (priv->term);
-  else
-    return FALSE;
-}
-
 TerminalScreenPopupInfo *
 terminal_screen_popup_info_new (TerminalScreen *screen)
 {
