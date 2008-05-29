@@ -82,6 +82,7 @@ enum {
   PROP_0,
   PROP_ICON_TITLE,
   PROP_ICON_TITLE_SET,
+  PROP_OVERRIDE_COMMAND,
   PROP_TITLE,
 };
 
@@ -412,9 +413,35 @@ terminal_screen_get_property (GObject *object,
       case PROP_ICON_TITLE_SET:
         g_value_set_boolean (value, terminal_screen_get_icon_title_set (screen));
         break;
+      case PROP_OVERRIDE_COMMAND:
+        g_value_set_boxed (value, terminal_screen_get_override_command (screen));
+        break;
       case PROP_TITLE:
         g_value_set_string (value, terminal_screen_get_title (screen));
         break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+terminal_screen_set_property (GObject *object,
+                              guint prop_id,
+                              const GValue *value,
+                              GParamSpec *pspec)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (object);
+
+  switch (prop_id)
+    {
+      case PROP_OVERRIDE_COMMAND:
+        terminal_screen_set_override_command (screen, g_value_get_boxed (value));
+        break;
+      case PROP_ICON_TITLE:
+      case PROP_ICON_TITLE_SET:
+      case PROP_TITLE:
+        /* not writable */
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -430,6 +457,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->dispose = terminal_screen_dispose;
   object_class->finalize = terminal_screen_finalize;
   object_class->get_property = terminal_screen_get_property;
+  object_class->set_property = terminal_screen_set_property;
 
   widget_class->screen_changed = terminal_screen_screen_changed;
 
@@ -467,6 +495,13 @@ terminal_screen_class_init (TerminalScreenClass *klass)
      g_param_spec_boolean ("icon-title-set", NULL, NULL,
                            FALSE,
                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property
+    (object_class,
+     PROP_ICON_TITLE,
+     g_param_spec_boxed ("override-command", NULL, NULL,
+                         G_TYPE_STRV,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
