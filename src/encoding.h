@@ -22,17 +22,17 @@
 #ifndef TERMINAL_ENCODING_H
 #define TERMINAL_ENCODING_H
 
-#include <gconf/gconf-client.h>
 #include <gtk/gtkwindow.h>
 
 typedef struct
 {
-  int      index_;
-  gboolean valid;
-  char    *charset;
-  char    *name;
-  int      refcount;
-  gboolean validity_checked;
+  int   refcount;
+  char *charset;
+  char *name;
+  guint valid            : 1;
+  guint validity_checked : 1;
+  guint is_custom        : 1;
+  guint is_active        : 1;
 } TerminalEncoding;
 
 void terminal_encoding_init (void);

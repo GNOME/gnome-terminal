@@ -91,6 +91,7 @@ schema_DATA = gnome-terminal.schemas
 uidir = $(pkgdatadir)
 ui_DATA = \
 	terminal.ui \
+	encodings-dialog.ui \
 	profile-manager.ui \
 	$(NULL)
 
