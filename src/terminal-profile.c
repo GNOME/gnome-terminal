@@ -689,7 +689,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
                 g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
                 g_strdup_value_contents (&value));)
 
-  if (!equal)
+  if (!equal || force_write)
     {
       if (!force_write && priv->initialising)
         terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
