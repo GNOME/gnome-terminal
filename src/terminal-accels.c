@@ -615,34 +615,6 @@ treeview_accel_changed_cb (GtkAccelGroup  *accel_group,
   gtk_tree_model_foreach (model, update_model_foreach, accel_closure->data);
 }
 
-static gboolean
-cb_check_for_uniqueness (GtkTreeModel *model,
-                         GtkTreePath  *path,
-                         GtkTreeIter  *iter,
-                         gpointer      user_data)
-{
-  KeyEntry *key_entry = (KeyEntry *) user_data;
-  KeyEntry *tmp_key_entry;
- 
-  gtk_tree_model_get (model, iter,
-                      KEYVAL_COLUMN, &tmp_key_entry,
-                      -1);
- 
-  if (tmp_key_entry != NULL &&
-      key_entry->gconf_keyval == tmp_key_entry->gconf_keyval &&
-      key_entry->gconf_mask   == tmp_key_entry->gconf_mask &&
-      /* be sure we don't claim a key is a dup of itself */
-      strcmp (key_entry->gconf_key, tmp_key_entry->gconf_key) != 0)
-    {
-      key_entry->needs_gconf_sync = FALSE;
-      key_entry->gconf_key = tmp_key_entry->gconf_key;
-      key_entry->user_visible_name = tmp_key_entry->user_visible_name;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 accel_edited_callback (GtkCellRendererAccel *cell,
                        gchar                *path_string,
@@ -654,7 +626,9 @@ accel_edited_callback (GtkCellRendererAccel *cell,
   GtkTreeModel *model;
   GtkTreePath *path;
   GtkTreeIter iter;
-  KeyEntry *ke, tmp_key;
+  KeyEntry *ke;
+  GtkAccelGroupEntry *entries;
+  guint n_entries;
   char *str;
   GConfClient *conf;
 
@@ -676,22 +650,19 @@ accel_edited_callback (GtkCellRendererAccel *cell,
   if (ke == NULL)
     return;
 
-  tmp_key.gconf_keyval = keyval;
-  tmp_key.gconf_mask = mask;
-  tmp_key.gconf_key = ke->gconf_key;
-  tmp_key.user_visible_name = NULL;
-  tmp_key.needs_gconf_sync = TRUE; /* kludge: we'll use this as return flag in the _foreach call */
-
-  if (keyval != 0) 
+  /* Check if we already have an entry using this accel */
+  entries = gtk_accel_group_query (hack_group, keyval, mask, &n_entries);
+  if (n_entries > 0)
     {
-      gtk_tree_model_foreach (model, cb_check_for_uniqueness, &tmp_key);
-
-      if (!tmp_key.needs_gconf_sync)
+      if (entries[0].accel_path_quark != g_quark_from_string (ke->accel_path))
         {
           GtkWidget *dialog;
           char *name;
+          KeyEntry *other_key;
 
           name = gtk_accelerator_get_label (keyval, mask);
+          other_key = entries[0].closure->data;
+          g_assert (other_key);
 
           dialog =
             gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (view))),
@@ -700,14 +671,14 @@ accel_edited_callback (GtkCellRendererAccel *cell,
                                     GTK_BUTTONS_OK,
                                     _("The shortcut key “%s” is already bound to the “%s” action"),
                                     name,
-                                    tmp_key.user_visible_name ? _(tmp_key.user_visible_name) : tmp_key.gconf_key);
+                                    other_key->user_visible_name ? _(other_key->user_visible_name) : other_key->gconf_key);
           g_free (name);
 
           g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
           gtk_window_present (GTK_WINDOW (dialog));
-
-          return;
         }
+
+      return;
     }
 
   str = binding_name (keyval, mask);
