@@ -37,7 +37,7 @@ typedef struct
 
 void terminal_encoding_init (void);
 
-GtkWidget* terminal_encoding_dialog_new (GtkWindow *transient_parent);
+void terminal_encoding_dialog_show (GtkWindow *transient_parent);
 
 GSList* terminal_get_active_encodings (void);
 

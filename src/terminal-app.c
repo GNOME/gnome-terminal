@@ -78,7 +78,6 @@ struct _TerminalApp
   GObject parent_instance;
 
   GList *windows;
-  GtkWidget *edit_encodings_dialog;
   GtkWidget *new_profile_dialog;
   GtkWidget *manage_profiles_dialog;
   GtkWidget *manage_profiles_list;
@@ -1848,28 +1847,7 @@ void
 terminal_app_edit_encodings (TerminalApp     *app,
                              GtkWindow       *transient_parent)
 {
-  GtkWindow *old_transient_parent;
-
-  if (app->edit_encodings_dialog == NULL)
-    {      
-      old_transient_parent = NULL;      
-
-      app->edit_encodings_dialog = terminal_encoding_dialog_new (transient_parent);
-      if (app->edit_encodings_dialog == NULL)
-        return;
-      
-      g_signal_connect (G_OBJECT (app->edit_encodings_dialog),
-                        "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &(app->edit_encodings_dialog));
-    }
-  else 
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (app->edit_encodings_dialog),
-                                    transient_parent);
-    }
-  
-  gtk_window_present (GTK_WINDOW (app->edit_encodings_dialog));
+  terminal_encoding_dialog_show (transient_parent);
 }
 
 TerminalWindow *

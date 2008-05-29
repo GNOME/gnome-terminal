@@ -138,6 +138,8 @@ typedef struct {
   GtkWidget *remove_button;
 } EncodingDialogData;
 
+static GtkWidget *encoding_dialog = NULL;
+
 static void update_active_encoding_tree_models (void);
 
 static void encodings_notify_cb (GConfClient *client,
@@ -327,7 +329,6 @@ encodings_notify_cb (GConfClient *client,
   update_active_encoding_tree_models ();
 }
 
-
 static void
 update_active_encodings_gconf (void)
 {
@@ -475,12 +476,9 @@ liststore_insert_encoding (gpointer key,
     return;
 
   gtk_list_store_insert_with_values (store, &iter, -1,
-                                     COLUMN_CHARSET,
-                                     encoding->charset,
-                                     COLUMN_NAME,
-                                     encoding->name,
-                                     COLUMN_DATA,
-                                     encoding,
+                                     COLUMN_CHARSET, encoding->charset,
+                                     COLUMN_NAME, encoding->name,
+                                     COLUMN_DATA, encoding,
                                      -1);
 }
 
@@ -544,13 +542,20 @@ register_liststore (EncodingDialogData *data)
   g_object_weak_ref (G_OBJECT (data->dialog), unregister_liststore, data);
 }
 
-GtkWidget*
-terminal_encoding_dialog_new (GtkWindow *transient_parent)
+void
+terminal_encoding_dialog_show (GtkWindow *transient_parent)
 {
   GtkCellRenderer *cell_renderer;
   GtkTreeViewColumn *column;
   GtkTreeModel *model;
   EncodingDialogData *data;
+
+  if (encoding_dialog)
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (encoding_dialog), transient_parent);
+      gtk_window_present (GTK_WINDOW (encoding_dialog));
+      return;
+    }
 
   data = g_new (EncodingDialogData, 1);
 
@@ -563,7 +568,7 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
                                         NULL))
     {
       g_free (data);
-      return NULL;
+      return;
     }
 
   g_object_set_data_full (G_OBJECT (data->dialog), "GT::Data", data, (GDestroyNotify) g_free);
@@ -649,7 +654,11 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
 
   g_object_unref (data->base_store);
 
-  return data->dialog;
+  gtk_window_present (GTK_WINDOW (data->dialog));
+
+  encoding_dialog = data->dialog;
+  g_signal_connect (data->dialog, "destroy",
+                    G_CALLBACK (gtk_widget_destroyed), &encoding_dialog);
 }
 
 void
