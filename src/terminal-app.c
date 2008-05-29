@@ -1828,14 +1828,9 @@ terminal_app_edit_encodings (TerminalApp     *app,
     {      
       old_transient_parent = NULL;      
 
-      /* passing in transient_parent here purely for the
-       * glade error dialog
-       */
-      app->edit_encodings_dialog =
-        terminal_encoding_dialog_new (transient_parent);
-
+      app->edit_encodings_dialog = terminal_encoding_dialog_new (transient_parent);
       if (app->edit_encodings_dialog == NULL)
-        return; /* glade file missing */
+        return;
       
       g_signal_connect (G_OBJECT (app->edit_encodings_dialog),
                         "destroy",
@@ -1844,17 +1839,10 @@ terminal_app_edit_encodings (TerminalApp     *app,
     }
   else 
     {
-      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->edit_encodings_dialog));
-    }
-  
-  if (old_transient_parent != transient_parent)
-    {
       gtk_window_set_transient_for (GTK_WINDOW (app->edit_encodings_dialog),
                                     transient_parent);
-      gtk_widget_hide (app->edit_encodings_dialog); /* re-show the window on its new parent */
     }
   
-  gtk_widget_show_all (app->edit_encodings_dialog);
   gtk_window_present (GTK_WINDOW (app->edit_encodings_dialog));
 }
 
