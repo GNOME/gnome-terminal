@@ -1,5 +1,7 @@
 #include <config.h>
 
+#include <stdlib.h>
+
 #include <glib.h>
 
 #include "skey.h"
@@ -13,7 +15,7 @@ typedef struct {
 	const char *btoe;
 } TestEntry;
 
-static TestEntry tests[] = {
+static const TestEntry tests[] = {
 	{ MD4, "This is a test.", "TeSt",     0, "D185 4218 EBBB 0B51", "ROME MUG FRED SCAN LIVE LACE"   },
 	{ MD4, "This is a test.", "TeSt",     1, "6347 3EF0 1CD0 B444", "CARD SAD MINI RYE COL KIN"      },
 	{ MD4, "This is a test.", "TeSt",    99, "C5E6 1277 6E6C 237A", "NOTE OUT IBIS SINK NAVE MODE"   },
@@ -61,6 +63,7 @@ skey_test (gconstpointer data)
                     test->passphrase);
         g_assert (key != NULL);
         g_assert (strcmp (key, test->btoe) == 0);
+        free (key);
 }
 
 int main(int argc, char *argv[])
