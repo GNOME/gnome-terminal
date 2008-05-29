@@ -278,12 +278,12 @@ find_screen_by_display_name (const char *display_name,
       period = strrchr (display_name, '.');
       if (period)
         {
-          unsigned long n;
+          gulong n;
           char *end;
           
           errno = 0;
-          end = (char*) period + 1;
-          n = strtoul (period + 1, &end, 0);
+          end = NULL;
+          n = g_ascii_strtoull (period + 1, &end, 0);
           if (errno == 0 && (period + 1) != end)
             screen_number = n;
         }

@@ -657,19 +657,16 @@ digest_options_callback (GOptionContext *context,
        * always save session in C locale format)
        */
       end = NULL;
+      errno = 0;
       val = g_strtod (results->zoom, &end);
       if (end == NULL || *end != '\0')
         {
-          val = g_ascii_strtod (results->zoom, &end);
-          if (end == NULL || *end != '\0')
-            {
-              g_set_error (error,
-                           G_OPTION_ERROR,
-                           G_OPTION_ERROR_BAD_VALUE,
-                           _("\"%s\" is not a valid zoom factor\n"),
-                           results->zoom);
-              return FALSE;
-            }
+          g_set_error (error,
+                        G_OPTION_ERROR,
+                        G_OPTION_ERROR_BAD_VALUE,
+                        _("\"%s\" is not a valid zoom factor\n"),
+                        results->zoom);
+          return FALSE;
         }
 
       if (val < (TERMINAL_SCALE_MINIMUM + 1e-6))
@@ -833,8 +830,8 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
           g_assert (i+1 < *argc);
           
           errno = 0;
-          end = argv[i+1];
-          n = strtoul (argv[i+1], &end, 0);
+          end = NULL;
+          n = g_ascii_strtoll (argv[i+1], &end, 0);
           if (errno == 0 && argv[i+1] != end)
             results->screen_number = n;
           
