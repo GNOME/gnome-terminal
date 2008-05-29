@@ -1407,9 +1407,9 @@ _terminal_profile_clone (TerminalProfile *base_profile,
       ++n_params;
     }
 
-  g_object_unref (base_profile);
-
   new_profile = g_object_newv (TERMINAL_TYPE_PROFILE, n_params, params);
+
+  g_object_unref (base_profile);
 
   for (i = 0; i < n_params; ++i)
     g_value_unset (&params[i].value);
