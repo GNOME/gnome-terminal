@@ -458,7 +458,7 @@ values_equal (GParamSpec *pspec,
   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
     return pango_font_description_equal (g_value_get_boxed (va), g_value_get_boxed (vb));
 
-  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+  if (G_IS_PARAM_SPEC_VALUE_ARRAY (pspec) &&
       G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
     {
       GValueArray *ara, *arb;
@@ -630,21 +630,21 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
-  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
+  if (G_IS_PARAM_SPEC_BOOLEAN (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_BOOL)
         goto out; /* FIXMEchpe maybe reset? */
 
       g_value_set_boolean (&value, gconf_value_get_bool (gconf_value));
     }
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_STRING)
+  else if (G_IS_PARAM_SPEC_STRING (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_STRING)
         goto out; /* FIXMEchpe maybe reset? */
 
       g_value_set_string (&value, gconf_value_get_string (gconf_value));
     }
-  else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_ENUM))
+  else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
       const GConfEnumStringPair *conversion;
       int enum_value;
@@ -679,21 +679,21 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
       g_value_take_boxed (&value, pango_font_description_from_string (gconf_value_get_string (gconf_value)));
     }
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_DOUBLE)
+  else if (G_IS_PARAM_SPEC_DOUBLE (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_FLOAT)
         goto out; /* FIXMEchpe maybe reset? */
 
       g_value_set_double (&value, gconf_value_get_float (gconf_value));
     }
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_INT)
+  else if (G_IS_PARAM_SPEC_INT (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_INT)
         goto out; /* FIXMEchpe maybe reset? */
 
       g_value_set_int (&value, gconf_value_get_int (gconf_value));
     }
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+  else if (G_IS_PARAM_SPEC_VALUE_ARRAY (pspec) &&
            G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
     {
       char **color_strings;
@@ -789,9 +789,9 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
 
   g_print ("CHANGESET adding pspec %s with value %s\n", pspec->name, g_strdup_value_contents (value));
 
-  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
+  if (G_IS_PARAM_SPEC_BOOLEAN (pspec))
     gconf_change_set_set_bool (changeset, key, g_value_get_boolean (value));
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_STRING)
+  else if (G_IS_PARAM_SPEC_STRING (pspec))
     {
       const char *str;
 
@@ -801,7 +801,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
     
       gconf_change_set_set_string (changeset, key, str);
     }
-  else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_ENUM))
+  else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
       const GConfEnumStringPair *conversion;
       const char *enum_value;
@@ -842,11 +842,11 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       gconf_change_set_set_string (changeset, key, font);
       g_free (font);
     }
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_DOUBLE)
+  else if (G_IS_PARAM_SPEC_DOUBLE (pspec))
     gconf_change_set_set_float (changeset, key, (float) g_value_get_double (value));
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_INT)
+  else if (G_IS_PARAM_SPEC_INT (pspec))
     gconf_change_set_set_int (changeset, key, g_value_get_int (value));
-  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+  else if (G_IS_PARAM_SPEC_VALUE_ARRAY (pspec) &&
            G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
     {
       GValueArray *array;
