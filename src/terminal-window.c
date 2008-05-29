@@ -1716,7 +1716,6 @@ sync_tab_label (TerminalScreen *screen,
   const char *title;
 
   title = terminal_screen_get_title (screen);
-g_print ("sync tab label %p title %s\n", screen, title);
   hbox = gtk_widget_get_parent (label);
 
   gtk_label_set_text (GTK_LABEL (label), title);
@@ -1931,7 +1930,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
-  g_print ("toplevel type %s\n", G_OBJECT_TYPE_NAME (app));
 
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
