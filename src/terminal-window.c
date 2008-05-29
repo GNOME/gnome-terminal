@@ -1877,7 +1877,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   }
 }
 
-/* FIXMEchpe make this also switch tabs! */
 void
 terminal_window_set_active (TerminalWindow *window,
                             TerminalScreen *screen)
@@ -2484,13 +2483,11 @@ view_zoom_in_callback (GtkAction *action,
     return;
   
   current = terminal_screen_get_font_scale (priv->active_term);
-
-  /* FIXMEchpe! this should be unnecessary! */
-  if (find_larger_zoom_factor (current, &current))
-    {
-      terminal_screen_set_font_scale (priv->active_term, current);
-      terminal_window_update_zoom_sensitivity (window);
-    }
+  if (!find_larger_zoom_factor (current, &current))
+    return;
+      
+  terminal_screen_set_font_scale (priv->active_term, current);
+  terminal_window_update_zoom_sensitivity (window);
 }
 
 static void
@@ -2504,13 +2501,11 @@ view_zoom_out_callback (GtkAction *action,
     return;
   
   current = terminal_screen_get_font_scale (priv->active_term);
-
-  /* FIXMEchpe! this should be unnecessary! */
-  if (find_smaller_zoom_factor (current, &current))
-    {
-      terminal_screen_set_font_scale (priv->active_term, current);
-      terminal_window_update_zoom_sensitivity (window);
-    }
+  if (!find_smaller_zoom_factor (current, &current))
+    return;
+      
+  terminal_screen_set_font_scale (priv->active_term, current);
+  terminal_window_update_zoom_sensitivity (window);
 }
 
 static void
