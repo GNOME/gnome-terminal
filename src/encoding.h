@@ -41,8 +41,6 @@ GtkWidget* terminal_encoding_dialog_new (GtkWindow *transient_parent);
 
 GSList* terminal_get_active_encodings (void);
 
-char* terminal_encoding_get_name (const char *charset);
-
 TerminalEncoding* terminal_encoding_ref (TerminalEncoding *encoding);
 
 void terminal_encoding_unref (TerminalEncoding *encoding);

@@ -1050,15 +1050,3 @@ terminal_encoding_init (void)
 
   g_object_unref (conf);
 }
-
-char*
-terminal_encoding_get_name (const char *charset)
-{
-  const TerminalEncoding *e;
-
-  e = find_encoding_by_charset (charset);
-  if (e != NULL)
-    return g_strdup_printf ("%s (%s)", e->name, e->charset);
-  else
-    return g_strdup (charset);
-}
