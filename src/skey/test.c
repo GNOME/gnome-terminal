@@ -1,6 +1,7 @@
 #include <config.h>
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <glib.h>
 
@@ -54,7 +55,7 @@ static const char *algos[] = {
 static void
 skey_test (gconstpointer data)
 {
-        TestEntry *test = (TestEntry *) data;
+        const TestEntry *test = (const TestEntry *) data;
         char *key;
 
         key = skey (test->algorithm,
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
         g_test_bug_base ("http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal");
 
         for (i = 0; i < G_N_ELEMENTS (tests); ++i) {
-                TestEntry *test = &tests[i];
+                const TestEntry *test = &tests[i];
                 char *name;
 
                 name = g_strdup_printf ("/%s/%s/%s/%d/%s/%s",
