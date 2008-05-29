@@ -641,8 +641,6 @@ profile_list_treeview_create (TerminalApp *app)
                                       NULL, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
                                GTK_TREE_VIEW_COLUMN (column));
-  
-  profile_list_treeview_refill (tree_view);
 
   return tree_view;
 }
@@ -1264,8 +1262,39 @@ monitor_profiles_for_is_default_change (GtkWidget *profile_combo_box)
 }
 
 static void
-manage_profiles_destroyed_callback (GtkWidget   *manage_profiles_dialog,
-                                    TerminalApp *app)
+profile_list_selection_changed_cb (GtkTreeSelection *selection,
+                                   TerminalApp *app)
+{
+  gboolean selected;
+
+  selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
+  g_print ("selection %d\n", selected);
+
+  gtk_widget_set_sensitive (app->manage_profiles_edit_button, selected);
+  gtk_widget_set_sensitive (app->manage_profiles_delete_button,
+                            selected &&
+                            terminal_app_get_profile_count (app) > 1);
+}
+
+static void
+profile_list_response_cb (GtkWidget *dialog,
+                          int        id,
+                          TerminalApp *app)
+{
+  g_assert (app->manage_profiles_dialog == dialog);
+  
+  if (id == GTK_RESPONSE_HELP)
+    {
+      terminal_util_show_help ("gnome-terminal-manage-profiles", GTK_WINDOW (dialog));
+      return;
+    }
+    
+  gtk_widget_destroy (dialog);
+}
+
+static void
+profile_list_destroyed_cb (GtkWidget   *manage_profiles_dialog,
+                           TerminalApp *app)
 {
   app->manage_profiles_dialog = NULL;
   app->manage_profiles_list = NULL;
@@ -1273,51 +1302,6 @@ manage_profiles_destroyed_callback (GtkWidget   *manage_profiles_dialog,
   app->manage_profiles_edit_button = NULL;
   app->manage_profiles_delete_button = NULL;
   app->manage_profiles_default_menu = NULL;
-}
-
-static void
-count_selected_profiles_func (GtkTreeModel      *model,
-                              GtkTreePath       *path,
-                              GtkTreeIter       *iter,
-                              gpointer           data)
-{
-  int *count = data;
-
-  *count += 1;
-}
-
-static void
-selection_changed_callback (GtkTreeSelection *selection,
-                            TerminalApp      *app)
-{
-  int count;
-
-  count = 0;
-  gtk_tree_selection_selected_foreach (selection,
-                                       count_selected_profiles_func,
-                                       &count);
-
-  gtk_widget_set_sensitive (app->manage_profiles_edit_button,
-                            count == 1);
-  gtk_widget_set_sensitive (app->manage_profiles_delete_button,
-                            count > 0);
-}
-
-static void
-manage_profiles_response_cb (GtkDialog *dialog,
-                             int        id,
-                             void      *data)
-{
-  TerminalApp *app;
-
-  app = data;
-
-  g_assert (app->manage_profiles_dialog == GTK_WIDGET (dialog));
-  
-  if (id == GTK_RESPONSE_HELP)
-    terminal_util_show_help ("gnome-terminal-manage-profiles", GTK_WINDOW (dialog));
-  else
-    gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 void
@@ -1357,12 +1341,19 @@ terminal_app_manage_profiles (TerminalApp     *app,
   app->manage_profiles_edit_button = GTK_WIDGET (edit_button);
   app->manage_profiles_delete_button  = GTK_WIDGET (remove_button);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (manage_profiles_response_cb), app);
-  g_signal_connect (dialog, "destroy", G_CALLBACK (manage_profiles_destroyed_callback), app);
+  g_signal_connect (dialog, "response", G_CALLBACK (profile_list_response_cb), app);
+  g_signal_connect (dialog, "destroy", G_CALLBACK (profile_list_destroyed_cb), app);
 
   app->manage_profiles_list = profile_list_treeview_create (app);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
+  g_signal_connect (selection, "changed", G_CALLBACK (profile_list_selection_changed_cb), app);
+
+  profile_list_treeview_refill (app->manage_profiles_list);
+
   g_signal_connect (app->manage_profiles_list, "row-activated",
                     G_CALLBACK (profile_list_row_activated_cb), app);
+
   gtk_container_add (GTK_CONTAINER (tree_view_container), app->manage_profiles_list);
   gtk_widget_show (app->manage_profiles_list);
 
@@ -1388,11 +1379,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
   monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
       
   gtk_widget_grab_focus (app->manage_profiles_list);
-
-  /* Monitor selection for sensitivity */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
-  selection_changed_callback (selection, app);
-  g_signal_connect (selection, "changed", G_CALLBACK (selection_changed_callback), app);
 
   gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog),
                                 transient_parent);
