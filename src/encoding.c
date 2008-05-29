@@ -356,6 +356,7 @@ terminal_encoding_new (int index_,
   encoding->name = g_strdup (name);
   encoding->charset = g_strdup (charset);
   encoding->valid = valid;
+  encoding->validity_checked = TRUE;
 
   return encoding;
 }
@@ -378,6 +379,51 @@ terminal_encoding_unref (TerminalEncoding *encoding)
   g_free (encoding->name);
   g_free (encoding->charset);
   g_slice_free (TerminalEncoding, encoding);
+}
+
+static gboolean
+terminal_encoding_is_valid (TerminalEncoding *encoding)
+{
+  /* All of the printing ASCII characters from space (32) to the tilde (126) */
+  static const char ascii_sample[] =
+      " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+  char *converted;
+  gsize bytes_read = 0, bytes_written = 0;
+  GError *error = NULL;
+
+  if (encoding->validity_checked)
+    return encoding->valid;
+
+  /* Test that the encoding is a proper superset of ASCII (which naive
+   * apps are going to use anyway) by attempting to validate the text
+   * using the current encoding.  This also flushes out any encodings
+   * which the underlying GIConv implementation can't support.
+   */
+  converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
+                         encoding->charset, "ASCII",
+                         &bytes_read, &bytes_written, &error);
+
+  /* The encoding is only valid if ASCII passes through cleanly. */
+  encoding->valid = (bytes_read == (sizeof (ascii_sample) - 1)) &&
+                    (converted != NULL) &&
+                    (strcmp (converted, ascii_sample) == 0);
+
+#ifdef DEBUG_ENCODINGS
+  if (!encoding->valid)
+    {
+      g_print("Rejecting encoding %s as invalid: %s\n", encoding->charset, error ? error->message : "");
+      g_print(" input  \"%s\"\n", ascii_sample);
+      g_print(" output \"%s\"\n\n", converted ? converted : "(null)");
+      g_clear_error (&error);
+    }
+  else
+    g_print ("Encoding %s is valid\n\n", encoding->charset);
+#endif
+
+  g_free (converted);
+
+  encoding->validity_checked = TRUE;
+  return encoding->valid;
 }
 
 static void
@@ -464,7 +510,7 @@ encodings_notify_cb (GConfClient *client,
         }
       else
         {
-          encoding = e->valid ? terminal_encoding_ref (e) : NULL;
+          encoding = terminal_encoding_is_valid (e) ? terminal_encoding_ref (e) : NULL;
         }
 
       if (encoding != NULL)
@@ -838,7 +884,7 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
 
   for (i = 0; i < (int) G_N_ELEMENTS (encodings); ++i)
     {
-      if (!encodings[i].valid)
+      if (!terminal_encoding_is_valid (&encodings[i]))
         continue;
 
       gtk_list_store_insert_with_values (store, &iter, -1,
@@ -974,12 +1020,8 @@ void
 terminal_encoding_init (void)
 {
   GConfClient *conf;
-  int i;
-  GError *err;
-  gsize bytes_read, bytes_written;
-  gchar *converted;
-  gchar ascii_sample[96];
-  
+  guint i;
+
   conf = gconf_client_get_default ();
 
   g_get_charset ((const char**)
@@ -987,71 +1029,22 @@ terminal_encoding_init (void)
 
   g_assert (G_N_ELEMENTS (encodings) == TERMINAL_ENCODING_LAST);
 
-  /* Initialize the sample text with all of the printing ASCII characters
-   * from space (32) to the tilde (126), 95 in all. */ 
-  for (i = 0; i < (int) sizeof (ascii_sample); i++) 
-    ascii_sample[i] = i + 32;
-
-  ascii_sample[sizeof(ascii_sample) - 1] = '\0';
-  
-  i = 0;
-  while (i < TERMINAL_ENCODING_LAST)
+  for (i = 0; i < TERMINAL_ENCODING_LAST; ++i)
     {
-      bytes_read = 0;
-      bytes_written = 0;
-      
       g_assert (encodings[i].index_ == i);
 
       /* Translate the names */
       encodings[i].name = _(encodings[i].name);
 
-      /* Test that the encoding is a proper superset of ASCII (which naive
-       * apps are going to use anyway) by attempting to validate the text
-       * using the current encoding.  This also flushes out any encodings
-       * which the underlying GIConv implementation can't support.
-       */
-      converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
-		             encodings[i].charset, "ASCII",
-			     &bytes_read, &bytes_written, NULL);
-      
-      /* The encoding is only valid if ASCII passes through cleanly. */
       if (i == TERMINAL_ENCODING_CURRENT_LOCALE)
-        encodings[i].valid = TRUE;
-      else
-        encodings[i].valid =
-          (bytes_read == (sizeof (ascii_sample) - 1)) &&
-          (converted != NULL) &&
-          (strcmp (converted, ascii_sample) == 0);
-
-#ifdef DEBUG_ENCODINGS
-      if (!encodings[i].valid)
-        {
-          g_print("Rejecting encoding %s as invalid:\n", encodings[i].charset);
-          g_print(" input  \"%s\"\n", ascii_sample);
-          g_print(" output \"%s\"\n\n", converted ? converted : "(null)");
-        }
-#endif
-
-      /* Discard the converted string. */
-      if (converted != NULL)
-        g_free (converted);
-
-      ++i;
+        encodings[i].valid = encodings[i].validity_checked = TRUE;
     }
 
-  err = NULL;
   gconf_client_notify_add (conf,
                            CONF_GLOBAL_PREFIX"/active_encodings",
                            encodings_notify_cb,
-                           NULL, /* user_data */
-                           NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal encoding list changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
+                           NULL /* user_data */, NULL,
+                           NULL);
 
   gconf_client_notify (conf, CONF_GLOBAL_PREFIX"/active_encodings");
 

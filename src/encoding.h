@@ -32,6 +32,7 @@ typedef struct
   char    *charset;
   char    *name;
   int      refcount;
+  gboolean validity_checked;
 } TerminalEncoding;
 
 void terminal_encoding_init (void);
