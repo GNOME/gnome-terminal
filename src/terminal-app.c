@@ -1383,8 +1383,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
   gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog),
                                 transient_parent);
 
-  gtk_window_set_default_size (GTK_WINDOW (app->manage_profiles_dialog), 450, 300);
-
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
 
   g_object_unref (builder);
