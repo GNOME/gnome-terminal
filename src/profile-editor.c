@@ -135,7 +135,7 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
       SET_SENSITIVE ("use-custom-command-checkbutton", !use_custom_locked);
       SET_SENSITIVE ("custom-command-box",
                      terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND) &&
-                     terminal_profile_property_locked (profile, TERMINAL_PROFILE_CUSTOM_COMMAND));
+                     !terminal_profile_property_locked (profile, TERMINAL_PROFILE_CUSTOM_COMMAND));
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE))
