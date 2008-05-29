@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 #include <string.h>
-#include <glib/gchecksum.h>
+#include <glib.h>
 
 #include "skey.h"
 #include "skeyutil.h"

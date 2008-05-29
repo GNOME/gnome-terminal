@@ -21,6 +21,9 @@
 
 #include <config.h>
 
+#include <glib.h>
+#undef G_DISABLE_SINGLE_INCLUDES
+
 #include "terminal-intl.h"
 
 #include "terminal-app.h"
@@ -30,10 +33,6 @@
 #include "profile-editor.h"
 #include "encoding.h"
 #include <gconf/gconf-client.h>
-#include <bonobo-activation/bonobo-activation-activate.h>
-#include <bonobo-activation/bonobo-activation-register.h>
-#include <bonobo/bonobo-exception.h>
-#include <bonobo/bonobo-listener.h>
 #include <libgnome/gnome-help.h>
 #include <libgnomeui/gnome-url.h>
 #include <libgnomeui/gnome-client.h>

@@ -21,9 +21,12 @@
 
 #include <config.h>
 
+#include <glib.h>
+
 #include "terminal-intl.h"
 
 #undef BONOBO_DISABLE_DEPRECATED
+#undef G_DISABLE_SINGLE_INCLUDES
 
 #include "terminal-app.h"
 #include "terminal-accels.h"

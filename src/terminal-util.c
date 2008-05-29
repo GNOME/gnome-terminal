@@ -27,6 +27,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 
+#include <glib.h>
+#undef G_DISABLE_SINGLE_INCLUDES
+
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 

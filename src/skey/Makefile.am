@@ -19,6 +19,7 @@ libskey_la_SOURCES = \
 
 libskey_la_CPPFLAGS = \
 	-I$(srcdir)/.. \
+	-DG_DISABLE_SINGLE_INCLUDES \
 	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
 
