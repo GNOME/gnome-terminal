@@ -61,7 +61,6 @@ typedef struct
 
 struct _TerminalScreenPrivate
 {
-  GtkWidget *term;
   TerminalWindow *window;
   TerminalProfile *profile; /* may be NULL at times */
   guint profile_changed_id;
@@ -322,8 +321,6 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv->recheck_working_dir_idle = 0;
 
-  priv->term = GTK_WIDGET (screen);
-
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
 #define USERCHARS "-A-Za-z0-9"
@@ -354,26 +351,22 @@ terminal_screen_init (TerminalScreen *screen)
 
   terminal_screen_setup_dnd (screen);
 
-  g_object_set_data (G_OBJECT (priv->term),
-                     "terminal-screen",
-                     screen);
-
   g_signal_connect (screen,
                     "realize",
                     G_CALLBACK (terminal_screen_update_on_realize),
                     screen);
 
-  g_signal_connect (G_OBJECT (priv->term),
+  g_signal_connect (screen,
                     "style_set",
                     G_CALLBACK (style_set_callback),
                     screen);
 
-  g_signal_connect (G_OBJECT (priv->term),
+  g_signal_connect (screen,
                     "popup_menu",
                     G_CALLBACK (terminal_screen_popup_menu),
                     screen);
 
-  g_signal_connect (G_OBJECT (priv->term),
+  g_signal_connect (screen,
                     "button_press_event",
                     G_CALLBACK (terminal_screen_button_press_event),
                     screen);
@@ -586,7 +579,6 @@ terminal_screen_reread_profile (TerminalScreen *screen)
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile;
-  GtkWidget *term;
   TerminalBackgroundType bg_type;
   TerminalWindow *window;
   
@@ -594,8 +586,6 @@ terminal_screen_reread_profile (TerminalScreen *screen)
   
   if (profile == NULL)
     return;
-
-  term = priv->term;
 
   terminal_screen_cook_title (screen);
   terminal_screen_cook_icon_title (screen);
@@ -610,7 +600,7 @@ terminal_screen_reread_profile (TerminalScreen *screen)
       terminal_window_update_geometry (priv->window);
     }
   
-  if (GTK_WIDGET_REALIZED (priv->term))
+  if (GTK_WIDGET_REALIZED (screen))
     terminal_screen_change_font (screen);
 
   update_color_scheme (screen);
@@ -790,8 +780,10 @@ update_color_scheme (TerminalScreen *screen)
   TerminalScreenPrivate *priv = screen->priv;
   GdkColor fg, bg;
   GdkColor palette[TERMINAL_PALETTE_SIZE];
-  
-  if (priv->term == NULL)
+  GtkStyle *style;
+
+  style = gtk_widget_get_style (GTK_WIDGET (screen));
+  if (!style)
     return;
 
   terminal_profile_get_palette (priv->profile,
@@ -799,8 +791,8 @@ update_color_scheme (TerminalScreen *screen)
 
   if (terminal_profile_get_use_theme_colors (priv->profile))
     {
-      fg = priv->term->style->text[GTK_STATE_NORMAL];
-      bg = priv->term->style->base[GTK_STATE_NORMAL];
+      fg = style->text[GTK_STATE_NORMAL];
+      bg = style->base[GTK_STATE_NORMAL];
     }
   else
     {
@@ -824,10 +816,9 @@ monospace_font_change_notify (GConfClient *client,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (user_data);
   TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *widget = priv->term;
   
   if (strcmp (entry->key, MONOSPACE_FONT_KEY) == 0 &&
-      GTK_WIDGET_REALIZED (widget))
+      GTK_WIDGET_REALIZED (screen))
     terminal_screen_change_font (screen);
 }
 
@@ -1035,7 +1026,7 @@ show_command_error_dialog (TerminalScreen *screen,
   
   g_assert (error != NULL);
   
-  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (priv->term, GTK_TYPE_WINDOW), NULL,
+  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
                                    _("There was a problem with the command for this terminal: %s"), error->message);
 }
 
@@ -1117,14 +1108,16 @@ get_child_command (TerminalScreen *screen,
 extern char **environ;
 
 static char**
-get_child_environment (GtkWidget      *term,
-                       TerminalScreen *screen)
+get_child_environment (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  GtkWidget *term;
   gchar **p, **retval;
   gint i;
   GConfClient *conf;
 #define EXTRA_ENV_VARS 8
+
+  term = GTK_WIDGET (screen);
 
   /* count env vars that are set */
   for (p = environ; *p; p++)
@@ -1290,7 +1283,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
       return;
     }
   
-  env = get_child_environment (priv->term, screen);  
+  env = get_child_environment (screen);
 
   update_records = terminal_profile_get_update_records (profile);
 
@@ -1306,7 +1299,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
   if (priv->child_pid == -1)
     {
 
-      terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (priv->term, GTK_TYPE_WINDOW), NULL,
+      terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
                                        "%s", _("There was an error creating the child process for this terminal"));
     }
   
@@ -1384,7 +1377,6 @@ terminal_screen_button_press_event (GtkWidget      *widget,
                                     TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *term;
   int char_width, char_height;
   gboolean dingus_button;
   char *matched_string;
@@ -1392,8 +1384,6 @@ terminal_screen_button_press_event (GtkWidget      *widget,
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
-
-  term = priv->term;
 
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
@@ -1652,8 +1642,7 @@ terminal_screen_set_font_scale (TerminalScreen *screen,
   
   priv->font_scale = factor;
   
-  if (priv->term &&
-      GTK_WIDGET_REALIZED (priv->term))
+  if (GTK_WIDGET_REALIZED (screen))
     {
       /* Update the font */
       terminal_screen_change_font (screen);
@@ -2192,10 +2181,10 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
   };
   TerminalScreenPrivate *priv = screen->priv;
   
-  g_signal_connect (G_OBJECT (priv->term), "drag_data_received",
+  g_signal_connect (screen, "drag_data_received",
                     G_CALLBACK (drag_data_received), screen);
   
-  gtk_drag_dest_set (GTK_WIDGET (priv->term),
+  gtk_drag_dest_set (GTK_WIDGET (screen),
                      GTK_DEST_DEFAULT_MOTION |
                      GTK_DEST_DEFAULT_HIGHLIGHT |
                      GTK_DEST_DEFAULT_DROP,
