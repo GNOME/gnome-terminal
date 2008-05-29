@@ -83,27 +83,35 @@ schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
 
-uidir = $(pkgdatadir)
-ui_DATA = \
-	terminal.ui \
-	encodings-dialog.ui \
-	keybinding-editor.ui \
-	profile-manager.ui \
-	profile-new-dialog.ui \
-	profile-preferences.ui \
-	skey-challenge.ui \
+uimanagerdir = $(pkgdatadir)
+uimanager_DATA = \
+	terminal.xml \
 	$(NULL)
+
+builder_in_files = \
+	encodings-dialog.glade \
+	keybinding-editor.glade \
+	profile-manager.glade \
+	profile-new-dialog.glade \
+	profile-preferences.glade \
+	skey-challenge.glade \
+	$(NULL)
+
+builderdir = $(pkgdatadir)
+builder_DATA = $(builder_in_files:.glade=.ui)
 
 CLEANFILES = \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
+	$(builder_DATA) \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
 	$(icon_DATA) \
 	$(schema_in_files) \
 	$(server_DATA) \
-	$(ui_DATA) \
+	$(uimanager_DATA) \
+	$(builder_in_files) \
 	$(NULL)
 
 serverdir = $(libdir)/bonobo/servers
@@ -115,3 +123,6 @@ if GCONF_SCHEMAS_INSTALL
 install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(top_builddir)/src/$(schema_DATA)
 endif
+
+%.ui: %.glade
+	$(GTK_BUILDER_CONVERT) $< $@
