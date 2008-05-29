@@ -34,7 +34,9 @@
 #include <math.h>
 #include "terminal-widget.h"
 
-#define BYTES_PER_LINE (terminal_widget_get_estimated_bytes_per_scrollback_line ())
+/* One slot in the ring buffer, plus the array which holds the data for
+  * the line, plus about 80 vte_charcell structures. */
+#define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 

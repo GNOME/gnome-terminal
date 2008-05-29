@@ -693,7 +693,8 @@ terminal_profile_class_init (TerminalProfileClass *klass)
     (object_class,
      PROP_BACKGROUND_DARKNESS,
      g_param_spec_double ("background-darkness", NULL, NULL,
-                          0.0, 1.0, /* FIXME? */
+                          /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
+                          0.0, 1.0,
                           0.0,
                           G_PARAM_READWRITE |
                           G_PARAM_STATIC_NAME |

@@ -90,7 +90,7 @@ static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
-static void terminal_screen_update_on_realize (GtkWidget      *widget,
+static void terminal_screen_update_on_realize (VteTerminal *vte_terminal,
                                                TerminalScreen *screen);
 static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu         (GtkWidget      *term,
@@ -175,6 +175,16 @@ parent_set_callback (TerminalScreen *screen,
 }
 
 static void
+set_background_image_file (VteTerminal *terminal,
+                           const char *fname)
+{
+  if (fname && fname[0])
+    vte_terminal_set_background_image_file (terminal,fname);
+  else
+    vte_terminal_set_background_image (terminal, NULL);
+}
+
+static void
 connect_monospace_font_change (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -227,7 +237,7 @@ terminal_screen_sync_settings (GtkSettings *settings,
                 "gtk-cursor-blink", &blink,
                 NULL);
 
-  terminal_widget_set_cursor_blinks (priv->term, blink);
+  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
 }
 
 static void
@@ -323,7 +333,7 @@ terminal_screen_init (TerminalScreen *screen)
                      "terminal-screen",
                      screen);
 
-  g_signal_connect (G_OBJECT (priv->term),
+  g_signal_connect (screen,
                     "realize",
                     G_CALLBACK (terminal_screen_update_on_realize),
                     screen);
@@ -543,6 +553,7 @@ void
 terminal_screen_reread_profile (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile;
   GtkWidget *term;
   TerminalBackgroundType bg_type;
@@ -573,20 +584,16 @@ terminal_screen_reread_profile (TerminalScreen *screen)
 
   update_color_scheme (screen);
 
-  terminal_widget_set_audible_bell (term,
-                                    !terminal_profile_get_silent_bell (profile));
-
-  terminal_widget_set_word_characters (term,
-                                       terminal_profile_get_word_chars (profile));
-
-  terminal_widget_set_scroll_on_keystroke (term,
-                                           terminal_profile_get_scroll_on_keystroke (profile));
-  
-  terminal_widget_set_scroll_on_output (term,
-                                        terminal_profile_get_scroll_on_output (profile));
-
-  terminal_widget_set_scrollback_lines (term,
-                                        terminal_profile_get_scrollback_lines (profile));
+  vte_terminal_set_audible_bell (vte_terminal,
+                                 !terminal_profile_get_silent_bell (profile));
+  vte_terminal_set_word_chars (vte_terminal,
+                               terminal_profile_get_word_chars (profile));
+  vte_terminal_set_scroll_on_keystroke (vte_terminal,
+                                        terminal_profile_get_scroll_on_keystroke (profile));
+  vte_terminal_set_scroll_on_output (vte_terminal,
+                                     terminal_profile_get_scroll_on_output (profile));
+  vte_terminal_set_scrollback_lines (vte_terminal,
+                                     terminal_profile_get_scrollback_lines (profile));
 
   if (terminal_profile_get_use_skey (priv->profile))
     {
@@ -606,42 +613,41 @@ terminal_screen_reread_profile (TerminalScreen *screen)
   
   if (bg_type == TERMINAL_BACKGROUND_IMAGE)
     {
-      terminal_widget_set_background_image_file (term,
-                                                 terminal_profile_get_background_image_file (profile));
-      terminal_widget_set_background_scrolls (term,
-                                              terminal_profile_get_scroll_background (profile));
+      set_background_image_file (vte_terminal,
+                                 terminal_profile_get_background_image_file (profile));
+      vte_terminal_set_scroll_background (vte_terminal,
+                                          terminal_profile_get_scroll_background (profile));
     }
   else
     {
-      terminal_widget_set_background_image_file (term, NULL);
-      terminal_widget_set_background_scrolls (term, FALSE);
+      set_background_image_file (vte_terminal, NULL);
+      vte_terminal_set_scroll_background (vte_terminal, FALSE);
     }
 
   if (bg_type == TERMINAL_BACKGROUND_IMAGE ||
       bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
     {
-    terminal_widget_set_background_darkness (term,
-                                             terminal_profile_get_background_darkness (profile));
-      terminal_widget_set_background_opacity (term,
-					      terminal_profile_get_background_darkness (profile));
+      vte_terminal_set_background_saturation (vte_terminal,
+                                              1.0 - terminal_profile_get_background_darkness (profile));
+      vte_terminal_set_opacity (vte_terminal,
+                                terminal_profile_get_background_darkness (profile) * 0xffff);
     }      
   else
     {
-    terminal_widget_set_background_darkness (term, 0.0); /* normal color */
-      terminal_widget_set_background_opacity (term, 1);
+      vte_terminal_set_background_saturation (vte_terminal, 1.0); /* normal color */
+      vte_terminal_set_opacity (vte_terminal, 0xffff);
     }
   
   window = terminal_screen_get_window (screen);
-  if (window == NULL || !terminal_window_uses_argb_visual (window))
-  terminal_widget_set_background_transparent (term,
-                                              bg_type == TERMINAL_BACKGROUND_TRANSPARENT);
-  else
-    terminal_widget_set_background_transparent (term, FALSE);
+  /* FIXME: Don't enable this if we have a compmgr. */
+  vte_terminal_set_background_transparent (vte_terminal,
+                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
+                                           (!window || !terminal_window_uses_argb_visual (window)));
 
-  vte_terminal_set_backspace_binding (VTE_TERMINAL (screen),
+  vte_terminal_set_backspace_binding (vte_terminal,
                                       terminal_profile_get_backspace_binding (profile));
   
-  vte_terminal_set_delete_binding (VTE_TERMINAL (screen),
+  vte_terminal_set_delete_binding (vte_terminal,
                                    terminal_profile_get_delete_binding (profile));
 }
 
@@ -863,7 +869,7 @@ terminal_screen_set_font (TerminalScreen *screen)
 }
 
 static void
-terminal_screen_update_on_realize (GtkWidget      *term,
+terminal_screen_update_on_realize (VteTerminal *vte_terminal,
                                    TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -872,9 +878,10 @@ terminal_screen_update_on_realize (GtkWidget      *term,
   profile = priv->profile;
 
   update_color_scheme (screen);
-  
-  terminal_widget_set_allow_bold (term,
-                                  terminal_profile_get_allow_bold (profile));
+
+  /* FIXMEchpe: why do this on realize? */
+  vte_terminal_set_allow_bold (vte_terminal,
+                               terminal_profile_get_allow_bold (profile));
   terminal_window_set_size (priv->window, screen, TRUE);
 }
 
@@ -884,7 +891,7 @@ terminal_screen_change_font (TerminalScreen *screen)
   TerminalScreenPrivate *priv = screen->priv;
   
   terminal_screen_set_font (screen);
-  terminal_screen_update_on_realize (priv->term, screen);
+  terminal_screen_update_on_realize (VTE_TERMINAL (screen), screen);
 }
 
 static void

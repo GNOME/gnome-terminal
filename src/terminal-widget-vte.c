@@ -239,114 +239,6 @@ terminal_widget_skey_check_match (GtkWidget *widget,
 }
 
 void
-terminal_widget_set_word_characters (GtkWidget  *widget,
-                                     const char *str)
-{
-  vte_terminal_set_word_chars(VTE_TERMINAL(widget), str);
-}
-
-void
-terminal_widget_set_cursor_blinks (GtkWidget *widget,
-				   gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_cursor_blinks(VTE_TERMINAL(widget), setting);
-}
-
-void
-terminal_widget_set_audible_bell (GtkWidget *widget,
-				  gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_audible_bell(VTE_TERMINAL(widget), setting);
-}
-
-void
-terminal_widget_set_scroll_on_keystroke (GtkWidget *widget,
-					 gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(widget), setting);
-}
-
-void
-terminal_widget_set_scroll_on_output (GtkWidget *widget,
-				      gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_scroll_on_output(VTE_TERMINAL(widget), setting);
-}
-
-void
-terminal_widget_set_scrollback_lines (GtkWidget *widget,
-				      int        lines)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_scrollback_lines(VTE_TERMINAL(widget), lines);
-}
-
-void
-terminal_widget_set_background_image (GtkWidget *widget,
-				      GdkPixbuf *pixbuf)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_background_image(VTE_TERMINAL(widget), pixbuf);
-}
-
-void
-terminal_widget_set_background_image_file (GtkWidget  *widget,
-					   const char *fname)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-
-  if ((fname != NULL) && (strlen(fname) > 0))
-    vte_terminal_set_background_image_file(VTE_TERMINAL(widget), fname);
-  else
-    vte_terminal_set_background_image(VTE_TERMINAL(widget), NULL);
-}
-
-void
-terminal_widget_set_background_transparent (GtkWidget *widget,
-					    gboolean   setting)
-{
-    /* FIXME: Don't enable this if we have a compmgr. */
-  vte_terminal_set_background_transparent(VTE_TERMINAL(widget), setting);
-}
-
-/* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
-void
-terminal_widget_set_background_darkness (GtkWidget *widget,
-					 double     factor)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_background_saturation(VTE_TERMINAL(widget), 1.0 - factor);
-}
-
-void
-terminal_widget_set_background_opacity (GtkWidget *widget,
-					double     factor)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_opacity(VTE_TERMINAL(widget), factor * 0xffff);
-}
-
-void
-terminal_widget_set_background_scrolls (GtkWidget *widget,
-					gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_scroll_background(VTE_TERMINAL(widget), setting);
-}
-
-void
-terminal_widget_set_allow_bold (GtkWidget *widget,
-				gboolean   setting)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_set_allow_bold(VTE_TERMINAL(widget), setting);
-}
-
-void
 terminal_widget_set_colors (GtkWidget      *widget,
 			    const GdkColor *foreground,
 			    const GdkColor *background,
@@ -356,14 +248,6 @@ terminal_widget_set_colors (GtkWidget      *widget,
   vte_terminal_set_colors(VTE_TERMINAL(widget), foreground, background,
 			  palette_entries, TERMINAL_PALETTE_SIZE);
   vte_terminal_set_background_tint_color(VTE_TERMINAL(widget), background);
-}
-
-void
-terminal_widget_reset (GtkWidget *widget,
-		       gboolean   also_clear_afterward)
-{
-  g_return_if_fail(VTE_IS_TERMINAL(widget));
-  vte_terminal_reset (VTE_TERMINAL(widget), TRUE, also_clear_afterward);
 }
 
 void
@@ -382,17 +266,6 @@ terminal_widget_disconnect_child_died (GtkWidget *widget,
 {
   g_signal_handlers_disconnect_by_func (widget, callback, data);
 }
-
-GtkAdjustment*
-terminal_widget_get_scroll_adjustment (GtkWidget *widget)
-{
-  VteTerminal *terminal;
-
-  terminal = VTE_TERMINAL (widget);
-
-  return terminal->adjustment;
-}
-
 
 gboolean
 terminal_widget_fork_command (GtkWidget   *widget,
@@ -420,16 +293,6 @@ terminal_widget_fork_command (GtkWidget   *widget,
     }
 
   return TRUE;
-}
-
-
-
-int
-terminal_widget_get_estimated_bytes_per_scrollback_line (void)
-{
-  /* One slot in the ring buffer, plus the array which holds the data for
-   * the line, plus about 80 vte_charcell structures. */
-  return sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4));
 }
 
 void

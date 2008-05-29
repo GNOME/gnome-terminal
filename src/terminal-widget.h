@@ -65,51 +65,17 @@ char*      terminal_widget_skey_check_match           (GtkWidget            *wid
                                                        int                   row,
                                                        int                  *flavor);
 void       terminal_widget_skey_match_remove          (GtkWidget            *widget);
-void       terminal_widget_set_word_characters        (GtkWidget            *widget,
-                                                       const char           *str);
-void       terminal_widget_set_cursor_blinks          (GtkWidget            *widget,
-                                                       gboolean              setting);
-void       terminal_widget_set_audible_bell           (GtkWidget            *widget,
-                                                       gboolean              setting);
-void       terminal_widget_set_scroll_on_keystroke    (GtkWidget            *widget,
-                                                       gboolean              setting);
-void       terminal_widget_set_scroll_on_output       (GtkWidget            *widget,
-                                                       gboolean              setting);
-void       terminal_widget_set_scrollback_lines       (GtkWidget            *widget,
-                                                       int                   lines);
-void       terminal_widget_set_background_image       (GtkWidget            *widget,
-                                                       GdkPixbuf            *pixbuf);
-void       terminal_widget_set_background_image_file  (GtkWidget            *widget,
-                                                       const char           *fname);
-void       terminal_widget_set_background_transparent (GtkWidget            *widget,
-                                                       gboolean              setting);
-/* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
-void       terminal_widget_set_background_darkness    (GtkWidget            *widget,
-                                                       double                factor);
-void	   terminal_widget_set_background_opacity     (GtkWidget            *widget,
-						       double                factor);
 
-void       terminal_widget_set_background_scrolls     (GtkWidget            *widget,
-                                                       gboolean              setting);
-void       terminal_widget_set_allow_bold             (GtkWidget            *widget,
-                                                       gboolean              setting);
 void       terminal_widget_set_colors                 (GtkWidget            *widget,
                                                        const GdkColor       *foreground,
                                                        const GdkColor       *background,
                                                        const GdkColor       *palette_entries);
-void       terminal_widget_copy_clipboard             (GtkWidget            *widget);
-void       terminal_widget_paste_clipboard            (GtkWidget            *widget);
-void       terminal_widget_reset                      (GtkWidget            *widget,
-                                                       gboolean              also_clear_afterward);
-
 void terminal_widget_connect_child_died            (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
 void terminal_widget_disconnect_child_died         (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
-
-GtkAdjustment* terminal_widget_get_scroll_adjustment (GtkWidget *widget);
 
 gboolean terminal_widget_fork_command      (GtkWidget   *widget,
                                             gboolean     lastlog,
@@ -120,8 +86,6 @@ gboolean terminal_widget_fork_command      (GtkWidget   *widget,
                                             const char  *working_dir,
                                             int         *child_pid,
                                             GError     **err);
-
-int terminal_widget_get_estimated_bytes_per_scrollback_line (void);
 
 void terminal_widget_write_data_to_child (GtkWidget  *widget,
                                           const char *data,

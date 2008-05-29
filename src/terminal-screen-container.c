@@ -34,7 +34,7 @@ terminal_screen_container_new (TerminalScreen *screen)
 
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, terminal_widget_get_scroll_adjustment (GTK_WIDGET (screen)));
+  scrolled_window = gtk_scrolled_window_new (NULL, vte_terminal_get_adjustment (VTE_TERMINAL (screen)));
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
@@ -51,7 +51,7 @@ terminal_screen_container_new (TerminalScreen *screen)
 
   hbox = gtk_hbox_new (FALSE, 0);
 
-  scrollbar = gtk_vscrollbar_new (terminal_widget_get_scroll_adjustment (GTK_WIDGET (screen)));
+  scrollbar = gtk_vscrollbar_new (vte_terminal_get_adjustment (VTE_TERMINAL (screen)));
 
   gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);

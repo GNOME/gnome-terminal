@@ -2543,15 +2543,11 @@ terminal_reset_callback (GtkAction *action,
                          TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget;
 
   if (priv->active_term == NULL)
     return;
       
-      
-  widget = terminal_screen_get_widget (priv->active_term);
-
-  terminal_widget_reset (widget, FALSE);
+  vte_terminal_reset (VTE_TERMINAL (priv->active_term), TRUE, FALSE);
 }
 
 static void
@@ -2559,14 +2555,11 @@ terminal_reset_clear_callback (GtkAction *action,
                                TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget;
 
   if (priv->active_term == NULL)
     return;
       
-  widget = terminal_screen_get_widget (priv->active_term);
-
-  terminal_widget_reset (widget, TRUE);
+  vte_terminal_reset (VTE_TERMINAL (priv->active_term), TRUE, TRUE);
 }
 
 static void
