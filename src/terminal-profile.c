@@ -672,7 +672,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   if (g_param_value_validate (pspec, &value))
     {
-      NOTE (g_warning ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
+      NOTE (g_message ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
                        gconf_entry_get_key (entry), pspec->name);)
       force_write = TRUE;
     }
@@ -773,10 +773,11 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       if (!color)
         return;
 
-      g_snprintf (str, sizeof (str), "#%02X%02X%02X",
-                  color->red / 256,
-                  color->green / 256,
-                  color->blue / 256);
+      g_snprintf (str, sizeof (str),
+                  "#%04X%04X%04X",
+                  color->red,
+                  color->green,
+                  color->blue);
 
       gconf_change_set_set_string (changeset, key, str);
     }
@@ -869,7 +870,7 @@ terminal_profile_save (TerminalProfile *profile)
 
   if (!gconf_client_commit_change_set (priv->conf, changeset, TRUE, &error))
     {
-      g_warning ("Failed to commit the changeset to gconf: %s", error->message);
+      g_message ("Failed to commit the changeset to gconf: %s", error->message);
       g_error_free (error);
     }
 
@@ -896,7 +897,7 @@ terminal_profile_schedule_save (TerminalProfile *profile,
   g_assert (pspec != NULL);
 
   if (priv->in_notification_count > 0)
-    g_warning ("Scheduling save from gconf notify!\n");
+    g_message ("Scheduling save from gconf notify!\n");
 
   if (!g_slist_find (priv->dirty_pspecs, pspec))
     priv->dirty_pspecs = g_slist_prepend (priv->dirty_pspecs, pspec);
