@@ -889,34 +889,26 @@ option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
     }
 }
 
-static int
-new_terminal_with_options (OptionParsingResults *results)
+static void
+new_terminal_with_options (TerminalApp *app,
+                           OptionParsingResults *results)
 {
-  TerminalApp *app;
-  GList *tmp;
+  GList *lw;
 
-  app = terminal_app_get ();
-
-  tmp = results->initial_windows;
-  while (tmp != NULL)
+  for (lw = results->initial_windows;  lw != NULL; lw = lw->next)
     {
-      TerminalProfile *profile;
-      GList *tmp2;
-      TerminalWindow *current_window;
-      TerminalScreen *active_screen;
-      
-      InitialWindow *iw = tmp->data;
+      InitialWindow *iw = lw->data;
+      TerminalWindow *current_window = NULL;
+      TerminalScreen *active_screen = NULL;
+      GList *lt;
 
       g_assert (iw->tabs);
 
-      current_window = NULL;
-      active_screen = NULL;
-      tmp2 = iw->tabs;
-      while (tmp2 != NULL)
+      for (lt = iw->tabs; lt != NULL; lt = lt->next)
         {
-          InitialTab *it = tmp2->data;
+          InitialTab *it = lt->data;
+          TerminalProfile *profile = NULL;
 
-          profile = NULL;
           if (it->profile)
             {
               if (it->profile_is_id)
@@ -939,7 +931,7 @@ new_terminal_with_options (OptionParsingResults *results)
           
           g_assert (profile);
 
-          if (tmp2 == iw->tabs)
+          if (lt == iw->tabs)
             {
               terminal_app_new_terminal (terminal_app_get (),
                                          profile,
@@ -987,17 +979,11 @@ new_terminal_with_options (OptionParsingResults *results)
                */
               active_screen = terminal_window_get_active (current_window);
              }
-
-          tmp2 = tmp2->next;
         }
       
       if (active_screen)
         terminal_window_switch_screen (current_window, active_screen);
-
-      tmp = tmp->next;
     }
-
-  return 0;
 }
 
 /* This assumes that argv already has room for the args,
@@ -1172,6 +1158,7 @@ main (int argc, char **argv)
           option_parsing_results_free (parsing_results);
           return 0;
         }
+      /* FIXMEchpe: else return 1; ? */
     }
 
   g_strfreev (argv_copy);
@@ -1184,12 +1171,7 @@ main (int argc, char **argv)
   terminal_app_initialize (use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  if (new_terminal_with_options (parsing_results))
-    {
-      option_parsing_results_free (parsing_results);
-      return 1;
-    }
-
+  new_terminal_with_options (terminal_app_get (), parsing_results);
   option_parsing_results_free (parsing_results);
   parsing_results = NULL;
 
@@ -1633,8 +1615,7 @@ handle_new_terminal_event (int          argc,
 
   option_parsing_results_apply_directory_defaults (parsing_results);
 
-  new_terminal_with_options (parsing_results);
-
+  new_terminal_with_options (terminal_app_get (), parsing_results);
   option_parsing_results_free (parsing_results);
 }
 
