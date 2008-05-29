@@ -470,7 +470,10 @@ terminal_profile_reset_property_internal (TerminalProfile *profile,
   GValue *value;
 
   if (notify)
-    value = &value_;
+    {
+      value = &value_;
+      g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+    }
   else
     value = g_value_array_get_nth (priv->properties, pspec->param_id);
   g_assert (value != NULL);
@@ -500,7 +503,10 @@ terminal_profile_reset_property_internal (TerminalProfile *profile,
     }
 
   if (notify)
-    g_object_set_property (G_OBJECT (profile), pspec->name, value);
+    {
+      g_object_set_property (G_OBJECT (profile), pspec->name, value);
+      g_value_unset (value);
+    }
 }
 
 static void
