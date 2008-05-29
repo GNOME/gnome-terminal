@@ -532,8 +532,7 @@ terminal_set_encoding_callback (GtkToggleAction *action,
   g_assert (g_str_has_prefix (name, SET_ENCODING_ACTION_NAME_PREFIX));
   charset = name + strlen (SET_ENCODING_ACTION_NAME_PREFIX);
 
-  widget = terminal_screen_get_widget (priv->active_term);
-  terminal_widget_set_encoding (widget, charset);
+  vte_terminal_set_encoding (VTE_TERMINAL (priv->active_term), charset);
 }
 
 static void
@@ -545,7 +544,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   guint n;
   GSList *encodings, *l;
   const char *charset;
-  GtkWidget *widget;
 
   /* Remove the old UI */
   if (priv->encodings_ui_id != 0)
@@ -570,8 +568,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
 
   priv->encodings_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
 
-  widget = terminal_screen_get_widget (priv->active_term);
-  charset = terminal_widget_get_encoding (widget);
+  charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_term));
   
   encodings = terminal_get_active_encodings ();
 
