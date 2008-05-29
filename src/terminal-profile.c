@@ -1,10 +1,7 @@
-/* object representing a profile */
-
 /*
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2002 Mathias Hasselmann
- *
- * This file is part of gnome-terminal.
+ * Copyright © 2008 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +24,7 @@
 
 #include <gtk/gtk.h>
 
+#include <gconf/gconf-client.h>
 #include <libgnome/gnome-program.h>
 
 #include "terminal-intl.h"
@@ -34,110 +32,19 @@
 #include "terminal-app.h"
 #include "terminal-type-builtins.h"
 
-/* If you add a key, you need to update code:
- * 
- *  - in the function that sets the key
- *  - in the update function that reads all keys on startup
- *  - in the profile_change_notify function
- *  - in the function that copies base profiles to new profiles
- *  - in terminal_profile_init() initial value, sometimes
- *    (only e.g. if the item is non-null by invariant)
+/* To add a new key, you need to:
  *
- * This sucks. ;-)
+ *  - add an entry to the enum below
+ *  - add a #define with its name in terminal-profile.h
+ *  - add a gobject property for it in terminal_profile_class_init
+ *  - if the property's type needs special casing, add that to
+ *    terminal_profile_gconf_notify_cb and
+ *    terminal_profile_gconf_changeset_add
+ *  - if necessary the default value cannot be handled via the paramspec,
+ *    handle that in terminal_profile_reset_property_internal
  */
-#define KEY_VISIBLE_NAME "visible_name"
-#define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
-#define KEY_FOREGROUND_COLOR "foreground_color"
-#define KEY_BACKGROUND_COLOR "background_color"
-#define KEY_TITLE "title"
-#define KEY_TITLE_MODE "title_mode"
-#define KEY_ALLOW_BOLD "allow_bold"
-#define KEY_SILENT_BELL "silent_bell"
-#define KEY_WORD_CHARS "word_chars"
-#define KEY_SCROLLBAR_POSITION "scrollbar_position"
-#define KEY_SCROLLBACK_LINES "scrollback_lines"
-#define KEY_SCROLL_ON_KEYSTROKE "scroll_on_keystroke"
-#define KEY_SCROLL_ON_OUTPUT "scroll_on_output"
-#define KEY_EXIT_ACTION "exit_action"
-#define KEY_LOGIN_SHELL "login_shell"
-#define KEY_UPDATE_RECORDS "update_records"
-#define KEY_USE_CUSTOM_COMMAND "use_custom_command"
-#define KEY_CUSTOM_COMMAND "custom_command"
-#define KEY_ICON "icon"
-#define KEY_PALETTE "palette"
-#define KEY_BACKGROUND_TYPE "background_type"
-#define KEY_BACKGROUND_IMAGE "background_image"
-#define KEY_SCROLL_BACKGROUND "scroll_background"
-#define KEY_BACKGROUND_DARKNESS "background_darkness"
-#define KEY_BACKSPACE_BINDING "backspace_binding"
-#define KEY_DELETE_BINDING "delete_binding"
-#define KEY_USE_THEME_COLORS "use_theme_colors"
-#define KEY_USE_SYSTEM_FONT "use_system_font"
-#define KEY_USE_SKEY "use_skey"
-#define KEY_FONT "font"
-#define KEY_NO_AA_WITHOUT_RENDER "no_aa_without_render" 
-
-struct _TerminalProfilePrivate
+enum
 {
-  char *name;
-  char *profile_dir;
-  GConfClient *conf;
-  guint notify_id;
-  TerminalSettingMask locked;
-  /* can't set keys when reporting a key changed,
-   * avoids a bunch of pesky signal handler blocks
-   * in profile-editor.c.
-   *
-   * As backup, we don't emit "changed" when values
-   * didn't really change.
-   */
-  int in_notification_count;
-  char *visible_name;
-  GdkColor foreground;
-  GdkColor background;
-  char *title;
-  TerminalTitleMode title_mode;
-  char *word_chars;
-  TerminalScrollbarPosition scrollbar_position;
-  int scrollback_lines;
-  TerminalExitAction exit_action;
-  char *custom_command;
-
-  char *icon_file;
-  GdkPixbuf *icon;
-
-  GdkColor palette[TERMINAL_PALETTE_SIZE];
-
-  TerminalBackgroundType background_type;
-  char *background_image_file;
-  GdkPixbuf *background_image;
-  double background_darkness;
-  VteTerminalEraseBinding backspace_binding;
-  VteTerminalEraseBinding delete_binding;
-
-  PangoFontDescription *font;
-  
-  guint icon_load_failed : 1;
-  guint background_load_failed : 1;
-  
-  guint default_show_menubar : 1;
-  guint allow_bold : 1;
-  guint silent_bell : 1;
-  guint scroll_on_keystroke : 1;
-  guint scroll_on_output : 1;
-  guint login_shell : 1;
-  guint update_records : 1;
-  guint use_custom_command : 1;
-  guint scroll_background : 1;
-  guint use_theme_colors : 1;
-  guint use_system_font : 1;
-  guint no_aa_without_render : 1;
-  guint use_skey : 1;
-  guint forgotten : 1;
-  guint is_default : 1;
-};
-
-enum {
   PROP_0,
   PROP_ALLOW_BOLD,
   PROP_BACKGROUND_COLOR,
@@ -173,63 +80,101 @@ enum {
   PROP_USE_SYSTEM_FONT,
   PROP_USE_THEME_COLORS,
   PROP_VISIBLE_NAME,
-  PROP_WORD_CHARS
+  PROP_WORD_CHARS,
+  LAST_PROP
 };
 
-#define DEFAULT_ALLOW_BOLD (TRUE)
-#define DEFAULT_BACKGROUND_DARKNESS (0.0)
-// #define DEFAULT_BACKGROUND_IMAGE ()
+#define KEY_ALLOW_BOLD "allow_bold"
+#define KEY_BACKGROUND_COLOR "background_color"
+#define KEY_BACKGROUND_DARKNESS "background_darkness"
+#define KEY_BACKGROUND_IMAGE_FILE "background_image"
+#define KEY_BACKGROUND_TYPE "background_type"
+#define KEY_BACKSPACE_BINDING "backspace_binding"
+#define KEY_CUSTOM_COMMAND "custom_command"
+#define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
+#define KEY_DELETE_BINDING "delete_binding"
+#define KEY_EXIT_ACTION "exit_action"
+#define KEY_FONT "font"
+#define KEY_FOREGROUND_COLOR "foreground_color"
+#define KEY_ICON_FILE "icon"
+#define KEY_LOGIN_SHELL "login_shell"
+#define KEY_NO_AA_WITHOUT_RENDER "no_aa_without_render" 
+#define KEY_PALETTE "palette"
+#define KEY_SCROLL_BACKGROUND "scroll_background"
+#define KEY_SCROLLBACK_LINES "scrollback_lines"
+#define KEY_SCROLLBAR_POSITION "scrollbar_position"
+#define KEY_SCROLL_ON_KEYSTROKE "scroll_on_keystroke"
+#define KEY_SCROLL_ON_OUTPUT "scroll_on_output"
+#define KEY_SILENT_BELL "silent_bell"
+#define KEY_TITLE_MODE "title_mode"
+#define KEY_TITLE "title"
+#define KEY_UPDATE_RECORDS "update_records"
+#define KEY_USE_CUSTOM_COMMAND "use_custom_command"
+#define KEY_USE_SKEY "use_skey"
+#define KEY_USE_SYSTEM_FONT "use_system_font"
+#define KEY_USE_THEME_COLORS "use_theme_colors"
+#define KEY_VISIBLE_NAME "visible_name"
+#define KEY_WORD_CHARS "word_chars"
+
+/* Keep these in sync with the GConf schema! */
+#define DEFAULT_ALLOW_BOLD            (TRUE)
+#define DEFAULT_BACKGROUND_COLOR      ("#FFFFDD")
+#define DEFAULT_BACKGROUND_DARKNESS   (0.5)
 #define DEFAULT_BACKGROUND_IMAGE_FILE ("")
-// #define DEFAULT_BACKGROUND_TYPE ()
-#define DEFAULT_BACKSPACE_BINDING (VTE_ERASE_ASCII_DELETE)
-// #define DEFAULT_COLOR_SCHEME ()
-#define DEFAULT_CUSTOM_COMMAND ("")
-#define DEFAULT_DEFAULT_SHOW_MENUBAR (TRUE)
-#define DEFAULT_DELETE_BINDING (VTE_ERASE_DELETE_SEQUENCE)
-// #define DEFAULT_EXIT_ACTION ()
-#define DEFAULT_FONT (NULL)
-#define DEFAULT_ICON (NULL)
-#define DEFAULT_ICON_FILE (NULL)
-#define DEFAULT_IS_DEFAULT (FALSE)
-// #define DEFAULT_LOGIN_SHELL ()
-#define DEFAULT_NAME (NULL)
-#define DEFAULT_NO_AA_WITHOUT_RENDER (TRUE)
-// #define DEFAULT_PALETTE ()
-#define DEFAULT_SCROLL_BACKGROUND ()
-#define DEFAULT_SCROLLBACK_LINES (1000)
-#define DEFAULT_SCROLLBAR_POSITION (TERMINAL_SCROLLBAR_RIGHT)
-/*#define DEFAULT_SCROLL_ON_KEYSTROKE ()
-#define DEFAULT_SCROLL_ON_OUTPUT ()
-#define DEFAULT_SILENT_BELL ()*/
-#define DEFAULT_TITLE (N_("Terminal"))
-#define DEFAULT_TITLE_MODE (TERMINAL_TITLE_REPLACE)
-#define DEFAULT_UPDATE_RECORDS (TRUE)
-#define DEFAULT_USE_CUSTOM_COMMAND (TRUE)
-#define DEFAULT_USE_SKEY (TRUE)
-#define DEFAULT_USE_SYSTEM_FONT (TRUE)
-#define DEFAULT_USE_THEME_COLORS (TRUE)
-#define DEFAULT_VISIBLE_NAME ("<not named>")
-#define DEFAULT_WORD_CHARS ("")
+#define DEFAULT_BACKGROUND_IMAGE      (NULL)
+#define DEFAULT_BACKGROUND_TYPE       (TERMINAL_BACKGROUND_SOLID)
+#define DEFAULT_BACKSPACE_BINDING     (VTE_ERASE_ASCII_DELETE)
+#define DEFAULT_CUSTOM_COMMAND        ("")
+#define DEFAULT_DEFAULT_SHOW_MENUBAR  (TRUE)
+#define DEFAULT_DELETE_BINDING        (VTE_ERASE_DELETE_SEQUENCE)
+#define DEFAULT_EXIT_ACTION           (TERMINAL_EXIT_CLOSE)
+#define DEFAULT_FONT                  ("Monospace 12")
+#define DEFAULT_FOREGROUND_COLOR      ("#000000")
+#define DEFAULT_ICON_FILE             (NULL)
+#define DEFAULT_ICON                  (NULL)
+#define DEFAULT_IS_DEFAULT            (FALSE)
+#define DEFAULT_LOGIN_SHELL           (FALSE)
+#define DEFAULT_NAME                  (NULL)
+#define DEFAULT_NO_AA_WITHOUT_RENDER  (TRUE)
+#define DEFAULT_PALETTE               (terminal_palettes[TERMINAL_PALETTE_TANGO])
+#define DEFAULT_SCROLL_BACKGROUND     (TRUE)
+#define DEFAULT_SCROLLBACK_LINES      (512)
+#define DEFAULT_SCROLLBAR_POSITION    (TERMINAL_SCROLLBAR_RIGHT)
+#define DEFAULT_SCROLL_ON_KEYSTROKE   (TRUE)
+#define DEFAULT_SCROLL_ON_OUTPUT      (FALSE)
+#define DEFAULT_SILENT_BELL           (FALSE)
+#define DEFAULT_TITLE_MODE            (TERMINAL_TITLE_REPLACE)
+#define DEFAULT_TITLE                 (N_("Terminal"))
+#define DEFAULT_UPDATE_RECORDS        (TRUE)
+#define DEFAULT_USE_CUSTOM_COMMAND    (FALSE)
+#define DEFAULT_USE_SKEY              (TRUE)
+#define DEFAULT_USE_SYSTEM_FONT       (TRUE)
+#define DEFAULT_USE_THEME_COLORS      (TRUE)
+#define DEFAULT_VISIBLE_NAME          (N_("Unnamed"))
+#define DEFAULT_WORD_CHARS            ("-A-Za-z0-9,./?%&#:_")
 
-static gboolean
-constcorrect_string_to_enum (const GConfEnumStringPair *table,
-                             const char                *str,
-                             int                       *outp)
+#define PSPEC_GCONF_KEY_DATA "GT::GConfKey"
+
+struct _TerminalProfilePrivate
 {
-  return gconf_string_to_enum ((GConfEnumStringPair*)table, str, outp);
-}
+  GValueArray *properties;
+  gboolean locked[LAST_PROP];
 
-static const char*
-constcorrect_enum_to_string (const GConfEnumStringPair *table,
-                             int                        val)
-{
-  return gconf_enum_to_string ((GConfEnumStringPair*)table, val);
-}
+  GConfClient *conf;
+  char *profile_dir;
+  guint notify_id;
 
-#define gconf_string_to_enum(table, str, outp) \
-   constcorrect_string_to_enum (table, str, outp)
-#define gconf_enum_to_string(table, val) \
-   constcorrect_enum_to_string (table, val)
+  GSList *dirty_pspecs;
+  guint save_idle_id;
+
+  int in_notification_count;
+
+  gboolean icon_load_failed;
+  gboolean background_load_failed;
+
+  guint initialising : 1;
+  guint forgotten : 1;
+};
 
 static const GConfEnumStringPair title_modes[] = {
   { TERMINAL_TITLE_REPLACE, "replace" },
@@ -269,10 +214,145 @@ static const GConfEnumStringPair background_types[] = {
   { -1, NULL }
 };
 
-#define RETURN_IF_NOTIFYING(profile) if ((profile)->priv->in_notification_count) return
+static const GdkColor terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
+{
+  /* Tango palette */
+  {
+    { 0, 0x2e2e, 0x3434, 0x3636 },
+    { 0, 0xcccc, 0x0000, 0x0000 },
+    { 0, 0x4e4e, 0x9a9a, 0x0606 },
+    { 0, 0xc4c4, 0xa0a0, 0x0000 },
+    { 0, 0x3434, 0x6565, 0xa4a4 },
+    { 0, 0x7575, 0x5050, 0x7b7b },
+    { 0, 0x0606, 0x9820, 0x9a9a },
+    { 0, 0xd3d3, 0xd7d7, 0xcfcf },
+    { 0, 0x5555, 0x5757, 0x5353 },
+    { 0, 0xefef, 0x2929, 0x2929 },
+    { 0, 0x8a8a, 0xe2e2, 0x3434 },
+    { 0, 0xfcfc, 0xe9e9, 0x4f4f },
+    { 0, 0x7272, 0x9f9f, 0xcfcf },
+    { 0, 0xadad, 0x7f7f, 0xa8a8 },
+    { 0, 0x3434, 0xe2e2, 0xe2e2 },
+    { 0, 0xeeee, 0xeeee, 0xecec }
+  },
 
-enum {
-  CHANGED,
+  /* Linux palette */
+  {
+    { 0, 0x0000, 0x0000, 0x0000 },
+    { 0, 0xaaaa, 0x0000, 0x0000 },
+    { 0, 0x0000, 0xaaaa, 0x0000 },
+    { 0, 0xaaaa, 0x5555, 0x0000 },
+    { 0, 0x0000, 0x0000, 0xaaaa },
+    { 0, 0xaaaa, 0x0000, 0xaaaa },
+    { 0, 0x0000, 0xaaaa, 0xaaaa },
+    { 0, 0xaaaa, 0xaaaa, 0xaaaa },
+    { 0, 0x5555, 0x5555, 0x5555 },
+    { 0, 0xffff, 0x5555, 0x5555 },
+    { 0, 0x5555, 0xffff, 0x5555 },
+    { 0, 0xffff, 0xffff, 0x5555 },
+    { 0, 0x5555, 0x5555, 0xffff },
+    { 0, 0xffff, 0x5555, 0xffff },
+    { 0, 0x5555, 0xffff, 0xffff },
+    { 0, 0xffff, 0xffff, 0xffff }
+  },
+
+  /* XTerm palette */
+  {
+    { 0, 0x0000, 0x0000, 0x0000 },
+    { 0, 0xcdcb, 0x0000, 0x0000 },
+    { 0, 0x0000, 0xcdcb, 0x0000 },
+    { 0, 0xcdcb, 0xcdcb, 0x0000 },
+    { 0, 0x1e1a, 0x908f, 0xffff },
+    { 0, 0xcdcb, 0x0000, 0xcdcb },
+    { 0, 0x0000, 0xcdcb, 0xcdcb },
+    { 0, 0xe5e2, 0xe5e2, 0xe5e2 },
+    { 0, 0x4ccc, 0x4ccc, 0x4ccc },
+    { 0, 0xffff, 0x0000, 0x0000 },
+    { 0, 0x0000, 0xffff, 0x0000 },
+    { 0, 0xffff, 0xffff, 0x0000 },
+    { 0, 0x4645, 0x8281, 0xb4ae },
+    { 0, 0xffff, 0x0000, 0xffff },
+    { 0, 0x0000, 0xffff, 0xffff },
+    { 0, 0xffff, 0xffff, 0xffff }
+  },
+
+  /* RXVT palette */
+  {
+    { 0, 0x0000, 0x0000, 0x0000 },
+    { 0, 0xcdcd, 0x0000, 0x0000 },
+    { 0, 0x0000, 0xcdcd, 0x0000 },
+    { 0, 0xcdcd, 0xcdcd, 0x0000 },
+    { 0, 0x0000, 0x0000, 0xcdcd },
+    { 0, 0xcdcd, 0x0000, 0xcdcd },
+    { 0, 0x0000, 0xcdcd, 0xcdcd },
+    { 0, 0xfafa, 0xebeb, 0xd7d7 },
+    { 0, 0x4040, 0x4040, 0x4040 },
+    { 0, 0xffff, 0x0000, 0x0000 },
+    { 0, 0x0000, 0xffff, 0x0000 },
+    { 0, 0xffff, 0xffff, 0x0000 },
+    { 0, 0x0000, 0x0000, 0xffff },
+    { 0, 0xffff, 0x0000, 0xffff },
+    { 0, 0x0000, 0xffff, 0xffff },
+    { 0, 0xffff, 0xffff, 0xffff }
+  }
+};
+
+static const GdkColor default_fg_color = { 0, 0, 0, 0 };
+static const GdkColor default_bg_color = { 0, 0xffff, 0xffff, 0xdddd };
+
+static gboolean
+constcorrect_string_to_enum (const GConfEnumStringPair *table,
+                             const char                *str,
+                             int                       *outp)
+{
+  return gconf_string_to_enum ((GConfEnumStringPair*)table, str, outp);
+}
+
+static const char*
+constcorrect_enum_to_string (const GConfEnumStringPair *table,
+                             int                        val)
+{
+  return gconf_enum_to_string ((GConfEnumStringPair*)table, val);
+}
+
+#define gconf_string_to_enum(table, str, outp) \
+   constcorrect_string_to_enum (table, str, outp)
+#define gconf_enum_to_string(table, val) \
+   constcorrect_enum_to_string (table, val)
+
+static const GConfEnumStringPair *
+pspec_to_enum_string_pair (GParamSpec *pspec)
+{
+  const GConfEnumStringPair *conversion;
+
+  switch (pspec->param_id)
+    {
+      case PROP_BACKGROUND_TYPE:
+        conversion = background_types;
+        break;
+      case PROP_BACKSPACE_BINDING:
+      case PROP_DELETE_BINDING:
+        conversion = erase_bindings;
+        break;
+      case PROP_EXIT_ACTION:
+        conversion = exit_actions;
+        break;
+      case PROP_SCROLLBAR_POSITION:
+        conversion = scrollbar_positions;
+        break;
+      case PROP_TITLE_MODE:
+        conversion = title_modes;
+        break;
+     default:
+        g_assert_not_reached ();
+        break;
+    }
+
+  return conversion;
+}
+
+enum
+{
   FORGOTTEN,
   LAST_SIGNAL
 };
@@ -281,64 +361,653 @@ static void terminal_profile_init        (TerminalProfile      *profile);
 static void terminal_profile_class_init  (TerminalProfileClass *klass);
 static void terminal_profile_finalize    (GObject              *object);
 
-static void profile_change_notify        (GConfClient *client,
-                                          guint        cnxn_id,
-                                          GConfEntry  *entry,
-                                          gpointer     user_data);
-
-static void emit_changed (TerminalProfile           *profile,
-                          const TerminalSettingMask *mask);
-
-
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (TerminalProfile, terminal_profile, G_TYPE_OBJECT)
+G_DEFINE_TYPE (TerminalProfile, terminal_profile, G_TYPE_OBJECT);
+
+
+static gboolean
+palette_cmp (const GdkColor *ca,
+             const GdkColor *cb)
+{
+  guint i;
+
+  for (i = 0; i < TERMINAL_PALETTE_SIZE; ++i)
+    if (!gdk_color_equal (&ca[i], &cb[i]))
+      return FALSE;
+
+  return TRUE;
+}
+
+static GParamSpec *
+get_pspec_from_name (TerminalProfile *profile,
+                     const char *prop_name)
+{
+  TerminalProfileClass *klass = TERMINAL_PROFILE_GET_CLASS (profile);
+  GParamSpec *pspec;
+
+  pspec = g_object_class_find_property (G_OBJECT_CLASS (klass), prop_name);
+  if (pspec &&
+      pspec->owner_type != TERMINAL_TYPE_PROFILE)
+    pspec = NULL;
+
+  return pspec;
+}
+
+
+static const GValue *
+get_prop_value_from_prop_name (TerminalProfile *profile,
+                               const char *prop_name)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  GParamSpec *pspec;
+
+  pspec = get_pspec_from_name (profile, prop_name);
+  if (!pspec)
+    return NULL;
+
+  return g_value_array_get_nth (priv->properties, pspec->param_id);
+}
+
+static void
+set_value_from_palette (GValue *value,
+                        const GdkColor *colors,
+                        guint n_colors)
+{
+  GValueArray *array;
+  guint i, max_n_colors;
+
+  max_n_colors = MAX (n_colors, TERMINAL_PALETTE_SIZE);
+  array = g_value_array_new (max_n_colors);
+  for (i = 0; i < max_n_colors; ++i)
+    g_value_array_append (array, NULL);
+
+  for (i = 0; i < n_colors; ++i)
+    {
+      GValue *value = g_value_array_get_nth (array, i);
+
+      g_value_init (value, GDK_TYPE_COLOR);
+      g_value_set_boxed (value, &colors[i]);
+    }
+
+  /* If we haven't enough colours yet, fill up with the default palette */
+  for (i = n_colors; i < TERMINAL_PALETTE_SIZE; ++i)
+    {
+      GValue *value = g_value_array_get_nth (array, i);
+
+      g_value_init (value, GDK_TYPE_COLOR);
+      g_value_set_boxed (value, &terminal_palettes[TERMINAL_PALETTE_TANGO][i]);
+    }
+
+  g_value_take_boxed (value, array);
+}
+
+static int
+values_equal (GParamSpec *pspec,
+              const GValue *va,
+              const GValue *vb)
+{
+  /* g_param_values_cmp isn't good enough for some types, since e.g.
+   * it compares colours and font descriptions by pointer value, not
+   * with the correct compare functions. Providing extra
+   * PangoParamSpecFontDescription and GdkParamSpecColor wouldn't
+   * have fixed this either, since it's unclear how to _order_ them.
+   * Luckily we only need to check them for equality here.
+   */
+
+  if (g_param_values_cmp (pspec, va, vb) == 0)
+    return TRUE;
+  
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR)
+    return gdk_color_equal (g_value_get_boxed (va), g_value_get_boxed (vb));
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
+    return pango_font_description_equal (g_value_get_boxed (va), g_value_get_boxed (vb));
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+      G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
+    {
+      GValueArray *ara, *arb;
+      guint i;
+
+      ara = g_value_get_boxed (va);
+      arb = g_value_get_boxed (vb);
+
+      if (!ara || !arb || ara->n_values != arb->n_values)
+        return FALSE;
+        
+      for (i = 0; i < ara->n_values; ++i)
+        if (!gdk_color_equal (g_value_get_boxed (g_value_array_get_nth (ara, i)),
+                              g_value_get_boxed (g_value_array_get_nth (arb, i))))
+          return FALSE;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+ensure_pixbuf_property (TerminalProfile *profile,
+                        guint filename_prop_id,
+                        guint pixbuf_prop_id,
+                        gboolean *load_failed)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  GValue *filename_value, *pixbuf_value;
+  GdkPixbuf *pixbuf;
+  const char *filename_utf8;
+  char *filename, *path;
+  GError *error = NULL;
+
+  pixbuf_value = g_value_array_get_nth (priv->properties, pixbuf_prop_id);
+
+  pixbuf = g_value_get_object (pixbuf_value);
+  if (pixbuf)
+    return;
+
+  if (*load_failed)
+    return;
+
+  filename_value= g_value_array_get_nth (priv->properties, filename_prop_id);
+  filename_utf8 = g_value_get_string (filename_value);
+  if (!filename_utf8)
+    goto failed;
+
+  filename = g_filename_from_utf8 (filename_utf8, -1, NULL, NULL, NULL);
+  if (!filename)
+    goto failed;
+
+  path = gnome_program_locate_file (gnome_program_get (),
+                                    /* FIXME should I use APP_PIXMAP? */
+                                    GNOME_FILE_DOMAIN_PIXMAP,
+                                    filename,
+                                    TRUE, NULL);
+  g_free (filename);
+  if (!path)
+    goto failed;
+
+  pixbuf = gdk_pixbuf_new_from_file (path, &error);
+  if (!pixbuf)
+    {
+      g_printerr ("Failed to load background image \"%s\" for terminal profile \"%s\": %s\n",
+                  filename /* FIXMEchpe this is not necessarily UTF-8 */,
+                  terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME),
+                  error->message);
+      g_error_free (error);
+      g_free (path);
+      goto failed;
+    }
+          
+  g_value_take_object (pixbuf_value, pixbuf);
+  g_free (path);
+  return;
+
+failed:
+  *load_failed = TRUE;
+}
+
+static void
+terminal_profile_reset_property_internal (TerminalProfile *profile,
+                                          GParamSpec *pspec,
+                                          gboolean notify)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  GValue value_ = { 0, };
+  GValue *value;
+
+  if (notify)
+    value = &value_;
+  else
+    value = g_value_array_get_nth (priv->properties, pspec->param_id);
+  g_assert (value != NULL);
+
+  /* A few properties don't have defaults via the param spec; set them explicitly */
+  switch (pspec->param_id)
+    {
+      case PROP_FOREGROUND_COLOR:
+        g_value_set_boxed (value, &DEFAULT_FOREGROUND_COLOR);
+        break;
+
+      case PROP_BACKGROUND_COLOR:
+        g_value_set_boxed (value, &DEFAULT_BACKGROUND_COLOR);
+        break;
+
+      case PROP_FONT:
+        g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_FONT));
+        break;
+
+      case PROP_PALETTE:
+        set_value_from_palette (value, DEFAULT_PALETTE, TERMINAL_PALETTE_SIZE);
+        break;
+
+      default:
+        g_param_value_set_default (pspec, value);
+        break;
+    }
+
+  if (notify)
+    g_object_set_property (G_OBJECT (profile), pspec->name, value);
+}
+
+static void
+terminal_profile_gconf_notify_cb (GConfClient *client,
+                                  guint        cnxn_id,
+                                  GConfEntry  *entry,
+                                  gpointer     user_data)
+{
+  TerminalProfile *profile = TERMINAL_PROFILE (user_data);
+  TerminalProfilePrivate *priv = profile->priv;
+  TerminalProfileClass *klass;
+  const char *key;
+  GConfValue *gconf_value;
+  GParamSpec *pspec;
+  GValue value = { 0, };
+
+  // FIXMEchpe!!! guard against recursion from saving the properties!
+//  FIXMEchpe;
+
+  key = gconf_entry_get_key (entry);
+  if (!key || !g_str_has_prefix (key, priv->profile_dir))
+    return;
+
+  g_print ("GCONF NOTIFY key %s\n", key);
+
+  key += strlen (priv->profile_dir);
+  if (!key[0])
+    return;
+
+  key++;
+  klass = TERMINAL_PROFILE_GET_CLASS (profile);
+  pspec = g_hash_table_lookup (klass->gconf_keys, key);
+  if (!pspec)
+    return; /* ignore unknown keys, for future extensibility */
+
+  priv->locked[pspec->param_id] = !gconf_entry_get_is_writable (entry);
+
+  gconf_value = gconf_entry_get_value (entry);
+  if (!gconf_value)
+    return; /* FIXMEchpe maybe reset the property to default instead? */
+
+  priv->in_notification_count++;
+
+//   if (priv->in_notification_count > 0)
+//     return;
+
+  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
+    {
+      if (gconf_value->type != GCONF_VALUE_BOOL)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_set_boolean (&value, gconf_value_get_bool (gconf_value));
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_STRING)
+    {
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_set_string (&value, gconf_value_get_string (gconf_value));
+    }
+  else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_ENUM))
+    {
+      const GConfEnumStringPair *conversion;
+      int enum_value;
+
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      /* FIXMEchpe: use the type builtin here!!!!! */
+
+      conversion = pspec_to_enum_string_pair (pspec);
+      if (!gconf_string_to_enum (conversion, gconf_value_get_string (gconf_value), &enum_value))
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_set_enum (&value, enum_value);
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR)
+    {
+      GdkColor color;
+
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      if (!gdk_color_parse (gconf_value_get_string (gconf_value), &color))
+        goto out; /* FIXMEchpe maybe reset? */
+      
+      g_value_set_boxed (&value, &color);
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
+    {
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_take_boxed (&value, pango_font_description_from_string (gconf_value_get_string (gconf_value)));
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_DOUBLE)
+    {
+      if (gconf_value->type != GCONF_VALUE_FLOAT)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_set_double (&value, gconf_value_get_float (gconf_value));
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_INT)
+    {
+      if (gconf_value->type != GCONF_VALUE_INT)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_value_set_int (&value, gconf_value_get_int (gconf_value));
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+           G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
+    {
+      char **color_strings;
+      GdkColor *colors;
+      int n_colors, i;
+
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      g_print ("palette string %s\n", gconf_value_get_string (gconf_value));
+      color_strings = g_strsplit (gconf_value_get_string (gconf_value), ":", -1);
+      if (!color_strings)
+        goto out; /* FIXMEchpe maybe reset? */
+
+      n_colors = g_strv_length (color_strings);
+      colors = g_new0 (GdkColor, n_colors);
+      for (i = 0; i < n_colors; ++i)
+        {
+          if (!gdk_color_parse (color_strings[i], &colors[i]))
+            continue; /* ignore errors */
+        }
+      g_strfreev (color_strings);
+
+      g_print ("parser palette string OK\n");
+
+      /* We continue even with a palette size != TERMINAL_PALETTE_SIZE,
+       * so we can change the palette size in future versions without
+       * causing too many issues.
+       */
+      set_value_from_palette (&value, colors, n_colors);
+      g_free (colors);
+    }
+  else
+    g_print ("Unhandled value type %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+
+  if (g_param_value_validate (pspec, &value))
+    g_warning ("Invalid value in gconf for key %s, was changed to comply with pspec %s\n", gconf_entry_get_key (entry), pspec->name);
+
+  /* Only set the property if the value is different than our current value,
+   * so we don't go into an infinite loop.
+   */
+  if (!values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id)))
+  {
+    g_print ("Values existing %s\n"
+             "and new         %s\n"
+             "for property %s seem to differ!\n\n",
+             g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
+             g_strdup_value_contents (&value),
+             pspec->name);
+    g_object_set_property (G_OBJECT (profile), pspec->name, &value);
+  }
+  else
+    g_print ("Values existing %s\n"
+             "and new         %s\n"
+             "for property %s are EQUAL\n\n",
+             g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
+             g_strdup_value_contents (&value),
+             pspec->name);
+
+out:
+
+  g_value_unset (&value);
+
+  priv->in_notification_count--;
+  //FIXMEchpe: honour the locked flags!!!
+}
+
+static void
+terminal_profile_gconf_changeset_add (TerminalProfile *profile,
+                                      GConfChangeSet *changeset,
+                                      GParamSpec *pspec)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  const char *gconf_key;
+  char *key;
+  const GValue *value;
+
+  /* FIXMEchpe: do this? */
+#if 0
+  if (priv->locked[pspec->param_id])
+    return;
+
+  if (!gconf_client_key_is_writable (priv->conf, gconf_key, NULL))
+    return;
+#endif
+  
+  gconf_key = g_param_spec_get_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA));
+  if (!gconf_key)
+    return;
+
+  key = gconf_concat_dir_and_key (priv->profile_dir, gconf_key);
+  value = g_value_array_get_nth (priv->properties, pspec->param_id);
+
+  g_print ("CHANGESET adding pspec %s with value %s\n", pspec->name, g_strdup_value_contents (value));
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
+    gconf_change_set_set_bool (changeset, key, g_value_get_boolean (value));
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_STRING)
+    {
+      const char *str;
+
+      str = g_value_get_string (value);
+      if (!str)
+        str = "";
+    
+      gconf_change_set_set_string (changeset, key, str);
+    }
+  else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_ENUM))
+    {
+      const GConfEnumStringPair *conversion;
+      const char *enum_value;
+
+      conversion = pspec_to_enum_string_pair (pspec);
+      enum_value = gconf_enum_to_string (conversion, g_value_get_enum (value));
+      if (!enum_value)
+        return;
+
+      gconf_change_set_set_string (changeset, key, enum_value);
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR)
+    {
+      GdkColor *color;
+      char str[16];
+
+      color = g_value_get_boxed (value);
+      if (!color)
+        return;
+
+      g_snprintf (str, sizeof (str), "#%02X%02X%02X",
+                  color->red / 256,
+                  color->green / 256,
+                  color->blue / 256);
+
+      gconf_change_set_set_string (changeset, key, str);
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
+    {
+      PangoFontDescription *font_desc;
+      char *font;
+
+      font_desc = g_value_get_boxed (value);
+      if (!font_desc)
+        return;
+
+      font = pango_font_description_to_string (font_desc);
+      gconf_change_set_set_string (changeset, key, font);
+      g_free (font);
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_DOUBLE)
+    gconf_change_set_set_float (changeset, key, (float) g_value_get_double (value));
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_INT)
+    gconf_change_set_set_int (changeset, key, g_value_get_int (value));
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_VALUE_ARRAY &&
+           G_PARAM_SPEC_VALUE_TYPE (G_PARAM_SPEC_VALUE_ARRAY (pspec)->element_spec) == GDK_TYPE_COLOR)
+    {
+      GValueArray *array;
+      GString *string;
+      guint n_colors, i;
+
+      /* We need to do this ourselves, because the gtk_color_selection_palette_to_string
+       * does not carry all the bytes, and xterm's palette is messed up...
+       */
+
+      array = g_value_get_boxed (value);
+      if (!array)
+        return;
+
+      n_colors = array->n_values;
+      string = g_string_sized_new (n_colors * (1 /* # */ + 3 * 4) + n_colors /* : separators and terminating \0 */);
+      for (i = 0; i < n_colors; ++i)
+        {
+          GdkColor *color;
+
+          if (i > 0)
+            g_string_append_c (string, ':');
+
+          color = g_value_get_boxed (g_value_array_get_nth (array, i));
+          if (!color)
+            continue;
+
+          g_string_append_printf (string,
+                                  "#%04X%04X%04X",
+                                  color->red,
+                                  color->green,
+                                  color->blue);
+        }
+
+      gconf_change_set_set_string (changeset, key, string->str);
+      g_string_free (string, TRUE);
+    }
+  else
+    g_print ("Unhandled value type %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+}
+
+static gboolean
+terminal_profile_save (TerminalProfile *profile)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  GConfChangeSet *changeset;
+  GSList *l;
+  GError *error = NULL;
+
+  priv->save_idle_id = 0;
+
+  changeset = gconf_change_set_new ();
+
+  for (l = priv->dirty_pspecs; l != NULL; l = l->next)
+    {
+      GParamSpec *pspec = (GParamSpec *) l->data;
+
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+        continue;
+
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+        continue;
+
+      terminal_profile_gconf_changeset_add (profile, changeset, pspec);
+    }
+
+  g_slist_free (priv->dirty_pspecs);
+  priv->dirty_pspecs = NULL;
+
+  if (!gconf_client_commit_change_set (priv->conf, changeset, TRUE, &error))
+    {
+      g_warning ("Failed to commit the changeset to gconf: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    g_print ("Successfully committed the changeset to gconf!\n");
+
+  gconf_change_set_unref (changeset);
+
+  if (priv->save_idle_id != 0)
+    g_warning ("ATTENTION! Committing the changeset seems to have dirtied some pspecs!??\n");
+
+  return FALSE; /* don't run again */
+}
+
+static void
+terminal_profile_schedule_save (TerminalProfile *profile,
+                                GParamSpec *pspec)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+
+  if (priv->initialising) {
+    g_print ("Initialising property %s, skipping save\n", pspec->name);
+    return;
+  }
+
+  if (priv->in_notification_count > 0)
+    g_warning ("Scheduling save from gconf notify!\n");
+
+  if (pspec &&
+      !g_slist_find (priv->dirty_pspecs, pspec))
+    priv->dirty_pspecs = g_slist_prepend (priv->dirty_pspecs, pspec);
+
+  if (priv->save_idle_id != 0)
+    return;
+
+  priv->save_idle_id = g_idle_add ((GSourceFunc) terminal_profile_save, profile);
+}
 
 static void
 terminal_profile_init (TerminalProfile *profile)
 {
   TerminalProfilePrivate *priv;
+  GObjectClass *object_class;
+  GParamSpec **pspecs;
+  guint n_pspecs, i;
 
   priv = profile->priv = G_TYPE_INSTANCE_GET_PRIVATE (profile, TERMINAL_TYPE_PROFILE, TerminalProfilePrivate);
 
+  priv->initialising = TRUE;
+
   priv->conf = gconf_client_get_default ();
 
-  terminal_setting_mask_clear (&priv->locked);
-  priv->default_show_menubar = DEFAULT_DEFAULT_SHOW_MENUBAR;
-  priv->visible_name = g_strdup (DEFAULT_VISIBLE_NAME);
-  priv->foreground.red = 0;
-  priv->foreground.green = 0;
-  priv->foreground.blue = 0;
-  priv->background.red = 0xFFFF;
-  priv->background.green = 0xFFFF;
-  priv->background.blue = 0xDDDD;
   priv->in_notification_count = 0;
-  priv->title_mode = DEFAULT_TITLE_MODE;
-  priv->title = g_strdup (_(DEFAULT_TITLE));
-  priv->scrollbar_position = DEFAULT_SCROLLBAR_POSITION;
-  priv->scrollback_lines = DEFAULT_SCROLLBACK_LINES;
-  priv->allow_bold = DEFAULT_ALLOW_BOLD;
-  priv->word_chars = g_strdup (DEFAULT_WORD_CHARS);
-  priv->custom_command = g_strdup (DEFAULT_CUSTOM_COMMAND);
-  priv->icon_file = NULL;
-  memcpy (priv->palette,
-          terminal_palette_linux,
-          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
-  priv->background_type = TERMINAL_BACKGROUND_SOLID;
-  priv->background_image_file = g_strdup (DEFAULT_BACKGROUND_IMAGE_FILE);
-  priv->background_darkness = DEFAULT_BACKGROUND_DARKNESS;
-  priv->backspace_binding = DEFAULT_BACKSPACE_BINDING;
-  priv->delete_binding = DEFAULT_DELETE_BINDING;
-  priv->use_theme_colors = DEFAULT_USE_THEME_COLORS;
-  priv->use_system_font = DEFAULT_USE_SYSTEM_FONT;
-  priv->no_aa_without_render = DEFAULT_NO_AA_WITHOUT_RENDER;
-  priv->use_skey = DEFAULT_USE_SKEY;
-  priv->font = pango_font_description_new ();
-  priv->exit_action = TERMINAL_EXIT_CLOSE;
-  pango_font_description_set_family (priv->font,
-                                     "monospace");
-  pango_font_description_set_size (priv->font,
-                                   PANGO_SCALE * 12);
+
+  memset (priv->locked, 0, LAST_PROP * sizeof (gboolean));
+  priv->locked[PROP_NAME] = TRUE;
+
+  priv->properties = g_value_array_new (LAST_PROP);
+  for (i = 0; i < LAST_PROP; ++i)
+    g_value_array_append (priv->properties, NULL);
+
+  pspecs = g_object_class_list_properties (G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (profile)), &n_pspecs);
+  for (i = 0; i < n_pspecs; ++i)
+    {
+      GParamSpec *pspec = pspecs[i];
+      GValue *value;
+
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+        continue;
+
+      g_assert (pspec->param_id < LAST_PROP);
+      value = g_value_array_get_nth (priv->properties, pspec->param_id);
+      g_value_init (value, pspec->value_type);
+      g_param_value_set_default (pspec, value);
+    }
+
+  g_free (pspecs);
+
+  /* A few properties don't have defaults via the param spec; set them explicitly */
+  object_class = G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (profile));
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FOREGROUND_COLOR), FALSE);
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_BACKGROUND_COLOR), FALSE);
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FONT), FALSE);
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_PALETTE), FALSE);
 }
 
 static GObject *
@@ -349,7 +1018,9 @@ terminal_profile_constructor (GType type,
   GObject *object;
   TerminalProfile *profile;
   TerminalProfilePrivate *priv;
-  GError *err;
+  const char *name;
+  GParamSpec **pspecs;
+  guint n_pspecs, i;
 
   object = G_OBJECT_CLASS (terminal_profile_parent_class)->constructor
             (type, n_construct_properties, construct_params);
@@ -357,289 +1028,210 @@ terminal_profile_constructor (GType type,
   profile = TERMINAL_PROFILE (object);
   priv = profile->priv;
 
-  g_assert (priv->name != NULL);
+  name = g_value_get_string (g_value_array_get_nth (priv->properties, PROP_NAME));
+  g_assert (name != NULL);
 
-  priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX,
-                                                priv->name);
+  /* Now load those properties from gconf that were not set as construction params */
+  pspecs = g_object_class_list_properties (G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (profile)), &n_pspecs);
+  for (i = 0; i < n_pspecs; ++i)
+    {
+      GParamSpec *pspec = pspecs[i];
+      guint j;
+      gboolean is_construct = FALSE;
+      const char *gconf_key;
+      char *key;
 
-  err = NULL;
-  gconf_client_add_dir (priv->conf, priv->profile_dir,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  priv->profile_dir, err->message);
-      g_error_free (err);
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+        continue;
+
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0 ||
+          (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0) {
+        g_print ("SKIPPING pspec %s due to flags\n", pspec->name);
+        continue;
+      }
+
+      for (j = 0; j < n_construct_properties; ++j)
+        if (pspec == construct_params[j].pspec)
+          {
+            is_construct = TRUE;
+            g_print ("SKIPPING pspec %s due to already been set on construct\n", pspec->name);
+            break;
+          }
+
+      if (is_construct)
+        continue;
+
+      gconf_key = g_param_spec_get_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA));
+      if (!gconf_key)
+        continue;
+
+      key = gconf_concat_dir_and_key (priv->profile_dir, gconf_key);
+      g_print ("NOTIFYING pspec %s key %s\n", pspec->name, key);
+      gconf_client_notify (priv->conf, key);
+      g_free (key);
     }
-  
-  err = NULL;
-  priv->notify_id =
-    gconf_client_notify_add (priv->conf,
-                             priv->profile_dir,
-                             profile_change_notify,
-                             profile,
-                             NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal profile changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
+
+  g_free (pspecs);
+
+  priv->initialising = FALSE;
 
   return object;
 }
 
 static void
-terminal_profile_get_property (GObject *object,
-                              guint prop_id,
-                              GValue *value,
-                              GParamSpec *pspec)
+terminal_profile_finalize (GObject *object)
 {
   TerminalProfile *profile = TERMINAL_PROFILE (object);
   TerminalProfilePrivate *priv = profile->priv;
 
+  gconf_client_notify_remove (priv->conf, priv->notify_id);
+  priv->notify_id = 0;
+
+  if (priv->save_idle_id)
+    {
+      g_source_remove (priv->save_idle_id);
+
+      /* Save now */
+      terminal_profile_save (profile); 
+    }
+
+  _terminal_profile_forget (profile);
+
+  g_object_unref (priv->conf);
+
+  g_value_array_free (priv->properties);
+
+  G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
+}
+
+static void
+terminal_profile_get_property (GObject *object,
+                               guint prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
+{
+  TerminalProfile *profile = TERMINAL_PROFILE (object);
+  TerminalProfilePrivate *priv = profile->priv;
+
+  if (prop_id == 0 || prop_id >= LAST_PROP)
+    {
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      return;
+    }
+    
   switch (prop_id)
     {
-      case PROP_ALLOW_BOLD:
-        g_value_set_boolean (value, terminal_profile_get_allow_bold (profile));
-        break;
-      case PROP_BACKGROUND_COLOR:
-        g_value_set_boxed (value, &priv->background);
-        break;
-      case PROP_BACKGROUND_DARKNESS:
-        g_value_set_double (value, terminal_profile_get_background_darkness (profile));
-        break;
       case PROP_BACKGROUND_IMAGE:
-        g_value_set_object (value, terminal_profile_get_background_image (profile));
-        break;
-      case PROP_BACKGROUND_IMAGE_FILE:
-        g_value_set_string (value, terminal_profile_get_background_image_file (profile));
-        break;
-      case PROP_BACKGROUND_TYPE:
-        g_value_set_enum (value, terminal_profile_get_background_type (profile));
-        break;
-      case PROP_BACKSPACE_BINDING:
-        g_value_set_enum (value, terminal_profile_get_backspace_binding (profile));
-        break;
-      case PROP_CUSTOM_COMMAND:
-        g_value_set_string (value, terminal_profile_get_custom_command (profile));
-        break;
-      case PROP_DEFAULT_SHOW_MENUBAR:
-        g_value_set_boolean (value, terminal_profile_get_default_show_menubar (profile));
-        break;
-      case PROP_DELETE_BINDING:
-        g_value_set_enum (value, terminal_profile_get_delete_binding (profile));
-        break;
-      case PROP_EXIT_ACTION:
-        g_value_set_enum (value, terminal_profile_get_exit_action (profile));
-        break;
-      case PROP_FONT:
-        g_value_set_boxed (value, terminal_profile_get_font (profile));
-        break;
-      case PROP_FOREGROUND_COLOR:
-        g_value_set_boxed (value, &priv->foreground);
+        ensure_pixbuf_property (profile, PROP_BACKGROUND_IMAGE_FILE, PROP_BACKGROUND_IMAGE, &priv->background_load_failed);
         break;
       case PROP_ICON:
-        g_value_set_object (value, terminal_profile_get_icon (profile));
-        break;
-      case PROP_ICON_FILE:
-        g_value_set_string (value, terminal_profile_get_icon_file (profile));
-        break;
-      case PROP_IS_DEFAULT:
-        g_value_set_boolean (value, terminal_profile_get_is_default (profile));
-        break;
-      case PROP_LOGIN_SHELL:
-        g_value_set_boolean (value, terminal_profile_get_login_shell (profile));
-        break;
-      case PROP_NAME:
-        g_value_set_string (value, terminal_profile_get_name (profile));
-        break;
-      case PROP_NO_AA_WITHOUT_RENDER:
-        g_value_set_boolean (value, terminal_profile_get_no_aa_without_render (profile));
-        break;
-      case PROP_PALETTE:
-// FIXME        g_value_set (value, terminal_profile_get_ (profile));
-        break;
-      case PROP_SCROLL_BACKGROUND:
-        g_value_set_boolean (value, terminal_profile_get_scroll_background (profile));
-        break;
-      case PROP_SCROLLBACK_LINES:
-        g_value_set_int (value, terminal_profile_get_scrollback_lines (profile));
-        break;
-      case PROP_SCROLLBAR_POSITION:
-        g_value_set_enum (value, terminal_profile_get_scrollbar_position (profile));
-        break;
-      case PROP_SCROLL_ON_KEYSTROKE:
-        g_value_set_boolean (value, terminal_profile_get_scroll_on_keystroke (profile));
-        break;
-      case PROP_SCROLL_ON_OUTPUT:
-        g_value_set_boolean (value, terminal_profile_get_scroll_on_output (profile));
-        break;
-      case PROP_SILENT_BELL:
-        g_value_set_boolean (value, terminal_profile_get_silent_bell (profile));
-        break;
-      case PROP_TITLE:
-        g_value_set_string (value, terminal_profile_get_title (profile));
-        break;
-      case PROP_TITLE_MODE:
-        g_value_set_enum (value, terminal_profile_get_title_mode (profile));
-        break;
-      case PROP_UPDATE_RECORDS:
-        g_value_set_boolean (value, terminal_profile_get_update_records (profile));
-        break;
-      case PROP_USE_CUSTOM_COMMAND:
-        g_value_set_boolean (value, terminal_profile_get_use_custom_command (profile));
-        break;
-      case PROP_USE_SKEY:
-        g_value_set_boolean (value, terminal_profile_get_use_skey (profile));
-        break;
-      case PROP_USE_SYSTEM_FONT:
-        g_value_set_boolean (value, terminal_profile_get_use_system_font (profile));
-        break;
-      case PROP_USE_THEME_COLORS:
-        g_value_set_boolean (value, terminal_profile_get_use_theme_colors (profile));
-        break;
-      case PROP_VISIBLE_NAME:
-        g_value_set_string (value, terminal_profile_get_visible_name (profile));
-        break;
-      case PROP_WORD_CHARS:
-        g_value_set_string (value, terminal_profile_get_word_chars (profile));
+        ensure_pixbuf_property (profile, PROP_ICON_FILE, PROP_ICON, &priv->icon_load_failed);
         break;
       default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+
+  g_value_copy (g_value_array_get_nth (priv->properties, prop_id), value);
+}
+
+static void
+terminal_profile_set_property (GObject *object,
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+  TerminalProfile *profile = TERMINAL_PROFILE (object);
+  TerminalProfilePrivate *priv = profile->priv;
+  GValue *prop_value;
+
+  if (prop_id == 0 || prop_id >= LAST_PROP)
+    {
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      return;
+    }
+
+  prop_value = g_value_array_get_nth (priv->properties, prop_id);
+
+  /* Preprocessing */
+  switch (prop_id)
+    {
+#if 0
+      case PROP_FONT: {
+        PangoFontDescription *font_desc, *new_font_desc;
+
+        font_desc = g_value_get_boxed (prop_value);
+        new_font_desc = g_value_get_boxed (value);
+
+        if (font_desc && new_font_desc)
+          {
+            /* Merge in case the new string isn't complete enough to load a font */
+            pango_font_description_merge (font_desc, new_font_desc, TRUE);
+            pango_font_description_free (new_font_desc);
+            break;
+          }
+
+        /* fall-through */
+      }
+#endif
+      default:
+        g_value_copy (value, prop_value);
+        break;
+    }
+
+  /* Extra processing */
+  switch (prop_id)
+    {
+      case PROP_NAME: {
+        const char *name = g_value_get_string (value);
+
+        g_assert (name != NULL);
+        priv->profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX, name);
+
+        gconf_client_add_dir (priv->conf, priv->profile_dir,
+                              GCONF_CLIENT_PRELOAD_ONELEVEL,
+                              NULL);
+        priv->notify_id =
+          gconf_client_notify_add (priv->conf,
+                                   priv->profile_dir,
+                                   terminal_profile_gconf_notify_cb,
+                                   profile, NULL,
+                                   NULL);
+
+        break;
+      }
+
+      case PROP_BACKGROUND_IMAGE_FILE:
+        /* Clear the cached image */
+        g_value_set_object (g_value_array_get_nth (priv->properties, PROP_BACKGROUND_IMAGE), NULL);
+        priv->background_load_failed = FALSE;
+        g_object_notify (object, TERMINAL_PROFILE_BACKGROUND_IMAGE);
+        break;
+
+      case PROP_ICON_FILE:
+        /* Clear the cached icon */
+        g_value_set_object (g_value_array_get_nth (priv->properties, PROP_ICON), NULL);
+        priv->icon_load_failed = FALSE;
+        g_object_notify (object, TERMINAL_PROFILE_ICON);
+        break;
+
+      default:
         break;
     }
 }
 
 static void
-terminal_profile_set_property (GObject *object,
-                              guint prop_id,
-                              const GValue *value,
-                              GParamSpec *pspec)
+terminal_profile_notify (GObject *object,
+                         GParamSpec *pspec)
 {
-  TerminalProfile *profile = TERMINAL_PROFILE (object);
-  TerminalProfilePrivate *priv = profile->priv;
+  void (* notify) (GObject *, GParamSpec *) = G_OBJECT_CLASS (terminal_profile_parent_class)->notify;
 
-  switch (prop_id)
-    {
-      case PROP_ALLOW_BOLD:
-        terminal_profile_set_allow_bold (profile, g_value_get_boolean (value));
-        break;
-      case PROP_BACKGROUND_COLOR: {
-        GdkColor *color = g_value_get_boxed (value);
-        if (color)
-          priv->background = *color;
-        break;
-      }
-      case PROP_BACKGROUND_DARKNESS:
-        terminal_profile_set_background_darkness (profile, g_value_get_double (value));
-        break;
-      case PROP_BACKGROUND_IMAGE:
-        /* not writable */
-        break;
-      case PROP_BACKGROUND_IMAGE_FILE:
-        terminal_profile_set_background_image_file (profile, g_value_get_string (value));
-        break;
-      case PROP_BACKGROUND_TYPE:
-        terminal_profile_set_background_type (profile, g_value_get_enum (value));
-        break;
-      case PROP_BACKSPACE_BINDING:
-        terminal_profile_set_backspace_binding (profile, g_value_get_enum (value));
-        break;
-      case PROP_CUSTOM_COMMAND:
-        terminal_profile_set_custom_command (profile, g_value_get_string (value));
-        break;
-      case PROP_DEFAULT_SHOW_MENUBAR:
-        terminal_profile_set_default_show_menubar (profile, g_value_get_boolean (value));
-        break;
-      case PROP_DELETE_BINDING:
-        terminal_profile_set_delete_binding (profile, g_value_get_enum (value));
-        break;
-      case PROP_EXIT_ACTION:
-        terminal_profile_set_exit_action (profile, g_value_get_enum (value));
-        break;
-      case PROP_FONT:
-        terminal_profile_set_font (profile, g_value_get_boxed (value));
-        break;
-      case PROP_FOREGROUND_COLOR: {
-        GdkColor *color = g_value_get_boxed (value);
-        if (color)
-          priv->foreground = *color;
-        break;
-      }
-      case PROP_ICON:
-        /* not writable */
-        break;
-      case PROP_ICON_FILE:
-        terminal_profile_set_icon_file (profile, g_value_get_string (value));
-        break;
-      case PROP_IS_DEFAULT:
-        terminal_profile_set_is_default (profile, g_value_get_boolean (value));
-        break;
-      case PROP_LOGIN_SHELL:
-        terminal_profile_set_login_shell (profile, g_value_get_boolean (value));
-        break;
-      case PROP_NAME:
-        g_assert (priv->name == NULL);
-        priv->name = g_value_dup_string (value);
-        break;
-      case PROP_NO_AA_WITHOUT_RENDER:
-// FIXME not writable?        terminal_profile_set_(profile, g_value_get_ (value));
-        break;
-      case PROP_PALETTE:
-//         FIXME terminal_profile_set_ (profile, g_value_get_ (value));
-        break;
-      case PROP_SCROLL_BACKGROUND:
-        terminal_profile_set_scroll_background (profile, g_value_get_boolean (value));
-        break;
-      case PROP_SCROLLBACK_LINES:
-        terminal_profile_set_scrollback_lines (profile, g_value_get_int (value));
-        break;
-      case PROP_SCROLLBAR_POSITION:
-        terminal_profile_set_scrollbar_position (profile, g_value_get_enum (value));
-        break;
-      case PROP_SCROLL_ON_KEYSTROKE:
-        terminal_profile_set_scroll_on_keystroke (profile, g_value_get_boolean (value));
-        break;
-      case PROP_SCROLL_ON_OUTPUT:
-        terminal_profile_set_scroll_on_output (profile, g_value_get_boolean (value));
-        break;
-      case PROP_SILENT_BELL:
-        terminal_profile_set_silent_bell (profile, g_value_get_boolean (value));
-        break;
-      case PROP_TITLE:
-        terminal_profile_set_title (profile, g_value_get_string (value));
-        break;
-      case PROP_TITLE_MODE:
-        terminal_profile_set_title_mode (profile, g_value_get_enum (value));
-        break;
-      case PROP_UPDATE_RECORDS:
-        terminal_profile_set_update_records (profile, g_value_get_boolean (value));
-        break;
-      case PROP_USE_CUSTOM_COMMAND:
-        terminal_profile_set_use_custom_command (profile, g_value_get_boolean (value));
-        break;
-      case PROP_USE_SKEY:
-        terminal_profile_set_use_skey (profile, g_value_get_boolean (value));
-        break;
-      case PROP_USE_SYSTEM_FONT:
-        terminal_profile_set_use_system_font (profile, g_value_get_boolean (value));
-        break;
-      case PROP_USE_THEME_COLORS:
-        terminal_profile_set_use_theme_colors (profile, g_value_get_boolean (value));
-        break;
-      case PROP_VISIBLE_NAME:
-        terminal_profile_set_visible_name (profile, g_value_get_string (value));
-        break;
-      case PROP_WORD_CHARS:
-        terminal_profile_set_word_chars (profile, g_value_get_string (value));
-        break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-        break;
-    }
+  g_print ("-> GOBJECT NOTIFY prop %s\n", pspec->name);
+  if (notify)
+    notify (object, pspec);
+
+  if (pspec->owner_type == TERMINAL_TYPE_PROFILE &&
+      (pspec->flags & G_PARAM_WRITABLE))
+    terminal_profile_schedule_save (TERMINAL_PROFILE (object), pspec);
 }
 
 static void
@@ -648,20 +1240,12 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   
   g_type_class_add_private (object_class, sizeof (TerminalProfilePrivate));
-  
+
   object_class->constructor = terminal_profile_constructor;
   object_class->finalize = terminal_profile_finalize;
   object_class->get_property = terminal_profile_get_property;
   object_class->set_property = terminal_profile_set_property;
-
-  signals[CHANGED] =
-    g_signal_new ("changed",
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalProfileClass, changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__POINTER,
-                  G_TYPE_NONE, 1, G_TYPE_POINTER);
+  object_class->notify = terminal_profile_notify;
 
   signals[FORGOTTEN] =
     g_signal_new ("forgotten",
@@ -672,138 +1256,135 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  /* gconf_key -> pspec hash */
+  klass->gconf_keys = g_hash_table_new (g_str_hash, g_str_equal);
+
 #define TERMINAL_PROFILE_PSPEC_STATIC (G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)
 
-#define TERMINAL_PROFILE_PROPERTY_BOOLEAN(propId, propName, propDefault) \
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_boolean (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY(propId, propSpec, propGConf) \
+{\
+  GParamSpec *pspec = propSpec;\
+  g_object_class_install_property (object_class, propId, pspec);\
+\
+  if (propGConf)\
+    {\
+      g_param_spec_set_qdata (pspec, g_quark_from_static_string (PSPEC_GCONF_KEY_DATA), propGConf);\
+      g_hash_table_insert (klass->gconf_keys, propGConf, pspec);\
+    }\
+}
+
+#define TERMINAL_PROFILE_PROPERTY_BOOLEAN(prop, propDefault, propGConf) \
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_boolean (TERMINAL_PROFILE_##prop, NULL, NULL,\
                           propDefault,\
-                          G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                          G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_BOXED(propId, propName, propType)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_boxed (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_BOXED(prop, propType, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_boxed (TERMINAL_PROFILE_##prop, NULL, NULL,\
                         propType,\
-                        G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                        G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_DOUBLE(propId, propName, propMin, propMax, propDefault)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_double (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_DOUBLE(prop, propMin, propMax, propDefault, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_double (TERMINAL_PROFILE_##prop, NULL, NULL,\
                          propMin, propMax, propDefault,\
-                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_ENUM(propId, propName, propType, propDefault)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_enum (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_ENUM(prop, propType, propDefault, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_enum (TERMINAL_PROFILE_##prop, NULL, NULL,\
                        propType, propDefault,\
-                       G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                       G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_INT(propId, propName, propMin, propMax, propDefault)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_int (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_INT(prop, propMin, propMax, propDefault, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_int (TERMINAL_PROFILE_##prop, NULL, NULL,\
                       propMin, propMax, propDefault,\
-                      G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                      G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_OBJECT(propId, propName, propType)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_object (propName, NULL, NULL,\
+/* these are all read-only */
+#define TERMINAL_PROFILE_PROPERTY_OBJECT(prop, propType, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_object (TERMINAL_PROFILE_##prop, NULL, NULL,\
                          propType,\
-                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                         G_PARAM_READABLE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_STRING(propId, propName, propDefault)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_string (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_STRING(prop, propDefault, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_string (TERMINAL_PROFILE_##prop, NULL, NULL,\
                          propDefault,\
-                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_STRING_CO(propId, propName, propDefault)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_string (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_STRING_CO(prop, propDefault, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_string (TERMINAL_PROFILE_##prop, NULL, NULL,\
                          propDefault,\
-                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC))
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-#define TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED(propId, propName, propElementName, propElementType)\
-  g_object_class_install_property (object_class, propId,\
-    g_param_spec_value_array (propName, NULL, NULL,\
+#define TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED(prop, propElementName, propElementType, propGConf)\
+  TERMINAL_PROFILE_PROPERTY (PROP_##prop,\
+    g_param_spec_value_array (TERMINAL_PROFILE_##prop, NULL, NULL,\
                               g_param_spec_boxed (propElementName, NULL, NULL,\
                                                   propElementType, \
                                                   G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
-                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC))
+                              G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC),\
+    propGConf)
 
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_ALLOW_BOLD, "allow-bold", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_DEFAULT_SHOW_MENUBAR, "default-show-menubar", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_IS_DEFAULT, "is-default", FALSE /* FIXMEchpe? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_LOGIN_SHELL, "login-shell", FALSE /* FIXME? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_NO_AA_WITHOUT_RENDER, "no-aa-without-render", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_BACKGROUND, "scroll-background", FALSE /* FIXME? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_ON_KEYSTROKE, "scroll-on-keystroke", TRUE /* FIXME? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_ON_OUTPUT, "scroll-on-output", TRUE /* FIXME? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SILENT_BELL, "silent-bell", TRUE /* FIXME? */);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_UPDATE_RECORDS, "update-records", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_CUSTOM_COMMAND, "use-custom-command", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_SKEY, "use-skey", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_SYSTEM_FONT, "use-system-font", TRUE);
-  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_THEME_COLORS, "use-theme-colors", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (ALLOW_BOLD, DEFAULT_ALLOW_BOLD, KEY_ALLOW_BOLD);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (DEFAULT_SHOW_MENUBAR, DEFAULT_DEFAULT_SHOW_MENUBAR, KEY_DEFAULT_SHOW_MENUBAR);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (IS_DEFAULT, DEFAULT_IS_DEFAULT, NULL);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (LOGIN_SHELL, DEFAULT_LOGIN_SHELL, KEY_LOGIN_SHELL);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (NO_AA_WITHOUT_RENDER, DEFAULT_NO_AA_WITHOUT_RENDER, KEY_NO_AA_WITHOUT_RENDER);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (SCROLL_BACKGROUND, DEFAULT_SCROLL_BACKGROUND, KEY_SCROLL_BACKGROUND);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (SCROLL_ON_KEYSTROKE, DEFAULT_SCROLL_ON_KEYSTROKE, KEY_SCROLL_ON_KEYSTROKE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (SCROLL_ON_OUTPUT, DEFAULT_SCROLL_ON_OUTPUT, KEY_SCROLL_ON_OUTPUT);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (SILENT_BELL, DEFAULT_SILENT_BELL, KEY_SILENT_BELL);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (UPDATE_RECORDS, DEFAULT_UPDATE_RECORDS, KEY_UPDATE_RECORDS);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (USE_CUSTOM_COMMAND, DEFAULT_USE_CUSTOM_COMMAND, KEY_USE_CUSTOM_COMMAND);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (USE_SKEY, DEFAULT_USE_SKEY, KEY_USE_SKEY);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (USE_SYSTEM_FONT, DEFAULT_USE_SYSTEM_FONT, KEY_USE_SYSTEM_FONT);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (USE_THEME_COLORS, DEFAULT_USE_THEME_COLORS, KEY_USE_THEME_COLORS);
 
-  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_BACKGROUND_COLOR, "background-color", GDK_TYPE_COLOR);
-  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_FONT, "font", PANGO_TYPE_FONT_DESCRIPTION);
-  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_FOREGROUND_COLOR, "foreground-color", GDK_TYPE_COLOR);
+  TERMINAL_PROFILE_PROPERTY_BOXED (BACKGROUND_COLOR, GDK_TYPE_COLOR, KEY_BACKGROUND_COLOR);
+  TERMINAL_PROFILE_PROPERTY_BOXED (FONT, PANGO_TYPE_FONT_DESCRIPTION, KEY_FONT);
+  TERMINAL_PROFILE_PROPERTY_BOXED (FOREGROUND_COLOR, GDK_TYPE_COLOR, KEY_FOREGROUND_COLOR);
 
   /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
-  TERMINAL_PROFILE_PROPERTY_DOUBLE (PROP_BACKGROUND_DARKNESS, "background-darkness", 0.0, 1.0, 0.0);
+  TERMINAL_PROFILE_PROPERTY_DOUBLE (BACKGROUND_DARKNESS, 0.0, 1.0, DEFAULT_BACKGROUND_DARKNESS, KEY_BACKGROUND_DARKNESS);
 
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_BACKGROUND_TYPE, "background-type", TERMINAL_TYPE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID);
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_BACKSPACE_BINDING, "backspace-binding",  vte_terminal_erase_binding_get_type (), VTE_ERASE_ASCII_DELETE);
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_DELETE_BINDING, "delete-binding", vte_terminal_erase_binding_get_type (), VTE_ERASE_DELETE_SEQUENCE);
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_EXIT_ACTION, "exit-action", TERMINAL_TYPE_EXIT_ACTION, TERMINAL_EXIT_CLOSE);
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_SCROLLBAR_POSITION, "scrollbar-position", TERMINAL_TYPE_SCROLLBAR_POSITION, DEFAULT_SCROLLBAR_POSITION);
-  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_TITLE_MODE, "title-mode", TERMINAL_TYPE_TITLE_MODE, TERMINAL_TITLE_REPLACE);
+  TERMINAL_PROFILE_PROPERTY_ENUM (BACKGROUND_TYPE, TERMINAL_TYPE_BACKGROUND_TYPE, DEFAULT_BACKGROUND_TYPE, KEY_BACKGROUND_TYPE);
+  TERMINAL_PROFILE_PROPERTY_ENUM (BACKSPACE_BINDING,  vte_terminal_erase_binding_get_type (), DEFAULT_BACKSPACE_BINDING, KEY_BACKSPACE_BINDING);
+  TERMINAL_PROFILE_PROPERTY_ENUM (DELETE_BINDING, vte_terminal_erase_binding_get_type (), DEFAULT_DELETE_BINDING, KEY_DELETE_BINDING);
+  TERMINAL_PROFILE_PROPERTY_ENUM (EXIT_ACTION, TERMINAL_TYPE_EXIT_ACTION, DEFAULT_EXIT_ACTION, KEY_EXIT_ACTION);
+  TERMINAL_PROFILE_PROPERTY_ENUM (SCROLLBAR_POSITION, TERMINAL_TYPE_SCROLLBAR_POSITION, DEFAULT_SCROLLBAR_POSITION, KEY_SCROLLBAR_POSITION);
+  TERMINAL_PROFILE_PROPERTY_ENUM (TITLE_MODE, TERMINAL_TYPE_TITLE_MODE, DEFAULT_TITLE_MODE, KEY_TITLE_MODE);
 
-  TERMINAL_PROFILE_PROPERTY_INT (PROP_SCROLLBACK_LINES, "scrollback-lines", 0, G_MAXINT, 1000);
+  TERMINAL_PROFILE_PROPERTY_INT (SCROLLBACK_LINES, 1, G_MAXINT, DEFAULT_SCROLLBACK_LINES, KEY_SCROLLBACK_LINES);
 
-  TERMINAL_PROFILE_PROPERTY_OBJECT (PROP_BACKGROUND_IMAGE, "background-image", GDK_TYPE_PIXBUF);
-  TERMINAL_PROFILE_PROPERTY_OBJECT (PROP_ICON, "icon", GDK_TYPE_PIXBUF);
+  TERMINAL_PROFILE_PROPERTY_OBJECT (BACKGROUND_IMAGE, GDK_TYPE_PIXBUF, NULL);
+  TERMINAL_PROFILE_PROPERTY_OBJECT (ICON, GDK_TYPE_PIXBUF, NULL);
 
-  TERMINAL_PROFILE_PROPERTY_STRING_CO (PROP_NAME, "name", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_BACKGROUND_IMAGE_FILE, "background-image-file", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_CUSTOM_COMMAND, "custom-command", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_ICON_FILE, "icon-file", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_TITLE, "title", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_VISIBLE_NAME, "visible-name", NULL);
-  TERMINAL_PROFILE_PROPERTY_STRING (PROP_WORD_CHARS, "word-chards", "");
+  TERMINAL_PROFILE_PROPERTY_STRING_CO (NAME, DEFAULT_NAME, NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (BACKGROUND_IMAGE_FILE, DEFAULT_BACKGROUND_IMAGE_FILE, KEY_BACKGROUND_IMAGE_FILE);
+  TERMINAL_PROFILE_PROPERTY_STRING (CUSTOM_COMMAND, DEFAULT_CUSTOM_COMMAND, KEY_CUSTOM_COMMAND);
+  TERMINAL_PROFILE_PROPERTY_STRING (ICON_FILE, DEFAULT_ICON_FILE, KEY_ICON_FILE);
+  TERMINAL_PROFILE_PROPERTY_STRING (TITLE, _(DEFAULT_TITLE), KEY_TITLE);
+  TERMINAL_PROFILE_PROPERTY_STRING (VISIBLE_NAME, _(DEFAULT_VISIBLE_NAME), KEY_VISIBLE_NAME);
+  TERMINAL_PROFILE_PROPERTY_STRING (WORD_CHARS, DEFAULT_WORD_CHARS, KEY_WORD_CHARS);
 
-  TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED (PROP_PALETTE, "palette", "color", GDK_TYPE_COLOR);
+  TERMINAL_PROFILE_PROPERTY_VALUE_ARRAY_BOXED (PALETTE, "palette-color", GDK_TYPE_COLOR, KEY_PALETTE);
 }
 
-static void
-terminal_profile_finalize (GObject *object)
-{
-  TerminalProfile *profile = TERMINAL_PROFILE (object);
-  TerminalProfilePrivate *priv = profile->priv;
-
-  terminal_profile_forget (profile);
-  
-  gconf_client_notify_remove (priv->conf, priv->notify_id);
-  priv->notify_id = 0;
-
-  g_object_unref (G_OBJECT (priv->conf));
-
-  g_free (priv->visible_name);
-  g_free (priv->name);
-  g_free (priv->title);
-  g_free (priv->profile_dir);
-  g_free (priv->icon_file);
-  if (priv->icon)
-    g_object_unref (G_OBJECT (priv->icon));
-
-  g_free (priv->background_image_file);
-  if (priv->background_image)
-    g_object_unref (G_OBJECT (priv->background_image));
-
-  pango_font_description_free (priv->font);
-
-  G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
-}
+/* Semi-Public API */
 
 TerminalProfile*
 _terminal_profile_new (const char *name)
@@ -813,1834 +1394,16 @@ _terminal_profile_new (const char *name)
                        NULL);
 }
 
-const char*
-terminal_profile_get_name (TerminalProfile *profile)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-
-  return priv->name;
-}
-
-const char*
-terminal_profile_get_visible_name (TerminalProfile *profile)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-
-  return priv->visible_name;
-}
-
 void
-terminal_profile_set_visible_name (TerminalProfile *profile,
-                                   const char      *name)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_VISIBLE_NAME);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           name,
-                           NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_forgotten (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->forgotten;
-}
-
-gboolean
-terminal_profile_get_silent_bell (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->silent_bell;
-}
-
-void
-terminal_profile_set_silent_bell (TerminalProfile  *profile,
-                                  gboolean          setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SILENT_BELL);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_scroll_on_keystroke (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->scroll_on_keystroke;
-}
-
-
-void
-terminal_profile_set_scroll_on_keystroke (TerminalProfile  *profile,
-                                          gboolean          setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SCROLL_ON_KEYSTROKE);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_scroll_on_output (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->scroll_on_output;
-}
-
-
-void
-terminal_profile_set_scroll_on_output (TerminalProfile  *profile,
-                                          gboolean          setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SCROLL_ON_OUTPUT);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-TerminalScrollbarPosition
-terminal_profile_get_scrollbar_position (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
-
-  return profile->priv->scrollbar_position;
-}
-
-void
-terminal_profile_set_scrollbar_position (TerminalProfile *profile,
-                                         TerminalScrollbarPosition pos)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *pos_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SCROLLBAR_POSITION);
-
-  pos_string = gconf_enum_to_string (scrollbar_positions, pos);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           pos_string,
-                           NULL);
-
-  g_free (key);
-}
-
-int
-terminal_profile_get_scrollback_lines (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 500);
-  
-  return profile->priv->scrollback_lines;  
-}
-
-void
-terminal_profile_set_scrollback_lines (TerminalProfile  *profile,
-                                       int               lines)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SCROLLBACK_LINES);
-  
-  gconf_client_set_int (priv->conf,
-                        key,
-                        lines,
-                        NULL);
-
-  g_free (key);
-}
-
-void
-terminal_profile_get_color_scheme (TerminalProfile  *profile,
-                                   GdkColor         *foreground,
-                                   GdkColor         *background)
-{
-  TerminalProfilePrivate *priv;
-  
-  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
-
-  priv = profile->priv;
-  if (foreground)
-    *foreground = priv->foreground;
-  if (background)
-    *background = priv->background;
-}
-
-static char*
-color_to_string (const GdkColor *color)
-{
-  char *s;
-  char *ptr;
-  
-  s = g_strdup_printf ("#%2X%2X%2X",
-                       color->red / 256,
-                       color->green / 256,
-                       color->blue / 256);
-  
-  for (ptr = s; *ptr; ptr++)
-    if (*ptr == ' ')
-      *ptr = '0';
-
-  return s;
-}
-
-void
-terminal_profile_set_color_scheme (TerminalProfile  *profile,
-                                   const GdkColor   *foreground,
-                                   const GdkColor   *background)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *fg_key;
-  char *bg_key;
-  char *str;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  fg_key = gconf_concat_dir_and_key (priv->profile_dir,
-                                     KEY_FOREGROUND_COLOR);
-
-  bg_key = gconf_concat_dir_and_key (priv->profile_dir,
-                                     KEY_BACKGROUND_COLOR);
-
-  str = color_to_string (foreground);
-  
-  gconf_client_set_string (priv->conf,
-                           fg_key, str, NULL);
-
-  g_free (str);
-
-  str = color_to_string (background);
-
-  gconf_client_set_string (priv->conf,
-                           bg_key, str, NULL);
-
-  g_free (str);
-  
-  g_free (fg_key);
-  g_free (bg_key);
-}
-
-const char*
-terminal_profile_get_word_chars (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-    
-  return profile->priv->word_chars;
-}
-
-void
-terminal_profile_set_word_chars (TerminalProfile *profile,
-                                 const char      *word_chars)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_WORD_CHARS);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           word_chars,
-                           NULL);
-
-  g_free (key);
-}
-
-const char*
-terminal_profile_get_title (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-  
-  return profile->priv->title;
-}
-
-void
-terminal_profile_set_title (TerminalProfile *profile,
-                            const char      *title)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_TITLE);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           title,
-                           NULL);
-
-  g_free (key);
-}
-
-TerminalTitleMode
-terminal_profile_get_title_mode (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
-  
-  return profile->priv->title_mode;
-}
-
-void
-terminal_profile_set_title_mode (TerminalProfile *profile,
-                                 TerminalTitleMode mode)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *mode_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_TITLE_MODE);
-
-  mode_string = gconf_enum_to_string (title_modes, mode);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           mode_string,
-                           NULL);
-
-  g_free (key);
-}
-
-
-gboolean
-terminal_profile_get_allow_bold (TerminalProfile  *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->allow_bold;
-}
-
-void
-terminal_profile_set_allow_bold (TerminalProfile  *profile,
-                                          gboolean          setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_ALLOW_BOLD);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_default_show_menubar (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TRUE);
-  
-  return profile->priv->default_show_menubar;
-}
-
-void
-terminal_profile_set_default_show_menubar (TerminalProfile *profile,
-                                           gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_DEFAULT_SHOW_MENUBAR);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-
-TerminalExitAction
-terminal_profile_get_exit_action (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0);
-
-  return profile->priv->exit_action;
-}
-
-void
-terminal_profile_set_exit_action (TerminalProfile   *profile,
-                                  TerminalExitAction action)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *action_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_EXIT_ACTION);
-
-  action_string = gconf_enum_to_string (exit_actions, action);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           action_string,
-                           NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_login_shell (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->login_shell;
-}
-
-void
-terminal_profile_set_login_shell (TerminalProfile *profile,
-                                  gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_LOGIN_SHELL);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_update_records (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->update_records;
-}
-
-void
-terminal_profile_set_update_records (TerminalProfile *profile,
-                                     gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_UPDATE_RECORDS);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_use_custom_command (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->use_custom_command;
-}
-
-void
-terminal_profile_set_use_custom_command (TerminalProfile *profile,
-                                         gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_USE_CUSTOM_COMMAND);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-const char*
-terminal_profile_get_custom_command (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-
-  return profile->priv->custom_command;
-}
-
-void
-terminal_profile_set_custom_command (TerminalProfile *profile,
-                                     const char      *command)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_CUSTOM_COMMAND);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           command,
-                           NULL);
-
-  g_free (key);
-}
-
-const char*
-terminal_profile_get_icon_file (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-  
-  return profile->priv->icon_file;
-}
-
-GdkPixbuf*
-terminal_profile_get_icon (TerminalProfile *profile)
-{
-  TerminalProfilePrivate *priv;
-  
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-
-  priv = profile->priv;
-  if (!priv->icon_file || !priv->icon_file[0])
-    return NULL;
-  
-  if (priv->icon == NULL &&
-      !priv->icon_load_failed)
-    {
-      GdkPixbuf *pixbuf;
-      GError *err;
-      char *filename;
-
-      filename = gnome_program_locate_file (gnome_program_get (),
-                                            /* FIXME should I use APP_PIXMAP? */
-                                            GNOME_FILE_DOMAIN_PIXMAP,
-                                            priv->icon_file,
-                                            TRUE, NULL);
-
-      if (filename == NULL)
-        {
-          g_printerr (_("Could not find an icon called \"%s\" for terminal profile \"%s\"\n"),
-                      priv->icon_file,
-                      terminal_profile_get_visible_name (profile));
-
-          priv->icon_load_failed = TRUE;
-          
-          goto out;
-        }
-      
-      err = NULL;
-      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
-
-      if (pixbuf == NULL)
-        {
-          g_printerr (_("Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"),
-                      filename,
-                      terminal_profile_get_visible_name (profile),
-                      err->message);
-          g_error_free (err);
-
-          g_free (filename);
-
-          priv->icon_load_failed = TRUE;
-          
-          goto out;
-        }
-
-      priv->icon = pixbuf;
-
-      g_free (filename);
-    }
-
- out:
-  return priv->icon;
-}
-
-void
-terminal_profile_set_icon_file (TerminalProfile *profile,
-                                const char      *filename)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_ICON);
-
-  if (filename)
-    {
-      gconf_client_set_string (priv->conf,
-                               key,
-                               filename,
-                               NULL);
-    }
-  else
-    {
-      gconf_client_unset (priv->conf, key, NULL);
-    }
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_is_default (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-  
-  return profile->priv->is_default;
-}
-
-void
-terminal_profile_set_is_default (TerminalProfile *profile,
-                                 gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  gconf_client_set_string (priv->conf,
-                           CONF_GLOBAL_PREFIX"/default_profile",
-                           terminal_profile_get_name (profile),
-                           NULL);
-
-  /* Even though the gconf change notification does this, it happens too late.
-   * In some cases, the default profile changes twice in quick succession,
-   * and update_default_profile must be called in sync with those changes.
-   */
-  priv->is_default = setting != FALSE;
-
-  /* FIXMEchpe */
-/*  update_default_profile (terminal_profile_get_name (profile),
-                          !gconf_client_key_is_writable (priv->conf,
-                                                         CONF_GLOBAL_PREFIX"/default_profile",
-                                                         NULL));*/
-}
-
-void
-terminal_profile_get_palette (TerminalProfile *profile,
-                              GdkColor        *colors)
-{
-  TerminalProfilePrivate *priv;
-
-  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
-  
-  priv = profile->priv;
-  memcpy (colors, priv->palette,
-          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
-}
-
-void
-terminal_profile_set_palette (TerminalProfile *profile,
-                              const GdkColor  *colors)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  char *str;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_PALETTE);
-
-  str = terminal_palette_to_string (colors);
-  
-  gconf_client_set_string (priv->conf,
-                           key, str,
-                           NULL);
-
-  g_free (key);
-  g_free (str);
-}
-
-TerminalBackgroundType
-terminal_profile_get_background_type (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_BACKGROUND_SOLID);
-
-  return profile->priv->background_type;
-}
-
-void
-terminal_profile_set_background_type (TerminalProfile        *profile,
-                                      TerminalBackgroundType  type)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *type_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_BACKGROUND_TYPE);
-
-  type_string = gconf_enum_to_string (background_types, type);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           type_string,
-                           NULL);
-
-  g_free (key);
-}
-
-GdkPixbuf*
-terminal_profile_get_background_image (TerminalProfile *profile)
-{
-  TerminalProfilePrivate *priv;
-  
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-
-  priv = profile->priv;
-  if (priv->background_image == NULL &&
-      !priv->background_load_failed)
-    {
-      GdkPixbuf *pixbuf;
-      GError *err;
-      char *filename;
-
-      filename = gnome_program_locate_file (gnome_program_get (),
-                                            /* FIXME should I use APP_PIXMAP? */
-                                            GNOME_FILE_DOMAIN_PIXMAP,
-                                            priv->background_image_file,
-                                            TRUE, NULL);
-
-      if (filename == NULL)
-        {
-          g_printerr (_("Could not find a background image called \"%s\" for terminal profile \"%s\"\n"),
-                      priv->background_image_file,
-                      terminal_profile_get_visible_name (profile));
-
-          priv->background_load_failed = TRUE;
-          
-          goto out;
-        }
-      
-      err = NULL;
-      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
-
-      if (pixbuf == NULL)
-        {
-          g_printerr (_("Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"),
-                      filename,
-                      terminal_profile_get_visible_name (profile),
-                      err->message);
-          g_error_free (err);
-
-          g_free (filename);
-
-          priv->background_load_failed = TRUE;
-          
-          goto out;
-        }
-
-      priv->background_image = pixbuf;
-    }
-
- out:
-  return priv->background_image;
-}
-
-const char*
-terminal_profile_get_background_image_file (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-
-  return profile->priv->background_image_file;
-}
-
-void
-terminal_profile_set_background_image_file (TerminalProfile *profile,
-                                            const char      *filename)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_BACKGROUND_IMAGE);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           filename,
-                           NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_scroll_background (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->scroll_background;
-}
-
-void
-terminal_profile_set_scroll_background (TerminalProfile *profile,
-                                        gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_SCROLL_BACKGROUND);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-double
-terminal_profile_get_background_darkness (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), 0.0);
-
-  return profile->priv->background_darkness;
-}
-
-void
-terminal_profile_set_background_darkness (TerminalProfile *profile,
-                                          double           setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_BACKGROUND_DARKNESS);
-  
-  gconf_client_set_float (priv->conf,
-                          key,
-                          setting,
-                          NULL);
-
-  g_free (key);
-}
-
-VteTerminalEraseBinding
-terminal_profile_get_backspace_binding (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), VTE_ERASE_ASCII_DELETE);
-
-  return profile->priv->backspace_binding;
-}
-
-void
-terminal_profile_set_backspace_binding (TerminalProfile        *profile,
-                                        VteTerminalEraseBinding    binding)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *binding_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_BACKSPACE_BINDING);
-
-  binding_string = gconf_enum_to_string (erase_bindings, binding);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           binding_string,
-                           NULL);
-
-  g_free (key);
-
-  //g_object_notify (G_OBJECT (profile), "backspace-binding");
-}
-
-VteTerminalEraseBinding
-terminal_profile_get_delete_binding (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), VTE_ERASE_DELETE_SEQUENCE);
-
-  return profile->priv->delete_binding;
-}
-
-void
-terminal_profile_set_delete_binding (TerminalProfile      *profile,
-                                     VteTerminalEraseBinding  binding)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  const char *binding_string;
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_DELETE_BINDING);
-
-  binding_string = gconf_enum_to_string (erase_bindings, binding);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           binding_string,
-                           NULL);
-
-  g_free (key);
-
-  //g_object_notify (G_OBJECT (profile), "delete-binding");
-}
-
-void
-terminal_profile_set_palette_entry (TerminalProfile *profile,
-                                    int              i,
-                                    const GdkColor  *color)
-{
-  TerminalProfilePrivate *priv;
-  GdkColor colors[TERMINAL_PALETTE_SIZE];
-
-  g_return_if_fail (TERMINAL_IS_PROFILE (profile));
-  g_return_if_fail (i < TERMINAL_PALETTE_SIZE);
-  g_return_if_fail (color != NULL);
-
-  priv = profile->priv;
-  memcpy (colors, priv->palette,
-          TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
-
-  colors[i] = *color;
-
-  terminal_profile_set_palette (profile, colors);
-}
-
-gboolean
-terminal_profile_get_use_theme_colors (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->use_theme_colors;
-}
-
-void
-terminal_profile_set_use_theme_colors (TerminalProfile *profile,
-                                       gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_USE_THEME_COLORS);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_no_aa_without_render (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->no_aa_without_render;
-}
-
-gboolean
-terminal_profile_get_use_system_font (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->use_system_font;
-}
-
-void
-terminal_profile_set_use_system_font (TerminalProfile *profile,
-                                      gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_USE_SYSTEM_FONT);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-gboolean
-terminal_profile_get_use_skey (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
-
-  return profile->priv->use_skey;
-}
-
-void
-terminal_profile_set_use_skey (TerminalProfile *profile,
-			       gboolean         setting)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_USE_SKEY);
-  
-  gconf_client_set_bool (priv->conf,
-                         key,
-                         setting,
-                         NULL);
-
-  g_free (key);
-}
-
-
-const PangoFontDescription*
-terminal_profile_get_font (TerminalProfile *profile)
-{
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
-
-  return profile->priv->font;
-}
-
-void
-terminal_profile_set_font (TerminalProfile            *profile,
-                           const PangoFontDescription *font_desc)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  char *str;
-
-  g_return_if_fail (font_desc != NULL);
-  
-  RETURN_IF_NOTIFYING (profile);
-  
-  key = gconf_concat_dir_and_key (priv->profile_dir,
-                                  KEY_FONT);
-
-  str = pango_font_description_to_string (font_desc);
-  g_return_if_fail (str);
-  
-  gconf_client_set_string (priv->conf,
-                           key,
-                           str,
-                           NULL);
-
-  g_free (str);
-  g_free (key);
-}
-
-static gboolean
-set_visible_name (TerminalProfile *profile,
-                  const char      *candidate_name)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  if (candidate_name &&
-      strcmp (priv->visible_name, candidate_name) == 0)
-    return FALSE;
-  
-  if (candidate_name != NULL)
-    {
-      g_free (priv->visible_name);
-      priv->visible_name = g_strdup (candidate_name);
-      return TRUE;
-    }
-  /* otherwise just leave the old name */
-
-  return FALSE;
-}
-
-static gboolean
-set_foreground_color (TerminalProfile *profile,
-                      const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  GdkColor color;
-  
-  if (str_val && gdk_color_parse (str_val, &color) &&
-      !gdk_color_equal (&color, &priv->foreground))
-    {
-      priv->foreground = color;
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static gboolean
-set_background_color (TerminalProfile *profile,
-                      const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  GdkColor color;
-  
-  if (str_val && gdk_color_parse (str_val, &color) &&
-      !gdk_color_equal (&color, &priv->background))
-    {
-      priv->background = color;
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static gboolean
-set_title (TerminalProfile *profile,
-           const char      *candidate_name)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (candidate_name &&
-      strcmp (priv->title, candidate_name) == 0)
-    return FALSE;
-  
-  if (candidate_name != NULL)
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (candidate_name);
-      return TRUE;
-    }
-  /* otherwise just leave the old name */
-
-  return FALSE;
-}
-
-static gboolean
-set_title_mode (TerminalProfile *profile,
-                const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int mode; /* TerminalTitleMode */
-  
-  if (str_val &&
-      gconf_string_to_enum (title_modes, str_val, &mode) &&
-      mode != priv->title_mode)
-    {
-      priv->title_mode = mode;
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static gboolean
-set_word_chars (TerminalProfile *profile,
-                const char      *candidate_chars)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  if (candidate_chars &&
-      strcmp (priv->word_chars, candidate_chars) == 0)
-    return FALSE;
-  
-  if (candidate_chars != NULL)
-    {
-      g_free (priv->word_chars);
-      priv->word_chars = g_strdup (candidate_chars);
-      return TRUE;
-    }
-  /* otherwise just leave the old chars */
-  
-  return FALSE;
-}
-
-static gboolean
-set_scrollbar_position (TerminalProfile *profile,
-                        const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int pos; /* TerminalScrollbarPosition */
-  
-  if (str_val &&
-      gconf_string_to_enum (scrollbar_positions, str_val, &pos) &&
-      pos != priv->scrollbar_position)
-    {
-      priv->scrollbar_position = pos;
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static gboolean
-set_scrollback_lines (TerminalProfile *profile,
-                      int              int_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (int_val >= 1 &&
-      int_val != priv->scrollback_lines)
-    {
-      priv->scrollback_lines = int_val;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-set_exit_action (TerminalProfile *profile,
-                 const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int action; /* TerminalExitAction */
-  
-  if (str_val &&
-      gconf_string_to_enum (exit_actions, str_val, &action) &&
-      action != priv->exit_action)
-    {
-      priv->exit_action = action;
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
-set_custom_command (TerminalProfile *profile,
-                    const char      *candidate_command)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (candidate_command &&
-      strcmp (priv->custom_command, candidate_command) == 0)
-    return FALSE;
-  
-  if (candidate_command != NULL)
-    {
-      g_free (priv->custom_command);
-      priv->custom_command = g_strdup (candidate_command);
-      return TRUE;
-    }
-  /* otherwise just leave the old command */
-  
-  return FALSE;
-}
-
-static gboolean
-set_icon_file (TerminalProfile *profile,
-               const char      *candidate_file)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (priv->icon_file &&
-      candidate_file &&
-      strcmp (priv->icon_file, candidate_file) == 0)
-    return FALSE;
-  
-  if (candidate_file != NULL)
-    {
-      
-      g_free (priv->icon_file);
-      priv->icon_file = g_strdup (candidate_file);
-
-      if (priv->icon != NULL)
-        {
-          g_object_unref (G_OBJECT (priv->icon));
-          priv->icon = NULL;
-        }
-
-      priv->icon_load_failed = FALSE; /* try again */
-
-      return TRUE;
-    }
-  /* otherwise just leave the old filename */
-  
-  return FALSE;
-}
-
-static gboolean
-set_palette (TerminalProfile *profile,
-             const char      *candidate_str)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (candidate_str != NULL)
-    {
-      int i;
-      GdkColor new_palette[TERMINAL_PALETTE_SIZE];
-
-      if (!terminal_palette_from_string (candidate_str,
-                                         new_palette,
-                                         TRUE))
-        {
-          return FALSE;
-        }
-
-      for (i = 0; i < TERMINAL_PALETTE_SIZE; i++)
-        {
-          if (!gdk_color_equal (&priv->palette[i],
-                                &new_palette[i]))
-            {
-              break;
-            }
-        }
-      
-      if (i == TERMINAL_PALETTE_SIZE)
-        {
-          return FALSE;
-        }
-              
-      memcpy (priv->palette, new_palette,
-              TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
-
-      return TRUE;
-    }
-  
-  return FALSE;
-}
-
-static gboolean
-set_background_type (TerminalProfile *profile,
-                     const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int type; /* TerminalBackgroundType */
-  
-  if (str_val &&
-      gconf_string_to_enum (background_types, str_val, &type) &&
-      type != priv->background_type)
-    {
-      priv->background_type = type;
-      return TRUE;
-    }
-      
-  return FALSE;
-}
-
-static gboolean
-set_background_image_file (TerminalProfile *profile,
-                           const char      *candidate_file)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  if (candidate_file &&
-      strcmp (priv->background_image_file, candidate_file) == 0)
-    return FALSE;
-  
-  if (candidate_file != NULL)
-    {
-      g_free (priv->background_image_file);
-      priv->background_image_file = g_strdup (candidate_file);
-
-      if (priv->background_image != NULL)
-        {
-          g_object_unref (G_OBJECT (priv->background_image));
-          priv->background_image = NULL;
-        }
-
-      priv->background_load_failed = FALSE; /* try again */
-
-      return TRUE;
-    }
-  /* otherwise just leave the old filename */
-  
-  return FALSE;
-}
-
-static gboolean
-set_backspace_binding (TerminalProfile *profile,
-                       const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int binding; /* VteTerminalEraseBinding */
-  
-  if (str_val &&
-      gconf_string_to_enum (erase_bindings, str_val, &binding) &&
-      binding != priv->backspace_binding)
-    {
-      priv->backspace_binding = binding;
-      return TRUE;
-    }
-      
-  return FALSE;
-}
-
-static gboolean
-set_delete_binding (TerminalProfile *profile,
-                    const char      *str_val)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  int binding; /* VteTerminalEraseBinding */
-
-  if (str_val &&
-      gconf_string_to_enum (erase_bindings, str_val, &binding) &&
-      binding != priv->delete_binding)
-    {
-      priv->delete_binding = binding;
-      return TRUE;
-    }
-  else
-    {
-      return FALSE;
-    }
-}
-
-static gboolean
-set_font (TerminalProfile *profile,
-          const char      *candidate_font_name)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  PangoFontDescription *desc;
-  PangoFontDescription *tmp;
-  
-  if (candidate_font_name == NULL)
-    return FALSE; /* leave old font */
-
-  desc = pango_font_description_from_string (candidate_font_name);
-  if (desc == NULL)
-    {
-      g_printerr (_("GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"),
-                  candidate_font_name);
-      return FALSE; /* leave the old font */
-    }
-
-  /* Merge in case the new string isn't complete enough to
-   * load a font
-   */
-  tmp = pango_font_description_copy (priv->font);
-  pango_font_description_merge (tmp, desc, TRUE);
-  pango_font_description_free (desc);
-  desc = tmp;
-  
-  if (pango_font_description_equal (priv->font, desc))
-    {
-      pango_font_description_free (desc);
-      return FALSE;
-    }
-  else
-    {
-      pango_font_description_free (priv->font);
-      priv->font = desc;
-      return TRUE;
-    }
-}
-
-void
-terminal_profile_update (TerminalProfile *profile)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  TerminalSettingMask locked;
-  TerminalSettingMask old_locked;
-  TerminalSettingMask mask;
-
-  g_return_if_fail (profile != NULL);
-  
-  terminal_setting_mask_clear (&mask);
-  terminal_setting_mask_clear (&locked);
-
-#define UPDATE_BOOLEAN(KName, FName)                                            \
-  {                                                                             \
-    char *key = gconf_concat_dir_and_key (priv->profile_dir, KName);   \
-    gboolean val = gconf_client_get_bool (priv->conf, key, NULL);      \
-                                                                                \
-    if (val != priv->FName)                                            \
-      {                                                                         \
-        mask.FName = TRUE;                                                      \
-        priv->FName = val;                                             \
-      }                                                                         \
-                                                                                \
-    locked.FName =                                                              \
-      !gconf_client_key_is_writable (priv->conf, key, NULL);           \
-                                                                                \
-    g_free (key);                                                               \
-  }
-
-#define UPDATE_INTEGER(KName, FName)                                            \
-  {                                                                             \
-    char *key = gconf_concat_dir_and_key (priv->profile_dir, KName);   \
-    int val = gconf_client_get_int (priv->conf, key, NULL);            \
-                                                                                \
-    mask.FName = set_##FName (profile, val);                                    \
-                                                                                \
-    locked.FName =                                                              \
-      !gconf_client_key_is_writable (priv->conf, key, NULL);           \
-                                                                                \
-    g_free (key);                                                               \
-  }
-
-#define UPDATE_FLOAT(KName, FName)                                              \
-  {                                                                             \
-    char *key = gconf_concat_dir_and_key (priv->profile_dir, KName);   \
-    double val = gconf_client_get_float (priv->conf, key, NULL);       \
-                                                                                \
-    if (val != priv->FName)                                            \
-      {                                                                         \
-        mask.FName = TRUE;                                                      \
-        priv->FName = val;                                             \
-      }                                                                         \
-                                                                                \
-    g_free (key);                                                               \
-  }
-
-#define UPDATE_STRING(KName, FName)                                             \
-  {                                                                             \
-    char *key = gconf_concat_dir_and_key (priv->profile_dir, KName);   \
-    char *val = gconf_client_get_string (priv->conf, key, NULL);       \
-                                                                                \
-    mask.FName = set_##FName (profile, val);                                    \
-                                                                                \
-    locked.FName =                                                              \
-      !gconf_client_key_is_writable (priv->conf, key, NULL);           \
-                                                                                \
-    g_free (val);                                                               \
-    g_free (key);                                                               \
-  }
-
-  UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR, default_show_menubar);
-  UPDATE_STRING  (KEY_VISIBLE_NAME,         visible_name);
-  UPDATE_STRING  (KEY_FOREGROUND_COLOR,     foreground_color);
-  UPDATE_STRING  (KEY_BACKGROUND_COLOR,     background_color);
-  UPDATE_STRING  (KEY_TITLE,                title);
-  UPDATE_STRING  (KEY_TITLE_MODE,           title_mode);
-  UPDATE_BOOLEAN (KEY_ALLOW_BOLD,           allow_bold);
-  UPDATE_BOOLEAN (KEY_SILENT_BELL,          silent_bell);
-  UPDATE_STRING  (KEY_WORD_CHARS,           word_chars);
-  UPDATE_STRING  (KEY_SCROLLBAR_POSITION,   scrollbar_position);
-  UPDATE_INTEGER (KEY_SCROLLBACK_LINES,     scrollback_lines);
-  UPDATE_BOOLEAN (KEY_SCROLL_ON_KEYSTROKE,  scroll_on_keystroke);
-  UPDATE_BOOLEAN (KEY_SCROLL_ON_OUTPUT,     scroll_on_output);
-  UPDATE_STRING  (KEY_EXIT_ACTION,          exit_action);
-  UPDATE_BOOLEAN (KEY_LOGIN_SHELL,          login_shell);
-  UPDATE_BOOLEAN (KEY_UPDATE_RECORDS,       update_records);
-  UPDATE_BOOLEAN (KEY_USE_CUSTOM_COMMAND,   use_custom_command);
-  UPDATE_STRING  (KEY_CUSTOM_COMMAND,       custom_command);
-  UPDATE_STRING  (KEY_ICON,                 icon_file);
-  UPDATE_STRING  (KEY_PALETTE,              palette);
-  UPDATE_STRING  (KEY_BACKGROUND_TYPE,      background_type);
-  UPDATE_STRING  (KEY_BACKGROUND_IMAGE,     background_image_file);
-  UPDATE_BOOLEAN (KEY_SCROLL_BACKGROUND,    scroll_background);
-  UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,  background_darkness);
-  UPDATE_STRING  (KEY_BACKSPACE_BINDING,    backspace_binding);
-  UPDATE_STRING  (KEY_DELETE_BINDING,       delete_binding);
-  UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,     use_theme_colors);
-  UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,      use_system_font);
-  UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER, no_aa_without_render);
-  UPDATE_STRING  (KEY_FONT,                 font);
-  
-#undef UPDATE_BOOLEAN
-#undef UPDATE_INTEGER
-#undef UPDATE_FLOAT
-#undef UPDATE_STRING
-
-  /* Update state and emit signals */
-  
-  old_locked = priv->locked;
-  priv->locked = locked;
-  
-  if (!(terminal_setting_mask_is_empty (&mask) &&
-        terminal_setting_mask_equal (&locked, &old_locked)))
-    emit_changed (profile, &mask);
-}
-
-
-static const gchar*
-find_key (const gchar* key)
-{
-  const gchar* end;
-  
-  end = strrchr (key, '/');
-
-  ++end;
-
-  return end;
-}
-
-static void
-profile_change_notify (GConfClient *client,
-                       guint        cnxn_id,
-                       GConfEntry  *entry,
-                       gpointer     user_data)
-{
-  TerminalProfile *profile = TERMINAL_PROFILE (user_data);
-  TerminalProfilePrivate *priv = profile->priv;
-  const char *key;
-  GConfValue *val;
-  TerminalSettingMask old_locked;
-  TerminalSettingMask mask;
-  
-  terminal_setting_mask_clear (&mask);
-  old_locked = priv->locked;
-
-  val = gconf_entry_get_value (entry);
-  
-  key = find_key (gconf_entry_get_key (entry));
-  
-#define UPDATE_BOOLEAN(KName, FName, Preset)                            \
-  }                                                                     \
-else if (strcmp (key, KName) == 0)                                      \
-  {                                                                     \
-    gboolean setting = (Preset);                                        \
-                                                                        \
-    if (val && val->type == GCONF_VALUE_BOOL)                           \
-      setting = gconf_value_get_bool (val);                             \
-                                                                        \
-    if (setting != priv->FName)                                \
-      {                                                                 \
-        mask.FName = TRUE;                                              \
-        priv->FName = setting;                                 \
-      }                                                                 \
-                                                                        \
-    priv->locked.FName = !gconf_entry_get_is_writable (entry);
-
-#define UPDATE_INTEGER(KName, FName, Preset)                            \
-  }                                                                     \
-else if (strcmp (key, KName) == 0)                                      \
-  {                                                                     \
-    int setting = (Preset);                                             \
-                                                                        \
-    if (val && val->type == GCONF_VALUE_INT)                            \
-      setting = gconf_value_get_int (val);                              \
-                                                                        \
-    mask.FName = set_##FName (profile, setting);                        \
-                                                                        \
-    priv->locked.FName = !gconf_entry_get_is_writable (entry);
-
-#define UPDATE_FLOAT(KName, FName, Preset)                              \
-  }                                                                     \
-else if (strcmp (key, KName) == 0)                                      \
-  {                                                                     \
-    float setting = (Preset);                                           \
-                                                                        \
-    if (val && val->type == GCONF_VALUE_FLOAT)                          \
-      setting = gconf_value_get_float (val);                            \
-                                                                        \
-    if (setting != priv->FName)                                \
-      {                                                                 \
-        mask.FName = TRUE;                                              \
-        priv->FName = setting;                                 \
-      }                                                                 \
-                                                                        \
-    priv->locked.FName = !gconf_entry_get_is_writable (entry);
-
-
-#define UPDATE_STRING(KName, FName, Preset)                             \
-  }                                                                     \
-else if (strcmp (key, KName) == 0)                                      \
-  {                                                                     \
-    const char * setting = (Preset);                                    \
-                                                                        \
-    if (val && val->type == GCONF_VALUE_STRING)                         \
-      setting = gconf_value_get_string (val);                           \
-                                                                        \
-    mask.FName = set_##FName (profile, setting);                        \
-                                                                        \
-    priv->locked.FName = !gconf_entry_get_is_writable (entry);
-
-
- if (0)
-   {
-     ;
-     UPDATE_BOOLEAN (KEY_DEFAULT_SHOW_MENUBAR,   default_show_menubar,   FALSE);
-     UPDATE_STRING  (KEY_VISIBLE_NAME,           visible_name,           NULL);
-     UPDATE_STRING  (KEY_FOREGROUND_COLOR,       foreground_color,       NULL);
-     UPDATE_STRING  (KEY_BACKGROUND_COLOR,       background_color,       NULL);
-     UPDATE_STRING  (KEY_TITLE,                  title,                  NULL);
-     UPDATE_STRING  (KEY_TITLE_MODE,             title_mode,             NULL);
-     UPDATE_BOOLEAN (KEY_ALLOW_BOLD,             allow_bold,             FALSE);
-     UPDATE_BOOLEAN (KEY_SILENT_BELL,            silent_bell,            FALSE);
-     UPDATE_STRING  (KEY_WORD_CHARS,             word_chars,             NULL);
-     UPDATE_STRING  (KEY_SCROLLBAR_POSITION,     scrollbar_position,     NULL);
-     UPDATE_INTEGER (KEY_SCROLLBACK_LINES,       scrollback_lines,       priv->scrollback_lines);
-     UPDATE_BOOLEAN (KEY_SCROLL_ON_KEYSTROKE, 	 scroll_on_keystroke,    FALSE);
-     UPDATE_BOOLEAN (KEY_SCROLL_ON_OUTPUT,       scroll_on_output,       FALSE);
-     UPDATE_STRING  (KEY_EXIT_ACTION,            exit_action,            NULL);
-     UPDATE_BOOLEAN (KEY_LOGIN_SHELL,            login_shell,            FALSE);
-     UPDATE_BOOLEAN (KEY_UPDATE_RECORDS,         update_records,         FALSE);
-     UPDATE_BOOLEAN (KEY_USE_CUSTOM_COMMAND,     use_custom_command,     FALSE);
-     UPDATE_STRING  (KEY_CUSTOM_COMMAND,         custom_command,         NULL);
-     UPDATE_STRING  (KEY_ICON,                   icon_file,              NULL);
-     UPDATE_STRING  (KEY_PALETTE,                palette,                NULL);
-     UPDATE_STRING  (KEY_BACKGROUND_TYPE,        background_type,        NULL);
-     UPDATE_STRING  (KEY_BACKGROUND_IMAGE,       background_image_file,  NULL);
-     UPDATE_BOOLEAN (KEY_SCROLL_BACKGROUND,      scroll_background,      FALSE);
-     UPDATE_FLOAT   (KEY_BACKGROUND_DARKNESS,    background_darkness,    0.5);
-     UPDATE_STRING  (KEY_BACKSPACE_BINDING,      backspace_binding,      NULL);
-     UPDATE_STRING  (KEY_DELETE_BINDING,         delete_binding,         NULL);
-     UPDATE_BOOLEAN (KEY_USE_THEME_COLORS,       use_theme_colors,       TRUE);
-     UPDATE_BOOLEAN (KEY_USE_SYSTEM_FONT,        use_system_font,        TRUE);
-     UPDATE_BOOLEAN (KEY_NO_AA_WITHOUT_RENDER,	 no_aa_without_render,	 TRUE);
-     UPDATE_STRING  (KEY_FONT,                   font,                   NULL);
-   }
-  
-#undef UPDATE_BOOLEAN
-#undef UPDATE_INTEGER
-#undef UPDATE_FLOAT
-#undef UPDATE_STRING
-
-  if (!(terminal_setting_mask_is_empty (&mask) &&
-        terminal_setting_mask_equal (&old_locked, &priv->locked)))
-    emit_changed (profile, &mask);
-}
-
-static void
-set_key_to_default (TerminalProfile *profile,
-                    const char      *relative_key)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  char *key;
-  char *default_key;
-  GError *err;
-  GConfValue *val;
-
-  default_key = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX"/"FALLBACK_PROFILE_ID,
-                                          relative_key);
-
-  err = NULL;
-  val = gconf_client_get_default_from_schema (priv->conf,
-                                              default_key,
-                                              &err);
-  if (err != NULL)
-    {
-      g_printerr (_("Error getting default value of %s: %s\n"),
-                  default_key, err->message);
-      g_error_free (err);
-    }
-
-  if (val == NULL)
-    g_printerr (_("There wasn't a default value for %s\n"),
-                default_key);
-  
-  g_free (default_key);
-  
-  if (val)
-    {
-      key = gconf_concat_dir_and_key (priv->profile_dir,
-                                      relative_key);
-      
-      err = NULL;      
-      gconf_client_set (priv->conf,
-                        key, val, &err);
-      if (err != NULL)
-        {
-          g_printerr (_("Error setting key %s back to default: %s\n"),
-                      key, err->message);
-          g_error_free (err);
-        }
-
-      gconf_value_free (val);
-      g_free (key);
-    }
-}
-
-void
-terminal_profile_reset_compat_defaults (TerminalProfile *profile)
-{
-  set_key_to_default (profile, KEY_DELETE_BINDING);
-  set_key_to_default (profile, KEY_BACKSPACE_BINDING);
-}
-
-void
-terminal_profile_forget (TerminalProfile *profile)
+_terminal_profile_forget (TerminalProfile *profile)
 {
   TerminalProfilePrivate *priv = profile->priv;
   
   if (!priv->forgotten)
     {
-      GError *err;
-      
-      err = NULL;
       gconf_client_remove_dir (priv->conf,
                                priv->profile_dir,
-                               &err);
-      if (err)
-        {
-          g_printerr (_("There was an error while removing the configuration directory %s. (%s)\n"),
-                      priv->profile_dir, err->message);
-          g_error_free (err);
-        }
+                               NULL);
 
       priv->forgotten = TRUE;
 
@@ -2648,623 +1411,320 @@ terminal_profile_forget (TerminalProfile *profile)
     }
 }
 
-const TerminalSettingMask*
-terminal_profile_get_locked_settings (TerminalProfile *profile)
+gboolean
+_terminal_profile_get_forgotten (TerminalProfile *profile)
 {
-  TerminalProfilePrivate *priv = profile->priv;
-  return &priv->locked;
+  return profile->priv->forgotten;
 }
 
-static void
-emit_changed (TerminalProfile           *profile,
-              const TerminalSettingMask *mask)
-{
-  TerminalProfilePrivate *priv = profile->priv;
-  
-  priv->in_notification_count += 1;
-  g_signal_emit (G_OBJECT (profile), signals[CHANGED], 0, mask);  
-  priv->in_notification_count -= 1;
-}
-
-/* returns actual name used for created profile */
-char *
-terminal_profile_clone (TerminalProfile *base_profile,
-                         const char      *visible_name,
-                         GError **error)
+TerminalProfile *
+_terminal_profile_clone (TerminalProfile *base_profile,
+                         const char      *visible_name)
 {
   TerminalApp *app = terminal_app_get ();
-  TerminalProfilePrivate *base_priv = base_profile->priv;
-  char *profile_name = NULL;
-  char *profile_dir = NULL;
-  int i;
-  char *s;
-  const char *cs;
-  char *key = NULL;
-  GList *profiles = NULL;
-  GSList *name_list = NULL;
-  GList *tmp;
-  GError *err = NULL;
+  GObject *base_object = G_OBJECT (base_profile);
+  TerminalProfilePrivate *new_priv;
+  char profile_name[32];
+  GParameter *params;
+  GParamSpec **pspecs;
+  guint n_pspecs, i, n_params, profile_num;
+  TerminalProfile *new_profile;
 
-  /* This is for extra bonus paranoia against CORBA reentrancy */
-  /* FIXMEchpe more like bogus paranoia */
   g_object_ref (base_profile);
 
-#define BAIL_OUT_CHECK() do {                           \
-    if (base_priv->forgotten ||                         \
-        err != NULL)                                    \
-       goto cleanup;                                    \
-  } while (0) 
-
-  /* FIXMEchpe justf use "profileN" */
-  /* Pick a unique name for storing in gconf (based on visible name) */
-  profile_name = gconf_escape_key (visible_name, -1);
-
-  s = g_strdup (profile_name);
-  i = 0;
-  while (terminal_app_get_profile_by_name (app, s))
+  profile_num = 0;
+  do
     {
-      g_free (s);
-      
-      s = g_strdup_printf ("%s-%d", profile_name, i);
-
-      ++i;
+      g_snprintf (profile_name, sizeof (profile_name), "Profile%u", ++profile_num);
     }
+  while (terminal_app_get_profile_by_name (app, profile_name) != NULL);
+ 
+  g_print ("cloning... new name %s\n", profile_name);
 
-  g_free (profile_name);
-  profile_name = s;
-
-  profile_dir = gconf_concat_dir_and_key (CONF_PROFILES_PREFIX, 
-                                          profile_name);
+  /* Now we have an unused profile name */
+  pspecs = g_object_class_list_properties (G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (base_profile)), &n_pspecs);
   
-  /* Store a copy of base profile values at under that directory */
+  params = g_newa (GParameter, n_pspecs);
+  n_params = 0;
 
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_VISIBLE_NAME);
-
-  gconf_client_set_string (base_priv->conf,
-                           key,
-                           visible_name,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_DEFAULT_SHOW_MENUBAR);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->default_show_menubar,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_FOREGROUND_COLOR);
-  s = color_to_string (&base_priv->foreground);
-  gconf_client_set_string (base_priv->conf,
-                           key, s,                           
-                           &err);
-  g_free (s);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_BACKGROUND_COLOR);
-  s = color_to_string (&base_priv->background);
-  gconf_client_set_string (base_priv->conf,
-                           key, s,                           
-                           &err);
-  g_free (s);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_TITLE);
-  /* default title is profile name, not copied from base */
-  gconf_client_set_string (base_priv->conf,
-                           key, visible_name,
-                           &err);
-  BAIL_OUT_CHECK ();
-  
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_TITLE_MODE);
-  cs = gconf_enum_to_string (title_modes, base_priv->title_mode);
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_ALLOW_BOLD);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->allow_bold,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SILENT_BELL);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->silent_bell,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_WORD_CHARS);
-  /* default title is profile name, not copied from base */
-  gconf_client_set_string (base_priv->conf,
-                           key, base_priv->word_chars,
-                           &err);
-  BAIL_OUT_CHECK ();
-  
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SCROLLBAR_POSITION);
-  cs = gconf_enum_to_string (scrollbar_positions,
-                             base_priv->scrollbar_position);
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-  BAIL_OUT_CHECK ();
-  
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SCROLLBACK_LINES);
-  gconf_client_set_int (base_priv->conf,
-                        key, base_priv->scrollback_lines,
-                        &err);
-  BAIL_OUT_CHECK ();
-
-  
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SCROLL_ON_KEYSTROKE);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->scroll_on_keystroke,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SCROLL_ON_OUTPUT);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->scroll_on_output,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_EXIT_ACTION);
-
-  cs = gconf_enum_to_string (exit_actions,
-                             base_priv->exit_action);
-  
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_LOGIN_SHELL);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->login_shell,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_UPDATE_RECORDS);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->update_records,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_USE_CUSTOM_COMMAND);
-
-  gconf_client_set_bool (base_priv->conf,
-                         key,
-                         base_priv->use_custom_command,
-                         &err);
-
-  BAIL_OUT_CHECK ();
-
-  
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_CUSTOM_COMMAND);
-  gconf_client_set_string (base_priv->conf,
-                           key, base_priv->custom_command,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_ICON);
-  gconf_client_set_string (base_priv->conf,
-                           key, base_priv->icon_file ? base_priv->icon_file : "",
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_PALETTE);
-  s = terminal_palette_to_string (base_priv->palette);
-  gconf_client_set_string (base_priv->conf,
-                           key, s,
-                           &err);
-  g_free (s);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_BACKGROUND_TYPE);
-  cs = gconf_enum_to_string (background_types, base_priv->background_type);
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_BACKGROUND_IMAGE);
-  gconf_client_set_string (base_priv->conf,
-                           key, base_priv->background_image_file,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_SCROLL_BACKGROUND);
-  gconf_client_set_bool (base_priv->conf,
-                         key, base_priv->scroll_background,
-                         &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_BACKGROUND_DARKNESS);
-  gconf_client_set_float (base_priv->conf,
-                          key, base_priv->background_darkness,
-                          &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_BACKSPACE_BINDING);
-  cs = gconf_enum_to_string (erase_bindings, base_priv->backspace_binding);
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_DELETE_BINDING);
-  cs = gconf_enum_to_string (erase_bindings, base_priv->delete_binding);
-  gconf_client_set_string (base_priv->conf,
-                           key, cs,
-                           &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_USE_THEME_COLORS);
-  gconf_client_set_bool (base_priv->conf,
-                         key, base_priv->use_theme_colors,
-                         &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_USE_SYSTEM_FONT);
-  gconf_client_set_bool (base_priv->conf,
-                         key, base_priv->use_system_font,
-                         &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_NO_AA_WITHOUT_RENDER);
-  gconf_client_set_bool (base_priv->conf,
-                         key, base_priv->no_aa_without_render,
-                         &err);
-  BAIL_OUT_CHECK ();
-
-  g_free (key);
-  key = gconf_concat_dir_and_key (profile_dir,
-                                  KEY_FONT);
-  s = pango_font_description_to_string (base_priv->font);
-  gconf_client_set_string (base_priv->conf,
-                           key, s,
-                           &err);
-  g_free (s);
-  
-  BAIL_OUT_CHECK ();
-  
-  
-  /* Add new profile to the profile list; the method for doing this has
-   * a race condition where we and someone else set at the same time,
-   * but I am just going to punt on this issue.
-   */
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
-  tmp = profiles;
-  while (tmp != NULL)
+  for (i = 0; i < n_pspecs; ++i)
     {
-      name_list = g_slist_prepend (name_list,
-                                   g_strdup (terminal_profile_get_name (tmp->data)));
-      
-      tmp = tmp->next;
-    }
+      GParamSpec *pspec = pspecs[i];
 
-  name_list = g_slist_prepend (name_list, g_strdup (profile_name));
-  
-  gconf_client_set_list (base_priv->conf,
-                         CONF_GLOBAL_PREFIX"/profile_list",
-                         GCONF_VALUE_STRING,
-                         name_list,
-                         &err);
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+        continue;
 
-  BAIL_OUT_CHECK ();
-  
- cleanup:
-  g_free (profile_dir);
-  g_free (key);
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+        continue;
 
-  g_list_free (profiles);
+      g_print ("pspec name %s\n", pspec->name);
+      g_value_init (&params[n_params].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      if (pspec->name == I_(TERMINAL_PROFILE_NAME))
+        {
+          g_print ("setting name %s\n", pspec->name);
+          g_value_set_static_string (&params[n_params].value, profile_name);
+        }
+      else if (pspec->name == I_(TERMINAL_PROFILE_VISIBLE_NAME))
+        g_value_set_static_string (&params[n_params].value, visible_name);
+      else
+        g_object_get_property (base_object, pspec->name, &params[n_params].value);
 
-  if (name_list)
-    {
-      g_slist_foreach (name_list, (GFunc) g_free, NULL);
-      g_slist_free (name_list);
-    }
-  
-  if (err)
-    {
-      g_free (profile_name);
-      profile_name = NULL;
-
-      *error = err;
+      ++n_params;
     }
 
   g_object_unref (base_profile);
-  return profile_name;
-}
 
-/* We need to do this ourselves, because the gtk_color_selection_palette_to_string
- * does not carry all the bytes, and xterm's palette is messed up...
- */
+  new_profile = g_object_newv (TERMINAL_TYPE_PROFILE, n_params, params);
 
-static gchar*
-color_selection_palette_to_string (const GdkColor *colors, gint n_colors)
-{
-  gint i;
-  gchar **strs = NULL;
-  gchar *retval;
-  
-  if (n_colors == 0)
-    return g_strdup ("");
+  for (i = 0; i < n_params; ++i)
+    g_value_unset (&params[i].value);
 
-  strs = g_new0 (gchar*, n_colors + 1);
-
-  for (i = 0; i < n_colors; ++i)
+  /* Flush the new profile to gconf */
+  new_priv = new_profile->priv;
+  g_slist_free (new_priv->dirty_pspecs);
+  for (i = 0; i < n_pspecs; ++i)
     {
-      gchar *ptr;
-      
-      strs[i] = g_strdup_printf ("#%4X%4X%4X", colors[i].red, colors[i].green, colors[i].blue);
+      GParamSpec *pspec = pspecs[i];
 
-      for (ptr = strs[i]; *ptr; ptr++)
-        if (*ptr == ' ')
-          *ptr = '0';
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+        continue;
+
+      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+        continue;
+
+      new_priv->dirty_pspecs = g_slist_prepend (new_priv->dirty_pspecs, pspec);
     }
+  g_free (pspecs);
 
-  retval = g_strjoinv (":", strs);
+  /* FIXMEchpe save immediately */
+  terminal_profile_schedule_save (new_profile, NULL);
 
-  g_strfreev (strs);
-
-  return retval;
+  return new_profile;
 }
 
-char*
-terminal_palette_to_string (const GdkColor *palette)
+/* Public API */
+
+gboolean
+terminal_profile_get_property_boolean (TerminalProfile *profile,
+                                       const char *prop_name)
 {
-  return color_selection_palette_to_string (palette,
-                                                TERMINAL_PALETTE_SIZE);
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_BOOLEAN (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_BOOLEAN (value))
+    return FALSE;
+
+  return g_value_get_boolean (value);
+}
+
+gconstpointer
+terminal_profile_get_property_boxed (TerminalProfile *profile,
+                                     const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_BOXED (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_BOXED (value))
+    return FALSE;
+
+  return g_value_get_boxed (value);
+}
+
+double
+terminal_profile_get_property_double (TerminalProfile *profile,
+                                      const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_DOUBLE (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_DOUBLE (value))
+    return FALSE;
+
+  return g_value_get_double (value);
+}
+
+glong
+terminal_profile_get_property_enum (TerminalProfile *profile,
+                                    const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_ENUM (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_ENUM (value))
+    return FALSE;
+
+  return g_value_get_enum (value);
+}
+
+int
+terminal_profile_get_property_int (TerminalProfile *profile,
+                                   const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_INT (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_INT (value))
+    return FALSE;
+
+  return g_value_get_int (value);
+}
+
+gpointer
+terminal_profile_get_property_object (TerminalProfile *profile,
+                                      const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_OBJECT (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_OBJECT (value))
+    return FALSE;
+
+  return g_value_get_object (value);
+}
+
+const char*
+terminal_profile_get_property_string (TerminalProfile *profile,
+                                      const char *prop_name)
+{
+  const GValue *value;
+
+  value = get_prop_value_from_prop_name (profile, prop_name);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_STRING (value), FALSE);
+  if (!value || !G_VALUE_HOLDS_STRING (value))
+    return FALSE;
+
+  return g_value_get_string (value);
 }
 
 gboolean
-terminal_palette_from_string (const char     *str,
-                              GdkColor       *palette,
-                              gboolean        warn)
-{
-  GdkColor *colors;
-  int n_colors;
-
-  colors = NULL;
-  n_colors = 0;
-  if (!gtk_color_selection_palette_from_string (str,
-                                                &colors, &n_colors))
-    {
-      if (warn)
-        g_printerr (_("Could not parse string \"%s\" as a color palette\n"),
-                    str);
-
-      return FALSE;
-    }
-
-  if (n_colors < TERMINAL_PALETTE_SIZE)
-    {
-      if (warn)
-        g_printerr (ngettext ("Palette had %d entry instead of %d\n",
-                              "Palette had %d entries instead of %d\n",
-			      n_colors),
-                    n_colors, TERMINAL_PALETTE_SIZE);
-    }
-                                                
-  /* We continue even with a funky palette size, so we can change the
-   * palette size in future versions without causing too many issues.
-   */
-  if (TERMINAL_PALETTE_SIZE > n_colors)
-    memcpy (palette, terminal_palette_linux, TERMINAL_PALETTE_SIZE * sizeof (GdkColor));
-  
-  memcpy (palette, colors, MIN (TERMINAL_PALETTE_SIZE, n_colors) * sizeof (GdkColor));
-
-  g_free (colors);
-
-  return TRUE;
-}
-
-gboolean 
-terminal_setting_mask_is_empty (const TerminalSettingMask *mask)
-{
-  const unsigned int *p = (const unsigned int *) mask;
-  const unsigned int *end = p + (sizeof (TerminalSettingMask) / 
-                                 sizeof (unsigned int));
-
-  while (p < end)
-    {
-      if (*p != 0)
-        return FALSE;
-      ++p;
-    }
-
-  return TRUE;
-}
-
-void
-terminal_setting_mask_clear (TerminalSettingMask *mask)
-{
-  memset (mask, '\0', sizeof (*mask));
-}
-
-gboolean
-terminal_setting_mask_equal (const TerminalSettingMask *a,
-                             const TerminalSettingMask *b)
-{
-  /* This assumes the padding in the TerminalSettingMask
-   * struct is initialized to 0
-   */
-  
-  return memcmp (a, b, sizeof (*a)) == 0;
-}
-
-const GdkColor
-terminal_palette_tango[TERMINAL_PALETTE_SIZE] =
-{
-  { 0, 0x2e2e, 0x3434, 0x3636 },
-  { 0, 0xcccc, 0x0000, 0x0000 },
-  { 0, 0x4e4e, 0x9a9a, 0x0606 },
-  { 0, 0xc4c4, 0xa0a0, 0x0000 },
-  { 0, 0x3434, 0x6565, 0xa4a4 },
-  { 0, 0x7575, 0x5050, 0x7b7b },
-  { 0, 0x0606, 0x9820, 0x9a9a },
-  { 0, 0xd3d3, 0xd7d7, 0xcfcf },
-  { 0, 0x5555, 0x5757, 0x5353 },
-  { 0, 0xefef, 0x2929, 0x2929 },
-  { 0, 0x8a8a, 0xe2e2, 0x3434 },
-  { 0, 0xfcfc, 0xe9e9, 0x4f4f },
-  { 0, 0x7272, 0x9f9f, 0xcfcf },
-  { 0, 0xadad, 0x7f7f, 0xa8a8 },
-  { 0, 0x3434, 0xe2e2, 0xe2e2 },
-  { 0, 0xeeee, 0xeeee, 0xecec }
-};
-
-const GdkColor
-terminal_palette_linux[TERMINAL_PALETTE_SIZE] =
-{
-  { 0, 0x0000, 0x0000, 0x0000 },
-  { 0, 0xaaaa, 0x0000, 0x0000 },
-  { 0, 0x0000, 0xaaaa, 0x0000 },
-  { 0, 0xaaaa, 0x5555, 0x0000 },
-  { 0, 0x0000, 0x0000, 0xaaaa },
-  { 0, 0xaaaa, 0x0000, 0xaaaa },
-  { 0, 0x0000, 0xaaaa, 0xaaaa },
-  { 0, 0xaaaa, 0xaaaa, 0xaaaa },
-  { 0, 0x5555, 0x5555, 0x5555 },
-  { 0, 0xffff, 0x5555, 0x5555 },
-  { 0, 0x5555, 0xffff, 0x5555 },
-  { 0, 0xffff, 0xffff, 0x5555 },
-  { 0, 0x5555, 0x5555, 0xffff },
-  { 0, 0xffff, 0x5555, 0xffff },
-  { 0, 0x5555, 0xffff, 0xffff },
-  { 0, 0xffff, 0xffff, 0xffff }
-};
-
-const GdkColor
-terminal_palette_xterm[TERMINAL_PALETTE_SIZE] =
-{
-    {0, 0x0000, 0x0000, 0x0000 },
-    {0, 0xcdcb, 0x0000, 0x0000 },
-    {0, 0x0000, 0xcdcb, 0x0000 },
-    {0, 0xcdcb, 0xcdcb, 0x0000 },
-    {0, 0x1e1a, 0x908f, 0xffff },
-    {0, 0xcdcb, 0x0000, 0xcdcb },
-    {0, 0x0000, 0xcdcb, 0xcdcb },
-    {0, 0xe5e2, 0xe5e2, 0xe5e2 },
-    {0, 0x4ccc, 0x4ccc, 0x4ccc },
-    {0, 0xffff, 0x0000, 0x0000 },
-    {0, 0x0000, 0xffff, 0x0000 },
-    {0, 0xffff, 0xffff, 0x0000 },
-    {0, 0x4645, 0x8281, 0xb4ae },
-    {0, 0xffff, 0x0000, 0xffff },
-    {0, 0x0000, 0xffff, 0xffff },
-    {0, 0xffff, 0xffff, 0xffff }
-};
-
-const GdkColor
-terminal_palette_rxvt[TERMINAL_PALETTE_SIZE] =
-{
-  { 0, 0x0000, 0x0000, 0x0000 },
-  { 0, 0xcdcd, 0x0000, 0x0000 },
-  { 0, 0x0000, 0xcdcd, 0x0000 },
-  { 0, 0xcdcd, 0xcdcd, 0x0000 },
-  { 0, 0x0000, 0x0000, 0xcdcd },
-  { 0, 0xcdcd, 0x0000, 0xcdcd },
-  { 0, 0x0000, 0xcdcd, 0xcdcd },
-  { 0, 0xfafa, 0xebeb, 0xd7d7 },
-  { 0, 0x4040, 0x4040, 0x4040 },
-  { 0, 0xffff, 0x0000, 0x0000 },
-  { 0, 0x0000, 0xffff, 0x0000 },
-  { 0, 0xffff, 0xffff, 0x0000 },
-  { 0, 0x0000, 0x0000, 0xffff },
-  { 0, 0xffff, 0x0000, 0xffff },
-  { 0, 0x0000, 0xffff, 0xffff },
-  { 0, 0xffff, 0xffff, 0xffff }
-};
-
-void
-profile_name_entry_notify (TerminalProfile *profile)
+terminal_profile_property_locked (TerminalProfile *profile,
+                                  const char *prop_name)
 {
   TerminalProfilePrivate *priv = profile->priv;
-  
-  gconf_client_notify (priv->conf,
-		       CONF_GLOBAL_PREFIX"/profile_list");
+  GParamSpec *pspec;
+
+  pspec = get_pspec_from_name (profile, prop_name);
+  g_return_val_if_fail (pspec != NULL, FALSE);
+  if (!pspec)
+    return FALSE;
+
+  return priv->locked[pspec->param_id];
+}
+
+void
+terminal_profile_reset_property (TerminalProfile *profile,
+                                 const char *prop_name)
+{
+  GParamSpec *pspec;
+
+  pspec = get_pspec_from_name (profile, prop_name);
+  g_return_if_fail (pspec != NULL);
+  if (!pspec ||
+      (pspec->flags & G_PARAM_WRITABLE) == 0)
+    return;
+
+  terminal_profile_reset_property_internal (profile, pspec, TRUE);
+}
+
+gboolean
+terminal_profile_get_palette (TerminalProfile *profile,
+                              GdkColor *colors,
+                              guint *n_colors)
+{
+  TerminalProfilePrivate *priv;
+  GValueArray *array;
+  guint i, n;
+
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
+  g_return_val_if_fail (colors != NULL && n_colors != NULL, FALSE);
+
+  priv = profile->priv;
+  array = g_value_get_boxed (g_value_array_get_nth (priv->properties, PROP_PALETTE));
+  if (!array)
+    return FALSE;
+
+  n = MIN (array->n_values, *n_colors);
+  for (i = 0; i < n; ++i)
+    {
+      GdkColor *color = g_value_get_boxed (g_value_array_get_nth (array, i));
+      if (!color)
+        continue; /* shouldn't happen!! */
+
+      colors[i] = *color;
+    }
+
+  *n_colors = n;
+  return TRUE;
+}
+
+gboolean
+terminal_profile_get_palette_is_builtin (TerminalProfile *profile,
+                                         guint *n)
+{
+  GdkColor colors[TERMINAL_PALETTE_SIZE];
+  guint n_colors;
+  guint i;
+
+  n_colors = G_N_ELEMENTS (colors);
+  if (!terminal_profile_get_palette (profile, colors, &n_colors) ||
+      n_colors != TERMINAL_PALETTE_SIZE)
+    return FALSE;
+
+  for (i = 0; i < TERMINAL_PALETTE_N_BUILTINS; ++i)
+    if (palette_cmp (colors, terminal_palettes[i]))
+      {
+        *n = i;
+        return TRUE;
+      }
+
+  return FALSE;
+}
+
+void
+terminal_profile_set_palette_builtin (TerminalProfile *profile,
+                                      guint n)
+{
+  GValue value = { 0, };
+
+  g_return_if_fail (n < TERMINAL_PALETTE_N_BUILTINS);
+
+  g_value_init (&value, G_TYPE_VALUE_ARRAY);
+  set_value_from_palette (&value, terminal_palettes[n], TERMINAL_PALETTE_SIZE);
+  g_object_set_property (G_OBJECT (profile), TERMINAL_PROFILE_PALETTE, &value);
+  g_value_unset (&value);
+}
+
+gboolean
+terminal_profile_modify_palette_entry (TerminalProfile *profile,
+                                       int              i,
+                                       const GdkColor  *color)
+{
+  TerminalProfilePrivate *priv = profile->priv;
+  GValueArray *array;
+  GValue *value;
+  GdkColor *old_color;
+
+  array = g_value_get_boxed (g_value_array_get_nth (priv->properties, PROP_PALETTE));
+  if (!array)
+    return FALSE; /* FIXMEchpe reset to default? Can't happen really can it? */
+
+  if (i < 0 || i >= array->n_values)
+    return FALSE;
+
+  value = g_value_array_get_nth (array, i);
+  old_color = g_value_get_boxed (value);
+  if (!old_color ||
+      !gdk_color_equal (old_color, color))
+    {
+      g_value_set_boxed (value, color);
+      g_object_notify (G_OBJECT (profile), TERMINAL_PROFILE_PALETTE);
+    }
+
+  return TRUE;
 }
