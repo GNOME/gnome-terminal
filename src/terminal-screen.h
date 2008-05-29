@@ -116,6 +116,13 @@ void        terminal_screen_set_font_scale    (TerminalScreen *screen,
                                                double          factor);
 double      terminal_screen_get_font_scale    (TerminalScreen *screen);
 
+void       terminal_screen_get_size (TerminalScreen *screen,
+                                     int *width_chars,
+                                     int *height_chars);
+void       terminal_screen_get_cell_size (TerminalScreen *screen,
+                                          int *width_chars,
+                                          int *height_chars);
+
 void terminal_screen_update_scrollbar (TerminalScreen *screen);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */

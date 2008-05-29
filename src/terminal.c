@@ -2854,7 +2854,7 @@ terminal_app_get_clone_command (TerminalApp *app,
 
                g_ptr_array_add (args, g_strdup ("--geometry"));
 
-              terminal_widget_get_size (terminal_screen_get_widget (screen), &w, &h);
+              terminal_screen_get_size (screen, &w, &h);
               gtk_window_get_position (GTK_WINDOW (window), &x, &y);
               g_ptr_array_add (args, g_strdup_printf ("%dx%d+%d+%d", w, h, x, y));
             }

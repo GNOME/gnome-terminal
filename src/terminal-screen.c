@@ -1367,7 +1367,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 
   term = priv->term;
 
-  terminal_widget_get_cell_size (term, &char_width, &char_height);
+  terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
   matched_string =
     terminal_widget_check_match (term,
@@ -2218,4 +2218,26 @@ terminal_screen_update_scrollbar (TerminalScreen *screen)
 
   terminal_screen_container_set_placement (parent, corner);
   terminal_screen_container_set_policy (parent, GTK_POLICY_NEVER, policy);
+}
+
+void
+terminal_screen_get_size (TerminalScreen *screen,
+			  int       *width_chars,
+			  int       *height_chars)
+{
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+
+  *width_chars = terminal->column_count;
+  *height_chars = terminal->row_count;
+}
+
+void
+terminal_screen_get_cell_size (TerminalScreen *screen,
+			       int                  *cell_width_pixels,
+			       int                  *cell_height_pixels)
+{
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+
+  *cell_width_pixels = terminal->char_width;
+  *cell_height_pixels = terminal->char_height;
 }

@@ -78,52 +78,6 @@ terminal_widget_set_implementation (GtkWidget *terminal)
 }
 
 void
-terminal_widget_set_size (GtkWidget *widget,
-			  int        width_chars,
-			  int        height_chars)
-{
-  VteTerminal *terminal;
-
-  terminal = VTE_TERMINAL (widget);
-
-  vte_terminal_set_size (terminal, width_chars, height_chars);
-}
-
-void
-terminal_widget_get_size (GtkWidget *widget,
-			  int       *width_chars,
-			  int       *height_chars)
-{
-  VteTerminal *terminal;
-
-  terminal = VTE_TERMINAL (widget);
-
-  *width_chars = terminal->column_count;
-  *height_chars = terminal->row_count;
-}
-
-void
-terminal_widget_get_cell_size (GtkWidget            *widget,
-			       int                  *cell_width_pixels,
-			       int                  *cell_height_pixels)
-{
-  VteTerminal *terminal;
-
-  terminal = VTE_TERMINAL (widget);
-
-  *cell_width_pixels = terminal->char_width;
-  *cell_height_pixels = terminal->char_height;
-}
-
-void
-terminal_widget_get_padding                (GtkWidget            *widget,
-					    int                  *xpad,
-					    int                  *ypad)
-{
-  vte_terminal_get_padding(VTE_TERMINAL(widget), xpad, ypad);
-}
-
-void
 terminal_widget_match_add                  (GtkWidget            *widget,
 					    const char           *regexp,
                                             int                   flavor)

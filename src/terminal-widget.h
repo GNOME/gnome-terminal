@@ -38,18 +38,6 @@ G_BEGIN_DECLS
  */
 
 void       terminal_widget_set_implementation         (GtkWidget            *widget);
-void       terminal_widget_set_size                   (GtkWidget            *widget,
-                                                       int                   width_chars,
-                                                       int                   height_chars);
-void       terminal_widget_get_size                   (GtkWidget            *widget,
-                                                       int                  *width_chars,
-                                                       int                  *height_chars);
-void       terminal_widget_get_cell_size              (GtkWidget            *widget,
-                                                       int                  *cell_width_pixels,
-                                                       int                  *cell_height_pixels);
-void       terminal_widget_get_padding                (GtkWidget            *widget,
-                                                       int                  *xpad,
-                                                       int                  *ypad);
 void       terminal_widget_match_add                  (GtkWidget            *widget,
                                                        const char           *regexp,
                                                        int                   flavor);

@@ -1805,15 +1805,15 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
 
-  terminal_widget_get_cell_size (widget, &char_width, &char_height);
-  terminal_widget_get_size (widget, &grid_width, &grid_height);
+  terminal_screen_get_cell_size (screen, &char_width, &char_height);
+  terminal_screen_get_size (screen, &grid_width, &grid_height);
 
   if (force_grid_width >= 0)
     grid_width = force_grid_width;
   if (force_grid_height >= 0)
     grid_height = force_grid_height;
   
-  terminal_widget_get_padding (widget, &xpad, &ypad);
+  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad, &ypad);
   
   w += xpad + char_width * grid_width;
   h += ypad + char_height * grid_height;
@@ -1916,26 +1916,21 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget* page_widget;
   TerminalScreen *screen;
-  GtkWidget *menu_item;
   int old_grid_width, old_grid_height;
-  GtkWidget *old_widget, *new_widget;
 
   if (priv->active_term == NULL || priv->disposed)
     return;
 
-  old_widget = terminal_screen_get_widget (priv->active_term);
-  terminal_widget_get_size (old_widget, &old_grid_width, &old_grid_height);
+  terminal_screen_get_size (priv->active_term, &old_grid_width, &old_grid_height);
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
-
   screen = terminal_screen_container_get_screen (page_widget);
 
   g_assert (screen);
   
   /* This is so that we maintain the same grid */
-  new_widget = terminal_screen_get_widget (screen);
-  terminal_widget_set_size (new_widget, old_grid_width, old_grid_height);
+  vte_terminal_set_size (VTE_TERMINAL (screen), old_grid_width, old_grid_height);
 
   terminal_window_set_active (window, screen);
   terminal_window_update_tabs_menu_sensitivity (window);
@@ -1996,13 +1991,11 @@ notebook_page_added_callback (GtkWidget       *notebook,
   /* If we have an active screen, match its size and zoom */
   if (priv->active_term)
     {
-      GtkWidget *widget;
       int current_width, current_height;
       double scale;
 
-      widget = terminal_screen_get_widget (priv->active_term);
-      terminal_widget_get_size (widget, &current_width, &current_height);
-      terminal_widget_set_size (term, current_width, current_height);
+      terminal_screen_get_size (priv->active_term, &current_width, &current_height);
+      vte_terminal_set_size (VTE_TERMINAL (screen), current_width, current_height);
 
       scale = terminal_screen_get_font_scale (priv->active_term);
       terminal_screen_set_font_scale (screen, scale);
@@ -2114,7 +2107,7 @@ terminal_window_update_geometry (TerminalWindow *window)
    * get some kind of union of all hints from all terms in the
    * window, but that doesn't make too much sense.
    */
-  terminal_widget_get_cell_size (widget, &char_width, &char_height);
+  terminal_screen_get_cell_size (priv->active_term, &char_width, &char_height);
   
   if (char_width != priv->old_char_width ||
       char_height != priv->old_char_height ||
@@ -2125,7 +2118,7 @@ terminal_window_update_geometry (TerminalWindow *window)
       /* FIXME Since we're using xthickness/ythickness to compute
        * padding we need to change the hints when the theme changes.
        */
-      terminal_widget_get_padding (widget, &xpad, &ypad);
+      vte_terminal_get_padding (VTE_TERMINAL (priv->active_term), &xpad, &ypad);
       
       hints.base_width = xpad;
       hints.base_height = ypad;
@@ -2203,11 +2196,9 @@ new_window (TerminalWindow *window,
 
   if (screen)
     {
-      GtkWidget *term;
       int width, height;
 
-      term = terminal_screen_get_widget (screen);
-      terminal_widget_get_size (term, &width, &height);
+      terminal_screen_get_size (screen, &width, &height);
       geometry = g_strdup_printf("%dx%d", width, height);
     }
   else
