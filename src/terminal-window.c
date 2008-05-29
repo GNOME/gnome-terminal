@@ -1481,6 +1481,9 @@ terminal_window_show (GtkWidget *widget)
           timestamp = sn_launchee_context_get_timestamp (context);
           gdk_x11_window_set_user_time (widget->window, timestamp);
         }
+
+      g_free (priv->startup_id);
+      priv->startup_id = NULL;
     }
   
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
