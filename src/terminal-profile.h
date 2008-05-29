@@ -133,7 +133,7 @@ struct _TerminalProfileClass
 
 GType terminal_profile_get_type (void) G_GNUC_CONST;
 
-TerminalProfile* terminal_profile_new (const char  *name);
+TerminalProfile* _terminal_profile_new (const char  *name);
 
 const char*               terminal_profile_get_name                 (TerminalProfile *profile);
 const char*               terminal_profile_get_visible_name         (TerminalProfile *profile);
@@ -251,35 +251,20 @@ void terminal_profile_set_font                   (TerminalProfile            *pr
 
 void terminal_profile_reset_compat_defaults     (TerminalProfile        *profile);
 
-TerminalProfile* terminal_profile_ensure_fallback        (GConfClient     *conf);
-void             terminal_profile_initialize             (GConfClient     *conf);
-GList*           terminal_profile_get_list               (void);
-int              terminal_profile_get_count              (void);
-/* may return NULL */
-TerminalProfile* terminal_profile_get_default            (void);
-/* never returns NULL if any profiles exist, one is always supposed to */
-TerminalProfile* terminal_profile_get_for_new_term       (TerminalProfile *current);
-TerminalProfile* terminal_profile_lookup                 (const char      *name);
-TerminalProfile* terminal_profile_lookup_by_visible_name (const char      *name);
-void             terminal_profile_forget                 (TerminalProfile *profile);
-
 const TerminalSettingMask* terminal_profile_get_locked_settings (TerminalProfile *profile);
 
 void terminal_profile_update (TerminalProfile *profile);
 
-char* terminal_profile_create (TerminalProfile *base_profile,
-                               const char      *visible_name,
-                               GtkWindow       *transient_parent);
+void             terminal_profile_forget                 (TerminalProfile *profile);
 
-void terminal_profile_delete_list (GConfClient *conf,
-                                   GList      *list,
-                                   GtkWindow  *transient_parent);
+char* terminal_profile_clone (TerminalProfile *base_profile,
+                              const char      *visible_name,
+                              GError **err);
 
 gboolean terminal_setting_mask_is_empty (const TerminalSettingMask *mask);
 void     terminal_setting_mask_clear    (TerminalSettingMask       *mask);
 gboolean terminal_setting_mask_equal    (const TerminalSettingMask *a,
                                          const TerminalSettingMask *b);
-
 
 extern const GdkColor terminal_palette_linux[TERMINAL_PALETTE_SIZE];
 extern const GdkColor terminal_palette_xterm[TERMINAL_PALETTE_SIZE];

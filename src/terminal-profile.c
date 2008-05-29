@@ -31,6 +31,7 @@
 
 #include "terminal-intl.h"
 #include "terminal-profile.h"
+#include "terminal-app.h"
 #include "terminal-type-builtins.h"
 
 /* If you add a key, you need to update code:
@@ -133,6 +134,7 @@ struct _TerminalProfilePrivate
   guint no_aa_without_render : 1;
   guint use_skey : 1;
   guint forgotten : 1;
+  guint is_default : 1;
 };
 
 enum {
@@ -265,11 +267,6 @@ static const GConfEnumStringPair background_types[] = {
   { -1, NULL }
 };
 
-static GHashTable *profiles = NULL;
-static char* default_profile_id = NULL;
-static TerminalProfile *default_profile = NULL;
-static gboolean default_profile_locked = FALSE;
-
 #define RETURN_IF_NOTIFYING(profile) if ((profile)->priv->in_notification_count) return
 
 enum {
@@ -286,14 +283,6 @@ static void profile_change_notify        (GConfClient *client,
                                           guint        cnxn_id,
                                           GConfEntry  *entry,
                                           gpointer     user_data);
-
-static void default_change_notify        (GConfClient *client,
-                                          guint        cnxn_id,
-                                          GConfEntry  *entry,
-                                          gpointer     user_data);
-
-static void update_default_profile       (const char  *name,
-                                          gboolean     locked);
 
 static void emit_changed (TerminalProfile           *profile,
                           const TerminalSettingMask *mask);
@@ -396,18 +385,7 @@ terminal_profile_constructor (GType type,
                   err->message);
       g_error_free (err);
     }
-  
-  g_hash_table_insert (profiles, priv->name, profile);
 
-  if (default_profile == NULL &&
-      default_profile_id &&
-      strcmp (default_profile_id,
-              terminal_profile_get_name (profile)) == 0)
-    {
-      /* We are the default profile */
-      default_profile = profile;
-    }
-  
   return object;
 }
 
@@ -1059,11 +1037,8 @@ terminal_profile_finalize (GObject *object)
 }
 
 TerminalProfile*
-terminal_profile_new (const char *name)
+_terminal_profile_new (const char *name)
 {
-  g_return_val_if_fail (terminal_profile_lookup (name) == NULL,
-                        NULL);
-  
   return g_object_new (TERMINAL_TYPE_PROFILE,
                        "name", name,
                        NULL);
@@ -1719,7 +1694,7 @@ terminal_profile_get_is_default (TerminalProfile *profile)
 {
   g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), FALSE);
   
-  return profile == default_profile;
+  return profile->priv->is_default;
 }
 
 void
@@ -1739,10 +1714,13 @@ terminal_profile_set_is_default (TerminalProfile *profile,
    * In some cases, the default profile changes twice in quick succession,
    * and update_default_profile must be called in sync with those changes.
    */
-  update_default_profile (terminal_profile_get_name (profile),
+  priv->is_default = setting != FALSE;
+
+  /* FIXMEchpe */
+/*  update_default_profile (terminal_profile_get_name (profile),
                           !gconf_client_key_is_writable (priv->conf,
                                                          CONF_GLOBAL_PREFIX"/default_profile",
-                                                         NULL));
+                                                         NULL));*/
 }
 
 void
@@ -2875,177 +2853,6 @@ terminal_profile_reset_compat_defaults (TerminalProfile *profile)
   set_key_to_default (profile, KEY_BACKSPACE_BINDING);
 }
 
-static void
-update_default_profile (const char *name,
-                        gboolean    locked)
-{
-  TerminalProfile *profile;
-  gboolean changed;
-  TerminalProfile *old_default;
-  
-  changed = FALSE;
-  
-  g_free (default_profile_id);
-  default_profile_id = g_strdup (name);
-
-  old_default = default_profile;
-  profile = terminal_profile_lookup (name);
-  
-  if (profile)
-    {
-      if (profile != default_profile)
-        {
-          default_profile = profile;
-          changed = TRUE;
-        }
-    }
-
-  if (locked != default_profile_locked)
-    {
-      /* Need to emit changed on all profiles */
-      GList *all_profiles;
-      GList *tmp;
-      TerminalSettingMask mask;
-
-      terminal_setting_mask_clear (&mask);
-      mask.is_default = TRUE;
-      
-      default_profile_locked = locked;
-      
-      all_profiles = terminal_profile_get_list ();
-      tmp = all_profiles;
-      while (tmp != NULL)
-        {
-          TerminalProfile *p = tmp->data;
-          
-          emit_changed (p, &mask);
-          tmp = tmp->next;
-        }
-
-      g_list_free (all_profiles);
-    }
-  else if (changed)
-    {
-      TerminalSettingMask mask;
-      
-      terminal_setting_mask_clear (&mask);
-      mask.is_default = TRUE;
-
-      if (old_default)
-        emit_changed (old_default, &mask);
-
-      emit_changed (profile, &mask);
-    }
-}
-
-static void
-default_change_notify (GConfClient *client,
-                       guint        cnxn_id,
-                       GConfEntry  *entry,
-                       gpointer     user_data)
-{
-  GConfValue *val;
-  gboolean locked;
-  const char *name;
-  
-  val = gconf_entry_get_value (entry);  
-
-  if (val == NULL || val->type != GCONF_VALUE_STRING)
-    return;
-  
-  if (gconf_entry_get_is_writable (entry))  
-    locked = FALSE;
-  else
-    locked = TRUE;
-  
-  name = gconf_value_get_string (val);
-
-  update_default_profile (name, locked);
-}
-
-static int
-alphabetic_cmp (gconstpointer a,
-                gconstpointer b)
-{
-  TerminalProfile *ap = (TerminalProfile*) a;
-  TerminalProfile *bp = (TerminalProfile*) b;
-  int result;
-
-  result =  g_utf8_collate (terminal_profile_get_visible_name (ap),
-			    terminal_profile_get_visible_name (bp));
-  if (result == 0)
-    result = strcmp (terminal_profile_get_name (ap),
-		     terminal_profile_get_name (bp));
-
-  return result;
-}
-
-/* FIXMEchpe: make this list contain ref'd objects */
-/**
- * terminal_profile_get_list:
- *
- * Returns: a #GList containing all #TerminalProfile objects.
- *   The content of the list is owned by the backend and
- *   should not be modified or freed. Use g_list_free() when done
- *   using the list.
- */
-GList*
-terminal_profile_get_list (void)
-{
-  return g_list_sort (g_hash_table_get_values (profiles), alphabetic_cmp);
-}
-
-int
-terminal_profile_get_count (void)
-{
-  return g_hash_table_size (profiles);
-}
-
-TerminalProfile*
-terminal_profile_lookup (const char *name)
-{
-  g_return_val_if_fail (name != NULL, NULL);
-
-  if (profiles)
-    return g_hash_table_lookup (profiles, name);
-    
-  return NULL;
-}
-
-typedef struct
-{
-  TerminalProfile *result;
-  const char *target;
-} LookupInfo;
-
-static void
-lookup_by_visible_name_foreach (gpointer key,
-                                gpointer value,
-                                gpointer data)
-{
-  LookupInfo *info = data;
-
-  if (strcmp (info->target, terminal_profile_get_visible_name (value)) == 0)
-    info->result = value;
-}
-
-TerminalProfile*
-terminal_profile_lookup_by_visible_name (const char *name)
-{
-  LookupInfo info;
-
-  info.result = NULL;
-  info.target = name;
-
-  if (profiles)
-    {
-      g_hash_table_foreach (profiles, lookup_by_visible_name_foreach, &info);
-      return info.result;
-    }
-    
-  return NULL;
-}
-
 void
 terminal_profile_forget (TerminalProfile *profile)
 {
@@ -3066,12 +2873,8 @@ terminal_profile_forget (TerminalProfile *profile)
           g_error_free (err);
         }
 
-      g_hash_table_remove (profiles, priv->name);
       priv->forgotten = TRUE;
 
-      if (profile == default_profile)          
-        default_profile = NULL;
-      
       g_signal_emit (G_OBJECT (profile), signals[FORGOTTEN], 0);
     }
 }
@@ -3081,60 +2884,6 @@ terminal_profile_get_locked_settings (TerminalProfile *profile)
 {
   TerminalProfilePrivate *priv = profile->priv;
   return &priv->locked;
-}
-
-TerminalProfile*
-terminal_profile_ensure_fallback (GConfClient *conf)
-{
-  TerminalProfile *profile;
-
-  profile = terminal_profile_lookup (FALLBACK_PROFILE_ID);
-
-  if (profile == NULL)
-    {
-      profile = terminal_profile_new (FALLBACK_PROFILE_ID);
-      
-      terminal_profile_update (profile);
-    }
-  
-  return profile;
-}
-
-void
-terminal_profile_initialize (GConfClient *conf)
-{
-  GError *err;
-  char *str;
-
-  g_return_if_fail (profiles == NULL);
-  
-  profiles = g_hash_table_new (g_str_hash, g_str_equal);
-  
-  err = NULL;
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/default_profile",
-                           default_change_notify,
-                           NULL,
-                           NULL, &err);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of changes to default profile. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-
-  str = gconf_client_get_string (conf,
-                                 CONF_GLOBAL_PREFIX"/default_profile",
-                                 NULL);
-  if (str)
-    {
-      update_default_profile (str,
-                              !gconf_client_key_is_writable (conf,
-                                                             CONF_GLOBAL_PREFIX"/default_profile",
-                                                             NULL));
-      g_free (str);
-    }
 }
 
 static void
@@ -3148,66 +2897,13 @@ emit_changed (TerminalProfile           *profile,
   priv->in_notification_count -= 1;
 }
 
-/* Function I'm cut-and-pasting everywhere, this is from msm */
-static void
-dialog_add_details (GtkDialog  *dialog,
-                    const char *details)
-{
-  GtkWidget *hbox;
-  GtkWidget *button;
-  GtkWidget *label;
-  GtkRequisition req;
-  
-  hbox = gtk_hbox_new (FALSE, 0);
-
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
-  
-  gtk_box_pack_start (GTK_BOX (dialog->vbox),
-                      hbox,
-                      FALSE, FALSE, 0);
-
-  button = gtk_button_new_with_mnemonic (_("_Details"));
-  
-  gtk_box_pack_end (GTK_BOX (hbox), button,
-                    FALSE, FALSE, 0);
-  
-  label = gtk_label_new (details);
-
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
-  
-  gtk_box_pack_start (GTK_BOX (hbox), label,
-                      TRUE, TRUE, 0);
-
-  /* show the label on click */
-  g_signal_connect_swapped (G_OBJECT (button),
-                            "clicked",
-                            G_CALLBACK (gtk_widget_show),
-                            label);
-  
-  /* second callback destroys the button (note disconnects first callback) */
-  g_signal_connect (G_OBJECT (button), "clicked",
-                    G_CALLBACK (gtk_widget_destroy),
-                    NULL);
-
-  /* Set default dialog size to size with the label,
-   * and without the button, but then rehide the label
-   */
-  gtk_widget_show_all (hbox);
-
-  gtk_widget_size_request (GTK_WIDGET (dialog), &req);
-
-  gtk_window_set_default_size (GTK_WINDOW (dialog), req.width, req.height);
-  
-  gtk_widget_hide (label);
-}
-
 /* returns actual name used for created profile */
 char *
-terminal_profile_create (TerminalProfile *base_profile,
+terminal_profile_clone (TerminalProfile *base_profile,
                          const char      *visible_name,
-                         GtkWindow       *transient_parent)
+                         GError **error)
 {
+  TerminalApp *app = terminal_app_get ();
   TerminalProfilePrivate *base_priv = base_profile->priv;
   char *profile_name = NULL;
   char *profile_dir = NULL;
@@ -3215,28 +2911,28 @@ terminal_profile_create (TerminalProfile *base_profile,
   char *s;
   const char *cs;
   char *key = NULL;
-  GError *err = NULL;
   GList *profiles = NULL;
   GSList *name_list = NULL;
-  GList *tmp;  
+  GList *tmp;
+  GError *err = NULL;
 
   /* This is for extra bonus paranoia against CORBA reentrancy */
-  g_object_ref (G_OBJECT (base_profile));
-  g_object_ref (G_OBJECT (transient_parent));
+  /* FIXMEchpe more like bogus paranoia */
+  g_object_ref (base_profile);
 
 #define BAIL_OUT_CHECK() do {                           \
-    if (!GTK_WIDGET_VISIBLE (transient_parent) ||       \
-        base_priv->forgotten ||                \
+    if (base_priv->forgotten ||                         \
         err != NULL)                                    \
        goto cleanup;                                    \
   } while (0) 
-  
+
+  /* FIXMEchpe justf use "profileN" */
   /* Pick a unique name for storing in gconf (based on visible name) */
   profile_name = gconf_escape_key (visible_name, -1);
 
   s = g_strdup (profile_name);
   i = 0;
-  while (terminal_profile_lookup (s))
+  while (terminal_app_get_profile_by_name (app, s))
     {
       g_free (s);
       
@@ -3550,7 +3246,7 @@ terminal_profile_create (TerminalProfile *base_profile,
    * a race condition where we and someone else set at the same time,
    * but I am just going to punt on this issue.
    */
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
   tmp = profiles;
   while (tmp != NULL)
     {
@@ -3584,159 +3280,17 @@ terminal_profile_create (TerminalProfile *base_profile,
   
   if (err)
     {
-      if (GTK_WIDGET_VISIBLE (transient_parent))
-        {
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("There was an error creating the profile \"%s\""),
-                                           visible_name);
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-
-          dialog_add_details (GTK_DIALOG (dialog),
-                              err->message);
-          
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-          
-          gtk_widget_show (dialog);
-        }
-
-      g_error_free (err);
-
       g_free (profile_name);
       profile_name = NULL;
+
+      *error = err;
     }
 
-  g_object_unref (G_OBJECT (base_profile));
-  g_object_unref (G_OBJECT (transient_parent));
+  g_object_unref (base_profile);
   return profile_name;
 }
 
-void
-terminal_profile_delete_list (GConfClient *conf,
-                              GList       *deleted_profiles,
-                              GtkWindow   *transient_parent)
-{
-  GList *current_profiles;
-  GList *tmp;
-  GSList *name_list;
-  GError *err = NULL;
-
-  /* reentrancy paranoia */
-  g_object_ref (G_OBJECT (transient_parent));
-  
-  current_profiles = terminal_profile_get_list ();  
-
-  /* remove deleted profiles from list */
-  tmp = deleted_profiles;
-  while (tmp != NULL)
-    {
-      gchar *dir;
-      TerminalProfile *profile = tmp->data;
-
-      dir = g_strdup_printf (CONF_PREFIX"/profiles/%s",
-			     terminal_profile_get_name (profile));
-      gconf_client_recursive_unset (conf, dir,
-				    GCONF_UNSET_INCLUDING_SCHEMA_NAMES,
-				    &err);
-      g_free (dir);
-
-      if (err)
-	break;
-
-      current_profiles = g_list_remove (current_profiles, profile);
-
-      tmp = tmp->next;
-    }
-
-  if (!err)
-    {
-      /* make list of profile names */
-      name_list = NULL;
-      tmp = current_profiles;
-      while (tmp != NULL)
-	{
-	  name_list = g_slist_prepend (name_list,
-				       g_strdup (terminal_profile_get_name (tmp->data)));
-	  tmp = tmp->next;
-	}
-
-      g_list_free (current_profiles);
-
-      gconf_client_set_list (conf,
-			     CONF_GLOBAL_PREFIX"/profile_list",
-			     GCONF_VALUE_STRING,
-			     name_list,
-			     &err);
-
-      g_slist_foreach (name_list, (GFunc) g_free, NULL);
-      g_slist_free (name_list);
-    }
-
-  else
-    {
-      if (GTK_WIDGET_VISIBLE (transient_parent))
-        {
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("There was an error deleting the profiles"));
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-
-          dialog_add_details (GTK_DIALOG (dialog),
-                              err->message);
-
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-          gtk_widget_show (dialog);
-        }
-
-      g_error_free (err);
-    }
-
-  g_object_unref (G_OBJECT (transient_parent));
-}
-
-TerminalProfile*
-terminal_profile_get_default (void)
-{
-  return default_profile;
-}
-
-TerminalProfile*
-terminal_profile_get_for_new_term (TerminalProfile *current)
-{
-  GList *list;
-  TerminalProfile *profile;
-
-  if (current)
-    return current;
-  
-  if (default_profile)
-    return default_profile;	
-
-  list = terminal_profile_get_list ();
-  if (list)
-    profile = list->data;
-  else
-    profile = NULL;
-
-  g_list_free (list);
-
-  return profile;
-}
-
-/* We need to do this ourselves, because the gtk_color_selection_palette_to_string 
+/* We need to do this ourselves, because the gtk_color_selection_palette_to_string
  * does not carry all the bytes, and xterm's palette is messed up...
  */
 

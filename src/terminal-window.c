@@ -313,7 +313,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   if (priv->active_term == NULL)
     return;
 
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
 
   action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
   gtk_action_set_sensitive (action, profiles && profiles->next != NULL /* list length >= 2 */);
@@ -443,7 +443,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       priv->new_terminal_action_group = NULL;
     }
 
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
   have_single_profile = !profiles || !profiles->next;
 
   action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
@@ -2144,7 +2144,7 @@ file_new_window_callback (GtkAction *action,
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
-    profile = terminal_profile_get_default ();
+    profile = terminal_app_get_default_profile (terminal_app_get ());
   if (!profile)
     return;
 
@@ -2201,7 +2201,7 @@ file_new_tab_callback (GtkAction *action,
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
-    profile = terminal_profile_get_default ();
+    profile = terminal_app_get_default_profile (terminal_app_get ());
   if (!profile)
     return;
 
@@ -2690,13 +2690,14 @@ default_profile_changed (TerminalProfile           *profile,
 #endif
 }
 
+/* FIXMEchpe */
 static void
 monitor_profiles_for_is_default_change (TerminalWindow *window)
 {
   GList *profiles;
   GList *tmp;
   
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
 
   tmp = profiles;
   while (tmp != NULL)

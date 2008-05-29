@@ -929,8 +929,11 @@ option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
 static int
 new_terminal_with_options (OptionParsingResults *results)
 {
+  TerminalApp *app;
   GList *tmp;
-  
+
+  app = terminal_app_get ();
+
   tmp = results->initial_windows;
   while (tmp != NULL)
     {
@@ -954,13 +957,13 @@ new_terminal_with_options (OptionParsingResults *results)
           if (it->profile)
             {
               if (it->profile_is_id)
-                profile = terminal_profile_lookup (it->profile);
+                profile = terminal_app_get_profile_by_name (app, it->profile);
               else                
-                profile = terminal_profile_lookup_by_visible_name (it->profile);
+                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
             }
           else if (it->profile == NULL)
             {
-              profile = terminal_profile_get_for_new_term (NULL);
+              profile = terminal_app_get_profile_for_new_term (app, NULL);
             }
           
           if (profile == NULL)
@@ -968,7 +971,7 @@ new_terminal_with_options (OptionParsingResults *results)
               if (it->profile)
                 g_printerr (_("No such profile '%s', using default profile\n"),
                             it->profile);
-              profile = terminal_profile_get_for_new_term (NULL);
+              profile = terminal_app_get_profile_for_new_term (app, NULL);
             }
           
           g_assert (profile);

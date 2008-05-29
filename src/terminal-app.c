@@ -93,7 +93,13 @@ struct _TerminalApp
   GtkWidget *manage_profiles_delete_button;
   GtkWidget *manage_profiles_default_menu;
 
+  GHashTable *profiles;
+  char* default_profile_id;
+  TerminalProfile *default_profile;
+  gboolean default_profile_locked;
+
   guint profile_list_notify_id;
+  guint default_profile_notify_id;
 };
 
 enum {
@@ -116,6 +122,7 @@ static TerminalApp *global_app = NULL;
 
 #define TERMINAL_STOCK_EDIT "terminal-edit"
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
+#define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
 
 static void refill_profile_treeview (GtkWidget *tree_view);
 
@@ -126,6 +133,40 @@ static void             profile_optionmenu_set_selected (GtkWidget       *option
                                                          TerminalProfile *profile);
 
 /* Helper functions */
+
+static int
+profiles_alphabetic_cmp (gconstpointer pa,
+                         gconstpointer pb)
+{
+  TerminalProfile *a = (TerminalProfile *) pa;
+  TerminalProfile *b = (TerminalProfile *) pb;
+  int result;
+
+  result =  g_utf8_collate (terminal_profile_get_visible_name (a),
+			    terminal_profile_get_visible_name (b));
+  if (result == 0)
+    result = strcmp (terminal_profile_get_name (a),
+		     terminal_profile_get_name (b));
+
+  return result;
+}
+
+typedef struct
+{
+  TerminalProfile *result;
+  const char *target;
+} LookupInfo;
+
+static void
+profiles_lookup_by_visible_name_foreach (gpointer key,
+                                         gpointer value,
+                                         gpointer data)
+{
+  LookupInfo *info = data;
+
+  if (strcmp (info->target, terminal_profile_get_visible_name (value)) == 0)
+    info->result = value;
+}
 
 static void
 terminal_window_destroyed (TerminalWindow *window,
@@ -139,6 +180,50 @@ terminal_window_destroyed (TerminalWindow *window,
   /* FIXMEchpe move this to terminal.h */
   if (app->windows == NULL)
     gtk_main_quit ();
+}
+
+static void
+terminal_app_profile_forgotten_cb (TerminalProfile *profile,
+                                   TerminalApp *app)
+{
+  g_hash_table_remove (app->profiles, terminal_profile_get_name (profile));
+
+  if (profile == app->default_profile)
+    app->default_profile = NULL;
+    /* FIXMEchpe update default profile! */
+
+  /* FIXMEchpe emit profiles-list-changed signal */
+}
+      
+static TerminalProfile *
+terminal_app_create_profile (TerminalApp *app,
+                             const char *name)
+{
+  TerminalProfile *profile;
+
+  profile = terminal_app_get_profile_by_name (app, name);
+  g_return_val_if_fail (profile == NULL, profile); /* FIXMEchpe can this happen? */
+
+  profile = _terminal_profile_new (name);
+  terminal_profile_update (profile);
+
+  g_signal_connect (profile, "forgotten",
+                    G_CALLBACK (terminal_app_profile_forgotten_cb), app);
+
+  g_hash_table_insert (app->profiles,
+                       g_strdup (terminal_profile_get_name (profile)),
+                       profile /* adopts the refcount */);
+
+  if (app->default_profile == NULL &&
+      app->default_profile_id != NULL &&
+      strcmp (app->default_profile_id,
+              terminal_profile_get_name (profile)) == 0)
+    {
+      /* We are the default profile */
+      app->default_profile = profile;
+    }
+  
+  return profile;
 }
 
 static GdkScreen*
@@ -258,7 +343,7 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
   gboolean need_new_default;
   TerminalProfile *fallback;
   
-  known = terminal_profile_get_list ();
+  known = terminal_app_get_profile_list (app);
 
   val = gconf_entry_get_value (entry);
 
@@ -289,19 +374,15 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
         }
       else
         {
-          TerminalProfile *profile;
-          
-          profile = terminal_profile_new (profile_name);
-
-          terminal_profile_update (profile);
+          terminal_app_create_profile (app, profile_name);
         }
     }
 
 ensure_one_profile:
 
   fallback = NULL;
-  if (terminal_profile_get_count () == 0 ||
-      terminal_profile_get_count () <= g_list_length (known))
+  if (terminal_app_get_profile_count (app) == 0 ||
+      terminal_app_get_profile_count (app) <= g_list_length (known))
     {
       /* We are going to run out, so create the fallback
        * to be sure we always have one. Must be done
@@ -314,7 +395,7 @@ ensure_one_profile:
        * all profiles, the FALLBACK_ID profile returns as
        * the living dead.
        */
-      fallback = terminal_profile_ensure_fallback (conf);
+      fallback = terminal_app_ensure_profile_fallback (app);
     }
   
   /* Forget no-longer-existing profiles */
@@ -331,7 +412,8 @@ ensure_one_profile:
         {
           if (terminal_profile_get_is_default (forgotten))
             need_new_default = TRUE;
-          
+
+          /* FIXMEchpe make this out of this loop! */
           terminal_profile_forget (forgotten);
         }
       
@@ -344,7 +426,7 @@ ensure_one_profile:
     {
       TerminalProfile *new_default;
 
-      known = terminal_profile_get_list ();
+      known = terminal_app_get_profile_list (app);
       
       g_assert (known);
       new_default = known->data;
@@ -352,9 +434,11 @@ ensure_one_profile:
       g_list_free (known);
 
       terminal_profile_set_is_default (new_default, TRUE);
+
+      /* FIXMEchpe emit default-profile-changed signal */
     }
 
-  g_assert (terminal_profile_get_count () > 0);  
+  g_assert (terminal_app_get_profile_count (app) > 0);
 
   if (app->new_profile_dialog)
     {
@@ -378,6 +462,175 @@ ensure_one_profile:
 }
 
 static void
+terminal_app_default_profile_notify_cb (GConfClient *client,
+                                        guint        cnxn_id,
+                                        GConfEntry  *entry,
+                                        gpointer     user_data)
+{
+  TerminalApp *app = TERMINAL_APP (user_data);
+  TerminalProfile *profile;
+  TerminalProfile *old_default;
+  GConfValue *val;
+  gboolean changed = FALSE;
+  gboolean locked;
+  const char *name;
+  
+  val = gconf_entry_get_value (entry);  
+  if (val == NULL ||
+      val->type != GCONF_VALUE_STRING)
+    return;
+  
+  name = gconf_value_get_string (val);
+  if (!name)
+    return; /* FIXMEchpe? */
+
+  locked = !gconf_entry_get_is_writable (entry);
+
+  g_free (app->default_profile_id);
+  app->default_profile_id = g_strdup (name);
+
+  old_default = app->default_profile;
+
+  profile = terminal_app_get_profile_by_name (app, name);
+  /* FIXMEchpe: what if |profile| is NULL here? */
+
+  if (profile != NULL &&
+      profile != app->default_profile)
+    {
+      app->default_profile = profile;
+      changed = TRUE;
+    }
+
+  if (locked != app->default_profile_locked)
+    {
+      /* Need to emit changed on all profiles */
+      GList *all_profiles;
+      GList *tmp;
+      TerminalSettingMask mask;
+
+      terminal_setting_mask_clear (&mask);
+      mask.is_default = TRUE;
+      
+      app->default_profile_locked = locked;
+      
+      all_profiles = terminal_app_get_profile_list (app);
+      for (tmp = all_profiles; tmp != NULL; tmp = tmp->next)
+        {
+//           TerminalProfile *p = tmp->data;
+          
+//           emit_changed (p, &mask);
+        }
+
+      g_list_free (all_profiles);
+    }
+  else if (changed)
+    {
+      TerminalSettingMask mask;
+      
+      terminal_setting_mask_clear (&mask);
+      mask.is_default = TRUE;
+
+//       if (old_default)
+//         emit_changed (old_default, &mask);
+
+//       emit_changed (profile, &mask);
+    }
+
+  /* FIXMEchpe: emit default-profile-changed signal */
+}
+
+static void
+terminal_app_profile_delete_list (TerminalApp *app,
+                                  GList       *deleted_profiles,
+                                  GtkWindow   *transient_parent)
+{
+  GList *current_profiles;
+  GList *tmp;
+  GSList *name_list;
+  GError *err = NULL;
+
+  /* reentrancy paranoia */
+  g_object_ref (G_OBJECT (transient_parent));
+  
+  current_profiles = terminal_app_get_profile_list (app);
+
+  /* remove deleted profiles from list */
+  tmp = deleted_profiles;
+  while (tmp != NULL)
+    {
+      gchar *dir;
+      TerminalProfile *profile = tmp->data;
+
+      dir = g_strdup_printf (CONF_PREFIX"/profiles/%s",
+			     terminal_profile_get_name (profile));
+      gconf_client_recursive_unset (conf, dir,
+				    GCONF_UNSET_INCLUDING_SCHEMA_NAMES,
+				    &err);
+      g_free (dir);
+
+      if (err)
+	break;
+
+      current_profiles = g_list_remove (current_profiles, profile);
+
+      tmp = tmp->next;
+    }
+
+  if (!err)
+    {
+      /* make list of profile names */
+      name_list = NULL;
+      tmp = current_profiles;
+      while (tmp != NULL)
+	{
+	  name_list = g_slist_prepend (name_list,
+				       g_strdup (terminal_profile_get_name (tmp->data)));
+	  tmp = tmp->next;
+	}
+
+      g_list_free (current_profiles);
+
+      gconf_client_set_list (conf,
+			     CONF_GLOBAL_PREFIX"/profile_list",
+			     GCONF_VALUE_STRING,
+			     name_list,
+			     &err);
+
+      g_slist_foreach (name_list, (GFunc) g_free, NULL);
+      g_slist_free (name_list);
+    }
+
+  else
+    {
+      if (GTK_WIDGET_VISIBLE (transient_parent))
+        {
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("There was an error deleting the profiles"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s", err->message);
+          g_error_free (err);
+
+          g_signal_connect (G_OBJECT (dialog), "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+
+          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+          gtk_widget_show (dialog);
+        }
+
+      g_error_free (err);
+    }
+
+  g_object_unref (G_OBJECT (transient_parent));
+}
+
+static void
 new_profile_response_callback (GtkWidget *new_profile_dialog,
                                int        response_id,
                                TerminalApp *app)
@@ -395,12 +648,13 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       GtkWindow *transient_parent;
       GtkWidget *confirm_dialog;
       gint retval;
+      GError *err;
       
       name_entry = g_object_get_data (G_OBJECT (new_profile_dialog), "name_entry");
       name = gtk_editable_get_chars (GTK_EDITABLE (name_entry), 0, -1);
       g_strstrip (name); /* name will be non empty after stripping */
       
-      profiles = terminal_profile_get_list ();
+      profiles = terminal_app_get_profile_list (app);
       for (tmp = profiles; tmp != NULL; tmp = tmp->next)
         {
           TerminalProfile *profile = tmp->data;
@@ -436,9 +690,33 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       
       gtk_widget_destroy (new_profile_dialog);
       
-      escaped_name = terminal_profile_create (base_profile, name, transient_parent);
-      new_profile = terminal_profile_new (escaped_name);
-      terminal_profile_update (new_profile);
+      err = NULL;
+      escaped_name = terminal_profile_clone (base_profile, name, &err);
+      if (err)
+        {
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
+                                           GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           _("There was an error creating the profile \"%s\""),
+                                           name);
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s", err->message);
+          g_error_free (err);
+
+          g_signal_connect (G_OBJECT (dialog), "response",
+                            G_CALLBACK (gtk_widget_destroy),
+                            NULL);
+
+          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+          
+          gtk_window_present (GTK_WINDOW (dialog));
+        }
+      
+      /* FIXMEchpe: we should have the profile in our list by now! */
+      new_profile = terminal_app_create_profile (app, escaped_name);
 
       /* FIXMEchpe: should be obsolete due to gconf notification */
       gconf_client_notify (conf, PROFILE_LIST_KEY);
@@ -603,13 +881,14 @@ free_profiles_list (gpointer data)
 static void
 refill_profile_treeview (GtkWidget *tree_view)
 {
+  TerminalApp *app = terminal_app_get ();
   GList *profiles;
   GList *tmp;
   GtkTreeSelection *selection;
   GtkListStore *model;
   GList *selected_profiles;
   GtkTreeIter iter;
-  
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view)));
 
@@ -620,7 +899,7 @@ refill_profile_treeview (GtkWidget *tree_view)
 
   gtk_list_store_clear (model);
   
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (app);
   tmp = profiles;
   while (tmp != NULL)
     {
@@ -714,7 +993,7 @@ delete_confirm_response (GtkWidget   *dialog,
   
   if (response_id == GTK_RESPONSE_ACCEPT)
     {
-      terminal_profile_delete_list (conf, deleted_profiles, transient_parent);
+      terminal_app_profile_delete_list (terminal_app_get (), deleted_profiles, transient_parent);
     }
 
   gtk_widget_destroy (dialog);
@@ -747,7 +1026,7 @@ profile_list_delete_selection (GtkWidget   *profile_list,
   
   count = g_list_length (deleted_profiles);
 
-  if (count == terminal_profile_get_count ())
+  if (count == terminal_app_get_profile_count (app))
     {
       free_profiles_list (deleted_profiles);
 
@@ -878,6 +1157,8 @@ default_menu_changed (GtkWidget   *option_menu,
 
   if (!terminal_profile_get_is_default (p))
     terminal_profile_set_is_default (p, TRUE);
+
+  /* FIXMEchpe */
 }
 
 static void
@@ -899,7 +1180,7 @@ monitor_profiles_for_is_default_change (GtkWidget *profile_optionmenu)
   GList *profiles;
   GList *tmp;
   
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
 
   tmp = profiles;
   while (tmp != NULL)
@@ -1175,9 +1456,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
             
       app->manage_profiles_default_menu = profile_optionmenu_new ();
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), app->manage_profiles_default_menu);
-      if (terminal_profile_get_default ())
+      if (terminal_app_get_default_profile (app))
         {
-          profile_optionmenu_set_selected (app->manage_profiles_default_menu, terminal_profile_get_default ());
+          profile_optionmenu_set_selected (app->manage_profiles_default_menu, terminal_app_get_default_profile (app));
         }
       g_signal_connect (G_OBJECT (app->manage_profiles_default_menu), "changed", 
                         G_CALLBACK (default_menu_changed), app);
@@ -1248,7 +1529,7 @@ profile_optionmenu_refill (GtkWidget *option_menu)
   
   menu = gtk_menu_new ();
   
-  profiles = terminal_profile_get_list ();
+  profiles = terminal_app_get_profile_list (terminal_app_get ());
 
   history = 0;
   i = 0;
@@ -1339,6 +1620,9 @@ terminal_app_init (TerminalApp *app)
 
   global_app = app;
 
+  /* FIXMEchpe leaks */
+  app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  
   conf = gconf_client_get_default ();
 
   gconf_client_add_dir (conf, CONF_GLOBAL_PREFIX,
@@ -1351,12 +1635,19 @@ terminal_app_init (TerminalApp *app)
                              app,
                              NULL, NULL);
 
+  app->default_profile_notify_id =
+    gconf_client_notify_add (conf,
+                             DEFAULT_PROFILE_KEY,
+                             terminal_app_default_profile_notify_cb,
+                             app,
+                             NULL, NULL);
+  
   terminal_accels_init ();
   terminal_encoding_init ();
   
-  terminal_profile_initialize (conf);
   /* And now read the profile list */
   gconf_client_notify (conf, PROFILE_LIST_KEY);
+  gconf_client_notify (conf, DEFAULT_PROFILE_KEY);
 
   g_object_unref (conf);
 }
@@ -1375,6 +1666,10 @@ terminal_app_finalize (GObject *object)
   gconf_client_remove_dir (conf, CONF_GLOBAL_PREFIX, NULL);
 
   g_object_unref (conf);
+
+  g_free (app->default_profile_id);
+
+  g_hash_table_destroy (app->profiles);
 
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
@@ -1617,4 +1912,106 @@ TerminalWindow *
 terminal_app_get_current_window (TerminalApp *app)
 {
   return g_list_last (app->windows)->data;
+}
+
+/* FIXMEchpe: make this list contain ref'd objects */
+/**
+ * terminal_profile_get_list:
+ *
+ * Returns: a #GList containing all #TerminalProfile objects.
+ *   The content of the list is owned by the backend and
+ *   should not be modified or freed. Use g_list_free() when done
+ *   using the list.
+ */
+GList*
+terminal_app_get_profile_list (TerminalApp *app)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
+  return g_list_sort (g_hash_table_get_values (app->profiles), profiles_alphabetic_cmp);
+}
+
+guint
+terminal_app_get_profile_count (TerminalApp *app)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), 0);
+
+  return g_hash_table_size (app->profiles);
+}
+
+TerminalProfile*
+terminal_app_get_profile_by_name (TerminalApp *app,
+                                  const char *name)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  return g_hash_table_lookup (app->profiles, name);
+}
+
+TerminalProfile*
+terminal_app_get_profile_by_visible_name (TerminalApp *app,
+                                          const char *name)
+{
+  LookupInfo info;
+
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  info.result = NULL;
+  info.target = name;
+
+  g_hash_table_foreach (app->profiles,
+                        profiles_lookup_by_visible_name_foreach,
+                        &info);
+  return info.result;
+}
+
+
+TerminalProfile*
+terminal_app_ensure_profile_fallback (TerminalApp *app)
+{
+  TerminalProfile *profile;
+
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
+  profile = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
+  if (profile == NULL)
+    profile = terminal_app_create_profile (app, FALLBACK_PROFILE_ID);
+  
+  return profile;
+}
+
+TerminalProfile*
+terminal_app_get_default_profile (TerminalApp *app)
+{
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
+  return app->default_profile;
+}
+
+TerminalProfile*
+terminal_app_get_profile_for_new_term (TerminalApp *app,
+                                       TerminalProfile *current)
+{
+  GList *list;
+  TerminalProfile *profile;
+
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
+  if (current)
+    return current;
+  
+  if (app->default_profile)
+    return app->default_profile;	
+
+  list = terminal_app_get_profile_list (app);
+  if (list)
+    profile = list->data;
+  else
+    profile = NULL;
+
+  g_list_free (list);
+
+  return profile;
 }
