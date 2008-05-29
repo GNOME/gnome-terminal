@@ -208,11 +208,8 @@ app_setting_notify_cb (TerminalApp *app,
       /* const */ char *saved_menubar_accel;
       gboolean enable_menubar_accel;
 
+      /* FIXME: Once gtk+ bug 507398 is fixed, use that to reset the property instead */
       /* Now this is a bad hack on so many levels. */
-      /* FIXMEchpe: instead of doing this crappy hack, file a gtk+ bug
-       * so we get a simple function to reset an overridden setting to
-       * its natural value!!
-       */
       saved_menubar_accel = g_object_get_data (G_OBJECT (settings), "GT::gtk-menu-bar-accel");
       if (!saved_menubar_accel)
         {
@@ -803,7 +800,7 @@ initialize_alpha_mode (TerminalWindow *window)
   GdkScreen *screen;
   GdkColormap *colormap;
 
-  /* FIXMEchpe: update the TerminalScreen's for this change! */
+  /* FIXME: update the TerminalScreen's for this change! */
   
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
   colormap = gdk_screen_get_rgba_colormap (screen);
@@ -1428,7 +1425,7 @@ terminal_window_init (TerminalWindow *window)
   priv->old_geometry_widget = NULL;
   
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
-  /* FIXMEchpe is that really true still ?
+  /* FIXME is that really true still ?
    * Simple way to find out: comment the code out (if 0'd below), and see
    * if anyone complains after the next release :)
    */
@@ -1615,13 +1612,7 @@ terminal_window_show (GtkWidget *widget)
   if (priv->startup_id != NULL)
     {
       /* Set up window for launch notification */
-      /* FIXME In principle all transient children of this
-       * window should get the same startup_id
-       */
-      /* FIXMEchpe since we don't put up transients on startup,
-       * this doesn't seem to have any point?
-       */
-      
+
       screen = gtk_window_get_screen (GTK_WINDOW (window));
       display = gdk_screen_get_display (screen);
       
@@ -1734,7 +1725,7 @@ sync_screen_icon_title_set (TerminalScreen *screen,
     return;
 
   /* Need to reset the icon name */
-  /* FIXMEchpe: needs a gdk function to unset the icon title! */
+  /* FIXME: Once gtk+ bug 535557 is fixed, use that to unset the icon title. */
 
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_title (screen));
 }
@@ -2063,7 +2054,7 @@ terminal_window_set_active (TerminalWindow *window,
    * account.
    */
   if (priv->active_screen)
-    gtk_widget_hide (GTK_WIDGET (priv->active_screen)); /* FIXMEchpe */
+    gtk_widget_hide (GTK_WIDGET (priv->active_screen)); /* FIXME */
   
   widget = GTK_WIDGET (screen);
   
@@ -2171,7 +2162,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (profile_set_callback),
                     window);
 
-  /* FIXMEchpe: only connect on the active screen, not all screens! */
+  /* FIXME: only connect on the active screen, not all screens! */
   g_signal_connect (screen, "notify::title",
                     G_CALLBACK (sync_screen_title), window);
   g_signal_connect (screen, "notify::icon-title",
@@ -2298,7 +2289,6 @@ notebook_page_removed_callback (GtkWidget       *notebook,
     }
   else if (pages == 0)
     {
-      /* FIXMEchpe!!! DO NOT DO THIS FROM THIS CALLBACK !!!!!!! */
       gtk_widget_destroy (GTK_WIDGET (window));
     }
 }
@@ -2399,7 +2389,7 @@ file_new_window_callback (GtkAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  /* FIXMEchpe: this seems wrong if tabs are shown in the window */
+  /* FIXME: this seems wrong if tabs are shown in the window */
   terminal_screen_get_size (priv->active_screen, &width, &height);
   geometry = g_strdup_printf ("%dx%d", width, height);
 
@@ -2731,7 +2721,7 @@ terminal_set_title_callback (GtkAction *action,
   if (priv->active_screen == NULL)
     return;
 
-  /* FIXMEchpe: hook the screen up so this dialogue closes if the terminal screen closes */
+  /* FIXME: hook the screen up so this dialogue closes if the terminal screen closes */
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -2871,7 +2861,7 @@ tabs_detach_tab_callback (GtkAction *action,
 
   screen = priv->active_screen;
 
-  /* FIXMEchpe: this seems wrong if tabs are shown in the window */
+  /* FIXME: this seems wrong if tabs are shown in the window */
   terminal_screen_get_size (screen, &width, &height);
   geometry = g_strdup_printf ("%dx%d", width, height);
 
