@@ -23,11 +23,8 @@
 #define TERMINAL_PROFILE_H
 
 #include <gtk/gtk.h>
-#include <vte/vte.h>
 
 G_BEGIN_DECLS
-
-#define FALLBACK_PROFILE_ID   "Default"
 
 typedef enum
 {

@@ -44,6 +44,8 @@
 #include <time.h>
 #include <gdk/gdkx.h>
 
+#define FALLBACK_PROFILE_ID "Default"
+
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
