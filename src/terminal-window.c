@@ -217,7 +217,7 @@ app_setting_notify_cb (TerminalApp *app,
   if (!prop_name || prop_name == I_(TERMINAL_APP_ENABLE_MENU_BAR_ACCEL))
     {
       /* const */ char *saved_menubar_accel;
-      gboolean enable_menu_accels;
+      gboolean enable_menubar_accel;
 
       /* Now this is a bad hack on so many levels. */
       /* FIXMEchpe: instead of doing this crappy hack, file a gtk+ bug
@@ -232,8 +232,8 @@ app_setting_notify_cb (TerminalApp *app,
                                   saved_menubar_accel, (GDestroyNotify) g_free);
         }
 
-      g_object_get (app, TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, &enable_menu_accels, NULL);
-      if (enable_menu_accels)
+      g_object_get (app, TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, &enable_menubar_accel, NULL);
+      if (enable_menubar_accel)
         g_object_set (settings, "gtk-menu-bar-accel", saved_menubar_accel, NULL);
       else
         g_object_set (settings, "gtk-menu-bar-accel", NULL, NULL);
@@ -745,7 +745,9 @@ static void
 terminal_menu_activate_callback (GtkAction *action,
                                  TerminalWindow *window)
 {
-  /* FIXMEchpe why? it's already updated when the active term changes */
+  /* FIXMEchpe: make the encoding list a prop on TerminalApp instead,
+   * and listen for notifications to update the menu instead of this hack.
+   */
   terminal_window_update_encoding_menu (window);
 }
 
@@ -1025,7 +1027,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
                                             "/Popup/PopupInputMethods");
-  /* FIXME: fix this when gtk+ bug #500065 is done, by using vte_terminal_im_merge_ui */
+  /* FIXME: fix this when gtk+ bug #500065 is done, use vte_terminal_im_merge_ui */
   if (show_input_method_menu)
     {
       im_menu = gtk_menu_new ();
@@ -1351,8 +1353,13 @@ terminal_window_init (TerminalWindow *window)
   initialize_alpha_mode (window);
 
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
-  /* FIXMEchpe is that really true still ?? */
+  /* FIXMEchpe is that really true still ?
+   * Simple way to find out: comment the code out (if 0'd below), and see
+   * if anyone complains after the next release :)
+   */
+#if 0
   gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
+#endif
 
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
@@ -1531,6 +1538,9 @@ terminal_window_show (GtkWidget *widget)
       /* Set up window for launch notification */
       /* FIXME In principle all transient children of this
        * window should get the same startup_id
+       */
+      /* FIXMEchpe since we don't put up transients on startup,
+       * this doesn't seem to have any point?
        */
       
       screen = gtk_window_get_screen (GTK_WINDOW (window));
@@ -1928,9 +1938,7 @@ terminal_window_set_active (TerminalWindow *window,
    * account.
    */
   if (priv->active_term)
-  {
     gtk_widget_hide (GTK_WIDGET (priv->active_term)); /* FIXMEchpe */
-  }
   
   widget = GTK_WIDGET (screen);
   
