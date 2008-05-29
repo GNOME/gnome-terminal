@@ -23,6 +23,7 @@
 
 #include <glib.h>
 #undef G_DISABLE_SINGLE_INCLUDES
+#undef GTK_DISABLE_SINGLE_INCLUDES
 
 #include "terminal-intl.h"
 
