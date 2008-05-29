@@ -1960,22 +1960,9 @@ drag_data_received (TerminalScreen   *widget,
           {
             TerminalProfile *profile;
             char *filename;
-            GError *err;
-
-            err = NULL;
-            filename = g_filename_from_uri (uris[0],
-                                            NULL,
-                                            &err);
-            if (err)
-              {
-                g_printerr (_("Error converting URI \"%s\" into filename: %s\n"),
-                            uris[0], err->message);
-
-                g_error_free (err);
-              }
 
             profile = terminal_screen_get_profile (screen);
-            
+            filename = g_filename_from_uri (uris[0], NULL, NULL);
             if (filename && profile)
               {
                 g_object_set (profile,
