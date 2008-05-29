@@ -923,7 +923,6 @@ setup_background_filechooser (GtkWidget *filechooser,
                     G_CALLBACK (update_image_preview), NULL);
 }
 
-// #include <gconf/gconf.h>
 static void
 profile_editor_destroyed (GtkWidget       *editor,
                           TerminalProfile *profile)
@@ -936,14 +935,9 @@ profile_editor_destroyed (GtkWidget       *editor,
                                         G_CALLBACK (profile_palette_notify_scheme_combo_cb), NULL);
   g_signal_handlers_disconnect_matched (profile, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
                                         G_CALLBACK (profile_palette_notify_colorpickers_cb), NULL);
-  /* FIXMEchpe are those all? */
   
   g_object_set_data (G_OBJECT (profile), "editor-window", NULL);
   g_object_set_data (G_OBJECT (editor), "builder", NULL);
-  
-  /* FIXMEchpe why!?? */
-/*  gconf_client_notify (gconf_client_get_default ();
-		       CONF_GLOBAL_PREFIX"/profile_list");*/
 }
 
 void
