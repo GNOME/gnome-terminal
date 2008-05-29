@@ -830,16 +830,9 @@ static void
 terminal_screen_cook_icon_title (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GObject *object = G_OBJECT (screen);      
-  
-  g_object_freeze_notify (object);
-
-  cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title);
 
   if (cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title))
     g_object_notify (G_OBJECT (screen), "icon-title");
-  
-  g_object_thaw_notify (object);
 }
 
 static void
