@@ -947,9 +947,6 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
                                    TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  TerminalProfile *profile;
-
-  profile = priv->profile;
 
   update_color_scheme (screen);
 
@@ -1179,7 +1176,7 @@ get_child_environment (TerminalScreen *screen)
   retval[i] = g_strdup ("TERM=xterm"); /* FIXME configurable later? */
   ++i;
 
-  /* FIXMEchpe: moving the tab between windows will make this invalid... */
+  /* FIXMEchpe: moving the tab between windows, or the window between displays will make this invalid... */
   retval[i] = g_strdup_printf ("WINDOWID=%ld",
                                GDK_WINDOW_XWINDOW (term->window));
   ++i;
@@ -1216,8 +1213,13 @@ get_child_environment (TerminalScreen *screen)
 					      "/authentication_password",
 					      NULL);
 
-	  if (user != '\0')
-	    auth = g_strdup_printf ("%s:%s", user, password);
+	  if (user && user != '\0')
+            {
+              if (password)
+                auth = g_strdup_printf ("%s:%s", user, password);
+              else
+                auth = g_strdup (user);
+            }
 
 	  g_free (user);
 	  g_free (password);
