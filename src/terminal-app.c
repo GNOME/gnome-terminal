@@ -92,19 +92,28 @@ struct _TerminalApp
   GtkWidget *manage_profiles_default_menu;
 
   GConfClient *conf;
+  guint profile_list_notify_id;
+  guint default_profile_notify_id;
+  guint system_font_notify_id;
 
   GHashTable *profiles;
   char* default_profile_id;
   TerminalProfile *default_profile;
   gboolean default_profile_locked;
 
-  guint profile_list_notify_id;
-  guint default_profile_notify_id;
+  PangoFontDescription *system_font_desc;
 
   gboolean use_factory;
 };
 
-enum {
+enum
+{
+  PROP_0,
+  PROP_SYSTEM_FONT
+};
+
+enum
+{
   QUIT,
   PROFILES_LIST_CHANGED,
   DEFAULT_PROFILE_CHANGED,
@@ -127,6 +136,10 @@ enum
 };
 
 static TerminalApp *global_app = NULL;
+
+#define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
+#define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
+#define DEFAULT_MONOSPACE_FONT ("Monospace 10")
 
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
@@ -1046,6 +1059,44 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
 }
 
 static void
+terminal_app_system_font_notify_cb (GConfClient *client,
+                                    guint        cnxn_id,
+                                    GConfEntry  *entry,
+                                    gpointer     user_data)
+{
+  TerminalApp *app = TERMINAL_APP (user_data);
+  GConfValue *gconf_value;
+  const char *font;
+  PangoFontDescription *font_desc;
+
+  if (strcmp (gconf_entry_get_key (entry), MONOSPACE_FONT_KEY) != 0)
+    return;
+
+  gconf_value = gconf_entry_get_value (entry);
+  if (!gconf_value || gconf_value->type != GCONF_VALUE_STRING)
+    return;
+
+  font = gconf_value_get_string (gconf_value);
+  if (!font)
+    return;
+
+  font_desc = pango_font_description_from_string (font);
+  if (app->system_font_desc &&
+      pango_font_description_equal (app->system_font_desc, font_desc))
+    {
+      pango_font_description_free (font_desc);
+      return;
+    }
+
+  if (app->system_font_desc)
+    pango_font_description_free (app->system_font_desc);
+
+  app->system_font_desc = font_desc;
+
+  g_object_notify (G_OBJECT (app), "system-font");
+}
+
+static void
 new_profile_response_callback (GtkWidget *new_profile_dialog,
                                int        response_id,
                                TerminalApp *app)
@@ -1565,27 +1616,34 @@ terminal_app_init (TerminalApp *app)
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
+  gconf_client_add_dir (app->conf, MONOSPACE_FONT_DIR,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        NULL);
   
   app->profile_list_notify_id =
     gconf_client_notify_add (app->conf, PROFILE_LIST_KEY,
                              terminal_app_profile_list_notify_cb,
-                             app,
-                             NULL, NULL);
+                             app, NULL, NULL);
 
   app->default_profile_notify_id =
     gconf_client_notify_add (app->conf,
                              DEFAULT_PROFILE_KEY,
                              terminal_app_default_profile_notify_cb,
-                             app,
-                             NULL, NULL);
-  
+                             app, NULL, NULL);
+
+  app->system_font_notify_id =
+    gconf_client_notify_add (app->conf,
+                             MONOSPACE_FONT_KEY,
+                             terminal_app_system_font_notify_cb,
+                             app, NULL, NULL);
+
+  gconf_client_notify (app->conf, PROFILE_LIST_KEY);
+  gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
+  gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
+
   terminal_accels_init ();
   terminal_encoding_init ();
   
-  /* And now read the profile list */
-  gconf_client_notify (app->conf, PROFILE_LIST_KEY);
-  gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
-
   sm_client = gnome_master_client ();
   g_signal_connect (sm_client,
                     "save_yourself",
@@ -1604,11 +1662,13 @@ terminal_app_finalize (GObject *object)
 
   if (app->profile_list_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->profile_list_notify_id);
-
   if (app->default_profile_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
+  if (app->system_font_notify_id != 0)
+    gconf_client_notify_remove (app->conf, app->system_font_notify_id);
 
   gconf_client_remove_dir (app->conf, CONF_GLOBAL_PREFIX, NULL);
+  gconf_client_remove_dir (app->conf, MONOSPACE_FONT_DIR, NULL);
 
   g_object_unref (app->conf);
 
@@ -1616,9 +1676,34 @@ terminal_app_finalize (GObject *object)
 
   g_hash_table_destroy (app->profiles);
 
+  if (app->system_font_desc)
+    pango_font_description_free (app->system_font_desc);
+
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
   global_app = NULL;
+}
+
+static void
+terminal_app_get_property (GObject *object,
+                            guint prop_id,
+                            GValue *value,
+                            GParamSpec *pspec)
+{
+  TerminalApp *app = TERMINAL_APP (object);
+
+  switch (prop_id)
+    {
+      case PROP_SYSTEM_FONT:
+        if (app->system_font_desc)
+          g_value_set_boxed (value, app->system_font_desc);
+        else
+          g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_MONOSPACE_FONT));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
 }
 
 static void
@@ -1627,6 +1712,7 @@ terminal_app_class_init (TerminalAppClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
+  object_class->get_property = terminal_app_get_property;
 
   signals[QUIT] =
     g_signal_new (I_("quit"),
@@ -1636,6 +1722,13 @@ terminal_app_class_init (TerminalAppClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  g_object_class_install_property
+    (object_class,
+     PROP_SYSTEM_FONT,
+     g_param_spec_boxed ("system-font", NULL, NULL,
+                         PANGO_TYPE_FONT_DESCRIPTION,
+                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 /* Public API */

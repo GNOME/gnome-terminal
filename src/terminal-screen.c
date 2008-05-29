@@ -28,8 +28,8 @@
 #include <X11/extensions/Xrender.h>
 #include <gdk/gdkx.h>
 
+#include <gconf/gconf.h>
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
-#include <libgnome/gnome-url.h> /* gnome_url_show */
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -41,8 +41,6 @@
 #include "terminal-window.h"
 #include "skey-popup.h"
 
-#define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
-#define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
 typedef struct
@@ -68,13 +66,13 @@ struct _TerminalScreenPrivate
   int child_pid;
   double font_scale;
   guint recheck_working_dir_idle;
-  guint gconf_connection_id;
   gboolean user_title; /* title was manually set */
   GSList *url_tags;
   GSList *skey_tags;
 };
 
-enum {
+enum
+{
   PROFILE_SET,
   SHOW_POPUP_MENU,
   LAST_SIGNAL
@@ -102,6 +100,9 @@ static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_update_on_realize (VteTerminal *vte_terminal,
                                                TerminalScreen *screen);
+static void terminal_screen_system_font_notify_cb (TerminalApp *app,
+                                                   GParamSpec *pspec,
+                                                   TerminalScreen *screen);
 static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu         (GtkWidget      *term,
                                                     TerminalScreen *screen);
@@ -125,11 +126,6 @@ static void terminal_screen_cook_title      (TerminalScreen *screen);
 static void terminal_screen_cook_icon_title (TerminalScreen *screen);
 
 static void queue_recheck_working_dir (TerminalScreen *screen);
-
-static void monospace_font_change_notify (GConfClient *client,
-					  guint        cnxn_id,
-					  GConfEntry  *entry,
-					  gpointer     user_data);
 
 static void drag_data_received (TerminalScreen   *widget,
                                 GdkDragContext   *context,
@@ -214,47 +210,6 @@ set_background_image_file (VteTerminal *terminal,
     vte_terminal_set_background_image_file (terminal,fname);
   else
     vte_terminal_set_background_image (terminal, NULL);
-}
-
-static void
-connect_monospace_font_change (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  GError *err;
-  GConfClient *conf;
-  guint connection_id;
-
-  conf = gconf_client_get_default ();
-  
-  err = NULL;
-  gconf_client_add_dir (conf, MONOSPACE_FONT_DIR,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  MONOSPACE_FONT_DIR, err->message);
-      g_error_free (err);
-    }
-
-  err = NULL;
-  connection_id = gconf_client_notify_add (conf,
-					   MONOSPACE_FONT_DIR,
-					   monospace_font_change_notify,
-					   screen, 
-					   NULL, &err);
-
-  g_object_unref (conf);
-  
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of monospace font changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }
-  else
-    priv->gconf_connection_id = connection_id;
 }
 
 static void
@@ -424,11 +379,12 @@ terminal_screen_init (TerminalScreen *screen)
                     G_CALLBACK (terminal_screen_widget_child_died),
                     screen);
 
-  connect_monospace_font_change (screen);
-
   g_signal_connect (G_OBJECT (screen), "parent-set",
                     G_CALLBACK (parent_set_callback), 
                     NULL);
+
+  g_signal_connect (terminal_app_get (), "notify::system-font",
+                    G_CALLBACK (terminal_screen_system_font_notify_cb), screen);
 
 #ifdef DEBUG_GEOMETRY
   g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
@@ -496,7 +452,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 }
 
@@ -519,17 +474,10 @@ terminal_screen_finalize (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
-  GConfClient *conf;
 
-  conf = gconf_client_get_default ();
-  
-  if (priv->gconf_connection_id)
-    gconf_client_notify_remove (conf, priv->gconf_connection_id);
-  
-  gconf_client_remove_dir (conf, MONOSPACE_FONT_DIR,
-			   NULL);
-
-  g_object_unref (conf);
+  g_signal_handlers_disconnect_by_func (terminal_app_get (),
+                                        G_CALLBACK (terminal_screen_system_font_notify_cb),
+                                        screen);
 
   if (priv->title_editor)
     gtk_widget_destroy (priv->title_editor);
@@ -855,44 +803,6 @@ update_color_scheme (TerminalScreen *screen)
   vte_terminal_set_background_tint_color (VTE_TERMINAL (screen), &bg);
 }
 
-/* Note this can be called on style_set, on prefs changing,
- * and on setting the font scale factor
- */
-static void
-monospace_font_change_notify (GConfClient *client,
-			      guint        cnxn_id,
-			      GConfEntry  *entry,
-			      gpointer     user_data)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (user_data);
-  
-  if (strcmp (entry->key, MONOSPACE_FONT_KEY) == 0 &&
-      GTK_WIDGET_REALIZED (screen))
-    terminal_screen_change_font (screen);
-}
-
-static PangoFontDescription *
-get_system_monospace_font (void)
-{
-  GConfClient *conf;
-  char *name;
-  PangoFontDescription *desc = NULL;
-
-  conf = gconf_client_get_default ();
-  name = gconf_client_get_string (conf, MONOSPACE_FONT_KEY, NULL);
-
-  if (name)
-    {
-      desc = pango_font_description_from_string (name);
-      g_free (name);
-    }
-  
-  if (!desc)
-    desc = pango_font_description_from_string ("Monospace 10");
-
-  return desc;
-}
-
 void
 terminal_screen_set_font (TerminalScreen *screen)
 {
@@ -905,9 +815,10 @@ terminal_screen_set_font (TerminalScreen *screen)
   
   /* FIXMEchpe make this use a get_font_desc on TerminalProfile */
   if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
-    desc = get_system_monospace_font ();
+    g_object_get (terminal_app_get (), "system-font", &desc, NULL);
   else
     desc = pango_font_description_copy (terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FONT));
+  g_assert (desc);
 
   pango_font_description_set_size (desc,
 				   priv->font_scale *
@@ -938,6 +849,25 @@ terminal_screen_set_font (TerminalScreen *screen)
     }
 
   pango_font_description_free (desc);
+}
+
+static void
+terminal_screen_system_font_notify_cb (TerminalApp *app,
+                                       GParamSpec *pspec,
+                                       TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (!priv->profile)
+    return; // FIXMEchpe
+
+  if (!GTK_WIDGET_REALIZED (screen))
+    return; // FIXMEchpe still necessary??
+
+  if (!terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
+    return;
+
+  terminal_screen_change_font (screen);
 }
 
 static void
