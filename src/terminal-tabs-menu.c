@@ -271,6 +271,23 @@ notebook_page_reordered_cb (GtkNotebook *notebook,
 }
 
 static void
+notebook_page_switch_cb (GtkNotebook *notebook,
+                         GtkNotebookPage *page,
+                         guint position,
+                         TerminalTabsMenu *menu)
+{
+        GtkWidget *container;
+        TerminalScreen *screen;
+        GtkAction *action;
+
+        container = gtk_notebook_get_nth_page (notebook, position);
+        screen = terminal_screen_container_get_screen (container);
+
+	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+}
+
+static void
 connect_proxy_cb (GtkActionGroup *action_group,
 		  GtkAction *action,
 		  GtkWidget *proxy,
@@ -286,27 +303,6 @@ connect_proxy_cb (GtkActionGroup *action_group,
 		gtk_label_set_ellipsize (label, PANGO_ELLIPSIZE_END);
 		gtk_label_set_max_width_chars (label, LABEL_WIDTH_CHARS);
 	}
-}
-
-static void
-sync_active_tab (TerminalWindow *window,
-		 GParamSpec *pspec,
-		 TerminalTabsMenu *menu)
-{
-	TerminalScreen *screen;
-	GtkAction *action;
-
-	screen = terminal_window_get_active (window);
-	if (screen == NULL) return;
-
-	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
-	/* happens initially, since the ::active-child comes before
-	* the ::tab-added signal
-	*/
-	/* FIXME that's not true with gtk+ 2.9 anymore */
-	if (action == NULL) return;
-
-	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
 }
 
 static void
@@ -332,9 +328,6 @@ terminal_tabs_menu_set_window (TerminalTabsMenu *menu,
 	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
 
-	g_signal_connect (window, "notify::active-child",
-			  G_CALLBACK (sync_active_tab), menu);
-
 	notebook = terminal_window_get_notebook (window);
 	g_signal_connect_object (notebook, "page-added",
 				 G_CALLBACK (notebook_page_added_cb), menu, 0);
@@ -342,6 +335,8 @@ terminal_tabs_menu_set_window (TerminalTabsMenu *menu,
 				 G_CALLBACK (notebook_page_removed_cb), menu, 0);
 	g_signal_connect_object (notebook, "page-reordered",
 				 G_CALLBACK (notebook_page_reordered_cb), menu, 0);
+	g_signal_connect_object (notebook, "switch-page",
+				 G_CALLBACK (notebook_page_switch_cb), menu, 0);
 }
 
 static void
@@ -386,7 +381,6 @@ terminal_tabs_menu_class_init (TerminalTabsMenuClass *klass)
 							      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (TerminalTabsMenuPrivate));
-
 
         /* We don't want to save accels, so skip them */
         gtk_accel_map_add_filter ("<Actions>/TabsActions/JmpTab*");

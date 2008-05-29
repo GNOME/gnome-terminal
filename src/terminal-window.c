@@ -1451,7 +1451,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
                        "}\n"
                        "widget \"*.gnome-terminal-tab-close-button\" style \"gnome-terminal-tab-close-button-style\"");
 
-
   gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
 }
 
