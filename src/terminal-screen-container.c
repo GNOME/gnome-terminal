@@ -42,6 +42,7 @@ terminal_screen_container_new (TerminalScreen *screen)
   gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET (screen));
   gtk_widget_show (GTK_WIDGET (screen));
 
+  _terminal_screen_update_scrollbar (screen);
   return scrolled_window;
 #else
   GtkWidget *hbox, *scrollbar;
@@ -60,6 +61,7 @@ terminal_screen_container_new (TerminalScreen *screen)
   
   gtk_widget_show_all (hbox);
 
+  _terminal_screen_update_scrollbar (screen);
   return hbox;
 #endif
 }

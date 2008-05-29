@@ -121,7 +121,7 @@ void       terminal_screen_get_cell_size (TerminalScreen *screen,
                                           int *width_chars,
                                           int *height_chars);
 
-void terminal_screen_update_scrollbar (TerminalScreen *screen);
+void _terminal_screen_update_scrollbar (TerminalScreen *screen);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)

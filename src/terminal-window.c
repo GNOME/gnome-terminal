@@ -2050,8 +2050,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
 
-  terminal_screen_update_scrollbar (screen);
-
   update_notebook (window);
 
   update_tab_visibility (window, 0);
