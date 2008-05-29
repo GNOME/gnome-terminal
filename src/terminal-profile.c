@@ -149,7 +149,7 @@ enum
 struct _TerminalProfilePrivate
 {
   GValueArray *properties;
-  gboolean locked[LAST_PROP];
+  gboolean *locked;
 
   GConfClient *conf;
   char *profile_dir;
@@ -917,7 +917,7 @@ terminal_profile_init (TerminalProfile *profile)
 
   priv->in_notification_count = 0;
 
-  memset (priv->locked, 0, LAST_PROP * sizeof (gboolean));
+  priv->locked = g_new0 (gboolean, LAST_PROP);
   priv->locked[PROP_NAME] = TRUE;
 
   priv->properties = g_value_array_new (LAST_PROP);
@@ -1038,6 +1038,7 @@ terminal_profile_finalize (GObject *object)
 
   g_object_unref (priv->conf);
 
+  g_free (priv->locked);
   g_value_array_free (priv->properties);
 
   G_OBJECT_CLASS (terminal_profile_parent_class)->finalize (object);
