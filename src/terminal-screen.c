@@ -359,9 +359,9 @@ terminal_screen_init (TerminalScreen *screen)
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
-  gtk_target_list_add_table (target_list, target_table, G_N_ELEMENTS (target_table));
-  gtk_target_list_add_text_targets (target_list, 0);
   gtk_target_list_add_uri_targets (target_list, 0);
+  gtk_target_list_add_text_targets (target_list, 0);
+  gtk_target_list_add_table (target_list, target_table, G_N_ELEMENTS (target_table));
 
   targets = gtk_target_table_new_from_list (target_list, &n_targets);
 
