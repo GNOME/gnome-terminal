@@ -441,7 +441,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->grab_focus = terminal_screen_grab_focus;
 
   signals[PROFILE_SET] =
-    g_signal_new ("profile_set",
+    g_signal_new (I_("profile_set"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, profile_set),
@@ -450,7 +450,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_TYPE_NONE, 0);
   
   signals[ICON_TITLE_CHANGED] =
-    g_signal_new ("icon_title_changed",
+    g_signal_new (I_("icon_title_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, icon_title_changed),
@@ -459,7 +459,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_TYPE_NONE, 0);
 
   signals[SELECTION_CHANGED] =
-    g_signal_new ("selection_changed",
+    g_signal_new (I_("selection_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, selection_changed),
@@ -468,7 +468,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_TYPE_NONE, 0);  
 
   signals[ENCODING_CHANGED] =
-    g_signal_new ("encoding_changed",
+    g_signal_new (I_("encoding_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
@@ -477,7 +477,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_TYPE_NONE, 0);
 
   signals[SHOW_POPUP_MENU] =
-    g_signal_new ("show-popup-menu",
+    g_signal_new (I_("show-popup-menu"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
