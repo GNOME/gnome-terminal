@@ -81,6 +81,7 @@ typedef struct
   gboolean default_window_menubar_forced;
   gboolean default_window_menubar_state;
   gboolean default_start_fullscreen;
+  char    *default_role;
   char    *default_geometry;
   char    *default_working_dir;
   char   **post_execute_args;
@@ -187,6 +188,12 @@ apply_defaults (OptionParsingResults *results,
 {
   g_assert (iw->geometry == NULL);
 
+  if (results->default_role)
+    {
+      iw->role = results->default_role;
+      results->default_role = NULL;
+    }
+  
   if (results->default_geometry)
     {
       iw->geometry = results->default_geometry;
@@ -428,9 +435,9 @@ option_tab_with_profile_internal_id_callback (const gchar *option_name,
 
 static gboolean 
 option_role_callback (const gchar *option_name,
-                         const gchar *value,
-                         gpointer     data,
-                         GError     **error)
+                      const gchar *value,
+                      gpointer     data,
+                      GError     **error)
 {
   OptionParsingResults *results = data;
   InitialWindow *iw;
@@ -439,6 +446,14 @@ option_role_callback (const gchar *option_name,
     {
       iw = g_list_last (results->initial_windows)->data;
       iw->role = g_strdup (value);
+    }
+  else if (!results->default_role)
+    results->default_role = g_strdup (value);
+  else
+    {
+      g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+                   "%s", _("Two roles given for one window"));
+      return FALSE;
     }
 
   return TRUE;
@@ -610,7 +625,6 @@ digest_options_callback (GOptionContext *context,
   if (results->initial_windows == NULL)
     it = ensure_top_tab (results);
 
-
   if (results->execute)
     {         
       if (results->post_execute_args == NULL)
@@ -637,8 +651,8 @@ digest_options_callback (GOptionContext *context,
           iw = g_list_last (results->initial_windows)->data;
           iw->geometry = g_strdup (results->geometry);
         }
-      else
-          results->default_geometry = g_strdup (results->geometry);
+      else if (!results->default_geometry)
+        results->default_geometry = g_strdup (results->geometry);
     }
 
 
@@ -706,6 +720,7 @@ option_parsing_results_new (int *argc, char **argv)
   results->startup_id = NULL;
   results->display_name = NULL;
   results->initial_windows = NULL;
+  results->default_role = NULL;
   results->default_geometry = NULL;
   results->geometry = NULL;
   results->zoom = NULL;
@@ -756,6 +771,7 @@ option_parsing_results_free (OptionParsingResults *results)
   g_list_foreach (results->initial_windows, (GFunc) initial_window_free, NULL);
   g_list_free (results->initial_windows);
 
+  g_free (results->default_role);
   g_free (results->default_geometry);
   g_free (results->default_working_dir);
 
