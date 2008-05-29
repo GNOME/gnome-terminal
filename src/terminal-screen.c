@@ -2016,9 +2016,37 @@ drag_data_received (TerminalScreen   *widget,
       break;
 
     case TARGET_NETSCAPE_URL:
-      /* FIXMEchpe implement me! */
-      break;
+      {
+        char *utf8_data, *newline, *filename;
         
+        /* The data contains the URL, a \n, then the
+         * title of the web page.
+         */
+        if (selection_data->length < 0 || selection_data->format != 8)
+          return;
+
+        utf8_data = g_strndup ((char *) selection_data->data, selection_data->length);
+        newline = strchr (utf8_data, '\n');
+        if (newline)
+          *newline = '\0';
+
+        /* If it's a file:/// URI, paste as quoted filename */
+        filename = g_filename_from_uri (utf8_data, NULL, NULL);
+        if (filename)
+          {
+            char *text;
+
+            text = g_shell_quote (filename);
+            vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+            g_free (filename);
+          }
+        else
+          vte_terminal_feed_child (VTE_TERMINAL (screen), utf8_data, strlen (utf8_data));
+          
+        g_free (utf8_data);
+      }
+      break;
+       
     case TARGET_BGIMAGE:
       {
         char *uri_list;
