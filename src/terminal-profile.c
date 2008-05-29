@@ -254,9 +254,10 @@ static const GConfEnumStringPair exit_actions[] = {
 
 /* FIXMEchpe make these use the same strings as vte */
 static const GConfEnumStringPair erase_bindings[] = {
+  { VTE_ERASE_AUTO, "auto" },
   { VTE_ERASE_ASCII_BACKSPACE, "control-h" },
-  { VTE_ERASE_DELETE_SEQUENCE, "escape-sequence" },
   { VTE_ERASE_ASCII_DELETE, "ascii-del" },
+  { VTE_ERASE_DELETE_SEQUENCE, "escape-sequence" },
   { -1, NULL }
 };
 
@@ -2485,7 +2486,7 @@ set_delete_binding (TerminalProfile *profile,
 {
   TerminalProfilePrivate *priv = profile->priv;
   int binding; /* VteTerminalEraseBinding */
-  
+
   if (str_val &&
       gconf_string_to_enum (erase_bindings, str_val, &binding) &&
       binding != priv->delete_binding)

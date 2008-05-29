@@ -1892,7 +1892,7 @@ profile_editor_update_delete_binding (GtkWidget       *editor,
   GtkWidget *w;
 
   w = profile_editor_get_widget (editor, "delete-binding-combobox");
-  
+
   gtk_combo_box_set_active (GTK_COMBO_BOX (w),
                             terminal_profile_get_delete_binding (profile));
 }
