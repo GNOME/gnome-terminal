@@ -40,7 +40,7 @@ typedef struct _TerminalApp TerminalApp;
 
 GType terminal_app_get_type (void);
 
-void terminal_app_initialize (void);
+void terminal_app_initialize (gboolean use_factory);
 
 void terminal_app_shutdown (void);
 

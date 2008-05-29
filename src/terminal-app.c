@@ -75,6 +75,7 @@
 struct _TerminalAppClass {
   GObjectClass parent_class;
 
+  void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
   void (* default_profile_changed) (TerminalApp *app);
 };
@@ -100,15 +101,18 @@ struct _TerminalApp
 
   guint profile_list_notify_id;
   guint default_profile_notify_id;
+
+  gboolean use_factory;
 };
 
 enum {
+  QUIT,
   PROFILES_LIST_CHANGED,
   DEFAULT_PROFILE_CHANGED,
   LAST_SIGNAL
 };
 
-// static guint signals[LAST_SIGNAL];
+static guint signals[LAST_SIGNAL];
 
 enum
 {
@@ -1534,6 +1538,182 @@ terminal_app_manage_profiles (TerminalApp     *app,
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
 }
 
+static void
+terminal_app_get_clone_command (TerminalApp *app,
+                                int         *argcp,
+                                char      ***argvp)
+{
+  GList *tmp;
+  GPtrArray* args;
+  
+  args = g_ptr_array_new ();
+
+   g_ptr_array_add (args, g_strdup (EXECUTABLE_NAME));
+
+  if (!app->use_factory)
+    {
+       g_ptr_array_add (args, g_strdup ("--disable-factory"));
+    }
+
+  tmp = app->windows;
+  while (tmp != NULL)
+    {
+      GList *tabs;
+      GList *tmp2;
+      TerminalWindow *window = tmp->data;
+      TerminalScreen *active_screen;
+
+      active_screen = terminal_window_get_active (window);
+      
+      tabs = terminal_window_list_screens (window);
+
+      tmp2 = tabs;
+      while (tmp2 != NULL)
+        {
+          TerminalScreen *screen = tmp2->data;
+          const char *profile_id;
+          const char **override_command;
+          const char *title;
+          double zoom;
+          
+          profile_id = terminal_profile_get_name (terminal_screen_get_profile (screen));
+          
+          if (tmp2 == tabs)
+            {
+               g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
+                                                     profile_id));
+              if (terminal_window_get_menubar_visible (window))
+                 g_ptr_array_add (args, g_strdup ("--show-menubar"));
+              else
+                 g_ptr_array_add (args, g_strdup ("--hide-menubar"));
+
+               g_ptr_array_add (args, g_strdup_printf ("--role=%s",
+                                                     gtk_window_get_role (GTK_WINDOW (window))));
+            }
+          else
+            {
+               g_ptr_array_add (args, g_strdup_printf ("--tab-with-profile-internal-id=%s",
+                                                     profile_id));
+            }
+
+          if (screen == active_screen)
+            {
+              int w, h, x, y;
+
+              /* FIXME saving the geometry is not great :-/ */
+               g_ptr_array_add (args, g_strdup ("--active"));
+
+               g_ptr_array_add (args, g_strdup ("--geometry"));
+
+              terminal_screen_get_size (screen, &w, &h);
+              gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+              g_ptr_array_add (args, g_strdup_printf ("%dx%d+%d+%d", w, h, x, y));
+            }
+
+          override_command = terminal_screen_get_override_command (screen);
+          if (override_command)
+            {
+              char *flattened;
+
+               g_ptr_array_add (args, g_strdup ("--command"));
+              
+              flattened = g_strjoinv (" ", (char**) override_command);
+               g_ptr_array_add (args, flattened);
+            }
+
+          title = terminal_screen_get_dynamic_title (screen);
+          if (title)
+            {
+               g_ptr_array_add (args, g_strdup ("--title"));
+               g_ptr_array_add (args, g_strdup (title));
+            }
+
+          {
+            const char *dir;
+
+            dir = terminal_screen_get_working_dir (screen);
+
+            if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
+              {
+                 g_ptr_array_add (args, g_strdup ("--working-directory"));
+                g_ptr_array_add (args, g_strdup (dir));
+              }
+          }
+
+          zoom = terminal_screen_get_font_scale (screen);
+          if (zoom < -1e-6 || zoom > 1e-6) /* if not 1.0 */
+            {
+              char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+              g_ascii_dtostr (buf, sizeof (buf), zoom);
+              
+              g_ptr_array_add (args, g_strdup ("--zoom"));
+              g_ptr_array_add (args, g_strdup (buf));
+            }
+          
+          tmp2 = tmp2->next;
+        }
+      
+      g_list_free (tabs);
+      
+      tmp = tmp->next;
+    }
+
+  /* final NULL */
+  g_ptr_array_add (args, NULL);
+
+  *argcp = args->len;
+  *argvp = (char**) g_ptr_array_free (args, FALSE);
+}
+
+static gboolean
+terminal_app_save_yourself_cb (GnomeClient        *client,
+                               gint                phase,
+                               GnomeSaveStyle      save_style,
+                               gboolean            shutdown,
+                               GnomeInteractStyle  interact_style,
+                               gboolean            fast,
+                               void               *data)
+{
+  char **clone_command;
+  TerminalApp *app;
+  int argc;
+#ifdef GNOME_ENABLE_DEBUG
+  int i;
+#endif
+
+  app = data;
+  
+  terminal_app_get_clone_command (app, &argc, &clone_command);
+
+  /* GnomeClient builds the clone command from the restart command */
+  gnome_client_set_restart_command (client, argc, clone_command);
+
+#ifdef GNOME_ENABLE_DEBUG
+  /* Debug spew */
+  g_print ("Saving session: ");
+  i = 0;
+  while (clone_command[i])
+    {
+      g_print ("%s ", clone_command[i]);
+      ++i;
+    }
+  g_print ("\n");
+#endif
+
+  g_strfreev (clone_command);
+  
+  /* success */
+  return TRUE;
+}
+
+static void
+terminal_app_client_die_cb (GnomeClient *client,
+                            TerminalApp *app)
+{
+  g_signal_emit (app, signals[QUIT], 0);
+}
+
 /* Class implementation */
 
 G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
@@ -1541,6 +1721,7 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 static void
 terminal_app_init (TerminalApp *app)
 {
+  GnomeClient *sm_client;
 //   GConfClient *conf;
 
   global_app = app;
@@ -1575,6 +1756,16 @@ terminal_app_init (TerminalApp *app)
   gconf_client_notify (conf, DEFAULT_PROFILE_KEY);
 
   g_object_unref (conf);
+
+  sm_client = gnome_master_client ();
+  g_signal_connect (sm_client,
+                    "save_yourself",
+                    G_CALLBACK (terminal_app_save_yourself_cb),
+                    terminal_app_get ());
+
+  g_signal_connect (sm_client, "die",
+                    G_CALLBACK (terminal_app_client_die_cb),
+                    NULL);
 }
 
 static void
@@ -1607,16 +1798,27 @@ terminal_app_class_init (TerminalAppClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
+
+  signals[QUIT] =
+    g_signal_new (I_("quit"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalAppClass, quit),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 }
 
 /* Public API */
 
 void
-terminal_app_initialize (void)
+terminal_app_initialize (gboolean use_factory)
 {
   g_assert (global_app == NULL);
   g_object_new (TERMINAL_TYPE_APP, NULL);
   g_assert (global_app != NULL);
+
+  global_app->use_factory = use_factory;
 }
 
 void
