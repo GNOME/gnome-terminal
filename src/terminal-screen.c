@@ -80,7 +80,9 @@ enum
 
 enum {
   PROP_0,
-  PROP_TITLE
+  PROP_ICON_TITLE,
+  PROP_ICON_TITLE_SET,
+  PROP_TITLE,
 };
 
 enum
@@ -404,6 +406,12 @@ terminal_screen_get_property (GObject *object,
 
   switch (prop_id)
     {
+      case PROP_ICON_TITLE:
+        g_value_set_string (value, terminal_screen_get_icon_title (screen));
+        break;
+      case PROP_ICON_TITLE_SET:
+        g_value_set_boolean (value, terminal_screen_get_icon_title_set (screen));
+        break;
       case PROP_TITLE:
         g_value_set_string (value, terminal_screen_get_title (screen));
         break;
@@ -446,11 +454,26 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   1,
                   G_TYPE_POINTER);
 
-  g_object_class_install_property (object_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title", NULL, NULL,
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property
+    (object_class,
+     PROP_ICON_TITLE,
+     g_param_spec_string ("icon-title", NULL, NULL,
+                          NULL,
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property
+    (object_class,
+     PROP_ICON_TITLE_SET,
+     g_param_spec_boolean ("icon-title-set", NULL, NULL,
+                           FALSE,
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property
+    (object_class,
+     PROP_TITLE,
+     g_param_spec_string ("title", NULL, NULL,
+                          NULL,
+                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 }
