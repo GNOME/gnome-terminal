@@ -742,7 +742,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
           /* Backward compatibility */
           string = gconf_enum_to_string ((GConfEnumStringPair*) erase_bindings, g_value_get_enum (value));
           if (!string)
-            return;
+            goto cleanup;
         }
       else
         return;
@@ -756,7 +756,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
 
       color = g_value_get_boxed (value);
       if (!color)
-        return;
+        goto cleanup;
 
       g_snprintf (str, sizeof (str),
                   "#%04X%04X%04X",
@@ -773,7 +773,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
 
       font_desc = g_value_get_boxed (value);
       if (!font_desc)
-        return;
+        goto cleanup;
 
       font = pango_font_description_to_string (font_desc);
       gconf_change_set_set_string (changeset, key, font);
@@ -796,7 +796,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
 
       array = g_value_get_boxed (value);
       if (!array)
-        return;
+        goto cleanup;
 
       n_colors = array->n_values;
       string = g_string_sized_new (n_colors * (1 /* # */ + 3 * 4) + n_colors /* : separators and terminating \0 */);
@@ -823,6 +823,9 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
     }
   else
     g_printerr ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
+
+cleanup:
+  g_free (key);
 }
 
 static gboolean
