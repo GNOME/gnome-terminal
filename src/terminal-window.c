@@ -1180,6 +1180,7 @@ static void
 terminal_window_screen_changed (GtkWidget *widget,
                                 GdkScreen *previous_screen)
 {
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
   void (* screen_changed) (GtkWidget *, GdkScreen *) =
     GTK_WIDGET_CLASS (terminal_window_parent_class)->screen_changed;
   GdkScreen *screen;
@@ -1198,7 +1199,7 @@ terminal_window_screen_changed (GtkWidget *widget,
   if (!screen)
     return;
 
-  terminal_window_screen_update (TERMINAL_WINDOW (window), screen);
+  terminal_window_screen_update (window, screen);
 }
 
 static void
