@@ -28,7 +28,7 @@
 #include "terminal-app.h"
 #include <string.h>
 
-#define D(x)
+#define D(x) x
 
 
 #define ACCEL_PATH_ROOT "<Actions>/Main/"
@@ -258,7 +258,7 @@ terminal_accels_init (void)
 
 	  key_entry = &(all_entries[i].key_entry[j]);
 
-	  key_entry->closure = g_closure_new_simple (sizeof (GClosure), NULL);
+	  key_entry->closure = g_closure_new_simple (sizeof (GClosure), key_entry);
 
 	  g_closure_ref (key_entry->closure);
 	  g_closure_sink (key_entry->closure);
@@ -430,7 +430,7 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
    * in gconf when the accelerator gets removed and then
    * setting it again when it gets added.
    */
-  int i;
+  KeyEntry *key_entry;
   
   D (g_print ("Changed accel %s closure %p\n",
               binding_name (keyval, modifier, FALSE), /* memleak */
@@ -442,24 +442,11 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
       return;
     }
 
-  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
-    {
-      int j;
+  key_entry = accel_closure->data;
+  g_assert (key_entry);
 
-      for (j = 0; j < all_entries[i].n_elements; ++j)
-	{
-	  KeyEntry *key_entry;
-
-	  key_entry = &(all_entries[i].key_entry[j]);
-
-	  if (key_entry->closure == accel_closure)
-	    {
-	      key_entry->needs_gconf_sync = TRUE;
-	      queue_gconf_sync ();
-	      break;
-	    }
-	}
-    }
+  key_entry->needs_gconf_sync = TRUE;
+  queue_gconf_sync ();
 }
 
 static gboolean
