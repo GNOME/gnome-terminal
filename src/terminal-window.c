@@ -1865,7 +1865,6 @@ terminal_window_set_active (TerminalWindow *window,
   priv->active_term = screen;
 
   terminal_window_update_geometry (window);
-  terminal_window_update_icon (window);
   
   /* Override menubar setting if it wasn't restored from session */
   if (priv->use_default_menubar_visibility)
@@ -2063,26 +2062,6 @@ notebook_page_removed_callback (GtkWidget       *notebook,
       /* FIXMEchpe!!! DO NOT DO THIS FROM THIS CALLBACK !!!!!!! */
       gtk_widget_destroy (GTK_WIDGET (window));
     }
-}
-
-void
-terminal_window_update_icon (TerminalWindow *window)
-{
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
-  TerminalProfile *profile;
-
-  if (priv->active_term == NULL ||
-      !(profile = terminal_screen_get_profile (priv->active_term)) ||
-      terminal_profile_get_icon_file (profile) == NULL)
-    {
-      gtk_window_set_icon (GTK_WINDOW (window), NULL);
-      return;
-    }
-
-  gtk_window_set_icon (GTK_WINDOW (window),
-                       terminal_profile_get_icon (profile));
-#endif
 }
 
 void

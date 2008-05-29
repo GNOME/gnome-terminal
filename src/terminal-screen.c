@@ -586,7 +586,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
        * update_on_realize
        */
       terminal_screen_update_scrollbar (screen);
-      terminal_window_update_icon (priv->window);
       terminal_window_update_geometry (priv->window);
     }
   
