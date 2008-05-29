@@ -3,6 +3,7 @@
 /*
  * Copyright © 2002 Havoc Pennington
  * Copyright © 2002 Mathias Hasselmann
+ * Copyright © 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *
@@ -914,6 +915,50 @@ setup_background_filechooser (GtkWidget *filechooser,
                     G_CALLBACK (update_image_preview), NULL);
 }
 
+static GladeXML*
+load_glade_file (const char *filename,
+                 const char *widget_root,
+                 GtkWindow  *error_dialog_parent)
+{
+  char *path;
+  GladeXML *xml;
+
+  xml = NULL;
+  path = g_strconcat ("./", filename, NULL);
+  
+  if (g_file_test (path,
+                   G_FILE_TEST_EXISTS))
+    {
+      /* Try current dir, for debugging */
+      xml = glade_xml_new (path,
+                           widget_root,
+                           GETTEXT_PACKAGE);
+    }
+  
+  if (xml == NULL)
+    {
+      g_free (path);
+      
+      path = g_build_filename (TERM_GLADE_DIR, filename, NULL);
+
+      xml = glade_xml_new (path,
+                           widget_root,
+                           GETTEXT_PACKAGE);
+    }
+
+  if (xml == NULL)
+    {
+      static GtkWidget *no_glade_dialog = NULL;
+
+      terminal_util_show_error_dialog (error_dialog_parent, &no_glade_dialog, 
+                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly."), path);
+    }
+
+  g_free (path);
+
+  return xml;
+}
+
 void
 terminal_profile_edit (TerminalProfile *profile,
                        GtkWindow       *transient_parent)
@@ -932,9 +977,9 @@ terminal_profile_edit (TerminalProfile *profile,
       gint i;
       GtkSizeGroup *size_group;
 
-      xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
-                                           "profile-editor-dialog",
-                                           transient_parent);
+      xml = load_glade_file (TERM_GLADE_FILE,
+                             "profile-editor-dialog",
+                             transient_parent);
       if (xml == NULL)
         return;
       

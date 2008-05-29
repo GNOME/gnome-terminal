@@ -161,50 +161,6 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
     atk_object_set_name (obj, name);
 }
 
-GladeXML*
-terminal_util_load_glade_file (const char *filename,
-                               const char *widget_root,
-                               GtkWindow  *error_dialog_parent)
-{
-  char *path;
-  GladeXML *xml;
-
-  xml = NULL;
-  path = g_strconcat ("./", filename, NULL);
-  
-  if (g_file_test (path,
-                   G_FILE_TEST_EXISTS))
-    {
-      /* Try current dir, for debugging */
-      xml = glade_xml_new (path,
-                           widget_root,
-                           GETTEXT_PACKAGE);
-    }
-  
-  if (xml == NULL)
-    {
-      g_free (path);
-      
-      path = g_build_filename (TERM_GLADE_DIR, filename, NULL);
-
-      xml = glade_xml_new (path,
-                           widget_root,
-                           GETTEXT_PACKAGE);
-    }
-
-  if (xml == NULL)
-    {
-      static GtkWidget *no_glade_dialog = NULL;
-
-      terminal_util_show_error_dialog (error_dialog_parent, &no_glade_dialog, 
-                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly."), path);
-    }
-
-  g_free (path);
-
-  return xml;
-}
-
 void
 terminal_util_open_url (GtkWidget *parent,
                         const char *orig_url,

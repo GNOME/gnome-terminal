@@ -70,9 +70,7 @@ typedef struct
 
 typedef enum
 {
-  /* this has to be kept in sync with the option menu in the
-   * glade file
-   */
+  /* this has to be kept in sync with the option menu in the profile editor UI file */
   TERMINAL_TITLE_REPLACE,
   TERMINAL_TITLE_BEFORE,
   TERMINAL_TITLE_AFTER,
