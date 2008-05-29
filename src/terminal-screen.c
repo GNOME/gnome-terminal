@@ -430,8 +430,6 @@ terminal_screen_init (TerminalScreen *screen)
   g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
   g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
 #endif
-
-  gtk_widget_show (GTK_WIDGET (screen)); /* FIXMEchpe remove this */
 }
 
 static void
