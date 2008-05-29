@@ -445,10 +445,7 @@ ensure_pixbuf_property (TerminalProfile *profile,
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
   if (!pixbuf)
     {
-      g_printerr ("Failed to load background image \"%s\" for terminal profile \"%s\": %s\n",
-                  filename_utf8,
-                  terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME),
-                  error->message);
+      g_printerr ("Failed to load image \"%s\": %s\n", filename_utf8, error->message);
       g_error_free (error);
       g_free (path);
       goto failed;
@@ -663,7 +660,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
     }
   else
     {
-      g_print ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
+      g_printerr ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
       goto out;
     }
 
@@ -833,7 +830,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       g_string_free (string, TRUE);
     }
   else
-    g_print ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
+    g_printerr ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
 }
 
 static gboolean
@@ -891,11 +888,6 @@ terminal_profile_schedule_save (TerminalProfile *profile,
   TerminalProfilePrivate *priv = profile->priv;
 
   g_assert (pspec != NULL);
-
-  if (priv->initialising) {
-    g_print ("Initialising property %s, skipping save\n", pspec->name);
-    return;
-  }
 
   if (priv->in_notification_count > 0)
     g_warning ("Scheduling save from gconf notify!\n");
@@ -999,7 +991,6 @@ terminal_profile_constructor (GType type,
         if (pspec == construct_params[j].pspec)
           {
             is_construct = TRUE;
-            g_print ("SKIPPING pspec %s due to already been set on construct\n", pspec->name);
             break;
           }
 
@@ -1011,7 +1002,6 @@ terminal_profile_constructor (GType type,
         continue;
 
       key = gconf_concat_dir_and_key (priv->profile_dir, gconf_key);
-      g_print ("NOTIFYING pspec %s key %s\n", pspec->name, key);
       gconf_client_notify (priv->conf, key);
       g_free (key);
     }
