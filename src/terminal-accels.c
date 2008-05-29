@@ -208,8 +208,6 @@ static char*    binding_name        (guint            keyval,
                                      GdkModifierType  mask,
                                      gboolean         translate);
 
-static void      queue_gconf_sync (void);
-
 static gboolean sync_idle_cb (gpointer data);
 
 static guint sync_idle_id = 0;
@@ -410,7 +408,9 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
   g_assert (key_entry);
 
   key_entry->needs_gconf_sync = TRUE;
-  queue_gconf_sync ();
+
+  if (sync_idle_id == 0)
+    sync_idle_id = g_idle_add (sync_idle_cb, NULL);
 }
 
 static gboolean
@@ -515,13 +515,6 @@ sync_idle_cb (gpointer data)
   g_object_unref (conf);
 
   return FALSE;
-}
-
-static void
-queue_gconf_sync (void)
-{
-  if (sync_idle_id == 0)
-    sync_idle_id = g_idle_add (sync_idle_cb, NULL);
 }
 
 /* We have the same KeyEntry* in both columns;
