@@ -1196,7 +1196,7 @@ terminal_app_get_clone_command (TerminalApp *app,
   if (!app->use_factory)
     g_ptr_array_add (args, g_strdup ("--disable-factory"));
 
-  for (lw = app->windows; l != NULL; l = l->next)
+  for (lw = app->windows; lw != NULL; lw = lw->next)
     {
       GList *tabs;
       GList *lt;
