@@ -43,6 +43,8 @@
 
 #define FALLBACK_PROFILE_ID "Default"
 
+#define EPSILON (1.0e-6)
+
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -1278,8 +1280,7 @@ terminal_app_get_clone_command (TerminalApp *app,
           }
 
           zoom = terminal_screen_get_font_scale (screen);
-          /* FIXMEchpe this looks wrong... */
-          if (zoom < -1e-6 || zoom > 1e-6) /* if not 1.0 */
+          if (zoom < (1.0 - EPSILON) || (zoom > 1.0 + EPSILON)) /* if not 1.0 */
             {
               char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
