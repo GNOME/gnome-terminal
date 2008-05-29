@@ -1982,9 +1982,8 @@ drag_data_received (TerminalScreen   *widget,
         TerminalScreen *moving_screen;
         TerminalWindow *source_window;
         TerminalWindow *dest_window;
-        GtkWidget *source_notebook;
         GtkWidget *dest_notebook;
-        gint page_num;
+        int page_num;
 
         /* FIXMEchpe same-app only!? */
         container = *(GtkWidget**) selection_data->data;
@@ -1997,15 +1996,11 @@ drag_data_received (TerminalScreen   *widget,
           return;
 
         source_window = moving_screen->priv->window;
-        source_notebook = terminal_window_get_notebook (source_window);
         dest_window = screen->priv->window;
         dest_notebook = terminal_window_get_notebook (dest_window);
         page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
                                           GTK_WIDGET (screen));
-
-        g_object_ref_sink (moving_screen);
-        terminal_window_add_screen (dest_window, moving_screen, page_num);
-        g_object_unref (moving_screen);
+        terminal_window_move_screen (source_window, dest_window, moving_screen, page_num + 1);
 
         gtk_drag_finish (context, TRUE, TRUE, time);
       }

@@ -57,10 +57,15 @@ GtkUIManager *terminal_window_get_ui_manager (TerminalWindow *window);
 
 void terminal_window_add_screen (TerminalWindow *window,
                                  TerminalScreen *screen,
-                                 gint            position);
+                                 int position);
 
 void terminal_window_remove_screen (TerminalWindow *window,
                                     TerminalScreen *screen);
+
+void terminal_window_move_screen (TerminalWindow *source_window,
+                                  TerminalWindow *dest_window,
+                                  TerminalScreen *screen,
+                                  int dest_position);
 
 /* Menubar visibility is part of session state, except that
  * if it isn't restored from session, the window gets the setting

@@ -1093,7 +1093,6 @@ static void
 screen_close_cb (TerminalScreen *screen,
                  TerminalWindow *window)
 {
-  g_print ("window %p screen-close %p\n", window, screen);
   terminal_window_remove_screen (window, screen);
 }
 
@@ -1779,12 +1778,12 @@ construct_tab_label (TerminalScreen *screen, GtkWidget *screen_container)
 void
 terminal_window_add_screen (TerminalWindow *window,
                             TerminalScreen *screen,
-                            gint            position)
+                            int            position)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *old_window;
   GtkWidget *screen_container, *tab_label;
- 
+
   old_window = gtk_widget_get_toplevel (GTK_WIDGET (screen));
   if (GTK_WIDGET_TOPLEVEL (old_window) &&
       TERMINAL_IS_WINDOW (old_window) &&
@@ -1836,6 +1835,41 @@ terminal_window_remove_screen (TerminalWindow *window,
 
   num_page = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), scrolled_window);
   gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), num_page);
+}
+
+
+void
+terminal_window_move_screen (TerminalWindow *source_window,
+                             TerminalWindow *dest_window,
+                             TerminalScreen *screen,
+                             int dest_position)
+{
+  GtkWidget *screen_container;
+
+  g_return_if_fail (TERMINAL_IS_WINDOW (source_window));
+  g_return_if_fail (TERMINAL_IS_WINDOW (dest_window));
+  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
+  g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (screen)) == GTK_WIDGET (source_window));
+  g_return_if_fail (dest_position >= -1);
+
+  screen_container = GTK_WIDGET (screen)->parent;
+  g_return_if_fail (GTK_IS_WIDGET (screen_container));
+
+  /* We have to ref the screen container as well as the screen,
+   * because otherwise removing the screen container from the source
+   * window's notebook will cause the container and its containing
+   * screen to be gtk_widget_destroy()ed!
+   */
+  g_object_ref_sink (screen_container);
+  g_object_ref_sink (screen);
+  terminal_window_remove_screen (source_window, screen);
+    
+  /* Now we can safely remove the screen from the container and let the container die */
+  gtk_container_remove (GTK_CONTAINER (screen_container), GTK_WIDGET (screen));
+  g_object_unref (screen_container);
+
+  terminal_window_add_screen (dest_window, screen, dest_position);
+  g_object_unref (screen);
 }
 
 GList*
@@ -2801,10 +2835,7 @@ tabs_detach_tab_callback (GtkAction *action,
                                         geometry);
   g_free (geometry);
 
-  g_object_ref_sink (screen);
-  terminal_window_remove_screen (window, screen);
-  terminal_window_add_screen (new_window, screen, -1);
-  g_object_unref (screen);
+  terminal_window_move_screen (window, new_window, screen, -1);
 
   gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
@@ -2849,8 +2880,7 @@ help_about_callback (GtkAction *action,
   };
   gchar *license_text;
 
-  license_text = g_strjoin ("\n\n",
-			    _(license[0]), _(license[1]), _(license[2]), NULL);
+  license_text = g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
 			 "program-name", _("GNOME Terminal"),
