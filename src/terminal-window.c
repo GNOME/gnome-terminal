@@ -647,8 +647,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       g_snprintf (name, sizeof (name), SET_ENCODING_ACTION_NAME_PREFIX "%s", e->charset);
       display_name = g_strdup_printf ("%s (%s)", e->name, e->charset);
 
-      g_print ("Encoding name %s encoding %s\n", e->name, e->charset);
-
       encoding_action = gtk_radio_action_new (name,
                                               display_name,
                                               NULL,
