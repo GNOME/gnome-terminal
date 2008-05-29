@@ -22,18 +22,22 @@
  */
 
 #include <config.h>
+
+#include <string.h>
+#include <math.h>
+
+#include <glib.h>
+#include <gio/gio.h>
+
 #include "terminal-intl.h"
 
 #include "profile-editor.h"
 #include "terminal.h"
 #include "terminal-util.h"
-#include <glade/glade.h>
-#include <gio/gio.h>
+
 #include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <libgnomeui/gnome-thumbnail.h>
-#include <string.h>
-#include <math.h>
 
 /* One slot in the ring buffer, plus the array which holds the data for
   * the line, plus about 80 vte_charcell structures. */
@@ -188,7 +192,7 @@ profile_editor_destroyed (GtkWidget       *editor,
                                         editor);
   
   g_object_set_data (G_OBJECT (profile), "editor-window", NULL);
-  g_object_set_data (G_OBJECT (editor), "glade-xml", NULL);
+  g_object_set_data (G_OBJECT (editor), "builder", NULL);
   profile_name_entry_notify (profile);
 }
 
@@ -788,7 +792,7 @@ format_percent_value (GtkScale *scale,
 static void
 init_background_darkness_scale (GtkWidget *scale)
 {
-  g_signal_connect (G_OBJECT (scale), "format_value",
+  g_signal_connect (scale, "format_value",
                     G_CALLBACK (format_percent_value),
                     NULL);
 }
@@ -915,380 +919,326 @@ setup_background_filechooser (GtkWidget *filechooser,
                     G_CALLBACK (update_image_preview), NULL);
 }
 
-static GladeXML*
-load_glade_file (const char *filename,
-                 const char *widget_root,
-                 GtkWindow  *error_dialog_parent)
-{
-  char *path;
-  GladeXML *xml;
-
-  xml = NULL;
-  path = g_strconcat ("./", filename, NULL);
-  
-  if (g_file_test (path,
-                   G_FILE_TEST_EXISTS))
-    {
-      /* Try current dir, for debugging */
-      xml = glade_xml_new (path,
-                           widget_root,
-                           GETTEXT_PACKAGE);
-    }
-  
-  if (xml == NULL)
-    {
-      g_free (path);
-      
-      path = g_build_filename (TERM_GLADE_DIR, filename, NULL);
-
-      xml = glade_xml_new (path,
-                           widget_root,
-                           GETTEXT_PACKAGE);
-    }
-
-  if (xml == NULL)
-    {
-      static GtkWidget *no_glade_dialog = NULL;
-
-      terminal_util_show_error_dialog (error_dialog_parent, &no_glade_dialog, 
-                                       _("The file \"%s\" is missing. This indicates that the application is installed incorrectly."), path);
-    }
-
-  g_free (path);
-
-  return xml;
-}
-
 void
 terminal_profile_edit (TerminalProfile *profile,
                        GtkWindow       *transient_parent)
 {
-  GtkWidget *editor, *fontsel;
-  GtkWindow *old_transient_parent;
+  char *path;
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GtkWidget *editor, *fontsel, *w;
+  GtkSizeGroup *size_group;
+  double num1, num2;
+  guint i;
 
   editor = g_object_get_data (G_OBJECT (profile),
                               "editor-window");
-
-  if (editor == NULL)
+  if (editor)
     {
-      GladeXML *xml;
-      GtkWidget *w;
-      double num1, num2;
-      gint i;
-      GtkSizeGroup *size_group;
-
-      xml = load_glade_file (TERM_GLADE_FILE,
-                             "profile-editor-dialog",
-                             transient_parent);
-      if (xml == NULL)
-        return;
-      
-      old_transient_parent = NULL;
-      
-      editor = glade_xml_get_widget (xml, "profile-editor-dialog");
-	         
-      g_object_set_data (G_OBJECT (profile),
-                         "editor-window",
-                         editor);      
-
-      g_object_set_data_full (G_OBJECT (editor),
-                              "glade-xml",
-                              xml,
-                              (GDestroyNotify) g_object_unref);
-      
-      g_signal_connect (G_OBJECT (editor),
-                        "destroy",
-                        G_CALLBACK (profile_editor_destroyed),
-                        profile);
-
-      g_signal_connect (G_OBJECT (editor),
-                        "response",
-                        G_CALLBACK (editor_response_cb),
-                        NULL);
-      
-      gtk_window_set_destroy_with_parent (GTK_WINDOW (editor), TRUE);
-
-      g_signal_connect (G_OBJECT (profile),
-                        "changed",
-                        G_CALLBACK (profile_changed),
-                        editor);
-      
-      g_signal_connect (G_OBJECT (profile),
-                        "forgotten",
-                        G_CALLBACK (profile_forgotten),
-                        editor);      
-
-      profile_editor_update_sensitivity (editor, profile);
-
-      /* Autoconnect is just too scary for me. */
-      w = glade_xml_get_widget (xml, "profile-name-entry");
-      profile_editor_update_visible_name (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (visible_name_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "profile-icon-entry");
-      profile_editor_update_icon (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (icon_changed),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "show-menubar-checkbutton");
-      profile_editor_update_default_show_menubar (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (show_menubar_toggled),
-                        profile);
-
-      profile_editor_update_color_pickers (editor, profile);
-      
-      w = glade_xml_get_widget (xml, "foreground-colorpicker");
-      g_signal_connect (G_OBJECT (w), "color_set",
-                        G_CALLBACK (foreground_color_set),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "background-colorpicker");
-      g_signal_connect (G_OBJECT (w), "color_set",
-                        G_CALLBACK (background_color_set),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "color-scheme-combobox");
-      init_color_scheme_menu (w);
-      profile_editor_update_color_scheme_menu (editor, profile);
-      profile_editor_update_palette (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (color_scheme_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "title-entry");
-      profile_editor_update_title (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (title_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "title-mode-combobox");
-      profile_editor_update_title_mode (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (title_mode_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "allow-bold-checkbutton");
-      profile_editor_update_allow_bold (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (allow_bold_toggled),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "bell-checkbutton");
-      profile_editor_update_silent_bell (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (bell_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "word-chars-entry");
-      profile_editor_update_word_chars (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (word_chars_changed),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "scrollbar-position-combobox");
-      profile_editor_update_scrollbar_position (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (scrollbar_position_changed),
-                        profile);
-
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      
-      w = glade_xml_get_widget (xml, "scrollback-lines-spinbutton");
-      profile_editor_update_scrollback_lines (editor, profile);
-      g_signal_connect (G_OBJECT (w), "value_changed",
-                        G_CALLBACK (scrollback_lines_value_changed),
-                        profile);
-      gtk_size_group_add_widget (size_group, w);
-      
-      gtk_spin_button_get_range (GTK_SPIN_BUTTON (w), &num1, &num2);
-
-      w = glade_xml_get_widget (xml, "scrollback-kilobytes-spinbutton");
-
-      /* Sync kilobytes spinbutton range with the lines spinbutton */
-      gtk_spin_button_set_range (GTK_SPIN_BUTTON (w),
-                                 (num1 * BYTES_PER_LINE) / 1024,
-                                 (num2 * BYTES_PER_LINE) / 1024);
-      
-      profile_editor_update_scrollback_lines (editor, profile);      
-      g_signal_connect (G_OBJECT (w), "value_changed",
-                        G_CALLBACK (scrollback_kilobytes_value_changed),
-                        profile);
-      gtk_size_group_add_widget (size_group, w);
-
-      g_object_unref (G_OBJECT (size_group));
-      
-      w = glade_xml_get_widget (xml, "scroll-on-keystroke-checkbutton");
-      profile_editor_update_scroll_on_keystroke (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (scroll_on_keystroke_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "scroll-on-output-checkbutton");
-      profile_editor_update_scroll_on_output (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (scroll_on_output_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "exit-action-combobox");
-      profile_editor_update_exit_action (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (exit_action_changed),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "login-shell-checkbutton");
-      profile_editor_update_login_shell (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (login_shell_toggled),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "update-records-checkbutton");
-      profile_editor_update_update_records (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (update_records_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "use-custom-command-checkbutton");
-      profile_editor_update_use_custom_command (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (use_custom_command_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "custom-command-entry");
-      profile_editor_update_custom_command (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (custom_command_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "palette-combobox");
-      g_assert (w);
-      init_palette_scheme_menu (w);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (palette_scheme_changed),
-                        profile);
-
-      profile_editor_update_background_type (editor, profile);
-      w = glade_xml_get_widget (xml, "solid-radiobutton");
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (solid_radio_toggled),
-                        profile);
-      w = glade_xml_get_widget (xml, "image-radiobutton");
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (image_radio_toggled),
-                        profile);
-      w = glade_xml_get_widget (xml, "transparent-radiobutton");
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (transparent_radio_toggled),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "background-image-filechooser");
-      profile_editor_update_background_image (editor, profile);
-      g_signal_connect (G_OBJECT (w), "selection-changed",
-                        G_CALLBACK (background_image_changed),
-                        profile);
-      setup_background_filechooser (w, profile);
-
-      w = glade_xml_get_widget (xml, "scroll-background-checkbutton");
-      profile_editor_update_scroll_background (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (scroll_background_toggled),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "darken-background-scale");
-      init_background_darkness_scale (w);
-      profile_editor_update_background_darkness (editor, profile);
-      g_signal_connect (G_OBJECT (w), "value_changed",
-                        G_CALLBACK (darken_background_value_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "backspace-binding-combobox");
-      profile_editor_update_backspace_binding (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (backspace_binding_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "delete-binding-combobox");
-      profile_editor_update_delete_binding (editor, profile);
-      g_signal_connect (G_OBJECT (w), "changed",
-                        G_CALLBACK (delete_binding_changed),
-                        profile);
-
-      w = glade_xml_get_widget (xml, "use-theme-colors-checkbutton");
-      profile_editor_update_use_theme_colors (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (use_theme_colors_toggled),
-                        profile);
-      
-      w = glade_xml_get_widget (xml, "system-font-checkbutton");
-      profile_editor_update_use_system_font (editor, profile);
-      g_signal_connect (G_OBJECT (w), "toggled",
-                        G_CALLBACK (use_system_font_toggled),
-                        profile);
-
-      
-      i = 0;
-      while (i < TERMINAL_PALETTE_SIZE)
-        {
-	  gchar *t;
-	  gchar *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
-
-	  w = glade_xml_get_widget (xml, s);
-	  g_assert (w);
-
-	  t = g_strdup_printf (_("Choose Palette Color %d"), i+1);
-	  gtk_color_button_set_title (GTK_COLOR_BUTTON (w), t);
-	  g_free (t);
-
-	  t = g_strdup_printf (_("Palette entry %d"), i+1);
-          gtk_widget_set_tooltip_text (w, t);
-	  g_free (t);
-
-	  g_object_set_data (G_OBJECT (w),
-			     "palette-entry-index",
-			     GINT_TO_POINTER (i));
-
-	  g_signal_connect (G_OBJECT (w), "color_set",
-			    G_CALLBACK (palette_color_set),
-			    profile);
-
-	  g_free (s);
-
-	  ++i;
-        }
-
-      profile_editor_update_palette (editor, profile);
-
-      fontsel = glade_xml_get_widget (xml, "font-selector");
-      g_object_set_data (G_OBJECT (editor), "font-selector", fontsel);
-
-      profile_editor_update_font (editor, profile);
-      g_signal_connect (G_OBJECT (fontsel), "font_set",
-			G_CALLBACK (font_set),
-			profile);
-
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      gtk_size_group_add_widget (size_group,
-				 glade_xml_get_widget (xml,
-                                                       "font-selector-label"));
-      gtk_size_group_add_widget (size_group,
-				 glade_xml_get_widget (xml,
-						       "profile-name-label"));
-      gtk_size_group_add_widget (size_group,
-				 glade_xml_get_widget (xml,
-						       "profile-icon-label"));
-      g_object_unref (G_OBJECT (size_group));
-
-      w = glade_xml_get_widget (xml, "reset-compat-defaults-button");
-      g_signal_connect (G_OBJECT (w), "clicked",
-			G_CALLBACK (reset_compat_defaults_clicked),
-			profile);
-
-      terminal_util_set_unique_role (GTK_WINDOW (editor), "gnome-terminal-profile-editor");
+      gtk_window_set_transient_for (GTK_WINDOW (editor),
+                                    GTK_WINDOW (transient_parent));
+      gtk_window_present (GTK_WINDOW (editor));
+      return;
     }
+
+  path = g_build_filename (TERM_PKGDATADIR, "profile-preferences.ui", NULL);
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_file (builder, path, &error)) {
+    g_warning ("Failed to load %s: %s\n", path, error->message);
+    g_error_free (error);
+    g_free (path);
+    g_object_unref (builder);
+    return;
+  }
+  g_free (path);
+
+  editor = (GtkWidget *) gtk_builder_get_object  (builder, "profile-editor-dialog");
+  g_object_set_data_full (G_OBJECT (editor), "builder",
+                          builder, (GDestroyNotify) g_object_unref);
+
+  /* FIXMEchpe */
+  g_object_set_data (G_OBJECT (profile), "editor-window", editor);
+
+  g_signal_connect (editor, "destroy",
+                    G_CALLBACK (profile_editor_destroyed),
+                    profile);
+
+  g_signal_connect (editor, "response",
+                    G_CALLBACK (editor_response_cb),
+                    NULL);
       
+  g_signal_connect (profile, "changed",
+                    G_CALLBACK (profile_changed),
+                    editor);
+  g_signal_connect (profile,
+                    "forgotten",
+                    G_CALLBACK (profile_forgotten),
+                    editor);
+
+  profile_editor_update_sensitivity (editor, profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "profile-name-entry");
+  profile_editor_update_visible_name (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (visible_name_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "profile-icon-entry");
+  profile_editor_update_icon (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (icon_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "show-menubar-checkbutton");
+  profile_editor_update_default_show_menubar (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (show_menubar_toggled),
+                    profile);
+
+  profile_editor_update_color_pickers (editor, profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "foreground-colorpicker");
+  g_signal_connect (w, "color_set",
+                    G_CALLBACK (foreground_color_set),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "background-colorpicker");
+  g_signal_connect (w, "color_set",
+                    G_CALLBACK (background_color_set),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
+  init_color_scheme_menu (w);
+  profile_editor_update_color_scheme_menu (editor, profile);
+  profile_editor_update_palette (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (color_scheme_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "title-entry");
+  profile_editor_update_title (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (title_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "title-mode-combobox");
+  profile_editor_update_title_mode (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (title_mode_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "allow-bold-checkbutton");
+  profile_editor_update_allow_bold (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (allow_bold_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "bell-checkbutton");
+  profile_editor_update_silent_bell (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (bell_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "word-chars-entry");
+  profile_editor_update_word_chars (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (word_chars_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scrollbar-position-combobox");
+  profile_editor_update_scrollbar_position (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (scrollbar_position_changed),
+                    profile);
+
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scrollback-lines-spinbutton");
+  profile_editor_update_scrollback_lines (editor, profile);
+  g_signal_connect (w, "value_changed",
+                    G_CALLBACK (scrollback_lines_value_changed),
+                    profile);
+  gtk_size_group_add_widget (size_group, w);
+
+  gtk_spin_button_get_range (GTK_SPIN_BUTTON (w), &num1, &num2);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scrollback-kilobytes-spinbutton");
+
+  /* Sync kilobytes spinbutton range with the lines spinbutton */
+  gtk_spin_button_set_range (GTK_SPIN_BUTTON (w),
+                              (num1 * BYTES_PER_LINE) / 1024,
+                              (num2 * BYTES_PER_LINE) / 1024);
+
+  profile_editor_update_scrollback_lines (editor, profile);
+  g_signal_connect (w, "value_changed",
+                    G_CALLBACK (scrollback_kilobytes_value_changed),
+                    profile);
+  gtk_size_group_add_widget (size_group, w);
+
+  g_object_unref (G_OBJECT (size_group));
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scroll-on-keystroke-checkbutton");
+  profile_editor_update_scroll_on_keystroke (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (scroll_on_keystroke_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scroll-on-output-checkbutton");
+  profile_editor_update_scroll_on_output (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (scroll_on_output_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "exit-action-combobox");
+  profile_editor_update_exit_action (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (exit_action_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "login-shell-checkbutton");
+  profile_editor_update_login_shell (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (login_shell_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "update-records-checkbutton");
+  profile_editor_update_update_records (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (update_records_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "use-custom-command-checkbutton");
+  profile_editor_update_use_custom_command (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (use_custom_command_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "custom-command-entry");
+  profile_editor_update_custom_command (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (custom_command_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "palette-combobox");
+  g_assert (w);
+  init_palette_scheme_menu (w);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (palette_scheme_changed),
+                    profile);
+
+  profile_editor_update_background_type (editor, profile);
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "solid-radiobutton");
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (solid_radio_toggled),
+                    profile);
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "image-radiobutton");
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (image_radio_toggled),
+                    profile);
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "transparent-radiobutton");
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (transparent_radio_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "background-image-filechooser");
+  profile_editor_update_background_image (editor, profile);
+  g_signal_connect (w, "selection-changed",
+                    G_CALLBACK (background_image_changed),
+                    profile);
+  setup_background_filechooser (w, profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "scroll-background-checkbutton");
+  profile_editor_update_scroll_background (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (scroll_background_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "darken-background-scale");
+  init_background_darkness_scale (w);
+  profile_editor_update_background_darkness (editor, profile);
+  g_signal_connect (w, "value_changed",
+                    G_CALLBACK (darken_background_value_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "backspace-binding-combobox");
+  profile_editor_update_backspace_binding (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (backspace_binding_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "delete-binding-combobox");
+  profile_editor_update_delete_binding (editor, profile);
+  g_signal_connect (w, "changed",
+                    G_CALLBACK (delete_binding_changed),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "use-theme-colors-checkbutton");
+  profile_editor_update_use_theme_colors (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (use_theme_colors_toggled),
+                    profile);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "system-font-checkbutton");
+  profile_editor_update_use_system_font (editor, profile);
+  g_signal_connect (w, "toggled",
+                    G_CALLBACK (use_system_font_toggled),
+                    profile);
+
+     
+  for (i = 0; i < TERMINAL_PALETTE_SIZE; ++i)
+    {
+      gchar *t;
+      gchar *s = g_strdup_printf ("palette-colorpicker-%d", i+1);
+
+      w = (GtkWidget *) gtk_builder_get_object  (builder, s);
+      g_assert (w);
+
+      t = g_strdup_printf (_("Choose Palette Color %d"), i+1);
+      gtk_color_button_set_title (GTK_COLOR_BUTTON (w), t);
+      g_free (t);
+
+      t = g_strdup_printf (_("Palette entry %d"), i+1);
+      gtk_widget_set_tooltip_text (w, t);
+      g_free (t);
+
+      g_object_set_data (G_OBJECT (w),
+                          "palette-entry-index",
+                          GINT_TO_POINTER (i));
+
+      g_signal_connect (w, "color_set",
+                        G_CALLBACK (palette_color_set),
+                        profile);
+
+      g_free (s);
+
+      ++i;
+    }
+
+  profile_editor_update_palette (editor, profile);
+
+  fontsel = (GtkWidget *) gtk_builder_get_object  (builder, "font-selector");
+  profile_editor_update_font (editor, profile);
+  g_signal_connect (fontsel, "font_set",
+                    G_CALLBACK (font_set),
+                    profile);
+
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  gtk_size_group_add_widget (size_group,
+                              (GtkWidget *) gtk_builder_get_object  (builder,
+                                                    "font-selector-label"));
+  gtk_size_group_add_widget (size_group,
+                              (GtkWidget *) gtk_builder_get_object  (builder,
+                                                    "profile-name-label"));
+  gtk_size_group_add_widget (size_group,
+                              (GtkWidget *) gtk_builder_get_object  (builder,
+                                                    "profile-icon-label"));
+  g_object_unref (G_OBJECT (size_group));
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "reset-compat-defaults-button");
+  g_signal_connect (w, "clicked",
+                    G_CALLBACK (reset_compat_defaults_clicked),
+                    profile);
+
   gtk_window_set_transient_for (GTK_WINDOW (editor),
                                 GTK_WINDOW (transient_parent));
   gtk_window_present (GTK_WINDOW (editor));
@@ -1977,7 +1927,7 @@ profile_editor_update_font (GtkWidget       *editor,
 {
   GtkWidget *w;
 
-  w = g_object_get_data (G_OBJECT (editor), "font-selector");
+  w = profile_editor_get_widget (editor, "font-selector");
 
   fontpicker_set_if_changed (w,
                              terminal_profile_get_font (profile));
@@ -1987,18 +1937,10 @@ static GtkWidget*
 profile_editor_get_widget (GtkWidget  *editor,
                            const char *widget_name)
 {
-  GladeXML *xml;
-  GtkWidget *w;
-  
-  xml = g_object_get_data (G_OBJECT (editor),
-                           "glade-xml");
+  GtkBuilder *builder;
 
-  g_return_val_if_fail (xml, NULL);
+  builder = g_object_get_data (G_OBJECT (editor), "builder");
+  g_assert (builder != NULL);
   
-  w = glade_xml_get_widget (xml, widget_name);
-
-  if (w == NULL)
-    g_error ("No such widget %s", widget_name);
-  
-  return w;
+  return (GtkWidget *) gtk_builder_get_object  (builder, widget_name);
 }
