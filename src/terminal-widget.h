@@ -106,9 +106,6 @@ void       terminal_widget_paste_clipboard            (GtkWidget            *wid
 void       terminal_widget_reset                      (GtkWidget            *widget,
                                                        gboolean              also_clear_afterward);
 
-void terminal_widget_connect_title_changed         (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
 void terminal_widget_disconnect_title_changed      (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
@@ -119,8 +116,6 @@ void terminal_widget_disconnect_child_died         (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
 
-const char* terminal_widget_get_title         (GtkWidget *widget);
-const char* terminal_widget_get_icon_title    (GtkWidget *widget);
 gboolean    terminal_widget_get_has_selection (GtkWidget *widget);
 
 GtkAdjustment* terminal_widget_get_scroll_adjustment (GtkWidget *widget);

@@ -394,16 +394,6 @@ terminal_widget_reset (GtkWidget *widget,
   vte_terminal_reset (VTE_TERMINAL(widget), TRUE, also_clear_afterward);
 }
 
-
-void
-terminal_widget_connect_title_changed (GtkWidget *widget,
-				       GCallback  callback,
-				       void      *data)
-{
-  g_signal_connect (widget, "window_title_changed",
-		    G_CALLBACK (callback), data);
-}
-
 void
 terminal_widget_disconnect_title_changed (GtkWidget *widget,
 					  GCallback  callback,
@@ -427,26 +417,6 @@ terminal_widget_disconnect_child_died (GtkWidget *widget,
 				       void      *data)
 {
   g_signal_handlers_disconnect_by_func (widget, callback, data);
-}
-
-const char*
-terminal_widget_get_title (GtkWidget *widget)
-{
-  VteTerminal *terminal;
-
-  terminal = VTE_TERMINAL (widget);
-
-  return terminal->window_title;
-}
-
-const char*
-terminal_widget_get_icon_title (GtkWidget *widget)
-{
-  VteTerminal *terminal;
-  
-  terminal = VTE_TERMINAL (widget);
-
-  return terminal->icon_title;
 }
 
 gboolean

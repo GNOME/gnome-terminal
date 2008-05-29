@@ -31,6 +31,10 @@
 #define GTK_DISABLE_DEPRECATED
 #define GDK_DISABLE_DEPRECATED
 
+#include <X11/extensions/Xrender.h>
+
+#include <gdk/gdkx.h>
+
 #include "terminal-accels.h"
 #include "terminal-window.h"
 #include "terminal-widget.h"
@@ -95,9 +99,9 @@ static gboolean terminal_screen_button_press_event (GtkWidget      *term,
                                                     GdkEventButton *event,
                                                     TerminalScreen *screen);
 
-static void terminal_screen_widget_title_changed      (GtkWidget      *term,
+static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
-static void terminal_screen_widget_icon_title_changed (GtkWidget      *term,
+static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
 
 static void terminal_screen_widget_child_died        (GtkWidget      *term,
@@ -341,12 +345,12 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv->title_from_arg = NULL;
   priv->user_title = FALSE;
-  terminal_widget_connect_title_changed (priv->term,
-                                         G_CALLBACK (terminal_screen_widget_title_changed),
-                                         screen);
-
+  
+  g_signal_connect (screen, "window-title-changed",
+                    G_CALLBACK (terminal_screen_window_title_changed),
+                    screen);
   g_signal_connect (screen, "icon-title-changed",
-                    G_CALLBACK (terminal_screen_widget_icon_title_changed),
+                    G_CALLBACK (terminal_screen_icon_title_changed),
                     screen);
 
   terminal_widget_connect_child_died (priv->term,
@@ -1641,22 +1645,22 @@ terminal_screen_get_font_scale (TerminalScreen *screen)
 }
 
 static void
-terminal_screen_widget_title_changed (GtkWidget      *widget,
+terminal_screen_window_title_changed (VteTerminal *vte_terminal,
                                       TerminalScreen *screen)
 {
   terminal_screen_set_dynamic_title (screen,
-                                     terminal_widget_get_title (widget),
+                                     vte_terminal_get_window_title (vte_terminal),
 				     FALSE);
 
   queue_recheck_working_dir (screen);
 }
 
 static void
-terminal_screen_widget_icon_title_changed (GtkWidget      *widget,
-                                           TerminalScreen *screen)
+terminal_screen_icon_title_changed (VteTerminal *vte_terminal,
+                                    TerminalScreen *screen)
 {
   terminal_screen_set_dynamic_icon_title (screen,
-                                          terminal_widget_get_icon_title (widget),
+                                          vte_terminal_get_icon_title (vte_terminal),
 					  FALSE);  
 
   queue_recheck_working_dir (screen);
