@@ -5,8 +5,6 @@
  * Copyright © 2003 Mariano Suarez-Alvarez
  * Copyright © 2008 Christian Persch
  *
- * This file is part of gnome-terminal.
- *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -40,6 +38,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
+/* One slot in the ring buffer, plus the array which holds the data for
+  * the line, plus about 80 vte_charcell structures. */
+#define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
 
 void
 terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
@@ -276,4 +278,294 @@ terminal_util_load_builder_file (const char *filename,
 
   g_object_unref (builder);
   return object_name == NULL;
+}
+
+int
+terminal_util_get_estimated_scrollback_buffer_size (int lines)
+{
+  return (lines * BYTES_PER_LINE) / 1024;
+}
+
+/* Bidirectional object/widget binding */
+
+typedef struct {
+  GObject *object;
+  const char *object_prop;
+  GtkWidget *widget;
+  gulong object_notify_id;
+  gulong widget_notify_id;
+  PropertyChangeFlags flags;
+} PropertyChange;
+
+static void
+property_change_free (PropertyChange *change)
+{
+  g_signal_handler_disconnect (change->object, change->object_notify_id);
+
+  g_slice_free (PropertyChange, change);
+}
+
+static gboolean
+transform_boolean (gboolean input,
+                   PropertyChangeFlags flags)
+{
+  if (flags & FLAG_INVERT_BOOL)
+    input = !input;
+
+  return input;
+}
+  
+static int
+transform_spinbutton_value (int input,
+                            PropertyChangeFlags flags,
+                            gboolean from)
+{
+  if ((flags & FLAG_SCROLLBACK) == 0)
+    return input;
+
+  if (from) /* value from spin button */
+    input = input * 1024 / BYTES_PER_LINE;
+  else /* value to set in the spin button */
+    input = input * BYTES_PER_LINE / 1024;
+
+  return input;
+}
+
+static void
+object_change_notify_cb (PropertyChange *change)
+{
+  GObject *object = change->object;
+  const char *object_prop = change->object_prop;
+  GtkWidget *widget = change->widget;
+
+  g_signal_handler_block (widget, change->widget_notify_id);
+
+  if (GTK_IS_RADIO_BUTTON (widget))
+    {
+      glong ovalue, rvalue;
+
+      g_object_get (object, object_prop, &ovalue, NULL);
+      rvalue = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "enum-value"));
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), ovalue == rvalue);
+    }
+  else if (GTK_IS_TOGGLE_BUTTON (widget))
+    {
+      gboolean enabled;
+
+      g_object_get (object, object_prop, &enabled, NULL);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
+                                    transform_boolean (enabled, change->flags));
+    }
+  else if (GTK_IS_SPIN_BUTTON (widget))
+    {
+      int value;
+
+      g_object_get (object, object_prop, &value, NULL);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), transform_spinbutton_value (value, change->flags, FALSE));
+    }
+  else if (GTK_IS_ENTRY (widget))
+    {
+      char *text;
+
+      g_object_get (object, object_prop, &text, NULL);
+      gtk_entry_set_text (GTK_ENTRY (widget), text ? text : "");
+      g_free (text);
+    }
+  else if (GTK_IS_COMBO_BOX (widget))
+    {
+      glong value;
+
+      g_object_get (object, object_prop, &value, NULL);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), value);
+    }
+  else if (GTK_IS_RANGE (widget))
+    {
+      double value;
+
+      g_object_get (object, object_prop, &value, NULL);
+      gtk_range_set_value (GTK_RANGE (widget), value);
+    }
+  else if (GTK_IS_COLOR_BUTTON (widget))
+    {
+      GdkColor *color;
+      GdkColor old_color;
+
+      g_object_get (object, object_prop, &color, NULL);
+      gtk_color_button_get_color (GTK_COLOR_BUTTON (widget), &old_color);
+
+      if (color && !gdk_color_equal (color, &old_color))
+        gtk_color_button_set_color (GTK_COLOR_BUTTON (widget), color);
+      if (color)
+        gdk_color_free (color);
+    }
+  else if (GTK_IS_FONT_BUTTON (widget))
+    {
+      PangoFontDescription *font_desc;
+      char *font;
+
+      g_object_get (object, object_prop, &font_desc, NULL);
+      if (!font_desc)
+        goto out;
+
+      font = pango_font_description_to_string (font_desc);
+      gtk_font_button_set_font_name (GTK_FONT_BUTTON (widget), font);
+      g_free (font);
+      pango_font_description_free (font_desc);
+    }
+  else if (GTK_IS_FILE_CHOOSER (widget))
+    {
+      char *name = NULL, *filename = NULL;
+
+      g_object_get (object, object_prop, &name, NULL);
+      if (name)
+        filename = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
+
+      if (filename)
+        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), filename);
+      else
+        gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (widget));
+      g_free (filename);
+      g_free (name);
+    }
+
+out:
+  g_signal_handler_unblock (widget, change->widget_notify_id);
+}
+
+static void
+widget_change_notify_cb (PropertyChange *change)
+{
+  GObject *object = change->object;
+  const char *object_prop = change->object_prop;
+  GtkWidget *widget = change->widget;
+
+  g_signal_handler_block (change->object, change->object_notify_id);
+
+  if (GTK_IS_RADIO_BUTTON (widget))
+    {
+      gboolean active;
+      glong value;
+
+      active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+      if (!active)
+        goto out;
+
+      value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "enum-value"));
+      g_object_set (object, object_prop, value, NULL);
+    }
+  else if (GTK_IS_TOGGLE_BUTTON (widget))
+    {
+      gboolean enabled;
+
+      enabled = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+      g_object_set (object, object_prop, transform_boolean (enabled, change->flags), NULL);
+    }
+  else if (GTK_IS_SPIN_BUTTON (widget))
+    {
+      double value;
+
+      value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
+      g_object_set (object, object_prop, transform_spinbutton_value (value, change->flags, TRUE), NULL);
+    }
+  else if (GTK_IS_ENTRY (widget))
+    {
+      const char *text;
+
+      text = gtk_entry_get_text (GTK_ENTRY (widget));
+      g_object_set (object, object_prop, text, NULL);
+    }
+  else if (GTK_IS_COMBO_BOX (widget))
+    {
+      int value;
+
+      value = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
+      g_object_set (object, object_prop, (glong) value, NULL);
+    }
+  else if (GTK_IS_COLOR_BUTTON (widget))
+    {
+      GdkColor color;
+
+      gtk_color_button_get_color (GTK_COLOR_BUTTON (widget), &color);
+      g_object_set (object, object_prop, &color, NULL);
+    }
+  else if (GTK_IS_FONT_BUTTON (widget))
+    {
+      PangoFontDescription *font_desc;
+      const char *font;
+
+      font = gtk_font_button_get_font_name (GTK_FONT_BUTTON (widget));
+      font_desc = pango_font_description_from_string (font);
+      g_object_set (object, object_prop, font_desc, NULL);
+      pango_font_description_free (font_desc);
+    }
+  else if (GTK_IS_RANGE (widget))
+    {
+      double value;
+
+      value = gtk_range_get_value (GTK_RANGE (widget));
+      g_object_set (object, object_prop, value, NULL);
+    }
+  else if (GTK_IS_FILE_CHOOSER (widget))
+    {
+      char *filename, *name = NULL;
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
+      if (filename)
+        name = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+
+      g_object_set (object, object_prop, name, NULL);
+      g_free (filename);
+      g_free (name);
+    }
+
+out:
+  g_signal_handler_unblock (change->object, change->object_notify_id);
+}
+
+void
+terminal_util_bind_object_property_to_widget (GObject *object,
+                                              const char *object_prop,
+                                              GtkWidget *widget,
+                                              PropertyChangeFlags flags)
+{
+  PropertyChange *change;
+  const char *signal;
+  char notify_signal[64];
+
+  change = g_slice_new0 (PropertyChange);
+
+  change->widget = widget;
+  g_assert (g_object_get_data (G_OBJECT (widget), "GT:PCD") == NULL);
+  g_object_set_data_full (G_OBJECT (widget), "GT:PCD", change, (GDestroyNotify) property_change_free);
+
+  if (GTK_IS_TOGGLE_BUTTON (widget))
+    signal = "notify::active";
+  else if (GTK_IS_SPIN_BUTTON (widget))
+    signal = "notify::value";
+  else if (GTK_IS_ENTRY (widget))
+    signal = "notify::text";
+  else if (GTK_IS_COMBO_BOX (widget))
+    signal = "notify::active";
+  else if (GTK_IS_COLOR_BUTTON (widget))
+    signal = "notify::color";
+  else if (GTK_IS_FONT_BUTTON (widget))
+    signal = "notify::font-name";
+  else if (GTK_IS_RANGE (widget))
+    signal = "value-changed";
+  else if (GTK_IS_FILE_CHOOSER_BUTTON (widget))
+    signal = "file-set";
+  else if (GTK_IS_FILE_CHOOSER (widget))
+    signal = "selection-changed";
+  else
+    g_assert_not_reached ();
+
+  change->widget_notify_id = g_signal_connect_swapped (widget, signal, G_CALLBACK (widget_change_notify_cb), change);
+
+  change->object = object;
+  change->flags = flags;
+  change->object_prop = object_prop;
+
+  g_snprintf (notify_signal, sizeof (notify_signal), "notify::%s", object_prop);
+  object_change_notify_cb (change);
+  change->object_notify_id = g_signal_connect_swapped (object, notify_signal, G_CALLBACK (object_change_notify_cb), change);
 }

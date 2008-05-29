@@ -1,5 +1,6 @@
 /*
  * Copyright © 2001 Havoc Pennington
+ * Copyright © 2008 Christian Persch
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,5 +50,17 @@ void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
 gboolean terminal_util_load_builder_file (const char *filename,
                                           const char *object_name,
                                           ...);
+
+int terminal_util_get_estimated_scrollback_buffer_size (int lines);
+
+typedef enum {
+  FLAG_INVERT_BOOL  = 1 << 0,
+  FLAG_SCROLLBACK   = 1 << 1,
+} PropertyChangeFlags;
+
+void terminal_util_bind_object_property_to_widget (GObject *object,
+                                                   const char *object_prop,
+                                                   GtkWidget *widget,
+                                                   PropertyChangeFlags flags);
 
 #endif /* TERMINAL_UTIL_H */
