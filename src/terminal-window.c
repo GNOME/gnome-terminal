@@ -28,6 +28,7 @@
 #include "terminal-window.h"
 #include "terminal-screen-container.h"
 #include "terminal-tabs-menu.h"
+#include "terminal-util.h"
 #include "terminal.h"
 #include "encoding.h"
 #include <string.h>

@@ -27,6 +27,7 @@
 #include "encoding.h"
 
 #include "terminal-profile.h"
+#include "terminal-util.h"
 
 #include <glade/glade.h>
 #include <gtk/gtktreeview.h>

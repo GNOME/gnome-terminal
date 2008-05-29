@@ -25,6 +25,7 @@
 
 #include "profile-editor.h"
 #include "terminal.h"
+#include "terminal-util.h"
 #include <glade/glade.h>
 #include <gio/gio.h>
 #include <libgnomeui/gnome-file-entry.h>

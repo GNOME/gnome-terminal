@@ -40,6 +40,7 @@
 #include "terminal-window.h"
 #include "terminal-profile.h"
 #include "terminal-screen-container.h"
+#include "terminal-util.h"
 #include "terminal.h"
 #include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */

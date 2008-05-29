@@ -22,40 +22,6 @@
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
-#include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
-#include <glade/glade.h>
-
-typedef enum {
-  FLAVOR_AS_IS,
-  FLAVOR_DEFAULT_TO_HTTP,
-  FLAVOR_EMAIL
-} TerminalURLFlavour;
-
-#include "terminal-screen.h"
-
 #define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
-
-void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
-
-void terminal_util_show_error_dialog (GtkWindow *transient_parent, 
-                                      GtkWidget **weap_ptr, 
-                                      const char *message_format, ...) G_GNUC_PRINTF(3, 4);
-
-void terminal_util_show_help (const char *topic, GtkWindow  *transient_parent);
-
-void terminal_util_set_labelled_by          (GtkWidget  *widget,
-                                             GtkLabel   *label);
-void terminal_util_set_atk_name_description (GtkWidget  *widget,
-                                             const char *name,
-                                             const char *desc);
-GladeXML* terminal_util_load_glade_file (const char *filename,
-                                         const char *widget_root,
-                                         GtkWindow  *error_dialog_parent);
-
-void terminal_util_open_url (GtkWidget *parent,
-                             const char *orig_url,
-                             TerminalURLFlavour flavor);
-
 
 #endif /* TERMINAL_H */
