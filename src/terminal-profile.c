@@ -444,7 +444,7 @@ ensure_pixbuf_property (TerminalProfile *profile,
   if (!pixbuf)
     {
       g_printerr ("Failed to load background image \"%s\" for terminal profile \"%s\": %s\n",
-                  filename /* FIXMEchpe this is not necessarily UTF-8 */,
+                  filename_utf8,
                   terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME),
                   error->message);
       g_error_free (error);
@@ -540,7 +540,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   gconf_value = gconf_entry_get_value (entry);
   if (!gconf_value)
-    return; /* FIXMEchpe maybe reset the property to default instead? */
+    return;
 
   priv->in_notification_count++;
 
@@ -559,7 +559,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   else if (G_IS_PARAM_SPEC_STRING (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_STRING)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_value_set_string (&value, gconf_value_get_string (gconf_value));
     }
@@ -569,7 +569,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
       int enum_value;
 
       if (gconf_value->type != GCONF_VALUE_STRING)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       eval = g_enum_get_value_by_nick (G_PARAM_SPEC_ENUM (pspec)->enum_class,
                                        gconf_value_get_string (gconf_value));
@@ -593,31 +593,31 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
       GdkColor color;
 
       if (gconf_value->type != GCONF_VALUE_STRING)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       if (!gdk_color_parse (gconf_value_get_string (gconf_value), &color))
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
       
       g_value_set_boxed (&value, &color);
     }
   else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
     {
       if (gconf_value->type != GCONF_VALUE_STRING)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_value_take_boxed (&value, pango_font_description_from_string (gconf_value_get_string (gconf_value)));
     }
   else if (G_IS_PARAM_SPEC_DOUBLE (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_FLOAT)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_value_set_double (&value, gconf_value_get_float (gconf_value));
     }
   else if (G_IS_PARAM_SPEC_INT (pspec))
     {
       if (gconf_value->type != GCONF_VALUE_INT)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_value_set_int (&value, gconf_value_get_int (gconf_value));
     }
@@ -629,12 +629,12 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
       int n_colors, i;
 
       if (gconf_value->type != GCONF_VALUE_STRING)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       g_print ("palette string %s\n", gconf_value_get_string (gconf_value));
       color_strings = g_strsplit (gconf_value_get_string (gconf_value), ":", -1);
       if (!color_strings)
-        goto out; /* FIXMEchpe maybe reset? */
+        goto out;
 
       n_colors = g_strv_length (color_strings);
       colors = g_new0 (GdkColor, n_colors);
@@ -682,11 +682,13 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
              pspec->name);
 
 out:
+  /* FIXMEchpe: if we arrive here through goto in the error cases,
+   * should we maybe reset the property to its default value?
+   */
 
   g_value_unset (&value);
 
   priv->in_notification_count--;
-  //FIXMEchpe: honour the locked flags!!!
 }
 
 static void
@@ -1629,7 +1631,7 @@ terminal_profile_modify_palette_entry (TerminalProfile *profile,
 
   array = g_value_get_boxed (g_value_array_get_nth (priv->properties, PROP_PALETTE));
   if (!array)
-    return FALSE; /* FIXMEchpe reset to default? Can't happen really can it? */
+    return FALSE;
 
   if (i < 0 || i >= array->n_values)
     return FALSE;
