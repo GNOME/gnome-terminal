@@ -59,8 +59,6 @@ enum
   PROP_EXIT_ACTION,
   PROP_FONT,
   PROP_FOREGROUND_COLOR,
-  PROP_ICON,
-  PROP_ICON_FILE,
   PROP_IS_DEFAULT,
   PROP_LOGIN_SHELL,
   PROP_NAME,
@@ -96,7 +94,6 @@ enum
 #define KEY_EXIT_ACTION "exit_action"
 #define KEY_FONT "font"
 #define KEY_FOREGROUND_COLOR "foreground_color"
-#define KEY_ICON_FILE "icon"
 #define KEY_LOGIN_SHELL "login_shell"
 #define KEY_NO_AA_WITHOUT_RENDER "no_aa_without_render" 
 #define KEY_PALETTE "palette"
@@ -130,8 +127,6 @@ enum
 #define DEFAULT_EXIT_ACTION           (TERMINAL_EXIT_CLOSE)
 #define DEFAULT_FONT                  ("Monospace 12")
 #define DEFAULT_FOREGROUND_COLOR      ("#000000")
-#define DEFAULT_ICON_FILE             (NULL)
-#define DEFAULT_ICON                  (NULL)
 #define DEFAULT_IS_DEFAULT            (FALSE)
 #define DEFAULT_LOGIN_SHELL           (FALSE)
 #define DEFAULT_NAME                  (NULL)
@@ -169,7 +164,6 @@ struct _TerminalProfilePrivate
 
   int in_notification_count;
 
-  gboolean icon_load_failed;
   gboolean background_load_failed;
 
   guint initialising : 1;
@@ -1124,9 +1118,6 @@ terminal_profile_get_property (GObject *object,
       case PROP_BACKGROUND_IMAGE:
         ensure_pixbuf_property (profile, PROP_BACKGROUND_IMAGE_FILE, PROP_BACKGROUND_IMAGE, &priv->background_load_failed);
         break;
-      case PROP_ICON:
-        ensure_pixbuf_property (profile, PROP_ICON_FILE, PROP_ICON, &priv->icon_load_failed);
-        break;
       default:
         break;
     }
@@ -1205,13 +1196,6 @@ terminal_profile_set_property (GObject *object,
         g_value_set_object (g_value_array_get_nth (priv->properties, PROP_BACKGROUND_IMAGE), NULL);
         priv->background_load_failed = FALSE;
         g_object_notify (object, TERMINAL_PROFILE_BACKGROUND_IMAGE);
-        break;
-
-      case PROP_ICON_FILE:
-        /* Clear the cached icon */
-        g_value_set_object (g_value_array_get_nth (priv->properties, PROP_ICON), NULL);
-        priv->icon_load_failed = FALSE;
-        g_object_notify (object, TERMINAL_PROFILE_ICON);
         break;
 
       default:
@@ -1371,12 +1355,10 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   TERMINAL_PROFILE_PROPERTY_INT (SCROLLBACK_LINES, 1, G_MAXINT, DEFAULT_SCROLLBACK_LINES, KEY_SCROLLBACK_LINES);
 
   TERMINAL_PROFILE_PROPERTY_OBJECT (BACKGROUND_IMAGE, GDK_TYPE_PIXBUF, NULL);
-  TERMINAL_PROFILE_PROPERTY_OBJECT (ICON, GDK_TYPE_PIXBUF, NULL);
 
   TERMINAL_PROFILE_PROPERTY_STRING_CO (NAME, DEFAULT_NAME, NULL);
   TERMINAL_PROFILE_PROPERTY_STRING (BACKGROUND_IMAGE_FILE, DEFAULT_BACKGROUND_IMAGE_FILE, KEY_BACKGROUND_IMAGE_FILE);
   TERMINAL_PROFILE_PROPERTY_STRING (CUSTOM_COMMAND, DEFAULT_CUSTOM_COMMAND, KEY_CUSTOM_COMMAND);
-  TERMINAL_PROFILE_PROPERTY_STRING (ICON_FILE, DEFAULT_ICON_FILE, KEY_ICON_FILE);
   TERMINAL_PROFILE_PROPERTY_STRING (TITLE, _(DEFAULT_TITLE), KEY_TITLE);
   TERMINAL_PROFILE_PROPERTY_STRING (VISIBLE_NAME, _(DEFAULT_VISIBLE_NAME), KEY_VISIBLE_NAME);
   TERMINAL_PROFILE_PROPERTY_STRING (WORD_CHARS, DEFAULT_WORD_CHARS, KEY_WORD_CHARS);

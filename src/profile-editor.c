@@ -30,7 +30,6 @@
 #include "profile-editor.h"
 #include "terminal-util.h"
 
-#include <libgnomeui/gnome-file-entry.h>
 #include <libgnomeui/gnome-icon-entry.h>
 #include <libgnomeui/gnome-thumbnail.h>
 
@@ -220,9 +219,6 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
   set_insensitive (editor, "profile-name-entry",
                    terminal_profile_property_locked (profile, TERMINAL_PROFILE_VISIBLE_NAME));
 
-  set_insensitive (editor, "profile-icon-entry",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_ICON_FILE));
-  
   set_insensitive (editor, "show-menubar-checkbutton",
                    terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR));
 
@@ -571,22 +567,6 @@ property_change_new (GtkWidget *editor,
 
   return change;
 }
-
-#if 0
-static void
-icon_changed (GtkWidget       *icon_entry,
-              TerminalProfile *profile)
-{
-  char *filename;
-
-  filename = gnome_icon_entry_get_filename (GNOME_ICON_ENTRY (icon_entry));
-
-  /* NULL filename happens here to unset */
-  terminal_profile_set_icon_file (profile, filename);
-  
-  g_free (filename);
-}
-#endif
 
 static void
 color_scheme_combo_changed_cb (GtkWidget *combo,
@@ -1098,14 +1078,6 @@ terminal_profile_edit (TerminalProfile *profile,
                     w);
 
 
-
-#if 0
-  g_signal_connect (gtk_builder_get_object  (builder, "profile-icon-entry"),
-                    "changed",
-                    G_CALLBACK (icon_changed),
-                    profile);
-#endif
-
 #define CONNECT_WITH_FLAGS(name, prop, flags) property_change_new (editor, profile, prop, (GtkWidget *) gtk_builder_get_object (builder, name), flags)
 #define CONNECT(name, prop) CONNECT_WITH_FLAGS (name, prop, 0)
 #define SET_ENUM_VALUE(name, value) g_object_set_data (gtk_builder_get_object (builder, name), "enum-value", GINT_TO_POINTER (value))
@@ -1194,28 +1166,3 @@ terminal_profile_edit (TerminalProfile *profile,
                                 GTK_WINDOW (transient_parent));
   gtk_window_present (GTK_WINDOW (editor));
 }
-
-#if 0
-static void
-profile_editor_update_icon (GtkWidget       *editor,
-                            TerminalProfile *profile)
-{
-  GtkWidget *w;
-  char *current_filename;
-  const char *profile_filename;
-  
-  w = profile_editor_get_widget (editor, "profile-icon-entry");
-
-  current_filename = gnome_icon_entry_get_filename (GNOME_ICON_ENTRY (w));
-
-  profile_filename = terminal_profile_get_icon_file (profile);
-  
-  if (current_filename && profile_filename &&
-      strcmp (current_filename, profile_filename) == 0)
-    return;
-
-  g_free (current_filename);
-  
-  gnome_icon_entry_set_filename (GNOME_ICON_ENTRY (w), profile_filename);
-}
-#endif
