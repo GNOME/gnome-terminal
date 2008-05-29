@@ -37,8 +37,6 @@ gnome_terminal_SOURCES= \
 gnome_terminal_CPPFLAGS = \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
 	-DTERM_LOCALEDIR=\"$(datadir)/locale\" \
-	-DTERM_GLADE_DIR=\"$(gladedir)\" \
-	-DTERM_GLADE_FILE=\"gnome-terminal.glade2\" \
 	-DTERM_LIBDIR=\"$(pkglibdir)\" \
 	-DTERM_PREFIX=\"$(prefix)\" \
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
@@ -81,9 +79,6 @@ terminal-type-builtins.c: terminal-type-builtins.c.template $(TYPES_H_FILES)
 	&& (cmp -s xgen-ttbc terminal-type-builtins.c || cp xgen-ttbc terminal-type-builtins.c ) \
 	&& rm -f xgen-ttbc
 
-gladedir = $(pkgdatadir)/glade
-glade_DATA = gnome-terminal.glade2
-
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
@@ -95,6 +90,7 @@ ui_DATA = \
 	keybinding-editor.ui \
 	profile-manager.ui \
 	profile-new-dialog.ui \
+	profile-preferences.ui \
 	skey-challenge.ui \
 	$(NULL)
 
@@ -105,7 +101,6 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	$(icon_DATA) \
-	$(glade_DATA) \
 	$(schema_in_files) \
 	$(server_DATA) \
 	$(ui_DATA) \
