@@ -2700,6 +2700,8 @@ terminal_set_title_callback (GtkAction *action,
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (terminal_set_title_dialog_response_cb), priv->active_screen);
+  g_signal_connect (dialog, "delete-event",
+                    G_CALLBACK (terminal_util_dialog_response_on_delete), NULL);
 
   label = GTK_MESSAGE_DIALOG (dialog)->label;
   gtk_widget_hide (label);
