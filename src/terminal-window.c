@@ -198,6 +198,7 @@ static void terminal_window_show (GtkWidget *widget);
 static gboolean confirm_close_window (TerminalWindow *window);
 static void
 profile_set_callback (TerminalScreen *screen,
+                      TerminalProfile *old_profile,
                       TerminalWindow *window);
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
@@ -286,7 +287,8 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
 
   if (terminal_profile_get_forgotten (profile))
     return;
-      
+
+  /* FIXMEchpe why block here? */
   g_signal_handlers_block_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
   terminal_screen_set_profile (priv->active_term, profile);    
   g_signal_handlers_unblock_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
@@ -1517,6 +1519,7 @@ update_notebook (TerminalWindow *window)
 
 static void
 profile_set_callback (TerminalScreen *screen,
+                      TerminalProfile *old_profile,
                       TerminalWindow *window)
 {
   terminal_window_update_set_profile_menu (window);

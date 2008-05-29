@@ -54,7 +54,8 @@ struct _TerminalScreenClass
 {
   VteTerminalClass parent_class;
 
-  void (* profile_set)        (TerminalScreen *screen);
+  void (* profile_set)        (TerminalScreen *screen,
+                               TerminalProfile *old_profile);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
 };

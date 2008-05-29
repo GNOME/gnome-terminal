@@ -404,8 +404,9 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, profile_set),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+                  g_cclosure_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1, TERMINAL_TYPE_PROFILE);
   
   signals[SHOW_POPUP_MENU] =
     g_signal_new (I_("show-popup-menu"),
@@ -882,10 +883,12 @@ terminal_screen_set_profile (TerminalScreen *screen,
                              TerminalProfile *profile)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  TerminalProfile *old_profile;
 
-  if (profile == priv->profile)
+  old_profile = priv->profile;
+  if (profile == old_profile)
     return;
-  
+
   if (priv->profile_changed_id)
     {
       g_signal_handler_disconnect (G_OBJECT (priv->profile),
@@ -922,18 +925,15 @@ terminal_screen_set_profile (TerminalScreen *screen,
            profile ? terminal_profile_get_visible_name (profile) : "none");
 #endif
   
-  if (priv->profile)
-    {
-      g_object_unref (G_OBJECT (priv->profile));
-    }
-
   priv->profile = profile;
 
   terminal_screen_reread_profile (screen);
 
   if (priv->profile)
-    g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0);
+    g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
 
+  if (old_profile)
+    g_object_unref (old_profile);
 }
 
 TerminalProfile*
