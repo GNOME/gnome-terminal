@@ -343,7 +343,7 @@ disconnect_profiles_from_actions_in_group (GtkActionGroup *action_group)
   actions = gtk_action_group_list_actions (action_group);
   for (l = actions; l != NULL; l = l->next)
     {
-      GObject *action= G_OBJECT (l->data);
+      GObject *action = G_OBJECT (l->data);
       TerminalProfile *profile;
 
       profile = g_object_get_data (action, PROFILE_DATA_KEY);
@@ -351,6 +351,38 @@ disconnect_profiles_from_actions_in_group (GtkActionGroup *action_group)
         continue;
 
       g_signal_handlers_disconnect_by_func (profile, G_CALLBACK (profile_visible_name_notify_cb), action);
+    }
+  g_list_free (actions);
+}
+
+static void
+terminal_window_update_set_profile_menu_active_profile (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalProfile *new_active_profile;
+  GList *actions, *l;
+
+  if (!priv->profiles_action_group)
+    return;
+
+  if (!priv->active_term)
+    return;
+
+  new_active_profile = terminal_screen_get_profile (priv->active_term);
+
+  actions = gtk_action_group_list_actions (priv->profiles_action_group);
+  for (l = actions; l != NULL; l = l->next)
+    {
+      GObject *action = G_OBJECT (l->data);
+      TerminalProfile *profile;
+
+      profile = g_object_get_data (action, PROFILE_DATA_KEY);
+      if (profile != new_active_profile)
+        continue;
+
+      g_signal_handlers_block_by_func (action, G_CALLBACK (terminal_set_profile_toggled_callback), window);
+      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+      g_signal_handlers_unblock_by_func (action, G_CALLBACK (terminal_set_profile_toggled_callback), window);
     }
   g_list_free (actions);
 }
@@ -365,6 +397,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   GList *profiles, *p;
   GSList *group;
   guint n;
+  gboolean single_profile;
 
   /* Remove the old UI */
   if (priv->profiles_ui_id != 0)
@@ -381,18 +414,18 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
       priv->profiles_action_group = NULL;
     }
 
-  if (priv->active_term == NULL)
-    return;
-
   profiles = terminal_app_get_profile_list (terminal_app_get ());
 
   action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
-  gtk_action_set_sensitive (action, profiles && profiles->next != NULL /* list length >= 2 */);
-
+  single_profile = !profiles || profiles->next == NULL; /* list length <= 1 */
+  gtk_action_set_sensitive (action, !single_profile);
   if (profiles == NULL)
     return;
 
-  active_profile = terminal_screen_get_profile (priv->active_term);
+  if (priv->active_term)
+    active_profile = terminal_screen_get_profile (priv->active_term);
+  else
+    active_profile = NULL;
 
   action_group = priv->profiles_action_group = gtk_action_group_new ("Profiles");
   gtk_ui_manager_insert_action_group (priv->ui_manager, action_group, -1);
@@ -1379,6 +1412,10 @@ terminal_window_init (TerminalWindow *window)
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
 
+  terminal_window_update_set_profile_menu (window);
+  terminal_window_update_new_terminal_menus (window);
+  terminal_window_update_encoding_menu (window);
+
   /* We have to explicitly call this, since screen-changed is NOT
    * emitted for the toplevel the first time!
    */
@@ -1564,7 +1601,7 @@ profile_set_callback (TerminalScreen *screen,
                       TerminalProfile *old_profile,
                       TerminalWindow *window)
 {
-  terminal_window_update_set_profile_menu (window);
+  terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_new_terminal_menus (window);
 }
 
@@ -1933,10 +1970,8 @@ terminal_window_set_active (TerminalWindow *window,
   g_fprintf (stderr,"setting size after flipping notebook pages\n");
 #endif
   terminal_window_set_size (window, screen, TRUE);
-  
-  terminal_window_update_set_profile_menu (window); /* FIXMEchpe no need to do this, just update the current profile action's active state! */
-  terminal_window_update_new_terminal_menus (window);
-  terminal_window_update_encoding_menu (window);
+
+  terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (window);
   terminal_window_update_zoom_sensitivity (window);
 }
