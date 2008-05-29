@@ -1727,9 +1727,9 @@ title_entry_changed (GtkWidget      *entry,
                      TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  char *text;
+  const char *text;
 
-  text = gtk_editable_get_chars (GTK_EDITABLE (entry), 0, -1);
+  text = gtk_entry_get_text (GTK_ENTRY (entry));
 
   /* The user set the title to nothing, let's understand that as a
      request to revert to dynamically setting the title again. */
@@ -1741,8 +1741,6 @@ title_entry_changed (GtkWidget      *entry,
       terminal_screen_set_dynamic_title (screen, text, TRUE);
       terminal_screen_set_dynamic_icon_title (screen, text, TRUE);
     }
-
-  g_free (text);
 }
 
 void
@@ -1903,10 +1901,7 @@ drag_data_received (TerminalScreen   *widget,
          * chooser incorrectly drops application/x-color with format 8.
          */
         if (selection_data->length != 8)
-          {
-            g_warning ("Received invalid color data\n");
-            return;
-          }
+          return;
 
         color.red = data[0];
         color.green = data[1];
