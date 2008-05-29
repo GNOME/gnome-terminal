@@ -1,41 +1,56 @@
-### FIXME
-INCLUDES=@TERM_CFLAGS@ -I$(srcdir)/..
+NULL =
 
-SKEYFILES =		\
-	btoe.c		\
-	btoe.h		\
-	skey.h		\
-	skey.c		\
-	skeyutil.h	\
-	skeyutil.c	\
-	md4.c		\
-	md4.h		\
-	md5.c		\
-	md5.h		\
-	sha1.h		\
-	sha1.c
+noinst_LTLIBRARIES = libskey.la
 
-noinst_LTLIBRARIES=libskey.la
+libskey_la_SOURCES = \
+	btoe.c \
+	btoe.h \
+	skey.h \
+	skey.c \
+	skeyutil.h\
+	skeyutil.c\
+	md4.c \
+	md4.h \
+	md5.c \
+	md5.h \
+	sha1.h \
+	sha1.c \
+	$(NULL)
 
-libskey_la_SOURCES=$(SKEYFILES)
+libskey_la_CPPFLAGS = \
+	-I$(srcdir)/.. \
+	$(AM_CPPFLAGS)
 
-libskey_la_LDFLAGS= @TERM_LIBS@
+libskey_la_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(AM_CFLASG)
 
-noinst_PROGRAMS=testskey
+# 	$(WARN_CFLAGS) \
+# 	$(DISABLE_DEPRECATED) \
+#
 
-testskey_CFLAGS = @CFLAGS@ @TERM_CFLAGS@ -DSKEY_MAIN
-testskey_LDFLAGS= @TERM_LIBS@
+libskey_la_LDFLAGS =
+
+libskey_la_LIBADD = \
+	$(TERM_LIBS)
+
+noinst_PROGRAMS = testskey
+
 testskey_SOURCES = \
-	btoe.c		\
-	btoe.h		\
-	skey.h		\
-	skey.c		\
-	skeyutil.h	\
-	skeyutil.c	\
-	md4.c		\
-	md4.h		\
-	md5.c		\
-	md5.h		\
-	sha1.h		\
-	sha1.c
+	test.c \
+	$(NULL)
 
+testskey_CPPFLAGS = \
+	-I$(srcdir)/.. \
+	-DSKEY_MAIN \
+	$(AM_CPPFLAGS)
+
+testskey_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(AM_CFLAGS)
+
+testskey_LDFLAGS =
+
+testskey_LDADD = \
+	libskey.la \
+	$(TERM_LIBS)
