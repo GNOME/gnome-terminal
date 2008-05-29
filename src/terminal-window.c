@@ -841,7 +841,7 @@ update_tab_visibility (TerminalWindow *window,
 
 static GtkNotebook *
 handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
-                              GtkWidget   *child,
+                              GtkWidget   *container,
                               gint         x,
                               gint         y,
                               gpointer     data)
@@ -852,7 +852,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   TerminalWindowPrivate *dest_priv;
   double zoom;
 
-  screen = TERMINAL_SCREEN (child);
+  screen = terminal_screen_container_get_screen (container);
   source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
 
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
