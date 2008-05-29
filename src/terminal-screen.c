@@ -695,8 +695,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   else
     prop_name = NULL;
 
-  prop_name = NULL; // FIXMEchpe
-
   g_object_freeze_notify (object);
 
   if (priv->window)
@@ -717,7 +715,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       terminal_screen_cook_title (screen);
       terminal_screen_cook_icon_title (screen);
     }
-  
+
   if (GTK_WIDGET_REALIZED (screen) &&
       (!prop_name ||
        prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT) ||
@@ -824,9 +822,10 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CURSOR_BLINK_MODE))
     terminal_screen_update_cursor_blink (screen, gtk_widget_get_settings (GTK_WIDGET (screen)));
 
-/*  if (GTK_WIDGET_REALIZED (screen))
-    terminal_screen_change_font (screen);*/
-  
+  /* Some changes require a redraw, but vte doesn't always schedule one */
+  if (GTK_WIDGET_REALIZED (screen))
+    gtk_widget_queue_draw (GTK_WIDGET (screen));
+
   g_object_thaw_notify (object);
 }
 
