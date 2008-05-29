@@ -272,6 +272,10 @@ enum
 static void terminal_profile_init        (TerminalProfile      *profile);
 static void terminal_profile_class_init  (TerminalProfileClass *klass);
 static void terminal_profile_finalize    (GObject              *object);
+static void terminal_profile_set_property (GObject *object,
+                                           guint prop_id,
+                                           const GValue *value,
+                                           GParamSpec *pspec);
 
 static guint signals[LAST_SIGNAL];
 static GQuark gconf_key_quark;
@@ -522,6 +526,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   GConfValue *gconf_value;
   GParamSpec *pspec;
   GValue value = { 0, };
+  gboolean equal;
 
   // FIXMEchpe!!! guard against recursion from saving the properties!
 //  FIXMEchpe;
@@ -669,23 +674,22 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   /* Only set the property if the value is different than our current value,
    * so we don't go into an infinite loop.
    */
-  if (!values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id)))
-  {
-    g_print ("Values existing %s\n"
-             "and new         %s\n"
-             "for property %s seem to differ!\n\n",
+  equal = values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id));
+  if (!equal)
+    g_print ("Setting property %s to a different value\n"
+             "  now: %s\n"
+             "  new: %s\n",
+             pspec->name,
              g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
-             g_strdup_value_contents (&value),
-             pspec->name);
-    g_object_set_property (G_OBJECT (profile), pspec->name, &value);
-  }
-  else
-    g_print ("Values existing %s\n"
-             "and new         %s\n"
-             "for property %s are EQUAL\n\n",
-             g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
-             g_strdup_value_contents (&value),
-             pspec->name);
+             g_strdup_value_contents (&value));
+
+  if (!equal)
+    {
+      if (priv->initialising)
+        terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
+      else
+        g_object_set_property (G_OBJECT (profile), pspec->name, &value);
+    }
 
 out:
   /* FIXMEchpe: if we arrive here through goto in the error cases,
