@@ -85,7 +85,7 @@ uidir = $(pkgdatadir)
 ui_DATA = \
 	terminal.ui
 
-CLEANFILES = gnome-terminal.schemas
+CLEANFILES = gnome-terminal.schemas $(BUILT_SOURCES)
 
 EXTRA_DIST =				\
 	$(icon_DATA)			\
@@ -93,7 +93,7 @@ EXTRA_DIST =				\
 	$(schema_in_files)		\
 	$(server_DATA)			\
 	$(ui_DATA)			\
-	terminal-widget-vte.c
+	$(NULL)
 
 
 serverdir = $(libdir)/bonobo/servers
