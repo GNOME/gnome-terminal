@@ -997,7 +997,7 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_contents (clipboard,
-                                  gdk_atom_intern_static_string("TARGETS"),
+                                  gdk_atom_intern_static_string ("TARGETS"),
                                   (GtkClipboardReceivedFunc) popup_clipboard_request_callback,
                                   terminal_screen_popup_info_ref (info));
 }
