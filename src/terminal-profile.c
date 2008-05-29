@@ -167,11 +167,8 @@ struct _TerminalProfilePrivate
   GSList *dirty_pspecs;
   guint save_idle_id;
 
-  int in_notification_count;
-
   gboolean background_load_failed;
 
-  guint initialising : 1;
   guint forgotten : 1;
 };
 
@@ -360,7 +357,7 @@ set_value_from_palette (GValue *value,
       GValue *value = g_value_array_get_nth (array, i);
 
       g_value_init (value, GDK_TYPE_COLOR);
-      g_value_set_boxed (value, &terminal_palettes[TERMINAL_PALETTE_TANGO][i]);
+      g_value_set_boxed (value, &DEFAULT_PALETTE[i]);
     }
 
   g_value_take_boxed (value, array);
@@ -533,9 +530,6 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   gboolean equal;
   gboolean force_write = FALSE;
 
-  // FIXMEchpe!!! guard against recursion from saving the properties!
-//  FIXMEchpe;
-
   key = gconf_entry_get_key (entry);
   if (!key || !g_str_has_prefix (key, priv->profile_dir))
     return;
@@ -557,11 +551,6 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   gconf_value = gconf_entry_get_value (entry);
   if (!gconf_value)
     return;
-
-  priv->in_notification_count++;
-
-//   if (priv->in_notification_count > 0)
-//     return;
 
   g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
@@ -685,20 +674,17 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
    */
   equal = values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id));
   NOTE (if (!equal)
-        g_print ("Setting property %s to a different value\n"
-                "  now: %s\n"
-                "  new: %s\n",
-                pspec->name,
-                g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
-                g_strdup_value_contents (&value));)
+          g_print ("Setting property %s to a different value\n"
+                  "  now: %s\n"
+                  "  new: %s\n",
+                  pspec->name,
+                  g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
+                  g_strdup_value_contents (&value));)
 
-  if (!equal || force_write)
-    {
-      if (!force_write && priv->initialising)
-        terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
-      else
-        g_object_set_property (G_OBJECT (profile), pspec->name, &value);
-    }
+  if (force_write)
+    g_object_set_property (G_OBJECT (profile), pspec->name, &value);
+  else if (!equal)
+    terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
 
 out:
   /* FIXMEchpe: if we arrive here through goto in the error cases,
@@ -706,8 +692,6 @@ out:
    */
 
   g_value_unset (&value);
-
-  priv->in_notification_count--;
 }
 
 static void
@@ -899,9 +883,6 @@ terminal_profile_schedule_save (TerminalProfile *profile,
 
   g_assert (pspec != NULL);
 
-  if (priv->in_notification_count > 0)
-    g_message ("Scheduling save from gconf notify!\n");
-
   if (!g_slist_find (priv->dirty_pspecs, pspec))
     priv->dirty_pspecs = g_slist_prepend (priv->dirty_pspecs, pspec);
 
@@ -921,11 +902,7 @@ terminal_profile_init (TerminalProfile *profile)
 
   priv = profile->priv = G_TYPE_INSTANCE_GET_PRIVATE (profile, TERMINAL_TYPE_PROFILE, TerminalProfilePrivate);
 
-  priv->initialising = TRUE;
-
   priv->conf = gconf_client_get_default ();
-
-  priv->in_notification_count = 0;
 
   priv->locked = g_new0 (gboolean, LAST_PROP);
   priv->locked[PROP_NAME] = TRUE;
@@ -1017,8 +994,6 @@ terminal_profile_constructor (GType type,
     }
 
   g_free (pspecs);
-
-  priv->initialising = FALSE;
 
   return object;
 }
