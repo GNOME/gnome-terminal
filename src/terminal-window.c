@@ -1051,6 +1051,9 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   action = gtk_action_group_get_action (priv->action_group, "Popup");
   gtk_action_activate (action);
 
+  if (info->button == 0)
+    gtk_menu_shell_select_first (GTK_MENU_SHELL (popup_menu), FALSE);
+
   gtk_menu_popup (GTK_MENU (popup_menu),
                   NULL, NULL,
                   NULL, NULL, 
@@ -1109,7 +1112,6 @@ screen_close_cb (TerminalScreen *screen,
 
 /*****************************************/
 
-
 static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
@@ -1145,7 +1147,6 @@ terminal_window_window_manager_changed_cb (GdkScreen *screen,
   gboolean supports_fs;
 
   supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
-  g_print ("window manager changed: %s supports-fs %d\n", gdk_x11_screen_get_window_manager_name (screen), supports_fs);
 
   action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
   gtk_action_set_sensitive (action, supports_fs);
