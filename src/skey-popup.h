@@ -26,7 +26,6 @@
 G_BEGIN_DECLS
 
 void terminal_skey_do_popup (TerminalScreen *screen,
-			     GtkWindow      *transient_parent,
 			     const gchar    *skey_match);
 
 G_END_DECLS

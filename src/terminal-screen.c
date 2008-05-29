@@ -1444,7 +1444,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
                                                      NULL);
       if (skey_match != NULL)
 	{
-	  terminal_skey_do_popup (screen, GTK_WINDOW (priv->window), skey_match);
+	  terminal_skey_do_popup (screen, skey_match);
 	  g_free (skey_match);
           g_free (matched_string);
 

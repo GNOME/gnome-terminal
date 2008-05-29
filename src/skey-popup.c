@@ -101,15 +101,19 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
 
 void
 terminal_skey_do_popup (TerminalScreen *screen,
-			GtkWindow      *transient_parent,
 			const gchar    *skey_match)
 {
   static GtkWidget *dialog = NULL;
   GtkWidget *entry;
+  GtkWidget *transient_parent;
   GtkWidget *ok_button;
   gint seq;
   gchar *seed;
   gint hash = MD5;
+
+  transient_parent = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+  if (!GTK_WIDGET_TOPLEVEL (transient_parent))
+    transient_parent = NULL;
 
   if (strncmp (SKEY_PREFIX, skey_match, strlen (SKEY_PREFIX)) == 0)
     {
