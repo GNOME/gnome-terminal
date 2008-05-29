@@ -117,20 +117,18 @@ enum
   RESPONSE_DELETE
 };
 
+enum
+{
+  COL_PROFILE,
+  NUM_COLUMNS
+};
+
 static GConfClient *conf = NULL;
 static TerminalApp *global_app = NULL;
 
 #define TERMINAL_STOCK_EDIT "terminal-edit"
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
-
-static void refill_profile_treeview (GtkWidget *tree_view);
-
-static GtkWidget*       profile_optionmenu_new          (void);
-static void             profile_optionmenu_refill       (GtkWidget       *option_menu);
-static TerminalProfile* profile_optionmenu_get_selected (GtkWidget       *option_menu);
-static void             profile_optionmenu_set_selected (GtkWidget       *option_menu,
-                                                         TerminalProfile *profile);
 
 /* Helper functions */
 
@@ -226,6 +224,76 @@ terminal_app_create_profile (TerminalApp *app,
   return profile;
 }
 
+static void
+terminal_app_delete_profile (TerminalApp *app,
+                             TerminalProfile *profile,
+                             GtkWindow   *transient_parent)
+{
+  GList *current_profiles, *tmp;
+  GSList *name_list;
+  GError *err = NULL;
+  char *dir;
+
+  current_profiles = terminal_app_get_profile_list (app);
+
+  /* remove profile from list */
+  dir = g_strdup_printf (CONF_PREFIX "/profiles/%s",
+                         terminal_profile_get_name (profile));
+  gconf_client_recursive_unset (conf, dir,
+                                GCONF_UNSET_INCLUDING_SCHEMA_NAMES,
+                                &err);
+  g_free (dir);
+
+  current_profiles = g_list_remove (current_profiles, profile);
+
+  if (!err)
+    {
+      /* make list of profile names */
+      name_list = NULL;
+      tmp = current_profiles;
+      while (tmp != NULL)
+	{
+	  name_list = g_slist_prepend (name_list,
+				       g_strdup (terminal_profile_get_name (tmp->data)));
+	  tmp = tmp->next;
+	}
+
+      g_list_free (current_profiles);
+
+      gconf_client_set_list (conf,
+			     CONF_GLOBAL_PREFIX"/profile_list",
+			     GCONF_VALUE_STRING,
+			     name_list,
+			     &err);
+
+      g_slist_foreach (name_list, (GFunc) g_free, NULL);
+      g_slist_free (name_list);
+    }
+  else
+    {
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
+                                        GTK_DIALOG_DESTROY_WITH_PARENT,
+                                        GTK_MESSAGE_ERROR,
+                                        GTK_BUTTONS_CLOSE,
+                                        _("There was an error deleting the profiles"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                "%s", err->message);
+      g_error_free (err);
+
+      g_signal_connect (G_OBJECT (dialog), "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
+
+      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+      gtk_window_present (GTK_WINDOW (dialog));
+
+      g_error_free (err);
+    }
+}
+
 static GdkScreen*
 find_screen_by_display_name (const char *display_name,
                              int         screen_number)
@@ -309,6 +377,412 @@ find_screen_by_display_name (const char *display_name,
     }
   
   return screen;
+}
+
+static void
+terminal_app_profile_cell_data_func (GtkTreeViewColumn *tree_column,
+                                     GtkCellRenderer *cell,
+                                     GtkTreeModel *tree_model,
+                                     GtkTreeIter *iter,
+                                     gpointer data)
+{
+  TerminalProfile *profile;
+  GValue value = { 0, };
+
+  gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_object_get_property (G_OBJECT (profile), "visible-name", &value);
+  g_object_set_property (G_OBJECT (cell), "text", &value);
+  g_value_unset (&value);
+}
+
+static int
+terminal_app_profile_sort_func (GtkTreeModel *model,
+                                GtkTreeIter *a,
+                                GtkTreeIter *b,
+                                gpointer user_data)
+{
+  TerminalProfile *profile_a, *profile_b;
+  int retval;
+
+  gtk_tree_model_get (model, a, (int) COL_PROFILE, &profile_a, (int) -1);
+  gtk_tree_model_get (model, b, (int) COL_PROFILE, &profile_b, (int) -1);
+
+  retval = profiles_alphabetic_cmp (profile_a, profile_b);
+
+  g_object_unref (profile_a);
+  g_object_unref (profile_b);
+
+  return retval;
+}
+
+static GtkTreeModel *
+terminal_app_get_profile_liststore (TerminalApp *app,
+                                    TerminalProfile *selected_profile,
+                                    GtkTreeIter *selected_profile_iter,
+                                    gboolean *selected_profile_iter_set)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+  GList *profiles, *l;
+  TerminalProfile *default_profile;
+
+  store = gtk_list_store_new (NUM_COLUMNS, TERMINAL_TYPE_PROFILE);
+
+  *selected_profile_iter_set = FALSE;
+
+  if (selected_profile &&
+      terminal_profile_get_forgotten (selected_profile))
+    selected_profile = NULL;
+
+  profiles = terminal_app_get_profile_list (app);
+  default_profile = terminal_app_get_default_profile (app);
+
+  for (l = profiles; l != NULL; l = l->next)
+    {
+      TerminalProfile *profile = TERMINAL_PROFILE (l->data);
+
+      gtk_list_store_insert_with_values (store, &iter, 0,
+                                         (int) COL_PROFILE, profile,
+                                         (int) -1);
+
+      if (selected_profile_iter && profile == selected_profile)
+        {
+          *selected_profile_iter = iter;
+          *selected_profile_iter_set = TRUE;
+        }
+    }
+  g_list_free (profiles);
+
+  /* Now turn on sorting */
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
+                                   COL_PROFILE,
+                                   terminal_app_profile_sort_func,
+                                   NULL, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        COL_PROFILE, GTK_SORT_ASCENDING);
+
+  return GTK_TREE_MODEL (store);
+}
+
+static /* ref */ TerminalProfile*
+profile_combo_box_get_selected (GtkWidget *widget)
+{
+  GtkComboBox *combo = GTK_COMBO_BOX (widget);
+  TerminalProfile *profile = NULL;
+  GtkTreeIter iter;
+
+  if (gtk_combo_box_get_active_iter (combo, &iter))
+    gtk_tree_model_get (gtk_combo_box_get_model (combo), &iter,
+                        (int) COL_PROFILE, &profile, (int) -1);
+
+  return profile;
+}
+
+static void
+profile_combo_box_refill (GtkWidget *widget)
+{
+  GtkComboBox *combo = GTK_COMBO_BOX (widget);
+  GtkTreeIter iter;
+  gboolean iter_set;
+  TerminalProfile *selected_profile;
+  GtkTreeModel *model;
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+
+  selected_profile = profile_combo_box_get_selected (widget);
+  if (!selected_profile)
+    {
+      selected_profile = terminal_app_get_default_profile (app);
+      if (selected_profile)
+        g_object_ref (selected_profile);
+    }
+
+  model = terminal_app_get_profile_liststore (app,
+                                              selected_profile,
+                                              &iter,
+                                              &iter_set);
+  gtk_combo_box_set_model (combo, model);
+  g_object_unref (model);
+
+  if (iter_set)
+    gtk_combo_box_set_active_iter (combo, &iter);
+
+  if (selected_profile)
+    g_object_unref (selected_profile);
+}
+
+static GtkWidget*
+profile_combo_box_new (void)
+{
+  GtkWidget *combo;
+  GtkCellRenderer *renderer;
+  
+  combo = gtk_combo_box_new ();
+  terminal_util_set_atk_name_description (combo, NULL, _("Click button to choose profile"));
+
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), renderer,
+                                      (GtkCellLayoutDataFunc) terminal_app_profile_cell_data_func,
+                                      NULL, NULL);
+
+  profile_combo_box_refill (combo);
+  
+  return combo;
+}
+
+static void
+profile_combo_box_set_selected (GtkWidget *widget,
+                                TerminalProfile *selected_profile)
+{
+  GtkComboBox *combo = GTK_COMBO_BOX (widget);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gboolean found = FALSE;
+
+  model = gtk_combo_box_get_model (combo);
+  if (!model)
+    return;
+
+  if (!gtk_tree_model_get_iter_first (model, &iter))
+    return;
+
+  do
+    {
+      TerminalProfile *profile;
+
+      gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &profile, (int) -1);
+      found = (profile == selected_profile);
+      g_object_unref (profile);
+    } while (!found && gtk_tree_model_iter_next (model, &iter));
+
+  if (found)
+    gtk_combo_box_set_active_iter (combo, &iter);
+}
+
+static void
+profile_combo_box_changed_cb (GtkWidget *widget,
+                              TerminalApp *app)
+{
+  TerminalProfile *profile;
+
+  profile = profile_combo_box_get_selected (widget);
+  if (!profile)
+    return;
+
+  if (!terminal_profile_get_is_default (profile))
+    terminal_profile_set_is_default (profile, TRUE);
+
+  g_object_unref (profile);
+
+  /* FIXMEchpe */
+}
+
+static void
+profile_list_treeview_refill (GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeIter iter;
+  gboolean iter_set;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  TerminalProfile *selected_profile = NULL;
+
+  model = gtk_tree_view_get_model (tree_view);
+
+  selection = gtk_tree_view_get_selection (tree_view);
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
+
+  model = terminal_app_get_profile_liststore (terminal_app_get (),
+                                              selected_profile,
+                                              &iter,
+                                              &iter_set);
+  gtk_tree_view_set_model (tree_view, model);
+  g_object_unref (model);
+
+  if (!iter_set)
+    iter_set = gtk_tree_model_get_iter_first (model, &iter);
+
+  if (iter_set)
+    gtk_tree_selection_select_iter (selection, &iter);
+
+  if (selected_profile)
+    g_object_unref (selected_profile);
+}
+
+static GtkWidget*
+profile_list_treeview_create (TerminalApp *app)
+{
+  GtkWidget *tree_view;
+  GtkTreeSelection *selection;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+
+  tree_view = gtk_tree_view_new ();
+  terminal_util_set_atk_name_description (tree_view, _("Profile list"), NULL);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
+                               GTK_SELECTION_BROWSE);
+
+  column = gtk_tree_view_column_new ();
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), renderer, TRUE);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), renderer,
+                                      (GtkCellLayoutDataFunc) terminal_app_profile_cell_data_func,
+                                      NULL, NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
+                               GTK_TREE_VIEW_COLUMN (column));
+  
+  profile_list_treeview_refill (tree_view);
+
+  return tree_view;
+}
+
+static void
+profile_list_delete_confirm_response_cb (GtkWidget *dialog,
+                                         int response,
+                                         gpointer data)
+{
+  TerminalProfile *profile;
+
+  profile = TERMINAL_PROFILE (g_object_get_data (G_OBJECT (dialog), "profile"));
+  
+  if (response == GTK_RESPONSE_ACCEPT)
+    terminal_app_delete_profile (terminal_app_get (), profile,
+                                 gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+profile_list_delete_button_clicked_cb (GtkWidget *button,
+                                       GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeSelection *selection;
+  GtkWidget *dialog;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  TerminalProfile *selected_profile;
+  GtkWidget *transient_parent;
+
+  model = gtk_tree_view_get_model (tree_view);
+  selection = gtk_tree_view_get_selection (tree_view);
+
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+  
+  gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
+
+  transient_parent = gtk_widget_get_toplevel (widget);
+
+  if (terminal_app_get_profile_count (terminal_app_get ()) == 1)
+    {
+      g_object_unref (selected_profile);
+
+      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
+                                       _("You must have at least one profile; you can't delete all of them."));
+      return;
+    }
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
+                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_QUESTION,
+                                   GTK_BUTTONS_NONE,
+                                   _("Delete profile \"%s\"?"),
+                                   terminal_profile_get_visible_name (selected_profile));
+
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          GTK_STOCK_CANCEL,
+                          GTK_RESPONSE_REJECT,
+                          GTK_STOCK_DELETE,
+                          GTK_RESPONSE_ACCEPT,
+                          NULL);
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_ACCEPT,
+                                           GTK_RESPONSE_REJECT,
+                                           -1);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+                                   GTK_RESPONSE_ACCEPT);
+ 
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile")); 
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+  /* Transfer refcount of |selected_profile|, so no unref below */
+  g_object_set_data_full (G_OBJECT (dialog), "profile", selected_profile, g_object_unref);
+  
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (profile_list_delete_confirm_response_cb),
+                    NULL);
+  
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+static void
+profile_list_new_button_clicked_cb (GtkWidget   *button,
+                                    gpointer data)
+{
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+  terminal_app_new_profile (app, NULL, GTK_WINDOW (app->manage_profiles_dialog));
+}
+
+static void
+profile_list_edit_button_clicked_cb (GtkWidget *button,
+                                     GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  TerminalProfile *selected_profile;
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+
+  model = gtk_tree_view_get_model (tree_view);
+  selection = gtk_tree_view_get_selection (tree_view);
+
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+  
+  gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
+      
+  terminal_app_edit_profile (app, selected_profile,
+                             GTK_WINDOW (app->manage_profiles_dialog));
+  g_object_unref (selected_profile);
+}
+
+static void
+profile_list_row_activated_cb (GtkTreeView       *tree_view,
+                               GtkTreePath       *path,
+                               GtkTreeViewColumn *column,
+                               gpointer data)
+{
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  TerminalProfile *selected_profile;
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+
+  model = gtk_tree_view_get_model (tree_view);
+
+  if (!gtk_tree_model_get_iter (model, &iter, path))
+    return;
+  
+  gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
+      
+  terminal_app_edit_profile (app, selected_profile,
+                             GTK_WINDOW (app->manage_profiles_dialog));
+  g_object_unref (selected_profile);
 }
 
 static GList*
@@ -445,12 +919,12 @@ ensure_one_profile:
       GtkWidget *new_profile_base_menu;
 
       new_profile_base_menu = g_object_get_data (G_OBJECT (app->new_profile_dialog), "base_option_menu");
-      profile_optionmenu_refill (new_profile_base_menu);
+      profile_combo_box_refill (new_profile_base_menu);
     }
   if (app->manage_profiles_list)
-    refill_profile_treeview (app->manage_profiles_list);
+    profile_list_treeview_refill (app->manage_profiles_list);
   if (app->manage_profiles_default_menu)
-    profile_optionmenu_refill (app->manage_profiles_default_menu);
+    profile_combo_box_refill (app->manage_profiles_default_menu);
 
   tmp_list = app->windows;
   while (tmp_list != NULL)
@@ -540,97 +1014,6 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
 }
 
 static void
-terminal_app_profile_delete_list (TerminalApp *app,
-                                  GList       *deleted_profiles,
-                                  GtkWindow   *transient_parent)
-{
-  GList *current_profiles;
-  GList *tmp;
-  GSList *name_list;
-  GError *err = NULL;
-
-  /* reentrancy paranoia */
-  g_object_ref (G_OBJECT (transient_parent));
-  
-  current_profiles = terminal_app_get_profile_list (app);
-
-  /* remove deleted profiles from list */
-  tmp = deleted_profiles;
-  while (tmp != NULL)
-    {
-      gchar *dir;
-      TerminalProfile *profile = tmp->data;
-
-      dir = g_strdup_printf (CONF_PREFIX"/profiles/%s",
-			     terminal_profile_get_name (profile));
-      gconf_client_recursive_unset (conf, dir,
-				    GCONF_UNSET_INCLUDING_SCHEMA_NAMES,
-				    &err);
-      g_free (dir);
-
-      if (err)
-	break;
-
-      current_profiles = g_list_remove (current_profiles, profile);
-
-      tmp = tmp->next;
-    }
-
-  if (!err)
-    {
-      /* make list of profile names */
-      name_list = NULL;
-      tmp = current_profiles;
-      while (tmp != NULL)
-	{
-	  name_list = g_slist_prepend (name_list,
-				       g_strdup (terminal_profile_get_name (tmp->data)));
-	  tmp = tmp->next;
-	}
-
-      g_list_free (current_profiles);
-
-      gconf_client_set_list (conf,
-			     CONF_GLOBAL_PREFIX"/profile_list",
-			     GCONF_VALUE_STRING,
-			     name_list,
-			     &err);
-
-      g_slist_foreach (name_list, (GFunc) g_free, NULL);
-      g_slist_free (name_list);
-    }
-
-  else
-    {
-      if (GTK_WIDGET_VISIBLE (transient_parent))
-        {
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (transient_parent),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           _("There was an error deleting the profiles"));
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                    "%s", err->message);
-          g_error_free (err);
-
-          g_signal_connect (G_OBJECT (dialog), "response",
-                            G_CALLBACK (gtk_widget_destroy),
-                            NULL);
-
-          gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-          gtk_widget_show (dialog);
-        }
-
-      g_error_free (err);
-    }
-
-  g_object_unref (G_OBJECT (transient_parent));
-}
-
-static void
 new_profile_response_callback (GtkWidget *new_profile_dialog,
                                int        response_id,
                                TerminalApp *app)
@@ -677,7 +1060,7 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       g_list_free (profiles);
 
       base_option_menu = g_object_get_data (G_OBJECT (new_profile_dialog), "base_option_menu");
-      base_profile = profile_optionmenu_get_selected (base_option_menu);
+      base_profile = profile_combo_box_get_selected (base_option_menu);
       
       if (base_profile == NULL)
         {
@@ -692,6 +1075,7 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       
       err = NULL;
       escaped_name = terminal_profile_clone (base_profile, name, &err);
+      g_object_unref (base_profile);
       if (err)
         {
           GtkWidget *dialog;
@@ -766,14 +1150,13 @@ terminal_app_new_profile (TerminalApp     *app,
                           TerminalProfile *default_base_profile,
                           GtkWindow       *transient_parent)
 {
-  GtkWindow *old_transient_parent;
   GtkWidget *create_button;
 
   if (app->new_profile_dialog == NULL)
     {
       GladeXML *xml;
       GtkWidget *w, *wl;
-      GtkWidget *create_button;
+      GtkWidget *create_button, *combo;
       GtkSizeGroup *size_group, *size_group_labels;
 
       xml = terminal_util_load_glade_file (TERM_GLADE_FILE, "new-profile-dialog", transient_parent);
@@ -809,10 +1192,12 @@ terminal_app_new_profile (TerminalApp     *app,
       gtk_size_group_add_widget (size_group_labels, wl);
  
       /* the base profile option menu */
-      w = glade_xml_get_widget (xml, "new-profile-base-option-menu");
+      w = glade_xml_get_widget (xml, "new-profile-table");
+      combo = profile_combo_box_new ();
+      gtk_table_attach_defaults (GTK_TABLE (w), combo, 1, 2, 1, 2);
+      w = combo;
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", w);
       terminal_util_set_atk_name_description (w, NULL, _("Choose base profile"));
-      profile_optionmenu_refill (w);
       gtk_size_group_add_widget (size_group, w);
 
       wl = glade_xml_get_widget (xml, "new-profile-base-label");
@@ -827,14 +1212,8 @@ terminal_app_new_profile (TerminalApp     *app,
       g_object_unref (G_OBJECT (xml));
     }
 
-  old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->new_profile_dialog));
-  
-  if (old_transient_parent != transient_parent)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (app->new_profile_dialog),
-                                    transient_parent);
-      gtk_widget_hide (app->new_profile_dialog); /* re-show the window on its new parent */
-    }
+  gtk_window_set_transient_for (GTK_WINDOW (app->new_profile_dialog),
+                                transient_parent);
 
   create_button = g_object_get_data (G_OBJECT (app->new_profile_dialog), "create_button");
   gtk_widget_set_sensitive (create_button, FALSE);
@@ -843,339 +1222,21 @@ terminal_app_new_profile (TerminalApp     *app,
   gtk_window_present (GTK_WINDOW (app->new_profile_dialog));
 }
 
-
-enum
-{
-  COLUMN_NAME,
-  COLUMN_PROFILE_OBJECT,
-  COLUMN_LAST
-};
-
-static void
-list_selected_profiles_func (GtkTreeModel      *model,
-                             GtkTreePath       *path,
-                             GtkTreeIter       *iter,
-                             gpointer           data)
-{
-  GList **list = data;
-  TerminalProfile *profile = NULL;
-
-  gtk_tree_model_get (model,
-                      iter,
-                      COLUMN_PROFILE_OBJECT,
-                      &profile,
-                      -1);
-
-  *list = g_list_prepend (*list, profile);
-}
-
-static void
-free_profiles_list (gpointer data)
-{
-  GList *profiles = data;
-  
-  g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
-  g_list_free (profiles);
-}
-
-static void
-refill_profile_treeview (GtkWidget *tree_view)
-{
-  TerminalApp *app = terminal_app_get ();
-  GList *profiles;
-  GList *tmp;
-  GtkTreeSelection *selection;
-  GtkListStore *model;
-  GList *selected_profiles;
-  GtkTreeIter iter;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
-  model = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view)));
-
-  selected_profiles = NULL;
-  gtk_tree_selection_selected_foreach (selection,
-                                       list_selected_profiles_func,
-                                       &selected_profiles);
-
-  gtk_list_store_clear (model);
-  
-  profiles = terminal_app_get_profile_list (app);
-  tmp = profiles;
-  while (tmp != NULL)
-    {
-      TerminalProfile *profile = tmp->data;
-
-      gtk_list_store_append (model, &iter);
-      
-      /* We are assuming the list store will hold a reference to
-       * the profile object, otherwise we would be in danger of disappearing
-       * profiles.
-       */
-      gtk_list_store_set (model,
-                          &iter,
-                          COLUMN_NAME, terminal_profile_get_visible_name (profile),
-                          COLUMN_PROFILE_OBJECT, profile,
-                          -1);
-      
-      if (g_list_find (selected_profiles, profile) != NULL)
-        gtk_tree_selection_select_iter (selection, &iter);
-    
-      tmp = tmp->next;
-    }
-
-  if (selected_profiles == NULL)
-    {
-      /* Select first row */
-      GtkTreePath *path;
-      
-      path = gtk_tree_path_new ();
-      gtk_tree_path_append_index (path, 0);
-      gtk_tree_selection_select_path (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)), path);
-      gtk_tree_path_free (path);
-    }
-  
-  free_profiles_list (selected_profiles);
-}
-
-static GtkWidget*
-create_profile_list (void)
-{
-  GtkTreeSelection *selection;
-  GtkCellRenderer *cell;
-  GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
-  GtkListStore *model;
-  
-  model = gtk_list_store_new (COLUMN_LAST,
-                              G_TYPE_STRING,
-                              G_TYPE_OBJECT);
-  
-  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (model));
-  terminal_util_set_atk_name_description (tree_view, _("Profile list"), NULL);
-
-  g_object_unref (G_OBJECT (model));
-  
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
-
-  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
-                               GTK_SELECTION_MULTIPLE);
-
-  refill_profile_treeview (tree_view);
-  
-  cell = gtk_cell_renderer_text_new ();
-
-  g_object_set (G_OBJECT (cell),
-                "xpad", 2,
-                NULL);
-  
-  column = gtk_tree_view_column_new_with_attributes (NULL,
-                                                     cell,
-                                                     "text", COLUMN_NAME,
-                                                     NULL);
-  
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
-                               GTK_TREE_VIEW_COLUMN (column));
-
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
-  
-  return tree_view;
-}
-
-static void
-delete_confirm_response (GtkWidget   *dialog,
-                         int          response_id,
-                         GtkWindow   *transient_parent)
-{
-  GList *deleted_profiles;
-
-  deleted_profiles = g_object_get_data (G_OBJECT (dialog),
-                                        "deleted-profiles-list");
-  
-  if (response_id == GTK_RESPONSE_ACCEPT)
-    {
-      terminal_app_profile_delete_list (terminal_app_get (), deleted_profiles, transient_parent);
-    }
-
-  gtk_widget_destroy (dialog);
-}
-
-static void
-profile_list_delete_selection (GtkWidget   *profile_list,
-                               GtkWindow   *transient_parent,
-                               TerminalApp *app)
-{
-  GtkTreeSelection *selection;
-  GList *deleted_profiles;
-  GtkWidget *dialog;
-  GString *str;
-  GList *tmp;
-  int count;
-  
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (profile_list));
-
-  deleted_profiles = NULL;
-  gtk_tree_selection_selected_foreach (selection,
-                                       list_selected_profiles_func,
-                                       &deleted_profiles);
-
-  if (deleted_profiles == NULL)
-    {
-      terminal_util_show_error_dialog (transient_parent, NULL, _("You must select one or more profiles to delete."));
-      return;
-    }
-  
-  count = g_list_length (deleted_profiles);
-
-  if (count == terminal_app_get_profile_count (app))
-    {
-      free_profiles_list (deleted_profiles);
-
-      terminal_util_show_error_dialog (transient_parent, NULL,
-                                       _("You must have at least one profile; you can't delete all of them."));
-      return;
-    }
-  
-  if (count > 1)
-    {
-      str = g_string_new (NULL);
-      g_string_printf (str,
-                       ngettext ("Delete this profile?\n",
-                       "Delete these %d profiles?\n",
-                       count),
-                       count);
-
-      tmp = deleted_profiles;
-      while (tmp != NULL)
-        {
-          g_string_append (str, "    ");
-          g_string_append (str,
-                           terminal_profile_get_visible_name (tmp->data));
-          if (tmp->next)
-            g_string_append (str, "\n");
-
-          tmp = tmp->next;
-        }
-    }
-  else
-    {
-      str = g_string_new (NULL);
-      g_string_printf (str,
-                       _("Delete profile \"%s\"?"),
-                       terminal_profile_get_visible_name (deleted_profiles->data));
-    }
-  
-  dialog = gtk_message_dialog_new (transient_parent,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_QUESTION,
-                                   GTK_BUTTONS_NONE,
-                                   "%s", 
-                                   str->str);
-  g_string_free (str, TRUE);
-
-  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          GTK_STOCK_CANCEL,
-                          GTK_RESPONSE_REJECT,
-                          GTK_STOCK_DELETE,
-                          GTK_RESPONSE_ACCEPT,
-                          NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
-                                   GTK_RESPONSE_ACCEPT);
- 
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile")); 
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-  g_object_set_data_full (G_OBJECT (dialog), "deleted-profiles-list",
-                          deleted_profiles, free_profiles_list);
-  
-  g_signal_connect (G_OBJECT (dialog), "response",
-                    G_CALLBACK (delete_confirm_response),
-                    transient_parent);
-  
-  gtk_widget_show_all (dialog);
-}
-
-static void
-new_button_clicked (GtkWidget   *button,
-                    TerminalApp *app)
-{
-  terminal_app_new_profile (app,
-                            NULL,
-                            GTK_WINDOW (app->manage_profiles_dialog));
-}
-
-static void
-edit_button_clicked (GtkWidget   *button,
-                     TerminalApp *app)
-{
-  GtkTreeSelection *selection;
-  GList *profiles;
-      
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
-
-  profiles = NULL;
-  gtk_tree_selection_selected_foreach (selection,
-                                       list_selected_profiles_func,
-                                       &profiles);
-
-  if (profiles == NULL)
-    return; /* edit button was supposed to be insensitive... */
-
-  if (profiles->next == NULL)
-    {
-      terminal_app_edit_profile (app,
-                                 profiles->data,
-                                 GTK_WINDOW (app->manage_profiles_dialog));
-    }
-  else
-    {
-      /* edit button was supposed to be insensitive due to multiple
-       * selection
-       */
-    }
-  
-  g_list_foreach (profiles, (GFunc) g_object_unref, NULL);
-  g_list_free (profiles);
-}
-
-static void
-delete_button_clicked (GtkWidget   *button,
-                       TerminalApp *app)
-{
-  profile_list_delete_selection (app->manage_profiles_list,
-                                 GTK_WINDOW (app->manage_profiles_dialog),
-                                 app);
-}
-
-static void
-default_menu_changed (GtkWidget   *option_menu,
-                      TerminalApp *app)
-{
-  TerminalProfile *p;
-
-  p = profile_optionmenu_get_selected (app->manage_profiles_default_menu);
-
-  if (!terminal_profile_get_is_default (p))
-    terminal_profile_set_is_default (p, TRUE);
-
-  /* FIXMEchpe */
-}
-
 static void
 default_profile_changed (TerminalProfile           *profile,
                          const TerminalSettingMask *mask,
-                         void                      *profile_optionmenu)
+                         void                      *profile_combo_box)
 {
   if (mask->is_default)
     {
       if (terminal_profile_get_is_default (profile))
-        profile_optionmenu_set_selected (GTK_WIDGET (profile_optionmenu),
+        profile_combo_box_set_selected (GTK_WIDGET (profile_combo_box),
                                          profile);      
     }
 }
 
 static void
-monitor_profiles_for_is_default_change (GtkWidget *profile_optionmenu)
+monitor_profiles_for_is_default_change (GtkWidget *profile_combo_box)
 {
   GList *profiles;
   GList *tmp;
@@ -1190,7 +1251,7 @@ monitor_profiles_for_is_default_change (GtkWidget *profile_optionmenu)
       g_signal_connect_object (G_OBJECT (profile),
                                "changed",
                                G_CALLBACK (default_profile_changed),
-                               G_OBJECT (profile_optionmenu),
+                               G_OBJECT (profile_combo_box),
                                0);
       
       tmp = tmp->next;
@@ -1263,35 +1324,6 @@ selection_changed_callback (GtkTreeSelection *selection,
   gtk_widget_set_sensitive (app->manage_profiles_delete_button,
                             count > 0);
 }
-
-static void
-profile_activated_callback (GtkTreeView       *tree_view,
-                            GtkTreePath       *path,
-                            GtkTreeViewColumn *column,
-                            TerminalApp       *app)
-{
-  TerminalProfile *profile;
-  GtkTreeIter iter;
-  GtkTreeModel *model;
-
-  model = gtk_tree_view_get_model (tree_view);
-
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    return;
-  
-  profile = NULL;
-  gtk_tree_model_get (model,
-                      &iter,
-                      COLUMN_PROFILE_OBJECT,
-                      &profile,
-                      -1);
-
-  if (profile)
-    terminal_app_edit_profile (app,
-                               profile,
-                               GTK_WINDOW (app->manage_profiles_dialog));
-}
-
 
 static void
 manage_profiles_response_cb (GtkDialog *dialog,
@@ -1403,10 +1435,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       gtk_size_group_add_widget (size_group, label);
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
-      app->manage_profiles_list = create_profile_list ();
-
-      g_signal_connect (G_OBJECT (app->manage_profiles_list), "row_activated",
-                        G_CALLBACK (profile_activated_callback), app);
+      app->manage_profiles_list = profile_list_treeview_create (app);
+      g_signal_connect (app->manage_profiles_list, "row-activated",
+                        G_CALLBACK (profile_list_row_activated_cb), NULL);
       
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -1427,7 +1458,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       button = gtk_button_new_from_stock (GTK_STOCK_NEW);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (new_button_clicked), app);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (profile_list_new_button_clicked_cb),
+                        app->manage_profiles_list);
       app->manage_profiles_new_button = button;
       terminal_util_set_atk_name_description (app->manage_profiles_new_button, NULL,                             
                                               _("Click to open new profile dialog"));
@@ -1435,7 +1468,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       button = gtk_button_new_from_stock (TERMINAL_STOCK_EDIT);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (edit_button_clicked), app);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (profile_list_edit_button_clicked_cb),
+                        app->manage_profiles_list);
       app->manage_profiles_edit_button = button;
       terminal_util_set_atk_name_description (app->manage_profiles_edit_button, NULL,                            
                                               _("Click to open edit profile dialog"));
@@ -1443,7 +1478,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
       button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (delete_button_clicked), app);
+      g_signal_connect (button, "clicked",
+                        G_CALLBACK (profile_list_delete_button_clicked_cb),
+                        app->manage_profiles_list);
       app->manage_profiles_delete_button = button;
       terminal_util_set_atk_name_description (app->manage_profiles_delete_button, NULL,                          
                                               _("Click to delete selected profile"));
@@ -1454,14 +1491,10 @@ terminal_app_manage_profiles (TerminalApp     *app,
       label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
             
-      app->manage_profiles_default_menu = profile_optionmenu_new ();
+      app->manage_profiles_default_menu = profile_combo_box_new ();
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), app->manage_profiles_default_menu);
-      if (terminal_app_get_default_profile (app))
-        {
-          profile_optionmenu_set_selected (app->manage_profiles_default_menu, terminal_app_get_default_profile (app));
-        }
-      g_signal_connect (G_OBJECT (app->manage_profiles_default_menu), "changed", 
-                        G_CALLBACK (default_menu_changed), app);
+      g_signal_connect (app->manage_profiles_default_menu, "changed",
+                        G_CALLBACK (profile_combo_box_changed_cb), app);
       monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
       gtk_box_pack_start (GTK_BOX (hbox), app->manage_profiles_default_menu, TRUE, TRUE, 0);
  
@@ -1499,114 +1532,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
   
   gtk_widget_show_all (app->manage_profiles_dialog);
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
-}
-
-static GtkWidget*
-profile_optionmenu_new (void)
-{
-  GtkWidget *option_menu;
-  
-  option_menu = gtk_option_menu_new ();
-  terminal_util_set_atk_name_description (option_menu, NULL, _("Click button to choose profile"));
-
-  profile_optionmenu_refill (option_menu);
-  
-  return option_menu;
-}
-
-static void
-profile_optionmenu_refill (GtkWidget *option_menu)
-{
-  GList *profiles;
-  GList *tmp;
-  int i;
-  int history;
-  GtkWidget *menu;
-  GtkWidget *mi;
-  TerminalProfile *selected;
-
-  selected = profile_optionmenu_get_selected (option_menu);
-  
-  menu = gtk_menu_new ();
-  
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
-
-  history = 0;
-  i = 0;
-  tmp = profiles;
-  while (tmp != NULL)
-    {
-      TerminalProfile *profile = tmp->data;
-      
-      mi = gtk_menu_item_new_with_label (terminal_profile_get_visible_name (profile));
-
-      gtk_widget_show (mi);
-      
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu),
-                             mi);
-
-      g_object_ref (G_OBJECT (profile));
-      g_object_set_data_full (G_OBJECT (mi),
-                              "profile",
-                              profile,
-                              (GDestroyNotify) g_object_unref);
-      
-      if (profile == selected)
-        history = i;
-      
-      ++i;
-      tmp = tmp->next;
-    }
-  
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu), history);
-  
-  g_list_free (profiles);  
-}
-
-static TerminalProfile*
-profile_optionmenu_get_selected (GtkWidget *option_menu)
-{
-  GtkWidget *menu;
-  GtkWidget *active;
-
-  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (option_menu));
-  if (menu == NULL)
-    return NULL;
-
-  active = gtk_menu_get_active (GTK_MENU (menu));
-  if (active == NULL)
-    return NULL;
-
-  return g_object_get_data (G_OBJECT (active), "profile");
-}
-
-static void
-profile_optionmenu_set_selected (GtkWidget       *option_menu,
-                                 TerminalProfile *profile)
-{
-  GtkWidget *menu;
-  GList *children;
-  GList *tmp;
-  int i;
-  
-  menu = gtk_option_menu_get_menu (GTK_OPTION_MENU (option_menu));
-  if (menu == NULL)
-    return;
-  
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
-  i = 0;
-  tmp = children;
-  while (tmp != NULL)
-    {
-      if (g_object_get_data (G_OBJECT (tmp->data), "profile") == profile)
-        break;
-      ++i;
-      tmp = tmp->next;
-    }
-  g_list_free (children);
-
-  gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu), i);
 }
 
 /* Class implementation */
