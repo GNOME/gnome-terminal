@@ -218,6 +218,9 @@ static char*    binding_name        (guint            keyval,
 
 static void      queue_gconf_sync (void);
 
+static gboolean sync_idle_cb (gpointer data);
+
+static guint sync_idle_id = 0;
 static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
@@ -306,6 +309,12 @@ terminal_accels_shutdown (void)
   gconf_client_notify_remove (conf, gconf_notify_id);
   gconf_client_remove_dir (conf, CONF_KEYS_PREFIX, NULL);
   g_object_unref (conf);
+
+  if (sync_idle_id != 0)
+    {
+      g_source_remove (sync_idle_id);
+      sync_idle_cb (NULL);
+    }
 }
 
 static gboolean
@@ -511,11 +520,8 @@ binding_name (guint            keyval,
     return translate ? g_strdup (_("Disabled")) : g_strdup ("disabled");
 }
 
-
-static guint sync_idle = 0;
-
 static gboolean
-sync_handler (gpointer data)
+sync_idle_cb (gpointer data)
 {
   GConfClient *conf;
   GConfChangeSet *changeset;
@@ -524,7 +530,7 @@ sync_handler (gpointer data)
 
   D (g_print ("gconf sync handler\n"));
   
-  sync_idle = 0;
+  sync_idle_id = 0;
 
   conf = gconf_client_get_default ();
 
@@ -582,8 +588,8 @@ sync_handler (gpointer data)
 static void
 queue_gconf_sync (void)
 {
-  if (sync_idle == 0)
-    sync_idle = g_idle_add (sync_handler, NULL);
+  if (sync_idle_id == 0)
+    sync_idle_id = g_idle_add (sync_idle_cb, NULL);
 }
 
 /* We have the same KeyEntry* in both columns;
