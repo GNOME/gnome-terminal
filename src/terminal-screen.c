@@ -808,8 +808,9 @@ update_color_scheme (TerminalScreen *screen)
                                          &fg, &bg);
     }
 
-  terminal_widget_set_colors (priv->term,
-                              &fg, &bg, palette);
+  vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
+                           palette, TERMINAL_PALETTE_SIZE);
+  vte_terminal_set_background_tint_color (VTE_TERMINAL (screen), &bg);
 }
 
 /* Note this can be called on style_set, on prefs changing,
