@@ -170,41 +170,14 @@ struct _TerminalProfilePrivate
   guint forgotten : 1;
 };
 
-static const GConfEnumStringPair title_modes[] = {
-  { TERMINAL_TITLE_REPLACE, "replace" },
-  { TERMINAL_TITLE_BEFORE, "before" },
-  { TERMINAL_TITLE_AFTER, "after" },
-  { TERMINAL_TITLE_IGNORE, "ignore" },
-  { -1, NULL }
-};
-
-static const GConfEnumStringPair scrollbar_positions[] = {
-  { TERMINAL_SCROLLBAR_LEFT, "left" },
-  { TERMINAL_SCROLLBAR_RIGHT, "right" },
-  { TERMINAL_SCROLLBAR_HIDDEN, "hidden" },  
-  { -1, NULL }
-};
-
-static const GConfEnumStringPair exit_actions[] = {
-  { TERMINAL_EXIT_CLOSE, "close" },
-  { TERMINAL_EXIT_RESTART, "restart" },
-  { TERMINAL_EXIT_HOLD, "hold" },
-  { -1, NULL }
-};
-
-/* FIXMEchpe make these use the same strings as vte */
+/* We have to continue to use these since they're unfortunately different
+ * from the value nicks of the vte_terminal_erase_binding_get_type() enum type.
+ */
 static const GConfEnumStringPair erase_bindings[] = {
   { VTE_ERASE_AUTO, "auto" },
   { VTE_ERASE_ASCII_BACKSPACE, "control-h" },
   { VTE_ERASE_ASCII_DELETE, "ascii-del" },
   { VTE_ERASE_DELETE_SEQUENCE, "escape-sequence" },
-  { -1, NULL }
-};
-
-static const GConfEnumStringPair background_types[] = {
-  { TERMINAL_BACKGROUND_SOLID, "solid" },
-  { TERMINAL_BACKGROUND_IMAGE, "image" },
-  { TERMINAL_BACKGROUND_TRANSPARENT, "transparent" },
   { -1, NULL }
 };
 
@@ -293,57 +266,6 @@ static const GdkColor terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PA
 
 static const GdkColor default_fg_color = { 0, 0, 0, 0 };
 static const GdkColor default_bg_color = { 0, 0xffff, 0xffff, 0xdddd };
-
-static gboolean
-constcorrect_string_to_enum (const GConfEnumStringPair *table,
-                             const char                *str,
-                             int                       *outp)
-{
-  return gconf_string_to_enum ((GConfEnumStringPair*)table, str, outp);
-}
-
-static const char*
-constcorrect_enum_to_string (const GConfEnumStringPair *table,
-                             int                        val)
-{
-  return gconf_enum_to_string ((GConfEnumStringPair*)table, val);
-}
-
-#define gconf_string_to_enum(table, str, outp) \
-   constcorrect_string_to_enum (table, str, outp)
-#define gconf_enum_to_string(table, val) \
-   constcorrect_enum_to_string (table, val)
-
-static const GConfEnumStringPair *
-pspec_to_enum_string_pair (GParamSpec *pspec)
-{
-  const GConfEnumStringPair *conversion;
-
-  switch (pspec->param_id)
-    {
-      case PROP_BACKGROUND_TYPE:
-        conversion = background_types;
-        break;
-      case PROP_BACKSPACE_BINDING:
-      case PROP_DELETE_BINDING:
-        conversion = erase_bindings;
-        break;
-      case PROP_EXIT_ACTION:
-        conversion = exit_actions;
-        break;
-      case PROP_SCROLLBAR_POSITION:
-        conversion = scrollbar_positions;
-        break;
-      case PROP_TITLE_MODE:
-        conversion = title_modes;
-        break;
-     default:
-        g_assert_not_reached ();
-        break;
-    }
-
-  return conversion;
-}
 
 enum
 {
@@ -646,17 +568,26 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
-      const GConfEnumStringPair *conversion;
+      const GEnumValue *eval;
       int enum_value;
 
       if (gconf_value->type != GCONF_VALUE_STRING)
         goto out; /* FIXMEchpe maybe reset? */
 
-      /* FIXMEchpe: use the type builtin here!!!!! */
-
-      conversion = pspec_to_enum_string_pair (pspec);
-      if (!gconf_string_to_enum (conversion, gconf_value_get_string (gconf_value), &enum_value))
-        goto out; /* FIXMEchpe maybe reset? */
+      eval = g_enum_get_value_by_nick (G_PARAM_SPEC_ENUM (pspec)->enum_class,
+                                       gconf_value_get_string (gconf_value));
+      if (eval)
+        enum_value = eval->value;
+      else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == vte_terminal_erase_binding_get_type ())
+        {
+          /* Backward compatibility */
+          if (!gconf_string_to_enum ((GConfEnumStringPair*) erase_bindings,
+                                     gconf_value_get_string (gconf_value),
+                                     &enum_value))
+            goto out;
+        }
+      else
+        goto out;
 
       g_value_set_enum (&value, enum_value);
     }
@@ -803,15 +734,23 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
     }
   else if (G_IS_PARAM_SPEC_ENUM (pspec))
     {
-      const GConfEnumStringPair *conversion;
-      const char *enum_value;
+      const GEnumValue *eval;
+      const char *string;
 
-      conversion = pspec_to_enum_string_pair (pspec);
-      enum_value = gconf_enum_to_string (conversion, g_value_get_enum (value));
-      if (!enum_value)
+      eval = g_enum_get_value (G_PARAM_SPEC_ENUM (pspec)->enum_class, g_value_get_enum (value));
+      if (eval)
+        string = eval->value_nick;
+      else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == vte_terminal_erase_binding_get_type ())
+        {
+          /* Backward compatibility */
+          string = gconf_enum_to_string ((GConfEnumStringPair*) erase_bindings, g_value_get_enum (value));
+          if (!string)
+            return;
+        }
+      else
         return;
 
-      gconf_change_set_set_string (changeset, key, enum_value);
+      gconf_change_set_set_string (changeset, key, string);
     }
   else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR)
     {
