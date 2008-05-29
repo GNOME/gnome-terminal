@@ -183,12 +183,6 @@ enum
  * into GConf. If GConf changes we propagate into accel map.
  * To avoid infinite loop hell, we short-circuit in both directions
  * if the value is unchanged from last known.
- * The short-circuit is also required because of:
- *  http://bugzilla.gnome.org/show_bug.cgi?id=73082
- *  FIXMEchpe at least that last reason isn't valid anymore
- *
- *  We have to keep our own hash of the current values in order to
- *  do this short-circuit stuff.
  */
 
 static void keys_change_notify (GConfClient *client,
