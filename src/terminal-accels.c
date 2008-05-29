@@ -54,27 +54,27 @@
 #define ACCEL_PATH_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
 #define ACCEL_PATH_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
 
-#define KEY_NEW_TAB CONF_KEYS_PREFIX"/new_tab"
-#define KEY_NEW_WINDOW CONF_KEYS_PREFIX"/new_window"
-#define KEY_NEW_PROFILE CONF_KEYS_PREFIX"/new_profile"
-#define KEY_CLOSE_TAB CONF_KEYS_PREFIX"/close_tab"
-#define KEY_CLOSE_WINDOW CONF_KEYS_PREFIX"/close_window"
-#define KEY_COPY CONF_KEYS_PREFIX"/copy"
-#define KEY_PASTE CONF_KEYS_PREFIX"/paste"
-#define KEY_TOGGLE_MENUBAR CONF_KEYS_PREFIX"/toggle_menubar"
-#define KEY_FULL_SCREEN CONF_KEYS_PREFIX"/full_screen"
-#define KEY_RESET CONF_KEYS_PREFIX"/reset"
-#define KEY_RESET_AND_CLEAR CONF_KEYS_PREFIX"/reset_and_clear"
-#define KEY_PREV_TAB CONF_KEYS_PREFIX"/prev_tab"
-#define KEY_NEXT_TAB CONF_KEYS_PREFIX"/next_tab"
-#define KEY_MOVE_TAB_LEFT CONF_KEYS_PREFIX"/move_tab_left"
-#define KEY_MOVE_TAB_RIGHT CONF_KEYS_PREFIX"/move_tab_right"
-#define KEY_DETACH_TAB CONF_KEYS_PREFIX"/detach_tab"
-#define KEY_SET_TERMINAL_TITLE CONF_KEYS_PREFIX"/set_window_title"
-#define KEY_HELP CONF_KEYS_PREFIX"/help"
-#define KEY_ZOOM_IN CONF_KEYS_PREFIX"/zoom_in"
-#define KEY_ZOOM_OUT CONF_KEYS_PREFIX"/zoom_out"
-#define KEY_ZOOM_NORMAL CONF_KEYS_PREFIX"/zoom_normal"
+#define KEY_CLOSE_TAB           CONF_KEYS_PREFIX "/close_tab"
+#define KEY_CLOSE_WINDOW        CONF_KEYS_PREFIX "/close_window"
+#define KEY_COPY                CONF_KEYS_PREFIX "/copy"
+#define KEY_DETACH_TAB          CONF_KEYS_PREFIX "/detach_tab"
+#define KEY_FULL_SCREEN         CONF_KEYS_PREFIX "/full_screen"
+#define KEY_HELP                CONF_KEYS_PREFIX "/help"
+#define KEY_MOVE_TAB_LEFT       CONF_KEYS_PREFIX "/move_tab_left"
+#define KEY_MOVE_TAB_RIGHT      CONF_KEYS_PREFIX "/move_tab_right"
+#define KEY_NEW_PROFILE         CONF_KEYS_PREFIX "/new_profile"
+#define KEY_NEW_TAB             CONF_KEYS_PREFIX "/new_tab"
+#define KEY_NEW_WINDOW          CONF_KEYS_PREFIX "/new_window"
+#define KEY_NEXT_TAB            CONF_KEYS_PREFIX "/next_tab"
+#define KEY_PASTE               CONF_KEYS_PREFIX "/paste"
+#define KEY_PREV_TAB            CONF_KEYS_PREFIX "/prev_tab"
+#define KEY_RESET_AND_CLEAR     CONF_KEYS_PREFIX "/reset_and_clear"
+#define KEY_RESET               CONF_KEYS_PREFIX "/reset"
+#define KEY_SET_TERMINAL_TITLE  CONF_KEYS_PREFIX "/set_window_title"
+#define KEY_TOGGLE_MENUBAR      CONF_KEYS_PREFIX "/toggle_menubar"
+#define KEY_ZOOM_IN             CONF_KEYS_PREFIX "/zoom_in"
+#define KEY_ZOOM_NORMAL         CONF_KEYS_PREFIX "/zoom_normal"
+#define KEY_ZOOM_OUT            CONF_KEYS_PREFIX "/zoom_out"
 
 typedef struct
 {
@@ -221,6 +221,7 @@ static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack
 static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
 static GtkWidget *edit_keys_dialog_treeview = NULL;
+static guint gconf_notify_id;
 
 void
 terminal_accels_init (void)
@@ -233,6 +234,7 @@ terminal_accels_init (void)
   gconf_client_add_dir (conf, CONF_KEYS_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
+  gconf_notify_id =
   gconf_client_notify_add (conf,
                            CONF_KEYS_PREFIX,
                            keys_change_notify,
@@ -291,6 +293,17 @@ terminal_accels_init (void)
                     "accel_changed",
                     G_CALLBACK (accel_changed_callback),
                     NULL);
+}
+
+void
+terminal_accels_shutdown (void)
+{
+  GConfClient *conf;
+
+  conf = gconf_client_get_default ();
+  gconf_client_notify_remove (conf, gconf_notify_id);
+  gconf_client_remove_dir (conf, CONF_KEYS_PREFIX, NULL);
+  g_object_unref (conf);
 }
 
 static gboolean
@@ -831,11 +844,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   int i;
 
   if (edit_keys_dialog != NULL)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
-      gtk_window_present (GTK_WINDOW (edit_keys_dialog));
-      return;
-    }
+    goto done;
 
   if (!terminal_util_load_builder_file ("keybinding-editor.ui",
                                         "keybindings-dialog", &dialog,
@@ -926,7 +935,8 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
-  gtk_window_set_transient_for (GTK_WINDOW (dialog), transient_parent);
 
+done:
+  gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
   gtk_window_present (GTK_WINDOW (edit_keys_dialog));
 }

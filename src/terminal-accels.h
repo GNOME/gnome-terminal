@@ -27,6 +27,8 @@ G_BEGIN_DECLS
 
 void terminal_accels_init (void);
  
+void terminal_accels_shutdown (void);
+
 void terminal_edit_keys_dialog_show (GtkWindow *transient_parent);
 
 G_END_DECLS

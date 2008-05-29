@@ -1541,6 +1541,8 @@ terminal_app_finalize (GObject *object)
   if (app->system_font_desc)
     pango_font_description_free (app->system_font_desc);
 
+  terminal_accels_shutdown ();
+
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
   global_app = NULL;
