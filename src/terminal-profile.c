@@ -872,7 +872,16 @@ terminal_profile_save (TerminalProfile *profile)
 
   gconf_change_set_unref (changeset);
 
-  return FALSE; /* don't run again */
+  return error == NULL;
+}
+
+static gboolean
+terminal_profile_save_idle_cb (TerminalProfile *profile)
+{
+  terminal_profile_save (profile);
+
+  /* don't run again */
+  return FALSE; 
 }
 
 static void
@@ -880,6 +889,8 @@ terminal_profile_schedule_save (TerminalProfile *profile,
                                 GParamSpec *pspec)
 {
   TerminalProfilePrivate *priv = profile->priv;
+
+  g_assert (pspec != NULL);
 
   if (priv->initialising) {
     g_print ("Initialising property %s, skipping save\n", pspec->name);
@@ -889,14 +900,13 @@ terminal_profile_schedule_save (TerminalProfile *profile,
   if (priv->in_notification_count > 0)
     g_warning ("Scheduling save from gconf notify!\n");
 
-  if (pspec &&
-      !g_slist_find (priv->dirty_pspecs, pspec))
+  if (!g_slist_find (priv->dirty_pspecs, pspec))
     priv->dirty_pspecs = g_slist_prepend (priv->dirty_pspecs, pspec);
 
   if (priv->save_idle_id != 0)
     return;
 
-  priv->save_idle_id = g_idle_add ((GSourceFunc) terminal_profile_save, profile);
+  priv->save_idle_id = g_idle_add ((GSourceFunc) terminal_profile_save_idle_cb, profile);
 }
 
 static void
@@ -1365,8 +1375,6 @@ _terminal_profile_clone (TerminalProfile *base_profile,
     }
   while (terminal_app_get_profile_by_name (app, profile_name) != NULL);
  
-  g_print ("cloning... new name %s\n", profile_name);
-
   /* Now we have an unused profile name */
   pspecs = g_object_class_list_properties (G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (base_profile)), &n_pspecs);
   
@@ -1376,24 +1384,24 @@ _terminal_profile_clone (TerminalProfile *base_profile,
   for (i = 0; i < n_pspecs; ++i)
     {
       GParamSpec *pspec = pspecs[i];
+      GValue *value;
 
-      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE ||
+          (pspec->flags & G_PARAM_WRITABLE) == 0)
         continue;
 
-      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
-        continue;
+      params[n_params].name = pspec->name;
 
-      g_print ("pspec name %s\n", pspec->name);
-      g_value_init (&params[n_params].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      value = &params[n_params].value;
+      G_VALUE_TYPE (value) = 0;
+      g_value_init (value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+
       if (pspec->name == I_(TERMINAL_PROFILE_NAME))
-        {
-          g_print ("setting name %s\n", pspec->name);
-          g_value_set_static_string (&params[n_params].value, profile_name);
-        }
+        g_value_set_static_string (value, profile_name);
       else if (pspec->name == I_(TERMINAL_PROFILE_VISIBLE_NAME))
-        g_value_set_static_string (&params[n_params].value, visible_name);
+        g_value_set_static_string (value, visible_name);
       else
-        g_object_get_property (base_object, pspec->name, &params[n_params].value);
+        g_object_get_property (base_object, pspec->name, value);
 
       ++n_params;
     }
@@ -1407,23 +1415,23 @@ _terminal_profile_clone (TerminalProfile *base_profile,
 
   /* Flush the new profile to gconf */
   new_priv = new_profile->priv;
+
   g_slist_free (new_priv->dirty_pspecs);
+  new_priv->dirty_pspecs = NULL;
+
   for (i = 0; i < n_pspecs; ++i)
     {
       GParamSpec *pspec = pspecs[i];
 
-      if (pspec->owner_type != TERMINAL_TYPE_PROFILE)
-        continue;
-
-      if ((pspec->flags & G_PARAM_WRITABLE) == 0)
+      if (pspec->owner_type != TERMINAL_TYPE_PROFILE ||
+          (pspec->flags & G_PARAM_WRITABLE) == 0)
         continue;
 
       new_priv->dirty_pspecs = g_slist_prepend (new_priv->dirty_pspecs, pspec);
     }
   g_free (pspecs);
 
-  /* FIXMEchpe save immediately */
-  terminal_profile_schedule_save (new_profile, NULL);
+  terminal_profile_save (new_profile);
 
   return new_profile;
 }
