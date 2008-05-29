@@ -806,9 +806,9 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 
   app = terminal_app_get ();
   terminal_util_bind_object_property_to_widget (G_OBJECT (app), TERMINAL_APP_ENABLE_MNEMONICS,
-                                                disable_mnemonics_button, FLAG_INVERT_BOOL);
+                                                disable_mnemonics_button, 0);
   terminal_util_bind_object_property_to_widget (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_BAR_ACCEL,
-                                                disable_menu_accel_button, FLAG_INVERT_BOOL);
+                                                disable_menu_accel_button, 0);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
