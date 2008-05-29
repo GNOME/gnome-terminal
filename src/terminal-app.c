@@ -938,6 +938,7 @@ terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
 {
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *gconf_value;
+  gboolean enable;
 
   if (strcmp (gconf_entry_get_key (entry), ENABLE_MNEMONICS_KEY) != 0)
     return;
@@ -946,7 +947,11 @@ terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
   if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
     return;
 
-  app->enable_mnemonics = gconf_value_get_bool (gconf_value);
+  enable = gconf_value_get_bool (gconf_value);
+  if (enable == app->enable_mnemonics)
+    return;
+
+  app->enable_mnemonics = enable;
   g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MNEMONICS);
 }
 
@@ -958,6 +963,7 @@ terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
 {
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *gconf_value;
+  gboolean enable;
 
   if (strcmp (gconf_entry_get_key (entry), ENABLE_MENU_ACCELS_KEY) != 0)
     return;
@@ -966,7 +972,11 @@ terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
   if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
     return;
 
-  app->enable_menu_accels = gconf_value_get_bool (gconf_value);
+  enable = gconf_value_get_bool (gconf_value);
+  if (enable == app->enable_menu_accels)
+    return;
+
+  app->enable_menu_accels = enable;
   g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_ACCELS);
 }
 
@@ -1538,9 +1548,9 @@ terminal_app_finalize (GObject *object)
 
 static void
 terminal_app_get_property (GObject *object,
-                            guint prop_id,
-                            GValue *value,
-                            GParamSpec *pspec)
+                           guint prop_id,
+                           GValue *value,
+                           GParamSpec *pspec)
 {
   TerminalApp *app = TERMINAL_APP (object);
 
@@ -1568,12 +1578,40 @@ terminal_app_get_property (GObject *object,
 }
 
 static void
+terminal_app_set_property (GObject *object,
+                            guint prop_id,
+                            const GValue *value,
+                            GParamSpec *pspec)
+{
+  TerminalApp *app = TERMINAL_APP (object);
+
+  switch (prop_id)
+    {
+      case PROP_ENABLE_MENU_ACCELS:
+        app->enable_menu_accels = g_value_get_boolean (value);
+        gconf_client_set_bool (app->conf, ENABLE_MENU_ACCELS_KEY, app->enable_menu_accels, NULL);
+        break;
+      case PROP_ENABLE_MNEMONICS:
+        app->enable_mnemonics = g_value_get_boolean (value);
+        gconf_client_set_bool (app->conf, ENABLE_MNEMONICS_KEY, app->enable_mnemonics, NULL);
+        break;
+      case PROP_DEFAULT_PROFILE:
+      case PROP_SYSTEM_FONT:
+        /* not writable */
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
   object_class->get_property = terminal_app_get_property;
+  object_class->set_property = terminal_app_set_property;
 
   signals[QUIT] =
     g_signal_new (I_("quit"),
@@ -1598,14 +1636,14 @@ terminal_app_class_init (TerminalAppClass *klass)
      PROP_ENABLE_MENU_ACCELS,
      g_param_spec_boolean (TERMINAL_APP_ENABLE_MENU_ACCELS, NULL, NULL,
                            DEFAULT_ENABLE_MENU_ACCELS,
-                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
      PROP_ENABLE_MNEMONICS,
      g_param_spec_boolean (TERMINAL_APP_ENABLE_MNEMONICS, NULL, NULL,
                            DEFAULT_ENABLE_MNEMONICS,
-                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
