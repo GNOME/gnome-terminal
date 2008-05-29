@@ -1,8 +1,6 @@
-/* Accelerator stuff */
 /*
  * Copyright © 2001, 2002 Havoc Pennington, Red Hat Inc.
- *
- * This file is part of gnome-terminal.
+ * Copyright © 2008 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +18,13 @@
 
 #include <config.h>
 
-#include "terminal-intl.h"
+#include <string.h>
 
 #include "terminal-accels.h"
+#include "terminal-app.h"
+#include "terminal-intl.h"
 #include "terminal-profile.h"
 #include "terminal-util.h"
-#include "terminal-app.h"
-#include <string.h>
 
 #define D(x)
 
@@ -263,16 +261,13 @@ terminal_accels_init (void)
     {
       for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
-          const char *gconf_key;
-	  char *str;
-	  guint keyval;
-	  GdkModifierType mask;
 	  KeyEntry *key_entry;
 
 	  key_entry = &(all_entries[i].key_entry[j]);
 
-          gconf_key = key_from_gconf_key (key_entry->gconf_key);
-          g_hash_table_insert (gconf_key_to_entry, (gpointer) gconf_key, key_entry);
+          g_hash_table_insert (gconf_key_to_entry,
+                               (gpointer) key_from_gconf_key (key_entry->gconf_key),
+                               key_entry);
 
 	  key_entry->closure = g_closure_new_simple (sizeof (GClosure), key_entry);
 
@@ -282,38 +277,13 @@ terminal_accels_init (void)
 	  gtk_accel_group_connect_by_path (hack_group,
 					   key_entry->accel_path,
 					   key_entry->closure);
-      
-	  /* Copy from gconf to GTK */
 
-          key_entry->gconf_writable = gconf_client_key_is_writable (conf, key_entry->gconf_key, NULL);
-          if (!key_entry->gconf_writable)
-            gtk_accel_map_lock_path (key_entry->accel_path);
-
-	  str = gconf_client_get_string (conf, key_entry->gconf_key, NULL);
-	  if (binding_from_string (str, &keyval, &mask))
-	    {
-	      key_entry->gconf_keyval = keyval;
-	      key_entry->gconf_mask = mask;
-          
-	      gtk_accel_map_change_entry (key_entry->accel_path,
-					  keyval, mask,
-					  TRUE);
-	    }
-	  else
-	    {
-	      g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
-			  key_entry->gconf_key,
-			  str ? str : "(null)");
-	    }
-
-	  g_free (str);
+          gconf_client_notify (conf, key_entry->gconf_key);
 	}
     }
   
-  g_signal_connect (G_OBJECT (hack_group),
-                    "accel_changed",
-                    G_CALLBACK (accel_changed_callback),
-                    NULL);
+  g_signal_connect (hack_group, "accel_changed",
+                    G_CALLBACK (accel_changed_callback), NULL);
 }
 
 void
@@ -366,7 +336,6 @@ keys_change_notify (GConfClient *client,
   GdkModifierType mask;
   guint keyval;
   gboolean gconf_writable;
-  const char *gconf_key;
 
   D (g_print ("key %s changed\n", gconf_entry_get_key (entry)));
   
@@ -380,8 +349,7 @@ keys_change_notify (GConfClient *client,
      g_print (" changed to \"%s\"\n",
               gconf_value_get_string (val)));
 
-  gconf_key = key_from_gconf_key (gconf_entry_get_key (entry));
-  key_entry = g_hash_table_lookup (gconf_key_to_entry, gconf_key);
+  key_entry = g_hash_table_lookup (gconf_key_to_entry, key_from_gconf_key (gconf_entry_get_key (entry)));
   if (!key_entry)
     return; /* shouldn't really happen, but let's be safe */
 
