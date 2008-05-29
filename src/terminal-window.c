@@ -2415,7 +2415,8 @@ static void
 file_close_window_callback (GtkAction *action,
                             TerminalWindow *window)
 {
-  confirm_close_window (window);
+  if (!confirm_close_window (window))
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 static void
