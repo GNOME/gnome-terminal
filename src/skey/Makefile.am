@@ -19,15 +19,13 @@ libskey_la_SOURCES = \
 
 libskey_la_CPPFLAGS = \
 	-I$(srcdir)/.. \
+	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
 
 libskey_la_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLASG)
-
-# 	$(WARN_CFLAGS) \
-# 	$(DISABLE_DEPRECATED) \
-#
 
 libskey_la_LDFLAGS =
 
@@ -42,11 +40,12 @@ testskey_SOURCES = \
 
 testskey_CPPFLAGS = \
 	-I$(srcdir)/.. \
-	-DSKEY_MAIN \
+	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
 
 testskey_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
 testskey_LDFLAGS =
