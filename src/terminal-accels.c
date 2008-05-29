@@ -87,6 +87,7 @@ typedef struct
   GClosure *closure;
   /* have gotten a notification from gtk */
   gboolean needs_gconf_sync;
+  gboolean gconf_writable;
 } KeyEntry;
 
 typedef struct
@@ -99,65 +100,65 @@ typedef struct
 static KeyEntry file_entries[] =
 {
   { N_("New Tab"),
-    KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, NULL, FALSE },
+    KEY_NEW_TAB, ACCEL_PATH_NEW_TAB, 0, 0, NULL, FALSE, TRUE },
   { N_("New Window"),
-    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, NULL, FALSE },
+    KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, 0, 0, NULL, FALSE, TRUE },
   { N_("New Profile"),
-    KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE },
+    KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE, TRUE },
   { N_("Close Tab"),
-    KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, 0, 0, NULL, FALSE },
+    KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, 0, 0, NULL, FALSE, TRUE },
   { N_("Close Window"),
-    KEY_CLOSE_WINDOW, ACCEL_PATH_CLOSE_WINDOW, 0, 0, NULL, FALSE },
+    KEY_CLOSE_WINDOW, ACCEL_PATH_CLOSE_WINDOW, 0, 0, NULL, FALSE, TRUE },
 };
 
 static KeyEntry edit_entries[] =
 {
   { N_("Copy"),
-    KEY_COPY, ACCEL_PATH_COPY, 0, 0, NULL, FALSE },
+    KEY_COPY, ACCEL_PATH_COPY, 0, 0, NULL, FALSE, TRUE },
   { N_("Paste"),
-    KEY_PASTE, ACCEL_PATH_PASTE, 0, 0, NULL, FALSE },
+    KEY_PASTE, ACCEL_PATH_PASTE, 0, 0, NULL, FALSE, TRUE },
 };
 
 static KeyEntry view_entries[] =
 {
   { N_("Hide and Show menubar"),
-    KEY_TOGGLE_MENUBAR, ACCEL_PATH_TOGGLE_MENUBAR, 0, 0, NULL, FALSE },
+    KEY_TOGGLE_MENUBAR, ACCEL_PATH_TOGGLE_MENUBAR, 0, 0, NULL, FALSE, TRUE },
   { N_("Full Screen"),
-    KEY_FULL_SCREEN, ACCEL_PATH_FULL_SCREEN, 0, 0, NULL, FALSE },
+    KEY_FULL_SCREEN, ACCEL_PATH_FULL_SCREEN, 0, 0, NULL, FALSE, TRUE },
   { N_("Zoom In"),
-    KEY_ZOOM_IN, ACCEL_PATH_ZOOM_IN, 0, 0, NULL, FALSE },
+    KEY_ZOOM_IN, ACCEL_PATH_ZOOM_IN, 0, 0, NULL, FALSE, TRUE },
   { N_("Zoom Out"),
-    KEY_ZOOM_OUT, ACCEL_PATH_ZOOM_OUT, 0, 0, NULL, FALSE },
+    KEY_ZOOM_OUT, ACCEL_PATH_ZOOM_OUT, 0, 0, NULL, FALSE, TRUE },
   { N_("Normal Size"),
-    KEY_ZOOM_NORMAL, ACCEL_PATH_ZOOM_NORMAL, 0, 0, NULL, FALSE }
+    KEY_ZOOM_NORMAL, ACCEL_PATH_ZOOM_NORMAL, 0, 0, NULL, FALSE, TRUE }
 };
 
 static KeyEntry terminal_entries[] =
 {
   { N_("Set Title"),
-    KEY_SET_TERMINAL_TITLE, ACCEL_PATH_SET_TERMINAL_TITLE, 0, 0, NULL, FALSE },
+    KEY_SET_TERMINAL_TITLE, ACCEL_PATH_SET_TERMINAL_TITLE, 0, 0, NULL, FALSE, TRUE },
   { N_("Reset"),
-    KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE },
+    KEY_RESET, ACCEL_PATH_RESET, 0, 0, NULL, FALSE, TRUE },
   { N_("Reset and Clear"),
-    KEY_RESET_AND_CLEAR, ACCEL_PATH_RESET_AND_CLEAR, 0, 0, NULL, FALSE },
+    KEY_RESET_AND_CLEAR, ACCEL_PATH_RESET_AND_CLEAR, 0, 0, NULL, FALSE, TRUE },
 };
 
 static KeyEntry go_entries[] =
 {
   { N_("Switch to Previous Tab"),
-    KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE },
+    KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE, TRUE },
   { N_("Switch to Next Tab"),
-    KEY_NEXT_TAB, ACCEL_PATH_NEXT_TAB, 0, 0, NULL, FALSE },
+    KEY_NEXT_TAB, ACCEL_PATH_NEXT_TAB, 0, 0, NULL, FALSE, TRUE },
   { N_("Move Tab to the Left"),
-    KEY_MOVE_TAB_LEFT, ACCEL_PATH_MOVE_TAB_LEFT, 0, 0, NULL, FALSE },
+    KEY_MOVE_TAB_LEFT, ACCEL_PATH_MOVE_TAB_LEFT, 0, 0, NULL, FALSE, TRUE },
   { N_("Move Tab to the Right"),
-    KEY_MOVE_TAB_RIGHT, ACCEL_PATH_MOVE_TAB_RIGHT, 0, 0, NULL, FALSE },
+    KEY_MOVE_TAB_RIGHT, ACCEL_PATH_MOVE_TAB_RIGHT, 0, 0, NULL, FALSE, TRUE },
   { N_("Detach Tab"),
-    KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, 0, 0, NULL, FALSE },
+    KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, 0, 0, NULL, FALSE, TRUE },
 };
 
 static KeyEntry help_entries[] = {
-  { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, 0, 0, NULL, FALSE}
+  { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, 0, 0, NULL, FALSE, TRUE }
 };
 
 static KeyEntryList all_entries[] =
@@ -186,6 +187,7 @@ enum
  * if the value is unchanged from last known.
  * The short-circuit is also required because of:
  *  http://bugzilla.gnome.org/show_bug.cgi?id=73082
+ *  FIXMEchpe at least that last reason isn't valid anymore
  *
  *  We have to keep our own hash of the current values in order to
  *  do this short-circuit stuff.
@@ -242,7 +244,7 @@ terminal_accels_init (void)
 
   hack_group = gtk_accel_group_new ();
 
-  for (i = 0; i <G_N_ELEMENTS (all_entries); ++i)
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
@@ -263,10 +265,10 @@ terminal_accels_init (void)
 					   key_entry->closure);
       
 	  /* Copy from gconf to GTK */
-      
-	  /* FIXME handle whether the entry is writable
-	   *  http://bugzilla.gnome.org/show_bug.cgi?id=73207
-	   */
+
+          ke_entry->gconf_writable = gconf_client_key_is_writable (conf, key_entry->gconf_key, NULL);
+          if (!key_entry->gconf_writable)
+            gtk_accel_map_lock_path (key_entry->accel_path);
 
 	  str = gconf_client_get_string (conf, key_entry->gconf_key, NULL);
 	  if (binding_from_string (str, &keyval, &mask))
@@ -336,10 +338,6 @@ keys_change_notify (GConfClient *client,
   GdkModifierType mask;
   guint keyval;
 
-  /* FIXME handle whether the entry is writable
-   *  http://bugzilla.gnome.org/show_bug.cgi?id=73207
-   */
-
   D (g_print ("key %s changed\n", gconf_entry_get_key (entry)));
   
   val = gconf_entry_get_value (entry);
@@ -351,27 +349,37 @@ keys_change_notify (GConfClient *client,
      else
      g_print (" changed to \"%s\"\n",
               gconf_value_get_string (val)));
-  
+
   if (binding_from_value (val, &keyval, &mask))
     {
       int i;
 
-      i = 0;
-      while (i < (int) G_N_ELEMENTS (all_entries))
+      for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
         {
 	  int j;
 
-	  j = 0;
-	  while (j < all_entries[i].n_elements)
+          for (j = 0; j < all_entries[i].n_elements; ++j)
 	    {
 	      KeyEntry *key_entry;
 
 	      key_entry = &(all_entries[i].key_entry[j]);
 	      if (strcmp (key_entry->gconf_key, gconf_entry_get_key (entry)) == 0)
 		{
+                  gboolean gconf_writable;
+
 		  /* found it */
 		  key_entry->gconf_keyval = keyval;
 		  key_entry->gconf_mask = mask;
+
+                  gconf_writable = gconf_entry_get_is_writable (entry);
+                  if (gconf_writable != key_entry->gconf_writable)
+                    {
+                      if (gconf_writable)
+                        gtk_accel_map_unlock_path (key_entry->accel_path);
+                      else
+                        gtk_accel_map_lock_path (key_entry->accel_path);
+                    }
+                  key_entry->gconf_writable = gconf_writable;
 
 		  /* sync over to GTK */
 		  D (g_print ("changing path %s to %s\n",
@@ -393,9 +401,7 @@ keys_change_notify (GConfClient *client,
               
 		  break;
 		}
-	      ++j;
 	    }
-	  ++i;
         }
     }
 }
@@ -427,13 +433,11 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
       return;
     }
 
-  i = 0;
-  while (i < (int) G_N_ELEMENTS (all_entries))
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       int j;
 
-      j = 0;
-      while (j < all_entries[i].n_elements)
+      for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
 	  KeyEntry *key_entry;
 
@@ -445,9 +449,7 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
 	      queue_gconf_sync ();
 	      break;
 	    }
-	  j++;
 	}
-      ++i;
     }
 }
 
@@ -524,12 +526,9 @@ sync_handler (gpointer data)
 
   conf = gconf_client_get_default ();
 
-  i = 0;
-  while (i < (int) G_N_ELEMENTS (all_entries))
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
-      j = 0;
-
-      while (j < all_entries[i].n_elements)
+      for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
 	  KeyEntry *key_entry;
 
@@ -576,10 +575,8 @@ sync_handler (gpointer data)
 		    }
 		}
 	    }
-	  ++j;
 	}
-      ++i;
-    }  
+    }
   
               
   g_object_unref (conf);
@@ -620,8 +617,10 @@ accel_set_func (GtkTreeViewColumn *tree_column,
   else
     g_object_set (cell,
                   "visible", TRUE,
-		  "accel-key", ke->gconf_keyval,
-		  "accel-mods", ke->gconf_mask,
+                  "sensitive", ke->gconf_writable,
+                  "editable", ke->gconf_writable,
+                  "accel-key", ke->gconf_keyval,
+                  "accel-mods", ke->gconf_mask,
 		  NULL);
 }
 
