@@ -266,7 +266,7 @@ terminal_accels_init (void)
       
 	  /* Copy from gconf to GTK */
 
-          ke_entry->gconf_writable = gconf_client_key_is_writable (conf, key_entry->gconf_key, NULL);
+          key_entry->gconf_writable = gconf_client_key_is_writable (conf, key_entry->gconf_key, NULL);
           if (!key_entry->gconf_writable)
             gtk_accel_map_lock_path (key_entry->accel_path);
 
@@ -518,6 +518,8 @@ static gboolean
 sync_handler (gpointer data)
 {
   GConfClient *conf;
+  GConfChangeSet *changeset;
+  GError *error = NULL;
   int i, j;
 
   D (g_print ("gconf sync handler\n"));
@@ -525,6 +527,8 @@ sync_handler (gpointer data)
   sync_idle = 0;
 
   conf = gconf_client_get_default ();
+
+  changeset = gconf_change_set_new ();
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
@@ -548,7 +552,6 @@ sync_handler (gpointer data)
 	      if (gtk_key.accel_key != key_entry->gconf_keyval ||
 		  gtk_key.accel_mods != key_entry->gconf_mask)
 		{
-		  GError *err;
 		  char *accel_name;
 
 		  accel_name = binding_name (gtk_key.accel_key,
@@ -557,28 +560,20 @@ sync_handler (gpointer data)
 
 		  D (g_print ("Setting gconf key %s to \"%s\"\n",
 			      key_entry->gconf_key, accel_name));
-              
-		  err = NULL;
-		  gconf_client_set_string (conf,
-					   key_entry->gconf_key,
-					   accel_name,
-					   &err);
-
+                  gconf_change_set_set_string (changeset,  key_entry->gconf_key, accel_name);
 		  g_free (accel_name);
-              
-		  if (err != NULL)
-		    {
-		      g_printerr (_("Error propagating accelerator change to configuration database: %s\n"),
-				  err->message);
-
-		      g_error_free (err);
-		    }
 		}
 	    }
 	}
     }
-  
               
+  if (!gconf_client_commit_change_set (conf, changeset, TRUE, &error))
+    {
+      g_printerr ("Error committing the accelerator changeset: %s\n", error->message);
+      g_error_free (error);
+    }
+              
+  gconf_change_set_unref (changeset);
   g_object_unref (conf);
 
   return FALSE;
