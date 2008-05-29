@@ -204,10 +204,6 @@ static gboolean binding_from_value  (GConfValue       *value,
                                      guint           *accelerator_key,
                                      GdkModifierType *accelerator_mods);
 
-static char*    binding_name        (guint            keyval,
-                                     GdkModifierType  mask,
-                                     gboolean         translate);
-
 static gboolean sync_idle_cb (gpointer data);
 
 static guint sync_idle_id = 0;
@@ -217,6 +213,26 @@ static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
 static guint gconf_notify_id;
 static GHashTable *gconf_key_to_entry;
+
+static char*
+binding_name (guint            keyval,
+              GdkModifierType  mask)
+{
+  if (keyval != 0)
+    return gtk_accelerator_name (keyval, mask);
+
+  return g_strdup ("disabled");
+}
+
+static char*
+binding_display_name (guint            keyval,
+                      GdkModifierType  mask)
+{
+  if (keyval != 0)
+    return gtk_accelerator_get_label (keyval, mask);
+    
+  return g_strdup (_("Disabled"));
+}
 
 static const char *
 key_from_gconf_key (const char *gconf_key)
@@ -369,7 +385,7 @@ keys_change_notify (GConfClient *client,
   /* sync over to GTK */
   D (g_print ("changing path %s to %s\n",
               key_entry->accel_path,
-              binding_name (keyval, mask, FALSE))); /* memleak */
+              binding_name (keyval, mask))); /* memleak */
   inside_gconf_notify += 1;
   gtk_accel_map_change_entry (key_entry->accel_path,
                               keyval, mask,
@@ -395,7 +411,7 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
   KeyEntry *key_entry;
   
   D (g_print ("Changed accel %s closure %p\n",
-              binding_name (keyval, modifier, FALSE), /* memleak */
+              binding_name (keyval, modifier), /* memleak */
               accel_closure));
 
   if (inside_gconf_notify)
@@ -455,17 +471,6 @@ binding_from_value (GConfValue       *value,
                               accelerator_mods);
 }
 
-static char*
-binding_name (guint            keyval,
-              GdkModifierType  mask,
-              gboolean         translate)
-{
-  if (keyval != 0)
-    return gtk_accelerator_name (keyval, mask);
-  else
-    return translate ? g_strdup (_("Disabled")) : g_strdup ("disabled");
-}
-
 static void
 add_key_entry_to_changeset (gpointer key,
                             KeyEntry *key_entry,
@@ -484,7 +489,7 @@ add_key_entry_to_changeset (gpointer key,
     {
       char *accel_name;
 
-      accel_name = binding_name (gtk_key.accel_key, gtk_key.accel_mods, FALSE);
+      accel_name = binding_name (gtk_key.accel_key, gtk_key.accel_mods);
       gconf_change_set_set_string (changeset,  key_entry->gconf_key, accel_name);
       g_free (accel_name);
     }
@@ -573,9 +578,8 @@ accel_compare_func (GtkTreeModel *model,
     }
   else
     {
-      name_a = binding_name (ke_a->gconf_keyval,
-			     ke_a->gconf_mask,
-			     TRUE);
+      name_a = binding_display_name (ke_a->gconf_keyval,
+                                     ke_a->gconf_mask);
     }
 
   gtk_tree_model_get (model, b,
@@ -589,9 +593,8 @@ accel_compare_func (GtkTreeModel *model,
     }
   else
     {
-      name_b = binding_name (ke_b->gconf_keyval,
-			     ke_b->gconf_mask,
-			     TRUE);
+      name_b = binding_display_name (ke_b->gconf_keyval,
+                                     ke_b->gconf_mask);
     }
   
   result = g_utf8_collate (name_a, name_b);
@@ -707,7 +710,7 @@ accel_edited_callback (GtkCellRendererAccel *cell,
         }
     }
 
-  str = binding_name (keyval, mask, FALSE);
+  str = binding_name (keyval, mask);
 
   D (g_print ("Edited keyval %s, setting gconf to %s\n",
               gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
@@ -756,7 +759,7 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
   ke->gconf_mask = 0;
   ke->needs_gconf_sync = TRUE;
 
-  str = binding_name (0, 0, FALSE);
+  str = binding_name (0, 0);
   D (g_print ("Cleared keybinding for gconf %s", ke->gconf_key));
 
   conf = gconf_client_get_default ();
@@ -816,7 +819,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   cell_renderer = gtk_cell_renderer_accel_new ();
   g_object_set (cell_renderer,
                 "editable", TRUE,
-                "accel_mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
+                "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                 NULL);
   g_signal_connect (cell_renderer, "accel-edited",
                     G_CALLBACK (accel_edited_callback), tree_view);
