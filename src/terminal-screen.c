@@ -270,7 +270,7 @@ terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
 
   screen = gtk_widget_get_screen (widget);
   if (previous_screen != NULL &&
-      (screen != previous_screen || screen == NULL)) {
+      screen != previous_screen) {
     settings = gtk_settings_get_for_screen (previous_screen);
     g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
                                           0, 0, NULL, NULL,
@@ -281,7 +281,7 @@ terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->screen_changed (widget, previous_screen);
   }
 
-  if (screen == previous_screen)
+  if (screen == previous_screen || screen == NULL)
     return;
 
   settings = gtk_widget_get_settings (widget);
