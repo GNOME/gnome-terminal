@@ -1141,7 +1141,9 @@ get_child_environment (TerminalScreen *screen)
 {
   GtkWidget *term;
   char **env, **p, **retval;
-  gint i;
+  char *proxymode, *proxyhost;
+  gboolean use_proxy;
+  int i;
   GConfClient *conf;
 #define EXTRA_ENV_VARS 8
 
@@ -1188,8 +1190,27 @@ get_child_environment (TerminalScreen *screen)
   
   conf = gconf_client_get_default ();
 
-  if (!getenv ("http_proxy") &&
-      gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy", NULL))
+  /* Series of conditions under which we don't set http_proxy */
+  use_proxy = gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy", NULL);
+
+  /* Is the mode unset or not equal to "manual"? */
+  proxymode = gconf_client_get_string (conf, "/system/proxy/mode", NULL);
+  if (!proxymode || strcmp (proxymode, "manual") != 0)
+    use_proxy = FALSE;
+  g_free (proxymode);
+
+  /* Do we already have a proxy setting? */
+  if (getenv ("http_proxy"))
+    use_proxy = FALSE;
+
+  /* Do we have no proxy host or an empty string? */
+  proxyhost = gconf_client_get_string (conf, HTTP_PROXY_DIR "/host", NULL);
+  if (!proxyhost || proxyhost[0] == '\0')
+    use_proxy = FALSE;
+  g_free (proxyhost);
+
+  /* Set up proxy environment variables if we passed all of the above */
+  if (use_proxy)
     {
       gint port;
       GSList *ignore;
