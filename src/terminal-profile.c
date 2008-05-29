@@ -833,7 +833,7 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       g_string_free (string, TRUE);
     }
   else
-    g_print ("Unhandled value type %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+    g_print ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
 }
 
 static gboolean
@@ -869,13 +869,8 @@ terminal_profile_save (TerminalProfile *profile)
       g_warning ("Failed to commit the changeset to gconf: %s", error->message);
       g_error_free (error);
     }
-  else
-    g_print ("Successfully committed the changeset to gconf!\n");
 
   gconf_change_set_unref (changeset);
-
-  if (priv->save_idle_id != 0)
-    g_warning ("ATTENTION! Committing the changeset seems to have dirtied some pspecs!??\n");
 
   return FALSE; /* don't run again */
 }
