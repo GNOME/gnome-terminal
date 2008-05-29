@@ -1145,13 +1145,7 @@ main (int argc, char **argv)
   display_name = gdk_display_get_name (display);
   parsing_results->display_name = g_strdup (display_name);
   
-
   option_parsing_results_apply_directory_defaults (parsing_results);
-  
-  gtk_rc_parse_string ("style \"hig-dialog\" {\n"
-                         "GtkDialog::action-area-border = 0\n"
-                         "GtkDialog::button-spacing = 12\n"
-                         "}\n");
 
   use_factory = parsing_results->use_factory;
   if (use_factory)
