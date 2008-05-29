@@ -20,7 +20,6 @@
 
 #include <config.h>
 
-#include "terminal-widget.h"
 #include "terminal-screen-container.h"
 
 #define SCREEN_DATA_KEY    "TSC::Screen"

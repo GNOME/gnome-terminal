@@ -37,7 +37,6 @@
 
 #include "terminal-accels.h"
 #include "terminal-window.h"
-#include "terminal-widget.h"
 #include "terminal-profile.h"
 #include "terminal-screen-container.h"
 #include "terminal.h"

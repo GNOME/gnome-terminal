@@ -22,7 +22,7 @@
 #include "terminal-intl.h"
 
 #include "terminal.h"
-#include "terminal-widget.h"
+#include "terminal-screen.h"
 #include "skey-popup.h"
 #include <glade/glade.h>
 #include "skey/skey.h"

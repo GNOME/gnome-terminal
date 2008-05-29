@@ -31,7 +31,6 @@
 #include "terminal.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
-#include "terminal-widget.h"
 #include "profile-editor.h"
 #include "encoding.h"
 #include <gconf/gconf-client.h>

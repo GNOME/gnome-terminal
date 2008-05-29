@@ -24,7 +24,6 @@
 #include "terminal-intl.h"
 
 #include "terminal-accels.h"
-#include "terminal-widget.h"
 #include "terminal-window.h"
 #include "terminal-screen-container.h"
 #include "terminal-tabs-menu.h"

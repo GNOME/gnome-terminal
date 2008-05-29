@@ -32,7 +32,6 @@
 #include <libgnomeui/gnome-thumbnail.h>
 #include <string.h>
 #include <math.h>
-#include "terminal-widget.h"
 
 /* One slot in the ring buffer, plus the array which holds the data for
   * the line, plus about 80 vte_charcell structures. */
