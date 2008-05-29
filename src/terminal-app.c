@@ -1276,31 +1276,6 @@ manage_profiles_destroyed_callback (GtkWidget   *manage_profiles_dialog,
 }
 
 static void
-fix_button_align (GtkWidget *button)
-{
-  GtkWidget *child;
-  GtkWidget *alignment;
-
-  child = gtk_bin_get_child (GTK_BIN (button));
-
-  g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (button), child);
-
-  alignment = gtk_alignment_new (0.0, 0.5, 1.0, 1.0);
-  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 12);
-
-  gtk_container_add (GTK_CONTAINER (alignment), child);
-  g_object_unref (child);
-
-  gtk_container_add (GTK_CONTAINER (button), alignment);
-
-  if (GTK_IS_ALIGNMENT (child) || GTK_IS_LABEL (child))
-    {
-      g_object_set (G_OBJECT (child), "xalign", 0.0, NULL);
-    }
-}
-
-static void
 count_selected_profiles_func (GtkTreeModel      *model,
                               GtkTreePath       *path,
                               GtkTreeIter       *iter,
@@ -1349,167 +1324,84 @@ void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
 {
-  GtkWindow *old_transient_parent;
+  char *ui_filename;
+  GtkBuilder *builder;
+  GObject *dialog;
+  GObject *tree_view_container, *new_button, *edit_button, *remove_button;
+  GObject *default_hbox, *default_label;
+  GtkTreeSelection *selection;
 
-  if (app->manage_profiles_dialog == NULL)
+  if (app->manage_profiles_dialog)
     {
-      GtkWidget *main_vbox;
-      GtkWidget *vbox;
-      GtkWidget *label;
-      GtkWidget *sw;
-      GtkWidget *hbox;
-      GtkWidget *button;
-      GtkWidget *spacer;
-      GtkRequisition req;
-      GtkSizeGroup *size_group;
-      GtkTreeSelection *selection;
-      
-      old_transient_parent = NULL;
-      
-      app->manage_profiles_dialog =
-        gtk_dialog_new_with_buttons (_("Profiles"),
-                                     NULL,
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_STOCK_HELP,
-                                     GTK_RESPONSE_HELP,
-                                     GTK_STOCK_CLOSE,
-                                     GTK_RESPONSE_ACCEPT,
-                                     NULL);
-      gtk_dialog_set_default_response (GTK_DIALOG (app->manage_profiles_dialog),
-                                       GTK_RESPONSE_ACCEPT);
-      g_signal_connect (GTK_DIALOG (app->manage_profiles_dialog),
-                        "response",
-                        G_CALLBACK (manage_profiles_response_cb),
-                        app);
+      gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog), transient_parent);
+      gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
+      return;
+    }
 
-      g_signal_connect (G_OBJECT (app->manage_profiles_dialog),
-                        "destroy",
-                        G_CALLBACK (manage_profiles_destroyed_callback),
-                        app);
+  builder = gtk_builder_new ();
 
-      terminal_util_set_unique_role (GTK_WINDOW (app->manage_profiles_dialog), "gnome-terminal-profile-manager");
+  ui_filename = g_build_filename (TERM_PKGDATADIR, "profile-manager.ui", NULL);
+  gtk_builder_add_from_file (builder, ui_filename, NULL);
+  g_free (ui_filename);
 
-      gtk_widget_set_name (app->manage_profiles_dialog, "profile-manager-dialog");
-      gtk_rc_parse_string ("widget \"profile-manager-dialog\" style \"hig-dialog\"\n");
+  dialog = gtk_builder_get_object (builder, "profile-manager");
+  tree_view_container = gtk_builder_get_object (builder, "profiles-treeview-container");
+  new_button = gtk_builder_get_object (builder, "new-profile-button");
+  edit_button = gtk_builder_get_object (builder, "edit-profile-button");
+  remove_button = gtk_builder_get_object (builder, "delete-profile-button");
+  default_hbox = gtk_builder_get_object (builder, "default-profile-hbox");
+  default_label = gtk_builder_get_object (builder, "default-profile-label");
 
-      gtk_dialog_set_has_separator (GTK_DIALOG (app->manage_profiles_dialog), FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (app->manage_profiles_dialog), 10);
-      gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (app->manage_profiles_dialog)->vbox), 12);
+  app->manage_profiles_dialog = GTK_WIDGET (dialog);
+  app->manage_profiles_new_button = GTK_WIDGET (new_button);
+  app->manage_profiles_edit_button = GTK_WIDGET (edit_button);
+  app->manage_profiles_delete_button  = GTK_WIDGET (remove_button);
 
-      main_vbox = gtk_vbox_new (FALSE, 12);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (app->manage_profiles_dialog)->vbox), main_vbox, TRUE, TRUE, 0);
-     
-      // the top thing
-      hbox = gtk_hbox_new (FALSE, 12);
-      gtk_box_pack_start (GTK_BOX (main_vbox), hbox, TRUE, TRUE, 0);
-      
-      vbox = gtk_vbox_new (FALSE, 6);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
+  g_signal_connect (dialog, "response", G_CALLBACK (manage_profiles_response_cb), app);
+  g_signal_connect (dialog, "destroy", G_CALLBACK (manage_profiles_destroyed_callback), app);
 
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-      
-      label = gtk_label_new_with_mnemonic (_("_Profiles:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-      gtk_size_group_add_widget (size_group, label);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  app->manage_profiles_list = profile_list_treeview_create (app);
+  g_signal_connect (app->manage_profiles_list, "row-activated",
+                    G_CALLBACK (profile_list_row_activated_cb), app);
+  gtk_container_add (GTK_CONTAINER (tree_view_container), app->manage_profiles_list);
+  gtk_widget_show (app->manage_profiles_list);
 
-      app->manage_profiles_list = profile_list_treeview_create (app);
-      g_signal_connect (app->manage_profiles_list, "row-activated",
-                        G_CALLBACK (profile_list_row_activated_cb), NULL);
-      
-      sw = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
-      gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
-      gtk_container_add (GTK_CONTAINER (sw), app->manage_profiles_list);      
-      
-      gtk_dialog_set_default_response (GTK_DIALOG (app->manage_profiles_dialog), RESPONSE_CREATE);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), app->manage_profiles_list);
-
-      vbox = gtk_vbox_new (FALSE, 6);
-      gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
-
-      spacer = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-      gtk_size_group_add_widget (size_group, spacer);      
-      gtk_box_pack_start (GTK_BOX (vbox), spacer, FALSE, FALSE, 0);
-      
-      button = gtk_button_new_from_stock (GTK_STOCK_NEW);
-      fix_button_align (button);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-                        G_CALLBACK (profile_list_new_button_clicked_cb),
-                        app->manage_profiles_list);
-      app->manage_profiles_new_button = button;
-      terminal_util_set_atk_name_description (app->manage_profiles_new_button, NULL,                             
-                                              _("Click to open new profile dialog"));
-      
-      button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
-      fix_button_align (button);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-                        G_CALLBACK (profile_list_edit_button_clicked_cb),
-                        app->manage_profiles_list);
-      app->manage_profiles_edit_button = button;
-      terminal_util_set_atk_name_description (app->manage_profiles_edit_button, NULL,                            
-                                              _("Click to open edit profile dialog"));
-      
-      button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
-      fix_button_align (button);
-      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-      g_signal_connect (button, "clicked",
-                        G_CALLBACK (profile_list_delete_button_clicked_cb),
-                        app->manage_profiles_list);
-      app->manage_profiles_delete_button = button;
-      terminal_util_set_atk_name_description (app->manage_profiles_delete_button, NULL,                          
-                                              _("Click to delete selected profile"));
-      // bottom line
-      hbox = gtk_hbox_new (FALSE, 12);
-      gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
-
-      label = gtk_label_new_with_mnemonic (_("Profile _used when launching a new terminal:"));
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  g_signal_connect (new_button, "clicked",
+                    G_CALLBACK (profile_list_new_button_clicked_cb),
+                    app->manage_profiles_list);   
+  g_signal_connect (edit_button, "clicked",
+                    G_CALLBACK (profile_list_edit_button_clicked_cb),
+                    app->manage_profiles_list);
+  g_signal_connect (remove_button, "clicked",
+                    G_CALLBACK (profile_list_delete_button_clicked_cb),
+                    app->manage_profiles_list);
             
-      app->manage_profiles_default_menu = profile_combo_box_new ();
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), app->manage_profiles_default_menu);
-      g_signal_connect (app->manage_profiles_default_menu, "changed",
-                        G_CALLBACK (profile_combo_box_changed_cb), app);
-      monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
-      gtk_box_pack_start (GTK_BOX (hbox), app->manage_profiles_default_menu, TRUE, TRUE, 0);
- 
-      /* Set default size of profile list */
-      gtk_window_set_geometry_hints (GTK_WINDOW (app->manage_profiles_dialog),
-                                     app->manage_profiles_list,
-                                     NULL, 0);
+  app->manage_profiles_default_menu = profile_combo_box_new ();
+  g_signal_connect (app->manage_profiles_default_menu, "changed",
+                    G_CALLBACK (profile_combo_box_changed_cb), app);
 
-      /* Incremental reflow makes this a bit useless, I guess. */
-      gtk_widget_size_request (app->manage_profiles_list, &req);
-      gtk_window_set_default_size (GTK_WINDOW (app->manage_profiles_dialog),
-                                   MIN (req.width + 140, 450),
-                                   MIN (req.height + 190, 400));
+  gtk_box_pack_start (GTK_BOX (default_hbox), app->manage_profiles_default_menu, FALSE, FALSE, 0);
+  gtk_widget_show (app->manage_profiles_default_menu);
 
-      gtk_widget_grab_focus (app->manage_profiles_list);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), app->manage_profiles_default_menu);
 
-      g_object_unref (G_OBJECT (size_group));
+  monitor_profiles_for_is_default_change (app->manage_profiles_default_menu);
+      
+  gtk_widget_grab_focus (app->manage_profiles_list);
 
-      /* Monitor selection for sensitivity */
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
-      selection_changed_callback (selection, app);
-      g_signal_connect (G_OBJECT (selection), "changed", G_CALLBACK (selection_changed_callback), app);
-    }
-  else 
-    {
-      old_transient_parent = gtk_window_get_transient_for (GTK_WINDOW (app->manage_profiles_dialog));
-    }
-  
-  if (old_transient_parent != transient_parent)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog),
-                                    transient_parent);
-      gtk_widget_hide (app->manage_profiles_dialog); /* re-show the window on its new parent */
-    }
-  
-  gtk_widget_show_all (app->manage_profiles_dialog);
+  /* Monitor selection for sensitivity */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (app->manage_profiles_list));
+  selection_changed_callback (selection, app);
+  g_signal_connect (selection, "changed", G_CALLBACK (selection_changed_callback), app);
+
+  gtk_window_set_transient_for (GTK_WINDOW (app->manage_profiles_dialog),
+                                transient_parent);
+
+  gtk_window_set_default_size (GTK_WINDOW (app->manage_profiles_dialog), 450, 300);
+
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
+
+  g_object_unref (builder);
 }
 
 static void

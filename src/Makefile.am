@@ -88,7 +88,9 @@ schema_DATA = gnome-terminal.schemas
 
 uidir = $(pkgdatadir)
 ui_DATA = \
-	terminal.ui
+	terminal.ui \
+	profile-manager.ui \
+	$(NULL)
 
 CLEANFILES = \
 	gnome-terminal.schemas \
