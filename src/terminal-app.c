@@ -1186,7 +1186,7 @@ terminal_app_get_clone_command (TerminalApp *app,
                                 int         *argcp,
                                 char      ***argvp)
 {
-  GList *tmp;
+  GList *lw;
   GPtrArray* args;
   
   args = g_ptr_array_new ();
@@ -1194,26 +1194,22 @@ terminal_app_get_clone_command (TerminalApp *app,
    g_ptr_array_add (args, g_strdup (EXECUTABLE_NAME));
 
   if (!app->use_factory)
-    {
-       g_ptr_array_add (args, g_strdup ("--disable-factory"));
-    }
+    g_ptr_array_add (args, g_strdup ("--disable-factory"));
 
-  tmp = app->windows;
-  while (tmp != NULL)
+  for (lw = app->windows; l != NULL; l = l->next)
     {
       GList *tabs;
-      GList *tmp2;
-      TerminalWindow *window = tmp->data;
+      GList *lt;
+      TerminalWindow *window = lw->data;
       TerminalScreen *active_screen;
 
       active_screen = terminal_window_get_active (window);
       
       tabs = terminal_window_list_screens (window);
 
-      tmp2 = tabs;
-      while (tmp2 != NULL)
+      for (lt = tabs; lt != NULL; lt = lt->next)
         {
-          TerminalScreen *screen = tmp2->data;
+          TerminalScreen *screen = lt->data;
           const char *profile_id;
           const char **override_command;
           const char *title;
@@ -1222,7 +1218,7 @@ terminal_app_get_clone_command (TerminalApp *app,
           profile_id = terminal_profile_get_property_string (terminal_screen_get_profile (screen),
                                                              TERMINAL_PROFILE_NAME);
           
-          if (tmp2 == tabs)
+          if (lt == tabs)
             {
                g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
                                                      profile_id));
@@ -1232,7 +1228,7 @@ terminal_app_get_clone_command (TerminalApp *app,
                  g_ptr_array_add (args, g_strdup ("--hide-menubar"));
 
                g_ptr_array_add (args, g_strdup_printf ("--role=%s",
-                                                     gtk_window_get_role (GTK_WINDOW (window))));
+                                                       gtk_window_get_role (GTK_WINDOW (window))));
             }
           else
             {
@@ -1285,6 +1281,7 @@ terminal_app_get_clone_command (TerminalApp *app,
           }
 
           zoom = terminal_screen_get_font_scale (screen);
+          /* FIXMEchpe this looks wrong... */
           if (zoom < -1e-6 || zoom > 1e-6) /* if not 1.0 */
             {
               char buf[G_ASCII_DTOSTR_BUF_SIZE];
@@ -1294,13 +1291,9 @@ terminal_app_get_clone_command (TerminalApp *app,
               g_ptr_array_add (args, g_strdup ("--zoom"));
               g_ptr_array_add (args, g_strdup (buf));
             }
-          
-          tmp2 = tmp2->next;
         }
       
       g_list_free (tabs);
-      
-      tmp = tmp->next;
     }
 
   /* final NULL */
