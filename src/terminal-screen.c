@@ -115,8 +115,6 @@ static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal
 static void terminal_screen_widget_child_died        (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
-static void terminal_screen_setup_dnd                (TerminalScreen *screen);
-
 static void update_color_scheme                      (TerminalScreen *screen);
 
 static gboolean cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_title);
@@ -307,7 +305,18 @@ static void size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 static void
 terminal_screen_init (TerminalScreen *screen)
 {
+  const GtkTargetEntry target_table[] = {
+    { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
+    { "application/x-color", 0, TARGET_COLOR },
+    { "property/bgimage",    0, TARGET_BGIMAGE },
+    { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
+    { "text/x-moz-url",  0, TARGET_MOZ_URL },
+    { "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
+  };
   TerminalScreenPrivate *priv;
+  GtkTargetList *target_list;
+  GtkTargetEntry *targets;
+  int n_targets;
 
   priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
 
@@ -348,7 +357,27 @@ terminal_screen_init (TerminalScreen *screen)
 			     "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
 			     "@[" HOSTCHARS ".]+(:[0-9]+)?\\>", FLAVOR_AS_IS);
 
-  terminal_screen_setup_dnd (screen);
+  /* Setup DND */
+  target_list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_table (target_list, target_table, G_N_ELEMENTS (target_table));
+  gtk_target_list_add_text_targets (target_list, 0);
+  gtk_target_list_add_uri_targets (target_list, 0);
+
+  targets = gtk_target_table_new_from_list (target_list, &n_targets);
+
+  gtk_drag_dest_set (GTK_WIDGET (screen),
+                     GTK_DEST_DEFAULT_MOTION |
+                     GTK_DEST_DEFAULT_HIGHLIGHT |
+                     GTK_DEST_DEFAULT_DROP,
+                     targets, n_targets,
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+
+  gtk_target_table_free (targets, n_targets);
+  gtk_target_list_unref (target_list);
+
+  g_signal_connect (screen, "drag_data_received",
+                    G_CALLBACK (drag_data_received),
+                    screen);
 
   g_signal_connect (screen,
                     "realize",
@@ -1812,15 +1841,13 @@ terminal_screen_edit_title (TerminalScreen *screen,
 enum
 {
   TARGET_URI_LIST,
-  TARGET_UTF8_STRING,
   TARGET_TEXT,
-  TARGET_COMPOUND_TEXT,
-  TARGET_STRING,
   TARGET_COLOR,
   TARGET_BGIMAGE,
   TARGET_RESET_BG,
   TARGET_TEXT_PLAIN,
   TARGET_MOZ_URL,
+  TARGET_NETSCAPE_URL,
   TARGET_TAB
 };
 
@@ -1839,61 +1866,65 @@ drag_data_received (TerminalScreen   *widget,
 #if 0
   {
     GList *tmp;
-    char *str;
-    
+
+    g_print ("info: %d\n", info);
     tmp = context->targets;
     while (tmp != NULL)
       {
-        GdkAtom atom = GPOINTER_TO_UINT (tmp->data);
+        GdkAtom atom = GDK_POINTER_TO_ATOM (tmp->data);
 
         g_print ("Target: %s\n", gdk_atom_name (atom));        
         
         tmp = tmp->next;
       }
+
+    g_print ("Chosen target: %s\n", gdk_atom_name (selection_data->target));
   }
 #endif
-  
-  switch (info)
+
+  if (gtk_targets_include_uri (&selection_data->target, 1))
     {
-    case TARGET_STRING:
-    case TARGET_UTF8_STRING:
-    case TARGET_COMPOUND_TEXT:
-    case TARGET_TEXT:
-      {
-        char *str;
-        
-        str = (char *) gtk_selection_data_get_text (selection_data);
+      char **uris;
+      char *text;
+      guint i;
 
-        /*
-	 * pass UTF-8 to the terminal widget. The terminal widget
-	 * should know which encoding mode it's in and be able
-	 * to perform the correct conversion.
-         */
-        if (str && *str)
-          vte_terminal_feed_child (VTE_TERMINAL (screen), str, strlen (str));
-        g_free (str);
-      }
-      break;
+      uris = gtk_selection_data_get_uris (selection_data);
+      if (!uris)
+        return;
 
-    case TARGET_TEXT_PLAIN:
-      {
-        if (selection_data->format != 8 ||
-            selection_data->length == 0)
-          {
-            g_printerr (_("text/plain dropped on terminal had wrong format (%d) or length (%d)\n"),
-                        selection_data->format,
-                        selection_data->length);
-            return;
-          }
-        
-        /* FIXME just brazenly ignoring encoding issues... */
-        /* FIXMEchpe: just use the text conversion routines in gtk! */
-        vte_terminal_feed_child (VTE_TERMINAL (screen),
-                                 (char *) selection_data->data,
-                                 selection_data->length);
-      }
-      break;
-      
+      /* Replace file:/// URIS with shell-quoted filename strings */
+      for (i = 0; uris[i] != NULL; ++i)
+        {
+          char *uri = uris[i];
+          char *filename;
+
+          filename = g_filename_from_uri (uri, NULL, NULL);
+          if (!filename)
+            continue;
+              
+          uris[i] = g_shell_quote (filename);
+
+          g_free (uri);
+          g_free (filename);
+        }
+
+      text = g_strjoinv (" ", uris);
+      vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+      g_free (text);
+
+      g_strfreev (uris);
+    }
+  else if (gtk_targets_include_text (&selection_data->target, 1))
+    {
+      char *text;
+
+      text = (char *) gtk_selection_data_get_text (selection_data);
+      if (text && text[0])
+        vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+      g_free (text);
+    }
+  else switch (info)
+    {
     case TARGET_COLOR:
       {
         guint16 *data = (guint16 *)selection_data->data;
@@ -1984,65 +2015,7 @@ drag_data_received (TerminalScreen   *widget,
         g_string_free (str, TRUE);
       }
       break;
-      
-    case TARGET_URI_LIST:
-      {
-        char *uri_list;
-        char **uris;
-        int i;
-        
-        if (selection_data->format != 8 ||
-            selection_data->length == 0)
-          {
-            g_printerr (_("URI list dropped on terminal had wrong format (%d) or length (%d)\n"),
-                        selection_data->format,
-                        selection_data->length);
-            return;
-          }
-        
-        uri_list = g_strndup ((char *) selection_data->data,
-                              selection_data->length);
 
-	uris = g_strsplit (uri_list, "\r\n", 0);
-
-        i = 0;
-	while (uris && uris[i])
-          {
-            char *old;
-            
-            old = uris[i];
-	    /* First, treat the dropped URI like it's a filename */
-            uris[i] = g_filename_from_uri (old, NULL, NULL);
-	    /* if it's NULL, that means it wasn't a filename.
-	     * Pass it as a plain URI, then.
-	     */
-	    if (uris[i] == NULL)
-	      uris[i] = old;
-            else 
-	      {
-		/* OK, it's a file. Quote the shell characters. */
-		g_free(old);
-		old = uris[i];
-		uris[i] = g_shell_quote(uris[i]);
-		g_free(old);
-	      }
-            ++i;
-          }
-
-        if (uris)
-          {
-            char *flat;
-            
-            flat = g_strjoinv (" ", uris);
-            vte_terminal_feed_child (VTE_TERMINAL (screen), flat, strlen (flat));
-            g_free (flat);
-          }
-
-        g_strfreev (uris);
-        g_free (uri_list);
-      }
-      break;
-      
     case TARGET_BGIMAGE:
       {
         char *uri_list;
@@ -2148,38 +2121,6 @@ drag_data_received (TerminalScreen   *widget,
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-terminal_screen_setup_dnd (TerminalScreen *screen)
-{
-  /* FIXMEchpe: use modern gtk here! */
-  static GtkTargetEntry target_table[] = {
-    { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
-    { "application/x-color", 0, TARGET_COLOR },
-    { "property/bgimage",    0, TARGET_BGIMAGE },
-    { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
-    { "text/uri-list",  0, TARGET_URI_LIST },
-    { "text/x-moz-url",  0, TARGET_MOZ_URL },
-    { "UTF8_STRING", 0, TARGET_UTF8_STRING },
-    { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-    { "TEXT", 0, TARGET_TEXT },
-    { "STRING",     0, TARGET_STRING },
-    /* text/plain problematic, we don't know its encoding */
-    { "text/plain", 0, TARGET_TEXT_PLAIN }
-    /* add when gtk supports it perhaps */
-    /* { "text/unicode", 0, TARGET_TEXT_UNICODE } */
-  };
-  
-  g_signal_connect (screen, "drag_data_received",
-                    G_CALLBACK (drag_data_received), screen);
-  
-  gtk_drag_dest_set (GTK_WIDGET (screen),
-                     GTK_DEST_DEFAULT_MOTION |
-                     GTK_DEST_DEFAULT_HIGHLIGHT |
-                     GTK_DEST_DEFAULT_DROP,
-                     target_table, G_N_ELEMENTS (target_table),
-                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
 /* FIXMEchpe move this to TerminalWindow! */
