@@ -568,18 +568,13 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   TerminalWindow *window;
   const char *prop_name;
-/*  VteTerminalEraseBinding backspace_binding, delete_binding;*/
   TerminalBackgroundType bg_type;
-//   gboolean silent_bell, scroll_on_keystroke, scroll_on_output;
 
   if (pspec)
     prop_name = pspec->name;
   else
     prop_name = NULL;
 
-  terminal_screen_cook_title (screen);
-  terminal_screen_cook_icon_title (screen);
-  
   if (priv->window)
     {
       /* We need these in line for the set_size in
@@ -589,77 +584,110 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       terminal_window_update_geometry (priv->window);
     }
   
-  if (GTK_WIDGET_REALIZED (screen))
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_TITLE_MODE) ||
+      prop_name == I_(TERMINAL_PROFILE_TITLE))
+    {
+      terminal_screen_cook_title (screen);
+      terminal_screen_cook_icon_title (screen);
+    }
+  
+  if (GTK_WIDGET_REALIZED (screen) &&
+      (!prop_name ||
+       prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT) ||
+       prop_name == I_(TERMINAL_PROFILE_FONT) ||
+       prop_name == I_(TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER)))
     terminal_screen_change_font (screen);
 
-  update_color_scheme (screen);
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS) ||
+      prop_name == I_(TERMINAL_PROFILE_FOREGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_PALETTE))
+    update_color_scheme (screen);
 
-/*  g_object_get (profile,
-                TERMINAL_PROFILE_SILENT_BELL, &silent_bell,*/
-  if (prop_name == I_(TERMINAL_PROFILE_SILENT_BELL))
-    vte_terminal_set_audible_bell (vte_terminal, !terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SILENT_BELL));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SILENT_BELL))
+      vte_terminal_set_audible_bell (vte_terminal, !terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SILENT_BELL));
 
-  vte_terminal_set_word_chars (vte_terminal,
-                               terminal_profile_get_property_string (profile, TERMINAL_PROFILE_WORD_CHARS));
-  vte_terminal_set_scroll_on_keystroke (vte_terminal,
-                                        terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE));
-  vte_terminal_set_scroll_on_output (vte_terminal,
-                                        terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
-  vte_terminal_set_scrollback_lines (vte_terminal,
-                                     terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHARS))
+    vte_terminal_set_word_chars (vte_terminal,
+                                 terminal_profile_get_property_string (profile, TERMINAL_PROFILE_WORD_CHARS));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE))
+    vte_terminal_set_scroll_on_keystroke (vte_terminal,
+                                          terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_OUTPUT))
+    vte_terminal_set_scroll_on_output (vte_terminal,
+                                       terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES))
+    vte_terminal_set_scrollback_lines (vte_terminal,
+                                       terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES));
 
-  if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_SKEY))
     {
-      terminal_screen_skey_match_add (screen,
-				      "s/key [0-9]* [-A-Za-z0-9]*",
-				      FLAVOR_AS_IS);
+      if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
+        {
+          terminal_screen_skey_match_add (screen,
+                                          "s/key [0-9]* [-A-Za-z0-9]*",
+                                          FLAVOR_AS_IS);
 
-      terminal_screen_skey_match_add (screen,
-				      "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
-				      FLAVOR_AS_IS);
-    }
-  else
-    {
-      terminal_screen_skey_match_remove (screen);
-    }
-  bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
-  
-  if (bg_type == TERMINAL_BACKGROUND_IMAGE)
-    {
-      set_background_image_file (vte_terminal,
-                                 terminal_profile_get_property_string (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
-      vte_terminal_set_scroll_background (vte_terminal,
-                                          terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
-    }
-  else
-    {
-      set_background_image_file (vte_terminal, NULL);
-      vte_terminal_set_scroll_background (vte_terminal, FALSE);
+          terminal_screen_skey_match_add (screen,
+                                          "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
+                                          FLAVOR_AS_IS);
+        }
+      else
+        {
+          terminal_screen_skey_match_remove (screen);
+        }
     }
 
-  if (bg_type == TERMINAL_BACKGROUND_IMAGE ||
-      bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_DARKNESS) ||
+      prop_name == I_(TERMINAL_PROFILE_SCROLL_BACKGROUND))
     {
-      vte_terminal_set_background_saturation (vte_terminal,
-                                              1.0 - terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
-      vte_terminal_set_opacity (vte_terminal,
-                                0xffff * terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
-    }
-  else
-    {
-      vte_terminal_set_background_saturation (vte_terminal, 1.0); /* normal color */
-      vte_terminal_set_opacity (vte_terminal, 0xffff);
-    }
-  
-  window = terminal_screen_get_window (screen);
-  /* FIXME: Don't enable this if we have a compmgr. */
-  vte_terminal_set_background_transparent (vte_terminal,
-                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                           (!window || !terminal_window_uses_argb_visual (window)));
+      bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+      
+      if (bg_type == TERMINAL_BACKGROUND_IMAGE)
+        {
+          /* FIXMEchpe: use the BACKGROUND property intead */
+          set_background_image_file (vte_terminal,
+                                    terminal_profile_get_property_string (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
+          vte_terminal_set_scroll_background (vte_terminal,
+                                              terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
+        }
+      else
+        {
+          set_background_image_file (vte_terminal, NULL);
+          vte_terminal_set_scroll_background (vte_terminal, FALSE);
+        }
 
+      if (bg_type == TERMINAL_BACKGROUND_IMAGE ||
+          bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
+        {
+          vte_terminal_set_background_saturation (vte_terminal,
+                                                  1.0 - terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
+          vte_terminal_set_opacity (vte_terminal,
+                                    0xffff * terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
+        }
+      else
+        {
+          vte_terminal_set_background_saturation (vte_terminal, 1.0); /* normal color */
+          vte_terminal_set_opacity (vte_terminal, 0xffff);
+        }
+      
+      window = terminal_screen_get_window (screen);
+      /* FIXME: Don't enable this if we have a compmgr. */
+      vte_terminal_set_background_transparent (vte_terminal,
+                                              bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
+                                              (!window || !terminal_window_uses_argb_visual (window)));
+    }
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING))
   vte_terminal_set_backspace_binding (vte_terminal,
                                       terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKSPACE_BINDING));
   
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_DELETE_BINDING))
   vte_terminal_set_delete_binding (vte_terminal,
                                    terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_DELETE_BINDING));
 }
@@ -933,9 +961,10 @@ terminal_screen_set_profile (TerminalScreen *screen,
       priv->profile_forgotten_id = 0;
     }
   
+  priv->profile = profile;
   if (profile)
     {
-      g_object_ref (G_OBJECT (profile));
+      g_object_ref (profile);
       priv->profile_changed_id =
         g_signal_connect (profile, "notify",
                           G_CALLBACK (terminal_screen_profile_notify_cb),
@@ -945,19 +974,7 @@ terminal_screen_set_profile (TerminalScreen *screen,
                           "forgotten",
                           G_CALLBACK (profile_forgotten_callback),
                           screen);
-    }
 
-#if 0
-  g_print ("Switching profile from '%s' to '%s'\n",
-           priv->profile ?
-           terminal_profile_get_visible_name (priv->profile) : "none",
-           profile ? terminal_profile_get_visible_name (profile) : "none");
-#endif
-  
-  priv->profile = profile;
-
-  if (priv->profile)
-    {
       terminal_screen_profile_notify_cb (profile, NULL, screen);
       g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
     }
@@ -1597,7 +1614,6 @@ queue_recheck_working_dir (TerminalScreen *screen)
                          NULL);
     }
 }
-
 
 void
 terminal_screen_set_font_scale (TerminalScreen *screen,
