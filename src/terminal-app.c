@@ -197,8 +197,7 @@ terminal_app_create_profile (TerminalApp *app,
 {
   TerminalProfile *profile;
 
-  profile = terminal_app_get_profile_by_name (app, name);
-  g_return_val_if_fail (profile == NULL, profile); /* FIXMEchpe can this happen? */
+  g_assert (terminal_app_get_profile_by_name (app, name) == NULL);
 
   profile = _terminal_profile_new (name);
 
@@ -213,6 +212,7 @@ terminal_app_create_profile (TerminalApp *app,
     {
       /* We are the default profile */
       app->default_profile = profile;
+      g_object_notify (G_OBJECT (app), "default-profile");
     }
   
   return profile;
