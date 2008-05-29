@@ -75,7 +75,6 @@ static const struct {
   { "GB2312",	N_("Chinese Simplified") },
   { "GBK",	N_("Chinese Simplified") },
   { "GEORGIAN-PS",	N_("Georgian") },
-  { "HZ",	N_("Chinese Simplified") },
   { "IBM850",	N_("Western") },
   { "IBM852",	N_("Central European") },
   { "IBM855",	N_("Cyrillic") },
