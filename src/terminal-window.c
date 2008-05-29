@@ -59,7 +59,7 @@ struct _TerminalWindowPrivate
   GtkWidget *menubar;
   GtkWidget *notebook;
   guint terms;
-  TerminalScreen *active_term;
+  TerminalScreen *active_screen;
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
@@ -282,7 +282,7 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   if (!gtk_toggle_action_get_active (action))
     return;
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
   
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
@@ -291,9 +291,9 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  g_signal_handlers_block_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
-  terminal_screen_set_profile (priv->active_term, profile);    
-  g_signal_handlers_unblock_by_func (priv->active_term, G_CALLBACK (profile_set_callback), window);
+  g_signal_handlers_block_by_func (priv->active_screen, G_CALLBACK (profile_set_callback), window);
+  terminal_screen_set_profile (priv->active_screen, profile);
+  g_signal_handlers_unblock_by_func (priv->active_screen, G_CALLBACK (profile_set_callback), window);
 }
 
 #define PROFILES_UI_PATH "/menubar/Terminal/TerminalProfiles"
@@ -363,10 +363,10 @@ terminal_window_update_set_profile_menu_active_profile (TerminalWindow *window)
   if (!priv->profiles_action_group)
     return;
 
-  if (!priv->active_term)
+  if (!priv->active_screen)
     return;
 
-  new_active_profile = terminal_screen_get_profile (priv->active_term);
+  new_active_profile = terminal_screen_get_profile (priv->active_screen);
 
   actions = gtk_action_group_list_actions (priv->profiles_action_group);
   for (l = actions; l != NULL; l = l->next)
@@ -420,8 +420,8 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   if (profiles == NULL)
     return;
 
-  if (priv->active_term)
-    active_profile = terminal_screen_get_profile (priv->active_term);
+  if (priv->active_screen)
+    active_profile = terminal_screen_get_profile (priv->active_screen);
   else
     active_profile = NULL;
 
@@ -597,14 +597,14 @@ terminal_set_encoding_callback (GtkToggleAction *action,
   if (!gtk_toggle_action_get_active (action))
     return;
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
 
   name = gtk_action_get_name (GTK_ACTION (action));
   g_assert (g_str_has_prefix (name, SET_ENCODING_ACTION_NAME_PREFIX));
   charset = name + strlen (SET_ENCODING_ACTION_NAME_PREFIX);
 
-  vte_terminal_set_encoding (VTE_TERMINAL (priv->active_term), charset);
+  vte_terminal_set_encoding (VTE_TERMINAL (priv->active_screen), charset);
 }
 
 static void
@@ -631,7 +631,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       priv->encodings_action_group = NULL;
     }
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
 
   action_group = priv->encodings_action_group = gtk_action_group_new ("Encodings");
@@ -640,7 +640,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
 
   priv->encodings_ui_id = gtk_ui_manager_new_merge_id (priv->ui_manager);
 
-  charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_term));
+  charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
   
   encodings = terminal_get_active_encodings ();
 
@@ -696,8 +696,8 @@ terminal_window_update_copy_sensitivity (TerminalWindow *window)
   GtkAction *action;
   gboolean can_copy = FALSE;
 
-  if (priv->active_term)
-    can_copy = vte_terminal_get_has_selection (VTE_TERMINAL (priv->active_term));
+  if (priv->active_screen)
+    can_copy = vte_terminal_get_has_selection (VTE_TERMINAL (priv->active_screen));
 
   action = gtk_action_group_get_action (priv->action_group, "EditCopy");
   gtk_action_set_sensitive (action, can_copy);
@@ -711,7 +711,7 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
   GtkAction *action;
   double current, zoom;
   
-  screen = priv->active_term;
+  screen = priv->active_screen;
   if (screen == NULL)
     return;
 
@@ -1327,7 +1327,7 @@ terminal_window_init (TerminalWindow *window)
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
 
   priv->terms = 0;
-  priv->active_term = NULL;
+  priv->active_screen = NULL;
   priv->menubar_visible = FALSE;
   
   main_vbox = gtk_vbox_new (FALSE, 0);
@@ -1626,7 +1626,7 @@ sync_screen_title (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
   
-  if (screen != priv->active_term)
+  if (screen != priv->active_screen)
     return;
 
   gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
@@ -1639,7 +1639,7 @@ sync_screen_icon_title (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (screen != priv->active_term)
+  if (screen != priv->active_screen)
     return;
 
   if (!terminal_screen_get_icon_title_set (screen))
@@ -1655,7 +1655,7 @@ sync_screen_icon_title_set (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (screen != priv->active_term)
+  if (screen != priv->active_screen)
     return;
 
   if (terminal_screen_get_icon_title_set (screen))
@@ -1843,12 +1843,12 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   
   g_object_set (priv->menubar, "visible", setting, NULL);
 
-  if (priv->active_term)
+  if (priv->active_screen)
     {
 #ifdef DEBUG_GEOMETRY
       g_fprintf (stderr,"setting size after toggling menubar visibility\n");
 #endif
-      terminal_window_set_size (window, priv->active_term, TRUE);
+      terminal_window_set_size (window, priv->active_screen, TRUE);
     }
 }
 
@@ -1952,15 +1952,15 @@ terminal_window_set_active (TerminalWindow *window,
   GtkWidget *widget;
   TerminalProfile *profile;
   
-  if (priv->active_term == screen)
+  if (priv->active_screen == screen)
     return;
   
   /* Workaround to remove gtknotebook's feature of computing its size based on
    * all pages. When the widget is hidden, its size will not be taken into
    * account.
    */
-  if (priv->active_term)
-    gtk_widget_hide (GTK_WIDGET (priv->active_term)); /* FIXMEchpe */
+  if (priv->active_screen)
+    gtk_widget_hide (GTK_WIDGET (priv->active_screen)); /* FIXMEchpe */
   
   widget = GTK_WIDGET (screen);
   
@@ -1972,7 +1972,7 @@ terminal_window_set_active (TerminalWindow *window,
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget); /* we need this for the char width */
 
-  priv->active_term = screen;
+  priv->active_screen = screen;
 
   terminal_window_update_geometry (window);
   
@@ -2017,7 +2017,7 @@ terminal_window_get_active (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  return priv->active_term;
+  return priv->active_screen;
 }
 
 static void
@@ -2031,10 +2031,10 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   TerminalScreen *screen;
   int old_grid_width, old_grid_height;
 
-  if (priv->active_term == NULL || priv->disposed)
+  if (priv->active_screen == NULL || priv->disposed)
     return;
 
-  terminal_screen_get_size (priv->active_term, &old_grid_width, &old_grid_height);
+  terminal_screen_get_size (priv->active_screen, &old_grid_width, &old_grid_height);
   
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
@@ -2098,15 +2098,15 @@ notebook_page_added_callback (GtkWidget       *notebook,
   gtk_widget_realize (GTK_WIDGET (screen));
 
   /* If we have an active screen, match its size and zoom */
-  if (priv->active_term)
+  if (priv->active_screen)
     {
       int current_width, current_height;
       double scale;
 
-      terminal_screen_get_size (priv->active_term, &current_width, &current_height);
+      terminal_screen_get_size (priv->active_screen, &current_width, &current_height);
       vte_terminal_set_size (VTE_TERMINAL (screen), current_width, current_height);
 
-      scale = terminal_screen_get_font_scale (priv->active_term);
+      scale = terminal_screen_get_font_scale (priv->active_screen);
       terminal_screen_set_font_scale (screen, scale);
     }
   
@@ -2114,7 +2114,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
   /* FIXMEchpe: this shouldn't be necessary since we'll immediately get
    * page-selected callback.
    */
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     terminal_window_set_active (window, screen);
 
   if (priv->present_on_insert)
@@ -2181,7 +2181,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
   pages = priv->terms;
   if (pages == 1)
     {
-      terminal_window_set_size (window, priv->active_term, TRUE);
+      terminal_window_set_size (window, priv->active_screen, TRUE);
     }
   else if (pages == 0)
     {
@@ -2199,17 +2199,17 @@ terminal_window_update_geometry (TerminalWindow *window)
   int char_width;
   int char_height;
   
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
 
-  widget = GTK_WIDGET (priv->active_term);
+  widget = GTK_WIDGET (priv->active_screen);
 
   /* We set geometry hints from the active term; best thing
    * I can think of to do. Other option would be to try to
    * get some kind of union of all hints from all terms in the
    * window, but that doesn't make too much sense.
    */
-  terminal_screen_get_cell_size (priv->active_term, &char_width, &char_height);
+  terminal_screen_get_cell_size (priv->active_screen, &char_width, &char_height);
   
   if (char_width != priv->old_char_width ||
       char_height != priv->old_char_height ||
@@ -2220,7 +2220,7 @@ terminal_window_update_geometry (TerminalWindow *window)
       /* FIXME Since we're using xthickness/ythickness to compute
        * padding we need to change the hints when the theme changes.
        */
-      vte_terminal_get_padding (VTE_TERMINAL (priv->active_term), &xpad, &ypad);
+      vte_terminal_get_padding (VTE_TERMINAL (priv->active_screen), &xpad, &ypad);
       
       hints.base_width = xpad;
       hints.base_height = ypad;
@@ -2293,7 +2293,7 @@ new_window (TerminalWindow *window,
 
   display_name = gdk_screen_make_display_name (gtk_widget_get_screen (GTK_WIDGET (window)));
 
-  dir = terminal_screen_get_working_dir (priv->active_term);
+  dir = terminal_screen_get_working_dir (priv->active_screen);
 
   if (screen)
     {
@@ -2336,7 +2336,7 @@ file_new_tab_callback (GtkAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
       
-  dir = terminal_screen_get_working_dir (priv->active_term);
+  dir = terminal_screen_get_working_dir (priv->active_screen);
 
   terminal_app_new_terminal (terminal_app_get (),
                              profile,
@@ -2405,10 +2405,10 @@ file_close_tab_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   
-  if (!priv->active_term)
+  if (!priv->active_screen)
     return;
 
-  terminal_window_remove_screen (window, priv->active_term);
+  terminal_window_remove_screen (window, priv->active_screen);
 }
 
 static void
@@ -2417,10 +2417,10 @@ edit_copy_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (!priv->active_term)
+  if (!priv->active_screen)
     return;
       
-  vte_terminal_copy_clipboard (VTE_TERMINAL (priv->active_term));
+  vte_terminal_copy_clipboard (VTE_TERMINAL (priv->active_screen));
 }
 
 static void
@@ -2429,10 +2429,10 @@ edit_paste_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (!priv->active_term)
+  if (!priv->active_screen)
     return;
       
-  vte_terminal_paste_clipboard (VTE_TERMINAL (priv->active_term));
+  vte_terminal_paste_clipboard (VTE_TERMINAL (priv->active_screen));
 }
 
 static void
@@ -2450,7 +2450,7 @@ edit_current_profile_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   
   terminal_app_edit_profile (terminal_app_get (),
-                             terminal_screen_get_profile (priv->active_term),
+                             terminal_screen_get_profile (priv->active_screen),
                              GTK_WINDOW (window));
 }
 
@@ -2461,7 +2461,7 @@ file_new_profile_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   
   terminal_app_new_profile (terminal_app_get (),
-                            terminal_screen_get_profile (priv->active_term),
+                            terminal_screen_get_profile (priv->active_screen),
                             GTK_WINDOW (window));
 }
 
@@ -2558,14 +2558,14 @@ view_zoom_in_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   double current;
   
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
   
-  current = terminal_screen_get_font_scale (priv->active_term);
+  current = terminal_screen_get_font_scale (priv->active_screen);
   if (!find_larger_zoom_factor (current, &current))
     return;
       
-  terminal_screen_set_font_scale (priv->active_term, current);
+  terminal_screen_set_font_scale (priv->active_screen, current);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -2576,14 +2576,14 @@ view_zoom_out_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   double current;
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
   
-  current = terminal_screen_get_font_scale (priv->active_term);
+  current = terminal_screen_get_font_scale (priv->active_screen);
   if (!find_smaller_zoom_factor (current, &current))
     return;
       
-  terminal_screen_set_font_scale (priv->active_term, current);
+  terminal_screen_set_font_scale (priv->active_screen, current);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -2593,10 +2593,10 @@ view_zoom_normal_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
 
-  terminal_screen_set_font_scale (priv->active_term, PANGO_SCALE_MEDIUM);
+  terminal_screen_set_font_scale (priv->active_screen, PANGO_SCALE_MEDIUM);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -2606,10 +2606,10 @@ terminal_set_title_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
     
-  terminal_screen_edit_title (priv->active_term,
+  terminal_screen_edit_title (priv->active_screen,
                               GTK_WINDOW (window));
 }
 
@@ -2627,10 +2627,10 @@ terminal_reset_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
       
-  vte_terminal_reset (VTE_TERMINAL (priv->active_term), TRUE, FALSE);
+  vte_terminal_reset (VTE_TERMINAL (priv->active_screen), TRUE, FALSE);
 }
 
 static void
@@ -2639,10 +2639,10 @@ terminal_reset_clear_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (priv->active_term == NULL)
+  if (priv->active_screen == NULL)
     return;
       
-  vte_terminal_reset (VTE_TERMINAL (priv->active_term), TRUE, TRUE);
+  vte_terminal_reset (VTE_TERMINAL (priv->active_screen), TRUE, TRUE);
 }
 
 static void
