@@ -215,52 +215,13 @@ static TerminalEncoding encodings[] = {
 
 static GSList *active_encodings = NULL;
 
-static void update_active_encodings_from_string_list (GSList *strings);
 static void update_active_encoding_tree_models  (void);
 static void register_active_encoding_tree_model (GtkListStore *store);
 
-static void
-encodings_change_notify (GConfClient *client,
-                         guint        cnxn_id,
-                         GConfEntry  *entry,
-                         gpointer     user_data)
-{
-  GConfValue *val;
-  GSList *strings;
-  
-  /* FIXME handle whether the entry is writable
-   */
-
-  val = gconf_entry_get_value (entry);
-  if (val == NULL || val->type != GCONF_VALUE_LIST ||
-      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
-    strings = NULL;
-  else
-    {
-      GSList *tmp;
-
-      strings = NULL;
-      tmp = gconf_value_get_list (val);
-      while (tmp != NULL)
-        {
-          GConfValue *v = tmp->data;
-          g_assert (v->type == GCONF_VALUE_STRING);
-
-          if (gconf_value_get_string (v))
-            {
-              strings = g_slist_prepend (strings,
-                                         (char*) gconf_value_get_string (v));
-            }
-          
-          tmp = tmp->next;
-        }
-    }
-
-  update_active_encodings_from_string_list (strings);
-
-  /* note we didn't copy the strings themselves, so don't free them */
-  g_slist_free (strings);
-}
+static void encodings_notify_cb (GConfClient *client,
+                                 guint        cnxn_id,
+                                 GConfEntry  *entry,
+                                 gpointer     user_data);
 
 static const TerminalEncoding*
 find_encoding_by_charset (const char *charset)
@@ -312,11 +273,45 @@ terminal_encoding_copy (const TerminalEncoding *src)
 }
 
 static void
-update_active_encodings_from_string_list (GSList *strings)
+encodings_notify_cb (GConfClient *client,
+                     guint        cnxn_id,
+                     GConfEntry  *entry,
+                     gpointer     user_data)
 {
+  GConfValue *val;
+  GSList *strings;
   GSList *tmp;
   GHashTable *table;
   const char *charset;
+
+  /* FIXME handle whether the entry is writable
+   */
+
+  val = gconf_entry_get_value (entry);
+  if (val == NULL ||
+      val->type != GCONF_VALUE_LIST ||
+      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
+    strings = NULL;
+  else
+    {
+      GSList *tmp;
+
+      strings = NULL;
+      tmp = gconf_value_get_list (val);
+      while (tmp != NULL)
+        {
+          GConfValue *v = tmp->data;
+          g_assert (v->type == GCONF_VALUE_STRING);
+
+          if (gconf_value_get_string (v))
+            {
+              strings = g_slist_prepend (strings,
+                                         (char*) gconf_value_get_string (v));
+            }
+          
+          tmp = tmp->next;
+        }
+    }
 
 #if 1
   g_slist_foreach (active_encodings, (GFunc) terminal_encoding_free,
@@ -395,6 +390,9 @@ update_active_encodings_from_string_list (GSList *strings)
   g_hash_table_destroy (table);
   
   update_active_encoding_tree_models ();
+
+  /* note we didn't copy the strings themselves, so don't free them */
+  g_slist_free (strings);
 }
 
 GSList*
@@ -907,7 +905,6 @@ terminal_encoding_init (void)
   GConfClient *conf;
   int i;
   GError *err;
-  GSList *strings;
   gsize bytes_read, bytes_written;
   gchar *converted;
   gchar ascii_sample[96];
@@ -974,7 +971,7 @@ terminal_encoding_init (void)
   err = NULL;
   gconf_client_notify_add (conf,
                            CONF_GLOBAL_PREFIX"/active_encodings",
-                           encodings_change_notify,
+                           encodings_notify_cb,
                            NULL, /* user_data */
                            NULL, &err);
   
@@ -985,14 +982,7 @@ terminal_encoding_init (void)
       g_error_free (err);
     }
 
-  strings = gconf_client_get_list (conf,
-                                   CONF_GLOBAL_PREFIX"/active_encodings",
-                                   GCONF_VALUE_STRING, NULL);
-
-  update_active_encodings_from_string_list (strings);
-
-  g_slist_foreach (strings, (GFunc) g_free, NULL);
-  g_slist_free (strings);
+  gconf_client_notify (conf, CONF_GLOBAL_PREFIX"/active_encodings");
 
   g_object_unref (conf);
 }
