@@ -91,10 +91,6 @@ void	   terminal_widget_set_background_opacity     (GtkWidget            *widget
 
 void       terminal_widget_set_background_scrolls     (GtkWidget            *widget,
                                                        gboolean              setting);
-void       terminal_widget_set_normal_gdk_font        (GtkWidget            *widget,
-                                                       GdkFont              *font);
-void       terminal_widget_set_bold_gdk_font          (GtkWidget            *widget,
-                                                       GdkFont              *font);
 void       terminal_widget_set_allow_bold             (GtkWidget            *widget,
                                                        gboolean              setting);
 void       terminal_widget_set_colors                 (GtkWidget            *widget,

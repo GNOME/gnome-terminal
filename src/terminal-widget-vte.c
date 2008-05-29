@@ -339,20 +339,6 @@ terminal_widget_set_background_scrolls (GtkWidget *widget,
 }
 
 void
-terminal_widget_set_normal_gdk_font (GtkWidget *widget,
-				     GdkFont   *font)
-{
-  UNIMPLEMENTED;
-}
-
-void
-terminal_widget_set_bold_gdk_font (GtkWidget *widget,
-				   GdkFont   *font)
-{
-  UNIMPLEMENTED;
-}
-
-void
 terminal_widget_set_allow_bold (GtkWidget *widget,
 				gboolean   setting)
 {
