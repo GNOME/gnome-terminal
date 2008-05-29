@@ -13,6 +13,7 @@ AC_C_BIGENDIAN
 
 AM_MAINTAINER_MODE
 
+PKG_PROG_PKG_CONFIG
 AC_PROG_CC
 AC_ISC_POSIX
 AC_HEADER_STDC
@@ -29,7 +30,7 @@ GLIB_REQUIRED=2.15.2
 GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=2.14.0
 STARTUP_NOTIFICATION_REQUIRED=0.8
-VTE_REQUIRED=0.15.3
+VTE_REQUIRED=0.16.13
 LIBGNOME_REQUIRED=2.14.0
 
 ## here we get the flags we'll actually use
@@ -56,9 +57,6 @@ fi
 
 AM_GCONF_SOURCE_2
 
-# Honor aclocal flags
-ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
-
 if $PKG_CONFIG 'xft >= 2.0.0 pangoxft >= 1.1.1'; then
    using_xft2=yes
    CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` $CPPFLAGS"
@@ -66,6 +64,11 @@ if $PKG_CONFIG 'xft >= 2.0.0 pangoxft >= 1.1.1'; then
 else
    using_xft2=no
 fi
+
+GLIB_GENMARSHAL="$($PKG_CONFIG --variable=glib_genmarshal glib-2.0)"
+AC_SUBST([GLIB_GENMARSHAL])
+GLIB_MKENUMS="$($PKG_CONFIG --variable=glib_mkenums glib-2.0)"
+AC_SUBST([GLIB_MKENUMS])
 
 GNOME_DOC_INIT
 

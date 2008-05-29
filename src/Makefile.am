@@ -41,6 +41,8 @@ gnome_terminal_SOURCES=				\
 	terminal-screen-container.h		\
 	terminal-tabs-menu.c			\
 	terminal-tabs-menu.h			\
+	terminal-type-builtins.c		\
+	terminal-type-builtins.h		\
 	terminal-widget.h			\
 	terminal-widget-vte.c			\
 	terminal-window.c			\
@@ -48,6 +50,29 @@ gnome_terminal_SOURCES=				\
 	$(NULL)
 
 gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ skey/libskey.la
+
+BUILT_SOURCES = \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
+	$(NULL)
+	
+TYPES_H_FILES = \
+	terminal-profile.h \
+	$(NULL)
+
+terminal-type-builtins.h: stamp-terminal-type-builtins.h
+	@true
+
+stamp-terminal-type-builtins.h: terminal-type-builtins.h.template $(TYPES_H_FILES)
+	$(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbh \
+	&& (cmp -s xgen-ttbh terminal-type-builtins.h || cp xgen-ttbh terminal-type-builtins.h ) \
+	&& rm -f xgen-ttbh \
+	&& echo timestamp > $(@F)
+
+terminal-type-builtins.c: terminal-type-builtins.c.template $(TYPES_H_FILES)
+	$(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbc \
+	&& (cmp -s xgen-ttbc terminal-type-builtins.c || cp xgen-ttbc terminal-type-builtins.c ) \
+	&& rm -f xgen-ttbc
 
 gladedir   = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
