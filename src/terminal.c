@@ -26,18 +26,14 @@
 
 #include "terminal-intl.h"
 
-#include <locale.h>
-
 #undef BONOBO_DISABLE_DEPRECATED
 
-#include "terminal.h"
 #include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
 #include "encoding.h"
-#include <gconf/gconf-client.h>
 #include <bonobo-activation/bonobo-activation-activate.h>
 #include <bonobo-activation/bonobo-activation-register.h>
 #include <bonobo/bonobo-exception.h>

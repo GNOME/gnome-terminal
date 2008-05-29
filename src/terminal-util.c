@@ -25,9 +25,6 @@
 
 #include "terminal-intl.h"
 
-#include <locale.h>
-
-#include "terminal.h"
 #include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"

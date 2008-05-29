@@ -25,7 +25,7 @@
 #include "terminal-accels.h"
 #include "terminal-profile.h"
 #include "terminal-util.h"
-#include "terminal.h"
+#include "terminal-app.h"
 #include <string.h>
 
 #define D(x)
