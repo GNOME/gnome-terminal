@@ -56,6 +56,13 @@ typedef enum
   TERMINAL_BACKGROUND_TRANSPARENT
 } TerminalBackgroundType;
 
+typedef enum
+{
+  TERMINAL_CURSOR_BLINK_SYSTEM,
+  TERMINAL_CURSOR_BLINK_ON,
+  TERMINAL_CURSOR_BLINK_OFF
+} TerminalCursorBlinkMode;
+
 #define TERMINAL_PALETTE_SIZE 16
 
 #define TERMINAL_PALETTE_TANGO 0
@@ -72,6 +79,7 @@ typedef enum
 #define TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE  "background-image-file"
 #define TERMINAL_PROFILE_BACKGROUND_TYPE        "background-type"
 #define TERMINAL_PROFILE_BACKSPACE_BINDING      "backspace-binding"
+#define TERMINAL_PROFILE_CURSOR_BLINK_MODE      "cursor-blink-mode"
 #define TERMINAL_PROFILE_CUSTOM_COMMAND         "custom-command"
 #define TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR   "default-show-menubar"
 #define TERMINAL_PROFILE_DELETE_BINDING         "delete-binding"

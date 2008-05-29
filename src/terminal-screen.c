@@ -225,17 +225,28 @@ set_background_image_file (VteTerminal *terminal,
 }
 
 static void
+terminal_screen_update_cursor_blink (TerminalScreen *screen,
+                                     GtkSettings *settings)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  TerminalCursorBlinkMode mode;
+  gboolean blink;
+
+  mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE);
+  if (mode == TERMINAL_CURSOR_BLINK_SYSTEM)
+    g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+  else
+    blink = (mode == TERMINAL_CURSOR_BLINK_ON);
+
+  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
+}
+
+static void
 terminal_screen_sync_settings (GtkSettings *settings,
                                GParamSpec *pspec,
                                TerminalScreen *screen)
 {
-  gboolean blink;
-
-  g_object_get (G_OBJECT (settings),
-                "gtk-cursor-blink", &blink,
-                NULL);
-
-  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
+  terminal_screen_update_cursor_blink (screen, settings);
 }
 
 static void
@@ -790,6 +801,9 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ALLOW_BOLD))
     vte_terminal_set_allow_bold (vte_terminal,
                                  terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CURSOR_BLINK_MODE))
+    terminal_screen_update_cursor_blink (screen, gtk_widget_get_settings (GTK_WIDGET (screen)));
 
 /*  if (GTK_WIDGET_REALIZED (screen))
     terminal_screen_change_font (screen);*/
