@@ -92,6 +92,7 @@ struct _TerminalApp
   guint default_profile_notify_id;
   guint system_font_notify_id;
   guint enable_mnemonics_notify_id;
+  guint enable_menu_accels_notify_id;
 
   GHashTable *profiles;
   char* default_profile_id;
@@ -100,6 +101,7 @@ struct _TerminalApp
 
   PangoFontDescription *system_font_desc;
   gboolean enable_mnemonics;
+  gboolean enable_menu_accels;
 
   gboolean use_factory;
 };
@@ -108,6 +110,7 @@ enum
 {
   PROP_0,
   PROP_DEFAULT_PROFILE,
+  PROP_ENABLE_MENU_ACCELS,
   PROP_ENABLE_MNEMONICS,
   PROP_SYSTEM_FONT,
 };
@@ -135,6 +138,9 @@ static TerminalApp *global_app = NULL;
 
 #define ENABLE_MNEMONICS_KEY CONF_GLOBAL_PREFIX "/use_mnemonics"
 #define DEFAULT_ENABLE_MNEMONICS (TRUE)
+
+#define ENABLE_MENU_ACCELS_KEY CONF_GLOBAL_PREFIX"/use_menu_accelerators"
+#define DEFAULT_ENABLE_MENU_ACCELS (TRUE)
 
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
@@ -210,7 +216,7 @@ terminal_app_create_profile (TerminalApp *app,
     {
       /* We are the default profile */
       app->default_profile = profile;
-      g_object_notify (G_OBJECT (app), "default-profile");
+      g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
     }
   
   return profile;
@@ -521,7 +527,7 @@ profile_combo_box_changed_cb (GtkWidget *widget,
    */
   app->default_profile = profile;
  
-  g_object_notify (G_OBJECT (app), "default-profile");
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
 
   g_object_unref (profile);
 }
@@ -849,7 +855,7 @@ ensure_one_profile:
 
       app->default_profile = new_default;
     
-      g_object_notify (object, "default-profile");
+      g_object_notify (object, TERMINAL_APP_DEFAULT_PROFILE);
     }
 
   g_assert (terminal_app_get_profile_count (app) > 0);
@@ -883,7 +889,7 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
 
   app->default_profile = terminal_app_get_profile_by_name (app, name);
 
-  g_object_notify (G_OBJECT (app), "default-profile");
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
 }
 
 static void
@@ -921,7 +927,7 @@ terminal_app_system_font_notify_cb (GConfClient *client,
 
   app->system_font_desc = font_desc;
 
-  g_object_notify (G_OBJECT (app), "system-font");
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_SYSTEM_FONT);
 }
 
 static void
@@ -933,8 +939,7 @@ terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *gconf_value;
 
-  if (strcmp (gconf_entry_get_key (entry),
-              CONF_GLOBAL_PREFIX "/use_mnemonics") != 0)
+  if (strcmp (gconf_entry_get_key (entry), ENABLE_MNEMONICS_KEY) != 0)
     return;
 
   gconf_value = gconf_entry_get_value (entry);
@@ -942,7 +947,27 @@ terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
     return;
 
   app->enable_mnemonics = gconf_value_get_bool (gconf_value);
-  g_object_notify (G_OBJECT (app), "enable-mnemonics");
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MNEMONICS);
+}
+
+static void
+terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
+                                           guint        cnxn_id,
+                                           GConfEntry  *entry,
+                                           gpointer     user_data)
+{
+  TerminalApp *app = TERMINAL_APP (user_data);
+  GConfValue *gconf_value;
+
+  if (strcmp (gconf_entry_get_key (entry), ENABLE_MENU_ACCELS_KEY) != 0)
+    return;
+
+  gconf_value = gconf_entry_get_value (entry);
+  if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
+    return;
+
+  app->enable_menu_accels = gconf_value_get_bool (gconf_value);
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_ACCELS);
 }
 
 static void
@@ -1452,9 +1477,16 @@ terminal_app_init (TerminalApp *app)
                              terminal_app_enable_mnemonics_notify_cb,
                              app, NULL, NULL);
 
+  app->enable_menu_accels_notify_id =
+    gconf_client_notify_add (app->conf,
+                             ENABLE_MENU_ACCELS_KEY,
+                             terminal_app_enable_menu_accels_notify_cb,
+                             app, NULL, NULL);
+
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
   gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
+  gconf_client_notify (app->conf, ENABLE_MENU_ACCELS_KEY);
   gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
 
   terminal_accels_init ();
@@ -1482,6 +1514,8 @@ terminal_app_finalize (GObject *object)
     gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
   if (app->system_font_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->system_font_notify_id);
+  if (app->enable_menu_accels_notify_id != 0)
+    gconf_client_notify_remove (app->conf, app->enable_menu_accels_notify_id);
   if (app->enable_mnemonics_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->enable_mnemonics_notify_id);
 
@@ -1517,6 +1551,9 @@ terminal_app_get_property (GObject *object,
           g_value_set_boxed (value, app->system_font_desc);
         else
           g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_MONOSPACE_FONT));
+        break;
+      case PROP_ENABLE_MENU_ACCELS:
+        g_value_set_boolean (value, app->enable_menu_accels);
         break;
       case PROP_ENABLE_MNEMONICS:
         g_value_set_boolean (value, app->enable_mnemonics);
@@ -1558,15 +1595,22 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   g_object_class_install_property
     (object_class,
+     PROP_ENABLE_MENU_ACCELS,
+     g_param_spec_boolean (TERMINAL_APP_ENABLE_MENU_ACCELS, NULL, NULL,
+                           DEFAULT_ENABLE_MENU_ACCELS,
+                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property
+    (object_class,
      PROP_ENABLE_MNEMONICS,
-     g_param_spec_boolean ("enable-mnemonics", NULL, NULL,
+     g_param_spec_boolean (TERMINAL_APP_ENABLE_MNEMONICS, NULL, NULL,
                            DEFAULT_ENABLE_MNEMONICS,
                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
      PROP_SYSTEM_FONT,
-     g_param_spec_boxed ("system-font", NULL, NULL,
+     g_param_spec_boxed (TERMINAL_APP_SYSTEM_FONT, NULL, NULL,
                          PANGO_TYPE_FONT_DESCRIPTION,
                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
@@ -1574,7 +1618,7 @@ terminal_app_class_init (TerminalAppClass *klass)
   g_object_class_install_property
     (object_class,
      PROP_DEFAULT_PROFILE,
-     g_param_spec_object ("default-profile", NULL, NULL,
+     g_param_spec_object (TERMINAL_APP_DEFAULT_PROFILE, NULL, NULL,
                           TERMINAL_TYPE_PROFILE,
                           G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }

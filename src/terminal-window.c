@@ -189,27 +189,64 @@ profile_set_callback (TerminalScreen *screen,
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
-/* Menubar mnemonics settings handling */
+/* Menubar mnemonics & accel settings handling */
+
+/* no one will ever press this ;-) */
+#define IMPOSSIBLE_MENUBAR_ACCEL "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10"
 
 static void
-mnemonics_setting_change_notify_cb (TerminalApp *app,
-                                    GParamSpec *pspec,
-                                    GdkScreen *screen)
+app_setting_notify_cb (TerminalApp *app,
+                       GParamSpec *pspec,
+                       GdkScreen *screen)
 {
-  gboolean enable_mnemonics;
+  GtkSettings *settings;
+  const char *prop_name;
 
-  g_object_get (app, "enable-mnemonics", &enable_mnemonics, NULL);
+  if (pspec)
+    prop_name = pspec->name;
+  else
+    prop_name = NULL;
 
-  g_object_set (gtk_settings_get_for_screen (screen),
-                "gtk-enable-mnemonics", enable_mnemonics,
-                NULL);
+  settings = gtk_settings_get_for_screen (screen);
+
+  if (!prop_name || prop_name == I_(TERMINAL_APP_ENABLE_MNEMONICS))
+    {
+      gboolean enable_mnemonics;
+
+      g_object_get (app, TERMINAL_APP_ENABLE_MNEMONICS, &enable_mnemonics, NULL);
+      g_object_set (settings, "gtk-enable-mnemonics", enable_mnemonics, NULL);
+    }
+  else if (!prop_name || prop_name == I_(TERMINAL_APP_ENABLE_MENU_ACCELS))
+    {
+      /* const */ char *saved_menubar_accel;
+      gboolean enable_menu_accels;
+
+      /* Now this is a bad hack on so many levels. */
+      /* FIXMEchpe: instead of doing this crappy hack, file a gtk+ bug
+       * so we get a simple function to reset an overridden setting to
+       * its natural value!!
+       */
+      saved_menubar_accel = g_object_get_data (G_OBJECT (settings), "GT::gtk-menu-bar-accel");
+      if (!saved_menubar_accel)
+        {
+          g_object_get (settings, "gtk-menu-bar-accel", &saved_menubar_accel, NULL);
+          g_object_set_data_full (G_OBJECT (settings), "GT::gtk-menu-bar-accel",
+                                  saved_menubar_accel, (GDestroyNotify) g_free);
+        }
+
+      g_object_get (app, TERMINAL_APP_ENABLE_MENU_ACCELS, &enable_menu_accels, NULL);
+      if (enable_menu_accels)
+        g_object_set (settings, "gtk-menu-bar-accel", saved_menubar_accel, NULL);
+      else
+        g_object_set (settings, "gtk-menu-bar-accel", IMPOSSIBLE_MENUBAR_ACCEL, NULL);
+    }
 }
 
 static void
-mnemonics_setting_change_destroy (GdkScreen *screen)
+app_setting_notify_destroy_cb (GdkScreen *screen)
 {
   g_signal_handlers_disconnect_by_func (terminal_app_get (),
-                                        G_CALLBACK (mnemonics_setting_change_notify_cb),
+                                        G_CALLBACK (app_setting_notify_cb),
                                         screen);
 }
 
@@ -1046,12 +1083,14 @@ terminal_window_settings_update (GtkWidget *widget)
 
   g_object_set_data_full (G_OBJECT (screen), "GT::HasSettingsConnection",
                           GINT_TO_POINTER (TRUE),
-                          (GDestroyNotify) mnemonics_setting_change_destroy);
+                          (GDestroyNotify) app_setting_notify_destroy_cb);
 
   app = terminal_app_get ();
-  mnemonics_setting_change_notify_cb (app, NULL, screen);
-  g_signal_connect (app, "notify::enable-mnemonics",
-                    G_CALLBACK (mnemonics_setting_change_notify_cb), screen);
+  app_setting_notify_cb (app, NULL, screen);
+  g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MNEMONICS,
+                    G_CALLBACK (app_setting_notify_cb), screen);
+  g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MENU_ACCELS,
+                    G_CALLBACK (app_setting_notify_cb), screen);
 }
 
 static void

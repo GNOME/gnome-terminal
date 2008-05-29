@@ -196,16 +196,6 @@ static void keys_change_notify (GConfClient *client,
                                 GConfEntry  *entry,
                                 gpointer     user_data);
 
-static void mnemonics_change_notify (GConfClient *client,
-                                    guint        cnxn_id,
-                                    GConfEntry  *entry,
-                                    gpointer     user_data);
-
-static void menu_accels_change_notify (GConfClient *client,
-                                       guint        cnxn_id,
-                                       GConfEntry  *entry,
-                                       gpointer     user_data);
-
 static void accel_changed_callback (GtkAccelGroup  *accel_group,
                                     guint           keyval,
                                     GdkModifierType modifier,
@@ -226,14 +216,9 @@ static char*    binding_name        (guint            keyval,
 
 static void      queue_gconf_sync (void);
 
-static void      update_menu_accel_state (void);
-
 static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
-static gboolean using_mnemonics = TRUE;
-static gboolean using_menu_accels = TRUE;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
-static char *saved_menu_accel = NULL;
 static GtkWidget *edit_keys_dialog = NULL;
 static GtkWidget *edit_keys_dialog_treeview = NULL;
 static GtkWidget *edit_keys_dialog_mnemonics_checkbutton = NULL;
@@ -308,20 +293,6 @@ terminal_accels_init (void)
                     "accel_changed",
                     G_CALLBACK (accel_changed_callback),
                     NULL);
-
-  using_mnemonics = gconf_client_get_bool (conf, CONF_GLOBAL_PREFIX"/use_mnemonics", NULL);
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/use_mnemonics",
-                           mnemonics_change_notify,
-                           NULL, NULL, NULL);
-
-  using_menu_accels = gconf_client_get_bool (conf, CONF_GLOBAL_PREFIX"/use_menu_accelerators", NULL);
-  update_menu_accel_state ();
-  
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/use_menu_accelerators",
-                           menu_accels_change_notify,
-                           NULL, NULL, NULL);
 }
 
 static gboolean
@@ -469,6 +440,7 @@ accel_changed_callback (GtkAccelGroup  *accel_group,
     }
 }
 
+#if 0
 static void
 mnemonics_change_notify (GConfClient *client,
                          guint        cnxn_id,
@@ -531,6 +503,7 @@ menu_accels_change_notify (GConfClient *client,
         }
     }
 }
+#endif
 
 static gboolean
 binding_from_string (const char      *str,
@@ -918,6 +891,7 @@ static void
 disable_mnemonics_toggled (GtkWidget *button,
                            gpointer   data)
 {
+#if 0
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
@@ -935,12 +909,14 @@ disable_mnemonics_toggled (GtkWidget *button,
                              !active, NULL);
       g_object_unref (conf);
     }
+#endif
 }
 
 static void
 disable_menu_accels_toggled (GtkWidget *button,
                              gpointer   data)
 {
+#if 0
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
@@ -958,6 +934,7 @@ disable_menu_accels_toggled (GtkWidget *button,
                              !active, NULL);
       g_object_unref (conf);
     }
+#endif
 }
 
 void
@@ -989,7 +966,9 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (gtk_widget_destroyed),
                     &edit_keys_dialog_mnemonics_checkbutton);
 
+#if 0
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_mnemonics_button), !using_mnemonics);
+#endif
   g_signal_connect (disable_mnemonics_button, "toggled",
                     G_CALLBACK (disable_mnemonics_toggled),
                     NULL);
@@ -999,7 +978,9 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (gtk_widget_destroyed),
                     &edit_keys_dialog_menu_accel_checkbutton);
 
+#if 0
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_menu_accel_button), !using_menu_accels);
+#endif
   g_signal_connect (disable_menu_accel_button, "toggled",
                     G_CALLBACK (disable_menu_accels_toggled),
                     NULL);
@@ -1082,37 +1063,4 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   gtk_window_set_transient_for (GTK_WINDOW (dialog), transient_parent);
 
   gtk_window_present (GTK_WINDOW (edit_keys_dialog));
-}
-
-static void
-update_menu_accel_state (void)
-{
-  /* Now this is a bad hack on so many levels. */
-  
-  if (saved_menu_accel == NULL)
-    {
-      g_object_get (G_OBJECT (gtk_settings_get_default ()),
-                    "gtk-menu-bar-accel",
-                    &saved_menu_accel,
-                    NULL);
-      /* FIXME if gtkrc is reparsed we don't catch on,
-       * I guess.
-       */
-    }
-  
-  if (using_menu_accels)
-    {
-      gtk_settings_set_string_property (gtk_settings_get_default (),
-                                        "gtk-menu-bar-accel",
-                                        saved_menu_accel,
-                                        "gnome-terminal");
-    }
-  else
-    {
-      gtk_settings_set_string_property (gtk_settings_get_default (),
-                                        "gtk-menu-bar-accel",
-                                        /* no one will ever press this ;-) */
-                                        "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10",
-                                        "gnome-terminal");
-    }
 }
