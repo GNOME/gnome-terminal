@@ -63,11 +63,7 @@ static const struct {
   { "ISO-8859-14",	N_("Celtic") },
   { "ISO-8859-15",	N_("Western") },
   { "ISO-8859-16",	N_("Romanian") },
-  { "UTF-7",	         N_("Unicode") },
   { "UTF-8",	N_("Unicode") },
-  { "UTF-16",	N_("Unicode") },
-  { "UCS-2",	N_("Unicode") },
-  { "UCS-4",	N_("Unicode") },
   { "ARMSCII-8",	N_("Armenian") },
   { "BIG5",	N_("Chinese Traditional") },
   { "BIG5-HKSCS",	N_("Chinese Traditional") },
@@ -89,7 +85,6 @@ static const struct {
   { "ISO-2022-JP",	N_("Japanese") },
   { "ISO-2022-KR",	N_("Korean") },
   { "ISO-IR-111",	N_("Cyrillic") },
-  { "JOHAB",	N_("Korean") },
   { "KOI8-R",	N_("Cyrillic") },
   { "KOI8-U",	N_("Cyrillic/Ukrainian") },
   { "MAC_ARABIC",	N_("Arabic") },
@@ -121,6 +116,17 @@ static const struct {
   { "WINDOWS-1256",	N_("Arabic") },
   { "WINDOWS-1257",	N_("Baltic") },
   { "WINDOWS-1258",	N_("Vietnamese") },
+#if 0
+  /* These encodings do NOT pass-through ASCII, so are always rejected.
+   * FIXMEchpe: why are they in this table; or rather why do we need
+   * the ASCII pass-through requirement?
+   */
+  { "UTF-7",  N_("Unicode") },
+  { "UTF-16", N_("Unicode") },
+  { "UCS-2",  N_("Unicode") },
+  { "UCS-4",  N_("Unicode") },
+  { "JOHAB",  N_("Korean") },
+#endif
 };
                            
 static GHashTable *encodings_hashtable;
