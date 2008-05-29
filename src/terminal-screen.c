@@ -42,6 +42,9 @@
 
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
+#define URL_MATCH_CURSOR  (GDK_HAND2)
+#define SKEY_MATCH_CURSOR (GDK_HAND2)
+
 typedef struct
 {
   int tag;
@@ -2131,10 +2134,12 @@ terminal_screen_match_add (TerminalScreen            *screen,
                            int                   flavor)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  VteTerminal *terminal = VTE_TERMINAL (screen);
   TagData *tag_data;
   int tag;
   
-  tag = vte_terminal_match_add (VTE_TERMINAL (screen), regexp);
+  tag = vte_terminal_match_add (terminal, regexp);
+  vte_terminal_match_set_cursor_type (terminal, tag, URL_MATCH_CURSOR);
 
   tag_data = g_slice_new (TagData);
   tag_data->tag = tag;
@@ -2144,15 +2149,17 @@ terminal_screen_match_add (TerminalScreen            *screen,
 }
 
 static void
-terminal_screen_skey_match_add (TerminalScreen            *screen,
-                                const char           *regexp,
-                                int                   flavor)
+terminal_screen_skey_match_add (TerminalScreen *screen,
+                                const char *regexp,
+                                int flavor)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  VteTerminal *terminal = VTE_TERMINAL (screen);
   TagData *tag_data;
   int tag;
   
-  tag = vte_terminal_match_add ( VTE_TERMINAL (screen), regexp);
+  tag = vte_terminal_match_add (terminal, regexp);
+  vte_terminal_match_set_cursor_type (terminal, tag, SKEY_MATCH_CURSOR);
 
   tag_data = g_slice_new (TagData);
   tag_data->tag = tag;
