@@ -111,14 +111,9 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
                                               guint            page_num,
                                               TerminalWindow  *window);
 
-static void new_window                    (TerminalWindow  *window,
-                                           TerminalScreen  *screen,
-                                           TerminalProfile *profile);
-
 /* Menu action callbacks */
 static void terminal_menu_activate_callback (GtkAction *action,
                                            TerminalWindow *window);
-
 static void file_new_window_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void file_new_tab_callback             (GtkAction *action,
@@ -167,7 +162,6 @@ static void tabs_move_right_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void tabs_detach_tab_callback          (GtkAction *action,
                                                TerminalWindow *window);
-
 static void help_contents_callback        (GtkAction *action,
                                            TerminalWindow *window);
 static void help_about_callback           (GtkAction *action,
@@ -848,25 +842,23 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
 {
   TerminalScreen *screen;
   TerminalWindow *source_window;
-  TerminalWindow *dest_window;
-  TerminalWindowPrivate *dest_priv;
-  double zoom;
+  TerminalWindow *new_window;
+  TerminalWindowPrivate *new_priv;
 
   screen = terminal_screen_container_get_screen (container);
   source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
-
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
 
-  zoom = terminal_screen_get_font_scale (screen);
-
-  dest_window = terminal_app_new_window (terminal_app_get (), NULL, NULL, NULL, -1);
-  dest_priv = dest_window->priv;
-  dest_priv->present_on_insert = TRUE;
+  new_window = terminal_app_new_window (terminal_app_get (),
+                                        gtk_widget_get_screen (GTK_WIDGET (source_window)),
+                                        NULL /* FIXME? */);
+  new_priv = new_window->priv;
+  new_priv->present_on_insert = TRUE;
 
   update_tab_visibility (source_window, -1);
-  update_tab_visibility (dest_window, +1);
+  update_tab_visibility (new_window, +1);
 
-  return GTK_NOTEBOOK (dest_priv->notebook);
+  return GTK_NOTEBOOK (new_priv->notebook);
 }
 
 static void
@@ -1101,6 +1093,7 @@ static void
 screen_close_cb (TerminalScreen *screen,
                  TerminalWindow *window)
 {
+  g_print ("window %p screen-close %p\n", window, screen);
   terminal_window_remove_screen (window, screen);
 }
 
@@ -1464,6 +1457,8 @@ terminal_window_init (TerminalWindow *window)
   window_group = gtk_window_group_new ();
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
   g_object_unref (window_group);
+
+  terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
 }
 
 static void
@@ -2155,7 +2150,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   if (priv->present_on_insert)
     {
-      gtk_window_present (GTK_WINDOW (window));
+      gtk_window_present_with_time (GTK_WINDOW (window), gtk_get_current_event_time ());
       priv->present_on_insert = FALSE;
     }
 
@@ -2312,55 +2307,38 @@ static void
 file_new_window_callback (GtkAction *action,
                           TerminalWindow *window)
 {
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalApp *app;
+  TerminalWindow *new_window;
   TerminalProfile *profile;
+  char *geometry;
+  int width, height;
+
+  app = terminal_app_get ();
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
-    profile = terminal_app_get_default_profile (terminal_app_get ());
+    profile = terminal_app_get_default_profile (app);
   if (!profile)
     return;
 
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  new_window (window, NULL, profile);
-}
+  /* FIXMEchpe: this seems wrong if tabs are shown in the window */
+  terminal_screen_get_size (priv->active_screen, &width, &height);
+  geometry = g_strdup_printf ("%dx%d", width, height);
 
-static void
-new_window (TerminalWindow *window,
-            TerminalScreen *screen,
-            TerminalProfile *profile)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  char *display_name, *geometry;
-  const char *dir;
-
-  display_name = gdk_screen_make_display_name (gtk_widget_get_screen (GTK_WIDGET (window)));
-
-  dir = terminal_screen_get_working_dir (priv->active_screen);
-
-  if (screen)
-    {
-      int width, height;
-
-      terminal_screen_get_size (screen, &width, &height);
-      geometry = g_strdup_printf("%dx%d", width, height);
-    }
-  else
-    {
-      geometry = NULL;
-    }
-
-  terminal_app_new_terminal (terminal_app_get (),
-                             profile,
-                             NULL,
-                             screen,
-                             FALSE, FALSE, FALSE,
-                             NULL, geometry, NULL, dir, NULL, 1.0,
-                             NULL, display_name, -1);
-
+  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)),
+                                        geometry);
   g_free (geometry);
-  g_free (display_name);
+
+  terminal_app_new_terminal (app, new_window, profile,
+                             NULL, NULL,
+                             terminal_screen_get_working_dir (priv->active_screen),
+                             1.0);
+
+  gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
 
 static void
@@ -2369,7 +2347,6 @@ file_new_tab_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
-  const char *dir;
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
@@ -2380,15 +2357,10 @@ file_new_tab_callback (GtkAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
       
-  dir = terminal_screen_get_working_dir (priv->active_screen);
-
-  terminal_app_new_terminal (terminal_app_get (),
-                             profile,
-                             window,
-                             NULL,
-                             FALSE, FALSE, FALSE,
-                             NULL, NULL, NULL, dir, NULL, 1.0,
-                             NULL, NULL, -1);
+  terminal_app_new_terminal (terminal_app_get (), window, profile,
+                             NULL, NULL,
+                             terminal_screen_get_working_dir (priv->active_screen),
+                             1.0);
 }
 
 static void
@@ -2813,18 +2785,30 @@ tabs_detach_tab_callback (GtkAction *action,
                           TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
-  TerminalProfile *profile;
-  gint page_num;
-  GtkWidget *page;
+  TerminalApp *app;
+  TerminalWindow *new_window;
   TerminalScreen *screen;
+  char *geometry;
+  int width, height;
 
-  page_num = gtk_notebook_get_current_page (notebook);
-  page = gtk_notebook_get_nth_page (notebook, page_num);
+  app = terminal_app_get ();
 
-  screen = terminal_screen_container_get_screen (page);
-  profile = terminal_screen_get_profile (screen);
-  new_window (window, screen, profile);
+  screen = priv->active_screen;
+
+  /* FIXMEchpe: this seems wrong if tabs are shown in the window */
+  terminal_screen_get_size (screen, &width, &height);
+  geometry = g_strdup_printf ("%dx%d", width, height);
+
+  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)),
+                                        geometry);
+  g_free (geometry);
+
+  g_object_ref_sink (screen);
+  terminal_window_remove_screen (window, screen);
+  terminal_window_add_screen (new_window, screen, -1);
+  g_object_unref (screen);
+
+  gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
 
 static void

@@ -990,13 +990,9 @@ profile_forgotten_callback (TerminalProfile *profile,
 {
   TerminalProfile *new_profile;
 
-  /* Revert to the new term profile if any */
-  new_profile = terminal_app_get_profile_for_new_term (terminal_app_get (), NULL);
-
-  if (new_profile)
-    terminal_screen_set_profile (screen, new_profile);
-  else
-    g_assert_not_reached (); /* FIXME ? */
+  new_profile = terminal_app_get_profile_for_new_term (terminal_app_get ());
+  g_assert (new_profile);
+  terminal_screen_set_profile (screen, new_profile);
 }
 
 void
@@ -1982,6 +1978,7 @@ drag_data_received (TerminalScreen   *widget,
 
     case TARGET_TAB:
       {
+        GtkWidget *container;
         TerminalScreen *moving_screen;
         TerminalWindow *source_window;
         TerminalWindow *dest_window;
@@ -1989,9 +1986,15 @@ drag_data_received (TerminalScreen   *widget,
         GtkWidget *dest_notebook;
         gint page_num;
 
-        moving_screen = *(TerminalScreen**) selection_data->data;
+        /* FIXMEchpe same-app only!? */
+        container = *(GtkWidget**) selection_data->data;
+        if (!GTK_IS_WIDGET (container))
+          return;
 
+        moving_screen = terminal_screen_container_get_screen (container);
         g_return_if_fail (TERMINAL_IS_SCREEN (moving_screen));
+        if (!TERMINAL_IS_SCREEN (moving_screen))
+          return;
 
         source_window = moving_screen->priv->window;
         source_notebook = terminal_window_get_notebook (source_window);
@@ -2000,9 +2003,9 @@ drag_data_received (TerminalScreen   *widget,
         page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
                                           GTK_WIDGET (screen));
 
-        g_object_ref (G_OBJECT (moving_screen));
+        g_object_ref_sink (moving_screen);
         terminal_window_add_screen (dest_window, moving_screen, page_num);
-        g_object_unref (G_OBJECT (moving_screen));
+        g_object_unref (moving_screen);
 
         gtk_drag_finish (context, TRUE, TRUE, time);
       }

@@ -67,27 +67,16 @@ void terminal_app_new_profile (TerminalApp     *app,
                                GtkWindow       *transient_parent);
 
 TerminalWindow * terminal_app_new_window   (TerminalApp *app,
-                                            const char *role,
-                                            const char *startup_id,
-                                            const char *display_name,
-                                            int screen_number);
+                                            GdkScreen *screen,
+                                            const char *geometry);
 
-void terminal_app_new_terminal (TerminalApp     *app,
-                                TerminalProfile *profile,
-                                TerminalWindow  *window,
-                                TerminalScreen  *screen,
-                                gboolean         force_menubar_state,
-                                gboolean         forced_menubar_state,
-                                gboolean         start_fullscreen,
-                                char           **override_command,
-                                const char      *geometry,
-                                const char      *title,
-                                const char      *working_dir,
-                                const char      *role,
-                                double           zoom,
-                                const char      *startup_id,
-                                const char      *display_name,
-                                int              screen_number);
+TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
+                                           TerminalWindow  *window,
+                                           TerminalProfile *profile,
+                                           char           **override_command,
+                                           const char      *title,
+                                           const char      *working_dir,
+                                           double           zoom);
 
 TerminalWindow *terminal_app_get_current_window (TerminalApp *app);
 
@@ -116,8 +105,7 @@ TerminalProfile* terminal_app_get_profile_by_visible_name (TerminalApp *app,
 TerminalProfile* terminal_app_get_default_profile (TerminalApp *app);
 
 /* never returns NULL if any profiles exist, one is always supposed to */
-TerminalProfile* terminal_app_get_profile_for_new_term (TerminalApp *app,
-                                                        TerminalProfile *current);
+TerminalProfile* terminal_app_get_profile_for_new_term (TerminalApp *app);
 
 G_END_DECLS
 

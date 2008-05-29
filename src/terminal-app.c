@@ -266,91 +266,6 @@ terminal_app_delete_profile (TerminalApp *app,
   g_free (gconf_dir);
 }
 
-static GdkScreen*
-find_screen_by_display_name (const char *display_name,
-                             int         screen_number)
-{
-  GdkScreen *screen;
-  
-  /* --screen=screen_number overrides --display */
-  
-  screen = NULL;
-  
-  if (display_name == NULL)
-    {
-      if (screen_number >= 0)
-        screen = gdk_display_get_screen (gdk_display_get_default (), screen_number);
-
-      if (screen == NULL)
-        screen = gdk_screen_get_default ();
-
-      g_object_ref (G_OBJECT (screen));
-    }
-  else
-    {
-      GSList *displays;
-      GSList *tmp;
-      const char *period;
-      GdkDisplay *display;
-        
-      period = strrchr (display_name, '.');
-      if (period)
-        {
-          gulong n;
-          char *end;
-          
-          errno = 0;
-          end = NULL;
-          n = g_ascii_strtoull (period + 1, &end, 0);
-          if (errno == 0 && (period + 1) != end)
-            screen_number = n;
-        }
-      
-      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-
-      display = NULL;
-      tmp = displays;
-      while (tmp != NULL)
-        {
-          const char *this_name;
-
-          display = tmp->data;
-          this_name = gdk_display_get_name (display);
-          
-          /* compare without the screen number part */
-          if (strncmp (this_name, display_name, period - display_name) == 0)
-            break;
-
-          tmp = tmp->next;
-        }
-      
-      g_slist_free (displays);
-
-      if (display == NULL)
-        display = gdk_display_open (display_name); /* FIXME we never close displays */
-      
-      if (display != NULL)
-        {
-          if (screen_number >= 0)
-            screen = gdk_display_get_screen (display, screen_number);
-          
-          if (screen == NULL)
-            screen = gdk_display_get_default_screen (display);
-
-          if (screen)
-            g_object_ref (G_OBJECT (screen));
-        }
-    }
-
-  if (screen == NULL)
-    {
-      screen = gdk_screen_get_default ();
-      g_object_ref (G_OBJECT (screen));
-    }
-  
-  return screen;
-}
-
 static void
 terminal_app_profile_cell_data_func (GtkTreeViewColumn *tree_column,
                                      GtkCellRenderer *cell,
@@ -1688,12 +1603,9 @@ terminal_app_get (void)
 
 TerminalWindow *
 terminal_app_new_window (TerminalApp *app,
-                         const char *role,
-                         const char *startup_id,
-                         const char *display_name,
-                         int screen_number)
+                         GdkScreen *screen,
+                         const char *geometry)
 {
-  GdkScreen *gdk_screen;
   TerminalWindow *window;
   
   window = terminal_window_new ();
@@ -1702,132 +1614,61 @@ terminal_app_new_window (TerminalApp *app,
   g_signal_connect (window, "destroy",
                     G_CALLBACK (terminal_window_destroyed), app);
 
-  gdk_screen = find_screen_by_display_name (display_name, screen_number);
-  if (gdk_screen != NULL)
-    {
-      gtk_window_set_screen (GTK_WINDOW (window), gdk_screen);
-      g_object_unref (G_OBJECT (gdk_screen));
-    }
+  if (screen)
+    gtk_window_set_screen (GTK_WINDOW (window), screen);
 
-  if (startup_id != NULL)
-    terminal_window_set_startup_id (window, startup_id);
-  
-  if (role == NULL)
-    terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
-  else
-    gtk_window_set_role (GTK_WINDOW (window), role);
+  if (geometry)
+    {
+      if (!gtk_window_parse_geometry (GTK_WINDOW (window), geometry))
+        g_printerr (_("Invalid geometry string \"%s\"\n"), geometry);
+    }
 
   return window;
 }
 
-void
+TerminalScreen *
 terminal_app_new_terminal (TerminalApp     *app,
-                           TerminalProfile *profile,
                            TerminalWindow  *window,
-                           TerminalScreen  *screen,
-                           gboolean         force_menubar_state,
-                           gboolean         forced_menubar_state,
-                           gboolean         start_fullscreen,
+                           TerminalProfile *profile,
                            char           **override_command,
-                           const char      *geometry,
                            const char      *title,
                            const char      *working_dir,
-                           const char      *role,
-                           double           zoom,
-                           const char      *startup_id,
-                           const char      *display_name,
-                           int              screen_number)
+                           double           zoom)
 {
-  gboolean window_created;
-  gboolean screen_created;
-  
-  g_return_if_fail (profile);
+  TerminalScreen *screen;
 
-  window_created = FALSE;
-  if (window == NULL)
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+  g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+
+  screen = terminal_screen_new ();
+
+  terminal_screen_set_profile (screen, profile);
+
+  if (title)
     {
-      window = terminal_app_new_window (app, role, startup_id, display_name, screen_number);
-      window_created = TRUE;
+      terminal_screen_set_title (screen, title);
+      terminal_screen_set_dynamic_title (screen, title, FALSE);
+      terminal_screen_set_dynamic_icon_title (screen, title, FALSE);
     }
 
-  if (force_menubar_state)
-    {
-      terminal_window_set_menubar_visible (window, forced_menubar_state);
-    }
+  if (working_dir)
+    terminal_screen_set_working_dir (screen, working_dir);
 
-  screen_created = FALSE;
-  if (screen == NULL)
-    {  
-      screen_created = TRUE;
-      screen = terminal_screen_new ();
-      
-      terminal_screen_set_profile (screen, profile);
-    
-      if (title)
-        {
-          terminal_screen_set_title (screen, title);
-          terminal_screen_set_dynamic_title (screen, title, FALSE);
-          terminal_screen_set_dynamic_icon_title (screen, title, FALSE);
-        }
+  if (override_command)
+    terminal_screen_set_override_command (screen, override_command);
 
-      if (working_dir)
-        terminal_screen_set_working_dir (screen, working_dir);
-      
-      if (override_command)    
-        terminal_screen_set_override_command (screen, override_command);
-    
-      terminal_screen_set_font_scale (screen, zoom);
-      terminal_screen_set_font (screen);
-    
-      terminal_window_add_screen (window, screen, -1);
+  terminal_screen_set_font_scale (screen, zoom);
+  terminal_screen_set_font (screen);
 
-      terminal_window_switch_screen (window, screen);
-      gtk_widget_grab_focus (GTK_WIDGET (screen));
-    }
-  else
-    {
-      GtkWidget *source_toplevel;
+  terminal_window_add_screen (window, screen, -1);
+  terminal_window_switch_screen (window, screen);
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
 
-      source_toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
-      if (GTK_WIDGET_TOPLEVEL (source_toplevel) &&
-          TERMINAL_IS_WINDOW (source_toplevel))
-        {
-          TerminalWindow *source_window = TERMINAL_WINDOW (source_toplevel);
+  terminal_screen_launch_child (screen);
 
-          g_object_ref_sink (screen);
-          terminal_window_remove_screen (source_window, screen);
-          terminal_window_add_screen (window, screen, -1);
-          g_object_unref (screen);
-
-          terminal_window_switch_screen (window, screen);
-          gtk_widget_grab_focus (GTK_WIDGET (screen));
-        }
-    }
-
-  if (geometry)
-    {
-      if (!gtk_window_parse_geometry (GTK_WINDOW (window),
-                                      geometry))
-        g_printerr (_("Invalid geometry string \"%s\"\n"),
-                    geometry);
-    }
-
-  if (start_fullscreen)
-    {
-      gtk_window_fullscreen (GTK_WINDOW (window));
-    }
-
-  /* don't present on new tab, or we can accidentally make the
-   * terminal jump workspaces.
-   * http://bugzilla.gnome.org/show_bug.cgi?id=78253
-   */
-  if (window_created)
-    gtk_window_present (GTK_WINDOW (window));
-
-  if (screen_created)
-    terminal_screen_launch_child (screen);
+  return screen;
 }
-
 
 void
 terminal_app_edit_profile (TerminalApp     *app,
@@ -1919,27 +1760,19 @@ terminal_app_get_default_profile (TerminalApp *app)
 }
 
 TerminalProfile*
-terminal_app_get_profile_for_new_term (TerminalApp *app,
-                                       TerminalProfile *current)
+terminal_app_get_profile_for_new_term (TerminalApp *app)
 {
-  GList *list;
-  TerminalProfile *profile;
+  GHashTableIter iter;
+  TerminalProfile *profile = NULL;
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
 
-  if (current)
-    return current;
-  
   if (app->default_profile)
     return app->default_profile;	
 
-  list = terminal_app_get_profile_list (app);
-  if (list)
-    profile = list->data;
-  else
-    profile = NULL;
+  g_hash_table_iter_init (&iter, app->profiles);
+  if (g_hash_table_iter_next (&iter, NULL, (gpointer*) &profile))
+    return profile;
 
-  g_list_free (list);
-
-  return profile;
+  return NULL;
 }
