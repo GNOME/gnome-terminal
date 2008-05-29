@@ -83,8 +83,8 @@ struct _TerminalWindowPrivate
 #define SET_ENCODING_UI_PATH              "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
 #define SET_ENCODING_ACTION_NAME_PREFIX   "TerminalSetEncoding"
 
-#define STOCK_NEW_WINDOW NULL
-#define STOCK_NEW_TAB NULL
+#define STOCK_NEW_WINDOW  "tab-new"
+#define STOCK_NEW_TAB     "window-new"
  
 static void terminal_window_init        (TerminalWindow      *window);
 static void terminal_window_class_init  (TerminalWindowClass *klass);
