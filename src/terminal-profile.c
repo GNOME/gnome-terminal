@@ -1442,9 +1442,9 @@ terminal_profile_get_property_boxed (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_BOXED (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_BOXED (value), NULL);
   if (!value || !G_VALUE_HOLDS_BOXED (value))
-    return FALSE;
+    return NULL;
 
   return g_value_get_boxed (value);
 }
@@ -1456,9 +1456,9 @@ terminal_profile_get_property_double (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_DOUBLE (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_DOUBLE (value), 0.0);
   if (!value || !G_VALUE_HOLDS_DOUBLE (value))
-    return FALSE;
+    return 0.0;
 
   return g_value_get_double (value);
 }
@@ -1470,9 +1470,9 @@ terminal_profile_get_property_enum (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_ENUM (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_ENUM (value), 0);
   if (!value || !G_VALUE_HOLDS_ENUM (value))
-    return FALSE;
+    return 0;
 
   return g_value_get_enum (value);
 }
@@ -1484,9 +1484,9 @@ terminal_profile_get_property_int (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_INT (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_INT (value), 0);
   if (!value || !G_VALUE_HOLDS_INT (value))
-    return FALSE;
+    return 0;
 
   return g_value_get_int (value);
 }
@@ -1498,9 +1498,9 @@ terminal_profile_get_property_object (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_OBJECT (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_OBJECT (value), NULL);
   if (!value || !G_VALUE_HOLDS_OBJECT (value))
-    return FALSE;
+    return NULL;
 
   return g_value_get_object (value);
 }
@@ -1512,9 +1512,9 @@ terminal_profile_get_property_string (TerminalProfile *profile,
   const GValue *value;
 
   value = get_prop_value_from_prop_name (profile, prop_name);
-  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_STRING (value), FALSE);
+  g_return_val_if_fail (value != NULL && G_VALUE_HOLDS_STRING (value), NULL);
   if (!value || !G_VALUE_HOLDS_STRING (value))
-    return FALSE;
+    return NULL;
 
   return g_value_get_string (value);
 }
