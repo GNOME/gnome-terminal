@@ -1156,62 +1156,41 @@ terminal_app_new_profile (TerminalApp     *app,
 
   if (app->new_profile_dialog == NULL)
     {
-      GladeXML *xml;
-      GtkWidget *w, *wl;
-      GtkWidget *create_button, *combo;
-      GtkSizeGroup *size_group, *size_group_labels;
+      GtkWidget *create_button, *table, *name_label, *name_entry, *base_label, *combo;
 
-      xml = terminal_util_load_glade_file (TERM_GLADE_FILE, "new-profile-dialog", transient_parent);
-
-      if (xml == NULL)
+      if (!terminal_util_load_builder_file ("profile-new-dialog.ui",
+                                            "new-profile-dialog", &app->new_profile_dialog,
+                                            "new-profile-create-button", &create_button,
+                                            "new-profile-table", &table,
+                                            "new-profile-name-label", &name_label,
+                                            "new-profile-name-entry", &name_entry,
+                                            "new-profile-base-label", &base_label,
+                                            NULL))
         return;
 
-      app->new_profile_dialog = glade_xml_get_widget (xml, "new-profile-dialog");
       g_signal_connect (G_OBJECT (app->new_profile_dialog), "response", G_CALLBACK (new_profile_response_callback), app);
-
-      terminal_util_set_unique_role (GTK_WINDOW (app->new_profile_dialog), "gnome-terminal-new-profile");
-  
       g_object_add_weak_pointer (G_OBJECT (app->new_profile_dialog), (void**) &app->new_profile_dialog);
 
-      create_button = glade_xml_get_widget (xml, "new-profile-create-button");
       g_object_set_data (G_OBJECT (app->new_profile_dialog), "create_button", create_button);
       gtk_widget_set_sensitive (create_button, FALSE);
 
-      size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-      size_group_labels = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
       /* the name entry */
-      w = glade_xml_get_widget (xml, "new-profile-name-entry");
-      g_object_set_data (G_OBJECT (app->new_profile_dialog), "name_entry", w);
-      g_signal_connect (G_OBJECT (w), "changed", G_CALLBACK (new_profile_name_entry_changed_callback), create_button);
-      gtk_entry_set_activates_default (GTK_ENTRY (w), TRUE);
-      gtk_widget_grab_focus (w);
-      terminal_util_set_atk_name_description (w, NULL, _("Enter profile name"));
-      gtk_size_group_add_widget (size_group, w);
+      g_object_set_data (G_OBJECT (app->new_profile_dialog), "name_entry", name_entry);
+      g_signal_connect (name_entry, "changed", G_CALLBACK (new_profile_name_entry_changed_callback), create_button);
+      gtk_entry_set_activates_default (GTK_ENTRY (name_entry), TRUE);
+      gtk_widget_grab_focus (name_entry);
 
-      wl = glade_xml_get_widget (xml, "new-profile-name-label");
-      gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
-      gtk_size_group_add_widget (size_group_labels, wl);
- 
+      gtk_label_set_mnemonic_widget (GTK_LABEL (name_label), name_entry);
+
       /* the base profile option menu */
-      w = glade_xml_get_widget (xml, "new-profile-table");
       combo = profile_combo_box_new ();
-      gtk_table_attach_defaults (GTK_TABLE (w), combo, 1, 2, 1, 2);
-      w = combo;
-      g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", w);
-      terminal_util_set_atk_name_description (w, NULL, _("Choose base profile"));
-      gtk_size_group_add_widget (size_group, w);
+      gtk_table_attach_defaults (GTK_TABLE (table), combo, 1, 2, 1, 2);
+      g_object_set_data (G_OBJECT (app->new_profile_dialog), "base_option_menu", combo);
+      terminal_util_set_atk_name_description (combo, NULL, _("Choose base profile"));
 
-      wl = glade_xml_get_widget (xml, "new-profile-base-label");
-      gtk_label_set_mnemonic_widget (GTK_LABEL (wl), w);
-      gtk_size_group_add_widget (size_group_labels, wl);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (base_label), combo);
 
       gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), RESPONSE_CREATE);
-
-      g_object_unref (G_OBJECT (size_group));
-      g_object_unref (G_OBJECT (size_group_labels));
-
-      g_object_unref (G_OBJECT (xml));
     }
 
   gtk_window_set_transient_for (GTK_WINDOW (app->new_profile_dialog),

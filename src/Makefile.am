@@ -94,6 +94,7 @@ ui_DATA = \
 	encodings-dialog.ui \
 	keybinding-editor.ui \
 	profile-manager.ui \
+	profile-new-dialog.ui \
 	skey-challenge.ui \
 	$(NULL)
 
