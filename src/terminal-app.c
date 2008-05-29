@@ -92,6 +92,8 @@ struct _TerminalApp
   GtkWidget *manage_profiles_edit_button;
   GtkWidget *manage_profiles_delete_button;
   GtkWidget *manage_profiles_default_menu;
+
+  guint profile_list_notify_id;
 };
 
 enum {
@@ -102,18 +104,19 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
+enum
+{
+  RESPONSE_CREATE = GTK_RESPONSE_ACCEPT, /* Arghhh: Glade wants a GTK_RESPONSE_* for dialog buttons */
+  RESPONSE_CANCEL,
+  RESPONSE_DELETE
+};
+
 static GConfClient *conf = NULL;
 static TerminalApp *global_app = NULL;
 
 #define TERMINAL_STOCK_EDIT "terminal-edit"
+#define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 
-static void         sync_profile_list            (TerminalApp *app,
-    gboolean use_this_list,
-                                                  GSList  *this_list);
-static void profile_list_notify   (GConfClient *client,
-                                   guint        cnxn_id,
-                                   GConfEntry  *entry,
-                                   gpointer     user_data);
 static void refill_profile_treeview (GtkWidget *tree_view);
 
 static GtkWidget*       profile_optionmenu_new          (void);
@@ -243,46 +246,41 @@ find_profile_link (GList      *profiles,
 }
 
 static void
-sync_profile_list (TerminalApp *app,
-                   gboolean use_this_list,
-                   GSList  *this_list)
+terminal_app_profile_list_notify_cb (GConfClient *conf,
+                                     guint        cnxn_id,
+                                     GConfEntry  *entry,
+                                     gpointer     user_data)
 {
-  GList *known;
-  GSList *updated;
-  GList *tmp_list;
-  GSList *tmp_slist;
-  GError *err;
+  TerminalApp *app = TERMINAL_APP (user_data);
+  GConfValue *val;
+  GSList *value_list, *tmp_slist;
+  GList *known, *tmp_list;
   gboolean need_new_default;
   TerminalProfile *fallback;
   
   known = terminal_profile_get_list ();
 
-  if (use_this_list)
-    {
-      updated = g_slist_copy (this_list);
-    }
-  else
-    {
-      err = NULL;
-      updated = gconf_client_get_list (conf,
-                                       CONF_GLOBAL_PREFIX"/profile_list",
-                                       GCONF_VALUE_STRING,
-                                       &err);
-      if (err)
-        {
-          g_printerr (_("There was an error getting the list of terminal profiles. (%s)\n"),
-                      err->message);
-          g_error_free (err);
-        }
-    }
+  val = gconf_entry_get_value (entry);
+
+  if (val == NULL ||
+      val->type != GCONF_VALUE_LIST ||
+      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
+    goto ensure_one_profile;
+    
+  value_list = gconf_value_get_list (val);
 
   /* Add any new ones */
-  tmp_slist = updated;
-  while (tmp_slist != NULL)
+  for (tmp_slist = value_list; tmp_slist != NULL; tmp_slist = tmp_slist->next)
     {
+      GConfValue *listvalue = (GConfValue *) (tmp_slist->data);
+      const char *profile_name;
       GList *link;
-      
-      link = find_profile_link (known, tmp_slist->data);
+
+      profile_name = gconf_value_get_string (listvalue);
+      if (!profile_name)
+        continue;
+
+      link = find_profile_link (known, profile_name);
       
       if (link)
         {
@@ -293,18 +291,13 @@ sync_profile_list (TerminalApp *app,
         {
           TerminalProfile *profile;
           
-          profile = terminal_profile_new (tmp_slist->data);
+          profile = terminal_profile_new (profile_name);
 
           terminal_profile_update (profile);
         }
-
-      if (!use_this_list)
-        g_free (tmp_slist->data);
-
-      tmp_slist = tmp_slist->next;
     }
 
-  g_slist_free (updated);
+ensure_one_profile:
 
   fallback = NULL;
   if (terminal_profile_get_count () == 0 ||
@@ -385,52 +378,6 @@ sync_profile_list (TerminalApp *app,
 }
 
 static void
-profile_list_notify (GConfClient *client,
-                     guint        cnxn_id,
-                     GConfEntry  *entry,
-                     gpointer     user_data)
-{
-  GConfValue *val;
-  GSList *value_list;
-  GSList *string_list;
-  GSList *tmp;
-  
-  val = gconf_entry_get_value (entry);
-
-  if (val == NULL ||
-      val->type != GCONF_VALUE_LIST ||
-      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
-    value_list = NULL;
-  else
-    value_list = gconf_value_get_list (val);
-
-  string_list = NULL;
-  tmp = value_list;
-  while (tmp != NULL)
-    {
-      string_list = g_slist_prepend (string_list,
-                                     g_strdup (gconf_value_get_string ((GConfValue*)tmp->data)));
-
-      tmp = tmp->next;
-    }
-
-  string_list = g_slist_reverse (string_list);
-  
-  sync_profile_list (terminal_app_get (), TRUE, string_list);
-
-  g_slist_foreach (string_list, (GFunc) g_free, NULL);
-  g_slist_free (string_list);
-}
-
-enum
-{
-  RESPONSE_CREATE = GTK_RESPONSE_ACCEPT, /* Arghhh: Glade wants a GTK_RESPONSE_* for dialog buttons */
-  RESPONSE_CANCEL,
-  RESPONSE_DELETE
-};
-
-
-static void
 new_profile_response_callback (GtkWidget *new_profile_dialog,
                                int        response_id,
                                TerminalApp *app)
@@ -492,7 +439,10 @@ new_profile_response_callback (GtkWidget *new_profile_dialog,
       escaped_name = terminal_profile_create (base_profile, name, transient_parent);
       new_profile = terminal_profile_new (escaped_name);
       terminal_profile_update (new_profile);
-      sync_profile_list (app, FALSE, NULL);
+
+      /* FIXMEchpe: should be obsolete due to gconf notification */
+      gconf_client_notify (conf, PROFILE_LIST_KEY);
+
       g_free (escaped_name);
       
       if (new_profile == NULL)
@@ -1385,43 +1335,28 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  GError *err;
 //   GConfClient *conf;
 
   global_app = app;
 
   conf = gconf_client_get_default ();
 
-  err = NULL;
   gconf_client_add_dir (conf, CONF_GLOBAL_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        &err);
-  if (err)
-    {
-      g_printerr (_("There was an error loading config from %s. (%s)\n"),
-                  CONF_GLOBAL_PREFIX, err->message);
-      g_error_free (err);
-    }
+                        NULL);
   
-  err = NULL;
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/profile_list",
-                           profile_list_notify,
-                           app,
-                           NULL, &err);
-
-  if (err)
-    {
-      g_printerr (_("There was an error subscribing to notification of terminal profile list changes. (%s)\n"),
-                  err->message);
-      g_error_free (err);
-    }  
+  app->profile_list_notify_id =
+    gconf_client_notify_add (conf, PROFILE_LIST_KEY,
+                             terminal_app_profile_list_notify_cb,
+                             app,
+                             NULL, NULL);
 
   terminal_accels_init ();
   terminal_encoding_init ();
   
   terminal_profile_initialize (conf);
-  sync_profile_list (app, FALSE, NULL);
+  /* And now read the profile list */
+  gconf_client_notify (conf, PROFILE_LIST_KEY);
 
   g_object_unref (conf);
 }
@@ -1434,8 +1369,10 @@ terminal_app_finalize (GObject *object)
 
   conf = gconf_client_get_default ();
 
+  if (app->profile_list_notify_id != 0)
+    gconf_client_notify_remove (conf, app->profile_list_notify_id);
+
   gconf_client_remove_dir (conf, CONF_GLOBAL_PREFIX, NULL);
-//   gconf_client_notify_remove (app->profile_list_notify_id);
 
   g_object_unref (conf);
 
