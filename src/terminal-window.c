@@ -1315,7 +1315,7 @@ terminal_window_init (TerminalWindow *window)
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
-                                                 TERM_PKGDATADIR "/terminal.ui",
+                                                 TERM_PKGDATADIR "/terminal.xml",
                                                  &error);
   if (error)
     {
