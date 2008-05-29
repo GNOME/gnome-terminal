@@ -108,18 +108,6 @@ widget_and_labels_set_sensitive (GtkWidget *widget, gboolean sensitive)
 }
 
 static void
-set_insensitive (GtkWidget  *editor,
-                 const char *widget_name,
-                 gboolean    setting)
-{
-  GtkWidget *w;  
-
-  w = profile_editor_get_widget (editor, widget_name);
-
-  widget_and_labels_set_sensitive (w, !setting);
-}
-
-static void
 profile_forgotten_cb (TerminalProfile *profile,
                       GtkWidget *editor)
 {
@@ -140,145 +128,157 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
   else
     prop_name = NULL;
   
-  /* This one can't be short-circuited by the cache, since
-   * it depends on settings
-   */
+#define SET_SENSITIVE(name, setting) widget_and_labels_set_sensitive (profile_editor_get_widget (editor, name), setting)
+
   use_custom_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND);
-  set_insensitive (editor, "custom-command-box",
-                   use_custom_locked ||
-                   !terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND));
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_USE_CUSTOM_COMMAND) ||
+      prop_name == I_(TERMINAL_PROFILE_CUSTOM_COMMAND))
+    {
+      SET_SENSITIVE ("use-custom-command-checkbutton", !use_custom_locked);
+      SET_SENSITIVE ("custom-command-box",
+                     terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND) &&
+                     terminal_profile_property_locked (profile, TERMINAL_PROFILE_CUSTOM_COMMAND));
+    }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE))
     {
-    bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
-    if (bg_type == TERMINAL_BACKGROUND_IMAGE)
-      {
-        set_insensitive (editor, "background-image-filechooser", terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
-        set_insensitive (editor, "scroll-background-checkbutton", terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
-        set_insensitive (editor, "darken-background-vbox", terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
-      }
-    else if (bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
-      {
-        set_insensitive (editor, "background-image-filechooser", TRUE);
-        set_insensitive (editor, "scroll-background-checkbutton", TRUE);
-        set_insensitive (editor, "darken-background-vbox", terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
-      }
-    else
-      {
-        set_insensitive (editor, "background-image-filechooser", TRUE);
-        set_insensitive (editor, "scroll-background-checkbutton", TRUE);
-        set_insensitive (editor, "darken-background-vbox", TRUE);
-      }
+      bg_type_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+      SET_SENSITIVE ("solid-radiobutton", !bg_type_locked);
+      SET_SENSITIVE ("image-radiobutton", !bg_type_locked);
+      SET_SENSITIVE ("transparent-radiobutton", !bg_type_locked);
+
+      bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+      if (bg_type == TERMINAL_BACKGROUND_IMAGE)
+        {
+          SET_SENSITIVE ("background-image-filechooser", !terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
+          SET_SENSITIVE ("scroll-background-checkbutton", !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
+          SET_SENSITIVE ("darken-background-vbox", !terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
+        }
+      else if (bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
+        {
+          SET_SENSITIVE ("background-image-filechooser", FALSE);
+          SET_SENSITIVE ("scroll-background-checkbutton", FALSE);
+          SET_SENSITIVE ("darken-background-vbox", !terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
+        }
+      else
+        {
+          SET_SENSITIVE ("background-image-filechooser", FALSE);
+          SET_SENSITIVE ("scroll-background-checkbutton", FALSE);
+          SET_SENSITIVE ("darken-background-vbox", FALSE);
+        }
     }
 
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT))
-  {
-    //FIXMEchpe
-  if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT) ||
+      prop_name == I_(TERMINAL_PROFILE_FONT))
     {
-      set_insensitive (editor, "font-hbox", terminal_profile_property_locked (profile, TERMINAL_PROFILE_FONT));
+      SET_SENSITIVE ("font-hbox",
+                    !terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT) &&
+                    !terminal_profile_property_locked (profile, TERMINAL_PROFILE_FONT));
+      SET_SENSITIVE ("system-font-checkbutton",
+                     !terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT));
     }
-  else
-    {
-      set_insensitive (editor, "font-hbox", TRUE);
-    }
-  }
 
-  if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS))
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_FOREGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS))
     {
-      set_insensitive (editor, "foreground-colorpicker", TRUE);
-      set_insensitive (editor, "foreground-colorpicker-label", TRUE);
-      set_insensitive (editor, "background-colorpicker", TRUE);
-      set_insensitive (editor, "background-colorpicker-label", TRUE);
-      set_insensitive (editor, "color-scheme-combobox", TRUE);
-      set_insensitive (editor, "color-scheme-combobox-label", TRUE);
-    }
-  else
-    {
-      gboolean fg_locked, bg_locked;
+      gboolean fg_locked, bg_locked, use_theme_colors;
 
       fg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
       bg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
+      use_theme_colors = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS);
 
-      set_insensitive (editor, "foreground-colorpicker", fg_locked);
-      set_insensitive (editor, "foreground-colorpicker-label", fg_locked);
-      set_insensitive (editor, "background-colorpicker", bg_locked);
-      set_insensitive (editor, "background-colorpicker-label", bg_locked);
-      set_insensitive (editor, "color-scheme-combobox", fg_locked || bg_locked);
-      set_insensitive (editor, "color-scheme-combobox-label", fg_locked || bg_locked);
+      SET_SENSITIVE ("foreground-colorpicker", !use_theme_colors && !fg_locked);
+      SET_SENSITIVE ("foreground-colorpicker-label", !use_theme_colors && !fg_locked);
+      SET_SENSITIVE ("background-colorpicker", !use_theme_colors && !bg_locked);
+      SET_SENSITIVE ("background-colorpicker-label", !use_theme_colors && !bg_locked);
+      SET_SENSITIVE ("color-scheme-combobox", !use_theme_colors && !fg_locked && !bg_locked);
+      SET_SENSITIVE ("color-scheme-combobox-label", !use_theme_colors && !fg_locked && !bg_locked);
+    }
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_VISIBLE_NAME))
+    SET_SENSITIVE ("profile-name-entry",
+                  !terminal_profile_property_locked (profile, TERMINAL_PROFILE_VISIBLE_NAME));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR))
+    SET_SENSITIVE ("show-menubar-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_TITLE))
+    SET_SENSITIVE ("title-entry",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_TITLE));
+  
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_TITLE_MODE))
+    SET_SENSITIVE ("title-mode-combobox",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_TITLE_MODE));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ALLOW_BOLD))
+    SET_SENSITIVE ("allow-bold-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_ALLOW_BOLD));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SILENT_BELL))
+    SET_SENSITIVE ("bell-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SILENT_BELL));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHARS))
+    SET_SENSITIVE ("word-chars-entry",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_WORD_CHARS));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POSITION))
+    SET_SENSITIVE ("scrollbar-position-combobox",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES))
+    {
+      scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
+
+      SET_SENSITIVE ("scrollback-lines-spinbutton", !scrollback_lines_locked);
+      SET_SENSITIVE ("scrollback-kilobytes-spinbutton", !scrollback_lines_locked);
     }
   
-#if 0 /* uncomment once we've tested the sensitivity code */
-  if (mask == last_mask)
-    return;
-  g_object_set_data (G_OBJECT (editor), "cached-lock-mask",
-                     GINT_TO_POINTER (mask));
-#endif
-  
-  set_insensitive (editor, "profile-name-entry",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_VISIBLE_NAME));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE))
+    SET_SENSITIVE ("scroll-on-keystroke-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE));
 
-  set_insensitive (editor, "show-menubar-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_OUTPUT))
+    SET_SENSITIVE ("scroll-on-output-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
 
-  set_insensitive (editor, "title-entry",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_TITLE));
-  
-  set_insensitive (editor, "title-mode-combobox",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_TITLE_MODE));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_EXIT_ACTION))
+    SET_SENSITIVE ("exit-action-combobox",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_EXIT_ACTION));
 
-  set_insensitive (editor, "allow-bold-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_ALLOW_BOLD));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_LOGIN_SHELL))
+    SET_SENSITIVE ("login-shell-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_LOGIN_SHELL));
 
-  set_insensitive (editor, "bell-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_SILENT_BELL));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_UPDATE_RECORDS))
+    SET_SENSITIVE ("update-records-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_UPDATE_RECORDS));
 
-  set_insensitive (editor, "word-chars-entry",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_WORD_CHARS));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_PALETTE))
+    {
+      palette_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_PALETTE);
+      SET_SENSITIVE ("palette-combobox", !palette_locked);
+      SET_SENSITIVE ("palette-table", !palette_locked);
+    }
 
-  set_insensitive (editor, "scrollbar-position-combobox",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING))
+    SET_SENSITIVE ("backspace-binding-combobox",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKSPACE_BINDING));
 
-  scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
-  set_insensitive (editor, "scrollback-lines-spinbutton", scrollback_lines_locked);
-  set_insensitive (editor, "scrollback-kilobytes-spinbutton", scrollback_lines_locked);
-  
-  set_insensitive (editor, "scroll-on-keystroke-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_DELETE_BINDING))
+    SET_SENSITIVE ("delete-binding-combobox",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_DELETE_BINDING));
 
-  set_insensitive (editor, "scroll-on-output-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS))
+    SET_SENSITIVE ("use-theme-colors-checkbutton",
+                   !terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_THEME_COLORS));
 
-  set_insensitive (editor, "exit-action-combobox",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_EXIT_ACTION));
-
-  set_insensitive (editor, "login-shell-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_LOGIN_SHELL));
-
-  set_insensitive (editor, "update-records-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_UPDATE_RECORDS));
-
-  set_insensitive (editor, "use-custom-command-checkbutton", use_custom_locked);
-
-  palette_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_PALETTE);
-  set_insensitive (editor, "palette-combobox", palette_locked);
-  set_insensitive (editor, "palette-table", palette_locked);
-
-  bg_type_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
-  set_insensitive (editor, "solid-radiobutton", bg_type_locked);
-  set_insensitive (editor, "image-radiobutton", bg_type_locked);
-  set_insensitive (editor, "transparent-radiobutton", bg_type_locked);
-
-  set_insensitive (editor, "backspace-binding-combobox",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKSPACE_BINDING));
-  set_insensitive (editor, "delete-binding-combobox",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_DELETE_BINDING));
-
-  set_insensitive (editor, "use-theme-colors-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_THEME_COLORS));
-
-  set_insensitive (editor, "system-font-checkbutton",
-                   terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT));
+#undef SET_INSENSITIVE
 }
 
 typedef enum {
