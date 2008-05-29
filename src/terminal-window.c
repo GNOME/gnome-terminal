@@ -1071,6 +1071,13 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
                                   terminal_screen_popup_info_ref (info));
 }
 
+static void
+screen_close_cb (TerminalScreen *screen,
+                 TerminalWindow *window)
+{
+  terminal_window_remove_screen (window, screen);
+}
+
 /*****************************************/
 
 
@@ -1688,7 +1695,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 }
 
 static GtkWidget *
-construct_tab_label (TerminalWindow *window, TerminalScreen *screen, GtkWidget *screen_container)
+construct_tab_label (TerminalScreen *screen, GtkWidget *screen_container)
 {
   GtkWidget *hbox, *label, *close_button, *image;
 
@@ -1753,7 +1760,7 @@ terminal_window_add_screen (TerminalWindow *window,
 
   update_tab_visibility (window, +1);
 
-  tab_label = construct_tab_label (window, screen, screen_container);
+  tab_label = construct_tab_label (screen, screen_container);
 
   gtk_notebook_insert_page (GTK_NOTEBOOK (priv->notebook),
                             screen_container,
@@ -2063,6 +2070,9 @@ notebook_page_added_callback (GtkWidget       *notebook,
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
 
+  g_signal_connect (screen, "close-screen",
+                    G_CALLBACK (screen_close_cb), window);
+
   update_notebook (window);
 
   update_tab_visibility (window, 0);
@@ -2135,6 +2145,10 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   g_signal_handlers_disconnect_by_func (screen,
                                         G_CALLBACK (screen_show_popup_menu_callback),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (screen,
+                                        G_CALLBACK (screen_close_cb),
                                         window);
 
   /* FIXMEchpe this should have been done by the parent-set handler already! */
@@ -2373,8 +2387,10 @@ file_close_tab_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   
-  if (priv->active_term)
-    terminal_screen_close (priv->active_term);
+  if (!priv->active_term)
+    return;
+
+  terminal_window_remove_screen (window, priv->active_term);
 }
 
 static void

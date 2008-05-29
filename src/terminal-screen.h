@@ -62,6 +62,7 @@ struct _TerminalScreenClass
                                TerminalProfile *old_profile);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
+  void (* close_screen)       (TerminalScreen *screen);
 };
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
@@ -87,8 +88,6 @@ void terminal_screen_launch_child (TerminalScreen *screen);
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 const char* terminal_screen_get_icon_title     (TerminalScreen *screen);
 gboolean    terminal_screen_get_icon_title_set (TerminalScreen *screen);
-
-void terminal_screen_close (TerminalScreen *screen);
 
 void terminal_screen_edit_title (TerminalScreen *screen,
                                  GtkWindow      *transient_parent);

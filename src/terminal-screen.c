@@ -74,6 +74,7 @@ enum
 {
   PROFILE_SET,
   SHOW_POPUP_MENU,
+  CLOSE_SCREEN,
   LAST_SIGNAL
 };
 
@@ -438,7 +439,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->screen_changed = terminal_screen_screen_changed;
 
   signals[PROFILE_SET] =
-    g_signal_new (I_("profile_set"),
+    g_signal_new (I_("profile-set"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalScreenClass, profile_set),
@@ -458,6 +459,16 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   1,
                   G_TYPE_POINTER);
 
+  signals[CLOSE_SCREEN] =
+    g_signal_new (I_("close-screen"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalScreenClass, close_screen),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
+  
   g_object_class_install_property
     (object_class,
      PROP_ICON_TITLE,
@@ -1361,17 +1372,6 @@ terminal_screen_launch_child (TerminalScreen *screen)
   g_strfreev (env);
 }
 
-void
-terminal_screen_close (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  g_return_if_fail (priv->window);
-
-  terminal_window_remove_screen (priv->window, screen);
-  /* screen should be finalized here, do not touch it past this point */
-}
-
 static TerminalScreenPopupInfo *
 terminal_screen_popup_info_new (TerminalScreen *screen)
 {
@@ -1748,7 +1748,7 @@ terminal_screen_widget_child_died (GtkWidget      *term,
   switch (action)
     {
     case TERMINAL_EXIT_CLOSE:
-      terminal_screen_close (screen);
+      g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
     case TERMINAL_EXIT_RESTART:
       terminal_screen_launch_child (screen);
