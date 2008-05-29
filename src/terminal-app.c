@@ -858,18 +858,16 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
 {
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *val;
-  const char *name;
+  const char *name = NULL;
   
   app->default_profile_locked = !gconf_entry_get_is_writable (entry);
 
   val = gconf_entry_get_value (entry);  
-  if (val == NULL ||
-      val->type != GCONF_VALUE_STRING)
-    return;
-  
-  name = gconf_value_get_string (val);
+  if (val != NULL &&
+      val->type == GCONF_VALUE_STRING)
+    name = gconf_value_get_string (val);
   if (!name)
-    name = FALLBACK_PROFILE_ID; /* FIXMEchpe? */
+    name = FALLBACK_PROFILE_ID;
 
   g_free (app->default_profile_id);
   app->default_profile_id = g_strdup (name);
@@ -1652,8 +1650,6 @@ terminal_app_new_terminal (TerminalApp     *app,
     
       terminal_window_add_screen (window, screen, -1);
 
-//       terminal_screen_reread_profile (screen); FIXMEchpe this should be obsolete by the set_profile above
-    
       terminal_window_set_active (window, screen);
       gtk_widget_grab_focus (GTK_WIDGET (screen));
     }
@@ -1749,7 +1745,6 @@ terminal_app_get_current_window (TerminalApp *app)
   return g_list_last (app->windows)->data;
 }
 
-/* FIXMEchpe: make this list contain ref'd objects */
 /**
  * terminal_profile_get_list:
  *
