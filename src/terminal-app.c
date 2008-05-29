@@ -220,6 +220,7 @@ terminal_app_delete_profile (TerminalApp *app,
   GSList *name_list;
   const char *name, *profile_name;
   char *gconf_dir;
+  GError *error = NULL;
 
   profile_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
   gconf_dir = gconf_concat_dir_and_key (CONF_PREFIX "/profiles", profile_name);
@@ -244,7 +245,12 @@ terminal_app_delete_profile (TerminalApp *app,
   g_slist_free (name_list);
 
   /* And remove the profile directory */
-  gconf_client_recursive_unset (app->conf, gconf_dir, GCONF_UNSET_INCLUDING_SCHEMA_NAMES, NULL);
+  if (!gconf_client_recursive_unset (app->conf, gconf_dir, GCONF_UNSET_INCLUDING_SCHEMA_NAMES, &error))
+    {
+      g_warning ("Failed to recursively unset %s: %s\n", gconf_dir, error->message);
+      g_error_free (error);
+    }
+      
   g_free (gconf_dir);
 }
 
@@ -484,7 +490,8 @@ profile_combo_box_new (TerminalApp *app)
   profile_combo_box_refill (app, combo);
   g_signal_connect (app, "profile-list-changed",
                     G_CALLBACK (profile_combo_box_refill), combo);
-  
+
+  gtk_widget_show (combo);
   return combo;
 }
 
@@ -812,13 +819,10 @@ ensure_one_profile:
           need_new_default = TRUE;
         }
 
-      g_object_add_weak_pointer (G_OBJECT (profile), (gpointer*)&profile);
-
       _terminal_profile_forget (profile);
       g_hash_table_remove (app->profiles, name);
 
-      /* |profile| should now be dead */
-      g_assert (profile == NULL);
+      /* |profile| possibly isn't dead yet since the profiles dialogue's tree model holds a ref too... */
     }
   g_list_free (profiles_to_delete);
   
@@ -973,8 +977,6 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
 
       transient_parent = gtk_window_get_transient_for (GTK_WINDOW (new_profile_dialog));
       
-//       gtk_widget_destroy (new_profile_dialog);
-
       new_profile = _terminal_profile_clone (base_profile, name);
       new_profile_name = terminal_profile_get_property_string (new_profile, TERMINAL_PROFILE_NAME);
       g_hash_table_insert (app->profiles,
