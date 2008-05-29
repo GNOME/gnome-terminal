@@ -918,7 +918,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (tree),
                                    KEYVAL_COLUMN, accel_compare_func,
                                    NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (tree), KEYVAL_COLUMN,
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (tree), ACTION_COLUMN,
                                         GTK_SORT_ASCENDING);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (tree));
