@@ -1044,6 +1044,7 @@ terminal_profile_finalize (GObject *object)
 
   g_object_unref (priv->conf);
 
+  g_free (priv->profile_dir);
   g_free (priv->locked);
   g_value_array_free (priv->properties);
 
