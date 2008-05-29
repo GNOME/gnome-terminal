@@ -29,7 +29,6 @@
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-//#include "gdk/gdkapplaunchcontext.h"
 
 #include <gconf/gconf-client.h>
 #include <libgnome/gnome-help.h>

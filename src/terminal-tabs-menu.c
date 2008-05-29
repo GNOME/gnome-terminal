@@ -16,26 +16,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- *  $Id$
  */
 
-#include "config.h"
+#include <config.h>
+
+#include <string.h>
+#include <stdlib.h>
+
+#include <gtk/gtk.h>
 
 #include "terminal-tabs-menu.h"
 #include "terminal-screen.h"
 #include "terminal-screen-container.h"
-
 #include "terminal-intl.h"
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkaccelmap.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtktoggleaction.h>
-#include <gtk/gtkradioaction.h>
-#include <gtk/gtkuimanager.h>
-#include <string.h>
-#include <stdlib.h>
 
 #define LABEL_WIDTH_CHARS 32
 #define ACTION_VERB_FORMAT_PREFIX       "JmpTab"

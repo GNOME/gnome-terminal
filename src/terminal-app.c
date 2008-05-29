@@ -34,15 +34,12 @@
 #include <bonobo-activation/bonobo-activation-register.h>
 #include <bonobo/bonobo-exception.h>
 #include <bonobo/bonobo-listener.h>
-#include <libgnome/gnome-program.h>
 #include <libgnome/gnome-help.h>
-#include <libgnomeui/gnome-ui-init.h>
 #include <libgnomeui/gnome-url.h>
 #include <libgnomeui/gnome-client.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <gdk/gdkx.h>
 
 #define FALLBACK_PROFILE_ID "Default"
 

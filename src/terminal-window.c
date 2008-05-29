@@ -21,8 +21,7 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <libgnome/gnome-program.h>
-#include <gtk/gtklabel.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>

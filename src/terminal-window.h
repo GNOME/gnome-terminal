@@ -20,8 +20,8 @@
 #ifndef TERMINAL_WINDOW_H
 #define TERMINAL_WINDOW_H
 
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkuimanager.h>
+#include <gtk/gtk.h>
+
 #include "terminal-screen.h"
 
 G_BEGIN_DECLS

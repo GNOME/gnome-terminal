@@ -29,7 +29,6 @@
 #include "profile-editor.h"
 #include "terminal-util.h"
 
-#include <libgnomeui/gnome-icon-entry.h>
 #include <libgnomeui/gnome-thumbnail.h>
 
 /* One slot in the ring buffer, plus the array which holds the data for

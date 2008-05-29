@@ -22,7 +22,7 @@
 #ifndef TERMINAL_ENCODING_H
 #define TERMINAL_ENCODING_H
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtk.h>
 
 typedef struct
 {
