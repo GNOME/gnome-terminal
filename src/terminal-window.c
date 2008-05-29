@@ -1442,6 +1442,7 @@ terminal_window_init (TerminalWindow *window)
                               gtk_ui_manager_get_accel_group (manager));
 
   /* Create the actions */
+  /* Note that this action group name is used in terminal-accels.c; do not change it */
   priv->action_group = action_group = gtk_action_group_new ("Main");
   gtk_action_group_set_translation_domain (action_group, NULL);
   gtk_action_group_add_actions (action_group, menu_entries,
