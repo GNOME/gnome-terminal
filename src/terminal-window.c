@@ -1161,8 +1161,6 @@ terminal_window_screen_update (TerminalWindow *window,
   g_signal_connect (screen, "window-manager-changed",
                     G_CALLBACK (terminal_window_window_manager_changed_cb), window);
 
-  initialize_alpha_mode (window);
-
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
 
@@ -1372,6 +1370,8 @@ terminal_window_init (TerminalWindow *window)
   GtkWindowGroup *window_group;
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
+
+  initialize_alpha_mode (window);
 
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
