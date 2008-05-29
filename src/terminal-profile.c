@@ -528,7 +528,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   GParamSpec *pspec;
   GValue value = { 0, };
   gboolean equal;
-  gboolean force_write = FALSE;
+  gboolean force_set = FALSE;
 
   key = gconf_entry_get_key (entry);
   if (!key || !g_str_has_prefix (key, priv->profile_dir))
@@ -666,7 +666,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
     {
       NOTE (g_message ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
                        gconf_entry_get_key (entry), pspec->name);)
-      force_write = TRUE;
+      force_set = TRUE;
     }
 
   /* Only set the property if the value is different than our current value,
@@ -681,9 +681,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
                   g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
                   g_strdup_value_contents (&value));)
 
-  if (force_write)
-    g_object_set_property (G_OBJECT (profile), pspec->name, &value);
-  else if (!equal)
+  if (!equal || force_set)
     terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
 
 out:
