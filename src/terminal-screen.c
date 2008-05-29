@@ -1939,18 +1939,19 @@ drag_data_received (TerminalScreen   *widget,
         GdkColor fg;
         TerminalProfile *profile;
 
-        if (selection_data->format != 16 ||
-            selection_data->length != 8)
+        /* We accept drops with the wrong format, since the KDE color
+         * chooser incorrectly drops application/x-color with format 8.
+         */
+        if (selection_data->length != 8)
           {
-            g_printerr (_("Color dropped on terminal had wrong format (%d) or length (%d)\n"),
-                        selection_data->format,
-                        selection_data->length);
+            g_warning ("Received invalid color data\n");
             return;
           }
 
         color.red = data[0];
         color.green = data[1];
         color.blue = data[2];
+        /* FIXMEchpe: use opacity from data[3] */
 
         profile = terminal_screen_get_profile (screen);
 
