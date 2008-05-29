@@ -2049,27 +2049,17 @@ drag_data_received (TerminalScreen   *widget,
        
     case TARGET_BGIMAGE:
       {
-        char *uri_list;
+        char *utf8_data;
         char **uris;
-        gboolean exactly_one;
         
-        if (selection_data->format != 8 ||
-            selection_data->length == 0)
-          {
-            g_printerr (_("Image filename dropped on terminal had wrong format (%d) or length (%d)\n"),
-                        selection_data->format,
-                        selection_data->length);
-            return;
-          }
+        if (selection_data->length < 0 || selection_data->format != 8)
+          return;
         
-        uri_list = g_strndup ((char *) selection_data->data,
-                              selection_data->length);
+        utf8_data = g_strndup ((char *) selection_data->data, selection_data->length);
+        uris = g_uri_list_extract_uris (utf8_data);
+        g_free (utf8_data);
 
-	uris = g_strsplit (uri_list, "\r\n", 0);
-
-	exactly_one = uris[0] != NULL && (uris[1] == NULL || uris[1][0] == '\0');
-
-        if (exactly_one)
+        if (uris && uris[0])
           {
             TerminalProfile *profile;
             char *filename;
@@ -2079,7 +2069,6 @@ drag_data_received (TerminalScreen   *widget,
             filename = g_filename_from_uri (uris[0],
                                             NULL,
                                             &err);
-
             if (err)
               {
                 g_printerr (_("Error converting URI \"%s\" into filename: %s\n"),
@@ -2094,7 +2083,6 @@ drag_data_received (TerminalScreen   *widget,
               {
                 terminal_profile_set_background_type (profile,
                                                       TERMINAL_BACKGROUND_IMAGE);
-                
                 terminal_profile_set_background_image_file (profile,
                                                             filename);
               }
@@ -2103,7 +2091,6 @@ drag_data_received (TerminalScreen   *widget,
           }
 
         g_strfreev (uris);
-        g_free (uri_list);
       }
       break;
 
