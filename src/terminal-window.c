@@ -1163,6 +1163,7 @@ terminal_window_screen_changed (GtkWidget *widget,
   if (previous_screen == gtk_widget_get_screen (widget))
     return;
 
+  initialize_alpha_mode (window);
   terminal_window_settings_update (widget);
 }
 
