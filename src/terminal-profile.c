@@ -282,7 +282,6 @@ static GQuark gconf_key_quark;
 
 G_DEFINE_TYPE (TerminalProfile, terminal_profile, G_TYPE_OBJECT);
 
-
 static gboolean
 palette_cmp (const GdkColor *ca,
              const GdkColor *cb)
@@ -310,7 +309,6 @@ get_pspec_from_name (TerminalProfile *profile,
 
   return pspec;
 }
-
 
 static const GValue *
 get_prop_value_from_prop_name (TerminalProfile *profile,
@@ -527,6 +525,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   GParamSpec *pspec;
   GValue value = { 0, };
   gboolean equal;
+  gboolean force_write = FALSE;
 
   // FIXMEchpe!!! guard against recursion from saving the properties!
 //  FIXMEchpe;
@@ -642,7 +641,6 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
       if (gconf_value->type != GCONF_VALUE_STRING)
         goto out;
 
-      g_print ("palette string %s\n", gconf_value_get_string (gconf_value));
       color_strings = g_strsplit (gconf_value_get_string (gconf_value), ":", -1);
       if (!color_strings)
         goto out;
@@ -656,8 +654,6 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
         }
       g_strfreev (color_strings);
 
-      g_print ("parser palette string OK\n");
-
       /* We continue even with a palette size != TERMINAL_PALETTE_SIZE,
        * so we can change the palette size in future versions without
        * causing too many issues.
@@ -666,10 +662,17 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
       g_free (colors);
     }
   else
-    g_print ("Unhandled value type %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+    {
+      g_print ("Unhandled value type %s of pspec %s\n", g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)), pspec->name);
+      goto out;
+    }
 
   if (g_param_value_validate (pspec, &value))
-    g_warning ("Invalid value in gconf for key %s, was changed to comply with pspec %s\n", gconf_entry_get_key (entry), pspec->name);
+    {
+      g_warning ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
+                 gconf_entry_get_key (entry), pspec->name);
+      force_write = TRUE;
+    }
 
   /* Only set the property if the value is different than our current value,
    * so we don't go into an infinite loop.
@@ -685,7 +688,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   if (!equal)
     {
-      if (priv->initialising)
+      if (!force_write && priv->initialising)
         terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
       else
         g_object_set_property (G_OBJECT (profile), pspec->name, &value);
