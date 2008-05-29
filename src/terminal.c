@@ -1190,7 +1190,7 @@ main (int argc, char **argv)
                                 GNOME_PARAM_GOPTION_CONTEXT, context,
                                 GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
                                 GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
-                                GNOME_PARAM_APP_DATADIR, TERM_DATADIR,
+                                GNOME_PARAM_APP_DATADIR, TERM_PKGDATADIR,
                                 GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
                                 NULL); 
 

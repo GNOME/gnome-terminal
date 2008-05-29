@@ -1,53 +1,61 @@
 NULL =
 
-EFENCE=
+SUBDIRS = skey
 
-SUBDIRS=skey
+bin_PROGRAMS = gnome-terminal
 
-INCLUDES=@TERM_CFLAGS@ \
-	-DTERM_LOCALEDIR=\"$(datadir)/locale\" -DEXECUTABLE_NAME=\"gnome-terminal\" \
+gnome_terminal_SOURCES= \
+	encoding.c \
+	encoding.h \
+	profile-editor.c \
+	profile-editor.h \
+	skey-popup.c \
+	skey-popup.h \
+	terminal.c \
+	terminal.h \
+	terminal-accels.c \
+	terminal-accels.h \
+	terminal-intl.h \
+	terminal-profile.c \
+	terminal-profile.h \
+	terminal-screen.c \
+	terminal-screen.h \
+	terminal-screen-container.c \
+	terminal-screen-container.h \
+	terminal-tabs-menu.c \
+	terminal-tabs-menu.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
+	terminal-window.c \
+	terminal-window.h \
+	$(NULL)
+
+gnome_terminal_CPPFLAGS = \
+	-DEXECUTABLE_NAME=\"gnome-terminal\" \
+	-DTERM_LOCALEDIR=\"$(datadir)/locale\" \
 	-DTERM_GLADE_DIR=\"$(gladedir)\" \
 	-DTERM_GLADE_FILE=\"gnome-terminal.glade2\" \
-	-DTERM_DATADIR=\"$(datadir)\" \
-	-DTERM_LIBDIR=\"$(libdir)\" \
+	-DTERM_LIBDIR=\"$(pkglibdir)\" \
 	-DTERM_PREFIX=\"$(prefix)\" \
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
 	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
-	-DGDK_DISABLE_DEPRECATED -DG_DISABLE_DEPRECATED	\
-	-DSN_API_NOT_YET_FROZEN
-#	-DGTK_DISABLE_DEPRECATED 
-#	-DGNOME_DISABLE_DEPRECATED 
+	-DGDK_DISABLE_DEPRECATED \
+	-DG_DISABLE_DEPRECATED\
+	-DSN_API_NOT_YET_FROZEN \
+	$(AM_CPPFLAGS)
 
-bin_PROGRAMS=gnome-terminal
+#	-DGTK_DISABLE_DEPRECATED
+#	-DGNOME_DISABLE_DEPRECATED
 
-## Terminal
-gnome_terminal_SOURCES=				\
-	encoding.c				\
-	encoding.h				\
-	profile-editor.c			\
-	profile-editor.h			\
-	skey-popup.c				\
-	skey-popup.h				\
-	terminal.c				\
-	terminal.h				\
-	terminal-accels.c			\
-	terminal-accels.h			\
-	terminal-intl.h				\
-	terminal-profile.c			\
-	terminal-profile.h			\
-	terminal-screen.c			\
-	terminal-screen.h			\
-	terminal-screen-container.c		\
-	terminal-screen-container.h		\
-	terminal-tabs-menu.c			\
-	terminal-tabs-menu.h			\
-	terminal-type-builtins.c		\
-	terminal-type-builtins.h		\
-	terminal-window.c			\
-	terminal-window.h			\
-	$(NULL)
+gnome_terminal_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(AM_CFLAGS)
 
-gnome_terminal_LDADD= $(EFENCE) @TERM_LIBS@ skey/libskey.la
+gnome_terminal_LDFLAGS =
+
+gnome_terminal_LDADD = \
+	skey/libskey.la \
+	$(TERM_LIBS)
 
 BUILT_SOURCES = \
 	terminal-type-builtins.c \
@@ -72,10 +80,10 @@ terminal-type-builtins.c: terminal-type-builtins.c.template $(TYPES_H_FILES)
 	&& (cmp -s xgen-ttbc terminal-type-builtins.c || cp xgen-ttbc terminal-type-builtins.c ) \
 	&& rm -f xgen-ttbc
 
-gladedir   = $(pkgdatadir)/glade
+gladedir = $(pkgdatadir)/glade
 glade_DATA = gnome-terminal.glade2
 
-schemadir   = @GCONF_SCHEMA_FILE_DIR@
+schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
 
@@ -83,16 +91,17 @@ uidir = $(pkgdatadir)
 ui_DATA = \
 	terminal.ui
 
-CLEANFILES = gnome-terminal.schemas $(BUILT_SOURCES)
+CLEANFILES = \
+	gnome-terminal.schemas \
+	$(BUILT_SOURCES)
 
-EXTRA_DIST =				\
-	$(icon_DATA)			\
-	$(glade_DATA)			\
-	$(schema_in_files)		\
-	$(server_DATA)			\
-	$(ui_DATA)			\
+EXTRA_DIST = \
+	$(icon_DATA) \
+	$(glade_DATA) \
+	$(schema_in_files) \
+	$(server_DATA) \
+	$(ui_DATA) \
 	$(NULL)
-
 
 serverdir = $(libdir)/bonobo/servers
 server_DATA = gnome-terminal.server
