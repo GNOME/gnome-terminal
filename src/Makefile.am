@@ -15,6 +15,8 @@ gnome_terminal_SOURCES= \
 	terminal.h \
 	terminal-accels.c \
 	terminal-accels.h \
+	terminal-app.c \
+	terminal-app.h \
 	terminal-intl.h \
 	terminal-profile.c \
 	terminal-profile.h \
@@ -39,14 +41,9 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_PREFIX=\"$(prefix)\" \
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
 	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
-	-DGDK_DISABLE_DEPRECATED \
-	-DG_DISABLE_DEPRECATED\
 	-DSN_API_NOT_YET_FROZEN \
+	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
-
-# $(DISABLE_DEPRECATED)
-#	-DGTK_DISABLE_DEPRECATED
-#	-DGNOME_DISABLE_DEPRECATED
 
 gnome_terminal_CFLAGS = \
 	$(TERM_CFLAGS) \

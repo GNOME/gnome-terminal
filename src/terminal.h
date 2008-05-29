@@ -35,49 +35,6 @@ typedef enum {
 #include "terminal-screen.h"
 
 #define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
-             
-typedef struct _TerminalApp TerminalApp;
-
-TerminalApp* terminal_app_get (void);
-
-void terminal_app_edit_profile (TerminalApp     *app,
-                                TerminalProfile *profile,
-                                GtkWindow       *transient_parent);
-
-void terminal_app_new_profile (TerminalApp     *app,
-                               TerminalProfile *default_base_profile,
-                               GtkWindow       *transient_parent);
-
-TerminalWindow * terminal_app_new_window   (TerminalApp *app,
-                                            const char *role,
-                                            const char *startup_id,
-                                            const char *display_name,
-                                            int screen_number);
-
-void terminal_app_new_terminal (TerminalApp     *app,
-                                TerminalProfile *profile,
-                                TerminalWindow  *window,
-                                TerminalScreen  *screen,
-                                gboolean         force_menubar_state,
-                                gboolean         forced_menubar_state,
-                                gboolean         start_fullscreen,
-                                char           **override_command,
-                                const char      *geometry,
-                                const char      *title,
-                                const char      *working_dir,
-                                const char      *role,
-                                double           zoom,
-                                const char      *startup_id,
-                                const char      *display_name,
-                                int              screen_number);
-
-void terminal_app_manage_profiles (TerminalApp     *app,
-                                   GtkWindow       *transient_parent);
-
-void terminal_app_edit_keybindings (TerminalApp     *app,
-                                    GtkWindow       *transient_parent);
-void terminal_app_edit_encodings   (TerminalApp     *app,
-                                    GtkWindow       *transient_parent);
 
 void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
 

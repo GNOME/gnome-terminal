@@ -23,6 +23,7 @@
 
 #include "terminal-intl.h"
 
+#include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
 #include "terminal-screen-container.h"
