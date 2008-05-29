@@ -185,14 +185,10 @@ static void
 terminal_window_destroyed (TerminalWindow *window,
                            TerminalApp    *app)
 {
-  g_return_if_fail (g_list_find (app->windows, window));
-  
   app->windows = g_list_remove (app->windows, window);
-  g_object_unref (G_OBJECT (window));
 
-  /* FIXMEchpe move this to terminal.h */
   if (app->windows == NULL)
-    gtk_main_quit ();
+    g_signal_emit (app, signals[QUIT], 0);
 }
 
 static TerminalProfile *
@@ -1702,13 +1698,10 @@ terminal_app_new_window (TerminalApp *app,
   TerminalWindow *window;
   
   window = terminal_window_new ();
-  g_object_ref (G_OBJECT (window));
-  
-  g_signal_connect (G_OBJECT (window), "destroy",
-                    G_CALLBACK (terminal_window_destroyed),
-                    app);
   
   app->windows = g_list_append (app->windows, window);
+  g_signal_connect (window, "destroy",
+                    G_CALLBACK (terminal_window_destroyed), app);
 
   gdk_screen = find_screen_by_display_name (display_name, screen_number);
   if (gdk_screen != NULL)
@@ -1882,6 +1875,7 @@ terminal_app_edit_encodings (TerminalApp     *app,
 TerminalWindow *
 terminal_app_get_current_window (TerminalApp *app)
 {
+  /* FIXMEchpe take focus into account! */
   return g_list_last (app->windows)->data;
 }
 
