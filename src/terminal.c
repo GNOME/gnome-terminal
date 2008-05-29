@@ -28,6 +28,8 @@
 
 #include <locale.h>
 
+#undef BONOBO_DISABLE_DEPRECATED
+
 #include "terminal.h"
 #include "terminal-app.h"
 #include "terminal-accels.h"
