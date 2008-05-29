@@ -18,35 +18,28 @@
 
 #include <config.h>
 
-#include "terminal-intl.h"
-
-// FIXMEchpe remove this crap
-/* grab gtk_style_get_font and gdk_x11_get_font_name */
-#undef GTK_DISABLE_DEPRECATED
-#undef GDK_DISABLE_DEPRECATED
-#include <gtk/gtkstyle.h>
-#include <gdk/gdkx.h>
-#define GTK_DISABLE_DEPRECATED
-#define GDK_DISABLE_DEPRECATED
-
-#include <X11/extensions/Xrender.h>
-
-#include <gdk/gdkx.h>
-
-#include "terminal-app.h"
-#include "terminal-accels.h"
-#include "terminal-window.h"
-#include "terminal-profile.h"
-#include "terminal-screen-container.h"
-#include "terminal-util.h"
-#include "terminal-app.h"
-#include "skey-popup.h"
-#include <libgnome/gnome-util.h> /* gnome_util_user_shell */
-#include <libgnome/gnome-url.h> /* gnome_url_show */
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+
+#include <gtk/gtk.h>
+
+#include <X11/extensions/Xrender.h>
+#include <gdk/gdkx.h>
+
+#include <libgnome/gnome-util.h> /* gnome_util_user_shell */
+#include <libgnome/gnome-url.h> /* gnome_url_show */
+
+#include "terminal-accels.h"
+#include "terminal-app.h"
+#include "terminal-app.h"
+#include "terminal-intl.h"
+#include "terminal-profile.h"
+#include "terminal-screen-container.h"
+#include "terminal-util.h"
+#include "terminal-window.h"
+#include "skey-popup.h"
 
 #define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
 #define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
