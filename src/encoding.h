@@ -118,10 +118,11 @@ typedef enum
 
 typedef struct
 {
-  int      index;
+  int      index_;
   gboolean valid;
   char    *charset;
   char    *name;
+  int      refcount;
 } TerminalEncoding;
 
 void terminal_encoding_init (void);
@@ -130,8 +131,10 @@ GtkWidget* terminal_encoding_dialog_new (GtkWindow *transient_parent);
 
 GSList* terminal_get_active_encodings (void);
 
-void terminal_encoding_free (TerminalEncoding *encoding);
-
 char* terminal_encoding_get_name (const char *charset);
+
+TerminalEncoding* terminal_encoding_ref (TerminalEncoding *encoding);
+
+void terminal_encoding_unref (TerminalEncoding *encoding);
 
 #endif /* TERMINAL_ENCODING_H */

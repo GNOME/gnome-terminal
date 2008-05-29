@@ -598,7 +598,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
                              GTK_UI_MANAGER_MENUITEM, FALSE);
     }
 
-  g_slist_foreach (encodings, (GFunc) terminal_encoding_free, NULL);
+  g_slist_foreach (encodings, (GFunc) terminal_encoding_unref, NULL);
   g_slist_free (encodings);
 }
 

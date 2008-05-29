@@ -54,163 +54,163 @@
 static TerminalEncoding encodings[] = {
 
   { TERMINAL_ENCODING_CURRENT_LOCALE, TRUE,
-    NULL, N_("Current Locale") },
+    NULL, N_("Current Locale") , 1 },
 
   { TERMINAL_ENCODING_ISO_8859_1, FALSE,
-    "ISO-8859-1", N_("Western") },
+    "ISO-8859-1", N_("Western") , 1 },
   { TERMINAL_ENCODING_ISO_8859_2, FALSE,
-    "ISO-8859-2", N_("Central European") },
+    "ISO-8859-2", N_("Central European") , 1 },
   { TERMINAL_ENCODING_ISO_8859_3, FALSE,
-    "ISO-8859-3", N_("South European") },
+    "ISO-8859-3", N_("South European") , 1 },
   { TERMINAL_ENCODING_ISO_8859_4, FALSE,
-    "ISO-8859-4", N_("Baltic") },
+    "ISO-8859-4", N_("Baltic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_5, FALSE,
-    "ISO-8859-5", N_("Cyrillic") },
+    "ISO-8859-5", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_6, FALSE,
-    "ISO-8859-6", N_("Arabic") },
+    "ISO-8859-6", N_("Arabic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_7, FALSE,
-    "ISO-8859-7", N_("Greek") },
+    "ISO-8859-7", N_("Greek") , 1 },
   { TERMINAL_ENCODING_ISO_8859_8, FALSE,
-    "ISO-8859-8", N_("Hebrew Visual") },
+    "ISO-8859-8", N_("Hebrew Visual") , 1 },
   { TERMINAL_ENCODING_ISO_8859_8_I, FALSE,
-    "ISO-8859-8-I", N_("Hebrew") },
+    "ISO-8859-8-I", N_("Hebrew") , 1 },
   { TERMINAL_ENCODING_ISO_8859_9, FALSE,
-    "ISO-8859-9", N_("Turkish") },
+    "ISO-8859-9", N_("Turkish") , 1 },
   { TERMINAL_ENCODING_ISO_8859_10, FALSE,
-    "ISO-8859-10", N_("Nordic") },
+    "ISO-8859-10", N_("Nordic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_13, FALSE,
-    "ISO-8859-13", N_("Baltic") },
+    "ISO-8859-13", N_("Baltic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_14, FALSE,
-    "ISO-8859-14", N_("Celtic") },
+    "ISO-8859-14", N_("Celtic") , 1 },
   { TERMINAL_ENCODING_ISO_8859_15, FALSE,
-    "ISO-8859-15", N_("Western") },
+    "ISO-8859-15", N_("Western") , 1 },
   { TERMINAL_ENCODING_ISO_8859_16, FALSE,
-    "ISO-8859-16", N_("Romanian") },
+    "ISO-8859-16", N_("Romanian") , 1 },
 
   { TERMINAL_ENCODING_UTF_7, FALSE,
-    "UTF-7", N_("Unicode") },
+    "UTF-7", N_("Unicode") , 1 },
   { TERMINAL_ENCODING_UTF_8, FALSE,
-    "UTF-8", N_("Unicode") },
+    "UTF-8", N_("Unicode") , 1 },
   { TERMINAL_ENCODING_UTF_16, FALSE,
-    "UTF-16", N_("Unicode") },
+    "UTF-16", N_("Unicode") , 1 },
   { TERMINAL_ENCODING_UCS_2, FALSE,
-    "UCS-2", N_("Unicode") },
+    "UCS-2", N_("Unicode") , 1 },
   { TERMINAL_ENCODING_UCS_4, FALSE,
-    "UCS-4", N_("Unicode") },
+    "UCS-4", N_("Unicode") , 1 },
 
   { TERMINAL_ENCODING_ARMSCII_8, FALSE,
-    "ARMSCII-8", N_("Armenian") },
+    "ARMSCII-8", N_("Armenian") , 1 },
   { TERMINAL_ENCODING_BIG5, FALSE,
-    "BIG5", N_("Chinese Traditional") },
+    "BIG5", N_("Chinese Traditional") , 1 },
   { TERMINAL_ENCODING_BIG5_HKSCS, FALSE,
-    "BIG5-HKSCS", N_("Chinese Traditional") },
+    "BIG5-HKSCS", N_("Chinese Traditional") , 1 },
   { TERMINAL_ENCODING_CP_866, FALSE,
-    "CP866", N_("Cyrillic/Russian") },
+    "CP866", N_("Cyrillic/Russian") , 1 },
 
   { TERMINAL_ENCODING_EUC_JP, FALSE,
-    "EUC-JP", N_("Japanese") },
+    "EUC-JP", N_("Japanese") , 1 },
   { TERMINAL_ENCODING_EUC_KR, FALSE,
-    "EUC-KR", N_("Korean") },
+    "EUC-KR", N_("Korean") , 1 },
   { TERMINAL_ENCODING_EUC_TW, FALSE,
-    "EUC-TW", N_("Chinese Traditional") },
+    "EUC-TW", N_("Chinese Traditional") , 1 },
 
   { TERMINAL_ENCODING_GB18030, FALSE,
-    "GB18030", N_("Chinese Simplified") },
+    "GB18030", N_("Chinese Simplified") , 1 },
   { TERMINAL_ENCODING_GB2312, FALSE,
-    "GB2312", N_("Chinese Simplified") },
+    "GB2312", N_("Chinese Simplified") , 1 },
   { TERMINAL_ENCODING_GBK, FALSE,
-    "GBK", N_("Chinese Simplified") },
+    "GBK", N_("Chinese Simplified") , 1 },
   { TERMINAL_ENCODING_GEOSTD8, FALSE,
-    "GEORGIAN-PS", N_("Georgian") },
+    "GEORGIAN-PS", N_("Georgian") , 1 },
   { TERMINAL_ENCODING_HZ, FALSE,
-    "HZ", N_("Chinese Simplified") },
+    "HZ", N_("Chinese Simplified") , 1 },
 
   { TERMINAL_ENCODING_IBM_850, FALSE,
-    "IBM850", N_("Western") },
+    "IBM850", N_("Western") , 1 },
   { TERMINAL_ENCODING_IBM_852, FALSE,
-    "IBM852", N_("Central European") },
+    "IBM852", N_("Central European") , 1 },
   { TERMINAL_ENCODING_IBM_855, FALSE,
-    "IBM855", N_("Cyrillic") },
+    "IBM855", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_IBM_857, FALSE,
-    "IBM857", N_("Turkish") },
+    "IBM857", N_("Turkish") , 1 },
   { TERMINAL_ENCODING_IBM_862, FALSE,
-    "IBM862", N_("Hebrew") },
+    "IBM862", N_("Hebrew") , 1 },
   { TERMINAL_ENCODING_IBM_864, FALSE,
-    "IBM864", N_("Arabic") },
+    "IBM864", N_("Arabic") , 1 },
 
   { TERMINAL_ENCODING_ISO_2022_JP, FALSE,
-    "ISO-2022-JP", N_("Japanese") },
+    "ISO-2022-JP", N_("Japanese") , 1 },
   { TERMINAL_ENCODING_ISO_2022_KR, FALSE,
-    "ISO-2022-KR", N_("Korean") },
+    "ISO-2022-KR", N_("Korean") , 1 },
   { TERMINAL_ENCODING_ISO_IR_111, FALSE,
-    "ISO-IR-111", N_("Cyrillic") },
+    "ISO-IR-111", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_JOHAB, FALSE,
-    "JOHAB", N_("Korean") },
+    "JOHAB", N_("Korean") , 1 },
   { TERMINAL_ENCODING_KOI8_R, FALSE,
-    "KOI8-R", N_("Cyrillic") },
+    "KOI8-R", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_KOI8_U, FALSE,
-    "KOI8-U", N_("Cyrillic/Ukrainian") },
+    "KOI8-U", N_("Cyrillic/Ukrainian") , 1 },
 
   { TERMINAL_ENCODING_MAC_ARABIC, FALSE,
-    "MAC_ARABIC", N_("Arabic") },
+    "MAC_ARABIC", N_("Arabic") , 1 },
   { TERMINAL_ENCODING_MAC_CE, FALSE,
-    "MAC_CE", N_("Central European") },
+    "MAC_CE", N_("Central European") , 1 },
   { TERMINAL_ENCODING_MAC_CROATIAN, FALSE,
-    "MAC_CROATIAN", N_("Croatian") },
+    "MAC_CROATIAN", N_("Croatian") , 1 },
   { TERMINAL_ENCODING_MAC_CYRILLIC, FALSE,
-    "MAC-CYRILLIC", N_("Cyrillic") },
+    "MAC-CYRILLIC", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_MAC_DEVANAGARI, FALSE,
-    "MAC_DEVANAGARI", N_("Hindi") },
+    "MAC_DEVANAGARI", N_("Hindi") , 1 },
   { TERMINAL_ENCODING_MAC_FARSI, FALSE,
-    "MAC_FARSI", N_("Persian") },
+    "MAC_FARSI", N_("Persian") , 1 },
   { TERMINAL_ENCODING_MAC_GREEK, FALSE,
-    "MAC_GREEK", N_("Greek") },
+    "MAC_GREEK", N_("Greek") , 1 },
   { TERMINAL_ENCODING_MAC_GUJARATI, FALSE,
-    "MAC_GUJARATI", N_("Gujarati") },
+    "MAC_GUJARATI", N_("Gujarati") , 1 },
   { TERMINAL_ENCODING_MAC_GURMUKHI, FALSE,
-    "MAC_GURMUKHI", N_("Gurmukhi") },
+    "MAC_GURMUKHI", N_("Gurmukhi") , 1 },
   { TERMINAL_ENCODING_MAC_HEBREW, FALSE,
-    "MAC_HEBREW", N_("Hebrew") },
+    "MAC_HEBREW", N_("Hebrew") , 1 },
   { TERMINAL_ENCODING_MAC_ICELANDIC, FALSE,
-    "MAC_ICELANDIC", N_("Icelandic") },
+    "MAC_ICELANDIC", N_("Icelandic") , 1 },
   { TERMINAL_ENCODING_MAC_ROMAN, FALSE,
-    "MAC_ROMAN", N_("Western") },
+    "MAC_ROMAN", N_("Western") , 1 },
   { TERMINAL_ENCODING_MAC_ROMANIAN, FALSE,
-    "MAC_ROMANIAN", N_("Romanian") },
+    "MAC_ROMANIAN", N_("Romanian") , 1 },
   { TERMINAL_ENCODING_MAC_TURKISH, FALSE,
-    "MAC_TURKISH", N_("Turkish") },
+    "MAC_TURKISH", N_("Turkish") , 1 },
   { TERMINAL_ENCODING_MAC_UKRAINIAN, FALSE,
-    "MAC_UKRAINIAN", N_("Cyrillic/Ukrainian") },
+    "MAC_UKRAINIAN", N_("Cyrillic/Ukrainian") , 1 },
   
   { TERMINAL_ENCODING_SHIFT_JIS, FALSE,
-    "SHIFT_JIS", N_("Japanese") },
+    "SHIFT_JIS", N_("Japanese") , 1 },
   { TERMINAL_ENCODING_TCVN, FALSE,
-    "TCVN", N_("Vietnamese") },
+    "TCVN", N_("Vietnamese") , 1 },
   { TERMINAL_ENCODING_TIS_620, FALSE,
-    "TIS-620", N_("Thai") },
+    "TIS-620", N_("Thai") , 1 },
   { TERMINAL_ENCODING_UHC, FALSE,
-    "UHC", N_("Korean") },
+    "UHC", N_("Korean") , 1 },
   { TERMINAL_ENCODING_VISCII, FALSE,
-    "VISCII", N_("Vietnamese") },
+    "VISCII", N_("Vietnamese") , 1 },
 
   { TERMINAL_ENCODING_WINDOWS_1250, FALSE,
-    "WINDOWS-1250", N_("Central European") },
+    "WINDOWS-1250", N_("Central European") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1251, FALSE,
-    "WINDOWS-1251", N_("Cyrillic") },
+    "WINDOWS-1251", N_("Cyrillic") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1252, FALSE,
-    "WINDOWS-1252", N_("Western") },
+    "WINDOWS-1252", N_("Western") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1253, FALSE,
-    "WINDOWS-1253", N_("Greek") },
+    "WINDOWS-1253", N_("Greek") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1254, FALSE,
-    "WINDOWS-1254", N_("Turkish") },
+    "WINDOWS-1254", N_("Turkish") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1255, FALSE,
-    "WINDOWS-1255", N_("Hebrew") },
+    "WINDOWS-1255", N_("Hebrew") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1256, FALSE,
-    "WINDOWS-1256", N_("Arabic") },
+    "WINDOWS-1256", N_("Arabic") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1257, FALSE,
-    "WINDOWS-1257", N_("Baltic") },
+    "WINDOWS-1257", N_("Baltic") , 1 },
   { TERMINAL_ENCODING_WINDOWS_1258, FALSE,
-    "WINDOWS-1258", N_("Vietnamese") }
+    "WINDOWS-1258", N_("Vietnamese") , 1 }
 };
 
 static GSList *active_encodings = NULL;
@@ -223,7 +223,7 @@ static void encodings_notify_cb (GConfClient *client,
                                  GConfEntry  *entry,
                                  gpointer     user_data);
 
-static const TerminalEncoding*
+static TerminalEncoding*
 find_encoding_by_charset (const char *charset)
 {
   int i;
@@ -250,26 +250,44 @@ find_encoding_by_charset (const char *charset)
   return NULL;
 }
 
-void
-terminal_encoding_free (TerminalEncoding *encoding)
+
+static TerminalEncoding *
+terminal_encoding_new (int index_,
+                       const char *charset,
+                       const char *name,
+                       gboolean valid)
 {
+  TerminalEncoding *encoding;
+
+
+  encoding = g_slice_new (TerminalEncoding);
+  encoding->refcount = 1;
+  encoding->index_ = index_;
+  encoding->name = g_strdup (name);
+  encoding->charset = g_strdup (charset);
+  encoding->valid = valid;
+
+  return encoding;
+}
+
+TerminalEncoding*
+terminal_encoding_ref (TerminalEncoding *encoding)
+{
+  g_return_val_if_fail (encoding != NULL, NULL);
+
+  encoding->refcount++;
+  return encoding;
+}
+
+void
+terminal_encoding_unref (TerminalEncoding *encoding)
+{
+  if (--encoding->refcount > 0)
+    return;
+
   g_free (encoding->name);
   g_free (encoding->charset);
   g_slice_free (TerminalEncoding, encoding);
-}
-
-static TerminalEncoding*
-terminal_encoding_copy (const TerminalEncoding *src)
-{
-  TerminalEncoding *c;
-
-  c = g_slice_new (TerminalEncoding);
-  c->index = src->index;
-  c->valid = src->valid;
-  c->name = g_strdup (src->name);
-  c->charset = g_strdup (src->charset);
-  
-  return c;
 }
 
 static void
@@ -284,7 +302,7 @@ encodings_notify_cb (GConfClient *client,
   const char *charset;
 
 #if 1
-  g_slist_foreach (active_encodings, (GFunc) terminal_encoding_free,
+  g_slist_foreach (active_encodings, (GFunc) terminal_encoding_unref,
                    NULL);
   g_slist_free (active_encodings);
 #endif
@@ -297,7 +315,7 @@ encodings_notify_cb (GConfClient *client,
   if (g_hash_table_lookup (table, GINT_TO_POINTER (g_quark_from_string (charset))) == NULL)
     {
       active_encodings = g_slist_prepend (active_encodings,
-                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_CURRENT_LOCALE]));
+                                          terminal_encoding_ref (&encodings[TERMINAL_ENCODING_CURRENT_LOCALE]));
       g_hash_table_insert (table,
 		           GINT_TO_POINTER (g_quark_from_string (charset)),
 		           GINT_TO_POINTER (g_quark_from_string (charset)));
@@ -308,7 +326,7 @@ encodings_notify_cb (GConfClient *client,
   if (g_hash_table_lookup (table, GINT_TO_POINTER (g_quark_from_string (charset))) == NULL)
     {
       active_encodings = g_slist_prepend (active_encodings,
-                                          terminal_encoding_copy (&encodings[TERMINAL_ENCODING_UTF_8]));
+                                          terminal_encoding_ref (&encodings[TERMINAL_ENCODING_UTF_8]));
       g_hash_table_insert (table,
 		           GINT_TO_POINTER (g_quark_from_string (charset)),
 		           GINT_TO_POINTER (g_quark_from_string (charset)));
@@ -325,7 +343,7 @@ encodings_notify_cb (GConfClient *client,
   for (tmp = strings; tmp != NULL; tmp = tmp->next)
     {
       GConfValue *v = (GConfValue *) tmp->data;
-      const TerminalEncoding *e;
+      TerminalEncoding *e;
       TerminalEncoding *encoding;
       charset = tmp->data;
       
@@ -349,16 +367,14 @@ encodings_notify_cb (GConfClient *client,
       
       if (e == NULL)
         {
-          encoding = g_new0 (TerminalEncoding, 1);
-          
-          encoding->index = -1;
-          encoding->valid = TRUE; /* scary! */
-          encoding->charset = g_strdup (charset);
-          encoding->name = g_strdup (_("User Defined"));
+          encoding = terminal_encoding_new (-1,
+                                            charset,
+                                            _("User Defined"),
+                                            TRUE /* scary! */);
         }
       else
         {
-          encoding = e->valid ? terminal_encoding_copy (e) : NULL;
+          encoding = e->valid ? terminal_encoding_ref (e) : NULL;
         }
 
       if (encoding != NULL)
@@ -375,25 +391,18 @@ encodings_notify_cb (GConfClient *client,
   update_active_encoding_tree_models ();
 }
 
+/**
+ * terminal_get_active_encodings:
+ *
+ * Returns: a newly allocated list of newly referenced #TerminalEncoding objects.
+ */
 GSList*
 terminal_get_active_encodings (void)
 {
   GSList *copy;
-  GSList *tmp;
 
-  copy = NULL;
-  tmp = active_encodings;
-  while (tmp != NULL)
-    {
-      copy = g_slist_prepend (copy,
-                              terminal_encoding_copy (tmp->data));
-      
-      tmp = tmp->next;
-    }
-
-  /* They should appear in order in the menus */
-  copy = g_slist_reverse (copy);
-
+  copy = g_slist_copy (active_encodings);
+  g_slist_foreach (copy, (GFunc) terminal_encoding_ref, NULL);
   return copy;
 }
 
@@ -909,7 +918,7 @@ terminal_encoding_init (void)
       bytes_read = 0;
       bytes_written = 0;
       
-      g_assert (encodings[i].index == i);
+      g_assert (encodings[i].index_ == i);
 
       /* Translate the names */
       encodings[i].name = _(encodings[i].name);
