@@ -1677,7 +1677,6 @@ terminal_new_event (BonoboListener    *listener,
   CORBA_sequence_CORBA_string *args;
   char **tmp_argv;
   int tmp_argc;
-  int i;
   NewTerminalEvent *event;
   
   if (strcmp (event_name, "new_terminal"))
@@ -1690,14 +1689,9 @@ terminal_new_event (BonoboListener    *listener,
   args = any->_value;
   
   tmp_argv = g_new0 (char*, args->_length + 1);
-  i = 0;
-  while (i < args->_length)
-    {
-      tmp_argv[i] = g_strdup (((const char**)args->_buffer)[i]);
-      ++i;
-    }
-  tmp_argv[i] = NULL;
-  tmp_argc = i;
+  for (tmp_argc = 0; tmp_argc < args->_length; ++tmp_argc)
+    tmp_argv[tmp_argc] = g_strdup (((const char**)args->_buffer)[tmp_argc]);
+  tmp_argv[tmp_argc] = NULL;
 
   event = g_new0 (NewTerminalEvent, 1);
   event->argc = tmp_argc;

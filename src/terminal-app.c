@@ -1419,12 +1419,8 @@ terminal_app_save_yourself_cb (GnomeClient        *client,
 #ifdef GNOME_ENABLE_DEBUG
   /* Debug spew */
   g_print ("Saving session: ");
-  i = 0;
-  while (clone_command[i])
-    {
-      g_print ("%s ", clone_command[i]);
-      ++i;
-    }
+  for (i = 0; clone_command[i]; ++i)
+    g_print ("%s ", clone_command[i]);
   g_print ("\n");
 #endif
 

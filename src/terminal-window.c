@@ -2464,10 +2464,9 @@ static gboolean
 find_larger_zoom_factor (double  current,
                          double *found)
 {
-  int i;
-  
-  i = 0;
-  while (i < (int) G_N_ELEMENTS (zoom_factors))
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (zoom_factors); ++i)
     {
       /* Find a font that's larger than this one */
       if ((zoom_factors[i] - current) > 1e-6)
@@ -2475,8 +2474,6 @@ find_larger_zoom_factor (double  current,
           *found = zoom_factors[i];
           return TRUE;
         }
-      
-      ++i;
     }
   
   return FALSE;
