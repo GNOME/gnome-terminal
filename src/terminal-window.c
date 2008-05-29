@@ -191,9 +191,6 @@ G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
 /* Menubar mnemonics & accel settings handling */
 
-/* no one will ever press this ;-) */
-#define IMPOSSIBLE_MENUBAR_ACCEL "<Shift><Control><Mod1><Mod2><Mod3><Mod4><Mod5>F10"
-
 static void
 app_setting_notify_cb (TerminalApp *app,
                        GParamSpec *pspec,
@@ -216,7 +213,8 @@ app_setting_notify_cb (TerminalApp *app,
       g_object_get (app, TERMINAL_APP_ENABLE_MNEMONICS, &enable_mnemonics, NULL);
       g_object_set (settings, "gtk-enable-mnemonics", enable_mnemonics, NULL);
     }
-  else if (!prop_name || prop_name == I_(TERMINAL_APP_ENABLE_MENU_ACCELS))
+
+  if (!prop_name || prop_name == I_(TERMINAL_APP_ENABLE_MENU_BAR_ACCEL))
     {
       /* const */ char *saved_menubar_accel;
       gboolean enable_menu_accels;
@@ -234,11 +232,11 @@ app_setting_notify_cb (TerminalApp *app,
                                   saved_menubar_accel, (GDestroyNotify) g_free);
         }
 
-      g_object_get (app, TERMINAL_APP_ENABLE_MENU_ACCELS, &enable_menu_accels, NULL);
+      g_object_get (app, TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, &enable_menu_accels, NULL);
       if (enable_menu_accels)
         g_object_set (settings, "gtk-menu-bar-accel", saved_menubar_accel, NULL);
       else
-        g_object_set (settings, "gtk-menu-bar-accel", IMPOSSIBLE_MENUBAR_ACCEL, NULL);
+        g_object_set (settings, "gtk-menu-bar-accel", NULL, NULL);
     }
 }
 
@@ -1121,7 +1119,7 @@ terminal_window_settings_update (GtkWidget *widget)
   app_setting_notify_cb (app, NULL, screen);
   g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MNEMONICS,
                     G_CALLBACK (app_setting_notify_cb), screen);
-  g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MENU_ACCELS,
+  g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MENU_BAR_ACCEL,
                     G_CALLBACK (app_setting_notify_cb), screen);
 }
 

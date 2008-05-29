@@ -109,7 +109,7 @@ enum
 {
   PROP_0,
   PROP_DEFAULT_PROFILE,
-  PROP_ENABLE_MENU_ACCELS,
+  PROP_ENABLE_MENU_BAR_ACCEL,
   PROP_ENABLE_MNEMONICS,
   PROP_SYSTEM_FONT,
 };
@@ -138,8 +138,8 @@ static TerminalApp *global_app = NULL;
 #define ENABLE_MNEMONICS_KEY CONF_GLOBAL_PREFIX "/use_mnemonics"
 #define DEFAULT_ENABLE_MNEMONICS (TRUE)
 
-#define ENABLE_MENU_ACCELS_KEY CONF_GLOBAL_PREFIX"/use_menu_accelerators"
-#define DEFAULT_ENABLE_MENU_ACCELS (TRUE)
+#define ENABLE_MENU_BAR_ACCEL_KEY CONF_GLOBAL_PREFIX"/use_menu_accelerators"
+#define DEFAULT_ENABLE_MENU_BAR_ACCEL (TRUE)
 
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
@@ -964,7 +964,7 @@ terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
   GConfValue *gconf_value;
   gboolean enable;
 
-  if (strcmp (gconf_entry_get_key (entry), ENABLE_MENU_ACCELS_KEY) != 0)
+  if (strcmp (gconf_entry_get_key (entry), ENABLE_MENU_BAR_ACCEL_KEY) != 0)
     return;
 
   gconf_value = gconf_entry_get_value (entry);
@@ -976,7 +976,7 @@ terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
     return;
 
   app->enable_menu_accels = enable;
-  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_ACCELS);
+  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_BAR_ACCEL);
 }
 
 static void
@@ -1484,14 +1484,14 @@ terminal_app_init (TerminalApp *app)
 
   app->enable_menu_accels_notify_id =
     gconf_client_notify_add (app->conf,
-                             ENABLE_MENU_ACCELS_KEY,
+                             ENABLE_MENU_BAR_ACCEL_KEY,
                              terminal_app_enable_menu_accels_notify_cb,
                              app, NULL, NULL);
 
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
   gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
-  gconf_client_notify (app->conf, ENABLE_MENU_ACCELS_KEY);
+  gconf_client_notify (app->conf, ENABLE_MENU_BAR_ACCEL_KEY);
   gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
 
   terminal_accels_init ();
@@ -1559,7 +1559,7 @@ terminal_app_get_property (GObject *object,
         else
           g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_MONOSPACE_FONT));
         break;
-      case PROP_ENABLE_MENU_ACCELS:
+      case PROP_ENABLE_MENU_BAR_ACCEL:
         g_value_set_boolean (value, app->enable_menu_accels);
         break;
       case PROP_ENABLE_MNEMONICS:
@@ -1584,9 +1584,9 @@ terminal_app_set_property (GObject *object,
 
   switch (prop_id)
     {
-      case PROP_ENABLE_MENU_ACCELS:
+      case PROP_ENABLE_MENU_BAR_ACCEL:
         app->enable_menu_accels = g_value_get_boolean (value);
-        gconf_client_set_bool (app->conf, ENABLE_MENU_ACCELS_KEY, app->enable_menu_accels, NULL);
+        gconf_client_set_bool (app->conf, ENABLE_MENU_BAR_ACCEL_KEY, app->enable_menu_accels, NULL);
         break;
       case PROP_ENABLE_MNEMONICS:
         app->enable_mnemonics = g_value_get_boolean (value);
@@ -1630,9 +1630,9 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   g_object_class_install_property
     (object_class,
-     PROP_ENABLE_MENU_ACCELS,
-     g_param_spec_boolean (TERMINAL_APP_ENABLE_MENU_ACCELS, NULL, NULL,
-                           DEFAULT_ENABLE_MENU_ACCELS,
+     PROP_ENABLE_MENU_BAR_ACCEL,
+     g_param_spec_boolean (TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, NULL, NULL,
+                           DEFAULT_ENABLE_MENU_BAR_ACCEL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property

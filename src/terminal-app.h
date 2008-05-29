@@ -33,10 +33,10 @@ G_BEGIN_DECLS
 
 #define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
 
-#define TERMINAL_APP_DEFAULT_PROFILE    "default-profile"
-#define TERMINAL_APP_ENABLE_MENU_ACCELS "enable-menu-accels"
-#define TERMINAL_APP_ENABLE_MNEMONICS   "enable-mnemonics"
-#define TERMINAL_APP_SYSTEM_FONT        "system-font"
+#define TERMINAL_APP_DEFAULT_PROFILE        "default-profile"
+#define TERMINAL_APP_ENABLE_MENU_BAR_ACCEL  "enable-menu-accels"
+#define TERMINAL_APP_ENABLE_MNEMONICS       "enable-mnemonics"
+#define TERMINAL_APP_SYSTEM_FONT            "system-font"
 
 /* TerminalApp */
 
