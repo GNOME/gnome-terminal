@@ -2392,7 +2392,7 @@ file_new_window_callback (GtkAction *action,
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
-    profile = terminal_app_get_default_profile (app);
+    profile = terminal_app_get_profile_for_new_term (app);
   if (!profile)
     return;
 
@@ -2412,7 +2412,7 @@ file_new_window_callback (GtkAction *action,
                              terminal_screen_get_working_dir (priv->active_screen),
                              1.0);
 
-  gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
+  gtk_window_present (GTK_WINDOW (new_window));
 }
 
 static void
@@ -2420,18 +2420,20 @@ file_new_tab_callback (GtkAction *action,
                        TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalApp *app;
   TerminalProfile *profile;
 
+  app = terminal_app_get ();
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
-    profile = terminal_app_get_default_profile (terminal_app_get ());
+    profile = terminal_app_get_profile_for_new_term (app);
   if (!profile)
     return;
 
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  terminal_app_new_terminal (terminal_app_get (), window, profile,
+  terminal_app_new_terminal (app, window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
                              1.0);
