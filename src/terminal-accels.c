@@ -27,7 +27,6 @@
 #include "terminal-util.h"
 #include "terminal.h"
 #include <string.h>
-#include <glade/glade.h>
 
 #define D(x)
 
@@ -1050,72 +1049,14 @@ disable_menu_accels_toggled (GtkWidget *button,
     }
 }
 
-typedef struct
-{
-  GtkTreeView *tree_view;
-  GtkTreePath *path;
-} IdleData;
-
-static gboolean
-real_start_editing_cb (IdleData *idle_data)
-{
-  gtk_widget_grab_focus (GTK_WIDGET (idle_data->tree_view));
-  gtk_tree_view_set_cursor (idle_data->tree_view,
-                            idle_data->path,
-			    gtk_tree_view_get_column (idle_data->tree_view, 1),
-			    TRUE);
-
-  gtk_tree_path_free (idle_data->path);
-  g_free (idle_data);
-
-  return FALSE;
-}
-
-static gboolean
-start_editing_cb (GtkTreeView    *tree_view,
-                  GdkEventButton *event,
-		  gpointer        data)
-{
-  GtkTreePath *path;
-
-  if (event->window != gtk_tree_view_get_bin_window (tree_view))
-    return FALSE;
-
-  if (gtk_tree_view_get_path_at_pos (tree_view,
-                                     (gint) event->x,
-				     (gint) event->y,
-				     &path, NULL,
-				     NULL, NULL))
-    {
-      IdleData *idle_data;
-
-      if (gtk_tree_path_get_depth (path) == 1)
-        {
-	  gtk_tree_path_free (path);
-	  return FALSE;
-	}
-
-      idle_data = g_new (IdleData, 1);
-      idle_data->tree_view = tree_view;
-      idle_data->path = path;
-      g_signal_stop_emission_by_name (G_OBJECT (tree_view), "button_press_event");
-      g_idle_add ((GSourceFunc) real_start_editing_cb, idle_data);
-    }
-
-  return TRUE;
-}
-
 void
 terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 {
-  GladeXML *xml;
-  GtkWidget *w;
-  GtkCellRenderer *cell_renderer;
-  int i;
-  GtkTreeModel *sort_model;
-  GtkTreeStore *tree;
+  GtkWidget *dialog, *tree_view, *disable_mnemonics_button, *disable_menu_accel_button;
   GtkTreeViewColumn *column;
-  GtkTreeIter parent_iter;
+  GtkCellRenderer *cell_renderer;
+  GtkTreeStore *tree;
+  int i;
 
   if (edit_keys_dialog != NULL)
     {
@@ -1124,56 +1065,46 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
       return;
     }
 
-  /* No keybindings editor yet, create one */
-  xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
-                                       "keybindings-dialog",
-                                       transient_parent);
-  if (xml == NULL)
+  if (!terminal_util_load_builder_file ("keybinding-editor.ui",
+                                        "keybindings-dialog", &dialog,
+                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
+                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
+                                        "accelerators-treeview", &tree_view,
+                                        NULL))
     return;
-  
-  w = glade_xml_get_widget (xml, "disable-mnemonics-checkbutton");
 
-  edit_keys_dialog_mnemonics_checkbutton = w;
-  g_signal_connect (G_OBJECT (w), "destroy",
+  edit_keys_dialog_mnemonics_checkbutton = disable_mnemonics_button;
+  g_signal_connect (disable_mnemonics_button, "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &edit_keys_dialog_mnemonics_checkbutton);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), !using_mnemonics);
-  g_signal_connect (G_OBJECT (w), "toggled",
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_mnemonics_button), !using_mnemonics);
+  g_signal_connect (disable_mnemonics_button, "toggled",
                     G_CALLBACK (disable_mnemonics_toggled),
                     NULL);
 
-  w = glade_xml_get_widget (xml, "disable-menu-accel-checkbutton");
-
-  edit_keys_dialog_menu_accel_checkbutton = w;
-  g_signal_connect (G_OBJECT (w), "destroy",
+  edit_keys_dialog_menu_accel_checkbutton = disable_menu_accel_button;
+  g_signal_connect (disable_menu_accel_button, "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &edit_keys_dialog_menu_accel_checkbutton);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), !using_menu_accels);
-  g_signal_connect (G_OBJECT (w), "toggled",
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (disable_menu_accel_button), !using_menu_accels);
+  g_signal_connect (disable_menu_accel_button, "toggled",
                     G_CALLBACK (disable_menu_accels_toggled),
                     NULL);
   
-  w = glade_xml_get_widget (xml, "accelerators-treeview");
-
-  g_signal_connect (G_OBJECT (w), "button_press_event",
-		    G_CALLBACK (start_editing_cb), NULL);
-  
-  edit_keys_dialog_treeview = w;
-  g_signal_connect (edit_keys_dialog_treeview, "destroy",
+  edit_keys_dialog_treeview = tree_view;
+  g_signal_connect (tree_view, "destroy",
                     G_CALLBACK (gtk_widget_destroyed),
                     &edit_keys_dialog_treeview);
 
-  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
-  
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("_Action"),
 						     cell_renderer,
 						     "text", ACTION_COLUMN,
 						     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
   gtk_tree_view_column_set_sort_column_id (column, ACTION_COLUMN);
 
   /* Column 2 */
@@ -1183,72 +1114,61 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                 "accel_mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                 NULL);
   g_signal_connect (cell_renderer, "accel-edited",
-                    G_CALLBACK (accel_edited_callback), w);
+                    G_CALLBACK (accel_edited_callback), tree_view);
   g_signal_connect (cell_renderer, "accel-cleared",
-                    G_CALLBACK (accel_cleared_callback), w);
+                    G_CALLBACK (accel_cleared_callback), tree_view);
   
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func, NULL, NULL);
   gtk_tree_view_column_set_sort_column_id (column, KEYVAL_COLUMN);  
-  gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* Add the data */
 
-  i = 0;
-  while (i < (gint) G_N_ELEMENTS (all_entries))
+  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
+      GtkTreeIter parent_iter;
       int j;
+
       gtk_tree_store_append (tree, &parent_iter, NULL);
       gtk_tree_store_set (tree, &parent_iter,
 			  ACTION_COLUMN, _(all_entries[i].user_visible_name),
 			  -1);
-      j = 0;
 
-      while (j < all_entries[i].n_elements)
+      for (j = 0; j < all_entries[i].n_elements; ++j)
 	{
+	  KeyEntry *key_entry = &(all_entries[i].key_entry[j]);
 	  GtkTreeIter iter;
-	  KeyEntry *key_entry;
 
-	  key_entry = &(all_entries[i].key_entry[j]);
-	  gtk_tree_store_append (tree, &iter, &parent_iter);
-	  gtk_tree_store_set (tree, &iter,
-			      ACTION_COLUMN, _(key_entry->user_visible_name),
-			      KEYVAL_COLUMN, key_entry,
-			      -1);
-	  ++j;
+          gtk_tree_store_insert_with_values (tree, &iter, &parent_iter, -1,
+                                             ACTION_COLUMN, _(key_entry->user_visible_name),
+                                             KEYVAL_COLUMN, key_entry,
+                                             -1);
 	}
-      ++i;
     }
 
-
-  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sort_model),
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (tree),
                                    KEYVAL_COLUMN, accel_compare_func,
                                    NULL, NULL);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (tree), KEYVAL_COLUMN,
+                                        GTK_SORT_ASCENDING);
 
-  gtk_tree_view_expand_all (GTK_TREE_VIEW (w));
-  g_object_unref (G_OBJECT (tree));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (tree));
+  g_object_unref (tree);
+
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
   
-  w = glade_xml_get_widget (xml, "keybindings-dialog");
-
-  g_signal_connect (G_OBJECT (w), "response",
+  edit_keys_dialog = dialog;
+  g_signal_connect (dialog, "destroy",
+                    G_CALLBACK (gtk_widget_destroyed), &edit_keys_dialog);
+  g_signal_connect (dialog, "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
-  gtk_window_set_default_size (GTK_WINDOW (w),
-                               -1, 350);
-
-  terminal_util_set_unique_role (GTK_WINDOW (w), "gnome-terminal-accels");
-
-  g_object_unref (xml);
-
-  edit_keys_dialog = w;
-
-  gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
-  g_signal_connect (edit_keys_dialog, "destroy",
-                    G_CALLBACK (gtk_widget_destroyed), &edit_keys_dialog);
+  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), transient_parent);
 
   gtk_window_present (GTK_WINDOW (edit_keys_dialog));
 }

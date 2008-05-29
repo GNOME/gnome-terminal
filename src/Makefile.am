@@ -92,6 +92,7 @@ uidir = $(pkgdatadir)
 ui_DATA = \
 	terminal.ui \
 	encodings-dialog.ui \
+	keybinding-editor.ui \
 	profile-manager.ui \
 	skey-challenge.ui \
 	$(NULL)
