@@ -114,8 +114,6 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
 static void new_window                    (TerminalWindow  *window,
                                            TerminalScreen  *screen,
                                            TerminalProfile *profile);
-static void detach_tab                    (TerminalScreen *screen,
-                                           TerminalWindow *window);
 
 /* Menu action callbacks */
 static void terminal_menu_activate_callback (GtkAction *action,
@@ -2810,29 +2808,13 @@ tabs_move_right_callback (GtkAction *action,
   gtk_notebook_reorder_child (notebook, page, page_num == last_page ? 0 : page_num + 1);
 }
 
-/* FIXMEchpe this is bogus bogus! */
-static void
-detach_tab (TerminalScreen  *screen,
-            TerminalWindow  *window)
-{
-  TerminalProfile *profile;
-
-  profile = terminal_screen_get_profile (screen);
-
-  g_assert (profile);
-
-  if (_terminal_profile_get_forgotten (profile))
-    return;
-      
-  new_window (window, screen, profile);
-}
-
 static void
 tabs_detach_tab_callback (GtkAction *action,
                           TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
+  TerminalProfile *profile;
   gint page_num;
   GtkWidget *page;
   TerminalScreen *screen;
@@ -2841,7 +2823,8 @@ tabs_detach_tab_callback (GtkAction *action,
   page = gtk_notebook_get_nth_page (notebook, page_num);
 
   screen = terminal_screen_container_get_screen (page);
-  detach_tab (screen, window);
+  profile = terminal_screen_get_profile (screen);
+  new_window (window, screen, profile);
 }
 
 static void
