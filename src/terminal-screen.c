@@ -575,6 +575,8 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   else
     prop_name = NULL;
 
+  prop_name = NULL; // FIXMEchpe
+
   if (priv->window)
     {
       /* We need these in line for the set_size in
@@ -690,6 +692,13 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_DELETE_BINDING))
   vte_terminal_set_delete_binding (vte_terminal,
                                    terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_DELETE_BINDING));
+
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ALLOW_BOLD))
+    vte_terminal_set_allow_bold (vte_terminal,
+                                 terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
+
+/*  if (GTK_WIDGET_REALIZED (screen))
+    terminal_screen_change_font (screen);*/
 }
 
 /**
@@ -908,8 +917,6 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
   update_color_scheme (screen);
 
   /* FIXMEchpe: why do this on realize? */
-  vte_terminal_set_allow_bold (vte_terminal,
-                               terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
   terminal_window_set_size (priv->window, screen, TRUE);
 }
 
