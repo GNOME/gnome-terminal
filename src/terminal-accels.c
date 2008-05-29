@@ -1,6 +1,6 @@
 /* Accelerator stuff */
 /*
- * Copyright (C) 2001, 2002 Havoc Pennington, Red Hat Inc.
+ * Copyright © 2001, 2002 Havoc Pennington, Red Hat Inc.
  *
  * This file is part of gnome-terminal.
  *

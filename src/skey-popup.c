@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2002 Jonathan Blandford <jrb@gnome.org>
+ * Copyright © 2002 Jonathan Blandford <jrb@gnome.org>
  *
  * This file is part of gnome-terminal.
  *

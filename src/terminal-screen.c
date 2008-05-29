@@ -1,8 +1,8 @@
 /* object representing one terminal window/tab with settings */
 
 /*
- * Copyright (C) 2001 Havoc Pennington
- * Copyright (C) 2007, 2008 Christian Persch
+ * Copyright © 2001 Havoc Pennington
+ * Copyright © 2007, 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *

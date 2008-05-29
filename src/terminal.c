@@ -1,10 +1,10 @@
 /* terminal program */
 /*
- * Copyright (C) 2001, 2002 Havoc Pennington
- * Copyright (C) 2002 Red Hat, Inc.
- * Copyright (C) 2002 Sun Microsystems
- * Copyright (C) 2003 Mariano Suarez-Alvarez
- * Copyright (C) 2008 Christian Persch
+ * Copyright © 2001, 2002 Havoc Pennington
+ * Copyright © 2002 Red Hat, Inc.
+ * Copyright © 2002 Sun Microsystems
+ * Copyright © 2003 Mariano Suarez-Alvarez
+ * Copyright © 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *

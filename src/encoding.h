@@ -1,7 +1,7 @@
 /* Encoding stuff */
 
 /*
- * Copyright (C) 2002 Red Hat, Inc.
+ * Copyright © 2002 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

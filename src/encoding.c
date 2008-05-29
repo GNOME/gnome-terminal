@@ -1,7 +1,7 @@
 /* Encoding stuff */
 
 /*
- * Copyright (C) 2002 Red Hat, Inc.
+ * Copyright © 2002 Red Hat, Inc.
  *
  * This file is part of gnome-terminal.
  *

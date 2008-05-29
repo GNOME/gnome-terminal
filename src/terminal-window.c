@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2001 Havoc Pennington
- * Copyright (C) 2002 Red Hat, Inc.
- * Copyright (C) 2007, 2008 Christian Persch
+ * Copyright © 2001 Havoc Pennington
+ * Copyright © 2002 Red Hat, Inc.
+ * Copyright © 2007, 2008 Christian Persch
  *
  * This file is part of gnome-terminal.
  *

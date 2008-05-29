@@ -1,8 +1,8 @@
 /* object representing a profile */
 
 /*
- * Copyright (C) 2001 Havoc Pennington
- * Copyright (C) 2002 Mathias Hasselmann
+ * Copyright © 2001 Havoc Pennington
+ * Copyright © 2002 Mathias Hasselmann
  *
  * This file is part of gnome-terminal.
  *

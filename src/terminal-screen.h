@@ -1,7 +1,7 @@
 /* object representing one Zvt widget and its properties */
 
 /*
- * Copyright (C) 2001 Havoc Pennington
+ * Copyright © 2001 Havoc Pennington
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
