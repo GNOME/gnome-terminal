@@ -840,11 +840,10 @@ terminal_screen_set_font (TerminalScreen *screen)
 
   profile = priv->profile;
   
-  /* FIXMEchpe make this use a get_font_desc on TerminalProfile */
   if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
     g_object_get (terminal_app_get (), "system-font", &desc, NULL);
   else
-    desc = pango_font_description_copy (terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FONT));
+    g_object_get (profile, TERMINAL_PROFILE_FONT, &desc, NULL);
   g_assert (desc);
 
   pango_font_description_set_size (desc,
@@ -886,7 +885,7 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
   TerminalScreenPrivate *priv = screen->priv;
 
   if (!priv->profile)
-    return; // FIXMEchpe
+    return;
 
   if (!GTK_WIDGET_REALIZED (screen))
     return; // FIXMEchpe still necessary??
@@ -976,6 +975,7 @@ terminal_screen_set_profile (TerminalScreen *screen,
                           screen);
 
       terminal_screen_profile_notify_cb (profile, NULL, screen);
+
       g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
     }
 
@@ -1095,27 +1095,21 @@ get_child_command (TerminalScreen *screen,
   return TRUE;
 }
 
-extern char **environ;
-
 static char**
 get_child_environment (TerminalScreen *screen)
 {
   GtkWidget *term;
-  gchar **p, **retval;
+  char **env, **p, **retval;
   gint i;
   GConfClient *conf;
 #define EXTRA_ENV_VARS 8
 
   term = GTK_WIDGET (screen);
 
-  /* count env vars that are set */
-  for (p = environ; *p; p++)
-    ;
+  env = g_listenv ();
+  retval = g_new (char *, g_strv_length (env) + 1 + EXTRA_ENV_VARS);
 
-  i = p - environ;
-  retval = g_new (char *, i + 1 + EXTRA_ENV_VARS);
-
-  for (i = 0, p = environ; *p; p++)
+  for (i = 0, p = env; *p; p++)
     {
       /* Strip all these out, we'll replace some of them */
       if ((strncmp (*p, "COLUMNS=", 8) == 0) ||
@@ -1130,7 +1124,7 @@ get_child_environment (TerminalScreen *screen)
         }
       else
         {
-          retval[i] = g_strdup (*p);
+          retval[i] = g_strdup_printf ("%s=%s", *p, g_getenv (*p));
           ++i;
         }
     }
@@ -1141,10 +1135,12 @@ get_child_environment (TerminalScreen *screen)
   retval[i] = g_strdup ("TERM=xterm"); /* FIXME configurable later? */
   ++i;
 
+  /* FIXMEchpe: moving the tab between windows will make this invalid... */
   retval[i] = g_strdup_printf ("WINDOWID=%ld",
                                GDK_WINDOW_XWINDOW (term->window));
   ++i;
 
+  /* FIXMEchpe: moving the window between displays will make this invalid... */
   retval[i] = g_strdup_printf ("DISPLAY=%s", 
 			       gdk_display_get_name(gtk_widget_get_display(term)));
   ++i;
@@ -1246,6 +1242,8 @@ get_child_environment (TerminalScreen *screen)
     }
 
   retval[i] = NULL;
+
+  g_strfreev (env);
 
   return retval;
 }
