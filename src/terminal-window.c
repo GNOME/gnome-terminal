@@ -734,16 +734,16 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 }
 
 static void
-update_edit_menu (GtkClipboard *clipboard,
-                  GdkAtom *targets,
-                  int n_targets,
-                  TerminalWindow *window)
+update_edit_menu_cb (GtkClipboard *clipboard,
+                     GdkAtom *targets,
+                     int n_targets,
+                     TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
   gboolean can_paste;
 
-  can_paste = gtk_targets_include_text (targets, n_targets);
+  can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
   gtk_action_set_sensitive (action, can_paste);
 
@@ -760,7 +760,7 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_targets (clipboard,
-                                  (GtkClipboardTargetsReceivedFunc) update_edit_menu,
+                                  (GtkClipboardTargetsReceivedFunc) update_edit_menu_cb,
                                   g_object_ref (window));
 }
 
@@ -974,10 +974,10 @@ popup_menu_deactivate_callback (GtkWidget *popup,
 }
 
 static void
-popup_clipboard_request_callback (GtkClipboard *clipboard,
-                                  GdkAtom *targets,
-                                  int n_targets,
-                                  TerminalScreenPopupInfo *info)
+popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
+                                     GdkAtom *targets,
+                                     int n_targets,
+                                     TerminalScreenPopupInfo *info)
 {
   TerminalWindow *window = info->window;
   TerminalWindowPrivate *priv = window->priv;
@@ -996,7 +996,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
-  can_paste = gtk_targets_include_text (targets, n_targets);
+  can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL && info->flavour != FLAVOR_VOIP_CALL;
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
   show_call_link = info->string != NULL && info->flavour == FLAVOR_VOIP_CALL;
@@ -1076,7 +1076,7 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_targets (clipboard,
-                                  (GtkClipboardTargetsReceivedFunc) popup_clipboard_request_callback,
+                                  (GtkClipboardTargetsReceivedFunc) popup_clipboard_targets_received_cb,
                                   terminal_screen_popup_info_ref (info));
 }
 

@@ -211,7 +211,7 @@ terminal_util_open_url (GtkWidget *parent,
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
                                        _("Could not open the address “%s”:\n%s"),
                                        uri, error->message);
-      
+
       g_error_free (error);
     }
 
