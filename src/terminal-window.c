@@ -1698,8 +1698,6 @@ terminal_window_add_screen (TerminalWindow *window,
   if (old == window)
     return;  
 
-  g_object_ref_sink (screen); /* FIXMEchpe this leaks!!!! */
-
   if (old)
     terminal_window_remove_screen (old, screen);
 
