@@ -947,7 +947,7 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
   GtkTreeModel *model;
   GtkTreePath *path;
   GtkTreeIter iter;
-  KeyEntry *ke, tmp_key;
+  KeyEntry *ke;
   char *str;
   GConfClient *conf;
 

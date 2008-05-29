@@ -79,7 +79,7 @@ terminal_screen_container_get_screen (GtkWidget *container)
 }
 
 #ifndef USE_SCROLLED_WINDOW
-GtkWidget *
+static GtkWidget *
 terminal_screen_container_get_scrollbar (GtkWidget *container)
 {
   return g_object_get_data (G_OBJECT (container), SCROLLBAR_DATA_KEY);

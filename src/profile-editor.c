@@ -930,7 +930,6 @@ terminal_profile_edit (TerminalProfile *profile,
       double num1, num2;
       gint i;
       GtkSizeGroup *size_group;
-      GtkWidget *font_label;
 
       xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
                                            "profile-editor-dialog",

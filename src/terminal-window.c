@@ -98,12 +98,6 @@ static gboolean terminal_window_delete_event (GtkWidget *widget,
                                               GdkEvent *event,
                                               gpointer data);
 
-static void       screen_set_menuitem  (TerminalScreen *screen,
-                                        GtkWidget      *menuitem);
-static GtkWidget* screen_get_menuitem  (TerminalScreen *screen);
-static TerminalScreen* find_screen (TerminalWindow *window,
-                                    TerminalScreen *screen);
-
 static void notebook_page_selected_callback  (GtkWidget       *notebook,
                                               GtkNotebookPage *useless_crap,
                                               guint            page_num,
@@ -143,8 +137,6 @@ static void edit_keybindings_callback         (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
-static void change_configuration_callback     (GtkAction *action,
-                                               TerminalWindow *window);
 static void edit_current_profile_callback     (GtkAction *action,
                                                TerminalWindow *window);
 static void file_new_profile_callback         (GtkAction *action,
@@ -177,10 +169,6 @@ static void tabs_move_right_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void tabs_detach_tab_callback          (GtkAction *action,
                                                TerminalWindow *window);
-
-static void change_tab_callback           (GtkAction *action,
-                                           TerminalWindow *window);
-                                           /* FIXME? */
 
 static void help_contents_callback        (GtkAction *action,
                                            TerminalWindow *window);
@@ -480,7 +468,6 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
   for (p = profiles; p != NULL; p = p->next)
     {
       TerminalProfile *profile = (TerminalProfile *) p->data;
-      char *profile_name, *display_name;
       char name[32];
 
       g_snprintf (name, sizeof (name), "FileNewTab%u", n);
@@ -519,7 +506,6 @@ terminal_set_encoding_callback (GtkToggleAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   const char *name, *charset;
-  GtkWidget *widget;
   
   if (!gtk_toggle_action_get_active (action))
     return;
@@ -680,7 +666,6 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
                              gpointer     user_data)
 {
   TerminalWindow *window = (TerminalWindow *) user_data;
-  TerminalWindowPrivate *priv = window->priv;
   GtkClipboard *clipboard;
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
@@ -825,7 +810,6 @@ popup_copy_url_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreenPopupInfo *info = priv->popup_info;
-  GdkDisplay *display;
   GtkClipboard *clipboard;
 
   if (info == NULL)
@@ -1234,11 +1218,7 @@ terminal_window_init (TerminalWindow *window)
   GtkAction *action;
   GtkUIManager *manager;
   GtkWidget *main_vbox;
-  GtkWidget *mi;
-  GtkWidget *menu;
-  GtkAccelGroup *accel_group;
   GError *error;
-
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
@@ -1523,7 +1503,6 @@ title_changed_callback (TerminalScreen *screen,
                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *menu_item;
   const char *title;
   
   if (screen == priv->active_term)
@@ -1770,7 +1749,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
                                      int             force_grid_width,
                                      int             force_grid_height)
 {
-  TerminalWindowPrivate *priv = window->priv;
   /* Owen's hack from gnome-terminal */
   GtkWidget *widget;
   GtkWidget *app;
@@ -2161,7 +2139,6 @@ static void
 file_new_window_callback (GtkAction *action,
                           TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
@@ -2308,7 +2285,6 @@ edit_copy_callback (GtkAction *action,
                     TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget;
 
   if (!priv->active_term)
     return;
@@ -2321,7 +2297,6 @@ edit_paste_callback (GtkAction *action,
                      TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget;
 
   if (!priv->active_term)
     return;
@@ -2376,10 +2351,8 @@ view_menubar_toggled_callback (GtkToggleAction *action,
 
 static void
 view_fullscreen_toggled_callback (GtkToggleAction *action,
-                                 TerminalWindow *window)
+                                  TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-
   g_return_if_fail (GTK_WIDGET_REALIZED (window));
 
   if (gtk_toggle_action_get_active (action))
@@ -2603,7 +2576,6 @@ static void
 detach_tab (TerminalScreen  *screen,
             TerminalWindow  *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
 
   profile = terminal_screen_get_profile (screen);
@@ -2720,7 +2692,6 @@ default_profile_changed (TerminalProfile           *profile,
 static void
 monitor_profiles_for_is_default_change (TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
   GList *profiles;
   GList *tmp;
   
@@ -2750,8 +2721,6 @@ monitor_profiles_for_is_default_change (TerminalWindow *window)
 void
 terminal_window_reread_profile_list (TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-  
   monitor_profiles_for_is_default_change (window);
   
   terminal_window_update_set_profile_menu (window);

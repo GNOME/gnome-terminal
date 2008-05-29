@@ -44,11 +44,13 @@ gnome_terminal_CPPFLAGS = \
 	-DSN_API_NOT_YET_FROZEN \
 	$(AM_CPPFLAGS)
 
+# $(DISABLE_DEPRECATED)
 #	-DGTK_DISABLE_DEPRECATED
 #	-DGNOME_DISABLE_DEPRECATED
 
 gnome_terminal_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
 gnome_terminal_LDFLAGS =
@@ -93,6 +95,7 @@ ui_DATA = \
 
 CLEANFILES = \
 	gnome-terminal.schemas \
+	stamp-terminal-type-builtins.h \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \

@@ -185,7 +185,6 @@ parent_set_callback (TerminalScreen *screen,
     }
   else
     {
-      GtkWidget *parent;
       GtkWidget *window;
 
       window = gtk_widget_get_toplevel (GTK_WIDGET (screen)->parent);
@@ -252,7 +251,6 @@ terminal_screen_sync_settings (GtkSettings *settings,
                                GParamSpec *pspec,
                                TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
   gboolean blink;
 
   g_object_get (G_OBJECT (settings),
@@ -464,7 +462,6 @@ static void
 terminal_screen_dispose (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
-  TerminalScreenPrivate *priv = screen->priv;
   GtkSettings *settings;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (screen));
@@ -814,7 +811,6 @@ monospace_font_change_notify (GConfClient *client,
 			      gpointer     user_data)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (user_data);
-  TerminalScreenPrivate *priv = screen->priv;
   
   if (strcmp (entry->key, MONOSPACE_FONT_KEY) == 0 &&
       GTK_WIDGET_REALIZED (screen))
@@ -910,8 +906,6 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
 static void
 terminal_screen_change_font (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
-  
   terminal_screen_set_font (screen);
   terminal_screen_update_on_realize (VTE_TERMINAL (screen), screen);
 }
@@ -920,7 +914,6 @@ static void
 profile_forgotten_callback (TerminalProfile *profile,
                             TerminalScreen  *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *new_profile;
 
   /* Revert to the new term profile if any */
@@ -1021,8 +1014,6 @@ static void
 show_command_error_dialog (TerminalScreen *screen,
                            GError         *error)
 {
-  TerminalScreenPrivate *priv = screen->priv;
-  
   g_assert (error != NULL);
   
   terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
@@ -1109,7 +1100,6 @@ extern char **environ;
 static char**
 get_child_environment (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
   GtkWidget *term;
   gchar **p, **retval;
   gint i;
@@ -1318,7 +1308,7 @@ terminal_screen_close (TerminalScreen *screen)
   /* screen should be finalized here, do not touch it past this point */
 }
 
-TerminalScreenPopupInfo *
+static TerminalScreenPopupInfo *
 terminal_screen_popup_info_new (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -1843,7 +1833,6 @@ drag_data_received (TerminalScreen   *widget,
                     gpointer          data)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (data);
-  TerminalScreenPrivate *priv = screen->priv;
 
 #if 0
   {
@@ -1871,7 +1860,7 @@ drag_data_received (TerminalScreen   *widget,
       {
         char *str;
         
-        str = gtk_selection_data_get_text (selection_data);
+        str = (char *) gtk_selection_data_get_text (selection_data);
 
         /*
 	 * pass UTF-8 to the terminal widget. The terminal widget
@@ -1898,7 +1887,7 @@ drag_data_received (TerminalScreen   *widget,
         /* FIXME just brazenly ignoring encoding issues... */
         /* FIXMEchpe: just use the text conversion routines in gtk! */
         vte_terminal_feed_child (VTE_TERMINAL (screen),
-                                 selection_data->data,
+                                 (char *) selection_data->data,
                                  selection_data->length);
       }
       break;
@@ -2009,7 +1998,7 @@ drag_data_received (TerminalScreen   *widget,
             return;
           }
         
-        uri_list = g_strndup (selection_data->data,
+        uri_list = g_strndup ((char *) selection_data->data,
                               selection_data->length);
 
 	uris = g_strsplit (uri_list, "\r\n", 0);
@@ -2067,7 +2056,7 @@ drag_data_received (TerminalScreen   *widget,
             return;
           }
         
-        uri_list = g_strndup (selection_data->data,
+        uri_list = g_strndup ((char *) selection_data->data,
                               selection_data->length);
 
 	uris = g_strsplit (uri_list, "\r\n", 0);
@@ -2162,6 +2151,7 @@ drag_data_received (TerminalScreen   *widget,
 static void
 terminal_screen_setup_dnd (TerminalScreen *screen)
 {
+  /* FIXMEchpe: use modern gtk here! */
   static GtkTargetEntry target_table[] = {
     { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
     { "application/x-color", 0, TARGET_COLOR },
@@ -2178,7 +2168,6 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
     /* add when gtk supports it perhaps */
     /* { "text/unicode", 0, TARGET_TEXT_UNICODE } */
   };
-  TerminalScreenPrivate *priv = screen->priv;
   
   g_signal_connect (screen, "drag_data_received",
                     G_CALLBACK (drag_data_received), screen);
@@ -2195,10 +2184,8 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
 void
 terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
   GtkWidget *parent;
-  GtkScrolledWindow *scrolled_window;
   GtkPolicyType policy = GTK_POLICY_ALWAYS;
   GtkCornerType corner = GTK_CORNER_TOP_LEFT;
 
