@@ -1727,7 +1727,7 @@ terminal_app_init (TerminalApp *app)
   global_app = app;
 
   /* FIXMEchpe leaks */
-  app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
   
   conf = gconf_client_get_default ();
 
