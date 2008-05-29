@@ -94,6 +94,17 @@ enum {
   PROP_TITLE
 };
 
+enum
+{
+  TARGET_COLOR,
+  TARGET_BGIMAGE,
+  TARGET_RESET_BG,
+  TARGET_TEXT_PLAIN,
+  TARGET_MOZ_URL,
+  TARGET_NETSCAPE_URL,
+  TARGET_TAB
+};
+
 static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
@@ -128,6 +139,15 @@ static void monospace_font_change_notify (GConfClient *client,
 					  guint        cnxn_id,
 					  GConfEntry  *entry,
 					  gpointer     user_data);
+
+static void drag_data_received (TerminalScreen   *widget,
+                                GdkDragContext   *context,
+                                gint              x,
+                                gint              y,
+                                GtkSelectionData *selection_data,
+                                guint             info,
+                                guint             time,
+                                gpointer          data);
 
 static void  terminal_screen_match_add         (TerminalScreen            *screen,
                                                 const char           *regexp,
@@ -1838,20 +1858,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
   gtk_window_present (GTK_WINDOW (priv->title_editor));
 }
 
-enum
-{
-  TARGET_URI_LIST,
-  TARGET_TEXT,
-  TARGET_COLOR,
-  TARGET_BGIMAGE,
-  TARGET_RESET_BG,
-  TARGET_TEXT_PLAIN,
-  TARGET_MOZ_URL,
-  TARGET_NETSCAPE_URL,
-  TARGET_TAB
-};
-
-static void        
+static void
 drag_data_received (TerminalScreen   *widget,
                     GdkDragContext   *context,
                     gint              x,
@@ -2016,6 +2023,10 @@ drag_data_received (TerminalScreen   *widget,
       }
       break;
 
+    case TARGET_NETSCAPE_URL:
+      /* FIXMEchpe implement me! */
+      break;
+        
     case TARGET_BGIMAGE:
       {
         char *uri_list;
