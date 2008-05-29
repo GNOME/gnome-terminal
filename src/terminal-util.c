@@ -116,7 +116,7 @@ terminal_util_show_help (const char *topic,
 
   err = NULL;
 
-  gnome_help_display ("gnome-terminal", topic, &err);
+  gnome_help_display ("gnome-terminal.xml", topic, &err);
   
   if (err)
     {
