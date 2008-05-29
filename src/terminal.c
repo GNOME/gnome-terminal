@@ -265,7 +265,7 @@ unsupported_option_callback (const gchar *option_name,
                              gpointer     data,
                              GError     **error)
 {
-  g_printerr (_("Option '%s' is no longer supported in this version of gnome-terminal;"
+  g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal;"
                " you might want to create a profile with the desired setting, and use"
                " the new '--window-with-profile' option\n"), option_name);
   return TRUE; /* we do not want to bail out here but continue */
@@ -932,7 +932,7 @@ new_terminal_with_options (OptionParsingResults *results)
           if (profile == NULL)
             {
               if (it->profile)
-                g_printerr (_("No such profile '%s', using default profile\n"),
+                g_printerr (_("No such profile \"%s\", using default profile\n"),
                             it->profile);
               profile = terminal_app_get_profile_for_new_term (app, NULL);
             }
@@ -1681,7 +1681,7 @@ terminal_new_event (BonoboListener    *listener,
   
   if (strcmp (event_name, "new_terminal"))
     {
-      g_warning ("Unknown event '%s' on terminal",
+      g_warning ("Unknown event \"%s\" on terminal",
 		 event_name);
       return;
     }

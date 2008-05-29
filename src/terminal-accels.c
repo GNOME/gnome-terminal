@@ -349,9 +349,9 @@ keys_change_notify (GConfClient *client,
   if (!binding_from_value (val, &keyval, &mask))
     {
       const char *str = val->type == GCONF_VALUE_STRING ? gconf_value_get_string (val) : NULL;
-      g_printerr (_("The value of configuration key %s is not valid; value is \"%s\"\n"),
-                  key_entry->gconf_key,
-                  str ? str : "(null)");
+      g_printerr ("The value \"%s\" of configuration key %s is not a valid accelerator\n",
+                  str ? str : "(null)",
+                  key_entry->gconf_key);
       return;
     }
 
@@ -702,7 +702,7 @@ accel_edited_callback (GtkCellRendererAccel *cell,
                                     GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
                                     GTK_MESSAGE_WARNING,
                                     GTK_BUTTONS_OK,
-                                    _("The shortcut key \"%s\" is already bound to the \"%s\" action"),
+                                    _("The shortcut key “%s” is already bound to the “%s” action"),
                                     name,
                                     tmp_key.user_visible_name ? _(tmp_key.user_visible_name) : tmp_key.gconf_key);
           g_free (name);

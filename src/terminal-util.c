@@ -188,7 +188,7 @@ terminal_util_open_url (GtkWidget *parent,
   if (!gnome_url_show_on_screen (url, gtk_widget_get_screen (parent), &error))
     {
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
-                                       _("Could not open the address \"%s\":\n%s"),
+                                       _("Could not open the address “%s”:\n%s"),
                                        url, error->message);
       
       g_error_free (error);
@@ -263,7 +263,7 @@ terminal_util_load_builder_file (const char *filename,
     objectptr = va_arg (args, GObject**);
     *objectptr = gtk_builder_get_object (builder, object_name);
     if (!*objectptr) {
-      g_warning ("Failed to fetch object '%s'\n", object_name);
+      g_warning ("Failed to fetch object \"%s\"\n", object_name);
       break;
     }
 

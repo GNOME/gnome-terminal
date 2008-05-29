@@ -638,7 +638,7 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_QUESTION,
                                    GTK_BUTTONS_NONE,
-                                   _("Delete profile \"%s\"?"),
+                                   _("Delete profile “%s”?"),
                                    terminal_profile_get_property_string (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME));
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
@@ -1029,7 +1029,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                                    GTK_MESSAGE_QUESTION, 
                                                    GTK_BUTTONS_YES_NO, 
-                                                   _("You already have a profile called \"%s\". Do you want to create another profile with the same name?"), name);
+                                                   _("You already have a profile called “%s”. Do you want to create another profile with the same name?"), name);
           retval = gtk_dialog_run (GTK_DIALOG (confirm_dialog));
           gtk_widget_destroy (confirm_dialog);
           if (retval == GTK_RESPONSE_NO)   

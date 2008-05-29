@@ -458,7 +458,7 @@ visible_name_entry_changed_cb (GtkEntry *entry,
   
   visible_name = gtk_entry_get_text (entry);
 
-  text = g_strdup_printf (_("Editing Profile \"%s\""), visible_name);
+  text = g_strdup_printf (_("Editing Profile “%s”"), visible_name);
   gtk_window_set_title (window, text);
   g_free (text);
 }
