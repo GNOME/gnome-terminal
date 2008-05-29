@@ -658,69 +658,95 @@ terminal_profile_class_init (TerminalProfileClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
-  g_object_class_install_property
-    (object_class,
-     PROP_ALLOW_BOLD,
-     g_param_spec_boolean ("allow-bold", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-  
-  g_object_class_install_property
-    (object_class,
-     PROP_BACKGROUND_DARKNESS,
-     g_param_spec_double ("background-darkness", NULL, NULL,
-                          /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
-                          0.0, 1.0,
-                          0.0,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
+#define TERMINAL_PROFILE_PSPEC_STATIC (G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB)
 
-  g_object_class_install_property
-    (object_class,
-     PROP_BACKGROUND_IMAGE,
-     g_param_spec_object ("background-image", NULL, NULL,
-                          GDK_TYPE_PIXBUF,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
+#define TERMINAL_PROFILE_PROPERTY_BOOLEAN(propId, propName, propDefault) \
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_boolean (propName, NULL, NULL,\
+                          propDefault,\
+                          G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
 
-  g_object_class_install_property
-    (object_class,
-     PROP_BACKGROUND_IMAGE_FILE,
-     g_param_spec_string ("background-image-file", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
+#define TERMINAL_PROFILE_PROPERTY_BOXED(propId, propName, propType)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_boxed (propName, NULL, NULL,\
+                        propType,\
+                        G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
 
-  g_object_class_install_property
-    (object_class,
-     PROP_BACKGROUND_TYPE,
-     g_param_spec_enum ("background-type", NULL, NULL,
-                        TERMINAL_TYPE_BACKGROUND_TYPE,
-                        TERMINAL_BACKGROUND_SOLID,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
+#define TERMINAL_PROFILE_PROPERTY_DOUBLE(propId, propName, propMin, propMax, propDefault)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_double (propName, NULL, NULL,\
+                         propMin, propMax, propDefault,\
+                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
 
-  g_object_class_install_property
-    (object_class,
-     PROP_BACKSPACE_BINDING,
-     g_param_spec_enum ("backspace-binding", NULL, NULL,
-                        vte_terminal_erase_binding_get_type (),
-                        VTE_ERASE_ASCII_DELETE,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
+#define TERMINAL_PROFILE_PROPERTY_ENUM(propId, propName, propType, propDefault)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_enum (propName, NULL, NULL,\
+                       propType, propDefault,\
+                       G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+
+#define TERMINAL_PROFILE_PROPERTY_INT(propId, propName, propMin, propMax, propDefault)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_int (propName, NULL, NULL,\
+                      propMin, propMax, propDefault,\
+                      G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+
+#define TERMINAL_PROFILE_PROPERTY_OBJECT(propId, propName, propType)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_object (propName, NULL, NULL,\
+                         propType,\
+                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+
+#define TERMINAL_PROFILE_PROPERTY_STRING(propId, propName, propDefault)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_string (propName, NULL, NULL,\
+                         propDefault,\
+                         G_PARAM_READWRITE | TERMINAL_PROFILE_PSPEC_STATIC))
+
+#define TERMINAL_PROFILE_PROPERTY_STRING_CO(propId, propName, propDefault)\
+  g_object_class_install_property (object_class, propId,\
+    g_param_spec_string (propName, NULL, NULL,\
+                         propDefault,\
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | TERMINAL_PROFILE_PSPEC_STATIC))
+
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_ALLOW_BOLD, "allow-bold", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_DEFAULT_SHOW_MENUBAR, "default-show-menubar", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_IS_DEFAULT, "is-default", FALSE /* FIXMEchpe? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_LOGIN_SHELL, "login-shell", FALSE /* FIXME? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_NO_AA_WITHOUT_RENDER, "no-aa-without-render", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_BACKGROUND, "scroll-background", FALSE /* FIXME? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_ON_KEYSTROKE, "scroll-on-keystroke", TRUE /* FIXME? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SCROLL_ON_OUTPUT, "scroll-on-output", TRUE /* FIXME? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_SILENT_BELL, "silent-bell", TRUE /* FIXME? */);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_UPDATE_RECORDS, "update-records", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_CUSTOM_COMMAND, "use-custom-command", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_SKEY, "use-skey", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_SYSTEM_FONT, "use-system-font", TRUE);
+  TERMINAL_PROFILE_PROPERTY_BOOLEAN (PROP_USE_THEME_COLORS, "use-theme-colors", TRUE);
+
+  TERMINAL_PROFILE_PROPERTY_BOXED (PROP_FONT, "font", PANGO_TYPE_FONT_DESCRIPTION);
+
+  /* 0.0 = normal bg, 1.0 = all black bg, 0.5 = half darkened */
+  TERMINAL_PROFILE_PROPERTY_DOUBLE (PROP_BACKGROUND_DARKNESS, "background-darkness", 0.0, 1.0, 0.0);
+
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_BACKGROUND_TYPE, "background-type", TERMINAL_TYPE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID);
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_BACKSPACE_BINDING, "backspace-binding",  vte_terminal_erase_binding_get_type (), VTE_ERASE_ASCII_DELETE);
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_DELETE_BINDING, "delete-binding", vte_terminal_erase_binding_get_type (), VTE_ERASE_DELETE_SEQUENCE);
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_EXIT_ACTION, "exit-action", TERMINAL_TYPE_EXIT_ACTION, TERMINAL_EXIT_CLOSE);
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_SCROLLBAR_POSITION, "scrollbar-position", TERMINAL_TYPE_SCROLLBAR_POSITION, DEFAULT_SCROLLBAR_POSITION);
+  TERMINAL_PROFILE_PROPERTY_ENUM (PROP_TITLE_MODE, "title-mode", TERMINAL_TYPE_TITLE_MODE, TERMINAL_TITLE_REPLACE);
+
+  TERMINAL_PROFILE_PROPERTY_INT (PROP_SCROLLBACK_LINES, "scrollback-lines", 0, G_MAXINT, 1000);
+
+  TERMINAL_PROFILE_PROPERTY_OBJECT (PROP_BACKGROUND_IMAGE, "background-image", GDK_TYPE_PIXBUF);
+  TERMINAL_PROFILE_PROPERTY_OBJECT (PROP_ICON, "icon", GDK_TYPE_PIXBUF);
+
+  TERMINAL_PROFILE_PROPERTY_STRING_CO (PROP_NAME, "name", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_BACKGROUND_IMAGE_FILE, "background-image-file", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_CUSTOM_COMMAND, "custom-command", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_ICON_FILE, "icon-file", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_TITLE, "title", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_VISIBLE_NAME, "visible-name", NULL);
+  TERMINAL_PROFILE_PROPERTY_STRING (PROP_WORD_CHARS, "word-chards", "");
 
 //   g_object_class_install_property
 //     (object_class,
@@ -731,119 +757,6 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 //                         G_PARAM_STATIC_NICK |
 //                         G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property
-    (object_class,
-     PROP_CUSTOM_COMMAND,
-     g_param_spec_string ("custom-command", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_DEFAULT_SHOW_MENUBAR,
-     g_param_spec_boolean ("default-show-menubar", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_DELETE_BINDING,
-     g_param_spec_enum ("delete-binding", NULL, NULL,
-                        vte_terminal_erase_binding_get_type (),
-                        VTE_ERASE_DELETE_SEQUENCE,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_EXIT_ACTION,
-     g_param_spec_enum ("exit-action", NULL, NULL,
-                        TERMINAL_TYPE_EXIT_ACTION,
-                        TERMINAL_EXIT_CLOSE,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
-  
-  g_object_class_install_property
-    (object_class,
-     PROP_FONT,
-     g_param_spec_boxed ("font", NULL, NULL,
-                         PANGO_TYPE_FONT_DESCRIPTION,
-                         G_PARAM_READWRITE |
-                         G_PARAM_STATIC_NAME |
-                         G_PARAM_STATIC_NICK |
-                         G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ICON,
-     g_param_spec_object ("icon", NULL, NULL,
-                          GDK_TYPE_PIXBUF,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ICON_FILE,
-     g_param_spec_string ("icon-file", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_IS_DEFAULT,
-     g_param_spec_boolean ("is-default", NULL, NULL,
-                           FALSE /* FIXMEchpe? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_LOGIN_SHELL,
-     g_param_spec_boolean ("login-shell", NULL, NULL,
-                           FALSE /* FIXME? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_NAME,
-     g_param_spec_string ("name", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB |
-                          G_PARAM_CONSTRUCT_ONLY));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_NO_AA_WITHOUT_RENDER,
-     g_param_spec_boolean ("no-aa-without-render", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
 //   g_object_class_install_property
 //     (object_class,
 //      PROP_PALETTE,
@@ -853,158 +766,6 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 //                         G_PARAM_STATIC_NICK |
 //                         G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property
-    (object_class,
-     PROP_SCROLL_BACKGROUND,
-     g_param_spec_boolean ("scroll-background", NULL, NULL,
-                           FALSE /* FIXME? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SCROLLBACK_LINES,
-     g_param_spec_int ("scrollback-lines", NULL, NULL,
-                       0, G_MAXINT,
-                       1000,
-                       G_PARAM_READWRITE |
-                       G_PARAM_STATIC_NAME |
-                       G_PARAM_STATIC_NICK |
-                       G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SCROLLBAR_POSITION,
-     g_param_spec_enum ("scrollbar-position", NULL, NULL,
-                        TERMINAL_TYPE_SCROLLBAR_POSITION,
-                        DEFAULT_SCROLLBAR_POSITION,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SCROLL_ON_KEYSTROKE,
-     g_param_spec_boolean ("scroll-on-keystroke", NULL, NULL,
-                           TRUE /* FIXME? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SCROLL_ON_OUTPUT,
-     g_param_spec_boolean ("scroll-on-output", NULL, NULL,
-                           TRUE /* FIXME? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SILENT_BELL,
-     g_param_spec_boolean ("silent-bell", NULL, NULL,
-                           TRUE /* FIXME? */,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_TITLE,
-     g_param_spec_string ("title", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_TITLE_MODE,
-     g_param_spec_enum ("title-mode", NULL, NULL,
-                        TERMINAL_TYPE_TITLE_MODE,
-                        TERMINAL_TITLE_REPLACE,
-                        G_PARAM_READWRITE |
-                        G_PARAM_STATIC_NAME |
-                        G_PARAM_STATIC_NICK |
-                        G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_UPDATE_RECORDS,
-     g_param_spec_boolean ("update-records", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-  
-  g_object_class_install_property
-    (object_class,
-    PROP_USE_CUSTOM_COMMAND,
-    g_param_spec_boolean ("use-custom-command", NULL, NULL,
-                          TRUE,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_USE_SKEY,
-     g_param_spec_boolean ("use-skey", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_USE_SYSTEM_FONT,
-     g_param_spec_boolean ("use-system-font", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_USE_THEME_COLORS,
-     g_param_spec_boolean ("use-theme-colors", NULL, NULL,
-                           TRUE,
-                           G_PARAM_READWRITE |
-                           G_PARAM_STATIC_NAME |
-                           G_PARAM_STATIC_NICK |
-                           G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_VISIBLE_NAME,
-     g_param_spec_string ("visible-name", NULL, NULL,
-                          NULL,
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_WORD_CHARS,
-     g_param_spec_string ("word-chards", NULL, NULL,
-                          "",
-                          G_PARAM_READWRITE |
-                          G_PARAM_STATIC_NAME |
-                          G_PARAM_STATIC_NICK |
-                          G_PARAM_STATIC_BLURB));
 }
 
 static void
