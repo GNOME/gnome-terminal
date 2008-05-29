@@ -833,13 +833,16 @@ static void
 terminal_screen_cook_icon_title (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  GObject *object = G_OBJECT (screen);      
   
+  g_object_freeze_notify (object);
+
   cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title);
-#if 0
-  /* FIXMEchpe */
+
   if (cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title))
-    g_signal_emit (G_OBJECT (screen), signals[ICON_TITLE_CHANGED], 0);
-#endif
+    g_object_notify (G_OBJECT (screen), "icon-title");
+  
+  g_object_thaw_notify (object);
 }
 
 static void
@@ -1540,6 +1543,7 @@ terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
 					gboolean       userset)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  GObject *object = G_OBJECT (screen);
   
   g_assert (TERMINAL_IS_SCREEN (screen));
 
@@ -1550,10 +1554,16 @@ terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
        strcmp (priv->raw_icon_title, icon_title) == 0))
     return;
 
+  g_object_freeze_notify (object);
+
   g_free (priv->raw_icon_title);
   priv->raw_icon_title = g_strdup (icon_title);
   priv->icon_title_set = TRUE;
+
+  g_object_notify (object, "icon-title-set");
   terminal_screen_cook_icon_title (screen);
+
+  g_object_thaw_notify (object);
 }
 
 void

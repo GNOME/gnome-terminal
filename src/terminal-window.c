@@ -1620,35 +1620,51 @@ profile_set_callback (TerminalScreen *screen,
 }
 
 static void
-title_changed_callback (TerminalScreen *screen,
+sync_screen_title (TerminalScreen *screen,
+                   GParamSpec *psepc,
+                   TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  
+  if (screen != priv->active_term)
+    return;
+
+  gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
+}
+
+static void
+sync_screen_icon_title (TerminalScreen *screen,
                         GParamSpec *psepc,
                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  const char *title;
-  
-  if (screen == priv->active_term)
-    {
-      title = terminal_screen_get_title (screen);
 
-      gtk_window_set_title (GTK_WINDOW (window), title);
+  if (screen != priv->active_term)
+    return;
 
-      if (terminal_screen_get_icon_title_set (screen))
-        {
-          title = terminal_screen_get_icon_title (screen);
-        }
-      gdk_window_set_icon_name (GTK_WIDGET (window)->window, title);
-    }
+  if (!terminal_screen_get_icon_title_set (screen))
+    return;
+
+  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
 }
 
 static void
-icon_title_changed_callback (TerminalScreen *screen,
-                             TerminalWindow *window)
+sync_screen_icon_title_set (TerminalScreen *screen,
+                            GParamSpec *psepc,
+                            TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (screen == priv->active_term)
-    gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+  if (screen != priv->active_term)
+    return;
+
+  if (terminal_screen_get_icon_title_set (screen))
+    return;
+
+  /* Need to reset the icon name */
+  /* FIXMEchpe: needs a gdk function to unset the icon title! */
+
+  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_title (screen));
 }
 
 /* Notebook callbacks */
@@ -1969,8 +1985,9 @@ terminal_window_set_active (TerminalWindow *window,
       terminal_window_set_menubar_visible (window, setting);
     }
 
-  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
-  gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
+  sync_screen_title (screen, NULL, window);
+  sync_screen_icon_title_set (screen, NULL, window);
+  sync_screen_icon_title (screen, NULL, window);
 
   /* set size of window to current grid size */
 #ifdef DEBUG_GEOMETRY
@@ -2052,15 +2069,12 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     window);
 
   /* FIXMEchpe: only connect on the active screen, not all screens! */
-  g_signal_connect (G_OBJECT (screen),
-                    "notify::title",
-                    G_CALLBACK (title_changed_callback),
-                    window);
-
-  g_signal_connect (G_OBJECT (screen),
-                    "icon-title-changed",
-                    G_CALLBACK (icon_title_changed_callback),
-                    window);
+  g_signal_connect (screen, "notify::title",
+                    G_CALLBACK (sync_screen_title), window);
+  g_signal_connect (screen, "notify::icon-title",
+                    G_CALLBACK (sync_screen_icon_title), window);
+  g_signal_connect (screen, "notify::icon-title-set",
+                    G_CALLBACK (sync_screen_icon_title_set), window);
 
   g_signal_connect_swapped (G_OBJECT (screen),
                             "selection-changed",
@@ -2132,11 +2146,15 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
-                                        G_CALLBACK (title_changed_callback),
+                                        G_CALLBACK (sync_screen_title),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
-                                        G_CALLBACK (icon_title_changed_callback),
+                                        G_CALLBACK (sync_screen_icon_title),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
+                                        G_CALLBACK (sync_screen_icon_title_set),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
