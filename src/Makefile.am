@@ -12,7 +12,6 @@ gnome_terminal_SOURCES= \
 	skey-popup.c \
 	skey-popup.h \
 	terminal.c \
-	terminal.h \
 	terminal-accels.c \
 	terminal-accels.h \
 	terminal-app.c \
@@ -128,6 +127,8 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	terminal-marshal.list \
+	terminal-type-builtins.c.template \
+	terminal-type-builtins.h.template \
 	$(icon_DATA) \
 	$(schema_in_files) \
 	$(server_DATA) \

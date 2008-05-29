@@ -1,7 +1,6 @@
-
 SUBDIRS=src po help
 
-DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper --disable-schemas-install
 
 desktopdir = $(datadir)/applications
 desktop_in_files = gnome-terminal.desktop.in
@@ -12,17 +11,11 @@ EXTRA_DIST = 			\
 	HACKING			\
 	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
-	intltool-extract.in	\
-	intltool-merge.in	\
-	intltool-update.in	\
 	gnome-doc-utils.make	\
 	xmldocs.make		\
 	omf.make
 
 DISTCLEANFILES =		\
-	intltool-extract	\
-	intltool-merge		\
-	intltool-update		\
 	gnome-doc-utils.make	\
 	$(desktop_DATA)
 
