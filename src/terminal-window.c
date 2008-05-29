@@ -1508,7 +1508,7 @@ terminal_window_delete_event (GtkWidget *widget,
                               GdkEvent *event,
                               gpointer data)
 {
-   return !confirm_close_window (TERMINAL_WINDOW (widget));
+   return confirm_close_window (TERMINAL_WINDOW (widget));
 }
 
 static void
@@ -2348,28 +2348,41 @@ file_new_tab_callback (GtkAction *action,
                              NULL, NULL, -1);
 }
 
+static void
+confirm_close_window_response_cb (GtkWidget *dialog,
+                                  int response,
+                                  GtkWidget *window)
+{
+  gtk_widget_destroy (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    gtk_widget_destroy (window);
+}
+
+/* Returns TRUE if closing needs to wait until user confirmation;
+ * FALSE if the window can close immediately
+ */
 static gboolean
 confirm_close_window (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *dialog;
   GConfClient *client;
-  gboolean result, do_confirm;
+  gboolean do_confirm;
   int n;
 
   n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
-
   if (n <= 1)
-    return TRUE;
+    return FALSE;
 
   client = gconf_client_get_default ();
   do_confirm = gconf_client_get_bool (client, CONF_GLOBAL_PREFIX "/confirm_window_close", NULL);
   g_object_unref (client);
   if (!do_confirm)
-    return TRUE;
+    return FALSE;
 
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_WARNING,
                                    GTK_BUTTONS_CANCEL,
                                    "%s", _("Close all tabs?"));
@@ -2386,18 +2399,18 @@ confirm_close_window (TerminalWindow *window)
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All _Tabs"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-  result = gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT;
-  gtk_widget_destroy (dialog);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (confirm_close_window_response_cb), window);
+  gtk_window_present (GTK_WINDOW (dialog));
 
-  return result;
+  return TRUE;
 }
 
 static void
 file_close_window_callback (GtkAction *action,
                             TerminalWindow *window)
 {
-  if (confirm_close_window (window))
-    gtk_widget_destroy (GTK_WIDGET (window));
+  confirm_close_window (window);
 }
 
 static void
