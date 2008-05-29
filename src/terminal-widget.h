@@ -151,16 +151,6 @@ const char* terminal_widget_get_encoding (GtkWidget  *widget);
 void        terminal_widget_set_encoding (GtkWidget  *widget,
                                           const char *encoding);
 
-gboolean terminal_widget_supports_dynamic_encoding (void);
-
-void terminal_widget_im_append_menuitems(GtkWidget    *wiget,
-					 GtkMenuShell *menushell);
-guint terminal_widget_im_merge_ui(GtkWidget *widget,
-                                  GtkUIManager *manager,
-                                  const char *group_name,
-                                  const char *ui_path,
-                                  GtkActionGroup **action_group);
-
 G_END_DECLS
 
 #endif /* TERMINAL_WIDGET_H */

@@ -547,9 +547,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   const char *charset;
   GtkWidget *widget;
 
-  if (!terminal_widget_supports_dynamic_encoding ())
-    return;
-  
   /* Remove the old UI */
   if (priv->encodings_ui_id != 0)
     {
@@ -960,12 +957,12 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
                                             "/Popup/PopupInputMethods");
-  /* FIXME: fix this when gtk+ bug #500065 is done */
+  /* FIXME: fix this when gtk+ bug #500065 is done, by using vte_terminal_im_merge_ui */
   if (show_input_method_menu)
     {
       im_menu = gtk_menu_new ();
-      terminal_widget_im_append_menuitems (terminal_screen_get_widget (screen),
-                                           GTK_MENU_SHELL (im_menu));
+      vte_terminal_im_append_menuitems (VTE_TERMINAL (screen),
+                                        GTK_MENU_SHELL (im_menu));
       gtk_widget_show (im_menu);
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), im_menu);
     }
@@ -1323,8 +1320,6 @@ terminal_window_init (TerminalWindow *window)
   action = gtk_action_group_get_action (action_group, "ViewFullscreen");
   gtk_action_set_sensitive (action,
                             gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE)));
-  action = gtk_action_group_get_action (action_group, "TerminalSetEncoding");
-  gtk_action_set_sensitive (action, terminal_widget_supports_dynamic_encoding ());
 
   /* Load the UI */
   error = NULL;
