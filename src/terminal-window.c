@@ -1314,6 +1314,7 @@ terminal_window_init (TerminalWindow *window)
   GtkUIManager *manager;
   GtkWidget *main_vbox;
   GError *error;
+  GtkWindowGroup *window_group;
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
@@ -1433,6 +1434,10 @@ terminal_window_init (TerminalWindow *window)
    * emitted for the toplevel the first time!
    */
   terminal_window_settings_update (GTK_WIDGET (window));
+
+  window_group = gtk_window_group_new ();
+  gtk_window_group_add_window (window_group, GTK_WINDOW (window));
+  g_object_unref (window_group);
 }
 
 static void
