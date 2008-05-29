@@ -552,8 +552,12 @@ property_change_new (GtkWidget *editor,
     signal = "notify::font-name";
   else if (GTK_IS_RANGE (widget))
     signal = "value-changed";
+  else if (GTK_IS_FILE_CHOOSER_BUTTON (widget))
+    signal = "file-set";
   else if (GTK_IS_FILE_CHOOSER (widget))
-    signal = "selection-changed"; // FIXMEchpe use file-set instead
+    signal = "selection-changed";
+  else
+    g_assert_not_reached ();
 
   change->widget_notify_id = g_signal_connect_swapped (widget, signal, G_CALLBACK (widget_change_notify_cb), change);
 
