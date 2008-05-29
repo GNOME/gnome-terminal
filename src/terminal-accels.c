@@ -440,9 +440,6 @@ binding_from_string (const char      *str,
       *accelerator_mods == 0)
     return FALSE;
 
-  if (*accelerator_key == 0)
-    return FALSE;
-    
   return TRUE;
 }
 
