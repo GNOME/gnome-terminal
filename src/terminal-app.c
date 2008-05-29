@@ -488,37 +488,6 @@ profile_combo_box_new (TerminalApp *app)
   return combo;
 }
 
-#if 0
-static void
-profile_combo_box_set_selected (GtkWidget *widget,
-                                TerminalProfile *selected_profile)
-{
-  GtkComboBox *combo = GTK_COMBO_BOX (widget);
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  gboolean found = FALSE;
-
-  model = gtk_combo_box_get_model (combo);
-  if (!model)
-    return;
-
-  if (!gtk_tree_model_get_iter_first (model, &iter))
-    return;
-
-  do
-    {
-      TerminalProfile *profile;
-
-      gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &profile, (int) -1);
-      found = (profile == selected_profile);
-      g_object_unref (profile);
-    } while (!found && gtk_tree_model_iter_next (model, &iter));
-
-  if (found)
-    gtk_combo_box_set_active_iter (combo, &iter);
-}
-#endif
-
 static void
 profile_combo_box_changed_cb (GtkWidget *widget,
                               TerminalApp *app)
