@@ -167,6 +167,8 @@ struct _TerminalProfilePrivate
   GSList *dirty_pspecs;
   guint save_idle_id;
 
+  GParamSpec *gconf_notification_pspec;
+
   gboolean background_load_failed;
 
   guint forgotten : 1;
@@ -682,7 +684,11 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
                   g_strdup_value_contents (&value));)
 
   if (!equal || force_set)
-    terminal_profile_set_property (G_OBJECT (profile), pspec->param_id, &value, pspec);
+    {
+      priv->gconf_notification_pspec = pspec;
+      g_object_set_property (G_OBJECT (profile), pspec->name, &value);
+      priv->gconf_notification_pspec = NULL;
+    }
 
 out:
   /* FIXMEchpe: if we arrive here through goto in the error cases,
@@ -903,6 +909,8 @@ terminal_profile_init (TerminalProfile *profile)
 
   priv = profile->priv = G_TYPE_INSTANCE_GET_PRIVATE (profile, TERMINAL_TYPE_PROFILE, TerminalProfilePrivate);
 
+  priv->gconf_notification_pspec = NULL;
+
   priv->conf = gconf_client_get_default ();
 
   priv->locked = g_new0 (gboolean, LAST_PROP);
@@ -1098,7 +1106,7 @@ terminal_profile_set_property (GObject *object,
         break;
     }
 
-  /* Extra processing */
+  /* Postprocessing */
   switch (prop_id)
     {
       case PROP_NAME: {
@@ -1136,6 +1144,7 @@ static void
 terminal_profile_notify (GObject *object,
                          GParamSpec *pspec)
 {
+  TerminalProfilePrivate *priv = TERMINAL_PROFILE (object)->priv;
   void (* notify) (GObject *, GParamSpec *) = G_OBJECT_CLASS (terminal_profile_parent_class)->notify;
 
   NOTE (g_print ("Property notification for prop %s\n", pspec->name);)
@@ -1144,7 +1153,8 @@ terminal_profile_notify (GObject *object,
 
   if (pspec->owner_type == TERMINAL_TYPE_PROFILE &&
       (pspec->flags & G_PARAM_WRITABLE) &&
-      g_param_spec_get_qdata (pspec, gconf_key_quark) != NULL)
+      g_param_spec_get_qdata (pspec, gconf_key_quark) != NULL &&
+      pspec != priv->gconf_notification_pspec)
     terminal_profile_schedule_save (TERMINAL_PROFILE (object), pspec);
 }
 
