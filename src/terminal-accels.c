@@ -217,7 +217,6 @@ static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
-static GtkWidget *edit_keys_dialog_treeview = NULL;
 static guint gconf_notify_id;
 static GHashTable *gconf_key_to_entry;
 
@@ -311,7 +310,7 @@ update_model_foreach (GtkTreeModel *model,
 		      KEYVAL_COLUMN, &key_entry,
 		      -1);
 
-  if (key_entry == (KeyEntry *)data)
+  if (key_entry == (KeyEntry *) data)
     {
       gtk_tree_model_row_changed (model, path, iter);
       return TRUE;
@@ -378,14 +377,6 @@ keys_change_notify (GConfClient *client,
                               keyval, mask,
                               TRUE);
   inside_gconf_notify -= 1;
-
-  /* Notify tree views to repaint with new values */
-  if (edit_keys_dialog_treeview)
-    {
-      gtk_tree_model_foreach (gtk_tree_view_get_model (GTK_TREE_VIEW (edit_keys_dialog_treeview)),
-                              update_model_foreach,
-                              key_entry);
-    }
 }
 
 static void
@@ -632,6 +623,16 @@ accel_compare_func (GtkTreeModel *model,
   return result;
 }
 
+static void
+treeview_accel_changed_cb (GtkAccelGroup  *accel_group,
+                           guint keyval,
+                           GdkModifierType modifier,
+                           GClosure *accel_closure,
+                           GtkTreeModel *model)
+{
+  gtk_tree_model_foreach (model, update_model_foreach, accel_closure->data);
+}
+
 static gboolean
 cb_check_for_uniqueness (GtkTreeModel *model,
                          GtkTreePath  *path,
@@ -788,6 +789,14 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
   g_free (str);
 }
 
+static void
+edit_keys_dialog_destroy_cb (GtkWidget *widget,
+                             gpointer user_data)
+{
+  g_signal_handlers_disconnect_by_func (hack_group, G_CALLBACK (treeview_accel_changed_cb), user_data);
+  edit_keys_dialog = NULL;
+}
+
 void
 terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 {
@@ -814,11 +823,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                                                 disable_mnemonics_button, FLAG_INVERT_BOOL);
   terminal_util_bind_object_property_to_widget (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_ACCELS,
                                                 disable_menu_accel_button, FLAG_INVERT_BOOL);
-
-  edit_keys_dialog_treeview = tree_view;
-  g_signal_connect (tree_view, "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &edit_keys_dialog_treeview);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -882,14 +886,18 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   g_object_unref (tree);
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
-  
+
+  g_signal_connect (hack_group, "accel-changed",
+                    G_CALLBACK (treeview_accel_changed_cb), tree);
+
   edit_keys_dialog = dialog;
   g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (gtk_widget_destroyed), &edit_keys_dialog);
+                    G_CALLBACK (edit_keys_dialog_destroy_cb), tree);
   g_signal_connect (dialog, "response",
                     G_CALLBACK (gtk_widget_destroy),
                     NULL);
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
+
 
 done:
   gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
