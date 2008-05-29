@@ -1309,8 +1309,6 @@ void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
 {
-  char *ui_filename;
-  GtkBuilder *builder;
   GObject *dialog;
   GObject *tree_view_container, *new_button, *edit_button, *remove_button;
   GObject *default_hbox, *default_label;
@@ -1323,19 +1321,16 @@ terminal_app_manage_profiles (TerminalApp     *app,
       return;
     }
 
-  builder = gtk_builder_new ();
-
-  ui_filename = g_build_filename (TERM_PKGDATADIR, "profile-manager.ui", NULL);
-  gtk_builder_add_from_file (builder, ui_filename, NULL);
-  g_free (ui_filename);
-
-  dialog = gtk_builder_get_object (builder, "profile-manager");
-  tree_view_container = gtk_builder_get_object (builder, "profiles-treeview-container");
-  new_button = gtk_builder_get_object (builder, "new-profile-button");
-  edit_button = gtk_builder_get_object (builder, "edit-profile-button");
-  remove_button = gtk_builder_get_object (builder, "delete-profile-button");
-  default_hbox = gtk_builder_get_object (builder, "default-profile-hbox");
-  default_label = gtk_builder_get_object (builder, "default-profile-label");
+  if (!terminal_util_load_builder_file ("profile-manager.ui",
+                                        "profile-manager", &dialog,
+                                        "profiles-treeview-container", &tree_view_container,
+                                        "new-profile-button", &new_button,
+                                        "edit-profile-button", &edit_button,
+                                        "delete-profile-button", &remove_button,
+                                        "default-profile-hbox", &default_hbox,
+                                        "default-profile-label", &default_label,
+                                        NULL))
+    return;
 
   app->manage_profiles_dialog = GTK_WIDGET (dialog);
   app->manage_profiles_new_button = GTK_WIDGET (new_button);
@@ -1385,8 +1380,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
                                 transient_parent);
 
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
-
-  g_object_unref (builder);
 }
 
 static void
