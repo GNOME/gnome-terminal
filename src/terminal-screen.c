@@ -388,9 +388,9 @@ terminal_screen_init (TerminalScreen *screen)
                     G_CALLBACK (terminal_screen_icon_title_changed),
                     screen);
 
-  terminal_widget_connect_child_died (priv->term,
-                                      G_CALLBACK (terminal_screen_widget_child_died),
-                                      screen);
+  g_signal_connect (screen, "child-exited",
+                    G_CALLBACK (terminal_screen_widget_child_died),
+                    screen);
 
   connect_monospace_font_change (screen);
 
@@ -1284,6 +1284,8 @@ terminal_screen_launch_child (TerminalScreen *screen)
   char  *path;
   char **argv;
   GError *err;
+  gboolean update_records;
+  
   
   profile = priv->profile;
 
@@ -1297,21 +1299,22 @@ terminal_screen_launch_child (TerminalScreen *screen)
   
   env = get_child_environment (priv->term, screen);  
 
-  err = NULL;
-  if (!terminal_widget_fork_command (priv->term,
-                                     terminal_profile_get_login_shell (profile),
-                                     terminal_profile_get_update_records (profile),
-                                     path,
-                                     argv,
-                                     env,
-                                     terminal_screen_get_working_dir (screen),
-                                     &priv->child_pid,
-                                     &err))
+  update_records = terminal_profile_get_update_records (profile);
+
+  priv->child_pid = vte_terminal_fork_command (VTE_TERMINAL (screen),
+                                               path,
+                                               argv,
+                                               env,
+                                               terminal_screen_get_working_dir (screen),
+                                               terminal_profile_get_login_shell (profile),
+                                               update_records,
+                                               update_records);
+
+  if (priv->child_pid == -1)
     {
 
       terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (priv->term, GTK_TYPE_WINDOW), NULL,
-                                       "%s", err->message);
-      g_error_free (err);
+                                       "%s", _("There was an error creating the child process for this terminal"));
     }
   
   g_free (path);

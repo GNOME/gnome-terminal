@@ -43,8 +43,6 @@ gnome_terminal_SOURCES=				\
 	terminal-tabs-menu.h			\
 	terminal-type-builtins.c		\
 	terminal-type-builtins.h		\
-	terminal-widget.h			\
-	terminal-widget-vte.c			\
 	terminal-window.c			\
 	terminal-window.h			\
 	$(NULL)
