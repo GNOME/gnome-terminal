@@ -1757,16 +1757,17 @@ terminal_window_add_screen (TerminalWindow *window,
                             gint            position)
 {
   TerminalWindowPrivate *priv = window->priv;
-  TerminalWindow *old;
+  GtkWidget *old_window;
   GtkWidget *screen_container, *tab_label;
  
-  old = terminal_screen_get_window (screen);
-
-  if (old == window)
+  old_window = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+  if (GTK_WIDGET_TOPLEVEL (old_window) &&
+      TERMINAL_IS_WINDOW (old_window) &&
+      TERMINAL_WINDOW (old_window)== window)
     return;  
 
-  if (old)
-    terminal_window_remove_screen (old, screen);
+  if (TERMINAL_IS_WINDOW (old_window))
+    terminal_window_remove_screen (TERMINAL_WINDOW (old_window), screen);
 
   screen_container = terminal_screen_container_new (screen);
   gtk_widget_show (screen_container);
@@ -1801,7 +1802,7 @@ terminal_window_remove_screen (TerminalWindow *window,
   GtkWidget *scrolled_window;
   guint num_page;
 
-  g_return_if_fail (terminal_screen_get_window (screen) == window);
+  g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (screen)) == GTK_WIDGET (window));
 
   update_tab_visibility (window, -1);
 

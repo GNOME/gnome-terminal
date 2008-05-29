@@ -1786,11 +1786,14 @@ terminal_app_new_terminal (TerminalApp     *app,
     }
   else
     {
-      TerminalWindow *source_window;
+      GtkWidget *source_toplevel;
 
-      source_window = terminal_screen_get_window (screen);
-      if (source_window)
+      source_toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+      if (GTK_WIDGET_TOPLEVEL (source_toplevel) &&
+          TERMINAL_IS_WINDOW (source_toplevel))
         {
+          TerminalWindow *source_window = TERMINAL_WINDOW (source_toplevel);
+
           g_object_ref_sink (screen);
           terminal_window_remove_screen (source_window, screen);
           terminal_window_add_screen (window, screen, -1);

@@ -555,12 +555,6 @@ terminal_screen_new (void)
   return g_object_new (TERMINAL_TYPE_SCREEN, NULL);
 }
 
-TerminalWindow*
-terminal_screen_get_window (TerminalScreen *screen)
-{
-  return screen->priv->window;
-}
-
 void
 terminal_screen_set_window (TerminalScreen *screen,
                             TerminalWindow *window)
@@ -611,7 +605,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
-  TerminalWindow *window;
   const char *prop_name;
   TerminalBackgroundType bg_type;
 
@@ -725,11 +718,10 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
           vte_terminal_set_opacity (vte_terminal, 0xffff);
         }
       
-      window = terminal_screen_get_window (screen);
       /* FIXME: Don't enable this if we have a compmgr. */
       vte_terminal_set_background_transparent (vte_terminal,
                                               bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                              (!window || !terminal_window_uses_argb_visual (window)));
+                                              (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING))
@@ -1462,7 +1454,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
                                                      NULL);
       if (skey_match != NULL)
 	{
-	  terminal_skey_do_popup (screen, GTK_WINDOW (terminal_screen_get_window (screen)), skey_match);
+	  terminal_skey_do_popup (screen, GTK_WINDOW (priv->window), skey_match);
 	  g_free (skey_match);
           g_free (matched_string);
 
@@ -2065,9 +2057,9 @@ drag_data_received (TerminalScreen   *widget,
 
         g_return_if_fail (TERMINAL_IS_SCREEN (moving_screen));
 
-        source_window = terminal_screen_get_window (moving_screen);
+        source_window = moving_screen->priv->window;
         source_notebook = terminal_window_get_notebook (source_window);
-        dest_window = terminal_screen_get_window (screen);
+        dest_window = screen->priv->window;
         dest_notebook = terminal_window_get_notebook (dest_window);
         page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
                                           GTK_WIDGET (screen));
