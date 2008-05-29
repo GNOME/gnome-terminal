@@ -982,10 +982,8 @@ terminal_profile_constructor (GType type,
         continue;
 
       if ((pspec->flags & G_PARAM_WRITABLE) == 0 ||
-          (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0) {
-        g_print ("SKIPPING pspec %s due to flags\n", pspec->name);
+          (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
         continue;
-      }
 
       for (j = 0; j < n_construct_properties; ++j)
         if (pspec == construct_params[j].pspec)
