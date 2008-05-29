@@ -29,7 +29,6 @@
 #include "terminal-screen-container.h"
 #include "terminal-tabs-menu.h"
 #include "terminal-util.h"
-#include "terminal.h"
 #include "encoding.h"
 #include <string.h>
 #include <stdlib.h>
@@ -274,7 +273,7 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   g_assert (profile);
 
-  if (terminal_profile_get_forgotten (profile))
+  if (_terminal_profile_get_forgotten (profile))
     return;
 
   /* FIXMEchpe why block here? */
@@ -335,12 +334,15 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   for (p = profiles; p != NULL; p = p->next)
     {
       TerminalProfile *profile = (TerminalProfile *) p->data;
+      const char *visible_name;
       GtkRadioAction *profile_action;
       char name[32];
       char *display_name;
 
       g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
-      display_name = escape_underscores (terminal_profile_get_visible_name (profile));
+
+      visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
+      display_name = escape_underscores (visible_name);
       profile_action = gtk_radio_action_new (name,
                                              display_name,
                                              NULL,
@@ -388,9 +390,11 @@ terminal_window_create_new_terminal_action (TerminalWindow *window,
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
+  const char *visible_name;
   char *profile_name, *display_name;
 
-  profile_name = escape_underscores (terminal_profile_get_visible_name (profile));
+  visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
+  profile_name = escape_underscores (visible_name);
   if (num < 10)
     {
       display_name = g_strdup_printf (_("_%d. %s"), num, profile_name);
@@ -1851,7 +1855,7 @@ terminal_window_set_active (TerminalWindow *window,
   if (priv->use_default_menubar_visibility)
     {
       gboolean setting =
-        terminal_profile_get_default_show_menubar (terminal_screen_get_profile (screen));
+        terminal_profile_get_property_boolean (terminal_screen_get_profile (screen), TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR);
 
       terminal_window_set_menubar_visible (window, setting);
     }
@@ -2048,6 +2052,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 void
 terminal_window_update_icon (TerminalWindow *window)
 {
+#if 0
   TerminalWindowPrivate *priv = window->priv;
   TerminalProfile *profile;
 
@@ -2061,6 +2066,7 @@ terminal_window_update_icon (TerminalWindow *window)
 
   gtk_window_set_icon (GTK_WINDOW (window),
                        terminal_profile_get_icon (profile));
+#endif
 }
 
 void
@@ -2149,7 +2155,7 @@ file_new_window_callback (GtkAction *action,
   if (!profile)
     return;
 
-  if (terminal_profile_get_forgotten (profile))
+  if (_terminal_profile_get_forgotten (profile))
     return;
 
   new_window (window, NULL, profile);
@@ -2206,7 +2212,7 @@ file_new_tab_callback (GtkAction *action,
   if (!profile)
     return;
 
-  if (terminal_profile_get_forgotten (profile))
+  if (_terminal_profile_get_forgotten (profile))
     return;
       
   dir = terminal_screen_get_working_dir (priv->active_term);
@@ -2584,7 +2590,7 @@ detach_tab (TerminalScreen  *screen,
 
   g_assert (profile);
 
-  if (terminal_profile_get_forgotten (profile))
+  if (_terminal_profile_get_forgotten (profile))
     return;
       
   new_window (window, screen, profile);
@@ -2664,6 +2670,7 @@ help_about_callback (GtkAction *action,
   g_free (license_text);
 }
 
+#if 0
 static void
 default_profile_changed (TerminalProfile           *profile,
                          const TerminalSettingMask *mask,
@@ -2720,11 +2727,12 @@ monitor_profiles_for_is_default_change (TerminalWindow *window)
 
   g_list_free (profiles);
 }
+#endif
 
 void
 terminal_window_reread_profile_list (TerminalWindow *window)
 {
-  monitor_profiles_for_is_default_change (window);
+//   monitor_profiles_for_is_default_change (window);
   
   terminal_window_update_set_profile_menu (window);
   terminal_window_update_new_terminal_menus (window);

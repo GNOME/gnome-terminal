@@ -2,8 +2,6 @@
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2007, 2008 Christian Persch
  *
- * This file is part of gnome-terminal.
- *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -19,8 +17,10 @@
  */
 
 #include <config.h>
+
 #include "terminal-intl.h"
 
+// FIXMEchpe remove this crap
 /* grab gtk_style_get_font and gdk_x11_get_font_name */
 #undef GTK_DISABLE_DEPRECATED
 #undef GDK_DISABLE_DEPRECATED
@@ -39,7 +39,7 @@
 #include "terminal-profile.h"
 #include "terminal-screen-container.h"
 #include "terminal-util.h"
-#include "terminal.h"
+#include "terminal-app.h"
 #include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 #include <libgnome/gnome-url.h> /* gnome_url_show */
@@ -618,19 +618,23 @@ terminal_screen_get_icon_title_set (TerminalScreen *screen)
   return screen->priv->icon_title_set;
 }
 
-void
-terminal_screen_reread_profile (TerminalScreen *screen)
+static void
+terminal_screen_profile_notify_cb (TerminalProfile *profile,
+                                   GParamSpec *pspec,
+                                   TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
-  TerminalProfile *profile;
-  TerminalBackgroundType bg_type;
   TerminalWindow *window;
-  
-  profile = priv->profile;  
-  
-  if (profile == NULL)
-    return;
+  const char *prop_name;
+/*  VteTerminalEraseBinding backspace_binding, delete_binding;*/
+  TerminalBackgroundType bg_type;
+//   gboolean silent_bell, scroll_on_keystroke, scroll_on_output;
+
+  if (pspec)
+    prop_name = pspec->name;
+  else
+    prop_name = NULL;
 
   terminal_screen_cook_title (screen);
   terminal_screen_cook_icon_title (screen);
@@ -650,18 +654,21 @@ terminal_screen_reread_profile (TerminalScreen *screen)
 
   update_color_scheme (screen);
 
-  vte_terminal_set_audible_bell (vte_terminal,
-                                 !terminal_profile_get_silent_bell (profile));
-  vte_terminal_set_word_chars (vte_terminal,
-                               terminal_profile_get_word_chars (profile));
-  vte_terminal_set_scroll_on_keystroke (vte_terminal,
-                                        terminal_profile_get_scroll_on_keystroke (profile));
-  vte_terminal_set_scroll_on_output (vte_terminal,
-                                     terminal_profile_get_scroll_on_output (profile));
-  vte_terminal_set_scrollback_lines (vte_terminal,
-                                     terminal_profile_get_scrollback_lines (profile));
+/*  g_object_get (profile,
+                TERMINAL_PROFILE_SILENT_BELL, &silent_bell,*/
+  if (prop_name == I_(TERMINAL_PROFILE_SILENT_BELL))
+    vte_terminal_set_audible_bell (vte_terminal, !terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SILENT_BELL));
 
-  if (terminal_profile_get_use_skey (priv->profile))
+  vte_terminal_set_word_chars (vte_terminal,
+                               terminal_profile_get_property_string (profile, TERMINAL_PROFILE_WORD_CHARS));
+  vte_terminal_set_scroll_on_keystroke (vte_terminal,
+                                        terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE));
+  vte_terminal_set_scroll_on_output (vte_terminal,
+                                        terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
+  vte_terminal_set_scrollback_lines (vte_terminal,
+                                     terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES));
+
+  if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
     {
       terminal_screen_skey_match_add (screen,
 				      "s/key [0-9]* [-A-Za-z0-9]*",
@@ -675,14 +682,14 @@ terminal_screen_reread_profile (TerminalScreen *screen)
     {
       terminal_screen_skey_match_remove (screen);
     }
-  bg_type = terminal_profile_get_background_type (profile);
+  bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
   
   if (bg_type == TERMINAL_BACKGROUND_IMAGE)
     {
       set_background_image_file (vte_terminal,
-                                 terminal_profile_get_background_image_file (profile));
+                                 terminal_profile_get_property_string (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
       vte_terminal_set_scroll_background (vte_terminal,
-                                          terminal_profile_get_scroll_background (profile));
+                                          terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
     }
   else
     {
@@ -694,10 +701,10 @@ terminal_screen_reread_profile (TerminalScreen *screen)
       bg_type == TERMINAL_BACKGROUND_TRANSPARENT)
     {
       vte_terminal_set_background_saturation (vte_terminal,
-                                              1.0 - terminal_profile_get_background_darkness (profile));
+                                              1.0 - terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
       vte_terminal_set_opacity (vte_terminal,
-                                terminal_profile_get_background_darkness (profile) * 0xffff);
-    }      
+                                0xffff * terminal_profile_get_property_double (profile, TERMINAL_PROFILE_BACKGROUND_DARKNESS));
+    }
   else
     {
       vte_terminal_set_background_saturation (vte_terminal, 1.0); /* normal color */
@@ -711,10 +718,10 @@ terminal_screen_reread_profile (TerminalScreen *screen)
                                            (!window || !terminal_window_uses_argb_visual (window)));
 
   vte_terminal_set_backspace_binding (vte_terminal,
-                                      terminal_profile_get_backspace_binding (profile));
+                                      terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKSPACE_BINDING));
   
   vte_terminal_set_delete_binding (vte_terminal,
-                                   terminal_profile_get_delete_binding (profile));
+                                   terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_DELETE_BINDING));
 }
 
 /**
@@ -739,7 +746,7 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
   g_return_val_if_fail (old_cooked_title != NULL, FALSE);
 
   if (priv->profile)
-    mode = terminal_profile_get_title_mode (priv->profile);
+    mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_TITLE_MODE);
   else
     mode = TERMINAL_TITLE_REPLACE;
 
@@ -747,7 +754,7 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
   if (priv->title_from_arg)
     static_title_piece = priv->title_from_arg;
   else
-    static_title_piece = terminal_profile_get_title (priv->profile);
+    static_title_piece = terminal_profile_get_property_string (priv->profile, TERMINAL_PROFILE_TITLE);
 
   switch (mode)
     {
@@ -812,41 +819,46 @@ terminal_screen_cook_icon_title (TerminalScreen *screen)
 }
 
 static void
-profile_changed_callback (TerminalProfile           *profile,
-                          const TerminalSettingMask *mask,
-                          TerminalScreen            *screen)
-{
-  terminal_screen_reread_profile (screen);
-}
-
-static void
 update_color_scheme (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GdkColor fg, bg;
-  GdkColor palette[TERMINAL_PALETTE_SIZE];
   GtkStyle *style;
+  GdkColor colors[TERMINAL_PALETTE_SIZE];
+  GdkColor *fg_color, *bg_color;
+  GdkColor fg, bg;
+  guint n_colors;
+  gboolean use_theme_colors;
 
   style = gtk_widget_get_style (GTK_WIDGET (screen));
   if (!style)
     return;
 
-  terminal_profile_get_palette (priv->profile,
-                                palette);
+  fg = style->text[GTK_STATE_NORMAL];
+  bg = style->base[GTK_STATE_NORMAL];
 
-  if (terminal_profile_get_use_theme_colors (priv->profile))
+  g_object_get (priv->profile,
+                TERMINAL_PROFILE_USE_THEME_COLORS, &use_theme_colors,
+                TERMINAL_PROFILE_FOREGROUND_COLOR, &fg_color,
+                TERMINAL_PROFILE_BACKGROUND_COLOR, &bg_color,
+                NULL);
+
+  if (fg_color)
     {
-      fg = style->text[GTK_STATE_NORMAL];
-      bg = style->base[GTK_STATE_NORMAL];
+      if (!use_theme_colors)
+        fg = *fg_color;
+      gdk_color_free (fg_color);
     }
-  else
+  if (bg_color)
     {
-      terminal_profile_get_color_scheme (priv->profile,
-                                         &fg, &bg);
+      if (!use_theme_colors)
+        bg = *bg_color;
+      gdk_color_free (bg_color);
     }
 
+  n_colors = G_N_ELEMENTS (colors);
+  terminal_profile_get_palette (priv->profile, colors, &n_colors);
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
-                           palette, TERMINAL_PALETTE_SIZE);
+                           colors, n_colors);
   vte_terminal_set_background_tint_color (VTE_TERMINAL (screen), &bg);
 }
 
@@ -899,16 +911,16 @@ terminal_screen_set_font (TerminalScreen *screen)
   profile = priv->profile;
   
   /* FIXMEchpe make this use a get_font_desc on TerminalProfile */
-  if (terminal_profile_get_use_system_font (profile))
+  if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
     desc = get_system_monospace_font ();
   else
-    desc = pango_font_description_copy (terminal_profile_get_font (profile));
+    desc = pango_font_description_copy (terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FONT));
 
   pango_font_description_set_size (desc,
 				   priv->font_scale *
 				   pango_font_description_get_size (desc));
 
-  no_aa_without_render = terminal_profile_get_no_aa_without_render (profile);
+  no_aa_without_render = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER);
   if (!no_aa_without_render)
     {
       vte_terminal_set_font (VTE_TERMINAL (screen), desc);
@@ -948,7 +960,7 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
 
   /* FIXMEchpe: why do this on realize? */
   vte_terminal_set_allow_bold (vte_terminal,
-                               terminal_profile_get_allow_bold (profile));
+                               terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
   terminal_window_set_size (priv->window, screen, TRUE);
 }
 
@@ -1003,9 +1015,8 @@ terminal_screen_set_profile (TerminalScreen *screen,
     {
       g_object_ref (G_OBJECT (profile));
       priv->profile_changed_id =
-        g_signal_connect (G_OBJECT (profile),
-                          "changed",
-                          G_CALLBACK (profile_changed_callback),
+        g_signal_connect (profile, "notify",
+                          G_CALLBACK (terminal_screen_profile_notify_cb),
                           screen);
       priv->profile_forgotten_id =
         g_signal_connect (G_OBJECT (profile),
@@ -1023,10 +1034,11 @@ terminal_screen_set_profile (TerminalScreen *screen,
   
   priv->profile = profile;
 
-  terminal_screen_reread_profile (screen);
-
   if (priv->profile)
-    g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
+    {
+      terminal_screen_profile_notify_cb (profile, NULL, screen);
+      g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);
+    }
 
   if (old_profile)
     g_object_unref (old_profile);
@@ -1095,9 +1107,9 @@ get_child_command (TerminalScreen *screen,
       file = g_strdup (priv->override_command[0]);
       argv = g_strdupv (priv->override_command);
     }
-  else if (terminal_profile_get_use_custom_command (profile))
+  else if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND))
     {
-      if (!g_shell_parse_argv (terminal_profile_get_custom_command (profile),
+      if (!g_shell_parse_argv (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND),
                                NULL, &argv,
                                err))
         return FALSE;
@@ -1121,7 +1133,7 @@ get_child_command (TerminalScreen *screen,
 
       argv = g_new (char*, 2);
 
-      if (terminal_profile_get_login_shell (profile))
+      if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL))
         argv[0] = g_strconcat ("-", only_name, NULL);
       else
         argv[0] = g_strdup (only_name);
@@ -1323,14 +1335,14 @@ terminal_screen_launch_child (TerminalScreen *screen)
   
   env = get_child_environment (screen);
 
-  update_records = terminal_profile_get_update_records (profile);
+  update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
 
   priv->child_pid = vte_terminal_fork_command (VTE_TERMINAL (screen),
                                                path,
                                                argv,
                                                env,
                                                terminal_screen_get_working_dir (screen),
-                                               terminal_profile_get_login_shell (profile),
+                                               terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL),
                                                update_records,
                                                update_records);
 
@@ -1434,7 +1446,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
 
   if (dingus_button &&
       (state & GDK_CONTROL_MASK) &&
-      terminal_profile_get_use_skey (priv->profile))
+      terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SKEY))
     {
       gchar *skey_match;
 
@@ -1729,7 +1741,7 @@ terminal_screen_widget_child_died (GtkWidget      *term,
   
   action = TERMINAL_EXIT_CLOSE;
   if (priv->profile)
-    action = terminal_profile_get_exit_action (priv->profile);
+    action = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION);
   
   switch (action)
     {
@@ -1919,7 +1931,6 @@ drag_data_received (TerminalScreen   *widget,
       {
         guint16 *data = (guint16 *)selection_data->data;
         GdkColor color;
-        GdkColor fg;
         TerminalProfile *profile;
 
         /* We accept drops with the wrong format, since the KDE color
@@ -1940,14 +1951,11 @@ drag_data_received (TerminalScreen   *widget,
 
         if (profile)
           {
-            terminal_profile_set_background_type (profile,
-                                                  TERMINAL_BACKGROUND_SOLID);
-            terminal_profile_set_use_theme_colors (profile, FALSE);
-            
-            terminal_profile_get_color_scheme (profile,
-                                               &fg, NULL);
-            
-            terminal_profile_set_color_scheme (profile, &fg, &color);
+            g_object_set (profile,
+                          TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
+                          TERMINAL_PROFILE_USE_THEME_COLORS, FALSE,
+                          TERMINAL_PROFILE_BACKGROUND_COLOR, &color,
+                          NULL);
           }
       }
       break;
@@ -2047,10 +2055,10 @@ drag_data_received (TerminalScreen   *widget,
             
             if (filename && profile)
               {
-                terminal_profile_set_background_type (profile,
-                                                      TERMINAL_BACKGROUND_IMAGE);
-                terminal_profile_set_background_image_file (profile,
-                                                            filename);
+                g_object_set (profile,
+                              TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_IMAGE,
+                              TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE, filename,
+                              NULL);
               }
 
             g_free (filename);
@@ -2068,8 +2076,9 @@ drag_data_received (TerminalScreen   *widget,
         
         if (profile)
           {
-            terminal_profile_set_background_type (profile,
-                                                  TERMINAL_BACKGROUND_SOLID);
+                g_object_set (profile,
+                              TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
+                              NULL);
           }
       }
       break;
@@ -2125,7 +2134,7 @@ terminal_screen_update_scrollbar (TerminalScreen *screen)
   if (!parent)
     return;
 
-  switch (terminal_profile_get_scrollbar_position (profile))
+  switch (terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION))
     {
     case TERMINAL_SCROLLBAR_HIDDEN:
       policy = GTK_POLICY_NEVER;

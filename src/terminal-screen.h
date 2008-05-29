@@ -78,8 +78,6 @@ void terminal_screen_set_profile (TerminalScreen *screen,
                                   TerminalProfile *profile);
 TerminalProfile* terminal_screen_get_profile (TerminalScreen *screen);
 
-void terminal_screen_reread_profile (TerminalScreen *screen);
-
 void         terminal_screen_set_override_command (TerminalScreen  *screen,
                                                    char           **argv);
 const char** terminal_screen_get_override_command (TerminalScreen  *screen);
@@ -134,8 +132,6 @@ void terminal_screen_update_scrollbar (TerminalScreen *screen);
 #define TERMINAL_SCALE_XXXXX_LARGE (TERMINAL_SCALE_XXXX_LARGE*1.2)
 #define TERMINAL_SCALE_MINIMUM     (TERMINAL_SCALE_XXXXX_SMALL/1.2)
 #define TERMINAL_SCALE_MAXIMUM     (TERMINAL_SCALE_XXXXX_LARGE*1.2)
-
-#include "terminal.h"
 
 struct _TerminalScreenPopupInfo {
   int ref_count;
