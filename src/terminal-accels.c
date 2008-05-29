@@ -491,8 +491,6 @@ binding_from_value (GConfValue       *value,
                     guint            *accelerator_key,
                     GdkModifierType  *accelerator_mods)
 {
-  g_return_val_if_fail (accelerator_key != NULL, FALSE);
-  
   if (value == NULL)
     {
       /* unset */
