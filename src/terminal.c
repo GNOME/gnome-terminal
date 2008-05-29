@@ -78,7 +78,6 @@ static gboolean initialization_complete = FALSE;
 static GSList *pending_new_terminal_events = NULL;
 static gboolean use_factory;
 
-#define TERMINAL_STOCK_EDIT "terminal-edit"
 typedef struct
 {
   char    *startup_id;

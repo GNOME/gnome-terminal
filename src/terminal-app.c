@@ -130,7 +130,6 @@ enum
 static GConfClient *conf = NULL;
 static TerminalApp *global_app = NULL;
 
-#define TERMINAL_STOCK_EDIT "terminal-edit"
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
 
@@ -1346,29 +1345,6 @@ manage_profiles_response_cb (GtkDialog *dialog,
     gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
-static void
-terminal_app_register_stock (void)
-{
-  static gboolean registered = FALSE;
-
-  if (!registered)
-    {
-      GtkIconFactory *factory;
-      GtkIconSet     *icons;
-
-      static GtkStockItem edit_item [] = {
-	{ TERMINAL_STOCK_EDIT, N_("_Edit"), 0, 0, GETTEXT_PACKAGE },
-      };
-
-      icons = gtk_icon_factory_lookup_default (GTK_STOCK_PREFERENCES);
-      factory = gtk_icon_factory_new ();
-      gtk_icon_factory_add (factory, TERMINAL_STOCK_EDIT, icons);
-      gtk_icon_factory_add_default (factory);
-      gtk_stock_add_static (edit_item, 1);
-      registered = TRUE;
-    }
-}
-
 void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
@@ -1388,9 +1364,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       GtkSizeGroup *size_group;
       GtkTreeSelection *selection;
       
-      terminal_app_register_stock ();
-
-      old_transient_parent = NULL;      
+      old_transient_parent = NULL;
       
       app->manage_profiles_dialog =
         gtk_dialog_new_with_buttons (_("Profiles"),
@@ -1469,7 +1443,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
       terminal_util_set_atk_name_description (app->manage_profiles_new_button, NULL,                             
                                               _("Click to open new profile dialog"));
       
-      button = gtk_button_new_from_stock (TERMINAL_STOCK_EDIT);
+      button = gtk_button_new_from_stock (GTK_STOCK_EDIT);
       fix_button_align (button);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
       g_signal_connect (button, "clicked",
