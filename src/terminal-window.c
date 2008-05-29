@@ -1263,7 +1263,7 @@ terminal_window_init (TerminalWindow *window)
       { "EditKeybindings", NULL, N_("_Keyboard Shortcuts…"), NULL,
         NULL,
         G_CALLBACK (edit_keybindings_callback) },
-      { "EditCurrentProfile", NULL, N_("C_urrent Profile…"), NULL,
+      { "EditCurrentProfile", NULL, N_("Profile _Preferences"), NULL,
         NULL,
         G_CALLBACK (edit_current_profile_callback) },
 
