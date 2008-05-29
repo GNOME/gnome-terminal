@@ -838,24 +838,20 @@ static void
 update_single_tree_model (GtkListStore *store)
 {
   GSList *tmp;
-  GtkTreeIter parent_iter;
+  GtkTreeIter iter;
 
   gtk_list_store_clear (store);
-  
-  tmp = active_encodings;
-  while (tmp != NULL)
+
+  for (tmp = active_encodings; tmp != NULL; tmp = tmp->next)
     {
       TerminalEncoding *e = tmp->data;
       
-      gtk_list_store_append (store, &parent_iter);
-      gtk_list_store_set (store, &parent_iter,
-                          COLUMN_CHARSET,
-                          e->charset,
-                          COLUMN_NAME,
-                          e->name,
-                          -1);
-
-      tmp = tmp->next;
+      gtk_list_store_insert_with_values (store, &iter, -1,
+                                         COLUMN_CHARSET,
+                                         e->charset,
+                                         COLUMN_NAME,
+                                         e->name,
+                                         -1);
     }
 }
 
