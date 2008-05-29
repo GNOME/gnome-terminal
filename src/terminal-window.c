@@ -644,14 +644,15 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 
 static void
 update_edit_menu (GtkClipboard *clipboard,
-                  GtkSelectionData *data,
+                  GdkAtom *targets,
+                  int n_targets,
                   TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
   gboolean can_paste;
 
-  can_paste = gtk_selection_data_targets_include_text (data);
+  can_paste = gtk_targets_include_text (targets, n_targets);
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
   gtk_action_set_sensitive (action, can_paste);
 
@@ -675,9 +676,8 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
   GtkClipboard *clipboard;
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_request_contents (clipboard,
-                                  gdk_atom_intern_static_string ("TARGETS"),
-                                  (GtkClipboardReceivedFunc) update_edit_menu,
+  gtk_clipboard_request_targets (clipboard,
+                                  (GtkClipboardTargetsReceivedFunc) update_edit_menu,
                                   g_object_ref (window));
 }
 
@@ -891,7 +891,8 @@ popup_menu_deactivate_callback (GtkWidget *popup,
 
 static void
 popup_clipboard_request_callback (GtkClipboard *clipboard,
-                                  GtkSelectionData *data,
+                                  GdkAtom *targets,
+                                  int n_targets,
                                   TerminalScreenPopupInfo *info)
 {
   TerminalWindow *window = info->window;
@@ -911,7 +912,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
-  can_paste = gtk_selection_data_targets_include_text (data);
+  can_paste = gtk_targets_include_text (targets, n_targets);
   show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL;
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
 
@@ -982,9 +983,8 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
   g_return_if_fail (info->window == window);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
-  gtk_clipboard_request_contents (clipboard,
-                                  gdk_atom_intern_static_string ("TARGETS"),
-                                  (GtkClipboardReceivedFunc) popup_clipboard_request_callback,
+  gtk_clipboard_request_targets (clipboard,
+                                  (GtkClipboardTargetsReceivedFunc) popup_clipboard_request_callback,
                                   terminal_screen_popup_info_ref (info));
 }
 
