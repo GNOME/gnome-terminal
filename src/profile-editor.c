@@ -1098,7 +1098,7 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("foreground-colorpicker", TERMINAL_PROFILE_FOREGROUND_COLOR);
   CONNECT ("image-radiobutton", TERMINAL_PROFILE_BACKGROUND_TYPE);
   CONNECT ("login-shell-checkbutton", TERMINAL_PROFILE_LOGIN_SHELL);
-  CONNECT ("profile-name-entry", TERMINAL_PROFILE_NAME);
+  CONNECT ("profile-name-entry", TERMINAL_PROFILE_VISIBLE_NAME);
   CONNECT ("scroll-background-checkbutton", TERMINAL_PROFILE_SCROLL_BACKGROUND);
   CONNECT ("scrollbar-position-combobox", TERMINAL_PROFILE_SCROLLBAR_POSITION);
   CONNECT ("scroll-on-keystroke-checkbutton", TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE);
