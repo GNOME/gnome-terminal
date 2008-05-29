@@ -80,10 +80,6 @@ void         terminal_screen_set_override_command (TerminalScreen  *screen,
                                                    char           **argv);
 const char** terminal_screen_get_override_command (TerminalScreen  *screen);
 
-
-
-GtkWidget* terminal_screen_get_widget (TerminalScreen *screen);
-
 void terminal_screen_launch_child (TerminalScreen *screen);
 
 const char* terminal_screen_get_title          (TerminalScreen *screen);

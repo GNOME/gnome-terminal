@@ -1027,13 +1027,6 @@ terminal_screen_get_override_command (TerminalScreen *screen)
   return (const char**) screen->priv->override_command;
 }
 
-
-GtkWidget*
-terminal_screen_get_widget (TerminalScreen *screen)
-{
-  return screen->priv->term;
-}
-
 static void
 show_command_error_dialog (TerminalScreen *screen,
                            GError         *error)

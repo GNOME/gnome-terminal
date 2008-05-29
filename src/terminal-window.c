@@ -914,7 +914,7 @@ popup_clipboard_request_callback (GtkClipboard *clipboard,
   
   remove_popup_info (window);
 
-  if (!GTK_WIDGET_REALIZED (terminal_screen_get_widget (info->screen)))
+  if (!GTK_WIDGET_REALIZED (info->screen))
     {
       terminal_screen_popup_info_unref (info);
       return;
@@ -1787,7 +1787,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
-  widget = terminal_screen_get_widget (screen);
+  widget = GTK_WIDGET (screen);
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
@@ -1850,12 +1850,10 @@ terminal_window_set_active (TerminalWindow *window,
    */
   if (priv->active_term)
   {
-    GtkWidget *old_widget;
-    old_widget = terminal_screen_get_widget (priv->active_term);
-    gtk_widget_hide (old_widget); /* FIXMEchpe */
+    gtk_widget_hide (GTK_WIDGET (priv->active_term)); /* FIXMEchpe */
   }
   
-  widget = terminal_screen_get_widget (screen);
+  widget = GTK_WIDGET (screen);
   
   /* Make sure that the widget is no longer hidden due to the workaround */
   gtk_widget_show (widget);
@@ -1944,7 +1942,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen;
-  GtkWidget *term;
 
   screen = terminal_screen_container_get_screen (container);
 
@@ -1981,12 +1978,11 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_tab_visibility (window, 0);
 
-  term = terminal_screen_get_widget (screen);
-
   /* ZvtTerm is a broken POS and requires this realize to get
    * the size request right.
    */
-  gtk_widget_realize (GTK_WIDGET (term));
+  /* FIXMEchpe: does this apply to VTE? */
+  gtk_widget_realize (GTK_WIDGET (screen));
 
   /* If we have an active screen, match its size and zoom */
   if (priv->active_term)
@@ -2092,16 +2088,16 @@ void
 terminal_window_update_geometry (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *widget;
   GdkGeometry hints;
-  GtkWidget *widget;  
   int char_width;
   int char_height;
   
   if (priv->active_term == NULL)
     return;
-  
-  widget = terminal_screen_get_widget (priv->active_term);
-  
+
+  widget = GTK_WIDGET (priv->active_term);
+
   /* We set geometry hints from the active term; best thing
    * I can think of to do. Other option would be to try to
    * get some kind of union of all hints from all terms in the
