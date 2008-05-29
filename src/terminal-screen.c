@@ -1783,45 +1783,32 @@ terminal_screen_edit_title (TerminalScreen *screen,
                             GtkWindow      *transient_parent)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GtkWindow *old_transient_parent;
   
   if (priv->title_editor == NULL)
     {
-      GtkWidget *hbox;
-      GtkWidget *entry;
-      GtkWidget *label;
+      GtkWidget *dialog, *hbox, *label, *entry;
       
-      old_transient_parent = NULL;      
-      
-      priv->title_editor =
-        gtk_dialog_new_with_buttons (_("Set Title"),
-                                     NULL,
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_STOCK_CLOSE,
-                                     GTK_RESPONSE_ACCEPT,
-                                     NULL);
-      
-      g_signal_connect (G_OBJECT (priv->title_editor),
-                        "response",
-                        G_CALLBACK (gtk_widget_destroy),
-                        NULL);
+      dialog = priv->title_editor =
+        gtk_message_dialog_new (transient_parent,
+                                GTK_DIALOG_DESTROY_WITH_PARENT,
+                                GTK_MESSAGE_OTHER,
+                                GTK_BUTTONS_OK_CANCEL,
+                                "%s", "");
 
-      g_object_add_weak_pointer (G_OBJECT (priv->title_editor),
-                                 (void**) &priv->title_editor);
+      gtk_window_set_title (GTK_WINDOW (dialog), _("Set Title"));
+      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+      gtk_window_set_role (GTK_WINDOW (dialog), "gnome-terminal-change-title");
 
-      gtk_window_set_resizable (GTK_WINDOW (priv->title_editor), FALSE);
-      
-      terminal_util_set_unique_role (GTK_WINDOW (priv->title_editor), "gnome-terminal-change-title");
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (gtk_widget_destroy), NULL);
 
-      gtk_widget_set_name (priv->title_editor, "set-title-dialog");
-      gtk_rc_parse_string ("widget \"set-title-dialog\" style \"hig-dialog\"\n");
+      g_object_add_weak_pointer (G_OBJECT (dialog), (void**) &priv->title_editor);
 
-      gtk_dialog_set_has_separator (GTK_DIALOG (priv->title_editor), FALSE);
-      gtk_container_set_border_width (GTK_CONTAINER (priv->title_editor), 10);
-      gtk_box_set_spacing (GTK_BOX (GTK_DIALOG (priv->title_editor)->vbox), 12);
+      label = GTK_MESSAGE_DIALOG (dialog)->label;
+      gtk_widget_hide (label);
 
       hbox = gtk_hbox_new (FALSE, 12);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (priv->title_editor)->vbox), hbox, FALSE, FALSE, 0);      
+      gtk_box_pack_start (GTK_BOX (label->parent), hbox, FALSE, FALSE, 0);
 
       label = gtk_label_new_with_mnemonic (_("_Title:"));
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -1832,6 +1819,7 @@ terminal_screen_edit_title (TerminalScreen *screen,
       gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+      gtk_widget_show_all (hbox);
       
       gtk_widget_grab_focus (entry);
       gtk_dialog_set_default_response (GTK_DIALOG (priv->title_editor), GTK_RESPONSE_ACCEPT);
@@ -1841,29 +1829,16 @@ terminal_screen_edit_title (TerminalScreen *screen,
       
       gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
-      g_signal_connect (G_OBJECT (entry), "changed",
-                        G_CALLBACK (title_entry_changed),
-                        screen);
+      g_signal_connect (entry, "changed",
+                        G_CALLBACK (title_entry_changed), screen);
 
       priv->title_entry = entry;
       g_object_add_weak_pointer (G_OBJECT (priv->title_entry),
                                  (void**) &priv->title_entry);
-
-    }
-  else
-    {
-      old_transient_parent =
-        gtk_window_get_transient_for (GTK_WINDOW (priv->title_editor));
     }
     
-  if (old_transient_parent != transient_parent)
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (priv->title_editor),
-                                    transient_parent);
-      gtk_widget_hide (priv->title_editor); /* re-show the window on its new parent */
-    }
+  gtk_window_set_transient_for (GTK_WINDOW (priv->title_editor), transient_parent);
   
-  gtk_widget_show_all (priv->title_editor);
   gtk_window_present (GTK_WINDOW (priv->title_editor));
 }
 
