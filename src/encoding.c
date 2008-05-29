@@ -305,8 +305,8 @@ static TerminalEncoding encodings[] = {
 
 static GSList *active_encodings = NULL;
 
-static void update_active_encoding_tree_models  (void);
-static void register_active_encoding_tree_model (GtkListStore *store);
+static void update_active_encoding_tree_models (void);
+static void register_active_encoding_treeview  (GtkTreeView *tree_view);
 
 static void encodings_notify_cb (GConfClient *client,
                                  guint        cnxn_id,
@@ -765,10 +765,9 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   GtkWidget *w;
   GtkCellRenderer *cell_renderer;
   int i;
-  GtkTreeModel *sort_model;
-  GtkListStore *tree;
+  GtkListStore *store;
   GtkTreeViewColumn *column;
-  GtkTreeIter parent_iter;
+  GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkWidget *dialog;
 
@@ -813,8 +812,6 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
                      "encoding-dialog-available-treeview",
                      w);
   
-  tree = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
-
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("_Description"),
@@ -833,37 +830,32 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_append_column (GTK_TREE_VIEW (w), column);
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);  
 
-  /* Add the data */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));
+  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
+			       GTK_SELECTION_MULTIPLE);
 
-  i = 0;
-  while (i < (int) G_N_ELEMENTS (encodings))
+  store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+
+  for (i = 0; i < (int) G_N_ELEMENTS (encodings); ++i)
     {
-      if (encodings[i].valid)
-        {
-          gtk_list_store_append (tree, &parent_iter);
-          gtk_list_store_set (tree, &parent_iter,
-                              COLUMN_CHARSET,
-                              encodings[i].charset,
-                              COLUMN_NAME,
-                              encodings[i].name,
-                              -1);
-        }
-      ++i;
+      if (!encodings[i].valid)
+        continue;
+
+      gtk_list_store_insert_with_values (store, &iter, -1,
+                                         COLUMN_CHARSET,
+                                         encodings[i].charset,
+                                         COLUMN_NAME,
+                                         encodings[i].name,
+                                         -1);
     }
 
-  /* Sort model */
-  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
-  
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model),
+  /* Now turn on sorting */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         COLUMN_NAME,
                                         GTK_SORT_ASCENDING);
   
-  gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
-  g_object_unref (G_OBJECT (tree));
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));    
-  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
-			       GTK_SELECTION_MULTIPLE);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (w), GTK_TREE_MODEL (store));
+  g_object_unref (store);
 
   available_selection_changed_callback (selection, dialog);
   g_signal_connect (G_OBJECT (selection), "changed",                    
@@ -876,8 +868,6 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   g_object_set_data (G_OBJECT (dialog),
                      "encoding-dialog-displayed-treeview",
                      w);
-  
-  tree = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -898,17 +888,14 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);  
 
   /* Add the data */
-  register_active_encoding_tree_model (tree);
-
-  /* Sort model */
-  sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (tree));
-  
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model),
+  store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         COLUMN_NAME,
                                         GTK_SORT_ASCENDING);
-  
-  gtk_tree_view_set_model (GTK_TREE_VIEW (w), sort_model);
-  g_object_unref (G_OBJECT (tree));  
+  gtk_tree_view_set_model (GTK_TREE_VIEW (w), GTK_TREE_MODEL (store));
+  g_object_unref (store);
+
+  register_active_encoding_treeview (GTK_TREE_VIEW (w));
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (w));    
   gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
@@ -925,12 +912,13 @@ terminal_encoding_dialog_new (GtkWindow *transient_parent)
 }
 
 static void
-update_single_tree_model (GtkListStore *store)
+update_single_treeview (GtkTreeView *tree_view)
 {
+  GtkListStore *store;
   GSList *tmp;
   GtkTreeIter iter;
 
-  gtk_list_store_clear (store);
+  store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING);
 
   for (tmp = active_encodings; tmp != NULL; tmp = tmp->next)
     {
@@ -943,35 +931,43 @@ update_single_tree_model (GtkListStore *store)
                                          e->name,
                                          -1);
     }
+
+  /* Now turn on sorting */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        COLUMN_NAME,
+                                        GTK_SORT_ASCENDING);
+  
+  gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (store));
+  g_object_unref (store);
 }
 
-static GSList *stores = NULL;
+static GSList *treeviews = NULL;
 
 static void
-unregister_store (void    *data,
-                  GObject *where_object_was)
+unregister_treeview (void    *data,
+                     GObject *where_object_was)
 {
-  stores = g_slist_remove (stores, where_object_was);
+  treeviews = g_slist_remove (treeviews, where_object_was);
 }
 
 static void
 update_active_encoding_tree_models (void)
 {
   GSList *tmp;
-  tmp = stores;
+  tmp = treeviews;
   while (tmp != NULL)
     {
-      update_single_tree_model (tmp->data);
+      update_single_treeview (tmp->data);
       tmp = tmp->next;
     }
 }
 
 static void
-register_active_encoding_tree_model (GtkListStore *store)
+register_active_encoding_treeview (GtkTreeView *tree_view)
 {
-  update_single_tree_model (store);
-  stores = g_slist_prepend (stores, store);
-  g_object_weak_ref (G_OBJECT (store), unregister_store, NULL);
+  update_single_treeview (tree_view);
+  treeviews = g_slist_prepend (treeviews, tree_view);
+  g_object_weak_ref (G_OBJECT (tree_view), unregister_treeview, NULL);
 }
 
 void
