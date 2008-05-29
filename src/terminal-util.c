@@ -39,10 +39,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-/* One slot in the ring buffer, plus the array which holds the data for
-  * the line, plus about 80 vte_charcell structures. */
-#define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
-
 void
 terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
 {
@@ -280,12 +276,6 @@ terminal_util_load_builder_file (const char *filename,
   return object_name == NULL;
 }
 
-int
-terminal_util_get_estimated_scrollback_buffer_size (int lines)
-{
-  return (lines * BYTES_PER_LINE) / 1024;
-}
-
 /* Bidirectional object/widget binding */
 
 typedef struct {
@@ -311,22 +301,6 @@ transform_boolean (gboolean input,
 {
   if (flags & FLAG_INVERT_BOOL)
     input = !input;
-
-  return input;
-}
-  
-static int
-transform_spinbutton_value (int input,
-                            PropertyChangeFlags flags,
-                            gboolean from)
-{
-  if ((flags & FLAG_SCROLLBACK) == 0)
-    return input;
-
-  if (from) /* value from spin button */
-    input = input * 1024 / BYTES_PER_LINE;
-  else /* value to set in the spin button */
-    input = input * BYTES_PER_LINE / 1024;
 
   return input;
 }
@@ -361,7 +335,7 @@ object_change_notify_cb (PropertyChange *change)
       int value;
 
       g_object_get (object, object_prop, &value, NULL);
-      gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), transform_spinbutton_value (value, change->flags, FALSE));
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
     }
   else if (GTK_IS_ENTRY (widget))
     {
@@ -462,10 +436,10 @@ widget_change_notify_cb (PropertyChange *change)
     }
   else if (GTK_IS_SPIN_BUTTON (widget))
     {
-      double value;
+      int value;
 
-      value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
-      g_object_set (object, object_prop, transform_spinbutton_value (value, change->flags, TRUE), NULL);
+      value = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
+      g_object_set (object, object_prop, value, NULL);
     }
   else if (GTK_IS_ENTRY (widget))
     {

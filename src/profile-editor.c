@@ -26,14 +26,15 @@
 #include <gio/gio.h>
 
 #include "terminal-intl.h"
-
 #include "profile-editor.h"
 #include "terminal-util.h"
 
 #include <libgnomeui/gnome-icon-entry.h>
 #include <libgnomeui/gnome-thumbnail.h>
 
-// FIXMEchpe make the kb spinbutton a label instead since changing it really isn't right
+/* One slot in the ring buffer, plus the array which holds the data for
+  * the line, plus about 80 vte_charcell structures. */
+#define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -231,8 +232,8 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
     {
       scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
 
-      SET_SENSITIVE ("scrollback-lines-spinbutton", !scrollback_lines_locked);
-      SET_SENSITIVE ("scrollback-kilobytes-spinbutton", !scrollback_lines_locked);
+      SET_SENSITIVE ("scrollback-label", !scrollback_lines_locked);
+      SET_SENSITIVE ("scrollback-box", !scrollback_lines_locked);
     }
   
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE))
@@ -463,6 +464,23 @@ visible_name_entry_changed_cb (GtkEntry *entry,
 }
 
 static void
+scrollback_lines_spin_button_changed_cb (GtkSpinButton *button,
+                                         GParamSpec *pspec,
+                                         GtkLabel *label)
+{
+  double lines;
+  char *kbtext, *text;
+
+  lines = gtk_spin_button_get_value (button);
+  kbtext = g_format_size_for_display (lines * BYTES_PER_LINE);
+  /* Translators: %s will be a data size, e.g. "(about 500kB)" */
+  text = g_strdup_printf (_("(about %s)"), kbtext);
+  gtk_label_set_text (label, text);
+  g_free (kbtext);
+  g_free (text);
+}
+
+static void
 reset_compat_defaults_cb (GtkWidget       *button,
                           TerminalProfile *profile)
 {
@@ -654,8 +672,6 @@ terminal_profile_edit (TerminalProfile *profile,
   GtkBuilder *builder;
   GError *error = NULL;
   GtkWidget *editor, *w;
-  GtkSizeGroup *size_group;
-  double num1, num2;
   guint i;
 
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
@@ -768,21 +784,10 @@ terminal_profile_edit (TerminalProfile *profile,
   g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry")),
                     "changed",
                     G_CALLBACK (visible_name_entry_changed_cb), editor);
-
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  w = (GtkWidget *) gtk_builder_get_object  (builder, "scrollback-lines-spinbutton");
-  gtk_size_group_add_widget (size_group, w);
-  gtk_spin_button_get_range (GTK_SPIN_BUTTON (w), &num1, &num2);
-
-  w = (GtkWidget *) gtk_builder_get_object  (builder, "scrollback-kilobytes-spinbutton");
-
-  /* Sync kilobytes spinbutton range with the lines spinbutton */
-  gtk_spin_button_set_range (GTK_SPIN_BUTTON (w),
-                             terminal_util_get_estimated_scrollback_buffer_size (num1),
-                             terminal_util_get_estimated_scrollback_buffer_size (num2));
-
-  gtk_size_group_add_widget (size_group, w);
-  g_object_unref (size_group);
+  g_signal_connect (GTK_WIDGET (gtk_builder_get_object  (builder, "scrollback-lines-spinbutton")),
+                    "notify::value",
+                    G_CALLBACK (scrollback_lines_spin_button_changed_cb),
+                    GTK_WIDGET (gtk_builder_get_object  (builder, "scrollback-kb-label")));
 
   g_signal_connect (gtk_builder_get_object  (builder, "reset-compat-defaults-button"),
                     "clicked",
@@ -820,7 +825,6 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("use-theme-colors-checkbutton", TERMINAL_PROFILE_USE_THEME_COLORS);
   CONNECT ("word-chars-entry", TERMINAL_PROFILE_WORD_CHARS);
   CONNECT_WITH_FLAGS ("bell-checkbutton", TERMINAL_PROFILE_SILENT_BELL, FLAG_INVERT_BOOL);
-  CONNECT_WITH_FLAGS ("scrollback-kilobytes-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES, FLAG_SCROLLBACK);
   CONNECT_WITH_FLAGS ("scrollback-lines-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES, 0);
 
 #undef CONNECT
