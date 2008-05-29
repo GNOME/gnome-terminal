@@ -21,23 +21,24 @@
 
 #include <config.h>
 
-#include "terminal-intl.h"
-
-#include "terminal-app.h"
-#include "terminal-accels.h"
-#include "terminal-window.h"
-#include "terminal-util.h"
-#include "profile-editor.h"
-#include "encoding.h"
-#include <gconf/gconf-client.h>
-#include <libgnome/gnome-program.h>
-#include <libgnome/gnome-help.h>
-#include <libgnomeui/gnome-ui-init.h>
-#include <libgnomeui/gnome-url.h>
-#include <libgnomeui/gnome-client.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+#include <gio/gio.h>
+#include <gtk/gtk.h>
+//#include "gdk/gdkapplaunchcontext.h"
+
+#include <gconf/gconf-client.h>
+#include <libgnome/gnome-help.h>
+
+#include "terminal-accels.h"
+#include "terminal-app.h"
+#include "terminal-intl.h"
+#include "terminal-util.h"
+#include "terminal-window.h"
 
 void
 terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
@@ -159,42 +160,62 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
 void
 terminal_util_open_url (GtkWidget *parent,
                         const char *orig_url,
-                        TerminalURLFlavour flavor)
+                        TerminalURLFlavour flavor,
+                        guint32 user_time)
 {
   GError *error = NULL;
-  char *url;
-  
+  char *uri;
+#if GTK_CHECK_VERSION (2, 13, 0)
+  GdkAppLaunchContext *context;
+#endif
+
   g_return_if_fail (orig_url != NULL);
 
   switch (flavor)
     {
     case FLAVOR_DEFAULT_TO_HTTP:
-      url = g_strdup_printf ("http:%s", orig_url);
+      uri = g_strdup_printf ("http:%s", orig_url);
       break;
     case FLAVOR_EMAIL:
       if (strncmp ("mailto:", orig_url, 7))
-	url = g_strdup_printf ("mailto:%s", orig_url);
+	uri = g_strdup_printf ("mailto:%s", orig_url);
       else
-	url = g_strdup (orig_url);
+	uri = g_strdup (orig_url);
       break;
     case FLAVOR_AS_IS:
-      url = g_strdup (orig_url);
+      uri = g_strdup (orig_url);
       break;
     default:
-      url = NULL;
+      uri = NULL;
       g_assert_not_reached ();
     }
 
-  if (!gnome_url_show_on_screen (url, gtk_widget_get_screen (parent), &error))
+#if GTK_CHECK_VERSION (2, 13, 0)
+  context = gdk_app_launch_context_new ();
+  gdk_app_launch_context_set_timestamp (context, user_time);
+
+  if (parent)
+    gdk_app_launch_context_set_screen (context, gtk_widget_get_screen (parent));
+  else
+    gdk_app_launch_context_set_screen (context, gdk_screen_get_default ());
+
+  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
+  g_object_unref (context);
+#else
+#error hi there!
+  g_app_info_launch_default_for_uri (uri, NULL, &error);
+#endif
+
+  if (error)
     {
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
                                        _("Could not open the address “%s”:\n%s"),
-                                       url, error->message);
+                                       uri, error->message);
       
       g_error_free (error);
     }
 
-  g_free (url);
+  g_free (uri);
 }
 
 /**

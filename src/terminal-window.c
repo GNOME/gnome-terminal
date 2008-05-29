@@ -892,7 +892,8 @@ popup_open_url_callback (GtkAction *action,
   if (info == NULL)
     return;
 
-  terminal_util_open_url (GTK_WIDGET (window), info->string, info->flavour);
+  terminal_util_open_url (GTK_WIDGET (window), info->string, info->flavour,
+                          gtk_get_current_event_time ());
 }
 
 static void
@@ -1100,7 +1101,8 @@ screen_url_clicked_cb (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return;
 
-  terminal_util_open_url (GTK_WIDGET (window), url, flavour);
+  terminal_util_open_url (GTK_WIDGET (window), url, flavour,
+                          gtk_get_current_event_time ());
 }
 
 static void

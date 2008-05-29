@@ -42,7 +42,8 @@ void terminal_util_set_atk_name_description (GtkWidget  *widget,
 
 void terminal_util_open_url (GtkWidget *parent,
                              const char *orig_url,
-                             TerminalURLFlavour flavor);
+                             TerminalURLFlavour flavor,
+                             guint32 user_time);
 
 
 void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
