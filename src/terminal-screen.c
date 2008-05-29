@@ -1870,7 +1870,7 @@ drag_data_received (TerminalScreen   *widget,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (data);
 
-#if 0
+#if 1
   {
     GList *tmp;
 
@@ -1971,11 +1971,7 @@ drag_data_received (TerminalScreen   *widget,
 
     case TARGET_MOZ_URL:
       {
-        GString *str;
-        int i;
-        const guint16 *char_data;
-        int char_len;
-        char *filename;
+        char *utf8_data, *newline, *filename;
         
         /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
          *
@@ -1992,35 +1988,30 @@ drag_data_received (TerminalScreen   *widget,
             return;
           }
 
-        str = g_string_new (NULL);
-        
-        char_len = selection_data->length / 2;
-        char_data = (const guint16*) selection_data->data;
-        i = 0;
-        while (i < char_len)
-          {
-            if (char_data[i] == '\n')
-              break;
-            
-            g_string_append_unichar (str, (gunichar) char_data[i]);
-            
-            ++i;
-          }
+        utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data->data,
+                                     selection_data->length / 2,
+                                     NULL, NULL, NULL);
+        if (!utf8_data)
+          return;
 
-        /* drop file:///, else paste in URI literally */
-        filename = g_filename_from_uri (str->str, NULL, NULL);
-        
-        /* FIXME just brazenly ignoring encoding issues, sending
-         * child some UTF-8
-         */
+        newline = strchr (utf8_data, '\n');
+        if (newline)
+          *newline = '\0';
+
+        /* If it's a file:/// URI, paste as quoted filename */
+        filename = g_filename_from_uri (utf8_data, NULL, NULL);
         if (filename)
-          vte_terminal_feed_child (VTE_TERMINAL (screen),
-                                   filename, strlen (filename));
-        else
-          vte_terminal_feed_child (VTE_TERMINAL (screen), str->str, str->len);
+          {
+            char *text;
 
-        g_free (filename);        
-        g_string_free (str, TRUE);
+            text = g_shell_quote (filename);
+            vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+            g_free (filename);
+          }
+        else
+          vte_terminal_feed_child (VTE_TERMINAL (screen), utf8_data, strlen (utf8_data));
+          
+        g_free (utf8_data);
       }
       break;
 
