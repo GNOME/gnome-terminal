@@ -83,12 +83,13 @@ const char** terminal_screen_get_override_command (TerminalScreen  *screen);
 
 void terminal_screen_launch_child (TerminalScreen *screen);
 
+const char* terminal_screen_get_raw_title      (TerminalScreen *screen);
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 const char* terminal_screen_get_icon_title     (TerminalScreen *screen);
 gboolean    terminal_screen_get_icon_title_set (TerminalScreen *screen);
 
-void terminal_screen_edit_title (TerminalScreen *screen,
-                                 GtkWindow      *transient_parent);
+void terminal_screen_set_user_title (TerminalScreen *screen,
+                                     const char *text);
 
 void        terminal_screen_set_dynamic_title      (TerminalScreen *screen,
                                                     const char     *title,

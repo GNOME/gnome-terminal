@@ -59,8 +59,6 @@ struct _TerminalScreenPrivate
   char *title_from_arg;
   gboolean icon_title_set;
   char **override_command;
-  GtkWidget *title_editor;
-  GtkWidget *title_entry;
   char *working_dir;
   int child_pid;
   double font_scale;
@@ -524,9 +522,6 @@ terminal_screen_finalize (GObject *object)
                                         G_CALLBACK (terminal_screen_system_font_notify_cb),
                                         screen);
 
-  if (priv->title_editor)
-    gtk_widget_destroy (priv->title_editor);
-  
   terminal_screen_set_profile (screen, NULL);
 
   if (priv->recheck_working_dir_idle)
@@ -560,6 +555,17 @@ terminal_screen_set_window (TerminalScreen *screen,
                             TerminalWindow *window)
 {
   screen->priv->window = window;
+}
+
+const char*
+terminal_screen_get_raw_title (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  
+  if (priv->raw_title)
+    return priv->raw_title;
+
+  return "";
 }
 
 const char*
@@ -1502,21 +1508,6 @@ terminal_screen_set_dynamic_title (TerminalScreen *screen,
   g_free (priv->raw_title);
   priv->raw_title = g_strdup (title);
   terminal_screen_cook_title (screen);
-
-  if (priv->title_entry &&
-      priv->raw_title)
-    {
-      char *text;
-      
-      text = gtk_editable_get_chars (GTK_EDITABLE (priv->title_entry),
-                                     0, -1);
-
-      if (strcmp (text, priv->raw_title) != 0)
-        gtk_entry_set_text (GTK_ENTRY (priv->title_entry),
-                            priv->raw_title);
-      
-      g_free (text);
-    }
 }
 
 void
@@ -1750,18 +1741,15 @@ terminal_screen_widget_child_died (GtkWidget      *term,
     }
 }
 
-static void
-title_entry_changed (GtkWidget      *entry,
-                     TerminalScreen *screen)
+void
+terminal_screen_set_user_title (TerminalScreen *screen,
+                                const char *text)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  const char *text;
-
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
 
   /* The user set the title to nothing, let's understand that as a
      request to revert to dynamically setting the title again. */
-  if (G_UNLIKELY (*text == '\0'))
+  if (!text || !text[0])
     priv->user_title = FALSE;
   else
     {
@@ -1769,70 +1757,6 @@ title_entry_changed (GtkWidget      *entry,
       terminal_screen_set_dynamic_title (screen, text, TRUE);
       terminal_screen_set_dynamic_icon_title (screen, text, TRUE);
     }
-}
-
-void
-terminal_screen_edit_title (TerminalScreen *screen,
-                            GtkWindow      *transient_parent)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  if (priv->title_editor == NULL)
-    {
-      GtkWidget *dialog, *hbox, *label, *entry;
-      
-      dialog = priv->title_editor =
-        gtk_message_dialog_new (transient_parent,
-                                GTK_DIALOG_DESTROY_WITH_PARENT,
-                                GTK_MESSAGE_OTHER,
-                                GTK_BUTTONS_OK_CANCEL,
-                                "%s", "");
-
-      gtk_window_set_title (GTK_WINDOW (dialog), _("Set Title"));
-      gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-      gtk_window_set_role (GTK_WINDOW (dialog), "gnome-terminal-change-title");
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
-
-      g_object_add_weak_pointer (G_OBJECT (dialog), (void**) &priv->title_editor);
-
-      label = GTK_MESSAGE_DIALOG (dialog)->label;
-      gtk_widget_hide (label);
-
-      hbox = gtk_hbox_new (FALSE, 12);
-      gtk_box_pack_start (GTK_BOX (label->parent), hbox, FALSE, FALSE, 0);
-
-      label = gtk_label_new_with_mnemonic (_("_Title:"));
-      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-      entry = gtk_entry_new ();
-      gtk_entry_set_width_chars (GTK_ENTRY (entry), 30);
-      gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
-      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
-      gtk_widget_show_all (hbox);
-      
-      gtk_widget_grab_focus (entry);
-      gtk_dialog_set_default_response (GTK_DIALOG (priv->title_editor), GTK_RESPONSE_ACCEPT);
-      
-      if (priv->raw_title)
-        gtk_entry_set_text (GTK_ENTRY (entry), priv->raw_title);
-      
-      gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-
-      g_signal_connect (entry, "changed",
-                        G_CALLBACK (title_entry_changed), screen);
-
-      priv->title_entry = entry;
-      g_object_add_weak_pointer (G_OBJECT (priv->title_entry),
-                                 (void**) &priv->title_entry);
-    }
-    
-  gtk_window_set_transient_for (GTK_WINDOW (priv->title_editor), transient_parent);
-  
-  gtk_window_present (GTK_WINDOW (priv->title_editor));
 }
 
 static void

@@ -2621,16 +2621,69 @@ view_zoom_normal_callback (GtkAction *action,
 }
 
 static void
+terminal_set_title_dialog_response_cb (GtkWidget *dialog,
+                                       int response,
+                                       TerminalScreen *screen)
+{
+  GtkEntry *entry;
+  const char *text;
+
+  entry = GTK_ENTRY (g_object_get_data (G_OBJECT (dialog), "title-entry"));
+  text = gtk_entry_get_text (entry);
+  terminal_screen_set_user_title (screen, text);
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
 terminal_set_title_callback (GtkAction *action,
                              TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  
+  GtkWidget *dialog, *hbox, *label, *entry;
+
   if (priv->active_screen == NULL)
     return;
-    
-  terminal_screen_edit_title (priv->active_screen,
-                              GTK_WINDOW (window));
+
+  /* FIXMEchpe: hook the screen up so this dialogue closes if the terminal screen closes */
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_OTHER,
+                                   GTK_BUTTONS_OK_CANCEL,
+                                   "%s", "");
+
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Set Title"));
+  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+  gtk_window_set_role (GTK_WINDOW (dialog), "gnome-terminal-change-title");
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (terminal_set_title_dialog_response_cb), priv->active_screen);
+
+  label = GTK_MESSAGE_DIALOG (dialog)->label;
+  gtk_widget_hide (label);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (label->parent), hbox, FALSE, FALSE, 0);
+
+  label = gtk_label_new_with_mnemonic (_("_Title:"));
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+  entry = gtk_entry_new ();
+  gtk_entry_set_width_chars (GTK_ENTRY (entry), 32);
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+  gtk_widget_show_all (hbox);
+
+  gtk_widget_grab_focus (entry);
+  gtk_entry_set_text (GTK_ENTRY (entry), terminal_screen_get_raw_title (priv->active_screen));
+  gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+  g_object_set_data (G_OBJECT (dialog), "title-entry", entry);
+
+  gtk_window_present (GTK_WINDOW (dialog));
 }
 
 static void
