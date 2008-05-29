@@ -67,10 +67,6 @@ char*      terminal_widget_skey_check_match           (GtkWidget            *wid
 void       terminal_widget_skey_match_remove          (GtkWidget            *widget);
 void       terminal_widget_set_word_characters        (GtkWidget            *widget,
                                                        const char           *str);
-void       terminal_widget_set_delete_binding         (GtkWidget            *widget,
-                                                       TerminalEraseBinding  binding);
-void       terminal_widget_set_backspace_binding      (GtkWidget            *widget,
-                                                       TerminalEraseBinding  binding);
 void       terminal_widget_set_cursor_blinks          (GtkWidget            *widget,
                                                        gboolean              setting);
 void       terminal_widget_set_audible_bell           (GtkWidget            *widget,

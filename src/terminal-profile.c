@@ -107,8 +107,8 @@ struct _TerminalProfilePrivate
   char *background_image_file;
   GdkPixbuf *background_image;
   double background_darkness;
-  TerminalEraseBinding backspace_binding;
-  TerminalEraseBinding delete_binding;
+  VteTerminalEraseBinding backspace_binding;
+  VteTerminalEraseBinding delete_binding;
 
   PangoFontDescription *font;
   
@@ -178,10 +178,11 @@ static const GConfEnumStringPair exit_actions[] = {
   { -1, NULL }
 };
 
+/* FIXMEchpe make these use the same strings as vte */
 static const GConfEnumStringPair erase_bindings[] = {
-  { TERMINAL_ERASE_CONTROL_H, "control-h" },
-  { TERMINAL_ERASE_ESCAPE_SEQUENCE, "escape-sequence" },
-  { TERMINAL_ERASE_ASCII_DEL, "ascii-del" },
+  { VTE_ERASE_ASCII_BACKSPACE, "control-h" },
+  { VTE_ERASE_DELETE_SEQUENCE, "escape-sequence" },
+  { VTE_ERASE_ASCII_DELETE, "ascii-del" },
   { -1, NULL }
 };
 
@@ -263,8 +264,8 @@ terminal_profile_init (TerminalProfile *profile)
   priv->background_type = TERMINAL_BACKGROUND_SOLID;
   priv->background_image_file = g_strdup ("");
   priv->background_darkness = 0.0;
-  priv->backspace_binding = TERMINAL_ERASE_ASCII_DEL;
-  priv->delete_binding = TERMINAL_ERASE_ESCAPE_SEQUENCE;
+  priv->backspace_binding = VTE_ERASE_ASCII_DELETE;
+  priv->delete_binding = VTE_ERASE_DELETE_SEQUENCE;
   priv->use_theme_colors = TRUE;
   priv->use_system_font = TRUE;
   priv->no_aa_without_render = TRUE;
@@ -1345,17 +1346,17 @@ terminal_profile_set_background_darkness (TerminalProfile *profile,
   g_free (key);
 }
 
-TerminalEraseBinding
+VteTerminalEraseBinding
 terminal_profile_get_backspace_binding (TerminalProfile *profile)
 {
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_ERASE_ASCII_DEL);
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), VTE_ERASE_ASCII_DELETE);
 
   return profile->priv->backspace_binding;
 }
 
 void
 terminal_profile_set_backspace_binding (TerminalProfile        *profile,
-                                        TerminalEraseBinding    binding)
+                                        VteTerminalEraseBinding    binding)
 {
   TerminalProfilePrivate *priv = profile->priv;
   char *key;
@@ -1376,17 +1377,17 @@ terminal_profile_set_backspace_binding (TerminalProfile        *profile,
   g_free (key);
 }
 
-TerminalEraseBinding
+VteTerminalEraseBinding
 terminal_profile_get_delete_binding (TerminalProfile *profile)
 {
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), TERMINAL_ERASE_ESCAPE_SEQUENCE);
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), VTE_ERASE_DELETE_SEQUENCE);
 
   return profile->priv->delete_binding;
 }
 
 void
 terminal_profile_set_delete_binding (TerminalProfile      *profile,
-                                     TerminalEraseBinding  binding)
+                                     VteTerminalEraseBinding  binding)
 {
   TerminalProfilePrivate *priv = profile->priv;
   char *key;
@@ -1876,7 +1877,7 @@ set_backspace_binding (TerminalProfile *profile,
                        const char      *str_val)
 {
   TerminalProfilePrivate *priv = profile->priv;
-  int binding; /* TerminalEraseBinding */
+  int binding; /* VteTerminalEraseBinding */
   
   if (str_val &&
       gconf_string_to_enum (erase_bindings, str_val, &binding) &&
@@ -1894,7 +1895,7 @@ set_delete_binding (TerminalProfile *profile,
                     const char      *str_val)
 {
   TerminalProfilePrivate *priv = profile->priv;
-  int binding; /* TerminalEraseBinding */
+  int binding; /* VteTerminalEraseBinding */
   
   if (str_val &&
       gconf_string_to_enum (erase_bindings, str_val, &binding) &&

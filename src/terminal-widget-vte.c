@@ -246,54 +246,6 @@ terminal_widget_set_word_characters (GtkWidget  *widget,
 }
 
 void
-terminal_widget_set_delete_binding (GtkWidget           *widget,
-				    TerminalEraseBinding binding)
-{
-  switch (binding) {
-    case TERMINAL_ERASE_ASCII_DEL:
-      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
-		      		      VTE_ERASE_ASCII_DELETE);
-      break;
-    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
-      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
-		      		      VTE_ERASE_DELETE_SEQUENCE);
-      break;
-    case TERMINAL_ERASE_CONTROL_H:
-      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
-		      		      VTE_ERASE_ASCII_BACKSPACE);
-      break;
-    default:
-      vte_terminal_set_delete_binding(VTE_TERMINAL(widget),
-		      		      VTE_ERASE_AUTO);
-      break;
-  }
-}
-
-void
-terminal_widget_set_backspace_binding (GtkWidget            *widget,
-				       TerminalEraseBinding  binding)
-{
-  switch (binding) {
-    case TERMINAL_ERASE_ASCII_DEL:
-      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
-		      			 VTE_ERASE_ASCII_DELETE);
-      break;
-    case TERMINAL_ERASE_ESCAPE_SEQUENCE:
-      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
-		      			 VTE_ERASE_DELETE_SEQUENCE);
-      break;
-    case TERMINAL_ERASE_CONTROL_H:
-      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
-		      			 VTE_ERASE_ASCII_BACKSPACE);
-      break;
-    default:
-      vte_terminal_set_backspace_binding(VTE_TERMINAL(widget),
-		      			 VTE_ERASE_AUTO);
-      break;
-  }
-}
-
-void
 terminal_widget_set_cursor_blinks (GtkWidget *widget,
 				   gboolean   setting)
 {

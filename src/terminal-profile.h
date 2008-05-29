@@ -24,6 +24,7 @@
 #define TERMINAL_PROFILE_H
 
 #include <gtk/gtk.h>
+#include <vte/vte.h>
 #include <gconf/gconf-client.h>
 
 #define CONF_PREFIX "/apps/gnome-terminal"
@@ -77,13 +78,6 @@ typedef enum
   TERMINAL_TITLE_AFTER,
   TERMINAL_TITLE_IGNORE
 } TerminalTitleMode;
-
-typedef enum
-{
-  TERMINAL_ERASE_ASCII_DEL,
-  TERMINAL_ERASE_ESCAPE_SEQUENCE,
-  TERMINAL_ERASE_CONTROL_H
-} TerminalEraseBinding;
 
 #define TERMINAL_PALETTE_SIZE 16
 
@@ -175,8 +169,8 @@ GdkPixbuf*             terminal_profile_get_background_image      (TerminalProfi
 const char*            terminal_profile_get_background_image_file (TerminalProfile *profile);
 gboolean               terminal_profile_get_scroll_background     (TerminalProfile *profile);
 double                 terminal_profile_get_background_darkness   (TerminalProfile *profile);
-TerminalEraseBinding   terminal_profile_get_backspace_binding     (TerminalProfile *profile);
-TerminalEraseBinding   terminal_profile_get_delete_binding        (TerminalProfile *profile);
+VteTerminalEraseBinding terminal_profile_get_backspace_binding     (TerminalProfile *profile);
+VteTerminalEraseBinding terminal_profile_get_delete_binding        (TerminalProfile *profile);
 
 gboolean               terminal_profile_get_use_theme_colors      (TerminalProfile *profile);
 gboolean               terminal_profile_get_use_system_font       (TerminalProfile *profile);
@@ -240,9 +234,9 @@ void terminal_profile_set_scroll_background     (TerminalProfile        *profile
 void terminal_profile_set_background_darkness   (TerminalProfile        *profile,
                                                  double                  setting);
 void terminal_profile_set_backspace_binding     (TerminalProfile        *profile,
-                                                 TerminalEraseBinding    binding);
+                                                 VteTerminalEraseBinding    binding);
 void terminal_profile_set_delete_binding        (TerminalProfile        *profile,
-                                                 TerminalEraseBinding    binding);
+                                                 VteTerminalEraseBinding    binding);
 
 void terminal_profile_set_use_theme_colors      (TerminalProfile        *profile,
                                                  gboolean                setting);

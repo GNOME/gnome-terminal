@@ -633,11 +633,11 @@ terminal_screen_reread_profile (TerminalScreen *screen)
   else
     terminal_widget_set_background_transparent (term, FALSE);
 
-  terminal_widget_set_backspace_binding (term,
-                                         terminal_profile_get_backspace_binding (profile));
+  vte_terminal_set_backspace_binding (VTE_TERMINAL (screen),
+                                      terminal_profile_get_backspace_binding (profile));
   
-  terminal_widget_set_delete_binding (term,
-                                      terminal_profile_get_delete_binding (profile));
+  vte_terminal_set_delete_binding (VTE_TERMINAL (screen),
+                                   terminal_profile_get_delete_binding (profile));
 }
 
 /**
