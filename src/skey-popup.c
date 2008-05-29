@@ -25,7 +25,6 @@
 #include "terminal-util.h"
 #include "terminal-screen.h"
 #include "skey-popup.h"
-#include <glade/glade.h>
 #include "skey/skey.h"
 #include <stdlib.h>
 #include <string.h>
@@ -145,33 +144,26 @@ terminal_skey_do_popup (TerminalScreen *screen,
 
   if (dialog == NULL)
     {
-      GladeXML *xml;
-      GtkWidget *title;
-      gchar *title_text;
+      GtkWindow *label;
+      char *title_text;
 
-      xml = terminal_util_load_glade_file (TERM_GLADE_FILE,
-                                           "skey-dialog",
-                                           transient_parent);
-
-      if (xml == NULL)
+      if (!terminal_util_load_builder_file ("skey-challenge.ui",
+                                            "skey-dialog", &dialog,
+                                            "skey-entry", &entry,
+                                            "text-label", &label,
+                                            "skey-ok-button", &ok_button,
+                                            NULL))
         return;
 
-      dialog = glade_xml_get_widget (xml, "skey-dialog");
-      title = glade_xml_get_widget (xml, "label61");
-      entry = glade_xml_get_widget (xml, "skey-entry");
-      ok_button = glade_xml_get_widget (xml, "skey-ok-button");
-
       title_text = g_strdup_printf ("<big><b>%s</b></big>",
-				    gtk_label_get_text (GTK_LABEL (title)));
-      gtk_label_set_label (GTK_LABEL (title), title_text);
+				    gtk_label_get_text (GTK_LABEL (label)));
+      gtk_label_set_label (GTK_LABEL (label), title_text);
       g_free (title_text);
 
       g_object_set_data (G_OBJECT (dialog), "skey-entry", entry);      
       g_object_set_data (G_OBJECT (dialog), "skey-ok-button", ok_button);
 
       g_object_add_weak_pointer (G_OBJECT (dialog), (void**) &dialog);
-
-      g_object_unref (G_OBJECT (xml));
     }
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog),

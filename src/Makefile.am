@@ -93,6 +93,7 @@ ui_DATA = \
 	terminal.ui \
 	encodings-dialog.ui \
 	profile-manager.ui \
+	skey-challenge.ui \
 	$(NULL)
 
 CLEANFILES = \
