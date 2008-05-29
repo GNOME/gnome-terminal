@@ -773,6 +773,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
         }
       
       /* FIXME: Don't enable this if we have a compmgr. */
+      /* FIXMEchpe: redo this on screen-changed! */
       vte_terminal_set_background_transparent (vte_terminal,
                                                bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
                                                (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
