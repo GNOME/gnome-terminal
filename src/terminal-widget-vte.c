@@ -60,14 +60,12 @@ free_vte_data (gpointer data)
   g_free (vte);
 }
 
-GtkWidget *
-terminal_widget_new (void)
+/* FIXMEchpe: to be removed later */
+void
+terminal_widget_set_implementation (GtkWidget *terminal)
 {
-  GtkWidget *terminal;
   VteData *data;
   
-  terminal = vte_terminal_new ();
-
   vte_terminal_set_mouse_autohide(VTE_TERMINAL(terminal), TRUE);
   
   data = g_new0 (VteData, 1);
@@ -77,8 +75,6 @@ terminal_widget_new (void)
 
   g_object_set_data_full (G_OBJECT (terminal), "terminal-widget-data",
                           data, free_vte_data);
-  
-  return terminal;
 }
 
 void
@@ -465,23 +461,6 @@ terminal_widget_disconnect_title_changed (GtkWidget *widget,
 }
 
 void
-terminal_widget_connect_icon_title_changed (GtkWidget *widget,
-					    GCallback  callback,
-					    void      *data)
-{
-  g_signal_connect (widget, "icon_title_changed",
-		    G_CALLBACK (callback), data);
-}
-
-void
-terminal_widget_disconnect_icon_title_changed (GtkWidget *widget,
-					       GCallback  callback,
-					       void      *data)
-{
-  g_signal_handlers_disconnect_by_func (widget, callback, data);
-}
-
-void
 terminal_widget_connect_child_died (GtkWidget *widget,
 				    GCallback  callback,
 				    void      *data)
@@ -494,40 +473,6 @@ void
 terminal_widget_disconnect_child_died (GtkWidget *widget,
 				       GCallback  callback,
 				       void      *data)
-{
-  g_signal_handlers_disconnect_by_func (widget, callback, data);
-}
-
-void
-terminal_widget_connect_selection_changed (GtkWidget *widget,
-					   GCallback  callback,
-					   void      *data)
-{
-  g_signal_connect (widget, "selection-changed",
-		    G_CALLBACK (callback), data);
-}
-
-void
-terminal_widget_disconnect_selection_changed (GtkWidget *widget,
-					      GCallback  callback,
-					      void      *data)
-{
-  g_signal_handlers_disconnect_by_func (widget, callback, data);
-}
-
-void
-terminal_widget_connect_encoding_changed      (GtkWidget *widget,
-                                               GCallback  callback,
-                                               void      *data)
-{
-  g_signal_connect (widget, "encoding-changed",
-		    G_CALLBACK (callback), data);
-}
-
-void
-terminal_widget_disconnect_encoding_changed   (GtkWidget *widget,
-                                               GCallback  callback,
-                                               void      *data)
 {
   g_signal_handlers_disconnect_by_func (widget, callback, data);
 }

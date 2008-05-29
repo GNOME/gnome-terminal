@@ -22,7 +22,7 @@
 #ifndef TERMINAL_SCREEN_H
 #define TERMINAL_SCREEN_H
 
-#include <gtk/gtkbin.h>
+#include <vte/vte.h>
 
 #include "terminal-profile.h"
 
@@ -45,19 +45,16 @@ typedef struct _TerminalScreenPrivate TerminalScreenPrivate;
 
 struct _TerminalScreen
 {
-  GtkBin parent_instance;
+  VteTerminal parent_instance;
 
   TerminalScreenPrivate *priv;
 };
 
 struct _TerminalScreenClass
 {
-  GtkBinClass parent_class;
+  VteTerminalClass parent_class;
 
   void (* profile_set)        (TerminalScreen *screen);
-  void (* icon_title_changed) (TerminalScreen *screen);
-  void (* selection_changed)  (TerminalScreen *screen);
-  void (* encoding_changed)   (TerminalScreen *screen);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
 };

@@ -26,6 +26,7 @@
 #include "terminal-accels.h"
 #include "terminal-widget.h"
 #include "terminal-window.h"
+#include "terminal-screen-container.h"
 #include "terminal-tabs-menu.h"
 #include "terminal.h"
 #include "encoding.h"
@@ -109,11 +110,11 @@ static void notebook_page_selected_callback  (GtkWidget       *notebook,
                                               guint            page_num,
                                               TerminalWindow  *window);
 static void notebook_page_added_callback     (GtkWidget       *notebook,
-                                              TerminalScreen  *screen,
+                                              GtkWidget       *container,
                                               guint            page_num,
                                               TerminalWindow  *window);
 static void notebook_page_removed_callback   (GtkWidget       *notebook,
-                                              TerminalScreen  *screen,
+                                              GtkWidget       *container,
                                               guint            page_num,
                                               TerminalWindow  *window);
 
@@ -1559,13 +1560,13 @@ icon_title_changed_callback (TerminalScreen *screen,
 
 static void
 close_button_clicked_cb (GtkWidget *widget,
-                         GtkWidget *screen)
+                         GtkWidget *screen_container)
 {
   GtkWidget *notebook;
   guint page_num;
 
-  notebook = gtk_widget_get_parent (GTK_WIDGET (screen));
-  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), screen);
+  notebook = gtk_widget_get_parent (screen_container);
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), screen_container);
   gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page_num);
 }
 
@@ -1578,7 +1579,7 @@ sync_tab_label (TerminalScreen *screen,
   const char *title;
 
   title = terminal_screen_get_title (screen);
-
+g_print ("sync tab label %p title %s\n", screen, title);
   hbox = gtk_widget_get_parent (label);
 
   gtk_label_set_text (GTK_LABEL (label), title);
@@ -1599,7 +1600,7 @@ tab_label_style_set_cb (GtkWidget *hbox,
 }
 
 static GtkWidget *
-contruct_tab_label (TerminalWindow *window, TerminalScreen *screen)
+construct_tab_label (TerminalWindow *window, TerminalScreen *screen, GtkWidget *screen_container)
 {
   GtkWidget *hbox, *label, *close_button, *image;
 
@@ -1629,7 +1630,7 @@ contruct_tab_label (TerminalWindow *window, TerminalScreen *screen)
                     G_CALLBACK (sync_tab_label), label);
 
   g_signal_connect (close_button, "clicked",
-		    G_CALLBACK (close_button_clicked_cb), screen);
+		    G_CALLBACK (close_button_clicked_cb), screen_container);
 
   g_signal_connect (hbox, "style-set",
                     G_CALLBACK (tab_label_style_set_cb), close_button);
@@ -1646,38 +1647,40 @@ terminal_window_add_screen (TerminalWindow *window,
 {
   TerminalWindowPrivate *priv = window->priv;
   TerminalWindow *old;
-  GtkWidget *tab_label;
+  GtkWidget *screen_container, *tab_label;
  
   old = terminal_screen_get_window (screen);
 
   if (old == window)
     return;  
 
-  g_object_ref (G_OBJECT (screen)); /* make our own new refcount */
+  g_object_ref_sink (screen); /* FIXMEchpe this leaks!!!! */
 
   if (old)
     terminal_window_remove_screen (old, screen);
 
-  terminal_screen_set_window (screen, window);
+  screen_container = terminal_screen_container_new (screen);
+  gtk_widget_show (screen_container);
 
-  gtk_widget_show_all (GTK_WIDGET (screen));
+  // FIXMEchpe remove this once the parent-set handler in TerminalScreen works
+  terminal_screen_set_window (screen, window);
 
   update_tab_visibility (window, +1);
 
-  tab_label = contruct_tab_label (window, screen);
+  tab_label = construct_tab_label (window, screen, screen_container);
 
   gtk_notebook_insert_page (GTK_NOTEBOOK (priv->notebook),
-                            GTK_WIDGET (screen),
+                            screen_container,
                             tab_label,
                             position);
   gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook),
-                                      GTK_WIDGET (screen),
+                                      screen_container,
                                       TRUE, TRUE, GTK_PACK_START);
   gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (priv->notebook),
-                                    GTK_WIDGET (screen),
+                                    screen_container,
                                     TRUE);
   gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (priv->notebook),
-                                   GTK_WIDGET (screen),
+                                   screen_container,
                                    TRUE);
 }
 
@@ -1686,13 +1689,17 @@ terminal_window_remove_screen (TerminalWindow *window,
                                TerminalScreen *screen)
 {
   TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *scrolled_window;
   guint num_page;
 
   g_return_if_fail (terminal_screen_get_window (screen) == window);
 
   update_tab_visibility (window, -1);
 
-  num_page = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), GTK_WIDGET (screen));
+  scrolled_window = GTK_WIDGET (screen)->parent;
+  g_return_if_fail (scrolled_window != NULL);
+
+  num_page = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), scrolled_window);
   gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), num_page);
 }
 
@@ -1789,6 +1796,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
+  g_print ("toplevel type %s\n", G_OBJECT_TYPE_NAME (app));
 
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
@@ -1849,7 +1857,7 @@ terminal_window_set_active (TerminalWindow *window,
   {
     GtkWidget *old_widget;
     old_widget = terminal_screen_get_widget (priv->active_term);
-    gtk_widget_hide (old_widget);
+    gtk_widget_hide (old_widget); /* FIXMEchpe */
   }
   
   widget = terminal_screen_get_widget (screen);
@@ -1879,7 +1887,8 @@ terminal_window_set_active (TerminalWindow *window,
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
   gtk_window_set_title (GTK_WINDOW (window), terminal_screen_get_title (screen));
 
-  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), GTK_WIDGET (screen));
+  /* FIXMEchpe this is highly suspect code, called from below notebook_page_selected_callback!!! */
+  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), GTK_WIDGET (screen)->parent);
   gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page_num);
 
   /* set size of window to current grid size */
@@ -1925,9 +1934,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
 
-  g_assert (page_widget);
-
-  screen = TERMINAL_SCREEN (page_widget);
+  screen = terminal_screen_container_get_screen (page_widget);
 
   g_assert (screen);
   
@@ -1941,12 +1948,15 @@ notebook_page_selected_callback (GtkWidget       *notebook,
 
 static void
 notebook_page_added_callback (GtkWidget       *notebook,
-                              TerminalScreen  *screen,
+                              GtkWidget       *container,
                               guint            page_num,
                               TerminalWindow  *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalScreen *screen;
   GtkWidget *term;
+
+  screen = terminal_screen_container_get_screen (container);
 
   terminal_screen_set_window (screen, window);
   priv->terms++;
@@ -2018,15 +2028,18 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
 static void
 notebook_page_removed_callback (GtkWidget       *notebook,
-                                TerminalScreen  *screen,
+                                GtkWidget       *container,
                                 guint            page_num,
                                 TerminalWindow  *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalScreen *screen;
   int pages;
 
   if (priv->disposed)
     return;
+
+  screen = terminal_screen_container_get_screen (container);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (profile_set_callback),
@@ -2640,12 +2653,14 @@ tabs_detach_tab_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   GtkNotebook *notebook = GTK_NOTEBOOK (priv->notebook);
   gint page_num;
-  GtkWidget *page; 
+  GtkWidget *page;
+  TerminalScreen *screen;
 
   page_num = gtk_notebook_get_current_page (notebook);
   page = gtk_notebook_get_nth_page (notebook, page_num);
-  
-  detach_tab (TERMINAL_SCREEN (page), window);
+
+  screen = terminal_screen_container_get_screen (page);
+  detach_tab (screen, window);
 }
 
 static void

@@ -35,6 +35,7 @@
 #include "terminal-window.h"
 #include "terminal-widget.h"
 #include "terminal-profile.h"
+#include "terminal-screen-container.h"
 #include "terminal.h"
 #include "skey-popup.h"
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
@@ -67,16 +68,11 @@ struct _TerminalScreenPrivate
   double font_scale;
   guint recheck_working_dir_idle;
   guint gconf_connection_id;
-  GtkWidget *hbox;
-  GtkWidget *scrollbar;
   gboolean user_title; /* title was manually set */
 };
 
 enum {
   PROFILE_SET,
-  ICON_TITLE_CHANGED,
-  SELECTION_CHANGED,
-  ENCODING_CHANGED,
   SHOW_POPUP_MENU,
   LAST_SIGNAL
 };
@@ -90,11 +86,6 @@ static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
-static void terminal_screen_size_allocate (GtkWidget *widget,
-                                           GtkAllocation *allocation);
-static void terminal_screen_size_request (GtkWidget *widget,
-                                           GtkRequisition *requisition);
-static void terminal_screen_map         (GtkWidget           *widget);
 static void terminal_screen_update_on_realize (GtkWidget      *widget,
                                                TerminalScreen *screen);
 static void terminal_screen_change_font (TerminalScreen *screen);
@@ -110,12 +101,6 @@ static void terminal_screen_widget_icon_title_changed (GtkWidget      *term,
                                                        TerminalScreen *screen);
 
 static void terminal_screen_widget_child_died        (GtkWidget      *term,
-                                                      TerminalScreen *screen);
-
-static void terminal_screen_widget_selection_changed (GtkWidget      *term,
-                                                      TerminalScreen *screen);
-
-static void terminal_screen_widget_encoding_changed  (GtkWidget      *term,
                                                       TerminalScreen *screen);
 
 static void terminal_screen_setup_dnd                (TerminalScreen *screen);
@@ -136,7 +121,7 @@ static void monospace_font_change_notify (GConfClient *client,
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (TerminalScreen, terminal_screen, GTK_TYPE_BIN)
+G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
 static void
 style_set_callback (GtkWidget *widget,
@@ -147,11 +132,26 @@ style_set_callback (GtkWidget *widget,
     terminal_screen_change_font (TERMINAL_SCREEN (data));
 }
 
+#ifdef DEBUG_GEOMETRY
+static void
+parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget *screen)
+{
+  g_print ("screen %p scrolled-window size req %d : %d\n", screen, req->width, req->height);
+}
+#endif
+
 static void
 parent_set_callback (TerminalScreen *screen,
                      GtkWidget      *old_parent)
 {
   TerminalScreenPrivate *priv = screen->priv;
+
+#ifdef DEBUG_GEOMETRY
+  if (old_parent)
+    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), screen);
+  if (GTK_WIDGET (screen)->parent)
+    g_signal_connect (GTK_WIDGET (screen)->parent, "size-request", G_CALLBACK (parent_size_request), screen);
+#endif
 
   if (GTK_WIDGET (screen)->parent == NULL)
     {
@@ -159,16 +159,14 @@ parent_set_callback (TerminalScreen *screen,
     }
   else
     {
+      GtkWidget *parent;
       GtkWidget *window;
 
-      g_return_if_fail (GTK_IS_NOTEBOOK (GTK_WIDGET (screen)->parent));
-
       window = gtk_widget_get_toplevel (GTK_WIDGET (screen)->parent);
+      if (!TERMINAL_IS_WINDOW (window))
+        return; /* FIXMEchpe */
 
-      g_return_if_fail (window != NULL);
-      g_return_if_fail (TERMINAL_IS_WINDOW (window));
-
-      priv->window = TERMINAL_WINDOW (gtk_widget_get_toplevel (window));
+      priv->window = TERMINAL_WINDOW (window);
     }
 }
 
@@ -214,34 +212,6 @@ connect_monospace_font_change (TerminalScreen *screen)
 }
 
 static void
-terminal_screen_size_request (GtkWidget *widget,
-                              GtkRequisition *requisition)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPrivate *priv = screen->priv;
-  GtkRequisition widget_request;
-
-  gtk_widget_size_request (priv->hbox, &widget_request);
-
-  requisition->width = widget_request.width;
-  requisition->height = widget_request.height;
-}
-
-static void
-terminal_screen_size_allocate (GtkWidget *widget,
-      GtkAllocation *allocation)
-{
-  GtkWidget *child;
-
-  widget->allocation = *allocation;
-
-  child = GTK_BIN (widget)->child;
-  g_assert (child != NULL);
-
-  gtk_widget_size_allocate (child, allocation);
-}
-
-static void
 terminal_screen_sync_settings (GtkSettings *settings,
                                GParamSpec *pspec,
                                TerminalScreen *screen)
@@ -284,14 +254,19 @@ terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
                     G_CALLBACK (terminal_screen_sync_settings), widget);
 }
 
-static void
-terminal_screen_grab_focus (GtkWidget *widget)
-{
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPrivate *priv = screen->priv;
+#ifdef DEBUG_GEOMETRY
 
-  gtk_widget_grab_focus (priv->term);
+static void size_request (GtkWidget *widget, GtkRequisition *req)
+{
+  g_print ("Screen %p size-request %d : %d\n", widget, req->width, req->height);
 }
+
+static void size_allocate (GtkWidget *widget, GtkAllocation *allocation)
+{
+  g_print ("Screen %p size-alloc   %d : %d at (%d, %d)\n", widget, allocation->width, allocation->height, allocation->x, allocation->y);
+}
+
+#endif
 
 static void
 terminal_screen_init (TerminalScreen *screen)
@@ -307,7 +282,8 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv->recheck_working_dir_idle = 0;
 
-  priv->term = terminal_widget_new ();
+  priv->term = GTK_WIDGET (screen);
+  terminal_widget_set_implementation (priv->term);
 
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
@@ -369,40 +345,26 @@ terminal_screen_init (TerminalScreen *screen)
                                          G_CALLBACK (terminal_screen_widget_title_changed),
                                          screen);
 
-  terminal_widget_connect_icon_title_changed (priv->term,
-                                              G_CALLBACK (terminal_screen_widget_icon_title_changed),
-                                              screen);
+  g_signal_connect (screen, "icon-title-changed",
+                    G_CALLBACK (terminal_screen_widget_icon_title_changed),
+                    screen);
 
   terminal_widget_connect_child_died (priv->term,
                                       G_CALLBACK (terminal_screen_widget_child_died),
                                       screen);
 
-  terminal_widget_connect_selection_changed (priv->term,
-                                             G_CALLBACK (terminal_screen_widget_selection_changed),
-                                             screen);
-
-  terminal_widget_connect_encoding_changed (priv->term,
-                                            G_CALLBACK (terminal_screen_widget_encoding_changed),
-                                            screen);
-
   connect_monospace_font_change (screen);
-
-  priv->scrollbar = gtk_vscrollbar_new (NULL);
-
-  priv->hbox = gtk_hbox_new (FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->term), TRUE, TRUE, 0);
-                      
-  gtk_range_set_adjustment (GTK_RANGE (priv->scrollbar),
-                            terminal_widget_get_scroll_adjustment (priv->term));
-  
-  gtk_container_add (GTK_CONTAINER (screen), GTK_WIDGET (priv->hbox));
-
-  gtk_widget_show_all (priv->hbox);
 
   g_signal_connect (G_OBJECT (screen), "parent-set",
                     G_CALLBACK (parent_set_callback), 
                     NULL);
+
+#ifdef DEBUG_GEOMETRY
+  g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
+  g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
+#endif
+
+  gtk_widget_show (GTK_WIDGET (screen)); /* FIXMEchpe remove this */
 }
 
 static void
@@ -434,11 +396,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->finalize = terminal_screen_finalize;
   object_class->get_property = terminal_screen_get_property;
 
-  widget_class->size_allocate = terminal_screen_size_allocate;
   widget_class->screen_changed = terminal_screen_screen_changed;
-  widget_class->size_request = terminal_screen_size_request;
-  widget_class->map = terminal_screen_map;
-  widget_class->grab_focus = terminal_screen_grab_focus;
 
   signals[PROFILE_SET] =
     g_signal_new (I_("profile_set"),
@@ -449,38 +407,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   
-  signals[ICON_TITLE_CHANGED] =
-    g_signal_new (I_("icon_title_changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, icon_title_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
-  signals[SELECTION_CHANGED] =
-    g_signal_new (I_("selection_changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, selection_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);  
-
-  signals[ENCODING_CHANGED] =
-    g_signal_new (I_("encoding_changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
   signals[SHOW_POPUP_MENU] =
     g_signal_new (I_("show-popup-menu"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, encoding_changed),
+                  G_STRUCT_OFFSET (TerminalScreenClass, show_popup_menu),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__POINTER,
                   G_TYPE_NONE,
@@ -552,19 +483,6 @@ TerminalScreen*
 terminal_screen_new (void)
 {
   return g_object_new (TERMINAL_TYPE_SCREEN, NULL);
-}
-
-static void
-terminal_screen_map (GtkWidget *widget)
-{
-  GtkWidget *child;
-
-  g_assert (GTK_WIDGET_REALIZED (widget));
-
-  child = GTK_BIN (widget)->child;
-  g_assert (child != NULL);
-
-  GTK_WIDGET_CLASS (terminal_screen_parent_class)->map (widget);
 }
 
 TerminalWindow*
@@ -808,8 +726,12 @@ terminal_screen_cook_icon_title (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   
+  cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title);
+#if 0
+  /* FIXMEchpe */
   if (cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title))
     g_signal_emit (G_OBJECT (screen), signals[ICON_TITLE_CHANGED], 0);
+#endif
 }
 
 static void
@@ -1747,20 +1669,6 @@ terminal_screen_widget_child_died (GtkWidget      *term,
 }
 
 static void
-terminal_screen_widget_selection_changed (GtkWidget      *term,
-                                          TerminalScreen *screen)
-{
-  g_signal_emit (G_OBJECT (screen), signals[SELECTION_CHANGED], 0);
-}
-
-static void
-terminal_screen_widget_encoding_changed (GtkWidget      *term,
-                                         TerminalScreen *screen)
-{
-  g_signal_emit (G_OBJECT (screen), signals[ENCODING_CHANGED], 0);
-}
-
-static void
 title_entry_changed (GtkWidget      *entry,
                      TerminalScreen *screen)
 {
@@ -2249,49 +2157,44 @@ terminal_screen_setup_dnd (TerminalScreen *screen)
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
+/* FIXMEchpe move this to TerminalWindow! */
 void
 terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
+  GtkWidget *parent;
+  GtkScrolledWindow *scrolled_window;
+  GtkPolicyType policy = GTK_POLICY_ALWAYS;
+  GtkCornerType corner = GTK_CORNER_TOP_LEFT;
 
   profile = terminal_screen_get_profile (screen);
 
   if (profile == NULL)
     return;
-  
-  g_object_ref (G_OBJECT (priv->scrollbar));
 
-  if (priv->scrollbar->parent)
-    {
-      gtk_container_remove (GTK_CONTAINER (priv->hbox), 
-                            priv->scrollbar);
-    }
-  
+  parent = GTK_WIDGET (screen)->parent;
+  if (!parent)
+    return;
+
   switch (terminal_profile_get_scrollbar_position (profile))
     {
     case TERMINAL_SCROLLBAR_HIDDEN:
-      gtk_widget_hide (priv->scrollbar);
-      /* pack just to hold refcount */
-      gtk_box_pack_end (GTK_BOX (priv->hbox),
-                        priv->scrollbar, FALSE, FALSE, 0);
+      policy = GTK_POLICY_NEVER;
       break;
     case TERMINAL_SCROLLBAR_RIGHT:
-      gtk_box_pack_end (GTK_BOX (priv->hbox),
-                        priv->scrollbar, FALSE, FALSE, 0);
-      gtk_box_reorder_child (GTK_BOX (priv->hbox), priv->scrollbar, -1);
-      gtk_widget_show (priv->scrollbar);
+      policy = GTK_POLICY_ALWAYS;
+      corner = GTK_CORNER_TOP_LEFT;
       break;
     case TERMINAL_SCROLLBAR_LEFT:
-      gtk_box_pack_start (GTK_BOX (priv->hbox),
-                          priv->scrollbar, FALSE, FALSE, 0);
-      gtk_box_reorder_child (GTK_BOX (priv->hbox), priv->scrollbar, 0);
-      gtk_widget_show (priv->scrollbar);
+      policy = GTK_POLICY_ALWAYS;
+      corner = GTK_CORNER_TOP_RIGHT;
       break;
     default:
       g_assert_not_reached ();
       break;
     }
 
-  g_object_unref (G_OBJECT (priv->scrollbar));
+  terminal_screen_container_set_placement (parent, corner);
+  terminal_screen_container_set_policy (parent, GTK_POLICY_NEVER, policy);
 }

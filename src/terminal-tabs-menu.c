@@ -24,6 +24,7 @@
 
 #include "terminal-tabs-menu.h"
 #include "terminal-screen.h"
+#include "terminal-screen-container.h"
 
 #include "terminal-intl.h"
 #include <gtk/gtklabel.h>
@@ -185,7 +186,7 @@ sync_tab_title (TerminalScreen *screen,
 
 static void
 notebook_page_added_cb (GtkNotebook *notebook,
-			TerminalScreen *screen,
+                        GtkWidget *container,
 			guint position,
 			TerminalTabsMenu *menu)
 {
@@ -193,6 +194,9 @@ notebook_page_added_cb (GtkNotebook *notebook,
 	GtkAction *action;
 	char verb[ACTION_VERB_FORMAT_LENGTH];
 	GSList *group;
+        TerminalScreen *screen;
+
+        screen = terminal_screen_container_get_screen (container);
 
 	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, allocate_tab_id ());
   
@@ -230,12 +234,15 @@ notebook_page_added_cb (GtkNotebook *notebook,
 
 static void
 notebook_page_removed_cb (GtkNotebook *notebook,
-			  TerminalScreen *screen,
+                          GtkWidget *container,
 			  guint position,
 			  TerminalTabsMenu *menu)
 {
 	TerminalTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
+        TerminalScreen *screen;
+
+        screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
 	g_return_if_fail (action != NULL);
@@ -256,7 +263,7 @@ notebook_page_removed_cb (GtkNotebook *notebook,
 
 static void
 notebook_page_reordered_cb (GtkNotebook *notebook,
-			    TerminalScreen *screen,
+			    GtkBin *bin,
 			    guint position,
 			    TerminalTabsMenu *menu)
 {
@@ -480,7 +487,10 @@ terminal_tabs_menu_update (TerminalTabsMenu *menu)
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
-		action = g_object_get_data (G_OBJECT (l->data), DATA_KEY);
+                GtkWidget *container = l->data;
+                GObject *screen = G_OBJECT (terminal_screen_container_get_screen (container));
+
+		action = g_object_get_data (screen, DATA_KEY);
 		g_return_if_fail (action != NULL);
   
 		verb = gtk_action_get_name (action);

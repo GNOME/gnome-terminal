@@ -37,7 +37,7 @@ G_BEGIN_DECLS
  *
  */
 
-GtkWidget* terminal_widget_new                        (void);
+void       terminal_widget_set_implementation         (GtkWidget            *widget);
 void       terminal_widget_set_size                   (GtkWidget            *widget,
                                                        int                   width_chars,
                                                        int                   height_chars);
@@ -116,28 +116,10 @@ void terminal_widget_connect_title_changed         (GtkWidget *widget,
 void terminal_widget_disconnect_title_changed      (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
-void terminal_widget_connect_icon_title_changed    (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
-void terminal_widget_disconnect_icon_title_changed (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
 void terminal_widget_connect_child_died            (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
 void terminal_widget_disconnect_child_died         (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
-void terminal_widget_connect_selection_changed     (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
-void terminal_widget_disconnect_selection_changed  (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
-void terminal_widget_connect_encoding_changed      (GtkWidget *widget,
-                                                    GCallback  callback,
-                                                    void      *data);
-void terminal_widget_disconnect_encoding_changed   (GtkWidget *widget,
                                                     GCallback  callback,
                                                     void      *data);
 
