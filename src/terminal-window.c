@@ -1322,13 +1322,13 @@ terminal_window_init (TerminalWindow *window)
         G_CALLBACK (help_about_callback) },
 
       /* Popup menu */
-      { "PopupSendEmail", NULL, N_("_Send Mail To..."), NULL,
+      { "PopupSendEmail", NULL, N_("_Send Mail To…"), NULL,
         NULL,
         G_CALLBACK (popup_open_url_callback) },
       { "PopupCopyEmailAddress", NULL, N_("_Copy E-mail Address"), NULL,
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
-      { "PopupCall", NULL, N_("C_all To..."), NULL,
+      { "PopupCall", NULL, N_("C_all To…"), NULL,
         NULL,
         G_CALLBACK (popup_open_url_callback) },
       { "PopupCopyCallAddress", NULL, N_("_Copy Call Address"), NULL,
