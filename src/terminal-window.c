@@ -78,11 +78,10 @@ struct _TerminalWindowPrivate
 
 #define PROFILE_DATA_KEY "GT::Profile"
 
-
 #define FILE_NEW_TERMINAL_TAB_UI_PATH     "/menubar/File/FileNewTabProfiles"
 #define FILE_NEW_TERMINAL_WINDOW_UI_PATH  "/menubar/File/FileNewWindowProfiles"
-#define SET_ENCODING_ACTION_NAME_PREFIX "TerminalSetEncoding"
-#define SET_ENCODING_UI_PATH "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
+#define SET_ENCODING_UI_PATH              "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
+#define SET_ENCODING_ACTION_NAME_PREFIX   "TerminalSetEncoding"
 
 #define STOCK_NEW_WINDOW NULL
 #define STOCK_NEW_TAB NULL
@@ -1225,8 +1224,8 @@ terminal_window_init (TerminalWindow *window)
     {
       /* Toplevel */
       { "File", NULL, N_("_File") },
-      { "FileNewTabProfiles", NULL, N_("Open _Terminal") },
-      { "FileNewWindowProfiles", NULL, N_("Open Ta_b") },
+      { "FileNewWindowProfiles", NULL, N_("Open _Terminal")},
+      { "FileNewTabProfiles", NULL, N_("Open Ta_b") },
       { "Edit", NULL, N_("_Edit") },
       { "View", NULL, N_("_View") },
       { "Terminal", NULL, N_("_Terminal") },
@@ -2431,7 +2430,7 @@ file_new_tab_callback (GtkAction *action,
 
   if (_terminal_profile_get_forgotten (profile))
     return;
-      
+
   terminal_app_new_terminal (terminal_app_get (), window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
