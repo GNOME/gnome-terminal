@@ -61,16 +61,13 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
 
   if (strncmp (p, "md4", 3) == 0)
     *hash = MD4;
-
   else if (strncmp (p, "md5", 3) == 0)
     *hash = MD5;
-
   else if (strncmp (p, "sha1", 4) == 0)
     {
       *hash = SHA1;
       len++;
     }
-
   else
     return FALSE;
 
@@ -100,9 +97,7 @@ extract_hash_seq_and_seed (const gchar  *otp_match,
       p++;
     }
 
-  /* FIXME: allocator mismatch */
-  *seed = strdup (p);
-
+  *seed = g_strdup (p);
   return TRUE;
 }
 
