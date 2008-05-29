@@ -1149,9 +1149,9 @@ main (int argc, char **argv)
     {
       /* Create a fake one containing a timestamp that we can use */
       Time timestamp;
-      timestamp = slowly_and_stupidly_obtain_timestamp (gdk_display);
-      parsing_results->startup_id = g_strdup_printf ("_TIME%lu",
-						    timestamp);
+      timestamp = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
+
+      parsing_results->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
     }
 
   g_set_application_name (_("Terminal"));
@@ -1729,7 +1729,7 @@ terminal_register_as_factory (void)
   listener = bonobo_listener_new (terminal_new_event, NULL);
 
   per_display_iid = bonobo_activation_make_registration_id (
-    ACT_IID, DisplayString (gdk_display));
+    ACT_IID, DisplayString (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ())));
 
   result = bonobo_activation_active_server_register (
     per_display_iid, BONOBO_OBJREF (listener));

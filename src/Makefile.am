@@ -44,6 +44,7 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
 	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
 	-DSN_API_NOT_YET_FROZEN \
+	-DGDK_MULTIHEAD_SAFE \
 	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
 

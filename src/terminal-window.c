@@ -805,6 +805,8 @@ initialize_alpha_mode (TerminalWindow *window)
   GdkScreen *screen;
   GdkColormap *colormap;
 
+  /* FIXMEchpe: update the TerminalScreen's for this change! */
+  
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
   colormap = gdk_screen_get_rgba_colormap (screen);
   if (colormap != NULL && gdk_screen_is_composited (screen))
@@ -1135,15 +1137,32 @@ terminal_window_state_event (GtkWidget            *widget,
 }
 
 static void
-terminal_window_settings_update (GtkWidget *widget)
+terminal_window_window_manager_changed_cb (GdkScreen *screen,
+                                           TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+  gboolean supports_fs;
+
+  supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
+  g_print ("window manager changed: %s supports-fs %d\n", gdk_x11_screen_get_window_manager_name (screen), supports_fs);
+
+  action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
+  gtk_action_set_sensitive (action, supports_fs);
+}
+
+static void
+terminal_window_screen_update (TerminalWindow *window,
+                               GdkScreen *screen)
 {
   TerminalApp *app;
-  GdkScreen *screen;
 
-  if (!gtk_widget_has_screen (widget))
-    return;
+  terminal_window_window_manager_changed_cb (screen, window);
+  g_signal_connect (screen, "window-manager-changed",
+                    G_CALLBACK (terminal_window_window_manager_changed_cb), window);
 
-  screen = gtk_widget_get_screen (widget);
+  initialize_alpha_mode (window);
+
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
 
@@ -1165,6 +1184,7 @@ terminal_window_screen_changed (GtkWidget *widget,
 {
   void (* screen_changed) (GtkWidget *, GdkScreen *) =
     GTK_WIDGET_CLASS (terminal_window_parent_class)->screen_changed;
+  GdkScreen *screen;
 
   if (screen_changed)
     screen_changed (widget, previous_screen);
@@ -1172,8 +1192,15 @@ terminal_window_screen_changed (GtkWidget *widget,
   if (previous_screen == gtk_widget_get_screen (widget))
     return;
 
-  initialize_alpha_mode (TERMINAL_WINDOW (widget));
-  terminal_window_settings_update (widget);
+  if (previous_screen)
+    g_signal_handlers_disconnect_by_func (previous_screen,
+                                          G_CALLBACK (terminal_window_window_manager_changed_cb),
+                                          window);
+
+  if (!screen)
+    return;
+
+  terminal_window_screen_update (TERMINAL_WINDOW (window), screen);
 }
 
 static void
@@ -1387,8 +1414,6 @@ terminal_window_init (TerminalWindow *window)
   priv->old_char_height = -1;
   priv->old_geometry_widget = NULL;
   
-  initialize_alpha_mode (window);
-
   /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
   /* FIXMEchpe is that really true still ?
    * Simple way to find out: comment the code out (if 0'd below), and see
@@ -1419,10 +1444,6 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (action, "activate",
                     G_CALLBACK (edit_menu_activate_callback), window);
 
-  action = gtk_action_group_get_action (action_group, "ViewFullscreen");
-  gtk_action_set_sensitive (action,
-                            gdk_net_wm_supports (gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE)));
-
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
@@ -1451,14 +1472,12 @@ terminal_window_init (TerminalWindow *window)
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
 
-  terminal_window_update_set_profile_menu (window);
-  terminal_window_update_new_terminal_menus (window);
   terminal_window_update_encoding_menu (window);
 
   /* We have to explicitly call this, since screen-changed is NOT
    * emitted for the toplevel the first time!
    */
-  terminal_window_settings_update (GTK_WIDGET (window));
+  terminal_window_screen_update (window, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   window_group = gtk_window_group_new ();
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
@@ -1499,6 +1518,7 @@ terminal_window_dispose (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
+  GdkScreen *screen;
 
   remove_popup_info (window);
 
@@ -1518,6 +1538,12 @@ terminal_window_dispose (GObject *object)
   g_signal_handlers_disconnect_by_func (terminal_app_get (),
                                         G_CALLBACK (terminal_window_profile_list_changed_cb),
                                         window);
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (object));
+  if (screen)
+    g_signal_handlers_disconnect_by_func (screen,
+                                          G_CALLBACK (terminal_window_window_manager_changed_cb),
+                                          window);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
