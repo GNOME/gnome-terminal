@@ -279,39 +279,9 @@ encodings_notify_cb (GConfClient *client,
                      gpointer     user_data)
 {
   GConfValue *val;
-  GSList *strings;
-  GSList *tmp;
+  GSList *strings, *tmp;
   GHashTable *table;
   const char *charset;
-
-  /* FIXME handle whether the entry is writable
-   */
-
-  val = gconf_entry_get_value (entry);
-  if (val == NULL ||
-      val->type != GCONF_VALUE_LIST ||
-      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
-    strings = NULL;
-  else
-    {
-      GSList *tmp;
-
-      strings = NULL;
-      tmp = gconf_value_get_list (val);
-      while (tmp != NULL)
-        {
-          GConfValue *v = tmp->data;
-          g_assert (v->type == GCONF_VALUE_STRING);
-
-          if (gconf_value_get_string (v))
-            {
-              strings = g_slist_prepend (strings,
-                                         (char*) gconf_value_get_string (v));
-            }
-          
-          tmp = tmp->next;
-        }
-    }
 
 #if 1
   g_slist_foreach (active_encodings, (GFunc) terminal_encoding_free,
@@ -344,12 +314,25 @@ encodings_notify_cb (GConfClient *client,
 		           GINT_TO_POINTER (g_quark_from_string (charset)));
     }
 
+  val = gconf_entry_get_value (entry);
+  if (val != NULL &&
+      val->type == GCONF_VALUE_LIST &&
+      gconf_value_get_list_type (val) == GCONF_VALUE_STRING)
+    strings = gconf_value_get_list (val);
+  else
+    strings = NULL;
+
   for (tmp = strings; tmp != NULL; tmp = tmp->next)
     {
+      GConfValue *v = (GConfValue *) tmp->data;
       const TerminalEncoding *e;
       TerminalEncoding *encoding;
       charset = tmp->data;
       
+      charset = gconf_value_get_string (v);
+      if (!charset)
+        continue;
+
       if (strcmp (charset, "current") == 0)
         g_get_charset (&charset);
       
@@ -390,9 +373,6 @@ encodings_notify_cb (GConfClient *client,
   g_hash_table_destroy (table);
   
   update_active_encoding_tree_models ();
-
-  /* note we didn't copy the strings themselves, so don't free them */
-  g_slist_free (strings);
 }
 
 GSList*
