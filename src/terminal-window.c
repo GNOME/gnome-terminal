@@ -75,7 +75,7 @@ struct _TerminalWindowPrivate
   guint present_on_insert : 1;
 };
 
-#define PROFILE_DATA_KEY I_("Terminal::Profile")
+#define PROFILE_DATA_KEY "GT::Profile"
 
 
 #define FILE_NEW_TERMINAL_TAB_UI_PATH     "/menubar/File/FileNewTabProfiles"
