@@ -1337,7 +1337,7 @@ terminal_window_init (TerminalWindow *window)
       { "PopupCopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
-      { "PopupTerminalProfiles", NULL, N_("_Profiles") },
+      { "PopupTerminalProfiles", NULL, N_("P_rofiles") },
       { "PopupCopy", GTK_STOCK_COPY, NULL, NULL,
         NULL,
         G_CALLBACK (edit_copy_callback) },
@@ -1362,7 +1362,7 @@ terminal_window_init (TerminalWindow *window)
   const GtkToggleActionEntry toggle_menu_entries[] =
     {
       /* View Menu */
-      { "ViewMenubar", NULL, N_("Show Menu_bar"), NULL,
+      { "ViewMenubar", NULL, N_("Show _Menubar"), NULL,
         NULL,
         G_CALLBACK (view_menubar_toggled_callback),
         FALSE },
