@@ -277,7 +277,9 @@ notebook_page_switch_cb (GtkNotebook *notebook,
         screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
+        g_signal_handlers_block_by_func (action, G_CALLBACK (tab_action_activate_cb), menu);
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
+        g_signal_handlers_unblock_by_func (action, G_CALLBACK (tab_action_activate_cb), menu);
 }
 
 static void
