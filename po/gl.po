@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-27 19:36+0200\n"
-"PO-Revision-Date: 2008-04-27 19:38+0200\n"
+"POT-Creation-Date: 2008-05-31 17:46+0200\n"
+"PO-Revision-Date: 2008-05-31 17:54+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -24,9 +24,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1)\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:97
-#: ../src/terminal-accels.c:168 ../src/terminal-profile.c:253
-#: ../src/terminal-window.c:1256 ../src/terminal.c:1208
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
+#: ../src/terminal-accels.c:167 ../src/terminal.c:1173
+#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1394
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -34,527 +34,166 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Usar a liña de comandos"
 
-#: ../src/encoding.c:56
-msgid "Current Locale"
-msgstr "Configuración rexional actual"
-
-#: ../src/encoding.c:59 ../src/encoding.c:85 ../src/encoding.c:128
-#: ../src/encoding.c:176 ../src/encoding.c:200
+#. { "UTF-8",	N_("Current Locale") },
+#: ../src/encoding.c:51 ../src/encoding.c:64 ../src/encoding.c:78
+#: ../src/encoding.c:100 ../src/encoding.c:111
 msgid "Western"
 msgstr "Occidental"
 
-#: ../src/encoding.c:61 ../src/encoding.c:130 ../src/encoding.c:156
-#: ../src/encoding.c:196
+#: ../src/encoding.c:52 ../src/encoding.c:79 ../src/encoding.c:90
+#: ../src/encoding.c:109
 msgid "Central European"
 msgstr "Europa Central"
 
-#: ../src/encoding.c:63
+#: ../src/encoding.c:53
 msgid "South European"
 msgstr "Europa do Sur"
 
-#: ../src/encoding.c:65 ../src/encoding.c:81 ../src/encoding.c:210
+#: ../src/encoding.c:54 ../src/encoding.c:62 ../src/encoding.c:116
 msgid "Baltic"
 msgstr "Báltico"
 
-#: ../src/encoding.c:67 ../src/encoding.c:132 ../src/encoding.c:145
-#: ../src/encoding.c:149 ../src/encoding.c:160 ../src/encoding.c:198
+#: ../src/encoding.c:55 ../src/encoding.c:80 ../src/encoding.c:86
+#: ../src/encoding.c:87 ../src/encoding.c:92 ../src/encoding.c:110
 msgid "Cyrillic"
 msgstr "Cirílico"
 
-#: ../src/encoding.c:69 ../src/encoding.c:138 ../src/encoding.c:154
-#: ../src/encoding.c:208
+#: ../src/encoding.c:56 ../src/encoding.c:83 ../src/encoding.c:89
+#: ../src/encoding.c:115
 msgid "Arabic"
 msgstr "Árabe"
 
-#: ../src/encoding.c:71 ../src/encoding.c:166 ../src/encoding.c:202
+#: ../src/encoding.c:57 ../src/encoding.c:95 ../src/encoding.c:112
 msgid "Greek"
 msgstr "Grego"
 
-#: ../src/encoding.c:73
+#: ../src/encoding.c:58
 msgid "Hebrew Visual"
 msgstr "Hebreo visual"
 
-#: ../src/encoding.c:75 ../src/encoding.c:136 ../src/encoding.c:172
-#: ../src/encoding.c:206
+#: ../src/encoding.c:59 ../src/encoding.c:82 ../src/encoding.c:98
+#: ../src/encoding.c:114
 msgid "Hebrew"
 msgstr "Hebreo"
 
-#: ../src/encoding.c:77 ../src/encoding.c:134 ../src/encoding.c:180
-#: ../src/encoding.c:204
+#: ../src/encoding.c:60 ../src/encoding.c:81 ../src/encoding.c:102
+#: ../src/encoding.c:113
 msgid "Turkish"
 msgstr "Turco"
 
-#: ../src/encoding.c:79
+#: ../src/encoding.c:61
 msgid "Nordic"
 msgstr "Nórdico"
 
-#: ../src/encoding.c:83
+#: ../src/encoding.c:63
 msgid "Celtic"
 msgstr "Celta"
 
-#: ../src/encoding.c:87 ../src/encoding.c:178
+#: ../src/encoding.c:65 ../src/encoding.c:101
 msgid "Romanian"
 msgstr "Romanés"
 
-#: ../src/encoding.c:90 ../src/encoding.c:92 ../src/encoding.c:94
-#: ../src/encoding.c:96 ../src/encoding.c:98
+#. These encodings do NOT pass-through ASCII, so are always rejected.
+#. * FIXME: why are they in this table; or rather why do we need
+#. * the ASCII pass-through requirement?
+#.
+#: ../src/encoding.c:66 ../src/encoding.c:123 ../src/encoding.c:124
+#: ../src/encoding.c:125 ../src/encoding.c:126
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/encoding.c:101
+#: ../src/encoding.c:67
 msgid "Armenian"
 msgstr "Armenio"
 
-#: ../src/encoding.c:103 ../src/encoding.c:105 ../src/encoding.c:114
+#: ../src/encoding.c:68 ../src/encoding.c:69 ../src/encoding.c:73
 msgid "Chinese Traditional"
 msgstr "Chinés tradicional"
 
-#: ../src/encoding.c:107
+#: ../src/encoding.c:70
 msgid "Cyrillic/Russian"
 msgstr "Cirílico/Ruso"
 
-#: ../src/encoding.c:110 ../src/encoding.c:141 ../src/encoding.c:185
+#: ../src/encoding.c:71 ../src/encoding.c:84 ../src/encoding.c:104
 msgid "Japanese"
 msgstr "Xaponés"
 
-#: ../src/encoding.c:112 ../src/encoding.c:143 ../src/encoding.c:147
-#: ../src/encoding.c:191
+#: ../src/encoding.c:72 ../src/encoding.c:85 ../src/encoding.c:107
+#: ../src/encoding.c:127
 msgid "Korean"
 msgstr "Coreano"
 
-#: ../src/encoding.c:117 ../src/encoding.c:119 ../src/encoding.c:121
-#: ../src/encoding.c:125
+#: ../src/encoding.c:74 ../src/encoding.c:75 ../src/encoding.c:76
 msgid "Chinese Simplified"
 msgstr "Chinés simplificado"
 
-#: ../src/encoding.c:123
+#: ../src/encoding.c:77
 msgid "Georgian"
 msgstr "Xeorxiano"
 
-#: ../src/encoding.c:151 ../src/encoding.c:182
+#: ../src/encoding.c:88 ../src/encoding.c:103
 msgid "Cyrillic/Ukrainian"
 msgstr "Cirílico/Ucraíno"
 
-#: ../src/encoding.c:158
+#: ../src/encoding.c:91
 msgid "Croatian"
 msgstr "Croata"
 
-#: ../src/encoding.c:162
+#: ../src/encoding.c:93
 msgid "Hindi"
 msgstr "Hindi"
 
-#: ../src/encoding.c:164
+#: ../src/encoding.c:94
 msgid "Persian"
 msgstr "Persa"
 
-#: ../src/encoding.c:168
+#: ../src/encoding.c:96
 msgid "Gujarati"
 msgstr "Guxarati"
 
-#: ../src/encoding.c:170
+#: ../src/encoding.c:97
 msgid "Gurmukhi"
 msgstr "Gurmukhi"
 
-#: ../src/encoding.c:174
+#: ../src/encoding.c:99
 msgid "Icelandic"
 msgstr "Islandés"
 
-#: ../src/encoding.c:187 ../src/encoding.c:193 ../src/encoding.c:212
+#: ../src/encoding.c:105 ../src/encoding.c:108 ../src/encoding.c:117
 msgid "Vietnamese"
 msgstr "Vietnamita"
 
-#: ../src/encoding.c:189
+#: ../src/encoding.c:106
 msgid "Thai"
 msgstr "Tailandés"
 
-#: ../src/encoding.c:378
+#: ../src/encoding.c:325
 msgid "User Defined"
 msgstr "Definido polo usuario"
 
-#: ../src/encoding.c:742 ../src/encoding.c:806
+#: ../src/encoding.c:599 ../src/encoding.c:624
 msgid "_Description"
 msgstr "_Descrición"
 
-#: ../src/encoding.c:751 ../src/encoding.c:815
+#: ../src/encoding.c:608 ../src/encoding.c:633
 msgid "_Encoding"
 msgstr "_Codificación"
 
-#: ../src/encoding.c:982
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal encoding list "
-"changes. (%s)\n"
-msgstr ""
-"Houbo un erro ao subscribir á notificación das modificacións da lista das "
-"codificacións do terminal. (%s)\n"
+#: ../src/encoding.c:690
+msgid "Current Locale"
+msgstr "Configuración rexional actual"
 
-#: ../src/gnome-terminal.glade2.h:1
-msgid "    "
-msgstr "    "
-
-#: ../src/gnome-terminal.glade2.h:2
-msgid "<b>Background</b>"
-msgstr "<b>Fondo</b>"
-
-#: ../src/gnome-terminal.glade2.h:3
-msgid "<b>Command</b>"
-msgstr "<b>Comando</b>"
-
-#: ../src/gnome-terminal.glade2.h:4
-msgid "<b>Compatibility</b>"
-msgstr "<b>Compatibilidade</b>"
-
-#: ../src/gnome-terminal.glade2.h:5
-msgid "<b>Foreground and Background</b>"
-msgstr "<b>Primeiro plano e fondo</b>"
-
-#: ../src/gnome-terminal.glade2.h:6
-msgid "<b>Palette</b>"
-msgstr "<b>Paleta</b>"
-
-#: ../src/gnome-terminal.glade2.h:7
-msgid "<b>Scrolling</b>"
-msgstr "<b>Desprazamento</b>"
-
-#: ../src/gnome-terminal.glade2.h:8
-msgid "<b>Title</b>"
-msgstr "<b>Título</b>"
-
-#: ../src/gnome-terminal.glade2.h:9
-msgid ""
-"<small><i><b>Note:</b> Terminal applications have these colors available to "
-"them.</i></small>"
-msgstr ""
-"<small><i><b>Nota:</b> As aplicacións do terminal teñen estas cores "
-"dispoñibles.</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:10
-msgid ""
-"<small><i><b>Note:</b> The command running inside the terminal may "
-"dynamically set a new title.</i></small>"
-msgstr ""
-"<small><i><b>Nota:</b> O comando en execución dentro do terminal pode "
-"establecer dinamicamente un título novo.</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:11
-msgid ""
-"<small><i><b>Note:</b> These options may cause some applications to behave "
-"incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior.</"
-"i></small>"
-msgstr ""
-"<small><i><b>Nota:</b> estas opcións poden provocar que algunhas aplicacións "
-"se comporten incorrectamente. Están aquí só para permitirlle obviar "
-"determinadas aplicacións e sistemas operativos que esperan un comportamento "
-"do terminal diferente.</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:12
-msgid "<small><i>Maximum</i></small>"
-msgstr "<small><i>Máximo</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:13
-msgid "<small><i>None</i></small>"
-msgstr "<small><i>Ningún</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:14
-msgid ""
-"ASCII DEL\n"
-"Escape sequence\n"
-"Control-H"
-msgstr ""
-"ASCII DEL\n"
-"Secuencia de escape\n"
-"Control-H"
-
-#: ../src/gnome-terminal.glade2.h:17
+#: ../src/encodings-dialog.glade.h:1
 msgid "A_vailable encodings:"
 msgstr "Codificacións _dispoñibles:"
 
-#: ../src/gnome-terminal.glade2.h:18
-msgid "Add encoding to menu."
-msgstr "Engadir codificación ao menú."
-
-#: ../src/gnome-terminal.glade2.h:19
+#: ../src/encodings-dialog.glade.h:2
 msgid "Add or Remove Terminal Encodings"
 msgstr "Engadir ou eliminar as codificacións do terminal"
 
-#: ../src/gnome-terminal.glade2.h:20
-msgid "Background _image"
-msgstr "_Imaxe de fondo"
-
-#: ../src/gnome-terminal.glade2.h:21
-msgid "Background image _scrolls"
-msgstr "A imaxe de fondo _desprázase"
-
-#: ../src/gnome-terminal.glade2.h:22
-msgid "Built-_in schemes:"
-msgstr "Esquemas _incorporados:"
-
-#: ../src/gnome-terminal.glade2.h:23
-msgid "Built-in _schemes:"
-msgstr "E_squemas incorporados:"
-
-#: ../src/gnome-terminal.glade2.h:24
-msgid "C_reate"
-msgstr "C_rear"
-
-#: ../src/gnome-terminal.glade2.h:25
-msgid "Choose A Profile Icon"
-msgstr "Seleccione unha icona de perfil"
-
-#: ../src/gnome-terminal.glade2.h:26
-msgid "Choose A Terminal Font"
-msgstr "Escolla un tipo de letra do terminal"
-
-#: ../src/gnome-terminal.glade2.h:27
-msgid "Choose Terminal Background Color"
-msgstr "Escolla a cor de fondo do terminal"
-
-#: ../src/gnome-terminal.glade2.h:28
-msgid "Choose Terminal Text Color"
-msgstr "Escolla a cor de texto do terminal"
-
-#: ../src/gnome-terminal.glade2.h:29
-msgid "Color _palette:"
-msgstr "_Paleta de cores:"
-
-#: ../src/gnome-terminal.glade2.h:30
-msgid "Colors"
-msgstr "Cores"
-
-#: ../src/gnome-terminal.glade2.h:31
-msgid "Compatibility"
-msgstr "Compatibilidade"
-
-#: ../src/gnome-terminal.glade2.h:32
-msgid "Custom"
-msgstr "Personalizar"
-
-#: ../src/gnome-terminal.glade2.h:33
-msgid "Custom co_mmand:"
-msgstr "Co_mando personalizado:"
-
-#: ../src/gnome-terminal.glade2.h:34
-msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
-msgstr ""
-"Desactivar todas as teclas de acceso ao me_nú (como Alt+f para abrir o menú "
-"Ficheiro)"
-
-#: ../src/gnome-terminal.glade2.h:35
-msgid "Disable m_enu shortcut key (F10 by default)"
-msgstr "Desactivar o atallo de teclado para o m_enú (F10 por defecto)"
-
-#: ../src/gnome-terminal.glade2.h:36
+#: ../src/encodings-dialog.glade.h:3
 msgid "E_ncodings shown in menu:"
 msgstr "Co_dificacións mostradas no menú:"
-
-#: ../src/gnome-terminal.glade2.h:37
-msgid "Effects"
-msgstr "Efectos"
-
-#: ../src/gnome-terminal.glade2.h:38
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"Saír do terminal\n"
-"Reiniciar o comando\n"
-"Manter o terminal aberto"
-
-#: ../src/gnome-terminal.glade2.h:41
-msgid "General"
-msgstr "Xeral"
-
-#: ../src/gnome-terminal.glade2.h:42
-msgid "Image _file:"
-msgstr "_Ficheiro de imaxe:"
-
-#: ../src/gnome-terminal.glade2.h:43
-msgid "Initial _title:"
-msgstr "_Título inicial:"
-
-#: ../src/gnome-terminal.glade2.h:44
-msgid "Keyboard Shortcuts"
-msgstr "Atallos de teclado"
-
-#: ../src/gnome-terminal.glade2.h:45 ../src/terminal-accels.c:105
-msgid "New Profile"
-msgstr "Novo perfil"
-
-#: ../src/gnome-terminal.glade2.h:46
-msgid ""
-"On the left side\n"
-"On the right side\n"
-"Disabled"
-msgstr ""
-"No lado esquerdo\n"
-"No lado dereito\n"
-"Desactivado"
-
-#: ../src/gnome-terminal.glade2.h:49
-msgid "Password:"
-msgstr "Contrasinal:"
-
-#: ../src/gnome-terminal.glade2.h:50
-msgid "Profile Editor"
-msgstr "Editor de perfís"
-
-#: ../src/gnome-terminal.glade2.h:51
-msgid "Profile _icon:"
-msgstr "_Icona do perfil:"
-
-#: ../src/gnome-terminal.glade2.h:52
-msgid "Profile _name:"
-msgstr "_Nome do perfil:"
-
-#: ../src/gnome-terminal.glade2.h:53
-msgid "Remove encoding from menu."
-msgstr "Eliminar a codificación do menú."
-
-#: ../src/gnome-terminal.glade2.h:54
-msgid ""
-"Replaces initial title\n"
-"Goes before initial title\n"
-"Goes after initial title\n"
-"Isn't displayed"
-msgstr ""
-"Substitúe o título inicial\n"
-"Antecede ao título inicial\n"
-"Precede ao título inicial\n"
-"Non se mostra"
-
-#: ../src/gnome-terminal.glade2.h:58
-msgid "Ru_n a custom command instead of my shell"
-msgstr "E_xecutar un comando personalizado en vez do intérprete de comandos"
-
-#: ../src/gnome-terminal.glade2.h:59
-msgid "S/Key Challenge Response"
-msgstr "Resposta ao desafío S/Key"
-
-#: ../src/gnome-terminal.glade2.h:60
-msgid "S_hade transparent or image background:"
-msgstr "_Sombra transparente ou imaxe de fondo:"
-
-#: ../src/gnome-terminal.glade2.h:61
-msgid "Sc_roll on output"
-msgstr "Desp_razar a saída"
-
-#: ../src/gnome-terminal.glade2.h:62
-msgid "Scr_ollback:"
-msgstr "Despra_zamento cara a atrás:"
-
-#: ../src/gnome-terminal.glade2.h:63
-msgid "Scroll on _keystroke"
-msgstr "Desprazar cunha _pulsación de tecla"
-
-#: ../src/gnome-terminal.glade2.h:64
-msgid "Scrolling"
-msgstr "Desprazamento"
-
-#: ../src/gnome-terminal.glade2.h:65
-msgid "Select Background Image"
-msgstr "Selecciona unha imaxe de fondo"
-
-#: ../src/gnome-terminal.glade2.h:66
-msgid "Select-by-_word characters:"
-msgstr "Caracteres que _separan palabras:"
-
-#: ../src/gnome-terminal.glade2.h:67
-msgid "Show _menubar by default in new terminals"
-msgstr "Mostrar por defecto a barra de _menú nos novos terminais"
-
-#: ../src/gnome-terminal.glade2.h:68
-msgid "Terminal _bell"
-msgstr "_Campá do terminal"
-
-#: ../src/gnome-terminal.glade2.h:69
-msgid "Title and Command"
-msgstr "Título e comando"
-
-#: ../src/gnome-terminal.glade2.h:70
-msgid "Use colors from s_ystem theme"
-msgstr "Usar as cores do tema do _sistema"
-
-#: ../src/gnome-terminal.glade2.h:71
-msgid "When command _exits:"
-msgstr "Cando o comando _finaliza:"
-
-#: ../src/gnome-terminal.glade2.h:72
-msgid "_Allow bold text"
-msgstr "Permitir texto en _negra"
-
-#: ../src/gnome-terminal.glade2.h:73
-msgid "_Background color:"
-msgstr "_Cor de fondo:"
-
-#: ../src/gnome-terminal.glade2.h:74
-msgid "_Backspace key generates:"
-msgstr "A tecla de _retroceso xera:"
-
-#: ../src/gnome-terminal.glade2.h:75
-msgid "_Base on:"
-msgstr "_Basear en:"
-
-#: ../src/gnome-terminal.glade2.h:76
-msgid "_Delete key generates:"
-msgstr "A tecla _suprimir xera:"
-
-#: ../src/gnome-terminal.glade2.h:77
-msgid "_Dynamically-set title:"
-msgstr "Título definido _dinamicamente:"
-
-#: ../src/gnome-terminal.glade2.h:78
-msgid "_Font:"
-msgstr "_Tipo de letra:"
-
-#: ../src/gnome-terminal.glade2.h:79
-msgid "_None (use solid color)"
-msgstr "_Ningún (usar unha cor sólida)"
-
-#: ../src/gnome-terminal.glade2.h:80
-msgid "_Profile name:"
-msgstr "Nome do _perfil:"
-
-#: ../src/gnome-terminal.glade2.h:81
-msgid "_Reset Compatibility Options to Defaults"
-msgstr "_Restablecer as opcións de compatibilidade predeterminadas"
-
-#: ../src/gnome-terminal.glade2.h:82
-msgid "_Run command as a login shell"
-msgstr "_Executar o comando como un intérprete de comandos de inicio de sesión"
-
-#: ../src/gnome-terminal.glade2.h:83
-msgid "_Scrollbar is:"
-msgstr "A _barra de desprazamento é:"
-
-#: ../src/gnome-terminal.glade2.h:84
-msgid "_Shortcut keys:"
-msgstr "_Atallos de teclado:"
-
-#: ../src/gnome-terminal.glade2.h:85
-msgid "_Text color:"
-msgstr "Cor do _texto:"
-
-#: ../src/gnome-terminal.glade2.h:86
-msgid "_Transparent background"
-msgstr "Fondo _transparente"
-
-#: ../src/gnome-terminal.glade2.h:87
-msgid "_Update login records when command is launched"
-msgstr "_Actualizar os rexistros de inicio de sesión ao iniciar o comando"
-
-#: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system fixed width font"
-msgstr "_Usar o tipo de letra de largura fixa do sistema"
-
-#: ../src/gnome-terminal.glade2.h:89
-msgid "_lines"
-msgstr "_liñas"
-
-#: ../src/gnome-terminal.glade2.h:90
-msgid "kilo_bytes"
-msgstr "kilo_bytes"
 
 #: ../src/gnome-terminal.schemas.in.h:1
 msgid ""
@@ -634,39 +273,31 @@ msgstr ""
 "Bold 14\"."
 
 #: ../src/gnome-terminal.schemas.in.h:10
-msgid ""
-"An X font name. See the X man page (type \"man X\") for more details on the "
-"format of X font names."
-msgstr ""
-"Un nome do tipo de letra de X. Vexa a páxina man de X (escriba \"man X\") "
-"para máis detalles sobre o formato dos nomes do tipo de letra de X."
-
-#: ../src/gnome-terminal.schemas.in.h:11
 msgid "Background image"
 msgstr "Imaxe de fondo"
 
-#: ../src/gnome-terminal.schemas.in.h:12
+#: ../src/gnome-terminal.schemas.in.h:11
 msgid "Background type"
 msgstr "Tipo de fondo"
 
-#: ../src/gnome-terminal.schemas.in.h:13
+#: ../src/gnome-terminal.schemas.in.h:12
 msgid "Characters that are considered \"part of a word\""
 msgstr "Caracteres considerados \"parte dunha palabra\""
 
-#: ../src/gnome-terminal.schemas.in.h:14
+#: ../src/gnome-terminal.schemas.in.h:13
 msgid "Custom command to use instead of the shell"
 msgstr ""
 "Comando personalizado que hai que usar en vez do intérprete de comandos"
 
-#: ../src/gnome-terminal.schemas.in.h:15
+#: ../src/gnome-terminal.schemas.in.h:14
 msgid "Default"
 msgstr "Predeterminado"
 
-#: ../src/gnome-terminal.schemas.in.h:16
+#: ../src/gnome-terminal.schemas.in.h:15
 msgid "Default color of terminal background"
 msgstr "Cor predeterminada do fondo do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:17
+#: ../src/gnome-terminal.schemas.in.h:16
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -675,11 +306,11 @@ msgstr ""
 "(poden ser díxitos hexadecimais no estilo HTML ou un nome de cor en inglés "
 "como \"red\")."
 
-#: ../src/gnome-terminal.schemas.in.h:18
+#: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of text in the terminal"
 msgstr "Cor predeterminada do texto no terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:19
+#: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -688,52 +319,52 @@ msgstr ""
 "(poden ser díxitos hexadecimais no estilo HTML ou un nome de cor en inglés "
 "como \"red\")."
 
-#: ../src/gnome-terminal.schemas.in.h:20
+#: ../src/gnome-terminal.schemas.in.h:19
 msgid "Effect of the Backspace key"
 msgstr "Efecto da tecla de retroceso"
 
-#: ../src/gnome-terminal.schemas.in.h:21
+#: ../src/gnome-terminal.schemas.in.h:20
 msgid "Effect of the Delete key"
 msgstr "Efecto da tecla suprimir"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:21
 msgid "Filename of a background image."
 msgstr "Nome do ficheiro dunha imaxe de fondo."
 
-#: ../src/gnome-terminal.schemas.in.h:23
+#: ../src/gnome-terminal.schemas.in.h:22
 msgid "Font"
 msgstr "Tipo de letra"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Highlight S/Key challenges"
 msgstr "Realzar desafíos S/Key"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "How much to darken the background image"
 msgstr "Canto hai que escurecer a imaxe de fondo"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:27
 msgid "Human-readable name of the profile"
 msgstr "Nome lexible por humanos do perfil"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:28
 msgid "Human-readable name of the profile."
 msgstr "Nome lexible por humanos do perfil."
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "Icon for terminal window"
 msgstr "Icona para a ventá do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr ""
 "Icona que hai que usar nos separadores/ventás que conteñen este perfil."
 
 # Fixen unha tradución supoñendo que a versión inglesa tiña as opcións
 # mal explicadas, se é certo aparecerá en fuzzy pronto
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -746,13 +377,13 @@ msgstr ""
 "Os valores posibles son (\"replace\"), (\"before\"), (\"after\") e (\"ignore"
 "\")."
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Se é verdadeiro, permite que as aplicacións no terminal mostren o texto en "
 "negra."
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -760,7 +391,7 @@ msgstr ""
 "Se é verdadeiro, non emite ningún ruído cando as aplicacións envíen a "
 "secuencia de escape para a campá do terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
@@ -770,13 +401,13 @@ msgstr ""
 "sen a extensión X RENDER, a cal proporciona unha mellora considerable de "
 "rendemento nestes casos."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr ""
 "Se é verdadeiro, ao premer unha tecla a barra de desprazamento vai até o "
 "final."
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -784,7 +415,7 @@ msgstr ""
 "Se é verdadeiro, a imaxe de fondo desprázase co texto en primeiro plano; se "
 "é falso, mantense a imaxe nunha posición fixa e o texto desprázase sobre ela."
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -792,7 +423,7 @@ msgstr ""
 "Se é verdadeiro, o comando dentro do terminal lanzarase como un intérprete "
 "de comandos de inicio de sesión (argv[0] terá un guión diante del.)"
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -800,7 +431,7 @@ msgstr ""
 "Se é verdadeiro, os ficheiros de rexistro do inicio de sesión utmp e wtmp "
 "actualizaranse ao lanzar o comando dentro do terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -809,7 +440,7 @@ msgstr ""
 "é monoespazado (en caso contrario, usará un tipo de letra o máis semellante "
 "posible)."
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -817,7 +448,7 @@ msgstr ""
 "Se é verdadeiro, o esquema de cores do tema usado para as caixas de texto "
 "será empregado para o terminal, en vez das cores proporcionadas polo usuario."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -825,14 +456,14 @@ msgstr ""
 "Se é verdadeiro, usarase o valor da definición custom_command en vez de "
 "executar un intérprete de comandos."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Se é verdadeiro, a barra de desprazamento irá ao final cando haxa unha nova "
 "saída no terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -844,7 +475,7 @@ msgstr ""
 "Se define a opción coa cadea especial \"disabled\", entón non haberá ningún "
 "atallo de teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -855,7 +486,7 @@ msgstr ""
 "opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -867,7 +498,7 @@ msgstr ""
 "coa cadea especial \"disabled\", entón non haberá ningún atallo de teclado "
 "para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -879,7 +510,7 @@ msgstr ""
 "+. Se define a opción coa cadea especial \"disabled\", entón non haberá "
 "ningún atallo de teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -890,7 +521,7 @@ msgstr ""
 "coa cadea especial \"disabled\", entón non haberá ningún atallo de teclado "
 "para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -902,7 +533,7 @@ msgstr ""
 "a opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -914,7 +545,7 @@ msgstr ""
 "a opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -926,7 +557,7 @@ msgstr ""
 "GTK+. Se define a opción coa cadea especial \"disabled\", entón non haberá "
 "ningún atallo de teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -938,7 +569,7 @@ msgstr ""
 "cadea especial \"disabled\", entón non haberá ningún atallo de teclado para "
 "esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -950,7 +581,7 @@ msgstr ""
 "cadea especial \"disabled\", entón non haberá ningún atallo de teclado para "
 "esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -962,7 +593,7 @@ msgstr ""
 "define a opción coa cadea especial \"disabled\", entón non haberá ningún "
 "atallo de teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -974,7 +605,7 @@ msgstr ""
 "a opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -986,7 +617,7 @@ msgstr ""
 "opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -998,7 +629,7 @@ msgstr ""
 "cadea especial \"disabled\", entón non haberá ningún atallo de teclado para "
 "esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -1010,7 +641,7 @@ msgstr ""
 "opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -1022,7 +653,7 @@ msgstr ""
 "opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -1034,7 +665,7 @@ msgstr ""
 "opción coa cadea especial \"disabled\", entón non haberá ningún atallo de "
 "teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -1046,87 +677,87 @@ msgstr ""
 "define a opción coa cadea especial \"disabled\", entón non haberá ningún "
 "atallo de teclado para esta acción."
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid "Keyboard shortcut to close a tab"
 msgstr "Atallo de teclado para pechar un separador"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid "Keyboard shortcut to close a window"
 msgstr "Atallo de teclado para pechar unha ventá"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid "Keyboard shortcut to copy text"
 msgstr "Atallo de teclado para copiar texto"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Atallo de teclado para crear un perfil novo"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid "Keyboard shortcut to launch help"
 msgstr "Atallo de teclado para executar a axuda"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid "Keyboard shortcut to make font larger"
 msgstr "Atallo de teclado para facer a o tipo de letra máis grande"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Atallo de teclado para pór o tipo de letra no tamaño normal"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Atallo de teclado para facer o tipo de letra máis pequeno"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Atallo de teclado para abrir un separador novo"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid "Keyboard shortcut to open a new window"
 msgstr "Atallo de teclado para abrir unha ventá nova"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid "Keyboard shortcut to paste text"
 msgstr "Atallo de teclado para pegar texto"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Atallo de teclado para restaurar e limpar o terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Atallo de teclado para restaurar o terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Atallo de teclado para definir o título do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Atallo de teclado para cambiar ao seguinte separador"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Atallo de teclado para cambiar ao separador anterior"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Atallo de teclado para alternar o modo de pantalla completa"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Atallo de teclado para alternar a visibilidade da barra de menú"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "List of available encodings"
 msgstr "Lista das codificacións dispoñibles"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "List of profiles"
 msgstr "Lista dos perfís"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -1134,7 +765,7 @@ msgstr ""
 "Lista dos perfís coñecidos polo Gnome-terminal. Esta lista contén cadeas "
 "referidas a subdirectorios relativos a /apps/gnome-terminal/profiles."
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -1144,11 +775,11 @@ msgstr ""
 "personalizar co gtkrc (gtk-menu-bar-accel = \"calqueracousa\"). Esta opción "
 "permite desactivar o atallo de teclado estándar para acceder á barra de menú."
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Number of lines to keep in scrollback"
 msgstr "Número de liñas que se manteñen no desprazamento"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -1160,13 +791,13 @@ msgstr ""
 "rexéitanse. Teña coidado con esta definición porque é o factor principal que "
 "determina canta memoria utilizará o terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Palette for terminal applications"
 msgstr "Paleta para as aplicacións do terminal"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -1175,11 +806,11 @@ msgstr ""
 "desafío S/Key. Ao escribir un contrasinal no diálogo, este enviarase ao "
 "terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Position of the scrollbar"
 msgstr "Posición da barra de desprazamento"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -1187,24 +818,24 @@ msgstr ""
 "Os valores posibles son \"close\" para pechar o terminal e \"restart\" para "
 "reiniciar o comando."
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Perfil usado ao abrir unha nova ventá ou separador. Debe estar en "
 "profile_list."
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:92
 msgid "Profile to use for new terminals"
 msgstr "Perfil usado para os terminais novos"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Executar este comando en vez do intérprete de comandos se use_custom_command "
 "é verdadeiro."
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -1219,7 +850,7 @@ msgstr ""
 "\"ascii-del\" é normalmente considerado como a configuración correcta para a "
 "tecla de retroceso."
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -1234,7 +865,7 @@ msgstr ""
 "sequence\" é normalmente considerado como a configuración correcta para a "
 "tecla suprimir."
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -1244,6 +875,15 @@ msgstr ""
 "se executen dentro del. Esta é esa paleta, na forma dunha lista de cores "
 "separadas por dous puntos. Os nomes de cores deben ter formato hexadecimal, "
 "por exemplo: \"#FF00FF\""
+
+#: ../src/gnome-terminal.schemas.in.h:98
+msgid ""
+"The possible values are \"system\" to use the global cursor blinking "
+"settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr ""
+"Os posibles valores son \"system\" para usar a configuración global de "
+"intermitencia do cursor, ou \"on\" ou \"off\" para establecer o modo "
+"explicitamente."
 
 #: ../src/gnome-terminal.schemas.in.h:99
 msgid "Title for terminal"
@@ -1328,12 +968,16 @@ msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Indica se se pide unha confirmación ao pechar as ventás do terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:112
+msgid "Whether to blink the cursor"
+msgstr "Indica se facer intermitencia no cursor"
+
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid "Whether to disable anti-aliasing without the X RENDER extension"
 msgstr ""
 "Indica se se debe desactivar o suavizado do tipo de letra sen a extensión X "
 "RENDER"
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1343,50 +987,50 @@ msgstr ""
 "teclas poden interferir con algunhas aplicacións executadas no terminal, así "
 "que existe a posibilidade de desactivalas."
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Indica se se lanza o comando no terminal como un intérprete de comandos de "
 "inicio de sesión"
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Whether to run a custom command instead of the shell"
 msgstr ""
 "Indica se se executa un comando personalizado en vez do intérprete de "
 "comandos"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid "Whether to scroll background image"
 msgstr "Indica se se despraza a imaxe de fondo"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Indica se se despraza ao final ao premer unha tecla"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:119
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Indica se se despraza ao final cando hai unha saída nova"
 
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid "Whether to show menubar in new windows/tabs"
 msgstr ""
 "Indica se se mostra a barra de menú nas novas ventás ou nos separadores"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid "Whether to silence terminal bell"
 msgstr "Indica se se silencia a campá do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Indica se se actualizan os rexistros de inicio de sesión ao lanzar un "
 "comando do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Indica se se usan as cores do tema no widget do terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Whether to use the system font"
 msgstr "Indica se se usa o tipo de letra do sistema"
 
@@ -1396,607 +1040,1034 @@ msgstr "Indica se se usa o tipo de letra do sistema"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "[UTF-8,current]"
 msgstr "[current,UTF-8,ISO-8859-15]"
 
-#: ../src/profile-editor.c:50
+#: ../src/keybinding-editor.glade.h:1
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "Activar o atallo de teclado para o m_enú (F10 por defecto)"
+
+#: ../src/keybinding-editor.glade.h:2
+msgid "Keyboard Shortcuts"
+msgstr "Atallos de teclado"
+
+#: ../src/keybinding-editor.glade.h:3
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+msgstr ""
+"Activar todas as teclas de acceso ao m_enú (como Alt+F para abrir o menú "
+"Ficheiro)"
+
+#: ../src/keybinding-editor.glade.h:4
+msgid "_Shortcut keys:"
+msgstr "_Atallos de teclado:"
+
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "Negro sobre amarelo claro"
 
-#: ../src/profile-editor.c:52
+#: ../src/profile-editor.c:50
 msgid "Black on white"
 msgstr "Negro sobre branco"
 
-#: ../src/profile-editor.c:54
+#: ../src/profile-editor.c:52
 msgid "Gray on black"
 msgstr "Gris sobre negro"
 
-#: ../src/profile-editor.c:56
+#: ../src/profile-editor.c:54
 msgid "Green on black"
 msgstr "Verde sobre negro"
 
-#: ../src/profile-editor.c:58
+#: ../src/profile-editor.c:56
 msgid "White on black"
 msgstr "Branco sobre negro"
 
-#: ../src/profile-editor.c:71
-msgid "Tango"
-msgstr "Tango"
+#: ../src/profile-editor.c:440
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Erro ao analizar o comando: %s"
 
-#: ../src/profile-editor.c:72
-msgid "Linux console"
-msgstr "Consola Linux"
+#: ../src/profile-editor.c:460
+#, c-format
+msgid "Editing Profile “%s”"
+msgstr "Editando o perfil \"%s\""
 
-#: ../src/profile-editor.c:73
-msgid "XTerm"
-msgstr "XTerm"
+#. Translators: %s will be a data size, e.g. "(about 500kB)"
+#: ../src/profile-editor.c:476
+#, c-format
+msgid "(about %s)"
+msgstr "(sobre %s)"
 
-#: ../src/profile-editor.c:74
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#: ../src/profile-editor.c:881
+#: ../src/profile-editor.c:614
 msgid "Images"
 msgstr "Imaxes"
 
-#: ../src/profile-editor.c:885
+#: ../src/profile-editor.c:618
 msgid "All Files"
 msgstr "Todos os ficheiros"
 
-#: ../src/profile-editor.c:1195
+#: ../src/profile-editor.c:734
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Escolla a paleta de cores %d"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:738
 #, c-format
 msgid "Palette entry %d"
 msgstr "Entrada %d da paleta"
 
-#: ../src/profile-editor.c:1476
-#, c-format
-msgid "Editing Profile \"%s\""
-msgstr "Editando o perfil \"%s\""
+#: ../src/profile-manager.glade.h:1
+msgid "Profiles"
+msgstr "Perfís"
 
-#: ../src/skey-popup.c:127
+#: ../src/profile-manager.glade.h:2
+msgid "_Profile used when launching a new terminal:"
+msgstr "Perfil que se _usa ao lanzar un terminal novo:"
+
+#: ../src/profile-new-dialog.glade.h:1
+msgid "C_reate"
+msgstr "C_rear"
+
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:104
+msgid "New Profile"
+msgstr "Novo perfil"
+
+#: ../src/profile-new-dialog.glade.h:3
+msgid "Profile _name:"
+msgstr "_Nome do perfil:"
+
+#: ../src/profile-new-dialog.glade.h:4
+msgid "_Base on:"
+msgstr "_Basear en:"
+
+#: ../src/profile-preferences.glade.h:1
+msgid "<b>Command</b>"
+msgstr "<b>Comando</b>"
+
+#: ../src/profile-preferences.glade.h:2
+msgid "<b>Foreground and Background</b>"
+msgstr "<b>Primeiro plano e fondo</b>"
+
+#: ../src/profile-preferences.glade.h:3
+msgid "<b>Palette</b>"
+msgstr "<b>Paleta</b>"
+
+#: ../src/profile-preferences.glade.h:4
+msgid "<b>Title</b>"
+msgstr "<b>Título</b>"
+
+#: ../src/profile-preferences.glade.h:5
+msgid ""
+"<small><i><b>Note:</b> Terminal applications have these colors available to "
+"them.</i></small>"
+msgstr ""
+"<small><i><b>Nota:</b> As aplicacións do terminal teñen estas cores "
+"dispoñibles.</i></small>"
+
+#: ../src/profile-preferences.glade.h:6
+msgid ""
+"<small><i><b>Note:</b> These options may cause some applications to behave "
+"incorrectly.  They are only here to allow you to work around certain "
+"applications and operating systems that expect different terminal behavior.</"
+"i></small>"
+msgstr ""
+"<small><i><b>Nota:</b> estas opcións poden provocar que algunhas aplicacións "
+"se comporten incorrectamente. Están aquí só para permitirlle obviar "
+"determinadas aplicacións e sistemas operativos que esperan un comportamento "
+"do terminal diferente.</i></small>"
+
+#: ../src/profile-preferences.glade.h:7
+msgid "<small><i>Maximum</i></small>"
+msgstr "<small><i>Máximo</i></small>"
+
+#: ../src/profile-preferences.glade.h:8
+msgid "<small><i>None</i></small>"
+msgstr "<small><i>Ningún</i></small>"
+
+#: ../src/profile-preferences.glade.h:9
+msgid ""
+"Automatic\n"
+"Control-H\n"
+"ASCII DEL\n"
+"Escape sequence"
+msgstr ""
+"Automático\n"
+"Control-H\n"
+"ASCII DEL\n"
+"Secuencia de escape"
+
+#: ../src/profile-preferences.glade.h:13
+msgid "Background"
+msgstr "Fondo"
+
+#: ../src/profile-preferences.glade.h:14
+msgid "Background image _scrolls"
+msgstr "A imaxe de fondo _desprázase"
+
+#: ../src/profile-preferences.glade.h:15
+msgid "Built-in _schemes:"
+msgstr "E_squemas incorporados:"
+
+#: ../src/profile-preferences.glade.h:16
+msgid "Built-in sche_mes:"
+msgstr "Esque_mas incorporados:"
+
+#: ../src/profile-preferences.glade.h:17
+msgid "Choose A Terminal Font"
+msgstr "Escolla un tipo de letra do terminal"
+
+#: ../src/profile-preferences.glade.h:18
+msgid "Choose Terminal Background Color"
+msgstr "Escolla a cor de fondo do terminal"
+
+#: ../src/profile-preferences.glade.h:19
+msgid "Choose Terminal Text Color"
+msgstr "Escolla a cor de texto do terminal"
+
+#: ../src/profile-preferences.glade.h:20
+msgid "Color p_alette:"
+msgstr "_Paleta de cores:"
+
+#: ../src/profile-preferences.glade.h:21
+msgid "Colors"
+msgstr "Cores"
+
+#: ../src/profile-preferences.glade.h:22
+msgid "Compatibility"
+msgstr "Compatibilidade"
+
+#: ../src/profile-preferences.glade.h:23
+msgid "Custom"
+msgstr "Personalizar"
+
+#: ../src/profile-preferences.glade.h:24
+msgid "Custom co_mmand:"
+msgstr "Co_mando personalizado:"
+
+#: ../src/profile-preferences.glade.h:25
+msgid ""
+"Exit the terminal\n"
+"Restart the command\n"
+"Hold the terminal open"
+msgstr ""
+"Saír do terminal\n"
+"Reiniciar o comando\n"
+"Manter o terminal aberto"
+
+#: ../src/profile-preferences.glade.h:28
+msgid "General"
+msgstr "Xeral"
+
+#: ../src/profile-preferences.glade.h:29
+msgid "Image _file:"
+msgstr "_Ficheiro de imaxe:"
+
+#: ../src/profile-preferences.glade.h:30
+msgid "Initial _title:"
+msgstr "_Título inicial:"
+
+#: ../src/profile-preferences.glade.h:31
+msgid ""
+"On the left side\n"
+"On the right side\n"
+"Disabled"
+msgstr ""
+"No lado esquerdo\n"
+"No lado dereito\n"
+"Desactivado"
+
+#: ../src/profile-preferences.glade.h:34
+msgid "Profile Editor"
+msgstr "Editor de perfís"
+
+#: ../src/profile-preferences.glade.h:35
+msgid ""
+"Replace initial title\n"
+"Append initial title\n"
+"Prepend initial title\n"
+"Keep initial title"
+msgstr ""
+"Substitúe o título inicial\n"
+"Antecede ao título inicial\n"
+"Precede ao título inicial\n"
+"Mantén o titulo inicial"
+
+#: ../src/profile-preferences.glade.h:39
+msgid "Ru_n a custom command instead of my shell"
+msgstr "E_xecutar un comando personalizado en vez do intérprete de comandos"
+
+#: ../src/profile-preferences.glade.h:40
+msgid "S_hade transparent or image background:"
+msgstr "_Sombra transparente ou imaxe de fondo:"
+
+#: ../src/profile-preferences.glade.h:41
+msgid "Scroll on _keystroke"
+msgstr "Desprazar cunha _pulsación de tecla"
+
+#: ../src/profile-preferences.glade.h:42
+msgid "Scroll on _output"
+msgstr "Desp_razar a saída"
+
+#: ../src/profile-preferences.glade.h:43
+msgid "Scroll_back:"
+msgstr "Despra_zamento cara a atrás:"
+
+#: ../src/profile-preferences.glade.h:44
+msgid "Scrolling"
+msgstr "Desprazamento"
+
+#: ../src/profile-preferences.glade.h:45
+msgid "Select Background Image"
+msgstr "Selecciona unha imaxe de fondo"
+
+#: ../src/profile-preferences.glade.h:46
+msgid "Select-by-_word characters:"
+msgstr "Caracteres que _separan palabras:"
+
+#: ../src/profile-preferences.glade.h:47
+msgid "Show _menubar by default in new terminals"
+msgstr "Mostrar por defecto a barra de _menú nos novos terminais"
+
+#: ../src/profile-preferences.glade.h:48
+msgid ""
+"Tango\n"
+"Linux console\n"
+"XTerm\n"
+"Rxvt\n"
+"Custom"
+msgstr ""
+"Tango\n"
+"Consola de Linux\n"
+"XTerm\n"
+"Rxvt\n"
+"Personalizado"
+
+#: ../src/profile-preferences.glade.h:53
+msgid "Terminal _bell"
+msgstr "_Campá do terminal"
+
+#: ../src/profile-preferences.glade.h:54
+msgid "Title and Command"
+msgstr "Título e comando"
+
+#: ../src/profile-preferences.glade.h:55
+msgid "When command _exits:"
+msgstr "Cando o comando _finaliza:"
+
+#: ../src/profile-preferences.glade.h:56
+msgid "When terminal commands set their o_wn titles:"
+msgstr "Cando os comandos da terminal establecen os seus _propios títulos:"
+
+#: ../src/profile-preferences.glade.h:57
+msgid "_Allow bold text"
+msgstr "Permitir texto en _negra"
+
+#: ../src/profile-preferences.glade.h:58
+msgid "_Background color:"
+msgstr "_Cor de fondo:"
+
+#: ../src/profile-preferences.glade.h:59
+msgid "_Background image"
+msgstr "Imaxe de _fondo"
+
+#: ../src/profile-preferences.glade.h:60
+msgid "_Backspace key generates:"
+msgstr "A tecla de _retroceso xera:"
+
+#: ../src/profile-preferences.glade.h:61
+msgid "_Delete key generates:"
+msgstr "A tecla _suprimir xera:"
+
+#: ../src/profile-preferences.glade.h:62
+msgid "_Font:"
+msgstr "_Tipo de letra:"
+
+#: ../src/profile-preferences.glade.h:63
+msgid "_Profile name:"
+msgstr "Nome do _perfil:"
+
+#: ../src/profile-preferences.glade.h:64
+msgid "_Reset Compatibility Options to Defaults"
+msgstr "_Restablecer as opcións de compatibilidade predeterminadas"
+
+#: ../src/profile-preferences.glade.h:65
+msgid "_Run command as a login shell"
+msgstr "_Executar o comando como un intérprete de comandos de inicio de sesión"
+
+#: ../src/profile-preferences.glade.h:66
+msgid "_Scrollbar is:"
+msgstr "A _barra de desprazamento é:"
+
+#: ../src/profile-preferences.glade.h:67
+msgid "_Solid color"
+msgstr "Cor _sólida"
+
+#: ../src/profile-preferences.glade.h:68
+msgid "_Text color:"
+msgstr "Cor do _texto:"
+
+#: ../src/profile-preferences.glade.h:69
+msgid "_Transparent background"
+msgstr "Fondo _transparente"
+
+#: ../src/profile-preferences.glade.h:70
+msgid "_Update login records when command is launched"
+msgstr "_Actualizar os rexistros de inicio de sesión ao iniciar o comando"
+
+#: ../src/profile-preferences.glade.h:71
+msgid "_Use colors from system theme"
+msgstr "_Usar as cores do tema do sistema"
+
+#: ../src/profile-preferences.glade.h:72
+msgid "_Use the system fixed width font"
+msgstr "_Usar o tipo de letra de largura fixa do sistema"
+
+#: ../src/profile-preferences.glade.h:73
+msgid "_lines"
+msgstr "_liñas"
+
+#: ../src/skey-challenge.glade.h:1
+msgid "S/Key Challenge Response"
+msgstr "Resposta ao desafío S/Key"
+
+#: ../src/skey-challenge.glade.h:2
+msgid "_Password:"
+msgstr "_Contrasinal:"
+
+#: ../src/skey-popup.c:164
 msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
 msgstr "O texto que premeu non semella ser un desafío S/Key válido."
 
-#: ../src/skey-popup.c:138
+#: ../src/skey-popup.c:175
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "O texto que premeu non semella ser un desafío OTP válido."
 
-#: ../src/terminal-accels.c:101
+#: ../src/terminal-accels.c:100
 msgid "New Tab"
 msgstr "Novo separador"
 
-#: ../src/terminal-accels.c:103
+#: ../src/terminal-accels.c:102
 msgid "New Window"
 msgstr "Nova ventá"
 
-#: ../src/terminal-accels.c:107
+#: ../src/terminal-accels.c:106
 msgid "Close Tab"
 msgstr "Pechar o separador"
 
-#: ../src/terminal-accels.c:109
+#: ../src/terminal-accels.c:108
 msgid "Close Window"
 msgstr "Pechar a ventá"
 
-#: ../src/terminal-accels.c:115
+#: ../src/terminal-accels.c:114
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../src/terminal-accels.c:117
+#: ../src/terminal-accels.c:116
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:122
 msgid "Hide and Show menubar"
 msgstr "Ocultar e mostrar a barra de menú"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:124
 msgid "Full Screen"
 msgstr "Pantalla completa"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:126
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:128
 msgid "Zoom Out"
 msgstr "Reducir"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:130
 msgid "Normal Size"
 msgstr "Tamaño normal"
 
-#: ../src/terminal-accels.c:137 ../src/terminal-screen.c:1802
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2733
 msgid "Set Title"
 msgstr "Definir o título"
 
-#: ../src/terminal-accels.c:139
+#: ../src/terminal-accels.c:138
 msgid "Reset"
 msgstr "Restaurar"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:140
 msgid "Reset and Clear"
 msgstr "Restaurar e limpar"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:146
 msgid "Switch to Previous Tab"
 msgstr "Seleccionar o separador anterior"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:148
 msgid "Switch to Next Tab"
 msgstr "Seleccionar o seguinte separador"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:150
 msgid "Move Tab to the Left"
 msgstr "Mover o separador á esquerda"
 
-#: ../src/terminal-accels.c:153
+#: ../src/terminal-accels.c:152
 msgid "Move Tab to the Right"
 msgstr "Mover o separador á dereita"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:154
 msgid "Detach Tab"
 msgstr "Desprender o separador"
 
-#: ../src/terminal-accels.c:160
+#: ../src/terminal-accels.c:159
 msgid "Contents"
 msgstr "Contidos"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:164
 msgid "File"
 msgstr "Ficheiro"
 
-#: ../src/terminal-accels.c:166
+#: ../src/terminal-accels.c:165
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:166
 msgid "View"
 msgstr "Ver"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:168
 msgid "Go"
 msgstr "Ir"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:169
 msgid "Help"
 msgstr "Axuda"
 
-#: ../src/terminal-accels.c:257 ../src/terminal-profile.c:306
-#: ../src/terminal-screen.c:192 ../src/terminal.c:1267
-#, c-format
-msgid "There was an error loading config from %s. (%s)\n"
-msgstr "Houbo un erro ao cargar a configuración de %s. (%s)\n"
-
-#: ../src/terminal-accels.c:271
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal keybinding "
-"changes. (%s)\n"
-msgstr ""
-"Ocorreu un erro ao subscribirse á notificación de cambios na combinación de "
-"teclas do terminal. (%s)\n"
-
-#: ../src/terminal-accels.c:312
-#, c-format
-msgid "There was an error loading a terminal keybinding. (%s)\n"
-msgstr "Houbo un erro ao cargar unha combinación de teclas do terminal. (%s)\n"
-
-#: ../src/terminal-accels.c:328
-#, c-format
-msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
-msgstr "O valor da chave de configuración %s non é válido; o valor é \"%s\"\n"
-
-#: ../src/terminal-accels.c:351
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use menubar access "
-"keys. (%s)\n"
-msgstr ""
-"Houbo un erro ao cargar o valor da configuración sobre o uso das teclas de "
-"acceso ás barras de menú. (%s)\n"
-
-#: ../src/terminal-accels.c:365
-#, c-format
-msgid ""
-"There was an error subscribing to notification on changes on whether to use "
-"menubar access keys (%s)\n"
-msgstr ""
-"Houbo un erro ao subscribir á notificación das modificacións sobre o uso das "
-"teclas de acceso ás barras de menú (%s)\n"
-
-#: ../src/terminal-accels.c:376
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use menu "
-"accelerators. (%s)\n"
-msgstr ""
-"Houbo un erro ao cargar o valor da configuración sobre o uso das teclas "
-"rápidas de menú. (%s)\n"
-
-#: ../src/terminal-accels.c:392
-#, c-format
-msgid ""
-"There was an error subscribing to notification for use_menu_accelerators (%"
-"s)\n"
-msgstr ""
-"Houbo un erro ao subscribirse á notificación de use_menu_accelerators (%s)\n"
-
-#: ../src/terminal-accels.c:661
+#: ../src/terminal-accels.c:234
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: ../src/terminal-accels.c:724
+#: ../src/terminal-accels.c:672
 #, c-format
-msgid "Error propagating accelerator change to configuration database: %s\n"
-msgstr ""
-"Erro ao propagar o cambio de tecla rápida á base de datos de configuración: %"
-"s\n"
-
-#: ../src/terminal-accels.c:915
-#, c-format
-msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
+msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "O atallo de teclado \"%s\" xa está vinculado á acción \"%s\""
 
-#: ../src/terminal-accels.c:1013
-#, c-format
-msgid "Error setting %s config key: %s\n"
-msgstr "Erro ao definir a chave de configuración %s: %s\n"
-
-#: ../src/terminal-accels.c:1044
-#, c-format
-msgid "Error setting use_menu_accelerators key: %s\n"
-msgstr "Erro ao definir a chave use_menu_accelerators: %s\n"
-
-#: ../src/terminal-accels.c:1171
+#: ../src/terminal-accels.c:782
 msgid "_Action"
 msgstr "_Acción"
 
-#: ../src/terminal-accels.c:1190
+#: ../src/terminal-accels.c:801
 msgid "Shortcut _Key"
 msgstr "_Tecla de atallo"
 
-#: ../src/terminal-profile.c:321
+#: ../src/terminal-app.c:408
+msgid "Click button to choose profile"
+msgstr "Prema o botón para escoller o perfil"
+
+#: ../src/terminal-app.c:493
+msgid "Profile list"
+msgstr "Lista dos perfís"
+
+#: ../src/terminal-app.c:555
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "Eliminar o perfil \"%s\"?"
+
+#: ../src/terminal-app.c:571
+msgid "Delete Profile"
+msgstr "Eliminar o perfil"
+
+#: ../src/terminal-app.c:946
 #, c-format
 msgid ""
-"There was an error subscribing to notification of terminal profile changes. "
-"(%s)\n"
+"You already have a profile called “%s”. Do you want to create another "
+"profile with the same name?"
 msgstr ""
-"Houbo un erro ao subscribirse á notificación das modificacións do perfil do "
-"terminal. (%s)\n"
+"Xa ten un perfil chamado \"%s\". Quere crear outro perfil co mesmo nome?"
 
-#: ../src/terminal-profile.c:1046
+#: ../src/terminal-app.c:1047
+msgid "Choose base profile"
+msgstr "Escolla o perfil base"
+
+#: ../src/terminal-app.c:1614
 #, c-format
-msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr ""
-"Non se localizou a icona chamada \"%s\" para o perfil do terminal \"%s\"\n"
+msgid "Invalid geometry string \"%s\"\n"
+msgstr "A cadea de xeometría \"%s\" non é válida\n"
 
-#: ../src/terminal-profile.c:1060
-#, c-format
-msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Fallo ao cargar a icona \"%s\" para o perfil do terminal \"%s\": %s\n"
-
-#: ../src/terminal-profile.c:1230
+#: ../src/terminal.c:275
 #, c-format
 msgid ""
-"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"window-with-profile' option\n"
 msgstr ""
-"Non se encontrou a imaxe de fondo chamada \"%s\" para o perfil do terminal "
-"\"%s\"\n"
+"A opción \"%s\" xa non se soporta nesta versión do gnome-terminal; pode que "
+"queira crear un perfil coa configuración desexada e usar a nova opción '--"
+"window-with-profile'\n"
 
-#: ../src/terminal-profile.c:1244
+#: ../src/terminal.c:301
+#, c-format
+msgid "Argument to \"%s\" is not a valid command: %s\n"
+msgstr "O argumento de \"%s\" non é un comando válido: %s\n"
+
+#: ../src/terminal.c:455
+msgid "Two roles given for one window"
+msgstr "Déronse dou roles para unha ventá"
+
+#: ../src/terminal.c:477 ../src/terminal.c:511
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "A opción \"%s\" indicouse dúas veces para a mesma ventá\n"
+
+#: ../src/terminal.c:635
 #, c-format
 msgid ""
-"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line\n"
 msgstr ""
-"Fallo ao cargar a imaxe de fondo \"%s\" para o perfil do terminal \"%s\": %"
-"s\n"
+"A opción \"%s\" require a especificación dun comando que se executará no "
+"resto da liña de comandos\n"
 
-#: ../src/terminal-profile.c:1926
+#: ../src/terminal.c:678
+#, c-format
+msgid "\"%s\" is not a valid zoom factor\n"
+msgstr "\"%s\" non é un factor de zoom válido\n"
+
+#: ../src/terminal.c:685
+#, c-format
+msgid "Zoom factor \"%g\" is too small, using %g\n"
+msgstr "O factor de zoom \"%g\" é demasiado pequeno, usarase %g\n"
+
+#: ../src/terminal.c:693
+#, c-format
+msgid "Zoom factor \"%g\" is too large, using %g\n"
+msgstr "O factor de zoom \"%g\" é demasiado grande, usarase %g\n"
+
+#: ../src/terminal.c:814
+#, c-format
+msgid "No argument given to \"%s\" option\n"
+msgstr "Non se indicaron argumentos para a opción \"%s\"\n"
+
+#: ../src/terminal.c:836
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr "A opción \"%s\" require un argumento\n"
+
+#: ../src/terminal.c:1017
+#, c-format
+msgid "No such profile \"%s\", using default profile\n"
+msgstr "Non existe o perfil \"%s\", usando o predeterminado\n"
+
+#: ../src/terminal.c:1259
+msgid "Execute the argument to this option inside the terminal."
+msgstr "Executar o argumento desta opción dentro do terminal."
+
+#: ../src/terminal.c:1268
+msgid "Execute the remainder of the command line inside the terminal."
+msgstr "Executar o resto da liña de comandos dentro do terminal."
+
+#: ../src/terminal.c:1277
+msgid ""
+"Open a new window containing a tab with the default profile. More than one "
+"of these options can be provided."
+msgstr ""
+"Abrir unha ventá nova que conteña un separador co perfil predeterminado. "
+"Pódese fornecer máis dunha destas opcións."
+
+#: ../src/terminal.c:1286
+msgid ""
+"Open a new window containing a tab with the given profile. More than one of "
+"these options can be provided."
+msgstr ""
+"Abrir unha ventá nova que conteña un separador co perfil indicado. Pódese "
+"proporcionar máis dunha destas opcións."
+
+#: ../src/terminal.c:1287 ../src/terminal.c:1305
+msgid "PROFILENAME"
+msgstr "NOME DO PERFIL"
+
+#: ../src/terminal.c:1295
+msgid ""
+"Open a new tab in the last-opened window with the default profile. More than "
+"one of these options can be provided."
+msgstr ""
+"Abrir un separador novo na última ventá aberta co perfil predeterminado. "
+"Pódese fornecer máis dunha destas opcións."
+
+#: ../src/terminal.c:1304
+msgid ""
+"Open a new tab in the last-opened window with the given profile. More than "
+"one of these options can be provided."
+msgstr ""
+"Abrir un novo separador na última ventá aberta co perfil indicado. Pódese "
+"proporcionar máis dunha destas opcións."
+
+#: ../src/terminal.c:1313
+msgid ""
+"Open a new window containing a tab with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+"Abrir unha nova ventá que conteña un separador co ID de perfil indicado. É "
+"usado internamente para gardar sesións."
+
+#: ../src/terminal.c:1314 ../src/terminal.c:1323
+msgid "PROFILEID"
+msgstr "ID DO PERFIL"
+
+#: ../src/terminal.c:1322
+msgid ""
+"Open a new tab in the last-opened window with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+"Abrir un separador novo na última ventá aberta co ID do perfil indicado. É "
+"usado internamente para gardar sesións."
+
+#: ../src/terminal.c:1331
+msgid ""
+"Set the role for the last-specified window; applies to only one window; can "
+"be specified once for each window you create from the command line."
+msgstr ""
+"Establecer o rol para a última ventá especificada; aplícase unicamente a "
+"unha ventá; pódese especificar unha vez para cada unha das ventás creadas "
+"desde a liña de comandos."
+
+#: ../src/terminal.c:1332
+msgid "ROLE"
+msgstr "ROL"
+
+#: ../src/terminal.c:1340
+msgid ""
+"Turn on the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Activar a barra de menú na última ventá especificada; aplícase a unha única "
+"ventá; pódese indicar unha vez para cada ventá creada desde a liña de "
+"comandos."
+
+#: ../src/terminal.c:1349
+msgid ""
+"Turn off the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Desactivar a barra de menú na última ventá especificada; aplícase a unha "
+"única ventá; pódese indicar unha vez para cada ventá creada desde a liña de "
+"comandos."
+
+#: ../src/terminal.c:1358
+msgid ""
+"Set the last-specified window into fullscreen mode; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Configurar a última ventá especificada dentro do modo de pantalla completa; "
+"aplícase a unha única ventá; pódese indicar unha vez para cada unha das "
+"ventás creadas desde a liña de comandos."
+
+#: ../src/terminal.c:1367
+msgid ""
+"X geometry specification (see \"X\" man page), can be specified once per "
+"window to be opened."
+msgstr ""
+"Especificación da xeometría de X (vexa a páxina man de \"X\"), pódese "
+"especificar unha vez para cada ventá aberta."
+
+#: ../src/terminal.c:1368
+msgid "GEOMETRY"
+msgstr "XEOMETRÍA"
+
+#: ../src/terminal.c:1376
+msgid ""
+"Do not register with the activation nameserver, do not re-use an active "
+"terminal"
+msgstr ""
+"Non rexistrar co servidor de nomes de activación; non reutilizar un terminal "
+"activo"
+
+#: ../src/terminal.c:1385
+msgid "Register with the activation nameserver [default]"
+msgstr "Rexistrar co servidor de nomes de activación [predeterminado]"
+
+#: ../src/terminal.c:1394
+msgid "ID for startup notification protocol."
+msgstr "ID para o protocolo de notificación de inicio."
+
+#: ../src/terminal.c:1403
+msgid "Set the terminal's title"
+msgstr "Definir o título do terminal"
+
+#: ../src/terminal.c:1404
+msgid "TITLE"
+msgstr "TÍTULO"
+
+#: ../src/terminal.c:1412
+msgid "Set the terminal's working directory"
+msgstr "Definir o directorio de traballo do terminal"
+
+#: ../src/terminal.c:1413 ../src/terminal.c:1422
+msgid "DIRNAME"
+msgstr "NOME DO DIRECTORIO"
+
+#: ../src/terminal.c:1421
+msgid "Set the default terminal's working directory. Used internally"
+msgstr "Definir o directorio de traballo do terminal. Usado internamente"
+
+#: ../src/terminal.c:1430
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr "Definir o factor de zoom do terminal (1.0 = tamaño normal)"
+
+#: ../src/terminal.c:1431 ../src/terminal.c:1440
+msgid "ZOOMFACTOR"
+msgstr "FACTOR DE ZOOM"
+
+#: ../src/terminal.c:1439
+msgid "Set the last specified tab as the active one in its window"
+msgstr "Definir o último separador especificado como o activo na súa ventá"
+
+#: ../src/terminal.c:1619 ../src/terminal.c:1622
+msgid "GNOME Terminal Emulator"
+msgstr "Emulador de terminal do Gnome"
+
+#: ../src/terminal.c:1623
+msgid "Show GNOME Terminal options"
+msgstr "Mostrar as opcións do terminal de Gnome"
+
+#: ../src/terminal.c:1772
 #, c-format
 msgid ""
-"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+"It appears that you do not have gnome-terminal.server installed in a valid "
+"location. Factory mode disabled.\n"
 msgstr ""
-"Terminal do Gnome: o nome do tipo de letra \"%s\" na base de datos de "
-"configuración non é válido\n"
+"Parece que o Gnome-terminal.server non está instalado nunha localización "
+"válida. O modo de factoría desactivado.\n"
 
-#: ../src/terminal-profile.c:2228
-#, c-format
-msgid "Error getting default value of %s: %s\n"
-msgstr "Erro ao obter o valor predeterminado de %s: %s\n"
-
-#: ../src/terminal-profile.c:2234
-#, c-format
-msgid "There wasn't a default value for %s\n"
-msgstr "Non hai un valor predeterminado para %s\n"
-
-#: ../src/terminal-profile.c:2249
-#, c-format
-msgid "Error setting key %s back to default: %s\n"
-msgstr "Erro ao restablecer a chave %s ao valor predeterminado: %s\n"
-
-#: ../src/terminal-profile.c:2452
+#: ../src/terminal.c:1775
 #, c-format
 msgid ""
-"There was an error while removing the configuration directory %s. (%s)\n"
-msgstr "Houbo un erro ao borrar o directorio de configuración %s. (%s)\n"
-
-#: ../src/terminal-profile.c:2510
-#, c-format
-msgid ""
-"There was an error subscribing to notification of changes to default "
-"profile. (%s)\n"
+"Error registering terminal with the activation service; factory mode "
+"disabled.\n"
 msgstr ""
-"Houbo un erro ao subscribirse á notificación das modificacións do perfil "
-"predeterminado. (%s)\n"
+"Erro ao rexistrar o terminal co servizo de activación; o modo de factoría "
+"desactivado.\n"
 
-#: ../src/terminal-profile.c:2557
-msgid "_Details"
-msgstr "_Detalles"
-
-#: ../src/terminal-profile.c:2983 ../src/terminal.c:1910
+#: ../src/terminal.c:1811
 #, c-format
-msgid "There was an error creating the profile \"%s\""
-msgstr "Houbo un erro ao crear o perfil \"%s\""
-
-#: ../src/terminal-profile.c:3079
-msgid "There was an error deleting the profiles"
-msgstr "Houbo un erro ao eliminar os perfís"
-
-#: ../src/terminal-profile.c:3182
-#, c-format
-msgid "Could not parse string \"%s\" as a color palette\n"
-msgstr "Non se pode analizar a cadea \"%s\" como unha paleta de cores\n"
-
-#: ../src/terminal-profile.c:3191
-#, c-format
-msgid "Palette had %d entry instead of %d\n"
-msgid_plural "Palette had %d entries instead of %d\n"
-msgstr[0] "A paleta ten %d entrada en vez de %d\n"
-msgstr[1] "A paleta ten %d entradas en vez de %d\n"
-
-#: ../src/terminal-screen.c:208
-#, c-format
-msgid ""
-"There was an error subscribing to notification of monospace font changes. (%"
-"s)\n"
+msgid "Failed to retrieve terminal server from activation server\n"
 msgstr ""
-"Houbo un erro ao subscribirse á notificación das modificacións no tipo de "
-"letra monoespazada. (%s)\n"
+"Fallo ao recuperar o servidor do terminal desde o servidor de activación\n"
 
-#: ../src/terminal-screen.c:1060
+#: ../src/terminal-profile.c:155
+msgid "Unnamed"
+msgstr "Sen nome"
+
+#: ../src/terminal-screen.c:1134
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Houbo un problema co comando para este terminal: %s"
 
-#: ../src/terminal-screen.c:1831
-msgid "_Title:"
-msgstr "_Título:"
-
-#: ../src/terminal-screen.c:1948
-#, c-format
-msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"O texto plano soltado no terminal ten un formato (%d) ou unha lonxitude (%d) "
-"incorrectas\n"
-
-#: ../src/terminal-screen.c:1971
-#, c-format
-msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"A cor soltada no terminal ten un formato (%d) ou unha lonxitude (%d) "
-"incorrectas\n"
-
-#: ../src/terminal-screen.c:2014
-#, c-format
-msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"O URL do Mozilla soltado no terminal ten un formato (%d) ou unha lonxitude (%"
-"d) incorrectas\n"
-
-#: ../src/terminal-screen.c:2063
-#, c-format
-msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"A lista dos URI soltada no terminal ten un formato (%d) ou unha lonxitude (%"
-"d) incorrectas\n"
-
-#: ../src/terminal-screen.c:2122
-#, c-format
-msgid ""
-"Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"O nome do ficheiro de imaxe soltado no terminal ten un formato (%d) ou unha "
-"lonxitude (%d) incorrectas\n"
-
-#: ../src/terminal-screen.c:2148
-#, c-format
-msgid "Error converting URI \"%s\" into filename: %s\n"
-msgstr "Erro ao converter o URI \"%s\" no nome de ficheiro: %s\n"
-
-#: ../src/terminal-tabs-menu.c:201
-msgid "Switch to this tab"
-msgstr "Cambiar a este separador"
-
-#: ../src/terminal-widget-vte.c:594
-#, c-format
+#: ../src/terminal-screen.c:1430
 msgid "There was an error creating the child process for this terminal"
 msgstr "Houbo un erro ao crear o proceso fillo para este terminal"
 
-#: ../src/terminal-window.c:404
+#: ../src/terminal-tabs-menu.c:198
+msgid "Switch to this tab"
+msgstr "Cambiar a este separador"
+
+#: ../src/terminal-util.c:127
+#, c-format
+msgid "There was an error displaying help: %s"
+msgstr "Ocorreu un erro ao mostrar a axuda: %s"
+
+#: ../src/terminal-util.c:215
+#, c-format
+msgid ""
+"Could not open the address “%s”:\n"
+"%s"
+msgstr ""
+"Non se puido abrir o enderezo \"%s\":\n"
+"%s"
+
+#: ../src/terminal-window.c:309
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:408
+#: ../src/terminal-window.c:311
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1092
+#: ../src/terminal-window.c:1223
 msgid "_File"
 msgstr "_Ficheiro"
 
 #. File menu
-#: ../src/terminal-window.c:1093 ../src/terminal-window.c:1103
-#: ../src/terminal-window.c:1209
+#: ../src/terminal-window.c:1224 ../src/terminal-window.c:1234
+#: ../src/terminal-window.c:1347
 msgid "Open _Terminal"
 msgstr "Abrir _terminal"
 
-#: ../src/terminal-window.c:1094 ../src/terminal-window.c:1106
-#: ../src/terminal-window.c:1212
+#: ../src/terminal-window.c:1225 ../src/terminal-window.c:1237
+#: ../src/terminal-window.c:1350
 msgid "Open Ta_b"
 msgstr "Abrir o se_parador"
 
-#: ../src/terminal-window.c:1095 ../src/terminal.c:2502
+#: ../src/terminal-window.c:1226
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/terminal-window.c:1096
+#: ../src/terminal-window.c:1227
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/terminal-window.c:1097
+#: ../src/terminal-window.c:1228
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1098
+#: ../src/terminal-window.c:1229
 msgid "_Tabs"
 msgstr "_Separadores"
 
-#: ../src/terminal-window.c:1099
+#: ../src/terminal-window.c:1230
 msgid "_Help"
 msgstr "_Axuda"
 
-#: ../src/terminal-window.c:1109
+#: ../src/terminal-window.c:1240
 msgid "New _Profile…"
 msgstr "Novo _perfil..."
 
-#: ../src/terminal-window.c:1112 ../src/terminal-window.c:1218
+#: ../src/terminal-window.c:1243 ../src/terminal-window.c:1356
 msgid "C_lose Tab"
 msgstr "P_echar o separador"
 
-#: ../src/terminal-window.c:1115
+#: ../src/terminal-window.c:1246
 msgid "_Close Window"
 msgstr "_Pechar a ventá"
 
-#: ../src/terminal-window.c:1126
+#: ../src/terminal-window.c:1257
 msgid "P_rofiles…"
 msgstr "Pe_rfís..."
 
-#: ../src/terminal-window.c:1129
+#: ../src/terminal-window.c:1260
 msgid "_Keyboard Shortcuts…"
 msgstr "_Atallos de teclado..."
 
-#: ../src/terminal-window.c:1132
-msgid "C_urrent Profile…"
-msgstr "Perfil act_ual..."
+#: ../src/terminal-window.c:1263
+msgid "Profile _Preferences"
+msgstr "_Preferencias do perfil"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1148
+#: ../src/terminal-window.c:1279
 msgid "Change _Profile"
 msgstr "Modificar o _perfil"
 
-#: ../src/terminal-window.c:1149
+#: ../src/terminal-window.c:1280
 msgid "_Set Title…"
 msgstr "_Definir o título..."
 
-#: ../src/terminal-window.c:1152
+#: ../src/terminal-window.c:1283
 msgid "Set _Character Encoding"
 msgstr "Definir a codificación de _caracteres"
 
-#: ../src/terminal-window.c:1153
+#: ../src/terminal-window.c:1284
 msgid "_Reset"
 msgstr "_Restaurar"
 
-#: ../src/terminal-window.c:1156
+#: ../src/terminal-window.c:1287
 msgid "Reset and C_lear"
 msgstr "Restaurar e _limpar"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1161
+#: ../src/terminal-window.c:1292
 msgid "_Add or Remove…"
 msgstr "_Engadir ou eliminar..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1166
+#: ../src/terminal-window.c:1297
 msgid "_Previous Tab"
 msgstr "Separador a_nterior"
 
-#: ../src/terminal-window.c:1169
+#: ../src/terminal-window.c:1300
 msgid "_Next Tab"
 msgstr "_Seguinte separador "
 
-#: ../src/terminal-window.c:1172
+#: ../src/terminal-window.c:1303
 msgid "Move Tab _Left"
 msgstr "Mover o separador á _esquerda"
 
-#: ../src/terminal-window.c:1175
+#: ../src/terminal-window.c:1306
 msgid "Move Tab _Right"
 msgstr "Mover o separador á _dereita"
 
-#: ../src/terminal-window.c:1178
+#: ../src/terminal-window.c:1309
 msgid "_Detach tab"
 msgstr "_Desprender o separador"
 
 #. Help menu
-#: ../src/terminal-window.c:1183
+#: ../src/terminal-window.c:1314
 msgid "_Contents"
 msgstr "_Contidos"
 
-#: ../src/terminal-window.c:1186
+#: ../src/terminal-window.c:1317
 msgid "_About"
 msgstr "_Sobre"
 
 #. Popup menu
-#: ../src/terminal-window.c:1191
-msgid "_Send Mail To..."
+#: ../src/terminal-window.c:1322
+msgid "_Send Mail To…"
 msgstr "_Enviar un correo a..."
 
-#: ../src/terminal-window.c:1194
+#: ../src/terminal-window.c:1325
 msgid "_Copy E-mail Address"
 msgstr "_Copiar o enderezo de correo"
 
-#: ../src/terminal-window.c:1197
+#: ../src/terminal-window.c:1328
+msgid "C_all To…"
+msgstr "_Chamar a..."
+
+#: ../src/terminal-window.c:1331
+msgid "_Copy Call Address"
+msgstr "_Copiar o enderezo de correo"
+
+#: ../src/terminal-window.c:1334
 msgid "_Open Link"
 msgstr "_Abrir a ligazón"
 
-#: ../src/terminal-window.c:1200
+#: ../src/terminal-window.c:1337
 msgid "_Copy Link Address"
 msgstr "_Copiar a ligazón do enderezo"
 
-#: ../src/terminal-window.c:1215
+#: ../src/terminal-window.c:1340
+msgid "P_rofiles"
+msgstr "Pe_rfís"
+
+#: ../src/terminal-window.c:1353
 msgid "C_lose Window"
 msgstr "_Pechar a ventá"
 
-#: ../src/terminal-window.c:1221
+#: ../src/terminal-window.c:1359
 msgid "_Input Methods"
 msgstr "Métodos de _entrada"
 
 #. View Menu
-#: ../src/terminal-window.c:1227
-msgid "Show Menu_bar"
-msgstr "Mostrar a _barra de menú"
+#: ../src/terminal-window.c:1365
+msgid "Show _Menubar"
+msgstr "Mostrar a barra de _menú"
 
-#: ../src/terminal-window.c:1231
+#: ../src/terminal-window.c:1369
 msgid "_Full Screen"
 msgstr "_Pantalla completa"
 
-#: ../src/terminal-window.c:1621
+#: ../src/terminal-window.c:1796
 msgid "Close tab"
 msgstr "Pechar o separador"
 
-#: ../src/terminal-window.c:2274
+#: ../src/terminal-window.c:2470
 msgid "Close all tabs?"
 msgstr "Pechar todos os separadores?"
 
-#: ../src/terminal-window.c:2276
+#: ../src/terminal-window.c:2472
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2005,11 +2076,15 @@ msgstr[0] "Esta ventá ten un separador aberto. Pecharase ao cerrar a ventá."
 msgstr[1] ""
 "Esta ventá ten %d separadores abertos. Pecharanse ao cerrar a ventá."
 
-#: ../src/terminal-window.c:2285
+#: ../src/terminal-window.c:2481
 msgid "Close All _Tabs"
 msgstr "Pechar todos os _separadores"
 
-#: ../src/terminal-window.c:2675
+#: ../src/terminal-window.c:2749
+msgid "_Title:"
+msgstr "_Título:"
+
+#: ../src/terminal-window.c:2904
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2021,7 +2096,7 @@ msgstr ""
 "Foundation; xa sexa na versión 2 da Licenza como (segundo a súa escolla) en "
 "calquera versión posterior."
 
-#: ../src/terminal-window.c:2679
+#: ../src/terminal-window.c:2908
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2033,7 +2108,7 @@ msgstr ""
 "IDONEIDADE PARA UN PROPÓSITO PARTICULAR. Para máis detalles vexa a Licenza "
 "Pública Xeral de GNU."
 
-#: ../src/terminal-window.c:2683
+#: ../src/terminal-window.c:2912
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2043,397 +2118,305 @@ msgstr ""
 "en caso contrario, escriba á Free Software Foundation, Inc., 59 Temple "
 "Place, Suite 330, Boston, MA  02111-1307 USA"
 
-#: ../src/terminal-window.c:2693
+#: ../src/terminal-window.c:2921
 msgid "GNOME Terminal"
 msgstr "Terminal do Gnome"
 
-#: ../src/terminal-window.c:2695
+#: ../src/terminal-window.c:2923
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulador do terminal para o escritorio do Gnome"
 
-#: ../src/terminal-window.c:2700
+#: ../src/terminal-window.c:2928
 msgid "translator-credits"
 msgstr ""
 "Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Proxecto Trasno"
 
-#: ../src/terminal.c:321
-#, c-format
-msgid ""
-"Option '%s' is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"window-with-profile' option\n"
-msgstr ""
-"A opción '%s' xa non se soporta nesta versión do gnome-terminal; pode que "
-"queira crear un perfil coa configuración desexada e usar a nova opción --"
-"window-with-profile\n"
-
-#: ../src/terminal.c:347
-#, c-format
-msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "O argumento de \"%s\" non é un comando válido: %s\n"
-
-#: ../src/terminal.c:515 ../src/terminal.c:549
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "A opción \"%s\" indicouse dúas veces para a mesma ventá\n"
-
-#: ../src/terminal.c:674
-#, c-format
-msgid ""
-"Option \"%s\" requires specifying the command to run on the rest of the "
-"command line\n"
-msgstr ""
-"A opción \"%s\" require a especificación dun comando que se executará no "
-"resto da liña de comandos\n"
-
-#: ../src/terminal.c:719
-#, c-format
-msgid "\"%s\" is not a valid zoom factor\n"
-msgstr "\"%s\" non é un factor de zoom válido\n"
-
-#: ../src/terminal.c:727
-#, c-format
-msgid "Zoom factor \"%g\" is too small, using %g\n"
-msgstr "O factor de zoom \"%g\" é demasiado pequeno, usarase %g\n"
-
-#: ../src/terminal.c:735
-#, c-format
-msgid "Zoom factor \"%g\" is too large, using %g\n"
-msgstr "O factor de zoom \"%g\" é demasiado grande, usarase %g\n"
-
-#: ../src/terminal.c:854
-#, c-format
-msgid "No argument given to \"%s\" option\n"
-msgstr "Non se indicaron argumentos para a opción \"%s\"\n"
-
-#: ../src/terminal.c:876
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr "A opción \"%s\" require un argumento\n"
-
-#: ../src/terminal.c:988
-#, c-format
-msgid "No such profile '%s', using default profile\n"
-msgstr "Non existe o perfil '%s', usando o predeterminado\n"
-
-#: ../src/terminal.c:1283
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal profile list "
-"changes. (%s)\n"
-msgstr ""
-"Houbo un erro ao subscribirse á notificación das modificacións da lista dos "
-"perfís do terminal. (%s)\n"
-
-#: ../src/terminal.c:1555
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "A cadea de xeometría \"%s\" non é válida\n"
-
-#: ../src/terminal.c:1621
-#, c-format
-msgid "There was an error getting the list of terminal profiles. (%s)\n"
-msgstr "Houbo un erro ao obter a lista dos perfís do terminal. (%s)\n"
-
-#: ../src/terminal.c:1879
-#, c-format
-msgid ""
-"You already have a profile called \"%s\". Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"Xa ten un perfil chamado \"%s\". Quere crear outro perfil co mesmo nome?"
-
-#: ../src/terminal.c:1893
-msgid ""
-"The profile you selected as a base for your new profile no longer exists"
-msgstr "O perfil que escolleu como base para o perfil novo xa non existe"
-
-#: ../src/terminal.c:1985
-msgid "Enter profile name"
-msgstr "Introduza o nome do perfil"
-
-#: ../src/terminal.c:1995
-msgid "Choose base profile"
-msgstr "Escolla o perfil base"
-
-#: ../src/terminal.c:2134
-msgid "Profile list"
-msgstr "Lista dos perfís"
-
-#: ../src/terminal.c:2203
-msgid "You must select one or more profiles to delete."
-msgstr "Debe seleccionar un ou máis perfís para eliminar."
-
-#: ../src/terminal.c:2214
-msgid "You must have at least one profile; you can't delete all of them."
-msgstr "Ten que ter polo menos un perfil; non pode eliminalos todos."
-
-#: ../src/terminal.c:2222
-#, c-format
-msgid "Delete this profile?\n"
-msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "Eliminar este perfil?\n"
-msgstr[1] "Eliminar estes %d perfís?\n"
-
-#: ../src/terminal.c:2243
-#, c-format
-msgid "Delete profile \"%s\"?"
-msgstr "Eliminar o perfil \"%s\"?"
-
-#: ../src/terminal.c:2265
-msgid "Delete Profile"
-msgstr "Eliminar o perfil"
-
-#: ../src/terminal.c:2538
-msgid "Profiles"
-msgstr "Perfís"
-
-#: ../src/terminal.c:2579
-msgid "_Profiles:"
-msgstr "_Perfís:"
-
-#: ../src/terminal.c:2611
-msgid "Click to open new profile dialog"
-msgstr "Prema para abrir o diálogo de perfil novo"
-
-#: ../src/terminal.c:2619
-msgid "Click to open edit profile dialog"
-msgstr "Prema para abrir o diálogo de editar perfil"
-
-#: ../src/terminal.c:2627
-msgid "Click to delete selected profile"
-msgstr "Prema para eliminar o perfil seleccionado"
-
-#: ../src/terminal.c:2632
-msgid "Profile _used when launching a new terminal:"
-msgstr "Perfil que se _usa ao lanzar un terminal novo:"
-
-#: ../src/terminal.c:2688
-msgid "Click button to choose profile"
-msgstr "Prema o botón para escoller o perfil"
-
-#: ../src/terminal.c:3052
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Ocorreu un erro ao mostrar a axuda: %s"
-
-#: ../src/terminal.c:3123
-#, c-format
-msgid ""
-"The file \"%s\" is missing. This indicates that the application is installed "
-"incorrectly."
-msgstr ""
-"Falta o ficheiro \"%s\". Isto indica que a aplicación non está instalada "
-"correctamente."
-
-#: ../src/terminal.c:3163
-#, c-format
-msgid ""
-"Could not open the address \"%s\":\n"
-"%s"
-msgstr ""
-"Non se puido abrir o enderezo \"%s\":\n"
-"%s"
-
-#: ../src/terminal.c:3193
-msgid "Execute the argument to this option inside the terminal."
-msgstr "Executar o argumento desta opción dentro do terminal."
-
-#: ../src/terminal.c:3202
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr "Executar o resto da liña de comandos dentro do terminal."
-
-#: ../src/terminal.c:3211
-msgid ""
-"Open a new window containing a tab with the default profile. More than one "
-"of these options can be provided."
-msgstr ""
-"Abrir unha ventá nova que conteña un separador co perfil predeterminado. "
-"Pódese fornecer máis dunha destas opcións."
-
-#: ../src/terminal.c:3220
-msgid ""
-"Open a new window containing a tab with the given profile. More than one of "
-"these options can be provided."
-msgstr ""
-"Abrir unha ventá nova que conteña un separador co perfil indicado. Pódese "
-"proporcionar máis dunha destas opcións."
-
-#: ../src/terminal.c:3221 ../src/terminal.c:3239
-msgid "PROFILENAME"
-msgstr "NOME DO PERFIL"
-
-#: ../src/terminal.c:3229
-msgid ""
-"Open a new tab in the last-opened window with the default profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Abrir un separador novo na última ventá aberta co perfil predeterminado. "
-"Pódese fornecer máis dunha destas opcións."
-
-#: ../src/terminal.c:3238
-msgid ""
-"Open a new tab in the last-opened window with the given profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Abrir un novo separador na última ventá aberta co perfil indicado. Pódese "
-"proporcionar máis dunha destas opcións."
-
-#: ../src/terminal.c:3247
-msgid ""
-"Open a new window containing a tab with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Abrir unha nova ventá que conteña un separador co ID de perfil indicado. É "
-"usado internamente para gardar sesións."
-
-#: ../src/terminal.c:3248 ../src/terminal.c:3257
-msgid "PROFILEID"
-msgstr "ID DO PERFIL"
-
-#: ../src/terminal.c:3256
-msgid ""
-"Open a new tab in the last-opened window with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Abrir un separador novo na última ventá aberta co ID do perfil indicado. É "
-"usado internamente para gardar sesións."
-
-#: ../src/terminal.c:3265
-msgid ""
-"Set the role for the last-specified window; applies to only one window; can "
-"be specified once for each window you create from the command line."
-msgstr ""
-"Establecer o rol para a última ventá especificada; aplícase unicamente a "
-"unha ventá; pódese especificar unha vez para cada unha das ventás creadas "
-"desde a liña de comandos."
-
-#: ../src/terminal.c:3266
-msgid "ROLE"
-msgstr "ROL"
-
-#: ../src/terminal.c:3274
-msgid ""
-"Turn on the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Activar a barra de menú na última ventá especificada; aplícase a unha única "
-"ventá; pódese indicar unha vez para cada ventá creada desde a liña de "
-"comandos."
-
-#: ../src/terminal.c:3283
-msgid ""
-"Turn off the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Desactivar a barra de menú na última ventá especificada; aplícase a unha "
-"única ventá; pódese indicar unha vez para cada ventá creada desde a liña de "
-"comandos."
-
-#: ../src/terminal.c:3292
-msgid ""
-"Set the last-specified window into fullscreen mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Configurar a última ventá especificada dentro do modo de pantalla completa; "
-"aplícase a unha única ventá; pódese indicar unha vez para cada unha das "
-"ventás creadas desde a liña de comandos."
-
-#: ../src/terminal.c:3301
-msgid ""
-"X geometry specification (see \"X\" man page), can be specified once per "
-"window to be opened."
-msgstr ""
-"Especificación da xeometría de X (vexa a páxina man de \"X\"), pódese "
-"especificar unha vez para cada ventá aberta."
-
-#: ../src/terminal.c:3302
-msgid "GEOMETRY"
-msgstr "XEOMETRÍA"
-
-#: ../src/terminal.c:3310
-msgid ""
-"Do not register with the activation nameserver, do not re-use an active "
-"terminal"
-msgstr ""
-"Non rexistrar co servidor de nomes de activación; non reutilizar un terminal "
-"activo"
-
-#: ../src/terminal.c:3319
-msgid "Register with the activation nameserver [default]"
-msgstr "Rexistrar co servidor de nomes de activación [predeterminado]"
-
-#: ../src/terminal.c:3328
-msgid "ID for startup notification protocol."
-msgstr "ID para o protocolo de notificación de inicio."
-
-#: ../src/terminal.c:3337
-msgid "Set the terminal's title"
-msgstr "Definir o título do terminal"
-
-#: ../src/terminal.c:3338
-msgid "TITLE"
-msgstr "TÍTULO"
-
-#: ../src/terminal.c:3346
-msgid "Set the terminal's working directory"
-msgstr "Definir o directorio de traballo do terminal"
-
-#: ../src/terminal.c:3347 ../src/terminal.c:3356
-msgid "DIRNAME"
-msgstr "NOME DO DIRECTORIO"
-
-#: ../src/terminal.c:3355
-msgid "Set the default terminal's working directory. Used internally"
-msgstr "Definir o directorio de traballo do terminal. Usado internamente"
-
-#: ../src/terminal.c:3364
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Definir o factor de zoom do terminal (1.0 = tamaño normal)"
-
-#: ../src/terminal.c:3365 ../src/terminal.c:3374
-msgid "ZOOMFACTOR"
-msgstr "FACTOR DE ZOOM"
-
-#: ../src/terminal.c:3373
-msgid "Set the last specified tab as the active one in its window"
-msgstr "Definir o último separador especificado como o activo na súa ventá"
-
-#: ../src/terminal.c:3553 ../src/terminal.c:3556
-msgid "GNOME Terminal Emulator"
-msgstr "Emulador de terminal do Gnome"
-
-#: ../src/terminal.c:3557
-msgid "Show GNOME Terminal options"
-msgstr "Mostrar as opcións do terminal de Gnome"
-
-#: ../src/terminal.c:3714
-#, c-format
-msgid ""
-"It appears that you do not have gnome-terminal.server installed in a valid "
-"location. Factory mode disabled.\n"
-msgstr ""
-"Parece que o Gnome-terminal.server non está instalado nunha localización "
-"válida. O modo de factoría desactivado.\n"
-
-#: ../src/terminal.c:3717
-#, c-format
-msgid ""
-"Error registering terminal with the activation service; factory mode "
-"disabled.\n"
-msgstr ""
-"Erro ao rexistrar o terminal co servizo de activación; o modo de factoría "
-"desactivado.\n"
-
-#: ../src/terminal.c:3753
-#, c-format
-msgid "Failed to retrieve terminal server from activation server\n"
-msgstr ""
-"Fallo ao recuperar o servidor do terminal desde o servidor de activación\n"
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal encoding list "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribir á notificación das modificacións da lista das "
+#~ "codificacións do terminal. (%s)\n"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Background</b>"
+#~ msgstr "<b>Fondo</b>"
+
+#~ msgid "<b>Compatibility</b>"
+#~ msgstr "<b>Compatibilidade</b>"
+
+#~ msgid "<b>Scrolling</b>"
+#~ msgstr "<b>Desprazamento</b>"
+
+#~ msgid ""
+#~ "<small><i><b>Note:</b> The command running inside the terminal may "
+#~ "dynamically set a new title.</i></small>"
+#~ msgstr ""
+#~ "<small><i><b>Nota:</b> O comando en execución dentro do terminal pode "
+#~ "establecer dinamicamente un título novo.</i></small>"
+
+#~ msgid "Add encoding to menu."
+#~ msgstr "Engadir codificación ao menú."
+
+#~ msgid "Background _image"
+#~ msgstr "_Imaxe de fondo"
+
+#~ msgid "Choose A Profile Icon"
+#~ msgstr "Seleccione unha icona de perfil"
+
+#~ msgid "Effects"
+#~ msgstr "Efectos"
+
+#~ msgid "Profile _icon:"
+#~ msgstr "_Icona do perfil:"
+
+#~ msgid "Remove encoding from menu."
+#~ msgstr "Eliminar a codificación do menú."
+
+#~ msgid "_Dynamically-set title:"
+#~ msgstr "Título definido _dinamicamente:"
+
+#~ msgid "kilo_bytes"
+#~ msgstr "kilo_bytes"
+
+#~ msgid ""
+#~ "An X font name. See the X man page (type \"man X\") for more details on "
+#~ "the format of X font names."
+#~ msgstr ""
+#~ "Un nome do tipo de letra de X. Vexa a páxina man de X (escriba \"man X\") "
+#~ "para máis detalles sobre o formato dos nomes do tipo de letra de X."
+
+#~ msgid "Tango"
+#~ msgstr "Tango"
+
+#~ msgid "Linux console"
+#~ msgstr "Consola Linux"
+
+#~ msgid "XTerm"
+#~ msgstr "XTerm"
+
+#~ msgid "Rxvt"
+#~ msgstr "Rxvt"
+
+#~ msgid "There was an error loading config from %s. (%s)\n"
+#~ msgstr "Houbo un erro ao cargar a configuración de %s. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal keybinding "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Ocorreu un erro ao subscribirse á notificación de cambios na combinación "
+#~ "de teclas do terminal. (%s)\n"
+
+#~ msgid "There was an error loading a terminal keybinding. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao cargar unha combinación de teclas do terminal. (%s)\n"
+
+#~ msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
+#~ msgstr ""
+#~ "O valor da chave de configuración %s non é válido; o valor é \"%s\"\n"
+
+#~ msgid ""
+#~ "There was an error loading config value for whether to use menubar access "
+#~ "keys. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao cargar o valor da configuración sobre o uso das teclas "
+#~ "de acceso ás barras de menú. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification on changes on whether to "
+#~ "use menubar access keys (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribir á notificación das modificacións sobre o uso "
+#~ "das teclas de acceso ás barras de menú (%s)\n"
+
+#~ msgid ""
+#~ "There was an error loading config value for whether to use menu "
+#~ "accelerators. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao cargar o valor da configuración sobre o uso das teclas "
+#~ "rápidas de menú. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification for use_menu_accelerators "
+#~ "(%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribirse á notificación de use_menu_accelerators (%"
+#~ "s)\n"
+
+#~ msgid "Error propagating accelerator change to configuration database: %s\n"
+#~ msgstr ""
+#~ "Erro ao propagar o cambio de tecla rápida á base de datos de "
+#~ "configuración: %s\n"
+
+#~ msgid "Error setting use_menu_accelerators key: %s\n"
+#~ msgstr "Erro ao definir a chave use_menu_accelerators: %s\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal profile "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribirse á notificación das modificacións do perfil "
+#~ "do terminal. (%s)\n"
+
+#~ msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
+#~ msgstr ""
+#~ "Non se localizou a icona chamada \"%s\" para o perfil do terminal \"%s\"\n"
+
+#~ msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
+#~ msgstr ""
+#~ "Fallo ao cargar a icona \"%s\" para o perfil do terminal \"%s\": %s\n"
+
+#~ msgid ""
+#~ "Could not find a background image called \"%s\" for terminal profile \"%s"
+#~ "\"\n"
+#~ msgstr ""
+#~ "Non se encontrou a imaxe de fondo chamada \"%s\" para o perfil do "
+#~ "terminal \"%s\"\n"
+
+#~ msgid ""
+#~ "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+#~ msgstr ""
+#~ "Fallo ao cargar a imaxe de fondo \"%s\" para o perfil do terminal \"%s\": "
+#~ "%s\n"
+
+#~ msgid ""
+#~ "GNOME Terminal: font name \"%s\" set in configuration database is not "
+#~ "valid\n"
+#~ msgstr ""
+#~ "Terminal do Gnome: o nome do tipo de letra \"%s\" na base de datos de "
+#~ "configuración non é válido\n"
+
+#~ msgid "Error getting default value of %s: %s\n"
+#~ msgstr "Erro ao obter o valor predeterminado de %s: %s\n"
+
+#~ msgid "There wasn't a default value for %s\n"
+#~ msgstr "Non hai un valor predeterminado para %s\n"
+
+#~ msgid "Error setting key %s back to default: %s\n"
+#~ msgstr "Erro ao restablecer a chave %s ao valor predeterminado: %s\n"
+
+#~ msgid ""
+#~ "There was an error while removing the configuration directory %s. (%s)\n"
+#~ msgstr "Houbo un erro ao borrar o directorio de configuración %s. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of changes to default "
+#~ "profile. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribirse á notificación das modificacións do perfil "
+#~ "predeterminado. (%s)\n"
+
+#~ msgid "_Details"
+#~ msgstr "_Detalles"
+
+#~ msgid "There was an error creating the profile \"%s\""
+#~ msgstr "Houbo un erro ao crear o perfil \"%s\""
+
+#~ msgid "There was an error deleting the profiles"
+#~ msgstr "Houbo un erro ao eliminar os perfís"
+
+#~ msgid "Could not parse string \"%s\" as a color palette\n"
+#~ msgstr "Non se pode analizar a cadea \"%s\" como unha paleta de cores\n"
+
+#~ msgid "Palette had %d entry instead of %d\n"
+#~ msgid_plural "Palette had %d entries instead of %d\n"
+#~ msgstr[0] "A paleta ten %d entrada en vez de %d\n"
+#~ msgstr[1] "A paleta ten %d entradas en vez de %d\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of monospace font changes. "
+#~ "(%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribirse á notificación das modificacións no tipo de "
+#~ "letra monoespazada. (%s)\n"
+
+#~ msgid ""
+#~ "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "O texto plano soltado no terminal ten un formato (%d) ou unha lonxitude (%"
+#~ "d) incorrectas\n"
+
+#~ msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "A cor soltada no terminal ten un formato (%d) ou unha lonxitude (%d) "
+#~ "incorrectas\n"
+
+#~ msgid ""
+#~ "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "O URL do Mozilla soltado no terminal ten un formato (%d) ou unha "
+#~ "lonxitude (%d) incorrectas\n"
+
+#~ msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "A lista dos URI soltada no terminal ten un formato (%d) ou unha lonxitude "
+#~ "(%d) incorrectas\n"
+
+#~ msgid ""
+#~ "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "O nome do ficheiro de imaxe soltado no terminal ten un formato (%d) ou "
+#~ "unha lonxitude (%d) incorrectas\n"
+
+#~ msgid "Error converting URI \"%s\" into filename: %s\n"
+#~ msgstr "Erro ao converter o URI \"%s\" no nome de ficheiro: %s\n"
+
+#~ msgid "C_urrent Profile…"
+#~ msgstr "Perfil act_ual..."
+
+#~ msgid "Show Menu_bar"
+#~ msgstr "Mostrar a _barra de menú"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal profile list "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Houbo un erro ao subscribirse á notificación das modificacións da lista "
+#~ "dos perfís do terminal. (%s)\n"
+
+#~ msgid "There was an error getting the list of terminal profiles. (%s)\n"
+#~ msgstr "Houbo un erro ao obter a lista dos perfís do terminal. (%s)\n"
+
+#~ msgid ""
+#~ "The profile you selected as a base for your new profile no longer exists"
+#~ msgstr "O perfil que escolleu como base para o perfil novo xa non existe"
+
+#~ msgid "Enter profile name"
+#~ msgstr "Introduza o nome do perfil"
+
+#~ msgid "You must select one or more profiles to delete."
+#~ msgstr "Debe seleccionar un ou máis perfís para eliminar."
+
+#~ msgid "You must have at least one profile; you can't delete all of them."
+#~ msgstr "Ten que ter polo menos un perfil; non pode eliminalos todos."
+
+#~ msgid "Delete this profile?\n"
+#~ msgid_plural "Delete these %d profiles?\n"
+#~ msgstr[0] "Eliminar este perfil?\n"
+#~ msgstr[1] "Eliminar estes %d perfís?\n"
+
+#~ msgid "_Profiles:"
+#~ msgstr "_Perfís:"
+
+#~ msgid "Click to open new profile dialog"
+#~ msgstr "Prema para abrir o diálogo de perfil novo"
+
+#~ msgid "Click to open edit profile dialog"
+#~ msgstr "Prema para abrir o diálogo de editar perfil"
+
+#~ msgid "Click to delete selected profile"
+#~ msgstr "Prema para eliminar o perfil seleccionado"
+
+#~ msgid ""
+#~ "The file \"%s\" is missing. This indicates that the application is "
+#~ "installed incorrectly."
+#~ msgstr ""
+#~ "Falta o ficheiro \"%s\". Isto indica que a aplicación non está instalada "
+#~ "correctamente."
 
 #~ msgid "Accelerator key"
 #~ msgstr "Teclas rápidas"
@@ -2678,9 +2661,6 @@ msgstr ""
 
 #~ msgid "_Edit Current Profile..."
 #~ msgstr "_Editar o perfil actual..."
-
-#~ msgid "Show _Menubar"
-#~ msgstr "Mostrar a barra de _menú"
 
 #~ msgid ""
 #~ "There was an error subscribing to notification of terminal window "
