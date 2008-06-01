@@ -1,6 +1,11 @@
-AC_INIT([GNOME Terminal],[2.23.0],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
-AC_CONFIG_SRCDIR([src/terminal.c])
+m4_define([gt_version_major],[2])
+m4_define([gt_version_minor],[23])
+m4_define([gt_version_micro],[3])
+m4_define([gt_version_extra],[])
+m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
+AC_INIT([GNOME Terminal],[gt_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
+AC_CONFIG_SRCDIR([src/terminal.c])
 AC_CONFIG_HEADER([config.h])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
@@ -99,12 +104,6 @@ if test x$using_xft2 = xno; then
         echo "*** Building with VTE widget but not Xft2"
         echo "*** This won't be as optimal as fontconfig/Xft2"
 fi
-
-#echo "
-#*** WARNING WARNING WARNING WARNING WARNING
-#*** This is the unstable branch of gnome-terminal
-#*** The stable branch is version 2.4.x
-#"
 
 echo "
 gnome-terminal-$VERSION:
