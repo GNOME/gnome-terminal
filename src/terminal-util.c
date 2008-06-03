@@ -205,7 +205,6 @@ terminal_util_open_url (GtkWidget *parent,
   g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
   g_object_unref (context);
 #else
-#error hi there!
   g_app_info_launch_default_for_uri (uri, NULL, &error);
 #endif
 
