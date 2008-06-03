@@ -8,6 +8,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = 			\
+	ChangeLog.pre-2-23	\
 	HACKING			\
 	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
