@@ -70,7 +70,6 @@
 
 static gboolean initialization_complete = FALSE;
 static GSList *pending_new_terminal_events = NULL;
-static gboolean use_factory;
 
 typedef struct
 {
@@ -1178,8 +1177,7 @@ main (int argc, char **argv)
   
   option_parsing_results_apply_directory_defaults (parsing_results);
 
-  use_factory = parsing_results->use_factory;
-  if (use_factory)
+  if (parsing_results->use_factory)
     {
       char *cwd;
       
@@ -1216,7 +1214,7 @@ main (int argc, char **argv)
  
   g_assert (parsing_results->post_execute_args == NULL);
 
-  terminal_app_initialize (use_factory);
+  terminal_app_initialize (parsing_results->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
   new_terminal_with_options (terminal_app_get (), parsing_results);
