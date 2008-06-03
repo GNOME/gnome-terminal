@@ -1496,7 +1496,7 @@ terminal_screen_button_press_event (GtkWidget      *widget,
   int char_width, char_height;
   gboolean dingus_button;
   char *matched_string;
-  int matched_flavor;
+  int matched_flavor = 0;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
