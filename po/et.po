@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-12 04:03+0100\n"
-"PO-Revision-Date: 2008-04-19 13:19+0300\n"
+"POT-Creation-Date: 2008-05-30 14:44+0000\n"
+"PO-Revision-Date: 2008-06-01 20:57+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -22,9 +22,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:97
-#: ../src/terminal-accels.c:168 ../src/terminal-profile.c:253
-#: ../src/terminal-window.c:1256 ../src/terminal.c:1208
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
+#: ../src/terminal-accels.c:167 ../src/terminal.c:1173
+#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1394
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -32,526 +32,166 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Käsurea kasutamine"
 
-#: ../src/encoding.c:56
-msgid "Current Locale"
-msgstr "Käesolev lokaat"
-
-#: ../src/encoding.c:59 ../src/encoding.c:85 ../src/encoding.c:128
-#: ../src/encoding.c:176 ../src/encoding.c:200
+#. { "UTF-8",	N_("Current Locale") },
+#: ../src/encoding.c:51 ../src/encoding.c:64 ../src/encoding.c:78
+#: ../src/encoding.c:100 ../src/encoding.c:111
 msgid "Western"
 msgstr "Lääne"
 
-#: ../src/encoding.c:61 ../src/encoding.c:130 ../src/encoding.c:156
-#: ../src/encoding.c:196
+#: ../src/encoding.c:52 ../src/encoding.c:79 ../src/encoding.c:90
+#: ../src/encoding.c:109
 msgid "Central European"
 msgstr "Kesk-euroopa"
 
-#: ../src/encoding.c:63
+#: ../src/encoding.c:53
 msgid "South European"
 msgstr "Lõuna-euroopa"
 
-#: ../src/encoding.c:65 ../src/encoding.c:81 ../src/encoding.c:210
+#: ../src/encoding.c:54 ../src/encoding.c:62 ../src/encoding.c:116
 msgid "Baltic"
 msgstr "Balti"
 
-#: ../src/encoding.c:67 ../src/encoding.c:132 ../src/encoding.c:145
-#: ../src/encoding.c:149 ../src/encoding.c:160 ../src/encoding.c:198
+#: ../src/encoding.c:55 ../src/encoding.c:80 ../src/encoding.c:86
+#: ../src/encoding.c:87 ../src/encoding.c:92 ../src/encoding.c:110
 msgid "Cyrillic"
 msgstr "Kirillitsa"
 
-#: ../src/encoding.c:69 ../src/encoding.c:138 ../src/encoding.c:154
-#: ../src/encoding.c:208
+#: ../src/encoding.c:56 ../src/encoding.c:83 ../src/encoding.c:89
+#: ../src/encoding.c:115
 msgid "Arabic"
 msgstr "Araabia"
 
-#: ../src/encoding.c:71 ../src/encoding.c:166 ../src/encoding.c:202
+#: ../src/encoding.c:57 ../src/encoding.c:95 ../src/encoding.c:112
 msgid "Greek"
 msgstr "Kreeka"
 
-#: ../src/encoding.c:73
+#: ../src/encoding.c:58
 msgid "Hebrew Visual"
 msgstr "Heebrea visuaalne"
 
-#: ../src/encoding.c:75 ../src/encoding.c:136 ../src/encoding.c:172
-#: ../src/encoding.c:206
+#: ../src/encoding.c:59 ../src/encoding.c:82 ../src/encoding.c:98
+#: ../src/encoding.c:114
 msgid "Hebrew"
 msgstr "Heebrea"
 
-#: ../src/encoding.c:77 ../src/encoding.c:134 ../src/encoding.c:180
-#: ../src/encoding.c:204
+#: ../src/encoding.c:60 ../src/encoding.c:81 ../src/encoding.c:102
+#: ../src/encoding.c:113
 msgid "Turkish"
 msgstr "Türgi"
 
-#: ../src/encoding.c:79
+#: ../src/encoding.c:61
 msgid "Nordic"
 msgstr "Põhjamaade"
 
-#: ../src/encoding.c:83
+#: ../src/encoding.c:63
 msgid "Celtic"
 msgstr "Keldi"
 
-#: ../src/encoding.c:87 ../src/encoding.c:178
+#: ../src/encoding.c:65 ../src/encoding.c:101
 msgid "Romanian"
 msgstr "Rumeenia"
 
-#: ../src/encoding.c:90 ../src/encoding.c:92 ../src/encoding.c:94
-#: ../src/encoding.c:96 ../src/encoding.c:98
+#. These encodings do NOT pass-through ASCII, so are always rejected.
+#. * FIXME: why are they in this table; or rather why do we need
+#. * the ASCII pass-through requirement?
+#.
+#: ../src/encoding.c:66 ../src/encoding.c:123 ../src/encoding.c:124
+#: ../src/encoding.c:125 ../src/encoding.c:126
 msgid "Unicode"
 msgstr "Unikood"
 
-#: ../src/encoding.c:101
+#: ../src/encoding.c:67
 msgid "Armenian"
 msgstr "Armeenia"
 
-#: ../src/encoding.c:103 ../src/encoding.c:105 ../src/encoding.c:114
+#: ../src/encoding.c:68 ../src/encoding.c:69 ../src/encoding.c:73
 msgid "Chinese Traditional"
 msgstr "Hiina traditsiooniline"
 
-#: ../src/encoding.c:107
+#: ../src/encoding.c:70
 msgid "Cyrillic/Russian"
 msgstr "Kirillitsa/Vene"
 
-#: ../src/encoding.c:110 ../src/encoding.c:141 ../src/encoding.c:185
+#: ../src/encoding.c:71 ../src/encoding.c:84 ../src/encoding.c:104
 msgid "Japanese"
 msgstr "Jaapani"
 
-#: ../src/encoding.c:112 ../src/encoding.c:143 ../src/encoding.c:147
-#: ../src/encoding.c:191
+#: ../src/encoding.c:72 ../src/encoding.c:85 ../src/encoding.c:107
+#: ../src/encoding.c:127
 msgid "Korean"
 msgstr "Korea"
 
-#: ../src/encoding.c:117 ../src/encoding.c:119 ../src/encoding.c:121
-#: ../src/encoding.c:125
+#: ../src/encoding.c:74 ../src/encoding.c:75 ../src/encoding.c:76
 msgid "Chinese Simplified"
 msgstr "Hiina lihtsustatud"
 
-#: ../src/encoding.c:123
+#: ../src/encoding.c:77
 msgid "Georgian"
 msgstr "Gruusia"
 
-#: ../src/encoding.c:151 ../src/encoding.c:182
+#: ../src/encoding.c:88 ../src/encoding.c:103
 msgid "Cyrillic/Ukrainian"
 msgstr "Kirillitsa/Ukraina"
 
-#: ../src/encoding.c:158
+#: ../src/encoding.c:91
 msgid "Croatian"
 msgstr "Horvaatia"
 
-#: ../src/encoding.c:162
+#: ../src/encoding.c:93
 msgid "Hindi"
 msgstr "Hindi"
 
-#: ../src/encoding.c:164
+#: ../src/encoding.c:94
 msgid "Persian"
 msgstr "Pärsia"
 
-#: ../src/encoding.c:168
+#: ../src/encoding.c:96
 msgid "Gujarati"
 msgstr "Gujarati"
 
-#: ../src/encoding.c:170
+#: ../src/encoding.c:97
 msgid "Gurmukhi"
 msgstr "Gurmuki"
 
-#: ../src/encoding.c:174
+#: ../src/encoding.c:99
 msgid "Icelandic"
 msgstr "Islandi"
 
-#: ../src/encoding.c:187 ../src/encoding.c:193 ../src/encoding.c:212
+#: ../src/encoding.c:105 ../src/encoding.c:108 ../src/encoding.c:117
 msgid "Vietnamese"
 msgstr "Vietnami"
 
-#: ../src/encoding.c:189
+#: ../src/encoding.c:106
 msgid "Thai"
 msgstr "Tai"
 
-#: ../src/encoding.c:378
+#: ../src/encoding.c:325
 msgid "User Defined"
 msgstr "Kasutaja kirjeldatud"
 
-#: ../src/encoding.c:742 ../src/encoding.c:806
+#: ../src/encoding.c:599 ../src/encoding.c:624
 msgid "_Description"
 msgstr "_Kirjeldus"
 
-#: ../src/encoding.c:751 ../src/encoding.c:815
+#: ../src/encoding.c:608 ../src/encoding.c:633
 msgid "_Encoding"
 msgstr "_Kooditabel"
 
-#: ../src/encoding.c:982
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal encoding list "
-"changes. (%s)\n"
-msgstr ""
-"Terminali kooditabelite nimekirja muutustest teavituste tellimisel tekkis "
-"viga. (%s)\n"
+#: ../src/encoding.c:690
+msgid "Current Locale"
+msgstr "Käesolev lokaat"
 
-#: ../src/gnome-terminal.glade2.h:1
-msgid "    "
-msgstr "    "
-
-#: ../src/gnome-terminal.glade2.h:2
-msgid "<b>Background</b>"
-msgstr "<b>Taust</b>"
-
-#: ../src/gnome-terminal.glade2.h:3
-msgid "<b>Command</b>"
-msgstr "<b>Käsk</b>"
-
-#: ../src/gnome-terminal.glade2.h:4
-msgid "<b>Compatibility</b>"
-msgstr "<b>Ühilduvus</b>"
-
-#: ../src/gnome-terminal.glade2.h:5
-msgid "<b>Foreground and Background</b>"
-msgstr "<b>Tekst ja taust</b>"
-
-#: ../src/gnome-terminal.glade2.h:6
-msgid "<b>Palette</b>"
-msgstr "<b>Palett</b>"
-
-#: ../src/gnome-terminal.glade2.h:7
-msgid "<b>Scrolling</b>"
-msgstr "<b>Kerimine</b>"
-
-#: ../src/gnome-terminal.glade2.h:8
-msgid "<b>Title</b>"
-msgstr "<b>Pealkiri</b>"
-
-#: ../src/gnome-terminal.glade2.h:9
-msgid ""
-"<small><i><b>Note:</b> Terminal applications have these colors available to "
-"them.</i></small>"
-msgstr ""
-"<small><i><b>Märkus:</b> Terminaliprogrammide käsutuses on järgnevad värvid."
-"</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:10
-msgid ""
-"<small><i><b>Note:</b> The command running inside the terminal may "
-"dynamically set a new title.</i></small>"
-msgstr ""
-"<small><i><b>Märkus:</b> Terminalis käivitatav käsk võib pealkirja jooksult "
-"määrata.</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:11
-msgid ""
-"<small><i><b>Note:</b> These options may cause some applications to behave "
-"incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior.</"
-"i></small>"
-msgstr ""
-"<small><i><b>Märkus:</b> Need valikud võivad põhjustada mõne rakenduse "
-"väärat käitmust.  Nad on siin ainult selleks, et võimaldada sul teatud "
-"rakenduste ja operatsioonisüsteemide erinevast käitumisest põhjustatud "
-"probleemide vältimist.</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:12
-msgid "<small><i>Maximum</i></small>"
-msgstr "<small><i>Suurim</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:13
-msgid "<small><i>None</i></small>"
-msgstr "<small><i>Puudub</i></small>"
-
-#: ../src/gnome-terminal.glade2.h:14
-msgid ""
-"ASCII DEL\n"
-"Escape sequence\n"
-"Control-H"
-msgstr ""
-"ASCII DEL\n"
-"Paojada\n"
-"Control-H"
-
-#: ../src/gnome-terminal.glade2.h:17
+#: ../src/encodings-dialog.glade.h:1
 msgid "A_vailable encodings:"
 msgstr "_Saadaolevad kooditabelid:"
 
-#: ../src/gnome-terminal.glade2.h:18
-msgid "Add encoding to menu."
-msgstr "Kooditabeli lisamine menüüsse."
-
-#: ../src/gnome-terminal.glade2.h:19
+#: ../src/encodings-dialog.glade.h:2
 msgid "Add or Remove Terminal Encodings"
 msgstr "Terminali kooditabelite lisamine või eemaldamine"
 
-#: ../src/gnome-terminal.glade2.h:20
-msgid "Background _image"
-msgstr "Tausta_pilt"
-
-#: ../src/gnome-terminal.glade2.h:21
-msgid "Background image _scrolls"
-msgstr "Taustapilt _kerib"
-
-#: ../src/gnome-terminal.glade2.h:22
-msgid "Built-_in schemes:"
-msgstr "S_isseehitatud teemad:"
-
-#: ../src/gnome-terminal.glade2.h:23
-msgid "Built-in _schemes:"
-msgstr "Sisse_ehitatud teemad:"
-
-#: ../src/gnome-terminal.glade2.h:24
-msgid "C_reate"
-msgstr "L_oo"
-
-#: ../src/gnome-terminal.glade2.h:25
-msgid "Choose A Profile Icon"
-msgstr "Profiiliikooni valimine"
-
-#: ../src/gnome-terminal.glade2.h:26
-msgid "Choose A Terminal Font"
-msgstr "Terminali kirjatüübi valimine"
-
-#: ../src/gnome-terminal.glade2.h:27
-msgid "Choose Terminal Background Color"
-msgstr "Terminali taustavärvi valimine"
-
-#: ../src/gnome-terminal.glade2.h:28
-msgid "Choose Terminal Text Color"
-msgstr "Terminali tekstivärvi valimine"
-
-#: ../src/gnome-terminal.glade2.h:29
-msgid "Color _palette:"
-msgstr "Värvi_palett:"
-
-#: ../src/gnome-terminal.glade2.h:30
-msgid "Colors"
-msgstr "Värvid"
-
-#: ../src/gnome-terminal.glade2.h:31
-msgid "Compatibility"
-msgstr "Ühilduvus"
-
-#: ../src/gnome-terminal.glade2.h:32
-msgid "Custom"
-msgstr "Oma"
-
-#: ../src/gnome-terminal.glade2.h:33
-msgid "Custom co_mmand:"
-msgstr "_Oma käsk:"
-
-#: ../src/gnome-terminal.glade2.h:34
-msgid "Disable all me_nu access keys (such as Alt+f to open File menu)"
-msgstr ""
-"Kõik _menüü liikumisklahvid on keelatud (näiteks Alt-F failimenüü jaoks)"
-
-#: ../src/gnome-terminal.glade2.h:35
-msgid "Disable m_enu shortcut key (F10 by default)"
-msgstr "M_enüü kiirklahv keelatud (vaikimisi F10)"
-
-#: ../src/gnome-terminal.glade2.h:36
+#: ../src/encodings-dialog.glade.h:3
 msgid "E_ncodings shown in menu:"
 msgstr "_Menüüs kuvatavad kooditabelid:"
-
-#: ../src/gnome-terminal.glade2.h:37
-msgid "Effects"
-msgstr "Efektid"
-
-#: ../src/gnome-terminal.glade2.h:38
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"Terminal suletakse\n"
-"Käivitatakse käsk uuesti\n"
-"Jäetakse terminal avatuks"
-
-#: ../src/gnome-terminal.glade2.h:41
-msgid "General"
-msgstr "Üldine"
-
-#: ../src/gnome-terminal.glade2.h:42
-msgid "Image _file:"
-msgstr "_Pildifail:"
-
-#: ../src/gnome-terminal.glade2.h:43
-msgid "Initial _title:"
-msgstr "Algne _pealkiri:"
-
-#: ../src/gnome-terminal.glade2.h:44
-msgid "Keyboard Shortcuts"
-msgstr "Kiirklahvid"
-
-#: ../src/gnome-terminal.glade2.h:45 ../src/terminal-accels.c:105
-msgid "New Profile"
-msgstr "Uus profiil"
-
-#: ../src/gnome-terminal.glade2.h:46
-msgid ""
-"On the left side\n"
-"On the right side\n"
-"Disabled"
-msgstr ""
-"Vasakus servas\n"
-"Paremas servas\n"
-"Puudub"
-
-#: ../src/gnome-terminal.glade2.h:49
-msgid "Password:"
-msgstr "Salasõna:"
-
-#: ../src/gnome-terminal.glade2.h:50
-msgid "Profile Editor"
-msgstr "Profiiliredaktor"
-
-#: ../src/gnome-terminal.glade2.h:51
-msgid "Profile _icon:"
-msgstr "Profiili _ikoon:"
-
-#: ../src/gnome-terminal.glade2.h:52
-msgid "Profile _name:"
-msgstr "Profiili _nimi:"
-
-#: ../src/gnome-terminal.glade2.h:53
-msgid "Remove encoding from menu."
-msgstr "Kooditabeli eemaldamine menüüst."
-
-#: ../src/gnome-terminal.glade2.h:54
-msgid ""
-"Replaces initial title\n"
-"Goes before initial title\n"
-"Goes after initial title\n"
-"Isn't displayed"
-msgstr ""
-"Asendab algse pealkirja\n"
-"Paigutatakse algse pealkirja ette\n"
-"Paigutatakse algse pealkirja järele\n"
-"Jäetakse kuvamata"
-
-#: ../src/gnome-terminal.glade2.h:58
-msgid "Ru_n a custom command instead of my shell"
-msgstr "Kesta asemel käivitada o_ma käsk"
-
-#: ../src/gnome-terminal.glade2.h:59
-msgid "S/Key Challenge Response"
-msgstr "S/Key väljakutse vastus"
-
-#: ../src/gnome-terminal.glade2.h:60
-msgid "S_hade transparent or image background:"
-msgstr "Läbipaistvate või pilt-taustade _varjutamine:"
-
-#: ../src/gnome-terminal.glade2.h:61
-msgid "Sc_roll on output"
-msgstr "Kerimine _väljundi saamisel"
-
-#: ../src/gnome-terminal.glade2.h:62
-msgid "Scr_ollback:"
-msgstr "_Kerimispuhver:"
-
-#: ../src/gnome-terminal.glade2.h:63
-msgid "Scroll on _keystroke"
-msgstr "Kerimine k_lahvivajutuse puhul"
-
-#: ../src/gnome-terminal.glade2.h:64
-msgid "Scrolling"
-msgstr "Kerimine"
-
-#: ../src/gnome-terminal.glade2.h:65
-msgid "Select Background Image"
-msgstr "Taustapildi valimine"
-
-#: ../src/gnome-terminal.glade2.h:66
-msgid "Select-by-_word characters:"
-msgstr "_Sõna-kaupa-valimise märgid:"
-
-#: ../src/gnome-terminal.glade2.h:67
-msgid "Show _menubar by default in new terminals"
-msgstr "Uutes terminalides _menüüriba vaikimisi näitamine"
-
-#: ../src/gnome-terminal.glade2.h:68
-msgid "Terminal _bell"
-msgstr "Terminali _kell"
-
-#: ../src/gnome-terminal.glade2.h:69
-msgid "Title and Command"
-msgstr "Pealkiri ja käsk"
-
-#: ../src/gnome-terminal.glade2.h:70
-msgid "Use colors from s_ystem theme"
-msgstr "_Kasutatakse süsteemi teema värve"
-
-#: ../src/gnome-terminal.glade2.h:71
-msgid "When command _exits:"
-msgstr "Käsu _lõpetamisel:"
-
-#: ../src/gnome-terminal.glade2.h:72
-msgid "_Allow bold text"
-msgstr "_Rasvane kiri lubatud"
-
-#: ../src/gnome-terminal.glade2.h:73
-msgid "_Background color:"
-msgstr "Tausta_värv:"
-
-#: ../src/gnome-terminal.glade2.h:74
-msgid "_Backspace key generates:"
-msgstr "_Backspace klahv põhjustab:"
-
-#: ../src/gnome-terminal.glade2.h:75
-msgid "_Base on:"
-msgstr "_Põhineb mallil:"
-
-#: ../src/gnome-terminal.glade2.h:76
-msgid "_Delete key generates:"
-msgstr "_Delete klahv põhjustab:"
-
-#: ../src/gnome-terminal.glade2.h:77
-msgid "_Dynamically-set title:"
-msgstr "_Jooksult määratud pealkiri:"
-
-#: ../src/gnome-terminal.glade2.h:78
-msgid "_Font:"
-msgstr "_Kirjatüüp:"
-
-#: ../src/gnome-terminal.glade2.h:79
-msgid "_None (use solid color)"
-msgstr "P_uudub (kasutatakse ühtlast värvi)"
-
-#: ../src/gnome-terminal.glade2.h:80
-msgid "_Profile name:"
-msgstr "Profiili _nimi:"
-
-#: ../src/gnome-terminal.glade2.h:81
-msgid "_Reset Compatibility Options to Defaults"
-msgstr "Taasta ühilduvusvalikute _algväärtused"
-
-#: ../src/gnome-terminal.glade2.h:82
-msgid "_Run command as a login shell"
-msgstr "Käsk käivitatakse _login kestana"
-
-#: ../src/gnome-terminal.glade2.h:83
-msgid "_Scrollbar is:"
-msgstr "K_erimisriba asukoht:"
-
-#: ../src/gnome-terminal.glade2.h:84
-msgid "_Shortcut keys:"
-msgstr "_Kiirklahvid:"
-
-#: ../src/gnome-terminal.glade2.h:85
-msgid "_Text color:"
-msgstr "_Teksti värv:"
-
-#: ../src/gnome-terminal.glade2.h:86
-msgid "_Transparent background"
-msgstr "_Läbipaistev taust"
-
-#: ../src/gnome-terminal.glade2.h:87
-msgid "_Update login records when command is launched"
-msgstr "Käsu käivitamisel _uuendatakse sisselogimiskirjeid"
-
-#: ../src/gnome-terminal.glade2.h:88
-msgid "_Use the system fixed width font"
-msgstr "Süsteemi _terminali kirjatüübi kasutamine"
-
-#: ../src/gnome-terminal.glade2.h:89
-msgid "_lines"
-msgstr "_rida"
-
-#: ../src/gnome-terminal.glade2.h:90
-msgid "kilo_bytes"
-msgstr "kilo_baiti"
 
 #: ../src/gnome-terminal.schemas.in.h:1
 msgid ""
@@ -624,38 +264,30 @@ msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
 msgstr "Pango kirjatüübi nimi. Näiteks \"Sans 12\" või \"Monospace Bold 14\"."
 
 #: ../src/gnome-terminal.schemas.in.h:10
-msgid ""
-"An X font name. See the X man page (type \"man X\") for more details on the "
-"format of X font names."
-msgstr ""
-"X'i kirjatüübi nimi. X'i kirjatüübinime üksikasju vaata X'i manuaalilehelt "
-"(käsk \"man X\")."
-
-#: ../src/gnome-terminal.schemas.in.h:11
 msgid "Background image"
 msgstr "Taustapilt"
 
-#: ../src/gnome-terminal.schemas.in.h:12
+#: ../src/gnome-terminal.schemas.in.h:11
 msgid "Background type"
 msgstr "Tausta tüüp"
 
-#: ../src/gnome-terminal.schemas.in.h:13
+#: ../src/gnome-terminal.schemas.in.h:12
 msgid "Characters that are considered \"part of a word\""
 msgstr "Märgid, mida arvestatakse kui \"sõna osa\""
 
-#: ../src/gnome-terminal.schemas.in.h:14
+#: ../src/gnome-terminal.schemas.in.h:13
 msgid "Custom command to use instead of the shell"
 msgstr "Kestprogrammi käivitamise asemel kasutatav käsk"
 
-#: ../src/gnome-terminal.schemas.in.h:15
+#: ../src/gnome-terminal.schemas.in.h:14
 msgid "Default"
 msgstr "Vaikimisi"
 
-#: ../src/gnome-terminal.schemas.in.h:16
+#: ../src/gnome-terminal.schemas.in.h:15
 msgid "Default color of terminal background"
 msgstr "Terminali vaikimisi taustavärv"
 
-#: ../src/gnome-terminal.schemas.in.h:17
+#: ../src/gnome-terminal.schemas.in.h:16
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -663,11 +295,11 @@ msgstr ""
 "Terminali tausta vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
 "stiilis kuueteistkümnendarve või ingliskeelseid värvinimetusi nagu \"red\")"
 
-#: ../src/gnome-terminal.schemas.in.h:18
+#: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of text in the terminal"
 msgstr "Terminali teksti vaikimisi värv"
 
-#: ../src/gnome-terminal.schemas.in.h:19
+#: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -675,49 +307,49 @@ msgstr ""
 "Terminali teksti vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
 "stiilis kuueteistkümnendarve või ingliskeelseid värvinimetusi nagu \"red\")"
 
-#: ../src/gnome-terminal.schemas.in.h:20
+#: ../src/gnome-terminal.schemas.in.h:19
 msgid "Effect of the Backspace key"
 msgstr "Backspace klahvi toime"
 
-#: ../src/gnome-terminal.schemas.in.h:21
+#: ../src/gnome-terminal.schemas.in.h:20
 msgid "Effect of the Delete key"
 msgstr "Delete klahvi toime"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:21
 msgid "Filename of a background image."
 msgstr "Taustapildi faili nimi."
 
-#: ../src/gnome-terminal.schemas.in.h:23
+#: ../src/gnome-terminal.schemas.in.h:22
 msgid "Font"
 msgstr "Kirjatüüp"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Highlight S/Key challenges"
 msgstr "S/Key väljakutsete esiletõstmine"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "How much to darken the background image"
 msgstr "Kui palju peab taustapilti tumendama"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:27
 msgid "Human-readable name of the profile"
 msgstr "Profiili inimloetav nimi"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:28
 msgid "Human-readable name of the profile."
 msgstr "Profiili inimloetav nimi."
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "Icon for terminal window"
 msgstr "Terminaliakna ikoon"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "Ikoon, mida selle profiili puhul kasutatakse sakkidel ja akendel"
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -730,13 +362,13 @@ msgstr ""
 "ette), \"after\" (dünaamiline pealkiri asetatakse määratud pealkirja "
 "järele), ja \"ignore\" (dünaamilist pealkirja eiratakse)."
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Kui märgitud, siis on terminalis töötavatel rakendustel võimalik jämedat "
 "kirja väljastada."
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -744,7 +376,7 @@ msgstr ""
 "Kui märgitud, siis terminal ei reageeri piiksu tegemiseks mõeldud "
 "koodijadale."
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid ""
 "If true, font anti-aliasing will be disabled when running without the X "
 "RENDER extension, which gives a considerable performance improvement in "
@@ -753,11 +385,11 @@ msgstr ""
 "Kui märgitud, siis jõudluse huvides on X RENDER laienduse puudumise korral "
 "kirjatüübi sakisilumine keelatud."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Kui märgitud, siis klahvivajutusel hüpatakse kerimisriba allaossa."
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -765,7 +397,7 @@ msgstr ""
 "Kui märgitud, siis keritakse taustapilti koos tekstiga, vastasel juhul "
 "taustapilt teksti kerimise korral kaasa ei liigu."
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -773,7 +405,7 @@ msgstr ""
 "Kui märgitud, siis terminalis käivitatav käsk käivitatakse kestprogrammina "
 "(argv[0] ette lisatakse sidekriips)."
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -781,7 +413,7 @@ msgstr ""
 "Kui märgitud, siis terminalis käsu käivitamisel uuendatakse süsteemi "
 "sisselogimiskirjeid utmp ja wtmp."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -790,7 +422,7 @@ msgstr ""
 "juhul, kui see on täheruut (vastasel juhul aga sellele kõige sarnasemat "
 "kirjatüüpi)."
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -798,7 +430,7 @@ msgstr ""
 "Määramise korral kasutatakse terminali tekstisisestuskastides kasutaja poolt "
 "määratud värvuste asemel teema värviskeemi."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -806,14 +438,14 @@ msgstr ""
 "Kui märgitud, siis custom_command võtme väärtust kasutatakse kestprogrammi "
 "käivitamiseks."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Kui märgitud, siis uue väljundi tekkimisel keritakse terminali sisu kõige "
 "alumisse otsa."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -824,7 +456,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -834,7 +466,7 @@ msgstr ""
 "nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks \"keelatud"
 "\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -845,7 +477,7 @@ msgstr ""
 "nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks \"keelatud"
 "\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -857,7 +489,7 @@ msgstr ""
 "selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi "
 "ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -867,7 +499,7 @@ msgstr ""
 "vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks "
 "\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -878,7 +510,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -889,7 +521,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -901,7 +533,7 @@ msgstr ""
 "selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi "
 "ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -912,7 +544,7 @@ msgstr ""
 "vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks "
 "\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -923,7 +555,7 @@ msgstr ""
 "vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks "
 "\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -934,7 +566,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -946,7 +578,7 @@ msgstr ""
 "selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi "
 "ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -958,7 +590,7 @@ msgstr ""
 "selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi "
 "ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -969,7 +601,7 @@ msgstr ""
 "vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks "
 "\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -980,7 +612,7 @@ msgstr ""
 "vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku väärtuseks "
 "\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -991,7 +623,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -1002,7 +634,7 @@ msgstr ""
 "samasuguses vormingus nagu GTK+ abifailides kasutab. Kui seada selle valiku "
 "väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -1014,87 +646,87 @@ msgstr ""
 "selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi "
 "ei ole."
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid "Keyboard shortcut to close a tab"
 msgstr "Kiirklahv saki sulgemiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid "Keyboard shortcut to close a window"
 msgstr "Kiirklahv akna sulgemiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid "Keyboard shortcut to copy text"
 msgstr "Kiirklahv teksti kopeerimiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Kiirklahv uue profiili loomiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid "Keyboard shortcut to launch help"
 msgstr "Kiirklahv abi kuvamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid "Keyboard shortcut to make font larger"
 msgstr "Kiirklahv kirjasuuruse suurendamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Kiirklahv kirjatüübi tavasuurusele viimiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Kiirklahv kirjasuuruse vähendamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Kiirklahv uue saki avamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid "Keyboard shortcut to open a new window"
 msgstr "Kiirklahv uue akna avamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid "Keyboard shortcut to paste text"
 msgstr "Kiirklahv teksti asetamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Kiirklahv terminali puhastamiseks ja algsätete seadmiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Kiirklahv terminali algseadistamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Kiirklahv terminali pealkirja seadmiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Kiirklahv järgmisele sakile lülitumiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Kiirklahv eelmisele sakile lülitumiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Kiirklahv täisekraanivaate sisse- ja väljalülitamiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Kiirklahv menüüriba peitmiseks ja nähtavale toomiseks"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "List of available encodings"
 msgstr "Saadaolevate kooditabelite loend"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "List of profiles"
 msgstr "Profiilide nimekiri"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -1102,7 +734,7 @@ msgstr ""
 "Gnome terminalile teadaolevate profiilide loend. Sisaldab alamkataloogide "
 "nimesid kataloogi /apps/gnome-terminal/profiles suhtes."
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -1112,11 +744,11 @@ msgstr ""
 "gtkrc abil (gtk-menu-bar-accel = \"misiganes\"). Selle võtme abil saab "
 "standardset menüüriba kiirklahvi keelata."
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Number of lines to keep in scrollback"
 msgstr "Tagasikerimise puhvri ridade arv"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -1128,13 +760,13 @@ msgstr ""
 "jäävad read kustutatakse mälust. Ole selle sättega ettevaatlik - see mõjutab "
 "otseselt terminali pool kasutatava mälu hulka."
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Palette for terminal applications"
 msgstr "Palett terminalirakenduste jaoks"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -1142,11 +774,11 @@ msgstr ""
 "Dialoogiakna avamine, kui S/Key väljakutse vastus on tuvastatud ja sellele "
 "on klõpsatud. Dialoogiaknasse sisestatud parool saadetakse terminalile."
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Position of the scrollbar"
 msgstr "Kerimisriba asukoht"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -1154,24 +786,24 @@ msgstr ""
 "Võimalikud väärtused on \"close\" terminali sulgemiseks ja \"restart\" käsu "
 "taaskäivitamiseks."
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Uue akna või saki avamisel kasutatav profiil. See peab olema võtmes "
 "profile_list loetletud."
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:92
 msgid "Profile to use for new terminals"
 msgstr "Profiil, mida kasutada uutes terminalides"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Kui use_custom_command on märgitud, siis käivitatakse kestprogrammi asemel "
 "see käsk."
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -1184,7 +816,7 @@ msgstr ""
 "BackSpace kood), \"escape-sequence\" BackSpace või Delete klahvi tüüpilise "
 "paojada jaoks. Üldjuhul tagab normaalse käitumise väärtus \"ascii-del\"."
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -1198,7 +830,7 @@ msgstr ""
 "paojada jaoks. Üldjuhul tagab normaalse käitumise väärtus \"escape-sequence"
 "\"."
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -1207,6 +839,12 @@ msgstr ""
 "Terminalides töötavate rakenduste käsutuses on on 16-värvusega palett, mis "
 "on kirjeldatud koolonitega eraldatud nimekirjana. Värvuste nimed võivad olla "
 "ka kuueteistkümnendkujul (näiteks \"#FF00FF\")."
+
+#: ../src/gnome-terminal.schemas.in.h:98
+msgid ""
+"The possible values are \"system\" to use the global cursor blinking "
+"settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:99
 msgid "Title for terminal"
@@ -1289,10 +927,14 @@ msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Kas terminaliakende sulgemisel peab kinnitust küsima"
 
 #: ../src/gnome-terminal.schemas.in.h:112
+msgid "Whether to blink the cursor"
+msgstr "Kas kursor plingib"
+
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid "Whether to disable anti-aliasing without the X RENDER extension"
 msgstr "Kas ilma X RENDER laienduseta keelata sakisilumine või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1302,44 +944,44 @@ msgstr ""
 "takistada mõne terminalis töötava rakenduse kasutamist ja seetõttu on seda "
 "võimalik välja lülitada."
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Kas terminali käsk käivitatakse sisselogimise kestana või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Whether to run a custom command instead of the shell"
 msgstr "_Oma käsu käivitamine kesta asemel"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid "Whether to scroll background image"
 msgstr "Kas taustapilti kerida või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Kas klahvivajutuse puhul tuleb kerida alla või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:119
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Kas uue väljundi puhul tuleb kerida alla või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Kas uutel akendel ja sakkidel näidatakse menüüriba või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid "Whether to silence terminal bell"
 msgstr "Kas vaigistada terminali kellaheli"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Kas terminalikäsu käivitamisel uuendatakse sisselogimise kirjeid või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Kas terminalividina jaoks kasutatakse teemast võetud värve või mitte"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Whether to use the system font"
 msgstr "Kas kasutada süsteemset kirjatüüpi või mitte"
 
@@ -1349,597 +991,1038 @@ msgstr "Kas kasutada süsteemset kirjatüüpi või mitte"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current]"
 
-#: ../src/profile-editor.c:50
+#: ../src/keybinding-editor.glade.h:1
+#, fuzzy
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "M_enüü kiirklahv keelatud (vaikimisi F10)"
+
+#: ../src/keybinding-editor.glade.h:2
+msgid "Keyboard Shortcuts"
+msgstr "Kiirklahvid"
+
+#: ../src/keybinding-editor.glade.h:3
+#, fuzzy
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+msgstr ""
+"Kõik _menüü liikumisklahvid on keelatud (näiteks Alt-F failimenüü jaoks)"
+
+#: ../src/keybinding-editor.glade.h:4
+msgid "_Shortcut keys:"
+msgstr "_Kiirklahvid:"
+
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "Must helekollasel"
 
-#: ../src/profile-editor.c:52
+#: ../src/profile-editor.c:50
 msgid "Black on white"
 msgstr "Must valgel"
 
-#: ../src/profile-editor.c:54
+#: ../src/profile-editor.c:52
 msgid "Gray on black"
 msgstr "Hall mustal"
 
-#: ../src/profile-editor.c:56
+#: ../src/profile-editor.c:54
 msgid "Green on black"
 msgstr "Roheline mustal"
 
-#: ../src/profile-editor.c:58
+#: ../src/profile-editor.c:56
 msgid "White on black"
 msgstr "Valge mustal"
 
-#: ../src/profile-editor.c:71
-msgid "Tango"
-msgstr "Tango"
+#: ../src/profile-editor.c:440
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Viga käsu analüüsimisel: %s"
 
-#: ../src/profile-editor.c:72
-msgid "Linux console"
-msgstr "Linuxi konsool"
+#: ../src/profile-editor.c:460
+#, fuzzy, c-format
+msgid "Editing Profile “%s”"
+msgstr "Profiili \"%s\" redigeerimine"
 
-#: ../src/profile-editor.c:73
-msgid "XTerm"
-msgstr "XTerm"
+#. Translators: %s will be a data size, e.g. "(about 500kB)"
+#: ../src/profile-editor.c:476
+#, c-format
+msgid "(about %s)"
+msgstr ""
 
-#: ../src/profile-editor.c:74
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#: ../src/profile-editor.c:881
+#: ../src/profile-editor.c:614
 msgid "Images"
 msgstr "Pildid"
 
-#: ../src/profile-editor.c:885
+#: ../src/profile-editor.c:618
 msgid "All Files"
 msgstr "Kõik failid"
 
-#: ../src/profile-editor.c:1195
+#: ../src/profile-editor.c:734
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Paletivärvi %d valimine"
 
-#: ../src/profile-editor.c:1199
+#: ../src/profile-editor.c:738
 #, c-format
 msgid "Palette entry %d"
 msgstr "Paletikirje nr %d"
 
-#: ../src/profile-editor.c:1476
-#, c-format
-msgid "Editing Profile \"%s\""
-msgstr "Profiili \"%s\" redigeerimine"
+#: ../src/profile-manager.glade.h:1
+msgid "Profiles"
+msgstr "Profiilid"
 
-#: ../src/skey-popup.c:127
+#: ../src/profile-manager.glade.h:2
+#, fuzzy
+msgid "_Profile used when launching a new terminal:"
+msgstr "Uue terminali avamisel _kasutatav profiil:"
+
+#: ../src/profile-new-dialog.glade.h:1
+msgid "C_reate"
+msgstr "L_oo"
+
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:104
+msgid "New Profile"
+msgstr "Uus profiil"
+
+#: ../src/profile-new-dialog.glade.h:3
+msgid "Profile _name:"
+msgstr "Profiili _nimi:"
+
+#: ../src/profile-new-dialog.glade.h:4
+msgid "_Base on:"
+msgstr "_Põhineb mallil:"
+
+#: ../src/profile-preferences.glade.h:1
+msgid "<b>Command</b>"
+msgstr "<b>Käsk</b>"
+
+#: ../src/profile-preferences.glade.h:2
+msgid "<b>Foreground and Background</b>"
+msgstr "<b>Tekst ja taust</b>"
+
+#: ../src/profile-preferences.glade.h:3
+msgid "<b>Palette</b>"
+msgstr "<b>Palett</b>"
+
+#: ../src/profile-preferences.glade.h:4
+msgid "<b>Title</b>"
+msgstr "<b>Pealkiri</b>"
+
+#: ../src/profile-preferences.glade.h:5
+msgid ""
+"<small><i><b>Note:</b> Terminal applications have these colors available to "
+"them.</i></small>"
+msgstr ""
+"<small><i><b>Märkus:</b> Terminaliprogrammide käsutuses on järgnevad värvid."
+"</i></small>"
+
+#: ../src/profile-preferences.glade.h:6
+msgid ""
+"<small><i><b>Note:</b> These options may cause some applications to behave "
+"incorrectly.  They are only here to allow you to work around certain "
+"applications and operating systems that expect different terminal behavior.</"
+"i></small>"
+msgstr ""
+"<small><i><b>Märkus:</b> Need valikud võivad põhjustada mõne rakenduse "
+"väärat käitmust.  Nad on siin ainult selleks, et võimaldada sul teatud "
+"rakenduste ja operatsioonisüsteemide erinevast käitumisest põhjustatud "
+"probleemide vältimist.</i></small>"
+
+#: ../src/profile-preferences.glade.h:7
+msgid "<small><i>Maximum</i></small>"
+msgstr "<small><i>Suurim</i></small>"
+
+#: ../src/profile-preferences.glade.h:8
+msgid "<small><i>None</i></small>"
+msgstr "<small><i>Puudub</i></small>"
+
+#: ../src/profile-preferences.glade.h:9
+msgid ""
+"Automatic\n"
+"Control-H\n"
+"ASCII DEL\n"
+"Escape sequence"
+msgstr ""
+"Automaatne\n"
+"Control-H\n"
+"ASCII DEL\n"
+"Paojada"
+
+#: ../src/profile-preferences.glade.h:13
+msgid "Background"
+msgstr "Taust"
+
+#: ../src/profile-preferences.glade.h:14
+msgid "Background image _scrolls"
+msgstr "Taustapilt _kerib"
+
+#: ../src/profile-preferences.glade.h:15
+msgid "Built-in _schemes:"
+msgstr "Sisse_ehitatud teemad:"
+
+#: ../src/profile-preferences.glade.h:16
+#, fuzzy
+msgid "Built-in sche_mes:"
+msgstr "S_isseehitatud teemad:"
+
+#: ../src/profile-preferences.glade.h:17
+msgid "Choose A Terminal Font"
+msgstr "Terminali kirjatüübi valimine"
+
+#: ../src/profile-preferences.glade.h:18
+msgid "Choose Terminal Background Color"
+msgstr "Terminali taustavärvi valimine"
+
+#: ../src/profile-preferences.glade.h:19
+msgid "Choose Terminal Text Color"
+msgstr "Terminali tekstivärvi valimine"
+
+#: ../src/profile-preferences.glade.h:20
+#, fuzzy
+msgid "Color p_alette:"
+msgstr "Värvi_palett:"
+
+#: ../src/profile-preferences.glade.h:21
+msgid "Colors"
+msgstr "Värvid"
+
+#: ../src/profile-preferences.glade.h:22
+msgid "Compatibility"
+msgstr "Ühilduvus"
+
+#: ../src/profile-preferences.glade.h:23
+msgid "Custom"
+msgstr "Oma"
+
+#: ../src/profile-preferences.glade.h:24
+msgid "Custom co_mmand:"
+msgstr "_Oma käsk:"
+
+#: ../src/profile-preferences.glade.h:25
+msgid ""
+"Exit the terminal\n"
+"Restart the command\n"
+"Hold the terminal open"
+msgstr ""
+"Terminal suletakse\n"
+"Käivitatakse käsk uuesti\n"
+"Jäetakse terminal avatuks"
+
+#: ../src/profile-preferences.glade.h:28
+msgid "General"
+msgstr "Üldine"
+
+#: ../src/profile-preferences.glade.h:29
+msgid "Image _file:"
+msgstr "_Pildifail:"
+
+#: ../src/profile-preferences.glade.h:30
+msgid "Initial _title:"
+msgstr "Algne _pealkiri:"
+
+#: ../src/profile-preferences.glade.h:31
+msgid ""
+"On the left side\n"
+"On the right side\n"
+"Disabled"
+msgstr ""
+"Vasakus servas\n"
+"Paremas servas\n"
+"Puudub"
+
+#: ../src/profile-preferences.glade.h:34
+msgid "Profile Editor"
+msgstr "Profiiliredaktor"
+
+#: ../src/profile-preferences.glade.h:35
+#, fuzzy
+msgid ""
+"Replace initial title\n"
+"Append initial title\n"
+"Prepend initial title\n"
+"Keep initial title"
+msgstr ""
+"Asendab algse pealkirja\n"
+"Paigutatakse algse pealkirja ette\n"
+"Paigutatakse algse pealkirja järele\n"
+"Jäetakse kuvamata"
+
+#: ../src/profile-preferences.glade.h:39
+msgid "Ru_n a custom command instead of my shell"
+msgstr "Kesta asemel käivitada o_ma käsk"
+
+#: ../src/profile-preferences.glade.h:40
+msgid "S_hade transparent or image background:"
+msgstr "Läbipaistvate või pilt-taustade _varjutamine:"
+
+#: ../src/profile-preferences.glade.h:41
+msgid "Scroll on _keystroke"
+msgstr "Kerimine k_lahvivajutuse puhul"
+
+#: ../src/profile-preferences.glade.h:42
+#, fuzzy
+msgid "Scroll on _output"
+msgstr "Kerimine _väljundi saamisel"
+
+#: ../src/profile-preferences.glade.h:43
+#, fuzzy
+msgid "Scroll_back:"
+msgstr "_Kerimispuhver:"
+
+#: ../src/profile-preferences.glade.h:44
+msgid "Scrolling"
+msgstr "Kerimine"
+
+#: ../src/profile-preferences.glade.h:45
+msgid "Select Background Image"
+msgstr "Taustapildi valimine"
+
+#: ../src/profile-preferences.glade.h:46
+msgid "Select-by-_word characters:"
+msgstr "_Sõna-kaupa-valimise märgid:"
+
+#: ../src/profile-preferences.glade.h:47
+msgid "Show _menubar by default in new terminals"
+msgstr "Uutes terminalides _menüüriba vaikimisi näitamine"
+
+#: ../src/profile-preferences.glade.h:48
+msgid ""
+"Tango\n"
+"Linux console\n"
+"XTerm\n"
+"Rxvt\n"
+"Custom"
+msgstr ""
+
+#: ../src/profile-preferences.glade.h:53
+msgid "Terminal _bell"
+msgstr "Terminali _kell"
+
+#: ../src/profile-preferences.glade.h:54
+msgid "Title and Command"
+msgstr "Pealkiri ja käsk"
+
+#: ../src/profile-preferences.glade.h:55
+msgid "When command _exits:"
+msgstr "Käsu _lõpetamisel:"
+
+#: ../src/profile-preferences.glade.h:56
+msgid "When terminal commands set their o_wn titles:"
+msgstr ""
+
+#: ../src/profile-preferences.glade.h:57
+msgid "_Allow bold text"
+msgstr "_Rasvane kiri lubatud"
+
+#: ../src/profile-preferences.glade.h:58
+msgid "_Background color:"
+msgstr "Tausta_värv:"
+
+#: ../src/profile-preferences.glade.h:59
+msgid "_Background image"
+msgstr "_Taustapilt"
+
+#: ../src/profile-preferences.glade.h:60
+msgid "_Backspace key generates:"
+msgstr "_Backspace klahv põhjustab:"
+
+#: ../src/profile-preferences.glade.h:61
+msgid "_Delete key generates:"
+msgstr "_Delete klahv põhjustab:"
+
+#: ../src/profile-preferences.glade.h:62
+msgid "_Font:"
+msgstr "_Kirjatüüp:"
+
+#: ../src/profile-preferences.glade.h:63
+msgid "_Profile name:"
+msgstr "Profiili _nimi:"
+
+#: ../src/profile-preferences.glade.h:64
+msgid "_Reset Compatibility Options to Defaults"
+msgstr "Taasta ühilduvusvalikute _algväärtused"
+
+#: ../src/profile-preferences.glade.h:65
+msgid "_Run command as a login shell"
+msgstr "Käsk käivitatakse _login kestana"
+
+#: ../src/profile-preferences.glade.h:66
+msgid "_Scrollbar is:"
+msgstr "K_erimisriba asukoht:"
+
+#: ../src/profile-preferences.glade.h:67
+msgid "_Solid color"
+msgstr "Ü_htlane värv"
+
+#: ../src/profile-preferences.glade.h:68
+msgid "_Text color:"
+msgstr "_Teksti värv:"
+
+#: ../src/profile-preferences.glade.h:69
+msgid "_Transparent background"
+msgstr "_Läbipaistev taust"
+
+#: ../src/profile-preferences.glade.h:70
+msgid "_Update login records when command is launched"
+msgstr "Käsu käivitamisel _uuendatakse sisselogimiskirjeid"
+
+#: ../src/profile-preferences.glade.h:71
+#, fuzzy
+msgid "_Use colors from system theme"
+msgstr "_Kasutatakse süsteemi teema värve"
+
+#: ../src/profile-preferences.glade.h:72
+msgid "_Use the system fixed width font"
+msgstr "Süsteemi _terminali kirjatüübi kasutamine"
+
+#: ../src/profile-preferences.glade.h:73
+msgid "_lines"
+msgstr "_rida"
+
+#: ../src/skey-challenge.glade.h:1
+msgid "S/Key Challenge Response"
+msgstr "S/Key väljakutse vastus"
+
+#: ../src/skey-challenge.glade.h:2
+msgid "_Password:"
+msgstr "_Parool:"
+
+#: ../src/skey-popup.c:164
 msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
 msgstr ""
 "Sinu poolt klõpsatud tekst ei paista olevat korrektne S/Key väljakutse."
 
-#: ../src/skey-popup.c:138
+#: ../src/skey-popup.c:175
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "Sinu poolt klõpsatud tekst ei paista olevat korrektne OTP väljakutse."
 
-#: ../src/terminal-accels.c:101
+#: ../src/terminal-accels.c:100
 msgid "New Tab"
 msgstr "Uus sakk"
 
-#: ../src/terminal-accels.c:103
+#: ../src/terminal-accels.c:102
 msgid "New Window"
 msgstr "Uus aken"
 
-#: ../src/terminal-accels.c:107
+#: ../src/terminal-accels.c:106
 msgid "Close Tab"
 msgstr "Saki sulgemine"
 
-#: ../src/terminal-accels.c:109
+#: ../src/terminal-accels.c:108
 msgid "Close Window"
 msgstr "Akna sulgemine"
 
-#: ../src/terminal-accels.c:115
+#: ../src/terminal-accels.c:114
 msgid "Copy"
 msgstr "Kopeerimine"
 
-#: ../src/terminal-accels.c:117
+#: ../src/terminal-accels.c:116
 msgid "Paste"
 msgstr "Asetamine"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:122
 msgid "Hide and Show menubar"
 msgstr "Menüüriba peitmine ja näitamine"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:124
 msgid "Full Screen"
 msgstr "Täisekraan"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:126
 msgid "Zoom In"
 msgstr "Suurendamine"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:128
 msgid "Zoom Out"
 msgstr "Vähendamine"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:130
 msgid "Normal Size"
 msgstr "Normaalsuurus"
 
-#: ../src/terminal-accels.c:137 ../src/terminal-screen.c:1802
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2733
 msgid "Set Title"
 msgstr "Pealkirja määramine"
 
-#: ../src/terminal-accels.c:139
+#: ../src/terminal-accels.c:138
 msgid "Reset"
 msgstr "Algväärtustamine"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:140
 msgid "Reset and Clear"
 msgstr "Algväärtustamine ja tühjendamine"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:146
 msgid "Switch to Previous Tab"
 msgstr "Liikumine eelmisele sakile"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:148
 msgid "Switch to Next Tab"
 msgstr "Liikumine järgmisele sakile"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:150
 msgid "Move Tab to the Left"
 msgstr "Saki liigutamine vasakule"
 
-#: ../src/terminal-accels.c:153
+#: ../src/terminal-accels.c:152
 msgid "Move Tab to the Right"
 msgstr "Saki liigutamine paremale"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:154
 msgid "Detach Tab"
 msgstr "Saki lahtihaakimine"
 
-#: ../src/terminal-accels.c:160
+#: ../src/terminal-accels.c:159
 msgid "Contents"
 msgstr "Sisukord"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:164
 msgid "File"
 msgstr "Fail"
 
-#: ../src/terminal-accels.c:166
+#: ../src/terminal-accels.c:165
 msgid "Edit"
 msgstr "Redaktor"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:166
 msgid "View"
 msgstr "Vaade"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:168
 msgid "Go"
 msgstr "Liigu"
 
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:169
 msgid "Help"
 msgstr "Abi"
 
-#: ../src/terminal-accels.c:257 ../src/terminal-profile.c:306
-#: ../src/terminal-screen.c:192 ../src/terminal.c:1267
-#, c-format
-msgid "There was an error loading config from %s. (%s)\n"
-msgstr "Konfiguratsiooni laadimisel %s-ist tekkis viga. (%s)\n"
-
-#: ../src/terminal-accels.c:271
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal keybinding "
-"changes. (%s)\n"
-msgstr ""
-"Terminali klahviseoste muutustest teavituste tellimisel tekkis viga. (%s)\n"
-
-#: ../src/terminal-accels.c:312
-#, c-format
-msgid "There was an error loading a terminal keybinding. (%s)\n"
-msgstr "Terminali klahviseose laadimisel tekkis viga. (%s)\n"
-
-#: ../src/terminal-accels.c:328
-#, c-format
-msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
-msgstr "Sätete võtme %s väärtus \"%s\" pole lubatud\n"
-
-#: ../src/terminal-accels.c:351
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use menubar access "
-"keys. (%s)\n"
-msgstr ""
-"Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
-"kohta sätetest väärtuse laadimisel tekkis viga. (%s)\n"
-
-#: ../src/terminal-accels.c:365
-#, c-format
-msgid ""
-"There was an error subscribing to notification on changes on whether to use "
-"menubar access keys (%s)\n"
-msgstr ""
-"Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
-"muutustest teavituste tellimisel tekkis viga (%s)\n"
-
-#: ../src/terminal-accels.c:376
-#, c-format
-msgid ""
-"There was an error loading config value for whether to use menu "
-"accelerators. (%s)\n"
-msgstr ""
-"Menüüriba kiirklahvide kasutamise ja mittekasutamise vahel lülitumise kohta "
-"sätetest väärtuse laadimisel tekkis viga. (%s)\n"
-
-#: ../src/terminal-accels.c:392
-#, c-format
-msgid ""
-"There was an error subscribing to notification for use_menu_accelerators (%"
-"s)\n"
-msgstr "use_menu_accelerators tellimisel tekkis viga (%s)\n"
-
-#: ../src/terminal-accels.c:661
+#: ../src/terminal-accels.c:234
 msgid "Disabled"
 msgstr "Keelatud"
 
-#: ../src/terminal-accels.c:724
-#, c-format
-msgid "Error propagating accelerator change to configuration database: %s\n"
-msgstr "Viga kiirklahvi andmete saatmisel seadistuste andmebaasi: %s\n"
-
-#: ../src/terminal-accels.c:915
-#, c-format
-msgid "The shortcut key \"%s\" is already bound to the \"%s\" action"
+#: ../src/terminal-accels.c:672
+#, fuzzy, c-format
+msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Kiirklahv \"%s\" on juba seotud toiminguga \"%s\""
 
-#: ../src/terminal-accels.c:1013
-#, c-format
-msgid "Error setting %s config key: %s\n"
-msgstr "Viga võtme %s määramisel: %s\n"
-
-#: ../src/terminal-accels.c:1044
-#, c-format
-msgid "Error setting use_menu_accelerators key: %s\n"
-msgstr "Viga võtme use_menu_accelerators määramisel: %s\n"
-
-#: ../src/terminal-accels.c:1171
+#: ../src/terminal-accels.c:782
 msgid "_Action"
 msgstr "_Tegevus"
 
-#: ../src/terminal-accels.c:1190
+#: ../src/terminal-accels.c:801
 msgid "Shortcut _Key"
 msgstr "Kii_rklahv"
 
-#: ../src/terminal-profile.c:321
+#: ../src/terminal-app.c:408
+msgid "Click button to choose profile"
+msgstr "Profiili valimiseks klõpsa nupule"
+
+#: ../src/terminal-app.c:493
+msgid "Profile list"
+msgstr "Profiilide nimekiri"
+
+#: ../src/terminal-app.c:555
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "Kustutada profiil „%s“?"
+
+#: ../src/terminal-app.c:571
+msgid "Delete Profile"
+msgstr "Profiili kustutamine"
+
+#: ../src/terminal-app.c:946
 #, c-format
 msgid ""
-"There was an error subscribing to notification of terminal profile changes. "
-"(%s)\n"
+"You already have a profile called “%s”. Do you want to create another "
+"profile with the same name?"
 msgstr ""
-"Terminali profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
+"Profiil nimega „%s“ on juba olemas. Kas sa soovid teha veel ühte sama nimega "
+"profiili?"
 
-#: ../src/terminal-profile.c:1046
-#, c-format
-msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-msgstr "Ikooni \"%s\" pole võimalik terminaliprofiili \"%s\" jaoks leida\n"
+#: ../src/terminal-app.c:1047
+msgid "Choose base profile"
+msgstr "Vali põhiprofiil"
 
-#: ../src/terminal-profile.c:1060
+#: ../src/terminal-app.c:1614
 #, c-format
-msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Tõrge ikooni \"%s\" laadimisel profiili \"%s\" jaoks: %s\n"
+msgid "Invalid geometry string \"%s\"\n"
+msgstr "Lubamatu geomeetriastring \"%s\"\n"
 
-#: ../src/terminal-profile.c:1230
-#, c-format
+#: ../src/terminal.c:275
+#, fuzzy, c-format
 msgid ""
-"Could not find a background image called \"%s\" for terminal profile \"%s\"\n"
+"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"window-with-profile' option\n"
 msgstr ""
-"Taustapilti \"%s\" pole võimalik terminaliprofiili \"%s\" jaoks leida\n"
+"Võti '%s' pole selles gnome-terminal'i versioonis enam toetatud. Võib-olla "
+"on sul kasulik luua uus profiil koos soovitud sätetega ja kasutada seda koos "
+"võtmega --window-with-profile\n"
 
-#: ../src/terminal-profile.c:1244
+#: ../src/terminal.c:301
+#, c-format
+msgid "Argument to \"%s\" is not a valid command: %s\n"
+msgstr "\"%s\" argument on vigane käsk: %s\n"
+
+#: ../src/terminal.c:455
+msgid "Two roles given for one window"
+msgstr "Ühele aknale on määratud kaks rolli"
+
+#: ../src/terminal.c:477 ../src/terminal.c:511
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "Võtit \"%s\" on ühele aknale määratud kaks korda\n"
+
+#: ../src/terminal.c:635
 #, c-format
 msgid ""
-"Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
-msgstr "Tõrge taustapildi \"%s\" laadimisel profiili \"%s\" jaoks: %s\n"
-
-#: ../src/terminal-profile.c:1926
-#, c-format
-msgid ""
-"GNOME Terminal: font name \"%s\" set in configuration database is not valid\n"
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line\n"
 msgstr ""
-"GNOME Terminal: seadistuste andmebaasis seatid kirjatüübi nimi \"%s\" ei ole "
-"lubatud\n"
+"Võtmel \"%s\" peab kogu käsurea edasises osas olema kirjeldatud käivitatav "
+"käsk\n"
 
-#: ../src/terminal-profile.c:2228
+#: ../src/terminal.c:678
 #, c-format
-msgid "Error getting default value of %s: %s\n"
-msgstr "Viga %s väärtuse võtmisel: %s\n"
+msgid "\"%s\" is not a valid zoom factor\n"
+msgstr "\"%s\" pole korrektne suurendustegur\n"
 
-#: ../src/terminal-profile.c:2234
+#: ../src/terminal.c:685
 #, c-format
-msgid "There wasn't a default value for %s\n"
-msgstr "%s jaoks pole vaikimisi väärtust\n"
+msgid "Zoom factor \"%g\" is too small, using %g\n"
+msgstr "Suurendustegur \"%g\" on liiga väike, kasutatakse %g\n"
 
-#: ../src/terminal-profile.c:2249
+#: ../src/terminal.c:693
 #, c-format
-msgid "Error setting key %s back to default: %s\n"
-msgstr "Viga võtme %s vaikeväärtusega väärtustamisel: %s\n"
+msgid "Zoom factor \"%g\" is too large, using %g\n"
+msgstr "Suurendustegur \"%g\" on liiga suur, kasutatakse %g\n"
 
-#: ../src/terminal-profile.c:2452
+#: ../src/terminal.c:814
 #, c-format
+msgid "No argument given to \"%s\" option\n"
+msgstr "Võtmele \"%s\" pole argumenti määratud\n"
+
+#: ../src/terminal.c:836
+#, c-format
+msgid "\"%s\" option requires an argument\n"
+msgstr "võtmel \"%s\" peab olema argument\n"
+
+#: ../src/terminal.c:1017
+#, fuzzy, c-format
+msgid "No such profile \"%s\", using default profile\n"
+msgstr "Profiili '%s' pole, kasutan vaikimisi profiili\n"
+
+#: ../src/terminal.c:1259
+msgid "Execute the argument to this option inside the terminal."
+msgstr "Selle võtme argumendi käivitamine terminalis"
+
+#: ../src/terminal.c:1268
+msgid "Execute the remainder of the command line inside the terminal."
+msgstr "Käsurea ülejäänud osa käivitamine terminalis"
+
+#: ../src/terminal.c:1277
 msgid ""
-"There was an error while removing the configuration directory %s. (%s)\n"
-msgstr "Seadistuste kataloogi %s eemaldamisel tekkis viga. (%s)\n"
-
-#: ../src/terminal-profile.c:2510
-#, c-format
-msgid ""
-"There was an error subscribing to notification of changes to default "
-"profile. (%s)\n"
+"Open a new window containing a tab with the default profile. More than one "
+"of these options can be provided."
 msgstr ""
-"Vaikimisi profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
+"Uue akna avamine, mis sisaldab vaikimisi profiiliga sakki. Seda võtit võib "
+"määrata rohkem kui üks kord."
 
-#: ../src/terminal-profile.c:2557
-msgid "_Details"
-msgstr "Ü_ksikasjad"
+#: ../src/terminal.c:1286
+msgid ""
+"Open a new window containing a tab with the given profile. More than one of "
+"these options can be provided."
+msgstr ""
+"Uue akna avamine, mis sisaldab viimati määratud profiiliga sakki. Seda võtit "
+"võib määrata rohkem kui üks kord."
 
-#: ../src/terminal-profile.c:2983 ../src/terminal.c:1910
-#, c-format
-msgid "There was an error creating the profile \"%s\""
-msgstr "Profiili \"%s\" loomisel tekkis viga"
+#: ../src/terminal.c:1287 ../src/terminal.c:1305
+msgid "PROFILENAME"
+msgstr "PROFIILI_NIMI"
 
-#: ../src/terminal-profile.c:3079
-msgid "There was an error deleting the profiles"
-msgstr "Profiilide kustutamisel tekkis viga"
+#: ../src/terminal.c:1295
+msgid ""
+"Open a new tab in the last-opened window with the default profile. More than "
+"one of these options can be provided."
+msgstr ""
+"Uue saki avamine viimati vaikimis profiiliga avatud aknas. Seda võtit võib "
+"määrata rohkem kui üks kord."
 
-#: ../src/terminal-profile.c:3182
-#, c-format
-msgid "Could not parse string \"%s\" as a color palette\n"
-msgstr "Stringi \"%s\" pole võimalik värvipaletina analüüsida\n"
+#: ../src/terminal.c:1304
+msgid ""
+"Open a new tab in the last-opened window with the given profile. More than "
+"one of these options can be provided."
+msgstr ""
+"Uue saki avamine viimati määratud profiili ID-ga kirjeldatud aknas. Seda "
+"võtit võib määrata rohkem kui üks kord."
 
-#: ../src/terminal-profile.c:3191
-#, c-format
-msgid "Palette had %d entry instead of %d\n"
-msgid_plural "Palette had %d entries instead of %d\n"
-msgstr[0] "Paletil on %d kirje %d asemel\n"
-msgstr[1] "Paletil on %d kirjet %d asemel\n"
+#: ../src/terminal.c:1313
+msgid ""
+"Open a new window containing a tab with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+"Uue akna avamine, mis sisaldab viimati määratud profiili ID-ga sakki. "
+"Sisemises kasutuses seansside salvestamiseks."
 
-#: ../src/terminal-screen.c:208
+#: ../src/terminal.c:1314 ../src/terminal.c:1323
+msgid "PROFILEID"
+msgstr "PROFIILI_ID"
+
+#: ../src/terminal.c:1322
+msgid ""
+"Open a new tab in the last-opened window with the given profile ID. Used "
+"internally to save sessions."
+msgstr ""
+"Uue saki avamine viimati määratud profiili ID-ga kirjeldatud aknas. "
+"Sisemises kasutuses seansside salvestamiseks."
+
+#: ../src/terminal.c:1331
+msgid ""
+"Set the role for the last-specified window; applies to only one window; can "
+"be specified once for each window you create from the command line."
+msgstr ""
+"Viimati kirjeldatud aknale rolli määramine. Seda võib kirjeldada ainult ühe "
+"käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
+
+#: ../src/terminal.c:1332
+msgid "ROLE"
+msgstr "ROLL"
+
+#: ../src/terminal.c:1340
+msgid ""
+"Turn on the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Viimati kirjeldatud akna menüüriba sisselülitamine. Seda võib kirjeldada "
+"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
+
+#: ../src/terminal.c:1349
+msgid ""
+"Turn off the menubar for the last-specified window; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Viimati kirjeldatud akna menüüriba väljalülitamine. Seda võib kirjeldada "
+"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
+
+#: ../src/terminal.c:1358
+msgid ""
+"Set the last-specified window into fullscreen mode; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Viimati kirjeldatud akna täisekraanirežiimi lülitamine. Seda võib kirjeldada "
+"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
+
+#: ../src/terminal.c:1367
+msgid ""
+"X geometry specification (see \"X\" man page), can be specified once per "
+"window to be opened."
+msgstr ""
+"X-geomeetria kirjeldus (vaata manuaali lehte \"X\"), seda võib kirjeldada "
+"üks kord avatava akna kohta."
+
+#: ../src/terminal.c:1368
+msgid "GEOMETRY"
+msgstr "GEOMEETRIA"
+
+#: ../src/terminal.c:1376
+msgid ""
+"Do not register with the activation nameserver, do not re-use an active "
+"terminal"
+msgstr ""
+"Aktiveerimise nimeserveris ei registreeruta, aktiivset terminali ei "
+"taaskasutata"
+
+#: ../src/terminal.c:1385
+msgid "Register with the activation nameserver [default]"
+msgstr "Registreerimine aktiveerimise nimeserveriga [vaikimisi]"
+
+#: ../src/terminal.c:1394
+msgid "ID for startup notification protocol."
+msgstr "Käivitamise teavitusprotokolli ID"
+
+#: ../src/terminal.c:1403
+msgid "Set the terminal's title"
+msgstr "Määra terminali pealkiri"
+
+#: ../src/terminal.c:1404
+msgid "TITLE"
+msgstr "PEALKIRI"
+
+#: ../src/terminal.c:1412
+msgid "Set the terminal's working directory"
+msgstr "Määra terminali töökataloog"
+
+#: ../src/terminal.c:1413 ../src/terminal.c:1422
+msgid "DIRNAME"
+msgstr "KATALOOGINIMI"
+
+#: ../src/terminal.c:1421
+msgid "Set the default terminal's working directory. Used internally"
+msgstr "Terminali vaikimisi töökataloogi määramine. Sisemiseks kasutamiseks"
+
+#: ../src/terminal.c:1430
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr "Terminali suurendusteguri seadmine (tavasuurus on 1.0)"
+
+#: ../src/terminal.c:1431 ../src/terminal.c:1440
+msgid "ZOOMFACTOR"
+msgstr "SUURENDUSTEGUR"
+
+#: ../src/terminal.c:1439
+msgid "Set the last specified tab as the active one in its window"
+msgstr "Viimasena kirjeldatud saki määramine omas aknas aktiivseks"
+
+#: ../src/terminal.c:1619 ../src/terminal.c:1622
+msgid "GNOME Terminal Emulator"
+msgstr "GNOME Terminaliemulaator"
+
+#: ../src/terminal.c:1623
+msgid "Show GNOME Terminal options"
+msgstr "GNOME Terminali valikute näitamine"
+
+#: ../src/terminal.c:1772
 #, c-format
 msgid ""
-"There was an error subscribing to notification of monospace font changes. (%"
-"s)\n"
+"It appears that you do not have gnome-terminal.server installed in a valid "
+"location. Factory mode disabled.\n"
 msgstr ""
-"Täheruudu kirjatüübi muutustest teavituste tellimisel tekkis viga. (%s)\n"
+"Paistab, et sul pole gnome-terminal.server õigesse kohta paigaldatud. "
+"Factory-režiim on keelatud.\n"
 
-#: ../src/terminal-screen.c:1060
+#: ../src/terminal.c:1775
+#, c-format
+msgid ""
+"Error registering terminal with the activation service; factory mode "
+"disabled.\n"
+msgstr ""
+"Viga terminali registreerimisel aktiveerimisteenuses, factory režiim on "
+"keelatud.\n"
+
+#: ../src/terminal.c:1811
+#, c-format
+msgid "Failed to retrieve terminal server from activation server\n"
+msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
+
+#: ../src/terminal-profile.c:155
+msgid "Unnamed"
+msgstr ""
+
+#: ../src/terminal-screen.c:1134
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Selle terminali käsuga tekkis probleem: %s"
 
-#: ../src/terminal-screen.c:1831
-msgid "_Title:"
-msgstr "_Pealkiri:"
-
-#: ../src/terminal-screen.c:1948
-#, c-format
-msgid "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Terminaliaknasse kukutatud text/plain (lihttekst) on vigase vormingu (%d) "
-"või pikkusega (%d)\n"
-
-#: ../src/terminal-screen.c:1971
-#, c-format
-msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Terminaliaknasse kukutatud värvus on vigase vormingu (%d) või pikkusega (%"
-"d)\n"
-
-#: ../src/terminal-screen.c:2014
-#, c-format
-msgid "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Terminaliaknasse kukutatud Mozilla URL on vigase vormingu (%d) või pikkusega "
-"(%d)\n"
-
-#: ../src/terminal-screen.c:2063
-#, c-format
-msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Terminaliaknasse kukutatud URI-de loetelu on vigase vormingu (%d) või "
-"pikkusega (%d)\n"
-
-#: ../src/terminal-screen.c:2122
-#, c-format
-msgid ""
-"Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
-msgstr ""
-"Terminaliaknasse kukutatud pildi failinimi on vigase vormingu (%d) või "
-"pikkusega (%d)\n"
-
-#: ../src/terminal-screen.c:2148
-#, c-format
-msgid "Error converting URI \"%s\" into filename: %s\n"
-msgstr "Viga URI \"%s\" teisendamisel failinimeks: %s\n"
-
-#: ../src/terminal-tabs-menu.c:201
-msgid "Switch to this tab"
-msgstr "Liikumine sellele sakile"
-
-#: ../src/terminal-widget-vte.c:594
-#, c-format
+#: ../src/terminal-screen.c:1430
 msgid "There was an error creating the child process for this terminal"
 msgstr "Sellele terminalile lapsprotsessi loomisel tekkis viga"
 
-#: ../src/terminal-window.c:404
+#: ../src/terminal-tabs-menu.c:198
+msgid "Switch to this tab"
+msgstr "Liikumine sellele sakile"
+
+#: ../src/terminal-util.c:127
+#, c-format
+msgid "There was an error displaying help: %s"
+msgstr "Abiinfo kuvamisel tekkis viga: %s"
+
+#: ../src/terminal-util.c:215
+#, c-format
+msgid ""
+"Could not open the address “%s”:\n"
+"%s"
+msgstr ""
+"Aadressi „%s“ pole võimalik avada:\n"
+"%s"
+
+#: ../src/terminal-window.c:309
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:408
+#: ../src/terminal-window.c:311
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1092
+#: ../src/terminal-window.c:1223
 msgid "_File"
 msgstr "_Fail"
 
 #. File menu
-#: ../src/terminal-window.c:1093 ../src/terminal-window.c:1103
-#: ../src/terminal-window.c:1209
+#: ../src/terminal-window.c:1224 ../src/terminal-window.c:1234
+#: ../src/terminal-window.c:1347
 msgid "Open _Terminal"
 msgstr "Ava _terminal"
 
-#: ../src/terminal-window.c:1094 ../src/terminal-window.c:1106
-#: ../src/terminal-window.c:1212
+#: ../src/terminal-window.c:1225 ../src/terminal-window.c:1237
+#: ../src/terminal-window.c:1350
 msgid "Open Ta_b"
 msgstr "Ava _sakk"
 
-#: ../src/terminal-window.c:1095 ../src/terminal.c:2502
+#: ../src/terminal-window.c:1226
 msgid "_Edit"
 msgstr "_Redaktor"
 
-#: ../src/terminal-window.c:1096
+#: ../src/terminal-window.c:1227
 msgid "_View"
 msgstr "_Vaade"
 
-#: ../src/terminal-window.c:1097
+#: ../src/terminal-window.c:1228
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1098
+#: ../src/terminal-window.c:1229
 msgid "_Tabs"
 msgstr "_Sakid"
 
-#: ../src/terminal-window.c:1099
+#: ../src/terminal-window.c:1230
 msgid "_Help"
 msgstr "A_bi"
 
-#: ../src/terminal-window.c:1109
+#: ../src/terminal-window.c:1240
 msgid "New _Profile…"
 msgstr "Uus _profiil…"
 
-#: ../src/terminal-window.c:1112 ../src/terminal-window.c:1218
+#: ../src/terminal-window.c:1243 ../src/terminal-window.c:1356
 msgid "C_lose Tab"
 msgstr "Su_lge sakk"
 
-#: ../src/terminal-window.c:1115
+#: ../src/terminal-window.c:1246
 msgid "_Close Window"
 msgstr "S_ulge aken"
 
-#: ../src/terminal-window.c:1126
+#: ../src/terminal-window.c:1257
 msgid "P_rofiles…"
 msgstr "P_rofiilid…"
 
-#: ../src/terminal-window.c:1129
+#: ../src/terminal-window.c:1260
 msgid "_Keyboard Shortcuts…"
 msgstr "_Kiirklahvid…"
 
-#: ../src/terminal-window.c:1132
-msgid "C_urrent Profile…"
-msgstr "Ak_tiivne profiil…"
+#: ../src/terminal-window.c:1263
+#, fuzzy
+msgid "Profile _Preferences"
+msgstr "Profiili _nimi:"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1148
+#: ../src/terminal-window.c:1279
 msgid "Change _Profile"
 msgstr "Muuda _profiil"
 
-#: ../src/terminal-window.c:1149
+#: ../src/terminal-window.c:1280
 msgid "_Set Title…"
 msgstr "Määra _pealkiri…"
 
-#: ../src/terminal-window.c:1152
+#: ../src/terminal-window.c:1283
 msgid "Set _Character Encoding"
 msgstr "_Määra märkide kooditabel"
 
-#: ../src/terminal-window.c:1153
+#: ../src/terminal-window.c:1284
 msgid "_Reset"
 msgstr "_Algväärtusta"
 
-#: ../src/terminal-window.c:1156
+#: ../src/terminal-window.c:1287
 msgid "Reset and C_lear"
 msgstr "Algväärtusta ja _tühjenda"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1161
+#: ../src/terminal-window.c:1292
 msgid "_Add or Remove…"
 msgstr "_Lisa või eemalda…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1166
+#: ../src/terminal-window.c:1297
 msgid "_Previous Tab"
 msgstr "_Eelmine sakk"
 
-#: ../src/terminal-window.c:1169
+#: ../src/terminal-window.c:1300
 msgid "_Next Tab"
 msgstr "_Järgmine sakk"
 
-#: ../src/terminal-window.c:1172
+#: ../src/terminal-window.c:1303
 msgid "Move Tab _Left"
 msgstr "Liiguta sakki _vasakule"
 
-#: ../src/terminal-window.c:1175
+#: ../src/terminal-window.c:1306
 msgid "Move Tab _Right"
 msgstr "Liiguta sakki _paremale"
 
-#: ../src/terminal-window.c:1178
+#: ../src/terminal-window.c:1309
 msgid "_Detach tab"
 msgstr "_Haagi sakk lahti"
 
 #. Help menu
-#: ../src/terminal-window.c:1183
+#: ../src/terminal-window.c:1314
 msgid "_Contents"
 msgstr "_Sisukord"
 
-#: ../src/terminal-window.c:1186
+#: ../src/terminal-window.c:1317
 msgid "_About"
 msgstr "_Programmist lähemalt"
 
 #. Popup menu
-#: ../src/terminal-window.c:1191
-msgid "_Send Mail To..."
+#: ../src/terminal-window.c:1322
+#, fuzzy
+msgid "_Send Mail To…"
 msgstr "_Saada e-sõnum..."
 
-#: ../src/terminal-window.c:1194
+#: ../src/terminal-window.c:1325
 msgid "_Copy E-mail Address"
 msgstr "Kopeeri _a-posti aadress"
 
-#: ../src/terminal-window.c:1197
+#: ../src/terminal-window.c:1328
+msgid "C_all To…"
+msgstr ""
+
+#: ../src/terminal-window.c:1331
+#, fuzzy
+msgid "_Copy Call Address"
+msgstr "Kopeeri _a-posti aadress"
+
+#: ../src/terminal-window.c:1334
 msgid "_Open Link"
 msgstr "A_va link"
 
-#: ../src/terminal-window.c:1200
+#: ../src/terminal-window.c:1337
 msgid "_Copy Link Address"
 msgstr "Kopeeri _lingi asukoht"
 
-#: ../src/terminal-window.c:1215
+#: ../src/terminal-window.c:1340
+#, fuzzy
+msgid "P_rofiles"
+msgstr "Profiilid"
+
+#: ../src/terminal-window.c:1353
 msgid "C_lose Window"
 msgstr "Su_lge aken"
 
-#: ../src/terminal-window.c:1221
+#: ../src/terminal-window.c:1359
 msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
 
 #. View Menu
-#: ../src/terminal-window.c:1227
-msgid "Show Menu_bar"
+#: ../src/terminal-window.c:1365
+msgid "Show _Menubar"
 msgstr "Näita m_enüüriba"
 
-#: ../src/terminal-window.c:1231
+#: ../src/terminal-window.c:1369
 msgid "_Full Screen"
 msgstr "_Täisekraan"
 
-#: ../src/terminal-window.c:1621
+#: ../src/terminal-window.c:1796
 msgid "Close tab"
 msgstr "Saki sulgemine"
 
-#: ../src/terminal-window.c:2274
+#: ../src/terminal-window.c:2470
 msgid "Close all tabs?"
 msgstr "Kas sulgeda kõik sakid?"
 
-#: ../src/terminal-window.c:2276
+#: ../src/terminal-window.c:2472
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -1948,11 +2031,15 @@ msgstr[0] "Sellel aknal on üks sakk avatud. Akna sulgemine sulgeb ka saki."
 msgstr[1] ""
 "Sellel aknal on %d sakki avatud. Akna sulgemine sulgeb ka kõik sakid."
 
-#: ../src/terminal-window.c:2285
+#: ../src/terminal-window.c:2481
 msgid "Close All _Tabs"
 msgstr "Sulge _kõik sakid"
 
-#: ../src/terminal-window.c:2675
+#: ../src/terminal-window.c:2749
+msgid "_Title:"
+msgstr "_Pealkiri:"
+
+#: ../src/terminal-window.c:2904
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1964,7 +2051,7 @@ msgstr ""
 "Tarkvara Fondi poolt avaldatud; kas Litsentsi versioon number 2 või "
 "(vastavalt Teie valikule) ükskõik milline hilisem versioon."
 
-#: ../src/terminal-window.c:2679
+#: ../src/terminal-window.c:2908
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1976,7 +2063,7 @@ msgstr ""
 "TEATUD KINDLAKS EESMÄRGIKS. Üksikasjade suhtes vaata GNU Üldist Avalikku "
 "Litsentsi."
 
-#: ../src/terminal-window.c:2683
+#: ../src/terminal-window.c:2912
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -1986,393 +2073,292 @@ msgstr ""
 "Terminaliga; kui ei, siis võtke ühendust Free Software Foundation'iga, 51 "
 "Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/terminal-window.c:2693
+#: ../src/terminal-window.c:2921
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
-#: ../src/terminal-window.c:2695
+#: ../src/terminal-window.c:2923
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminaliemulaator GNOME töölauale"
 
-#: ../src/terminal-window.c:2700
+#: ../src/terminal-window.c:2928
 msgid "translator-credits"
 msgstr ""
 "Tõivo Leedjärv <toivo@linux.ee>, 2002.\n"
 "Priit Laes <amd@store20.com>, 2004-2006.\n"
 "Ivar Smolin <okul@linux.ee>, 2005-2008."
 
-#: ../src/terminal.c:321
-#, c-format
-msgid ""
-"Option '%s' is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"window-with-profile' option\n"
-msgstr ""
-"Võti '%s' pole selles gnome-terminal'i versioonis enam toetatud. Võib-olla "
-"on sul kasulik luua uus profiil koos soovitud sätetega ja kasutada seda koos "
-"võtmega --window-with-profile\n"
-
-#: ../src/terminal.c:347
-#, c-format
-msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "\"%s\" argument on vigane käsk: %s\n"
-
-#: ../src/terminal.c:515 ../src/terminal.c:549
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "Võtit \"%s\" on ühele aknale määratud kaks korda\n"
-
-#: ../src/terminal.c:674
-#, c-format
-msgid ""
-"Option \"%s\" requires specifying the command to run on the rest of the "
-"command line\n"
-msgstr ""
-"Võtmel \"%s\" peab kogu käsurea edasises osas olema kirjeldatud käivitatav "
-"käsk\n"
-
-#: ../src/terminal.c:719
-#, c-format
-msgid "\"%s\" is not a valid zoom factor\n"
-msgstr "\"%s\" pole korrektne suurendustegur\n"
-
-#: ../src/terminal.c:727
-#, c-format
-msgid "Zoom factor \"%g\" is too small, using %g\n"
-msgstr "Suurendustegur \"%g\" on liiga väike, kasutatakse %g\n"
-
-#: ../src/terminal.c:735
-#, c-format
-msgid "Zoom factor \"%g\" is too large, using %g\n"
-msgstr "Suurendustegur \"%g\" on liiga suur, kasutatakse %g\n"
-
-#: ../src/terminal.c:854
-#, c-format
-msgid "No argument given to \"%s\" option\n"
-msgstr "Võtmele \"%s\" pole argumenti määratud\n"
-
-#: ../src/terminal.c:876
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr "võtmel \"%s\" peab olema argument\n"
-
-#: ../src/terminal.c:988
-#, c-format
-msgid "No such profile '%s', using default profile\n"
-msgstr "Profiili '%s' pole, kasutan vaikimisi profiili\n"
-
-#: ../src/terminal.c:1283
-#, c-format
-msgid ""
-"There was an error subscribing to notification of terminal profile list "
-"changes. (%s)\n"
-msgstr ""
-"Terminali profiililide nimekirja muutustest teavituste tellimisel tekkis "
-"viga (%s).\n"
-
-#: ../src/terminal.c:1555
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "Lubamatu geomeetriastring \"%s\"\n"
-
-#: ../src/terminal.c:1621
-#, c-format
-msgid "There was an error getting the list of terminal profiles. (%s)\n"
-msgstr "Viga terminaliprofiilide nimekirja hankimisel. (%s)\n"
-
-#: ../src/terminal.c:1879
-#, c-format
-msgid ""
-"You already have a profile called \"%s\". Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"Profiil nimega \"%s\" on juba olemas. Kas sa soovid teha veel ühte sama "
-"nimega profiili?"
-
-#: ../src/terminal.c:1893
-msgid ""
-"The profile you selected as a base for your new profile no longer exists"
-msgstr "Uue profiili aluseks valitud profiili pole enam olemas"
-
-#: ../src/terminal.c:1985
-msgid "Enter profile name"
-msgstr "Sisesta profiili nimi"
-
-#: ../src/terminal.c:1995
-msgid "Choose base profile"
-msgstr "Vali põhiprofiil"
-
-#: ../src/terminal.c:2134
-msgid "Profile list"
-msgstr "Profiilide nimekiri"
-
-#: ../src/terminal.c:2203
-msgid "You must select one or more profiles to delete."
-msgstr "Kustutamiseks pead sa ühe või rohkem profiile valima."
-
-#: ../src/terminal.c:2214
-msgid "You must have at least one profile; you can't delete all of them."
-msgstr "Sul peab vähemalt üks profiil olema: sa ei saa kõiki kustutada."
-
-#: ../src/terminal.c:2222
-#, c-format
-msgid "Delete this profile?\n"
-msgid_plural "Delete these %d profiles?\n"
-msgstr[0] "Kas kustutan selle profiili?\n"
-msgstr[1] "Kas kustutan %d profiili?\n"
-
-#: ../src/terminal.c:2243
-#, c-format
-msgid "Delete profile \"%s\"?"
-msgstr "Kustutada profiil \"%s\"?"
-
-#: ../src/terminal.c:2265
-msgid "Delete Profile"
-msgstr "Profiili kustutamine"
-
-#: ../src/terminal.c:2538
-msgid "Profiles"
-msgstr "Profiilid"
-
-#: ../src/terminal.c:2579
-msgid "_Profiles:"
-msgstr "_Profiilid:"
-
-#: ../src/terminal.c:2611
-msgid "Click to open new profile dialog"
-msgstr "Kõpsa uue profiilidialoogi avamiseks"
-
-#: ../src/terminal.c:2619
-msgid "Click to open edit profile dialog"
-msgstr "Kõpsa profiilidialoogi redigeerimisakna avamiseks"
-
-#: ../src/terminal.c:2627
-msgid "Click to delete selected profile"
-msgstr "Kõpsa valitud profiili kustutamiseks"
-
-#: ../src/terminal.c:2632
-msgid "Profile _used when launching a new terminal:"
-msgstr "Uue terminali avamisel _kasutatav profiil:"
-
-#: ../src/terminal.c:2688
-msgid "Click button to choose profile"
-msgstr "Profiili valimiseks klõpsa nupule"
-
-#: ../src/terminal.c:3052
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Abiinfo kuvamisel tekkis viga: %s"
-
-#: ../src/terminal.c:3123
-#, c-format
-msgid ""
-"The file \"%s\" is missing. This indicates that the application is installed "
-"incorrectly."
-msgstr ""
-"Fail \"%s\" on puudu. See näitab, et rakendus pole korralikult paigaldatud."
-
-#: ../src/terminal.c:3163
-#, c-format
-msgid ""
-"Could not open the address \"%s\":\n"
-"%s"
-msgstr ""
-"Aadressi \"%s\" pole võimalik avada:\n"
-"%s"
-
-#: ../src/terminal.c:3193
-msgid "Execute the argument to this option inside the terminal."
-msgstr "Selle võtme argumendi käivitamine terminalis"
-
-#: ../src/terminal.c:3202
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr "Käsurea ülejäänud osa käivitamine terminalis"
-
-#: ../src/terminal.c:3211
-msgid ""
-"Open a new window containing a tab with the default profile. More than one "
-"of these options can be provided."
-msgstr ""
-"Uue akna avamine, mis sisaldab vaikimisi profiiliga sakki. Seda võtit võib "
-"määrata rohkem kui üks kord."
-
-#: ../src/terminal.c:3220
-msgid ""
-"Open a new window containing a tab with the given profile. More than one of "
-"these options can be provided."
-msgstr ""
-"Uue akna avamine, mis sisaldab viimati määratud profiiliga sakki. Seda võtit "
-"võib määrata rohkem kui üks kord."
-
-#: ../src/terminal.c:3221 ../src/terminal.c:3239
-msgid "PROFILENAME"
-msgstr "PROFIILI_NIMI"
-
-#: ../src/terminal.c:3229
-msgid ""
-"Open a new tab in the last-opened window with the default profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Uue saki avamine viimati vaikimis profiiliga avatud aknas. Seda võtit võib "
-"määrata rohkem kui üks kord."
-
-#: ../src/terminal.c:3238
-msgid ""
-"Open a new tab in the last-opened window with the given profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Uue saki avamine viimati määratud profiili ID-ga kirjeldatud aknas. Seda "
-"võtit võib määrata rohkem kui üks kord."
-
-#: ../src/terminal.c:3247
-msgid ""
-"Open a new window containing a tab with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Uue akna avamine, mis sisaldab viimati määratud profiili ID-ga sakki. "
-"Sisemises kasutuses seansside salvestamiseks."
-
-#: ../src/terminal.c:3248 ../src/terminal.c:3257
-msgid "PROFILEID"
-msgstr "PROFIILI_ID"
-
-#: ../src/terminal.c:3256
-msgid ""
-"Open a new tab in the last-opened window with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Uue saki avamine viimati määratud profiili ID-ga kirjeldatud aknas. "
-"Sisemises kasutuses seansside salvestamiseks."
-
-#: ../src/terminal.c:3265
-msgid ""
-"Set the role for the last-specified window; applies to only one window; can "
-"be specified once for each window you create from the command line."
-msgstr ""
-"Viimati kirjeldatud aknale rolli määramine. Seda võib kirjeldada ainult ühe "
-"käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
-
-#: ../src/terminal.c:3266
-msgid "ROLE"
-msgstr "ROLL"
-
-#: ../src/terminal.c:3274
-msgid ""
-"Turn on the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Viimati kirjeldatud akna menüüriba sisselülitamine. Seda võib kirjeldada "
-"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
-
-#: ../src/terminal.c:3283
-msgid ""
-"Turn off the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Viimati kirjeldatud akna menüüriba väljalülitamine. Seda võib kirjeldada "
-"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
-
-#: ../src/terminal.c:3292
-msgid ""
-"Set the last-specified window into fullscreen mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"Viimati kirjeldatud akna täisekraanirežiimi lülitamine. Seda võib kirjeldada "
-"ainult ühe käsureal määratud akna kohta ja see rakendub ainult ühele aknale."
-
-#: ../src/terminal.c:3301
-msgid ""
-"X geometry specification (see \"X\" man page), can be specified once per "
-"window to be opened."
-msgstr ""
-"X-geomeetria kirjeldus (vaata manuaali lehte \"X\"), seda võib kirjeldada "
-"üks kord avatava akna kohta."
-
-#: ../src/terminal.c:3302
-msgid "GEOMETRY"
-msgstr "GEOMEETRIA"
-
-#: ../src/terminal.c:3310
-msgid ""
-"Do not register with the activation nameserver, do not re-use an active "
-"terminal"
-msgstr ""
-"Aktiveerimise nimeserveris ei registreeruta, aktiivset terminali ei "
-"taaskasutata"
-
-#: ../src/terminal.c:3319
-msgid "Register with the activation nameserver [default]"
-msgstr "Registreerimine aktiveerimise nimeserveriga [vaikimisi]"
-
-#: ../src/terminal.c:3328
-msgid "ID for startup notification protocol."
-msgstr "Käivitamise teavitusprotokolli ID"
-
-#: ../src/terminal.c:3337
-msgid "Set the terminal's title"
-msgstr "Määra terminali pealkiri"
-
-#: ../src/terminal.c:3338
-msgid "TITLE"
-msgstr "PEALKIRI"
-
-#: ../src/terminal.c:3346
-msgid "Set the terminal's working directory"
-msgstr "Määra terminali töökataloog"
-
-#: ../src/terminal.c:3347 ../src/terminal.c:3356
-msgid "DIRNAME"
-msgstr "KATALOOGINIMI"
-
-#: ../src/terminal.c:3355
-msgid "Set the default terminal's working directory. Used internally"
-msgstr "Terminali vaikimisi töökataloogi määramine. Sisemiseks kasutamiseks"
-
-#: ../src/terminal.c:3364
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Terminali suurendusteguri seadmine (tavasuurus on 1.0)"
-
-#: ../src/terminal.c:3365 ../src/terminal.c:3374
-msgid "ZOOMFACTOR"
-msgstr "SUURENDUSTEGUR"
-
-#: ../src/terminal.c:3373
-msgid "Set the last specified tab as the active one in its window"
-msgstr "Viimasena kirjeldatud saki määramine omas aknas aktiivseks"
-
-#: ../src/terminal.c:3553 ../src/terminal.c:3556
-msgid "GNOME Terminal Emulator"
-msgstr "GNOME Terminaliemulaator"
-
-#: ../src/terminal.c:3557
-msgid "Show GNOME Terminal options"
-msgstr "GNOME Terminali valikute näitamine"
-
-#: ../src/terminal.c:3714
-#, c-format
-msgid ""
-"It appears that you do not have gnome-terminal.server installed in a valid "
-"location. Factory mode disabled.\n"
-msgstr ""
-"Paistab, et sul pole gnome-terminal.server õigesse kohta paigaldatud. "
-"Factory-režiim on keelatud.\n"
-
-#: ../src/terminal.c:3717
-#, c-format
-msgid ""
-"Error registering terminal with the activation service; factory mode "
-"disabled.\n"
-msgstr ""
-"Viga terminali registreerimisel aktiveerimisteenuses, factory režiim on "
-"keelatud.\n"
-
-#: ../src/terminal.c:3753
-#, c-format
-msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal encoding list "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Terminali kooditabelite nimekirja muutustest teavituste tellimisel tekkis "
+#~ "viga. (%s)\n"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Background</b>"
+#~ msgstr "<b>Taust</b>"
+
+#~ msgid "<b>Compatibility</b>"
+#~ msgstr "<b>Ühilduvus</b>"
+
+#~ msgid "<b>Scrolling</b>"
+#~ msgstr "<b>Kerimine</b>"
+
+#~ msgid ""
+#~ "<small><i><b>Note:</b> The command running inside the terminal may "
+#~ "dynamically set a new title.</i></small>"
+#~ msgstr ""
+#~ "<small><i><b>Märkus:</b> Terminalis käivitatav käsk võib pealkirja "
+#~ "jooksult määrata.</i></small>"
+
+#~ msgid "Add encoding to menu."
+#~ msgstr "Kooditabeli lisamine menüüsse."
+
+#~ msgid "Background _image"
+#~ msgstr "Tausta_pilt"
+
+#~ msgid "Choose A Profile Icon"
+#~ msgstr "Profiiliikooni valimine"
+
+#~ msgid "Effects"
+#~ msgstr "Efektid"
+
+#~ msgid "Profile _icon:"
+#~ msgstr "Profiili _ikoon:"
+
+#~ msgid "Remove encoding from menu."
+#~ msgstr "Kooditabeli eemaldamine menüüst."
+
+#~ msgid "_Dynamically-set title:"
+#~ msgstr "_Jooksult määratud pealkiri:"
+
+#~ msgid "kilo_bytes"
+#~ msgstr "kilo_baiti"
+
+#~ msgid ""
+#~ "An X font name. See the X man page (type \"man X\") for more details on "
+#~ "the format of X font names."
+#~ msgstr ""
+#~ "X'i kirjatüübi nimi. X'i kirjatüübinime üksikasju vaata X'i "
+#~ "manuaalilehelt (käsk \"man X\")."
+
+#~ msgid "Tango"
+#~ msgstr "Tango"
+
+#~ msgid "Linux console"
+#~ msgstr "Linuxi konsool"
+
+#~ msgid "XTerm"
+#~ msgstr "XTerm"
+
+#~ msgid "Rxvt"
+#~ msgstr "Rxvt"
+
+#~ msgid "There was an error loading config from %s. (%s)\n"
+#~ msgstr "Konfiguratsiooni laadimisel %s-ist tekkis viga. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal keybinding "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Terminali klahviseoste muutustest teavituste tellimisel tekkis viga. (%"
+#~ "s)\n"
+
+#~ msgid "There was an error loading a terminal keybinding. (%s)\n"
+#~ msgstr "Terminali klahviseose laadimisel tekkis viga. (%s)\n"
+
+#~ msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
+#~ msgstr "Sätete võtme %s väärtus \"%s\" pole lubatud\n"
+
+#~ msgid ""
+#~ "There was an error loading config value for whether to use menubar access "
+#~ "keys. (%s)\n"
+#~ msgstr ""
+#~ "Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
+#~ "kohta sätetest väärtuse laadimisel tekkis viga. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification on changes on whether to "
+#~ "use menubar access keys (%s)\n"
+#~ msgstr ""
+#~ "Menüüriba liikumisklahvide kasutamise ja mittekasutamise vahel lülitumise "
+#~ "muutustest teavituste tellimisel tekkis viga (%s)\n"
+
+#~ msgid ""
+#~ "There was an error loading config value for whether to use menu "
+#~ "accelerators. (%s)\n"
+#~ msgstr ""
+#~ "Menüüriba kiirklahvide kasutamise ja mittekasutamise vahel lülitumise "
+#~ "kohta sätetest väärtuse laadimisel tekkis viga. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification for use_menu_accelerators "
+#~ "(%s)\n"
+#~ msgstr "use_menu_accelerators tellimisel tekkis viga (%s)\n"
+
+#~ msgid "Error propagating accelerator change to configuration database: %s\n"
+#~ msgstr "Viga kiirklahvi andmete saatmisel seadistuste andmebaasi: %s\n"
+
+#~ msgid "Error setting use_menu_accelerators key: %s\n"
+#~ msgstr "Viga võtme use_menu_accelerators määramisel: %s\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal profile "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Terminali profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
+
+#~ msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
+#~ msgstr "Ikooni \"%s\" pole võimalik terminaliprofiili \"%s\" jaoks leida\n"
+
+#~ msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
+#~ msgstr "Tõrge ikooni \"%s\" laadimisel profiili \"%s\" jaoks: %s\n"
+
+#~ msgid ""
+#~ "Could not find a background image called \"%s\" for terminal profile \"%s"
+#~ "\"\n"
+#~ msgstr ""
+#~ "Taustapilti \"%s\" pole võimalik terminaliprofiili \"%s\" jaoks leida\n"
+
+#~ msgid ""
+#~ "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
+#~ msgstr "Tõrge taustapildi \"%s\" laadimisel profiili \"%s\" jaoks: %s\n"
+
+#~ msgid ""
+#~ "GNOME Terminal: font name \"%s\" set in configuration database is not "
+#~ "valid\n"
+#~ msgstr ""
+#~ "GNOME Terminal: seadistuste andmebaasis seatid kirjatüübi nimi \"%s\" ei "
+#~ "ole lubatud\n"
+
+#~ msgid "Error getting default value of %s: %s\n"
+#~ msgstr "Viga %s väärtuse võtmisel: %s\n"
+
+#~ msgid "There wasn't a default value for %s\n"
+#~ msgstr "%s jaoks pole vaikimisi väärtust\n"
+
+#~ msgid "Error setting key %s back to default: %s\n"
+#~ msgstr "Viga võtme %s vaikeväärtusega väärtustamisel: %s\n"
+
+#~ msgid ""
+#~ "There was an error while removing the configuration directory %s. (%s)\n"
+#~ msgstr "Seadistuste kataloogi %s eemaldamisel tekkis viga. (%s)\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of changes to default "
+#~ "profile. (%s)\n"
+#~ msgstr ""
+#~ "Vaikimisi profiili muutustest teavituste tellimisel tekkis viga. (%s)\n"
+
+#~ msgid "_Details"
+#~ msgstr "Ü_ksikasjad"
+
+#~ msgid "There was an error creating the profile \"%s\""
+#~ msgstr "Profiili \"%s\" loomisel tekkis viga"
+
+#~ msgid "There was an error deleting the profiles"
+#~ msgstr "Profiilide kustutamisel tekkis viga"
+
+#~ msgid "Could not parse string \"%s\" as a color palette\n"
+#~ msgstr "Stringi \"%s\" pole võimalik värvipaletina analüüsida\n"
+
+#~ msgid "Palette had %d entry instead of %d\n"
+#~ msgid_plural "Palette had %d entries instead of %d\n"
+#~ msgstr[0] "Paletil on %d kirje %d asemel\n"
+#~ msgstr[1] "Paletil on %d kirjet %d asemel\n"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of monospace font changes. "
+#~ "(%s)\n"
+#~ msgstr ""
+#~ "Täheruudu kirjatüübi muutustest teavituste tellimisel tekkis viga. (%s)\n"
+
+#~ msgid ""
+#~ "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "Terminaliaknasse kukutatud text/plain (lihttekst) on vigase vormingu (%d) "
+#~ "või pikkusega (%d)\n"
+
+#~ msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "Terminaliaknasse kukutatud värvus on vigase vormingu (%d) või pikkusega (%"
+#~ "d)\n"
+
+#~ msgid ""
+#~ "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "Terminaliaknasse kukutatud Mozilla URL on vigase vormingu (%d) või "
+#~ "pikkusega (%d)\n"
+
+#~ msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "Terminaliaknasse kukutatud URI-de loetelu on vigase vormingu (%d) või "
+#~ "pikkusega (%d)\n"
+
+#~ msgid ""
+#~ "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
+#~ msgstr ""
+#~ "Terminaliaknasse kukutatud pildi failinimi on vigase vormingu (%d) või "
+#~ "pikkusega (%d)\n"
+
+#~ msgid "Error converting URI \"%s\" into filename: %s\n"
+#~ msgstr "Viga URI \"%s\" teisendamisel failinimeks: %s\n"
+
+#~ msgid "C_urrent Profile…"
+#~ msgstr "Ak_tiivne profiil…"
+
+#~ msgid "Show Menu_bar"
+#~ msgstr "Näita m_enüüriba"
+
+#~ msgid ""
+#~ "There was an error subscribing to notification of terminal profile list "
+#~ "changes. (%s)\n"
+#~ msgstr ""
+#~ "Terminali profiililide nimekirja muutustest teavituste tellimisel tekkis "
+#~ "viga (%s).\n"
+
+#~ msgid "There was an error getting the list of terminal profiles. (%s)\n"
+#~ msgstr "Viga terminaliprofiilide nimekirja hankimisel. (%s)\n"
+
+#~ msgid ""
+#~ "The profile you selected as a base for your new profile no longer exists"
+#~ msgstr "Uue profiili aluseks valitud profiili pole enam olemas"
+
+#~ msgid "Enter profile name"
+#~ msgstr "Sisesta profiili nimi"
+
+#~ msgid "You must select one or more profiles to delete."
+#~ msgstr "Kustutamiseks pead sa ühe või rohkem profiile valima."
+
+#~ msgid "You must have at least one profile; you can't delete all of them."
+#~ msgstr "Sul peab vähemalt üks profiil olema: sa ei saa kõiki kustutada."
+
+#~ msgid "Delete this profile?\n"
+#~ msgid_plural "Delete these %d profiles?\n"
+#~ msgstr[0] "Kas kustutan selle profiili?\n"
+#~ msgstr[1] "Kas kustutan %d profiili?\n"
+
+#~ msgid "_Profiles:"
+#~ msgstr "_Profiilid:"
+
+#~ msgid "Click to open new profile dialog"
+#~ msgstr "Kõpsa uue profiilidialoogi avamiseks"
+
+#~ msgid "Click to open edit profile dialog"
+#~ msgstr "Kõpsa profiilidialoogi redigeerimisakna avamiseks"
+
+#~ msgid "Click to delete selected profile"
+#~ msgstr "Kõpsa valitud profiili kustutamiseks"
+
+#~ msgid ""
+#~ "The file \"%s\" is missing. This indicates that the application is "
+#~ "installed incorrectly."
+#~ msgstr ""
+#~ "Fail \"%s\" on puudu. See näitab, et rakendus pole korralikult "
+#~ "paigaldatud."
 
 #~ msgid "Accelerator key"
 #~ msgstr "Kiirklahv"
@@ -2561,9 +2547,6 @@ msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
 #~ "Kui märgitud, siis selle profiili akendel ja sakkidel peab terminali "
 #~ "fookuses olemise korral kursor vilkuma."
 
-#~ msgid "Whether to blink the cursor"
-#~ msgstr "Kas kursor plingib"
-
 #~ msgid "Switch to Tab 1"
 #~ msgstr "Liikumine sakile nr 1"
 
@@ -2616,9 +2599,6 @@ msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
 #~ msgid "_Edit Current Profile..."
 #~ msgstr "_Muuda aktiivset profiili..."
 
-#~ msgid "Show _Menubar"
-#~ msgstr "Näita m_enüüriba"
-
 #~ msgid ""
 #~ "There was an error subscribing to notification of terminal window "
 #~ "configuration changes. (%s)\n"
@@ -2659,33 +2639,6 @@ msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
 #~ msgid "Click to choose font size"
 #~ msgstr "Klõpsa, et valida kirjasuurust"
 
-#~ msgid "roman"
-#~ msgstr "püstkiri"
-
-#~ msgid "italic"
-#~ msgstr "kursiiv"
-
-#~ msgid "oblique"
-#~ msgstr "viltune (obliikva)"
-
-#~ msgid "reverse italic"
-#~ msgstr "vasakule kursiiv"
-
-#~ msgid "reverse oblique"
-#~ msgstr "pööratud viltune (obliikva)"
-
-#~ msgid "other"
-#~ msgstr "muu"
-
-#~ msgid "proportional"
-#~ msgstr "proportsionaalne"
-
-#~ msgid "monospaced"
-#~ msgstr "ühelaiune"
-
-#~ msgid "char cell"
-#~ msgstr "märgiruut"
-
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
 #~ msgstr "MAX_FONTS on ületatud, mõned kirjatüübid võivad puudu olla."
 
@@ -2712,9 +2665,6 @@ msgstr "Tõrge terminaliserveri vastuvõtmisel aktiveerimisserverist\n"
 
 #~ msgid "Option \"%s\" requires an argument giving the role\n"
 #~ msgstr "Võtme \"%s\" argumendiks peab olema roll\n"
-
-#~ msgid "Two roles given for one window\n"
-#~ msgstr "Ühele aknale on määratud kaks rolli\n"
 
 #~ msgid "Option \"%s\" requires an argument giving the geometry\n"
 #~ msgstr "Võtme \"%s\" argumendiks peab olema geomeetriakirjeldus\n"
