@@ -23,3 +23,20 @@ DISTCLEANFILES =		\
 # mess behind.
 distuninstallcheck_listfiles = 	\
         find -regex '.*/var/scrollkeeper/.*' -prune -or -type f -print
+
+# Build ChangeLog from GIT or SVN history
+# (SVN r2446 was the first ChangeLog-less checkin).
+# Only build this when in a git or svn checkout.
+
+ChangeLog:
+	@if test -f $(top_srcdir)/.git/HEAD; then \
+		git log --stat > $@; \
+	elif test -f $(top_srcdir)/.svn/entries; then \
+		svn log -v --xml -r HEAD:2446 $(SVN_ROOT)/$(SVN_MODULE)/$(SVN_BRANCH) | \
+			xsltproc --stringparam strip-prefix "$(SVN_MODULE)/$(SVN_BRANCH)" \
+				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
+	fi
+
+dist: ChangeLog
+
+.PHONY: ChangeLog
