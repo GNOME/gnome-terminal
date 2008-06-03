@@ -5,7 +5,7 @@ srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
 REQUIRED_AUTOMAKE_VERSION=1.9
-REQUIRED_INTLTOOL_VERSION=0.39.99
+REQUIRED_INTLTOOL_VERSION=0.40.0
 
 PKG_NAME="gnome-terminal"
 
