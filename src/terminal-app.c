@@ -1583,6 +1583,7 @@ terminal_app_shutdown (void)
 {
   g_assert (global_app != NULL);
   g_object_unref (global_app);
+  g_assert (global_app == NULL);
 }
 
 TerminalApp*
