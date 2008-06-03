@@ -45,6 +45,7 @@
 #include <time.h>
 #include <gdk/gdkx.h>
 
+#define ACT_IID "OAFIID:GNOME_Terminal_Factory"
 
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
@@ -70,6 +71,7 @@
 
 static gboolean initialization_complete = FALSE;
 static GSList *pending_new_terminal_events = NULL;
+static BonoboListener *listener = NULL;
 
 typedef struct
 {
@@ -1228,6 +1230,9 @@ main (int argc, char **argv)
 
   terminal_app_shutdown ();
 
+  if (listener)
+    bonobo_activation_active_server_unregister (ACT_IID, BONOBO_OBJREF (listener));
+
   g_object_unref (program);
 
   return 0;
@@ -1731,13 +1736,10 @@ terminal_new_event (BonoboListener    *listener,
     handle_new_terminal_events ();
 }
 
-#define ACT_IID "OAFIID:GNOME_Terminal_Factory"
-
 static Bonobo_RegistrationResult
 terminal_register_as_factory (void)
 {
   char *per_display_iid;
-  BonoboListener *listener;
   Bonobo_RegistrationResult result;
 
   listener = bonobo_listener_new (terminal_new_event, NULL);
@@ -1750,6 +1752,11 @@ terminal_register_as_factory (void)
 
   if (result != Bonobo_ACTIVATION_REG_SUCCESS)
     bonobo_object_unref (BONOBO_OBJECT (listener));
+
+#ifdef DEBUG_FACTORY
+  if (result == Bonobo_ACTIVATION_REG_SUCCESS)
+    g_print ("Successfully registered factory \"%s\"\n", per_display_iid);
+#endif
 
   g_free (per_display_iid);
 
@@ -1773,6 +1780,9 @@ terminal_invoke_factory (int argc, char **argv)
         g_printerr (_("Error registering terminal with the activation service; factory mode disabled.\n"));
         return FALSE;
       case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
+#ifdef DEBUG_FACTORY
+        g_print ("Factory found; forwarding request\n");
+#endif
         /* lets use it then */
         break;
     }
