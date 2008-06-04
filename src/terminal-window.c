@@ -1942,7 +1942,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   if (priv->active_screen)
     {
 #ifdef DEBUG_GEOMETRY
-      g_fprintf (stderr,"setting size after toggling menubar visibility\n");
+      g_printerr ("setting size after toggling menubar visibility\n");
 #endif
       terminal_window_set_size (window, priv->active_screen, TRUE);
     }
@@ -2005,7 +2005,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   gtk_widget_size_request (widget, &widget_request);
 
 #ifdef DEBUG_GEOMETRY
-  g_fprintf (stderr,"set size: toplevel %dx%d widget %dx%d\n",
+  g_printerr ("set size: toplevel %dx%d widget %dx%d\n",
            toplevel_request.width, toplevel_request.height,
            widget_request.width, widget_request.height);
 #endif
@@ -2027,7 +2027,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   h += ypad + char_height * grid_height;
 
 #ifdef DEBUG_GEOMETRY
-  g_fprintf (stderr,"set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
+  g_printerr ("set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
            grid_width, grid_height, force_grid_width, force_grid_height, w, h);
 #endif
 
@@ -2086,7 +2086,7 @@ terminal_window_set_active (TerminalWindow *window,
 
   /* set size of window to current grid size */
 #ifdef DEBUG_GEOMETRY
-  g_fprintf (stderr,"setting size after flipping notebook pages\n");
+  g_printerr ("setting size after flipping notebook pages\n");
 #endif
   terminal_window_set_size (window, screen, TRUE);
 
@@ -2347,7 +2347,7 @@ terminal_window_update_geometry (TerminalWindow *window)
                                      GDK_HINT_BASE_SIZE);
 
 #ifdef DEBUG_GEOMETRY
-      g_fprintf (stderr,"hints: base %dx%d min %dx%d inc %d %d\n",
+      g_printerr ("hints: base %dx%d min %dx%d inc %d %d\n",
                hints.base_width,
                hints.base_height,
                hints.min_width,
@@ -2363,7 +2363,7 @@ terminal_window_update_geometry (TerminalWindow *window)
 #ifdef DEBUG_GEOMETRY
   else
     {
-      g_fprintf (stderr,"hints: increment unchanged, not setting\n");
+      g_printerr ("hints: increment unchanged, not setting\n");
     }
 #endif
 }

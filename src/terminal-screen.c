@@ -217,9 +217,9 @@ parent_set_callback (GtkWidget *widget,
 
 #ifdef DEBUG_GEOMETRY
   if (old_parent)
-    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), screen);
-  if (GTK_WIDGET (screen)->parent)
-    g_signal_connect (GTK_WIDGET (screen)->parent, "size-request", G_CALLBACK (parent_size_request), screen);
+    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), widget);
+  if (widget->parent)
+    g_signal_connect (widget->parent, "size-request", G_CALLBACK (parent_size_request), widget);
 #endif
 }
 
