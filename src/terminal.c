@@ -1401,7 +1401,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_STRING,
       &parsing_results->startup_id,
       N_("ID for startup notification protocol."),
-      NULL
+      N_("STARTUPID")
     },
     {
       "title",
@@ -1446,7 +1446,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       option_active_callback,
       N_("Set the last specified tab as the active one in its window"),
-      N_("ZOOMFACTOR")
+      NULL
     },
     
     /*
