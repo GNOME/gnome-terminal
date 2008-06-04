@@ -68,8 +68,7 @@ void terminal_app_new_profile (TerminalApp     *app,
                                GtkWindow       *transient_parent);
 
 TerminalWindow * terminal_app_new_window   (TerminalApp *app,
-                                            GdkScreen *screen,
-                                            const char *geometry);
+                                            GdkScreen *screen);
 
 TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            TerminalWindow  *window,

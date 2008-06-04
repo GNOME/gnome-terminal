@@ -1595,8 +1595,7 @@ terminal_app_get (void)
 
 TerminalWindow *
 terminal_app_new_window (TerminalApp *app,
-                         GdkScreen *screen,
-                         const char *geometry)
+                         GdkScreen *screen)
 {
   TerminalWindow *window;
   
@@ -1608,12 +1607,6 @@ terminal_app_new_window (TerminalApp *app,
 
   if (screen)
     gtk_window_set_screen (GTK_WINDOW (window), screen);
-
-  if (geometry)
-    {
-      if (!gtk_window_parse_geometry (GTK_WINDOW (window), geometry))
-        g_printerr (_("Invalid geometry string \"%s\"\n"), geometry);
-    }
 
   return window;
 }

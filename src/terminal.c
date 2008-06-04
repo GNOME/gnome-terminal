@@ -984,7 +984,7 @@ new_terminal_with_options (TerminalApp *app,
       g_assert (iw->tabs);
 
       /* Create & setup new window */
-      window = terminal_app_new_window (app, screen, iw->geometry);
+      window = terminal_app_new_window (app, screen);
 
       if (results->startup_id)
         terminal_window_set_startup_id (window, results->startup_id);
@@ -1029,6 +1029,12 @@ new_terminal_with_options (TerminalApp *app,
           
           if (it->active)
             terminal_window_switch_screen (window, screen);
+        }
+
+      if (iw->geometry)
+        {
+          if (!gtk_window_parse_geometry (GTK_WINDOW (window), iw->geometry))
+            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
         }
 
       gtk_window_present (GTK_WINDOW (window));

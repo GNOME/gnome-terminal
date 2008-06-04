@@ -856,8 +856,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
 
   new_window = terminal_app_new_window (terminal_app_get (),
-                                        gtk_widget_get_screen (GTK_WIDGET (source_window)),
-                                        NULL /* FIXME? */);
+                                        gtk_widget_get_screen (GTK_WIDGET (source_window)));
   new_priv = new_window->priv;
   new_priv->present_on_insert = TRUE;
 
@@ -2394,14 +2393,15 @@ file_new_window_callback (GtkAction *action,
   terminal_screen_get_size (priv->active_screen, &width, &height);
   geometry = g_strdup_printf ("%dx%d", width, height);
 
-  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)),
-                                        geometry);
-  g_free (geometry);
+  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   terminal_app_new_terminal (app, new_window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
                              1.0);
+
+  gtk_window_parse_geometry (GTK_WINDOW (window), geometry);
+  g_free (geometry);
 
   gtk_window_present (GTK_WINDOW (new_window));
 }
@@ -2866,11 +2866,12 @@ tabs_detach_tab_callback (GtkAction *action,
   terminal_screen_get_size (screen, &width, &height);
   geometry = g_strdup_printf ("%dx%d", width, height);
 
-  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)),
-                                        geometry);
-  g_free (geometry);
+  new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   terminal_window_move_screen (window, new_window, screen, -1);
+
+  gtk_window_parse_geometry (GTK_WINDOW (window), geometry);
+  g_free (geometry);
 
   gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
