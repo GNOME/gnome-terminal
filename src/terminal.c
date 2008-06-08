@@ -72,6 +72,7 @@
 static gboolean initialization_complete = FALSE;
 static GSList *pending_new_terminal_events = NULL;
 static BonoboListener *listener = NULL;
+static gboolean factory_registered = FALSE;
 
 typedef struct
 {
@@ -1236,8 +1237,10 @@ main (int argc, char **argv)
 
   terminal_app_shutdown ();
 
-  if (listener)
+  if (factory_registered)
     bonobo_activation_active_server_unregister (ACT_IID, BONOBO_OBJREF (listener));
+  if (listener)
+    bonobo_object_unref (BONOBO_OBJECT (listener));
 
   g_object_unref (program);
 
@@ -1756,8 +1759,14 @@ terminal_register_as_factory (void)
   result = bonobo_activation_active_server_register (
     per_display_iid, BONOBO_OBJREF (listener));
 
-  if (result != Bonobo_ACTIVATION_REG_SUCCESS)
-    bonobo_object_unref (BONOBO_OBJECT (listener));
+  factory_registered = (result == Bonobo_ACTIVATION_REG_SUCCESS);
+
+  if (!factory_registered)
+    {
+      bonobo_object_unref (BONOBO_OBJECT (listener));
+      listener = NULL;
+    }
+
 
 #ifdef DEBUG_FACTORY
   if (result == Bonobo_ACTIVATION_REG_SUCCESS)
@@ -1772,7 +1781,7 @@ terminal_register_as_factory (void)
 static gboolean
 terminal_invoke_factory (int argc, char **argv)
 {
-  Bonobo_Listener listener;
+  Bonobo_Listener receiver;
 
   switch (terminal_register_as_factory ())
     {
@@ -1793,10 +1802,10 @@ terminal_invoke_factory (int argc, char **argv)
         break;
     }
 
-  listener = bonobo_activation_activate_from_id (
+  receiver = bonobo_activation_activate_from_id (
     ACT_IID, Bonobo_ACTIVATION_FLAG_EXISTING_ONLY, NULL, NULL);
 
-  if (listener != CORBA_OBJECT_NIL)
+  if (receiver != CORBA_OBJECT_NIL)
     {
       int i;
       CORBA_any any;
@@ -1814,8 +1823,8 @@ terminal_invoke_factory (int argc, char **argv)
       for (i = 0; i < args._length; i++)
         args._buffer [i] = argv [i];
       
-      Bonobo_Listener_event (listener, "new_terminal", &any, &ev);
-      CORBA_Object_release (listener, &ev);
+      Bonobo_Listener_event (receiver, "new_terminal", &any, &ev);
+      CORBA_Object_release (receiver, &ev);
       if (!BONOBO_EX (&ev))
         return TRUE;
 
