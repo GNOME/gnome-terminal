@@ -2521,15 +2521,67 @@ edit_copy_callback (GtkAction *action,
 }
 
 static void
+clipboard_uris_received_cb (GtkClipboard *clipboard,
+                            GtkSelectionData *selection_data,
+                            TerminalScreen *screen)
+{
+  char **uris;
+  char *text;
+
+  uris = gtk_selection_data_get_uris (selection_data);
+  if (!uris) {
+    g_object_unref (screen);
+    return;
+  }
+
+  terminal_util_transform_uris_to_quoted_fuse_paths (uris);
+
+  text = g_strjoinv (" ", uris);
+  vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+  g_free (text);
+
+  g_strfreev (uris);
+
+  g_object_unref (screen);
+}
+
+static void
+clipboard_targets_received_cb (GtkClipboard *clipboard,
+                               GdkAtom *targets,
+                               int n_targets,
+                               TerminalScreen *screen)
+{
+  if (!targets) {
+    g_object_unref (screen);
+    return;
+  }
+
+  if (gtk_targets_include_uri (targets, n_targets)) {
+    gtk_clipboard_request_contents (clipboard,
+                                    gdk_atom_intern ("text/uri-list", FALSE),
+                                    (GtkClipboardReceivedFunc) clipboard_uris_received_cb,
+                                    g_object_ref (screen));
+  } else /* if (gtk_targets_include_text (targets, n_targets)) */ {
+    vte_terminal_paste_clipboard (VTE_TERMINAL (screen));
+  }
+
+  g_object_unref (screen);
+}
+
+static void
 edit_paste_callback (GtkAction *action,
                      TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  GtkClipboard *clipboard;
 
   if (!priv->active_screen)
     return;
       
-  vte_terminal_paste_clipboard (VTE_TERMINAL (priv->active_screen));
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
+  gtk_clipboard_request_targets (clipboard,
+                                 (GtkClipboardTargetsReceivedFunc) clipboard_targets_received_cb,
+                                 g_object_ref (priv->active_screen));
 }
 
 static void
