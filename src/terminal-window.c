@@ -2534,7 +2534,8 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
     return;
   }
 
-  terminal_util_transform_uris_to_quoted_fuse_paths (uris);
+  /* Bug #537112 */
+  /* terminal_util_transform_uris_to_quoted_fuse_paths (uris); */
 
   text = g_strjoinv (" ", uris);
   vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
