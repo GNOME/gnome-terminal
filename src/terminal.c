@@ -1400,11 +1400,11 @@ get_goption_context (OptionParsingResults *parsing_results)
     {
       "startup-id",
       0,
-      0,
+      G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_STRING,
       &parsing_results->startup_id,
-      N_("ID for startup notification protocol."),
-      N_("STARTUPID")
+      NULL,
+      NULL
     },
     {
       "title",
