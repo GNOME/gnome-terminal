@@ -29,6 +29,8 @@
 
 #include "terminal-app.h"
 #include "terminal-accels.h"
+#include "terminal-screen.h"
+#include "terminal-screen-container.h"
 #include "terminal-window.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
@@ -1204,16 +1206,17 @@ terminal_app_get_clone_command (TerminalApp *app,
 
       active_screen = terminal_window_get_active (window);
       
-      tabs = terminal_window_list_screens (window);
+      tabs = terminal_window_list_screen_containers (window);
 
       for (lt = tabs; lt != NULL; lt = lt->next)
         {
-          TerminalScreen *screen = lt->data;
+          TerminalScreen *screen;
           const char *profile_id;
           const char **override_command;
           const char *title;
           double zoom;
-          
+
+          screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
           profile_id = terminal_profile_get_property_string (terminal_screen_get_profile (screen),
                                                              TERMINAL_PROFILE_NAME);
           

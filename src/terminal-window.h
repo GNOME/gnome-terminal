@@ -79,8 +79,7 @@ void            terminal_window_switch_screen (TerminalWindow *window,
                                                TerminalScreen *screen);
 TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 
-/* In order of their tabs in the notebook */
-GList* terminal_window_list_screens (TerminalWindow *window);
+GList* terminal_window_list_screen_containers (TerminalWindow *window);
 
 void terminal_window_update_geometry  (TerminalWindow *window);
 void terminal_window_set_size         (TerminalWindow *window,

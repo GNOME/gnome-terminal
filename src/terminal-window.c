@@ -1908,7 +1908,7 @@ terminal_window_move_screen (TerminalWindow *source_window,
 }
 
 GList*
-terminal_window_list_screens (TerminalWindow *window)
+terminal_window_list_screen_containers (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   

@@ -465,7 +465,7 @@ terminal_tabs_menu_update (TerminalTabsMenu *menu)
 
 	terminal_tabs_menu_clean (menu);
 
-	tabs = terminal_window_list_screens (p->window);
+	tabs = terminal_window_list_screen_containers (p->window);
 
 	n = g_list_length (tabs);
 	if (n == 0) return;
