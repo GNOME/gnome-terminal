@@ -2400,7 +2400,7 @@ file_new_window_callback (GtkAction *action,
                              terminal_screen_get_working_dir (priv->active_screen),
                              1.0);
 
-  gtk_window_parse_geometry (GTK_WINDOW (window), geometry);
+  gtk_window_parse_geometry (GTK_WINDOW (new_window), geometry);
   g_free (geometry);
 
   gtk_window_present (GTK_WINDOW (new_window));
@@ -2870,7 +2870,7 @@ tabs_detach_tab_callback (GtkAction *action,
 
   terminal_window_move_screen (window, new_window, screen, -1);
 
-  gtk_window_parse_geometry (GTK_WINDOW (window), geometry);
+  gtk_window_parse_geometry (GTK_WINDOW (new_window), geometry);
   g_free (geometry);
 
   gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
