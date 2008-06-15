@@ -321,9 +321,8 @@ option_window_callback (const gchar *option_name,
                         GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
 
-  iw = add_new_window (results, NULL, FALSE);
+  add_new_window (results, NULL, FALSE);
 
   return TRUE;
 }
@@ -599,10 +598,9 @@ option_active_callback (const gchar *option_name,
                         gpointer     data,
                         GError     **error)
 {
-  OptionParsingResults *results;
+  OptionParsingResults *results = data;
   InitialTab *it;
 
-  results = data;
   it = ensure_top_tab (results);
   it->active = TRUE;
 
@@ -617,11 +615,9 @@ digest_options_callback (GOptionContext *context,
                          gpointer      data,
                          GError      **error)
 {
-  OptionParsingResults *results;
+  OptionParsingResults *results = data;
   InitialTab    *it;
   InitialWindow *iw;
-
-  results = data;
 
   /* make sure we have some window in case no options were given */
   if (results->initial_windows == NULL)
