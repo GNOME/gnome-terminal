@@ -226,8 +226,7 @@ terminal_app_create_profile (TerminalApp *app,
 
 static void
 terminal_app_delete_profile (TerminalApp *app,
-                             TerminalProfile *profile,
-                             GtkWindow   *transient_parent)
+                             TerminalProfile *profile)
 {
   GHashTableIter iter;
   GSList *name_list;
@@ -241,12 +240,12 @@ terminal_app_delete_profile (TerminalApp *app,
   name_list = NULL;
   g_hash_table_iter_init (&iter, app->profiles);
   while (g_hash_table_iter_next (&iter, (gpointer*) &name, NULL))
-  {
-    if (strcmp (name, profile_name) == 0)
-      continue;
+    {
+      if (strcmp (name, profile_name) == 0)
+        continue;
 
-    name_list = g_slist_prepend (name_list, g_strdup (name));
-  }
+      name_list = g_slist_prepend (name_list, g_strdup (name));
+    }
 
   gconf_client_set_list (app->conf,
                          CONF_GLOBAL_PREFIX"/profile_list",
@@ -305,7 +304,7 @@ terminal_app_profile_sort_func (GtkTreeModel *model,
   return retval;
 }
 
-static GtkTreeModel *
+static /* ref */ GtkTreeModel *
 terminal_app_get_profile_liststore (TerminalApp *app,
                                     TerminalProfile *selected_profile,
                                     GtkTreeIter *selected_profile_iter,
@@ -522,8 +521,7 @@ profile_list_delete_confirm_response_cb (GtkWidget *dialog,
   g_assert (profile != NULL);
   
   if (response == GTK_RESPONSE_ACCEPT)
-    terminal_app_delete_profile (app, profile,
-                                 gtk_window_get_transient_for (GTK_WINDOW (dialog)));
+    terminal_app_delete_profile (app, profile);
 
   gtk_widget_destroy (dialog);
 }
