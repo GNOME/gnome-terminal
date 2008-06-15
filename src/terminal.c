@@ -89,7 +89,6 @@ typedef struct
   char   **post_execute_args;
 
   gboolean  execute;
-  char     *geometry;
   gboolean  use_factory;
   char     *zoom;
 } OptionParsingResults;
@@ -188,19 +187,14 @@ static void
 apply_defaults (OptionParsingResults *results,
                 InitialWindow        *iw)
 {
-  g_assert (iw->geometry == NULL);
-
   if (results->default_role)
     {
       iw->role = results->default_role;
       results->default_role = NULL;
     }
   
-  if (results->default_geometry)
-    {
-      iw->geometry = results->default_geometry;
-      results->default_geometry = NULL;
-    }
+  if (iw->geometry == NULL)
+    iw->geometry = g_strdup (results->default_geometry);
 
   if (results->default_window_menubar_forced)
     {
@@ -526,8 +520,7 @@ option_hide_menubar_callback (const gchar *option_name,
   return TRUE;
 }
 
-
-static gboolean 
+static gboolean
 option_fullscreen_callback (const gchar *option_name,
                             const gchar *value,
                             gpointer     data,
@@ -547,8 +540,28 @@ option_fullscreen_callback (const gchar *option_name,
   return TRUE;
 }
 
+static gboolean
+option_geometry_callback (const gchar *option_name,
+                          const gchar *value,
+                          gpointer     data,
+                          GError     **error)
+{
+  OptionParsingResults *results = data;
 
-static gboolean 
+  if (results->initial_windows)
+    {
+      InitialWindow *iw;
+
+      iw = g_list_last (results->initial_windows)->data;
+      iw->geometry = g_strdup (value);
+    }
+  else
+    results->default_geometry = g_strdup (value);
+
+  return TRUE;
+}
+
+static gboolean
 option_disable_factory_callback (const gchar *option_name,
                                  const gchar *value,
                                  gpointer     data,
@@ -617,7 +630,6 @@ digest_options_callback (GOptionContext *context,
 {
   OptionParsingResults *results = data;
   InitialTab    *it;
-  InitialWindow *iw;
 
   /* make sure we have some window in case no options were given */
   if (results->initial_windows == NULL)
@@ -640,19 +652,6 @@ digest_options_callback (GOptionContext *context,
       it->exec_argv = results->post_execute_args;
       results->post_execute_args = NULL;
     } 
-         
-
-  if (results->geometry)
-    {
-      if (results->initial_windows)
-        {
-          iw = g_list_last (results->initial_windows)->data;
-          iw->geometry = g_strdup (results->geometry);
-        }
-      else if (!results->default_geometry)
-        results->default_geometry = g_strdup (results->geometry);
-    }
-
 
   if (results->zoom)
     {
@@ -720,7 +719,6 @@ option_parsing_results_new (int *argc, char **argv)
   results->initial_windows = NULL;
   results->default_role = NULL;
   results->default_geometry = NULL;
-  results->geometry = NULL;
   results->zoom = NULL;
 
   results->screen_number = -1;
@@ -778,7 +776,6 @@ option_parsing_results_free (OptionParsingResults *results)
 
   g_free (results->display_name);
   g_free (results->startup_id);
-  g_free (results->geometry);
   g_free (results->zoom);
 
   g_slice_free (OptionParsingResults, results);
@@ -1370,8 +1367,8 @@ get_goption_context (OptionParsingResults *parsing_results)
       "geometry",
       0,
       0,
-      G_OPTION_ARG_STRING,
-      &parsing_results->geometry,
+      G_OPTION_ARG_CALLBACK,
+      option_geometry_callback,
       N_("X geometry specification (see \"X\" man page), can be specified once per window to be opened."),
       N_("GEOMETRY")
     },
