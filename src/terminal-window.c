@@ -1483,7 +1483,6 @@ terminal_window_init (TerminalWindow *window)
   gtk_box_pack_start (GTK_BOX (main_vbox),
 		      priv->menubar,
 		      FALSE, FALSE, 0);
-  gtk_widget_show (priv->menubar);
 
   /* Add tabs menu */
   priv->tabs_menu = terminal_tabs_menu_new (window);
