@@ -2976,11 +2976,10 @@ help_about_callback (GtkAction *action,
     "Copyright © 2006 Guilherme de S. Pastore\n"
     "Copyright © 2007–2008 Christian Persch";
   const char *authors[] = {
-    "Behdad Esfahbod <behdad@gnome.org> (maintainer)",
-    "Christian Persch <chpe" "\100" "gnome" "." "org" "> (maintainer)",
-    "",
+    "Behdad Esfahbod <behdad@gnome.org>",
     "Guilherme de S. Pastore <gpastore@gnome.org>",
     "Havoc Pennington <hp@redhat.com>",
+    "Christian Persch <chpe" "\100" "gnome" "." "org" ">",
     "Mariano Suárez-Alvarez <mariano@gnome.org>",
     NULL
   };
