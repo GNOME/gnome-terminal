@@ -83,6 +83,7 @@ enum
 
 enum {
   PROP_0,
+  PROP_PROFILE,
   PROP_ICON_TITLE,
   PROP_ICON_TITLE_SET,
   PROP_OVERRIDE_COMMAND,
@@ -281,7 +282,6 @@ terminal_screen_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->realize (widget);
 
   g_assert (priv->window != NULL);
-  g_assert (priv->profile != NULL);
 
   /* FIXME: Don't enable this if we have a compmgr. */
   bg_type = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
@@ -446,6 +446,9 @@ terminal_screen_get_property (GObject *object,
 
   switch (prop_id)
     {
+      case PROP_PROFILE:
+        g_value_set_object (value, terminal_screen_get_profile (screen));
+        break;
       case PROP_ICON_TITLE:
         g_value_set_string (value, terminal_screen_get_icon_title (screen));
         break;
@@ -474,6 +477,14 @@ terminal_screen_set_property (GObject *object,
 
   switch (prop_id)
     {
+      case PROP_PROFILE: {
+        TerminalProfile *profile;
+
+        profile = g_value_get_object (value);
+        g_assert (profile != NULL);
+        terminal_screen_set_profile (screen, profile);
+        break;
+      }
       case PROP_OVERRIDE_COMMAND:
         terminal_screen_set_override_command (screen, g_value_get_boxed (value));
         break;
@@ -555,7 +566,14 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
-  
+
+  g_object_class_install_property
+    (object_class,
+     PROP_PROFILE,
+     g_param_spec_string ("profile", NULL, NULL,
+                          NULL,
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+
   g_object_class_install_property
     (object_class,
      PROP_ICON_TITLE,
@@ -856,10 +874,7 @@ cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_ti
 
   g_return_val_if_fail (old_cooked_title != NULL, FALSE);
 
-  if (priv->profile)
-    mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_TITLE_MODE);
-  else
-    mode = TERMINAL_TITLE_REPLACE;
+  mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_TITLE_MODE);
 
   /* use --title argument if one was supplied, otherwise ask the profile */
   if (priv->title_from_arg)
@@ -1015,9 +1030,6 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  if (!priv->profile)
-    return;
-
   if (!GTK_WIDGET_REALIZED (screen))
     return;
 
@@ -1044,7 +1056,7 @@ profile_forgotten_callback (TerminalProfile *profile,
   TerminalProfile *new_profile;
 
   new_profile = terminal_app_get_profile_for_new_term (terminal_app_get ());
-  g_assert (new_profile);
+  g_assert (new_profile != NULL);
   terminal_screen_set_profile (screen, new_profile);
 }
 
@@ -1094,12 +1106,17 @@ terminal_screen_set_profile (TerminalScreen *screen,
 
   if (old_profile)
     g_object_unref (old_profile);
+
+  g_object_notify (G_OBJECT (screen), "profile");
 }
 
 TerminalProfile*
 terminal_screen_get_profile (TerminalScreen *screen)
 {
-  return screen->priv->profile;
+  TerminalScreenPrivate *priv = screen->priv;
+
+  g_assert (priv->profile != NULL);
+  return priv->profile;
 }
 
 void
@@ -1798,9 +1815,7 @@ terminal_screen_widget_child_died (GtkWidget      *term,
 
   priv->child_pid = -1;
   
-  action = TERMINAL_EXIT_CLOSE;
-  if (priv->profile)
-    action = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION);
+  action = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION);
   
   switch (action)
     {
@@ -1843,6 +1858,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
                                     guint             time)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
 
 #if 0
   {
@@ -1895,7 +1911,6 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       {
         guint16 *data = (guint16 *)selection_data->data;
         GdkColor color;
-        TerminalProfile *profile;
 
         /* We accept drops with the wrong format, since the KDE color
          * chooser incorrectly drops application/x-color with format 8.
@@ -1908,16 +1923,11 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         color.blue = data[2];
         /* FIXME: use opacity from data[3] */
 
-        profile = terminal_screen_get_profile (screen);
-
-        if (profile)
-          {
-            g_object_set (profile,
-                          TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
-                          TERMINAL_PROFILE_USE_THEME_COLORS, FALSE,
-                          TERMINAL_PROFILE_BACKGROUND_COLOR, &color,
-                          NULL);
-          }
+        g_object_set (priv->profile,
+                      TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
+                      TERMINAL_PROFILE_USE_THEME_COLORS, FALSE,
+                      TERMINAL_PROFILE_BACKGROUND_COLOR, &color,
+                      NULL);
       }
       break;
 
@@ -1996,14 +2006,12 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
         if (uris && uris[0])
           {
-            TerminalProfile *profile;
             char *filename;
 
-            profile = terminal_screen_get_profile (screen);
             filename = g_filename_from_uri (uris[0], NULL, NULL);
-            if (filename && profile)
+            if (filename)
               {
-                g_object_set (profile,
+                g_object_set (priv->profile,
                               TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_IMAGE,
                               TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE, filename,
                               NULL);
@@ -2017,18 +2025,9 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
       break;
 
     case TARGET_RESET_BG:
-      {
-        TerminalProfile *profile;
-
-        profile = terminal_screen_get_profile (screen);
-        
-        if (profile)
-          {
-                g_object_set (profile,
-                              TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
-                              NULL);
-          }
-      }
+      g_object_set (priv->profile,
+                    TERMINAL_PROFILE_BACKGROUND_TYPE, TERMINAL_BACKGROUND_SOLID,
+                    NULL);
       break;
 
     case TARGET_TAB:
@@ -2068,20 +2067,16 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
-  TerminalProfile *profile;
+  TerminalScreenPrivate *priv = screen->priv;
   GtkWidget *parent;
   GtkPolicyType policy = GTK_POLICY_ALWAYS;
   GtkCornerType corner = GTK_CORNER_TOP_LEFT;
-
-  profile = terminal_screen_get_profile (screen);
-  if (profile == NULL)
-    return;
 
   parent = GTK_WIDGET (screen)->parent;
   if (!parent)
     return;
 
-  switch (terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION))
+  switch (terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POSITION))
     {
     case TERMINAL_SCROLLBAR_HIDDEN:
       policy = GTK_POLICY_NEVER;

@@ -82,6 +82,9 @@ struct _TerminalWindowPrivate
 #define SET_ENCODING_UI_PATH              "/menubar/Terminal/TerminalSetEncoding/EncodingsPH"
 #define SET_ENCODING_ACTION_NAME_PREFIX   "TerminalSetEncoding"
 
+#define PROFILES_UI_PATH        "/menubar/Terminal/TerminalProfiles"
+#define PROFILES_POPUP_UI_PATH  "/Popup/PopupTerminalProfiles/ProfilesPH"
+
 #define STOCK_NEW_WINDOW  "tab-new"
 #define STOCK_NEW_TAB     "window-new"
  
@@ -281,9 +284,6 @@ terminal_set_profile_toggled_callback (GtkToggleAction *action,
   terminal_screen_set_profile (priv->active_screen, profile);
   g_signal_handlers_unblock_by_func (priv->active_screen, G_CALLBACK (profile_set_callback), window);
 }
-
-#define PROFILES_UI_PATH "/menubar/Terminal/TerminalProfiles"
-#define PROFILES_POPUP_UI_PATH "/Popup/PopupTerminalProfiles/ProfilesPH"
 
 static void
 profile_visible_name_notify_cb (TerminalProfile *profile,
