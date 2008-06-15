@@ -799,7 +799,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
         }
       
       /* FIXME: Don't enable this if we have a compmgr. */
-      /* FIXME: redo this on screen-changed! */
       vte_terminal_set_background_transparent (vte_terminal,
                                                bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
                                                (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
@@ -1024,6 +1023,16 @@ terminal_screen_update_on_realize (VteTerminal *vte_terminal,
                                    TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  TerminalBackgroundType bg_type;
+
+  g_assert (priv->window != NULL);
+  g_assert (priv->profile != NULL);
+
+  /* FIXME: Don't enable this if we have a compmgr. */
+  bg_type = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+  vte_terminal_set_background_transparent (vte_terminal,
+                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
+                                           !terminal_window_uses_argb_visual (priv->window));
 
   update_color_scheme (screen);
 
