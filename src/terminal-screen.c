@@ -103,17 +103,20 @@ static void terminal_screen_init        (TerminalScreen      *screen);
 static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
-static void terminal_screen_update_on_realize (VteTerminal *vte_terminal,
-                                               TerminalScreen *screen);
+static void terminal_screen_drag_data_received (GtkWidget        *widget,
+                                                GdkDragContext   *context,
+                                                gint              x,
+                                                gint              y,
+                                                GtkSelectionData *selection_data,
+                                                guint             info,
+                                                guint             time);
 static void terminal_screen_system_font_notify_cb (TerminalApp *app,
                                                    GParamSpec *pspec,
                                                    TerminalScreen *screen);
 static void terminal_screen_change_font (TerminalScreen *screen);
-static gboolean terminal_screen_popup_menu         (GtkWidget      *term,
-                                                    TerminalScreen *screen);
-static gboolean terminal_screen_button_press_event (GtkWidget      *term,
-                                                    GdkEventButton *event,
-                                                    TerminalScreen *screen);
+static gboolean terminal_screen_popup_menu (GtkWidget *widget);
+static gboolean terminal_screen_button_press (GtkWidget *widget,
+                                              GdkEventButton *event);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
@@ -131,15 +134,6 @@ static void terminal_screen_cook_title      (TerminalScreen *screen);
 static void terminal_screen_cook_icon_title (TerminalScreen *screen);
 
 static void queue_recheck_working_dir (TerminalScreen *screen);
-
-static void drag_data_received (TerminalScreen   *widget,
-                                GdkDragContext   *context,
-                                gint              x,
-                                gint              y,
-                                GtkSelectionData *selection_data,
-                                guint             info,
-                                guint             time,
-                                gpointer          data);
 
 static void  terminal_screen_match_add         (TerminalScreen            *screen,
                                                 const char           *regexp,
@@ -165,15 +159,6 @@ static void
 free_tag_data (TagData *tagdata)
 {
   g_slice_free (TagData, tagdata);
-}
-
-static void
-style_set_callback (GtkWidget *widget,
-                    GtkStyle  *previous_style,
-                    void      *data)
-{
-  if (GTK_WIDGET_REALIZED (widget))
-    terminal_screen_change_font (TERMINAL_SCREEN (data));
 }
 
 #ifdef DEBUG_GEOMETRY
@@ -286,6 +271,44 @@ terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
                     G_CALLBACK (terminal_screen_sync_settings), widget);
 }
 
+static void
+terminal_screen_realize (GtkWidget *widget)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  TerminalScreenPrivate *priv = screen->priv;
+  TerminalBackgroundType bg_type;
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->realize (widget);
+
+  g_assert (priv->window != NULL);
+  g_assert (priv->profile != NULL);
+
+  /* FIXME: Don't enable this if we have a compmgr. */
+  bg_type = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+  vte_terminal_set_background_transparent (VTE_TERMINAL (screen),
+                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
+                                           !terminal_window_uses_argb_visual (priv->window));
+
+  /* FIXME: why do this on realize? */
+  terminal_window_set_size (priv->window, screen, TRUE);
+}
+
+static void
+terminal_screen_style_set (GtkWidget *widget,
+                           GtkStyle *previous_style)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+  void (* style_set) (GtkWidget*, GtkStyle*) = GTK_WIDGET_CLASS (terminal_screen_parent_class)->style_set;
+
+  if (style_set)
+    style_set (widget, previous_style);
+
+  update_color_scheme (screen);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    terminal_screen_change_font (screen);
+}
+
 #ifdef DEBUG_GEOMETRY
 
 static void size_request (GtkWidget *widget, GtkRequisition *req)
@@ -383,28 +406,9 @@ terminal_screen_init (TerminalScreen *screen)
   gtk_target_table_free (targets, n_targets);
   gtk_target_list_unref (target_list);
 
-  g_signal_connect (screen, "drag_data_received",
-                    G_CALLBACK (drag_data_received),
-                    screen);
-
-  g_signal_connect (screen,
-                    "realize",
-                    G_CALLBACK (terminal_screen_update_on_realize),
-                    screen);
-
-  g_signal_connect (screen,
-                    "style_set",
-                    G_CALLBACK (style_set_callback),
-                    screen);
-
   g_signal_connect (screen,
                     "popup_menu",
                     G_CALLBACK (terminal_screen_popup_menu),
-                    screen);
-
-  g_signal_connect (screen,
-                    "button_press_event",
-                    G_CALLBACK (terminal_screen_button_press_event),
                     screen);
 
   priv->title_from_arg = NULL;
@@ -495,6 +499,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->set_property = terminal_screen_set_property;
 
   widget_class->screen_changed = terminal_screen_screen_changed;
+  widget_class->realize = terminal_screen_realize;
+  widget_class->style_set = terminal_screen_style_set;
+  widget_class->drag_data_received = terminal_screen_drag_data_received;
+  widget_class->button_press_event = terminal_screen_button_press;
+  widget_class->popup_menu = terminal_screen_popup_menu;
 
   signals[PROFILE_SET] =
     g_signal_new (I_("profile-set"),
@@ -1019,32 +1028,13 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
 }
 
 static void
-terminal_screen_update_on_realize (VteTerminal *vte_terminal,
-                                   TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  TerminalBackgroundType bg_type;
-
-  g_assert (priv->window != NULL);
-  g_assert (priv->profile != NULL);
-
-  /* FIXME: Don't enable this if we have a compmgr. */
-  bg_type = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
-  vte_terminal_set_background_transparent (vte_terminal,
-                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                           !terminal_window_uses_argb_visual (priv->window));
-
-  update_color_scheme (screen);
-
-  /* FIXME: why do this on realize? */
-  terminal_window_set_size (priv->window, screen, TRUE);
-}
-
-static void
 terminal_screen_change_font (TerminalScreen *screen)
 {
+  TerminalScreenPrivate *priv = screen->priv;
+
   terminal_screen_set_font (screen);
-  terminal_screen_update_on_realize (VTE_TERMINAL (screen), screen);
+
+  terminal_window_set_size (priv->window, screen, TRUE);
 }
 
 static void
@@ -1481,9 +1471,9 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
 }
 
 static gboolean
-terminal_screen_popup_menu (GtkWidget      *term,
-                            TerminalScreen *screen)
+terminal_screen_popup_menu (GtkWidget *widget)
 {
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPopupInfo *info;
 
   info = terminal_screen_popup_info_new (screen);
@@ -1497,10 +1487,10 @@ terminal_screen_popup_menu (GtkWidget      *term,
 }
 
 static gboolean
-terminal_screen_button_press_event (GtkWidget      *widget,
-                                    GdkEventButton *event,
-                                    TerminalScreen *screen)
+terminal_screen_button_press (GtkWidget      *widget,
+                              GdkEventButton *event)
 {
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
   int char_width, char_height;
   gboolean dingus_button;
@@ -1569,6 +1559,9 @@ terminal_screen_button_press_event (GtkWidget      *widget,
     }
 
   /* default behavior is to let the terminal widget deal with it */
+  if (GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event)
+    return GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event (widget, event);
+
   return FALSE;
 }
 
@@ -1841,16 +1834,15 @@ terminal_screen_set_user_title (TerminalScreen *screen,
 }
 
 static void
-drag_data_received (TerminalScreen   *widget,
-                    GdkDragContext   *context,
-                    gint              x,
-                    gint              y,
-                    GtkSelectionData *selection_data,
-                    guint             info,
-                    guint             time,
-                    gpointer          data)
+terminal_screen_drag_data_received (GtkWidget        *widget,
+                                    GdkDragContext   *context,
+                                    gint              x,
+                                    gint              y,
+                                    GtkSelectionData *selection_data,
+                                    guint             info,
+                                    guint             time)
 {
-  TerminalScreen *screen = TERMINAL_SCREEN (data);
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
 
 #if 0
   {
