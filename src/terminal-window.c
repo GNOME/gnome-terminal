@@ -738,11 +738,15 @@ update_edit_menu_cb (GtkClipboard *clipboard,
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
-  gboolean can_paste;
+  gboolean can_paste, can_paste_uris;
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
+  can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
+
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
   gtk_action_set_sensitive (action, can_paste);
+  action = gtk_action_group_get_action (priv->action_group, "EditPasteURIPaths");
+  gtk_action_set_sensitive (action, can_paste_uris);
 
   /* Ref was added in gtk_clipboard_request_targets below */
   g_object_unref (window);
@@ -757,8 +761,8 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_targets (clipboard,
-                                  (GtkClipboardTargetsReceivedFunc) update_edit_menu_cb,
-                                  g_object_ref (window));
+                                 (GtkClipboardTargetsReceivedFunc) update_edit_menu_cb,
+                                 g_object_ref (window));
 }
 
 static void
@@ -980,7 +984,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
-  gboolean can_paste, show_link, show_email_link, show_call_link, show_input_method_menu;
+  gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
   
   remove_popup_info (window);
 
@@ -993,6 +997,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
+  can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
   show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL && info->flavour != FLAVOR_VOIP_CALL;
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
   show_call_link = info->string != NULL && info->flavour == FLAVOR_VOIP_CALL;
@@ -1019,6 +1024,8 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
   action = gtk_action_group_get_action (priv->action_group, "PopupPaste");
   gtk_action_set_sensitive (action, can_paste);
+  action = gtk_action_group_get_action (priv->action_group, "PopupPasteURIPaths");
+  gtk_action_set_visible (action, can_paste_uris);
   
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
                 "gtk-show-input-method-menu", &show_input_method_menu,
@@ -1253,6 +1260,9 @@ terminal_window_init (TerminalWindow *window)
       { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
         NULL,
         G_CALLBACK (edit_paste_callback) },
+      { "EditPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), NULL,
+        NULL,
+        G_CALLBACK (edit_paste_callback) },
       { "EditProfiles", NULL, N_("P_rofiles…"), NULL,
         NULL,
         G_CALLBACK (edit_profiles_callback) },
@@ -1341,6 +1351,9 @@ terminal_window_init (TerminalWindow *window)
         NULL,
         G_CALLBACK (edit_copy_callback) },
       { "PopupPaste", GTK_STOCK_PASTE, NULL, NULL,
+        NULL,
+        G_CALLBACK (edit_paste_callback) },
+      { "PopupPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), NULL,
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "PopupNewTerminal", NULL, N_("Open _Terminal"), NULL,
@@ -2520,40 +2533,48 @@ edit_copy_callback (GtkAction *action,
   vte_terminal_copy_clipboard (VTE_TERMINAL (priv->active_screen));
 }
 
+typedef struct {
+  TerminalScreen *screen;
+  gboolean uris_as_paths;
+} PasteData;
+
 static void
 clipboard_uris_received_cb (GtkClipboard *clipboard,
                             GtkSelectionData *selection_data,
-                            TerminalScreen *screen)
+                            PasteData *data)
 {
   char **uris;
   char *text;
 
   uris = gtk_selection_data_get_uris (selection_data);
   if (!uris) {
-    g_object_unref (screen);
+    g_object_unref (data->screen);
+    g_slice_free (PasteData, data);
     return;
   }
 
-  /* Bug #537112 */
-  /* terminal_util_transform_uris_to_quoted_fuse_paths (uris); */
+  if (data->uris_as_paths)
+    terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
   text = g_strjoinv (" ", uris);
-  vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+  vte_terminal_feed_child (VTE_TERMINAL (data->screen), text, strlen (text));
   g_free (text);
 
   g_strfreev (uris);
 
-  g_object_unref (screen);
+  g_object_unref (data->screen);
+  g_slice_free (PasteData, data);
 }
 
 static void
 clipboard_targets_received_cb (GtkClipboard *clipboard,
                                GdkAtom *targets,
                                int n_targets,
-                               TerminalScreen *screen)
+                               PasteData *data)
 {
   if (!targets) {
-    g_object_unref (screen);
+    g_object_unref (data->screen);
+    g_slice_free (PasteData, data);
     return;
   }
 
@@ -2561,12 +2582,14 @@ clipboard_targets_received_cb (GtkClipboard *clipboard,
     gtk_clipboard_request_contents (clipboard,
                                     gdk_atom_intern ("text/uri-list", FALSE),
                                     (GtkClipboardReceivedFunc) clipboard_uris_received_cb,
-                                    g_object_ref (screen));
+                                    data);
+    return;
   } else /* if (gtk_targets_include_text (targets, n_targets)) */ {
-    vte_terminal_paste_clipboard (VTE_TERMINAL (screen));
+    vte_terminal_paste_clipboard (VTE_TERMINAL (data->screen));
   }
 
-  g_object_unref (screen);
+  g_object_unref (data->screen);
+  g_slice_free (PasteData, data);
 }
 
 static void
@@ -2575,14 +2598,22 @@ edit_paste_callback (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkClipboard *clipboard;
+  PasteData *data;
+  const char *name;
 
   if (!priv->active_screen)
     return;
       
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
+  name = gtk_action_get_name (action);
+
+  data = g_slice_new (PasteData);
+  data->screen = g_object_ref (priv->active_screen);
+  data->uris_as_paths = (name == I_("EditPasteURIPaths") || name == I_("PopupPasteURIPaths"));
+
   gtk_clipboard_request_targets (clipboard,
                                  (GtkClipboardTargetsReceivedFunc) clipboard_targets_received_cb,
-                                 g_object_ref (priv->active_screen));
+                                 data);
 }
 
 static void
