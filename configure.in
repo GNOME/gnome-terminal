@@ -1,7 +1,7 @@
 m4_define([gt_version_major],[2])
 m4_define([gt_version_minor],[23])
-m4_define([gt_version_micro],[3])
-m4_define([gt_version_extra],[-svn])
+m4_define([gt_version_micro],[4])
+m4_define([gt_version_extra],[])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
 # This can be either "trunk" or "branches/gnome-x-y"
@@ -9,7 +9,7 @@ m4_define([gt_branch],["trunk"])
 
 AC_INIT([GNOME Terminal],[gt_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
 AC_CONFIG_SRCDIR([src/terminal.c])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
 
