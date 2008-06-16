@@ -9,6 +9,7 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 EXTRA_DIST = 			\
 	ChangeLog.pre-2-23	\
+	ChangeLog.README	\
 	HACKING			\
 	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
