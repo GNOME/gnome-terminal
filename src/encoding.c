@@ -264,8 +264,6 @@ encoding_mark_active (gpointer key,
   TerminalEncoding *encoding = (TerminalEncoding *) value;
   guint active = GPOINTER_TO_UINT (data);
 
-  g_assert (key == encoding->charset);
-
   encoding->is_active = active;
 }
 
