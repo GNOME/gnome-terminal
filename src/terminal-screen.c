@@ -406,11 +406,6 @@ terminal_screen_init (TerminalScreen *screen)
   gtk_target_table_free (targets, n_targets);
   gtk_target_list_unref (target_list);
 
-  g_signal_connect (screen,
-                    "popup_menu",
-                    G_CALLBACK (terminal_screen_popup_menu),
-                    screen);
-
   priv->title_from_arg = NULL;
   priv->user_title = FALSE;
   
