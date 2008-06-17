@@ -746,6 +746,7 @@ update_edit_menu_cb (GtkClipboard *clipboard,
   action = gtk_action_group_get_action (priv->action_group, "EditPaste");
   gtk_action_set_sensitive (action, can_paste);
   action = gtk_action_group_get_action (priv->action_group, "EditPasteURIPaths");
+  gtk_action_set_visible (action, can_paste_uris);
   gtk_action_set_sensitive (action, can_paste_uris);
 
   /* Ref was added in gtk_clipboard_request_targets below */
@@ -1254,10 +1255,10 @@ terminal_window_init (TerminalWindow *window)
         G_CALLBACK (file_close_window_callback) },
 
       /* Edit menu */
-      { "EditCopy", GTK_STOCK_COPY, NULL, NULL,
+      { "EditCopy", GTK_STOCK_COPY, NULL, "<shift><control>C",
         NULL,
         G_CALLBACK (edit_copy_callback) },
-      { "EditPaste", GTK_STOCK_PASTE, NULL, NULL,
+      { "EditPaste", GTK_STOCK_PASTE, NULL, "<shift><control>V",
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "EditPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), NULL,
@@ -1347,10 +1348,10 @@ terminal_window_init (TerminalWindow *window)
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
       { "PopupTerminalProfiles", NULL, N_("P_rofiles") },
-      { "PopupCopy", GTK_STOCK_COPY, NULL, NULL,
+      { "PopupCopy", GTK_STOCK_COPY, NULL, "<shift><control>C",
         NULL,
         G_CALLBACK (edit_copy_callback) },
-      { "PopupPaste", GTK_STOCK_PASTE, NULL, NULL,
+      { "PopupPaste", GTK_STOCK_PASTE, NULL, "<shift><control>V",
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "PopupPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), NULL,
