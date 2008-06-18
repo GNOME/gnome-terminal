@@ -750,6 +750,20 @@ edit_keys_dialog_destroy_cb (GtkWidget *widget,
   edit_keys_dialog = NULL;
 }
 
+static void
+edit_keys_dialog_response_cb (GtkWidget *editor,
+                              int response,
+                              gpointer use_data)
+{  
+  if (response == GTK_RESPONSE_HELP)
+    {
+      terminal_util_show_help ("gnome-terminal-shortcuts", GTK_WINDOW (editor));
+      return;
+    }
+    
+  gtk_widget_destroy (editor);
+}
+
 void
 terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 {
@@ -847,7 +861,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   g_signal_connect (dialog, "destroy",
                     G_CALLBACK (edit_keys_dialog_destroy_cb), tree);
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (edit_keys_dialog_response_cb),
                     NULL);
   gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
 
