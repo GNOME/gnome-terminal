@@ -1220,7 +1220,9 @@ terminal_app_get_clone_command (TerminalApp *app,
           
           if (lt == tabs)
             {
-               g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
+              GdkWindowState state;
+                
+              g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
                                                      profile_id));
               if (terminal_window_get_menubar_visible (window))
                  g_ptr_array_add (args, g_strdup ("--show-menubar"));
@@ -1229,6 +1231,12 @@ terminal_app_get_clone_command (TerminalApp *app,
 
                g_ptr_array_add (args, g_strdup_printf ("--role=%s",
                                                        gtk_window_get_role (GTK_WINDOW (window))));
+
+               state = gdk_window_get_state (GTK_WIDGET (window)->window);
+               if (state & GDK_WINDOW_STATE_MAXIMIZED)
+                 g_ptr_array_add (args, g_strdup ("--maximize"));
+               if (state & GDK_WINDOW_STATE_FULLSCREEN)
+                 g_ptr_array_add (args, g_strdup ("--full-screen"));
             }
           else
             {
