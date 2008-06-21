@@ -1564,7 +1564,6 @@ terminal_app_class_init (TerminalAppClass *klass)
                          PANGO_TYPE_FONT_DESCRIPTION,
                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  /* FIMXEchpe make rw prop */
   g_object_class_install_property
     (object_class,
      PROP_DEFAULT_PROFILE,
