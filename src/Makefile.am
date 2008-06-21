@@ -126,6 +126,7 @@ builderdir = $(pkgdatadir)
 builder_DATA = $(builder_in_files:.glade=.ui)
 
 CLEANFILES = \
+	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
 	$(builder_DATA) \
