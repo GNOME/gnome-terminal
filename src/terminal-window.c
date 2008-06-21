@@ -2540,13 +2540,20 @@ typedef struct {
 
 static void
 clipboard_uris_received_cb (GtkClipboard *clipboard,
+#if GTK_CHECK_VERSION (2, 13, 4)
+                            char **uris,
+#else
                             GtkSelectionData *selection_data,
+#endif /* GTK 2.13.4 */
                             PasteData *data)
 {
-  char **uris;
   char *text;
+#if !GTK_CHECK_VERSION (2, 13, 4)
+  char **uris;
 
   uris = gtk_selection_data_get_uris (selection_data);
+#endif /* ! GTK 2.13.4 */
+
   if (!uris) {
     g_object_unref (data->screen);
     g_slice_free (PasteData, data);
@@ -2579,10 +2586,16 @@ clipboard_targets_received_cb (GtkClipboard *clipboard,
   }
 
   if (gtk_targets_include_uri (targets, n_targets)) {
+#if GTK_CHECK_VERSION (2, 13, 4)
+    gtk_clipboard_request_uris (clipboard,
+                                (GtkClipboardURIReceivedFunc) clipboard_uris_received_cb,
+                                data);
+#else
     gtk_clipboard_request_contents (clipboard,
                                     gdk_atom_intern ("text/uri-list", FALSE),
                                     (GtkClipboardReceivedFunc) clipboard_uris_received_cb,
                                     data);
+#endif /* GTK 2.13.4 */
     return;
   } else /* if (gtk_targets_include_text (targets, n_targets)) */ {
     vte_terminal_paste_clipboard (VTE_TERMINAL (data->screen));
