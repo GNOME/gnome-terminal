@@ -36,8 +36,6 @@
 #include "profile-editor.h"
 #include "encoding.h"
 #include <gconf/gconf-client.h>
-#include <libgnome/gnome-help.h>
-#include <libgnomeui/gnome-url.h>
 #include <libgnomeui/gnome-client.h>
 #include <string.h>
 #include <stdlib.h>
