@@ -172,14 +172,15 @@ static guint signals[LAST_SIGNAL];
 typedef struct {
   const char *pattern;
   TerminalURLFlavour flavor;
+  GRegexCompileFlags flags;
 } TerminalRegexPattern;
 
 static const TerminalRegexPattern url_regex_patterns[] = {
-  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT "(?:" URLPATH ")?", FLAVOR_AS_IS },
-  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT "(?:" URLPATH ")?", FLAVOR_DEFAULT_TO_HTTP },
-  { "(?:callto:|h323:|sip:)" USERCHARS_CLASS "[" USERCHARS ".]*(?:" PORT "/[a-z0-9]+)?\\@" HOST, FLAVOR_VOIP_CALL },
-  { "(?:mailto:)?" USERCHARS_CLASS "[" USERCHARS ".]*\\@" HOST, FLAVOR_EMAIL },
-  { "news:[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS },
+  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT "(?:" URLPATH ")?", FLAVOR_AS_IS, G_REGEX_CASELESS },
+  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT "(?:" URLPATH ")?", FLAVOR_DEFAULT_TO_HTTP, G_REGEX_CASELESS  },
+  { "(?:callto:|h323:|sip:)" USERCHARS_CLASS "[" USERCHARS ".]*(?:" PORT "/[a-z0-9]+)?\\@" HOST, FLAVOR_VOIP_CALL, G_REGEX_CASELESS  },
+  { "(?:mailto:)?" USERCHARS_CLASS "[" USERCHARS ".]*\\@" HOST, FLAVOR_EMAIL, G_REGEX_CASELESS  },
+  { "news:[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, G_REGEX_CASELESS  },
 };
 
 static const TerminalRegexPattern skey_regex_patterns[] = {
@@ -673,7 +674,9 @@ terminal_screen_class_init (TerminalScreenClass *klass)
     {
       GError *error = NULL;
 
-      url_regexes[i] = g_regex_new (url_regex_patterns[i].pattern, G_REGEX_OPTIMIZE, 0, &error);
+      url_regexes[i] = g_regex_new (url_regex_patterns[i].pattern,
+                                    url_regex_patterns[i].flags | G_REGEX_OPTIMIZE,
+                                    0, &error);
       if (error)
         {
           g_message ("%s", error->message);
