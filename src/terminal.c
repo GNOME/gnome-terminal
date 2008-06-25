@@ -169,6 +169,7 @@ initial_window_new (const char *profile,
   iw->force_menubar_state = FALSE;
   iw->menubar_state = FALSE;
   iw->start_fullscreen = FALSE;
+  iw->start_maximized = FALSE;
   iw->geometry = NULL;
   iw->role = NULL;
   
