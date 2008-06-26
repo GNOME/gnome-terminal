@@ -1603,23 +1603,20 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreenPrivate *priv = screen->priv;
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  int char_width, char_height;
-  gboolean dingus_button;
+  int char_width, char_height, x, y, xpad, ypad;
   char *matched_string;
   int matched_flavor = 0;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
+  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad, &ypad);
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
-  matched_string = terminal_screen_check_match (screen,
-                                                event->x / char_width,
-                                                event->y / char_height,
-                                                &matched_flavor);
+  x = (event->x - xpad) / char_width;
+  y = (event->y - ypad) / char_height;
+  matched_string = terminal_screen_check_match (screen, x, y, &matched_flavor);
   
-  dingus_button = ((event->button == 1) || (event->button == 2));
-
   if (matched_string != NULL &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
