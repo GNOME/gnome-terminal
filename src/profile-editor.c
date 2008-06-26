@@ -579,7 +579,7 @@ update_image_preview (GtkFileChooser *chooser)
   gchar *file;
 
   image = gtk_file_chooser_get_preview_widget (GTK_FILE_CHOOSER (chooser));
-  file = gtk_file_chooser_get_preview_filename (chooser);
+  file = gtk_file_chooser_get_preview_uri (chooser);
   
   if (file != NULL) {
 
@@ -597,8 +597,8 @@ update_image_preview (GtkFileChooser *chooser)
                                 "gtk-dialog-question",
       	                        GTK_ICON_SIZE_DIALOG);
     }
-  }				
-  gtk_file_chooser_set_preview_widget_active (chooser, TRUE);
+  }
+  gtk_file_chooser_set_preview_widget_active (chooser, file != NULL);
 }
 
 static void
