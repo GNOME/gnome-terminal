@@ -36,7 +36,8 @@ typedef enum {
   FLAVOR_AS_IS,
   FLAVOR_DEFAULT_TO_HTTP,
   FLAVOR_VOIP_CALL,
-  FLAVOR_EMAIL
+  FLAVOR_EMAIL,
+  FLAVOR_SKEY
 } TerminalURLFlavour;
 
 /* Forward decls */
@@ -69,11 +70,10 @@ struct _TerminalScreenClass
                                TerminalProfile *old_profile);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
-  void (* skey_clicked)       (TerminalScreen *screen,
-                               const char *skey_challenge);
-  void (* url_clicked)        (TerminalScreen *screen,
+  gboolean (* match_clicked)  (TerminalScreen *screen,
                                const char *url,
-                               int flavour);
+                               int flavour,
+                               guint state);
   void (* close_screen)       (TerminalScreen *screen);
 };
 
@@ -146,6 +146,7 @@ struct _TerminalScreenPopupInfo {
   char *string;
   TerminalURLFlavour flavour;
   guint button;
+  guint state;
   guint32 timestamp;
 };
 

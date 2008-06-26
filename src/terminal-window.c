@@ -999,7 +999,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
-  show_link = info->string != NULL && info->flavour != FLAVOR_EMAIL && info->flavour != FLAVOR_VOIP_CALL;
+  show_link = info->string != NULL && (info->flavour == FLAVOR_AS_IS || info->flavour == FLAVOR_DEFAULT_TO_HTTP);
   show_email_link = info->string != NULL && info->flavour == FLAVOR_EMAIL;
   show_call_link = info->string != NULL && info->flavour == FLAVOR_VOIP_CALL;
 
@@ -1084,32 +1084,31 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
                                   terminal_screen_popup_info_ref (info));
 }
 
-static void
-screen_skey_clicked_cb (TerminalScreen *screen,
-                        const char *skey_challenge,
-                        TerminalWindow *window)
+static gboolean
+screen_match_clicked_cb (TerminalScreen *screen,
+                         const char *match,
+                         int flavour,
+                         guint state,
+                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
 
   if (screen != priv->active_screen)
-    return;
+    return FALSE;
 
-  terminal_skey_do_popup (GTK_WINDOW (window), screen, skey_challenge);
-}
+  switch (flavour)
+    {
+      case FLAVOR_SKEY:
+        terminal_skey_do_popup (GTK_WINDOW (window), screen, match);
+        break;
+      default:
+        gtk_widget_grab_focus (GTK_WIDGET (screen));
+        terminal_util_open_url (GTK_WIDGET (window), match, flavour,
+                                gtk_get_current_event_time ());
+        break;
+    }
 
-static void
-screen_url_clicked_cb (TerminalScreen *screen,
-                       const char *url,
-                       int flavour,
-                       TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-
-  if (screen != priv->active_screen)
-    return;
-
-  terminal_util_open_url (GTK_WIDGET (window), url, flavour,
-                          gtk_get_current_event_time ());
+  return TRUE;
 }
 
 static void
@@ -2190,10 +2189,8 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
-  g_signal_connect (screen, "skey-clicked",
-                    G_CALLBACK (screen_skey_clicked_cb), window);
-  g_signal_connect (screen, "url-clicked",
-                    G_CALLBACK (screen_url_clicked_cb), window);
+  g_signal_connect (screen, "match-clicked",
+                    G_CALLBACK (screen_match_clicked_cb), window);
 
   g_signal_connect (screen, "close-screen",
                     G_CALLBACK (screen_close_cb), window);
@@ -2277,11 +2274,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,
-                                        G_CALLBACK (screen_skey_clicked_cb),
-                                        window);
-
-  g_signal_handlers_disconnect_by_func (screen,
-                                        G_CALLBACK (screen_url_clicked_cb),
+                                        G_CALLBACK (screen_match_clicked_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,

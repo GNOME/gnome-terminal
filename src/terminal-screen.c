@@ -67,16 +67,14 @@ struct _TerminalScreenPrivate
   double font_scale;
   guint recheck_working_dir_idle;
   gboolean user_title; /* title was manually set */
-  GSList *url_tags;
-  GSList *skey_tags;
+  GSList *match_tags;
 };
 
 enum
 {
   PROFILE_SET,
   SHOW_POPUP_MENU,
-  SKEY_CLICKED,
-  URL_CLICKED,
+  MATCH_CLICKED,
   CLOSE_SCREEN,
   LAST_SIGNAL
 };
@@ -140,15 +138,8 @@ static void queue_recheck_working_dir (TerminalScreen *screen);
 static void  terminal_screen_match_add         (TerminalScreen            *screen,
                                                 const char           *regexp,
                                                 int                   flavor);
-static void  terminal_screen_skey_match_add    (TerminalScreen            *screen,
-                                                const char           *regexp,
-                                                int                   flavor);
 #endif /* VTE < 0.6.15 */
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
-                                                int                   column,
-                                                int                   row,
-                                                int                  *flavor);
-static char* terminal_screen_skey_check_match  (TerminalScreen            *screen,
                                                 int                   column,
                                                 int                   row,
                                                 int                  *flavor);
@@ -407,7 +398,7 @@ terminal_screen_init (TerminalScreen *screen)
       tag_data->tag = vte_terminal_match_add_gregex (terminal, url_regexes[i], 0);
       vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
 
-      priv->url_tags = g_slist_prepend (priv->url_tags, tag_data);
+      priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
 #else /* VTE < 0.6.15 */
   
@@ -592,25 +583,15 @@ terminal_screen_class_init (TerminalScreenClass *klass)
                   1,
                   G_TYPE_POINTER);
 
-  signals[SKEY_CLICKED] =
-    g_signal_new (I_("skey-clicked"),
+  signals[MATCH_CLICKED] =
+    g_signal_new (I_("match-clicked"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, skey_clicked),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__STRING,
-                  G_TYPE_NONE,
-                  1, G_TYPE_STRING);
-  
-  signals[URL_CLICKED] =
-    g_signal_new (I_("url-clicked"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalScreenClass, url_clicked),
-                  NULL, NULL,
-                  _terminal_marshal_VOID__STRING_INT,
-                  G_TYPE_NONE,
-                  2, G_TYPE_STRING, G_TYPE_INT);
+                  G_STRUCT_OFFSET (TerminalScreenClass, match_clicked),
+                  g_signal_accumulator_true_handled, NULL,
+                  _terminal_marshal_BOOLEAN__STRING_INT_UINT,
+                  G_TYPE_BOOLEAN,
+                  3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_UINT);
   
   signals[CLOSE_SCREEN] =
     g_signal_new (I_("close-screen"),
@@ -738,11 +719,8 @@ terminal_screen_finalize (GObject *object)
   g_strfreev (priv->override_command);
   g_free (priv->working_dir);
 
-  g_slist_foreach (priv->url_tags, (GFunc) free_tag_data, NULL);
-  g_slist_free (priv->url_tags);
-
-  g_slist_foreach (priv->skey_tags, (GFunc) free_tag_data, NULL);
-  g_slist_free (priv->skey_tags);
+  g_slist_foreach (priv->match_tags, (GFunc) free_tag_data, NULL);
+  g_slist_free (priv->match_tags);
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
 }
@@ -879,20 +857,20 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
               TagData *tag_data;
 
               tag_data = g_slice_new (TagData);
-              tag_data->flavor = FLAVOR_AS_IS;
+              tag_data->flavor = FLAVOR_SKEY;
               tag_data->tag = vte_terminal_match_add_gregex (vte_terminal, skey_regexes[i], 0);
               vte_terminal_match_set_cursor_type (vte_terminal, tag_data->tag, SKEY_MATCH_CURSOR);
 
-              priv->skey_tags = g_slist_prepend (priv->skey_tags, tag_data);
+              priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
             }
 #else /* VTE < 0.6.15 */
-          terminal_screen_skey_match_add (screen,
-                                          "s/key [0-9]* [-A-Za-z0-9]*",
-                                          FLAVOR_AS_IS);
+          terminal_screen_match_add (screen,
+                                     "s/key [0-9]* [-A-Za-z0-9]*",
+                                     FLAVOR_SKEY);
 
-          terminal_screen_skey_match_add (screen,
-                                          "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
-                                          FLAVOR_AS_IS);
+          terminal_screen_match_add (screen,
+                                     "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
+                                     FLAVOR_SKEY);
 #endif /* VTE 0.6.15 */
         }
       else
@@ -1623,6 +1601,8 @@ terminal_screen_button_press (GtkWidget      *widget,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
+  gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
+    GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
   int char_width, char_height;
   gboolean dingus_button;
   char *matched_string;
@@ -1633,45 +1613,35 @@ terminal_screen_button_press (GtkWidget      *widget,
 
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
-  matched_string =
-    terminal_screen_check_match (screen,
-                                 event->x / char_width,
-                                 event->y / char_height,
-                                 &matched_flavor);
+  matched_string = terminal_screen_check_match (screen,
+                                                event->x / char_width,
+                                                event->y / char_height,
+                                                &matched_flavor);
+  
   dingus_button = ((event->button == 1) || (event->button == 2));
 
-  if (dingus_button &&
-      (state & GDK_CONTROL_MASK) &&
-      terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SKEY))
+  if (matched_string != NULL &&
+      (event->button == 1 || event->button == 2) &&
+      (state & GDK_CONTROL_MASK))
     {
-      char *skey_match;
+      gboolean handled = FALSE;
 
-      skey_match = terminal_screen_skey_check_match (screen,
-						     event->x / char_width,
-						     event->y / char_height,
-                                                     NULL);
-      if (skey_match != NULL)
-	{
-          g_signal_emit (screen, signals[SKEY_CLICKED], 0, skey_match);
-	  g_free (skey_match);
-          g_free (matched_string);
+      if (matched_flavor != FLAVOR_SKEY ||
+          terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SKEY))
+        {
+          g_signal_emit (screen, signals[MATCH_CLICKED], 0,
+                         matched_string,
+                         matched_flavor,
+                         state,
+                         &handled);
+        }
 
-	  return TRUE;
-	}
+        g_free (matched_string);
+
+        if (handled)
+          return TRUE; /* don't do anything else such as select with the click */
     }
 
-  if (dingus_button &&
-      (state & GDK_CONTROL_MASK) != 0 &&
-      matched_string != NULL)
-    {
-      gtk_widget_grab_focus (widget);
-
-      g_signal_emit (screen, signals[URL_CLICKED], 0, matched_string, matched_flavor);
-      g_free (matched_string);
-
-      return TRUE; /* don't do anything else such as select with the click */
-    }
-      
   if (event->button == 3 &&
       (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) == 0)
     {
@@ -1679,6 +1649,7 @@ terminal_screen_button_press (GtkWidget      *widget,
 
       info = terminal_screen_popup_info_new (screen);
       info->button = event->button;
+      info->state = state;
       info->timestamp = event->time;
       info->string = matched_string; /* adopted */
       info->flavour = matched_flavor;
@@ -1690,8 +1661,8 @@ terminal_screen_button_press (GtkWidget      *widget,
     }
 
   /* default behavior is to let the terminal widget deal with it */
-  if (GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event)
-    return GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event (widget, event);
+  if (button_press_event)
+    return button_press_event (widget, event);
 
   return FALSE;
 }
@@ -2237,7 +2208,7 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
 #if !VTE_CHECK_VERSION (0, 16, 15)
 
 static void
-terminal_screen_match_add (TerminalScreen            *screen,
+terminal_screen_match_add (TerminalScreen       *screen,
                            const char           *regexp,
                            int                   flavor)
 {
@@ -2253,27 +2224,7 @@ terminal_screen_match_add (TerminalScreen            *screen,
   tag_data->tag = tag;
   tag_data->flavor = flavor;
 
-  priv->url_tags = g_slist_append (priv->url_tags, tag_data);
-}
-
-static void
-terminal_screen_skey_match_add (TerminalScreen *screen,
-                                const char *regexp,
-                                int flavor)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  VteTerminal *terminal = VTE_TERMINAL (screen);
-  TagData *tag_data;
-  int tag;
-  
-  tag = vte_terminal_match_add (terminal, regexp);
-  vte_terminal_match_set_cursor_type (terminal, tag, SKEY_MATCH_CURSOR);
-
-  tag_data = g_slice_new (TagData);
-  tag_data->tag = tag;
-  tag_data->flavor = flavor;
-
-  priv->skey_tags = g_slist_append (priv->skey_tags, tag_data);
+  priv->match_tags = g_slist_append (priv->match_tags, tag_data);
 }
 
 #endif /* VTE 0.6.15 */
@@ -2282,15 +2233,22 @@ static void
 terminal_screen_skey_match_remove (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GSList *tags;
-  
-  for (tags = priv->skey_tags; tags != NULL; tags = tags->next)
-    vte_terminal_match_remove (VTE_TERMINAL (screen),
-                               GPOINTER_TO_INT(((TagData*)tags->data)->tag));
+  GSList *l, *next;
 
-  g_slist_foreach (priv->skey_tags, (GFunc) free_tag_data, NULL);
-  g_slist_free (priv->skey_tags);
-  priv->skey_tags = NULL;
+  l = priv->match_tags;
+  while (l != NULL)
+    {
+      TagData *tag_data = (TagData *) l->data;
+
+      next = l->next;
+      if (tag_data->flavor == FLAVOR_SKEY)
+        {
+          vte_terminal_match_remove (VTE_TERMINAL (screen), tag_data->tag);
+          priv->match_tags = g_slist_delete_link (priv->match_tags, l);
+        }
+
+      l = next;
+    }
 }
 
 static char*
@@ -2301,41 +2259,14 @@ terminal_screen_check_match (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSList *tags;
-  gint tag;
+  int tag;
   char *match;
 
   match = vte_terminal_match_check (VTE_TERMINAL (screen), column, row, &tag);
-  for (tags = priv->url_tags; tags != NULL; tags = tags->next)
+  for (tags = priv->match_tags; tags != NULL; tags = tags->next)
     {
       TagData *tag_data = (TagData*) tags->data;
-      if (GPOINTER_TO_INT(tag_data->tag) == tag)
-	{
-	  if (flavor)
-	    *flavor = tag_data->flavor;
-	  return match;
-	}
-    }
-
-  g_free (match);
-  return NULL;
-}
-
-static char*
-terminal_screen_skey_check_match (TerminalScreen *screen,
-				  int        column,
-				  int        row,
-                                  int       *flavor)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  GSList *tags;
-  gint tag;
-  char *match;
-
-  match = vte_terminal_match_check (VTE_TERMINAL (screen), column, row, &tag);
-  for (tags = priv->skey_tags; tags != NULL; tags = tags->next)
-    {
-      TagData *tag_data = (TagData*) tags->data;
-      if (GPOINTER_TO_INT(tag_data->tag) == tag)
+      if (tag_data->tag == tag)
 	{
 	  if (flavor)
 	    *flavor = tag_data->flavor;
