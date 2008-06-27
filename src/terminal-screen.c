@@ -138,7 +138,7 @@ static void queue_recheck_working_dir (TerminalScreen *screen);
 static void  terminal_screen_match_add         (TerminalScreen            *screen,
                                                 const char           *regexp,
                                                 int                   flavor);
-#endif /* VTE < 0.6.15 */
+#endif /* VTE < 0.16.15 */
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 int                   column,
                                                 int                   row,
@@ -184,7 +184,7 @@ static TerminalURLFlavour *url_regex_flavors;
 static guint n_url_regexes;
 static GRegex **skey_regexes;
 static guint n_skey_regexes;
-#endif /* VTE 0.6.15 */
+#endif /* VTE 0.16.15 */
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
@@ -400,7 +400,7 @@ terminal_screen_init (TerminalScreen *screen)
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
-#else /* VTE < 0.6.15 */
+#else /* VTE < 0.16.15 */
   
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
@@ -437,7 +437,7 @@ terminal_screen_init (TerminalScreen *screen)
                              "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
                              HOST PORT "\\>",
                              FLAVOR_AS_IS);
-#endif /* VTE 0.6.15 */
+#endif /* VTE 0.16.15 */
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
@@ -679,7 +679,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
         }
     }
 }
-#endif /* VTE 0.6.15 */
+#endif /* VTE 0.16.15 */
 }
 
 static void
@@ -863,7 +863,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 
               priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
             }
-#else /* VTE < 0.6.15 */
+#else /* VTE < 0.16.15 */
           terminal_screen_match_add (screen,
                                      "s/key [0-9]* [-A-Za-z0-9]*",
                                      FLAVOR_SKEY);
@@ -871,7 +871,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
           terminal_screen_match_add (screen,
                                      "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
                                      FLAVOR_SKEY);
-#endif /* VTE 0.6.15 */
+#endif /* VTE 0.16.15 */
         }
       else
         {
@@ -2224,7 +2224,7 @@ terminal_screen_match_add (TerminalScreen       *screen,
   priv->match_tags = g_slist_append (priv->match_tags, tag_data);
 }
 
-#endif /* VTE 0.6.15 */
+#endif /* VTE 0.16.15 */
 
 static void
 terminal_screen_skey_match_remove (TerminalScreen *screen)
