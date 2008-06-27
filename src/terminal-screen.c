@@ -251,29 +251,17 @@ set_background_image_file (VteTerminal *terminal,
     vte_terminal_set_background_image (terminal, NULL);
 }
 
-static void
-terminal_screen_update_cursor_blink (TerminalScreen *screen,
-                                     GtkSettings *settings)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  TerminalCursorBlinkMode mode;
-  gboolean blink;
-
-  mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE);
-  if (mode == TERMINAL_CURSOR_BLINK_SYSTEM)
-    g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
-  else
-    blink = (mode == TERMINAL_CURSOR_BLINK_ON);
-
-  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
-}
+#if !VTE_CHECK_VERSION (0, 16, 15)
 
 static void
 terminal_screen_sync_settings (GtkSettings *settings,
                                GParamSpec *pspec,
                                TerminalScreen *screen)
 {
-  terminal_screen_update_cursor_blink (screen, settings);
+  gboolean blink;
+
+  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
 }
 
 static void
@@ -303,6 +291,8 @@ terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
   g_signal_connect (settings, "notify::gtk-cursor-blink",
                     G_CALLBACK (terminal_screen_sync_settings), widget);
 }
+
+#endif /* VTE < 0.16.15 */
 
 static void
 terminal_screen_realize (GtkWidget *widget)
@@ -555,7 +545,9 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->get_property = terminal_screen_get_property;
   object_class->set_property = terminal_screen_set_property;
 
+#if !VTE_CHECK_VERSION (0, 16, 15)
   widget_class->screen_changed = terminal_screen_screen_changed;
+#endif
   widget_class->realize = terminal_screen_realize;
   widget_class->style_set = terminal_screen_style_set;
   widget_class->drag_data_received = terminal_screen_drag_data_received;
@@ -933,8 +925,11 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     vte_terminal_set_allow_bold (vte_terminal,
                                  terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
 
+#if VTE_CHECK_VERSION (0, 16, 15)
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CURSOR_BLINK_MODE))
-    terminal_screen_update_cursor_blink (screen, gtk_widget_get_settings (GTK_WIDGET (screen)));
+    vte_terminal_set_cursor_blink_mode (vte_terminal,
+                                        terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE));
+#endif
 
 #if !VTE_CHECK_VERSION (0, 16, 15)
   /* For bug 535552 */
