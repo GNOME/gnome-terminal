@@ -1069,7 +1069,9 @@ terminal_screen_set_font (TerminalScreen *screen)
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
   PangoFontDescription *desc;
+#if !VTE_CHECK_VERSION (0, 16, 15)
   gboolean no_aa_without_render;
+#endif
 
   profile = priv->profile;
   
@@ -1083,6 +1085,9 @@ terminal_screen_set_font (TerminalScreen *screen)
 				   priv->font_scale *
 				   pango_font_description_get_size (desc));
 
+#if VTE_CHECK_VERSION (0, 16, 15)
+  vte_terminal_set_font (VTE_TERMINAL (screen), desc);
+#else
   no_aa_without_render = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER);
   if (!no_aa_without_render)
     {
@@ -1106,6 +1111,7 @@ terminal_screen_set_font (TerminalScreen *screen)
 				    desc,
 				    VTE_ANTI_ALIAS_FORCE_DISABLE);
     }
+#endif /* VTE 0.16.15 */
 
   pango_font_description_free (desc);
 }
