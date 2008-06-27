@@ -2381,8 +2381,6 @@ file_new_window_callback (GtkAction *action,
   TerminalApp *app;
   TerminalWindow *new_window;
   TerminalProfile *profile;
-  char *geometry;
-  int width, height;
 
   app = terminal_app_get ();
 
@@ -2395,19 +2393,12 @@ file_new_window_callback (GtkAction *action,
   if (_terminal_profile_get_forgotten (profile))
     return;
 
-  /* FIXME: this seems wrong if tabs are shown in the window */
-  terminal_screen_get_size (priv->active_screen, &width, &height);
-  geometry = g_strdup_printf ("%dx%d", width, height);
-
   new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   terminal_app_new_terminal (app, new_window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
                              1.0);
-
-  gtk_window_parse_geometry (GTK_WINDOW (new_window), geometry);
-  g_free (geometry);
 
   gtk_window_present (GTK_WINDOW (new_window));
 }
