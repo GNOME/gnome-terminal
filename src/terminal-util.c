@@ -346,7 +346,7 @@ object_change_notify_cb (PropertyChange *change)
 
   if (GTK_IS_RADIO_BUTTON (widget))
     {
-      glong ovalue, rvalue;
+      int ovalue, rvalue;
 
       g_object_get (object, object_prop, &ovalue, NULL);
       rvalue = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "enum-value"));
@@ -377,7 +377,7 @@ object_change_notify_cb (PropertyChange *change)
     }
   else if (GTK_IS_COMBO_BOX (widget))
     {
-      glong value;
+      int value;
 
       g_object_get (object, object_prop, &value, NULL);
       gtk_combo_box_set_active (GTK_COMBO_BOX (widget), value);
@@ -448,7 +448,7 @@ widget_change_notify_cb (PropertyChange *change)
   if (GTK_IS_RADIO_BUTTON (widget))
     {
       gboolean active;
-      glong value;
+      int value;
 
       active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
       if (!active)
@@ -483,7 +483,7 @@ widget_change_notify_cb (PropertyChange *change)
       int value;
 
       value = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-      g_object_set (object, object_prop, (glong) value, NULL);
+      g_object_set (object, object_prop, value, NULL);
     }
   else if (GTK_IS_COLOR_BUTTON (widget))
     {

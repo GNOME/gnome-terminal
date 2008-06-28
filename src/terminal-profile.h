@@ -154,7 +154,7 @@ gconstpointer     terminal_profile_get_property_boxed     (TerminalProfile *prof
 double            terminal_profile_get_property_double    (TerminalProfile *profile,
                                                            const char *prop_name);
 
-glong             terminal_profile_get_property_enum      (TerminalProfile *profile,
+int               terminal_profile_get_property_enum      (TerminalProfile *profile,
                                                            const char *prop_name);
 
 int               terminal_profile_get_property_int       (TerminalProfile *profile,

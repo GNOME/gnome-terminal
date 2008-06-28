@@ -1481,7 +1481,7 @@ terminal_profile_get_property_double (TerminalProfile *profile,
   return g_value_get_double (value);
 }
 
-glong
+int
 terminal_profile_get_property_enum (TerminalProfile *profile,
                                     const char *prop_name)
 {
