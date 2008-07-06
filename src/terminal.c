@@ -287,12 +287,9 @@ option_command_callback (const gchar *option_name,
 {
   OptionParsingResults *results = data;
   InitialTab *it;
-  GError *err;
-  char   **exec_argv;
-  error = NULL;
-  exec_argv = NULL;
+  GError *err = NULL;
+  char  **exec_argv;
 
-  err = NULL;
   if (!g_shell_parse_argv (value, NULL, &exec_argv, &err))
     {
       g_set_error(error,
