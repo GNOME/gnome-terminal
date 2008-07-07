@@ -1691,6 +1691,11 @@ profile_set_callback (TerminalScreen *screen,
                       TerminalProfile *old_profile,
                       TerminalWindow *window)
 {
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (screen != priv->active_screen)
+    return;
+
   terminal_window_update_set_profile_menu_active_profile (window);
 }
 
