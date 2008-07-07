@@ -2256,11 +2256,11 @@ notebook_button_press_cb (GtkWidget *widget,
 
   tab_clicked = find_tab_num_at_pos (notebook, event->x_root, event->y_root);
 
-  if (tab_clicked == -1)
+  if (tab_clicked < 0)
     /* consume event, so that we don't pop up the context menu when
      * the mouse if not over a tab label
      */
-    return TRUE;
+    return FALSE;
 
   /* switch to the page the mouse is over, but don't consume the event */
   gtk_notebook_set_current_page (notebook, tab_clicked);
