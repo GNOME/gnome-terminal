@@ -745,17 +745,18 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
       const char *string;
 
       eval = g_enum_get_value (G_PARAM_SPEC_ENUM (pspec)->enum_class, g_value_get_enum (value));
-      if (eval)
-        string = eval->value_nick;
-      else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == vte_terminal_erase_binding_get_type ())
+
+      if (G_PARAM_SPEC_VALUE_TYPE (pspec) == vte_terminal_erase_binding_get_type ())
         {
           /* Backward compatibility */
           string = gconf_enum_to_string ((GConfEnumStringPair*) erase_bindings, g_value_get_enum (value));
           if (!string)
             goto cleanup;
         }
+      else if (eval)
+        string = eval->value_nick;
       else
-        return;
+        goto cleanup;
 
       gconf_change_set_set_string (changeset, key, string);
     }
