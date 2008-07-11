@@ -141,7 +141,7 @@ static KeyEntry terminal_entries[] =
     KEY_RESET_AND_CLEAR, ACCEL_PATH_RESET_AND_CLEAR, 0, 0, NULL, FALSE, TRUE },
 };
 
-static KeyEntry go_entries[] =
+static KeyEntry tabs_entries[] =
 {
   { N_("Switch to Previous Tab"),
     KEY_PREV_TAB, ACCEL_PATH_PREV_TAB, 0, 0, NULL, FALSE, TRUE },
@@ -165,7 +165,7 @@ static KeyEntryList all_entries[] =
   { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
-  { go_entries, G_N_ELEMENTS (go_entries), N_("Go") },
+  { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
   { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
 };
 
