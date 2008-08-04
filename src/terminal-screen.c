@@ -1337,13 +1337,13 @@ get_child_environment (TerminalScreen *screen)
   for (i = 0, p = env; *p; p++)
     {
       /* Strip all these out, we'll replace some of them */
-      if ((strncmp (*p, "COLUMNS=", 8) == 0) ||
-          (strncmp (*p, "LINES=", 6) == 0)   ||
-          (strncmp (*p, "WINDOWID=", 9) == 0) ||
-          (strncmp (*p, "TERM=", 5) == 0)    ||
-          (strncmp (*p, "GNOME_DESKTOP_ICON=", 19) == 0) ||
-          (strncmp (*p, "COLORTERM=", 10) == 0) ||
-	  (strncmp (*p, "DISPLAY=", 8) == 0))
+      if ((strcmp (*p, "COLUMNS") == 0) ||
+          (strcmp (*p, "LINES") == 0)   ||
+          (strcmp (*p, "WINDOWID") == 0) ||
+          (strcmp (*p, "TERM") == 0)    ||
+          (strcmp (*p, "GNOME_DESKTOP_ICON") == 0) ||
+          (strcmp (*p, "COLORTERM") == 0) ||
+          (strcmp (*p, "DISPLAY") == 0))
         {
           /* nothing: do not copy */
         }
