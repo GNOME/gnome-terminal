@@ -1161,10 +1161,10 @@ main (int argc, char **argv)
 
   parsing_results = option_parsing_results_new (&argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id != NULL && *startup_id != '\0')
+  if (startup_id != NULL && startup_id[0] != '\0')
     {
       parsing_results->startup_id = g_strdup (startup_id);
-      putenv ((char *) "DESKTOP_STARTUP_ID=");
+      g_unsetenv ("DESKTOP_STARTUP_ID");
     }
   
   gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
