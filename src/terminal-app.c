@@ -231,13 +231,14 @@ terminal_app_delete_profile (TerminalApp *app,
   const char *name, *profile_name;
   char *gconf_dir;
   GError *error = NULL;
+  const char **nameptr = &name;
 
   profile_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
   gconf_dir = gconf_concat_dir_and_key (CONF_PREFIX "/profiles", profile_name);
 
   name_list = NULL;
   g_hash_table_iter_init (&iter, app->profiles);
-  while (g_hash_table_iter_next (&iter, (gpointer*) &name, NULL))
+  while (g_hash_table_iter_next (&iter, (gpointer *) nameptr, NULL))
     {
       if (strcmp (name, profile_name) == 0)
         continue;
@@ -753,6 +754,7 @@ ensure_one_profile:
   if (need_new_default)
     {
       TerminalProfile *new_default;
+      TerminalProfile **new_default_ptr = &new_default;
 
       new_default = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
       if (new_default == NULL)
@@ -760,7 +762,7 @@ ensure_one_profile:
           GHashTableIter iter;
 
           g_hash_table_iter_init (&iter, app->profiles);
-          if (!g_hash_table_iter_next (&iter, NULL, (gpointer *) &new_default))
+          if (!g_hash_table_iter_next (&iter, NULL, (gpointer *) new_default_ptr))
             /* shouldn't really happen ever, but just to be safe */
             new_default = terminal_app_create_profile (app, FALLBACK_PROFILE_ID); 
         }
@@ -1754,6 +1756,7 @@ terminal_app_get_profile_for_new_term (TerminalApp *app)
 {
   GHashTableIter iter;
   TerminalProfile *profile = NULL;
+  TerminalProfile **profileptr = &profile;
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
 
@@ -1761,7 +1764,7 @@ terminal_app_get_profile_for_new_term (TerminalApp *app)
     return app->default_profile;	
 
   g_hash_table_iter_init (&iter, app->profiles);
-  if (g_hash_table_iter_next (&iter, NULL, (gpointer*) &profile))
+  if (g_hash_table_iter_next (&iter, NULL, (gpointer *) profileptr))
     return profile;
 
   return NULL;
