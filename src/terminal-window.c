@@ -2708,6 +2708,7 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
                             PasteData *data)
 {
   char *text;
+  gsize len;
 #if !GTK_CHECK_VERSION (2, 13, 4)
   char **uris;
 
@@ -2723,8 +2724,8 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
   if (data->uris_as_paths)
     terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
-  text = g_strjoinv (" ", uris);
-  vte_terminal_feed_child (VTE_TERMINAL (data->screen), text, strlen (text));
+  text = terminal_util_concat_uris (uris, &len);
+  vte_terminal_feed_child (VTE_TERMINAL (data->screen), text, len);
   g_free (text);
 
   g_strfreev (uris);

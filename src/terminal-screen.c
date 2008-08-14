@@ -1966,6 +1966,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
     {
       char **uris;
       char *text;
+      gsize len;
 
       uris = gtk_selection_data_get_uris (selection_data);
       if (!uris)
@@ -1973,8 +1974,8 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
       terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
-      text = g_strjoinv (" ", uris);
-      vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
+      text = terminal_util_concat_uris (uris, &len);
+      vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
       g_free (text);
 
       g_strfreev (uris);
@@ -2016,8 +2017,9 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
     case TARGET_MOZ_URL:
       {
-        char *utf8_data, *newline;
+        char *utf8_data, *newline, *text;
         char *uris[2];
+        gsize len;
         
         /* MOZ_URL is in UCS-2 but in format 8. BROKEN!
          *
@@ -2043,15 +2045,18 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         uris[1] = NULL;
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
-        vte_terminal_feed_child (VTE_TERMINAL (screen), uris[0], strlen (uris[0]));
+        text = terminal_util_concat_uris (uris, &len);
+        vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+        g_free (text);
         g_free (uris[0]);
       }
       break;
 
     case TARGET_NETSCAPE_URL:
       {
-        char *utf8_data, *newline;
+        char *utf8_data, *newline, *text;
         char *uris[2];
+        gsize len;
         
         /* The data contains the URL, a \n, then the
          * title of the web page.
@@ -2068,7 +2073,9 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         uris[1] = NULL;
         terminal_util_transform_uris_to_quoted_fuse_paths (uris); /* This may replace uris[0] */
 
-        vte_terminal_feed_child (VTE_TERMINAL (screen), uris[0], strlen (uris[0]));
+        text = terminal_util_concat_uris (uris, &len);
+        vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
+        g_free (text);
         g_free (uris[0]);
       }
       break;

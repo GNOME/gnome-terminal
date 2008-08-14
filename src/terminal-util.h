@@ -48,6 +48,9 @@ void terminal_util_open_url (GtkWidget *parent,
 
 void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
 
+char *terminal_util_concat_uris (char **uris,
+                                 gsize *length);
+
 gboolean terminal_util_load_builder_file (const char *filename,
                                           const char *object_name,
                                           ...);
