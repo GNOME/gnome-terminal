@@ -1762,34 +1762,46 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
   /* Try to update the working dir using various OS-specific mechanisms */
   if (priv->child_pid >= 0)
     {
-      char *file;
+      static const char *patterns[] = {
+        "/proc/%d/cwd",         /* Linux */
+        "/proc/%d/path/cwd",    /* Solaris >= 10 */
+      };
+      char *file = NULL;
       char buf[PATH_MAX+1];
-      int len;
+      int len = 0;
+      guint i;
 
-      /* readlink (/proc/pid/cwd) will work on Linux */
-      file = g_strdup_printf ("/proc/%d/cwd", priv->child_pid);
-
-      /* Silently ignore failure here, since we may not be on Linux */
-      len = readlink (file, buf, sizeof (buf) - 1);
-
-      if (len > 0 && buf[0] == '/')
+      /* First try to update the working dir using various OS-specific mechanisms */
+      file = NULL;
+      for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
         {
-          buf[len] = '\0';
-          
-          g_free (priv->working_dir);
-          priv->working_dir = g_strdup (buf);
+          g_free (file);
+          file = g_strdup_printf (patterns[i], priv->child_pid);
+          len = readlink (file, buf, sizeof (buf) - 1);
+
+          if (len > 0 && buf[0] == '/')
+            {
+              buf[len] = '\0';
+              
+              g_free (priv->working_dir);
+              priv->working_dir = g_strdup (buf);
+
+              break;
+            }
         }
-      else if (len == 0)
+
+      /* If that did not do it, be bold */
+      if (len <= 0)
         {
-          /* On Solaris, readlink returns an empty string, but the
-           * link can be used as a directory, including as a target
-           * of chdir().
-           */
           char *cwd;
 
           cwd = g_get_current_dir ();
           if (cwd != NULL)
             {
+              /* On Solaris, readlink returns an empty string, but the
+               * link can be used as a directory, including as a target
+               * of chdir().
+               */
               if (chdir (file) == 0)
                 {
                   g_free (priv->working_dir);
@@ -1799,10 +1811,10 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
               g_free (cwd);
             }
         }
-      
+
       g_free (file);
     }
-  
+
   return priv->working_dir;
 }
 
