@@ -134,11 +134,6 @@ static void terminal_screen_cook_icon_title (TerminalScreen *screen);
 
 static void queue_recheck_working_dir (TerminalScreen *screen);
 
-#if !VTE_CHECK_VERSION (0, 16, 15)
-static void  terminal_screen_match_add         (TerminalScreen            *screen,
-                                                const char           *regexp,
-                                                int                   flavor);
-#endif /* VTE < 0.16.15 */
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 int                   column,
                                                 int                   row,
@@ -146,8 +141,6 @@ static char* terminal_screen_check_match       (TerminalScreen            *scree
 static void  terminal_screen_skey_match_remove (TerminalScreen            *screen);
 
 static guint signals[LAST_SIGNAL];
-
-#if VTE_CHECK_VERSION (0, 16, 15)
 
 #define USERCHARS "-[:alnum:]"
 #define USERCHARS_CLASS "[" USERCHARS "]"
@@ -184,7 +177,6 @@ static TerminalURLFlavour *url_regex_flavors;
 static guint n_url_regexes;
 static GRegex **skey_regexes;
 static guint n_skey_regexes;
-#endif /* VTE 0.16.15 */
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
@@ -251,49 +243,6 @@ set_background_image_file (VteTerminal *terminal,
     vte_terminal_set_background_image (terminal, NULL);
 }
 
-#if !VTE_CHECK_VERSION (0, 16, 15)
-
-static void
-terminal_screen_sync_settings (GtkSettings *settings,
-                               GParamSpec *pspec,
-                               TerminalScreen *screen)
-{
-  gboolean blink;
-
-  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
-  vte_terminal_set_cursor_blinks (VTE_TERMINAL (screen), blink);
-}
-
-static void
-terminal_screen_screen_changed (GtkWidget *widget, GdkScreen *previous_screen)
-{
-  GdkScreen *screen;
-  GtkSettings *settings;
-
-  screen = gtk_widget_get_screen (widget);
-  if (previous_screen != NULL &&
-      screen != previous_screen) {
-    settings = gtk_settings_get_for_screen (previous_screen);
-    g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL, NULL,
-                                          widget);
-  }
-
-  if (GTK_WIDGET_CLASS (terminal_screen_parent_class)->screen_changed) {
-    GTK_WIDGET_CLASS (terminal_screen_parent_class)->screen_changed (widget, previous_screen);
-  }
-
-  if (screen == previous_screen || screen == NULL)
-    return;
-
-  settings = gtk_widget_get_settings (widget);
-  terminal_screen_sync_settings (settings, NULL, TERMINAL_SCREEN (widget));
-  g_signal_connect (settings, "notify::gtk-cursor-blink",
-                    G_CALLBACK (terminal_screen_sync_settings), widget);
-}
-
-#endif /* VTE < 0.16.15 */
-
 static void
 terminal_screen_realize (GtkWidget *widget)
 {
@@ -356,14 +305,12 @@ terminal_screen_init (TerminalScreen *screen)
     { "text/x-moz-url",  0, TARGET_MOZ_URL },
     { "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
   };
+  VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalScreenPrivate *priv;
   GtkTargetList *target_list;
   GtkTargetEntry *targets;
   int n_targets;
-#if VTE_CHECK_VERSION (0, 16, 15)
-  VteTerminal *terminal = VTE_TERMINAL (screen);
   guint i;
-#endif
 
   priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
 
@@ -378,7 +325,6 @@ terminal_screen_init (TerminalScreen *screen)
 
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
-#if VTE_CHECK_VERSION (0, 16, 15)
   for (i = 0; i < n_url_regexes; ++i)
     {
       TagData *tag_data;
@@ -390,44 +336,6 @@ terminal_screen_init (TerminalScreen *screen)
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
     }
-#else /* VTE < 0.16.15 */
-  
-#define USERCHARS "-A-Za-z0-9"
-#define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
-#define HOSTCHARS "-A-Za-z0-9"
-#define HOST      "[" HOSTCHARS "]+(\\.[" HOSTCHARS "]+)*"
-#define PORT      "(:[0-9]{1,5})?"
-#define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
-#define SCHEME    "(news:|telnet:|nntp:|file:/|https?:|ftps?:|webcal:)"
-#define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
-#define URLPATH   "/[" PATHCHARS "]*[^]'.}>) \t\r\n,\\\"]"
-
-  terminal_screen_match_add (screen,
-                             "\\<" SCHEME "//(" USER "@)?" HOST
-                             PORT "(" URLPATH ")?\\>/?",
-                             FLAVOR_AS_IS);
-
-  terminal_screen_match_add (screen,
-                             "\\<(www|ftp)[" HOSTCHARS "]*\\." HOST
-                             PORT "(" URLPATH ")?\\>/?",
-                             FLAVOR_DEFAULT_TO_HTTP);
-
-  terminal_screen_match_add (screen,
-                             "\\<(callto|h323|sip):[" USERCHARS "]"
-                             "[" USERCHARS ".]*(" PORT "/[a-z0-9]+)?"
-                             "@" HOST "\\>",
-                             FLAVOR_VOIP_CALL);
-
-  terminal_screen_match_add (screen,
-                             "\\<(mailto:)?[" USERCHARS "][" USERCHARS ".]*@"
-                             "[" HOSTCHARS "]+\\." HOST "\\>",
-                             FLAVOR_EMAIL);
-
-  terminal_screen_match_add (screen,
-                             "\\<news:[-A-Z\\^_a-z{|}~!\"#$%&'()*+,./0-9;:=?`]+"
-                             HOST PORT "\\>",
-                             FLAVOR_AS_IS);
-#endif /* VTE 0.16.15 */
 
   /* Setup DND */
   target_list = gtk_target_list_new (NULL, 0);
@@ -539,15 +447,13 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+  guint i;
 
   object_class->dispose = terminal_screen_dispose;
   object_class->finalize = terminal_screen_finalize;
   object_class->get_property = terminal_screen_get_property;
   object_class->set_property = terminal_screen_set_property;
 
-#if !VTE_CHECK_VERSION (0, 16, 15)
-  widget_class->screen_changed = terminal_screen_screen_changed;
-#endif
   widget_class->realize = terminal_screen_realize;
   widget_class->style_set = terminal_screen_style_set;
   widget_class->drag_data_received = terminal_screen_drag_data_received;
@@ -632,10 +538,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
-#if VTE_CHECK_VERSION (0, 16, 15)
-{
-  guint i;
-
   /* Precompile the regexes */
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   url_regexes = g_new0 (GRegex*, n_url_regexes);
@@ -670,8 +572,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
           g_error_free (error);
         }
     }
-}
-#endif /* VTE 0.16.15 */
 }
 
 static void
@@ -841,7 +741,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     {
       if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
         {
-#if VTE_CHECK_VERSION (0, 16, 15)
           guint i;
 
           for (i = 0; i < n_skey_regexes; ++i)
@@ -855,15 +754,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 
               priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
             }
-#else /* VTE < 0.16.15 */
-          terminal_screen_match_add (screen,
-                                     "s/key [0-9]* [-A-Za-z0-9]*",
-                                     FLAVOR_SKEY);
-
-          terminal_screen_match_add (screen,
-                                     "otp-[a-z0-9]* [0-9]* [-A-Za-z0-9]*",
-                                     FLAVOR_SKEY);
-#endif /* VTE 0.16.15 */
         }
       else
         {
@@ -925,17 +815,9 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     vte_terminal_set_allow_bold (vte_terminal,
                                  terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_ALLOW_BOLD));
 
-#if VTE_CHECK_VERSION (0, 16, 15)
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CURSOR_BLINK_MODE))
     vte_terminal_set_cursor_blink_mode (vte_terminal,
                                         terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE));
-#endif
-
-#if !VTE_CHECK_VERSION (0, 16, 15)
-  /* For bug 535552 */
-  if (GTK_WIDGET_REALIZED (screen))
-    gtk_widget_queue_draw (GTK_WIDGET (screen));
-#endif
 
   g_object_thaw_notify (object);
 }
@@ -1084,34 +966,8 @@ terminal_screen_set_font (TerminalScreen *screen)
 				   pango_font_description_get_size (desc));
 
   no_aa_without_render = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER);
-#if VTE_CHECK_VERSION (0, 16, 15)
   vte_terminal_set_font_full (VTE_TERMINAL (screen), desc,
                               no_aa_without_render ? VTE_ANTI_ALIAS_USE_DEFAULT : VTE_ANTI_ALIAS_FORCE_ENABLE);
-#else
-  if (!no_aa_without_render)
-    {
-      vte_terminal_set_font (VTE_TERMINAL (screen), desc);
-    }
-  else
-    {
-      Display *dpy;
-      gboolean has_render;
-      gint event_base, error_base;
-
-      /* FIXME multi-head/mult-screen! */
-      dpy = gdk_x11_display_get_xdisplay (gtk_widget_get_display (GTK_WIDGET (screen)));
-      has_render = (XRenderQueryExtension (dpy, &event_base, &error_base) &&
-		    (XRenderFindVisualFormat (dpy, DefaultVisual (dpy, DefaultScreen (dpy))) != NULL));
-
-      if (has_render)
-	vte_terminal_set_font (VTE_TERMINAL (screen), desc);
-      else 
-	vte_terminal_set_font_full (VTE_TERMINAL (screen),
-				    desc,
-				    VTE_ANTI_ALIAS_FORCE_DISABLE);
-    }
-#endif /* VTE 0.16.15 */
-
   pango_font_description_free (desc);
 }
 
@@ -2220,30 +2076,6 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
   *cell_width_pixels = terminal->char_width;
   *cell_height_pixels = terminal->char_height;
 }
-
-#if !VTE_CHECK_VERSION (0, 16, 15)
-
-static void
-terminal_screen_match_add (TerminalScreen       *screen,
-                           const char           *regexp,
-                           int                   flavor)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  VteTerminal *terminal = VTE_TERMINAL (screen);
-  TagData *tag_data;
-  int tag;
-  
-  tag = vte_terminal_match_add (terminal, regexp);
-  vte_terminal_match_set_cursor_type (terminal, tag, URL_MATCH_CURSOR);
-
-  tag_data = g_slice_new (TagData);
-  tag_data->tag = tag;
-  tag_data->flavor = flavor;
-
-  priv->match_tags = g_slist_append (priv->match_tags, tag_data);
-}
-
-#endif /* VTE 0.16.15 */
 
 static void
 terminal_screen_skey_match_remove (TerminalScreen *screen)

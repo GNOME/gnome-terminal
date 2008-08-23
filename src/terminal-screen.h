@@ -25,11 +25,6 @@
 
 #include "terminal-profile.h"
 
-/* VTE_CHECK_VERSION exists only since 0.16.15 which we don't have a hard dep on yet */
-#ifndef VTE_CHECK_VERSION
-#define VTE_CHECK_VERSION(x,y,z) (0)
-#endif
-
 G_BEGIN_DECLS
 
 typedef enum {
