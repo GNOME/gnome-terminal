@@ -167,9 +167,7 @@ terminal_util_open_url (GtkWidget *parent,
 {
   GError *error = NULL;
   char *uri;
-#if GTK_CHECK_VERSION (2, 13, 0)
   GdkAppLaunchContext *context;
-#endif
 
   g_return_if_fail (orig_url != NULL);
 
@@ -193,7 +191,6 @@ terminal_util_open_url (GtkWidget *parent,
       g_assert_not_reached ();
     }
 
-#if GTK_CHECK_VERSION (2, 13, 0)
   context = gdk_app_launch_context_new ();
   gdk_app_launch_context_set_timestamp (context, user_time);
 
@@ -204,9 +201,6 @@ terminal_util_open_url (GtkWidget *parent,
 
   g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
   g_object_unref (context);
-#else
-  g_app_info_launch_default_for_uri (uri, NULL, &error);
-#endif
 
   if (error)
     {
