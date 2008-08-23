@@ -1612,7 +1612,7 @@ terminal_window_init (TerminalWindow *window)
   gtk_window_group_add_window (window_group, GTK_WINDOW (window));
   g_object_unref (window_group);
 
-  terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
+  terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal-window");
 }
 
 static void

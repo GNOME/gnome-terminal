@@ -1005,10 +1005,9 @@ new_terminal_with_options (TerminalApp *app,
       if (results->startup_id)
         terminal_window_set_startup_id (window, results->startup_id);
 
+      /* Overwrite the default, unique window role set in terminal_window_init */
       if (iw->role)
         gtk_window_set_role (GTK_WINDOW (window), iw->role);
-      else
-        terminal_util_set_unique_role (GTK_WINDOW (window), "gnome-terminal");
 
       if (iw->force_menubar_state)
         terminal_window_set_menubar_visible (window, iw->menubar_state);
