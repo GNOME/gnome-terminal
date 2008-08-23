@@ -25,8 +25,9 @@
 
 #include <gtk/gtk.h>
 
-#include <X11/extensions/Xrender.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 #include <gconf/gconf.h>
 #include <libgnome/gnome-util.h> /* gnome_util_user_shell */
@@ -1215,6 +1216,7 @@ get_child_environment (TerminalScreen *screen)
   retval[i] = g_strdup ("TERM=xterm"); /* FIXME configurable later? */
   ++i;
 
+#ifdef GDK_WINDOWING_X11
   /* FIXME: moving the tab between windows, or the window between displays will make this invalid... */
   retval[i] = g_strdup_printf ("WINDOWID=%ld",
                                GDK_WINDOW_XWINDOW (term->window));
@@ -1224,6 +1226,7 @@ get_child_environment (TerminalScreen *screen)
   retval[i] = g_strdup_printf ("DISPLAY=%s", 
 			       gdk_display_get_name(gtk_widget_get_display(term)));
   ++i;
+#endif
   
   conf = gconf_client_get_default ();
 
