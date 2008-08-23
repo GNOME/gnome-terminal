@@ -972,14 +972,6 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   return GTK_NOTEBOOK (new_priv->notebook);
 }
 
-static void
-terminal_window_realized_callback (GtkWidget *window,
-                                   gpointer   user_data)
-{
-  gdk_window_set_group (window->window, window->window);
-  g_signal_handlers_disconnect_by_func (window, terminal_window_realized_callback, NULL);
-}
-
 /* Terminal screen popup menu handling */
 
 static void
@@ -1500,9 +1492,6 @@ terminal_window_init (TerminalWindow *window)
 
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
-                    NULL);
-  g_signal_connect (G_OBJECT (window), "realize",
-                    G_CALLBACK (terminal_window_realized_callback),
                     NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
