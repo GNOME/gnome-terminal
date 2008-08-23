@@ -580,7 +580,7 @@ terminal_encoding_dialog_show (GtkWindow *transient_parent)
   g_object_set_data_full (G_OBJECT (data->dialog), "GT::Data", data, (GDestroyNotify) g_free);
 
   gtk_window_set_transient_for (GTK_WINDOW (data->dialog), transient_parent);
-  terminal_util_set_unique_role (GTK_WINDOW (data->dialog), "gnome-terminal-encodings");
+  gtk_window_set_role (GTK_WINDOW (data->dialog), "gnome-terminal-encodings");
   g_signal_connect (data->dialog, "response",
                     G_CALLBACK (response_callback), data);
 
