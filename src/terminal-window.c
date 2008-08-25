@@ -2689,7 +2689,7 @@ typedef struct {
 
 static void
 clipboard_uris_received_cb (GtkClipboard *clipboard,
-                            char **uris,
+                            /* const */ char **uris,
                             PasteData *data)
 {
   char *text;
@@ -2701,14 +2701,13 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
     return;
   }
 
+  /* This potentially modifies the strings in |uris| but that's ok */
   if (data->uris_as_paths)
     terminal_util_transform_uris_to_quoted_fuse_paths (uris);
 
   text = terminal_util_concat_uris (uris, &len);
   vte_terminal_feed_child (VTE_TERMINAL (data->screen), text, len);
   g_free (text);
-
-  g_strfreev (uris);
 
   g_object_unref (data->screen);
   g_slice_free (PasteData, data);
