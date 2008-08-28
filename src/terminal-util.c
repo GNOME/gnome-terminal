@@ -150,6 +150,9 @@ terminal_util_show_help (const char *topic,
     if (g_file_test (uri, G_FILE_TEST_EXISTS)) {
       break;
     }
+
+    g_free (uri);
+    uri = NULL;
   }
 
   if (!uri)
