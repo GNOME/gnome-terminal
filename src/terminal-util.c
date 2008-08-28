@@ -28,13 +28,11 @@
 #include <sys/types.h>
 
 #include <glib.h>
-#undef G_DISABLE_SINGLE_INCLUDES
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
 #include <gconf/gconf-client.h>
-#include <libgnome/gnome-help.h>
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -109,25 +107,69 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_p
 
       gtk_window_present (GTK_WINDOW (*weak_ptr));
     }
-  }
+}
+
+static gboolean
+open_url (GtkWindow *parent,
+          const char *uri,
+          guint32 user_time,
+          GError **error)
+{
+  GdkScreen *screen;
+
+  if (parent)
+    screen = gtk_widget_get_screen (GTK_WIDGET (parent));
+  else
+    screen = gdk_screen_get_default ();
+
+  return gtk_show_uri (screen, uri, user_time, error);
+}
 
 void
 terminal_util_show_help (const char *topic, 
-                         GtkWindow  *transient_parent)
+                         GtkWindow  *parent)
 {
-  GError *err;
-
-  err = NULL;
-
-  gnome_help_display ("gnome-terminal.xml", topic, &err);
-  
-  if (err)
-    {
-      terminal_util_show_error_dialog (GTK_WINDOW (transient_parent), NULL,
-                                       _("There was an error displaying help: %s"),
-                                      err->message);
-      g_error_free (err);
+  GError *error = NULL;
+  const char *lang;
+  char *uri = NULL, *url;
+  guint i;
+ 
+  const char * const * langs = g_get_language_names ();
+  for (i = 0; langs[i]; i++) {
+    lang = langs[i];
+    if (strchr (lang, '.')) {
+      continue;
     }
+ 
+    uri = g_build_filename (TERM_DATADIR,
+                            "gnome", "help", "gnome-terminal",
+                            lang,
+                            "gnome-terminal.xml",
+                            NULL);
+					
+    if (g_file_test (uri, G_FILE_TEST_EXISTS)) {
+      break;
+    }
+  }
+
+  if (!uri)
+    return;
+
+  if (topic) {
+    url = g_strdup_printf ("ghelp://%s?%s", uri, topic);
+  } else {
+    url = g_strdup_printf ("ghelp://%s", uri);
+  }
+
+  if (!open_url (GTK_WINDOW (parent), url, gtk_get_current_event_time (), &error))
+    {
+      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
+                                       _("There was an error displaying help: %s"),
+                                      error->message);
+      g_error_free (error);
+    }
+
+  g_free (url);
 }
  
 /* sets accessible name and description for the widget */
@@ -167,7 +209,6 @@ terminal_util_open_url (GtkWidget *parent,
 {
   GError *error = NULL;
   char *uri;
-  GdkAppLaunchContext *context;
 
   g_return_if_fail (orig_url != NULL);
 
@@ -191,18 +232,7 @@ terminal_util_open_url (GtkWidget *parent,
       g_assert_not_reached ();
     }
 
-  context = gdk_app_launch_context_new ();
-  gdk_app_launch_context_set_timestamp (context, user_time);
-
-  if (parent)
-    gdk_app_launch_context_set_screen (context, gtk_widget_get_screen (parent));
-  else
-    gdk_app_launch_context_set_screen (context, gdk_screen_get_default ());
-
-  g_app_info_launch_default_for_uri (uri, G_APP_LAUNCH_CONTEXT (context), &error);
-  g_object_unref (context);
-
-  if (error)
+  if (!open_url (GTK_WINDOW (parent), uri, user_time, &error))
     {
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
                                        _("Could not open the address “%s”:\n%s"),

@@ -37,11 +37,12 @@ gnome_terminal_SOURCES= \
 
 gnome_terminal_CPPFLAGS = \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
-	-DTERM_LOCALEDIR=\"$(datadir)/locale\" \
-	-DTERM_LIBDIR=\"$(pkglibdir)\" \
-	-DTERM_PREFIX=\"$(prefix)\" \
-	-DTERM_SYSCONFDIR=\"$(sysconfdir)\" \
-	-DTERM_PKGDATADIR=\"$(pkgdatadir)\" \
+	-DTERM_DATADIR="\"$(datadir)\"" \
+	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
+	-DTERM_LIBDIR="\"$(pkglibdir)\"" \
+	-DTERM_PREFIX="\"$(prefix)\"" \
+	-DTERM_SYSCONFDIR="\"$(sysconfdir)\"" \
+	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
 	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	-DG_DISABLE_SINGLE_INCLUDES \
