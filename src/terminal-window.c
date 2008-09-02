@@ -85,8 +85,8 @@ struct _TerminalWindowPrivate
 #define PROFILES_UI_PATH        "/menubar/Terminal/TerminalProfiles"
 #define PROFILES_POPUP_UI_PATH  "/Popup/PopupTerminalProfiles/ProfilesPH"
 
-#define STOCK_NEW_WINDOW  "tab-new"
-#define STOCK_NEW_TAB     "window-new"
+#define STOCK_NEW_WINDOW  "window-new"
+#define STOCK_NEW_TAB     "tab-new"
 
 static void terminal_window_init        (TerminalWindow      *window);
 static void terminal_window_class_init  (TerminalWindowClass *klass);
