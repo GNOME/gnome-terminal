@@ -172,6 +172,7 @@ terminal_util_show_help (const char *topic,
       g_error_free (error);
     }
 
+  g_free (uri);
   g_free (url);
 }
  
