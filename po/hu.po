@@ -8,14 +8,13 @@
 # Laszlo Dvornik <dvornik@gnome.hu>, 2004.
 # Gabor Kelemen <kelemeng@gnome.hu>, 2004, 2005, 2006, 2007, 2008.
 # Mate ORY <orymate at gmail d0t com>, 2006, 2008.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-30 14:44+0000\n"
-"PO-Revision-Date: 2008-05-31 21:18+0200\n"
-"Last-Translator: Mate Ory <orymate@gmail.com>\n"
+"POT-Creation-Date: 2008-07-11 09:11+0000\n"
+"PO-Revision-Date: 2008-09-16 19:36+0200\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,8 +23,8 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
-#: ../src/terminal-accels.c:167 ../src/terminal.c:1173
-#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1394
+#: ../src/terminal-accels.c:167 ../src/terminal.c:1198
+#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1508
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -166,19 +165,19 @@ msgstr "Vietnami"
 msgid "Thai"
 msgstr "Thai"
 
-#: ../src/encoding.c:325
+#: ../src/encoding.c:323
 msgid "User Defined"
 msgstr "Felhasználó által megadott"
 
-#: ../src/encoding.c:599 ../src/encoding.c:624
+#: ../src/encoding.c:597 ../src/encoding.c:622
 msgid "_Description"
 msgstr "_Leírás"
 
-#: ../src/encoding.c:608 ../src/encoding.c:633
+#: ../src/encoding.c:606 ../src/encoding.c:631
 msgid "_Encoding"
 msgstr "_Kódolás"
 
-#: ../src/encoding.c:690
+#: ../src/encoding.c:688
 msgid "Current Locale"
 msgstr "Jelenlegi locale"
 
@@ -419,7 +418,7 @@ msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
 msgstr ""
-"Ha be van állítva, a terminál a munkaasztal globális szabvány betűkészletét "
+"Ha be van állítva, a terminál az asztal globális szabvány betűkészletét "
 "fogja használni, ha az monospace (és a hozzá leginkább hasonlót egyébként)."
 
 #: ../src/gnome-terminal.schemas.in.h:40
@@ -819,10 +818,10 @@ msgid ""
 "setting for the Delete key."
 msgstr ""
 "Beállítja, milyen karaktert generál a delete billentyű. Lehetséges értékek: "
-"„ascii-del” az ASCII DEL karakterhez, „control-h” a Ctrl+H (más néven "
-"ASCII BS karakter), „escape-sequence” azon escape szekvenciához ami "
-"általában a backspace vagy delete billentyűhöz van kötve. Az „escape-"
-"sequence” alapértelmezés szerint megfelelőként elfogadott beállítás a Delete "
+"„ascii-del” az ASCII DEL karakterhez, „control-h” a Ctrl+H (más néven ASCII "
+"BS karakter), „escape-sequence” azon escape szekvenciához ami általában a "
+"backspace vagy delete billentyűhöz van kötve. Az „escape-sequence” "
+"alapértelmezés szerint megfelelőként elfogadott beállítás a Delete "
 "billentyűhöz."
 
 #: ../src/gnome-terminal.schemas.in.h:97
@@ -839,7 +838,9 @@ msgstr ""
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
-msgstr "A lehetséges értékek: „system” (globális kurzorvillogási beállítás használata), illetve „on” (be) vagy „off” (ki) a mód explicit beállításához."
+msgstr ""
+"A lehetséges értékek: „system” (globális kurzorvillogási beállítás "
+"használata), illetve „on” (be) vagy „off” (ki) a mód explicit beállításához."
 
 #: ../src/gnome-terminal.schemas.in.h:99
 msgid "Title for terminal"
@@ -999,9 +1000,7 @@ msgstr "Gyorsbillentyűk"
 
 #: ../src/keybinding-editor.glade.h:3
 msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr ""
-"Me_nü-hívóbetűk engedélyezése (például Alt+F a Fájl menü "
-"megnyitásához)"
+msgstr "Me_nü-hívóbetűk engedélyezése (például Alt+F a Fájl menü megnyitásához)"
 
 #: ../src/keybinding-editor.glade.h:4
 msgid "_Shortcut keys:"
@@ -1047,16 +1046,12 @@ msgstr "(kb. %s)"
 msgid "Images"
 msgstr "Képek"
 
-#: ../src/profile-editor.c:618
-msgid "All Files"
-msgstr "Minden fájl"
-
-#: ../src/profile-editor.c:734
+#: ../src/profile-editor.c:729
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "%d. paletta szín kiválasztása"
 
-#: ../src/profile-editor.c:738
+#: ../src/profile-editor.c:733
 #, c-format
 msgid "Palette entry %d"
 msgstr "%d. palettabejegyzés"
@@ -1370,8 +1365,8 @@ msgid "_Use the system fixed width font"
 msgstr "A rendszer rögzített szélességű betűkészletének _használata"
 
 #: ../src/profile-preferences.glade.h:73
-msgid "_lines"
-msgstr "_sor"
+msgid "lines"
+msgstr "sor"
 
 #: ../src/skey-challenge.glade.h:1
 msgid "S/Key Challenge Response"
@@ -1433,7 +1428,7 @@ msgstr "Kicsinyítés"
 msgid "Normal Size"
 msgstr "Normál méret"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2733
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2990
 msgid "Set Title"
 msgstr "Cím beállítása"
 
@@ -1482,8 +1477,8 @@ msgid "View"
 msgstr "Nézet"
 
 #: ../src/terminal-accels.c:168
-msgid "Go"
-msgstr "Ugrás"
+msgid "Tabs"
+msgstr "Lapok"
 
 #: ../src/terminal-accels.c:169
 msgid "Help"
@@ -1498,32 +1493,32 @@ msgstr "Tiltva"
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "A(z) „%s” gyorsbillentyű már hozzá van kötve a(z) „%s” művelethez"
 
-#: ../src/terminal-accels.c:782
+#: ../src/terminal-accels.c:796
 msgid "_Action"
 msgstr "_Művelet"
 
-#: ../src/terminal-accels.c:801
+#: ../src/terminal-accels.c:815
 msgid "Shortcut _Key"
 msgstr "_Gyorsbillentyű"
 
-#: ../src/terminal-app.c:408
+#: ../src/terminal-app.c:407
 msgid "Click button to choose profile"
 msgstr "Kattintson ide a profil kiválasztásához"
 
-#: ../src/terminal-app.c:493
+#: ../src/terminal-app.c:492
 msgid "Profile list"
 msgstr "Profil lista"
 
-#: ../src/terminal-app.c:555
+#: ../src/terminal-app.c:553
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Törli a(z) „%s” profilt?"
 
-#: ../src/terminal-app.c:571
+#: ../src/terminal-app.c:569
 msgid "Delete Profile"
 msgstr "Profil törlése"
 
-#: ../src/terminal-app.c:946
+#: ../src/terminal-app.c:944
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1532,14 +1527,9 @@ msgstr ""
 "Már rendelkezik „%s” nevű profillal. Létre akar hozni egy másik profilt "
 "ugyanazzal a névvel?"
 
-#: ../src/terminal-app.c:1047
+#: ../src/terminal-app.c:1045
 msgid "Choose base profile"
 msgstr "Alap profil kiválasztása"
-
-#: ../src/terminal-app.c:1614
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "Érvénytelen geometria-karakterlánc: „%s”\n"
 
 #: ../src/terminal.c:275
 #, c-format
@@ -1552,66 +1542,71 @@ msgstr ""
 "verziójában. Hozzon létre egy profilt a kívánt beállításokkal, és használja "
 "az új --window-with-profile opciót\n"
 
-#: ../src/terminal.c:301
+#: ../src/terminal.c:298
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s\n"
 msgstr "A(z) „%s” paramétere érvénytelen parancs: %s\n"
 
-#: ../src/terminal.c:455
+#: ../src/terminal.c:451
 msgid "Two roles given for one window"
 msgstr "Két szerepet kapott egy ablak"
 
-#: ../src/terminal.c:477 ../src/terminal.c:511
+#: ../src/terminal.c:473 ../src/terminal.c:507
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "A(z) „%s” opció kétszer lett megadva ugyanarra az ablakra\n"
 
-#: ../src/terminal.c:635
+#: ../src/terminal.c:666
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line\n"
 msgstr "A(z) „%s” kapcsolónak szüksége van a parancsra, amelyet el kell indítania\n"
 
-#: ../src/terminal.c:678
+#: ../src/terminal.c:696
 #, c-format
 msgid "\"%s\" is not a valid zoom factor\n"
 msgstr "„%s” érvénytelen nagyítás\n"
 
-#: ../src/terminal.c:685
+#: ../src/terminal.c:703
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "A „%g” méret túl kicsi, %g lesz használva\n"
 
-#: ../src/terminal.c:693
+#: ../src/terminal.c:711
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "A „%g” méret túl nagy, %g lesz használva\n"
 
-#: ../src/terminal.c:814
+#: ../src/terminal.c:831
 #, c-format
 msgid "No argument given to \"%s\" option\n"
 msgstr "Nem lett paraméter megadva a(z) „%s” opciónak\n"
 
-#: ../src/terminal.c:836
+#: ../src/terminal.c:853
 #, c-format
 msgid "\"%s\" option requires an argument\n"
 msgstr "A(z) „%s” opcióhoz szükséges egy paraméter\n"
 
-#: ../src/terminal.c:1017
+#: ../src/terminal.c:1036
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Nincs „%s” nevű profil, az alapértelmezettet használom helyette\n"
 
-#: ../src/terminal.c:1259
+#: ../src/terminal.c:1055
+#, c-format
+msgid "Invalid geometry string \"%s\"\n"
+msgstr "Érvénytelen geometria-karakterlánc: „%s”\n"
+
+#: ../src/terminal.c:1288
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Az opció paraméterének futtatása a terminálon belül."
 
-#: ../src/terminal.c:1268
+#: ../src/terminal.c:1297
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Parancssor maradékának futtatása a terminálban."
 
-#: ../src/terminal.c:1277
+#: ../src/terminal.c:1306
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
@@ -1619,7 +1614,7 @@ msgstr ""
 "Új ablak megnyitása az alapértelmezett profillal rendelkező lappal. Egynél "
 "több opció megadása lehetséges."
 
-#: ../src/terminal.c:1286
+#: ../src/terminal.c:1315
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
@@ -1627,11 +1622,11 @@ msgstr ""
 "Új ablak megnyitása a megadott profillal rendelkező lappal. Egynél több "
 "opció megadása lehetséges."
 
-#: ../src/terminal.c:1287 ../src/terminal.c:1305
+#: ../src/terminal.c:1316 ../src/terminal.c:1334
 msgid "PROFILENAME"
 msgstr "PROFILNÉV"
 
-#: ../src/terminal.c:1295
+#: ../src/terminal.c:1324
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
@@ -1639,7 +1634,7 @@ msgstr ""
 "Új lap megnyitása az utolsó megnyitott ablakban az alapértelmezett "
 "profillal. Egynél több opció megadása lehetséges."
 
-#: ../src/terminal.c:1304
+#: ../src/terminal.c:1333
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1647,7 +1642,7 @@ msgstr ""
 "Új lap megnyitása az utolsó megnyitott ablakban a megadott profillal. Egynél "
 "több opció megadása lehetséges."
 
-#: ../src/terminal.c:1313
+#: ../src/terminal.c:1342
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1655,11 +1650,11 @@ msgstr ""
 "Új ablak megnyitása a megadott profilazonosítóval rendelkező lappal. Belső "
 "használatra, a munkamenet elmentésére."
 
-#: ../src/terminal.c:1314 ../src/terminal.c:1323
+#: ../src/terminal.c:1343 ../src/terminal.c:1352
 msgid "PROFILEID"
 msgstr "PROFILAZONOSÍTÓ"
 
-#: ../src/terminal.c:1322
+#: ../src/terminal.c:1351
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1667,7 +1662,7 @@ msgstr ""
 "Új lap nyitása az utolsó nyitott ablakban, a megadott profilazonosítóval. "
 "Belső használatra, a munkamenet elmentésére."
 
-#: ../src/terminal.c:1331
+#: ../src/terminal.c:1360
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -1675,11 +1670,11 @@ msgstr ""
 "A szerep megadása az utolsó megadott ablakra; csak egy ablakra érvényes; "
 "egyszer adható meg minden egyes ablakra, amelyet parancssorból nyit."
 
-#: ../src/terminal.c:1332
+#: ../src/terminal.c:1361
 msgid "ROLE"
 msgstr "SZEREP"
 
-#: ../src/terminal.c:1340
+#: ../src/terminal.c:1369
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1689,7 +1684,7 @@ msgstr ""
 "érvényes; egyszer adható meg minden egyes ablakra, amelyet parancssorból "
 "nyit."
 
-#: ../src/terminal.c:1349
+#: ../src/terminal.c:1378
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1699,7 +1694,16 @@ msgstr ""
 "érvényes; egyszer adható meg minden egyes ablakra, amelyet parancssorból "
 "nyit."
 
-#: ../src/terminal.c:1358
+#: ../src/terminal.c:1387
+msgid ""
+"Set the last-specified window into maximized mode; applies to only one "
+"window; can be specified once for each window you create from the command "
+"line."
+msgstr ""
+"Az utoljára megadott ablak teljes képernyős módba állítása; csak egy ablakra "
+"érvényes; egyszer adható meg minden egyes parancssorból nyitott ablakra."
+
+#: ../src/terminal.c:1396
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1709,7 +1713,7 @@ msgstr ""
 "érvényes; egyszer adható meg minden egyes ablakra, amelyet parancssorból "
 "nyit."
 
-#: ../src/terminal.c:1367
+#: ../src/terminal.c:1405
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1717,11 +1721,11 @@ msgstr ""
 "Az X-geometria (lásd az „X” kézikönyvoldalát) csak egyszer adható meg minden "
 "új ablakra."
 
-#: ../src/terminal.c:1368
+#: ../src/terminal.c:1406
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: ../src/terminal.c:1376
+#: ../src/terminal.c:1414
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1729,55 +1733,51 @@ msgstr ""
 "Ne regisztráljon az aktivációs névkiszolgálón, ne használjon újra egy aktív "
 "terminált"
 
-#: ../src/terminal.c:1385
+#: ../src/terminal.c:1423
 msgid "Register with the activation nameserver [default]"
 msgstr "Regisztrálás az aktivációs névkiszolgálón [alapértelmezett]"
 
-#: ../src/terminal.c:1394
-msgid "ID for startup notification protocol."
-msgstr "Az indítási értesítés protokolljának azonosítója."
-
-#: ../src/terminal.c:1403
+#: ../src/terminal.c:1441
 msgid "Set the terminal's title"
 msgstr "A terminál címsorának beállítása"
 
-#: ../src/terminal.c:1404
+#: ../src/terminal.c:1442
 msgid "TITLE"
 msgstr "CÍM"
 
-#: ../src/terminal.c:1412
+#: ../src/terminal.c:1450
 msgid "Set the terminal's working directory"
 msgstr "A terminál munkakönyvtárának beállítása"
 
-#: ../src/terminal.c:1413 ../src/terminal.c:1422
+#: ../src/terminal.c:1451 ../src/terminal.c:1460
 msgid "DIRNAME"
 msgstr "KÖNYVTÁRNÉV"
 
-#: ../src/terminal.c:1421
+#: ../src/terminal.c:1459
 msgid "Set the default terminal's working directory. Used internally"
 msgstr "Az alapértelmezett terminál munkakönyvtárának beállítása. Belső használatra"
 
-#: ../src/terminal.c:1430
+#: ../src/terminal.c:1468
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "A terminál méretének beállítása (1.0 = normál méret)"
 
-#: ../src/terminal.c:1431 ../src/terminal.c:1440
+#: ../src/terminal.c:1469
 msgid "ZOOMFACTOR"
 msgstr "NAGYÍTÁSI_ARÁNY"
 
-#: ../src/terminal.c:1439
+#: ../src/terminal.c:1477
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Az utolsóként használt lap beállítása aktívként a saját ablakában"
 
-#: ../src/terminal.c:1619 ../src/terminal.c:1622
+#: ../src/terminal.c:1657 ../src/terminal.c:1660
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Terminálemulátor"
 
-#: ../src/terminal.c:1623
+#: ../src/terminal.c:1661
 msgid "Show GNOME Terminal options"
 msgstr "A GNOME Terminál kapcsolóinak megjelenítése"
 
-#: ../src/terminal.c:1772
+#: ../src/terminal.c:1818
 #, c-format
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
@@ -1786,7 +1786,7 @@ msgstr ""
 "Úgy tűnik, hogy a gnome-terminal.server nem érvényes helyre van telepítve. "
 "Factory mód tiltva.\n"
 
-#: ../src/terminal.c:1775
+#: ../src/terminal.c:1821
 #, c-format
 msgid ""
 "Error registering terminal with the activation service; factory mode "
@@ -1795,7 +1795,7 @@ msgstr ""
 "Hiba a terminál aktivációs szolgáltatásba regisztrálásánál: factory mód "
 "letiltva.\n"
 
-#: ../src/terminal.c:1811
+#: ../src/terminal.c:1860
 #, c-format
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Hiba a terminálkiszolgáló aktivációs kiszolgálóból való lekérésekor\n"
@@ -1804,12 +1804,12 @@ msgstr "Hiba a terminálkiszolgáló aktivációs kiszolgálóból való lekér�
 msgid "Unnamed"
 msgstr "Névtelen"
 
-#: ../src/terminal-screen.c:1134
+#: ../src/terminal-screen.c:1243
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Valami probléma történt a terminál parancsával: %s"
 
-#: ../src/terminal-screen.c:1430
+#: ../src/terminal-screen.c:1539
 msgid "There was an error creating the child process for this terminal"
 msgstr "Hiba történt a terminál gyermekfolyamatának létrehozásakor"
 
@@ -1822,7 +1822,7 @@ msgstr "Váltás erre a lapra"
 msgid "There was an error displaying help: %s"
 msgstr "Hiba történt a súgó megjelenítése közben: %s"
 
-#: ../src/terminal-util.c:215
+#: ../src/terminal-util.c:214
 #, c-format
 msgid ""
 "Could not open the address “%s”:\n"
@@ -1831,187 +1831,191 @@ msgstr ""
 "Nem lehet a(z) „%s” címet megnyitni:\n"
 "%s"
 
-#: ../src/terminal-window.c:309
+#: ../src/terminal-window.c:410
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:311
+#: ../src/terminal-window.c:412
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1223
+#: ../src/terminal-window.c:1330
 msgid "_File"
 msgstr "_Fájl"
 
 #. File menu
-#: ../src/terminal-window.c:1224 ../src/terminal-window.c:1234
-#: ../src/terminal-window.c:1347
+#: ../src/terminal-window.c:1331 ../src/terminal-window.c:1342
+#: ../src/terminal-window.c:1461
 msgid "Open _Terminal"
 msgstr "_Terminál megnyitása"
 
-#: ../src/terminal-window.c:1225 ../src/terminal-window.c:1237
-#: ../src/terminal-window.c:1350
+#: ../src/terminal-window.c:1332 ../src/terminal-window.c:1345
+#: ../src/terminal-window.c:1464
 msgid "Open Ta_b"
 msgstr "_Lap megnyitása"
 
-#: ../src/terminal-window.c:1226
+#: ../src/terminal-window.c:1333
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: ../src/terminal-window.c:1227
+#: ../src/terminal-window.c:1334
 msgid "_View"
 msgstr "_Nézet"
 
-#: ../src/terminal-window.c:1228
+#: ../src/terminal-window.c:1335
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: ../src/terminal-window.c:1229
+#: ../src/terminal-window.c:1336
 msgid "_Tabs"
 msgstr "_Lapok"
 
-#: ../src/terminal-window.c:1230
+#: ../src/terminal-window.c:1337
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../src/terminal-window.c:1240
+#: ../src/terminal-window.c:1348
 msgid "New _Profile…"
 msgstr "Új _profil…"
 
-#: ../src/terminal-window.c:1243 ../src/terminal-window.c:1356
+#: ../src/terminal-window.c:1351 ../src/terminal-window.c:1470
 msgid "C_lose Tab"
 msgstr "Lap _bezárása"
 
-#: ../src/terminal-window.c:1246
+#: ../src/terminal-window.c:1354
 msgid "_Close Window"
 msgstr "_Ablak bezárása"
 
-#: ../src/terminal-window.c:1257
+#: ../src/terminal-window.c:1365 ../src/terminal-window.c:1458
+msgid "Paste _Filenames"
+msgstr "_Fájlnevek beillesztése"
+
+#: ../src/terminal-window.c:1368
 msgid "P_rofiles…"
 msgstr "Pro_filok…"
 
-#: ../src/terminal-window.c:1260
+#: ../src/terminal-window.c:1371
 msgid "_Keyboard Shortcuts…"
 msgstr "_Gyorsbillentyűk…"
 
-#: ../src/terminal-window.c:1263
+#: ../src/terminal-window.c:1374
 msgid "Profile _Preferences"
 msgstr "Profil _tulajdonságai"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1279
+#: ../src/terminal-window.c:1390
 msgid "Change _Profile"
 msgstr "_Profil megváltoztatása"
 
-#: ../src/terminal-window.c:1280
+#: ../src/terminal-window.c:1391
 msgid "_Set Title…"
 msgstr "_Cím beállítása…"
 
-#: ../src/terminal-window.c:1283
+#: ../src/terminal-window.c:1394
 msgid "Set _Character Encoding"
 msgstr "_Karakterkódolás beállítása"
 
-#: ../src/terminal-window.c:1284
+#: ../src/terminal-window.c:1395
 msgid "_Reset"
 msgstr "_Visszaállítás"
 
-#: ../src/terminal-window.c:1287
+#: ../src/terminal-window.c:1398
 msgid "Reset and C_lear"
 msgstr "Visszaállítás és _törlés"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1292
+#: ../src/terminal-window.c:1403
 msgid "_Add or Remove…"
 msgstr "Hozzá_adás vagy eltávolítás…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1297
+#: ../src/terminal-window.c:1408
 msgid "_Previous Tab"
 msgstr "_Előző lap"
 
-#: ../src/terminal-window.c:1300
+#: ../src/terminal-window.c:1411
 msgid "_Next Tab"
 msgstr "_Következő lap"
 
-#: ../src/terminal-window.c:1303
+#: ../src/terminal-window.c:1414
 msgid "Move Tab _Left"
 msgstr "Lap mozgatása _balra"
 
-#: ../src/terminal-window.c:1306
+#: ../src/terminal-window.c:1417
 msgid "Move Tab _Right"
 msgstr "Lap mozgatása j_obbra"
 
-#: ../src/terminal-window.c:1309
+#: ../src/terminal-window.c:1420
 msgid "_Detach tab"
 msgstr "_Lap leválasztása"
 
 #. Help menu
-#: ../src/terminal-window.c:1314
+#: ../src/terminal-window.c:1425
 msgid "_Contents"
 msgstr "_Tartalom"
 
-#: ../src/terminal-window.c:1317
+#: ../src/terminal-window.c:1428
 msgid "_About"
 msgstr "_Névjegy"
 
 #. Popup menu
-#: ../src/terminal-window.c:1322
+#: ../src/terminal-window.c:1433
 msgid "_Send Mail To…"
 msgstr "E-mail küldé_se…"
 
-#: ../src/terminal-window.c:1325
+#: ../src/terminal-window.c:1436
 msgid "_Copy E-mail Address"
 msgstr "_E-mail cím másolása"
 
-#: ../src/terminal-window.c:1328
+#: ../src/terminal-window.c:1439
 msgid "C_all To…"
 msgstr "_Hívás…"
 
-#: ../src/terminal-window.c:1331
+#: ../src/terminal-window.c:1442
 msgid "_Copy Call Address"
 msgstr "Hívási cím _másolása"
 
-#: ../src/terminal-window.c:1334
+#: ../src/terminal-window.c:1445
 msgid "_Open Link"
 msgstr "_Megnyitás böngészőben"
 
-#: ../src/terminal-window.c:1337
+#: ../src/terminal-window.c:1448
 msgid "_Copy Link Address"
 msgstr "_Cím másolása"
 
-#: ../src/terminal-window.c:1340
+#: ../src/terminal-window.c:1451
 msgid "P_rofiles"
 msgstr "P_rofilok"
 
-#: ../src/terminal-window.c:1353
+#: ../src/terminal-window.c:1467
 msgid "C_lose Window"
 msgstr "_Ablak bezárása"
 
-#: ../src/terminal-window.c:1359
+#: ../src/terminal-window.c:1473
 msgid "_Input Methods"
 msgstr "_Beviteli mód"
 
 #. View Menu
-#: ../src/terminal-window.c:1365
+#: ../src/terminal-window.c:1479
 msgid "Show _Menubar"
 msgstr "_Menü megjelenítése"
 
-#: ../src/terminal-window.c:1369
+#: ../src/terminal-window.c:1483
 msgid "_Full Screen"
 msgstr "_Teljes képernyő"
 
-#: ../src/terminal-window.c:1796
+#: ../src/terminal-window.c:1918
 msgid "Close tab"
 msgstr "Lap bezárása"
 
-#: ../src/terminal-window.c:2470
+#: ../src/terminal-window.c:2643
 msgid "Close all tabs?"
 msgstr "Bezárja az összes lapot?"
 
-#: ../src/terminal-window.c:2472
+#: ../src/terminal-window.c:2645
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural "This window has %d tabs open. Closing the window will also close all tabs."
@@ -2022,15 +2026,15 @@ msgstr[1] ""
 "Ez az ablak %d megnyitott lappal rendelkezik. Az ablak bezárásával az összes "
 "lap is be fog záródni."
 
-#: ../src/terminal-window.c:2481
+#: ../src/terminal-window.c:2654
 msgid "Close All _Tabs"
 msgstr "Összes la_p bezárása"
 
-#: ../src/terminal-window.c:2749
+#: ../src/terminal-window.c:3006
 msgid "_Title:"
 msgstr "_Cím:"
 
-#: ../src/terminal-window.c:2904
+#: ../src/terminal-window.c:3161
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2041,7 +2045,7 @@ msgstr ""
 "Software Foundation által kiadott GNU General Public License második (vagy "
 "bármely későbbi) változatában foglaltak alapján."
 
-#: ../src/terminal-window.c:2908
+#: ../src/terminal-window.c:3165
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2053,7 +2057,7 @@ msgstr ""
 "program alkalmas-e a KÖZREADÁSRA vagy EGY BIZONYOS FELADAT ELVÉGZÉSÉRE. "
 "További részletekért tanulmányozza a GNU GPL licencet."
 
-#: ../src/terminal-window.c:2912
+#: ../src/terminal-window.c:3169
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2063,15 +2067,15 @@ msgstr ""
 "jár, ha nem kapta meg, írjon a Free Software Foundation Inc.-nek. "
 "Levélcímük: 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA."
 
-#: ../src/terminal-window.c:2921
+#: ../src/terminal-window.c:3178
 msgid "GNOME Terminal"
 msgstr "GNOME Terminál"
 
-#: ../src/terminal-window.c:2923
+#: ../src/terminal-window.c:3180
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminálemulátor a GNOME asztalhoz"
 
-#: ../src/terminal-window.c:2928
+#: ../src/terminal-window.c:3185
 msgid "translator-credits"
 msgstr ""
 "Bán Szabolcs <shooby@gnome.hu>\n"
