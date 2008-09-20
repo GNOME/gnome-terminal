@@ -8,7 +8,7 @@ DOC_FIGURES = figures/gnome-terminal-default.png \
               figures/gnome-terminal-tabbed.png 
 #	      figures/terminal-window.png   This image is not used.
 
-DOC_LINGUAS = de ca es fr it ko oc pt_BR ru sv uk
+DOC_LINGUAS = de ca cs es fr it ko oc pt_BR ru sv uk
 
 # Move to DOC_LINGUAS in transition to gnome-doc-utils
 

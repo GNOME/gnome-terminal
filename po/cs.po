@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-13 19:55+0200\n"
-"PO-Revision-Date: 2008-08-13 19:54+0200\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"POT-Creation-Date: 2008-09-21 01:22+0200\n"
+"PO-Revision-Date: 2008-09-20 12:32+0100\n"
+"Last-Translator: Lucas Lommer <llommer@svn.gnome.org>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,8 +24,8 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
-#: ../src/terminal-accels.c:167 ../src/terminal.c:1198
-#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1508
+#: ../src/terminal-accels.c:167 ../src/terminal.c:1197
+#: ../src/terminal-profile.c:150 ../src/terminal-window.c:1497
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -282,30 +282,30 @@ msgstr "Vlastní příkazy, které používat místo shellu"
 
 #: ../src/gnome-terminal.schemas.in.h:14
 msgid "Default"
-msgstr "Implicitní"
+msgstr "Výchozí"
 
 #: ../src/gnome-terminal.schemas.in.h:15
 msgid "Default color of terminal background"
-msgstr "Implicitní barva pozadí terminálu"
+msgstr "Výchozí barva pozadí terminálu"
 
 #: ../src/gnome-terminal.schemas.in.h:16
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
-"Implicitní barva pozadí terminálu jako určení barvy (může se jednat o "
+"Výchozí barva pozadí terminálu jako určení barvy (může se jednat o "
 "šestnáctkové číslice ve stylu HTML nebo název barvy, např. \"red\")."
 
 #: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of text in the terminal"
-msgstr "Implicitní barva textu v terminálu"
+msgstr "Výchozí barva textu v terminálu"
 
 #: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
-"Implicitní barva textu v terminálu, jako určení barvy (mohou to být "
+"Výchozí barva textu v terminálu, jako určení barvy (mohou to být "
 "šestnáctkové číslice ve stylu HTML nebo název barvy, např. \"red\")."
 
 #: ../src/gnome-terminal.schemas.in.h:19
@@ -1082,7 +1082,7 @@ msgstr "Nový profil"
 
 #: ../src/profile-new-dialog.glade.h:3
 msgid "Profile _name:"
-msgstr "Jméno _profilu:"
+msgstr "_Název profilu:"
 
 #: ../src/profile-new-dialog.glade.h:4
 msgid "_Base on:"
@@ -1212,7 +1212,7 @@ msgstr "Soubor s _obrázkem:"
 
 #: ../src/profile-preferences.glade.h:30
 msgid "Initial _title:"
-msgstr "Implicitní _titulek:"
+msgstr "Výchozí _titulek:"
 
 #: ../src/profile-preferences.glade.h:31
 msgid ""
@@ -1235,14 +1235,14 @@ msgid ""
 "Prepend initial title\n"
 "Keep initial title"
 msgstr ""
-"Nahradit počáteční titulek\n"
-"Připojit za počáteční titulek\n"
-"Připojit před počáteční titulek\n"
+"Nahradit výchozí titulek\n"
+"Připojit za výchozí titulek\n"
+"Připojit před výchozí titulek\n"
 "Zachovat výchozí titulek"
 
 #: ../src/profile-preferences.glade.h:39
 msgid "Ru_n a custom command instead of my shell"
-msgstr "S_pustit vlastní program místo mého shellu"
+msgstr "S_pustit vlastní příkaz místo mého shellu"
 
 #: ../src/profile-preferences.glade.h:40
 msgid "S_hade transparent or image background:"
@@ -1274,7 +1274,7 @@ msgstr "Znaky pro výběr _slov:"
 
 #: ../src/profile-preferences.glade.h:47
 msgid "Show _menubar by default in new terminals"
-msgstr "Zobrazovat v nových terminálech implicitně _panel nabídky"
+msgstr "Zobrazovat nové terminály s _panelem nabídky"
 
 #: ../src/profile-preferences.glade.h:48
 msgid ""
@@ -1434,7 +1434,7 @@ msgstr "Zmenšit"
 msgid "Normal Size"
 msgstr "Normální velikost"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2990
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2963
 msgid "Set Title"
 msgstr "Nastavit titulek"
 
@@ -1507,24 +1507,24 @@ msgstr "_Akce"
 msgid "Shortcut _Key"
 msgstr "_Klávesová zkratka"
 
-#: ../src/terminal-app.c:407
+#: ../src/terminal-app.c:408
 msgid "Click button to choose profile"
 msgstr "Kliknutím vyberete profil"
 
-#: ../src/terminal-app.c:492
+#: ../src/terminal-app.c:493
 msgid "Profile list"
 msgstr "Seznam profilů"
 
-#: ../src/terminal-app.c:553
+#: ../src/terminal-app.c:554
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Odstranit profil \"%s\"?"
 
-#: ../src/terminal-app.c:569
+#: ../src/terminal-app.c:570
 msgid "Delete Profile"
-msgstr "Odstranit profil"
+msgstr "Odstranění profilu"
 
-#: ../src/terminal-app.c:944
+#: ../src/terminal-app.c:946
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1533,7 +1533,7 @@ msgstr ""
 "Profil nazvaný \"%s\" již existuje. Chcete vytvořit další profil se stejným "
 "názvem?"
 
-#: ../src/terminal-app.c:1045
+#: ../src/terminal-app.c:1047
 msgid "Choose base profile"
 msgstr "Vyberte základní profil"
 
@@ -1596,52 +1596,52 @@ msgstr "Nebyl zadán argument volby \"%s\"\n"
 msgid "\"%s\" option requires an argument\n"
 msgstr "Volba \"%s\" vyžaduje argument\n"
 
-#: ../src/terminal.c:1036
+#: ../src/terminal.c:1035
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Profil \"%s\" neexistuje, použije se výchozí profil\n"
 
-#: ../src/terminal.c:1055
+#: ../src/terminal.c:1054
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Neplatný řetězec geometrie \"%s\"\n"
 
-#: ../src/terminal.c:1288
+#: ../src/terminal.c:1287
 msgid "Execute the argument to this option inside the terminal."
 msgstr "Spustit argument této volby v terminálu."
 
-#: ../src/terminal.c:1297
+#: ../src/terminal.c:1296
 msgid "Execute the remainder of the command line inside the terminal."
 msgstr "Spustit zbytek příkazového řádku v terminálu."
 
-#: ../src/terminal.c:1306
+#: ../src/terminal.c:1305
 msgid ""
 "Open a new window containing a tab with the default profile. More than one "
 "of these options can be provided."
 msgstr ""
-"Otevřít nové okno obsahující kartu s implicitním profilem. Tuto volbu lze "
-"zadat vícenásobně."
+"Otevřít nové okno obsahující kartu s výchozím profilem. Tuto volbu lze zadat "
+"vícenásobně."
 
-#: ../src/terminal.c:1315
+#: ../src/terminal.c:1314
 msgid ""
 "Open a new window containing a tab with the given profile. More than one of "
 "these options can be provided."
 msgstr ""
 "Otevřít nové okno s kartou v daném profilu. Tuto volbu lze zadat vícenásobně."
 
-#: ../src/terminal.c:1316 ../src/terminal.c:1334
+#: ../src/terminal.c:1315 ../src/terminal.c:1333
 msgid "PROFILENAME"
 msgstr "NÁZEVPROFILU"
 
-#: ../src/terminal.c:1324
+#: ../src/terminal.c:1323
 msgid ""
 "Open a new tab in the last-opened window with the default profile. More than "
 "one of these options can be provided."
 msgstr ""
-"Otevřít novou kartu v naposledy otevřeném okně s implicitním profilem. Tuto "
+"Otevřít novou kartu v naposledy otevřeném okně s výchozím profilem. Tuto "
 "volbu lze zadat vícenásobně."
 
-#: ../src/terminal.c:1333
+#: ../src/terminal.c:1332
 msgid ""
 "Open a new tab in the last-opened window with the given profile. More than "
 "one of these options can be provided."
@@ -1649,7 +1649,7 @@ msgstr ""
 "Otevřít novou kartu v naposledy otevřeném okně v daném profilu. Tuto volbu "
 "lze zadat vícenásobně."
 
-#: ../src/terminal.c:1342
+#: ../src/terminal.c:1341
 msgid ""
 "Open a new window containing a tab with the given profile ID. Used "
 "internally to save sessions."
@@ -1657,11 +1657,11 @@ msgstr ""
 "Otevřít nové okno s kartou v zadaném ID profilu. Používáno interně pro "
 "ukládání sezení."
 
-#: ../src/terminal.c:1343 ../src/terminal.c:1352
+#: ../src/terminal.c:1342 ../src/terminal.c:1351
 msgid "PROFILEID"
 msgstr "IDPROFILU"
 
-#: ../src/terminal.c:1351
+#: ../src/terminal.c:1350
 msgid ""
 "Open a new tab in the last-opened window with the given profile ID. Used "
 "internally to save sessions."
@@ -1669,7 +1669,7 @@ msgstr ""
 "Otevřít novou kartu v naposledy otevřeném okně v zadaném ID profilu. "
 "Používáno interně pro ukládání sezení."
 
-#: ../src/terminal.c:1360
+#: ../src/terminal.c:1359
 msgid ""
 "Set the role for the last-specified window; applies to only one window; can "
 "be specified once for each window you create from the command line."
@@ -1677,11 +1677,11 @@ msgstr ""
 "Nastavení role pro naposledy zadané okno. Použije se pouze pro jedno okno; "
 "může se nastavit jednou pro každé okno vytvořené z příkazového řádku."
 
-#: ../src/terminal.c:1361
+#: ../src/terminal.c:1360
 msgid "ROLE"
 msgstr "ROLE"
 
-#: ../src/terminal.c:1369
+#: ../src/terminal.c:1368
 msgid ""
 "Turn on the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1690,7 +1690,7 @@ msgstr ""
 "Zapnout panel nabídky pro naposledy zadané okno. Použije se pouze pro jedno "
 "okno; může se použít jednou pro každé okno vytvořené z příkazového řádku."
 
-#: ../src/terminal.c:1378
+#: ../src/terminal.c:1377
 msgid ""
 "Turn off the menubar for the last-specified window; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1699,7 +1699,7 @@ msgstr ""
 "Vypnout panel nabídky pro naposledy zadané okno. Použije se pouze pro jedno "
 "okno; může se použít jednou pro každé okno vytvořené z příkazového řádku."
 
-#: ../src/terminal.c:1387
+#: ../src/terminal.c:1386
 msgid ""
 "Set the last-specified window into maximized mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1709,7 +1709,7 @@ msgstr ""
 "pro jedno okno; může se nastavit jednou pro každé okno vytvořené z "
 "příkazového řádku."
 
-#: ../src/terminal.c:1396
+#: ../src/terminal.c:1395
 msgid ""
 "Set the last-specified window into fullscreen mode; applies to only one "
 "window; can be specified once for each window you create from the command "
@@ -1719,7 +1719,7 @@ msgstr ""
 "pouze pro jedno okno; může se nastavit jednou pro každé okno vytvořené z "
 "příkazového řádku."
 
-#: ../src/terminal.c:1405
+#: ../src/terminal.c:1404
 msgid ""
 "X geometry specification (see \"X\" man page), can be specified once per "
 "window to be opened."
@@ -1727,11 +1727,11 @@ msgstr ""
 "Specifikace geometrie X (popsáno v manuálové stránce \"X\"); může se použít "
 "jednou pro každé otvírané okno."
 
-#: ../src/terminal.c:1406
+#: ../src/terminal.c:1405
 msgid "GEOMETRY"
 msgstr "GEOMETRIE"
 
-#: ../src/terminal.c:1414
+#: ../src/terminal.c:1413
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1739,51 +1739,51 @@ msgstr ""
 "Neregistrovat u aktivačního serveru, nesnažit se znovu použít aktivní "
 "terminál"
 
-#: ../src/terminal.c:1423
+#: ../src/terminal.c:1422
 msgid "Register with the activation nameserver [default]"
-msgstr "Zaregistrovat u aktivačního serveru [implicitní]"
+msgstr "Zaregistrovat u aktivačního serveru [výchozí]"
 
-#: ../src/terminal.c:1441
+#: ../src/terminal.c:1440
 msgid "Set the terminal's title"
 msgstr "Nastavit titulek terminálu"
 
-#: ../src/terminal.c:1442
+#: ../src/terminal.c:1441
 msgid "TITLE"
 msgstr "TITULEK"
 
-#: ../src/terminal.c:1450
+#: ../src/terminal.c:1449
 msgid "Set the terminal's working directory"
 msgstr "Nastavit pracovní adresář terminálu"
 
-#: ../src/terminal.c:1451 ../src/terminal.c:1460
+#: ../src/terminal.c:1450 ../src/terminal.c:1459
 msgid "DIRNAME"
 msgstr "ADRESÁŘ"
 
-#: ../src/terminal.c:1459
+#: ../src/terminal.c:1458
 msgid "Set the default terminal's working directory. Used internally"
-msgstr "Nastavit implicitní pracovní adresář terminálu. Používá se interně"
+msgstr "Nastavit výchozí pracovní adresář terminálu. Používá se interně"
 
-#: ../src/terminal.c:1468
+#: ../src/terminal.c:1467
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Nastavení poměru zvětšení terminálu (1.0 = normální velikost)"
 
-#: ../src/terminal.c:1469
+#: ../src/terminal.c:1468
 msgid "ZOOMFACTOR"
 msgstr "POMĚRZVĚTŠENÍ"
 
-#: ../src/terminal.c:1477
+#: ../src/terminal.c:1476
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Nastavit poslední určenou záložku jako aktivní v tomto okně"
 
-#: ../src/terminal.c:1657 ../src/terminal.c:1660
+#: ../src/terminal.c:1656 ../src/terminal.c:1659
 msgid "GNOME Terminal Emulator"
 msgstr "Emulátor terminálu pro GNOME"
 
-#: ../src/terminal.c:1661
+#: ../src/terminal.c:1660
 msgid "Show GNOME Terminal options"
 msgstr "Zobrazit nastavení Terminálu GNOME"
 
-#: ../src/terminal.c:1818
+#: ../src/terminal.c:1817
 #, c-format
 msgid ""
 "It appears that you do not have gnome-terminal.server installed in a valid "
@@ -1792,7 +1792,7 @@ msgstr ""
 "Zdá se, že nemáte na správném místě nainstalovaný gnome-terminal.server. "
 "Režim factory bude vypnutý.\n"
 
-#: ../src/terminal.c:1821
+#: ../src/terminal.c:1820
 #, c-format
 msgid ""
 "Error registering terminal with the activation service; factory mode "
@@ -1801,21 +1801,21 @@ msgstr ""
 "Chyba při registraci terminálu u aktivační služby; režim factory bude "
 "vypnutý.\n"
 
-#: ../src/terminal.c:1860
+#: ../src/terminal.c:1859
 #, c-format
 msgid "Failed to retrieve terminal server from activation server\n"
 msgstr "Od aktivačního serveru se nepodařilo získat terminálový server\n"
 
-#: ../src/terminal-profile.c:155
+#: ../src/terminal-profile.c:156
 msgid "Unnamed"
 msgstr "Nepojmenováno"
 
-#: ../src/terminal-screen.c:1243
+#: ../src/terminal-screen.c:1099
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Nastal problém s příkazem pro tento terminál: %s"
 
-#: ../src/terminal-screen.c:1539
+#: ../src/terminal-screen.c:1397
 msgid "There was an error creating the child process for this terminal"
 msgstr "Při vytváření procesu potomka pro tento terminál došlo k chybě"
 
@@ -1823,12 +1823,12 @@ msgstr "Při vytváření procesu potomka pro tento terminál došlo k chybě"
 msgid "Switch to this tab"
 msgstr "Přepnout na tuto kartu"
 
-#: ../src/terminal-util.c:127
+#: ../src/terminal-util.c:170
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "Došlo k chybě při zobrazování nápovědy: %s"
 
-#: ../src/terminal-util.c:214
+#: ../src/terminal-util.c:242
 #, c-format
 msgid ""
 "Could not open the address “%s”:\n"
@@ -1848,180 +1848,180 @@ msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1330
+#: ../src/terminal-window.c:1322
 msgid "_File"
 msgstr "_Soubor"
 
 #. File menu
-#: ../src/terminal-window.c:1331 ../src/terminal-window.c:1342
-#: ../src/terminal-window.c:1461
+#: ../src/terminal-window.c:1323 ../src/terminal-window.c:1334
+#: ../src/terminal-window.c:1453
 msgid "Open _Terminal"
 msgstr "Otevřít _terminál"
 
-#: ../src/terminal-window.c:1332 ../src/terminal-window.c:1345
-#: ../src/terminal-window.c:1464
+#: ../src/terminal-window.c:1324 ../src/terminal-window.c:1337
+#: ../src/terminal-window.c:1456
 msgid "Open Ta_b"
 msgstr "Nová _karta"
 
-#: ../src/terminal-window.c:1333
+#: ../src/terminal-window.c:1325
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/terminal-window.c:1334
+#: ../src/terminal-window.c:1326
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: ../src/terminal-window.c:1335
+#: ../src/terminal-window.c:1327
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: ../src/terminal-window.c:1336
+#: ../src/terminal-window.c:1328
 msgid "_Tabs"
 msgstr "Kar_ty"
 
-#: ../src/terminal-window.c:1337
+#: ../src/terminal-window.c:1329
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/terminal-window.c:1348
+#: ../src/terminal-window.c:1340
 msgid "New _Profile…"
 msgstr "Nový _profil..."
 
-#: ../src/terminal-window.c:1351 ../src/terminal-window.c:1470
+#: ../src/terminal-window.c:1343 ../src/terminal-window.c:1462
 msgid "C_lose Tab"
 msgstr "_Zavřít kartu"
 
-#: ../src/terminal-window.c:1354
+#: ../src/terminal-window.c:1346
 msgid "_Close Window"
 msgstr "_Zavřít okno"
 
-#: ../src/terminal-window.c:1365 ../src/terminal-window.c:1458
+#: ../src/terminal-window.c:1357 ../src/terminal-window.c:1450
 msgid "Paste _Filenames"
 msgstr "Vložit _jména souborů"
 
-#: ../src/terminal-window.c:1368
+#: ../src/terminal-window.c:1360
 msgid "P_rofiles…"
 msgstr "P_rofily..."
 
-#: ../src/terminal-window.c:1371
+#: ../src/terminal-window.c:1363
 msgid "_Keyboard Shortcuts…"
 msgstr "_Klávesové zkratky..."
 
-#: ../src/terminal-window.c:1374
+#: ../src/terminal-window.c:1366
 msgid "Profile _Preferences"
 msgstr "Vlastnosti _profilu"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1390
+#: ../src/terminal-window.c:1382
 msgid "Change _Profile"
 msgstr "Změnit _profil"
 
-#: ../src/terminal-window.c:1391
+#: ../src/terminal-window.c:1383
 msgid "_Set Title…"
 msgstr "Na_stavit titulek..."
 
-#: ../src/terminal-window.c:1394
+#: ../src/terminal-window.c:1386
 msgid "Set _Character Encoding"
 msgstr "Nastavit _kódování znaků"
 
-#: ../src/terminal-window.c:1395
+#: ../src/terminal-window.c:1387
 msgid "_Reset"
 msgstr "_Inicializovat"
 
-#: ../src/terminal-window.c:1398
+#: ../src/terminal-window.c:1390
 msgid "Reset and C_lear"
 msgstr "Inicializovat a _vymazat"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1403
+#: ../src/terminal-window.c:1395
 msgid "_Add or Remove…"
 msgstr "_Přidat nebo odebrat..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1408
+#: ../src/terminal-window.c:1400
 msgid "_Previous Tab"
 msgstr "_Předchozí karta"
 
-#: ../src/terminal-window.c:1411
+#: ../src/terminal-window.c:1403
 msgid "_Next Tab"
 msgstr "_Následující karta"
 
-#: ../src/terminal-window.c:1414
+#: ../src/terminal-window.c:1406
 msgid "Move Tab _Left"
 msgstr "Posunout kartu do_leva"
 
-#: ../src/terminal-window.c:1417
+#: ../src/terminal-window.c:1409
 msgid "Move Tab _Right"
 msgstr "Posunout kartu dop_rava"
 
-#: ../src/terminal-window.c:1420
+#: ../src/terminal-window.c:1412
 msgid "_Detach tab"
 msgstr "O_dpojit kartu"
 
 #. Help menu
-#: ../src/terminal-window.c:1425
+#: ../src/terminal-window.c:1417
 msgid "_Contents"
 msgstr "_Obsah"
 
-#: ../src/terminal-window.c:1428
+#: ../src/terminal-window.c:1420
 msgid "_About"
 msgstr "O _aplikaci"
 
 #. Popup menu
-#: ../src/terminal-window.c:1433
+#: ../src/terminal-window.c:1425
 msgid "_Send Mail To…"
 msgstr "Ode_slat zprávu..."
 
-#: ../src/terminal-window.c:1436
+#: ../src/terminal-window.c:1428
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovat e-mailovou adresu"
 
-#: ../src/terminal-window.c:1439
+#: ../src/terminal-window.c:1431
 msgid "C_all To…"
 msgstr "Vol_at..."
 
-#: ../src/terminal-window.c:1442
+#: ../src/terminal-window.c:1434
 msgid "_Copy Call Address"
 msgstr "_Kopírovat adresu pro volání"
 
-#: ../src/terminal-window.c:1445
+#: ../src/terminal-window.c:1437
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: ../src/terminal-window.c:1448
+#: ../src/terminal-window.c:1440
 msgid "_Copy Link Address"
 msgstr "_Kopírovat adresu odkazu"
 
-#: ../src/terminal-window.c:1451
+#: ../src/terminal-window.c:1443
 msgid "P_rofiles"
 msgstr "P_rofily"
 
-#: ../src/terminal-window.c:1467
+#: ../src/terminal-window.c:1459
 msgid "C_lose Window"
 msgstr "_Zavřít okno"
 
-#: ../src/terminal-window.c:1473
+#: ../src/terminal-window.c:1465
 msgid "_Input Methods"
 msgstr "Vstupní metod_y"
 
 #. View Menu
-#: ../src/terminal-window.c:1479
+#: ../src/terminal-window.c:1471
 msgid "Show _Menubar"
 msgstr "Zobrazit _panel nabídky"
 
-#: ../src/terminal-window.c:1483
+#: ../src/terminal-window.c:1475
 msgid "_Full Screen"
 msgstr "_Celá obrazovka"
 
-#: ../src/terminal-window.c:1918
+#: ../src/terminal-window.c:1907
 msgid "Close tab"
 msgstr "Zavřít kartu"
 
-#: ../src/terminal-window.c:2643
+#: ../src/terminal-window.c:2632
 msgid "Close all tabs?"
 msgstr "Zavřít všechny karty?"
 
-#: ../src/terminal-window.c:2645
+#: ../src/terminal-window.c:2634
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2030,15 +2030,15 @@ msgstr[0] "Toto okno má otevřenou jednu kartu. Zavření okna ji zavře."
 msgstr[1] "Toto okno má otevřené %d karty. Zavření okna je zavře."
 msgstr[2] "Toto okno má otevřených %d karet. Zavření okna je zavře."
 
-#: ../src/terminal-window.c:2654
+#: ../src/terminal-window.c:2643
 msgid "Close All _Tabs"
 msgstr "Zavřít všechny _karty"
 
-#: ../src/terminal-window.c:3006
+#: ../src/terminal-window.c:2979
 msgid "_Title:"
 msgstr "_Titulek:"
 
-#: ../src/terminal-window.c:3161
+#: ../src/terminal-window.c:3134
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2050,7 +2050,7 @@ msgstr ""
 "to buď verze 2 této licence anebo (podle vlastního uvážení) kterékoliv "
 "pozdější verze."
 
-#: ../src/terminal-window.c:3165
+#: ../src/terminal-window.c:3138
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2061,7 +2061,7 @@ msgstr ""
 "ZÁRUKY; neposkytují se ani odvozené záruky PRODEJNOSTI anebo VHODNOSTI PRO "
 "URČITÝ ÚČEL. Další podrobnosti hledejte v GNU General Public License."
 
-#: ../src/terminal-window.c:3169
+#: ../src/terminal-window.c:3142
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2071,15 +2071,15 @@ msgstr ""
 "programem; pokud se tak nestalo, napište o ni Free Software Foundation, "
 "Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/terminal-window.c:3178
+#: ../src/terminal-window.c:3151
 msgid "GNOME Terminal"
 msgstr "Terminál GNOME"
 
-#: ../src/terminal-window.c:3180
+#: ../src/terminal-window.c:3153
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Emulátor terminálu pracovního prostředí GNOME"
 
-#: ../src/terminal-window.c:3185
+#: ../src/terminal-window.c:3158
 msgid "translator-credits"
 msgstr ""
 "Stanislav Brabec <utx@penguin.cz>\n"
