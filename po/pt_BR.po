@@ -1,11 +1,11 @@
-# Brazilian Portuguese translation of gnome-terminal.
-# Copyright (C) 2002-2006, 2007 Free Software Foundation, Inc.
+# Brazilian Portuguese translation of the GNOME Terminal.
+# Copyright (C) 2002-2008 the GNOME Terminal authors.
 # This file is distributed under the same license as the gnome-terminal package.
 # Evandro Fernandes Giovanini <evandrofg@ig.com.br>, 2002, 2003.
 # Alexandre Folle de Menezes <afmenez@terra.com.br>, 2003.
 # Gustavo Noronha Silva <kov@debian.org>, 2004, 2005.
 # Guilherme de S. Pastore <gpastore@gnome.org>, 2005.
-# Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>, 2007-2008.
+# Leonardo Ferreira Fontenelle <leonardof@gnome.org>, 2007-2008.
 # Hugo Doria <hugodoria@gmail.com>, 2008.
 # Rodrigo Luiz Marques Flores <rodrigomarquesflores@gmail.com>, 2008.
 #
@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-02 21:21+0000\n"
+"POT-Creation-Date: 2008-08-20 03:44+0000\n"
 "PO-Revision-Date: 2008-08-19 22:39-0300\n"
-"Last-Translator: Rodrigo Flores <rodrigomarquesflores@gmail.com>\n"
+"Last-Translator: Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -410,15 +410,15 @@ msgid ""
 "(argv[0] will have a hyphen in front of it.)"
 msgstr ""
 "Se verdadeiro, o comando dentro do terminal será lançado como uma shell de "
-"login. (argv[0] terá um hífen na frente.)"
+"sessão. (argv[0] terá um hífen na frente.)"
 
 #: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"Se verdadeiro, os registros utmp e wtmp do sistema serão atualizados quando "
-"o comando dentro do terminal for lançado."
+"Se verdadeiro, os registros de sessão utmp e wtmp do sistema serão "
+"atualizados quando o comando dentro do terminal for lançado."
 
 #: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
@@ -967,7 +967,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:115
 msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Lançar o comando no terminal como shell de login"
+msgstr "Lançar o comando no terminal como shell de sessão"
 
 #: ../src/gnome-terminal.schemas.in.h:116
 msgid "Whether to run a custom command instead of the shell"
@@ -995,7 +995,7 @@ msgstr "Silenciar a campainha do terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:122
 msgid "Whether to update login records when launching terminal command"
-msgstr "Atualizar registros de login ao lançar comando do terminal"
+msgstr "Atualizar registros de sessão ao lançar comando do terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:123
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -1112,7 +1112,7 @@ msgstr "<b>Comando</b>"
 
 #: ../src/profile-preferences.glade.h:2
 msgid "<b>Foreground and Background</b>"
-msgstr "<b>Texto e Fundo</b>"
+msgstr "<b>Texto e fundo</b>"
 
 #: ../src/profile-preferences.glade.h:3
 msgid "<b>Palette</b>"
@@ -1358,7 +1358,7 @@ msgstr "_Restaurar padrões para as opções de compatibilidade"
 
 #: ../src/profile-preferences.glade.h:65
 msgid "_Run command as a login shell"
-msgstr "Executa_r comando como shell de login"
+msgstr "Executa_r comando como shell de sessão"
 
 #: ../src/profile-preferences.glade.h:66
 msgid "_Scrollbar is:"
@@ -1378,7 +1378,7 @@ msgstr "Fundo _transparente"
 
 #: ../src/profile-preferences.glade.h:70
 msgid "_Update login records when command is launched"
-msgstr "Atu_alizar registros de login quando comando é iniciado"
+msgstr "Atu_alizar registros de sessão quando o comando é iniciado"
 
 #: ../src/profile-preferences.glade.h:71
 msgid "_Use colors from system theme"
@@ -1452,7 +1452,7 @@ msgstr "Reduzir"
 msgid "Normal Size"
 msgstr "Tamanho normal"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2990
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2991
 msgid "Set Title"
 msgstr "Definir título"
 
@@ -1525,24 +1525,24 @@ msgstr "_Ação"
 msgid "Shortcut _Key"
 msgstr "Te_cla de atalho"
 
-#: ../src/terminal-app.c:407
+#: ../src/terminal-app.c:408
 msgid "Click button to choose profile"
 msgstr "Clique no botão para escolher o perfil"
 
-#: ../src/terminal-app.c:492
+#: ../src/terminal-app.c:493
 msgid "Profile list"
 msgstr "Lista de perfis"
 
-#: ../src/terminal-app.c:553
+#: ../src/terminal-app.c:554
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Excluir o perfil \"%s\"?"
 
-#: ../src/terminal-app.c:569
+#: ../src/terminal-app.c:570
 msgid "Delete Profile"
 msgstr "Excluir perfil"
 
-#: ../src/terminal-app.c:944
+#: ../src/terminal-app.c:946
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1551,7 +1551,7 @@ msgstr ""
 "Você já tem um perfil chamado \"%s\". Deseja criar um outro perfil com o "
 "mesmo nome?"
 
-#: ../src/terminal-app.c:1045
+#: ../src/terminal-app.c:1047
 msgid "Choose base profile"
 msgstr "Escolha um perfil base"
 
@@ -2057,11 +2057,11 @@ msgstr[1] ""
 msgid "Close All _Tabs"
 msgstr "Fechar todas as _abas"
 
-#: ../src/terminal-window.c:3006
+#: ../src/terminal-window.c:3007
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-window.c:3161
+#: ../src/terminal-window.c:3162
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2073,7 +2073,7 @@ msgstr ""
 "conforme publicada pela Free Software Foundation; tanto a versão 2 da "
 "Licença como (a seu critério) qualquer versão mais nova."
 
-#: ../src/terminal-window.c:3165
+#: ../src/terminal-window.c:3166
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2085,7 +2085,7 @@ msgstr ""
 "A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU "
 "para obter mais detalhes."
 
-#: ../src/terminal-window.c:3169
+#: ../src/terminal-window.c:3170
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2095,15 +2095,15 @@ msgstr ""
 "GNOME; caso contrário, escreva para a Free Software Foundation, Inc., 51 "
 "Franklin St, Fifth Floor, Boston, MA 02110-1301 USA."
 
-#: ../src/terminal-window.c:3178
+#: ../src/terminal-window.c:3179
 msgid "GNOME Terminal"
 msgstr "Terminal do GNOME"
 
-#: ../src/terminal-window.c:3180
+#: ../src/terminal-window.c:3181
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Um emulador de terminal para o GNOME"
 
-#: ../src/terminal-window.c:3185
+#: ../src/terminal-window.c:3186
 msgid "translator-credits"
 msgstr ""
 "Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
@@ -2111,7 +2111,7 @@ msgstr ""
 "Gustavo Noronha Silva <kov@debian.org>\n"
 "Goedson Teixeira Paixão <goedson@debian.org>\n"
 "Guilherme de S. Pastore <gpastore@gnome.org>\n"
-"Leonardo Ferreira Fontenelle <leo.fontenelle@gmail.com>\n"
+"Leonardo Ferreira Fontenelle <leonardof@gnome.org>\n"
 "Hugo Doria <hugodoria@gmail.com>\n"
 "Rodrigo Luiz Marques Flores <rodrigomarquesflores@gmail.com>"
 
