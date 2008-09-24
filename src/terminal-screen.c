@@ -30,7 +30,6 @@
 #endif
 
 #include <gconf/gconf.h>
-#include <libgnome/gnome-util.h> /* gnome_util_user_shell */
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -40,6 +39,8 @@
 #include "terminal-screen-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+
+#include "eggusershell.h"
 
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
@@ -1139,7 +1140,7 @@ get_child_command (TerminalScreen *screen,
       const char *only_name;
       char *shell;
 
-      shell = gnome_util_user_shell ();
+      shell = egg_user_shell ();
 
       file = g_strdup (shell);
       
