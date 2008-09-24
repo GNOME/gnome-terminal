@@ -1331,136 +1331,7 @@ typedef struct
 static GOptionContext *
 get_goption_context (OptionParsingResults *parsing_results)
 {
-  GOptionContext *context;
-  GOptionGroup *option_group;
-
-  const GOptionEntry goptions[] = {
-    {
-      "command",
-      'e',
-      G_OPTION_FLAG_FILENAME,
-      G_OPTION_ARG_CALLBACK,
-      option_command_callback,
-      N_("Execute the argument to this option inside the terminal."),
-      NULL
-    },
-    {
-      "execute",
-      'x',
-      0,
-      G_OPTION_ARG_NONE,
-      &parsing_results->execute,
-      N_("Execute the remainder of the command line inside the terminal."),
-      NULL
-    },
-    {
-      "window",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_window_callback,
-      N_("Open a new window containing a tab with the default profile. More than one of these options can be provided."),
-      NULL
-    },
-    {
-      "window-with-profile",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_window_with_profile_callback,
-      N_("Open a new window containing a tab with the given profile. More than one of these options can be provided."),
-      N_("PROFILENAME")
-    },
-    {
-      "tab",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_tab_callback,
-      N_("Open a new tab in the last-opened window with the default profile. More than one of these options can be provided."),
-      NULL
-    },
-    {
-      "tab-with-profile",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_tab_with_profile_callback,
-      N_("Open a new tab in the last-opened window with the given profile. More than one of these options can be provided."),
-      N_("PROFILENAME")
-    },
-    {
-      "window-with-profile-internal-id",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_window_with_profile_internal_id_callback,
-      N_("Open a new window containing a tab with the given profile ID. Used internally to save sessions."),
-      N_("PROFILEID")
-    },
-    {
-      "tab-with-profile-internal-id",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_tab_with_profile_internal_id_callback,
-      N_("Open a new tab in the last-opened window with the given profile ID. Used internally to save sessions."),
-      N_("PROFILEID")
-    },
-    {
-      "role",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_role_callback,
-      N_("Set the role for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
-      N_("ROLE")
-    },
-    {
-      "show-menubar",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_show_menubar_callback,
-      N_("Turn on the menubar for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
-      NULL
-    },
-    {
-      "hide-menubar",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_hide_menubar_callback,
-      N_("Turn off the menubar for the last-specified window; applies to only one window; can be specified once for each window you create from the command line."),
-      NULL
-    },
-    {
-      "maximize",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_maximize_callback,
-      N_("Set the last-specified window into maximized mode; applies to only one window; can be specified once for each window you create from the command line."),
-      NULL
-    },
-    {
-      "full-screen",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_fullscreen_callback,
-      N_("Set the last-specified window into fullscreen mode; applies to only one window; can be specified once for each window you create from the command line."),
-      NULL
-    },
-    {
-      "geometry",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_geometry_callback,
-      N_("X geometry specification (see \"X\" man page), can be specified once per window to be opened."),
-      N_("GEOMETRY")
-    },
+  const GOptionEntry global_unique_goptions[] = {
     {
       "disable-factory",
       0,
@@ -1471,21 +1342,123 @@ get_goption_context (OptionParsingResults *parsing_results)
       NULL
     },
     {
-      "use-factory",
-      0,
+      "execute",
+      'x',
       0,
       G_OPTION_ARG_NONE,
-      &parsing_results->use_factory,
-      N_("Register with the activation nameserver [default]"),
+      &parsing_results->execute,
+      N_("Execute the remainder of the command line inside the terminal"),
+      NULL
+    },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
+
+  const GOptionEntry global_multiple_goptions[] = {
+    {
+      "window",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_window_callback,
+      N_("Open a new window containing a tab with the default profile"),
       NULL
     },
     {
-      "startup-id",
+      "tab",
       0,
-      G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_STRING,
-      &parsing_results->startup_id,
-      NULL,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_tab_callback,
+      N_("Open a new tab in the last-opened window with the default profile"),
+      NULL
+    },
+    {
+      "window-with-profile",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_window_with_profile_callback,
+      N_("Open a new window containing a tab with the given profile"),
+      N_("PROFILE-NAME")
+    },
+    {
+      "tab-with-profile",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_tab_with_profile_callback,
+      N_("Open a new tab in the last-opened window with the given profile"),
+      N_("PROFILE-NAME")
+    },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
+
+  const GOptionEntry window_goptions[] = {
+    {
+      "show-menubar",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_show_menubar_callback,
+      N_("Turn on the menubar"),
+      NULL
+    },
+    {
+      "hide-menubar",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_hide_menubar_callback,
+      N_("Turn off the menubar"),
+      NULL
+    },
+    {
+      "maximize",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_maximize_callback,
+      N_("Maximise the window"),
+      NULL
+    },
+    {
+      "full-screen",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_fullscreen_callback,
+      N_("Full-screen the window"),
+      NULL
+    },
+    {
+      "geometry",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_geometry_callback,
+      N_("Set the window geometry from the provided X geometry specification; see the \"X\" man page for more information"),
+      N_("GEOMETRY")
+    },
+    {
+      "role",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_role_callback,
+      N_("Set the window role"),
+      N_("ROLE")
+    },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
+
+  const GOptionEntry terminal_goptions[] = {
+    {
+      "command",
+      'e',
+      G_OPTION_FLAG_FILENAME,
+      G_OPTION_ARG_CALLBACK,
+      option_command_callback,
+      N_("Execute the argument to this option inside the terminal"),
       NULL
     },
     {
@@ -1494,7 +1467,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_ARG_CALLBACK,
       option_title_callback,
-      N_("Set the terminal's title"),
+      N_("Set the terminal title"),
       N_("TITLE")
     },
     {
@@ -1503,16 +1476,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_FLAG_FILENAME,
       G_OPTION_ARG_CALLBACK,
       option_working_directory_callback,
-      N_("Set the terminal's working directory"),
-      N_("DIRNAME")
-    },
-    {
-      "default-working-directory",
-      0,
-      0,
-      G_OPTION_ARG_FILENAME,
-      &parsing_results->default_working_dir,
-      N_("Set the default terminal's working directory. Used internally"),
+      N_("Set the working directory"),
       N_("DIRNAME")
     },
     {
@@ -1522,7 +1486,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_STRING,
       &parsing_results->zoom,
       N_("Set the terminal's zoom factor (1.0 = normal size)"),
-      N_("ZOOMFACTOR")
+      N_("ZOOM")
     },
     {
       "active",
@@ -1533,7 +1497,51 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Set the last specified tab as the active one in its window"),
       NULL
     },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
 
+  const GOptionEntry internal_goptions[] = {  
+    {
+      "window-with-profile-internal-id",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      option_window_with_profile_internal_id_callback,
+      NULL, NULL
+    },
+    {
+      "tab-with-profile-internal-id",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      option_tab_with_profile_internal_id_callback,
+      NULL, NULL
+    },
+    {
+      "default-working-directory",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_FILENAME,
+      &parsing_results->default_working_dir,
+      NULL, NULL,
+    },
+    {
+      "use-factory",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_NONE,
+      &parsing_results->use_factory,
+      NULL, NULL
+    },
+    {
+      "startup-id",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING,
+      &parsing_results->startup_id,
+      NULL,
+      NULL
+    },
     /*
      * Crappy old compat args
      */
@@ -1552,7 +1560,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "nologin",
       0,
@@ -1576,7 +1584,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "background",
       0,
@@ -1608,7 +1616,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "shaded",
       0,
@@ -1616,7 +1624,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "noshaded",
       0,
@@ -1624,7 +1632,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "transparent",
       0,
@@ -1632,7 +1640,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "utmp",
       0,
@@ -1640,7 +1648,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "noutmp",
       0,
@@ -1648,7 +1656,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "wtmp",
       0,
@@ -1664,7 +1672,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "lastlog",
       0,
@@ -1672,7 +1680,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "nolastlog",
       0,
@@ -1688,7 +1696,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },
+    },  
     {
       "termname",
       0,
@@ -1705,23 +1713,53 @@ get_goption_context (OptionParsingResults *parsing_results)
       unsupported_option_callback,
       NULL, NULL
     },
-    {
-      NULL
-    }
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
+
+  GOptionContext *context;
+  GOptionGroup *group;
 
   context = g_option_context_new (N_("GNOME Terminal Emulator"));
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
-  option_group = g_option_group_new ("gnome-terminal",
-                                     N_("GNOME Terminal Emulator"),
-                                     N_("Show GNOME Terminal options"),
-                                     parsing_results,
-                                     NULL);
-  g_option_group_add_entries (option_group, goptions);
-  g_option_group_set_translation_domain (option_group, GETTEXT_PACKAGE);
-  g_option_group_set_parse_hooks (option_group, NULL, digest_options_callback);
-  g_option_context_set_main_group (context, option_group);
 
+  group = g_option_group_new ("gnome-terminal",
+                              N_("GNOME Terminal Emulator"),
+                              N_("Show GNOME Terminal options"),
+                              parsing_results,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, global_unique_goptions);
+  g_option_group_add_entries (group, internal_goptions);
+  g_option_group_set_parse_hooks (group, NULL, digest_options_callback);
+  g_option_context_set_main_group (context, group);
+
+  group = g_option_group_new ("terminal",
+                              N_("Options to open new windows or terminal tabs; more than one of these may be specified:"),
+                              N_("Show terminal options"),
+                              parsing_results,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, global_multiple_goptions);
+  g_option_context_add_group (context, group);
+
+  group = g_option_group_new ("window-options",
+                              N_("Window options; if used before the first --window or --tab argument, sets the default for all windows:"),
+                              N_("Show per-window options"),
+                              parsing_results,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, window_goptions);
+  g_option_context_add_group (context, group);
+  
+  group = g_option_group_new ("terminal-options",
+                              N_("Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"),
+                              N_("Show per-terminal options"),
+                              parsing_results,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, terminal_goptions);
+  g_option_context_add_group (context, group);
+  
   return context;
 }
 
