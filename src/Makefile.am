@@ -73,8 +73,6 @@ gnome_terminal_SOURCES += \
 	eggdesktopfile.h \
 	eggsmclient.c \
 	eggsmclient.h \
-	eggsmclient-libgnomeui.c \
-	eggsmclient-libgnomeui.h \
 	eggsmclient-private.h \
 	$(NULL)
 if WITH_SMCLIENT_XSMP

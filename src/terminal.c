@@ -38,15 +38,14 @@
 #include <bonobo-activation/bonobo-activation-register.h>
 #include <bonobo/bonobo-exception.h>
 #include <bonobo/bonobo-listener.h>
-#include <libgnome/gnome-program.h>
-#include <libgnomeui/gnome-ui-init.h>
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <gdk/gdkx.h>
 
 #ifdef WITH_SMCLIENT
-#include "eggsmclient-libgnomeui.h"
+#include "eggsmclient.h"
 #endif
 
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
@@ -1148,8 +1147,8 @@ main (int argc, char **argv)
   const char *startup_id;
   const char *display_name;
   GdkDisplay *display;
-  GnomeProgram *program;
   OptionParsingResults *parsing_results;
+  GError *error = NULL;
 
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -1175,19 +1174,20 @@ main (int argc, char **argv)
                                                      */
 
   context = get_goption_context (parsing_results);
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
+  g_option_context_add_group (context, egg_sm_client_get_option_group ());
 
-  /* This automagically makes GOption parse */
-  program = gnome_program_init (PACKAGE, VERSION,
-                                EGG_SM_CLIENT_LIBGNOMEUI_MODULE,
-                                argc,
-                                argv,
-                                GNOME_PARAM_GOPTION_CONTEXT, context,
-                                GNOME_PARAM_APP_PREFIX, TERM_PREFIX,
-                                GNOME_PARAM_APP_SYSCONFDIR, TERM_SYSCONFDIR,
-                                GNOME_PARAM_APP_DATADIR, TERM_PKGDATADIR,
-                                GNOME_PARAM_APP_LIBDIR, TERM_LIBDIR,
-                                NULL); 
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_printerr (_("Failed to parse arguments: %s\n"), error->message);
+      g_error_free (error);
+      g_option_context_free (context);
+      exit (1);
+    }
 
+  g_option_context_free (context);
+  g_set_application_name (_("Terminal"));
+  
  /* Do this here so that gdk_display is initialized */
   if (parsing_results->startup_id == NULL)
     {
@@ -1198,8 +1198,6 @@ main (int argc, char **argv)
       parsing_results->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
     }
 
-  g_set_application_name (_("Terminal"));
-  
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
   parsing_results->display_name = g_strdup (display_name);
@@ -1261,8 +1259,6 @@ main (int argc, char **argv)
     bonobo_activation_active_server_unregister (ACT_IID, BONOBO_OBJREF (listener));
   if (listener)
     bonobo_object_unref (BONOBO_OBJECT (listener));
-
-  g_object_unref (program);
 
   return 0;
 }

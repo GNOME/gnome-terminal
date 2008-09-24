@@ -39,18 +39,17 @@ GTK_REQUIRED=2.13.6
 GCONF_REQUIRED=2.14.0
 STARTUP_NOTIFICATION_REQUIRED=0.8
 VTE_REQUIRED=0.17.0
-LIBGNOME_REQUIRED=2.14.0
 
 ## here we get the flags we'll actually use
-PKG_CHECK_MODULES(TERM, dnl
- glib-2.0 >= $GLIB_REQUIRED dnl
- gtk+-2.0 >= $GTK_REQUIRED dnl
- gconf-2.0 >= $GCONF_REQUIRED dnl
- gio-2.0 dnl
- libgnomeui-2.0 dnl
- libgnome-2.0 >= $LIBGNOME_REQUIRED dnl
- libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED dnl
- vte >= $VTE_REQUIRED)
+PKG_CHECK_MODULES([TERM],
+  [vte >= $VTE_REQUIRED
+   glib-2.0 >= $GLIB_REQUIRED
+   gio-2.0
+   gtk+-2.0 >= $GTK_REQUIRED
+   gconf-2.0 >= $GCONF_REQUIRED
+   libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED
+   libbonobo-2.0
+   bonobo-activation-2.0])
 
 # Check the smclient backend
 GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
