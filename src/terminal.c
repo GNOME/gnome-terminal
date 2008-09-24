@@ -341,7 +341,7 @@ option_command_callback (const gchar *option_name,
       g_set_error(error,
                   G_OPTION_ERROR,
                   G_OPTION_ERROR_BAD_VALUE,
-                  _("Argument to \"%s\" is not a valid command: %s\n"),
+                  _("Argument to \"%s\" is not a valid command: %s"),
                    "--command/-e",
                   err->message);
       g_error_free (err);
@@ -709,7 +709,7 @@ option_zoom_callback (const gchar *option_name,
       g_set_error (error,
                    G_OPTION_ERROR,
                    G_OPTION_ERROR_BAD_VALUE,
-                   _("\"%s\" is not a valid zoom factor\n"),
+                   _("\"%s\" is not a valid zoom factor"),
                    value);
       return FALSE;
     }
@@ -764,7 +764,7 @@ digest_options_callback (GOptionContext *context,
                        G_OPTION_ERROR,
                        G_OPTION_ERROR_BAD_VALUE,
                        _("Option \"%s\" requires specifying the command to run"
-                       " on the rest of the command line\n"),
+                       " on the rest of the command line"),
                        "--execute/-x");
           return FALSE;
         }
