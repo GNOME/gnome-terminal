@@ -38,6 +38,7 @@ GLIB_REQUIRED=2.16.0
 GTK_REQUIRED=2.13.6
 GCONF_REQUIRED=2.14.0
 STARTUP_NOTIFICATION_REQUIRED=0.8
+DBUS_GLIB_REQUIRED=0.6
 VTE_REQUIRED=0.17.0
 
 ## here we get the flags we'll actually use
@@ -47,9 +48,8 @@ PKG_CHECK_MODULES([TERM],
    gio-2.0
    gtk+-2.0 >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED
-   libbonobo-2.0
-   bonobo-activation-2.0])
+   dbus-glib-1 >= $DBUS_GLIB_REQUIRED
+   libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED])
 
 # Check the smclient backend
 GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
@@ -99,6 +99,11 @@ AC_SUBST([GLIB_MKENUMS])
 AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
 if test "$GTK_BUILDER_CONVERT" = "false"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
+fi
+
+AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[false])
+if test "$DBUS_BINDING_TOOL" = "false"; then
+  AC_MSG_ERROR([dbus-binding-tool not found])
 fi
 
 GNOME_DOC_INIT

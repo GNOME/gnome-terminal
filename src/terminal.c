@@ -25,7 +25,6 @@
 
 #include "terminal-intl.h"
 
-#undef BONOBO_DISABLE_DEPRECATED
 #undef G_DISABLE_SINGLE_INCLUDES
 
 #include "terminal-app.h"
@@ -34,10 +33,6 @@
 #include "terminal-util.h"
 #include "profile-editor.h"
 #include "encoding.h"
-#include <bonobo-activation/bonobo-activation-activate.h>
-#include <bonobo-activation/bonobo-activation-register.h>
-#include <bonobo/bonobo-exception.h>
-#include <bonobo/bonobo-listener.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
@@ -48,8 +43,59 @@
 #include "eggsmclient.h"
 #endif
 
-#define ACT_IID "OAFIID:GNOME_Terminal_Factory"
+#include <dbus/dbus-protocol.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-bindings.h>
 
+#define TERMINAL_FACTORY_SERVICE_NAME   "org.gnome.Terminal.Factory"
+#define TERMINAL_FACTORY_SERVICE_PATH   "/org/gnome/Terminal/Factory"
+#define TERMINAL_FACTORY_INTERFACE_NAME "org.gnome.Terminal.Factory"
+
+#define TERMINAL_TYPE_FACTORY             (terminal_factory_get_type ())
+#define TERMINAL_FACTORY(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_FACTORY, TerminalFactory))
+#define TERMINAL_FACTORY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), TERMINAL_TYPE_FACTORY, TerminalFactoryClass))
+#define TERMINAL_IS_FACTORY(object)       (G_TYPE_CHECK_INSTANCE_TYPE ((object), TERMINAL_TYPE_FACTORY))
+#define TERMINAL_IS_FACTORY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), TERMINAL_TYPE_FACTORY))
+#define TERMINAL_FACTORY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), TERMINAL_TYPE_FACTORY, TerminalFactoryClass))
+
+typedef struct _TerminalFactory        TerminalFactory;
+typedef struct _TerminalFactoryClass   TerminalFactoryClass;
+typedef struct _TerminalFactoryPrivate TerminalFactoryPrivate;
+
+struct _TerminalFactory
+{
+  GObject parent_instance;
+};
+
+struct _TerminalFactoryClass
+{
+  GObjectClass parent_class;
+};
+
+static gboolean terminal_factory_new_terminal (TerminalFactory *factory,
+                                               const char **IN_args,
+                                               GError **error);
+
+#include "terminal-factory-client.h"
+#include "terminal-factory-server.h"
+
+static void
+terminal_factory_class_init (TerminalFactoryClass *factory_class)
+{
+}
+
+static void
+terminal_factory_init (TerminalFactory *factory)
+{
+}
+
+static GType terminal_factory_get_type (void);
+
+G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
+  dbus_g_object_type_install_info (g_define_type_id,
+                                   &dbus_glib_terminal_factory_object_info)
+);
+ 
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -74,8 +120,7 @@
 
 static gboolean initialization_complete = FALSE;
 static GSList *pending_new_terminal_events = NULL;
-static BonoboListener *listener = NULL;
-static gboolean factory_registered = FALSE;
+static TerminalFactory *factory = NULL;
 
 typedef struct
 {
@@ -1255,10 +1300,8 @@ main (int argc, char **argv)
 
   terminal_app_shutdown ();
 
-  if (factory_registered)
-    bonobo_activation_active_server_unregister (ACT_IID, BONOBO_OBJREF (listener));
-  if (listener)
-    bonobo_object_unref (BONOBO_OBJECT (listener));
+  if (factory)
+    g_object_unref (factory);
 
   return 0;
 }
@@ -1733,130 +1776,124 @@ handle_new_terminal_events (void)
  *   Invoked remotely to instantiate a terminal with the
  * given arguments.
  */
-static void
-terminal_new_event (BonoboListener    *listener,
-		    const char        *event_name, 
-		    const CORBA_any   *any,
-		    CORBA_Environment *ev,
-		    gpointer           user_data)
+static gboolean 
+terminal_factory_new_terminal (TerminalFactory *factory,
+                               const char **argv,
+                               GError **error)
 {
-  CORBA_sequence_CORBA_string *args;
-  char **tmp_argv;
-  int tmp_argc;
   NewTerminalEvent *event;
-  
-  if (strcmp (event_name, "new_terminal"))
-    {
-      g_warning ("Unknown event \"%s\" on terminal",
-		 event_name);
-      return;
-    }
-
-  args = any->_value;
-  
-  tmp_argv = g_new0 (char*, args->_length + 1);
-  for (tmp_argc = 0; tmp_argc < args->_length; ++tmp_argc)
-    tmp_argv[tmp_argc] = g_strdup (((const char**)args->_buffer)[tmp_argc]);
-  tmp_argv[tmp_argc] = NULL;
 
   event = g_slice_new0 (NewTerminalEvent);
-  event->argc = tmp_argc;
-  event->argv = tmp_argv;
+  event->argc = g_strv_length ((char **) argv);
+  event->argv = g_strdupv ((char **) argv);
 
   pending_new_terminal_events = g_slist_append (pending_new_terminal_events,
                                                 event);
 
   if (initialization_complete)
     handle_new_terminal_events ();
-}
 
-static Bonobo_RegistrationResult
-terminal_register_as_factory (void)
-{
-  char *per_display_iid;
-  Bonobo_RegistrationResult result;
-
-  listener = bonobo_listener_new (terminal_new_event, NULL);
-
-  per_display_iid = bonobo_activation_make_registration_id (
-    ACT_IID, DisplayString (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ())));
-
-  result = bonobo_activation_active_server_register (
-    per_display_iid, BONOBO_OBJREF (listener));
-
-  factory_registered = (result == Bonobo_ACTIVATION_REG_SUCCESS);
-
-  if (!factory_registered)
-    {
-      bonobo_object_unref (BONOBO_OBJECT (listener));
-      listener = NULL;
-    }
-
-
-#ifdef DEBUG_FACTORY
-  if (result == Bonobo_ACTIVATION_REG_SUCCESS)
-    g_print ("Successfully registered factory \"%s\"\n", per_display_iid);
-#endif
-
-  g_free (per_display_iid);
-
-  return result;
+  return TRUE;
 }
 
 static gboolean
-terminal_invoke_factory (int argc, char **argv)
+terminal_register_as_factory (gboolean *is_owner,
+                              GError **error)
 {
-  Bonobo_Listener receiver;
+  DBusGConnection *connection;
+  DBusGProxy *proxy;
+  guint32 request_name_ret;
 
-  switch (terminal_register_as_factory ())
-    {
-      case Bonobo_ACTIVATION_REG_SUCCESS:
-	/* we were the first terminal to register */
-	return FALSE;
-      case Bonobo_ACTIVATION_REG_NOT_LISTED:
-	g_printerr (_("It appears that you do not have gnome-terminal.server installed in a valid location. Factory mode disabled.\n"));
-        return FALSE;
-      case Bonobo_ACTIVATION_REG_ERROR:
-        g_printerr (_("Error registering terminal with the activation service; factory mode disabled.\n"));
-        return FALSE;
-      case Bonobo_ACTIVATION_REG_ALREADY_ACTIVE:
-#ifdef DEBUG_FACTORY
-        g_print ("Factory found; forwarding request\n");
+  connection = dbus_g_bus_get (DBUS_BUS_SESSION, error);
+  if (connection == NULL)
+    return FALSE;
+ 
+  proxy = dbus_g_proxy_new_for_name (connection,
+                                     DBUS_SERVICE_DBUS,
+                                     DBUS_PATH_DBUS,
+                                     DBUS_INTERFACE_DBUS);
+#if 0
+  dbus_g_proxy_add_signal (proxy, "NameOwnerChanged",
+                           G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                           G_TYPE_INVALID);
+  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged", 
+                               G_CALLBACK (name_owner_changed), factory, NULL);
 #endif
-        /* lets use it then */
-        break;
-    }
 
-  receiver = bonobo_activation_activate_from_id (
-    ACT_IID, Bonobo_ACTIVATION_FLAG_EXISTING_ONLY, NULL, NULL);
+  if (!org_freedesktop_DBus_request_name (proxy, 
+                                          TERMINAL_FACTORY_SERVICE_NAME,
+                                          DBUS_NAME_FLAG_DO_NOT_QUEUE, 
+                                          &request_name_ret, 
+                                          error))
+    return FALSE;
 
-  if (receiver != CORBA_OBJECT_NIL)
-    {
-      int i;
-      CORBA_any any;
-      CORBA_sequence_CORBA_string args;
-      CORBA_Environment ev;
+  if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
+    //g_set_error (error, dbus_g_error_quark (), DBUS_GERROR_FAILED, "%s", _("Not primary owner"));
+    //return FALSE;
+    *is_owner = FALSE;
+    return TRUE;
+  }
 
-      CORBA_exception_init (&ev);
+  factory = g_object_new (TERMINAL_TYPE_FACTORY, NULL);
+  dbus_g_connection_register_g_object (connection,
+                                       TERMINAL_FACTORY_SERVICE_PATH,
+                                       G_OBJECT (factory));
+ 
+  *is_owner = TRUE;
+#ifdef DEBUG_FACTORY
+  g_print ("Successfully registered factory \"%s\"\n", per_display_iid);
+#endif
 
-      any._type = TC_CORBA_sequence_CORBA_string;
-      any._value = &args;
+  return TRUE;
+}
 
-      args._length = argc;
-      args._buffer = g_newa (CORBA_char *, args._length);
+static gboolean
+terminal_invoke_factory (int argc,
+                         char **argv)
+{
+  DBusGConnection *connection;
+  DBusGProxy *proxy;
+  char **args;
+  int i;
+  GError *error = NULL;
+  gboolean is_owner;
 
-      for (i = 0; i < args._length; i++)
-        args._buffer [i] = argv [i];
-      
-      Bonobo_Listener_event (receiver, "new_terminal", &any, &ev);
-      CORBA_Object_release (receiver, &ev);
-      if (!BONOBO_EX (&ev))
-        return TRUE;
+  if (!terminal_register_as_factory (&is_owner, &error)) {
+    g_printerr ("Failed to invoke factory: %s\n", error->message);
+    g_error_free (error);
+    exit (1);
+    return FALSE;
+  }
 
-      CORBA_exception_free (&ev);
-    }
-  else
-    g_printerr (_("Failed to retrieve terminal server from activation server\n"));
+  if (is_owner)
+    return FALSE;
 
-  return FALSE;
+  connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+  if (connection == NULL) {
+    exit (1);
+    return FALSE;
+  }
+
+  /* Need to NULL terminate our argv */
+  args = g_new (char *, argc + 1);
+  for (i = 0; i < argc; i++) {
+    args[i] = argv[i];
+  }
+  args[argc] = NULL;
+
+  proxy = dbus_g_proxy_new_for_name (connection,
+                                     TERMINAL_FACTORY_SERVICE_NAME,
+                                     TERMINAL_FACTORY_SERVICE_PATH,
+                                     TERMINAL_FACTORY_INTERFACE_NAME);
+  if (!org_gnome_Terminal_Factory_new_terminal (proxy, 
+                                                (const char **) args, 
+                                                &error)) {
+    g_free (args);
+    g_printerr ("Failed to start new terminal: %s\n", error->message);
+    g_error_free (error);
+    return FALSE;
+  }
+
+  g_free (args);
+  return TRUE;
 }
