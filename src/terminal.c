@@ -141,7 +141,7 @@ typedef struct
 
   gboolean  execute;
   gboolean  use_factory;
-  char     *zoom;
+  double    zoom;
 } OptionParsingResults;
 
 static GOptionContext * get_goption_context (OptionParsingResults *parsing_results);
@@ -687,6 +687,60 @@ option_active_callback (const gchar *option_name,
   return TRUE;
 }
 
+static gboolean
+option_zoom_callback (const gchar *option_name,
+                      const gchar *value,
+                      gpointer     data,
+                      GError     **error)
+{
+  OptionParsingResults *results = data;
+  double zoom;
+  char *end;
+
+  /* Try reading a locale-style double first, in case it was
+    * typed by a person, then fall back to ascii_strtod (we
+    * always save session in C locale format)
+    */
+  end = NULL;
+  errno = 0;
+  zoom = g_strtod (value, &end);
+  if (end == NULL || *end != '\0')
+    {
+      g_set_error (error,
+                   G_OPTION_ERROR,
+                   G_OPTION_ERROR_BAD_VALUE,
+                   _("\"%s\" is not a valid zoom factor\n"),
+                   value);
+      return FALSE;
+    }
+
+  if (zoom < (TERMINAL_SCALE_MINIMUM + 1e-6))
+    {
+      g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
+                  zoom,
+                  TERMINAL_SCALE_MINIMUM);
+      zoom = TERMINAL_SCALE_MINIMUM;
+    }
+
+  if (zoom > (TERMINAL_SCALE_MAXIMUM - 1e-6))
+    {
+      g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
+                  zoom,
+                  TERMINAL_SCALE_MAXIMUM);
+      zoom = TERMINAL_SCALE_MAXIMUM;
+    }
+
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+      it->zoom = zoom;
+      it->zoom_set = TRUE;
+    }
+  else
+    results->zoom = zoom;
+
+  return TRUE;
+}
 
 /* Evaluation of the arguments given to the command line options */
 static gboolean
@@ -720,50 +774,6 @@ digest_options_callback (GOptionContext *context,
       results->post_execute_args = NULL;
     }
 
-  if (results->zoom)
-    {
-      double val;
-      char *end;
-
-      it = ensure_top_tab (results);
-
-      /* Try reading a locale-style double first, in case it was
-       * typed by a person, then fall back to ascii_strtod (we
-       * always save session in C locale format)
-       */
-      end = NULL;
-      errno = 0;
-      val = g_strtod (results->zoom, &end);
-      if (end == NULL || *end != '\0')
-        {
-          g_set_error (error,
-                        G_OPTION_ERROR,
-                        G_OPTION_ERROR_BAD_VALUE,
-                        _("\"%s\" is not a valid zoom factor\n"),
-                        results->zoom);
-          return FALSE;
-        }
-
-      if (val < (TERMINAL_SCALE_MINIMUM + 1e-6))
-        {
-          g_printerr (_("Zoom factor \"%g\" is too small, using %g\n"),
-                      val,
-                      TERMINAL_SCALE_MINIMUM);
-          val = TERMINAL_SCALE_MINIMUM;
-        }
-
-      if (val > (TERMINAL_SCALE_MAXIMUM - 1e-6))
-        {
-          g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
-                      val,
-                      TERMINAL_SCALE_MAXIMUM);
-          val = TERMINAL_SCALE_MAXIMUM;
-        }
-
-      it->zoom = val;
-      it->zoom_set = TRUE;
-    }
-
   return TRUE;
 }
 
@@ -791,7 +801,7 @@ option_parsing_results_new (const char *working_directory,
   results->initial_windows = NULL;
   results->default_role = NULL;
   results->default_geometry = NULL;
-  results->zoom = NULL;
+  results->zoom = 1.0;
 
   results->screen_number = -1;
   results->default_working_dir = g_strdup (working_directory);
@@ -847,7 +857,6 @@ option_parsing_results_free (OptionParsingResults *results)
 
   g_free (results->display_name);
   g_free (results->startup_id);
-  g_free (results->zoom);
 
   g_slice_free (OptionParsingResults, results);
 }
@@ -1089,7 +1098,7 @@ new_terminal_with_options (TerminalApp *app,
                                               it->exec_argv,
                                               it->title,
                                               it->working_dir,
-                                              it->zoom_set ? it->zoom : 1.0);
+                                              it->zoom_set ? it->zoom : results->zoom);
 
           if (it->active)
             terminal_window_switch_screen (window, screen);
@@ -1483,9 +1492,9 @@ get_goption_context (OptionParsingResults *parsing_results)
       "zoom",
       0,
       0,
-      G_OPTION_ARG_STRING,
-      &parsing_results->zoom,
-      N_("Set the terminal's zoom factor (1.0 = normal size)"),
+      G_OPTION_ARG_CALLBACK,
+      option_zoom_callback,
+      N_("Set the terminalx's zoom factor (1.0 = normal size)"),
       N_("ZOOM")
     },
     {
