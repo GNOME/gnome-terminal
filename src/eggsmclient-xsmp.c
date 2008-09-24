@@ -89,6 +89,8 @@ struct _EggSMClientXSMP
   char **restart_command;
   gboolean set_restart_command;
   int restart_style;
+  char **discard_command;
+  gboolean set_discard_command;
 
   guint idle;
 
@@ -116,6 +118,9 @@ struct _EggSMClientXSMPClass
 static void     sm_client_xsmp_startup (EggSMClient *client,
 					const char  *client_id);
 static void     sm_client_xsmp_set_restart_command (EggSMClient  *client,
+						    int           argc,
+						    const char  **argv);
+static void     sm_client_xsmp_set_discard_command (EggSMClient  *client,
 						    int           argc,
 						    const char  **argv);
 static void     sm_client_xsmp_will_quit (EggSMClient *client,
@@ -151,7 +156,7 @@ static SmProp *card8_prop        (const char    *name,
 static void set_properties         (EggSMClientXSMP *xsmp, ...);
 static void delete_properties      (EggSMClientXSMP *xsmp, ...);
 
-static GPtrArray *generate_command (char       **restart_command,
+static GPtrArray *generate_command (char       **argv,
 				    const char  *client_id,
 				    const char  *state_file);
 
@@ -186,6 +191,7 @@ egg_sm_client_xsmp_class_init (EggSMClientXSMPClass *klass)
 
   sm_client_class->startup             = sm_client_xsmp_startup;
   sm_client_class->set_restart_command = sm_client_xsmp_set_restart_command;
+  sm_client_class->set_discard_command = sm_client_xsmp_set_discard_command;
   sm_client_class->will_quit           = sm_client_xsmp_will_quit;
   sm_client_class->end_session         = sm_client_xsmp_end_session;
 }
@@ -407,6 +413,26 @@ sm_client_xsmp_set_restart_command (EggSMClient  *client,
   xsmp->restart_command[i] = NULL;
 
   xsmp->set_restart_command = TRUE;
+}
+
+static void
+sm_client_xsmp_set_discard_command (EggSMClient  *client,
+				    int           argc,
+				    const char  **argv)
+{
+  EggSMClientXSMP *xsmp = (EggSMClientXSMP *)client;
+  int i;
+
+  g_return_if_fail (xsmp->set_restart_command);
+
+  g_strfreev (xsmp->discard_command);
+
+  xsmp->discard_command = g_new (char *, argc + 1);
+  for (i = 0; i < argc; i++)
+    xsmp->discard_command[i] = g_strdup (argv[i]);
+  xsmp->discard_command[i] = NULL;
+
+  xsmp->set_discard_command = TRUE;
 }
 
 static void
@@ -801,7 +827,7 @@ save_state (EggSMClientXSMP *xsmp)
   GKeyFile *state_file;
   char *state_file_path, *data;
   EggDesktopFile *desktop_file;
-  GPtrArray *restart;
+  GPtrArray *restart, *discard;
   int offset, fd;
 
   /* We set xsmp->state before emitting save_state, but our caller is
@@ -817,7 +843,18 @@ save_state (EggSMClientXSMP *xsmp)
 		      ptrarray_prop (SmRestartCommand, restart),
 		      NULL);
       g_ptr_array_free (restart, TRUE);
-      delete_properties (xsmp, SmDiscardCommand, NULL);
+
+      if (xsmp->set_discard_command)
+        {
+          discard = generate_command (xsmp->discard_command, NULL, NULL);
+          set_properties (xsmp,
+                          ptrarray_prop (SmDiscardCommand, discard),
+                          NULL);
+          g_ptr_array_free (discard, TRUE);
+        }
+      else
+        delete_properties (xsmp, SmDiscardCommand, NULL);
+
       return;
     }
 
@@ -1040,14 +1077,14 @@ xsmp_shutdown_cancelled (SmcConn   smc_conn,
  * then free the array, but not its contents.
  */
 static GPtrArray *
-generate_command (char **restart_command, const char *client_id,
+generate_command (char **argv, const char *client_id,
 		  const char *state_file)
 {
   GPtrArray *cmd;
   int i;
 
   cmd = g_ptr_array_new ();
-  g_ptr_array_add (cmd, restart_command[0]);
+  g_ptr_array_add (cmd, argv[0]);
 
   if (client_id)
     {
@@ -1061,8 +1098,8 @@ generate_command (char **restart_command, const char *client_id,
       g_ptr_array_add (cmd, (char *)state_file);
     }
 
-  for (i = 1; restart_command[i]; i++)
-    g_ptr_array_add (cmd, restart_command[i]);
+  for (i = 1; argv[i]; i++)
+    g_ptr_array_add (cmd, argv[i]);
 
   return cmd;
 }

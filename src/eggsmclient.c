@@ -214,9 +214,12 @@ egg_sm_client_get_option_group (void)
     { "sm-client-id", 0, 0,
       G_OPTION_ARG_STRING, &sm_client_id,
       N_("Specify session management ID"), N_("ID") },
+    /* Compatibility options */
+    { "sm-disable", 0, G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_NONE, &sm_client_disable,
+      NULL, NULL },
     { NULL }
   };
-
   GOptionGroup *group;
 
   /* Use our own debug handler for the "EggSMClient" domain. */
@@ -224,10 +227,9 @@ egg_sm_client_get_option_group (void)
 		     egg_sm_client_debug_handler, NULL);
 
   group = g_option_group_new ("sm-client",
-			      N_("Session Management Options:"),
-			      N_("Show session management options"),
+			      _("Session management options:"),
+			      _("Show session management options"),
 			      NULL, NULL);
-  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, entries);
   g_option_group_set_parse_hooks (group, NULL, sm_client_post_parse_func);
 
@@ -418,6 +420,27 @@ egg_sm_client_set_restart_command (EggSMClient  *client,
 
   if (EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command)
     EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command (client, argc, argv);
+}
+
+/**
+ * egg_sm_client_set_discard_command:
+ * @client: the client
+ * @argc: the length of @argv
+ * @argv: argument vector
+ *
+ * Sets the command used to discard a custom state file if using
+ * egg_sm_client_set_restart_command(), which must be called before 
+ * using this function.
+ **/
+void
+egg_sm_client_set_discard_command (EggSMClient  *client,
+				   int           argc,
+				   const char  **argv)
+{
+  g_return_if_fail (EGG_IS_SM_CLIENT (client));
+
+  if (EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command)
+    EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command (client, argc, argv);
 }
 
 /**
