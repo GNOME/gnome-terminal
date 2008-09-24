@@ -19,7 +19,10 @@ AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 
 AC_C_BIGENDIAN
 
-AM_MAINTAINER_MODE
+if test -z "$enable_maintainer_mode"; then
+  enable_maintainer_mode=yes
+fi
+AM_MAINTAINER_MODE([enable])
 
 PKG_PROG_PKG_CONFIG
 AC_PROG_CC
