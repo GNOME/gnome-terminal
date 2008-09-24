@@ -221,7 +221,7 @@ terminal_app_create_profile (TerminalApp *app,
       app->default_profile = profile;
       g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
     }
-  
+
   return profile;
 }
 
@@ -264,7 +264,7 @@ terminal_app_delete_profile (TerminalApp *app,
       g_warning ("Failed to recursively unset %s: %s\n", gconf_dir, error->message);
       g_error_free (error);
     }
-      
+
   g_free (gconf_dir);
 }
 
@@ -406,7 +406,7 @@ profile_combo_box_new (TerminalApp *app)
 {
   GtkWidget *combo;
   GtkCellRenderer *renderer;
-  
+
   combo = gtk_combo_box_new ();
   terminal_util_set_atk_name_description (combo, NULL, _("Click button to choose profile"));
 
@@ -444,7 +444,7 @@ profile_combo_box_changed_cb (GtkWidget *widget,
    * and update_default_profile must be called in sync with those changes.
    */
   app->default_profile = profile;
- 
+
   g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
 
   g_object_unref (profile);
@@ -521,7 +521,7 @@ profile_list_delete_confirm_response_cb (GtkWidget *dialog,
 
   profile = TERMINAL_PROFILE (g_object_get_data (G_OBJECT (dialog), "profile"));
   g_assert (profile != NULL);
-  
+
   if (response == GTK_RESPONSE_ACCEPT)
     terminal_app_delete_profile (app, profile);
 
@@ -546,7 +546,7 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
-  
+
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
 
   transient_parent = gtk_widget_get_toplevel (widget);
@@ -569,17 +569,17 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
                                            -1);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog),
                                    GTK_RESPONSE_ACCEPT);
- 
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile")); 
+
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile"));
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
   /* Transfer refcount of |selected_profile|, so no unref below */
   g_object_set_data_full (G_OBJECT (dialog), "profile", selected_profile, g_object_unref);
-  
+
   g_signal_connect (dialog, "response",
                     G_CALLBACK (profile_list_delete_confirm_response_cb),
                     app);
-  
+
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
@@ -611,9 +611,9 @@ profile_list_edit_button_clicked_cb (GtkWidget *button,
 
   if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
-  
+
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
-      
+
   terminal_app_edit_profile (app, selected_profile,
                              GTK_WINDOW (app->manage_profiles_dialog));
   g_object_unref (selected_profile);
@@ -636,9 +636,9 @@ profile_list_row_activated_cb (GtkTreeView       *tree_view,
 
   if (!gtk_tree_model_get_iter (model, &iter, path))
     return;
-  
+
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
-      
+
   terminal_app_edit_profile (app, selected_profile,
                              GTK_WINDOW (app->manage_profiles_dialog));
   g_object_unref (selected_profile);
@@ -675,7 +675,7 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
   GList *profiles_to_delete, *l;
   gboolean need_new_default;
   TerminalProfile *fallback;
-  
+
   g_object_freeze_notify (object);
 
   profiles_to_delete = terminal_app_get_profile_list (app);
@@ -685,7 +685,7 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
       val->type != GCONF_VALUE_LIST ||
       gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
     goto ensure_one_profile;
-    
+
   value_list = gconf_value_get_list (val);
 
   /* Add any new ones */
@@ -729,7 +729,7 @@ ensure_one_profile:
         fallback = terminal_app_create_profile (app, FALLBACK_PROFILE_ID);
       g_assert (fallback != NULL);
     }
-  
+
   /* Forget no-longer-existing profiles */
   need_new_default = FALSE;
   for (l = profiles_to_delete; l != NULL; l = l->next)
@@ -753,7 +753,7 @@ ensure_one_profile:
       /* |profile| possibly isn't dead yet since the profiles dialogue's tree model holds a ref too... */
     }
   g_list_free (profiles_to_delete);
-  
+
   if (need_new_default)
     {
       TerminalProfile *new_default;
@@ -792,10 +792,10 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *val;
   const char *name = NULL;
-  
+
   app->default_profile_locked = !gconf_entry_get_is_writable (entry);
 
-  val = gconf_entry_get_value (entry);  
+  val = gconf_entry_get_value (entry);
   if (val != NULL &&
       val->type == GCONF_VALUE_STRING)
     name = gconf_value_get_string (val);
@@ -928,7 +928,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
       name_entry = g_object_get_data (G_OBJECT (new_profile_dialog), "name_entry");
       name = gtk_editable_get_chars (GTK_EDITABLE (name_entry), 0, -1);
       g_strstrip (name); /* name will be non empty after stripping */
-      
+
       profiles = terminal_app_get_profile_list (app);
       for (tmp = profiles; tmp != NULL; tmp = tmp->next)
         {
@@ -942,20 +942,20 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
         }
       if (tmp)
         {
-          confirm_dialog = gtk_message_dialog_new (GTK_WINDOW (new_profile_dialog), 
+          confirm_dialog = gtk_message_dialog_new (GTK_WINDOW (new_profile_dialog),
                                                    GTK_DIALOG_DESTROY_WITH_PARENT,
-                                                   GTK_MESSAGE_QUESTION, 
-                                                   GTK_BUTTONS_YES_NO, 
+                                                   GTK_MESSAGE_QUESTION,
+                                                   GTK_BUTTONS_YES_NO,
                                                    _("You already have a profile called “%s”. Do you want to create another profile with the same name?"), name);
           retval = gtk_dialog_run (GTK_DIALOG (confirm_dialog));
           gtk_widget_destroy (confirm_dialog);
-          if (retval == GTK_RESPONSE_NO)   
+          if (retval == GTK_RESPONSE_NO)
             goto cleanup;
         }
       g_list_free (profiles);
 
       transient_parent = gtk_window_get_transient_for (GTK_WINDOW (new_profile_dialog));
-      
+
       new_profile = _terminal_profile_clone (base_profile, name);
       new_profile_name = terminal_profile_get_property_string (new_profile, TERMINAL_PROFILE_NAME);
       g_hash_table_insert (app->profiles,
@@ -979,7 +979,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
     cleanup:
       g_free (name);
     }
-      
+
   gtk_widget_destroy (new_profile_dialog);
 }
 
@@ -988,7 +988,7 @@ new_profile_dialog_destroy_cb (GtkWidget *new_profile_dialog,
                                TerminalApp *app)
 {
   GtkWidget *combo;
-      
+
   combo = g_object_get_data (G_OBJECT (new_profile_dialog), "base_option_menu");
   g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_combo_box_refill), combo);
 
@@ -1081,13 +1081,13 @@ profile_list_response_cb (GtkWidget *dialog,
                           TerminalApp *app)
 {
   g_assert (app->manage_profiles_dialog == dialog);
-  
+
   if (id == GTK_RESPONSE_HELP)
     {
       terminal_util_show_help ("gnome-terminal-manage-profiles", GTK_WINDOW (dialog));
       return;
     }
-    
+
   gtk_widget_destroy (dialog);
 }
 
@@ -1158,14 +1158,14 @@ terminal_app_manage_profiles (TerminalApp     *app,
 
   g_signal_connect (new_button, "clicked",
                     G_CALLBACK (profile_list_new_button_clicked_cb),
-                    app->manage_profiles_list);   
+                    app->manage_profiles_list);
   g_signal_connect (edit_button, "clicked",
                     G_CALLBACK (profile_list_edit_button_clicked_cb),
                     app->manage_profiles_list);
   g_signal_connect (remove_button, "clicked",
                     G_CALLBACK (profile_list_delete_button_clicked_cb),
                     app->manage_profiles_list);
-            
+
   app->manage_profiles_default_menu = profile_combo_box_new (app);
   g_signal_connect (app->manage_profiles_default_menu, "changed",
                     G_CALLBACK (profile_combo_box_changed_cb), app);
@@ -1190,7 +1190,7 @@ terminal_app_get_clone_command (TerminalApp *app,
 {
   GList *lw;
   GPtrArray* args;
-  
+
   args = g_ptr_array_new ();
 
    g_ptr_array_add (args, g_strdup (EXECUTABLE_NAME));
@@ -1206,7 +1206,7 @@ terminal_app_get_clone_command (TerminalApp *app,
       TerminalScreen *active_screen;
 
       active_screen = terminal_window_get_active (window);
-      
+
       tabs = terminal_window_list_screen_containers (window);
 
       for (lt = tabs; lt != NULL; lt = lt->next)
@@ -1220,11 +1220,11 @@ terminal_app_get_clone_command (TerminalApp *app,
           screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
           profile_id = terminal_profile_get_property_string (terminal_screen_get_profile (screen),
                                                              TERMINAL_PROFILE_NAME);
-          
+
           if (lt == tabs)
             {
               GdkWindowState state;
-                
+
               g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
                                                      profile_id));
               if (terminal_window_get_menubar_visible (window))
@@ -1267,7 +1267,7 @@ terminal_app_get_clone_command (TerminalApp *app,
               char *flattened;
 
                g_ptr_array_add (args, g_strdup ("--command"));
-              
+
               flattened = g_strjoinv (" ", (char**) override_command);
                g_ptr_array_add (args, flattened);
             }
@@ -1297,12 +1297,12 @@ terminal_app_get_clone_command (TerminalApp *app,
               char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
               g_ascii_dtostr (buf, sizeof (buf), zoom);
-              
+
               g_ptr_array_add (args, g_strdup ("--zoom"));
               g_ptr_array_add (args, g_strdup (buf));
             }
         }
-      
+
       g_list_free (tabs);
     }
 
@@ -1340,7 +1340,7 @@ terminal_app_save_state_cb (EggSMClient *client,
 #endif
 
   g_strfreev (clone_command);
-  
+
   /* success */
   return TRUE;
 }
@@ -1378,7 +1378,7 @@ terminal_app_init (TerminalApp *app)
   global_app = app;
 
   app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  
+
   app->conf = gconf_client_get_default ();
 
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
@@ -1387,7 +1387,7 @@ terminal_app_init (TerminalApp *app)
   gconf_client_add_dir (app->conf, MONOSPACE_FONT_DIR,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
-  
+
   app->profile_list_notify_id =
     gconf_client_notify_add (app->conf, PROFILE_LIST_KEY,
                              terminal_app_profile_list_notify_cb,
@@ -1632,9 +1632,9 @@ terminal_app_new_window (TerminalApp *app,
                          GdkScreen *screen)
 {
   TerminalWindow *window;
-  
+
   window = terminal_window_new ();
-  
+
   app->windows = g_list_append (app->windows, window);
   g_signal_connect (window, "destroy",
                     G_CALLBACK (terminal_window_destroyed), app);

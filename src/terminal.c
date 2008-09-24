@@ -172,7 +172,7 @@ typedef struct
 
   char *geometry;
   char *role;
-  
+
 } InitialWindow;
 
 static InitialTab*
@@ -191,7 +191,7 @@ initial_tab_new (const char *profile,
   it->zoom = 1.0;
   it->zoom_set = FALSE;
   it->active = FALSE;
-  
+
   return it;
 }
 
@@ -210,9 +210,9 @@ initial_window_new (const char *profile,
                     gboolean    is_id)
 {
   InitialWindow *iw;
-  
+
   iw = g_slice_new (InitialWindow);
-  
+
   iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
   iw->force_menubar_state = FALSE;
   iw->menubar_state = FALSE;
@@ -220,7 +220,7 @@ initial_window_new (const char *profile,
   iw->start_maximized = FALSE;
   iw->geometry = NULL;
   iw->role = NULL;
-  
+
   return iw;
 }
 
@@ -243,7 +243,7 @@ apply_defaults (OptionParsingResults *results,
       iw->role = results->default_role;
       results->default_role = NULL;
     }
-  
+
   if (iw->geometry == NULL)
     iw->geometry = g_strdup (results->default_geometry);
 
@@ -263,7 +263,7 @@ static InitialWindow*
 ensure_top_window (OptionParsingResults *results)
 {
   InitialWindow *iw;
-  
+
   if (results->initial_windows == NULL)
     {
       iw = initial_window_new (NULL, FALSE);
@@ -278,7 +278,7 @@ ensure_top_window (OptionParsingResults *results)
     }
 
   g_assert (iw->tabs);
-  
+
   return iw;
 }
 
@@ -291,7 +291,7 @@ ensure_top_tab (OptionParsingResults *results)
   iw = ensure_top_window (results);
 
   g_assert (iw->tabs);
-  
+
   it = g_list_last (iw->tabs)->data;
 
   return it;
@@ -305,11 +305,11 @@ add_new_window (OptionParsingResults *results,
   InitialWindow *iw;
 
   iw = initial_window_new (profile, is_id);
-  
+
   apply_defaults (results, iw);
 
   results->initial_windows = g_list_append (results->initial_windows, iw);
-  
+
   return iw;
 }
 
@@ -327,7 +327,7 @@ unsupported_option_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_command_callback (const gchar *option_name,
                          const gchar *value,
                          gpointer     data,
@@ -357,7 +357,7 @@ option_command_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_window_callback (const gchar *option_name,
                         const gchar *value,
                         gpointer     data,
@@ -371,7 +371,7 @@ option_window_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_window_with_profile_callback (const gchar *option_name,
                                      const gchar *value,
                                      gpointer     data,
@@ -388,7 +388,7 @@ option_window_with_profile_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_tab_callback (const gchar *option_name,
                      const gchar *value,
                      gpointer     data,
@@ -397,12 +397,12 @@ option_tab_callback (const gchar *option_name,
   OptionParsingResults *results = data;
   InitialWindow *iw;
   const char *profile = NULL;
-                
+
   if (results->initial_windows)
     {
       iw = g_list_last (results->initial_windows)->data;
 
-      iw->tabs = 
+      iw->tabs =
       g_list_append (iw->tabs, initial_tab_new (profile, FALSE));
     }
   else
@@ -414,7 +414,7 @@ option_tab_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_tab_with_profile_callback (const gchar *option_name,
 				  const gchar *value,
 				  gpointer     data,
@@ -427,7 +427,7 @@ option_tab_with_profile_callback (const gchar *option_name,
   if (results->initial_windows)
     {
       iw = g_list_last (results->initial_windows)->data;
-      iw->tabs = 
+      iw->tabs =
       g_list_append (iw->tabs, initial_tab_new (profile, FALSE));
     }
   else
@@ -437,7 +437,7 @@ option_tab_with_profile_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_window_with_profile_internal_id_callback (const gchar *option_name,
                                                  const gchar *value,
                                                  gpointer     data,
@@ -453,7 +453,7 @@ option_window_with_profile_internal_id_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_tab_with_profile_internal_id_callback (const gchar *option_name,
 					      const gchar *value,
 					      gpointer     data,
@@ -467,7 +467,7 @@ option_tab_with_profile_internal_id_callback (const gchar *option_name,
     {
       iw = g_list_last (results->initial_windows)->data;
 
-      iw->tabs = 
+      iw->tabs =
       g_list_append (iw->tabs, initial_tab_new (profile, TRUE));
     }
   else
@@ -477,7 +477,7 @@ option_tab_with_profile_internal_id_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_role_callback (const gchar *option_name,
                       const gchar *value,
                       gpointer     data,
@@ -504,7 +504,7 @@ option_role_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_show_menubar_callback (const gchar *option_name,
                          const gchar *value,
                          gpointer     data,
@@ -537,7 +537,7 @@ option_show_menubar_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_hide_menubar_callback (const gchar *option_name,
                               const gchar *value,
                               gpointer     data,
@@ -549,7 +549,7 @@ option_hide_menubar_callback (const gchar *option_name,
   if (results->initial_windows)
     {
       iw = g_list_last (results->initial_windows)->data;
- 
+
       if (iw->force_menubar_state && iw->menubar_state == FALSE)
         {
           g_printerr (_("\"%s\" option given twice for the same window\n"),
@@ -558,7 +558,7 @@ option_hide_menubar_callback (const gchar *option_name,
         }
 
       iw->force_menubar_state = TRUE;
-      iw->menubar_state = FALSE;                
+      iw->menubar_state = FALSE;
     }
   else
     {
@@ -644,7 +644,7 @@ option_disable_factory_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_title_callback (const gchar *option_name,
                        const gchar *value,
                        gpointer     data,
@@ -659,7 +659,7 @@ option_title_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_working_directory_callback (const gchar *option_name,
                                    const gchar *value,
                                    gpointer     data,
@@ -674,7 +674,7 @@ option_working_directory_callback (const gchar *option_name,
 }
 
 
-static gboolean 
+static gboolean
 option_active_callback (const gchar *option_name,
                         const gchar *value,
                         gpointer     data,
@@ -705,7 +705,7 @@ digest_options_callback (GOptionContext *context,
     it = ensure_top_tab (results);
 
   if (results->execute)
-    {         
+    {
       if (results->post_execute_args == NULL)
         {
           g_set_error (error,
@@ -720,7 +720,7 @@ digest_options_callback (GOptionContext *context,
       it = ensure_top_tab (results);
       it->exec_argv = results->post_execute_args;
       results->post_execute_args = NULL;
-    } 
+    }
 
   if (results->zoom)
     {
@@ -757,11 +757,11 @@ digest_options_callback (GOptionContext *context,
       if (val > (TERMINAL_SCALE_MAXIMUM - 1e-6))
         {
           g_printerr (_("Zoom factor \"%g\" is too large, using %g\n"),
-                      val, 
+                      val,
                       TERMINAL_SCALE_MAXIMUM);
           val = TERMINAL_SCALE_MAXIMUM;
         }
-        
+
       it->zoom = val;
       it->zoom_set = TRUE;
     }
@@ -793,7 +793,7 @@ option_parsing_results_new (int *argc, char **argv)
 
   results->screen_number = -1;
   results->default_working_dir = NULL;
-  
+
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   results->post_execute_args = NULL;
   i = 1;
@@ -809,14 +809,14 @@ option_parsing_results_new (int *argc, char **argv)
           last = i;
           if (i == *argc)
             break; /* we'll complain about this later. */
-          
+
           results->post_execute_args = g_new0 (char*, *argc - i + 1);
           j = 0;
           while (i < *argc)
             {
               results->post_execute_args[j] = g_strdup (argv[i]);
 
-              i++; 
+              i++;
               j++;
             }
           results->post_execute_args[j] = NULL;
@@ -824,7 +824,7 @@ option_parsing_results_new (int *argc, char **argv)
           /* strip the args we used up, also ends the loop since i >= last */
           *argc = last;
         }
-      
+
       ++i;
     }
 
@@ -856,7 +856,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
                                                int *argc, char **argv)
 {
   int i;
-  
+
   /* The point here is to strip --display, in the case where we
    * aren't going via gtk_init()
    */
@@ -864,7 +864,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
   while (i < *argc)
     {
       gboolean remove_two = FALSE;
-      
+
       if (strcmp (argv[i], "-x") == 0 ||
           strcmp (argv[i], "--execute") == 0)
         {
@@ -873,7 +873,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
                    */
         }
       else if (strcmp (argv[i], "--display") == 0)
-        {          
+        {
           if ((i + 1) >= *argc)
             {
               g_printerr (_("No argument given to \"%s\" option\n"), "--display");
@@ -882,20 +882,20 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
                        * when not using factory mode.
                        */
             }
-          
+
           if (results->display_name)
             g_free (results->display_name);
 
           g_assert (i+1 < *argc);
           results->display_name = g_strdup (argv[i+1]);
-          
+
           remove_two = TRUE;
         }
       else if (strcmp (argv[i], "--screen") == 0)
         {
           int n;
           char *end;
-          
+
           if ((i + 1) >= *argc)
             {
               g_printerr (_("\"%s\" option requires an argument\n"), "--screen");
@@ -906,23 +906,23 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
             }
 
           g_assert (i+1 < *argc);
-          
+
           errno = 0;
           end = NULL;
           n = g_ascii_strtoll (argv[i+1], &end, 0);
           if (errno == 0 && argv[i+1] != end)
             results->screen_number = n;
-          
+
           remove_two = TRUE;
         }
 
       if (remove_two)
         {
           int n_to_move;
-          
+
           n_to_move = *argc - i - 2;
           g_assert (n_to_move >= 0);
-          
+
           if (n_to_move > 0)
             {
               g_memmove (&argv[i], &argv[i+2],
@@ -950,31 +950,31 @@ find_screen_by_display_name (const char *display_name,
 {
   GdkDisplay *display = NULL;
   GdkScreen *screen;
-  
+
   /* --screen=screen_number overrides --display */
-  
+
   screen = NULL;
-  
+
   if (display_name == NULL)
     display = gdk_display_get_default ();
   else
     {
       GSList *displays, *l;
       const char *period;
-        
+
       period = strrchr (display_name, '.');
       if (period)
         {
           gulong n;
           char *end;
-          
+
           errno = 0;
           end = NULL;
           n = g_ascii_strtoull (period + 1, &end, 0);
           if (errno == 0 && (period + 1) != end)
             screen_number = n;
         }
-      
+
       displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
       for (l = displays; l != NULL; l = l->next)
         {
@@ -1016,7 +1016,7 @@ option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
       InitialWindow *window;
 
       window = (InitialWindow*) w->data;
-      
+
       for (t = window->tabs; t ; t = t->next)
         {
           InitialTab *tab;
@@ -1076,7 +1076,7 @@ new_terminal_with_options (TerminalApp *app,
             {
               if (it->profile_is_id)
                 profile = terminal_app_get_profile_by_name (app, it->profile);
-              else                
+              else
                 profile = terminal_app_get_profile_by_visible_name (app, it->profile);
 
               if (profile == NULL)
@@ -1091,7 +1091,7 @@ new_terminal_with_options (TerminalApp *app,
                                               it->title,
                                               it->working_dir,
                                               it->zoom_set ? it->zoom : 1.0);
-          
+
           if (it->active)
             terminal_window_switch_screen (window, screen);
         }
@@ -1166,7 +1166,7 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
     g_assert (atom_type != None);
 
     name = "Fake Window";
-    XChangeProperty (xdisplay, 
+    XChangeProperty (xdisplay,
                      xwindow, atom_name,
                      atom_type,
                      8, PropModeReplace, (unsigned char *)name, strlen (name));
@@ -1213,7 +1213,7 @@ main (int argc, char **argv)
       parsing_results->startup_id = g_strdup (startup_id);
       g_unsetenv ("DESKTOP_STARTUP_ID");
     }
-  
+
   gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
                                                      * to complicated factory setup
                                                      */
@@ -1263,7 +1263,7 @@ main (int argc, char **argv)
       /* Forward our display to the child */
       insert_args (&argc_copy, argv_copy,
                    "--display", parsing_results->display_name);
-      
+
       /* Forward out working directory */
       cwd = g_get_current_dir ();
       insert_args (&argc_copy, argv_copy,
@@ -1283,7 +1283,7 @@ main (int argc, char **argv)
   argv_copy = NULL;
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
- 
+
   g_assert (parsing_results->post_execute_args == NULL);
 
   terminal_app_initialize (parsing_results->use_factory);
@@ -1320,7 +1320,7 @@ get_goption_context (OptionParsingResults *parsing_results)
   GOptionContext *context;
   GOptionGroup *option_group;
 
-  const GOptionEntry goptions[] = {  
+  const GOptionEntry goptions[] = {
     {
       "command",
       'e',
@@ -1519,7 +1519,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Set the last specified tab as the active one in its window"),
       NULL
     },
-    
+
     /*
      * Crappy old compat args
      */
@@ -1538,7 +1538,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "nologin",
       0,
@@ -1562,7 +1562,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "background",
       0,
@@ -1594,7 +1594,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "shaded",
       0,
@@ -1602,7 +1602,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "noshaded",
       0,
@@ -1610,7 +1610,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "transparent",
       0,
@@ -1618,7 +1618,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "utmp",
       0,
@@ -1626,7 +1626,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "noutmp",
       0,
@@ -1634,7 +1634,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "wtmp",
       0,
@@ -1650,7 +1650,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "lastlog",
       0,
@@ -1658,7 +1658,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "nolastlog",
       0,
@@ -1674,7 +1674,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       unsupported_option_callback,
       NULL, NULL
-    },  
+    },
     {
       "termname",
       0,
@@ -1722,12 +1722,12 @@ handle_new_terminal_event (int          argc,
   g_assert (initialization_complete);
 
   parsing_results = option_parsing_results_new (&argc, argv);
-  
+
   /* Find and parse --display */
   option_parsing_results_check_for_display_name (parsing_results,
                                                  &argc,
                                                  argv);
-  
+
   context = get_goption_context (parsing_results);
   g_option_context_set_ignore_unknown_options (context, TRUE);
   if(!g_option_context_parse (context, &argc, &argv, &error))
@@ -1776,7 +1776,7 @@ handle_new_terminal_events (void)
  *   Invoked remotely to instantiate a terminal with the
  * given arguments.
  */
-static gboolean 
+static gboolean
 terminal_factory_new_terminal (TerminalFactory *factory,
                                const char **argv,
                                GError **error)
@@ -1807,7 +1807,7 @@ terminal_register_as_factory (gboolean *is_owner,
   connection = dbus_g_bus_get (DBUS_BUS_SESSION, error);
   if (connection == NULL)
     return FALSE;
- 
+
   proxy = dbus_g_proxy_new_for_name (connection,
                                      DBUS_SERVICE_DBUS,
                                      DBUS_PATH_DBUS,
@@ -1816,14 +1816,14 @@ terminal_register_as_factory (gboolean *is_owner,
   dbus_g_proxy_add_signal (proxy, "NameOwnerChanged",
                            G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
                            G_TYPE_INVALID);
-  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged", 
+  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged",
                                G_CALLBACK (name_owner_changed), factory, NULL);
 #endif
 
-  if (!org_freedesktop_DBus_request_name (proxy, 
+  if (!org_freedesktop_DBus_request_name (proxy,
                                           TERMINAL_FACTORY_SERVICE_NAME,
-                                          DBUS_NAME_FLAG_DO_NOT_QUEUE, 
-                                          &request_name_ret, 
+                                          DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                          &request_name_ret,
                                           error))
     return FALSE;
 
@@ -1838,7 +1838,7 @@ terminal_register_as_factory (gboolean *is_owner,
   dbus_g_connection_register_g_object (connection,
                                        TERMINAL_FACTORY_SERVICE_PATH,
                                        G_OBJECT (factory));
- 
+
   *is_owner = TRUE;
 #ifdef DEBUG_FACTORY
   g_print ("Successfully registered factory \"%s\"\n", per_display_iid);
@@ -1885,8 +1885,8 @@ terminal_invoke_factory (int argc,
                                      TERMINAL_FACTORY_SERVICE_NAME,
                                      TERMINAL_FACTORY_SERVICE_PATH,
                                      TERMINAL_FACTORY_INTERFACE_NAME);
-  if (!org_gnome_Terminal_Factory_new_terminal (proxy, 
-                                                (const char **) args, 
+  if (!org_gnome_Terminal_Factory_new_terminal (proxy,
+                                                (const char **) args,
                                                 &error)) {
     g_free (args);
     g_printerr ("Failed to start new terminal: %s\n", error->message);
