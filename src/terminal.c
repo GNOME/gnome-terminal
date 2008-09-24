@@ -72,9 +72,13 @@ struct _TerminalFactoryClass
   GObjectClass parent_class;
 };
 
-static gboolean terminal_factory_new_terminal (TerminalFactory *factory,
-                                               const char **IN_args,
-                                               GError **error);
+static gboolean
+terminal_factory_new_terminal (TerminalFactory *factory,
+                               const char *working_directory,
+                               const char *display_name,
+                               const char *startup_id,
+                               const char **argv,
+                               GError **error);
 
 #include "terminal-factory-client.h"
 #include "terminal-factory-server.h"
@@ -143,8 +147,6 @@ typedef struct
 } OptionParsingResults;
 
 static GOptionContext * get_goption_context (OptionParsingResults *parsing_results);
-
-static gboolean terminal_invoke_factory (int argc, char **argv);
 
 static void handle_new_terminal_events (void);
 
@@ -770,7 +772,11 @@ digest_options_callback (GOptionContext *context,
 }
 
 static OptionParsingResults *
-option_parsing_results_new (int *argc, char **argv)
+option_parsing_results_new (const char *working_directory,
+                            const char *display_name,
+                            const char *startup_id,
+                            int *argc,
+                            char **argv)
 {
   OptionParsingResults *results;
   int i;
@@ -784,15 +790,15 @@ option_parsing_results_new (int *argc, char **argv)
   results->execute = FALSE;
   results->use_factory = TRUE;
 
-  results->startup_id = NULL;
-  results->display_name = NULL;
+  results->startup_id = g_strdup (startup_id);
+  results->display_name = g_strdup (display_name);
   results->initial_windows = NULL;
   results->default_role = NULL;
   results->default_geometry = NULL;
   results->zoom = NULL;
 
   results->screen_number = -1;
-  results->default_working_dir = NULL;
+  results->default_working_dir = g_strdup (working_directory);
 
   /* pre-scan for -x and --execute options (code from old gnome-terminal) */
   results->post_execute_args = NULL;
@@ -877,16 +883,14 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
           if ((i + 1) >= *argc)
             {
               g_printerr (_("No argument given to \"%s\" option\n"), "--display");
-              return; /* popt (GOption?) will die on this later, plus it shouldn't happen
+              return; /* option parsing will die on this later, plus it shouldn't happen
                        * because normally gtk_init() parses --display
                        * when not using factory mode.
                        */
             }
 
-          if (results->display_name)
-            g_free (results->display_name);
-
           g_assert (i+1 < *argc);
+          g_free (results->display_name);
           results->display_name = g_strdup (argv[i+1]);
 
           remove_two = TRUE;
@@ -1106,31 +1110,6 @@ new_terminal_with_options (TerminalApp *app,
     }
 }
 
-/* This assumes that argv already has room for the args,
- * and inserts them just after argv[0]
- */
-static void
-insert_args (int        *argc,
-             char      **argv,
-             const char *arg1,
-             const char *arg2)
-{
-  int i;
-
-  i = *argc;
-  while (i >= 1)
-    {
-      argv[i+2] = argv[i];
-      --i;
-    }
-
-  /* fill in 1 and 2 */
-  argv[1] = g_strdup (arg1);
-  argv[2] = g_strdup (arg2);
-  *argc += 2;
-  argv[*argc] = NULL;
-}
-
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
  */
@@ -1193,20 +1172,23 @@ main (int argc, char **argv)
   const char *display_name;
   GdkDisplay *display;
   OptionParsingResults *parsing_results;
+  DBusGConnection *connection;
+  DBusGProxy *proxy;
+  guint32 request_name_ret;
   GError *error = NULL;
 
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  /* Make a copy since we may need it later */
   argc_copy = argc;
-  /* we leave empty slots, for --startup-id, --display and --default-working-directory */
-  argv_copy = g_new0 (char *, argc_copy + 7);
-  for (i = 0; i < argc_copy; i++)
+  argv_copy = g_new (char *, argc_copy + 1);
+  for (i = 0; i < argc_copy; ++i)
     argv_copy [i] = g_strdup (argv [i]);
   argv_copy [i] = NULL;
 
-  parsing_results = option_parsing_results_new (&argc, argv);
+  parsing_results = option_parsing_results_new (NULL, NULL, NULL, &argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id != NULL && startup_id[0] != '\0')
     {
@@ -1249,35 +1231,87 @@ main (int argc, char **argv)
   
   option_parsing_results_apply_directory_defaults (parsing_results);
 
-  if (parsing_results->use_factory)
+  if (!parsing_results->use_factory)
+    goto factory_disabled;
+
+  /* Now try to acquire register us as the terminal factory */
+  connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+  if (!connection)
     {
-      char *cwd;
-      
-      if (parsing_results->startup_id != NULL)
-        {
-          /* we allocated argv_copy with extra space so we could do this */
-          insert_args (&argc_copy, argv_copy,
-                       "--startup-id", parsing_results->startup_id);
-        }
-
-      /* Forward our display to the child */
-      insert_args (&argc_copy, argv_copy,
-                   "--display", parsing_results->display_name);
-
-      /* Forward out working directory */
-      cwd = g_get_current_dir ();
-      insert_args (&argc_copy, argv_copy,
-                   "--default-working-directory", cwd);
-      g_free (cwd);
-
-      if (terminal_invoke_factory (argc_copy, argv_copy))
-        {
-          g_strfreev (argv_copy);
-          option_parsing_results_free (parsing_results);
-          return 0;
-        }
-      /* FIXME: else return 1; ? */
+      g_printerr ("Failed to get the session bus: %s\nFalling back to non-factory mode.\n",
+                  error->message);
+      g_error_free (error);
+      goto factory_disabled;
     }
+
+  proxy = dbus_g_proxy_new_for_name (connection,
+                                     DBUS_SERVICE_DBUS,
+                                     DBUS_PATH_DBUS,
+                                     DBUS_INTERFACE_DBUS);
+#if 0
+  dbus_g_proxy_add_signal (proxy, "NameOwnerChanged",
+                           G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+                           G_TYPE_INVALID);
+  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged",
+                               G_CALLBACK (name_owner_changed), factory, NULL);
+#endif
+
+  if (!org_freedesktop_DBus_request_name (proxy,
+                                          TERMINAL_FACTORY_SERVICE_NAME,
+                                          DBUS_NAME_FLAG_DO_NOT_QUEUE,
+                                          &request_name_ret,
+                                          &error))
+    {
+      g_printerr ("Failed name request: %s\n", error->message);
+      g_error_free (error);
+      goto factory_disabled;
+    }
+      
+  /* Forward to the existing factory and exit */
+  if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
+    {
+      char **args;
+      guint i;
+      int ret = EXIT_SUCCESS;
+
+      /* Need to NULL terminate our argv */
+      args = g_new (char *, argc_copy + 1);
+      for (i = 0; i < argc_copy; i++) {
+        args[i] = argv_copy[i];
+      }
+      args[argc_copy] = NULL;
+
+      proxy = dbus_g_proxy_new_for_name (connection,
+                                         TERMINAL_FACTORY_SERVICE_NAME,
+                                         TERMINAL_FACTORY_SERVICE_PATH,
+                                         TERMINAL_FACTORY_INTERFACE_NAME);
+      if (!org_gnome_Terminal_Factory_new_terminal (proxy,
+                                                    g_get_current_dir (),
+                                                    parsing_results->display_name,
+                                                    parsing_results->startup_id,
+                                                    (const char **) args,
+                                                    &error))
+        {
+          g_printerr ("Failed to forward request to factory: %s\n", error->message);
+          g_error_free (error);
+          ret = EXIT_FAILURE;
+        }
+
+      g_free (args);
+      g_strfreev (argv_copy);
+      option_parsing_results_free (parsing_results);
+
+      exit (ret);
+    }
+
+  factory = g_object_new (TERMINAL_TYPE_FACTORY, NULL);
+  dbus_g_connection_register_g_object (connection,
+                                       TERMINAL_FACTORY_SERVICE_PATH,
+                                       G_OBJECT (factory));
+
+  /* Now we're registered as the factory. Proceed to open the terminal(s). */
+
+factory_disabled:
 
   g_strfreev (argv_copy);
   argv_copy = NULL;
@@ -1310,6 +1344,9 @@ main (int argc, char **argv)
 
 typedef struct
 {
+  char *working_directory;
+  char *display_name;
+  char *startup_id;
   int argc;
   char **argv;
 } NewTerminalEvent;
@@ -1712,21 +1749,23 @@ get_goption_context (OptionParsingResults *parsing_results)
 }
 
 static void
-handle_new_terminal_event (int          argc,
-                           char       **argv)
+handle_new_terminal_event (NewTerminalEvent *event)
 {
   GOptionContext *context;
   OptionParsingResults *parsing_results;
   GError *error = NULL;
+  int argc = event->argc;
+  char **argv = event->argv;
 
   g_assert (initialization_complete);
 
-  parsing_results = option_parsing_results_new (&argc, argv);
+  parsing_results = option_parsing_results_new (event->working_directory,
+                                                event->display_name,
+                                                event->startup_id,
+                                                &argc, argv);
 
   /* Find and parse --display */
-  option_parsing_results_check_for_display_name (parsing_results,
-                                                 &argc,
-                                                 argv);
+  option_parsing_results_check_for_display_name (parsing_results, &argc, argv);
 
   context = get_goption_context (parsing_results);
   g_option_context_set_ignore_unknown_options (context, TRUE);
@@ -1761,7 +1800,7 @@ handle_new_terminal_events (void)
       GSList *next;
       NewTerminalEvent *event = pending_new_terminal_events->data;
 
-      handle_new_terminal_event (event->argc, event->argv);
+      handle_new_terminal_event (event);
 
       next = pending_new_terminal_events->next;
       g_strfreev (event->argv);
@@ -1772,18 +1811,20 @@ handle_new_terminal_events (void)
   currently_handling_events = FALSE;
 }
 
-/*
- *   Invoked remotely to instantiate a terminal with the
- * given arguments.
- */
 static gboolean
 terminal_factory_new_terminal (TerminalFactory *factory,
+                               const char *working_directory,
+                               const char *display_name,
+                               const char *startup_id,
                                const char **argv,
                                GError **error)
 {
   NewTerminalEvent *event;
 
   event = g_slice_new0 (NewTerminalEvent);
+  event->working_directory = g_strdup (working_directory);
+  event->display_name = g_strdup (display_name);
+  event->startup_id = g_strdup (startup_id);
   event->argc = g_strv_length ((char **) argv);
   event->argv = g_strdupv ((char **) argv);
 
@@ -1793,107 +1834,5 @@ terminal_factory_new_terminal (TerminalFactory *factory,
   if (initialization_complete)
     handle_new_terminal_events ();
 
-  return TRUE;
-}
-
-static gboolean
-terminal_register_as_factory (gboolean *is_owner,
-                              GError **error)
-{
-  DBusGConnection *connection;
-  DBusGProxy *proxy;
-  guint32 request_name_ret;
-
-  connection = dbus_g_bus_get (DBUS_BUS_SESSION, error);
-  if (connection == NULL)
-    return FALSE;
-
-  proxy = dbus_g_proxy_new_for_name (connection,
-                                     DBUS_SERVICE_DBUS,
-                                     DBUS_PATH_DBUS,
-                                     DBUS_INTERFACE_DBUS);
-#if 0
-  dbus_g_proxy_add_signal (proxy, "NameOwnerChanged",
-                           G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                           G_TYPE_INVALID);
-  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged",
-                               G_CALLBACK (name_owner_changed), factory, NULL);
-#endif
-
-  if (!org_freedesktop_DBus_request_name (proxy,
-                                          TERMINAL_FACTORY_SERVICE_NAME,
-                                          DBUS_NAME_FLAG_DO_NOT_QUEUE,
-                                          &request_name_ret,
-                                          error))
-    return FALSE;
-
-  if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER) {
-    //g_set_error (error, dbus_g_error_quark (), DBUS_GERROR_FAILED, "%s", _("Not primary owner"));
-    //return FALSE;
-    *is_owner = FALSE;
-    return TRUE;
-  }
-
-  factory = g_object_new (TERMINAL_TYPE_FACTORY, NULL);
-  dbus_g_connection_register_g_object (connection,
-                                       TERMINAL_FACTORY_SERVICE_PATH,
-                                       G_OBJECT (factory));
-
-  *is_owner = TRUE;
-#ifdef DEBUG_FACTORY
-  g_print ("Successfully registered factory \"%s\"\n", per_display_iid);
-#endif
-
-  return TRUE;
-}
-
-static gboolean
-terminal_invoke_factory (int argc,
-                         char **argv)
-{
-  DBusGConnection *connection;
-  DBusGProxy *proxy;
-  char **args;
-  int i;
-  GError *error = NULL;
-  gboolean is_owner;
-
-  if (!terminal_register_as_factory (&is_owner, &error)) {
-    g_printerr ("Failed to invoke factory: %s\n", error->message);
-    g_error_free (error);
-    exit (1);
-    return FALSE;
-  }
-
-  if (is_owner)
-    return FALSE;
-
-  connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-  if (connection == NULL) {
-    exit (1);
-    return FALSE;
-  }
-
-  /* Need to NULL terminate our argv */
-  args = g_new (char *, argc + 1);
-  for (i = 0; i < argc; i++) {
-    args[i] = argv[i];
-  }
-  args[argc] = NULL;
-
-  proxy = dbus_g_proxy_new_for_name (connection,
-                                     TERMINAL_FACTORY_SERVICE_NAME,
-                                     TERMINAL_FACTORY_SERVICE_PATH,
-                                     TERMINAL_FACTORY_INTERFACE_NAME);
-  if (!org_gnome_Terminal_Factory_new_terminal (proxy,
-                                                (const char **) args,
-                                                &error)) {
-    g_free (args);
-    g_printerr ("Failed to start new terminal: %s\n", error->message);
-    g_error_free (error);
-    return FALSE;
-  }
-
-  g_free (args);
   return TRUE;
 }

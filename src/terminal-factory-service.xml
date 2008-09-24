@@ -1,7 +1,10 @@
-<node name="/">
+<node name="/org/gnome/Terminal">
   <interface name="org.gnome.Terminal.Factory">
     <method name="NewTerminal">
-      <arg type="as"/>
+      <arg type="s" name="working_directory" direction="in" />
+      <arg type="s" name="display_name" direction="in" />
+      <arg type="s" name="startup_id" direction="in" />
+      <arg type="as" name="arguments" direction="in" />
     </method>
   </interface>
 </node>
