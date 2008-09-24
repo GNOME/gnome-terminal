@@ -29,8 +29,6 @@
 #include "profile-editor.h"
 #include "terminal-util.h"
 
-#include <libgnomeui/gnome-thumbnail.h>
-
 /* One slot in the ring buffer, plus the array which holds the data for
   * the line, plus about 80 vte_charcell structures. */
 #define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
@@ -535,6 +533,7 @@ editor_response_cb (GtkWidget *editor,
   gtk_widget_destroy (editor);
 }
 
+#if 0
 static GdkPixbuf *
 create_preview_pixbuf (const gchar *filename)
 {
@@ -600,19 +599,24 @@ update_image_preview (GtkFileChooser *chooser)
   }
   gtk_file_chooser_set_preview_widget_active (chooser, file != NULL);
 }
+#endif
 
 static void
 setup_background_filechooser (GtkWidget *filechooser, 
                               TerminalProfile *profile)
 {
   GtkFileFilter *filter;
-  GtkWidget *image_preview;
-  GdkPixbuf *pixbuf = NULL;
   
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_filter_set_name (filter, _("Images"));
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (filechooser), filter);
+
+  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (filechooser), TRUE);
+
+#if 0
+  GtkWidget *image_preview;
+  GdkPixbuf *pixbuf = NULL;
 
   image_preview = gtk_image_new ();
   /* FIXMchpe this is bogus */
@@ -633,12 +637,12 @@ setup_background_filechooser (GtkWidget *filechooser,
                                        image_preview);
   gtk_file_chooser_set_use_preview_label (GTK_FILE_CHOOSER (filechooser),
                                           FALSE);
-  gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (filechooser), TRUE);
-  gtk_widget_set_size_request (image_preview, 128, -1);  
+  gtk_widget_set_size_request (image_preview, 128, -1);
   gtk_widget_show (image_preview); 
 
   g_signal_connect (filechooser, "update-preview",
                     G_CALLBACK (update_image_preview), NULL);
+#endif
 }
 
 static void
