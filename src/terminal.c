@@ -1259,7 +1259,7 @@ main (int argc, char **argv)
       g_error_free (error);
       goto factory_disabled;
     }
-      
+
   /* Forward to the existing factory and exit */
   if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
     {
