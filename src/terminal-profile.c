@@ -25,7 +25,6 @@
 #include <gtk/gtk.h>
 
 #include <gconf/gconf-client.h>
-#include <libgnome/gnome-program.h>
 
 #include "terminal-screen.h"
 #include "terminal-intl.h"
@@ -413,15 +412,15 @@ values_equal (GParamSpec *pspec,
 
 static void
 ensure_pixbuf_property (TerminalProfile *profile,
-                        guint filename_prop_id,
+                        guint path_prop_id,
                         guint pixbuf_prop_id,
                         gboolean *load_failed)
 {
   TerminalProfilePrivate *priv = profile->priv;
-  GValue *filename_value, *pixbuf_value;
+  GValue *path_value, *pixbuf_value;
   GdkPixbuf *pixbuf;
-  const char *filename_utf8;
-  char *filename, *path;
+  const char *path_utf8;
+  char *path;
   GError *error = NULL;
 
   pixbuf_value = g_value_array_get_nth (priv->properties, pixbuf_prop_id);
@@ -433,21 +432,12 @@ ensure_pixbuf_property (TerminalProfile *profile,
   if (*load_failed)
     return;
 
-  filename_value= g_value_array_get_nth (priv->properties, filename_prop_id);
-  filename_utf8 = g_value_get_string (filename_value);
-  if (!filename_utf8)
+  path_value = g_value_array_get_nth (priv->properties, path_prop_id);
+  path_utf8 = g_value_get_string (path_value);
+  if (!path_utf8 || !path_utf8[0])
     goto failed;
 
-  filename = g_filename_from_utf8 (filename_utf8, -1, NULL, NULL, NULL);
-  if (!filename)
-    goto failed;
-
-  path = gnome_program_locate_file (gnome_program_get (),
-                                    /* FIXME should I use APP_PIXMAP? */
-                                    GNOME_FILE_DOMAIN_PIXMAP,
-                                    filename,
-                                    TRUE, NULL);
-  g_free (filename);
+  path = g_filename_from_utf8 (path_utf8, -1, NULL, NULL, NULL);
   if (!path)
     goto failed;
 
