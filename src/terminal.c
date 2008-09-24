@@ -122,8 +122,6 @@ G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
  *
  */
 
-static gboolean initialization_complete = FALSE;
-static GSList *pending_new_terminal_events = NULL;
 static TerminalFactory *factory = NULL;
 
 typedef struct
@@ -147,8 +145,6 @@ typedef struct
 } OptionParsingResults;
 
 static GOptionContext * get_goption_context (OptionParsingResults *parsing_results);
-
-static void handle_new_terminal_events (void);
 
 typedef struct
 {
@@ -847,8 +843,7 @@ option_parsing_results_free (OptionParsingResults *results)
   g_free (results->default_geometry);
   g_free (results->default_working_dir);
 
-  if (results->post_execute_args)
-    g_strfreev (results->post_execute_args);
+  g_strfreev (results->post_execute_args);
 
   g_free (results->display_name);
   g_free (results->startup_id);
@@ -1312,9 +1307,7 @@ main (int argc, char **argv)
   /* Now we're registered as the factory. Proceed to open the terminal(s). */
 
 factory_disabled:
-
   g_strfreev (argv_copy);
-  argv_copy = NULL;
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
@@ -1325,11 +1318,7 @@ factory_disabled:
 
   new_terminal_with_options (terminal_app_get (), parsing_results);
   option_parsing_results_free (parsing_results);
-  parsing_results = NULL;
 
-  initialization_complete = TRUE;
-  handle_new_terminal_events ();
-  
   gtk_main ();
 
   terminal_app_shutdown ();
@@ -1748,7 +1737,7 @@ get_goption_context (OptionParsingResults *parsing_results)
   return context;
 }
 
-static void
+static gboolean
 handle_new_terminal_event (NewTerminalEvent *event)
 {
   GOptionContext *context;
@@ -1756,8 +1745,6 @@ handle_new_terminal_event (NewTerminalEvent *event)
   GError *error = NULL;
   int argc = event->argc;
   char **argv = event->argv;
-
-  g_assert (initialization_complete);
 
   parsing_results = option_parsing_results_new (event->working_directory,
                                                 event->display_name,
@@ -1769,46 +1756,34 @@ handle_new_terminal_event (NewTerminalEvent *event)
 
   context = get_goption_context (parsing_results);
   g_option_context_set_ignore_unknown_options (context, TRUE);
-  if(!g_option_context_parse (context, &argc, &argv, &error))
-  {
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
       g_warning ("Error parsing options: %s, passed from terminal child",
                  error->message);
       g_error_free (error);
       g_option_context_free (context);
       option_parsing_results_free (parsing_results);
-      return;
-  }
+
+      return FALSE;
+    }
   g_option_context_free (context);
 
   option_parsing_results_apply_directory_defaults (parsing_results);
 
   new_terminal_with_options (terminal_app_get (), parsing_results);
   option_parsing_results_free (parsing_results);
+
+  return FALSE;
 }
 
 static void
-handle_new_terminal_events (void)
+new_terminal_event_free (NewTerminalEvent *event)
 {
-  static gboolean currently_handling_events = FALSE;
-
-  if (currently_handling_events)
-    return;
-  currently_handling_events = TRUE;
-
-  while (pending_new_terminal_events != NULL)
-    {
-      GSList *next;
-      NewTerminalEvent *event = pending_new_terminal_events->data;
-
-      handle_new_terminal_event (event);
-
-      next = pending_new_terminal_events->next;
-      g_strfreev (event->argv);
-      g_slice_free (NewTerminalEvent, event);
-      g_slist_free_1 (pending_new_terminal_events);
-      pending_new_terminal_events = next;
-    }
-  currently_handling_events = FALSE;
+  g_free (event->working_directory);
+  g_free (event->display_name);
+  g_free (event->startup_id);
+  g_strfreev (event->argv);
+  g_slice_free (NewTerminalEvent, event);
 }
 
 static gboolean
@@ -1828,11 +1803,10 @@ terminal_factory_new_terminal (TerminalFactory *factory,
   event->argc = g_strv_length ((char **) argv);
   event->argv = g_strdupv ((char **) argv);
 
-  pending_new_terminal_events = g_slist_append (pending_new_terminal_events,
-                                                event);
-
-  if (initialization_complete)
-    handle_new_terminal_events ();
+  g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+                   (GSourceFunc) handle_new_terminal_event,
+                   event,
+                   (GDestroyNotify) new_terminal_event_free);
 
   return TRUE;
 }
