@@ -52,6 +52,30 @@ PKG_CHECK_MODULES(TERM, dnl
  libstartup-notification-1.0 >= $STARTUP_NOTIFICATION_REQUIRED dnl
  vte >= $VTE_REQUIRED)
 
+# Check the smclient backend
+GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
+
+AC_MSG_CHECKING([which smclient backend to use])
+AC_ARG_WITH([smclient],
+  [AS_HELP_STRING([--with-smclient-backend],[which smclient backend to use (xsmp/win32/quartz)])],
+  [],
+  [case "$GDK_TARGET" in
+    x11) with_smclient=xsmp ;;
+    win32|quartz) with_smclient=$GDK_TARGET ;;
+    *) with_smclient=no ;;
+   esac])
+AC_MSG_RESULT([$with_smclient])
+
+if test "$with_smclient" != "no"; then
+  AC_DEFINE([WITH_SMCLIENT],[1],[Define if smclient is enabled])
+fi
+
+AM_CONDITIONAL([WITH_SMCLIENT],[test "$with_smclient" != "no"])
+AM_CONDITIONAL([WITH_SMCLIENT_XSMP],[test "$with_smclient" = "xsmp"])
+AM_CONDITIONAL([WITH_SMCLIENT_WIN32],[test "$with_smclient" = "win32"])
+AM_CONDITIONAL([WITH_SMCLIENT_QUARTZ],[test "$with_smclient" = "quartz"])
+
+# GConf
 AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
 
 if test x"$GCONFTOOL" = xno; then
@@ -121,4 +145,5 @@ gnome-terminal-$VERSION:
 	compiler:		${CC}
 
         using fontconfig/Xft2:  ${using_xft2}
+        using smclient:         ${with_smclient}
 "

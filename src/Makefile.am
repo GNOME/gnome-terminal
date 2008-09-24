@@ -65,6 +65,28 @@ gnome_terminal_LDADD = \
 	skey/libskey.la \
 	$(TERM_LIBS)
 
+if WITH_SMCLIENT
+gnome_terminal_SOURCES += \
+	eggdesktopfile.c \
+	eggdesktopfile.h \
+	eggsmclient.c \
+	eggsmclient.h \
+	eggsmclient-libgnomeui.c \
+	eggsmclient-libgnomeui.h \
+	eggsmclient-private.h \
+	$(NULL)
+if WITH_SMCLIENT_XSMP
+gnome_terminal_SOURCES += eggsmclient-xsmp.c
+gnome_terminal_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
+endif
+if WITH_SMCLIENT_WIN32
+gnome_terminal_SOURCES += eggsmclient-win32.c
+endif
+if WITH_SMCLIENT_QUARTZ
+gnome_terminal_SOURCES += eggsmclient-osx.c
+endif
+endif
+
 BUILT_SOURCES = \
 	terminal-marshal.c \
 	terminal-marshal.h \

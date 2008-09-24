@@ -45,6 +45,10 @@
 #include <time.h>
 #include <gdk/gdkx.h>
 
+#ifdef WITH_SMCLIENT
+#include "eggsmclient-libgnomeui.h"
+#endif
+
 #define ACT_IID "OAFIID:GNOME_Terminal_Factory"
 
 /* Settings storage works as follows:
@@ -1174,7 +1178,7 @@ main (int argc, char **argv)
 
   /* This automagically makes GOption parse */
   program = gnome_program_init (PACKAGE, VERSION,
-                                LIBGNOMEUI_MODULE,
+                                EGG_SM_CLIENT_LIBGNOMEUI_MODULE,
                                 argc,
                                 argv,
                                 GNOME_PARAM_GOPTION_CONTEXT, context,

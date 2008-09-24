@@ -36,10 +36,13 @@
 #include "profile-editor.h"
 #include "encoding.h"
 #include <gconf/gconf-client.h>
-#include <libgnomeui/gnome-client.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
+#ifdef WITH_SMCLIENT
+#include "eggsmclient.h"
+#endif
 
 #define FALLBACK_PROFILE_ID "Default"
 
@@ -1310,33 +1313,28 @@ terminal_app_get_clone_command (TerminalApp *app,
   *argvp = (char**) g_ptr_array_free (args, FALSE);
 }
 
+#ifdef WITH_SMCLIENT
+
 static gboolean
-terminal_app_save_yourself_cb (GnomeClient        *client,
-                               gint                phase,
-                               GnomeSaveStyle      save_style,
-                               gboolean            shutdown,
-                               GnomeInteractStyle  interact_style,
-                               gboolean            fast,
-                               void               *data)
+terminal_app_save_state_cb (EggSMClient *client,
+                            GKeyFile *keyfile,
+                            TerminalApp *app)
 {
   char **clone_command;
-  TerminalApp *app;
   int argc;
 #ifdef GNOME_ENABLE_DEBUG
   int i;
 #endif
 
-  app = data;
-  
   terminal_app_get_clone_command (app, &argc, &clone_command);
 
   /* GnomeClient builds the clone command from the restart command */
-  gnome_client_set_restart_command (client, argc, clone_command);
+  egg_sm_client_set_restart_command (client, argc, (const char **) clone_command);
 
 #ifdef GNOME_ENABLE_DEBUG
   /* Debug spew */
   g_print ("Saving session: ");
-  for (i = 0; clone_command[i]; ++i)
+  for (i = 0; i < argc; ++i)
     g_print ("%s ", clone_command[i]);
   g_print ("\n");
 #endif
@@ -1348,11 +1346,27 @@ terminal_app_save_yourself_cb (GnomeClient        *client,
 }
 
 static void
-terminal_app_client_die_cb (GnomeClient *client,
-                            TerminalApp *app)
+terminal_app_client_quit_requested_cb (EggSMClient *client,
+                                       TerminalApp *app)
+{
+  g_print ("smclient: quit requested\n");
+}
+
+static void
+terminal_app_client_quit_cancelled_cb (EggSMClient *client,
+                                       TerminalApp *app)
+{
+  g_print ("smclient: quit cancelled\n");
+}
+
+static void
+terminal_app_client_quit_cb (EggSMClient *client,
+                             TerminalApp *app)
 {
   g_signal_emit (app, signals[QUIT], 0);
 }
+
+#endif /* WITH_SMCLIENT */
 
 /* Class implementation */
 
@@ -1361,8 +1375,6 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  GnomeClient *sm_client;
-
   global_app = app;
 
   app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
@@ -1414,21 +1426,35 @@ terminal_app_init (TerminalApp *app)
   terminal_accels_init ();
   terminal_encoding_init ();
   
-  sm_client = gnome_master_client ();
-  g_signal_connect (sm_client,
-                    "save_yourself",
-                    G_CALLBACK (terminal_app_save_yourself_cb),
-                    terminal_app_get ());
+#ifdef WITH_SMCLIENT
+{
+  EggSMClient *sm_client;
 
-  g_signal_connect (sm_client, "die",
-                    G_CALLBACK (terminal_app_client_die_cb),
-                    NULL);
+  sm_client = egg_sm_client_get ();
+  g_signal_connect (sm_client, "save-state",
+                    G_CALLBACK (terminal_app_save_state_cb), app);
+  g_signal_connect (sm_client, "quit-requested",
+                    G_CALLBACK (terminal_app_client_quit_requested_cb), app);
+  g_signal_connect (sm_client, "quit-cancelled",
+                    G_CALLBACK (terminal_app_client_quit_cancelled_cb), app);
+  g_signal_connect (sm_client, "quit",
+                    G_CALLBACK (terminal_app_client_quit_cb), app);
+}
+#endif
 }
 
 static void
 terminal_app_finalize (GObject *object)
 {
   TerminalApp *app = TERMINAL_APP (object);
+
+#ifdef WITH_SMCLIENT
+  EggSMClient *sm_client;
+
+  sm_client = egg_sm_client_get ();
+  g_signal_handlers_disconnect_matched (sm_client, G_SIGNAL_MATCH_DATA,
+                                        0, 0, NULL, NULL, app);
+#endif
 
   if (app->profile_list_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->profile_list_notify_id);
