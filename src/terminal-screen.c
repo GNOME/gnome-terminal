@@ -40,7 +40,7 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 
-#include "eggusershell.h"
+#include "eggshell.h"
 
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
@@ -1140,7 +1140,7 @@ get_child_command (TerminalScreen *screen,
       const char *only_name;
       char *shell;
 
-      shell = egg_user_shell ();
+      shell = egg_shell ();
 
       file = g_strdup (shell);
       

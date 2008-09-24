@@ -5,8 +5,8 @@ SUBDIRS = skey
 bin_PROGRAMS = gnome-terminal
 
 gnome_terminal_SOURCES= \
-	eggusershell.c \
-	eggusershell.h \
+	eggshell.c \
+	eggshell.h \
 	encoding.c \
 	encoding.h \
 	profile-editor.c \

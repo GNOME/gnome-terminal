@@ -34,7 +34,7 @@
 
 #include <config.h>
 
-#include "eggusershell.h"
+#include "eggshell.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -47,14 +47,14 @@
 #include <glib.h>
 
 /**
- * egg_user_shell:
+ * egg_shell:
  *
  * Retrieves the user's preferred shell.
  *
  * Returns: A newly allocated string that is the path to the shell.
  */
 char *
-egg_user_shell (void)
+egg_shell (void)
 {
 #ifndef G_OS_WIN32
 	struct passwd *pw;
@@ -93,7 +93,7 @@ egg_user_shell (void)
 	}
 
 	/* If /bin/sh doesn't exist, your system is truly broken.  */
-	abort ();
+	g_assert_not_reached ();
 
 	/* Placate compiler.  */
 	return NULL;

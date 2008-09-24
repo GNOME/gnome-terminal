@@ -33,7 +33,7 @@
 G_BEGIN_DECLS
 
 /* Find the name of the user's shell.  */
-char *egg_user_shell (void);
+char *egg_shell (void);
 
 G_END_DECLS
 
