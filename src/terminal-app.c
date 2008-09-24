@@ -1346,20 +1346,6 @@ terminal_app_save_state_cb (EggSMClient *client,
 }
 
 static void
-terminal_app_client_quit_requested_cb (EggSMClient *client,
-                                       TerminalApp *app)
-{
-  g_print ("smclient: quit requested\n");
-}
-
-static void
-terminal_app_client_quit_cancelled_cb (EggSMClient *client,
-                                       TerminalApp *app)
-{
-  g_print ("smclient: quit cancelled\n");
-}
-
-static void
 terminal_app_client_quit_cb (EggSMClient *client,
                              TerminalApp *app)
 {
@@ -1433,10 +1419,6 @@ terminal_app_init (TerminalApp *app)
   sm_client = egg_sm_client_get ();
   g_signal_connect (sm_client, "save-state",
                     G_CALLBACK (terminal_app_save_state_cb), app);
-  g_signal_connect (sm_client, "quit-requested",
-                    G_CALLBACK (terminal_app_client_quit_requested_cb), app);
-  g_signal_connect (sm_client, "quit-cancelled",
-                    G_CALLBACK (terminal_app_client_quit_cancelled_cb), app);
   g_signal_connect (sm_client, "quit",
                     G_CALLBACK (terminal_app_client_quit_cb), app);
 }
