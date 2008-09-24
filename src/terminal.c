@@ -1161,7 +1161,6 @@ main (int argc, char **argv)
 {
   GOptionContext *context;
   int i;
-  int argc_copy;
   char **argv_copy;
   const char *startup_id;
   const char *display_name;
@@ -1176,11 +1175,10 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
-  /* Make a copy since we may need it later */
-  argc_copy = argc;
-  argv_copy = g_new (char *, argc_copy + 1);
-  for (i = 0; i < argc_copy; ++i)
-    argv_copy [i] = g_strdup (argv [i]);
+  /* Make a NULL-terminated copy since we may need it later */
+  argv_copy = g_new (char *, argc + 1);
+  for (i = 0; i < argc; ++i)
+    argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
   parsing_results = option_parsing_results_new (NULL, NULL, NULL, &argc, argv);
@@ -1265,16 +1263,7 @@ main (int argc, char **argv)
   /* Forward to the existing factory and exit */
   if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
     {
-      char **args;
-      guint i;
       int ret = EXIT_SUCCESS;
-
-      /* Need to NULL terminate our argv */
-      args = g_new (char *, argc_copy + 1);
-      for (i = 0; i < argc_copy; i++) {
-        args[i] = argv_copy[i];
-      }
-      args[argc_copy] = NULL;
 
       proxy = dbus_g_proxy_new_for_name (connection,
                                          TERMINAL_FACTORY_SERVICE_NAME,
@@ -1284,7 +1273,7 @@ main (int argc, char **argv)
                                                     g_get_current_dir (),
                                                     parsing_results->display_name,
                                                     parsing_results->startup_id,
-                                                    (const char **) args,
+                                                    (const char **) argv_copy,
                                                     &error))
         {
           g_printerr ("Failed to forward request to factory: %s\n", error->message);
@@ -1292,8 +1281,7 @@ main (int argc, char **argv)
           ret = EXIT_FAILURE;
         }
 
-      g_free (args);
-      g_strfreev (argv_copy);
+      g_free (argv_copy);
       option_parsing_results_free (parsing_results);
 
       exit (ret);
@@ -1307,7 +1295,7 @@ main (int argc, char **argv)
   /* Now we're registered as the factory. Proceed to open the terminal(s). */
 
 factory_disabled:
-  g_strfreev (argv_copy);
+  g_free (argv_copy);
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
