@@ -1285,7 +1285,7 @@ main (int argc, char **argv)
                                                     (const char **) argv_copy,
                                                     &error))
         {
-          g_printerr ("Failed to forward request to factory: %s\n", error->message);
+          g_printerr (_("Factory error: %s\n"), error->message);
           g_error_free (error);
           ret = EXIT_FAILURE;
         }
@@ -1327,15 +1327,6 @@ factory_disabled:
 }
 
 /* Factory stuff */
-
-typedef struct
-{
-  char *working_directory;
-  char *display_name;
-  char *startup_id;
-  int argc;
-  char **argv;
-} NewTerminalEvent;
 
 static GOptionContext *
 get_goption_context (OptionParsingResults *parsing_results)
@@ -1773,29 +1764,42 @@ get_goption_context (OptionParsingResults *parsing_results)
 }
 
 static gboolean
-handle_new_terminal_event (NewTerminalEvent *event)
+handle_new_terminal_event (OptionParsingResults *parsing_results)
 {
-  GOptionContext *context;
-  OptionParsingResults *parsing_results;
-  GError *error = NULL;
-  int argc = event->argc;
-  char **argv = event->argv;
+  new_terminal_with_options (terminal_app_get (), parsing_results);
 
-  parsing_results = option_parsing_results_new (event->working_directory,
-                                                event->display_name,
-                                                event->startup_id,
+  return FALSE;
+}
+
+static gboolean
+terminal_factory_new_terminal (TerminalFactory *factory,
+                               const char *working_directory,
+                               const char *display_name,
+                               const char *startup_id,
+                               const char **arguments,
+                               GError **error)
+{
+  OptionParsingResults *parsing_results;
+  GOptionContext *context;
+  char **argv;
+  int argc;
+
+  argc = g_strv_length ((char **) arguments);
+  argv = (char **) g_memdup (arguments, (argc + 1) * sizeof (char *));
+
+  parsing_results = option_parsing_results_new (working_directory,
+                                                display_name,
+                                                startup_id,
                                                 &argc, argv);
 
+  /* FIXMEchpe: I don't think we need this for the forwarded args! */
   /* Find and parse --display */
   option_parsing_results_check_for_display_name (parsing_results, &argc, argv);
 
   context = get_goption_context (parsing_results);
   g_option_context_set_ignore_unknown_options (context, TRUE);
-  if (!g_option_context_parse (context, &argc, &argv, &error))
+  if (!g_option_context_parse (context, &argc, &argv, error))
     {
-      g_warning ("Error parsing options: %s, passed from terminal child",
-                 error->message);
-      g_error_free (error);
       g_option_context_free (context);
       option_parsing_results_free (parsing_results);
 
@@ -1805,43 +1809,10 @@ handle_new_terminal_event (NewTerminalEvent *event)
 
   option_parsing_results_apply_directory_defaults (parsing_results);
 
-  new_terminal_with_options (terminal_app_get (), parsing_results);
-  option_parsing_results_free (parsing_results);
-
-  return FALSE;
-}
-
-static void
-new_terminal_event_free (NewTerminalEvent *event)
-{
-  g_free (event->working_directory);
-  g_free (event->display_name);
-  g_free (event->startup_id);
-  g_strfreev (event->argv);
-  g_slice_free (NewTerminalEvent, event);
-}
-
-static gboolean
-terminal_factory_new_terminal (TerminalFactory *factory,
-                               const char *working_directory,
-                               const char *display_name,
-                               const char *startup_id,
-                               const char **argv,
-                               GError **error)
-{
-  NewTerminalEvent *event;
-
-  event = g_slice_new0 (NewTerminalEvent);
-  event->working_directory = g_strdup (working_directory);
-  event->display_name = g_strdup (display_name);
-  event->startup_id = g_strdup (startup_id);
-  event->argc = g_strv_length ((char **) argv);
-  event->argv = g_strdupv ((char **) argv);
-
   g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                    (GSourceFunc) handle_new_terminal_event,
-                   event,
-                   (GDestroyNotify) new_terminal_event_free);
+                   parsing_results,
+                   (GDestroyNotify) option_parsing_results_free);
 
   return TRUE;
 }
