@@ -2563,6 +2563,7 @@ file_new_window_callback (GtkAction *action,
   terminal_app_new_terminal (app, new_window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
+                             terminal_screen_get_initial_environment (priv->active_screen),
                              1.0);
 
   gtk_window_present (GTK_WINDOW (new_window));
@@ -2589,6 +2590,7 @@ file_new_tab_callback (GtkAction *action,
   terminal_app_new_terminal (app, window, profile,
                              NULL, NULL,
                              terminal_screen_get_working_dir (priv->active_screen),
+                             terminal_screen_get_initial_environment (priv->active_screen),
                              1.0);
 }
 

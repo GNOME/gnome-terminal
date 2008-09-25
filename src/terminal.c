@@ -78,6 +78,7 @@ terminal_factory_new_terminal (TerminalFactory *factory,
                                const char *display_name,
                                const char *startup_id,
                                const char **argv,
+                               const char **env,
                                GError **error);
 
 #include "terminal-factory-client.h"
@@ -126,6 +127,7 @@ static TerminalFactory *factory = NULL;
 
 typedef struct
 {
+  char   **env;
   char    *startup_id;
   char    *display_name;
   int      screen_number;
@@ -781,6 +783,7 @@ static OptionParsingResults *
 option_parsing_results_new (const char *working_directory,
                             const char *display_name,
                             const char *startup_id,
+                            const char **env,
                             int *argc,
                             char **argv)
 {
@@ -796,6 +799,7 @@ option_parsing_results_new (const char *working_directory,
   results->execute = FALSE;
   results->use_factory = TRUE;
 
+  results->env = g_strdupv ((char **) env);
   results->startup_id = g_strdup (startup_id);
   results->display_name = g_strdup (display_name);
   results->initial_windows = NULL;
@@ -849,6 +853,7 @@ option_parsing_results_free (OptionParsingResults *results)
   g_list_foreach (results->initial_windows, (GFunc) initial_window_free, NULL);
   g_list_free (results->initial_windows);
 
+  g_strfreev (results->env);
   g_free (results->default_role);
   g_free (results->default_geometry);
   g_free (results->default_working_dir);
@@ -1098,6 +1103,7 @@ new_terminal_with_options (TerminalApp *app,
                                               it->exec_argv,
                                               it->title,
                                               it->working_dir,
+                                              results->env,
                                               it->zoom_set ? it->zoom : results->zoom);
 
           if (it->active)
@@ -1190,7 +1196,7 @@ main (int argc, char **argv)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
-  parsing_results = option_parsing_results_new (NULL, NULL, NULL, &argc, argv);
+  parsing_results = option_parsing_results_new (NULL, NULL, NULL, NULL, &argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id != NULL && startup_id[0] != '\0')
     {
@@ -1272,7 +1278,25 @@ main (int argc, char **argv)
   /* Forward to the existing factory and exit */
   if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
     {
+      char **env;
+      const char *evalue;
+      guint i, n;
+      GPtrArray *env_array;
       int ret = EXIT_SUCCESS;
+
+      env = g_listenv ();
+      n = g_strv_length (env);
+      env_array = g_ptr_array_sized_new (n);
+      for (i = 0; i < n; ++i)
+        {
+          evalue = g_getenv (env[i]);
+          if (evalue)
+            g_ptr_array_add (env_array, g_strdup_printf ("%s=%s", env[i], evalue));
+        }
+      g_ptr_array_add (env_array, NULL);
+
+      g_strfreev (env);
+      env = (char **) g_ptr_array_free (env_array, FALSE);
 
       proxy = dbus_g_proxy_new_for_name (connection,
                                          TERMINAL_FACTORY_SERVICE_NAME,
@@ -1282,6 +1306,7 @@ main (int argc, char **argv)
                                                     g_get_current_dir (),
                                                     parsing_results->display_name,
                                                     parsing_results->startup_id,
+                                                    (const char **) env,
                                                     (const char **) argv_copy,
                                                     &error))
         {
@@ -1291,6 +1316,7 @@ main (int argc, char **argv)
         }
 
       g_free (argv_copy);
+      g_strfreev (env);
       option_parsing_results_free (parsing_results);
 
       exit (ret);
@@ -1776,6 +1802,7 @@ terminal_factory_new_terminal (TerminalFactory *factory,
                                const char *working_directory,
                                const char *display_name,
                                const char *startup_id,
+                               const char **env,
                                const char **arguments,
                                GError **error)
 {
@@ -1790,6 +1817,7 @@ terminal_factory_new_terminal (TerminalFactory *factory,
   parsing_results = option_parsing_results_new (working_directory,
                                                 display_name,
                                                 startup_id,
+                                                env,
                                                 &argc, argv);
 
   /* FIXMEchpe: I don't think we need this for the forwarded args! */

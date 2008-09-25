@@ -1634,6 +1634,7 @@ terminal_app_new_terminal (TerminalApp     *app,
                            char           **override_command,
                            const char      *title,
                            const char      *working_dir,
+                           char           **child_env,
                            double           zoom)
 {
   TerminalScreen *screen;
@@ -1658,6 +1659,9 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   if (override_command)
     terminal_screen_set_override_command (screen, override_command);
+
+  if (child_env)
+    terminal_screen_set_initial_environment (screen, child_env);
 
   terminal_screen_set_font_scale (screen, zoom);
   terminal_screen_set_font (screen);

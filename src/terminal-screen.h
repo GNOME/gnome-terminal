@@ -84,6 +84,10 @@ void         terminal_screen_set_override_command (TerminalScreen  *screen,
                                                    char           **argv);
 const char** terminal_screen_get_override_command (TerminalScreen  *screen);
 
+void         terminal_screen_set_initial_environment (TerminalScreen  *screen,
+                                                      char           **argv);
+char **      terminal_screen_get_initial_environment (TerminalScreen  *screen);
+
 void terminal_screen_launch_child (TerminalScreen *screen);
 
 const char* terminal_screen_get_raw_title      (TerminalScreen *screen);
