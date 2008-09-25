@@ -1311,6 +1311,15 @@ main (int argc, char **argv)
                                                     (const char **) argv_copy,
                                                     &error))
         {
+          if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_UNKNOWN_METHOD))
+            {
+              /* Incompatible factory version, fall back, to new instance */
+              g_printerr (_("Incompatible factory version; creating a new instance.\n"));
+              g_strfreev (env);
+
+              goto factory_disabled;
+            }
+
           g_printerr (_("Factory error: %s\n"), error->message);
           g_error_free (error);
           ret = EXIT_FAILURE;
