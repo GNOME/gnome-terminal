@@ -156,9 +156,7 @@ static void terminal_reset_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void terminal_reset_clear_callback     (GtkAction *action,
                                                TerminalWindow *window);
-static void tabs_next_tab_callback            (GtkAction *action,
-                                               TerminalWindow *window);
-static void tabs_previous_tab_callback        (GtkAction *action,
+static void tabs_next_or_previous_tab_cb      (GtkAction *action,
                                                TerminalWindow *window);
 static void tabs_move_left_callback           (GtkAction *action,
                                                TerminalWindow *window);
@@ -1399,10 +1397,10 @@ terminal_window_init (TerminalWindow *window)
       /* Tabs menu */
       { "TabsPrevious", NULL, N_("_Previous Tab"), "<control>Page_Up",
         NULL,
-        G_CALLBACK (tabs_previous_tab_callback) },
+        G_CALLBACK (tabs_next_or_previous_tab_cb) },
       { "TabsNext", NULL, N_("_Next Tab"), "<control>Page_Down",
         NULL,
-        G_CALLBACK (tabs_next_tab_callback) },
+        G_CALLBACK (tabs_next_or_previous_tab_cb) },
       { "TabsMoveLeft", NULL, N_("Move Tab _Left"), "<shift><control>Page_Up",
         NULL,
         G_CALLBACK (tabs_move_left_callback) },
@@ -3030,21 +3028,28 @@ terminal_reset_clear_callback (GtkAction *action,
 }
 
 static void
-tabs_next_tab_callback (GtkAction *action,
-                        TerminalWindow *window)
+tabs_next_or_previous_tab_cb (GtkAction *action,
+                              TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  
-  gtk_notebook_next_page (GTK_NOTEBOOK (priv->notebook));
-}
+  GtkNotebookClass *klass;
+  GtkBindingSet *binding_set;
+  const char *name;
+  guint keyval = 0;
 
-static void
-tabs_previous_tab_callback (GtkAction *action,
-                            TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  
-  gtk_notebook_prev_page (GTK_NOTEBOOK (priv->notebook));
+  name = gtk_action_get_name (action);
+  if (strcmp (name, "TabsNext") == 0) {
+    keyval = GDK_Page_Down;
+  } else if (strcmp (name, "TabsPrevious") == 0) {
+    keyval = GDK_Page_Up;
+  }
+
+  klass = GTK_NOTEBOOK_GET_CLASS (GTK_NOTEBOOK (priv->notebook));
+  binding_set = gtk_binding_set_by_class (klass);
+  gtk_binding_set_activate (gtk_binding_set_by_class (klass),
+                            keyval,
+                            GDK_CONTROL_MASK,
+                            GTK_OBJECT (priv->notebook));
 }
 
 static void
