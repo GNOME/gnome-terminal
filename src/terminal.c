@@ -328,6 +328,18 @@ unsupported_option_callback (const gchar *option_name,
 
 
 static gboolean
+option_version_cb (const gchar *option_name,
+                   const gchar *value,
+                   gpointer     data,
+                   GError     **error)
+{
+  g_printerr ("%s %s\n", _("GNOME Terminal"), VERSION);
+
+  exit (EXIT_SUCCESS);
+  return FALSE;
+}
+
+static gboolean
 option_command_callback (const gchar *option_name,
                          const gchar *value,
                          gpointer     data,
@@ -1387,6 +1399,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Execute the remainder of the command line inside the terminal"),
       NULL
     },
+    { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
