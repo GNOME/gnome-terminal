@@ -140,6 +140,8 @@ typedef struct
   char    *default_geometry;
   char    *default_working_dir;
   char   **post_execute_args;
+  char    *default_profile;
+  gboolean default_profile_is_id;
 
   gboolean  execute;
   gboolean  use_factory;
@@ -364,6 +366,60 @@ option_command_callback (const gchar *option_name,
 
   it = ensure_top_tab (results);
   it->exec_argv = exec_argv;
+
+  return TRUE;
+}
+
+
+static gboolean
+option_profile_cb (const gchar *option_name,
+                   const gchar *value,
+                   gpointer     data,
+                   GError     **error)
+{
+  OptionParsingResults *results = data;
+
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+
+      g_free (it->profile);
+      it->profile = g_strdup (value);
+      it->profile_is_id = FALSE;
+    }
+  else
+    {
+      g_free (results->default_profile);
+      results->default_profile = g_strdup (value);
+      results->default_profile_is_id = FALSE;
+    }
+
+  return TRUE;
+}
+
+
+static gboolean
+option_profile_id_cb (const gchar *option_name,
+                      const gchar *value,
+                      gpointer     data,
+                      GError     **error)
+{
+  OptionParsingResults *results = data;
+
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+
+      g_free (it->profile);
+      it->profile = g_strdup (value);
+      it->profile_is_id = TRUE;
+    }
+  else
+    {
+      g_free (results->default_profile);
+      results->default_profile = g_strdup (value);
+      results->default_profile_is_id = TRUE;
+    }
 
   return TRUE;
 }
@@ -869,6 +925,7 @@ option_parsing_results_free (OptionParsingResults *results)
   g_free (results->default_role);
   g_free (results->default_geometry);
   g_free (results->default_working_dir);
+  g_free (results->default_profile);
 
   g_strfreev (results->post_execute_args);
 
@@ -1097,13 +1154,26 @@ new_terminal_with_options (TerminalApp *app,
           InitialTab *it = lt->data;
           TerminalProfile *profile = NULL;
           TerminalScreen *screen;
+          const char *profile_name;
+          gboolean profile_is_id;
 
           if (it->profile)
             {
-              if (it->profile_is_id)
-                profile = terminal_app_get_profile_by_name (app, it->profile);
+              profile_name = it->profile;
+              profile_is_id = it->profile_is_id;
+            }
+          else
+            {
+              profile_name = results->default_profile;
+              profile_is_id = results->default_profile_is_id;
+            }
+
+          if (profile_name)
+            {
+              if (profile_is_id)
+                profile = terminal_app_get_profile_by_name (app, profile_name);
               else
-                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
+                profile = terminal_app_get_profile_by_visible_name (app, profile_name);
 
               if (profile == NULL)
                 g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
@@ -1422,24 +1492,6 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Open a new tab in the last-opened window with the default profile"),
       NULL
     },
-    {
-      "window-with-profile",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_window_with_profile_callback,
-      N_("Open a new window containing a tab with the given profile"),
-      N_("PROFILE-NAME")
-    },
-    {
-      "tab-with-profile",
-      0,
-      0,
-      G_OPTION_ARG_CALLBACK,
-      option_tab_with_profile_callback,
-      N_("Open a new tab in the last-opened window with the given profile"),
-      N_("PROFILE-NAME")
-    },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
@@ -1498,6 +1550,15 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Set the window role"),
       N_("ROLE")
     },
+    {
+      "active",
+      0,
+      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_ARG_CALLBACK,
+      option_active_callback,
+      N_("Set the last specified tab as the active one in its window"),
+      NULL
+    },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
@@ -1510,6 +1571,15 @@ get_goption_context (OptionParsingResults *parsing_results)
       option_command_callback,
       N_("Execute the argument to this option inside the terminal"),
       NULL
+    },
+    {
+      "profile",
+      0,
+      0,
+      G_OPTION_ARG_CALLBACK,
+      option_profile_cb,
+      N_("Use the given profile instead of the default profile"),
+      N_("PROFILE-NAME")
     },
     {
       "title",
@@ -1538,19 +1608,34 @@ get_goption_context (OptionParsingResults *parsing_results)
       N_("Set the terminalx's zoom factor (1.0 = normal size)"),
       N_("ZOOM")
     },
-    {
-      "active",
-      0,
-      G_OPTION_FLAG_NO_ARG,
-      G_OPTION_ARG_CALLBACK,
-      option_active_callback,
-      N_("Set the last specified tab as the active one in its window"),
-      NULL
-    },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
   const GOptionEntry internal_goptions[] = {  
+    {
+      "profile-id",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      option_profile_id_cb,
+      NULL, NULL
+    },
+    {
+      "window-with-profile",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      option_window_with_profile_callback,
+      NULL, NULL
+    },
+    {
+      "tab-with-profile",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      option_tab_with_profile_callback,
+      NULL, NULL
+    },
     {
       "window-with-profile-internal-id",
       0,
