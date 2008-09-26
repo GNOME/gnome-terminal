@@ -1316,6 +1316,7 @@ main (int argc, char **argv)
               /* Incompatible factory version, fall back, to new instance */
               g_printerr (_("Incompatible factory version; creating a new instance.\n"));
               g_strfreev (env);
+              g_error_free (error);
 
               goto factory_disabled;
             }
@@ -1755,8 +1756,9 @@ get_goption_context (OptionParsingResults *parsing_results)
   GOptionContext *context;
   GOptionGroup *group;
 
-  context = g_option_context_new (N_("GNOME Terminal Emulator"));
+  context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_set_description (context, N_("GNOME Terminal Emulator"));
 
   group = g_option_group_new ("gnome-terminal",
                               N_("GNOME Terminal Emulator"),
