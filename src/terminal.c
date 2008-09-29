@@ -1259,18 +1259,18 @@ about_url_hook (GtkAboutDialog *about,
 	        const char *link,
 	        gpointer user_data)
 {
-	GError *error = NULL;
+  GError *error = NULL;
 
-	if (!gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (about)),
-	                   link,
-	                   gtk_get_current_event_time (),
-	                   &error))
-	{
-	        terminal_util_show_error_dialog (GTK_WINDOW (about), NULL,
-                                                 _("Could not open link: %s"),
-                                                 error->message);
-	        g_error_free (error);
-	}
+  if (!gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (about)),
+                      link,
+                      gtk_get_current_event_time (),
+                      &error))
+    {
+      terminal_util_show_error_dialog (GTK_WINDOW (about), NULL,
+                                       _("Could not open link: %s"),
+                                       error->message);
+      g_error_free (error);
+    }
 }
 
 static void
@@ -1278,14 +1278,14 @@ about_email_hook (GtkAboutDialog *about,
 		  const char *email_address,
 		  gpointer user_data)
 {
-	char *escaped, *uri;
+  char *escaped, *uri;
 
-	escaped = g_uri_escape_string (email_address, NULL, FALSE);
-	uri = g_strdup_printf ("mailto:%s", escaped);
-	g_free (escaped);
+  escaped = g_uri_escape_string (email_address, NULL, FALSE);
+  uri = g_strdup_printf ("mailto:%s", escaped);
+  g_free (escaped);
 
-	about_url_hook (about, uri, user_data);
-	g_free (uri);
+  about_url_hook (about, uri, user_data);
+  g_free (uri);
 }
 
 int
