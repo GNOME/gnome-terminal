@@ -1254,6 +1254,40 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
   return event.xproperty.time;
 }
 
+static void
+about_url_hook (GtkAboutDialog *about,
+	        const char *link,
+	        gpointer user_data)
+{
+	GError *error = NULL;
+
+	if (!gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (about)),
+	                   link,
+	                   gtk_get_current_event_time (),
+	                   &error))
+	{
+	        terminal_util_show_error_dialog (GTK_WINDOW (about), NULL,
+                                                 _("Could not open link: %s"),
+                                                 error->message);
+	        g_error_free (error);
+	}
+}
+
+static void
+about_email_hook (GtkAboutDialog *about,
+		  const char *email_address,
+		  gpointer user_data)
+{
+	char *escaped, *uri;
+
+	escaped = g_uri_escape_string (email_address, NULL, FALSE);
+	uri = g_strdup_printf ("mailto:%s", escaped);
+	g_free (escaped);
+
+	about_url_hook (about, uri, user_data);
+	g_free (uri);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -1426,6 +1460,9 @@ factory_disabled:
   g_free (argv_copy);
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
+
+  gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
+  gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
   g_assert (parsing_results->post_execute_args == NULL);
 
