@@ -2564,6 +2564,8 @@ file_new_window_callback (GtkAction *action,
 
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
   if (!profile)
+    profile = terminal_screen_get_profile (priv->active_screen);
+  if (!profile)
     profile = terminal_app_get_profile_for_new_term (app);
   if (!profile)
     return;
@@ -2592,6 +2594,8 @@ file_new_tab_callback (GtkAction *action,
 
   app = terminal_app_get ();
   profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
+  if (!profile)
+    profile = terminal_screen_get_profile (priv->active_screen);
   if (!profile)
     profile = terminal_app_get_profile_for_new_term (app);
   if (!profile)
