@@ -885,10 +885,25 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   not_first = page_num > 0;
   not_last = page_num + 1 < num_pages;
 
+#if 1
+  /* NOTE: We always make next/prev actions sensitive except in
+   * single-tab windows, so the corresponding shortcut key escape code
+   * isn't sent to the terminal. See bug #453193 and bug #138609.
+   * This also makes tab cycling work, bug #92139.
+   * FIXME: Find a better way to do this.
+   */
+  action = gtk_action_group_get_action (action_group, "TabsPrevious");
+  gtk_action_set_sensitive (action, num_pages > 1);
+  action = gtk_action_group_get_action (action_group, "TabsNext");
+  gtk_action_set_sensitive (action, num_pages > 1);
+#else
+  /* This would be correct, but see the comment above. */
   action = gtk_action_group_get_action (action_group, "TabsPrevious");
   gtk_action_set_sensitive (action, not_first);
   action = gtk_action_group_get_action (action_group, "TabsNext");
   gtk_action_set_sensitive (action, not_last);
+#endif
+
   action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
   gtk_action_set_sensitive (action, not_first);
   action = gtk_action_group_get_action (action_group, "TabsMoveRight");
