@@ -25,8 +25,6 @@
 
 #include "terminal-intl.h"
 
-#undef G_DISABLE_SINGLE_INCLUDES
-
 #include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-window.h"
