@@ -627,6 +627,7 @@ terminal_screen_finalize (GObject *object)
   g_free (priv->cooked_icon_title);
   g_strfreev (priv->override_command);
   g_free (priv->working_dir);
+  g_strfreev (priv->initial_env);
 
   g_slist_foreach (priv->match_tags, (GFunc) free_tag_data, NULL);
   g_slist_free (priv->match_tags);
