@@ -180,7 +180,7 @@ unsupported_option_callback (const gchar *option_name,
 {
   g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal;"
                " you might want to create a profile with the desired setting, and use"
-               " the new '--window-with-profile' option\n"), option_name);
+               " the new '--profile' option\n"), option_name);
   return TRUE; /* we do not want to bail out here but continue */
 }
 
