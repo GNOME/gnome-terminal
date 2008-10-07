@@ -139,7 +139,8 @@ typedef struct
   char    *default_role;
   char    *default_geometry;
   char    *default_working_dir;
-  char   **post_execute_args;
+  char    *default_title;
+  char   **exec_argv;
   char    *default_profile;
   gboolean default_profile_is_id;
 
@@ -348,7 +349,6 @@ option_command_callback (const gchar *option_name,
                          GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialTab *it;
   GError *err = NULL;
   char  **exec_argv;
 
@@ -364,8 +364,18 @@ option_command_callback (const gchar *option_name,
       return FALSE;
     }
 
-  it = ensure_top_tab (results);
-  it->exec_argv = exec_argv;
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+
+      g_strfreev (it->exec_argv);
+      it->exec_argv = exec_argv;
+    }
+  else
+    {
+      g_strfreev (results->exec_argv);
+      results->exec_argv = exec_argv;
+    }
 
   return TRUE;
 }
@@ -446,11 +456,8 @@ option_window_with_profile_callback (const gchar *option_name,
                                      GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
-  const char *profile;
-  profile = value;
 
-  iw = add_new_window (results, profile, FALSE);
+  add_new_window (results, value, FALSE);
 
   return TRUE;
 }
@@ -463,19 +470,17 @@ option_tab_callback (const gchar *option_name,
                      GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
-  const char *profile = NULL;
 
   if (results->initial_windows)
     {
-      iw = g_list_last (results->initial_windows)->data;
+      InitialWindow *iw;
 
-      iw->tabs =
-      g_list_append (iw->tabs, initial_tab_new (profile, FALSE));
+      iw = g_list_last (results->initial_windows)->data;
+      iw->tabs = g_list_append (iw->tabs, initial_tab_new (NULL, FALSE));
     }
   else
     {
-      iw = add_new_window (results, profile, FALSE);
+      add_new_window (results, NULL, FALSE);
     }
 
   return TRUE;
@@ -489,17 +494,16 @@ option_tab_with_profile_callback (const gchar *option_name,
 				  GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
-  const gchar *profile = value;
 
   if (results->initial_windows)
     {
+      InitialWindow *iw;
+
       iw = g_list_last (results->initial_windows)->data;
-      iw->tabs =
-      g_list_append (iw->tabs, initial_tab_new (profile, FALSE));
+      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, FALSE));
     }
   else
-    iw = add_new_window (results, profile, FALSE);
+    add_new_window (results, value, FALSE);
 
   return TRUE;
 }
@@ -512,10 +516,8 @@ option_window_with_profile_internal_id_callback (const gchar *option_name,
                                                  GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
-  const char *profile = value;
 
-  iw = add_new_window (results, profile, TRUE);
+  add_new_window (results, value, TRUE);
 
   return TRUE;
 }
@@ -528,18 +530,17 @@ option_tab_with_profile_internal_id_callback (const gchar *option_name,
 					      GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
-  const char *profile = value;
 
   if (results->initial_windows)
     {
+      InitialWindow *iw;
+
       iw = g_list_last (results->initial_windows)->data;
 
-      iw->tabs =
-      g_list_append (iw->tabs, initial_tab_new (profile, TRUE));
+      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, TRUE));
     }
   else
-    iw = add_new_window (results, profile, TRUE);
+    add_new_window (results, value, TRUE);
 
   return TRUE;
 }
@@ -574,9 +575,9 @@ option_role_callback (const gchar *option_name,
 
 static gboolean
 option_show_menubar_callback (const gchar *option_name,
-                         const gchar *value,
-                         gpointer     data,
-                         GError     **error)
+                              const gchar *value,
+                              gpointer     data,
+                              GError     **error)
 {
   OptionParsingResults *results = data;
   InitialWindow *iw;
@@ -664,10 +665,11 @@ option_fullscreen_callback (const gchar *option_name,
                             GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialWindow *iw;
 
   if (results->initial_windows)
     {
+      InitialWindow *iw;
+
       iw = g_list_last (results->initial_windows)->data;
       iw->start_fullscreen = TRUE;
     }
@@ -719,9 +721,19 @@ option_title_callback (const gchar *option_name,
                        GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialTab *it = ensure_top_tab (results);
 
-  it->title = g_strdup (value);
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+
+      g_free (it->title);
+      it->title = g_strdup (value);
+    }
+  else
+    {
+      g_free (results->default_title);
+      results->default_title = g_strdup (value);
+    }
 
   return TRUE;
 }
@@ -734,9 +746,19 @@ option_working_directory_callback (const gchar *option_name,
                                    GError     **error)
 {
   OptionParsingResults *results = data;
-  InitialTab *it = ensure_top_tab (results);
 
-  it->working_dir = g_strdup (value);
+  if (results->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (results);
+
+      g_free (it->working_dir);
+      it->working_dir = g_strdup (value);
+    }
+  else
+    {
+      g_free (results->default_working_dir);
+      results->default_working_dir = g_strdup (value);
+    }
 
   return TRUE;
 }
@@ -828,20 +850,21 @@ digest_options_callback (GOptionContext *context,
 
   if (results->execute)
     {
-      if (results->post_execute_args == NULL)
+      if (results->exec_argv == NULL)
         {
           g_set_error (error,
                        G_OPTION_ERROR,
                        G_OPTION_ERROR_BAD_VALUE,
                        _("Option \"%s\" requires specifying the command to run"
-                       " on the rest of the command line"),
+                         " on the rest of the command line"),
                        "--execute/-x");
           return FALSE;
         }
 
+      /* Apply -x/--execute command only to the first tab */
       it = ensure_top_tab (results);
-      it->exec_argv = results->post_execute_args;
-      results->post_execute_args = NULL;
+      it->exec_argv = results->exec_argv;
+      results->exec_argv = NULL;
     }
 
   return TRUE;
@@ -873,43 +896,43 @@ option_parsing_results_new (const char *working_directory,
   results->initial_windows = NULL;
   results->default_role = NULL;
   results->default_geometry = NULL;
+  results->default_title = NULL;
   results->zoom = 1.0;
 
   results->screen_number = -1;
   results->default_working_dir = g_strdup (working_directory);
 
-  /* pre-scan for -x and --execute options (code from old gnome-terminal) */
-  results->post_execute_args = NULL;
-  i = 1;
-  while (i < *argc)
+  /* The old -x/--execute option is broken, so we need to pre-scan for it. */
+  /* We now also support passing the command after the -- switch. */
+  results->exec_argv = NULL;
+  for (i = 1 ; i < *argc; ++i)
     {
-      if (strcmp (argv[i], "-x") == 0 ||
-          strcmp (argv[i], "--execute") == 0)
-        {
-          int last;
-          int j;
+      gboolean is_execute;
+      gboolean is_dashdash;
+      int j, last;
 
-          ++i;
-          last = i;
-          if (i == *argc)
-            break; /* we'll complain about this later. */
+      is_execute = strcmp (argv[i], "-x") == 0 || strcmp (argv[i], "--execute") == 0;
+      is_dashdash = strcmp (argv[i], "--") == 0;
 
-          results->post_execute_args = g_new0 (char*, *argc - i + 1);
-          j = 0;
-          while (i < *argc)
-            {
-              results->post_execute_args[j] = g_strdup (argv[i]);
+      if (!is_execute && !is_dashdash)
+        continue;
 
-              i++;
-              j++;
-            }
-          results->post_execute_args[j] = NULL;
+      results->execute = is_execute;
 
-          /* strip the args we used up, also ends the loop since i >= last */
-          *argc = last;
-        }
-
+      /* Skip the switch */
+      last = i;
       ++i;
+      if (i == *argc)
+        break; /* we'll complain about this later for -x/--execute; it's fine for -- */
+
+      /* Collect the args, and remove them from argv */
+      results->exec_argv = g_new0 (char*, *argc - i + 1);
+      for (j = 0; i < *argc; ++i, ++j)
+        results->exec_argv[j] = g_strdup (argv[i]);
+      results->exec_argv[j] = NULL;
+
+      *argc = last;
+      break;
     }
 
   return results;
@@ -925,9 +948,10 @@ option_parsing_results_free (OptionParsingResults *results)
   g_free (results->default_role);
   g_free (results->default_geometry);
   g_free (results->default_working_dir);
+  g_free (results->default_title);
   g_free (results->default_profile);
 
-  g_strfreev (results->post_execute_args);
+  g_strfreev (results->exec_argv);
 
   g_free (results->display_name);
   g_free (results->startup_id);
@@ -1087,32 +1111,6 @@ find_screen_by_display_name (const char *display_name,
 }
 
 static void
-option_parsing_results_apply_directory_defaults (OptionParsingResults *results)
-{
-  GList *w, *t;
-
-  if (results->default_working_dir == NULL)
-    return;
-
-  for (w = results->initial_windows; w; w = w ->next)
-    {
-      InitialWindow *window;
-
-      window = (InitialWindow*) w->data;
-
-      for (t = window->tabs; t ; t = t->next)
-        {
-          InitialTab *tab;
-
-          tab = (InitialTab*) t->data;
-
-          if (tab->working_dir == NULL)
-            tab->working_dir = g_strdup (results->default_working_dir);
-        }
-    }
-}
-
-static void
 new_terminal_with_options (TerminalApp *app,
                            OptionParsingResults *results)
 {
@@ -1183,9 +1181,9 @@ new_terminal_with_options (TerminalApp *app,
           g_assert (profile);
 
           screen = terminal_app_new_terminal (app, window, profile,
-                                              it->exec_argv,
-                                              it->title,
-                                              it->working_dir,
+                                              it->exec_argv ? it->exec_argv : results->exec_argv,
+                                              it->title ? it->title : results->default_title,
+                                              it->working_dir ? it->working_dir : results->default_working_dir,
                                               results->env,
                                               it->zoom_set ? it->zoom : results->zoom);
 
@@ -1354,8 +1352,6 @@ main (int argc, char **argv)
   display_name = gdk_display_get_name (display);
   parsing_results->display_name = g_strdup (display_name);
   
-  option_parsing_results_apply_directory_defaults (parsing_results);
-
   if (!parsing_results->use_factory)
     goto factory_disabled;
 
@@ -1464,8 +1460,6 @@ factory_disabled:
   gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
   gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
-  g_assert (parsing_results->post_execute_args == NULL);
-
   terminal_app_initialize (parsing_results->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
@@ -1495,15 +1489,6 @@ get_goption_context (OptionParsingResults *parsing_results)
       G_OPTION_ARG_CALLBACK,
       option_disable_factory_callback,
       N_("Do not register with the activation nameserver, do not re-use an active terminal"),
-      NULL
-    },
-    {
-      "execute",
-      'x',
-      0,
-      G_OPTION_ARG_NONE,
-      &parsing_results->execute,
-      N_("Execute the remainder of the command line inside the terminal"),
       NULL
     },
     { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
@@ -1981,8 +1966,6 @@ terminal_factory_new_terminal (TerminalFactory *factory,
       return FALSE;
     }
   g_option_context_free (context);
-
-  option_parsing_results_apply_directory_defaults (parsing_results);
 
   g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                    (GSourceFunc) handle_new_terminal_event,
