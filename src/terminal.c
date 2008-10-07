@@ -186,7 +186,7 @@ find_screen_by_display_name (const char *display_name,
 
 static void
 new_terminal_with_options (TerminalApp *app,
-                           OptionParsingResults *results)
+                           TerminalOptions *results)
 {
   GList *lw;
   GdkScreen *screen;
@@ -369,7 +369,7 @@ main (int argc, char **argv)
   const char *startup_id;
   const char *display_name;
   GdkDisplay *display;
-  OptionParsingResults *parsing_results;
+  TerminalOptions *options;
   DBusGConnection *connection;
   DBusGProxy *proxy;
   guint32 request_name_ret;
@@ -385,11 +385,11 @@ main (int argc, char **argv)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
-  parsing_results = option_parsing_results_new (NULL, NULL, NULL, NULL, &argc, argv);
+  options = option_options_new (NULL, NULL, NULL, NULL, &argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id != NULL && startup_id[0] != '\0')
     {
-      parsing_results->startup_id = g_strdup (startup_id);
+      options->startup_id = g_strdup (startup_id);
       g_unsetenv ("DESKTOP_STARTUP_ID");
     }
 
@@ -397,7 +397,7 @@ main (int argc, char **argv)
                                                      * to complicated factory setup
                                                      */
 
-  context = terminal_options_get_goption_context (parsing_results);
+  context = terminal_options_get_goption_context (options);
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
   g_option_context_add_group (context, egg_sm_client_get_option_group ());
 
@@ -413,20 +413,20 @@ main (int argc, char **argv)
   g_set_application_name (_("Terminal"));
   
  /* Do this here so that gdk_display is initialized */
-  if (parsing_results->startup_id == NULL)
+  if (options->startup_id == NULL)
     {
       /* Create a fake one containing a timestamp that we can use */
       Time timestamp;
       timestamp = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
 
-      parsing_results->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
+      options->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
     }
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);
-  parsing_results->display_name = g_strdup (display_name);
+  options->display_name = g_strdup (display_name);
   
-  if (!parsing_results->use_factory)
+  if (!options->use_factory)
     goto factory_disabled;
 
   /* Now try to acquire register us as the terminal factory */
@@ -491,8 +491,8 @@ main (int argc, char **argv)
                                          TERMINAL_FACTORY_INTERFACE_NAME);
       if (!org_gnome_Terminal_Factory_new_terminal (proxy,
                                                     g_get_current_dir (),
-                                                    parsing_results->display_name,
-                                                    parsing_results->startup_id,
+                                                    options->display_name,
+                                                    options->startup_id,
                                                     (const char **) env,
                                                     (const char **) argv_copy,
                                                     &error))
@@ -514,7 +514,7 @@ main (int argc, char **argv)
 
       g_free (argv_copy);
       g_strfreev (env);
-      option_parsing_results_free (parsing_results);
+      option_options_free (options);
 
       exit (ret);
     }
@@ -534,11 +534,11 @@ factory_disabled:
   gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
   gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
-  terminal_app_initialize (parsing_results->use_factory);
+  terminal_app_initialize (options->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  new_terminal_with_options (terminal_app_get (), parsing_results);
-  option_parsing_results_free (parsing_results);
+  new_terminal_with_options (terminal_app_get (), options);
+  option_options_free (options);
 
   gtk_main ();
 
@@ -553,9 +553,9 @@ factory_disabled:
 /* Factory stuff */
 
 static gboolean
-handle_new_terminal_event (OptionParsingResults *parsing_results)
+handle_new_terminal_event (TerminalOptions *options)
 {
-  new_terminal_with_options (terminal_app_get (), parsing_results);
+  new_terminal_with_options (terminal_app_get (), options);
 
   return FALSE;
 }
@@ -569,7 +569,7 @@ terminal_factory_new_terminal (TerminalFactory *factory,
                                const char **arguments,
                                GError **error)
 {
-  OptionParsingResults *parsing_results;
+  TerminalOptions *options;
   GOptionContext *context;
   char **argv;
   int argc;
@@ -577,7 +577,7 @@ terminal_factory_new_terminal (TerminalFactory *factory,
   argc = g_strv_length ((char **) arguments);
   argv = (char **) g_memdup (arguments, (argc + 1) * sizeof (char *));
 
-  parsing_results = option_parsing_results_new (working_directory,
+  options = option_options_new (working_directory,
                                                 display_name,
                                                 startup_id,
                                                 env,
@@ -585,14 +585,14 @@ terminal_factory_new_terminal (TerminalFactory *factory,
 
   /* FIXMEchpe: I don't think we need this for the forwarded args! */
   /* Find and parse --display */
-  option_parsing_results_check_for_display_name (parsing_results, &argc, argv);
+  option_options_check_for_display_name (options, &argc, argv);
 
-  context = terminal_options_get_goption_context (parsing_results);
+  context = terminal_options_get_goption_context (options);
   g_option_context_set_ignore_unknown_options (context, TRUE);
   if (!g_option_context_parse (context, &argc, &argv, error))
     {
       g_option_context_free (context);
-      option_parsing_results_free (parsing_results);
+      option_options_free (options);
 
       return FALSE;
     }
@@ -600,8 +600,8 @@ terminal_factory_new_terminal (TerminalFactory *factory,
 
   g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                    (GSourceFunc) handle_new_terminal_event,
-                   parsing_results,
-                   (GDestroyNotify) option_parsing_results_free);
+                   options,
+                   (GDestroyNotify) option_options_free);
 
   return TRUE;
 }

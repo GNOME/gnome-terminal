@@ -59,9 +59,9 @@ typedef struct
   gboolean  execute;
   gboolean  use_factory;
   double    zoom;
-} OptionParsingResults;
+} TerminalOptions;
 
-GOptionContext *get_goption_context (OptionParsingResults *parsing_results);
+GOptionContext *get_goption_context (TerminalOptions *options);
 
 typedef struct
 {
@@ -90,18 +90,18 @@ typedef struct
 
 } InitialWindow;
 
-OptionParsingResults *option_parsing_results_new (const char *working_directory,
+TerminalOptions *option_options_new (const char *working_directory,
                                                   const char *display_name,
                                                   const char *startup_id,
                                                   const char **env,
                                                   int *argc,
                                                   char **argv);
 
-void option_parsing_results_free (OptionParsingResults *results);
+void option_options_free (TerminalOptions *options);
 
-GOptionContext * terminal_options_get_goption_context (OptionParsingResults *parsing_results);
+GOptionContext * terminal_options_get_goption_context (TerminalOptions *options);
 
-void option_parsing_results_check_for_display_name (OptionParsingResults *results,
+void option_options_check_for_display_name (TerminalOptions *options,
                                                     int *argc, char **argv);
 
 G_END_DECLS

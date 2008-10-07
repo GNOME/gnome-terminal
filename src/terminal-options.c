@@ -90,46 +90,46 @@ initial_window_free (InitialWindow *iw)
 }
 
 static void
-apply_defaults (OptionParsingResults *results,
+apply_defaults (TerminalOptions *options,
                 InitialWindow        *iw)
 {
-  if (results->default_role)
+  if (options->default_role)
     {
-      iw->role = results->default_role;
-      results->default_role = NULL;
+      iw->role = options->default_role;
+      options->default_role = NULL;
     }
 
   if (iw->geometry == NULL)
-    iw->geometry = g_strdup (results->default_geometry);
+    iw->geometry = g_strdup (options->default_geometry);
 
-  if (results->default_window_menubar_forced)
+  if (options->default_window_menubar_forced)
     {
       iw->force_menubar_state = TRUE;
-      iw->menubar_state = results->default_window_menubar_state;
+      iw->menubar_state = options->default_window_menubar_state;
 
-      results->default_window_menubar_forced = FALSE;
+      options->default_window_menubar_forced = FALSE;
     }
 
-  iw->start_fullscreen |= results->default_fullscreen;
-  iw->start_maximized |= results->default_maximize;
+  iw->start_fullscreen |= options->default_fullscreen;
+  iw->start_maximized |= options->default_maximize;
 }
 
 static InitialWindow*
-ensure_top_window (OptionParsingResults *results)
+ensure_top_window (TerminalOptions *options)
 {
   InitialWindow *iw;
 
-  if (results->initial_windows == NULL)
+  if (options->initial_windows == NULL)
     {
       iw = initial_window_new (NULL, FALSE);
-      apply_defaults (results, iw);
+      apply_defaults (options, iw);
 
-      results->initial_windows = g_list_append (results->initial_windows,
+      options->initial_windows = g_list_append (options->initial_windows,
                                                 iw);
     }
   else
     {
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
     }
 
   g_assert (iw->tabs);
@@ -138,12 +138,12 @@ ensure_top_window (OptionParsingResults *results)
 }
 
 static InitialTab*
-ensure_top_tab (OptionParsingResults *results)
+ensure_top_tab (TerminalOptions *options)
 {
   InitialWindow *iw;
   InitialTab *it;
 
-  iw = ensure_top_window (results);
+  iw = ensure_top_window (options);
 
   g_assert (iw->tabs);
 
@@ -153,7 +153,7 @@ ensure_top_tab (OptionParsingResults *results)
 }
 
 static InitialWindow*
-add_new_window (OptionParsingResults *results,
+add_new_window (TerminalOptions *options,
                 const char           *profile,
                 gboolean              is_id)
 {
@@ -161,9 +161,9 @@ add_new_window (OptionParsingResults *results,
 
   iw = initial_window_new (profile, is_id);
 
-  apply_defaults (results, iw);
+  apply_defaults (options, iw);
 
-  results->initial_windows = g_list_append (results->initial_windows, iw);
+  options->initial_windows = g_list_append (options->initial_windows, iw);
 
   return iw;
 }
@@ -200,7 +200,7 @@ option_command_callback (const gchar *option_name,
                          gpointer     data,
                          GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   GError *err = NULL;
   char  **exec_argv;
 
@@ -216,17 +216,17 @@ option_command_callback (const gchar *option_name,
       return FALSE;
     }
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
 
       g_strfreev (it->exec_argv);
       it->exec_argv = exec_argv;
     }
   else
     {
-      g_strfreev (results->exec_argv);
-      results->exec_argv = exec_argv;
+      g_strfreev (options->exec_argv);
+      options->exec_argv = exec_argv;
     }
 
   return TRUE;
@@ -238,11 +238,11 @@ option_profile_cb (const gchar *option_name,
                    gpointer     data,
                    GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
 
       g_free (it->profile);
       it->profile = g_strdup (value);
@@ -250,9 +250,9 @@ option_profile_cb (const gchar *option_name,
     }
   else
     {
-      g_free (results->default_profile);
-      results->default_profile = g_strdup (value);
-      results->default_profile_is_id = FALSE;
+      g_free (options->default_profile);
+      options->default_profile = g_strdup (value);
+      options->default_profile_is_id = FALSE;
     }
 
   return TRUE;
@@ -264,11 +264,11 @@ option_profile_id_cb (const gchar *option_name,
                       gpointer     data,
                       GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
 
       g_free (it->profile);
       it->profile = g_strdup (value);
@@ -276,9 +276,9 @@ option_profile_id_cb (const gchar *option_name,
     }
   else
     {
-      g_free (results->default_profile);
-      results->default_profile = g_strdup (value);
-      results->default_profile_is_id = TRUE;
+      g_free (options->default_profile);
+      options->default_profile = g_strdup (value);
+      options->default_profile_is_id = TRUE;
     }
 
   return TRUE;
@@ -291,12 +291,12 @@ option_window_callback (const gchar *option_name,
                         gpointer     data,
                         GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   gboolean is_profile_id;
 
   is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
 
-  add_new_window (results, value, is_profile_id);
+  add_new_window (options, value, is_profile_id);
 
   return TRUE;
 }
@@ -307,20 +307,20 @@ option_tab_callback (const gchar *option_name,
                      gpointer     data,
                      GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   gboolean is_profile_id;
 
   is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
       InitialWindow *iw;
 
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, is_profile_id));
     }
   else
-    add_new_window (results, value, is_profile_id);
+    add_new_window (options, value, is_profile_id);
 
   return TRUE;
 }
@@ -331,16 +331,16 @@ option_role_callback (const gchar *option_name,
                       gpointer     data,
                       GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialWindow *iw;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       iw->role = g_strdup (value);
     }
-  else if (!results->default_role)
-    results->default_role = g_strdup (value);
+  else if (!options->default_role)
+    options->default_role = g_strdup (value);
   else
     {
       g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
@@ -357,12 +357,12 @@ option_show_menubar_callback (const gchar *option_name,
                               gpointer     data,
                               GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialWindow *iw;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       if (iw->force_menubar_state && iw->menubar_state == TRUE)
         {
           g_printerr (_("\"%s\" option given twice for the same window\n"),
@@ -376,8 +376,8 @@ option_show_menubar_callback (const gchar *option_name,
     }
   else
     {
-      results->default_window_menubar_forced = TRUE;
-      results->default_window_menubar_state = TRUE;
+      options->default_window_menubar_forced = TRUE;
+      options->default_window_menubar_state = TRUE;
     }
 
   return TRUE;
@@ -389,12 +389,12 @@ option_hide_menubar_callback (const gchar *option_name,
                               gpointer     data,
                               GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialWindow *iw;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
 
       if (iw->force_menubar_state && iw->menubar_state == FALSE)
         {
@@ -408,8 +408,8 @@ option_hide_menubar_callback (const gchar *option_name,
     }
   else
     {
-      results->default_window_menubar_forced = TRUE;
-      results->default_window_menubar_state = FALSE;
+      options->default_window_menubar_forced = TRUE;
+      options->default_window_menubar_state = FALSE;
     }
 
   return TRUE;
@@ -421,16 +421,16 @@ option_maximize_callback (const gchar *option_name,
                           gpointer     data,
                           GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialWindow *iw;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       iw->start_maximized = TRUE;
     }
   else
-    results->default_maximize = TRUE;
+    options->default_maximize = TRUE;
 
   return TRUE;
 }
@@ -441,17 +441,17 @@ option_fullscreen_callback (const gchar *option_name,
                             gpointer     data,
                             GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
       InitialWindow *iw;
 
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       iw->start_fullscreen = TRUE;
     }
   else
-    results->default_fullscreen = TRUE;
+    options->default_fullscreen = TRUE;
 
   return TRUE;
 }
@@ -462,17 +462,17 @@ option_geometry_callback (const gchar *option_name,
                           gpointer     data,
                           GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
       InitialWindow *iw;
 
-      iw = g_list_last (results->initial_windows)->data;
+      iw = g_list_last (options->initial_windows)->data;
       iw->geometry = g_strdup (value);
     }
   else
-    results->default_geometry = g_strdup (value);
+    options->default_geometry = g_strdup (value);
 
   return TRUE;
 }
@@ -483,9 +483,9 @@ option_disable_factory_callback (const gchar *option_name,
                                  gpointer     data,
                                  GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  results->use_factory = FALSE;
+  options->use_factory = FALSE;
 
   return TRUE;
 }
@@ -496,19 +496,19 @@ option_title_callback (const gchar *option_name,
                        gpointer     data,
                        GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
 
       g_free (it->title);
       it->title = g_strdup (value);
     }
   else
     {
-      g_free (results->default_title);
-      results->default_title = g_strdup (value);
+      g_free (options->default_title);
+      options->default_title = g_strdup (value);
     }
 
   return TRUE;
@@ -520,19 +520,19 @@ option_working_directory_callback (const gchar *option_name,
                                    gpointer     data,
                                    GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
 
       g_free (it->working_dir);
       it->working_dir = g_strdup (value);
     }
   else
     {
-      g_free (results->default_working_dir);
-      results->default_working_dir = g_strdup (value);
+      g_free (options->default_working_dir);
+      options->default_working_dir = g_strdup (value);
     }
 
   return TRUE;
@@ -544,10 +544,10 @@ option_active_callback (const gchar *option_name,
                         gpointer     data,
                         GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialTab *it;
 
-  it = ensure_top_tab (results);
+  it = ensure_top_tab (options);
   it->active = TRUE;
 
   return TRUE;
@@ -559,7 +559,7 @@ option_zoom_callback (const gchar *option_name,
                       gpointer     data,
                       GError     **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   double zoom;
   char *end;
 
@@ -596,14 +596,14 @@ option_zoom_callback (const gchar *option_name,
       zoom = TERMINAL_SCALE_MAXIMUM;
     }
 
-  if (results->initial_windows)
+  if (options->initial_windows)
     {
-      InitialTab *it = ensure_top_tab (results);
+      InitialTab *it = ensure_top_tab (options);
       it->zoom = zoom;
       it->zoom_set = TRUE;
     }
   else
-    results->zoom = zoom;
+    options->zoom = zoom;
 
   return TRUE;
 }
@@ -615,16 +615,16 @@ digest_options_callback (GOptionContext *context,
                          gpointer      data,
                          GError      **error)
 {
-  OptionParsingResults *results = data;
+  TerminalOptions *options = data;
   InitialTab    *it;
 
   /* make sure we have some window in case no options were given */
-  if (results->initial_windows == NULL)
-    it = ensure_top_tab (results);
+  if (options->initial_windows == NULL)
+    it = ensure_top_tab (options);
 
-  if (results->execute)
+  if (options->execute)
     {
-      if (results->exec_argv == NULL)
+      if (options->exec_argv == NULL)
         {
           g_set_error (error,
                        G_OPTION_ERROR,
@@ -636,49 +636,49 @@ digest_options_callback (GOptionContext *context,
         }
 
       /* Apply -x/--execute command only to the first tab */
-      it = ensure_top_tab (results);
-      it->exec_argv = results->exec_argv;
-      results->exec_argv = NULL;
+      it = ensure_top_tab (options);
+      it->exec_argv = options->exec_argv;
+      options->exec_argv = NULL;
     }
 
   return TRUE;
 }
 
-OptionParsingResults *
-option_parsing_results_new (const char *working_directory,
+TerminalOptions *
+option_options_new (const char *working_directory,
                             const char *display_name,
                             const char *startup_id,
                             const char **env,
                             int *argc,
                             char **argv)
 {
-  OptionParsingResults *results;
+  TerminalOptions *options;
   int i;
 
-  results = g_slice_new0 (OptionParsingResults);
+  options = g_slice_new0 (TerminalOptions);
 
-  results->default_window_menubar_forced = FALSE;
-  results->default_window_menubar_state = TRUE;
-  results->default_fullscreen = FALSE;
-  results->default_maximize = FALSE;
-  results->execute = FALSE;
-  results->use_factory = TRUE;
+  options->default_window_menubar_forced = FALSE;
+  options->default_window_menubar_state = TRUE;
+  options->default_fullscreen = FALSE;
+  options->default_maximize = FALSE;
+  options->execute = FALSE;
+  options->use_factory = TRUE;
 
-  results->env = g_strdupv ((char **) env);
-  results->startup_id = g_strdup (startup_id);
-  results->display_name = g_strdup (display_name);
-  results->initial_windows = NULL;
-  results->default_role = NULL;
-  results->default_geometry = NULL;
-  results->default_title = NULL;
-  results->zoom = 1.0;
+  options->env = g_strdupv ((char **) env);
+  options->startup_id = g_strdup (startup_id);
+  options->display_name = g_strdup (display_name);
+  options->initial_windows = NULL;
+  options->default_role = NULL;
+  options->default_geometry = NULL;
+  options->default_title = NULL;
+  options->zoom = 1.0;
 
-  results->screen_number = -1;
-  results->default_working_dir = g_strdup (working_directory);
+  options->screen_number = -1;
+  options->default_working_dir = g_strdup (working_directory);
 
   /* The old -x/--execute option is broken, so we need to pre-scan for it. */
   /* We now also support passing the command after the -- switch. */
-  results->exec_argv = NULL;
+  options->exec_argv = NULL;
   for (i = 1 ; i < *argc; ++i)
     {
       gboolean is_execute;
@@ -691,7 +691,7 @@ option_parsing_results_new (const char *working_directory,
       if (!is_execute && !is_dashdash)
         continue;
 
-      results->execute = is_execute;
+      options->execute = is_execute;
 
       /* Skip the switch */
       last = i;
@@ -700,41 +700,41 @@ option_parsing_results_new (const char *working_directory,
         break; /* we'll complain about this later for -x/--execute; it's fine for -- */
 
       /* Collect the args, and remove them from argv */
-      results->exec_argv = g_new0 (char*, *argc - i + 1);
+      options->exec_argv = g_new0 (char*, *argc - i + 1);
       for (j = 0; i < *argc; ++i, ++j)
-        results->exec_argv[j] = g_strdup (argv[i]);
-      results->exec_argv[j] = NULL;
+        options->exec_argv[j] = g_strdup (argv[i]);
+      options->exec_argv[j] = NULL;
 
       *argc = last;
       break;
     }
 
-  return results;
+  return options;
 }
 
 void
-option_parsing_results_free (OptionParsingResults *results)
+option_options_free (TerminalOptions *options)
 {
-  g_list_foreach (results->initial_windows, (GFunc) initial_window_free, NULL);
-  g_list_free (results->initial_windows);
+  g_list_foreach (options->initial_windows, (GFunc) initial_window_free, NULL);
+  g_list_free (options->initial_windows);
 
-  g_strfreev (results->env);
-  g_free (results->default_role);
-  g_free (results->default_geometry);
-  g_free (results->default_working_dir);
-  g_free (results->default_title);
-  g_free (results->default_profile);
+  g_strfreev (options->env);
+  g_free (options->default_role);
+  g_free (options->default_geometry);
+  g_free (options->default_working_dir);
+  g_free (options->default_title);
+  g_free (options->default_profile);
 
-  g_strfreev (results->exec_argv);
+  g_strfreev (options->exec_argv);
 
-  g_free (results->display_name);
-  g_free (results->startup_id);
+  g_free (options->display_name);
+  g_free (options->startup_id);
 
-  g_slice_free (OptionParsingResults, results);
+  g_slice_free (TerminalOptions, options);
 }
 
 void
-option_parsing_results_check_for_display_name (OptionParsingResults *results,
+option_options_check_for_display_name (TerminalOptions *options,
                                                int *argc, char **argv)
 {
   int i;
@@ -766,8 +766,8 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
             }
 
           g_assert (i+1 < *argc);
-          g_free (results->display_name);
-          results->display_name = g_strdup (argv[i+1]);
+          g_free (options->display_name);
+          options->display_name = g_strdup (argv[i+1]);
 
           remove_two = TRUE;
         }
@@ -791,7 +791,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
           end = NULL;
           n = g_ascii_strtoll (argv[i+1], &end, 0);
           if (errno == 0 && argv[i+1] != end)
-            results->screen_number = n;
+            options->screen_number = n;
 
           remove_two = TRUE;
         }
@@ -825,7 +825,7 @@ option_parsing_results_check_for_display_name (OptionParsingResults *results,
 }
 
 GOptionContext *
-terminal_options_get_goption_context (OptionParsingResults *parsing_results)
+terminal_options_get_goption_context (TerminalOptions *options)
 {
   const GOptionEntry global_unique_goptions[] = {
     {
@@ -1025,7 +1025,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_FILENAME,
-      &parsing_results->default_working_dir,
+      &options->default_working_dir,
       NULL, NULL,
     },
     {
@@ -1033,7 +1033,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_NONE,
-      &parsing_results->use_factory,
+      &options->use_factory,
       NULL, NULL
     },
     {
@@ -1041,7 +1041,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_STRING,
-      &parsing_results->startup_id,
+      &options->startup_id,
       NULL,
       NULL
     },
@@ -1229,7 +1229,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
   group = g_option_group_new ("gnome-terminal",
                               N_("GNOME Terminal Emulator"),
                               N_("Show GNOME Terminal options"),
-                              parsing_results,
+                              options,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, global_unique_goptions);
@@ -1240,7 +1240,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
   group = g_option_group_new ("terminal",
                               N_("Options to open new windows or terminal tabs; more than one of these may be specified:"),
                               N_("Show terminal options"),
-                              parsing_results,
+                              options,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, global_multiple_goptions);
@@ -1249,7 +1249,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
   group = g_option_group_new ("window-options",
                               N_("Window options; if used before the first --window or --tab argument, sets the default for all windows:"),
                               N_("Show per-window options"),
-                              parsing_results,
+                              options,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, window_goptions);
@@ -1258,7 +1258,7 @@ terminal_options_get_goption_context (OptionParsingResults *parsing_results)
   group = g_option_group_new ("terminal-options",
                               N_("Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"),
                               N_("Show per-terminal options"),
-                              parsing_results,
+                              options,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, terminal_goptions);
