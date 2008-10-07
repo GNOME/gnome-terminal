@@ -442,22 +442,11 @@ option_window_callback (const gchar *option_name,
                         GError     **error)
 {
   OptionParsingResults *results = data;
+  gboolean is_profile_id;
 
-  add_new_window (results, NULL, FALSE);
+  is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
 
-  return TRUE;
-}
-
-
-static gboolean
-option_window_with_profile_callback (const gchar *option_name,
-                                     const gchar *value,
-                                     gpointer     data,
-                                     GError     **error)
-{
-  OptionParsingResults *results = data;
-
-  add_new_window (results, value, FALSE);
+  add_new_window (results, value, is_profile_id);
 
   return TRUE;
 }
@@ -470,77 +459,19 @@ option_tab_callback (const gchar *option_name,
                      GError     **error)
 {
   OptionParsingResults *results = data;
+  gboolean is_profile_id;
+
+  is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
 
   if (results->initial_windows)
     {
       InitialWindow *iw;
 
       iw = g_list_last (results->initial_windows)->data;
-      iw->tabs = g_list_append (iw->tabs, initial_tab_new (NULL, FALSE));
+      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, is_profile_id));
     }
   else
-    {
-      add_new_window (results, NULL, FALSE);
-    }
-
-  return TRUE;
-}
-
-
-static gboolean
-option_tab_with_profile_callback (const gchar *option_name,
-				  const gchar *value,
-				  gpointer     data,
-				  GError     **error)
-{
-  OptionParsingResults *results = data;
-
-  if (results->initial_windows)
-    {
-      InitialWindow *iw;
-
-      iw = g_list_last (results->initial_windows)->data;
-      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, FALSE));
-    }
-  else
-    add_new_window (results, value, FALSE);
-
-  return TRUE;
-}
-
-
-static gboolean
-option_window_with_profile_internal_id_callback (const gchar *option_name,
-                                                 const gchar *value,
-                                                 gpointer     data,
-                                                 GError     **error)
-{
-  OptionParsingResults *results = data;
-
-  add_new_window (results, value, TRUE);
-
-  return TRUE;
-}
-
-
-static gboolean
-option_tab_with_profile_internal_id_callback (const gchar *option_name,
-					      const gchar *value,
-					      gpointer     data,
-					      GError     **error)
-{
-  OptionParsingResults *results = data;
-
-  if (results->initial_windows)
-    {
-      InitialWindow *iw;
-
-      iw = g_list_last (results->initial_windows)->data;
-
-      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, TRUE));
-    }
-  else
-    add_new_window (results, value, TRUE);
+    add_new_window (results, value, is_profile_id);
 
   return TRUE;
 }
@@ -1647,7 +1578,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_window_with_profile_callback,
+      option_window_callback,
       NULL, NULL
     },
     {
@@ -1655,7 +1586,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_tab_with_profile_callback,
+      option_tab_callback,
       NULL, NULL
     },
     {
@@ -1663,7 +1594,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_window_with_profile_internal_id_callback,
+      option_window_callback,
       NULL, NULL
     },
     {
@@ -1671,7 +1602,7 @@ get_goption_context (OptionParsingResults *parsing_results)
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_tab_with_profile_internal_id_callback,
+      option_tab_callback,
       NULL, NULL
     },
     {
