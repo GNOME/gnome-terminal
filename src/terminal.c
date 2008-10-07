@@ -28,12 +28,8 @@
 #include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-options.h"
-#include "terminal-window.h"
 #include "terminal-util.h"
-#include "profile-editor.h"
 #include "encoding.h"
-#include <errno.h>
-#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <gdk/gdkx.h>
