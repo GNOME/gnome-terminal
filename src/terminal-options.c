@@ -29,11 +29,7 @@
 #include "terminal-options.h"
 #include "terminal-intl.h"
 
-static GOptionContext *get_goption_context (TerminalOptions *options,
-                                            gboolean is_for_remote);
-static void check_for_display_name (TerminalOptions *options,
-                                    int *argc,
-                                    char **argv);
+static GOptionContext *get_goption_context (TerminalOptions *options);
 
 static InitialTab*
 initial_tab_new (const char *profile,
@@ -654,7 +650,7 @@ terminal_options_parse (const char *working_directory,
                         const char *display_name,
                         const char *startup_id,
                         const char **env,
-                        gboolean is_for_remote,
+                        gboolean ignore_unknown_options,
                         int *argcp,
                         char ***argvp,
                         GError **error,
@@ -722,7 +718,9 @@ terminal_options_parse (const char *working_directory,
       break;
     }
 
-  context = get_goption_context (options, is_for_remote);
+  context = get_goption_context (options);
+
+  g_option_context_set_ignore_unknown_options (context, ignore_unknown_options);
 
   va_start (va_args, error);
   extra_group = va_arg (va_args, GOptionGroup*);
@@ -732,13 +730,6 @@ terminal_options_parse (const char *working_directory,
       extra_group = va_arg (va_args, GOptionGroup*);
     }
   va_end (va_args);
-
-  if (is_for_remote)
-    {
-      /* FIXMEchpe: I don't think we need this for the forwarded args! */
-      /* Find and parse --display */
-      check_for_display_name (options, argcp, *argvp);
-    }
 
   retval = g_option_context_parse (context, argcp, argvp, error);
   g_option_context_free (context);
@@ -771,101 +762,8 @@ terminal_options_free (TerminalOptions *options)
   g_slice_free (TerminalOptions, options);
 }
 
-static void
-check_for_display_name (TerminalOptions *options,
-                        int *argc,
-                        char **argv)
-{
-  int i;
-
-  /* The point here is to strip --display, in the case where we
-   * aren't going via gtk_init()
-   */
-  i = 1;
-  while (i < *argc)
-    {
-      gboolean remove_two = FALSE;
-
-      if (strcmp (argv[i], "-x") == 0 ||
-          strcmp (argv[i], "--execute") == 0)
-        {
-          return; /* We can't have --display or --screen past here,
-                   * unless intended for the child process.
-                   */
-        }
-      else if (strcmp (argv[i], "--display") == 0)
-        {
-          if ((i + 1) >= *argc)
-            {
-              g_printerr (_("No argument given to \"%s\" option\n"), "--display");
-              return; /* option parsing will die on this later, plus it shouldn't happen
-                       * because normally gtk_init() parses --display
-                       * when not using factory mode.
-                       */
-            }
-
-          g_assert (i+1 < *argc);
-          g_free (options->display_name);
-          options->display_name = g_strdup (argv[i+1]);
-
-          remove_two = TRUE;
-        }
-      else if (strcmp (argv[i], "--screen") == 0)
-        {
-          int n;
-          char *end;
-
-          if ((i + 1) >= *argc)
-            {
-              g_printerr (_("\"%s\" option requires an argument\n"), "--screen");
-              return; /* popt will die on this later, plus it shouldn't happen
-                       * because normally gtk_init() parses --display
-                       * when not using factory mode.
-                       */
-            }
-
-          g_assert (i+1 < *argc);
-
-          errno = 0;
-          end = NULL;
-          n = g_ascii_strtoll (argv[i+1], &end, 0);
-          if (errno == 0 && argv[i+1] != end)
-            options->screen_number = n;
-
-          remove_two = TRUE;
-        }
-
-      if (remove_two)
-        {
-          int n_to_move;
-
-          n_to_move = *argc - i - 2;
-          g_assert (n_to_move >= 0);
-
-          if (n_to_move > 0)
-            {
-              g_memmove (&argv[i], &argv[i+2],
-                         sizeof (argv[0]) * n_to_move);
-              argv[*argc-1] = NULL;
-              argv[*argc-2] = NULL;
-            }
-          else
-            {
-              argv[i] = NULL;
-            }
-
-          *argc -= 2;
-        }
-      else
-        {
-          ++i;
-        }
-    }
-}
-
 static GOptionContext *
-get_goption_context (TerminalOptions *options,
-                     gboolean is_for_remote)
+get_goption_context (TerminalOptions *options)
 {
   const GOptionEntry global_unique_goptions[] = {
     {
@@ -1304,8 +1202,5 @@ get_goption_context (TerminalOptions *options,
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
   
-  if (is_for_remote)
-    g_option_context_set_ignore_unknown_options (context, TRUE);
-
   return context;
 }
