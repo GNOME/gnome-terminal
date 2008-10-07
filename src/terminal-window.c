@@ -1338,7 +1338,7 @@ terminal_window_init (TerminalWindow *window)
       { "Edit", NULL, N_("_Edit") },
       { "View", NULL, N_("_View") },
       { "Terminal", NULL, N_("_Terminal") },
-      { "Tabs", NULL, N_("_Tabs") },
+      { "Tabs", NULL, N_("Ta_bs") },
       { "Help", NULL, N_("_Help") },
       { "Popup", NULL, NULL },
       { "NotebookPopup", NULL, "" },
