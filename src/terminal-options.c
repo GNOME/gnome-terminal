@@ -23,12 +23,17 @@
 
 #include <errno.h>
 #include <string.h>
-#include <stdlib.h>
 
 #include <glib.h>
 
 #include "terminal-options.h"
 #include "terminal-intl.h"
+
+static GOptionContext *get_goption_context (TerminalOptions *options,
+                                            gboolean is_for_remote);
+static void check_for_display_name (TerminalOptions *options,
+                                    int *argc,
+                                    char **argv);
 
 static InitialTab*
 initial_tab_new (const char *profile,
@@ -645,15 +650,23 @@ digest_options_callback (GOptionContext *context,
 }
 
 TerminalOptions *
-option_options_new (const char *working_directory,
-                            const char *display_name,
-                            const char *startup_id,
-                            const char **env,
-                            int *argc,
-                            char **argv)
+terminal_options_parse (const char *working_directory,
+                        const char *display_name,
+                        const char *startup_id,
+                        const char **env,
+                        gboolean is_for_remote,
+                        int *argcp,
+                        char ***argvp,
+                        GError **error,
+                        ...)
 {
   TerminalOptions *options;
+  GOptionContext *context;
+  GOptionGroup *extra_group;
+  va_list va_args;
+  gboolean retval;
   int i;
+  char **argv = *argvp;
 
   options = g_slice_new0 (TerminalOptions);
 
@@ -665,7 +678,7 @@ option_options_new (const char *working_directory,
   options->use_factory = TRUE;
 
   options->env = g_strdupv ((char **) env);
-  options->startup_id = g_strdup (startup_id);
+  options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
   options->display_name = g_strdup (display_name);
   options->initial_windows = NULL;
   options->default_role = NULL;
@@ -679,7 +692,7 @@ option_options_new (const char *working_directory,
   /* The old -x/--execute option is broken, so we need to pre-scan for it. */
   /* We now also support passing the command after the -- switch. */
   options->exec_argv = NULL;
-  for (i = 1 ; i < *argc; ++i)
+  for (i = 1 ; i < *argcp; ++i)
     {
       gboolean is_execute;
       gboolean is_dashdash;
@@ -696,24 +709,49 @@ option_options_new (const char *working_directory,
       /* Skip the switch */
       last = i;
       ++i;
-      if (i == *argc)
+      if (i == *argcp)
         break; /* we'll complain about this later for -x/--execute; it's fine for -- */
 
       /* Collect the args, and remove them from argv */
-      options->exec_argv = g_new0 (char*, *argc - i + 1);
-      for (j = 0; i < *argc; ++i, ++j)
+      options->exec_argv = g_new0 (char*, *argcp - i + 1);
+      for (j = 0; i < *argcp; ++i, ++j)
         options->exec_argv[j] = g_strdup (argv[i]);
       options->exec_argv[j] = NULL;
 
-      *argc = last;
+      *argcp = last;
       break;
     }
 
-  return options;
+  context = get_goption_context (options, is_for_remote);
+
+  va_start (va_args, error);
+  extra_group = va_arg (va_args, GOptionGroup*);
+  while (extra_group != NULL)
+    {
+      g_option_context_add_group (context, extra_group);
+      extra_group = va_arg (va_args, GOptionGroup*);
+    }
+  va_end (va_args);
+
+  if (is_for_remote)
+    {
+      /* FIXMEchpe: I don't think we need this for the forwarded args! */
+      /* Find and parse --display */
+      check_for_display_name (options, argcp, *argvp);
+    }
+
+  retval = g_option_context_parse (context, argcp, argvp, error);
+  g_option_context_free (context);
+
+  if (retval)
+    return options;
+
+  terminal_options_free (options);
+  return NULL;
 }
 
 void
-option_options_free (TerminalOptions *options)
+terminal_options_free (TerminalOptions *options)
 {
   g_list_foreach (options->initial_windows, (GFunc) initial_window_free, NULL);
   g_list_free (options->initial_windows);
@@ -733,9 +771,10 @@ option_options_free (TerminalOptions *options)
   g_slice_free (TerminalOptions, options);
 }
 
-void
-option_options_check_for_display_name (TerminalOptions *options,
-                                               int *argc, char **argv)
+static void
+check_for_display_name (TerminalOptions *options,
+                        int *argc,
+                        char **argv)
 {
   int i;
 
@@ -824,8 +863,9 @@ option_options_check_for_display_name (TerminalOptions *options,
     }
 }
 
-GOptionContext *
-terminal_options_get_goption_context (TerminalOptions *options)
+static GOptionContext *
+get_goption_context (TerminalOptions *options,
+                     gboolean is_for_remote)
 {
   const GOptionEntry global_unique_goptions[] = {
     {
@@ -1264,5 +1304,8 @@ terminal_options_get_goption_context (TerminalOptions *options)
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
   
+  if (is_for_remote)
+    g_option_context_set_ignore_unknown_options (context, TRUE);
+
   return context;
 }

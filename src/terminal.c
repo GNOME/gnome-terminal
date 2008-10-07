@@ -363,7 +363,6 @@ about_email_hook (GtkAboutDialog *about,
 int
 main (int argc, char **argv)
 {
-  GOptionContext *context;
   int i;
   char **argv_copy;
   const char *startup_id;
@@ -385,38 +384,43 @@ main (int argc, char **argv)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
 
-  options = option_options_new (NULL, NULL, NULL, NULL, &argc, argv);
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id != NULL && startup_id[0] != '\0')
+
+  options = terminal_options_parse (NULL,
+                                    NULL,
+                                    startup_id,
+                                    NULL,
+                                    FALSE,
+                                    &argc, &argv,
+                                    &error,
+                                    gtk_get_option_group (TRUE),
+                                    egg_sm_client_get_option_group (),
+                                    NULL);
+  if (!options)
     {
-      options->startup_id = g_strdup (startup_id);
-      g_unsetenv ("DESKTOP_STARTUP_ID");
+      g_printerr (_("Failed to parse arguments: %s\n"), error->message);
+      g_error_free (error);
+      exit (1);
     }
+
+  g_set_application_name (_("Terminal"));
+  
+  /* Unset the startup ID, so it doesn't end up in the factory's env
+   * and thus in the terminals' envs.
+   */
+  if (startup_id)
+    g_unsetenv ("DESKTOP_STARTUP_ID");
 
   gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
                                                      * to complicated factory setup
                                                      */
 
-  context = terminal_options_get_goption_context (options);
-  g_option_context_add_group (context, gtk_get_option_group (TRUE));
-  g_option_context_add_group (context, egg_sm_client_get_option_group ());
-
-  if (!g_option_context_parse (context, &argc, &argv, &error))
-    {
-      g_printerr (_("Failed to parse arguments: %s\n"), error->message);
-      g_error_free (error);
-      g_option_context_free (context);
-      exit (1);
-    }
-
-  g_option_context_free (context);
-  g_set_application_name (_("Terminal"));
-  
  /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
     {
       /* Create a fake one containing a timestamp that we can use */
       Time timestamp;
+
       timestamp = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
 
       options->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
@@ -514,7 +518,7 @@ main (int argc, char **argv)
 
       g_free (argv_copy);
       g_strfreev (env);
-      option_options_free (options);
+      terminal_options_free (options);
 
       exit (ret);
     }
@@ -538,7 +542,7 @@ factory_disabled:
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
   new_terminal_with_options (terminal_app_get (), options);
-  option_options_free (options);
+  terminal_options_free (options);
 
   gtk_main ();
 
@@ -570,38 +574,30 @@ terminal_factory_new_terminal (TerminalFactory *factory,
                                GError **error)
 {
   TerminalOptions *options;
-  GOptionContext *context;
   char **argv;
   int argc;
 
+  /* Copy the arguments since terminal_options_parse potentially modifies the array */
   argc = g_strv_length ((char **) arguments);
   argv = (char **) g_memdup (arguments, (argc + 1) * sizeof (char *));
 
-  options = option_options_new (working_directory,
-                                                display_name,
-                                                startup_id,
-                                                env,
-                                                &argc, argv);
+  options = terminal_options_parse (working_directory,
+                                    display_name,
+                                    startup_id,
+                                    env,
+                                    TRUE,
+                                    &argc, &argv,
+                                    error,
+                                    NULL);
+  g_free (argv);
 
-  /* FIXMEchpe: I don't think we need this for the forwarded args! */
-  /* Find and parse --display */
-  option_options_check_for_display_name (options, &argc, argv);
-
-  context = terminal_options_get_goption_context (options);
-  g_option_context_set_ignore_unknown_options (context, TRUE);
-  if (!g_option_context_parse (context, &argc, &argv, error))
-    {
-      g_option_context_free (context);
-      option_options_free (options);
-
-      return FALSE;
-    }
-  g_option_context_free (context);
+  if (!options)
+    return FALSE;
 
   g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                    (GSourceFunc) handle_new_terminal_event,
                    options,
-                   (GDestroyNotify) option_options_free);
+                   (GDestroyNotify) terminal_options_free);
 
   return TRUE;
 }

@@ -61,8 +61,6 @@ typedef struct
   double    zoom;
 } TerminalOptions;
 
-GOptionContext *get_goption_context (TerminalOptions *options);
-
 typedef struct
 {
   char *profile;
@@ -90,18 +88,16 @@ typedef struct
 
 } InitialWindow;
 
-TerminalOptions *option_options_new (const char *working_directory,
-                                                  const char *display_name,
-                                                  const char *startup_id,
-                                                  const char **env,
-                                                  int *argc,
-                                                  char **argv);
+TerminalOptions *terminal_options_parse (const char *working_directory,
+                                         const char *display_name,
+                                         const char *startup_id,
+                                         const char **env,
+                                         gboolean is_for_remote,
+                                         int *argcp,
+                                         char ***argvp,
+                                         GError **error,
+                                         ...);
 
-void option_options_free (TerminalOptions *options);
-
-GOptionContext * terminal_options_get_goption_context (TerminalOptions *options);
-
-void option_options_check_for_display_name (TerminalOptions *options,
-                                                    int *argc, char **argv);
+void terminal_options_free (TerminalOptions *options);
 
 G_END_DECLS
