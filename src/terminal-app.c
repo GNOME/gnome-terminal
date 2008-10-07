@@ -21,6 +21,8 @@
 
 #include <config.h>
 
+#include <errno.h>
+
 #include <glib.h>
 #undef G_DISABLE_SINGLE_INCLUDES
 #undef GTK_DISABLE_SINGLE_INCLUDES
@@ -149,6 +151,64 @@ static TerminalApp *global_app = NULL;
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
 
 /* Helper functions */
+
+static GdkScreen*
+terminal_app_get_screen_by_display_name (const char *display_name,
+                                         int screen_number)
+{
+  GdkDisplay *display = NULL;
+  GdkScreen *screen = NULL;
+
+  /* --screen=screen_number overrides --display */
+
+  if (display_name == NULL)
+    display = gdk_display_get_default ();
+  else
+    {
+      GSList *displays, *l;
+      const char *period;
+
+      period = strrchr (display_name, '.');
+      if (period)
+        {
+          gulong n;
+          char *end;
+
+          errno = 0;
+          end = NULL;
+          n = g_ascii_strtoull (period + 1, &end, 0);
+          if (errno == 0 && (period + 1) != end)
+            screen_number = n;
+        }
+
+      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+      for (l = displays; l != NULL; l = l->next)
+        {
+          GdkDisplay *disp = l->data;
+
+          /* compare without the screen number part, if present */
+          if ((period && strncmp (gdk_display_get_name (disp), display_name, period - display_name) == 0) ||
+              (period == NULL && strcmp (gdk_display_get_name (disp), display_name) == 0))
+            {
+              display = disp;
+              break;
+            }
+        }
+      g_slist_free (displays);
+
+      if (display == NULL)
+        display = gdk_display_open (display_name); /* FIXME we never close displays */
+    }
+
+  if (display == NULL)
+    return NULL;
+  if (screen_number >= 0)
+    screen = gdk_display_get_screen (display, screen_number);
+  if (screen == NULL)
+    screen = gdk_display_get_default_screen (display);
+
+  return screen;
+}
 
 /* Menubar mnemonics settings handling */
 
@@ -1607,6 +1667,97 @@ terminal_app_get (void)
 {
   g_assert (global_app != NULL);
   return global_app;
+}
+
+void
+terminal_app_handle_options (TerminalApp *app,
+                             TerminalOptions *options)
+{
+  GList *lw;
+  GdkScreen *screen;
+
+  screen = terminal_app_get_screen_by_display_name (options->display_name,
+                                                    options->screen_number);
+
+  for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
+    {
+      InitialWindow *iw = lw->data;
+      TerminalWindow *window;
+      GList *lt;
+
+      g_assert (iw->tabs);
+
+      /* Create & setup new window */
+      window = terminal_app_new_window (app, screen);
+
+      if (options->startup_id)
+        terminal_window_set_startup_id (window, options->startup_id);
+
+      /* Overwrite the default, unique window role set in terminal_window_init */
+      if (iw->role)
+        gtk_window_set_role (GTK_WINDOW (window), iw->role);
+
+      if (iw->force_menubar_state)
+        terminal_window_set_menubar_visible (window, iw->menubar_state);
+
+      if (iw->start_fullscreen)
+        gtk_window_fullscreen (GTK_WINDOW (window));
+      if (iw->start_maximized)
+        gtk_window_maximize (GTK_WINDOW (window));
+
+      /* Now add the tabs */
+      for (lt = iw->tabs; lt != NULL; lt = lt->next)
+        {
+          InitialTab *it = lt->data;
+          TerminalProfile *profile = NULL;
+          TerminalScreen *screen;
+          const char *profile_name;
+          gboolean profile_is_id;
+
+          if (it->profile)
+            {
+              profile_name = it->profile;
+              profile_is_id = it->profile_is_id;
+            }
+          else
+            {
+              profile_name = options->default_profile;
+              profile_is_id = options->default_profile_is_id;
+            }
+
+          if (profile_name)
+            {
+              if (profile_is_id)
+                profile = terminal_app_get_profile_by_name (app, profile_name);
+              else
+                profile = terminal_app_get_profile_by_visible_name (app, profile_name);
+
+              if (profile == NULL)
+                g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
+            }
+          if (profile == NULL)
+            profile = terminal_app_get_profile_for_new_term (app);
+          g_assert (profile);
+
+          screen = terminal_app_new_terminal (app, window, profile,
+                                              it->exec_argv ? it->exec_argv : options->exec_argv,
+                                              it->title ? it->title : options->default_title,
+                                              it->working_dir ? it->working_dir : options->default_working_dir,
+                                              options->env,
+                                              it->zoom_set ? it->zoom : options->zoom);
+
+          if (it->active)
+            terminal_window_switch_screen (window, screen);
+        }
+
+      if (iw->geometry)
+        {
+          if (!gtk_window_parse_geometry (GTK_WINDOW (window), iw->geometry))
+            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
+        }
+
+      gtk_window_present (GTK_WINDOW (window));
+    }
 }
 
 TerminalWindow *

@@ -23,10 +23,12 @@
 
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <glib.h>
 
 #include "terminal-options.h"
+#include "terminal-screen.h"
 #include "terminal-intl.h"
 
 static GOptionContext *get_goption_context (TerminalOptions *options);

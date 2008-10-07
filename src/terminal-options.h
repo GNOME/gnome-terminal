@@ -19,23 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef TERMINAL_OPTIONS_H
+#define TERMINAL_OPTIONS_H
+
 #include <glib.h>
 
 G_BEGIN_DECLS
-
-#include "terminal-intl.h"
-
-#include "terminal-app.h"
-#include "terminal-accels.h"
-#include "terminal-window.h"
-#include "terminal-util.h"
-#include "profile-editor.h"
-#include "encoding.h"
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <gdk/gdkx.h>
 
 typedef struct
 {
@@ -101,3 +90,5 @@ TerminalOptions *terminal_options_parse (const char *working_directory,
 void terminal_options_free (TerminalOptions *options);
 
 G_END_DECLS
+
+#endif /* !TERMINAL_OPTIONS_H */

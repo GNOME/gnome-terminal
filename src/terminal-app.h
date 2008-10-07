@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 
 #include "terminal-screen.h"
+#include "terminal-options.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,9 @@ void terminal_app_initialize (gboolean use_factory);
 void terminal_app_shutdown (void);
 
 TerminalApp* terminal_app_get (void);
+
+void terminal_app_handle_options (TerminalApp *app,
+                                  TerminalOptions *options);
 
 void terminal_app_edit_profile (TerminalApp     *app,
                                 TerminalProfile *profile,

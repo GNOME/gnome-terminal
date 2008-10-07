@@ -124,157 +124,6 @@ G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
 
 static TerminalFactory *factory = NULL;
 
-static GdkScreen*
-find_screen_by_display_name (const char *display_name,
-                             int         screen_number)
-{
-  GdkDisplay *display = NULL;
-  GdkScreen *screen;
-
-  /* --screen=screen_number overrides --display */
-
-  screen = NULL;
-
-  if (display_name == NULL)
-    display = gdk_display_get_default ();
-  else
-    {
-      GSList *displays, *l;
-      const char *period;
-
-      period = strrchr (display_name, '.');
-      if (period)
-        {
-          gulong n;
-          char *end;
-
-          errno = 0;
-          end = NULL;
-          n = g_ascii_strtoull (period + 1, &end, 0);
-          if (errno == 0 && (period + 1) != end)
-            screen_number = n;
-        }
-
-      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-      for (l = displays; l != NULL; l = l->next)
-        {
-          GdkDisplay *disp = l->data;
-
-          /* compare without the screen number part, if present */
-          if ((period && strncmp (gdk_display_get_name (disp), display_name, period - display_name) == 0) ||
-              (period == NULL && strcmp (gdk_display_get_name (disp), display_name) == 0))
-            {
-              display = disp;
-              break;
-            }
-        }
-      g_slist_free (displays);
-
-      if (display == NULL)
-        display = gdk_display_open (display_name); /* FIXME we never close displays */
-    }
-
-  if (display == NULL)
-    return NULL;
-  if (screen_number >= 0)
-    screen = gdk_display_get_screen (display, screen_number);
-  if (screen == NULL)
-    screen = gdk_display_get_default_screen (display);
-
-  return screen;
-}
-
-static void
-new_terminal_with_options (TerminalApp *app,
-                           TerminalOptions *results)
-{
-  GList *lw;
-  GdkScreen *screen;
-
-  screen = find_screen_by_display_name (results->display_name,
-                                        results->screen_number);
-
-  for (lw = results->initial_windows;  lw != NULL; lw = lw->next)
-    {
-      InitialWindow *iw = lw->data;
-      TerminalWindow *window;
-      GList *lt;
-
-      g_assert (iw->tabs);
-
-      /* Create & setup new window */
-      window = terminal_app_new_window (app, screen);
-
-      if (results->startup_id)
-        terminal_window_set_startup_id (window, results->startup_id);
-
-      /* Overwrite the default, unique window role set in terminal_window_init */
-      if (iw->role)
-        gtk_window_set_role (GTK_WINDOW (window), iw->role);
-
-      if (iw->force_menubar_state)
-        terminal_window_set_menubar_visible (window, iw->menubar_state);
-
-      if (iw->start_fullscreen)
-        gtk_window_fullscreen (GTK_WINDOW (window));
-      if (iw->start_maximized)
-        gtk_window_maximize (GTK_WINDOW (window));
-
-      /* Now add the tabs */
-      for (lt = iw->tabs; lt != NULL; lt = lt->next)
-        {
-          InitialTab *it = lt->data;
-          TerminalProfile *profile = NULL;
-          TerminalScreen *screen;
-          const char *profile_name;
-          gboolean profile_is_id;
-
-          if (it->profile)
-            {
-              profile_name = it->profile;
-              profile_is_id = it->profile_is_id;
-            }
-          else
-            {
-              profile_name = results->default_profile;
-              profile_is_id = results->default_profile_is_id;
-            }
-
-          if (profile_name)
-            {
-              if (profile_is_id)
-                profile = terminal_app_get_profile_by_name (app, profile_name);
-              else
-                profile = terminal_app_get_profile_by_visible_name (app, profile_name);
-
-              if (profile == NULL)
-                g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
-            }
-          if (profile == NULL)
-            profile = terminal_app_get_profile_for_new_term (app);
-          g_assert (profile);
-
-          screen = terminal_app_new_terminal (app, window, profile,
-                                              it->exec_argv ? it->exec_argv : results->exec_argv,
-                                              it->title ? it->title : results->default_title,
-                                              it->working_dir ? it->working_dir : results->default_working_dir,
-                                              results->env,
-                                              it->zoom_set ? it->zoom : results->zoom);
-
-          if (it->active)
-            terminal_window_switch_screen (window, screen);
-        }
-
-      if (iw->geometry)
-        {
-          if (!gtk_window_parse_geometry (GTK_WINDOW (window), iw->geometry))
-            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
-        }
-
-      gtk_window_present (GTK_WINDOW (window));
-    }
-}
-
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
  */
@@ -541,7 +390,7 @@ factory_disabled:
   terminal_app_initialize (options->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  new_terminal_with_options (terminal_app_get (), options);
+  terminal_app_handle_options (terminal_app_get (), options);
   terminal_options_free (options);
 
   gtk_main ();
@@ -559,7 +408,7 @@ factory_disabled:
 static gboolean
 handle_new_terminal_event (TerminalOptions *options)
 {
-  new_terminal_with_options (terminal_app_get (), options);
+  terminal_app_handle_options (terminal_app_get (), options);
 
   return FALSE;
 }
