@@ -23,6 +23,8 @@ gnome_terminal_SOURCES= \
 	terminal-intl.h \
 	terminal-marshal.c \
 	terminal-marshal.h \
+	terminal-options.c \
+	terminal-options.h \
 	terminal-profile.c \
 	terminal-profile.h \
 	terminal-screen.c \

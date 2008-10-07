@@ -1,0 +1,107 @@
+/*
+ * Copyright © 2001, 2002 Havoc Pennington
+ * Copyright © 2002 Red Hat, Inc.
+ * Copyright © 2002 Sun Microsystems
+ * Copyright © 2003 Mariano Suarez-Alvarez
+ * Copyright © 2008 Christian Persch
+ *
+ * Gnome-terminal is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Gnome-terminal is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+#include "terminal-intl.h"
+
+#include "terminal-app.h"
+#include "terminal-accels.h"
+#include "terminal-window.h"
+#include "terminal-util.h"
+#include "profile-editor.h"
+#include "encoding.h"
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#include <gdk/gdkx.h>
+
+typedef struct
+{
+  char   **env;
+  char    *startup_id;
+  char    *display_name;
+  int      screen_number;
+  GList   *initial_windows;
+  gboolean default_window_menubar_forced;
+  gboolean default_window_menubar_state;
+  gboolean default_fullscreen;
+  gboolean default_maximize;
+  char    *default_role;
+  char    *default_geometry;
+  char    *default_working_dir;
+  char    *default_title;
+  char   **exec_argv;
+  char    *default_profile;
+  gboolean default_profile_is_id;
+
+  gboolean  execute;
+  gboolean  use_factory;
+  double    zoom;
+} OptionParsingResults;
+
+GOptionContext *get_goption_context (OptionParsingResults *parsing_results);
+
+typedef struct
+{
+  char *profile;
+  gboolean profile_is_id;
+  char **exec_argv;
+  char *title;
+  char *working_dir;
+  double zoom;
+  guint zoom_set : 1;
+  guint active : 1;
+} InitialTab;
+
+typedef struct
+{
+  GList *tabs; /* list of InitialTab */
+
+  gboolean force_menubar_state;
+  gboolean menubar_state;
+
+  gboolean start_fullscreen;
+  gboolean start_maximized;
+
+  char *geometry;
+  char *role;
+
+} InitialWindow;
+
+OptionParsingResults *option_parsing_results_new (const char *working_directory,
+                                                  const char *display_name,
+                                                  const char *startup_id,
+                                                  const char **env,
+                                                  int *argc,
+                                                  char **argv);
+
+void option_parsing_results_free (OptionParsingResults *results);
+
+GOptionContext * terminal_options_get_goption_context (OptionParsingResults *parsing_results);
+
+void option_parsing_results_check_for_display_name (OptionParsingResults *results,
+                                                    int *argc, char **argv);
+
+G_END_DECLS
