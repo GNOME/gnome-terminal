@@ -51,6 +51,8 @@ void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
 char *terminal_util_concat_uris (char **uris,
                                  gsize *length);
 
+char *terminal_util_get_licence_text (void);
+
 gboolean terminal_util_load_builder_file (const char *filename,
                                           const char *object_name,
                                           ...);

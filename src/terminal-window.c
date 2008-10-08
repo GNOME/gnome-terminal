@@ -1579,7 +1579,7 @@ terminal_window_init (TerminalWindow *window)
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
-                                                 TERM_PKGDATADIR "/terminal.xml",
+                                                 TERM_PKGDATADIR G_DIR_SEPARATOR_S "terminal.xml",
                                                  &error);
   if (error)
     {
@@ -3139,6 +3139,9 @@ help_contents_callback (GtkAction *action,
   terminal_util_show_help (NULL, GTK_WINDOW (window));
 }
 
+#define ABOUT_GROUP "About"
+#define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
+
 static void
 help_about_callback (GtkAction *action,
                      TerminalWindow *window)
@@ -3148,43 +3151,70 @@ help_about_callback (GtkAction *action,
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
     "Copyright © 2007–2008 Christian Persch";
-  const char *authors[] = {
-    "Behdad Esfahbod <behdad@gnome.org>",
-    "Guilherme de S. Pastore <gpastore@gnome.org>",
-    "Havoc Pennington <hp@redhat.com>",
-    "Christian Persch <chpe" "\100" "gnome" "." "org" ">",
-    "Mariano Suárez-Alvarez <mariano@gnome.org>",
-    NULL
-  };
-  const gchar *license[] = {
-    N_("GNOME Terminal is free software; you can redistribute it and/or modify "
-       "it under the terms of the GNU General Public License as published by "
-       "the Free Software Foundation; either version 2 of the License, or "
-       "(at your option) any later version."),
-    N_("GNOME Terminal is distributed in the hope that it will be useful, "
-       "but WITHOUT ANY WARRANTY; without even the implied warranty of "
-       "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
-       "GNU General Public License for more details."),
-    N_("You should have received a copy of the GNU General Public License "
-       "along with GNOME Terminal; if not, write to the Free Software Foundation, "
-       "Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA")
-  };
-  gchar *license_text;
+  char *licence_text;
+  GKeyFile *key_file;
+  GError *error = NULL;
+  char **authors, **contributors, **artists, **documenters, **array_strv;
+  gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
+  GPtrArray *array;
 
-  license_text = g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file (key_file, TERM_PKGDATADIR G_DIR_SEPARATOR_S "terminal.about", 0, &error))
+    {
+      g_warning ("Couldn't load about data: %s\n", error->message);
+      g_error_free (error);
+      g_key_file_free (key_file);
+      return;
+    }
+
+  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, NULL);
+  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, NULL);
+  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
+  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+
+  array = g_ptr_array_new ();
+
+  for (i = 0; i < n_authors; ++i)
+    g_ptr_array_add (array, EMAILIFY (authors[i]));
+  g_free (authors); /* strings are now owned by the array */
+
+  if (n_contributors > 0)
+  {
+    g_ptr_array_add (array, g_strdup (""));
+    g_ptr_array_add (array, g_strdup (_("Contributors:")));
+    for (i = 0; i < n_contributors; ++i)
+      g_ptr_array_add (array, EMAILIFY (contributors[i]));
+    g_free (contributors); /* strings are now owned by the array */
+  }
+  
+  g_ptr_array_add (array, NULL);
+  array_strv = (char **) g_ptr_array_free (array, FALSE);
+
+  for (i = 0; i < n_artists; ++i)
+    artists[i] = EMAILIFY (artists[i]);
+  for (i = 0; i < n_documenters; ++i)
+    documenters[i] = EMAILIFY (documenters[i]);
+
+  licence_text = terminal_util_get_licence_text ();
 
   gtk_show_about_dialog (GTK_WINDOW (window),
 			 "program-name", _("GNOME Terminal"),
 			 "copyright", copyright,
 			 "comments", _("A terminal emulator for the GNOME desktop"),
 			 "version", VERSION,
-			 "authors", authors,
-			 "license", license_text,
+			 "authors", array_strv,
+                         "artists", artists,
+                         "documenters", documenters,
+			 "license", licence_text,
 			 "wrap-license", TRUE,
 			 "translator-credits", _("translator-credits"),
 			 "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
 			 NULL);
-  g_free (license_text);
+
+  g_strfreev (array_strv);
+  g_strfreev (artists);
+  g_strfreev (documenters);
+  g_free (licence_text);
 }
 
 void

@@ -143,6 +143,11 @@ schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
 
+aboutdir = $(pkgdatadir)
+about_DATA = \
+	terminal.about \
+	$(NULL)
+
 uimanagerdir = $(pkgdatadir)
 uimanager_DATA = \
 	terminal.xml \
@@ -172,7 +177,7 @@ EXTRA_DIST = \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
-	$(icon_DATA) \
+	$(about_DATA) \
 	$(schema_in_files) \
 	$(uimanager_DATA) \
 	$(builder_in_files) \
