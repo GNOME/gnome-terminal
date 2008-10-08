@@ -2951,12 +2951,15 @@ terminal_set_title_dialog_response_cb (GtkWidget *dialog,
                                        int response,
                                        TerminalScreen *screen)
 {
-  GtkEntry *entry;
-  const char *text;
+  if (response == GTK_RESPONSE_OK)
+    {
+      GtkEntry *entry;
+      const char *text;
 
-  entry = GTK_ENTRY (g_object_get_data (G_OBJECT (dialog), "title-entry"));
-  text = gtk_entry_get_text (entry);
-  terminal_screen_set_user_title (screen, text);
+      entry = GTK_ENTRY (g_object_get_data (G_OBJECT (dialog), "title-entry"));
+      text = gtk_entry_get_text (entry);
+      terminal_screen_set_user_title (screen, text);
+    }
 
   gtk_widget_destroy (dialog);
 }
@@ -2982,7 +2985,7 @@ terminal_set_title_callback (GtkAction *action,
   gtk_window_set_title (GTK_WINDOW (dialog), _("Set Title"));
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
   gtk_window_set_role (GTK_WINDOW (dialog), "gnome-terminal-change-title");
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (terminal_set_title_dialog_response_cb), priv->active_screen);
