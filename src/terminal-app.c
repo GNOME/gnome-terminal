@@ -876,19 +876,19 @@ terminal_app_system_font_notify_cb (GConfClient *client,
 {
   TerminalApp *app = TERMINAL_APP (user_data);
   GConfValue *gconf_value;
-  const char *font;
+  const char *font = NULL;
   PangoFontDescription *font_desc;
 
   if (strcmp (gconf_entry_get_key (entry), MONOSPACE_FONT_KEY) != 0)
     return;
 
   gconf_value = gconf_entry_get_value (entry);
-  if (!gconf_value || gconf_value->type != GCONF_VALUE_STRING)
-    return;
-
-  font = gconf_value_get_string (gconf_value);
+  if (gconf_value &&
+      gconf_value->type == GCONF_VALUE_STRING)
+    font = gconf_value_get_string (gconf_value);
   if (!font)
-    return;
+    font = DEFAULT_MONOSPACE_FONT;
+  g_assert (font != NULL);
 
   font_desc = pango_font_description_from_string (font);
   if (app->system_font_desc &&
@@ -1421,6 +1421,10 @@ terminal_app_init (TerminalApp *app)
 {
   global_app = app;
 
+  /* Initialise defaults */
+  app->enable_mnemonics = DEFAULT_ENABLE_MNEMONICS;
+  app->enable_menu_accels = DEFAULT_ENABLE_MENU_BAR_ACCEL;
+
   app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 
   app->conf = gconf_client_get_default ();
@@ -1461,11 +1465,16 @@ terminal_app_init (TerminalApp *app)
                              terminal_app_enable_menu_accels_notify_cb,
                              app, NULL, NULL);
 
+  /* Load the settings */
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
   gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
   gconf_client_notify (app->conf, ENABLE_MENU_BAR_ACCEL_KEY);
   gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
+
+  /* Ensure we have valid settings */
+  g_assert (app->default_profile_id != NULL);
+  g_assert (app->system_font_desc != NULL);
 
   terminal_accels_init ();
   terminal_encoding_init ();
