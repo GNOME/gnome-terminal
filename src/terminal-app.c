@@ -1367,7 +1367,7 @@ terminal_app_get_clone_command (TerminalApp *app,
   /* final NULL */
   g_ptr_array_add (args, NULL);
 
-  *argcp = args->len;
+  *argcp = args->len - 1;
   *argvp = (char**) g_ptr_array_free (args, FALSE);
 }
 
