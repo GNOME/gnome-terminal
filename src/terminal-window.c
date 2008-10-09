@@ -133,6 +133,8 @@ static void edit_copy_callback                (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_paste_callback               (GtkAction *action,
                                                TerminalWindow *window);
+static void edit_select_all_callback          (GtkAction *action,
+                                               TerminalWindow *window);
 static void edit_keybindings_callback         (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_profiles_callback            (GtkAction *action,
@@ -1472,6 +1474,9 @@ terminal_window_init (TerminalWindow *window)
       { "EditPaste", GTK_STOCK_PASTE, NULL, "<shift><control>V",
         NULL,
         G_CALLBACK (edit_paste_callback) },
+      { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, NULL,
+        NULL,
+        G_CALLBACK (edit_select_all_callback) },
       { "EditPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), "",
         NULL,
         G_CALLBACK (edit_paste_callback) },
@@ -2893,6 +2898,18 @@ edit_paste_callback (GtkAction *action,
                                  data);
 }
 
+static void
+edit_select_all_callback (GtkAction *action,
+                          TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (!priv->active_screen)
+    return;
+
+  vte_terminal_select_all (VTE_TERMINAL (priv->active_screen));
+}
+      
 static void
 edit_keybindings_callback (GtkAction *action,
                            TerminalWindow *window)
