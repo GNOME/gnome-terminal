@@ -866,6 +866,34 @@ edit_menu_activate_callback (GtkMenuItem *menuitem,
 }
 
 static void
+screen_resize_window_cb (TerminalScreen *screen,
+                         guint width,
+                         guint height,
+                         TerminalWindow* window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+  guint grid_width, grid_height;
+  int xpad, ypad, char_width, char_height;
+
+  /* The resize-window signal sucks. Re-compute grid widths */
+
+  vte_terminal_get_padding (terminal, &xpad, &ypad);
+  char_width = vte_terminal_get_char_width (terminal);
+  char_height = vte_terminal_get_char_height (terminal);
+
+  grid_width = (width - 2 * xpad) / char_width;
+  grid_height = (height - 2 * ypad) / char_height;
+
+  vte_terminal_set_size (terminal, grid_width, grid_height);
+
+  if (screen != priv->active_screen)
+    return;
+
+  terminal_window_set_size_force_grid (window, screen, TRUE, -1, -1); //grid_width, grid_height);
+}
+
+static void
 terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
@@ -2146,7 +2174,8 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
     grid_height = force_grid_height;
   
   vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad, &ypad);
-  
+
+  /* FIXMEchpe: shouldn't this 2 * PAD ? */
   w += xpad + char_width * grid_width;
   h += ypad + char_height * grid_height;
 
@@ -2369,6 +2398,8 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (screen_show_popup_menu_callback), window);
   g_signal_connect (screen, "match-clicked",
                     G_CALLBACK (screen_match_clicked_cb), window);
+  g_signal_connect (screen, "resize-window",
+                    G_CALLBACK (screen_resize_window_cb), window);
 
   g_signal_connect (screen, "close-screen",
                     G_CALLBACK (screen_close_cb), window);
@@ -2395,7 +2426,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
       scale = terminal_screen_get_font_scale (priv->active_screen);
       terminal_screen_set_font_scale (screen, scale);
     }
-  
+
   /* Make the first-added screen the active one */
   /* FIXME: this shouldn't be necessary since we'll immediately get
    * page-selected callback.
@@ -2453,6 +2484,9 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   g_signal_handlers_disconnect_by_func (screen,
                                         G_CALLBACK (screen_match_clicked_cb),
+                                        window);
+  g_signal_handlers_disconnect_by_func (screen,
+                                        G_CALLBACK (screen_resize_window_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (screen,
