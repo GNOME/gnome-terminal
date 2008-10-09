@@ -2254,9 +2254,8 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   
   vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad, &ypad);
 
-  /* FIXMEchpe: shouldn't this 2 * PAD ? */
-  w += xpad + char_width * grid_width;
-  h += ypad + char_height * grid_height;
+  w += xpad * 2 + char_width * grid_width;
+  h += ypad * 2 + char_height * grid_height;
 
 #ifdef DEBUG_GEOMETRY
   g_printerr ("set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
