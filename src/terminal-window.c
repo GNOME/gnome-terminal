@@ -85,6 +85,9 @@ struct _TerminalWindowPrivate
 #define PROFILES_UI_PATH        "/menubar/Terminal/TerminalProfiles"
 #define PROFILES_POPUP_UI_PATH  "/Popup/PopupTerminalProfiles/ProfilesPH"
 
+#define SIZE_TO_UI_PATH            "/menubar/Terminal/TerminalSizeToPH"
+#define SIZE_TO_ACTION_NAME_PREFIX "TerminalSizeTo"
+
 #define STOCK_NEW_WINDOW  "window-new"
 #define STOCK_NEW_TAB     "tab-new"
 
@@ -791,6 +794,80 @@ terminal_window_update_encoding_menu_active_encoding (TerminalWindow *window)
   g_signal_handlers_block_by_func (action, G_CALLBACK (terminal_set_encoding_callback), window);
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
   g_signal_handlers_unblock_by_func (action, G_CALLBACK (terminal_set_encoding_callback), window);
+}
+
+static void
+terminal_size_to_cb (GtkAction *action,
+                     TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  const char *name;
+  char *end = NULL;
+  guint width, height;
+
+  if (priv->active_screen == NULL)
+    return;
+
+  name = gtk_action_get_name (action) + strlen (SIZE_TO_ACTION_NAME_PREFIX);
+  width = g_ascii_strtoull (name, &end, 10);
+  g_assert (end && *end == 'x');
+  height = g_ascii_strtoull (end + 1, &end, 10);
+  g_assert (end && *end == '\0');
+
+  vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), width, height);
+
+  terminal_window_set_size_force_grid (window, priv->active_screen, TRUE, -1, -1);
+}
+
+static void
+terminal_window_update_size_to_menu (TerminalWindow *window)
+{
+  static const struct {
+    guint grid_width;
+    guint grid_height;
+  } predefined_sizes[] = {
+    { 80, 24 },
+    { 80, 43 },
+    { 132, 24 },
+    { 132, 43 }
+  };
+  TerminalWindowPrivate *priv = window->priv;
+  guint i;
+
+  /* We only install this once, so there's no need for a separate action group
+   * and any cleanup + build-new-one action here.
+   */
+
+  for (i = 0; i < G_N_ELEMENTS (predefined_sizes); ++i)
+    {
+      guint grid_width = predefined_sizes[i].grid_width;
+      guint grid_height = predefined_sizes[i].grid_height;
+      GtkAction *action;
+      char name[40];
+      char *display_name;
+      
+      g_snprintf (name, sizeof (name), SIZE_TO_ACTION_NAME_PREFIX "%ux%u",
+                  grid_width, grid_height);
+
+      /* If there are ever more than 9 of these, extend this to use A..Z as mnemonics,
+       * like we do for the profiles menu.
+       */
+      display_name = g_strdup_printf ("_%u. %ux%u", i + 1, grid_width, grid_height);
+
+      action = gtk_action_new (name, display_name, NULL, NULL);
+      g_free (display_name);
+
+      g_signal_connect (action, "activate",
+                        G_CALLBACK (terminal_size_to_cb), window);
+
+      gtk_action_group_add_action (priv->action_group, action);
+      g_object_unref (action);
+
+      gtk_ui_manager_add_ui (priv->ui_manager, priv->ui_id,
+                             SIZE_TO_UI_PATH,
+                             name, name,
+                             GTK_UI_MANAGER_MENUITEM, FALSE);
+    }
 }
 
 /* Actions stuff */
@@ -1632,6 +1709,8 @@ terminal_window_init (TerminalWindow *window)
   priv->use_default_menubar_visibility = TRUE;
 
   terminal_window_update_encoding_menu (window);
+
+  terminal_window_update_size_to_menu (window);
 
   /* We have to explicitly call this, since screen-changed is NOT
    * emitted for the toplevel the first time!
