@@ -120,14 +120,12 @@ static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
+static void terminal_screen_child_exited  (VteTerminal *terminal);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
 static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
-
-static void terminal_screen_widget_child_died        (GtkWidget      *term,
-                                                      TerminalScreen *screen);
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
@@ -369,10 +367,6 @@ terminal_screen_init (TerminalScreen *screen)
                     G_CALLBACK (terminal_screen_icon_title_changed),
                     screen);
 
-  g_signal_connect (screen, "child-exited",
-                    G_CALLBACK (terminal_screen_widget_child_died),
-                    screen);
-
   g_signal_connect (terminal_app_get (), "notify::system-font",
                     G_CALLBACK (terminal_screen_system_font_notify_cb), screen);
 
@@ -457,6 +451,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+  VteTerminalClass *terminal_class = VTE_TERMINAL_CLASS (klass);
   guint i;
 
   object_class->dispose = terminal_screen_dispose;
@@ -469,6 +464,8 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
+
+  terminal_class->child_exited = terminal_screen_child_exited;
 
   signals[PROFILE_SET] =
     g_signal_new (I_("profile-set"),
@@ -1789,13 +1786,14 @@ terminal_screen_icon_title_changed (VteTerminal *vte_terminal,
   queue_recheck_working_dir (screen);
 }
 
-
 static void
-terminal_screen_widget_child_died (GtkWidget      *term,
-                                   TerminalScreen *screen)
+terminal_screen_child_exited (VteTerminal *terminal)
 {
+  TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
   TerminalExitAction action;
+
+  /* No need to chain up to VteTerminalClass::child_exited since it's NULL */
 
   priv->child_pid = -1;
   
