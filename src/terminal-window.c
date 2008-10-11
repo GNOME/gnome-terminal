@@ -732,7 +732,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   else
     charset = NULL;
   
-  encodings = terminal_get_active_encodings ();
+  encodings = terminal_app_get_active_encodings (terminal_app_get ());
 
   group = NULL;
   n = 0;
@@ -1434,6 +1434,13 @@ terminal_window_profile_list_changed_cb (TerminalApp *app,
 }
 
 static void
+terminal_window_encoding_list_changed_cb (TerminalApp *app,
+                                          TerminalWindow *window)
+{
+  terminal_window_update_encoding_menu (window);
+}
+
+static void
 terminal_window_init (TerminalWindow *window)
 {
   const GtkActionEntry menu_entries[] =
@@ -1710,10 +1717,12 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (app, "profile-list-changed",
                     G_CALLBACK (terminal_window_profile_list_changed_cb), window);
   
+  terminal_window_encoding_list_changed_cb (app, window);
+  g_signal_connect (app, "encoding-list-changed",
+                    G_CALLBACK (terminal_window_encoding_list_changed_cb), window);
+
   terminal_window_set_menubar_visible (window, TRUE);
   priv->use_default_menubar_visibility = TRUE;
-
-  terminal_window_update_encoding_menu (window);
 
   terminal_window_update_size_to_menu (window);
 
