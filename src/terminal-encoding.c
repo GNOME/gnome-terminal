@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-#include "encoding.h"
+#include "terminal-encoding.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
 #include "terminal-profile.h"

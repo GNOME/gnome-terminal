@@ -26,10 +26,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>
 
-#include "encoding.h"
 #include "skey-popup.h"
 #include "terminal-accels.h"
 #include "terminal-app.h"
+#include "terminal-encoding.h"
 #include "terminal-intl.h"
 #include "terminal-screen-container.h"
 #include "terminal-tabs-menu.h"

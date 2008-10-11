@@ -34,7 +34,7 @@
 #include "terminal-window.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
-#include "encoding.h"
+#include "terminal-encoding.h"
 #include <gconf/gconf-client.h>
 #include <string.h>
 #include <stdlib.h>

@@ -29,7 +29,6 @@
 #include "terminal-accels.h"
 #include "terminal-options.h"
 #include "terminal-util.h"
-#include "encoding.h"
 #include <stdlib.h>
 #include <time.h>
 #include <gdk/gdkx.h>
