@@ -306,10 +306,16 @@ terminal_accels_shutdown (void)
   if (sync_idle_id != 0)
     {
       g_source_remove (sync_idle_id);
+      sync_idle_id = 0;
+
       sync_idle_cb (NULL);
     }
 
   g_hash_table_destroy (gconf_key_to_entry);
+  gconf_key_to_entry = NULL;
+
+  g_object_unref (notification_group);
+  notification_group = NULL;
 }
 
 static gboolean
