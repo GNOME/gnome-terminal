@@ -207,7 +207,7 @@ static gboolean binding_from_value  (GConfValue       *value,
 static gboolean sync_idle_cb (gpointer data);
 
 static guint sync_idle_id = 0;
-static GtkAccelGroup * /* accel_group_i_need_because_gtk_accel_api_sucks */ hack_group = NULL;
+static GtkAccelGroup *notification_group = NULL;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
@@ -262,7 +262,7 @@ terminal_accels_init (void)
 
   gconf_key_to_entry = g_hash_table_new (g_str_hash, g_str_equal);
 
-  hack_group = gtk_accel_group_new ();
+  notification_group = gtk_accel_group_new ();
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
@@ -281,7 +281,7 @@ terminal_accels_init (void)
 	  g_closure_ref (key_entry->closure);
 	  g_closure_sink (key_entry->closure);
 	  
-	  gtk_accel_group_connect_by_path (hack_group,
+	  gtk_accel_group_connect_by_path (notification_group,
 					   I_(key_entry->accel_path),
 					   key_entry->closure);
 
@@ -289,7 +289,7 @@ terminal_accels_init (void)
 	}
     }
   
-  g_signal_connect (hack_group, "accel_changed",
+  g_signal_connect (notification_group, "accel_changed",
                     G_CALLBACK (accel_changed_callback), NULL);
 }
 
@@ -651,7 +651,7 @@ accel_edited_callback (GtkCellRendererAccel *cell,
     return;
 
   /* Check if we already have an entry using this accel */
-  entries = gtk_accel_group_query (hack_group, keyval, mask, &n_entries);
+  entries = gtk_accel_group_query (notification_group, keyval, mask, &n_entries);
   if (n_entries > 0)
     {
       if (entries[0].accel_path_quark != g_quark_from_string (ke->accel_path))
@@ -746,7 +746,7 @@ static void
 edit_keys_dialog_destroy_cb (GtkWidget *widget,
                              gpointer user_data)
 {
-  g_signal_handlers_disconnect_by_func (hack_group, G_CALLBACK (treeview_accel_changed_cb), user_data);
+  g_signal_handlers_disconnect_by_func (notification_group, G_CALLBACK (treeview_accel_changed_cb), user_data);
   edit_keys_dialog = NULL;
 }
 
@@ -854,7 +854,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
-  g_signal_connect (hack_group, "accel-changed",
+  g_signal_connect (notification_group, "accel-changed",
                     G_CALLBACK (treeview_accel_changed_cb), tree);
 
   edit_keys_dialog = dialog;
