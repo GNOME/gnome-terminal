@@ -990,6 +990,10 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   not_first = page_num > 0;
   not_last = page_num + 1 < num_pages;
 
+  /* Hide the tabs menu in single-tab windows */
+  action = gtk_action_group_get_action (action_group, "Tabs");
+  gtk_action_set_visible (action, num_pages > 1);
+  
 #if 1
   /* NOTE: We always make next/prev actions sensitive except in
    * single-tab windows, so the corresponding shortcut key escape code
