@@ -127,9 +127,6 @@ static const struct {
   { "JOHAB",  N_("Korean") },
 #endif
 };
-                           
-static GHashTable *encodings_hashtable;
-static gboolean encodings_writable;
 
 typedef struct {
   GtkWidget *dialog;
@@ -146,16 +143,9 @@ typedef struct {
 
 static GtkWidget *encoding_dialog = NULL;
 
-static void update_active_encoding_tree_models (void);
-
-static void encodings_notify_cb (GConfClient *client,
-                                 guint        cnxn_id,
-                                 GConfEntry  *entry,
-                                 gpointer     user_data);
-
-static TerminalEncoding *
+TerminalEncoding *
 terminal_encoding_new (const char *charset,
-                       const char *name,
+                       const char *display_name,
                        gboolean is_custom,
                        gboolean force_valid)
 {
@@ -164,9 +154,10 @@ terminal_encoding_new (const char *charset,
   encoding = g_slice_new (TerminalEncoding);
   encoding->refcount = 1;
   encoding->charset = g_strdup (charset);
-  encoding->name = g_strdup (name);
+  encoding->name = g_strdup (display_name);
   encoding->valid = encoding->validity_checked = force_valid;
   encoding->is_custom = is_custom;
+  encoding->is_active = FALSE;
 
   return encoding;
 }
@@ -191,7 +182,7 @@ terminal_encoding_unref (TerminalEncoding *encoding)
   g_slice_free (TerminalEncoding, encoding);
 }
 
-static gboolean
+gboolean
 terminal_encoding_is_valid (TerminalEncoding *encoding)
 {
   /* All of the printing ASCII characters from space (32) to the tilde (126) */
@@ -240,9 +231,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
   return encoding->valid;
 }
 
-#define TERMINAL_TYPE_ENCODING (terminal_encoding_get_type ())
-
-static GType
+GType
 terminal_encoding_get_type (void)
 {
   static GType type = 0;
@@ -257,92 +246,13 @@ terminal_encoding_get_type (void)
 }
 
 static void
-encoding_mark_active (gpointer key,
-                      gpointer value,
-                      gpointer data)
-{
-  TerminalEncoding *encoding = (TerminalEncoding *) value;
-  guint active = GPOINTER_TO_UINT (data);
-
-  encoding->is_active = active;
-}
-
-static void
-encodings_notify_cb (GConfClient *client,
-                     guint        cnxn_id,
-                     GConfEntry  *entry,
-                     gpointer     user_data)
-{
-  GConfValue *val;
-  GSList *strings, *tmp;
-  TerminalEncoding *encoding;
-  const char *charset;
-
-  encodings_writable = gconf_entry_get_is_writable (entry);
-
-  /* Mark all as non-active, then re-enable the active ones */
-  g_hash_table_foreach (encodings_hashtable, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
-
-  /* First add the local encoding. */
-  if (!g_get_charset (&charset))
-    {
-      encoding = g_hash_table_lookup (encodings_hashtable, charset);
-      if (encoding)
-        encoding->is_active = TRUE;
-    }
-
-  /* Always ensure that UTF-8 is available. */
-  encoding = g_hash_table_lookup (encodings_hashtable, "UTF-8");
-  g_assert (encoding);
-  encoding->is_active = TRUE;
-
-  val = gconf_entry_get_value (entry);
-  if (val != NULL &&
-      val->type == GCONF_VALUE_LIST &&
-      gconf_value_get_list_type (val) == GCONF_VALUE_STRING)
-    strings = gconf_value_get_list (val);
-  else
-    strings = NULL;
-
-  for (tmp = strings; tmp != NULL; tmp = tmp->next)
-    {
-      GConfValue *v = (GConfValue *) tmp->data;
-      
-      charset = gconf_value_get_string (v);
-      if (!charset)
-        continue;
-
-      /* We already handled the locale charset above */
-      if (strcmp (charset, "current") == 0)
-        continue; 
-
-      encoding = g_hash_table_lookup (encodings_hashtable, charset);
-      if (!encoding)
-        {
-          encoding = terminal_encoding_new (charset,
-                                            _("User Defined"),
-                                            TRUE,
-                                            TRUE /* scary! */);
-          g_hash_table_insert (encodings_hashtable, encoding->charset, encoding);
-        }
-
-      if (!terminal_encoding_is_valid (encoding))
-        continue;
-
-      encoding->is_active = TRUE;
-    }
-
-  update_active_encoding_tree_models ();
-}
-
-static void
 update_active_encodings_gconf (void)
 {
   GSList *list, *l;
   GSList *strings = NULL;
   GConfClient *conf;
 
-  list = terminal_get_active_encodings ();
+  list = terminal_app_get_active_encodings (terminal_app_get ());
   for (l = list; l != NULL; l = l->next)
     {
       TerminalEncoding *encoding = (TerminalEncoding *) l->data;
@@ -361,34 +271,6 @@ update_active_encodings_gconf (void)
   g_slist_free (strings);
   g_slist_foreach (list, (GFunc) terminal_encoding_unref, NULL);
   g_slist_free (list);
-}
-
-static void
-add_active_encoding_to_list (gpointer key,
-                             gpointer value,
-                             gpointer data)
-{
-  TerminalEncoding *encoding = (TerminalEncoding *) value;
-  GSList **list = (GSList **) data;
-
-  if (!encoding->is_active)
-    return;
-
-  *list = g_slist_prepend (*list, terminal_encoding_ref (encoding));
-}
-
-/**
- * terminal_get_active_encodings:
- *
- * Returns: a newly allocated list of newly referenced #TerminalEncoding objects.
- */
-GSList*
-terminal_get_active_encodings (void)
-{
-  GSList *list = NULL;
-
-  g_hash_table_foreach (encodings_hashtable, (GHFunc) add_active_encoding_to_list, &list);
-  return g_slist_reverse (list); /* FIXME sort ! */
 }
 
 static void
@@ -467,7 +349,6 @@ button_clicked_cb (GtkWidget *button,
   /* We don't need to emit row-changed here, since updating the gconf pref
    * will update the models.
    */
-  
   update_active_encodings_gconf ();
 }
 
@@ -519,38 +400,28 @@ encodings_create_treemodel (GtkListStore *base_store,
 }
 
 static void
-update_single_liststore (EncodingDialogData *data)
+encodings_list_changed_cb (TerminalApp *app,
+                           EncodingDialogData *data)
 {
   gtk_list_store_clear (data->base_store);
-  g_hash_table_foreach (encodings_hashtable, (GHFunc) liststore_insert_encoding, data->base_store);
-}
 
-static GSList *encoding_dialogs_data = NULL;
-
-static void
-unregister_liststore (void    *data,
-                      GObject *where_object_was)
-{
-  encoding_dialogs_data = g_slist_remove (encoding_dialogs_data, data);
+  g_hash_table_foreach (terminal_app_get_encodings (app), (GHFunc) liststore_insert_encoding, data->base_store);
 }
 
 static void
-update_active_encoding_tree_models (void)
+encoding_dialog_data_free (EncodingDialogData *data)
 {
-  g_slist_foreach (encoding_dialogs_data, (GFunc) update_single_liststore, NULL);
-}
+  g_signal_handlers_disconnect_by_func (terminal_app_get (),
+                                        G_CALLBACK (encodings_list_changed_cb),
+                                        data);
 
-static void
-register_liststore (EncodingDialogData *data)
-{
-  update_single_liststore (data);
-  encoding_dialogs_data = g_slist_prepend (encoding_dialogs_data, data);
-  g_object_weak_ref (G_OBJECT (data->dialog), unregister_liststore, data);
+  g_free (data);
 }
 
 void
 terminal_encoding_dialog_show (GtkWindow *transient_parent)
 {
+  TerminalApp *app;
   GtkCellRenderer *cell_renderer;
   GtkTreeViewColumn *column;
   GtkTreeModel *model;
@@ -577,7 +448,7 @@ terminal_encoding_dialog_show (GtkWindow *transient_parent)
       return;
     }
 
-  g_object_set_data_full (G_OBJECT (data->dialog), "GT::Data", data, (GDestroyNotify) g_free);
+  g_object_set_data_full (G_OBJECT (data->dialog), "GT::Data", data, (GDestroyNotify) encoding_dialog_data_free);
 
   gtk_window_set_transient_for (GTK_WINDOW (data->dialog), transient_parent);
   gtk_window_set_role (GTK_WINDOW (data->dialog), "gnome-terminal-encodings");
@@ -644,7 +515,12 @@ terminal_encoding_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (selection_changed_cb), data);
 
   data->base_store = gtk_list_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, TERMINAL_TYPE_ENCODING);
-  register_liststore (data);
+
+  app = terminal_app_get ();
+  encodings_list_changed_cb (app, data);
+  g_signal_connect (app, "encoding-list-changed",
+                    G_CALLBACK (encodings_list_changed_cb), data);
+
   /* Now turn on sorting */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (data->base_store),
                                         COLUMN_NAME,
@@ -667,14 +543,12 @@ terminal_encoding_dialog_show (GtkWindow *transient_parent)
                     G_CALLBACK (gtk_widget_destroyed), &encoding_dialog);
 }
 
-void
-terminal_encoding_init (void)
+GHashTable *
+terminal_encodings_get_builtins (void)
 {
-  GConfClient *conf;
+  GHashTable *encodings_hashtable;
   guint i;
   const char *locale_charset = NULL;
-
-  conf = gconf_client_get_default ();
 
   encodings_hashtable = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                NULL,
@@ -702,13 +576,5 @@ terminal_encoding_init (void)
       g_hash_table_insert (encodings_hashtable, encoding->charset, encoding);
     }
 
-  gconf_client_notify_add (conf,
-                           CONF_GLOBAL_PREFIX"/active_encodings",
-                           encodings_notify_cb,
-                           NULL /* user_data */, NULL,
-                           NULL);
-
-  gconf_client_notify (conf, CONF_GLOBAL_PREFIX"/active_encodings");
-
-  g_object_unref (conf);
+  return encodings_hashtable;
 }

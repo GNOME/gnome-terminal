@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 
+#define TERMINAL_TYPE_ENCODING (terminal_encoding_get_type ())
+
 typedef struct
 {
   int   refcount;
@@ -35,14 +37,21 @@ typedef struct
   guint is_active        : 1;
 } TerminalEncoding;
 
-void terminal_encoding_init (void);
+GType terminal_encoding_get_type (void);
 
-void terminal_encoding_dialog_show (GtkWindow *transient_parent);
+TerminalEncoding *terminal_encoding_new (const char *charset,
+                                         const char *display_name,
+                                         gboolean is_custom,
+                                         gboolean force_valid);
 
-GSList* terminal_get_active_encodings (void);
-
-TerminalEncoding* terminal_encoding_ref (TerminalEncoding *encoding);
+TerminalEncoding *terminal_encoding_ref (TerminalEncoding *encoding);
 
 void terminal_encoding_unref (TerminalEncoding *encoding);
+
+gboolean terminal_encoding_is_valid (TerminalEncoding *encoding);
+
+GHashTable *terminal_encodings_get_builtins (void);
+
+void terminal_encoding_dialog_show (GtkWindow *transient_parent);
 
 #endif /* TERMINAL_ENCODING_H */

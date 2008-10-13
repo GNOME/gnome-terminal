@@ -91,8 +91,6 @@ void terminal_app_edit_encodings   (TerminalApp     *app,
 
 GList* terminal_app_get_profile_list (TerminalApp *app);
 
-guint  terminal_app_get_profile_count (TerminalApp *app);
-
 TerminalProfile* terminal_app_ensure_profile_fallback (TerminalApp *app);
 
 TerminalProfile* terminal_app_get_profile_by_name         (TerminalApp *app,
@@ -106,6 +104,10 @@ TerminalProfile* terminal_app_get_default_profile (TerminalApp *app);
 
 /* never returns NULL if any profiles exist, one is always supposed to */
 TerminalProfile* terminal_app_get_profile_for_new_term (TerminalApp *app);
+
+GHashTable *terminal_app_get_encodings (TerminalApp *app);
+
+GSList* terminal_app_get_active_encodings (TerminalApp *app);
 
 G_END_DECLS
 

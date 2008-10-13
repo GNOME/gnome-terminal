@@ -72,6 +72,7 @@ struct _TerminalAppClass {
 
   void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
+  void (* encoding_list_changed) (TerminalApp *app);
 };
 
 struct _TerminalApp
@@ -90,6 +91,7 @@ struct _TerminalApp
   GConfClient *conf;
   guint profile_list_notify_id;
   guint default_profile_notify_id;
+  guint encoding_list_notify_id;
   guint system_font_notify_id;
   guint enable_mnemonics_notify_id;
   guint enable_menu_accels_notify_id;
@@ -98,6 +100,9 @@ struct _TerminalApp
   char* default_profile_id;
   TerminalProfile *default_profile;
   gboolean default_profile_locked;
+
+  GHashTable *encodings;
+  gboolean encodings_locked;
 
   PangoFontDescription *system_font_desc;
   gboolean enable_mnemonics;
@@ -119,6 +124,7 @@ enum
 {
   QUIT,
   PROFILE_LIST_CHANGED,
+  ENCODING_LIST_CHANGED,
   LAST_SIGNAL
 };
 
@@ -144,6 +150,8 @@ static TerminalApp *global_app = NULL;
 
 #define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
 #define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
+
+#define ENCODING_LIST_KEY CONF_GLOBAL_PREFIX "/active_encodings"
 
 /* Helper functions */
 
@@ -672,7 +680,8 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
   GList *profiles_to_delete, *l;
   gboolean need_new_default;
   TerminalProfile *fallback;
-  
+  guint count;
+
   g_object_freeze_notify (object);
 
   profiles_to_delete = terminal_app_get_profile_list (app);
@@ -707,8 +716,8 @@ terminal_app_profile_list_notify_cb (GConfClient *conf,
 ensure_one_profile:
 
   fallback = NULL;
-  if (terminal_app_get_profile_count (app) == 0 ||
-      terminal_app_get_profile_count (app) <= g_list_length (profiles_to_delete))
+  count = g_hash_table_size (app->profiles);
+  if (count == 0 || count <= g_list_length (profiles_to_delete))
     {
       /* We are going to run out, so create the fallback
        * to be sure we always have one. Must be done
@@ -773,7 +782,7 @@ ensure_one_profile:
       g_object_notify (object, TERMINAL_APP_DEFAULT_PROFILE);
     }
 
-  g_assert (terminal_app_get_profile_count (app) > 0);
+  g_assert (g_hash_table_size (app->profiles) > 0);
 
   g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
 
@@ -805,6 +814,93 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
   app->default_profile = terminal_app_get_profile_by_name (app, name);
 
   g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
+}
+
+static int
+compare_encodings (TerminalEncoding *a,
+                   TerminalEncoding *b)
+{
+  return g_utf8_collate (a->name, b->name);
+}
+
+static void
+encoding_mark_active (gpointer key,
+                      gpointer value,
+                      gpointer data)
+{
+  TerminalEncoding *encoding = (TerminalEncoding *) value;
+  guint active = GPOINTER_TO_UINT (data);
+
+  encoding->is_active = active;
+}
+
+static void
+terminal_app_encoding_list_notify_cb (GConfClient *client,
+                                      guint        cnxn_id,
+                                      GConfEntry  *entry,
+                                      gpointer     user_data)
+{
+  TerminalApp *app = TERMINAL_APP (user_data);
+  GConfValue *val;
+  GSList *strings, *tmp;
+  TerminalEncoding *encoding;
+  const char *charset;
+
+  app->encodings_locked = !gconf_entry_get_is_writable (entry);
+
+  /* Mark all as non-active, then re-enable the active ones */
+  g_hash_table_foreach (app->encodings, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
+
+  /* First add the local encoding. */
+  if (!g_get_charset (&charset))
+    {
+      encoding = g_hash_table_lookup (app->encodings, charset);
+      if (encoding)
+        encoding->is_active = TRUE;
+    }
+
+  /* Always ensure that UTF-8 is available. */
+  encoding = g_hash_table_lookup (app->encodings, "UTF-8");
+  g_assert (encoding);
+  encoding->is_active = TRUE;
+
+  val = gconf_entry_get_value (entry);
+  if (val != NULL &&
+      val->type == GCONF_VALUE_LIST &&
+      gconf_value_get_list_type (val) == GCONF_VALUE_STRING)
+    strings = gconf_value_get_list (val);
+  else
+    strings = NULL;
+
+  for (tmp = strings; tmp != NULL; tmp = tmp->next)
+    {
+      GConfValue *v = (GConfValue *) tmp->data;
+      
+      charset = gconf_value_get_string (v);
+      if (!charset)
+        continue;
+
+      /* We already handled the locale charset above */
+      if (strcmp (charset, "current") == 0)
+        continue; 
+
+      encoding = g_hash_table_lookup (app->encodings, charset);
+      if (!encoding)
+        {
+          encoding = terminal_encoding_new (charset,
+                                            _("User Defined"),
+                                            TRUE,
+                                            TRUE /* scary! */);
+          g_hash_table_insert (app->encodings, encoding->charset, encoding);
+        }
+
+      if (!terminal_encoding_is_valid (encoding))
+        continue;
+
+      encoding->is_active = TRUE;
+    }
+
+  g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
 }
 
 static void
@@ -1069,7 +1165,7 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
   gtk_widget_set_sensitive (app->manage_profiles_edit_button, selected);
   gtk_widget_set_sensitive (app->manage_profiles_delete_button,
                             selected &&
-                            terminal_app_get_profile_count (app) > 1);
+                            g_hash_table_size (app->profiles) > 1);
 }
 
 static void
@@ -1370,7 +1466,9 @@ terminal_app_init (TerminalApp *app)
   app->enable_menu_accels = DEFAULT_ENABLE_MENU_BAR_ACCEL;
 
   app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  
+
+  app->encodings = terminal_encodings_get_builtins ();
+
   app->conf = gconf_client_get_default ();
 
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
@@ -1389,6 +1487,12 @@ terminal_app_init (TerminalApp *app)
     gconf_client_notify_add (app->conf,
                              DEFAULT_PROFILE_KEY,
                              terminal_app_default_profile_notify_cb,
+                             app, NULL, NULL);
+
+  app->encoding_list_notify_id =
+    gconf_client_notify_add (app->conf,
+                             ENCODING_LIST_KEY,
+                             terminal_app_encoding_list_notify_cb,
                              app, NULL, NULL);
 
   app->system_font_notify_id =
@@ -1412,6 +1516,7 @@ terminal_app_init (TerminalApp *app)
   /* Load the settings */
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
+  gconf_client_notify (app->conf, ENCODING_LIST_KEY);
   gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
   gconf_client_notify (app->conf, ENABLE_MENU_BAR_ACCEL_KEY);
   gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
@@ -1421,7 +1526,6 @@ terminal_app_init (TerminalApp *app)
   g_assert (app->system_font_desc != NULL);
 
   terminal_accels_init ();
-  terminal_encoding_init ();
   
   sm_client = gnome_master_client ();
   g_signal_connect (sm_client,
@@ -1443,6 +1547,8 @@ terminal_app_finalize (GObject *object)
     gconf_client_notify_remove (app->conf, app->profile_list_notify_id);
   if (app->default_profile_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
+  if (app->encoding_list_notify_id != 0)
+    gconf_client_notify_remove (app->conf, app->encoding_list_notify_id);
   if (app->system_font_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->system_font_notify_id);
   if (app->enable_menu_accels_notify_id != 0)
@@ -1459,8 +1565,9 @@ terminal_app_finalize (GObject *object)
 
   g_hash_table_destroy (app->profiles);
 
-  if (app->system_font_desc)
-    pango_font_description_free (app->system_font_desc);
+  g_hash_table_destroy (app->encodings);
+
+  pango_font_description_free (app->system_font_desc);
 
   terminal_accels_shutdown ();
 
@@ -1547,6 +1654,15 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   signals[PROFILE_LIST_CHANGED] =
     g_signal_new (I_("profile-list-changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (TerminalAppClass, profile_list_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  signals[ENCODING_LIST_CHANGED] =
+    g_signal_new (I_("encoding-list-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalAppClass, profile_list_changed),
@@ -1716,14 +1832,6 @@ terminal_app_get_profile_list (TerminalApp *app)
   return g_list_sort (g_hash_table_get_values (app->profiles), profiles_alphabetic_cmp);
 }
 
-guint
-terminal_app_get_profile_count (TerminalApp *app)
-{
-  g_return_val_if_fail (TERMINAL_IS_APP (app), 0);
-
-  return g_hash_table_size (app->profiles);
-}
-
 TerminalProfile*
 terminal_app_get_profile_by_name (TerminalApp *app,
                                   const char *name)
@@ -1777,4 +1885,36 @@ terminal_app_get_profile_for_new_term (TerminalApp *app)
     return profile;
 
   return NULL;
+}
+
+GHashTable *
+terminal_app_get_encodings (TerminalApp *app)
+{
+  return app->encodings;
+}
+
+/**
+ * terminal_app_get_active_encodings:
+ *
+ * Returns: a newly allocated list of newly referenced #TerminalEncoding objects.
+ */
+GSList*
+terminal_app_get_active_encodings (TerminalApp *app)
+{
+  GSList *list = NULL;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_hash_table_iter_init (&iter, app->encodings);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      TerminalEncoding *encoding = (TerminalEncoding *) value;
+
+      if (!encoding->is_active)
+        continue;
+
+      list = g_slist_prepend (list, terminal_encoding_ref (encoding));
+    }
+
+  return g_slist_sort (list, (GCompareFunc) compare_encodings);
 }
