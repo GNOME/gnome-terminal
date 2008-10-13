@@ -5,8 +5,6 @@ SUBDIRS = skey
 bin_PROGRAMS = gnome-terminal
 
 gnome_terminal_SOURCES= \
-	encoding.c \
-	encoding.h \
 	profile-editor.c \
 	profile-editor.h \
 	skey-popup.c \
@@ -16,6 +14,8 @@ gnome_terminal_SOURCES= \
 	terminal-accels.h \
 	terminal-app.c \
 	terminal-app.h \
+	terminal-encoding.c \
+	terminal-encoding.h \
 	terminal-intl.h \
 	terminal-marshal.c \
 	terminal-marshal.h \
