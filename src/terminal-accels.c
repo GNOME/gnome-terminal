@@ -26,8 +26,28 @@
 #include "terminal-profile.h"
 #include "terminal-util.h"
 
+#ifdef DEBUG_ACCELS
+#define D(x) x
+#else
 #define D(x)
+#endif
 
+/* NOTES
+ *
+ * There are two sources of keybindings changes, from GConf and from
+ * the accel map (happens with in-place menu editing).
+ *
+ * When a keybinding gconf key changes, we propagate that into the
+ * accel map.
+ * When the accel map changes, we queue a sync to gconf.
+ *
+ * To avoid infinite loops, we short-circuit in both directions
+ * if the value is unchanged from last known.
+ *
+ * In the keybinding editor, when editing or clearing an accel, we write
+ * the change directly to gconf and rely on the gconf callback to
+ * actually apply the change to the accel map.
+ */
 
 #define ACCEL_PATH_ROOT "<Actions>/Main/"
 #define ACCEL_PATH_NEW_TAB              ACCEL_PATH_ROOT "FileNewTab"
@@ -176,15 +196,6 @@ enum
   N_COLUMNS
 };
 
-/*
- * This is kind of annoying. We have two sources of keybinding change;
- * GConf and GtkAccelMap. GtkAccelMap will change if the user uses
- * the magic in-place editing mess. If accel map changes, we propagate
- * into GConf. If GConf changes we propagate into accel map.
- * To avoid infinite loop hell, we short-circuit in both directions
- * if the value is unchanged from last known.
- */
-
 static void keys_change_notify (GConfClient *client,
                                 guint        cnxn_id,
                                 GConfEntry  *entry,
@@ -211,6 +222,7 @@ static GtkAccelGroup *notification_group = NULL;
 /* never set gconf keys in response to receiving a gconf notify. */
 static int inside_gconf_notify = 0;
 static GtkWidget *edit_keys_dialog = NULL;
+static GtkTreeStore *edit_keys_store = NULL;
 static guint gconf_notify_id;
 static GHashTable *gconf_key_to_entry;
 
@@ -289,7 +301,7 @@ terminal_accels_init (void)
 	}
     }
   
-  g_signal_connect (notification_group, "accel_changed",
+  g_signal_connect (notification_group, "accel-changed",
                     G_CALLBACK (accel_changed_callback), NULL);
 }
 
@@ -357,6 +369,7 @@ keys_change_notify (GConfClient *client,
               gconf_value_get_string (val)));
 
   key_entry = g_hash_table_lookup (gconf_key_to_entry, key_from_gconf_key (gconf_entry_get_key (entry)));
+  D (if (!key_entry) g_print ("  WARNING: KeyEntry for changed key not found, bailing out\n"));
   if (!key_entry)
     return; /* shouldn't really happen, but let's be safe */
 
@@ -387,10 +400,21 @@ keys_change_notify (GConfClient *client,
               key_entry->accel_path,
               binding_name (keyval, mask))); /* memleak */
   inside_gconf_notify += 1;
+  /* Note that this may return FALSE, e.g. when the entry was already set correctly. */
   gtk_accel_map_change_entry (key_entry->accel_path,
                               keyval, mask,
                               TRUE);
   inside_gconf_notify -= 1;
+
+  /* This seems necessary to update the tree model, since sometimes the
+   * notification on the notification_group seems not to be emitted correctly.
+   * Without this change, when trying to set an accel to e.g. Alt-T (while the main
+   * menu in the terminal windows is _Terminal with Alt-T mnemonic) only displays
+   * the accel change after a re-expose of the row.
+   * FIXME: Find out *why* the accel-changed signal is wrong here!
+   */
+  if (edit_keys_store)
+    gtk_tree_model_foreach (GTK_TREE_MODEL (edit_keys_store), update_model_foreach, key_entry);
 }
 
 static void
@@ -612,6 +636,7 @@ treeview_accel_changed_cb (GtkAccelGroup  *accel_group,
                            GClosure *accel_closure,
                            GtkTreeModel *model)
 {
+g_print("TREEVIEW ACCEL-CHANGED keyval %s mask %x\n", gdk_keyval_name (keyval), modifier);
   gtk_tree_model_foreach (model, update_model_foreach, accel_closure->data);
 }
 
@@ -683,9 +708,17 @@ accel_edited_callback (GtkCellRendererAccel *cell,
 
   str = binding_name (keyval, mask);
 
-  D (g_print ("Edited keyval %s, setting gconf to %s\n",
+  D (g_print ("Edited path %s keyval %s, setting gconf to %s\n",
+              ke->accel_path,
               gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
               str));
+  D({
+    GtkAccelKey old_key;
+    if (gtk_accel_map_lookup_entry (ke->accel_path, &old_key)) {
+      g_print ("  Old entry of path %s is keyval %s mask %x\n", ke->accel_path, gdk_keyval_name (old_key.accel_key), old_key.accel_mods);
+    } else
+      g_print ("  Failed to look up the old entry of path %s\n", ke->accel_path);
+    })
 
   conf = gconf_client_get_default ();
   gconf_client_set_string (conf,
@@ -748,6 +781,7 @@ edit_keys_dialog_destroy_cb (GtkWidget *widget,
 {
   g_signal_handlers_disconnect_by_func (notification_group, G_CALLBACK (treeview_accel_changed_cb), user_data);
   edit_keys_dialog = NULL;
+  edit_keys_store = NULL;
 }
 
 static void
@@ -763,6 +797,17 @@ edit_keys_dialog_response_cb (GtkWidget *editor,
     
   gtk_widget_destroy (editor);
 }
+
+#ifdef DEBUG_ACCELS 
+static void
+row_changed (GtkTreeModel *tree_model,
+             GtkTreePath  *path,
+             GtkTreeIter  *iter,
+             gpointer      user_data)
+{
+  g_print ("ROW-CHANGED [%s]\n", gtk_tree_path_to_string (path));
+}
+#endif
 
 void
 terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
@@ -820,7 +865,11 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 
   /* Add the data */
 
-  tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
+  tree = edit_keys_store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
+#ifdef DEBUG_ACCELS
+  g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), NULL);
+#endif
+
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       GtkTreeIter parent_iter;
