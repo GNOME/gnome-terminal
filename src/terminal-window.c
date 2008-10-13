@@ -1585,6 +1585,12 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (action, "activate",
                     G_CALLBACK (edit_menu_activate_callback), window);
 
+  /* Set this action invisible so the Edit menu doesn't flash the first
+   * time it's shown and there's no text/uri-list on the clipboard.
+   */
+  action = gtk_action_group_get_action (priv->action_group, "EditPasteURIPaths");
+  gtk_action_set_visible (action, FALSE);
+
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
