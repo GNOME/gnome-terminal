@@ -834,6 +834,10 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     vte_terminal_set_cursor_blink_mode (vte_terminal,
                                         terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_BLINK_MODE));
 
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CURSOR_SHAPE))
+    vte_terminal_set_cursor_shape (vte_terminal,
+                                   terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_SHAPE));
+
   g_object_thaw_notify (object);
 }
 

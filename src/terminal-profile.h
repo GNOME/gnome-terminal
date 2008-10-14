@@ -73,6 +73,7 @@ typedef enum
 #define TERMINAL_PROFILE_BACKGROUND_TYPE        "background-type"
 #define TERMINAL_PROFILE_BACKSPACE_BINDING      "backspace-binding"
 #define TERMINAL_PROFILE_CURSOR_BLINK_MODE      "cursor-blink-mode"
+#define TERMINAL_PROFILE_CURSOR_SHAPE           "cursor-shape"
 #define TERMINAL_PROFILE_CUSTOM_COMMAND         "custom-command"
 #define TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR   "default-show-menubar"
 #define TERMINAL_PROFILE_DELETE_BINDING         "delete-binding"

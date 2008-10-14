@@ -799,6 +799,7 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("background-colorpicker", TERMINAL_PROFILE_BACKGROUND_COLOR);
   CONNECT ("background-image-filechooser", TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE);
   CONNECT ("backspace-binding-combobox", TERMINAL_PROFILE_BACKSPACE_BINDING);
+  CONNECT ("cursor-shape-combobox", TERMINAL_PROFILE_CURSOR_SHAPE);
   CONNECT ("custom-command-entry", TERMINAL_PROFILE_CUSTOM_COMMAND);
   CONNECT ("darken-background-scale", TERMINAL_PROFILE_BACKGROUND_DARKNESS);
   CONNECT ("delete-binding-combobox", TERMINAL_PROFILE_DELETE_BINDING);
