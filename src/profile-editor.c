@@ -280,7 +280,7 @@ color_scheme_combo_changed_cb (GtkWidget *combo,
                                GParamSpec *pspec,
                                TerminalProfile *profile)
 {
-  int i;
+  guint i;
   
   i = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
   
@@ -305,7 +305,7 @@ profile_colors_notify_scheme_combo_cb (TerminalProfile *profile,
                                        GtkComboBox *combo)
 {
   const GdkColor *fg, *bg;
-  int i;
+  guint i;
 
   fg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
   bg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
@@ -367,10 +367,10 @@ palette_color_notify_cb (GtkColorButton *button,
 {
   GtkWidget *editor;
   GdkColor color;
-  int i;
+  guint i;
 
   gtk_color_button_get_color (button, &color);
-  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "palette-entry-index"));
+  i = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "palette-entry-index"));
 
   editor = gtk_widget_get_toplevel (GTK_WIDGET (button));
   g_signal_handlers_block_by_func (profile, G_CALLBACK (profile_palette_notify_colorpickers_cb), editor);
@@ -725,10 +725,10 @@ terminal_profile_edit (TerminalProfile *profile,
       char name[32];
       char *text;
 
-      g_snprintf (name, sizeof (name), "palette-colorpicker-%d", i + 1);
+      g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i + 1);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
 
-      g_object_set_data (G_OBJECT (w), "palette-entry-index", GINT_TO_POINTER (i));
+      g_object_set_data (G_OBJECT (w), "palette-entry-index", GUINT_TO_POINTER (i));
 
       text = g_strdup_printf (_("Choose Palette Color %d"), i + 1);
       gtk_color_button_set_title (GTK_COLOR_BUTTON (w), text);

@@ -1625,7 +1625,7 @@ terminal_profile_set_palette_builtin (TerminalProfile *profile,
 
 gboolean
 terminal_profile_modify_palette_entry (TerminalProfile *profile,
-                                       int              i,
+                                       guint            i,
                                        const GdkColor  *color)
 {
   TerminalProfilePrivate *priv = profile->priv;
@@ -1634,10 +1634,8 @@ terminal_profile_modify_palette_entry (TerminalProfile *profile,
   GdkColor *old_color;
 
   array = g_value_get_boxed (g_value_array_get_nth (priv->properties, PROP_PALETTE));
-  if (!array)
-    return FALSE;
-
-  if (i < 0 || i >= array->n_values)
+  if (!array ||
+      i >= array->n_values)
     return FALSE;
 
   value = g_value_array_get_nth (array, i);

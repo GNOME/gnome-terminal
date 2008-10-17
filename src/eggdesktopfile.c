@@ -939,7 +939,7 @@ set_startup_notification_timeout (GdkDisplay *display,
 static GPtrArray *
 array_putenv (GPtrArray *env, char *variable)
 {
-  int i, keylen;
+  guint i, keylen;
 
   if (!env)
     {

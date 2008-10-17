@@ -863,7 +863,7 @@ save_state (EggSMClientXSMP *xsmp)
     {
       GKeyFile *merged_file;
       char *exec;
-      int i;
+      guint i;
 
       merged_file = g_key_file_new ();
       merge_keyfiles (merged_file, egg_desktop_file_get_key_file (desktop_file));
@@ -1114,7 +1114,7 @@ set_properties (EggSMClientXSMP *xsmp, ...)
   GPtrArray *props;
   SmProp *prop;
   va_list ap;
-  int i;
+  guint i;
 
   props = g_ptr_array_new ();
 
@@ -1207,7 +1207,7 @@ ptrarray_prop (const char *name, GPtrArray *values)
   SmProp *prop;
   SmPropValue pv;
   GArray *vals;
-  int i;
+  guint i;
 
   prop = g_new (SmProp, 1);
   prop->name = (char *)name;

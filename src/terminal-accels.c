@@ -116,7 +116,7 @@ typedef struct
 typedef struct
 {
   KeyEntry *key_entry;
-  gint n_elements;
+  guint n_elements;
   gchar *user_visible_name;
 } KeyEntryList;
 
@@ -300,7 +300,7 @@ void
 terminal_accels_init (void)
 {
   GConfClient *conf;
-  int i, j;
+  guint i, j;
 
   conf = gconf_client_get_default ();
   
@@ -864,7 +864,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell_renderer;
   GtkTreeStore *tree;
-  int i;
+  guint i;
 
   if (edit_keys_dialog != NULL)
     goto done;
@@ -920,7 +920,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       GtkTreeIter parent_iter;
-      int j;
+      guint j;
 
       gtk_tree_store_append (tree, &parent_iter, NULL);
       gtk_tree_store_set (tree, &parent_iter,
