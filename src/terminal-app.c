@@ -1016,10 +1016,12 @@ terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
     return;
 
   gconf_value = gconf_entry_get_value (entry);
-  if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
-    return;
+  if (gconf_value &&
+      gconf_value->type == GCONF_VALUE_BOOL)
+    enable = gconf_value_get_bool (gconf_value);
+  else
+    enable = TRUE;
 
-  enable = gconf_value_get_bool (gconf_value);
   if (enable == app->enable_mnemonics)
     return;
 
@@ -1041,10 +1043,12 @@ terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
     return;
 
   gconf_value = gconf_entry_get_value (entry);
-  if (!gconf_value || gconf_value->type != GCONF_VALUE_BOOL)
-    return;
+  if (gconf_value &&
+      gconf_value->type == GCONF_VALUE_BOOL)
+    enable = gconf_value_get_bool (gconf_value);
+  else
+    enable = TRUE;
 
-  enable = gconf_value_get_bool (gconf_value);
   if (enable == app->enable_menu_accels)
     return;
 
