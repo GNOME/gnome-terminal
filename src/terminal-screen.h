@@ -98,13 +98,7 @@ gboolean    terminal_screen_get_icon_title_set (TerminalScreen *screen);
 void terminal_screen_set_user_title (TerminalScreen *screen,
                                      const char *text);
 
-void        terminal_screen_set_dynamic_title      (TerminalScreen *screen,
-                                                    const char     *title,
-						    gboolean	   userset);
-void        terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
-                                                    const char     *title,
-						    gboolean	   userset);
-void        terminal_screen_set_title              (TerminalScreen *screen,
+void        terminal_screen_set_override_title     (TerminalScreen *screen,
                                                     const char     *title);
 
 const char *terminal_screen_get_dynamic_title      (TerminalScreen *screen);

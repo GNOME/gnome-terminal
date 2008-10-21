@@ -61,7 +61,7 @@ struct _TerminalScreenPrivate
   guint profile_forgotten_id;
   char *raw_title, *raw_icon_title;
   char *cooked_title, *cooked_icon_title;
-  char *title_from_arg;
+  char *override_title;
   gboolean icon_title_set;
   char **initial_env;
   char **override_command;
@@ -129,7 +129,7 @@ static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
-static gboolean cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_title);
+static gboolean terminal_screen_format_title (TerminalScreen *screen, const char *raw_title, char **old_cooked_title);
 
 static void terminal_screen_cook_title      (TerminalScreen *screen);
 static void terminal_screen_cook_icon_title (TerminalScreen *screen);
@@ -357,7 +357,7 @@ terminal_screen_init (TerminalScreen *screen)
   gtk_target_table_free (targets, n_targets);
   gtk_target_list_unref (target_list);
 
-  priv->title_from_arg = NULL;
+  priv->override_title = NULL;
   priv->user_title = FALSE;
   
   g_signal_connect (screen, "window-title-changed",
@@ -619,7 +619,7 @@ terminal_screen_finalize (GObject *object)
   
   g_free (priv->raw_title);
   g_free (priv->cooked_title);
-  g_free (priv->title_from_arg);
+  g_free (priv->override_title);
   g_free (priv->raw_icon_title);
   g_free (priv->cooked_icon_title);
   g_strfreev (priv->override_command);
@@ -683,6 +683,124 @@ gboolean
 terminal_screen_get_icon_title_set (TerminalScreen *screen)
 {
   return screen->priv->icon_title_set;
+}
+
+/* Supported format specifiers:
+ * %S = static title
+ * %D = dynamic title
+ * %A = dynamic title, falling back to static title if empty
+ * %- = separator, if not at start or end of string (excluding whitespace)
+ */
+static const char *
+terminal_screen_get_title_format (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  static const char *formats[] = {
+    "%A"      /* TERMINAL_TITLE_REPLACE */,
+    "%D%-%S"  /* TERMINAL_TITLE_BEFORE  */,
+    "%S%-%D"  /* TERMINAL_TITLE_AFTER   */,
+    "%S"      /* TERMINAL_TITLE_IGNORE  */
+  };
+
+  return formats[terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_TITLE_MODE)];
+}
+
+/**
+ * terminal_screen_format_title::
+ * @screen:
+ * @raw_title: main ingredient
+ * @titleptr <inout>: pointer of the current title string
+ * 
+ * Format title according @format, and stores it in <literal>*titleptr</literal>.
+ * Always ensures that *titleptr will be non-NULL.
+ *
+ * Returns: %TRUE iff the title changed
+ */
+static gboolean
+terminal_screen_format_title (TerminalScreen *screen,
+                              const char *raw_title,
+                              char **titleptr)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  const char *format, *arg;
+  const char *static_title = NULL;
+  GString *title;
+  gboolean add_sep;
+
+  g_assert (titleptr);
+
+  /* use --title argument if one was supplied, otherwise ask the profile */
+  if (priv->override_title)
+    static_title = priv->override_title;
+  else
+    static_title = terminal_profile_get_property_string (priv->profile, TERMINAL_PROFILE_TITLE);
+
+  //title = g_string_sized_new (strlen (static_title) + strlen (raw_title) + 3 + 1);
+  title = g_string_sized_new (128);
+
+  format = terminal_screen_get_title_format (screen);
+  for (arg = format; *arg; arg += 2)
+    {
+      const char *text_to_append = NULL;
+
+      g_assert (arg[0] == '%');
+
+      switch (arg[1])
+        {
+          case 'A':
+            text_to_append = raw_title ? raw_title : static_title;
+            break;
+          case 'D':
+            text_to_append = raw_title;
+            break;
+          case 'S':
+            text_to_append = static_title;
+            break;
+          case '-':
+            text_to_append = NULL;
+            add_sep = TRUE;
+            break;
+          default:
+            g_assert_not_reached ();
+        }
+
+      if (!text_to_append || !text_to_append[0])
+        continue;
+
+      if (add_sep && title->len > 0)
+        g_string_append (title, " - ");
+
+      g_string_append (title, text_to_append);
+      add_sep = FALSE;
+    }
+
+  if (*titleptr == NULL || strcmp (title->str, *titleptr) != 0)
+    {
+      g_free (*titleptr);
+      *titleptr = g_string_free (title, FALSE);
+      return TRUE;
+    }
+
+  g_string_free (title, TRUE);
+  return FALSE;
+}
+
+static void 
+terminal_screen_cook_title (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  
+  if (terminal_screen_format_title (screen, priv->raw_title, &priv->cooked_title))
+    g_object_notify (G_OBJECT (screen), "title");
+}
+
+static void 
+terminal_screen_cook_icon_title (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (terminal_screen_format_title (screen, priv->raw_icon_title, &priv->cooked_icon_title))
+    g_object_notify (G_OBJECT (screen), "icon-title");
 }
 
 static void
@@ -839,93 +957,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
                                    terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_CURSOR_SHAPE));
 
   g_object_thaw_notify (object);
-}
-
-/**
- * cook_title:
- * @screen:
- * @raw_title: main ingredient
- * @old_cooked_title: pointer of the current cooked_title
- * 
- * Cook title according to the profile of @screen. If the result is different from
- * <literal>*old_cooked_title</literal>, store it there.
- * Returns: %TRUE or %FALSE according to whether the cooked_title was changed.
- */
-
-static gboolean
-cook_title  (TerminalScreen *screen, const char *raw_title, char **old_cooked_title)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  TerminalTitleMode mode;
-  char *new_cooked_title = NULL;
-  const char *static_title_piece = NULL;
-
-  g_return_val_if_fail (old_cooked_title != NULL, FALSE);
-
-  mode = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_TITLE_MODE);
-
-  /* use --title argument if one was supplied, otherwise ask the profile */
-  if (priv->title_from_arg)
-    static_title_piece = priv->title_from_arg;
-  else
-    static_title_piece = terminal_profile_get_property_string (priv->profile, TERMINAL_PROFILE_TITLE);
-
-  switch (mode)
-    {
-    case TERMINAL_TITLE_AFTER:
-      new_cooked_title =
-        g_strconcat (static_title_piece,
-                     (raw_title && *raw_title) ? " - " : "",
-                     raw_title,
-                     NULL);
-      break;
-    case TERMINAL_TITLE_BEFORE:
-      new_cooked_title =
-        g_strconcat (raw_title ? raw_title : "",
-                     (raw_title && *raw_title) ? " - " : "",
-                     static_title_piece,
-                     NULL);
-      break;
-    case TERMINAL_TITLE_REPLACE:
-      if (raw_title)
-        new_cooked_title = g_strdup (raw_title);
-      else
-        new_cooked_title = g_strdup (static_title_piece);
-      break;
-    case TERMINAL_TITLE_IGNORE:
-      new_cooked_title = g_strdup (static_title_piece);
-    /* no default so we get missing cases statically */
-    }
-
-  if (*old_cooked_title == NULL || strcmp (new_cooked_title, *old_cooked_title) != 0)
-    {
-      g_free (*old_cooked_title);
-      *old_cooked_title = new_cooked_title;
-      return TRUE;
-    }
-  else
-    {
-      g_free (new_cooked_title);
-      return FALSE;
-    }
-}
-
-static void 
-terminal_screen_cook_title (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  if (cook_title (screen, priv->raw_title, &priv->cooked_title))
-    g_object_notify (G_OBJECT (screen), "title");
-}
-
-static void 
-terminal_screen_cook_icon_title (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-
-  if (cook_title (screen, priv->raw_icon_title, &priv->cooked_icon_title))
-    g_object_notify (G_OBJECT (screen), "icon-title");
 }
 
 static void
@@ -1555,7 +1586,7 @@ terminal_screen_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-void
+static void
 terminal_screen_set_dynamic_title (TerminalScreen *screen,
                                    const char     *title,
 				   gboolean	  userset)
@@ -1574,7 +1605,7 @@ terminal_screen_set_dynamic_title (TerminalScreen *screen,
   terminal_screen_cook_title (screen);
 }
 
-void
+static void
 terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
                                         const char     *icon_title,
 					gboolean       userset)
@@ -1604,14 +1635,16 @@ terminal_screen_set_dynamic_icon_title (TerminalScreen *screen,
 }
 
 void
-terminal_screen_set_title (TerminalScreen *screen,
-			   const char     *title)
+terminal_screen_set_override_title (TerminalScreen *screen,
+                                    const char     *title)
 {
   TerminalScreenPrivate *priv = screen->priv;
   
-  if (priv->title_from_arg)
-    g_free (priv->title_from_arg);
-  priv->title_from_arg = g_strdup (title);
+  g_assert (priv->override_title == NULL);
+  priv->override_title = g_strdup (title);
+
+  terminal_screen_set_dynamic_title (screen, title, FALSE);
+  terminal_screen_set_dynamic_icon_title (screen, title, FALSE);
 }
 
 const char*
