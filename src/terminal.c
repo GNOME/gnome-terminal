@@ -238,7 +238,9 @@ main (int argc, char **argv)
                                     &argc, &argv,
                                     &error,
                                     gtk_get_option_group (TRUE),
+#ifdef WITH_SMCLIENT
                                     egg_sm_client_get_option_group (),
+#endif
                                     NULL);
   if (!options)
     {
