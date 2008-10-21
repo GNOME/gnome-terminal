@@ -24,6 +24,7 @@
 #include <sys/wait.h>
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
@@ -246,6 +247,30 @@ set_background_image_file (VteTerminal *terminal,
 }
 
 static void
+terminal_screen_class_enable_menu_bar_accel_notify_cb (TerminalApp *app,
+                                                       GParamSpec *pspec,
+                                                       TerminalScreenClass *klass)
+{
+  static gboolean is_enabled = TRUE; /* the binding is enabled by default since GtkWidgetClass installs it */
+  gboolean enable;
+  GtkBindingSet *binding_set;
+
+  g_object_get (app, TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, &enable, NULL);
+
+  /* Only remove the 'skip' entry when we have added it previously! */
+  if (enable == is_enabled)
+    return;
+
+  is_enabled = enable;
+
+  binding_set = gtk_binding_set_by_class (klass);
+  if (enable)
+    gtk_binding_entry_remove (binding_set, GDK_F10, GDK_SHIFT_MASK);
+  else
+    gtk_binding_entry_skip (binding_set, GDK_F10, GDK_SHIFT_MASK);
+}
+
+static void
 terminal_screen_realize (GtkWidget *widget)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
@@ -452,6 +477,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
   VteTerminalClass *terminal_class = VTE_TERMINAL_CLASS (klass);
+  TerminalApp *app;
   guint i;
 
   object_class->dispose = terminal_screen_dispose;
@@ -586,6 +612,12 @@ terminal_screen_class_init (TerminalScreenClass *klass)
           g_error_free (error);
         }
     }
+
+  /* This fixes bug #329827 */
+  app = terminal_app_get ();
+  terminal_screen_class_enable_menu_bar_accel_notify_cb (app, NULL, klass);
+  g_signal_connect (app, "notify::" TERMINAL_APP_ENABLE_MENU_BAR_ACCEL,
+                    G_CALLBACK (terminal_screen_class_enable_menu_bar_accel_notify_cb), klass);
 }
 
 static void
