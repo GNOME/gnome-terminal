@@ -20,14 +20,11 @@
 
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
-
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
 #include "terminal-profile.h"
 #include "terminal-util.h"
-#include "terminal-accels.h"
 
 #ifdef DEBUG_ACCELS
 #define D(x) x
@@ -74,7 +71,6 @@
 #define ACCEL_PATH_MOVE_TAB_LEFT        ACCEL_PATH_ROOT "TabsMoveLeft"
 #define ACCEL_PATH_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
 #define ACCEL_PATH_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
-#define ACCEL_PATH_SWITCH_TAB_PREFIX    ACCEL_PATH_ROOT "TabsSwitch"
 
 #define KEY_CLOSE_TAB           CONF_KEYS_PREFIX "/close_tab"
 #define KEY_CLOSE_WINDOW        CONF_KEYS_PREFIX "/close_window"
@@ -97,7 +93,6 @@
 #define KEY_ZOOM_IN             CONF_KEYS_PREFIX "/zoom_in"
 #define KEY_ZOOM_NORMAL         CONF_KEYS_PREFIX "/zoom_normal"
 #define KEY_ZOOM_OUT            CONF_KEYS_PREFIX "/zoom_out"
-#define KEY_SWITCH_TAB_PREFIX   CONF_KEYS_PREFIX "/switch_to_tab_"
 
 typedef struct
 {
@@ -180,47 +175,6 @@ static KeyEntry tabs_entries[] =
     KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, 0, 0, NULL, FALSE, TRUE },
 };
 
-#define UN_(x) (x)
-
-static KeyEntry jump_tab_entries[] = {
-  { UN_("Switch to Tab 1"),
-    KEY_SWITCH_TAB_PREFIX "1",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "1", GDK_1, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 2"),
-    KEY_SWITCH_TAB_PREFIX "2",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "2", GDK_2, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 3"),
-    KEY_SWITCH_TAB_PREFIX "3",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "3", GDK_3, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 4"),
-    KEY_SWITCH_TAB_PREFIX "4",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "4", GDK_4, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 5"),
-    KEY_SWITCH_TAB_PREFIX "5",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "5", GDK_5, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 6"),
-    KEY_SWITCH_TAB_PREFIX "6",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "6", GDK_6, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 7"),
-    KEY_SWITCH_TAB_PREFIX "7",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "7", GDK_7, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 8"),
-    KEY_SWITCH_TAB_PREFIX "8",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "8", GDK_8, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 9"),
-    KEY_SWITCH_TAB_PREFIX "9",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "9", GDK_9, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 10"),
-    KEY_SWITCH_TAB_PREFIX "10",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "10", GDK_0, GDK_MOD1_MASK, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 11"),
-    KEY_SWITCH_TAB_PREFIX "11",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "11", 0, 0, NULL, FALSE, TRUE },
-  { UN_("Switch to Tab 12"),
-    KEY_SWITCH_TAB_PREFIX "12",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "12", 0, 0, NULL, FALSE, TRUE }
-};
-
 static KeyEntry help_entries[] = {
   { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, 0, 0, NULL, FALSE, TRUE }
 };
@@ -232,8 +186,7 @@ static KeyEntryList all_entries[] =
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
   { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
-  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") },
-  { jump_tab_entries, G_N_ELEMENTS (jump_tab_entries), NULL }
+  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
 };
 
 enum
@@ -917,8 +870,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), NULL);
 #endif
 
-  /* -1 because we can't add the Tabs entries on gnome-2-24 b/c of string freeze */
-  for (i = 0; i < G_N_ELEMENTS (all_entries) - 1; ++i)
+  for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
       GtkTreeIter parent_iter;
       int j;

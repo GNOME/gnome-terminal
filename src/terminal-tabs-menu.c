@@ -30,16 +30,14 @@
 #include "terminal-screen-container.h"
 #include "terminal-intl.h"
 
-#define TERMINAL_ACCELS_N_TABS_SWITCH (12)
-
 #define LABEL_WIDTH_CHARS 32
 #define ACTION_VERB_FORMAT_PREFIX       "JmpTab"
-#define ACTION_VERB_FORMAT_PREFIX_LEN   strlen (ACTION_VERB_FORMAT_PREFIX)
+#define ACTION_VERB_FORMAT_PREFIX_LEN   (6) /* strlen (ACTION_VERB_FORMAT_PREFIX) */
 #define ACTION_VERB_FORMAT		ACTION_VERB_FORMAT_PREFIX "%x"
 #define ACTION_VERB_FORMAT_LENGTH	strlen (ACTION_VERB_FORMAT) + 14 + 1
 #define ACTION_VERB_FORMAT_BASE         (16) /* %x is hex */
-#define ACCEL_PATH_FORMAT		"<Actions>/Main/TabsSwitch%u"
-#define ACCEL_PATH_FORMAT_LENGTH	strlen (ACCEL_PATH_FORMAT) + 14 + 1
+#define ACCEL_PATH_FORMAT		"<Actions>/TabsActions/%s"
+#define ACCEL_PATH_FORMAT_LENGTH	strlen (ACCEL_PATH_FORMAT) -2 + ACTION_VERB_FORMAT_LENGTH
 #define DATA_KEY			"TerminalTabsMenu::Action"
 
 #define UI_PATH                         "/menubar/Tabs"
@@ -381,7 +379,7 @@ terminal_tabs_menu_class_init (TerminalTabsMenuClass *klass)
 	g_type_class_add_private (object_class, sizeof (TerminalTabsMenuPrivate));
 
         /* We don't want to save accels, so skip them */
-        gtk_accel_map_add_filter ("<Actions>/Main/TabsSwitch*");
+        gtk_accel_map_add_filter ("<Actions>/TabsActions/JmpTab*");
 }
 
 static void
@@ -418,19 +416,40 @@ tab_set_action_accelerator (GtkActionGroup *action_group,
 			    guint tab_number,
 			    gboolean is_single_tab)
 {
-        if (!is_single_tab &&
-            tab_number < TERMINAL_ACCELS_N_TABS_SWITCH)
-        {
-                char accel_path[ACCEL_PATH_FORMAT_LENGTH];
+	const char *verb;
+	char accel_path[ACCEL_PATH_FORMAT_LENGTH];
+	char accel[7];
+	gint accel_number;
+	guint accel_key;
+	GdkModifierType accel_mods;
 
-                g_snprintf (accel_path, sizeof (accel_path), ACCEL_PATH_FORMAT, tab_number + 1);
-                gtk_action_set_accel_path (action, accel_path);
-        }
-        else
-        {
-                gtk_action_set_accel_path (action, NULL);
-                return;
-        }
+	verb = gtk_action_get_name (action);
+
+	/* set the accel path for the menu item */
+	g_snprintf (accel_path, sizeof (accel_path),
+		    ACCEL_PATH_FORMAT, verb);
+	gtk_action_set_accel_path (action, accel_path);
+
+	/* Only the first ten tabs get accelerators starting from 1 through 0 */
+	if (tab_number < 10 && !is_single_tab)
+	{
+		accel_key = 0;
+		accel_number = (tab_number + 1) % 10;
+
+		g_snprintf (accel, sizeof (accel), "<alt>%d", accel_number);
+
+		gtk_accelerator_parse (accel, &accel_key, &accel_mods);
+
+		if (accel_key != 0)
+		{
+			gtk_accel_map_change_entry (accel_path, accel_key,
+						    accel_mods, TRUE);
+		}
+	}
+	else
+	{
+		gtk_accel_map_change_entry (accel_path, 0, 0, TRUE);
+	}
 }
 
 static void
