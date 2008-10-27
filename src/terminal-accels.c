@@ -683,7 +683,6 @@ treeview_accel_changed_cb (GtkAccelGroup  *accel_group,
                            GClosure *accel_closure,
                            GtkTreeModel *model)
 {
-g_print("TREEVIEW ACCEL-CHANGED keyval %s mask %x\n", gdk_keyval_name (keyval), modifier);
   gtk_tree_model_foreach (model, update_model_foreach, accel_closure->data);
 }
 
