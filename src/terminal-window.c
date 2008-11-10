@@ -875,14 +875,17 @@ terminal_window_update_size_to_menu (TerminalWindow *window)
 /* Actions stuff */
 
 static void
-terminal_window_update_copy_sensitivity (TerminalWindow *window)
+terminal_window_update_copy_sensitivity (TerminalScreen *screen,
+                                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkAction *action;
-  gboolean can_copy = FALSE;
+  gboolean can_copy;
 
-  if (priv->active_screen)
-    can_copy = vte_terminal_get_has_selection (VTE_TERMINAL (priv->active_screen));
+  if (screen != priv->active_screen)
+    return;
+
+  can_copy = vte_terminal_get_has_selection (VTE_TERMINAL (screen));
 
   action = gtk_action_group_get_action (priv->action_group, "EditCopy");
   gtk_action_set_sensitive (action, can_copy);
@@ -1575,10 +1578,10 @@ terminal_window_init (TerminalWindow *window)
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
       { "PopupTerminalProfiles", NULL, N_("P_rofiles") },
-      { "PopupCopy", GTK_STOCK_COPY, NULL, "<shift><control>C",
+      { "PopupCopy", GTK_STOCK_COPY, NULL, "",
         NULL,
         G_CALLBACK (edit_copy_callback) },
-      { "PopupPaste", GTK_STOCK_PASTE, NULL, "<shift><control>V",
+      { "PopupPaste", GTK_STOCK_PASTE, NULL, "",
         NULL,
         G_CALLBACK (edit_paste_callback) },
       { "PopupPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), "",
@@ -2347,7 +2350,7 @@ terminal_window_set_active (TerminalWindow *window,
 
   terminal_window_update_encoding_menu_active_encoding (window);
   terminal_window_update_set_profile_menu_active_profile (window);
-  terminal_window_update_copy_sensitivity (window);
+  terminal_window_update_copy_sensitivity (screen, window);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -2490,11 +2493,8 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (sync_screen_icon_title), window);
   g_signal_connect (screen, "notify::icon-title-set",
                     G_CALLBACK (sync_screen_icon_title_set), window);
-
-  g_signal_connect_swapped (G_OBJECT (screen),
-                            "selection-changed",
-                            G_CALLBACK (terminal_window_update_copy_sensitivity),
-                            window);
+  g_signal_connect (screen, "selection-changed",
+                    G_CALLBACK (terminal_window_update_copy_sensitivity), window);
 
   g_signal_connect (screen, "show-popup-menu",
                     G_CALLBACK (screen_show_popup_menu_callback), window);
