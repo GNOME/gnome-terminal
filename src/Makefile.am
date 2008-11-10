@@ -31,6 +31,8 @@ gnome_terminal_SOURCES= \
 	terminal-screen.h \
 	terminal-screen-container.c \
 	terminal-screen-container.h \
+	terminal-tab-label.c \
+	terminal-tab-label.h \
 	terminal-tabs-menu.c \
 	terminal-tabs-menu.h \
 	terminal-type-builtins.c \
