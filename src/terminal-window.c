@@ -1338,6 +1338,54 @@ screen_close_cb (TerminalScreen *screen,
   terminal_window_remove_screen (window, screen);
 }
 
+static gboolean
+terminal_window_accel_activate_cb (GtkAccelGroup  *accel_group,
+                                   GObject        *acceleratable,
+                                   guint           keyval,
+                                   GdkModifierType modifier,
+                                   TerminalWindow *window)
+{
+  GtkAccelGroupEntry *entries;
+  guint n_entries;
+  gboolean retval = FALSE;
+
+  entries = gtk_accel_group_query (accel_group, keyval, modifier, &n_entries);
+  if (n_entries > 0)
+    {
+      const char *accel_path;
+
+      accel_path = g_quark_to_string (entries[0].accel_path_quark);
+
+      if (g_str_has_prefix (accel_path, "<Actions>/Main/"))
+        {
+          TerminalWindowPrivate *priv = window->priv;
+          const char *action_name;
+
+          /* We want to always consume these accelerators, even if the corresponding
+           * action is insensitive, so the corresponding shortcut key escape code
+           * isn't sent to the terminal. See bug #453193, bug #138609 and bug #559728.
+           * This also makes tab cycling work, bug #92139. (NOT!)
+           */
+
+          action_name = I_(accel_path + strlen ("<Actions>/Main/"));
+
+#if 0
+          if (gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook)) > 1 &&
+              (action_name == I_("TabsPrevious") || action_name == I_("TabsNext")))
+            retval = TRUE;
+          else
+#endif
+               if (action_name == I_("EditCopy") ||
+                   action_name == I_("PopupCopy") ||
+                   action_name == I_("EditPaste") ||
+                   action_name == I_("PopupPaste"))
+            retval = TRUE;
+        }
+    }
+
+  return retval;
+}
+
 /*****************************************/
 
 static gboolean
@@ -1622,6 +1670,7 @@ terminal_window_init (TerminalWindow *window)
   GtkWidget *main_vbox;
   GError *error;
   GtkWindowGroup *window_group;
+  GtkAccelGroup *accel_group;
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
@@ -1680,8 +1729,12 @@ terminal_window_init (TerminalWindow *window)
 
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
-  gtk_window_add_accel_group (GTK_WINDOW (window),
-                              gtk_ui_manager_get_accel_group (manager));
+
+  accel_group = gtk_ui_manager_get_accel_group (manager);
+  gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+  /* Workaround for bug #453193, bug #138609 and bug #559728 */
+  g_signal_connect_after (accel_group, "accel-activate",
+                          G_CALLBACK (terminal_window_accel_activate_cb), window);
 
   /* Create the actions */
   /* Note that this action group name is used in terminal-accels.c; do not change it */
