@@ -33,6 +33,7 @@ struct _TerminalTabLabelPrivate
   TerminalScreen *screen;
   GtkWidget *label;
   GtkWidget *close_button;
+  gboolean bold;
 };
 
 enum
@@ -225,10 +226,61 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
 
 /* public API */
 
+/**
+ * terminal_tab_label_new:
+ * @screen: a #TerminalScreen
+ *
+ * Returns: a new #TerminalTabLabel for @screen
+ */
 GtkWidget *
 terminal_tab_label_new (TerminalScreen *screen)
 {
   return g_object_new (TERMINAL_TYPE_TAB_LABEL,
                        "screen", screen,
                        NULL);
+}
+
+/**
+ * terminal_tab_label_set_bold:
+ * @tab_label: a #TerminalTabLabel
+ * @bold: whether to enable label bolding
+ *
+ * Sets the tab label text bold, or unbolds it.
+ */
+void
+terminal_tab_label_set_bold (TerminalTabLabel *tab_label,
+                             gboolean bold)
+{
+  TerminalTabLabelPrivate *priv = tab_label->priv;
+  PangoAttrList *attr_list;
+  PangoAttribute *weight_attr;
+  gboolean free_list = FALSE;
+
+  bold = bold != FALSE;
+  if (priv->bold == bold)
+    return;
+
+  priv->bold = bold;
+
+  attr_list = gtk_label_get_attributes (GTK_LABEL (priv->label));
+  if (!attr_list) {
+    attr_list = pango_attr_list_new ();
+    free_list = TRUE;
+  }
+
+  if (bold)
+    weight_attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
+  else
+    weight_attr = pango_attr_weight_new (PANGO_WEIGHT_NORMAL);
+
+  /* gtk_label_get_attributes() returns the label's internal list,
+   * which we're probably not supposed to modify directly. 
+   * It seems to work ok however.
+   */
+  pango_attr_list_change (attr_list, weight_attr);
+
+  gtk_label_set_attributes (GTK_LABEL (priv->label), attr_list);
+
+  if (free_list)
+    pango_attr_list_unref (attr_list);
 }

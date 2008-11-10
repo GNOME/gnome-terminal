@@ -56,6 +56,9 @@ GType       terminal_tab_label_get_type   (void);
 
 GtkWidget  *terminal_tab_label_new        (TerminalScreen *screen);
 
+void        terminal_tab_label_set_bold   (TerminalTabLabel *tab_label,
+                                           gboolean bold);
+
 G_END_DECLS
 
 #endif /* !TERMINAL_TAB_LABEL_H */
