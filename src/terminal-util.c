@@ -141,8 +141,8 @@ terminal_util_show_help (const char *topic,
       continue;
     }
  
-    uri = g_build_filename (TERM_DATADIR,
-                            "gnome", "help", "gnome-terminal",
+    uri = g_build_filename (TERM_HELPDIR,
+                            "gnome-terminal", /* DOC_MODULE */
                             lang,
                             "gnome-terminal.xml",
                             NULL);

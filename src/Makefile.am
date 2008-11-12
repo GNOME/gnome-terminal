@@ -51,6 +51,7 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_PREFIX="\"$(prefix)\"" \
 	-DTERM_SYSCONFDIR="\"$(sysconfdir)\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	-DG_DISABLE_SINGLE_INCLUDES \
