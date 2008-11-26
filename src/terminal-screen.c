@@ -875,8 +875,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   if (GTK_WIDGET_REALIZED (screen) &&
       (!prop_name ||
        prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT) ||
-       prop_name == I_(TERMINAL_PROFILE_FONT) ||
-       prop_name == I_(TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER)))
+       prop_name == I_(TERMINAL_PROFILE_FONT)))
     terminal_screen_change_font (screen);
 
   if (!prop_name ||
@@ -1033,7 +1032,6 @@ terminal_screen_set_font (TerminalScreen *screen)
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
   PangoFontDescription *desc;
-  gboolean no_aa_without_render;
 
   profile = priv->profile;
   
@@ -1047,9 +1045,8 @@ terminal_screen_set_font (TerminalScreen *screen)
 				   priv->font_scale *
 				   pango_font_description_get_size (desc));
 
-  no_aa_without_render = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER);
-  vte_terminal_set_font_full (VTE_TERMINAL (screen), desc,
-                              no_aa_without_render ? VTE_ANTI_ALIAS_USE_DEFAULT : VTE_ANTI_ALIAS_FORCE_ENABLE);
+  vte_terminal_set_font (VTE_TERMINAL (screen), desc);
+
   pango_font_description_free (desc);
 }
 

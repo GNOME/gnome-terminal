@@ -82,7 +82,6 @@ typedef enum
 #define TERMINAL_PROFILE_FOREGROUND_COLOR       "foreground-color"
 #define TERMINAL_PROFILE_LOGIN_SHELL            "login-shell"
 #define TERMINAL_PROFILE_NAME                   "name"
-#define TERMINAL_PROFILE_NO_AA_WITHOUT_RENDER   "no-aa-without-render"
 #define TERMINAL_PROFILE_PALETTE                "palette"
 #define TERMINAL_PROFILE_SCROLL_BACKGROUND      "scroll-background"
 #define TERMINAL_PROFILE_SCROLLBACK_LINES       "scrollback-lines"
