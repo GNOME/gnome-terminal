@@ -284,6 +284,10 @@ static void terminal_profile_set_property (GObject *object,
                                            guint prop_id,
                                            const GValue *value,
                                            GParamSpec *pspec);
+static void ensure_pixbuf_property (TerminalProfile *profile,
+                                    guint path_prop_id,
+                                    guint pixbuf_prop_id,
+                                    gboolean *load_failed);
 
 static guint signals[LAST_SIGNAL];
 static GQuark gconf_key_quark;
@@ -328,6 +332,9 @@ get_prop_value_from_prop_name (TerminalProfile *profile,
   pspec = get_pspec_from_name (profile, prop_name);
   if (!pspec)
     return NULL;
+
+  if (G_UNLIKELY (pspec->param_id == PROP_BACKGROUND_IMAGE))
+    ensure_pixbuf_property (profile, PROP_BACKGROUND_IMAGE_FILE, PROP_BACKGROUND_IMAGE, &priv->background_load_failed);
 
   return g_value_array_get_nth (priv->properties, pspec->param_id);
 }
@@ -444,7 +451,7 @@ ensure_pixbuf_property (TerminalProfile *profile,
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
   if (!pixbuf)
     {
-      NOTE (g_printerr ("Failed to load image \"%s\": %s\n", filename_utf8, error->message);)
+      NOTE (g_printerr ("Failed to load image \"%s\": %s\n", path, error->message);)
       g_error_free (error);
       g_free (path);
       goto failed;
@@ -1042,6 +1049,7 @@ terminal_profile_get_property (GObject *object,
       return;
     }
     
+  /* Note: When adding things here, do the same in get_prop_value_from_prop_name! */
   switch (prop_id)
     {
       case PROP_BACKGROUND_IMAGE:

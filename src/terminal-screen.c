@@ -237,16 +237,6 @@ parent_set_callback (GtkWidget *widget,
 }
 
 static void
-set_background_image_file (VteTerminal *terminal,
-                           const char *fname)
-{
-  if (fname && fname[0])
-    vte_terminal_set_background_image_file (terminal,fname);
-  else
-    vte_terminal_set_background_image (terminal, NULL);
-}
-
-static void
 terminal_screen_class_enable_menu_bar_accel_notify_cb (TerminalApp *app,
                                                        GParamSpec *pspec,
                                                        TerminalScreenClass *klass)
@@ -927,23 +917,24 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE) ||
-      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_IMAGE) ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_DARKNESS) ||
       prop_name == I_(TERMINAL_PROFILE_SCROLL_BACKGROUND))
     {
       bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
-      
+
+      g_print ("changing bg type %d\n", bg_type);
       if (bg_type == TERMINAL_BACKGROUND_IMAGE)
         {
-          /* FIXME: use the BACKGROUND property intead */
-          set_background_image_file (vte_terminal,
-                                    terminal_profile_get_property_string (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE));
+          g_print ("Setting backgr %p\n", terminal_profile_get_property_object (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE));
+          vte_terminal_set_background_image (vte_terminal,
+                                             terminal_profile_get_property_object (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE));
           vte_terminal_set_scroll_background (vte_terminal,
                                               terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_BACKGROUND));
         }
       else
         {
-          set_background_image_file (vte_terminal, NULL);
+          vte_terminal_set_background_image (vte_terminal, NULL);
           vte_terminal_set_scroll_background (vte_terminal, FALSE);
         }
 
