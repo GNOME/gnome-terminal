@@ -26,17 +26,12 @@
 
 #include <gconf/gconf-client.h>
 
-#include "terminal-screen.h"
+#include "terminal-app.h"
+#include "terminal-debug.h"
 #include "terminal-intl.h"
 #include "terminal-profile.h"
-#include "terminal-app.h"
+#include "terminal-screen.h"
 #include "terminal-type-builtins.h"
-
-#ifdef DEBUG_PROFILE
-#define NOTE(x) x
-#else
-#define NOTE(x)
-#endif
 
 /* To add a new key, you need to:
  *
@@ -451,7 +446,10 @@ ensure_pixbuf_property (TerminalProfile *profile,
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
   if (!pixbuf)
     {
-      NOTE (g_printerr ("Failed to load image \"%s\": %s\n", path, error->message);)
+      _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                             "Failed to load image \"%s\": %s\n",
+                             path, error->message);
+
       g_error_free (error);
       g_free (path);
       goto failed;
@@ -534,7 +532,9 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
   if (!key || !g_str_has_prefix (key, priv->profile_dir))
     return;
 
-  NOTE (g_print ("GConf notification for key %s\n", key);)
+  _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                         "GConf notification for key %s\n",
+                         key);
 
   key += strlen (priv->profile_dir);
   if (!key[0])
@@ -664,8 +664,10 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
   if (g_param_value_validate (pspec, &value))
     {
-      NOTE (g_message ("Invalid value in gconf for key %s was changed to comply with pspec %s\n",
-                       gconf_entry_get_key (entry), pspec->name);)
+      _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                             "Invalid value in gconf for key %s was changed to comply with pspec %s\n",
+                             gconf_entry_get_key (entry), pspec->name);
+
       force_set = TRUE;
     }
 
@@ -673,13 +675,19 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
    * so we don't go into an infinite loop.
    */
   equal = values_equal (pspec, &value, g_value_array_get_nth (priv->properties, pspec->param_id));
-  NOTE (if (!equal)
-          g_print ("Setting property %s to a different value\n"
-                  "  now: %s\n"
-                  "  new: %s\n",
-                  pspec->name,
-                  g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
-                  g_strdup_value_contents (&value));)
+#ifdef GNOME_ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_PROFILE)
+    {
+      if (!equal)
+        _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                              "Setting property %s to a different value\n"
+                                "  now: %s\n"
+                                "  new: %s\n",
+                                pspec->name,
+                                g_strdup_value_contents (g_value_array_get_nth (priv->properties, pspec->param_id)),
+                                g_strdup_value_contents (&value));
+    }
+#endif
 
   if (!equal || force_set)
     {
@@ -722,7 +730,9 @@ terminal_profile_gconf_changeset_add (TerminalProfile *profile,
   key = gconf_concat_dir_and_key (priv->profile_dir, gconf_key);
   value = g_value_array_get_nth (priv->properties, pspec->param_id);
 
-  NOTE (g_print ("Adding pspec %s with value %s to the gconf changeset\n", pspec->name, g_strdup_value_contents (value));)
+  _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                         "Adding pspec %s with value %s to the gconf changeset\n",
+                         pspec->name, g_strdup_value_contents (value));
 
   if (G_IS_PARAM_SPEC_BOOLEAN (pspec))
     gconf_change_set_set_bool (changeset, key, g_value_get_boolean (value));
@@ -1147,7 +1157,10 @@ terminal_profile_notify (GObject *object,
   TerminalProfilePrivate *priv = TERMINAL_PROFILE (object)->priv;
   void (* notify) (GObject *, GParamSpec *) = G_OBJECT_CLASS (terminal_profile_parent_class)->notify;
 
-  NOTE (g_print ("Property notification for prop %s\n", pspec->name);)
+  _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
+                         "Property notification for prop %s\n",
+                         pspec->name);
+
   if (notify)
     notify (object, pspec);
 
