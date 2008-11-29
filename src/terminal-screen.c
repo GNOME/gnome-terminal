@@ -966,10 +966,8 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     {
       bg_type = terminal_profile_get_property_enum (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
 
-      g_print ("changing bg type %d\n", bg_type);
       if (bg_type == TERMINAL_BACKGROUND_IMAGE)
         {
-          g_print ("Setting backgr %p\n", terminal_profile_get_property_object (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE));
           vte_terminal_set_background_image (vte_terminal,
                                              terminal_profile_get_property_object (profile, TERMINAL_PROFILE_BACKGROUND_IMAGE));
           vte_terminal_set_scroll_background (vte_terminal,
