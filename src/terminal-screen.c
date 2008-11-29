@@ -775,7 +775,7 @@ terminal_screen_format_title (TerminalScreen *screen,
   const char *format, *arg;
   const char *static_title = NULL;
   GString *title;
-  gboolean add_sep;
+  gboolean add_sep = FALSE;
 
   g_assert (titleptr);
 
