@@ -74,7 +74,12 @@ struct _TerminalScreenClass
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
 
-TerminalScreen* terminal_screen_new                    (void);
+TerminalScreen *terminal_screen_new (TerminalProfile *profile,
+                                     char           **override_command,
+                                     const char      *title,
+                                     const char      *working_dir,
+                                     char           **child_env,
+                                     double           zoom);
 
 void terminal_screen_set_profile (TerminalScreen *screen,
                                   TerminalProfile *profile);
@@ -121,6 +126,10 @@ void       terminal_screen_get_cell_size (TerminalScreen *screen,
                                           int *height_chars);
 
 void _terminal_screen_update_scrollbar (TerminalScreen *screen);
+
+void terminal_screen_save_config (TerminalScreen *screen,
+                                  GKeyFile *key_file,
+                                  const char *group);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)

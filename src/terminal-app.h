@@ -28,6 +28,35 @@
 
 G_BEGIN_DECLS
 
+/* Terminal conf files */
+
+#define TERMINAL_CONFIG_VERSION             (1) /* Bump this for any changes */
+#define TERMINAL_CONFIG_COMPAT_VERSION      (1) /* Bump this for incompatible changes */
+
+#define TERMINAL_CONFIG_GROUP               "GNOME Terminal Configuration"
+#define TERMINAL_CONFIG_PROP_FACTORY        "FactoryEnabled"
+#define TERMINAL_CONFIG_PROP_VERSION        "Version"
+#define TERMINAL_CONFIG_PROP_COMPAT_VERSION "CompatVersion"
+#define TERMINAL_CONFIG_PROP_WINDOWS        "Windows"
+
+#define TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB       "ActiveTerminal"
+#define TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN       "Fullscreen"
+#define TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY         "Geometry"
+#define TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED        "Maximized"
+#define TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE  "MenubarVisible"
+#define TERMINAL_CONFIG_WINDOW_PROP_ROLE             "Role"
+#define TERMINAL_CONFIG_WINDOW_PROP_TABS             "Terminals"
+
+#define TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT             "Height"
+#define TERMINAL_CONFIG_TERMINAL_PROP_COMMAND            "Command"
+#define TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID         "ProfileID"
+#define TERMINAL_CONFIG_TERMINAL_PROP_TITLE              "Title"
+#define TERMINAL_CONFIG_TERMINAL_PROP_WIDTH              "Width"
+#define TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY  "WorkingDirectory"
+#define TERMINAL_CONFIG_TERMINAL_PROP_ZOOM               "Zoom"
+
+/* Configuration */
+
 #define CONF_PREFIX           "/apps/gnome-terminal"
 #define CONF_GLOBAL_PREFIX    CONF_PREFIX "/global"
 #define CONF_PROFILES_PREFIX  CONF_PREFIX "/profiles"
@@ -39,6 +68,8 @@ G_BEGIN_DECLS
 #define TERMINAL_APP_ENABLE_MENU_BAR_ACCEL  "enable-menu-accels"
 #define TERMINAL_APP_ENABLE_MNEMONICS       "enable-mnemonics"
 #define TERMINAL_APP_SYSTEM_FONT            "system-font"
+
+#define EPSILON (1.0e-6)
 
 /* TerminalApp */
 
@@ -60,8 +91,9 @@ void terminal_app_shutdown (void);
 
 TerminalApp* terminal_app_get (void);
 
-void terminal_app_handle_options (TerminalApp *app,
-                                  TerminalOptions *options);
+gboolean terminal_app_handle_options (TerminalApp *app,
+                                      TerminalOptions *options,
+                                      GError **error);
 
 void terminal_app_edit_profile (TerminalApp     *app,
                                 TerminalProfile *profile,
@@ -113,6 +145,13 @@ TerminalProfile* terminal_app_get_profile_for_new_term (TerminalApp *app);
 GHashTable *terminal_app_get_encodings (TerminalApp *app);
 
 GSList* terminal_app_get_active_encodings (TerminalApp *app);
+
+void terminal_app_save_config (TerminalApp *app,
+                               GKeyFile *key_file);
+
+gboolean terminal_app_save_config_file (TerminalApp *app,
+                                        const char *file_name,
+                                        GError **error);
 
 G_END_DECLS
 

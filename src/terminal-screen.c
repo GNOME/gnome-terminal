@@ -654,10 +654,38 @@ terminal_screen_finalize (GObject *object)
   G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
 }
 
-TerminalScreen*
-terminal_screen_new (void)
+TerminalScreen *
+terminal_screen_new (TerminalProfile *profile,
+                     char           **override_command,
+                     const char      *title,
+                     const char      *working_dir,
+                     char           **child_env,
+                     double           zoom)
 {
-  return g_object_new (TERMINAL_TYPE_SCREEN, NULL);
+  TerminalScreen *screen;
+
+  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
+
+  screen = g_object_new (TERMINAL_TYPE_SCREEN, NULL);
+
+  terminal_screen_set_profile (screen, profile);
+
+  if (title)
+    terminal_screen_set_override_title (screen, title);
+
+  if (working_dir)
+    terminal_screen_set_working_dir (screen, working_dir);
+
+  if (override_command)
+    terminal_screen_set_override_command (screen, override_command);
+
+  if (child_env)
+    terminal_screen_set_initial_environment (screen, child_env);
+
+  terminal_screen_set_font_scale (screen, zoom);
+  terminal_screen_set_font (screen);
+
+  return screen;
 }
 
 const char*
@@ -2213,4 +2241,37 @@ terminal_screen_check_match (TerminalScreen *screen,
 
   g_free (match);
   return NULL;
+}
+
+void
+terminal_screen_save_config (TerminalScreen *screen,
+                             GKeyFile *key_file,
+                             const char *group)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  VteTerminal *terminal = VTE_TERMINAL (screen);
+  TerminalProfile *profile = priv->profile;
+  const char *profile_id, *dir;
+
+  profile_id = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
+  g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, profile_id);
+
+  if (priv->override_command)
+    terminal_util_key_file_set_argv (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND,
+                                     -1, priv->override_command);
+
+  /* FIXMEchpe: only persist user-set titles here */
+  if (priv->raw_title)
+    g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, priv->raw_title);
+
+  dir = terminal_screen_get_working_dir (screen);
+  if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
+    terminal_util_key_file_set_string_escape (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, dir);
+
+  g_key_file_set_double (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_ZOOM, priv->font_scale);
+
+  g_key_file_set_integer (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH,
+                          vte_terminal_get_column_count (terminal));
+  g_key_file_set_integer (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT,
+                          vte_terminal_get_row_count (terminal));
 }

@@ -46,8 +46,6 @@
 
 #define FALLBACK_PROFILE_ID "Default"
 
-#define EPSILON (1.0e-6)
-
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -866,8 +864,9 @@ terminal_app_default_profile_notify_cb (GConfClient *client,
   if (val != NULL &&
       val->type == GCONF_VALUE_STRING)
     name = gconf_value_get_string (val);
-  if (!name)
+  if (!name || !name[0])
     name = FALLBACK_PROFILE_ID;
+  g_assert (name != NULL);
 
   g_free (app->default_profile_id);
   app->default_profile_id = g_strdup (name);
@@ -1341,166 +1340,14 @@ terminal_app_manage_profiles (TerminalApp     *app,
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
 }
 
-static void
-terminal_app_get_clone_command (TerminalApp *app,
-                                int         *argcp,
-                                char      ***argvp)
-{
-  GList *lw;
-  GPtrArray* args;
-
-  args = g_ptr_array_new ();
-
-   g_ptr_array_add (args, g_strdup (EXECUTABLE_NAME));
-
-  if (!app->use_factory)
-    g_ptr_array_add (args, g_strdup ("--disable-factory"));
-
-  for (lw = app->windows; lw != NULL; lw = lw->next)
-    {
-      GList *tabs;
-      GList *lt;
-      TerminalWindow *window = lw->data;
-      TerminalScreen *active_screen;
-
-      active_screen = terminal_window_get_active (window);
-
-      tabs = terminal_window_list_screen_containers (window);
-
-      for (lt = tabs; lt != NULL; lt = lt->next)
-        {
-          TerminalScreen *screen;
-          const char *profile_id;
-          const char **override_command;
-          const char *title;
-          double zoom;
-
-          screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
-          profile_id = terminal_profile_get_property_string (terminal_screen_get_profile (screen),
-                                                             TERMINAL_PROFILE_NAME);
-
-          if (lt == tabs)
-            {
-              GdkWindowState state;
-
-              g_ptr_array_add (args, g_strdup_printf ("--window-with-profile-internal-id=%s",
-                                                     profile_id));
-              if (terminal_window_get_menubar_visible (window))
-                 g_ptr_array_add (args, g_strdup ("--show-menubar"));
-              else
-                 g_ptr_array_add (args, g_strdup ("--hide-menubar"));
-
-               g_ptr_array_add (args, g_strdup_printf ("--role=%s",
-                                                       gtk_window_get_role (GTK_WINDOW (window))));
-
-               state = gdk_window_get_state (GTK_WIDGET (window)->window);
-               if (state & GDK_WINDOW_STATE_MAXIMIZED)
-                 g_ptr_array_add (args, g_strdup ("--maximize"));
-               if (state & GDK_WINDOW_STATE_FULLSCREEN)
-                 g_ptr_array_add (args, g_strdup ("--full-screen"));
-            }
-          else
-            {
-               g_ptr_array_add (args, g_strdup_printf ("--tab-with-profile-internal-id=%s",
-                                                     profile_id));
-            }
-
-          if (screen == active_screen)
-            {
-              int w, h, x, y;
-
-              /* FIXME saving the geometry is not great :-/ */
-               g_ptr_array_add (args, g_strdup ("--active"));
-
-               g_ptr_array_add (args, g_strdup ("--geometry"));
-
-              terminal_screen_get_size (screen, &w, &h);
-              gtk_window_get_position (GTK_WINDOW (window), &x, &y);
-              g_ptr_array_add (args, g_strdup_printf ("%dx%d+%d+%d", w, h, x, y));
-            }
-
-          override_command = terminal_screen_get_override_command (screen);
-          if (override_command)
-            {
-              char *flattened;
-
-               g_ptr_array_add (args, g_strdup ("--command"));
-
-              flattened = g_strjoinv (" ", (char**) override_command);
-               g_ptr_array_add (args, flattened);
-            }
-
-          title = terminal_screen_get_dynamic_title (screen);
-          if (title)
-            {
-               g_ptr_array_add (args, g_strdup ("--title"));
-               g_ptr_array_add (args, g_strdup (title));
-            }
-
-          {
-            const char *dir;
-
-            dir = terminal_screen_get_working_dir (screen);
-
-            if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
-              {
-                 g_ptr_array_add (args, g_strdup ("--working-directory"));
-                g_ptr_array_add (args, g_strdup (dir));
-              }
-          }
-
-          zoom = terminal_screen_get_font_scale (screen);
-          if (zoom < (1.0 - EPSILON) || (zoom > 1.0 + EPSILON)) /* if not 1.0 */
-            {
-              char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-              g_ascii_dtostr (buf, sizeof (buf), zoom);
-
-              g_ptr_array_add (args, g_strdup ("--zoom"));
-              g_ptr_array_add (args, g_strdup (buf));
-            }
-        }
-
-      g_list_free (tabs);
-    }
-
-  /* final NULL */
-  g_ptr_array_add (args, NULL);
-
-  *argcp = args->len - 1;
-  *argvp = (char**) g_ptr_array_free (args, FALSE);
-}
-
 #ifdef WITH_SMCLIENT
 
-static gboolean
+static void
 terminal_app_save_state_cb (EggSMClient *client,
-                            GKeyFile *keyfile,
+                            GKeyFile *key_file,
                             TerminalApp *app)
 {
-  char **clone_command;
-  int argc;
-#ifdef GNOME_ENABLE_DEBUG
-  int i;
-#endif
-
-  terminal_app_get_clone_command (app, &argc, &clone_command);
-
-  /* GnomeClient builds the clone command from the restart command */
-  egg_sm_client_set_restart_command (client, argc, (const char **) clone_command);
-
-#ifdef GNOME_ENABLE_DEBUG
-  /* Debug spew */
-  g_print ("Saving session: ");
-  for (i = 0; i < argc; ++i)
-    g_print ("%s ", clone_command[i]);
-  g_print ("\n");
-#endif
-
-  g_strfreev (clone_command);
-
-  /* success */
-  return TRUE;
+  terminal_app_save_config (app, key_file);
 }
 
 static void
@@ -1796,15 +1643,35 @@ terminal_app_get (void)
   return global_app;
 }
 
-void
+gboolean
 terminal_app_handle_options (TerminalApp *app,
-                             TerminalOptions *options)
+                             TerminalOptions *options,
+                             GError **error)
 {
   GList *lw;
   GdkScreen *screen;
 
   screen = terminal_app_get_screen_by_display_name (options->display_name,
                                                     options->screen_number);
+
+  if (options->save_config)
+    return terminal_app_save_config_file (app, options->config_file, error);
+
+  if (options->load_config)
+    {
+      GKeyFile *key_file;
+      gboolean result;
+
+      key_file = g_key_file_new ();
+      result = g_key_file_load_from_file (key_file, options->config_file, 0, error) &&
+               terminal_options_merge_config (options, key_file, error);
+      g_key_file_free (key_file);
+
+      if (!result)
+        return FALSE;
+
+      /* fall-through on success */
+    }
 
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {
@@ -1885,6 +1752,8 @@ terminal_app_handle_options (TerminalApp *app,
 
       gtk_window_present (GTK_WINDOW (window));
     }
+
+  return TRUE;
 }
 
 TerminalWindow *
@@ -1919,26 +1788,9 @@ terminal_app_new_terminal (TerminalApp     *app,
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
-  g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
 
-  screen = terminal_screen_new ();
-
-  terminal_screen_set_profile (screen, profile);
-
-  if (title)
-    terminal_screen_set_override_title (screen, title);
-
-  if (working_dir)
-    terminal_screen_set_working_dir (screen, working_dir);
-
-  if (override_command)
-    terminal_screen_set_override_command (screen, override_command);
-
-  if (child_env)
-    terminal_screen_set_initial_environment (screen, child_env);
-
-  terminal_screen_set_font_scale (screen, zoom);
-  terminal_screen_set_font (screen);
+  screen = terminal_screen_new (profile, override_command, title,
+                                working_dir, child_env, zoom);
 
   terminal_window_add_screen (window, screen, -1);
   terminal_window_switch_screen (window, screen);
@@ -2078,4 +1930,62 @@ terminal_app_get_active_encodings (TerminalApp *app)
     }
 
   return g_slist_sort (list, (GCompareFunc) compare_encodings);
+}
+
+void
+terminal_app_save_config (TerminalApp *app,
+                          GKeyFile *key_file)
+{
+  GList *lw;
+  guint n = 0;
+  GPtrArray *window_names_array;
+  char **window_names;
+  gsize len;
+
+  g_key_file_set_comment (key_file, NULL, NULL, "Written by " PACKAGE_STRING, NULL);
+
+  g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, TERMINAL_CONFIG_VERSION);
+  g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, TERMINAL_CONFIG_COMPAT_VERSION);
+
+  /* FIXMEchpe this seems useless */
+  g_key_file_set_boolean (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_FACTORY, app->use_factory);
+
+  window_names_array = g_ptr_array_sized_new (g_list_length (app->windows) + 1);
+
+  for (lw = app->windows; lw != NULL; lw = lw->next)
+    {
+      TerminalWindow *window = TERMINAL_WINDOW (lw->data);
+      char *group;
+
+      group = g_strdup_printf ("Window%u", n++);
+      g_ptr_array_add (window_names_array, group);
+
+      terminal_window_save_state (window, key_file, group);
+    }
+
+  g_ptr_array_add (window_names_array, NULL);
+  len = window_names_array->len;
+  window_names = (char **) g_ptr_array_free (window_names_array, FALSE);
+  g_key_file_set_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, (const char * const *) window_names, len);
+  g_strfreev (window_names);
+}
+
+gboolean
+terminal_app_save_config_file (TerminalApp *app,
+                               const char *file_name,
+                               GError **error)
+{
+  GKeyFile *key_file;
+  char *data;
+  gsize len;
+  gboolean result;
+
+  key_file = g_key_file_new ();
+  terminal_app_save_config (app, key_file);
+
+  data = g_key_file_to_data (key_file, &len, NULL);
+  result = g_file_set_contents (file_name, data, len, error);
+  g_free (data);
+
+  return result;
 }

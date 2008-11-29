@@ -35,6 +35,7 @@
 
 #ifdef WITH_SMCLIENT
 #include "eggsmclient.h"
+#include "eggdesktopfile.h"
 #endif
 
 #include <dbus/dbus-protocol.h>
@@ -384,10 +385,14 @@ factory_disabled:
   gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
   gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
+#ifdef WITH_SMCLIENT
+  //egg_set_desktop_file (TERM_DATADIR G_DIR_SEPARATOR_S  // FIXME)
+#endif
+
   terminal_app_initialize (options->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  terminal_app_handle_options (terminal_app_get (), options);
+  terminal_app_handle_options (terminal_app_get (), options, NULL);
   terminal_options_free (options);
 
   gtk_main ();
@@ -405,7 +410,7 @@ factory_disabled:
 static gboolean
 handle_new_terminal_event (TerminalOptions *options)
 {
-  terminal_app_handle_options (terminal_app_get (), options);
+  terminal_app_handle_options (terminal_app_get (), options, NULL);
 
   return FALSE;
 }

@@ -48,6 +48,10 @@ typedef struct
   gboolean  execute;
   gboolean  use_factory;
   double    zoom;
+
+  char    *config_file;
+  gboolean load_config;
+  gboolean save_config;
 } TerminalOptions;
 
 typedef struct
@@ -86,6 +90,10 @@ TerminalOptions *terminal_options_parse (const char *working_directory,
                                          char ***argvp,
                                          GError **error,
                                          ...);
+
+gboolean terminal_options_merge_config (TerminalOptions *options,
+                                        GKeyFile *key_file,
+                                        GError **error);
 
 void terminal_options_free (TerminalOptions *options);
 

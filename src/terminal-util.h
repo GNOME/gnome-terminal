@@ -59,6 +59,26 @@ gboolean terminal_util_load_builder_file (const char *filename,
 
 gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);
 
+void terminal_util_key_file_set_string_escape    (GKeyFile *key_file,
+                                                  const char *group,
+                                                  const char *key,
+                                                  const char *string);
+char *terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
+                                                  const char *group,
+                                                  const char *key,
+                                                  GError **error);
+
+void terminal_util_key_file_set_argv      (GKeyFile *key_file,
+                                           const char *group,
+                                           const char *key,
+                                           int argc,
+                                           char **argv);
+char **terminal_util_key_file_get_argv    (GKeyFile *key_file,
+                                           const char *group,
+                                           const char *key,
+                                           int *argc,
+                                           GError **error);
+
 typedef enum {
   FLAG_INVERT_BOOL  = 1 << 0,
 } PropertyChangeFlags;

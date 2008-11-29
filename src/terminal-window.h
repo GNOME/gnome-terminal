@@ -98,6 +98,10 @@ void terminal_window_set_startup_id (TerminalWindow *window,
 
 gboolean terminal_window_uses_argb_visual (TerminalWindow *window);
 
+void terminal_window_save_state (TerminalWindow *window,
+                                 GKeyFile *key_file,
+                                 const char *group);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */

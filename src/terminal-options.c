@@ -29,7 +29,9 @@
 
 #include "terminal-options.h"
 #include "terminal-screen.h"
+#include "terminal-app.h"
 #include "terminal-intl.h"
+#include "terminal-util.h"
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
@@ -64,20 +66,11 @@ initial_tab_free (InitialTab *it)
 }
 
 static InitialWindow*
-initial_window_new (const char *profile,
-                    gboolean    is_id)
+initial_window_new (void)
 {
   InitialWindow *iw;
 
-  iw = g_slice_new (InitialWindow);
-
-  iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
-  iw->force_menubar_state = FALSE;
-  iw->menubar_state = FALSE;
-  iw->start_fullscreen = FALSE;
-  iw->start_maximized = FALSE;
-  iw->geometry = NULL;
-  iw->role = NULL;
+  iw = g_slice_new0 (InitialWindow);
 
   return iw;
 }
@@ -124,11 +117,11 @@ ensure_top_window (TerminalOptions *options)
 
   if (options->initial_windows == NULL)
     {
-      iw = initial_window_new (NULL, FALSE);
+      iw = initial_window_new ();
+      iw->tabs = g_list_append (NULL, initial_tab_new (NULL, FALSE));
       apply_defaults (options, iw);
 
-      options->initial_windows = g_list_append (options->initial_windows,
-                                                iw);
+      options->initial_windows = g_list_append (options->initial_windows, iw);
     }
   else
     {
@@ -162,8 +155,8 @@ add_new_window (TerminalOptions *options,
 {
   InitialWindow *iw;
 
-  iw = initial_window_new (profile, is_id);
-
+  iw = initial_window_new ();
+  iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
   apply_defaults (options, iw);
 
   options->initial_windows = g_list_append (options->initial_windows, iw);
@@ -494,6 +487,27 @@ option_disable_factory_callback (const gchar *option_name,
 }
 
 static gboolean
+option_load_save_config_cb (const gchar *option_name,
+                            const gchar *value,
+                            gpointer     data,
+                            GError     **error)
+{
+  TerminalOptions *options = data;
+
+  if (options->config_file)
+    {
+      g_set_error (error, 0, 0, "X"); /* FIXME */
+      return FALSE;
+    }
+
+  options->config_file = g_strdup (value);
+  options->load_config = strcmp (option_name, "--load-config") == 0;
+  options->save_config = strcmp (option_name, "--save-config") == 0;
+
+  return TRUE;
+}
+
+static gboolean
 option_title_callback (const gchar *option_name,
                        const gchar *value,
                        gpointer     data,
@@ -743,6 +757,110 @@ terminal_options_parse (const char *working_directory,
   return NULL;
 }
 
+gboolean
+terminal_options_merge_config (TerminalOptions *options,
+                               GKeyFile *key_file,
+                               GError **error)
+{
+  int version, compat_version;
+  char **groups;
+  guint i;
+  gboolean have_error = FALSE;
+  GList *initial_windows = NULL;
+
+  if (!g_key_file_has_group (key_file, TERMINAL_CONFIG_GROUP))
+    {
+      g_set_error_literal (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND,
+                           _("Not a valid terminal config file."));
+      return FALSE;
+    }
+  
+  version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, NULL);
+  compat_version = g_key_file_get_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, NULL);
+
+  if (version <= 0 ||
+      compat_version <= 0 ||
+      compat_version > TERMINAL_CONFIG_COMPAT_VERSION)
+    {
+      g_set_error_literal (error, 0 /* FIXME */, 0,
+                           _("Incompatible terminal config file version."));
+      return FALSE;
+    }
+
+  groups = g_key_file_get_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, NULL, error);
+  if (!groups)
+    return FALSE;
+
+  for (i = 0; groups[i]; ++i)
+    {
+      const char *window_group = groups[i];
+      char **tab_groups;
+      InitialWindow *iw;
+      guint j;
+
+      tab_groups = g_key_file_get_string_list (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_TABS, NULL, error);
+      if (!tab_groups)
+        continue; /* no tabs in this window, skip it */
+
+      iw = initial_window_new ();
+      initial_windows = g_list_append (initial_windows, iw);
+      apply_defaults (options, iw);
+
+      iw->role = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ROLE, NULL);
+      iw->geometry = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY, NULL);
+      iw->start_fullscreen = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN, NULL);
+      iw->start_maximized = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED, NULL);
+      if (g_key_file_has_key (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL))
+        {
+          iw->force_menubar_state = TRUE;
+          iw->menubar_state = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL);
+        }
+
+      for (j = 0; tab_groups[j]; ++j)
+        {
+          const char *tab_group = tab_groups[j];
+          InitialTab *it;
+          char *profile;
+
+          profile = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, NULL);
+          it = initial_tab_new (profile, TRUE);
+          g_free (profile);
+
+          iw->tabs = g_list_append (iw->tabs, it);
+
+/*          it->width = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH, NULL);
+          it->height = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT, NULL);*/
+          it->working_dir = terminal_util_key_file_get_string_unescape (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, NULL);
+          it->title = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, NULL);
+
+          if (g_key_file_has_key (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL) &&
+              !(it->exec_argv = terminal_util_key_file_get_argv (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL, error)))
+            {
+              have_error = TRUE;
+              break;
+            }
+        }
+
+      g_strfreev (tab_groups);
+
+      if (have_error)
+        break;
+    }
+
+  g_strfreev (groups);
+
+  if (have_error)
+    {
+      g_list_foreach (initial_windows, (GFunc) initial_window_free, NULL);
+      g_list_free (initial_windows);
+      return FALSE;
+    }
+
+  options->initial_windows = g_list_concat (options->initial_windows, initial_windows);
+
+  return TRUE;
+}
+
 void
 terminal_options_free (TerminalOptions *options)
 {
@@ -776,6 +894,24 @@ get_goption_context (TerminalOptions *options)
       option_disable_factory_callback,
       N_("Do not register with the activation nameserver, do not re-use an active terminal"),
       NULL
+    },
+    {
+      "load-config",
+      0,
+      G_OPTION_FLAG_FILENAME,
+      G_OPTION_ARG_CALLBACK,
+      option_load_save_config_cb,
+      N_("Load a terminal configuration file"),
+      N_("FILE")
+    },
+    {
+      "save-config",
+      0,
+      G_OPTION_FLAG_FILENAME,
+      G_OPTION_ARG_CALLBACK,
+      option_load_save_config_cb,
+      N_("Save the terminal configuration to a file"),
+      N_("FILE")
     },
     { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
