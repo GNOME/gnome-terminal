@@ -402,7 +402,16 @@ factory_disabled:
   gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
 #ifdef WITH_SMCLIENT
-  //egg_set_desktop_file (TERM_DATADIR G_DIR_SEPARATOR_S  // FIXME)
+  {
+    char *desktop_file;
+
+    desktop_file = g_build_filename (TERM_DATADIR,
+                                     "applications",
+                                     PACKAGE ".desktop",
+                                     NULL);
+    egg_set_desktop_file (desktop_file);
+    g_free (desktop_file);
+  }
 #endif
 
   terminal_app_initialize (options->use_factory);
