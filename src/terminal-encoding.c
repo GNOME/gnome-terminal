@@ -22,8 +22,9 @@
 
 #include <gtk/gtk.h>
 
-#include "terminal-encoding.h"
 #include "terminal-app.h"
+#include "terminal-debug.h"
+#include "terminal-encoding.h"
 #include "terminal-intl.h"
 #include "terminal-profile.h"
 #include "terminal-util.h"
@@ -209,19 +210,30 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
                     (converted != NULL) &&
                     (strcmp (converted, ascii_sample) == 0);
 
-#ifdef DEBUG_ENCODINGS
-  if (!encoding->valid)
-    {
-      g_print("Rejecting encoding %s as invalid:\n", encoding->charset);
-      g_print(" input  \"%s\"\n", ascii_sample);
-      g_print(" output \"%s\" bytes read %u written %u\n",
-              converted ? converted : "(null)", bytes_read, bytes_written);
-      if (error)
-        g_print (" Error: %s\n", error->message);
-      g_print ("\n");
-    }
-  else
-    g_print ("Encoding %s is valid\n\n", encoding->charset);
+#ifdef GNOME_ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ENCODINGS)
+  {
+    if (!encoding->valid)
+      {
+        _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
+                               "Rejecting encoding %s as invalid:\n",
+                               encoding->charset);
+        _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
+                               " input  \"%s\"\n",
+                               ascii_sample);
+        _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
+                               " output \"%s\" bytes read %u written %u\n",
+                               converted ? converted : "(null)", bytes_read, bytes_written);
+        if (error)
+          _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
+                                 " Error: %s\n",
+                                 error->message);
+      }
+    else
+        _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
+                               "Encoding %s is valid\n\n",
+                               encoding->charset);
+  }
 #endif
 
   g_clear_error (&error);
