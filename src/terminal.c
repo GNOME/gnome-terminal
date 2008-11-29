@@ -388,7 +388,8 @@ factory_disabled:
 
   /* If the gconf daemon isn't available (e.g. because there's no dbus
    * session bus running), we'd crash later on. Tell the user about it
-   * now, and exit. See bug #561663. */
+   * now, and exit. See bug #561663.
+   */
   if (!gconf_ping_daemon ())
     {
       g_printerr ("Failed to contact the GConf daemon; exiting.\n");
