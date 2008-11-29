@@ -29,6 +29,7 @@
 #include "skey-popup.h"
 #include "terminal-accels.h"
 #include "terminal-app.h"
+#include "terminal-debug.h"
 #include "terminal-encoding.h"
 #include "terminal-intl.h"
 #include "terminal-screen-container.h"
@@ -2184,9 +2185,10 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
 
   if (priv->active_screen)
     {
-#ifdef DEBUG_GEOMETRY
-      g_printerr ("setting size after toggling menubar visibility\n");
-#endif
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                             "[window %p] setting size after toggling menubar visibility\n",
+                             window);
+
       terminal_window_set_size (window, priv->active_screen, TRUE);
     }
 }
@@ -2247,11 +2249,11 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
 
-#ifdef DEBUG_GEOMETRY
-  g_printerr ("set size: toplevel %dx%d widget %dx%d\n",
-           toplevel_request.width, toplevel_request.height,
-           widget_request.width, widget_request.height);
-#endif
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] set size: toplevel %dx%d widget %dx%d\n",
+                         window,
+                         toplevel_request.width, toplevel_request.height,
+                         widget_request.width, widget_request.height);
   
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
@@ -2269,10 +2271,10 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   w += xpad * 2 + char_width * grid_width;
   h += ypad * 2 + char_height * grid_height;
 
-#ifdef DEBUG_GEOMETRY
-  g_printerr ("set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
-           grid_width, grid_height, force_grid_width, force_grid_height, w, h);
-#endif
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
+                         window,
+                         grid_width, grid_height, force_grid_width, force_grid_height, w, h);
 
   if (even_if_mapped && GTK_WIDGET_MAPPED (app)) {
     gtk_window_resize (GTK_WINDOW (app), w, h);
@@ -2328,9 +2330,9 @@ terminal_window_set_active (TerminalWindow *window,
   sync_screen_icon_title (screen, NULL, window);
 
   /* set size of window to current grid size */
-#ifdef DEBUG_GEOMETRY
-  g_printerr ("setting size after flipping notebook pages\n");
-#endif
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] setting size after flipping notebook pages\n",
+                         window);
   terminal_window_set_size (window, screen, TRUE);
 
   terminal_window_update_encoding_menu_active_encoding (window);
@@ -2650,26 +2652,26 @@ terminal_window_update_geometry (TerminalWindow *window)
                                      GDK_HINT_MIN_SIZE |
                                      GDK_HINT_BASE_SIZE);
 
-#ifdef DEBUG_GEOMETRY
-      g_printerr ("hints: base %dx%d min %dx%d inc %d %d\n",
-               hints.base_width,
-               hints.base_height,
-               hints.min_width,
-               hints.min_height,
-               hints.width_inc,
-               hints.height_inc);
-#endif
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                             "[window %p] hints: base %dx%d min %dx%d inc %d %d\n",
+                             window,
+                             hints.base_width,
+                             hints.base_height,
+                             hints.min_width,
+                             hints.min_height,
+                             hints.width_inc,
+                             hints.height_inc);
       
       priv->old_char_width = hints.width_inc;
       priv->old_char_height = hints.height_inc;
       priv->old_geometry_widget = widget;
     }
-#ifdef DEBUG_GEOMETRY
   else
     {
-      g_printerr ("hints: increment unchanged, not setting\n");
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                             "[window %p] hints: increment unchanged, not setting\n",
+                             window);
     }
-#endif
 }
 
 static void

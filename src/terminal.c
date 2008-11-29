@@ -23,12 +23,6 @@
 
 #include <glib.h>
 
-#include "terminal-intl.h"
-
-#include "terminal-app.h"
-#include "terminal-accels.h"
-#include "terminal-options.h"
-#include "terminal-util.h"
 #include <stdlib.h>
 #include <time.h>
 #include <gdk/gdkx.h>
@@ -41,6 +35,13 @@
 #include <dbus/dbus-protocol.h>
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus-glib-bindings.h>
+
+#include "terminal-accels.h"
+#include "terminal-app.h"
+#include "terminal-debug.h"
+#include "terminal-intl.h"
+#include "terminal-options.h"
+#include "terminal-util.h"
 
 #define TERMINAL_FACTORY_SERVICE_NAME   "org.gnome.Terminal.Factory"
 #define TERMINAL_FACTORY_SERVICE_PATH   "/org/gnome/Terminal/Factory"
@@ -222,6 +223,8 @@ main (int argc, char **argv)
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
+
+  _terminal_debug_init ();
 
   /* Make a NULL-terminated copy since we may need it later */
   argv_copy = g_new (char *, argc + 1);

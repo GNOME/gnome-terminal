@@ -34,6 +34,7 @@
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
+#include "terminal-debug.h"
 #include "terminal-intl.h"
 #include "terminal-marshal.h"
 #include "terminal-profile.h"
@@ -189,13 +190,13 @@ free_tag_data (TagData *tagdata)
   g_slice_free (TagData, tagdata);
 }
 
-#ifdef DEBUG_GEOMETRY
 static void
 parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget *screen)
 {
-  g_print ("screen %p scrolled-window size req %d : %d\n", screen, req->width, req->height);
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[screen %p] scrolled-window size req %d : %d\n",
+                         screen, req->width, req->height);
 }
-#endif
 
 static void
 parent_parent_set_cb (GtkWidget *widget,
@@ -228,12 +229,13 @@ parent_set_callback (GtkWidget *widget,
   if (widget->parent)
     g_signal_connect (widget->parent, "parent-set", G_CALLBACK (parent_parent_set_cb), widget);
 
-#ifdef DEBUG_GEOMETRY
-  if (old_parent)
-    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), widget);
-  if (widget->parent)
-    g_signal_connect (widget->parent, "size-request", G_CALLBACK (parent_size_request), widget);
-#endif
+  if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
+    {
+      if (old_parent)
+        g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), widget);
+      if (widget->parent)
+        g_signal_connect (widget->parent, "size-request", G_CALLBACK (parent_size_request), widget);
+    }
 }
 
 static void
@@ -297,19 +299,23 @@ terminal_screen_style_set (GtkWidget *widget,
     terminal_screen_change_font (screen);
 }
 
-#ifdef DEBUG_GEOMETRY
-
-static void size_request (GtkWidget *widget, GtkRequisition *req)
+static void
+size_request (GtkWidget *widget,
+              GtkRequisition *req)
 {
-  g_print ("Screen %p size-request %d : %d\n", widget, req->width, req->height);
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[screen %p] size-request %d : %d\n",
+                         widget, req->width, req->height);
 }
 
-static void size_allocate (GtkWidget *widget, GtkAllocation *allocation)
+static void
+size_allocate (GtkWidget *widget,
+               GtkAllocation *allocation)
 {
-  g_print ("Screen %p size-alloc   %d : %d at (%d, %d)\n", widget, allocation->width, allocation->height, allocation->x, allocation->y);
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[screen %p] size-alloc   %d : %d at (%d, %d)\n",
+                         widget, allocation->width, allocation->height, allocation->x, allocation->y);
 }
-
-#endif
 
 static void
 terminal_screen_init (TerminalScreen *screen)
@@ -387,10 +393,11 @@ terminal_screen_init (TerminalScreen *screen)
 
   g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
 
-#ifdef DEBUG_GEOMETRY
-  g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
-  g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
-#endif
+  if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
+    {
+      g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
+      g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
+    }
 }
 
 static void
@@ -1687,7 +1694,7 @@ terminal_screen_set_override_title (TerminalScreen *screen,
                                     const char     *title)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  const char *old_title;
+  char *old_title;
 
   old_title = priv->override_title;
   priv->override_title = g_strdup (title);

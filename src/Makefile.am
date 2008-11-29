@@ -16,6 +16,8 @@ gnome_terminal_SOURCES= \
 	terminal-accels.h \
 	terminal-app.c \
 	terminal-app.h \
+	terminal-debug.c \
+	terminal-debug.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
 	terminal-factory-client.h \
