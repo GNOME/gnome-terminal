@@ -533,8 +533,9 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
     return;
 
   _terminal_debug_print (TERMINAL_DEBUG_PROFILE,
-                         "GConf notification for key %s\n",
-                         key);
+                         "GConf notification for key %s [%s]\n",
+                         key,
+                         gconf_entry_get_is_writable (entry) ? "writable" : "LOCKED");
 
   key += strlen (priv->profile_dir);
   if (!key[0])
@@ -923,7 +924,12 @@ terminal_profile_init (TerminalProfile *profile)
   priv->conf = gconf_client_get_default ();
 
   priv->locked = g_new0 (gboolean, LAST_PROP);
-  priv->locked[PROP_NAME] = TRUE;
+
+  /* Lock all props by default. If GConf is working and allows writing
+   * to the resp. keys, we'll unlock in the notification handler.
+   */
+  for (i = 0; i < LAST_PROP; ++i)
+    priv->locked[i] = TRUE;
 
   priv->properties = g_value_array_new (LAST_PROP);
   for (i = 0; i < LAST_PROP; ++i)
