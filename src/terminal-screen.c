@@ -232,7 +232,7 @@ parent_set_callback (GtkWidget *widget,
     g_signal_connect (widget->parent, "parent-set", G_CALLBACK (parent_parent_set_cb), widget);
 
 #ifdef GNOME_ENABLE_DEBUG
-  if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
     {
       if (old_parent)
         g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), widget);
@@ -400,7 +400,7 @@ terminal_screen_init (TerminalScreen *screen)
   g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
 
 #ifdef GNOME_ENABLE_DEBUG
-  if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
     {
       g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
       g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
