@@ -1687,9 +1687,11 @@ terminal_screen_set_override_title (TerminalScreen *screen,
                                     const char     *title)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  
-  g_assert (priv->override_title == NULL);
+  const char *old_title;
+
+  old_title = priv->override_title;
   priv->override_title = g_strdup (title);
+  g_free (old_title);
 
   terminal_screen_set_dynamic_title (screen, title, FALSE);
   terminal_screen_set_dynamic_icon_title (screen, title, FALSE);
@@ -2260,9 +2262,8 @@ terminal_screen_save_config (TerminalScreen *screen,
     terminal_util_key_file_set_argv (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND,
                                      -1, priv->override_command);
 
-  /* FIXMEchpe: only persist user-set titles here */
-  if (priv->raw_title)
-    g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, priv->raw_title);
+  if (priv->override_title)
+    g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, priv->override_title);
 
   dir = terminal_screen_get_working_dir (screen);
   if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
