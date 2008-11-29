@@ -190,6 +190,7 @@ free_tag_data (TagData *tagdata)
   g_slice_free (TagData, tagdata);
 }
 
+#ifdef GNOME_ENABLE_DEBUG
 static void
 parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget *screen)
 {
@@ -197,6 +198,7 @@ parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget 
                          "[screen %p] scrolled-window size req %d : %d\n",
                          screen, req->width, req->height);
 }
+#endif
 
 static void
 parent_parent_set_cb (GtkWidget *widget,
@@ -229,6 +231,7 @@ parent_set_callback (GtkWidget *widget,
   if (widget->parent)
     g_signal_connect (widget->parent, "parent-set", G_CALLBACK (parent_parent_set_cb), widget);
 
+#ifdef GNOME_ENABLE_DEBUG
   if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
     {
       if (old_parent)
@@ -236,6 +239,7 @@ parent_set_callback (GtkWidget *widget,
       if (widget->parent)
         g_signal_connect (widget->parent, "size-request", G_CALLBACK (parent_size_request), widget);
     }
+#endif
 }
 
 static void
@@ -299,6 +303,7 @@ terminal_screen_style_set (GtkWidget *widget,
     terminal_screen_change_font (screen);
 }
 
+#ifdef GNOME_ENABLE_DEBUG
 static void
 size_request (GtkWidget *widget,
               GtkRequisition *req)
@@ -316,6 +321,7 @@ size_allocate (GtkWidget *widget,
                          "[screen %p] size-alloc   %d : %d at (%d, %d)\n",
                          widget, allocation->width, allocation->height, allocation->x, allocation->y);
 }
+#endif
 
 static void
 terminal_screen_init (TerminalScreen *screen)
@@ -393,11 +399,13 @@ terminal_screen_init (TerminalScreen *screen)
 
   g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
 
+#ifdef GNOME_ENABLE_DEBUG
   if (_terminal_debug_on (TERMINAL_DEBUG_GEOMETRY))
     {
       g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);
       g_signal_connect_after (screen, "size-allocate", G_CALLBACK (size_allocate), NULL);
     }
+#endif
 }
 
 static void
