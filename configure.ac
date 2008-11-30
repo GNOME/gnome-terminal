@@ -45,7 +45,6 @@ STARTUP_NOTIFICATION_REQUIRED=0.8
 DBUS_GLIB_REQUIRED=0.6
 VTE_REQUIRED=0.17.5
 
-## here we get the flags we'll actually use
 PKG_CHECK_MODULES([TERM],
   [vte >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
@@ -86,14 +85,6 @@ if test x"$GCONFTOOL" = xno; then
 fi
 
 AM_GCONF_SOURCE_2
-
-if $PKG_CONFIG 'xft >= 2.0.0 pangoxft >= 1.1.1'; then
-   using_xft2=yes
-   CPPFLAGS="`$PKG_CONFIG --cflags xft pangoxft` $CPPFLAGS"
-   LIBS="`$PKG_CONFIG --libs xft pangoxft` `$PKG_CONFIG --variable=xrenderlibs xft` $LIBS"
-else
-   using_xft2=no
-fi
 
 GLIB_GENMARSHAL="$($PKG_CONFIG --variable=glib_genmarshal glib-2.0)"
 AC_SUBST([GLIB_GENMARSHAL])
@@ -139,12 +130,6 @@ AC_OUTPUT
 
 # ****************************
 
-if test x$using_xft2 = xno; then
-        echo "*** WARNING WARNING WARNING WARNING WARNING"
-        echo "*** Building with VTE widget but not Xft2"
-        echo "*** This won't be as optimal as fontconfig/Xft2"
-fi
-
 echo "
 gnome-terminal-$VERSION:
 
@@ -152,6 +137,5 @@ gnome-terminal-$VERSION:
 	source code location:	${srcdir}
 	compiler:		${CC}
 
-        using fontconfig/Xft2:  ${using_xft2}
         using smclient:         ${with_smclient}
 "
