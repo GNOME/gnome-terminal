@@ -1,10 +1,10 @@
-SUBDIRS=src po help
+SUBDIRS = src po help
 
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper --disable-schemas-install
 
 desktopdir = $(datadir)/applications
-desktop_in_files = gnome-terminal.desktop.in
-desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
+desktop_in_files = gnome-terminal.desktop.in.in
+desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 EXTRA_DIST = 			\
@@ -13,7 +13,6 @@ EXTRA_DIST = 			\
 	help/ChangeLog.pre-2-23	\
 	ChangeLog.README	\
 	HACKING			\
-	$(desktop_in_files) 	\
 	$(desktop_DATA)		\
 	gnome-doc-utils.make	\
 	xmldocs.make		\
