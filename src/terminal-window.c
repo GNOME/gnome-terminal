@@ -1028,31 +1028,6 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   gtk_action_set_sensitive (action, num_pages > 1);
 }
 
-static void
-initialize_alpha_mode (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GdkScreen *screen;
-  GdkColormap *colormap;
-
-  /* FIXME: update the TerminalScreen's for this change! */
-  
-  screen = gtk_widget_get_screen (GTK_WIDGET (window));
-  colormap = gdk_screen_get_rgba_colormap (screen);
-  if (colormap != NULL && gdk_screen_is_composited (screen))
-    {
-      /* Set RGBA colormap if possible so VTE can use real alpha
-       * channels for transparency. */
-
-      gtk_widget_set_colormap(GTK_WIDGET (window), colormap);
-      priv->have_argb_visual = TRUE;
-    }
-  else
-    {
-      priv->have_argb_visual = FALSE;
-    }
-}
-
 gboolean
 terminal_window_uses_argb_visual (TerminalWindow *window)
 {
@@ -1389,6 +1364,33 @@ terminal_window_accel_activate_cb (GtkAccelGroup  *accel_group,
 
 /*****************************************/
 
+static void
+terminal_window_realize (GtkWidget *widget)
+{
+#ifdef GDK_WINDOWING_X11
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
+  GdkScreen *screen;
+  GdkColormap *colormap;
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  colormap = gdk_screen_get_rgba_colormap (screen);
+  if (colormap != NULL && gdk_screen_is_composited (screen))
+    {
+      /* Set RGBA colormap if possible so VTE can use real transparency */
+      gtk_widget_set_colormap (widget, colormap);
+      priv->have_argb_visual = TRUE;
+    }
+  else
+    {
+      gtk_widget_set_colormap (widget, gdk_screen_get_default_colormap (screen));
+      priv->have_argb_visual = FALSE;
+    }
+#endif
+
+  GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
+}
+    
 static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
@@ -1429,6 +1431,35 @@ terminal_window_window_manager_changed_cb (GdkScreen *screen,
   gtk_action_set_sensitive (action, supports_fs);
 }
 
+#ifdef GDK_WINDOWING_X11
+
+static void
+terminal_window_composited_changed_cb (GdkScreen *screen,
+                                       TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  gboolean composited;
+
+  composited = gdk_screen_is_composited (screen);
+  if ((composited != priv->have_argb_visual) &&
+      GTK_WIDGET_REALIZED (window))
+    {
+      GtkWidget *widget = GTK_WIDGET (window);
+      guint32 user_time;
+
+      user_time = gdk_x11_display_get_user_time (gtk_widget_get_display (widget));
+
+      /* If compositing changed, re-realize the window. Bug #563561 */
+      gtk_widget_hide (widget);
+      gtk_widget_unrealize (widget);
+      gtk_widget_realize (widget);
+      gdk_x11_window_set_user_time (widget->window, user_time);
+      gtk_widget_show (widget);
+    }
+}
+
+#endif /* GDK_WINDOWING_X11 */
+
 static void
 terminal_window_screen_update (TerminalWindow *window,
                                GdkScreen *screen)
@@ -1438,6 +1469,10 @@ terminal_window_screen_update (TerminalWindow *window,
   terminal_window_window_manager_changed_cb (screen, window);
   g_signal_connect (screen, "window-manager-changed",
                     G_CALLBACK (terminal_window_window_manager_changed_cb), window);
+#ifdef GDK_WINDOWING_X11
+  g_signal_connect (screen, "composited-changed",
+                    G_CALLBACK (terminal_window_composited_changed_cb), window);
+#endif
 
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
@@ -1471,9 +1506,16 @@ terminal_window_screen_changed (GtkWidget *widget,
     return;
 
   if (previous_screen)
-    g_signal_handlers_disconnect_by_func (previous_screen,
-                                          G_CALLBACK (terminal_window_window_manager_changed_cb),
-                                          window);
+    {
+      g_signal_handlers_disconnect_by_func (previous_screen,
+                                            G_CALLBACK (terminal_window_window_manager_changed_cb),
+                                            window);
+#ifdef GDK_WINDOWING_X11
+      g_signal_handlers_disconnect_by_func (previous_screen,
+                                            G_CALLBACK (terminal_window_composited_changed_cb),
+                                            window);
+#endif
+    }
 
   if (!screen)
     return;
@@ -1675,8 +1717,6 @@ terminal_window_init (TerminalWindow *window)
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
-  initialize_alpha_mode (window);
-
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
                     NULL);
@@ -1815,6 +1855,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   object_class->finalize = terminal_window_finalize;
 
   widget_class->show = terminal_window_show;
+  widget_class->realize = terminal_window_realize;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
 
@@ -1860,9 +1901,16 @@ terminal_window_dispose (GObject *object)
 
   screen = gtk_widget_get_screen (GTK_WIDGET (object));
   if (screen)
-    g_signal_handlers_disconnect_by_func (screen,
-                                          G_CALLBACK (terminal_window_window_manager_changed_cb),
-                                          window);
+    {
+      g_signal_handlers_disconnect_by_func (screen,
+                                            G_CALLBACK (terminal_window_window_manager_changed_cb),
+                                            window);
+#ifdef GDK_WINDOWING_X11
+      g_signal_handlers_disconnect_by_func (screen,
+                                            G_CALLBACK (terminal_window_composited_changed_cb),
+                                            window);
+#endif
+    }
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
