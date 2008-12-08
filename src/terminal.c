@@ -1134,6 +1134,9 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
   return event.xproperty.time;
 }
 
+/* Evil hack alert: this is exported from libgconf-2 but not in a public header */
+extern gboolean gconf_ping_daemon (void);
+         
 int
 main (int argc, char **argv)
 {
@@ -1234,6 +1237,15 @@ main (int argc, char **argv)
 
   g_strfreev (argv_copy);
   argv_copy = NULL;
+
+  /* If the gconf daemon isn't available (e.g. because there's no dbus
+   * session bus running), we'd crash later on. Tell the user about it
+   * now, and exit. See bug #561663. */
+  if (!gconf_ping_daemon ())
+    {
+      g_printerr ("Failed to contact the GConf daemon; exiting.\n");
+      exit (1);
+    }
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
  
