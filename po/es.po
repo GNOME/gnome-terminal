@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&amp;component=general\n"
-"POT-Creation-Date: 2008-11-30 09:33+0000\n"
-"PO-Revision-Date: 2008-11-30 12:22+0100\n"
+"POT-Creation-Date: 2008-12-15 19:57+0000\n"
+"PO-Revision-Date: 2008-12-15 21:45+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
 #: ../src/terminal-accels.c:222 ../src/terminal.c:259
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1684
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1724
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -978,10 +978,12 @@ msgstr ""
 #: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
-"for an image, or \"transparent\" for pseudo-transparency."
+"for an image, or \"transparent\" for either real transparency if a "
+"compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
 "El tipo de fondo del terminal. Puede ser «solid» para un color sólido, «image» "
-"para una imagen o «transparent» para una pseudo-transparencia."
+"para una imagen o «transparent» para una transparencia real o, si se está "
+"ejecutando un gestor de ventanas de composición, una pseudo-transparencia."
 
 #: ../src/gnome-terminal.schemas.in.h:128
 msgid "What to do with dynamic title"
@@ -1562,7 +1564,7 @@ msgstr "Reducir"
 msgid "Normal Size"
 msgstr "Tamaño normal"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3120
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3168
 msgid "Set Title"
 msgstr "Establecer título"
 
@@ -1913,7 +1915,7 @@ msgstr ""
 "quiera crear un perfil con el ajuste deseado y usar la nueva opción «--"
 "profile»\n"
 
-#: ../src/terminal-options.c:187 ../src/terminal-window.c:3339
+#: ../src/terminal-options.c:187 ../src/terminal-window.c:3387
 msgid "GNOME Terminal"
 msgstr "Terminal de GNOME"
 
@@ -2192,176 +2194,176 @@ msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1505
+#: ../src/terminal-window.c:1547
 msgid "_File"
 msgstr "_Archivo"
 
 #. File menu
-#: ../src/terminal-window.c:1506 ../src/terminal-window.c:1517
-#: ../src/terminal-window.c:1639
+#: ../src/terminal-window.c:1548 ../src/terminal-window.c:1559
+#: ../src/terminal-window.c:1681
 msgid "Open _Terminal"
 msgstr "Abrir _terminal"
 
-#: ../src/terminal-window.c:1507 ../src/terminal-window.c:1520
-#: ../src/terminal-window.c:1642
+#: ../src/terminal-window.c:1549 ../src/terminal-window.c:1562
+#: ../src/terminal-window.c:1684
 msgid "Open Ta_b"
 msgstr "Abrir _solapa"
 
-#: ../src/terminal-window.c:1508
+#: ../src/terminal-window.c:1550
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/terminal-window.c:1509
+#: ../src/terminal-window.c:1551
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/terminal-window.c:1510
+#: ../src/terminal-window.c:1552
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1511
+#: ../src/terminal-window.c:1553
 msgid "Ta_bs"
 msgstr "_Solapas"
 
-#: ../src/terminal-window.c:1512
+#: ../src/terminal-window.c:1554
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/terminal-window.c:1523
+#: ../src/terminal-window.c:1565
 msgid "New _Profile…"
 msgstr "_Perfil nuevo..."
 
-#: ../src/terminal-window.c:1526 ../src/terminal-window.c:1648
+#: ../src/terminal-window.c:1568 ../src/terminal-window.c:1690
 msgid "C_lose Tab"
 msgstr "C_errar solapa"
 
-#: ../src/terminal-window.c:1529
+#: ../src/terminal-window.c:1571
 msgid "_Close Window"
 msgstr "_Cerrar ventana"
 
-#: ../src/terminal-window.c:1540 ../src/terminal-window.c:1636
+#: ../src/terminal-window.c:1582 ../src/terminal-window.c:1678
 msgid "Paste _Filenames"
 msgstr "Pegar los _nombres de archivo"
 
-#: ../src/terminal-window.c:1546
+#: ../src/terminal-window.c:1588
 msgid "P_rofiles…"
 msgstr "Pe_rfiles..."
 
-#: ../src/terminal-window.c:1549
+#: ../src/terminal-window.c:1591
 msgid "_Keyboard Shortcuts…"
 msgstr "Combinaciones de _teclas..."
 
-#: ../src/terminal-window.c:1552
+#: ../src/terminal-window.c:1594
 msgid "Pr_ofile Preferences"
 msgstr "Pre_ferencias del perfil"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1568
+#: ../src/terminal-window.c:1610
 msgid "Change _Profile"
 msgstr "Cambiar _perfil"
 
-#: ../src/terminal-window.c:1569
+#: ../src/terminal-window.c:1611
 msgid "_Set Title…"
 msgstr "E_stablecer título..."
 
-#: ../src/terminal-window.c:1572
+#: ../src/terminal-window.c:1614
 msgid "Set _Character Encoding"
 msgstr "Establecer _codificación de caracteres"
 
-#: ../src/terminal-window.c:1573
+#: ../src/terminal-window.c:1615
 msgid "_Reset"
 msgstr "_Reiniciar"
 
-#: ../src/terminal-window.c:1576
+#: ../src/terminal-window.c:1618
 msgid "Reset and C_lear"
 msgstr "Reiniciar y _limpiar"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1581
+#: ../src/terminal-window.c:1623
 msgid "_Add or Remove…"
 msgstr "_Añadir o quitar…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1586
+#: ../src/terminal-window.c:1628
 msgid "_Previous Tab"
 msgstr "Solapa _anterior"
 
-#: ../src/terminal-window.c:1589
+#: ../src/terminal-window.c:1631
 msgid "_Next Tab"
 msgstr "Solapa _siguiente"
 
-#: ../src/terminal-window.c:1592
+#: ../src/terminal-window.c:1634
 msgid "Move Tab _Left"
 msgstr "Mover solapa a la _izquierda"
 
-#: ../src/terminal-window.c:1595
+#: ../src/terminal-window.c:1637
 msgid "Move Tab _Right"
 msgstr "Mover solapa a la de_recha"
 
-#: ../src/terminal-window.c:1598
+#: ../src/terminal-window.c:1640
 msgid "_Detach tab"
 msgstr "_Desacoplar solapa"
 
 #. Help menu
-#: ../src/terminal-window.c:1603
+#: ../src/terminal-window.c:1645
 msgid "_Contents"
 msgstr "_Índice"
 
-#: ../src/terminal-window.c:1606
+#: ../src/terminal-window.c:1648
 msgid "_About"
 msgstr "Acerca _de"
 
 #. Popup menu
-#: ../src/terminal-window.c:1611
+#: ../src/terminal-window.c:1653
 msgid "_Send Mail To…"
 msgstr "_Enviar correo a…"
 
-#: ../src/terminal-window.c:1614
+#: ../src/terminal-window.c:1656
 msgid "_Copy E-mail Address"
 msgstr "_Copiar la dirección de correo-e"
 
-#: ../src/terminal-window.c:1617
+#: ../src/terminal-window.c:1659
 msgid "C_all To…"
 msgstr "_Llamar a..."
 
-#: ../src/terminal-window.c:1620
+#: ../src/terminal-window.c:1662
 msgid "_Copy Call Address"
 msgstr "_Copiar la dirección de llamada"
 
-#: ../src/terminal-window.c:1623
+#: ../src/terminal-window.c:1665
 msgid "_Open Link"
 msgstr "A_brir el enlace"
 
-#: ../src/terminal-window.c:1626
+#: ../src/terminal-window.c:1668
 msgid "_Copy Link Address"
 msgstr "C_opiar la dirección del enlace"
 
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1671
 msgid "P_rofiles"
 msgstr "Pe_rfiles"
 
-#: ../src/terminal-window.c:1645
+#: ../src/terminal-window.c:1687
 msgid "C_lose Window"
 msgstr "_Cerrar ventana"
 
-#: ../src/terminal-window.c:1651
+#: ../src/terminal-window.c:1693
 msgid "_Input Methods"
 msgstr "Mé_todos de entrada"
 
 #. View Menu
-#: ../src/terminal-window.c:1657
+#: ../src/terminal-window.c:1699
 msgid "Show _Menubar"
 msgstr "Mostrar la barra de _menú"
 
-#: ../src/terminal-window.c:1661
+#: ../src/terminal-window.c:1703
 msgid "_Full Screen"
 msgstr "_Pantalla completa"
 
-#: ../src/terminal-window.c:2774
+#: ../src/terminal-window.c:2822
 msgid "Close all tabs?"
 msgstr "¿Desea cerrar todas las solapas?"
 
-#: ../src/terminal-window.c:2776
+#: ../src/terminal-window.c:2824
 #, c-format
 msgid "This window has one tab open. Closing the window will close it."
 msgid_plural ""
@@ -2373,23 +2375,23 @@ msgstr[1] ""
 "Esta ventana tiene %d solapas abiertas. Al cerrar la ventana también se "
 "cerrarán todas sus solapas."
 
-#: ../src/terminal-window.c:2785
+#: ../src/terminal-window.c:2833
 msgid "Close All _Tabs"
 msgstr "Cerrar _todas las solapas"
 
-#: ../src/terminal-window.c:3136
+#: ../src/terminal-window.c:3184
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-window.c:3322
+#: ../src/terminal-window.c:3370
 msgid "Contributors:"
 msgstr "Colaboradores:"
 
-#: ../src/terminal-window.c:3341
+#: ../src/terminal-window.c:3389
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulador de terminal para el escritorio GNOME"
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3396
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>\n"
