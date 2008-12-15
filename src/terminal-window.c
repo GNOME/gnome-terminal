@@ -67,6 +67,8 @@ struct _TerminalWindowPrivate
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
   char *startup_id;
 
+  GtkWidget *confirm_close_dialog;
+
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
 
@@ -183,7 +185,9 @@ static gboolean find_smaller_zoom_factor (double  current,
 
 static void terminal_window_show (GtkWidget *widget);
 
-static gboolean confirm_close_window (TerminalWindow *window);
+static gboolean confirm_close_window_or_tab (TerminalWindow *window,
+                                             TerminalScreen *screen);
+
 static void
 profile_set_callback (TerminalScreen *screen,
                       TerminalProfile *old_profile,
@@ -1925,6 +1929,10 @@ terminal_window_finalize (GObject *object)
 
   g_object_unref (priv->ui_manager);
 
+  if (priv->confirm_close_dialog)
+    gtk_dialog_response (GTK_DIALOG (priv->confirm_close_dialog),
+                         GTK_RESPONSE_DELETE_EVENT);
+
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
 
@@ -1933,7 +1941,7 @@ terminal_window_delete_event (GtkWidget *widget,
                               GdkEvent *event,
                               gpointer data)
 {
-   return confirm_close_window (TERMINAL_WINDOW (widget));
+   return confirm_close_window_or_tab (TERMINAL_WINDOW (widget), NULL);
 }
 
 static void
@@ -2097,12 +2105,23 @@ static void
 close_button_clicked_cb (GtkWidget *tab_label,
                          GtkWidget *screen_container)
 {
-  GtkWidget *notebook;
-  guint page_num;
+  GtkWidget *toplevel;
+  TerminalWindow *window;
+  TerminalWindowPrivate *priv;
+  TerminalScreen *screen;
 
-  notebook = gtk_widget_get_parent (screen_container);
-  page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), screen_container);
-  gtk_notebook_remove_page (GTK_NOTEBOOK (notebook), page_num);
+  toplevel = gtk_widget_get_toplevel (screen_container);
+  if (!GTK_WIDGET_TOPLEVEL (toplevel) || !TERMINAL_IS_WINDOW (toplevel))
+    return;
+
+  window = TERMINAL_WINDOW (toplevel);
+  priv = window->priv;
+
+  screen = terminal_screen_container_get_screen (screen_container);
+  if (confirm_close_window_or_tab (window, screen))
+    return;
+
+  terminal_window_remove_screen (window, screen);
 }
 
 void
@@ -2783,31 +2802,44 @@ file_new_tab_callback (GtkAction *action,
 }
 
 static void
-confirm_close_window_response_cb (GtkWidget *dialog,
-                                  int response,
-                                  GtkWidget *window)
+confirm_close_response_cb (GtkWidget *dialog,
+                           int response,
+                           TerminalWindow *window)
 {
+  TerminalScreen *screen;
+
+  screen = g_object_get_data (G_OBJECT (dialog), "close-screen");
+
   gtk_widget_destroy (dialog);
 
-  if (response == GTK_RESPONSE_ACCEPT)
-    gtk_widget_destroy (window);
+  if (response != GTK_RESPONSE_ACCEPT)
+    return;
+    
+  if (screen)
+    terminal_window_remove_screen (window, screen);
+  else
+    gtk_widget_destroy (GTK_WIDGET (window));
 }
 
-/* Returns TRUE if closing needs to wait until user confirmation;
- * FALSE if the window can close immediately
+/* Returns: TRUE if closing needs to wait until user confirmation;
+ * FALSE if the terminal or window can close immediately.
  */
 static gboolean
-confirm_close_window (TerminalWindow *window)
+confirm_close_window_or_tab (TerminalWindow *window,
+                             TerminalScreen *screen)
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *dialog;
   GConfClient *client;
   gboolean do_confirm;
-  int n;
+  int n_tabs;
 
-  n = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
-  if (n <= 1)
-    return FALSE;
+  if (priv->confirm_close_dialog)
+    {
+      /* WTF, already have one? It's modal, so how did that happen? */
+      gtk_dialog_response (GTK_DIALOG (priv->confirm_close_dialog),
+                           GTK_RESPONSE_DELETE_EVENT);
+    }
 
   client = gconf_client_get_default ();
   do_confirm = gconf_client_get_bool (client, CONF_GLOBAL_PREFIX "/confirm_window_close", NULL);
@@ -2815,26 +2847,65 @@ confirm_close_window (TerminalWindow *window)
   if (!do_confirm)
     return FALSE;
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_WARNING,
-                                   GTK_BUTTONS_CANCEL,
-                                   "%s", _("Close all tabs?"));
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-			  		    ngettext ("This window has one tab open. Closing "
-						      "the window will close it.",
-						      "This window has %d tabs open. Closing "
-						      "the window will also close all tabs.",
-						      n),
-					    n);
+  if (screen)
+    {
+      do_confirm = terminal_screen_has_foreground_process (screen);
+      n_tabs = 1;
+    }
+  else
+    {
+      GList *tabs, *t;
 
-  gtk_window_set_title (GTK_WINDOW(dialog), ""); 
+      do_confirm = FALSE;
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), _("Close All _Tabs"), GTK_RESPONSE_ACCEPT);
+      tabs = terminal_window_list_screen_containers (window);
+      n_tabs = g_list_length (tabs);
+
+      for (t = tabs; t != NULL; t = t->next)
+        {
+          TerminalScreen *screen;
+
+          screen = terminal_screen_container_get_screen ((GtkWidget *) t->data);
+          if (terminal_screen_has_foreground_process (screen))
+            {
+              do_confirm = TRUE;
+              break;
+            }
+        }
+      g_list_free (tabs);
+    }
+
+  if (!do_confirm)
+    return FALSE;
+
+  dialog = priv->confirm_close_dialog =
+    gtk_message_dialog_new (GTK_WINDOW (window),
+                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                            GTK_MESSAGE_WARNING,
+                            GTK_BUTTONS_CANCEL,
+                            "%s", screen ? _("Close this terminal?") : _("Close this window?"));
+
+  if (n_tabs > 1)
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              "%s", _("There are still processes running in some terminals in this window. "
+                                                      "Closing the window will kill all of them."));
+  else
+    gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                              "%s", _("There is still a process running in this terminal. "
+                                                      "Closing the terminal will kill it."));
+
+  gtk_window_set_title (GTK_WINDOW (dialog), ""); 
+
+  gtk_dialog_add_button (GTK_DIALOG (dialog), n_tabs > 1 ? _("_Close Terminal") : _("_Close Window"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
+  g_object_set_data (G_OBJECT (dialog), "close-screen", screen);
+
+  g_signal_connect (dialog, "destroy",
+                    G_CALLBACK (gtk_widget_destroyed), &priv->confirm_close_dialog);
   g_signal_connect (dialog, "response",
-                    G_CALLBACK (confirm_close_window_response_cb), window);
+                    G_CALLBACK (confirm_close_response_cb), window);
+
   gtk_window_present (GTK_WINDOW (dialog));
 
   return TRUE;
@@ -2844,8 +2915,10 @@ static void
 file_close_window_callback (GtkAction *action,
                             TerminalWindow *window)
 {
-  if (!confirm_close_window (window))
-    gtk_widget_destroy (GTK_WIDGET (window));
+  if (confirm_close_window_or_tab (window, NULL))
+    return;
+  
+  gtk_widget_destroy (GTK_WIDGET (window));
 }
 
 static void
@@ -2853,11 +2926,15 @@ file_close_tab_callback (GtkAction *action,
                          TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalScreen *active_screen = priv->active_screen;
   
-  if (!priv->active_screen)
+  if (!active_screen)
     return;
 
-  terminal_window_remove_screen (window, priv->active_screen);
+  if (confirm_close_window_or_tab (window, active_screen))
+    return;
+
+  terminal_window_remove_screen (window, active_screen);
 }
 
 static void

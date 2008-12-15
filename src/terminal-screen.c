@@ -2289,3 +2289,54 @@ terminal_screen_save_config (TerminalScreen *screen,
   g_key_file_set_integer (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT,
                           vte_terminal_get_row_count (terminal));
 }
+
+/**
+ * terminal_screen_has_foreground_process:
+ * @screen:
+ *
+ * Checks whether there's a foreground process running in
+ * this terminal.
+ * 
+ * Returns: %TRUE iff there's a foreground process running in @screen
+ */
+gboolean
+terminal_screen_has_foreground_process (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  int master_fd, fgpid;
+
+  master_fd = vte_terminal_get_pty (VTE_TERMINAL (screen));
+  if (master_fd == -1)
+    return FALSE;
+
+  fgpid = tcgetpgrp (master_fd);
+  if (fgpid == -1 || fgpid == priv->child_pid)
+    return FALSE;
+
+  return TRUE;
+
+#if 0
+  char *cmdline, *basename, *name;
+  gsize len;
+  char filename[64];
+
+  g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
+  if (!g_file_get_contents (filename, &cmdline, &len, NULL))
+    return TRUE;
+
+  basename = g_path_get_basename (cmdline);
+  g_free (cmdline);
+  if (!basename)
+    return TRUE;
+
+  name = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
+  g_free (basename);
+  if (!name)
+    return TRUE;
+
+  if (process_name)
+    *process_name = name;
+
+  return TRUE;
+#endif
+}
