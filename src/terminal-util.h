@@ -79,6 +79,18 @@ char **terminal_util_key_file_get_argv    (GKeyFile *key_file,
                                            int *argc,
                                            GError **error);
 
+GArray *terminal_util_string_to_array (const char *string);
+
+GArray *terminal_util_strv_to_array (int argc,
+                                     char **argv);
+
+char *terminal_util_array_to_string (const GArray *array,
+                                     GError **error);
+
+char **terminal_util_array_to_strv (const GArray *array,
+                                    int *argc,
+                                    GError **error);
+
 typedef enum {
   FLAG_INVERT_BOOL  = 1 << 0,
 } PropertyChangeFlags;

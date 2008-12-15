@@ -665,7 +665,7 @@ TerminalOptions *
 terminal_options_parse (const char *working_directory,
                         const char *display_name,
                         const char *startup_id,
-                        const char **env,
+                        char **env,
                         gboolean ignore_unknown_options,
                         int *argcp,
                         char ***argvp,
@@ -689,7 +689,7 @@ terminal_options_parse (const char *working_directory,
   options->execute = FALSE;
   options->use_factory = TRUE;
 
-  options->env = g_strdupv ((char **) env);
+  options->env = g_strdupv (env);
   options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
   options->display_name = g_strdup (display_name);
   options->initial_windows = NULL;

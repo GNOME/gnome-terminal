@@ -84,7 +84,7 @@ typedef struct
 TerminalOptions *terminal_options_parse (const char *working_directory,
                                          const char *display_name,
                                          const char *startup_id,
-                                         const char **env,
+                                         char **env,
                                          gboolean ignore_unknown_options,
                                          int *argcp,
                                          char ***argvp,

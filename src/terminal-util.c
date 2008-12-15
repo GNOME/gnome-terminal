@@ -465,6 +465,144 @@ terminal_util_key_file_get_argv (GKeyFile *key_file,
   return NULL;
 }
 
+/* Why? Because dbus-glib sucks, that's why! */
+
+/**
+ * terminal_util_string_to_array:
+ * @string:
+ *
+ * Converts the string @string into a #GArray.
+ * 
+ * Returns: a newly allocated #GArray containing @string's bytes.
+ */
+GArray *
+terminal_util_string_to_array (const char *string)
+{
+  GArray *array;
+  gsize len = 0;
+
+  if (string)
+    len = strlen (string);
+
+  array = g_array_sized_new (FALSE, FALSE, sizeof (guchar), len);
+  return g_array_append_vals (array, string, len);
+}
+
+/**
+ * terminal_util_strv_to_array:
+ * @argc: the length of @argv
+ * @argv: a string array
+ *
+ * Converts the string array @argv of length @argc into a #GArray.
+ * 
+ * Returns: a newly allocated #GArray
+ */
+GArray *
+terminal_util_strv_to_array (int argc,
+                             char **argv)
+{
+  GArray *array;
+  gsize len = 0;
+  int i;
+  const char nullbyte = 0;
+
+  for (i = 0; i < argc; ++i)
+    len += strlen (argv[i]);
+  if (argc > 0)
+    len += argc - 1;
+
+  array = g_array_sized_new (FALSE, FALSE, sizeof (guchar), len);
+
+  for (i = 0; i < argc; ++i) {
+    g_array_append_vals (array, argv[i], strlen (argv[i]));
+    if (i < argc)
+      g_array_append_val (array, nullbyte);
+  }
+
+  return array;
+}
+
+/**
+ * terminal_util_array_to_string:
+ * @array:
+ * @error: a #GError to fill in
+ *
+ * Converts @array into a string.
+ * 
+ * Returns: a newly allocated string, or %NULL on error
+ */
+char *
+terminal_util_array_to_string (const GArray *array,
+                               GError **error)
+{
+  char *string;
+  g_return_val_if_fail (array != NULL, NULL);
+
+  string = g_strndup (array->data, array->len);
+
+  /* Validate */
+  if (strlen (string) < array->len) {
+    g_set_error_literal (error,
+                         g_quark_from_static_string ("terminal-error"),
+                         0,
+                         "String is shorter than claimed");
+    return NULL;
+  }
+
+  return string;
+}
+
+/**
+ * terminal_util_array_to_strv:
+ * @array:
+ * @argc: a location to store the length of the returned string array
+ * @error: a #GError to fill in
+ *
+ * Converts @array into a string.
+ * 
+ * Returns: a newly allocated string array of length *@argc, or %NULL on error
+ */
+char **
+terminal_util_array_to_strv (const GArray *array,
+                             int *argc,
+                             GError **error)
+{
+  GPtrArray *argv;
+  const char *data, *nullbyte;
+  gsize len;
+
+  g_return_val_if_fail (array != NULL, NULL);
+
+  if (array->len == 0) {
+    *argc = 0;
+    return NULL;
+  }
+
+  argv = g_ptr_array_new ();
+
+  len = array->len;
+  data = array->data;
+
+  do {
+    gsize string_len;
+
+    nullbyte = memchr (data, '\0', len);
+
+    string_len = nullbyte ? nullbyte - data : len;
+    g_ptr_array_add (argv, g_strndup (data, string_len));
+
+    len -= string_len + 1;
+    data += string_len + 1;
+  } while (len > 0);
+
+  if (argc)
+    *argc = argv->len;
+
+  /* NULL terminate */
+  g_ptr_array_add (argv, NULL);
+  return (char **) g_ptr_array_free (argv, FALSE);
+}
+
 /* Bidirectional object/widget binding */
 
 typedef struct {

@@ -69,13 +69,13 @@ struct _TerminalFactoryClass
 };
 
 static gboolean
-terminal_factory_new_terminal (TerminalFactory *factory,
-                               const char *working_directory,
-                               const char *display_name,
-                               const char *startup_id,
-                               const char **argv,
-                               const char **env,
-                               GError **error);
+terminal_factory_handle_arguments (TerminalFactory *factory,
+                                   const GArray *working_directory_array,
+                                   const GArray *display_name_array,
+                                   const GArray *startup_id_array,
+                                   const GArray *argv_array,
+                                   const GArray *env_array,
+                                   GError **error);
 
 #include "terminal-factory-client.h"
 #include "terminal-factory-server.h"
@@ -214,6 +214,7 @@ main (int argc, char **argv)
 {
   int i;
   char **argv_copy;
+  int argc_copy;
   const char *startup_id;
   const char *display_name;
   GdkDisplay *display;
@@ -234,6 +235,7 @@ main (int argc, char **argv)
   for (i = 0; i < argc; ++i)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
+  argc_copy = argc;
 
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
 
@@ -322,43 +324,62 @@ main (int argc, char **argv)
   /* Forward to the existing factory and exit */
   if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
     {
+      char *working_directory;
       char **env;
       const char *evalue;
-      guint i, n;
-      GPtrArray *env_array;
+      GPtrArray *env_ptr_array;
+      int i, envc;
+      GArray *working_directory_array, *display_name_array, *startup_id_array;
+      GArray *env_array, *argv_array;
+      gboolean retval;
       int ret = EXIT_SUCCESS;
 
       env = g_listenv ();
-      n = g_strv_length (env);
-      env_array = g_ptr_array_sized_new (n);
-      for (i = 0; i < n; ++i)
+      envc = g_strv_length (env);
+      env_ptr_array = g_ptr_array_sized_new (envc);
+      for (i = 0; i < envc; ++i)
         {
           evalue = g_getenv (env[i]);
           if (evalue)
-            g_ptr_array_add (env_array, g_strdup_printf ("%s=%s", env[i], evalue));
+            g_ptr_array_add (env_ptr_array, g_strdup_printf ("%s=%s", env[i], evalue));
         }
-      g_ptr_array_add (env_array, NULL);
+      g_ptr_array_add (env_ptr_array, NULL);
 
       g_strfreev (env);
-      env = (char **) g_ptr_array_free (env_array, FALSE);
+      env = (char **) g_ptr_array_free (env_ptr_array, FALSE);
+
+      working_directory = g_get_current_dir ();
+      working_directory_array = terminal_util_string_to_array (working_directory);
+      display_name_array = terminal_util_string_to_array (options->display_name);
+      startup_id_array = terminal_util_string_to_array (options->startup_id);
+      env_array = terminal_util_strv_to_array (envc, env);
+      argv_array = terminal_util_strv_to_array (argc_copy, argv_copy);
 
       proxy = dbus_g_proxy_new_for_name (connection,
                                          TERMINAL_FACTORY_SERVICE_NAME,
                                          TERMINAL_FACTORY_SERVICE_PATH,
                                          TERMINAL_FACTORY_INTERFACE_NAME);
-      if (!org_gnome_Terminal_Factory_new_terminal (proxy,
-                                                    g_get_current_dir (),
-                                                    options->display_name,
-                                                    options->startup_id,
-                                                    (const char **) env,
-                                                    (const char **) argv_copy,
-                                                    &error))
+      retval = org_gnome_Terminal_Factory_handle_arguments (proxy,
+                                                            working_directory_array,
+                                                            display_name_array,
+                                                            startup_id_array,
+                                                            env_array,
+                                                            argv_array,
+                                                            &error);
+      g_free (working_directory);
+      g_array_free (working_directory_array, TRUE);
+      g_array_free (display_name_array, TRUE);
+      g_array_free (startup_id_array, TRUE);
+      g_array_free (env_array, TRUE);
+      g_array_free (argv_array, TRUE);
+      g_strfreev (env);
+
+      if (!retval)
         {
           if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_UNKNOWN_METHOD))
             {
               /* Incompatible factory version, fall back, to new instance */
               g_printerr (_("Incompatible factory version; creating a new instance.\n"));
-              g_strfreev (env);
               g_error_free (error);
 
               goto factory_disabled;
@@ -370,7 +391,6 @@ main (int argc, char **argv)
         }
 
       g_free (argv_copy);
-      g_strfreev (env);
       terminal_options_free (options);
 
       exit (ret);
@@ -441,31 +461,61 @@ handle_new_terminal_event (TerminalOptions *options)
 }
 
 static gboolean
-terminal_factory_new_terminal (TerminalFactory *factory,
-                               const char *working_directory,
-                               const char *display_name,
-                               const char *startup_id,
-                               const char **env,
-                               const char **arguments,
-                               GError **error)
+terminal_factory_handle_arguments (TerminalFactory *factory,
+                                   const GArray *working_directory_array,
+                                   const GArray *display_name_array,
+                                   const GArray *startup_id_array,
+                                   const GArray *env_array,
+                                   const GArray *argv_array,
+                                   GError **error)
 {
-  TerminalOptions *options;
-  char **argv;
+  TerminalOptions *options = NULL;
+  char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
+  char **env = NULL, **argv = NULL, **argv_copy = NULL;
   int argc;
+  GError *arg_error = NULL;
+
+  working_directory = terminal_util_array_to_string (working_directory_array, &arg_error);
+  if (arg_error)
+    goto out;
+  display_name = terminal_util_array_to_string (display_name_array, &arg_error);
+  if (arg_error)
+    goto out;
+  startup_id = terminal_util_array_to_string (startup_id_array, &arg_error);
+  if (arg_error)
+    goto out;
+  env = terminal_util_array_to_strv (env_array, NULL, &arg_error);
+  if (arg_error)
+    goto out;
+  argv = terminal_util_array_to_strv (argv_array, &argc, &arg_error);
+  if (arg_error)
+    goto out;
 
   /* Copy the arguments since terminal_options_parse potentially modifies the array */
-  argc = g_strv_length ((char **) arguments);
-  argv = (char **) g_memdup (arguments, (argc + 1) * sizeof (char *));
+  argv_copy = (char **) g_memdup (argv, (argc + 1) * sizeof (char *));
 
   options = terminal_options_parse (working_directory,
                                     display_name,
                                     startup_id,
                                     env,
                                     TRUE,
-                                    &argc, &argv,
+                                    &argc, &argv_copy,
                                     error,
                                     NULL);
-  g_free (argv);
+
+out:
+  g_free (working_directory);
+  g_free (display_name);
+  g_free (startup_id);
+  g_strfreev (env);
+  g_strfreev (argv);
+  g_free (argv_copy);
+
+  if (arg_error)
+    {
+      g_propagate_error (error, arg_error);
+      return FALSE;
+    }
 
   if (!options)
     return FALSE;
