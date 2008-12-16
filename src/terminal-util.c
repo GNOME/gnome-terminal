@@ -588,7 +588,7 @@ terminal_util_array_to_strv (const GArray *array,
 
     nullbyte = memchr (data, '\0', len);
 
-    string_len = nullbyte ? nullbyte - data : len;
+    string_len = nullbyte ? (gsize) (nullbyte - data) : len;
     g_ptr_array_add (argv, g_strndup (data, string_len));
 
     len -= string_len + 1;
