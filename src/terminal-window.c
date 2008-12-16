@@ -1378,8 +1378,8 @@ terminal_window_realize (GtkWidget *widget)
   GdkColormap *colormap;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
-  colormap = gdk_screen_get_rgba_colormap (screen);
-  if (colormap != NULL && gdk_screen_is_composited (screen))
+  if (gdk_screen_is_composited (screen) &&
+      (colormap = gdk_screen_get_rgba_colormap (screen)) != NULL)
     {
       /* Set RGBA colormap if possible so VTE can use real transparency */
       gtk_widget_set_colormap (widget, colormap);
