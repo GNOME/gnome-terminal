@@ -152,10 +152,10 @@ static guint signals[LAST_SIGNAL];
 #define HOSTCHARS_CLASS "[-[:alnum:]]"
 #define HOST HOSTCHARS_CLASS "+(\\." HOSTCHARS_CLASS "+)*"
 #define PORT "(?:\\:[[:digit:]]{1,5})?"
-#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*(),;:@&=?/~#%\\E]"
+#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,;@&=?/~#%\\E]"
 #define SCHEME "(?:news:|telnet:|nntp:|file:\\/|https?:|ftps?:|webcal:)"
 #define USERPASS USERCHARS_CLASS "+(?:" PASSCHARS_CLASS "+)?"
-#define URLPATH "/" PATHCHARS_CLASS "*[^\\Q]'.}>) \t\r\n,\"\\E]"
+#define URLPATH   "(/"PATHCHARS_CLASS"+(?:[(]"PATHCHARS_CLASS"*[)])*"PATHCHARS_CLASS"*)*"
 
 typedef struct {
   const char *pattern;
@@ -164,8 +164,8 @@ typedef struct {
 } TerminalRegexPattern;
 
 static const TerminalRegexPattern url_regex_patterns[] = {
-  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT "(?:" URLPATH ")?", FLAVOR_AS_IS, G_REGEX_CASELESS },
-  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT "(?:" URLPATH ")?", FLAVOR_DEFAULT_TO_HTTP, G_REGEX_CASELESS  },
+  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT URLPATH, FLAVOR_AS_IS, G_REGEX_CASELESS },
+  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT URLPATH , FLAVOR_DEFAULT_TO_HTTP, G_REGEX_CASELESS  },
   { "(?:callto:|h323:|sip:)" USERCHARS_CLASS "[" USERCHARS ".]*(?:" PORT "/[a-z0-9]+)?\\@" HOST, FLAVOR_VOIP_CALL, G_REGEX_CASELESS  },
   { "(?:mailto:)?" USERCHARS_CLASS "[" USERCHARS ".]*\\@" HOSTCHARS_CLASS "+\\." HOST, FLAVOR_EMAIL, G_REGEX_CASELESS  },
   { "news:[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, G_REGEX_CASELESS  },
