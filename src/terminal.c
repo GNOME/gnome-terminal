@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #include "terminal-intl.h"
 
@@ -1146,6 +1147,7 @@ main (int argc, char **argv)
   char **argv_copy;
   const char *startup_id;
   const char *display_name;
+  const char *home_dir;
   GdkDisplay *display;
   GnomeProgram *program;
   OptionParsingResults *parsing_results;
@@ -1260,7 +1262,14 @@ main (int argc, char **argv)
 
   initialization_complete = TRUE;
   handle_new_terminal_events ();
-  
+
+  /* Now change directory to $HOME so we don't prevent unmounting, e.g. if the
+   * factory is started by nautilus-open-terminal. See bug #565328.
+   */
+  home_dir = g_get_home_dir ();
+  if (home_dir)
+    g_chdir (home_dir);
+
   gtk_main ();
 
   terminal_app_shutdown ();
