@@ -1156,6 +1156,8 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  g_thread_init (NULL);
+
   argc_copy = argc;
   /* we leave empty slots, for --startup-id, --display and --default-working-directory */
   argv_copy = g_new0 (char *, argc_copy + 7);
