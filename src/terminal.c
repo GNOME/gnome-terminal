@@ -228,6 +228,9 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  /* GConf uses ORBit2 which need GThread. See bug #565516 */
+  g_thread_init (NULL);
+
   _terminal_debug_init ();
 
   /* Make a NULL-terminated copy since we may need it later */
