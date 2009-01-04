@@ -221,7 +221,7 @@ static KeyEntryList all_entries[] =
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
   { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
-  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") },
+  { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }
 };
 
 enum
