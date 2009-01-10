@@ -57,12 +57,13 @@ PKG_CHECK_MODULES([TERM],
 # Check the smclient backend
 GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
 
+SMCLIENT_PKGS=
 AC_MSG_CHECKING([which smclient backend to use])
 AC_ARG_WITH([smclient],
   [AS_HELP_STRING([--with-smclient-backend],[which smclient backend to use (xsmp/win32/quartz)])],
   [],
   [case "$GDK_TARGET" in
-    x11) with_smclient=xsmp ;;
+    x11) with_smclient=xsmp SMCLIENT_PKGS="sm" ;;
     win32|quartz) with_smclient=$GDK_TARGET ;;
     *) with_smclient=no ;;
    esac])
@@ -70,6 +71,12 @@ AC_MSG_RESULT([$with_smclient])
 
 if test "$with_smclient" != "no"; then
   AC_DEFINE([WITH_SMCLIENT],[1],[Define if smclient is enabled])
+fi
+
+if test -n "$SMCLIENT_PKGS"; then
+  PKG_CHECK_MODULES([SMCLIENT],[$SMCLIENT_PKGS])
+  AC_SUBST([SMCLIENT_CFLAGS])
+  AC_SUBST([SMCLIENT_LIBS])
 fi
 
 AM_CONDITIONAL([WITH_SMCLIENT],[test "$with_smclient" != "no"])

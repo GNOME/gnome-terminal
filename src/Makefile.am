@@ -81,6 +81,9 @@ gnome_terminal_SOURCES += \
 	eggsmclient.h \
 	eggsmclient-private.h \
 	$(NULL)
+gnome_terminal_CFLAGS += $(SMCLIENT_CFLAGS)
+gnome_terminal_LDADD += $(SMCLIENT_LIBS)
+
 if WITH_SMCLIENT_XSMP
 gnome_terminal_SOURCES += eggsmclient-xsmp.c
 gnome_terminal_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
