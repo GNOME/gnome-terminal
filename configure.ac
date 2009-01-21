@@ -48,6 +48,7 @@ VTE_REQUIRED=0.19.1
 PKG_CHECK_MODULES([TERM],
   [vte >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
+   gthread-2.0
    gio-2.0
    gtk+-2.0 >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
