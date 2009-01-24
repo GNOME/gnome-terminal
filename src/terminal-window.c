@@ -1551,8 +1551,8 @@ terminal_window_init (TerminalWindow *window)
     {
       /* Toplevel */
       { "File", NULL, N_("_File") },
-      { "FileNewWindowProfiles", NULL, N_("Open _Terminal")},
-      { "FileNewTabProfiles", NULL, N_("Open Ta_b") },
+      { "FileNewWindowProfiles", STOCK_NEW_WINDOW, N_("Open _Terminal")},
+      { "FileNewTabProfiles", STOCK_NEW_TAB, N_("Open Ta_b") },
       { "Edit", NULL, N_("_Edit") },
       { "View", NULL, N_("_View") },
       { "Terminal", NULL, N_("_Terminal") },
