@@ -69,6 +69,7 @@ struct _TerminalScreenPrivate
   char **override_command;
   char *working_dir;
   int child_pid;
+  int pty_fd;
   double font_scale;
   guint recheck_working_dir_idle;
   gboolean user_title; /* title was manually set */
@@ -349,6 +350,7 @@ terminal_screen_init (TerminalScreen *screen)
   if (priv->working_dir == NULL) /* shouldn't ever happen */
     priv->working_dir = g_strdup (g_get_home_dir ());
   priv->child_pid = -1;
+  priv->pty_fd = -1;
 
   priv->recheck_working_dir_idle = 0;
 
@@ -1485,6 +1487,7 @@ void
 terminal_screen_launch_child (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile;
   char **env, **argv;
   char *path;
@@ -1505,7 +1508,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
 
   update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
 
-  priv->child_pid = vte_terminal_fork_command (VTE_TERMINAL (screen),
+  priv->child_pid = vte_terminal_fork_command (terminal,
                                                path,
                                                argv,
                                                env,
@@ -1521,6 +1524,8 @@ terminal_screen_launch_child (TerminalScreen *screen)
                                        "%s", _("There was an error creating the child process for this terminal"));
     }
   
+  priv->pty_fd = vte_terminal_get_pty (terminal);
+
   g_free (path);
   g_strfreev (argv);
   g_strfreev (env);
@@ -1746,7 +1751,7 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
   /* Try to update the working dir using various OS-specific mechanisms */
-  if (priv->child_pid >= 0)
+  if (priv->pty_fd >= 0)
     {
       static const char *patterns[] = {
         "/proc/%d/cwd",         /* Linux */
@@ -1756,13 +1761,18 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
       char buf[PATH_MAX+1];
       int len = 0;
       guint i;
+      int fgpid;
+
+      fgpid = tcgetpgrp (priv->pty_fd);
+      if (fgpid == -1)
+        return priv->working_dir; /* FIXME set priv->working_dir to NULL? */
 
       /* First try to update the working dir using various OS-specific mechanisms */
       file = NULL;
       for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
         {
           g_free (file);
-          file = g_strdup_printf (patterns[i], priv->child_pid);
+          file = g_strdup_printf (patterns[i], fgpid);
           len = readlink (file, buf, sizeof (buf) - 1);
 
           if (len > 0 && buf[0] == '/')
@@ -1896,6 +1906,7 @@ terminal_screen_child_exited (VteTerminal *terminal)
   /* No need to chain up to VteTerminalClass::child_exited since it's NULL */
 
   priv->child_pid = -1;
+  priv->pty_fd = -1;
   
   action = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_EXIT_ACTION);
   
