@@ -65,13 +65,12 @@ struct _TerminalScreenPrivate
   char *cooked_title, *cooked_icon_title;
   char *override_title;
   gboolean icon_title_set;
+  char *initial_working_directory;
   char **initial_env;
   char **override_command;
-  char *working_dir;
   int child_pid;
   int pty_fd;
   double font_scale;
-  guint recheck_working_dir_idle;
   gboolean user_title; /* title was manually set */
   GSList *match_tags;
 };
@@ -136,8 +135,6 @@ static gboolean terminal_screen_format_title (TerminalScreen *screen, const char
 
 static void terminal_screen_cook_title      (TerminalScreen *screen);
 static void terminal_screen_cook_icon_title (TerminalScreen *screen);
-
-static void queue_recheck_working_dir (TerminalScreen *screen);
 
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 int                   column,
@@ -346,13 +343,8 @@ terminal_screen_init (TerminalScreen *screen)
 
   vte_terminal_set_mouse_autohide (VTE_TERMINAL (screen), TRUE);
 
-  priv->working_dir = g_get_current_dir ();
-  if (priv->working_dir == NULL) /* shouldn't ever happen */
-    priv->working_dir = g_strdup (g_get_home_dir ());
   priv->child_pid = -1;
   priv->pty_fd = -1;
-
-  priv->recheck_working_dir_idle = 0;
 
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
@@ -653,16 +645,13 @@ terminal_screen_finalize (GObject *object)
 
   terminal_screen_set_profile (screen, NULL);
 
-  if (priv->recheck_working_dir_idle)
-    g_source_remove (priv->recheck_working_dir_idle);
-  
   g_free (priv->raw_title);
   g_free (priv->cooked_title);
   g_free (priv->override_title);
   g_free (priv->raw_icon_title);
   g_free (priv->cooked_icon_title);
+  g_free (priv->initial_working_directory);
   g_strfreev (priv->override_command);
-  g_free (priv->working_dir);
   g_strfreev (priv->initial_env);
 
   g_slist_foreach (priv->match_tags, (GFunc) free_tag_data, NULL);
@@ -680,18 +669,19 @@ terminal_screen_new (TerminalProfile *profile,
                      double           zoom)
 {
   TerminalScreen *screen;
+  TerminalScreenPrivate *priv;
 
   g_return_val_if_fail (TERMINAL_IS_PROFILE (profile), NULL);
 
   screen = g_object_new (TERMINAL_TYPE_SCREEN, NULL);
+  priv = screen->priv;
 
   terminal_screen_set_profile (screen, profile);
 
   if (title)
     terminal_screen_set_override_title (screen, title);
 
-  if (working_dir)
-    terminal_screen_set_working_dir (screen, working_dir);
+  priv->initial_working_directory = g_strdup (working_dir);
 
   if (override_command)
     terminal_screen_set_override_command (screen, override_command);
@@ -1512,7 +1502,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
                                                path,
                                                argv,
                                                env,
-                                               terminal_screen_get_working_dir (screen),
+                                               priv->initial_working_directory,
                                                terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL),
                                                update_records,
                                                update_records);
@@ -1731,65 +1721,52 @@ terminal_screen_get_dynamic_icon_title (TerminalScreen *screen)
   return screen->priv->raw_icon_title;
 }
 
-void
-terminal_screen_set_working_dir (TerminalScreen *screen,
-                                 const char     *dirname)
+/**
+ * terminal_screen_get_current_dir:
+ * @screen:
+ *
+ * Returns: a newly allocated string containing the current working directory
+ *   of the foreground process in @screen's PTY; or otherwise the initial working
+ *   directory as set by terminal_screen_new()
+ */
+char*
+terminal_screen_get_current_dir (TerminalScreen *screen)
 {
+  static const char patterns[][18] = {
+    "/proc/%d/cwd",         /* Linux */
+    "/proc/%d/path/cwd",    /* Solaris >= 10 */
+  };
   TerminalScreenPrivate *priv = screen->priv;
-  
-  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
-
-  g_free (priv->working_dir);
-  priv->working_dir = g_strdup (dirname);
-}
-
-const char*
-terminal_screen_get_working_dir (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
+  int fgpid;
+  guint i;
   
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
-  /* Try to update the working dir using various OS-specific mechanisms */
-  if (priv->pty_fd >= 0)
+  if (priv->pty_fd == -1)
+    return priv->initial_working_directory;
+
+  /* Get the foreground process ID */
+  fgpid = tcgetpgrp (priv->pty_fd);
+  if (fgpid == -1)
+    return priv->initial_working_directory;
+
+  /* Try to get the working directory using various OS-specific mechanisms */
+  for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
     {
-      static const char *patterns[] = {
-        "/proc/%d/cwd",         /* Linux */
-        "/proc/%d/path/cwd",    /* Solaris >= 10 */
-      };
-      char *file = NULL;
-      char buf[PATH_MAX+1];
-      int len = 0;
-      guint i;
-      int fgpid;
+      char cwd_file[64];
+      char buf[PATH_MAX + 1];
+      int len;
 
-      fgpid = tcgetpgrp (priv->pty_fd);
-      if (fgpid == -1)
-        return priv->working_dir; /* FIXME set priv->working_dir to NULL? */
+      g_snprintf (cwd_file, sizeof (cwd_file), patterns[i], fgpid);
+      len = readlink (cwd_file, buf, sizeof (buf) - 1);
 
-      /* First try to update the working dir using various OS-specific mechanisms */
-      file = NULL;
-      for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
-        {
-          g_free (file);
-          file = g_strdup_printf (patterns[i], fgpid);
-          len = readlink (file, buf, sizeof (buf) - 1);
+      if (len > 0 && buf[0] == '/')
+        return g_strndup (buf, len);
 
-          if (len > 0 && buf[0] == '/')
-            {
-              buf[len] = '\0';
-              
-              g_free (priv->working_dir);
-              priv->working_dir = g_strdup (buf);
-
-              break;
-            }
-        }
-
-      /* If that did not do it, be bold */
+      /* If that didn't do it, try this hack */
       if (len <= 0)
         {
-          char *cwd;
+          char *cwd, *working_dir = NULL;
 
           cwd = g_get_current_dir ();
           if (cwd != NULL)
@@ -1798,50 +1775,20 @@ terminal_screen_get_working_dir (TerminalScreen *screen)
                * link can be used as a directory, including as a target
                * of chdir().
                */
-              if (chdir (file) == 0)
+              if (chdir (cwd_file) == 0)
                 {
-                  g_free (priv->working_dir);
-                  priv->working_dir = g_get_current_dir ();
+                  working_dir = g_get_current_dir ();
                   chdir (cwd);
                 }
               g_free (cwd);
             }
+
+          if (working_dir)
+            return working_dir;
         }
-
-      g_free (file);
     }
 
-  return priv->working_dir;
-}
-
-static gboolean
-recheck_dir (void *data)
-{
-  TerminalScreen *screen = data;
-  TerminalScreenPrivate *priv = screen->priv;
-
-  priv->recheck_working_dir_idle = 0;
-  
-  /* called just for side effect */
-  terminal_screen_get_working_dir (screen);
-
-  /* remove idle */
-  return FALSE;
-}
-
-static void
-queue_recheck_working_dir (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  if (priv->recheck_working_dir_idle == 0)
-    {
-      priv->recheck_working_dir_idle =
-        g_idle_add_full (G_PRIORITY_LOW + 50,
-                         recheck_dir,
-                         screen,
-                         NULL);
-    }
+  return priv->initial_working_directory;
 }
 
 void
@@ -1881,8 +1828,6 @@ terminal_screen_window_title_changed (VteTerminal *vte_terminal,
   terminal_screen_set_dynamic_title (screen,
                                      vte_terminal_get_window_title (vte_terminal),
 				     FALSE);
-
-  queue_recheck_working_dir (screen);
 }
 
 static void
@@ -1891,9 +1836,7 @@ terminal_screen_icon_title_changed (VteTerminal *vte_terminal,
 {
   terminal_screen_set_dynamic_icon_title (screen,
                                           vte_terminal_get_icon_title (vte_terminal),
-					  FALSE);  
-
-  queue_recheck_working_dir (screen);
+					  FALSE);
 }
 
 static void
@@ -2277,7 +2220,8 @@ terminal_screen_save_config (TerminalScreen *screen,
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile = priv->profile;
-  const char *profile_id, *dir;
+  const char *profile_id;
+  char *working_directory;
 
   profile_id = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
   g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, profile_id);
@@ -2289,9 +2233,11 @@ terminal_screen_save_config (TerminalScreen *screen,
   if (priv->override_title)
     g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, priv->override_title);
 
-  dir = terminal_screen_get_working_dir (screen);
-  if (dir != NULL && *dir != '\0') /* should always be TRUE anyhow */
-    terminal_util_key_file_set_string_escape (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, dir);
+  /* FIXMEchpe: use the initial_working_directory instead?? */
+  working_directory = terminal_screen_get_current_dir (screen);
+  if (working_directory)
+    terminal_util_key_file_set_string_escape (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, working_directory);
+  g_free (working_directory);
 
   g_key_file_set_double (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_ZOOM, priv->font_scale);
 
