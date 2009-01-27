@@ -21,6 +21,8 @@
 
 #include <config.h>
 
+#include <locale.h>
+
 #include <glib.h>
 #include <glib/gstdio.h>
 
@@ -44,9 +46,9 @@
 #include "terminal-options.h"
 #include "terminal-util.h"
 
-#define TERMINAL_FACTORY_SERVICE_NAME   "org.gnome.Terminal.Factory"
-#define TERMINAL_FACTORY_SERVICE_PATH   "/org/gnome/Terminal/Factory"
-#define TERMINAL_FACTORY_INTERFACE_NAME "org.gnome.Terminal.Factory"
+#define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Factory.Display"
+#define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
+#define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
 
 #define TERMINAL_TYPE_FACTORY             (terminal_factory_get_type ())
 #define TERMINAL_FACTORY(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_FACTORY, TerminalFactory))
@@ -207,6 +209,29 @@ about_email_hook (GtkAboutDialog *about,
   g_free (uri);
 }
 
+static char *
+get_factory_name_for_display (const char *display_name)
+{
+  GString *name;
+  const char *p;
+
+  name = g_string_sized_new (strlen (TERMINAL_FACTORY_SERVICE_NAME_PREFIX) + strlen (display_name) + 1 /* NUL */);
+  g_string_append (name, TERMINAL_FACTORY_SERVICE_NAME_PREFIX);
+
+  for (p = display_name; *p; ++p)
+    {
+      if (g_ascii_isalnum (*p))
+        g_string_append_c (name, *p);
+      else
+        g_string_append_c (name, '_');
+    }
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Factory name is \"%s\"\n", name->str);
+
+  return g_string_free (name, FALSE);
+}
+
 /* Evil hack alert: this is exported from libgconf-2 but not in a public header */
 extern gboolean gconf_ping_daemon (void);
          
@@ -220,9 +245,12 @@ main (int argc, char **argv)
   GdkDisplay *display;
   TerminalOptions *options;
   DBusGConnection *connection;
+  char *factory_name = NULL;
   DBusGProxy *proxy;
   guint32 request_name_ret;
   GError *error = NULL;
+
+  setlocale (LC_ALL, "");
 
   bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -313,8 +341,9 @@ main (int argc, char **argv)
                                G_CALLBACK (name_owner_changed), factory, NULL);
 #endif
 
+  factory_name = get_factory_name_for_display (display_name);
   if (!org_freedesktop_DBus_request_name (proxy,
-                                          TERMINAL_FACTORY_SERVICE_NAME,
+                                          factory_name,
                                           DBUS_NAME_FLAG_DO_NOT_QUEUE,
                                           &request_name_ret,
                                           &error))
@@ -336,6 +365,9 @@ main (int argc, char **argv)
       GArray *env_array, *argv_array;
       gboolean retval;
       int ret = EXIT_SUCCESS;
+
+      _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                             "Forwarding arguments to existing instance\n");
 
       env = g_listenv ();
       envc = g_strv_length (env);
@@ -359,7 +391,7 @@ main (int argc, char **argv)
       argv_array = terminal_util_strv_to_array (argc_copy, argv_copy);
 
       proxy = dbus_g_proxy_new_for_name (connection,
-                                         TERMINAL_FACTORY_SERVICE_NAME,
+                                         factory_name,
                                          TERMINAL_FACTORY_SERVICE_PATH,
                                          TERMINAL_FACTORY_INTERFACE_NAME);
       retval = org_gnome_Terminal_Factory_handle_arguments (proxy,
@@ -408,6 +440,7 @@ main (int argc, char **argv)
 
 factory_disabled:
   g_free (argv_copy);
+  g_free (factory_name);
 
   /* If the gconf daemon isn't available (e.g. because there's no dbus
    * session bus running), we'd crash later on. Tell the user about it

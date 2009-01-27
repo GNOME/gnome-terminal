@@ -31,6 +31,7 @@ _terminal_debug_init(void)
   const GDebugKey keys[] = {
     { "accels",    TERMINAL_DEBUG_ACCELS    },
     { "encodings", TERMINAL_DEBUG_ENCODINGS },
+    { "factory",   TERMINAL_DEBUG_FACTORY   },
     { "geometry",  TERMINAL_DEBUG_GEOMETRY  },
     { "profile",   TERMINAL_DEBUG_PROFILE   }
   };
