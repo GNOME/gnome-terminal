@@ -46,7 +46,7 @@
 #include "terminal-options.h"
 #include "terminal-util.h"
 
-#define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Factory.Display"
+#define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Display"
 #define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
 #define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
 
