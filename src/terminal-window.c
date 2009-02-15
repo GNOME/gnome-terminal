@@ -1,7 +1,7 @@
 /*
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
- * Copyright © 2007, 2008 Christian Persch
+ * Copyright © 2007, 2008, 2009 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -3421,7 +3421,7 @@ help_about_callback (GtkAction *action,
     "Copyright © 2002–2004 Havoc Pennington\n"
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2008 Christian Persch";
+    "Copyright © 2007–2009 Christian Persch";
   char *licence_text;
   GKeyFile *key_file;
   GError *error = NULL;
