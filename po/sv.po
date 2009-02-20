@@ -1,15 +1,15 @@
 # Swedish messages for gnome-terminal.
-# Copyright (C) 2002-2008 Free Software Foundation, Inc.
-# Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008.
+# Copyright (C) 2002-2009 Free Software Foundation, Inc.
 # Christian Rose <menthos@menthos.com>, 2002, 2003, 2004, 2005.
 # Richard Hult <richard@imendio.com>, 2004.
+# Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-01 23:03+0100\n"
-"PO-Revision-Date: 2008-12-01 23:09+0100\n"
+"POT-Creation-Date: 2009-02-20 13:44+0100\n"
+"PO-Revision-Date: 2009-02-20 13:52+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -20,9 +20,9 @@ msgstr ""
 #: ../gnome-terminal.desktop.in.in.h:1
 #: ../src/gnome-terminal.schemas.in.h:119
 #: ../src/terminal-accels.c:222
-#: ../src/terminal.c:259
+#: ../src/terminal.c:292
 #: ../src/terminal-profile.c:144
-#: ../src/terminal-window.c:1684
+#: ../src/terminal-window.c:1730
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -36,7 +36,7 @@ msgstr "Inaktivera anslutning till sessionshanteraren"
 
 #: ../src/eggsmclient.c:227
 msgid "Specify file containing saved configuration"
-msgstr ""
+msgstr "Ange filen som innehåller sparad konfiguration"
 
 #: ../src/eggsmclient.c:227
 #: ../src/terminal-options.c:905
@@ -46,7 +46,7 @@ msgstr "FIL"
 
 #: ../src/eggsmclient.c:230
 msgid "Specify session management ID"
-msgstr ""
+msgstr "Ange id för sessionshanterare"
 
 #: ../src/eggsmclient.c:230
 msgid "ID"
@@ -54,12 +54,11 @@ msgstr "ID"
 
 #: ../src/eggsmclient.c:244
 msgid "Session management options:"
-msgstr ""
+msgstr "Flaggor för sessionshantering:"
 
 #: ../src/eggsmclient.c:245
-#, fuzzy
 msgid "Show session management options"
-msgstr "Visa flaggor för GNOME-terminal"
+msgstr "Visa flaggor för sessionshantering"
 
 #: ../src/encodings-dialog.glade.h:1
 msgid "A_vailable encodings:"
@@ -539,11 +538,11 @@ msgstr "Terminaler har en palett med 16 färger som program i terminalen kan anv
 
 #: ../src/gnome-terminal.schemas.in.h:121
 msgid "The cursor appearance"
-msgstr ""
+msgstr "Markörens utseende"
 
 #: ../src/gnome-terminal.schemas.in.h:122
 msgid "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a vertical line cursor, or \"underline\" to use an underline cursor."
-msgstr ""
+msgstr "Möjliga värden är \"block\" för att använda en blockmarkör, \"ibeam\" för att använda en vertifikal linje eller \"underline\" för att använda ett understreck."
 
 #: ../src/gnome-terminal.schemas.in.h:123
 msgid "The possible values are \"system\" to use the global cursor blinking settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -562,8 +561,8 @@ msgid "True if the menubar should be shown in new windows, for windows/tabs with
 msgstr "Sant om menyraden ska visas i nya fönster, för fönster/flikar med denna profil."
 
 #: ../src/gnome-terminal.schemas.in.h:127
-msgid "Type of terminal background. May be \"solid\" for a solid color, \"image\" for an image, or \"transparent\" for pseudo-transparency."
-msgstr "Typ av terminalbakgrund. Kan vara \"solid\" för enfärgad, \"image\" för en bild eller \"transparent\" för pseudogenomskinlighet."
+msgid "Type of terminal background. May be \"solid\" for a solid color, \"image\" for an image, or \"transparent\" for either real transparency if a compositing window manager is running, or pseudo-transparency otherwise."
+msgstr "Typ av terminalbakgrund. Kan vara \"solid\" för enfärgad, \"image\" för en bild eller \"transparent\" för antingen riktig genomskinlighet om en fönsterhanterare med \"compositing\" används eller annars pseudogenomskinlighet."
 
 #: ../src/gnome-terminal.schemas.in.h:128
 msgid "What to do with dynamic title"
@@ -808,6 +807,9 @@ msgid ""
 "I-Beam\n"
 "Underline"
 msgstr ""
+"Block\n"
+"I-tecken\n"
+"Understreck"
 
 #: ../src/profile-preferences.glade.h:18
 msgid "Built-in _schemes:"
@@ -843,7 +845,7 @@ msgstr "Kompatibilitet"
 
 #: ../src/profile-preferences.glade.h:26
 msgid "Cursor _shape:"
-msgstr ""
+msgstr "Markör_typ:"
 
 #: ../src/profile-preferences.glade.h:27
 msgid "Custom"
@@ -1097,7 +1099,7 @@ msgid "Normal Size"
 msgstr "Normal storlek"
 
 #: ../src/terminal-accels.c:155
-#: ../src/terminal-window.c:3120
+#: ../src/terminal-window.c:3253
 msgid "Set Title"
 msgstr "Ställ in titel"
 
@@ -1259,23 +1261,23 @@ msgstr "Det finns ingen profil \"%s\", använder standardprofilen\n"
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ogiltig geometristräng \"%s\"\n"
 
-#: ../src/terminal.c:188
+#: ../src/terminal.c:191
 #, c-format
 msgid "Could not open link: %s"
 msgstr "Kunde inte öppna länk: %s"
 
-#: ../src/terminal.c:254
+#: ../src/terminal.c:287
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Misslyckades med att tolka argument: %s\n"
 
 #. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:360
+#: ../src/terminal.c:417
 #, c-format
 msgid "Incompatible factory version; creating a new instance.\n"
-msgstr ""
+msgstr "Inkompatibel fabriksversion; skapar en ny instans.\n"
 
-#: ../src/terminal.c:367
+#: ../src/terminal.c:423
 #, c-format
 msgid "Factory error: %s\n"
 msgstr "Fabriksfel: %s\n"
@@ -1462,12 +1464,12 @@ msgid "Current Locale"
 msgstr "Aktuell lokal"
 
 #: ../src/terminal-options.c:174
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal; you might want to create a profile with the desired setting, and use the new '--profile' option\n"
-msgstr "Flaggan \"%s\" stöds inte längre i denna version av gnome-terminal. Du vill kanske skapa en profil med den önskade inställningen och använda den nya flaggan \"--window-with-profile\"\n"
+msgstr "Flaggan \"%s\" stöds inte längre i denna version av gnome-terminal. Du vill kanske skapa en profil med den önskade inställningen och använda den nya flaggan \"--profile\"\n"
 
 #: ../src/terminal-options.c:187
-#: ../src/terminal-window.c:3339
+#: ../src/terminal-window.c:3472
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
@@ -1502,18 +1504,18 @@ msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Zoomfaktorn \"%g\" är för stor, använder %g\n"
 
 #: ../src/terminal-options.c:649
-#, fuzzy, c-format
+#, c-format
 msgid "Option \"%s\" requires specifying the command to run on the rest of the command line"
-msgstr "Flaggan \"%s\" kräver att det kommando som ska köras anges på resten av kommandoraden\n"
+msgstr "Flaggan \"%s\" kräver att det kommando som ska köras anges på resten av kommandoraden"
 
 #: ../src/terminal-options.c:774
 msgid "Not a valid terminal config file."
-msgstr ""
+msgstr "Inte en giltig terminalkonfigurationsfil."
 
 #. FIXME
 #: ../src/terminal-options.c:786
 msgid "Incompatible terminal config file version."
-msgstr ""
+msgstr "Inkompatibel version för terminalkonfigurationsfil."
 
 #: ../src/terminal-options.c:895
 msgid "Do not register with the activation nameserver, do not re-use an active terminal"
@@ -1549,20 +1551,19 @@ msgstr "Maximera fönstret"
 
 #: ../src/terminal-options.c:976
 msgid "Full-screen the window"
-msgstr ""
+msgstr "Helskärm för fönstret"
 
 #: ../src/terminal-options.c:985
 msgid "Set the window geometry from the provided X geometry specification; see the \"X\" man page for more information"
-msgstr ""
+msgstr "Ställ in fönstrets geometri från tillhandahållen X-geometrispecifikation; se manualsidan för \"X\" för mer information"
 
 #: ../src/terminal-options.c:986
 msgid "GEOMETRY"
 msgstr "GEOMETRI"
 
 #: ../src/terminal-options.c:994
-#, fuzzy
 msgid "Set the window role"
-msgstr "Ställ in terminaltiteln"
+msgstr "Ställ in fönsterrollen"
 
 #: ../src/terminal-options.c:995
 msgid "ROLE"
@@ -1573,21 +1574,18 @@ msgid "Set the last specified tab as the active one in its window"
 msgstr "Ställ in den senast angivna fliken som den aktiva i dess fönster"
 
 #: ../src/terminal-options.c:1016
-#, fuzzy
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Kör argumentet till denna flagga inuti terminalen."
 
 #: ../src/terminal-options.c:1025
-#, fuzzy
 msgid "Use the given profile instead of the default profile"
-msgstr "Det finns ingen profil \"%s\", använder standardprofilen\n"
+msgstr "Använd angiven profil istället för standardprofilen"
 
 #: ../src/terminal-options.c:1026
 msgid "PROFILE-NAME"
 msgstr "PROFILNAMN"
 
 #: ../src/terminal-options.c:1034
-#, fuzzy
 msgid "Set the terminal title"
 msgstr "Ställ in terminaltiteln"
 
@@ -1596,16 +1594,14 @@ msgid "TITLE"
 msgstr "TITEL"
 
 #: ../src/terminal-options.c:1043
-#, fuzzy
 msgid "Set the working directory"
-msgstr "Ställ in terminalens arbetskatalog"
+msgstr "Ställ in arbetskatalogen"
 
 #: ../src/terminal-options.c:1044
 msgid "DIRNAME"
 msgstr "KATNAMN"
 
 #: ../src/terminal-options.c:1052
-#, fuzzy
 msgid "Set the terminalx's zoom factor (1.0 = normal size)"
 msgstr "Ställ in terminalens zoomfaktor (1,0 = normal storlek)"
 
@@ -1624,41 +1620,38 @@ msgstr "Visa flaggor för GNOME-terminal"
 
 #: ../src/terminal-options.c:1317
 msgid "Options to open new windows or terminal tabs; more than one of these may be specified:"
-msgstr ""
+msgstr "Flaggor för att öppna nya fönster eller terminalflikar; fler än en av dessa kan anges:"
 
 #: ../src/terminal-options.c:1318
-#, fuzzy
 msgid "Show terminal options"
-msgstr "Visa flaggor för GNOME-terminal"
+msgstr "Visa terminalflaggor"
 
 #: ../src/terminal-options.c:1326
 msgid "Window options; if used before the first --window or --tab argument, sets the default for all windows:"
-msgstr ""
+msgstr "Fönsterflaggor; om används innan första argumentet --window eller --tab, ställer in standarden för alla fönster:"
 
 #: ../src/terminal-options.c:1327
-#, fuzzy
 msgid "Show per-window options"
-msgstr "Visa flaggor för GNOME-terminal"
+msgstr "Visa flaggor för per-fönster"
 
 #: ../src/terminal-options.c:1335
 msgid "Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"
-msgstr ""
+msgstr "Terminalflaggor; om används innan första argumentet --window eller --tab, ställer in standarden för alla terminaler:"
 
 #: ../src/terminal-options.c:1336
-#, fuzzy
 msgid "Show per-terminal options"
-msgstr "Visa flaggor för GNOME-terminal"
+msgstr "Visa flaggor för per-terminal"
 
 #: ../src/terminal-profile.c:150
 msgid "Unnamed"
 msgstr "Namnlös"
 
-#: ../src/terminal-screen.c:1230
+#: ../src/terminal-screen.c:1222
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "Det uppstod ett problem med kommandot för denna terminal: %s"
 
-#: ../src/terminal-screen.c:1521
+#: ../src/terminal-screen.c:1514
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ett fel uppstod vid skapande av barnprocessen för denna terminal"
 
@@ -1696,217 +1689,223 @@ msgstr "GNOME-terminal distribueras i hopp om att det ska vara användbart, men 
 msgid "You should have received a copy of the GNU General Public License along with GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgstr "Du bör ha fått en kopia av GNU General Public License tillsammans med detta program. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/terminal-window.c:415
+#: ../src/terminal-window.c:419
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:417
+#: ../src/terminal-window.c:421
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
 #. Toplevel
-#: ../src/terminal-window.c:1505
+#: ../src/terminal-window.c:1553
 msgid "_File"
 msgstr "_Arkiv"
 
 # _t krockar med "s_täng flik"
 #. File menu
-#: ../src/terminal-window.c:1506
-#: ../src/terminal-window.c:1517
-#: ../src/terminal-window.c:1639
+#: ../src/terminal-window.c:1554
+#: ../src/terminal-window.c:1565
+#: ../src/terminal-window.c:1687
 msgid "Open _Terminal"
-msgstr "_Öppna terminalfönster"
+msgstr "Öppna _terminalfönster"
 
-#: ../src/terminal-window.c:1507
-#: ../src/terminal-window.c:1520
-#: ../src/terminal-window.c:1642
+#: ../src/terminal-window.c:1555
+#: ../src/terminal-window.c:1568
+#: ../src/terminal-window.c:1690
 msgid "Open Ta_b"
 msgstr "Öppna _flik"
 
-#: ../src/terminal-window.c:1508
+#: ../src/terminal-window.c:1556
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: ../src/terminal-window.c:1509
+#: ../src/terminal-window.c:1557
 msgid "_View"
 msgstr "_Visa"
 
-#: ../src/terminal-window.c:1510
+#: ../src/terminal-window.c:1558
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1511
+#: ../src/terminal-window.c:1559
 msgid "Ta_bs"
 msgstr "_Flikar"
 
-#: ../src/terminal-window.c:1512
+#: ../src/terminal-window.c:1560
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: ../src/terminal-window.c:1523
+#: ../src/terminal-window.c:1571
 msgid "New _Profile…"
 msgstr "Ny _profil..."
 
-#: ../src/terminal-window.c:1526
-#: ../src/terminal-window.c:1648
+#: ../src/terminal-window.c:1574
+#: ../src/terminal-window.c:1696
 msgid "C_lose Tab"
 msgstr "S_täng flik"
 
-#: ../src/terminal-window.c:1529
+#: ../src/terminal-window.c:1577
+#: ../src/terminal-window.c:2907
 msgid "_Close Window"
 msgstr "_Stäng fönster"
 
-#: ../src/terminal-window.c:1540
-#: ../src/terminal-window.c:1636
+#: ../src/terminal-window.c:1588
+#: ../src/terminal-window.c:1684
 msgid "Paste _Filenames"
 msgstr "Klistra in _filnamn"
 
-#: ../src/terminal-window.c:1546
+#: ../src/terminal-window.c:1594
 msgid "P_rofiles…"
 msgstr "P_rofiler..."
 
-#: ../src/terminal-window.c:1549
+#: ../src/terminal-window.c:1597
 msgid "_Keyboard Shortcuts…"
 msgstr "Tan_gentbordsgenvägar..."
 
-#: ../src/terminal-window.c:1552
+#: ../src/terminal-window.c:1600
 msgid "Pr_ofile Preferences"
 msgstr "Profil_inställningar"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1568
+#: ../src/terminal-window.c:1616
 msgid "Change _Profile"
 msgstr "Ändra _profil"
 
-#: ../src/terminal-window.c:1569
+#: ../src/terminal-window.c:1617
 msgid "_Set Title…"
 msgstr "A_nge titel..."
 
-#: ../src/terminal-window.c:1572
+#: ../src/terminal-window.c:1620
 msgid "Set _Character Encoding"
 msgstr "Ställ in _teckenkodning"
 
-#: ../src/terminal-window.c:1573
+#: ../src/terminal-window.c:1621
 msgid "_Reset"
 msgstr "_Återställ"
 
-#: ../src/terminal-window.c:1576
+#: ../src/terminal-window.c:1624
 msgid "Reset and C_lear"
 msgstr "Återställ och t_öm"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1581
+#: ../src/terminal-window.c:1629
 msgid "_Add or Remove…"
 msgstr "_Lägg till eller ta bort..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1586
+#: ../src/terminal-window.c:1634
 msgid "_Previous Tab"
 msgstr "_Föregående flik"
 
-#: ../src/terminal-window.c:1589
+#: ../src/terminal-window.c:1637
 msgid "_Next Tab"
 msgstr "_Nästa flik"
 
-#: ../src/terminal-window.c:1592
+#: ../src/terminal-window.c:1640
 msgid "Move Tab _Left"
 msgstr "Flytta flik till _vänster"
 
-#: ../src/terminal-window.c:1595
+#: ../src/terminal-window.c:1643
 msgid "Move Tab _Right"
 msgstr "Flytta flik till _höger"
 
-#: ../src/terminal-window.c:1598
+#: ../src/terminal-window.c:1646
 msgid "_Detach tab"
 msgstr "Koppla _loss flik"
 
 #. Help menu
-#: ../src/terminal-window.c:1603
+#: ../src/terminal-window.c:1651
 msgid "_Contents"
 msgstr "_Innehåll"
 
-#: ../src/terminal-window.c:1606
+#: ../src/terminal-window.c:1654
 msgid "_About"
 msgstr "_Om"
 
 #. Popup menu
-#: ../src/terminal-window.c:1611
+#: ../src/terminal-window.c:1659
 msgid "_Send Mail To…"
 msgstr "_Skicka e-post till..."
 
-#: ../src/terminal-window.c:1614
+#: ../src/terminal-window.c:1662
 msgid "_Copy E-mail Address"
 msgstr "_Kopiera e-postadress"
 
-#: ../src/terminal-window.c:1617
+#: ../src/terminal-window.c:1665
 msgid "C_all To…"
 msgstr "Rin_g till…"
 
-#: ../src/terminal-window.c:1620
+#: ../src/terminal-window.c:1668
 msgid "_Copy Call Address"
 msgstr "_Kopiera samtalsadress"
 
-#: ../src/terminal-window.c:1623
+#: ../src/terminal-window.c:1671
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: ../src/terminal-window.c:1626
+#: ../src/terminal-window.c:1674
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1677
 msgid "P_rofiles"
 msgstr "P_rofiler"
 
-#: ../src/terminal-window.c:1645
+#: ../src/terminal-window.c:1693
 msgid "C_lose Window"
 msgstr "Stän_g fönster"
 
 # _i krockar med "klistra _in", som är stockitem och inte kan ändras här
-#: ../src/terminal-window.c:1651
+#: ../src/terminal-window.c:1699
 msgid "_Input Methods"
 msgstr "I_nmatningsmetoder"
 
 #. View Menu
-#: ../src/terminal-window.c:1657
+#: ../src/terminal-window.c:1705
 msgid "Show _Menubar"
 msgstr "Visa _menyrad"
 
-#: ../src/terminal-window.c:1661
+#: ../src/terminal-window.c:1709
 msgid "_Full Screen"
 msgstr "_Helskärmsläge"
 
-#: ../src/terminal-window.c:2774
-msgid "Close all tabs?"
-msgstr "Stäng alla flikar?"
+#: ../src/terminal-window.c:2894
+msgid "Close this terminal?"
+msgstr "Stäng denna terminal?"
 
-#: ../src/terminal-window.c:2776
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural "This window has %d tabs open. Closing the window will also close all tabs."
-msgstr[0] "Detta fönster har en flik öppen. Att stänga detta fönster kommer att stänga den."
-msgstr[1] "Detta fönster har %d flikar öppna. Att stänga detta fönster kommer att stänga dem."
+#: ../src/terminal-window.c:2894
+msgid "Close this window?"
+msgstr "Stäng detta fönster?"
 
-#: ../src/terminal-window.c:2785
-msgid "Close All _Tabs"
-msgstr "Stäng alla _flikar"
+#: ../src/terminal-window.c:2898
+msgid "There are still processes running in some terminals in this window. Closing the window will kill all of them."
+msgstr "Det finns fortfarande processer igång i några terminaler i detta fönster. Stängning av fönstret kommer att döda dem alla."
 
-#: ../src/terminal-window.c:3136
+#: ../src/terminal-window.c:2902
+msgid "There is still a process running in this terminal. Closing the terminal will kill it."
+msgstr "Det finns fortfarande en process igång i denna terminal. Stängning av terminalen kommer att döda den."
+
+#: ../src/terminal-window.c:2907
+msgid "_Close Terminal"
+msgstr "S_täng terminal"
+
+#: ../src/terminal-window.c:3269
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/terminal-window.c:3322
+#: ../src/terminal-window.c:3455
 msgid "Contributors:"
 msgstr "Bidragsgivare:"
 
-#: ../src/terminal-window.c:3341
+#: ../src/terminal-window.c:3474
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "En terminalemulator för skrivbordsmiljön GNOME"
 
-#: ../src/terminal-window.c:3348
+#: ../src/terminal-window.c:3481
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander\n"
@@ -1916,6 +1915,19 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
+#~ msgid "Close all tabs?"
+#~ msgstr "Stäng alla flikar?"
+#~ msgid "This window has one tab open. Closing the window will close it."
+#~ msgid_plural ""
+#~ "This window has %d tabs open. Closing the window will also close all tabs."
+#~ msgstr[0] ""
+#~ "Detta fönster har en flik öppen. Att stänga detta fönster kommer att "
+#~ "stänga den."
+#~ msgstr[1] ""
+#~ "Detta fönster har %d flikar öppna. Att stänga detta fönster kommer att "
+#~ "stänga dem."
+#~ msgid "Close All _Tabs"
+#~ msgstr "Stäng alla _flikar"
 #~ msgid ""
 #~ "If true, font anti-aliasing will be disabled when running without the X "
 #~ "RENDER extension, which gives a considerable performance improvement in "
