@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-15 17:27+0700\n"
-"PO-Revision-Date: 2009-01-12 15:53+0700\n"
+"POT-Creation-Date: 2009-02-20 20:21+0700\n"
+"PO-Revision-Date: 2009-02-20 21:19+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -19,9 +19,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
-#: ../src/terminal-accels.c:167 ../src/terminal.c:1198
-#: ../src/terminal-profile.c:149 ../src/terminal-window.c:1508
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
+#: ../src/terminal-accels.c:222 ../src/terminal.c:292
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1730
 msgid "Terminal"
 msgstr "เทอร์มินัล"
 
@@ -29,154 +29,34 @@ msgstr "เทอร์มินัล"
 msgid "Use the command line"
 msgstr "สั่งการด้วยบรรทัดคำสั่ง"
 
-#. { "UTF-8",	N_("Current Locale") },
-#: ../src/encoding.c:51 ../src/encoding.c:64 ../src/encoding.c:78
-#: ../src/encoding.c:100 ../src/encoding.c:111
-msgid "Western"
-msgstr "ตะวันตก"
+#: ../src/eggsmclient.c:224
+msgid "Disable connection to session manager"
+msgstr "ปิดใช้การเชื่อมต่อไปยังโปรแกรมจัดการวาระ"
 
-#: ../src/encoding.c:52 ../src/encoding.c:79 ../src/encoding.c:90
-#: ../src/encoding.c:109
-msgid "Central European"
-msgstr "ยุโรปตอนกลาง"
+#: ../src/eggsmclient.c:227
+msgid "Specify file containing saved configuration"
+msgstr "ระบุแฟ้มที่บันทึกค่าตั้งไว้"
 
-#: ../src/encoding.c:53
-msgid "South European"
-msgstr "ยุโรปตอนใต้"
+#: ../src/eggsmclient.c:227 ../src/terminal-options.c:905
+#: ../src/terminal-options.c:914
+msgid "FILE"
+msgstr "FILE"
 
-#: ../src/encoding.c:54 ../src/encoding.c:62 ../src/encoding.c:116
-msgid "Baltic"
-msgstr "บอลติก"
+#: ../src/eggsmclient.c:230
+msgid "Specify session management ID"
+msgstr "ระบุหมายเลขการจัดการวาระ"
 
-#: ../src/encoding.c:55 ../src/encoding.c:80 ../src/encoding.c:86
-#: ../src/encoding.c:87 ../src/encoding.c:92 ../src/encoding.c:110
-msgid "Cyrillic"
-msgstr "ซีริลลิก"
+#: ../src/eggsmclient.c:230
+msgid "ID"
+msgstr "ID"
 
-#: ../src/encoding.c:56 ../src/encoding.c:83 ../src/encoding.c:89
-#: ../src/encoding.c:115
-msgid "Arabic"
-msgstr "อาหรับ"
+#: ../src/eggsmclient.c:244
+msgid "Session management options:"
+msgstr "ตัวเลือกเกี่ยวกับการจัดการวาระ:"
 
-#: ../src/encoding.c:57 ../src/encoding.c:95 ../src/encoding.c:112
-msgid "Greek"
-msgstr "กรีก"
-
-#: ../src/encoding.c:58
-msgid "Hebrew Visual"
-msgstr "ฮิบรูวิชวล"
-
-#: ../src/encoding.c:59 ../src/encoding.c:82 ../src/encoding.c:98
-#: ../src/encoding.c:114
-msgid "Hebrew"
-msgstr "ฮิบรู"
-
-#: ../src/encoding.c:60 ../src/encoding.c:81 ../src/encoding.c:102
-#: ../src/encoding.c:113
-msgid "Turkish"
-msgstr "ตุรกี"
-
-#: ../src/encoding.c:61
-msgid "Nordic"
-msgstr "นอร์ดิก"
-
-#: ../src/encoding.c:63
-msgid "Celtic"
-msgstr "เซลติก"
-
-#: ../src/encoding.c:65 ../src/encoding.c:101
-msgid "Romanian"
-msgstr "โรมาเนีย"
-
-#. These encodings do NOT pass-through ASCII, so are always rejected.
-#. * FIXME: why are they in this table; or rather why do we need
-#. * the ASCII pass-through requirement?
-#.
-#: ../src/encoding.c:66 ../src/encoding.c:123 ../src/encoding.c:124
-#: ../src/encoding.c:125 ../src/encoding.c:126
-msgid "Unicode"
-msgstr "ยูนิโค้ด"
-
-#: ../src/encoding.c:67
-msgid "Armenian"
-msgstr "อาร์เมเนีย"
-
-#: ../src/encoding.c:68 ../src/encoding.c:69 ../src/encoding.c:73
-msgid "Chinese Traditional"
-msgstr "จีนตัวเต็ม"
-
-#: ../src/encoding.c:70
-msgid "Cyrillic/Russian"
-msgstr "ซีริลลิก/รัสเซีย"
-
-#: ../src/encoding.c:71 ../src/encoding.c:84 ../src/encoding.c:104
-msgid "Japanese"
-msgstr "ญี่ปุ่น"
-
-#: ../src/encoding.c:72 ../src/encoding.c:85 ../src/encoding.c:107
-#: ../src/encoding.c:127
-msgid "Korean"
-msgstr "เกาหลี"
-
-#: ../src/encoding.c:74 ../src/encoding.c:75 ../src/encoding.c:76
-msgid "Chinese Simplified"
-msgstr "จีนตัวย่อ"
-
-#: ../src/encoding.c:77
-msgid "Georgian"
-msgstr "จอร์เจีย"
-
-#: ../src/encoding.c:88 ../src/encoding.c:103
-msgid "Cyrillic/Ukrainian"
-msgstr "ซีริลลิก/ยูเครน"
-
-#: ../src/encoding.c:91
-msgid "Croatian"
-msgstr "โครเอเชียน"
-
-#: ../src/encoding.c:93
-msgid "Hindi"
-msgstr "ฮินดี"
-
-#: ../src/encoding.c:94
-msgid "Persian"
-msgstr "เปอร์เซีย"
-
-#: ../src/encoding.c:96
-msgid "Gujarati"
-msgstr "คุชราตี"
-
-#: ../src/encoding.c:97
-msgid "Gurmukhi"
-msgstr "คุรุมุขี"
-
-#: ../src/encoding.c:99
-msgid "Icelandic"
-msgstr "ไอซ์แลนด์"
-
-#: ../src/encoding.c:105 ../src/encoding.c:108 ../src/encoding.c:117
-msgid "Vietnamese"
-msgstr "เวียดนาม"
-
-#: ../src/encoding.c:106
-msgid "Thai"
-msgstr "ไทย"
-
-#: ../src/encoding.c:323
-msgid "User Defined"
-msgstr "กำหนดโดยผู้ใช้"
-
-#: ../src/encoding.c:597 ../src/encoding.c:622
-msgid "_Description"
-msgstr "คำ_บรรยาย"
-
-#: ../src/encoding.c:606 ../src/encoding.c:631
-msgid "_Encoding"
-msgstr "_รหัสอักขระ"
-
-#: ../src/encoding.c:688
-msgid "Current Locale"
-msgstr "ตามโลแคลปัจจุบัน"
+#: ../src/eggsmclient.c:245
+msgid "Show session management options"
+msgstr "แสดงตัวเลือกเกี่ยวกับการจัดการวาระ"
 
 #: ../src/encodings-dialog.glade.h:1
 msgid "A_vailable encodings:"
@@ -363,19 +243,10 @@ msgid ""
 msgstr "ถ้าเลือก จะไม่ส่งเสียงเมื่อโปรแกรมส่งลำดับอักขระพิเศษของเสียงบี๊ปของเทอร์มินัล"
 
 #: ../src/gnome-terminal.schemas.in.h:34
-msgid ""
-"If true, font anti-aliasing will be disabled when running without the X "
-"RENDER extension, which gives a considerable performance improvement in "
-"these situations."
-msgstr ""
-"ถ้าเลือก จะปิดการลบรอยหยักเมื่อทำงานโดยไม่มีส่วนขยาย X RENDER "
-"ซึ่งจะเพิ่มประสิทธิภาพการทำงานของโปรแกรมพอสมควร ภายใต้สภาวะดังกล่าว"
-
-#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "ถ้าเลือก การกดปุ่มใดปุ่มหนึ่งจะเลื่อนแถบเลื่อนไปท้ายสุด"
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -383,7 +254,7 @@ msgstr ""
 "ถ้าเลือก ให้เลื่อนภาพพื้นหลังไปพร้อมกับข้อความเบื้องหน้า, ถ้าไม่เลือก "
 "ให้รักษาภาพพื้นหลังอยู่ที่เดิมและเลื่อนข้อความเบื้องหน้าไปบนภาพพื้นหลังนั้น"
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -391,14 +262,14 @@ msgstr ""
 "ถ้าเลือก คำสั่งภายในเทอร์มินัลจะถูกเรียกใช้งานแบบเชลล์ลอกอิน (argv[0] "
 "จะมีเครื่องหมายยัติภังค์อยู่ข้างหน้า)"
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
 "ถ้าเลือก จะปรับข้อมูลระเบียนล็อกอิน utmp และ wtmp ของระบบ เมื่อเรียกใช้คำสั่งภายในเทอร์มินัล"
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -406,7 +277,7 @@ msgstr ""
 "ถ้าเลือก เทอร์มินัลจะใช้แบบอักษรมาตรฐานที่กำหนดในพื้นโต๊ะ ถ้าแบบอักษรนั้นเป็นแบบความกว้างคงที่ "
 "(หรือแบบอักษรที่ใกล้เคียงที่สุดที่สามารถใช้ได้ ในกรณีที่หาไม่พบ)"
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -414,18 +285,18 @@ msgstr ""
 "ถ้าเลือก รายการชุดรูปแบบสีที่ใช้สำหรับกล่องป้อนข้อความจะใช้สำหรับเทอร์มินัลด้วย โดยจะแทนที่สีต่างๆ "
 "ที่ผู้ใช้กำหนดไว้"
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr "ถ้าเลือก จะใช้ค่าของ custom_command แทนการเรียกใช้งานเชลล์"
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "ถ้าเลือก เทอร์มินัลจะเลื่อนไปล่างสุดเมื่อมีผลลัพธ์ใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -436,7 +307,7 @@ msgstr ""
 "resource ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" "
 "จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -445,7 +316,7 @@ msgstr ""
 "ปุ่มลัดสำหรับการปิดแท็บ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK+ "
 "ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" ไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -455,7 +326,7 @@ msgstr ""
 "ปุ่มลัดสำหรับปิดหน้าต่าง กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK+ "
 "ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -466,7 +337,7 @@ msgstr ""
 "resource ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" "
 "จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -475,7 +346,7 @@ msgstr ""
 "ปุ่มลัดสำหรับเรียกใช้ระบบช่วยเหลือ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -485,7 +356,7 @@ msgstr ""
 "ปุ่มลัดสำหรับขยายขนาดแบบอักษร กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -495,7 +366,7 @@ msgstr ""
 "ปุ่มลัดสำหรับย่อขนาดแบบอักษร กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
 "+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -505,7 +376,7 @@ msgstr ""
 "ปุ่มลัดสำหรับกำหนดแบบอักษรขนาดปกติ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource "
 "ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -515,7 +386,7 @@ msgstr ""
 "ปุ่มลัดสำหรับเปิดแท็บใหม่ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK+ "
 "ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -525,7 +396,7 @@ msgstr ""
 "ปุ่มลัดสำหรับเปิดหน้าต่างใหม่ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK+ "
 "ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -535,7 +406,118 @@ msgstr ""
 "ปุ่มลัดสำหรับแปะเนื้อหาจากคลิปบอร์ด กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource "
 "ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
+#: ../src/gnome-terminal.schemas.in.h:53
+msgid ""
+"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 1 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
 #: ../src/gnome-terminal.schemas.in.h:54
+msgid ""
+"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 10 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:55
+msgid ""
+"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 11 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:56
+msgid ""
+"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 12 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:57
+msgid ""
+"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 2 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:58
+msgid ""
+"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 3 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:59
+msgid ""
+"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 4 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:60
+msgid ""
+"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 5 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:61
+msgid ""
+"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 6 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:62
+msgid ""
+"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 7 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:63
+msgid ""
+"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 8 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:64
+msgid ""
+"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 9 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK"
+"+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
+
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -545,7 +527,7 @@ msgstr ""
 "ปุ่มลัดสำหรับสลับโหมดเต็มจอ กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ GTK+ "
 "ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -556,7 +538,7 @@ msgstr ""
 "resource ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" "
 "จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -566,7 +548,7 @@ msgstr ""
 "ปุ่มลัดสำหรับย้อนเทอร์มินัลกลับค่าเดิม กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource "
 "ของ GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -576,7 +558,7 @@ msgstr ""
 "ปุ่มลัดสำหรับตั้งหัวเรื่องเทอร์มินัล กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -586,7 +568,7 @@ msgstr ""
 "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บถัดไป กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -596,7 +578,7 @@ msgstr ""
 "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บที่แล้ว กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -606,87 +588,135 @@ msgstr ""
 "ปุ่มลัดสำหรับสลับการแสดงแถบเมนู กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
 "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "ปุ่มลัดปิดแท็บ"
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "ปุ่มลัดสำหรับปิดหน้าต่าง"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "ปุ่มลัดคัดลอกข้อความ"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to create a new profile"
 msgstr "ปุ่มลัดสร้างโพรไฟล์ใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to launch help"
 msgstr "ปุ่มลัดเรียกตัวช่วย"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut to make font larger"
 msgstr "ปุ่มลัดสำหรับขยายแบบอักษร"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "ปุ่มลัดสำหรับทำแบบอักษรขนาดปกติ"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to make font smaller"
 msgstr "ปุ่มลัดสำหรับย่อแบบอักษร"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to open a new tab"
 msgstr "ปุ่มลัดสำหรับเปิดแท็บใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to open a new window"
 msgstr "ปุ่มลัดสำหรับเปิดหน้าต่างใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to paste text"
 msgstr "ปุ่มลัดสำหรับแปะข้อความ"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "ปุ่มลัดสำหรับตั้งค่าใหม่และลบเทอร์มินัล"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "ปุ่มลัดสำหรับย้อนเทอร์มินัลกลับค่าเดิม"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "ปุ่มลัดสำหรับตั้งหัวเรื่องเทอร์มินัล"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:86
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 1"
+
+#: ../src/gnome-terminal.schemas.in.h:87
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 10"
+
+#: ../src/gnome-terminal.schemas.in.h:88
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 11"
+
+#: ../src/gnome-terminal.schemas.in.h:89
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 12"
+
+#: ../src/gnome-terminal.schemas.in.h:90
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 2"
+
+#: ../src/gnome-terminal.schemas.in.h:91
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 3"
+
+#: ../src/gnome-terminal.schemas.in.h:92
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 4"
+
+#: ../src/gnome-terminal.schemas.in.h:93
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 5"
+
+#: ../src/gnome-terminal.schemas.in.h:94
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 6"
+
+#: ../src/gnome-terminal.schemas.in.h:95
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 7"
+
+#: ../src/gnome-terminal.schemas.in.h:96
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 8"
+
+#: ../src/gnome-terminal.schemas.in.h:97
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 9"
+
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บถัดไป"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บที่แล้ว"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "ปุ่มลัดสำหรับสลับโหมดเต็มหน้าจอ"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "ปุ่มลัดสำหรับสลับค่าความสามารถในการมองเห็นของแถบเมนู"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "List of available encodings"
 msgstr "รายการของการเข้ารหัสที่มีอยู่"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "List of profiles"
 msgstr "รายการโพรไฟล์"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -694,7 +724,7 @@ msgstr ""
 "รายการของโพรไฟล์ที่เทอร์มินัล gnome รู้จัก "
 "รายการดังกล่าวมีข้อความที่ตั้งชื่อไดเรกทอรีย่อยที่สอดคล้องตาม /apps/gnome-terminal/profiles"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -703,11 +733,11 @@ msgstr ""
 "โดยปกติคุณสามารถเข้าถึงแถบเมนูได้ด้วยปุ่ม F10 ปุ่มนี้สามารถกำหนดได้เองโดยใช้ gtkrc (gtk-"
 "menu-bar-accel = \"ปุ่มใดๆ\") ตัวเลือกนี้อนุญาตให้ยกเลิกการใช้ปุ่มลัดมาตรฐานของแถบเมนู"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Number of lines to keep in scrollback"
 msgstr "จำนวนบรรทัดที่รักษาไว้สำหรับการเลื่อนกลับ"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -718,13 +748,13 @@ msgstr ""
 "บรรทัดที่ไม่เหมาะสมในการเลื่อนกลับจะถูกละเว้น ให้ระวังการตั้งค่านี้ "
 "ค่าดังกล่าวจะเป็นปัจจัยเบื้องต้นในการพิจารณาหน่วยความจำที่เทอร์มินัลจะใช้"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Palette for terminal applications"
 msgstr "จานสีสำหรับโปรแกรมเทอร์มินัล"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -732,30 +762,30 @@ msgstr ""
 "เปิดกล่องโต้ตอบเมื่อตรวจพบและมีการคลิกคำขอการโต้ตอบคำท้า S/Key "
 "การพิมพ์รหัสผ่านในกล่องโต้ตอบจะส่งการโต้ตอบดังกล่าวไปที่เทอร์มินัล"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid "Position of the scrollbar"
 msgstr "ตำแหน่งของแถบเลื่อน"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
 msgstr "ค่าที่เป็นไปได้คือ \"close\" เพื่อปิดเทอร์มินัล และ \"restart\" เพื่อเริ่มต้นคำสั่งใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr "โพรไฟล์ที่ใช้เมื่อเปิดหน้าต่างหรือแท็บใหม่จะต้องอยู่ในรายการโพรไฟล์ (_l)"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Profile to use for new terminals"
 msgstr "โพรไฟล์ที่ใช้สำหรับเทอร์มินัลใหม่"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "เรียกใช้คำสั่งนี้ในตำแหน่งที่ตั้งของเชลล์ ถ้าเลือก use_custom_command "
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -768,7 +798,7 @@ msgstr ""
 "สำหรับลำดับอักขระพิเศษซึ่งแทนปุ่ม Backspace หรือ Delete โดยปกติแล้ว \"ascii-del\" "
 "คือค่าที่น่าจะถูกต้องสำหรับปุ่ม Backspace"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -781,7 +811,7 @@ msgstr ""
 "สำหรับลำดับอักขระพิเศษซึ่งแทนปุ่ม Backspace หรือ Delete โดยปกติแล้ว \"escape-sequence\" "
 "คือค่าที่น่าจะถูกต้องสำหรับปุ่ม Delete"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -790,7 +820,19 @@ msgstr ""
 "เทอร์มินัลมีจานสีชนิด 16 สี ซึ่งเทอร์มินัลสามารถใช้โปรแกรมภายในได้้ "
 "จานสีนั้นอยู่ในรูปแบบของรายการชื่อสีที่แยกด้วยโคลอน ชื่อสีควรเป็นเลขฐานสิบหก เช่น \"#FF00FF\""
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:121
+msgid "The cursor appearance"
+msgstr "รูปร่างของเคอร์เซอร์"
+
+#: ../src/gnome-terminal.schemas.in.h:122
+msgid ""
+"The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
+"vertical line cursor, or \"underline\" to use an underline cursor."
+msgstr ""
+"ค่าที่เป็นไปได้คือ \"block\" สำหรับเคอร์เซอร์รูปบล็อคสี่เหลี่ยม, \"ibeam\" "
+"สำหรับเคอร์เซอร์รูปขีดตั้ง หรือ \"underline\" สำหรับเคอร์เซอร์แบบขีดล่าง"
+
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -798,11 +840,11 @@ msgstr ""
 "ค่าที่เป็นไปได้คือ \"system\" ซึ่งจะใช้ค่าตั้งรวมของระบบเกี่ยวกับการกะพริบของเคอร์เซอร์ หรือ "
 "\"on\" หรือ \"off\" เพื่อกำหนดโหมดโดยตรง"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Title for terminal"
 msgstr "หัวเรื่องเทอร์มินัล"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -811,29 +853,31 @@ msgstr ""
 "หัวเรื่องที่แสดงสำหรับหน้าต่างเทอร์มินัลหรือแท็บ "
 "อาจจะถูกแทนที่หรือรวมกับชุดหัวเรื่องจากโปรแกรมภายในเทอร์มินัลขึ้นอยู่กับการตั้งค่า title mode"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 msgstr "เลือก ถ้าแถบเมนูควรแสดงในหน้าต่างใหม่ สำหรับหน้าต่าง/แท็บที่ใช้โพรไฟล์นี้"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
-"for an image, or \"transparent\" for pseudo-transparency."
+"for an image, or \"transparent\" for either real transparency if a "
+"compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
 "ชนิดของพื้นหลังเทอร์มินัล อาจจะเป็น \"solid\" สำหรับสีทึบ, \"image\" สำหรับภาพ หรือ "
-"\"transparent\" สำหรับลักษณะโปร่งแสงเทียม"
+"\"transparent\" สำหรับลักษณะโปร่งแสงจริงถ้าใช้โปรแกรมจัดการหน้าต่างที่รองรับการ compose "
+"หรือโปร่งแสงแบบเทียมถ้าไม่ใช่"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid "What to do with dynamic title"
 msgstr "สิ่งที่เกิดขึ้นกับหัวเรื่องพลวัต"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:129
 msgid "What to do with the terminal when the child command exits"
 msgstr "สิ่งที่เกิดขึ้นกับเทอร์มินัลเมื่อออกจากคำสั่งลูก"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -842,44 +886,40 @@ msgstr ""
 "เมื่อเลือกข้อความเป็นคำ ลำดับของอักขระเหล่านี้พิจารณาเป็นคำเดี่ยว ช่วงอักขระสามารถกำหนดเป็น "
 "\"A-Z\" เครื่องหมายยัติภังค์ (ที่ไม่ใช่การแสดงช่วง) ควรเป็นอักขระตัวแรก"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
 msgstr ""
 "ตำแหน่งที่วางแถบเลื่อนเทอร์มินัล ที่วางได้คือ \"left\", \"right\", และ \"disabled\""
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid "Whether the menubar has access keys"
 msgstr "กำหนดว่าแถบเมนูมีปุ่มลัดหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "ใช้มาตรฐาน GTK สำหรับการเข้าถึงแถบเมนูหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Whether to allow bold text"
 msgstr "อนุญาตให้ใช้ข้อความตัวหนาหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 msgstr "กำหนดว่าจะถามก่อนปิดหน้าต่างเทอร์มินัลที่เปิดแท็บไว้มากกว่าหนึ่งแท็บหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "กำหนดว่าจะถามก่อนปิดหน้าต่างเทอร์มินัลหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid "Whether to blink the cursor"
 msgstr "กะพริบเคอร์เซอร์หรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:113
-msgid "Whether to disable anti-aliasing without the X RENDER extension"
-msgstr "กำหนดว่าจะไม่ใช้การลบรอยหยักเมื่อไม่มีส่วนขยาย X RENDER หรือไม่"
-
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -888,43 +928,43 @@ msgstr ""
 "กำหนดว่าแถบเมนูมีปุ่มลัด Alt+ตัวอักษร หรือไม่ "
 "ปุ่มลัดเหล่านี้อาจรบกวนบางโปรแกรมที่ทำงานอยู่ภายในเทอร์มินัล จึงอนุญาตให้ปิดการใช้ปุ่มลัดได้"
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "เรียกใช้คำสั่งในเทอร์มินัลแบบเชลล์ล็อกอินหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether to run a custom command instead of the shell"
 msgstr "เรียกใช้คำสั่งที่กำหนดเองแทนการใช้เชลล์หรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether to scroll background image"
 msgstr "เลื่อนภาพพื้นหลังหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "เลื่อนไปตำแหน่งล่างสุดเมื่อกดปุ่มใดปุ่มหนึ่งหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "เลื่อนไปตำแหน่งล่างสุดเมื่อมีมีผลลัพธ์ใหม่หรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "แสดงแถบเมนูในหน้าต่าง/แท็บใหม่หรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether to silence terminal bell"
 msgstr "ปิดเสียงออดเตือนเทอร์มินัลหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to update login records when launching terminal command"
 msgstr "ปรับข้อมูลระเบียนล็อกอินเมื่อเรียกใช้คำสั่งเทอร์มินัลหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "ใช้สีจากชุดตกแต่งสำหรับ widget เทอร์มินัลหรือไม่"
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to use the system font"
 msgstr "ใช้แบบอักษรระบบหรือไม่"
 
@@ -934,7 +974,7 @@ msgstr "ใช้แบบอักษรระบบหรือไม่"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current,TIS-620]"
 
@@ -954,52 +994,52 @@ msgstr "เ_ปิดใช้ปุ่มด่วนสำหรับเร�
 msgid "_Shortcut keys:"
 msgstr "ปุ่ม_ลัด:"
 
-#: ../src/profile-editor.c:48
+#: ../src/profile-editor.c:46
 msgid "Black on light yellow"
 msgstr "สีดำบนพื้นเหลืองอ่อน"
 
-#: ../src/profile-editor.c:50
+#: ../src/profile-editor.c:48
 msgid "Black on white"
 msgstr "สีดำบนพื้นขาว"
 
-#: ../src/profile-editor.c:52
+#: ../src/profile-editor.c:50
 msgid "Gray on black"
 msgstr "สีเทาบนพื้นดำ"
 
-#: ../src/profile-editor.c:54
+#: ../src/profile-editor.c:52
 msgid "Green on black"
 msgstr "สีเขียวบนพื้นดำ"
 
-#: ../src/profile-editor.c:56
+#: ../src/profile-editor.c:54
 msgid "White on black"
 msgstr "สีขาวบนพื้นดำ"
 
-#: ../src/profile-editor.c:440
+#: ../src/profile-editor.c:438
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "เกิดข้อผิดพลาดขณะแจงคำสั่ง: %s"
 
-#: ../src/profile-editor.c:460
+#: ../src/profile-editor.c:458
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "แก้ไขโพรไฟล์ “%s”"
 
 #. Translators: %s will be a data size, e.g. "(about 500kB)"
-#: ../src/profile-editor.c:476
+#: ../src/profile-editor.c:474
 #, c-format
 msgid "(about %s)"
 msgstr "(ประมาณ %s)"
 
-#: ../src/profile-editor.c:614
+#: ../src/profile-editor.c:612
 msgid "Images"
 msgstr "รูปภาพ"
 
-#: ../src/profile-editor.c:729
+#: ../src/profile-editor.c:733
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "เลือกสีในจานสีช่อง %d"
 
-#: ../src/profile-editor.c:733
+#: ../src/profile-editor.c:737
 #, c-format
 msgid "Palette entry %d"
 msgstr "จานสีรายการที่ %d"
@@ -1016,7 +1056,7 @@ msgstr "โ_พรไฟล์สำหรับเปิดเทอร์ม�
 msgid "C_reate"
 msgstr "_สร้าง"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:104
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:123
 msgid "New Profile"
 msgstr "โพรไฟล์ใหม่"
 
@@ -1092,46 +1132,60 @@ msgid "Background image _scrolls"
 msgstr "ภาพพื้นหลังเ_ลื่อนได้"
 
 #: ../src/profile-preferences.glade.h:15
+msgid ""
+"Block\n"
+"I-Beam\n"
+"Underline"
+msgstr ""
+"บล็อค\n"
+"ขีดตั้ง\n"
+"ขีดล่าง"
+
+#: ../src/profile-preferences.glade.h:18
 msgid "Built-in _schemes:"
 msgstr "ชุดรูปแบบสีที่มีมากับโ_ปรแกรม:"
 
-#: ../src/profile-preferences.glade.h:16
+#: ../src/profile-preferences.glade.h:19
 msgid "Built-in sche_mes:"
 msgstr "ชุดรูปแบบสีที่_มีมากับโปรแกรม:"
 
-#: ../src/profile-preferences.glade.h:17
+#: ../src/profile-preferences.glade.h:20
 msgid "Choose A Terminal Font"
 msgstr "เลือกแบบอักษรเทอร์มินัล"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.glade.h:21
 msgid "Choose Terminal Background Color"
 msgstr "เลือกสีพื้นหลังเทอร์มินัล"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose Terminal Text Color"
 msgstr "เลือกสีตัวอักษรเทอร์มินัล"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:23
 msgid "Color p_alette:"
 msgstr "_จานสี:"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:24
 msgid "Colors"
 msgstr "สี"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:25
 msgid "Compatibility"
 msgstr "ความเข้ากันได้"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:26
+msgid "Cursor _shape:"
+msgstr "รูป_ร่างของเคอร์เซอร์:"
+
+#: ../src/profile-preferences.glade.h:27
 msgid "Custom"
 msgstr "กำหนดเอง"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:28
 msgid "Custom co_mmand:"
 msgstr "คำสั่ง_กำหนดเอง:"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:29
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1141,19 +1195,19 @@ msgstr ""
 "เริ่มทำคำสั่งใหม่\n"
 "เปิดเทอร์มินัลค้างไว้"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:32
 msgid "General"
 msgstr "ทั่วไป"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:33
 msgid "Image _file:"
 msgstr "แฟ้มรูป_ภาพ:"
 
-#: ../src/profile-preferences.glade.h:30
+#: ../src/profile-preferences.glade.h:34
 msgid "Initial _title:"
 msgstr "_หัวเรื่องเริ่มต้น:"
 
-#: ../src/profile-preferences.glade.h:31
+#: ../src/profile-preferences.glade.h:35
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1163,11 +1217,11 @@ msgstr ""
 "ด้านขวา\n"
 "ไม่ใช้"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:38
 msgid "Profile Editor"
 msgstr "หน้าต่างแก้ไขโพรไฟล์"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:39
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1179,43 +1233,43 @@ msgstr ""
 "นำหน้าหัวเรื่องเริ่มแรก\n"
 "คงหัวเรื่องเริ่มแรก"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:43
 msgid "Ru_n a custom command instead of my shell"
 msgstr "เ_รียกคำสั่งที่กำหนดแทนเชลล์"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.glade.h:44
 msgid "S_hade transparent or image background:"
 msgstr "ความทึบของ_ฝ้าบังภาพฉากหลัง:"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.glade.h:45
 msgid "Scroll on _keystroke"
 msgstr "เลื่อนจอเมื่อมีการกดแ_ป้นพิมพ์"
 
-#: ../src/profile-preferences.glade.h:42
+#: ../src/profile-preferences.glade.h:46
 msgid "Scroll on _output"
 msgstr "เลื่อนจอเมื่อมีการแ_สดงผล"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:47
 msgid "Scroll_back:"
 msgstr "เ_ลื่อนกลับ:"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:48
 msgid "Scrolling"
 msgstr "การเลื่อน"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:49
 msgid "Select Background Image"
 msgstr "เลือกภาพพื้นหลัง"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:50
 msgid "Select-by-_word characters:"
 msgstr "อักขระที่นับรวมเมื่อเลือกเป็น_คำ:"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:51
 msgid "Show _menubar by default in new terminals"
 msgstr "แสดงแถบเ_มนูในเทอร์มินัลใหม่โดยปริยาย"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:52
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1229,87 +1283,87 @@ msgstr ""
 "Rxvt\n"
 "กำหนดเอง"
 
-#: ../src/profile-preferences.glade.h:53
+#: ../src/profile-preferences.glade.h:57
 msgid "Terminal _bell"
 msgstr "เ_สียงเตือนในเทอร์มินัล"
 
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.glade.h:58
 msgid "Title and Command"
 msgstr "หัวเรื่องและคำสั่ง"
 
-#: ../src/profile-preferences.glade.h:55
+#: ../src/profile-preferences.glade.h:59
 msgid "When command _exits:"
 msgstr "เมื่อ_จบคำสั่ง:"
 
-#: ../src/profile-preferences.glade.h:56
+#: ../src/profile-preferences.glade.h:60
 msgid "When terminal commands set their o_wn titles:"
 msgstr "เมื่อคำสั่งเทอร์มินัลกำหนดหัวเรื่องเ_อง:"
 
-#: ../src/profile-preferences.glade.h:57
+#: ../src/profile-preferences.glade.h:61
 msgid "_Allow bold text"
 msgstr "อนุญาตข้อความตัว_หนา"
 
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.glade.h:62
 msgid "_Background color:"
 msgstr "สี_พื้นหลัง:"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:63
 msgid "_Background image"
 msgstr "ภาพ_พื้นหลัง"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:64
 msgid "_Backspace key generates:"
 msgstr "ปุ่ม _Backspace แทน:"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:65
 msgid "_Delete key generates:"
 msgstr "ปุ่ม _Delete แทน:"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:66
 msgid "_Font:"
 msgstr "แ_บบอักษร:"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:67
 msgid "_Profile name:"
 msgstr "ชื่อโ_พรไฟล์:"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:68
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "ตั้งค่าตัวเลือกความเข้ากันได้เป็นค่า_ปริยาย"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:69
 msgid "_Run command as a login shell"
 msgstr "เรียกคำสั่งแบบ_ล็อกอินเชลล์"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:70
 msgid "_Scrollbar is:"
 msgstr "ตำแหน่งแ_ถบเลื่อน:"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:71
 msgid "_Solid color"
 msgstr "สี_ทึบ"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:72
 msgid "_Text color:"
 msgstr "สี_ข้อความ:"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:73
 msgid "_Transparent background"
 msgstr "พื้นหลังโปร่งแ_สง"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:74
 msgid "_Update login records when command is launched"
 msgstr "_ปรับข้อมูลระเบียนล็อกอินเมื่อเรียกใช้งานคำสั่ง"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:75
 msgid "_Use colors from system theme"
 msgstr "ใ_ช้สีจากชุดตกแต่งระบบ"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:76
 msgid "_Use the system fixed width font"
 msgstr "ใ_ช้แบบอักษรความกว้างคงที่ของระบบ"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:77
 msgid "lines"
 msgstr "บรรทัด"
 
@@ -1329,427 +1383,615 @@ msgstr "ดูเหมือนข้อความที่คุณคลิ
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "ดูเหมือนข้อความที่คุณคลิกจะไม่ใช่คำท้า OTP ที่ถูกต้อง"
 
-#: ../src/terminal-accels.c:100
+#: ../src/terminal-accels.c:119
 msgid "New Tab"
 msgstr "แท็บใหม่"
 
-#: ../src/terminal-accels.c:102
+#: ../src/terminal-accels.c:121
 msgid "New Window"
 msgstr "หน้าต่างใหม่"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:125
 msgid "Close Tab"
 msgstr "ปิดแท็บ"
 
-#: ../src/terminal-accels.c:108
+#: ../src/terminal-accels.c:127
 msgid "Close Window"
 msgstr "ปิดหน้าต่าง"
 
-#: ../src/terminal-accels.c:114
+#: ../src/terminal-accels.c:133
 msgid "Copy"
 msgstr "คัดลอก"
 
-#: ../src/terminal-accels.c:116
+#: ../src/terminal-accels.c:135
 msgid "Paste"
 msgstr "แปะ"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:141
 msgid "Hide and Show menubar"
 msgstr "ซ่อนหรือแสดงแถบเมนู"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:143
 msgid "Full Screen"
 msgstr "เต็มหน้าจอ"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:145
 msgid "Zoom In"
 msgstr "ขยาย"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:147
 msgid "Zoom Out"
 msgstr "ย่อ"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:149
 msgid "Normal Size"
 msgstr "ขนาดปกติ"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2991
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3253
 msgid "Set Title"
 msgstr "ตั้งหัวเรื่อง"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:157
 msgid "Reset"
 msgstr "ตั้งค่าใหม่"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:159
 msgid "Reset and Clear"
 msgstr "ตั้งค่าใหม่และลบ"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:165
 msgid "Switch to Previous Tab"
 msgstr "สลับไปที่แท็บก่อนหน้านี้"
 
-#: ../src/terminal-accels.c:148
+#: ../src/terminal-accels.c:167
 msgid "Switch to Next Tab"
 msgstr "สลับไปที่แท็บถัดไป"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:169
 msgid "Move Tab to the Left"
 msgstr "ย้ายแท็บไปทางซ้าย"
 
-#: ../src/terminal-accels.c:152
+#: ../src/terminal-accels.c:171
 msgid "Move Tab to the Right"
 msgstr "ย้ายแท็บไปทางขวา"
 
-#: ../src/terminal-accels.c:154
+#: ../src/terminal-accels.c:173
 msgid "Detach Tab"
 msgstr "ดึงแท็บออกมา"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:175
+msgid "Switch to Tab 1"
+msgstr "สลับไปที่แท็บ 1"
+
+#: ../src/terminal-accels.c:178
+msgid "Switch to Tab 2"
+msgstr "สลับไปที่แท็บ 2"
+
+#: ../src/terminal-accels.c:181
+msgid "Switch to Tab 3"
+msgstr "สลับไปที่แท็บ 3"
+
+#: ../src/terminal-accels.c:184
+msgid "Switch to Tab 4"
+msgstr "สลับไปที่แท็บ 4"
+
+#: ../src/terminal-accels.c:187
+msgid "Switch to Tab 5"
+msgstr "สลับไปที่แท็บ 5"
+
+#: ../src/terminal-accels.c:190
+msgid "Switch to Tab 6"
+msgstr "สลับไปที่แท็บ 6"
+
+#: ../src/terminal-accels.c:193
+msgid "Switch to Tab 7"
+msgstr "สลับไปที่แท็บ 7"
+
+#: ../src/terminal-accels.c:196
+msgid "Switch to Tab 8"
+msgstr "สลับไปที่แท็บ 8"
+
+#: ../src/terminal-accels.c:199
+msgid "Switch to Tab 9"
+msgstr "สลับไปที่แท็บ 9"
+
+#: ../src/terminal-accels.c:202
+msgid "Switch to Tab 10"
+msgstr "สลับไปที่แท็บ 10"
+
+#: ../src/terminal-accels.c:205
+msgid "Switch to Tab 11"
+msgstr "สลับไปที่แท็บ 11"
+
+#: ../src/terminal-accels.c:208
+msgid "Switch to Tab 12"
+msgstr "สลับไปที่แท็บ 12"
+
+#: ../src/terminal-accels.c:214
 msgid "Contents"
 msgstr "เนื้อหา"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:219
 msgid "File"
 msgstr "แฟ้ม"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:220
 msgid "Edit"
 msgstr "แก้ไข"
 
-#: ../src/terminal-accels.c:166
+#: ../src/terminal-accels.c:221
 msgid "View"
 msgstr "มุมมอง"
 
-#: ../src/terminal-accels.c:168
+#: ../src/terminal-accels.c:223
 msgid "Tabs"
 msgstr "แท็บ"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:224
 msgid "Help"
 msgstr "ระบบช่วยเหลือ"
 
-#: ../src/terminal-accels.c:234
+#: ../src/terminal-accels.c:281
 msgid "Disabled"
 msgstr "ยกเลิกการใช้งาน"
 
-#: ../src/terminal-accels.c:672
+#: ../src/terminal-accels.c:753
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "ปุ่มลัด “%s” ถูกกำหนดไว้ให้เชื่อมกับปฏิบัติการ “%s” แล้ว"
 
-#: ../src/terminal-accels.c:796
+#: ../src/terminal-accels.c:911
 msgid "_Action"
 msgstr "การ_ทำงาน"
 
-#: ../src/terminal-accels.c:815
+#: ../src/terminal-accels.c:930
 msgid "Shortcut _Key"
 msgstr "ปุ่ม_ลัด"
 
-#: ../src/terminal-app.c:408
+#: ../src/terminal-app.c:475
 msgid "Click button to choose profile"
 msgstr "คลิกปุ่มเพื่อเลือกโพรไฟล์"
 
-#: ../src/terminal-app.c:493
+#: ../src/terminal-app.c:560
 msgid "Profile list"
 msgstr "รายการโพรไฟล์"
 
-#: ../src/terminal-app.c:554
+#: ../src/terminal-app.c:621
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "ลบโพรไฟล์ “%s” หรือไม่?"
 
-#: ../src/terminal-app.c:570
+#: ../src/terminal-app.c:637
 msgid "Delete Profile"
 msgstr "ลบโพรไฟล์"
 
-#: ../src/terminal-app.c:946
+#: ../src/terminal-app.c:951
+msgid "User Defined"
+msgstr "ผู้ใช้กำหนดเอง"
+
+#: ../src/terminal-app.c:1106
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
 "profile with the same name?"
 msgstr "คุณมีโพรไฟล์ชื่อ “%s” อยู่แล้ว ต้องการสร้างโพรไฟล์ใหม่ด้วยชื่อเดียวกันหรือไม่?"
 
-#: ../src/terminal-app.c:1047
+#: ../src/terminal-app.c:1207
 msgid "Choose base profile"
 msgstr "เลือกโพรไฟล์หลัก"
 
-#: ../src/terminal.c:275
-#, c-format
-msgid ""
-"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"window-with-profile' option\n"
-msgstr ""
-"เทอร์มินัล GNOME รุ่นนี้ไม่รองรับตัวเลือก \"%s\" อีกต่อไป "
-"คุณอาจจะต้องสร้างโพรไฟล์ที่มีค่าตั้งที่ต้องการ แล้วใช้ตัวเลือกใหม่ --window-with-profile\n"
-
-#: ../src/terminal.c:298
-#, c-format
-msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "อาร์กิวเมนต์สำหรับ \"%s\" ไม่ใช่คำสั่งที่ถูกต้อง: %s\n"
-
-#: ../src/terminal.c:451
-msgid "Two roles given for one window"
-msgstr "กำหนดสองหน้าที่ให้หนึ่งหน้าต่าง"
-
-#: ../src/terminal.c:473 ../src/terminal.c:507
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "\"%s\" ตัวเลือกถูกกำหนดซ้ำในหน้าต่างเดียวกัน\n"
-
-#: ../src/terminal.c:666
-#, c-format
-msgid ""
-"Option \"%s\" requires specifying the command to run on the rest of the "
-"command line\n"
-msgstr "ตัวเลือก \"%s\" ต้องการการกำหนดคำสั่งเพื่อทำงานบนบรรทัดคำสั่งที่เหลือ\n"
-
-#: ../src/terminal.c:696
-#, c-format
-msgid "\"%s\" is not a valid zoom factor\n"
-msgstr "\"%s\" ไม่ใช่อัตราขยายที่ถูกต้อง\n"
-
-#: ../src/terminal.c:703
-#, c-format
-msgid "Zoom factor \"%g\" is too small, using %g\n"
-msgstr "อัตราขยาย \"%g\" มีค่าน้อยเกินไป จะใช้ค่า %g\n"
-
-#: ../src/terminal.c:711
-#, c-format
-msgid "Zoom factor \"%g\" is too large, using %g\n"
-msgstr "อัตราขยาย \"%g\" มีค่ามากเกินไป จะใช้ค่า %g\n"
-
-#: ../src/terminal.c:831
-#, c-format
-msgid "No argument given to \"%s\" option\n"
-msgstr "ไม่ได้กำหนดอาร์กิวเมนต์ให้แก่ตัวเลือก \"%s\"\n"
-
-#: ../src/terminal.c:853
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr "ตัวเลือก \"%s\" ต้องการอาร์กิวเมนต์\n"
-
-#: ../src/terminal.c:1036
+#: ../src/terminal-app.c:1730
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "ไม่มีโพรไฟล์ \"%s\" จะใช้โพรไฟล์ปริยายแทน\n"
 
-#: ../src/terminal.c:1055
+#: ../src/terminal-app.c:1750
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
-msgstr "ชุดอักขระเรขาคณิตไม่ถูกต้อง \"%s\"\n"
+msgstr "คำบรรยายค่าเรขาคณิตไม่ถูกต้อง \"%s\"\n"
 
-#: ../src/terminal.c:1288
-msgid "Execute the argument to this option inside the terminal."
-msgstr "เรียกใช้งานอาร์กิวเมนต์ตามตัวเลือกนี้ภายในเทอร์มินัล"
+#: ../src/terminal.c:191
+#, c-format
+msgid "Could not open link: %s"
+msgstr "ไม่สามารถเปิดลิงก์: %s"
 
-#: ../src/terminal.c:1297
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr "เรียกใช้งานบรรทัดคำสั่งที่เหลือภายในเทอร์มินัล"
+#: ../src/terminal.c:287
+#, c-format
+msgid "Failed to parse arguments: %s\n"
+msgstr "แจงอาร์กิวเมนต์ไม่สำเร็จ: %s\n"
 
-#: ../src/terminal.c:1306
+#. Incompatible factory version, fall back, to new instance
+#: ../src/terminal.c:417
+#, c-format
+msgid "Incompatible factory version; creating a new instance.\n"
+msgstr "รุ่นของโรงงานไม่เข้ากัน: จะสร้างชิ้นใหม่แทน\n"
+
+#: ../src/terminal.c:423
+#, c-format
+msgid "Factory error: %s\n"
+msgstr "ข้อผิดพลาดของโรงงาน: %s\n"
+
+#. { "UTF-8",	N_("Current Locale") },
+#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
+#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:101
+#: ../src/terminal-encoding.c:112
+msgid "Western"
+msgstr "ตะวันตก"
+
+#: ../src/terminal-encoding.c:53 ../src/terminal-encoding.c:80
+#: ../src/terminal-encoding.c:91 ../src/terminal-encoding.c:110
+msgid "Central European"
+msgstr "ยุโรปตอนกลาง"
+
+#: ../src/terminal-encoding.c:54
+msgid "South European"
+msgstr "ยุโรปตอนใต้"
+
+#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:63
+#: ../src/terminal-encoding.c:117
+msgid "Baltic"
+msgstr "บอลติก"
+
+#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:81
+#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:88
+#: ../src/terminal-encoding.c:93 ../src/terminal-encoding.c:111
+msgid "Cyrillic"
+msgstr "ซีริลลิก"
+
+#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:84
+#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
+msgid "Arabic"
+msgstr "อาหรับ"
+
+#: ../src/terminal-encoding.c:58 ../src/terminal-encoding.c:96
+#: ../src/terminal-encoding.c:113
+msgid "Greek"
+msgstr "กรีก"
+
+#: ../src/terminal-encoding.c:59
+msgid "Hebrew Visual"
+msgstr "ฮีบรูซ้ายไปขวา"
+
+#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:83
+#: ../src/terminal-encoding.c:99 ../src/terminal-encoding.c:115
+msgid "Hebrew"
+msgstr "ฮีบรู"
+
+#: ../src/terminal-encoding.c:61 ../src/terminal-encoding.c:82
+#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:114
+msgid "Turkish"
+msgstr "ตุรกี"
+
+#: ../src/terminal-encoding.c:62
+msgid "Nordic"
+msgstr "นอร์ดิก"
+
+#: ../src/terminal-encoding.c:64
+msgid "Celtic"
+msgstr "เซลติก"
+
+#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:102
+msgid "Romanian"
+msgstr "โรมาเนีย"
+
+#. These encodings do NOT pass-through ASCII, so are always rejected.
+#. * FIXME: why are they in this table; or rather why do we need
+#. * the ASCII pass-through requirement?
+#.
+#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:124
+#: ../src/terminal-encoding.c:125 ../src/terminal-encoding.c:126
+#: ../src/terminal-encoding.c:127
+msgid "Unicode"
+msgstr "ยูนิโค้ด"
+
+#: ../src/terminal-encoding.c:68
+msgid "Armenian"
+msgstr "อาร์เมเนีย"
+
+#: ../src/terminal-encoding.c:69 ../src/terminal-encoding.c:70
+#: ../src/terminal-encoding.c:74
+msgid "Chinese Traditional"
+msgstr "จีนตัวเต็ม"
+
+#: ../src/terminal-encoding.c:71
+msgid "Cyrillic/Russian"
+msgstr "ซีริลลิก/รัสเซีย"
+
+#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
+#: ../src/terminal-encoding.c:105
+msgid "Japanese"
+msgstr "ญี่ปุ่น"
+
+#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:86
+#: ../src/terminal-encoding.c:108 ../src/terminal-encoding.c:128
+msgid "Korean"
+msgstr "เกาหลี"
+
+#: ../src/terminal-encoding.c:75 ../src/terminal-encoding.c:76
+#: ../src/terminal-encoding.c:77
+msgid "Chinese Simplified"
+msgstr "จีนตัวย่อ"
+
+#: ../src/terminal-encoding.c:78
+msgid "Georgian"
+msgstr "จอร์เจีย"
+
+#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:104
+msgid "Cyrillic/Ukrainian"
+msgstr "ซีริลลิก/ยูเครน"
+
+#: ../src/terminal-encoding.c:92
+msgid "Croatian"
+msgstr "โครเอเชีย"
+
+#: ../src/terminal-encoding.c:94
+msgid "Hindi"
+msgstr "ฮินดี"
+
+#: ../src/terminal-encoding.c:95
+msgid "Persian"
+msgstr "เปอร์เซีย"
+
+#: ../src/terminal-encoding.c:97
+msgid "Gujarati"
+msgstr "คุชราตี"
+
+#: ../src/terminal-encoding.c:98
+msgid "Gurmukhi"
+msgstr "คุรุมุขี"
+
+#: ../src/terminal-encoding.c:100
+msgid "Icelandic"
+msgstr "ไอซ์แลนด์"
+
+#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:109
+#: ../src/terminal-encoding.c:118
+msgid "Vietnamese"
+msgstr "เวียดนาม"
+
+#: ../src/terminal-encoding.c:107
+msgid "Thai"
+msgstr "ไทย"
+
+#: ../src/terminal-encoding.c:480 ../src/terminal-encoding.c:505
+msgid "_Description"
+msgstr "คำ_บรรยาย"
+
+#: ../src/terminal-encoding.c:489 ../src/terminal-encoding.c:514
+msgid "_Encoding"
+msgstr "_รหัสอักขระ"
+
+#: ../src/terminal-encoding.c:574
+msgid "Current Locale"
+msgstr "ตามโลแคลปัจจุบัน"
+
+#: ../src/terminal-options.c:174
+#, c-format
 msgid ""
-"Open a new window containing a tab with the default profile. More than one "
-"of these options can be provided."
-msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโพรไฟล์ปริยาย ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก"
-
-#: ../src/terminal.c:1315
-msgid ""
-"Open a new window containing a tab with the given profile. More than one of "
-"these options can be provided."
-msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโพรไฟล์ที่กำหนดให้ ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก"
-
-#: ../src/terminal.c:1316 ../src/terminal.c:1334
-msgid "PROFILENAME"
-msgstr "PROFILENAME"
-
-#: ../src/terminal.c:1324
-msgid ""
-"Open a new tab in the last-opened window with the default profile. More than "
-"one of these options can be provided."
+"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"profile' option\n"
 msgstr ""
-"เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้โพรไฟล์ที่กำหนดโดยปริยาย "
-"ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก่"
+"เทอร์มินัล GNOME รุ่นนี้ไม่รองรับตัวเลือก \"%s\" อีกต่อไป "
+"คุณอาจจะต้องสร้างโพรไฟล์ที่มีค่าตั้งที่ต้องการ แล้วใช้ตัวเลือก --profile ซึ่งเป็นตัวเลือกใหม่\n"
 
-#: ../src/terminal.c:1333
+#: ../src/terminal-options.c:187 ../src/terminal-window.c:3472
+msgid "GNOME Terminal"
+msgstr "เทอร์มินัล GNOME"
+
+#: ../src/terminal-options.c:208
+#, c-format
+msgid "Argument to \"%s\" is not a valid command: %s"
+msgstr "อาร์กิวเมนต์สำหรับ \"%s\" ไม่ใช่คำสั่งที่ถูกต้อง: %s"
+
+#: ../src/terminal-options.c:343
+msgid "Two roles given for one window"
+msgstr "กำหนดสองหน้าที่ให้หนึ่งหน้าต่าง"
+
+#: ../src/terminal-options.c:364 ../src/terminal-options.c:397
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "\"%s\" ตัวเลือกถูกกำหนดซ้ำในหน้าต่างเดียวกัน\n"
+
+#: ../src/terminal-options.c:595
+#, c-format
+msgid "\"%s\" is not a valid zoom factor"
+msgstr "\"%s\" ไม่ใช่อัตราขยายที่ถูกต้อง"
+
+#: ../src/terminal-options.c:602
+#, c-format
+msgid "Zoom factor \"%g\" is too small, using %g\n"
+msgstr "อัตราขยาย \"%g\" มีค่าน้อยเกินไป จะใช้ค่า %g\n"
+
+#: ../src/terminal-options.c:610
+#, c-format
+msgid "Zoom factor \"%g\" is too large, using %g\n"
+msgstr "อัตราขยาย \"%g\" มีค่ามากเกินไป จะใช้ค่า %g\n"
+
+#: ../src/terminal-options.c:649
+#, c-format
 msgid ""
-"Open a new tab in the last-opened window with the given profile. More than "
-"one of these options can be provided."
-msgstr ""
-"เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้โพรไฟล์ที่กำหนด "
-"ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก"
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line"
+msgstr "ตัวเลือก \"%s\" ต้องตามด้วยคำสั่งที่จะเรียก โดยป้อนบนบรรทัดคำสั่งที่เหลือ"
 
-#: ../src/terminal.c:1342
-msgid ""
-"Open a new window containing a tab with the given profile ID. Used "
-"internally to save sessions."
-msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโดยใช้รหัสโพรไฟล์ที่กำหนด  ใช้ภายในเพื่อบันทึกเซสชัน"
+#: ../src/terminal-options.c:774
+msgid "Not a valid terminal config file."
+msgstr "ไม่ใช่แฟ้มค่าตั้งเทอร์มินัลที่ใช้การได้"
 
-#: ../src/terminal.c:1343 ../src/terminal.c:1352
-msgid "PROFILEID"
-msgstr "PROFILEIDPROFILEID"
+#. FIXME
+#: ../src/terminal-options.c:786
+msgid "Incompatible terminal config file version."
+msgstr "แฟ้มค่าตั้งเทอร์มินัลเป็นรุ่นที่ไม่เข้ากัน"
 
-#: ../src/terminal.c:1351
-msgid ""
-"Open a new tab in the last-opened window with the given profile ID. Used "
-"internally to save sessions."
-msgstr "เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้ ID โพรไฟล์ที่กำหนด ใช้ภายในเพื่อบันทึกเซสชัน"
-
-#: ../src/terminal.c:1360
-msgid ""
-"Set the role for the last-specified window; applies to only one window; can "
-"be specified once for each window you create from the command line."
-msgstr ""
-"ตั้งหน้าที่สำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
-"สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
-
-#: ../src/terminal.c:1361
-msgid "ROLE"
-msgstr "ROLE"
-
-#: ../src/terminal.c:1369
-msgid ""
-"Turn on the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"เปิดแถบเมนูสำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
-"สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
-
-#: ../src/terminal.c:1378
-msgid ""
-"Turn off the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"ปิดแถบเมนูสำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
-"สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
-
-#: ../src/terminal.c:1387
-msgid ""
-"Set the last-specified window into maximized mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"ตั้งหน้าต่างที่กำหนดล่าสุดให้ขยายหน้าต่างเต็มหน้าจอ มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
-"สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
-
-#: ../src/terminal.c:1396
-msgid ""
-"Set the last-specified window into fullscreen mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"ตั้งหน้าต่างที่กำหนดล่าสุดให้แสดงเต็มจอ มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
-"สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
-
-#: ../src/terminal.c:1405
-msgid ""
-"X geometry specification (see \"X\" man page), can be specified once per "
-"window to be opened."
-msgstr "ข้อกำหนดเรขาคณิต X (ดูในหน้าคู่มือ \"X\") สามารถกำหนดหนึ่งครั้งต่อหนึ่งหน้าต่างที่เปิดขึ้น"
-
-#: ../src/terminal.c:1406
-msgid "GEOMETRY"
-msgstr "GEOMETRY"
-
-#: ../src/terminal.c:1414
+#: ../src/terminal-options.c:895
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
-msgstr "ห้ามลงทะเบียนด้วยชื่อเซิร์ฟเวอร์การเปิดใช้งาน ห้ามเรียกใช้ซ้ำกับเทอร์มินัลที่ทำงานอยู่"
+msgstr ""
+"ไม่ต้องลงทะเบียนกับเซิร์ฟเวอร์สารบบชื่อสำหรับการเรียกทำงาน ไม่ต้องนำเทอร์มินัลที่ทำงานอยู่มาใช้ซ้ำ"
 
-#: ../src/terminal.c:1423
-msgid "Register with the activation nameserver [default]"
-msgstr "ห้ามลงทะเบียนด้วย nameserver ที่ใช้อยู่ [ค่าปริยาย]"
+#: ../src/terminal-options.c:904
+msgid "Load a terminal configuration file"
+msgstr "โหลดแฟ้มค่าตั้งเทอร์มินัล"
 
-#: ../src/terminal.c:1441
-msgid "Set the terminal's title"
-msgstr "ตั้งหัวเรื่องของเทอร์มินัล"
+#: ../src/terminal-options.c:913
+msgid "Save the terminal configuration to a file"
+msgstr "บันทึกค่าตั้งของเทอร์มินัลลงในแฟ้ม"
 
-#: ../src/terminal.c:1442
-msgid "TITLE"
-msgstr "TITLE"
+#: ../src/terminal-options.c:927
+msgid "Open a new window containing a tab with the default profile"
+msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโพรไฟล์ปริยาย"
 
-#: ../src/terminal.c:1450
-msgid "Set the terminal's working directory"
-msgstr "ตั้งไดเรกทอรีทำงานของเทอร์มินัล"
+#: ../src/terminal-options.c:936
+msgid "Open a new tab in the last-opened window with the default profile"
+msgstr "เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้โพรไฟล์ปริยาย"
 
-#: ../src/terminal.c:1451 ../src/terminal.c:1460
-msgid "DIRNAME"
-msgstr "DIRNAME"
+#: ../src/terminal-options.c:949
+msgid "Turn on the menubar"
+msgstr "แสดงแถบเมนู"
 
-#: ../src/terminal.c:1459
-msgid "Set the default terminal's working directory. Used internally"
-msgstr "ตั้งไดเรกทอรีทำงานของเทอร์มินัล ใช้เป็นการภายในเท่านั้น"
+#: ../src/terminal-options.c:958
+msgid "Turn off the menubar"
+msgstr "ปิดแถบเมนู"
 
-#: ../src/terminal.c:1468
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "ตั้งค่าอัตราขยายของเทอร์มินัล (1.0 = ขนาดปกติ)"
+#: ../src/terminal-options.c:967
+msgid "Maximise the window"
+msgstr "ขยายแผ่หน้าต่าง"
 
-#: ../src/terminal.c:1469
-msgid "ZOOMFACTOR"
-msgstr "ZOOMFACTOR"
+#: ../src/terminal-options.c:976
+msgid "Full-screen the window"
+msgstr "แสดงหน้าต่างแบบเต็มจอ"
 
-#: ../src/terminal.c:1477
+#: ../src/terminal-options.c:985
+msgid ""
+"Set the window geometry from the provided X geometry specification; see the "
+"\"X\" man page for more information"
+msgstr ""
+"กำหนดค่าเรขาคณิตของหน้าต่างตามข้อกำหนดเรขาคณิตของ X; ดูข้อมูลเพิ่มเติมได้จาก man page ของ "
+"\"X\""
+
+#: ../src/terminal-options.c:986
+msgid "GEOMETRY"
+msgstr "GEOMETRY"
+
+#: ../src/terminal-options.c:994
+msgid "Set the window role"
+msgstr "ตั้ง role ของหน้าต่าง"
+
+#: ../src/terminal-options.c:995
+msgid "ROLE"
+msgstr "ROLE"
+
+#: ../src/terminal-options.c:1003
 msgid "Set the last specified tab as the active one in its window"
 msgstr "ตั้งแท็บที่กำหนดล่าสุดเป็นแท็บที่ทำงานในหน้าต่างนั้น"
 
-#: ../src/terminal.c:1657 ../src/terminal.c:1660
+#: ../src/terminal-options.c:1016
+msgid "Execute the argument to this option inside the terminal"
+msgstr "เรียกคำสั่งที่เป็นอาร์กิวเมนต์ของตัวเลือกนี้ในเทอร์มินัล"
+
+#: ../src/terminal-options.c:1025
+msgid "Use the given profile instead of the default profile"
+msgstr "ใช้โพรไฟล์ที่กำหนดแทนโพรไฟล์ปริยาย"
+
+#: ../src/terminal-options.c:1026
+msgid "PROFILE-NAME"
+msgstr "PROFILE-NAME"
+
+#: ../src/terminal-options.c:1034
+msgid "Set the terminal title"
+msgstr "ตั้งหัวหน้าต่างของเทอร์มินัล"
+
+#: ../src/terminal-options.c:1035
+msgid "TITLE"
+msgstr "TITLE"
+
+#: ../src/terminal-options.c:1043
+msgid "Set the working directory"
+msgstr "ตั้งไดเรกทอรีทำงาน"
+
+#: ../src/terminal-options.c:1044
+msgid "DIRNAME"
+msgstr "DIRNAME"
+
+#: ../src/terminal-options.c:1052
+msgid "Set the terminalx's zoom factor (1.0 = normal size)"
+msgstr "ตั้งค่าอัตราขยายของเทอร์มินัล (1.0 = ขนาดปกติ)"
+
+#: ../src/terminal-options.c:1053
+msgid "ZOOM"
+msgstr "ZOOM"
+
+#: ../src/terminal-options.c:1303 ../src/terminal-options.c:1306
 msgid "GNOME Terminal Emulator"
 msgstr "เทอร์มินัลเทียมของ GNOME"
 
-#: ../src/terminal.c:1661
+#: ../src/terminal-options.c:1307
 msgid "Show GNOME Terminal options"
 msgstr "แสดงตัวเลือกของเทอร์มินัล GNOME"
 
-#: ../src/terminal.c:1818
-#, c-format
+#: ../src/terminal-options.c:1317
 msgid ""
-"It appears that you do not have gnome-terminal.server installed in a valid "
-"location. Factory mode disabled.\n"
-msgstr ""
-"ปรากฏว่าคุณไม่มีเทอร์มินัล gnome-terminal.server ติดตั้งไว้ในตำแหน่งที่ถูกต้อง "
-"ยกเลิกโหมดโรงงาน\n"
+"Options to open new windows or terminal tabs; more than one of these may be "
+"specified:"
+msgstr "ตัวเลือกสำหรับเปิดหน้าต่างใหม่หรือแท็บเทอร์มินัลใหม่ สามารถกำหนดได้มากกว่าหนึ่งตัวเลือก"
 
-#: ../src/terminal.c:1821
-#, c-format
+#: ../src/terminal-options.c:1318
+msgid "Show terminal options"
+msgstr "แสดงตัวเลือกของเทอร์มินัล"
+
+#: ../src/terminal-options.c:1326
 msgid ""
-"Error registering terminal with the activation service; factory mode "
-"disabled.\n"
+"Window options; if used before the first --window or --tab argument, sets "
+"the default for all windows:"
 msgstr ""
-"เกิดข้อผิดพลาดขณะลงทะเบียนเทอร์มินัลเข้ากับบริการ activation  ดังนั้น "
-"จะปิดการใช้งานโหมดโรงงาน\n"
+"ตัวเลือกสำหรับหน้าต่าง ถ้าใช้ก่อนตัวเลือก --window หรือ --tab แรก "
+"จะกำหนดเป็นค่าปริยายของทุกหน้าต่าง:"
 
-#: ../src/terminal.c:1860
-#, c-format
-msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "ไม่สามารถอ่านเซิร์ฟเวอร์เทอร์มินัลจากเซิร์ฟเวอร์ activation\n"
+#: ../src/terminal-options.c:1327
+msgid "Show per-window options"
+msgstr "แสดงตัวเลือกสำหรับแต่ละหน้าต่าง"
 
-#: ../src/terminal-profile.c:155
+#: ../src/terminal-options.c:1335
+msgid ""
+"Terminal options; if used before the first --window or --tab argument, sets "
+"the default for all terminals:"
+msgstr ""
+"ตัวเลือกสำหรับเทอร์มินัล ถ้าใช้ก่อนตัวเลือก --window หรือ --tab แรก "
+"จะกำหนดเป็นค่าปริยายของทุกเทอร์มินัล:"
+
+#: ../src/terminal-options.c:1336
+msgid "Show per-terminal options"
+msgstr "แสดงตัวเลือกสำหรับแต่ละเทอร์มินัล"
+
+#: ../src/terminal-profile.c:150
 msgid "Unnamed"
 msgstr "ไม่มีชื่อ"
 
-#: ../src/terminal-screen.c:1243
+#: ../src/terminal-screen.c:1222
 #, c-format
 msgid "There was a problem with the command for this terminal: %s"
 msgstr "เกิดปัญหากับคำสั่งสำหรับเทอร์มินัลนี้: %s"
 
-#: ../src/terminal-screen.c:1539
+#: ../src/terminal-screen.c:1514
 msgid "There was an error creating the child process for this terminal"
 msgstr "เกิดข้อผิดพลาดขณะสร้างกระบวนการลูกสำหรับเทอร์มินัลนี้:"
 
-#: ../src/terminal-tabs-menu.c:198
+#: ../src/terminal-tab-label.c:151
+msgid "Close tab"
+msgstr "ปิดแท็บ"
+
+#: ../src/terminal-tabs-menu.c:200
 msgid "Switch to this tab"
 msgstr "สลับมาที่แท็บนี้"
 
-#: ../src/terminal-util.c:127
+#: ../src/terminal-util.c:170
 #, c-format
 msgid "There was an error displaying help: %s"
 msgstr "เกิดข้อผิดพลาดในการแสดงข้อความช่วยเหลือ: %s"
 
-#: ../src/terminal-util.c:214
+#: ../src/terminal-util.c:242
 #, c-format
 msgid ""
 "Could not open the address “%s”:\n"
@@ -1758,206 +2000,7 @@ msgstr ""
 "ไม่สามารถเปิดที่อยู่ “%s”:\n"
 "%s"
 
-#: ../src/terminal-window.c:410
-#, c-format
-msgid "_%d. %s"
-msgstr "_%d. %s"
-
-#: ../src/terminal-window.c:412
-#, c-format
-msgid "_%c. %s"
-msgstr "_%c. %s"
-
-#. Toplevel
-#: ../src/terminal-window.c:1330
-msgid "_File"
-msgstr "แ_ฟ้ม"
-
-#. File menu
-#: ../src/terminal-window.c:1331 ../src/terminal-window.c:1342
-#: ../src/terminal-window.c:1461
-msgid "Open _Terminal"
-msgstr "เปิดเ_ทอร์มินัล"
-
-#: ../src/terminal-window.c:1332 ../src/terminal-window.c:1345
-#: ../src/terminal-window.c:1464
-msgid "Open Ta_b"
-msgstr "แท็_บใหม่"
-
-#: ../src/terminal-window.c:1333
-msgid "_Edit"
-msgstr "แ_ก้ไข"
-
-#: ../src/terminal-window.c:1334
-msgid "_View"
-msgstr "มุ_มมอง"
-
-#: ../src/terminal-window.c:1335
-msgid "_Terminal"
-msgstr "เ_ทอร์มินัล"
-
-#: ../src/terminal-window.c:1336
-msgid "_Tabs"
-msgstr "แท็_บ"
-
-#: ../src/terminal-window.c:1337
-msgid "_Help"
-msgstr "_วิธีใช้"
-
-#: ../src/terminal-window.c:1348
-msgid "New _Profile…"
-msgstr "โ_พรไฟล์ใหม่…"
-
-#: ../src/terminal-window.c:1351 ../src/terminal-window.c:1470
-msgid "C_lose Tab"
-msgstr "ปิ_ดแท็บ"
-
-#: ../src/terminal-window.c:1354
-msgid "_Close Window"
-msgstr "ปิดห_น้าต่าง"
-
-#: ../src/terminal-window.c:1365 ../src/terminal-window.c:1458
-msgid "Paste _Filenames"
-msgstr "แปะ_ชื่อแฟ้ม"
-
-#: ../src/terminal-window.c:1368
-msgid "P_rofiles…"
-msgstr "โ_พรไฟล์…"
-
-#: ../src/terminal-window.c:1371
-msgid "_Keyboard Shortcuts…"
-msgstr "ปุ่ม_ลัด"
-
-#: ../src/terminal-window.c:1374
-msgid "Profile _Preferences"
-msgstr "_ปรับแต่งโพรไฟล์"
-
-#. Terminal menu
-#: ../src/terminal-window.c:1390
-msgid "Change _Profile"
-msgstr "เปลี่ยนโ_พรไฟล์"
-
-#: ../src/terminal-window.c:1391
-msgid "_Set Title…"
-msgstr "ตั้งป้าย_ชื่อ…"
-
-#: ../src/terminal-window.c:1394
-msgid "Set _Character Encoding"
-msgstr "ตั้งค่า_รหัสอักขระ"
-
-#: ../src/terminal-window.c:1395
-msgid "_Reset"
-msgstr "_คืนค่าเดิม"
-
-#: ../src/terminal-window.c:1398
-msgid "Reset and C_lear"
-msgstr "คืนค่าเดิมและ_ลบจอ"
-
-#. Terminal/Encodings menu
-#: ../src/terminal-window.c:1403
-msgid "_Add or Remove…"
-msgstr "เ_พิ่มหรือลด…"
-
-#. Tabs menu
-#: ../src/terminal-window.c:1408
-msgid "_Previous Tab"
-msgstr "แท็บ_ก่อน"
-
-#: ../src/terminal-window.c:1411
-msgid "_Next Tab"
-msgstr "แท็บ_ถัดไป"
-
-#: ../src/terminal-window.c:1414
-msgid "Move Tab _Left"
-msgstr "ย้ายแท็บไปทางซ้า_ย"
-
-#: ../src/terminal-window.c:1417
-msgid "Move Tab _Right"
-msgstr "ย้ายแท็บไปทาง_ขวา"
-
-#: ../src/terminal-window.c:1420
-msgid "_Detach tab"
-msgstr "_ดึงแท็บออกมา"
-
-#. Help menu
-#: ../src/terminal-window.c:1425
-msgid "_Contents"
-msgstr "เนื้อ_หา"
-
-#: ../src/terminal-window.c:1428
-msgid "_About"
-msgstr "เ_กี่ยวกับ"
-
-#. Popup menu
-#: ../src/terminal-window.c:1433
-msgid "_Send Mail To…"
-msgstr "ส่งเ_มลถึง…"
-
-#: ../src/terminal-window.c:1436
-msgid "_Copy E-mail Address"
-msgstr "คัดลอก_ที่อยู่อีเมล"
-
-#: ../src/terminal-window.c:1439
-msgid "C_all To…"
-msgstr "เ_รียกสายไปยัง…"
-
-#: ../src/terminal-window.c:1442
-msgid "_Copy Call Address"
-msgstr "คัดลอก_ที่อยู่เรียกสาย"
-
-#: ../src/terminal-window.c:1445
-msgid "_Open Link"
-msgstr "_เปิดลิงก์"
-
-#: ../src/terminal-window.c:1448
-msgid "_Copy Link Address"
-msgstr "คัด_ลอกที่อยู่ลิงก์"
-
-#: ../src/terminal-window.c:1451
-msgid "P_rofiles"
-msgstr "โ_พรไฟล์ "
-
-#: ../src/terminal-window.c:1467
-msgid "C_lose Window"
-msgstr "ปิ_ดหน้าต่าง"
-
-#: ../src/terminal-window.c:1473
-msgid "_Input Methods"
-msgstr "วิธี_ป้อนข้อมูล"
-
-#. View Menu
-#: ../src/terminal-window.c:1479
-msgid "Show _Menubar"
-msgstr "แสดงแถบเ_มนู"
-
-#: ../src/terminal-window.c:1483
-msgid "_Full Screen"
-msgstr "เ_ต็มจอ"
-
-#: ../src/terminal-window.c:1918
-msgid "Close tab"
-msgstr "ปิดแท็บ"
-
-#: ../src/terminal-window.c:2643
-msgid "Close all tabs?"
-msgstr "จะปิดแท็บทั้งหมดหรือไม่?"
-
-#: ../src/terminal-window.c:2645
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all tabs."
-msgstr[0] "หน้าต่างนี้เปิดแท็บไว้ %d แท็บ การปิดหน้าต่างจะปิดแท็บทั้งหมดในหน้าต่าง"
-
-#: ../src/terminal-window.c:2654
-msgid "Close All _Tabs"
-msgstr "ปิดแ_ท็บทั้งหมด"
-
-#: ../src/terminal-window.c:3007
-msgid "_Title:"
-msgstr "_หัวเรื่อง:"
-
-#: ../src/terminal-window.c:3162
+#: ../src/terminal-util.c:317
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1968,7 +2011,7 @@ msgstr ""
 "ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี "
 "ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
 
-#: ../src/terminal-window.c:3166
+#: ../src/terminal-util.c:321
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1980,7 +2023,7 @@ msgstr ""
 "*ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ* กรุณาอ่าน GNU General Public License "
 "เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: ../src/terminal-window.c:3170
+#: ../src/terminal-util.c:325
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -1990,20 +2033,356 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., 51 Franklin St, Fifth "
 "Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/terminal-window.c:3179
-msgid "GNOME Terminal"
-msgstr "เทอร์มินัล GNOME"
+#: ../src/terminal-window.c:419
+#, c-format
+msgid "_%d. %s"
+msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:3181
+#: ../src/terminal-window.c:421
+#, c-format
+msgid "_%c. %s"
+msgstr "_%c. %s"
+
+#. Toplevel
+#: ../src/terminal-window.c:1553
+msgid "_File"
+msgstr "แ_ฟ้ม"
+
+#. File menu
+#: ../src/terminal-window.c:1554 ../src/terminal-window.c:1565
+#: ../src/terminal-window.c:1687
+msgid "Open _Terminal"
+msgstr "เปิดเ_ทอร์มินัล"
+
+#: ../src/terminal-window.c:1555 ../src/terminal-window.c:1568
+#: ../src/terminal-window.c:1690
+msgid "Open Ta_b"
+msgstr "แท็_บใหม่"
+
+#: ../src/terminal-window.c:1556
+msgid "_Edit"
+msgstr "แ_ก้ไข"
+
+#: ../src/terminal-window.c:1557
+msgid "_View"
+msgstr "มุ_มมอง"
+
+#: ../src/terminal-window.c:1558
+msgid "_Terminal"
+msgstr "เ_ทอร์มินัล"
+
+#: ../src/terminal-window.c:1559
+msgid "Ta_bs"
+msgstr "แท็_บ"
+
+#: ../src/terminal-window.c:1560
+msgid "_Help"
+msgstr "_วิธีใช้"
+
+#: ../src/terminal-window.c:1571
+msgid "New _Profile…"
+msgstr "โ_พรไฟล์ใหม่…"
+
+#: ../src/terminal-window.c:1574 ../src/terminal-window.c:1696
+msgid "C_lose Tab"
+msgstr "ปิ_ดแท็บ"
+
+#: ../src/terminal-window.c:1577 ../src/terminal-window.c:2907
+msgid "_Close Window"
+msgstr "ปิดห_น้าต่าง"
+
+#: ../src/terminal-window.c:1588 ../src/terminal-window.c:1684
+msgid "Paste _Filenames"
+msgstr "แปะ_ชื่อแฟ้ม"
+
+#: ../src/terminal-window.c:1594
+msgid "P_rofiles…"
+msgstr "โ_พรไฟล์…"
+
+#: ../src/terminal-window.c:1597
+msgid "_Keyboard Shortcuts…"
+msgstr "ปุ่ม_ลัด"
+
+#: ../src/terminal-window.c:1600
+msgid "Pr_ofile Preferences"
+msgstr "_ปรับแต่งโพรไฟล์"
+
+#. Terminal menu
+#: ../src/terminal-window.c:1616
+msgid "Change _Profile"
+msgstr "เปลี่ยนโ_พรไฟล์"
+
+#: ../src/terminal-window.c:1617
+msgid "_Set Title…"
+msgstr "ตั้งป้าย_ชื่อ…"
+
+#: ../src/terminal-window.c:1620
+msgid "Set _Character Encoding"
+msgstr "ตั้งค่า_รหัสอักขระ"
+
+#: ../src/terminal-window.c:1621
+msgid "_Reset"
+msgstr "_คืนค่าเดิม"
+
+#: ../src/terminal-window.c:1624
+msgid "Reset and C_lear"
+msgstr "คืนค่าเดิมและ_ลบจอ"
+
+#. Terminal/Encodings menu
+#: ../src/terminal-window.c:1629
+msgid "_Add or Remove…"
+msgstr "เ_พิ่มหรือลด…"
+
+#. Tabs menu
+#: ../src/terminal-window.c:1634
+msgid "_Previous Tab"
+msgstr "แท็บ_ก่อน"
+
+#: ../src/terminal-window.c:1637
+msgid "_Next Tab"
+msgstr "แท็บ_ถัดไป"
+
+#: ../src/terminal-window.c:1640
+msgid "Move Tab _Left"
+msgstr "ย้ายแท็บไปทางซ้า_ย"
+
+#: ../src/terminal-window.c:1643
+msgid "Move Tab _Right"
+msgstr "ย้ายแท็บไปทาง_ขวา"
+
+#: ../src/terminal-window.c:1646
+msgid "_Detach tab"
+msgstr "_ดึงแท็บออกมา"
+
+#. Help menu
+#: ../src/terminal-window.c:1651
+msgid "_Contents"
+msgstr "เนื้อ_หา"
+
+#: ../src/terminal-window.c:1654
+msgid "_About"
+msgstr "เ_กี่ยวกับ"
+
+#. Popup menu
+#: ../src/terminal-window.c:1659
+msgid "_Send Mail To…"
+msgstr "ส่งเ_มลถึง…"
+
+#: ../src/terminal-window.c:1662
+msgid "_Copy E-mail Address"
+msgstr "คัดลอก_ที่อยู่อีเมล"
+
+#: ../src/terminal-window.c:1665
+msgid "C_all To…"
+msgstr "เ_รียกสายไปยัง…"
+
+#: ../src/terminal-window.c:1668
+msgid "_Copy Call Address"
+msgstr "คัดลอก_ที่อยู่เรียกสาย"
+
+#: ../src/terminal-window.c:1671
+msgid "_Open Link"
+msgstr "_เปิดลิงก์"
+
+#: ../src/terminal-window.c:1674
+msgid "_Copy Link Address"
+msgstr "คัด_ลอกที่อยู่ลิงก์"
+
+#: ../src/terminal-window.c:1677
+msgid "P_rofiles"
+msgstr "โ_พรไฟล์ "
+
+#: ../src/terminal-window.c:1693
+msgid "C_lose Window"
+msgstr "ปิ_ดหน้าต่าง"
+
+#: ../src/terminal-window.c:1699
+msgid "_Input Methods"
+msgstr "วิธี_ป้อนข้อมูล"
+
+#. View Menu
+#: ../src/terminal-window.c:1705
+msgid "Show _Menubar"
+msgstr "แสดงแถบเ_มนู"
+
+#: ../src/terminal-window.c:1709
+msgid "_Full Screen"
+msgstr "เ_ต็มจอ"
+
+#: ../src/terminal-window.c:2894
+msgid "Close this terminal?"
+msgstr "จะปิดเทอร์มินัลนี้หรือไม่"
+
+#: ../src/terminal-window.c:2894
+msgid "Close this window?"
+msgstr "จะปิดหน้าต่างนี้หรือไม่"
+
+#: ../src/terminal-window.c:2898
+msgid ""
+"There are still processes running in some terminals in this window. Closing "
+"the window will kill all of them."
+msgstr ""
+"ยังมีโพรเซสทำงานอยู่ในบางเทอร์มินัลในหน้าต่างนี้ ถ้าปิดหน้าต่าง ก็จะเป็นการฆ่าโพรเซสเหล่านั้นทั้งหมด"
+
+#: ../src/terminal-window.c:2902
+msgid ""
+"There is still a process running in this terminal. Closing the terminal will "
+"kill it."
+msgstr "ยังมีโพรเซสหนึ่งทำงานอยู่ในเทอร์มินัลนี้ ถ้าปิดเทอร์มินัล ก็จะเป็นการฆ่าโพรเซสดังกล่าว"
+
+#: ../src/terminal-window.c:2907
+msgid "_Close Terminal"
+msgstr "ปิดเ_ทอร์มินัล"
+
+#: ../src/terminal-window.c:3269
+msgid "_Title:"
+msgstr "_หัวเรื่อง:"
+
+#: ../src/terminal-window.c:3455
+msgid "Contributors:"
+msgstr "ผู้ร่วมสมทบ:"
+
+#: ../src/terminal-window.c:3474
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "โปรแกรมเทอร์มินัลเทียมสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/terminal-window.c:3186
+#: ../src/terminal-window.c:3481
 msgid "translator-credits"
 msgstr ""
 "ชัชวาลย์ หาญสกุลบันเทิง <chatchawarnh@nectec.or.th>\n"
 "ชาญชัย จันฤๅชัย <taz@opentle.org>\n"
 "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
+
+#~ msgid ""
+#~ "If true, font anti-aliasing will be disabled when running without the X "
+#~ "RENDER extension, which gives a considerable performance improvement in "
+#~ "these situations."
+#~ msgstr ""
+#~ "ถ้าเลือก จะปิดการลบรอยหยักเมื่อทำงานโดยไม่มีส่วนขยาย X RENDER "
+#~ "ซึ่งจะเพิ่มประสิทธิภาพการทำงานของโปรแกรมพอสมควร ภายใต้สภาวะดังกล่าว"
+
+#~ msgid "Whether to disable anti-aliasing without the X RENDER extension"
+#~ msgstr "กำหนดว่าจะไม่ใช้การลบรอยหยักเมื่อไม่มีส่วนขยาย X RENDER หรือไม่"
+
+#~ msgid "No argument given to \"%s\" option\n"
+#~ msgstr "ไม่ได้กำหนดอาร์กิวเมนต์ให้แก่ตัวเลือก \"%s\"\n"
+
+#~ msgid "\"%s\" option requires an argument\n"
+#~ msgstr "ตัวเลือก \"%s\" ต้องการอาร์กิวเมนต์\n"
+
+#~ msgid "Execute the remainder of the command line inside the terminal."
+#~ msgstr "เรียกใช้งานบรรทัดคำสั่งที่เหลือภายในเทอร์มินัล"
+
+#~ msgid ""
+#~ "Open a new window containing a tab with the given profile. More than one "
+#~ "of these options can be provided."
+#~ msgstr ""
+#~ "เปิดหน้าต่างใหม่ที่มีแท็บตามโพรไฟล์ที่กำหนดให้ ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก"
+
+#~ msgid ""
+#~ "Open a new tab in the last-opened window with the given profile. More "
+#~ "than one of these options can be provided."
+#~ msgstr ""
+#~ "เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้โพรไฟล์ที่กำหนด "
+#~ "ตัวเลือกเหล่านี้สามารถมีได้มากกว่าหนึ่งตัวเลือก"
+
+#~ msgid ""
+#~ "Open a new window containing a tab with the given profile ID. Used "
+#~ "internally to save sessions."
+#~ msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโดยใช้รหัสโพรไฟล์ที่กำหนด  ใช้ภายในเพื่อบันทึกเซสชัน"
+
+#~ msgid "PROFILEID"
+#~ msgstr "PROFILEIDPROFILEID"
+
+#~ msgid ""
+#~ "Open a new tab in the last-opened window with the given profile ID. Used "
+#~ "internally to save sessions."
+#~ msgstr "เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้ ID โพรไฟล์ที่กำหนด ใช้ภายในเพื่อบันทึกเซสชัน"
+
+#~ msgid ""
+#~ "Set the role for the last-specified window; applies to only one window; "
+#~ "can be specified once for each window you create from the command line."
+#~ msgstr ""
+#~ "ตั้งหน้าที่สำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
+#~ "สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
+
+#~ msgid ""
+#~ "Turn on the menubar for the last-specified window; applies to only one "
+#~ "window; can be specified once for each window you create from the command "
+#~ "line."
+#~ msgstr ""
+#~ "เปิดแถบเมนูสำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
+#~ "สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
+
+#~ msgid ""
+#~ "Turn off the menubar for the last-specified window; applies to only one "
+#~ "window; can be specified once for each window you create from the command "
+#~ "line."
+#~ msgstr ""
+#~ "ปิดแถบเมนูสำหรับหน้าต่างที่กำหนดล่าสุด มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
+#~ "สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
+
+#~ msgid ""
+#~ "Set the last-specified window into maximized mode; applies to only one "
+#~ "window; can be specified once for each window you create from the command "
+#~ "line."
+#~ msgstr ""
+#~ "ตั้งหน้าต่างที่กำหนดล่าสุดให้ขยายหน้าต่างเต็มหน้าจอ มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
+#~ "สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
+
+#~ msgid ""
+#~ "Set the last-specified window into fullscreen mode; applies to only one "
+#~ "window; can be specified once for each window you create from the command "
+#~ "line."
+#~ msgstr ""
+#~ "ตั้งหน้าต่างที่กำหนดล่าสุดให้แสดงเต็มจอ มีผลกับหน้าต่างเพียงหน้าต่างเดียว "
+#~ "สามารถกำหนดได้ครั้งเดียวต่อหน้าต่างแต่ละหน้าต่างที่คุณสร้างจากบรรทัดคำสั่ง"
+
+#~ msgid ""
+#~ "X geometry specification (see \"X\" man page), can be specified once per "
+#~ "window to be opened."
+#~ msgstr ""
+#~ "ข้อกำหนดเรขาคณิต X (ดูในหน้าคู่มือ \"X\") สามารถกำหนดหนึ่งครั้งต่อหนึ่งหน้าต่างที่เปิดขึ้น"
+
+#~ msgid "Register with the activation nameserver [default]"
+#~ msgstr "ห้ามลงทะเบียนด้วย nameserver ที่ใช้อยู่ [ค่าปริยาย]"
+
+#~ msgid "Set the default terminal's working directory. Used internally"
+#~ msgstr "ตั้งไดเรกทอรีทำงานของเทอร์มินัล ใช้เป็นการภายในเท่านั้น"
+
+#~ msgid "ZOOMFACTOR"
+#~ msgstr "ZOOMFACTOR"
+
+#~ msgid ""
+#~ "It appears that you do not have gnome-terminal.server installed in a "
+#~ "valid location. Factory mode disabled.\n"
+#~ msgstr ""
+#~ "ปรากฏว่าคุณไม่มีเทอร์มินัล gnome-terminal.server ติดตั้งไว้ในตำแหน่งที่ถูกต้อง "
+#~ "ยกเลิกโหมดโรงงาน\n"
+
+#~ msgid ""
+#~ "Error registering terminal with the activation service; factory mode "
+#~ "disabled.\n"
+#~ msgstr ""
+#~ "เกิดข้อผิดพลาดขณะลงทะเบียนเทอร์มินัลเข้ากับบริการ activation  ดังนั้น "
+#~ "จะปิดการใช้งานโหมดโรงงาน\n"
+
+#~ msgid "Failed to retrieve terminal server from activation server\n"
+#~ msgstr "ไม่สามารถอ่านเซิร์ฟเวอร์เทอร์มินัลจากเซิร์ฟเวอร์ activation\n"
+
+#~ msgid "_Tabs"
+#~ msgstr "แท็_บ"
+
+#~ msgid "Close all tabs?"
+#~ msgstr "จะปิดแท็บทั้งหมดหรือไม่?"
+
+#~ msgid "This window has one tab open. Closing the window will close it."
+#~ msgid_plural ""
+#~ "This window has %d tabs open. Closing the window will also close all tabs."
+#~ msgstr[0] "หน้าต่างนี้เปิดแท็บไว้ %d แท็บ การปิดหน้าต่างจะปิดแท็บทั้งหมดในหน้าต่าง"
+
+#~ msgid "Close All _Tabs"
+#~ msgstr "ปิดแ_ท็บทั้งหมด"
 
 #~ msgid "Go"
 #~ msgstr "ไปที่"
@@ -2280,186 +2659,6 @@ msgstr ""
 #~ msgid "<b>General</b>"
 #~ msgstr "<b>ทั่วไป</b>"
 
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 1. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 1 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 10 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 11 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 12 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 2. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 2 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 3. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 3 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 4. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 4 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 5. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 5 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 6. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 6 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 7. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 7 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 8. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 8 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 9. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 9 กำหนดโดยข้อความที่มีรูปแบบเหมือนกับที่ใช้ในแฟ้ม resource ของ "
-#~ "GTK+ ถ้าคุณกำหนดตัวเลือกนี้เป็นค่าพิเศษ \"disabled\" จะไม่มีปุ่มลัดสำหรับปฏิบัติการนี้"
-
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 1"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 10"
-
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 11"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 12"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 2"
-
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 3"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 4"
-
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 5"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 6"
-
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 7"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 8"
-
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "ปุ่มลัดสำหรับเปลี่ยนไปที่แท็บ 9"
-
-#~ msgid "Switch to Tab 1"
-#~ msgstr "สลับไปที่แท็บ 1"
-
-#~ msgid "Switch to Tab 2"
-#~ msgstr "สลับไปที่แท็บ 2"
-
-#~ msgid "Switch to Tab 3"
-#~ msgstr "สลับไปที่แท็บ 3"
-
-#~ msgid "Switch to Tab 4"
-#~ msgstr "สลับไปที่แท็บ 4"
-
-#~ msgid "Switch to Tab 5"
-#~ msgstr "สลับไปที่แท็บ 5"
-
-#~ msgid "Switch to Tab 6"
-#~ msgstr "สลับไปที่แท็บ 6"
-
-#~ msgid "Switch to Tab 7"
-#~ msgstr "สลับไปที่แท็บ 7"
-
-#~ msgid "Switch to Tab 8"
-#~ msgstr "สลับไปที่แท็บ 8"
-
-#~ msgid "Switch to Tab 9"
-#~ msgstr "สลับไปที่แท็บ 9"
-
-#~ msgid "Switch to Tab 10"
-#~ msgstr "สลับไปที่แท็บ 10"
-
-#~ msgid "Switch to Tab 11"
-#~ msgstr "สลับไปที่แท็บ 11"
-
-#~ msgid "Switch to Tab 12"
-#~ msgstr "สลับไปที่แท็บ 12"
-
 #~ msgid "Error setting new accelerator in configuration database: %s\n"
 #~ msgstr "เกิดข้อผิดพลาดในการตั้งค่าปุ่มลัดอันใหม่ในฐานข้อมูลการตั้งค่า: %s\n"
 
@@ -2496,12 +2695,6 @@ msgstr ""
 
 #~ msgid "_Set Title..."
 #~ msgstr "ตั้ง_หัวเรื่อง..."
-
-#~ msgid "Could not load icon \"%s\": %s\n"
-#~ msgstr "ไม่สามารถโหลดไอคอน \"%s\": %s\n"
-
-#~ msgid "Cursor blin_ks"
-#~ msgstr "เคอร์เซอร์_กะพริบ"
 
 #~ msgid ""
 #~ "True if the cursor should blink when the terminal has focus, for windows/"
@@ -2604,9 +2797,6 @@ msgstr ""
 
 #~ msgid "\"%s\" option given twice\n"
 #~ msgstr "กำหนดตัวเลือก \"%s\" ซ้ำ\n"
-
-#~ msgid "Invalid argument: \"%s\"\n"
-#~ msgstr "อาร์กิวเมนต์ไม่ถูกต้อง: \"%s\"\n"
 
 #~ msgid "New accelerator..."
 #~ msgstr "ปุ่มลัดใหม่..."
@@ -2718,9 +2908,6 @@ msgstr ""
 
 #~ msgid "Control-H"
 #~ msgstr "ปุ่ม Control-H"
-
-#~ msgid "Exit the terminal"
-#~ msgstr "ออกจากเทอร์มินัล"
 
 #~ msgid "Goes after initial title"
 #~ msgstr "ตามหลังหัวเรื่องเริ่มต้น"
