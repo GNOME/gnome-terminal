@@ -1581,19 +1581,19 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreenPrivate *priv = screen->priv;
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  int char_width, char_height, x, y, xpad, ypad;
+  int char_width, char_height, row, col, xpad_total, ypad_total;
   char *matched_string;
   int matched_flavor = 0;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad, &ypad);
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
+  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad_total, &ypad_total);
 
-  x = (event->x - xpad) / char_width;
-  y = (event->y - ypad) / char_height;
-  matched_string = terminal_screen_check_match (screen, x, y, &matched_flavor);
+  row = (event->x - xpad_total / 2) / char_width;
+  col = (event->y - ypad_total / 2) / char_height;
+  matched_string = terminal_screen_check_match (screen, row, col, &matched_flavor);
   
   if (matched_string != NULL &&
       (event->button == 1 || event->button == 2) &&
