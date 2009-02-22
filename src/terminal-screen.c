@@ -556,7 +556,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_object_class_install_property
     (object_class,
-     PROP_ICON_TITLE,
+     PROP_OVERRIDE_COMMAND,
      g_param_spec_boxed ("override-command", NULL, NULL,
                          G_TYPE_STRV,
                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
