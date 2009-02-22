@@ -569,11 +569,11 @@ terminal_util_array_to_strv (const GArray *array,
 {
   GPtrArray *argv;
   const char *data, *nullbyte;
-  gsize len;
+  gssize len;
 
   g_return_val_if_fail (array != NULL, NULL);
 
-  if (array->len == 0) {
+  if (array->len == 0 || array->len > G_MAXSSIZE) {
     *argc = 0;
     return NULL;
   }
