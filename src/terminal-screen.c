@@ -1743,12 +1743,12 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
   if (priv->pty_fd == -1)
-    return priv->initial_working_directory;
+    return g_strdup (priv->initial_working_directory);
 
   /* Get the foreground process ID */
   fgpid = tcgetpgrp (priv->pty_fd);
   if (fgpid == -1)
-    return priv->initial_working_directory;
+    return g_strdup (priv->initial_working_directory);
 
   /* Try to get the working directory using various OS-specific mechanisms */
   for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
@@ -1788,7 +1788,7 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
         }
     }
 
-  return priv->initial_working_directory;
+  return g_strdup (priv->initial_working_directory);
 }
 
 void
