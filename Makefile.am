@@ -28,8 +28,10 @@ distuninstallcheck_listfiles = 	\
         find -regex '.*/var/scrollkeeper/.*' -prune -or -type f -print
 
 # Build ChangeLog from GIT  history
-ChangeLog: $(top_srcdir)/.git/HEAD
-	git log --stat > $@
+ChangeLog:
+	@if test -f $(top_srcdir)/.git/HEAD; then \
+		git log --stat > $@; \
+	fi
 
 dist: ChangeLog
 
