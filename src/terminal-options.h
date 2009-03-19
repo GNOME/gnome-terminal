@@ -97,11 +97,13 @@ TerminalOptions *terminal_options_parse (const char *working_directory,
                                          int *argcp,
                                          char ***argvp,
                                          GError **error,
-                                         ...);
+                                         ...) G_GNUC_NULL_TERMINATED;
 
 gboolean terminal_options_merge_config (TerminalOptions *options,
                                         GKeyFile *key_file,
                                         GError **error);
+
+void terminal_options_ensure_window (TerminalOptions *options);
 
 void terminal_options_free (TerminalOptions *options);
 

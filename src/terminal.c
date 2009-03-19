@@ -475,7 +475,7 @@ factory_disabled:
   terminal_app_initialize (options->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  terminal_app_handle_options (terminal_app_get (), options, NULL);
+  terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, NULL);
   terminal_options_free (options);
 
   /* Now change directory to / so we don't prevent unmounting, e.g. if the
@@ -499,7 +499,7 @@ factory_disabled:
 static gboolean
 handle_new_terminal_event (TerminalOptions *options)
 {
-  terminal_app_handle_options (terminal_app_get (), options, NULL);
+  terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, NULL);
 
   return FALSE;
 }

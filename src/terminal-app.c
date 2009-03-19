@@ -1643,9 +1643,24 @@ terminal_app_get (void)
   return global_app;
 }
 
+/**
+ * terminal_app_handle_options:
+ * @app:
+ * @options: a #TerminalOptions
+ * @allow_resume: whether to merge the terminal configuration from the
+ *   saved session on resume
+ * @error: a #GError to fill in
+ *
+ * Processes @options. It loads or saves the terminal configuration, or
+ * opens the specified windows and tabs.
+ *
+ * Returns: %TRUE if @options could be successfully handled, or %FALSE on
+ *   error
+ */
 gboolean
 terminal_app_handle_options (TerminalApp *app,
                              TerminalOptions *options,
+                             gboolean allow_resume,
                              GError **error)
 {
   GList *lw;
@@ -1672,6 +1687,27 @@ terminal_app_handle_options (TerminalApp *app,
 
       /* fall-through on success */
     }
+
+#ifdef WITH_SMCLIENT
+{
+  EggSMClient *sm_client;
+
+  sm_client = egg_sm_client_get ();
+
+  if (allow_resume && egg_sm_client_is_resumed (sm_client))
+    {
+      GKeyFile *key_file;
+
+      key_file = egg_sm_client_get_state_file (sm_client);
+      if (key_file != NULL &&
+          !terminal_options_merge_config (options, key_file, error))
+        return FALSE;
+    }
+}
+#endif
+
+  /* Make sure we option at least one window */
+  terminal_options_ensure_window (options);
 
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {

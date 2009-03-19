@@ -93,6 +93,7 @@ TerminalApp* terminal_app_get (void);
 
 gboolean terminal_app_handle_options (TerminalApp *app,
                                       TerminalOptions *options,
+                                      gboolean allow_resume,
                                       GError **error);
 
 void terminal_app_edit_profile (TerminalApp     *app,
