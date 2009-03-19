@@ -1197,14 +1197,15 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
   gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
-  
-  remove_popup_info (window);
 
   if (!GTK_WIDGET_REALIZED (info->screen))
     {
       terminal_screen_popup_info_unref (info);
       return;
     }
+
+  /* Now we know that the screen is realized, we know that the window is still alive */
+  remove_popup_info (window);
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
