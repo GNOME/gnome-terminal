@@ -1224,6 +1224,7 @@ show_command_error_dialog (TerminalScreen *screen,
 
 static gboolean
 get_child_command (TerminalScreen *screen,
+                   const char     *shell_env,
                    char          **file_p,
                    char         ***argv_p,
                    GError        **err)
@@ -1262,7 +1263,7 @@ get_child_command (TerminalScreen *screen,
       const char *only_name;
       char *shell;
 
-      shell = egg_shell ();
+      shell = egg_shell (shell_env);
 
       file = g_strdup (shell);
       
@@ -1298,7 +1299,8 @@ get_child_command (TerminalScreen *screen,
 }
 
 static char**
-get_child_environment (TerminalScreen *screen)
+get_child_environment (TerminalScreen *screen,
+                       char **shell)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GtkWidget *term = GTK_WIDGET (screen);
@@ -1359,7 +1361,7 @@ get_child_environment (TerminalScreen *screen)
   g_free (proxymode);
 
   /* Do we already have a proxy setting? */
-  if (getenv ("http_proxy"))
+  if (g_hash_table_lookup (env_table, "http_proxy") != NULL)
     use_proxy = FALSE;
 
   /* Do we have no proxy host or an empty string? */
@@ -1469,6 +1471,8 @@ get_child_environment (TerminalScreen *screen)
     g_ptr_array_add (retval, g_strdup_printf ("%s=%s", e, v ? v : ""));
   g_ptr_array_add (retval, NULL);
 
+  *shell = g_strdup (g_hash_table_lookup (env_table, "SHELL"));
+
   g_hash_table_destroy (env_table);
   return (char **) g_ptr_array_free (retval, FALSE);
 }
@@ -1480,21 +1484,23 @@ terminal_screen_launch_child (TerminalScreen *screen)
   VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile;
   char **env, **argv;
-  char *path;
-  GError *err;
+  char *path, *shell = NULL;
+  GError *err = NULL;
   gboolean update_records;
 
   profile = priv->profile;
 
-  err = NULL;
-  if (!get_child_command (screen, &path, &argv, &err))
+  env = get_child_environment (screen, &shell);
+
+  if (!get_child_command (screen, shell, &path, &argv, &err))
     {
       show_command_error_dialog (screen, err);
       g_error_free (err);
+
+      g_strfreev (env);
+      g_free (shell);
       return;
     }
-
-  env = get_child_environment (screen);
 
   update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
 
@@ -1516,6 +1522,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
   
   priv->pty_fd = vte_terminal_get_pty (terminal);
 
+  g_free (shell);
   g_free (path);
   g_strfreev (argv);
   g_strfreev (env);

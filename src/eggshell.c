@@ -48,18 +48,18 @@
 
 /**
  * egg_shell:
+ * @shell: the value of the SHELL env variable
  *
  * Retrieves the user's preferred shell.
  *
  * Returns: A newly allocated string that is the path to the shell.
  */
 char *
-egg_shell (void)
+egg_shell (const char *shell)
 {
 #ifndef G_OS_WIN32
 	struct passwd *pw;
 	int i;
-	const char *shell;
 	const char shells [][14] = {
 		/* Note that on some systems shells can also
 		 * be installed in /usr/bin */
@@ -73,7 +73,7 @@ egg_shell (void)
 	if (geteuid () == getuid () &&
 	    getegid () == getgid ()) {
 		/* only in non-setuid */
-		if ((shell = g_getenv ("SHELL"))){
+		if (shell != NULL) {
 			if (access (shell, X_OK) == 0) {
 				return g_strdup (shell);
 			}
