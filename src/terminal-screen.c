@@ -2272,13 +2272,12 @@ gboolean
 terminal_screen_has_foreground_process (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  int master_fd, fgpid;
+  int fgpid;
 
-  master_fd = vte_terminal_get_pty (VTE_TERMINAL (screen));
-  if (master_fd == -1)
+  if (priv->pty_fd == -1)
     return FALSE;
 
-  fgpid = tcgetpgrp (master_fd);
+  fgpid = tcgetpgrp (priv->pty_fd);
   if (fgpid == -1 || fgpid == priv->child_pid)
     return FALSE;
 
