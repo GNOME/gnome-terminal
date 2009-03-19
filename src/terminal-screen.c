@@ -1754,6 +1754,11 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
 
   /* Get the foreground process ID */
   fgpid = tcgetpgrp (priv->pty_fd);
+
+  /* If that didn't work, try falling back to the primary child. See bug #575184. */
+  if (fgpid == -1)
+    fgpid = priv->child_pid;
+
   if (fgpid == -1)
     return g_strdup (priv->initial_working_directory);
 
