@@ -606,13 +606,19 @@ setup_background_filechooser (GtkWidget *filechooser,
                               TerminalProfile *profile)
 {
   GtkFileFilter *filter;
-  
+  const char *home_dir;
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_filter_set_name (filter, _("Images"));
   gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (filechooser), filter);
 
   gtk_file_chooser_set_local_only (GTK_FILE_CHOOSER (filechooser), TRUE);
+
+  /* Start filechooser in $HOME instead of the current dir of the factory which is "/" */
+  home_dir = g_get_home_dir ();
+  if (home_dir)
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (filechooser), home_dir);
 
 #if 0
   GtkWidget *image_preview;
