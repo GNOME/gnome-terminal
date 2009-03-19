@@ -81,6 +81,14 @@ typedef struct
 
 } InitialWindow;
 
+#define TERMINAL_OPTION_ERROR (g_quark_from_static_string ("terminal-option-error"))
+
+typedef enum {
+  TERMINAL_OPTION_ERROR_EXCLUSIVE_OPTIONS,
+  TERMINAL_OPTION_ERROR_INVALID_CONFIG_FILE,
+  TERMINAL_OPTION_ERROR_INCOMPATIBLE_CONFIG_FILE
+} TerminalOptionError;
+
 TerminalOptions *terminal_options_parse (const char *working_directory,
                                          const char *display_name,
                                          const char *startup_id,

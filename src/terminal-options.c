@@ -496,7 +496,8 @@ option_load_save_config_cb (const gchar *option_name,
 
   if (options->config_file)
     {
-      g_set_error (error, 0, 0, "X"); /* FIXME */
+      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_EXCLUSIVE_OPTIONS,
+                           "Options \"--load-config\" and \"--save-config\" are mutually exclusive");
       return FALSE;
     }
 
@@ -770,7 +771,8 @@ terminal_options_merge_config (TerminalOptions *options,
 
   if (!g_key_file_has_group (key_file, TERMINAL_CONFIG_GROUP))
     {
-      g_set_error_literal (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND,
+      g_set_error_literal (error, TERMINAL_OPTION_ERROR,
+                           TERMINAL_OPTION_ERROR_INVALID_CONFIG_FILE,
                            _("Not a valid terminal config file."));
       return FALSE;
     }
@@ -782,7 +784,8 @@ terminal_options_merge_config (TerminalOptions *options,
       compat_version <= 0 ||
       compat_version > TERMINAL_CONFIG_COMPAT_VERSION)
     {
-      g_set_error_literal (error, 0 /* FIXME */, 0,
+      g_set_error_literal (error, TERMINAL_OPTION_ERROR,
+                           TERMINAL_OPTION_ERROR_INCOMPATIBLE_CONFIG_FILE,
                            _("Incompatible terminal config file version."));
       return FALSE;
     }
