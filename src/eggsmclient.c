@@ -178,6 +178,7 @@ egg_sm_client_class_init (EggSMClientClass *klass)
 static gboolean sm_client_disable = FALSE;
 static char *sm_client_state_file = NULL;
 static char *sm_client_id = NULL;
+static char *sm_config_prefix = NULL;
 
 static gboolean
 sm_client_post_parse_func (GOptionContext  *context,
@@ -231,6 +232,9 @@ egg_sm_client_get_option_group (void)
     /* Compatibility options */
     { "sm-disable", 0, G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_NONE, &sm_client_disable,
+      NULL, NULL },
+    { "sm-config-prefix", 0, G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING, &sm_config_prefix,
       NULL, NULL },
     { NULL }
   };
