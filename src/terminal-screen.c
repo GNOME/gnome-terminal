@@ -1065,9 +1065,14 @@ terminal_screen_set_font (TerminalScreen *screen)
     g_object_get (profile, TERMINAL_PROFILE_FONT, &desc, NULL);
   g_assert (desc);
 
-  pango_font_description_set_size (desc,
-				   priv->font_scale *
-				   pango_font_description_get_size (desc));
+  if (pango_font_description_get_size_is_absolute (desc))
+    pango_font_description_set_absolute_size (desc,
+                                              priv->font_scale *
+                                              pango_font_description_get_size (desc));
+  else
+    pango_font_description_set_size (desc,
+                                     priv->font_scale *
+                                     pango_font_description_get_size (desc));
 
   vte_terminal_set_font (VTE_TERMINAL (screen), desc);
 
