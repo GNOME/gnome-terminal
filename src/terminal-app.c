@@ -1104,6 +1104,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
                                                    GTK_MESSAGE_QUESTION,
                                                    GTK_BUTTONS_YES_NO,
                                                    _("You already have a profile called “%s”. Do you want to create another profile with the same name?"), name);
+          /* Alternative button order was set automatically by GtkMessageDialog */
           retval = gtk_dialog_run (GTK_DIALOG (confirm_dialog));
           gtk_widget_destroy (confirm_dialog);
           if (retval == GTK_RESPONSE_NO)
@@ -1208,6 +1209,10 @@ terminal_app_new_profile (TerminalApp     *app,
 
       gtk_label_set_mnemonic_widget (GTK_LABEL (base_label), combo);
 
+      gtk_dialog_set_alternative_button_order (GTK_DIALOG (app->new_profile_dialog),
+                                               GTK_RESPONSE_ACCEPT,
+                                               GTK_RESPONSE_CANCEL,
+                                               -1);
       gtk_dialog_set_default_response (GTK_DIALOG (app->new_profile_dialog), GTK_RESPONSE_ACCEPT);
       gtk_dialog_set_response_sensitive (GTK_DIALOG (app->new_profile_dialog), GTK_RESPONSE_ACCEPT, FALSE);
     }
