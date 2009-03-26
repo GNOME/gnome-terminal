@@ -69,8 +69,6 @@ G_BEGIN_DECLS
 #define TERMINAL_APP_ENABLE_MNEMONICS       "enable-mnemonics"
 #define TERMINAL_APP_SYSTEM_FONT            "system-font"
 
-#define EPSILON (1.0e-6)
-
 /* TerminalApp */
 
 #define TERMINAL_TYPE_APP              (terminal_app_get_type ())

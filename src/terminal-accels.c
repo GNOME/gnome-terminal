@@ -335,6 +335,8 @@ terminal_accels_init (void)
           gconf_client_notify (conf, key_entry->gconf_key);
 	}
     }
+
+  g_object_unref (conf);
   
   g_signal_connect (notification_group, "accel-changed",
                     G_CALLBACK (accel_changed_callback), NULL);

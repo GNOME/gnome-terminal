@@ -21,7 +21,6 @@
 #define TERMINAL_ACCELS_H
 
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 
 G_BEGIN_DECLS
 

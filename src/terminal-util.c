@@ -32,8 +32,6 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include <gconf/gconf-client.h>
-
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
