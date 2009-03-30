@@ -416,8 +416,16 @@ profile_visible_name_notify_cb (TerminalProfile *profile,
 
       free_me = display_name;
       if (num < 10)
+        /* Translators: This is the label of a menu item to choose a profile.
+         * _%d is used as the accelerator (with d between 1 and 9), and
+         * the %s is the name of the terminal profile.
+         */
         display_name = g_strdup_printf (_("_%d. %s"), num, display_name);
       else if (num < 36)
+        /* Translators: This is the label of a menu item to choose a profile.
+         * _%c is used as the accelerator (it will be a character between A and Z),
+         * and the %s is the name of the terminal profile.
+         */
         display_name = g_strdup_printf (_("_%c. %s"), ('A' + num - 10), display_name);
       else
         free_me = NULL;
