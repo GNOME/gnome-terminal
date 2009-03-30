@@ -3562,10 +3562,11 @@ terminal_window_save_state (TerminalWindow *window,
       TerminalScreen *screen;
       char *tab_group;
 
+      screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
+
       tab_group = g_strdup_printf ("Terminal%p", screen);
       g_ptr_array_add (tab_names_array, tab_group);
 
-      screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
       terminal_screen_save_config (screen, key_file, tab_group);
 
       if (screen == active_screen)
