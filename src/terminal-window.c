@@ -1133,6 +1133,13 @@ popup_copy_url_callback (GtkAction *action,
 }
 
 static void
+popup_leave_fullscreen_callback (GtkAction *action,
+                                 TerminalWindow *window)
+{
+    gtk_window_unfullscreen (GTK_WINDOW (window));
+}
+
+static void
 remove_popup_info (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
@@ -1432,6 +1439,9 @@ terminal_window_state_event (GtkWidget            *widget,
 
       action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
       gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_fullscreen);
+  
+      action = gtk_action_group_get_action (priv->action_group, "PopupLeaveFullscreen");
+      gtk_action_set_visible (action, is_fullscreen);
     }
   
   if (window_state_event)
@@ -1713,6 +1723,9 @@ terminal_window_init (TerminalWindow *window)
       { "PopupCloseTab", NULL, N_("C_lose Tab"), NULL,
         NULL,
         G_CALLBACK (file_close_tab_callback) },
+      { "PopupLeaveFullscreen", NULL, N_("L_eave Full Screen"), NULL,
+        NULL,
+        G_CALLBACK (popup_leave_fullscreen_callback) },
       { "PopupInputMethods", NULL, N_("_Input Methods") }
     };
   
@@ -1821,6 +1834,10 @@ terminal_window_init (TerminalWindow *window)
    * time it's shown and there's no text/uri-list on the clipboard.
    */
   action = gtk_action_group_get_action (priv->action_group, "EditPasteURIPaths");
+  gtk_action_set_visible (action, FALSE);
+
+  /* Idem for this action, since the window is not fullscreen. */
+  action = gtk_action_group_get_action (priv->action_group, "PopupLeaveFullscreen");
   gtk_action_set_visible (action, FALSE);
 
   /* Load the UI */
