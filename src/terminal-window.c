@@ -1893,6 +1893,7 @@ terminal_window_dispose (GObject *object)
 {
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
+  TerminalApp *app;
   GdkScreen *screen;
 
   remove_popup_info (window);
@@ -1910,8 +1911,12 @@ terminal_window_dispose (GObject *object)
   if (priv->new_terminal_action_group != NULL)
     disconnect_profiles_from_actions_in_group (priv->new_terminal_action_group);
 
-  g_signal_handlers_disconnect_by_func (terminal_app_get (),
+  app = terminal_app_get ();
+  g_signal_handlers_disconnect_by_func (app,
                                         G_CALLBACK (terminal_window_profile_list_changed_cb),
+                                        window);
+  g_signal_handlers_disconnect_by_func (app,
+                                        G_CALLBACK (terminal_window_encoding_list_changed_cb),
                                         window);
 
   screen = gtk_widget_get_screen (GTK_WIDGET (object));
