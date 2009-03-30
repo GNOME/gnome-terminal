@@ -2926,7 +2926,7 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
   gtk_window_set_title (GTK_WINDOW (dialog), ""); 
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), n_tabs > 1 ? _("_Close Window") : _("_Close Terminal"), GTK_RESPONSE_ACCEPT);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), n_tabs > 1 ? _("C_lose Window") : _("C_lose Terminal"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
