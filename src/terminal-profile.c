@@ -148,7 +148,7 @@ enum
 #define DEFAULT_USE_SYSTEM_FONT       (TRUE)
 #define DEFAULT_USE_THEME_COLORS      (TRUE)
 #define DEFAULT_VISIBLE_NAME          (N_("Unnamed"))
-#define DEFAULT_WORD_CHARS            ("-A-Za-z0-9,./?%&#:_")
+#define DEFAULT_WORD_CHARS            ("-A-Za-z0-9,./?%&#:_=+@~")
 
 struct _TerminalProfilePrivate
 {
