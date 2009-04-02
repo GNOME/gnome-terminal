@@ -97,7 +97,7 @@ typedef enum
 #define TERMINAL_PROFILE_USE_SYSTEM_FONT        "use-system-font"
 #define TERMINAL_PROFILE_USE_THEME_COLORS       "use-theme-colors"
 #define TERMINAL_PROFILE_VISIBLE_NAME           "visible-name"
-#define TERMINAL_PROFILE_WORD_CHARS             "word-chards"
+#define TERMINAL_PROFILE_WORD_CHARS             "word-chars"
 
 /* TerminalProfile object */
 
