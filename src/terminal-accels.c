@@ -404,7 +404,7 @@ keys_change_notify (GConfClient *client,
   val = gconf_entry_get_value (entry);
 
 #ifdef GNOME_ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
     {
       if (val == NULL)
         _terminal_debug_print (TERMINAL_DEBUG_ACCELS, " changed to be unset\n");
@@ -770,7 +770,7 @@ accel_edited_callback (GtkCellRendererAccel *cell,
                          gdk_keyval_name (keyval) ? gdk_keyval_name (keyval) : "null",
                          str);
 #ifdef GNOME_ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
     {
       GtkAccelKey old_key;
 
@@ -938,7 +938,7 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   tree = edit_keys_store = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
 
 #ifdef GNOME_ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
     g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), NULL);
 #endif
 
