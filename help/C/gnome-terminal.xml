@@ -3,10 +3,11 @@
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
   <!ENTITY app "GNOME Terminal">  
-  <!ENTITY appversion "2.5.90">
+  <!ENTITY appversion "2.24.3">
   <!ENTITY manrevision "2.8">
-  <!ENTITY date "March 2004">
+  <!ENTITY date "March 2009">
 ]>
+<!-- =============Document Header ============================= -->
 <!-- (Do not remove this comment block.)
   Maintained by the GNOME Documentation Project
   Template version: 2.0 beta
@@ -18,7 +19,8 @@
      <title>&app; Manual</title> 
      <abstract role="description">
        <para>
-	 User manual for the GNOME Terminal application.
+	 The Terminal gives users the power to communicate with their system using
+text-based commands through a shell such as Bash.
        </para>
      </abstract>
      <copyright> 
@@ -39,6 +41,14 @@
         <year>2000</year> 
         <holder>Alexander Kirillov</holder> 
      </copyright>
+     <copyright> 
+        <year>2008</year> 
+        <holder>Christian Persch</holder> 
+     </copyright>
+     <copyright> 
+        <year>2009</year> 
+        <holder>Paul Cutler</holder> 
+     </copyright>	 
      <publisher> 
         <publishername>GNOME Documentation Project</publishername> 
      </publisher> &legal; 
@@ -75,19 +85,18 @@
      <publisher role="maintainer">
        <publishername>GNOME Documentation Project</publishername>
      </publisher>
+	<releaseinfo revision="2.26" role="review">
+		<ulink type="planning" url="http://mail.gnome.org/archives/gnome-doc-list/2009-March/msg00048.html"/>
+    </releaseinfo>
      <revhistory> 
-        <revision> 
-          <revnumber>&app; Manual V&manrevision;</revnumber> 
-          <date>&date;</date> 
+	<revision> 
+          <revnumber>GNOME Terminal Manual V2.8</revnumber> 
+          <date>March 2009</date> 
           <revdescription> 
-             <para role="author">
-                Sun GNOME Documentation Team
-             </para>
-             <para role="publisher">
-                GNOME Documentation Project 
-             </para>
+             <para role="author">Paul Cutler</para>
+             <para role="publisher">GNOME Documentation Project</para>
           </revdescription> 
-        </revision> 
+        </revision>
 	<revision> 
           <revnumber>GNOME Terminal Manual V2.7</revnumber> 
           <date>November 2003</date> 
@@ -190,8 +199,6 @@
           </revdescription> 
         </revision> 
      </revhistory> 
-     <releaseinfo revision="2.26" role="review">
-     </releaseinfo>
      <releaseinfo> This manual describes version &appversion; of &app;.
         </releaseinfo> 
      <legalnotice> 
@@ -205,6 +212,8 @@
   <indexterm> 
      <primary>terminal application</primary> 
   </indexterm> 
+  
+  <!-- ============= Introduction ============================== -->
   <sect1 id="gnome-terminal-introduction"> 
      <title>Introduction</title> 
      <para>
@@ -229,6 +238,9 @@
         </varlistentry> 
      </variablelist> 
   </sect1> 
+
+  <!--=========== Getting Started ============================== -->
+  
   <sect1 id="gnome-terminal-get-started"> 
      <title>Getting Started</title> 
      <para>
@@ -354,6 +366,8 @@
      </sect2> 
 
   </sect1> 
+  
+  <!--=========== Usage ============================== -->  
 
   <sect1 id="gnome-terminal-usage"> 
      <title>Usage</title> 
@@ -760,6 +774,8 @@
      </sect2>   
 
   </sect1> 
+  
+  <!--=========== Preferences ============================== -->  
 
   <sect1 id="gnome-terminal-prefs"> 
      <title>Preferences</title> 
