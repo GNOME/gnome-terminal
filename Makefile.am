@@ -29,8 +29,8 @@ distuninstallcheck_listfiles = 	\
 
 # Build ChangeLog from GIT  history
 ChangeLog:
-	@if test -f $(top_srcdir)/.git/HEAD; then \
-		git log --stat > $@; \
+	@if test -d $(top_srcdir)/.git; then \
+		GIT_DIR="$(top_srcdir)/.git" git log --stat > $@; \
 	fi
 
 dist: ChangeLog
