@@ -56,3 +56,5 @@ testskey_LDADD = \
 	$(TERM_LIBS)
 
 TESTS = testskey
+
+-include $(top_srcdir)/git.mk

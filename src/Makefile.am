@@ -197,3 +197,5 @@ endif
 
 %.ui: %.glade
 	$(GTK_BUILDER_CONVERT) $< $@
+
+-include $(top_srcdir)/git.mk

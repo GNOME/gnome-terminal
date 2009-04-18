@@ -18,9 +18,26 @@ EXTRA_DIST = 			\
 	xmldocs.make		\
 	omf.make
 
-DISTCLEANFILES =		\
-	gnome-doc-utils.make	\
-	$(desktop_DATA)
+MAINTAINERCLEANFILES = \
+	$(srcdir)/INSTALL \
+	$(srcdir)/aclocal.m4 \
+	$(srcdir)/autoscan.log \
+	$(srcdir)/compile \
+	$(srcdir)/config.guess \
+	$(srcdir)/config.h.in \
+	$(srcdir)/config.sub \
+	$(srcdir)/configure.scan \
+	$(srcdir)/depcomp \
+	$(srcdir)/install-sh \
+	$(srcdir)/ltmain.sh \
+	$(srcdir)/missing \
+	$(srcdir)/mkinstalldirs \
+	$(srcdir)/omf.make \
+	$(srcdir)/xmldocs.make \
+	$(srcdir)/ChangeLog \
+	$(srcdir)/gnome-doc-utils.make	\
+	$(desktop_DATA) \
+	`find "$(srcdir)" -type f -name Makefile.in -print`
 
 # hack from sound-juicer to get around scrollkeeper's leaving a big
 # mess behind.
@@ -36,3 +53,5 @@ ChangeLog:
 dist: ChangeLog
 
 .PHONY: ChangeLog
+
+-include $(top_srcdir)/git.mk
