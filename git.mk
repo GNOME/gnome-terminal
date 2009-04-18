@@ -1,6 +1,6 @@
 # git.mk
 #
-# Copyright 2009 Red Hat, Inc.
+# Use as you wish.  Copyright not claimed.
 # Written by Behdad Esfahbod
 #
 # The canonical source for this file is pango/git.mk, or whereever the
