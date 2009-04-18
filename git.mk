@@ -1,7 +1,11 @@
 # git.mk
 #
-# Use as you wish.  Copyright not claimed.
+# Copyright 2009, Red Hat, Inc.
 # Written by Behdad Esfahbod
+#
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.
 #
 # The canonical source for this file is pango/git.mk, or whereever the
 # header of pango/git.mk suggests in the future.
@@ -77,7 +81,7 @@ git-mk-install:
 
 ### .gitignore generation
 
-.gitignore: Makefile.am $(top_srcdir)/git.mk
+$(srcdir)/.gitignore: Makefile.am $(top_srcdir)/git.mk
 	@echo Generating $@; \
 	GTKDOCGITIGNOREFILES=; \
 	test "x$(DOC_MODULE)" = x -o "x$(DOC_MAIN_SGML_FILE)" = x || \
@@ -155,12 +159,12 @@ git-mk-install:
 		"*~" \
 		".*.swp" \
 	; do echo /$$x; done | \
-	grep -v '/[.][.]/' | \
+	sed "s@^/`echo "$(srcdir)" | sed 's/\(.\)/[\1]/g'`/@/@" | \
 	sed 's@/[.]/@/@g' | \
 	LANG=C sort | uniq > $@.tmp && \
 	mv $@.tmp $@;
 
-all: .gitignore gitignore-recurse
+all: $(srcdir)/.gitignore gitignore-recurse
 gitignore-recurse:
 	@if test "x$(SUBDIRS)" = "x$(DIST_SUBDIRS)"; then :; else \
 		list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
@@ -169,6 +173,6 @@ gitignore-recurse:
 	fi;
 maintainer-clean-local: gitignore-clean
 gitignore-clean:
-	rm -f .gitignore
+	rm -f $(srcdir)/.gitignore
 .PHONY: gitignore-clean gitignore-recurse
 

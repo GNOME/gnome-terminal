@@ -18,6 +18,10 @@ EXTRA_DIST = 			\
 	xmldocs.make		\
 	omf.make
 
+# err, INTLTOOL makes it hard to pass distcheck
+DISTCLEANFILES = \
+	$(desktop_DATA)
+
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
 	$(srcdir)/aclocal.m4 \
@@ -36,7 +40,6 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/xmldocs.make \
 	$(srcdir)/ChangeLog \
 	$(srcdir)/gnome-doc-utils.make	\
-	$(desktop_DATA) \
 	`find "$(srcdir)" -type f -name Makefile.in -print`
 
 # hack from sound-juicer to get around scrollkeeper's leaving a big
