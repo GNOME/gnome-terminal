@@ -1,5 +1,7 @@
 SUBDIRS = src po help
 
+NULL =
+
 DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper --disable-schemas-install
 
 desktopdir = $(datadir)/applications
@@ -13,14 +15,14 @@ EXTRA_DIST = 			\
 	help/ChangeLog.pre-2-23	\
 	ChangeLog.README	\
 	HACKING			\
-	$(desktop_DATA)		\
 	gnome-doc-utils.make	\
 	xmldocs.make		\
-	omf.make
+	omf.make		\
+	$(NULL)
 
-# err, INTLTOOL makes it hard to pass distcheck
-DISTCLEANFILES = \
-	$(desktop_DATA)
+CLEANFILES = \
+	$(desktop_DATA)	\
+	$(NULL)
 
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
@@ -38,9 +40,9 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/mkinstalldirs \
 	$(srcdir)/omf.make \
 	$(srcdir)/xmldocs.make \
-	$(srcdir)/ChangeLog \
 	$(srcdir)/gnome-doc-utils.make	\
-	`find "$(srcdir)" -type f -name Makefile.in -print`
+	`find "$(srcdir)" -type f -name Makefile.in -print` \
+	$(NULL)
 
 # hack from sound-juicer to get around scrollkeeper's leaving a big
 # mess behind.
