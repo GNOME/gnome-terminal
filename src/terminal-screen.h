@@ -110,6 +110,7 @@ const char *terminal_screen_get_dynamic_title      (TerminalScreen *screen);
 const char *terminal_screen_get_dynamic_icon_title (TerminalScreen *screen);
 
 char *terminal_screen_get_current_dir (TerminalScreen *screen);
+char *terminal_screen_get_current_dir_with_fallback (TerminalScreen *screen);
 
 void        terminal_screen_set_font (TerminalScreen *screen);
 void        terminal_screen_set_font_scale    (TerminalScreen *screen,
