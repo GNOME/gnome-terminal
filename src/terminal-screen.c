@@ -1546,6 +1546,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
   char *path, *shell = NULL;
   GError *err = NULL;
   gboolean update_records;
+  const char *working_dir;
 
   profile = priv->profile;
 
@@ -1563,11 +1564,16 @@ terminal_screen_launch_child (TerminalScreen *screen)
 
   update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
 
+  if (priv->initial_working_directory)
+    working_dir = priv->initial_working_directory;
+  else
+    working_dir = g_get_home_dir ();
+
   priv->child_pid = vte_terminal_fork_command (terminal,
                                                path,
                                                argv,
                                                env,
-                                               priv->initial_working_directory,
+                                               working_dir,
                                                terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL),
                                                update_records,
                                                update_records);
@@ -1834,16 +1840,11 @@ char*
 terminal_screen_get_current_dir_with_fallback (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  char *cwd;
 
-  cwd = terminal_screen_get_current_dir (screen);
-  if (cwd != NULL)
-    return cwd;
-
-  if (priv->initial_working_directory != NULL)
+  if (priv->pty_fd == -1)
     return g_strdup (priv->initial_working_directory);
 
-  return g_strdup (g_get_home_dir ());
+  return terminal_screen_get_current_dir (screen);
 }
 
 void
