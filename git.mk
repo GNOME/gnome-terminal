@@ -171,8 +171,8 @@ gitignore-recurse:
 		  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) .gitignore); \
 		done; \
 	fi;
-maintainer-clean-local: gitignore-clean
+maintainer-clean: gitignore-clean
 gitignore-clean:
-	rm -f $(srcdir)/.gitignore
+	-rm -f $(srcdir)/.gitignore
 .PHONY: gitignore-clean gitignore-recurse
 
