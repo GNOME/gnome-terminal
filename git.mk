@@ -28,8 +28,8 @@
 # ignore them.  See "man gitignore".
 #
 # If "make maintainer-clean" removes the files but they are not recognized
-# by this script (that is, if "git stat" shows untracked files still), send
-# me the output of "git stat" as well as your Makefile.am and Makefile for
+# by this script (that is, if "git status" shows untracked files still), send
+# me the output of "git status" as well as your Makefile.am and Makefile for
 # the directories involved.
 #
 # For a list of toplevel files that should be in MAINTAINERCLEANFILES, see
@@ -83,96 +83,100 @@ git-mk-install:
 
 $(srcdir)/.gitignore: Makefile.am $(top_srcdir)/git.mk
 	@echo Generating $@; \
-	GTKDOCGITIGNOREFILES=; \
-	test "x$(DOC_MODULE)" = x -o "x$(DOC_MAIN_SGML_FILE)" = x || \
-	GTKDOCGITIGNOREFILES=" \
-		$(DOC_MODULE)-decl-list.txt \
-		$(DOC_MODULE)-decl.txt \
-		tmpl/$(DOC_MODULE)-unused.sgml \
-		tmpl/*.bak \
-		xml html \
-		"; \
-	GNOMEDOCUTILSGITIGNOREFILES=; \
-	test "x$(DOC_MODULE)" = x -o "x$(DOC_LINGUAS)" = x || \
-	GNOMEDOCUTILSGITIGNOREFILES=" \
-		$(_DOC_C_DOCS) \
-		$(_DOC_LC_DOCS) \
-		$(_DOC_OMF_ALL) \
-		$(_DOC_DSK_ALL) \
-		$(_DOC_HTML_ALL) \
-		$(_DOC_POFILES) \
-		*/.xml2po.mo \
-		*/*.omf.out \
-		"; \
-	INTLTOOLGITIGNOREFILES=; test -f $(srcdir)/po/Makefile.in.in && \
-	INTLTOOLGITIGNOREFILES=" \
-		po/Makefile.in.in \
-		po/Makefile.in \
-		po/Makefile \
-		po/*.gmo \
-		po/*.mo \
-		po/POTFILES \
-		po/stamp-it \
-		po/.intltool-merge-cache \
-		intltool-extract.in \
-		intltool-merge.in \
-		intltool-update.in \
-		"; \
-	AUTOCONFGITIGNOREFILES=; test -f $(srcdir)/configure && \
-	AUTOCONFGITIGNOREFILES=" \
-		autom4te.cache \
-		configure \
-		config.h \
-		stamp-h1 \
-		libtool \
-		config.lt \
-		"; \
-	for x in \
-		.gitignore \
-		$$GTKDOCGITIGNOREFILES \
-		$$GNOMEDOCUTILSGITIGNOREFILES \
-		$$INTLTOOLGITIGNOREFILES \
-		$$AUTOCONFGITIGNOREFILES \
-		$(GITIGNOREFILES) \
-		$(CLEANFILES) \
-		$(PROGRAMS) \
-		$(EXTRA_PROGRAMS) \
-		$(LTLIBRARIES) \
-		so_locations \
-		.libs _libs \
-		$(MOSTLYCLEANFILES) \
-		"*.$(OBJEXT)" \
-		"*.lo" \
-		$(DISTCLEANFILES) \
-		$(am__CONFIG_DISTCLEAN_FILES) \
-		$(CONFIG_CLEAN_FILES) \
-		TAGS ID GTAGS GRTAGS GSYMS GPATH tags \
-		"*.tab.c" \
-		$(MAINTAINERCLEANFILES) \
-		$(BUILT_SOURCES) \
-		$(DEPDIR) \
-		Makefile \
-		Makefile.in \
-		"*.orig" \
-		"*.rej" \
-		"*.bak" \
-		"*~" \
-		".*.swp" \
-	; do echo /$$x; done | \
+	{ \
+		if test "x$(DOC_MODULE)" = x -o "x$(DOC_MAIN_SGML_FILE)" = x; then :; else \
+			for x in \
+				$(DOC_MODULE)-decl-list.txt \
+				$(DOC_MODULE)-decl.txt \
+				tmpl/$(DOC_MODULE)-unused.sgml \
+				"tmpl/*.bak" \
+				xml html \
+			; do echo /$$x; done; \
+		fi; \
+		if test "x$(DOC_MODULE)" = x -o "x$(DOC_LINGUAS)" = x; then :; else \
+			for x in \
+				$(_DOC_C_DOCS) \
+				$(_DOC_LC_DOCS) \
+				$(_DOC_OMF_ALL) \
+				$(_DOC_DSK_ALL) \
+				$(_DOC_HTML_ALL) \
+				$(_DOC_POFILES) \
+				"*/.xml2po.mo" \
+				"*/*.omf.out" \
+			; do echo /$$x; done; \
+		fi; \
+		if test -f $(srcdir)/po/Makefile.in.in; then \
+			for x in \
+				po/Makefile.in.in \
+				po/Makefile.in \
+				po/Makefile \
+				po/POTFILES \
+				po/stamp-it \
+				po/.intltool-merge-cache \
+				"po/*.gmo" \
+				"po/*.mo" \
+				intltool-extract.in \
+				intltool-merge.in \
+				intltool-update.in \
+			; do echo /$$x; done; \
+		fi; \
+		if test -f $(srcdir)/configure; then \
+			for x in \
+				autom4te.cache \
+				configure \
+				config.h \
+				stamp-h1 \
+				libtool \
+				config.lt \
+			; do echo /$$x; done; \
+		fi; \
+		for x in \
+			.gitignore \
+			$(GITIGNOREFILES) \
+			$(CLEANFILES) \
+			$(PROGRAMS) \
+			$(EXTRA_PROGRAMS) \
+			$(LTLIBRARIES) \
+			so_locations \
+			.libs _libs \
+			$(MOSTLYCLEANFILES) \
+			"*.$(OBJEXT)" \
+			"*.lo" \
+			$(DISTCLEANFILES) \
+			$(am__CONFIG_DISTCLEAN_FILES) \
+			$(CONFIG_CLEAN_FILES) \
+			TAGS ID GTAGS GRTAGS GSYMS GPATH tags \
+			"*.tab.c" \
+			$(MAINTAINERCLEANFILES) \
+			$(BUILT_SOURCES) \
+			$(DEPDIR) \
+			Makefile \
+			Makefile.in \
+			"*.orig" \
+			"*.rej" \
+			"*.bak" \
+			"*~" \
+			".*.sw[nop]" \
+		; do echo /$$x; done; \
+	} | \
 	sed "s@^/`echo "$(srcdir)" | sed 's/\(.\)/[\1]/g'`/@/@" | \
 	sed 's@/[.]/@/@g' | \
 	LANG=C sort | uniq > $@.tmp && \
 	mv $@.tmp $@;
 
-all: $(srcdir)/.gitignore gitignore-recurse
-gitignore-recurse:
+all: $(srcdir)/.gitignore gitignore-recurse-maybe
+gitignore-recurse-maybe:
 	@if test "x$(SUBDIRS)" = "x$(DIST_SUBDIRS)"; then :; else \
-		list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-		  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) .gitignore); \
-		done; \
+		$(MAKE) $(AM_MAKEFLAGS) gitignore-recurse; \
 	fi;
+gitignore-recurse:
+	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) .gitignore gitignore-recurse); \
+	done
+gitignore: $(srcdir)/.gitignore gitignore-recurse
+
 maintainer-clean: gitignore-clean
 gitignore-clean:
 	-rm -f $(srcdir)/.gitignore
-.PHONY: gitignore-clean gitignore-recurse
 
+.PHONY: gitignore-clean gitignore gitignore-recurse gitignore-recurse-maybe
