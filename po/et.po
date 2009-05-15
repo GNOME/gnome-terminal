@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&component=general\n"
 "POT-Creation-Date: 2009-03-30 17:17+0000\n"
-"PO-Revision-Date: 2009-05-10 12:38+0300\n"
+"PO-Revision-Date: 2009-05-12 09:05+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -754,12 +754,15 @@ msgstr ""
 "ka kuueteistkümnendkujul (näiteks \"#FF00FF\")."
 
 msgid "The cursor appearance"
-msgstr ""
+msgstr "Kursori kuju"
 
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr ""
+"Võimalikud väärtused on \"block\" kastikujulise kursori, \"ibeam\" "
+"püstkriipsukujulise kursori ja \"underline\" allkriipsukujulise kursori "
+"jaoks."
 
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
@@ -788,17 +791,14 @@ msgstr ""
 "Kui märgitud, siis selle profiili akende/kaartide uutel akendel tuleb "
 "menüüriba näidata."
 
-#, fuzzy
-#| msgid ""
-#| "Type of terminal background. May be \"solid\" for a solid color, \"image"
-#| "\" for an image, or \"transparent\" for pseudo-transparency."
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
 "compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
 "Terminali tausta liik. Võimalikud väärtused on \"solid\" ühtlase värvuse "
-"jaoks, \"image\" pildi jaoks ja \"transparent\" pseudoläbipaistvuse jaoks."
+"jaoks, \"image\" pildi jaoks ja \"transparent\" läbipaistvuse jaoks "
+"(Kui ei kasutata komposiitaknahaldurit, siis pseudoläbipaistvuse jaoks)."
 
 msgid "What to do with dynamic title"
 msgstr "Mida teha dünaamilise pealkirjaga"
@@ -1021,6 +1021,9 @@ msgid ""
 "I-Beam\n"
 "Underline"
 msgstr ""
+"Kast\n"
+"Püstkriips\n"
+"Allkriips"
 
 msgid "Built-in _schemes:"
 msgstr "Sisse_ehitatud teemad:"
@@ -1047,7 +1050,7 @@ msgid "Compatibility"
 msgstr "Ühilduvus"
 
 msgid "Cursor _shape:"
-msgstr ""
+msgstr "_Kursori kuju:"
 
 msgid "Custom"
 msgstr "Oma"
@@ -1492,11 +1495,7 @@ msgstr "_Kooditabel"
 msgid "Current Locale"
 msgstr "Käesolev lokaat"
 
-#, fuzzy, c-format
-#| msgid ""
-#| "Option \"%s\" is no longer supported in this version of gnome-terminal; "
-#| "you might want to create a profile with the desired setting, and use the "
-#| "new '--window-with-profile' option\n"
+#, c-format
 msgid ""
 "Option \"%s\" is no longer supported in this version of gnome-terminal; you "
 "might want to create a profile with the desired setting, and use the new '--"
@@ -1504,15 +1503,14 @@ msgid ""
 msgstr ""
 "Võti \"%s\" pole selles gnome-terminal'i versioonis enam toetatud. Võib-olla "
 "on sul kasulik luua uus profiil koos soovitud sätetega ja kasutada seda koos "
-"võtmega '--window-with-profile'\n"
+"uue võtmega '--profile'\n"
 
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
 
-#, fuzzy, c-format
-#| msgid "Argument to \"%s\" is not a valid command: %s\n"
+#, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
-msgstr "\"%s\" argument on vigane käsk: %s\n"
+msgstr "\"%s\" argument on vigane käsk: %s"
 
 msgid "Two roles given for one window"
 msgstr "Ühele aknale on määratud kaks rolli"
@@ -1521,10 +1519,9 @@ msgstr "Ühele aknale on määratud kaks rolli"
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "Võtit \"%s\" on ühele aknale määratud kaks korda\n"
 
-#, fuzzy, c-format
-#| msgid "\"%s\" is not a valid zoom factor\n"
+#, c-format
 msgid "\"%s\" is not a valid zoom factor"
-msgstr "\"%s\" pole korrektne suurendustegur\n"
+msgstr "\"%s\" pole korrektne suurendustegur"
 
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
@@ -1534,22 +1531,19 @@ msgstr "Suurendustegur \"%g\" on liiga väike, kasutatakse %g\n"
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Suurendustegur \"%g\" on liiga suur, kasutatakse %g\n"
 
-#, fuzzy, c-format
-#| msgid ""
-#| "Option \"%s\" requires specifying the command to run on the rest of the "
-#| "command line\n"
+#, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line"
 msgstr ""
 "Võtmel \"%s\" peab kogu käsurea edasises osas olema kirjeldatud käivitatav "
-"käsk\n"
+"käsk"
 
 msgid "Not a valid terminal config file."
-msgstr ""
+msgstr "Terminali seadistusfail on vigane."
 
 msgid "Incompatible terminal config file version."
-msgstr ""
+msgstr "Terminali seadistusfaili versioon ei ühildu."
 
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
@@ -1559,30 +1553,16 @@ msgstr ""
 "taaskasutata"
 
 msgid "Load a terminal configuration file"
-msgstr ""
+msgstr "Terminali sätete faili laadimine"
 
-#, fuzzy
-#| msgid "Set the terminal's title"
 msgid "Save the terminal configuration to a file"
-msgstr "Määra terminali pealkiri"
+msgstr "Terminali sätete salvestamine faili"
 
-#, fuzzy
-#| msgid ""
-#| "Open a new window containing a tab with the default profile. More than "
-#| "one of these options can be provided."
 msgid "Open a new window containing a tab with the default profile"
-msgstr ""
-"Uue akna avamine, mis sisaldab vaikimisi profiiliga kaarti. Seda võtit võib "
-"määrata rohkem kui üks kord."
+msgstr "Uue akna avamine, mis sisaldab vaikimisi profiiliga kaarti"
 
-#, fuzzy
-#| msgid ""
-#| "Open a new tab in the last-opened window with the default profile. More "
-#| "than one of these options can be provided."
 msgid "Open a new tab in the last-opened window with the default profile"
-msgstr ""
-"Uue vaikimisi profiiliga kaardi avamine viimati avatud aknas. Seda võtit "
-"võib määrata rohkem kui üks kord."
+msgstr "Uue vaikimisi profiiliga kaardi avamine viimati avatud aknas"
 
 msgid "Turn on the menubar"
 msgstr "Menüüriba näitamise sisselülitamine"
@@ -1613,15 +1593,11 @@ msgstr "ROLL"
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Viimasena kirjeldatud kaardi määramine omas aknas aktiivseks"
 
-#, fuzzy
-#| msgid "Execute the argument to this option inside the terminal."
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Selle võtme argumendi käivitamine terminalis"
 
-#, fuzzy
-#| msgid "No such profile \"%s\", using default profile\n"
 msgid "Use the given profile instead of the default profile"
-msgstr "Profiili \"%s\" pole, kasutatakse vaikimisi profiili\n"
+msgstr "Määratud profiili kasutamine vaikimisi profiili asemel"
 
 msgid "PROFILE-NAME"
 msgstr "PROFIILI-NIMI"
@@ -1663,20 +1639,16 @@ msgid ""
 "the default for all windows:"
 msgstr ""
 
-#, fuzzy
-#| msgid "Show GNOME Terminal options"
 msgid "Show per-window options"
-msgstr "GNOME Terminali valikute näitamine"
+msgstr ""
 
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
 msgstr ""
 
-#, fuzzy
-#| msgid "Show GNOME Terminal options"
 msgid "Show per-terminal options"
-msgstr "GNOME Terminali valikute näitamine"
+msgstr ""
 
 msgid "Unnamed"
 msgstr "Nimetu"
@@ -1773,10 +1745,8 @@ msgstr "_Vaade"
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#, fuzzy
-#| msgid "Tabs"
 msgid "Ta_bs"
-msgstr "Kaardid"
+msgstr "_Kaardid"
 
 msgid "_Help"
 msgstr "A_bi"
@@ -1799,8 +1769,6 @@ msgstr "P_rofiilid…"
 msgid "_Keyboard Shortcuts…"
 msgstr "_Kiirklahvid…"
 
-#, fuzzy
-#| msgid "Profile _Preferences"
 msgid "Pr_ofile Preferences"
 msgstr "Profiili _eelistused"
 
@@ -1872,10 +1840,8 @@ msgstr "P_rofiilid"
 msgid "C_lose Window"
 msgstr "Su_lge aken"
 
-#, fuzzy
-#| msgid "_Full Screen"
 msgid "L_eave Full Screen"
-msgstr "_Täisekraan"
+msgstr "_Lahku täisekraanist"
 
 msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
@@ -1887,15 +1853,11 @@ msgstr "Näita m_enüüriba"
 msgid "_Full Screen"
 msgstr "_Täisekraan"
 
-#, fuzzy
-#| msgid "Title for terminal"
 msgid "Close this terminal?"
-msgstr "Terminali pealkiri"
+msgstr "Kas sulgeda see terminal?"
 
-#, fuzzy
-#| msgid "Close Window"
 msgid "Close this window?"
-msgstr "Akna sulgemine"
+msgstr "Kas sulgeda see aken?"
 
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
@@ -1907,16 +1869,14 @@ msgid ""
 "kill it."
 msgstr ""
 
-#, fuzzy
-#| msgid "_Terminal"
 msgid "C_lose Terminal"
-msgstr "_Terminal"
+msgstr "Sul_ge terminal"
 
 msgid "_Title:"
 msgstr "_Pealkiri:"
 
 msgid "Contributors:"
-msgstr ""
+msgstr "Kaasautorid:"
 
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminaliemulaator GNOME töölauale"
