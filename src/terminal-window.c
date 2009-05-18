@@ -983,6 +983,12 @@ screen_resize_window_cb (TerminalScreen *screen,
   guint grid_width, grid_height;
   int xpad_total, ypad_total, char_width, char_height;
 
+  /* Don't do anything if we're maximised or fullscreened */
+  // FIXME: realized && ... instead? 
+  if (!GTK_WIDGET_REALIZED (widget) ||
+      (gdk_window_get_state (widget->window) & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)) != 0)
+    return;
+
   /* NOTE: width and height already include the VteTerminal's padding! */
 
   /* Short-circuit */
