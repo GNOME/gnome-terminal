@@ -4,6 +4,8 @@ m4_define([gt_version_micro],[0])
 m4_define([gt_version_extra],[-git])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
+m4_define([gt_api_version],[0])
+
 AC_INIT([GNOME Terminal],[gt_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
 AC_CONFIG_SRCDIR([src/terminal.c])
 AC_CONFIG_HEADERS([config.h])
@@ -110,10 +112,18 @@ GNOME_DOC_INIT
 
 # ****************************
 
+AC_SUBST([TERMINAL_MAJOR_VERSION],[gt_version_major])
+AC_SUBST([TERMINAL_MINOR_VERSION],[gt_version_minor])
+AC_SUBST([TERMINAL_MICRO_VERSION],[gt_version_micro])
+AC_SUBST([TERMINAL_API_VERSION],[gt_api_version])
+
+# ****************************
+
 AC_CONFIG_FILES([
 Makefile
 gnome-terminal.desktop.in
 src/Makefile
+src/terminal-version.h
 src/skey/Makefile
 help/Makefile
 help/bg/Makefile

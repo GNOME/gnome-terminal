@@ -41,11 +41,13 @@ gnome_terminal_SOURCES= \
 	terminal-type-builtins.h \
 	terminal-util.c \
 	terminal-util.h \
+	terminal-version.h \
 	terminal-window.c \
 	terminal-window.h \
 	$(NULL)
 
 gnome_terminal_CPPFLAGS = \
+	-DTERMINAL_COMPILATION \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
