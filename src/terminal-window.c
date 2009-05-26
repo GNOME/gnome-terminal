@@ -77,6 +77,9 @@ struct _TerminalWindowPrivate
 
   guint disposed : 1;
   guint present_on_insert : 1;
+
+  /* Workaround until gtk+ bug #535557 is fixed */
+  guint icon_title_set : 1;
 };
 
 #define PROFILE_DATA_KEY "GT::Profile"
@@ -2086,6 +2089,9 @@ profile_set_callback (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
+  if (!GTK_WIDGET_REALIZED (window))
+    return;
+
   if (screen != priv->active_screen)
     return;
 
@@ -2119,6 +2125,8 @@ sync_screen_icon_title (TerminalScreen *screen,
     return;
 
   gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+
+  priv->icon_title_set = TRUE;
 }
 
 static void
@@ -2127,6 +2135,13 @@ sync_screen_icon_title_set (TerminalScreen *screen,
                             TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+
+  if (!GTK_WIDGET_REALIZED (window))
+    return;
+
+  /* No need to restore the title if we never set an icon title */
+  if (!priv->icon_title_set)
+    return;
 
   if (screen != priv->active_screen)
     return;
@@ -2137,7 +2152,12 @@ sync_screen_icon_title_set (TerminalScreen *screen,
   /* Need to reset the icon name */
   /* FIXME: Once gtk+ bug 535557 is fixed, use that to unset the icon title. */
 
-  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_title (screen));
+  g_object_set_qdata (G_OBJECT (GTK_WIDGET (window)->window),
+                      g_quark_from_static_string ("gdk-icon-name-set"),
+                      GUINT_TO_POINTER (FALSE));
+  priv->icon_title_set = FALSE;
+
+  /* Re-setting the right title will be done by the notify::title handler which comes after this one */
 }
 
 /* Notebook callbacks */
@@ -2433,9 +2453,9 @@ terminal_window_set_active (TerminalWindow *window,
       terminal_window_set_menubar_visible (window, setting);
     }
 
-  sync_screen_title (screen, NULL, window);
   sync_screen_icon_title_set (screen, NULL, window);
   sync_screen_icon_title (screen, NULL, window);
+  sync_screen_title (screen, NULL, window);
 
   /* set size of window to current grid size */
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
