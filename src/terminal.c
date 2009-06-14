@@ -34,7 +34,9 @@
 
 #ifdef WITH_SMCLIENT
 #include "eggsmclient.h"
+#ifdef GDK_WINDOWING_X11
 #include "eggdesktopfile.h"
+#endif
 #endif
 
 #include <dbus/dbus-protocol.h>
@@ -459,7 +461,7 @@ factory_disabled:
   gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
   gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
 
-#ifdef WITH_SMCLIENT
+#if defined(WITH_SMCLIENT) && defined(GDK_WINDOWING_X11)
   {
     char *desktop_file;
 

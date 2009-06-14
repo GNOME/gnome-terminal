@@ -77,8 +77,6 @@ gnome_terminal_LDADD = \
 
 if WITH_SMCLIENT
 gnome_terminal_SOURCES += \
-	eggdesktopfile.c \
-	eggdesktopfile.h \
 	eggsmclient.c \
 	eggsmclient.h \
 	eggsmclient-private.h \
@@ -87,7 +85,11 @@ gnome_terminal_CFLAGS += $(SMCLIENT_CFLAGS)
 gnome_terminal_LDADD += $(SMCLIENT_LIBS)
 
 if WITH_SMCLIENT_XSMP
-gnome_terminal_SOURCES += eggsmclient-xsmp.c
+gnome_terminal_SOURCES += \
+	eggdesktopfile.c \
+	eggdesktopfile.h \
+	eggsmclient-xsmp.c \
+	$(NULL)
 gnome_terminal_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
 endif
 if WITH_SMCLIENT_WIN32
