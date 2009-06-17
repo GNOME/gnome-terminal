@@ -1482,12 +1482,23 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
     {
       GtkWidget *widget = GTK_WIDGET (window);
       guint32 user_time;
+      int x, y;
 
       user_time = gdk_x11_display_get_user_time (gtk_widget_get_display (widget));
 
       /* If compositing changed, re-realize the window. Bug #563561 */
+
+      /* Save the position; this isn't perfect, because the position
+       * that gtk_window_get_position() returns is the position of the
+       * frame window, and we are racing with the new window manager
+       * framing our window, so we might see a funky intermediate state.
+       * But at worst, we'll be off by a few pixels (the frame size). */
+      gtk_window_get_position (GTK_WINDOW (window), &x, &y);
       gtk_widget_hide (widget);
       gtk_widget_unrealize (widget);
+
+      /* put the window back where it was before */
+      gtk_window_move (GTK_WINDOW (window), x, y);
       gtk_widget_realize (widget);
       gdk_x11_window_set_user_time (widget->window, user_time);
       gtk_widget_show (widget);
