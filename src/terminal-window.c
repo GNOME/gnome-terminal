@@ -2012,9 +2012,13 @@ terminal_window_show (GtkWidget *widget)
   GdkScreen *screen;
   GdkDisplay *display;
 
-  if (!GTK_WIDGET_REALIZED (widget))
-    gtk_widget_realize (widget);
-  
+  if (priv->active_screen != NULL)
+    {
+      /* At this point, we have our GdkScreen, and hence the right
+       * font size, so we can go ahead and size the window. */
+      terminal_window_set_size (window, priv->active_screen, FALSE);
+    }
+
   context = NULL;
   sn_display = NULL;
   if (priv->startup_id != NULL)

@@ -334,9 +334,6 @@ terminal_screen_realize (GtkWidget *widget)
   vte_terminal_set_background_transparent (VTE_TERMINAL (screen),
                                            bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
                                            !terminal_window_uses_argb_visual (priv->window));
-
-  /* FIXME: why do this on realize? */
-  terminal_window_set_size (priv->window, screen, TRUE);
 }
 
 static void
