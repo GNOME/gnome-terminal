@@ -77,6 +77,11 @@ struct _TerminalWindowPrivate
   /* Compositing manager integration */
   guint have_argb_visual : 1;
 
+  /* Used to clear stray "demands attention" flashing on our window when we
+   * unmap and map it to switch to an ARGB visual.
+   */
+  guint clear_demands_attention : 1;
+
   guint disposed : 1;
   guint present_on_insert : 1;
 
@@ -1425,6 +1430,32 @@ terminal_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
 }
+
+static gboolean
+terminal_window_map_event (GtkWidget    *widget,
+			   GdkEventAny  *event)
+{
+  gboolean (* map_event) (GtkWidget *, GdkEventAny *) =
+      GTK_WIDGET_CLASS (terminal_window_parent_class)->map_event;
+
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (priv->clear_demands_attention)
+    {
+#ifdef GDK_WINDOWING_X11
+      terminal_util_x11_clear_demands_attention (widget->window);
+#endif
+
+      priv->clear_demands_attention = FALSE;
+    }
+
+  if (map_event)
+    return map_event (widget, event);
+
+  return FALSE;
+}
+
     
 static gboolean
 terminal_window_state_event (GtkWidget            *widget,
@@ -1513,6 +1544,15 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       gtk_widget_show (widget);
       if (have_desktop)
         terminal_util_x11_set_net_wm_desktop (widget->window, desktop);
+
+      /* Mapping the window is likely to have set the "demands-attention" state.
+       * In particular, Metacity will always set the state if a window is mapped,
+       * is not given the focus (because of an old user time), and is covered
+       * by some other window. We have no way of preventing this, so we just
+       * wait for our window to be mapped, and then tell the window manager
+       * to turn off the bit. If it wasn't set, no harm.
+       */
+      priv->clear_demands_attention = TRUE;
     }
 }
 
@@ -1921,6 +1961,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
+  widget_class->map_event = terminal_window_map_event;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
 
