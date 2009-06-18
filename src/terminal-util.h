@@ -100,4 +100,9 @@ void terminal_util_bind_object_property_to_widget (GObject *object,
                                                    GtkWidget *widget,
                                                    PropertyChangeFlags flags);
 
+gboolean terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
+					       guint32   *desktop);
+void     terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
+					       guint32    desktop);
+
 #endif /* TERMINAL_UTIL_H */

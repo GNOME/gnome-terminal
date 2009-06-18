@@ -32,6 +32,11 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#include <X11/Xatom.h>
+#endif
+
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
@@ -869,3 +874,114 @@ terminal_util_bind_object_property_to_widget (GObject *object,
   change->object_notify_id = g_signal_connect_swapped (object, notify_signal, G_CALLBACK (object_change_notify_cb), change);
 }
 
+#ifdef GDK_WINDOWING_X11
+
+/* We don't want to hop desktops when we unrealize/realize.
+ * So we need to save and restore the value of NET_WM_DESKTOP. This isn't
+ * exposed through GDK.
+ */
+gboolean
+terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
+				      guint32   *desktop)
+{
+  GdkDisplay *display = gdk_drawable_get_display (window);
+  Atom type;
+  int format;
+  guchar *data;
+  gulong n_items, bytes_after;
+  gboolean result = FALSE;
+
+  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+			  GDK_DRAWABLE_XID (window),
+			  gdk_x11_get_xatom_by_name_for_display (display,
+								 "_NET_WM_DESKTOP"),
+			  0, G_MAXLONG, False, AnyPropertyType,
+			  &type, &format, &n_items, &bytes_after, &data) == Success &&
+      type != None)
+    {
+      if (type == XA_CARDINAL && format == 32 && n_items == 1)
+	{
+	  *desktop = *(gulong *)data;
+	  result = TRUE;
+	}
+
+      XFree (data);
+    }
+
+  return result;
+}
+
+void
+terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
+				      guint32    desktop)
+{
+  /* We can't change the current desktop before mapping our window,
+   * because GDK has the annoying habit of clearing _NET_WM_DESKTOP
+   * before mapping a GdkWindow, So we we have to do it after instead.
+   *
+   * However, doing it after is different whether or not we have a
+   * window manager (if we don't have a window manager, we have to
+   * set the _NET_WM_DESKTOP property so that it picks it up when
+   * it starts)
+   *
+   * http://bugzilla.gnome.org/show_bug.cgi?id=586311 asks for GTK+
+   * to just handle everything behind the scenes including the desktop.
+   */
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkDisplay *display = gdk_screen_get_display (screen);
+  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  char *wm_selection_name;
+  Atom wm_selection;
+  gboolean have_wm;
+
+  wm_selection_name = g_strdup_printf ("WM_S%d", gdk_screen_get_number (screen));
+  wm_selection = gdk_x11_get_xatom_by_name_for_display (display, wm_selection_name);
+  g_free(wm_selection_name);
+
+  XGrabServer (xdisplay);
+
+  have_wm = XGetSelectionOwner (xdisplay, wm_selection) != None;
+
+  if (have_wm)
+    {
+      /* code borrowed from GDK
+       */
+      XClientMessageEvent xclient;
+
+      memset (&xclient, 0, sizeof (xclient));
+      xclient.type = ClientMessage;
+      xclient.serial = 0;
+      xclient.send_event = True;
+      xclient.window = GDK_WINDOW_XWINDOW (window);
+      xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP");
+      xclient.format = 32;
+
+      xclient.data.l[0] = desktop;
+      xclient.data.l[1] = 0;
+      xclient.data.l[2] = 0;
+      xclient.data.l[3] = 0;
+      xclient.data.l[4] = 0;
+
+      XSendEvent (xdisplay,
+		  GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)),
+		  False,
+		  SubstructureRedirectMask | SubstructureNotifyMask,
+		  (XEvent *)&xclient);
+    }
+  else
+    {
+      gulong long_desktop = desktop;
+
+      XChangeProperty (xdisplay,
+		       GDK_DRAWABLE_XID (window),
+		       gdk_x11_get_xatom_by_name_for_display (display,
+							      "_NET_WM_DESKTOP"),
+		       XA_CARDINAL, 32, PropModeReplace,
+		       (guchar *)&long_desktop, 1);
+    }
+
+  XUngrabServer (xdisplay);
+  XFlush (xdisplay);
+}
+
+#endif /* GDK_WINDOWING_X11 */

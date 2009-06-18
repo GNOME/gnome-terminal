@@ -22,7 +22,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
+#ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 #include <gdk/gdkkeysyms.h>
 #include <libsn/sn-launchee.h>
 
@@ -1482,6 +1484,8 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
     {
       GtkWidget *widget = GTK_WIDGET (window);
       guint32 user_time;
+      gboolean have_desktop;
+      guint32 desktop = 0; /* Quiet GCC */
       int x, y;
 
       user_time = gdk_x11_display_get_user_time (gtk_widget_get_display (widget));
@@ -1494,6 +1498,10 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
        * framing our window, so we might see a funky intermediate state.
        * But at worst, we'll be off by a few pixels (the frame size). */
       gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+
+      /* And the desktop */
+      have_desktop = terminal_util_x11_get_net_wm_desktop (widget->window, &desktop);
+
       gtk_widget_hide (widget);
       gtk_widget_unrealize (widget);
 
@@ -1501,7 +1509,10 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       gtk_window_move (GTK_WINDOW (window), x, y);
       gtk_widget_realize (widget);
       gdk_x11_window_set_user_time (widget->window, user_time);
+
       gtk_widget_show (widget);
+      if (have_desktop)
+        terminal_util_x11_set_net_wm_desktop (widget->window, desktop);
     }
 }
 
