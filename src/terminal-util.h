@@ -107,4 +107,6 @@ void     terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
 
 void terminal_util_x11_clear_demands_attention (GdkWindow *window);
 
+gboolean terminal_util_x11_window_is_minimized (GdkWindow *window);
+
 #endif /* TERMINAL_UTIL_H */

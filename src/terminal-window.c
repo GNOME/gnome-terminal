@@ -1517,6 +1517,7 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       guint32 user_time;
       gboolean have_desktop;
       guint32 desktop = 0; /* Quiet GCC */
+      gboolean was_minimized;
       int x, y;
 
       user_time = gdk_x11_display_get_user_time (gtk_widget_get_display (widget));
@@ -1530,6 +1531,13 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
        * But at worst, we'll be off by a few pixels (the frame size). */
       gtk_window_get_position (GTK_WINDOW (window), &x, &y);
 
+      /* GtkWindow tries to save whether the window was iconified
+       * and restore it, but that doesn't work because of problems
+       * GDK_WINDOW_STATE_ICONIFIED. For details, see comment for
+       * terminal_util_x11_window_is_minimized()
+       */
+      was_minimized = terminal_util_x11_window_is_minimized (widget->window);
+
       /* And the desktop */
       have_desktop = terminal_util_x11_get_net_wm_desktop (widget->window, &desktop);
 
@@ -1540,6 +1548,11 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       gtk_window_move (GTK_WINDOW (window), x, y);
       gtk_widget_realize (widget);
       gdk_x11_window_set_user_time (widget->window, user_time);
+
+      if (was_minimized)
+	gtk_window_iconify (GTK_WINDOW (window));
+      else
+	gtk_window_deiconify (GTK_WINDOW (window));
 
       gtk_widget_show (widget);
       if (have_desktop)

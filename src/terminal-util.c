@@ -1018,4 +1018,56 @@ terminal_util_x11_clear_demands_attention (GdkWindow *window)
 	      (XEvent *)&xclient);
 }
 
+/* Check if a GdkWindow is minimized. This is a workaround for a
+ * GDK bug/misfeature. gdk_window_get_state (window) has the
+ * GDK_WINDOW_STATE_ICONIFIED bit for all unmapped windows,
+ * even windows on another desktop.
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=586664
+ *
+ * Code to read _NET_WM_STATE adapted from GDK
+ */
+gboolean
+terminal_util_x11_window_is_minimized (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_drawable_get_display (window);
+
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  guchar *data;
+  Atom *atoms = NULL;
+  gulong i;
+
+  gboolean minimized = FALSE;
+
+  type = None;
+  gdk_error_trap_push ();
+  XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
+                      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
+                      &bytes_after, &data);
+  gdk_error_trap_pop ();
+
+  if (type != None)
+    {
+      Atom hidden_atom = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_HIDDEN");
+
+      atoms = (Atom *)data;
+
+      for (i = 0; i < nitems; i++)
+        {
+          if (atoms[i] == hidden_atom)
+            minimized = TRUE;
+
+          ++i;
+        }
+
+      XFree (atoms);
+    }
+
+  return minimized;
+}
+
 #endif /* GDK_WINDOWING_X11 */
