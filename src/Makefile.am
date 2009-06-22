@@ -4,6 +4,15 @@ SUBDIRS = skey
 
 bin_PROGRAMS = gnome-terminal
 
+BUILT_SOURCES = \
+	terminal-factory-client.h \
+	terminal-factory-server.h \
+	terminal-marshal.c \
+	terminal-marshal.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
+	$(NULL)
+
 gnome_terminal_SOURCES= \
 	eggshell.c \
 	eggshell.h \
@@ -20,11 +29,7 @@ gnome_terminal_SOURCES= \
 	terminal-debug.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
-	terminal-factory-client.h \
-	terminal-factory-server.h \
 	terminal-intl.h \
-	terminal-marshal.c \
-	terminal-marshal.h \
 	terminal-options.c \
 	terminal-options.h \
 	terminal-profile.c \
@@ -37,14 +42,14 @@ gnome_terminal_SOURCES= \
 	terminal-tab-label.h \
 	terminal-tabs-menu.c \
 	terminal-tabs-menu.h \
-	terminal-type-builtins.c \
-	terminal-type-builtins.h \
 	terminal-util.c \
 	terminal-util.h \
 	terminal-version.h \
 	terminal-window.c \
 	terminal-window.h \
 	$(NULL)
+
+nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
 
 gnome_terminal_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
@@ -100,15 +105,6 @@ gnome_terminal_SOURCES += eggsmclient-osx.c
 endif
 endif
 
-BUILT_SOURCES = \
-	terminal-factory-client.h \
-	terminal-factory-server.h \
-	terminal-marshal.c \
-	terminal-marshal.h \
-	terminal-type-builtins.c \
-	terminal-type-builtins.h \
-	$(NULL)
-	
 TYPES_H_FILES = \
 	terminal-profile.h \
 	$(NULL)
