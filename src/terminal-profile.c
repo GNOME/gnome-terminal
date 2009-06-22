@@ -844,7 +844,7 @@ cleanup:
   g_free (key);
 }
 
-static gboolean
+static void
 terminal_profile_save (TerminalProfile *profile)
 {
   TerminalProfilePrivate *priv = profile->priv;
@@ -879,8 +879,6 @@ terminal_profile_save (TerminalProfile *profile)
     }
 
   gconf_change_set_unref (changeset);
-
-  return error == NULL;
 }
 
 static gboolean
