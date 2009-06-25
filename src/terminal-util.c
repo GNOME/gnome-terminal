@@ -234,6 +234,8 @@ terminal_util_open_url (GtkWidget *parent,
     case FLAVOR_AS_IS:
       uri = g_strdup (orig_url);
       break;
+    case FLAVOR_SKEY:
+      /* shouldn't get this */
     default:
       uri = NULL;
       g_assert_not_reached ();
@@ -833,8 +835,8 @@ terminal_util_bind_object_property_to_widget (GObject *object,
                                               PropertyChangeFlags flags)
 {
   PropertyChange *change;
-  const char *signal;
-  char notify_signal[64];
+  const char *signal_name;
+  char notify_signal_name[64];
 
   change = g_slice_new0 (PropertyChange);
 
@@ -843,35 +845,35 @@ terminal_util_bind_object_property_to_widget (GObject *object,
   g_object_set_data_full (G_OBJECT (widget), "GT:PCD", change, (GDestroyNotify) property_change_free);
 
   if (GTK_IS_TOGGLE_BUTTON (widget))
-    signal = "notify::active";
+    signal_name = "notify::active";
   else if (GTK_IS_SPIN_BUTTON (widget))
-    signal = "notify::value";
+    signal_name = "notify::value";
   else if (GTK_IS_ENTRY (widget))
-    signal = "notify::text";
+    signal_name = "notify::text";
   else if (GTK_IS_COMBO_BOX (widget))
-    signal = "notify::active";
+    signal_name = "notify::active";
   else if (GTK_IS_COLOR_BUTTON (widget))
-    signal = "notify::color";
+    signal_name = "notify::color";
   else if (GTK_IS_FONT_BUTTON (widget))
-    signal = "notify::font-name";
+    signal_name = "notify::font-name";
   else if (GTK_IS_RANGE (widget))
-    signal = "value-changed";
+    signal_name = "value-changed";
   else if (GTK_IS_FILE_CHOOSER_BUTTON (widget))
-    signal = "file-set";
+    signal_name = "file-set";
   else if (GTK_IS_FILE_CHOOSER (widget))
-    signal = "selection-changed";
+    signal_name = "selection-changed";
   else
     g_assert_not_reached ();
 
-  change->widget_notify_id = g_signal_connect_swapped (widget, signal, G_CALLBACK (widget_change_notify_cb), change);
+  change->widget_notify_id = g_signal_connect_swapped (widget, signal_name, G_CALLBACK (widget_change_notify_cb), change);
 
   change->object = object;
   change->flags = flags;
   change->object_prop = object_prop;
 
-  g_snprintf (notify_signal, sizeof (notify_signal), "notify::%s", object_prop);
+  g_snprintf (notify_signal_name, sizeof (notify_signal_name), "notify::%s", object_prop);
   object_change_notify_cb (change);
-  change->object_notify_id = g_signal_connect_swapped (object, notify_signal, G_CALLBACK (object_change_notify_cb), change);
+  change->object_notify_id = g_signal_connect_swapped (object, notify_signal_name, G_CALLBACK (object_change_notify_cb), change);
 }
 
 #ifdef GDK_WINDOWING_X11

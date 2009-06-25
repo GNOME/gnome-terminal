@@ -105,8 +105,6 @@ struct _TerminalWindowPrivate
 #define STOCK_NEW_WINDOW  "window-new"
 #define STOCK_NEW_TAB     "tab-new"
 
-static void terminal_window_init        (TerminalWindow      *window);
-static void terminal_window_class_init  (TerminalWindowClass *klass);
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
@@ -3010,10 +3008,10 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
       for (t = tabs; t != NULL; t = t->next)
         {
-          TerminalScreen *screen;
+          TerminalScreen *terminal_screen;
 
-          screen = terminal_screen_container_get_screen ((GtkWidget *) t->data);
-          if (terminal_screen_has_foreground_process (screen))
+          terminal_screen = terminal_screen_container_get_screen ((GtkWidget *) t->data);
+          if (terminal_screen_has_foreground_process (terminal_screen))
             {
               do_confirm = TRUE;
               break;

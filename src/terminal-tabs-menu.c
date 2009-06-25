@@ -60,8 +60,6 @@ enum
 	PROP_WINDOW
 };
 
-static void	terminal_tabs_menu_class_init	(TerminalTabsMenuClass *klass);
-static void	terminal_tabs_menu_init	  	(TerminalTabsMenu *menu);
 static void	terminal_tabs_menu_update		(TerminalTabsMenu *menu);
 
 /* FIXME: this can be severely optimised */
@@ -130,7 +128,7 @@ free_tab_id (GtkAction *action)
         name = gtk_action_get_name (action);
         id = g_ascii_strtoull (name + ACTION_VERB_FORMAT_PREFIX_LEN, NULL,
                                ACTION_VERB_FORMAT_BASE);
-        g_assert (id >= 0 && id < tabs_id_array->len * 8);
+        g_assert (id < tabs_id_array->len * 8);
 
         b = id >> 3;
         bit = id & 0x7;
@@ -350,6 +348,9 @@ terminal_tabs_menu_set_property (GObject *object,
 		case PROP_WINDOW:
 			terminal_tabs_menu_set_window (menu, g_value_get_object (value));
 			break;
+                default:
+                        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+                        break;
 	}
 }
 

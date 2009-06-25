@@ -104,8 +104,6 @@ enum
   TARGET_TAB
 };
 
-static void terminal_screen_init        (TerminalScreen      *screen);
-static void terminal_screen_class_init  (TerminalScreenClass *klass);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_drag_data_received (GtkWidget        *widget,
@@ -1915,6 +1913,7 @@ terminal_screen_child_exited (VteTerminal *terminal)
       terminal_screen_launch_child (screen);
       break;
     case TERMINAL_EXIT_HOLD:
+    default:
       break;
     }
 }
@@ -1944,7 +1943,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
                                     gint              y,
                                     GtkSelectionData *selection_data,
                                     guint             info,
-                                    guint             time)
+                                    guint             timestamp)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
@@ -2151,7 +2150,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
                                           GTK_WIDGET (screen));
         terminal_window_move_screen (source_window, dest_window, moving_screen, page_num + 1);
 
-        gtk_drag_finish (context, TRUE, TRUE, time);
+        gtk_drag_finish (context, TRUE, TRUE, timestamp);
       }
       break;
 

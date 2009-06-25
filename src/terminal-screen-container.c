@@ -111,6 +111,8 @@ terminal_screen_container_set_policy (GtkWidget *container,
     case GTK_POLICY_ALWAYS:
       gtk_widget_show (scrollbar);
       break;
+    default:
+      g_assert_not_reached ();
   }
 #endif
 }
@@ -138,6 +140,8 @@ terminal_screen_container_set_placement (GtkWidget *container,
     case GTK_CORNER_BOTTOM_RIGHT:
       gtk_box_reorder_child (GTK_BOX (container), scrollbar, 0);
       break;
+    default:
+      g_assert_not_reached ();
   }
 #endif
 }

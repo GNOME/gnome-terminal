@@ -1669,10 +1669,10 @@ terminal_app_handle_options (TerminalApp *app,
                              GError **error)
 {
   GList *lw;
-  GdkScreen *screen;
+  GdkScreen *gdk_screen;
 
-  screen = terminal_app_get_screen_by_display_name (options->display_name,
-                                                    options->screen_number);
+  gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
+                                                        options->screen_number);
 
   if (options->save_config)
     return terminal_app_save_config_file (app, options->config_file, error);
@@ -1723,7 +1723,7 @@ terminal_app_handle_options (TerminalApp *app,
       g_assert (iw->tabs);
 
       /* Create & setup new window */
-      window = terminal_app_new_window (app, screen);
+      window = terminal_app_new_window (app, gdk_screen);
 
       if (options->startup_id)
         terminal_window_set_startup_id (window, options->startup_id);

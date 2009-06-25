@@ -272,8 +272,6 @@ enum
   LAST_SIGNAL
 };
 
-static void terminal_profile_init        (TerminalProfile      *profile);
-static void terminal_profile_class_init  (TerminalProfileClass *klass);
 static void terminal_profile_finalize    (GObject              *object);
 static void terminal_profile_set_property (GObject *object,
                                            guint prop_id,
@@ -335,7 +333,7 @@ get_prop_value_from_prop_name (TerminalProfile *profile,
 }
 
 static void
-set_value_from_palette (GValue *value,
+set_value_from_palette (GValue *ret_value,
                         const GdkColor *colors,
                         guint n_colors)
 {
@@ -364,7 +362,7 @@ set_value_from_palette (GValue *value,
       g_value_set_boxed (value, &DEFAULT_PALETTE[i]);
     }
 
-  g_value_take_boxed (value, array);
+  g_value_take_boxed (ret_value, array);
 }
 
 static int
@@ -1211,8 +1209,8 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 \
   if (propGConf)\
     {\
-      g_param_spec_set_qdata (pspec, gconf_key_quark, propGConf);\
-      g_hash_table_insert (klass->gconf_keys, propGConf, pspec);\
+      g_param_spec_set_qdata (pspec, gconf_key_quark, (gpointer) propGConf);\
+      g_hash_table_insert (klass->gconf_keys, (gpointer) propGConf, pspec);\
     }\
 }
 

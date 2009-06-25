@@ -26,8 +26,7 @@ char *skey(SKeyAlgorithm algorithm, int seq, const char *seed, const char *passp
 {
 	char key[SKEY_SIZE];
 	int i;
-	g_assert(algorithm >= MD4);
-	g_assert(algorithm <= SHA1);
+        g_assert (algorithm < G_N_ELEMENTS (hash_table));
 	if (hash_table[algorithm].Keycrunch(key, seed, passphrase) == -1)
 		return NULL;
 

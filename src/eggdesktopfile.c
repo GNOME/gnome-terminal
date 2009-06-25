@@ -1386,6 +1386,8 @@ egg_desktop_file_launch (EggDesktopFile *desktop_file,
       free_document_list (documents);
       break;
 
+    case EGG_DESKTOP_FILE_TYPE_UNRECOGNIZED:
+    case EGG_DESKTOP_FILE_TYPE_DIRECTORY:
     default:
       g_set_error (error, EGG_DESKTOP_FILE_ERROR,
 		   EGG_DESKTOP_FILE_ERROR_NOT_LAUNCHABLE,

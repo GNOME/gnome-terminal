@@ -178,7 +178,7 @@ unsupported_option_callback (const gchar *option_name,
 }
 
 
-static gboolean
+static gboolean G_GNUC_NORETURN
 option_version_cb (const gchar *option_name,
                    const gchar *value,
                    gpointer     data,
@@ -187,7 +187,6 @@ option_version_cb (const gchar *option_name,
   g_print ("%s %s\n", _("GNOME Terminal"), VERSION);
 
   exit (EXIT_SUCCESS);
-  return FALSE;
 }
 
 static gboolean

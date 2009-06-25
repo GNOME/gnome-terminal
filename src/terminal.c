@@ -87,6 +87,13 @@ terminal_factory_handle_arguments (TerminalFactory *factory,
 #include "terminal-factory-client.h"
 #include "terminal-factory-server.h"
 
+static GType terminal_factory_get_type (void);
+
+G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
+  dbus_g_object_type_install_info (g_define_type_id,
+                                   &dbus_glib_terminal_factory_object_info)
+);
+ 
 static void
 terminal_factory_class_init (TerminalFactoryClass *factory_class)
 {
@@ -97,13 +104,6 @@ terminal_factory_init (TerminalFactory *factory)
 {
 }
 
-static GType terminal_factory_get_type (void);
-
-G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
-  dbus_g_object_type_install_info (g_define_type_id,
-                                   &dbus_glib_terminal_factory_object_info)
-);
- 
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -181,13 +181,13 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 
 static void
 about_url_hook (GtkAboutDialog *about,
-	        const char *link,
+	        const char *uri,
 	        gpointer user_data)
 {
   GError *error = NULL;
 
   if (!gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (about)),
-                      link,
+                      uri,
                       gtk_get_current_event_time (),
                       &error))
     {
@@ -364,7 +364,7 @@ main (int argc, char **argv)
       char **env;
       const char *evalue;
       GPtrArray *env_ptr_array;
-      int i, envc;
+      int envc;
       GArray *working_directory_array, *display_name_array, *startup_id_array;
       GArray *env_array, *argv_array;
       gboolean retval;
@@ -507,7 +507,7 @@ handle_new_terminal_event (TerminalOptions *options)
 }
 
 static gboolean
-terminal_factory_handle_arguments (TerminalFactory *factory,
+terminal_factory_handle_arguments (TerminalFactory *terminal_factory,
                                    const GArray *working_directory_array,
                                    const GArray *display_name_array,
                                    const GArray *startup_id_array,

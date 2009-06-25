@@ -176,9 +176,9 @@ terminal_tab_label_finalize (GObject *object)
 
 static void
 terminal_tab_label_set_property (GObject *object,
-                           guint prop_id,
-                           const GValue *value,
-                           GParamSpec *pspec)
+                                 guint prop_id,
+                                 const GValue *value,
+                                 GParamSpec *pspec)
 {
   TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
   TerminalTabLabelPrivate *priv = tab_label->priv;
@@ -186,6 +186,9 @@ terminal_tab_label_set_property (GObject *object,
   switch (prop_id) {
     case PROP_SCREEN:
       priv->screen = g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
 }

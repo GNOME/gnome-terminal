@@ -111,7 +111,7 @@ typedef struct
 {
   KeyEntry *key_entry;
   guint n_elements;
-  gchar *user_visible_name;
+  const char *user_visible_name;
 } KeyEntryList;
 
 static KeyEntry file_entries[] =
