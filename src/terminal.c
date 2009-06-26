@@ -469,7 +469,7 @@ factory_disabled:
                                      "applications",
                                      PACKAGE ".desktop",
                                      NULL);
-    egg_set_desktop_file (desktop_file);
+    egg_set_desktop_file_without_defaults (desktop_file);
     g_free (desktop_file);
   }
 #endif

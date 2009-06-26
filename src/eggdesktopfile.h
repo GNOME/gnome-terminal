@@ -150,8 +150,9 @@ typedef enum {
 } EggDesktopFileError;
 
 /* Global application desktop file */
-void            egg_set_desktop_file (const char *desktop_file_path);
-EggDesktopFile *egg_get_desktop_file (void);
+void            egg_set_desktop_file                  (const char *desktop_file_path);
+void            egg_set_desktop_file_without_defaults (const char *desktop_file_path);
+EggDesktopFile *egg_get_desktop_file                  (void);
 
 
 G_END_DECLS
