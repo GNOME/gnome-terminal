@@ -925,12 +925,6 @@ terminal_profile_init (TerminalProfile *profile)
 
   priv->locked = g_new0 (gboolean, LAST_PROP);
 
-  /* Lock all props by default. If GConf is working and allows writing
-   * to the resp. keys, we'll unlock in the notification handler.
-   */
-  for (i = 0; i < LAST_PROP; ++i)
-    priv->locked[i] = TRUE;
-
   priv->properties = g_value_array_new (LAST_PROP);
   for (i = 0; i < LAST_PROP; ++i)
     g_value_array_append (priv->properties, NULL);
