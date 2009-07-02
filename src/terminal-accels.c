@@ -286,7 +286,7 @@ key_from_gconf_key (const char *gconf_key)
 {
   const char *last_slash = strrchr (gconf_key, '/');
   if (last_slash)
-    return last_slash++;
+    return ++last_slash;
   return NULL;
 }
 
