@@ -1274,8 +1274,8 @@ egg_desktop_file_launchv (EggDesktopFile *desktop_file,
  out:
   if (env)
     {
-      g_strfreev ((char **)env->pdata);
-      g_ptr_array_free (env, FALSE);
+      g_ptr_array_foreach (env, (GFunc)g_free, NULL);
+      g_ptr_array_free (env, TRUE);
     }
   free_document_list (translated_documents);
 
