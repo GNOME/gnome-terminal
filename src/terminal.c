@@ -253,6 +253,7 @@ main (int argc, char **argv)
   DBusGProxy *proxy;
   guint32 request_name_ret;
   GError *error = NULL;
+  const char *home_dir;
 
   setlocale (LC_ALL, "");
 
@@ -480,11 +481,13 @@ factory_disabled:
   terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, NULL);
   terminal_options_free (options);
 
-  /* Now change directory to / so we don't prevent unmounting, e.g. if the
+  /* Now change directory to $HOME so we don't prevent unmounting, e.g. if the
    * factory is started by nautilus-open-terminal. See bug #565328.
+   * On failure back to /.
    */
-  if (chdir ("/") < 0)
-    g_warning ("Failed to chdir to /: %s", g_strerror (errno));
+  home_dir = g_get_home_dir ();
+  if (home_dir == NULL || chdir (home_dir) < 0)
+    (void) chdir ("/");
 
   gtk_main ();
 
