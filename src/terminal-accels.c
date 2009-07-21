@@ -104,7 +104,7 @@ typedef struct
   GClosure *closure;
   /* have gotten a notification from gtk */
   gboolean needs_gconf_sync;
-  gboolean gconf_writable;
+  gboolean accel_path_unlocked;
 } KeyEntry;
 
 typedef struct
@@ -397,7 +397,6 @@ keys_change_notify (GConfClient *client,
   KeyEntry *key_entry;
   GdkModifierType mask;
   guint keyval;
-  gboolean gconf_writable;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
@@ -440,15 +439,9 @@ keys_change_notify (GConfClient *client,
   key_entry->gconf_keyval = keyval;
   key_entry->gconf_mask = mask;
 
-  gconf_writable = gconf_entry_get_is_writable (entry);
-  if (gconf_writable != key_entry->gconf_writable)
-    {
-      if (gconf_writable)
-        gtk_accel_map_unlock_path (key_entry->accel_path);
-      else
-        gtk_accel_map_lock_path (key_entry->accel_path);
-    }
-  key_entry->gconf_writable = gconf_writable;
+  /* Unlock the path, so we can change its accel */
+  if (!key_entry->accel_path_unlocked)
+    gtk_accel_map_unlock_path (key_entry->accel_path);
 
   /* sync over to GTK */
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
@@ -461,6 +454,11 @@ keys_change_notify (GConfClient *client,
                               keyval, mask,
                               TRUE);
   inside_gconf_notify -= 1;
+
+  /* Lock the path if the gconf key isn't writable */
+  key_entry->accel_path_unlocked = gconf_entry_get_is_writable (entry);
+  if (!key_entry->accel_path_unlocked)
+    gtk_accel_map_lock_path (key_entry->accel_path);
 
   /* This seems necessary to update the tree model, since sometimes the
    * notification on the notification_group seems not to be emitted correctly.
@@ -631,8 +629,8 @@ accel_set_func (GtkTreeViewColumn *tree_column,
   else
     g_object_set (cell,
                   "visible", TRUE,
-                  "sensitive", ke->gconf_writable,
-                  "editable", ke->gconf_writable,
+                  "sensitive", ke->accel_path_unlocked,
+                  "editable", ke->accel_path_unlocked,
                   "accel-key", ke->gconf_keyval,
                   "accel-mods", ke->gconf_mask,
 		  NULL);
