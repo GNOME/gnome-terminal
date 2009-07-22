@@ -1806,10 +1806,12 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
   char *cwd;
 
   if (priv->pty_fd != -1) {
+#if 0
     /* Get the foreground process ID */
     cwd = cwd_of_pid (tcgetpgrp (priv->pty_fd));
     if (cwd != NULL)
       return cwd;
+#endif
 
     /* If that didn't work, try falling back to the primary child. See bug #575184. */
     cwd = cwd_of_pid (priv->child_pid);
