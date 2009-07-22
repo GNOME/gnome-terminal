@@ -2313,6 +2313,9 @@ terminal_screen_save_config (TerminalScreen *screen,
 gboolean
 terminal_screen_has_foreground_process (TerminalScreen *screen)
 {
+  return FALSE;
+
+#if 0
   TerminalScreenPrivate *priv = screen->priv;
   int fgpid;
 
@@ -2324,6 +2327,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen)
     return FALSE;
 
   return TRUE;
+#endif
 
 #if 0
   char *cmdline, *basename, *name;
