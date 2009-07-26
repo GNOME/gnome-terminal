@@ -30,7 +30,8 @@ void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
 
 void terminal_util_show_error_dialog (GtkWindow *transient_parent, 
                                       GtkWidget **weap_ptr, 
-                                      const char *message_format, ...) G_GNUC_PRINTF(3, 4);
+                                      GError *error,
+                                      const char *message_format, ...) G_GNUC_PRINTF(4, 5);
 
 void terminal_util_show_help (const char *topic, GtkWindow  *transient_parent);
 

@@ -191,9 +191,8 @@ about_url_hook (GtkAboutDialog *about,
                       gtk_get_current_event_time (),
                       &error))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (about), NULL,
-                                       _("Could not open link: %s"),
-                                       error->message);
+      terminal_util_show_error_dialog (GTK_WINDOW (about), NULL, error,
+                                       "%s", _("Could not open link"));
       g_error_free (error);
     }
 }

@@ -1272,8 +1272,8 @@ show_command_error_dialog (TerminalScreen *screen,
 {
   g_assert (error != NULL);
   
-  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
-                                   _("There was a problem with the command for this terminal: %s"), error->message);
+  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL, error,
+                                   "%s", _("There was a problem with the command for this terminal"));
 }
 
 static gboolean
@@ -1577,6 +1577,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
     {
 
       terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
+                                       error,
                                        "%s", _("There was an error creating the child process for this terminal"));
     }
   

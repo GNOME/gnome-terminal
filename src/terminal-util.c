@@ -57,6 +57,7 @@ terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
  * terminal_util_show_error_dialog:
  * @transient_parent: parent of the future dialog window;
  * @weap_ptr: pointer to a #Widget pointer, to control the population.
+ * @error: a #GError, or %NULL
  * @message_format: printf() style format string
  *
  * Create a #GtkMessageDialog window with the message, and present it, handling its buttons.
@@ -65,9 +66,12 @@ terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
  * present <literal>*weak_ptr</literal>. Note that in this last case, the message <emph>will</emph>
  * be changed.
  */
-
 void
-terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_ptr, const char *message_format, ...)
+terminal_util_show_error_dialog (GtkWindow *transient_parent, 
+                                 GtkWidget **weak_ptr,
+                                 GError *error,
+                                 const char *message_format, 
+                                 ...) 
 {
   char *message;
   va_list args;
@@ -89,6 +93,10 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent, GtkWidget **weak_p
                                        GTK_BUTTONS_OK,
                                        message ? "%s" : NULL,
 				       message);
+
+      if (error != NULL)
+        gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                  "%s", error->message);
 
       g_signal_connect (G_OBJECT (dialog), "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
@@ -169,9 +177,8 @@ terminal_util_show_help (const char *topic,
 
   if (!open_url (GTK_WINDOW (parent), url, gtk_get_current_event_time (), &error))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
-                                       _("There was an error displaying help: %s"),
-                                      error->message);
+      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
+                                       _("There was an error displaying help"));
       g_error_free (error);
     }
 
@@ -243,9 +250,9 @@ terminal_util_open_url (GtkWidget *parent,
 
   if (!open_url (GTK_WINDOW (parent), uri, user_time, &error))
     {
-      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL,
-                                       _("Could not open the address “%s”:\n%s"),
-                                       uri, error->message);
+      terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
+                                       _("Could not open the address “%s”"),
+                                       uri);
 
       g_error_free (error);
     }

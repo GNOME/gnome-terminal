@@ -160,7 +160,7 @@ terminal_skey_do_popup (GtkWindow *window,
     {
       if (!extract_seq_and_seed (skey_match, &seq, &seed))
 	{
-	  terminal_util_show_error_dialog (window, NULL,
+	  terminal_util_show_error_dialog (window, NULL, NULL,
 					   _("The text you clicked on doesn't "
 					     "seem to be a valid S/Key "
 					     "challenge."));
@@ -171,7 +171,7 @@ terminal_skey_do_popup (GtkWindow *window,
     {
       if (!extract_hash_seq_and_seed (skey_match, &hash, &seq, &seed))
 	{
-	  terminal_util_show_error_dialog (window, NULL,
+	  terminal_util_show_error_dialog (window, NULL, NULL,
 					   _("The text you clicked on doesn't "
 					     "seem to be a valid OTP "
 					     "challenge."));
