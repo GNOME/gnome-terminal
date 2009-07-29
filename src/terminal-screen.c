@@ -1577,7 +1577,7 @@ terminal_screen_launch_child (TerminalScreen *screen)
     {
 
       terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
-                                       error,
+                                       err,
                                        "%s", _("There was an error creating the child process for this terminal"));
     }
   
