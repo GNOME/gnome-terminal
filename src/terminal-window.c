@@ -3000,22 +3000,17 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
   if (screen)
     {
-#if 0
       do_confirm = terminal_screen_has_foreground_process (screen);
-#endif
-      do_confirm = FALSE;
       n_tabs = 1;
     }
   else
     {
-      GList *tabs;
-      GList *t;
+      GList *tabs, *t;
+
+      do_confirm = FALSE;
 
       tabs = terminal_window_list_screen_containers (window);
       n_tabs = g_list_length (tabs);
-      do_confirm = n_tabs > 1;
-#if 0
-      do_confirm = FALSE;
 
       for (t = tabs; t != NULL; t = t->next)
         {
@@ -3028,7 +3023,6 @@ confirm_close_window_or_tab (TerminalWindow *window,
               break;
             }
         }
-#endif
       g_list_free (tabs);
     }
 
