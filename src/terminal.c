@@ -236,8 +236,8 @@ get_factory_name_for_display (const char *display_name)
 }
 
 /* Evil hack alert: this is exported from libgconf-2 but not in a public header */
-extern gboolean gconf_ping_daemon (void);
-         
+extern gboolean gconf_spawn_daemon(GError** err);
+
 int
 main (int argc, char **argv)
 {
@@ -329,7 +329,7 @@ main (int argc, char **argv)
     {
       g_printerr ("Failed to get the session bus: %s\nFalling back to non-factory mode.\n",
                   error->message);
-      g_error_free (error);
+      g_clear_error (&error);
       goto factory_disabled;
     }
 
@@ -353,7 +353,7 @@ main (int argc, char **argv)
                                           &error))
     {
       g_printerr ("Failed name request: %s\n", error->message);
-      g_error_free (error);
+      g_clear_error (&error);
       goto factory_disabled;
     }
 
@@ -419,7 +419,7 @@ main (int argc, char **argv)
             {
               /* Incompatible factory version, fall back, to new instance */
               g_printerr (_("Incompatible factory version; creating a new instance.\n"));
-              g_error_free (error);
+              g_clear_error (&error);
 
               goto factory_disabled;
             }
@@ -449,10 +449,13 @@ factory_disabled:
   /* If the gconf daemon isn't available (e.g. because there's no dbus
    * session bus running), we'd crash later on. Tell the user about it
    * now, and exit. See bug #561663.
+   * Don't use gconf_ping_daemon() here since the server may just not
+   * be running yet, but able to be started. See comments on bug #564649.
    */
-  if (!gconf_ping_daemon ())
+  if (!gconf_spawn_daemon (&error))
     {
-      g_printerr ("Failed to contact the GConf daemon; exiting.\n");
+      g_printerr ("Failed to summon the GConf demon: %s\n", error->message);
+      g_error_free (error);
       exit (1);
     }
 
