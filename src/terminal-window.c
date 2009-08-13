@@ -929,7 +929,7 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 
   current = terminal_screen_get_font_scale (screen);
 
-  action = gtk_action_group_get_action (priv->action_group, "ViewZoomIn");
+  action = gtk_action_group_get_action (priv->action_group, "ViewZoomOut");
   gtk_action_set_sensitive (action, find_smaller_zoom_factor (current, &zoom));
   action = gtk_action_group_get_action (priv->action_group, "ViewZoomIn");
   gtk_action_set_sensitive (action, find_larger_zoom_factor (current, &zoom));
