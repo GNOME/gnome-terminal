@@ -20,8 +20,8 @@
 #include <config.h>
 
 #include <gtk/gtk.h>
-#include <glib/gi18n.h>
 
+#include "terminal-intl.h"
 #include "terminal-tab-label.h"
 
 #define TERMINAL_TAB_LABEL_GET_PRIVATE(tab_label)(G_TYPE_INSTANCE_GET_PRIVATE ((tab_label), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelPrivate))
@@ -207,7 +207,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   widget_class->style_set = terminal_tab_label_style_set;
 
   signals[CLOSE_BUTTON_CLICKED] =
-    g_signal_new ("close-button-clicked",
+    g_signal_new (I_("close-button-clicked"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (TerminalTabLabelClass, close_button_clicked),
