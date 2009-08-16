@@ -184,7 +184,7 @@ static const GdkColor terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PA
 {
   /* Tango palette */
   {
-    { 0, 0x2e2e, 0x3434, 0x3636 },
+    { 0, 0x0000, 0x0000, 0x0000 },
     { 0, 0xcccc, 0x0000, 0x0000 },
     { 0, 0x4e4e, 0x9a9a, 0x0606 },
     { 0, 0xc4c4, 0xa0a0, 0x0000 },
