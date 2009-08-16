@@ -113,25 +113,25 @@ terminal-type-builtins.h: stamp-terminal-type-builtins.h
 	@true
 
 stamp-terminal-type-builtins.h: terminal-type-builtins.h.template $(TYPES_H_FILES)
-	$(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbh \
+	$(AM_V_GEN) $(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbh \
 	&& (cmp -s xgen-ttbh terminal-type-builtins.h || cp xgen-ttbh terminal-type-builtins.h ) \
 	&& rm -f xgen-ttbh \
 	&& echo timestamp > $(@F)
 
 terminal-type-builtins.c: terminal-type-builtins.c.template $(TYPES_H_FILES)
-	$(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbc \
+	$(AM_V_GEN) $(GLIB_MKENUMS) --template $< $(filter-out $<,$^) > xgen-ttbc \
 	&& (cmp -s xgen-ttbc terminal-type-builtins.c || cp xgen-ttbc terminal-type-builtins.c ) \
 	&& rm -f xgen-ttbc
 
 terminal-marshal.h: $(srcdir)/terminal-marshal.list
-	( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
+	$(AM_V_GEN) ( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
 			--header \
 			--internal > terminal-marshal.h.tmp \
 	&& mv terminal-marshal.h.tmp terminal-marshal.h ) \
 	|| ( rm -f terminal-marshal.h.tmp && exit 1 )
 
 terminal-marshal.c: $(srcdir)/terminal-marshal.list
-	( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
+	$(AM_V_GEN) ( $(GLIB_GENMARSHAL) --prefix=_terminal_marshal $(srcdir)/terminal-marshal.list \
 				--header \
 				--body \
 				--internal > terminal-marshal.c.tmp \
@@ -139,10 +139,10 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
 terminal-factory-client.h: terminal-factory-service.xml
-	$(DBUS_BINDING_TOOL) --mode=glib-client --output=$@ $<
+	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --mode=glib-client --output=$@ $<
 
 terminal-factory-server.h: terminal-factory-service.xml
-	$(DBUS_BINDING_TOOL) --mode=glib-server --prefix=terminal_factory --output=$@ $<
+	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --mode=glib-server --prefix=terminal_factory --output=$@ $<
 
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
@@ -196,6 +196,6 @@ install-data-local:
 endif
 
 %.ui: %.glade
-	$(GTK_BUILDER_CONVERT) $< $@
+	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $< $@
 
 -include $(top_srcdir)/git.mk
