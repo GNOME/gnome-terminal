@@ -2155,6 +2155,21 @@ terminal_window_new (void)
   return g_object_new (TERMINAL_TYPE_WINDOW, NULL);
 }
 
+/**
+ * terminal_window_set_is_restored:
+ * @window:
+ *
+ * Marks the window as restored from session.
+ */
+void
+terminal_window_set_is_restored (TerminalWindow *window)
+{
+  g_return_if_fail (TERMINAL_IS_WINDOW (window));
+  g_return_if_fail (!GTK_WIDGET_MAPPED (window));
+
+  window->priv->clear_demands_attention = TRUE;
+}
+
 static void
 update_notebook (TerminalWindow *window)
 {

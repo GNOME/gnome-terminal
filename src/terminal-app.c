@@ -137,6 +137,12 @@ enum
   NUM_COLUMNS
 };
 
+enum
+{
+  SOURCE_DEFAULT = 0,
+  SOURCE_SESSION = 1
+};
+
 static TerminalApp *global_app = NULL;
 
 #define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
@@ -1684,7 +1690,7 @@ terminal_app_handle_options (TerminalApp *app,
 
       key_file = g_key_file_new ();
       result = g_key_file_load_from_file (key_file, options->config_file, 0, error) &&
-               terminal_options_merge_config (options, key_file, error);
+               terminal_options_merge_config (options, key_file, SOURCE_DEFAULT, error);
       g_key_file_free (key_file);
 
       if (!result)
@@ -1705,7 +1711,7 @@ terminal_app_handle_options (TerminalApp *app,
 
       key_file = egg_sm_client_get_state_file (sm_client);
       if (key_file != NULL &&
-          !terminal_options_merge_config (options, key_file, error))
+          !terminal_options_merge_config (options, key_file, SOURCE_SESSION, error))
         return FALSE;
     }
 }
@@ -1724,6 +1730,10 @@ terminal_app_handle_options (TerminalApp *app,
 
       /* Create & setup new window */
       window = terminal_app_new_window (app, gdk_screen);
+
+      /* Restored windows shouldn't demand attention; see bug #586308. */
+      if (iw->source_tag == SOURCE_SESSION)
+        terminal_window_set_is_restored (window);
 
       if (options->startup_id)
         terminal_window_set_startup_id (window, options->startup_id);

@@ -68,6 +68,8 @@ typedef struct
 
 typedef struct
 {
+  guint source_tag;
+
   GList *tabs; /* list of InitialTab */
 
   gboolean force_menubar_state;
@@ -101,6 +103,7 @@ TerminalOptions *terminal_options_parse (const char *working_directory,
 
 gboolean terminal_options_merge_config (TerminalOptions *options,
                                         GKeyFile *key_file,
+                                        guint source_tag,
                                         GError **error);
 
 void terminal_options_ensure_window (TerminalOptions *options);
