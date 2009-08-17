@@ -36,8 +36,11 @@ N_("I-Beam")
 /* Translators: Cursor shape: ... */
 N_("Underline")
 
+/* Translators: When command exits: ... */
 N_("Exit the terminal")
+/* Translators: When command exits: ... */
 N_("Restart the command")
+/* Translators: When command exits: ... */
 N_("Hold the terminal open")
 
 /* Translators: Scrollbar is: ... */
