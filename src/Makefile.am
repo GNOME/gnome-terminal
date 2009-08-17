@@ -182,6 +182,7 @@ EXTRA_DIST = \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
+	extra-strings.c \
 	$(about_DATA) \
 	$(schema_in_files) \
 	$(uimanager_DATA) \
