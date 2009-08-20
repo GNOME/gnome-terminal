@@ -1358,6 +1358,7 @@ get_child_environment (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
   GtkWidget *term = GTK_WIDGET (screen);
+  GtkWidget *window;
   char **env;
   char *e, *v;
   char *proxymode, *proxyhost;
@@ -1367,6 +1368,9 @@ get_child_environment (TerminalScreen *screen,
   GHashTableIter iter;
   GPtrArray *retval;
   guint i;
+
+  window = gtk_widget_get_toplevel (term);
+  g_assert (window != NULL && GTK_WIDGET_TOPLEVEL (window));
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
@@ -1399,8 +1403,8 @@ get_child_environment (TerminalScreen *screen,
   
 #ifdef GDK_WINDOWING_X11
   /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
-  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (term->window)));
-  g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (term))));
+  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (window->window)));
+  g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
 #endif
 
   conf = gconf_client_get_default ();
