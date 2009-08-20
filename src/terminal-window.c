@@ -3606,6 +3606,7 @@ help_about_callback (GtkAction *action,
   contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, NULL);
   artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
   documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+  g_key_file_free (key_file);
 
   array = g_ptr_array_new ();
 
@@ -3619,8 +3620,8 @@ help_about_callback (GtkAction *action,
     g_ptr_array_add (array, g_strdup (_("Contributors:")));
     for (i = 0; i < n_contributors; ++i)
       g_ptr_array_add (array, EMAILIFY (contributors[i]));
-    g_free (contributors); /* strings are now owned by the array */
   }
+  g_free (contributors); /* strings are now owned by the array */
   
   g_ptr_array_add (array, NULL);
   array_strv = (char **) g_ptr_array_free (array, FALSE);
