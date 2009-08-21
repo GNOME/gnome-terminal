@@ -454,7 +454,7 @@ factory_disabled:
    */
   if (!gconf_spawn_daemon (&error))
     {
-      g_printerr ("Failed to summon the GConf demon: %s\n", error->message);
+      g_printerr ("Failed to summon the GConf demon; exiting.  %s\n", error->message);
       g_error_free (error);
       exit (1);
     }
