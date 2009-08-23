@@ -1685,7 +1685,7 @@ terminal_app_handle_options (TerminalApp *app,
       if (options->remote_arguments)
         return terminal_app_save_config_file (app, options->config_file, error);
       
-      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_EXCLUSIVE_OPTIONS,
+      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_IN_FACTORY,
                             "Cannot use \"--save-config\" when starting the factory process");
       return FALSE;
     }
