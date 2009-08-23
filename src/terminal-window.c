@@ -3732,8 +3732,8 @@ terminal_window_save_state (TerminalWindow *window,
 
   g_list_free (tabs);
 
-  g_ptr_array_add (tab_names_array, NULL);
   len = tab_names_array->len;
+  g_ptr_array_add (tab_names_array, NULL);
   tab_names = (char **) g_ptr_array_free (tab_names_array, FALSE);
   g_key_file_set_string_list (key_file, group, TERMINAL_CONFIG_WINDOW_PROP_TABS, (const char * const *) tab_names, len);
   g_strfreev (tab_names);
