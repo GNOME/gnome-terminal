@@ -514,14 +514,6 @@ shutdown:
 /* Factory stuff */
 
 static gboolean
-handle_new_terminal_event (TerminalOptions *options)
-{
-  terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, NULL);
-
-  return FALSE;
-}
-
-static gboolean
 terminal_factory_handle_arguments (TerminalFactory *terminal_factory,
                                    const GArray *working_directory_array,
                                    const GArray *display_name_array,
@@ -535,6 +527,7 @@ terminal_factory_handle_arguments (TerminalFactory *terminal_factory,
   char **env = NULL, **argv = NULL, **argv_copy = NULL;
   int argc;
   GError *arg_error = NULL;
+  gboolean retval;
 
   working_directory = terminal_util_array_to_string (working_directory_array, &arg_error);
   if (arg_error)
@@ -582,10 +575,8 @@ out:
   if (!options)
     return FALSE;
 
-  g_idle_add_full (G_PRIORITY_HIGH_IDLE,
-                   (GSourceFunc) handle_new_terminal_event,
-                   options,
-                   (GDestroyNotify) terminal_options_free);
+  retval = terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, error);
 
-  return TRUE;
+  terminal_options_free (options);
+  return retval;
 }
