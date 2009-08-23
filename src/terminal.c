@@ -253,6 +253,7 @@ main (int argc, char **argv)
   guint32 request_name_ret;
   GError *error = NULL;
   const char *home_dir;
+  int ret = EXIT_SUCCESS;
 
   setlocale (LC_ALL, "");
 
@@ -369,7 +370,6 @@ main (int argc, char **argv)
       GArray *working_directory_array, *display_name_array, *startup_id_array;
       GArray *env_array, *argv_array;
       gboolean retval;
-      int ret = EXIT_SUCCESS;
 
       _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                              "Forwarding arguments to existing instance\n");
@@ -488,6 +488,8 @@ factory_disabled:
     {
       g_printerr ("Error handling options: %s\n", error->message);
       g_clear_error (&error);
+
+      ret = EXIT_FAILURE;
       goto shutdown;
     }
 
@@ -508,7 +510,7 @@ shutdown:
   if (factory)
     g_object_unref (factory);
 
-  return 0;
+  return ret;
 }
 
 /* Factory stuff */
