@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 typedef struct
 {
+  gboolean remote_arguments;
   char   **env;
   char    *startup_id;
   char    *display_name;
@@ -95,6 +96,7 @@ TerminalOptions *terminal_options_parse (const char *working_directory,
                                          const char *display_name,
                                          const char *startup_id,
                                          char **env,
+                                         gboolean remote_arguments,
                                          gboolean ignore_unknown_options,
                                          int *argcp,
                                          char ***argvp,
