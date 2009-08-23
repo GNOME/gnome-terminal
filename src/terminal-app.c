@@ -1717,7 +1717,7 @@ terminal_app_handle_options (TerminalApp *app,
 }
 #endif
 
-  /* Make sure we option at least one window */
+  /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
 
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
@@ -2014,8 +2014,8 @@ terminal_app_save_config (TerminalApp *app,
       terminal_window_save_state (window, key_file, group);
     }
 
-  g_ptr_array_add (window_names_array, NULL);
   len = window_names_array->len;
+  g_ptr_array_add (window_names_array, NULL);
   window_names = (char **) g_ptr_array_free (window_names_array, FALSE);
   g_key_file_set_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, (const char * const *) window_names, len);
   g_strfreev (window_names);
