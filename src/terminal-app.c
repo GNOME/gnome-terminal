@@ -1877,6 +1877,9 @@ terminal_app_edit_encodings (TerminalApp     *app,
 TerminalWindow *
 terminal_app_get_current_window (TerminalApp *app)
 {
+  if (app->windows == NULL)
+    return NULL;
+
   return g_list_last (app->windows)->data;
 }
 
