@@ -480,8 +480,15 @@ factory_disabled:
   terminal_app_initialize (options->use_factory);
   g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
 
-  terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, NULL);
+  terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, &error);
   terminal_options_free (options);
+
+  if (error)
+    {
+      g_printerr ("Error handling options: %s\n", error->message);
+      g_clear_error (&error);
+      goto shutdown;
+    }
 
   /* Now change directory to $HOME so we don't prevent unmounting, e.g. if the
    * factory is started by nautilus-open-terminal. See bug #565328.
@@ -492,6 +499,8 @@ factory_disabled:
     (void) chdir ("/");
 
   gtk_main ();
+
+shutdown:
 
   terminal_app_shutdown ();
 
