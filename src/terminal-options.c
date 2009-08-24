@@ -501,7 +501,7 @@ option_load_save_config_cb (const gchar *option_name,
       return FALSE;
     }
 
-  options->config_file = g_strdup (value);
+  options->config_file = terminal_util_resolve_relative_path (options->default_working_dir, value);
   options->load_config = strcmp (option_name, "--load-config") == 0;
   options->save_config = strcmp (option_name, "--save-config") == 0;
 

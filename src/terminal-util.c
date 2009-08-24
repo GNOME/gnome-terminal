@@ -261,6 +261,39 @@ terminal_util_open_url (GtkWidget *parent,
 }
 
 /**
+ * terminal_util_resolve_relative_path:
+ * @path:
+ * @relative_path:
+ *
+ * Returns: a newly allocate string
+ */
+char *
+terminal_util_resolve_relative_path (const char *path,
+                                     const char *relative_path)
+{
+  GFile *file, *resolved_file;
+  char *resolved_path = NULL;
+
+  g_return_val_if_fail (relative_path != NULL, NULL);
+
+  if (path == NULL)
+    return g_strdup (relative_path);
+
+  file = g_file_new_for_path (path);
+  resolved_file = g_file_resolve_relative_path (file, relative_path);
+  g_object_unref (file);
+
+  if (resolved_file == NULL)
+    return NULL;
+
+  resolved_path = g_file_get_path (resolved_file);
+  g_object_unref (resolved_file);
+
+  g_print ("resolved %s + %s => %s\n", path, relative_path, resolved_path);
+  return resolved_path;
+}
+
+/**
  * terminal_util_transform_uris_to_quoted_fuse_paths:
  * @uris:
  *

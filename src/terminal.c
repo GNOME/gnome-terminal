@@ -253,6 +253,7 @@ main (int argc, char **argv)
   guint32 request_name_ret;
   GError *error = NULL;
   const char *home_dir;
+  char *working_directory;
   int ret = EXIT_SUCCESS;
 
   setlocale (LC_ALL, "");
@@ -275,7 +276,9 @@ main (int argc, char **argv)
 
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
 
-  options = terminal_options_parse (NULL,
+  working_directory = g_get_current_dir ();
+
+  options = terminal_options_parse (working_directory,
                                     NULL,
                                     startup_id,
                                     NULL,
@@ -288,6 +291,9 @@ main (int argc, char **argv)
                                     egg_sm_client_get_option_group (),
 #endif
                                     NULL);
+
+  g_free (working_directory);
+
   if (!options)
     {
       g_printerr (_("Failed to parse arguments: %s\n"), error->message);
@@ -362,7 +368,6 @@ main (int argc, char **argv)
   /* Forward to the existing factory and exit */
   if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
     {
-      char *working_directory;
       char **env;
       const char *evalue;
       GPtrArray *env_ptr_array;
@@ -546,6 +551,12 @@ terminal_factory_handle_arguments (TerminalFactory *terminal_factory,
   argv = terminal_util_array_to_strv (argv_array, &argc, &arg_error);
   if (arg_error)
     goto out;
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
+                         working_directory ? working_directory : "(null)",
+                         display_name ? display_name : "(null)",
+                         startup_id ? startup_id : "(null)");
 
   /* Copy the arguments since terminal_options_parse potentially modifies the array */
   argv_copy = (char **) g_memdup (argv, (argc + 1) * sizeof (char *));

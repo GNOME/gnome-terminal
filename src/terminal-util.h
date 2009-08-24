@@ -46,6 +46,8 @@ void terminal_util_open_url (GtkWidget *parent,
                              TerminalURLFlavour flavor,
                              guint32 user_time);
 
+char *terminal_util_resolve_relative_path (const char *path,
+                                           const char *relative_path);
 
 void terminal_util_transform_uris_to_quoted_fuse_paths (char **uris);
 
