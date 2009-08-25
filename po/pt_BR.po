@@ -13,15 +13,15 @@
 # Enrico Nicoletto <liverig@gmail.com>, 2009.
 # Fabrício Godoy <skarllot@gmail.com>, 2009.
 # César Veiga <tombs@linuxmail.org>, 2009.
+# Henrique P Machado <zehrique@gmail.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&component=general\n"
-"POT-Creation-Date: 2009-05-03 09:21+0000\n"
-"PO-Revision-Date: 2009-03-05 00:05-0300\n"
-"Last-Translator: César Veiga <tombs@linuxmail.org>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-24 22:30-0400\n"
+"PO-Revision-Date: 2009-08-24 18:53-0300\n"
+"Last-Translator: Henrique P Machado <zehrique@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,8 +31,8 @@ msgstr ""
 "X-Poedit-Country: BRAZIL\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:294
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1760
+#: ../src/terminal-accels.c:222 ../src/terminal.c:304
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1842
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -48,8 +48,8 @@ msgstr "Desativar conexão ao gerenciador de sessões"
 msgid "Specify file containing saved configuration"
 msgstr "Especificar arquivo contendo configurações salvas"
 
-#: ../src/eggsmclient.c:228 ../src/terminal-options.c:952
-#: ../src/terminal-options.c:961
+#: ../src/eggsmclient.c:228 ../src/terminal-options.c:957
+#: ../src/terminal-options.c:966
 msgid "FILE"
 msgstr "ARQUIVO"
 
@@ -1298,7 +1298,8 @@ msgstr "Compatibilidade"
 msgid "Cursor _shape:"
 msgstr "_Forma do cursor:"
 
-#: ../src/profile-preferences.glade.h:27
+#. Translators: This is the name of a colour scheme
+#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "Personalizado"
 
@@ -1548,7 +1549,7 @@ msgstr "Reduzir"
 msgid "Normal Size"
 msgstr "Tamanho normal"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3297
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3416
 msgid "Set Title"
 msgstr "Definir título"
 
@@ -1652,45 +1653,46 @@ msgstr "Abas"
 msgid "Help"
 msgstr "Ajuda"
 
-#: ../src/terminal-accels.c:281
+#. Translators: Scrollbar is: ...
+#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Desabilitado"
 
-#: ../src/terminal-accels.c:755
+#: ../src/terminal-accels.c:753
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "A tecla de atalho \"%s\" já está associada à ação \"%s\""
 
-#: ../src/terminal-accels.c:913
+#: ../src/terminal-accels.c:911
 msgid "_Action"
 msgstr "_Ação"
 
-#: ../src/terminal-accels.c:932
+#: ../src/terminal-accels.c:930
 msgid "Shortcut _Key"
 msgstr "Te_cla de atalho"
 
-#: ../src/terminal-app.c:475
+#: ../src/terminal-app.c:481
 msgid "Click button to choose profile"
 msgstr "Clique no botão para escolher o perfil"
 
-#: ../src/terminal-app.c:560
+#: ../src/terminal-app.c:566
 msgid "Profile list"
 msgstr "Lista de perfis"
 
-#: ../src/terminal-app.c:621
+#: ../src/terminal-app.c:627
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Excluir o perfil \"%s\"?"
 
-#: ../src/terminal-app.c:637
+#: ../src/terminal-app.c:643
 msgid "Delete Profile"
 msgstr "Excluir perfil"
 
-#: ../src/terminal-app.c:951
+#: ../src/terminal-app.c:957
 msgid "User Defined"
 msgstr "Definido pelo Usuário"
 
-#: ../src/terminal-app.c:1106
+#: ../src/terminal-app.c:1112
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1699,37 +1701,36 @@ msgstr ""
 "Você já tem um perfil chamado \"%s\". Deseja criar um outro perfil com o "
 "mesmo nome?"
 
-#: ../src/terminal-app.c:1208
+#: ../src/terminal-app.c:1214
 msgid "Choose base profile"
 msgstr "Escolha um perfil base"
 
-#: ../src/terminal-app.c:1771
+#: ../src/terminal-app.c:1788
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Não existe o perfil \"%s\", usando o perfil padrão\n"
 
-#: ../src/terminal-app.c:1791
+#: ../src/terminal-app.c:1808
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Expressão geométrica inválida \"%s\"\n"
 
-#: ../src/terminal.c:193
-#, c-format
-msgid "Could not open link: %s"
-msgstr "Não foi possível abrir o link: %s"
+#: ../src/terminal.c:195
+msgid "Could not open link"
+msgstr "Não foi possível abrir o link"
 
-#: ../src/terminal.c:289
+#: ../src/terminal.c:299
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Falha ao analisar os argumentos: %s\n"
 
 #. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:419
+#: ../src/terminal.c:427
 #, c-format
 msgid "Incompatible factory version; creating a new instance.\n"
 msgstr "Versão de fabricação incompatível; criando uma nova instância.\n"
 
-#: ../src/terminal.c:425
+#: ../src/terminal.c:433
 #, c-format
 msgid "Factory error: %s\n"
 msgstr "Erro de fabricação: %s\n"
@@ -1888,7 +1889,7 @@ msgstr "_Codificação"
 msgid "Current Locale"
 msgstr "Codificação atual"
 
-#: ../src/terminal-options.c:174
+#: ../src/terminal-options.c:175
 #, c-format
 msgid ""
 "Option \"%s\" is no longer supported in this version of gnome-terminal; you "
@@ -1899,7 +1900,7 @@ msgstr ""
 "criar um perfil com a configuração desejada, e utilizar a nova opção \"--"
 "profile\"\n"
 
-#: ../src/terminal-options.c:187 ../src/terminal-window.c:3517
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3637
 msgid "GNOME Terminal"
 msgstr "Terminal do GNOME"
 
@@ -1941,15 +1942,15 @@ msgstr ""
 "A opção \"%s\" requer a especificação do comando para executar no resto da "
 "linha de comando"
 
-#: ../src/terminal-options.c:802
+#: ../src/terminal-options.c:807
 msgid "Not a valid terminal config file."
 msgstr "Arquivo de configuração do terminal inválido."
 
-#: ../src/terminal-options.c:815
+#: ../src/terminal-options.c:820
 msgid "Incompatible terminal config file version."
 msgstr "Versão de arquivo de configuração do terminal incompatível."
 
-#: ../src/terminal-options.c:942
+#: ../src/terminal-options.c:947
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1957,40 +1958,40 @@ msgstr ""
 "Não registrar com o servidor de nomes de ativação, não reutilizar um "
 "terminal ativo"
 
-#: ../src/terminal-options.c:951
+#: ../src/terminal-options.c:956
 msgid "Load a terminal configuration file"
 msgstr "Carregar um arquivo de configuração do terminal"
 
-#: ../src/terminal-options.c:960
+#: ../src/terminal-options.c:965
 msgid "Save the terminal configuration to a file"
 msgstr "Salvar a configuração do terminal em um arquivo"
 
-#: ../src/terminal-options.c:974
+#: ../src/terminal-options.c:979
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Abrir uma nova janela contendo uma aba com o perfil padrão"
 
-#: ../src/terminal-options.c:983
+#: ../src/terminal-options.c:988
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Abrir uma nova aba na última janela aberta com o perfil padrão"
 
-#: ../src/terminal-options.c:996
+#: ../src/terminal-options.c:1001
 msgid "Turn on the menubar"
 msgstr "Ativar a barra de menu"
 
-#: ../src/terminal-options.c:1005
+#: ../src/terminal-options.c:1010
 msgid "Turn off the menubar"
 msgstr "Desativar a barra de menu"
 
-#: ../src/terminal-options.c:1014
+#: ../src/terminal-options.c:1019
 msgid "Maximise the window"
 msgstr "Maximizar a janela"
 
-#: ../src/terminal-options.c:1023
+#: ../src/terminal-options.c:1028
 msgid "Full-screen the window"
 msgstr "Tornar a janela em tela-cheia"
 
 # Man is the abbreviation of manual.
-#: ../src/terminal-options.c:1032
+#: ../src/terminal-options.c:1037
 msgid ""
 "Set the window geometry from the provided X geometry specification; see the "
 "\"X\" man page for more information"
@@ -1998,68 +1999,68 @@ msgstr ""
 "Definir a geometria da janela a partir da especificação geométrica X "
 "fornecida; consulte a página do manual \"X\" para maiores informações"
 
-#: ../src/terminal-options.c:1033
+#: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: ../src/terminal-options.c:1041
+#: ../src/terminal-options.c:1046
 msgid "Set the window role"
 msgstr "Definir o papel do terminal"
 
-#: ../src/terminal-options.c:1042
+#: ../src/terminal-options.c:1047
 msgid "ROLE"
 msgstr "PAPEL"
 
-#: ../src/terminal-options.c:1050
+#: ../src/terminal-options.c:1055
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Definir a última aba especificada como a ativa em sua janela"
 
-#: ../src/terminal-options.c:1063
+#: ../src/terminal-options.c:1068
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Executar o argumento para esta opção dentro do terminal"
 
-#: ../src/terminal-options.c:1072
+#: ../src/terminal-options.c:1077
 msgid "Use the given profile instead of the default profile"
 msgstr "Usar o perfil fornecido em vez de usar o perfil padrão"
 
 # Parece ser exibida com "gnome-terminal --help"
-#: ../src/terminal-options.c:1073
+#: ../src/terminal-options.c:1078
 msgid "PROFILE-NAME"
 msgstr "NOME-PERFIL"
 
-#: ../src/terminal-options.c:1081
+#: ../src/terminal-options.c:1086
 msgid "Set the terminal title"
 msgstr "Definir o título do terminal"
 
-#: ../src/terminal-options.c:1082
+#: ../src/terminal-options.c:1087
 msgid "TITLE"
 msgstr "TÍTULO"
 
-#: ../src/terminal-options.c:1090
+#: ../src/terminal-options.c:1095
 msgid "Set the working directory"
 msgstr "Definir o diretório de trabalho"
 
-#: ../src/terminal-options.c:1091
+#: ../src/terminal-options.c:1096
 msgid "DIRNAME"
 msgstr "DIRETÓRIO"
 
-#: ../src/terminal-options.c:1099
+#: ../src/terminal-options.c:1104
 msgid "Set the terminalx's zoom factor (1.0 = normal size)"
 msgstr "Definir o fator de ampliação do terminal x (1.0 = tamanho normal)"
 
-#: ../src/terminal-options.c:1100
+#: ../src/terminal-options.c:1105
 msgid "ZOOM"
 msgstr "FATOR"
 
-#: ../src/terminal-options.c:1350 ../src/terminal-options.c:1353
+#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
 msgid "GNOME Terminal Emulator"
 msgstr "Emulador de terminal do GNOME"
 
-#: ../src/terminal-options.c:1354
+#: ../src/terminal-options.c:1359
 msgid "Show GNOME Terminal options"
 msgstr "Mostrar as opções do Terminal do GNOME"
 
-#: ../src/terminal-options.c:1364
+#: ../src/terminal-options.c:1369
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2067,11 +2068,11 @@ msgstr ""
 "Opções para abrir novas janelas ou abas de terminal; mais de uma destas "
 "podem ser especificadas:"
 
-#: ../src/terminal-options.c:1365
+#: ../src/terminal-options.c:1370
 msgid "Show terminal options"
 msgstr "Mostrar as opções do terminal"
 
-#: ../src/terminal-options.c:1373
+#: ../src/terminal-options.c:1378
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2079,11 +2080,11 @@ msgstr ""
 "Opções de janela; se utilizadas antes do primeiro argumento --window ou --"
 "tab, definem o padrão para todas as janelas:"
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1379
 msgid "Show per-window options"
 msgstr "Mostrar as opções por janela"
 
-#: ../src/terminal-options.c:1382
+#: ../src/terminal-options.c:1387
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2091,7 +2092,7 @@ msgstr ""
 "Opções do terminal; se utilizadas antes do primeiro argumento --window ou --"
 "tab, definem o padrão para todos os terminais:"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1388
 msgid "Show per-terminal options"
 msgstr "Mostrar as opções por terminal"
 
@@ -2099,10 +2100,9 @@ msgstr "Mostrar as opções por terminal"
 msgid "Unnamed"
 msgstr "Sem nome"
 
-#: ../src/terminal-screen.c:1281
-#, c-format
-msgid "There was a problem with the command for this terminal: %s"
-msgstr "Houve um problema com o comando para este terminal: %s"
+#: ../src/terminal-screen.c:1276
+msgid "There was a problem with the command for this terminal"
+msgstr "Houve um problema com o comando para este terminal"
 
 #: ../src/terminal-screen.c:1585
 msgid "There was an error creating the child process for this terminal"
@@ -2112,25 +2112,20 @@ msgstr "Houve um erro ao criar um processo filho para este terminal"
 msgid "Close tab"
 msgstr "Fechar aba"
 
-#: ../src/terminal-tabs-menu.c:200
+#: ../src/terminal-tabs-menu.c:198
 msgid "Switch to this tab"
 msgstr "Alternar para esta aba"
 
-#: ../src/terminal-util.c:168
-#, c-format
-msgid "There was an error displaying help: %s"
+#: ../src/terminal-util.c:181
+msgid "There was an error displaying help"
 msgstr "Houve um erro ao exibir a ajuda: %s"
 
-#: ../src/terminal-util.c:240
+#: ../src/terminal-util.c:254
 #, c-format
-msgid ""
-"Could not open the address “%s”:\n"
-"%s"
-msgstr ""
-"Não foi possível abrir o endereço \"%s\":\n"
-"%s"
+msgid "Could not open the address “%s”"
+msgstr "Não foi possível abrir o endereço \"%s\""
 
-#: ../src/terminal-util.c:315
+#: ../src/terminal-util.c:362
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2142,7 +2137,7 @@ msgstr ""
 "conforme publicada pela Free Software Foundation; tanto a versão 2 da "
 "Licença como (a seu critério) qualquer versão mais nova."
 
-#: ../src/terminal-util.c:319
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2154,7 +2149,7 @@ msgstr ""
 "A QUALQUER PROPÓSITO EM PARTICULAR. Consulte a Licença Pública Geral GNU "
 "para obter mais detalhes."
 
-#: ../src/terminal-util.c:323
+#: ../src/terminal-util.c:370
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2168,7 +2163,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:423
+#: ../src/terminal-window.c:431
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2177,190 +2172,190 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:429
+#: ../src/terminal-window.c:437
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1580
+#: ../src/terminal-window.c:1662
 msgid "_File"
 msgstr "_Arquivo"
 
 #. File menu
-#: ../src/terminal-window.c:1581 ../src/terminal-window.c:1592
-#: ../src/terminal-window.c:1714
+#: ../src/terminal-window.c:1663 ../src/terminal-window.c:1674
+#: ../src/terminal-window.c:1796
 msgid "Open _Terminal"
 msgstr "Abrir _terminal"
 
-#: ../src/terminal-window.c:1582 ../src/terminal-window.c:1595
-#: ../src/terminal-window.c:1717
+#: ../src/terminal-window.c:1664 ../src/terminal-window.c:1677
+#: ../src/terminal-window.c:1799
 msgid "Open Ta_b"
 msgstr "Abrir a_ba"
 
-#: ../src/terminal-window.c:1583
+#: ../src/terminal-window.c:1665
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../src/terminal-window.c:1584
+#: ../src/terminal-window.c:1666
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/terminal-window.c:1585
+#: ../src/terminal-window.c:1667
 msgid "_Terminal"
 msgstr "Te_rminal"
 
-#: ../src/terminal-window.c:1586
+#: ../src/terminal-window.c:1668
 msgid "Ta_bs"
 msgstr "A_bas"
 
-#: ../src/terminal-window.c:1587
+#: ../src/terminal-window.c:1669
 msgid "_Help"
 msgstr "Aj_uda"
 
-#: ../src/terminal-window.c:1598
+#: ../src/terminal-window.c:1680
 msgid "New _Profile…"
 msgstr "Novo _perfil..."
 
-#: ../src/terminal-window.c:1601 ../src/terminal-window.c:1723
+#: ../src/terminal-window.c:1683 ../src/terminal-window.c:1805
 msgid "C_lose Tab"
 msgstr "F_echar Aba"
 
-#: ../src/terminal-window.c:1604
+#: ../src/terminal-window.c:1686
 msgid "_Close Window"
 msgstr "_Fechar janela"
 
-#: ../src/terminal-window.c:1615 ../src/terminal-window.c:1711
+#: ../src/terminal-window.c:1697 ../src/terminal-window.c:1793
 msgid "Paste _Filenames"
 msgstr "Colar nomes de ar_quivos"
 
-#: ../src/terminal-window.c:1621
+#: ../src/terminal-window.c:1703
 msgid "P_rofiles…"
 msgstr "Pe_rfis..."
 
-#: ../src/terminal-window.c:1624
+#: ../src/terminal-window.c:1706
 msgid "_Keyboard Shortcuts…"
 msgstr "Atalhos de _teclado..."
 
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1709
 msgid "Pr_ofile Preferences"
 msgstr "Preferências do _perfil"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1643
+#: ../src/terminal-window.c:1725
 msgid "Change _Profile"
 msgstr "Alterar _perfil"
 
-#: ../src/terminal-window.c:1644
+#: ../src/terminal-window.c:1726
 msgid "_Set Title…"
 msgstr "Definir _título..."
 
-#: ../src/terminal-window.c:1647
+#: ../src/terminal-window.c:1729
 msgid "Set _Character Encoding"
 msgstr "Definir _codificação de caractere"
 
-#: ../src/terminal-window.c:1648
+#: ../src/terminal-window.c:1730
 msgid "_Reset"
 msgstr "_Redefinir"
 
-#: ../src/terminal-window.c:1651
+#: ../src/terminal-window.c:1733
 msgid "Reset and C_lear"
 msgstr "Redefinir e _limpar"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1656
+#: ../src/terminal-window.c:1738
 msgid "_Add or Remove…"
 msgstr "_Adicionar ou remover..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1661
+#: ../src/terminal-window.c:1743
 msgid "_Previous Tab"
 msgstr "Aba _anterior"
 
-#: ../src/terminal-window.c:1664
+#: ../src/terminal-window.c:1746
 msgid "_Next Tab"
 msgstr "Pró_xima aba"
 
-#: ../src/terminal-window.c:1667
+#: ../src/terminal-window.c:1749
 msgid "Move Tab _Left"
 msgstr "Mover aba para a _esquerda"
 
-#: ../src/terminal-window.c:1670
+#: ../src/terminal-window.c:1752
 msgid "Move Tab _Right"
 msgstr "Mover aba para a _direita"
 
-#: ../src/terminal-window.c:1673
+#: ../src/terminal-window.c:1755
 msgid "_Detach tab"
 msgstr "_Desanexar aba"
 
 #. Help menu
-#: ../src/terminal-window.c:1678
+#: ../src/terminal-window.c:1760
 msgid "_Contents"
 msgstr "S_umário"
 
-#: ../src/terminal-window.c:1681
+#: ../src/terminal-window.c:1763
 msgid "_About"
 msgstr "_Sobre"
 
 #. Popup menu
-#: ../src/terminal-window.c:1686
+#: ../src/terminal-window.c:1768
 msgid "_Send Mail To…"
 msgstr "_Enviar e-mail para..."
 
-#: ../src/terminal-window.c:1689
+#: ../src/terminal-window.c:1771
 msgid "_Copy E-mail Address"
 msgstr "_Copiar endereço de e-mail"
 
-#: ../src/terminal-window.c:1692
+#: ../src/terminal-window.c:1774
 msgid "C_all To…"
 msgstr "Li_gar para..."
 
-#: ../src/terminal-window.c:1695
+#: ../src/terminal-window.c:1777
 msgid "_Copy Call Address"
 msgstr "_Copiar endereço de chamada"
 
-#: ../src/terminal-window.c:1698
+#: ../src/terminal-window.c:1780
 msgid "_Open Link"
 msgstr "_Abrir link"
 
-#: ../src/terminal-window.c:1701
+#: ../src/terminal-window.c:1783
 msgid "_Copy Link Address"
 msgstr "_Copiar endereço de link"
 
-#: ../src/terminal-window.c:1704
+#: ../src/terminal-window.c:1786
 msgid "P_rofiles"
 msgstr "Pe_rfis"
 
-#: ../src/terminal-window.c:1720 ../src/terminal-window.c:2946
+#: ../src/terminal-window.c:1802 ../src/terminal-window.c:3065
 msgid "C_lose Window"
 msgstr "_Fechar janela"
 
-#: ../src/terminal-window.c:1726
+#: ../src/terminal-window.c:1808
 msgid "L_eave Full Screen"
 msgstr "Sa_ir da tela cheia"
 
-#: ../src/terminal-window.c:1729
+#: ../src/terminal-window.c:1811
 msgid "_Input Methods"
 msgstr "Métodos de en_trada"
 
 #. View Menu
-#: ../src/terminal-window.c:1735
+#: ../src/terminal-window.c:1817
 msgid "Show _Menubar"
 msgstr "Mostrar barra de _menu"
 
-#: ../src/terminal-window.c:1739
+#: ../src/terminal-window.c:1821
 msgid "_Full Screen"
 msgstr "_Tela cheia"
 
-#: ../src/terminal-window.c:2933
-msgid "Close this terminal?"
-msgstr "Fechar este terminal?"
-
-#: ../src/terminal-window.c:2933
+#: ../src/terminal-window.c:3052
 msgid "Close this window?"
 msgstr "Fechar esta janela?"
 
-#: ../src/terminal-window.c:2937
+#: ../src/terminal-window.c:3052
+msgid "Close this terminal?"
+msgstr "Fechar este terminal?"
+
+#: ../src/terminal-window.c:3056
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2368,7 +2363,7 @@ msgstr ""
 "Ainda há processos sendo executados em alguns terminais nesta janela. Fechar "
 "esta janela irá matar todos eles."
 
-#: ../src/terminal-window.c:2941
+#: ../src/terminal-window.c:3060
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2376,23 +2371,23 @@ msgstr ""
 "Ainda há um processo sendo executado neste terminal. Fechar este terminal "
 "irá matá-lo."
 
-#: ../src/terminal-window.c:2946
+#: ../src/terminal-window.c:3065
 msgid "C_lose Terminal"
 msgstr "Fec_har o terminal"
 
-#: ../src/terminal-window.c:3314
+#: ../src/terminal-window.c:3433
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-window.c:3500
+#: ../src/terminal-window.c:3620
 msgid "Contributors:"
 msgstr "Contribuidores:"
 
-#: ../src/terminal-window.c:3519
+#: ../src/terminal-window.c:3639
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Um emulador de terminal para o GNOME"
 
-#: ../src/terminal-window.c:3526
+#: ../src/terminal-window.c:3646
 msgid "translator-credits"
 msgstr ""
 "Evandro Fernandes Giovanini <evandrofg@ig.com.br>\n"
@@ -2406,4 +2401,125 @@ msgstr ""
 "Og Maciel <ogmaciel@gnome.org>\n"
 "Enrico Nicoletto <liverig@gmail.com>\n"
 "Fabrício Godoy <skarllot@gmail.com>\n"
-"César Veiga <tombs@linuxmail.org>"
+"César Veiga <tombs@linuxmail.org>\n"
+"Henrique P Machado <zehrique@gmail.com>"
+
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 2 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "Automática"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "Control-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "Seqüência de escape"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:33
+msgid "Block"
+msgstr "Bloco"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "I-Beam"
+msgstr "I-Beam"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "Underline"
+msgstr "Sublinhado"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:40
+msgid "Exit the terminal"
+msgstr "Sair do terminal"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Restart the command"
+msgstr "Reiniciar o comando"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Hold the terminal open"
+msgstr "Manter o terminal aberto"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:47
+msgid "On the left side"
+msgstr "No lado esquerdo"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "On the right side"
+msgstr "No lado direito"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:54
+msgid "Replace initial title"
+msgstr "Substituir título inicial"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+msgid "Append initial title"
+msgstr "Acrescentar título inicial"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+msgid "Prepend initial title"
+msgstr "Anteceder título inicial"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+msgid "Keep initial title"
+msgstr "Manter título inicial"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:63
+msgid "Tango"
+msgstr "Tango"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Linux console"
+msgstr "Console do Linux"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "Rxvt"
+msgstr "Rxvt"
