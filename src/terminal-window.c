@@ -2217,17 +2217,6 @@ terminal_window_set_is_restored (TerminalWindow *window)
 }
 
 static void
-update_notebook (TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  gboolean single;
-
-  single = priv->terms == 1;
-    
-  gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->notebook), !single);
-}
-
-static void
 profile_set_callback (TerminalScreen *screen,
                       TerminalProfile *old_profile,
                       TerminalWindow *window)
@@ -2767,8 +2756,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
   g_signal_connect (screen, "close-screen",
                     G_CALLBACK (screen_close_cb), window);
 
-  update_notebook (window);
-
   update_tab_visibility (window, 0);
 
   /* ZvtTerm is a broken POS and requires this realize to get
@@ -2857,8 +2844,6 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         window);
 
   priv->terms--;
-
-  update_notebook (window);
 
   terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
