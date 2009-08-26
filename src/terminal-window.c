@@ -62,7 +62,6 @@ struct _TerminalWindowPrivate
 
   GtkWidget *menubar;
   GtkWidget *notebook;
-  guint terms;
   TerminalScreen *active_screen;
   int old_char_width;
   int old_char_height;
@@ -1226,6 +1225,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
   gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
+  int n_pages;
 
   if (!GTK_WIDGET_REALIZED (info->screen))
     {
@@ -1237,6 +1237,8 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   remove_popup_info (window);
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
+
+  n_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
@@ -1258,9 +1260,9 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_visible (action, show_link);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCloseWindow");
-  gtk_action_set_visible (action, priv->terms <= 1);
+  gtk_action_set_visible (action, n_pages <= 1);
   action = gtk_action_group_get_action (priv->action_group, "PopupCloseTab");
-  gtk_action_set_visible (action, priv->terms > 1);
+  gtk_action_set_visible (action, n_pages > 1);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
   gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
@@ -1881,7 +1883,6 @@ terminal_window_init (TerminalWindow *window)
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
 
-  priv->terms = 0;
   priv->active_screen = NULL;
   priv->menubar_visible = FALSE;
   
@@ -2729,8 +2730,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   screen = terminal_screen_container_get_screen (container);
 
-  priv->terms++;
-
   g_signal_connect (G_OBJECT (screen),
                     "profile-set",
                     G_CALLBACK (profile_set_callback),
@@ -2843,12 +2842,10 @@ notebook_page_removed_callback (GtkWidget       *notebook,
                                         G_CALLBACK (screen_close_cb),
                                         window);
 
-  priv->terms--;
-
   terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
 
-  pages = priv->terms;
+  pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   if (pages == 1)
     {
       terminal_window_set_size (window, priv->active_screen, TRUE);
