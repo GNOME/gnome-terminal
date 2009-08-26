@@ -2555,7 +2555,11 @@ terminal_window_set_active (TerminalWindow *window,
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *widget;
   TerminalProfile *profile;
-  
+
+  _terminal_debug_print (TERMINAL_DEBUG_MDI,
+                         "[window %p] MDI: setting active tab to screen %p (old active is %p)\n",
+                         window, screen, priv->active_screen);
+
   if (priv->active_screen == screen)
     return;
   
@@ -2701,6 +2705,10 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   TerminalScreen *screen;
   int old_grid_width, old_grid_height;
 
+  _terminal_debug_print (TERMINAL_DEBUG_MDI,
+                         "[window %p] MDI: page-selected %d\n",
+                         window, page_num);
+
   if (priv->active_screen == NULL || priv->disposed)
     return;
 
@@ -2709,9 +2717,12 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
                                            page_num);
   screen = terminal_screen_container_get_screen (page_widget);
-
   g_assert (screen);
   
+  _terminal_debug_print (TERMINAL_DEBUG_MDI,
+                         "[window %p] MDI: screen %p now the active tab\n",
+                         window, screen);
+
   /* This is so that we maintain the same grid */
   vte_terminal_set_size (VTE_TERMINAL (screen), old_grid_width, old_grid_height);
 
@@ -2729,6 +2740,10 @@ notebook_page_added_callback (GtkWidget       *notebook,
   TerminalScreen *screen;
 
   screen = terminal_screen_container_get_screen (container);
+
+  _terminal_debug_print (TERMINAL_DEBUG_MDI,
+                         "[window %p] MDI: screen %p inserted\n",
+                         window, screen);
 
   g_signal_connect (G_OBJECT (screen),
                     "profile-set",
@@ -2806,6 +2821,10 @@ notebook_page_removed_callback (GtkWidget       *notebook,
     return;
 
   screen = terminal_screen_container_get_screen (container);
+
+  _terminal_debug_print (TERMINAL_DEBUG_MDI,
+                         "[window %p] MDI: screen %p removed\n",
+                         window, screen);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (profile_set_callback),

@@ -33,6 +33,7 @@ _terminal_debug_init(void)
     { "encodings", TERMINAL_DEBUG_ENCODINGS },
     { "factory",   TERMINAL_DEBUG_FACTORY   },
     { "geometry",  TERMINAL_DEBUG_GEOMETRY  },
+    { "mdi",       TERMINAL_DEBUG_MDI       },
     { "profile",   TERMINAL_DEBUG_PROFILE   }
   };
 
