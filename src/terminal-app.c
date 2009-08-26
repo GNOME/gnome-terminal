@@ -27,6 +27,7 @@
 
 #include "terminal-intl.h"
 
+#include "terminal-debug.h"
 #include "terminal-app.h"
 #include "terminal-accels.h"
 #include "terminal-screen.h"
@@ -1804,6 +1805,10 @@ terminal_app_handle_options (TerminalApp *app,
 
       if (iw->geometry)
         {
+          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                                "[window %p] applying geometry %s\n",
+                                window, iw->geometry);
+
           if (!gtk_window_parse_geometry (GTK_WINDOW (window), iw->geometry))
             g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
         }

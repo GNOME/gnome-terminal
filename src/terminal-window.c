@@ -1408,6 +1408,28 @@ terminal_window_accel_activate_cb (GtkAccelGroup  *accel_group,
 
 /*****************************************/
 
+#ifdef GNOME_ENABLE_DEBUG
+static void
+terminal_window_size_request_cb (GtkWidget *widget,
+                                 GtkRequisition *req)
+{
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] size-request result %d : %d\n",
+                         widget, req->width, req->height);
+}
+
+static void
+terminal_window_size_allocate_cb (GtkWidget *widget,
+                                  GtkAllocation *allocation)
+{
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] size-alloc result %d : %d at (%d, %d)\n",
+                         widget,
+                         allocation->width, allocation->height,
+                         allocation->x, allocation->y);
+}
+#endif /* GNOME_ENABLE_DEBUG */
+
 static void
 terminal_window_realize (GtkWidget *widget)
 {
@@ -1432,6 +1454,12 @@ terminal_window_realize (GtkWidget *widget)
     }
 #endif
 
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] realize, size %d : %d at (%d, %d)\n",
+                         widget,
+                         widget->allocation.width, widget->allocation.height,
+                         widget->allocation.x, widget->allocation.y);
+
   GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
 }
 
@@ -1439,11 +1467,16 @@ static gboolean
 terminal_window_map_event (GtkWidget    *widget,
 			   GdkEventAny  *event)
 {
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
   gboolean (* map_event) (GtkWidget *, GdkEventAny *) =
       GTK_WIDGET_CLASS (terminal_window_parent_class)->map_event;
 
-  TerminalWindow *window = TERMINAL_WINDOW (widget);
-  TerminalWindowPrivate *priv = window->priv;
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] map-event, size %d : %d at (%d, %d)\n",
+                         widget,
+                         widget->allocation.width, widget->allocation.height,
+                         widget->allocation.x, widget->allocation.y);
 
   if (priv->clear_demands_attention)
     {
@@ -1838,6 +1871,13 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
                     NULL);
+#ifdef GNOME_ENABLE_DEBUG
+  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
+    {
+      g_signal_connect_after (window, "size-request", G_CALLBACK (terminal_window_size_request_cb), NULL);
+      g_signal_connect_after (window, "size-allocate", G_CALLBACK (terminal_window_size_allocate_cb), NULL);
+    }
+#endif
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
 
@@ -2091,6 +2131,12 @@ terminal_window_show (GtkWidget *widget)
   SnLauncheeContext *context;
   GdkScreen *screen;
   GdkDisplay *display;
+
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] show, size %d : %d at (%d, %d)\n",
+                         widget,
+                         widget->allocation.width, widget->allocation.height,
+                         widget->allocation.x, widget->allocation.y);
 
   if (priv->active_screen != NULL)
     {
@@ -2476,17 +2522,18 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
 
+  terminal_screen_get_cell_size (screen, &char_width, &char_height);
+  terminal_screen_get_size (screen, &grid_width, &grid_height);
+
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] set size: toplevel %dx%d widget %dx%d\n",
+                         "[window %p] set size: toplevel %dx%d widget %dx%d grid %dx%d char-cell %dx%d\n",
                          window,
                          toplevel_request.width, toplevel_request.height,
-                         widget_request.width, widget_request.height);
+                         widget_request.width, widget_request.height,
+                         grid_width, grid_height, char_width, char_height);
   
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
-
-  terminal_screen_get_cell_size (screen, &char_width, &char_height);
-  terminal_screen_get_size (screen, &grid_width, &grid_height);
 
   if (force_grid_width >= 0)
     grid_width = force_grid_width;
