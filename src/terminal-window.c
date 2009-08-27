@@ -2436,6 +2436,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
+
   widget = GTK_WIDGET (screen);
   
   app = gtk_widget_get_toplevel (widget);
@@ -2615,13 +2616,8 @@ notebook_page_selected_callback (GtkWidget       *notebook,
 
   profile = terminal_screen_get_profile (screen);
 
-  if (!GTK_WIDGET_REALIZED (widget))
-    gtk_widget_realize (widget); /* we need this for the char width */
-
   priv->active_screen = screen;
 
-  terminal_window_update_geometry (window);
-  
   /* Override menubar setting if it wasn't restored from session */
   if (priv->use_default_menubar_visibility)
     {
