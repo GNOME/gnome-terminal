@@ -73,6 +73,7 @@ struct _TerminalScreenPrivate
   double font_scale;
   gboolean user_title; /* title was manually set */
   GSList *match_tags;
+  guint launch_child_source_id;
 };
 
 enum
@@ -120,6 +121,7 @@ static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
+static void terminal_screen_launch_child_on_idle (TerminalScreen *screen);
 static void terminal_screen_child_exited  (VteTerminal *terminal);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
@@ -672,12 +674,19 @@ static void
 terminal_screen_dispose (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
+  TerminalScreenPrivate *priv = screen->priv;
   GtkSettings *settings;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (screen));
   g_signal_handlers_disconnect_matched (settings, G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL, NULL,
                                         screen);
+
+  if (priv->launch_child_source_id != 0)
+    {
+      g_source_remove (priv->launch_child_source_id);
+      priv->launch_child_source_id = 0;
+    }
 
   G_OBJECT_CLASS (terminal_screen_parent_class)->dispose (object);
 }
@@ -740,6 +749,9 @@ terminal_screen_new (TerminalProfile *profile,
 
   terminal_screen_set_font_scale (screen, zoom);
   terminal_screen_set_font (screen);
+
+  /* Launch the child on idle */
+  terminal_screen_launch_child_on_idle (screen);
 
   return screen;
 }
@@ -1535,8 +1547,8 @@ get_child_environment (TerminalScreen *screen,
   return (char **) g_ptr_array_free (retval, FALSE);
 }
 
-void
-terminal_screen_launch_child (TerminalScreen *screen)
+static gboolean
+terminal_screen_launch_child_cb (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *terminal = VTE_TERMINAL (screen);
@@ -1546,6 +1558,10 @@ terminal_screen_launch_child (TerminalScreen *screen)
   GError *err = NULL;
   gboolean update_records;
   const char *working_dir;
+
+  priv->launch_child_source_id = 0;
+
+  g_return_val_if_fail (GTK_WIDGET_REALIZED (screen), FALSE);
 
   profile = priv->profile;
 
@@ -1558,7 +1574,8 @@ terminal_screen_launch_child (TerminalScreen *screen)
 
       g_strfreev (env);
       g_free (shell);
-      return;
+
+      return FALSE;
     }
 
   update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
@@ -1591,6 +1608,19 @@ terminal_screen_launch_child (TerminalScreen *screen)
   g_free (path);
   g_strfreev (argv);
   g_strfreev (env);
+
+  return FALSE; /* don't run again */
+}
+
+static void
+terminal_screen_launch_child_on_idle (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  if (priv->launch_child_source_id != 0)
+    return;
+
+  priv->launch_child_source_id = g_idle_add ((GSourceFunc) terminal_screen_launch_child_cb, screen);
 }
 
 static TerminalScreenPopupInfo *
@@ -1917,7 +1947,7 @@ terminal_screen_child_exited (VteTerminal *terminal)
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
     case TERMINAL_EXIT_RESTART:
-      terminal_screen_launch_child (screen);
+      terminal_screen_launch_child_on_idle (screen);
       break;
     case TERMINAL_EXIT_HOLD:
     default:

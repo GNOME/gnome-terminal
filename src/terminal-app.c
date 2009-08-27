@@ -1859,8 +1859,6 @@ terminal_app_new_terminal (TerminalApp     *app,
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
-  terminal_screen_launch_child (screen);
-
   return screen;
 }
 

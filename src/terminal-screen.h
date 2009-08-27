@@ -93,8 +93,6 @@ void         terminal_screen_set_initial_environment (TerminalScreen  *screen,
                                                       char           **argv);
 char **      terminal_screen_get_initial_environment (TerminalScreen  *screen);
 
-void terminal_screen_launch_child (TerminalScreen *screen);
-
 const char* terminal_screen_get_raw_title      (TerminalScreen *screen);
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 const char* terminal_screen_get_icon_title     (TerminalScreen *screen);
