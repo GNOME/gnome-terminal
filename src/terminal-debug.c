@@ -34,6 +34,7 @@ _terminal_debug_init(void)
     { "factory",   TERMINAL_DEBUG_FACTORY   },
     { "geometry",  TERMINAL_DEBUG_GEOMETRY  },
     { "mdi",       TERMINAL_DEBUG_MDI       },
+    { "processes", TERMINAL_DEBUG_PROCESSES },
     { "profile",   TERMINAL_DEBUG_PROFILE   }
   };
 

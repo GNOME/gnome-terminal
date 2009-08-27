@@ -1563,6 +1563,10 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
 
   g_return_val_if_fail (GTK_WIDGET_REALIZED (screen), FALSE);
 
+  _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
+                         "[screen %p] now launching the child process\n",
+                         screen);
+
   profile = priv->profile;
 
   env = get_child_environment (screen, &shell);
@@ -1619,6 +1623,10 @@ terminal_screen_launch_child_on_idle (TerminalScreen *screen)
 
   if (priv->launch_child_source_id != 0)
     return;
+
+  _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
+                         "[screen %p] scheduling launching the child process on idle\n",
+                         screen);
 
   priv->launch_child_source_id = g_idle_add ((GSourceFunc) terminal_screen_launch_child_cb, screen);
 }
@@ -1935,6 +1943,10 @@ terminal_screen_child_exited (VteTerminal *terminal)
   TerminalExitAction action;
 
   /* No need to chain up to VteTerminalClass::child_exited since it's NULL */
+
+  _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
+                         "[screen %p] child process exited\n",
+                         screen);
 
   priv->child_pid = -1;
   priv->pty_fd = -1;
