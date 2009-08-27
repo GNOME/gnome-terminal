@@ -1728,6 +1728,11 @@ terminal_app_handle_options (TerminalApp *app,
   /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
 
+  if (options->startup_id != NULL)
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                           "Startup ID is '%s'\n",
+                           options->startup_id);
+
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {
       InitialWindow *iw = lw->data;
@@ -1743,8 +1748,8 @@ terminal_app_handle_options (TerminalApp *app,
       if (iw->source_tag == SOURCE_SESSION)
         terminal_window_set_is_restored (window);
 
-      if (options->startup_id)
-        terminal_window_set_startup_id (window, options->startup_id);
+      if (options->startup_id != NULL)
+        gtk_window_set_startup_id (GTK_WINDOW (window), options->startup_id);
 
       /* Overwrite the default, unique window role set in terminal_window_init */
       if (iw->role)

@@ -309,10 +309,6 @@ main (int argc, char **argv)
   if (startup_id)
     g_unsetenv ("DESKTOP_STARTUP_ID");
 
-  gtk_window_set_auto_startup_notification (FALSE); /* we'll do it ourselves due
-                                                     * to complicated factory setup
-                                                     */
-
  /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
     {

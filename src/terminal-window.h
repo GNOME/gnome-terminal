@@ -95,9 +95,6 @@ void terminal_window_set_size_force_grid (TerminalWindow *window,
 
 GtkWidget* terminal_window_get_notebook (TerminalWindow *window);
 
-void terminal_window_set_startup_id (TerminalWindow *window,
-                                     const char     *startup_id);
-
 gboolean terminal_window_uses_argb_visual (TerminalWindow *window);
 
 void terminal_window_save_state (TerminalWindow *window,

@@ -26,7 +26,6 @@
 #include <gdk/gdkx.h>
 #endif
 #include <gdk/gdkkeysyms.h>
-#include <libsn/sn-launchee.h>
 
 #include "skey-popup.h"
 #include "terminal-accels.h"
@@ -66,7 +65,6 @@ struct _TerminalWindowPrivate
   int old_char_width;
   int old_char_height;
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
-  char *startup_id;
 
   GtkWidget *confirm_close_dialog;
 
@@ -2090,8 +2088,6 @@ terminal_window_finalize (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
 
-  g_free (priv->startup_id);
-
   g_object_unref (priv->ui_manager);
 
   if (priv->confirm_close_dialog)
@@ -2110,28 +2106,10 @@ terminal_window_delete_event (GtkWidget *widget,
 }
 
 static void
-sn_error_trap_push (SnDisplay *display,
-                    Display   *xdisplay)
-{
-  gdk_error_trap_push ();
-}
-
-static void
-sn_error_trap_pop (SnDisplay *display,
-                   Display   *xdisplay)
-{
-  gdk_error_trap_pop ();
-}
-
-static void
 terminal_window_show (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
   TerminalWindowPrivate *priv = window->priv;
-  SnDisplay *sn_display;
-  SnLauncheeContext *context;
-  GdkScreen *screen;
-  GdkDisplay *display;
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] show, size %d : %d at (%d, %d)\n",
@@ -2146,54 +2124,7 @@ terminal_window_show (GtkWidget *widget)
       terminal_window_set_size (window, priv->active_screen, FALSE);
     }
 
-  context = NULL;
-  sn_display = NULL;
-  if (priv->startup_id != NULL)
-    {
-      /* Set up window for launch notification */
-
-      screen = gtk_window_get_screen (GTK_WINDOW (window));
-      display = gdk_screen_get_display (screen);
-      
-      sn_display = sn_display_new (gdk_x11_display_get_xdisplay (display),
-                                   sn_error_trap_push,
-                                   sn_error_trap_pop);
-      
-      context = sn_launchee_context_new (sn_display,
-                                         gdk_screen_get_number (screen),
-                                         priv->startup_id);
-
-      /* Handle the setup for the window if the startup_id is valid; I
-       * don't think it can hurt to do this even if it was invalid,
-       * but why do the extra work...
-       */
-      if (strncmp (sn_launchee_context_get_startup_id (context), "_TIME", 5) != 0)
-        sn_launchee_context_setup_window (context,
-                                          GDK_WINDOW_XWINDOW (widget->window));
-
-      /* Now, set the _NET_WM_USER_TIME for the new window to the timestamp
-       * that caused the window to be launched.
-       */
-      if (sn_launchee_context_get_id_has_timestamp (context))
-        {
-          gulong timestamp;
-
-          timestamp = sn_launchee_context_get_timestamp (context);
-          gdk_x11_window_set_user_time (widget->window, timestamp);
-        }
-
-      g_free (priv->startup_id);
-      priv->startup_id = NULL;
-    }
-  
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
-
-  if (context != NULL)
-    {
-      sn_launchee_context_complete (context);
-      sn_launchee_context_unref (context);
-      sn_display_unref (sn_display);
-    }
 }
 
 TerminalWindow*
@@ -3690,16 +3621,6 @@ help_about_callback (GtkAction *action,
   g_strfreev (artists);
   g_strfreev (documenters);
   g_free (licence_text);
-}
-
-void
-terminal_window_set_startup_id (TerminalWindow *window,
-                                const char     *startup_id)
-{
-  TerminalWindowPrivate *priv = window->priv;
-
-  g_free (priv->startup_id);
-  priv->startup_id = g_strdup (startup_id);
 }
 
 GtkUIManager *
