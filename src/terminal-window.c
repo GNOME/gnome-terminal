@@ -2446,6 +2446,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   
   g_object_set (priv->menubar, "visible", setting, NULL);
 
+  /* FIXMEchpe: use GTK_WIDGET_REALIZED instead? */
   if (priv->active_screen)
     {
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
@@ -2548,67 +2549,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   }
 }
 
-static void
-terminal_window_set_active (TerminalWindow *window,
-                            TerminalScreen *screen)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *widget;
-  TerminalProfile *profile;
-
-  _terminal_debug_print (TERMINAL_DEBUG_MDI,
-                         "[window %p] MDI: setting active tab to screen %p (old active is %p)\n",
-                         window, screen, priv->active_screen);
-
-  if (priv->active_screen == screen)
-    return;
-  
-  /* Workaround to remove gtknotebook's feature of computing its size based on
-   * all pages. When the widget is hidden, its size will not be taken into
-   * account.
-   */
-  if (priv->active_screen)
-    gtk_widget_hide (GTK_WIDGET (priv->active_screen)); /* FIXME */
-  
-  widget = GTK_WIDGET (screen);
-  
-  /* Make sure that the widget is no longer hidden due to the workaround */
-  gtk_widget_show (widget);
-
-  profile = terminal_screen_get_profile (screen);
-
-  if (!GTK_WIDGET_REALIZED (widget))
-    gtk_widget_realize (widget); /* we need this for the char width */
-
-  priv->active_screen = screen;
-
-  terminal_window_update_geometry (window);
-  
-  /* Override menubar setting if it wasn't restored from session */
-  if (priv->use_default_menubar_visibility)
-    {
-      gboolean setting =
-        terminal_profile_get_property_boolean (terminal_screen_get_profile (screen), TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR);
-
-      terminal_window_set_menubar_visible (window, setting);
-    }
-
-  sync_screen_icon_title_set (screen, NULL, window);
-  sync_screen_icon_title (screen, NULL, window);
-  sync_screen_title (screen, NULL, window);
-
-  /* set size of window to current grid size */
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] setting size after flipping notebook pages\n",
-                         window);
-  terminal_window_set_size (window, screen, TRUE);
-
-  terminal_window_update_encoding_menu_active_encoding (window);
-  terminal_window_update_set_profile_menu_active_profile (window);
-  terminal_window_update_copy_sensitivity (screen, window);
-  terminal_window_update_zoom_sensitivity (window);
-}
-
 void
 terminal_window_switch_screen (TerminalWindow *window,
                               TerminalScreen *screen)
@@ -2701,33 +2641,80 @@ notebook_page_selected_callback (GtkWidget       *notebook,
                                  TerminalWindow  *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget* page_widget;
+  GtkWidget* page_widget, *widget;
   TerminalScreen *screen;
+  TerminalProfile *profile;
   int old_grid_width, old_grid_height;
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: page-selected %d\n",
                          window, page_num);
 
-  if (priv->active_screen == NULL || priv->disposed)
+  if (priv->disposed)
     return;
 
-  terminal_screen_get_size (priv->active_screen, &old_grid_width, &old_grid_height);
-  
-  page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook),
-                                           page_num);
+  page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
   screen = terminal_screen_container_get_screen (page_widget);
-  g_assert (screen);
-  
+  widget = GTK_WIDGET (screen);
+  g_assert (screen != NULL);
+
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
-                         "[window %p] MDI: screen %p now the active tab\n",
-                         window, screen);
+                         "[window %p] MDI: setting active tab to screen %p (old active screen %p)\n",
+                         window, screen, priv->active_screen);
 
-  /* This is so that we maintain the same grid */
-  vte_terminal_set_size (VTE_TERMINAL (screen), old_grid_width, old_grid_height);
+  if (priv->active_screen == screen)
+    return;
+  
+  if (priv->active_screen != NULL) {
+    terminal_screen_get_size (priv->active_screen, &old_grid_width, &old_grid_height);
+  
+    /* This is so that we maintain the same grid */
+    vte_terminal_set_size (VTE_TERMINAL (screen), old_grid_width, old_grid_height);
+  }
 
-  terminal_window_set_active (window, screen);
+  /* Workaround to remove gtknotebook's feature of computing its size based on
+   * all pages. When the widget is hidden, its size will not be taken into
+   * account.
+   */
+  if (priv->active_screen)
+    gtk_widget_hide (GTK_WIDGET (priv->active_screen)); /* FIXME */
+
+  /* Make sure that the widget is no longer hidden due to the workaround */
+  gtk_widget_show (widget);
+
+  profile = terminal_screen_get_profile (screen);
+
+  if (!GTK_WIDGET_REALIZED (widget))
+    gtk_widget_realize (widget); /* we need this for the char width */
+
+  priv->active_screen = screen;
+
+  terminal_window_update_geometry (window);
+  
+  /* Override menubar setting if it wasn't restored from session */
+  if (priv->use_default_menubar_visibility)
+    {
+      gboolean setting =
+        terminal_profile_get_property_boolean (terminal_screen_get_profile (screen), TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR);
+
+      terminal_window_set_menubar_visible (window, setting);
+    }
+
+  sync_screen_icon_title_set (screen, NULL, window);
+  sync_screen_icon_title (screen, NULL, window);
+  sync_screen_title (screen, NULL, window);
+
+  /* set size of window to current grid size */
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] setting size after flipping notebook pages\n",
+                         window);
+  terminal_window_set_size (window, screen, TRUE);
+
   terminal_window_update_tabs_menu_sensitivity (window);
+  terminal_window_update_encoding_menu_active_encoding (window);
+  terminal_window_update_set_profile_menu_active_profile (window);
+  terminal_window_update_copy_sensitivity (screen, window);
+  terminal_window_update_zoom_sensitivity (window);
 }
 
 static void
@@ -2736,7 +2723,9 @@ notebook_page_added_callback (GtkWidget       *notebook,
                               guint            page_num,
                               TerminalWindow  *window)
 {
+#if 0
   TerminalWindowPrivate *priv = window->priv;
+#endif
   TerminalScreen *screen;
 
   screen = terminal_screen_container_get_screen (container);
@@ -2772,11 +2761,16 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_tab_visibility (window, 0);
 
+#if 0
   /* ZvtTerm is a broken POS and requires this realize to get
    * the size request right.
    */
   /* FIXME: does this apply to VTE? */
   gtk_widget_realize (GTK_WIDGET (screen));
+#endif
+
+#if 0
+  /* FIXMEchpe: wtf is this doing? */
 
   /* If we have an active screen, match its size and zoom */
   if (priv->active_screen)
@@ -2790,19 +2784,16 @@ notebook_page_added_callback (GtkWidget       *notebook,
       scale = terminal_screen_get_font_scale (priv->active_screen);
       terminal_screen_set_font_scale (screen, scale);
     }
+#endif
 
-  /* Make the first-added screen the active one */
-  /* FIXME: this shouldn't be necessary since we'll immediately get
-   * page-selected callback.
-   */
-  if (priv->active_screen == NULL)
-    terminal_window_set_active (window, screen);
-
+  /* FIXMEchpe: do this in a connect-after handler */
+#if 0
   if (priv->present_on_insert)
     {
       gtk_window_present_with_time (GTK_WINDOW (window), gtk_get_current_event_time ());
       priv->present_on_insert = FALSE;
     }
+#endif
 
   terminal_window_update_tabs_menu_sensitivity (window);
 }
