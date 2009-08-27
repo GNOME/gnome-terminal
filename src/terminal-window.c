@@ -2693,14 +2693,6 @@ notebook_page_added_callback (GtkWidget       *notebook,
   update_tab_visibility (window, 0);
 
 #if 0
-  /* ZvtTerm is a broken POS and requires this realize to get
-   * the size request right.
-   */
-  /* FIXME: does this apply to VTE? */
-  gtk_widget_realize (GTK_WIDGET (screen));
-#endif
-
-#if 0
   /* FIXMEchpe: wtf is this doing? */
 
   /* If we have an active screen, match its size and zoom */
