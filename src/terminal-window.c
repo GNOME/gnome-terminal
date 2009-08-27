@@ -2109,13 +2109,8 @@ static void
 terminal_window_show (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
+#if 0
   TerminalWindowPrivate *priv = window->priv;
-
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] show, size %d : %d at (%d, %d)\n",
-                         widget,
-                         widget->allocation.width, widget->allocation.height,
-                         widget->allocation.x, widget->allocation.y);
 
   if (priv->active_screen != NULL)
     {
@@ -2123,6 +2118,15 @@ terminal_window_show (GtkWidget *widget)
        * font size, so we can go ahead and size the window. */
       terminal_window_set_size (window, priv->active_screen, FALSE);
     }
+#endif
+
+  terminal_window_update_geometry (window);
+
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] show, size %d : %d at (%d, %d)\n",
+                         widget,
+                         widget->allocation.width, widget->allocation.height,
+                         widget->allocation.x, widget->allocation.y);
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
 }
