@@ -1916,15 +1916,6 @@ terminal_window_init (TerminalWindow *window)
   priv->old_char_height = -1;
   priv->old_geometry_widget = NULL;
   
-  /* force gtk to construct its GtkClipboard; otherwise our UI is very slow the first time we need it */
-  /* FIXME is that really true still ?
-   * Simple way to find out: comment the code out (if 0'd below), and see
-   * if anyone complains after the next release :)
-   */
-#if 0
-  gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
-#endif
-
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
 
