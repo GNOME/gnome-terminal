@@ -3,23 +3,24 @@
 # This file is distributed under the same license as the Profterm package.
 #
 # Görkem Çetin <gorkem@gelecek.com.tr>, 2002.
-# Baris Cicek <baris@teamforce.name.tr>, 2004, 2008.
+# Baris Cicek <baris@teamforce.name.tr>, 2004, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-13 05:45+0300\n"
-"PO-Revision-Date: 2008-09-10 23:34+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"terminal&component=general\n"
+"POT-Creation-Date: 2009-08-30 04:02+0000\n"
+"PO-Revision-Date: 2009-08-30 06:56+0300\n"
 "Last-Translator: Baris Cicek <baris@teamforce.name.tr>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type:  text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=1; plural=0;\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:96
-#: ../src/terminal-accels.c:167 ../src/terminal.c:1197
-#: ../src/terminal-profile.c:150 ../src/terminal-window.c:1497
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
+#: ../src/terminal-accels.c:222 ../src/terminal.c:304
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1882
 msgid "Terminal"
 msgstr "Uçbirim"
 
@@ -27,154 +28,34 @@ msgstr "Uçbirim"
 msgid "Use the command line"
 msgstr "Komut satırını kullan"
 
-#. { "UTF-8",	N_("Current Locale") },
-#: ../src/encoding.c:51 ../src/encoding.c:64 ../src/encoding.c:78
-#: ../src/encoding.c:100 ../src/encoding.c:111
-msgid "Western"
-msgstr "Batı"
+#: ../src/eggsmclient.c:225
+msgid "Disable connection to session manager"
+msgstr "Oturum yöneticisine bağlantıyı devre dışı bırak"
 
-#: ../src/encoding.c:52 ../src/encoding.c:79 ../src/encoding.c:90
-#: ../src/encoding.c:109
-msgid "Central European"
-msgstr "Merkez Avrupa"
+#: ../src/eggsmclient.c:228
+msgid "Specify file containing saved configuration"
+msgstr "Kaydedilmiş yapılandırmayı içeren dosyayı belirtin"
 
-#: ../src/encoding.c:53
-msgid "South European"
-msgstr "Güney Avrupa"
+#: ../src/eggsmclient.c:228 ../src/terminal-options.c:957
+#: ../src/terminal-options.c:966
+msgid "FILE"
+msgstr "DOSYA"
 
-#: ../src/encoding.c:54 ../src/encoding.c:62 ../src/encoding.c:116
-msgid "Baltic"
-msgstr "Baltık"
+#: ../src/eggsmclient.c:231
+msgid "Specify session management ID"
+msgstr "Oturum yönetimi kimliğini belirtin"
 
-#: ../src/encoding.c:55 ../src/encoding.c:80 ../src/encoding.c:86
-#: ../src/encoding.c:87 ../src/encoding.c:92 ../src/encoding.c:110
-msgid "Cyrillic"
-msgstr "Kiril"
+#: ../src/eggsmclient.c:231
+msgid "ID"
+msgstr "ID"
 
-#: ../src/encoding.c:56 ../src/encoding.c:83 ../src/encoding.c:89
-#: ../src/encoding.c:115
-msgid "Arabic"
-msgstr "Arapça"
+#: ../src/eggsmclient.c:252
+msgid "Session management options:"
+msgstr "Oturum yönetimi seçenekleri:"
 
-#: ../src/encoding.c:57 ../src/encoding.c:95 ../src/encoding.c:112
-msgid "Greek"
-msgstr "Yunanca"
-
-#: ../src/encoding.c:58
-msgid "Hebrew Visual"
-msgstr "Görsel İbranice"
-
-#: ../src/encoding.c:59 ../src/encoding.c:82 ../src/encoding.c:98
-#: ../src/encoding.c:114
-msgid "Hebrew"
-msgstr "İbranice"
-
-#: ../src/encoding.c:60 ../src/encoding.c:81 ../src/encoding.c:102
-#: ../src/encoding.c:113
-msgid "Turkish"
-msgstr "Türkçe"
-
-#: ../src/encoding.c:61
-msgid "Nordic"
-msgstr "Nordik"
-
-#: ../src/encoding.c:63
-msgid "Celtic"
-msgstr "Seltik"
-
-#: ../src/encoding.c:65 ../src/encoding.c:101
-msgid "Romanian"
-msgstr "Romanca"
-
-#. These encodings do NOT pass-through ASCII, so are always rejected.
-#. * FIXME: why are they in this table; or rather why do we need
-#. * the ASCII pass-through requirement?
-#.
-#: ../src/encoding.c:66 ../src/encoding.c:123 ../src/encoding.c:124
-#: ../src/encoding.c:125 ../src/encoding.c:126
-msgid "Unicode"
-msgstr "Ünikod"
-
-#: ../src/encoding.c:67
-msgid "Armenian"
-msgstr "Ermenice"
-
-#: ../src/encoding.c:68 ../src/encoding.c:69 ../src/encoding.c:73
-msgid "Chinese Traditional"
-msgstr "Geleneksel Çince"
-
-#: ../src/encoding.c:70
-msgid "Cyrillic/Russian"
-msgstr "Kiril/Rusça"
-
-#: ../src/encoding.c:71 ../src/encoding.c:84 ../src/encoding.c:104
-msgid "Japanese"
-msgstr "Japonca"
-
-#: ../src/encoding.c:72 ../src/encoding.c:85 ../src/encoding.c:107
-#: ../src/encoding.c:127
-msgid "Korean"
-msgstr "Korece"
-
-#: ../src/encoding.c:74 ../src/encoding.c:75 ../src/encoding.c:76
-msgid "Chinese Simplified"
-msgstr "Basitleştirilmiş Çince"
-
-#: ../src/encoding.c:77
-msgid "Georgian"
-msgstr "Gürcüce"
-
-#: ../src/encoding.c:88 ../src/encoding.c:103
-msgid "Cyrillic/Ukrainian"
-msgstr "Kiril/Ukraynaca"
-
-#: ../src/encoding.c:91
-msgid "Croatian"
-msgstr "Hırvatça"
-
-#: ../src/encoding.c:93
-msgid "Hindi"
-msgstr "Hintçe"
-
-#: ../src/encoding.c:94
-msgid "Persian"
-msgstr "Farsça"
-
-#: ../src/encoding.c:96
-msgid "Gujarati"
-msgstr "Gujarati"
-
-#: ../src/encoding.c:97
-msgid "Gurmukhi"
-msgstr "Gurmukhi"
-
-#: ../src/encoding.c:99
-msgid "Icelandic"
-msgstr "İzlandaca"
-
-#: ../src/encoding.c:105 ../src/encoding.c:108 ../src/encoding.c:117
-msgid "Vietnamese"
-msgstr "Vietnamca"
-
-#: ../src/encoding.c:106
-msgid "Thai"
-msgstr "Tay"
-
-#: ../src/encoding.c:323
-msgid "User Defined"
-msgstr "Kullanıcı Tanımlı"
-
-#: ../src/encoding.c:597 ../src/encoding.c:622
-msgid "_Description"
-msgstr "_Açıklama"
-
-#: ../src/encoding.c:606 ../src/encoding.c:631
-msgid "_Encoding"
-msgstr "_Kodlama"
-
-#: ../src/encoding.c:688
-msgid "Current Locale"
-msgstr "Geçerli Dil"
+#: ../src/eggsmclient.c:253
+msgid "Show session management options"
+msgstr "Oturum yönetimi seçeneklerini göster"
 
 #: ../src/encodings-dialog.glade.h:1
 msgid "A_vailable encodings:"
@@ -374,19 +255,10 @@ msgstr ""
 "çıkarmaz."
 
 #: ../src/gnome-terminal.schemas.in.h:34
-msgid ""
-"If true, font anti-aliasing will be disabled when running without the X "
-"RENDER extension, which gives a considerable performance improvement in "
-"these situations."
-msgstr ""
-"Eğer seçiliylse, yazıtipi yumuşatması X RENDER uzantısı olmadığı durumlarda "
-"kapatılacak, bu tip durumlarda belirgin bir performans artışı sağlar."
-
-#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Eğer seçiliyse, bir tuşa basmak kaydırma çubuğunu en alta götürür."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -394,7 +266,7 @@ msgstr ""
 "Eğer seçiliyse, arkaplan resmi önalandaki metinlerle beraber kaydırılır, "
 "eğer seçili değise, resmi sabit tutar ve metin onun üzerinde kayar."
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -402,7 +274,7 @@ msgstr ""
 "Eğer seçiliyse, uçbirim içindeki komut giriş kabuğu olarak başlatılır. (argv"
 "[0] önünde çizgi olacak.)"
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -410,7 +282,7 @@ msgstr ""
 "Eğer seçiliyse, uçbirim içinde bir uygulama başlatıldığında giriş kaydı "
 "güncellenecek."
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -418,7 +290,7 @@ msgstr ""
 "Eğer seçiliyse, uçbirim eş aralıklıysa desktop-standard yazıtipini "
 "kullanacak (ona en benzeyen font onunla beraber gelebilir)."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -426,7 +298,7 @@ msgstr ""
 "Eğer seçiliyse, metin giriş kutuları için tema renk şeması, kullanıcı "
 "tarafından belirtilen renkler yerine uçbirim için de kullanılacak."
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -434,14 +306,14 @@ msgstr ""
 "Eğer seçiliyse, custom_command ayarının değeri bir kabuk çalıştırılırken "
 "onun yerine kullanılacak."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Eğer seçiliyse, uçbirimde yeni bir çıktı oluştuğunda kaydırma çubuğu en alta "
 "gidecek."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -453,7 +325,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -463,7 +335,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -475,7 +347,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -487,7 +359,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -497,7 +369,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -509,7 +381,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -521,7 +393,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -533,7 +405,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -544,7 +416,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -556,7 +428,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -568,7 +440,130 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
+#: ../src/gnome-terminal.schemas.in.h:53
+msgid ""
+"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 1'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
 #: ../src/gnome-terminal.schemas.in.h:54
+msgid ""
+"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Sekme 10'a geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:55
+msgid ""
+"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Sekme 11'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:56
+msgid ""
+"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Sekme 12'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:57
+msgid ""
+"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 2'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:58
+msgid ""
+"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 3'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:59
+msgid ""
+"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 4'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:60
+msgid ""
+"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 5'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:61
+msgid ""
+"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 6'ya geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:62
+msgid ""
+"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 7'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:63
+msgid ""
+"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 8'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:64
+msgid ""
+"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Sekme 9'a geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
+"kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
+"diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
+
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -580,7 +575,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -591,7 +586,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -602,7 +597,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -614,7 +609,7 @@ msgstr ""
 "gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
 "olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -625,7 +620,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -636,7 +631,7 @@ msgstr ""
 "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel bir "
 "diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -648,87 +643,135 @@ msgstr ""
 "\"disabled\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol "
 "tuşu olmayacaktır."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut to close a tab"
 msgstr "Sekmeyi kapatmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut to close a window"
 msgstr "Pencereyi kapatmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut to copy text"
 msgstr "Metni kopyalamak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Yeni bir profil oluşturmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to launch help"
 msgstr "Yardımı başlatmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut to make font larger"
 msgstr "Yazıtipini büyütmek için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Yazıtipini normal boyutuna getirmek için klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Yazıtipini küçültmek için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Yeni bir sekme açmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to open a new window"
 msgstr "Yeni bir pencere açmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to paste text"
 msgstr "Metin yapıştırmak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Ekranı sıfırlamak ve silmek için klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Uçbirimi sıfırlamak için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Uçbirim başlığını değiştirmek için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:86
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "Sekme 1'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:87
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "Sekme 10'a geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:88
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "Sekme 11'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:89
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "Sekme 12'ye geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:90
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "Sekme 2'ye geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:91
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "Sekme 3'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:92
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "Sekme 4'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:93
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "Sekme 5'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:94
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "Sekme 6'ya geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:95
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "Sekme 7'ye geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:96
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "Sekme 8'e geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:97
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "Sekme 9'a geçmek için kullanılan klavye kısayolu"
+
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Sonraki sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Önceki sekmeye geçmek için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Tam ekran kipi için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Menü çubuğu için kullanılan klavye kısayolu"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "List of available encodings"
 msgstr "Kullanılabilir kodlamaların listesi"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "List of profiles"
 msgstr "Profillerin listesi"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -736,7 +779,7 @@ msgstr ""
 "gnome-terminal tarafından bilinen profillerin listesi. Liste /apps/gnome- "
 "terminal/profiles altdizinine göre adlandırılmış dizilerden oluşur."
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -746,11 +789,11 @@ msgstr ""
 "(gtk-menu-accel = \"herneyse\") özelleştirilebilir. Bu özellik standart menü "
 "çubuğu hızlandırıcısının kapatılmasını mümkün kılar."
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Number of lines to keep in scrollback"
 msgstr "Geriye kaydırmak için tutulacak satır sayısı"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -762,13 +805,13 @@ msgstr ""
 "satırlar için geriye kaydırma yapamazsınız. Bu ayarı yaparken dikkatli olun; "
 "ayar uçbirimin ne kadar bellek kullanacağını belirlemede en baştaki etkendir."
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Palette for terminal applications"
 msgstr "Uçbirim uygulamaları için palet"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -776,11 +819,11 @@ msgstr ""
 "S/Key challenge response sorgusu algılandığında ve tıklandığında bir pencere "
 "çıkar. Bu pencereye yazılacak olan parola uçbirime gönderilir."
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid "Position of the scrollbar"
 msgstr "Kaydırma çubuğunun yeri"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -788,22 +831,22 @@ msgstr ""
 "Geçerli değerler uçbirimi kapatmak için \"close\", ve komutu tekrar "
 "çalıştırmak için \"restart\"."
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Yeni sekme ya da pencere açılırken kullanıacak profil. profile_list içinde "
 "olmalı."
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Profile to use for new terminals"
 msgstr "Yeni uçbirimler için kullanılacak profil"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "Eğer custom_command seçiliyse, kabuk yerine bu komutu çalıştır."
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -817,7 +860,7 @@ msgstr ""
 "bağlı, için \"escape- sequence\"dir. \"ascii-del\" normalde Geri silme tuşu "
 "için doğru ayar olarak kabul edilir."
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -831,7 +874,7 @@ msgstr ""
 "bağlı, için \"escape- sequence\"dir. \"ascii-del\" normalde Silme tuşu için "
 "doğru ayar olarak kabul edilir."
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -841,7 +884,20 @@ msgstr ""
 "paletleri vardır. Renk adları iki nokta ile ayırılmış listesi biçimde olan "
 "palet budur. Renk adları onaltılı biçimde olmalıdır örn. \"#FF00FF\"."
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:121
+msgid "The cursor appearance"
+msgstr "İmleç görünümü"
+
+#: ../src/gnome-terminal.schemas.in.h:122
+msgid ""
+"The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
+"vertical line cursor, or \"underline\" to use an underline cursor."
+msgstr ""
+"Olası değerler \"block \" bir blok imleç kullanmak için, \"ibeam\" dikey bir "
+"çizgi imleç kullanmak için veya  \"underline\" bir altçizgi imleci kullanmak "
+"için."
+
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -849,11 +905,11 @@ msgstr ""
 "Geçerli değerler, genel imleç yanıp sönme ayarları için \"system\", ya da "
 "kipi ayrıca belirtmek için \"on\" ya da \"off\"."
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Title for terminal"
 msgstr "Uçbirim için başlık"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -863,7 +919,7 @@ msgstr ""
 "title_mode ayarının durumuna göre, uçbirim içindeki uygulamaların ayarladığı "
 "başlıklar tarafından değiştirilebilir veya birleştirilebilir."
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -871,23 +927,25 @@ msgstr ""
 "Eğer seçiliyse, bu profildeki pencereler/sekmeler için yeni pencerelerde "
 "menü çubuğu gösterilir."
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
-"for an image, or \"transparent\" for pseudo-transparency."
+"for an image, or \"transparent\" for either real transparency if a "
+"compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
 "Uçbirim arkaplanının tipi. Geçerli değerler, sabit renk için \"solid\", "
-"resim için \"image\", veya pseudo-saydamlık için \"transparent\"dir."
+"resim için \"image\", veya komposit pencere yöneticisi çalışıyorsa gerçek-"
+"saydamlık aksi halde pseudo-saydamlık için \"transparent\"dir."
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid "What to do with dynamic title"
 msgstr "Dinamik başlık ile ne yapılacağı"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:129
 msgid "What to do with the terminal when the child command exits"
 msgstr "Oğul komut sonlandığında uçbirim ile ne yapılacağı"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -897,7 +955,7 @@ msgstr ""
 "kabul edilecek. \"A-Z\" şeklinde aralıklar belirlenebilir. Gerçek düz çizgi "
 "(aralık belirtmeyen) verilen karakterler arasında en başta olmalıdır."
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
@@ -905,19 +963,19 @@ msgstr ""
 "Uçbirim kaydırma çubuğunun nereye koyulacağı. Geçerli değerler \"left\", "
 "\"right\", ve \"disabled\"dır."
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid "Whether the menubar has access keys"
 msgstr "Menü çubuğunun ulaşma tuşunun olması"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Menü çubuğunun standart ulaşım için GTK kısayolun etkinliği"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Whether to allow bold text"
 msgstr "Kalın metne izin verilmesi"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -925,19 +983,15 @@ msgstr ""
 "Eğer birden fazla uçbirim penceresi sekmesi açık ise, uçbirim penceresi "
 "kapanması için onay sorulması."
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Uçbirim pencereleri kapatılırken onay için sorulması"
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid "Whether to blink the cursor"
 msgstr "İmlecin yanım sönmesi"
 
-#: ../src/gnome-terminal.schemas.in.h:113
-msgid "Whether to disable anti-aliasing without the X RENDER extension"
-msgstr "X RENDER uzantısı olmadan yumuşatmanın kapatılması"
-
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -947,43 +1001,43 @@ msgstr ""
 "uçbirim içinde çalışan başka uygulamaları etkileyebilecekleri için "
 "kapatılabilirler."
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Giriş kabuğu olarak uçbirimdeki komutun başlatılması"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Kabuk yerine özel bir komutun çalıştırılması"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether to scroll background image"
 msgstr "Arkaplan resminin kaydırılması"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Bir tuşa basıldığında en alta kayma"
 
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Yeni çıktı olduğunda en alta kayma"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Yeni pencere/sekmelerde menü çubuğunun gösterilmesi"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether to silence terminal bell"
 msgstr "Uçbirim zilinin susturulması"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to update login records when launching terminal command"
 msgstr "Uçbirim komutları başlatıldığında giriş kayıtlarının güncellenmesi"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Uçbirim parçacığı temasından renklerin kullanılması"
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to use the system font"
 msgstr "Sistem yazıtipinin kullanılması"
 
@@ -993,7 +1047,7 @@ msgstr "Sistem yazıtipinin kullanılması"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current,ISO-8859-9]"
 
@@ -1014,52 +1068,52 @@ msgstr ""
 msgid "_Shortcut keys:"
 msgstr "_Kısayol tuşları:"
 
-#: ../src/profile-editor.c:48
+#: ../src/profile-editor.c:46
 msgid "Black on light yellow"
 msgstr "Açık sarı üzerine siyah"
 
-#: ../src/profile-editor.c:50
+#: ../src/profile-editor.c:48
 msgid "Black on white"
 msgstr "Beyaz üzerine siyah"
 
-#: ../src/profile-editor.c:52
+#: ../src/profile-editor.c:50
 msgid "Gray on black"
 msgstr "Siyah üzerine gri"
 
-#: ../src/profile-editor.c:54
+#: ../src/profile-editor.c:52
 msgid "Green on black"
 msgstr "Siyah üzerine yeşil"
 
-#: ../src/profile-editor.c:56
+#: ../src/profile-editor.c:54
 msgid "White on black"
 msgstr "Siyah üzerine beyaz"
 
-#: ../src/profile-editor.c:440
+#: ../src/profile-editor.c:438
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Komut ayrıştırılırken hata: %s"
 
-#: ../src/profile-editor.c:460
+#: ../src/profile-editor.c:458
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "“%s“ Profili Düzenleniyor"
 
 #. Translators: %s will be a data size, e.g. "(about 500kB)"
-#: ../src/profile-editor.c:476
+#: ../src/profile-editor.c:474
 #, c-format
 msgid "(about %s)"
 msgstr "(%s hakkında)"
 
-#: ../src/profile-editor.c:614
+#: ../src/profile-editor.c:613
 msgid "Images"
 msgstr "Resimler"
 
-#: ../src/profile-editor.c:729
+#: ../src/profile-editor.c:739
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Palet Rengi %d Seç"
 
-#: ../src/profile-editor.c:733
+#: ../src/profile-editor.c:743
 #, c-format
 msgid "Palette entry %d"
 msgstr "Palet girdisi %d"
@@ -1076,7 +1130,7 @@ msgstr "_Yeni bir uçbirim başlatıldığı zaman kullanılacak profil:"
 msgid "C_reate"
 msgstr "_Oluştur"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:104
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:123
 msgid "New Profile"
 msgstr "Yeni Profil"
 
@@ -1153,46 +1207,61 @@ msgid "Background image _scrolls"
 msgstr "_Arkaplan resmi kaysın"
 
 #: ../src/profile-preferences.glade.h:15
+msgid ""
+"Block\n"
+"I-Beam\n"
+"Underline"
+msgstr ""
+"Blok\n"
+"I-Bean\n"
+"Alt Çizgi"
+
+#: ../src/profile-preferences.glade.h:18
 msgid "Built-in _schemes:"
 msgstr "_Yapısal şemalar:"
 
-#: ../src/profile-preferences.glade.h:16
+#: ../src/profile-preferences.glade.h:19
 msgid "Built-in sche_mes:"
 msgstr "Yapısal ş_emalar:"
 
-#: ../src/profile-preferences.glade.h:17
+#: ../src/profile-preferences.glade.h:20
 msgid "Choose A Terminal Font"
 msgstr "Bir Uçbirim Yazıtipini Seçin"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.glade.h:21
 msgid "Choose Terminal Background Color"
 msgstr "Uçbirim Arkaplan Rengini Seçin"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose Terminal Text Color"
 msgstr "Uçbirim Metin Rengini Seçin"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:23
 msgid "Color p_alette:"
 msgstr "Renk _paleti:"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:24
 msgid "Colors"
 msgstr "Renkler"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:25
 msgid "Compatibility"
 msgstr "Uyumluluk"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:26
+msgid "Cursor _shape:"
+msgstr "İmleç ş_ekli:"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "Özel"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:28
 msgid "Custom co_mmand:"
 msgstr "Özel _komut:"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:29
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1202,19 +1271,19 @@ msgstr ""
 "Komutu yeniden başlat\n"
 "Uçbirimi açık tut"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:32
 msgid "General"
 msgstr "Genel"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:33
 msgid "Image _file:"
 msgstr "_Resim dosyası:"
 
-#: ../src/profile-preferences.glade.h:30
+#: ../src/profile-preferences.glade.h:34
 msgid "Initial _title:"
 msgstr "İ_lk başlık:"
 
-#: ../src/profile-preferences.glade.h:31
+#: ../src/profile-preferences.glade.h:35
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1224,11 +1293,11 @@ msgstr ""
 "Sağ tarafta\n"
 "Kapalı"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:38
 msgid "Profile Editor"
 msgstr "Profil Düzenleyici"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:39
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1240,43 +1309,43 @@ msgstr ""
 "İlk başlığın sonrasında\n"
 "İlk başlığı kullan"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:43
 msgid "Ru_n a custom command instead of my shell"
 msgstr "_Kabuk yerine özel bir komut çalıştır"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.glade.h:44
 msgid "S_hade transparent or image background:"
 msgstr "Ş_effaf arkaplan ya da arkaplan resmi:"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.glade.h:45
 msgid "Scroll on _keystroke"
 msgstr "Tuş darbesi ile _kaydır"
 
-#: ../src/profile-preferences.glade.h:42
+#: ../src/profile-preferences.glade.h:46
 msgid "Scroll on _output"
 msgstr "Çı_ktı olduğunda kaydır"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:47
 msgid "Scroll_back:"
 msgstr "_En alta dönme:"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:48
 msgid "Scrolling"
 msgstr "Kaydırma"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:49
 msgid "Select Background Image"
 msgstr "Arkaplan Resmi Seç"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:50
 msgid "Select-by-_word characters:"
 msgstr "Kelime _oluşturan karakterler:"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:51
 msgid "Show _menubar by default in new terminals"
 msgstr "_Menü çubuğunu yeni uçbirimlerde öntanımlı olarak göster"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:52
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1290,87 +1359,87 @@ msgstr ""
 "Rxvt\n"
 "Özel"
 
-#: ../src/profile-preferences.glade.h:53
+#: ../src/profile-preferences.glade.h:57
 msgid "Terminal _bell"
 msgstr "Uçbirim _zili"
 
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.glade.h:58
 msgid "Title and Command"
 msgstr "Başlık ve Komut"
 
-#: ../src/profile-preferences.glade.h:55
+#: ../src/profile-preferences.glade.h:59
 msgid "When command _exits:"
 msgstr "_Komut sona erdiğinde:"
 
-#: ../src/profile-preferences.glade.h:56
+#: ../src/profile-preferences.glade.h:60
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Uçbirim komutları _kendi başlıklarını atadıklarında:"
 
-#: ../src/profile-preferences.glade.h:57
+#: ../src/profile-preferences.glade.h:61
 msgid "_Allow bold text"
 msgstr "_Kalın metne izin ver"
 
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.glade.h:62
 msgid "_Background color:"
 msgstr "_Arkaplan rengi:"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:63
 msgid "_Background image"
 msgstr "_Arkaplan resmi"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:64
 msgid "_Backspace key generates:"
 msgstr "_Geri Silme tuşunun oluşturacağı:"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:65
 msgid "_Delete key generates:"
 msgstr "_Silme tuşunun oluşturacağı:"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:66
 msgid "_Font:"
 msgstr "_Yazıtipi:"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:67
 msgid "_Profile name:"
 msgstr "_Profil adı:"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:68
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Uyumluluk Tercihlerini Öntanımlı Değerlere Getir"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:69
 msgid "_Run command as a login shell"
 msgstr "_Giriş kabuğu yerine komut çalıştır"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:70
 msgid "_Scrollbar is:"
 msgstr "_Kaydırma çubuğu:"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:71
 msgid "_Solid color"
 msgstr "_Sabit renk"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:72
 msgid "_Text color:"
 msgstr "_Metin rengi:"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:73
 msgid "_Transparent background"
 msgstr "Ş_effaf arkaplan"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:74
 msgid "_Update login records when command is launched"
 msgstr "_Komut başlatıldığında giriş kayıtlarını güncelle"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:75
 msgid "_Use colors from system theme"
 msgstr "_Sistem temasının renklerini kullan"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:76
 msgid "_Use the system fixed width font"
 msgstr "_Sistem sabit genişlikli yazıtipini kullan"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:77
 msgid "lines"
 msgstr "satır"
 
@@ -1390,141 +1459,194 @@ msgstr "Tıkladığınız metin geçerli bir S/Key challenge gibi görünmüyor.
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "Tıkladığınız metin geçerli bir OTP challenge gibi görünmüyor."
 
-#: ../src/terminal-accels.c:100
+#: ../src/terminal-accels.c:119
 msgid "New Tab"
 msgstr "Yeni Sekme"
 
-#: ../src/terminal-accels.c:102
+#: ../src/terminal-accels.c:121
 msgid "New Window"
 msgstr "Yeni Pencere"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:125
 msgid "Close Tab"
 msgstr "Sekmeyi Kapat"
 
-#: ../src/terminal-accels.c:108
+#: ../src/terminal-accels.c:127
 msgid "Close Window"
 msgstr "Pencereyi Kapat"
 
-#: ../src/terminal-accels.c:114
+#: ../src/terminal-accels.c:133
 msgid "Copy"
 msgstr "Kopyala"
 
-#: ../src/terminal-accels.c:116
+#: ../src/terminal-accels.c:135
 msgid "Paste"
 msgstr "Yapıştır"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:141
 msgid "Hide and Show menubar"
 msgstr "Menü Çubuğunu Gizle ve Göster"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:143
 msgid "Full Screen"
 msgstr "Tam Ekran"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:145
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:147
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:149
 msgid "Normal Size"
 msgstr "Normal Boyutu"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:2963
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3369
 msgid "Set Title"
 msgstr "Başlığı Düzenle"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:157
 msgid "Reset"
 msgstr "Sıfırla"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:159
 msgid "Reset and Clear"
 msgstr "Sıfırla ve Temizle"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:165
 msgid "Switch to Previous Tab"
 msgstr "Önceki Sekmeye Geç"
 
-#: ../src/terminal-accels.c:148
+#: ../src/terminal-accels.c:167
 msgid "Switch to Next Tab"
 msgstr "Sonraki Sekmeye Geç"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:169
 msgid "Move Tab to the Left"
 msgstr "Sekmeyi Sola Taşı"
 
-#: ../src/terminal-accels.c:152
+#: ../src/terminal-accels.c:171
 msgid "Move Tab to the Right"
 msgstr "Sekmeyi Sağa Taşı"
 
-#: ../src/terminal-accels.c:154
+#: ../src/terminal-accels.c:173
 msgid "Detach Tab"
 msgstr "Sekmeyı Ayır"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:175
+msgid "Switch to Tab 1"
+msgstr "Sekme 1'e Geç"
+
+#: ../src/terminal-accels.c:178
+msgid "Switch to Tab 2"
+msgstr "Sekme 2'ye Geç"
+
+#: ../src/terminal-accels.c:181
+msgid "Switch to Tab 3"
+msgstr "Sekme 3'e Geç"
+
+#: ../src/terminal-accels.c:184
+msgid "Switch to Tab 4"
+msgstr "Sekme 4'e Geç"
+
+#: ../src/terminal-accels.c:187
+msgid "Switch to Tab 5"
+msgstr "Sekme 5'e Geç"
+
+#: ../src/terminal-accels.c:190
+msgid "Switch to Tab 6"
+msgstr "Sekme 6'ya Geç"
+
+#: ../src/terminal-accels.c:193
+msgid "Switch to Tab 7"
+msgstr "Sekme 7'ye Geç"
+
+#: ../src/terminal-accels.c:196
+msgid "Switch to Tab 8"
+msgstr "Sekme 8'e Geç"
+
+#: ../src/terminal-accels.c:199
+msgid "Switch to Tab 9"
+msgstr "Sekme 9'a Geç"
+
+#: ../src/terminal-accels.c:202
+msgid "Switch to Tab 10"
+msgstr "Sekme 10'a Geç"
+
+#: ../src/terminal-accels.c:205
+msgid "Switch to Tab 11"
+msgstr "Sekme 11'e Geç"
+
+#: ../src/terminal-accels.c:208
+msgid "Switch to Tab 12"
+msgstr "Sekme 12'ye Geç"
+
+#: ../src/terminal-accels.c:214
 msgid "Contents"
 msgstr "İçerik"
 
-#: ../src/terminal-accels.c:164
+#: ../src/terminal-accels.c:219
 msgid "File"
 msgstr "Dosya"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:220
 msgid "Edit"
 msgstr "Düzenle"
 
-#: ../src/terminal-accels.c:166
+#: ../src/terminal-accels.c:221
 msgid "View"
 msgstr "Görünüm"
 
-#: ../src/terminal-accels.c:168
+#: ../src/terminal-accels.c:223
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:224
 msgid "Help"
 msgstr "Yardım"
 
-#: ../src/terminal-accels.c:234
+#. Translators: Scrollbar is: ...
+#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Kapalı"
 
-#: ../src/terminal-accels.c:672
+#: ../src/terminal-accels.c:753
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "“%s“ kısayol tuşu zaten “%s“ eylemine bağlanmış"
 
-#: ../src/terminal-accels.c:796
+#: ../src/terminal-accels.c:911
 msgid "_Action"
 msgstr "_Eylem"
 
-#: ../src/terminal-accels.c:815
+#: ../src/terminal-accels.c:930
 msgid "Shortcut _Key"
 msgstr "Kısayol _Tuşu"
 
-#: ../src/terminal-app.c:408
+#: ../src/terminal-app.c:482
 msgid "Click button to choose profile"
 msgstr "Profil seçmek için düğmeye tıklayın"
 
-#: ../src/terminal-app.c:493
+#: ../src/terminal-app.c:567
 msgid "Profile list"
 msgstr "Profil listesi"
 
-#: ../src/terminal-app.c:554
+#: ../src/terminal-app.c:628
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "“%s“ profili silinsin mi?"
 
-#: ../src/terminal-app.c:570
+#: ../src/terminal-app.c:644
 msgid "Delete Profile"
 msgstr "Profil Sil"
 
-#: ../src/terminal-app.c:946
+#: ../src/terminal-app.c:958
+msgid "User Defined"
+msgstr "Kullanıcı Tanımlı"
+
+#: ../src/terminal-app.c:1113
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1533,512 +1655,428 @@ msgstr ""
 "Zaten “%s“ isminde bir profile sahipsiniz. Aynı adla bir profil daha "
 "oluşturmak istiyor musunuz?"
 
-#: ../src/terminal-app.c:1047
+#: ../src/terminal-app.c:1215
 msgid "Choose base profile"
 msgstr "Taban profilini seçin"
 
-#: ../src/terminal.c:275
-#, c-format
-msgid ""
-"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"window-with-profile' option\n"
-msgstr ""
-"Seçenek '\"%s\" gnome-terminal'in bu sürümünde artık kullanılmıyor; siz "
-"belki de istenilen ayarlarda bir profil oluşturmak istiyorsunuz; ve yeni --"
-"window-with-profile seçeneğini kullanmalısınız\n"
-
-#: ../src/terminal.c:298
-#, c-format
-msgid "Argument to \"%s\" is not a valid command: %s\n"
-msgstr "\"%s\" için olan parametre geçerli bir komut değil: %s\n"
-
-#: ../src/terminal.c:451
-msgid "Two roles given for one window"
-msgstr "Bir pencere için iki rol verildi"
-
-#: ../src/terminal.c:473 ../src/terminal.c:507
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "\"%s\" seçeneği aynı pencere için iki kere verilmiş\n"
-
-#: ../src/terminal.c:666
-#, c-format
-msgid ""
-"Option \"%s\" requires specifying the command to run on the rest of the "
-"command line\n"
-msgstr ""
-"\"%s\" seçeneği için komut satırının geri kalanında çalıştırılacak komutu "
-"belirtmeniz gerekiyor\n"
-
-#: ../src/terminal.c:696
-#, c-format
-msgid "\"%s\" is not a valid zoom factor\n"
-msgstr "\"%s\" geçerli bir yaklaştırma oranı değil\n"
-
-#: ../src/terminal.c:703
-#, c-format
-msgid "Zoom factor \"%g\" is too small, using %g\n"
-msgstr "\"%g\" yaklaştırma oranı çok küçük, %g kullanılıyor\n"
-
-#: ../src/terminal.c:711
-#, c-format
-msgid "Zoom factor \"%g\" is too large, using %g\n"
-msgstr "\"%g\" yaklaştırma oranı çok büyük, %g kullanılıyor\n"
-
-#: ../src/terminal.c:831
-#, c-format
-msgid "No argument given to \"%s\" option\n"
-msgstr "\"%s\" seçeneğine hiçbir parametre verilmemiş\n"
-
-#: ../src/terminal.c:853
-#, c-format
-msgid "\"%s\" option requires an argument\n"
-msgstr "\"%s\" seçeneği parametere istiyor\n"
-
-#: ../src/terminal.c:1035
+#: ../src/terminal-app.c:1794
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "\"%s\" profili yok, öntanımlı profil kullanılıyor\n"
 
-#: ../src/terminal.c:1054
+#: ../src/terminal-app.c:1818
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Geçersiz geometri dizisi \"%s\"\n"
 
-#: ../src/terminal.c:1287
-msgid "Execute the argument to this option inside the terminal."
-msgstr "Bu seçenek parametrelerini uçbirim içerisinde çalıştır."
+#: ../src/terminal.c:195
+msgid "Could not open link"
+msgstr "Bağ açılamadı"
 
-#: ../src/terminal.c:1296
-msgid "Execute the remainder of the command line inside the terminal."
-msgstr "Komut satırının geri kalanını uçbirim içerisinde çalıştır."
+#: ../src/terminal.c:299
+#, c-format
+msgid "Failed to parse arguments: %s\n"
+msgstr "Argümanlar ayrıştırılamadı: %s\n"
 
-#: ../src/terminal.c:1305
+#. Incompatible factory version, fall back, to new instance
+#: ../src/terminal.c:423
+#, c-format
+msgid "Incompatible factory version; creating a new instance.\n"
+msgstr "Uyumsuz üretici sürümü; yeni bir örnek oluşturuluyor.\n"
+
+#: ../src/terminal.c:429
+#, c-format
+msgid "Factory error: %s\n"
+msgstr "Üretici hatası: %s \n"
+
+#. { "UTF-8",	N_("Current Locale") },
+#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
+#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:101
+#: ../src/terminal-encoding.c:112
+msgid "Western"
+msgstr "Batı"
+
+#: ../src/terminal-encoding.c:53 ../src/terminal-encoding.c:80
+#: ../src/terminal-encoding.c:91 ../src/terminal-encoding.c:110
+msgid "Central European"
+msgstr "Merkez Avrupa"
+
+#: ../src/terminal-encoding.c:54
+msgid "South European"
+msgstr "Güney Avrupa"
+
+#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:63
+#: ../src/terminal-encoding.c:117
+msgid "Baltic"
+msgstr "Baltık"
+
+#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:81
+#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:88
+#: ../src/terminal-encoding.c:93 ../src/terminal-encoding.c:111
+msgid "Cyrillic"
+msgstr "Kiril"
+
+#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:84
+#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
+msgid "Arabic"
+msgstr "Arapça"
+
+#: ../src/terminal-encoding.c:58 ../src/terminal-encoding.c:96
+#: ../src/terminal-encoding.c:113
+msgid "Greek"
+msgstr "Yunanca"
+
+#: ../src/terminal-encoding.c:59
+msgid "Hebrew Visual"
+msgstr "Görsel İbranice"
+
+#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:83
+#: ../src/terminal-encoding.c:99 ../src/terminal-encoding.c:115
+msgid "Hebrew"
+msgstr "İbranice"
+
+#: ../src/terminal-encoding.c:61 ../src/terminal-encoding.c:82
+#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:114
+msgid "Turkish"
+msgstr "Türkçe"
+
+#: ../src/terminal-encoding.c:62
+msgid "Nordic"
+msgstr "Nordik"
+
+#: ../src/terminal-encoding.c:64
+msgid "Celtic"
+msgstr "Seltik"
+
+#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:102
+msgid "Romanian"
+msgstr "Romanca"
+
+#. These encodings do NOT pass-through ASCII, so are always rejected.
+#. * FIXME: why are they in this table; or rather why do we need
+#. * the ASCII pass-through requirement?
+#.
+#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:124
+#: ../src/terminal-encoding.c:125 ../src/terminal-encoding.c:126
+#: ../src/terminal-encoding.c:127
+msgid "Unicode"
+msgstr "Ünikod"
+
+#: ../src/terminal-encoding.c:68
+msgid "Armenian"
+msgstr "Ermenice"
+
+#: ../src/terminal-encoding.c:69 ../src/terminal-encoding.c:70
+#: ../src/terminal-encoding.c:74
+msgid "Chinese Traditional"
+msgstr "Geleneksel Çince"
+
+#: ../src/terminal-encoding.c:71
+msgid "Cyrillic/Russian"
+msgstr "Kiril/Rusça"
+
+#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
+#: ../src/terminal-encoding.c:105
+msgid "Japanese"
+msgstr "Japonca"
+
+#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:86
+#: ../src/terminal-encoding.c:108 ../src/terminal-encoding.c:128
+msgid "Korean"
+msgstr "Korece"
+
+#: ../src/terminal-encoding.c:75 ../src/terminal-encoding.c:76
+#: ../src/terminal-encoding.c:77
+msgid "Chinese Simplified"
+msgstr "Basitleştirilmiş Çince"
+
+#: ../src/terminal-encoding.c:78
+msgid "Georgian"
+msgstr "Gürcüce"
+
+#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:104
+msgid "Cyrillic/Ukrainian"
+msgstr "Kiril/Ukraynaca"
+
+#: ../src/terminal-encoding.c:92
+msgid "Croatian"
+msgstr "Hırvatça"
+
+#: ../src/terminal-encoding.c:94
+msgid "Hindi"
+msgstr "Hintçe"
+
+#: ../src/terminal-encoding.c:95
+msgid "Persian"
+msgstr "Farsça"
+
+#: ../src/terminal-encoding.c:97
+msgid "Gujarati"
+msgstr "Gujarati"
+
+#: ../src/terminal-encoding.c:98
+msgid "Gurmukhi"
+msgstr "Gurmukhi"
+
+#: ../src/terminal-encoding.c:100
+msgid "Icelandic"
+msgstr "İzlandaca"
+
+#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:109
+#: ../src/terminal-encoding.c:118
+msgid "Vietnamese"
+msgstr "Vietnamca"
+
+#: ../src/terminal-encoding.c:107
+msgid "Thai"
+msgstr "Tay"
+
+#: ../src/terminal-encoding.c:480 ../src/terminal-encoding.c:505
+msgid "_Description"
+msgstr "_Açıklama"
+
+#: ../src/terminal-encoding.c:489 ../src/terminal-encoding.c:514
+msgid "_Encoding"
+msgstr "_Kodlama"
+
+#: ../src/terminal-encoding.c:574
+msgid "Current Locale"
+msgstr "Geçerli Dil"
+
+#: ../src/terminal-options.c:175
+#, c-format
 msgid ""
-"Open a new window containing a tab with the default profile. More than one "
-"of these options can be provided."
+"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
+"might want to create a profile with the desired setting, and use the new '--"
+"profile' option\n"
 msgstr ""
-"Öntanımlı profille bir sekme içeren yeni uçbirim penceresi aç. Bu "
-"seçeneğinbirden fazlası sağlanabilir."
+"Seçenek \"%s\" gnome-terminal'in bu sürümünde artık kullanılmıyor; siz belki "
+"de istenilen ayarlarda bir profil oluşturmak istiyorsunuz; ve yeni '--"
+"profile' seçeneğini kullanmalısınız\n"
 
-#: ../src/terminal.c:1314
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3590
+msgid "GNOME Terminal"
+msgstr "GNOME Uçbirimi"
+
+#: ../src/terminal-options.c:208
+#, c-format
+msgid "Argument to \"%s\" is not a valid command: %s"
+msgstr "\"%s\" için olan parametre geçerli bir komut değil: %s"
+
+#: ../src/terminal-options.c:343
+msgid "Two roles given for one window"
+msgstr "Bir pencere için iki rol verildi"
+
+#: ../src/terminal-options.c:364 ../src/terminal-options.c:397
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "\"%s\" seçeneği aynı pencere için iki kere verilmiş\n"
+
+#: ../src/terminal-options.c:596
+#, c-format
+msgid "\"%s\" is not a valid zoom factor"
+msgstr "\"%s\" geçerli bir yaklaştırma oranı değil"
+
+#: ../src/terminal-options.c:603
+#, c-format
+msgid "Zoom factor \"%g\" is too small, using %g\n"
+msgstr "\"%g\" yaklaştırma oranı çok küçük, %g kullanılıyor\n"
+
+#: ../src/terminal-options.c:611
+#, c-format
+msgid "Zoom factor \"%g\" is too large, using %g\n"
+msgstr "\"%g\" yaklaştırma oranı çok büyük, %g kullanılıyor\n"
+
+#: ../src/terminal-options.c:646
+#, c-format
 msgid ""
-"Open a new window containing a tab with the given profile. More than one of "
-"these options can be provided."
+"Option \"%s\" requires specifying the command to run on the rest of the "
+"command line"
 msgstr ""
-"Belirtilen profille bir sekme içeren yeni uçbirim penceresi aç. Bu "
-"seçeneğinbirden fazlası sağlanabilir."
+"\"%s\" seçeneği için komut satırının geri kalanında çalıştırılacak komutu "
+"belirtmeniz gerekiyor"
 
-#: ../src/terminal.c:1315 ../src/terminal.c:1333
-msgid "PROFILENAME"
-msgstr "PROFİLADI"
+#: ../src/terminal-options.c:807
+msgid "Not a valid terminal config file."
+msgstr "Geçerli bir uçbirim yapılandırma dosyasını."
 
-#: ../src/terminal.c:1323
-msgid ""
-"Open a new tab in the last-opened window with the default profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Öntanımlı profille en son açılan uçbirim penceresinde bir sekme aç. Bu "
-"seçeneğinbirden fazlası sağlanabilir."
+#: ../src/terminal-options.c:820
+msgid "Incompatible terminal config file version."
+msgstr "Uçbirim yapılandırma dosyası sürümü uyumsuz."
 
-#: ../src/terminal.c:1332
-msgid ""
-"Open a new tab in the last-opened window with the given profile. More than "
-"one of these options can be provided."
-msgstr ""
-"Belirtilen profille en son açılan uçbirim penceresinde bir sekme aç. Bu "
-"seçeneğinbirden fazlası sağlanabilir."
-
-#: ../src/terminal.c:1341
-msgid ""
-"Open a new window containing a tab with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Belirtilen profil nosu ile bir sekme içeren yeni uçbirim penceresi aç. "
-"Oturumları kaydetmek için dahili olarak kullanılır."
-
-#: ../src/terminal.c:1342 ../src/terminal.c:1351
-msgid "PROFILEID"
-msgstr "PROFİLNO"
-
-#: ../src/terminal.c:1350
-msgid ""
-"Open a new tab in the last-opened window with the given profile ID. Used "
-"internally to save sessions."
-msgstr ""
-"Belirtilen profil nosu ile en son açılan uçbirim penceresinde bir sekme aç. "
-"Oturumları kaydetmek için dahili olarak kullanılır."
-
-#: ../src/terminal.c:1359
-msgid ""
-"Set the role for the last-specified window; applies to only one window; can "
-"be specified once for each window you create from the command line."
-msgstr ""
-"En son belirtilen pencere için bir rol ayarla; sadece bir pencereye "
-"uygulanır; komut satırından oluşturduğunuz her pencere için bir kere "
-"belirtilebilir."
-
-#: ../src/terminal.c:1360
-msgid "ROLE"
-msgstr "ROL"
-
-#: ../src/terminal.c:1368
-msgid ""
-"Turn on the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"En son belirtilen pencere için menü çubuğunu aç; sadece bir pencereye "
-"uygulanır; komut satırından oluşturduğunuz her pencere için bir kere "
-"belirtilebilir."
-
-#: ../src/terminal.c:1377
-msgid ""
-"Turn off the menubar for the last-specified window; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"En son belirtilen pencere için menü çubuğunu kapat; sadece bir pencereye "
-"uygulanır; komut satırından oluşturduğunuz her pencere için bir kere "
-"belirtilebilir."
-
-#: ../src/terminal.c:1386
-msgid ""
-"Set the last-specified window into maximized mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"En son belirtilen pencereyi tam ekran kipine ayarla; sadece bir pencereye "
-"uygulanır; komut satırından oluşturduğunuz her pencere için bir kere "
-"belirtilebilir."
-
-#: ../src/terminal.c:1395
-msgid ""
-"Set the last-specified window into fullscreen mode; applies to only one "
-"window; can be specified once for each window you create from the command "
-"line."
-msgstr ""
-"En son belirtilen pencereyi tam ekran kipine ayarla; sadece bir pencereye "
-"uygulanır; komut satırından oluşturduğunuz her pencere için bir kere "
-"belirtilebilir."
-
-#: ../src/terminal.c:1404
-msgid ""
-"X geometry specification (see \"X\" man page), can be specified once per "
-"window to be opened."
-msgstr ""
-"X geometri spesifikasyonu (\"X\" kavuz sayfasına bakın), açılan her pencere "
-"için bir kere belirtilebilir. "
-
-#: ../src/terminal.c:1405
-msgid "GEOMETRY"
-msgstr "GEOMETRİ"
-
-#: ../src/terminal.c:1413
+#: ../src/terminal-options.c:947
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Aktivasyon isim sunucusuna kaydolma, aktif bir uçbirimi bir daha kullanma"
 
-#: ../src/terminal.c:1422
-msgid "Register with the activation nameserver [default]"
-msgstr "Aktivasyon isim sunucusuna kaydol [öntanımlı]"
+#: ../src/terminal-options.c:956
+msgid "Load a terminal configuration file"
+msgstr "Bir uçbirim yapılandırma dosyası yükle"
 
-#: ../src/terminal.c:1440
-msgid "Set the terminal's title"
-msgstr "Uçbirim başlığını ayarla"
+#: ../src/terminal-options.c:965
+msgid "Save the terminal configuration to a file"
+msgstr "Uçbirim yapılandırmasını bir dosyaya kaydet"
 
-#: ../src/terminal.c:1441
-msgid "TITLE"
-msgstr "BAŞLIK"
+#: ../src/terminal-options.c:979
+msgid "Open a new window containing a tab with the default profile"
+msgstr "Öntanımlı profille bir sekme içeren yeni uçbirim penceresi aç."
 
-#: ../src/terminal.c:1449
-msgid "Set the terminal's working directory"
-msgstr "Uçbirimin çalışma dizinini ayarla"
+#: ../src/terminal-options.c:988
+msgid "Open a new tab in the last-opened window with the default profile"
+msgstr "Öntanımlı profille en son açılan uçbirim penceresinde bir sekme aç."
 
-#: ../src/terminal.c:1450 ../src/terminal.c:1459
-msgid "DIRNAME"
-msgstr "DİZİNADI"
+#: ../src/terminal-options.c:1001
+msgid "Turn on the menubar"
+msgstr "Menü çubuğunu aç"
 
-#: ../src/terminal.c:1458
-msgid "Set the default terminal's working directory. Used internally"
-msgstr "Uçbirimin öntanımlı çalışma dizinini ayarla. Dahili olarak kullanılır"
+#: ../src/terminal-options.c:1010
+msgid "Turn off the menubar"
+msgstr "Menü çubuğunu kapat"
 
-#: ../src/terminal.c:1467
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Uçbirimin yaklaştırma oranını ayarla (1.0 = normal boyut)"
+#: ../src/terminal-options.c:1019
+msgid "Maximise the window"
+msgstr "Pencereyi büyült"
 
-#: ../src/terminal.c:1468
-msgid "ZOOMFACTOR"
-msgstr "YAKLAŞTIRMAORANI"
+#: ../src/terminal-options.c:1028
+msgid "Full-screen the window"
+msgstr "Tam ekran pencere"
 
-#: ../src/terminal.c:1476
+#: ../src/terminal-options.c:1037
+msgid ""
+"Set the window geometry from the provided X geometry specification; see the "
+"\"X\" man page for more information"
+msgstr ""
+"Sağlanan X geometri belirtiminden pencerede geometrisini ata; \"X\" kılavuz "
+"sayfasına daha fazla bilgi için bakın"
+
+#: ../src/terminal-options.c:1038
+msgid "GEOMETRY"
+msgstr "GEOMETRİ"
+
+#: ../src/terminal-options.c:1046
+msgid "Set the window role"
+msgstr "Pencere rolünü ata"
+
+#: ../src/terminal-options.c:1047
+msgid "ROLE"
+msgstr "ROL"
+
+#: ../src/terminal-options.c:1055
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Kendi penceresinde aktif olan sekmeyi ayarlayın"
 
-#: ../src/terminal.c:1656 ../src/terminal.c:1659
+#: ../src/terminal-options.c:1068
+msgid "Execute the argument to this option inside the terminal"
+msgstr "Bu seçenek parametrelerini uçbirim içerisinde çalıştır."
+
+#: ../src/terminal-options.c:1077
+msgid "Use the given profile instead of the default profile"
+msgstr "Öntanımlı profil yerine verilen profil kullan"
+
+#: ../src/terminal-options.c:1078
+msgid "PROFILE-NAME"
+msgstr "PROFİL-ADI"
+
+#: ../src/terminal-options.c:1086
+msgid "Set the terminal title"
+msgstr "Uçbirim başlığını ayarla"
+
+#: ../src/terminal-options.c:1087
+msgid "TITLE"
+msgstr "BAŞLIK"
+
+#: ../src/terminal-options.c:1095
+msgid "Set the working directory"
+msgstr "Çalışma dizinini ayarla"
+
+#: ../src/terminal-options.c:1096
+msgid "DIRNAME"
+msgstr "DİZİNADI"
+
+#: ../src/terminal-options.c:1104
+msgid "Set the terminalx's zoom factor (1.0 = normal size)"
+msgstr "Terminalx'in yaklaştırma oranını ayarla (1.0 = normal boyut)"
+
+#: ../src/terminal-options.c:1105
+msgid "ZOOM"
+msgstr "YAKLAŞTIRMA"
+
+#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Uçbirimi Emülatörü"
 
-#: ../src/terminal.c:1660
+#: ../src/terminal-options.c:1359
 msgid "Show GNOME Terminal options"
 msgstr "GNOME Uçbirimi seçeneklerini göster"
 
-#: ../src/terminal.c:1817
-#, c-format
+#: ../src/terminal-options.c:1369
 msgid ""
-"It appears that you do not have gnome-terminal.server installed in a valid "
-"location. Factory mode disabled.\n"
+"Options to open new windows or terminal tabs; more than one of these may be "
+"specified:"
 msgstr ""
-"gnome-terminal.server doğru bir konumda kurulmamış gibi görülüyor. Üretici "
-"kipi kapatıldı.\n"
+"Yeni pencereler veya uçbirim sekmeleri açmak için seçenekler; birden fazla "
+"belirtilen olabilir:"
 
-#: ../src/terminal.c:1820
-#, c-format
+#: ../src/terminal-options.c:1370
+msgid "Show terminal options"
+msgstr "Uçbirimi seçeneklerini göster"
+
+#: ../src/terminal-options.c:1378
 msgid ""
-"Error registering terminal with the activation service; factory mode "
-"disabled.\n"
+"Window options; if used before the first --window or --tab argument, sets "
+"the default for all windows:"
 msgstr ""
-"Aktivasyon servisine kaydolurken hata oluştu; üretici kipi kapatıldı.\n"
+"Pencere seçenekleri; eğer ilk önce --window veya --tab argümanı "
+"kullanıldıysa, tüm pencereleri için öntanımlı ayarlar:"
 
-#: ../src/terminal.c:1859
-#, c-format
-msgid "Failed to retrieve terminal server from activation server\n"
-msgstr "Aktivasyon sunucusundan uçbirim sunucusu alınamadı\n"
+#: ../src/terminal-options.c:1379
+msgid "Show per-window options"
+msgstr "Pencere başına seçenekleri göster"
 
-#: ../src/terminal-profile.c:156
+#: ../src/terminal-options.c:1387
+msgid ""
+"Terminal options; if used before the first --window or --tab argument, sets "
+"the default for all terminals:"
+msgstr ""
+"Uçbirim seçenekleri; eğer ilk önce --window veya --tab argümanı "
+"kullanıldıysa, tüm uçbirimler için öntanımlı ayarlar:"
+
+#: ../src/terminal-options.c:1388
+msgid "Show per-terminal options"
+msgstr "Uçbirim başına seçenekleri göster"
+
+#: ../src/terminal-profile.c:150
 msgid "Unnamed"
 msgstr "İsimsiz"
 
-#: ../src/terminal-screen.c:1099
-#, c-format
-msgid "There was a problem with the command for this terminal: %s"
-msgstr "Bu uçbirim için olan komutta bir hata var: %s"
+#: ../src/terminal-screen.c:1288
+msgid "There was a problem with the command for this terminal"
+msgstr "Bu uçbirim için olan komutta bir hata var"
 
-#: ../src/terminal-screen.c:1397
+#: ../src/terminal-screen.c:1606
 msgid "There was an error creating the child process for this terminal"
 msgstr "Bu uçbirim için oğul işlem yaratırken bir hata oluştu"
+
+#: ../src/terminal-tab-label.c:151
+msgid "Close tab"
+msgstr "Sekmeyi kapat"
 
 #: ../src/terminal-tabs-menu.c:198
 msgid "Switch to this tab"
 msgstr "Bu sekmeye geç"
 
-#: ../src/terminal-util.c:170
+#: ../src/terminal-util.c:181
+msgid "There was an error displaying help"
+msgstr "Yardım gösterilirken hata oluştu"
+
+#: ../src/terminal-util.c:254
 #, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Yardım gösterilirken hata oluştu: %s"
+msgid "Could not open the address “%s”"
+msgstr "Adres “%s“ açılamadı"
 
-#: ../src/terminal-util.c:242
-#, c-format
-msgid ""
-"Could not open the address “%s”:\n"
-"%s"
-msgstr ""
-"Adres “%s“ açılamadı:\n"
-"%s"
-
-#: ../src/terminal-window.c:410
-#, c-format
-msgid "_%d. %s"
-msgstr "_%d. %s"
-
-#: ../src/terminal-window.c:412
-#, c-format
-msgid "_%c. %s"
-msgstr "_%c. %s"
-
-#. Toplevel
-#: ../src/terminal-window.c:1322
-msgid "_File"
-msgstr "_Dosya"
-
-#. File menu
-#: ../src/terminal-window.c:1323 ../src/terminal-window.c:1334
-#: ../src/terminal-window.c:1453
-msgid "Open _Terminal"
-msgstr "_Uçbirim Aç"
-
-#: ../src/terminal-window.c:1324 ../src/terminal-window.c:1337
-#: ../src/terminal-window.c:1456
-msgid "Open Ta_b"
-msgstr "_Sekme Aç"
-
-#: ../src/terminal-window.c:1325
-msgid "_Edit"
-msgstr "Dü_zenle"
-
-#: ../src/terminal-window.c:1326
-msgid "_View"
-msgstr "_Görünüm"
-
-#: ../src/terminal-window.c:1327
-msgid "_Terminal"
-msgstr "_Uçbirim"
-
-#: ../src/terminal-window.c:1328
-msgid "_Tabs"
-msgstr "S_ekmeler"
-
-#: ../src/terminal-window.c:1329
-msgid "_Help"
-msgstr "_Yardım"
-
-#: ../src/terminal-window.c:1340
-msgid "New _Profile…"
-msgstr "Yeni _Profil..."
-
-#: ../src/terminal-window.c:1343 ../src/terminal-window.c:1462
-msgid "C_lose Tab"
-msgstr "Sekmeyi _Kapat"
-
-#: ../src/terminal-window.c:1346
-msgid "_Close Window"
-msgstr "_Pencereyi Kapat"
-
-#: ../src/terminal-window.c:1357 ../src/terminal-window.c:1450
-msgid "Paste _Filenames"
-msgstr "_Dosya İsimlerini Yapıştır"
-
-#: ../src/terminal-window.c:1360
-msgid "P_rofiles…"
-msgstr "_Profiller..."
-
-#: ../src/terminal-window.c:1363
-msgid "_Keyboard Shortcuts…"
-msgstr "_Klavye Kısayolları..."
-
-#: ../src/terminal-window.c:1366
-msgid "Profile _Preferences"
-msgstr "_Profil Tercihleri"
-
-#. Terminal menu
-#: ../src/terminal-window.c:1382
-msgid "Change _Profile"
-msgstr "_Profil Değiştir"
-
-#: ../src/terminal-window.c:1383
-msgid "_Set Title…"
-msgstr "_Başlığı Ata..."
-
-#: ../src/terminal-window.c:1386
-msgid "Set _Character Encoding"
-msgstr "_Karakter Kodlamasını Ayarla"
-
-#: ../src/terminal-window.c:1387
-msgid "_Reset"
-msgstr "_Sıfırla"
-
-#: ../src/terminal-window.c:1390
-msgid "Reset and C_lear"
-msgstr "Sıfırla ve _Temizle"
-
-#. Terminal/Encodings menu
-#: ../src/terminal-window.c:1395
-msgid "_Add or Remove…"
-msgstr "_Ekle veya Çıkar..."
-
-#. Tabs menu
-#: ../src/terminal-window.c:1400
-msgid "_Previous Tab"
-msgstr "Ö_nceki Sekme"
-
-#: ../src/terminal-window.c:1403
-msgid "_Next Tab"
-msgstr "_Sonraki Sekme"
-
-#: ../src/terminal-window.c:1406
-msgid "Move Tab _Left"
-msgstr "Sekmeyi S_ola Taşı"
-
-#: ../src/terminal-window.c:1409
-msgid "Move Tab _Right"
-msgstr "Sekmeyi _Sağa Taşı"
-
-#: ../src/terminal-window.c:1412
-msgid "_Detach tab"
-msgstr "_Sekmeyı ayır"
-
-#. Help menu
-#: ../src/terminal-window.c:1417
-msgid "_Contents"
-msgstr "İç_erik"
-
-#: ../src/terminal-window.c:1420
-msgid "_About"
-msgstr "_Hakkında"
-
-#. Popup menu
-#: ../src/terminal-window.c:1425
-msgid "_Send Mail To…"
-msgstr "_Mektup Gönder..."
-
-#: ../src/terminal-window.c:1428
-msgid "_Copy E-mail Address"
-msgstr "_E-postaı Adresini Kopyala"
-
-#: ../src/terminal-window.c:1431
-msgid "C_all To…"
-msgstr "Ç_ağrı..."
-
-#: ../src/terminal-window.c:1434
-msgid "_Copy Call Address"
-msgstr "Ç_ağrı Adresini Kopyala"
-
-#: ../src/terminal-window.c:1437
-msgid "_Open Link"
-msgstr "_Bağlantıyı Aç"
-
-#: ../src/terminal-window.c:1440
-msgid "_Copy Link Address"
-msgstr "_Bağlantı Adresini Kopyala"
-
-#: ../src/terminal-window.c:1443
-msgid "P_rofiles"
-msgstr "_Profiller"
-
-#: ../src/terminal-window.c:1459
-msgid "C_lose Window"
-msgstr "_Pencereyi Kapat"
-
-#: ../src/terminal-window.c:1465
-msgid "_Input Methods"
-msgstr "_Giriş Metodları"
-
-#. View Menu
-#: ../src/terminal-window.c:1471
-msgid "Show _Menubar"
-msgstr "_Menü Çubuğunu Göster"
-
-#: ../src/terminal-window.c:1475
-msgid "_Full Screen"
-msgstr "_Tam Ekran"
-
-#: ../src/terminal-window.c:1907
-msgid "Close tab"
-msgstr "Sekmeyi kapat"
-
-#: ../src/terminal-window.c:2632
-msgid "Close all tabs?"
-msgstr "Tum sekmeler kapansın mı?"
-
-#: ../src/terminal-window.c:2634
-#, c-format
-msgid "This window has one tab open. Closing the window will close it."
-msgid_plural ""
-"This window has %d tabs open. Closing the window will also close all tabs."
-msgstr[0] "Bu pencerenin %d sekmesi açık. Pencereyi kapatmak onu da kapatacak."
-
-#: ../src/terminal-window.c:2643
-msgid "Close All _Tabs"
-msgstr "Tüm _Sekmeleri Kapat"
-
-#: ../src/terminal-window.c:2979
-msgid "_Title:"
-msgstr "_Başlık:"
-
-#: ../src/terminal-window.c:3134
+#: ../src/terminal-util.c:362
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2049,7 +2087,7 @@ msgstr ""
 "dağıtılan GNU Genel Kamu Lisansı'nın sürüm iki (ya da tercihen) daha sonraki "
 "sürümleri koşulları altında dağıtabilir ve/veya değiştirebilirsiniz."
 
-#: ../src/terminal-window.c:3138
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2060,7 +2098,7 @@ msgstr ""
 "GARANTİSİ YOKTUR; hatta SATILABİLİRLİK ya da BİR AMACA HİZMET gibi garantisi "
 "de yoktur. Daha fazla ayrıntı için GNU Genel Kamu Lisansı'na bakın."
 
-#: ../src/terminal-window.c:3142
+#: ../src/terminal-util.c:370
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2070,559 +2108,353 @@ msgstr ""
 "olmalısınız, eğer almadıysanız Özgür Yazılım Vakfı, Inc. 51 Franklin St. "
 "Fifth Floor, Boston, MA  02110-1301 USA adresine yazın"
 
-#: ../src/terminal-window.c:3151
-msgid "GNOME Terminal"
-msgstr "GNOME Uçbirimi"
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%d is used as the accelerator (with d between 1 and 9), and
+#. * the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:428
+#, c-format
+msgid "_%d. %s"
+msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:3153
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%c is used as the accelerator (it will be a character between A and Z),
+#. * and the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:434
+#, c-format
+msgid "_%c. %s"
+msgstr "_%c. %s"
+
+#. Toplevel
+#: ../src/terminal-window.c:1695
+msgid "_File"
+msgstr "_Dosya"
+
+#. File menu
+#: ../src/terminal-window.c:1696 ../src/terminal-window.c:1707
+#: ../src/terminal-window.c:1829
+msgid "Open _Terminal"
+msgstr "_Uçbirim Aç"
+
+#: ../src/terminal-window.c:1697 ../src/terminal-window.c:1710
+#: ../src/terminal-window.c:1832
+msgid "Open Ta_b"
+msgstr "_Sekme Aç"
+
+#: ../src/terminal-window.c:1698
+msgid "_Edit"
+msgstr "Dü_zenle"
+
+#: ../src/terminal-window.c:1699
+msgid "_View"
+msgstr "_Görünüm"
+
+#: ../src/terminal-window.c:1700
+msgid "_Terminal"
+msgstr "_Uçbirim"
+
+#: ../src/terminal-window.c:1701
+msgid "Ta_bs"
+msgstr "_Sekmeler"
+
+#: ../src/terminal-window.c:1702
+msgid "_Help"
+msgstr "_Yardım"
+
+#: ../src/terminal-window.c:1713
+msgid "New _Profile…"
+msgstr "Yeni _Profil..."
+
+#: ../src/terminal-window.c:1716 ../src/terminal-window.c:1838
+msgid "C_lose Tab"
+msgstr "Sekmeyi _Kapat"
+
+#: ../src/terminal-window.c:1719
+msgid "_Close Window"
+msgstr "_Pencereyi Kapat"
+
+#: ../src/terminal-window.c:1730 ../src/terminal-window.c:1826
+msgid "Paste _Filenames"
+msgstr "_Dosya İsimlerini Yapıştır"
+
+#: ../src/terminal-window.c:1736
+msgid "P_rofiles…"
+msgstr "_Profiller..."
+
+#: ../src/terminal-window.c:1739
+msgid "_Keyboard Shortcuts…"
+msgstr "_Klavye Kısayolları..."
+
+#: ../src/terminal-window.c:1742
+msgid "Pr_ofile Preferences"
+msgstr "_Profil Tercihleri"
+
+#. Terminal menu
+#: ../src/terminal-window.c:1758
+msgid "Change _Profile"
+msgstr "_Profil Değiştir"
+
+#: ../src/terminal-window.c:1759
+msgid "_Set Title…"
+msgstr "_Başlığı Ata..."
+
+#: ../src/terminal-window.c:1762
+msgid "Set _Character Encoding"
+msgstr "_Karakter Kodlamasını Ayarla"
+
+#: ../src/terminal-window.c:1763
+msgid "_Reset"
+msgstr "_Sıfırla"
+
+#: ../src/terminal-window.c:1766
+msgid "Reset and C_lear"
+msgstr "Sıfırla ve _Temizle"
+
+#. Terminal/Encodings menu
+#: ../src/terminal-window.c:1771
+msgid "_Add or Remove…"
+msgstr "_Ekle veya Çıkar..."
+
+#. Tabs menu
+#: ../src/terminal-window.c:1776
+msgid "_Previous Tab"
+msgstr "Ö_nceki Sekme"
+
+#: ../src/terminal-window.c:1779
+msgid "_Next Tab"
+msgstr "_Sonraki Sekme"
+
+#: ../src/terminal-window.c:1782
+msgid "Move Tab _Left"
+msgstr "Sekmeyi S_ola Taşı"
+
+#: ../src/terminal-window.c:1785
+msgid "Move Tab _Right"
+msgstr "Sekmeyi _Sağa Taşı"
+
+#: ../src/terminal-window.c:1788
+msgid "_Detach tab"
+msgstr "_Sekmeyı ayır"
+
+#. Help menu
+#: ../src/terminal-window.c:1793
+msgid "_Contents"
+msgstr "İç_erik"
+
+#: ../src/terminal-window.c:1796
+msgid "_About"
+msgstr "_Hakkında"
+
+#. Popup menu
+#: ../src/terminal-window.c:1801
+msgid "_Send Mail To…"
+msgstr "_Mektup Gönder..."
+
+#: ../src/terminal-window.c:1804
+msgid "_Copy E-mail Address"
+msgstr "_E-postaı Adresini Kopyala"
+
+#: ../src/terminal-window.c:1807
+msgid "C_all To…"
+msgstr "Ç_ağrı..."
+
+#: ../src/terminal-window.c:1810
+msgid "_Copy Call Address"
+msgstr "Ç_ağrı Adresini Kopyala"
+
+#: ../src/terminal-window.c:1813
+msgid "_Open Link"
+msgstr "_Bağlantıyı Aç"
+
+#: ../src/terminal-window.c:1816
+msgid "_Copy Link Address"
+msgstr "_Bağlantı Adresini Kopyala"
+
+#: ../src/terminal-window.c:1819
+msgid "P_rofiles"
+msgstr "_Profiller"
+
+#: ../src/terminal-window.c:1835 ../src/terminal-window.c:3018
+msgid "C_lose Window"
+msgstr "_Pencereyi Kapat"
+
+#: ../src/terminal-window.c:1841
+msgid "L_eave Full Screen"
+msgstr "_Tam Ekranı Terket"
+
+#: ../src/terminal-window.c:1844
+msgid "_Input Methods"
+msgstr "_Giriş Metodları"
+
+#. View Menu
+#: ../src/terminal-window.c:1850
+msgid "Show _Menubar"
+msgstr "_Menü Çubuğunu Göster"
+
+#: ../src/terminal-window.c:1854
+msgid "_Full Screen"
+msgstr "_Tam Ekran"
+
+#: ../src/terminal-window.c:3005
+msgid "Close this window?"
+msgstr "Bu pencereyi kapatılsın mı?"
+
+#: ../src/terminal-window.c:3005
+msgid "Close this terminal?"
+msgstr "Bu uçbirim kapatılsın mı?"
+
+#: ../src/terminal-window.c:3009
+msgid ""
+"There are still processes running in some terminals in this window. Closing "
+"the window will kill all of them."
+msgstr ""
+"Hala bu pencerede bazı uçbirimlerde çalışan süreçler var. Pencereyi kapatmak "
+"hepsini sonlandırır."
+
+#: ../src/terminal-window.c:3013
+msgid ""
+"There is still a process running in this terminal. Closing the terminal will "
+"kill it."
+msgstr ""
+"Hala bir süreç bu uçbirimde çalışıyor. Uçbirimi kapatmak onu sonlandıracak."
+
+#: ../src/terminal-window.c:3018
+msgid "C_lose Terminal"
+msgstr "_Uçbirimi Kapat"
+
+#: ../src/terminal-window.c:3386
+msgid "_Title:"
+msgstr "_Başlık:"
+
+#: ../src/terminal-window.c:3573
+msgid "Contributors:"
+msgstr "Katkıda Bulunanlar:"
+
+#: ../src/terminal-window.c:3592
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME masaüstü için bir uçbirim emülatörü"
 
-#: ../src/terminal-window.c:3158
+#: ../src/terminal-window.c:3599
 msgid "translator-credits"
 msgstr "Barış Çiçek <baris@teamforce.name.tr>"
 
-#~ msgid "Accelerator key"
-#~ msgstr "Hızlandırıcı tuş"
-
-#~ msgid "Accelerator modifiers"
-#~ msgstr "Hızlandırıcı düzenleyicileri"
-
-#~ msgid "Accelerator Mode"
-#~ msgstr "Hızlandırıcı Kipi"
-
-#~ msgid "The type of accelerator."
-#~ msgstr "Hızlandırıcının türü."
-
-#~ msgid "Type a new accelerator, or press Backspace to clear"
-#~ msgstr "Yeni bir hızlandırıcı girin, ya da silme tuşu ile silin."
-
-#~ msgid "Type a new accelerator"
-#~ msgstr "Yeni bir hızlandırıcı girin"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of terminal encoding list "
-#~ "changes. (%s)\n"
-#~ msgstr ""
-#~ "Uçbirim kodlaması listesi değişikliklerini uyarılmasına kaydolurken bir "
-#~ "hata oluştu: (%s)\n"
-
-#~ msgid "    "
-#~ msgstr "    "
-
-#~ msgid "<b>Background</b>"
-#~ msgstr "<b>Arkaplan</b>"
-
-#~ msgid "<b>Compatibility</b>"
-#~ msgstr "<b>Uyumluluk</b>"
-
-#~ msgid "<b>General</b>"
-#~ msgstr "<b>Genel</b>"
-
-#~ msgid "<b>Scrolling</b>"
-#~ msgstr "<b>Kaydırma</b>"
-
-#~ msgid ""
-#~ "<small><i><b>Note:</b> The command running inside the terminal may "
-#~ "dynamically set a new title.</i></small>"
-#~ msgstr ""
-#~ "<small><i><b>Not:</b>Belki uçbirim içerisinde çalışan bir uygulama "
-#~ "dinamik bir başlık ayarlar.</i></small>"
-
-#~ msgid "Add encoding to menu."
-#~ msgstr "Kodlamayı menüye ekle."
-
-#~ msgid "Background _image"
-#~ msgstr "Arkaplan _resmi"
-
-#~ msgid "Choose A Profile Icon"
-#~ msgstr "Bir Profil Simgesi Seçin"
-
-#~ msgid "Effects"
-#~ msgstr "Efektler"
-
-#~ msgid "Profile _icon:"
-#~ msgstr "Profil _simgesi:"
-
-#~ msgid "Remove encoding from menu."
-#~ msgstr "Kodlamayı menüden sil."
-
-#~ msgid "_Dynamically-set title:"
-#~ msgstr "_Dinamik-ayarlanmış başlık:"
-
-#~ msgid "kilo_bytes"
-#~ msgstr "kilo_bayt"
-
-#~ msgid ""
-#~ "An X font name. See the X man page (type \"man X\") for more details on "
-#~ "the format of X font names."
-#~ msgstr ""
-#~ "X yazıtipi adı. Daha fazla bilgi için X klavuz sayfasındaki (\"man X\" "
-#~ "yazın) X yazıtipi adları biçimlerine bakın."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 1. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 1'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 10'a geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 11'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 12'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 2. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 2'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 3. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 3'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 4. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 4'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 5. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 5'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 6. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 6'ya geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 7. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 7'ye geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak "
-#~ "dosyalarında kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled"
-#~ "\" gibi özel bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu "
-#~ "olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 8. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 8'e geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 9. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Sekme 9'a geçiş yapmak için klavye kısayol tuşu. GTK+ kaynak dosyalarında "
-#~ "kullanıldığı biçimde dizi olarak belirtilir. Eğer \"disabled\" gibi özel "
-#~ "bir diziye ayarlıysa, bu eylem için klavye kısayol tuşu olmayacaktır."
-
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "Sekme 1'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "Sekme 10'a geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "Sekme 11'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "Sekme 12'ye geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "Sekme 2'ye geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "Sekme 3'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "Sekme 4'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "Sekme 5'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "Sekme 6'ya geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "Sekme 7'ye geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "Sekme 8'e geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "Sekme 9'a geçmek için kullanılan klavye kısayolu"
-
-#~ msgid "Tango"
-#~ msgstr "Tango"
-
-#~ msgid "Linux console"
-#~ msgstr "Linux konsolu"
-
-#~ msgid "XTerm"
-#~ msgstr "XTerm"
-
-#~ msgid "Rxvt"
-#~ msgstr "Rxvt"
-
-#~ msgid "All Files"
-#~ msgstr "Tüm Dosyalar"
-
-#~ msgid "Switch to Tab 1"
-#~ msgstr "Sekme 1'e Geç"
-
-#~ msgid "Switch to Tab 2"
-#~ msgstr "Sekme 2'ye Geç"
-
-#~ msgid "Switch to Tab 3"
-#~ msgstr "Sekme 3'e Geç"
-
-#~ msgid "Switch to Tab 4"
-#~ msgstr "Sekme 4'e Geç"
-
-#~ msgid "Switch to Tab 5"
-#~ msgstr "Sekme 5'e Geç"
-
-#~ msgid "Switch to Tab 6"
-#~ msgstr "Sekme 6'ya Geç"
-
-#~ msgid "Switch to Tab 7"
-#~ msgstr "Sekme 7'ye Geç"
-
-#~ msgid "Switch to Tab 8"
-#~ msgstr "Sekme 8'e Geç"
-
-#~ msgid "Switch to Tab 9"
-#~ msgstr "Sekme 9'a Geç"
-
-#~ msgid "Switch to Tab 10"
-#~ msgstr "Sekme 10'a Geç"
-
-#~ msgid "Switch to Tab 11"
-#~ msgstr "Sekme 11'e Geç"
-
-#~ msgid "Switch to Tab 12"
-#~ msgstr "Sekme 12'ye Geç"
-
-#~ msgid "Go"
-#~ msgstr "Git"
-
-#~ msgid "There was an error loading config from %s. (%s)\n"
-#~ msgstr "%s'dan ayar yüklenirken hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of terminal keybinding "
-#~ "changes. (%s)\n"
-#~ msgstr ""
-#~ "Uçbirim tuş bağlarının değişiklikleri uyarısına kaydolurken bir hata "
-#~ "oluştu. (%s)\n"
-
-#~ msgid "There was an error loading a terminal keybinding. (%s)\n"
-#~ msgstr "Uçbirim tuş bağları yüklenirken bir hata oluştu. (%s)\n"
-
-#~ msgid "The value of configuration key %s is not valid; value is \"%s\"\n"
-#~ msgstr "%s yapılandırma anahtarı değeri geçerli değil, değer \"%s\"\n"
-
-#~ msgid ""
-#~ "There was an error loading config value for whether to use menubar access "
-#~ "keys. (%s)\n"
-#~ msgstr ""
-#~ "Menü çubuğu ulaşımı için hangi tuşların kullanılacağını belirten değer "
-#~ "yüklenirken hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification on changes on whether to "
-#~ "use menubar access keys (%s)\n"
-#~ msgstr ""
-#~ "Menü çubuğu ulaşımı için hangi tuşların kullanılacağı değişiklikleri "
-#~ "uyarısına kaydolurken bir hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "There was an error loading config value for whether to use menu "
-#~ "accelerators. (%s)\n"
-#~ msgstr ""
-#~ "Menü tuşlarının kullanımı ile ilgili değer yüklenirken hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification for use_menu_accelerators "
-#~ "(%s)\n"
-#~ msgstr ""
-#~ "Menü tuşlarının kullanımı ile ilgili değer değişiklikleri uyarısına "
-#~ "kaydolurken bir hata oluştu. (%s)\n"
-
-#~ msgid "Error propagating accelerator change to configuration database: %s\n"
-#~ msgstr ""
-#~ "Yapılandırma veritabanına hızlandırıcı değişiklikleri kaydedilirken hata: "
-#~ "%s\n"
-
-#~ msgid "Error setting new accelerator in configuration database: %s\n"
-#~ msgstr "Yapılandırma veritabanına yeni hızlandırıcı ayarlarken hata: %s\n"
-
-#~ msgid "Error setting use_menu_accelerators key: %s\n"
-#~ msgstr "use_menu_accelerators anahtarı ayarlanırken hata: %s\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of terminal profile "
-#~ "changes. (%s)\n"
-#~ msgstr ""
-#~ "Uçbirim profili değişiklikleri uyarısına kaydolurken bir hata oluştu. (%"
-#~ "s)\n"
-
-#~ msgid "Could not find an icon called \"%s\" for terminal profile \"%s\"\n"
-#~ msgstr "\"%s\" uçbirim profili için \"%s\" adındaki şekil bulunamadı\n"
-
-#~ msgid "Failed to load icon \"%s\" for terminal profile \"%s\": %s\n"
-#~ msgstr "\"%s\" uçbirim profili için \"%s\" adındaki şekil bulunamadı: %s\n"
-
-#~ msgid ""
-#~ "Could not find a background image called \"%s\" for terminal profile \"%s"
-#~ "\"\n"
-#~ msgstr ""
-#~ "\"%s\" uçbirim profili için \"%s\" adındaki arkaplan resmi bulunamadı\n"
-
-#~ msgid ""
-#~ "Failed to load background image \"%s\" for terminal profile \"%s\": %s\n"
-#~ msgstr ""
-#~ "\"%s\" uçbirim profili için \"%s\" adındaki arkaplan resmi bulunamadı: %"
-#~ "s\n"
-
-#~ msgid ""
-#~ "GNOME Terminal: font name \"%s\" set in configuration database is not "
-#~ "valid\n"
-#~ msgstr ""
-#~ "GNOME Uçbirimi: yapılandırma veritabanındaki yazıtipi ismi \"%s\" "
-#~ "geçersiz\n"
-
-#~ msgid "Error getting default value of %s: %s\n"
-#~ msgstr "%s öntanımlı değeri alınırken hata: %s\n"
-
-#~ msgid "There wasn't a default value for %s\n"
-#~ msgstr "%s için öntanımlı değer yok\n"
-
-#~ msgid "Error setting key %s back to default: %s\n"
-#~ msgstr "%s anahtarını öntanımlı değere ayarlarken hata: %s\n"
-
-#~ msgid ""
-#~ "There was an error while removing the configuration directory %s. (%s)\n"
-#~ msgstr "Yapılandırma dizini %s silinirken hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of changes to default "
-#~ "profile. (%s)\n"
-#~ msgstr ""
-#~ "Öntanımlı profildeki değişiklik uyarısına kayıt olurken bir hata oluştu. "
-#~ "(%s)\n"
-
-#~ msgid "_Details"
-#~ msgstr "_Ayrıntılar"
-
-#~ msgid "There was an error creating the profile \"%s\""
-#~ msgstr "\"%s\" profili yaratılırken bir hata oluştu"
-
-#~ msgid "There was an error deleting the profiles"
-#~ msgstr "Profiller silinirken hata oluştu"
-
-#~ msgid "Could not parse string \"%s\" as a color palette\n"
-#~ msgstr "\"%s\" dizisi bir renk paleti gibi kullanılamıyor\n"
-
-#~ msgid "Palette had %d entry instead of %d\n"
-#~ msgid_plural "Palette had %d entries instead of %d\n"
-#~ msgstr[0] "Palet %2$d değer yerine %1$d değere sahip\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of monospace font changes. "
-#~ "(%s)\n"
-#~ msgstr ""
-#~ "Eşaralıklı yazıtipi değişikliği uyarısı kaydolurken bir hata oluştu. (%"
-#~ "s)\n"
-
-#~ msgid ""
-#~ "There was an error loading config value for whether to use image in "
-#~ "menus. (%s)\n"
-#~ msgstr ""
-#~ "Menülerde resim gösterilmesi ile ilgili ayar değeri yüklenirken bir hata "
-#~ "oluştu. (%s)\n"
-
-#~ msgid "Change P_rofile"
-#~ msgstr "_Profil Değiştir"
-
-#~ msgid "_Edit Current Profile..."
-#~ msgstr "_Güncel Profili Düzenle..."
-
-#~ msgid ""
-#~ "text/plain dropped on terminal had wrong format (%d) or length (%d)\n"
-#~ msgstr ""
-#~ "Uçbirim üzerine bırakılan text/plain yanlış biçimde (%d) veya boyda (%d)\n"
-
-#~ msgid "Color dropped on terminal had wrong format (%d) or length (%d)\n"
-#~ msgstr ""
-#~ "Uçbirim üzerine bırakılan renk yanlış biçimde (%d) veya boyda (%d)\n"
-
-#~ msgid ""
-#~ "Mozilla url dropped on terminal had wrong format (%d) or length (%d)\n"
-#~ msgstr ""
-#~ "Uçbirim üzerine bırakılan Mozilla url'si yanlış biçimde (%d) veya boyda (%"
-#~ "d)\n"
-
-#~ msgid "URI list dropped on terminal had wrong format (%d) or length (%d)\n"
-#~ msgstr ""
-#~ "Uçbirim üzerine bırakılan URI listesi yanlış biçimde (%d) veya boyda (%"
-#~ "d)\n"
-
-#~ msgid ""
-#~ "Image filename dropped on terminal had wrong format (%d) or length (%d)\n"
-#~ msgstr ""
-#~ "Uçbirim üzerine bırakılan dosya adı yanlış biçimde (%d) veya boyda (%d)\n"
-
-#~ msgid "Error converting URI \"%s\" into filename: %s\n"
-#~ msgstr "\"%s\" URI'si dosya adına çevirirken hata oluştu: %s\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of terminal window "
-#~ "configuration changes. (%s)\n"
-#~ msgstr ""
-#~ "Uçbirim penceresi değişiklikleri uyarısı kaydolurken bir hata oluştu. (%"
-#~ "s)\n"
-
-#~ msgid ""
-#~ "There was an error loading config value for whether to use mnemonics. (%"
-#~ "s)\n"
-#~ msgstr ""
-#~ "mnemonics kulllanımı ile ilgili ayar değeri yükleniren hata oluştu. (%s)\n"
-
-#~ msgid "New _Profile..."
-#~ msgstr "_Yeni Profil..."
-
-#~ msgid "P_rofiles..."
-#~ msgstr "_Profiller..."
-
-#~ msgid "_Keyboard Shortcuts..."
-#~ msgstr "_Klavye Kısayolları..."
-
-#~ msgid "C_urrent Profile..."
-#~ msgstr "_Güncel Profil..."
-
-#~ msgid "Show Menu_bar"
-#~ msgstr "_Menü Çubuğunu Göster"
-
-#~ msgid "_Set Title..."
-#~ msgstr "_Başlığı Ayarla..."
-
-#~ msgid "Could not load icon \"%s\": %s\n"
-#~ msgstr "\"%s\" simgesi yüklenemedi: %s\n"
-
-#~ msgid ""
-#~ "There was an error subscribing to notification of terminal profile list "
-#~ "changes. (%s)\n"
-#~ msgstr ""
-#~ "Uçbirim profili değişiklikleri uyarısı kaydolurken bir hata oluştu. (%s)\n"
-
-#~ msgid "There was an error getting the list of terminal profiles. (%s)\n"
-#~ msgstr "Uçbirim profilleri listesi dizisini alırken bir hata oluştu. (%s)\n"
-
-#~ msgid ""
-#~ "The profile you selected as a base for your new profile no longer exists"
-#~ msgstr "Yeni profiliniz için seçtiğiniz taban profili artık bulunmuyor"
-
-#~ msgid "Enter profile name"
-#~ msgstr "Profil adını girin"
-
-#~ msgid "You must select one or more profiles to delete."
-#~ msgstr "Silmek için bir ya da daha fazla profil seçmelisiniz"
-
-#~ msgid "You must have at least one profile; you can't delete all of them."
-#~ msgstr "En azından bir profil seçmelisiniz; bütün profilleri silemezsiniz."
-
-#~ msgid "Delete this profile?\n"
-#~ msgid_plural "Delete these %d profiles?\n"
-#~ msgstr[0] "Bu %d profil silinsin mi?\n"
-
-#~ msgid "_Profiles:"
-#~ msgstr "_Profiller:"
-
-#~ msgid "Click to open new profile dialog"
-#~ msgstr "Yeni profil penceresi açmak için tıklayın"
-
-#~ msgid "Click to open edit profile dialog"
-#~ msgstr "Profil düzenleme penceresi açmak için tıklayın"
-
-#~ msgid "Click to delete selected profile"
-#~ msgstr "Seçili profili silme penceresi açmak için tıklayın"
-
-#~ msgid ""
-#~ "The file \"%s\" is missing. This indicates that the application is "
-#~ "installed incorrectly."
-#~ msgstr ""
-#~ "\"%s\" dosyası bulunamıyor. Bu, uygulamanın yanlış yüklendiğini belirtir."
-
-#~ msgid "ID for startup notification protocol."
-#~ msgstr "Başlangıç uyarı protokolü için ID."
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 2 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "Otomatik"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "Kontrol-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "Kaçış dizisi"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:33
+msgid "Block"
+msgstr "Blok"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "I-Beam"
+msgstr "I-Beam"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "Underline"
+msgstr "Alt Çizgi"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:40
+msgid "Exit the terminal"
+msgstr "Uçbirimden çık"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Restart the command"
+msgstr "Komutu tekrar başlat"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Hold the terminal open"
+msgstr "Uçbirimi açık tut"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:47
+msgid "On the left side"
+msgstr "Sol tarafta"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "On the right side"
+msgstr "Sağ tarafta"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:54
+msgid "Replace initial title"
+msgstr "İlk başlığı yer değiştir"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+msgid "Append initial title"
+msgstr "İlk başlığa ekle"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+msgid "Prepend initial title"
+msgstr "İlk başlığın başına ekle"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+msgid "Keep initial title"
+msgstr "İlk başlığı koru"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:63
+msgid "Tango"
+msgstr "Tango"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Linux console"
+msgstr "Linux konsolu"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "Rxvt"
+msgstr "Rxvt"
