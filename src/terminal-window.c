@@ -2133,18 +2133,16 @@ terminal_window_show (GtkWidget *widget)
   GdkScreen *screen;
   GdkDisplay *display;
 
+  /* At this point, we have our GdkScreen, and hence the right
+    * font size, so we can go ahead and size the window.
+   */
+  terminal_window_update_geometry (window);
+
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] show, size %d : %d at (%d, %d)\n",
                          widget,
                          widget->allocation.width, widget->allocation.height,
                          widget->allocation.x, widget->allocation.y);
-
-  if (priv->active_screen != NULL)
-    {
-      /* At this point, we have our GdkScreen, and hence the right
-       * font size, so we can go ahead and size the window. */
-      terminal_window_set_size (window, priv->active_screen, FALSE);
-    }
 
   context = NULL;
   sn_display = NULL;
