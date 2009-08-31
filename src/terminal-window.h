@@ -83,6 +83,9 @@ TerminalScreen* terminal_window_get_active (TerminalWindow *window);
 
 GList* terminal_window_list_screen_containers (TerminalWindow *window);
 
+gboolean terminal_window_parse_geometry (TerminalWindow *window,
+					 const char     *geometry);
+
 void terminal_window_update_geometry  (TerminalWindow *window);
 void terminal_window_set_size         (TerminalWindow *window,
                                        TerminalScreen *screen,

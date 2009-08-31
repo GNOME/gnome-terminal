@@ -2276,12 +2276,16 @@ static void
 terminal_window_show (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
   GtkAllocation widget_allocation;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
 
-#if 0
-  TerminalWindowPrivate *priv = window->priv;
+  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                         "[window %p] show, size %d : %d at (%d, %d)\n",
+                         widget,
+                         widget_allocation.width, widget_allocation.height,
+                         widget_allocation.x, widget_allocation.y);
 
   if (priv->active_screen != NULL)
     {
@@ -2289,15 +2293,6 @@ terminal_window_show (GtkWidget *widget)
        * font size, so we can go ahead and size the window. */
       terminal_window_set_size (window, priv->active_screen, FALSE);
     }
-#endif
-
-  terminal_window_update_geometry (window);
-
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] show, size %d : %d at (%d, %d)\n",
-                         widget,
-                         widget_allocation.width, widget_allocation.height,
-                         widget_allocation.x, widget_allocation.y);
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
 }
@@ -3021,6 +3016,43 @@ notebook_scroll_event_cb (GtkWidget      *widget,
 }
 
 #endif /* GTK 3.0 */
+
+gboolean
+terminal_window_parse_geometry (TerminalWindow *window,
+				const char     *geometry)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  /* gtk_window_parse_geometry() needs to have the right base size
+   * and width/height increment to compute the window size from
+   * the geometry.
+   */
+  terminal_window_update_geometry (window);
+
+  if (!gtk_window_parse_geometry (GTK_WINDOW (window), geometry))
+    return FALSE;
+
+  /* We won't actually get allocated at the size parsed out of the
+   * geometry until the window is shown. If terminal_window_set_size()
+   * is called between now and then, that could result in us getting
+   * snapped back to the old grid size. So we need to immediately
+   * update the size of the active terminal to grid size from the
+   * geometry.
+   */
+  if (priv->active_screen)
+    {
+      int grid_width, grid_height;
+
+      /* After parse_geometry(), the default size is in units of the
+       * width/height increment, not a pixel size */
+      gtk_window_get_default_size (GTK_WINDOW (window), &grid_height, &grid_width);
+
+      vte_terminal_set_size (VTE_TERMINAL (priv->active_screen),
+			     grid_width, grid_height);
+    }
+
+  return TRUE;
+}
 
 void
 terminal_window_update_geometry (TerminalWindow *window)
@@ -3954,7 +3986,7 @@ tabs_detach_tab_callback (GtkAction *action,
 
   terminal_window_move_screen (window, new_window, screen, -1);
 
-  gtk_window_parse_geometry (GTK_WINDOW (new_window), geometry);
+  terminal_window_parse_geometry (new_window, geometry);
   g_free (geometry);
 
   gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
