@@ -2,7 +2,7 @@ SUBDIRS = src po help
 
 NULL =
 
-DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper --disable-schemas-install
+DISTCHECK_CONFIGURE_FLAGS = --disable-scrollkeeper --disable-schemas-install --disable-silent-rules
 
 desktopdir = $(datadir)/applications
 desktop_in_files = @PACKAGE@.desktop.in.in
