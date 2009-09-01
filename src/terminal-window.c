@@ -2656,9 +2656,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
                               guint            page_num,
                               TerminalWindow  *window)
 {
-#if 0
   TerminalWindowPrivate *priv = window->priv;
-#endif
   TerminalScreen *screen;
 
   screen = terminal_screen_container_get_screen (container);
@@ -2693,6 +2691,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
                     G_CALLBACK (screen_close_cb), window);
 
   update_tab_visibility (window, 0);
+  terminal_window_update_tabs_menu_sensitivity (window);
 
 #if 0
   /* FIXMEchpe: wtf is this doing? */
@@ -2711,16 +2710,11 @@ notebook_page_added_callback (GtkWidget       *notebook,
     }
 #endif
 
-  /* FIXMEchpe: do this in a connect-after handler */
-#if 0
   if (priv->present_on_insert)
     {
       gtk_window_present_with_time (GTK_WINDOW (window), gtk_get_current_event_time ());
       priv->present_on_insert = FALSE;
     }
-#endif
-
-  terminal_window_update_tabs_menu_sensitivity (window);
 }
 
 static void
