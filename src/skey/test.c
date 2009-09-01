@@ -1,5 +1,6 @@
 #include <config.h>
 
+#include <locale.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -70,6 +71,9 @@ skey_test (gconstpointer data)
 int main(int argc, char *argv[])
 {
         guint i;
+
+        if (!setlocale (LC_ALL, ""))
+                 g_error ("Locale not supported by C library!\n");
 
         g_test_init (&argc, &argv, NULL);
         g_test_bug_base ("http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal");
