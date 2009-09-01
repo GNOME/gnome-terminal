@@ -197,6 +197,10 @@ static void
 profile_set_callback (TerminalScreen *screen,
                       TerminalProfile *old_profile,
                       TerminalWindow *window);
+static void
+sync_screen_icon_title (TerminalScreen *screen,
+                        GParamSpec *psepc,
+                        TerminalWindow *window);
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
 
@@ -1433,9 +1437,9 @@ terminal_window_size_allocate_cb (GtkWidget *widget,
 static void
 terminal_window_realize (GtkWidget *widget)
 {
-#ifdef GDK_WINDOWING_X11
   TerminalWindow *window = TERMINAL_WINDOW (widget);
   TerminalWindowPrivate *priv = window->priv;
+#ifdef GDK_WINDOWING_X11
   GdkScreen *screen;
   GdkColormap *colormap;
 
@@ -1461,6 +1465,10 @@ terminal_window_realize (GtkWidget *widget)
                          widget->allocation.x, widget->allocation.y);
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
+
+  /* Need to do this now since this requires the window to be realized */
+  if (priv->active_screen != NULL)
+    sync_screen_icon_title (priv->active_screen, NULL, window);
 }
 
 static gboolean
@@ -2178,6 +2186,9 @@ sync_screen_icon_title (TerminalScreen *screen,
                         TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+
+  if (!GTK_WIDGET_REALIZED (window))
+    return;
 
   if (screen != priv->active_screen)
     return;
