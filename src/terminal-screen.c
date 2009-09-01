@@ -1561,8 +1561,6 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
 
   priv->launch_child_source_id = 0;
 
-  g_return_val_if_fail (GTK_WIDGET_REALIZED (screen), FALSE);
-
   _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
                          "[screen %p] now launching the child process\n",
                          screen);
