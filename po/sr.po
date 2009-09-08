@@ -1,5 +1,5 @@
 # Serbian translation of gnome-terminal
-# Courtesy of Prevod.org team (http://prevod.org/) -- 2003, 2004, 2005, 2006.
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003 - 2009.
 #
 # This file is distributed under the same license as the gnome-terminal package.
 #
@@ -9,8 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-21 20:44+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"terminal&component=general\n"
+"POT-Creation-Date: 2009-08-28 07:31+0000\n"
 "PO-Revision-Date: 2006-01-30 21:31+0100\n"
 "Last-Translator: Слободан Д. Средојевић <slobo@akrep.be>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -21,8 +22,8 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:294
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1739
+#: ../src/terminal-accels.c:222 ../src/terminal.c:304
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1884
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -30,32 +31,32 @@ msgstr "Терминал"
 msgid "Use the command line"
 msgstr "Користите линију наредби"
 
-#: ../src/eggsmclient.c:224
+#: ../src/eggsmclient.c:225
 msgid "Disable connection to session manager"
 msgstr "Онемогући вези са управником сесијама"
 
-#: ../src/eggsmclient.c:227
+#: ../src/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
 msgstr "Одредите датотеку са сачуваним подешавањима"
 
-#: ../src/eggsmclient.c:227 ../src/terminal-options.c:952
-#: ../src/terminal-options.c:961
+#: ../src/eggsmclient.c:228 ../src/terminal-options.c:957
+#: ../src/terminal-options.c:966
 msgid "FILE"
 msgstr "ДАТОТЕКА"
 
-#: ../src/eggsmclient.c:230
+#: ../src/eggsmclient.c:231
 msgid "Specify session management ID"
 msgstr "Одредите ИБ управника сесијама"
 
-#: ../src/eggsmclient.c:230
+#: ../src/eggsmclient.c:231
 msgid "ID"
 msgstr "ИБ"
 
-#: ../src/eggsmclient.c:244
+#: ../src/eggsmclient.c:252
 msgid "Session management options:"
 msgstr "Могућности управника сесијама:"
 
-#: ../src/eggsmclient.c:245
+#: ../src/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "Прикажи могућности управника сесијама"
 
@@ -1191,7 +1192,7 @@ msgstr ""
 "Аутоматски\n"
 "Ctrl-H\n"
 "ASCII Del\n"
-"Ескејп секвенца"
+"Ознака за звонце"
 
 #: ../src/profile-preferences.glade.h:13
 msgid "Background"
@@ -1247,7 +1248,8 @@ msgstr "Усклађивање"
 msgid "Cursor _shape:"
 msgstr "Облик _курсора:"
 
-#: ../src/profile-preferences.glade.h:27
+#. Translators: This is the name of a colour scheme
+#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "Прилагођено"
 
@@ -1498,7 +1500,7 @@ msgstr "Умањи"
 msgid "Normal Size"
 msgstr "Нормална величина"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3262
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3464
 msgid "Set Title"
 msgstr "Постави наслов"
 
@@ -1602,7 +1604,8 @@ msgstr "Листови"
 msgid "Help"
 msgstr "Помоћ"
 
-#: ../src/terminal-accels.c:281
+#. Translators: Scrollbar is: ...
+#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Онемогућен"
 
@@ -1619,28 +1622,28 @@ msgstr "_Радња"
 msgid "Shortcut _Key"
 msgstr "_Тастер за пречицу"
 
-#: ../src/terminal-app.c:475
+#: ../src/terminal-app.c:482
 msgid "Click button to choose profile"
 msgstr "Кликните дугме за избор профила"
 
-#: ../src/terminal-app.c:560
+#: ../src/terminal-app.c:567
 msgid "Profile list"
 msgstr "Списак профила"
 
-#: ../src/terminal-app.c:621
+#: ../src/terminal-app.c:628
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Обрисати профил „%s“?"
 
-#: ../src/terminal-app.c:637
+#: ../src/terminal-app.c:644
 msgid "Delete Profile"
 msgstr "Брисање профила"
 
-#: ../src/terminal-app.c:951
+#: ../src/terminal-app.c:958
 msgid "User Defined"
 msgstr "корисник одредио"
 
-#: ../src/terminal-app.c:1106
+#: ../src/terminal-app.c:1113
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1649,38 +1652,38 @@ msgstr ""
 "Већ имате профил назван „%s“. Желите ли да направите други профил под истим "
 "називом?"
 
-#: ../src/terminal-app.c:1207
+#: ../src/terminal-app.c:1215
 msgid "Choose base profile"
 msgstr "Изаберите основни профил"
 
-#: ../src/terminal-app.c:1766
+#: ../src/terminal-app.c:1789
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Не постоји профил „%s“, користим подразумевани\n"
 
-#: ../src/terminal-app.c:1786
+#: ../src/terminal-app.c:1813
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Нетачан податак о геометрији „%s“\n"
 
-#: ../src/terminal.c:193
-#, c-format
-msgid "Could not open link: %s"
-msgstr "Не могу да отворим везу: %s"
+#: ../src/terminal.c:195
+#| msgid "Could not open link: %s"
+msgid "Could not open link"
+msgstr "Не могу да отворим везу"
 
-#: ../src/terminal.c:289
+#: ../src/terminal.c:299
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Не могу да обрадим аргументе: %s\n"
 
 # Можда није сагласно почетно издање, покречем нови програм???
 #. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:419
+#: ../src/terminal.c:427
 #, c-format
 msgid "Incompatible factory version; creating a new instance.\n"
 msgstr "Није сагласно фабричко издање; правим ново.\n"
 
-#: ../src/terminal.c:425
+#: ../src/terminal.c:433
 #, c-format
 msgid "Factory error: %s\n"
 msgstr "Фабричка грешка: %s\n"
@@ -1839,7 +1842,7 @@ msgstr "_Запис"
 msgid "Current Locale"
 msgstr "Изабрани распоред"
 
-#: ../src/terminal-options.c:174
+#: ../src/terminal-options.c:175
 #, c-format
 msgid ""
 "Option \"%s\" is no longer supported in this version of gnome-terminal; you "
@@ -1850,7 +1853,7 @@ msgstr ""
 "желите да направите профил са жељеним подешавањима, и користите „--"
 "profile“могућност\n"
 
-#: ../src/terminal-options.c:187 ../src/terminal-window.c:3481
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3685
 msgid "GNOME Terminal"
 msgstr "Гномов терминал"
 
@@ -1890,56 +1893,56 @@ msgid ""
 "command line"
 msgstr "Могућност „%s“ захтева задавање наредбе на крају линије за наредбе"
 
-#: ../src/terminal-options.c:802
+#: ../src/terminal-options.c:807
 msgid "Not a valid terminal config file."
 msgstr "Неисправна датотека са подешавањима терминала."
 
-#: ../src/terminal-options.c:815
+#: ../src/terminal-options.c:820
 msgid "Incompatible terminal config file version."
 msgstr "Неисправно издање датотеке са подешавањима терминала."
 
-#: ../src/terminal-options.c:942
+#: ../src/terminal-options.c:947
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "Не пријављуј се на сервер за покретање, не користи исти покренути терминал"
 
-#: ../src/terminal-options.c:951
+#: ../src/terminal-options.c:956
 msgid "Load a terminal configuration file"
 msgstr "Учитај датотеку са подешавањима терминала"
 
-#: ../src/terminal-options.c:960
+#: ../src/terminal-options.c:965
 msgid "Save the terminal configuration to a file"
 msgstr "Сачувај подешавања терминала у датотеку"
 
-#: ../src/terminal-options.c:974
+#: ../src/terminal-options.c:979
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Отвори нови прозор са листом користећи подразумевани профил"
 
-#: ../src/terminal-options.c:983
+#: ../src/terminal-options.c:988
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "Отвори нови лист у последњем отвореном прозору користећи подразумевани "
 "профил."
 
-#: ../src/terminal-options.c:996
+#: ../src/terminal-options.c:1001
 msgid "Turn on the menubar"
 msgstr "Прикажи главни мени"
 
-#: ../src/terminal-options.c:1005
+#: ../src/terminal-options.c:1010
 msgid "Turn off the menubar"
 msgstr "Уклони главни мени"
 
-#: ../src/terminal-options.c:1014
+#: ../src/terminal-options.c:1019
 msgid "Maximise the window"
 msgstr "Увећај прозор"
 
-#: ../src/terminal-options.c:1023
+#: ../src/terminal-options.c:1028
 msgid "Full-screen the window"
 msgstr "Постави преко целог екрана"
 
-#: ../src/terminal-options.c:1032
+#: ../src/terminal-options.c:1037
 msgid ""
 "Set the window geometry from the provided X geometry specification; see the "
 "\"X\" man page for more information"
@@ -1947,67 +1950,67 @@ msgstr ""
 "Поставља геометрију прозора из X-ових спецификација; видите „X“ man страницу "
 "за више података"
 
-#: ../src/terminal-options.c:1033
+#: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРИЈА"
 
-#: ../src/terminal-options.c:1041
+#: ../src/terminal-options.c:1046
 msgid "Set the window role"
 msgstr "Постави улогу прозора"
 
-#: ../src/terminal-options.c:1042
+#: ../src/terminal-options.c:1047
 msgid "ROLE"
 msgstr "УЛОГА"
 
-#: ../src/terminal-options.c:1050
+#: ../src/terminal-options.c:1055
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Постави последње наведени лист као активан у свом прозору"
 
-#: ../src/terminal-options.c:1063
+#: ../src/terminal-options.c:1068
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Изврши аргумент ове могућности унутар терминала."
 
-#: ../src/terminal-options.c:1072
+#: ../src/terminal-options.c:1077
 msgid "Use the given profile instead of the default profile"
 msgstr "Користи овај профил уместо подразумеваног"
 
-#: ../src/terminal-options.c:1073
+#: ../src/terminal-options.c:1078
 msgid "PROFILE-NAME"
 msgstr "НАЗИВ ПРОФИЛА"
 
-#: ../src/terminal-options.c:1081
+#: ../src/terminal-options.c:1086
 msgid "Set the terminal title"
 msgstr "Постави наслов прозора"
 
-#: ../src/terminal-options.c:1082
+#: ../src/terminal-options.c:1087
 msgid "TITLE"
 msgstr "НАСЛОВ"
 
-#: ../src/terminal-options.c:1090
+#: ../src/terminal-options.c:1095
 msgid "Set the working directory"
 msgstr "Постави радни директоријум"
 
-#: ../src/terminal-options.c:1091
+#: ../src/terminal-options.c:1096
 msgid "DIRNAME"
 msgstr "ИМЕ ДИРЕКТОРИЈУМА"
 
-#: ../src/terminal-options.c:1099
+#: ../src/terminal-options.c:1104
 msgid "Set the terminalx's zoom factor (1.0 = normal size)"
 msgstr "Постави вредност увећања (1.0 = нормалан приказ)"
 
-#: ../src/terminal-options.c:1100
+#: ../src/terminal-options.c:1105
 msgid "ZOOM"
 msgstr "УВЕЋАЊЕ"
 
-#: ../src/terminal-options.c:1350 ../src/terminal-options.c:1353
+#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
 msgid "GNOME Terminal Emulator"
 msgstr "Гномов емулатор терминала"
 
-#: ../src/terminal-options.c:1354
+#: ../src/terminal-options.c:1359
 msgid "Show GNOME Terminal options"
 msgstr "Прикажи могућности Гномовог терминала"
 
-#: ../src/terminal-options.c:1364
+#: ../src/terminal-options.c:1369
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2015,11 +2018,11 @@ msgstr ""
 "Могућности отварања терминала у листовима; можете одредити више од једног "
 "листа:"
 
-#: ../src/terminal-options.c:1365
+#: ../src/terminal-options.c:1370
 msgid "Show terminal options"
 msgstr "Прикажи могућности терминала"
 
-#: ../src/terminal-options.c:1373
+#: ../src/terminal-options.c:1378
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2027,11 +2030,11 @@ msgstr ""
 "Могућности прозора; уколико се користи пре аргумената --window или --tab "
 "поставља се подразумевано за све прозоре:"
 
-#: ../src/terminal-options.c:1374
+#: ../src/terminal-options.c:1379
 msgid "Show per-window options"
 msgstr "Опције приказа по прозору"
 
-#: ../src/terminal-options.c:1382
+#: ../src/terminal-options.c:1387
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2039,7 +2042,7 @@ msgstr ""
 "Могућности терминала; уколико се користи пре аргумената --window или --tab "
 "поставља се подразумевано за све терминале:"
 
-#: ../src/terminal-options.c:1383
+#: ../src/terminal-options.c:1388
 msgid "Show per-terminal options"
 msgstr "Опције приказа по терминалу"
 
@@ -2047,12 +2050,12 @@ msgstr "Опције приказа по терминалу"
 msgid "Unnamed"
 msgstr "Неименовано"
 
-#: ../src/terminal-screen.c:1222
-#, c-format
-msgid "There was a problem with the command for this terminal: %s"
-msgstr "Догодио се проблем са наредбом за овај терминал: %s"
+#: ../src/terminal-screen.c:1276
+#| msgid "There was a problem with the command for this terminal: %s"
+msgid "There was a problem with the command for this terminal"
+msgstr "Постоји проблем са наредбом за овај терминал"
 
-#: ../src/terminal-screen.c:1520
+#: ../src/terminal-screen.c:1585
 msgid "There was an error creating the child process for this terminal"
 msgstr "Догодила се грешка при стварању садржаног процеса овог терминала"
 
@@ -2060,25 +2063,24 @@ msgstr "Догодила се грешка при стварању садржа�
 msgid "Close tab"
 msgstr "Затвори лист"
 
-#: ../src/terminal-tabs-menu.c:200
+#: ../src/terminal-tabs-menu.c:198
 msgid "Switch to this tab"
 msgstr "Пређи на овај лист"
 
-#: ../src/terminal-util.c:170
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Догодила се грешка при приказивању помоћи: %s"
+#: ../src/terminal-util.c:181
+#| msgid "There was an error displaying help: %s"
+msgid "There was an error displaying help"
+msgstr "Догодила се грешка приликом приказа помоћи"
 
-#: ../src/terminal-util.c:242
+#: ../src/terminal-util.c:254
 #, c-format
-msgid ""
-"Could not open the address “%s”:\n"
-"%s"
-msgstr ""
-"Не могу да отворим адресу „%s“:\n"
-"%s"
+#| msgid ""
+#| "Could not open the address “%s”:\n"
+#| "%s"
+msgid "Could not open the address “%s”"
+msgstr "Не могу да отворим адресу „%s“"
 
-#: ../src/terminal-util.c:317
+#: ../src/terminal-util.c:362
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2090,7 +2092,7 @@ msgstr ""
 "за Слободни Софтвер (FSF); било верзије 2 те Лиценце, било (по вашем "
 "нахођењу) било које новије верзије."
 
-#: ../src/terminal-util.c:321
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2101,7 +2103,7 @@ msgstr ""
 "ГАРАНЦИЈА; чак и без подразумеване гаранције КОРИСНОСТИ или ПРИЛАГОЂЕНОСТИ "
 "ОДРЕЂЕНОЈ НАМЕНИ.  Видите ГНУ Општу Јавну Лиценцу за више детаља."
 
-#: ../src/terminal-util.c:325
+#: ../src/terminal-util.c:370
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2111,191 +2113,204 @@ msgstr ""
 "нисте, пишите Задужбини за Слободни Софтвер (Free Software Foundation, "
 "Inc.), 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA"
 
-#: ../src/terminal-window.c:419
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%d is used as the accelerator (with d between 1 and 9), and
+#. * the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:430
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:421
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%c is used as the accelerator (it will be a character between A and Z),
+#. * and the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1562
+#: ../src/terminal-window.c:1697
 msgid "_File"
 msgstr "_Датотека"
 
 #. File menu
-#: ../src/terminal-window.c:1563 ../src/terminal-window.c:1574
-#: ../src/terminal-window.c:1696
+#: ../src/terminal-window.c:1698 ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1831
 msgid "Open _Terminal"
 msgstr "Отвори _терминал"
 
-#: ../src/terminal-window.c:1564 ../src/terminal-window.c:1577
-#: ../src/terminal-window.c:1699
+#: ../src/terminal-window.c:1699 ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1834
 msgid "Open Ta_b"
 msgstr "Отвори _лист"
 
-#: ../src/terminal-window.c:1565
+#: ../src/terminal-window.c:1700
 msgid "_Edit"
 msgstr "_Уређивање"
 
-#: ../src/terminal-window.c:1566
+#: ../src/terminal-window.c:1701
 msgid "_View"
 msgstr "П_реглед"
 
-#: ../src/terminal-window.c:1567
+#: ../src/terminal-window.c:1702
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: ../src/terminal-window.c:1568
+#: ../src/terminal-window.c:1703
 msgid "Ta_bs"
 msgstr "_Листови"
 
-#: ../src/terminal-window.c:1569
+#: ../src/terminal-window.c:1704
 msgid "_Help"
 msgstr "_Помоћ"
 
-#: ../src/terminal-window.c:1580
+#: ../src/terminal-window.c:1715
 msgid "New _Profile…"
 msgstr "Нови _профил…"
 
-#: ../src/terminal-window.c:1583 ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1718 ../src/terminal-window.c:1840
 msgid "C_lose Tab"
 msgstr "За_твори лист"
 
-#: ../src/terminal-window.c:1586 ../src/terminal-window.c:2916
+#: ../src/terminal-window.c:1721
 msgid "_Close Window"
 msgstr "_Затвори прозор"
 
-#: ../src/terminal-window.c:1597 ../src/terminal-window.c:1693
+#: ../src/terminal-window.c:1732 ../src/terminal-window.c:1828
 msgid "Paste _Filenames"
 msgstr "Убаци називе _датотека"
 
-#: ../src/terminal-window.c:1603
+#: ../src/terminal-window.c:1738
 msgid "P_rofiles…"
 msgstr "Про_фили…"
 
-#: ../src/terminal-window.c:1606
+#: ../src/terminal-window.c:1741
 msgid "_Keyboard Shortcuts…"
 msgstr "Пречице са _тастатуре…"
 
-#: ../src/terminal-window.c:1609
+#: ../src/terminal-window.c:1744
 msgid "Pr_ofile Preferences"
 msgstr "_Поставке профиле"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1625
+#: ../src/terminal-window.c:1760
 msgid "Change _Profile"
 msgstr "Измени _профил"
 
-#: ../src/terminal-window.c:1626
+#: ../src/terminal-window.c:1761
 msgid "_Set Title…"
 msgstr "Постави _наслов…"
 
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1764
 msgid "Set _Character Encoding"
 msgstr "Постави _кодирање знакова"
 
-#: ../src/terminal-window.c:1630
+#: ../src/terminal-window.c:1765
 msgid "_Reset"
 msgstr "По_ново постави"
 
-#: ../src/terminal-window.c:1633
+#: ../src/terminal-window.c:1768
 msgid "Reset and C_lear"
 msgstr "Поново постави и о_чисти"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1638
+#: ../src/terminal-window.c:1773
 msgid "_Add or Remove…"
 msgstr "_Додај или уклони…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1643
+#: ../src/terminal-window.c:1778
 msgid "_Previous Tab"
 msgstr "Прет_ходни лист"
 
-#: ../src/terminal-window.c:1646
+#: ../src/terminal-window.c:1781
 msgid "_Next Tab"
 msgstr "_Следећи лист"
 
-#: ../src/terminal-window.c:1649
+#: ../src/terminal-window.c:1784
 msgid "Move Tab _Left"
 msgstr "Премести лист у_лево"
 
-#: ../src/terminal-window.c:1652
+#: ../src/terminal-window.c:1787
 msgid "Move Tab _Right"
 msgstr "Премести лист у_десно"
 
-#: ../src/terminal-window.c:1655
+#: ../src/terminal-window.c:1790
 msgid "_Detach tab"
 msgstr "_Одвоји лист"
 
 #. Help menu
-#: ../src/terminal-window.c:1660
+#: ../src/terminal-window.c:1795
 msgid "_Contents"
 msgstr "_Садржај"
 
-#: ../src/terminal-window.c:1663
+#: ../src/terminal-window.c:1798
 msgid "_About"
 msgstr "_О програму"
 
 #. Popup menu
-#: ../src/terminal-window.c:1668
+#: ../src/terminal-window.c:1803
 msgid "_Send Mail To…"
 msgstr "Пошаљи _е-поруку…"
 
-#: ../src/terminal-window.c:1671
+#: ../src/terminal-window.c:1806
 msgid "_Copy E-mail Address"
 msgstr "_Умножи адресу електронске поште"
 
-#: ../src/terminal-window.c:1674
+#: ../src/terminal-window.c:1809
 msgid "C_all To…"
 msgstr "_Позови…"
 
-#: ../src/terminal-window.c:1677
+#: ../src/terminal-window.c:1812
 msgid "_Copy Call Address"
 msgstr "_Умножи број за позив"
 
-#: ../src/terminal-window.c:1680
+#: ../src/terminal-window.c:1815
 msgid "_Open Link"
 msgstr "_Отвори везу"
 
-#: ../src/terminal-window.c:1683
+#: ../src/terminal-window.c:1818
 msgid "_Copy Link Address"
 msgstr "_Умножи адресу везе"
 
-#: ../src/terminal-window.c:1686
+#: ../src/terminal-window.c:1821
 msgid "P_rofiles"
 msgstr "Профили"
 
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:1837 ../src/terminal-window.c:3113
 msgid "C_lose Window"
 msgstr "_Затвори прозор"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1843
+#| msgid "_Full Screen"
+msgid "L_eave Full Screen"
+msgstr "_Напусти цео екран"
+
+#: ../src/terminal-window.c:1846
 msgid "_Input Methods"
 msgstr "_Начини уноса"
 
 #. View Menu
-#: ../src/terminal-window.c:1714
+#: ../src/terminal-window.c:1852
 msgid "Show _Menubar"
 msgstr "Прикажи м_ени"
 
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:1856
 msgid "_Full Screen"
 msgstr "_Преко целог екрана"
 
-#: ../src/terminal-window.c:2903
-msgid "Close this terminal?"
-msgstr "Да затворим терминал?"
-
-#: ../src/terminal-window.c:2903
+#: ../src/terminal-window.c:3100
 msgid "Close this window?"
 msgstr "Да затворим прозор?"
 
-#: ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:3100
+msgid "Close this terminal?"
+msgstr "Да затворим терминал?"
+
+#: ../src/terminal-window.c:3104
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2303,7 +2318,7 @@ msgstr ""
 "Неки програми су још увек покренути унутар терминала овог прозора. Затварање "
 "прозора ће убити све програме."
 
-#: ../src/terminal-window.c:2911
+#: ../src/terminal-window.c:3108
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2311,29 +2326,155 @@ msgstr ""
 "Неки програм је још увек покренут унутар овог терминала. Затварање терминала "
 "ће убити програм."
 
-#: ../src/terminal-window.c:2916
-msgid "_Close Terminal"
+#: ../src/terminal-window.c:3113
+#| msgid "_Close Terminal"
+msgid "C_lose Terminal"
 msgstr "_Затвори терминал"
 
-#: ../src/terminal-window.c:3278
+#: ../src/terminal-window.c:3481
 msgid "_Title:"
 msgstr "_Наслов:"
 
-#: ../src/terminal-window.c:3464
+#: ../src/terminal-window.c:3668
 msgid "Contributors:"
 msgstr "Доприносиоцу:"
 
-#: ../src/terminal-window.c:3483
+#: ../src/terminal-window.c:3687
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Терминал за Гном радно окружење"
 
-#: ../src/terminal-window.c:3490
+#: ../src/terminal-window.c:3694
 msgid "translator-credits"
 msgstr ""
 "Слободан Д. Средојевић <slobo@akrep.be>\n"
 "Данило Шеган <danilo@prevod.org>\n"
 "\n"
 "Prevod.org — превод на српски језик."
+
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 2 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "Сам изабери"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "CTRL-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "Ознака за звонце"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:33
+msgid "Block"
+msgstr "Блок"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "I-Beam"
+msgstr "Усправна цртица"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "Underline"
+msgstr "Доња цртица"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:40
+#| msgid "Set the terminal title"
+msgid "Exit the terminal"
+msgstr "Изађи из терминала"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Restart the command"
+msgstr "Понови наредбу"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Hold the terminal open"
+msgstr "Држи терминал отвореним"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:47
+msgid "On the left side"
+msgstr "На левој страни"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "On the right side"
+msgstr "На десној страни"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:54
+#| msgid "Replaces initial title"
+msgid "Replace initial title"
+msgstr "Замени почетни наслов"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+#| msgid "Replaces initial title"
+msgid "Append initial title"
+msgstr "Додај на почетни наслов"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+#| msgid "Replaces initial title"
+msgid "Prepend initial title"
+msgstr "Уклони почетни наслов"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+#| msgid "Replaces initial title"
+msgid "Keep initial title"
+msgstr "Задржи почетни наслов"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:63
+msgid "Tango"
+msgstr "Танго"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Linux console"
+msgstr "Линукс конзола"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "Rxvt"
+msgstr "Rxvt"
 
 #~ msgid ""
 #~ "If true, font anti-aliasing will be disabled when running without the X "
@@ -2558,18 +2699,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Постављено ако курсор треба да трепери када је терминал у жижи, за "
 #~ "прозоре/листове са овим профилом."
-
-#~ msgid "Tango"
-#~ msgstr "Танго"
-
-#~ msgid "Linux console"
-#~ msgstr "Линукс конзола"
-
-#~ msgid "XTerm"
-#~ msgstr "XTerm"
-
-#~ msgid "Rxvt"
-#~ msgstr "Rxvt"
 
 #~ msgid "All Files"
 #~ msgstr "Све датотеке"
@@ -2938,9 +3067,6 @@ msgstr ""
 #~ msgid "Accel Mode"
 #~ msgstr "Режим за брзи приступ"
 
-#~ msgid "ASCII DEL"
-#~ msgstr "ASCII DEL"
-
 #~ msgid "Built-in foreground and background color schemes:"
 #~ msgstr "Постојеће шеме боја исцртавања и позадине:"
 
@@ -2950,26 +3076,14 @@ msgstr ""
 #~ msgid "Color Selector"
 #~ msgstr "Бирач боје"
 
-#~ msgid "Control-H"
-#~ msgstr "CTRL-H"
-
 #~ msgid "Goes after initial title"
 #~ msgstr "Стоји после почетног наслова"
 
 #~ msgid "Goes before initial title"
 #~ msgstr "Стоји испред почетног наслова"
 
-#~ msgid "Hold the terminal open"
-#~ msgstr "Држи терминал отвореним"
-
 #~ msgid "Isn't displayed"
 #~ msgstr "Није приказан"
-
-#~ msgid "On the left side"
-#~ msgstr "На левој страни"
-
-#~ msgid "On the right side"
-#~ msgstr "На десној страни"
 
 #~ msgid "Open a dialog to specify the color"
 #~ msgstr "Отворите прозорче да наведете боју"
@@ -3018,12 +3132,6 @@ msgstr ""
 
 #~ msgid "Palette entry 8"
 #~ msgstr "Боја број 8"
-
-#~ msgid "Replaces initial title"
-#~ msgstr "Замењује почетни наслов"
-
-#~ msgid "Restart the command"
-#~ msgstr "Понови наредбу"
 
 #~ msgid "kilobytes"
 #~ msgstr "килобајта"
