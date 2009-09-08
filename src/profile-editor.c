@@ -29,9 +29,8 @@
 #include "profile-editor.h"
 #include "terminal-util.h"
 
-/* One slot in the ring buffer, plus the array which holds the data for
-  * the line, plus about 80 vte_charcell structures. */
-#define BYTES_PER_LINE (sizeof(gpointer) + sizeof(GArray) + (80 * (sizeof(gunichar) + 4)))
+/* Behdad estimates this to about 1 byte/cell, approx. */
+#define BYTES_PER_LINE ((goffset) 80)
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -469,7 +468,7 @@ scrollback_lines_spin_button_changed_cb (GtkSpinButton *button,
   char *kbtext, *text;
 
   lines = gtk_spin_button_get_value (button);
-  kbtext = g_format_size_for_display (lines * BYTES_PER_LINE);
+  kbtext = g_format_size_for_display (((goffset) (lines + 0.5)) * BYTES_PER_LINE);
   /* Translators: %s will be a data size, e.g. "(about 500kB)" */
   text = g_strdup_printf (_("(about %s)"), kbtext);
   gtk_label_set_text (label, text);
