@@ -9,9 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-20 20:21+0700\n"
-"PO-Revision-Date: 2009-02-20 21:19+0700\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"terminal&component=general\n"
+"POT-Creation-Date: 2009-08-28 07:31+0000\n"
+"PO-Revision-Date: 2009-09-15 14:52+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -20,8 +21,8 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:292
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1730
+#: ../src/terminal-accels.c:222 ../src/terminal.c:304
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1884
 msgid "Terminal"
 msgstr "เทอร์มินัล"
 
@@ -29,32 +30,32 @@ msgstr "เทอร์มินัล"
 msgid "Use the command line"
 msgstr "สั่งการด้วยบรรทัดคำสั่ง"
 
-#: ../src/eggsmclient.c:224
+#: ../src/eggsmclient.c:225
 msgid "Disable connection to session manager"
 msgstr "ปิดใช้การเชื่อมต่อไปยังโปรแกรมจัดการวาระ"
 
-#: ../src/eggsmclient.c:227
+#: ../src/eggsmclient.c:228
 msgid "Specify file containing saved configuration"
 msgstr "ระบุแฟ้มที่บันทึกค่าตั้งไว้"
 
-#: ../src/eggsmclient.c:227 ../src/terminal-options.c:905
-#: ../src/terminal-options.c:914
+#: ../src/eggsmclient.c:228 ../src/terminal-options.c:957
+#: ../src/terminal-options.c:966
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/eggsmclient.c:230
+#: ../src/eggsmclient.c:231
 msgid "Specify session management ID"
 msgstr "ระบุหมายเลขการจัดการวาระ"
 
-#: ../src/eggsmclient.c:230
+#: ../src/eggsmclient.c:231
 msgid "ID"
 msgstr "ID"
 
-#: ../src/eggsmclient.c:244
+#: ../src/eggsmclient.c:252
 msgid "Session management options:"
 msgstr "ตัวเลือกเกี่ยวกับการจัดการวาระ:"
 
-#: ../src/eggsmclient.c:245
+#: ../src/eggsmclient.c:253
 msgid "Show session management options"
 msgstr "แสดงตัวเลือกเกี่ยวกับการจัดการวาระ"
 
@@ -1030,16 +1031,16 @@ msgstr "แก้ไขโพรไฟล์ “%s”"
 msgid "(about %s)"
 msgstr "(ประมาณ %s)"
 
-#: ../src/profile-editor.c:612
+#: ../src/profile-editor.c:613
 msgid "Images"
 msgstr "รูปภาพ"
 
-#: ../src/profile-editor.c:733
+#: ../src/profile-editor.c:739
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "เลือกสีในจานสีช่อง %d"
 
-#: ../src/profile-editor.c:737
+#: ../src/profile-editor.c:743
 #, c-format
 msgid "Palette entry %d"
 msgstr "จานสีรายการที่ %d"
@@ -1177,7 +1178,8 @@ msgstr "ความเข้ากันได้"
 msgid "Cursor _shape:"
 msgstr "รูป_ร่างของเคอร์เซอร์:"
 
-#: ../src/profile-preferences.glade.h:27
+#. Translators: This is the name of a colour scheme
+#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "กำหนดเอง"
 
@@ -1427,7 +1429,7 @@ msgstr "ย่อ"
 msgid "Normal Size"
 msgstr "ขนาดปกติ"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3253
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3464
 msgid "Set Title"
 msgstr "ตั้งหัวเรื่อง"
 
@@ -1531,7 +1533,8 @@ msgstr "แท็บ"
 msgid "Help"
 msgstr "ระบบช่วยเหลือ"
 
-#: ../src/terminal-accels.c:281
+#. Translators: Scrollbar is: ...
+#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "ยกเลิกการใช้งาน"
 
@@ -1548,65 +1551,64 @@ msgstr "การ_ทำงาน"
 msgid "Shortcut _Key"
 msgstr "ปุ่ม_ลัด"
 
-#: ../src/terminal-app.c:475
+#: ../src/terminal-app.c:482
 msgid "Click button to choose profile"
 msgstr "คลิกปุ่มเพื่อเลือกโพรไฟล์"
 
-#: ../src/terminal-app.c:560
+#: ../src/terminal-app.c:567
 msgid "Profile list"
 msgstr "รายการโพรไฟล์"
 
-#: ../src/terminal-app.c:621
+#: ../src/terminal-app.c:628
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "ลบโพรไฟล์ “%s” หรือไม่?"
 
-#: ../src/terminal-app.c:637
+#: ../src/terminal-app.c:644
 msgid "Delete Profile"
 msgstr "ลบโพรไฟล์"
 
-#: ../src/terminal-app.c:951
+#: ../src/terminal-app.c:958
 msgid "User Defined"
 msgstr "ผู้ใช้กำหนดเอง"
 
-#: ../src/terminal-app.c:1106
+#: ../src/terminal-app.c:1113
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
 "profile with the same name?"
 msgstr "คุณมีโพรไฟล์ชื่อ “%s” อยู่แล้ว ต้องการสร้างโพรไฟล์ใหม่ด้วยชื่อเดียวกันหรือไม่?"
 
-#: ../src/terminal-app.c:1207
+#: ../src/terminal-app.c:1215
 msgid "Choose base profile"
 msgstr "เลือกโพรไฟล์หลัก"
 
-#: ../src/terminal-app.c:1730
+#: ../src/terminal-app.c:1789
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "ไม่มีโพรไฟล์ \"%s\" จะใช้โพรไฟล์ปริยายแทน\n"
 
-#: ../src/terminal-app.c:1750
+#: ../src/terminal-app.c:1813
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "คำบรรยายค่าเรขาคณิตไม่ถูกต้อง \"%s\"\n"
 
-#: ../src/terminal.c:191
-#, c-format
-msgid "Could not open link: %s"
-msgstr "ไม่สามารถเปิดลิงก์: %s"
+#: ../src/terminal.c:195
+msgid "Could not open link"
+msgstr "ไม่สามารถเปิดลิงก์"
 
-#: ../src/terminal.c:287
+#: ../src/terminal.c:299
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "แจงอาร์กิวเมนต์ไม่สำเร็จ: %s\n"
 
 #. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:417
+#: ../src/terminal.c:427
 #, c-format
 msgid "Incompatible factory version; creating a new instance.\n"
 msgstr "รุ่นของโรงงานไม่เข้ากัน: จะสร้างชิ้นใหม่แทน\n"
 
-#: ../src/terminal.c:423
+#: ../src/terminal.c:433
 #, c-format
 msgid "Factory error: %s\n"
 msgstr "ข้อผิดพลาดของโรงงาน: %s\n"
@@ -1765,7 +1767,7 @@ msgstr "_รหัสอักขระ"
 msgid "Current Locale"
 msgstr "ตามโลแคลปัจจุบัน"
 
-#: ../src/terminal-options.c:174
+#: ../src/terminal-options.c:175
 #, c-format
 msgid ""
 "Option \"%s\" is no longer supported in this version of gnome-terminal; you "
@@ -1775,7 +1777,7 @@ msgstr ""
 "เทอร์มินัล GNOME รุ่นนี้ไม่รองรับตัวเลือก \"%s\" อีกต่อไป "
 "คุณอาจจะต้องสร้างโพรไฟล์ที่มีค่าตั้งที่ต้องการ แล้วใช้ตัวเลือก --profile ซึ่งเป็นตัวเลือกใหม่\n"
 
-#: ../src/terminal-options.c:187 ../src/terminal-window.c:3472
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3685
 msgid "GNOME Terminal"
 msgstr "เทอร์มินัล GNOME"
 
@@ -1793,77 +1795,76 @@ msgstr "กำหนดสองหน้าที่ให้หนึ่งห
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "\"%s\" ตัวเลือกถูกกำหนดซ้ำในหน้าต่างเดียวกัน\n"
 
-#: ../src/terminal-options.c:595
+#: ../src/terminal-options.c:596
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" ไม่ใช่อัตราขยายที่ถูกต้อง"
 
-#: ../src/terminal-options.c:602
+#: ../src/terminal-options.c:603
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "อัตราขยาย \"%g\" มีค่าน้อยเกินไป จะใช้ค่า %g\n"
 
-#: ../src/terminal-options.c:610
+#: ../src/terminal-options.c:611
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "อัตราขยาย \"%g\" มีค่ามากเกินไป จะใช้ค่า %g\n"
 
-#: ../src/terminal-options.c:649
+#: ../src/terminal-options.c:646
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line"
 msgstr "ตัวเลือก \"%s\" ต้องตามด้วยคำสั่งที่จะเรียก โดยป้อนบนบรรทัดคำสั่งที่เหลือ"
 
-#: ../src/terminal-options.c:774
+#: ../src/terminal-options.c:807
 msgid "Not a valid terminal config file."
 msgstr "ไม่ใช่แฟ้มค่าตั้งเทอร์มินัลที่ใช้การได้"
 
-#. FIXME
-#: ../src/terminal-options.c:786
+#: ../src/terminal-options.c:820
 msgid "Incompatible terminal config file version."
 msgstr "แฟ้มค่าตั้งเทอร์มินัลเป็นรุ่นที่ไม่เข้ากัน"
 
-#: ../src/terminal-options.c:895
+#: ../src/terminal-options.c:947
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
 "ไม่ต้องลงทะเบียนกับเซิร์ฟเวอร์สารบบชื่อสำหรับการเรียกทำงาน ไม่ต้องนำเทอร์มินัลที่ทำงานอยู่มาใช้ซ้ำ"
 
-#: ../src/terminal-options.c:904
+#: ../src/terminal-options.c:956
 msgid "Load a terminal configuration file"
 msgstr "โหลดแฟ้มค่าตั้งเทอร์มินัล"
 
-#: ../src/terminal-options.c:913
+#: ../src/terminal-options.c:965
 msgid "Save the terminal configuration to a file"
 msgstr "บันทึกค่าตั้งของเทอร์มินัลลงในแฟ้ม"
 
-#: ../src/terminal-options.c:927
+#: ../src/terminal-options.c:979
 msgid "Open a new window containing a tab with the default profile"
 msgstr "เปิดหน้าต่างใหม่ที่มีแท็บตามโพรไฟล์ปริยาย"
 
-#: ../src/terminal-options.c:936
+#: ../src/terminal-options.c:988
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "เปิดแท็บใหม่ในหน้าต่างที่เปิดล่าสุดโดยใช้โพรไฟล์ปริยาย"
 
-#: ../src/terminal-options.c:949
+#: ../src/terminal-options.c:1001
 msgid "Turn on the menubar"
 msgstr "แสดงแถบเมนู"
 
-#: ../src/terminal-options.c:958
+#: ../src/terminal-options.c:1010
 msgid "Turn off the menubar"
 msgstr "ปิดแถบเมนู"
 
-#: ../src/terminal-options.c:967
+#: ../src/terminal-options.c:1019
 msgid "Maximise the window"
 msgstr "ขยายแผ่หน้าต่าง"
 
-#: ../src/terminal-options.c:976
+#: ../src/terminal-options.c:1028
 msgid "Full-screen the window"
 msgstr "แสดงหน้าต่างแบบเต็มจอ"
 
-#: ../src/terminal-options.c:985
+#: ../src/terminal-options.c:1037
 msgid ""
 "Set the window geometry from the provided X geometry specification; see the "
 "\"X\" man page for more information"
@@ -1871,77 +1872,77 @@ msgstr ""
 "กำหนดค่าเรขาคณิตของหน้าต่างตามข้อกำหนดเรขาคณิตของ X; ดูข้อมูลเพิ่มเติมได้จาก man page ของ "
 "\"X\""
 
-#: ../src/terminal-options.c:986
+#: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: ../src/terminal-options.c:994
+#: ../src/terminal-options.c:1046
 msgid "Set the window role"
 msgstr "ตั้ง role ของหน้าต่าง"
 
-#: ../src/terminal-options.c:995
+#: ../src/terminal-options.c:1047
 msgid "ROLE"
 msgstr "ROLE"
 
-#: ../src/terminal-options.c:1003
+#: ../src/terminal-options.c:1055
 msgid "Set the last specified tab as the active one in its window"
 msgstr "ตั้งแท็บที่กำหนดล่าสุดเป็นแท็บที่ทำงานในหน้าต่างนั้น"
 
-#: ../src/terminal-options.c:1016
+#: ../src/terminal-options.c:1068
 msgid "Execute the argument to this option inside the terminal"
 msgstr "เรียกคำสั่งที่เป็นอาร์กิวเมนต์ของตัวเลือกนี้ในเทอร์มินัล"
 
-#: ../src/terminal-options.c:1025
+#: ../src/terminal-options.c:1077
 msgid "Use the given profile instead of the default profile"
 msgstr "ใช้โพรไฟล์ที่กำหนดแทนโพรไฟล์ปริยาย"
 
-#: ../src/terminal-options.c:1026
+#: ../src/terminal-options.c:1078
 msgid "PROFILE-NAME"
 msgstr "PROFILE-NAME"
 
-#: ../src/terminal-options.c:1034
+#: ../src/terminal-options.c:1086
 msgid "Set the terminal title"
 msgstr "ตั้งหัวหน้าต่างของเทอร์มินัล"
 
-#: ../src/terminal-options.c:1035
+#: ../src/terminal-options.c:1087
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/terminal-options.c:1043
+#: ../src/terminal-options.c:1095
 msgid "Set the working directory"
 msgstr "ตั้งไดเรกทอรีทำงาน"
 
-#: ../src/terminal-options.c:1044
+#: ../src/terminal-options.c:1096
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/terminal-options.c:1052
+#: ../src/terminal-options.c:1104
 msgid "Set the terminalx's zoom factor (1.0 = normal size)"
 msgstr "ตั้งค่าอัตราขยายของเทอร์มินัล (1.0 = ขนาดปกติ)"
 
-#: ../src/terminal-options.c:1053
+#: ../src/terminal-options.c:1105
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ../src/terminal-options.c:1303 ../src/terminal-options.c:1306
+#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
 msgid "GNOME Terminal Emulator"
 msgstr "เทอร์มินัลเทียมของ GNOME"
 
-#: ../src/terminal-options.c:1307
+#: ../src/terminal-options.c:1359
 msgid "Show GNOME Terminal options"
 msgstr "แสดงตัวเลือกของเทอร์มินัล GNOME"
 
-#: ../src/terminal-options.c:1317
+#: ../src/terminal-options.c:1369
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr "ตัวเลือกสำหรับเปิดหน้าต่างใหม่หรือแท็บเทอร์มินัลใหม่ สามารถกำหนดได้มากกว่าหนึ่งตัวเลือก"
 
-#: ../src/terminal-options.c:1318
+#: ../src/terminal-options.c:1370
 msgid "Show terminal options"
 msgstr "แสดงตัวเลือกของเทอร์มินัล"
 
-#: ../src/terminal-options.c:1326
+#: ../src/terminal-options.c:1378
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1949,11 +1950,11 @@ msgstr ""
 "ตัวเลือกสำหรับหน้าต่าง ถ้าใช้ก่อนตัวเลือก --window หรือ --tab แรก "
 "จะกำหนดเป็นค่าปริยายของทุกหน้าต่าง:"
 
-#: ../src/terminal-options.c:1327
+#: ../src/terminal-options.c:1379
 msgid "Show per-window options"
 msgstr "แสดงตัวเลือกสำหรับแต่ละหน้าต่าง"
 
-#: ../src/terminal-options.c:1335
+#: ../src/terminal-options.c:1387
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1961,7 +1962,7 @@ msgstr ""
 "ตัวเลือกสำหรับเทอร์มินัล ถ้าใช้ก่อนตัวเลือก --window หรือ --tab แรก "
 "จะกำหนดเป็นค่าปริยายของทุกเทอร์มินัล:"
 
-#: ../src/terminal-options.c:1336
+#: ../src/terminal-options.c:1388
 msgid "Show per-terminal options"
 msgstr "แสดงตัวเลือกสำหรับแต่ละเทอร์มินัล"
 
@@ -1969,12 +1970,11 @@ msgstr "แสดงตัวเลือกสำหรับแต่ละเ
 msgid "Unnamed"
 msgstr "ไม่มีชื่อ"
 
-#: ../src/terminal-screen.c:1222
-#, c-format
-msgid "There was a problem with the command for this terminal: %s"
-msgstr "เกิดปัญหากับคำสั่งสำหรับเทอร์มินัลนี้: %s"
+#: ../src/terminal-screen.c:1276
+msgid "There was a problem with the command for this terminal"
+msgstr "เกิดปัญหากับคำสั่งสำหรับเทอร์มินัลนี้"
 
-#: ../src/terminal-screen.c:1514
+#: ../src/terminal-screen.c:1585
 msgid "There was an error creating the child process for this terminal"
 msgstr "เกิดข้อผิดพลาดขณะสร้างกระบวนการลูกสำหรับเทอร์มินัลนี้:"
 
@@ -1982,25 +1982,20 @@ msgstr "เกิดข้อผิดพลาดขณะสร้างกร
 msgid "Close tab"
 msgstr "ปิดแท็บ"
 
-#: ../src/terminal-tabs-menu.c:200
+#: ../src/terminal-tabs-menu.c:198
 msgid "Switch to this tab"
 msgstr "สลับมาที่แท็บนี้"
 
-#: ../src/terminal-util.c:170
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "เกิดข้อผิดพลาดในการแสดงข้อความช่วยเหลือ: %s"
+#: ../src/terminal-util.c:181
+msgid "There was an error displaying help"
+msgstr "เกิดข้อผิดพลาดในการแสดงข้อความช่วยเหลือ"
 
-#: ../src/terminal-util.c:242
+#: ../src/terminal-util.c:254
 #, c-format
-msgid ""
-"Could not open the address “%s”:\n"
-"%s"
-msgstr ""
-"ไม่สามารถเปิดที่อยู่ “%s”:\n"
-"%s"
+msgid "Could not open the address “%s”"
+msgstr "ไม่สามารถเปิดที่อยู่ “%s”"
 
-#: ../src/terminal-util.c:317
+#: ../src/terminal-util.c:362
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2011,7 +2006,7 @@ msgstr ""
 "ภายใต้เงื่อนไขของ GNU General Public License ที่เผยแพร่โดยมูลนิธิซอฟต์แวร์เสรี "
 "ไม่ว่าจะเป็นสัญญาอนุญาตรุ่นที่ 2 หรือรุ่นถัดมา (ตามแต่คุณจะเลือก)"
 
-#: ../src/terminal-util.c:321
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2023,7 +2018,7 @@ msgstr ""
 "*ความเหมาะสมสำหรับวัตถุประสงค์เฉพาะกิจใดๆ* กรุณาอ่าน GNU General Public License "
 "เพื่อดูรายละเอียดเพิ่มเติม"
 
-#: ../src/terminal-util.c:325
+#: ../src/terminal-util.c:370
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2033,225 +2028,357 @@ msgstr ""
 "ถ้าคุณไม่ได้รับ กรุณาติดต่อไปที่ Free Software Foundation, Inc., 51 Franklin St, Fifth "
 "Floor, Boston, MA  02110-1301 USA"
 
-#: ../src/terminal-window.c:419
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%d is used as the accelerator (with d between 1 and 9), and
+#. * the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:430
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
 
-#: ../src/terminal-window.c:421
+#. Translators: This is the label of a menu item to choose a profile.
+#. * _%c is used as the accelerator (it will be a character between A and Z),
+#. * and the %s is the name of the terminal profile.
+#.
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1553
+#: ../src/terminal-window.c:1697
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
 #. File menu
-#: ../src/terminal-window.c:1554 ../src/terminal-window.c:1565
-#: ../src/terminal-window.c:1687
+#: ../src/terminal-window.c:1698 ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1831
 msgid "Open _Terminal"
 msgstr "เปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:1555 ../src/terminal-window.c:1568
-#: ../src/terminal-window.c:1690
+#: ../src/terminal-window.c:1699 ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1834
 msgid "Open Ta_b"
 msgstr "แท็_บใหม่"
 
-#: ../src/terminal-window.c:1556
+#: ../src/terminal-window.c:1700
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/terminal-window.c:1557
+#: ../src/terminal-window.c:1701
 msgid "_View"
 msgstr "มุ_มมอง"
 
-#: ../src/terminal-window.c:1558
+#: ../src/terminal-window.c:1702
 msgid "_Terminal"
 msgstr "เ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:1559
+#: ../src/terminal-window.c:1703
 msgid "Ta_bs"
 msgstr "แท็_บ"
 
-#: ../src/terminal-window.c:1560
+#: ../src/terminal-window.c:1704
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/terminal-window.c:1571
+#: ../src/terminal-window.c:1715
 msgid "New _Profile…"
 msgstr "โ_พรไฟล์ใหม่…"
 
-#: ../src/terminal-window.c:1574 ../src/terminal-window.c:1696
+#: ../src/terminal-window.c:1718 ../src/terminal-window.c:1840
 msgid "C_lose Tab"
 msgstr "ปิ_ดแท็บ"
 
-#: ../src/terminal-window.c:1577 ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:1721
 msgid "_Close Window"
 msgstr "ปิดห_น้าต่าง"
 
-#: ../src/terminal-window.c:1588 ../src/terminal-window.c:1684
+#: ../src/terminal-window.c:1732 ../src/terminal-window.c:1828
 msgid "Paste _Filenames"
 msgstr "แปะ_ชื่อแฟ้ม"
 
-#: ../src/terminal-window.c:1594
+#: ../src/terminal-window.c:1738
 msgid "P_rofiles…"
 msgstr "โ_พรไฟล์…"
 
-#: ../src/terminal-window.c:1597
+#: ../src/terminal-window.c:1741
 msgid "_Keyboard Shortcuts…"
 msgstr "ปุ่ม_ลัด"
 
-#: ../src/terminal-window.c:1600
+#: ../src/terminal-window.c:1744
 msgid "Pr_ofile Preferences"
 msgstr "_ปรับแต่งโพรไฟล์"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1616
+#: ../src/terminal-window.c:1760
 msgid "Change _Profile"
 msgstr "เปลี่ยนโ_พรไฟล์"
 
-#: ../src/terminal-window.c:1617
+#: ../src/terminal-window.c:1761
 msgid "_Set Title…"
 msgstr "ตั้งป้าย_ชื่อ…"
 
-#: ../src/terminal-window.c:1620
+#: ../src/terminal-window.c:1764
 msgid "Set _Character Encoding"
 msgstr "ตั้งค่า_รหัสอักขระ"
 
-#: ../src/terminal-window.c:1621
+#: ../src/terminal-window.c:1765
 msgid "_Reset"
 msgstr "_คืนค่าเดิม"
 
-#: ../src/terminal-window.c:1624
+#: ../src/terminal-window.c:1768
 msgid "Reset and C_lear"
 msgstr "คืนค่าเดิมและ_ลบจอ"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1773
 msgid "_Add or Remove…"
 msgstr "เ_พิ่มหรือลด…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1634
+#: ../src/terminal-window.c:1778
 msgid "_Previous Tab"
 msgstr "แท็บ_ก่อน"
 
-#: ../src/terminal-window.c:1637
+#: ../src/terminal-window.c:1781
 msgid "_Next Tab"
 msgstr "แท็บ_ถัดไป"
 
-#: ../src/terminal-window.c:1640
+#: ../src/terminal-window.c:1784
 msgid "Move Tab _Left"
 msgstr "ย้ายแท็บไปทางซ้า_ย"
 
-#: ../src/terminal-window.c:1643
+#: ../src/terminal-window.c:1787
 msgid "Move Tab _Right"
 msgstr "ย้ายแท็บไปทาง_ขวา"
 
-#: ../src/terminal-window.c:1646
+#: ../src/terminal-window.c:1790
 msgid "_Detach tab"
 msgstr "_ดึงแท็บออกมา"
 
 #. Help menu
-#: ../src/terminal-window.c:1651
+#: ../src/terminal-window.c:1795
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/terminal-window.c:1654
+#: ../src/terminal-window.c:1798
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
 #. Popup menu
-#: ../src/terminal-window.c:1659
+#: ../src/terminal-window.c:1803
 msgid "_Send Mail To…"
 msgstr "ส่งเ_มลถึง…"
 
-#: ../src/terminal-window.c:1662
+#: ../src/terminal-window.c:1806
 msgid "_Copy E-mail Address"
 msgstr "คัดลอก_ที่อยู่อีเมล"
 
-#: ../src/terminal-window.c:1665
+#: ../src/terminal-window.c:1809
 msgid "C_all To…"
 msgstr "เ_รียกสายไปยัง…"
 
-#: ../src/terminal-window.c:1668
+#: ../src/terminal-window.c:1812
 msgid "_Copy Call Address"
 msgstr "คัดลอก_ที่อยู่เรียกสาย"
 
-#: ../src/terminal-window.c:1671
+#: ../src/terminal-window.c:1815
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
-#: ../src/terminal-window.c:1674
+#: ../src/terminal-window.c:1818
 msgid "_Copy Link Address"
 msgstr "คัด_ลอกที่อยู่ลิงก์"
 
-#: ../src/terminal-window.c:1677
+#: ../src/terminal-window.c:1821
 msgid "P_rofiles"
 msgstr "โ_พรไฟล์ "
 
-#: ../src/terminal-window.c:1693
+#: ../src/terminal-window.c:1837 ../src/terminal-window.c:3113
 msgid "C_lose Window"
 msgstr "ปิ_ดหน้าต่าง"
 
-#: ../src/terminal-window.c:1699
+#: ../src/terminal-window.c:1843
+msgid "L_eave Full Screen"
+msgstr "เ_ลิกแสดงผลเต็มจอ"
+
+#: ../src/terminal-window.c:1846
 msgid "_Input Methods"
 msgstr "วิธี_ป้อนข้อมูล"
 
 #. View Menu
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1852
 msgid "Show _Menubar"
 msgstr "แสดงแถบเ_มนู"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1856
 msgid "_Full Screen"
 msgstr "เ_ต็มจอ"
 
-#: ../src/terminal-window.c:2894
-msgid "Close this terminal?"
-msgstr "จะปิดเทอร์มินัลนี้หรือไม่"
-
-#: ../src/terminal-window.c:2894
+#: ../src/terminal-window.c:3100
 msgid "Close this window?"
-msgstr "จะปิดหน้าต่างนี้หรือไม่"
+msgstr "จะปิดหน้าต่างนี้หรือไม่?"
 
-#: ../src/terminal-window.c:2898
+#: ../src/terminal-window.c:3100
+msgid "Close this terminal?"
+msgstr "จะปิดเทอร์มินัลนี้หรือไม่?"
+
+#: ../src/terminal-window.c:3104
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "ยังมีโพรเซสทำงานอยู่ในบางเทอร์มินัลในหน้าต่างนี้ ถ้าปิดหน้าต่าง ก็จะเป็นการฆ่าโพรเซสเหล่านั้นทั้งหมด"
 
-#: ../src/terminal-window.c:2902
+#: ../src/terminal-window.c:3108
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "ยังมีโพรเซสหนึ่งทำงานอยู่ในเทอร์มินัลนี้ ถ้าปิดเทอร์มินัล ก็จะเป็นการฆ่าโพรเซสดังกล่าว"
 
-#: ../src/terminal-window.c:2907
-msgid "_Close Terminal"
+#: ../src/terminal-window.c:3113
+msgid "C_lose Terminal"
 msgstr "ปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:3269
+#: ../src/terminal-window.c:3481
 msgid "_Title:"
 msgstr "_หัวเรื่อง:"
 
-#: ../src/terminal-window.c:3455
+#: ../src/terminal-window.c:3668
 msgid "Contributors:"
 msgstr "ผู้ร่วมสมทบ:"
 
-#: ../src/terminal-window.c:3474
+#: ../src/terminal-window.c:3687
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "โปรแกรมเทอร์มินัลเทียมสำหรับเดสก์ท็อป GNOME"
 
-#: ../src/terminal-window.c:3481
+#: ../src/terminal-window.c:3694
 msgid "translator-credits"
 msgstr ""
 "ชัชวาลย์ หาญสกุลบันเทิง <chatchawarnh@nectec.or.th>\n"
 "ชาญชัย จันฤๅชัย <taz@opentle.org>\n"
 "เทพพิทักษ์ การุญบุญญานันท์ <thep@linux.thai.net>"
+
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 2 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "อัตโนมัติ"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "ปุ่ม Control-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "DEL รหัสแอสกี"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "รหัสอักขระหลีก"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:33
+msgid "Block"
+msgstr "บล็อค"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "I-Beam"
+msgstr "ขีดตั้งรูปตัว I"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "Underline"
+msgstr "เส้นใต้"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:40
+msgid "Exit the terminal"
+msgstr "ออกจากเทอร์มินัล"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Restart the command"
+msgstr "เริ่มต้นคำสั่งใหม่"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Hold the terminal open"
+msgstr "เปิดเทอร์มินัลทิ้งไว้"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:47
+msgid "On the left side"
+msgstr "ทางฝั่งซ้าย"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "On the right side"
+msgstr "ทางฝั่งขวา"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:54
+msgid "Replace initial title"
+msgstr "แทนที่หัวเรื่องเริ่มต้น"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+msgid "Append initial title"
+msgstr "ต่อท้ายหัวเรื่องเริ่มต้น"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+msgid "Prepend initial title"
+msgstr "เติมข้างหน้าหัวเรื่องเริ่มต้น"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+msgid "Keep initial title"
+msgstr "ใช้หัวเรื่องเริ่มต้นตามเดิม"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:63
+msgid "Tango"
+msgstr "Tango"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Linux console"
+msgstr "คอนโซลลินุกซ์"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "Rxvt"
+msgstr "Rxvt"
 
 #~ msgid ""
 #~ "If true, font anti-aliasing will be disabled when running without the X "
@@ -2444,18 +2571,6 @@ msgstr ""
 #~ "the format of X font names."
 #~ msgstr ""
 #~ "ชื่อแบบอักษร X ดูข้อมูลเพิ่มเติมในหน้าคู่มือ X (พิมพ์ \"man X\") ในส่วนรูปแบบของแบบอักษร X "
-
-#~ msgid "Tango"
-#~ msgstr "Tango"
-
-#~ msgid "Linux console"
-#~ msgstr "คอนโซลลินุกซ์"
-
-#~ msgid "XTerm"
-#~ msgstr "XTerm"
-
-#~ msgid "Rxvt"
-#~ msgstr "Rxvt"
 
 #~ msgid "There was an error loading config from %s. (%s)\n"
 #~ msgstr "เกิดข้อผิดพลาดในการโหลดค่าที่ตั้งไว้จาก %s. (%s)\n"
@@ -2894,9 +3009,6 @@ msgstr ""
 #~ msgid "Palette entry 8"
 #~ msgstr "จานสีรายการที่ 8"
 
-#~ msgid "ASCII DEL"
-#~ msgstr "DEL รหัสแอสกี"
-
 #~ msgid "Built-in foreground and background color schemes:"
 #~ msgstr "ชุดรูปแบบสีพื้นหน้าและพื้นหลังที่มีมากับโปรแกรม:"
 
@@ -2906,35 +3018,17 @@ msgstr ""
 #~ msgid "Color Selector"
 #~ msgstr "ตัวเลือกสี:"
 
-#~ msgid "Control-H"
-#~ msgstr "ปุ่ม Control-H"
-
 #~ msgid "Goes after initial title"
 #~ msgstr "ตามหลังหัวเรื่องเริ่มต้น"
 
 #~ msgid "Goes before initial title"
 #~ msgstr "นำหน้าหัวเรื่องเริ่มต้น"
 
-#~ msgid "Hold the terminal open"
-#~ msgstr "เปิดเทอร์มินัลทิ้งไว้"
-
 #~ msgid "Isn't displayed"
 #~ msgstr "ไม่แสดงผล"
 
-#~ msgid "On the left side"
-#~ msgstr "ทางฝั่งซ้าย"
-
-#~ msgid "On the right side"
-#~ msgstr "ทางฝั่งขวา"
-
 #~ msgid "Open a dialog to specify the color"
 #~ msgstr "เปิดกล่องโต้ตอบเพื่อกำหนดสี"
-
-#~ msgid "Replaces initial title"
-#~ msgstr "แทนที่หัวเรื่องเริ่มต้น"
-
-#~ msgid "Restart the command"
-#~ msgstr "เริ่มต้นคำสั่งใหม่"
 
 #~ msgid "kilobytes"
 #~ msgstr "กิโลไบต์"
