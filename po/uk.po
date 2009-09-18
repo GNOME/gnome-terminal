@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terninal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-01 22:21+0300\n"
+"POT-Creation-Date: 2009-09-18 11:42+0300\n"
 "PO-Revision-Date: 2009-07-01 15:30+3200\n"
 "Last-Translator: Maxim Dziumanenko <dziumanenko@gmail.com>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:296
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1842
+#: ../src/terminal-accels.c:222 ../src/terminal.c:304
+#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1884
 msgid "Terminal"
 msgstr "Термінал"
 
@@ -35,8 +35,8 @@ msgstr "Не з'єднуватися з менеджером сеансів"
 msgid "Specify file containing saved configuration"
 msgstr "Визначити файл, що містить збережену конфігурацію"
 
-#: ../src/eggsmclient.c:228 ../src/terminal-options.c:951
-#: ../src/terminal-options.c:960
+#: ../src/eggsmclient.c:228 ../src/terminal-options.c:957
+#: ../src/terminal-options.c:966
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -957,8 +957,8 @@ msgid ""
 "compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
 "Тип тла терміналу. Може мати значення: \"solid\" - суцільний колір, \"image"
-"\" - зображення, або \"transparent\" - псевдо-прозоре тло, якщо увімкнено менеджер композиції "
-"або псевдо-напівпрозорий, якщо вимкнено."
+"\" - зображення, або \"transparent\" - псевдо-прозоре тло, якщо увімкнено "
+"менеджер композиції або псевдо-напівпрозорий, якщо вимкнено."
 
 #: ../src/gnome-terminal.schemas.in.h:128
 msgid "What to do with dynamic title"
@@ -1091,52 +1091,52 @@ msgstr ""
 msgid "_Shortcut keys:"
 msgstr "_Комбінації клавіш:"
 
-#: ../src/profile-editor.c:46
+#: ../src/profile-editor.c:45
 msgid "Black on light yellow"
 msgstr "Чорний на світло-жовтому"
 
-#: ../src/profile-editor.c:48
+#: ../src/profile-editor.c:47
 msgid "Black on white"
 msgstr "Чорний на білому"
 
-#: ../src/profile-editor.c:50
+#: ../src/profile-editor.c:49
 msgid "Gray on black"
 msgstr "Сірий на чорному"
 
-#: ../src/profile-editor.c:52
+#: ../src/profile-editor.c:51
 msgid "Green on black"
 msgstr "Зелений на чорному"
 
-#: ../src/profile-editor.c:54
+#: ../src/profile-editor.c:53
 msgid "White on black"
 msgstr "Білий на чорному"
 
-#: ../src/profile-editor.c:438
+#: ../src/profile-editor.c:437
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Помилка у синтаксисі команди: %s"
 
-#: ../src/profile-editor.c:458
+#: ../src/profile-editor.c:457
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Редагування профілю \"%s\""
 
 #. Translators: %s will be a data size, e.g. "(about 500kB)"
-#: ../src/profile-editor.c:474
+#: ../src/profile-editor.c:473
 #, c-format
 msgid "(about %s)"
 msgstr "(близько %s)"
 
-#: ../src/profile-editor.c:613
+#: ../src/profile-editor.c:612
 msgid "Images"
 msgstr "Зображення"
 
-#: ../src/profile-editor.c:739
+#: ../src/profile-editor.c:738
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Вибір кольору палітри %d"
 
-#: ../src/profile-editor.c:743
+#: ../src/profile-editor.c:742
 #, c-format
 msgid "Palette entry %d"
 msgstr "Елемент палітри %d"
@@ -1275,7 +1275,8 @@ msgstr "Сумісність"
 msgid "Cursor _shape:"
 msgstr "_Форма курсору:"
 
-#: ../src/profile-preferences.glade.h:27
+#. Translators: This is the name of a colour scheme
+#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "Інше"
 
@@ -1525,7 +1526,7 @@ msgstr "Зменшити"
 msgid "Normal Size"
 msgstr "Звичайний розмір"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3401
+#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3462
 msgid "Set Title"
 msgstr "Встановлення заголовка"
 
@@ -1629,45 +1630,46 @@ msgstr "Вкладки"
 msgid "Help"
 msgstr "Довідка"
 
-#: ../src/terminal-accels.c:281
+#. Translators: Scrollbar is: ...
+#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: ../src/terminal-accels.c:755
+#: ../src/terminal-accels.c:753
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Комбінація клавіш \"%s\" вже прив'язана до дії \"%s\""
 
-#: ../src/terminal-accels.c:913
+#: ../src/terminal-accels.c:911
 msgid "_Action"
 msgstr "Д_ія"
 
-#: ../src/terminal-accels.c:932
+#: ../src/terminal-accels.c:930
 msgid "Shortcut _Key"
 msgstr "Комбінація к_лавіш"
 
-#: ../src/terminal-app.c:475
+#: ../src/terminal-app.c:482
 msgid "Click button to choose profile"
 msgstr "Клацніть, щоб вибрати профіль"
 
-#: ../src/terminal-app.c:560
+#: ../src/terminal-app.c:567
 msgid "Profile list"
 msgstr "Список профілів"
 
-#: ../src/terminal-app.c:621
+#: ../src/terminal-app.c:628
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Видалити профіль \"%s\"?"
 
-#: ../src/terminal-app.c:637
+#: ../src/terminal-app.c:644
 msgid "Delete Profile"
 msgstr "Видалення профілю"
 
-#: ../src/terminal-app.c:951
+#: ../src/terminal-app.c:958
 msgid "User Defined"
 msgstr "Визначене користувачем"
 
-#: ../src/terminal-app.c:1106
+#: ../src/terminal-app.c:1113
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1676,37 +1678,36 @@ msgstr ""
 "Профіль з назвою \"%s\" вже існує. Бажаєте створити інший профіль з такою "
 "самою назвою?"
 
-#: ../src/terminal-app.c:1208
+#: ../src/terminal-app.c:1215
 msgid "Choose base profile"
 msgstr "Виберіть базовий профіль"
 
-#: ../src/terminal-app.c:1771
+#: ../src/terminal-app.c:1789
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Відсутній профіль \"%s\", використовується типовий профіль\n"
 
-#: ../src/terminal-app.c:1791
+#: ../src/terminal-app.c:1813
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Неправильний рядок геометрії \"%s\"\n"
 
 #: ../src/terminal.c:195
-#, c-format
-msgid "Could not open link: %s"
-msgstr "Не вдається відкрити посилання: %s"
+msgid "Could not open link"
+msgstr "Не вдається відкрити посилання"
 
-#: ../src/terminal.c:291
+#: ../src/terminal.c:299
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Не вдається визначити аргументи: %s\n"
 
 #. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:421
+#: ../src/terminal.c:427
 #, c-format
 msgid "Incompatible factory version; creating a new instance.\n"
 msgstr "Несумісна версія фабрики; створення нового екземпляру.\n"
 
-#: ../src/terminal.c:427
+#: ../src/terminal.c:433
 #, c-format
 msgid "Factory error: %s\n"
 msgstr "Помилка фабрики: %s\n"
@@ -1865,7 +1866,7 @@ msgstr "_Кодування"
 msgid "Current Locale"
 msgstr "Поточна локаль"
 
-#: ../src/terminal-options.c:174
+#: ../src/terminal-options.c:175
 #, c-format
 msgid ""
 "Option \"%s\" is no longer supported in this version of gnome-terminal; you "
@@ -1873,43 +1874,43 @@ msgid ""
 "profile' option\n"
 msgstr ""
 "Параметр \"%s\" більше не підтримується цією версією програми gnome-"
-"terminal; слід створити профіль з бажаними параметрами, та "
-"використовувати новий параметр «--profile»\n"
+"terminal; слід створити профіль з бажаними параметрами, та використовувати "
+"новий параметр «--profile»\n"
 
-#: ../src/terminal-options.c:187 ../src/terminal-window.c:3621
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3683
 msgid "GNOME Terminal"
 msgstr "Термінал GNOME"
 
-#: ../src/terminal-options.c:207
+#: ../src/terminal-options.c:208
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Аргумент до \"%s\" не є припустимою командою: %s"
 
-#: ../src/terminal-options.c:342
+#: ../src/terminal-options.c:343
 msgid "Two roles given for one window"
 msgstr "Для одного вікна вказано дві ролі"
 
-#: ../src/terminal-options.c:363 ../src/terminal-options.c:396
+#: ../src/terminal-options.c:364 ../src/terminal-options.c:397
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "\"%s\" вказано двічі для одного вікна\n"
 
-#: ../src/terminal-options.c:595
+#: ../src/terminal-options.c:596
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" не є припустимим множником збільшення"
 
-#: ../src/terminal-options.c:602
+#: ../src/terminal-options.c:603
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Множник збільшення \"%g\" надто малий, використовується %g\n"
 
-#: ../src/terminal-options.c:610
+#: ../src/terminal-options.c:611
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Множник збільшення \"%g\" надто великий, використовується %g\n"
 
-#: ../src/terminal-options.c:645
+#: ../src/terminal-options.c:646
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1918,15 +1919,15 @@ msgstr ""
 "Параметр \"%s\" вимагає вказування команди для запуску у залишку командного "
 "рядка"
 
-#: ../src/terminal-options.c:801
+#: ../src/terminal-options.c:807
 msgid "Not a valid terminal config file."
 msgstr "Неправильний формат файлу конфігурації терміналу"
 
-#: ../src/terminal-options.c:814
+#: ../src/terminal-options.c:820
 msgid "Incompatible terminal config file version."
 msgstr "Версія файлу конфігурації та терміналу несумісні"
 
-#: ../src/terminal-options.c:941
+#: ../src/terminal-options.c:947
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1934,39 +1935,40 @@ msgstr ""
 "Не реєструвати за допомогою сервера назв активації, не використовувати "
 "повторно термінал"
 
-#: ../src/terminal-options.c:950
+#: ../src/terminal-options.c:956
 msgid "Load a terminal configuration file"
 msgstr "Завантажити конфігурацію терміналу з файлу"
 
-#: ../src/terminal-options.c:959
+#: ../src/terminal-options.c:965
 msgid "Save the terminal configuration to a file"
 msgstr "Зберегти конфігурацію терміналу у файл"
 
-#: ../src/terminal-options.c:973
+#: ../src/terminal-options.c:979
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Відкрити нове вікно, що містить вкладку типовим профілем"
 
-#: ../src/terminal-options.c:982
+#: ../src/terminal-options.c:988
 msgid "Open a new tab in the last-opened window with the default profile"
-msgstr "Відкрити нову вкладку з типовим профілем у останньому відкритому вікні."
+msgstr ""
+"Відкрити нову вкладку з типовим профілем у останньому відкритому вікні."
 
-#: ../src/terminal-options.c:995
+#: ../src/terminal-options.c:1001
 msgid "Turn on the menubar"
 msgstr "Показати рядок меню"
 
-#: ../src/terminal-options.c:1004
+#: ../src/terminal-options.c:1010
 msgid "Turn off the menubar"
 msgstr "Сховати рядок меню"
 
-#: ../src/terminal-options.c:1013
+#: ../src/terminal-options.c:1019
 msgid "Maximise the window"
 msgstr "Розгорнути вікно на весь екран"
 
-#: ../src/terminal-options.c:1022
+#: ../src/terminal-options.c:1028
 msgid "Full-screen the window"
 msgstr "Розгорнути на весь екран"
 
-#: ../src/terminal-options.c:1031
+#: ../src/terminal-options.c:1037
 msgid ""
 "Set the window geometry from the provided X geometry specification; see the "
 "\"X\" man page for more information"
@@ -1974,100 +1976,100 @@ msgstr ""
 "Встановити геометрію вікна відповідно до специфікацій X-сервера; для "
 "отримання докладної інформації зверніться до посібника з «X»"
 
-#: ../src/terminal-options.c:1032
+#: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
 msgstr "ГЕОМЕТРІЯ"
 
-#: ../src/terminal-options.c:1040
+#: ../src/terminal-options.c:1046
 msgid "Set the window role"
 msgstr "Встановити роль вікна"
 
-#: ../src/terminal-options.c:1041
+#: ../src/terminal-options.c:1047
 msgid "ROLE"
 msgstr "РОЛЬ"
 
-#: ../src/terminal-options.c:1049
+#: ../src/terminal-options.c:1055
 msgid "Set the last specified tab as the active one in its window"
 msgstr ""
 "Встановити останню вкладку, яка використовувалась, як активну у її вікні"
 
-#: ../src/terminal-options.c:1062
+#: ../src/terminal-options.c:1068
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Виконати аргумент цього параметру в терміналі"
 
-#: ../src/terminal-options.c:1071
+#: ../src/terminal-options.c:1077
 msgid "Use the given profile instead of the default profile"
 msgstr "Використовувати цей профіль замість типового профіля"
 
-#: ../src/terminal-options.c:1072
+#: ../src/terminal-options.c:1078
 msgid "PROFILE-NAME"
 msgstr "НАЗВА-ПРОФІЛЮ"
 
-#: ../src/terminal-options.c:1080
+#: ../src/terminal-options.c:1086
 msgid "Set the terminal title"
 msgstr "Встановити заголовок терміналу"
 
-#: ../src/terminal-options.c:1081
+#: ../src/terminal-options.c:1087
 msgid "TITLE"
 msgstr "ЗАГОЛОВОК"
 
-#: ../src/terminal-options.c:1089
+#: ../src/terminal-options.c:1095
 msgid "Set the working directory"
 msgstr "Встановити робочий каталог"
 
-#: ../src/terminal-options.c:1090
+#: ../src/terminal-options.c:1096
 msgid "DIRNAME"
 msgstr "КАТАЛОГ"
 
-#: ../src/terminal-options.c:1098
+#: ../src/terminal-options.c:1104
 msgid "Set the terminalx's zoom factor (1.0 = normal size)"
 msgstr "Встановити множник збільшення (1.0 — звичайний розмір)"
 
-#: ../src/terminal-options.c:1099
+#: ../src/terminal-options.c:1105
 msgid "ZOOM"
 msgstr "МАСШТАБ"
 
-#: ../src/terminal-options.c:1349 ../src/terminal-options.c:1352
+#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
 msgid "GNOME Terminal Emulator"
 msgstr "Емулятор терміналу для GNOME"
 
-#: ../src/terminal-options.c:1353
+#: ../src/terminal-options.c:1359
 msgid "Show GNOME Terminal options"
 msgstr "Показати параметри терміналу GNOME"
 
-#: ../src/terminal-options.c:1363
+#: ../src/terminal-options.c:1369
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr ""
-"Параметри для відкривання нових вікон чи вкладок терміналу; ці параметри можна "
-"вказати кілька разів:"
+"Параметри для відкривання нових вікон чи вкладок терміналу; ці параметри "
+"можна вказати кілька разів:"
 
-#: ../src/terminal-options.c:1364
+#: ../src/terminal-options.c:1370
 msgid "Show terminal options"
 msgstr "Показати параметри терміналу"
 
-#: ../src/terminal-options.c:1372
+#: ../src/terminal-options.c:1378
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
 msgstr ""
-"Параметри вікна; якщо використовуються до першого аргументу --window чи --tab, "
-"встановлюються типово для усіх вікон"
+"Параметри вікна; якщо використовуються до першого аргументу --window чи --"
+"tab, встановлюються типово для усіх вікон"
 
-#: ../src/terminal-options.c:1373
+#: ../src/terminal-options.c:1379
 msgid "Show per-window options"
 msgstr "Показати параметри, що застосовуються до вікна"
 
-#: ../src/terminal-options.c:1381
+#: ../src/terminal-options.c:1387
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
 msgstr ""
-"Параметри терміналу; якщо використовуються до першого аргументу --window чи --"
-"tab, встановлюються типово для усіх терминалів:"
+"Параметри терміналу; якщо використовуються до першого аргументу --window чи "
+"--tab, встановлюються типово для усіх терминалів:"
 
-#: ../src/terminal-options.c:1382
+#: ../src/terminal-options.c:1388
 msgid "Show per-terminal options"
 msgstr "Показати параметри, що застосовуються до терміналу"
 
@@ -2076,11 +2078,10 @@ msgid "Unnamed"
 msgstr "Без назви"
 
 #: ../src/terminal-screen.c:1276
-#, c-format
-msgid "There was a problem with the command for this terminal: %s"
-msgstr "Проблеми з командним рядком для цього терміналу: %s"
+msgid "There was a problem with the command for this terminal"
+msgstr "Проблеми з командним рядком для цього терміналу"
 
-#: ../src/terminal-screen.c:1580
+#: ../src/terminal-screen.c:1585
 msgid "There was an error creating the child process for this terminal"
 msgstr "Помилка створення процесу-нащадка для цього терміналу"
 
@@ -2092,21 +2093,16 @@ msgstr "Закрити вкладку"
 msgid "Switch to this tab"
 msgstr "До наступної вкладки"
 
-#: ../src/terminal-util.c:173
-#, c-format
-msgid "There was an error displaying help: %s"
-msgstr "Помилка відображення довідки: %s"
+#: ../src/terminal-util.c:181
+msgid "There was an error displaying help"
+msgstr "Помилка відкриття довідки"
 
-#: ../src/terminal-util.c:247
+#: ../src/terminal-util.c:254
 #, c-format
-msgid ""
-"Could not open the address “%s”:\n"
-"%s"
-msgstr ""
-"Не вдається відкрити адресу \"%s\":\n"
-"%s"
+msgid "Could not open the address “%s”"
+msgstr "Не вдається відкрити адресу «%s»"
 
-#: ../src/terminal-util.c:322
+#: ../src/terminal-util.c:362
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2118,7 +2114,7 @@ msgstr ""
 "Software Foundation; версії 2 цієї ліцензії, або (на ваш розсуд) будь-якою "
 "старшої версії."
 
-#: ../src/terminal-util.c:326
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2130,7 +2126,7 @@ msgstr ""
 "ПРОДАЖУ чи ВІДПОВІДНОСТІ ПЕВНІЙ МЕТІ.  Докладнішу інформацію дивіться у GNU "
 "General Public License."
 
-#: ../src/terminal-util.c:330
+#: ../src/terminal-util.c:370
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2144,7 +2140,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:431
+#: ../src/terminal-window.c:430
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2153,224 +2149,346 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:437
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1662
+#: ../src/terminal-window.c:1697
 msgid "_File"
 msgstr "_Файл"
 
 #. File menu
-#: ../src/terminal-window.c:1663 ../src/terminal-window.c:1674
-#: ../src/terminal-window.c:1796
+#: ../src/terminal-window.c:1698 ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1831
 msgid "Open _Terminal"
 msgstr "Відкрити _термінал"
 
-#: ../src/terminal-window.c:1664 ../src/terminal-window.c:1677
-#: ../src/terminal-window.c:1799
+#: ../src/terminal-window.c:1699 ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1834
 msgid "Open Ta_b"
 msgstr "Відкрити вк_ладку"
 
-#: ../src/terminal-window.c:1665
+#: ../src/terminal-window.c:1700
 msgid "_Edit"
 msgstr "_Правка"
 
-#: ../src/terminal-window.c:1666
+#: ../src/terminal-window.c:1701
 msgid "_View"
 msgstr "_Вигляд"
 
-#: ../src/terminal-window.c:1667
+#: ../src/terminal-window.c:1702
 msgid "_Terminal"
 msgstr "_Термінал"
 
-#: ../src/terminal-window.c:1668
+#: ../src/terminal-window.c:1703
 msgid "Ta_bs"
 msgstr "В_кладки"
 
-#: ../src/terminal-window.c:1669
+#: ../src/terminal-window.c:1704
 msgid "_Help"
 msgstr "_Довідка"
 
-#: ../src/terminal-window.c:1680
+#: ../src/terminal-window.c:1715
 msgid "New _Profile…"
 msgstr "Створити _профіль…"
 
-#: ../src/terminal-window.c:1683 ../src/terminal-window.c:1805
+#: ../src/terminal-window.c:1718 ../src/terminal-window.c:1840
 msgid "C_lose Tab"
 msgstr "Закр_ити вкладку"
 
-#: ../src/terminal-window.c:1686
+#: ../src/terminal-window.c:1721
 msgid "_Close Window"
 msgstr "_Закрити вікно"
 
-#: ../src/terminal-window.c:1697 ../src/terminal-window.c:1793
+#: ../src/terminal-window.c:1732 ../src/terminal-window.c:1828
 msgid "Paste _Filenames"
 msgstr "Вставити _імена файлів"
 
-#: ../src/terminal-window.c:1703
+#: ../src/terminal-window.c:1738
 msgid "P_rofiles…"
 msgstr "_Профілі…"
 
-#: ../src/terminal-window.c:1706
+#: ../src/terminal-window.c:1741
 msgid "_Keyboard Shortcuts…"
 msgstr "_Комбінації клавіш…"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1744
 msgid "Pr_ofile Preferences"
 msgstr "_Параметри профілю"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1725
+#: ../src/terminal-window.c:1760
 msgid "Change _Profile"
 msgstr "Змінити _профіль"
 
-#: ../src/terminal-window.c:1726
+#: ../src/terminal-window.c:1761
 msgid "_Set Title…"
 msgstr "_Встановити заголовок…"
 
-#: ../src/terminal-window.c:1729
+#: ../src/terminal-window.c:1764
 msgid "Set _Character Encoding"
 msgstr "Встановити _кодування символів"
 
-#: ../src/terminal-window.c:1730
+#: ../src/terminal-window.c:1765
 msgid "_Reset"
 msgstr "_Скинути"
 
-#: ../src/terminal-window.c:1733
+#: ../src/terminal-window.c:1768
 msgid "Reset and C_lear"
 msgstr "Скинути і о_чистити"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1738
+#: ../src/terminal-window.c:1773
 msgid "_Add or Remove…"
 msgstr "_Додати чи видалити…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1743
+#: ../src/terminal-window.c:1778
 msgid "_Previous Tab"
 msgstr "_Попередня вкладка"
 
-#: ../src/terminal-window.c:1746
+#: ../src/terminal-window.c:1781
 msgid "_Next Tab"
 msgstr "_Наступна вкладка"
 
-#: ../src/terminal-window.c:1749
+#: ../src/terminal-window.c:1784
 msgid "Move Tab _Left"
 msgstr "Перемістити вкладку _ліворуч"
 
-#: ../src/terminal-window.c:1752
+#: ../src/terminal-window.c:1787
 msgid "Move Tab _Right"
 msgstr "Перемістити вкладку _праворуч"
 
-#: ../src/terminal-window.c:1755
+#: ../src/terminal-window.c:1790
 msgid "_Detach tab"
 msgstr "Від'_єднати вкладку"
 
 #. Help menu
-#: ../src/terminal-window.c:1760
+#: ../src/terminal-window.c:1795
 msgid "_Contents"
 msgstr "_Зміст"
 
-#: ../src/terminal-window.c:1763
+#: ../src/terminal-window.c:1798
 msgid "_About"
 msgstr "_Про програму"
 
 #. Popup menu
-#: ../src/terminal-window.c:1768
+#: ../src/terminal-window.c:1803
 msgid "_Send Mail To…"
 msgstr "_Надіслати ел.пошту..."
 
-#: ../src/terminal-window.c:1771
+#: ../src/terminal-window.c:1806
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати E-mail адресу"
 
-#: ../src/terminal-window.c:1774
+#: ../src/terminal-window.c:1809
 msgid "C_all To…"
 msgstr "_Подзвонити…"
 
-#: ../src/terminal-window.c:1777
+#: ../src/terminal-window.c:1812
 msgid "_Copy Call Address"
 msgstr "_Копіювати адресу E-mail"
 
-#: ../src/terminal-window.c:1780
+#: ../src/terminal-window.c:1815
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: ../src/terminal-window.c:1783
+#: ../src/terminal-window.c:1818
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1821
 msgid "P_rofiles"
 msgstr "П_рофілі"
 
-#: ../src/terminal-window.c:1802 ../src/terminal-window.c:3050
+#: ../src/terminal-window.c:1837 ../src/terminal-window.c:3111
 msgid "C_lose Window"
 msgstr "Закр_ити вікно"
 
-#: ../src/terminal-window.c:1808
+#: ../src/terminal-window.c:1843
 msgid "L_eave Full Screen"
 msgstr "_Лишити на весь екран"
 
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1846
 msgid "_Input Methods"
 msgstr "Методи _вводу"
 
 #. View Menu
-#: ../src/terminal-window.c:1817
+#: ../src/terminal-window.c:1852
 msgid "Show _Menubar"
 msgstr "Показати _панель меню"
 
-#: ../src/terminal-window.c:1821
+#: ../src/terminal-window.c:1856
 msgid "_Full Screen"
 msgstr "_На весь екран"
 
-#: ../src/terminal-window.c:3037
+#: ../src/terminal-window.c:3098
 msgid "Close this window?"
 msgstr "Закрити вікно?"
 
-#: ../src/terminal-window.c:3037
+#: ../src/terminal-window.c:3098
 msgid "Close this terminal?"
 msgstr "Закрити цей термінал?"
 
-#: ../src/terminal-window.c:3041
+#: ../src/terminal-window.c:3102
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
-"У деяких терміналах цього вікна запущені процеси. Закриття вікна призведе "
-"до переривання усіх цих процесів."
+"У деяких терміналах цього вікна запущені процеси. Закриття вікна призведе до "
+"переривання усіх цих процесів."
 
-#: ../src/terminal-window.c:3045
+#: ../src/terminal-window.c:3106
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
-"У терміналі запущено процес.  Закриття терміналу призведе до переривання процесу."
+"У терміналі запущено процес.  Закриття терміналу призведе до переривання "
+"процесу."
 
-#: ../src/terminal-window.c:3050
+#: ../src/terminal-window.c:3111
 msgid "C_lose Terminal"
 msgstr "_закрити термінал"
 
-#: ../src/terminal-window.c:3418
+#: ../src/terminal-window.c:3479
 msgid "_Title:"
 msgstr "За_головок:"
 
-#: ../src/terminal-window.c:3604
+#: ../src/terminal-window.c:3666
 msgid "Contributors:"
 msgstr "Помічники:"
 
-#: ../src/terminal-window.c:3623
+#: ../src/terminal-window.c:3685
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Емулятор терміналу для середовища GNOME"
 
-#: ../src/terminal-window.c:3630
+#: ../src/terminal-window.c:3692
 msgid "translator-credits"
 msgstr ""
 "Юрій Сирота\n"
 "Максим Дзюманенко <dziumanenko@gmail.com>"
 
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 2 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "Автоматично"
 
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "Ctrl-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "DEL"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "Escape-послідовність"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:33
+msgid "Block"
+msgstr "Блок"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "I-Beam"
+msgstr "I-Beam"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "Underline"
+msgstr "Підкреслення"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:40
+msgid "Exit the terminal"
+msgstr "Вийти з терміналу"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Restart the command"
+msgstr "Перезапустити команду"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Hold the terminal open"
+msgstr "Тримати термінал відкритим"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:47
+msgid "On the left side"
+msgstr "Ліворуч"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "On the right side"
+msgstr "Праворуч"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:54
+msgid "Replace initial title"
+msgstr "Міняти початковий заголовок"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+msgid "Append initial title"
+msgstr "Додавати до початкового заголовку"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+msgid "Prepend initial title"
+msgstr "Перед початковим заголовком"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+msgid "Keep initial title"
+msgstr "Зберігати початковий заголовок"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:63
+msgid "Tango"
+msgstr "Танго"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Linux console"
+msgstr "Консоль Linux"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#~ msgid "I"
+#~ msgstr "Літера I"
