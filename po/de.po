@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gnome-terminal HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&component=general\n"
-"POT-Creation-Date: 2009-09-01 22:13+0000\n"
+"POT-Creation-Date: 2009-09-04 20:43+0000\n"
 "PO-Revision-Date: 2009-09-02 01:12+0200\n"
 "Last-Translator: Christian Kirbach <Christian.Kirbach@googlemail.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -178,7 +178,7 @@ msgid ""
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
 "Die voreingestellte Hintergrundfarbe des Terminals als Farbangabe (kann als "
-"HTML-artige Hex-Zahl oder einer Schriftfarbe wie »red« angegeben werden)."
+"HTML-artige Hex-Zahl oder als Schriftfarbe wie »red« angegeben werden)."
 
 #: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of text in the terminal"
@@ -190,7 +190,7 @@ msgid ""
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
 "Die voreingestellte Textfarbe des Terminals als Farbangabe (kann als HTML-"
-"artige Hex-Zahl oder einer Schriftfarbe wie »red« angegeben werden)."
+"artige Hex-Zahl oder als Schriftfarbe wie »red« angegeben werden)."
 
 #: ../src/gnome-terminal.schemas.in.h:19
 msgid "Effect of the Backspace key"
@@ -198,7 +198,7 @@ msgstr "Funktion der Rücktaste"
 
 #: ../src/gnome-terminal.schemas.in.h:20
 msgid "Effect of the Delete key"
-msgstr "Funktion der Löschen-Taste"
+msgstr "Funktion der Entf-Taste"
 
 #: ../src/gnome-terminal.schemas.in.h:21
 msgid "Filename of a background image."
@@ -289,7 +289,7 @@ msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr ""
-"Falls dieser Schlüssel wahr ist, werden die Login-Aufzeichnungen utmp/wtmp "
+"Falls dieser Schlüssel wahr ist, werden die Anmeldeprotokolle utmp/wtmp "
 "beim Starten des Befehls im Terminal aktualisiert."
 
 #: ../src/gnome-terminal.schemas.in.h:38
@@ -688,7 +688,7 @@ msgstr "Tastenkombination zum Kopieren von Text"
 
 #: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut to create a new profile"
-msgstr "Tastenkombination, um ein neues Profil anzulegen"
+msgstr "Tastenkombination zum Anlegen eines neuen Profils"
 
 #: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut to launch help"
@@ -797,7 +797,7 @@ msgstr "Tastenkombination zum Anzeigen/Verbergen der Menüleiste"
 
 #: ../src/gnome-terminal.schemas.in.h:102
 msgid "List of available encodings"
-msgstr "Liste Verfügbarer Zeichenkodierungen"
+msgstr "Liste verfügbarer Zeichenkodierungen"
 
 #: ../src/gnome-terminal.schemas.in.h:103
 msgid "List of profiles"
@@ -809,7 +809,7 @@ msgid ""
 "subdirectories relative to /apps/gnome-terminal/profiles."
 msgstr ""
 "Die Liste der dem Terminal bekannten Profile. Sie enthält Zeichenketten, die "
-"Unterverzeichnisse relativ zu »/apps/gnome-terminal/profiles« benennen."
+"Unterordner relativ zu »/apps/gnome-terminal/profiles« benennen."
 
 #: ../src/gnome-terminal.schemas.in.h:105
 msgid ""
@@ -818,13 +818,13 @@ msgid ""
 "standard menubar accelerator to be disabled."
 msgstr ""
 "Im Normalfall können Sie per F10 auf die Menüleiste zugreifen. Dies kann "
-"auch mit Hilfe von gtkrc angepasst werden (gtk-menu-bar-accel = "
+"auch mit Hilfe der gtkrc angepasst werden (gtk-menu-bar-accel = "
 "»wasauchimmer«). Mit Hilfe dieses Schlüssels können Sie die Tastenkombination "
 "zum Zugriff auf die Menüleiste deaktivieren."
 
 #: ../src/gnome-terminal.schemas.in.h:106
 msgid "Number of lines to keep in scrollback"
-msgstr "Anzahl im Puffer vorzuhaltender Zeilen"
+msgstr "Anzahl der im Puffer vorzuhaltenden Zeilen"
 
 #: ../src/gnome-terminal.schemas.in.h:107
 msgid ""
@@ -833,10 +833,10 @@ msgid ""
 "discarded. Be careful with this setting; it's the primary factor in "
 "determining how much memory the terminal will use."
 msgstr ""
-"Die Anzahl der zu vorzuhaltenden Pufferzeilen. Sie können im Terminal diese "
+"Die Anzahl der vorzuhaltenden Pufferzeilen. Sie können im Terminal diese "
 "Anzahl von Zeilen zurückrollen; überzählige Zeilen werden verworfen. Gehen "
 "Sie vorsichtig mit dem Wert dieses Schlüssels um; es ist der Hauptfaktor für "
-"den Speicherkonsum des Terminals."
+"den Speicherverbrauch des Terminals."
 
 #: ../src/gnome-terminal.schemas.in.h:108
 msgid "Palette for terminal applications"
@@ -904,7 +904,7 @@ msgid ""
 "backspace or delete. \"escape-sequence\" is normally considered the correct "
 "setting for the Delete key."
 msgstr ""
-"Legt fest, welchen Code die Löschtaste ausgibt. Zulässige Werte: »ascii-"
+"Legt fest, welchen Code die Entf-Taste ausgibt. Zulässige Werte: »ascii-"
 "del« (ASCII-DEL-Zeichen), »control-h« (Strg-H bzw. ASCII-BS-Zeichen) sowie "
 "»escape-sequence« (im Normalfall der Rück- oder Löschtaste zugewiesene "
 "Terminiersequenz). Empfohlener Schlüsselwert: »escape-sequence«."
@@ -929,16 +929,16 @@ msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr ""
-"Mögliche Werte sind »Block« für einen blockförmige Marke, »Balken« für einen "
-"senkrechten dünnen Balken oder »Unterstrich« für einen Unterstrich als Marke."
+"Mögliche Werte sind »block« für einen blockförmige Marke, »ibeam« für einen "
+"senkrechten dünnen Balken oder »underline« für einen Unterstrich als Marke."
 
 #: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
 msgstr ""
-"Mögliche Einstellungen sind »System«, um die globalen Cursoreinstellungen zu "
-"übernehmen und »an« bzw. »aus«, um den Modus explizit festzulegen."
+"Mögliche Einstellungen sind »system«, um die globalen Cursoreinstellungen zu "
+"übernehmen und »on« bzw. »off«, um den Modus explizit festzulegen."
 
 #: ../src/gnome-terminal.schemas.in.h:124
 msgid "Title for terminal"
@@ -968,8 +968,8 @@ msgid ""
 "for an image, or \"transparent\" for either real transparency if a "
 "compositing window manager is running, or pseudo-transparency otherwise."
 msgstr ""
-"Der Typ des Terminal-Hintergrunds. Zulässige Werte sind »einfarbig« für einen "
-"einfarbigen, »Bild« für ein Bild oder »transparent« entweder für eine echte "
+"Der Typ des Terminal-Hintergrunds. Zulässige Werte sind »solid« für einen "
+"einfarbigen, »image« für ein Bild oder »transparent« entweder für eine echte "
 "Transparenz bei Einsatz eines Compositing-Fensterverwalters oder sonst "
 "Pseudo-Transparenz."
 
@@ -990,7 +990,7 @@ msgid ""
 msgstr ""
 "Bei der wortweisen Auswahl werden Abfolgen dieser Zeichen wie einzelne "
 "Wörter behandelt. Bereiche können in der Form »A-Z« angegeben werden. Der "
-"Bindestrich (der keinen Bereich ausdrückt) sollte als erster Buchstabe "
+"Bindestrich (der keinen Bereich ausdrückt) sollte als erstes Zeichen "
 "angegeben werden."
 
 #: ../src/gnome-terminal.schemas.in.h:131
@@ -1003,7 +1003,7 @@ msgstr ""
 
 #: ../src/gnome-terminal.schemas.in.h:132
 msgid "Whether the menubar has access keys"
-msgstr "Kürzelbuchstaben in Menüleiste anzeigen?"
+msgstr "Zugriffstasten in Menüleiste anzeigen?"
 
 #: ../src/gnome-terminal.schemas.in.h:133
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
@@ -1071,7 +1071,7 @@ msgstr "Terminalglocke stummschalten?"
 #: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
-"Login-Aufzeichnungen beim Starten eines Terminal-Befehls aktualisieren?"
+"Anmeldeprotokolle beim Starten eines Terminal-Befehls aktualisieren?"
 
 #: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -1132,7 +1132,7 @@ msgstr "Weiß auf schwarz"
 #: ../src/profile-editor.c:438
 #, c-format
 msgid "Error parsing command: %s"
-msgstr "Fehler beim Parsen des Befehls: %s"
+msgstr "Fehler beim Verarbeiten des Befehls: %s"
 
 #: ../src/profile-editor.c:458
 #, c-format
@@ -1473,7 +1473,7 @@ msgstr "_Transparenter Hintergrund"
 
 #: ../src/profile-preferences.glade.h:74
 msgid "_Update login records when command is launched"
-msgstr "Login-Aufzeichnungen _aktualisieren, wenn Befehl ausgeführt wird"
+msgstr "Anmeldeprotokolle _aktualisieren, wenn Befehl ausgeführt wird"
 
 #: ../src/profile-preferences.glade.h:75
 msgid "_Use colors from system theme"
@@ -1967,7 +1967,7 @@ msgstr "Konfigurationsdatei des Terminals laden"
 
 #: ../src/terminal-options.c:965
 msgid "Save the terminal configuration to a file"
-msgstr "Konfiguration des Terminals in eine Datei abspeichern"
+msgstr "Konfiguration des Terminals in eine Datei speichern"
 
 #: ../src/terminal-options.c:979
 msgid "Open a new window containing a tab with the default profile"
@@ -2043,7 +2043,7 @@ msgstr "TITEL"
 
 #: ../src/terminal-options.c:1095
 msgid "Set the working directory"
-msgstr "Das Arbeitsverzeichnis festlegen"
+msgstr "Den Arbeitsordner festlegen"
 
 #: ../src/terminal-options.c:1096
 msgid "DIRNAME"
@@ -2378,7 +2378,7 @@ msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
-"Es läuft noch ein Prozesse in diesem Terminal. Ein Schließen des Terminals "
+"Es läuft noch ein Prozess in diesem Terminal. Ein Schließen des Terminals "
 "wird ihn beenden."
 
 #: ../src/terminal-window.c:3111
@@ -2636,7 +2636,7 @@ msgstr "Rxvt"
 
 #~ msgid "Set the default terminal's working directory. Used internally"
 #~ msgstr ""
-#~ "Das Vorgabe-Arbeitsverzeichnis des Terminals festlegen. Zum internen "
+#~ "Den Vorgabe-Arbeitsordner des Terminals festlegen. Zum internen "
 #~ "Gebrauch"
 
 #~ msgid "ZOOMFACTOR"
