@@ -29,9 +29,6 @@
 #include "profile-editor.h"
 #include "terminal-util.h"
 
-/* Behdad estimates this to about 1 byte/cell, approx. */
-#define BYTES_PER_LINE ((goffset) 80)
-
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
 struct _TerminalColorScheme
@@ -460,23 +457,6 @@ visible_name_entry_changed_cb (GtkEntry *entry,
 }
 
 static void
-scrollback_lines_spin_button_changed_cb (GtkSpinButton *button,
-                                         GParamSpec *pspec,
-                                         GtkLabel *label)
-{
-  double lines;
-  char *kbtext, *text;
-
-  lines = gtk_spin_button_get_value (button);
-  kbtext = g_format_size_for_display (((goffset) (lines + 0.5)) * BYTES_PER_LINE);
-  /* Translators: %s will be a data size, e.g. "(about 500kB)" */
-  text = g_strdup_printf (_("(about %s)"), kbtext);
-  gtk_label_set_text (label, text);
-  g_free (kbtext);
-  g_free (text);
-}
-
-static void
 reset_compat_defaults_cb (GtkWidget       *button,
                           TerminalProfile *profile)
 {
@@ -787,10 +767,6 @@ terminal_profile_edit (TerminalProfile *profile,
   g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry")),
                     "changed",
                     G_CALLBACK (visible_name_entry_changed_cb), editor);
-  g_signal_connect (GTK_WIDGET (gtk_builder_get_object  (builder, "scrollback-lines-spinbutton")),
-                    "notify::value",
-                    G_CALLBACK (scrollback_lines_spin_button_changed_cb),
-                    GTK_WIDGET (gtk_builder_get_object  (builder, "scrollback-kb-label")));
 
   g_signal_connect (gtk_builder_get_object  (builder, "reset-compat-defaults-button"),
                     "clicked",
