@@ -118,6 +118,8 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
 
       gtk_window_present (GTK_WINDOW (*weak_ptr));
     }
+
+  g_free (message);
 }
 
 static gboolean
