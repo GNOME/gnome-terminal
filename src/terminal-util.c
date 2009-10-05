@@ -291,7 +291,6 @@ terminal_util_resolve_relative_path (const char *path,
   resolved_path = g_file_get_path (resolved_file);
   g_object_unref (resolved_file);
 
-  g_print ("resolved %s + %s => %s\n", path, relative_path, resolved_path);
   return resolved_path;
 }
 
