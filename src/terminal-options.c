@@ -1101,7 +1101,7 @@ get_goption_context (TerminalOptions *options)
       0,
       G_OPTION_ARG_CALLBACK,
       option_zoom_callback,
-      N_("Set the terminalx's zoom factor (1.0 = normal size)"),
+      N_("Set the terminal's zoom factor (1.0 = normal size)"),
       N_("ZOOM")
     },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
