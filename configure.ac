@@ -129,7 +129,6 @@ help/Makefile
 help/bg/Makefile
 help/ro/Makefile
 help/ja/Makefile
-help/zh_CN/Makefile
 help/zh_TW/Makefile
 po/Makefile.in
 ])
