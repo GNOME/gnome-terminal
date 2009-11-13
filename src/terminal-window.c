@@ -2349,9 +2349,11 @@ terminal_window_add_screen (TerminalWindow *window,
                             screen_container,
                             tab_label,
                             position);
-  gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook),
-                                      screen_container,
-                                      TRUE, TRUE, GTK_PACK_START);
+  gtk_container_child_set (GTK_CONTAINER (priv->notebook),
+                           screen_container,
+                           "tab-expand", TRUE,
+                           "tab-fill", TRUE,
+                           NULL);
   gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (priv->notebook),
                                     screen_container,
                                     TRUE);
