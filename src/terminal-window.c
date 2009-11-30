@@ -982,7 +982,8 @@ screen_resize_window_cb (TerminalScreen *screen,
   VteTerminal *terminal = VTE_TERMINAL (screen);
   GtkWidget *widget = GTK_WIDGET (screen);
   guint grid_width, grid_height;
-  int xpad_total, ypad_total, char_width, char_height;
+  int char_width, char_height;
+  GtkBorder *inner_border = NULL;
 
   /* Don't do anything if we're maximised or fullscreened */
   // FIXME: realized && ... instead? 
@@ -999,12 +1000,13 @@ screen_resize_window_cb (TerminalScreen *screen,
 
   /* The resize-window signal sucks. Re-compute grid widths */
 
-  vte_terminal_get_padding (terminal, &xpad_total, &ypad_total);
   char_width = vte_terminal_get_char_width (terminal);
   char_height = vte_terminal_get_char_height (terminal);
 
-  grid_width = (width - xpad_total) / char_width;
-  grid_height = (height - ypad_total) / char_height;
+  gtk_widget_style_get (GTK_WIDGET (terminal), "inner-border", &inner_border, NULL);
+  grid_width = (width - (inner_border ? (inner_border->left + inner_border->right) : 0)) / char_width;
+  grid_height = (height - (inner_border ? (inner_border->top + inner_border->bottom) : 0)) / char_height;
+  gtk_border_free (inner_border);
 
   vte_terminal_set_size (terminal, grid_width, grid_height);
 
@@ -2439,8 +2441,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   int char_height;
   int grid_width;
   int grid_height;
-  int xpad_total;
-  int ypad_total;
+  GtkBorder *inner_border = NULL;
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
@@ -2471,10 +2472,10 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   if (force_grid_height >= 0)
     grid_height = force_grid_height;
   
-  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad_total, &ypad_total);
-
-  w += xpad_total + char_width * grid_width;
-  h += ypad_total + char_height * grid_height;
+  gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
+  w += (inner_border ? (inner_border->left + inner_border->right) : 0) + char_width * grid_width;
+  h += (inner_border ? (inner_border->top + inner_border->bottom) : 0) + char_height * grid_height;
+  gtk_border_free (inner_border);
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] set size: grid %dx%d force %dx%d setting %dx%d pixels\n",
@@ -2812,15 +2813,18 @@ terminal_window_update_geometry (TerminalWindow *window)
       char_height != priv->old_char_height ||
       widget != (GtkWidget*) priv->old_geometry_widget)
     {
-      int xpad_total, ypad_total;
+      GtkBorder *inner_border = NULL;
       
       /* FIXME Since we're using xthickness/ythickness to compute
        * padding we need to change the hints when the theme changes.
        */
-      vte_terminal_get_padding (VTE_TERMINAL (priv->active_screen), &xpad_total, &ypad_total);
-      
-      hints.base_width = xpad_total;
-      hints.base_height = ypad_total;
+
+      gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
+
+      hints.base_width = (inner_border ? (inner_border->left + inner_border->right) : 0);
+      hints.base_height = (inner_border ? (inner_border->top + inner_border->bottom) : 0);
+
+      gtk_border_free (inner_border);
 
 #define MIN_WIDTH_CHARS 4
 #define MIN_HEIGHT_CHARS 2

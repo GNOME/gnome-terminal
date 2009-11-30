@@ -1689,18 +1689,22 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreenPrivate *priv = screen->priv;
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  int char_width, char_height, row, col, xpad_total, ypad_total;
+  int char_width, char_height, row, col;
   char *matched_string;
   int matched_flavor = 0;
   guint state;
+  GtkBorder *inner_border = NULL;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
-  vte_terminal_get_padding (VTE_TERMINAL (screen), &xpad_total, &ypad_total);
 
-  row = (event->x - xpad_total / 2) / char_width;
-  col = (event->y - ypad_total / 2) / char_height;
+  gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
+  row = (event->x - (inner_border ? inner_border->left : 0)) / char_width;
+  col = (event->y - (inner_border ? inner_border->top : 0)) / char_height;
+  gtk_border_free (inner_border);
+
+  /* FIXMEchpe: add vte API to do this check by widget coords instead of grid coords */
   matched_string = terminal_screen_check_match (screen, row, col, &matched_flavor);
   
   if (matched_string != NULL &&
