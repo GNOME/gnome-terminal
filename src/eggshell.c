@@ -60,7 +60,7 @@ egg_shell (const char *shell)
 #ifndef G_OS_WIN32
 	struct passwd *pw;
 	int i;
-	const char shells [][14] = {
+	static const char shells [][14] = {
 		/* Note that on some systems shells can also
 		 * be installed in /usr/bin */
 		"/bin/bash", "/usr/bin/bash",
