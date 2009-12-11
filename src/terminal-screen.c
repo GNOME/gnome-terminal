@@ -966,6 +966,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS) ||
       prop_name == I_(TERMINAL_PROFILE_FOREGROUND_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_PALETTE))
     update_color_scheme (screen);
 
@@ -1080,7 +1081,7 @@ update_color_scheme (TerminalScreen *screen)
   TerminalProfile *profile = priv->profile;
   GtkStyle *style;
   GdkColor colors[TERMINAL_PALETTE_SIZE];
-  const GdkColor *fg_color, *bg_color;
+  const GdkColor *fg_color, *bg_color, *bold_color;
   GdkColor fg, bg;
   guint n_colors;
 
@@ -1090,12 +1091,14 @@ update_color_scheme (TerminalScreen *screen)
 
   fg = style->text[GTK_STATE_NORMAL];
   bg = style->base[GTK_STATE_NORMAL];
-
-  fg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
-  bg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
+  bold_color = NULL;
 
   if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS))
     {
+      fg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
+      bg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
+      bold_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BOLD_COLOR);
+
       if (fg_color)
         fg = *fg_color;
       if (bg_color)
@@ -1106,6 +1109,8 @@ update_color_scheme (TerminalScreen *screen)
   terminal_profile_get_palette (priv->profile, colors, &n_colors);
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
+  if (bold_color)
+    vte_terminal_set_color_bold (VTE_TERMINAL (screen), bold_color);
   vte_terminal_set_background_tint_color (VTE_TERMINAL (screen), &bg);
 }
 

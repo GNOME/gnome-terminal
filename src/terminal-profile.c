@@ -54,6 +54,7 @@ enum
   PROP_BACKGROUND_IMAGE_FILE,
   PROP_BACKGROUND_TYPE,
   PROP_BACKSPACE_BINDING,
+  PROP_BOLD_COLOR,
   PROP_CURSOR_BLINK_MODE,
   PROP_CURSOR_SHAPE,
   PROP_CUSTOM_COMMAND,
@@ -89,6 +90,7 @@ enum
 #define KEY_BACKGROUND_IMAGE_FILE "background_image"
 #define KEY_BACKGROUND_TYPE "background_type"
 #define KEY_BACKSPACE_BINDING "backspace_binding"
+#define KEY_BOLD_COLOR "bold_color"
 #define KEY_CURSOR_BLINK_MODE "cursor_blink_mode"
 #define KEY_CURSOR_SHAPE "cursor_shape"
 #define KEY_CUSTOM_COMMAND "custom_command"
@@ -380,7 +382,7 @@ values_equal (GParamSpec *pspec,
 
   if (g_param_values_cmp (pspec, va, vb) == 0)
     return TRUE;
-  
+
   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR)
     return gdk_color_equal (g_value_get_boxed (va), g_value_get_boxed (vb));
 
@@ -483,6 +485,7 @@ terminal_profile_reset_property_internal (TerminalProfile *profile,
   switch (pspec->param_id)
     {
       case PROP_FOREGROUND_COLOR:
+      case PROP_BOLD_COLOR:
         g_value_set_boxed (value, &DEFAULT_FOREGROUND_COLOR);
         break;
 
@@ -601,7 +604,7 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
 
       if (!gdk_color_parse (gconf_value_get_string (gconf_value), &color))
         goto out;
-      
+
       g_value_set_boxed (&value, &color);
     }
   else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == PANGO_TYPE_FONT_DESCRIPTION)
@@ -945,6 +948,7 @@ terminal_profile_init (TerminalProfile *profile)
   /* A few properties don't have defaults via the param spec; set them explicitly */
   object_class = G_OBJECT_CLASS (TERMINAL_PROFILE_GET_CLASS (profile));
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FOREGROUND_COLOR), FALSE);
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_BOLD_COLOR), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_BACKGROUND_COLOR), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FONT), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_PALETTE), FALSE);
@@ -1288,6 +1292,7 @@ terminal_profile_class_init (TerminalProfileClass *klass)
   TERMINAL_PROFILE_PROPERTY_BOOLEAN (USE_THEME_COLORS, DEFAULT_USE_THEME_COLORS, KEY_USE_THEME_COLORS);
 
   TERMINAL_PROFILE_PROPERTY_BOXED (BACKGROUND_COLOR, GDK_TYPE_COLOR, KEY_BACKGROUND_COLOR);
+  TERMINAL_PROFILE_PROPERTY_BOXED (BOLD_COLOR, GDK_TYPE_COLOR, KEY_BOLD_COLOR);
   TERMINAL_PROFILE_PROPERTY_BOXED (FONT, PANGO_TYPE_FONT_DESCRIPTION, KEY_FONT);
   TERMINAL_PROFILE_PROPERTY_BOXED (FOREGROUND_COLOR, GDK_TYPE_COLOR, KEY_FOREGROUND_COLOR);
 
