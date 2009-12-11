@@ -1289,128 +1289,119 @@ show_command_error_dialog (TerminalScreen *screen,
 }
 
 
-void
+static char *
+conf_get_string (GConfClient *conf, const char *key)
+{
+  char *value;
+  value = gconf_client_get_string (conf, key, NULL);
+  if (G_UNLIKELY (value && *value == '\0'))
+    {
+      g_free (value);
+      value = NULL;
+    }
+  return value;
+}
+
+static gboolean
+conf_get_bool (GConfClient *conf, const char *key)
+{
+  return gconf_client_get_string (conf, key, NULL);
+}
+
+static gint
+conf_get_int (GConfClient *conf, const char *key)
+{
+  return gconf_client_get_int (conf, key, NULL);
+}
+
+
+static void
+setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
+{
+  gchar *host, *auth = NULL;
+  gint port;
+  GSList *ignore;
+
+  /* Do we already have a proxy setting? */
+  if (g_hash_table_lookup (env_table, "http_proxy") != NULL)
+    return;
+
+  if (!conf_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy"))
+    return;
+
+  port = conf_get_int (conf, HTTP_PROXY_DIR "/port");
+  host = conf_get_string (conf, HTTP_PROXY_DIR "/host");
+  if (!host)
+    return;
+
+  if (conf_get_bool (conf, HTTP_PROXY_DIR "/use_authentication"))
+    {
+      char *user, *password;
+
+      user = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_user");
+      password = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_password");
+      if (user)
+	{
+	  if (password)
+	    auth = g_strdup_printf ("%s:%s", user, password);
+	  else
+	    auth = g_strdup (user);
+	}
+      g_free (user);
+      g_free (password);
+    }
+
+  if (host && port)
+    {
+      if (auth)
+	g_hash_table_replace (env_table, g_strdup ("http_proxy"),
+			      g_strdup_printf ("http://%s@%s:%d/", auth, host, port));
+      else
+	g_hash_table_replace (env_table, g_strdup ("http_proxy"),
+			      g_strdup_printf ("http://%s:%d/", host, port));
+    }
+
+  g_free (auth);
+  g_free (host);
+
+
+  ignore = gconf_client_get_list (conf, HTTP_PROXY_DIR "/ignore_hosts", GCONF_VALUE_STRING, NULL);
+  if (ignore)
+    {
+      GString *buf = g_string_sized_new (64);
+      while (ignore != NULL)
+	{
+	  GSList *old;
+
+	  g_string_append (buf, ignore->data);
+	  g_string_append_c (buf, ',');
+
+	  old = ignore;
+	  ignore = g_slist_next (ignore);
+	  g_free (old->data);
+	  g_slist_free_1 (old);
+	}
+      g_hash_table_replace (env_table, g_strdup ("no_proxy"), g_string_free (buf, FALSE));
+    }
+}
+
+static void
 setup_proxy_env (GHashTable *env_table)
 {
-  char *proxymode, *proxyhost;
-  gboolean use_proxy;
+  char *proxymode;
 
   GConfClient *conf;
   conf = gconf_client_get_default ();
 
-  /* Series of conditions under which we don't set http_proxy */
-  use_proxy = gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy", NULL);
-
-  /* Is the mode unset or not equal to "manual"? */
+  /* If mode is not manual, nothing to set */
   proxymode = gconf_client_get_string (conf, "/system/proxy/mode", NULL);
-  if (!proxymode || strcmp (proxymode, "manual") != 0)
-    use_proxy = FALSE;
-  g_free (proxymode);
-
-  /* Do we already have a proxy setting? */
-  if (g_hash_table_lookup (env_table, "http_proxy") != NULL)
-    use_proxy = FALSE;
-
-  /* Do we have no proxy host or an empty string? */
-  proxyhost = gconf_client_get_string (conf, HTTP_PROXY_DIR "/host", NULL);
-  if (!proxyhost || proxyhost[0] == '\0')
-    use_proxy = FALSE;
-  g_free (proxyhost);
-
-  /* Set up proxy environment variables if we passed all of the above */
-  if (use_proxy)
+  if (proxymode && 0 == strcmp (proxymode, "manual"))
     {
-      gint port;
-      GSList *ignore;
-      gchar *host, *auth = NULL;
-
-      host = gconf_client_get_string (conf, HTTP_PROXY_DIR "/host", NULL);
-      port = gconf_client_get_int (conf, HTTP_PROXY_DIR "/port", NULL);
-      ignore = gconf_client_get_list (conf, HTTP_PROXY_DIR "/ignore_hosts",
-				      GCONF_VALUE_STRING, NULL);
-
-      if (gconf_client_get_bool (conf, HTTP_PROXY_DIR "/use_authentication", NULL))
-	{
-	  char *user, *password;
-
-	  user = gconf_client_get_string (conf,
-					  HTTP_PROXY_DIR "/authentication_user",
-					  NULL);
-
-	  password = gconf_client_get_string (conf,
-					      HTTP_PROXY_DIR
-					      "/authentication_password",
-					      NULL);
-
-	  if (user && *user != '\0')
-            {
-              if (password)
-                auth = g_strdup_printf ("%s:%s", user, password);
-              else
-                auth = g_strdup (user);
-            }
-
-	  g_free (user);
-	  g_free (password);
-	}
-
-      g_object_unref (conf);
-
-      if (port && host && *host != '\0')
-	{
-	  if (auth)
-            g_hash_table_replace (env_table, g_strdup ("http_proxy"),
-                                  g_strdup_printf ("http://%s@%s:%d/", auth, host, port));
-	  else
-            g_hash_table_replace (env_table, g_strdup ("http_proxy"),
-	                          g_strdup_printf ("http://%s:%d/", host, port));
-	}
-
-      if (auth)
-	g_free (auth);
-
-      if (host)
-	g_free (host);
-
-      if (ignore)
-	{
-	  /* code distantly based on gconf's */
-	  gchar *buf = NULL;
-	  guint bufsize = 64;
-	  guint cur = 0;
-
-	  buf = g_malloc (bufsize + 3);
-
-	  while (ignore != NULL)
-	    {
-	      guint len = strlen (ignore->data);
-
-	      if ((cur + len + 2) >= bufsize) /* +2 for '\0' and comma */
-		{
-		  bufsize = MAX(bufsize * 2, bufsize + len + 4); 
-		  buf = g_realloc (buf, bufsize + 3);
-		}
-
-	      g_assert (cur < bufsize);
-
-	      strcpy (&buf[cur], ignore->data);
-	      cur += len;
-
-	      g_assert(cur < bufsize);
-
-	      buf[cur] = ',';
-	      ++cur;
-
-	      g_assert(cur < bufsize);
-
-	      ignore = g_slist_next (ignore);
-	    }
-
-	  buf[cur-1] = '\0'; /* overwrites last comma */
-
-          g_hash_table_replace (env_table, g_strdup ("no_proxy"), buf);
-	}
+      setup_http_proxy_env (env_table, conf);
     }
+
+  g_free (proxymode);
+  g_object_unref (conf);
 }
 
 
