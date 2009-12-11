@@ -1479,7 +1479,7 @@ get_child_environment (TerminalScreen *screen,
 
       g_object_unref (conf);
 
-      if (port && host && host != '\0')
+      if (port && host && *host != '\0')
 	{
 	  if (auth)
             g_hash_table_replace (env_table, g_strdup ("http_proxy"),
