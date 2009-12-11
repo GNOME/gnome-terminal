@@ -1389,12 +1389,12 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
   port = conf_get_int (conf, HTTP_PROXY_DIR "/port");
   if (host && port)
     {
-      char *http_proxy;
+      char *proxy;
       if (auth)
-	http_proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
+	proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
       else
-	http_proxy = g_strdup_printf ("http://%s:%d/", host, port);
-      set_proxy_env (env_table, "http_proxy", http_proxy);
+	proxy = g_strdup_printf ("http://%s:%d/", host, port);
+      set_proxy_env (env_table, "http_proxy", proxy);
     }
   g_free (host);
 
@@ -1424,6 +1424,40 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
 #define PROXY_DIR "/system/proxy"
 
 static void
+setup_https_proxy_env (GHashTable *env_table, GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, PROXY_DIR "/secure_host");
+  port = conf_get_int (conf, PROXY_DIR "/secure_port");
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("https://%s:%d/", host, port);
+      set_proxy_env (env_table, "https_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
+setup_ftp_proxy_env (GHashTable *env_table, GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, PROXY_DIR "/ftp_host");
+  port = conf_get_int (conf, PROXY_DIR "/ftp_port");
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("ftp://%s:%d/", host, port);
+      set_proxy_env (env_table, "ftp_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
 setup_proxy_env (GHashTable *env_table)
 {
   char *proxymode;
@@ -1437,6 +1471,8 @@ setup_proxy_env (GHashTable *env_table)
   if (proxymode && 0 == strcmp (proxymode, "manual"))
     {
       setup_http_proxy_env (env_table, conf);
+      setup_https_proxy_env (env_table, conf);
+      setup_ftp_proxy_env (env_table, conf);
     }
 
   g_free (proxymode);
