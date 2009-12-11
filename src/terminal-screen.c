@@ -1475,6 +1475,21 @@ setup_socks_proxy_env (GHashTable *env_table, GConfClient *conf)
 }
 
 static void
+setup_autoconfig_proxy_env (GHashTable *env_table, GConfClient *conf)
+{
+  gchar *url;
+
+  url = conf_get_string (conf, PROXY_DIR "/autoconfig_url");
+  if (url)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("pac+%s", url);
+      set_proxy_env (env_table, "http_proxy", proxy);
+    }
+  g_free (url);
+}
+
+static void
 setup_proxy_env (GHashTable *env_table)
 {
   char *proxymode;
@@ -1484,13 +1499,17 @@ setup_proxy_env (GHashTable *env_table)
   gconf_client_preload (conf, PROXY_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 
   /* If mode is not manual, nothing to set */
-  proxymode = gconf_client_get_string (conf, PROXY_DIR "/mode", NULL);
+  proxymode = conf_get_string (conf, PROXY_DIR "/mode");
   if (proxymode && 0 == strcmp (proxymode, "manual"))
     {
       setup_http_proxy_env (env_table, conf);
       setup_https_proxy_env (env_table, conf);
       setup_ftp_proxy_env (env_table, conf);
       setup_socks_proxy_env (env_table, conf);
+    }
+  else if (proxymode && 0 == strcmp (proxymode, "auto"))
+    {
+      setup_autoconfig_proxy_env (env_table, conf);
     }
 
   g_free (proxymode);
