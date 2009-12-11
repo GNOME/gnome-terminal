@@ -1487,9 +1487,11 @@ setup_autoconfig_proxy_env (GHashTable *env_table, GConfClient *conf)
   url = conf_get_string (conf, PROXY_DIR "/autoconfig_url");
   if (url)
     {
+      /* XXX  Not sure what to do with it.  See bug 596688
       char *proxy;
       proxy = g_strdup_printf ("pac+%s", url);
       set_proxy_env (env_table, "http_proxy", proxy);
+      */
     }
   g_free (url);
 }
