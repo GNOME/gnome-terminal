@@ -1465,7 +1465,7 @@ get_child_environment (TerminalScreen *screen,
 					      "/authentication_password",
 					      NULL);
 
-	  if (user && user != '\0')
+	  if (user && *user != '\0')
             {
               if (password)
                 auth = g_strdup_printf ("%s:%s", user, password);
