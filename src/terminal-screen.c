@@ -44,8 +44,6 @@
 
 #include "eggshell.h"
 
-#define HTTP_PROXY_DIR "/system/http_proxy"
-
 #define URL_MATCH_CURSOR  (GDK_HAND2)
 #define SKEY_MATCH_CURSOR (GDK_HAND2)
 
@@ -1305,13 +1303,53 @@ conf_get_string (GConfClient *conf, const char *key)
 static gboolean
 conf_get_bool (GConfClient *conf, const char *key)
 {
-  return gconf_client_get_string (conf, key, NULL);
+  return gconf_client_get_bool (conf, key, NULL);
 }
 
 static gint
 conf_get_int (GConfClient *conf, const char *key)
 {
   return gconf_client_get_int (conf, key, NULL);
+}
+
+/* Consumes value.
+ * Sets for both key and upper(key).
+ * Also, never overwrites a variable. */
+static void
+set_proxy_env (GHashTable *env_table, const char *key, char *value)
+{
+  char *key1 = NULL, *key2 = NULL;
+  char *value1 = NULL, *value2 = NULL;
+
+  if (!value)
+    return;
+
+  if (g_hash_table_lookup (env_table, key) == NULL)
+    key1 = g_strdup (key);
+
+  key2 = g_ascii_strup (key, -1);
+  if (g_hash_table_lookup (env_table, key) != NULL)
+    {
+      g_free (key2);
+      key2 = NULL;
+    }
+
+  if (key1 && key2)
+    {
+      value1 = value;
+      value2 = g_strdup (value);
+    }
+  else if (key1)
+    value1 = value;
+  else if (key2)
+    value2 = value;
+  else
+    g_free (value);
+
+  if (key1)
+    g_hash_table_replace (env_table, key1, value1);
+  if (key2)
+    g_hash_table_replace (env_table, key2, value2);
 }
 
 
@@ -1322,47 +1360,43 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
   gint port;
   GSList *ignore;
 
-  /* Do we already have a proxy setting? */
-  if (g_hash_table_lookup (env_table, "http_proxy") != NULL)
-    return;
+#define HTTP_PROXY_DIR "/system/http_proxy"
 
   if (!conf_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy"))
-    return;
-
-  port = conf_get_int (conf, HTTP_PROXY_DIR "/port");
-  host = conf_get_string (conf, HTTP_PROXY_DIR "/host");
-  if (!host)
     return;
 
   if (conf_get_bool (conf, HTTP_PROXY_DIR "/use_authentication"))
     {
       char *user, *password;
-
       user = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_user");
       password = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_password");
       if (user)
 	{
 	  if (password)
-	    auth = g_strdup_printf ("%s:%s", user, password);
+	    {
+	      auth = g_strdup_printf ("%s:%s", user, password);
+	      g_free (user);
+	    }
 	  else
-	    auth = g_strdup (user);
+	    auth = user;
 	}
-      g_free (user);
       g_free (password);
     }
 
+  host = conf_get_string (conf, HTTP_PROXY_DIR "/host");
+  port = conf_get_int (conf, HTTP_PROXY_DIR "/port");
   if (host && port)
     {
+      char *http_proxy;
       if (auth)
-	g_hash_table_replace (env_table, g_strdup ("http_proxy"),
-			      g_strdup_printf ("http://%s@%s:%d/", auth, host, port));
+	http_proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
       else
-	g_hash_table_replace (env_table, g_strdup ("http_proxy"),
-			      g_strdup_printf ("http://%s:%d/", host, port));
+	http_proxy = g_strdup_printf ("http://%s:%d/", host, port);
+      set_proxy_env (env_table, "http_proxy", http_proxy);
     }
+  g_free (host);
 
   g_free (auth);
-  g_free (host);
 
 
   ignore = gconf_client_get_list (conf, HTTP_PROXY_DIR "/ignore_hosts", GCONF_VALUE_STRING, NULL);
@@ -1381,7 +1415,7 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
 	  g_free (old->data);
 	  g_slist_free_1 (old);
 	}
-      g_hash_table_replace (env_table, g_strdup ("no_proxy"), g_string_free (buf, FALSE));
+      set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
     }
 }
 
