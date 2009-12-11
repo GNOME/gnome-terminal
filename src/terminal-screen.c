@@ -1362,6 +1362,8 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
 
 #define HTTP_PROXY_DIR "/system/http_proxy"
 
+  gconf_client_preload (conf, HTTP_PROXY_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+
   if (!conf_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy"))
     return;
 
@@ -1419,6 +1421,8 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
     }
 }
 
+#define PROXY_DIR "/system/proxy"
+
 static void
 setup_proxy_env (GHashTable *env_table)
 {
@@ -1426,9 +1430,10 @@ setup_proxy_env (GHashTable *env_table)
 
   GConfClient *conf;
   conf = gconf_client_get_default ();
+  gconf_client_preload (conf, PROXY_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 
   /* If mode is not manual, nothing to set */
-  proxymode = gconf_client_get_string (conf, "/system/proxy/mode", NULL);
+  proxymode = gconf_client_get_string (conf, PROXY_DIR "/mode", NULL);
   if (proxymode && 0 == strcmp (proxymode, "manual"))
     {
       setup_http_proxy_env (env_table, conf);
