@@ -1288,137 +1288,14 @@ show_command_error_dialog (TerminalScreen *screen,
                                    "%s", _("There was a problem with the command for this terminal"));
 }
 
-static gboolean
-get_child_command (TerminalScreen *screen,
-                   const char     *shell_env,
-                   char          **file_p,
-                   char         ***argv_p,
-                   GError        **err)
+
+void
+setup_proxy_env (GHashTable *env_table)
 {
-  TerminalScreenPrivate *priv = screen->priv;
-  TerminalProfile *profile;
-  char  *file;
-  char **argv;
-
-  profile = priv->profile;
-
-  file = NULL;
-  argv = NULL;
-  
-  if (file_p)
-    *file_p = NULL;
-  if (argv_p)
-    *argv_p = NULL;
-
-  if (priv->override_command)
-    {
-      file = g_strdup (priv->override_command[0]);
-      argv = g_strdupv (priv->override_command);
-    }
-  else if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND))
-    {
-      if (!g_shell_parse_argv (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND),
-                               NULL, &argv,
-                               err))
-        return FALSE;
-
-      file = g_strdup (argv[0]);
-    }
-  else
-    {
-      const char *only_name;
-      char *shell;
-
-      shell = egg_shell (shell_env);
-
-      file = g_strdup (shell);
-      
-      only_name = strrchr (shell, '/');
-      if (only_name != NULL)
-        only_name++;
-      else
-        only_name = shell;
-
-      argv = g_new (char*, 2);
-
-      if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL))
-        argv[0] = g_strconcat ("-", only_name, NULL);
-      else
-        argv[0] = g_strdup (only_name);
-
-      argv[1] = NULL;
-
-      g_free (shell);
-    }
-
-  if (file_p)
-    *file_p = file;
-  else
-    g_free (file);
-
-  if (argv_p)
-    *argv_p = argv;
-  else
-    g_strfreev (argv);
-
-  return TRUE;
-}
-
-static char**
-get_child_environment (TerminalScreen *screen,
-                       char **shell)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *term = GTK_WIDGET (screen);
-  GtkWidget *window;
-  char **env;
-  char *e, *v;
   char *proxymode, *proxyhost;
   gboolean use_proxy;
+
   GConfClient *conf;
-  GHashTable *env_table;
-  GHashTableIter iter;
-  GPtrArray *retval;
-  guint i;
-
-  window = gtk_widget_get_toplevel (term);
-  g_assert (window != NULL && GTK_WIDGET_TOPLEVEL (window));
-
-  env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-
-  /* First take the factory's environment */
-  env = g_listenv ();
-  for (i = 0; env[i]; ++i)
-    g_hash_table_insert (env_table, env[i], g_strdup (g_getenv (env[i])));
-  g_free (env); /* the strings themselves are now owned by the hash table */
-
-  /* and then merge the child environment, if any */
-  env = priv->initial_env;
-  if (env)
-    {
-      for (i = 0; env[i]; ++i)
-        {
-          v = strchr (env[i], '=');
-          if (v)
-             g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
-           else
-             g_hash_table_replace (env_table, g_strdup (env[i]), NULL);
-        }
-    }
-
-  g_hash_table_remove (env_table, "COLUMNS");
-  g_hash_table_remove (env_table, "LINES");
-  g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
-  
-  g_hash_table_replace (env_table, g_strdup ("COLORTERM"), g_strdup (EXECUTABLE_NAME));
-  g_hash_table_replace (env_table, g_strdup ("TERM"), g_strdup ("xterm")); /* FIXME configurable later? */
-  
-#ifdef GDK_WINDOWING_X11
-  /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
-  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (window->window)));
-  g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
-#endif
-
   conf = gconf_client_get_default ();
 
   /* Series of conditions under which we don't set http_proxy */
@@ -1534,6 +1411,138 @@ get_child_environment (TerminalScreen *screen,
           g_hash_table_replace (env_table, g_strdup ("no_proxy"), buf);
 	}
     }
+}
+
+
+static gboolean
+get_child_command (TerminalScreen *screen,
+                   const char     *shell_env,
+                   char          **file_p,
+                   char         ***argv_p,
+                   GError        **err)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  TerminalProfile *profile;
+  char  *file;
+  char **argv;
+
+  profile = priv->profile;
+
+  file = NULL;
+  argv = NULL;
+  
+  if (file_p)
+    *file_p = NULL;
+  if (argv_p)
+    *argv_p = NULL;
+
+  if (priv->override_command)
+    {
+      file = g_strdup (priv->override_command[0]);
+      argv = g_strdupv (priv->override_command);
+    }
+  else if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND))
+    {
+      if (!g_shell_parse_argv (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND),
+                               NULL, &argv,
+                               err))
+        return FALSE;
+
+      file = g_strdup (argv[0]);
+    }
+  else
+    {
+      const char *only_name;
+      char *shell;
+
+      shell = egg_shell (shell_env);
+
+      file = g_strdup (shell);
+      
+      only_name = strrchr (shell, '/');
+      if (only_name != NULL)
+        only_name++;
+      else
+        only_name = shell;
+
+      argv = g_new (char*, 2);
+
+      if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL))
+        argv[0] = g_strconcat ("-", only_name, NULL);
+      else
+        argv[0] = g_strdup (only_name);
+
+      argv[1] = NULL;
+
+      g_free (shell);
+    }
+
+  if (file_p)
+    *file_p = file;
+  else
+    g_free (file);
+
+  if (argv_p)
+    *argv_p = argv;
+  else
+    g_strfreev (argv);
+
+  return TRUE;
+}
+
+static char**
+get_child_environment (TerminalScreen *screen,
+                       char **shell)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+  GtkWidget *term = GTK_WIDGET (screen);
+  GtkWidget *window;
+  char **env;
+  char *e, *v;
+  GHashTable *env_table;
+  GHashTableIter iter;
+  GPtrArray *retval;
+  guint i;
+
+  window = gtk_widget_get_toplevel (term);
+  g_assert (window != NULL && GTK_WIDGET_TOPLEVEL (window));
+
+  env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  /* First take the factory's environment */
+  env = g_listenv ();
+  for (i = 0; env[i]; ++i)
+    g_hash_table_insert (env_table, env[i], g_strdup (g_getenv (env[i])));
+  g_free (env); /* the strings themselves are now owned by the hash table */
+
+  /* and then merge the child environment, if any */
+  env = priv->initial_env;
+  if (env)
+    {
+      for (i = 0; env[i]; ++i)
+        {
+          v = strchr (env[i], '=');
+          if (v)
+             g_hash_table_replace (env_table, g_strndup (env[i], v - env[i]), g_strdup (v + 1));
+           else
+             g_hash_table_replace (env_table, g_strdup (env[i]), NULL);
+        }
+    }
+
+  g_hash_table_remove (env_table, "COLUMNS");
+  g_hash_table_remove (env_table, "LINES");
+  g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
+  
+  g_hash_table_replace (env_table, g_strdup ("COLORTERM"), g_strdup (EXECUTABLE_NAME));
+  g_hash_table_replace (env_table, g_strdup ("TERM"), g_strdup ("xterm")); /* FIXME configurable later? */
+  
+#ifdef GDK_WINDOWING_X11
+  /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
+  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (window->window)));
+  g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
+#endif
+
+  setup_proxy_env (env_table);
 
   retval = g_ptr_array_sized_new (g_hash_table_size (env_table));
   g_hash_table_iter_init (&iter, env_table);
