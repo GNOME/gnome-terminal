@@ -1458,6 +1458,23 @@ setup_ftp_proxy_env (GHashTable *env_table, GConfClient *conf)
 }
 
 static void
+setup_socks_proxy_env (GHashTable *env_table, GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, PROXY_DIR "/socks_host");
+  port = conf_get_int (conf, PROXY_DIR "/socks_port");
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("socks://%s:%d/", host, port);
+      set_proxy_env (env_table, "all_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
 setup_proxy_env (GHashTable *env_table)
 {
   char *proxymode;
@@ -1473,6 +1490,7 @@ setup_proxy_env (GHashTable *env_table)
       setup_http_proxy_env (env_table, conf);
       setup_https_proxy_env (env_table, conf);
       setup_ftp_proxy_env (env_table, conf);
+      setup_socks_proxy_env (env_table, conf);
     }
 
   g_free (proxymode);
