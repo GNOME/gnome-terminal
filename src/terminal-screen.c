@@ -966,6 +966,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS) ||
       prop_name == I_(TERMINAL_PROFILE_FOREGROUND_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG) ||
       prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_PALETTE))
     update_color_scheme (screen);
@@ -1097,7 +1098,9 @@ update_color_scheme (TerminalScreen *screen)
     {
       fg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
       bg_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
-      bold_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BOLD_COLOR);
+
+      if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG))
+	bold_color = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BOLD_COLOR);
 
       if (fg_color)
         fg = *fg_color;

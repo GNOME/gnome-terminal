@@ -175,19 +175,22 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
       prop_name == I_(TERMINAL_PROFILE_FOREGROUND_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR) ||
       prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG) ||
       prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS))
     {
-      gboolean fg_locked, bg_locked, use_theme_colors;
+      gboolean fg_locked, bg_locked, use_theme_colors, bold_same_as_fg;
 
       fg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
       bg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
       use_theme_colors = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS);
+      bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
 
       SET_SENSITIVE ("foreground-colorpicker", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("foreground-colorpicker-label", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("background-colorpicker", !use_theme_colors && !bg_locked);
       SET_SENSITIVE ("background-colorpicker-label", !use_theme_colors && !bg_locked);
-      SET_SENSITIVE ("bold-colorpicker", !use_theme_colors && !fg_locked);
+      SET_SENSITIVE ("bold-color-same-as-fg-checkbox", !use_theme_colors && !fg_locked);
+      SET_SENSITIVE ("bold-colorpicker", !use_theme_colors && !fg_locked && !bold_same_as_fg);
       SET_SENSITIVE ("bold-colorpicker-label", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("color-scheme-combobox", !use_theme_colors && !fg_locked && !bg_locked);
       SET_SENSITIVE ("color-scheme-combobox-label", !use_theme_colors && !fg_locked && !bg_locked);
@@ -290,7 +293,7 @@ color_scheme_combo_changed_cb (GtkWidget *combo,
       g_object_set (profile,
                     TERMINAL_PROFILE_FOREGROUND_COLOR, &color_schemes[i].foreground,
                     TERMINAL_PROFILE_BACKGROUND_COLOR, &color_schemes[i].background,
-                    TERMINAL_PROFILE_BOLD_COLOR, &color_schemes[i].bold,
+                    TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG, TRUE,
                     NULL);
       g_signal_handlers_unblock_by_func (profile, G_CALLBACK (profile_colors_notify_scheme_combo_cb), combo);
     }
@@ -305,19 +308,26 @@ profile_colors_notify_scheme_combo_cb (TerminalProfile *profile,
                                        GParamSpec *pspec,
                                        GtkComboBox *combo)
 {
-  const GdkColor *fg, *bg, *bold;
+  const GdkColor *fg, *bg;
   guint i;
+  gboolean bold_same_as_fg;
 
   fg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
   bg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
-  bold = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BOLD_COLOR);
+  bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
 
-  for (i = 0; i < G_N_ELEMENTS (color_schemes); ++i)
+  if (fg && bg && bold_same_as_fg)
     {
-      if (fg && gdk_color_equal (fg, &color_schemes[i].foreground) &&
-          bg && gdk_color_equal (bg, &color_schemes[i].background) &&
-          bold && gdk_color_equal (bold, &color_schemes[i].bold))
-        break;
+      for (i = 0; i < G_N_ELEMENTS (color_schemes); ++i)
+	{
+	  if (gdk_color_equal (fg, &color_schemes[i].foreground) &&
+	      gdk_color_equal (bg, &color_schemes[i].background))
+	    break;
+	}
+    }
+  else
+    {
+      i = G_N_ELEMENTS (color_schemes);
     }
   /* If we didn't find a match, then we get the last combo box item which is "custom" */
 
@@ -763,7 +773,7 @@ terminal_profile_edit (TerminalProfile *profile,
   g_signal_connect (profile, "notify::" TERMINAL_PROFILE_BACKGROUND_COLOR,
                     G_CALLBACK (profile_colors_notify_scheme_combo_cb),
                     w);
-  g_signal_connect (profile, "notify::" TERMINAL_PROFILE_BOLD_COLOR,
+  g_signal_connect (profile, "notify::" TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG,
                     G_CALLBACK (profile_colors_notify_scheme_combo_cb),
                     w);
 
@@ -790,6 +800,7 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("background-colorpicker", TERMINAL_PROFILE_BACKGROUND_COLOR);
   CONNECT ("background-image-filechooser", TERMINAL_PROFILE_BACKGROUND_IMAGE_FILE);
   CONNECT ("backspace-binding-combobox", TERMINAL_PROFILE_BACKSPACE_BINDING);
+  CONNECT ("bold-color-same-as-fg-checkbox", TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
   CONNECT ("bold-colorpicker", TERMINAL_PROFILE_BOLD_COLOR);
   CONNECT ("cursor-shape-combobox", TERMINAL_PROFILE_CURSOR_SHAPE);
   CONNECT ("custom-command-entry", TERMINAL_PROFILE_CUSTOM_COMMAND);
