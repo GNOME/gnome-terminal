@@ -36,20 +36,19 @@ struct _TerminalColorScheme
   const char *name;
   const GdkColor foreground;
   const GdkColor background;
-  const GdkColor bold;
 };
 
 static const TerminalColorScheme color_schemes[] = {
   { N_("Black on light yellow"),
-    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xDDDD }, { 0, 0x0000, 0x0000, 0x0000 } },
+    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xDDDD } },
   { N_("Black on white"),
-    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 } },
+    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xFFFF } },
   { N_("Gray on black"),
-    { 0, 0xAAAA, 0xAAAA, 0xAAAA }, { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xAAAA, 0xAAAA, 0xAAAA } },
+    { 0, 0xAAAA, 0xAAAA, 0xAAAA }, { 0, 0x0000, 0x0000, 0x0000 } },
   { N_("Green on black"),
-    { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0x0000, 0xFFFF, 0x0000 } },
+    { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 } },
   { N_("White on black"),
-    { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xFFFF } }
+    { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 } }
 };
 
 static void profile_forgotten_cb (TerminalProfile           *profile,
@@ -293,7 +292,6 @@ color_scheme_combo_changed_cb (GtkWidget *combo,
       g_object_set (profile,
                     TERMINAL_PROFILE_FOREGROUND_COLOR, &color_schemes[i].foreground,
                     TERMINAL_PROFILE_BACKGROUND_COLOR, &color_schemes[i].background,
-                    TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG, TRUE,
                     NULL);
       g_signal_handlers_unblock_by_func (profile, G_CALLBACK (profile_colors_notify_scheme_combo_cb), combo);
     }
@@ -314,9 +312,8 @@ profile_colors_notify_scheme_combo_cb (TerminalProfile *profile,
 
   fg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
   bg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
-  bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
 
-  if (fg && bg && bold_same_as_fg)
+  if (fg && bg)
     {
       for (i = 0; i < G_N_ELEMENTS (color_schemes); ++i)
 	{
@@ -771,9 +768,6 @@ terminal_profile_edit (TerminalProfile *profile,
                     G_CALLBACK (profile_colors_notify_scheme_combo_cb),
                     w);
   g_signal_connect (profile, "notify::" TERMINAL_PROFILE_BACKGROUND_COLOR,
-                    G_CALLBACK (profile_colors_notify_scheme_combo_cb),
-                    w);
-  g_signal_connect (profile, "notify::" TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG,
                     G_CALLBACK (profile_colors_notify_scheme_combo_cb),
                     w);
 
