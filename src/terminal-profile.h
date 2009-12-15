@@ -78,6 +78,8 @@ typedef enum
 #define TERMINAL_PROFILE_CURSOR_SHAPE           "cursor-shape"
 #define TERMINAL_PROFILE_CUSTOM_COMMAND         "custom-command"
 #define TERMINAL_PROFILE_DEFAULT_SHOW_MENUBAR   "default-show-menubar"
+#define TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS   "default-size-columns"
+#define TERMINAL_PROFILE_DEFAULT_SIZE_ROWS      "default-size-rows"
 #define TERMINAL_PROFILE_DELETE_BINDING         "delete-binding"
 #define TERMINAL_PROFILE_EXIT_ACTION            "exit-action"
 #define TERMINAL_PROFILE_FONT                   "font"

@@ -236,6 +236,20 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
     SET_SENSITIVE ("word-chars-entry",
                    !terminal_profile_property_locked (profile, TERMINAL_PROFILE_WORD_CHARS));
 
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS) ||
+      prop_name == I_(TERMINAL_PROFILE_DEFAULT_SIZE_ROWS))
+    {
+      gboolean columns_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS);
+      gboolean rows_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS);
+
+      SET_SENSITIVE ("default-size-label", !columns_locked || !rows_locked);
+      SET_SENSITIVE ("default-size-columns-label", !columns_locked);
+      SET_SENSITIVE ("default-size-columns-spinbutton", !columns_locked);
+      SET_SENSITIVE ("default-size-rows-label", !rows_locked);
+      SET_SENSITIVE ("default-size-rows-spinbutton", !rows_locked);
+    }
+
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POSITION))
     SET_SENSITIVE ("scrollbar-position-combobox",
                    !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION));
@@ -816,6 +830,8 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("cursor-shape-combobox", TERMINAL_PROFILE_CURSOR_SHAPE);
   CONNECT ("custom-command-entry", TERMINAL_PROFILE_CUSTOM_COMMAND);
   CONNECT ("darken-background-scale", TERMINAL_PROFILE_BACKGROUND_DARKNESS);
+  CONNECT ("default-size-columns-spinbutton", TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS);
+  CONNECT ("default-size-rows-spinbutton", TERMINAL_PROFILE_DEFAULT_SIZE_ROWS);
   CONNECT ("delete-binding-combobox", TERMINAL_PROFILE_DELETE_BINDING);
   CONNECT ("exit-action-combobox", TERMINAL_PROFILE_EXIT_ACTION);
   CONNECT ("font-selector", TERMINAL_PROFILE_FONT);

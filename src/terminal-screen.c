@@ -734,6 +734,10 @@ terminal_screen_new (TerminalProfile *profile,
 
   terminal_screen_set_profile (screen, profile);
 
+  vte_terminal_set_size (VTE_TERMINAL (screen),
+			 terminal_profile_get_property_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS),
+			 terminal_profile_get_property_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS));
+
   if (title)
     terminal_screen_set_override_title (screen, title);
 
