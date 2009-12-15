@@ -177,22 +177,35 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
       prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG) ||
       prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS))
     {
-      gboolean fg_locked, bg_locked, use_theme_colors, bold_same_as_fg;
+      gboolean bg_locked, use_theme_colors, fg_locked;
 
+      use_theme_colors = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS);
       fg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
       bg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
-      use_theme_colors = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS);
-      bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
 
       SET_SENSITIVE ("foreground-colorpicker", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("foreground-colorpicker-label", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("background-colorpicker", !use_theme_colors && !bg_locked);
       SET_SENSITIVE ("background-colorpicker-label", !use_theme_colors && !bg_locked);
-      SET_SENSITIVE ("bold-color-same-as-fg-checkbox", !use_theme_colors && !fg_locked);
-      SET_SENSITIVE ("bold-colorpicker", !use_theme_colors && !fg_locked && !bold_same_as_fg);
-      SET_SENSITIVE ("bold-colorpicker-label", !use_theme_colors && !fg_locked);
       SET_SENSITIVE ("color-scheme-combobox", !use_theme_colors && !fg_locked && !bg_locked);
       SET_SENSITIVE ("color-scheme-combobox-label", !use_theme_colors && !fg_locked && !bg_locked);
+    }
+
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR) ||
+      prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG) ||
+      prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS))
+    {
+      gboolean bold_locked, bold_same_as_fg_locked, bold_same_as_fg, use_theme_colors;
+
+      use_theme_colors = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS);
+      bold_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BOLD_COLOR);
+      bold_same_as_fg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
+      bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG);
+
+      SET_SENSITIVE ("bold-color-same-as-fg-checkbox", !use_theme_colors && !bold_same_as_fg_locked);
+      SET_SENSITIVE ("bold-colorpicker", !use_theme_colors && !bold_locked && !bold_same_as_fg);
+      SET_SENSITIVE ("bold-colorpicker-label", !use_theme_colors && ((!bold_same_as_fg && !bold_locked) || !bold_same_as_fg_locked));
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_VISIBLE_NAME))
@@ -232,11 +245,12 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
       prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_UNLIMITED))
     {
       gboolean scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
+      gboolean scrollback_unlimited_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED);
       gboolean scrollback_unlimited = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED);
 
       SET_SENSITIVE ("scrollback-label", !scrollback_lines_locked);
       SET_SENSITIVE ("scrollback-box", !scrollback_lines_locked && !scrollback_unlimited);
-      SET_SENSITIVE ("scrollback-unlimited-checkbutton", !scrollback_lines_locked);
+      SET_SENSITIVE ("scrollback-unlimited-checkbutton", !scrollback_lines_locked && !scrollback_unlimited_locked);
     }
   
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE))
