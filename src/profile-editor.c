@@ -110,7 +110,7 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
                                GtkWidget *editor)
 {
   TerminalBackgroundType bg_type;
-  gboolean use_custom_locked, palette_locked, bg_type_locked, scrollback_lines_locked;
+  gboolean use_custom_locked, palette_locked, bg_type_locked;
   const char *prop_name;
 
   if (pspec)
@@ -227,12 +227,16 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
     SET_SENSITIVE ("scrollbar-position-combobox",
                    !terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBAR_POSITION));
 
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES))
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES) ||
+      prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_UNLIMITED))
     {
-      scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
+      gboolean scrollback_lines_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
+      gboolean scrollback_unlimited = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED);
 
       SET_SENSITIVE ("scrollback-label", !scrollback_lines_locked);
-      SET_SENSITIVE ("scrollback-box", !scrollback_lines_locked);
+      SET_SENSITIVE ("scrollback-box", !scrollback_lines_locked && !scrollback_unlimited);
+      SET_SENSITIVE ("scrollback-unlimited-checkbutton", !scrollback_lines_locked);
     }
   
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE))
@@ -308,7 +312,6 @@ profile_colors_notify_scheme_combo_cb (TerminalProfile *profile,
 {
   const GdkColor *fg, *bg;
   guint i;
-  gboolean bold_same_as_fg;
 
   fg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_FOREGROUND_COLOR);
   bg = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_BACKGROUND_COLOR);
@@ -806,6 +809,8 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("image-radiobutton", TERMINAL_PROFILE_BACKGROUND_TYPE);
   CONNECT ("login-shell-checkbutton", TERMINAL_PROFILE_LOGIN_SHELL);
   CONNECT ("profile-name-entry", TERMINAL_PROFILE_VISIBLE_NAME);
+  CONNECT ("scrollback-lines-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES);
+  CONNECT ("scrollback-unlimited-checkbutton", TERMINAL_PROFILE_SCROLLBACK_UNLIMITED);
   CONNECT ("scroll-background-checkbutton", TERMINAL_PROFILE_SCROLL_BACKGROUND);
   CONNECT ("scrollbar-position-combobox", TERMINAL_PROFILE_SCROLLBAR_POSITION);
   CONNECT ("scroll-on-keystroke-checkbutton", TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE);
@@ -821,7 +826,6 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("use-theme-colors-checkbutton", TERMINAL_PROFILE_USE_THEME_COLORS);
   CONNECT ("word-chars-entry", TERMINAL_PROFILE_WORD_CHARS);
   CONNECT_WITH_FLAGS ("bell-checkbutton", TERMINAL_PROFILE_SILENT_BELL, FLAG_INVERT_BOOL);
-  CONNECT_WITH_FLAGS ("scrollback-lines-spinbutton", TERMINAL_PROFILE_SCROLLBACK_LINES, 0);
 
 #undef CONNECT
 #undef CONNECT_WITH_FLAGS

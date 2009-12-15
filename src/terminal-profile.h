@@ -87,6 +87,7 @@ typedef enum
 #define TERMINAL_PROFILE_PALETTE                "palette"
 #define TERMINAL_PROFILE_SCROLL_BACKGROUND      "scroll-background"
 #define TERMINAL_PROFILE_SCROLLBACK_LINES       "scrollback-lines"
+#define TERMINAL_PROFILE_SCROLLBACK_UNLIMITED   "scrollback-unlimited"
 #define TERMINAL_PROFILE_SCROLLBAR_POSITION     "scrollbar-position"
 #define TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE    "scroll-on-keystroke"
 #define TERMINAL_PROFILE_SCROLL_ON_OUTPUT       "scroll-on-output"

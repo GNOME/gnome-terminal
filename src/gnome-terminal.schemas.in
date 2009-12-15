@@ -192,6 +192,7 @@
            Default color of bold text in the terminal, as a color
            specification (can be HTML-style hex digits, or
            a color name such as "red").
+	   This is ignored if bold_color_same_as_fg is true.
          </long>
       </locale>
     </schema>
@@ -318,11 +319,27 @@
       <locale name="C">
          <short>Number of lines to keep in scrollback</short>
          <long>
-           Number of scrollback lines to keep around. You can 
-           scroll back in the terminal by this number of lines; 
+           Number of scrollback lines to keep around. You can
+           scroll back in the terminal by this number of lines;
            lines that don't fit in the scrollback are discarded.
-           Be careful with this setting; it's the primary factor 
-           in determining how much memory the terminal will use.      
+	   If scrollback_unlimited is true, this value is ignored.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/scrollback_unlimited</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/scrollback_unlimited</applyto>
+      <owner>gnome-terminal</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether an unlimited number of lines should be kept in scrollback</short>
+         <long>
+	   If true, scrollback lines will never be discarded.  The scrollback
+	   history is stored on disk temporarily, so this may cause the system
+	   to run out of disk space if there is a lot of output to the
+	   terminal.
          </long>
       </locale>
     </schema>

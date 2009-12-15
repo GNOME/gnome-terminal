@@ -983,9 +983,14 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_OUTPUT))
     vte_terminal_set_scroll_on_output (vte_terminal,
                                        terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_OUTPUT));
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES))
-    vte_terminal_set_scrollback_lines (vte_terminal,
-                                       terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES));
+  if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_LINES) ||
+      prop_name == I_(TERMINAL_PROFILE_SCROLLBACK_UNLIMITED))
+    {
+      glong lines = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED) ?
+		    -1 : terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
+      vte_terminal_set_scrollback_lines (vte_terminal, lines);
+    }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_SKEY))
     {
