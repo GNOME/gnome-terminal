@@ -263,7 +263,11 @@ parent_parent_set_cb (GtkWidget *widget,
       g_return_if_fail (GTK_IS_NOTEBOOK (widget->parent));
 
       toplevel = gtk_widget_get_toplevel (widget);
+#if GTK_CHECK_VERSION (2, 19, 3)
+      g_return_if_fail (gtk_widget_is_toplevel (toplevel));
+#else
       g_return_if_fail (GTK_WIDGET_TOPLEVEL (toplevel));
+#endif
 
       priv->window = TERMINAL_WINDOW (toplevel);
     }
@@ -1627,7 +1631,12 @@ get_child_environment (TerminalScreen *screen,
   guint i;
 
   window = gtk_widget_get_toplevel (term);
-  g_assert (window != NULL && GTK_WIDGET_TOPLEVEL (window));
+  g_assert (window != NULL);
+#if GTK_CHECK_VERSION (2, 19, 3)
+  g_assert (gtk_widget_is_toplevel (window));
+#else
+  g_assert (GTK_WIDGET_TOPLEVEL (window));
+#endif
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 

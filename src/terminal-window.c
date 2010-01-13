@@ -2246,7 +2246,14 @@ close_button_clicked_cb (GtkWidget *tab_label,
   TerminalScreen *screen;
 
   toplevel = gtk_widget_get_toplevel (screen_container);
-  if (!GTK_WIDGET_TOPLEVEL (toplevel) || !TERMINAL_IS_WINDOW (toplevel))
+#if GTK_CHECK_VERSION (2, 19, 3)
+  if (!gtk_widget_is_toplevel (toplevel))
+#else
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+#endif
+    return;
+
+  if (!TERMINAL_IS_WINDOW (toplevel))
     return;
 
   window = TERMINAL_WINDOW (toplevel);
@@ -2269,7 +2276,11 @@ terminal_window_add_screen (TerminalWindow *window,
   GtkWidget *screen_container, *tab_label;
 
   old_window = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+#if GTK_CHECK_VERSION (2, 19, 3)
+  if (gtk_widget_is_toplevel (old_window) &&
+#else
   if (GTK_WIDGET_TOPLEVEL (old_window) &&
+#endif
       TERMINAL_IS_WINDOW (old_window) &&
       TERMINAL_WINDOW (old_window)== window)
     return;  
