@@ -136,6 +136,8 @@ static void file_new_tab_callback             (GtkAction *action,
                                                TerminalWindow *window);
 static void file_close_window_callback        (GtkAction *action,
                                                TerminalWindow *window);
+static void file_save_contents_callback       (GtkAction *action,
+                                               TerminalWindow *window);
 static void file_close_tab_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_copy_callback                (GtkAction *action,
@@ -1723,6 +1725,9 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile…"), "",
         NULL,
         G_CALLBACK (file_new_profile_callback) },
+      { "FileSaveContents", GTK_STOCK_SAVE, N_("_Save Contents"), "",
+        NULL,
+        G_CALLBACK (file_save_contents_callback) },
       { "FileCloseTab", GTK_STOCK_CLOSE, N_("C_lose Tab"), "<shift><control>W",
         NULL,
         G_CALLBACK (file_close_tab_callback) },
@@ -3063,9 +3068,95 @@ file_close_window_callback (GtkAction *action,
 {
   if (confirm_close_window_or_tab (window, NULL))
     return;
-  
+
   gtk_widget_destroy (GTK_WIDGET (window));
 }
+
+static void
+save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer terminal)
+{
+  GtkWindow *parent;
+  gchar *filename_uri = NULL;
+  GFile *file;
+  GOutputStream *stream;
+  GError *error = NULL;
+
+  if (response_id != GTK_RESPONSE_ACCEPT)
+    {
+      gtk_widget_destroy (GTK_WIDGET (dialog));
+      return;
+    }
+
+  parent = (GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (terminal), GTK_TYPE_WINDOW);
+  filename_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (dialog));
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+
+  if (filename_uri == NULL)
+    return;
+
+  file = g_file_new_for_uri (filename_uri);
+  stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE, G_FILE_CREATE_NONE, NULL, &error));
+
+  if (stream)
+    {
+      /* XXX
+       * FIXME
+       * This is a sync operation.
+       * Should be replaced with the async version when vte implements that.
+       */
+      vte_terminal_write_contents (terminal, stream,
+				   VTE_TERMINAL_WRITE_DEFAULT,
+				   NULL, &error);
+      g_object_unref (stream);
+    }
+
+  if (error)
+    {
+      terminal_util_show_error_dialog (parent, NULL, error,
+				       "%s", _("Could not save contents"));
+      g_error_free (error);
+    }
+
+  g_object_unref(file);
+  g_free(filename_uri);
+}
+
+static void
+file_save_contents_callback (GtkAction *action,
+                             TerminalWindow *window)
+{
+  GtkWidget *dialog = NULL;
+  TerminalWindowPrivate *priv = window->priv;
+  VteTerminal *terminal;
+
+  if (!priv->active_screen)
+    return;
+
+  terminal = VTE_TERMINAL (priv->active_screen);
+  g_return_if_fail (VTE_IS_TERMINAL (terminal));
+
+  dialog = gtk_file_chooser_dialog_new (_("Save as..."),
+                                        GTK_WINDOW(window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                        NULL);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  /* XXX where should we save to? */
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP));
+
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW(window));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
+
+  g_signal_connect (dialog, "response", G_CALLBACK (save_contents_dialog_on_response), terminal);
+  g_signal_connect (dialog, "delete_event", G_CALLBACK (terminal_util_dialog_response_on_delete), NULL);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
 
 static void
 file_close_tab_callback (GtkAction *action,

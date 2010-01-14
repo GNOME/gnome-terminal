@@ -50,6 +50,7 @@
 #define ACCEL_PATH_NEW_TAB              ACCEL_PATH_ROOT "FileNewTab"
 #define ACCEL_PATH_NEW_WINDOW           ACCEL_PATH_ROOT "FileNewWindow"
 #define ACCEL_PATH_NEW_PROFILE          ACCEL_PATH_ROOT "FileNewProfile"
+#define ACCEL_PATH_SAVE_CONTENTS        ACCEL_PATH_ROOT "FileSaveContents"
 #define ACCEL_PATH_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
 #define ACCEL_PATH_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
 #define ACCEL_PATH_COPY                 ACCEL_PATH_ROOT "EditCopy"
@@ -86,6 +87,7 @@
 #define KEY_PREV_TAB            CONF_KEYS_PREFIX "/prev_tab"
 #define KEY_RESET_AND_CLEAR     CONF_KEYS_PREFIX "/reset_and_clear"
 #define KEY_RESET               CONF_KEYS_PREFIX "/reset"
+#define KEY_SAVE_CONTENTS       CONF_KEYS_PREFIX "/save_contents"
 #define KEY_SET_TERMINAL_TITLE  CONF_KEYS_PREFIX "/set_window_title"
 #define KEY_TOGGLE_MENUBAR      CONF_KEYS_PREFIX "/toggle_menubar"
 #define KEY_ZOOM_IN             CONF_KEYS_PREFIX "/zoom_in"
@@ -122,6 +124,8 @@ static KeyEntry file_entries[] =
     KEY_NEW_WINDOW, ACCEL_PATH_NEW_WINDOW, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_n, NULL, FALSE, TRUE },
   { N_("New Profile"),
     KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE, TRUE },
+  { N_("Save Contents"),
+    KEY_SAVE_CONTENTS, ACCEL_PATH_SAVE_CONTENTS, 0, 0, NULL, FALSE },
   { N_("Close Tab"),
     KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_w, NULL, FALSE, TRUE },
   { N_("Close Window"),
