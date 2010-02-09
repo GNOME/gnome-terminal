@@ -1430,8 +1430,9 @@ setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
 	{
 	  GSList *old;
 
+	  if (buf->len)
+	    g_string_append_c (buf, ',');
 	  g_string_append (buf, ignore->data);
-	  g_string_append_c (buf, ',');
 
 	  old = ignore;
 	  ignore = g_slist_next (ignore);
