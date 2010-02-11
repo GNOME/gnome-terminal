@@ -3,14 +3,14 @@
 # <qk269@hotmail.com>, 2002.
 # Jordi Mallach <jordi@sindominio.net>, 2002, 2003, 2004, 2005.
 # Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006, 2007.
-# Joan Duran <jodufi@gmail.com>, 2009.
+# Joan Duran <jodufi@gmail.com>, 2009, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-21 01:24+0200\n"
-"PO-Revision-Date: 2009-09-10 17:57+0200\n"
+"POT-Creation-Date: 2010-02-11 20:27+0100\n"
+"PO-Revision-Date: 2010-02-11 19:54+0100\n"
 "Last-Translator: Joan Duran <jodufi@gmail.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:304
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1890
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:129
+#: ../src/terminal-accels.c:226 ../src/terminal.c:304
+#: ../src/terminal-profile.c:158 ../src/terminal-window.c:1897
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -98,10 +98,10 @@ msgid ""
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keybinding for this action."
 msgstr ""
-"Tecla acceleradora per a separar la pestanya actual. S'expressa com una "
-"cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
-"Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
-"assignació de tecla per a aquesta acció."
+"Tecla acceleradora per separar la pestanya actual. S'expressa com una cadena "
+"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:4
 msgid ""
@@ -110,9 +110,9 @@ msgid ""
 "the special string \"disabled\", then there will be no keybinding for this "
 "action."
 msgstr ""
-"Tecla acceleradora per a moure la pestanya actual a l'esquerra. S'expressa "
-"com a una cadena en el mateix format que l'utilitzat als fitxers de recursos "
-"de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"Tecla acceleradora per moure la pestanya actual a l'esquerra. S'expressa com "
+"a una cadena en el mateix format que l'utilitzat als fitxers de recursos de "
+"GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:5
@@ -122,22 +122,22 @@ msgid ""
 "the special string \"disabled\", then there will be no keybinding for this "
 "action."
 msgstr ""
-"Tecla acceleradora per a moure la pestanya actual a la dreta. S'expressa com "
-"a una cadena en el mateix format que l'utilitzat als fitxers de recursos de "
-"GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"Tecla acceleradora per moure la pestanya actual a la dreta. S'expressa com a "
+"una cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK"
+"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:6
 msgid "Accelerator to detach current tab."
-msgstr "Accelerador per a separar la pestanya actual."
+msgstr "Accelerador per separar la pestanya actual."
 
 #: ../src/gnome-terminal.schemas.in.h:7
 msgid "Accelerator to move the current tab to the left."
-msgstr "Accelerador per a moure la pestanya actual a l'esquerra."
+msgstr "Accelerador per moure la pestanya actual a l'esquerra."
 
 #: ../src/gnome-terminal.schemas.in.h:8
 msgid "Accelerator to move the current tab to the right."
-msgstr "Accelerador per a moure la pestanya actual a la dreta."
+msgstr "Accelerador per moure la pestanya actual a la dreta."
 
 #: ../src/gnome-terminal.schemas.in.h:9
 msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
@@ -165,75 +165,97 @@ msgid "Default"
 msgstr "Predeterminat"
 
 #: ../src/gnome-terminal.schemas.in.h:15
+msgid "Default color of bold text in the terminal"
+msgstr "Color predeterminat del text en negreta al terminal"
+
+#: ../src/gnome-terminal.schemas.in.h:16
+msgid ""
+"Default color of bold text in the terminal, as a color specification (can be "
+"HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
+"bold_color_same_as_fg is true."
+msgstr ""
+"Color predeterminat del text en negreta al terminal, com una especificació "
+"de color (poden ser dígits hexadecimals en estil HTML o un nom de color tal "
+"com «red» (vermell)). S'ignorarà si «bold_color_same_as_fg» està habilitat."
+
+#: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of terminal background"
 msgstr "El color de fons del terminal per defecte"
 
-#: ../src/gnome-terminal.schemas.in.h:16
+#: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
 "Color predeterminat del fons del terminal, com una especificació de color "
-"(pot ser dígits hexadecimals a l'estil HTML, o un nom de color tal com «red»)."
+"(poden ser dígits hexadecimals en estil HTML, o un nom de color tal com "
+"«red» (vermell))."
 
-#: ../src/gnome-terminal.schemas.in.h:17
+#: ../src/gnome-terminal.schemas.in.h:19
 msgid "Default color of text in the terminal"
 msgstr "Color predeterminat del text al terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:18
+#: ../src/gnome-terminal.schemas.in.h:20
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
 "Color predeterminat del text al terminal, com una especificació de color "
-"(pot ser en estil HTML de dígits hexadecimals o un nom de color tal com "
-"«red»)."
+"(poden ser dígits hexadecimals en estil HTML o un nom de color tal com «red»)."
 
-#: ../src/gnome-terminal.schemas.in.h:19
+#: ../src/gnome-terminal.schemas.in.h:21
+msgid "Default number of columns"
+msgstr "Nombre predeterminat de columnes"
+
+#: ../src/gnome-terminal.schemas.in.h:22
+msgid "Default number of rows"
+msgstr "Nombre predeterminat de files"
+
+#: ../src/gnome-terminal.schemas.in.h:23
 msgid "Effect of the Backspace key"
 msgstr "Efecte de la tecla de retrocés"
 
-#: ../src/gnome-terminal.schemas.in.h:20
+#: ../src/gnome-terminal.schemas.in.h:24
 msgid "Effect of the Delete key"
-msgstr "Efecte de la tecla suprimeix"
+msgstr "Efecte de la tecla de supressió"
 
-#: ../src/gnome-terminal.schemas.in.h:21
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Filename of a background image."
 msgstr "Nom del fitxer d'una imatge de fons."
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "Font"
-msgstr "Font"
+msgstr "Tipus de lletra"
 
 # FIXME
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:25
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "Highlight S/Key challenges"
 msgstr "Ressalta els desafiaments d'S/Key"
 
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "How much to darken the background image"
 msgstr "Quant s'ha d'enfosquir la imatge de fons"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid "Human-readable name of the profile"
 msgstr "Nom del perfil llegible per humans"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "Human-readable name of the profile."
 msgstr "Nom del perfil llegible per humans."
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid "Icon for terminal window"
 msgstr "Icona per a la finestra del terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr ""
 "Icona a utilitzar per a les pestanyes/finestres que continguen aquest perfil."
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -241,17 +263,24 @@ msgid ""
 "values are \"replace\", \"before\", \"after\", and \"ignore\"."
 msgstr ""
 "Si l'aplicació dins del terminal estableix el títol (típicament, la gent té "
-"el seu intèrpret configurat per a fer açò), el títol dinàmicament establert "
+"el seu intèrpret configurat per fer això), el títol dinàmicament establert "
 "pot esborrar el títol configurat, anar davant, darrere o reemplaçar-lo. Els "
 "valors possibles són «replace», «before», «after» i «ignore»."
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Si està habilitat, permet a les aplicacions dins del terminal mostrar text "
 "en negreta."
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:37
+msgid ""
+"If true, boldface text will be rendered using the same color as normal text."
+msgstr ""
+"Si està habilitat, es renderitzarà el text en negreta utilitzant el mateix "
+"color que el text normal."
+
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -259,11 +288,11 @@ msgstr ""
 "Si està habilitat, no fa cap soroll quan les aplicacions envien la seqüència "
 "d'escapada de l'avís sonor del terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Si està habilitat, en prémer una tecla fa que es desplaci al fons."
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -271,7 +300,18 @@ msgstr ""
 "Si està habilitat, desplaça la imatge de fons amb el text del primer pla; "
 "sinó, manté la imatge en una posició fixa i hi desplaça el text per sobre."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:41
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"Si està habilitat, les línies de desplaçament no es descartaran mai. "
+"L'historial de desplaçament s'emmagatzema temporalment al disc, de manera "
+"que això pot provocar que el sistema es quedi sense espai al disc si hi ha "
+"molta sortida al terminal."
+
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -279,7 +319,7 @@ msgstr ""
 "Si està habilitat, l'ordre dins del terminal s'iniciarà com a un intèrpret "
 "d'entrada. (argv[0] tindrà un guió davant seu.)"
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -288,7 +328,7 @@ msgstr ""
 "del terminal s'executi."
 
 # monospace -> no recorde com vam quedar a la llista i no trobe el missatge. jm
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -297,7 +337,7 @@ msgstr ""
 "global per a tot l'escriptori si és monoespai (i el tipus de lletra més "
 "similar que puga trobar si no és així)."
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -306,7 +346,7 @@ msgstr ""
 "d'entrada de text s'utilitzarà per al terminal, en comptes dels colors "
 "indicats per l'usuari."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -314,491 +354,507 @@ msgstr ""
 "Si està habilitat, el valor de la configuració custom_command s'utilitzarà "
 "en comptes d'executar un intèrpret."
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Si està habilitat, quan hi hagi nova sortida el terminal, es desplaçarà al "
 "fons."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
 "you set the option to the special string \"disabled\", then there will be no "
 "keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a mostrar el diàleg de creació de perfils. S'expressa "
+"Tecla acceleradora per mostrar el diàleg de creació de perfils. S'expressa "
 "com una cadena en el mateix format que l'utilitzat als fitxers de recursos "
 "de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a tancar una pestanya. S'expressa com una cadena en "
-"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
+"Tecla acceleradora per tancar una pestanya. S'expressa com una cadena en el "
+"mateix format que l'utilitzat als fitxers de recursos de GTK+. Si establiu "
+"l'opció a la cadena especial «disabled», no hi haurà cap assignació de tecla "
+"per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a tancar una finestra. S'expressa com una cadena en "
-"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
+"Tecla acceleradora per tancar una finestra. S'expressa com una cadena en el "
+"mateix format que l'utilitzat als fitxers de recursos de GTK+. Si establiu "
+"l'opció a la cadena especial «disabled», no hi haurà cap assignació de tecla "
+"per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
 "option to the special string \"disabled\", then there will be no keyboard "
 "shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a copiar el text seleccionat al porta-retalls. "
+"Tecla acceleradora per copiar el text seleccionat al porta-retalls. "
 "S'expressa com una cadena en el mateix format que l'utilitzat als fitxers de "
 "recursos de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi "
 "haurà cap assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a mostrar l'ajuda. S'expressa com una cadena en el "
+"Tecla acceleradora per mostrar l'ajuda. S'expressa com una cadena en el "
 "mateix format que l'utilitzat als fitxers de recursos de GTK+. Si establiu "
 "l'opció a la cadena especial «disabled», no hi haurà cap assignació de tecla "
 "per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a fer el tipus de lletra més gran. S'expressa com una "
+"Tecla acceleradora per fer el tipus de lletra més gran. S'expressa com una "
 "cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
 "Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a fer el tipus de lletra més petit. S'expressa com "
-"una cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK"
-"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"Tecla acceleradora per fer el tipus de lletra més petit. S'expressa com una "
+"cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
+"Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a fer el tipus de lletra de mida normal. S'expressa "
-"com una cadena en el mateix format que l'utilitzat als fitxers de recursos "
-"de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"Tecla acceleradora per fer el tipus de lletra de mida normal. S'expressa com "
+"una cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK"
+"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a obrir una nova pestanya. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"Tecla acceleradora per obrir una nova pestanya. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a obrir una nova finestra. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"Tecla acceleradora per obrir una nova finestra. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
 "files. If you set the option to the special string \"disabled\", then there "
 "will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a enganxar el text seleccionat des del porta-retalls. "
+"Tecla acceleradora per enganxar el text seleccionat des del porta-retalls. "
 "S'expressa com una cadena en el mateix format que l'utilitzat als fitxers de "
 "recursos de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi "
 "haurà cap assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 1. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"Tecla acceleradora per canviar a la pestanya 1. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 10. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:55
-msgid ""
-"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 11. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:56
-msgid ""
-"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 12. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:57
-msgid ""
-"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 2. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:58
-msgid ""
-"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 3. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:59
-msgid ""
-"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 4. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
-"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
-"de tecla per a aquesta acció."
-
-#: ../src/gnome-terminal.schemas.in.h:60
-msgid ""
-"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 5. S'expressa com una cadena "
+"Tecla acceleradora per canviar a la pestanya 10. S'expressa com una cadena "
 "en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
-"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 6. S'expressa com una cadena "
+"Tecla acceleradora per canviar a la pestanya 11. S'expressa com una cadena "
 "en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
-"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
+"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 7. S'expressa com una cadena "
+"Tecla acceleradora per canviar a la pestanya 12. S'expressa com una cadena "
 "en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:63
 msgid ""
-"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 8. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"Tecla acceleradora per canviar a la pestanya 2. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:64
 msgid ""
-"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
 "string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya 9. S'expressa com una cadena "
-"en el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"Tecla acceleradora per canviar a la pestanya 3. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
-"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a commutar el mode a pantalla sencera. S'expressa com "
-"una cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK"
-"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
-"assignació de tecla per a aquesta acció."
+"Tecla acceleradora per canviar a la pestanya 4. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
-"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a reiniciar i netejar el terminal. S'expressa com una "
-"cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
-"Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
-"assignació de tecla per a aquesta acció."
+"Tecla acceleradora per canviar a la pestanya 5. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
-"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
+"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a reiniciar el terminal. S'expressa com una cadena en "
+"Tecla acceleradora per canviar a la pestanya 6. S'expressa com una cadena en "
 "el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
 "establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
 "de tecla per a aquesta acció."
 
 #: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
+"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Tecla acceleradora per canviar a la pestanya 7. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:69
+msgid ""
+"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Tecla acceleradora per canviar a la pestanya 8. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:70
+msgid ""
+"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
+"format used for GTK+ resource files. If you set the option to the special "
+"string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr ""
+"Tecla acceleradora per canviar a la pestanya 9. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:71
+msgid ""
+"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Tecla acceleradora per commutar el mode a pantalla sencera. S'expressa com "
+"una cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK"
+"+. Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"assignació de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:72
+msgid ""
+"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
+"in the same format used for GTK+ resource files. If you set the option to "
+"the special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Tecla acceleradora per reiniciar i netejar el terminal. S'expressa com una "
+"cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
+"Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
+"assignació de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:73
+msgid ""
+"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
+"same format used for GTK+ resource files. If you set the option to the "
+"special string \"disabled\", then there will be no keyboard shortcut for "
+"this action."
+msgstr ""
+"Tecla acceleradora per reiniciar el terminal. S'expressa com una cadena en "
+"el mateix format que l'utilitzat als fitxers de recursos de GTK+. Si "
+"establiu l'opció a la cadena especial «disabled», no hi haurà cap assignació "
+"de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:74
+msgid ""
+"Keyboard shortcut key to save the current tab contents to a file. Expressed "
+"as a string in the same format used for GTK+ resource files. If you set the "
+"option to the special string \"disabled\", then there will be no keyboard "
+"shortcut for this action."
+msgstr ""
+"Tecla acceleradora per desar el contingut de la pestanya actual a un fitxer. "
+"S'expressa com una cadena en el mateix format que l'utilitzat als fitxers de "
+"recursos de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi "
+"haurà cap assignació de tecla per a aquesta acció."
+
+#: ../src/gnome-terminal.schemas.in.h:75
+msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a establir el títol del terminal. S'expressa com una "
+"Tecla acceleradora per establir el títol del terminal. S'expressa com una "
 "cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
 "Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
 "special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya següent. S'expressa com una "
+"Tecla acceleradora per canviar a la pestanya següent. S'expressa com una "
 "cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
 "Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
 "the special string \"disabled\", then there will be no keyboard shortcut for "
 "this action."
 msgstr ""
-"Tecla acceleradora per a canviar a la pestanya anterior. S'expressa com una "
+"Tecla acceleradora per canviar a la pestanya anterior. S'expressa com una "
 "cadena en el mateix format que l'utilitzat als fitxers de recursos de GTK+. "
 "Si establiu l'opció a la cadena especial «disabled», no hi haurà cap "
 "assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
 "option to the special string \"disabled\", then there will be no keyboard "
 "shortcut for this action."
 msgstr ""
-"Tecla acceleradora per a commutar la visibilitat de la barra de menú. "
+"Tecla acceleradora per commutar la visibilitat de la barra de menú. "
 "S'expressa com una cadena en el mateix format que l'utilitzat als fitxers de "
 "recursos de GTK+. Si establiu l'opció a la cadena especial «disabled», no hi "
 "haurà cap assignació de tecla per a aquesta acció."
 
-#: ../src/gnome-terminal.schemas.in.h:72
-msgid "Keyboard shortcut to close a tab"
-msgstr "Accelerador per a tancar una pestanya"
-
-#: ../src/gnome-terminal.schemas.in.h:73
-msgid "Keyboard shortcut to close a window"
-msgstr "Accelerador per a tancar una finestra"
-
-#: ../src/gnome-terminal.schemas.in.h:74
-msgid "Keyboard shortcut to copy text"
-msgstr "Accelerador per a copiar text"
-
-#: ../src/gnome-terminal.schemas.in.h:75
-msgid "Keyboard shortcut to create a new profile"
-msgstr "Accelerador per a crear un nou perfil"
-
-#: ../src/gnome-terminal.schemas.in.h:76
-msgid "Keyboard shortcut to launch help"
-msgstr "Accelerador per a llançar l'ajuda"
-
-#: ../src/gnome-terminal.schemas.in.h:77
-msgid "Keyboard shortcut to make font larger"
-msgstr "Accelerador per a fer el tipus de lletra més gran"
-
-#: ../src/gnome-terminal.schemas.in.h:78
-msgid "Keyboard shortcut to make font normal-size"
-msgstr "Accelerador per a fer el tipus de lletra de mida normal"
-
 #: ../src/gnome-terminal.schemas.in.h:79
-msgid "Keyboard shortcut to make font smaller"
-msgstr "Accelerador per a fer el tipus de lletra més petit"
+msgid "Keyboard shortcut to close a tab"
+msgstr "Accelerador per tancar una pestanya"
 
 #: ../src/gnome-terminal.schemas.in.h:80
-msgid "Keyboard shortcut to open a new tab"
-msgstr "Accelerador per a obrir una nova pestanya"
+msgid "Keyboard shortcut to close a window"
+msgstr "Accelerador per tancar una finestra"
 
 #: ../src/gnome-terminal.schemas.in.h:81
-msgid "Keyboard shortcut to open a new window"
-msgstr "Accelerador per a obrir una nova finestra"
+msgid "Keyboard shortcut to copy text"
+msgstr "Accelerador per copiar text"
 
 #: ../src/gnome-terminal.schemas.in.h:82
-msgid "Keyboard shortcut to paste text"
-msgstr "Accelerador per a enganxar text"
+msgid "Keyboard shortcut to create a new profile"
+msgstr "Accelerador per crear un nou perfil"
 
 #: ../src/gnome-terminal.schemas.in.h:83
-msgid "Keyboard shortcut to reset and clear the terminal"
-msgstr "Accelerador per a reiniciar i netejar el terminal"
+msgid "Keyboard shortcut to launch help"
+msgstr "Accelerador per llançar l'ajuda"
 
 #: ../src/gnome-terminal.schemas.in.h:84
-msgid "Keyboard shortcut to reset the terminal"
-msgstr "Accelerador per a reiniciar el terminal"
+msgid "Keyboard shortcut to make font larger"
+msgstr "Accelerador per fer el tipus de lletra més gran"
 
 #: ../src/gnome-terminal.schemas.in.h:85
-msgid "Keyboard shortcut to set the terminal title"
-msgstr "Accelerador per a establir el títol del terminal"
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "Accelerador per fer el tipus de lletra de mida normal"
 
 #: ../src/gnome-terminal.schemas.in.h:86
-msgid "Keyboard shortcut to switch to tab 1"
-msgstr "Accelerador per a canviar a la pestanya 1"
+msgid "Keyboard shortcut to make font smaller"
+msgstr "Accelerador per fer el tipus de lletra més petit"
 
 #: ../src/gnome-terminal.schemas.in.h:87
-msgid "Keyboard shortcut to switch to tab 10"
-msgstr "Accelerador per a canviar a la pestanya 10"
+msgid "Keyboard shortcut to open a new tab"
+msgstr "Accelerador per obrir una nova pestanya"
 
 #: ../src/gnome-terminal.schemas.in.h:88
-msgid "Keyboard shortcut to switch to tab 11"
-msgstr "Accelerador per a canviar a la pestanya 11"
+msgid "Keyboard shortcut to open a new window"
+msgstr "Accelerador per obrir una nova finestra"
 
 #: ../src/gnome-terminal.schemas.in.h:89
-msgid "Keyboard shortcut to switch to tab 12"
-msgstr "Accelerador per a canviar a la pestanya 12"
+msgid "Keyboard shortcut to paste text"
+msgstr "Accelerador per enganxar text"
 
 #: ../src/gnome-terminal.schemas.in.h:90
-msgid "Keyboard shortcut to switch to tab 2"
-msgstr "Accelerador per a canviar a la pestanya 2"
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr "Accelerador per reiniciar i netejar el terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:91
-msgid "Keyboard shortcut to switch to tab 3"
-msgstr "Accelerador per a canviar a la pestanya 3"
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "Accelerador per reiniciar el terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:92
-msgid "Keyboard shortcut to switch to tab 4"
-msgstr "Accelerador per a canviar a la pestanya 4"
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "Accelerador per desar el contingut de la pestanya actual a un fitxer"
 
 #: ../src/gnome-terminal.schemas.in.h:93
-msgid "Keyboard shortcut to switch to tab 5"
-msgstr "Accelerador per a canviar a la pestanya 5"
+msgid "Keyboard shortcut to set the terminal title"
+msgstr "Accelerador per establir el títol del terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:94
-msgid "Keyboard shortcut to switch to tab 6"
-msgstr "Accelerador per a canviar a la pestanya 6"
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "Accelerador per canviar a la pestanya 1"
 
 #: ../src/gnome-terminal.schemas.in.h:95
-msgid "Keyboard shortcut to switch to tab 7"
-msgstr "Accelerador per a canviar a la pestanya 7"
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "Accelerador per canviar a la pestanya 10"
 
 #: ../src/gnome-terminal.schemas.in.h:96
-msgid "Keyboard shortcut to switch to tab 8"
-msgstr "Accelerador per a canviar a la pestanya 8"
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "Accelerador per canviar a la pestanya 11"
 
 #: ../src/gnome-terminal.schemas.in.h:97
-msgid "Keyboard shortcut to switch to tab 9"
-msgstr "Accelerador per a canviar a la pestanya 9"
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "Accelerador per canviar a la pestanya 12"
 
 #: ../src/gnome-terminal.schemas.in.h:98
-msgid "Keyboard shortcut to switch to the next tab"
-msgstr "Accelerador per a canviar a la pestanya següent"
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "Accelerador per canviar a la pestanya 2"
 
 #: ../src/gnome-terminal.schemas.in.h:99
-msgid "Keyboard shortcut to switch to the previous tab"
-msgstr "Accelerador per a canviar a la pestanya anterior"
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "Accelerador per canviar a la pestanya 3"
 
 #: ../src/gnome-terminal.schemas.in.h:100
-msgid "Keyboard shortcut to toggle full screen mode"
-msgstr "Accelerador per a commutar el mode a pantalla sencera"
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "Accelerador per canviar a la pestanya 4"
 
 #: ../src/gnome-terminal.schemas.in.h:101
-msgid "Keyboard shortcut to toggle the visibility of the menubar"
-msgstr "Accelerador per a canviar la visibilitat de la barra del menú"
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "Accelerador per canviar a la pestanya 5"
 
 #: ../src/gnome-terminal.schemas.in.h:102
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "Accelerador per canviar a la pestanya 6"
+
+#: ../src/gnome-terminal.schemas.in.h:103
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "Accelerador per canviar a la pestanya 7"
+
+#: ../src/gnome-terminal.schemas.in.h:104
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "Accelerador per canviar a la pestanya 8"
+
+#: ../src/gnome-terminal.schemas.in.h:105
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "Accelerador per canviar a la pestanya 9"
+
+#: ../src/gnome-terminal.schemas.in.h:106
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "Accelerador per canviar a la pestanya següent"
+
+#: ../src/gnome-terminal.schemas.in.h:107
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "Accelerador per canviar a la pestanya anterior"
+
+#: ../src/gnome-terminal.schemas.in.h:108
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr "Accelerador per commutar el mode a pantalla sencera"
+
+#: ../src/gnome-terminal.schemas.in.h:109
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "Accelerador per canviar la visibilitat de la barra del menú"
+
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "Llista de codificacions disponibles"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "Llista de perfils"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -806,40 +862,47 @@ msgstr ""
 "Llista de perfils coneguts per gnome-terminal. La llista conté cadenes que "
 "nombren subdirectoris relatius a /apps/gnome-terminal/profiles."
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
 "standard menubar accelerator to be disabled."
 msgstr ""
-"Normalment podeu accedir a la barra de menú amb F10. Açò també es pot "
-"personalitzar mitjançant gtkrc (gtk-menu-bar-accel = «el que siga»). Aquesta "
+"Normalment podeu accedir a la barra de menú amb F10. Això també es pot "
+"personalitzar mitjançant gtkrc (gtk-menu-bar-accel = «whatever»). Aquesta "
 "opció permet que l'accelerador de barra de menú estàndard es puga "
 "inhabilitar."
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:114
+msgid "Number of columns in newly created terminal windows."
+msgstr "Nombre de columnes en les finestres de terminal acabades de crear."
+
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "Nombre de línies a mantenir en el desplaçament"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:116
+msgid "Number of rows in newly created terminal windows."
+msgstr "Nombre de files en les finestres de terminal acabades de crear."
+
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. Be careful with this setting; it's the primary factor in "
-"determining how much memory the terminal will use."
+"discarded. If scrollback_unlimited is true, this value is ignored."
 msgstr ""
 "Nombre de línies de desplaçament a mantenir. Podeu desplaçar-vos cap enrere "
 "en el terminal aquest nombre de línies; les línies que no càpiguen al "
-"desplaçament es descarten. Aneu amb compte amb aquesta configuració, és el "
-"principal factor per a determinar quanta memòria utilitzarà el terminal."
+"desplaçament es descarten. Si «scrollback_unlimited» està habilitat, "
+"s'ignorarà aquest valor."
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "Paleta per a les aplicacions de terminal"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -848,36 +911,36 @@ msgstr ""
 "d'un desafiament d's/key. Si es tecleja una contrasenya al diàleg, s'enviarà "
 "al terminal."
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Position of the scrollbar"
 msgstr "Posició de la barra de desplaçament"
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
 msgstr ""
-"Els valors possibles són «close» per a tancar el terminal i «reinicia» per a "
-"tornar a executar l'ordre."
+"Els valors possibles són «close» per tancar el terminal i «restart» per tornar "
+"a executar l'ordre."
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Perfil a utilitzar quan s'obre una nova finestra o pestanya. Ha d'estar a "
 "profile_list."
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid "Profile to use for new terminals"
 msgstr "Perfil a utilitzar per a nous terminals"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Executa aquesta ordre en comptes de l'intèrpret, si use_custom_command és "
 "cert."
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -891,7 +954,7 @@ msgstr ""
 "d'escapada normalment associada a retrocés o suprimeix. «ascii-del» és "
 "considerada normalment la configuració correcta de la tecla de retrocés."
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -905,7 +968,7 @@ msgstr ""
 "d'escapada normalment associada a retrocés o suprimeix. «escape-sequence» és "
 "considerada normalment la configuració correcta de la tecla de retrocés."
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -916,32 +979,32 @@ msgstr ""
 "llista de noms de colors separats per dos punts. Els colors han d'estar en "
 "format hexadecimal, com per exemple «#FF00FF»."
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "The cursor appearance"
 msgstr "L'aparença del cursor"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr ""
-"Els valors possibles són «block» per a utilitzar un bloc, «ibeam» per a "
-"utilitzar una línia vertical o «underline» per a utilitzar un subratllat."
+"Els valors possibles són «block» per utilitzar un bloc, «ibeam» per utilitzar "
+"una línia vertical o «underline» per utilitzar un subratllat."
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
 msgstr ""
 "Els valors possibles són «system» (sistema) per utilitzar el paràmetre de "
-"parpelleig del cursor global, «on» (activat) o «off» (apagat) per a establir "
+"parpelleig del cursor global, «on» (activat) o «off» (apagat) per establir "
 "explícitament el mode."
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Title for terminal"
 msgstr "Títol pel terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -951,7 +1014,7 @@ msgstr ""
 "pot reemplaçar o combinar amb el títol establert per l'aplicació dins del "
 "terminal, depenent de la configuració title_mode."
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -959,7 +1022,7 @@ msgstr ""
 "Cert si la barra de menú s'ha de mostrar a les noves finestres, per a "
 "finestres/pestanyes amb aquest perfil."
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
@@ -970,15 +1033,15 @@ msgstr ""
 "un gestor de finestres de composició (en cas contrari serà una "
 "pseudotransparència)."
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid "What to do with dynamic title"
 msgstr "Què cal fer amb el títol dinàmic"
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "What to do with the terminal when the child command exits"
 msgstr "Què cal fer amb el terminal quan l'ordre filla surt"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -988,7 +1051,7 @@ msgstr ""
 "se seleccioni text per paraules. Es poden donar rangs com «A-Z». El guió "
 "literal (que no expressi un rang) ha de ser el primer caràcter donat."
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
@@ -996,21 +1059,30 @@ msgstr ""
 "On s'ha de mostrar la barra de desplaçament del terminal. Les possibilitats "
 "són «left», «right» i «disabled»."
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:142
+msgid "Whether an unlimited number of lines should be kept in scrollback"
+msgstr ""
+"Si s'hauria de mantenir un nombre de línies il·limitat en el desplaçament"
+
+#: ../src/gnome-terminal.schemas.in.h:143
+msgid "Whether bold text should use the same color as normal text"
+msgstr ""
+"Si el text en negreta hauria d'utilitzar el mateix color que el text normal"
+
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether the menubar has access keys"
 msgstr "Si la barra de menú té dreceres"
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
-"Si la drecera estàndard de GTK per a accedir a les barres de menú està "
-"activada"
+"Si la drecera estàndard de GTK per accedir a les barres de menú està activada"
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to allow bold text"
 msgstr "Si es permet o no text en negreta"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -1018,15 +1090,15 @@ msgstr ""
 "Si s'ha de demanar confirmació en tancar una finestra del terminal que té "
 "més d'una pestanya oberta."
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Si s'ha de demanar confirmació en tancar finestres del terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to blink the cursor"
 msgstr "Si el cursor ha de parpellejar"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1036,47 +1108,47 @@ msgstr ""
 "interferir amb algunes aplicacions dins del terminal així doncs és possible "
 "inhabilitar-les."
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Si s'ha d'executar l'ordre dins del terminal com un intèrpret d'entrada"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to run a custom command instead of the shell"
 msgstr ""
 "Si s'executa o no una ordre personalitzada en comptes de l'intèrpret d'ordres"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to scroll background image"
 msgstr "Si s'ha de desplaçar la imatge de fons"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Si s'ha de desplaçar al final quan es prem una tecla"
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Si s'ha de desplaçar al final quan hi ha una sortida nova"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Si s'ha de mostrar la barra de menú a les finestres/pestanyes noves"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to silence terminal bell"
 msgstr "Si s'ha de silenciar l'avís sonor del terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Si s'ha d'actualitzar el registre d'entrada quan s'executa l'ordre del "
 "terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:159
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Si s'han d'utilitzar els colors del tema per al giny del terminal"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:160
 msgid "Whether to use the system font"
 msgstr "Si s'ha d'utilitzar el tipus de lletra del sistema"
 
@@ -1086,7 +1158,7 @@ msgstr "Si s'ha d'utilitzar el tipus de lletra del sistema"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:167
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,ISO-8859-1,current]"
 
@@ -1109,52 +1181,46 @@ msgstr ""
 msgid "_Shortcut keys:"
 msgstr "_Dreceres:"
 
-#: ../src/profile-editor.c:45
+#: ../src/profile-editor.c:42
 msgid "Black on light yellow"
 msgstr "Negre sobre groc clar"
 
-#: ../src/profile-editor.c:47
+#: ../src/profile-editor.c:44
 msgid "Black on white"
 msgstr "Negre sobre blanc"
 
-#: ../src/profile-editor.c:49
+#: ../src/profile-editor.c:46
 msgid "Gray on black"
 msgstr "Gris sobre negre"
 
-#: ../src/profile-editor.c:51
+#: ../src/profile-editor.c:48
 msgid "Green on black"
 msgstr "Verd sobre negre"
 
-#: ../src/profile-editor.c:53
+#: ../src/profile-editor.c:50
 msgid "White on black"
 msgstr "Blanc sobre negre"
 
-#: ../src/profile-editor.c:437
+#: ../src/profile-editor.c:479
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "S'ha produït un error en analitzar l'ordre: %s"
 
-#: ../src/profile-editor.c:457
+#: ../src/profile-editor.c:499
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Edició del perfil «%s»"
 
-#. Translators: %s will be a data size, e.g. "(about 500kB)"
-#: ../src/profile-editor.c:473
-#, c-format
-msgid "(about %s)"
-msgstr "(uns %s)"
-
-#: ../src/profile-editor.c:612
+#: ../src/profile-editor.c:637
 msgid "Images"
 msgstr "Imatges"
 
-#: ../src/profile-editor.c:738
+#: ../src/profile-editor.c:763
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Escolliu el color %d de la paleta"
 
-#: ../src/profile-editor.c:742
+#: ../src/profile-editor.c:767
 #, c-format
 msgid "Palette entry %d"
 msgstr "Entrada %d de la paleta"
@@ -1171,7 +1237,7 @@ msgstr "Perfil _emprat quan es llanci un terminal nou:"
 msgid "C_reate"
 msgstr "C_rea"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:123
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:125
 msgid "New Profile"
 msgstr "Perfil nou"
 
@@ -1188,8 +1254,8 @@ msgid "<b>Command</b>"
 msgstr "<b>Ordre</b>"
 
 #: ../src/profile-preferences.glade.h:2
-msgid "<b>Foreground and Background</b>"
-msgstr "<b>Primer pla i fons</b>"
+msgid "<b>Foreground, Background, and Bold</b>"
+msgstr "<b>Primer pla, fons i negreta</b>"
 
 #: ../src/profile-preferences.glade.h:3
 msgid "<b>Palette</b>"
@@ -1258,51 +1324,59 @@ msgstr ""
 "Subratllat"
 
 #: ../src/profile-preferences.glade.h:18
+msgid "Bol_d color:"
+msgstr "Color de la _negreta:"
+
+#: ../src/profile-preferences.glade.h:19
 msgid "Built-in _schemes:"
 msgstr "_Esquemes integrats:"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:20
 msgid "Built-in sche_mes:"
 msgstr "Esquemes _integrats:"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:21
 msgid "Choose A Terminal Font"
 msgstr "Trieu un tipus de lletra de terminal"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose Terminal Background Color"
 msgstr "Trieu el color de fons del terminal"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:23
 msgid "Choose Terminal Text Color"
 msgstr "Trieu el color del text del terminal"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:24
 msgid "Color p_alette:"
 msgstr "_Paleta de colors:"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:25
 msgid "Colors"
 msgstr "Colors"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:26
 msgid "Compatibility"
 msgstr "Compatibilitat"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:27
 msgid "Cursor _shape:"
 msgstr "_Forma del cursor:"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
+#: ../src/profile-preferences.glade.h:28 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "Personalitzat"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:29
 msgid "Custom co_mmand:"
 msgstr "_Ordre personalitzada:"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:30
+msgid "Default si_ze:"
+msgstr "_Mida predeterminada:"
+
+#: ../src/profile-preferences.glade.h:31
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1312,19 +1386,19 @@ msgstr ""
 "Reinicia l'ordre\n"
 "Manté el terminal obert"
 
-#: ../src/profile-preferences.glade.h:32
+#: ../src/profile-preferences.glade.h:34
 msgid "General"
 msgstr "General"
 
-#: ../src/profile-preferences.glade.h:33
+#: ../src/profile-preferences.glade.h:35
 msgid "Image _file:"
 msgstr "_Fitxer d'imatge:"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:36
 msgid "Initial _title:"
 msgstr "Títol _inicial:"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:37
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1334,11 +1408,11 @@ msgstr ""
 "A la part dreta\n"
 "Inhabilitada"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.glade.h:40
 msgid "Profile Editor"
 msgstr "Editor de perfils"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:41
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1350,44 +1424,44 @@ msgstr ""
 "Va després del títol inicial\n"
 "Manté el títol inicial"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:45
 msgid "Ru_n a custom command instead of my shell"
 msgstr ""
 "E_xecuta una ordre personalitzada en comptes del meu intèrpret d'ordres"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:46
 msgid "S_hade transparent or image background:"
 msgstr "_Enfosqueix la transparència o imatge de fons:"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:47
 msgid "Scroll on _keystroke"
 msgstr "Desplaçament en _prémer una tecla"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:48
 msgid "Scroll on _output"
 msgstr "Desplaçament en _sortida"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:49
 msgid "Scroll_back:"
 msgstr "Desplaçament cap _enrere:"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:50
 msgid "Scrolling"
 msgstr "Desplaçament"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:51
 msgid "Select Background Image"
 msgstr "Trieu la imatge del fons"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.glade.h:52
 msgid "Select-by-_word characters:"
 msgstr "Caràcters de _selecció per paraula:"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.glade.h:53
 msgid "Show _menubar by default in new terminals"
 msgstr "Mostra la barra del _menú per defecte"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.glade.h:54
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1401,89 +1475,105 @@ msgstr ""
 "Rxvt\n"
 "Personalitzat"
 
-#: ../src/profile-preferences.glade.h:57
+#: ../src/profile-preferences.glade.h:59
 msgid "Terminal _bell"
 msgstr "_Avís sonor del terminal"
 
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.glade.h:60
 msgid "Title and Command"
 msgstr "Títol i ordre"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:61
 msgid "When command _exits:"
 msgstr "Quan l'ordre _surt:"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:62
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Quan les ordres del terminal estableixin el seu propi _títol:"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:63
 msgid "_Allow bold text"
 msgstr "Permet text en _negreta"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:64
 msgid "_Background color:"
 msgstr "Color del _fons:"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:65
 msgid "_Background image"
 msgstr "_Imatge de fons"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:66
 msgid "_Backspace key generates:"
 msgstr "La tecla de _retrocés genera:"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:67
 msgid "_Delete key generates:"
 msgstr "La tecla de _suprimir genera:"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:68
 msgid "_Font:"
 msgstr "Tipus de _lletra:"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:69
 msgid "_Profile name:"
 msgstr "Nom del _perfil:"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:70
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "Reinicia les _opcions de compatibilitat a aquelles per defecte"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:71
 msgid "_Run command as a login shell"
 msgstr "_Executa una ordre com a entrada a l'intèrpret d'ordres"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:72
+msgid "_Same as text color"
+msgstr "El matei_x que el color del text"
+
+#: ../src/profile-preferences.glade.h:73
 msgid "_Scrollbar is:"
 msgstr "La _barra de desplaçament és:"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:74
 msgid "_Solid color"
 msgstr "Color _sòlid"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:75
 msgid "_Text color:"
 msgstr "Color del _text:"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:76
 msgid "_Transparent background"
 msgstr "F_ons transparent"
 
-#: ../src/profile-preferences.glade.h:74
-msgid "_Update login records when command is launched"
-msgstr "_Actualitza el registres d'entrada quan s'executi l'ordre"
+#: ../src/profile-preferences.glade.h:77
+msgid "_Unlimited"
+msgstr "_Il·limitat"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:78
+msgid "_Update login records when command is launched"
+msgstr "_Actualitza els registres d'entrada quan s'executi l'ordre"
+
+#: ../src/profile-preferences.glade.h:79
 msgid "_Use colors from system theme"
 msgstr "_Utilitza els colors del tema del sistema"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:80
 msgid "_Use the system fixed width font"
 msgstr "_Utilitza el tipus de lletra d'amplada fixa del sistema"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:81
+msgid "columns"
+msgstr "columnes"
+
+#: ../src/profile-preferences.glade.h:82
 msgid "lines"
 msgstr "línies"
+
+#: ../src/profile-preferences.glade.h:83
+msgid "rows"
+msgstr "files"
 
 #: ../src/skey-challenge.glade.h:1
 msgid "S/Key Challenge Response"
@@ -1503,176 +1593,180 @@ msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr ""
 "El text sobre el que heu fet clic sembla no ser un desafiament OTP vàlid."
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:121
 msgid "New Tab"
 msgstr "Pestanya nova"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:123
 msgid "New Window"
 msgstr "Finestra nova"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:127
+msgid "Save Contents"
+msgstr "Desa el contingut"
+
+#: ../src/terminal-accels.c:129
 msgid "Close Tab"
 msgstr "Tanca la pestanya"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:131
 msgid "Close Window"
 msgstr "Tanca la finestra"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:137
 msgid "Copy"
 msgstr "Copia"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:139
 msgid "Paste"
 msgstr "Enganxa"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:145
 msgid "Hide and Show menubar"
 msgstr "Amaga i mostra la barra de menú"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:147
 msgid "Full Screen"
 msgstr "Pantalla completa"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:149
 msgid "Zoom In"
 msgstr "Amplia el zoom"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:151
 msgid "Zoom Out"
 msgstr "Redueix el zoom"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:153
 msgid "Normal Size"
 msgstr "Mida normal"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3374
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:3482
 msgid "Set Title"
 msgstr "Estableix el títol"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:161
 msgid "Reset"
 msgstr "Reinicia"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:163
 msgid "Reset and Clear"
 msgstr "Reinicia i neteja"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:169
 msgid "Switch to Previous Tab"
 msgstr "Canvia a la pestanya anterior"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:171
 msgid "Switch to Next Tab"
 msgstr "Canvia a la pestanya següent"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Mou pestanya a l'esquerra"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:175
 msgid "Move Tab to the Right"
 msgstr "Mou pestanya a la dreta"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:177
 msgid "Detach Tab"
 msgstr "Separa la pestanya"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:179
 msgid "Switch to Tab 1"
 msgstr "Canvia a la pestanya 1"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:182
 msgid "Switch to Tab 2"
 msgstr "Canvia a la pestanya 2"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:185
 msgid "Switch to Tab 3"
 msgstr "Canvia a la pestanya 3"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:188
 msgid "Switch to Tab 4"
 msgstr "Canvia a la pestanya 4"
 
-#: ../src/terminal-accels.c:187
+#: ../src/terminal-accels.c:191
 msgid "Switch to Tab 5"
 msgstr "Canvia a la pestanya 5"
 
-#: ../src/terminal-accels.c:190
+#: ../src/terminal-accels.c:194
 msgid "Switch to Tab 6"
 msgstr "Canvia a la pestanya 6"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:197
 msgid "Switch to Tab 7"
 msgstr "Canvia a la pestanya 7"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:200
 msgid "Switch to Tab 8"
 msgstr "Canvia a la pestanya 8"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:203
 msgid "Switch to Tab 9"
 msgstr "Canvia a la pestanya 9"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:206
 msgid "Switch to Tab 10"
 msgstr "Canvia a la pestanya 10"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:209
 msgid "Switch to Tab 11"
 msgstr "Canvia a la pestanya 11"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:212
 msgid "Switch to Tab 12"
 msgstr "Canvia a la pestanya 12"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:218
 msgid "Contents"
 msgstr "Continguts"
 
-#: ../src/terminal-accels.c:219
+#: ../src/terminal-accels.c:223
 msgid "File"
 msgstr "Fitxer"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:224
 msgid "Edit"
 msgstr "Edita"
 
-#: ../src/terminal-accels.c:221
+#: ../src/terminal-accels.c:225
 msgid "View"
 msgstr "Visualitza"
 
 #
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:227
 msgid "Tabs"
 msgstr "Pestanyes"
 
-#: ../src/terminal-accels.c:224
+#: ../src/terminal-accels.c:228
 msgid "Help"
 msgstr "Ajuda"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
+#: ../src/terminal-accels.c:285 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Inhabilitada"
 
-#: ../src/terminal-accels.c:753
+#: ../src/terminal-accels.c:757
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "La tecla de drecera «%s» ja està assignada a l'acció «%s»"
 
-#: ../src/terminal-accels.c:911
+#: ../src/terminal-accels.c:915
 msgid "_Action"
 msgstr "_Acció"
 
-#: ../src/terminal-accels.c:930
+#: ../src/terminal-accels.c:934
 msgid "Shortcut _Key"
 msgstr "_Tecla de drecera"
 
 #: ../src/terminal-app.c:482
 msgid "Click button to choose profile"
-msgstr "Feu clic per a triar el perfil"
+msgstr "Feu clic per triar el perfil"
 
 #: ../src/terminal-app.c:567
 msgid "Profile list"
@@ -1848,7 +1942,7 @@ msgstr "Croat"
 
 #: ../src/terminal-encoding.c:94
 msgid "Hindi"
-msgstr "Hindi"
+msgstr "Hindú"
 
 #: ../src/terminal-encoding.c:95
 msgid "Persian"
@@ -1898,7 +1992,7 @@ msgstr ""
 "Podeu crear un perfil amb la configuració desitjada i utilitzar l'opció nova "
 "«--profile»\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3595
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3703
 msgid "GNOME Terminal"
 msgstr "Terminal del GNOME"
 
@@ -1992,12 +2086,10 @@ msgstr "Mostra la finestra a pantalla completa"
 
 #: ../src/terminal-options.c:1037
 msgid ""
-"Set the window geometry from the provided X geometry specification; see the "
-"\"X\" man page for more information"
+"Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"
 msgstr ""
-"Estableix la geometria de la finestra a partir de l'especificació de "
-"geometria X proporcionada. Per a obtenir més informació vegeu la pàgina del "
-"manual d'«X»"
+"Establiu la mida de la finestra; per exemple 80x24 or 80x24+200+200 "
+"(FILESxCOLUMNES+X+Y)"
 
 #: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
@@ -2045,7 +2137,7 @@ msgid "DIRNAME"
 msgstr "DIRECTORI"
 
 #: ../src/terminal-options.c:1104
-msgid "Set the terminalx's zoom factor (1.0 = normal size)"
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Estableix el factor d'ampliació del terminal (1.0 = mida normal)"
 
 #: ../src/terminal-options.c:1105
@@ -2065,7 +2157,7 @@ msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr ""
-"Opcions per a obrir finestres o pestanyes de terminal noves. Se'n pot "
+"Opcions per obrir finestres o pestanyes de terminal noves. Se'n pot "
 "especificar més d'una:"
 
 #: ../src/terminal-options.c:1370
@@ -2096,15 +2188,15 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Mostra les opcions individuals per terminal"
 
-#: ../src/terminal-profile.c:150
+#: ../src/terminal-profile.c:164
 msgid "Unnamed"
 msgstr "Sense nom"
 
-#: ../src/terminal-screen.c:1288
+#: ../src/terminal-screen.c:1307
 msgid "There was a problem with the command for this terminal"
 msgstr "Hi ha hagut un problema amb l'ordre per aquest terminal"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1745
 msgid "There was an error creating the child process for this terminal"
 msgstr "S'ha produït un error en crear el subprocés per aquest terminal"
 
@@ -2117,16 +2209,16 @@ msgstr "Tanca la pestanya"
 msgid "Switch to this tab"
 msgstr "Canvia a aquesta pestanya"
 
-#: ../src/terminal-util.c:181
+#: ../src/terminal-util.c:183
 msgid "There was an error displaying help"
 msgstr "S'ha produït un error en mostrar l'ajuda"
 
-#: ../src/terminal-util.c:254
+#: ../src/terminal-util.c:256
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "No s'ha pogut obrir l'adreça «%s»"
 
-#: ../src/terminal-util.c:362
+#: ../src/terminal-util.c:363
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2138,7 +2230,7 @@ msgstr ""
 "estat publicada per la Free Software Foundation; ja sigui la versió 2 de la "
 "Llicència o bé (si ho preferiu) qualsevol altra versió posterior."
 
-#: ../src/terminal-util.c:366
+#: ../src/terminal-util.c:367
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2150,7 +2242,7 @@ msgstr ""
 "ADEQUACIÓ PER UN PROPÒSIT PARTICULAR. Vegeu la Llicència Pública General GNU "
 "per obtenir-ne més detalls."
 
-#: ../src/terminal-util.c:370
+#: ../src/terminal-util.c:371
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2165,7 +2257,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:432
+#: ../src/terminal-window.c:434
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2174,197 +2266,201 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:438
+#: ../src/terminal-window.c:440
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1703
+#: ../src/terminal-window.c:1707
 msgid "_File"
 msgstr "_Fitxer"
 
 #. File menu
-#: ../src/terminal-window.c:1704 ../src/terminal-window.c:1715
-#: ../src/terminal-window.c:1837
+#: ../src/terminal-window.c:1708 ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1844
 msgid "Open _Terminal"
 msgstr "Obre un _terminal"
 
-#: ../src/terminal-window.c:1705 ../src/terminal-window.c:1718
-#: ../src/terminal-window.c:1840
+#: ../src/terminal-window.c:1709 ../src/terminal-window.c:1722
+#: ../src/terminal-window.c:1847
 msgid "Open Ta_b"
 msgstr "Obre una _pestanya"
 
-#: ../src/terminal-window.c:1706
+#: ../src/terminal-window.c:1710
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../src/terminal-window.c:1707
+#: ../src/terminal-window.c:1711
 msgid "_View"
 msgstr "_Visualitza"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1712
 msgid "_Terminal"
 msgstr "_Terminal"
 
 #
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1713
 msgid "Ta_bs"
 msgstr "_Pestanyes"
 
-#: ../src/terminal-window.c:1710
+#: ../src/terminal-window.c:1714
 msgid "_Help"
 msgstr "A_juda"
 
 #
-#: ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:1725
 msgid "New _Profile…"
-msgstr "_Perfil nou..."
+msgstr "_Perfil nou…"
 
-#: ../src/terminal-window.c:1724 ../src/terminal-window.c:1846
+#: ../src/terminal-window.c:1728
+msgid "_Save Contents"
+msgstr "De_sa el contingut"
+
+#: ../src/terminal-window.c:1731 ../src/terminal-window.c:1853
 msgid "C_lose Tab"
 msgstr "Tanca la p_estanya"
 
-#: ../src/terminal-window.c:1727
+#: ../src/terminal-window.c:1734
 msgid "_Close Window"
 msgstr "Tanca la _finestra"
 
-#: ../src/terminal-window.c:1738 ../src/terminal-window.c:1834
+#: ../src/terminal-window.c:1745 ../src/terminal-window.c:1841
 msgid "Paste _Filenames"
 msgstr "Enganxa els _noms de fitxers"
 
-#: ../src/terminal-window.c:1744
+#: ../src/terminal-window.c:1751
 msgid "P_rofiles…"
-msgstr "P_erfils..."
+msgstr "P_erfils…"
 
-#: ../src/terminal-window.c:1747
+#: ../src/terminal-window.c:1754
 msgid "_Keyboard Shortcuts…"
-msgstr "_Dreceres de teclat..."
+msgstr "_Dreceres de teclat…"
 
-#: ../src/terminal-window.c:1750
+#: ../src/terminal-window.c:1757
 msgid "Pr_ofile Preferences"
 msgstr "_Preferències del perfil"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:1773
 msgid "Change _Profile"
 msgstr "Canvia de _perfil"
 
 #
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1774
 msgid "_Set Title…"
-msgstr "_Estableix el títol..."
+msgstr "_Estableix el títol…"
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1777
 msgid "Set _Character Encoding"
 msgstr "Estableix la _codificació dels caràcters"
 
-#: ../src/terminal-window.c:1771
+#: ../src/terminal-window.c:1778
 msgid "_Reset"
 msgstr "_Reinicia"
 
-#: ../src/terminal-window.c:1774
+#: ../src/terminal-window.c:1781
 msgid "Reset and C_lear"
 msgstr "Reinicia i _neteja"
 
 #
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1786
 msgid "_Add or Remove…"
-msgstr "_Afegeix o suprimeix..."
+msgstr "_Afegeix o suprimeix…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1784
+#: ../src/terminal-window.c:1791
 msgid "_Previous Tab"
 msgstr "Pestanya _anterior"
 
-#: ../src/terminal-window.c:1787
+#: ../src/terminal-window.c:1794
 msgid "_Next Tab"
 msgstr "Pestanya _següent"
 
 #
-#: ../src/terminal-window.c:1790
+#: ../src/terminal-window.c:1797
 msgid "Move Tab _Left"
 msgstr "Mou la pestanya a l'_esquerra"
 
 #
-#: ../src/terminal-window.c:1793
+#: ../src/terminal-window.c:1800
 msgid "Move Tab _Right"
 msgstr "Mou la pestanya a la _dreta"
 
 #
-#: ../src/terminal-window.c:1796
+#: ../src/terminal-window.c:1803
 msgid "_Detach tab"
 msgstr "_Separa la pestanya"
 
 #. Help menu
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1808
 msgid "_Contents"
 msgstr "_Continguts"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1811
 msgid "_About"
 msgstr "_Quant a"
 
 #. Popup menu
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1816
 msgid "_Send Mail To…"
-msgstr "En_via un correu a..."
+msgstr "En_via un correu a…"
 
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1819
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça de correu"
 
-#: ../src/terminal-window.c:1815
+#: ../src/terminal-window.c:1822
 msgid "C_all To…"
-msgstr "Truc_a a..."
+msgstr "Truc_a a…"
 
-#: ../src/terminal-window.c:1818
+#: ../src/terminal-window.c:1825
 msgid "_Copy Call Address"
 msgstr "_Copia l'adreça de trucada"
 
-#: ../src/terminal-window.c:1821
+#: ../src/terminal-window.c:1828
 msgid "_Open Link"
 msgstr "_Obre l'enllaç"
 
-#: ../src/terminal-window.c:1824
+#: ../src/terminal-window.c:1831
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1834
 msgid "P_rofiles"
 msgstr "Pe_rfils"
 
-#: ../src/terminal-window.c:1843 ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:1850 ../src/terminal-window.c:3045
 msgid "C_lose Window"
 msgstr "Tanca la _finestra"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1856
 msgid "L_eave Full Screen"
 msgstr "_Surt de la pantalla completa"
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1859
 msgid "_Input Methods"
 msgstr "Mètodes d'_entrada"
 
 #. View Menu
-#: ../src/terminal-window.c:1858
+#: ../src/terminal-window.c:1865
 msgid "Show _Menubar"
 msgstr "Mostra la _barra del menú"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1869
 msgid "_Full Screen"
 msgstr "_Pantalla completa"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3032
 msgid "Close this window?"
 msgstr "Voleu tancar aquesta finestra?"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3032
 msgid "Close this terminal?"
 msgstr "Voleu tancar aquest terminal?"
 
-#: ../src/terminal-window.c:3014
+#: ../src/terminal-window.c:3036
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2372,7 +2468,7 @@ msgstr ""
 "Encara s'estan executant processos en alguns terminals d'aquesta finestra. "
 "Si la tanqueu es mataran tots."
 
-#: ../src/terminal-window.c:3018
+#: ../src/terminal-window.c:3040
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2380,23 +2476,31 @@ msgstr ""
 "Encara s'està executant un procés en aquest terminal. Si el tanqueu es "
 "matarà aquest procés."
 
-#: ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:3045
 msgid "C_lose Terminal"
 msgstr "_Tanca el terminal"
 
-#: ../src/terminal-window.c:3391
+#: ../src/terminal-window.c:3117
+msgid "Could not save contents"
+msgstr "No s'ha pogut desar el contingut"
+
+#: ../src/terminal-window.c:3139
+msgid "Save as..."
+msgstr "Anomena i desa..."
+
+#: ../src/terminal-window.c:3499
 msgid "_Title:"
 msgstr "Tít_ol:"
 
-#: ../src/terminal-window.c:3578
+#: ../src/terminal-window.c:3686
 msgid "Contributors:"
 msgstr "Col·laboradors:"
 
-#: ../src/terminal-window.c:3597
+#: ../src/terminal-window.c:3705
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulador de terminal per a l'escriptori GNOME"
 
-#: ../src/terminal-window.c:3604
+#: ../src/terminal-window.c:3712
 msgid "translator-credits"
 msgstr ""
 "Nada Nada <qk269@hotmail.com>\n"
@@ -2524,6 +2628,17 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
+#~ msgid "(about %s)"
+#~ msgstr "(uns %s)"
+
+#~ msgid ""
+#~ "Set the window geometry from the provided X geometry specification; see "
+#~ "the \"X\" man page for more information"
+#~ msgstr ""
+#~ "Estableix la geometria de la finestra a partir de l'especificació de "
+#~ "geometria X proporcionada. Per obtenir més informació vegeu la pàgina del "
+#~ "manual d'«X»"
+
 #~ msgid ""
 #~ "If true, font anti-aliasing will be disabled when running without the X "
 #~ "RENDER extension, which gives a considerable performance improvement in "
@@ -2564,7 +2679,7 @@ msgstr "Rxvt"
 #~ "internally to save sessions."
 #~ msgstr ""
 #~ "Obre una finestra nova que contingui una pestanya amb la ID de perfil "
-#~ "donat. S'empra internament per a desar sessions."
+#~ "donat. S'empra internament per desar sessions."
 
 #~ msgid "PROFILEID"
 #~ msgstr "ID DEL PERFIL"
@@ -2574,7 +2689,7 @@ msgstr "Rxvt"
 #~ "internally to save sessions."
 #~ msgstr ""
 #~ "Obre una pestanya nova a la darrera finestra oberta amb la ID de perfil "
-#~ "donat. S'empra internament per a desar sessions."
+#~ "donat. S'empra internament per desar sessions."
 
 #~ msgid ""
 #~ "Set the role for the last-specified window; applies to only one window; "
@@ -2907,7 +3022,7 @@ msgstr "Rxvt"
 
 #
 #~ msgid "C_urrent Profile…"
-#~ msgstr "Perfil _actual..."
+#~ msgstr "Perfil _actual…"
 
 #~ msgid "Show Menu_bar"
 #~ msgstr "Mostra la _barra del menú"
@@ -2946,13 +3061,13 @@ msgstr "Rxvt"
 #~ msgstr "_Perfils:"
 
 #~ msgid "Click to open new profile dialog"
-#~ msgstr "Feu clic per a obrir un nou diàleg de perfil"
+#~ msgstr "Feu clic per obrir un nou diàleg de perfil"
 
 #~ msgid "Click to open edit profile dialog"
-#~ msgstr "Feu clic per a obrir el diàleg d'edició de perfils"
+#~ msgstr "Feu clic per obrir el diàleg d'edició de perfils"
 
 #~ msgid "Click to delete selected profile"
-#~ msgstr "Feu clic per a eliminar el perfil seleccionat"
+#~ msgstr "Feu clic per eliminar el perfil seleccionat"
 
 #~ msgid ""
 #~ "The file \"%s\" is missing. This indicates that the application is "
@@ -3047,10 +3162,10 @@ msgstr "Rxvt"
 #~ msgstr "_Utilitza el tipus de lletra en negreta"
 
 #~ msgid "Click to choose font type"
-#~ msgstr "Feu clic per a triar el tipus de lletra"
+#~ msgstr "Feu clic per triar el tipus de lletra"
 
 #~ msgid "Click to choose font size"
-#~ msgstr "Feu clic per a triar la mida del tipus de lletra"
+#~ msgstr "Feu clic per triar la mida del tipus de lletra"
 
 #~ msgid "roman"
 #~ msgstr "romana"
@@ -3085,9 +3200,6 @@ msgstr "Rxvt"
 #~ msgstr ""
 #~ "S'ha sobrepassat el nombre màxim de tipus de lletra (MAX_FONTS). Pot ser "
 #~ "que alguns tipus de lletra no papreguin."
-
-#~ msgid "Could not load font \"%s\"\n"
-#~ msgstr "No es pot carregar «%s»\n"
 
 #~ msgid ""
 #~ "There was an error subscribing to notification of menu icon visibility "
@@ -3262,7 +3374,7 @@ msgstr "Rxvt"
 #~ msgstr "No es mostra"
 
 #~ msgid "Open a dialog to specify the color"
-#~ msgstr "Obre un diàleg per a especificar el color"
+#~ msgstr "Obre un diàleg per especificar el color"
 
 #~ msgid "kilobytes"
 #~ msgstr "kilobytes"
