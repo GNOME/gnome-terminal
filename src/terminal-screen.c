@@ -18,6 +18,8 @@
 
 #include <config.h>
 
+#undef VTE_DISABLE_DEPRECATED
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -39,6 +41,10 @@
 #include "terminal-screen-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+
+#if GTK_CHECK_VERSION (2, 18, 0)
+#include "terminal-info-bar.h"
+#endif
 
 #include "eggshell.h"
 
@@ -1403,6 +1409,27 @@ get_child_environment (TerminalScreen *screen,
   return (char **) g_ptr_array_free (retval, FALSE);
 }
 
+#if GTK_CHECK_VERSION (2, 18, 0)
+
+static void
+info_bar_response_cb (GtkWidget *info_bar,
+                      int response,
+                      TerminalScreen *screen)
+{
+  gtk_widget_destroy (info_bar);
+
+  switch (response) {
+    case GTK_RESPONSE_CANCEL:
+      g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
+      break;
+    case GTK_RESPONSE_ACCEPT:
+      terminal_screen_launch_child_on_idle (screen);
+      break;
+  }
+}
+
+#endif /* GTK+ >= 2.18.0 */
+
 static gboolean
 terminal_screen_launch_child_cb (TerminalScreen *screen)
 {
@@ -1447,9 +1474,28 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
                                        NULL, NULL,
                                        &pid,
                                        &err)) {
+#if GTK_CHECK_VERSION (2, 18, 0)
+    GtkWidget *info_bar;
+
+    info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
+                                      _("Retry"), GTK_RESPONSE_ACCEPT,
+                                      NULL);
+    terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
+                                   _("There was an error creating the child process for this terminal"));
+    terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
+                                   "%s", err->message);
+    g_signal_connect (info_bar, "response",
+                      G_CALLBACK (info_bar_response_cb), screen);
+
+    gtk_box_pack_start (GTK_BOX (terminal_screen_container_get_from_screen (screen)),
+                        info_bar, FALSE, FALSE, 0);
+    gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
+    gtk_widget_show (info_bar);
+#else
     terminal_util_show_error_dialog (GTK_WINDOW (terminal_screen_get_window (screen)), NULL,
                                      err,
                                      "%s", _("There was an error creating the child process for this terminal"));
+#endif /* GTK+ >= 2.18.0 */
 
     g_error_free (err);
     g_strfreev (env);
