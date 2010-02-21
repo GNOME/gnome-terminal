@@ -18,8 +18,6 @@
 
 #include <config.h>
 
-#undef VTE_DISABLE_DEPRECATED
-
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -1269,42 +1267,28 @@ terminal_screen_get_initial_environment (TerminalScreen *screen)
   return screen->priv->initial_env;
 }
 
-static void
-show_command_error_dialog (TerminalScreen *screen,
-                           GError         *error)
-{
-  g_assert (error != NULL);
-  
-  terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL, error,
-                                   "%s", _("There was a problem with the command for this terminal"));
-}
-
 static gboolean
 get_child_command (TerminalScreen *screen,
                    const char     *shell_env,
-                   char          **file_p,
+                   GSpawnFlags    *spawn_flags_p,
                    char         ***argv_p,
                    GError        **err)
 {
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile;
-  char  *file;
   char **argv;
+
+  g_assert (spawn_flags_p != NULL && argv_p != NULL);
 
   profile = priv->profile;
 
-  file = NULL;
-  argv = NULL;
-  
-  if (file_p)
-    *file_p = NULL;
-  if (argv_p)
-    *argv_p = NULL;
+  *argv_p = argv = NULL;
 
   if (priv->override_command)
     {
-      file = g_strdup (priv->override_command[0]);
       argv = g_strdupv (priv->override_command);
+
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
     }
   else if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND))
     {
@@ -1313,44 +1297,37 @@ get_child_command (TerminalScreen *screen,
                                err))
         return FALSE;
 
-      file = g_strdup (argv[0]);
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
     }
   else
     {
       const char *only_name;
       char *shell;
+      int argc = 0;
 
       shell = egg_shell (shell_env);
 
-      file = g_strdup (shell);
-      
       only_name = strrchr (shell, '/');
       if (only_name != NULL)
         only_name++;
       else
         only_name = shell;
 
-      argv = g_new (char*, 2);
+      argv = g_new (char*, 3);
+
+      argv[argc++] = shell;
 
       if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL))
-        argv[0] = g_strconcat ("-", only_name, NULL);
+        argv[argc++] = g_strconcat ("-", only_name, NULL);
       else
-        argv[0] = g_strdup (only_name);
+        argv[argc++] = g_strdup (only_name);
 
-      argv[1] = NULL;
+      argv[argc++] = NULL;
 
-      g_free (shell);
+      *spawn_flags_p |= G_SPAWN_FILE_AND_ARGV_ZERO;
     }
 
-  if (file_p)
-    *file_p = file;
-  else
-    g_free (file);
-
-  if (argv_p)
-    *argv_p = argv;
-  else
-    g_strfreev (argv);
+  *argv_p = argv;
 
   return TRUE;
 }
@@ -1433,10 +1410,12 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
   VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalProfile *profile;
   char **env, **argv;
-  char *path, *shell = NULL;
+  char *shell = NULL;
   GError *err = NULL;
-  gboolean update_records;
   const char *working_dir;
+  VtePtyFlags pty_flags = VTE_PTY_DEFAULT;
+  GSpawnFlags spawn_flags = 0;
+  GPid pid;
 
   priv->launch_child_source_id = 0;
 
@@ -1448,45 +1427,41 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
 
   env = get_child_environment (screen, &shell);
 
-  if (!get_child_command (screen, shell, &path, &argv, &err))
-    {
-      show_command_error_dialog (screen, err);
-      g_error_free (err);
-
-      g_strfreev (env);
-      g_free (shell);
-
-      return FALSE;
-    }
-
-  update_records = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS);
-
   if (priv->initial_working_directory)
     working_dir = priv->initial_working_directory;
   else
     working_dir = g_get_home_dir ();
 
-  priv->child_pid = vte_terminal_fork_command (terminal,
-                                               path,
-                                               argv,
-                                               env,
-                                               working_dir,
-                                               terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL),
-                                               update_records,
-                                               update_records);
+  if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL))
+    pty_flags |= VTE_PTY_NO_LASTLOG;
+  if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS))
+    pty_flags |= VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP;
 
-  if (priv->child_pid == -1)
-    {
+  if (!get_child_command (screen, shell, &spawn_flags, &argv, &err) ||
+      !vte_terminal_fork_command_full (terminal,
+                                       pty_flags,
+                                       working_dir,
+                                       argv,
+                                       env,
+                                       spawn_flags,
+                                       NULL, NULL,
+                                       &pid,
+                                       &err)) {
+    terminal_util_show_error_dialog (GTK_WINDOW (terminal_screen_get_window (screen)), NULL,
+                                     err,
+                                     "%s", _("There was an error creating the child process for this terminal"));
 
-      terminal_util_show_error_dialog ((GtkWindow*) gtk_widget_get_ancestor (GTK_WIDGET (screen), GTK_TYPE_WINDOW), NULL,
-                                       err,
-                                       "%s", _("There was an error creating the child process for this terminal"));
-    }
-  
+    g_error_free (err);
+    g_strfreev (env);
+    g_free (shell);
+
+    return FALSE;
+  }
+
+  priv->child_pid = pid;
   priv->pty_fd = vte_terminal_get_pty (terminal);
 
   g_free (shell);
-  g_free (path);
   g_strfreev (argv);
   g_strfreev (env);
 
