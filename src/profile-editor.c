@@ -451,40 +451,31 @@ profile_palette_notify_colorpickers_cb (TerminalProfile *profile,
 }
 
 static void
-custom_command_entry_changed_cb (GtkWidget *entry)
+custom_command_entry_changed_cb (GtkEntry *entry)
 {
+#if GTK_CHECK_VERSION (2, 16, 0)
   const char *command;
   GError *error = NULL;
 
-  command = gtk_entry_get_text (GTK_ENTRY (entry));
+  command = gtk_entry_get_text (entry);
 
   if (g_shell_parse_argv (command, NULL, NULL, &error))
     {
-      GtkRcStyle *mod;
-
-      gtk_widget_set_tooltip_text (entry, NULL);
-
-      mod = gtk_widget_get_modifier_style (entry);
-      if (mod)
-        mod->color_flags[GTK_STATE_NORMAL] &= ~GTK_RC_TEXT;
-
-      gtk_widget_modify_style (entry, mod);
-      /* caution, mod is potentially destroyed at this point */
+      gtk_entry_set_icon_from_stock (entry, GTK_PACK_END, NULL);
     }
   else
     {
-      GdkColor color;
       char *tooltip;
 
-      tooltip = g_strdup_printf (_("Error parsing command: %s"), error->message);
-      g_error_free (error);
+      gtk_entry_set_icon_from_stock (entry, GTK_PACK_END, GTK_STOCK_DIALOG_WARNING);
 
-      gtk_widget_set_tooltip_text (entry, tooltip);
+      tooltip = g_strdup_printf (_("Error parsing command: %s"), error->message);
+      gtk_entry_set_icon_tooltip_text (entry, GTK_PACK_END, tooltip);
       g_free (tooltip);
-    
-      gdk_color_parse ("red", &color);
-      gtk_widget_modify_text (entry, GTK_STATE_NORMAL, &color);
+
+      g_error_free (error);
     }
+#endif /* GTK+ >= 2.16.0 */
 }
 
 static void
