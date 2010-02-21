@@ -781,7 +781,7 @@ terminal_profile_edit (TerminalProfile *profile,
 #define CONNECT(name, prop) CONNECT_WITH_FLAGS (name, prop, 0)
 #define SET_ENUM_VALUE(name, value) g_object_set_data (gtk_builder_get_object (builder, name), "enum-value", GINT_TO_POINTER (value))
 
-  g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry")),
+  g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry")),
                     "changed",
                     G_CALLBACK (custom_command_entry_changed_cb), NULL);
   g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry")),
