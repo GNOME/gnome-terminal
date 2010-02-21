@@ -531,7 +531,7 @@ format_percent_value (GtkScale *scale,
                       double    val,
                       void     *data)
 {
-  return g_strdup_printf ("%d%%", (int) rint (val * 100.0));
+  return g_strdup_printf ("%d%%", (int) (val * 100.0 + 0.5));
 }
 
 static void
