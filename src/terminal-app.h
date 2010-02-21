@@ -96,7 +96,8 @@ gboolean terminal_app_handle_options (TerminalApp *app,
 
 void terminal_app_edit_profile (TerminalApp     *app,
                                 TerminalProfile *profile,
-                                GtkWindow       *transient_parent);
+                                GtkWindow       *transient_parent,
+                                const char      *widget_name);
 
 void terminal_app_new_profile (TerminalApp     *app,
                                TerminalProfile *default_base_profile,

@@ -3299,7 +3299,8 @@ edit_current_profile_callback (GtkAction *action,
   
   terminal_app_edit_profile (terminal_app_get (),
                              terminal_screen_get_profile (priv->active_screen),
-                             GTK_WINDOW (window));
+                             GTK_WINDOW (window),
+                             NULL);
 }
 
 static void

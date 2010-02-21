@@ -686,7 +686,8 @@ profile_list_edit_button_clicked_cb (GtkWidget *button,
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
 
   terminal_app_edit_profile (app, selected_profile,
-                             GTK_WINDOW (app->manage_profiles_dialog));
+                             GTK_WINDOW (app->manage_profiles_dialog),
+                             NULL);
   g_object_unref (selected_profile);
 }
 
@@ -711,7 +712,8 @@ profile_list_row_activated_cb (GtkTreeView       *tree_view,
   gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
 
   terminal_app_edit_profile (app, selected_profile,
-                             GTK_WINDOW (app->manage_profiles_dialog));
+                             GTK_WINDOW (app->manage_profiles_dialog),
+                             NULL);
   g_object_unref (selected_profile);
 }
 
@@ -1139,7 +1141,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
                              list,
                              NULL);
 
-      terminal_profile_edit (new_profile, transient_parent);
+      terminal_profile_edit (new_profile, transient_parent, NULL);
 
     cleanup:
       g_free (name);
@@ -1876,9 +1878,10 @@ terminal_app_new_terminal (TerminalApp     *app,
 void
 terminal_app_edit_profile (TerminalApp     *app,
                            TerminalProfile *profile,
-                           GtkWindow       *transient_parent)
+                           GtkWindow       *transient_parent,
+                           const char      *widget_name)
 {
-  terminal_profile_edit (profile, transient_parent);
+  terminal_profile_edit (profile, transient_parent, widget_name);
 }
 
 void

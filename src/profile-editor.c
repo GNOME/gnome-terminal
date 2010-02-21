@@ -687,9 +687,50 @@ profile_editor_destroyed (GtkWidget       *editor,
   g_object_set_data (G_OBJECT (editor), "builder", NULL);
 }
 
+static void
+terminal_profile_editor_focus_widget (GtkWidget *editor,
+                                      const char *widget_name)
+{
+  GtkBuilder *builder;
+  GtkWidget *widget, *page;
+
+  if (widget_name == NULL)
+    return;
+
+  builder = g_object_get_data (G_OBJECT (editor), "builder");
+  widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
+  if (widget == NULL)
+    return;
+
+  page = widget;
+  while (page && page->parent && !GTK_IS_NOTEBOOK (page->parent))
+    page = page->parent;
+
+  if (page != NULL && GTK_IS_NOTEBOOK (page->parent)) {
+    GtkNotebook *notebook;
+
+    notebook = GTK_NOTEBOOK (page->parent);
+    gtk_notebook_set_current_page (notebook, gtk_notebook_page_num (notebook, page));
+  }
+
+  if (GTK_WIDGET_IS_SENSITIVE (widget))
+    gtk_widget_grab_focus (widget);
+}
+
+/**
+ * terminal_profile_edit:
+ * @profile: a #TerminalProfile
+ * @transient_parent: a #GtkWindow, or %NULL
+ * @widget_name: a widget name in the profile editor's UI, or %NULL
+ *
+ * Shows the profile editor with @profile, anchored to @transient_parent.
+ * If @widget_name is non-%NULL, focuses the corresponding widget and
+ * switches the notebook to its containing page.
+ */
 void
 terminal_profile_edit (TerminalProfile *profile,
-                       GtkWindow       *transient_parent)
+                       GtkWindow       *transient_parent,
+                       const char      *widget_name)
 {
   char *path;
   GtkBuilder *builder;
@@ -700,6 +741,8 @@ terminal_profile_edit (TerminalProfile *profile,
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
   if (editor)
     {
+      terminal_profile_editor_focus_widget (editor, widget_name);
+
       gtk_window_set_transient_for (GTK_WINDOW (editor),
                                     GTK_WINDOW (transient_parent));
       gtk_window_present (GTK_WINDOW (editor));
@@ -801,11 +844,12 @@ terminal_profile_edit (TerminalProfile *profile,
 #define CONNECT(name, prop) CONNECT_WITH_FLAGS (name, prop, 0)
 #define SET_ENUM_VALUE(name, value) g_object_set_data (gtk_builder_get_object (builder, name), "enum-value", GINT_TO_POINTER (value))
 
-  g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry")),
-                    "changed",
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "custom-command-entry"));
+  custom_command_entry_changed_cb (GTK_ENTRY (w));
+  g_signal_connect (w, "changed",
                     G_CALLBACK (custom_command_entry_changed_cb), NULL);
-  g_signal_connect (GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry")),
-                    "changed",
+  w = GTK_WIDGET (gtk_builder_get_object (builder, "profile-name-entry"));
+  g_signal_connect (w, "changed",
                     G_CALLBACK (visible_name_entry_changed_cb), editor);
 
   g_signal_connect (gtk_builder_get_object  (builder, "reset-compat-defaults-button"),
@@ -865,6 +909,8 @@ terminal_profile_edit (TerminalProfile *profile,
                     "forgotten",
                     G_CALLBACK (profile_forgotten_cb),
                     editor);
+
+  terminal_profile_editor_focus_widget (editor, widget_name);
 
   gtk_window_set_transient_for (GTK_WINDOW (editor),
                                 GTK_WINDOW (transient_parent));

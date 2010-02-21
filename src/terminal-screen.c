@@ -1411,19 +1411,33 @@ get_child_environment (TerminalScreen *screen,
 
 #if GTK_CHECK_VERSION (2, 18, 0)
 
+enum {
+  RESPONSE_RETRY,
+  RESPONSE_EDIT_PROFILE
+};
+
 static void
 info_bar_response_cb (GtkWidget *info_bar,
                       int response,
                       TerminalScreen *screen)
 {
-  gtk_widget_destroy (info_bar);
-
   switch (response) {
     case GTK_RESPONSE_CANCEL:
+      gtk_widget_destroy (info_bar);
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
-    case GTK_RESPONSE_ACCEPT:
+    case RESPONSE_RETRY:
+      gtk_widget_destroy (info_bar);
       terminal_screen_launch_child_on_idle (screen);
+      break;
+    case RESPONSE_EDIT_PROFILE:
+      terminal_app_edit_profile (terminal_app_get (),
+                                 terminal_screen_get_profile (screen),
+                                 GTK_WINDOW (terminal_screen_get_window (screen)),
+                                 "custom-command-entry");
+      break;
+    default:
+      gtk_widget_destroy (info_bar);
       break;
   }
 }
@@ -1478,7 +1492,8 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
     GtkWidget *info_bar;
 
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
-                                      _("Retry"), GTK_RESPONSE_ACCEPT,
+                                      _("_Profile Preferences"), RESPONSE_EDIT_PROFILE,
+                                      _("_Retry"), RESPONSE_RETRY,
                                       NULL);
     terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                    _("There was an error creating the child process for this terminal"));
