@@ -179,7 +179,7 @@ sync_tab_title (TerminalScreen *screen,
 
 static void
 notebook_page_added_cb (GtkNotebook *notebook,
-                        GtkWidget *container,
+                        TerminalScreenContainer *container,
 			guint position,
 			TerminalTabsMenu *menu)
 {
@@ -227,7 +227,7 @@ notebook_page_added_cb (GtkNotebook *notebook,
 
 static void
 notebook_page_removed_cb (GtkNotebook *notebook,
-                          GtkWidget *container,
+                          TerminalScreenContainer *container,
 			  guint position,
 			  TerminalTabsMenu *menu)
 {
@@ -269,11 +269,11 @@ notebook_page_switch_cb (GtkNotebook *notebook,
                          guint position,
                          TerminalTabsMenu *menu)
 {
-        GtkWidget *container;
+        TerminalScreenContainer *container;
         TerminalScreen *screen;
         GtkAction *action;
 
-        container = gtk_notebook_get_nth_page (notebook, position);
+        container = TERMINAL_SCREEN_CONTAINER (gtk_notebook_get_nth_page (notebook, position));
         screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
@@ -459,7 +459,7 @@ terminal_tabs_menu_update (TerminalTabsMenu *menu)
 
 	for (l = tabs; l != NULL; l = l->next)
 	{
-                GtkWidget *container = l->data;
+                TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (l->data);
                 GObject *screen = G_OBJECT (terminal_screen_container_get_screen (container));
 
 		action = g_object_get_data (screen, DATA_KEY);

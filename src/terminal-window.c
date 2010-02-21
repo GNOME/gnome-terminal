@@ -1104,7 +1104,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
   TerminalWindow *new_window;
   TerminalWindowPrivate *new_priv;
 
-  screen = terminal_screen_container_get_screen (container);
+  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
   source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
 
@@ -2268,7 +2268,7 @@ close_button_clicked_cb (GtkWidget *tab_label,
   window = TERMINAL_WINDOW (toplevel);
   priv = window->priv;
 
-  screen = terminal_screen_container_get_screen (screen_container);
+  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (screen_container));
   if (confirm_close_window_or_tab (window, screen))
     return;
 
@@ -2615,7 +2615,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
     return;
 
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
-  screen = terminal_screen_container_get_screen (page_widget);
+  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (page_widget));
   widget = GTK_WIDGET (screen);
   g_assert (screen != NULL);
 
@@ -2682,7 +2682,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen;
 
-  screen = terminal_screen_container_get_screen (container);
+  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: screen %p inserted\n",
@@ -2753,7 +2753,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
   if (priv->disposed)
     return;
 
-  screen = terminal_screen_container_get_screen (container);
+  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: screen %p removed\n",
@@ -3015,7 +3015,7 @@ confirm_close_window_or_tab (TerminalWindow *window,
         {
           TerminalScreen *terminal_screen;
 
-          terminal_screen = terminal_screen_container_get_screen ((GtkWidget *) t->data);
+          terminal_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (t->data));
           if (terminal_screen_has_foreground_process (terminal_screen))
             {
               do_confirm = TRUE;
@@ -3768,7 +3768,7 @@ terminal_window_save_state (TerminalWindow *window,
       TerminalScreen *screen;
       char *tab_group;
 
-      screen = terminal_screen_container_get_screen (GTK_WIDGET (lt->data));
+      screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (lt->data));
 
       tab_group = g_strdup_printf ("Terminal%p", screen);
       g_ptr_array_add (tab_names_array, tab_group);

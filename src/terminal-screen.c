@@ -55,7 +55,6 @@ typedef struct
 
 struct _TerminalScreenPrivate
 {
-  TerminalWindow *window;
   TerminalProfile *profile; /* may be NULL at times */
   guint profile_changed_id;
   guint profile_forgotten_id;
@@ -240,62 +239,6 @@ free_tag_data (TagData *tagdata)
   g_slice_free (TagData, tagdata);
 }
 
-#ifdef GNOME_ENABLE_DEBUG
-static void
-parent_size_request (GtkWidget *scrolled_window, GtkRequisition *req, GtkWidget *screen)
-{
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[screen %p] scrolled-window size req %d : %d\n",
-                         screen, req->width, req->height);
-}
-#endif
-
-static void
-parent_parent_set_cb (GtkWidget *widget,
-                      GtkWidget *old_parent,
-                      TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *toplevel;
-
-  if (widget->parent)
-    {
-      g_return_if_fail (GTK_IS_NOTEBOOK (widget->parent));
-
-      toplevel = gtk_widget_get_toplevel (widget);
-#if GTK_CHECK_VERSION (2, 19, 3)
-      g_return_if_fail (gtk_widget_is_toplevel (toplevel));
-#else
-      g_return_if_fail (GTK_WIDGET_TOPLEVEL (toplevel));
-#endif
-
-      priv->window = TERMINAL_WINDOW (toplevel);
-    }
-  else
-    priv->window = NULL;
-}
-
-static void
-parent_set_callback (GtkWidget *widget,
-                     GtkWidget *old_parent)
-{
-  if (old_parent)
-    g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_parent_set_cb), widget);
-
-  if (widget->parent)
-    g_signal_connect (widget->parent, "parent-set", G_CALLBACK (parent_parent_set_cb), widget);
-
-#ifdef GNOME_ENABLE_DEBUG
-  _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
-    {
-      if (old_parent)
-        g_signal_handlers_disconnect_by_func (old_parent, G_CALLBACK (parent_size_request), widget);
-      if (widget->parent)
-        g_signal_connect (widget->parent, "size-request", G_CALLBACK (parent_size_request), widget);
-    }
-#endif
-}
-
 static void
 terminal_screen_class_enable_menu_bar_accel_notify_cb (TerminalApp *app,
                                                        GParamSpec *pspec,
@@ -320,6 +263,35 @@ terminal_screen_class_enable_menu_bar_accel_notify_cb (TerminalApp *app,
     gtk_binding_entry_skip (binding_set, GDK_F10, GDK_SHIFT_MASK);
 }
 
+static TerminalWindow *
+terminal_screen_get_window (TerminalScreen *screen)
+{
+  GtkWidget *widget = GTK_WIDGET (screen);
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+#if GTK_CHECK_VERSION (2, 18, 0)
+  if (!gtk_widget_is_toplevel (toplevel))
+#else
+  if (!GTK_WIDGET_TOPLEVEL (toplevel))
+#endif
+    return NULL;
+
+  return TERMINAL_WINDOW (toplevel);
+}
+
+static gboolean
+window_uses_argb_visual (TerminalScreen *screen)
+{
+  TerminalWindow *window;
+
+  window = terminal_screen_get_window (screen);
+  if (window == NULL || !GTK_WIDGET_REALIZED (window))
+    return FALSE;
+
+  return terminal_window_uses_argb_visual (window);
+}
+
 static void
 terminal_screen_realize (GtkWidget *widget)
 {
@@ -329,13 +301,11 @@ terminal_screen_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->realize (widget);
 
-  g_assert (priv->window != NULL);
-
   /* FIXME: Don't enable this if we have a compmgr. */
   bg_type = terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
   vte_terminal_set_background_transparent (VTE_TERMINAL (screen),
                                            bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                           !terminal_window_uses_argb_visual (priv->window));
+                                           !window_uses_argb_visual (screen));
 }
 
 static void
@@ -443,8 +413,6 @@ terminal_screen_init (TerminalScreen *screen)
 
   g_signal_connect (terminal_app_get (), "notify::system-font",
                     G_CALLBACK (terminal_screen_system_font_notify_cb), screen);
-
-  g_signal_connect (screen, "parent-set", G_CALLBACK (parent_set_callback), NULL);
 
 #ifdef GNOME_ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
@@ -939,6 +907,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   const char *prop_name;
   TerminalBackgroundType bg_type;
+  TerminalWindow *window;
 
   if (pspec)
     prop_name = pspec->name;
@@ -947,12 +916,12 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 
   g_object_freeze_notify (object);
 
-  if (priv->window)
+  if ((window = terminal_screen_get_window (screen)))
     {
       /* We need these in line for the set_size in
        * update_on_realize
        */
-      terminal_window_update_geometry (priv->window);
+      terminal_window_update_geometry (window);
     }
   
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POSITION))
@@ -1064,7 +1033,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       /* FIXME: Don't enable this if we have a compmgr. */
       vte_terminal_set_background_transparent (vte_terminal,
                                                bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                               (!priv->window || !terminal_window_uses_argb_visual (priv->window)));
+                                               !window_uses_argb_visual (screen));
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKSPACE_BINDING))
@@ -1180,11 +1149,12 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
 static void
 terminal_screen_change_font (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
+  TerminalWindow *window;
 
   terminal_screen_set_font (screen);
 
-  terminal_window_set_size (priv->window, screen, TRUE);
+  window = terminal_screen_get_window (screen);
+  terminal_window_set_size (window, screen, TRUE);
 }
 
 static void
@@ -1541,13 +1511,12 @@ terminal_screen_launch_child_on_idle (TerminalScreen *screen)
 static TerminalScreenPopupInfo *
 terminal_screen_popup_info_new (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
   TerminalScreenPopupInfo *info;
 
   info = g_slice_new0 (TerminalScreenPopupInfo);
   info->ref_count = 1;
   info->screen = g_object_ref (screen);
-  info->window = priv->window;
+  info->window = terminal_screen_get_window (screen);
 
   return info;
 }
@@ -2098,13 +2067,13 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         if (!GTK_IS_WIDGET (container))
           return;
 
-        moving_screen = terminal_screen_container_get_screen (container);
+        moving_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
         g_return_if_fail (TERMINAL_IS_SCREEN (moving_screen));
         if (!TERMINAL_IS_SCREEN (moving_screen))
           return;
 
-        source_window = moving_screen->priv->window;
-        dest_window = screen->priv->window;
+        source_window = terminal_screen_get_window (moving_screen);
+        dest_window = terminal_screen_get_window (screen);
         dest_notebook = terminal_window_get_notebook (dest_window);
         page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
                                           GTK_WIDGET (screen));
@@ -2123,12 +2092,11 @@ void
 _terminal_screen_update_scrollbar (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GtkWidget *parent;
+  TerminalScreenContainer *container;
   GtkPolicyType policy = GTK_POLICY_ALWAYS;
   GtkCornerType corner = GTK_CORNER_TOP_LEFT;
 
-  parent = GTK_WIDGET (screen)->parent;
-  if (!parent)
+  if (!GTK_WIDGET (screen)->parent)
     return;
 
   switch (terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POSITION))
@@ -2149,8 +2117,9 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
       break;
     }
 
-  terminal_screen_container_set_placement (parent, corner);
-  terminal_screen_container_set_policy (parent, GTK_POLICY_NEVER, policy);
+  container = terminal_screen_container_get_from_screen (screen);
+  terminal_screen_container_set_placement (container, corner);
+  terminal_screen_container_set_policy (container, GTK_POLICY_NEVER, policy);
 }
 
 void
