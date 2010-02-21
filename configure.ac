@@ -45,6 +45,13 @@ GCONF_REQUIRED=2.14.0
 DBUS_GLIB_REQUIRED=0.6
 VTE_REQUIRED=0.23.5
 
+GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
+
+case "$GDK_TARGET" in
+  x11) PLATFORM_DEPS="x11" ;;
+  *) PLATFORM_DEPS="" ;;
+esac
+
 PKG_CHECK_MODULES([TERM],
   [vte >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
@@ -52,11 +59,10 @@ PKG_CHECK_MODULES([TERM],
    gio-2.0
    gtk+-2.0 >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   dbus-glib-1 >= $DBUS_GLIB_REQUIRED])
+   dbus-glib-1 >= $DBUS_GLIB_REQUIRED
+   $PLATFORM_DEPS])
 
 # Check the smclient backend
-GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
-
 SMCLIENT_PKGS=
 AC_MSG_CHECKING([which smclient backend to use])
 AC_ARG_WITH([smclient],
