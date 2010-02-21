@@ -49,6 +49,13 @@ gnome_terminal_SOURCES= \
 	terminal-window.h \
 	$(NULL)
 
+if HAVE_GTK_2_18
+gnome_terminal_SOURCES += \
+	terminal-info-bar.c \
+	terminal-info-bar.h \
+	$(NULL)
+endif
+
 nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
 
 gnome_terminal_CPPFLAGS = \

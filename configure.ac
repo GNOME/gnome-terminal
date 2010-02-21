@@ -62,6 +62,9 @@ PKG_CHECK_MODULES([TERM],
    dbus-glib-1 >= $DBUS_GLIB_REQUIRED
    $PLATFORM_DEPS])
 
+PKG_CHECK_EXISTS([gtk+-2.0 >= 2.18.0],[have_gtk_2_18=yes],[have_gtk_2_18=no])
+AM_CONDITIONAL([HAVE_GTK_2_18],[test "$have_gtk_2_18" = "yes"])
+
 # Check the smclient backend
 SMCLIENT_PKGS=
 AC_MSG_CHECKING([which smclient backend to use])
