@@ -125,7 +125,7 @@ static KeyEntry file_entries[] =
   { N_("New Profile"),
     KEY_NEW_PROFILE, ACCEL_PATH_NEW_PROFILE, 0, 0, NULL, FALSE, TRUE },
   { N_("Save Contents"),
-    KEY_SAVE_CONTENTS, ACCEL_PATH_SAVE_CONTENTS, 0, 0, NULL, FALSE },
+    KEY_SAVE_CONTENTS, ACCEL_PATH_SAVE_CONTENTS, 0, 0, NULL, FALSE, TRUE },
   { N_("Close Tab"),
     KEY_CLOSE_TAB, ACCEL_PATH_CLOSE_TAB, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_w, NULL, FALSE, TRUE },
   { N_("Close Window"),
