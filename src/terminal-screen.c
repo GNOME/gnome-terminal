@@ -1412,7 +1412,7 @@ get_child_environment (TerminalScreen *screen,
 #if GTK_CHECK_VERSION (2, 18, 0)
 
 enum {
-  RESPONSE_RETRY,
+  RESPONSE_RELAUNCH,
   RESPONSE_EDIT_PROFILE
 };
 
@@ -1426,7 +1426,7 @@ info_bar_response_cb (GtkWidget *info_bar,
       gtk_widget_destroy (info_bar);
       g_signal_emit (screen, signals[CLOSE_SCREEN], 0);
       break;
-    case RESPONSE_RETRY:
+    case RESPONSE_RELAUNCH:
       gtk_widget_destroy (info_bar);
       terminal_screen_launch_child_on_idle (screen);
       break;
@@ -1493,7 +1493,7 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
 
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
                                       _("_Profile Preferences"), RESPONSE_EDIT_PROFILE,
-                                      _("_Retry"), RESPONSE_RETRY,
+                                      _("_Relaunch"), RESPONSE_RELAUNCH,
                                       NULL);
     terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
                                    _("There was an error creating the child process for this terminal"));
@@ -1877,7 +1877,37 @@ terminal_screen_child_exited (VteTerminal *terminal)
     case TERMINAL_EXIT_RESTART:
       terminal_screen_launch_child_on_idle (screen);
       break;
-    case TERMINAL_EXIT_HOLD:
+#if GTK_CHECK_VERSION (2, 18, 0)
+    case TERMINAL_EXIT_HOLD: {
+      GtkWidget *info_bar;
+      int status;
+
+      status = vte_terminal_get_child_exit_status (terminal);
+
+      info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO,
+                                        _("_Relaunch"), RESPONSE_RELAUNCH,
+                                        NULL);
+      if (WIFEXITED (status)) {
+        terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
+                                      _("The child process exited normally with status %d."), WEXITSTATUS (status));
+      } else if (WIFSIGNALED (status)) {
+        terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
+                                      _("The child process was terminated by signal %d."), WTERMSIG (status));
+      } else {
+        terminal_info_bar_format_text (TERMINAL_INFO_BAR (info_bar),
+                                      _("The child process was terminated."));
+      }
+      g_signal_connect (info_bar, "response",
+                        G_CALLBACK (info_bar_response_cb), screen);
+
+      gtk_box_pack_start (GTK_BOX (terminal_screen_container_get_from_screen (screen)),
+                          info_bar, FALSE, FALSE, 0);
+      gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
+      gtk_widget_show (info_bar);
+      break;
+    }
+#endif /* GTK+ >= 2.18.0 */
+
     default:
       break;
     }
