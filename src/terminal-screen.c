@@ -44,6 +44,7 @@
 
 #if GTK_CHECK_VERSION (2, 18, 0)
 #include "terminal-info-bar.h"
+#define USE_INFOBARS
 #endif
 
 #include "eggshell.h"
@@ -1409,7 +1410,7 @@ get_child_environment (TerminalScreen *screen,
   return (char **) g_ptr_array_free (retval, FALSE);
 }
 
-#if GTK_CHECK_VERSION (2, 18, 0)
+#ifdef USE_INFOBARS
 
 enum {
   RESPONSE_RELAUNCH,
@@ -1444,7 +1445,7 @@ info_bar_response_cb (GtkWidget *info_bar,
   }
 }
 
-#endif /* GTK+ >= 2.18.0 */
+#endif /* USE_INFOBARS */
 
 static gboolean
 terminal_screen_launch_child_cb (TerminalScreen *screen)
@@ -1490,7 +1491,7 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
                                        NULL, NULL,
                                        &pid,
                                        &err)) {
-#if GTK_CHECK_VERSION (2, 18, 0)
+#ifdef USE_INFOBARS
     GtkWidget *info_bar;
 
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
@@ -1512,7 +1513,7 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
     terminal_util_show_error_dialog (GTK_WINDOW (terminal_screen_get_window (screen)), NULL,
                                      err,
                                      "%s", _("There was an error creating the child process for this terminal"));
-#endif /* GTK+ >= 2.18.0 */
+#endif /* USE_INFOBARS */
 
     g_error_free (err);
     g_strfreev (env);
@@ -1879,7 +1880,7 @@ terminal_screen_child_exited (VteTerminal *terminal)
     case TERMINAL_EXIT_RESTART:
       terminal_screen_launch_child_on_idle (screen);
       break;
-#if GTK_CHECK_VERSION (2, 18, 0)
+#ifdef USE_INFOBARS
     case TERMINAL_EXIT_HOLD: {
       GtkWidget *info_bar;
       int status;
@@ -1908,7 +1909,7 @@ terminal_screen_child_exited (VteTerminal *terminal)
       gtk_widget_show (info_bar);
       break;
     }
-#endif /* GTK+ >= 2.18.0 */
+#endif /* USE_INFOBARS */
 
     default:
       break;
