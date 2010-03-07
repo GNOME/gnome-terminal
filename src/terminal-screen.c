@@ -1421,6 +1421,8 @@ info_bar_response_cb (GtkWidget *info_bar,
                       int response,
                       TerminalScreen *screen)
 {
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
+
   switch (response) {
     case GTK_RESPONSE_CANCEL:
       gtk_widget_destroy (info_bar);
