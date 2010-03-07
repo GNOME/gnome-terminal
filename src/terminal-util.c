@@ -32,6 +32,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+#include <gconf/gconf.h>
+
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
@@ -647,6 +649,241 @@ terminal_util_array_to_strv (const GArray *array,
   /* NULL terminate */
   g_ptr_array_add (argv, NULL);
   return (char **) g_ptr_array_free (argv, FALSE);
+}
+
+/* Proxy stuff */
+
+static char *
+conf_get_string (GConfClient *conf,
+                 const char *key)
+{
+  char *value;
+  value = gconf_client_get_string (conf, key, NULL);
+  if (G_UNLIKELY (value && *value == '\0'))
+    {
+      g_free (value);
+      value = NULL;
+    }
+  return value;
+}
+
+/*
+ * set_proxy_env:
+ * @env_table: a #GHashTable
+ * @key: the env var name
+ * @value: the env var value
+ *
+ * Adds @value for @key to @env_table, taking care to never overwrite an
+ * existing value for @key. @value is consumed.
+ */
+static void
+set_proxy_env (GHashTable *env_table,
+               const char *key,
+               char *value)
+{
+  char *key1 = NULL, *key2 = NULL;
+  char *value1 = NULL, *value2 = NULL;
+
+  if (!value)
+    return;
+
+  if (g_hash_table_lookup (env_table, key) == NULL)
+    key1 = g_strdup (key);
+
+  key2 = g_ascii_strup (key, -1);
+  if (g_hash_table_lookup (env_table, key) != NULL)
+    {
+      g_free (key2);
+      key2 = NULL;
+    }
+
+  if (key1 && key2)
+    {
+      value1 = value;
+      value2 = g_strdup (value);
+    }
+  else if (key1)
+    value1 = value;
+  else if (key2)
+    value2 = value;
+  else
+    g_free (value);
+
+  if (key1)
+    g_hash_table_replace (env_table, key1, value1);
+  if (key2)
+    g_hash_table_replace (env_table, key2, value2);
+}
+
+static void
+setup_http_proxy_env (GHashTable *env_table,
+                      GConfClient *conf)
+{
+  gchar *host, *auth = NULL;
+  gint port;
+  GSList *ignore;
+
+  if (!gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_http_proxy", NULL))
+    return;
+
+  if (gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_authentication", NULL))
+    {
+      char *user, *password;
+      user = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_user");
+      password = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_password");
+      if (user)
+	{
+	  if (password)
+	    {
+	      auth = g_strdup_printf ("%s:%s", user, password);
+	      g_free (user);
+	    }
+	  else
+	    auth = user;
+	}
+      g_free (password);
+    }
+
+  host = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/host");
+  port = gconf_client_get_int (conf, CONF_HTTP_PROXY_PREFIX "/port", NULL);
+  if (host && port)
+    {
+      char *proxy;
+      if (auth)
+	proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
+      else
+	proxy = g_strdup_printf ("http://%s:%d/", host, port);
+      set_proxy_env (env_table, "http_proxy", proxy);
+    }
+  g_free (host);
+
+  g_free (auth);
+
+
+  ignore = gconf_client_get_list (conf, CONF_HTTP_PROXY_PREFIX "/ignore_hosts", GCONF_VALUE_STRING, NULL);
+  if (ignore)
+    {
+      GString *buf = g_string_sized_new (64);
+      while (ignore != NULL)
+	{
+	  GSList *old;
+
+	  if (buf->len)
+	    g_string_append_c (buf, ',');
+	  g_string_append (buf, ignore->data);
+
+	  old = ignore;
+	  ignore = g_slist_next (ignore);
+	  g_free (old->data);
+	  g_slist_free_1 (old);
+	}
+      set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
+    }
+}
+
+static void
+setup_https_proxy_env (GHashTable *env_table,
+                       GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, CONF_PROXY_PREFIX "/secure_host");
+  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/secure_port", NULL);
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("https://%s:%d/", host, port);
+      set_proxy_env (env_table, "https_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
+setup_ftp_proxy_env (GHashTable *env_table,
+                     GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, CONF_PROXY_PREFIX "/ftp_host");
+  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/ftp_port", NULL);
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("ftp://%s:%d/", host, port);
+      set_proxy_env (env_table, "ftp_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
+setup_socks_proxy_env (GHashTable *env_table,
+                       GConfClient *conf)
+{
+  gchar *host;
+  gint port;
+
+  host = conf_get_string (conf, CONF_PROXY_PREFIX "/socks_host");
+  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/socks_port", NULL);
+  if (host && port)
+    {
+      char *proxy;
+      proxy = g_strdup_printf ("socks://%s:%d/", host, port);
+      set_proxy_env (env_table, "all_proxy", proxy);
+    }
+  g_free (host);
+}
+
+static void
+setup_autoconfig_proxy_env (GHashTable *env_table,
+                            GConfClient *conf)
+{
+  gchar *url;
+
+  url = conf_get_string (conf, CONF_PROXY_PREFIX "/autoconfig_url");
+  if (url)
+    {
+      /* XXX  Not sure what to do with it.  See bug 596688
+      char *proxy;
+      proxy = g_strdup_printf ("pac+%s", url);
+      set_proxy_env (env_table, "http_proxy", proxy);
+      */
+    }
+  g_free (url);
+}
+
+/**
+ * terminal_util_add_proxy_env:
+ * @env_table: a #GHashTable
+ *
+ * Adds the proxy env variables to @env_table.
+ */
+void
+terminal_util_add_proxy_env (GHashTable *env_table)
+{
+  char *proxymode;
+
+  GConfClient *conf;
+  conf = gconf_client_get_default ();
+  gconf_client_preload (conf, CONF_PROXY_PREFIX, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+
+  /* If mode is not manual, nothing to set */
+  proxymode = conf_get_string (conf, CONF_PROXY_PREFIX "/mode");
+  if (proxymode && 0 == strcmp (proxymode, "manual"))
+    {
+      setup_http_proxy_env (env_table, conf);
+      setup_https_proxy_env (env_table, conf);
+      setup_ftp_proxy_env (env_table, conf);
+      setup_socks_proxy_env (env_table, conf);
+    }
+  else if (proxymode && 0 == strcmp (proxymode, "auto"))
+    {
+      setup_autoconfig_proxy_env (env_table, conf);
+    }
+
+  g_free (proxymode);
+  g_object_unref (conf);
 }
 
 /* Bidirectional object/widget binding */

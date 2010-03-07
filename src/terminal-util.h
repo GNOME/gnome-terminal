@@ -26,6 +26,11 @@
 
 #include "terminal-screen.h"
 
+G_BEGIN_DECLS
+
+#define CONF_PROXY_PREFIX      "/system/proxy"
+#define CONF_HTTP_PROXY_PREFIX "/system/http_proxy"
+
 void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
 
 void terminal_util_show_error_dialog (GtkWindow *transient_parent, 
@@ -94,6 +99,8 @@ char **terminal_util_array_to_strv (const GArray *array,
                                     int *argc,
                                     GError **error);
 
+void terminal_util_add_proxy_env (GHashTable *env_table);
+
 typedef enum {
   FLAG_INVERT_BOOL  = 1 << 0,
 } PropertyChangeFlags;
@@ -111,5 +118,7 @@ void     terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
 void terminal_util_x11_clear_demands_attention (GdkWindow *window);
 
 gboolean terminal_util_x11_window_is_minimized (GdkWindow *window);
+
+G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */

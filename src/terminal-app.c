@@ -1390,12 +1390,29 @@ terminal_app_init (TerminalApp *app)
 
   app->conf = gconf_client_get_default ();
 
+  /* We need to monitor these gconf dirs */
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
   gconf_client_add_dir (app->conf, MONOSPACE_FONT_DIR,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
+  gconf_client_add_dir (app->conf, CONF_PROXY_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        NULL);
+  gconf_client_add_dir (app->conf, CONF_HTTP_PROXY_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL,
+                        NULL);
+
+  /* Now actually preload the gconf dirs */
+  gconf_client_preload (app->conf, CONF_GLOBAL_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+  gconf_client_preload (app->conf, MONOSPACE_FONT_DIR,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+  gconf_client_preload (app->conf, CONF_PROXY_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+  gconf_client_preload (app->conf, CONF_HTTP_PROXY_PREFIX,
+                        GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 
   app->profile_list_notify_id =
     gconf_client_notify_add (app->conf, PROFILE_LIST_KEY,

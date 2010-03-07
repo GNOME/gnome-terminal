@@ -18,6 +18,8 @@
 
 #include <config.h>
 
+#undef VTE_DISABLE_DEPRECATED
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -29,8 +31,6 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
-#include <gconf/gconf.h>
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -1307,240 +1307,6 @@ show_command_error_dialog (TerminalScreen *screen,
                                    "%s", _("There was a problem with the command for this terminal"));
 }
 
-
-static char *
-conf_get_string (GConfClient *conf, const char *key)
-{
-  char *value;
-  value = gconf_client_get_string (conf, key, NULL);
-  if (G_UNLIKELY (value && *value == '\0'))
-    {
-      g_free (value);
-      value = NULL;
-    }
-  return value;
-}
-
-static gboolean
-conf_get_bool (GConfClient *conf, const char *key)
-{
-  return gconf_client_get_bool (conf, key, NULL);
-}
-
-static gint
-conf_get_int (GConfClient *conf, const char *key)
-{
-  return gconf_client_get_int (conf, key, NULL);
-}
-
-/* Consumes value.
- * Sets for both key and upper(key).
- * Also, never overwrites a variable. */
-static void
-set_proxy_env (GHashTable *env_table, const char *key, char *value)
-{
-  char *key1 = NULL, *key2 = NULL;
-  char *value1 = NULL, *value2 = NULL;
-
-  if (!value)
-    return;
-
-  if (g_hash_table_lookup (env_table, key) == NULL)
-    key1 = g_strdup (key);
-
-  key2 = g_ascii_strup (key, -1);
-  if (g_hash_table_lookup (env_table, key) != NULL)
-    {
-      g_free (key2);
-      key2 = NULL;
-    }
-
-  if (key1 && key2)
-    {
-      value1 = value;
-      value2 = g_strdup (value);
-    }
-  else if (key1)
-    value1 = value;
-  else if (key2)
-    value2 = value;
-  else
-    g_free (value);
-
-  if (key1)
-    g_hash_table_replace (env_table, key1, value1);
-  if (key2)
-    g_hash_table_replace (env_table, key2, value2);
-}
-
-
-static void
-setup_http_proxy_env (GHashTable *env_table, GConfClient *conf)
-{
-  gchar *host, *auth = NULL;
-  gint port;
-  GSList *ignore;
-
-#define HTTP_PROXY_DIR "/system/http_proxy"
-
-  gconf_client_preload (conf, HTTP_PROXY_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
-
-  if (!conf_get_bool (conf, HTTP_PROXY_DIR "/use_http_proxy"))
-    return;
-
-  if (conf_get_bool (conf, HTTP_PROXY_DIR "/use_authentication"))
-    {
-      char *user, *password;
-      user = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_user");
-      password = conf_get_string (conf, HTTP_PROXY_DIR "/authentication_password");
-      if (user)
-	{
-	  if (password)
-	    {
-	      auth = g_strdup_printf ("%s:%s", user, password);
-	      g_free (user);
-	    }
-	  else
-	    auth = user;
-	}
-      g_free (password);
-    }
-
-  host = conf_get_string (conf, HTTP_PROXY_DIR "/host");
-  port = conf_get_int (conf, HTTP_PROXY_DIR "/port");
-  if (host && port)
-    {
-      char *proxy;
-      if (auth)
-	proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
-      else
-	proxy = g_strdup_printf ("http://%s:%d/", host, port);
-      set_proxy_env (env_table, "http_proxy", proxy);
-    }
-  g_free (host);
-
-  g_free (auth);
-
-
-  ignore = gconf_client_get_list (conf, HTTP_PROXY_DIR "/ignore_hosts", GCONF_VALUE_STRING, NULL);
-  if (ignore)
-    {
-      GString *buf = g_string_sized_new (64);
-      while (ignore != NULL)
-	{
-	  GSList *old;
-
-	  if (buf->len)
-	    g_string_append_c (buf, ',');
-	  g_string_append (buf, ignore->data);
-
-	  old = ignore;
-	  ignore = g_slist_next (ignore);
-	  g_free (old->data);
-	  g_slist_free_1 (old);
-	}
-      set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
-    }
-}
-
-#define PROXY_DIR "/system/proxy"
-
-static void
-setup_https_proxy_env (GHashTable *env_table, GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, PROXY_DIR "/secure_host");
-  port = conf_get_int (conf, PROXY_DIR "/secure_port");
-  if (host && port)
-    {
-      char *proxy;
-      proxy = g_strdup_printf ("https://%s:%d/", host, port);
-      set_proxy_env (env_table, "https_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_ftp_proxy_env (GHashTable *env_table, GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, PROXY_DIR "/ftp_host");
-  port = conf_get_int (conf, PROXY_DIR "/ftp_port");
-  if (host && port)
-    {
-      char *proxy;
-      proxy = g_strdup_printf ("ftp://%s:%d/", host, port);
-      set_proxy_env (env_table, "ftp_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_socks_proxy_env (GHashTable *env_table, GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, PROXY_DIR "/socks_host");
-  port = conf_get_int (conf, PROXY_DIR "/socks_port");
-  if (host && port)
-    {
-      char *proxy;
-      proxy = g_strdup_printf ("socks://%s:%d/", host, port);
-      set_proxy_env (env_table, "all_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_autoconfig_proxy_env (GHashTable *env_table, GConfClient *conf)
-{
-  gchar *url;
-
-  url = conf_get_string (conf, PROXY_DIR "/autoconfig_url");
-  if (url)
-    {
-      /* XXX  Not sure what to do with it.  See bug 596688
-      char *proxy;
-      proxy = g_strdup_printf ("pac+%s", url);
-      set_proxy_env (env_table, "http_proxy", proxy);
-      */
-    }
-  g_free (url);
-}
-
-static void
-setup_proxy_env (GHashTable *env_table)
-{
-  char *proxymode;
-
-  GConfClient *conf;
-  conf = gconf_client_get_default ();
-  gconf_client_preload (conf, PROXY_DIR, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
-
-  /* If mode is not manual, nothing to set */
-  proxymode = conf_get_string (conf, PROXY_DIR "/mode");
-  if (proxymode && 0 == strcmp (proxymode, "manual"))
-    {
-      setup_http_proxy_env (env_table, conf);
-      setup_https_proxy_env (env_table, conf);
-      setup_ftp_proxy_env (env_table, conf);
-      setup_socks_proxy_env (env_table, conf);
-    }
-  else if (proxymode && 0 == strcmp (proxymode, "auto"))
-    {
-      setup_autoconfig_proxy_env (env_table, conf);
-    }
-
-  g_free (proxymode);
-  g_object_unref (conf);
-}
-
-
 static gboolean
 get_child_command (TerminalScreen *screen,
                    const char     *shell_env,
@@ -1674,7 +1440,7 @@ get_child_environment (TerminalScreen *screen,
   g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
 #endif
 
-  setup_proxy_env (env_table);
+  terminal_util_add_proxy_env (env_table);
 
   retval = g_ptr_array_sized_new (g_hash_table_size (env_table));
   g_hash_table_iter_init (&iter, env_table);
