@@ -866,7 +866,6 @@ terminal_util_add_proxy_env (GHashTable *env_table)
 
   GConfClient *conf;
   conf = gconf_client_get_default ();
-  gconf_client_preload (conf, CONF_PROXY_PREFIX, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 
   /* If mode is not manual, nothing to set */
   proxymode = conf_get_string (conf, CONF_PROXY_PREFIX "/mode");
