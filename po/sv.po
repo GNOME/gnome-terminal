@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-09 17:48+0100\n"
-"PO-Revision-Date: 2010-01-09 17:52+0100\n"
+"POT-Creation-Date: 2010-03-14 00:49+0100\n"
+"PO-Revision-Date: 2010-03-14 00:52+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1
-#: ../src/gnome-terminal.schemas.in.h:127
-#: ../src/terminal-accels.c:222
+#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/terminal-accels.c:226
 #: ../src/terminal.c:304
 #: ../src/terminal-profile.c:158
-#: ../src/terminal-window.c:1892
+#: ../src/terminal-window.c:1897
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -212,7 +212,7 @@ msgstr "Om sant, tillåt program i terminalfönstret att göra text fet."
 
 #: ../src/gnome-terminal.schemas.in.h:37
 msgid "If true, boldface text will be rendered using the same color as normal text."
-msgstr ""
+msgstr "Om true kommer fet text att renderas med samma färg som normal text."
 
 #: ../src/gnome-terminal.schemas.in.h:38
 msgid "If true, don't make a noise when applications send the escape sequence for the terminal bell."
@@ -228,7 +228,7 @@ msgstr "Om sant, rulla bakgrundsbilden tillsammans med förgrundstexten; om fals
 
 #: ../src/gnome-terminal.schemas.in.h:41
 msgid "If true, scrollback lines will never be discarded. The scrollback history is stored on disk temporarily, so this may cause the system to run out of disk space if there is a lot of output to the terminal."
-msgstr ""
+msgstr "Om true kommer rader i rullningshistoriken aldrig att förkastas. Rullningshistoriken lagras temporärt på disk så detta kan orsaka att systemet får slut på diskutrymme om det är mycket utdata i terminalfönstret."
 
 #: ../src/gnome-terminal.schemas.in.h:42
 msgid "If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)"
@@ -359,334 +359,340 @@ msgid "Keyboard shortcut key to reset the terminal. Expressed as a string in the
 msgstr "Snabbtangent för att återställa terminalfönstret. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
 
 #: ../src/gnome-terminal.schemas.in.h:74
+msgid "Keyboard shortcut key to save the current tab contents to a file. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
+msgstr "Snabbtangent för att spara innehållet i aktuell flik till en fil. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
+
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut key to set the terminal title. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "Snabbtangent för att ställa in terminaltiteln. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut key to switch to the next tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "Snabbtangent för att växla till nästa flik. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut key to switch to the previous tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "Snabbtangent för att växla till föregående flik. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "Snabbtangent för att växla synligheten för menyraden. Uttryckt som en sträng i samma format som används för GTK+-resursfiler. Om du ställer in detta alternativ till specialsträngen \"disabled\" kommer det inte att finnas någon tangentbindning för denna åtgärd."
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to close a tab"
 msgstr "Snabbtangent för att stänga en flik"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a window"
 msgstr "Snabbtangent för att stänga ett fönster"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to copy text"
 msgstr "Snabbtangent för kopiera text"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Snabbtangent för att skapa en ny profil"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to launch help"
 msgstr "Snabbtangent för att starta hjälp"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to make font larger"
 msgstr "Snabbtangent för att göra typsnitt större"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Snabbtangent för att göra typsnitt till normal storlek"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Snabbtangent för att göra typsnitt mindre"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Snabbtangent för att öppna en ny flik"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new window"
 msgstr "Snabbtangent för att öppna ett nytt fönster"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to paste text"
 msgstr "Snabbtangent för att klistra in text"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Snabbtangent för att återställa och tömma terminalfönstret"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Snabbtangent för att återställa terminalfönstret"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:92
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "Snabbtangent för att spara innehållet i aktuell flik till en fil"
+
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Snabbtangent för att ställa in terminaltiteln"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "Snabbtangent för att växla till flik 1"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "Snabbtangent för att växla till flik 10"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "Snabbtangent för att växla till flik 11"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "Snabbtangent för att växla till flik 12"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "Snabbtangent för att växla till flik 2"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "Snabbtangent för att växla till flik 3"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "Snabbtangent för att växla till flik 4"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "Snabbtangent för att växla till flik 5"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "Snabbtangent för att växla till flik 6"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "Snabbtangent för att växla till flik 7"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "Snabbtangent för att växla till flik 8"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "Snabbtangent för att växla till flik 9"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Snabbtangent för att växla till nästa flik"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Snabbtangent för att växla till föregående flik"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Snabbtangent för att växla helskärmsläge"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Snabbtangent för att växla synligheten på menyraden"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "Lista med tillgängliga kodningar"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "Lista med profiler"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid "List of profiles known to gnome-terminal. The list contains strings naming subdirectories relative to /apps/gnome-terminal/profiles."
 msgstr "Lista med profiler som är kända av gnome-terminal. Listan innehåller strängar med namn på underkataloger som är relativa till /apps/gnome-terminal/profiles."
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid "Normally you can access the menubar with F10. This can also be customized via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the standard menubar accelerator to be disabled."
 msgstr "Normalt kan du komma åt menyraden genom att trycka F10. Detta kan också anpassas via gtkrc (gtk-menu-bar-accel = \"whatever\"). Detta alternativ möjliggör att standardmenyradsgenvägen inaktiveras."
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid "Number of columns in newly created terminal windows."
 msgstr "Antal kolumner i nyligen skapade terminalfönster."
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "Antal rader som ska behållas i rullningshistoriken"
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Number of rows in newly created terminal windows."
 msgstr "Antal rader i nyligen skapade terminalfönster."
 
-#: ../src/gnome-terminal.schemas.in.h:115
-#, fuzzy
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid "Number of scrollback lines to keep around. You can scroll back in the terminal by this number of lines; lines that don't fit in the scrollback are discarded. If scrollback_unlimited is true, this value is ignored."
-msgstr "Antal rader i rullningshistoriken som ska behållas. Du kan rulla bakåt i terminalfönstret detta antal rader; rader som inte får plats i rullningshistoriken kastas. Var försiktig med denna inställning; det är den främsta faktorn som avgör hur mycket minne terminalfönstret kommer att använda."
+msgstr "Antal rader i rullningshistoriken som ska behållas. Du kan rulla bakåt i terminalfönstret med detta antal rader; rader som inte får plats i rullningshistoriken förkastas. Om scrollback_unlimited är true så ignoreras detta värde."
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "Palett för terminalprogram"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid "Popup a dialog when an S/Key challenge response query is detected and clicked on. Typing a password into the dialog will send it to the terminal."
 msgstr "Visa ett dialogfönster då en svar på S/key-utmaning efterfrågas, detekteras och klickas på. Genom att ange ett lösenord i dialogfönstret kommer det att skickas till terminalfönstret."
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Position of the scrollbar"
 msgstr "Position för rullningslisten"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Possible values are \"close\" to close the terminal, and \"restart\" to restart the command."
 msgstr "Möjliga värden är \"close\" för att stänga terminalfönstret och \"restart\" för att starta om kommandot."
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr "Profil som ska användas vid öppnande av ett nytt fönster eller flik. Måste finnas i profile_list."
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid "Profile to use for new terminals"
 msgstr "Profil att använda för nya terminalfönster"
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "Kör detta kommando istället för skalet, om use_custom_command är sant."
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid "Sets what code the backspace key generates. Possible values are \"ascii-del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS character), \"escape-sequence\" for the escape sequence typically bound to backspace or delete. \"ascii-del\" is normally considered the correct setting for the Backspace key."
 msgstr "Ställer in vilken kod som backstegstangenten genererar. Möjliga värden är \"ascii-del\" för tecknet ASCII DEL, \"control-h\" för Control-H (även känt som tecknet ASCII BS), \"escape-sequence\" för kontrollsekvensen som normalt är bunden till backsteg eller delete. \"ascii-del\" betraktas normalt som den korrekta inställningen för backstegstangenten."
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid "Sets what code the delete key generates. Possible values are \"ascii-del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS character), \"escape-sequence\" for the escape sequence typically bound to backspace or delete. \"escape-sequence\" is normally considered the correct setting for the Delete key."
 msgstr "Ställer in vilken kod som delete-tangenten genererar. Möjliga värden är \"ascii-del\" för tecknet ASCII DEL, \"control-h\" för Control-H (även känt som tecknet ASCII BS), \"escape-sequence\" för kontrollsekvensen som normalt är bunden till backsteg eller delete. \"escape-sequence\" betraktas normalt som den korrekta inställningen för backstegstangenten."
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid "Terminals have a 16-color palette that applications inside the terminal can use. This is that palette, in the form of a colon-separated list of color names. Color names should be in hex format e.g. \"#FF00FF\""
 msgstr "Terminaler har en palett med 16 färger som program i terminalen kan använda. Detta är den paletten, i form av en kolonseparerad lista med färgnamn. Färgnamn ska skrivas i hexadecimalt format, till exempel \"#FF00FF\""
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "The cursor appearance"
 msgstr "Markörens utseende"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr "Möjliga värden är \"block\" för att använda en blockmarkör, \"ibeam\" för att använda en vertikal linje eller \"underline\" för att använda ett understreck."
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid "The possible values are \"system\" to use the global cursor blinking settings, or \"on\" or \"off\" to set the mode explicitly."
 msgstr "Möjliga värden är \"system\" för att använda globala inställningar för markörblinkning, eller \"on\" eller \"off\" för att uttryckligen ställa in önskat läge."
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Title for terminal"
 msgstr "Titel för terminalfönstret"
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid "Title to display for the terminal window or tab. This title may be replaced by or combined with the title set by the application inside the terminal, depending on the title_mode setting."
 msgstr "Titel att visa för terminalfönstret eller terminalfliken. Denna titel kan ersättas med eller kombineras med titeln som är satt av programmet inuti terminalfönstret, beroende på inställningen title_mode."
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid "True if the menubar should be shown in new windows, for windows/tabs with this profile."
 msgstr "Sant om menyraden ska visas i nya fönster, för fönster/flikar med denna profil."
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid "Type of terminal background. May be \"solid\" for a solid color, \"image\" for an image, or \"transparent\" for either real transparency if a compositing window manager is running, or pseudo-transparency otherwise."
 msgstr "Typ av terminalbakgrund. Kan vara \"solid\" för enfärgad, \"image\" för en bild eller \"transparent\" för antingen riktig genomskinlighet om en fönsterhanterare med \"compositing\" används eller annars pseudogenomskinlighet."
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid "What to do with dynamic title"
 msgstr "Vad som ska göras med dynamisk titel"
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "What to do with the terminal when the child command exits"
 msgstr "Vad som ska göras med terminalfönstret när barnkommandot avslutar"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "When selecting text by word, sequences of these characters are considered single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing a range) should be the first character given."
 msgstr "När text markeras ord för ord betraktas sekvenser av dessa tecken som enstaka ord. Intervall kan anges som \"A-Z\". Ett bindestreck (som inte betecknar ett intervall) bör vara det första tecknet som anges."
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", and \"disabled\"."
 msgstr "Var terminalfönstrets rullningslist ska placeras. Möjligheterna är \"left\" (vänster), \"right\" (höger) och \"disabled\" (inaktiverad)."
 
-#: ../src/gnome-terminal.schemas.in.h:140
-#, fuzzy
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether an unlimited number of lines should be kept in scrollback"
-msgstr "Antal rader som ska behållas i rullningshistoriken"
+msgstr "Huruvida ett obegränsat antal rader ska behållas i rullningshistoriken"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether bold text should use the same color as normal text"
 msgstr "Huruvida fet text ska använda samma färg som vanlig text"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether the menubar has access keys"
 msgstr "Huruvida menyraden har åtkomsttangenter"
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Huruvida GTK:s standardsnabbtangent för menyradsåtkomst är aktiverad"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to allow bold text"
 msgstr "Huruvida fet text ska tillåtas"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to ask for confirmation when closing a terminal window which has more than one open tab."
 msgstr "Huruvida bekräftelse ska efterfrågas då ett terminalfönster som har mer än en öppen flik ska stängas."
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Huruvida bekräftelse ska efterfrågas då terminalfönster stängs"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to blink the cursor"
 msgstr "Huruvida markören ska blinka"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid "Whether to have Alt+letter access keys for the menubar. They may interfere with some applications run inside the terminal so it's possible to turn them off."
 msgstr "Huruvida det ska finnas åtkomsttangenter med Alt+bokstav för menyraden. De kan kollidera med en del program som körs inuti terminalfönstret, och det är därför möjligt att inaktivera dem."
 
-#: ../src/gnome-terminal.schemas.in.h:149
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Huruvida kommandot inuti terminalfönstret ska startas som inloggningsskal"
 
-#: ../src/gnome-terminal.schemas.in.h:150
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Huruvida ett eget kommando ska köras istället för skalet"
 
-#: ../src/gnome-terminal.schemas.in.h:151
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to scroll background image"
 msgstr "Huruvida bakgrundsbilden ska rullas"
 
-#: ../src/gnome-terminal.schemas.in.h:152
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Huruvida det ska rullas till nedersta läget då en tangent trycks ned"
 
-#: ../src/gnome-terminal.schemas.in.h:153
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Huruvida det ska rullas till nedersta läget då det finns ny utdata"
 
-#: ../src/gnome-terminal.schemas.in.h:154
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Huruvida menyraden ska visas i nya fönster/flikar"
 
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to silence terminal bell"
 msgstr "Huruvida terminalljudet ska tystas"
 
-#: ../src/gnome-terminal.schemas.in.h:156
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to update login records when launching terminal command"
 msgstr "Huruvida inloggningsposter ska uppdateras då ett nytt terminalkommando startas"
 
-#: ../src/gnome-terminal.schemas.in.h:157
+#: ../src/gnome-terminal.schemas.in.h:159
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Huruvida färgerna från temat ska användas för terminalwidgeten"
 
-#: ../src/gnome-terminal.schemas.in.h:158
+#: ../src/gnome-terminal.schemas.in.h:160
 msgid "Whether to use the system font"
 msgstr "Huruvida systemtypsnittet ska användas"
 
@@ -696,7 +702,7 @@ msgstr "Huruvida systemtypsnittet ska användas"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:165
+#: ../src/gnome-terminal.schemas.in.h:167
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,ISO-8859-15,current]"
 
@@ -736,26 +742,26 @@ msgstr "Grönt på svart"
 msgid "White on black"
 msgstr "Vitt på svart"
 
-#: ../src/profile-editor.c:479
+#: ../src/profile-editor.c:472
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Fel vid tolkning av kommando: %s"
 
-#: ../src/profile-editor.c:499
+#: ../src/profile-editor.c:490
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Redigerar profilen \"%s\""
 
-#: ../src/profile-editor.c:637
+#: ../src/profile-editor.c:628
 msgid "Images"
 msgstr "Bilder"
 
-#: ../src/profile-editor.c:763
+#: ../src/profile-editor.c:754
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Välj palettfärg %d"
 
-#: ../src/profile-editor.c:767
+#: ../src/profile-editor.c:758
 #, c-format
 msgid "Palette entry %d"
 msgstr "Palettpost %d"
@@ -773,7 +779,7 @@ msgid "C_reate"
 msgstr "S_kapa"
 
 #: ../src/profile-new-dialog.glade.h:2
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:125
 msgid "New Profile"
 msgstr "Ny profil"
 
@@ -1117,172 +1123,176 @@ msgstr "Texten du klickade på verkar inte vara en giltig S/key-utmaning."
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "Texten du klickade på verkar inte vara en giltig OTP-utmaning."
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:121
 msgid "New Tab"
 msgstr "Ny flik"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:123
 msgid "New Window"
 msgstr "Nytt fönster"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:127
+msgid "Save Contents"
+msgstr "Spara innehåll"
+
+#: ../src/terminal-accels.c:129
 msgid "Close Tab"
 msgstr "Stäng flik"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:131
 msgid "Close Window"
 msgstr "Stäng fönster"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:137
 msgid "Copy"
 msgstr "Kopiera"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:139
 msgid "Paste"
 msgstr "Klistra in"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:145
 msgid "Hide and Show menubar"
 msgstr "Dölj och visa menyrad"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:147
 msgid "Full Screen"
 msgstr "Helskärmsläge"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:149
 msgid "Zoom In"
 msgstr "Zooma in"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:151
 msgid "Zoom Out"
 msgstr "Zooma ut"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:153
 msgid "Normal Size"
 msgstr "Normal storlek"
 
-#: ../src/terminal-accels.c:155
-#: ../src/terminal-window.c:3380
+#: ../src/terminal-accels.c:159
+#: ../src/terminal-window.c:3482
 msgid "Set Title"
 msgstr "Ställ in titel"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:161
 msgid "Reset"
 msgstr "Återställ"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:163
 msgid "Reset and Clear"
 msgstr "Återställ och töm"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:169
 msgid "Switch to Previous Tab"
 msgstr "Växla till föregående flik"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:171
 msgid "Switch to Next Tab"
 msgstr "Växla till nästa flik"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:173
 msgid "Move Tab to the Left"
 msgstr "Flytta flik till vänster"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:175
 msgid "Move Tab to the Right"
 msgstr "Flytta flik till höger"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:177
 msgid "Detach Tab"
 msgstr "Frigör flik"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:179
 msgid "Switch to Tab 1"
 msgstr "Växla till flik 1"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:182
 msgid "Switch to Tab 2"
 msgstr "Växla till flik 2"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:185
 msgid "Switch to Tab 3"
 msgstr "Växla till flik 3"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:188
 msgid "Switch to Tab 4"
 msgstr "Växla till flik 4"
 
-#: ../src/terminal-accels.c:187
+#: ../src/terminal-accels.c:191
 msgid "Switch to Tab 5"
 msgstr "Växla till flik 5"
 
-#: ../src/terminal-accels.c:190
+#: ../src/terminal-accels.c:194
 msgid "Switch to Tab 6"
 msgstr "Växla till flik 6"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:197
 msgid "Switch to Tab 7"
 msgstr "Växla till flik 7"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:200
 msgid "Switch to Tab 8"
 msgstr "Växla till flik 8"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:203
 msgid "Switch to Tab 9"
 msgstr "Växla till flik 9"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:206
 msgid "Switch to Tab 10"
 msgstr "Växla till flik 10"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:209
 msgid "Switch to Tab 11"
 msgstr "Växla till flik 11"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:212
 msgid "Switch to Tab 12"
 msgstr "Växla till flik 12"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:218
 msgid "Contents"
 msgstr "Innehåll"
 
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
-#: ../src/terminal-accels.c:219
+#: ../src/terminal-accels.c:223
 msgid "File"
 msgstr "Arkiv"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:224
 msgid "Edit"
 msgstr "Redigera"
 
-#: ../src/terminal-accels.c:221
+#: ../src/terminal-accels.c:225
 msgid "View"
 msgstr "Visa"
 
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:227
 msgid "Tabs"
 msgstr "Flikar"
 
-#: ../src/terminal-accels.c:224
+#: ../src/terminal-accels.c:228
 msgid "Help"
 msgstr "Hjälp"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:281
+#: ../src/terminal-accels.c:285
 #: ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: ../src/terminal-accels.c:753
+#: ../src/terminal-accels.c:757
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Snabbtangenten \"%s\" är redan bunden till \"%s\"-åtgärden"
 
-#: ../src/terminal-accels.c:911
+#: ../src/terminal-accels.c:915
 msgid "_Action"
 msgstr "_Åtgärd"
 
-#: ../src/terminal-accels.c:930
+#: ../src/terminal-accels.c:934
 msgid "Shortcut _Key"
 msgstr "Snabb_tangent"
 
@@ -1316,12 +1326,12 @@ msgstr "Du har redan en profil med namnet \"%s\". Vill du skapa en annan profil 
 msgid "Choose base profile"
 msgstr "Välj basprofil"
 
-#: ../src/terminal-app.c:1794
+#: ../src/terminal-app.c:1800
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Det finns ingen profil \"%s\", använder standardprofilen\n"
 
-#: ../src/terminal-app.c:1818
+#: ../src/terminal-app.c:1824
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Ogiltig geometristräng \"%s\"\n"
@@ -1533,7 +1543,7 @@ msgid "Option \"%s\" is no longer supported in this version of gnome-terminal; y
 msgstr "Flaggan \"%s\" stöds inte längre i denna version av gnome-terminal. Du vill kanske skapa en profil med den önskade inställningen och använda den nya flaggan \"--profile\"\n"
 
 #: ../src/terminal-options.c:188
-#: ../src/terminal-window.c:3601
+#: ../src/terminal-window.c:3703
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
@@ -1709,11 +1719,11 @@ msgstr "Visa flaggor för per-terminal"
 msgid "Unnamed"
 msgstr "Namnlös"
 
-#: ../src/terminal-screen.c:1303
+#: ../src/terminal-screen.c:1307
 msgid "There was a problem with the command for this terminal"
 msgstr "Det uppstod ett problem med kommandot för denna terminal"
 
-#: ../src/terminal-screen.c:1735
+#: ../src/terminal-screen.c:1511
 msgid "There was an error creating the child process for this terminal"
 msgstr "Ett fel uppstod vid skapande av barnprocessen för denna terminal"
 
@@ -1725,24 +1735,24 @@ msgstr "Stäng flik"
 msgid "Switch to this tab"
 msgstr "Växla till denna flik"
 
-#: ../src/terminal-util.c:183
+#: ../src/terminal-util.c:185
 msgid "There was an error displaying help"
 msgstr "Ett fel uppstod vid visning av hjälpen"
 
-#: ../src/terminal-util.c:256
+#: ../src/terminal-util.c:258
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Kunde inte öppna adressen \"%s\""
 
-#: ../src/terminal-util.c:363
+#: ../src/terminal-util.c:365
 msgid "GNOME Terminal is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "GNOME-terminal är fri programvara. Du kan distribuera det och/eller modifiera det under villkoren i GNU General Public License, publicerad av Free Software Foundation, antingen version 2 eller (om du så vill) någon senare version."
 
-#: ../src/terminal-util.c:367
+#: ../src/terminal-util.c:369
 msgid "GNOME Terminal is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "GNOME-terminal distribueras i hopp om att det ska vara användbart, men UTAN NÅGON SOM HELST GARANTI, även utan underförstådd garanti om SÄLJBARHET eller LÄMPLIGHET FÖR NÅGOT SPECIELLT ÄNDAMÅL. Se GNU General Public License för ytterligare information."
 
-#: ../src/terminal-util.c:371
+#: ../src/terminal-util.c:373
 msgid "You should have received a copy of the GNU General Public License along with GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgstr "Du bör ha fått en kopia av GNU General Public License tillsammans med detta program. Om inte, skriv till Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 
@@ -1750,7 +1760,7 @@ msgstr "Du bör ha fått en kopia av GNU General Public License tillsammans med 
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:432
+#: ../src/terminal-window.c:434
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1759,222 +1769,234 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:438
+#: ../src/terminal-window.c:440
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 # Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv Arkiv och inget annat än Arkiv!
 #. Toplevel
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1707
 msgid "_File"
 msgstr "_Arkiv"
 
 # _t krockar med "s_täng flik"
 #. File menu
-#: ../src/terminal-window.c:1706
-#: ../src/terminal-window.c:1717
-#: ../src/terminal-window.c:1839
+#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1844
 msgid "Open _Terminal"
 msgstr "Öppna _terminalfönster"
 
-#: ../src/terminal-window.c:1707
-#: ../src/terminal-window.c:1720
-#: ../src/terminal-window.c:1842
+#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1722
+#: ../src/terminal-window.c:1847
 msgid "Open Ta_b"
 msgstr "Öppna _flik"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1710
 msgid "_Edit"
 msgstr "_Redigera"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1711
 msgid "_View"
 msgstr "_Visa"
 
-#: ../src/terminal-window.c:1710
+#: ../src/terminal-window.c:1712
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1711
+#: ../src/terminal-window.c:1713
 msgid "Ta_bs"
 msgstr "_Flikar"
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1714
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: ../src/terminal-window.c:1723
+#: ../src/terminal-window.c:1725
 msgid "New _Profile…"
 msgstr "Ny _profil..."
 
-#: ../src/terminal-window.c:1726
-#: ../src/terminal-window.c:1848
+#: ../src/terminal-window.c:1728
+msgid "_Save Contents"
+msgstr "_Spara innehåll"
+
+#: ../src/terminal-window.c:1731
+#: ../src/terminal-window.c:1853
 msgid "C_lose Tab"
 msgstr "S_täng flik"
 
-#: ../src/terminal-window.c:1729
+#: ../src/terminal-window.c:1734
 msgid "_Close Window"
 msgstr "_Stäng fönster"
 
-#: ../src/terminal-window.c:1740
-#: ../src/terminal-window.c:1836
+#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:1841
 msgid "Paste _Filenames"
 msgstr "Klistra in _filnamn"
 
-#: ../src/terminal-window.c:1746
+#: ../src/terminal-window.c:1751
 msgid "P_rofiles…"
 msgstr "P_rofiler..."
 
-#: ../src/terminal-window.c:1749
+#: ../src/terminal-window.c:1754
 msgid "_Keyboard Shortcuts…"
 msgstr "Tan_gentbordsgenvägar..."
 
-#: ../src/terminal-window.c:1752
+#: ../src/terminal-window.c:1757
 msgid "Pr_ofile Preferences"
 msgstr "Profil_inställningar"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1768
+#: ../src/terminal-window.c:1773
 msgid "Change _Profile"
 msgstr "Ändra _profil"
 
-#: ../src/terminal-window.c:1769
+#: ../src/terminal-window.c:1774
 msgid "_Set Title…"
 msgstr "A_nge titel..."
 
-#: ../src/terminal-window.c:1772
+#: ../src/terminal-window.c:1777
 msgid "Set _Character Encoding"
 msgstr "Ställ in _teckenkodning"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:1778
 msgid "_Reset"
 msgstr "_Återställ"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:1781
 msgid "Reset and C_lear"
 msgstr "Återställ och t_öm"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1781
+#: ../src/terminal-window.c:1786
 msgid "_Add or Remove…"
 msgstr "_Lägg till eller ta bort..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1791
 msgid "_Previous Tab"
 msgstr "_Föregående flik"
 
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1794
 msgid "_Next Tab"
 msgstr "_Nästa flik"
 
-#: ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:1797
 msgid "Move Tab _Left"
 msgstr "Flytta flik till _vänster"
 
-#: ../src/terminal-window.c:1795
+#: ../src/terminal-window.c:1800
 msgid "Move Tab _Right"
 msgstr "Flytta flik till _höger"
 
-#: ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1803
 msgid "_Detach tab"
 msgstr "Koppla _loss flik"
 
 #. Help menu
-#: ../src/terminal-window.c:1803
+#: ../src/terminal-window.c:1808
 msgid "_Contents"
 msgstr "_Innehåll"
 
-#: ../src/terminal-window.c:1806
+#: ../src/terminal-window.c:1811
 msgid "_About"
 msgstr "_Om"
 
 #. Popup menu
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1816
 msgid "_Send Mail To…"
 msgstr "_Skicka e-post till..."
 
-#: ../src/terminal-window.c:1814
+#: ../src/terminal-window.c:1819
 msgid "_Copy E-mail Address"
 msgstr "_Kopiera e-postadress"
 
-#: ../src/terminal-window.c:1817
+#: ../src/terminal-window.c:1822
 msgid "C_all To…"
 msgstr "Rin_g till…"
 
-#: ../src/terminal-window.c:1820
+#: ../src/terminal-window.c:1825
 msgid "_Copy Call Address"
 msgstr "_Kopiera samtalsadress"
 
-#: ../src/terminal-window.c:1823
+#: ../src/terminal-window.c:1828
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: ../src/terminal-window.c:1826
+#: ../src/terminal-window.c:1831
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: ../src/terminal-window.c:1829
+#: ../src/terminal-window.c:1834
 msgid "P_rofiles"
 msgstr "P_rofiler"
 
-#: ../src/terminal-window.c:1845
-#: ../src/terminal-window.c:3029
+#: ../src/terminal-window.c:1850
+#: ../src/terminal-window.c:3045
 msgid "C_lose Window"
 msgstr "Stän_g fönster"
 
-#: ../src/terminal-window.c:1851
+#: ../src/terminal-window.c:1856
 msgid "L_eave Full Screen"
 msgstr "L_ämna helskärm"
 
 # _i krockar med "klistra _in", som är stockitem och inte kan ändras här
-#: ../src/terminal-window.c:1854
+#: ../src/terminal-window.c:1859
 msgid "_Input Methods"
 msgstr "I_nmatningsmetoder"
 
 #. View Menu
-#: ../src/terminal-window.c:1860
+#: ../src/terminal-window.c:1865
 msgid "Show _Menubar"
 msgstr "Visa _menyrad"
 
-#: ../src/terminal-window.c:1864
+#: ../src/terminal-window.c:1869
 msgid "_Full Screen"
 msgstr "_Helskärmsläge"
 
-#: ../src/terminal-window.c:3016
+#: ../src/terminal-window.c:3032
 msgid "Close this window?"
 msgstr "Stäng detta fönster?"
 
-#: ../src/terminal-window.c:3016
+#: ../src/terminal-window.c:3032
 msgid "Close this terminal?"
 msgstr "Stäng denna terminal?"
 
-#: ../src/terminal-window.c:3020
+#: ../src/terminal-window.c:3036
 msgid "There are still processes running in some terminals in this window. Closing the window will kill all of them."
 msgstr "Det finns fortfarande processer igång i några terminaler i detta fönster. Stängning av fönstret kommer att döda dem alla."
 
-#: ../src/terminal-window.c:3024
+#: ../src/terminal-window.c:3040
 msgid "There is still a process running in this terminal. Closing the terminal will kill it."
 msgstr "Det finns fortfarande en process igång i denna terminal. Stängning av terminalen kommer att döda den."
 
-#: ../src/terminal-window.c:3029
+#: ../src/terminal-window.c:3045
 msgid "C_lose Terminal"
 msgstr "S_täng terminal"
 
-#: ../src/terminal-window.c:3397
+#: ../src/terminal-window.c:3117
+msgid "Could not save contents"
+msgstr "Kunde inte spara innehåll"
+
+#: ../src/terminal-window.c:3139
+msgid "Save as..."
+msgstr "Spara som..."
+
+#: ../src/terminal-window.c:3499
 msgid "_Title:"
 msgstr "_Titel:"
 
-#: ../src/terminal-window.c:3584
+#: ../src/terminal-window.c:3686
 msgid "Contributors:"
 msgstr "Bidragsgivare:"
 
-#: ../src/terminal-window.c:3603
+#: ../src/terminal-window.c:3705
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "En terminalemulator för skrivbordsmiljön GNOME"
 
-#: ../src/terminal-window.c:3610
+#: ../src/terminal-window.c:3712
 msgid "translator-credits"
 msgstr ""
 "Daniel Nylander\n"
