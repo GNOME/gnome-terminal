@@ -110,7 +110,6 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
                                GtkWidget *editor)
 {
   TerminalBackgroundType bg_type;
-  gboolean use_custom_locked, palette_locked, bg_type_locked;
   const char *prop_name;
 
   if (pspec)
@@ -120,12 +119,12 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
   
 #define SET_SENSITIVE(name, setting) widget_and_labels_set_sensitive (profile_editor_get_widget (editor, name), setting)
 
-  use_custom_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND);
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_USE_CUSTOM_COMMAND) ||
       prop_name == I_(TERMINAL_PROFILE_CUSTOM_COMMAND))
     {
-      SET_SENSITIVE ("use-custom-command-checkbutton", !use_custom_locked);
+      gboolean use_custom_command_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND);
+      SET_SENSITIVE ("use-custom-command-checkbutton", !use_custom_command_locked);
       SET_SENSITIVE ("custom-command-box",
                      terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND) &&
                      !terminal_profile_property_locked (profile, TERMINAL_PROFILE_CUSTOM_COMMAND));
@@ -133,7 +132,7 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE))
     {
-      bg_type_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
+      gboolean bg_type_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BACKGROUND_TYPE);
       SET_SENSITIVE ("solid-radiobutton", !bg_type_locked);
       SET_SENSITIVE ("image-radiobutton", !bg_type_locked);
       SET_SENSITIVE ("transparent-radiobutton", !bg_type_locked);
@@ -237,13 +236,18 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
                    !terminal_profile_property_locked (profile, TERMINAL_PROFILE_WORD_CHARS));
 
   if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE) ||
       prop_name == I_(TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS) ||
       prop_name == I_(TERMINAL_PROFILE_DEFAULT_SIZE_ROWS))
     {
+      gboolean use_custom_default_size_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE);
+      gboolean use_custom_default_size = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE);
       gboolean columns_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS);
       gboolean rows_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS);
 
-      SET_SENSITIVE ("default-size-label", !columns_locked || !rows_locked);
+      SET_SENSITIVE ("use-custom-default-size-checkbutton", !use_custom_default_size_locked);
+      SET_SENSITIVE ("default-size-hbox", use_custom_default_size);
+      SET_SENSITIVE ("default-size-label", (!columns_locked || !rows_locked));
       SET_SENSITIVE ("default-size-columns-label", !columns_locked);
       SET_SENSITIVE ("default-size-columns-spinbutton", !columns_locked);
       SET_SENSITIVE ("default-size-rows-label", !rows_locked);
@@ -289,7 +293,7 @@ profile_notify_sensitivity_cb (TerminalProfile *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_PALETTE))
     {
-      palette_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_PALETTE);
+      gboolean palette_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_PALETTE);
       SET_SENSITIVE ("palette-combobox", !palette_locked);
       SET_SENSITIVE ("palette-table", !palette_locked);
     }
@@ -844,6 +848,7 @@ terminal_profile_edit (TerminalProfile *profile,
   CONNECT ("transparent-radiobutton", TERMINAL_PROFILE_BACKGROUND_TYPE);
   CONNECT ("update-records-checkbutton", TERMINAL_PROFILE_UPDATE_RECORDS);
   CONNECT ("use-custom-command-checkbutton", TERMINAL_PROFILE_USE_CUSTOM_COMMAND);
+  CONNECT ("use-custom-default-size-checkbutton", TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE);
   CONNECT ("use-theme-colors-checkbutton", TERMINAL_PROFILE_USE_THEME_COLORS);
   CONNECT ("word-chars-entry", TERMINAL_PROFILE_WORD_CHARS);
   CONNECT_WITH_FLAGS ("bell-checkbutton", TERMINAL_PROFILE_SILENT_BELL, FLAG_INVERT_BOOL);

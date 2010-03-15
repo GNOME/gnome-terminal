@@ -296,6 +296,20 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gnome-terminal/profiles/Default/use_custom_default_size</key>
+      <applyto>/apps/gnome-terminal/profiles/Default/use_custom_default_size</applyto>
+      <owner>gnome-terminal</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Whether to use custom terminal size for new windows</short>
+         <long>
+	  If true, newly created terminal windows will have custom
+	  size specified by default_size_columns and default_size_rows.
+         </long>
+      </locale>
+    </schema>
+    <schema>
       <key>/schemas/apps/gnome-terminal/profiles/Default/default_size_columns</key>
       <applyto>/apps/gnome-terminal/profiles/Default/default_size_columns</applyto>
       <owner>gnome-terminal</owner>
@@ -305,6 +319,7 @@
          <short>Default number of columns</short>
          <long>
 	   Number of columns in newly created terminal windows.
+	   Has no effect if use_custom_default_size is not enabled.
          </long>
       </locale>
     </schema>
@@ -319,6 +334,7 @@
          <short>Default number of rows</short>
          <long>
 	   Number of rows in newly created terminal windows.
+	   Has no effect if use_custom_default_size is not enabled.
          </long>
       </locale>
     </schema>
