@@ -7,24 +7,25 @@
 # Leonid Kanter <leon@asplinux.ru>, 2003, 2004, 2005.
 # Tuchinsky Artem <tuchinsky@gmail.com>, 2006.
 # Yuri Kozlov <yuray@komyakino.ru>, 2010.
+# Alexander Saprykin <xelfium@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-16 15:20+0200\n"
-"PO-Revision-Date: 2010-03-13 14:40+0300\n"
-"Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
-"Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
+"POT-Creation-Date: 2010-03-17 11:17+0200\n"
+"PO-Revision-Date: 2010-03-17 00:43+0300\n"
+"Last-Translator: Alexander Saprykin <xelfium@gmail.com>\n"
+"Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:129
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:130
 #: ../src/terminal-accels.c:228 ../src/terminal.c:304
-#: ../src/terminal-profile.c:158 ../src/terminal-window.c:1901
+#: ../src/terminal-profile.c:160 ../src/terminal-window.c:1901
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -287,10 +288,18 @@ msgstr ""
 "последовательность для терминального звонка."
 
 #: ../src/gnome-terminal.schemas.in.h:39
+msgid ""
+"If true, newly created terminal windows will have custom size specified by "
+"default_size_columns and default_size_rows."
+msgstr ""
+"Если включено, новые окна терминалов будут иметь размер, определяемый "
+"параметрами default_size_columns и default_size_rows."
+
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Если включено, нажатие клавиши приводит к перемотке до низа."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -299,7 +308,7 @@ msgstr ""
 "выключено, оставить изображение в фиксированной позиции и перематывать текст "
 "поверх него."
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -309,7 +318,7 @@ msgstr ""
 "временно сохраняться на диск, что при большом количестве вывода в терминал "
 "может привести к заполнению дискового пространства."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -317,7 +326,7 @@ msgstr ""
 "Если включено, команда в терминале будет запущена как login shell. (будет "
 "поставлено тире перед argv[0].)"
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -325,7 +334,7 @@ msgstr ""
 "Если да, файлы utmp/wtmp будут обновлены при запуске команды внутри "
 "терминала."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -333,7 +342,7 @@ msgstr ""
 "Если включено, терминал будет использовать глобальный стандартный шрифт, "
 "если он моноширинный (и наиболее похожий шрифт в противном случае)."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -341,7 +350,7 @@ msgstr ""
 "Если установлено, для терминала будет использоваться цветовая схема полей "
 "ввода из текущей темы, а не цвета пользователя."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -349,14 +358,14 @@ msgstr ""
 "Если этот ключ установлен, вместо оболочки будет использоваться значение "
 "параметра custom_command."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Если установлено, появление нового вывода в терминале будет приводить к "
 "прокрутке вниз."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -367,7 +376,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -377,7 +386,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -388,7 +397,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -400,7 +409,7 @@ msgstr ""
 "специальное значение «disabled», для этого действия не будет комбинации "
 "клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -410,7 +419,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -421,7 +430,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -432,7 +441,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -443,7 +452,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -454,7 +463,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -465,7 +474,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -477,7 +486,7 @@ msgstr ""
 "специальное значение «disabled», для этого действия не будет комбинации "
 "клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -487,7 +496,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
 "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -498,7 +507,7 @@ msgstr ""
 "в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
 "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -509,7 +518,7 @@ msgstr ""
 "в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid ""
 "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -520,7 +529,7 @@ msgstr ""
 "в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid ""
 "Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -530,7 +539,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -540,7 +549,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -550,7 +559,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -560,7 +569,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -570,7 +579,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -580,7 +589,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -590,7 +599,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -600,7 +609,7 @@ msgstr ""
 "формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -611,7 +620,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -622,7 +631,7 @@ msgstr ""
 "в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -633,7 +642,7 @@ msgstr ""
 "файлов ресурсов GTK+. Если установить специальное значение «disabled», для "
 "этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid ""
 "Keyboard shortcut key to save the current tab contents to a file. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -644,7 +653,7 @@ msgstr ""
 "в виде строки в формате файлов ресурсов GTK+. Если установить специальное "
 "значение «disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -655,7 +664,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -666,7 +675,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -677,7 +686,7 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -688,139 +697,139 @@ msgstr ""
 "строки в формате файлов ресурсов GTK+. Если установить специальное значение "
 "«disabled», для этого действия не будет комбинации клавиш."
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a tab"
 msgstr "Комбинация клавиш для закрытия вкладки"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to close a window"
 msgstr "Комбинация клавиш для закрытия окна"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to copy text"
 msgstr "Комбинация клавиш для копирования текста"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Комбинация клавиш для создания нового профиля"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to launch help"
 msgstr "Комбинация клавиш для вызова помощи"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font larger"
 msgstr "Комбинация клавиш для увеличения шрифта"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Комбинация клавиш для установки нормального размера шрифта"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Комбинация клавиш для уменьшения шрифта"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Комбинация клавиш для открытия новой вкладки"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to open a new window"
 msgstr "Комбинация клавиш для открытия нового окна"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to paste text"
 msgstr "Комбинация клавиш для вставки текста"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Комбинация клавиш для сброса и очистки терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:92
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Комбинация клавиш для сброса терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Комбинация клавиш для записи содержимого текущей вкладки в файл"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Комбинация клавиш для установки заголовка терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "Комбинация клавиш для переключения на вкладку 1"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "Комбинация клавиш для переключения на вкладку 10"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "Комбинация клавиш для переключения на вкладку 11"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "Комбинация клавиш для переключения на вкладку 12"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "Комбинация клавиш для переключения на вкладку 2"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "Комбинация клавиш для переключения на вкладку 3"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "Комбинация клавиш для переключения на вкладку 4"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "Комбинация клавиш для переключения на вкладку 5"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "Комбинация клавиш для переключения на вкладку 6"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "Комбинация клавиш для переключения на вкладку 7"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "Комбинация клавиш для переключения на вкладку 8"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "Комбинация клавиш для переключения на вкладку 9"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Комбинация клавиш для переключения на следующую вкладку"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Комбинация клавиш для переключения на предыдущую вкладку"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Комбинация клавиш для переключения в полноэкранный режим"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Комбинация клавиш для переключения видимости меню"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of available encodings"
 msgstr "Список доступных кодировок"
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid "List of profiles"
 msgstr "Список профилей"
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -828,7 +837,7 @@ msgstr ""
 "Список профилей, известных терминалу. Список содержит строки, именующие "
 "подкаталоги каталога /apps/gnome-terminal/profiles."
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -838,19 +847,27 @@ msgstr ""
 "быть изменена в в файле gtkrc (gtk-menu-bar-accel = «что-либо»). Этот ключ "
 "позволяет отключить стандартный акселератор доступа к меню."
 
-#: ../src/gnome-terminal.schemas.in.h:114
-msgid "Number of columns in newly created terminal windows."
-msgstr "Количество столбцов в создаваемых окнах терминалов."
-
 #: ../src/gnome-terminal.schemas.in.h:115
+msgid ""
+"Number of columns in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Количество столбцов в создаваемых окнах терминалов. Используется при "
+"включённом use_custom_default_size."
+
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Number of lines to keep in scrollback"
 msgstr "Количество строк в буфере прокрутки"
 
-#: ../src/gnome-terminal.schemas.in.h:116
-msgid "Number of rows in newly created terminal windows."
-msgstr "Количество строк в создаваемых окнах терминалов."
-
 #: ../src/gnome-terminal.schemas.in.h:117
+msgid ""
+"Number of rows in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Количество строк в создаваемых окнах терминалов. Используется при включённом "
+"use_custom_default_size."
+
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -861,13 +878,13 @@ msgstr ""
 "самые старые строки отбрасываются. Если scrollback_unlimited равно true, то "
 "это значение игнорируется."
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:119
 msgid "Palette for terminal applications"
 msgstr "Палитра для терминальных приложений"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -875,11 +892,11 @@ msgstr ""
 "Показывать диалог при обнаружении ответа на запрос S/Key и нажатии на него. "
 "Ввод пароля в диалоге приведет к отправке его в терминал."
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Position of the scrollbar"
 msgstr "Положение линейки прокрутки"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -887,24 +904,24 @@ msgstr ""
 "Возможные значения: «close» - закрыть терминал, «restart» - перезапустить "
 "команду."
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Профиль, используемый при открытии нового окна или вкладки. Должен быть в "
 "profile_list."
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid "Profile to use for new terminals"
 msgstr "Профиль, используемый для новых терминалов"
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Выполнять эту команду вместо оболочки, если установлен ключ "
 "use_custom_command."
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -917,7 +934,7 @@ msgstr ""
 "последовательность, обычно соответствующая клавишам «Backspace» или «Delete»). "
 "Рекомендуется установить значение «ascii-del»."
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:129
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -930,7 +947,7 @@ msgstr ""
 "последовательность, обычно соответствующая клавишам «Backspace» или «Delete»). "
 "Рекомендуется установить значение «escape-sequence»."
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -941,11 +958,11 @@ msgstr ""
 "запятыми списка имен цветов. Имена цветов должны быть в шестнадцатеричном "
 "формате, например «#FF00FF»"
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid "The cursor appearance"
 msgstr "Вид курсора"
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
@@ -953,7 +970,7 @@ msgstr ""
 "Возможные значения: «block» - прямоугольный курсор, «ibeam» - курсор в виде "
 "вертикальной линии или «underline» - курсор в виде подчёркивания."
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -962,11 +979,11 @@ msgstr ""
 "настройки мигания курсора, либо «on» или «off» для явной установки режима "
 "мигания."
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid "Title for terminal"
 msgstr "Заголовок терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -976,7 +993,7 @@ msgstr ""
 "совмещен с заголовком, устанавливаемым приложением внутри терминала, в "
 "зависимости от значения ключа title_mode."
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -984,7 +1001,7 @@ msgstr ""
 "Если установлено, показывать панель меню в новых окнах, для окон/вкладок с "
 "этим профилем."
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
@@ -994,15 +1011,15 @@ msgstr ""
 "изображение, «transparent» - полупрозрачный, если включен менеджер композиции "
 "или псевдо-полупрозрачный, если выключен."
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "What to do with dynamic title"
 msgstr "Что делать с динамическим заголовком"
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "What to do with the terminal when the child command exits"
 msgstr "Что делать с терминалом после завершения дочерней команды"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -1012,7 +1029,7 @@ msgstr ""
 "как отдельные слова. Диапазоны могут быть указаны как «A-Z». Знак переноса "
 "(не означающий диапазон) должен быть первым из указанных символов."
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
@@ -1020,27 +1037,27 @@ msgstr ""
 "Размещение линейки прокрутки терминала. Возможные варианты «left», «right» и "
 "«disabled»."
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Включение в буфере прокрутки бесконечного количества строк"
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether bold text should use the same color as normal text"
 msgstr "Выводить ли полужирный текст тем же цветом что и обычный текст"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether the menubar has access keys"
 msgstr "Имеет ли панель меню клавиши доступа"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Разрешать ли стандартную комбинацию клавиш GTK для доступа к меню"
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to allow bold text"
 msgstr "Разрешать ли полужирный текст"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -1048,15 +1065,15 @@ msgstr ""
 "Запрашивать ли подтверждение при закрытии окна терминала, которое имеет "
 "более одной открытой вкладки."
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Запрашивать ли подтверждение при закрытии окон терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:149
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid "Whether to blink the cursor"
 msgstr "Включать ли мигание курсора"
 
-#: ../src/gnome-terminal.schemas.in.h:150
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1066,44 +1083,49 @@ msgstr ""
 "может мешать работе некоторых приложений внутри терминала, в этом случае ее "
 "необходимо отключить."
 
-#: ../src/gnome-terminal.schemas.in.h:151
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr ""
 "Запускать ли команду в терминале как регистрационную оболочку (login shell)"
 
-#: ../src/gnome-terminal.schemas.in.h:152
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Запускать ли другую команду вместо оболочки"
 
-#: ../src/gnome-terminal.schemas.in.h:153
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to scroll background image"
 msgstr "Прокручивать ли фоновое изображение"
 
-#: ../src/gnome-terminal.schemas.in.h:154
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Прокручивать ли окно вниз при нажатии клавиши"
 
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Прокручивать ли вниз при появлении нового вывода"
 
-#: ../src/gnome-terminal.schemas.in.h:156
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Отображать ли меню в новых окнах/вкладках"
 
-#: ../src/gnome-terminal.schemas.in.h:157
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to silence terminal bell"
 msgstr "Подавлять ли сигнал терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:158
+#: ../src/gnome-terminal.schemas.in.h:159
 msgid "Whether to update login records when launching terminal command"
 msgstr "Обновлять ли utmp/wtmp при запуске команды терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:159
+#: ../src/gnome-terminal.schemas.in.h:160
+msgid "Whether to use custom terminal size for new windows"
+msgstr ""
+"Использовать ли заданный пользователем размер для создаваемых окон терминалов"
+
+#: ../src/gnome-terminal.schemas.in.h:161
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Использовать ли шрифт из текущей темы для объекта терминала"
 
-#: ../src/gnome-terminal.schemas.in.h:160
+#: ../src/gnome-terminal.schemas.in.h:162
 msgid "Whether to use the system font"
 msgstr "Использовать ли системный шрифт"
 
@@ -1113,7 +1135,7 @@ msgstr "Использовать ли системный шрифт"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:167
+#: ../src/gnome-terminal.schemas.in.h:169
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,ISO-8859-5,KOI8R,WINDOWS-1251,current]"
 
@@ -1155,26 +1177,26 @@ msgstr "зелёный на чёрном"
 msgid "White on black"
 msgstr "белый на чёрном"
 
-#: ../src/profile-editor.c:472
+#: ../src/profile-editor.c:476
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Ошибка в синтаксисе команды: %s"
 
-#: ../src/profile-editor.c:490
+#: ../src/profile-editor.c:494
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Изменение профиля «%s»"
 
-#: ../src/profile-editor.c:628
+#: ../src/profile-editor.c:632
 msgid "Images"
 msgstr "Изображения"
 
-#: ../src/profile-editor.c:754
+#: ../src/profile-editor.c:758
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Изменить цвет палитры %d"
 
-#: ../src/profile-editor.c:758
+#: ../src/profile-editor.c:762
 #, c-format
 msgid "Palette entry %d"
 msgstr "Элемент палитры %d"
@@ -1437,94 +1459,98 @@ msgid "Title and Command"
 msgstr "Заголовок и команда"
 
 #: ../src/profile-preferences.glade.h:61
+msgid "Use custom default terminal si_ze"
+msgstr "Использовать другой размер терминала по умолчанию"
+
+#: ../src/profile-preferences.glade.h:62
 msgid "When command _exits:"
 msgstr "При в_ыходе из команды:"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:63
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Когда команды терминала устанавливают _собственный заголовок"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:64
 msgid "_Allow bold text"
 msgstr "Р_азрешать полужирный текст"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:65
 msgid "_Background color:"
 msgstr "Цвет фо_на:"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:66
 msgid "_Background image"
 msgstr "Ф_оновое изображение"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:67
 msgid "_Backspace key generates:"
 msgstr "Клавиша «_Backspace» генерирует:"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:68
 msgid "_Delete key generates:"
 msgstr "Клавиша «_Delete» генерирует:"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:69
 msgid "_Font:"
 msgstr "_Шрифт:"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:70
 msgid "_Profile name:"
 msgstr "Название _профиля:"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:71
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Восстановить параметры совместимости по умолчанию"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:72
 msgid "_Run command as a login shell"
 msgstr "За_пускать команду как оболочку входа"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:73
 msgid "_Same as text color"
 msgstr "_Цвет как у обычного текста"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:74
 msgid "_Scrollbar is:"
 msgstr "Полоса прокр_утки:"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:75
 msgid "_Solid color"
 msgstr "_Сплошной цвет"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:76
 msgid "_Text color:"
 msgstr "Цвет _текста:"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:77
 msgid "_Transparent background"
 msgstr "_Прозрачный фон"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:78
 msgid "_Unlimited"
 msgstr "_Бесконечно"
 
-#: ../src/profile-preferences.glade.h:78
+#: ../src/profile-preferences.glade.h:79
 msgid "_Update login records when command is launched"
 msgstr "_Обновлять записи utmp/wtmp при запуске команды"
 
-#: ../src/profile-preferences.glade.h:79
+#: ../src/profile-preferences.glade.h:80
 msgid "_Use colors from system theme"
 msgstr "_Использовать цвета из системной темы"
 
-#: ../src/profile-preferences.glade.h:80
+#: ../src/profile-preferences.glade.h:81
 msgid "_Use the system fixed width font"
 msgstr "_Использовать системный моноширинный шрифт"
 
-#: ../src/profile-preferences.glade.h:81
+#: ../src/profile-preferences.glade.h:82
 msgid "columns"
 msgstr "столбцов"
 
-#: ../src/profile-preferences.glade.h:82
+#: ../src/profile-preferences.glade.h:83
 msgid "lines"
 msgstr "строк"
 
-#: ../src/profile-preferences.glade.h:83
+#: ../src/profile-preferences.glade.h:84
 msgid "rows"
 msgstr "строк"
 
@@ -1940,7 +1966,7 @@ msgid ""
 "profile' option\n"
 msgstr ""
 "Параметр «%s» больше не поддерживается этой версией программы gnome-terminal; "
-"вы можете создать профиль с желаемыми настройками и использовать новый "
+"вы можете создать профиль с желаемыми параметрами и использовать новый "
 "параметр «--profile»\n"
 
 #: ../src/terminal-options.c:188 ../src/terminal-window.c:3708
@@ -2136,7 +2162,7 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Показать параметры, применяемые к терминалу"
 
-#: ../src/terminal-profile.c:164
+#: ../src/terminal-profile.c:167
 msgid "Unnamed"
 msgstr "Безымянный"
 
@@ -2285,7 +2311,7 @@ msgstr "_Комбинации клавиш…"
 
 #: ../src/terminal-window.c:1761
 msgid "Pr_ofile Preferences"
-msgstr "Настройки п_рофиля"
+msgstr "Параметры п_рофиля"
 
 #. Terminal menu
 #: ../src/terminal-window.c:1777
