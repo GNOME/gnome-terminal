@@ -28,6 +28,8 @@ N_("Control-H")
 N_("ASCII DEL")
 /* Translators: This refers to the Delete keybinding option */
 N_("Escape sequence")
+/* Translators: This refers to the Delete keybinding option */
+N_("TTY Erase")
 
 /* Translators: Cursor shape: ... */
 N_("Block")
