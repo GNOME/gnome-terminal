@@ -18,8 +18,6 @@
 
 #include <config.h>
 
-#undef VTE_DISABLE_DEPRECATED
-
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
