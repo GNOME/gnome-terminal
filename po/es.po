@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&component=general\n"
-"POT-Creation-Date: 2010-03-16 20:09+0000\n"
-"PO-Revision-Date: 2010-03-17 07:11+0100\n"
+"POT-Creation-Date: 2010-03-23 23:57+0000\n"
+"PO-Revision-Date: 2010-03-24 17:22+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -898,7 +898,6 @@ msgstr ""
 "a la barra de menús."
 
 #: ../src/gnome-terminal.schemas.in.h:115
-#| msgid "Number of columns in newly created terminal windows."
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -911,7 +910,6 @@ msgid "Number of lines to keep in scrollback"
 msgstr "Cantidad de líneas a mantener en el desplazamiento"
 
 #: ../src/gnome-terminal.schemas.in.h:117
-#| msgid "Number of rows in newly created terminal windows."
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -1089,13 +1087,15 @@ msgstr ""
 "literal (sin expresar un rango) debería ser el primer carácter proporcionado."
 
 #: ../src/gnome-terminal.schemas.in.h:142
+#| msgid ""
+#| "Where to put the terminal scrollbar. Possibilities are \"left\", \"right"
+#| "\", and \"disabled\"."
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
-"and \"disabled\"."
+"and \"hidden\"."
 msgstr ""
 "Indica dónde colocar la barra de desplazamiento de la terminal. Las "
-"posibilidades son «left» (izquierda), «right» (derecha), y "
-"«disabled» (desactivada)."
+"posibilidades son «left» (izquierda), «right» (derecha), y «hidden» (oculta)."
 
 #: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether an unlimited number of lines should be kept in scrollback"
@@ -1188,7 +1188,6 @@ msgstr ""
 "comando de terminal"
 
 #: ../src/gnome-terminal.schemas.in.h:160
-#| msgid "Whether to show menubar in new windows/tabs"
 msgid "Whether to use custom terminal size for new windows"
 msgstr ""
 "Indica si se debe usar un tamaño personalizado de terminal para las ventanas "
@@ -1265,12 +1264,12 @@ msgstr "Editando el perfil «%s»"
 msgid "Images"
 msgstr "Imágenes"
 
-#: ../src/profile-editor.c:758
+#: ../src/profile-editor.c:801
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Elija la paleta de colores %d"
 
-#: ../src/profile-editor.c:762
+#: ../src/profile-editor.c:805
 #, c-format
 msgid "Palette entry %d"
 msgstr "Entrada de paleta %d"
@@ -1344,26 +1343,33 @@ msgid "<small><i>None</i></small>"
 msgstr "<small><i>Ninguno</i></small>"
 
 #: ../src/profile-preferences.glade.h:9
+#| msgid ""
+#| "Automatic\n"
+#| "Control-H\n"
+#| "ASCII DEL\n"
+#| "Escape sequence"
 msgid ""
 "Automatic\n"
 "Control-H\n"
 "ASCII DEL\n"
-"Escape sequence"
+"Escape sequence\n"
+"TTY Erase"
 msgstr ""
 "Automático\n"
 "Control-H\n"
 "ASCII para Supr.\n"
-"Secuencia de escape"
+"Secuencia de escape\n"
+"Borrado TTY"
 
-#: ../src/profile-preferences.glade.h:13
+#: ../src/profile-preferences.glade.h:14
 msgid "Background"
 msgstr "Fondo"
 
-#: ../src/profile-preferences.glade.h:14
+#: ../src/profile-preferences.glade.h:15
 msgid "Background image _scrolls"
 msgstr "_Desplazar la imagen de fondo"
 
-#: ../src/profile-preferences.glade.h:15
+#: ../src/profile-preferences.glade.h:16
 msgid ""
 "Block\n"
 "I-Beam\n"
@@ -1373,60 +1379,61 @@ msgstr ""
 "Doble T\n"
 "Subrayar"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.glade.h:19
 msgid "Bol_d color:"
 msgstr "Color de _negrita:"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:20
 msgid "Built-in _schemes:"
 msgstr "E_squemas incluidos:"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:21
 msgid "Built-in sche_mes:"
 msgstr "Esque_mas incluidos:"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose A Terminal Font"
 msgstr "Elija una tipografía de terminal"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:23
 msgid "Choose Terminal Background Color"
 msgstr "Elija el color de fondo de la terminal"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:24
 msgid "Choose Terminal Text Color"
 msgstr "Elija el color del texto de la terminal"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:25
 msgid "Color p_alette:"
 msgstr "P_aleta de colores:"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:26
 msgid "Colors"
 msgstr "Colores"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:27
 msgid "Compatibility"
 msgstr "Compatibilidad"
 
-#: ../src/profile-preferences.glade.h:27
+#: ../src/profile-preferences.glade.h:28
 msgid "Cursor _shape:"
 msgstr "_Forma del cursor:"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/profile-preferences.glade.h:28 ../src/extra-strings.c:71
+#: ../src/profile-preferences.glade.h:29 ../src/extra-strings.c:73
 msgid "Custom"
 msgstr "Personalizar"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:30
 msgid "Custom co_mmand:"
 msgstr "Comando _personalizado:"
 
-#: ../src/profile-preferences.glade.h:30
-msgid "Default si_ze:"
-msgstr "_Tamaño predeterminado:"
-
 #: ../src/profile-preferences.glade.h:31
+#| msgid "Default si_ze:"
+msgid "Default size:"
+msgstr "Tamaño predeterminado:"
+
+#: ../src/profile-preferences.glade.h:32
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1436,19 +1443,19 @@ msgstr ""
 "Reiniciar el comando\n"
 "Mantener la terminal abierta"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:35
 msgid "General"
 msgstr "General"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:36
 msgid "Image _file:"
 msgstr "Archivo de _imagen:"
 
-#: ../src/profile-preferences.glade.h:36
+#: ../src/profile-preferences.glade.h:37
 msgid "Initial _title:"
 msgstr "_Título inicial:"
 
-#: ../src/profile-preferences.glade.h:37
+#: ../src/profile-preferences.glade.h:38
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1458,11 +1465,11 @@ msgstr ""
 "En el lado derecho\n"
 "Desactivada"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.glade.h:41
 msgid "Profile Editor"
 msgstr "Editor de perfiles"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.glade.h:42
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1474,43 +1481,43 @@ msgstr ""
 "Precede al título inicial\n"
 "Mantiene el título inicial"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:46
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Ejec_utar un comando personalizado en vez de mi intérprete"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:47
 msgid "S_hade transparent or image background:"
 msgstr "So_mbra transparente o imagen de fondo:"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:48
 msgid "Scroll on _keystroke"
 msgstr "Desplazar al pulsar _teclas"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:49
 msgid "Scroll on _output"
 msgstr "Desplazar en la _salida"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:50
 msgid "Scroll_back:"
 msgstr "_Desplazar hacia atrás:"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.glade.h:51
 msgid "Scrolling"
 msgstr "Desplazamiento"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.glade.h:52
 msgid "Select Background Image"
 msgstr "Seleccione la imagen de fondo"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.glade.h:53
 msgid "Select-by-_word characters:"
 msgstr "Caracteres para _selección por palabra:"
 
-#: ../src/profile-preferences.glade.h:53
+#: ../src/profile-preferences.glade.h:54
 msgid "Show _menubar by default in new terminals"
 msgstr "Mostrar la barra de _menús en las terminales nuevas por omisión"
 
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.glade.h:55
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1524,108 +1531,108 @@ msgstr ""
 "Rxvt\n"
 "Personalizado"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:60
 msgid "Terminal _bell"
 msgstr "C_ampana de la terminal"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:61
 msgid "Title and Command"
 msgstr "Título y comando"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:62
 msgid "Use custom default terminal si_ze"
 msgstr "Usar tama_ño predeterminado personalizado de terminal"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:63
 msgid "When command _exits:"
 msgstr "Cuando el comando termi_na:"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:64
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Cuando los comandos de la terminal establecen sus p_ropios títulos:"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:65
 msgid "_Allow bold text"
 msgstr "Permitir texto _resaltado"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:66
 msgid "_Background color:"
 msgstr "Color del _fondo:"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:67
 msgid "_Background image"
 msgstr "Imagen de _fondo"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:68
 msgid "_Backspace key generates:"
 msgstr "La tecla _Retroceso genera:"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:69
 msgid "_Delete key generates:"
 msgstr "La tecla _Suprimir genera:"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:70
 msgid "_Font:"
 msgstr "_Tipografía:"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:71
 msgid "_Profile name:"
 msgstr "_Nombre del perfil:"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:72
 msgid "_Reset Compatibility Options to Defaults"
 msgstr ""
 "R_einiciar las opciones de compatibilidad con los valores predeterminados"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:73
 msgid "_Run command as a login shell"
 msgstr "_Ejecutar el comando como un intérprete de conexión"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:74
 msgid "_Same as text color"
 msgstr "El _mismo que el color del texto"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:75
 msgid "_Scrollbar is:"
 msgstr "La _barra de desplazamiento está:"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:76
 msgid "_Solid color"
 msgstr "Color _sólido"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:77
 msgid "_Text color:"
 msgstr "Color del _texto:"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:78
 msgid "_Transparent background"
 msgstr "Fondo _transparente"
 
-#: ../src/profile-preferences.glade.h:78
+#: ../src/profile-preferences.glade.h:79
 msgid "_Unlimited"
 msgstr "_Ilimitado"
 
-#: ../src/profile-preferences.glade.h:79
+#: ../src/profile-preferences.glade.h:80
 msgid "_Update login records when command is launched"
 msgstr "_Actualizar registros de inicio de sesión cuando se ejecuta un comando"
 
-#: ../src/profile-preferences.glade.h:80
+#: ../src/profile-preferences.glade.h:81
 msgid "_Use colors from system theme"
 msgstr "_Usar colores del tema del sistema"
 
-#: ../src/profile-preferences.glade.h:81
+#: ../src/profile-preferences.glade.h:82
 msgid "_Use the system fixed width font"
 msgstr "_Usar la tipografía de ancho fijo del sistema"
 
-#: ../src/profile-preferences.glade.h:82
+#: ../src/profile-preferences.glade.h:83
 msgid "columns"
 msgstr "columnas"
 
-#: ../src/profile-preferences.glade.h:83
+#: ../src/profile-preferences.glade.h:84
 msgid "lines"
 msgstr "líneas"
 
-#: ../src/profile-preferences.glade.h:84
+#: ../src/profile-preferences.glade.h:85
 msgid "rows"
 msgstr "filas"
 
@@ -1693,7 +1700,7 @@ msgstr "Reducir"
 msgid "Normal Size"
 msgstr "Tamaño normal"
 
-#: ../src/terminal-accels.c:161 ../src/terminal-window.c:3487
+#: ../src/terminal-accels.c:161 ../src/terminal-window.c:3488
 msgid "Set Title"
 msgstr "Establecer título"
 
@@ -1798,7 +1805,7 @@ msgid "Help"
 msgstr "Ayuda"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:287 ../src/extra-strings.c:51
+#: ../src/terminal-accels.c:287 ../src/extra-strings.c:53
 msgid "Disabled"
 msgstr "Desactivada"
 
@@ -1832,11 +1839,11 @@ msgstr "¿Borrar el perfil «%s»?"
 msgid "Delete Profile"
 msgstr "Borrar perfil"
 
-#: ../src/terminal-app.c:958
+#: ../src/terminal-app.c:960
 msgid "User Defined"
 msgstr "Definido por el usuario"
 
-#: ../src/terminal-app.c:1113
+#: ../src/terminal-app.c:1115
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1845,16 +1852,16 @@ msgstr ""
 "Ya tiene un perfil llamado «%s». ¿Quiere crear otro perfil con el mismo "
 "nombre?"
 
-#: ../src/terminal-app.c:1215
+#: ../src/terminal-app.c:1217
 msgid "Choose base profile"
 msgstr "Seleccione el perfil base"
 
-#: ../src/terminal-app.c:1800
+#: ../src/terminal-app.c:1802
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "No existe el perfil «%s», usando el perfil predeterminado\n"
 
-#: ../src/terminal-app.c:1824
+#: ../src/terminal-app.c:1826
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Cadena de geometría inválida «%s»\n"
@@ -2044,7 +2051,7 @@ msgstr ""
 "quiera crear un perfil con el ajuste deseado y usar la nueva opción «--"
 "profile»\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3708
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3709
 msgid "GNOME Terminal"
 msgstr "Terminal de GNOME"
 
@@ -2245,13 +2252,32 @@ msgstr "Muestra las opciones por terminal"
 msgid "Unnamed"
 msgstr "Sin nombre"
 
-#: ../src/terminal-screen.c:1309
-msgid "There was a problem with the command for this terminal"
-msgstr "Hubo un problema con el comando para este terminal"
+#: ../src/terminal-screen.c:1496
+#| msgid "Pr_ofile Preferences"
+msgid "_Profile Preferences"
+msgstr "_Preferencias del perfil"
 
-#: ../src/terminal-screen.c:1513
+#: ../src/terminal-screen.c:1497 ../src/terminal-screen.c:1889
+msgid "_Relaunch"
+msgstr "_Relanzar"
+
+#: ../src/terminal-screen.c:1500 ../src/terminal-screen.c:1513
 msgid "There was an error creating the child process for this terminal"
 msgstr "Hubo un error al crear el proceso hijo para este terminal"
+
+#: ../src/terminal-screen.c:1893
+#, c-format
+msgid "The child process exited normally with status %d."
+msgstr "El proceso hijo finalizó correctamente con el estado %d."
+
+#: ../src/terminal-screen.c:1896
+#, c-format
+msgid "The child process was terminated by signal %d."
+msgstr "La señal %d terminó el proceso hijo."
+
+#: ../src/terminal-screen.c:1899
+msgid "The child process was terminated."
+msgstr "El proceso hijo fue terminado."
 
 #: ../src/terminal-tab-label.c:151
 msgid "Close tab"
@@ -2532,19 +2558,19 @@ msgstr "No se pudo guardar el contenido"
 msgid "Save as..."
 msgstr "Guardar como…"
 
-#: ../src/terminal-window.c:3504
+#: ../src/terminal-window.c:3505
 msgid "_Title:"
 msgstr "_Título:"
 
-#: ../src/terminal-window.c:3691
+#: ../src/terminal-window.c:3692
 msgid "Contributors:"
 msgstr "Colaboradores:"
 
-#: ../src/terminal-window.c:3710
+#: ../src/terminal-window.c:3711
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulador de terminal para el escritorio GNOME"
 
-#: ../src/terminal-window.c:3717
+#: ../src/terminal-window.c:3718
 msgid "translator-credits"
 msgstr ""
 "Jorge González <jorgegonz@svn.gnome.org>\n"
@@ -2591,85 +2617,93 @@ msgstr "ASCII para Supr."
 msgid "Escape sequence"
 msgstr "Secuencia de escape"
 
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:32
+msgid "TTY Erase"
+msgstr "Borrado TTY"
+
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:33
+#: ../src/extra-strings.c:35
 msgid "Block"
 msgstr "Bloque"
 
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
+#: ../src/extra-strings.c:37
 msgid "I-Beam"
 msgstr "Doble T"
 
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
+#: ../src/extra-strings.c:39
 msgid "Underline"
 msgstr "Subrayado"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:40
+#: ../src/extra-strings.c:42
 msgid "Exit the terminal"
 msgstr "Salir de la terminal"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
+#: ../src/extra-strings.c:44
 msgid "Restart the command"
 msgstr "Reiniciar el comando"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
+#: ../src/extra-strings.c:46
 msgid "Hold the terminal open"
 msgstr "Mantener la terminal abierta"
 
 #. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:47
+#: ../src/extra-strings.c:49
 msgid "On the left side"
 msgstr "En la parte izquierda"
 
 #. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
+#: ../src/extra-strings.c:51
 msgid "On the right side"
 msgstr "En la parte derecha"
 
 #. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:54
-msgid "Replace initial title"
-msgstr "_Título inicial:"
-
-#. Translators: When terminal commands set their own titles: ...
 #: ../src/extra-strings.c:56
-msgid "Append initial title"
-msgstr "_Título inicial:"
+msgid "Replace initial title"
+msgstr "Reemplazar el título inicial"
 
 #. Translators: When terminal commands set their own titles: ...
 #: ../src/extra-strings.c:58
-msgid "Prepend initial title"
-msgstr "_Título inicial:"
+msgid "Append initial title"
+msgstr "Añadir al título inicial"
 
 #. Translators: When terminal commands set their own titles: ...
 #: ../src/extra-strings.c:60
+msgid "Prepend initial title"
+msgstr "Añadir al comienzo del título inicial"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:62
 msgid "Keep initial title"
-msgstr "_Título inicial:"
+msgstr "Mantener el título inicial"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:63
+#: ../src/extra-strings.c:65
 msgid "Tango"
 msgstr "Tango"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
+#: ../src/extra-strings.c:67
 msgid "Linux console"
 msgstr "Consola Linux"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
+#: ../src/extra-strings.c:69
 msgid "XTerm"
 msgstr "Terminal"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
+#: ../src/extra-strings.c:71
 msgid "Rxvt"
 msgstr "Rxvt"
+
+#~ msgid "There was a problem with the command for this terminal"
+#~ msgstr "Hubo un problema con el comando para este terminal"
 
 #~ msgid ""
 #~ "Set the window geometry from the provided X geometry specification; see "
