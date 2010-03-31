@@ -719,46 +719,42 @@ static void
 setup_http_proxy_env (GHashTable *env_table,
                       GConfClient *conf)
 {
-  gchar *host, *auth = NULL;
+  gchar *host;
   gint port;
   GSList *ignore;
 
   if (!gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_http_proxy", NULL))
     return;
 
-  if (gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_authentication", NULL))
-    {
-      char *user, *password;
-      user = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_user");
-      password = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_password");
-      if (user)
-	{
-	  if (password)
-	    {
-	      auth = g_strdup_printf ("%s:%s", user, password);
-	      g_free (user);
-	    }
-	  else
-	    auth = user;
-	}
-      g_free (password);
-    }
-
   host = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/host");
   port = gconf_client_get_int (conf, CONF_HTTP_PROXY_PREFIX "/port", NULL);
   if (host && port)
     {
-      char *proxy;
-      if (auth)
-	proxy = g_strdup_printf ("http://%s@%s:%d/", auth, host, port);
-      else
-	proxy = g_strdup_printf ("http://%s:%d/", host, port);
-      set_proxy_env (env_table, "http_proxy", proxy);
+      GString *buf = g_string_sized_new (64);
+      g_string_append (buf, "http://");
+
+      if (gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_authentication", NULL))
+	{
+	  char *user, *password;
+	  user = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_user");
+	  if (user)
+	    {
+	      g_string_append_uri_escaped (buf, user, NULL, TRUE);
+	      password = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_password");
+	      if (password)
+		{
+		  g_string_append_c (buf, ':');
+		  g_string_append_uri_escaped (buf, password, NULL, TRUE);
+		  g_free (password);
+		}
+	      g_free (user);
+	      g_string_append_c (buf, '@');
+	    }
+	}
+      g_string_append_printf (buf, "%s:%d/", host, port);
+      set_proxy_env (env_table, "http_proxy", g_string_free (buf, FALSE));
     }
   g_free (host);
-
-  g_free (auth);
-
 
   ignore = gconf_client_get_list (conf, CONF_HTTP_PROXY_PREFIX "/ignore_hosts", GCONF_VALUE_STRING, NULL);
   if (ignore)
