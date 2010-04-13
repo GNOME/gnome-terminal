@@ -34,8 +34,6 @@
 #define CONF_FIND_MATCH_CASE    CONF_FIND_PREFIX "/match_case"
 #define CONF_FIND_MATCH_REGEX   CONF_FIND_PREFIX "/match_regex"
 #define CONF_FIND_MATCH_WHOLE   CONF_FIND_PREFIX "/match_whole"
-#define CONF_FIND_HISTORY_LIST  CONF_FIND_PREFIX "/history_list"
-#define CONF_FIND_HISTORY_COUNT CONF_FIND_PREFIX "/history_count"
 
 #define CONF_FIND_ENTRY_DEFAULT 50              /* By default, save 50 previous finds */
 
@@ -59,86 +57,6 @@ static GtkWindow      *parent;
 static FindParams     *params;
 
 static void terminal_find_set_parent (GtkWindow *new_parent);
-
-/**
- * terminal_find_history_load
- *
- * Read the list of previous searches from GConf.
- * They are stored in the GtkTreeModel attached to the GtkEntry.
- * The list is capped at @entry_max items.
- */
-static void
-terminal_find_history_load (void)
-{
-  GtkTreeIter iter;
-  GSList *list = NULL;
-  GSList *curr = NULL;
-  int i;
-  int count;
-
-  g_assert (gconf);
-  g_assert (model);
-
-  entry_max = gconf_client_get_int (gconf, CONF_FIND_HISTORY_COUNT, NULL);
-  if (entry_max == 0)
-    entry_max = CONF_FIND_ENTRY_DEFAULT;
-
-  list = gconf_client_get_list (gconf, CONF_FIND_HISTORY_LIST, GCONF_VALUE_STRING, NULL);
-  count = g_slist_length (list);
-
-  count = MIN (count, entry_max);
-  curr = list;
-  for (i = 0; i < count; i++)
-    {
-      gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-      gtk_list_store_set (GTK_LIST_STORE (model), &iter, 0, curr->data, -1);
-      curr = g_slist_next (curr);
-    }
-}
-
-/**
- * terminal_find_history_save
- *
- * Save the list of previous searches in GConf.
- * They are stored in the GtkTreeModel attached to the GtkEntry.
- * The list is capped at @entry_max items.
- */
-static void
-terminal_find_history_save (void)
-{
-  GtkTreeIter iter;
-  GSList *list = NULL;
-  int i;
-  int count;
-
-  g_assert (gconf);
-  g_assert (model);
-
-  gtk_tree_model_get_iter_first (model, &iter);
-  count = gtk_tree_model_iter_n_children (model, NULL);
-  count = MIN (count, entry_max);
-
-  /* Copy the strings from the GtkEntryCompletion to a GSList */
-  for (i = 0; i < count; i++)
-    {
-      GValue value = { 0 };
-
-      gtk_tree_model_get_value (model, &iter, 0, &value);
-      list = g_slist_append (list, g_value_dup_string (&value));
-      g_value_unset (&value);
-
-      gtk_tree_model_iter_next (model, &iter);
-    }
-
-  gconf_client_set_int  (gconf, CONF_FIND_HISTORY_COUNT,   entry_max, NULL);
-  gconf_client_set_list (gconf, CONF_FIND_HISTORY_LIST, GCONF_VALUE_STRING, list, NULL);
-
-  /* Clear up the list of strings we used */
-  for (i = 0; i < count; i++)
-    g_free (g_slist_nth_data (list, i));
-
-  g_slist_free (list);
-}
 
 /**
  * terminal_find_history_add
@@ -217,9 +135,6 @@ terminal_find_history_init (void)
   /* The GtkEntry's holding the references now. */
   g_object_unref (comp);
   g_object_unref (model);
-
-  /* Finally, populate the list with items stored in GConf */
-  terminal_find_history_load ();
 }
 
 
@@ -626,8 +541,6 @@ terminal_find_destroyed_cb (GtkWidget *widget,
                             gpointer   user_data)
 {
   g_assert (gconf);
-
-  terminal_find_history_save ();
 
   gconf_client_notify_remove (gconf, nid_case);
   gconf_client_notify_remove (gconf, nid_regex);
