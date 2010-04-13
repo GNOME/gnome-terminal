@@ -35,9 +35,6 @@
 #define CONF_FIND_MATCH_REGEX   CONF_FIND_PREFIX "/match_regex"
 #define CONF_FIND_MATCH_WHOLE   CONF_FIND_PREFIX "/match_whole"
 
-#define CONF_FIND_ENTRY_DEFAULT 50              /* By default, save 50 previous finds */
-
-
 
 #define TERMINAL_FIND_FLAG_CASE   (1 << 0)
 #define TERMINAL_FIND_FLAG_REGEX  (1 << 1)
