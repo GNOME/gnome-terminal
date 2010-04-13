@@ -22,7 +22,7 @@
 
 #include <gtk/gtk.h>
 
-void terminal_find_display (GtkWindow *parent);
+void terminal_find_dialog_display (GtkWindow *parent);
 
 #endif /* _TERMINAL_FIND_H_ */
 

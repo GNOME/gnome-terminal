@@ -606,7 +606,7 @@ terminal_find_set_parent (GtkWindow *new_parent)
 
 
 /**
- * terminal_find_display
+ * terminal_find_dialog_display
  * @terminal_window: Parent to the Find Dialog
  *
  * Create and initialise the find dialog.  If the dialog already exists, we
@@ -616,7 +616,7 @@ terminal_find_set_parent (GtkWindow *new_parent)
  * in GConf and we listen for the death of our parent.
  */
 void
-terminal_find_display (GtkWindow *terminal_window)
+terminal_find_dialog_display (GtkWindow *terminal_window)
 {
   GtkButton *button_close = NULL;
   GtkButton *button_find  = NULL;

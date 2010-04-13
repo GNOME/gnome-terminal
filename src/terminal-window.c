@@ -3313,7 +3313,7 @@ static void
 edit_find_callback (GtkAction *action,
                     TerminalWindow *window)
 {
-  terminal_find_display (GTK_WINDOW (window));
+  terminal_find_dialog_display (GTK_WINDOW (window));
 }
 
 static void
