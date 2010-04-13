@@ -22,23 +22,21 @@
 #include <glib.h>
 
 #include "terminal-app.h"
-#include "terminal-find.h"
+#include "terminal-search.h"
 #include "terminal-window.h"
 #include "terminal-util.h"
-//#include "vteint.h"
-//#include "vte-private.h"
 
 /* Our config info lives under: /apps/gnome-terminal/find */
-#define CONF_FIND_PREFIX        CONF_PREFIX "/find"
+#define CONF_SEARCH_PREFIX        CONF_PREFIX "/search"
 
-#define CONF_FIND_MATCH_CASE    CONF_FIND_PREFIX "/match_case"
-#define CONF_FIND_MATCH_REGEX   CONF_FIND_PREFIX "/match_regex"
-#define CONF_FIND_MATCH_WHOLE   CONF_FIND_PREFIX "/match_whole"
+#define CONF_SEARCH_MATCH_CASE    CONF_SEARCH_PREFIX "/match_case"
+#define CONF_SEARCH_MATCH_REGEX   CONF_SEARCH_PREFIX "/match_regex"
+#define CONF_SEARCH_MATCH_WHOLE   CONF_SEARCH_PREFIX "/match_whole"
 
 
-#define TERMINAL_FIND_FLAG_CASE   (1 << 0)
-#define TERMINAL_FIND_FLAG_REGEX  (1 << 1)
-#define TERMINAL_FIND_FLAG_WHOLE  (1 << 2)
+#define TERMINAL_SEARCH_FLAG_CASE   (1 << 0)
+#define TERMINAL_SEARCH_FLAG_REGEX  (1 << 1)
+#define TERMINAL_SEARCH_FLAG_WHOLE  (1 << 2)
 
 typedef struct
 {
@@ -236,11 +234,11 @@ terminal_find_build_search (FindParams *fp)
   g_assert (entry);
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_case)))
-    new_flags |= TERMINAL_FIND_FLAG_CASE;
+    new_flags |= TERMINAL_SEARCH_FLAG_CASE;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_regex)))
-    new_flags |= TERMINAL_FIND_FLAG_REGEX;
+    new_flags |= TERMINAL_SEARCH_FLAG_REGEX;
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check_whole)))
-    new_flags |= TERMINAL_FIND_FLAG_WHOLE;
+    new_flags |= TERMINAL_SEARCH_FLAG_WHOLE;
 
   if (fp->flags != new_flags)
     {
@@ -261,11 +259,11 @@ terminal_find_build_search (FindParams *fp)
       fp->column = -1;
     }
 
-  if ((fp->flags & TERMINAL_FIND_FLAG_REGEX) == 0)
+  if ((fp->flags & TERMINAL_SEARCH_FLAG_REGEX) == 0)
     terminal_find_replace_string (&new_str, g_regex_escape_string (new_str, -1));
 
   /* Perl Regular Expression (RE) */
-  if (fp->flags & TERMINAL_FIND_FLAG_WHOLE)
+  if (fp->flags & TERMINAL_SEARCH_FLAG_WHOLE)
     terminal_find_replace_string (&new_str, g_strdup_printf ("\\b%s\\b", new_str));
 
   terminal_find_replace_string (&fp->regex_string, new_str);
@@ -346,7 +344,7 @@ terminal_find_perform_search (FindParams *fp)
   fp->length = -1;
 
   /* Generate a regex for searching */
-  if ((fp->flags & TERMINAL_FIND_FLAG_CASE) == 0)
+  if ((fp->flags & TERMINAL_SEARCH_FLAG_CASE) == 0)
     regex_flags |= G_REGEX_CASELESS;
 
   attrs = g_array_new (FALSE, TRUE, sizeof (VteCharAttributes));
@@ -507,11 +505,11 @@ terminal_find_toggled_cb (GtkToggleButton *togglebutton,
   b = gtk_toggle_button_get_active (togglebutton);
 
   if (togglebutton == GTK_TOGGLE_BUTTON (check_case))
-    gconf_client_set_bool (gconf, CONF_FIND_MATCH_CASE, b, NULL);
+    gconf_client_set_bool (gconf, CONF_SEARCH_MATCH_CASE, b, NULL);
   else if (togglebutton == GTK_TOGGLE_BUTTON (check_regex))
-    gconf_client_set_bool (gconf, CONF_FIND_MATCH_REGEX, b, NULL);
+    gconf_client_set_bool (gconf, CONF_SEARCH_MATCH_REGEX, b, NULL);
   else if (togglebutton == GTK_TOGGLE_BUTTON (check_whole))
-    gconf_client_set_bool (gconf, CONF_FIND_MATCH_WHOLE, b, NULL);
+    gconf_client_set_bool (gconf, CONF_SEARCH_MATCH_WHOLE, b, NULL);
 }
 
 /**
@@ -565,7 +563,7 @@ terminal_find_destroyed_cb (GtkWidget *widget,
   nid_regex = 0;
   nid_whole = 0;
 
-  gconf_client_remove_dir (gconf, CONF_FIND_PREFIX, NULL);
+  gconf_client_remove_dir (gconf, CONF_SEARCH_PREFIX, NULL);
 
   g_object_unref (gconf);
   gconf = NULL;
@@ -636,9 +634,9 @@ terminal_find_dialog_display (GtkWindow *terminal_window)
     }
 
   gconf = gconf_client_get_default ();
-  gconf_client_add_dir (gconf, CONF_FIND_PREFIX, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
+  gconf_client_add_dir (gconf, CONF_SEARCH_PREFIX, GCONF_CLIENT_PRELOAD_ONELEVEL, NULL);
 
-  if (!terminal_util_load_builder_file ("terminal-find.ui",
+  if (!terminal_util_load_builder_file ("search-find.ui",
                                         "dialog-find",     &dialog,
                                         "check-case",      &check_case,
                                         "check-whole",     &check_whole,
@@ -649,9 +647,9 @@ terminal_find_dialog_display (GtkWindow *terminal_window)
                                         NULL))
     return;
 
-  find_case  = gconf_client_get_bool (gconf, CONF_FIND_MATCH_CASE,  NULL);
-  find_regex = gconf_client_get_bool (gconf, CONF_FIND_MATCH_REGEX, NULL);
-  find_whole = gconf_client_get_bool (gconf, CONF_FIND_MATCH_WHOLE, NULL);
+  find_case  = gconf_client_get_bool (gconf, CONF_SEARCH_MATCH_CASE,  NULL);
+  find_regex = gconf_client_get_bool (gconf, CONF_SEARCH_MATCH_REGEX, NULL);
+  find_whole = gconf_client_get_bool (gconf, CONF_SEARCH_MATCH_WHOLE, NULL);
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_case),  find_case);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_regex), find_regex);
@@ -663,9 +661,9 @@ terminal_find_dialog_display (GtkWindow *terminal_window)
   gtk_entry_set_icon_sensitive (entry, GTK_ENTRY_ICON_SECONDARY, FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (button_find), FALSE);
 
-  nid_case  = gconf_client_notify_add (gconf, CONF_FIND_MATCH_CASE,  terminal_find_check_cb, check_case,  NULL, NULL);
-  nid_regex = gconf_client_notify_add (gconf, CONF_FIND_MATCH_REGEX, terminal_find_check_cb, check_regex, NULL, NULL);
-  nid_whole = gconf_client_notify_add (gconf, CONF_FIND_MATCH_WHOLE, terminal_find_check_cb, check_whole, NULL, NULL);
+  nid_case  = gconf_client_notify_add (gconf, CONF_SEARCH_MATCH_CASE,  terminal_find_check_cb, check_case,  NULL, NULL);
+  nid_regex = gconf_client_notify_add (gconf, CONF_SEARCH_MATCH_REGEX, terminal_find_check_cb, check_regex, NULL, NULL);
+  nid_whole = gconf_client_notify_add (gconf, CONF_SEARCH_MATCH_WHOLE, terminal_find_check_cb, check_whole, NULL, NULL);
 
   g_signal_connect (dialog,      "destroy",      G_CALLBACK (terminal_find_destroyed_cb), NULL);
   g_signal_connect (dialog,      "response",     G_CALLBACK (terminal_find_response_cb),  NULL);

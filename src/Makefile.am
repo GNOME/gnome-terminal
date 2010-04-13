@@ -27,8 +27,6 @@ gnome_terminal_SOURCES= \
 	terminal-app.h \
 	terminal-debug.c \
 	terminal-debug.h \
-	terminal-find.c \
-	terminal-find.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
 	terminal-intl.h \
@@ -40,6 +38,8 @@ gnome_terminal_SOURCES= \
 	terminal-screen.h \
 	terminal-screen-container.c \
 	terminal-screen-container.h \
+	terminal-search.c \
+	terminal-search.h \
 	terminal-tab-label.c \
 	terminal-tab-label.h \
 	terminal-tabs-menu.c \
@@ -173,8 +173,8 @@ builder_in_files = \
 	profile-manager.glade \
 	profile-new-dialog.glade \
 	profile-preferences.glade \
+	search-find.glade \
 	skey-challenge.glade \
-	terminal-find.glade \
 	$(NULL)
 
 builderdir = $(pkgdatadir)
