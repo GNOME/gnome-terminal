@@ -72,7 +72,7 @@ static gint            entry_max;
 static GtkWindow      *parent;
 
 
-static void terminal_find_set_parent (GtkWindow *new_parent);
+static void terminal_find_dialog_set_parent (GtkWindow *new_parent);
 
 /**
  * terminal_find_history_add
@@ -581,19 +581,19 @@ terminal_find_destroyed_cb (GtkWidget *widget,
   entry       = NULL;
   entry_max   = 0;
 
-  terminal_find_set_parent (NULL);
+  terminal_find_dialog_set_parent (NULL);
 }
 
 
 /**
- * terminal_find_set_parent
+ * terminal_find_dialog_set_parent
  * @new_parent:  Dialog's new parent
  *
  * Keep track of the dialog's parent.  If it dies, we must die.
  * If find is called from another window, the dialog's parent might change.
  */
 static void
-terminal_find_set_parent (GtkWindow *new_parent)
+terminal_find_dialog_set_parent (GtkWindow *new_parent)
 {
   if (parent)
     g_signal_handlers_disconnect_by_func (parent, G_CALLBACK (terminal_find_window_cb), NULL);
@@ -631,7 +631,7 @@ terminal_find_dialog_display (GtkWindow *terminal_window)
     {
       gtk_window_set_transient_for (GTK_WINDOW (dialog), terminal_window);
       gtk_window_present (GTK_WINDOW (dialog));
-      terminal_find_set_parent (terminal_window);
+      terminal_find_dialog_set_parent (terminal_window);
       return;
     }
 
@@ -675,7 +675,7 @@ terminal_find_dialog_display (GtkWindow *terminal_window)
   g_signal_connect (check_whole, "toggled",      G_CALLBACK (terminal_find_toggled_cb),   NULL);
   g_signal_connect (entry,       "notify::text", G_CALLBACK (terminal_find_text_cb),      button_find);
 
-  terminal_find_set_parent (terminal_window);
+  terminal_find_dialog_set_parent (terminal_window);
 
   gtk_window_set_transient_for (GTK_WINDOW (dialog), terminal_window);
   gtk_window_present (GTK_WINDOW (dialog));
