@@ -22,21 +22,6 @@
 
 #include <gtk/gtk.h>
 
-#define TERMINAL_FIND_FLAG_CASE   (1 << 0)
-#define TERMINAL_FIND_FLAG_REGEX  (1 << 1)
-#define TERMINAL_FIND_FLAG_WHOLE  (1 << 2)
-
-typedef struct
-{
-  char *find_string;
-  char *regex_string;
-  int   row;
-  int   column;
-  int   length;
-  int   flags;
-  void *screen;
-} FindParams;
-
 void terminal_find_display (GtkWindow *parent);
 
 #endif /* _TERMINAL_FIND_H_ */

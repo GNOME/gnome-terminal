@@ -37,6 +37,27 @@
 
 #define CONF_FIND_ENTRY_DEFAULT 50              /* By default, save 50 previous finds */
 
+
+
+#define TERMINAL_FIND_FLAG_CASE   (1 << 0)
+#define TERMINAL_FIND_FLAG_REGEX  (1 << 1)
+#define TERMINAL_FIND_FLAG_WHOLE  (1 << 2)
+
+typedef struct
+{
+  char *find_string;
+  char *regex_string;
+  int   row;
+  int   column;
+  int   length;
+  int   flags;
+  void *screen;
+} FindParams;
+
+/* Keep track of where we are */
+static FindParams     *params;
+
+
 /* GConf stuff */
 static GConfClient    *gconf;
 static guint           nid_case;                /* Notify IDs */
@@ -53,8 +74,6 @@ static GtkTreeModel   *model;
 static gint            entry_max;
 static GtkWindow      *parent;
 
-/* Keep track of where we are */
-static FindParams     *params;
 
 static void terminal_find_set_parent (GtkWindow *new_parent);
 
