@@ -32,6 +32,7 @@
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-encoding.h"
+#include "terminal-find.h"
 #include "terminal-intl.h"
 #include "terminal-screen-container.h"
 #include "terminal-tab-label.h"
@@ -153,6 +154,8 @@ static void edit_keybindings_callback         (GtkAction *action,
 static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_current_profile_callback     (GtkAction *action,
+                                               TerminalWindow *window);
+static void edit_find_callback                (GtkAction *action,
                                                TerminalWindow *window);
 static void file_new_profile_callback         (GtkAction *action,
                                                TerminalWindow *window);
@@ -1761,6 +1764,9 @@ terminal_window_init (TerminalWindow *window)
       { "EditCurrentProfile", NULL, N_("Pr_ofile Preferences"), NULL,
         NULL,
         G_CALLBACK (edit_current_profile_callback) },
+      { "EditFind", NULL, N_("_Find…"), "<shift><control>F",
+        NULL,
+        G_CALLBACK (edit_find_callback) },
 
       /* View menu */
       { "ViewZoomIn", GTK_STOCK_ZOOM_IN, NULL, "<control>plus",
@@ -3301,6 +3307,13 @@ edit_current_profile_callback (GtkAction *action,
                              terminal_screen_get_profile (priv->active_screen),
                              GTK_WINDOW (window),
                              NULL);
+}
+
+static void
+edit_find_callback (GtkAction *action,
+                    TerminalWindow *window)
+{
+  terminal_find_display (GTK_WINDOW (window));
 }
 
 static void
