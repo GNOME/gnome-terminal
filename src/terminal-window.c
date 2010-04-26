@@ -34,7 +34,7 @@
 #include "terminal-encoding.h"
 #include "terminal-intl.h"
 #include "terminal-screen-container.h"
-#include "terminal-search.h"
+#include "terminal-search-dialog.h"
 #include "terminal-tab-label.h"
 #include "terminal-tabs-menu.h"
 #include "terminal-util.h"
@@ -68,6 +68,7 @@ struct _TerminalWindowPrivate
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
 
   GtkWidget *confirm_close_dialog;
+  GtkWidget *search_find_dialog;
 
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
@@ -135,6 +136,8 @@ static void file_new_window_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void file_new_tab_callback             (GtkAction *action,
                                                TerminalWindow *window);
+static void file_new_profile_callback         (GtkAction *action,
+                                               TerminalWindow *window);
 static void file_close_window_callback        (GtkAction *action,
                                                TerminalWindow *window);
 #if 0
@@ -155,10 +158,6 @@ static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_current_profile_callback     (GtkAction *action,
                                                TerminalWindow *window);
-static void edit_find_callback                (GtkAction *action,
-                                               TerminalWindow *window);
-static void file_new_profile_callback         (GtkAction *action,
-                                               TerminalWindow *window);
 static void view_menubar_toggled_callback     (GtkToggleAction *action,
                                                TerminalWindow *window);
 static void view_fullscreen_toggled_callback  (GtkToggleAction *action,
@@ -168,6 +167,14 @@ static void view_zoom_in_callback             (GtkAction *action,
 static void view_zoom_out_callback            (GtkAction *action,
                                                TerminalWindow *window);
 static void view_zoom_normal_callback         (GtkAction *action,
+                                               TerminalWindow *window);
+static void search_find_callback              (GtkAction *action,
+                                               TerminalWindow *window);
+static void search_find_next_callback         (GtkAction *action,
+                                               TerminalWindow *window);
+static void search_find_prev_callback         (GtkAction *action,
+                                               TerminalWindow *window);
+static void search_clear_highlight_callback   (GtkAction *action,
                                                TerminalWindow *window);
 static void terminal_set_title_callback       (GtkAction *action,
                                                TerminalWindow *window);
@@ -944,6 +951,27 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
 }
 
 static void
+terminal_window_update_search_sensitivity (TerminalScreen *screen,
+                                           TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+  gboolean can_search;
+
+  if (screen != priv->active_screen)
+    return;
+
+  can_search = vte_terminal_search_get_gregex (VTE_TERMINAL (screen)) != NULL;
+
+  action = gtk_action_group_get_action (priv->action_group, "SearchFindNext");
+  gtk_action_set_sensitive (action, can_search);
+  action = gtk_action_group_get_action (priv->action_group, "SearchFindPrevious");
+  gtk_action_set_sensitive (action, can_search);
+  action = gtk_action_group_get_action (priv->action_group, "SearchClearHighlight");
+  gtk_action_set_sensitive (action, can_search);
+}
+
+static void
 update_edit_menu_cb (GtkClipboard *clipboard,
                      GdkAtom *targets,
                      int n_targets,
@@ -1714,6 +1742,7 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewTabProfiles", STOCK_NEW_TAB, N_("Open Ta_b") },
       { "Edit", NULL, N_("_Edit") },
       { "View", NULL, N_("_View") },
+      { "Search", NULL, N_("_Search") },
       { "Terminal", NULL, N_("_Terminal") },
       { "Tabs", NULL, N_("Ta_bs") },
       { "Help", NULL, N_("_Help") },
@@ -1764,9 +1793,6 @@ terminal_window_init (TerminalWindow *window)
       { "EditCurrentProfile", NULL, N_("Pr_ofile Preferences"), NULL,
         NULL,
         G_CALLBACK (edit_current_profile_callback) },
-      { "EditFind", NULL, N_("_Find…"), "<shift><control>F",
-        NULL,
-        G_CALLBACK (edit_find_callback) },
 
       /* View menu */
       { "ViewZoomIn", GTK_STOCK_ZOOM_IN, NULL, "<control>plus",
@@ -1778,6 +1804,28 @@ terminal_window_init (TerminalWindow *window)
       { "ViewZoom100", GTK_STOCK_ZOOM_100, NULL, "<control>0",
         NULL,
         G_CALLBACK (view_zoom_normal_callback) },
+
+      /* Search menu */
+      { "SearchFind", GTK_STOCK_FIND, N_("_Find..."), "<shift><control>F",
+	NULL,
+	G_CALLBACK (search_find_callback) },
+      { "SearchFindNext", NULL, N_("Find Ne_xt"), "<shift><control>H",
+	NULL,
+	G_CALLBACK (search_find_next_callback) },
+      { "SearchFindPrevious", NULL, N_("Find Pre_vious"), "<shift><control>G",
+	NULL,
+	G_CALLBACK (search_find_prev_callback) },
+      { "SearchClearHighlight", NULL, N_("_Clear Highlight"), "<shift><control>J",
+	NULL,
+	G_CALLBACK (search_clear_highlight_callback) },
+#if 0
+      { "SearchGoToLine", GTK_STOCK_JUMP_TO, N_("Go to _Line..."), "<shift><control>I",
+	NULL,
+	G_CALLBACK (search_goto_line_callback) },
+      { "SearchIncrementalSearch", GTK_STOCK_FIND, N_("_Incremental Search..."), "<shift><control>K",
+	NULL,
+	G_CALLBACK (search_incremental_search_callback) },
+#endif
 
       /* Terminal menu */
       { "TerminalProfiles", NULL, N_("Change _Profile") },
@@ -2108,6 +2156,10 @@ terminal_window_finalize (GObject *object)
 
   if (priv->confirm_close_dialog)
     gtk_dialog_response (GTK_DIALOG (priv->confirm_close_dialog),
+                         GTK_RESPONSE_DELETE_EVENT);
+
+  if (priv->search_find_dialog)
+    gtk_dialog_response (GTK_DIALOG (priv->search_find_dialog),
                          GTK_RESPONSE_DELETE_EVENT);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
@@ -2677,6 +2729,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (screen, window);
   terminal_window_update_zoom_sensitivity (window);
+  terminal_window_update_search_sensitivity (screen, window);
 }
 
 static void
@@ -3310,13 +3363,6 @@ edit_current_profile_callback (GtkAction *action,
 }
 
 static void
-edit_find_callback (GtkAction *action,
-                    TerminalWindow *window)
-{
-  terminal_find_dialog_display (GTK_WINDOW (window));
-}
-
-static void
 file_new_profile_callback (GtkAction *action,
                            TerminalWindow *window)
 {
@@ -3460,6 +3506,139 @@ view_zoom_normal_callback (GtkAction *action,
 
   terminal_screen_set_font_scale (priv->active_screen, PANGO_SCALE_MEDIUM);
   terminal_window_update_zoom_sensitivity (window);
+}
+
+
+static void
+search_find_response_callback (GtkWidget *dialog,
+			       int        response,
+			       gpointer   user_data)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (user_data);
+  TerminalWindowPrivate *priv = window->priv;
+  TerminalSearchFlags flags;
+  GRegex *regex;
+  gboolean wrap_around;
+
+  if (response != GTK_RESPONSE_ACCEPT)
+    return;
+
+  if (G_UNLIKELY (!priv->active_screen))
+    return;
+
+  regex = terminal_search_dialog_get_regex (dialog);
+  if (G_UNLIKELY (!regex))
+    return; /* TODO error handling? */
+
+  flags = terminal_search_dialog_get_search_flags (dialog);
+  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
+
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  if (flags & TERMINAL_SEARCH_FLAG_BACKWARDS)
+    vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen), wrap_around);
+  else
+    vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen), wrap_around);
+
+  terminal_window_update_search_sensitivity (priv->active_screen, window);
+}
+
+static gboolean
+search_dialog_delete_event_cb (GtkWidget   *widget,
+			       GdkEventAny *event,
+			       gpointer     user_data)
+{
+	/* prevent destruction */
+	return TRUE;
+}
+
+static void
+search_find_callback (GtkAction *action,
+		      TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (!priv->search_find_dialog) {
+    GtkWidget *dialog;
+
+    dialog = priv->search_find_dialog = terminal_search_dialog_new (GTK_WINDOW (window));
+
+    g_signal_connect (dialog, "destroy",
+		      G_CALLBACK (gtk_widget_destroyed), &priv->search_find_dialog);
+    g_signal_connect (dialog, "response",
+		      G_CALLBACK (search_find_response_callback), window);
+    g_signal_connect (dialog, "delete-event",
+		     G_CALLBACK (search_dialog_delete_event_cb), NULL);
+  }
+
+  terminal_search_dialog_present (priv->search_find_dialog);
+}
+
+static void
+search_find_next_callback (GtkAction *action,
+			   TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *dialog;
+  TerminalSearchFlags flags;
+  GRegex *regex;
+  gboolean wrap_around;
+
+  if (!priv->search_find_dialog)
+    return;
+  dialog = priv->search_find_dialog;
+
+  if (G_UNLIKELY (!priv->active_screen))
+    return;
+
+  regex = terminal_search_dialog_get_regex (dialog);
+  if (G_UNLIKELY (!regex))
+    return; /* TODO error handling? */
+
+  flags = terminal_search_dialog_get_search_flags (dialog);
+  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
+
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen), wrap_around);
+}
+
+static void
+search_find_prev_callback (GtkAction *action,
+			   TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *dialog;
+  TerminalSearchFlags flags;
+  GRegex *regex;
+  gboolean wrap_around;
+
+  if (!priv->search_find_dialog)
+    return;
+  dialog = priv->search_find_dialog;
+
+  if (G_UNLIKELY (!priv->active_screen))
+    return;
+
+  regex = terminal_search_dialog_get_regex (dialog);
+  if (G_UNLIKELY (!regex))
+    return; /* TODO error handling? */
+
+  flags = terminal_search_dialog_get_search_flags (dialog);
+  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
+
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen), wrap_around);
+}
+
+static void
+search_clear_highlight_callback (GtkAction *action,
+				 TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (G_UNLIKELY (!priv->active_screen))
+    return;
+
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), NULL);
 }
 
 static void
