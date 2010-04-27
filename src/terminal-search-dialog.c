@@ -256,8 +256,8 @@ response_handler (GtkWidget *dialog,
   const gchar *str;
 
   if (response_id != GTK_RESPONSE_ACCEPT) {
-	  gtk_widget_hide (dialog);
-	  return;
+    gtk_widget_hide (dialog);
+    return;
   }
 
   priv = TERMINAL_SEARCH_DIALOG_GET_PRIVATE (dialog);
