@@ -359,7 +359,7 @@ terminal_search_dialog_get_regex (GtkWidget *dialog)
       g_regex_unref (priv->regex);
 
     /* TODO Error handling */
-    priv->regex = g_regex_new (pattern, compile_flags, G_REGEX_MATCH_NOTEMPTY, NULL);
+    priv->regex = g_regex_new (pattern, compile_flags, 0, NULL);
   }
 
   if (pattern != text)
