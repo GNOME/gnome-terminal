@@ -2774,6 +2774,7 @@ notebook_page_added_callback (GtkWidget       *notebook,
 
   update_tab_visibility (window, 0);
   terminal_window_update_tabs_menu_sensitivity (window);
+  terminal_window_update_search_sensitivity (screen, window);
 
 #if 0
   /* FIXMEchpe: wtf is this doing? */
@@ -2855,6 +2856,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
 
   terminal_window_update_tabs_menu_sensitivity (window);
   update_tab_visibility (window, 0);
+  terminal_window_update_search_sensitivity (screen, window);
 
   pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   if (pages == 1)
@@ -3580,7 +3582,6 @@ search_find_next_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *dialog;
   TerminalSearchFlags flags;
-  GRegex *regex;
   gboolean wrap_around;
 
   if (!priv->search_find_dialog)
@@ -3590,14 +3591,10 @@ search_find_next_callback (GtkAction *action,
   if (G_UNLIKELY (!priv->active_screen))
     return;
 
-  regex = terminal_search_dialog_get_regex (dialog);
-  if (G_UNLIKELY (!regex))
-    return; /* TODO error handling? */
-
   flags = terminal_search_dialog_get_search_flags (dialog);
   wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
 
-  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  /* TODO we should save the per-screen wrap_around */
   vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen), wrap_around);
 }
 
@@ -3608,7 +3605,6 @@ search_find_prev_callback (GtkAction *action,
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *dialog;
   TerminalSearchFlags flags;
-  GRegex *regex;
   gboolean wrap_around;
 
   if (!priv->search_find_dialog)
@@ -3618,14 +3614,10 @@ search_find_prev_callback (GtkAction *action,
   if (G_UNLIKELY (!priv->active_screen))
     return;
 
-  regex = terminal_search_dialog_get_regex (dialog);
-  if (G_UNLIKELY (!regex))
-    return; /* TODO error handling? */
-
   flags = terminal_search_dialog_get_search_flags (dialog);
   wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
 
-  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  /* TODO we should save the per-screen wrap_around */
   vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen), wrap_around);
 }
 
