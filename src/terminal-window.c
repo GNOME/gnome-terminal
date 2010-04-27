@@ -3520,7 +3520,6 @@ search_find_response_callback (GtkWidget *dialog,
   TerminalWindowPrivate *priv = window->priv;
   TerminalSearchFlags flags;
   GRegex *regex;
-  gboolean wrap_around;
 
   if (response != GTK_RESPONSE_ACCEPT)
     return;
@@ -3533,13 +3532,15 @@ search_find_response_callback (GtkWidget *dialog,
     return; /* TODO error handling? */
 
   flags = terminal_search_dialog_get_search_flags (dialog);
-  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
 
   vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  vte_terminal_search_set_wrap_around (VTE_TERMINAL (priv->active_screen),
+				       (flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND));
+
   if (flags & TERMINAL_SEARCH_FLAG_BACKWARDS)
-    vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen), wrap_around);
+    vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen));
   else
-    vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen), wrap_around);
+    vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen));
 
   terminal_window_update_search_sensitivity (priv->active_screen, window);
 }
@@ -3579,58 +3580,30 @@ static void
 search_find_next_callback (GtkAction *action,
 			   TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *dialog;
-  TerminalSearchFlags flags;
-  gboolean wrap_around;
-
-  if (!priv->search_find_dialog)
-    return;
-  dialog = priv->search_find_dialog;
-
-  if (G_UNLIKELY (!priv->active_screen))
+  if (G_UNLIKELY (!window->priv->active_screen))
     return;
 
-  flags = terminal_search_dialog_get_search_flags (dialog);
-  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
-
-  /* TODO we should save the per-screen wrap_around */
-  vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen), wrap_around);
+  vte_terminal_search_find_next (VTE_TERMINAL (window->priv->active_screen));
 }
 
 static void
 search_find_prev_callback (GtkAction *action,
 			   TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *dialog;
-  TerminalSearchFlags flags;
-  gboolean wrap_around;
-
-  if (!priv->search_find_dialog)
-    return;
-  dialog = priv->search_find_dialog;
-
-  if (G_UNLIKELY (!priv->active_screen))
+  if (G_UNLIKELY (!window->priv->active_screen))
     return;
 
-  flags = terminal_search_dialog_get_search_flags (dialog);
-  wrap_around = !!(flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND);
-
-  /* TODO we should save the per-screen wrap_around */
-  vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen), wrap_around);
+  vte_terminal_search_find_previous (VTE_TERMINAL (window->priv->active_screen));
 }
 
 static void
 search_clear_highlight_callback (GtkAction *action,
 				 TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-
-  if (G_UNLIKELY (!priv->active_screen))
+  if (G_UNLIKELY (!window->priv->active_screen))
     return;
 
-  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), NULL);
+  vte_terminal_search_set_gregex (VTE_TERMINAL (window->priv->active_screen), NULL);
 }
 
 static void
