@@ -101,6 +101,7 @@ terminal_search_dialog_new (GtkWindow   *parent)
 
 
   priv->search_text_entry = gtk_bin_get_child (GTK_BIN (priv->search_entry));
+  gtk_widget_set_size_request (priv->search_entry, 300, -1);
 
   priv->store = store = gtk_list_store_new (1, G_TYPE_STRING);
   g_object_set (G_OBJECT (priv->search_entry),
