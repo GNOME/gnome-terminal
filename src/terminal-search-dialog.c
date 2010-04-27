@@ -26,7 +26,7 @@
 #include "terminal-util.h"
 
 #define HISTORY_MIN_ITEM_LEN 3
-#define HISTORY_LENGTH 20
+#define HISTORY_LENGTH 10
 
 static GQuark
 get_quark (void)
@@ -182,77 +182,69 @@ static gboolean
 remove_item (GtkListStore *store,
 	     const gchar  *text)
 {
-	GtkTreeIter iter;
+  GtkTreeIter iter;
 
-	g_return_val_if_fail (text != NULL, FALSE);
+  g_return_val_if_fail (text != NULL, FALSE);
 
-	if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter))
-		return FALSE;
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter))
+    return FALSE;
 
-	do {
-		gchar *item_text;
+  do {
+    gchar *item_text;
 
-		gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
-				    0, &item_text, -1);
+    gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 0, &item_text, -1);
 
-		if (item_text != NULL && strcmp (item_text, text) == 0)
-		{
-			gtk_list_store_remove (store, &iter);
-			g_free (item_text);
-			return TRUE;
-		}
+    if (item_text != NULL && strcmp (item_text, text) == 0) {
+      gtk_list_store_remove (store, &iter);
+      g_free (item_text);
+      return TRUE;
+    }
 
-		g_free (item_text);
+    g_free (item_text);
+  } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
 
-	} while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
-
-	return FALSE;
+  return FALSE;
 }
 
 static void
 clamp_list_store (GtkListStore *store,
 		  guint         max)
 {
-	GtkTreePath *path;
-	GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeIter iter;
 
-	/* -1 because TreePath counts from 0 */
-	path = gtk_tree_path_new_from_indices (max - 1, -1);
+  /* -1 because TreePath counts from 0 */
+  path = gtk_tree_path_new_from_indices (max - 1, -1);
 
-	if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
-		while (1)
-			if (!gtk_list_store_remove (store, &iter))
-				break;
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &iter, path))
+    while (1)
+      if (!gtk_list_store_remove (store, &iter))
+	break;
 
-	gtk_tree_path_free (path);
+  gtk_tree_path_free (path);
 }
 
 static void
 history_entry_insert (GtkListStore *store,
 		      const gchar  *text)
 {
-	GtkTreeIter iter;
+  GtkTreeIter iter;
 
-	g_return_if_fail (text != NULL);
+  g_return_if_fail (text != NULL);
 
-	if (g_utf8_strlen (text, -1) <= HISTORY_MIN_ITEM_LEN)
-		return;
+  if (g_utf8_strlen (text, -1) <= HISTORY_MIN_ITEM_LEN)
+    return;
 
-	/* remove the text from the store if it was already
-	 * present. If it wasn't, clamp to max history - 1
-	 * before inserting the new row, otherwise appending
-	 * would not work */
+  /* remove the text from the store if it was already
+   * present. If it wasn't, clamp to max history - 1
+   * before inserting the new row, otherwise appending
+   * would not work */
 
-	if (!remove_item (store, text))
-		clamp_list_store (store, HISTORY_LENGTH - 1);
+  if (!remove_item (store, text))
+    clamp_list_store (store, HISTORY_LENGTH - 1);
 
-	gtk_list_store_insert (store, &iter, 0);
-
-	gtk_list_store_set (store,
-			    &iter,
-			    0,
-			    text,
-			    -1);
+  gtk_list_store_insert (store, &iter, 0);
+  gtk_list_store_set (store, &iter, 0, text, -1);
 }
 
 static void
