@@ -2163,7 +2163,8 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
   GtkPolicyType policy = GTK_POLICY_ALWAYS;
   GtkCornerType corner = GTK_CORNER_TOP_LEFT;
 
-  if (!GTK_WIDGET (screen)->parent)
+  container = terminal_screen_container_get_from_screen (screen);
+  if (container == NULL)
     return;
 
   switch (terminal_profile_get_property_enum (priv->profile, TERMINAL_PROFILE_SCROLLBAR_POSITION))
@@ -2184,7 +2185,6 @@ _terminal_screen_update_scrollbar (TerminalScreen *screen)
       break;
     }
 
-  container = terminal_screen_container_get_from_screen (screen);
   terminal_screen_container_set_placement (container, corner);
   terminal_screen_container_set_policy (container, GTK_POLICY_NEVER, policy);
 }

@@ -2328,18 +2328,15 @@ terminal_window_remove_screen (TerminalWindow *window,
                                TerminalScreen *screen)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *scrolled_window;
-  guint num_page;
+  TerminalScreenContainer *screen_container;
 
   g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (screen)) == GTK_WIDGET (window));
 
   update_tab_visibility (window, -1);
 
-  scrolled_window = GTK_WIDGET (screen)->parent;
-  g_return_if_fail (scrolled_window != NULL);
-
-  num_page = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook), scrolled_window);
-  gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), num_page);
+  screen_container = terminal_screen_container_get_from_screen (screen);
+  gtk_container_remove (GTK_CONTAINER (priv->notebook),
+                        GTK_WIDGET (screen_container));
 }
 
 void
@@ -2348,7 +2345,7 @@ terminal_window_move_screen (TerminalWindow *source_window,
                              TerminalScreen *screen,
                              int dest_position)
 {
-  GtkWidget *screen_container;
+  TerminalScreenContainer *screen_container;
 
   g_return_if_fail (TERMINAL_IS_WINDOW (source_window));
   g_return_if_fail (TERMINAL_IS_WINDOW (dest_window));
@@ -2356,8 +2353,8 @@ terminal_window_move_screen (TerminalWindow *source_window,
   g_return_if_fail (gtk_widget_get_toplevel (GTK_WIDGET (screen)) == GTK_WIDGET (source_window));
   g_return_if_fail (dest_position >= -1);
 
-  screen_container = GTK_WIDGET (screen)->parent;
-  g_return_if_fail (GTK_IS_WIDGET (screen_container));
+  screen_container = terminal_screen_container_get_from_screen (screen);
+  g_assert (TERMINAL_IS_SCREEN_CONTAINER (screen_container));
 
   /* We have to ref the screen container as well as the screen,
    * because otherwise removing the screen container from the source
@@ -2512,13 +2509,16 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
 
 void
 terminal_window_switch_screen (TerminalWindow *window,
-                              TerminalScreen *screen)
+                               TerminalScreen *screen)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalScreenContainer *screen_container;
   int page_num;
 
+  screen_container = terminal_screen_container_get_from_screen (screen);
+  g_assert (TERMINAL_IS_SCREEN_CONTAINER (screen_container));
   page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
-                                    GTK_WIDGET (screen)->parent);
+                                    GTK_WIDGET (screen_container));
   gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page_num);
 }
 
