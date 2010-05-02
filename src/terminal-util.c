@@ -116,7 +116,8 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
     {
       g_return_if_fail (GTK_IS_MESSAGE_DIALOG (*weak_ptr));
 
-      gtk_label_set_text (GTK_LABEL (GTK_MESSAGE_DIALOG (*weak_ptr)->label), message);
+      /* Sucks that there's no direct accessor for "text" property */
+      g_object_set (G_OBJECT (*weak_ptr), "text", message, NULL);
 
       gtk_window_present (GTK_WINDOW (*weak_ptr));
     }

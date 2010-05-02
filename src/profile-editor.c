@@ -692,7 +692,7 @@ terminal_profile_editor_focus_widget (GtkWidget *editor,
                                       const char *widget_name)
 {
   GtkBuilder *builder;
-  GtkWidget *widget, *page;
+  GtkWidget *widget, *page, *page_parent;
 
   if (widget_name == NULL)
     return;
@@ -703,17 +703,20 @@ terminal_profile_editor_focus_widget (GtkWidget *editor,
     return;
 
   page = widget;
-  while (page && page->parent && !GTK_IS_NOTEBOOK (page->parent))
-    page = page->parent;
+  while (page != NULL &&
+         (page_parent = gtk_widget_get_parent (page)) != NULL &&
+         !GTK_IS_NOTEBOOK (page_parent))
+    page = page_parent;
 
-  if (page != NULL && GTK_IS_NOTEBOOK (page->parent)) {
+  page_parent = gtk_widget_get_parent (page);
+  if (page != NULL && GTK_IS_NOTEBOOK (page_parent)) {
     GtkNotebook *notebook;
 
-    notebook = GTK_NOTEBOOK (page->parent);
+    notebook = GTK_NOTEBOOK (page_parent);
     gtk_notebook_set_current_page (notebook, gtk_notebook_page_num (notebook, page));
   }
 
-  if (GTK_WIDGET_IS_SENSITIVE (widget))
+  if (gtk_widget_is_sensitive (widget))
     gtk_widget_grab_focus (widget);
 }
 

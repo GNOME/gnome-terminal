@@ -305,11 +305,9 @@ find_tab_num_at_pos (GtkNotebook *notebook,
   int page_num = 0;
   GtkNotebook *nb = GTK_NOTEBOOK (notebook);
   GtkWidget *page;
+  GtkAllocation tab_allocation;
 
   tab_pos = gtk_notebook_get_tab_pos (GTK_NOTEBOOK (notebook));
-
-  if (GTK_NOTEBOOK (notebook)->first_tab == NULL)
-    return -1;
 
   while ((page = gtk_notebook_get_nth_page (nb, page_num)))
     {
@@ -319,16 +317,17 @@ find_tab_num_at_pos (GtkNotebook *notebook,
       tab = gtk_notebook_get_tab_label (nb, page);
       g_return_val_if_fail (tab != NULL, -1);
 
-      if (!GTK_WIDGET_MAPPED (GTK_WIDGET (tab)))
+      if (!gtk_widget_get_mapped (GTK_WIDGET (tab)))
         {
           page_num++;
           continue;
         }
 
-      gdk_window_get_origin (tab->window, &x_root, &y_root);
+      gdk_window_get_origin (gtk_widget_get_window (tab), &x_root, &y_root);
 
-      max_x = x_root + tab->allocation.x + tab->allocation.width;
-      max_y = y_root + tab->allocation.y + tab->allocation.height;
+      gtk_widget_get_allocation (tab, &tab_allocation);
+      max_x = x_root + tab_allocation.x + tab_allocation.width;
+      max_y = y_root + tab_allocation.y + tab_allocation.height;
 
       if ((tab_pos == GTK_POS_TOP || tab_pos == GTK_POS_BOTTOM) && screen_x <= max_x)
         return page_num;
@@ -351,41 +350,45 @@ position_menu_under_widget (GtkMenu *menu,
 {
   /* Adapted from gtktoolbar.c */
   GtkWidget *widget = GTK_WIDGET (user_data);
+  GdkWindow *widget_window;
   GtkWidget *container;
   GtkRequisition req;
   GtkRequisition menu_req;
   GdkRectangle monitor;
   int monitor_num;
   GdkScreen *screen;
+  GtkAllocation widget_allocation;
 
+  widget_window = gtk_widget_get_window (widget);
+  gtk_widget_get_allocation (widget, &widget_allocation);
   container = gtk_widget_get_ancestor (widget, GTK_TYPE_CONTAINER);
 
   gtk_widget_size_request (widget, &req);
   gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
 
   screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-  monitor_num = gdk_screen_get_monitor_at_window (screen, widget->window);
+  monitor_num = gdk_screen_get_monitor_at_window (screen, widget_window);
   if (monitor_num < 0)
           monitor_num = 0;
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
-  gdk_window_get_origin (widget->window, x, y);
-  if (GTK_WIDGET_NO_WINDOW (widget))
+  gdk_window_get_origin (widget_window, x, y);
+  if (!gtk_widget_get_has_window (widget))
     {
-      *x += widget->allocation.x;
-      *y += widget->allocation.y;
+      *x += widget_allocation.x;
+      *y += widget_allocation.y;
     }
   if (gtk_widget_get_direction (container) == GTK_TEXT_DIR_LTR) 
-    *x += widget->allocation.width - req.width;
+    *x += widget_allocation.width - req.width;
   else 
     *x += req.width - menu_req.width;
 
-  if ((*y + widget->allocation.height + menu_req.height) <= monitor.y + monitor.height)
-    *y += widget->allocation.height;
+  if ((*y + widget_allocation.height + menu_req.height) <= monitor.y + monitor.height)
+    *y += widget_allocation.height;
   else if ((*y - menu_req.height) >= monitor.y)
     *y -= menu_req.height;
-  else if (monitor.y + monitor.height - (*y + widget->allocation.height) > *y)
-    *y += widget->allocation.height;
+  else if (monitor.y + monitor.height - (*y + widget_allocation.height) > *y)
+    *y += widget_allocation.height;
   else
     *y -= menu_req.height;
 
@@ -1017,18 +1020,20 @@ screen_resize_window_cb (TerminalScreen *screen,
   guint grid_width, grid_height;
   int char_width, char_height;
   GtkBorder *inner_border = NULL;
+  GtkAllocation widget_allocation;
 
+  gtk_widget_get_allocation (widget, &widget_allocation);
   /* Don't do anything if we're maximised or fullscreened */
   // FIXME: realized && ... instead? 
-  if (!GTK_WIDGET_REALIZED (widget) ||
-      (gdk_window_get_state (widget->window) & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)) != 0)
+  if (!gtk_widget_get_realized (widget) ||
+      (gdk_window_get_state (gtk_widget_get_window (widget)) & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)) != 0)
     return;
 
   /* NOTE: width and height already include the VteTerminal's padding! */
 
   /* Short-circuit */
-  if (((int) width) == widget->allocation.width &&
-      ((int) height) == widget->allocation.height)
+  if (((int) width) == widget_allocation.width &&
+      ((int) height) == widget_allocation.height)
     return;
 
   /* The resize-window signal sucks. Re-compute grid widths */
@@ -1264,7 +1269,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
   int n_pages;
 
-  if (!GTK_WIDGET_REALIZED (info->screen))
+  if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
       terminal_screen_popup_info_unref (info);
       return;
@@ -1477,7 +1482,9 @@ terminal_window_realize (GtkWidget *widget)
 #ifdef GDK_WINDOWING_X11
   GdkScreen *screen;
   GdkColormap *colormap;
+  GtkAllocation widget_allocation;
 
+  gtk_widget_get_allocation (widget, &widget_allocation);
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
   if (gdk_screen_is_composited (screen) &&
       (colormap = gdk_screen_get_rgba_colormap (screen)) != NULL)
@@ -1496,8 +1503,8 @@ terminal_window_realize (GtkWidget *widget)
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] realize, size %d : %d at (%d, %d)\n",
                          widget,
-                         widget->allocation.width, widget->allocation.height,
-                         widget->allocation.x, widget->allocation.y);
+                         widget_allocation.width, widget_allocation.height,
+                         widget_allocation.x, widget_allocation.y);
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->realize (widget);
 
@@ -1514,17 +1521,19 @@ terminal_window_map_event (GtkWidget    *widget,
   TerminalWindowPrivate *priv = window->priv;
   gboolean (* map_event) (GtkWidget *, GdkEventAny *) =
       GTK_WIDGET_CLASS (terminal_window_parent_class)->map_event;
+  GtkAllocation widget_allocation;
 
+  gtk_widget_get_allocation (widget, &widget_allocation);
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] map-event, size %d : %d at (%d, %d)\n",
                          widget,
-                         widget->allocation.width, widget->allocation.height,
-                         widget->allocation.x, widget->allocation.y);
+                         widget_allocation.width, widget_allocation.height,
+                         widget_allocation.x, widget_allocation.y);
 
   if (priv->clear_demands_attention)
     {
 #ifdef GDK_WINDOWING_X11
-      terminal_util_x11_clear_demands_attention (widget->window);
+      terminal_util_x11_clear_demands_attention (gtk_widget_get_window (widget));
 #endif
 
       priv->clear_demands_attention = FALSE;
@@ -1591,14 +1600,17 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
 
   composited = gdk_screen_is_composited (screen);
   if ((composited != priv->have_argb_visual) &&
-      GTK_WIDGET_REALIZED (window))
+      gtk_widget_get_realized (GTK_WIDGET (window)))
     {
       GtkWidget *widget = GTK_WIDGET (window);
+      GdkWindow *widget_window;
       guint32 user_time;
       gboolean have_desktop;
       guint32 desktop = 0; /* Quiet GCC */
       gboolean was_minimized;
       int x, y;
+
+      widget_window = gtk_widget_get_window (widget);
 
       user_time = gdk_x11_display_get_user_time (gtk_widget_get_display (widget));
 
@@ -1616,10 +1628,10 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
        * GDK_WINDOW_STATE_ICONIFIED. For details, see comment for
        * terminal_util_x11_window_is_minimized()
        */
-      was_minimized = terminal_util_x11_window_is_minimized (widget->window);
+      was_minimized = terminal_util_x11_window_is_minimized (widget_window);
 
       /* And the desktop */
-      have_desktop = terminal_util_x11_get_net_wm_desktop (widget->window, &desktop);
+      have_desktop = terminal_util_x11_get_net_wm_desktop (widget_window, &desktop);
 
       gtk_widget_hide (widget);
       gtk_widget_unrealize (widget);
@@ -1627,7 +1639,7 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       /* put the window back where it was before */
       gtk_window_move (GTK_WINDOW (window), x, y);
       gtk_widget_realize (widget);
-      gdk_x11_window_set_user_time (widget->window, user_time);
+      gdk_x11_window_set_user_time (widget_window, user_time);
 
       if (was_minimized)
 	gtk_window_iconify (GTK_WINDOW (window));
@@ -1636,7 +1648,7 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
 
       gtk_widget_show (widget);
       if (have_desktop)
-        terminal_util_x11_set_net_wm_desktop (widget->window, desktop);
+        terminal_util_x11_set_net_wm_desktop (widget_window, desktop);
 
       /* Mapping the window is likely to have set the "demands-attention" state.
        * In particular, Metacity will always set the state if a window is mapped,
@@ -2173,6 +2185,10 @@ static void
 terminal_window_show (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
+  GtkAllocation widget_allocation;
+
+  gtk_widget_get_allocation (widget, &widget_allocation);
+
 #if 0
   TerminalWindowPrivate *priv = window->priv;
 
@@ -2189,8 +2205,8 @@ terminal_window_show (GtkWidget *widget)
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] show, size %d : %d at (%d, %d)\n",
                          widget,
-                         widget->allocation.width, widget->allocation.height,
-                         widget->allocation.x, widget->allocation.y);
+                         widget_allocation.width, widget_allocation.height,
+                         widget_allocation.x, widget_allocation.y);
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
 }
@@ -2211,7 +2227,7 @@ void
 terminal_window_set_is_restored (TerminalWindow *window)
 {
   g_return_if_fail (TERMINAL_IS_WINDOW (window));
-  g_return_if_fail (!GTK_WIDGET_MAPPED (window));
+  g_return_if_fail (!gtk_widget_get_mapped (GTK_WIDGET (window)));
 
   window->priv->clear_demands_attention = TRUE;
 }
@@ -2223,7 +2239,7 @@ profile_set_callback (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (!GTK_WIDGET_REALIZED (window))
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
   if (screen != priv->active_screen)
@@ -2252,7 +2268,7 @@ sync_screen_icon_title (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (!GTK_WIDGET_REALIZED (window))
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
   if (screen != priv->active_screen)
@@ -2261,7 +2277,7 @@ sync_screen_icon_title (TerminalScreen *screen,
   if (!terminal_screen_get_icon_title_set (screen))
     return;
 
-  gdk_window_set_icon_name (GTK_WIDGET (window)->window, terminal_screen_get_icon_title (screen));
+  gdk_window_set_icon_name (gtk_widget_get_window (GTK_WIDGET (window)), terminal_screen_get_icon_title (screen));
 
   priv->icon_title_set = TRUE;
 }
@@ -2273,7 +2289,7 @@ sync_screen_icon_title_set (TerminalScreen *screen,
 {
   TerminalWindowPrivate *priv = window->priv;
 
-  if (!GTK_WIDGET_REALIZED (window))
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
   /* No need to restore the title if we never set an icon title */
@@ -2289,7 +2305,7 @@ sync_screen_icon_title_set (TerminalScreen *screen,
   /* Need to reset the icon name */
   /* FIXME: Once gtk+ bug 535557 is fixed, use that to unset the icon title. */
 
-  g_object_set_qdata (G_OBJECT (GTK_WIDGET (window)->window),
+  g_object_set_qdata (G_OBJECT (gtk_widget_get_window (GTK_WIDGET (window))),
                       g_quark_from_static_string ("gdk-icon-name-set"),
                       GUINT_TO_POINTER (FALSE));
   priv->icon_title_set = FALSE;
@@ -2458,7 +2474,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
   
   g_object_set (priv->menubar, "visible", setting, NULL);
 
-  /* FIXMEchpe: use GTK_WIDGET_REALIZED instead? */
+  /* FIXMEchpe: use gtk_widget_get_realized instead? */
   if (priv->active_screen)
     {
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
@@ -2553,7 +2569,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
                          window,
                          grid_width, grid_height, force_grid_width, force_grid_height, w, h);
 
-  if (even_if_mapped && GTK_WIDGET_MAPPED (app)) {
+  if (even_if_mapped && gtk_widget_get_mapped (app)) {
     gtk_window_resize (GTK_WINDOW (app), w, h);
   }
   else {
@@ -3389,7 +3405,7 @@ static void
 view_fullscreen_toggled_callback (GtkToggleAction *action,
                                   TerminalWindow *window)
 {
-  g_return_if_fail (GTK_WIDGET_REALIZED (window));
+  g_return_if_fail (gtk_widget_get_realized (GTK_WIDGET (window)));
 
   if (gtk_toggle_action_get_active (action))
     gtk_window_fullscreen (GTK_WINDOW (window));
@@ -3651,7 +3667,7 @@ terminal_set_title_callback (GtkAction *action,
   gtk_widget_hide (label);
 
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (label->parent), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (gtk_widget_get_parent (label)), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic (_("_Title:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
@@ -3904,7 +3920,7 @@ terminal_window_save_state (TerminalWindow *window,
   g_key_file_set_string (key_file, group, TERMINAL_CONFIG_WINDOW_PROP_ROLE,
                          gtk_window_get_role (GTK_WINDOW (window)));
 
-  state = gdk_window_get_state (GTK_WIDGET (window)->window);
+  state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (window)));
   if (state & GDK_WINDOW_STATE_MAXIMIZED)
     g_key_file_set_boolean (key_file, group, TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED, TRUE);
   if (state & GDK_WINDOW_STATE_FULLSCREEN)

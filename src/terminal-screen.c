@@ -289,7 +289,7 @@ window_uses_argb_visual (TerminalScreen *screen)
   TerminalWindow *window;
 
   window = terminal_screen_get_window (screen);
-  if (window == NULL || !GTK_WIDGET_REALIZED (window))
+  if (window == NULL || !gtk_widget_get_realized (GTK_WIDGET (window)))
     return FALSE;
 
   return terminal_window_uses_argb_visual (window);
@@ -323,7 +323,7 @@ terminal_screen_style_set (GtkWidget *widget,
 
   update_color_scheme (screen);
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (gtk_widget_get_realized (widget))
     terminal_screen_change_font (screen);
 }
 
@@ -938,7 +938,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       terminal_screen_cook_icon_title (screen);
     }
 
-  if (GTK_WIDGET_REALIZED (screen) &&
+  if (gtk_widget_get_realized (GTK_WIDGET (screen)) &&
       (!prop_name ||
        prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT) ||
        prop_name == I_(TERMINAL_PROFILE_FONT)))
@@ -1140,7 +1140,7 @@ terminal_screen_system_font_notify_cb (TerminalApp *app,
 {
   TerminalScreenPrivate *priv = screen->priv;
 
-  if (!GTK_WIDGET_REALIZED (screen))
+  if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
     return;
 
   if (!terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SYSTEM_FONT))
@@ -1390,7 +1390,7 @@ get_child_environment (TerminalScreen *screen,
   
 #ifdef GDK_WINDOWING_X11
   /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
-  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (window->window)));
+  g_hash_table_replace (env_table, g_strdup ("WINDOWID"), g_strdup_printf ("%ld", GDK_WINDOW_XWINDOW (gtk_widget_get_window (window))));
   g_hash_table_replace (env_table, g_strdup ("DISPLAY"), g_strdup (gdk_display_get_name (gtk_widget_get_display (window))));
 #endif
 
@@ -1819,7 +1819,7 @@ terminal_screen_set_font_scale (TerminalScreen *screen,
   
   priv->font_scale = factor;
   
-  if (GTK_WIDGET_REALIZED (screen))
+  if (gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
       /* Update the font */
       terminal_screen_change_font (screen);
@@ -1943,6 +1943,14 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
+  const guchar *selection_data_data;
+  GdkAtom selection_data_target;
+  gint selection_data_length, selection_data_format;
+
+  selection_data_data = gtk_selection_data_get_data (selection_data);
+  selection_data_target = gtk_selection_data_get_target (selection_data);
+  selection_data_length = gtk_selection_data_get_length (selection_data);
+  selection_data_format = gtk_selection_data_get_format (selection_data);
 
 #if 0
   {
@@ -1963,7 +1971,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
   }
 #endif
 
-  if (gtk_targets_include_uri (&selection_data->target, 1))
+  if (gtk_targets_include_uri (&selection_data_target, 1))
     {
       char **uris;
       char *text;
@@ -1981,7 +1989,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
       g_strfreev (uris);
     }
-  else if (gtk_targets_include_text (&selection_data->target, 1))
+  else if (gtk_targets_include_text (&selection_data_target, 1))
     {
       char *text;
 
@@ -1994,13 +2002,14 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
     {
     case TARGET_COLOR:
       {
-        guint16 *data = (guint16 *)selection_data->data;
+        guint16 *data = (guint16 *)selection_data_data;
         GdkColor color;
 
         /* We accept drops with the wrong format, since the KDE color
          * chooser incorrectly drops application/x-color with format 8.
+         * So just check for the data length.
          */
-        if (selection_data->length != 8)
+        if (selection_data_length != 8)
           return;
 
         color.red = data[0];
@@ -2027,13 +2036,13 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
          * The data contains the URL, a \n, then the
          * title of the web page.
          */
-        if (selection_data->format != 8 ||
-            selection_data->length == 0 ||
-            (selection_data->length % 2) != 0)
+        if (selection_data_format != 8 ||
+            selection_data_length == 0 ||
+            (selection_data_length % 2) != 0)
           return;
 
-        utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data->data,
-                                     selection_data->length / 2,
+        utf8_data = g_utf16_to_utf8 ((const gunichar2*) selection_data_data,
+                                     selection_data_length / 2,
                                      NULL, NULL, NULL);
         if (!utf8_data)
           return;
@@ -2062,10 +2071,10 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         /* The data contains the URL, a \n, then the
          * title of the web page.
          */
-        if (selection_data->length < 0 || selection_data->format != 8)
+        if (selection_data_length < 0 || selection_data_format != 8)
           return;
 
-        utf8_data = g_strndup ((char *) selection_data->data, selection_data->length);
+        utf8_data = g_strndup ((char *) selection_data_data, selection_data_length);
         newline = strchr (utf8_data, '\n');
         if (newline)
           *newline = '\0';
@@ -2086,10 +2095,10 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         char *utf8_data;
         char **uris;
         
-        if (selection_data->length < 0 || selection_data->format != 8)
+        if (selection_data_length < 0 || selection_data_format != 8)
           return;
         
-        utf8_data = g_strndup ((char *) selection_data->data, selection_data->length);
+        utf8_data = g_strndup ((char *) selection_data_data, selection_data_length);
         uris = g_uri_list_extract_uris (utf8_data);
         g_free (utf8_data);
 
@@ -2130,7 +2139,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         GtkWidget *dest_notebook;
         int page_num;
 
-        container = *(GtkWidget**) selection_data->data;
+        container = *(GtkWidget**) selection_data_data;
         if (!GTK_IS_WIDGET (container))
           return;
 
@@ -2196,8 +2205,8 @@ terminal_screen_get_size (TerminalScreen *screen,
 {
   VteTerminal *terminal = VTE_TERMINAL (screen);
 
-  *width_chars = terminal->column_count;
-  *height_chars = terminal->row_count;
+  *width_chars = vte_terminal_get_column_count (terminal);
+  *height_chars = vte_terminal_get_row_count (terminal);
 }
 
 void
@@ -2207,8 +2216,8 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
 {
   VteTerminal *terminal = VTE_TERMINAL (screen);
 
-  *cell_width_pixels = terminal->char_width;
-  *cell_height_pixels = terminal->char_height;
+  *cell_width_pixels = vte_terminal_get_char_width (terminal);
+  *cell_height_pixels = vte_terminal_get_char_height (terminal);
 }
 
 static void
