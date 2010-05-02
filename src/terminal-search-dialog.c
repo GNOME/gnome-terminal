@@ -43,6 +43,8 @@ get_quark (void)
 #define TERMINAL_SEARCH_DIALOG_GET_PRIVATE(object) \
   ((TerminalSearchDialogPrivate *) g_object_get_qdata (G_OBJECT (object), get_quark ()))
 
+#define GET_FLAG(widget) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->widget))
+
 typedef struct _TerminalSearchDialogPrivate
 {
   GtkWidget *search_label;
@@ -63,8 +65,8 @@ typedef struct _TerminalSearchDialogPrivate
 } TerminalSearchDialogPrivate;
 
 
-static void search_text_entry_changed (GtkEditable *editable,
-				       GtkWidget   *dialog);
+static void update_sensitivity (void *unused,
+				GtkWidget *dialog);
 static void response_handler (GtkWidget *dialog,
 			      gint       response_id,
 			      gpointer   data);
@@ -121,7 +123,8 @@ terminal_search_dialog_new (GtkWindow   *parent)
   gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
 
   gtk_entry_set_activates_default (GTK_ENTRY (priv->search_text_entry), TRUE);
-  g_signal_connect (priv->search_text_entry, "changed", G_CALLBACK (search_text_entry_changed), dialog);
+  g_signal_connect (priv->search_text_entry, "changed", G_CALLBACK (update_sensitivity), dialog);
+  g_signal_connect (priv->regex_checkbutton, "toggled", G_CALLBACK (update_sensitivity), dialog);
 
   g_signal_connect (dialog, "response", G_CALLBACK (response_handler), NULL);
 
@@ -160,23 +163,29 @@ terminal_search_dialog_private_destroy (TerminalSearchDialogPrivate *priv)
 
 
 static void
-search_text_entry_changed (GtkEditable *editable,
-			   GtkWidget   *dialog)
+update_sensitivity (void *unused, GtkWidget *dialog)
 {
   TerminalSearchDialogPrivate *priv = TERMINAL_SEARCH_DIALOG_GET_PRIVATE (dialog);
   const gchar *search_string;
-
-  search_string = gtk_entry_get_text (GTK_ENTRY (editable));
-  g_return_if_fail (search_string != NULL);
-
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog),
-				     GTK_RESPONSE_ACCEPT,
-				     *search_string != '\0');
+  gboolean valid;
 
   if (priv->regex) {
     g_regex_unref (priv->regex);
     priv->regex = NULL;
   }
+
+  search_string = gtk_entry_get_text (GTK_ENTRY (priv->search_text_entry));
+  g_return_if_fail (search_string != NULL);
+
+  valid = *search_string != '\0';
+
+  if (valid && GET_FLAG (regex_checkbutton)) {
+    /* Check that the regex is valid */
+    valid = NULL != terminal_search_dialog_get_regex (dialog);
+    /* TODO show the error message somewhere */
+  }
+
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, valid);
 }
 
 static gboolean
@@ -300,8 +309,6 @@ terminal_search_dialog_get_search_text (GtkWidget *dialog)
 
   return gtk_entry_get_text (GTK_ENTRY (priv->search_text_entry));
 }
-
-#define GET_FLAG(widget) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->widget))
 
 TerminalSearchFlags
 terminal_search_dialog_get_search_flags (GtkWidget *dialog)

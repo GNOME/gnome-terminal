@@ -3528,8 +3528,7 @@ search_find_response_callback (GtkWidget *dialog,
     return;
 
   regex = terminal_search_dialog_get_regex (dialog);
-  if (G_UNLIKELY (!regex))
-    return; /* TODO error handling? */
+  g_return_if_fail (regex != NULL);
 
   flags = terminal_search_dialog_get_search_flags (dialog);
 
