@@ -38,6 +38,8 @@ gnome_terminal_SOURCES= \
 	terminal-screen.h \
 	terminal-screen-container.c \
 	terminal-screen-container.h \
+	terminal-search-dialog.c \
+	terminal-search-dialog.h \
 	terminal-tab-label.c \
 	terminal-tab-label.h \
 	terminal-tabs-menu.c \
@@ -167,6 +169,7 @@ uimanager_DATA = \
 
 builder_in_files = \
 	encodings-dialog.glade \
+	find-dialog.glade \
 	keybinding-editor.glade \
 	profile-manager.glade \
 	profile-new-dialog.glade \
@@ -175,7 +178,7 @@ builder_in_files = \
 	$(NULL)
 
 builderdir = $(pkgdatadir)
-builder_DATA = $(builder_in_files:.glade=.ui)
+builder_DATA =  $(builder_in_files:.glade=.ui)
 
 CLEANFILES = \
 	stamp-terminal-type-builtins.h \
