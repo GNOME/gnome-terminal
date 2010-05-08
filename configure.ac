@@ -1,7 +1,7 @@
 m4_define([gt_version_major],[2])
 m4_define([gt_version_minor],[31])
 m4_define([gt_version_micro],[3])
-m4_define([gt_version_extra],[git])
+m4_define([gt_version_extra],[-git])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
 m4_define([gt_api_version],[0])
@@ -39,10 +39,10 @@ GNOME_COMPILE_WARNINGS([maximum])
 
 AM_GLIB_GNU_GETTEXT
 
-GLIB_REQUIRED=2.16.0
+GLIB_REQUIRED=2.25.0
+GIO_REQUIRED=2.25.4
 GTK_REQUIRED=2.14.0
-GCONF_REQUIRED=2.14.0
-DBUS_GLIB_REQUIRED=0.6
+GCONF_REQUIRED=2.31.3
 VTE_REQUIRED=0.25.1
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
@@ -75,10 +75,9 @@ PKG_CHECK_MODULES([TERM],
   [vte >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
    gthread-2.0
-   gio-2.0
+   gio-2.0 >= $GIO_REQUIRED
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   dbus-glib-1 >= $DBUS_GLIB_REQUIRED
    $PLATFORM_DEPS])
 
 # Check the smclient backend
@@ -126,11 +125,6 @@ AC_SUBST([GLIB_MKENUMS])
 AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
 if test "$GTK_BUILDER_CONVERT" = "false"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
-fi
-
-AC_PATH_PROG([DBUS_BINDING_TOOL],[dbus-binding-tool],[false])
-if test "$DBUS_BINDING_TOOL" = "false"; then
-  AC_MSG_ERROR([dbus-binding-tool not found])
 fi
 
 GNOME_DOC_INIT

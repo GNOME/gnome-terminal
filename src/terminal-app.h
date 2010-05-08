@@ -34,7 +34,6 @@ G_BEGIN_DECLS
 #define TERMINAL_CONFIG_COMPAT_VERSION      (1) /* Bump this for incompatible changes */
 
 #define TERMINAL_CONFIG_GROUP               "GNOME Terminal Configuration"
-#define TERMINAL_CONFIG_PROP_FACTORY        "FactoryEnabled"
 #define TERMINAL_CONFIG_PROP_VERSION        "Version"
 #define TERMINAL_CONFIG_PROP_COMPAT_VERSION "CompatVersion"
 #define TERMINAL_CONFIG_PROP_WINDOWS        "Windows"
@@ -83,11 +82,9 @@ typedef struct _TerminalApp TerminalApp;
 
 GType terminal_app_get_type (void);
 
-void terminal_app_initialize (gboolean use_factory);
+TerminalApp* terminal_app_get (void);
 
 void terminal_app_shutdown (void);
-
-TerminalApp* terminal_app_get (void);
 
 gboolean terminal_app_handle_options (TerminalApp *app,
                                       TerminalOptions *options,

@@ -5,8 +5,6 @@ SUBDIRS = skey
 bin_PROGRAMS = gnome-terminal
 
 BUILT_SOURCES = \
-	terminal-factory-client.h \
-	terminal-factory-server.h \
 	terminal-marshal.c \
 	terminal-marshal.h \
 	terminal-type-builtins.c \
@@ -142,12 +140,6 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
-terminal-factory-client.h: terminal-factory-service.xml
-	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --mode=glib-client --output=$@ $<
-
-terminal-factory-server.h: terminal-factory-service.xml
-	$(AM_V_GEN) $(DBUS_BINDING_TOOL) --mode=glib-server --prefix=terminal_factory --output=$@ $<
-
 schemadir = $(GCONF_SCHEMA_FILE_DIR)
 schema_in_files = gnome-terminal.schemas.in
 schema_DATA = gnome-terminal.schemas
@@ -183,7 +175,6 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
-	terminal-factory-service.xml \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \

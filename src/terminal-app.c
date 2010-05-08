@@ -43,6 +43,9 @@
 
 #ifdef WITH_SMCLIENT
 #include "eggsmclient.h"
+#ifdef GDK_WINDOWING_X11
+#include "eggdesktopfile.h"
+#endif
 #endif
 
 #define FALLBACK_PROFILE_ID "Default"
@@ -109,8 +112,6 @@ struct _TerminalApp
   PangoFontDescription *system_font_desc;
   gboolean enable_mnemonics;
   gboolean enable_menu_accels;
-
-  gboolean use_factory;
 };
 
 enum
@@ -145,6 +146,9 @@ enum
 };
 
 static TerminalApp *global_app = NULL;
+
+/* Evil hack alert: this is exported from libgconf-2 but not in a public header */
+extern gboolean gconf_spawn_daemon(GError** err);
 
 #define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
 #define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
@@ -1380,7 +1384,25 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 static void
 terminal_app_init (TerminalApp *app)
 {
+  GError *error = NULL;
+
   global_app = app;
+
+  /* If the gconf daemon isn't available (e.g. because there's no dbus
+   * session bus running), we'd crash later on. Tell the user about it
+   * now, and exit. See bug #561663.
+   * Don't use gconf_ping_daemon() here since the server may just not
+   * be running yet, but able to be started. See comments on bug #564649.
+   */
+  if (!gconf_spawn_daemon (&error))
+    {
+      g_printerr ("Failed to summon the GConf demon; exiting.  %s\n", error->message);
+      g_error_free (error);
+
+      exit (EXIT_FAILURE);
+    }
+
+  gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
   /* Initialise defaults */
   app->enable_mnemonics = DEFAULT_ENABLE_MNEMONICS;
@@ -1457,6 +1479,16 @@ terminal_app_init (TerminalApp *app)
 #ifdef WITH_SMCLIENT
 {
   EggSMClient *sm_client;
+#ifdef GDK_WINDOWING_X11
+  char *desktop_file;
+
+  desktop_file = g_build_filename (TERM_DATADIR,
+                                   "applications",
+                                   PACKAGE ".desktop",
+                                   NULL);
+  egg_set_desktop_file_without_defaults (desktop_file);
+  g_free (desktop_file);
+#endif /* GDK_WINDOWING_X11 */
 
   sm_client = egg_sm_client_get ();
   g_signal_connect (sm_client, "save-state",
@@ -1572,6 +1604,12 @@ terminal_app_set_property (GObject *object,
 }
 
 static void
+terminal_app_real_quit (TerminalApp *app)
+{
+  gtk_main_quit();
+}
+
+static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1579,6 +1617,8 @@ terminal_app_class_init (TerminalAppClass *klass)
   object_class->finalize = terminal_app_finalize;
   object_class->get_property = terminal_app_get_property;
   object_class->set_property = terminal_app_set_property;
+
+  klass->quit = terminal_app_real_quit;
 
   signals[QUIT] =
     g_signal_new (I_("quit"),
@@ -1638,29 +1678,25 @@ terminal_app_class_init (TerminalAppClass *klass)
 
 /* Public API */
 
-void
-terminal_app_initialize (gboolean use_factory)
+TerminalApp*
+terminal_app_get (void)
 {
-  g_assert (global_app == NULL);
-  g_object_new (TERMINAL_TYPE_APP, NULL);
-  g_assert (global_app != NULL);
+  if (global_app == NULL) {
+    g_object_new (TERMINAL_TYPE_APP, NULL);
+    g_assert (global_app != NULL);
+  }
 
-  global_app->use_factory = use_factory;
+  return global_app;
 }
 
 void
 terminal_app_shutdown (void)
 {
-  g_assert (global_app != NULL);
+  if (global_app == NULL)
+    return;
+
   g_object_unref (global_app);
   g_assert (global_app == NULL);
-}
-
-TerminalApp*
-terminal_app_get (void)
-{
-  g_assert (global_app != NULL);
-  return global_app;
 }
 
 /**
@@ -2024,9 +2060,6 @@ terminal_app_save_config (TerminalApp *app,
 
   g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, TERMINAL_CONFIG_VERSION);
   g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, TERMINAL_CONFIG_COMPAT_VERSION);
-
-  /* FIXMEchpe this seems useless */
-  g_key_file_set_boolean (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_FACTORY, app->use_factory);
 
   window_names_array = g_ptr_array_sized_new (g_list_length (app->windows) + 1);
 

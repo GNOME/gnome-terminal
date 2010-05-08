@@ -29,19 +29,13 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
+#include <gio/gio.h>
 
 #include <gdk/gdkx.h>
 
 #ifdef WITH_SMCLIENT
 #include "eggsmclient.h"
-#ifdef GDK_WINDOWING_X11
-#include "eggdesktopfile.h"
 #endif
-#endif
-
-#include <dbus/dbus-protocol.h>
-#include <dbus/dbus-glib.h>
-#include <dbus/dbus-glib-bindings.h>
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -54,54 +48,314 @@
 #define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
 #define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
 
-#define TERMINAL_TYPE_FACTORY             (terminal_factory_get_type ())
-#define TERMINAL_FACTORY(object)          (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_FACTORY, TerminalFactory))
-#define TERMINAL_FACTORY_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), TERMINAL_TYPE_FACTORY, TerminalFactoryClass))
-#define TERMINAL_IS_FACTORY(object)       (G_TYPE_CHECK_INSTANCE_TYPE ((object), TERMINAL_TYPE_FACTORY))
-#define TERMINAL_IS_FACTORY_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), TERMINAL_TYPE_FACTORY))
-#define TERMINAL_FACTORY_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), TERMINAL_TYPE_FACTORY, TerminalFactoryClass))
-
-typedef struct _TerminalFactory        TerminalFactory;
-typedef struct _TerminalFactoryClass   TerminalFactoryClass;
-typedef struct _TerminalFactoryPrivate TerminalFactoryPrivate;
-
-struct _TerminalFactory
+/* The returned string is owned by @variant */
+static const char *
+ay_to_string (GVariant *variant,
+              GError **error)
 {
-  GObject parent_instance;
-};
+  const char *string;
+  gsize len;
 
-struct _TerminalFactoryClass
+  string = g_variant_get_byte_array (variant, &len);
+  if (len == 0)
+    return NULL;
+
+  /* Validate that the string is nul-terminated and full-length */
+  if (string[len - 1] != '\0') {
+    g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                         "String not nul-terminated!");
+    return NULL;
+  }
+  if (strlen (string) != (len - 1)) {
+    g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                         "String is shorter than claimed (claimed %" G_GSIZE_FORMAT " actual %" G_GSIZE_FORMAT ")",
+                         len, strlen (string));
+    return NULL;
+  }
+
+  return string;
+}
+
+/* The returned strings are owned by @variant. Free the array itself with g_free(). */
+static char **
+aay_to_strv (GVariant *variant,
+             int *argc,
+             GError **error)
 {
-  GObjectClass parent_class;
-};
+  GVariant *item;
+  char **argv;
+  gsize i, n;
 
-static gboolean
-terminal_factory_handle_arguments (TerminalFactory *factory,
-                                   const GArray *working_directory_array,
-                                   const GArray *display_name_array,
-                                   const GArray *startup_id_array,
-                                   const GArray *argv_array,
-                                   const GArray *env_array,
-                                   GError **error);
+  n = g_variant_n_children (variant);
+  if (argc)
+    *argc = n;
+  if (n == 0)
+    return NULL;
 
-#include "terminal-factory-client.h"
-#include "terminal-factory-server.h"
+  argv = g_new (char *, n + 1);
 
-static GType terminal_factory_get_type (void);
+  for (i = 0; i < n; ++i) {
+    item = g_variant_get_child_value (variant, i);
+    argv[i] = (char *) ay_to_string (item, error);
+    g_variant_unref (item);
+    if (*error != NULL)
+      goto err;
+  }
 
-G_DEFINE_TYPE_WITH_CODE (TerminalFactory, terminal_factory, G_TYPE_OBJECT,
-  dbus_g_object_type_install_info (g_define_type_id,
-                                   &dbus_glib_terminal_factory_object_info)
-);
- 
+  argv[n] = NULL;
+  return argv;
+
+err:
+  g_free (argv);
+  return NULL;
+}
+
+typedef struct {
+  char *factory_name;
+  TerminalOptions *options;
+  int exit_code;
+  char **argv;
+  int argc;
+} OwnData;
+
 static void
-terminal_factory_class_init (TerminalFactoryClass *factory_class)
+method_call_cb (GDBusConnection *connection,
+                const char *sender,
+                const char *object_path,
+                const char *interface_name,
+                const char *method_name,
+                GVariant *parameters,
+                GDBusMethodInvocation *invocation,
+                gpointer user_data)
 {
+  if (g_strcmp0 (method_name, "HandleArguments") == 0) {
+    TerminalOptions *options = NULL;
+    GVariant *v_wd, *v_display, *v_sid, *v_envv, *v_argv;
+    const char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
+    char **envv = NULL, **argv = NULL;
+    int argc;
+    GError *error = NULL;
+
+    g_variant_get (parameters, "(@ay@ay@ay@aay@aay)",
+                   &v_wd, &v_display, &v_sid, &v_envv, &v_argv);
+
+    working_directory = ay_to_string (v_wd, &error);
+    if (error)
+      goto out;
+    display_name = ay_to_string (v_display, &error);
+    if (error)
+      goto out;
+    startup_id = ay_to_string (v_sid, &error);
+    if (error)
+      goto out;
+    envv = aay_to_strv (v_envv, NULL, &error);
+    if (error)
+      goto out;
+    argv = aay_to_strv (v_argv, &argc, &error);
+    if (error)
+      goto out;
+
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                          "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
+                          working_directory ? working_directory : "(null)",
+                          display_name ? display_name : "(null)",
+                          startup_id ? startup_id : "(null)");
+
+    options = terminal_options_parse (working_directory,
+                                      display_name,
+                                      startup_id,
+                                      envv,
+                                      TRUE,
+                                      TRUE,
+                                      &argc, &argv,
+                                      &error,
+                                      NULL);
+
+    if (options != NULL) {
+      terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, &error);
+      terminal_options_free (options);
+    }
+ 
+  out:
+    g_variant_unref (v_wd);
+    g_variant_unref (v_display);
+    g_variant_unref (v_sid);
+    g_free (envv);
+    g_variant_unref (v_envv);
+    g_free (argv);
+    g_variant_unref (v_argv);
+
+    if (error == NULL) {
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("()"));
+    } else {
+      g_dbus_method_invocation_return_gerror (invocation, error);
+      g_error_free (error);
+    }
+  }
 }
 
 static void
-terminal_factory_init (TerminalFactory *factory)
+bus_acquired_cb (GDBusConnection *connection,
+                 const char *name,
+                 gpointer user_data)
 {
+  static const char dbus_introspection_xml[] =
+    "<node name='/org/gnome/Terminal'>"
+      "<interface name='org.gnome.Terminal.Factory'>"
+        "<method name='HandleArguments'>"
+          "<arg type='ay' name='working_directory' direction='in' />"
+          "<arg type='ay' name='display_name' direction='in' />"
+          "<arg type='ay' name='startup_id' direction='in' />"
+          "<arg type='aay' name='environment' direction='in' />"
+          "<arg type='aay' name='arguments' direction='in' />"
+        "</method>"
+      "</interface>"
+    "</node>";
+
+  static const GDBusInterfaceVTable interface_vtable = {
+    method_call_cb,
+    NULL,
+    NULL,
+  };
+
+  OwnData *data = (OwnData *) user_data;
+  GDBusNodeInfo *introspection_data;
+  guint registration_id;
+  GError *error = NULL;
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Bus %s acquired\n", name);
+
+  introspection_data = g_dbus_node_info_new_for_xml (dbus_introspection_xml, NULL);
+  g_assert (introspection_data != NULL);
+
+  registration_id = g_dbus_connection_register_object (connection,
+                                                       TERMINAL_FACTORY_SERVICE_PATH,
+                                                       introspection_data->interfaces[0],
+                                                       &interface_vtable,
+                                                       introspection_data,
+                                                       (GDestroyNotify) g_dbus_node_info_unref,
+                                                       &error);
+  if (registration_id == 0) {
+    g_printerr ("Failed to register object: %s\n", error->message);
+    g_error_free (error);
+    data->exit_code = EXIT_FAILURE;
+    gtk_main_quit ();
+  }
+}
+
+static void
+name_acquired_cb (GDBusConnection *connection,
+                  const char *name,
+                  gpointer user_data)
+{
+  OwnData *data = (OwnData *) user_data;
+  GError *error = NULL;
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Acquired the name %s on the session bus\n", name);
+
+  if (data->options == NULL) {
+    /* Name re-acquired!? */
+    g_assert_not_reached ();
+  }
+
+
+  if (!terminal_app_handle_options (terminal_app_get (), data->options, FALSE /* no resume */, &error)) {
+    g_printerr ("Failed to handle options: %s\n", error->message);
+    g_error_free (error);
+    data->exit_code = EXIT_FAILURE;
+    gtk_main_quit ();
+  }
+
+  terminal_options_free (data->options);
+  data->options = NULL;
+}
+
+static void
+name_lost_cb (GDBusConnection *connection,
+              const char *name,
+              gpointer user_data)
+{
+  OwnData *data = (OwnData *) user_data;
+  GError *error = NULL;
+  char **envv;
+  int envc, i;
+  GVariantBuilder builder;
+  GVariant *value;
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Lost the name %s on the session bus\n", name);
+
+  if (data->options == NULL) {
+    /* Already handled */
+    data->exit_code = EXIT_SUCCESS;
+    gtk_main_quit ();
+    return;
+  }
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                          "Forwarding arguments to existing instance\n");
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(ayayayaayaay)"));
+
+  g_variant_builder_add (&builder, "@ay",
+                         g_variant_new_byte_array (data->options->default_working_dir ? data->options->default_working_dir : "", -1));
+  g_variant_builder_add (&builder, "@ay",
+                         g_variant_new_byte_array (data->options->display_name ? data->options->display_name : "", -1));
+  g_variant_builder_add (&builder, "@ay",
+                         g_variant_new_byte_array (data->options->startup_id ? data->options->startup_id : "", -1));
+
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("aay"));
+  envv = g_listenv ();
+  envc = g_strv_length (envv);
+  for (i = 0; i < envc; ++i)
+    {
+      const char *value;
+      char *str;
+
+      value = g_getenv (envv[i]);
+      if (value == NULL)
+        continue;
+
+      str = g_strdup_printf ("%s=%s", envv[i], value);
+      g_variant_builder_add (&builder, "@ay", g_variant_new_byte_array (str, -1));
+      g_free (str);
+    }
+  g_variant_builder_close (&builder);
+
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("aay"));
+  for (i = 0; i < data->argc; ++i)
+    g_variant_builder_add (&builder, "@ay",
+                           g_variant_new_byte_array (data->argv[i], -1));
+  g_variant_builder_close (&builder);
+
+  value = g_dbus_connection_call_sync (connection,
+                                       data->factory_name,
+                                       TERMINAL_FACTORY_SERVICE_PATH,
+                                       TERMINAL_FACTORY_INTERFACE_NAME,
+                                       "HandleArguments",
+                                       g_variant_builder_end (&builder),
+                                       G_VARIANT_TYPE ("()"),
+                                       G_DBUS_CALL_FLAGS_NONE,
+                                       -1,
+                                       NULL,
+                                       &error);
+  if (value == NULL) {
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                           "Failed to forward arguments: %s\n", error->message);
+    g_error_free (error);
+    data->exit_code = EXIT_FAILURE;
+    gtk_main_quit ();
+  } else {
+    g_variant_unref (value);
+    data->exit_code = EXIT_SUCCESS;
+  }
+
+  terminal_options_free (data->options);
+  data->options = NULL;
+
+  gtk_main_quit ();
 }
 
 /* Settings storage works as follows:
@@ -125,8 +379,6 @@ terminal_factory_init (TerminalFactory *factory)
  * a profiles feature.
  *
  */
-
-static TerminalFactory *factory = NULL;
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
@@ -179,39 +431,6 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
   return event.xproperty.time;
 }
 
-static void
-about_url_hook (GtkAboutDialog *about,
-	        const char *uri,
-	        gpointer user_data)
-{
-  GError *error = NULL;
-
-  if (!gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (about)),
-                      uri,
-                      gtk_get_current_event_time (),
-                      &error))
-    {
-      terminal_util_show_error_dialog (GTK_WINDOW (about), NULL, error,
-                                       "%s", _("Could not open link"));
-      g_error_free (error);
-    }
-}
-
-static void
-about_email_hook (GtkAboutDialog *about,
-		  const char *email_address,
-		  gpointer user_data)
-{
-  char *escaped, *uri;
-
-  escaped = g_uri_escape_string (email_address, NULL, FALSE);
-  uri = g_strdup_printf ("mailto:%s", escaped);
-  g_free (escaped);
-
-  about_url_hook (about, uri, user_data);
-  g_free (uri);
-}
-
 static char *
 get_factory_name_for_display (const char *display_name)
 {
@@ -235,24 +454,16 @@ get_factory_name_for_display (const char *display_name)
   return g_string_free (name, FALSE);
 }
 
-/* Evil hack alert: this is exported from libgconf-2 but not in a public header */
-extern gboolean gconf_spawn_daemon(GError** err);
-
 int
 main (int argc, char **argv)
 {
   int i;
   char **argv_copy;
   int argc_copy;
-  const char *startup_id, *display_name;
+  const char *startup_id, *display_name, *home_dir;
   GdkDisplay *display;
   TerminalOptions *options;
-  DBusGConnection *connection;
-  char *factory_name = NULL;
-  DBusGProxy *proxy;
-  guint32 request_name_ret;
   GError *error = NULL;
-  const char *home_dir;
   char *working_directory;
   int ret = EXIT_SUCCESS;
 
@@ -278,6 +489,14 @@ main (int argc, char **argv)
 
   working_directory = g_get_current_dir ();
 
+  /* Now change directory to $HOME so we don't prevent unmounting, e.g. if the
+   * factory is started by nautilus-open-terminal. See bug #565328.
+   * On failure back to /.
+   */
+  home_dir = g_get_home_dir ();
+  if (home_dir == NULL || chdir (home_dir) < 0)
+    (void) chdir ("/");
+
   options = terminal_options_parse (working_directory,
                                     NULL,
                                     startup_id,
@@ -294,12 +513,11 @@ main (int argc, char **argv)
 
   g_free (working_directory);
 
-  if (!options)
-    {
-      g_printerr (_("Failed to parse arguments: %s\n"), error->message);
-      g_error_free (error);
-      exit (1);
-    }
+  if (options == NULL) {
+    g_printerr (_("Failed to parse arguments: %s\n"), error->message);
+    g_error_free (error);
+    exit (EXIT_FAILURE);
+  }
 
   g_set_application_name (_("Terminal"));
   
@@ -324,268 +542,50 @@ main (int argc, char **argv)
   display_name = gdk_display_get_name (display);
   options->display_name = g_strdup (display_name);
   
-  if (!options->use_factory)
-    goto factory_disabled;
+  if (options->use_factory) {
+    OwnData *data;
+    guint owner_id;
 
-  /* Now try to acquire register us as the terminal factory */
-  connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
-  if (!connection)
-    {
-      g_printerr ("Failed to get the session bus: %s\nFalling back to non-factory mode.\n",
-                  error->message);
-      g_clear_error (&error);
-      goto factory_disabled;
-    }
+    data = g_new (OwnData, 1);
+    data->factory_name = get_factory_name_for_display (display_name);
+    data->options = options;
+    data->exit_code = -1;
+    data->argv = argv_copy;
+    data->argc = argc_copy;
 
-  proxy = dbus_g_proxy_new_for_name (connection,
-                                     DBUS_SERVICE_DBUS,
-                                     DBUS_PATH_DBUS,
-                                     DBUS_INTERFACE_DBUS);
-#if 0
-  dbus_g_proxy_add_signal (proxy, "NameOwnerChanged",
-                           G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
-                           G_TYPE_INVALID);
-  dbus_g_proxy_connect_signal (proxy, "NameOwnerChanged",
-                               G_CALLBACK (name_owner_changed), factory, NULL);
-#endif
+    owner_id = g_bus_own_name (G_BUS_TYPE_SESSION,
+                               data->factory_name,
+                               G_BUS_NAME_OWNER_FLAGS_NONE,
+                               bus_acquired_cb,
+                               name_acquired_cb,
+                               name_lost_cb,
+                               data, NULL);
 
-  factory_name = get_factory_name_for_display (display_name);
-  if (!org_freedesktop_DBus_request_name (proxy,
-                                          factory_name,
-                                          DBUS_NAME_FLAG_DO_NOT_QUEUE,
-                                          &request_name_ret,
-                                          &error))
-    {
-      g_printerr ("Failed name request: %s\n", error->message);
-      g_clear_error (&error);
-      goto factory_disabled;
-    }
+    gtk_main ();
 
-  /* Forward to the existing factory and exit */
-  if (request_name_ret != DBUS_REQUEST_NAME_REPLY_PRIMARY_OWNER)
-    {
-      char **env;
-      const char *evalue;
-      GPtrArray *env_ptr_array;
-      int envc;
-      GArray *working_directory_array, *display_name_array, *startup_id_array;
-      GArray *env_array, *argv_array;
-      gboolean retval;
+    ret = data->exit_code;
+    g_bus_unown_name (owner_id);
 
-      _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                             "Forwarding arguments to existing instance\n");
+    g_free (data->factory_name);
+    g_free (data);
 
-      env = g_listenv ();
-      envc = g_strv_length (env);
-      env_ptr_array = g_ptr_array_sized_new (envc);
-      for (i = 0; i < envc; ++i)
-        {
-          evalue = g_getenv (env[i]);
-          if (evalue)
-            g_ptr_array_add (env_ptr_array, g_strdup_printf ("%s=%s", env[i], evalue));
-        }
-      g_ptr_array_add (env_ptr_array, NULL);
+  } else {
 
-      g_strfreev (env);
-      env = (char **) g_ptr_array_free (env_ptr_array, FALSE);
+    terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, &error);
+    terminal_options_free (options);
 
-      working_directory = g_get_current_dir ();
-      working_directory_array = terminal_util_string_to_array (working_directory);
-      display_name_array = terminal_util_string_to_array (options->display_name);
-      startup_id_array = terminal_util_string_to_array (options->startup_id);
-      env_array = terminal_util_strv_to_array (envc, env);
-      argv_array = terminal_util_strv_to_array (argc_copy, argv_copy);
-
-      proxy = dbus_g_proxy_new_for_name (connection,
-                                         factory_name,
-                                         TERMINAL_FACTORY_SERVICE_PATH,
-                                         TERMINAL_FACTORY_INTERFACE_NAME);
-      retval = org_gnome_Terminal_Factory_handle_arguments (proxy,
-                                                            working_directory_array,
-                                                            display_name_array,
-                                                            startup_id_array,
-                                                            env_array,
-                                                            argv_array,
-                                                            &error);
-      g_free (working_directory);
-      g_array_free (working_directory_array, TRUE);
-      g_array_free (display_name_array, TRUE);
-      g_array_free (startup_id_array, TRUE);
-      g_array_free (env_array, TRUE);
-      g_array_free (argv_array, TRUE);
-      g_strfreev (env);
-
-      if (!retval)
-        {
-          if (g_error_matches (error, DBUS_GERROR, DBUS_GERROR_UNKNOWN_METHOD))
-            {
-              /* Incompatible factory version, fall back, to new instance */
-              g_printerr (_("Incompatible factory version; creating a new instance.\n"));
-              g_clear_error (&error);
-
-              goto factory_disabled;
-            }
-
-          g_printerr (_("Factory error: %s\n"), error->message);
-          g_error_free (error);
-          ret = EXIT_FAILURE;
-        }
-
-      g_free (argv_copy);
-      terminal_options_free (options);
-
-      exit (ret);
-    }
-
-  factory = g_object_new (TERMINAL_TYPE_FACTORY, NULL);
-  dbus_g_connection_register_g_object (connection,
-                                       TERMINAL_FACTORY_SERVICE_PATH,
-                                       G_OBJECT (factory));
-
-  /* Now we're registered as the factory. Proceed to open the terminal(s). */
-
-factory_disabled:
-  g_free (argv_copy);
-  g_free (factory_name);
-
-  /* If the gconf daemon isn't available (e.g. because there's no dbus
-   * session bus running), we'd crash later on. Tell the user about it
-   * now, and exit. See bug #561663.
-   * Don't use gconf_ping_daemon() here since the server may just not
-   * be running yet, but able to be started. See comments on bug #564649.
-   */
-  if (!gconf_spawn_daemon (&error))
-    {
-      g_printerr ("Failed to summon the GConf demon; exiting.  %s\n", error->message);
-      g_error_free (error);
-      exit (1);
-    }
-
-  gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
-
-  gtk_about_dialog_set_url_hook (about_url_hook, NULL, NULL);
-  gtk_about_dialog_set_email_hook (about_email_hook, NULL, NULL);
-
-#if defined(WITH_SMCLIENT) && defined(GDK_WINDOWING_X11)
-  {
-    char *desktop_file;
-
-    desktop_file = g_build_filename (TERM_DATADIR,
-                                     "applications",
-                                     PACKAGE ".desktop",
-                                     NULL);
-    egg_set_desktop_file_without_defaults (desktop_file);
-    g_free (desktop_file);
-  }
-#endif
-
-  terminal_app_initialize (options->use_factory);
-  g_signal_connect (terminal_app_get (), "quit", G_CALLBACK (gtk_main_quit), NULL);
-
-  terminal_app_handle_options (terminal_app_get (), options, TRUE /* allow resume */, &error);
-  terminal_options_free (options);
-
-  if (error)
-    {
+    if (error == NULL) {
+      gtk_main ();
+    } else {
       g_printerr ("Error handling options: %s\n", error->message);
-      g_clear_error (&error);
-
+      g_error_free (error);
       ret = EXIT_FAILURE;
-      goto shutdown;
     }
-
-  /* Now change directory to $HOME so we don't prevent unmounting, e.g. if the
-   * factory is started by nautilus-open-terminal. See bug #565328.
-   * On failure back to /.
-   */
-  home_dir = g_get_home_dir ();
-  if (home_dir == NULL || chdir (home_dir) < 0)
-    (void) chdir ("/");
-
-  gtk_main ();
-
-shutdown:
+  }
 
   terminal_app_shutdown ();
 
-  if (factory)
-    g_object_unref (factory);
-
-  return ret;
-}
-
-/* Factory stuff */
-
-static gboolean
-terminal_factory_handle_arguments (TerminalFactory *terminal_factory,
-                                   const GArray *working_directory_array,
-                                   const GArray *display_name_array,
-                                   const GArray *startup_id_array,
-                                   const GArray *env_array,
-                                   const GArray *argv_array,
-                                   GError **error)
-{
-  TerminalOptions *options = NULL;
-  char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
-  char **env = NULL, **argv = NULL, **argv_copy = NULL;
-  int argc;
-  GError *arg_error = NULL;
-  gboolean retval;
-
-  working_directory = terminal_util_array_to_string (working_directory_array, &arg_error);
-  if (arg_error)
-    goto out;
-  display_name = terminal_util_array_to_string (display_name_array, &arg_error);
-  if (arg_error)
-    goto out;
-  startup_id = terminal_util_array_to_string (startup_id_array, &arg_error);
-  if (arg_error)
-    goto out;
-  env = terminal_util_array_to_strv (env_array, NULL, &arg_error);
-  if (arg_error)
-    goto out;
-  argv = terminal_util_array_to_strv (argv_array, &argc, &arg_error);
-  if (arg_error)
-    goto out;
-
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
-                         working_directory ? working_directory : "(null)",
-                         display_name ? display_name : "(null)",
-                         startup_id ? startup_id : "(null)");
-
-  /* Copy the arguments since terminal_options_parse potentially modifies the array */
-  argv_copy = (char **) g_memdup (argv, (argc + 1) * sizeof (char *));
-
-  options = terminal_options_parse (working_directory,
-                                    display_name,
-                                    startup_id,
-                                    env,
-                                    TRUE,
-                                    TRUE,
-                                    &argc, &argv_copy,
-                                    error,
-                                    NULL);
-
-out:
-  g_free (working_directory);
-  g_free (display_name);
-  g_free (startup_id);
-  g_strfreev (env);
-  g_strfreev (argv);
   g_free (argv_copy);
 
-  if (arg_error)
-    {
-      g_propagate_error (error, arg_error);
-      return FALSE;
-    }
-
-  if (!options)
-    return FALSE;
-
-  retval = terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, error);
-
-  terminal_options_free (options);
-  return retval;
+  return ret;
 }
