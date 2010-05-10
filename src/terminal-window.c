@@ -2926,7 +2926,7 @@ terminal_window_update_geometry (TerminalWindow *window)
       gtk_border_free (inner_border);
 
 #define MIN_WIDTH_CHARS 4
-#define MIN_HEIGHT_CHARS 2
+#define MIN_HEIGHT_CHARS 1
       
       hints.width_inc = char_width;
       hints.height_inc = char_height;
