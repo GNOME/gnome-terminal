@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&component=general\n"
-"POT-Creation-Date: 2010-01-30 11:59+0000\n"
-"PO-Revision-Date: 2010-04-03 12:09+0300\n"
+"POT-Creation-Date: 2010-05-06 17:21+0000\n"
+"PO-Revision-Date: 2010-05-29 23:04+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -59,6 +59,27 @@ msgstr "Terminali kooditabelite lisamine või eemaldamine"
 
 msgid "E_ncodings shown in menu:"
 msgstr "_Menüüs kuvatavad kooditabelid:"
+
+msgid "Find"
+msgstr "Otsi"
+
+msgid "Match _entire word only"
+msgstr "Kogu sõ_na peab vastavuses olema"
+
+msgid "Match as _regular expression"
+msgstr ""
+
+msgid "Search _backwards"
+msgstr "Otsitakse tagantpoolt _ettepoole"
+
+msgid "_Match case"
+msgstr "_Tõstutundlik"
+
+msgid "_Search for:"
+msgstr "_Otsitav tekst:"
+
+msgid "_Wrap around"
+msgstr "_Lõppu (või algusese) jõudmisel otsingut ei katkestata"
 
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
@@ -235,6 +256,11 @@ msgid ""
 msgstr ""
 "Kui märgitud, siis terminal ei reageeri piiksu tegemiseks mõeldud "
 "koodijadale."
+
+msgid ""
+"If true, newly created terminal windows will have custom size specified by "
+"default_size_columns and default_size_rows."
+msgstr ""
 
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Kui märgitud, siis klahvivajutusel hüpatakse kerimisriba allaossa."
@@ -716,13 +742,21 @@ msgstr ""
 "gtkrc abil (gtk-menu-bar-accel = \"misiganes\"). Selle võtme abil saab "
 "standardset menüüriba kiirklahvi keelata."
 
-msgid "Number of columns in newly created terminal windows."
+#, fuzzy
+#| msgid "Number of columns in newly created terminal windows."
+msgid ""
+"Number of columns in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
 msgstr "Uute akende veergude arv."
 
 msgid "Number of lines to keep in scrollback"
 msgstr "Tagasikerimise puhvri ridade arv"
 
-msgid "Number of rows in newly created terminal windows."
+#, fuzzy
+#| msgid "Number of rows in newly created terminal windows."
+msgid ""
+"Number of rows in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
 msgstr "Uute akende ridade arv."
 
 msgid ""
@@ -869,10 +903,10 @@ msgstr ""
 
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
-"and \"disabled\"."
+"and \"hidden\"."
 msgstr ""
 "Terminali kerimisriba asukoht. Võimalikud asukohad on \"left\" (vasakul), "
-"\"right\" (paremal) ja \"disabled\" (keelatud)."
+"\"right\" (paremal) ja \"hidden\" (peidus)."
 
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Kas tagasikerimise puhvris hoitakse piiramatut arvu ridu või mitte"
@@ -935,6 +969,11 @@ msgstr "Kas vaigistada terminali kellaheli"
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Kas terminalikäsu käivitamisel uuendatakse sisselogimise kirjeid või mitte"
+
+msgid "Whether to use custom terminal size for new windows"
+msgstr ""
+"Kas uutel akendel ja kaartidel kasutatakse terminalile kohandatud suurust "
+"või mitte"
 
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Kas terminalividina jaoks kasutatakse teemast võetud värve või mitte"
@@ -1019,8 +1058,8 @@ msgstr "_Põhineb mallil:"
 msgid "<b>Command</b>"
 msgstr "<b>Käsk</b>"
 
-msgid "<b>Foreground, Background, and Bold</b>"
-msgstr "<b>Tekst, taust ja rasvane kiri</b>"
+msgid "<b>Foreground, Background, Bold and Underline</b>"
+msgstr "<b>Tekst, taust ja allajoonitud ning rasvane kiri</b>"
 
 msgid "<b>Palette</b>"
 msgstr "<b>Palett</b>"
@@ -1056,12 +1095,14 @@ msgid ""
 "Automatic\n"
 "Control-H\n"
 "ASCII DEL\n"
-"Escape sequence"
+"Escape sequence\n"
+"TTY Erase"
 msgstr ""
 "Automaatne\n"
 "Control-H\n"
 "ASCII DEL\n"
-"Paojada"
+"Paojada\n"
+"TTY puhastamine"
 
 msgid "Background"
 msgstr "Taust"
@@ -1115,8 +1156,8 @@ msgstr "Oma"
 msgid "Custom co_mmand:"
 msgstr "_Oma käsk:"
 
-msgid "Default si_ze:"
-msgstr "_Vaikimisi suurus:"
+msgid "Default size:"
+msgstr "Vaikimisi suurus:"
 
 msgid ""
 "Exit the terminal\n"
@@ -1205,6 +1246,9 @@ msgstr "Terminali kõ_ll"
 msgid "Title and Command"
 msgstr "Pealkiri ja käsk"
 
+msgid "Use custom default terminal si_ze"
+msgstr ""
+
 msgid "When command _exits:"
 msgstr "Käsu _lõpetamisel:"
 
@@ -1252,6 +1296,9 @@ msgstr "_Teksti värv:"
 
 msgid "_Transparent background"
 msgstr "_Läbipaistev taust"
+
+msgid "_Underline color:"
+msgstr "_Allajoonimise värvus:"
 
 msgid "_Unlimited"
 msgstr "Pii_ramatu"
@@ -1733,11 +1780,25 @@ msgstr "Terminalipõhiste valikute näitamine"
 msgid "Unnamed"
 msgstr "Nimetu"
 
-msgid "There was a problem with the command for this terminal"
-msgstr "Selle terminali käsuga tekkis probleem"
+msgid "_Profile Preferences"
+msgstr "Profiili _eelistused"
+
+msgid "_Relaunch"
+msgstr ""
 
 msgid "There was an error creating the child process for this terminal"
 msgstr "Sellele terminalile alamprotsessi loomisel tekkis viga"
+
+#, c-format
+msgid "The child process exited normally with status %d."
+msgstr ""
+
+#, c-format
+msgid "The child process was terminated by signal %d."
+msgstr ""
+
+msgid "The child process was terminated."
+msgstr ""
 
 msgid "Close tab"
 msgstr "Kaardi sulgemine"
@@ -1816,6 +1877,9 @@ msgstr "_Redaktor"
 msgid "_View"
 msgstr "_Vaade"
 
+msgid "_Search"
+msgstr "_Otsing"
+
 msgid "_Terminal"
 msgstr "_Terminal"
 
@@ -1848,6 +1912,25 @@ msgstr "_Kiirklahvid…"
 
 msgid "Pr_ofile Preferences"
 msgstr "Profiili _eelistused"
+
+#. Search menu
+msgid "_Find..."
+msgstr "_Otsi..."
+
+msgid "Find Ne_xt"
+msgstr "Otsi _uuesti"
+
+msgid "Find Pre_vious"
+msgstr "Otsi _eelmist"
+
+msgid "_Clear Highlight"
+msgstr ""
+
+msgid "Go to _Line..."
+msgstr ""
+
+msgid "_Incremental Search..."
+msgstr ""
 
 #. Terminal menu
 msgid "Change _Profile"
@@ -2011,6 +2094,10 @@ msgstr "ASCII DEL"
 msgid "Escape sequence"
 msgstr "Paojada"
 
+#. Translators: This refers to the Delete keybinding option
+msgid "TTY Erase"
+msgstr ""
+
 #. Translators: Cursor shape: ...
 msgid "Block"
 msgstr "Kast"
@@ -2075,32 +2162,5 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-msgid "_Search"
-msgstr "_Otsing"
-
-msgid "_Find..."
-msgstr "_Otsi..."
-
-msgid "Find Ne_xt"
-msgstr "Otsi _uuesti"
-
-msgid "Find Pre_vious"
-msgstr "Otsi _eelmist"
-
-msgid "Find"
-msgstr "Otsi"
-
-msgid "_Search for:"
-msgstr "_Otsitav tekst:"
-
-msgid "_Match case"
-msgstr "_Tõstutundlik"
-
-msgid "Match _entire word only"
-msgstr "Kogu sõ_na peab vastavuses olema"
-
-msgid "Search _backwards"
-msgstr "Otsitakse tagantpoolt _ettepoole"
-
-msgid "_Wrap around"
-msgstr "_Lõppu (või algusese) jõudmisel otsingut ei katkestata"
+#~ msgid "There was a problem with the command for this terminal"
+#~ msgstr "Selle terminali käsuga tekkis probleem"
