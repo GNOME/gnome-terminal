@@ -202,7 +202,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
    * which the underlying GIConv implementation can't support.
    */
   converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
-                         encoding->charset, "ASCII",
+                         encoding->charset, "UTF-8",
                          &bytes_read, &bytes_written, &error);
 
   /* The encoding is only valid if ASCII passes through cleanly. */
