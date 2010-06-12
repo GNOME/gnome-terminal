@@ -29,6 +29,8 @@ gnome_terminal_SOURCES= \
 	terminal-debug.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
+	terminal-info-bar.c \
+	terminal-info-bar.h \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
@@ -50,13 +52,6 @@ gnome_terminal_SOURCES= \
 	terminal-window.c \
 	terminal-window.h \
 	$(NULL)
-
-if HAVE_GTK_2_18
-gnome_terminal_SOURCES += \
-	terminal-info-bar.c \
-	terminal-info-bar.h \
-	$(NULL)
-endif
 
 nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
 

@@ -39,11 +39,7 @@
 #include "terminal-screen-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
-
-#if GTK_CHECK_VERSION (2, 18, 0)
 #include "terminal-info-bar.h"
-#define USE_INFOBARS
-#endif
 
 #include "eggshell.h"
 
@@ -273,11 +269,7 @@ terminal_screen_get_window (TerminalScreen *screen)
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
-#if GTK_CHECK_VERSION (2, 18, 0)
   if (!gtk_widget_is_toplevel (toplevel))
-#else
-  if (!GTK_WIDGET_TOPLEVEL (toplevel))
-#endif
     return NULL;
 
   return TERMINAL_WINDOW (toplevel);
@@ -1353,11 +1345,7 @@ get_child_environment (TerminalScreen *screen,
 
   window = gtk_widget_get_toplevel (term);
   g_assert (window != NULL);
-#if GTK_CHECK_VERSION (2, 19, 3)
   g_assert (gtk_widget_is_toplevel (window));
-#else
-  g_assert (GTK_WIDGET_TOPLEVEL (window));
-#endif
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
@@ -1408,8 +1396,6 @@ get_child_environment (TerminalScreen *screen,
   return (char **) g_ptr_array_free (retval, FALSE);
 }
 
-#ifdef USE_INFOBARS
-
 enum {
   RESPONSE_RELAUNCH,
   RESPONSE_EDIT_PROFILE
@@ -1442,8 +1428,6 @@ info_bar_response_cb (GtkWidget *info_bar,
       break;
   }
 }
-
-#endif /* USE_INFOBARS */
 
 static gboolean
 terminal_screen_launch_child_cb (TerminalScreen *screen)
@@ -1489,7 +1473,6 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
                                        NULL, NULL,
                                        &pid,
                                        &err)) {
-#ifdef USE_INFOBARS
     GtkWidget *info_bar;
 
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
@@ -1507,11 +1490,6 @@ terminal_screen_launch_child_cb (TerminalScreen *screen)
                         info_bar, FALSE, FALSE, 0);
     gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
     gtk_widget_show (info_bar);
-#else
-    terminal_util_show_error_dialog (GTK_WINDOW (terminal_screen_get_window (screen)), NULL,
-                                     err,
-                                     "%s", _("There was an error creating the child process for this terminal"));
-#endif /* USE_INFOBARS */
 
     g_error_free (err);
     g_strfreev (env);
@@ -1878,7 +1856,6 @@ terminal_screen_child_exited (VteTerminal *terminal)
     case TERMINAL_EXIT_RESTART:
       terminal_screen_launch_child_on_idle (screen);
       break;
-#ifdef USE_INFOBARS
     case TERMINAL_EXIT_HOLD: {
       GtkWidget *info_bar;
       int status;
@@ -1907,7 +1884,6 @@ terminal_screen_child_exited (VteTerminal *terminal)
       gtk_widget_show (info_bar);
       break;
     }
-#endif /* USE_INFOBARS */
 
     default:
       break;

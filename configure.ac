@@ -57,7 +57,7 @@ AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
   2.0) GTK_API_VERSION=2.0
-       GTK_REQUIRED=2.14.0
+       GTK_REQUIRED=2.18.0
        ;;
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=2.90.0
@@ -80,9 +80,6 @@ PKG_CHECK_MODULES([TERM],
    gconf-2.0 >= $GCONF_REQUIRED
    dbus-glib-1 >= $DBUS_GLIB_REQUIRED
    $PLATFORM_DEPS])
-
-PKG_CHECK_EXISTS([gtk+-$GTK_API_VERSION >= 2.18.0],[have_gtk_2_18=yes],[have_gtk_2_18=no])
-AM_CONDITIONAL([HAVE_GTK_2_18],[test "$have_gtk_2_18" = "yes"])
 
 # Check the smclient backend
 SMCLIENT_PKGS=
