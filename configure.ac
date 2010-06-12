@@ -45,7 +45,26 @@ GCONF_REQUIRED=2.14.0
 DBUS_GLIB_REQUIRED=0.6
 VTE_REQUIRED=0.25.1
 
-GDK_TARGET="$($PKG_CONFIG --variable target gdk-2.0)"
+AC_MSG_CHECKING([which gtk+ version to compile against])
+AC_ARG_WITH([gtk],
+  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 2.0)])],
+  [case "$with_gtk" in
+     2.0|3.0) ;;
+     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
+   esac],
+  [with_gtk=2.0])
+AC_MSG_RESULT([$with_gtk])
+
+case "$with_gtk" in
+  2.0) GTK_API_VERSION=2.0
+       GTK_REQUIRED=2.14.0
+       ;;
+  3.0) GTK_API_VERSION=3.0
+       GTK_REQUIRED=2.90.0
+       ;;
+esac
+
+GDK_TARGET="$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)"
 
 case "$GDK_TARGET" in
   x11) PLATFORM_DEPS="x11" ;;
@@ -57,12 +76,12 @@ PKG_CHECK_MODULES([TERM],
    glib-2.0 >= $GLIB_REQUIRED
    gthread-2.0
    gio-2.0
-   gtk+-2.0 >= $GTK_REQUIRED
+   gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
    dbus-glib-1 >= $DBUS_GLIB_REQUIRED
    $PLATFORM_DEPS])
 
-PKG_CHECK_EXISTS([gtk+-2.0 >= 2.18.0],[have_gtk_2_18=yes],[have_gtk_2_18=no])
+PKG_CHECK_EXISTS([gtk+-$GTK_API_VERSION >= 2.18.0],[have_gtk_2_18=yes],[have_gtk_2_18=no])
 AM_CONDITIONAL([HAVE_GTK_2_18],[test "$have_gtk_2_18" = "yes"])
 
 # Check the smclient backend
