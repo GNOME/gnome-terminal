@@ -148,7 +148,6 @@ method_call_cb (GDBusConnection *connection,
     int argc;
     GError *error = NULL;
 
-    g_print ("Here!\n");
     g_variant_get (parameters, "(@aaya{sv})", &v_argv, &data_iter);
 
     while (g_variant_iter_next (data_iter, "{&sv}", &key, &data)) {
@@ -201,10 +200,8 @@ method_call_cb (GDBusConnection *connection,
     g_variant_unref (v_argv);
 
     if (error == NULL) {
-      g_print ("No Error!\n");
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("()"));
     } else {
-      g_print ("Error:%s!\n", error->message);
       g_dbus_method_invocation_return_gerror (invocation, error);
       g_error_free (error);
     }
