@@ -572,11 +572,12 @@ main (int argc, char **argv)
 
   g_set_application_name (_("Terminal"));
   
-  /* Unset the startup ID, so it doesn't end up in the factory's env
-   * and thus in the terminals' envs.
+  /* Unset the these env variables, so they doesn't end up
+   * in the factory's env and thus in the terminals' envs.
    */
-  if (startup_id)
-    g_unsetenv ("DESKTOP_STARTUP_ID");
+  g_unsetenv ("DESKTOP_STARTUP_ID");
+  g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE_PID");
+  g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE");
 
  /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
