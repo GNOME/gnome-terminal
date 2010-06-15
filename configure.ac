@@ -58,9 +58,11 @@ AC_MSG_RESULT([$with_gtk])
 case "$with_gtk" in
   2.0) GTK_API_VERSION=2.0
        GTK_REQUIRED=2.18.0
+       VTE_PC_VERSION=
        ;;
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=2.90.0
+       VTE_PC_VERSION=-2.90
        ;;
 esac
 
@@ -72,7 +74,7 @@ case "$GDK_TARGET" in
 esac
 
 PKG_CHECK_MODULES([TERM],
-  [vte >= $VTE_REQUIRED
+  [vte$VTE_PC_VERSION >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
    gthread-2.0
    gio-2.0 >= $GIO_REQUIRED
