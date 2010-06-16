@@ -155,7 +155,7 @@ method_call_cb (GDBusConnection *connection,
         working_directory = ay_to_string (data, &error);
       } else if (strcmp (key, "display-name") == 0) {
         display_name = ay_to_string (data, &error);
-      } else if (strcmp (key, "working-directory") == 0) {
+      } else if (strcmp (key, "cwd") == 0) {
         working_directory = ay_to_string (data, &error);
       } else if (strcmp (key, "environment") == 0) {
         envv = aay_to_strv (data, NULL, &error);
@@ -353,7 +353,7 @@ name_lost_cb (GDBusConnection *connection,
                          "display-name",
                          g_variant_new_byte_array (data->options->display_name ? data->options->display_name : "", -1));
   g_variant_builder_add (&builder, "{sv}",
-                         "working-directory",
+                         "cwd",
                          g_variant_new_byte_array (data->options->default_working_dir ? data->options->default_working_dir : "", -1));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("{sv}"));
