@@ -2428,7 +2428,7 @@ terminal_window_move_screen (TerminalWindow *source_window,
   terminal_window_remove_screen (source_window, screen);
     
   /* Now we can safely remove the screen from the container and let the container die */
-  gtk_container_remove (GTK_CONTAINER (screen_container), GTK_WIDGET (screen));
+  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (screen))), GTK_WIDGET (screen));
   g_object_unref (screen_container);
 
   terminal_window_add_screen (dest_window, screen, dest_position);
