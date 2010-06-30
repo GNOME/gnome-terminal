@@ -9,10 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&component=general\n"
-"POT-Creation-Date: 2010-05-30 20:18+0000\n"
-"PO-Revision-Date: 2009-11-05 22:49+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-30 17:10+0800\n"
+"PO-Revision-Date: 2010-06-30 17:11+0800\n"
 "Last-Translator: Fan Qijiang <fqj1994@linux.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +20,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:130
-#: ../src/terminal-accels.c:226 ../src/terminal.c:304
+#: ../src/terminal-accels.c:226 ../src/terminal.c:573
 #: ../src/terminal-profile.c:160 ../src/terminal-window.c:1963
 msgid "Terminal"
 msgstr "终端"
@@ -1557,7 +1556,7 @@ msgstr "缩小"
 msgid "Normal Size"
 msgstr "普通大小"
 
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:3655
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:3647
 msgid "Set Title"
 msgstr "设置标题"
 
@@ -1679,28 +1678,28 @@ msgstr "动作(_A)"
 msgid "Shortcut _Key"
 msgstr "快捷键(_K)"
 
-#: ../src/terminal-app.c:482
+#: ../src/terminal-app.c:486
 msgid "Click button to choose profile"
 msgstr "单击此按钮以选择配置文件"
 
-#: ../src/terminal-app.c:567
+#: ../src/terminal-app.c:571
 msgid "Profile list"
 msgstr "配置文件列表"
 
-#: ../src/terminal-app.c:628
+#: ../src/terminal-app.c:632
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "删除配置文件“%s”吗？"
 
-#: ../src/terminal-app.c:644
+#: ../src/terminal-app.c:648
 msgid "Delete Profile"
 msgstr "删除配置文件"
 
-#: ../src/terminal-app.c:960
+#: ../src/terminal-app.c:964
 msgid "User Defined"
 msgstr "用户定义"
 
-#: ../src/terminal-app.c:1115
+#: ../src/terminal-app.c:1119
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1708,39 +1707,24 @@ msgid ""
 msgstr ""
 "您已经有名为“%s”的配置文件。您是否想要使用相同的名称创建另外一个配置文件？"
 
-#: ../src/terminal-app.c:1217
+#: ../src/terminal-app.c:1221
 msgid "Choose base profile"
 msgstr "选择基础配置文件"
 
-#: ../src/terminal-app.c:1802
+#: ../src/terminal-app.c:1838
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "不存在配置文件“%s”，使用默认配置文件\n"
 
-#: ../src/terminal-app.c:1826
+#: ../src/terminal-app.c:1862
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "无效的几何属性字符串“%s”\n"
 
-#: ../src/terminal.c:195
-msgid "Could not open link"
-msgstr "无法打开链接"
-
-#: ../src/terminal.c:299
+#: ../src/terminal.c:568
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "无法处理参数：%s\n"
-
-#. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:423
-#, c-format
-msgid "Incompatible factory version; creating a new instance.\n"
-msgstr "不兼容的工厂版本；正在创建一个新实例。\n"
-
-#: ../src/terminal.c:429
-#, c-format
-msgid "Factory error: %s\n"
-msgstr "工厂错误：%s\n"
 
 #. { "UTF-8",	N_("Current Locale") },
 #: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
@@ -1906,7 +1890,7 @@ msgstr ""
 "此版本的 gnome-terminal 已不再支持选项 \"%s\" ；您可能想要创建一个有期望设定"
 "的配置文件，然后使用新的“--profile”选项\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3876
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3868
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
@@ -2095,31 +2079,29 @@ msgstr "显示每个终端的选项"
 msgid "Unnamed"
 msgstr "未命名"
 
-#: ../src/terminal-screen.c:1496
+#: ../src/terminal-screen.c:1479
 msgid "_Profile Preferences"
 msgstr "配置文件首选项(_P)"
 
-#: ../src/terminal-screen.c:1497 ../src/terminal-screen.c:1889
-#, fuzzy
-#| msgid "_Search"
+#: ../src/terminal-screen.c:1480 ../src/terminal-screen.c:1866
 msgid "_Relaunch"
-msgstr "搜索(_S)"
+msgstr "重新启动(_R)"
 
-#: ../src/terminal-screen.c:1500 ../src/terminal-screen.c:1513
+#: ../src/terminal-screen.c:1483
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
-#: ../src/terminal-screen.c:1893
+#: ../src/terminal-screen.c:1870
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "子进程以状态%d正常的退出。"
 
-#: ../src/terminal-screen.c:1896
+#: ../src/terminal-screen.c:1873
 #, c-format
 msgid "The child process was terminated by signal %d."
 msgstr "子进程被信号%d中断。"
 
-#: ../src/terminal-screen.c:1899
+#: ../src/terminal-screen.c:1876
 msgid "The child process was terminated."
 msgstr "子进程被中断。"
 
@@ -2371,7 +2353,7 @@ msgstr "复制链接地址(_C)"
 msgid "P_rofiles"
 msgstr "配置文件(_R)"
 
-#: ../src/terminal-window.c:1916 ../src/terminal-window.c:3122
+#: ../src/terminal-window.c:1916 ../src/terminal-window.c:3114
 msgid "C_lose Window"
 msgstr "关闭窗口(_L)"
 
@@ -2392,51 +2374,51 @@ msgstr "显示菜单栏(_M)"
 msgid "_Full Screen"
 msgstr "全屏(_F)"
 
-#: ../src/terminal-window.c:3109
+#: ../src/terminal-window.c:3101
 msgid "Close this window?"
 msgstr "关闭这个窗口？"
 
-#: ../src/terminal-window.c:3109
+#: ../src/terminal-window.c:3101
 msgid "Close this terminal?"
 msgstr "关闭此终端？"
 
-#: ../src/terminal-window.c:3113
+#: ../src/terminal-window.c:3105
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在这个窗口的一些终端中仍然有进程在运行。关闭该窗口将杀死所有这些进程。"
 
-#: ../src/terminal-window.c:3117
+#: ../src/terminal-window.c:3109
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "该终端中仍然有一个进程在运行。关闭终端将杀死该进程。"
 
-#: ../src/terminal-window.c:3122
+#: ../src/terminal-window.c:3114
 msgid "C_lose Terminal"
 msgstr "关闭终端(_L)"
 
-#: ../src/terminal-window.c:3194
+#: ../src/terminal-window.c:3186
 msgid "Could not save contents"
 msgstr "无法保存内容"
 
-#: ../src/terminal-window.c:3216
+#: ../src/terminal-window.c:3208
 msgid "Save as..."
 msgstr "另存为..."
 
-#: ../src/terminal-window.c:3672
+#: ../src/terminal-window.c:3664
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/terminal-window.c:3859
+#: ../src/terminal-window.c:3851
 msgid "Contributors:"
 msgstr "贡献者："
 
-#: ../src/terminal-window.c:3878
+#: ../src/terminal-window.c:3870
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME 桌面的终端模拟器"
 
-#: ../src/terminal-window.c:3885
+#: ../src/terminal-window.c:3877
 msgid "translator-credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
@@ -2487,7 +2469,7 @@ msgstr "Esc 序列"
 #. Translators: This refers to the Delete keybinding option
 #: ../src/extra-strings.c:32
 msgid "TTY Erase"
-msgstr ""
+msgstr "TTY Erase"
 
 #. Translators: Cursor shape: ...
 #: ../src/extra-strings.c:35
@@ -2497,7 +2479,7 @@ msgstr "方块"
 #. Translators: Cursor shape: ...
 #: ../src/extra-strings.c:37
 msgid "I-Beam"
-msgstr "I型"
+msgstr "I 型"
 
 #. Translators: Cursor shape: ...
 #: ../src/extra-strings.c:39
@@ -2568,6 +2550,15 @@ msgstr "XTerm"
 #: ../src/extra-strings.c:71
 msgid "Rxvt"
 msgstr "Rxvt"
+
+#~ msgid "Could not open link"
+#~ msgstr "无法打开链接"
+
+#~ msgid "Incompatible factory version; creating a new instance.\n"
+#~ msgstr "不兼容的工厂版本；正在创建一个新实例。\n"
+
+#~ msgid "Factory error: %s\n"
+#~ msgstr "工厂错误：%s\n"
 
 #~ msgid ""
 #~ "Set the window geometry from the provided X geometry specification; see "
