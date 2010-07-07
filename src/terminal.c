@@ -57,20 +57,18 @@ ay_to_string (GVariant *variant,
   const char *string;
   gsize len;
 
-  string = g_variant_get_byte_array (variant, &len);
-  if (len == 0)
-    return NULL;
-
-  /* Validate that the string is nul-terminated and full-length */
-  if (string[len - 1] != '\0') {
+  len = g_variant_get_size (variant);
+  if (len == 0) {
     g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                         "String not nul-terminated!");
+                         "NUL strings not allowed");
     return NULL;
   }
+
+  string = g_variant_get_bytestring (variant);
   if (strlen (string) != (len - 1)) {
     g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
                          "String is shorter than claimed (claimed %" G_GSIZE_FORMAT " actual %" G_GSIZE_FORMAT ")",
-                         len, strlen (string));
+                         len - 1, strlen (string));
     return NULL;
   }
 
@@ -340,21 +338,20 @@ name_lost_cb (GDBusConnection *connection,
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("aay"));
   for (i = 0; i < data->argc; ++i)
-    g_variant_builder_add (&builder, "@ay",
-                           g_variant_new_byte_array (data->argv[i], -1));
+    g_variant_builder_add (&builder, "^ay", data->argv[i]);
   g_variant_builder_close (&builder); /* aay */
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
 
   g_variant_builder_add (&builder, "{sv}",
                          "startup-notication-id",
-                         g_variant_new_byte_array (data->options->startup_id ? data->options->startup_id : "", -1));
+                         g_variant_new_bytestring (data->options->startup_id ? data->options->startup_id : ""));
   g_variant_builder_add (&builder, "{sv}",
                          "display-name",
-                         g_variant_new_byte_array (data->options->display_name ? data->options->display_name : "", -1));
+                         g_variant_new_bytestring (data->options->display_name ? data->options->display_name : ""));
   g_variant_builder_add (&builder, "{sv}",
                          "cwd",
-                         g_variant_new_byte_array (data->options->default_working_dir ? data->options->default_working_dir : "", -1));
+                         g_variant_new_bytestring (data->options->default_working_dir ? data->options->default_working_dir : ""));
 
   g_variant_builder_open (&builder, G_VARIANT_TYPE ("{sv}"));
   g_variant_builder_add (&builder, "s", "environment");
@@ -372,7 +369,7 @@ name_lost_cb (GDBusConnection *connection,
         continue;
 
       str = g_strdup_printf ("%s=%s", envv[i], value);
-      g_variant_builder_add (&builder, "@ay", g_variant_new_byte_array (str, -1));
+      g_variant_builder_add (&builder, "^ay", str);
       g_free (str);
     }
   g_variant_builder_close (&builder); /* aay */
