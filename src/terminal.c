@@ -270,9 +270,10 @@ bus_acquired_cb (GDBusConnection *connection,
                                                        TERMINAL_FACTORY_SERVICE_PATH,
                                                        introspection_data->interfaces[0],
                                                        &interface_vtable,
-                                                       introspection_data,
-                                                       (GDestroyNotify) g_dbus_node_info_unref,
+                                                       NULL, NULL,
                                                        &error);
+  g_dbus_node_info_unref (introspection_data);
+
   if (registration_id == 0) {
     g_printerr ("Failed to register object: %s\n", error->message);
     g_error_free (error);
