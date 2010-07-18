@@ -391,8 +391,7 @@ name_lost_cb (GDBusConnection *connection,
                                        NULL,
                                        &error);
   if (value == NULL) {
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "Failed to forward arguments: %s\n", error->message);
+    g_printerr ("Failed to forward arguments: %s\n", error->message);
     g_error_free (error);
     data->exit_code = EXIT_FAILURE;
     gtk_main_quit ();
