@@ -119,7 +119,11 @@ static gboolean notebook_button_press_cb     (GtkWidget *notebook,
 static gboolean notebook_popup_menu_cb       (GtkWidget *notebook,
                                               TerminalWindow *window);
 static void notebook_page_selected_callback  (GtkWidget       *notebook,
-                                              GtkNotebookPage *page,
+#if GTK_CHECK_VERSION (2, 90, 6)
+                                              GtkWidget       *page,
+#else
+                                              gpointer         page,
+#endif
                                               guint            page_num,
                                               TerminalWindow  *window);
 static void notebook_page_added_callback     (GtkWidget       *notebook,
@@ -2659,15 +2663,22 @@ notebook_popup_menu_cb (GtkWidget *widget,
 
 static void
 notebook_page_selected_callback (GtkWidget       *notebook,
-                                 GtkNotebookPage *useless_crap,
+#if GTK_CHECK_VERSION (2, 90, 6)
+                                 GtkWidget       *page_widget,
+#else
+                                 gpointer         useless_crap,
+#endif
                                  guint            page_num,
                                  TerminalWindow  *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget* page_widget, *widget;
+  GtkWidget *widget;
   TerminalScreen *screen;
   TerminalProfile *profile;
   int old_grid_width, old_grid_height;
+#if !GTK_CHECK_VERSION (2, 90, 6)
+  GtkWidget *page_widget;
+#endif
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: page-selected %d\n",
@@ -2676,7 +2687,10 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   if (priv->disposed)
     return;
 
+#if !GTK_CHECK_VERSION (2, 90, 6)
   page_widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook), page_num);
+#endif
+
   screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (page_widget));
   widget = GTK_WIDGET (screen);
   g_assert (screen != NULL);
