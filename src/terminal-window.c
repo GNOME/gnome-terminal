@@ -3645,7 +3645,7 @@ terminal_set_title_callback (GtkAction *action,
                              TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *dialog, *hbox, *label, *entry;
+  GtkWidget *dialog, *message_area, *hbox, *label, *entry;
 
   if (priv->active_screen == NULL)
     return;
@@ -3669,11 +3669,17 @@ terminal_set_title_callback (GtkAction *action,
   g_signal_connect (dialog, "delete-event",
                     G_CALLBACK (terminal_util_dialog_response_on_delete), NULL);
 
+#if GTK_CHECK_VERSION (2, 90, 6)
+  message_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
+  gtk_container_foreach (GTK_CONTAINER (message_area), (GtkCallback) gtk_widget_hide, NULL);
+#else
   label = GTK_MESSAGE_DIALOG (dialog)->label;
   gtk_widget_hide (label);
+  message_area = gtk_widget_get_parent (label);
+#endif
 
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (gtk_widget_get_parent (label)), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (message_area), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic (_("_Title:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
