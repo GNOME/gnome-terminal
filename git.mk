@@ -172,8 +172,11 @@ gitignore-recurse-maybe:
 		$(MAKE) $(AM_MAKEFLAGS) gitignore-recurse; \
 	fi;
 gitignore-recurse:
-	@list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
-	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) .gitignore gitignore-recurse || echo "Skipping $$subdir"); \
+	@for subdir in $(DIST_SUBDIRS); do \
+	  case " $(SUBDIRS) " in \
+	    *" $$subdir "*) :;; \
+	    *) test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) .gitignore gitignore-recurse || echo "Skipping $$subdir");; \
+	  esac; \
 	done
 gitignore: $(srcdir)/.gitignore gitignore-recurse
 
