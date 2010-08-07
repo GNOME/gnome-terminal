@@ -4,15 +4,16 @@
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2003-2008.
 # Satoru SATOH <ss@gnome.gr.jp>, 2006.
-# Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009.
+# Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2009-2010.
+# Hideki Yamane (Debian-JP) <henrich@debian.or.jp>, 2010.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal master\n"
+"Project-Id-Version: gnome-terminal gnome-2-30\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&component=general\n"
-"POT-Creation-Date: 2009-11-03 15:18+0900\n"
-"PO-Revision-Date: 2009-11-03 15:19+0900\n"
+"POT-Creation-Date: 2010-07-29 10:53+0000\n"
+"PO-Revision-Date: 2010-08-08 01:46+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -20,9 +21,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:304
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1890
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:129
+#: ../src/terminal-accels.c:228 ../src/terminal.c:304
+#: ../src/terminal-profile.c:158 ../src/terminal-window.c:1901
 msgid "Terminal"
 msgstr "端末"
 
@@ -161,17 +162,31 @@ msgstr "\"単語の一部\" とみなす文字の指定"
 
 #: ../src/gnome-terminal.schemas.in.h:13
 msgid "Custom command to use instead of the shell"
-msgstr "SHELL の代わりに使用するコマンド"
+msgstr "シェルの代わりに使用するコマンド"
 
 #: ../src/gnome-terminal.schemas.in.h:14
 msgid "Default"
 msgstr "デフォルト"
 
 #: ../src/gnome-terminal.schemas.in.h:15
+msgid "Default color of bold text in the terminal"
+msgstr "端末の太字テキストのデフォルト色"
+
+#: ../src/gnome-terminal.schemas.in.h:16
+msgid ""
+"Default color of bold text in the terminal, as a color specification (can be "
+"HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
+"bold_color_same_as_fg is true."
+msgstr ""
+"端末の太字テキストのデフォルト色を、色指定子 (HTML スタイルの 16 進数もしく"
+"は \"red\" のような色の名前) で設定します。これは bold_color_same_as_fg が有"
+"効になっている場合に無視されます。"
+
+#: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of terminal background"
 msgstr "端末の背景のデフォルト色"
 
-#: ../src/gnome-terminal.schemas.in.h:16
+#: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -179,11 +194,11 @@ msgstr ""
 "端末の背景のデフォルト色を、色指定子 (HTML スタイルの 16 進数もしくは \"red"
 "\" のような色の名前) で設定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:17
+#: ../src/gnome-terminal.schemas.in.h:19
 msgid "Default color of text in the terminal"
 msgstr "端末のテキストのデフォルト色"
 
-#: ../src/gnome-terminal.schemas.in.h:18
+#: ../src/gnome-terminal.schemas.in.h:20
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -191,49 +206,57 @@ msgstr ""
 "端末のテキストのデフォルト色を、色指定子 (HTML スタイルの 16 進数もしくは "
 "\"red\" のような色の名前) で設定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:19
+#: ../src/gnome-terminal.schemas.in.h:21
+msgid "Default number of columns"
+msgstr "デフォルトの列数"
+
+#: ../src/gnome-terminal.schemas.in.h:22
+msgid "Default number of rows"
+msgstr "デフォルトの行数"
+
+#: ../src/gnome-terminal.schemas.in.h:23
 msgid "Effect of the Backspace key"
 msgstr "Backspace キーの効果"
 
-#: ../src/gnome-terminal.schemas.in.h:20
+#: ../src/gnome-terminal.schemas.in.h:24
 msgid "Effect of the Delete key"
 msgstr "Delete キーの効果"
 
-#: ../src/gnome-terminal.schemas.in.h:21
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Filename of a background image."
 msgstr "背景の画像ファイル名を指定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "Font"
 msgstr "フォント"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:25
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "Highlight S/Key challenges"
 msgstr "S/Key のチャレンジ・レスポンスを強調表示する"
 
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "How much to darken the background image"
 msgstr "背景の画像をどの程度暗くするか"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid "Human-readable name of the profile"
 msgstr "プロファイルの可読な名前"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "Human-readable name of the profile."
 msgstr "プロファイルの可読な名前です。"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid "Icon for terminal window"
 msgstr "端末ウィンドウのアイコン"
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "このプロファイルを適用するタブ/ウィンドウに使うアイコンを指定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -245,13 +268,18 @@ msgstr ""
 "たり、前に来たり、後に来たり、置き換えたりすることができます。指定可能な値: "
 "\"replace\"、\"before\"、\"after\"、\"ignore\""
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "TRUE にすると、端末で実行しているアプリケーションが太字のテキストを利用できる"
 "ようにします。"
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:37
+msgid ""
+"If true, boldface text will be rendered using the same color as normal text."
+msgstr "有効にすると、太字のテキストは通常のテキストと同じ色で表示されます。"
+
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -259,11 +287,11 @@ msgstr ""
 "TRUE にすると、アプリケーションが端末ベルのエスケープ・シーケンスを送出しても"
 "音を出しません。"
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "TRUE にすると、キー押下のたびにスクロールバーが下に移動します。"
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -271,7 +299,17 @@ msgstr ""
 "TRUE にすると、背景の画像が前景のテキストと一緒にスクロールします; それ以外の"
 "場合、画像はそのまま留まりテキストのみが上にスクロールします。"
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:41
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"有効にすると、スクロールバック行は破棄されなくなります。スクロールバックの履"
+"歴は一時的にディスクに保存されるので、端末に大量の出力があった場合にシステム"
+"のディスクが不足するかもしれません。"
+
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -279,7 +317,7 @@ msgstr ""
 "TRUE にすると、端末内のコマンドをログイン・シェルとして起動します (argv[0] は"
 "その前にハイフンを付けます)。"
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -287,7 +325,7 @@ msgstr ""
 "TRUE にすると、端末内でコマンドが実行された時に utmp と wtmp のシステム・ログ"
 "イン情報を記録します。"
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -296,7 +334,7 @@ msgstr ""
 "端末はそのフォントを使用します (そうでない場合は、最もよく似たフォントを使用"
 "します)。"
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -304,7 +342,7 @@ msgstr ""
 "TRUE にすると、ユーザが指定した色の代わりに、テキスト入力ボックスに使われる"
 "テーマ色スキーマを使用します。"
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -312,12 +350,12 @@ msgstr ""
 "TRUE にすると、custom_command に設定された値が実行中の SHELL の代わりに使用さ"
 "れます。"
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "TRUE にすると、新しい出力が表示されるたびに下までスクロールします。"
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -329,7 +367,7 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -340,7 +378,7 @@ msgstr ""
 "文字列をオプションに指定した場合は、この操作に対するキーバインドは無効になり"
 "ます。"
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -352,7 +390,7 @@ msgstr ""
 "特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無効"
 "になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -364,7 +402,7 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -375,7 +413,7 @@ msgstr ""
 "殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無効に"
 "なります。"
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -387,7 +425,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -399,7 +437,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -411,7 +449,7 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -423,7 +461,7 @@ msgstr ""
 "殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無効に"
 "なります。"
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -435,7 +473,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -447,7 +485,7 @@ msgstr ""
 "定します。\"disabled\" という特殊な文字列をオプションに指定した場合は、この操"
 "作に対するキーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -458,7 +496,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -470,7 +508,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
 "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -482,7 +520,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
 "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -494,7 +532,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid ""
 "Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -505,7 +543,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid ""
 "Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -516,7 +554,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -527,7 +565,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -538,7 +576,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -549,7 +587,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -560,7 +598,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -571,7 +609,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -582,7 +620,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -594,7 +632,7 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -606,7 +644,7 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -618,7 +656,19 @@ msgstr ""
 "特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無効"
 "になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:74
+msgid ""
+"Keyboard shortcut key to save the current tab contents to a file. Expressed "
+"as a string in the same format used for GTK+ resource files. If you set the "
+"option to the special string \"disabled\", then there will be no keyboard "
+"shortcut for this action."
+msgstr ""
+"現在のタブの内容をファイルに保存するキーボード・ショートカット・キーです。GTK"
+"+ のリソース・ファイルと同じフォーマットの文字列を指定します。\"disabled\" と"
+"いう特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは"
+"無効になります。"
+
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -630,7 +680,7 @@ msgstr ""
 "\" という特殊な文字列をオプションに指定した場合は、この操作に対するキーバイン"
 "ドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -642,7 +692,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -654,7 +704,7 @@ msgstr ""
 "う特殊な文字列をオプションに指定した場合は、この操作に対するキーバインドは無"
 "効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -666,135 +716,139 @@ msgstr ""
 "\"disabled\" という特殊な文字列をオプションに指定した場合は、この操作に対する"
 "キーバインドは無効になります。"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to close a tab"
 msgstr "タブを閉じるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a window"
 msgstr "ウィンドウを閉じるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to copy text"
 msgstr "テキストをコピーするショートカット・エディタ"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to create a new profile"
 msgstr "新しいプロファイルを生成するキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to launch help"
 msgstr "ヘルプを起動するキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to make font larger"
 msgstr "フォントを大きくするキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "フォントを標準サイズに戻すキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font smaller"
 msgstr "フォントを小さくするキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to open a new tab"
 msgstr "新しいタブを開くキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new window"
 msgstr "新しいウィンドウを開くキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to paste text"
 msgstr "テキストを貼り付けるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "端末をリセットしクリアするキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "端末をリセットするキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:92
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "現在のタブの内容をファイルに保存するキーボード・ショートカット"
+
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "端末のタイトルを設定するキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "タブ 1 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "タブ 10 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "タブ 11 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "タブ 12 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "タブ 2 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "タブ 3 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "タブ 4 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "タブ 5 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "タブ 6 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "タブ 7 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "タブ 8 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "タブ 9 に切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "次のタブに切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "前のタブに切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "フルスクリーン・モードに切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "メニューバーの表示を切り替えるキーボード・ショートカット"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "利用可能なエンコーディングのリスト"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "プロファイルのリスト"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -802,7 +856,7 @@ msgstr ""
 "gnome-terminal が知っているプロファイルのリストです。このリストには /apps/"
 "gnome-terminal/profiles に対するサブディレクトリの名前が含まれています。"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -812,28 +866,35 @@ msgstr ""
 "menu-bar-accel = \"whatever\") 経由でカスタマイズすることも可能です。このオプ"
 "ションにより標準的なメニューバー・アクセラレータを無効にすることが可能です。"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:114
+msgid "Number of columns in newly created terminal windows."
+msgstr "新しく作成されるウインドウの列の数。"
+
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "スクロール時に維持する行数"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:116
+msgid "Number of rows in newly created terminal windows."
+msgstr "新しく作成されるウインドウの行の数。"
+
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. Be careful with this setting; it's the primary factor in "
-"determining how much memory the terminal will use."
+"discarded. If scrollback_unlimited is true, this value is ignored."
 msgstr ""
 "スクロール時に維持する行数を指定します。この行数だけ端末をスクロールして戻る"
-"ことができます; この行数を越えた行は破棄されます。この設定には注意を払って下"
-"さい; この値は端末が使用するメモリ量を決定する第一の要因になります。"
+"ことができます; この行数を越えた行は破棄されます。crollback_unlimited が有効"
+"になっている場合、この値は無視されます。"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "端末で実行するアプリケーションのパレット"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -842,34 +903,34 @@ msgstr ""
 "ポップアップします。ダイアログにパスワードを入力すると、その値を端末に送りま"
 "す。"
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Position of the scrollbar"
 msgstr "スクロールバーの位置"
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
 msgstr ""
 "指定可能な値: \"close\" (端末を閉じる)、\"restart\" (コマンドを再実行する)"
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "新しいウィンドウやタブを開くときに使うプロファイルを指定します。profile_list "
 "に表示されています。"
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid "Profile to use for new terminals"
 msgstr "新しい端末に使用するプロファイル"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "use_custom_command が TRUE の場合、SHELL の代わりにこのコマンドを実行します。"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -883,7 +944,7 @@ msgstr ""
 "delete に典型的に割り付けられているエスケープ・シーケンスを生成する)。通常は "
 "\"ascii-dell\" を設定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -897,7 +958,7 @@ msgstr ""
 "delete に典型的に割り付けられているエスケープ・シーケンスを生成する)。通常は "
 "\"escape-sequence\" を設定します。"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -907,17 +968,17 @@ msgstr ""
 "れは色の名前をコロンで区切った形式のパレットになっています。色の名前は "
 "\"#FF00FF\" のような 16 進フォーマットにして下さい。"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "The cursor appearance"
 msgstr "端末に表示するカーソルの形状"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr "指定可能な値: \"block\" (矩形)、\"ibeam\" (縦棒)、\"underline\" (下線)"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -925,11 +986,11 @@ msgstr ""
 "指定可能な値: \"system\" (カーソルの点滅でシステム規模の設定を使う)、\"on"
 "\" (カーソルを点滅させる)、\"off\" (カーソルを点滅させない)"
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Title for terminal"
 msgstr "端末のタイトル"
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -939,7 +1000,7 @@ msgstr ""
 "行中のアプリケーションによって置き換えられたり、追加されたりすることが可能"
 "で、title_mode の設定に依存します。"
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -947,7 +1008,7 @@ msgstr ""
 "TRUE にすると、このプロファイルを使用しているウィンドウやタブで、ウィンドウ内"
 "にメニューバーが表示されます。"
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
@@ -957,15 +1018,15 @@ msgstr ""
 "像)、\"transparent\" (合成機能を持ったウィンドウ・マネージャを利用している場"
 "合は実際に透過させ、それ以外は擬似的に透過する)"
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid "What to do with dynamic title"
 msgstr "動的なタイトルをどう扱うか"
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "What to do with the terminal when the child command exits"
 msgstr "子プロセスのコマンドが終了した後の対応"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -975,7 +1036,7 @@ msgstr ""
 "囲は \"A-Z\" で与えられます。リテラルのハイフン (範囲を示すハイフンではない) "
 "を指定する場合は先頭において下さい。"
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
@@ -983,20 +1044,28 @@ msgstr ""
 "端末のスクロールバーを配置する場所を設定します。指定可能な値:\"left\"、"
 "\"right\"、\"disabled\""
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:142
+msgid "Whether an unlimited number of lines should be kept in scrollback"
+msgstr "スクロール時に維持する行数を無制限にするかどうか"
+
+#: ../src/gnome-terminal.schemas.in.h:143
+msgid "Whether bold text should use the same color as normal text"
+msgstr "太字テキストが通常のテキストと同じ文字色を使うかどうか"
+
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether the menubar has access keys"
 msgstr "メニュー・バーがアクセス・キーを持つかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "メニューバーにアクセスするための標準的なショートカットを有効にするかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to allow bold text"
 msgstr "太字のフォントを許可するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -1004,15 +1073,15 @@ msgstr ""
 "一つ以上のタブを開いている端末ウィンドウを閉じる際に確認ダイアログを表示する"
 "かどうかです。"
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "端末ウィンドウを閉じる際に確認するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to blink the cursor"
 msgstr "カーソルを点滅させるかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1022,43 +1091,43 @@ msgstr ""
 "らは端末内で実行するアプリケーションに影響することがあるので、無効にすること"
 "ができます。"
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "端末で実行するコマンドをログイン・シェルとして実行するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to run a custom command instead of the shell"
 msgstr "SHELL の代わりに特定のコマンドを実行するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to scroll background image"
 msgstr "背景の画像をスクロールさせるかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "キーが押されるたび下までスクロールするかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "新しい出力があるたびに下までスクロールするかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "新しいウィンドウ/タブにメニューバーを表示するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to silence terminal bell"
 msgstr "端末ベルを消すかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to update login records when launching terminal command"
 msgstr "端末内でコマンドを実行したときにログイン情報を更新するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:159
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "端末ウィジェットに対してテーマ色を使用するかどうか"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:160
 msgid "Whether to use the system font"
 msgstr "システム・フォントを使用するかどうか"
 
@@ -1068,7 +1137,7 @@ msgstr "システム・フォントを使用するかどうか"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:167
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,EUC-JP,SHIFT_JIS,ISO-2022-JP,current]"
 
@@ -1110,26 +1179,26 @@ msgstr "黒地に緑色文字"
 msgid "White on black"
 msgstr "黒地に白文字"
 
-#: ../src/profile-editor.c:434
+#: ../src/profile-editor.c:472
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "次のコマンドを解析する際にエラー: %s"
 
-#: ../src/profile-editor.c:454
+#: ../src/profile-editor.c:490
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "\"%s\" というプロファイルの編集"
 
-#: ../src/profile-editor.c:592
+#: ../src/profile-editor.c:628
 msgid "Images"
 msgstr "画像"
 
-#: ../src/profile-editor.c:718
+#: ../src/profile-editor.c:754
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "パレット %d 色の選択"
 
-#: ../src/profile-editor.c:722
+#: ../src/profile-editor.c:758
 #, c-format
 msgid "Palette entry %d"
 msgstr "パレットのエントリ (その %d)"
@@ -1146,7 +1215,7 @@ msgstr "新しい端末を起動する際に使用するプロファイル(_P):"
 msgid "C_reate"
 msgstr "作成(_R)"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:123
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:125
 msgid "New Profile"
 msgstr "新しいプロファイル"
 
@@ -1163,8 +1232,8 @@ msgid "<b>Command</b>"
 msgstr "<b>コマンド</b>"
 
 #: ../src/profile-preferences.glade.h:2
-msgid "<b>Foreground and Background</b>"
-msgstr "<b>前景と背景</b>"
+msgid "<b>Foreground, Background, and Bold</b>"
+msgstr "<b>前景、背景、および太字</b>"
 
 #: ../src/profile-preferences.glade.h:3
 msgid "<b>Palette</b>"
@@ -1233,51 +1302,59 @@ msgstr ""
 "下線"
 
 #: ../src/profile-preferences.glade.h:18
+msgid "Bol_d color:"
+msgstr "太字の色(_D):"
+
+#: ../src/profile-preferences.glade.h:19
 msgid "Built-in _schemes:"
 msgstr "組み込みのスキーム(_S):"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:20
 msgid "Built-in sche_mes:"
 msgstr "組み込みのスキーム(_M):"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:21
 msgid "Choose A Terminal Font"
 msgstr "端末フォントの選択"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose Terminal Background Color"
 msgstr "端末の背景色の選択"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:23
 msgid "Choose Terminal Text Color"
 msgstr "端末の文字色の選択"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:24
 msgid "Color p_alette:"
 msgstr "カラー・パレット(_A):"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:25
 msgid "Colors"
 msgstr "色"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:26
 msgid "Compatibility"
 msgstr "互換性"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:27
 msgid "Cursor _shape:"
 msgstr "カーソルの形状(_S):"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
+#: ../src/profile-preferences.glade.h:28 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "その他"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:29
 msgid "Custom co_mmand:"
 msgstr "コマンド(_M):"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:30
+msgid "Default si_ze:"
+msgstr "デフォルトサイズ(_Z):"
+
+#: ../src/profile-preferences.glade.h:31
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1287,19 +1364,19 @@ msgstr ""
 "コマンドを再実行する\n"
 "端末を開いたままにする"
 
-#: ../src/profile-preferences.glade.h:32
+#: ../src/profile-preferences.glade.h:34
 msgid "General"
 msgstr "全般"
 
-#: ../src/profile-preferences.glade.h:33
+#: ../src/profile-preferences.glade.h:35
 msgid "Image _file:"
 msgstr "画像ファイル(_F):"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:36
 msgid "Initial _title:"
 msgstr "初期のタイトル(_T)"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:37
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1309,11 +1386,11 @@ msgstr ""
 "右側\n"
 "無効にする"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.glade.h:40
 msgid "Profile Editor"
 msgstr "プロファイル・エディタ"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:41
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1325,43 +1402,43 @@ msgstr ""
 "初期のタイトルの前に挿入する\n"
 "変更しない"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:45
 msgid "Ru_n a custom command instead of my shell"
 msgstr "SHELL の代わりにコマンドを実行する(_N)"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:46
 msgid "S_hade transparent or image background:"
 msgstr "透過画像や背景の画像に濃淡をつける(_S):"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:47
 msgid "Scroll on _keystroke"
 msgstr "キー入力するたびにスクロールする(_K)"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:48
 msgid "Scroll on _output"
 msgstr "出力するたびにスクロールする(_O)"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:49
 msgid "Scroll_back:"
 msgstr "スクロールバックのサイズ(_B):"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:50
 msgid "Scrolling"
 msgstr "スクロール"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:51
 msgid "Select Background Image"
 msgstr "背景画像の選択"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.glade.h:52
 msgid "Select-by-_word characters:"
 msgstr "単語単位で選択する文字(_W):"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.glade.h:53
 msgid "Show _menubar by default in new terminals"
 msgstr "常にメニューバーをデフォルトで表示する(_M)"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.glade.h:54
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1375,88 +1452,104 @@ msgstr ""
 "Rxvt\n"
 "指定する"
 
-#: ../src/profile-preferences.glade.h:57
+#: ../src/profile-preferences.glade.h:59
 msgid "Terminal _bell"
 msgstr "端末ベルを鳴らす(_B)"
 
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.glade.h:60
 msgid "Title and Command"
 msgstr "タイトルとコマンド"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:61
 msgid "When command _exits:"
 msgstr "コマンドの実行が完了した後(_E):"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:62
 msgid "When terminal commands set their o_wn titles:"
 msgstr "端末からコマンドで指定しようとした場合(_W):"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:63
 msgid "_Allow bold text"
 msgstr "太字フォントを有効にする(_A)"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:64
 msgid "_Background color:"
 msgstr "背景色(_B):"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:65
 msgid "_Background image"
 msgstr "画像にする(_B)"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:66
 msgid "_Backspace key generates:"
 msgstr "[BS] キーが生成するコード(_B):"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:67
 msgid "_Delete key generates:"
 msgstr "[DEL] キーが生成するコード(_D):"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:68
 msgid "_Font:"
 msgstr "フォント(_F):"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:69
 msgid "_Profile name:"
 msgstr "プロファイルの名前(_P):"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:70
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "互換性のオプションをデフォルトに戻す(_R)"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:71
 msgid "_Run command as a login shell"
 msgstr "ログイン・シェルとしてコマンドを実行する(_R)"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:72
+msgid "_Same as text color"
+msgstr "文字色と同じにする(_S):"
+
+#: ../src/profile-preferences.glade.h:73
 msgid "_Scrollbar is:"
 msgstr "スクロールバーの位置(_S):"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:74
 msgid "_Solid color"
 msgstr "単色にする(_S)"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:75
 msgid "_Text color:"
 msgstr "文字の色(_T):"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:76
 msgid "_Transparent background"
 msgstr "透過な画像にする(_T)"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:77
+msgid "_Unlimited"
+msgstr "無制限にする(_U)"
+
+#: ../src/profile-preferences.glade.h:78
 msgid "_Update login records when command is launched"
 msgstr "コマンドを実行した時にログイン記録を更新する(_U)"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:79
 msgid "_Use colors from system theme"
 msgstr "システムのテーマ色を使用する(_U)"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:80
 msgid "_Use the system fixed width font"
 msgstr "\"固定幅のフォント\" を使用する(_U)"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:81
+msgid "columns"
+msgstr "列"
+
+#: ../src/profile-preferences.glade.h:82
 msgid "lines"
+msgstr "行"
+
+#: ../src/profile-preferences.glade.h:83
+msgid "rows"
 msgstr "行"
 
 #: ../src/skey-challenge.glade.h:1
@@ -1475,169 +1568,173 @@ msgstr "クリックした文字列は適切な S/Key チャレンジではな�
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "クリックした文字列は適切な OTP チャレンジではないようです。"
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:121
 msgid "New Tab"
 msgstr "新しいタブを開く"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:123
 msgid "New Window"
 msgstr "新しいウィンドウを開く"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:128
+msgid "Save Contents"
+msgstr "内容を保存する"
+
+#: ../src/terminal-accels.c:131
 msgid "Close Tab"
 msgstr "タブを閉じる"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:133
 msgid "Close Window"
 msgstr "ウィンドウを閉じる"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:139
 msgid "Copy"
 msgstr "コピーする"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:141
 msgid "Paste"
 msgstr "貼り付ける"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:147
 msgid "Hide and Show menubar"
 msgstr "メニューバーの表示/非表示"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:149
 msgid "Full Screen"
 msgstr "フルスクリーンにする"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:151
 msgid "Zoom In"
 msgstr "拡大する"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:153
 msgid "Zoom Out"
 msgstr "縮小する"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:155
 msgid "Normal Size"
 msgstr "通常のサイズに戻す"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3374
+#: ../src/terminal-accels.c:161 ../src/terminal-window.c:3487
 msgid "Set Title"
 msgstr "タイトルを設定する"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:163
 msgid "Reset"
 msgstr "リセットする"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:165
 msgid "Reset and Clear"
 msgstr "リセットしてクリアする"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "前のタブに切り替える"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:173
 msgid "Switch to Next Tab"
 msgstr "次のタブに切り替える"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:175
 msgid "Move Tab to the Left"
 msgstr "タブを左へ移動する"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:177
 msgid "Move Tab to the Right"
 msgstr "タブを右へ移動する"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:179
 msgid "Detach Tab"
 msgstr "タブを閉じる"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:181
 msgid "Switch to Tab 1"
 msgstr "タブ 1 に切り替える"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:184
 msgid "Switch to Tab 2"
 msgstr "タブ 2 に切り替える"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:187
 msgid "Switch to Tab 3"
 msgstr "タブ 3 に切り替える"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:190
 msgid "Switch to Tab 4"
 msgstr "タブ 4 に切り替える"
 
-#: ../src/terminal-accels.c:187
+#: ../src/terminal-accels.c:193
 msgid "Switch to Tab 5"
 msgstr "タブ 5 に切り替える"
 
-#: ../src/terminal-accels.c:190
+#: ../src/terminal-accels.c:196
 msgid "Switch to Tab 6"
 msgstr "タブ 6 に切り替える"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 7"
 msgstr "タブ 7 に切り替える"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 8"
 msgstr "タブ 8 に切り替える"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 9"
 msgstr "タブ 9 に切り替える"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 10"
 msgstr "タブ 10 に切り替える"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 11"
 msgstr "タブ 11 に切り替える"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 12"
 msgstr "タブ 12 に切り替える"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:220
 msgid "Contents"
 msgstr "目次を表示する"
 
-#: ../src/terminal-accels.c:219
+#: ../src/terminal-accels.c:225
 msgid "File"
 msgstr "ファイル"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:226
 msgid "Edit"
 msgstr "編集"
 
-#: ../src/terminal-accels.c:221
+#: ../src/terminal-accels.c:227
 msgid "View"
 msgstr "表示"
 
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:229
 msgid "Tabs"
 msgstr "タブ"
 
-#: ../src/terminal-accels.c:224
+#: ../src/terminal-accels.c:230
 msgid "Help"
 msgstr "ヘルプ"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
+#: ../src/terminal-accels.c:287 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "無効にする"
 
-#: ../src/terminal-accels.c:753
+#: ../src/terminal-accels.c:759
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "\"%s\" は既に \"%s\" というアクションに関連づけられています"
 
-#: ../src/terminal-accels.c:911
+#: ../src/terminal-accels.c:917
 msgid "_Action"
 msgstr "操作(_A)"
 
-#: ../src/terminal-accels.c:930
+#: ../src/terminal-accels.c:936
 msgid "Shortcut _Key"
 msgstr "ショートカット・キー(_K)"
 
@@ -1675,14 +1772,14 @@ msgstr ""
 msgid "Choose base profile"
 msgstr "ベースとなるプロファイルの選択"
 
-#: ../src/terminal-app.c:1794
+#: ../src/terminal-app.c:1800
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr ""
 "\"%s\" というプロファイルはありません (デフォルトのプロファイルを使用しま"
 "す)\n"
 
-#: ../src/terminal-app.c:1818
+#: ../src/terminal-app.c:1824
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "無効なジオメトリ文字列 \"%s\"\n"
@@ -1872,7 +1969,7 @@ msgstr ""
 "ていません (ご希望の設定でプロファイルを作成したい場合は \"--profile\" という"
 "新しいオプションを指定してみて下さい)\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3595
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3708
 msgid "GNOME Terminal"
 msgstr "GNOME 端末"
 
@@ -1960,10 +2057,8 @@ msgstr "フルスクリーン表示にする"
 
 #: ../src/terminal-options.c:1037
 msgid ""
-"Set the window geometry from the provided X geometry specification; see the "
-"\"X\" man page for more information"
-msgstr ""
-"端末の位置をＸと同じ形式で指定する (詳細は X の man ページを参照のこと)"
+"Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"
+msgstr "ウィンドウサイズを設定する。 例: 80x24、80x24+200+200 (行x列+X+Y)"
 
 #: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
@@ -2061,15 +2156,15 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "端末毎のオプションを表示する"
 
-#: ../src/terminal-profile.c:150
+#: ../src/terminal-profile.c:164
 msgid "Unnamed"
 msgstr "名前なし"
 
-#: ../src/terminal-screen.c:1288
+#: ../src/terminal-screen.c:1309
 msgid "There was a problem with the command for this terminal"
 msgstr "この端末のコマンドに問題がありました"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1513
 msgid "There was an error creating the child process for this terminal"
 msgstr "この端末の子プロセスを作成中にエラーが発生しました"
 
@@ -2081,16 +2176,16 @@ msgstr "タブを閉じます"
 msgid "Switch to this tab"
 msgstr "このタブへ切り替える"
 
-#: ../src/terminal-util.c:183
+#: ../src/terminal-util.c:185
 msgid "There was an error displaying help"
 msgstr "ヘルプを表示する際にエラーが発生しました"
 
-#: ../src/terminal-util.c:256
+#: ../src/terminal-util.c:258
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "\"%s\" というアドレスを開けませんでした"
 
-#: ../src/terminal-util.c:363
+#: ../src/terminal-util.c:365
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2101,7 +2196,7 @@ msgstr ""
 "一般公衆利用許諾契約書の第二版、あるいはそれ以降の版が定める条項の下で本プロ"
 "グラムを再頒布または変更することができます。"
 
-#: ../src/terminal-util.c:367
+#: ../src/terminal-util.c:369
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2112,7 +2207,7 @@ msgstr ""
 "的、その適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細"
 "については GNU 一般公衆利用許諾契約書をご覧下さい。"
 
-#: ../src/terminal-util.c:371
+#: ../src/terminal-util.c:373
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2126,7 +2221,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:432
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2135,190 +2230,194 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:438
+#: ../src/terminal-window.c:442
 #, c-format
 msgid "_%c. %s"
 msgstr " _%c. %s "
 
 #. Toplevel
-#: ../src/terminal-window.c:1703
+#: ../src/terminal-window.c:1709
 msgid "_File"
 msgstr "ファイル(_F)"
 
 #. File menu
-#: ../src/terminal-window.c:1704 ../src/terminal-window.c:1715
-#: ../src/terminal-window.c:1837
+#: ../src/terminal-window.c:1710 ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:1848
 msgid "Open _Terminal"
 msgstr "端末を開く(_T)"
 
-#: ../src/terminal-window.c:1705 ../src/terminal-window.c:1718
-#: ../src/terminal-window.c:1840
+#: ../src/terminal-window.c:1711 ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:1851
 msgid "Open Ta_b"
 msgstr "新しいタブを開く(_B)"
 
-#: ../src/terminal-window.c:1706
+#: ../src/terminal-window.c:1712
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: ../src/terminal-window.c:1707
+#: ../src/terminal-window.c:1713
 msgid "_View"
 msgstr "表示(_V)"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1714
 msgid "_Terminal"
 msgstr "端末(_T)"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1715
 msgid "Ta_bs"
 msgstr "タブ(_B)"
 
-#: ../src/terminal-window.c:1710
+#: ../src/terminal-window.c:1716
 msgid "_Help"
 msgstr "ヘルプ(_H)"
 
-#: ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:1727
 msgid "New _Profile…"
 msgstr "新しいプロファイル(_P)..."
 
-#: ../src/terminal-window.c:1724 ../src/terminal-window.c:1846
+#: ../src/terminal-window.c:1731
+msgid "_Save Contents"
+msgstr "内容を保存する(_C)"
+
+#: ../src/terminal-window.c:1735 ../src/terminal-window.c:1857
 msgid "C_lose Tab"
 msgstr "タブを閉じる(_L)"
 
-#: ../src/terminal-window.c:1727
+#: ../src/terminal-window.c:1738
 msgid "_Close Window"
-msgstr "ウィンドウを閉じる (_C)"
+msgstr "ウィンドウを閉じる(_C)"
 
-#: ../src/terminal-window.c:1738 ../src/terminal-window.c:1834
+#: ../src/terminal-window.c:1749 ../src/terminal-window.c:1845
 msgid "Paste _Filenames"
 msgstr "ファイル名の貼り付け(_F)"
 
-#: ../src/terminal-window.c:1744
+#: ../src/terminal-window.c:1755
 msgid "P_rofiles…"
 msgstr "プロファイル(_R)..."
 
-#: ../src/terminal-window.c:1747
+#: ../src/terminal-window.c:1758
 msgid "_Keyboard Shortcuts…"
 msgstr "キーボード・ショートカット(_K)..."
 
-#: ../src/terminal-window.c:1750
+#: ../src/terminal-window.c:1761
 msgid "Pr_ofile Preferences"
 msgstr "プロファイルの設定(_O)"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:1777
 msgid "Change _Profile"
 msgstr "プロファイルの変更(_P)"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1778
 msgid "_Set Title…"
 msgstr "タイトルを指定する(_S)..."
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1781
 msgid "Set _Character Encoding"
 msgstr "文字コードの設定(_C)"
 
-#: ../src/terminal-window.c:1771
+#: ../src/terminal-window.c:1782
 msgid "_Reset"
 msgstr "リセット(_R)"
 
-#: ../src/terminal-window.c:1774
+#: ../src/terminal-window.c:1785
 msgid "Reset and C_lear"
 msgstr "リセットとクリア(_L)"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1790
 msgid "_Add or Remove…"
 msgstr "追加/削除(_A)..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1784
+#: ../src/terminal-window.c:1795
 msgid "_Previous Tab"
 msgstr "前のタブへ(_P)"
 
-#: ../src/terminal-window.c:1787
+#: ../src/terminal-window.c:1798
 msgid "_Next Tab"
 msgstr "次のタブへ(_N)"
 
-#: ../src/terminal-window.c:1790
+#: ../src/terminal-window.c:1801
 msgid "Move Tab _Left"
 msgstr "タブを左へ移動(_L)"
 
-#: ../src/terminal-window.c:1793
+#: ../src/terminal-window.c:1804
 msgid "Move Tab _Right"
 msgstr "タブを右へ移動(_R)"
 
-#: ../src/terminal-window.c:1796
+#: ../src/terminal-window.c:1807
 msgid "_Detach tab"
 msgstr "タブを取り外す(_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1812
 msgid "_Contents"
 msgstr "目次(_C)"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1815
 msgid "_About"
 msgstr "情報(_A)"
 
 #. Popup menu
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1820
 msgid "_Send Mail To…"
 msgstr "メールを送信する(_S)..."
 
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1823
 msgid "_Copy E-mail Address"
 msgstr "メール・アドレスのコピー(_C)"
 
-#: ../src/terminal-window.c:1815
+#: ../src/terminal-window.c:1826
 msgid "C_all To…"
 msgstr "呼び出す(_A)..."
 
-#: ../src/terminal-window.c:1818
+#: ../src/terminal-window.c:1829
 msgid "_Copy Call Address"
 msgstr "アドレスのコピー(_C)"
 
-#: ../src/terminal-window.c:1821
+#: ../src/terminal-window.c:1832
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
-#: ../src/terminal-window.c:1824
+#: ../src/terminal-window.c:1835
 msgid "_Copy Link Address"
 msgstr "リンク・アドレスのコピー(_C)"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1838
 msgid "P_rofiles"
 msgstr "プロファイル(_R)"
 
-#: ../src/terminal-window.c:1843 ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:1854 ../src/terminal-window.c:3049
 msgid "C_lose Window"
 msgstr "ウィンドウを閉じる(_L)"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1860
 msgid "L_eave Full Screen"
 msgstr "フルスクリーンを終了(_E)"
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1863
 msgid "_Input Methods"
 msgstr "入力メソッド(_I)"
 
 #. View Menu
-#: ../src/terminal-window.c:1858
+#: ../src/terminal-window.c:1869
 msgid "Show _Menubar"
 msgstr "メニューバーの表示(_M)"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1873
 msgid "_Full Screen"
 msgstr "フルスクリーン(_F)"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3036
 msgid "Close this window?"
 msgstr "このウィンドウを閉じますか？"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3036
 msgid "Close this terminal?"
 msgstr "この端末を閉じますか？"
 
-#: ../src/terminal-window.c:3014
+#: ../src/terminal-window.c:3040
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2326,7 +2425,7 @@ msgstr ""
 "このウィンドウには未だ実行中のプロセスが存在しているタブがあります。ここで"
 "ウィンドウを閉じるとそれらのプロセスを全て強制終了します。"
 
-#: ../src/terminal-window.c:3018
+#: ../src/terminal-window.c:3044
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2334,23 +2433,31 @@ msgstr ""
 "この端末には未だ実行中のプロセスが存在しています。ここで端末を閉じるとそのプ"
 "ロセスを強制終了します。"
 
-#: ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:3049
 msgid "C_lose Terminal"
 msgstr "端末を閉じる(_L)"
 
-#: ../src/terminal-window.c:3391
+#: ../src/terminal-window.c:3122
+msgid "Could not save contents"
+msgstr "内容を保存できませんでした"
+
+#: ../src/terminal-window.c:3144
+msgid "Save as..."
+msgstr "別名で保存する..."
+
+#: ../src/terminal-window.c:3504
 msgid "_Title:"
 msgstr "タイトル(_T):"
 
-#: ../src/terminal-window.c:3578
+#: ../src/terminal-window.c:3691
 msgid "Contributors:"
 msgstr "貢献者:"
 
-#: ../src/terminal-window.c:3597
+#: ../src/terminal-window.c:3710
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME デスクトップ向けの端末エミュレータです。"
 
-#: ../src/terminal-window.c:3604
+#: ../src/terminal-window.c:3717
 msgid "translator-credits"
 msgstr ""
 "相花 毅 <takeshi.aihana@gmail.com>\n"
@@ -2358,6 +2465,7 @@ msgstr ""
 "KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>\n"
 "James Hashida <khashida@redhat.com>\n"
 "草野 貴之 <AE5T-KSN@asahi-net.or.jp>\n"
+"やまねひでき <henrich@debian.or.jp>\n"
 "日本GNOMEユーザー会 http://www.gnome.gr.jp/"
 
 #.
@@ -2479,6 +2587,88 @@ msgstr "XTerm"
 #: ../src/extra-strings.c:69
 msgid "Rxvt"
 msgstr "Rxvt"
+
+#~ msgid "Find"
+#~ msgstr "検索"
+
+#~ msgid "Match _entire word only"
+#~ msgstr "単語全体にのみマッチ(_E)"
+
+#~ msgid "Match as _regular expression"
+#~ msgstr "正規表現としてマッチ(_R)"
+
+#~ msgid "Search _backwards"
+#~ msgstr "後方検索(_B)"
+
+#~ msgid "_Match case"
+#~ msgstr "大文字・小文字を区別してマッチ(_M)"
+
+#~ msgid "_Search for:"
+#~ msgstr "検索文字列(_S):"
+
+#~ msgid "_Wrap around"
+#~ msgstr "折り返す(_W)"
+
+#~ msgid ""
+#~ "If true, newly created terminal windows will have custom size specified "
+#~ "by default_size_columns and default_size_rows."
+#~ msgstr ""
+#~ "TRUE なら、新しく作成されたウインドウは default_size_columns と "
+#~ "default_size_rows で指定されたサイズになります。"
+
+#~ msgid "Whether to use custom terminal size for new windows"
+#~ msgstr "新しいウインドウに指定した大きさを使用するかどうか"
+
+#~ msgid "Use custom default terminal si_ze"
+#~ msgstr "カスタマイズしたデフォルトの端末サイズを使用(_Z)"
+
+#~ msgid "_Underline color:"
+#~ msgstr "下線の色(_U)"
+
+#~ msgid "_Profile Preferences"
+#~ msgstr "プロファイルの設定(_P)"
+
+#~ msgid "_Relaunch"
+#~ msgstr "再起動(_R)"
+
+#~ msgid "The child process exited normally with status %d."
+#~ msgstr "子プロセスが終了コード %d で成城終了しました。"
+
+#~ msgid "The child process was terminated by signal %d."
+#~ msgstr "子プロセスがシグナル %d で終了しました。"
+
+#~ msgid "The child process was terminated."
+#~ msgstr "子プロセスが終了しました。"
+
+#~ msgid "_Search"
+#~ msgstr "検索(_S)"
+
+#~ msgid "_Find..."
+#~ msgstr "検索(_F)..."
+
+#~ msgid "Find Ne_xt"
+#~ msgstr "次を検索(_X)"
+
+#~ msgid "Find Pre_vious"
+#~ msgstr "前を検索(_V)"
+
+#~ msgid "_Clear Highlight"
+#~ msgstr "ハイライトを消去(_C)"
+
+#~ msgid "Go to _Line..."
+#~ msgstr "指定行へ移動(_L)..."
+
+#~ msgid "_Incremental Search..."
+#~ msgstr "インクリメンタル検索(_I)..."
+
+#~ msgid "TTY Erase"
+#~ msgstr "TTY Erase"
+
+#~ msgid ""
+#~ "Set the window geometry from the provided X geometry specification; see "
+#~ "the \"X\" man page for more information"
+#~ msgstr ""
+#~ "端末の位置をＸと同じ形式で指定する (詳細は X の man ページを参照のこと)"
 
 #~ msgid "(about %s)"
 #~ msgstr "(およそ %s)"
