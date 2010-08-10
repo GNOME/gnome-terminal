@@ -107,6 +107,20 @@ struct _TerminalWindowPrivate
 #define STOCK_NEW_WINDOW  "window-new"
 #define STOCK_NEW_TAB     "tab-new"
 
+#if 1
+/*
+ * We don't want to enable content saving until vte supports it async.
+ * So we disable this code for stable versions.
+ */
+#include "terminal-version.h"
+
+#if (TERMINAL_MINOR_VERSION & 1) != 0
+#define ENABLE_SAVE
+#else
+#undef ENABLE_SAVE
+#endif
+#endif
+
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
@@ -147,8 +161,10 @@ static void file_new_profile_callback         (GtkAction *action,
                                                TerminalWindow *window);
 static void file_close_window_callback        (GtkAction *action,
                                                TerminalWindow *window);
+#ifdef ENABLE_SAVE
 static void file_save_contents_callback       (GtkAction *action,
                                                TerminalWindow *window);
+#endif
 static void file_close_tab_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_copy_callback                (GtkAction *action,
@@ -1778,9 +1794,11 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile…"), "",
         NULL,
         G_CALLBACK (file_new_profile_callback) },
+#ifdef ENABLE_SAVE
       { "FileSaveContents", GTK_STOCK_SAVE, N_("_Save Contents"), "",
         NULL,
         G_CALLBACK (file_save_contents_callback) },
+#endif
       { "FileCloseTab", GTK_STOCK_CLOSE, N_("C_lose Tab"), "<shift><control>W",
         NULL,
         G_CALLBACK (file_close_tab_callback) },
@@ -3160,6 +3178,7 @@ file_close_window_callback (GtkAction *action,
   gtk_widget_destroy (GTK_WIDGET (window));
 }
 
+#ifdef ENABLE_SAVE
 static void
 save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer terminal)
 {
@@ -3244,7 +3263,7 @@ file_save_contents_callback (GtkAction *action,
 
   gtk_window_present (GTK_WINDOW (dialog));
 }
-
+#endif /* ENABLE_SAVE */
 
 static void
 file_close_tab_callback (GtkAction *action,
