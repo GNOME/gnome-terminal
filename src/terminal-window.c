@@ -161,10 +161,8 @@ static void file_new_profile_callback         (GtkAction *action,
                                                TerminalWindow *window);
 static void file_close_window_callback        (GtkAction *action,
                                                TerminalWindow *window);
-#ifdef ENABLE_SAVE
 static void file_save_contents_callback       (GtkAction *action,
                                                TerminalWindow *window);
-#endif
 static void file_close_tab_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_copy_callback                (GtkAction *action,
@@ -1794,11 +1792,9 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile…"), "",
         NULL,
         G_CALLBACK (file_new_profile_callback) },
-#ifdef ENABLE_SAVE
       { "FileSaveContents", GTK_STOCK_SAVE, N_("_Save Contents"), "",
         NULL,
         G_CALLBACK (file_save_contents_callback) },
-#endif
       { "FileCloseTab", GTK_STOCK_CLOSE, N_("C_lose Tab"), "<shift><control>W",
         NULL,
         G_CALLBACK (file_close_tab_callback) },
@@ -2060,6 +2056,11 @@ terminal_window_init (TerminalWindow *window)
   action = gtk_action_group_get_action (priv->action_group, "PopupLeaveFullscreen");
   gtk_action_set_visible (action, FALSE);
 
+#ifndef ENABLE_SAVE
+  action = gtk_action_group_get_action (priv->action_group, "FileSaveContents");
+  gtk_action_set_visible (action, FALSE);
+#endif
+  
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
@@ -3228,11 +3229,13 @@ save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer 
   g_object_unref(file);
   g_free(filename_uri);
 }
+#endif /* ENABLE_SAVE */
 
 static void
 file_save_contents_callback (GtkAction *action,
                              TerminalWindow *window)
 {
+#ifdef ENABLE_SAVE
   GtkWidget *dialog = NULL;
   TerminalWindowPrivate *priv = window->priv;
   VteTerminal *terminal;
@@ -3262,8 +3265,8 @@ file_save_contents_callback (GtkAction *action,
   g_signal_connect (dialog, "delete_event", G_CALLBACK (terminal_util_dialog_response_on_delete), NULL);
 
   gtk_window_present (GTK_WINDOW (dialog));
-}
 #endif /* ENABLE_SAVE */
+}
 
 static void
 file_close_tab_callback (GtkAction *action,
