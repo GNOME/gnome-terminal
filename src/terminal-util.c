@@ -670,7 +670,8 @@ setup_ftp_proxy_env (GHashTable *env_table,
   if (host && port)
     {
       char *proxy;
-      proxy = g_strdup_printf ("ftp://%s:%d/", host, port);
+      /* Even though it's ftp, the proxy scheme is 'http'. See bug #624440. */
+      proxy = g_strdup_printf ("http://%s:%d/", host, port);
       set_proxy_env (env_table, "ftp_proxy", proxy);
     }
   g_free (host);
