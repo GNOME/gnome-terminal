@@ -46,67 +46,77 @@
 
 #define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Display"
 #define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
+#define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
 
-#define GAPPLICATION_INTERFACE_NAME           "org.gtk.Application"
-
-/* The returned string is owned by @variant */
-static const char *
+static char *
 ay_to_string (GVariant *variant,
               GError **error)
 {
-  const char *string;
   gsize len;
+  const char *data;
 
-  len = g_variant_get_size (variant);
-  if (len == 0) {
+  data = g_variant_get_fixed_array (variant, &len, sizeof (char));
+  if (len == 0)
+    return NULL;
+
+  /* Make sure there are no embedded NULs */
+  if (memchr (data, '\0', len) != NULL) {
     g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                         "NUL strings not allowed");
+                         "String is shorter than claimed");
     return NULL;
   }
 
-  string = g_variant_get_bytestring (variant);
-  if (strlen (string) != (len - 1)) {
-    g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                         "String is shorter than claimed (claimed %" G_GSIZE_FORMAT " actual %" G_GSIZE_FORMAT ")",
-                         len - 1, strlen (string));
-    return NULL;
-  }
-
-  return string;
+  return g_strndup (data, len);
 }
 
-/* The returned strings are owned by @variant. Free the array itself with g_free(). */
 static char **
-aay_to_strv (GVariant *variant,
-             int *argc,
-             GError **error)
+ay_to_strv (GVariant *variant,
+            int *argc)
 {
-  GVariant *item;
-  char **argv;
-  gsize i, n;
+  GPtrArray *argv;
+  const char *data, *nullbyte;
+  gsize data_len;
+  gssize len;
 
-  n = g_variant_n_children (variant);
-  if (argc)
-    *argc = n;
-  if (n == 0)
+  data = g_variant_get_fixed_array (variant, &data_len, sizeof (char));
+  if (data_len == 0 || data_len > G_MAXSSIZE) {
+    *argc = 0;
     return NULL;
-
-  argv = g_new (char *, n + 1);
-
-  for (i = 0; i < n; ++i) {
-    item = g_variant_get_child_value (variant, i);
-    argv[i] = (char *) ay_to_string (item, error);
-    g_variant_unref (item);
-    if (*error != NULL)
-      goto err;
   }
 
-  argv[n] = NULL;
-  return argv;
+  argv = g_ptr_array_new ();
 
-err:
-  g_free (argv);
-  return NULL;
+  len = data_len;
+  do {
+    gsize string_len;
+
+    nullbyte = memchr (data, '\0', len);
+
+    string_len = nullbyte ? (gsize) (nullbyte - data) : len;
+    g_ptr_array_add (argv, g_strndup (data, string_len));
+
+    len -= string_len + 1;
+    data += string_len + 1;
+  } while (len > 0);
+
+  if (argc)
+    *argc = argv->len;
+
+  /* NULL terminate */
+  g_ptr_array_add (argv, NULL);
+  return (char **) g_ptr_array_free (argv, FALSE);
+}
+
+static GVariant *
+string_to_ay (const char *string)
+{
+  gsize len;
+  char *data;
+
+  len = strlen (string);
+  data = g_strndup (string, len);
+
+  return g_variant_new_from_data (G_VARIANT_TYPE ("ay"), data, len, TRUE, g_free, data);
 }
 
 typedef struct {
@@ -127,49 +137,28 @@ method_call_cb (GDBusConnection *connection,
                 GDBusMethodInvocation *invocation,
                 gpointer user_data)
 {
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Remote method call sender '%s' object-path '%s' interface-name '%s' method-name '%s' parameters-type '%s'\n",
-                         sender, object_path, interface_name, method_name,
-                         g_variant_get_type_string (parameters));
-
-  if (g_strcmp0 (object_path, TERMINAL_FACTORY_SERVICE_PATH) != 0 ||
-      g_strcmp0 (interface_name, GAPPLICATION_INTERFACE_NAME) != 0)
-    return;
-
-  if (g_strcmp0 (method_name, "Activate") == 0) {
+  if (g_strcmp0 (method_name, "HandleArguments") == 0) {
     TerminalOptions *options = NULL;
-    GVariantIter *data_iter;
-    const char *key;
-    GVariant *data, *v_argv;
-    const char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
+    GVariant *v_wd, *v_display, *v_sid, *v_envv, *v_argv;
+    char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
     char **envv = NULL, **argv = NULL;
     int argc;
     GError *error = NULL;
 
-    g_variant_get (parameters, "(@aaya{sv})", &v_argv, &data_iter);
+    g_variant_get (parameters, "(@ay@ay@ay@ay@ay)",
+                   &v_wd, &v_display, &v_sid, &v_envv, &v_argv);
 
-    while (g_variant_iter_next (data_iter, "{&sv}", &key, &data)) {
-      if (strcmp (key, "startup-notication-id") == 0) {
-        working_directory = ay_to_string (data, &error);
-      } else if (strcmp (key, "display-name") == 0) {
-        display_name = ay_to_string (data, &error);
-      } else if (strcmp (key, "cwd") == 0) {
-        working_directory = ay_to_string (data, &error);
-      } else if (strcmp (key, "environment") == 0) {
-        envv = aay_to_strv (data, NULL, &error);
-      }
-
-      g_variant_unref (data);
-      if (error)
-        break;
-    }
-    g_variant_iter_free (data_iter);
+    working_directory = ay_to_string (v_wd, &error);
     if (error)
       goto out;
-
-    argv = aay_to_strv (v_argv, &argc, &error);
+    display_name = ay_to_string (v_display, &error);
     if (error)
       goto out;
+    startup_id = ay_to_string (v_sid, &error);
+    if (error)
+      goto out;
+    envv = ay_to_strv (v_envv, NULL);
+    argv = ay_to_strv (v_argv, &argc);
 
     _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                           "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
@@ -191,11 +180,18 @@ method_call_cb (GDBusConnection *connection,
       terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, &error);
       terminal_options_free (options);
     }
-
+ 
   out:
-    g_free (envv);
-    g_free (argv);
+    g_variant_unref (v_wd);
+    g_free (working_directory);
+    g_variant_unref (v_display);
+    g_free (display_name);
+    g_variant_unref (v_sid);
+    g_free (startup_id);
+    g_variant_unref (v_envv);
+    g_strfreev (envv);
     g_variant_unref (v_argv);
+    g_strfreev (argv);
 
     if (error == NULL) {
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("()"));
@@ -203,23 +199,6 @@ method_call_cb (GDBusConnection *connection,
       g_dbus_method_invocation_return_gerror (invocation, error);
       g_error_free (error);
     }
-  } else if (g_strcmp0 (method_name, "ListActions") == 0) {
-    g_dbus_method_invocation_return_value (invocation,
-                                            g_variant_new ("(a{s(sb)})", NULL));
-    return;
-  } else if (g_strcmp0 (method_name, "InvokeAction") == 0) {
-    g_dbus_method_invocation_return_error (invocation,
-                                            G_DBUS_ERROR,
-                                            G_DBUS_ERROR_NOT_SUPPORTED,
-                                            "Not supported");
-    return;
-  } else if (g_strcmp0 (method_name, "Quit") == 0) {
-    /* Very funny. If you want to quit, use the session manager! */
-    g_dbus_method_invocation_return_error (invocation,
-                                            G_DBUS_ERROR,
-                                            G_DBUS_ERROR_NOT_SUPPORTED,
-                                            "Not supported");
-    return;
   }
 }
 
@@ -230,22 +209,14 @@ bus_acquired_cb (GDBusConnection *connection,
 {
   static const char dbus_introspection_xml[] =
     "<node name='/org/gnome/Terminal'>"
-      "<interface name='org.gtk.Application'>"
-        "<method name='Quit'>"
-          "<arg type='u' name='timestamp' direction='in'/>"
+      "<interface name='org.gnome.Terminal.Factory'>"
+        "<method name='HandleArguments'>"
+          "<arg type='ay' name='working_directory' direction='in' />"
+          "<arg type='ay' name='display_name' direction='in' />"
+          "<arg type='ay' name='startup_id' direction='in' />"
+          "<arg type='ay' name='environment' direction='in' />"
+          "<arg type='ay' name='arguments' direction='in' />"
         "</method>"
-        "<method name='ListActions'>"
-          "<arg type='a{s(sb)}' name='actions' direction='out'/>"
-        "</method>"
-        "<method name='InvokeAction'>"
-          "<arg type='s' name='action' direction='in'/>"
-          "<arg type='u' name='timestamp' direction='in'/>"
-        "</method>"
-        "<method name='Activate'>"
-          "<arg type='aay' name='arguments' direction='in'/>"
-          "<arg type='a{sv}' name='data' direction='in'/>"
-        "</method>"
-        "<signal name='ActionsChanged'/>"
       "</interface>"
     "</node>";
 
@@ -321,9 +292,19 @@ name_lost_cb (GDBusConnection *connection,
   int envc, i;
   GVariantBuilder builder;
   GVariant *value;
+  GString *string;
+  char *s;
+  gsize len;
 
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                          "Lost the name %s on the session bus\n", name);
+
+  /* Couldn't get the connection? No way to continue! */
+  if (connection == NULL) {
+    data->exit_code = EXIT_FAILURE;
+    gtk_main_quit ();
+    return;
+  }
 
   if (data->options == NULL) {
     /* Already handled */
@@ -335,55 +316,53 @@ name_lost_cb (GDBusConnection *connection,
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                           "Forwarding arguments to existing instance\n");
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(aaya{sv})"));
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(ayayayayay)"));
 
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("aay"));
-  for (i = 0; i < data->argc; ++i)
-    g_variant_builder_add (&builder, "^ay", data->argv[i]);
-  g_variant_builder_close (&builder); /* aay */
+  g_variant_builder_add (&builder, "@ay", string_to_ay (data->options->default_working_dir));
+  g_variant_builder_add (&builder, "@ay", string_to_ay (data->options->display_name));
+  g_variant_builder_add (&builder, "@ay", string_to_ay (data->options->startup_id));
 
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
-
-  g_variant_builder_add (&builder, "{sv}",
-                         "startup-notication-id",
-                         g_variant_new_bytestring (data->options->startup_id ? data->options->startup_id : ""));
-  g_variant_builder_add (&builder, "{sv}",
-                         "display-name",
-                         g_variant_new_bytestring (data->options->display_name ? data->options->display_name : ""));
-  g_variant_builder_add (&builder, "{sv}",
-                         "cwd",
-                         g_variant_new_bytestring (data->options->default_working_dir ? data->options->default_working_dir : ""));
-
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("{sv}"));
-  g_variant_builder_add (&builder, "s", "environment");
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
-  g_variant_builder_open (&builder, G_VARIANT_TYPE ("aay"));
+  string = g_string_new (NULL);
   envv = g_listenv ();
   envc = g_strv_length (envv);
   for (i = 0; i < envc; ++i)
     {
       const char *value;
-      char *str;
 
       value = g_getenv (envv[i]);
       if (value == NULL)
         continue;
 
-      str = g_strdup_printf ("%s=%s", envv[i], value);
-      g_variant_builder_add (&builder, "^ay", str);
-      g_free (str);
-    }
-  g_variant_builder_close (&builder); /* aay */
-  g_variant_builder_close (&builder); /* v */
-  g_variant_builder_close (&builder); /* {sv} */
+      if (i > 0)
+        g_string_append_c (string, '\0');
 
-  g_variant_builder_close (&builder); /* a{sv} */
+      g_string_append_printf (string, "%s=%s", envv[i], value);
+    }
+
+  len = string->len;
+  s = g_string_free (string, FALSE);
+  g_variant_builder_add (&builder, "@ay",
+                         g_variant_new_from_data (G_VARIANT_TYPE ("ay"), s, len, TRUE, g_free, s));
+
+  string = g_string_new (NULL);
+
+  for (i = 0; i < data->argc; ++i)
+    {
+      if (i > 0)
+        g_string_append_c (string, '\0');
+      g_string_append (string, data->argv[i]);
+    }
+
+  len = string->len;
+  s = g_string_free (string, FALSE);
+  g_variant_builder_add (&builder, "@ay",
+                         g_variant_new_from_data (G_VARIANT_TYPE ("ay"), s, len, TRUE, g_free, s));
 
   value = g_dbus_connection_call_sync (connection,
                                        data->factory_name,
                                        TERMINAL_FACTORY_SERVICE_PATH,
-                                       GAPPLICATION_INTERFACE_NAME,
-                                       "Activate",
+                                       TERMINAL_FACTORY_INTERFACE_NAME,
+                                       "HandleArguments",
                                        g_variant_builder_end (&builder),
                                        G_VARIANT_TYPE ("()"),
                                        G_DBUS_CALL_FLAGS_NONE,
