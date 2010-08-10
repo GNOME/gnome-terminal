@@ -50,6 +50,10 @@ void terminal_encoding_unref (TerminalEncoding *encoding);
 
 gboolean terminal_encoding_is_valid (TerminalEncoding *encoding);
 
+const char *terminal_encoding_get_id (TerminalEncoding *encoding);
+
+const char *terminal_encoding_get_charset (TerminalEncoding *encoding);
+
 GHashTable *terminal_encodings_get_builtins (void);
 
 void terminal_encoding_dialog_show (GtkWindow *transient_parent);

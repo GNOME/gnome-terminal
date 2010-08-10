@@ -964,7 +964,9 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
                                             _("User Defined"),
                                             TRUE,
                                             TRUE /* scary! */);
-          g_hash_table_insert (app->encodings, encoding->charset, encoding);
+          g_hash_table_insert (app->encodings,
+                               (gpointer) terminal_encoding_get_charset (encoding),
+                               encoding);
         }
 
       if (!terminal_encoding_is_valid (encoding))

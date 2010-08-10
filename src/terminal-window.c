@@ -804,8 +804,8 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       char name[128];
       char *display_name;
       
-      g_snprintf (name, sizeof (name), SET_ENCODING_ACTION_NAME_PREFIX "%s", e->charset);
-      display_name = g_strdup_printf ("%s (%s)", e->name, e->charset);
+      g_snprintf (name, sizeof (name), SET_ENCODING_ACTION_NAME_PREFIX "%s", terminal_encoding_get_id (e));
+      display_name = g_strdup_printf ("%s (%s)", e->name, terminal_encoding_get_charset (e));
 
       encoding_action = gtk_radio_action_new (name,
                                               display_name,
@@ -817,7 +817,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       gtk_radio_action_set_group (encoding_action, group);
       group = gtk_radio_action_get_group (encoding_action);
 
-      if (charset && strcmp (e->charset, charset) == 0)
+      if (charset && strcmp (terminal_encoding_get_charset (e), charset) == 0)
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (encoding_action), TRUE);
 
       g_signal_connect (encoding_action, "toggled",

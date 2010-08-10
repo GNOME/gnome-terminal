@@ -48,7 +48,6 @@ static const struct {
   const char *charset;
   const char *name;
 } encodings[] = {
-//  { "UTF-8",	N_("Current Locale") },
   { "ISO-8859-1",	N_("Western") },
   { "ISO-8859-2",	N_("Central European") },
   { "ISO-8859-3",	N_("South European") },
@@ -183,6 +182,22 @@ terminal_encoding_unref (TerminalEncoding *encoding)
   g_slice_free (TerminalEncoding, encoding);
 }
 
+const char *
+terminal_encoding_get_id (TerminalEncoding *encoding)
+{
+  g_return_val_if_fail (encoding != NULL, NULL);
+  
+  return encoding->charset;
+}
+
+const char *
+terminal_encoding_get_charset (TerminalEncoding *encoding)
+{
+  g_return_val_if_fail (encoding != NULL, NULL);
+
+  return encoding->charset;
+}
+
 gboolean
 terminal_encoding_is_valid (TerminalEncoding *encoding)
 {
@@ -202,7 +217,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
    * which the underlying GIConv implementation can't support.
    */
   converted = g_convert (ascii_sample, sizeof (ascii_sample) - 1,
-                         encoding->charset, "UTF-8",
+                         terminal_encoding_get_charset (encoding), "UTF-8",
                          &bytes_read, &bytes_written, &error);
 
   /* The encoding is only valid if ASCII passes through cleanly. */
@@ -217,7 +232,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
       {
         _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
                                "Rejecting encoding %s as invalid:\n",
-                               encoding->charset);
+                               terminal_encoding_get_charset (encoding));
         _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
                                " input  \"%s\"\n",
                                ascii_sample);
@@ -232,7 +247,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
     else
         _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
                                "Encoding %s is valid\n\n",
-                               encoding->charset);
+                               terminal_encoding_get_charset (encoding));
   }
 #endif
 
@@ -269,7 +284,7 @@ update_active_encodings_gconf (void)
     {
       TerminalEncoding *encoding = (TerminalEncoding *) l->data;
 
-      strings = g_slist_prepend (strings, encoding->charset);
+      strings = g_slist_prepend (strings, (gpointer) terminal_encoding_get_id (encoding));
     }
 
   conf = gconf_client_get_default ();
@@ -375,7 +390,7 @@ liststore_insert_encoding (gpointer key,
     return;
 
   gtk_list_store_insert_with_values (store, &iter, -1,
-                                     COLUMN_CHARSET, encoding->charset,
+                                     COLUMN_CHARSET, terminal_encoding_get_charset (encoding),
                                      COLUMN_NAME, encoding->name,
                                      COLUMN_DATA, encoding,
                                      -1);
@@ -574,7 +589,7 @@ terminal_encodings_get_builtins (void)
                                         _("Current Locale"),
                                         FALSE,
                                         TRUE);
-      g_hash_table_insert (encodings_hashtable, encoding->charset, encoding);
+      g_hash_table_insert (encodings_hashtable, (gpointer) terminal_encoding_get_id (encoding), encoding);
     }
 
   for (i = 0; i < G_N_ELEMENTS (encodings); ++i)
@@ -585,7 +600,9 @@ terminal_encodings_get_builtins (void)
                                         _(encodings[i].name),
                                         FALSE,
                                         FALSE);
-      g_hash_table_insert (encodings_hashtable, encoding->charset, encoding);
+      g_hash_table_insert (encodings_hashtable,
+                           (gpointer) terminal_encoding_get_id (encoding),
+                           encoding);
     }
 
   return encodings_hashtable;
