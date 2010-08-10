@@ -652,7 +652,8 @@ setup_https_proxy_env (GHashTable *env_table,
   if (host && port)
     {
       char *proxy;
-      proxy = g_strdup_printf ("https://%s:%d/", host, port);
+      /* Even though it's https, the proxy scheme is 'http'. See bug #624440. */
+      proxy = g_strdup_printf ("http://%s:%d/", host, port);
       set_proxy_env (env_table, "https_proxy", proxy);
     }
   g_free (host);
@@ -699,18 +700,18 @@ static void
 setup_autoconfig_proxy_env (GHashTable *env_table,
                             GConfClient *conf)
 {
+  /* XXX  Not sure what to do with this.  See bug #596688.
   gchar *url;
 
   url = conf_get_string (conf, CONF_PROXY_PREFIX "/autoconfig_url");
   if (url)
     {
-      /* XXX  Not sure what to do with it.  See bug 596688
       char *proxy;
       proxy = g_strdup_printf ("pac+%s", url);
       set_proxy_env (env_table, "http_proxy", proxy);
-      */
     }
   g_free (url);
+  */
 }
 
 /**
