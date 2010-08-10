@@ -1,6 +1,8 @@
 NULL =
 
+if ENABLE_SKEY
 SUBDIRS = skey
+endif
 
 bin_PROGRAMS = gnome-terminal
 
@@ -16,8 +18,6 @@ gnome_terminal_SOURCES= \
 	eggshell.h \
 	profile-editor.c \
 	profile-editor.h \
-	skey-popup.c \
-	skey-popup.h \
 	terminal.c \
 	terminal-accels.c \
 	terminal-accels.h \
@@ -50,6 +50,13 @@ gnome_terminal_SOURCES= \
 	terminal-window.c \
 	terminal-window.h \
 	$(NULL)
+
+if ENABLE_SKEY
+gnome_terminal_SOURCES += \
+	skey-popup.c \
+	skey-popup.h \
+	$(NULL)
+endif
 
 nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
 

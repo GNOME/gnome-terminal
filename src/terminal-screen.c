@@ -1,6 +1,6 @@
 /*
  * Copyright © 2001 Havoc Pennington
- * Copyright © 2007, 2008 Christian Persch
+ * Copyright © 2007, 2008, 2010 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -136,7 +136,6 @@ static char* terminal_screen_check_match       (TerminalScreen            *scree
                                                 int                   column,
                                                 int                   row,
                                                 int                  *flavor);
-static void  terminal_screen_skey_match_remove (TerminalScreen            *screen);
 
 static guint signals[LAST_SIGNAL];
 
@@ -166,16 +165,21 @@ static const TerminalRegexPattern url_regex_patterns[] = {
   { "news:[[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, G_REGEX_CASELESS  },
 };
 
+static GRegex **url_regexes;
+static TerminalURLFlavour *url_regex_flavors;
+static guint n_url_regexes;
+
+#ifdef ENABLE_SKEY
 static const TerminalRegexPattern skey_regex_patterns[] = {
   { "s/key [[:digit:]]* [-[:alnum:]]*",         FLAVOR_AS_IS },
   { "otp-[a-z0-9]* [[:digit:]]* [-[:alnum:]]*", FLAVOR_AS_IS },
 };
 
-static GRegex **url_regexes;
-static TerminalURLFlavour *url_regex_flavors;
-static guint n_url_regexes;
 static GRegex **skey_regexes;
 static guint n_skey_regexes;
+
+static void  terminal_screen_skey_match_remove (TerminalScreen            *screen);
+#endif /* ENABLE_SKEY */
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
@@ -597,8 +601,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   url_regexes = g_new0 (GRegex*, n_url_regexes);
   url_regex_flavors = g_new0 (TerminalURLFlavour, n_url_regexes);
-  n_skey_regexes = G_N_ELEMENTS (skey_regex_patterns);
-  skey_regexes = g_new0 (GRegex*, n_skey_regexes);
 
   for (i = 0; i < n_url_regexes; ++i)
     {
@@ -616,6 +618,10 @@ terminal_screen_class_init (TerminalScreenClass *klass)
       url_regex_flavors[i] = url_regex_patterns[i].flavor;
     }
 
+#ifdef ENABLE_SKEY
+  n_skey_regexes = G_N_ELEMENTS (skey_regex_patterns);
+  skey_regexes = g_new0 (GRegex*, n_skey_regexes);
+
   for (i = 0; i < n_skey_regexes; ++i)
     {
       GError *error = NULL;
@@ -627,6 +633,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
           g_error_free (error);
         }
     }
+#endif /* ENABLE_SKEY */
 
   /* This fixes bug #329827 */
   app = terminal_app_get ();
@@ -966,6 +973,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
       vte_terminal_set_scrollback_lines (vte_terminal, lines);
     }
 
+#ifdef ENABLE_SKEY
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_SKEY))
     {
       if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
@@ -989,6 +997,7 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
           terminal_screen_skey_match_remove (screen);
         }
     }
+#endif /* ENABLE_SKEY */
 
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE) ||
@@ -1579,7 +1588,6 @@ terminal_screen_button_press (GtkWidget      *widget,
                               GdkEventButton *event)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
-  TerminalScreenPrivate *priv = screen->priv;
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
   int char_width, char_height, row, col;
@@ -1606,8 +1614,10 @@ terminal_screen_button_press (GtkWidget      *widget,
     {
       gboolean handled = FALSE;
 
+#ifdef ENABLE_SKEY
       if (matched_flavor != FLAVOR_SKEY ||
-          terminal_profile_get_property_boolean (priv->profile, TERMINAL_PROFILE_USE_SKEY))
+          terminal_profile_get_property_boolean (screen->priv->profile, TERMINAL_PROFILE_USE_SKEY))
+#endif
         {
           g_signal_emit (screen, signals[MATCH_CLICKED], 0,
                          matched_string,
@@ -2196,6 +2206,7 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
   *cell_height_pixels = vte_terminal_get_char_height (terminal);
 }
 
+#ifdef ENABLE_SKEY
 static void
 terminal_screen_skey_match_remove (TerminalScreen *screen)
 {
@@ -2217,6 +2228,7 @@ terminal_screen_skey_match_remove (TerminalScreen *screen)
       l = next;
     }
 }
+#endif /* ENABLE_SKEY */
 
 static char*
 terminal_screen_check_match (TerminalScreen *screen,

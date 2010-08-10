@@ -82,7 +82,10 @@ PKG_CHECK_MODULES([TERM],
    gconf-2.0 >= $GCONF_REQUIRED
    $PLATFORM_DEPS])
 
-# Check the smclient backend
+# ********
+# smclient
+# ********
+
 SMCLIENT_PKGS=
 AC_MSG_CHECKING([which smclient backend to use])
 AC_ARG_WITH([smclient],
@@ -110,7 +113,10 @@ AM_CONDITIONAL([WITH_SMCLIENT_XSMP],[test "$with_smclient" = "xsmp"])
 AM_CONDITIONAL([WITH_SMCLIENT_WIN32],[test "$with_smclient" = "win32"])
 AM_CONDITIONAL([WITH_SMCLIENT_QUARTZ],[test "$with_smclient" = "quartz"])
 
+# *****
 # GConf
+# *****
+
 AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
 
 if test x"$GCONFTOOL" = xno; then
@@ -128,6 +134,26 @@ AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
 if test "$GTK_BUILDER_CONVERT" = "false"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
 fi
+
+# *****
+# S/Key
+# *****
+
+AC_MSG_CHECKING([whether to enable s/key support])
+AC_ARG_ENABLE([skey],
+  [AS_HELP_STRING([--disable-skey],[disable s/key support (default: enabled)])],
+  [],[enable_skey=yes])
+AC_MSG_RESULT([$enable_skey])
+
+if test "$enable_skey" = "yes"; then
+  AC_DEFINE([ENABLE_SKEY],[1],[Define if s/key support is enabled])
+fi
+
+AM_CONDITIONAL([ENABLE_SKEY],[test "$enable_skey" = "yes"])
+
+# *************
+# Documentation
+# *************
 
 GNOME_DOC_INIT
 
@@ -165,4 +191,5 @@ gnome-terminal-$VERSION:
 	compiler:		${CC}
 
         using smclient:         ${with_smclient}
+        s/key support:          ${enable_skey}
 "
