@@ -952,18 +952,7 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
       if (!charset)
         continue;
 
-      encoding = g_hash_table_lookup (app->encodings, charset);
-      if (encoding == NULL)
-        {
-          encoding = terminal_encoding_new (charset,
-                                            _("User Defined"),
-                                            TRUE,
-                                            TRUE /* scary! */);
-          g_hash_table_insert (app->encodings,
-                               (gpointer) terminal_encoding_get_id (encoding),
-                               encoding);
-        }
-
+      encoding = terminal_app_ensure_encoding (app, charset);
       if (!terminal_encoding_is_valid (encoding))
         continue;
 
@@ -2015,6 +2004,34 @@ GHashTable *
 terminal_app_get_encodings (TerminalApp *app)
 {
   return app->encodings;
+}
+
+/**
+ * terminal_app_ensure_encoding:
+ * @app:
+ * @charset:
+ *
+ * Ensures there's a #TerminalEncoding for @charset available.
+ */
+TerminalEncoding *
+terminal_app_ensure_encoding (TerminalApp *app,
+                              const char *charset)
+{
+  TerminalEncoding *encoding;
+
+  encoding = g_hash_table_lookup (app->encodings, charset);
+  if (encoding == NULL)
+    {
+      encoding = terminal_encoding_new (charset,
+                                        _("User Defined"),
+                                        TRUE,
+                                        TRUE /* scary! */);
+      g_hash_table_insert (app->encodings,
+                          (gpointer) terminal_encoding_get_id (encoding),
+                          encoding);
+    }
+
+  return encoding;
 }
 
 /**

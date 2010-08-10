@@ -764,11 +764,13 @@ static void
 terminal_window_update_encoding_menu (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  TerminalApp *app;
   GtkActionGroup *action_group;
   GSList *group;
   guint n;
   GSList *encodings, *l;
   const char *charset;
+  TerminalEncoding *active_encoding;
 
   /* Remove the old UI */
   if (priv->encodings_ui_id != 0)
@@ -794,8 +796,14 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
     charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
   else
     charset = "current";
-  
-  encodings = terminal_app_get_active_encodings (terminal_app_get ());
+
+  app = terminal_app_get ();
+  active_encoding = terminal_app_ensure_encoding (app, charset);
+
+  encodings = terminal_app_get_active_encodings (app);
+
+  if (g_slist_find (encodings, active_encoding) == NULL)
+    encodings = g_slist_append (encodings, terminal_encoding_ref (active_encoding));
 
   group = NULL;
   n = 0;

@@ -23,6 +23,7 @@
 
 #include <gtk/gtk.h>
 
+#include "terminal-encoding.h"
 #include "terminal-screen.h"
 #include "terminal-options.h"
 
@@ -138,6 +139,9 @@ TerminalProfile* terminal_app_get_default_profile (TerminalApp *app);
 
 /* never returns NULL if any profiles exist, one is always supposed to */
 TerminalProfile* terminal_app_get_profile_for_new_term (TerminalApp *app);
+
+TerminalEncoding *terminal_app_ensure_encoding (TerminalApp *app,
+                                                const char *charset);
 
 GHashTable *terminal_app_get_encodings (TerminalApp *app);
 
