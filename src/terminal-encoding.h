@@ -29,7 +29,7 @@
 typedef struct
 {
   int   refcount;
-  char *charset;
+  char *id;
   char *name;
   guint valid            : 1;
   guint validity_checked : 1;

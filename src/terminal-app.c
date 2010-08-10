@@ -924,18 +924,17 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
   /* Mark all as non-active, then re-enable the active ones */
   g_hash_table_foreach (app->encodings, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
 
-  /* First add the local encoding. */
-  if (!g_get_charset (&charset))
-    {
-      encoding = g_hash_table_lookup (app->encodings, charset);
-      if (encoding)
-        encoding->is_active = TRUE;
-    }
+  /* First add the locale's charset */
+  encoding = g_hash_table_lookup (app->encodings, "current");
+  g_assert (encoding);
+  if (terminal_encoding_is_valid (encoding))
+    encoding->is_active = TRUE;
 
-  /* Always ensure that UTF-8 is available. */
+  /* Also always make UTF-8 available */
   encoding = g_hash_table_lookup (app->encodings, "UTF-8");
   g_assert (encoding);
-  encoding->is_active = TRUE;
+  if (terminal_encoding_is_valid (encoding))
+    encoding->is_active = TRUE;
 
   val = gconf_entry_get_value (entry);
   if (val != NULL &&
@@ -953,19 +952,15 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
       if (!charset)
         continue;
 
-      /* We already handled the locale charset above */
-      if (strcmp (charset, "current") == 0)
-        continue; 
-
       encoding = g_hash_table_lookup (app->encodings, charset);
-      if (!encoding)
+      if (encoding == NULL)
         {
           encoding = terminal_encoding_new (charset,
                                             _("User Defined"),
                                             TRUE,
                                             TRUE /* scary! */);
           g_hash_table_insert (app->encodings,
-                               (gpointer) terminal_encoding_get_charset (encoding),
+                               (gpointer) terminal_encoding_get_id (encoding),
                                encoding);
         }
 

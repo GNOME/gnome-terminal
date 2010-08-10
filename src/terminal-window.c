@@ -107,6 +107,8 @@ struct _TerminalWindowPrivate
 #define STOCK_NEW_WINDOW  "window-new"
 #define STOCK_NEW_TAB     "tab-new"
 
+#define ENCODING_DATA_KEY "encoding"
+
 #if 1
 /*
  * We don't want to enable content saving until vte supports it async.
@@ -743,7 +745,7 @@ terminal_set_encoding_callback (GtkToggleAction *action,
                                 TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  const char *name, *charset;
+  TerminalEncoding *encoding;
   
   if (!gtk_toggle_action_get_active (action))
     return;
@@ -751,11 +753,11 @@ terminal_set_encoding_callback (GtkToggleAction *action,
   if (priv->active_screen == NULL)
     return;
 
-  name = gtk_action_get_name (GTK_ACTION (action));
-  g_assert (g_str_has_prefix (name, SET_ENCODING_ACTION_NAME_PREFIX));
-  charset = name + strlen (SET_ENCODING_ACTION_NAME_PREFIX);
+  encoding = g_object_get_data (G_OBJECT (action), ENCODING_DATA_KEY);
+  g_assert (encoding);
 
-  vte_terminal_set_encoding (VTE_TERMINAL (priv->active_screen), charset);
+  vte_terminal_set_encoding (VTE_TERMINAL (priv->active_screen),
+                             terminal_encoding_get_charset (encoding));
 }
 
 static void
@@ -791,7 +793,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   if (priv->active_screen)
     charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
   else
-    charset = NULL;
+    charset = "current";
   
   encodings = terminal_app_get_active_encodings (terminal_app_get ());
 
@@ -817,11 +819,15 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
       gtk_radio_action_set_group (encoding_action, group);
       group = gtk_radio_action_get_group (encoding_action);
 
-      if (charset && strcmp (terminal_encoding_get_charset (e), charset) == 0)
+      if (charset && strcmp (terminal_encoding_get_id (e), charset) == 0)
         gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (encoding_action), TRUE);
 
       g_signal_connect (encoding_action, "toggled",
                         G_CALLBACK (terminal_set_encoding_callback), window);
+
+      g_object_set_data_full (G_OBJECT (encoding_action), ENCODING_DATA_KEY,
+                              terminal_encoding_ref (e),
+                              (GDestroyNotify) terminal_encoding_unref);
 
       gtk_action_group_add_action (action_group, GTK_ACTION (encoding_action));
       g_object_unref (encoding_action);
