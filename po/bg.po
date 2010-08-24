@@ -13,18 +13,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-17 17:13+0200\n"
-"PO-Revision-Date: 2010-03-17 17:13+0200\n"
+"POT-Creation-Date: 2010-08-24 15:28+0300\n"
+"PO-Revision-Date: 2010-08-24 15:27+0300\n"
 "Last-Translator: Alexander Shopov <ash@kambanaria.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:130
-#: ../src/terminal-accels.c:228 ../src/terminal.c:304
-#: ../src/terminal-profile.c:160 ../src/terminal-window.c:1901
+#: ../src/terminal-accels.c:242 ../src/terminal.c:549
+#: ../src/terminal-profile.c:160 ../src/terminal-window.c:2000
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -72,6 +73,34 @@ msgstr "Добавяне или премахване на кодови табл�
 #: ../src/encodings-dialog.glade.h:3
 msgid "E_ncodings shown in menu:"
 msgstr "К_одови таблици в менюто:"
+
+#: ../src/find-dialog.glade.h:1
+msgid "Find"
+msgstr "Търсене"
+
+#: ../src/find-dialog.glade.h:2
+msgid "Match _entire word only"
+msgstr "Ако съвпада само с _цяла дума"
+
+#: ../src/find-dialog.glade.h:3
+msgid "Match as _regular expression"
+msgstr "Ако съвпада с _регулярен израз"
+
+#: ../src/find-dialog.glade.h:4
+msgid "Search _backwards"
+msgstr "Търсене наза_д"
+
+#: ../src/find-dialog.glade.h:5
+msgid "_Match case"
+msgstr "Зачитане на главни/_малки"
+
+#: ../src/find-dialog.glade.h:6
+msgid "_Search for:"
+msgstr "_Търсене за: "
+
+#: ../src/find-dialog.glade.h:7
+msgid "_Wrap around"
+msgstr "_След края — от началото"
 
 #: ../src/gnome-terminal.schemas.in.h:1
 msgid ""
@@ -1042,10 +1071,10 @@ msgstr ""
 #: ../src/gnome-terminal.schemas.in.h:142
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
-"and \"disabled\"."
+"and \"hidden\"."
 msgstr ""
-"Местоположение на плъзгача на терминала. Възможностите са „left“, „right“ и "
-"„disabled“."
+"Местоположение на плъзгача на терминала. Възможностите са „left“ (отляво), "
+"„right“ (отдясно) и „hidden“ (скрит)."
 
 #: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether an unlimited number of lines should be kept in scrollback"
@@ -1202,12 +1231,12 @@ msgstr "Редактиране на профила „%s“"
 msgid "Images"
 msgstr "Изображения"
 
-#: ../src/profile-editor.c:758
+#: ../src/profile-editor.c:804
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Избор на цвят на палитрата № %d"
 
-#: ../src/profile-editor.c:762
+#: ../src/profile-editor.c:808
 #, c-format
 msgid "Palette entry %d"
 msgstr "Палитра — цвят № %d"
@@ -1224,7 +1253,7 @@ msgstr "Профил _използван при отваряне на нов т�
 msgid "C_reate"
 msgstr "С_ъздаване"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:125
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:139
 msgid "New Profile"
 msgstr "Нов профил"
 
@@ -1241,8 +1270,8 @@ msgid "<b>Command</b>"
 msgstr "<b>Команда</b>"
 
 #: ../src/profile-preferences.glade.h:2
-msgid "<b>Foreground, Background, and Bold</b>"
-msgstr "<b>Преден план, фон, получер</b>"
+msgid "<b>Foreground, Background, Bold and Underline</b>"
+msgstr "<b>Преден план, фон, получер и подчертано</b>"
 
 #: ../src/profile-preferences.glade.h:3
 msgid "<b>Palette</b>"
@@ -1285,22 +1314,24 @@ msgid ""
 "Automatic\n"
 "Control-H\n"
 "ASCII DEL\n"
-"Escape sequence"
+"Escape sequence\n"
+"TTY Erase"
 msgstr ""
 "Автоматично\n"
 "Control-H\n"
 "ASCII DEL\n"
-"Екр-ща посл-ст"
+"Екр-ща посл-ст\n"
+"TTY Erase"
 
-#: ../src/profile-preferences.glade.h:13
+#: ../src/profile-preferences.glade.h:14
 msgid "Background"
 msgstr "Фон"
 
-#: ../src/profile-preferences.glade.h:14
+#: ../src/profile-preferences.glade.h:15
 msgid "Background image _scrolls"
 msgstr "Придвижване на _фоновото изображение"
 
-#: ../src/profile-preferences.glade.h:15
+#: ../src/profile-preferences.glade.h:16
 msgid ""
 "Block\n"
 "I-Beam\n"
@@ -1310,60 +1341,60 @@ msgstr ""
 "вертикална черта\n"
 "долна черта"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.glade.h:19
 msgid "Bol_d color:"
 msgstr "Полу_черен цвят:"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:20
 msgid "Built-in _schemes:"
 msgstr "Вградени _схеми:"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:21
 msgid "Built-in sche_mes:"
 msgstr "_Вградени схеми:"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose A Terminal Font"
 msgstr "Избор на шрифт за терминала"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:23
 msgid "Choose Terminal Background Color"
 msgstr "Избор на цвета на фона на терминала"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:24
 msgid "Choose Terminal Text Color"
 msgstr "Избор на цвета на текста на терминала"
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:25
 msgid "Color p_alette:"
 msgstr "_Цветова палитра:"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:26
 msgid "Colors"
 msgstr "Цветове"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:27
 msgid "Compatibility"
 msgstr "Съвместимост"
 
-#: ../src/profile-preferences.glade.h:27
+#: ../src/profile-preferences.glade.h:28
 msgid "Cursor _shape:"
 msgstr "_Форма на курсора:"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/profile-preferences.glade.h:28 ../src/extra-strings.c:71
+#: ../src/profile-preferences.glade.h:29 ../src/extra-strings.c:73
 msgid "Custom"
 msgstr "Потребителска"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:30
 msgid "Custom co_mmand:"
 msgstr "Потребителска _команда:"
 
-#: ../src/profile-preferences.glade.h:30
-msgid "Default si_ze:"
-msgstr "Стандартен _размер:"
-
 #: ../src/profile-preferences.glade.h:31
+msgid "Default size:"
+msgstr "Стандартен размер:"
+
+#: ../src/profile-preferences.glade.h:32
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1373,19 +1404,19 @@ msgstr ""
 "Рестартиране на командата\n"
 "Оставяне на терминала отворен"
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:35
 msgid "General"
 msgstr "Общи"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:36
 msgid "Image _file:"
 msgstr "_Файл с изображение:"
 
-#: ../src/profile-preferences.glade.h:36
+#: ../src/profile-preferences.glade.h:37
 msgid "Initial _title:"
 msgstr "_Начално заглавие:"
 
-#: ../src/profile-preferences.glade.h:37
+#: ../src/profile-preferences.glade.h:38
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1395,11 +1426,11 @@ msgstr ""
 "отдясно\n"
 "изключена"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.glade.h:41
 msgid "Profile Editor"
 msgstr "Редактор на профили"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.glade.h:42
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1411,43 +1442,43 @@ msgstr ""
 "вмъква се след първоначалното заглавие\n"
 "ползване на първоначалното заглавие"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:46
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Изпълнение на команда _вместо стандартната обвивка"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:47
 msgid "S_hade transparent or image background:"
 msgstr "_Непрозрачност на изображението или фона:"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:48
 msgid "Scroll on _keystroke"
 msgstr "Придвижване при _натискане на клавиш"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:49
 msgid "Scroll on _output"
 msgstr "Придвижване при _извеждане на текст"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:50
 msgid "Scroll_back:"
 msgstr "Придвижване _назад:"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.glade.h:51
 msgid "Scrolling"
 msgstr "Придвижване"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.glade.h:52
 msgid "Select Background Image"
 msgstr "Избор на изображение за фон"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.glade.h:53
 msgid "Select-by-_word characters:"
 msgstr "Знаци, считани за _букви:"
 
-#: ../src/profile-preferences.glade.h:53
+#: ../src/profile-preferences.glade.h:54
 msgid "Show _menubar by default in new terminals"
 msgstr "Показване на менюто в _новите терминали"
 
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.glade.h:55
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1461,107 +1492,111 @@ msgstr ""
 "терминал Rxvt\n"
 "потребителски настройки"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:60
 msgid "Terminal _bell"
 msgstr "З_вук на терминала"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:61
 msgid "Title and Command"
 msgstr "Заглавие и команда"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:62
 msgid "Use custom default terminal si_ze"
 msgstr "Използване на стандартен _размер на терминала"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:63
 msgid "When command _exits:"
 msgstr "_При приключване на командата:"
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:64
 msgid "When terminal commands set their o_wn titles:"
 msgstr "_Кога командите задават собствено заглавие на прозореца:"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:65
 msgid "_Allow bold text"
 msgstr "Позволяване на полу_чер текст"
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:66
 msgid "_Background color:"
 msgstr "Цвят на _фона:"
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:67
 msgid "_Background image"
 msgstr "_Изображение за фон"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:68
 msgid "_Backspace key generates:"
 msgstr "_Клавишът „Backspace“ генерира:"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:69
 msgid "_Delete key generates:"
 msgstr "Клавишът „Delete“ _генерира:"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:70
 msgid "_Font:"
 msgstr "_Шрифт:"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:71
 msgid "_Profile name:"
 msgstr "_Име на профила:"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:72
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Връщане настройките за съвместимост към стандартните"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:73
 msgid "_Run command as a login shell"
 msgstr "_Изпълнение на команда като обвивка при влизане"
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:74
 msgid "_Same as text color"
 msgstr "_Еднакъв с цвета на текста"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:75
 msgid "_Scrollbar is:"
 msgstr "_Лентата за придвижване е:"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:76
 msgid "_Solid color"
 msgstr "_Плътен цвят"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:77
 msgid "_Text color:"
 msgstr "Цвят на _текста:"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:78
 msgid "_Transparent background"
 msgstr "Про_зрачен фон"
 
-#: ../src/profile-preferences.glade.h:78
+#: ../src/profile-preferences.glade.h:79
+msgid "_Underline color:"
+msgstr "Цвят за под_чертаване:"
+
+#: ../src/profile-preferences.glade.h:80
 msgid "_Unlimited"
 msgstr "_Без ограничение"
 
-#: ../src/profile-preferences.glade.h:79
+#: ../src/profile-preferences.glade.h:81
 msgid "_Update login records when command is launched"
 msgstr "_Обновяване на записите utmp/wtmp при изпълнение на команда"
 
-#: ../src/profile-preferences.glade.h:80
+#: ../src/profile-preferences.glade.h:82
 msgid "_Use colors from system theme"
 msgstr "_Използване на цветовете от системната тема"
 
-#: ../src/profile-preferences.glade.h:81
+#: ../src/profile-preferences.glade.h:83
 msgid "_Use the system fixed width font"
 msgstr "Използване на _системния шрифт на терминала"
 
-#: ../src/profile-preferences.glade.h:82
+#: ../src/profile-preferences.glade.h:84
 msgid "columns"
 msgstr "колони"
 
-#: ../src/profile-preferences.glade.h:83
+#: ../src/profile-preferences.glade.h:85
 msgid "lines"
 msgstr "реда"
 
-#: ../src/profile-preferences.glade.h:84
+#: ../src/profile-preferences.glade.h:86
 msgid "rows"
 msgstr "реда"
 
@@ -1582,198 +1617,194 @@ msgstr ""
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "Изглежда че текстът, който натиснахте, не е предизвикателство на OTP."
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:135
 msgid "New Tab"
 msgstr "Нов подпрозорец"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:137
 msgid "New Window"
 msgstr "Нов прозорец"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:142
 msgid "Save Contents"
 msgstr "Запазване на съдържанието"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:145
 msgid "Close Tab"
 msgstr "Затваряне на този подпрозорец"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:147
 msgid "Close Window"
 msgstr "Затваряне на този прозорец"
 
-#: ../src/terminal-accels.c:139
+#: ../src/terminal-accels.c:153
 msgid "Copy"
 msgstr "Копиране"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:155
 msgid "Paste"
 msgstr "Поставяне"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:161
 msgid "Hide and Show menubar"
 msgstr "Скриване/показване на менюто"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:163
 msgid "Full Screen"
 msgstr "Цял екран"
 
-#: ../src/terminal-accels.c:151
+#: ../src/terminal-accels.c:165
 msgid "Zoom In"
 msgstr "Увеличаване"
 
-#: ../src/terminal-accels.c:153
+#: ../src/terminal-accels.c:167
 msgid "Zoom Out"
 msgstr "Намаляване"
 
-#: ../src/terminal-accels.c:155
+#: ../src/terminal-accels.c:169
 msgid "Normal Size"
 msgstr "Нормален размер"
 
-#: ../src/terminal-accels.c:161 ../src/terminal-window.c:3487
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:3702
 msgid "Set Title"
 msgstr "Задаване на заглавие"
 
-#: ../src/terminal-accels.c:163
+#: ../src/terminal-accels.c:177
 msgid "Reset"
 msgstr "Възстановяване"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:179
 msgid "Reset and Clear"
 msgstr "Възстановяване и изчистване"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:185
 msgid "Switch to Previous Tab"
 msgstr "Преход към предишния подпрозорец"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:187
 msgid "Switch to Next Tab"
 msgstr "Преход към следващия подпрозорец"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:189
 msgid "Move Tab to the Left"
 msgstr "Преместване на подпрозореца наляво"
 
-#: ../src/terminal-accels.c:177
+#: ../src/terminal-accels.c:191
 msgid "Move Tab to the Right"
 msgstr "Преместване на подпрозорец надясно"
 
-#: ../src/terminal-accels.c:179
+#: ../src/terminal-accels.c:193
 msgid "Detach Tab"
 msgstr "Отделяне на подпрозореца"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:195
 msgid "Switch to Tab 1"
 msgstr "Преход към подпрозорец 1"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:198
 msgid "Switch to Tab 2"
 msgstr "Преход към подпрозорец 2"
 
-#: ../src/terminal-accels.c:187
+#: ../src/terminal-accels.c:201
 msgid "Switch to Tab 3"
 msgstr "Преход към подпрозорец 3"
 
-#: ../src/terminal-accels.c:190
+#: ../src/terminal-accels.c:204
 msgid "Switch to Tab 4"
 msgstr "Преход към подпрозорец 4"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:207
 msgid "Switch to Tab 5"
 msgstr "Преход към подпрозорец 5"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:210
 msgid "Switch to Tab 6"
 msgstr "Преход към подпрозорец 6"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:213
 msgid "Switch to Tab 7"
 msgstr "Преход към подпрозорец 7"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:216
 msgid "Switch to Tab 8"
 msgstr "Преход към подпрозорец 8"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:219
 msgid "Switch to Tab 9"
 msgstr "Преход към подпрозорец 9"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:222
 msgid "Switch to Tab 10"
 msgstr "Преход към подпрозорец 10"
 
-#: ../src/terminal-accels.c:211
+#: ../src/terminal-accels.c:225
 msgid "Switch to Tab 11"
 msgstr "Преход към подпрозорец 11"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:228
 msgid "Switch to Tab 12"
 msgstr "Преход към подпрозорец 12"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:234
 msgid "Contents"
 msgstr "Ръководство"
 
-#: ../src/terminal-accels.c:225
+#: ../src/terminal-accels.c:239
 msgid "File"
 msgstr "Файл"
 
-#: ../src/terminal-accels.c:226
+#: ../src/terminal-accels.c:240
 msgid "Edit"
 msgstr "Редактиране"
 
-#: ../src/terminal-accels.c:227
+#: ../src/terminal-accels.c:241
 msgid "View"
 msgstr "Изглед"
 
-#: ../src/terminal-accels.c:229
+#: ../src/terminal-accels.c:243
 msgid "Tabs"
 msgstr "Подпрозорци"
 
-#: ../src/terminal-accels.c:230
+#: ../src/terminal-accels.c:244
 msgid "Help"
 msgstr "Помощ"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:287 ../src/extra-strings.c:51
+#: ../src/terminal-accels.c:301 ../src/extra-strings.c:53
 msgid "Disabled"
 msgstr "Изключен"
 
-#: ../src/terminal-accels.c:759
+#: ../src/terminal-accels.c:773
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Клавишната комбинация „%s“ отговаря на действието „%s“"
 
-#: ../src/terminal-accels.c:917
+#: ../src/terminal-accels.c:931
 msgid "_Action"
 msgstr "_Действие"
 
-#: ../src/terminal-accels.c:936
+#: ../src/terminal-accels.c:950
 msgid "Shortcut _Key"
 msgstr "_Клавишна комбинация"
 
-#: ../src/terminal-app.c:482
+#: ../src/terminal-app.c:486
 msgid "Click button to choose profile"
 msgstr "Натиснете за избор на профил"
 
-#: ../src/terminal-app.c:567
+#: ../src/terminal-app.c:571
 msgid "Profile list"
 msgstr "Списък на профилите"
 
-#: ../src/terminal-app.c:628
+#: ../src/terminal-app.c:632
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Да бъде ли изтрит профилът „%s“?"
 
-#: ../src/terminal-app.c:644
+#: ../src/terminal-app.c:648
 msgid "Delete Profile"
 msgstr "Изтриване на профил"
 
-#: ../src/terminal-app.c:958
-msgid "User Defined"
-msgstr "Определено от потребителя"
-
-#: ../src/terminal-app.c:1113
+#: ../src/terminal-app.c:1105
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1782,100 +1813,88 @@ msgstr ""
 "Вече съществува профил с име „%s“. Искате ли да се създаде още един профил "
 "със същото име?"
 
-#: ../src/terminal-app.c:1215
+#: ../src/terminal-app.c:1207
 msgid "Choose base profile"
 msgstr "Избор на основен профил"
 
-#: ../src/terminal-app.c:1800
+#: ../src/terminal-app.c:1824
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "Няма профил „%s“, ще бъде използван стандартният\n"
 
-#: ../src/terminal-app.c:1824
+#: ../src/terminal-app.c:1848
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Грешен низ на геометрията „%s“\n"
 
-#: ../src/terminal.c:195
-msgid "Could not open link"
-msgstr "Връзката не може да бъде отворена"
+#: ../src/terminal-app.c:2026
+msgid "User Defined"
+msgstr "Определено от потребителя"
 
-#: ../src/terminal.c:299
+#: ../src/terminal.c:544
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Аргументите не могат да бъдат анализирани: %s\n"
 
-#. Incompatible factory version, fall back, to new instance
-#: ../src/terminal.c:423
-#, c-format
-msgid "Incompatible factory version; creating a new instance.\n"
-msgstr "Несъвместима версия на фабрика. Създава се нов елемент.\n"
-
-#: ../src/terminal.c:429
-#, c-format
-msgid "Factory error: %s\n"
-msgstr "Грешка на фабриката: %s\n"
-
-#. { "UTF-8",	N_("Current Locale") },
-#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
-#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:101
-#: ../src/terminal-encoding.c:112
+#: ../src/terminal-encoding.c:51 ../src/terminal-encoding.c:64
+#: ../src/terminal-encoding.c:78 ../src/terminal-encoding.c:100
+#: ../src/terminal-encoding.c:111
 msgid "Western"
 msgstr "западноевропейски"
 
-#: ../src/terminal-encoding.c:53 ../src/terminal-encoding.c:80
-#: ../src/terminal-encoding.c:91 ../src/terminal-encoding.c:110
+#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:79
+#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:109
 msgid "Central European"
 msgstr "централноевропейски"
 
-#: ../src/terminal-encoding.c:54
+#: ../src/terminal-encoding.c:53
 msgid "South European"
 msgstr "южноевропейски"
 
-#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:63
-#: ../src/terminal-encoding.c:117
+#: ../src/terminal-encoding.c:54 ../src/terminal-encoding.c:62
+#: ../src/terminal-encoding.c:116
 msgid "Baltic"
 msgstr "балтийски"
 
-#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:81
-#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:88
-#: ../src/terminal-encoding.c:93 ../src/terminal-encoding.c:111
+#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:80
+#: ../src/terminal-encoding.c:86 ../src/terminal-encoding.c:87
+#: ../src/terminal-encoding.c:92 ../src/terminal-encoding.c:110
 msgid "Cyrillic"
 msgstr "кирилица"
 
-#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:84
-#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
+#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:83
+#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:115
 msgid "Arabic"
 msgstr "арабски"
 
-#: ../src/terminal-encoding.c:58 ../src/terminal-encoding.c:96
-#: ../src/terminal-encoding.c:113
+#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:95
+#: ../src/terminal-encoding.c:112
 msgid "Greek"
 msgstr "гръцки"
 
-#: ../src/terminal-encoding.c:59
+#: ../src/terminal-encoding.c:58
 msgid "Hebrew Visual"
 msgstr "еврейски, визуално"
 
-#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:83
-#: ../src/terminal-encoding.c:99 ../src/terminal-encoding.c:115
+#: ../src/terminal-encoding.c:59 ../src/terminal-encoding.c:82
+#: ../src/terminal-encoding.c:98 ../src/terminal-encoding.c:114
 msgid "Hebrew"
 msgstr "иврит"
 
-#: ../src/terminal-encoding.c:61 ../src/terminal-encoding.c:82
-#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:114
+#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:81
+#: ../src/terminal-encoding.c:102 ../src/terminal-encoding.c:113
 msgid "Turkish"
 msgstr "турски"
 
-#: ../src/terminal-encoding.c:62
+#: ../src/terminal-encoding.c:61
 msgid "Nordic"
 msgstr "скандинавски"
 
-#: ../src/terminal-encoding.c:64
+#: ../src/terminal-encoding.c:63
 msgid "Celtic"
 msgstr "келтски"
 
-#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:102
+#: ../src/terminal-encoding.c:65 ../src/terminal-encoding.c:101
 msgid "Romanian"
 msgstr "румънски"
 
@@ -1883,90 +1902,90 @@ msgstr "румънски"
 #. * FIXME: why are they in this table; or rather why do we need
 #. * the ASCII pass-through requirement?
 #.
-#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:124
-#: ../src/terminal-encoding.c:125 ../src/terminal-encoding.c:126
-#: ../src/terminal-encoding.c:127
+#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:123
+#: ../src/terminal-encoding.c:124 ../src/terminal-encoding.c:125
+#: ../src/terminal-encoding.c:126
 msgid "Unicode"
 msgstr "Уникод"
 
-#: ../src/terminal-encoding.c:68
+#: ../src/terminal-encoding.c:67
 msgid "Armenian"
 msgstr "арменски"
 
-#: ../src/terminal-encoding.c:69 ../src/terminal-encoding.c:70
-#: ../src/terminal-encoding.c:74
+#: ../src/terminal-encoding.c:68 ../src/terminal-encoding.c:69
+#: ../src/terminal-encoding.c:73
 msgid "Chinese Traditional"
 msgstr "традиционен китайски"
 
-#: ../src/terminal-encoding.c:71
+#: ../src/terminal-encoding.c:70
 msgid "Cyrillic/Russian"
 msgstr "кирилица (Русия)"
 
-#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
-#: ../src/terminal-encoding.c:105
+#: ../src/terminal-encoding.c:71 ../src/terminal-encoding.c:84
+#: ../src/terminal-encoding.c:104
 msgid "Japanese"
 msgstr "японски"
 
-#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:86
-#: ../src/terminal-encoding.c:108 ../src/terminal-encoding.c:128
+#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
+#: ../src/terminal-encoding.c:107 ../src/terminal-encoding.c:127
 msgid "Korean"
 msgstr "корейски"
 
-#: ../src/terminal-encoding.c:75 ../src/terminal-encoding.c:76
-#: ../src/terminal-encoding.c:77
+#: ../src/terminal-encoding.c:74 ../src/terminal-encoding.c:75
+#: ../src/terminal-encoding.c:76
 msgid "Chinese Simplified"
 msgstr "опростен китайски"
 
-#: ../src/terminal-encoding.c:78
+#: ../src/terminal-encoding.c:77
 msgid "Georgian"
 msgstr "грузински"
 
-#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:104
+#: ../src/terminal-encoding.c:88 ../src/terminal-encoding.c:103
 msgid "Cyrillic/Ukrainian"
 msgstr "кирилица (Украйна)"
 
-#: ../src/terminal-encoding.c:92
+#: ../src/terminal-encoding.c:91
 msgid "Croatian"
 msgstr "хърватски"
 
-#: ../src/terminal-encoding.c:94
+#: ../src/terminal-encoding.c:93
 msgid "Hindi"
 msgstr "хинди"
 
-#: ../src/terminal-encoding.c:95
+#: ../src/terminal-encoding.c:94
 msgid "Persian"
 msgstr "персийски"
 
-#: ../src/terminal-encoding.c:97
+#: ../src/terminal-encoding.c:96
 msgid "Gujarati"
 msgstr "гуджарати"
 
-#: ../src/terminal-encoding.c:98
+#: ../src/terminal-encoding.c:97
 msgid "Gurmukhi"
 msgstr "гурмуки"
 
-#: ../src/terminal-encoding.c:100
+#: ../src/terminal-encoding.c:99
 msgid "Icelandic"
 msgstr "исландски"
 
-#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:109
-#: ../src/terminal-encoding.c:118
+#: ../src/terminal-encoding.c:105 ../src/terminal-encoding.c:108
+#: ../src/terminal-encoding.c:117
 msgid "Vietnamese"
 msgstr "виетнамски"
 
-#: ../src/terminal-encoding.c:107
+#: ../src/terminal-encoding.c:106
 msgid "Thai"
 msgstr "тайландски"
 
-#: ../src/terminal-encoding.c:480 ../src/terminal-encoding.c:505
+#: ../src/terminal-encoding.c:503 ../src/terminal-encoding.c:528
 msgid "_Description"
 msgstr "_Описание"
 
-#: ../src/terminal-encoding.c:489 ../src/terminal-encoding.c:514
+#: ../src/terminal-encoding.c:512 ../src/terminal-encoding.c:537
 msgid "_Encoding"
 msgstr "_Кодова таблица"
 
-#: ../src/terminal-encoding.c:574
+#: ../src/terminal-encoding.c:595
 msgid "Current Locale"
 msgstr "Текущ локал"
 
@@ -1981,7 +2000,7 @@ msgstr ""
 "създадете профил с желаните настройки и да използвате новата опция „--"
 "profile“\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3708
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3929
 msgid "GNOME Terminal"
 msgstr "Терминалът на GNOME"
 
@@ -2204,13 +2223,31 @@ msgstr "Показване на опциите за подпрозорците"
 msgid "Unnamed"
 msgstr "Без име"
 
-#: ../src/terminal-screen.c:1309
-msgid "There was a problem with the command for this terminal"
-msgstr "Проблем с командата за този терминал"
+#: ../src/terminal-screen.c:1488
+msgid "_Profile Preferences"
+msgstr "_Настройки на профила"
 
-#: ../src/terminal-screen.c:1513
+#: ../src/terminal-screen.c:1489 ../src/terminal-screen.c:1876
+msgid "_Relaunch"
+msgstr "_Повторно пускане"
+
+#: ../src/terminal-screen.c:1492
 msgid "There was an error creating the child process for this terminal"
 msgstr "Грешка при създаване на дъщерен процес за този терминал"
+
+#: ../src/terminal-screen.c:1880
+#, c-format
+msgid "The child process exited normally with status %d."
+msgstr "Дъщерният процес завърши нормално с код за състояние %d."
+
+#: ../src/terminal-screen.c:1883
+#, c-format
+msgid "The child process was terminated by signal %d."
+msgstr "Дъщерният процес бе преустановен от сигнал %d."
+
+#: ../src/terminal-screen.c:1886
+msgid "The child process was terminated."
+msgstr "Дъщерният процес бе преустановен."
 
 #: ../src/terminal-tab-label.c:151
 msgid "Close tab"
@@ -2220,28 +2257,28 @@ msgstr "Затваряне на подпрозорец"
 msgid "Switch to this tab"
 msgstr "Преход към този подпрозорец"
 
-#: ../src/terminal-util.c:185
+#: ../src/terminal-util.c:186
 msgid "There was an error displaying help"
 msgstr "Грешка при зареждането на помощта"
 
-#: ../src/terminal-util.c:258
+#: ../src/terminal-util.c:259
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Не може да бъде отворен адресът „%s“"
 
-#: ../src/terminal-util.c:365
+#: ../src/terminal-util.c:366
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 2 of the License, or (at your option) "
+"Software Foundation; either version 3 of the License, or (at your option) "
 "any later version."
 msgstr ""
 "Тази програма (GNOME Terminal) е свободен софтуер. Можете да я "
 "разпространявате и/или променяте под условията на Общия публичен лиценз на "
 "GNU (GNU GPL), както е публикуван от Фондацията за свободен софтуер — версия "
-"2 на лиценза или (по ваше решение) по-късна версия."
+"3 на лиценза или (по ваше решение) по-късна версия."
 
-#: ../src/terminal-util.c:369
+#: ../src/terminal-util.c:370
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2252,7 +2289,7 @@ msgstr ""
 "НИКАКВИ ГАРАНЦИИ, дори и косвените за ПРОДАЖБА или СЪОТВЕТСТВИЕ С КАКВАТО И "
 "ДА Е УПОТРЕБА. За подробности погледнете Общия публичен лиценз на GNU."
 
-#: ../src/terminal-util.c:373
+#: ../src/terminal-util.c:374
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2266,7 +2303,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:436
+#: ../src/terminal-window.c:470
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2275,194 +2312,223 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:442
+#: ../src/terminal-window.c:476
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1787
 msgid "_File"
 msgstr "_Файл"
 
 #. File menu
-#: ../src/terminal-window.c:1710 ../src/terminal-window.c:1721
-#: ../src/terminal-window.c:1848
+#: ../src/terminal-window.c:1788 ../src/terminal-window.c:1800
+#: ../src/terminal-window.c:1947
 msgid "Open _Terminal"
 msgstr "_Отваряне на прозорец"
 
-#: ../src/terminal-window.c:1711 ../src/terminal-window.c:1724
-#: ../src/terminal-window.c:1851
+#: ../src/terminal-window.c:1789 ../src/terminal-window.c:1803
+#: ../src/terminal-window.c:1950
 msgid "Open Ta_b"
 msgstr "О_тваряне на подпрозорец"
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1790
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: ../src/terminal-window.c:1713
+#: ../src/terminal-window.c:1791
 msgid "_View"
 msgstr "_Изглед"
 
-#: ../src/terminal-window.c:1714
+#: ../src/terminal-window.c:1792
+msgid "_Search"
+msgstr "_Търсене"
+
+#: ../src/terminal-window.c:1793
 msgid "_Terminal"
 msgstr "_Терминал"
 
-#: ../src/terminal-window.c:1715
+#: ../src/terminal-window.c:1794
 msgid "Ta_bs"
 msgstr "По_дпрозорци"
 
-#: ../src/terminal-window.c:1716
+#: ../src/terminal-window.c:1795
 msgid "_Help"
 msgstr "Помо_щ"
 
-#: ../src/terminal-window.c:1727
+#: ../src/terminal-window.c:1806
 msgid "New _Profile…"
 msgstr "Нов _профил…"
 
-#: ../src/terminal-window.c:1731
+#: ../src/terminal-window.c:1809
 msgid "_Save Contents"
 msgstr "_Запазване на съдържанието"
 
-#: ../src/terminal-window.c:1735 ../src/terminal-window.c:1857
+#: ../src/terminal-window.c:1812 ../src/terminal-window.c:1956
 msgid "C_lose Tab"
 msgstr "З_атваряне на този подпрозорец"
 
-#: ../src/terminal-window.c:1738
+#: ../src/terminal-window.c:1815
 msgid "_Close Window"
 msgstr "_Затваряне на този прозорец"
 
-#: ../src/terminal-window.c:1749 ../src/terminal-window.c:1845
+#: ../src/terminal-window.c:1826 ../src/terminal-window.c:1944
 msgid "Paste _Filenames"
 msgstr "Поставяне на име на _файл"
 
-#: ../src/terminal-window.c:1755
+#: ../src/terminal-window.c:1832
 msgid "P_rofiles…"
 msgstr "П_рофили…"
 
-#: ../src/terminal-window.c:1758
+#: ../src/terminal-window.c:1835
 msgid "_Keyboard Shortcuts…"
 msgstr "_Клавишни комбинации…"
 
-#: ../src/terminal-window.c:1761
+#: ../src/terminal-window.c:1838
 msgid "Pr_ofile Preferences"
 msgstr "_Настройки на профила"
 
+#. Search menu
+#: ../src/terminal-window.c:1854
+msgid "_Find..."
+msgstr "_Търсене…"
+
+#: ../src/terminal-window.c:1857
+msgid "Find Ne_xt"
+msgstr "_Следваща поява"
+
+#: ../src/terminal-window.c:1860
+msgid "Find Pre_vious"
+msgstr "_Предишна поява"
+
+#: ../src/terminal-window.c:1863
+msgid "_Clear Highlight"
+msgstr "_Изчистване на осветяването"
+
+#: ../src/terminal-window.c:1867
+msgid "Go to _Line..."
+msgstr "Към _ред…"
+
+#: ../src/terminal-window.c:1870
+msgid "_Incremental Search..."
+msgstr "Постепенно _търсене…"
+
 #. Terminal menu
-#: ../src/terminal-window.c:1777
+#: ../src/terminal-window.c:1876
 msgid "Change _Profile"
 msgstr "Смяна на _профила"
 
-#: ../src/terminal-window.c:1778
+#: ../src/terminal-window.c:1877
 msgid "_Set Title…"
 msgstr "_Задаване на заглавие…"
 
-#: ../src/terminal-window.c:1781
+#: ../src/terminal-window.c:1880
 msgid "Set _Character Encoding"
 msgstr "_Кодова таблица на знаците"
 
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:1881
 msgid "_Reset"
 msgstr "_Възстановяване"
 
-#: ../src/terminal-window.c:1785
+#: ../src/terminal-window.c:1884
 msgid "Reset and C_lear"
 msgstr "Възстановяване и _изчистване"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1790
+#: ../src/terminal-window.c:1889
 msgid "_Add or Remove…"
 msgstr "_Добавяне или премахване…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1795
+#: ../src/terminal-window.c:1894
 msgid "_Previous Tab"
 msgstr "_Предишен подпрозорец"
 
-#: ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1897
 msgid "_Next Tab"
 msgstr "_Следващ подпрозорец"
 
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1900
 msgid "Move Tab _Left"
 msgstr "Преместване подпрозореца на_ляво"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1903
 msgid "Move Tab _Right"
 msgstr "Преместване подпрозореца на_дясно"
 
-#: ../src/terminal-window.c:1807
+#: ../src/terminal-window.c:1906
 msgid "_Detach tab"
 msgstr "_Отделяне на подпрозореца"
 
 #. Help menu
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1911
 msgid "_Contents"
 msgstr "_Ръководство"
 
-#: ../src/terminal-window.c:1815
+#: ../src/terminal-window.c:1914
 msgid "_About"
 msgstr "_Относно"
 
 #. Popup menu
-#: ../src/terminal-window.c:1820
+#: ../src/terminal-window.c:1919
 msgid "_Send Mail To…"
 msgstr "Из_пращане на е-поща до…"
 
-#: ../src/terminal-window.c:1823
+#: ../src/terminal-window.c:1922
 msgid "_Copy E-mail Address"
 msgstr "_Копиране на адреса на е-пощата"
 
-#: ../src/terminal-window.c:1826
+#: ../src/terminal-window.c:1925
 msgid "C_all To…"
 msgstr "_Обаждане на…"
 
-#: ../src/terminal-window.c:1829
+#: ../src/terminal-window.c:1928
 msgid "_Copy Call Address"
 msgstr "_Копиране на адреса за обаждане"
 
-#: ../src/terminal-window.c:1832
+#: ../src/terminal-window.c:1931
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
-#: ../src/terminal-window.c:1835
+#: ../src/terminal-window.c:1934
 msgid "_Copy Link Address"
 msgstr "_Копиране на адреса на препратката"
 
-#: ../src/terminal-window.c:1838
+#: ../src/terminal-window.c:1937
 msgid "P_rofiles"
 msgstr "_Профили"
 
-#: ../src/terminal-window.c:1854 ../src/terminal-window.c:3049
+#: ../src/terminal-window.c:1953 ../src/terminal-window.c:3166
 msgid "C_lose Window"
 msgstr "_Затваряне на този прозорец"
 
-#: ../src/terminal-window.c:1860
+#: ../src/terminal-window.c:1959
 msgid "L_eave Full Screen"
 msgstr "Изход от _цял екран"
 
-#: ../src/terminal-window.c:1863
+#: ../src/terminal-window.c:1962
 msgid "_Input Methods"
 msgstr "Методи за _вход"
 
 #. View Menu
-#: ../src/terminal-window.c:1869
+#: ../src/terminal-window.c:1968
 msgid "Show _Menubar"
 msgstr "_Показване на менюто"
 
-#: ../src/terminal-window.c:1873
+#: ../src/terminal-window.c:1972
 msgid "_Full Screen"
 msgstr "На _цял екран"
 
-#: ../src/terminal-window.c:3036
+#: ../src/terminal-window.c:3153
 msgid "Close this window?"
 msgstr "Затваряне на този прозорец?"
 
-#: ../src/terminal-window.c:3036
+#: ../src/terminal-window.c:3153
 msgid "Close this terminal?"
 msgstr "Затваряне на терминала?"
 
-#: ../src/terminal-window.c:3040
+#: ../src/terminal-window.c:3157
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2470,7 +2536,7 @@ msgstr ""
 "В някой от подпрозорците на този прозорец поне един процес още не е завършил "
 "работа. Затварянето на прозореца ще го убие."
 
-#: ../src/terminal-window.c:3044
+#: ../src/terminal-window.c:3161
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2478,31 +2544,31 @@ msgstr ""
 "В този прозорец поне един процес още не е завършил работа. Затварянето на "
 "прозореца ще го убие."
 
-#: ../src/terminal-window.c:3049
+#: ../src/terminal-window.c:3166
 msgid "C_lose Terminal"
 msgstr "_Затваряне на терминала"
 
-#: ../src/terminal-window.c:3122
+#: ../src/terminal-window.c:3239
 msgid "Could not save contents"
 msgstr "Съдържанието не може да бъде запазено"
 
-#: ../src/terminal-window.c:3144
+#: ../src/terminal-window.c:3263
 msgid "Save as..."
 msgstr "Запазване като…"
 
-#: ../src/terminal-window.c:3504
+#: ../src/terminal-window.c:3725
 msgid "_Title:"
 msgstr "_Заглавие:"
 
-#: ../src/terminal-window.c:3691
+#: ../src/terminal-window.c:3912
 msgid "Contributors:"
 msgstr "Сътрудници:"
 
-#: ../src/terminal-window.c:3710
+#: ../src/terminal-window.c:3931
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Емулатор на терминал към GNOME"
 
-#: ../src/terminal-window.c:3717
+#: ../src/terminal-window.c:3938
 msgid "translator-credits"
 msgstr ""
 "Владимир „Kaladan“ Петков <kaladan@gmail.com>\n"
@@ -2520,7 +2586,7 @@ msgstr ""
 #. *
 #. * Gnome-terminal is free software; you can redistribute it and/or modify
 #. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 2 of the License, or
+#. * the Free Software Foundation; either version 3 of the License, or
 #. * (at your option) any later version.
 #. *
 #. * Gnome-terminal is distributed in the hope that it will be useful,
@@ -2555,112 +2621,87 @@ msgstr "ASCII DEL"
 msgid "Escape sequence"
 msgstr "Екранираща последователност"
 
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:32
+msgid "TTY Erase"
+msgstr "TTY Erase"
+
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:33
+#: ../src/extra-strings.c:35
 msgid "Block"
 msgstr "Правоъгълник"
 
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
+#: ../src/extra-strings.c:37
 msgid "I-Beam"
 msgstr "Вертикална черта"
 
 #. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
+#: ../src/extra-strings.c:39
 msgid "Underline"
 msgstr "Подчертаване"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:40
+#: ../src/extra-strings.c:42
 msgid "Exit the terminal"
 msgstr "Изход от терминала"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
+#: ../src/extra-strings.c:44
 msgid "Restart the command"
 msgstr "Рестартиране на командата"
 
 #. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
+#: ../src/extra-strings.c:46
 msgid "Hold the terminal open"
 msgstr "Терминалът да остане отворен"
 
 #. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:47
+#: ../src/extra-strings.c:49
 msgid "On the left side"
 msgstr "Отляво"
 
 #. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
+#: ../src/extra-strings.c:51
 msgid "On the right side"
 msgstr "Отдясно"
 
 #. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:54
+#: ../src/extra-strings.c:56
 msgid "Replace initial title"
 msgstr "Замяна на първоначалното заглавие"
 
 #. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:56
+#: ../src/extra-strings.c:58
 msgid "Append initial title"
 msgstr "Добавяне пред първоначалното заглавие"
 
 #. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:58
+#: ../src/extra-strings.c:60
 msgid "Prepend initial title"
 msgstr "Добавяне зад първоначалното заглавие"
 
 #. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:60
+#: ../src/extra-strings.c:62
 msgid "Keep initial title"
 msgstr "Запазване на първоначалното заглавие"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:63
+#: ../src/extra-strings.c:65
 msgid "Tango"
 msgstr "Танго"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
+#: ../src/extra-strings.c:67
 msgid "Linux console"
 msgstr "Конзола на Линукс"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
+#: ../src/extra-strings.c:69
 msgid "XTerm"
 msgstr "XTerm"
 
 #. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
+#: ../src/extra-strings.c:71
 msgid "Rxvt"
 msgstr "Rxvt"
-
-msgid "_Search"
-msgstr "_Търсене"
-
-msgid "_Find..."
-msgstr "_Търсене…"
-
-msgid "Find Ne_xt"
-msgstr "_Следваща поява"
-
-msgid "Find Pre_vious"
-msgstr "_Предишна поява"
-
-msgid "Find"
-msgstr "Търсене"
-
-msgid "_Search for:"
-msgstr "_Търсене за: "
-
-msgid "_Match case"
-msgstr "Зачитане на главни/_малки"
-
-msgid "Match _entire word only"
-msgstr "Ако съвпада само с _цяла дума"
-
-msgid "Search _backwards"
-msgstr "Търсене наза_д"
-
-msgid "_Wrap around"
-msgstr "_След края — от началото"
