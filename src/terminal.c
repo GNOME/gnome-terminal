@@ -270,7 +270,7 @@ name_acquired_cb (GDBusConnection *connection,
   }
 
 
-  if (!terminal_app_handle_options (terminal_app_get (), data->options, FALSE /* no resume */, &error)) {
+  if (!terminal_app_handle_options (terminal_app_get (), data->options, TRUE /* do resume */, &error)) {
     g_printerr ("Failed to handle options: %s\n", error->message);
     g_error_free (error);
     data->exit_code = EXIT_FAILURE;
