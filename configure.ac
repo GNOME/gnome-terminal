@@ -1,6 +1,6 @@
 m4_define([gt_version_major],[2])
 m4_define([gt_version_minor],[31])
-m4_define([gt_version_micro],[90])
+m4_define([gt_version_micro],[91])
 m4_define([gt_version_extra],[])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
@@ -43,7 +43,7 @@ GLIB_REQUIRED=2.25.0
 GIO_REQUIRED=2.25.12
 GTK_REQUIRED=2.14.0
 GCONF_REQUIRED=2.31.3
-VTE_REQUIRED=0.25.90
+VTE_REQUIRED=0.25.91
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
