@@ -88,11 +88,11 @@ ay_to_strv (GVariant *variant,
 
   len = data_len;
   do {
-    gsize string_len;
+    gssize string_len;
 
     nullbyte = memchr (data, '\0', len);
 
-    string_len = nullbyte ? (gsize) (nullbyte - data) : len;
+    string_len = nullbyte ? (gssize) (nullbyte - data) : len;
     g_ptr_array_add (argv, g_strndup (data, string_len));
 
     len -= string_len + 1;
