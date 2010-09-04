@@ -223,7 +223,7 @@ cwd_of_pid (int pid)
               if (chdir (cwd_file) == 0)
                 {
                   working_dir = g_get_current_dir ();
-                  chdir (cwd);
+                  (void) chdir (cwd);
                 }
               g_free (cwd);
             }
