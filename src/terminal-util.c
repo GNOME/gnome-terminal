@@ -1024,12 +1024,18 @@ gboolean
 terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
 				      guint32   *desktop)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display;
   Atom type;
   int format;
   guchar *data;
   gulong n_items, bytes_after;
   gboolean result = FALSE;
+
+#if GTK_CHECK_VERSION (2, 90, 8)
+  display = gdk_window_get_display (window);
+#else
+  display = gdk_drawable_get_display (window);
+#endif
 
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
 			  GDK_DRAWABLE_XID (window),
@@ -1067,12 +1073,20 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
    * http://bugzilla.gnome.org/show_bug.cgi?id=586311 asks for GTK+
    * to just handle everything behind the scenes including the desktop.
    */
-  GdkScreen *screen = gdk_drawable_get_screen (window);
-  GdkDisplay *display = gdk_screen_get_display (screen);
-  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+  GdkScreen *screen;
+  GdkDisplay *display;
+  Display *xdisplay;
   char *wm_selection_name;
   Atom wm_selection;
   gboolean have_wm;
+
+#if GTK_CHECK_VERSION (2, 90, 8)
+  screen = gdk_window_get_screen (window);
+#else
+  screen = gdk_drawable_get_screen (window);
+#endif
+  display = gdk_screen_get_display (screen);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   wm_selection_name = g_strdup_printf ("WM_S%d", gdk_screen_get_number (screen));
   wm_selection = gdk_x11_get_xatom_by_name_for_display (display, wm_selection_name);
@@ -1133,9 +1147,16 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
 void
 terminal_util_x11_clear_demands_attention (GdkWindow *window)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (window);
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkScreen *screen;
+  GdkDisplay *display;
   XClientMessageEvent xclient;
+
+#if GTK_CHECK_VERSION (2, 90, 8)
+  screen = gdk_window_get_screen (window);
+#else
+  screen = gdk_drawable_get_screen (window);
+#endif
+  display = gdk_screen_get_display (screen);
 
   memset (&xclient, 0, sizeof (xclient));
   xclient.type = ClientMessage;
@@ -1170,7 +1191,13 @@ terminal_util_x11_clear_demands_attention (GdkWindow *window)
 gboolean
 terminal_util_x11_window_is_minimized (GdkWindow *window)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display;
+
+#if GTK_CHECK_VERSION (2, 90, 8)
+  display = gdk_window_get_display (window);
+#else
+  display = gdk_drawable_get_display (window);
+#endif
 
   Atom type;
   gint format;

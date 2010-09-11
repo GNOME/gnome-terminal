@@ -1524,11 +1524,29 @@ terminal_window_realize (GtkWidget *widget)
   TerminalWindowPrivate *priv = window->priv;
 #ifdef GDK_WINDOWING_X11
   GdkScreen *screen;
-  GdkColormap *colormap;
   GtkAllocation widget_allocation;
+#if GTK_CHECK_VERSION (2, 90, 8)
+  GdkVisual *visual;
+#else
+  GdkColormap *colormap;
+#endif
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
+#if GTK_CHECK_VERSION (2, 90, 8)
+  if (gdk_screen_is_composited (screen) &&
+      (visual = gdk_screen_get_rgba_visual (screen)) != NULL)
+    {
+      /* Set RGBA visual if possible so VTE can use real transparency */
+      gtk_window_set_visual (GTK_WINDOW (widget), visual);
+      priv->have_argb_visual = TRUE;
+    }
+  else
+    {
+      gtk_window_set_visual (GTK_WINDOW (window), gdk_screen_get_system_visual (screen));
+      priv->have_argb_visual = FALSE;
+    }
+#else
   if (gdk_screen_is_composited (screen) &&
       (colormap = gdk_screen_get_rgba_colormap (screen)) != NULL)
     {
@@ -1541,6 +1559,7 @@ terminal_window_realize (GtkWidget *widget)
       gtk_widget_set_colormap (widget, gdk_screen_get_default_colormap (screen));
       priv->have_argb_visual = FALSE;
     }
+#endif
 #endif
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
