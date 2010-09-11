@@ -24,7 +24,13 @@
 #include <sys/wait.h>
 
 #include <gtk/gtk.h>
+
+#if GTK_CHECK_VERSION (2, 90, 7)
+#define GDK_KEY(symbol) GDK_KEY_##symbol
+#else
 #include <gdk/gdkkeysyms.h>
+#define GDK_KEY(symbol) GDK_##symbol
+#endif
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
@@ -261,9 +267,9 @@ terminal_screen_class_enable_menu_bar_accel_notify_cb (TerminalApp *app,
 
   binding_set = gtk_binding_set_by_class (klass);
   if (enable)
-    gtk_binding_entry_remove (binding_set, GDK_F10, GDK_SHIFT_MASK);
+    gtk_binding_entry_remove (binding_set, GDK_KEY (F10), GDK_SHIFT_MASK);
   else
-    gtk_binding_entry_skip (binding_set, GDK_F10, GDK_SHIFT_MASK);
+    gtk_binding_entry_skip (binding_set, GDK_KEY (F10), GDK_SHIFT_MASK);
 }
 
 static TerminalWindow *

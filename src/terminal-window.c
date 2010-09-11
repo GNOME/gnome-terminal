@@ -25,7 +25,13 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
+
+#if GTK_CHECK_VERSION (2, 90, 7)
+#define GDK_KEY(symbol) GDK_KEY_##symbol
+#else
 #include <gdk/gdkkeysyms.h>
+#define GDK_KEY(symbol) GDK_##symbol
+#endif
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -3789,9 +3795,9 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
 
   name = gtk_action_get_name (action);
   if (strcmp (name, "TabsNext") == 0) {
-    keyval = GDK_Page_Down;
+    keyval = GDK_KEY (Page_Down);
   } else if (strcmp (name, "TabsPrevious") == 0) {
-    keyval = GDK_Page_Up;
+    keyval = GDK_KEY (Page_Up);
   }
 
   klass = GTK_NOTEBOOK_GET_CLASS (GTK_NOTEBOOK (priv->notebook));
