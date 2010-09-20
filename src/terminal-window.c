@@ -1676,6 +1676,10 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
       /* put the window back where it was before */
       gtk_window_move (GTK_WINDOW (window), x, y);
       gtk_widget_realize (widget);
+
+      /* Get new GdkWindow */
+      widget_window = gtk_widget_get_window (widget);
+
       gdk_x11_window_set_user_time (widget_window, user_time);
 
       if (was_minimized)
