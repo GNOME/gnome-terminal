@@ -159,6 +159,11 @@ static void notebook_page_removed_callback   (GtkWidget       *notebook,
                                               GtkWidget       *container,
                                               guint            page_num,
                                               TerminalWindow  *window);
+#if GTK_CHECK_VERSION (2, 90, 8)
+static gboolean notebook_scroll_event_cb     (GtkWidget      *notebook,
+                                              GdkEventScroll *event,
+                                              TerminalWindow *window);
+#endif
 
 /* Menu action callbacks */
 static void file_new_window_callback          (GtkAction *action,
@@ -2055,7 +2060,13 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect_data (priv->notebook, "page-reordered",
                          G_CALLBACK (terminal_window_update_tabs_menu_sensitivity),
                          window, NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  
+#if GTK_CHECK_VERSION (2, 90, 8)
+  /* Tab scrolling was removed from GtkNotebook in gtk 3 */
+  gtk_widget_add_events (priv->notebook, GDK_SCROLL_MASK);
+  g_signal_connect (priv->notebook, "scroll-event",
+                    G_CALLBACK (notebook_scroll_event_cb), window);
+#endif
+
   gtk_box_pack_end (GTK_BOX (main_vbox), priv->notebook, TRUE, TRUE, 0);
   gtk_widget_show (priv->notebook);
 
@@ -2953,6 +2964,54 @@ notebook_page_removed_callback (GtkWidget       *notebook,
       gtk_widget_destroy (GTK_WIDGET (window));
     }
 }
+
+#if GTK_CHECK_VERSION (2, 90, 8)
+
+static gboolean
+notebook_scroll_event_cb (GtkWidget      *widget,
+                          GdkEventScroll *event,
+                          TerminalWindow *window)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkWidget *child, *event_widget, *action_widget;
+
+  child = gtk_notebook_get_nth_page (notebook, gtk_notebook_get_current_page (notebook));
+  if (child == NULL)
+    return FALSE;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  /* Ignore scroll events from the content of the page */
+  if (event_widget == NULL ||
+      event_widget == child ||
+      gtk_widget_is_ancestor (event_widget, child))
+    return FALSE;
+
+  /* And also from the action widgets */
+  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_START);
+  if (event_widget == action_widget ||
+      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
+    return FALSE;
+  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_END);
+  if (event_widget == action_widget ||
+      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
+    return FALSE;
+
+  switch (event->direction) {
+    case GDK_SCROLL_RIGHT:
+    case GDK_SCROLL_DOWN:
+      gtk_notebook_next_page (notebook);
+      break;
+    case GDK_SCROLL_LEFT:
+    case GDK_SCROLL_UP:
+      gtk_notebook_prev_page (notebook);
+      break;
+    }
+
+  return TRUE;
+}
+
+#endif /* GTK 3.0 */
 
 void
 terminal_window_update_geometry (TerminalWindow *window)
