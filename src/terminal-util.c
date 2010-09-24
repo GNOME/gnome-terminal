@@ -1215,7 +1215,11 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
                       0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
                       &bytes_after, &data);
+#if GTK_CHECK_VERSION (2, 90, 8)
+  gdk_error_trap_pop_ignored ();
+#else
   gdk_error_trap_pop ();
+#endif
 
   if (type != None)
     {
