@@ -6,7 +6,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--disable-scrollkeeper \
 	--disable-schemas-install \
 	--disable-silent-rules \
-	--with-gtk=3.0
+	--with-gtk=2.0
 
 desktopdir = $(datadir)/applications
 desktop_in_files = @PACKAGE@.desktop.in.in
