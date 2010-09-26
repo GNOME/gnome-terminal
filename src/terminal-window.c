@@ -1177,7 +1177,7 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
                               GtkWidget   *container,
                               gint         x,
                               gint         y,
-                              gpointer     data)
+                              gpointer     data G_GNUC_UNUSED)
 {
   TerminalScreen *screen;
   TerminalWindow *source_window;
@@ -2061,6 +2061,9 @@ terminal_window_init (TerminalWindow *window)
                          G_CALLBACK (terminal_window_update_tabs_menu_sensitivity),
                          window, NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 #if GTK_CHECK_VERSION (2, 90, 8)
+  g_signal_connect (priv->notebook, "create-window",
+                    G_CALLBACK (handle_tab_droped_on_desktop), window);
+
   /* Tab scrolling was removed from GtkNotebook in gtk 3 */
   gtk_widget_add_events (priv->notebook, GDK_SCROLL_MASK);
   g_signal_connect (priv->notebook, "scroll-event",
@@ -2186,7 +2189,9 @@ terminal_window_class_init (TerminalWindowClass *klass)
                        "}\n"
                        "widget \"*.gnome-terminal-tab-close-button\" style \"gnome-terminal-tab-close-button-style\"");
 
+#if !GTK_CHECK_VERSION (2, 90, 8)
   gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
+#endif
 }
 
 static void
