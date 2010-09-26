@@ -2044,7 +2044,11 @@ terminal_window_init (TerminalWindow *window)
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook), TRUE);
   gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->notebook), FALSE);
   gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->notebook), FALSE);
+#if GTK_CHECK_VERSION (2, 90, 8)
+  gtk_notebook_set_group_name (GTK_NOTEBOOK (priv->notebook), I_("gnome-terminal-window"));
+#else
   gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), GUINT_TO_POINTER (1));
+#endif
   gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook),
                                TRUE);
   g_signal_connect (priv->notebook, "button-press-event",
