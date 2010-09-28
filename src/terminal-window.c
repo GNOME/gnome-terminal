@@ -1543,12 +1543,12 @@ terminal_window_realize (GtkWidget *widget)
       (visual = gdk_screen_get_rgba_visual (screen)) != NULL)
     {
       /* Set RGBA visual if possible so VTE can use real transparency */
-      gtk_window_set_visual (GTK_WINDOW (widget), visual);
+      gtk_widget_set_visual (GTK_WIDGET (widget), visual);
       priv->have_argb_visual = TRUE;
     }
   else
     {
-      gtk_window_set_visual (GTK_WINDOW (window), gdk_screen_get_system_visual (screen));
+      gtk_widget_set_visual (GTK_WIDGET (window), gdk_screen_get_system_visual (screen));
       priv->have_argb_visual = FALSE;
     }
 #else
