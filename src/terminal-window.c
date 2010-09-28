@@ -3892,7 +3892,11 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
   gtk_binding_set_activate (gtk_binding_set_by_class (klass),
                             keyval,
                             GDK_CONTROL_MASK,
+#if GTK_CHECK_VERSION (2, 90, 8)
+                            G_OBJECT (priv->notebook));
+#else
                             GTK_OBJECT (priv->notebook));
+#endif
 }
 
 static void
