@@ -2136,7 +2136,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
           return;
 
         moving_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
-        g_return_if_fail (TERMINAL_IS_SCREEN (moving_screen));
+        g_warn_if_fail (TERMINAL_IS_SCREEN (moving_screen));
         if (!TERMINAL_IS_SCREEN (moving_screen))
           return;
 
