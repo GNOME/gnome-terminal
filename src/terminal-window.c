@@ -2623,6 +2623,23 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
 
+  /* This set_size_request hack is because the extra size above base
+   * size should only include the width of widgets to the side of the
+   * terminal and the height of widgets above and below the terminal.
+   * The minimum width of the menu, for example, shouldn't be included.
+   * GTK+ computes this extra size as:
+   *
+   *  size_request(toplevel) - size_request(geometry_widget)
+
+   * Which only works when the terminal has a size request wider than
+   * the menu and taller than scrollbar.
+   *
+   * See https://bugzilla.gnome.org/show_bug.cgi?id=68668
+   *
+   * The size request can be huge without hosing anything because we
+   * set the MIN_SIZE geometry hint.
+   */
+  gtk_widget_set_size_request (widget, 2000, 2000);
   gtk_widget_size_request (app, &toplevel_request);
   gtk_widget_size_request (widget, &widget_request);
 
