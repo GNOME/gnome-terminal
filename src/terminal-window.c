@@ -2287,6 +2287,13 @@ terminal_window_show (GtkWidget *widget)
                          widget_allocation.width, widget_allocation.height,
                          widget_allocation.x, widget_allocation.y);
 
+  /* Because of the unexpected reentrancy caused by notebook_page_added_callback()
+   * showing the TerminalWindow, we can get here when the first page has been
+   * added but not yet set current. By setting the page current, we get the
+   * right size when we first show the window */
+  if (gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook)) == -1)
+    gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), 0);
+
   if (priv->active_screen != NULL)
     {
       /* At this point, we have our GdkScreen, and hence the right
