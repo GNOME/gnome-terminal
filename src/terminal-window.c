@@ -3045,7 +3045,7 @@ terminal_window_parse_geometry (TerminalWindow *window,
 
       /* After parse_geometry(), the default size is in units of the
        * width/height increment, not a pixel size */
-      gtk_window_get_default_size (GTK_WINDOW (window), &grid_height, &grid_width);
+      gtk_window_get_default_size (GTK_WINDOW (window), &grid_width, &grid_height);
 
       vte_terminal_set_size (VTE_TERMINAL (priv->active_screen),
 			     grid_width, grid_height);
