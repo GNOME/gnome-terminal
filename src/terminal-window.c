@@ -2603,17 +2603,10 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
                                      int             force_grid_width,
                                      int             force_grid_height)
 {
-  /* Owen's hack from gnome-terminal */
   GtkWidget *widget;
   GtkWidget *app;
-  GtkRequisition toplevel_request;
-  GtkRequisition widget_request;
-  int w, h;
-  int char_width;
-  int char_height;
   int grid_width;
   int grid_height;
-  GtkBorder *inner_border = NULL;
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
@@ -2622,6 +2615,29 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   
   app = gtk_widget_get_toplevel (widget);
   g_assert (app != NULL);
+
+  terminal_screen_get_size (screen, &grid_width, &grid_height);
+
+  if (force_grid_width >= 0)
+    grid_width = force_grid_width;
+  if (force_grid_height >= 0)
+    grid_height = force_grid_height;
+
+#if GTK_CHECK_VERSION (2, 91, 0)
+  if (even_if_mapped && gtk_widget_get_mapped (app))
+    gtk_window_resize_to_geometry (GTK_WINDOW (app), grid_width, grid_height);
+  else
+    gtk_window_set_default_geometry (GTK_WINDOW (app), grid_width, grid_height);
+#else
+{
+  /* Owen's hack from gnome-terminal */
+
+  GtkBorder *inner_border = NULL;
+  GtkRequisition toplevel_request;
+  GtkRequisition widget_request;
+  int char_width;
+  int char_height;
+  int w, h;
 
   /* This set_size_request hack is because the extra size above base
    * size should only include the width of widgets to the side of the
@@ -2644,7 +2660,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   gtk_widget_size_request (widget, &widget_request);
 
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
-  terminal_screen_get_size (screen, &grid_width, &grid_height);
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] set size: toplevel %dx%d widget %dx%d grid %dx%d char-cell %dx%d\n",
@@ -2656,11 +2671,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   w = toplevel_request.width - widget_request.width;
   h = toplevel_request.height - widget_request.height;
 
-  if (force_grid_width >= 0)
-    grid_width = force_grid_width;
-  if (force_grid_height >= 0)
-    grid_height = force_grid_height;
-  
   gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
   w += (inner_border ? (inner_border->left + inner_border->right) : 0) + char_width * grid_width;
   h += (inner_border ? (inner_border->top + inner_border->bottom) : 0) + char_height * grid_height;
@@ -2677,6 +2687,8 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   else {
     gtk_window_set_default_size (GTK_WINDOW (app), w, h);
   }
+}
+#endif
 }
 
 void
