@@ -904,7 +904,7 @@ terminal_size_to_cb (GtkAction *action,
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), width, height);
 
-  terminal_window_set_size_force_grid (window, priv->active_screen, TRUE, -1, -1);
+  terminal_window_set_size_force_grid (window, priv->active_screen, -1, -1);
 }
 
 static void
@@ -1097,7 +1097,7 @@ screen_resize_window_cb (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return;
 
-  terminal_window_set_size_force_grid (window, screen, TRUE, -1, -1); //grid_width, grid_height);
+  terminal_window_set_size_force_grid (window, screen, -1, -1); //grid_width, grid_height);
 }
 
 static void
@@ -2298,7 +2298,7 @@ terminal_window_show (GtkWidget *widget)
     {
       /* At this point, we have our GdkScreen, and hence the right
        * font size, so we can go ahead and size the window. */
-      terminal_window_set_size (window, priv->active_screen, FALSE);
+      terminal_window_set_size (window, priv->active_screen);
     }
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
@@ -2566,7 +2566,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
                              "[window %p] setting size after toggling menubar visibility\n",
                              window);
 
-      terminal_window_set_size (window, priv->active_screen, TRUE);
+      terminal_window_set_size (window, priv->active_screen);
     }
 }
 
@@ -2590,16 +2590,14 @@ terminal_window_get_notebook (TerminalWindow *window)
 
 void
 terminal_window_set_size (TerminalWindow *window,
-                          TerminalScreen *screen,
-                          gboolean        even_if_mapped)
+                          TerminalScreen *screen)
 {
-  terminal_window_set_size_force_grid (window, screen, even_if_mapped, -1, -1);
+  terminal_window_set_size_force_grid (window, screen, -1, -1);
 }
 
 void
 terminal_window_set_size_force_grid (TerminalWindow *window,
                                      TerminalScreen *screen,
-                                     gboolean        even_if_mapped,
                                      int             force_grid_width,
                                      int             force_grid_height)
 {
@@ -2624,10 +2622,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
     grid_height = force_grid_height;
 
 #if GTK_CHECK_VERSION (2, 91, 0)
-  if (even_if_mapped && gtk_widget_get_mapped (app))
-    gtk_window_resize_to_geometry (GTK_WINDOW (app), grid_width, grid_height);
-  else
-    gtk_window_set_default_geometry (GTK_WINDOW (app), grid_width, grid_height);
+  gtk_window_resize_to_geometry (GTK_WINDOW (app), grid_width, grid_height);
 #else
 {
   /* Owen's hack from gnome-terminal */
@@ -2681,12 +2676,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
                          window,
                          grid_width, grid_height, force_grid_width, force_grid_height, w, h);
 
-  if (even_if_mapped && gtk_widget_get_mapped (app)) {
-    gtk_window_resize (GTK_WINDOW (app), w, h);
-  }
-  else {
-    gtk_window_set_default_size (GTK_WINDOW (app), w, h);
-  }
+  gtk_window_resize (GTK_WINDOW (app), w, h);
 }
 #endif
 }
@@ -2858,7 +2848,7 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] setting size after flipping notebook pages\n",
                          window);
-  terminal_window_set_size (window, screen, TRUE);
+  terminal_window_set_size (window, screen);
 
   terminal_window_update_tabs_menu_sensitivity (window);
   terminal_window_update_encoding_menu_active_encoding (window);
@@ -2997,7 +2987,7 @@ notebook_page_removed_callback (GtkWidget       *notebook,
   pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (notebook));
   if (pages == 1)
     {
-      terminal_window_set_size (window, priv->active_screen, TRUE);
+      terminal_window_set_size (window, priv->active_screen);
     }
   else if (pages == 0)
     {

@@ -1164,7 +1164,7 @@ terminal_screen_change_font (TerminalScreen *screen)
   terminal_screen_set_font (screen);
 
   window = terminal_screen_get_window (screen);
-  terminal_window_set_size (window, screen, TRUE);
+  terminal_window_set_size (window, screen);
 }
 
 static void
