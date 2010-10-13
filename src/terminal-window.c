@@ -2621,7 +2621,7 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   if (force_grid_height >= 0)
     grid_height = force_grid_height;
 
-#if GTK_CHECK_VERSION (2, 91, 0)
+#if GTK_CHECK_VERSION (2, 91, 1)
   gtk_window_resize_to_geometry (GTK_WINDOW (app), grid_width, grid_height);
 #else
 {
