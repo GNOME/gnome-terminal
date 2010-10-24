@@ -142,7 +142,12 @@ terminal_screen_container_constructor (GType type,
   g_assert (priv->screen != NULL);
 
 #ifdef USE_SCROLLED_WINDOW
+#if GTK_CHECK_VERSION (2, 91, 2)
+  priv->scrolled_window = gtk_scrolled_window_new (gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(priv->screen)),
+                                                   gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(priv->screen)));
+#else
   priv->scrolled_window = gtk_scrolled_window_new (NULL, vte_terminal_get_adjustment (VTE_TERMINAL (priv->screen)));
+#endif
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
                                   priv->hscrollbar_policy,
@@ -162,7 +167,11 @@ terminal_screen_container_constructor (GType type,
 
   priv->hbox = gtk_hbox_new (FALSE, 0);
 
+#if GTK_CHECK_VERSION (2, 91, 2)
+  priv->vscrollbar = gtk_vscrollbar_new (gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(priv->screen)));
+#else
   priv->vscrollbar = gtk_vscrollbar_new (vte_terminal_get_adjustment (VTE_TERMINAL (priv->screen)));
+#endif
 
   gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->hbox), priv->vscrollbar, FALSE, FALSE, 0);
