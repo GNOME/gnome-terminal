@@ -1389,7 +1389,6 @@ get_child_environment (TerminalScreen *screen,
   g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
   
   g_hash_table_replace (env_table, g_strdup ("COLORTERM"), g_strdup (EXECUTABLE_NAME));
-  g_hash_table_replace (env_table, g_strdup ("TERM"), g_strdup ("xterm")); /* FIXME configurable later? */
   
 #ifdef GDK_WINDOWING_X11
   /* FIXME: moving the tab between windows, or the window between displays will make the next two invalid... */
