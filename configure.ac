@@ -42,7 +42,6 @@ AM_GLIB_GNU_GETTEXT
 GLIB_REQUIRED=2.25.0
 GIO_REQUIRED=2.25.12
 GCONF_REQUIRED=2.31.3
-VTE_REQUIRED=0.27.1
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
@@ -58,10 +57,12 @@ case "$with_gtk" in
   2.0) GTK_API_VERSION=2.0
        GTK_REQUIRED=2.18.0
        VTE_PC_VERSION=
+       VTE_REQUIRED=0.26.0
        ;;
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=2.91.1
        VTE_PC_VERSION=-2.90
+       VTE_REQUIRED=0.27.1
        ;;
 esac
 
