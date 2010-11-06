@@ -80,7 +80,9 @@ ay_to_strv (GVariant *variant,
 
   data = g_variant_get_fixed_array (variant, &data_len, sizeof (char));
   if (data_len == 0 || data_len > G_MAXSSIZE) {
-    *argc = 0;
+    if (argc)
+      *argc = 0;
+
     return NULL;
   }
 
