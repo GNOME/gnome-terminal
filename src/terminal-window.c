@@ -45,10 +45,6 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 
-#ifdef ENABLE_SKEY
-#include "skey-popup.h"
-#endif
-
 struct _TerminalWindowPrivate
 {
   GtkActionGroup *action_group;
@@ -1427,19 +1423,9 @@ screen_match_clicked_cb (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return FALSE;
 
-  switch (flavour)
-    {
-#ifdef ENABLE_SKEY
-      case FLAVOR_SKEY:
-        terminal_skey_do_popup (GTK_WINDOW (window), screen, match);
-        break;
-#endif
-      default:
-        gtk_widget_grab_focus (GTK_WIDGET (screen));
-        terminal_util_open_url (GTK_WIDGET (window), match, flavour,
-                                gtk_get_current_event_time ());
-        break;
-    }
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
+  terminal_util_open_url (GTK_WIDGET (window), match, flavour,
+                          gtk_get_current_event_time ());
 
   return TRUE;
 }

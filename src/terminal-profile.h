@@ -99,7 +99,6 @@ typedef enum
 #define TERMINAL_PROFILE_UPDATE_RECORDS         "update-records"
 #define TERMINAL_PROFILE_USE_CUSTOM_COMMAND     "use-custom-command"
 #define TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE "use-custom-default-size"
-#define TERMINAL_PROFILE_USE_SKEY               "use-skey"
 #define TERMINAL_PROFILE_USE_SYSTEM_FONT        "use-system-font"
 #define TERMINAL_PROFILE_USE_THEME_COLORS       "use-theme-colors"
 #define TERMINAL_PROFILE_VISIBLE_NAME           "visible-name"

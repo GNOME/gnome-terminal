@@ -1,9 +1,5 @@
 NULL =
 
-if ENABLE_SKEY
-SUBDIRS = skey
-endif
-
 bin_PROGRAMS = gnome-terminal
 
 BUILT_SOURCES = \
@@ -51,13 +47,6 @@ gnome_terminal_SOURCES= \
 	terminal-window.h \
 	$(NULL)
 
-if ENABLE_SKEY
-gnome_terminal_SOURCES += \
-	skey-popup.c \
-	skey-popup.h \
-	$(NULL)
-endif
-
 nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
 
 gnome_terminal_CPPFLAGS = \
@@ -86,7 +75,6 @@ gnome_terminal_CFLAGS = \
 gnome_terminal_LDFLAGS =
 
 gnome_terminal_LDADD = \
-	skey/libskey.la \
 	$(TERM_LIBS)
 
 if WITH_SMCLIENT
@@ -168,7 +156,6 @@ builder_in_files = \
 	profile-manager.glade \
 	profile-new-dialog.glade \
 	profile-preferences.glade \
-	skey-challenge.glade \
 	$(NULL)
 
 builderdir = $(pkgdatadir)

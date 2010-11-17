@@ -50,7 +50,6 @@
 #include "eggshell.h"
 
 #define URL_MATCH_CURSOR  (GDK_HAND2)
-#define SKEY_MATCH_CURSOR (GDK_HAND2)
 
 typedef struct
 {
@@ -174,18 +173,6 @@ static const TerminalRegexPattern url_regex_patterns[] = {
 static GRegex **url_regexes;
 static TerminalURLFlavour *url_regex_flavors;
 static guint n_url_regexes;
-
-#ifdef ENABLE_SKEY
-static const TerminalRegexPattern skey_regex_patterns[] = {
-  { "s/key [[:digit:]]* [-[:alnum:]]*",         FLAVOR_AS_IS },
-  { "otp-[a-z0-9]* [[:digit:]]* [-[:alnum:]]*", FLAVOR_AS_IS },
-};
-
-static GRegex **skey_regexes;
-static guint n_skey_regexes;
-
-static void  terminal_screen_skey_match_remove (TerminalScreen            *screen);
-#endif /* ENABLE_SKEY */
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
@@ -624,23 +611,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
       url_regex_flavors[i] = url_regex_patterns[i].flavor;
     }
 
-#ifdef ENABLE_SKEY
-  n_skey_regexes = G_N_ELEMENTS (skey_regex_patterns);
-  skey_regexes = g_new0 (GRegex*, n_skey_regexes);
-
-  for (i = 0; i < n_skey_regexes; ++i)
-    {
-      GError *error = NULL;
-
-      skey_regexes[i] = g_regex_new (skey_regex_patterns[i].pattern, G_REGEX_OPTIMIZE, 0, &error);
-      if (error)
-        {
-          g_message ("%s", error->message);
-          g_error_free (error);
-        }
-    }
-#endif /* ENABLE_SKEY */
-
   /* This fixes bug #329827 */
   app = terminal_app_get ();
   terminal_screen_class_enable_menu_bar_accel_notify_cb (app, NULL, klass);
@@ -978,32 +948,6 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
 		    -1 : terminal_profile_get_property_int (profile, TERMINAL_PROFILE_SCROLLBACK_LINES);
       vte_terminal_set_scrollback_lines (vte_terminal, lines);
     }
-
-#ifdef ENABLE_SKEY
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_USE_SKEY))
-    {
-      if (terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_SKEY))
-        {
-          guint i;
-
-          for (i = 0; i < n_skey_regexes; ++i)
-            {
-              TagData *tag_data;
-
-              tag_data = g_slice_new (TagData);
-              tag_data->flavor = FLAVOR_SKEY;
-              tag_data->tag = vte_terminal_match_add_gregex (vte_terminal, skey_regexes[i], 0);
-              vte_terminal_match_set_cursor_type (vte_terminal, tag_data->tag, SKEY_MATCH_CURSOR);
-
-              priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
-            }
-        }
-      else
-        {
-          terminal_screen_skey_match_remove (screen);
-        }
-    }
-#endif /* ENABLE_SKEY */
 
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TYPE) ||
@@ -1612,29 +1556,23 @@ terminal_screen_button_press (GtkWidget      *widget,
 
   /* FIXMEchpe: add vte API to do this check by widget coords instead of grid coords */
   matched_string = terminal_screen_check_match (screen, row, col, &matched_flavor);
-  
+
   if (matched_string != NULL &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
       gboolean handled = FALSE;
 
-#ifdef ENABLE_SKEY
-      if (matched_flavor != FLAVOR_SKEY ||
-          terminal_profile_get_property_boolean (screen->priv->profile, TERMINAL_PROFILE_USE_SKEY))
-#endif
+      g_signal_emit (screen, signals[MATCH_CLICKED], 0,
+                     matched_string,
+                     matched_flavor,
+                     state,
+                     &handled);
+      if (handled)
         {
-          g_signal_emit (screen, signals[MATCH_CLICKED], 0,
-                         matched_string,
-                         matched_flavor,
-                         state,
-                         &handled);
-        }
-
-        g_free (matched_string);
-
-        if (handled)
+          g_free (matched_string);
           return TRUE; /* don't do anything else such as select with the click */
+        }
     }
 
   if (event->button == 3 &&
@@ -1654,6 +1592,8 @@ terminal_screen_button_press (GtkWidget      *widget,
 
       return TRUE;
     }
+
+  g_free (matched_string);
 
   /* default behavior is to let the terminal widget deal with it */
   if (button_press_event)
@@ -2210,30 +2150,6 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
   *cell_width_pixels = vte_terminal_get_char_width (terminal);
   *cell_height_pixels = vte_terminal_get_char_height (terminal);
 }
-
-#ifdef ENABLE_SKEY
-static void
-terminal_screen_skey_match_remove (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  GSList *l, *next;
-
-  l = priv->match_tags;
-  while (l != NULL)
-    {
-      TagData *tag_data = (TagData *) l->data;
-
-      next = l->next;
-      if (tag_data->flavor == FLAVOR_SKEY)
-        {
-          vte_terminal_match_remove (VTE_TERMINAL (screen), tag_data->tag);
-          priv->match_tags = g_slist_delete_link (priv->match_tags, l);
-        }
-
-      l = next;
-    }
-}
-#endif /* ENABLE_SKEY */
 
 static char*
 terminal_screen_check_match (TerminalScreen *screen,

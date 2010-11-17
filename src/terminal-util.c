@@ -246,8 +246,6 @@ terminal_util_open_url (GtkWidget *parent,
     case FLAVOR_AS_IS:
       uri = g_strdup (orig_url);
       break;
-    case FLAVOR_SKEY:
-      /* shouldn't get this */
     default:
       uri = NULL;
       g_assert_not_reached ();

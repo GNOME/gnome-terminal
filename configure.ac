@@ -139,22 +139,6 @@ if test "$GTK_BUILDER_CONVERT" = "false"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
 fi
 
-# *****
-# S/Key
-# *****
-
-AC_MSG_CHECKING([whether to enable s/key support])
-AC_ARG_ENABLE([skey],
-  [AS_HELP_STRING([--disable-skey],[disable s/key support (default: enabled)])],
-  [],[enable_skey=yes])
-AC_MSG_RESULT([$enable_skey])
-
-if test "$enable_skey" = "yes"; then
-  AC_DEFINE([ENABLE_SKEY],[1],[Define if s/key support is enabled])
-fi
-
-AM_CONDITIONAL([ENABLE_SKEY],[test "$enable_skey" = "yes"])
-
 # *************
 # Documentation
 # *************
@@ -175,7 +159,6 @@ Makefile
 gnome-terminal.desktop.in
 src/Makefile
 src/terminal-version.h
-src/skey/Makefile
 help/Makefile
 help/bg/Makefile
 help/ro/Makefile
@@ -195,5 +178,4 @@ gnome-terminal-$VERSION:
 	compiler:		${CC}
 
         using smclient:         ${with_smclient}
-        s/key support:          ${enable_skey}
 "

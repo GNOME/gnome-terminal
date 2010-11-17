@@ -31,8 +31,7 @@ typedef enum {
   FLAVOR_AS_IS,
   FLAVOR_DEFAULT_TO_HTTP,
   FLAVOR_VOIP_CALL,
-  FLAVOR_EMAIL,
-  FLAVOR_SKEY
+  FLAVOR_EMAIL
 } TerminalURLFlavour;
 
 /* Forward decls */
