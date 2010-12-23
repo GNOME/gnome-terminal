@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,7 +20,13 @@
 #ifndef __EGG_SM_CLIENT_PRIVATE_H__
 #define __EGG_SM_CLIENT_PRIVATE_H__
 
+#include <gtk/gtk.h>
+
+#if !GTK_CHECK_VERSION(2,91,7) && !GTK_CHECK_VERSION(3,0,0)
+/* GTK+ 3 includes this automatically */
 #include <gdkconfig.h>
+#endif
+
 #include "eggsmclient.h"
 
 G_BEGIN_DECLS

@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -202,7 +202,8 @@ sm_client_post_parse_func (GOptionContext  *context,
    * use the same client id. */
   g_unsetenv ("DESKTOP_AUTOSTART_ID");
 
-  if (EGG_SM_CLIENT_GET_CLASS (client)->startup)
+  if (global_client_mode != EGG_SM_CLIENT_MODE_DISABLED &&
+      EGG_SM_CLIENT_GET_CLASS (client)->startup)
     EGG_SM_CLIENT_GET_CLASS (client)->startup (client, sm_client_id);
   return TRUE;
 }
@@ -265,9 +266,9 @@ egg_sm_client_get_option_group (void)
  * Sets the "mode" of #EggSMClient as follows:
  *
  *    %EGG_SM_CLIENT_MODE_DISABLED: Session management is completely
- *    disabled. The application will not even connect to the session
- *    manager. (egg_sm_client_get() will still return an #EggSMClient,
- *    but it will just be a dummy object.)
+ *    disabled, until the mode is changed again. The application will
+ *    not even connect to the session manager. (egg_sm_client_get()
+ *    will still return an #EggSMClient object.)
  *
  *    %EGG_SM_CLIENT_MODE_NO_RESTART: The application will connect to
  *    the session manager (and thus will receive notification when the
@@ -277,12 +278,27 @@ egg_sm_client_get_option_group (void)
  *    %EGG_SM_CLIENT_MODE_NORMAL: The default. #EggSMCLient will
  *    function normally.
  *
- * This must be called before the application's main loop begins.
+ * This must be called before the application's main loop begins and
+ * before any call to egg_sm_client_get(), unless the mode was set
+ * earlier to %EGG_SM_CLIENT_MODE_DISABLED and this call enables
+ * session management. Note that option parsing will call
+ * egg_sm_client_get().
  **/
 void
 egg_sm_client_set_mode (EggSMClientMode mode)
 {
+  EggSMClientMode old_mode = global_client_mode;
+
+  g_return_if_fail (global_client == NULL || global_client_mode == EGG_SM_CLIENT_MODE_DISABLED);
+  g_return_if_fail (!(global_client != NULL && mode == EGG_SM_CLIENT_MODE_DISABLED));
+
   global_client_mode = mode;
+
+  if (global_client != NULL && old_mode == EGG_SM_CLIENT_MODE_DISABLED)
+    {
+      if (EGG_SM_CLIENT_GET_CLASS (global_client)->startup)
+        EGG_SM_CLIENT_GET_CLASS (global_client)->startup (global_client, sm_client_id);
+    }
 }
 
 /**
@@ -317,8 +333,7 @@ egg_sm_client_get (void)
 {
   if (!global_client)
     {
-      if (global_client_mode != EGG_SM_CLIENT_MODE_DISABLED &&
-	  !sm_client_disable)
+      if (!sm_client_disable)
 	{
 #if defined (GDK_WINDOWING_WIN32)
 	  global_client = egg_sm_client_win32_new ();
@@ -442,27 +457,6 @@ egg_sm_client_set_restart_command (EggSMClient  *client,
 
   if (EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command)
     EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command (client, argc, argv);
-}
-
-/**
- * egg_sm_client_set_discard_command:
- * @client: the client
- * @argc: the length of @argv
- * @argv: argument vector
- *
- * Sets the command used to discard a custom state file if using
- * egg_sm_client_set_restart_command(), which must be called before 
- * using this function.
- **/
-void
-egg_sm_client_set_discard_command (EggSMClient  *client,
-				   int           argc,
-				   const char  **argv)
-{
-  g_return_if_fail (EGG_IS_SM_CLIENT (client));
-
-  if (EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command)
-    EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command (client, argc, argv);
 }
 
 /**
