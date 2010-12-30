@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 3 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -72,6 +72,9 @@ struct _EggSMClientClass
   void	   (*set_restart_command) (EggSMClient          *client,
 				   int                   argc,
 				   const char          **argv);
+  void	   (*set_discard_command) (EggSMClient          *client,
+				   int                   argc,
+				   const char          **argv);
   void	   (*will_quit)           (EggSMClient          *client,
 				   gboolean              will_quit);
   gboolean (*end_session)         (EggSMClient          *client,
@@ -100,6 +103,9 @@ GKeyFile        *egg_sm_client_get_state_file      (EggSMClient *client);
 
 /* Alternate means of saving state */
 void             egg_sm_client_set_restart_command (EggSMClient  *client,
+						    int           argc,
+						    const char  **argv);
+void             egg_sm_client_set_discard_command (EggSMClient  *client,
 						    int           argc,
 						    const char  **argv);
 

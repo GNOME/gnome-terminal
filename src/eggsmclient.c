@@ -2,16 +2,16 @@
  * Copyright (C) 2007 Novell, Inc.
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * version 3 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
+ * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
@@ -457,6 +457,27 @@ egg_sm_client_set_restart_command (EggSMClient  *client,
 
   if (EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command)
     EGG_SM_CLIENT_GET_CLASS (client)->set_restart_command (client, argc, argv);
+}
+
+/**
+ * egg_sm_client_set_discard_command:
+ * @client: the client
+ * @argc: the length of @argv
+ * @argv: argument vector
+ *
+ * Sets the command used to discard a custom state file if using
+ * egg_sm_client_set_restart_command(), which must be called before 
+ * using this function.
+ **/
+void
+egg_sm_client_set_discard_command (EggSMClient  *client,
+				   int           argc,
+				   const char  **argv)
+{
+  g_return_if_fail (EGG_IS_SM_CLIENT (client));
+
+  if (EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command)
+    EGG_SM_CLIENT_GET_CLASS (client)->set_discard_command (client, argc, argv);
 }
 
 /**
