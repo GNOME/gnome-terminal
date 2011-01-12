@@ -66,11 +66,21 @@ case "$with_gtk" in
        ;;
 esac
 
-GDK_TARGET="$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)"
+AC_MSG_CHECKING([for GDK target])
+case "$with_gtk" in
+  2.0) GDK_TARGET="$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)" ;;
+  3.0) for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
+         GDK_TARGET="$target"
+         break
+       done
+       ;;
+esac
+AC_MSG_RESULT([$GDK_TARGET])
 
 case "$GDK_TARGET" in
   x11) PLATFORM_DEPS="x11" ;;
-  *) PLATFORM_DEPS="" ;;
+  win32|quartz) PLATFORM_DEPS="" ;;
+  *) AC_MSG_ERROR([unknown gdk target]) ;;
 esac
 
 PKG_CHECK_MODULES([TERM],
