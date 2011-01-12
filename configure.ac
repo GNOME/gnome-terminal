@@ -141,14 +141,18 @@ AC_SUBST([GLIB_GENMARSHAL])
 GLIB_MKENUMS="$($PKG_CONFIG --variable=glib_mkenums glib-2.0)"
 AC_SUBST([GLIB_MKENUMS])
 
-case "$with_gtk" in
-  2.0) AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false]) ;;
-  3.0) AC_PATH_PROGS([GTK_BUILDER_CONVERT],[gtk-builder-convert gtk-builder-convert-3.0],[false]) ;;
-esac
+AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false]) ;;
 
 if test "$GTK_BUILDER_CONVERT" = "false"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
 fi
+
+case "$with_gtk" in
+  2.0) GTK_BUILDER_CONVERT_FLAGS="" ;;
+  3.0) GTK_BUILDER_CONVERT_FLAGS="--target-version=3.0" ;;
+esac
+
+AC_SUBST([GTK_BUILDER_CONVERT_FLAGS])
 
 # *************
 # Documentation

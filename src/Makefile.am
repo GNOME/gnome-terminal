@@ -187,6 +187,6 @@ install-data-local:
 endif
 
 %.ui: %.glade
-	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $< $@
+	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $(GTK_BUILDER_CONVERT_FLAGS) $< $@
 
 -include $(top_srcdir)/git.mk
