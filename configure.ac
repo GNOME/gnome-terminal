@@ -103,7 +103,7 @@ AC_ARG_WITH([smclient],
   [AS_HELP_STRING([--with-smclient-backend],[which smclient backend to use (xsmp/win32/quartz)])],
   [],
   [case "$GDK_TARGET" in
-    x11) with_smclient=xsmp SMCLIENT_PKGS="sm" ;;
+    x11) with_smclient=xsmp SMCLIENT_PKGS="sm ice" ;;
     win32|quartz) with_smclient=$GDK_TARGET ;;
     *) with_smclient=no ;;
    esac])
