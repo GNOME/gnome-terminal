@@ -365,7 +365,8 @@ terminal_search_dialog_get_regex (GtkWidget *dialog)
       g_free ((char *) old_pattern);
   }
 
-  if (!priv->regex || priv->regex_compile_flags != compile_flags) {
+  if (!priv->regex || priv->regex_compile_flags != compile_flags ||
+      g_strcmp0 (pattern, g_regex_get_pattern (priv->regex)) != 0) {
     priv->regex_compile_flags = compile_flags;
     if (priv->regex)
       g_regex_unref (priv->regex);
