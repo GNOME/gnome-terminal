@@ -663,56 +663,6 @@ accel_set_func (GtkTreeViewColumn *tree_column,
 		  NULL);
 }
 
-static int
-accel_compare_func (GtkTreeModel *model,
-                    GtkTreeIter  *a,
-                    GtkTreeIter  *b,
-                    gpointer      user_data)
-{
-  KeyEntry *ke_a;
-  KeyEntry *ke_b;
-  char *name_a;
-  char *name_b;
-  int result;
-  
-  gtk_tree_model_get (model, a,
-                      KEYVAL_COLUMN, &ke_a,
-                      -1);
-  if (ke_a == NULL)
-    {
-      gtk_tree_model_get (model, a,
-			  ACTION_COLUMN, &name_a,
-			  -1);
-    }
-  else
-    {
-      name_a = binding_display_name (ke_a->gconf_keyval,
-                                     ke_a->gconf_mask);
-    }
-
-  gtk_tree_model_get (model, b,
-                      KEYVAL_COLUMN, &ke_b,
-                      -1);
-  if (ke_b == NULL)
-    {
-      gtk_tree_model_get (model, b,
-                          ACTION_COLUMN, &name_b,
-                          -1);
-    }
-  else
-    {
-      name_b = binding_display_name (ke_b->gconf_keyval,
-                                     ke_b->gconf_mask);
-    }
-  
-  result = g_utf8_collate (name_a, name_b);
-
-  g_free (name_a);
-  g_free (name_b);
-
-  return result;
-}
-
 static void
 treeview_accel_changed_cb (GtkAccelGroup  *accel_group,
                            guint keyval,
@@ -940,7 +890,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
 						     "text", ACTION_COLUMN,
 						     NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-  gtk_tree_view_column_set_sort_column_id (column, ACTION_COLUMN);
 
   /* Column 2 */
   cell_renderer = gtk_cell_renderer_accel_new ();
@@ -957,7 +906,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
   gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func, NULL, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, KEYVAL_COLUMN);  
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* Add the data */
@@ -990,12 +938,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
                                              -1);
 	}
     }
-
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (tree),
-                                   KEYVAL_COLUMN, accel_compare_func,
-                                   NULL, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (tree), ACTION_COLUMN,
-                                        GTK_SORT_ASCENDING);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (tree));
   g_object_unref (tree);
