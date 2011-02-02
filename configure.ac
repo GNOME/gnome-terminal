@@ -1,7 +1,7 @@
 m4_define([gt_version_major],[2])
 m4_define([gt_version_minor],[33])
-m4_define([gt_version_micro],[4])
-m4_define([gt_version_extra],[.git])
+m4_define([gt_version_micro],[5])
+m4_define([gt_version_extra],[])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
 m4_define([gt_api_version],[0])
@@ -12,7 +12,7 @@ AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
 
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([no])])
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST([GETTEXT_PACKAGE])
@@ -39,8 +39,8 @@ GNOME_COMPILE_WARNINGS([maximum])
 
 AM_GLIB_GNU_GETTEXT
 
-GLIB_REQUIRED=2.25.0
-GIO_REQUIRED=2.25.12
+GLIB_REQUIRED=2.26.0
+GIO_REQUIRED=2.26.0
 GCONF_REQUIRED=2.31.3
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
@@ -60,7 +60,7 @@ case "$with_gtk" in
        VTE_REQUIRED=0.26.0
        ;;
   3.0) GTK_API_VERSION=3.0
-       GTK_REQUIRED=2.91.6
+       GTK_REQUIRED=2.99.3
        VTE_PC_VERSION=-2.90
        VTE_REQUIRED=0.27.3
        ;;
@@ -90,7 +90,6 @@ PKG_CHECK_MODULES([TERM],
    gio-2.0 >= $GIO_REQUIRED
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   x11
    $PLATFORM_DEPS])
 
 # ********
