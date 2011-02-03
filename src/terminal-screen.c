@@ -1064,10 +1064,9 @@ update_color_scheme (TerminalScreen *screen)
   context = gtk_widget_get_style_context (GTK_WIDGET (screen));
   gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
   rgba_to_color (&fg, &rgba);
-  g_print ("fg %g,%g,%g ", rgba.red, rgba.green, rgba.blue);
+
   gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
   rgba_to_color (&bg, &rgba);
-  g_print ("bg %g,%g,%g\n", rgba.red, rgba.green, rgba.blue);
 
 #else /* GTK 2.0 */
   GtkStyle *style;
