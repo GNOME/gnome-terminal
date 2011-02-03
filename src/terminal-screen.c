@@ -300,6 +300,23 @@ terminal_screen_realize (GtkWidget *widget)
                                            !window_uses_argb_visual (screen));
 }
 
+#if GTK_CHECK_VERSION (2, 99, 0)
+
+static void
+terminal_screen_style_updated (GtkWidget *widget)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->style_updated (widget);
+
+  update_color_scheme (screen);
+
+  if (gtk_widget_get_realized (widget))
+    terminal_screen_change_font (screen);
+}
+
+#else /* GTK 2.0 */
+
 static void
 terminal_screen_style_set (GtkWidget *widget,
                            GtkStyle *previous_style)
@@ -315,6 +332,8 @@ terminal_screen_style_set (GtkWidget *widget,
   if (gtk_widget_get_realized (widget))
     terminal_screen_change_font (screen);
 }
+
+#endif /* GTK 3.0 */
 
 #ifdef GNOME_ENABLE_DEBUG
 static void
@@ -498,7 +517,11 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->set_property = terminal_screen_set_property;
 
   widget_class->realize = terminal_screen_realize;
+#if GTK_CHECK_VERSION (2, 99, 0)
+  widget_class->style_updated = terminal_screen_style_updated;
+#else
   widget_class->style_set = terminal_screen_style_set;
+#endif
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
@@ -1013,16 +1036,41 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
   g_object_thaw_notify (object);
 }
 
+#if GTK_CHECK_VERSION (2, 99, 0)
+static void
+rgba_to_color (GdkColor *color,
+               const GdkRGBA *rgba)
+{
+        color->red = rgba->red * 65535.;
+        color->green = rgba->green * 65535.;
+        color->blue = rgba->blue * 65535.;
+        color->pixel = 0;
+}
+#endif
+
 static void
 update_color_scheme (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   TerminalProfile *profile = priv->profile;
-  GtkStyle *style;
   GdkColor colors[TERMINAL_PALETTE_SIZE];
   const GdkColor *fg_color, *bg_color, *bold_color;
   GdkColor fg, bg;
   guint n_colors;
+#if GTK_CHECK_VERSION (2, 99, 0)
+  GtkStyleContext *context;
+  GdkRGBA rgba;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (screen));
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
+  rgba_to_color (&fg, &rgba);
+  g_print ("fg %g,%g,%g ", rgba.red, rgba.green, rgba.blue);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
+  rgba_to_color (&bg, &rgba);
+  g_print ("bg %g,%g,%g\n", rgba.red, rgba.green, rgba.blue);
+
+#else /* GTK 2.0 */
+  GtkStyle *style;
 
   style = gtk_widget_get_style (GTK_WIDGET (screen));
   if (!style)
@@ -1030,6 +1078,8 @@ update_color_scheme (TerminalScreen *screen)
 
   fg = style->text[GTK_STATE_NORMAL];
   bg = style->base[GTK_STATE_NORMAL];
+#endif /* GTK 3.0 */
+
   bold_color = NULL;
 
   if (!terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS))
