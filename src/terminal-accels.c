@@ -298,16 +298,6 @@ binding_name (guint            keyval,
   return g_strdup ("disabled");
 }
 
-static char*
-binding_display_name (guint            keyval,
-                      GdkModifierType  mask)
-{
-  if (keyval != 0)
-    return gtk_accelerator_get_label (keyval, mask);
-    
-  return g_strdup (_("Disabled"));
-}
-
 static const char *
 key_from_gconf_key (const char *gconf_key)
 {
