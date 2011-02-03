@@ -49,6 +49,8 @@
 #endif
 
 #define FALLBACK_PROFILE_ID "Default"
+#define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
+#define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
 
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
@@ -97,9 +99,10 @@ struct _TerminalApp
   guint profile_list_notify_id;
   guint default_profile_notify_id;
   guint encoding_list_notify_id;
-  guint system_font_notify_id;
   guint enable_mnemonics_notify_id;
   guint enable_menu_accels_notify_id;
+
+  GSettings *desktop_interface_settings;
 
   GHashTable *profiles;
   char* default_profile_id;
@@ -150,8 +153,6 @@ static TerminalApp *global_app = NULL;
 /* Evil hack alert: this is exported from libgconf-2 but not in a public header */
 extern gboolean gconf_spawn_daemon(GError** err);
 
-#define MONOSPACE_FONT_DIR "/desktop/gnome/interface"
-#define MONOSPACE_FONT_KEY MONOSPACE_FONT_DIR "/monospace_font_name"
 #define DEFAULT_MONOSPACE_FONT ("Monospace 10")
 
 #define ENABLE_MNEMONICS_KEY CONF_GLOBAL_PREFIX "/use_mnemonics"
@@ -963,26 +964,14 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
 }
 
 static void
-terminal_app_system_font_notify_cb (GConfClient *client,
-                                    guint        cnxn_id,
-                                    GConfEntry  *entry,
-                                    gpointer     user_data)
+terminal_app_system_font_notify_cb (GSettings   *settings,
+                                    const char  *key,
+                                    TerminalApp *app)
 {
-  TerminalApp *app = TERMINAL_APP (user_data);
-  GConfValue *gconf_value;
   const char *font = NULL;
   PangoFontDescription *font_desc;
 
-  if (strcmp (gconf_entry_get_key (entry), MONOSPACE_FONT_KEY) != 0)
-    return;
-
-  gconf_value = gconf_entry_get_value (entry);
-  if (gconf_value &&
-      gconf_value->type == GCONF_VALUE_STRING)
-    font = gconf_value_get_string (gconf_value);
-  if (!font)
-    font = DEFAULT_MONOSPACE_FONT;
-  g_assert (font != NULL);
+  g_settings_get (settings, MONOSPACE_FONT_KEY_NAME, "&s", &font);
 
   font_desc = pango_font_description_from_string (font);
   if (app->system_font_desc &&
@@ -1390,6 +1379,16 @@ terminal_app_init (TerminalApp *app)
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
+  /* Terminal global settings */
+  app->desktop_interface_settings = g_settings_new (DESKTOP_INTERFACE_SETTINGS_SCHEMA);
+  terminal_app_system_font_notify_cb (app->desktop_interface_settings,
+                                      MONOSPACE_FONT_KEY_NAME,
+                                      app);
+  g_signal_connect (app->desktop_interface_settings,
+                    "changed::" MONOSPACE_FONT_KEY_NAME,
+                    G_CALLBACK (terminal_app_system_font_notify_cb),
+                    app);
+
   /* Initialise defaults */
   app->enable_mnemonics = DEFAULT_ENABLE_MNEMONICS;
   app->enable_menu_accels = DEFAULT_ENABLE_MENU_BAR_ACCEL;
@@ -1401,9 +1400,6 @@ terminal_app_init (TerminalApp *app)
   app->conf = gconf_client_get_default ();
 
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        NULL);
-  gconf_client_add_dir (app->conf, MONOSPACE_FONT_DIR,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
   gconf_client_add_dir (app->conf, CONF_PROXY_PREFIX,
@@ -1430,12 +1426,6 @@ terminal_app_init (TerminalApp *app)
                              terminal_app_encoding_list_notify_cb,
                              app, NULL, NULL);
 
-  app->system_font_notify_id =
-    gconf_client_notify_add (app->conf,
-                             MONOSPACE_FONT_KEY,
-                             terminal_app_system_font_notify_cb,
-                             app, NULL, NULL);
-
   app->enable_mnemonics_notify_id =
     gconf_client_notify_add (app->conf,
                              ENABLE_MNEMONICS_KEY,
@@ -1452,7 +1442,6 @@ terminal_app_init (TerminalApp *app)
   gconf_client_notify (app->conf, PROFILE_LIST_KEY);
   gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
   gconf_client_notify (app->conf, ENCODING_LIST_KEY);
-  gconf_client_notify (app->conf, MONOSPACE_FONT_KEY);
   gconf_client_notify (app->conf, ENABLE_MENU_BAR_ACCEL_KEY);
   gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
 
@@ -1504,15 +1493,12 @@ terminal_app_finalize (GObject *object)
     gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
   if (app->encoding_list_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->encoding_list_notify_id);
-  if (app->system_font_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->system_font_notify_id);
   if (app->enable_menu_accels_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->enable_menu_accels_notify_id);
   if (app->enable_mnemonics_notify_id != 0)
     gconf_client_notify_remove (app->conf, app->enable_mnemonics_notify_id);
 
   gconf_client_remove_dir (app->conf, CONF_GLOBAL_PREFIX, NULL);
-  gconf_client_remove_dir (app->conf, MONOSPACE_FONT_DIR, NULL);
 
   g_object_unref (app->conf);
 
@@ -1523,6 +1509,8 @@ terminal_app_finalize (GObject *object)
   g_hash_table_destroy (app->encodings);
 
   pango_font_description_free (app->system_font_desc);
+
+  g_object_unref (app->desktop_interface_settings);
 
   terminal_accels_shutdown ();
 
