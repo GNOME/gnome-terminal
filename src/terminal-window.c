@@ -2170,15 +2170,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
-  gtk_rc_parse_string ("style \"gnome-terminal-tab-close-button-style\"\n"
-                       "{\n"
-                          "GtkWidget::focus-padding = 0\n"
-                          "GtkWidget::focus-line-width = 0\n"
-                          "xthickness = 0\n"
-                          "ythickness = 0\n"
-                       "}\n"
-                       "widget \"*.gnome-terminal-tab-close-button\" style \"gnome-terminal-tab-close-button-style\"");
-
 #if !GTK_CHECK_VERSION (2, 90, 8)
   gtk_notebook_set_window_creation_hook (handle_tab_droped_on_desktop, NULL, NULL);
 #endif

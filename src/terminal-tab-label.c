@@ -23,6 +23,7 @@
 
 #include "terminal-intl.h"
 #include "terminal-tab-label.h"
+#include "terminal-close-button.h"
 
 #define TERMINAL_TAB_LABEL_GET_PRIVATE(tab_label)(G_TYPE_INSTANCE_GET_PRIVATE ((tab_label), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelPrivate))
 
@@ -92,23 +93,6 @@ terminal_tab_label_parent_set (GtkWidget *widget,
 }
 
 static void
-terminal_tab_label_style_set (GtkWidget *widget,
-                              GtkStyle *previous_style)
-{
-  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (widget);
-  TerminalTabLabelPrivate *priv = tab_label->priv;
-  void (* style_set) (GtkWidget *, GtkStyle *) = GTK_WIDGET_CLASS (terminal_tab_label_parent_class)->style_set;
-  int h, w;
-
-  if (style_set)
-    style_set (widget, previous_style);
-
-  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (widget),
-                                     GTK_ICON_SIZE_MENU, &w, &h);
-  gtk_widget_set_size_request (priv->close_button, w + 2, h + 2);
-}
-
-static void
 terminal_tab_label_init (TerminalTabLabel *tab_label)
 {
   tab_label->priv = TERMINAL_TAB_LABEL_GET_PRIVATE (tab_label);
@@ -122,7 +106,7 @@ terminal_tab_label_constructor (GType type,
   GObject *object;
   TerminalTabLabel *tab_label;
   TerminalTabLabelPrivate *priv;
-  GtkWidget *hbox, *label, *close_button, *image;
+  GtkWidget *hbox, *label, *close_button;
 
   object = G_OBJECT_CLASS (terminal_tab_label_parent_class)->constructor
              (type, n_construct_properties, construct_params);
@@ -143,15 +127,8 @@ terminal_tab_label_constructor (GType type,
 
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  priv->close_button = close_button = gtk_button_new ();
-  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-  gtk_button_set_focus_on_click (GTK_BUTTON (close_button), FALSE);
-  gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
-  gtk_widget_set_name (close_button, "gnome-terminal-tab-close-button");
+  priv->close_button = close_button = terminal_close_button_new ();
   gtk_widget_set_tooltip_text (close_button, _("Close tab"));
-
-  image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
-  gtk_container_add (GTK_CONTAINER (close_button), image);
   gtk_box_pack_end (GTK_BOX (hbox), close_button, FALSE, FALSE, 0);
 
   sync_tab_label (priv->screen, NULL, label);
@@ -204,7 +181,6 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   gobject_class->set_property = terminal_tab_label_set_property;
 
   widget_class->parent_set = terminal_tab_label_parent_set;
-  widget_class->style_set = terminal_tab_label_style_set;
 
   signals[CLOSE_BUTTON_CLICKED] =
     g_signal_new (I_("close-button-clicked"),
