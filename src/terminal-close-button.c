@@ -43,7 +43,7 @@ terminal_close_button_style_set (GtkWidget *button,
 
 	gtk_widget_set_size_request (button, w + 2, h + 2);
 
-	GTK_WIDGET_CLASS (gedit_close_button_parent_class)->style_set (button, previous_style);
+	GTK_WIDGET_CLASS (terminal_close_button_parent_class)->style_set (button, previous_style);
 }
 #endif
 
