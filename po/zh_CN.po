@@ -5,22 +5,24 @@
 # 甘露(Gan Lu) <rhythm.gan@gmail.com>, 2009.
 # Hinker <hinkerliu@163.com>, 2009.
 # Aron Xu <happyaron.xu@gmail.com>, 2009.
+# Yinghua Wang <wantinghard@gmail.com>，2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-11-05 22:25+0800\n"
-"PO-Revision-Date: 2009-11-05 22:49+0800\n"
-"Last-Translator: Aron Xu <happyaron.xu@gmail.com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"terminal&component=general\n"
+"POT-Creation-Date: 2010-08-07 06:59+0000\n"
+"PO-Revision-Date: 2010-08-07 21:18+0800\n"
+"Last-Translator: Yinghua Wang <wantinghard@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:119
-#: ../src/terminal-accels.c:222 ../src/terminal.c:304
-#: ../src/terminal-profile.c:144 ../src/terminal-window.c:1890
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:129
+#: ../src/terminal-accels.c:228 ../src/terminal.c:304
+#: ../src/terminal-profile.c:158 ../src/terminal-window.c:1901
 msgid "Terminal"
 msgstr "终端"
 
@@ -155,10 +157,23 @@ msgid "Default"
 msgstr "默认"
 
 #: ../src/gnome-terminal.schemas.in.h:15
+msgid "Default color of bold text in the terminal"
+msgstr "终端加粗文字的默认颜色"
+
+#: ../src/gnome-terminal.schemas.in.h:16
+msgid ""
+"Default color of bold text in the terminal, as a color specification (can be "
+"HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
+"bold_color_same_as_fg is true."
+msgstr ""
+"终端加粗文字的默认颜色，必须是颜色指定(可以是 HTML 风格的十六进制数码，也可以"
+"是像“red”这样的颜色名称)。如果bold_color_same+as_fg是真，这个选项将被忽略。"
+
+#: ../src/gnome-terminal.schemas.in.h:17
 msgid "Default color of terminal background"
 msgstr "终端背景的默认颜色"
 
-#: ../src/gnome-terminal.schemas.in.h:16
+#: ../src/gnome-terminal.schemas.in.h:18
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -166,11 +181,11 @@ msgstr ""
 "终端背景的默认颜色，必须是颜色指定(可以是 HTML 风格的十六进制数码，也可以是"
 "像“red”这样的颜色名称)。"
 
-#: ../src/gnome-terminal.schemas.in.h:17
+#: ../src/gnome-terminal.schemas.in.h:19
 msgid "Default color of text in the terminal"
 msgstr "终端文字的默认颜色"
 
-#: ../src/gnome-terminal.schemas.in.h:18
+#: ../src/gnome-terminal.schemas.in.h:20
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -178,49 +193,57 @@ msgstr ""
 "终端文字的默认颜色，必须是颜色指定(可以是 HTML 风格的十六进制数码，也可以是"
 "像“red”这样的颜色名称)。"
 
-#: ../src/gnome-terminal.schemas.in.h:19
+#: ../src/gnome-terminal.schemas.in.h:21
+msgid "Default number of columns"
+msgstr "默认列数"
+
+#: ../src/gnome-terminal.schemas.in.h:22
+msgid "Default number of rows"
+msgstr "默认行数"
+
+#: ../src/gnome-terminal.schemas.in.h:23
 msgid "Effect of the Backspace key"
 msgstr "退格键效果"
 
-#: ../src/gnome-terminal.schemas.in.h:20
+#: ../src/gnome-terminal.schemas.in.h:24
 msgid "Effect of the Delete key"
 msgstr "删除键效果"
 
-#: ../src/gnome-terminal.schemas.in.h:21
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Filename of a background image."
 msgstr "背景图像的文件名。"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "Font"
 msgstr "字体"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:25
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "Highlight S/Key challenges"
 msgstr "高亮 S/Key 挑战"
 
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "How much to darken the background image"
 msgstr "背景图像的灰暗程度"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid "Human-readable name of the profile"
 msgstr "配置文件的友好名称"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "Human-readable name of the profile."
 msgstr "配置文件的友好名称。"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid "Icon for terminal window"
 msgstr "终端窗口的图标"
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "包含此配置文件的标签页/窗口所用的图标。"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -231,21 +254,26 @@ msgstr ""
 "态设置的标题可以删除配置好的标题，或者在原有标题前/后插入。可供选择的值有“替"
 "换”、“之前”、“之后”和“忽略”。"
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "如果为真(true)，就允许终端中的程序将文字以粗体显示。"
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:37
+msgid ""
+"If true, boldface text will be rendered using the same color as normal text."
+msgstr "如果是真(true)，粗体字将与普通字显示同样的颜色。"
+
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
 msgstr "如果为真(true)，在应用程序发送终端响铃的转码序列时就闷声不响。"
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "如果为真(true)，按键就把滚动条滚动到底部。"
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -253,7 +281,16 @@ msgstr ""
 "如果为真(true)，就和前景文字一起滚动背景图像；如果为 false，就将图像保留在固"
 "定位置，而只滚动其上的文字。"
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:41
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"如果为真(true)，回滚的行将不会丢弃。回滚历史是临时保存在磁盘上的，因此若终端"
+"有大量输出，这可能导致系统磁盘空间耗尽。"
+
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -261,13 +298,13 @@ msgstr ""
 "如果为真(true)，终端中的命令将会以登录 shell 被调用。(argv[0] 将在前面有一个"
 "连字符。)"
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
 msgstr "如果为真(true)，将会在终端内的命令调用时更新登录记录 utmp/wtmp。"
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -275,25 +312,25 @@ msgstr ""
 "如果为真(true)，终端就将使用与桌面相同的标准字体，假如该字体为等宽字体的话(否"
 "则就是用最为接近的字体)。"
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
 msgstr ""
 "如果为真(true)，终端就会使用文本输入框的主题颜色配对，而不是用户给出的颜色。"
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr "如果为真(true)，将会使用用户自定义的设置来取代 shell。"
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "如果为真(true)，在终端有新输出时滚动条就会滚动到底部。"
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -303,7 +340,7 @@ msgstr ""
 "启动配置文件创建对话框的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您"
 "将选项设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -312,7 +349,7 @@ msgstr ""
 "关闭标签页的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特"
 "殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -322,7 +359,7 @@ msgstr ""
 "关闭窗口的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特殊"
 "字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -332,7 +369,7 @@ msgstr ""
 "将选中文字复制到剪贴板的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您"
 "将选项设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -341,7 +378,7 @@ msgstr ""
 "调用帮助的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特殊"
 "字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -351,7 +388,7 @@ msgstr ""
 "设为大字体的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特"
 "殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -361,7 +398,7 @@ msgstr ""
 "设为小字体的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特"
 "殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -371,7 +408,7 @@ msgstr ""
 "设为普通字体的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为"
 "特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -381,7 +418,7 @@ msgstr ""
 "打开新标签页的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为"
 "特殊字符串 \"disabled\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -391,7 +428,7 @@ msgstr ""
 "打开新窗口的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特"
 "殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -401,7 +438,7 @@ msgstr ""
 "从剪贴板粘贴文字的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -410,7 +447,7 @@ msgstr ""
 "切换到标签页 1 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -420,7 +457,7 @@ msgstr ""
 "切换到标签页 10 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
 "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -430,7 +467,7 @@ msgstr ""
 "切换到标签页 11 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
 "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -440,7 +477,7 @@ msgstr ""
 "切换到标签页 12 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid ""
 "Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -449,7 +486,7 @@ msgstr ""
 "切换到标签页 2 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid ""
 "Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -458,7 +495,7 @@ msgstr ""
 "切换到标签页 3 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -467,7 +504,7 @@ msgstr ""
 "切换到标签页 4 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -476,7 +513,7 @@ msgstr ""
 "切换到标签页 5 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -485,7 +522,7 @@ msgstr ""
 "切换到标签页 6 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -494,7 +531,7 @@ msgstr ""
 "切换到标签页 7 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -503,7 +540,7 @@ msgstr ""
 "切换到标签页 8 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -512,7 +549,7 @@ msgstr ""
 "切换到标签页 9 的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串 \"禁用\"，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -522,7 +559,7 @@ msgstr ""
 "切换全屏模式的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为"
 "特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -532,7 +569,7 @@ msgstr ""
 "重置并清除终端的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设"
 "为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -542,7 +579,17 @@ msgstr ""
 "重置终端的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为特殊"
 "字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:74
+msgid ""
+"Keyboard shortcut key to save the current tab contents to a file. Expressed "
+"as a string in the same format used for GTK+ resource files. If you set the "
+"option to the special string \"disabled\", then there will be no keyboard "
+"shortcut for this action."
+msgstr ""
+"保存当前标签内容到文件的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您"
+"将选项设为特殊字符串“disabled”，则此操作就没有快捷键。"
+
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -552,7 +599,7 @@ msgstr ""
 "设定终端标题的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项设为"
 "特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -562,7 +609,7 @@ msgstr ""
 "切换到下一标签页的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -572,7 +619,7 @@ msgstr ""
 "切换到上一标签页的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选项"
 "设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -582,135 +629,139 @@ msgstr ""
 "切换菜单栏是否可见的快捷键。以 GTK+ 资源文件所用格式给出的字符串。如果您将选"
 "项设为特殊字符串“disabled”，则此操作就没有快捷键。"
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to close a tab"
 msgstr "关闭标签页的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a window"
 msgstr "关闭窗口的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to copy text"
 msgstr "复制文字的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to create a new profile"
 msgstr "创建新配置文件的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to launch help"
 msgstr "调用帮助的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to make font larger"
 msgstr "大字体的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "普通字体的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font smaller"
 msgstr "小字体的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to open a new tab"
 msgstr "打开新标签页的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new window"
 msgstr "打开新窗口的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to paste text"
 msgstr "粘贴文字的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "重置并清除终端的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "重置终端的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:92
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "保存当前标签内容到文件的快捷键"
+
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "设置终端标题的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "切换到标签页 1 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "切换到标签页 10 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "切换到标签页 11 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "切换到标签页 12 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "切换到标签页 2 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "切换到标签页 3 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "切换到标签页 4 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "切换到标签页 5 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "切换到标签页 6 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "切换到标签页 7 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "切换到标签页 8 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "切换到标签页 9 的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "切换到下一标签页的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "切换到上一标签页的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "切换全屏模式的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "切换菜单栏是否可见的快捷键"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "可用编码的列表"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "配置文件列表"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -718,7 +769,7 @@ msgstr ""
 "列出了 gnome-terminal 已知的配置文件。列表包含的子目录是相对于 /apps/gnome-"
 "terminal/profiles 的。"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -727,27 +778,34 @@ msgstr ""
 "通常您可以用 F10 访问菜单栏。这也可以通过 gtkrc 自定义(gtk-menu-bar-accel = "
 "\"whatever\")。此选项允许禁用标准的菜单栏加速键。"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:114
+msgid "Number of columns in newly created terminal windows."
+msgstr "新建终端窗口的列数。"
+
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "回滚的行数"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:116
+msgid "Number of rows in newly created terminal windows."
+msgstr "新建终端窗口的行数。"
+
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. Be careful with this setting; it's the primary factor in "
-"determining how much memory the terminal will use."
+"discarded. If scrollback_unlimited is true, this value is ignored."
 msgstr ""
-"要保留的回滚行数。您可以往回滚动终端到这么多行；不在回滚之内的行将被丢弃。请"
-"小心使用此设置；因为它是决定终端要使用多大内存的首要因数。"
+"要保留的回滚行数。您可以往回滚动终端到这么多行；不在回滚之内的行将被丢弃。如"
+"果scrollback_unlimited被设置为真(true)，这个值将被忽略。"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "终端程序调色板"
 
 #. Translators: S/Key is the name of an application, so it should
 #. not be translated.
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid ""
 "Popup a dialog when an S/Key challenge response query is detected and "
 "clicked on. Typing a password into the dialog will send it to the terminal."
@@ -755,30 +813,30 @@ msgstr ""
 "检测到 S/Key 挑战响应查询且单击时弹出一个对话框。在对话框中输入的密码将发送到"
 "终端。"
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Position of the scrollbar"
 msgstr "滚动条的位置"
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
 msgstr "可供选择的值中，“关闭”可关闭终端，“重新启动”可重新启动命令。"
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid ""
 "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr "打开新窗口或标签页时要使用的配置文件。必须位于配置文件列表中。"
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid "Profile to use for new terminals"
 msgstr "新终端要使用的配置文件"
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:126
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "在 shell 的位置运行此命令，如果 use_custom_command 为 true。"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -790,7 +848,7 @@ msgstr ""
 "符，“control-h”代表 Ctrl+H(即 ASCII BS 字符)，“escape-sequence”代表 "
 "backspace 或 delete 代表的转码序列。“ascii-del”通常是退格键正确的设置。"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -802,7 +860,7 @@ msgstr ""
 "符，“control-h”代表 Ctrl+H(即 ASCII BS 字符)，“escape-sequence”代表 "
 "backspace 或 delete 代表的转码序列。“ascii-del”通常是 Delete 键正确的设置。"
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -811,11 +869,11 @@ msgstr ""
 "终端使用 16 色的调色板，以供终端中的程序使用。这就是该调色板，格式为冒号分隔"
 "的颜色名称。颜色名必须是十六进制格式，即“#FF00FF”"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "The cursor appearance"
 msgstr "光标外观"
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
@@ -823,18 +881,18 @@ msgstr ""
 "可能值为 \"block\" 以使用块状鼠标，\"ibeam\" 以使用垂直线鼠标，或者 "
 "\"underline\" 以使用下划线鼠标。"
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
 msgstr ""
 "可供选择的值包括“system”可使用全局光标闪烁设置，“on”或“off”可显式设置模式。"
 
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Title for terminal"
 msgstr "终端标题"
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -843,13 +901,13 @@ msgstr ""
 "终端窗口或标签页显示用的标题。根据 title_mode 设置的不同，此标题可替换为终端"
 "内程序所指定的标题，或与之组合。"
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
 msgstr "True 代表要在使用此配置文件的新窗口中显示菜单栏。"
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
@@ -858,15 +916,15 @@ msgstr ""
 "终端背景的类型。可以是“纯色”代表单一颜色，“图像”代表图像，以及“透明”代表真透"
 "明(如果一个复合窗口管理器在运行)，否者为假透明。"
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid "What to do with dynamic title"
 msgstr "如何对待动态标题"
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "What to do with the terminal when the child command exits"
 msgstr "如何对待子命令退出时"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -875,39 +933,47 @@ msgstr ""
 "逐词选中文字时，这些字符的序列将被认为是一个单词。范围可以给为“A-Z”。连字符"
 "(不表示范围)必须是给出的第一个字符。"
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"disabled\"."
 msgstr "将终端滚动条放在哪里。可供选择的值是“左”、“右”和“禁用”。"
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:142
+msgid "Whether an unlimited number of lines should be kept in scrollback"
+msgstr "是否保存无限行的回滚内容"
+
+#: ../src/gnome-terminal.schemas.in.h:143
+msgid "Whether bold text should use the same color as normal text"
+msgstr "粗体字是否应该与普通字的颜色相同"
+
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether the menubar has access keys"
 msgstr "菜单栏是否有访问键"
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "是否启用 GTK 标准的快捷键访问菜单栏"
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to allow bold text"
 msgstr "是否允许粗体字"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
 msgstr "是否在关闭打开了多个标签页的终端窗口时请求确认。"
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "是否在关闭终端窗口时请求确认"
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to blink the cursor"
 msgstr "是否闪烁光标"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -916,43 +982,43 @@ msgstr ""
 "菜单栏是否使用 Alt+字母的快捷键。终端运行的很多程序都可能与此快捷键产生冲突，"
 "所以可以关闭此特性。"
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "是否以登录 shell 在终端调用命令"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to run a custom command instead of the shell"
 msgstr "是否运行自定义命令而不是 Shell"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to scroll background image"
 msgstr "是否滚动背景图像"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "是否在按键时滚动到底部"
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "是否在有新输出时滚动到底部"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "是否在新窗口/标签页显示菜单栏"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to silence terminal bell"
 msgstr "是否禁用终端铃声"
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to update login records when launching terminal command"
 msgstr "是否在调用终端命令时更新登录日志"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:159
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "是否为终端部件使用主题中的颜色"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:160
 msgid "Whether to use the system font"
 msgstr "是否使用系统字体"
 
@@ -962,7 +1028,7 @@ msgstr "是否使用系统字体"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:167
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,GB18030,GBK,GB2312,current]"
 
@@ -1002,26 +1068,26 @@ msgstr "黑底绿字"
 msgid "White on black"
 msgstr "黑底白字"
 
-#: ../src/profile-editor.c:434
+#: ../src/profile-editor.c:472
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "分析命令时出错：%s"
 
-#: ../src/profile-editor.c:454
+#: ../src/profile-editor.c:490
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "编辑配置文件“%s”"
 
-#: ../src/profile-editor.c:592
+#: ../src/profile-editor.c:628
 msgid "Images"
 msgstr "图像"
 
-#: ../src/profile-editor.c:718
+#: ../src/profile-editor.c:754
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "选择调色板颜色 %d"
 
-#: ../src/profile-editor.c:722
+#: ../src/profile-editor.c:758
 #, c-format
 msgid "Palette entry %d"
 msgstr "调色板项 %d"
@@ -1038,7 +1104,7 @@ msgstr "打开新终端时使用的配置文件(_P)："
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:123
+#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:125
 msgid "New Profile"
 msgstr "新建配置文件"
 
@@ -1055,8 +1121,8 @@ msgid "<b>Command</b>"
 msgstr "<b>命令</b>"
 
 #: ../src/profile-preferences.glade.h:2
-msgid "<b>Foreground and Background</b>"
-msgstr "<b>前景色和背景色</b>"
+msgid "<b>Foreground, Background, and Bold</b>"
+msgstr "<b>前景色、背景色和加粗</b>"
 
 #: ../src/profile-preferences.glade.h:3
 msgid "<b>Palette</b>"
@@ -1121,51 +1187,59 @@ msgstr ""
 "下划线"
 
 #: ../src/profile-preferences.glade.h:18
+msgid "Bol_d color:"
+msgstr "粗体颜色(_D)："
+
+#: ../src/profile-preferences.glade.h:19
 msgid "Built-in _schemes:"
 msgstr "内置方案(_S)："
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:20
 msgid "Built-in sche_mes:"
 msgstr "内置方案(_M)："
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:21
 msgid "Choose A Terminal Font"
 msgstr "选择终端字体"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:22
 msgid "Choose Terminal Background Color"
 msgstr "选择终端背景颜色"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:23
 msgid "Choose Terminal Text Color"
 msgstr "选择终端文本颜色"
 
-#: ../src/profile-preferences.glade.h:23
+#: ../src/profile-preferences.glade.h:24
 msgid "Color p_alette:"
 msgstr "调色板(_A)："
 
-#: ../src/profile-preferences.glade.h:24
+#: ../src/profile-preferences.glade.h:25
 msgid "Colors"
 msgstr "颜色"
 
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.glade.h:26
 msgid "Compatibility"
 msgstr "兼容性"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:27
 msgid "Cursor _shape:"
 msgstr "鼠标形状(_s)："
 
 #. Translators: This is the name of a colour scheme
-#: ../src/profile-preferences.glade.h:27 ../src/extra-strings.c:71
+#: ../src/profile-preferences.glade.h:28 ../src/extra-strings.c:71
 msgid "Custom"
 msgstr "自定义"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:29
 msgid "Custom co_mmand:"
 msgstr "自定义命令(_M)："
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:30
+msgid "Default si_ze:"
+msgstr "默认大小(_Z)："
+
+#: ../src/profile-preferences.glade.h:31
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1175,19 +1249,19 @@ msgstr ""
 "重新启动命令\n"
 "保持终端打开"
 
-#: ../src/profile-preferences.glade.h:32
+#: ../src/profile-preferences.glade.h:34
 msgid "General"
 msgstr "常规"
 
-#: ../src/profile-preferences.glade.h:33
+#: ../src/profile-preferences.glade.h:35
 msgid "Image _file:"
 msgstr "图像文件(_F)："
 
-#: ../src/profile-preferences.glade.h:34
+#: ../src/profile-preferences.glade.h:36
 msgid "Initial _title:"
 msgstr "起始标题(_T)："
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:37
 msgid ""
 "On the left side\n"
 "On the right side\n"
@@ -1197,11 +1271,11 @@ msgstr ""
 "在右侧\n"
 "已禁用"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.glade.h:40
 msgid "Profile Editor"
 msgstr "配置文件编辑器"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:41
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1213,43 +1287,43 @@ msgstr ""
 "置于初始标题之后\n"
 "保留初始标题"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:45
 msgid "Ru_n a custom command instead of my shell"
 msgstr "运行自定义命令而不是 Shell(_N)"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:46
 msgid "S_hade transparent or image background:"
 msgstr "加深透明和图像背景(_H)："
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:47
 msgid "Scroll on _keystroke"
 msgstr "击键时滚动(_K)"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:48
 msgid "Scroll on _output"
 msgstr "输出时滚动(_O)"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:49
 msgid "Scroll_back:"
 msgstr "回滚(_B)："
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:50
 msgid "Scrolling"
 msgstr "滚动"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:51
 msgid "Select Background Image"
 msgstr "选择背景图像"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.glade.h:52
 msgid "Select-by-_word characters:"
 msgstr "选择单词的标识字符(_W)："
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.glade.h:53
 msgid "Show _menubar by default in new terminals"
 msgstr "默认在新终端中显示菜单栏(_M)"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.glade.h:54
 msgid ""
 "Tango\n"
 "Linux console\n"
@@ -1263,88 +1337,105 @@ msgstr ""
 "Rxvt\n"
 "自定义"
 
-#: ../src/profile-preferences.glade.h:57
+#: ../src/profile-preferences.glade.h:59
 msgid "Terminal _bell"
 msgstr "终端响铃(_B)"
 
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.glade.h:60
 msgid "Title and Command"
 msgstr "标题和命令"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.glade.h:61
 msgid "When command _exits:"
 msgstr "命令退出时(_E)："
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.glade.h:62
 msgid "When terminal commands set their o_wn titles:"
 msgstr "终端命令设置其自己的标题时(_W)："
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.glade.h:63
 msgid "_Allow bold text"
 msgstr "允许粗体字(_A)"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.glade.h:64
 msgid "_Background color:"
 msgstr "背景颜色(_B)："
 
-#: ../src/profile-preferences.glade.h:63
+#: ../src/profile-preferences.glade.h:65
 msgid "_Background image"
 msgstr "背景图像(_B)"
 
-#: ../src/profile-preferences.glade.h:64
+#: ../src/profile-preferences.glade.h:66
 msgid "_Backspace key generates:"
 msgstr "按 _Backspace 键产生："
 
-#: ../src/profile-preferences.glade.h:65
+#: ../src/profile-preferences.glade.h:67
 msgid "_Delete key generates:"
 msgstr "按 _Delete 键产生："
 
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:68
 msgid "_Font:"
 msgstr "字体(_F)："
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:69
 msgid "_Profile name:"
 msgstr "配置文件名(_P)："
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:70
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "重置兼容性选项为默认值(_R)"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:71
 msgid "_Run command as a login shell"
 msgstr "以登录 Shell 方式运行命令(_R)"
 
-#: ../src/profile-preferences.glade.h:70
+#: ../src/profile-preferences.glade.h:72
+msgid "_Same as text color"
+msgstr "与文本颜色相同(_S)"
+
+#: ../src/profile-preferences.glade.h:73
 msgid "_Scrollbar is:"
 msgstr "滚动条(_S)："
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:74
 msgid "_Solid color"
 msgstr "纯色(_S)"
 
-#: ../src/profile-preferences.glade.h:72
+#: ../src/profile-preferences.glade.h:75
 msgid "_Text color:"
 msgstr "文本颜色(_T)："
 
-#: ../src/profile-preferences.glade.h:73
+#: ../src/profile-preferences.glade.h:76
 msgid "_Transparent background"
 msgstr "透明背景(_T)"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:77
+msgid "_Unlimited"
+msgstr "不限制(_U)"
+
+#: ../src/profile-preferences.glade.h:78
 msgid "_Update login records when command is launched"
 msgstr "执行命令时更新登录记录(_U)"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:79
 msgid "_Use colors from system theme"
 msgstr "使用系统主题中的颜色(_U)"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:80
 msgid "_Use the system fixed width font"
 msgstr "使用系统的等宽字体(_U)"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:81
+msgid "columns"
+msgstr "列"
+
+#: ../src/profile-preferences.glade.h:82
 msgid "lines"
+msgstr "行"
+
+#: ../src/profile-preferences.glade.h:83
+#, fuzzy
+msgid "rows"
 msgstr "行"
 
 #: ../src/skey-challenge.glade.h:1
@@ -1363,169 +1454,173 @@ msgstr "您点击的文字不像是有效的 S/Key 挑战。"
 msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 msgstr "您点击的文字不像是有效的 OTP 挑战。"
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:121
 msgid "New Tab"
 msgstr "新建标签页"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:123
 msgid "New Window"
 msgstr "新建窗口"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:128
+msgid "Save Contents"
+msgstr "保存内容"
+
+#: ../src/terminal-accels.c:131
 msgid "Close Tab"
 msgstr "关闭标签页"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:133
 msgid "Close Window"
 msgstr "关闭窗口"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:139
 msgid "Copy"
 msgstr "复制"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:141
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/terminal-accels.c:141
+#: ../src/terminal-accels.c:147
 msgid "Hide and Show menubar"
 msgstr "隐藏/显示菜单栏"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:149
 msgid "Full Screen"
 msgstr "全屏"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:151
 msgid "Zoom In"
 msgstr "放大"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:153
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:155
 msgid "Normal Size"
 msgstr "普通大小"
 
-#: ../src/terminal-accels.c:155 ../src/terminal-window.c:3374
+#: ../src/terminal-accels.c:161 ../src/terminal-window.c:3487
 msgid "Set Title"
 msgstr "设置标题"
 
-#: ../src/terminal-accels.c:157
+#: ../src/terminal-accels.c:163
 msgid "Reset"
 msgstr "复位"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:165
 msgid "Reset and Clear"
 msgstr "复位并清除"
 
-#: ../src/terminal-accels.c:165
+#: ../src/terminal-accels.c:171
 msgid "Switch to Previous Tab"
 msgstr "切换到上个标签页"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:173
 msgid "Switch to Next Tab"
 msgstr "切换到下个标签页"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:175
 msgid "Move Tab to the Left"
 msgstr "标签页左移"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:177
 msgid "Move Tab to the Right"
 msgstr "标签页右移"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:179
 msgid "Detach Tab"
 msgstr "漂移标签页"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:181
 msgid "Switch to Tab 1"
 msgstr "切换到标签页 1"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:184
 msgid "Switch to Tab 2"
 msgstr "切换到标签页 2"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:187
 msgid "Switch to Tab 3"
 msgstr "切换到标签页 3"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:190
 msgid "Switch to Tab 4"
 msgstr "切换到标签页 4"
 
-#: ../src/terminal-accels.c:187
+#: ../src/terminal-accels.c:193
 msgid "Switch to Tab 5"
 msgstr "切换到标签页 5"
 
-#: ../src/terminal-accels.c:190
+#: ../src/terminal-accels.c:196
 msgid "Switch to Tab 6"
 msgstr "切换到标签页 6"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 7"
 msgstr "切换到标签页 7"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 8"
 msgstr "切换到标签页 8"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 9"
 msgstr "切换到标签页 9"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 10"
 msgstr "切换到标签页 10"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 11"
 msgstr "切换到标签页 11"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 12"
 msgstr "切换到标签页 12"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:220
 msgid "Contents"
 msgstr "目录"
 
-#: ../src/terminal-accels.c:219
+#: ../src/terminal-accels.c:225
 msgid "File"
 msgstr "文件"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:226
 msgid "Edit"
 msgstr "编辑"
 
-#: ../src/terminal-accels.c:221
+#: ../src/terminal-accels.c:227
 msgid "View"
 msgstr "查看"
 
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:229
 msgid "Tabs"
 msgstr "标签页"
 
-#: ../src/terminal-accels.c:224
+#: ../src/terminal-accels.c:230
 msgid "Help"
 msgstr "帮助"
 
 #. Translators: Scrollbar is: ...
-#: ../src/terminal-accels.c:281 ../src/extra-strings.c:51
+#: ../src/terminal-accels.c:287 ../src/extra-strings.c:51
 msgid "Disabled"
 msgstr "已禁用"
 
-#: ../src/terminal-accels.c:753
+#: ../src/terminal-accels.c:759
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "快捷键“%s”已经绑定到“%s”动作"
 
-#: ../src/terminal-accels.c:911
+#: ../src/terminal-accels.c:917
 msgid "_Action"
 msgstr "动作(_A)"
 
-#: ../src/terminal-accels.c:930
+#: ../src/terminal-accels.c:936
 msgid "Shortcut _Key"
 msgstr "快捷键(_K)"
 
@@ -1562,12 +1657,12 @@ msgstr ""
 msgid "Choose base profile"
 msgstr "选择基础配置文件"
 
-#: ../src/terminal-app.c:1794
+#: ../src/terminal-app.c:1800
 #, c-format
 msgid "No such profile \"%s\", using default profile\n"
 msgstr "不存在配置文件“%s”，使用默认配置文件\n"
 
-#: ../src/terminal-app.c:1818
+#: ../src/terminal-app.c:1824
 #, c-format
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "无效的几何属性字符串“%s”\n"
@@ -1756,7 +1851,7 @@ msgstr ""
 "此版本的 gnome-terminal 已不再支持选项 \"%s\" ；您可能想要创建一个有期望设定"
 "的配置文件，然后使用新的“--profile”选项\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:3595
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:3708
 msgid "GNOME Terminal"
 msgstr "GNOME 终端"
 
@@ -1844,10 +1939,8 @@ msgstr "全屏幕窗口"
 
 #: ../src/terminal-options.c:1037
 msgid ""
-"Set the window geometry from the provided X geometry specification; see the "
-"\"X\" man page for more information"
-msgstr ""
-"根据提供的 X 几何形状规格设定窗口的几何形状；更多信息参见 \"X\" 帮助页。"
+"Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"
+msgstr "设置窗口大小；例如：80x24，或者80x24+200+200 (行x列+X坐标+Y坐标)"
 
 #: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
@@ -1943,15 +2036,15 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "显示每个终端的选项"
 
-#: ../src/terminal-profile.c:150
+#: ../src/terminal-profile.c:164
 msgid "Unnamed"
 msgstr "未命名"
 
-#: ../src/terminal-screen.c:1288
+#: ../src/terminal-screen.c:1309
 msgid "There was a problem with the command for this terminal"
 msgstr "该终端的命令行有误"
 
-#: ../src/terminal-screen.c:1604
+#: ../src/terminal-screen.c:1513
 msgid "There was an error creating the child process for this terminal"
 msgstr "创建此终端的子进程时出错"
 
@@ -1963,16 +2056,16 @@ msgstr "关闭标签页"
 msgid "Switch to this tab"
 msgstr "切换到这一标签页"
 
-#: ../src/terminal-util.c:183
+#: ../src/terminal-util.c:185
 msgid "There was an error displaying help"
 msgstr "显示帮助时出错"
 
-#: ../src/terminal-util.c:256
+#: ../src/terminal-util.c:258
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "无法打开地址“%s”"
 
-#: ../src/terminal-util.c:363
+#: ../src/terminal-util.c:365
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1982,7 +2075,7 @@ msgstr ""
 "GNOME 终端是自由软件；您可以在自由软件基金会发布的 GNU 通用公共许可证下重新发"
 "布或修改它；许可证应使用第二版本或您所选择的更新的版本。"
 
-#: ../src/terminal-util.c:367
+#: ../src/terminal-util.c:369
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1993,7 +2086,7 @@ msgstr ""
 "式的担保，也无法保证它可以在特定用途中得到您希望的结果。请参看 GNU GPL 许可中"
 "的更多细节。"
 
-#: ../src/terminal-util.c:371
+#: ../src/terminal-util.c:373
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2007,7 +2100,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:432
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2016,218 +2109,230 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:438
+#: ../src/terminal-window.c:442
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1703
+#: ../src/terminal-window.c:1709
 msgid "_File"
 msgstr "文件(_F)"
 
 #. File menu
-#: ../src/terminal-window.c:1704 ../src/terminal-window.c:1715
-#: ../src/terminal-window.c:1837
+#: ../src/terminal-window.c:1710 ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:1848
 msgid "Open _Terminal"
 msgstr "打开终端(_T)"
 
-#: ../src/terminal-window.c:1705 ../src/terminal-window.c:1718
-#: ../src/terminal-window.c:1840
+#: ../src/terminal-window.c:1711 ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:1851
 msgid "Open Ta_b"
 msgstr "打开标签页(_B)"
 
-#: ../src/terminal-window.c:1706
+#: ../src/terminal-window.c:1712
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src/terminal-window.c:1707
+#: ../src/terminal-window.c:1713
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:1714
 msgid "_Terminal"
 msgstr "终端(_T)"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1715
 msgid "Ta_bs"
 msgstr "标签页(_b)"
 
-#: ../src/terminal-window.c:1710
+#: ../src/terminal-window.c:1716
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:1727
 msgid "New _Profile…"
 msgstr "新建配置文件(_P)..."
 
-#: ../src/terminal-window.c:1724 ../src/terminal-window.c:1846
+#: ../src/terminal-window.c:1731
+msgid "_Save Contents"
+msgstr "保存内容(_S)"
+
+#: ../src/terminal-window.c:1735 ../src/terminal-window.c:1857
 msgid "C_lose Tab"
 msgstr "关闭标签页(_L)"
 
-#: ../src/terminal-window.c:1727
+#: ../src/terminal-window.c:1738
 msgid "_Close Window"
 msgstr "关闭窗口(_C)"
 
-#: ../src/terminal-window.c:1738 ../src/terminal-window.c:1834
+#: ../src/terminal-window.c:1749 ../src/terminal-window.c:1845
 msgid "Paste _Filenames"
 msgstr "粘贴文件名(_F)"
 
-#: ../src/terminal-window.c:1744
+#: ../src/terminal-window.c:1755
 msgid "P_rofiles…"
 msgstr "配置文件(_R)..."
 
-#: ../src/terminal-window.c:1747
+#: ../src/terminal-window.c:1758
 msgid "_Keyboard Shortcuts…"
 msgstr "键盘快捷键(_K)..."
 
-#: ../src/terminal-window.c:1750
+#: ../src/terminal-window.c:1761
 msgid "Pr_ofile Preferences"
 msgstr "配置文件首选项(_o)"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:1777
 msgid "Change _Profile"
 msgstr "更改配置文件(_P)"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1778
 msgid "_Set Title…"
 msgstr "设置标题(_S)..."
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1781
 msgid "Set _Character Encoding"
 msgstr "设定字符编码(_C)"
 
-#: ../src/terminal-window.c:1771
+#: ../src/terminal-window.c:1782
 msgid "_Reset"
 msgstr "复位(_R)"
 
-#: ../src/terminal-window.c:1774
+#: ../src/terminal-window.c:1785
 msgid "Reset and C_lear"
 msgstr "复位并清屏(_L)"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1790
 msgid "_Add or Remove…"
 msgstr "添加或删除(_A)..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1784
+#: ../src/terminal-window.c:1795
 msgid "_Previous Tab"
 msgstr "前一标签页(_P)"
 
-#: ../src/terminal-window.c:1787
+#: ../src/terminal-window.c:1798
 msgid "_Next Tab"
 msgstr "后一标签页(_N)"
 
-#: ../src/terminal-window.c:1790
+#: ../src/terminal-window.c:1801
 msgid "Move Tab _Left"
 msgstr "标签页左移(_L)"
 
-#: ../src/terminal-window.c:1793
+#: ../src/terminal-window.c:1804
 msgid "Move Tab _Right"
 msgstr "标签页右移(_R)"
 
-#: ../src/terminal-window.c:1796
+#: ../src/terminal-window.c:1807
 msgid "_Detach tab"
 msgstr "分离标签页(_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1812
 msgid "_Contents"
 msgstr "目录(_C)"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1815
 msgid "_About"
 msgstr "关于(_A)"
 
 #. Popup menu
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1820
 msgid "_Send Mail To…"
 msgstr "发送邮件给(_S)..."
 
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1823
 msgid "_Copy E-mail Address"
 msgstr "复制电子邮件地址(_C)"
 
-#: ../src/terminal-window.c:1815
+#: ../src/terminal-window.c:1826
 msgid "C_all To…"
 msgstr "呼叫(_A)..."
 
-#: ../src/terminal-window.c:1818
+#: ../src/terminal-window.c:1829
 msgid "_Copy Call Address"
 msgstr "复制呼叫地址(_C)"
 
-#: ../src/terminal-window.c:1821
+#: ../src/terminal-window.c:1832
 msgid "_Open Link"
 msgstr "打开链接(_O)"
 
-#: ../src/terminal-window.c:1824
+#: ../src/terminal-window.c:1835
 msgid "_Copy Link Address"
 msgstr "复制链接地址(_C)"
 
-#: ../src/terminal-window.c:1827
+#: ../src/terminal-window.c:1838
 msgid "P_rofiles"
 msgstr "配置文件(_R)"
 
-#: ../src/terminal-window.c:1843 ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:1854 ../src/terminal-window.c:3049
 msgid "C_lose Window"
 msgstr "关闭窗口(_L)"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1860
 msgid "L_eave Full Screen"
 msgstr "退出全屏(_E)"
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1863
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
 #. View Menu
-#: ../src/terminal-window.c:1858
+#: ../src/terminal-window.c:1869
 msgid "Show _Menubar"
 msgstr "显示菜单栏(_M)"
 
-#: ../src/terminal-window.c:1862
+#: ../src/terminal-window.c:1873
 msgid "_Full Screen"
 msgstr "全屏(_F)"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3036
 msgid "Close this window?"
 msgstr "关闭这个窗口？"
 
-#: ../src/terminal-window.c:3010
+#: ../src/terminal-window.c:3036
 msgid "Close this terminal?"
 msgstr "关闭此终端？"
 
-#: ../src/terminal-window.c:3014
+#: ../src/terminal-window.c:3040
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在这个窗口的一些终端中仍然有进程在运行。关闭该窗口将杀死所有这些进程。"
 
-#: ../src/terminal-window.c:3018
+#: ../src/terminal-window.c:3044
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "该终端中仍然有一个进程在运行。关闭终端将杀死该进程。"
 
-#: ../src/terminal-window.c:3023
+#: ../src/terminal-window.c:3049
 msgid "C_lose Terminal"
 msgstr "关闭终端(_L)"
 
-#: ../src/terminal-window.c:3391
+#: ../src/terminal-window.c:3122
+msgid "Could not save contents"
+msgstr "无法保存内容"
+
+#: ../src/terminal-window.c:3144
+msgid "Save as..."
+msgstr "另存为..."
+
+#: ../src/terminal-window.c:3504
 msgid "_Title:"
 msgstr "标题(_T)："
 
-#: ../src/terminal-window.c:3578
+#: ../src/terminal-window.c:3691
 msgid "Contributors:"
 msgstr "贡献者："
 
-#: ../src/terminal-window.c:3597
+#: ../src/terminal-window.c:3710
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "GNOME 桌面的终端模拟器"
 
-#: ../src/terminal-window.c:3604
+#: ../src/terminal-window.c:3717
 msgid "translator-credits"
 msgstr ""
 "He Qiangqiang <carton@linux.net.cn>, 2002\n"
@@ -2282,7 +2387,7 @@ msgstr "方块"
 #. Translators: Cursor shape: ...
 #: ../src/extra-strings.c:35
 msgid "I-Beam"
-msgstr "I型"
+msgstr "I 型"
 
 #. Translators: Cursor shape: ...
 #: ../src/extra-strings.c:37
@@ -2353,6 +2458,12 @@ msgstr "XTerm"
 #: ../src/extra-strings.c:69
 msgid "Rxvt"
 msgstr "Rxvt"
+
+#~ msgid ""
+#~ "Set the window geometry from the provided X geometry specification; see "
+#~ "the \"X\" man page for more information"
+#~ msgstr ""
+#~ "根据提供的 X 几何形状规格设定窗口的几何形状；更多信息参见 \"X\" 帮助页。"
 
 #~ msgid "(about %s)"
 #~ msgstr "(大约 %s)"
