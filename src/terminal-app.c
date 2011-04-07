@@ -52,6 +52,8 @@
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 #define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
 
+#define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
+
 /* Settings storage works as follows:
  *   /apps/gnome-terminal/global/
  *   /apps/gnome-terminal/profiles/Foo/
@@ -103,6 +105,7 @@ struct _TerminalApp
   guint enable_menu_accels_notify_id;
 
   GSettings *desktop_interface_settings;
+  GSettings *system_proxy_settings;
 
   GHashTable *profiles;
   char* default_profile_id;
@@ -1379,6 +1382,9 @@ terminal_app_init (TerminalApp *app)
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
+  /* Desktop proxy settings */
+  app->system_proxy_settings = g_settings_new (SYSTEM_PROXY_SETTINGS_SCHEMA);
+
   /* Terminal global settings */
   app->desktop_interface_settings = g_settings_new (DESKTOP_INTERFACE_SETTINGS_SCHEMA);
   terminal_app_system_font_notify_cb (app->desktop_interface_settings,
@@ -1400,12 +1406,6 @@ terminal_app_init (TerminalApp *app)
   app->conf = gconf_client_get_default ();
 
   gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        NULL);
-  gconf_client_add_dir (app->conf, CONF_PROXY_PREFIX,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        NULL);
-  gconf_client_add_dir (app->conf, CONF_HTTP_PROXY_PREFIX,
                         GCONF_CLIENT_PRELOAD_ONELEVEL,
                         NULL);
 
@@ -1511,6 +1511,7 @@ terminal_app_finalize (GObject *object)
   pango_font_description_free (app->system_font_desc);
 
   g_object_unref (app->desktop_interface_settings);
+  g_object_unref (app->system_proxy_settings);
 
   terminal_accels_shutdown ();
 
@@ -2101,4 +2102,16 @@ terminal_app_save_config_file (TerminalApp *app,
   g_free (data);
 
   return result;
+}
+
+/**
+ * terminal_app_get_proxy_settings:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the cached #GSettings object for the org.gnome.system.proxy schema
+ */
+GSettings *
+terminal_app_get_proxy_settings (TerminalApp *app)
+{
+  return app->system_proxy_settings;
 }
