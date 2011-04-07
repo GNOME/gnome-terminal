@@ -3,7 +3,7 @@
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
- * Copyright © 2008 Christian Persch
+ * Copyright © 2008, 2011 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,12 +32,12 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#include <gconf/gconf.h>
-
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #include <X11/Xatom.h>
 #endif
+
+#include <gdesktop-enums.h>
 
 #include "terminal-accels.h"
 #include "terminal-app.h"
@@ -514,20 +514,6 @@ terminal_util_key_file_get_argv (GKeyFile *key_file,
 
 /* Proxy stuff */
 
-static char *
-conf_get_string (GConfClient *conf,
-                 const char *key)
-{
-  char *value;
-  value = gconf_client_get_string (conf, key, NULL);
-  if (G_UNLIKELY (value && *value == '\0'))
-    {
-      g_free (value);
-      value = NULL;
-    }
-  return value;
-}
-
 /*
  * set_proxy_env:
  * @env_table: a #GHashTable
@@ -540,7 +526,7 @@ conf_get_string (GConfClient *conf,
 static void
 set_proxy_env (GHashTable *env_table,
                const char *key,
-               char *value)
+               char *value /* consumed */)
 {
   char *key1 = NULL, *key2 = NULL;
   char *value1 = NULL, *value2 = NULL;
@@ -577,139 +563,102 @@ set_proxy_env (GHashTable *env_table,
 }
 
 static void
-setup_http_proxy_env (GHashTable *env_table,
-                      GConfClient *conf)
+setup_proxy_env (GSettings  *proxy_settings,
+                 const char *child_schema_id,
+                 const char *proxy_scheme,
+                 const char *env_name,
+                 GHashTable *env_table)
 {
-  gchar *host;
-  gint port;
-  GSList *ignore;
+  GSettings *child_settings;
+  GString *buf;
+  const char *host;
+  int port;
+  gboolean is_http;
 
-  if (!gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_http_proxy", NULL))
-    return;
+  is_http = (strcmp (child_schema_id, "http") == 0);
 
-  host = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/host");
-  port = gconf_client_get_int (conf, CONF_HTTP_PROXY_PREFIX "/port", NULL);
-  if (host && port)
+  child_settings = g_settings_get_child (proxy_settings, child_schema_id);
+
+  if (is_http && !g_settings_get_boolean (child_settings, "enabled"))
+    goto out;
+
+  g_settings_get (child_settings, "host", "&s", &host);
+  port = g_settings_get_int (child_settings, "port");
+  if (host[0] == '\0' || port == 0)
+    goto out;
+
+  buf = g_string_sized_new (64);
+
+  g_string_append_printf (buf, "%s://", proxy_scheme);
+
+  if (is_http &&
+      g_settings_get_boolean (child_settings, "use-authentication"))
     {
-      GString *buf = g_string_sized_new (64);
-      g_string_append (buf, "http://");
+      const char *user, *password;
 
-      if (gconf_client_get_bool (conf, CONF_HTTP_PROXY_PREFIX "/use_authentication", NULL))
-	{
-	  char *user, *password;
-	  user = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_user");
-	  if (user)
-	    {
-	      g_string_append_uri_escaped (buf, user, NULL, TRUE);
-	      password = conf_get_string (conf, CONF_HTTP_PROXY_PREFIX "/authentication_password");
-	      if (password)
-		{
-		  g_string_append_c (buf, ':');
-		  g_string_append_uri_escaped (buf, password, NULL, TRUE);
-		  g_free (password);
-		}
-	      g_free (user);
-	      g_string_append_c (buf, '@');
-	    }
-	}
-      g_string_append_printf (buf, "%s:%d/", host, port);
-      set_proxy_env (env_table, "http_proxy", g_string_free (buf, FALSE));
+      g_settings_get (child_settings, "authentication-user", "&s", &user);
+
+      if (user[0])
+        {
+          g_string_append_uri_escaped (buf, user, NULL, TRUE);
+
+          g_settings_get (child_settings, "authentication-password", "&s", &password);
+
+          if (password[0])
+            {
+              g_string_append_c (buf, ':');
+              g_string_append_uri_escaped (buf, password, NULL, TRUE);
+            }
+          g_string_append_c (buf, '@');
+        }
     }
-  g_free (host);
 
-  ignore = gconf_client_get_list (conf, CONF_HTTP_PROXY_PREFIX "/ignore_hosts", GCONF_VALUE_STRING, NULL);
-  if (ignore)
-    {
-      GString *buf = g_string_sized_new (64);
-      while (ignore != NULL)
-	{
-	  GSList *old;
+  g_string_append_printf (buf, "%s:%d/", host, port);
+  set_proxy_env (env_table, env_name, g_string_free (buf, FALSE));
 
-	  if (buf->len)
-	    g_string_append_c (buf, ',');
-	  g_string_append (buf, ignore->data);
-
-	  old = ignore;
-	  ignore = g_slist_next (ignore);
-	  g_free (old->data);
-	  g_slist_free_1 (old);
-	}
-      set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
-    }
+out:
+  g_object_unref (child_settings);
 }
 
 static void
-setup_https_proxy_env (GHashTable *env_table,
-                       GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, CONF_PROXY_PREFIX "/secure_host");
-  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/secure_port", NULL);
-  if (host && port)
-    {
-      char *proxy;
-      /* Even though it's https, the proxy scheme is 'http'. See bug #624440. */
-      proxy = g_strdup_printf ("http://%s:%d/", host, port);
-      set_proxy_env (env_table, "https_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_ftp_proxy_env (GHashTable *env_table,
-                     GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, CONF_PROXY_PREFIX "/ftp_host");
-  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/ftp_port", NULL);
-  if (host && port)
-    {
-      char *proxy;
-      /* Even though it's ftp, the proxy scheme is 'http'. See bug #624440. */
-      proxy = g_strdup_printf ("http://%s:%d/", host, port);
-      set_proxy_env (env_table, "ftp_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_socks_proxy_env (GHashTable *env_table,
-                       GConfClient *conf)
-{
-  gchar *host;
-  gint port;
-
-  host = conf_get_string (conf, CONF_PROXY_PREFIX "/socks_host");
-  port = gconf_client_get_int (conf, CONF_PROXY_PREFIX "/socks_port", NULL);
-  if (host && port)
-    {
-      char *proxy;
-      proxy = g_strdup_printf ("socks://%s:%d/", host, port);
-      set_proxy_env (env_table, "all_proxy", proxy);
-    }
-  g_free (host);
-}
-
-static void
-setup_autoconfig_proxy_env (GHashTable *env_table,
-                            GConfClient *conf)
+setup_autoconfig_proxy_env (GSettings *proxy_settings,
+                            GHashTable *env_table)
 {
   /* XXX  Not sure what to do with this.  See bug #596688.
-  gchar *url;
+  const char *url;
 
-  url = conf_get_string (conf, CONF_PROXY_PREFIX "/autoconfig_url");
-  if (url)
+  g_settings_get (proxy_settings, "autoconfig-url", "&s", &url);
+  if (url[0])
     {
       char *proxy;
       proxy = g_strdup_printf ("pac+%s", url);
       set_proxy_env (env_table, "http_proxy", proxy);
     }
-  g_free (url);
   */
+}
+
+static void
+setup_ignore_proxy_env (GSettings *proxy_settings,
+                        GHashTable *env_table)
+{
+  GString *buf;
+  char **ignore;
+  int i;
+
+  g_settings_get (proxy_settings, "ignore-hosts", "^a&s", &ignore);
+  if (ignore == NULL)
+    return;
+
+  buf = g_string_sized_new (64);
+  for (i = 0; ignore[i] != NULL; ++i)
+    {
+      if (buf->len)
+        g_string_append_c (buf, ',');
+      g_string_append (buf, ignore[i]);
+    }
+  g_free (ignore);
+
+  set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
 }
 
 /**
@@ -721,27 +670,26 @@ setup_autoconfig_proxy_env (GHashTable *env_table,
 void
 terminal_util_add_proxy_env (GHashTable *env_table)
 {
-  char *proxymode;
+  GSettings *proxy_settings;
+  GDesktopProxyMode mode;
 
-  GConfClient *conf;
-  conf = gconf_client_get_default ();
+  proxy_settings = terminal_app_get_proxy_settings (terminal_app_get ());
+  mode = g_settings_get_enum (proxy_settings, "mode");
 
-  /* If mode is not manual, nothing to set */
-  proxymode = conf_get_string (conf, CONF_PROXY_PREFIX "/mode");
-  if (proxymode && 0 == strcmp (proxymode, "manual"))
+  if (mode == G_DESKTOP_PROXY_MODE_MANUAL)
     {
-      setup_http_proxy_env (env_table, conf);
-      setup_https_proxy_env (env_table, conf);
-      setup_ftp_proxy_env (env_table, conf);
-      setup_socks_proxy_env (env_table, conf);
+      setup_proxy_env (proxy_settings, "http", "http", "http_proxy", env_table);
+      /* Even though it's https, the proxy scheme is 'http'. See bug #624440. */
+      setup_proxy_env (proxy_settings, "https", "http", "https_proxy", env_table);
+      /* Even though it's ftp, the proxy scheme is 'http'. See bug #624440. */
+      setup_proxy_env (proxy_settings, "ftp", "http", "ftp_proxy", env_table);
+      setup_proxy_env (proxy_settings, "socks", "socks", "all_proxy", env_table);
+      setup_ignore_proxy_env (proxy_settings, env_table);
     }
-  else if (proxymode && 0 == strcmp (proxymode, "auto"))
+  else if (mode == G_DESKTOP_PROXY_MODE_AUTO)
     {
-      setup_autoconfig_proxy_env (env_table, conf);
+      setup_autoconfig_proxy_env (proxy_settings, env_table);
     }
-
-  g_free (proxymode);
-  g_object_unref (conf);
 }
 
 /* Bidirectional object/widget binding */

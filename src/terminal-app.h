@@ -154,6 +154,8 @@ gboolean terminal_app_save_config_file (TerminalApp *app,
                                         const char *file_name,
                                         GError **error);
 
+GSettings *terminal_app_get_proxy_settings (TerminalApp *app);
+
 G_END_DECLS
 
 #endif /* !TERMINAL_APP_H */
