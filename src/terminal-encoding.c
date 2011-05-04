@@ -26,12 +26,14 @@
 #include "terminal-debug.h"
 #include "terminal-encoding.h"
 #include "terminal-intl.h"
-#include "terminal-profile.h"
+#include "terminal-schemas.h"
 #include "terminal-util.h"
+
+#define CONF_GLOBAL_PREFIX "/" // FIXMEchpe
 
 /* Overview
  *
- * There's a list of character sets stored in gconf, indicating
+ * There's a list of character sets stored in gsettings, indicating
  * which encodings to display in the encoding menu.
  * 
  * We have a pre-canned list of available encodings
@@ -39,7 +41,7 @@
  * the encoding menu, and to give a human-readable name
  * to certain encodings.
  *
- * If the gconf list contains an encoding not in the
+ * If the setting list contains an encoding not in the
  * predetermined table, then that encoding is
  * labeled "user defined" but still appears in the menu.
  */
@@ -281,31 +283,29 @@ terminal_encoding_get_type (void)
 }
 
 static void
-update_active_encodings_gconf (void)
+update_active_encodings_setting (void)
 {
+  TerminalApp *app;
   GSList *list, *l;
-  GSList *strings = NULL;
-  GConfClient *conf;
+  GVariantBuilder builder;
+  GSettings *settings;
 
-  list = terminal_app_get_active_encodings (terminal_app_get ());
+  app = terminal_app_get ();
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("as"));
+
+  list = terminal_app_get_active_encodings (app);
   for (l = list; l != NULL; l = l->next)
     {
       TerminalEncoding *encoding = (TerminalEncoding *) l->data;
 
-      strings = g_slist_prepend (strings, (gpointer) terminal_encoding_get_id (encoding));
+      g_variant_builder_add (&builder, "s", terminal_encoding_get_id (encoding));
     }
-
-  conf = gconf_client_get_default ();
-  gconf_client_set_list (conf,
-                         CONF_GLOBAL_PREFIX"/active_encodings",
-                         GCONF_VALUE_STRING,
-                         strings,
-                         NULL);
-  g_object_unref (conf);
-
-  g_slist_free (strings);
   g_slist_foreach (list, (GFunc) terminal_encoding_unref, NULL);
   g_slist_free (list);
+
+  settings = terminal_app_get_global_settings (app);
+  g_settings_set (settings, TERMINAL_SETTING_ENCODINGS_KEY, "as", &builder);
 }
 
 static void
@@ -381,10 +381,10 @@ button_clicked_cb (GtkWidget *button,
 
   terminal_encoding_unref (encoding);
 
-  /* We don't need to emit row-changed here, since updating the gconf pref
+  /* We don't need to emit row-changed here, since updating the pref
    * will update the models.
    */
-  update_active_encodings_gconf ();
+  update_active_encodings_setting ();
 }
 
 static void

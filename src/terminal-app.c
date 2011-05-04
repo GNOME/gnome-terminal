@@ -3,7 +3,7 @@
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
- * Copyright © 2008 Christian Persch
+ * Copyright © 2008, 2010, 2011 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 #include "terminal-util.h"
 #include "profile-editor.h"
 #include "terminal-encoding.h"
-#include <gconf/gconf-client.h>
+#include "terminal-schemas.h"
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -48,32 +48,18 @@
 #endif
 #endif
 
-#define FALLBACK_PROFILE_ID "Default"
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 #define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
 
-/* Settings storage works as follows:
- *   /apps/gnome-terminal/global/
- *   /apps/gnome-terminal/profiles/Foo/
- *
- * It's somewhat tricky to manage the profiles/ dir since we need to track
- * the list of profiles, but gconf doesn't have a concept of notifying that
- * a directory has appeared or disappeared.
- *
+/*
  * Session state is stored entirely in the RestartCommand command line.
  *
  * The number one rule: all stored information is EITHER per-session,
  * per-profile, or set from a command line option. THERE CAN BE NO
  * OVERLAP. The UI and implementation totally break if you overlap
  * these categories. See gnome-terminal 1.x for why.
- *
- * Don't use this code as an example of how to use GConf - it's hugely
- * overcomplicated due to the profiles stuff. Most apps should not
- * have to do scary things of this nature, and should not have
- * a profiles feature.
- *
  */
 
 struct _TerminalAppClass {
@@ -97,36 +83,15 @@ struct _TerminalApp
   GtkWidget *manage_profiles_delete_button;
   GtkWidget *manage_profiles_default_menu;
 
-  GConfClient *conf;
-  guint profile_list_notify_id;
-  guint default_profile_notify_id;
-  guint encoding_list_notify_id;
-  guint enable_mnemonics_notify_id;
-  guint enable_menu_accels_notify_id;
-
-  GSettings *desktop_interface_settings;
-  GSettings *system_proxy_settings;
-
   GHashTable *profiles;
-  char* default_profile_id;
-  TerminalProfile *default_profile;
-  gboolean default_profile_locked;
 
   GHashTable *encodings;
   gboolean encodings_locked;
 
-  PangoFontDescription *system_font_desc;
-  gboolean enable_mnemonics;
-  gboolean enable_menu_accels;
-};
-
-enum
-{
-  PROP_0,
-  PROP_DEFAULT_PROFILE,
-  PROP_ENABLE_MENU_BAR_ACCEL,
-  PROP_ENABLE_MNEMONICS,
-  PROP_SYSTEM_FONT,
+  GSettings *global_settings;
+  GSettings *profiles_settings;
+  GSettings *desktop_interface_settings;
+  GSettings *system_proxy_settings;
 };
 
 enum
@@ -152,22 +117,6 @@ enum
 };
 
 static TerminalApp *global_app = NULL;
-
-/* Evil hack alert: this is exported from libgconf-2 but not in a public header */
-extern gboolean gconf_spawn_daemon(GError** err);
-
-#define DEFAULT_MONOSPACE_FONT ("Monospace 10")
-
-#define ENABLE_MNEMONICS_KEY CONF_GLOBAL_PREFIX "/use_mnemonics"
-#define DEFAULT_ENABLE_MNEMONICS (TRUE)
-
-#define ENABLE_MENU_BAR_ACCEL_KEY CONF_GLOBAL_PREFIX"/use_menu_accelerators"
-#define DEFAULT_ENABLE_MENU_BAR_ACCEL (TRUE)
-
-#define PROFILE_LIST_KEY CONF_GLOBAL_PREFIX "/profile_list"
-#define DEFAULT_PROFILE_KEY CONF_GLOBAL_PREFIX "/default_profile"
-
-#define ENCODING_LIST_KEY CONF_GLOBAL_PREFIX "/active_encodings"
 
 /* Helper functions */
 
@@ -229,8 +178,7 @@ terminal_app_get_screen_by_display_name (const char *display_name,
   return screen;
 }
 
-/* Menubar mnemonics settings handling */
-
+#if 0
 static int
 profiles_alphabetic_cmp (gconstpointer pa,
                          gconstpointer pb)
@@ -239,11 +187,11 @@ profiles_alphabetic_cmp (gconstpointer pa,
   TerminalProfile *b = (TerminalProfile *) pb;
   int result;
 
-  result =  g_utf8_collate (terminal_profile_get_property_string (a, TERMINAL_PROFILE_VISIBLE_NAME),
-			    terminal_profile_get_property_string (b, TERMINAL_PROFILE_VISIBLE_NAME));
+  result =  g_utf8_collate (terminal_profile_get_property_string (a, TERMINAL_PROFILE_VISIBLE_NAME_KEY),
+			    terminal_profile_get_property_string (b, TERMINAL_PROFILE_VISIBLE_NAME_KEY));
   if (result == 0)
-    result = strcmp (terminal_profile_get_property_string (a, TERMINAL_PROFILE_NAME),
-		     terminal_profile_get_property_string (b, TERMINAL_PROFILE_NAME));
+    result = strcmp (terminal_profile_get_property_string (a, TERMINAL_PROFILE_NAME_KEY),
+		     terminal_profile_get_property_string (b, TERMINAL_PROFILE_NAME_KEY));
 
   return result;
 }
@@ -262,10 +210,11 @@ profiles_lookup_by_visible_name_foreach (gpointer key,
   LookupInfo *info = data;
   const char *name;
 
-  name = terminal_profile_get_property_string (value, TERMINAL_PROFILE_VISIBLE_NAME);
+  name = terminal_profile_get_property_string (value, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
   if (name && strcmp (info->target, name) == 0)
     info->result = value;
 }
+#endif
 
 static void
 terminal_window_destroyed (TerminalWindow *window,
@@ -276,6 +225,8 @@ terminal_window_destroyed (TerminalWindow *window,
   if (app->windows == NULL)
     g_signal_emit (app, signals[QUIT], 0);
 }
+
+#if 0
 
 static TerminalProfile *
 terminal_app_create_profile (TerminalApp *app,
@@ -288,13 +239,13 @@ terminal_app_create_profile (TerminalApp *app,
   profile = _terminal_profile_new (name);
 
   g_hash_table_insert (app->profiles,
-                       g_strdup (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME)),
+                       g_strdup (terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME_KEY)),
                        profile /* adopts the refcount */);
 
   if (app->default_profile == NULL &&
       app->default_profile_id != NULL &&
       strcmp (app->default_profile_id,
-              terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME)) == 0)
+              terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME_KEY)) == 0)
     {
       /* We are the default profile */
       app->default_profile = profile;
@@ -315,7 +266,7 @@ terminal_app_delete_profile (TerminalApp *app,
   GError *error = NULL;
   const char **nameptr = &name;
 
-  profile_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
+  profile_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME_KEY);
   gconf_dir = gconf_concat_dir_and_key (CONF_PREFIX "/profiles", profile_name);
 
   name_list = NULL;
@@ -515,7 +466,7 @@ profile_combo_box_changed_cb (GtkWidget *widget,
 
   gconf_client_set_string (app->conf,
                            CONF_GLOBAL_PREFIX "/default_profile",
-                           terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME),
+                           terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME_KEY),
                            NULL);
 
   /* Even though the gconf change notification does this, it happens too late.
@@ -634,7 +585,7 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
                                    GTK_MESSAGE_QUESTION,
                                    GTK_BUTTONS_NONE,
                                    _("Delete profile “%s”?"),
-                                   terminal_profile_get_property_string (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME));
+                                   terminal_profile_get_property_string (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY));
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
                           GTK_STOCK_CANCEL,
@@ -735,7 +686,7 @@ find_profile_link (GList      *profiles,
     {
       const char *profile_name;
 
-      profile_name = terminal_profile_get_property_string (TERMINAL_PROFILE (l->data), TERMINAL_PROFILE_NAME);
+      profile_name = terminal_profile_get_property_string (TERMINAL_PROFILE (l->data), TERMINAL_PROFILE_NAME_KEY);
       if (profile_name && strcmp (profile_name, name) == 0)
         break;
     }
@@ -744,154 +695,54 @@ find_profile_link (GList      *profiles,
 }
 
 static void
-terminal_app_profile_list_notify_cb (GConfClient *conf,
-                                     guint        cnxn_id,
-                                     GConfEntry  *entry,
-                                     gpointer     user_data)
+terminal_app_profiles_children_changed_cb (GSettings   *settings,
+                                           TerminalApp *app)
 {
-  TerminalApp *app = TERMINAL_APP (user_data);
   GObject *object = G_OBJECT (app);
-  GConfValue *val;
-  GSList *value_list, *sl;
-  GList *profiles_to_delete, *l;
-  gboolean need_new_default;
-  TerminalProfile *fallback;
-  guint count;
+  char **profile_names;
+  gpointer *new_profiles;
+  guint i, n_profile_names;
 
   g_object_freeze_notify (object);
 
-  profiles_to_delete = terminal_app_get_profile_list (app);
+  profile_names = g_settings_list_children (settings);
+  n_profile_names = g_strv_length (profile_names);
+  /* There's always going to at least the the 'default' child */
+  g_assert (g_strv_length (profile_names) >= 1);
 
-  val = gconf_entry_get_value (entry);
-  if (val == NULL ||
-      val->type != GCONF_VALUE_LIST ||
-      gconf_value_get_list_type (val) != GCONF_VALUE_STRING)
-    goto ensure_one_profile;
-
-  value_list = gconf_value_get_list (val);
-
-  /* Add any new ones */
-  for (sl = value_list; sl != NULL; sl = sl->next)
+  new_profiles = g_newa (gpointer, n_profile_names);
+  for (i = 0; i < n_profile_names; ++i)
     {
-      GConfValue *listvalue = (GConfValue *) (sl->data);
-      const char *profile_name;
-      GList *link;
+      const char *profile_name = profile_names[i];
+      GSettings *profile;
 
-      profile_name = gconf_value_get_string (listvalue);
-      if (!profile_name)
-        continue;
-
-      link = find_profile_link (profiles_to_delete, profile_name);
-      if (link)
-        /* make profiles_to_delete point to profiles we didn't find in the list */
-        profiles_to_delete = g_list_delete_link (profiles_to_delete, link);
+      profile = g_hash_table_lookup (app->profiles, profile_name);
+      if (profile != NULL)
+        new_profiles[i] = g_object_ref (profile);
       else
-        terminal_app_create_profile (app, profile_name);
+        new_profiles[i] = g_settings_get_child (settings, profile_name);
     }
 
-ensure_one_profile:
+  g_hash_table_remove_all (app->profiles);
+  for (i = 0; i < n_profile_names; ++i)
+    if (new_profiles[i] != NULL)
+      g_hash_table_insert (app->profiles,
+                           g_strdup (profile_names[i]),
+                           new_profiles[i] /* adopted */);
 
-  fallback = NULL;
-  count = g_hash_table_size (app->profiles);
-  if (count == 0 || count <= g_list_length (profiles_to_delete))
-    {
-      /* We are going to run out, so create the fallback
-       * to be sure we always have one. Must be done
-       * here before we emit "forgotten" signals so that
-       * screens have a profile to fall back to.
-       *
-       * If the profile with the FALLBACK_ID already exists,
-       * we aren't allowed to delete it, unless at least one
-       * other profile will still exist. And if you delete
-       * all profiles, the FALLBACK_ID profile returns as
-       * the living dead.
-       */
-      fallback = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
-      if (fallback == NULL)
-        fallback = terminal_app_create_profile (app, FALLBACK_PROFILE_ID);
-      g_assert (fallback != NULL);
-    }
+  g_strfreev (profile_names);
 
-  /* Forget no-longer-existing profiles */
-  need_new_default = FALSE;
-  for (l = profiles_to_delete; l != NULL; l = l->next)
-    {
-      TerminalProfile *profile = TERMINAL_PROFILE (l->data);
-      const char *name;
+  g_assert (g_hash_table_size (app->profiles) >= 1);
 
-      name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_NAME);
-      if (strcmp (name, FALLBACK_PROFILE_ID) == 0)
-        continue;
-
-      if (profile == app->default_profile)
-        {
-          app->default_profile = NULL;
-          need_new_default = TRUE;
-        }
-
-      _terminal_profile_forget (profile);
-      g_hash_table_remove (app->profiles, name);
-
-      /* |profile| possibly isn't dead yet since the profiles dialogue's tree model holds a ref too... */
-    }
-  g_list_free (profiles_to_delete);
-
-  if (need_new_default)
-    {
-      TerminalProfile *new_default;
-      TerminalProfile **new_default_ptr = &new_default;
-
-      new_default = terminal_app_get_profile_by_name (app, FALLBACK_PROFILE_ID);
-      if (new_default == NULL)
-        {
-          GHashTableIter iter;
-
-          g_hash_table_iter_init (&iter, app->profiles);
-          if (!g_hash_table_iter_next (&iter, NULL, (gpointer *) new_default_ptr))
-            /* shouldn't really happen ever, but just to be safe */
-            new_default = terminal_app_create_profile (app, FALLBACK_PROFILE_ID); 
-        }
-      g_assert (new_default != NULL);
-
-      app->default_profile = new_default;
-    
-      g_object_notify (object, TERMINAL_APP_DEFAULT_PROFILE);
-    }
-
-  g_assert (g_hash_table_size (app->profiles) > 0);
+  // FIXME: re-set profile on any tabs having a profile NOT in the new list?
+  // or just continue to use the now-defunct ones?
 
   g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
 
   g_object_thaw_notify (object);
 }
 
-static void
-terminal_app_default_profile_notify_cb (GConfClient *client,
-                                        guint        cnxn_id,
-                                        GConfEntry  *entry,
-                                        gpointer     user_data)
-{
-  TerminalApp *app = TERMINAL_APP (user_data);
-  GConfValue *val;
-  const char *name = NULL;
-
-  app->default_profile_locked = !gconf_entry_get_is_writable (entry);
-
-  val = gconf_entry_get_value (entry);
-  if (val != NULL &&
-      val->type == GCONF_VALUE_STRING)
-    name = gconf_value_get_string (val);
-  if (!name || !name[0])
-    name = FALLBACK_PROFILE_ID;
-  g_assert (name != NULL);
-
-  g_free (app->default_profile_id);
-  app->default_profile_id = g_strdup (name);
-
-  app->default_profile = terminal_app_get_profile_by_name (app, name);
-
-  g_object_notify (G_OBJECT (app), TERMINAL_APP_DEFAULT_PROFILE);
-}
+#endif /* 0 */
 
 static int
 compare_encodings (TerminalEncoding *a,
@@ -912,18 +763,15 @@ encoding_mark_active (gpointer key,
 }
 
 static void
-terminal_app_encoding_list_notify_cb (GConfClient *client,
-                                      guint        cnxn_id,
-                                      GConfEntry  *entry,
-                                      gpointer     user_data)
+terminal_app_encoding_list_notify_cb (GSettings   *settings,
+                                      const char  *key,
+                                      TerminalApp *app)
 {
-  TerminalApp *app = TERMINAL_APP (user_data);
-  GConfValue *val;
-  GSList *strings, *tmp;
+  char **encodings;
+  int i;
   TerminalEncoding *encoding;
-  const char *charset;
 
-  app->encodings_locked = !gconf_entry_get_is_writable (entry);
+  app->encodings_locked = !g_settings_is_writable (settings, key);
 
   /* Mark all as non-active, then re-enable the active ones */
   g_hash_table_foreach (app->encodings, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
@@ -940,112 +788,20 @@ terminal_app_encoding_list_notify_cb (GConfClient *client,
   if (terminal_encoding_is_valid (encoding))
     encoding->is_active = TRUE;
 
-  val = gconf_entry_get_value (entry);
-  if (val != NULL &&
-      val->type == GCONF_VALUE_LIST &&
-      gconf_value_get_list_type (val) == GCONF_VALUE_STRING)
-    strings = gconf_value_get_list (val);
-  else
-    strings = NULL;
-
-  for (tmp = strings; tmp != NULL; tmp = tmp->next)
-    {
-      GConfValue *v = (GConfValue *) tmp->data;
-      
-      charset = gconf_value_get_string (v);
-      if (!charset)
-        continue;
-
-      encoding = terminal_app_ensure_encoding (app, charset);
+  g_settings_get (settings, key, "^a&s", &encodings);
+  for (i = 0; encodings[i] != NULL; ++i) {
+      encoding = terminal_app_ensure_encoding (app, encodings[i]);
       if (!terminal_encoding_is_valid (encoding))
         continue;
 
       encoding->is_active = TRUE;
     }
+  g_free (encodings);
 
   g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
 }
 
-static void
-terminal_app_system_font_notify_cb (GSettings   *settings,
-                                    const char  *key,
-                                    TerminalApp *app)
-{
-  const char *font = NULL;
-  PangoFontDescription *font_desc;
-
-  g_settings_get (settings, MONOSPACE_FONT_KEY_NAME, "&s", &font);
-
-  font_desc = pango_font_description_from_string (font);
-  if (app->system_font_desc &&
-      pango_font_description_equal (app->system_font_desc, font_desc))
-    {
-      pango_font_description_free (font_desc);
-      return;
-    }
-
-  if (app->system_font_desc)
-    pango_font_description_free (app->system_font_desc);
-
-  app->system_font_desc = font_desc;
-
-  g_object_notify (G_OBJECT (app), TERMINAL_APP_SYSTEM_FONT);
-}
-
-static void
-terminal_app_enable_mnemonics_notify_cb (GConfClient *client,
-                                         guint        cnxn_id,
-                                         GConfEntry  *entry,
-                                         gpointer     user_data)
-{
-  TerminalApp *app = TERMINAL_APP (user_data);
-  GConfValue *gconf_value;
-  gboolean enable;
-
-  if (strcmp (gconf_entry_get_key (entry), ENABLE_MNEMONICS_KEY) != 0)
-    return;
-
-  gconf_value = gconf_entry_get_value (entry);
-  if (gconf_value &&
-      gconf_value->type == GCONF_VALUE_BOOL)
-    enable = gconf_value_get_bool (gconf_value);
-  else
-    enable = TRUE;
-
-  if (enable == app->enable_mnemonics)
-    return;
-
-  app->enable_mnemonics = enable;
-  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MNEMONICS);
-}
-
-static void
-terminal_app_enable_menu_accels_notify_cb (GConfClient *client,
-                                           guint        cnxn_id,
-                                           GConfEntry  *entry,
-                                           gpointer     user_data)
-{
-  TerminalApp *app = TERMINAL_APP (user_data);
-  GConfValue *gconf_value;
-  gboolean enable;
-
-  if (strcmp (gconf_entry_get_key (entry), ENABLE_MENU_BAR_ACCEL_KEY) != 0)
-    return;
-
-  gconf_value = gconf_entry_get_value (entry);
-  if (gconf_value &&
-      gconf_value->type == GCONF_VALUE_BOOL)
-    enable = gconf_value_get_bool (gconf_value);
-  else
-    enable = TRUE;
-
-  if (enable == app->enable_menu_accels)
-    return;
-
-  app->enable_menu_accels = enable;
-  g_object_notify (G_OBJECT (app), TERMINAL_APP_ENABLE_MENU_BAR_ACCEL);
-}
-
+#if 0
 static void
 new_profile_response_cb (GtkWidget *new_profile_dialog,
                          int        response_id,
@@ -1083,7 +839,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
           TerminalProfile *profile = tmp->data;
           const char *visible_name;
 
-          visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME);
+          visible_name = terminal_profile_get_property_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
 
           if (visible_name && strcmp (name, visible_name) == 0)
             break;
@@ -1106,7 +862,7 @@ new_profile_response_cb (GtkWidget *new_profile_dialog,
       transient_parent = gtk_window_get_transient_for (GTK_WINDOW (new_profile_dialog));
 
       new_profile = _terminal_profile_clone (base_profile, name);
-      new_profile_name = terminal_profile_get_property_string (new_profile, TERMINAL_PROFILE_NAME);
+      new_profile_name = terminal_profile_get_property_string (new_profile, TERMINAL_PROFILE_NAME_KEY);
       g_hash_table_insert (app->profiles,
                            g_strdup (new_profile_name),
                            new_profile /* adopts the refcount */);
@@ -1159,11 +915,14 @@ new_profile_name_entry_changed_cb (GtkEntry *entry,
   gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, name[0] != '\0');
 }
 
+#endif
+
 void
-terminal_app_new_profile (TerminalApp     *app,
-                          TerminalProfile *default_base_profile,
-                          GtkWindow       *transient_parent)
+terminal_app_new_profile (TerminalApp *app,
+                          GSettings   *default_base_profile,
+                          GtkWindow   *transient_parent)
 {
+#if 0
   if (app->new_profile_dialog == NULL)
     {
       GtkWidget *create_button, *table, *name_label, *name_entry, *base_label, *combo;
@@ -1212,8 +971,10 @@ terminal_app_new_profile (TerminalApp     *app,
                                 transient_parent);
 
   gtk_window_present (GTK_WINDOW (app->new_profile_dialog));
+#endif
 }
 
+#if 0
 static void
 profile_list_selection_changed_cb (GtkTreeSelection *selection,
                                    TerminalApp *app)
@@ -1258,11 +1019,13 @@ profile_list_destroyed_cb (GtkWidget   *manage_profiles_dialog,
   app->manage_profiles_delete_button = NULL;
   app->manage_profiles_default_menu = NULL;
 }
+#endif
 
 void
 terminal_app_manage_profiles (TerminalApp     *app,
                               GtkWindow       *transient_parent)
 {
+#if 0
   GObject *dialog;
   GObject *tree_view_container, *new_button, *edit_button, *remove_button;
   GObject *default_hbox, *default_label;
@@ -1334,6 +1097,7 @@ terminal_app_manage_profiles (TerminalApp     *app,
                                 transient_parent);
 
   gtk_window_present (GTK_WINDOW (app->manage_profiles_dialog));
+#endif
 }
 
 #ifdef WITH_SMCLIENT
@@ -1362,95 +1126,42 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  GError *error = NULL;
-
   global_app = app;
-
-  /* If the gconf daemon isn't available (e.g. because there's no dbus
-   * session bus running), we'd crash later on. Tell the user about it
-   * now, and exit. See bug #561663.
-   * Don't use gconf_ping_daemon() here since the server may just not
-   * be running yet, but able to be started. See comments on bug #564649.
-   */
-  if (!gconf_spawn_daemon (&error))
-    {
-      g_printerr ("Failed to summon the GConf demon; exiting.  %s\n", error->message);
-      g_error_free (error);
-
-      exit (EXIT_FAILURE);
-    }
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
   /* Desktop proxy settings */
   app->system_proxy_settings = g_settings_new (SYSTEM_PROXY_SETTINGS_SCHEMA);
 
-  /* Terminal global settings */
+  /* Desktop Interface settings */
   app->desktop_interface_settings = g_settings_new (DESKTOP_INTERFACE_SETTINGS_SCHEMA);
-  terminal_app_system_font_notify_cb (app->desktop_interface_settings,
-                                      MONOSPACE_FONT_KEY_NAME,
-                                      app);
-  g_signal_connect (app->desktop_interface_settings,
-                    "changed::" MONOSPACE_FONT_KEY_NAME,
-                    G_CALLBACK (terminal_app_system_font_notify_cb),
-                    app);
 
-  /* Initialise defaults */
-  app->enable_mnemonics = DEFAULT_ENABLE_MNEMONICS;
-  app->enable_menu_accels = DEFAULT_ENABLE_MENU_BAR_ACCEL;
-
-  app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  /* Terminal global settings */
+  app->global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
 
   app->encodings = terminal_encodings_get_builtins ();
+  terminal_app_encoding_list_notify_cb (app->global_settings, "encodings", app);
+  g_signal_connect (app->global_settings,
+                    "changed::encodings",
+                    G_CALLBACK (terminal_app_encoding_list_notify_cb),
+                    app);
 
-  app->conf = gconf_client_get_default ();
-
-  gconf_client_add_dir (app->conf, CONF_GLOBAL_PREFIX,
-                        GCONF_CLIENT_PRELOAD_ONELEVEL,
-                        NULL);
-
-  app->profile_list_notify_id =
-    gconf_client_notify_add (app->conf, PROFILE_LIST_KEY,
-                             terminal_app_profile_list_notify_cb,
-                             app, NULL, NULL);
-
-  app->default_profile_notify_id =
-    gconf_client_notify_add (app->conf,
-                             DEFAULT_PROFILE_KEY,
-                             terminal_app_default_profile_notify_cb,
-                             app, NULL, NULL);
-
-  app->encoding_list_notify_id =
-    gconf_client_notify_add (app->conf,
-                             ENCODING_LIST_KEY,
-                             terminal_app_encoding_list_notify_cb,
-                             app, NULL, NULL);
-
-  app->enable_mnemonics_notify_id =
-    gconf_client_notify_add (app->conf,
-                             ENABLE_MNEMONICS_KEY,
-                             terminal_app_enable_mnemonics_notify_cb,
-                             app, NULL, NULL);
-
-  app->enable_menu_accels_notify_id =
-    gconf_client_notify_add (app->conf,
-                             ENABLE_MENU_BAR_ACCEL_KEY,
-                             terminal_app_enable_menu_accels_notify_cb,
-                             app, NULL, NULL);
-
-  /* Load the settings */
-  gconf_client_notify (app->conf, PROFILE_LIST_KEY);
-  gconf_client_notify (app->conf, DEFAULT_PROFILE_KEY);
-  gconf_client_notify (app->conf, ENCODING_LIST_KEY);
-  gconf_client_notify (app->conf, ENABLE_MENU_BAR_ACCEL_KEY);
-  gconf_client_notify (app->conf, ENABLE_MNEMONICS_KEY);
-
-  /* Ensure we have valid settings */
-  g_assert (app->default_profile_id != NULL);
-  g_assert (app->system_font_desc != NULL);
+  app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+  g_hash_table_insert (app->profiles,
+                       g_strdup ("profile0"),
+                       g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA,
+                                                 "/org/gnome/terminal/settings/profiles:/profile0/"));
+#if 0
+  app->profiles_settings = g_settings_new (PROFILES_SETTINGS_SCHEMA_ID);
+  terminal_app_profiles_children_changed_cb (app->profiles_settings, app);
+  g_signal_connect (app->profiles_settings,
+                    "children-changed",
+                    G_CALLBACK (terminal_app_profiles_children_changed_cb),
+                    app);
+#endif
 
   terminal_accels_init ();
-  
+
 #ifdef WITH_SMCLIENT
 {
   EggSMClient *sm_client;
@@ -1487,29 +1198,20 @@ terminal_app_finalize (GObject *object)
                                         0, 0, NULL, NULL, app);
 #endif
 
-  if (app->profile_list_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->profile_list_notify_id);
-  if (app->default_profile_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->default_profile_notify_id);
-  if (app->encoding_list_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->encoding_list_notify_id);
-  if (app->enable_menu_accels_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->enable_menu_accels_notify_id);
-  if (app->enable_mnemonics_notify_id != 0)
-    gconf_client_notify_remove (app->conf, app->enable_mnemonics_notify_id);
-
-  gconf_client_remove_dir (app->conf, CONF_GLOBAL_PREFIX, NULL);
-
-  g_object_unref (app->conf);
-
-  g_free (app->default_profile_id);
+  g_hash_table_destroy (app->encodings);
+  g_signal_handlers_disconnect_by_func (app->global_settings,
+                                        G_CALLBACK (terminal_app_encoding_list_notify_cb),
+                                        app);
 
   g_hash_table_destroy (app->profiles);
+#if 0
+  g_signal_handlers_disconnect_by_func (app->profiles_settings,
+                                        G_CALLBACK (terminal_app_profiles_children_changed_cb),
+                                        app);
+  g_object_unref (app->profiles_settings);
+#endif
 
-  g_hash_table_destroy (app->encodings);
-
-  pango_font_description_free (app->system_font_desc);
-
+  g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
   g_object_unref (app->system_proxy_settings);
 
@@ -1518,64 +1220,6 @@ terminal_app_finalize (GObject *object)
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
   global_app = NULL;
-}
-
-static void
-terminal_app_get_property (GObject *object,
-                           guint prop_id,
-                           GValue *value,
-                           GParamSpec *pspec)
-{
-  TerminalApp *app = TERMINAL_APP (object);
-
-  switch (prop_id)
-    {
-      case PROP_SYSTEM_FONT:
-        if (app->system_font_desc)
-          g_value_set_boxed (value, app->system_font_desc);
-        else
-          g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_MONOSPACE_FONT));
-        break;
-      case PROP_ENABLE_MENU_BAR_ACCEL:
-        g_value_set_boolean (value, app->enable_menu_accels);
-        break;
-      case PROP_ENABLE_MNEMONICS:
-        g_value_set_boolean (value, app->enable_mnemonics);
-        break;
-      case PROP_DEFAULT_PROFILE:
-        g_value_set_object (value, app->default_profile);
-        break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-        break;
-    }
-}
-
-static void
-terminal_app_set_property (GObject *object,
-                            guint prop_id,
-                            const GValue *value,
-                            GParamSpec *pspec)
-{
-  TerminalApp *app = TERMINAL_APP (object);
-
-  switch (prop_id)
-    {
-      case PROP_ENABLE_MENU_BAR_ACCEL:
-        app->enable_menu_accels = g_value_get_boolean (value);
-        gconf_client_set_bool (app->conf, ENABLE_MENU_BAR_ACCEL_KEY, app->enable_menu_accels, NULL);
-        break;
-      case PROP_ENABLE_MNEMONICS:
-        app->enable_mnemonics = g_value_get_boolean (value);
-        gconf_client_set_bool (app->conf, ENABLE_MNEMONICS_KEY, app->enable_mnemonics, NULL);
-        break;
-      case PROP_DEFAULT_PROFILE:
-      case PROP_SYSTEM_FONT:
-        /* not writable */
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-        break;
-    }
 }
 
 static void
@@ -1590,8 +1234,6 @@ terminal_app_class_init (TerminalAppClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
-  object_class->get_property = terminal_app_get_property;
-  object_class->set_property = terminal_app_set_property;
 
   klass->quit = terminal_app_real_quit;
 
@@ -1621,34 +1263,6 @@ terminal_app_class_init (TerminalAppClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ENABLE_MENU_BAR_ACCEL,
-     g_param_spec_boolean (TERMINAL_APP_ENABLE_MENU_BAR_ACCEL, NULL, NULL,
-                           DEFAULT_ENABLE_MENU_BAR_ACCEL,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_ENABLE_MNEMONICS,
-     g_param_spec_boolean (TERMINAL_APP_ENABLE_MNEMONICS, NULL, NULL,
-                           DEFAULT_ENABLE_MNEMONICS,
-                           G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_SYSTEM_FONT,
-     g_param_spec_boxed (TERMINAL_APP_SYSTEM_FONT, NULL, NULL,
-                         PANGO_TYPE_FONT_DESCRIPTION,
-                         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_DEFAULT_PROFILE,
-     g_param_spec_object (TERMINAL_APP_DEFAULT_PROFILE, NULL, NULL,
-                          TERMINAL_TYPE_PROFILE,
-                          G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 /* Public API */
@@ -1672,6 +1286,8 @@ terminal_app_shutdown (void)
 
   g_object_unref (global_app);
   g_assert (global_app == NULL);
+
+  g_settings_sync ();
 }
 
 /**
@@ -1786,34 +1402,21 @@ terminal_app_handle_options (TerminalApp *app,
       for (lt = iw->tabs; lt != NULL; lt = lt->next)
         {
           InitialTab *it = lt->data;
-          TerminalProfile *profile = NULL;
+          GSettings *profile = NULL;
           TerminalScreen *screen;
-          const char *profile_name;
-          gboolean profile_is_id;
 
           if (it->profile)
             {
-              profile_name = it->profile;
-              profile_is_id = it->profile_is_id;
-            }
-          else
-            {
-              profile_name = options->default_profile;
-              profile_is_id = options->default_profile_is_id;
-            }
-
-          if (profile_name)
-            {
-              if (profile_is_id)
-                profile = terminal_app_get_profile_by_name (app, profile_name);
+              if (it->profile_is_id)
+                profile = terminal_app_get_profile_by_name (app, it->profile);
               else
-                profile = terminal_app_get_profile_by_visible_name (app, profile_name);
+                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
 
               if (profile == NULL)
                 g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
             }
           if (profile == NULL)
-            profile = terminal_app_get_profile_for_new_term (app);
+            profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
           g_assert (profile);
 
           screen = terminal_app_new_terminal (app, window, profile,
@@ -1822,6 +1425,7 @@ terminal_app_handle_options (TerminalApp *app,
                                               it->working_dir ? it->working_dir : options->default_working_dir,
                                               options->env,
                                               it->zoom_set ? it->zoom : options->zoom);
+          g_object_unref (profile);
 
           if (it->active)
             terminal_window_switch_screen (window, screen);
@@ -1864,7 +1468,7 @@ terminal_app_new_window (TerminalApp *app,
 TerminalScreen *
 terminal_app_new_terminal (TerminalApp     *app,
                            TerminalWindow  *window,
-                           TerminalProfile *profile,
+                           GSettings       *profile,
                            char           **override_command,
                            const char      *title,
                            const char      *working_dir,
@@ -1888,7 +1492,7 @@ terminal_app_new_terminal (TerminalApp     *app,
 
 void
 terminal_app_edit_profile (TerminalApp     *app,
-                           TerminalProfile *profile,
+                           GSettings       *profile,
                            GtkWindow       *transient_parent,
                            const char      *widget_name)
 {
@@ -1929,63 +1533,49 @@ terminal_app_get_current_window (TerminalApp *app)
 GList*
 terminal_app_get_profile_list (TerminalApp *app)
 {
+#if 0
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
 
   return g_list_sort (g_hash_table_get_values (app->profiles), profiles_alphabetic_cmp);
+#endif
+return NULL;
 }
 
-TerminalProfile*
+/**
+ * terminal_app_get_profile_by_name:
+ * @app:
+ * @name:
+ *
+ * Returns: (transfer full): a new #GSettings for the profile schema, or %NULL
+ */
+GSettings *
 terminal_app_get_profile_by_name (TerminalApp *app,
                                   const char *name)
 {
+  GSettings *profile;
+
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  return g_hash_table_lookup (app->profiles, name);
+  profile = g_hash_table_lookup (app->profiles, name);
+  if (profile != NULL)
+    return g_object_ref (profile);
+
+  profile = g_settings_get_child (app->profiles_settings, name);
+  if (profile != NULL)
+    g_hash_table_insert (app->profiles, g_strdup (name), g_object_ref (profile));
+
+  return profile;
 }
 
-TerminalProfile*
+GSettings*
 terminal_app_get_profile_by_visible_name (TerminalApp *app,
                                           const char *name)
 {
-  LookupInfo info;
-
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  info.result = NULL;
-  info.target = name;
-
-  g_hash_table_foreach (app->profiles,
-                        profiles_lookup_by_visible_name_foreach,
-                        &info);
-  return info.result;
-}
-
-TerminalProfile*
-terminal_app_get_default_profile (TerminalApp *app)
-{
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-
-  return app->default_profile;
-}
-
-TerminalProfile*
-terminal_app_get_profile_for_new_term (TerminalApp *app)
-{
-  GHashTableIter iter;
-  TerminalProfile *profile = NULL;
-  TerminalProfile **profileptr = &profile;
-
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-
-  if (app->default_profile)
-    return app->default_profile;	
-
-  g_hash_table_iter_init (&iter, app->profiles);
-  if (g_hash_table_iter_next (&iter, NULL, (gpointer *) profileptr))
-    return profile;
-
+  // FIXMEchpe re-implement, or drop?
   return NULL;
 }
 
@@ -2104,6 +1694,31 @@ terminal_app_save_config_file (TerminalApp *app,
   return result;
 }
 
+
+/**
+ * terminal_app_get_global_settings:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the cached #GSettings object for the org.gnome.Terminal.Preferences schema
+ */
+GSettings *
+terminal_app_get_global_settings (TerminalApp *app)
+{
+  return app->global_settings;
+}
+
+/**
+ * terminal_app_get_desktop_interface_settings:
+ * @app: a #TerminalApp
+ *
+ * Returns: (tranfer none): the cached #GSettings object for the org.gnome.interface schema
+ */
+GSettings *
+terminal_app_get_desktop_interface_settings (TerminalApp *app)
+{
+  return app->desktop_interface_settings;
+}
+
 /**
  * terminal_app_get_proxy_settings:
  * @app: a #TerminalApp
@@ -2114,4 +1729,24 @@ GSettings *
 terminal_app_get_proxy_settings (TerminalApp *app)
 {
   return app->system_proxy_settings;
+}
+
+/**
+ * terminal_app_get_system_font:
+ * @app:
+ *
+ * Creates a #PangoFontDescription for the system monospace font.
+ * 
+ * Returns: (transfer full): a new #PangoFontDescription
+ */
+PangoFontDescription *
+terminal_app_get_system_font (TerminalApp *app)
+{
+  const char *font;
+
+  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
+
+  g_settings_get (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME, "&s", &font);
+
+  return pango_font_description_from_string (font);
 }

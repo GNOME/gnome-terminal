@@ -689,274 +689,6 @@ terminal_util_add_proxy_env (GHashTable *env_table)
     }
 }
 
-/* Bidirectional object/widget binding */
-
-typedef struct {
-  GObject *object;
-  const char *object_prop;
-  GtkWidget *widget;
-  gulong object_notify_id;
-  gulong widget_notify_id;
-  PropertyChangeFlags flags;
-} PropertyChange;
-
-static void
-property_change_free (PropertyChange *change)
-{
-  g_signal_handler_disconnect (change->object, change->object_notify_id);
-
-  g_slice_free (PropertyChange, change);
-}
-
-static gboolean
-transform_boolean (gboolean input,
-                   PropertyChangeFlags flags)
-{
-  if (flags & FLAG_INVERT_BOOL)
-    input = !input;
-
-  return input;
-}
-
-static void
-object_change_notify_cb (PropertyChange *change)
-{
-  GObject *object = change->object;
-  const char *object_prop = change->object_prop;
-  GtkWidget *widget = change->widget;
-
-  g_signal_handler_block (widget, change->widget_notify_id);
-
-  if (GTK_IS_RADIO_BUTTON (widget))
-    {
-      int ovalue, rvalue;
-
-      g_object_get (object, object_prop, &ovalue, NULL);
-      rvalue = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "enum-value"));
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), ovalue == rvalue);
-    }
-  else if (GTK_IS_TOGGLE_BUTTON (widget))
-    {
-      gboolean enabled;
-
-      g_object_get (object, object_prop, &enabled, NULL);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget),
-                                    transform_boolean (enabled, change->flags));
-    }
-  else if (GTK_IS_SPIN_BUTTON (widget))
-    {
-      int value;
-
-      g_object_get (object, object_prop, &value, NULL);
-      gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
-    }
-  else if (GTK_IS_ENTRY (widget))
-    {
-      char *text;
-
-      g_object_get (object, object_prop, &text, NULL);
-      gtk_entry_set_text (GTK_ENTRY (widget), text ? text : "");
-      g_free (text);
-    }
-  else if (GTK_IS_COMBO_BOX (widget))
-    {
-      int value;
-
-      g_object_get (object, object_prop, &value, NULL);
-      gtk_combo_box_set_active (GTK_COMBO_BOX (widget), value);
-    }
-  else if (GTK_IS_RANGE (widget))
-    {
-      double value;
-
-      g_object_get (object, object_prop, &value, NULL);
-      gtk_range_set_value (GTK_RANGE (widget), value);
-    }
-  else if (GTK_IS_COLOR_BUTTON (widget))
-    {
-      GdkColor *color;
-      GdkColor old_color;
-
-      g_object_get (object, object_prop, &color, NULL);
-      gtk_color_button_get_color (GTK_COLOR_BUTTON (widget), &old_color);
-
-      if (color && !gdk_color_equal (color, &old_color))
-        gtk_color_button_set_color (GTK_COLOR_BUTTON (widget), color);
-      if (color)
-        gdk_color_free (color);
-    }
-  else if (GTK_IS_FONT_BUTTON (widget))
-    {
-      PangoFontDescription *font_desc;
-      char *font;
-
-      g_object_get (object, object_prop, &font_desc, NULL);
-      if (!font_desc)
-        goto out;
-
-      font = pango_font_description_to_string (font_desc);
-      gtk_font_button_set_font_name (GTK_FONT_BUTTON (widget), font);
-      g_free (font);
-      pango_font_description_free (font_desc);
-    }
-  else if (GTK_IS_FILE_CHOOSER (widget))
-    {
-      char *name = NULL, *filename = NULL;
-
-      g_object_get (object, object_prop, &name, NULL);
-      if (name)
-        filename = g_filename_from_utf8 (name, -1, NULL, NULL, NULL);
-
-      if (filename)
-        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (widget), filename);
-      else
-        gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (widget));
-      g_free (filename);
-      g_free (name);
-    }
-
-out:
-  g_signal_handler_unblock (widget, change->widget_notify_id);
-}
-
-static void
-widget_change_notify_cb (PropertyChange *change)
-{
-  GObject *object = change->object;
-  const char *object_prop = change->object_prop;
-  GtkWidget *widget = change->widget;
-
-  g_signal_handler_block (change->object, change->object_notify_id);
-
-  if (GTK_IS_RADIO_BUTTON (widget))
-    {
-      gboolean active;
-      int value;
-
-      active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-      if (!active)
-        goto out;
-
-      value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (widget), "enum-value"));
-      g_object_set (object, object_prop, value, NULL);
-    }
-  else if (GTK_IS_TOGGLE_BUTTON (widget))
-    {
-      gboolean enabled;
-
-      enabled = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-      g_object_set (object, object_prop, transform_boolean (enabled, change->flags), NULL);
-    }
-  else if (GTK_IS_SPIN_BUTTON (widget))
-    {
-      int value;
-
-      value = (int) gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
-      g_object_set (object, object_prop, value, NULL);
-    }
-  else if (GTK_IS_ENTRY (widget))
-    {
-      const char *text;
-
-      text = gtk_entry_get_text (GTK_ENTRY (widget));
-      g_object_set (object, object_prop, text, NULL);
-    }
-  else if (GTK_IS_COMBO_BOX (widget))
-    {
-      int value;
-
-      value = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-      g_object_set (object, object_prop, value, NULL);
-    }
-  else if (GTK_IS_COLOR_BUTTON (widget))
-    {
-      GdkColor color;
-
-      gtk_color_button_get_color (GTK_COLOR_BUTTON (widget), &color);
-      g_object_set (object, object_prop, &color, NULL);
-    }
-  else if (GTK_IS_FONT_BUTTON (widget))
-    {
-      PangoFontDescription *font_desc;
-      const char *font;
-
-      font = gtk_font_button_get_font_name (GTK_FONT_BUTTON (widget));
-      font_desc = pango_font_description_from_string (font);
-      g_object_set (object, object_prop, font_desc, NULL);
-      pango_font_description_free (font_desc);
-    }
-  else if (GTK_IS_RANGE (widget))
-    {
-      double value;
-
-      value = gtk_range_get_value (GTK_RANGE (widget));
-      g_object_set (object, object_prop, value, NULL);
-    }
-  else if (GTK_IS_FILE_CHOOSER (widget))
-    {
-      char *filename, *name = NULL;
-
-      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (widget));
-      if (filename)
-        name = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
-
-      g_object_set (object, object_prop, name, NULL);
-      g_free (filename);
-      g_free (name);
-    }
-
-out:
-  g_signal_handler_unblock (change->object, change->object_notify_id);
-}
-
-void
-terminal_util_bind_object_property_to_widget (GObject *object,
-                                              const char *object_prop,
-                                              GtkWidget *widget,
-                                              PropertyChangeFlags flags)
-{
-  PropertyChange *change;
-  const char *signal_name;
-  char notify_signal_name[64];
-
-  change = g_slice_new0 (PropertyChange);
-
-  change->widget = widget;
-  g_assert (g_object_get_data (G_OBJECT (widget), "GT:PCD") == NULL);
-  g_object_set_data_full (G_OBJECT (widget), "GT:PCD", change, (GDestroyNotify) property_change_free);
-
-  if (GTK_IS_TOGGLE_BUTTON (widget))
-    signal_name = "notify::active";
-  else if (GTK_IS_SPIN_BUTTON (widget))
-    signal_name = "notify::value";
-  else if (GTK_IS_ENTRY (widget))
-    signal_name = "notify::text";
-  else if (GTK_IS_COMBO_BOX (widget))
-    signal_name = "notify::active";
-  else if (GTK_IS_COLOR_BUTTON (widget))
-    signal_name = "notify::color";
-  else if (GTK_IS_FONT_BUTTON (widget))
-    signal_name = "notify::font-name";
-  else if (GTK_IS_RANGE (widget))
-    signal_name = "value-changed";
-  else if (GTK_IS_FILE_CHOOSER_BUTTON (widget))
-    signal_name = "file-set";
-  else if (GTK_IS_FILE_CHOOSER (widget))
-    signal_name = "selection-changed";
-  else
-    g_assert_not_reached ();
-
-  change->widget_notify_id = g_signal_connect_swapped (widget, signal_name, G_CALLBACK (widget_change_notify_cb), change);
-
-  change->object = object;
-  change->flags = flags;
-  change->object_prop = object_prop;
-
-  g_snprintf (notify_signal_name, sizeof (notify_signal_name), "notify::%s", object_prop);
-  object_change_notify_cb (change);
-  change->object_notify_id = g_signal_connect_swapped (object, notify_signal_name, G_CALLBACK (object_change_notify_cb), change);
-}
-
 #ifdef GDK_WINDOWING_X11
 
 /* We don't want to hop desktops when we unrealize/realize.
@@ -974,18 +706,10 @@ terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
   gulong n_items, bytes_after;
   gboolean result = FALSE;
 
-#if GTK_CHECK_VERSION (2, 90, 8)
   display = gdk_window_get_display (window);
-#else
-  display = gdk_drawable_get_display (window);
-#endif
 
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-#if GTK_CHECK_VERSION (2, 91, 6)
                           GDK_WINDOW_XID (window),
-#else
-			  GDK_DRAWABLE_XID (window),
-#endif
 			  gdk_x11_get_xatom_by_name_for_display (display,
 								 "_NET_WM_DESKTOP"),
 			  0, G_MAXLONG, False, AnyPropertyType,
@@ -1027,11 +751,7 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
   Atom wm_selection;
   gboolean have_wm;
 
-#if GTK_CHECK_VERSION (2, 90, 8)
   screen = gdk_window_get_screen (window);
-#else
-  screen = gdk_drawable_get_screen (window);
-#endif
   display = gdk_screen_get_display (screen);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
@@ -1053,11 +773,7 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
       xclient.type = ClientMessage;
       xclient.serial = 0;
       xclient.send_event = True;
-#if GTK_CHECK_VERSION (2, 91, 6)
       xclient.window = GDK_WINDOW_XID (window);
-#else
-      xclient.window = GDK_WINDOW_XWINDOW (window);
-#endif
       xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP");
       xclient.format = 32;
 
@@ -1068,11 +784,7 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
       xclient.data.l[4] = 0;
 
       XSendEvent (xdisplay,
-#if GTK_CHECK_VERSION (2, 91, 6)
                   GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
-#else
-		  GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)),
-#endif
 		  False,
 		  SubstructureRedirectMask | SubstructureNotifyMask,
 		  (XEvent *)&xclient);
@@ -1082,11 +794,7 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
       gulong long_desktop = desktop;
 
       XChangeProperty (xdisplay,
-#if GTK_CHECK_VERSION (2, 91, 6)
                        GDK_WINDOW_XID (window),
-#else
-		       GDK_DRAWABLE_XID (window),
-#endif
 		       gdk_x11_get_xatom_by_name_for_display (display,
 							      "_NET_WM_DESKTOP"),
 		       XA_CARDINAL, 32, PropModeReplace,
@@ -1110,22 +818,14 @@ terminal_util_x11_clear_demands_attention (GdkWindow *window)
   GdkDisplay *display;
   XClientMessageEvent xclient;
 
-#if GTK_CHECK_VERSION (2, 90, 8)
   screen = gdk_window_get_screen (window);
-#else
-  screen = gdk_drawable_get_screen (window);
-#endif
   display = gdk_screen_get_display (screen);
 
   memset (&xclient, 0, sizeof (xclient));
   xclient.type = ClientMessage;
   xclient.serial = 0;
   xclient.send_event = True;
-#if GTK_CHECK_VERSION (2, 91, 6)
   xclient.window = GDK_WINDOW_XID (window);
-#else
-  xclient.window = GDK_WINDOW_XWINDOW (window);
-#endif
   xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE");
   xclient.format = 32;
 
@@ -1136,11 +836,7 @@ terminal_util_x11_clear_demands_attention (GdkWindow *window)
   xclient.data.l[4] = 0;
 
   XSendEvent (GDK_DISPLAY_XDISPLAY (display),
-#if GTK_CHECK_VERSION (2, 91, 6)
               GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
-#else
-	      GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)),
-#endif
 	      False,
 	      SubstructureRedirectMask | SubstructureNotifyMask,
 	      (XEvent *)&xclient);
@@ -1160,11 +856,7 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
 {
   GdkDisplay *display;
 
-#if GTK_CHECK_VERSION (2, 90, 8)
   display = gdk_window_get_display (window);
-#else
-  display = gdk_drawable_get_display (window);
-#endif
 
   Atom type;
   gint format;
@@ -1182,11 +874,7 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
                       0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
                       &bytes_after, &data);
-#if GTK_CHECK_VERSION (2, 90, 8)
   gdk_error_trap_pop_ignored ();
-#else
-  gdk_error_trap_pop ();
-#endif
 
   if (type != None)
     {
@@ -1209,3 +897,171 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
 }
 
 #endif /* GDK_WINDOWING_X11 */
+
+static gboolean
+s_to_gdk_color (GVariant *variant,
+                gpointer *result,
+                gpointer  user_data)
+{
+  GdkColor *color = user_data;
+  const char *str;
+
+  g_assert (variant != NULL);
+
+  g_variant_get (variant, "&s", &str);
+  return gdk_color_parse (str, color);
+}
+
+/**
+ * terminal_g_settings_get_gdk_color:
+ * @settings: a #GSettings
+ * @key: a valid key in @settings of type "s"
+ * @color: location to store the parsed color
+ *
+ * Gets a color from @key in @settings.
+ *
+ * Returns: whether parsing the value as color succeeded
+ */
+void
+terminal_g_settings_get_gdk_color (GSettings  *settings,
+                                   const char *key,
+                                   GdkColor   *color)
+{
+  g_return_if_fail (color != NULL);
+
+  g_settings_get_mapped (settings, key,
+                         (GSettingsGetMapping) s_to_gdk_color,
+                         color);
+}
+
+/**
+ * terminal_g_settings_get_sdk_color:
+ * @settings: a #GSettings
+ * @key: a valid key in @settings of type "s"
+ * @color: a #GdkColor
+ *
+ * Sets a color in @key in @settings.
+ */
+void
+terminal_g_settings_set_gdk_color (GSettings  *settings,
+                                   const char *key,
+                                   const GdkColor *color)
+{
+  char *str;
+
+  str = gdk_color_to_string (color);
+  g_settings_set_string (settings, key, str);
+  g_free (str);
+}
+
+static gboolean
+as_to_gdk_colors (GVariant *variant,
+                  gpointer *result,
+                  gpointer user_data)
+{
+  gsize *n_colors = user_data;
+  gsize n, i;
+  GdkColor *colors;
+  GVariantIter iter;
+  const char *str;
+
+  /* We should never get to the fallback case */
+  g_assert (variant != NULL);
+
+  g_variant_iter_init (&iter, variant);
+  n = g_variant_iter_n_children (&iter);
+  colors = g_new (GdkColor, n);
+
+  i = 0;
+  while (g_variant_iter_next (&iter, "&s", &str)) {
+    if (!gdk_color_parse (str, &colors[i++])) {
+      g_free (colors);
+      return FALSE;
+    }
+  }
+
+  *result = colors;
+  if (n_colors)
+    *n_colors = n;
+
+  return TRUE;
+}
+
+/**
+ * terminal_g_settings_get_gdk_color:
+ * @settings: a #GSettings
+ * @key: a valid key in @settings or type "s"
+ * @color: location to store the parsed color
+ *
+ * Returns: (transfer full):
+ */
+GdkColor *
+terminal_g_settings_get_gdk_palette (GSettings  *settings,
+                                     const char *key,
+                                     gsize      *n_colors)
+{
+  return g_settings_get_mapped (settings, key,
+                                (GSettingsGetMapping) as_to_gdk_colors,
+                                n_colors);
+}
+
+void
+terminal_g_settings_set_gdk_palette (GSettings      *settings,
+                                     const char     *key,
+                                     const GdkColor *colors,
+                                     gsize           n_colors)
+{
+  char **strv;
+  gsize i;
+
+  strv = g_new (char *, n_colors + 1);
+  for (i = 0; i < n_colors; ++i)
+    strv[i] = gdk_color_to_string (&colors[i]);
+  strv[n_colors] = NULL;
+
+  g_settings_set (settings, key, "^as", strv);
+  g_strfreev (strv);
+}
+
+static void
+mnemonic_label_set_sensitive_cb (GtkWidget *widget,
+                                 GParamSpec *pspec,
+                                 GtkWidget *label)
+{
+  gtk_widget_set_sensitive (label, gtk_widget_get_sensitive (widget));
+}
+
+/**
+ * terminal_util_bind_mnemonic_label_sensitivity:
+ * @container: a #GtkContainer
+ */
+void
+terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
+{
+  GList *list, *l;
+
+  list = gtk_widget_list_mnemonic_labels (widget);
+  for (l = list; l != NULL; l = l->next) {
+    GtkWidget *label = l->data;
+
+    if (gtk_widget_is_ancestor (label, widget))
+      continue;
+
+#if 0
+    g_print ("Widget %s has mnemonic label %s\n",
+             gtk_buildable_get_name (GTK_BUILDABLE (widget)),
+             gtk_buildable_get_name (GTK_BUILDABLE (label)));
+#endif
+
+    mnemonic_label_set_sensitive_cb (widget, NULL, label);
+    g_signal_connect (widget, "notify::sensitive",
+                      G_CALLBACK (mnemonic_label_set_sensitive_cb),
+                      label);
+  }
+  g_list_free (list);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_foreach (GTK_CONTAINER (widget),
+                           (GtkCallback) terminal_util_bind_mnemonic_label_sensitivity,
+                           NULL);
+}

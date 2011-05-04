@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © 2002 Havoc Pennington
+  Copyright © 2002 Jonathan Blandford
+  Copyright © 2003, 2004 Mariano Suárez-Alvarez
+  Copyright © 2005 Kjartan Maraas
+  Copyright © 2005 Tony Tsui
+  Copyright © 2006 Guilherme de S. Pastore
+  Copyright © 2009, 2010 Behdad Esfahbod
+  Copyright © 2008, 2010 Christian Persch
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 3, or (at your option)
+  any later version.
+
+  This program is distributed in the hope conf it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+-->
+<schemalist gettext-domain="gnome-terminal">
+
+  <enum id='org.gnome.Terminal.TitleMode'>
+    <value nick='replace' value='0'/>
+    <value nick='before' value='1'/>
+    <value nick='after' value='2'/>
+    <value nick='ignore' value='3'/>
+  </enum>
+
+   <enum id='org.gnome.Terminal.ScrollbarPolicy'>
+    <value nick='always' value='0'/>
+    <value nick='automatic' value='1'/>
+    <value nick='never' value='2'/>
+  </enum>
+
+  <enum id='org.gnome.Terminal.ExitAction'>
+    <value nick='close' value='0'/>
+    <value nick='restart' value='1'/>
+    <value nick='hold' value='2'/>
+  </enum>
+
+  <!-- These really belong into some vte-built enums file, but
+        using enums from other modules still has some
+        problems. Just include a copy here for now.
+    -->
+  <enum id='org.gnome.Terminal.EraseBinding'>
+    <value nick='auto' value='0'/>
+    <value nick='ascii-backspace' value='1'/>
+    <value nick='ascii-delete' value='2'/>
+    <value nick='delete-sequence' value='3'/>
+    <value nick='tty' value='4'/>
+  </enum>
+  <enum id='org.gnome.Terminal.Cursor.BlinkMode'>
+    <value nick='system' value='0'/>
+    <value nick='on' value='1'/>
+    <value nick='off' value='2'/>
+  </enum>
+  <enum id='org.gnome.Terminal.Cursor.Shape'>
+    <value nick='block' value='0'/>
+    <value nick='ibeam' value='1'/>
+    <value nick='underline' value='2'/>
+  </enum>
+
+  <!-- A terminal profile -->
+
+  <schema id="org.gnome.Terminal.Profile">
+    <key name="visible-name" type="s">
+      <default l10n="messages" context="visible-name">'Default'</default>
+      <_summary>Human-readable name of the profile</_summary>
+      <_description>Human-readable name of the profile.</_description>
+    </key>
+    <key name="foreground-color" type="s">
+      <default>'#000000'</default>
+      <_summary>Default color of text in the terminal</_summary>
+      <_description>Default color of text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as "red").</_description>
+    </key>
+    <key name="background-color" type="s">
+      <default>'#FFFFDD'</default>
+      <_summary>Default color of terminal background</_summary>
+      <_description>Default color of terminal background, as a color specification (can be HTML-style hex digits, or a color name such as "red").</_description>
+    </key>
+    <key name="bold-color" type="s">
+      <default>'#000000'</default>
+      <_summary>Default color of bold text in the terminal</_summary>
+      <_description>Default color of bold text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as "red"). This is ignored if bold_color_same_as_fg is true.</_description>
+    </key>
+    <key name="bold-color-same-as-fg" type="b">
+      <default>true</default>
+      <_summary>Whether bold text should use the same color as normal text</_summary>
+      <_description>If true, boldface text will be rendered using the same color as normal text.</_description>
+    </key>
+    <key name="title-mode" enum="org.gnome.Terminal.TitleMode">
+      <default>'replace'</default>
+      <_summary>What to do with dynamic title</_summary>
+      <_description>If the application in the terminal sets the title (most typically people have their shell set up to do this), the dynamically-set title can erase the configured title, go before it, go after it, or replace it. The possible values are "replace", "before", "after", and "ignore".</_description>
+    </key>
+    <key name="title" type="s">
+      <default l10n="messages" context="title">'Terminal'</default>
+      <_summary>Title for terminal</_summary>
+      <_description>Title to display for the terminal window or tab. This title may be replaced by or combined with the title set by the application inside the terminal, depending on the title_mode setting.</_description>
+    </key>
+    <key name="allow-bold" type="b">
+      <default>true</default>
+      <_summary>Whether to allow bold text</_summary>
+      <_description>If true, allow applications in the terminal to make text boldface.</_description>
+    </key>
+    <key name="audible-bell" type="b">
+      <default>true</default>
+      <_summary>Whether to ring the terminal bell</_summary>
+    </key>
+    <key name="word-chars" type="s">
+      <default>'-A-Za-z0-9,./?%&amp;#:_=+@~'</default>
+      <_summary>Characters that are considered "part of a word"</_summary>
+      <_description>When selecting text by word, sequences of these characters are considered single words. Ranges can be given as "A-Z". Literal hyphen (not expressing a range) should be the first character given.</_description>
+    </key>
+    <key name="default-show-menubar" type="b">
+      <default>true</default>
+      <_summary>Whether to show menubar in new windows/tabs</_summary>
+      <_description>True if the menubar should be shown in new window</_description>
+    </key>
+    <!-- FIXMEchpe!!! -->
+    <key name="use-custom-default-size" type="b">
+      <default>false</default>
+      <_summary>Whether to use custom terminal size for new windows</_summary>
+      <_description>If true, newly created terminal windows will have custom size specified by default_size_columns and default_size_rows.</_description>
+    </key>
+    <key name="default-size-columns" type="i">
+      <default>80</default>
+      <_summary>Default number of columns</_summary>
+      <_description>Number of columns in newly created terminal windows. Has no effect if use_custom_default_size is not enabled.</_description>
+    </key>
+    <key name="default-size-rows" type="i">
+      <default>24</default>
+      <_summary>Default number of rows</_summary>
+      <_description>Number of rows in newly created terminal windows. Has no effect if use_custom_default_size is not enabled.</_description>
+    </key>
+    <key name="scrollbar-policy" enum="org.gnome.Terminal.ScrollbarPolicy">
+      <default>'always'</default>
+      <_summary>When to show the scrollbar</_summary>
+    </key>
+    <key name="scrollback-lines" type="i">
+      <default>512</default>
+      <_summary>Number of lines to keep in scrollback</_summary>
+      <_description>Number of scrollback lines to keep around. You can scroll back in the terminal by this number of lines; lines that don't fit in the scrollback are discarded. If scrollback_unlimited is true, this value is ignored.</_description>
+    </key>
+    <key name="scrollback-unlimited" type="b">
+      <default>false</default>
+      <_summary>Whether an unlimited number of lines should be kept in scrollback</_summary>
+      <_description>If true, scrollback lines will never be discarded. The scrollback history is stored on disk temporarily, so this may cause the system to run out of disk space if there is a lot of output to the terminal.</_description>
+    </key>
+    <key name="scroll-on-keystroke" type="b">
+      <default>true</default>
+      <_summary>Whether to scroll to the bottom when a key is pressed</_summary>
+      <_description>If true, pressing a key jumps the scrollbar to the bottom.</_description>
+    </key>
+    <key name="scroll-on-output" type="b">
+      <default>false</default>
+      <_summary>Whether to scroll to the bottom when there's new output</_summary>
+      <_description>If true, whenever there's new output the terminal will scroll to the bottom.</_description>
+    </key>
+    <key name="exit-action" enum="org.gnome.Terminal.ExitAction">
+      <default>'close'</default>
+      <_summary>What to do with the terminal when the child command exits</_summary>
+      <_description>Possible values are "close" to close the terminal, and "restart" to restart the command.</_description>
+    </key>
+    <key name="login-shell" type="b">
+      <default>false</default>
+      <_summary>Whether to launch the command in the terminal as a login shell</_summary>
+      <_description>If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)</_description>
+    </key>
+    <key name="update-records" type="b">
+      <default>true</default>
+      <_summary>Whether to update login records when launching terminal command</_summary>
+      <_description>If true, the system login records utmp and wtmp will be updated when the command inside the terminal is launched.</_description>
+    </key>
+    <key name="use-custom-command" type="b">
+      <default>false</default>
+      <_summary>Whether to run a custom command instead of the shell</_summary>
+      <_description>If true, the value of the custom_command setting will be used in place of running a shell.</_description>
+    </key>
+    <key name="cursor-blink-mode" enum="org.gnome.Terminal.Cursor.BlinkMode">
+      <default>'system'</default>
+      <_summary>Whether to blink the cursor</_summary>
+      <_description>The possible values are "system" to use the global cursor blinking settings, or "on" or "off" to set the mode explicitly.</_description>
+    </key>
+    <key name="cursor-shape" enum="org.gnome.Terminal.Cursor.Shape">
+      <default>'block'</default>
+      <_summary>The cursor appearance</_summary>
+    </key>
+    <key name="custom-command" type="s">
+      <default>''</default>
+      <_summary>Custom command to use instead of the shell</_summary>
+      <_description>Run this command in place of the shell, if use_custom_command is true.</_description>
+    </key>
+    <key name="palette" type="as">
+      <default>["#2E2E34343636",
+                "#CCCC00000000",
+                "#4E4E9A9A0606",
+                "#C4C4A0A00000",
+                "#34346565A4A4",
+                "#757550507B7B",
+                "#060698209A9A",
+                "#D3D3D7D7CFCF",
+                "#555557575353",
+                "#EFEF29292929",
+                "#8A8AE2E23434",
+                "#FCFCE9E94F4F",
+                "#72729F9FCFCF",
+                "#ADAD7F7FA8A8",
+                "#3434E2E2E2E2",
+                "#EEEEEEEEECEC"]</default>
+      <_summary>Palette for terminal applications</_summary>
+    </key>
+    <key name="font" type="s">
+      <default>'Monospace 12'</default>
+      <_summary>A pango font name and size</_summary>
+    </key>
+    <key name="backspace-binding" enum="org.gnome.Terminal.EraseBinding">
+      <default>'ascii-delete'</default>
+      <_summary>The code sequence the Backspace key generates</_summary>
+    </key>
+    <key name="delete-binding" enum="org.gnome.Terminal.EraseBinding">
+      <default>'delete-sequence'</default>
+      <_summary>The code sequence the Delete key generates</_summary>
+    </key>
+    <key name="use-theme-colors" type="b">
+      <default>true</default>
+      <_summary>Whether to use the colors from the theme for the terminal widget</_summary>
+    </key>
+    <key name="use-system-font" type="b">
+      <default>true</default>
+      <_summary>Whether to use the system monospace font</_summary>
+    </key>
+  </schema>
+
+  <!-- Profiles list -->
+
+  <!--
+  <schema id="org.gnome.Terminal.Profiles" list-of="org.gnome.Terminal.Profile" />
+  -->
+
+  <!-- Global settings -->
+
+  <schema id="org.gnome.Terminal.Settings" path="/org/gnome/terminal/">
+
+    <key name="mnemonics-enabled" type="b">
+      <default>false</default>
+      <_summary>Whether the menubar has access keys</_summary>
+      <_description>
+        Whether to have Alt+letter access keys for the menubar.
+        They may interfere with some applications run inside the terminal
+        so it's possible to turn them off.
+      </_description>
+    </key>
+
+    <key name="menu-accelerator-enabled" type="b">
+      <default>false</default>
+      <_summary>Whether the standard GTK shortcut for menubar access is enabled</_summary>
+      <_description>
+        Normally you can access the menubar with F10. This can also
+        be customized via gtkrc (gtk-menu-bar-accel =
+        "whatever"). This option allows the standard menubar
+        accelerator to be disabled.
+      </_description>
+    </key>
+
+    <key name="encodings" type="as">
+      <!-- Translators: Please note that this has to be a list of
+           valid encodings (which are to be taken from the list in src/encoding.c).
+           It has to include UTF-8 and the word 'current', which is not to be
+           translated. This is provided for customization of the default encoding
+           menu; see bug 144810 for an use case. In most cases, this should be
+           left alone.
+      -->
+      <default>["UTF-8", "current"]</default>
+      <_summary>List of available encodings</_summary>
+      <_description>
+        A subset of possible encodings are presented in
+        the Encoding submenu. This is a list of encodings
+        to appear there. The special encoding name "current"
+        means to display the encoding of the current locale.
+      </_description>
+    </key>
+
+    <key name="confirm-close" type="b">
+      <default>true</default>
+      <_summary>Whether to ask for confirmation before closing a terminal</_summary>
+    </key>
+
+    <key name="default-show-menubar" type="b">
+      <default>true</default>
+      <_summary>Whether to show the menubar in new windows</_summary>
+    </key>
+
+    <!--
+    <child name="profiles" schema="org.gnome.Terminal.Profiles" >
+      <child name="profile0" schema="org.gnome.Terminal.Profile">
+        <override name="visible-name">"Default Profile"</override>
+      </child>
+    </child>
+    -->
+
+  </schema>
+
+</schemalist>

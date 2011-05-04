@@ -30,8 +30,7 @@ gnome_terminal_SOURCES= \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
-	terminal-profile.c \
-	terminal-profile.h \
+	terminal-schemas.h \
 	terminal-screen.c \
 	terminal-screen.h \
 	terminal-screen-container.c \
@@ -105,7 +104,7 @@ endif
 endif
 
 TYPES_H_FILES = \
-	terminal-profile.h \
+	terminal-enums.h \
 	$(NULL)
 
 terminal-type-builtins.h: stamp-terminal-type-builtins.h
@@ -137,9 +136,27 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
-schemadir = $(GCONF_SCHEMA_FILE_DIR)
-schema_in_files = gnome-terminal.schemas.in
-schema_DATA = gnome-terminal.schemas
+
+migrationdir = $(libexecdir)/GConf/gsettings
+migration_PROGRAMS = gnome-terminal-migration
+
+gnome_terminal_migration_SOURCES = \
+	migration.c \
+	terminal-schemas.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
+	$(NULL)
+
+gnome_terminal_migration_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+gnome_terminal_migration_CFLAGS = \
+	$(MIGRATOR_CFLAGS) \
+	$(AM_CFLAGS)
+gnome_terminal_migration_LDFLAGS = \
+	$(AM_LDFLAGS)
+gnome_terminal_migration_LDADD = \
+	$(MIGRATOR_LIBS) \
+	$(INTLLIBS)
 
 aboutdir = $(pkgdatadir)
 about_DATA = \
@@ -163,11 +180,15 @@ builder_in_files = \
 builderdir = $(pkgdatadir)
 builder_DATA =  $(builder_in_files:.glade=.ui)
 
+gsettingsschema_in_files = org.gnome.Terminal.Preferences.gschema.xml.in
+gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)
+
 CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
 	$(builder_DATA) \
+	$(gsettings_SCHEMAS) \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
@@ -176,17 +197,13 @@ EXTRA_DIST = \
 	terminal-type-builtins.h.template \
 	extra-strings.c \
 	$(about_DATA) \
-	$(schema_in_files) \
 	$(uimanager_DATA) \
 	$(builder_in_files) \
+	$(gsettingsschema_in_files) \
 	$(NULL)
 
-@INTLTOOL_SCHEMAS_RULE@
-
-if GCONF_SCHEMAS_INSTALL
-install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(top_builddir)/src/$(schema_DATA)
-endif
+@INTLTOOL_XML_NOMERGE_RULE@
+@GSETTINGS_RULES@
 
 %.ui: %.glade
 	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $(GTK_BUILDER_CONVERT_FLAGS) $< $@

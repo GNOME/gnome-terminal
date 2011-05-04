@@ -265,11 +265,7 @@ notebook_page_reordered_cb (GtkNotebook *notebook,
 
 static void
 notebook_page_switch_cb (GtkNotebook *notebook,
-#if GTK_CHECK_VERSION (2, 90, 6)
                          GtkWidget *page,
-#else
-                         gpointer page,
-#endif
                          guint position,
                          TerminalTabsMenu *menu)
 {
@@ -277,11 +273,7 @@ notebook_page_switch_cb (GtkNotebook *notebook,
         TerminalScreen *screen;
         GtkAction *action;
 
-#if GTK_CHECK_VERSION (2, 90, 6)
         container = TERMINAL_SCREEN_CONTAINER (page);
-#else
-        container = TERMINAL_SCREEN_CONTAINER (gtk_notebook_get_nth_page (notebook, position));
-#endif
         screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);

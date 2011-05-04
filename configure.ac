@@ -40,26 +40,21 @@ GNOME_COMPILE_WARNINGS([maximum])
 AM_GLIB_GNU_GETTEXT
 
 GLIB_REQUIRED=2.26.0
-GIO_REQUIRED=2.26.0
-GCONF_REQUIRED=2.31.3
+GIO_REQUIRED=2.27.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.1.0
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 3.0)])],
+  [AS_HELP_STRING([--with-gtk=3.0],[which gtk+ version to compile against (default: 3.0)])],
   [case "$with_gtk" in
-     2.0|3.0) ;;
-     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
+     3.0) ;;
+     2.0) AC_MSG_ERROR([unsupported gtk version $with_gtk specified]) ;;
+     *) AC_MSG_ERROR([invalid gtk version $with_gtk specified]) ;;
    esac],
   [with_gtk=3.0])
 AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
-  2.0) GTK_API_VERSION=2.0
-       GTK_REQUIRED=2.18.0
-       VTE_PC_VERSION=
-       VTE_REQUIRED=0.26.0
-       ;;
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.0.0
        VTE_PC_VERSION=-2.90
@@ -69,7 +64,6 @@ esac
 
 AC_MSG_CHECKING([for GDK target])
 case "$with_gtk" in
-  2.0) GDK_TARGET="$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)" ;;
   3.0) for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
          GDK_TARGET="$target"
          break
@@ -90,9 +84,14 @@ PKG_CHECK_MODULES([TERM],
    gthread-2.0
    gio-2.0 >= $GIO_REQUIRED
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
-   gconf-2.0 >= $GCONF_REQUIRED
    gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
    $PLATFORM_DEPS])
+
+# *********
+# GSettings
+# *********
+
+GLIB_GSETTINGS
 
 # ********
 # smclient
@@ -125,17 +124,20 @@ AM_CONDITIONAL([WITH_SMCLIENT_XSMP],[test "$with_smclient" = "xsmp"])
 AM_CONDITIONAL([WITH_SMCLIENT_WIN32],[test "$with_smclient" = "win32"])
 AM_CONDITIONAL([WITH_SMCLIENT_QUARTZ],[test "$with_smclient" = "quartz"])
 
-# *****
-# GConf
-# *****
+# *************************
+# GConf-GSettings Migration
+# *************************
 
-AC_PATH_PROG(GCONFTOOL, gconftool-2, no)
+GCONF_REQUIRED=2.31.3
 
-if test x"$GCONFTOOL" = xno; then
-  AC_MSG_ERROR([gconftool-2 executable not found in your path - should be installed with GConf])
-fi
+PKG_CHECK_MODULES([MIGRATOR],[
+  gio-2.0 >= $GIO_REQUIRED
+  vte$VTE_PC_VERSION >= $VTE_REQUIRED
+  gconf-2.0 >= $GCONF_REQUIRED])
 
-AM_GCONF_SOURCE_2
+# ***********
+# Build tools
+# ***********
 
 GLIB_GENMARSHAL="$($PKG_CONFIG --variable=glib_genmarshal glib-2.0)"
 AC_SUBST([GLIB_GENMARSHAL])
@@ -149,7 +151,6 @@ if test "$GTK_BUILDER_CONVERT" = "false"; then
 fi
 
 case "$with_gtk" in
-  2.0) GTK_BUILDER_CONVERT_FLAGS="" ;;
   3.0) GTK_BUILDER_CONVERT_FLAGS="--target-version=3.0" ;;
 esac
 

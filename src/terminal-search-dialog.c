@@ -108,11 +108,7 @@ terminal_search_dialog_new (GtkWindow   *parent)
   priv->store = store = gtk_list_store_new (1, G_TYPE_STRING);
   g_object_set (G_OBJECT (priv->search_entry),
 		"model", store,
-#if GTK_CHECK_VERSION (2, 91, 0)
 		"entry-text-column", 0,
-#else
-		"text-column", 0,
-#endif
 		NULL);
 
   priv->completion = completion = gtk_entry_completion_new ();

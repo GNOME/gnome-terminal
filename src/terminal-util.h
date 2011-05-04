@@ -1,19 +1,19 @@
 /*
  * Copyright © 2001 Havoc Pennington
- * Copyright © 2008 Christian Persch
+ * Copyright © 2008, 2010 Christian Persch
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * This programme is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This programme is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
+ * You should have received a copy of the GNU General Public
+ * License along with this programme; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
@@ -21,15 +21,12 @@
 #ifndef TERMINAL_UTIL_H
 #define TERMINAL_UTIL_H
 
+#include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 
 #include "terminal-screen.h"
 
 G_BEGIN_DECLS
-
-#define CONF_PROXY_PREFIX      "/system/proxy"
-#define CONF_HTTP_PROXY_PREFIX "/system/http_proxy"
 
 void terminal_util_set_unique_role (GtkWindow *window, const char *prefix);
 
@@ -89,14 +86,6 @@ char **terminal_util_key_file_get_argv    (GKeyFile *key_file,
 
 void terminal_util_add_proxy_env (GHashTable *env_table);
 
-typedef enum {
-  FLAG_INVERT_BOOL  = 1 << 0,
-} PropertyChangeFlags;
-
-void terminal_util_bind_object_property_to_widget (GObject *object,
-                                                   const char *object_prop,
-                                                   GtkWidget *widget,
-                                                   PropertyChangeFlags flags);
 
 gboolean terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
 					       guint32   *desktop);
@@ -106,6 +95,23 @@ void     terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
 void terminal_util_x11_clear_demands_attention (GdkWindow *window);
 
 gboolean terminal_util_x11_window_is_minimized (GdkWindow *window);
+
+void terminal_g_settings_get_gdk_color (GSettings  *settings,
+                                        const char *key,
+                                        GdkColor   *color);
+void terminal_g_settings_set_gdk_color (GSettings  *settings,
+                                        const char *key,
+                                        const GdkColor *color);
+
+GdkColor *terminal_g_settings_get_gdk_palette (GSettings  *settings,
+                                               const char *key,
+                                               gsize      *n_colors);
+void terminal_g_settings_set_gdk_palette (GSettings      *settings,
+                                          const char     *key,
+                                          const GdkColor *colors,
+                                          gsize           n_colors);
+
+void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
 G_END_DECLS
 

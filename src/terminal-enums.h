@@ -1,5 +1,7 @@
 /*
- * Copyright © 2002 Havoc Pennington
+ * Copyright © 2001 Havoc Pennington
+ * Copyright © 2002 Mathias Hasselmann
+ * Copyright © 2008, 2010 Christian Persch
  *
  * This programme is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
@@ -17,11 +19,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef TERMINAL_INTL_H
-#define TERMINAL_INTL_H
+#ifndef TERMINAL_ENUMS_H
+#define TERMINAL_ENUMS_H
 
-#include <glib/gi18n.h>
+#include <glib.h>
 
-#define I_(string) g_intern_static_string (string)
+G_BEGIN_DECLS
 
-#endif /* TERMINAL_INTL_H */
+typedef enum
+{
+  TERMINAL_TITLE_REPLACE,
+  TERMINAL_TITLE_BEFORE,
+  TERMINAL_TITLE_AFTER,
+  TERMINAL_TITLE_IGNORE
+} TerminalTitleMode;
+
+typedef enum 
+{
+  TERMINAL_EXIT_CLOSE,
+  TERMINAL_EXIT_RESTART,
+  TERMINAL_EXIT_HOLD
+} TerminalExitAction;
+
+G_END_DECLS
+
+#endif /* TERMINAL_ENUMS_H */

@@ -32,6 +32,7 @@
 #include "terminal-app.h"
 #include "terminal-intl.h"
 #include "terminal-util.h"
+#include "terminal-version.h"
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
@@ -165,6 +166,7 @@ add_new_window (TerminalOptions *options,
   return iw;
 }
 
+#if !TERMINAL_CHECK_VERSION (3, 0, 0)
 /* handle deprecated command line options */
 static gboolean
 unsupported_option_callback (const gchar *option_name,
@@ -177,7 +179,7 @@ unsupported_option_callback (const gchar *option_name,
                " the new '--profile' option\n"), option_name);
   return TRUE; /* we do not want to bail out here but continue */
 }
-
+#endif
 
 static gboolean G_GNUC_NORETURN
 option_version_cb (const gchar *option_name,
@@ -1173,6 +1175,7 @@ get_goption_context (TerminalOptions *options)
       NULL,
       NULL
     },
+#if !TERMINAL_CHECK_VERSION (3, 0, 0)
     /*
      * Crappy old compat args
      */
@@ -1344,6 +1347,7 @@ get_goption_context (TerminalOptions *options)
       unsupported_option_callback,
       NULL, NULL
     },
+#endif /* Terminal < 3.0.0 */
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 

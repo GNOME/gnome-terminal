@@ -1,19 +1,19 @@
 /*
  * Copyright © 2001 Havoc Pennington
- * Copyright © 2008 Christian Persch
+ * Copyright © 2008, 2010 Christian Persch
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
+ * This programme is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This programme is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the
+ * You should have received a copy of the GNU General Public
+ * License along with this programme; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
@@ -21,9 +21,10 @@
 #ifndef TERMINAL_SCREEN_H
 #define TERMINAL_SCREEN_H
 
-#include <vte/vte.h>
+#include <glib-object.h>
+#include <gio/gio.h>
 
-#include "terminal-profile.h"
+#include <vte/vte.h>
 
 G_BEGIN_DECLS
 
@@ -61,7 +62,7 @@ struct _TerminalScreenClass
   VteTerminalClass parent_class;
 
   void (* profile_set)        (TerminalScreen *screen,
-                               TerminalProfile *old_profile);
+                               GSettings *old_profile);
   void (* show_popup_menu)    (TerminalScreen *screen,
                                TerminalScreenPopupInfo *info);
   gboolean (* match_clicked)  (TerminalScreen *screen,
@@ -73,7 +74,7 @@ struct _TerminalScreenClass
 
 GType terminal_screen_get_type (void) G_GNUC_CONST;
 
-TerminalScreen *terminal_screen_new (TerminalProfile *profile,
+TerminalScreen *terminal_screen_new (GSettings       *profile,
                                      char           **override_command,
                                      const char      *title,
                                      const char      *working_dir,
@@ -81,8 +82,8 @@ TerminalScreen *terminal_screen_new (TerminalProfile *profile,
                                      double           zoom);
 
 void terminal_screen_set_profile (TerminalScreen *screen,
-                                  TerminalProfile *profile);
-TerminalProfile* terminal_screen_get_profile (TerminalScreen *screen);
+                                  GSettings      *profile);
+GSettings* terminal_screen_get_profile (TerminalScreen *screen);
 
 void         terminal_screen_set_override_command (TerminalScreen  *screen,
                                                    char           **argv);

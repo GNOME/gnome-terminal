@@ -3,7 +3,7 @@
  * Copyright © 2002 Red Hat, Inc.
  * Copyright © 2002 Sun Microsystems
  * Copyright © 2003 Mariano Suarez-Alvarez
- * Copyright © 2008, 2010 Christian Persch
+ * Copyright © 2008, 2010, 2011 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -386,28 +386,6 @@ name_lost_cb (GDBusConnection *connection,
 
   gtk_main_quit ();
 }
-
-/* Settings storage works as follows:
- *   /apps/gnome-terminal/global/
- *   /apps/gnome-terminal/profiles/Foo/
- *
- * It's somewhat tricky to manage the profiles/ dir since we need to track
- * the list of profiles, but gconf doesn't have a concept of notifying that
- * a directory has appeared or disappeared.
- *
- * Session state is stored entirely in the RestartCommand command line.
- *
- * The number one rule: all stored information is EITHER per-session,
- * per-profile, or set from a command line option. THERE CAN BE NO
- * OVERLAP. The UI and implementation totally break if you overlap
- * these categories. See gnome-terminal 1.x for why.
- *
- * Don't use this code as an example of how to use GConf - it's hugely
- * overcomplicated due to the profiles stuff. Most apps should not
- * have to do scary things of this nature, and should not have
- * a profiles feature.
- *
- */
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).

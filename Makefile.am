@@ -2,6 +2,8 @@ SUBDIRS = src po help
 
 NULL =
 
+ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
+
 DISTCHECK_CONFIGURE_FLAGS = \
 	--disable-scrollkeeper \
 	--disable-schemas-install \

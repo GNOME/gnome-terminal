@@ -46,11 +46,11 @@ N_("Restart the command")
 N_("Hold the terminal open")
 
 /* Translators: Scrollbar is: ... */
-N_("On the left side")
+N_("Always visible")
 /* Translators: Scrollbar is: ... */
-N_("On the right side")
+N_("Visible only when necessary")
 /* Translators: Scrollbar is: ... */
-N_("Disabled")
+N_("Hidden")
 
 /* Translators: When terminal commands set their own titles: ... */
 N_("Replace initial title")
