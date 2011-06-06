@@ -579,9 +579,6 @@ setup_proxy_env (GSettings  *proxy_settings,
 
   child_settings = g_settings_get_child (proxy_settings, child_schema_id);
 
-  if (is_http && !g_settings_get_boolean (child_settings, "enabled"))
-    goto out;
-
   g_settings_get (child_settings, "host", "&s", &host);
   port = g_settings_get_int (child_settings, "port");
   if (host[0] == '\0' || port == 0)
