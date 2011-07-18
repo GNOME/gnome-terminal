@@ -2033,8 +2033,6 @@ terminal_window_init (TerminalWindow *window)
 #else
   gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), GUINT_TO_POINTER (1));
 #endif
-  gtk_notebook_set_scrollable (GTK_NOTEBOOK (priv->notebook),
-                               TRUE);
   g_signal_connect (priv->notebook, "button-press-event",
                     G_CALLBACK (notebook_button_press_cb), window);	
   g_signal_connect (priv->notebook, "popup-menu",
