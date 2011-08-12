@@ -402,7 +402,7 @@ terminal_screen_init (TerminalScreen *screen)
                     screen);
 
   app = terminal_app_get ();
-  g_signal_connect (terminal_app_get_desktop_interface_settings (app), "changed",
+  g_signal_connect (terminal_app_get_desktop_interface_settings (app), "changed::" MONOSPACE_FONT_KEY_NAME,
                     G_CALLBACK (terminal_screen_system_font_changed_cb), screen);
 
 #ifdef GNOME_ENABLE_DEBUG

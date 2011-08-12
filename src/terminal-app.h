@@ -57,6 +57,8 @@ G_BEGIN_DECLS
 
 #define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
 
+#define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
+
 /* TerminalApp */
 
 #define TERMINAL_TYPE_APP              (terminal_app_get_type ())

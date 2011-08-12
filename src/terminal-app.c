@@ -49,7 +49,6 @@
 #endif
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
-#define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
 
