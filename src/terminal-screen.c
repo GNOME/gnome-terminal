@@ -266,37 +266,12 @@ terminal_screen_get_window (TerminalScreen *screen)
   return TERMINAL_WINDOW (toplevel);
 }
 
-#if 0
-static gboolean
-window_uses_argb_visual (TerminalScreen *screen)
-{
-  TerminalWindow *window;
-
-  window = terminal_screen_get_window (screen);
-  if (window == NULL || !gtk_widget_get_realized (GTK_WIDGET (window)))
-    return FALSE;
-
-  return terminal_window_uses_argb_visual (window);
-}
-#endif
-
 static void
 terminal_screen_realize (GtkWidget *widget)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
 
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->realize (widget);
-
-#if 0
-  TerminalScreenPrivate *priv = screen->priv;
-  TerminalBackgroundType bg_type;
-
-  /* FIXME: Don't enable this if we have a compmgr. */
-  bg_type = g_settings_get_enum (priv->profile, TERMINAL_PROFILE_BACKGROUND_TYPE_KEY);
-  vte_terminal_set_background_transparent (VTE_TERMINAL (screen),
-                                           bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
-                                           !window_uses_argb_visual (screen));
-#endif
 
   terminal_screen_set_font (screen);
 }
