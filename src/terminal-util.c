@@ -899,82 +899,95 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
 #endif /* GDK_WINDOWING_X11 */
 
 static gboolean
-s_to_gdk_color (GVariant *variant,
-                gpointer *result,
-                gpointer  user_data)
+s_to_rgba (GVariant *variant,
+           gpointer *result,
+           gpointer  user_data)
 {
-  GdkColor *color = user_data;
+  GdkRGBA *color = user_data;
   const char *str;
 
-  g_assert (variant != NULL);
+  if (variant == NULL) {
+    /* Fallback */
+    *result = NULL;
+    return TRUE;
+  }
 
   g_variant_get (variant, "&s", &str);
-  return gdk_color_parse (str, color);
+  if (!gdk_rgba_parse (color, str))
+    return FALSE;
+
+  *result = color;
+  return TRUE;
 }
 
 /**
- * terminal_g_settings_get_gdk_color:
+ * terminal_g_settings_get_rgba:
  * @settings: a #GSettings
  * @key: a valid key in @settings of type "s"
  * @color: location to store the parsed color
  *
  * Gets a color from @key in @settings.
  *
- * Returns: whether parsing the value as color succeeded
+ * Returns: @color if parsing succeeded, or %NULL otherwise
  */
-void
-terminal_g_settings_get_gdk_color (GSettings  *settings,
-                                   const char *key,
-                                   GdkColor   *color)
+const GdkRGBA *
+terminal_g_settings_get_rgba (GSettings  *settings,
+                              const char *key,
+                              GdkRGBA    *color)
 {
-  g_return_if_fail (color != NULL);
+  g_return_val_if_fail (color != NULL, FALSE);
 
-  g_settings_get_mapped (settings, key,
-                         (GSettingsGetMapping) s_to_gdk_color,
-                         color);
+  return g_settings_get_mapped (settings, key,
+                                (GSettingsGetMapping) s_to_rgba,
+                                color);
 }
 
 /**
- * terminal_g_settings_get_sdk_color:
+ * terminal_g_settings_set_rgba:
  * @settings: a #GSettings
  * @key: a valid key in @settings of type "s"
- * @color: a #GdkColor
+ * @color: a #GdkRGBA
  *
  * Sets a color in @key in @settings.
  */
 void
-terminal_g_settings_set_gdk_color (GSettings  *settings,
-                                   const char *key,
-                                   const GdkColor *color)
+terminal_g_settings_set_rgba (GSettings  *settings,
+                              const char *key,
+                              const GdkRGBA *color)
 {
   char *str;
 
-  str = gdk_color_to_string (color);
+  str = gdk_rgba_to_string (color);
   g_settings_set_string (settings, key, str);
   g_free (str);
 }
 
 static gboolean
-as_to_gdk_colors (GVariant *variant,
-                  gpointer *result,
-                  gpointer user_data)
+as_to_rgba_palette (GVariant *variant,
+                    gpointer *result,
+                    gpointer user_data)
 {
   gsize *n_colors = user_data;
   gsize n, i;
-  GdkColor *colors;
+  GdkRGBA *colors;
   GVariantIter iter;
   const char *str;
 
-  /* We should never get to the fallback case */
-  g_assert (variant != NULL);
+  /* Fallback */
+  if (variant == NULL) {
+    *result = NULL;
+    if (n_colors)
+      *n_colors = 0;
+    return TRUE;
+  }
 
   g_variant_iter_init (&iter, variant);
   n = g_variant_iter_n_children (&iter);
-  colors = g_new (GdkColor, n);
+  colors = g_new (GdkRGBA, n);
 
   i = 0;
   while (g_variant_iter_next (&iter, "&s", &str)) {
-    if (!gdk_color_parse (str, &colors[i++])) {
+    if (!gdk_rgba_parse (&colors[i++], str)) {
       g_free (colors);
       return FALSE;
     }
@@ -988,35 +1001,35 @@ as_to_gdk_colors (GVariant *variant,
 }
 
 /**
- * terminal_g_settings_get_gdk_color:
+ * terminal_g_settings_get_rgba_palette:
  * @settings: a #GSettings
  * @key: a valid key in @settings or type "s"
- * @color: location to store the parsed color
+ * @n_colors: (allow-none): location to store the number of palette entries, or %NULL
  *
  * Returns: (transfer full):
  */
-GdkColor *
-terminal_g_settings_get_gdk_palette (GSettings  *settings,
-                                     const char *key,
-                                     gsize      *n_colors)
+GdkRGBA *
+terminal_g_settings_get_rgba_palette (GSettings  *settings,
+                                      const char *key,
+                                      gsize      *n_colors)
 {
   return g_settings_get_mapped (settings, key,
-                                (GSettingsGetMapping) as_to_gdk_colors,
+                                (GSettingsGetMapping) as_to_rgba_palette,
                                 n_colors);
 }
 
 void
-terminal_g_settings_set_gdk_palette (GSettings      *settings,
-                                     const char     *key,
-                                     const GdkColor *colors,
-                                     gsize           n_colors)
+terminal_g_settings_set_rgba_palette (GSettings      *settings,
+                                      const char     *key,
+                                      const GdkRGBA  *colors,
+                                      gsize           n_colors)
 {
   char **strv;
   gsize i;
 
   strv = g_new (char *, n_colors + 1);
   for (i = 0; i < n_colors; ++i)
-    strv[i] = gdk_color_to_string (&colors[i]);
+    strv[i] = gdk_rgba_to_string (&colors[i]);
   strv[n_colors] = NULL;
 
   g_settings_set (settings, key, "^as", strv);

@@ -96,20 +96,20 @@ void terminal_util_x11_clear_demands_attention (GdkWindow *window);
 
 gboolean terminal_util_x11_window_is_minimized (GdkWindow *window);
 
-void terminal_g_settings_get_gdk_color (GSettings  *settings,
-                                        const char *key,
-                                        GdkColor   *color);
-void terminal_g_settings_set_gdk_color (GSettings  *settings,
-                                        const char *key,
-                                        const GdkColor *color);
+const GdkRGBA *terminal_g_settings_get_rgba (GSettings  *settings,
+                                             const char *key,
+                                             GdkRGBA    *rgba);
+void terminal_g_settings_set_rgba (GSettings  *settings,
+                                   const char *key,
+                                   const GdkRGBA *rgba);
 
-GdkColor *terminal_g_settings_get_gdk_palette (GSettings  *settings,
+GdkRGBA *terminal_g_settings_get_rgba_palette (GSettings  *settings,
                                                const char *key,
                                                gsize      *n_colors);
-void terminal_g_settings_set_gdk_palette (GSettings      *settings,
-                                          const char     *key,
-                                          const GdkColor *colors,
-                                          gsize           n_colors);
+void terminal_g_settings_set_rgba_palette (GSettings      *settings,
+                                           const char     *key,
+                                           const GdkRGBA  *colors,
+                                           gsize           n_colors);
 
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 

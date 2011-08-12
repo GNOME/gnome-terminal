@@ -942,36 +942,35 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 static void
 update_color_scheme (TerminalScreen *screen)
 {
+  GtkWidget *widget = GTK_WIDGET (screen);
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
-  GtkStyle *style;
-  GdkColor *colors;
+  GdkRGBA *colors;
   gsize n_colors;
-  GdkColor fg, bg, bold;
+  GdkRGBA fg, bg, bold, theme_fg, theme_bg;
+  GtkStyleContext *context;
 
-  style = gtk_widget_get_style (GTK_WIDGET (screen));
-  if (!style)
-    return;
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &theme_fg);
+  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &theme_bg);
 
-  fg = style->text[GTK_STATE_NORMAL];
-  bg = style->base[GTK_STATE_NORMAL];
-
-  if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY))
+  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY) ||
+      (!terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg) ||
+       !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg)))
     {
-      terminal_g_settings_get_gdk_color (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg);
-      terminal_g_settings_get_gdk_color (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg);
-
-      if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY))
-        terminal_g_settings_get_gdk_color (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold);
+      fg = theme_fg;
+      bg = theme_bg;
     }
 
-  colors = terminal_g_settings_get_gdk_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
-  vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
-                           colors, n_colors);
-  g_free (colors);
+  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) ||
+      !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold))
+    bold = fg;
 
-  if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY))
-    vte_terminal_set_color_bold (VTE_TERMINAL (screen), &bold);
+  colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
+  vte_terminal_set_colors_rgba (VTE_TERMINAL (screen), &fg, &bg,
+                                colors, n_colors);
+  vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), &bold);
+  g_free (colors);
 }
 
 void
@@ -1858,7 +1857,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
     case TARGET_COLOR:
       {
         guint16 *data = (guint16 *)selection_data_data;
-        GdkColor color;
+        GdkRGBA color;
 
         /* We accept drops with the wrong format, since the KDE color
          * chooser incorrectly drops application/x-color with format 8.
@@ -1867,14 +1866,15 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         if (selection_data_length != 8)
           return;
 
-        color.red = data[0];
-        color.green = data[1];
-        color.blue = data[2];
+        color.red = (double) data[0] / 65535.;
+        color.green = (double) data[1] / 65535.;
+        color.blue = (double) data[2] / 65535.;
+        color.alpha = 1.;
         /* FIXME: use opacity from data[3] */
 
-        terminal_g_settings_set_gdk_color (priv->profile,
-                                           TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
-                                           &color);
+        terminal_g_settings_set_rgba (priv->profile,
+                                      TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
+                                      &color);
         g_settings_set_boolean (priv->profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY, FALSE);
       }
       break;

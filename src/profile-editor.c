@@ -37,21 +37,31 @@ typedef struct _TerminalColorScheme TerminalColorScheme;
 struct _TerminalColorScheme
 {
   const char *name;
-  const GdkColor foreground;
-  const GdkColor background;
+  const GdkRGBA foreground;
+  const GdkRGBA background;
 };
 
 static const TerminalColorScheme color_schemes[] = {
   { N_("Black on light yellow"),
-    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xDDDD } },
+    { 0, 0, 0, 1 },
+    { 1, 1, 0.866667, 1 }
+  },
   { N_("Black on white"),
-    { 0, 0x0000, 0x0000, 0x0000 }, { 0, 0xFFFF, 0xFFFF, 0xFFFF } },
+    { 0, 0, 0, 1 },
+    { 1, 1, 1, 1 }
+  },
   { N_("Gray on black"),
-    { 0, 0xAAAA, 0xAAAA, 0xAAAA }, { 0, 0x0000, 0x0000, 0x0000 } },
+    { 0.666667, 0.666667, 0.666667, 1 },
+    { 0, 0, 0, 1 }
+  },
   { N_("Green on black"),
-    { 0, 0x0000, 0xFFFF, 0x0000 }, { 0, 0x0000, 0x0000, 0x0000 } },
+    { 0, 1, 0, 1 },
+    { 0, 0, 0, 1 }
+  },
   { N_("White on black"),
-    { 0, 0xFFFF, 0xFFFF, 0xFFFF }, { 0, 0x0000, 0x0000, 0x0000 } }
+    { 1, 1, 1, 1 },
+    { 0, 0, 0, 1 }
+  }
 };
 
 #define TERMINAL_PALETTE_SIZE (16)
@@ -65,86 +75,86 @@ enum
   TERMINAL_PALETTE_N_BUILTINS
 };
 
-static const GdkColor terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
+static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PALETTE_SIZE] =
 {
   /* Tango palette */
   {
-    { 0, 0x0000, 0x0000, 0x0000 },
-    { 0, 0xcccc, 0x0000, 0x0000 },
-    { 0, 0x4e4e, 0x9a9a, 0x0606 },
-    { 0, 0xc4c4, 0xa0a0, 0x0000 },
-    { 0, 0x3434, 0x6565, 0xa4a4 },
-    { 0, 0x7575, 0x5050, 0x7b7b },
-    { 0, 0x0606, 0x9820, 0x9a9a },
-    { 0, 0xd3d3, 0xd7d7, 0xcfcf },
-    { 0, 0x5555, 0x5757, 0x5353 },
-    { 0, 0xefef, 0x2929, 0x2929 },
-    { 0, 0x8a8a, 0xe2e2, 0x3434 },
-    { 0, 0xfcfc, 0xe9e9, 0x4f4f },
-    { 0, 0x7272, 0x9f9f, 0xcfcf },
-    { 0, 0xadad, 0x7f7f, 0xa8a8 },
-    { 0, 0x3434, 0xe2e2, 0xe2e2 },
-    { 0, 0xeeee, 0xeeee, 0xecec }
+    { 0,         0,        0,         1 },
+    { 0.8,       0,        0,         1 },
+    { 0.305882,  0.603922, 0.0235294, 1 },
+    { 0.768627,  0.627451, 0,         1 },
+    { 0.203922,  0.396078, 0.643137,  1 },
+    { 0.458824,  0.313725, 0.482353,  1 },
+    { 0.0235294, 0.596078, 0.603922,  1 },
+    { 0.827451,  0.843137, 0.811765,  1 },
+    { 0.333333,  0.341176, 0.32549,   1 },
+    { 0.937255,  0.160784, 0.160784,  1 },
+    { 0.541176,  0.886275, 0.203922,  1 },
+    { 0.988235,  0.913725, 0.309804,  1 },
+    { 0.447059,  0.623529, 0.811765,  1 },
+    { 0.678431,  0.498039, 0.658824,  1 },
+    { 0.203922,  0.886275, 0.886275,  1 },
+    { 0.933333,  0.933333, 0.92549,   1 },
   },
 
   /* Linux palette */
   {
-    { 0, 0x0000, 0x0000, 0x0000 },
-    { 0, 0xaaaa, 0x0000, 0x0000 },
-    { 0, 0x0000, 0xaaaa, 0x0000 },
-    { 0, 0xaaaa, 0x5555, 0x0000 },
-    { 0, 0x0000, 0x0000, 0xaaaa },
-    { 0, 0xaaaa, 0x0000, 0xaaaa },
-    { 0, 0x0000, 0xaaaa, 0xaaaa },
-    { 0, 0xaaaa, 0xaaaa, 0xaaaa },
-    { 0, 0x5555, 0x5555, 0x5555 },
-    { 0, 0xffff, 0x5555, 0x5555 },
-    { 0, 0x5555, 0xffff, 0x5555 },
-    { 0, 0xffff, 0xffff, 0x5555 },
-    { 0, 0x5555, 0x5555, 0xffff },
-    { 0, 0xffff, 0x5555, 0xffff },
-    { 0, 0x5555, 0xffff, 0xffff },
-    { 0, 0xffff, 0xffff, 0xffff }
+    { 0,        0,        0,        1 },
+    { 0.666667, 0,        0,        1 },
+    { 0,        0.666667, 0,        1 },
+    { 0.666667, 0.333333, 0,        1 },
+    { 0,        0,        0.666667, 1 },
+    { 0.666667, 0,        0.666667, 1 },
+    { 0,        0.666667, 0.666667, 1 },
+    { 0.666667, 0.666667, 0.666667, 1 },
+    { 0.333333, 0.333333, 0.333333, 1 },
+    { 1,        0.333333, 0.333333, 1 },
+    { 0.333333, 1,        0.333333, 1 },
+    { 1,        1,        0.333333, 1 },
+    { 0.333333, 0.333333, 1,        1 },
+    { 1,        0.333333, 1,        1 },
+    { 0.333333, 1,        1,        1 },
+    { 1,        1,        1,        1 },
   },
 
   /* XTerm palette */
   {
-    { 0, 0x0000, 0x0000, 0x0000 },
-    { 0, 0xcdcb, 0x0000, 0x0000 },
-    { 0, 0x0000, 0xcdcb, 0x0000 },
-    { 0, 0xcdcb, 0xcdcb, 0x0000 },
-    { 0, 0x1e1a, 0x908f, 0xffff },
-    { 0, 0xcdcb, 0x0000, 0xcdcb },
-    { 0, 0x0000, 0xcdcb, 0xcdcb },
-    { 0, 0xe5e2, 0xe5e2, 0xe5e2 },
-    { 0, 0x4ccc, 0x4ccc, 0x4ccc },
-    { 0, 0xffff, 0x0000, 0x0000 },
-    { 0, 0x0000, 0xffff, 0x0000 },
-    { 0, 0xffff, 0xffff, 0x0000 },
-    { 0, 0x4645, 0x8281, 0xb4ae },
-    { 0, 0xffff, 0x0000, 0xffff },
-    { 0, 0x0000, 0xffff, 0xffff },
-    { 0, 0xffff, 0xffff, 0xffff }
+    { 0,        0,        0,        1 },
+    { 0.803922, 0,        0,        1 },
+    { 0,        0.803922, 0,        1 },
+    { 0.803922, 0.803922, 0,        1 },
+    { 0.117647, 0.564706, 1,        1 },
+    { 0.803922, 0,        0.803922, 1 },
+    { 0,        0.803922, 0.803922, 1 },
+    { 0.898039, 0.898039, 0.898039, 1 },
+    { 0.298039, 0.298039, 0.298039, 1 },
+    { 1,        0,        0,        1 },
+    { 0,        1,        0,        1 },
+    { 1,        1,        0,        1 },
+    { 0.27451,  0.509804, 0.705882, 1 },
+    { 1,        0,        1,        1 },
+    { 0,        1,        1,        1 },
+    { 1,        1,        1,        1 },
   },
 
   /* RXVT palette */
   {
-    { 0, 0x0000, 0x0000, 0x0000 },
-    { 0, 0xcdcd, 0x0000, 0x0000 },
-    { 0, 0x0000, 0xcdcd, 0x0000 },
-    { 0, 0xcdcd, 0xcdcd, 0x0000 },
-    { 0, 0x0000, 0x0000, 0xcdcd },
-    { 0, 0xcdcd, 0x0000, 0xcdcd },
-    { 0, 0x0000, 0xcdcd, 0xcdcd },
-    { 0, 0xfafa, 0xebeb, 0xd7d7 },
-    { 0, 0x4040, 0x4040, 0x4040 },
-    { 0, 0xffff, 0x0000, 0x0000 },
-    { 0, 0x0000, 0xffff, 0x0000 },
-    { 0, 0xffff, 0xffff, 0x0000 },
-    { 0, 0x0000, 0x0000, 0xffff },
-    { 0, 0xffff, 0x0000, 0xffff },
-    { 0, 0x0000, 0xffff, 0xffff },
-    { 0, 0xffff, 0xffff, 0xffff }
+    { 0,        0,        0,        1 },
+    { 0.803922, 0,        0,        1 },
+    { 0,        0.803922, 0,        1 },
+    { 0.803922, 0.803922, 0,        1 },
+    { 0,        0,        0.803922, 1 },
+    { 0.803922, 0,        0.803922, 1 },
+    { 0,        0.803922, 0.803922, 1 },
+    { 0.980392, 0.921569, 0.843137, 1 },
+    { 0.25098,  0.25098,  0.25098,  1 },
+    { 1, 0, 0, 1 },
+    { 0, 1, 0, 1 },
+    { 1, 1, 0, 1 },
+    { 0, 0, 1, 1 },
+    { 1, 0, 1, 1 },
+    { 0, 1, 1, 1 },
+    { 1, 1, 1, 1 },
   }
 };
 
@@ -160,21 +170,37 @@ static void profile_palette_notify_colorpickers_cb (GSettings *profile,
                                                     const char *key,
                                                     GtkWidget *editor);
 
+
+/* gdk_rgba_equal is too strict! */
 static gboolean
-palette_cmp (const GdkColor *ca,
-             const GdkColor *cb)
+rgba_equal (const GdkRGBA *a,
+            const GdkRGBA *b)
+{
+  gdouble dr, dg, db, da;
+
+  dr = a->red - b->red;
+  dg = a->green - b->green;
+  db = a->blue - b->blue;
+  da = a->alpha - b->alpha;
+
+  return (dr * dr + dg * dg + db * db + da * da) < 1e-4;
+}
+
+static gboolean
+palette_cmp (const GdkRGBA *ca,
+             const GdkRGBA *cb)
 {
   guint i;
 
   for (i = 0; i < TERMINAL_PALETTE_SIZE; ++i)
-    if (!gdk_color_equal (&ca[i], &cb[i]))
+    if (!rgba_equal (&ca[i], &cb[i]))
       return FALSE;
 
   return TRUE;
 }
 
 static gboolean
-palette_is_builtin (GdkColor *colors,
+palette_is_builtin (const GdkRGBA *colors,
                     gsize n_colors,
                     guint *n)
 {
@@ -198,18 +224,20 @@ palette_is_builtin (GdkColor *colors,
 static void
 modify_palette_entry (GSettings       *profile,
                       guint            i,
-                      const GdkColor  *color)
+                      const GdkRGBA   *color)
 {
-  GdkColor *colors;
+  GdkRGBA *colors;
   gsize n_colors;
 
-  colors = terminal_g_settings_get_gdk_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
+  /* FIXMEchpe: this can be optimised, don't really need to parse the colours! */
+
+  colors = terminal_g_settings_get_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
 
   if (i < n_colors)
     {
       colors[i] = *color;
-      terminal_g_settings_set_gdk_palette (profile, TERMINAL_PROFILE_PALETTE_KEY,
-                                           colors, n_colors);
+      terminal_g_settings_set_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY,
+                                            colors, n_colors);
     }
 
   g_free (colors);
@@ -227,8 +255,8 @@ color_scheme_combo_changed_cb (GtkWidget *combo,
   if (i < G_N_ELEMENTS (color_schemes))
     {
       g_signal_handlers_block_by_func (profile, G_CALLBACK (profile_colors_notify_scheme_combo_cb), combo);
-      terminal_g_settings_set_gdk_color (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &color_schemes[i].foreground);
-      terminal_g_settings_set_gdk_color (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &color_schemes[i].background);
+      terminal_g_settings_set_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &color_schemes[i].foreground);
+      terminal_g_settings_set_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &color_schemes[i].background);
       g_signal_handlers_unblock_by_func (profile, G_CALLBACK (profile_colors_notify_scheme_combo_cb), combo);
     }
   else
@@ -242,16 +270,16 @@ profile_colors_notify_scheme_combo_cb (GSettings *profile,
                                        const char *key,
                                        GtkComboBox *combo)
 {
-  GdkColor fg, bg;
+  GdkRGBA fg, bg;
   guint i;
 
-  terminal_g_settings_get_gdk_color (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg);
-  terminal_g_settings_get_gdk_color (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg);
+  terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg);
+  terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg);
 
   for (i = 0; i < G_N_ELEMENTS (color_schemes); ++i)
     {
-      if (gdk_color_equal (&fg, &color_schemes[i].foreground) &&
-          gdk_color_equal (&bg, &color_schemes[i].background))
+      if (rgba_equal (&fg, &color_schemes[i].foreground) &&
+          rgba_equal (&bg, &color_schemes[i].background))
         break;
     }
   /* If we didn't find a match, then we get the last combo box item which is "custom" */
@@ -272,8 +300,8 @@ palette_scheme_combo_changed_cb (GtkComboBox *combo,
 
   g_signal_handlers_block_by_func (profile, G_CALLBACK (profile_colors_notify_scheme_combo_cb), combo);
   if (i < TERMINAL_PALETTE_N_BUILTINS)
-    terminal_g_settings_set_gdk_palette (profile, TERMINAL_PROFILE_PALETTE_KEY,
-                                         terminal_palettes[i], TERMINAL_PALETTE_SIZE);
+    terminal_g_settings_set_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY,
+                                          terminal_palettes[i], TERMINAL_PALETTE_SIZE);
   else
     {
       /* "custom" selected, no change */
@@ -286,11 +314,11 @@ profile_palette_notify_scheme_combo_cb (GSettings *profile,
                                         const char *key,
                                         GtkComboBox *combo)
 {
-  GdkColor *colors;
+  GdkRGBA *colors;
   gsize n_colors;
   guint i;
 
-  colors = terminal_g_settings_get_gdk_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
+  colors = terminal_g_settings_get_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
   if (!palette_is_builtin (colors, n_colors, &i))
     /* If we didn't find a match, then we want the last combo
      * box item which is "custom"
@@ -310,10 +338,10 @@ palette_color_notify_cb (GtkColorButton *button,
                          GSettings *profile)
 {
   GtkWidget *editor;
-  GdkColor color;
+  GdkRGBA color;
   guint i;
 
-  gtk_color_button_get_color (button, &color);
+  gtk_color_button_get_rgba (button, &color);
   i = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "palette-entry-index"));
 
   editor = gtk_widget_get_toplevel (GTK_WIDGET (button));
@@ -329,7 +357,7 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
 {
   GtkWidget *w;
   GtkBuilder *builder;
-  GdkColor *colors;
+  GdkRGBA *colors;
   gsize n_colors, i;
 
   g_assert (strcmp (key, TERMINAL_PROFILE_PALETTE_KEY) == 0);
@@ -337,22 +365,22 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
   builder = g_object_get_data (G_OBJECT (editor), "builder");
   g_assert (builder != NULL);
 
-  colors = terminal_g_settings_get_gdk_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
+  colors = terminal_g_settings_get_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
 
   n_colors = MIN (n_colors, TERMINAL_PALETTE_SIZE);
   for (i = 0; i < n_colors; i++)
     {
       char name[32];
-      GdkColor old_color;
+      GdkRGBA old_color;
 
       g_snprintf (name, sizeof (name), "palette-colorpicker-%" G_GSIZE_FORMAT, i + 1);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
 
-      gtk_color_button_get_color (GTK_COLOR_BUTTON (w), &old_color);
-      if (!gdk_color_equal (&old_color, &colors[i]))
+      gtk_color_button_get_rgba (GTK_COLOR_BUTTON (w), &old_color);
+      if (!rgba_equal (&old_color, &colors[i]))
         {
           g_signal_handlers_block_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
-          gtk_color_button_set_color (GTK_COLOR_BUTTON (w), &colors[i]);
+          gtk_color_button_set_rgba (GTK_COLOR_BUTTON (w), &colors[i]);
           g_signal_handlers_unblock_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
         }
     }
@@ -500,28 +528,27 @@ string_to_window_title (GValue *value,
 
 
 static gboolean
-string_to_color (GValue *value,
-                 GVariant *variant,
-                 gpointer user_data)
+s_to_rgba (GValue *value,
+           GVariant *variant,
+           gpointer user_data)
 {
   const char *s;
-  GdkColor color;
-  gboolean retval;
+  GdkRGBA color;
 
   g_variant_get (variant, "&s", &s);
-  retval = gdk_color_parse (s, &color);
-  if (retval)
-    g_value_set_boxed (value, &color);
+  if (!gdk_rgba_parse (&color, s))
+    return FALSE;
 
-  return retval;
+  g_value_set_boxed (value, &color);
+  return TRUE;
 }
 
 static GVariant *
-color_to_string (const GValue *value,
-                 const GVariantType *expected_type,
-                 gpointer user_data)
+rgba_to_s (const GValue *value,
+           const GVariantType *expected_type,
+           gpointer user_data)
 {
-  GdkColor *color;
+  GdkRGBA *color;
   char *s;
   GVariant *variant;
 
@@ -529,7 +556,7 @@ color_to_string (const GValue *value,
   if (color == NULL)
     return NULL;
 
-  s = gdk_color_to_string (color);
+  s = gdk_rgba_to_string (color);
   variant = g_variant_new_string (s);
   g_free (s);
 
@@ -680,7 +707,7 @@ terminal_profile_edit (GSettings  *profile,
       gtk_widget_set_tooltip_text (w, text);
       g_free (text);
 
-      g_signal_connect (w, "notify::color",
+      g_signal_connect (w, "notify::rgba",
                         G_CALLBACK (palette_color_notify_cb),
                         profile);
     }
@@ -741,10 +768,10 @@ terminal_profile_edit (GSettings  *profile,
                                 TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
                                 gtk_builder_get_object (builder,
                                                         "background-colorpicker"),
-                                "color",
+                                "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
-                                (GSettingsBindGetMapping) string_to_color,
-                                (GSettingsBindSetMapping) color_to_string,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
@@ -762,10 +789,10 @@ terminal_profile_edit (GSettings  *profile,
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY,
                                 gtk_builder_get_object (builder,
                                                         "bold-colorpicker"),
-                                "color",
+                                "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
-                                (GSettingsBindGetMapping) string_to_color,
-                                (GSettingsBindSetMapping) color_to_string,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                                 gtk_builder_get_object (builder,
@@ -813,10 +840,10 @@ terminal_profile_edit (GSettings  *profile,
                                 TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
                                 gtk_builder_get_object (builder,
                                                         "foreground-colorpicker"),
-                                "color",
+                                "rgba",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
-                                (GSettingsBindGetMapping) string_to_color,
-                                (GSettingsBindSetMapping) color_to_string,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY,
                    gtk_builder_get_object (builder,
