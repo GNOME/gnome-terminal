@@ -283,10 +283,11 @@ window_uses_argb_visual (TerminalScreen *screen)
 static void
 terminal_screen_realize (GtkWidget *widget)
 {
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+
   GTK_WIDGET_CLASS (terminal_screen_parent_class)->realize (widget);
 
 #if 0
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
   TerminalScreenPrivate *priv = screen->priv;
   TerminalBackgroundType bg_type;
 
@@ -296,6 +297,8 @@ terminal_screen_realize (GtkWidget *widget)
                                            bg_type == TERMINAL_BACKGROUND_TRANSPARENT &&
                                            !window_uses_argb_visual (screen));
 #endif
+
+  terminal_screen_set_font (screen);
 }
 
 static void
