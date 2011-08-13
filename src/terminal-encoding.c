@@ -268,19 +268,9 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
   return encoding->valid;
 }
 
-GType
-terminal_encoding_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (type == 0)) {
-    type = g_boxed_type_register_static (I_("TerminalEncoding"),
-                                         (GBoxedCopyFunc) terminal_encoding_ref,
-                                         (GBoxedFreeFunc) terminal_encoding_unref);
-  }
-
-  return type;
-}
+G_DEFINE_BOXED_TYPE (TerminalEncoding, terminal_encoding,
+                     terminal_encoding_ref,
+                     terminal_encoding_unref);
 
 static void
 update_active_encodings_setting (void)
