@@ -579,7 +579,7 @@ main (int argc, char **argv)
     data = g_new (OwnData, 1);
     data->factory_name = get_factory_name_for_display (display_name);
     data->options = options;
-    data->exit_code = -1;
+    data->exit_code = EXIT_SUCCESS;
     data->argv = argv_copy;
     data->argc = argc_copy;
 
