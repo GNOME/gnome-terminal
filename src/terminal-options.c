@@ -1034,7 +1034,7 @@ get_goption_context (TerminalOptions *options)
       0,
       G_OPTION_ARG_CALLBACK,
       option_geometry_callback,
-      N_("Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"),
+      N_("Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"),
       N_("GEOMETRY")
     },
     {
