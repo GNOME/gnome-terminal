@@ -46,30 +46,25 @@ GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.1.0
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
-  [AS_HELP_STRING([--with-gtk=2.0|3.0],[which gtk+ version to compile against (default: 3.0)])],
+  [AS_HELP_STRING([--with-gtk=3.0],[which gtk+ version to compile against (default: 3.0)])],
   [case "$with_gtk" in
-     2.0|3.0) ;;
-     *) AC_MSG_ERROR([invalid gtk version specified]) ;;
+     3.0) ;;
+     2.0) AC_MSG_ERROR([unsupported gtk version $with_gtk specified]) ;;
+     *) AC_MSG_ERROR([invalid gtk version $with_gtk specified]) ;;
    esac],
   [with_gtk=3.0])
 AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
-  2.0) GTK_API_VERSION=2.0
-       GTK_REQUIRED=2.18.0
-       VTE_PC_VERSION=
-       VTE_REQUIRED=0.26.0
-       ;;
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.0.0
        VTE_PC_VERSION=-2.90
-       VTE_REQUIRED=0.27.3
+       VTE_REQUIRED=0.29.1
        ;;
 esac
 
 AC_MSG_CHECKING([for GDK target])
 case "$with_gtk" in
-  2.0) GDK_TARGET="$($PKG_CONFIG --variable target gdk-$GTK_API_VERSION)" ;;
   3.0) for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
          GDK_TARGET="$target"
          break
