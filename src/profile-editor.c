@@ -549,6 +549,16 @@ init_background_darkness_scale (GtkWidget *scale)
                     NULL);
 }
 
+#if GTK_CHECK_VERSION (3, 1, 19)
+static gboolean
+font_family_is_monospace (const PangoFontFamily *family,
+                          const PangoFontFace   *face,
+                          gpointer               data)
+{
+  return pango_font_family_is_monospace ((PangoFontFamily *) family);
+}
+
+#endif
 
 static void
 editor_response_cb (GtkWidget *editor,
@@ -871,6 +881,11 @@ terminal_profile_edit (TerminalProfile *profile,
                     "clicked",
                     G_CALLBACK (reset_compat_defaults_cb),
                     profile);
+
+#if GTK_CHECK_VERSION (3, 1, 19)
+  gtk_font_chooser_set_filter_func (GTK_FONT_CHOOSER (gtk_builder_get_object (builder, "font-selector")),
+                                    font_family_is_monospace, NULL, NULL);
+#endif
 
   SET_ENUM_VALUE ("image-radiobutton", TERMINAL_BACKGROUND_IMAGE);
   SET_ENUM_VALUE ("solid-radiobutton", TERMINAL_BACKGROUND_SOLID);
