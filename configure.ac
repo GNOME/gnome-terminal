@@ -1,5 +1,5 @@
 m4_define([gt_version_major],[3])
-m4_define([gt_version_minor],[1])
+m4_define([gt_version_minor],[2])
 m4_define([gt_version_micro],[0])
 m4_define([gt_version_extra],[])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
@@ -59,7 +59,7 @@ case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.0.0
        VTE_PC_VERSION=-2.90
-       VTE_REQUIRED=0.29.0
+       VTE_REQUIRED=0.30.0
        ;;
 esac
 
