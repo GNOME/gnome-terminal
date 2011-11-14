@@ -34,8 +34,6 @@ IT_PROG_INTLTOOL([0.40.0])
 
 GNOME_COMMON_INIT
 GNOME_DEBUG_CHECK
-GNOME_COMPILE_WARNINGS([maximum])
-#GNOME_MAINTAINER_MODE_DEFINES
 
 AM_GLIB_GNU_GETTEXT
 
@@ -155,6 +153,22 @@ case "$with_gtk" in
 esac
 
 AC_SUBST([GTK_BUILDER_CONVERT_FLAGS])
+
+# ***********
+# Compilation
+# ***********
+
+CC_CHECK_CFLAGS_APPEND([ \
+  -Wall -Wextra \
+  -Wsign-compare -Werror-implicit-function-declaration \
+  -Wpointer-arith -Wwrite-strings -Wstrict-prototypes \
+  -Waggregate-return -Wcast-align -Wimplicit -Wuninitialised \
+  -Wmissing-prototypes -Wmissing-declarations -Wnested-externs \
+  -Wpacked -Wmissing-format-attribute -Wshadow \
+  -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations \
+  -Wdeclaration-after-statement -Wold-style-definition \
+  -Wno-missing-field-initializers -Wno-unused-parameter \
+  -fno-common -Wno-switch-enum])
 
 # *************
 # Documentation
