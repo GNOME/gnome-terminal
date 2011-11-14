@@ -69,7 +69,7 @@ terminal_close_button_init (TerminalCloseButton *button)
 }
 
 GtkWidget *
-terminal_close_button_new ()
+terminal_close_button_new (void)
 {
 	return GTK_WIDGET (g_object_new (TERMINAL_TYPE_CLOSE_BUTTON,
 	                                 "relief", GTK_RELIEF_NONE,
