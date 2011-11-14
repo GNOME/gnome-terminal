@@ -1137,12 +1137,10 @@ handle_tab_droped_on_desktop (GtkNotebook *source_notebook,
                               gint         y,
                               gpointer     data G_GNUC_UNUSED)
 {
-  TerminalScreen *screen;
   TerminalWindow *source_window;
   TerminalWindow *new_window;
   TerminalWindowPrivate *new_priv;
 
-  screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (container));
   source_window = TERMINAL_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (source_notebook)));
   g_return_val_if_fail (TERMINAL_IS_WINDOW (source_window), NULL);
 
@@ -2224,7 +2222,6 @@ close_button_clicked_cb (GtkWidget *tab_label,
 {
   GtkWidget *toplevel;
   TerminalWindow *window;
-  TerminalWindowPrivate *priv;
   TerminalScreen *screen;
 
   toplevel = gtk_widget_get_toplevel (screen_container);
@@ -2235,7 +2232,6 @@ close_button_clicked_cb (GtkWidget *tab_label,
     return;
 
   window = TERMINAL_WINDOW (toplevel);
-  priv = window->priv;
 
   screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (screen_container));
   if (confirm_close_window_or_tab (window, screen))
@@ -2531,7 +2527,6 @@ notebook_page_selected_callback (GtkWidget       *notebook,
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *widget;
   TerminalScreen *screen;
-  GSettings *profile;
   int old_grid_width, old_grid_height;
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
@@ -2568,8 +2563,6 @@ notebook_page_selected_callback (GtkWidget       *notebook,
 
   /* Make sure that the widget is no longer hidden due to the workaround */
   gtk_widget_show (widget);
-
-  profile = terminal_screen_get_profile (screen);
 
   priv->active_screen = screen;
 
@@ -3657,7 +3650,6 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
 {
   TerminalWindowPrivate *priv = window->priv;
   GtkNotebookClass *klass;
-  GtkBindingSet *binding_set;
   const char *name;
   guint keyval = 0;
 
@@ -3669,7 +3661,6 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
   }
 
   klass = GTK_NOTEBOOK_GET_CLASS (GTK_NOTEBOOK (priv->notebook));
-  binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_set_activate (gtk_binding_set_by_class (klass),
                             keyval,
                             GDK_CONTROL_MASK,
