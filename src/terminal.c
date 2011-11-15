@@ -325,21 +325,15 @@ name_lost_cb (GDBusConnection *connection,
   g_variant_builder_add (&builder, "@ay", string_to_ay (data->options->startup_id));
 
   string = g_string_new (NULL);
-  envv = g_listenv ();
-  envc = g_strv_length (envv);
-  for (i = 0; i < envc; ++i)
+  envv = g_get_environ ();
+  for (i = 0; envv[i]; ++i)
     {
-      const char *value;
-
-      value = g_getenv (envv[i]);
-      if (value == NULL)
-        continue;
-
       if (i > 0)
         g_string_append_c (string, '\0');
 
-      g_string_append_printf (string, "%s=%s", envv[i], value);
+      g_string_append (string, envv[i]);
     }
+  g_strfreev (envv);
 
   len = string->len;
   s = g_string_free (string, FALSE);
