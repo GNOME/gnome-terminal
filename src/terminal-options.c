@@ -494,6 +494,7 @@ option_load_save_config_cb (const gchar *option_name,
                             gpointer     data,
                             GError     **error)
 {
+#ifdef TERMINAL_SERVER
   TerminalOptions *options = data;
 
   if (options->config_file)
@@ -506,6 +507,7 @@ option_load_save_config_cb (const gchar *option_name,
   options->config_file = terminal_util_resolve_relative_path (options->default_working_dir, value);
   options->load_config = strcmp (option_name, "--load-config") == 0;
   options->save_config = strcmp (option_name, "--save-config") == 0;
+#endif
 
   return TRUE;
 }
@@ -778,6 +780,8 @@ terminal_options_parse (const char *working_directory,
   return NULL;
 }
 
+#ifdef TERMINAL_SERVER
+
 /**
  * terminal_options_merge_config:
  * @options:
@@ -896,6 +900,8 @@ terminal_options_merge_config (TerminalOptions *options,
 
   return TRUE;
 }
+
+#endif /* TERMINAL_SERVIER */
 
 /**
  * terminal_options_ensure_window:

@@ -1,6 +1,11 @@
 NULL =
 
 bin_PROGRAMS = gnome-terminal
+libexec_PROGRAMS = gnome-terminal-server
+
+# Terminal server
+
+dbusservice_DATA = org.gnome.Terminal.Factory0.service
 
 BUILT_SOURCES = \
 	terminal-marshal.c \
@@ -9,12 +14,12 @@ BUILT_SOURCES = \
 	terminal-type-builtins.h \
 	$(NULL)
 
-gnome_terminal_SOURCES= \
+gnome_terminal_server_SOURCES= \
 	eggshell.c \
 	eggshell.h \
 	profile-editor.c \
 	profile-editor.h \
-	terminal.c \
+	server.c \
 	terminal-accels.c \
 	terminal-accels.h \
 	terminal-app.c \
@@ -48,10 +53,11 @@ gnome_terminal_SOURCES= \
 	terminal-window.h \
 	$(NULL)
 
-nodist_gnome_terminal_SOURCES= $(BUILT_SOURCES)
+nodist_gnome_terminal_server_SOURCES= $(BUILT_SOURCES)
 
-gnome_terminal_CPPFLAGS = \
+gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
+	-DTERMINAL_SERVER \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
@@ -59,47 +65,40 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
-	-DG_DISABLE_SINGLE_INCLUDES \
-	-DPANGO_DISABLE_SINGLE_INCLUDES \
-	-DATK_DISABLE_SINGLE_INCLUDES \
-	-DGDK_DISABLE_SINGLE_INCLUDES \
-	-DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES \
-	-DGTK_DISABLE_SINGLE_INCLUDES \
-	$(DISABLE_DEPRECATED) \
 	$(AM_CPPFLAGS)
 
-gnome_terminal_CFLAGS = \
+gnome_terminal_server_CFLAGS = \
 	$(TERM_CFLAGS) \
-	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
-gnome_terminal_LDFLAGS =
+gnome_terminal_server_LDFLAGS = \
+	$(AM_LDFLAGS)
 
-gnome_terminal_LDADD = \
+gnome_terminal_server_LDADD = \
 	$(TERM_LIBS)
 
 if WITH_SMCLIENT
-gnome_terminal_SOURCES += \
+gnome_terminal_server_SOURCES += \
 	eggsmclient.c \
 	eggsmclient.h \
 	eggsmclient-private.h \
 	$(NULL)
-gnome_terminal_CFLAGS += $(SMCLIENT_CFLAGS)
-gnome_terminal_LDADD += $(SMCLIENT_LIBS)
+gnome_terminal_server_CFLAGS += $(SMCLIENT_CFLAGS)
+gnome_terminal_server_LDADD += $(SMCLIENT_LIBS)
 
 if WITH_SMCLIENT_XSMP
-gnome_terminal_SOURCES += \
+gnome_terminal_server_SOURCES += \
 	eggdesktopfile.c \
 	eggdesktopfile.h \
 	eggsmclient-xsmp.c \
 	$(NULL)
-gnome_terminal_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
+gnome_terminal_server_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
 endif
 if WITH_SMCLIENT_WIN32
-gnome_terminal_SOURCES += eggsmclient-win32.c
+gnome_terminal_server_SOURCES += eggsmclient-win32.c
 endif
 if WITH_SMCLIENT_QUARTZ
-gnome_terminal_SOURCES += eggsmclient-osx.c
+gnome_terminal_server_SOURCES += eggsmclient-osx.c
 endif
 endif
 
@@ -136,6 +135,69 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
+org.gnome.Terminal.Factory0.service: Makefile
+	$(AM_V_GEN) ( echo "[D-BUS Service]"; \
+		      echo "Name=org.gnome.Terminal.Factory0"; \
+		      echo "${libexecdir}/gnome-terminal-server") > $@
+
+# Terminal remote
+
+gnome_terminal_SOURCES= \
+	terminal.c \
+	terminal-debug.c \
+	terminal-debug.h \
+	terminal-intl.h \
+	terminal-options.c \
+	terminal-options.h \
+	$(NULL)
+
+gnome_terminal_CPPFLAGS = \
+	-DTERMINAL_COMPILATION \
+	-DTERMINAL_REMOTE \
+	-DTERM_DATADIR="\"$(datadir)\"" \
+	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
+	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DSN_API_NOT_YET_FROZEN \
+	-DGDK_MULTIHEAD_SAFE \
+	$(AM_CPPFLAGS)
+
+gnome_terminal_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(AM_CFLAGS)
+
+gnome_terminal_LDFLAGS = \
+	$(AM_LDFLAGS)
+
+gnome_terminal_LDADD = \
+	$(TERM_LIBS)
+
+
+if WITH_SMCLIENT
+gnome_terminal_SOURCES += \
+	eggsmclient.c \
+	eggsmclient.h \
+	eggsmclient-private.h \
+	$(NULL)
+gnome_terminal_CFLAGS += $(SMCLIENT_CFLAGS)
+gnome_terminal_LDADD += $(SMCLIENT_LIBS)
+
+if WITH_SMCLIENT_XSMP
+gnome_terminal_SOURCES += \
+	eggdesktopfile.c \
+	eggdesktopfile.h \
+	eggsmclient-xsmp.c \
+	$(NULL)
+gnome_terminal_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
+endif
+if WITH_SMCLIENT_WIN32
+gnome_terminal_SOURCES += eggsmclient-win32.c
+endif
+if WITH_SMCLIENT_QUARTZ
+gnome_terminal_SOURCES += eggsmclient-osx.c
+endif
+endif
+
+# Pref migrator
 
 migrationdir = $(libexecdir)/GConf/gsettings
 migration_PROGRAMS = gnome-terminal-migration

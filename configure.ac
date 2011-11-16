@@ -85,6 +85,17 @@ PKG_CHECK_MODULES([TERM],
    gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
    $PLATFORM_DEPS])
 
+# ****
+# DBus
+# ****
+
+AC_ARG_WITH([dbus-service-dir],
+  [AS_HELP_STRING([--with-dbus-service-dir=PATH],[dbus service file directory])],
+  [dbusservicedir="$withval"],
+  [dbusservicedir='${datadir}/dbus-1/services'])
+AC_SUBST([dbusservicedir])
+
+AC_ARG_WITH
 # *********
 # GSettings
 # *********
@@ -205,6 +216,7 @@ echo "
 gnome-terminal-$VERSION:
 
 	prefix:                 ${prefix}
+        DBus service dir:       ${dbusservicedir}
 	source code location:	${srcdir}
 	compiler:		${CC}
 

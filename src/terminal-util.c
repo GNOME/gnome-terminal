@@ -42,6 +42,7 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
+#include "terminal-screen.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
 
