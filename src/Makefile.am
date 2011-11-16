@@ -12,6 +12,8 @@ BUILT_SOURCES = \
 	terminal-marshal.h \
 	terminal-type-builtins.c \
 	terminal-type-builtins.h \
+	terminal-factory.c \
+	terminal-factory.h \
 	$(NULL)
 
 gnome_terminal_server_SOURCES= \
@@ -140,12 +142,22 @@ org.gnome.Terminal.Factory0.service: Makefile
 		      echo "Name=org.gnome.Terminal.Factory0"; \
 		      echo "${libexecdir}/gnome-terminal-server") > $@
 
+terminal-factory.c terminal-factory.h: org.gnome.Terminal.xml Makefile
+	$(AM_V_GEN) $(GDBUS_CODEGEN) \
+			--interface-prefix=org.gnome.Terminal \
+			--c-namespace=Terminal \
+			--c-generate-object-manager \
+			--generate-c-code terminal-factory \
+			$<
+
 # Terminal remote
 
 gnome_terminal_SOURCES= \
 	terminal.c \
 	terminal-debug.c \
 	terminal-debug.h \
+	terminal-factory.c \
+	terminal-factory.h \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
@@ -268,6 +280,6 @@ EXTRA_DIST = \
 @GSETTINGS_RULES@
 
 %.ui: %.glade
-	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $(GTK_BUILDER_CONVERT_FLAGS) $< $@
+	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $< $@
 
 -include $(top_srcdir)/git.mk

@@ -37,6 +37,7 @@
 #include "profile-editor.h"
 #include "terminal-encoding.h"
 #include "terminal-schemas.h"
+#include "terminal-factory.h"
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -62,7 +63,7 @@
  */
 
 struct _TerminalAppClass {
-  GObjectClass parent_class;
+  TerminalFactorySkeletonClass parent_class;
 
   void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
@@ -71,7 +72,7 @@ struct _TerminalAppClass {
 
 struct _TerminalApp
 {
-  GObject parent_instance;
+  TerminalFactorySkeleton parent_instance;
 
   GList *windows;
   GtkWidget *new_profile_dialog;
@@ -1120,7 +1121,62 @@ terminal_app_client_quit_cb (EggSMClient *client,
 
 /* Class implementation */
 
-G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
+static gboolean
+terminal_app_handle_arguments (TerminalFactory *factory,
+                               GDBusMethodInvocation *invocation,
+                               const char *working_directory,
+                               const char *display_name,
+                               const char *startup_id,
+                               const char * const *envv,
+                               const char * const *argv)
+{
+  TerminalApp *app = TERMINAL_APP (factory);
+  TerminalOptions *options;
+  int argc;
+  GError *error = NULL;
+
+  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                         "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
+                         working_directory, display_name, startup_id);
+
+  argc = g_strv_length ((char **) argv);
+  options = terminal_options_parse (working_directory,
+                                    display_name,
+                                    startup_id,
+                                    (char **) envv,
+                                    TRUE,
+                                    TRUE,
+                                    &argc, (char ***) &argv,
+                                    &error,
+                                    NULL);
+
+  if (options == NULL) {
+    g_dbus_method_invocation_take_error (invocation, error);
+    goto out;
+  }
+
+  if (!terminal_app_handle_options (app, options, FALSE /* no resume */, &error)) {
+    g_dbus_method_invocation_take_error (invocation, error);
+    goto out;
+  }
+
+  terminal_factory_complete_handle_arguments (factory, invocation);
+
+out:
+  if (options)
+    terminal_options_free (options);
+
+  return TRUE; /* handled */
+}
+
+static void
+terminal_factory_iface_init (TerminalFactoryIface *iface)
+{
+  iface->handle_handle_arguments = terminal_app_handle_arguments;
+}
+
+G_DEFINE_TYPE_WITH_CODE (TerminalApp, terminal_app, TERMINAL_TYPE_FACTORY_SKELETON,
+                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_FACTORY, terminal_factory_iface_init))
 
 static void
 terminal_app_init (TerminalApp *app)

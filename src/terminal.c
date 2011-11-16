@@ -41,78 +41,15 @@
 #include "terminal-debug.h"
 #include "terminal-intl.h"
 #include "terminal-options.h"
+#include "terminal-factory.h"
 
-#define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Factory0.Display"
-#define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
-#define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
+#define TERMINAL_UNIQUE_NAME                  "org.gnome.Terminal"
 
-static GVariant *
-string_to_ay (const char *string)
-{
-  gsize len;
-  char *data;
+#define TERMINAL_OBJECT_PATH_PREFIX           "/org/gnome/Terminal"
+#define TERMINAL_OBJECT_INTERFACE_PREFIX      "org.gnome.Terminal"
 
-  len = strlen (string);
-  data = g_strndup (string, len);
-
-  return g_variant_new_from_data (G_VARIANT_TYPE ("ay"), data, len, TRUE, g_free, data);
-}
-
-/**
- * options_to_variant:
- * 
- * Returns: a new floating #GVariant
- */
-static GVariant *
-options_to_variant (TerminalOptions *options,
-                    char **argv,
-                    int argc)
-{
-  char **envv;
-  int i;
-  GVariantBuilder builder;
-  GString *string;
-  char *s;
-  gsize len;
-
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(ayayayayay)"));
-
-  g_variant_builder_add (&builder, "@ay", string_to_ay (options->default_working_dir));
-  g_variant_builder_add (&builder, "@ay", string_to_ay (options->display_name));
-  g_variant_builder_add (&builder, "@ay", string_to_ay (options->startup_id));
-
-  string = g_string_new (NULL);
-  envv = g_get_environ ();
-  for (i = 0; envv[i]; ++i)
-    {
-      if (i > 0)
-        g_string_append_c (string, '\0');
-
-      g_string_append (string, envv[i]);
-    }
-  g_strfreev (envv);
-
-  len = string->len;
-  s = g_string_free (string, FALSE);
-  g_variant_builder_add (&builder, "@ay",
-                         g_variant_new_from_data (G_VARIANT_TYPE ("ay"), s, len, TRUE, g_free, s));
-
-  string = g_string_new (NULL);
-
-  for (i = 0; i < argc; ++i)
-    {
-      if (i > 0)
-        g_string_append_c (string, '\0');
-      g_string_append (string, argv[i]);
-    }
-
-  len = string->len;
-  s = g_string_free (string, FALSE);
-  g_variant_builder_add (&builder, "@ay",
-                         g_variant_new_from_data (G_VARIANT_TYPE ("ay"), s, len, TRUE, g_free, s));
-
-  return g_variant_builder_end (&builder);
-}
+#define TERMINAL_FACTORY_OBJECT_PATH          TERMINAL_OBJECT_PATH_PREFIX "/Factory0"
+#define TERMINAL_FACTORY_INTERFACE_NAME       TERMINAL_OBJECT_INTERFACE_PREFIX ".Factory0"
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
@@ -165,47 +102,17 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
   return event.xproperty.time;
 }
 
-
-static char *
-get_factory_name_for_display (const char *display_name)
-{
-#if 0
-  GString *name;
-  const char *p;
-
-  name = g_string_sized_new (strlen (TERMINAL_FACTORY_SERVICE_NAME_PREFIX) + strlen (display_name) + 1 /* NUL */);
-  g_string_append (name, TERMINAL_FACTORY_SERVICE_NAME_PREFIX);
-
-  for (p = display_name; *p; ++p)
-    {
-      if (g_ascii_isalnum (*p))
-        g_string_append_c (name, *p);
-      else
-        g_string_append_c (name, '_');
-    }
-
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Factory name is \"%s\"\n", name->str);
-
-  return g_string_free (name, FALSE);
-#endif
-  return g_strdup ("org.gnome.Terminal.Factory0");
-}
-
 int
 main (int argc, char **argv)
 {
   int i;
-  char **argv_copy;
-  int argc_copy;
+  char **argv_copy, **envv;
   const char *startup_id, *display_name;
-  char *factory_name = NULL;
   GdkDisplay *display;
   TerminalOptions *options;
-  GDBusConnection *connection;
+  TerminalFactory *factory;
   GError *error = NULL;
   char *working_directory;
-  GVariant *server_retval;
   int exit_code = EXIT_FAILURE;
 
   setlocale (LC_ALL, "");
@@ -223,7 +130,6 @@ main (int argc, char **argv)
   for (i = 0; i < argc; ++i)
     argv_copy [i] = argv [i];
   argv_copy [i] = NULL;
-  argc_copy = argc;
 
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   working_directory = g_get_current_dir ();
@@ -242,11 +148,10 @@ main (int argc, char **argv)
 #endif
                                     NULL);
 
-  g_free (working_directory);
-
   if (options == NULL) {
     g_printerr (_("Failed to parse arguments: %s\n"), error->message);
     g_error_free (error);
+    g_free (working_directory);
     g_free (argv_copy);
     exit (EXIT_FAILURE);
   }
@@ -275,39 +180,42 @@ main (int argc, char **argv)
   display_name = gdk_display_get_name (display);
   options->display_name = g_strdup (display_name);
 
-  connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
-  if (connection == NULL) {
-    g_printerr ("Error connecting to bus: %s\n", error->message);
+  factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                     G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                                                     G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                                     TERMINAL_UNIQUE_NAME,
+                                                     TERMINAL_FACTORY_OBJECT_PATH,
+                                                     NULL /* cancellable */,
+                                                     &error);
+  if (factory == NULL) {
+    g_printerr ("Error constructing proxy for %s:%s: %s\n", 
+                TERMINAL_UNIQUE_NAME, TERMINAL_FACTORY_OBJECT_PATH,
+                error->message);
     g_error_free (error);
     goto out;
   }
 
-  factory_name = get_factory_name_for_display (options->display_name);
-  server_retval = g_dbus_connection_call_sync (connection,
-                                               factory_name,
-                                               TERMINAL_FACTORY_SERVICE_PATH,
-                                               TERMINAL_FACTORY_INTERFACE_NAME,
-                                               "HandleArguments",
-                                               options_to_variant (options, argv_copy, argc_copy),
-                                               G_VARIANT_TYPE ("()"),
-                                               G_DBUS_CALL_FLAGS_NONE,
-                                               -1,
-                                               NULL,
-                                               &error);
-  if (server_retval == NULL) {
+  envv = g_get_environ ();
+  if (!terminal_factory_call_handle_arguments_sync (factory,
+                                                    working_directory ? working_directory : "",
+                                                    display_name ? display_name : "",
+                                                    startup_id ? startup_id : "",
+                                                    (const char * const *) envv,
+                                                    (const char * const *) argv_copy,
+                                                    NULL /* cancellable */,
+                                                    &error)) {
     g_printerr ("Error opening terminal: %s\n", error->message);
     g_error_free (error);
   } else {
-    g_variant_unref (server_retval);
     exit_code = EXIT_SUCCESS;
   }
 
-  g_free (factory_name);
-  g_object_unref (connection);
+  g_strfreev (envv);
+  g_object_unref (factory);
 
 out:
   terminal_options_free (options);
-
+  g_free (working_directory);
   g_free (argv_copy);
 
   return exit_code;

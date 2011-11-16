@@ -148,22 +148,29 @@ PKG_CHECK_MODULES([MIGRATOR],[
 # Build tools
 # ***********
 
-GLIB_GENMARSHAL="$($PKG_CONFIG --variable=glib_genmarshal glib-2.0)"
-AC_SUBST([GLIB_GENMARSHAL])
-GLIB_MKENUMS="$($PKG_CONFIG --variable=glib_mkenums glib-2.0)"
-AC_SUBST([GLIB_MKENUMS])
-
-AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[false])
-
-if test "$GTK_BUILDER_CONVERT" = "false"; then
-  AC_MSG_ERROR([gtk-builder-convert not found])
+AC_ARG_VAR([GLIB_GENMARSHAL],[the glib-genmarschal programme])
+AC_PATH_PROG([GLIB_GENMARSHAL],[glib-genmarshal],[])
+if test -z "$GLIB_GENMARSHAL"; then
+  AC_MSG_ERROR([glib-genmarshal not found])
 fi
 
-case "$with_gtk" in
-  3.0) GTK_BUILDER_CONVERT_FLAGS="--target-version=3.0" ;;
-esac
+AC_ARG_VAR([GLIB_MKENUMS],[the glib-mkenums programme])
+AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums],[])
+if test -z "$GLIB_MKENUMS"; then
+  AC_MSG_ERROR([glib-mkenums not found])
+fi
 
-AC_SUBST([GTK_BUILDER_CONVERT_FLAGS])
+AC_ARG_VAR([GDBUS_CODEGEN],[the gdbus-codegen programme])
+AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
+if test -z "$GDBUS_CODEGEN"; then
+  AC_MSG_ERROR([gdbus-codegen not found])
+fi
+
+AC_ARG_VAR([GTK_BUILDER_CONVERT],[the gtk-builder-convert programme])
+AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[])
+if test -z "$GTK_BUILDER_CONVERT"; then
+  AC_MSG_ERROR([gtk-builder-convert not found])
+fi
 
 # ***********
 # Compilation

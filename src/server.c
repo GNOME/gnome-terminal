@@ -38,205 +38,42 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
+#include "terminal-factory.h"
 #include "terminal-intl.h"
 #include "terminal-options.h"
 #include "terminal-util.h"
 
-#define TERMINAL_FACTORY_SERVICE_NAME_PREFIX  "org.gnome.Terminal.Factory0.Display"
-#define TERMINAL_FACTORY_SERVICE_PATH         "/org/gnome/Terminal/Factory"
-#define TERMINAL_FACTORY_INTERFACE_NAME       "org.gnome.Terminal.Factory"
+#define TERMINAL_UNIQUE_NAME                  "org.gnome.Terminal"
 
-static char *
-ay_to_string (GVariant *variant,
-              GError **error)
-{
-  gsize len;
-  const char *data;
+#define TERMINAL_OBJECT_PATH_PREFIX           "/org/gnome/Terminal"
+#define TERMINAL_OBJECT_INTERFACE_PREFIX      "org.gnome.Terminal"
 
-  data = g_variant_get_fixed_array (variant, &len, sizeof (char));
-  if (len == 0)
-    return NULL;
-
-  /* Make sure there are no embedded NULs */
-  if (memchr (data, '\0', len) != NULL) {
-    g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                         "String is shorter than claimed");
-    return NULL;
-  }
-
-  return g_strndup (data, len);
-}
-
-static char **
-ay_to_strv (GVariant *variant,
-            int *argc)
-{
-  GPtrArray *argv;
-  const char *data, *nullbyte;
-  gsize data_len;
-  gssize len;
-
-  data = g_variant_get_fixed_array (variant, &data_len, sizeof (char));
-  if (data_len == 0 || data_len > G_MAXSSIZE) {
-    if (argc)
-      *argc = 0;
-
-    return NULL;
-  }
-
-  argv = g_ptr_array_new ();
-
-  len = data_len;
-  do {
-    gssize string_len;
-
-    nullbyte = memchr (data, '\0', len);
-
-    string_len = nullbyte ? (gssize) (nullbyte - data) : len;
-    g_ptr_array_add (argv, g_strndup (data, string_len));
-
-    len -= string_len + 1;
-    data += string_len + 1;
-  } while (len > 0);
-
-  if (argc)
-    *argc = argv->len;
-
-  /* NULL terminate */
-  g_ptr_array_add (argv, NULL);
-  return (char **) g_ptr_array_free (argv, FALSE);
-}
+#define TERMINAL_FACTORY_OBJECT_PATH          TERMINAL_OBJECT_PATH_PREFIX "/Factory0"
+#define TERMINAL_FACTORY_INTERFACE_NAME       TERMINAL_OBJECT_INTERFACE_PREFIX ".Factory0"
 
 typedef struct {
-  char *factory_name;
+  GDBusObjectManagerServer *manager;
   int exit_code;
 } OwnData;
-
-static void
-method_call_cb (GDBusConnection *connection,
-                const char *sender,
-                const char *object_path,
-                const char *interface_name,
-                const char *method_name,
-                GVariant *parameters,
-                GDBusMethodInvocation *invocation,
-                gpointer user_data)
-{
-  if (g_strcmp0 (method_name, "HandleArguments") == 0) {
-    TerminalOptions *options = NULL;
-    GVariant *v_wd, *v_display, *v_sid, *v_envv, *v_argv;
-    char *working_directory = NULL, *display_name = NULL, *startup_id = NULL;
-    char **envv = NULL, **argv = NULL;
-    int argc;
-    GError *error = NULL;
-
-    g_variant_get (parameters, "(@ay@ay@ay@ay@ay)",
-                   &v_wd, &v_display, &v_sid, &v_envv, &v_argv);
-
-    working_directory = ay_to_string (v_wd, &error);
-    if (error)
-      goto out;
-    display_name = ay_to_string (v_display, &error);
-    if (error)
-      goto out;
-    startup_id = ay_to_string (v_sid, &error);
-    if (error)
-      goto out;
-    envv = ay_to_strv (v_envv, NULL);
-    argv = ay_to_strv (v_argv, &argc);
-
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                          "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
-                          working_directory ? working_directory : "(null)",
-                          display_name ? display_name : "(null)",
-                          startup_id ? startup_id : "(null)");
-
-    options = terminal_options_parse (working_directory,
-                                      display_name,
-                                      startup_id,
-                                      envv,
-                                      TRUE,
-                                      TRUE,
-                                      &argc, &argv,
-                                      &error,
-                                      NULL);
-
-    if (options != NULL) {
-      terminal_app_handle_options (terminal_app_get (), options, FALSE /* no resume */, &error);
-      terminal_options_free (options);
-    }
-
-  out:
-    g_variant_unref (v_wd);
-    g_free (working_directory);
-    g_variant_unref (v_display);
-    g_free (display_name);
-    g_variant_unref (v_sid);
-    g_free (startup_id);
-    g_variant_unref (v_envv);
-    g_strfreev (envv);
-    g_variant_unref (v_argv);
-    g_strfreev (argv);
-
-    if (error == NULL) {
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("()"));
-    } else {
-      g_dbus_method_invocation_return_gerror (invocation, error);
-      g_error_free (error);
-    }
-  }
-}
 
 static void
 bus_acquired_cb (GDBusConnection *connection,
                  const char *name,
                  gpointer user_data)
 {
-  static const char dbus_introspection_xml[] =
-    "<node name='/org/gnome/Terminal'>"
-      "<interface name='org.gnome.Terminal.Factory'>"
-        "<method name='HandleArguments'>"
-          "<arg type='ay' name='working_directory' direction='in' />"
-          "<arg type='ay' name='display_name' direction='in' />"
-          "<arg type='ay' name='startup_id' direction='in' />"
-          "<arg type='ay' name='environment' direction='in' />"
-          "<arg type='ay' name='arguments' direction='in' />"
-        "</method>"
-      "</interface>"
-    "</node>";
-
-  static const GDBusInterfaceVTable interface_vtable = {
-    method_call_cb,
-    NULL,
-    NULL,
-  };
-
   OwnData *data = (OwnData *) user_data;
-  GDBusNodeInfo *introspection_data;
-  guint registration_id;
-  GError *error = NULL;
+  TerminalObjectSkeleton *object;
 
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                          "Bus %s acquired\n", name);
 
-  introspection_data = g_dbus_node_info_new_for_xml (dbus_introspection_xml, NULL);
-  g_assert (introspection_data != NULL);
+  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
+  terminal_object_skeleton_set_factory (object, TERMINAL_FACTORY (terminal_app_get ()));
+  g_dbus_object_manager_server_export (data->manager, G_DBUS_OBJECT_SKELETON (object));
+  g_object_unref (object);
 
-  registration_id = g_dbus_connection_register_object (connection,
-                                                       TERMINAL_FACTORY_SERVICE_PATH,
-                                                       introspection_data->interfaces[0],
-                                                       &interface_vtable,
-                                                       NULL, NULL,
-                                                       &error);
-  g_dbus_node_info_unref (introspection_data);
-
-  if (registration_id == 0) {
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "Failed to register object: %s\n", error->message);
-    g_error_free (error);
-    data->exit_code = EXIT_FAILURE;
-    gtk_main_quit ();
-  }
+  /* And export the object */
+  g_dbus_object_manager_server_set_connection (data->manager, connection);
 }
 
 static void
@@ -264,32 +101,6 @@ name_lost_cb (GDBusConnection *connection,
 
   data->exit_code = EXIT_FAILURE;
   gtk_main_quit ();
-}
-
-static char *
-get_factory_name_for_display (const char *display_name)
-{
-#if 0
-  GString *name;
-  const char *p;
-
-  name = g_string_sized_new (strlen (TERMINAL_FACTORY_SERVICE_NAME_PREFIX) + strlen (display_name) + 1 /* NUL */);
-  g_string_append (name, TERMINAL_FACTORY_SERVICE_NAME_PREFIX);
-
-  for (p = display_name; *p; ++p)
-    {
-      if (g_ascii_isalnum (*p))
-        g_string_append_c (name, *p);
-      else
-        g_string_append_c (name, '_');
-    }
-
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Factory name is \"%s\"\n", name->str);
-
-  return g_string_free (name, FALSE);
-#endif
-  return g_strdup ("org.gnome.Terminal.Factory0");
 }
 
 int
@@ -335,12 +146,11 @@ main (int argc, char **argv)
 //   g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE_PID");
 //   g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE");
 
-  display = gdk_display_get_default ();
-  data.factory_name = get_factory_name_for_display (gdk_display_get_name (display));
   data.exit_code = EXIT_FAILURE;
+  data.manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
 
   owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
-                             data.factory_name,
+                             TERMINAL_UNIQUE_NAME,
                              G_BUS_NAME_OWNER_FLAGS_NONE,
                              bus_acquired_cb,
                              name_acquired_cb,
@@ -351,7 +161,7 @@ main (int argc, char **argv)
 
   g_bus_unown_name (owner_id);
 
-  g_free (data.factory_name);
+  g_object_unref (data.manager);
 
   terminal_app_shutdown ();
 
