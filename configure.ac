@@ -178,9 +178,10 @@ fi
 
 CC_CHECK_CFLAGS_APPEND([ \
   -Wall -Wextra \
-  -Wsign-compare -Werror-implicit-function-declaration \
+  -Wformat-nonliteral -Werror=format-security \
+  -Wsign-compare -Werror=implicit-function-declaration \
   -Wpointer-arith -Wwrite-strings -Wstrict-prototypes \
-  -Waggregate-return -Wcast-align -Wimplicit -Wuninitialised \
+  -Waggregate-return -Wcast-align -Wimplicit -Wuninitialized \
   -Wmissing-prototypes -Wmissing-declarations -Wnested-externs \
   -Wpacked -Wmissing-format-attribute -Wshadow \
   -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations \
