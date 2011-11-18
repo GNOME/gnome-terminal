@@ -95,7 +95,6 @@ AC_ARG_WITH([dbus-service-dir],
   [dbusservicedir='${datadir}/dbus-1/services'])
 AC_SUBST([dbusservicedir])
 
-AC_ARG_WITH
 # *********
 # GSettings
 # *********
