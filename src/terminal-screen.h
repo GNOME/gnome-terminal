@@ -81,6 +81,14 @@ TerminalScreen *terminal_screen_new (GSettings       *profile,
                                      char           **child_env,
                                      double           zoom);
 
+gboolean terminal_screen_exec (TerminalScreen *screen,
+                               char          **argv,
+                               char          **envv,
+                               const char     *cwd,
+                               GError        **error);
+
+void _terminal_screen_launch_child_on_idle (TerminalScreen *screen);
+
 void terminal_screen_set_profile (TerminalScreen *screen,
                                   GSettings      *profile);
 GSettings* terminal_screen_get_profile (TerminalScreen *screen);

@@ -37,7 +37,10 @@
 #include "profile-editor.h"
 #include "terminal-encoding.h"
 #include "terminal-schemas.h"
-#include "terminal-factory.h"
+#include "terminal-gdbus-generated.h"
+#include "terminal-controller.h"
+#include "terminal-defines.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
@@ -52,6 +55,10 @@
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
+
+#define CONTROLLER_SKELETON_DATA_KEY  "terminal-object-skeleton"
+
+extern GDBusObjectManagerServer *object_manager;
 
 /*
  * Session state is stored entirely in the RestartCommand command line.
@@ -74,6 +81,8 @@ struct _TerminalApp
 {
   TerminalFactorySkeleton parent_instance;
 
+  GDBusObjectManagerServer *object_manager;
+  
   GList *windows;
   GtkWidget *new_profile_dialog;
   GtkWidget *manage_profiles_dialog;
@@ -1119,52 +1128,160 @@ terminal_app_client_quit_cb (EggSMClient *client,
 
 #endif /* WITH_SMCLIENT */
 
+static void
+screen_destroy_cb (GObject *screen,
+                   gpointer user_data)
+{
+  GDBusObjectSkeleton *skeleton;
+  const char *object_path;
+
+  skeleton = g_object_get_data (screen, CONTROLLER_SKELETON_DATA_KEY);
+  if (skeleton == NULL)
+    return;
+
+  object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (skeleton));
+  g_dbus_object_manager_server_unexport (object_manager, object_path);
+  g_object_set_data (screen, CONTROLLER_SKELETON_DATA_KEY, NULL);
+}
+
 /* Class implementation */
 
 static gboolean
-terminal_app_handle_arguments (TerminalFactory *factory,
-                               GDBusMethodInvocation *invocation,
-                               const char *working_directory,
-                               const char *display_name,
-                               const char *startup_id,
-                               const char * const *envv,
-                               const char * const *argv)
+terminal_app_create_instance (TerminalFactory *factory,
+                              GDBusMethodInvocation *invocation,
+                              GVariant *options)
 {
   TerminalApp *app = TERMINAL_APP (factory);
-  TerminalOptions *options;
-  int argc;
-  GError *error = NULL;
+  TerminalWindow *window;
+  TerminalScreen *screen;
+  TerminalController *controller;
+  TerminalObjectSkeleton *skeleton;
+  char *object_path;
+  GSettings *profile = NULL;
+  GdkScreen *gdk_screen;
+  const char *startup_id, *display_name, *working_directory;
+  int screen_number;
+  gboolean is_restored = FALSE;
+  gboolean start_fullscreen = FALSE;
+  gboolean start_maximized = FALSE;
+  gboolean force_menubar_state = FALSE, menubar_state = TRUE;
+  char *role = NULL;
+  char *title = NULL;
+  char *profile_name = NULL;
+  gboolean zoom_set = FALSE;
+  gdouble zoom = 1.0;
+  gboolean active = TRUE;
+  char *geometry = NULL;
 
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Factory invoked with working-dir='%s' display='%s' startup-id='%s'\n",
-                         working_directory, display_name, startup_id);
-
-  argc = g_strv_length ((char **) argv);
-  options = terminal_options_parse (working_directory,
-                                    display_name,
-                                    startup_id,
-                                    (char **) envv,
-                                    TRUE,
-                                    TRUE,
-                                    &argc, (char ***) &argv,
-                                    &error,
-                                    NULL);
-
-  if (options == NULL) {
-    g_dbus_method_invocation_take_error (invocation, error);
+  if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
+    g_dbus_method_invocation_return_error (invocation, 
+                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                           "No display specified");
     goto out;
   }
 
-  if (!terminal_app_handle_options (app, options, FALSE /* no resume */, &error)) {
-    g_dbus_method_invocation_take_error (invocation, error);
+  screen_number = 0;
+  gdk_screen = terminal_app_get_screen_by_display_name (display_name, screen_number);
+  if (gdk_screen == NULL) {
+    g_dbus_method_invocation_return_error (invocation, 
+                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                           "No screen %d on display \"%s\"",
+                                           screen_number, display_name);
     goto out;
   }
 
-  terminal_factory_complete_handle_arguments (factory, invocation);
+  if (!g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
+    startup_id = NULL;
+
+  if (startup_id != NULL)
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                           "Startup ID is '%s'\n", startup_id);
+  if (working_directory != NULL)
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                           "CWD is '%s'\n", working_directory);
+
+  if (!g_variant_lookup (options, "zoom", "d", &zoom))
+    zoom_set = FALSE;
+
+  window = terminal_app_new_window (app, gdk_screen);
+
+  /* Restored windows shouldn't demand attention; see bug #586308. */
+  if (is_restored)
+    terminal_window_set_is_restored (window);
+
+  if (startup_id != NULL)
+    gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
+
+  /* Overwrite the default, unique window role set in terminal_window_init */
+  if (role)
+    gtk_window_set_role (GTK_WINDOW (window), role);
+
+  if (force_menubar_state)
+    terminal_window_set_menubar_visible (window, menubar_state);
+
+  if (start_fullscreen)
+    gtk_window_fullscreen (GTK_WINDOW (window));
+  if (start_maximized)
+    gtk_window_maximize (GTK_WINDOW (window));
+
+  if (profile_name)
+    {
+      if (TRUE /* profile_is_id */)
+        profile = terminal_app_get_profile_by_name (app, profile_name);
+      else
+        profile = terminal_app_get_profile_by_visible_name (app, profile_name);
+
+      if (profile == NULL)
+        _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                               "No such profile \"%s\", using default profile", 
+                               profile_name);
+    }
+  if (profile == NULL)
+    profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
+  g_assert (profile);
+
+  screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
+                                zoom_set ? zoom : 1.0);
+  terminal_window_add_screen (window, screen, -1);
+  terminal_window_switch_screen (window, screen);
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
+
+  // FIXMEchpe make this better!
+  object_path = g_strdup_printf (TERMINAL_CONTROLLER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
+
+  skeleton = terminal_object_skeleton_new (object_path);
+  controller = terminal_controller_new (screen);
+  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (controller));
+  g_object_unref (controller);
+
+  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (skeleton));
+  g_object_set_data_full (G_OBJECT (screen), CONTROLLER_SKELETON_DATA_KEY,
+                          skeleton, (GDestroyNotify) g_object_unref);
+  g_signal_connect (screen, "destroy",
+                    G_CALLBACK (screen_destroy_cb), app);
+
+  if (active)
+    terminal_window_switch_screen (window, screen);
+
+  if (geometry)
+    {
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                            "[window %p] applying geometry %s\n",
+                            window, geometry);
+
+      if (!terminal_window_parse_geometry (window, geometry))
+        _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                               "Invalid geometry string \"%s\"", geometry);
+    }
+
+  gtk_window_present (GTK_WINDOW (window));
+
+  terminal_factory_complete_create_instance (factory, invocation, object_path);
+
+  g_free (object_path);
+  g_object_unref (profile);
 
 out:
-  if (options)
-    terminal_options_free (options);
 
   return TRUE; /* handled */
 }
@@ -1172,7 +1289,7 @@ out:
 static void
 terminal_factory_iface_init (TerminalFactoryIface *iface)
 {
-  iface->handle_handle_arguments = terminal_app_handle_arguments;
+  iface->handle_create_instance = terminal_app_create_instance;
 }
 
 G_DEFINE_TYPE_WITH_CODE (TerminalApp, terminal_app, TERMINAL_TYPE_FACTORY_SKELETON,
@@ -1345,163 +1462,6 @@ terminal_app_shutdown (void)
   g_settings_sync ();
 }
 
-/**
- * terminal_app_handle_options:
- * @app:
- * @options: a #TerminalOptions
- * @allow_resume: whether to merge the terminal configuration from the
- *   saved session on resume
- * @error: a #GError to fill in
- *
- * Processes @options. It loads or saves the terminal configuration, or
- * opens the specified windows and tabs.
- *
- * Returns: %TRUE if @options could be successfully handled, or %FALSE on
- *   error
- */
-gboolean
-terminal_app_handle_options (TerminalApp *app,
-                             TerminalOptions *options,
-                             gboolean allow_resume,
-                             GError **error)
-{
-  GList *lw;
-  GdkScreen *gdk_screen;
-
-  gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
-                                                        options->screen_number);
-
-  if (options->save_config)
-    {
-      if (options->remote_arguments)
-        return terminal_app_save_config_file (app, options->config_file, error);
-      
-      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_IN_FACTORY,
-                            "Cannot use \"--save-config\" when starting the factory process");
-      return FALSE;
-    }
-
-  if (options->load_config)
-    {
-      GKeyFile *key_file;
-      gboolean result;
-
-      key_file = g_key_file_new ();
-      result = g_key_file_load_from_file (key_file, options->config_file, 0, error) &&
-               terminal_options_merge_config (options, key_file, SOURCE_DEFAULT, error);
-      g_key_file_free (key_file);
-
-      if (!result)
-        return FALSE;
-
-      /* fall-through on success */
-    }
-
-#ifdef WITH_SMCLIENT
-{
-  EggSMClient *sm_client;
-
-  sm_client = egg_sm_client_get ();
-
-  if (allow_resume && egg_sm_client_is_resumed (sm_client))
-    {
-      GKeyFile *key_file;
-
-      key_file = egg_sm_client_get_state_file (sm_client);
-      if (key_file != NULL &&
-          !terminal_options_merge_config (options, key_file, SOURCE_SESSION, error))
-        return FALSE;
-    }
-}
-#endif
-
-  /* Make sure we open at least one window */
-  terminal_options_ensure_window (options);
-
-  if (options->startup_id != NULL)
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "Startup ID is '%s'\n",
-                           options->startup_id);
-
-  for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
-    {
-      InitialWindow *iw = lw->data;
-      TerminalWindow *window;
-      GList *lt;
-
-      g_assert (iw->tabs);
-
-      /* Create & setup new window */
-      window = terminal_app_new_window (app, gdk_screen);
-
-      /* Restored windows shouldn't demand attention; see bug #586308. */
-      if (iw->source_tag == SOURCE_SESSION)
-        terminal_window_set_is_restored (window);
-
-      if (options->startup_id != NULL)
-        gtk_window_set_startup_id (GTK_WINDOW (window), options->startup_id);
-
-      /* Overwrite the default, unique window role set in terminal_window_init */
-      if (iw->role)
-        gtk_window_set_role (GTK_WINDOW (window), iw->role);
-
-      if (iw->force_menubar_state)
-        terminal_window_set_menubar_visible (window, iw->menubar_state);
-
-      if (iw->start_fullscreen)
-        gtk_window_fullscreen (GTK_WINDOW (window));
-      if (iw->start_maximized)
-        gtk_window_maximize (GTK_WINDOW (window));
-
-      /* Now add the tabs */
-      for (lt = iw->tabs; lt != NULL; lt = lt->next)
-        {
-          InitialTab *it = lt->data;
-          GSettings *profile = NULL;
-          TerminalScreen *screen;
-
-          if (it->profile)
-            {
-              if (it->profile_is_id)
-                profile = terminal_app_get_profile_by_name (app, it->profile);
-              else
-                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
-
-              if (profile == NULL)
-                g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
-            }
-          if (profile == NULL)
-            profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
-          g_assert (profile);
-
-          screen = terminal_app_new_terminal (app, window, profile,
-                                              it->exec_argv ? it->exec_argv : options->exec_argv,
-                                              it->title ? it->title : options->default_title,
-                                              it->working_dir ? it->working_dir : options->default_working_dir,
-                                              options->env,
-                                              it->zoom_set ? it->zoom : options->zoom);
-          g_object_unref (profile);
-
-          if (it->active)
-            terminal_window_switch_screen (window, screen);
-        }
-
-      if (iw->geometry)
-        {
-          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                                "[window %p] applying geometry %s\n",
-                                window, iw->geometry);
-
-          if (!terminal_window_parse_geometry (window, iw->geometry))
-            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
-        }
-
-      gtk_window_present (GTK_WINDOW (window));
-    }
-
-  return TRUE;
-}
-
 TerminalWindow *
 terminal_app_new_window (TerminalApp *app,
                          GdkScreen *screen)
@@ -1541,6 +1501,9 @@ terminal_app_new_terminal (TerminalApp     *app,
   terminal_window_add_screen (window, screen, -1);
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
+
+  /* Launch the child on idle */
+  _terminal_screen_launch_child_on_idle (screen);
 
   return screen;
 }

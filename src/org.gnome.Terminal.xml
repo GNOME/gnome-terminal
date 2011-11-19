@@ -20,12 +20,19 @@
 <node>
   <interface name="org.gnome.Terminal.Factory0">
     <annotation name="org.gtk.GDBus.C.Name" value="Factory" />
-    <method name="HandleArguments">
-      <arg type="ay" name="working_directory" direction="in" />
-      <arg type="ay" name="display_name" direction="in" />
-      <arg type="ay" name="startup_id" direction="in" />
-      <arg type="aay" name="environment" direction="in" />
-      <arg type="aay" name="arguments" direction="in" />
+    <method name="CreateInstance">
+      <arg type="a{sv}" name="options" direction="in" />
+      <arg type="o" name="receiver" direction="out" />
+    </method>
+  </interface>
+
+  <interface name="org.gnome.Terminal.Terminal0">
+    <annotation name="org.gtk.GDBus.C.Name" value="Receiver" />
+    <method name="Exec">
+      <arg type="a{sv}" name="options" direction="in" />
+      <arg type="aay" name="arguments" direction="in">
+        <annotation name="org.gtk.GDBus.C.ForceGVariant" value="true" />
+      </arg>
     </method>
   </interface>
 </node>

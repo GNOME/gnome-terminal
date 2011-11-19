@@ -25,7 +25,6 @@
 
 #include "terminal-encoding.h"
 #include "terminal-screen.h"
-#include "terminal-options.h"
 
 G_BEGIN_DECLS
 
@@ -77,10 +76,7 @@ TerminalApp* terminal_app_get (void);
 
 void terminal_app_shutdown (void);
 
-gboolean terminal_app_handle_options (TerminalApp *app,
-                                      TerminalOptions *options,
-                                      gboolean allow_resume,
-                                      GError **error);
+GDBusObjectManagerServer *terminal_app_get_object_manager (TerminalApp *app);
 
 void terminal_app_edit_profile (TerminalApp *app,
                                 GSettings   *profile,

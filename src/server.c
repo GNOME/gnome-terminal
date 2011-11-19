@@ -31,28 +31,17 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
-#ifdef WITH_SMCLIENT
-#include "eggsmclient.h"
-#endif
-
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
-#include "terminal-factory.h"
+#include "terminal-gdbus-generated.h"
 #include "terminal-intl.h"
-#include "terminal-options.h"
 #include "terminal-util.h"
+#include "terminal-defines.h"
 
-#define TERMINAL_UNIQUE_NAME                  "org.gnome.Terminal"
-
-#define TERMINAL_OBJECT_PATH_PREFIX           "/org/gnome/Terminal"
-#define TERMINAL_OBJECT_INTERFACE_PREFIX      "org.gnome.Terminal"
-
-#define TERMINAL_FACTORY_OBJECT_PATH          TERMINAL_OBJECT_PATH_PREFIX "/Factory0"
-#define TERMINAL_FACTORY_INTERFACE_NAME       TERMINAL_OBJECT_INTERFACE_PREFIX ".Factory0"
+GDBusObjectManagerServer *object_manager;
 
 typedef struct {
-  GDBusObjectManagerServer *manager;
   int exit_code;
 } OwnData;
 
@@ -61,7 +50,6 @@ bus_acquired_cb (GDBusConnection *connection,
                  const char *name,
                  gpointer user_data)
 {
-  OwnData *data = (OwnData *) user_data;
   TerminalObjectSkeleton *object;
 
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
@@ -69,11 +57,11 @@ bus_acquired_cb (GDBusConnection *connection,
 
   object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
   terminal_object_skeleton_set_factory (object, TERMINAL_FACTORY (terminal_app_get ()));
-  g_dbus_object_manager_server_export (data->manager, G_DBUS_OBJECT_SKELETON (object));
+  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 
   /* And export the object */
-  g_dbus_object_manager_server_set_connection (data->manager, connection);
+  g_dbus_object_manager_server_set_connection (object_manager, connection);
 }
 
 static void
@@ -100,6 +88,7 @@ name_lost_cb (GDBusConnection *connection,
   }
 
   data->exit_code = EXIT_FAILURE;
+
   gtk_main_quit ();
 }
 
@@ -109,7 +98,6 @@ main (int argc, char **argv)
   OwnData data;
   guint owner_id;
   const char *home_dir;
-  GdkDisplay *display;
   GError *error = NULL;
 
   setlocale (LC_ALL, "");
@@ -139,16 +127,9 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  /* Unset the these env variables, so they doesn't end up
-   * in the factory's env and thus in the terminals' envs.
-   */
-//   g_unsetenv ("DESKTOP_STARTUP_ID");
-//   g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE_PID");
-//   g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE");
+  object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
 
   data.exit_code = EXIT_FAILURE;
-  data.manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
-
   owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
                              TERMINAL_UNIQUE_NAME,
                              G_BUS_NAME_OWNER_FLAGS_NONE,
@@ -161,7 +142,12 @@ main (int argc, char **argv)
 
   g_bus_unown_name (owner_id);
 
-  g_object_unref (data.manager);
+  g_dbus_object_manager_server_unexport (object_manager, TERMINAL_FACTORY_OBJECT_PATH);
+  if (data.exit_code == EXIT_SUCCESS)
+    g_dbus_connection_flush_sync (g_dbus_object_manager_server_get_connection (object_manager),
+                                  NULL /* cancellable */, NULL /* error */);
+  g_object_unref (object_manager);
+  object_manager = NULL;
 
   terminal_app_shutdown ();
 

@@ -1,6 +1,6 @@
 NULL =
 
-bin_PROGRAMS = gnome-terminal
+bin_PROGRAMS = gnome-terminal-client gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
 
 # Terminal server
@@ -12,8 +12,8 @@ BUILT_SOURCES = \
 	terminal-marshal.h \
 	terminal-type-builtins.c \
 	terminal-type-builtins.h \
-	terminal-factory.c \
-	terminal-factory.h \
+	terminal-gdbus-generated.c \
+	terminal-gdbus-generated.h \
 	$(NULL)
 
 gnome_terminal_server_SOURCES= \
@@ -28,15 +28,16 @@ gnome_terminal_server_SOURCES= \
 	terminal-app.h \
 	terminal-close-button.h \
 	terminal-close-button.c \
+	terminal-controller.c \
+	terminal-controller.h \
 	terminal-debug.c \
 	terminal-debug.h \
+	terminal-defines.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
 	terminal-info-bar.c \
 	terminal-info-bar.h \
 	terminal-intl.h \
-	terminal-options.c \
-	terminal-options.h \
 	terminal-schemas.h \
 	terminal-screen.c \
 	terminal-screen.h \
@@ -142,30 +143,67 @@ org.gnome.Terminal.Factory0.service: Makefile
 		      echo "Name=org.gnome.Terminal.Factory0"; \
 		      echo "${libexecdir}/gnome-terminal-server") > $@
 
-terminal-factory.c terminal-factory.h: org.gnome.Terminal.xml Makefile
+terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
 			--interface-prefix=org.gnome.Terminal \
 			--c-namespace=Terminal \
 			--c-generate-object-manager \
-			--generate-c-code terminal-factory \
+			--generate-c-code terminal-gdbus-generated \
 			$<
 
-# Terminal remote
+# Terminal client
+
+gnome_terminal_client_SOURCES = \
+	client.c \
+	terminal-defines.h \
+	terminal-intl.h \
+	$(NULL)
+
+nodist_gnome_terminal_client_SOURCES = \
+	terminal-gdbus-generated.c \
+	terminal-gdbus-generated.h \
+	$(NULL)
+
+gnome_terminal_client_CPPFLAGS = \
+	-DTERMINAL_COMPILATION \
+	-DTERMINAL_CLIENT \
+	-DTERM_DATADIR="\"$(datadir)\"" \
+	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
+	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DSN_API_NOT_YET_FROZEN \
+	-DGDK_MULTIHEAD_SAFE \
+	$(AM_CPPFLAGS)
+
+gnome_terminal_client_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(AM_CFLAGS)
+
+gnome_terminal_client_LDFLAGS = \
+	$(AM_LDFLAGS)
+
+gnome_terminal_client_LDADD = \
+	$(TERM_LIBS)
+
+# Legacy terminal client
 
 gnome_terminal_SOURCES= \
 	terminal.c \
 	terminal-debug.c \
 	terminal-debug.h \
-	terminal-factory.c \
-	terminal-factory.h \
+	terminal-defines.h \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
 	$(NULL)
 
+nodist_gnome_terminal_SOURCES = \
+	terminal-gdbus-generated.c \
+	terminal-gdbus-generated.h \
+	$(NULL)
+
 gnome_terminal_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
-	-DTERMINAL_REMOTE \
+	-DTERMINAL_CLIENT \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \

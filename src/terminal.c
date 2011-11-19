@@ -41,15 +41,180 @@
 #include "terminal-debug.h"
 #include "terminal-intl.h"
 #include "terminal-options.h"
-#include "terminal-factory.h"
+#include "terminal-gdbus-generated.h"
+#include "terminal-defines.h"
 
-#define TERMINAL_UNIQUE_NAME                  "org.gnome.Terminal"
+/**
+ * handle_options:
+ * @app:
+ * @options: a #TerminalOptions
+ * @allow_resume: whether to merge the terminal configuration from the
+ *   saved session on resume
+ * @error: a #GError to fill in
+ *
+ * Processes @options. It loads or saves the terminal configuration, or
+ * opens the specified windows and tabs.
+ *
+ * Returns: %TRUE if @options could be successfully handled, or %FALSE on
+ *   error
+ */
+static gboolean
+handle_options (TerminalFactory *factory,
+                TerminalOptions *options,
+                char **envv,
+                gboolean allow_resume,
+                GError **error)
+{
+#if 0
+  GList *lw;
+  GdkScreen *gdk_screen;
 
-#define TERMINAL_OBJECT_PATH_PREFIX           "/org/gnome/Terminal"
-#define TERMINAL_OBJECT_INTERFACE_PREFIX      "org.gnome.Terminal"
+  gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
+                                                        options->screen_number);
 
-#define TERMINAL_FACTORY_OBJECT_PATH          TERMINAL_OBJECT_PATH_PREFIX "/Factory0"
-#define TERMINAL_FACTORY_INTERFACE_NAME       TERMINAL_OBJECT_INTERFACE_PREFIX ".Factory0"
+  if (options->save_config)
+    {
+#if 0
+      if (options->remote_arguments)
+        return terminal_app_save_config_file (app, options->config_file, error);
+      
+      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_IN_FACTORY,
+                            "Cannot use \"--save-config\" when starting the factory process");
+      return FALSE;
+#endif
+      g_set_error (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_SUPPORTED,
+                   "Not supported anymore");
+      return FALSE;
+    }
+
+  if (options->load_config)
+    {
+      GKeyFile *key_file;
+      gboolean result;
+
+      key_file = g_key_file_new ();
+      result = g_key_file_load_from_file (key_file, options->config_file, 0, error) &&
+               terminal_options_merge_config (options, key_file, SOURCE_DEFAULT, error);
+      g_key_file_free (key_file);
+
+      if (!result)
+        return FALSE;
+
+      /* fall-through on success */
+    }
+
+#ifdef WITH_SMCLIENT
+{
+  EggSMClient *sm_client;
+
+  sm_client = egg_sm_client_get ();
+
+  if (allow_resume && egg_sm_client_is_resumed (sm_client))
+    {
+      GKeyFile *key_file;
+
+      key_file = egg_sm_client_get_state_file (sm_client);
+      if (key_file != NULL &&
+          !terminal_options_merge_config (options, key_file, SOURCE_SESSION, error))
+        return FALSE;
+    }
+}
+#endif
+
+  /* Make sure we open at least one window */
+  terminal_options_ensure_window (options);
+
+  if (options->startup_id != NULL)
+    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                           "Startup ID is '%s'\n",
+                           options->startup_id);
+
+  for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
+    {
+      InitialWindow *iw = lw->data;
+      GList *lt;
+#if 0
+      TerminalWindow *window;
+
+      g_assert (iw->tabs);
+
+      /* Create & setup new window */
+      window = terminal_app_new_window (app, gdk_screen);
+
+      /* Restored windows shouldn't demand attention; see bug #586308. */
+      if (iw->source_tag == SOURCE_SESSION)
+        terminal_window_set_is_restored (window);
+
+      if (options->startup_id != NULL)
+        gtk_window_set_startup_id (GTK_WINDOW (window), options->startup_id);
+
+      /* Overwrite the default, unique window role set in terminal_window_init */
+      if (iw->role)
+        gtk_window_set_role (GTK_WINDOW (window), iw->role);
+
+      if (iw->force_menubar_state)
+        terminal_window_set_menubar_visible (window, iw->menubar_state);
+
+      if (iw->start_fullscreen)
+        gtk_window_fullscreen (GTK_WINDOW (window));
+      if (iw->start_maximized)
+        gtk_window_maximize (GTK_WINDOW (window));
+#endif
+
+      /* Now add the tabs */
+      for (lt = iw->tabs; lt != NULL; lt = lt->next)
+        {
+          InitialTab *it = lt->data;
+#if 0
+          GSettings *profile = NULL;
+          TerminalScreen *screen;
+
+          if (it->profile)
+            {
+              if (it->profile_is_id)
+                profile = terminal_app_get_profile_by_name (app, it->profile);
+              else
+                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
+
+              if (profile == NULL)
+                g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
+            }
+          if (profile == NULL)
+            profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
+          g_assert (profile);
+
+          screen = terminal_app_new_terminal (app, window, profile,
+                                              it->exec_argv ? it->exec_argv : options->exec_argv,
+                                              it->title ? it->title : options->default_title,
+                                              it->working_dir ? it->working_dir : options->default_working_dir,
+                                              options->env,
+                                              it->zoom_set ? it->zoom : options->zoom);
+          g_object_unref (profile);
+
+          if (it->active)
+            terminal_window_switch_screen (window, screen);
+#endif
+        }
+
+#if 0
+      if (iw->geometry)
+        {
+          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                                "[window %p] applying geometry %s\n",
+                                window, iw->geometry);
+
+          if (!terminal_window_parse_geometry (window, iw->geometry))
+            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
+        }
+
+      gtk_window_present (GTK_WINDOW (window));
+#endif
+    }
+
+  return TRUE;
+#endif
+  return FALSE;
+}
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
@@ -196,6 +361,7 @@ main (int argc, char **argv)
   }
 
   envv = g_get_environ ();
+#if 0
   if (!terminal_factory_call_handle_arguments_sync (factory,
                                                     working_directory ? working_directory : "",
                                                     display_name ? display_name : "",
@@ -206,6 +372,10 @@ main (int argc, char **argv)
                                                     &error)) {
     g_printerr ("Error opening terminal: %s\n", error->message);
     g_error_free (error);
+  } else {
+#endif
+  if (!handle_options (factory, options, envv, TRUE /* allow resume */, &error)) {
+    g_printerr ("Failed to handle arguments: %s\n", error->message);
   } else {
     exit_code = EXIT_SUCCESS;
   }
