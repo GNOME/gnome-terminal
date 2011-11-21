@@ -1159,7 +1159,7 @@ terminal_app_create_instance (TerminalFactory *factory,
   char *object_path;
   GSettings *profile = NULL;
   GdkScreen *gdk_screen;
-  const char *startup_id, *display_name, *working_directory;
+  const char *startup_id, *display_name;
   int screen_number;
   gboolean is_restored = FALSE;
   gboolean start_fullscreen = FALSE;
@@ -1196,9 +1196,6 @@ terminal_app_create_instance (TerminalFactory *factory,
   if (startup_id != NULL)
     _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                            "Startup ID is '%s'\n", startup_id);
-  if (working_directory != NULL)
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "CWD is '%s'\n", working_directory);
 
   if (!g_variant_lookup (options, "zoom", "d", &zoom))
     zoom_set = FALSE;

@@ -215,6 +215,9 @@ typedef struct
   char   *title;
   double  zoom;
 
+  /* Processing options */
+  gboolean wait;
+
   /* Flags */
   guint menubar_state_set : 1;
   guint zoom_set          : 1;
@@ -285,6 +288,13 @@ get_goption_context (OptionData *data)
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
+  const GOptionEntry processing_goptions[] = {
+    { "wait", 0, 0, G_OPTION_ARG_NONE, &data->wait,
+      N_("Wait until the child exits"), NULL },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
+
+
   GOptionContext *context;
   GOptionGroup *group;
 
@@ -304,13 +314,21 @@ get_goption_context (OptionData *data)
 
   group = g_option_group_new ("terminal-options",
                               N_("Terminal options:"),
-                              N_("Show per-terminal options"),
+                              N_("Show terminal options"),
                               data,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
 
+  group = g_option_group_new ("processing-goptions",
+                              N_("Processing options:"),
+                              N_("Show processing options"),
+                              data,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, processing_goptions);
+  g_option_context_add_group (context, group);
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   return context;
@@ -448,12 +466,29 @@ build_exec_options_variant (OptionData *data)
   return g_variant_builder_end (&builder);
 }
 
+typedef struct {
+  GMainLoop *loop;
+  int exit_code;
+} WaitData;
+
+static void
+receiver_child_exited_cb (TerminalReceiver *receiver,
+                          int exit_code,
+                          WaitData *data)
+{
+  data->exit_code = exit_code;
+
+  if (g_main_loop_is_running (data->loop))
+    g_main_loop_quit (data->loop);
+}
+
 static gboolean
 handle_open (int *argc,
              char ***argv,
              gboolean request_completion,
              const gchar *completion_cur,
-             const gchar *completion_prev)
+             const gchar *completion_prev,
+             int *exit_code)
 {
   OptionData *data;
   TerminalFactory *factory;
@@ -529,6 +564,25 @@ handle_open (int *argc,
     return FALSE;
   }
 
+  if (data->wait) {
+    WaitData wait_data;
+
+    wait_data.loop = g_main_loop_new (NULL, FALSE);
+    wait_data.exit_code = 255;
+
+    g_signal_connect (receiver, "child-exited", 
+                      G_CALLBACK (receiver_child_exited_cb), 
+                      &wait_data);
+    g_main_loop_run (wait_data.loop);
+    g_signal_handlers_disconnect_by_func (receiver,
+                                          G_CALLBACK (receiver_child_exited_cb),
+                                          &wait_data);
+
+    g_main_loop_unref (wait_data.loop);
+
+    *exit_code = wait_data.exit_code;
+  }
+
   option_data_free (data);
 
   g_object_unref (receiver);
@@ -578,6 +632,7 @@ gint
 main (gint argc, gchar *argv[])
 {
   int ret;
+  int exit_code = 0;
   const gchar *command;
   gboolean request_completion;
   gchar *completion_cur;
@@ -628,7 +683,8 @@ main (gint argc, gchar *argv[])
                        &argv,
                        request_completion,
                        completion_cur,
-                       completion_prev))
+                       completion_prev,
+                       &exit_code))
         ret = EXIT_SUCCESS;
       goto out;
     }
@@ -716,6 +772,15 @@ main (gint argc, gchar *argv[])
  out:
   g_free (completion_cur);
   g_free (completion_prev);
+
+  if (ret == 0 && exit_code != 0) {
+    if (WIFEXITED (exit_code))
+      return WEXITSTATUS (exit_code);
+    else if (WIFSIGNALED (exit_code))
+      raise (WTERMSIG (exit_code));
+    else
+      return 255;
+  }
 
   return ret;
 }

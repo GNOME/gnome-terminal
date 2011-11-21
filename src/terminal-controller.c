@@ -35,6 +35,17 @@ enum {
 /* helper functions */
 
 static void
+child_exited_cb (VteTerminal *terminal,
+                 TerminalReceiver *receiver)
+{
+  int exit_code;
+
+  exit_code = vte_terminal_get_child_exit_status (terminal);;
+
+  terminal_receiver_emit_child_exited (receiver, exit_code);
+}
+
+static void
 terminal_controller_set_screen (TerminalController *controller,
                                 TerminalScreen *screen)
 {
@@ -48,13 +59,16 @@ terminal_controller_set_screen (TerminalController *controller,
     return;
 
   if (priv->screen) {
-    g_signal_handlers_disconnect_by_func (priv->screen,
-                                          G_CALLBACK (_terminal_controller_unset_screen),
-                                          controller);
+    g_signal_handlers_disconnect_matched (priv->screen,
+                                          G_SIGNAL_MATCH_DATA,
+                                          0, 0, NULL, NULL, controller);
   }
 
   priv->screen = screen;
   if (screen) {
+    g_signal_connect (screen, "child-exited",
+                      G_CALLBACK (child_exited_cb), 
+                      controller);
     g_signal_connect_swapped (screen, "destroy",
                               G_CALLBACK (_terminal_controller_unset_screen), 
                               controller);
