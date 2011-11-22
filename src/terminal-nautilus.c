@@ -511,7 +511,7 @@ struct _TerminalNautilusMenuItem {
   TerminalNautilus *nautilus;
   GdkScreen *screen;
   NautilusFileInfo *file_info;
-  char *command_to_run;
+  gboolean run_in_mc;
   gboolean remote_terminal;
 };
 
@@ -536,7 +536,7 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
 
   terminal_command = get_terminal_command_for_file_info (menu_item->nautilus, 
                                                          menu_item->file_info, 
-                                                         menu_item->command_to_run, 
+                                                         menu_item->run_in_mc ? "mc" : NULL,
                                                          menu_item->remote_terminal);
   if (terminal_command != NULL) {
           _not_eel_gnome_open_terminal_on_screen (terminal_command, menu_item->screen);
@@ -568,8 +568,6 @@ terminal_nautilus_menu_item_dispose (GObject *object)
     g_object_unref (menu_item->file_info);
     menu_item->file_info = NULL;
   }
-  g_free (menu_item->command_to_run);
-  menu_item->command_to_run = NULL;
 
   G_OBJECT_CLASS (terminal_nautilus_menu_item_parent_class)->dispose (object);
 }
@@ -598,7 +596,7 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
                                  const char       *icon,
                                  GdkScreen        *screen,
                                  NautilusFileInfo *file_info,
-                                 const char       *command_to_run,
+                                 gboolean          run_in_mc,
                                  gboolean          remote_terminal)
 {
   TerminalNautilusMenuItem *item;
@@ -617,7 +615,7 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
   item->nautilus = g_object_ref (nautilus);
   item->file_info = g_object_ref (file_info);
   item->screen = g_object_ref (screen);
-  item->command_to_run = g_strdup (command_to_run);
+  item->run_in_mc = run_in_mc;
   item->remote_terminal = remote_terminal;
   
   return (NautilusMenuItem *) item;
@@ -901,7 +899,7 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
                              NautilusFileInfo *file_info,
 			     TerminalFileInfo  terminal_file_info,
 			     GdkScreen        *screen,
-			     const char       *command_to_run,
+			     gboolean          run_in_mc,
 			     gboolean          remote_terminal,
 			     gboolean          is_file_item)
 {
@@ -910,7 +908,7 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
 	const char *name;
 	const char *tooltip;
 
-	if (command_to_run == NULL) {
+	if (!run_in_mc) {
 		switch (terminal_file_info) {
 			case FILE_INFO_SFTP:
 				if (remote_terminal) {
@@ -950,7 +948,7 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
 			default:
 				g_assert_not_reached ();
 		}
-	} else if (!strcmp (command_to_run, "mc")) {
+	} else {
 		switch (terminal_file_info) {
 			case FILE_INFO_LOCAL:
 			case FILE_INFO_SFTP:
@@ -976,15 +974,12 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
 			default:
 				g_assert_not_reached ();
 		}
-	} else {
-		g_assert_not_reached ();
 	}
 
-	if (command_to_run != NULL) {
-		action_name = g_strdup_printf (remote_terminal ?
-					       "TerminalNautilus::open_remote_terminal_%s" :
-					       "TerminalNautilus::open_terminal_%s",
-					       command_to_run);
+	if (run_in_mc) {
+		action_name = g_strdup (remote_terminal ?
+					"TerminalNautilus::open_remote_terminal_mc" :
+					"TerminalNautilus::open_terminal_mc");
 	} else {
 		action_name = g_strdup (remote_terminal ? 
 					"TerminalNautilus::open_remote_terminal" :
@@ -998,7 +993,7 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
                                                 "gnome-terminal",
                                                 screen,
                                                 file_info,
-                                                command_to_run,
+                                                run_in_mc,
                                                 remote_terminal);
 	g_free (action_name);
 
@@ -1058,7 +1053,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 		/* local locations or SSH */
 		item = open_terminal_menu_item_new (nautilus,
                                                     file_info, terminal_file_info, gtk_widget_get_screen (window),
-						    NULL, terminal_file_info == FILE_INFO_SFTP, FALSE);
+						    FALSE, terminal_file_info == FILE_INFO_SFTP, FALSE);
 		items = g_list_append (items, item);
 	}
 
@@ -1068,7 +1063,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 		/* remote locations that offer local back-mapping */
 		item = open_terminal_menu_item_new (nautilus,
                                                     file_info, terminal_file_info, gtk_widget_get_screen (window),
-						    NULL, FALSE, FALSE);
+						    FALSE, FALSE, FALSE);
 		items = g_list_append (items, item);
 	}
 
@@ -1078,7 +1073,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	      (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus))) ||
 	     uri_has_local_path (uri))) {
 		item = open_terminal_menu_item_new (nautilus,
-                                                    file_info, terminal_file_info, gtk_widget_get_screen (window), "mc", FALSE, FALSE);
+                                                    file_info, terminal_file_info, gtk_widget_get_screen (window), TRUE, FALSE, FALSE);
 		items = g_list_append (items, item);
 	}
 
@@ -1121,14 +1116,14 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 			if (terminal_file_info == FILE_INFO_SFTP || uri_has_local_path (uri)) {
 				item = open_terminal_menu_item_new (nautilus,
                                                                     files->data, terminal_file_info, gtk_widget_get_screen (window),
-								    NULL, terminal_file_info == FILE_INFO_SFTP, TRUE);
+								    FALSE, terminal_file_info == FILE_INFO_SFTP, TRUE);
 				items = g_list_append (items, item);
 			}
 
 			if (terminal_file_info == FILE_INFO_SFTP &&
 			    uri_has_local_path (uri)) {
 				item = open_terminal_menu_item_new (nautilus,
-                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), NULL, FALSE, TRUE);
+                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), FALSE, FALSE, TRUE);
 				items = g_list_append (items, item);
 			}
 
@@ -1136,7 +1131,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 			    g_find_program_in_path ("mc") &&
 			     uri_has_local_path (uri)) {
 				item = open_terminal_menu_item_new (nautilus,
-                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), "mc", TRUE, FALSE);
+                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), TRUE, TRUE, FALSE);
 				items = g_list_append (items, item);
 			}
 			break;
