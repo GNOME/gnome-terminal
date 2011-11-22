@@ -30,10 +30,64 @@
 
 #include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h> /* for atoi */
-#include <string.h> /* for strcmp */
-#include <unistd.h> /* for chdir */
-#include <sys/stat.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* Nautilus extension class */
+
+#define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
+#define TERMINAL_NAUTILUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilus))
+#define TERMINAL_NAUTILUS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+#define TERMINAL_IS_NAUTILUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_IS_NAUTILUS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_NAUTILUS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+
+typedef struct _TerminalNautilus      TerminalNautilus;
+typedef struct _TerminalNautilusClass TerminalNautilusClass;
+
+struct _TerminalNautilus {
+        GObject parent_instance;
+
+        GSettings *nautilus_prefs;
+        GSettings *lockdown_prefs;
+        gboolean have_mc;
+};
+
+struct _TerminalNautilusClass {
+        GObjectClass parent_class;
+};
+
+static GType terminal_nautilus_get_type (void);
+
+/* Nautilus menu item class */
+
+#define TERMINAL_TYPE_NAUTILUS_MENU_ITEM        (terminal_nautilus_menu_item_get_type ())
+#define TERMINAL_NAUTILUS_MENU_ITEM(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItem))
+#define TERMINAL_NAUTILUS_MENU_ITEM_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
+#define TERMINAL_IS_NAUTILUS_MENU_ITEM(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
+#define TERMINAL_IS_NAUTILUS_MENU_ITEM_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
+#define TERMINAL_NAUTILUS_MENU_ITEM_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
+
+typedef struct _TerminalNautilusMenuItem      TerminalNautilusMenuItem;
+typedef struct _TerminalNautilusMenuItemClass TerminalNautilusMenuItemClass;
+
+struct _TerminalNautilusMenuItem {
+  GObject parent_instance;
+
+  TerminalNautilus *nautilus;
+  GdkScreen *screen;
+  NautilusFileInfo *file_info;
+  gboolean run_in_mc;
+  gboolean remote_terminal;
+};
+
+struct _TerminalNautilusMenuItemClass {
+  GObjectClass parent_class;
+};
+
+static GType terminal_nautilus_menu_item_get_type (void);
+
+/* --- */
 
 #define TERMINAL_ICON_NAME "utilities-terminal"
 
@@ -77,31 +131,6 @@ get_terminal_file_info_from_uri (const char *uri)
   return ret;
 }
 
-/* Nautilus extension class */
-
-#define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
-#define TERMINAL_NAUTILUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilus))
-#define TERMINAL_NAUTILUS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
-#define TERMINAL_IS_NAUTILUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS))
-#define TERMINAL_IS_NAUTILUS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS))
-#define TERMINAL_NAUTILUS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
-
-typedef struct _TerminalNautilus      TerminalNautilus;
-typedef struct _TerminalNautilusClass TerminalNautilusClass;
-
-struct _TerminalNautilus {
-        GObject parent_instance;
-
-        GSettings *nautilus_prefs;
-        GSettings *lockdown_prefs;
-};
-
-struct _TerminalNautilusClass {
-        GObjectClass parent_class;
-};
-
-static GType terminal_nautilus_get_type (void);
-
 /* Helpers */
 
 #define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
@@ -133,7 +162,7 @@ static inline gboolean
 desktop_is_home_dir (TerminalNautilus *nautilus)
 {
   return g_settings_get_boolean (nautilus->nautilus_prefs,
-                                  "desktop-is-home-dir");
+                                 "desktop-is-home-dir");
 }
 
 /* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
@@ -271,33 +300,7 @@ uri_has_local_path (const char *uri)
   return ret;
 }
 
-/* Nautilus menu item class & implementation */
-
-#define TERMINAL_TYPE_NAUTILUS_MENU_ITEM        (terminal_nautilus_menu_item_get_type ())
-#define TERMINAL_NAUTILUS_MENU_ITEM(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItem))
-#define TERMINAL_NAUTILUS_MENU_ITEM_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
-#define TERMINAL_IS_NAUTILUS_MENU_ITEM(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
-#define TERMINAL_IS_NAUTILUS_MENU_ITEM_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
-#define TERMINAL_NAUTILUS_MENU_ITEM_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
-
-typedef struct _TerminalNautilusMenuItem      TerminalNautilusMenuItem;
-typedef struct _TerminalNautilusMenuItemClass TerminalNautilusMenuItemClass;
-
-struct _TerminalNautilusMenuItem {
-  GObject parent_instance;
-
-  TerminalNautilus *nautilus;
-  GdkScreen *screen;
-  NautilusFileInfo *file_info;
-  gboolean run_in_mc;
-  gboolean remote_terminal;
-};
-
-struct _TerminalNautilusMenuItemClass {
-  GObjectClass parent_class;
-};
-
-static GType terminal_nautilus_menu_item_get_type (void);
+/* Nautilus menu item class */
 
 static void
 terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
@@ -403,10 +406,6 @@ terminal_nautilus_menu_item_dispose (GObject *object)
 {
   TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (object);
 
-  if (menu_item->nautilus != NULL) {
-    g_object_unref (menu_item->nautilus);
-    menu_item->nautilus = NULL;
-  }
   if (menu_item->screen != NULL) {
     g_object_unref (menu_item->screen);
     menu_item->screen = NULL;
@@ -414,6 +413,10 @@ terminal_nautilus_menu_item_dispose (GObject *object)
   if (menu_item->file_info != NULL) {
     g_object_unref (menu_item->file_info);
     menu_item->file_info = NULL;
+  }
+  if (menu_item->nautilus != NULL) {
+    g_object_unref (menu_item->nautilus);
+    menu_item->nautilus = NULL;
   }
 
   G_OBJECT_CLASS (terminal_nautilus_menu_item_parent_class)->dispose (object);
@@ -543,130 +546,168 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
 
 static GList *
 terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
-					     GtkWidget		  *window,
-					     NautilusFileInfo	  *file_info)
+                                        GtkWidget            *window,
+                                        NautilusFileInfo     *file_info)
 {
-        TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
-	gchar *uri;
-	GList *items;
-	NautilusMenuItem *item;
-	TerminalFileInfo  terminal_file_info;
+  TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
+  gchar *uri;
+  GList *items;
+  NautilusMenuItem *item;
+  TerminalFileInfo terminal_file_info;
 
-        if (terminal_locked_down (nautilus)) {
-            return NULL;
-        }
+  if (terminal_locked_down (nautilus))
+    return NULL;
 
-	items = NULL;
+  uri = nautilus_file_info_get_activation_uri (file_info);
+  if (uri == NULL)
+    return NULL;
 
-	uri = nautilus_file_info_get_activation_uri (file_info);
-	terminal_file_info = get_terminal_file_info_from_uri (uri);
+  items = NULL;
 
-	if (terminal_file_info == FILE_INFO_SFTP ||
-	    terminal_file_info == FILE_INFO_DESKTOP ||
-	    uri_has_local_path (uri)) {
-		/* local locations or SSH */
-		item = terminal_nautilus_menu_item_new(nautilus,
-                                                    file_info, terminal_file_info, gtk_widget_get_screen (window),
-						    FALSE, terminal_file_info == FILE_INFO_SFTP, FALSE);
-		items = g_list_append (items, item);
-	}
+  terminal_file_info = get_terminal_file_info_from_uri (uri);
 
-	if ((terminal_file_info == FILE_INFO_SFTP ||
-	     terminal_file_info == FILE_INFO_OTHER) &&
-	    uri_has_local_path (uri)) {
-		/* remote locations that offer local back-mapping */
-		item = terminal_nautilus_menu_item_new(nautilus,
-                                                    file_info, terminal_file_info, gtk_widget_get_screen (window),
-						    FALSE, FALSE, FALSE);
-		items = g_list_append (items, item);
-	}
+  if (terminal_file_info == FILE_INFO_SFTP ||
+      terminal_file_info == FILE_INFO_DESKTOP ||
+      uri_has_local_path (uri)) {
+    /* local locations or SSH */
+    item = terminal_nautilus_menu_item_new (nautilus,
+                                            file_info, 
+                                            terminal_file_info, 
+                                            gtk_widget_get_screen (window),
+                                            FALSE, 
+                                            terminal_file_info == FILE_INFO_SFTP, 
+                                            FALSE);
+    items = g_list_append (items, item);
+  }
 
-	if (display_mc_item (nautilus) &&
-	    g_find_program_in_path ("mc") &&
-	    ((terminal_file_info == FILE_INFO_DESKTOP &&
-	      (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus))) ||
-	     uri_has_local_path (uri))) {
-		item = terminal_nautilus_menu_item_new(nautilus,
-                                                    file_info, terminal_file_info, gtk_widget_get_screen (window), TRUE, FALSE, FALSE);
-		items = g_list_append (items, item);
-	}
+  if ((terminal_file_info == FILE_INFO_SFTP ||
+        terminal_file_info == FILE_INFO_OTHER) &&
+      uri_has_local_path (uri)) {
+    /* remote locations that offer local back-mapping */
+    item = terminal_nautilus_menu_item_new (nautilus,
+                                            file_info, 
+                                            terminal_file_info, 
+                                            gtk_widget_get_screen (window),
+                                            FALSE, 
+                                            FALSE, 
+                                            FALSE);
+    items = g_list_append (items, item);
+  }
 
-	g_free (uri);
+  if (display_mc_item (nautilus) &&
+      nautilus->have_mc &&
+      ((terminal_file_info == FILE_INFO_DESKTOP &&
+       (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus))) ||
+       uri_has_local_path (uri))) {
+    item = terminal_nautilus_menu_item_new (nautilus,
+                                            file_info, 
+                                            terminal_file_info, 
+                                            gtk_widget_get_screen (window), 
+                                            TRUE, 
+                                            FALSE, 
+                                            FALSE);
+    items = g_list_append (items, item);
+  }
 
-	return items;
+  g_free (uri);
+
+  return items;
 }
 
 static GList *
 terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
-				       GtkWidget            *window,
-				       GList                *files)
+                                  GtkWidget            *window,
+                                  GList                *files)
 {
-        TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
-	gchar *uri;
-	GList *items;
-	NautilusMenuItem *item;
-	TerminalFileInfo  terminal_file_info;
+  TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
+  gchar *uri;
+  GList *items;
+  NautilusMenuItem *item;
+  NautilusFileInfo *file_info;
+  GFileType file_type;
+  TerminalFileInfo terminal_file_info;
 
-        if (terminal_locked_down (nautilus)) {
-            return NULL;
-        }
+  if (terminal_locked_down (nautilus))
+    return NULL;
 
-	if (g_list_length (files) != 1 ||
-	    (!nautilus_file_info_is_directory (files->data) &&
-	     nautilus_file_info_get_file_type (files->data) != G_FILE_TYPE_SHORTCUT &&
-	     nautilus_file_info_get_file_type (files->data) != G_FILE_TYPE_MOUNTABLE)) {
-		return NULL;
-	}
+  /* Only add items when passed exactly one file */
+  if (files == NULL || files->next != NULL)
+    return NULL;
 
-	items = NULL;
+  file_info = (NautilusFileInfo *) files->data;
+  file_type = nautilus_file_info_get_file_type (file_info);
+  if (!nautilus_file_info_is_directory (file_info) &&
+      file_type != G_FILE_TYPE_SHORTCUT &&
+      file_type != G_FILE_TYPE_MOUNTABLE)
+    return NULL;
 
-	uri = nautilus_file_info_get_activation_uri (files->data);
-	terminal_file_info = get_terminal_file_info_from_uri (uri);
+  uri = nautilus_file_info_get_activation_uri (file_info);
+  if (uri == NULL)
+    return NULL;
 
-	switch (terminal_file_info) {
-		case FILE_INFO_LOCAL:
-		case FILE_INFO_SFTP:
-		case FILE_INFO_OTHER:
-			if (terminal_file_info == FILE_INFO_SFTP || uri_has_local_path (uri)) {
-				item = terminal_nautilus_menu_item_new(nautilus,
-                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window),
-								    FALSE, terminal_file_info == FILE_INFO_SFTP, TRUE);
-				items = g_list_append (items, item);
-			}
+  items = NULL;
 
-			if (terminal_file_info == FILE_INFO_SFTP &&
-			    uri_has_local_path (uri)) {
-				item = terminal_nautilus_menu_item_new(nautilus,
-                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), FALSE, FALSE, TRUE);
-				items = g_list_append (items, item);
-			}
+  terminal_file_info = get_terminal_file_info_from_uri (uri);
 
-			if (display_mc_item (nautilus) &&
-			    g_find_program_in_path ("mc") &&
-			     uri_has_local_path (uri)) {
-				item = terminal_nautilus_menu_item_new(nautilus,
-                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), TRUE, TRUE, FALSE);
-				items = g_list_append (items, item);
-			}
-			break;
+  switch (terminal_file_info) {
+    case FILE_INFO_LOCAL:
+    case FILE_INFO_SFTP:
+    case FILE_INFO_OTHER:
+      if (terminal_file_info == FILE_INFO_SFTP || 
+          uri_has_local_path (uri)) {
+        item = terminal_nautilus_menu_item_new (nautilus,
+                                                file_info,
+                                                terminal_file_info, 
+                                                gtk_widget_get_screen (window),
+                                                FALSE, 
+                                                terminal_file_info == FILE_INFO_SFTP, 
+                                                TRUE);
+        items = g_list_append (items, item);
+      }
 
-		case FILE_INFO_DESKTOP:
-			break;
+      if (terminal_file_info == FILE_INFO_SFTP &&
+          uri_has_local_path (uri)) {
+        item = terminal_nautilus_menu_item_new (nautilus,
+                                                file_info, 
+                                                terminal_file_info, 
+                                                gtk_widget_get_screen (window), 
+                                                FALSE, 
+                                                FALSE, 
+                                                TRUE);
+        items = g_list_append (items, item);
+      }
 
-		default:
-			g_assert_not_reached ();
-	}
+      if (display_mc_item (nautilus) &&
+          nautilus->have_mc &&
+          uri_has_local_path (uri)) {
+        item = terminal_nautilus_menu_item_new (nautilus,
+                                                file_info, 
+                                                terminal_file_info, 
+                                                gtk_widget_get_screen (window), 
+                                                TRUE, 
+                                                TRUE, 
+                                                FALSE);
+        items = g_list_append (items, item);
+      }
+      break;
 
-	g_free (uri);
+    case FILE_INFO_DESKTOP:
+      break;
 
-	return items;
+    default:
+      g_assert_not_reached ();
+  }
+
+  g_free (uri);
+
+  return items;
 }
 
 static void
 terminal_nautilus_menu_provider_iface_init (NautilusMenuProviderIface *iface)
 {
-	iface->get_background_items = terminal_nautilus_get_background_items;
-	iface->get_file_items = terminal_nautilus_get_file_items;
+  iface->get_background_items = terminal_nautilus_get_background_items;
+  iface->get_file_items = terminal_nautilus_get_file_items;
 }
 
 G_DEFINE_DYNAMIC_TYPE_EXTENDED (TerminalNautilus, terminal_nautilus, G_TYPE_OBJECT, 0,
@@ -677,12 +718,17 @@ static void
 terminal_nautilus_init (TerminalNautilus *nautilus)
 {
   GSettings *settings;
+  char *path;
 
   settings = g_settings_new (NAUTILUS_SETTINGS_SCHEMA);
   nautilus->nautilus_prefs = g_settings_get_child (settings, "preferences");
-  g_object_unref (settings);;
+  g_object_unref (settings);
 
   nautilus->lockdown_prefs = g_settings_new (GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA);
+
+  path = g_find_program_in_path ("mc");
+  nautilus->have_mc = (path != NULL);
+  g_free (path);
 }
 
 static void
