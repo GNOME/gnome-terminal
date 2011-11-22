@@ -254,21 +254,14 @@ endif
 # Nautilus extension
 
 libterminal_nautilus_la_SOURCES = \
-	terminal-defines.h \
-	terminal-intl.h \
 	terminal-nautilus.c \
-	$(NULL)
-
-nodist_libterminal_nautilus_la_SOURCES = \
-	terminal-gdbus-generated.c \
-	terminal-gdbus-generated.h \
 	$(NULL)
 
 libterminal_nautilus_la_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DTERM_BINDIR="\"$(bindir)\"" \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 

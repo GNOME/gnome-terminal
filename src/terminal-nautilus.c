@@ -77,441 +77,6 @@ get_terminal_file_info_from_uri (const char *uri)
   return ret;
 }
 
-
-
-/* BEGIN gnome-desktop */
-#if 1
-/* -*- Mode: C; c-set-style: linux indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
-/* gnome-desktop-utils.c - Utilities for the GNOME Desktop
-
-   Copyright (C) 1998 Tom Tromey
-   All rights reserved.
-
-   This file is part of the Gnome Library.
-
-   The Gnome Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-   
-   The Gnome Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-   
-   You should have received a copy of the GNU Library General Public
-   License along with the Gnome Library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.  */
-/*
-  @NOTATION@
- */
-
-#include <glib.h>
-#include <glib/gi18n-lib.h>
-
-/**
- * gnome_desktop_prepend_terminal_to_vector:
- * @argc: a pointer to the vector size
- * @argv: a pointer to the vector
- *
- * Description:  Prepends a terminal (either the one configured as default in
- * the user's GNOME setup, or one of the common xterm emulators) to the passed
- * in vector, modifying it in the process.  The vector should be allocated with
- * #g_malloc, as this will #g_free the original vector.  Also all elements must
- * have been allocated separately.  That is the standard glib/GNOME way of
- * doing vectors however.  If the integer that @argc points to is negative, the
- * size will first be computed.  Also note that passing in pointers to a vector
- * that is empty, will just create a new vector for you.
- **/
-static void
-gnome_desktop_prepend_terminal_to_vector (int *argc, char ***argv)
-{
-#ifndef G_OS_WIN32
-        char **real_argv;
-        int real_argc;
-        int i, j;
-        char **term_argv = NULL;
-        int term_argc = 0;
-        GSettings *settings;
-
-        gchar *terminal = NULL;
-
-        char **the_argv;
-
-        g_return_if_fail (argc != NULL);
-        g_return_if_fail (argv != NULL);
-
-//         _gnome_desktop_init_i18n ();
-
-        /* sanity */
-        if(*argv == NULL)
-                *argc = 0;
-
-        the_argv = *argv;
-
-        /* compute size if not given */
-        if (*argc < 0) {
-                for (i = 0; the_argv[i] != NULL; i++)
-                        ;
-                *argc = i;
-        }
-
-        settings = g_settings_new ("org.gnome.desktop.default-applications.terminal");
-        terminal = g_settings_get_string (settings, "exec");
-
-        if (terminal) {
-                gchar *command_line;
-                gchar *exec_flag;
-
-                exec_flag = g_settings_get_string (settings, "exec-arg");
-
-                if (exec_flag == NULL)
-                        command_line = g_strdup (terminal);
-                else
-                        command_line = g_strdup_printf ("%s %s", terminal,
-                                                        exec_flag);
-
-                g_shell_parse_argv (command_line,
-                                    &term_argc,
-                                    &term_argv,
-                                    NULL /* error */);
-
-                g_free (command_line);
-                g_free (exec_flag);
-                g_free (terminal);
-        }
-
-        g_object_unref (settings);
-
-        if (term_argv == NULL) {
-                char *check;
-
-                term_argc = 2;
-                term_argv = g_new0 (char *, 3);
-
-                check = g_find_program_in_path ("gnome-terminal");
-                if (check != NULL) {
-                        term_argv[0] = check;
-                        /* Note that gnome-terminal takes -x and
-                         * as -e in gnome-terminal is broken we use that. */
-                        term_argv[1] = g_strdup ("-x");
-                } else {
-                        if (check == NULL)
-                                check = g_find_program_in_path ("nxterm");
-                        if (check == NULL)
-                                check = g_find_program_in_path ("color-xterm");
-                        if (check == NULL)
-                                check = g_find_program_in_path ("rxvt");
-                        if (check == NULL)
-                                check = g_find_program_in_path ("xterm");
-                        if (check == NULL)
-                                check = g_find_program_in_path ("dtterm");
-                        if (check == NULL) {
-                                g_warning (_("Cannot find a terminal, using "
-                                             "xterm, even if it may not work"));
-                                check = g_strdup ("xterm");
-                        }
-                        term_argv[0] = check;
-                        term_argv[1] = g_strdup ("-e");
-                }
-        }
-
-        real_argc = term_argc + *argc;
-        real_argv = g_new (char *, real_argc + 1);
-
-        for (i = 0; i < term_argc; i++)
-                real_argv[i] = term_argv[i];
-
-        for (j = 0; j < *argc; j++, i++)
-                real_argv[i] = (char *)the_argv[j];
-
-        real_argv[i] = NULL;
-
-        g_free (*argv);
-        *argv = real_argv;
-        *argc = real_argc;
-
-        /* we use g_free here as we sucked all the inner strings
-         * out from it into real_argv */
-        g_free (term_argv);
-#else
-        /* FIXME: Implement when needed */
-        g_warning ("gnome_prepend_terminal_to_vector: Not implemented");
-#endif
-}
-#endif /* 1 */
-
-/* END gnome-desktop */
-
-/* BEGIN eel-gnome-extensions */
-
-#if 1
-
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
-
-/* eel-gnome-extensions.h - interface for new functions that operate on
-                                 gnome classes. Perhaps some of these should be
-                                 rolled into gnome someday.
-
-   Copyright (C) 1999, 2000, 2001 Eazel, Inc.
-
-   The Gnome Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   The Gnome Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with the Gnome Library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-
-   Authors: Darin Adler <darin@eazel.com>
-*/
-
-#ifndef _NOT_EEL_GNOME_EXTENSIONS_H
-#define _NOT_EEL_GNOME_EXTENSIONS_H
-
-#include <gtk/gtk.h>
-
-/* Return a command string containing the path to a terminal on this system. */
-char *        _not_eel_gnome_make_terminal_command                         (const char               *command);
-
-/* Open up a new terminal, optionally passing in a command to execute */
-void          _not_eel_gnome_open_terminal                                 (const char               *command);
-void          _not_eel_gnome_open_terminal_on_screen                       (const char               *command,
-                                                                            GdkScreen                *screen);
-                                                                 
-#endif /* _NOT_EEL_GNOME_EXTENSIONS_H */
-
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
-
-/* eel-gnome-extensions.c - implementation of new functions that operate on
-                            gnome classes. Perhaps some of these should be
-                            rolled into gnome someday.
-
-   Copyright (C) 1999, 2000, 2001 Eazel, Inc.
-
-   The Gnome Library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   The Gnome Library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with the Gnome Library; see the file COPYING.LIB.  If not,
-   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
-
-   Authors: Darin Adler <darin@eazel.com>
-*/
-
-#include <config.h>
-
-#include <X11/Xatom.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <gdk/gdkx.h>
-#include <gtk/gtk.h>
-#include <limits.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-/* Return a command string containing the path to a terminal on this system. */
-
-
-
-static char *
-try_terminal_command (const char *program,
-                      const char *args)
-{
-        char *program_in_path, *quoted, *result;
-
-        if (program == NULL) {
-                return NULL;
-        }
-
-        program_in_path = g_find_program_in_path (program);
-        if (program_in_path == NULL) {
-                return NULL;
-        }
-
-        quoted = g_shell_quote (program_in_path);
-        if (args == NULL || args[0] == '\0') {
-                return quoted;
-        }
-        result = g_strconcat (quoted, " ", args, NULL);
-        g_free (quoted);
-        return result;
-}
-
-static char *
-try_terminal_command_argv (int argc,
-                           char **argv)
-{
-        GString *string;
-        int i;
-        char *quoted, *result;
-
-        if (argc == 0) {
-                return NULL;
-        }
-
-        if (argc == 1) {
-                return try_terminal_command (argv[0], NULL);
-        }
-        
-        string = g_string_new (argv[1]);
-        for (i = 2; i < argc; i++) {
-                quoted = g_shell_quote (argv[i]);
-                g_string_append_c (string, ' ');
-                g_string_append (string, quoted);
-                g_free (quoted);
-        }
-        result = try_terminal_command (argv[0], string->str);
-        g_string_free (string, TRUE);
-
-        return result;
-}
-
-static char *
-get_terminal_command_prefix (gboolean for_command)
-{
-        int argc;
-        char **argv;
-        char *command;
-        guint i;
-        static const char *const commands[][3] = {
-                { "gnome-terminal", "-x",                                      "" },
-                { "dtterm",         "-e",                                      "-ls" },
-                { "nxterm",         "-e",                                      "-ls" },
-                { "color-xterm",    "-e",                                      "-ls" },
-                { "rxvt",           "-e",                                      "-ls" },
-                { "xterm",          "-e",                                      "-ls" },
-        };
-
-        /* Try the terminal from preferences. Use without any
-         * arguments if we are just doing a standalone terminal.
-         */
-        argc = 0;
-        argv = g_new0 (char *, 1);
-        gnome_desktop_prepend_terminal_to_vector (&argc, &argv);
-
-        command = NULL;
-        if (argc != 0) {
-                if (for_command) {
-                        command = try_terminal_command_argv (argc, argv);
-                } else {
-                        /* Strip off the arguments in a lame attempt
-                         * to make it be an interactive shell.
-                         */
-                        command = try_terminal_command (argv[0], NULL);
-                }
-        }
-
-        while (argc != 0) {
-                g_free (argv[--argc]);
-        }
-        g_free (argv);
-
-        if (command != NULL) {
-                return command;
-        }
-
-        /* Try well-known terminal applications in same order that gmc did. */
-        for (i = 0; i < G_N_ELEMENTS (commands); i++) {
-                command = try_terminal_command (commands[i][0],
-                                                commands[i][for_command ? 1 : 2]);
-                if (command != NULL) {
-                        break;
-                }
-        }
-        
-        return command;
-}
-
-char *
-_not_eel_gnome_make_terminal_command (const char *command)
-{
-        char *prefix, *quoted, *terminal_command;
-
-        if (command == NULL) {
-                return get_terminal_command_prefix (FALSE);
-        }
-        prefix = get_terminal_command_prefix (TRUE);
-        quoted = g_shell_quote (command);
-        terminal_command = g_strconcat (prefix, " /bin/sh -c ", quoted, NULL);
-        g_free (prefix);
-        g_free (quoted);
-        return terminal_command;
-}
-
-void
-_not_eel_gnome_open_terminal_on_screen (const char *command,
-                                        GdkScreen  *screen)
-{
-        char *command_line;
-        GAppInfo *app;
-        GdkAppLaunchContext *ctx;
-        GError *error = NULL;
-        GdkDisplay *display;
-
-        if (screen == NULL) {
-                screen = gdk_screen_get_default ();
-        }
-        
-        command_line = _not_eel_gnome_make_terminal_command (command);
-        if (command_line == NULL) {
-                g_message ("Could not start a terminal");
-                return;
-        }
-
-        app = g_app_info_create_from_commandline (command_line, NULL, 0, &error);
-
-        if (app != NULL) {
-                display = gdk_screen_get_display (screen);
-                ctx = gdk_display_get_app_launch_context (display);
-                gdk_app_launch_context_set_screen (ctx, screen);
-
-                g_app_info_launch (app, NULL, G_APP_LAUNCH_CONTEXT (ctx), &error);
-
-                g_object_unref (app);
-                g_object_unref (ctx);   
-        }
-
-        if (error != NULL) {
-                g_message ("Could not start application on terminal: %s", error->message);
-
-                g_error_free (error);
-        }
-
-        g_free (command_line);
-}
-
-void
-_not_eel_gnome_open_terminal (const char *command)
-{
-        _not_eel_gnome_open_terminal_on_screen (command, NULL);
-}
-
-#endif /* 1 */
-
-/* END eel-gnome-extensions */
-
 /* Nautilus extension class */
 
 #define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
@@ -629,67 +194,55 @@ parse_sftp_uri (GFile *file,
   g_free (save);
 }
 
-static char *
-get_remote_ssh_command (const char *uri,
-                        const char *command_to_run)
+static void
+append_remote_ssh_command (char ***argvp,
+                           int *argcp,
+                           const char *uri,
+                           gboolean run_in_mc)
 {
   GFile *file;
-
-  char *host_name, *path, *user_name;
-  char *command, *user_host, *unescaped_path;
-  char *quoted_path;
-  char *remote_command;
-  char *quoted_remote_command;
-  char *port_str;
+  char **argv = *argvp;
+  int argc = *argcp;
+  char *host_name, *path, *user_name, *unescaped_path, *quoted_path;
   guint host_port;
 
   g_assert (uri != NULL);
+
+  argv[argc++] = g_strdup ("ssh");
 
   file = g_file_new_for_uri (uri);
   parse_sftp_uri (file, &user_name, &host_name, &host_port, &path);
   g_object_unref (file);
 
+  if (user_name != NULL) {
+    argv[argc++ ]= g_strdup_printf ("%s@%s", user_name, host_name);
+    g_free (host_name);
+    g_free (user_name);
+  } else {
+    argv[argc++] = host_name;
+  }
+
+  if (host_port != 0) {
+    argv[argc++] = g_strdup ("-p");
+    argv[argc++] = g_strdup_printf ("%d", host_port);
+  }
+
   /* FIXME to we have to consider the remote file encoding? */
   unescaped_path = g_uri_unescape_string (path, NULL);
   quoted_path = g_shell_quote (unescaped_path);
 
-  port_str = NULL;
-  if (host_port != 0) {
-    port_str = g_strdup_printf (" -p %d", host_port);
-  } else {
-    port_str = g_strdup ("");
-  }
-
-  if (user_name != NULL) {
-    user_host = g_strdup_printf ("%s@%s", user_name, host_name);
-  } else {
-    user_host = g_strdup (host_name);
-  }
-
-  if (command_to_run != NULL) {
-    remote_command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
+  if (run_in_mc) {
+    argv[argc++] = g_strdup_printf ("cd %s && exec %s", quoted_path, "mc");
   } else {
     /* login shell */
-    remote_command = g_strdup_printf ("cd %s && exec $SHELL -", quoted_path);
+    argv[argc++] = g_strdup_printf ("cd %s && exec $SHELL -", quoted_path);
   }
-
-  quoted_remote_command = g_shell_quote (remote_command);
-
-  command = g_strdup_printf ("ssh %s%s -t %s", user_host, port_str, quoted_remote_command);
-
-  g_free (user_name);
-  g_free (user_host);
-  g_free (host_name);
-  g_free (port_str);
 
   g_free (path);
   g_free (unescaped_path);
   g_free (quoted_path);
 
-  g_free (remote_command);
-  g_free (quoted_remote_command);
-
-  return command;
+  *argcp = argc;
 }
 
 static gboolean
@@ -751,19 +304,19 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
 {
   TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (item);
   TerminalNautilus *nautilus = menu_item->nautilus;
-  char *uri, *path, *quoted_path;
-  char *command;
-  const char *command_to_run;
+  char *uri, *path;
+  TerminalFileInfo info;
+  char *argv[16];
+  int argc, i;
 
   uri = nautilus_file_info_get_activation_uri (menu_item->file_info);
   if (uri == NULL)
     return;
 
   path = NULL;
-  command = NULL;
-  command_to_run = menu_item->run_in_mc ? "mc" : NULL;
+  info = get_terminal_file_info_from_uri (uri);
 
-  switch (get_terminal_file_info_from_uri (uri)) {
+  switch (info) {
     case FILE_INFO_LOCAL:
       path = g_filename_from_uri (uri, NULL, NULL);
       break;
@@ -777,10 +330,9 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
       break;
 
     case FILE_INFO_SFTP:
-      if (menu_item->remote_terminal) {
-        command = get_remote_ssh_command (uri, command_to_run);
+      if (menu_item->remote_terminal)
         break;
-      }
+
       /* fall through */
 
     case FILE_INFO_OTHER: {
@@ -797,27 +349,46 @@ terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
       g_assert_not_reached ();
   }
 
-  if (command == NULL && path != NULL) {
-    quoted_path = g_shell_quote (path);
-
-    if (command_to_run != NULL) {
-      command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
-    } else {
-      /* interactive shell */
-      command = g_strdup_printf ("cd %s && exec $SHELL", quoted_path);
-    }
-
-    g_free (quoted_path);
+  if (path == NULL && (info != FILE_INFO_SFTP || !menu_item->remote_terminal)) {
+    g_free (uri);
+    return;
   }
 
-  g_free (path);
+  argc = 0;
+  argv[argc++] = g_strdup (TERM_BINDIR "/gnome-terminal-client");
+  argv[argc++] = g_strdup ("open");
+
+  argv[argc++] = g_strdup ("--display");
+  argv[argc++] = gdk_screen_make_display_name (menu_item->screen);
+
+  if (path) {
+    argv[argc++] = g_strdup ("--cwd");
+    argv[argc++] = path;
+  }
+
+  if (info == FILE_INFO_SFTP && menu_item->remote_terminal) {
+    argv[argc++] = g_strdup ("--");
+    append_remote_ssh_command ((char ***)&argv, &argc, uri, menu_item->run_in_mc);
+  } else if (menu_item->run_in_mc) {
+    argv[argc++] = g_strdup ("--");
+    argv[argc++] = g_strdup ("mc");
+  }
+
+  argv[argc] = NULL;
+  g_assert (argc < (int) G_N_ELEMENTS (argv));
+
+  g_spawn_async (path,
+                 argv,
+                 NULL /* envv */,
+                 0 /* flags */,
+                 NULL, NULL, /* child setup */
+                 NULL /* pid */,
+                 NULL /* error */);
+
+  for (i = 0; i < argc; ++i)
+    g_free (argv[i]);
+
   g_free (uri);
-
-  if (command == NULL)
-    return;
-
-  _not_eel_gnome_open_terminal_on_screen (command, menu_item->screen);
-  g_free (command);
 }
 
 G_DEFINE_DYNAMIC_TYPE (TerminalNautilusMenuItem, terminal_nautilus_menu_item, NAUTILUS_TYPE_MENU_ITEM)
