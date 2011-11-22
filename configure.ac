@@ -186,9 +186,7 @@ if test "$with_nautilus_extension" = "yes"; then
   PKG_CHECK_MODULES([NAUTILUS],[
     libnautilus-extension >= $NAUTILUS_REQUIRED
     gio-2.0
-    gio-unix-2.0
-    gconf-2.0
-    gtk+-$GTK_API_VERSION])
+    gio-unix-2.0])
 
   AC_ARG_WITH([nautilus-dir],
     [AS_HELP_STRING([--with-nautilus-dir=PATH],[Nautilus extensions directory])],

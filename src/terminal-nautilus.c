@@ -25,8 +25,6 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <gconf/gconf.h>
-#include <gconf/gconf-client.h>
 
 #include <libnautilus-extension/nautilus-menu-provider.h>
 
@@ -49,6 +47,9 @@ typedef struct _TerminalNautilusClass TerminalNautilusClass;
 
 struct _TerminalNautilus {
         GObject parent_instance;
+        
+        GSettings *nautilus_prefs;
+        GSettings *lockdown_prefs;
 };
 
 struct _TerminalNautilusClass {
@@ -56,6 +57,9 @@ struct _TerminalNautilusClass {
 };
 
 static GType terminal_nautilus_get_type (void);
+
+#define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
+#define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
 
 /* BEGIN gnome-desktop */
 
@@ -527,30 +531,33 @@ get_terminal_file_info (const char *uri)
 	return ret;
 }
 
-static GConfClient *gconf_client = NULL;
-
 static inline gboolean
-desktop_opens_home_dir (void)
+desktop_opens_home_dir (TerminalNautilus *nautilus)
 {
-	return gconf_client_get_bool (gconf_client,
+#if 0
+	return  _client_get_bool (gconf_client,
 				      "/apps/nautilus-open-terminal/desktop_opens_home_dir",
 				      NULL);
+#endif
+        return TRUE;
 }
 
 static inline gboolean
-display_mc_item (void)
+display_mc_item (TerminalNautilus *nautilus)
 {
+#if 0
 	return gconf_client_get_bool (gconf_client,
 				      "/apps/nautilus-open-terminal/display_mc_item",
 				      NULL);
+#endif
+        return FALSE;
 }
 
 static inline gboolean
-desktop_is_home_dir (void)
+desktop_is_home_dir (TerminalNautilus *nautilus)
 {
-	return gconf_client_get_bool (gconf_client,
-				      "/apps/nautilus/preferences/desktop_is_home_dir",
-				      NULL);
+        return g_settings_get_boolean (nautilus->nautilus_prefs,
+                                       "desktop-is-home-dir");
 }
 
 /* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
@@ -688,7 +695,8 @@ get_gvfs_path_for_uri (const char *uri)
 }
 
 static char *
-get_terminal_command_for_file_info (NautilusFileInfo *file_info,
+get_terminal_command_for_file_info (TerminalNautilus *nautilus,
+                                    NautilusFileInfo *file_info,
 				    const char *command_to_run,
 				    gboolean remote_terminal)
 {
@@ -708,7 +716,7 @@ get_terminal_command_for_file_info (NautilusFileInfo *file_info,
 			break;
 
 		case FILE_INFO_DESKTOP:
-			if (desktop_is_home_dir () || desktop_opens_home_dir ()) {
+			if (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus)) {
 				path = g_strdup (g_get_home_dir ());
 			} else {
 				path = g_strdup (g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP));
@@ -754,7 +762,8 @@ get_terminal_command_for_file_info (NautilusFileInfo *file_info,
 
 
 static void
-open_terminal (NautilusMenuItem *item,
+open_terminal (TerminalNautilus *nautilus,
+               NautilusMenuItem *item,
 	       NautilusFileInfo *file_info)
 {
 	char *terminal_command, *command_to_run;
@@ -765,7 +774,7 @@ open_terminal (NautilusMenuItem *item,
 	command_to_run = g_object_get_data (G_OBJECT (item), "TerminalNautilus::command-to-run");
 	remote_terminal = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (item), "TerminalNautilus::remote-terminal"));
 
-	terminal_command = get_terminal_command_for_file_info (file_info, command_to_run, remote_terminal);
+	terminal_command = get_terminal_command_for_file_info (nautilus, file_info, command_to_run, remote_terminal);
 	if (terminal_command != NULL) {
 		_not_eel_gnome_open_terminal_on_screen (terminal_command, screen);
 	}
@@ -774,13 +783,17 @@ open_terminal (NautilusMenuItem *item,
 
 static void
 open_terminal_callback (NautilusMenuItem *item,
-			NautilusFileInfo *file_info)
+                        TerminalNautilus *nautilus)
 {
-	open_terminal (item, file_info);
+  NautilusFileInfo *file_info;
+
+  file_info = g_object_get_data (G_OBJECT (item), "TerminalNautilus::file-info");
+  open_terminal (nautilus, item, file_info);
 }
 
 static NautilusMenuItem *
-open_terminal_menu_item_new (NautilusFileInfo *file_info,
+open_terminal_menu_item_new (TerminalNautilus *nautilus,
+                             NautilusFileInfo *file_info,
 			     TerminalFileInfo  terminal_file_info,
 			     GdkScreen        *screen,
 			     const char       *command_to_run,
@@ -820,7 +833,7 @@ open_terminal_menu_item_new (NautilusFileInfo *file_info,
 				break;
 
 			case FILE_INFO_DESKTOP:
-				if (desktop_opens_home_dir ()) {
+				if (desktop_opens_home_dir (nautilus)) {
 					name = _("Open T_erminal");
 					tooltip = _("Open a terminal");
 				} else {
@@ -846,7 +859,7 @@ open_terminal_menu_item_new (NautilusFileInfo *file_info,
 				break;
 
 			case FILE_INFO_DESKTOP:
-				if (desktop_opens_home_dir ()) {
+				if (desktop_opens_home_dir (nautilus)) {
 					name = _("Open _Midnight Commander");
 					tooltip = _("Open the terminal file manager Midnight Commander");
 				} else {
@@ -889,21 +902,19 @@ open_terminal_menu_item_new (NautilusFileInfo *file_info,
 				g_object_ref (file_info),
 				(GDestroyNotify) g_object_unref);
 
-
 	g_signal_connect (ret, "activate",
 			  G_CALLBACK (open_terminal_callback),
-			  file_info);
+			  nautilus);
 
 
 	return ret;
 }
 
 static gboolean
-terminal_locked_down (void)
+terminal_locked_down (TerminalNautilus *nautilus)
 {
-	return gconf_client_get_bool (gconf_client,
-                                      "/desktop/gnome/lockdown/disable_command_line",
-                                      NULL);
+        return g_settings_get_boolean (nautilus->lockdown_prefs,
+                                       "disable-command-line");
 }
 
 /* used to determine for remote URIs whether GVFS is capable of mapping them to ~/.gvfs */
@@ -930,12 +941,13 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 					     GtkWidget		  *window,
 					     NautilusFileInfo	  *file_info)
 {
+        TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
 	gchar *uri;
 	GList *items;
 	NautilusMenuItem *item;
 	TerminalFileInfo  terminal_file_info;
 
-        if (terminal_locked_down ()) {
+        if (terminal_locked_down (nautilus)) {
             return NULL;
         }
 
@@ -948,7 +960,8 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	    terminal_file_info == FILE_INFO_DESKTOP ||
 	    uri_has_local_path (uri)) {
 		/* local locations or SSH */
-		item = open_terminal_menu_item_new (file_info, terminal_file_info, gtk_widget_get_screen (window),
+		item = open_terminal_menu_item_new (nautilus,
+                                                    file_info, terminal_file_info, gtk_widget_get_screen (window),
 						    NULL, terminal_file_info == FILE_INFO_SFTP, FALSE);
 		items = g_list_append (items, item);
 	}
@@ -957,17 +970,19 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	     terminal_file_info == FILE_INFO_OTHER) &&
 	    uri_has_local_path (uri)) {
 		/* remote locations that offer local back-mapping */
-		item = open_terminal_menu_item_new (file_info, terminal_file_info, gtk_widget_get_screen (window),
+		item = open_terminal_menu_item_new (nautilus,
+                                                    file_info, terminal_file_info, gtk_widget_get_screen (window),
 						    NULL, FALSE, FALSE);
 		items = g_list_append (items, item);
 	}
 
-	if (display_mc_item () &&
+	if (display_mc_item (nautilus) &&
 	    g_find_program_in_path ("mc") &&
 	    ((terminal_file_info == FILE_INFO_DESKTOP &&
-	      (desktop_is_home_dir () || desktop_opens_home_dir ())) ||
+	      (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus))) ||
 	     uri_has_local_path (uri))) {
-		item = open_terminal_menu_item_new (file_info, terminal_file_info, gtk_widget_get_screen (window), "mc", FALSE, FALSE);
+		item = open_terminal_menu_item_new (nautilus,
+                                                    file_info, terminal_file_info, gtk_widget_get_screen (window), "mc", FALSE, FALSE);
 		items = g_list_append (items, item);
 	}
 
@@ -981,12 +996,13 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 				       GtkWidget            *window,
 				       GList                *files)
 {
+        TerminalNautilus *nautilus = TERMINAL_NAUTILUS (provider);
 	gchar *uri;
 	GList *items;
 	NautilusMenuItem *item;
 	TerminalFileInfo  terminal_file_info;
 
-        if (terminal_locked_down ()) {
+        if (terminal_locked_down (nautilus)) {
             return NULL;
         }
 
@@ -1007,21 +1023,24 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 		case FILE_INFO_SFTP:
 		case FILE_INFO_OTHER:
 			if (terminal_file_info == FILE_INFO_SFTP || uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (files->data, terminal_file_info, gtk_widget_get_screen (window),
+				item = open_terminal_menu_item_new (nautilus,
+                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window),
 								    NULL, terminal_file_info == FILE_INFO_SFTP, TRUE);
 				items = g_list_append (items, item);
 			}
 
 			if (terminal_file_info == FILE_INFO_SFTP &&
 			    uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (files->data, terminal_file_info, gtk_widget_get_screen (window), NULL, FALSE, TRUE);
+				item = open_terminal_menu_item_new (nautilus,
+                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), NULL, FALSE, TRUE);
 				items = g_list_append (items, item);
 			}
 
-			if (display_mc_item () &&
+			if (display_mc_item (nautilus) &&
 			    g_find_program_in_path ("mc") &&
 			     uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (files->data, terminal_file_info, gtk_widget_get_screen (window), "mc", TRUE, FALSE);
+				item = open_terminal_menu_item_new (nautilus,
+                                                                    files->data, terminal_file_info, gtk_widget_get_screen (window), "mc", TRUE, FALSE);
 				items = g_list_append (items, item);
 			}
 			break;
@@ -1045,37 +1064,54 @@ terminal_nautilus_menu_provider_iface_init (NautilusMenuProviderIface *iface)
 	iface->get_file_items = terminal_nautilus_get_file_items;
 }
 
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (TerminalNautilus, terminal_nautilus, G_TYPE_OBJECT, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (NAUTILUS_TYPE_MENU_PROVIDER,
+                                                               terminal_nautilus_menu_provider_iface_init))
+
 static void 
-terminal_nautilus_init (TerminalNautilus *instance)
+terminal_nautilus_init (TerminalNautilus *nautilus)
 {
+  GSettings *settings;
+
+  settings = g_settings_new (NAUTILUS_SETTINGS_SCHEMA);
+  nautilus->nautilus_prefs = g_settings_get_child (settings, "preferences");
+  g_object_unref (settings);;
+
+  nautilus->lockdown_prefs = g_settings_new (GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA);
 }
 
 static void
-terminal_nautilus_class_init (TerminalNautilusClass *class)
+terminal_nautilus_dispose (GObject *object)
 {
-        bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-        bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  TerminalNautilus *nautilus = TERMINAL_NAUTILUS (object);
 
-        gconf_client_add_dir(gconf_client_get_default(), 
-                             "/desktop/gnome/lockdown",
-                             0,
-                             NULL);
+  if (nautilus->nautilus_prefs != NULL) {
+    g_object_unref (nautilus->nautilus_prefs);
+    nautilus->nautilus_prefs = NULL;
+  }
+  if (nautilus->lockdown_prefs != NULL) {
+    g_object_unref (nautilus->lockdown_prefs);
+    nautilus->lockdown_prefs = NULL;
+  }
 
-	g_assert (gconf_client == NULL);
-	gconf_client = gconf_client_get_default ();
+  G_OBJECT_CLASS (terminal_nautilus_parent_class)->dispose (object);
+}
+
+static void
+terminal_nautilus_class_init (TerminalNautilusClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = terminal_nautilus_dispose;
+
+  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 }
 
 static void
 terminal_nautilus_class_finalize (TerminalNautilusClass *class)
 {
-	g_assert (gconf_client != NULL);
-	g_object_unref (gconf_client);
-	gconf_client = NULL;
 }
-
-G_DEFINE_DYNAMIC_TYPE_EXTENDED (TerminalNautilus, terminal_nautilus, G_TYPE_OBJECT, 0,
-                                G_IMPLEMENT_INTERFACE_DYNAMIC (NAUTILUS_TYPE_MENU_PROVIDER,
-                                                               terminal_nautilus_menu_provider_iface_init))
 
 /* Nautilus extension */
 
