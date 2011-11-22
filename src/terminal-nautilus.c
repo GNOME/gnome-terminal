@@ -35,6 +35,48 @@
 #include <unistd.h> /* for chdir */
 #include <sys/stat.h>
 
+typedef enum {
+  /* local files. Always open "conventionally", i.e. cd and spawn. */
+  FILE_INFO_LOCAL,
+  FILE_INFO_DESKTOP,
+  /* SFTP: Shell terminals are opened "remote" (i.e. with ssh client),
+   * commands are executed like OTHER.
+   */
+  FILE_INFO_SFTP,
+  /* OTHER: Terminals and commands are opened by mapping the URI back
+   * to ~/.gvfs, i.e. to the GVFS FUSE bridge.
+   */
+  FILE_INFO_OTHER
+} TerminalFileInfo;
+
+static TerminalFileInfo
+get_terminal_file_info_from_uri (const char *uri)
+{
+  TerminalFileInfo ret;
+  char *uri_scheme;
+
+  uri_scheme = g_uri_parse_scheme (uri);
+
+  if (uri_scheme == NULL) {
+    ret = FILE_INFO_OTHER;
+  } else if (strcmp (uri_scheme, "file") == 0) {
+    ret = FILE_INFO_LOCAL;
+  } else if (strcmp (uri_scheme, "x-nautilus-desktop") == 0) {
+    ret = FILE_INFO_DESKTOP;
+  } else if (strcmp (uri_scheme, "sftp") == 0 ||
+             strcmp (uri_scheme, "ssh") == 0) {
+    ret = FILE_INFO_SFTP;
+  } else {
+    ret = FILE_INFO_OTHER;
+  }
+
+  g_free (uri_scheme);
+
+  return ret;
+}
+
+
+
 /* BEGIN gnome-desktop */
 #if 1
 /* -*- Mode: C; c-set-style: linux indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
@@ -625,46 +667,6 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
 
 #define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
 #define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
-
-typedef enum {
-	/* local files. Always open "conventionally", i.e. cd and spawn. */
-	FILE_INFO_LOCAL,
-	FILE_INFO_DESKTOP,
-	/* SFTP: Shell terminals are opened "remote" (i.e. with ssh client),
-	 * commands are executed like *_OTHER */
-	FILE_INFO_SFTP,
-	/* OTHER: Terminals and commands are opened by mapping the URI back
-	 * to ~/.gvfs, i.e. to the GVFS FUSE bridge
-	 */
-	FILE_INFO_OTHER
-} TerminalFileInfo;
-
-static TerminalFileInfo
-get_terminal_file_info (const char *uri)
-{
-	TerminalFileInfo ret;
-	char *uri_scheme;
-
-	uri_scheme = g_uri_parse_scheme (uri);
-
-	if (uri_scheme == NULL) {
-		ret = FILE_INFO_OTHER;
-	} else if (strcmp (uri_scheme, "file") == 0) {
-		ret = FILE_INFO_LOCAL;
-	} else if (strcmp (uri_scheme, "x-nautilus-desktop") == 0) {
-		ret = FILE_INFO_DESKTOP;
-	} else if (strcmp (uri_scheme, "sftp") == 0 ||
-		   strcmp (uri_scheme, "ssh") == 0) {
-		ret = FILE_INFO_SFTP;
-	} else {
-		ret = FILE_INFO_OTHER;
-	}
-
-	g_free (uri_scheme);
-
-	return ret;
-}
-
 static inline gboolean
 desktop_opens_home_dir (TerminalNautilus *nautilus)
 {
@@ -842,7 +844,7 @@ get_terminal_command_for_file_info (TerminalNautilus *nautilus,
 	path = NULL;
 	command = NULL;
 
-	switch (get_terminal_file_info (uri)) {
+	switch (get_terminal_file_info_from_uri (uri)) {
 		case FILE_INFO_LOCAL:
 			if (uri != NULL) {
 				path = g_filename_from_uri (uri, NULL, NULL);
@@ -1045,7 +1047,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	items = NULL;
 
 	uri = nautilus_file_info_get_activation_uri (file_info);
-	terminal_file_info = get_terminal_file_info (uri);
+	terminal_file_info = get_terminal_file_info_from_uri (uri);
 
 	if (terminal_file_info == FILE_INFO_SFTP ||
 	    terminal_file_info == FILE_INFO_DESKTOP ||
@@ -1107,7 +1109,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 	items = NULL;
 
 	uri = nautilus_file_info_get_activation_uri (files->data);
-	terminal_file_info = get_terminal_file_info (uri);
+	terminal_file_info = get_terminal_file_info_from_uri (uri);
 
 	switch (terminal_file_info) {
 		case FILE_INFO_LOCAL:
