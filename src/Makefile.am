@@ -3,6 +3,10 @@ NULL =
 bin_PROGRAMS = gnome-terminal-client gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
 
+if WITH_NAUTILUS_EXTENSION
+nautilusextension_LTLIBRARIES = libterminal-nautilus.la
+endif # WITH_NAUTILUS_EXTENSION
+
 # Terminal server
 
 dbusservice_DATA = org.gnome.Terminal.Factory0.service
@@ -16,7 +20,7 @@ BUILT_SOURCES = \
 	terminal-gdbus-generated.h \
 	$(NULL)
 
-gnome_terminal_server_SOURCES= \
+gnome_terminal_server_SOURCES = \
 	eggshell.c \
 	eggshell.h \
 	profile-editor.c \
@@ -186,7 +190,7 @@ gnome_terminal_client_LDADD = \
 
 # Legacy terminal client
 
-gnome_terminal_SOURCES= \
+gnome_terminal_SOURCES = \
 	terminal.c \
 	terminal-debug.c \
 	terminal-debug.h \
@@ -246,6 +250,41 @@ if WITH_SMCLIENT_QUARTZ
 gnome_terminal_SOURCES += eggsmclient-osx.c
 endif
 endif
+
+# Nautilus extension
+
+libterminal_nautilus_la_SOURCES = \
+	nautilus.c \
+	terminal-defines.h \
+	terminal-intl.h \
+	terminal-nautilus.c \
+	terminal-nautilus.h \
+	$(NULL)
+
+nodist_libterminal_nautilus_la_SOURCES = \
+	terminal-gdbus-generated.c \
+	terminal-gdbus-generated.h \
+	$(NULL)
+
+libterminal_nautilus_la_CPPFLAGS = \
+	-DTERMINAL_COMPILATION \
+	-DTERM_DATADIR="\"$(datadir)\"" \
+	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
+	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DGDK_MULTIHEAD_SAFE \
+	$(AM_CPPFLAGS)
+
+libterminal_nautilus_la_CFLAGS = \
+	$(NAUTILUS_CFLAGS) \
+	$(AM_CFLAGS)
+
+libterminal_nautilus_la_LDFLAGS = \
+	-module -avoid-version \
+	-export-symbols $(srcdir)/nautilus.symbols \
+	$(AM_LDFLAGS)
+
+libterminal_nautilus_la_LIBADD = \
+	$(NAUTILUS_LIBS)
 
 # Pref migrator
 
@@ -308,6 +347,7 @@ EXTRA_DIST = \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
 	extra-strings.c \
+	nautilus.symbols \
 	$(about_DATA) \
 	$(uimanager_DATA) \
 	$(builder_in_files) \

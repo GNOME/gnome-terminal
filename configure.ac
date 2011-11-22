@@ -171,6 +171,35 @@ if test -z "$GTK_BUILDER_CONVERT"; then
   AC_MSG_ERROR([gtk-builder-convert not found])
 fi
 
+# ******************
+# Nautilus extension
+# ******************
+
+AC_ARG_WITH([nautilus-extension],
+  [AS_HELP_STRING([--without-nautilus-extension],[Disable nautilus extension])],
+  [],
+  [with_nautilus_extension=yes])
+
+if test "$with_nautilus_extension" = "yes"; then
+  NAUTILUS_REQUIRED=3.0.0
+
+  PKG_CHECK_MODULES([NAUTILUS],[
+    libnautilus-extension >= $NAUTILUS_REQUIRED
+    gio-2.0
+    gio-unix-2.0
+    gconf-2.0
+    gtk+-$GTK_API_VERSION])
+
+  AC_ARG_WITH([nautilus-dir],
+    [AS_HELP_STRING([--with-nautilus-dir=PATH],[Nautilus extensions directory])],
+    [nautilusextensiondir="$withval"],
+    [nautilusextensiondir='${libdir}/nautilus/extensions-3.0'])
+  AC_SUBST([nautilusextensiondir])
+
+fi
+
+AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes"])
+
 # ***********
 # Compilation
 # ***********
@@ -223,9 +252,11 @@ echo "
 gnome-terminal-$VERSION:
 
 	prefix:                 ${prefix}
-        DBus service dir:       ${dbusservicedir}
 	source code location:	${srcdir}
 	compiler:		${CC}
+        DBus service dir:       ${dbusservicedir}
+        Nautilus extension:     ${with_nautilus_extension}
+        Nautilus extension dir: ${nautilusextensiondir}
 
         using smclient:         ${with_smclient}
 "

@@ -378,8 +378,6 @@ parse_arguments (int *argcp,
     }
   }
 
-  data->working_directory = g_get_current_dir ();
-
   /* Need to save this here before calling gtk_init! */
   data->startup_id = g_strdup (g_getenv ("DESKTOP_STARTUP_ID"));
 
@@ -390,6 +388,9 @@ parse_arguments (int *argcp,
     return NULL;
   }
   g_option_context_free (context);
+
+  if (data->working_directory == NULL)
+    data->working_directory = g_get_current_dir ();
 
   /* Do this here so that gdk_display is initialized */
   if (data->startup_id == NULL)
@@ -444,24 +445,45 @@ build_exec_options_variant (OptionData *data)
 {
   GVariantBuilder builder;
   char **envv;
+  const char *pwd, *working_directory;
+  char path[PATH_MAX];
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
-  if (data->working_directory)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "cwd", g_variant_new_bytestring (data->working_directory));
-
   envv = g_get_environ ();
-  if (envv) {
-    envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
-    envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
-    envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
+  envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
+  envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
+  envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
 
-    g_variant_builder_add (&builder, "{sv}",
-                           "environ",
-                           g_variant_new_bytestring_array ((const char * const *) envv, -1));
-    g_strfreev (envv);
+  g_variant_builder_add (&builder, "{sv}",
+                         "environ",
+                         g_variant_new_bytestring_array ((const char * const *) envv, -1));
+
+  /* If $PWD points to the CWD, transmit $PWD instead so as
+   * not follow symlinks! See bug #502146.
+   */
+  pwd = g_environ_getenv (envv, "PWD");
+  if (pwd) {
+    char *s;
+    GError *err = NULL;
+    if ((s = g_file_read_link (pwd, &err)) == NULL)
+      g_print ("Failed to readlink %s: %s\n", pwd, err->message);
+    else 
+      g_print ("Resolved: %s\n", s);
   }
+  if (pwd != NULL && data->working_directory != NULL &&
+      readlink (pwd, path, sizeof (path)) != -1) {
+    working_directory = pwd;
+  } else {
+    working_directory = data->working_directory;
+  }
+
+  g_print ("Transmit pwd = %s (working_directory %s)\n", working_directory, data->working_directory);
+
+  g_variant_builder_add (&builder, "{sv}", 
+                         "cwd", g_variant_new_bytestring (working_directory));
+
+  g_strfreev (envv);
 
   return g_variant_builder_end (&builder);
 }

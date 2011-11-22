@@ -81,8 +81,6 @@ struct _TerminalApp
 {
   TerminalFactorySkeleton parent_instance;
 
-  GDBusObjectManagerServer *object_manager;
-  
   GList *windows;
   GtkWidget *new_profile_dialog;
   GtkWidget *manage_profiles_dialog;
