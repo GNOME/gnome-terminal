@@ -692,19 +692,6 @@ get_remote_ssh_command (const char *uri,
   return command;
 }
 
-static inline char *
-get_gvfs_path_for_uri (const char *uri)
-{
-  GFile *file;
-  char *path;
-
-  file = g_file_new_for_uri (uri);
-  path = g_file_get_path (file);
-  g_object_unref (file);
-
-  return path;
-}
-
 static gboolean
 terminal_locked_down (TerminalNautilus *nautilus)
 {
@@ -759,25 +746,26 @@ struct _TerminalNautilusMenuItemClass {
 
 static GType terminal_nautilus_menu_item_get_type (void);
 
-static char *
-get_terminal_command_for_file_info (TerminalNautilus *nautilus,
-                                    NautilusFileInfo *file_info,
-                                    const char *command_to_run,
-                                    gboolean remote_terminal)
+static void
+terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
 {
+  TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (item);
+  TerminalNautilus *nautilus = menu_item->nautilus;
   char *uri, *path, *quoted_path;
   char *command;
+  const char *command_to_run;
 
-  uri = nautilus_file_info_get_activation_uri (file_info);
+  uri = nautilus_file_info_get_activation_uri (menu_item->file_info);
+  if (uri == NULL)
+    return;
 
   path = NULL;
   command = NULL;
+  command_to_run = menu_item->run_in_mc ? "mc" : NULL;
 
   switch (get_terminal_file_info_from_uri (uri)) {
     case FILE_INFO_LOCAL:
-      if (uri != NULL) {
-        path = g_filename_from_uri (uri, NULL, NULL);
-      }
+      path = g_filename_from_uri (uri, NULL, NULL);
       break;
 
     case FILE_INFO_DESKTOP:
@@ -789,18 +777,21 @@ get_terminal_command_for_file_info (TerminalNautilus *nautilus,
       break;
 
     case FILE_INFO_SFTP:
-      if (remote_terminal && uri != NULL) {
+      if (menu_item->remote_terminal) {
         command = get_remote_ssh_command (uri, command_to_run);
         break;
       }
       /* fall through */
 
-    case FILE_INFO_OTHER:
-      if (uri != NULL) {
-        /* map back remote URI to local path */
-        path = get_gvfs_path_for_uri (uri);
-      }
+    case FILE_INFO_OTHER: {
+      GFile *file;
+
+      /* map back remote URI to local path */
+      file = g_file_new_for_uri (uri);
+      path = g_file_get_path (file);
+      g_object_unref (file);
       break;
+    }
 
     default:
       g_assert_not_reached ();
@@ -822,23 +813,11 @@ get_terminal_command_for_file_info (TerminalNautilus *nautilus,
   g_free (path);
   g_free (uri);
 
-  return command;
-}
+  if (command == NULL)
+    return;
 
-static void
-terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
-{
-  TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (item);
-  char *terminal_command;
-
-  terminal_command = get_terminal_command_for_file_info (menu_item->nautilus, 
-                                                         menu_item->file_info, 
-                                                         menu_item->run_in_mc ? "mc" : NULL,
-                                                         menu_item->remote_terminal);
-  if (terminal_command != NULL) {
-          _not_eel_gnome_open_terminal_on_screen (terminal_command, menu_item->screen);
-  }
-  g_free (terminal_command);
+  _not_eel_gnome_open_terminal_on_screen (command, menu_item->screen);
+  g_free (command);
 }
 
 G_DEFINE_DYNAMIC_TYPE (TerminalNautilusMenuItem, terminal_nautilus_menu_item, NAUTILUS_TYPE_MENU_ITEM)
