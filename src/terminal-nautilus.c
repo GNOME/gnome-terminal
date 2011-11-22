@@ -35,34 +35,8 @@
 #include <unistd.h> /* for chdir */
 #include <sys/stat.h>
 
-#define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
-#define TERMINAL_NAUTILUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilus))
-#define TERMINAL_TERMINAL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
-#define TERMINAL_IS_NAUTILUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS))
-#define TERMINAL_IS_TERMINAL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS))
-#define TERMINAL_TERMINAL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
-
-typedef struct _TerminalNautilus      TerminalNautilus;
-typedef struct _TerminalNautilusClass TerminalNautilusClass;
-
-struct _TerminalNautilus {
-        GObject parent_instance;
-        
-        GSettings *nautilus_prefs;
-        GSettings *lockdown_prefs;
-};
-
-struct _TerminalNautilusClass {
-        GObjectClass parent_class;
-};
-
-static GType terminal_nautilus_get_type (void);
-
-#define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
-#define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
-
 /* BEGIN gnome-desktop */
-
+#if 1
 /* -*- Mode: C; c-set-style: linux indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 /* gnome-desktop-utils.c - Utilities for the GNOME Desktop
 
@@ -222,10 +196,13 @@ gnome_desktop_prepend_terminal_to_vector (int *argc, char ***argv)
         g_warning ("gnome_prepend_terminal_to_vector: Not implemented");
 #endif
 }
+#endif /* 1 */
 
 /* END gnome-desktop */
 
 /* BEGIN eel-gnome-extensions */
+
+#if 1
 
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 8; tab-width: 8 -*- */
 
@@ -487,10 +464,169 @@ _not_eel_gnome_open_terminal (const char *command)
         _not_eel_gnome_open_terminal_on_screen (command, NULL);
 }
 
+#endif /* 1 */
+
 /* END eel-gnome-extensions */
 
-static void terminal_nautilus_init       (TerminalNautilus      *instance);
-static void terminal_nautilus_class_init (TerminalNautilusClass *klass);
+/* Nautilus extension class */
+
+#define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
+#define TERMINAL_NAUTILUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilus))
+#define TERMINAL_NAUTILUS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+#define TERMINAL_IS_NAUTILUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_IS_NAUTILUS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_NAUTILUS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+
+typedef struct _TerminalNautilus      TerminalNautilus;
+typedef struct _TerminalNautilusClass TerminalNautilusClass;
+
+struct _TerminalNautilus {
+        GObject parent_instance;
+
+        GSettings *nautilus_prefs;
+        GSettings *lockdown_prefs;
+};
+
+struct _TerminalNautilusClass {
+        GObjectClass parent_class;
+};
+
+static GType terminal_nautilus_get_type (void);
+
+/* Nautilus menu item class & implementation */
+
+#define TERMINAL_TYPE_NAUTILUS_MENU_ITEM        (terminal_nautilus_menu_item_get_type ())
+#define TERMINAL_NAUTILUS_MENU_ITEM(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItem))
+#define TERMINAL_NAUTILUS_MENU_ITEM_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
+#define TERMINAL_IS_NAUTILUS_MENU_ITEM(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
+#define TERMINAL_IS_NAUTILUS_MENU_ITEM_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS_MENU_ITEM))
+#define TERMINAL_NAUTILUS_MENU_ITEM_GET_CLASS(o)(G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS_MENU_ITEM, TerminalNautilusMenuItemClass))
+
+typedef struct _TerminalNautilusMenuItem      TerminalNautilusMenuItem;
+typedef struct _TerminalNautilusMenuItemClass TerminalNautilusMenuItemClass;
+
+struct _TerminalNautilusMenuItem {
+  GObject parent_instance;
+
+  TerminalNautilus *nautilus;
+  GdkScreen *screen;
+  NautilusFileInfo *file_info;
+  char *command_to_run;
+  gboolean remote_terminal;
+};
+
+struct _TerminalNautilusMenuItemClass {
+  GObjectClass parent_class;
+};
+
+static GType terminal_nautilus_menu_item_get_type (void);
+
+static char *
+get_terminal_command_for_file_info (TerminalNautilus *nautilus,
+                                    NautilusFileInfo *file_info,
+                                    const char *command_to_run,
+                                    gboolean remote_terminal);
+
+
+static void
+terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
+{
+  TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (item);
+  char *terminal_command;
+
+  terminal_command = get_terminal_command_for_file_info (menu_item->nautilus, 
+                                                         menu_item->file_info, 
+                                                         menu_item->command_to_run, 
+                                                         menu_item->remote_terminal);
+  if (terminal_command != NULL) {
+          _not_eel_gnome_open_terminal_on_screen (terminal_command, menu_item->screen);
+  }
+  g_free (terminal_command);
+}
+
+G_DEFINE_DYNAMIC_TYPE (TerminalNautilusMenuItem, terminal_nautilus_menu_item, NAUTILUS_TYPE_MENU_ITEM)
+
+static void 
+terminal_nautilus_menu_item_init (TerminalNautilusMenuItem *nautilus_menu_item)
+{
+}
+
+static void
+terminal_nautilus_menu_item_dispose (GObject *object)
+{
+  TerminalNautilusMenuItem *menu_item = TERMINAL_NAUTILUS_MENU_ITEM (object);
+
+  if (menu_item->nautilus != NULL) {
+    g_object_unref (menu_item->nautilus);
+    menu_item->nautilus = NULL;
+  }
+  if (menu_item->screen != NULL) {
+    g_object_unref (menu_item->screen);
+    menu_item->screen = NULL;
+  }
+  if (menu_item->file_info != NULL) {
+    g_object_unref (menu_item->file_info);
+    menu_item->file_info = NULL;
+  }
+  g_free (menu_item->command_to_run);
+  menu_item->command_to_run = NULL;
+
+  G_OBJECT_CLASS (terminal_nautilus_menu_item_parent_class)->dispose (object);
+}
+
+static void
+terminal_nautilus_menu_item_class_init (TerminalNautilusMenuItemClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  NautilusMenuItemClass *menu_item_class = NAUTILUS_MENU_ITEM_CLASS (klass);
+
+  gobject_class->dispose = terminal_nautilus_menu_item_dispose;
+
+  menu_item_class->activate = terminal_nautilus_menu_item_activate;
+}
+
+static void
+terminal_nautilus_menu_item_class_finalize (TerminalNautilusMenuItemClass *class)
+{
+}
+
+static NautilusMenuItem *
+terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
+                                 const char       *name,
+                                 const char       *label,
+                                 const char       *tip,
+                                 const char       *icon,
+                                 GdkScreen        *screen,
+                                 NautilusFileInfo *file_info,
+                                 const char       *command_to_run,
+                                 gboolean          remote_terminal)
+{
+  TerminalNautilusMenuItem *item;
+
+  g_return_val_if_fail (name != NULL, NULL);
+  g_return_val_if_fail (label != NULL, NULL);
+  g_return_val_if_fail (tip != NULL, NULL);
+
+  item = g_object_new (TERMINAL_TYPE_NAUTILUS_MENU_ITEM,
+                       "name", name,
+                       "label", label,
+                       "tip", tip,
+                       "icon", icon,
+                       NULL);
+
+  item->nautilus = g_object_ref (nautilus);
+  item->file_info = g_object_ref (file_info);
+  item->screen = g_object_ref (screen);
+  item->command_to_run = g_strdup (command_to_run);
+  item->remote_terminal = remote_terminal;
+  
+  return (NautilusMenuItem *) item;
+}
+
+/* Nautilus extension class implementation */
+
+#define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
+#define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
 
 typedef enum {
 	/* local files. Always open "conventionally", i.e. cd and spawn. */
@@ -760,37 +896,6 @@ get_terminal_command_for_file_info (TerminalNautilus *nautilus,
 	return command;
 }
 
-
-static void
-open_terminal (TerminalNautilus *nautilus,
-               NautilusMenuItem *item,
-	       NautilusFileInfo *file_info)
-{
-	char *terminal_command, *command_to_run;
-	GdkScreen *screen;
-	gboolean remote_terminal;
-
-	screen = g_object_get_data (G_OBJECT (item), "TerminalNautilus::screen");
-	command_to_run = g_object_get_data (G_OBJECT (item), "TerminalNautilus::command-to-run");
-	remote_terminal = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (item), "TerminalNautilus::remote-terminal"));
-
-	terminal_command = get_terminal_command_for_file_info (nautilus, file_info, command_to_run, remote_terminal);
-	if (terminal_command != NULL) {
-		_not_eel_gnome_open_terminal_on_screen (terminal_command, screen);
-	}
-	g_free (terminal_command);
-}
-
-static void
-open_terminal_callback (NautilusMenuItem *item,
-                        TerminalNautilus *nautilus)
-{
-  NautilusFileInfo *file_info;
-
-  file_info = g_object_get_data (G_OBJECT (item), "TerminalNautilus::file-info");
-  open_terminal (nautilus, item, file_info);
-}
-
 static NautilusMenuItem *
 open_terminal_menu_item_new (TerminalNautilus *nautilus,
                              NautilusFileInfo *file_info,
@@ -885,26 +990,17 @@ open_terminal_menu_item_new (TerminalNautilus *nautilus,
 					"TerminalNautilus::open_remote_terminal" :
 					"TerminalNautilus::open_terminal");
 	}
-	ret = nautilus_menu_item_new (action_name, name, tooltip, "gnome-terminal");
+
+        ret = terminal_nautilus_menu_item_new (nautilus,
+                                               action_name, 
+                                                name, 
+                                                tooltip, 
+                                                "gnome-terminal",
+                                                screen,
+                                                file_info,
+                                                command_to_run,
+                                                remote_terminal);
 	g_free (action_name);
-
-	g_object_set_data (G_OBJECT (ret),
-			   "TerminalNautilus::screen",
-			   screen);
-	g_object_set_data_full (G_OBJECT (ret), "TerminalNautilus::command-to-run",
-				g_strdup (command_to_run),
-				(GDestroyNotify) g_free);
-	g_object_set_data (G_OBJECT (ret), "TerminalNautilus::remote-terminal",
-			   GUINT_TO_POINTER (remote_terminal));
-
-
-	g_object_set_data_full (G_OBJECT (ret), "file-info",
-				g_object_ref (file_info),
-				(GDestroyNotify) g_object_unref);
-
-	g_signal_connect (ret, "activate",
-			  G_CALLBACK (open_terminal_callback),
-			  nautilus);
 
 
 	return ret;
@@ -1125,8 +1221,10 @@ static GType type_list[1];
 void
 nautilus_module_initialize (GTypeModule *module)
 {
-        terminal_nautilus_register_type (module);
-        type_list[0] = TERMINAL_TYPE_NAUTILUS;
+  terminal_nautilus_register_type (module);
+  terminal_nautilus_menu_item_register_type (module);
+
+  type_list[0] = TERMINAL_TYPE_NAUTILUS;
 }
 
 void
@@ -1138,6 +1236,6 @@ void
 nautilus_module_list_types (const GType **types,
                             int          *num_types)
 {
-        *types = type_list;
-        *num_types = G_N_ELEMENTS (type_list);
+  *types = type_list;
+  *num_types = G_N_ELEMENTS (type_list);
 }
