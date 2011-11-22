@@ -35,6 +35,8 @@
 #include <unistd.h> /* for chdir */
 #include <sys/stat.h>
 
+#define TERMINAL_ICON_NAME "utilities-terminal"
+
 typedef enum {
   /* local files. Always open "conventionally", i.e. cd and spawn. */
   FILE_INFO_LOCAL,
@@ -535,6 +537,39 @@ struct _TerminalNautilusClass {
 
 static GType terminal_nautilus_get_type (void);
 
+/* Helpers */
+
+#define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
+#define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
+static inline gboolean
+desktop_opens_home_dir (TerminalNautilus *nautilus)
+{
+#if 0
+        return  _client_get_bool (gconf_client,
+                                      "/apps/nautilus-open-terminal/desktop_opens_home_dir",
+                                      NULL);
+#endif
+        return TRUE;
+}
+
+static inline gboolean
+display_mc_item (TerminalNautilus *nautilus)
+{
+#if 0
+        return gconf_client_get_bool (gconf_client,
+                                      "/apps/nautilus-open-terminal/display_mc_item",
+                                      NULL);
+#endif
+        return FALSE;
+}
+
+static inline gboolean
+desktop_is_home_dir (TerminalNautilus *nautilus)
+{
+        return g_settings_get_boolean (nautilus->nautilus_prefs,
+                                       "desktop-is-home-dir");
+}
+
 /* Nautilus menu item class & implementation */
 
 #define TERMINAL_TYPE_NAUTILUS_MENU_ITEM        (terminal_nautilus_menu_item_get_type ())
@@ -632,26 +667,97 @@ terminal_nautilus_menu_item_class_finalize (TerminalNautilusMenuItemClass *class
 
 static NautilusMenuItem *
 terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
-                                 const char       *name,
-                                 const char       *label,
-                                 const char       *tip,
-                                 const char       *icon,
-                                 GdkScreen        *screen,
                                  NautilusFileInfo *file_info,
+                                 TerminalFileInfo  terminal_file_info,
+                                 GdkScreen        *screen,
                                  gboolean          run_in_mc,
-                                 gboolean          remote_terminal)
+                                 gboolean          remote_terminal,
+                                 gboolean          is_file_item)
 {
   TerminalNautilusMenuItem *item;
+  const char *action_name;
+  const char *name;
+  const char *tooltip;
 
-  g_return_val_if_fail (name != NULL, NULL);
-  g_return_val_if_fail (label != NULL, NULL);
-  g_return_val_if_fail (tip != NULL, NULL);
+  if (!run_in_mc) {
+    action_name = remote_terminal ? "TerminalNautilus:OpenRemote"
+                                  : "TerminalNautilus:OpenLocal";
+
+    switch (terminal_file_info) {
+      case FILE_INFO_SFTP:
+        if (remote_terminal) {
+          name = _("Open in _Remote Terminal");
+        } else {
+          name = _("Open in _Local Terminal");
+        }
+
+        if (is_file_item) {
+          tooltip = _("Open the currently selected folder in a terminal");
+        } else {
+          tooltip = _("Open the currently open folder in a terminal");
+        }
+        break;
+
+      case FILE_INFO_LOCAL:
+      case FILE_INFO_OTHER:
+        name = _("Open in T_erminal");
+
+        if (is_file_item) {
+          tooltip = _("Open the currently selected folder in a terminal");
+        } else {
+          tooltip = _("Open the currently open folder in a terminal");
+        }
+        break;
+
+      case FILE_INFO_DESKTOP:
+        if (desktop_opens_home_dir (nautilus)) {
+          name = _("Open T_erminal");
+          tooltip = _("Open a terminal");
+        } else {
+          name = _("Open in T_erminal");
+          tooltip = _("Open the currently open folder in a terminal");
+        }
+        break;
+
+      default:
+        g_assert_not_reached ();
+    }
+  } else {
+    action_name = remote_terminal ? "TerminalNautilus:OpenRemoteMC"
+                                  : "TerminalNautilus:OpenLocalMC";
+
+    switch (terminal_file_info) {
+      case FILE_INFO_LOCAL:
+      case FILE_INFO_SFTP:
+      case FILE_INFO_OTHER:
+        name = _("Open in _Midnight Commander");
+        if (is_file_item) {
+          tooltip = _("Open the currently selected folder in the terminal file manager Midnight Commander");
+        } else {
+          tooltip = _("Open the currently open folder in the terminal file manager Midnight Commander");
+        }
+        break;
+
+      case FILE_INFO_DESKTOP:
+        if (desktop_opens_home_dir (nautilus)) {
+          name = _("Open _Midnight Commander");
+          tooltip = _("Open the terminal file manager Midnight Commander");
+        } else {
+          name = _("Open in _Midnight Commander");
+          tooltip = _("Open the currently open folder in the terminal file manager Midnight Commander");
+        }
+        break;
+
+      default:
+              g_assert_not_reached ();
+    }
+  }
 
   item = g_object_new (TERMINAL_TYPE_NAUTILUS_MENU_ITEM,
-                       "name", name,
-                       "label", label,
-                       "tip", tip,
-                       "icon", icon,
+                       "name", action_name,
+                       "label", name,
+                       "tip", tooltip,
+                       "icon", TERMINAL_ICON_NAME,
                        NULL);
 
   item->nautilus = g_object_ref (nautilus);
@@ -659,42 +765,11 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
   item->screen = g_object_ref (screen);
   item->run_in_mc = run_in_mc;
   item->remote_terminal = remote_terminal;
-  
+
   return (NautilusMenuItem *) item;
 }
 
 /* Nautilus extension class implementation */
-
-#define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
-#define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
-static inline gboolean
-desktop_opens_home_dir (TerminalNautilus *nautilus)
-{
-#if 0
-	return  _client_get_bool (gconf_client,
-				      "/apps/nautilus-open-terminal/desktop_opens_home_dir",
-				      NULL);
-#endif
-        return TRUE;
-}
-
-static inline gboolean
-display_mc_item (TerminalNautilus *nautilus)
-{
-#if 0
-	return gconf_client_get_bool (gconf_client,
-				      "/apps/nautilus-open-terminal/display_mc_item",
-				      NULL);
-#endif
-        return FALSE;
-}
-
-static inline gboolean
-desktop_is_home_dir (TerminalNautilus *nautilus)
-{
-        return g_settings_get_boolean (nautilus->nautilus_prefs,
-                                       "desktop-is-home-dir");
-}
 
 /* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
 #define SFTP_PREFIX "sftp://"
@@ -896,113 +971,6 @@ get_terminal_command_for_file_info (TerminalNautilus *nautilus,
 	return command;
 }
 
-static NautilusMenuItem *
-open_terminal_menu_item_new (TerminalNautilus *nautilus,
-                             NautilusFileInfo *file_info,
-			     TerminalFileInfo  terminal_file_info,
-			     GdkScreen        *screen,
-			     gboolean          run_in_mc,
-			     gboolean          remote_terminal,
-			     gboolean          is_file_item)
-{
-	NautilusMenuItem *ret;
-	char *action_name;
-	const char *name;
-	const char *tooltip;
-
-	if (!run_in_mc) {
-		switch (terminal_file_info) {
-			case FILE_INFO_SFTP:
-				if (remote_terminal) {
-					name = _("Open in _Remote Terminal");
-				} else {
-					name = _("Open in _Local Terminal");
-				}
-
-				if (is_file_item) {
-					tooltip = _("Open the currently selected folder in a terminal");
-				} else {
-					tooltip = _("Open the currently open folder in a terminal");
-				}
-				break;
-
-			case FILE_INFO_LOCAL:
-			case FILE_INFO_OTHER:
-				name = _("Open in T_erminal");
-
-				if (is_file_item) {
-					tooltip = _("Open the currently selected folder in a terminal");
-				} else {
-					tooltip = _("Open the currently open folder in a terminal");
-				}
-				break;
-
-			case FILE_INFO_DESKTOP:
-				if (desktop_opens_home_dir (nautilus)) {
-					name = _("Open T_erminal");
-					tooltip = _("Open a terminal");
-				} else {
-					name = _("Open in T_erminal");
-					tooltip = _("Open the currently open folder in a terminal");
-				}
-				break;
-
-			default:
-				g_assert_not_reached ();
-		}
-	} else {
-		switch (terminal_file_info) {
-			case FILE_INFO_LOCAL:
-			case FILE_INFO_SFTP:
-			case FILE_INFO_OTHER:
-				name = _("Open in _Midnight Commander");
-				if (is_file_item) {
-					tooltip = _("Open the currently selected folder in the terminal file manager Midnight Commander");
-				} else {
-					tooltip = _("Open the currently open folder in the terminal file manager Midnight Commander");
-				}
-				break;
-
-			case FILE_INFO_DESKTOP:
-				if (desktop_opens_home_dir (nautilus)) {
-					name = _("Open _Midnight Commander");
-					tooltip = _("Open the terminal file manager Midnight Commander");
-				} else {
-					name = _("Open in _Midnight Commander");
-					tooltip = _("Open the currently open folder in the terminal file manager Midnight Commander");
-				}
-				break;
-
-			default:
-				g_assert_not_reached ();
-		}
-	}
-
-	if (run_in_mc) {
-		action_name = g_strdup (remote_terminal ?
-					"TerminalNautilus::open_remote_terminal_mc" :
-					"TerminalNautilus::open_terminal_mc");
-	} else {
-		action_name = g_strdup (remote_terminal ? 
-					"TerminalNautilus::open_remote_terminal" :
-					"TerminalNautilus::open_terminal");
-	}
-
-        ret = terminal_nautilus_menu_item_new (nautilus,
-                                               action_name, 
-                                                name, 
-                                                tooltip, 
-                                                "gnome-terminal",
-                                                screen,
-                                                file_info,
-                                                run_in_mc,
-                                                remote_terminal);
-	g_free (action_name);
-
-
-	return ret;
-}
-
 static gboolean
 terminal_locked_down (TerminalNautilus *nautilus)
 {
@@ -1053,7 +1021,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	    terminal_file_info == FILE_INFO_DESKTOP ||
 	    uri_has_local_path (uri)) {
 		/* local locations or SSH */
-		item = open_terminal_menu_item_new (nautilus,
+		item = terminal_nautilus_menu_item_new(nautilus,
                                                     file_info, terminal_file_info, gtk_widget_get_screen (window),
 						    FALSE, terminal_file_info == FILE_INFO_SFTP, FALSE);
 		items = g_list_append (items, item);
@@ -1063,7 +1031,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	     terminal_file_info == FILE_INFO_OTHER) &&
 	    uri_has_local_path (uri)) {
 		/* remote locations that offer local back-mapping */
-		item = open_terminal_menu_item_new (nautilus,
+		item = terminal_nautilus_menu_item_new(nautilus,
                                                     file_info, terminal_file_info, gtk_widget_get_screen (window),
 						    FALSE, FALSE, FALSE);
 		items = g_list_append (items, item);
@@ -1074,7 +1042,7 @@ terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
 	    ((terminal_file_info == FILE_INFO_DESKTOP &&
 	      (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus))) ||
 	     uri_has_local_path (uri))) {
-		item = open_terminal_menu_item_new (nautilus,
+		item = terminal_nautilus_menu_item_new(nautilus,
                                                     file_info, terminal_file_info, gtk_widget_get_screen (window), TRUE, FALSE, FALSE);
 		items = g_list_append (items, item);
 	}
@@ -1116,7 +1084,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 		case FILE_INFO_SFTP:
 		case FILE_INFO_OTHER:
 			if (terminal_file_info == FILE_INFO_SFTP || uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (nautilus,
+				item = terminal_nautilus_menu_item_new(nautilus,
                                                                     files->data, terminal_file_info, gtk_widget_get_screen (window),
 								    FALSE, terminal_file_info == FILE_INFO_SFTP, TRUE);
 				items = g_list_append (items, item);
@@ -1124,7 +1092,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 
 			if (terminal_file_info == FILE_INFO_SFTP &&
 			    uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (nautilus,
+				item = terminal_nautilus_menu_item_new(nautilus,
                                                                     files->data, terminal_file_info, gtk_widget_get_screen (window), FALSE, FALSE, TRUE);
 				items = g_list_append (items, item);
 			}
@@ -1132,7 +1100,7 @@ terminal_nautilus_get_file_items (NautilusMenuProvider *provider,
 			if (display_mc_item (nautilus) &&
 			    g_find_program_in_path ("mc") &&
 			     uri_has_local_path (uri)) {
-				item = open_terminal_menu_item_new (nautilus,
+				item = terminal_nautilus_menu_item_new(nautilus,
                                                                     files->data, terminal_file_info, gtk_widget_get_screen (window), TRUE, TRUE, FALSE);
 				items = g_list_append (items, item);
 			}
