@@ -21,10 +21,6 @@
 
 #include "config.h"
 
-#include "terminal-nautilus.h"
-
-#include <libnautilus-extension/nautilus-menu-provider.h>
-
 #include <glib.h>
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
@@ -32,12 +28,34 @@
 #include <gconf/gconf.h>
 #include <gconf/gconf-client.h>
 
+#include <libnautilus-extension/nautilus-menu-provider.h>
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h> /* for atoi */
 #include <string.h> /* for strcmp */
 #include <unistd.h> /* for chdir */
 #include <sys/stat.h>
+
+#define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
+#define TERMINAL_NAUTILUS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilus))
+#define TERMINAL_TERMINAL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+#define TERMINAL_IS_NAUTILUS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_IS_TERMINAL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_NAUTILUS))
+#define TERMINAL_TERMINAL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_NAUTILUS, TerminalNautilusClass))
+
+typedef struct _TerminalNautilus      TerminalNautilus;
+typedef struct _TerminalNautilusClass TerminalNautilusClass;
+
+struct _TerminalNautilus {
+        GObject parent_instance;
+};
+
+struct _TerminalNautilusClass {
+        GObjectClass parent_class;
+};
+
+static GType terminal_nautilus_get_type (void);
 
 /* BEGIN gnome-desktop */
 
@@ -467,11 +485,8 @@ _not_eel_gnome_open_terminal (const char *command)
 
 /* END eel-gnome-extensions */
 
-
 static void terminal_nautilus_init       (TerminalNautilus      *instance);
 static void terminal_nautilus_class_init (TerminalNautilusClass *klass);
-
-static GType terminal_nautilus_type = 0;
 
 typedef enum {
 	/* local files. Always open "conventionally", i.e. cd and spawn. */
@@ -1038,6 +1053,14 @@ terminal_nautilus_init (TerminalNautilus *instance)
 static void
 terminal_nautilus_class_init (TerminalNautilusClass *class)
 {
+        bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
+        bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+
+        gconf_client_add_dir(gconf_client_get_default(), 
+                             "/desktop/gnome/lockdown",
+                             0,
+                             NULL);
+
 	g_assert (gconf_client == NULL);
 	gconf_client = gconf_client_get_default ();
 }
@@ -1050,40 +1073,35 @@ terminal_nautilus_class_finalize (TerminalNautilusClass *class)
 	gconf_client = NULL;
 }
 
-GType
-terminal_nautilus_get_type (void) 
+G_DEFINE_DYNAMIC_TYPE_EXTENDED (TerminalNautilus, terminal_nautilus, G_TYPE_OBJECT, 0,
+                                G_IMPLEMENT_INTERFACE_DYNAMIC (NAUTILUS_TYPE_MENU_PROVIDER,
+                                                               terminal_nautilus_menu_provider_iface_init))
+
+/* Nautilus extension */
+
+void nautilus_module_initialize (GTypeModule *module);
+void nautilus_module_shutdown   (void);
+void nautilus_module_list_types (const GType **types, 
+                                 int *num_types);
+
+static GType type_list[1];
+
+void
+nautilus_module_initialize (GTypeModule *module)
 {
-	return terminal_nautilus_type;
+        terminal_nautilus_register_type (module);
+        type_list[0] = TERMINAL_TYPE_NAUTILUS;
 }
 
 void
-terminal_nautilus_register_type (GTypeModule *module)
+nautilus_module_shutdown (void)
 {
-	static const GTypeInfo info = {
-		sizeof (TerminalNautilusClass),
-		(GBaseInitFunc) NULL,
-		(GBaseFinalizeFunc) NULL,
-		(GClassInitFunc) terminal_nautilus_class_init,
-		(GClassFinalizeFunc) terminal_nautilus_class_finalize,
-		NULL,
-		sizeof (TerminalNautilus),
-		0,
-		(GInstanceInitFunc) terminal_nautilus_init,
-	};
+}
 
-	static const GInterfaceInfo menu_provider_iface_info = {
-		(GInterfaceInitFunc) terminal_nautilus_menu_provider_iface_init,
-		NULL,
-		NULL
-	};
-
-	terminal_nautilus_type = g_type_module_register_type (module,
-						     G_TYPE_OBJECT,
-						     "TerminalNautilus",
-						     &info, 0);
-
-	g_type_module_add_interface (module,
-				     terminal_nautilus_type,
-				     NAUTILUS_TYPE_MENU_PROVIDER,
-				     &menu_provider_iface_info);
+void 
+nautilus_module_list_types (const GType **types,
+                            int          *num_types)
+{
+        *types = type_list;
+        *num_types = G_N_ELEMENTS (type_list);
 }

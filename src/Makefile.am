@@ -254,11 +254,9 @@ endif
 # Nautilus extension
 
 libterminal_nautilus_la_SOURCES = \
-	nautilus.c \
 	terminal-defines.h \
 	terminal-intl.h \
 	terminal-nautilus.c \
-	terminal-nautilus.h \
 	$(NULL)
 
 nodist_libterminal_nautilus_la_SOURCES = \
