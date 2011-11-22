@@ -541,33 +541,194 @@ static GType terminal_nautilus_get_type (void);
 
 #define NAUTILUS_SETTINGS_SCHEMA                "org.gnome.Nautilus"
 #define GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA  "org.gnome.desktop.lockdown"
+
 static inline gboolean
 desktop_opens_home_dir (TerminalNautilus *nautilus)
 {
 #if 0
-        return  _client_get_bool (gconf_client,
-                                      "/apps/nautilus-open-terminal/desktop_opens_home_dir",
-                                      NULL);
+  return  _client_get_bool (gconf_client,
+                                "/apps/nautilus-open-terminal/desktop_opens_home_dir",
+                                NULL);
 #endif
-        return TRUE;
+  return TRUE;
 }
 
 static inline gboolean
 display_mc_item (TerminalNautilus *nautilus)
 {
 #if 0
-        return gconf_client_get_bool (gconf_client,
-                                      "/apps/nautilus-open-terminal/display_mc_item",
-                                      NULL);
+  return gconf_client_get_bool (gconf_client,
+                                "/apps/nautilus-open-terminal/display_mc_item",
+                                NULL);
 #endif
-        return FALSE;
+  return FALSE;
 }
 
 static inline gboolean
 desktop_is_home_dir (TerminalNautilus *nautilus)
 {
-        return g_settings_get_boolean (nautilus->nautilus_prefs,
-                                       "desktop-is-home-dir");
+  return g_settings_get_boolean (nautilus->nautilus_prefs,
+                                  "desktop-is-home-dir");
+}
+
+/* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
+#define SFTP_PREFIX "sftp://"
+static void
+parse_sftp_uri (GFile *file,
+                char **user,
+                char **host,
+                unsigned int *port,
+                char **path)
+{
+  char *tmp, *save;
+  char *uri;
+
+  uri = g_file_get_uri (file);
+  g_assert (uri != NULL);
+  save = uri;
+
+  *path = NULL;
+  *user = NULL;
+  *host = NULL;
+  *port = 0;
+
+  /* skip intial 'sftp:// prefix */
+  g_assert (!strncmp (uri, SFTP_PREFIX, strlen (SFTP_PREFIX)));
+  uri += strlen (SFTP_PREFIX);
+
+  /* cut out the path */
+  tmp = strchr (uri, '/');
+  if (tmp != NULL) {
+    *path = g_uri_unescape_string (tmp, "/");
+    *tmp = '\0';
+  }
+
+  /* read the username - it ends with @ */
+  tmp = strchr (uri, '@');
+  if (tmp != NULL) {
+    *tmp++ = '\0';
+
+    *user = strdup (uri);
+    if (strchr (*user, ':') != NULL) {
+      /* chop the password */
+      *(strchr (*user, ':')) = '\0'; 
+    }
+
+    uri = tmp;
+  }
+
+  /* now read the port, starts with : */
+  tmp = strchr (uri, ':');
+  if (tmp != NULL) {
+    *tmp++ = '\0';
+    *port = atoi (tmp);  /*FIXME: getservbyname*/
+  }
+
+  /* what is left is the host */
+  *host = strdup (uri);
+  g_free (save);
+}
+
+static char *
+get_remote_ssh_command (const char *uri,
+                        const char *command_to_run)
+{
+  GFile *file;
+
+  char *host_name, *path, *user_name;
+  char *command, *user_host, *unescaped_path;
+  char *quoted_path;
+  char *remote_command;
+  char *quoted_remote_command;
+  char *port_str;
+  guint host_port;
+
+  g_assert (uri != NULL);
+
+  file = g_file_new_for_uri (uri);
+  parse_sftp_uri (file, &user_name, &host_name, &host_port, &path);
+  g_object_unref (file);
+
+  /* FIXME to we have to consider the remote file encoding? */
+  unescaped_path = g_uri_unescape_string (path, NULL);
+  quoted_path = g_shell_quote (unescaped_path);
+
+  port_str = NULL;
+  if (host_port != 0) {
+    port_str = g_strdup_printf (" -p %d", host_port);
+  } else {
+    port_str = g_strdup ("");
+  }
+
+  if (user_name != NULL) {
+    user_host = g_strdup_printf ("%s@%s", user_name, host_name);
+  } else {
+    user_host = g_strdup (host_name);
+  }
+
+  if (command_to_run != NULL) {
+    remote_command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
+  } else {
+    /* login shell */
+    remote_command = g_strdup_printf ("cd %s && exec $SHELL -", quoted_path);
+  }
+
+  quoted_remote_command = g_shell_quote (remote_command);
+
+  command = g_strdup_printf ("ssh %s%s -t %s", user_host, port_str, quoted_remote_command);
+
+  g_free (user_name);
+  g_free (user_host);
+  g_free (host_name);
+  g_free (port_str);
+
+  g_free (path);
+  g_free (unescaped_path);
+  g_free (quoted_path);
+
+  g_free (remote_command);
+  g_free (quoted_remote_command);
+
+  return command;
+}
+
+static inline char *
+get_gvfs_path_for_uri (const char *uri)
+{
+  GFile *file;
+  char *path;
+
+  file = g_file_new_for_uri (uri);
+  path = g_file_get_path (file);
+  g_object_unref (file);
+
+  return path;
+}
+
+static gboolean
+terminal_locked_down (TerminalNautilus *nautilus)
+{
+  return g_settings_get_boolean (nautilus->lockdown_prefs,
+                                 "disable-command-line");
+}
+
+/* used to determine for remote URIs whether GVFS is capable of mapping them to ~/.gvfs */
+static gboolean
+uri_has_local_path (const char *uri)
+{
+  GFile *file;
+  char *path;
+  gboolean ret;
+
+  file = g_file_new_for_uri (uri);
+  path = g_file_get_path (file);
+
+  ret = (path != NULL);
+
+  g_free (path);
+  g_object_unref (file);
+
+  return ret;
 }
 
 /* Nautilus menu item class & implementation */
@@ -602,8 +763,67 @@ static char *
 get_terminal_command_for_file_info (TerminalNautilus *nautilus,
                                     NautilusFileInfo *file_info,
                                     const char *command_to_run,
-                                    gboolean remote_terminal);
+                                    gboolean remote_terminal)
+{
+  char *uri, *path, *quoted_path;
+  char *command;
 
+  uri = nautilus_file_info_get_activation_uri (file_info);
+
+  path = NULL;
+  command = NULL;
+
+  switch (get_terminal_file_info_from_uri (uri)) {
+    case FILE_INFO_LOCAL:
+      if (uri != NULL) {
+        path = g_filename_from_uri (uri, NULL, NULL);
+      }
+      break;
+
+    case FILE_INFO_DESKTOP:
+      if (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus)) {
+        path = g_strdup (g_get_home_dir ());
+      } else {
+        path = g_strdup (g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP));
+      }
+      break;
+
+    case FILE_INFO_SFTP:
+      if (remote_terminal && uri != NULL) {
+        command = get_remote_ssh_command (uri, command_to_run);
+        break;
+      }
+      /* fall through */
+
+    case FILE_INFO_OTHER:
+      if (uri != NULL) {
+        /* map back remote URI to local path */
+        path = get_gvfs_path_for_uri (uri);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+  }
+
+  if (command == NULL && path != NULL) {
+    quoted_path = g_shell_quote (path);
+
+    if (command_to_run != NULL) {
+      command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
+    } else {
+      /* interactive shell */
+      command = g_strdup_printf ("cd %s && exec $SHELL", quoted_path);
+    }
+
+    g_free (quoted_path);
+  }
+
+  g_free (path);
+  g_free (uri);
+
+  return command;
+}
 
 static void
 terminal_nautilus_menu_item_activate (NautilusMenuItem *item)
@@ -770,232 +990,6 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
 }
 
 /* Nautilus extension class implementation */
-
-/* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
-#define SFTP_PREFIX "sftp://"
-static void
-parse_sftp_uri (GFile *file,
-		char **user,
-		char **host,
-		unsigned int *port,
-		char **path)
-{
-	char *tmp, *save;
-	char *uri;
-
-	uri = g_file_get_uri (file);
-	g_assert (uri != NULL);
-	save = uri;
-
-	*path = NULL;
-	*user = NULL;
-	*host = NULL;
-	*port = 0;
-
-	/* skip intial 'sftp:// prefix */
-	g_assert (!strncmp (uri, SFTP_PREFIX, strlen (SFTP_PREFIX)));
-	uri += strlen (SFTP_PREFIX);
-
-	/* cut out the path */
-	tmp = strchr (uri, '/');
-	if (tmp != NULL) {
-		*path = g_uri_unescape_string (tmp, "/");
-		*tmp = '\0';
-	}
-
-	/* read the username - it ends with @ */
-	tmp = strchr (uri, '@');
-	if (tmp != NULL) {
-		*tmp++ = '\0';
-
-		*user = strdup (uri);
-		if (strchr (*user, ':') != NULL) {
-			/* chop the password */
-			*(strchr (*user, ':')) = '\0'; 
-		}
-
-		uri = tmp;
-	}
-
-	/* now read the port, starts with : */
-	tmp = strchr (uri, ':');
-	if (tmp != NULL) {
-		*tmp++ = '\0';
-		*port = atoi (tmp);  /*FIXME: getservbyname*/
-	}
-
-	/* what is left is the host */
-	*host = strdup (uri);
-	g_free (save);
-}
-
-static char *
-get_remote_ssh_command (const char *uri,
-			const char *command_to_run)
-{
-	GFile *file;
-
-	char *host_name, *path, *user_name;
-	char *command, *user_host, *unescaped_path;
-	char *quoted_path;
-	char *remote_command;
-	char *quoted_remote_command;
-	char *port_str;
-	guint host_port;
-
-	g_assert (uri != NULL);
-
-	file = g_file_new_for_uri (uri);
-	parse_sftp_uri (file, &user_name, &host_name, &host_port, &path);
-	g_object_unref (file);
-
-	/* FIXME to we have to consider the remote file encoding? */
-	unescaped_path = g_uri_unescape_string (path, NULL);
-	quoted_path = g_shell_quote (unescaped_path);
-
-	port_str = NULL;
-	if (host_port != 0) {
-		port_str = g_strdup_printf (" -p %d", host_port);
-	} else {
-		port_str = g_strdup ("");
-	}
-
-	if (user_name != NULL) {
-		user_host = g_strdup_printf ("%s@%s", user_name, host_name);
-	} else {
-		user_host = g_strdup (host_name);
-	}
-
-	if (command_to_run != NULL) {
-		remote_command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
-	} else {
-		/* login shell */
-		remote_command = g_strdup_printf ("cd %s && exec $SHELL -", quoted_path);
-	}
-
-	quoted_remote_command = g_shell_quote (remote_command);
-
-	command = g_strdup_printf ("ssh %s%s -t %s", user_host, port_str, quoted_remote_command);
-
-	g_free (user_name);
-	g_free (user_host);
-	g_free (host_name);
-	g_free (port_str);
-
-	g_free (path);
-	g_free (unescaped_path);
-	g_free (quoted_path);
-
-	g_free (remote_command);
-	g_free (quoted_remote_command);
-
-	return command;
-}
-
-static inline char *
-get_gvfs_path_for_uri (const char *uri)
-{
-	GFile *file;
-	char *path;
-
-	file = g_file_new_for_uri (uri);
-	path = g_file_get_path (file);
-	g_object_unref (file);
-
-	return path;
-}
-
-static char *
-get_terminal_command_for_file_info (TerminalNautilus *nautilus,
-                                    NautilusFileInfo *file_info,
-				    const char *command_to_run,
-				    gboolean remote_terminal)
-{
-	char *uri, *path, *quoted_path;
-	char *command;
-
-	uri = nautilus_file_info_get_activation_uri (file_info);
-
-	path = NULL;
-	command = NULL;
-
-	switch (get_terminal_file_info_from_uri (uri)) {
-		case FILE_INFO_LOCAL:
-			if (uri != NULL) {
-				path = g_filename_from_uri (uri, NULL, NULL);
-			}
-			break;
-
-		case FILE_INFO_DESKTOP:
-			if (desktop_is_home_dir (nautilus) || desktop_opens_home_dir (nautilus)) {
-				path = g_strdup (g_get_home_dir ());
-			} else {
-				path = g_strdup (g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP));
-			}
-			break;
-
-		case FILE_INFO_SFTP:
-			if (remote_terminal && uri != NULL) {
-				command = get_remote_ssh_command (uri, command_to_run);
-				break;
-			}
-
-			/* fall through */
-		case FILE_INFO_OTHER:
-			if (uri != NULL) {
-				/* map back remote URI to local path */
-				path = get_gvfs_path_for_uri (uri);
-			}
-			break;
-
-		default:
-			g_assert_not_reached ();
-	}
-
-	if (command == NULL && path != NULL) {
-		quoted_path = g_shell_quote (path);
-
-		if (command_to_run != NULL) {
-			command = g_strdup_printf ("cd %s && exec %s", quoted_path, command_to_run);
-		} else {
-			/* interactive shell */
-			command = g_strdup_printf ("cd %s && exec $SHELL", quoted_path);
-		}
-
-		g_free (quoted_path);
-	}
-
-	g_free (path);
-	g_free (uri);
-
-	return command;
-}
-
-static gboolean
-terminal_locked_down (TerminalNautilus *nautilus)
-{
-        return g_settings_get_boolean (nautilus->lockdown_prefs,
-                                       "disable-command-line");
-}
-
-/* used to determine for remote URIs whether GVFS is capable of mapping them to ~/.gvfs */
-static gboolean
-uri_has_local_path (const char *uri)
-{
-	GFile *file;
-	char *path;
-	gboolean ret;
-
-	file = g_file_new_for_uri (uri);
-	path = g_file_get_path (file);
-
-	ret = (path != NULL);
-
-	g_free (path);
-	g_object_unref (file);
-
-	return ret;
-}
 
 static GList *
 terminal_nautilus_get_background_items (NautilusMenuProvider *provider,
