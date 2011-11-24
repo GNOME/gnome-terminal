@@ -117,12 +117,6 @@ enum
   NUM_COLUMNS
 };
 
-enum
-{
-  SOURCE_DEFAULT = 0,
-  SOURCE_SESSION = 1
-};
-
 static TerminalApp *global_app = NULL;
 
 /* Helper functions */
@@ -1660,6 +1654,8 @@ terminal_app_get_active_encodings (TerminalApp *app)
 
   return g_slist_sort (list, (GCompareFunc) compare_encodings);
 }
+
+#include "terminal-options.h"
 
 void
 terminal_app_save_config (TerminalApp *app,

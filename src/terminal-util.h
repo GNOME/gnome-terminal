@@ -68,21 +68,11 @@ void terminal_util_key_file_set_string_escape    (GKeyFile *key_file,
                                                   const char *group,
                                                   const char *key,
                                                   const char *string);
-char *terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
-                                                  const char *group,
-                                                  const char *key,
-                                                  GError **error);
-
 void terminal_util_key_file_set_argv      (GKeyFile *key_file,
                                            const char *group,
                                            const char *key,
                                            int argc,
                                            char **argv);
-char **terminal_util_key_file_get_argv    (GKeyFile *key_file,
-                                           const char *group,
-                                           const char *key,
-                                           int *argc,
-                                           GError **error);
 
 void terminal_util_add_proxy_env (GHashTable *env_table);
 

@@ -36,6 +36,48 @@
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
 
+static char *
+terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
+                                            const char *group,
+                                            const char *key,
+                                            GError **error)
+{
+  char *escaped, *unescaped;
+
+  escaped = g_key_file_get_string (key_file, group, key, error);
+  if (!escaped)
+    return NULL;
+
+  unescaped = g_strcompress (escaped);
+  g_free (escaped);
+
+  return unescaped;
+}
+
+static char **
+terminal_util_key_file_get_argv (GKeyFile *key_file,
+                                 const char *group,
+                                 const char *key,
+                                 int *argc,
+                                 GError **error)
+{
+  char **argv;
+  char *flat;
+  gboolean retval;
+
+  flat = terminal_util_key_file_get_string_unescape (key_file, group, key, error);
+  if (!flat)
+    return NULL;
+
+  retval = g_shell_parse_argv (flat, argc, &argv, error);
+  g_free (flat);
+
+  if (retval)
+    return argv;
+
+  return NULL;
+}
+
 static InitialTab*
 initial_tab_new (const char *profile,
                  gboolean    is_id)
@@ -625,7 +667,10 @@ option_zoom_callback (const gchar *option_name,
       it->zoom_set = TRUE;
     }
   else
-    options->zoom = zoom;
+    {
+      options->zoom = zoom;
+      options->zoom_set = TRUE;
+    }
 
   return TRUE;
 }
@@ -667,7 +712,6 @@ digest_options_callback (GOptionContext *context,
  * @working_directory: the default working directory
  * @display_name: the default X display name
  * @startup_id: the startup notification ID
- * @env: the environment as variable=value pairs
  * @remote_arguments: whether the caller is the factory process or not
  * @ignore_unknown_options: whether to ignore unknown options when parsing
  *   the arguments
@@ -686,7 +730,6 @@ TerminalOptions *
 terminal_options_parse (const char *working_directory,
                         const char *display_name,
                         const char *startup_id,
-                        char **env,
                         gboolean remote_arguments,
                         gboolean ignore_unknown_options,
                         int *argcp,
@@ -712,7 +755,6 @@ terminal_options_parse (const char *working_directory,
   options->execute = FALSE;
   options->use_factory = TRUE;
 
-  options->env = g_strdupv (env);
   options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
   options->display_name = g_strdup (display_name);
   options->initial_windows = NULL;
@@ -720,6 +762,7 @@ terminal_options_parse (const char *working_directory,
   options->default_geometry = NULL;
   options->default_title = NULL;
   options->zoom = 1.0;
+  options->zoom_set = FALSE;
 
   options->screen_number = -1;
   options->default_working_dir = g_strdup (working_directory);
@@ -779,8 +822,6 @@ terminal_options_parse (const char *working_directory,
   terminal_options_free (options);
   return NULL;
 }
-
-#ifdef TERMINAL_SERVER
 
 /**
  * terminal_options_merge_config:
@@ -901,8 +942,6 @@ terminal_options_merge_config (TerminalOptions *options,
   return TRUE;
 }
 
-#endif /* TERMINAL_SERVIER */
-
 /**
  * terminal_options_ensure_window:
  * @options:
@@ -927,7 +966,6 @@ terminal_options_free (TerminalOptions *options)
   g_list_foreach (options->initial_windows, (GFunc) initial_window_free, NULL);
   g_list_free (options->initial_windows);
 
-  g_strfreev (options->env);
   g_free (options->default_role);
   g_free (options->default_geometry);
   g_free (options->default_working_dir);

@@ -3822,6 +3822,7 @@ terminal_window_get_ui_manager (TerminalWindow *window)
   return priv->ui_manager;
 }
 
+#include "terminal-options.h"
 void
 terminal_window_save_state (TerminalWindow *window,
                             GKeyFile *key_file,

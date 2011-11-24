@@ -43,6 +43,13 @@
 #include "terminal-options.h"
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
+#include "terminal-client-utils.h"
+
+enum
+{
+  SOURCE_DEFAULT = 0,
+  SOURCE_SESSION = 1
+};
 
 /**
  * handle_options:
@@ -61,23 +68,23 @@
 static gboolean
 handle_options (TerminalFactory *factory,
                 TerminalOptions *options,
-                char **envv,
                 gboolean allow_resume,
                 GError **error)
 {
-#if 0
   GList *lw;
-  GdkScreen *gdk_screen;
+  GError *err;
 
+#if 0
   gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
                                                         options->screen_number);
+#endif
 
   if (options->save_config)
     {
 #if 0
       if (options->remote_arguments)
         return terminal_app_save_config_file (app, options->config_file, error);
-      
+
       g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_IN_FACTORY,
                             "Cannot use \"--save-config\" when starting the factory process");
       return FALSE;
@@ -124,96 +131,108 @@ handle_options (TerminalFactory *factory,
   /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
 
-  if (options->startup_id != NULL)
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "Startup ID is '%s'\n",
-                           options->startup_id);
-
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {
       InitialWindow *iw = lw->data;
       GList *lt;
-#if 0
-      TerminalWindow *window;
 
       g_assert (iw->tabs);
-
-      /* Create & setup new window */
-      window = terminal_app_new_window (app, gdk_screen);
-
-      /* Restored windows shouldn't demand attention; see bug #586308. */
-      if (iw->source_tag == SOURCE_SESSION)
-        terminal_window_set_is_restored (window);
-
-      if (options->startup_id != NULL)
-        gtk_window_set_startup_id (GTK_WINDOW (window), options->startup_id);
-
-      /* Overwrite the default, unique window role set in terminal_window_init */
-      if (iw->role)
-        gtk_window_set_role (GTK_WINDOW (window), iw->role);
-
-      if (iw->force_menubar_state)
-        terminal_window_set_menubar_visible (window, iw->menubar_state);
-
-      if (iw->start_fullscreen)
-        gtk_window_fullscreen (GTK_WINDOW (window));
-      if (iw->start_maximized)
-        gtk_window_maximize (GTK_WINDOW (window));
-#endif
 
       /* Now add the tabs */
       for (lt = iw->tabs; lt != NULL; lt = lt->next)
         {
           InitialTab *it = lt->data;
+          GVariantBuilder builder;
+          char *object_path;
+          TerminalReceiver *receiver;
+          char **argv;
+          int argc;
+
+          err = NULL;
+
+          g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
+
+          terminal_client_append_create_instance_options (&builder,
+                                                          options->display_name,
+                                                          options->startup_id,
+                                                          iw->geometry,
+                                                          iw->role,
+                                                          it->profile ? it->profile : options->default_profile,
+                                                          it->title ? it->title : options->default_title,
+                                                          iw->start_maximized,
+                                                          iw->start_fullscreen);
+
+          /* Restored windows shouldn't demand attention; see bug #586308. */
+          if (iw->source_tag == SOURCE_SESSION)
+            g_variant_builder_add (&builder, "{sv}",
+                                   "present-window", g_variant_new_boolean (FALSE));
+          if (options->zoom_set || it->zoom_set)
+            g_variant_builder_add (&builder, "{sv}",
+                                   "zoom", g_variant_new_double (it->zoom_set ? it->zoom : options->zoom));
 #if 0
-          GSettings *profile = NULL;
-          TerminalScreen *screen;
-
-          if (it->profile)
-            {
-              if (it->profile_is_id)
-                profile = terminal_app_get_profile_by_name (app, it->profile);
-              else
-                profile = terminal_app_get_profile_by_visible_name (app, it->profile);
-
-              if (profile == NULL)
-                g_printerr (_("No such profile \"%s\", using default profile\n"), it->profile);
-            }
-          if (profile == NULL)
-            profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
-          g_assert (profile);
-
-          screen = terminal_app_new_terminal (app, window, profile,
-                                              it->exec_argv ? it->exec_argv : options->exec_argv,
-                                              it->title ? it->title : options->default_title,
-                                              it->working_dir ? it->working_dir : options->default_working_dir,
-                                              options->env,
-                                              it->zoom_set ? it->zoom : options->zoom);
-          g_object_unref (profile);
-
+          if (iw->force_menubar_state)
+            terminal_window_set_menubar_visible (window, iw->menubar_state);
+#endif
+#if 0
           if (it->active)
             terminal_window_switch_screen (window, screen);
 #endif
+
+          if (!terminal_factory_call_create_instance_sync 
+                 (factory,
+                  g_variant_builder_end (&builder),
+                  &object_path,
+                  NULL /* cancellable */,
+                  &err)) {
+            g_printerr ("Error creating terminal: %s\n", err->message);
+            g_error_free (err);
+
+            /* Continue processing the remaining options! */
+            continue;
+          }
+
+          receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                                               G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
+                                                               G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
+                                                               TERMINAL_UNIQUE_NAME,
+                                                               object_path,
+                                                               NULL /* cancellable */,
+                                                               &err);
+          if (receiver == NULL) {
+            g_printerr ("Failed to create proxy for terminal: %s\n", err->message);
+            g_error_free (err);
+            g_free (object_path);
+
+            /* Continue processing the remaining options! */
+            continue;
+          }
+          g_free (object_path);
+
+          g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
+
+          terminal_client_append_exec_options (&builder,
+                                               it->working_dir ? it->working_dir 
+                                                               : options->default_working_dir);
+
+          argv = it->exec_argv ? it->exec_argv : options->exec_argv,
+          argc = argv ? g_strv_length (argv) : 0;
+
+          if (!terminal_receiver_call_exec_sync (receiver,
+                                                 g_variant_builder_end (&builder),
+                                                 g_variant_new_bytestring_array ((const char * const *) argv, argc),
+                                                NULL /* cancellable */,
+                                                &err)) {
+            g_printerr ("Error: %s\n", err->message);
+            g_error_free (err);
+
+            /* Continue processing the remaining options! */
+            continue;
+          }
+
         }
-
-#if 0
-      if (iw->geometry)
-        {
-          _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                                "[window %p] applying geometry %s\n",
-                                window, iw->geometry);
-
-          if (!terminal_window_parse_geometry (window, iw->geometry))
-            g_printerr (_("Invalid geometry string \"%s\"\n"), iw->geometry);
-        }
-
-      gtk_window_present (GTK_WINDOW (window));
-#endif
     }
 
   return TRUE;
-#endif
-  return FALSE;
 }
 
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
@@ -271,7 +290,7 @@ int
 main (int argc, char **argv)
 {
   int i;
-  char **argv_copy, **envv;
+  char **argv_copy;
   const char *startup_id, *display_name;
   GdkDisplay *display;
   TerminalOptions *options;
@@ -302,7 +321,6 @@ main (int argc, char **argv)
   options = terminal_options_parse (working_directory,
                                     NULL,
                                     startup_id,
-                                    NULL,
                                     FALSE,
                                     FALSE,
                                     &argc, &argv,
@@ -360,27 +378,12 @@ main (int argc, char **argv)
     goto out;
   }
 
-  envv = g_get_environ ();
-#if 0
-  if (!terminal_factory_call_handle_arguments_sync (factory,
-                                                    working_directory ? working_directory : "",
-                                                    display_name ? display_name : "",
-                                                    startup_id ? startup_id : "",
-                                                    (const char * const *) envv,
-                                                    (const char * const *) argv_copy,
-                                                    NULL /* cancellable */,
-                                                    &error)) {
-    g_printerr ("Error opening terminal: %s\n", error->message);
-    g_error_free (error);
-  } else {
-#endif
-  if (!handle_options (factory, options, envv, TRUE /* allow resume */, &error)) {
+  if (!handle_options (factory, options, TRUE /* allow resume */, &error)) {
     g_printerr ("Failed to handle arguments: %s\n", error->message);
   } else {
     exit_code = EXIT_SUCCESS;
   }
 
-  g_strfreev (envv);
   g_object_unref (factory);
 
 out:

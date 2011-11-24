@@ -2077,6 +2077,8 @@ terminal_screen_check_match (TerminalScreen *screen,
   return NULL;
 }
 
+#include "terminal-options.h"
+
 void
 terminal_screen_save_config (TerminalScreen *screen,
                              GKeyFile *key_file,

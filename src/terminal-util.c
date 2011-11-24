@@ -445,24 +445,6 @@ terminal_util_key_file_set_string_escape (GKeyFile *key_file,
   g_free (escaped);
 }
 
-char *
-terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
-                                            const char *group,
-                                            const char *key,
-                                            GError **error)
-{
-  char *escaped, *unescaped;
-
-  escaped = g_key_file_get_string (key_file, group, key, error);
-  if (!escaped)
-    return NULL;
-
-  unescaped = g_strcompress (escaped);
-  g_free (escaped);
-
-  return unescaped;
-}
-
 void
 terminal_util_key_file_set_argv (GKeyFile *key_file,
                                  const char *group,
@@ -487,30 +469,6 @@ terminal_util_key_file_set_argv (GKeyFile *key_file,
 
   g_free (flat);
   g_strfreev (quoted_argv);
-}
-
-char **
-terminal_util_key_file_get_argv (GKeyFile *key_file,
-                                 const char *group,
-                                 const char *key,
-                                 int *argc,
-                                 GError **error)
-{
-  char **argv;
-  char *flat;
-  gboolean retval;
-
-  flat = terminal_util_key_file_get_string_unescape (key_file, group, key, error);
-  if (!flat)
-    return NULL;
-
-  retval = g_shell_parse_argv (flat, argc, &argv, error);
-  g_free (flat);
-
-  if (retval)
-    return argv;
-
-  return NULL;
 }
 
 /* Proxy stuff */

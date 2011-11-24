@@ -26,10 +26,33 @@
 
 G_BEGIN_DECLS
 
+#define TERMINAL_CONFIG_VERSION             (1) /* Bump this for any changes */
+#define TERMINAL_CONFIG_COMPAT_VERSION      (1) /* Bump this for incompatible changes */
+
+#define TERMINAL_CONFIG_GROUP               "GNOME Terminal Configuration"
+#define TERMINAL_CONFIG_PROP_VERSION        "Version"
+#define TERMINAL_CONFIG_PROP_COMPAT_VERSION "CompatVersion"
+#define TERMINAL_CONFIG_PROP_WINDOWS        "Windows"
+
+#define TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB       "ActiveTerminal"
+#define TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN       "Fullscreen"
+#define TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY         "Geometry"
+#define TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED        "Maximized"
+#define TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE  "MenubarVisible"
+#define TERMINAL_CONFIG_WINDOW_PROP_ROLE             "Role"
+#define TERMINAL_CONFIG_WINDOW_PROP_TABS             "Terminals"
+
+#define TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT             "Height"
+#define TERMINAL_CONFIG_TERMINAL_PROP_COMMAND            "Command"
+#define TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID         "ProfileID"
+#define TERMINAL_CONFIG_TERMINAL_PROP_TITLE              "Title"
+#define TERMINAL_CONFIG_TERMINAL_PROP_WIDTH              "Width"
+#define TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY  "WorkingDirectory"
+#define TERMINAL_CONFIG_TERMINAL_PROP_ZOOM               "Zoom"
+
 typedef struct
 {
   gboolean remote_arguments;
-  char   **env;
   char    *startup_id;
   char    *display_name;
   int      screen_number;
@@ -53,6 +76,8 @@ typedef struct
   char    *config_file;
   gboolean load_config;
   gboolean save_config;
+
+  guint zoom_set : 1;
 } TerminalOptions;
 
 typedef struct
@@ -97,7 +122,6 @@ typedef enum {
 TerminalOptions *terminal_options_parse (const char *working_directory,
                                          const char *display_name,
                                          const char *startup_id,
-                                         char **env,
                                          gboolean remote_arguments,
                                          gboolean ignore_unknown_options,
                                          int *argcp,
