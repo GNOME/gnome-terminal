@@ -40,6 +40,7 @@
 #include "terminal-intl.h"
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
+#include "terminal-client-utils.h"
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -280,7 +281,7 @@ get_goption_context (OptionData *data)
       N_("PROFILE-NAME") },
     { "title", 0, 0, G_OPTION_ARG_STRING, &data->title,
       N_("Set the terminal title"), N_("TITLE") },
-    { "cwd", 0, 0, G_OPTION_ARG_STRING, &data->working_directory,
+    { "cwd", 0, 0, G_OPTION_ARG_FILENAME, &data->working_directory,
       N_("Set the working directory"), N_("DIRNAME") },
     { "zoom", 0, 0, G_OPTION_ARG_CALLBACK, option_zoom_cb,
       N_("Set the terminal's zoom factor (1.0 = normal size)"),
@@ -401,11 +402,6 @@ parse_arguments (int *argcp,
   return data;
 }
 
-/**
- * build_create_options_variant:
- * 
- * Returns: a floating #GVariant
- */
 static GVariant *
 build_create_options_variant (OptionData *data)
 {
@@ -413,24 +409,15 @@ build_create_options_variant (OptionData *data)
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
-  g_variant_builder_add (&builder, "{sv}",
-                         "display", g_variant_new_bytestring (data->display_name));
-
-  if (data->startup_id)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "desktop-startup-id", g_variant_new_bytestring (data->startup_id));
-  if (data->geometry)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "geometry", g_variant_new_string (data->geometry));
-  if (data->role)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "role", g_variant_new_string (data->role));
-  if (data->start_maximized)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "maximize-window", g_variant_new_boolean (TRUE));
-  if (data->start_fullscreen)
-    g_variant_builder_add (&builder, "{sv}", 
-                           "fullscreen-window", g_variant_new_boolean (TRUE));
+  terminal_client_append_create_instance_options (&builder,
+                                                  data->display_name,
+                                                  data->startup_id,
+                                                  data->geometry,
+                                                  data->role,
+                                                  data->profile,
+                                                  data->title,
+                                                  data->start_maximized,
+                                                  data->start_fullscreen);
 
   return g_variant_builder_end (&builder);
 }
@@ -444,46 +431,11 @@ static GVariant *
 build_exec_options_variant (OptionData *data)
 {
   GVariantBuilder builder;
-  char **envv;
-  const char *pwd, *working_directory;
-  char path[PATH_MAX];
 
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
-  envv = g_get_environ ();
-  envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
-  envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
-  envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
-
-  g_variant_builder_add (&builder, "{sv}",
-                         "environ",
-                         g_variant_new_bytestring_array ((const char * const *) envv, -1));
-
-  /* If $PWD points to the CWD, transmit $PWD instead so as
-   * not follow symlinks! See bug #502146.
-   */
-  pwd = g_environ_getenv (envv, "PWD");
-  if (pwd) {
-    char *s;
-    GError *err = NULL;
-    if ((s = g_file_read_link (pwd, &err)) == NULL)
-      g_print ("Failed to readlink %s: %s\n", pwd, err->message);
-    else 
-      g_print ("Resolved: %s\n", s);
-  }
-  if (pwd != NULL && data->working_directory != NULL &&
-      readlink (pwd, path, sizeof (path)) != -1) {
-    working_directory = pwd;
-  } else {
-    working_directory = data->working_directory;
-  }
-
-  g_print ("Transmit pwd = %s (working_directory %s)\n", working_directory, data->working_directory);
-
-  g_variant_builder_add (&builder, "{sv}", 
-                         "cwd", g_variant_new_bytestring (working_directory));
-
-  g_strfreev (envv);
+  terminal_client_append_exec_options (&builder,
+                                       data->working_directory);
 
   return g_variant_builder_end (&builder);
 }

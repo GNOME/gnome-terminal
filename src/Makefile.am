@@ -159,6 +159,8 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 
 gnome_terminal_client_SOURCES = \
 	client.c \
+	terminal-client-utils.c \
+	terminal-client-utils.h \
 	terminal-defines.h \
 	terminal-intl.h \
 	$(NULL)
@@ -192,6 +194,8 @@ gnome_terminal_client_LDADD = \
 
 gnome_terminal_SOURCES = \
 	terminal.c \
+	terminal-client-utils.c \
+	terminal-client-utils.h \
 	terminal-debug.c \
 	terminal-debug.h \
 	terminal-defines.h \

@@ -1158,18 +1158,15 @@ terminal_app_create_instance (TerminalFactory *factory,
   GSettings *profile = NULL;
   GdkScreen *gdk_screen;
   const char *startup_id, *display_name;
+  char *role, *geometry, *profile_name, *title;
   int screen_number;
-  gboolean is_restored = FALSE;
-  gboolean start_fullscreen = FALSE;
-  gboolean start_maximized = FALSE;
-  gboolean force_menubar_state = FALSE, menubar_state = TRUE;
-  char *role = NULL;
-  char *title = NULL;
-  char *profile_name = NULL;
+  gboolean start_maximized, start_fullscreen;
+  gboolean present_window, present_window_set = FALSE;
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
+
+  gboolean menubar_state = TRUE, menubar_state_set = FALSE;
   gboolean active = TRUE;
-  char *geometry = NULL;
 
   if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
     g_dbus_method_invocation_return_error (invocation, 
@@ -1190,18 +1187,30 @@ terminal_app_create_instance (TerminalFactory *factory,
 
   if (!g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
     startup_id = NULL;
+  if (!g_variant_lookup (options, "geometry", "&s", &geometry))
+    geometry = NULL;
+  if (!g_variant_lookup (options, "role", "&s", &role))
+    role = NULL;
+  if (!g_variant_lookup (options, "maximize-window", "b", &start_maximized))
+    start_maximized = FALSE;
+  if (!g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen))
+    start_fullscreen = FALSE;
+  if (!g_variant_lookup (options, "profile", "&s", &profile_name))
+    profile_name = NULL;
+  if (!g_variant_lookup (options, "title", "&s", &title))
+    profile_name = NULL;
 
-  if (startup_id != NULL)
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                           "Startup ID is '%s'\n", startup_id);
-
-  if (!g_variant_lookup (options, "zoom", "d", &zoom))
-    zoom_set = FALSE;
+  if (g_variant_lookup (options, "present-window", "b", &present_window)) {
+    present_window_set = TRUE;
+  }
+  if (g_variant_lookup (options, "zoom", "d", &zoom)) {
+    zoom_set = TRUE;
+  }
 
   window = terminal_app_new_window (app, gdk_screen);
 
   /* Restored windows shouldn't demand attention; see bug #586308. */
-  if (is_restored)
+  if (present_window_set && !present_window)
     terminal_window_set_is_restored (window);
 
   if (startup_id != NULL)
@@ -1211,7 +1220,7 @@ terminal_app_create_instance (TerminalFactory *factory,
   if (role)
     gtk_window_set_role (GTK_WINDOW (window), role);
 
-  if (force_menubar_state)
+  if (menubar_state_set)
     terminal_window_set_menubar_visible (window, menubar_state);
 
   if (start_fullscreen)
