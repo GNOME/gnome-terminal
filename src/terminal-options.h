@@ -77,6 +77,11 @@ typedef struct
   gboolean load_config;
   gboolean save_config;
 
+  gboolean sm_client_disable;
+  char *sm_client_state_file;
+  char *sm_client_id;
+  char *sm_config_prefix;
+
   guint zoom_set : 1;
 } TerminalOptions;
 
@@ -120,14 +125,10 @@ typedef enum {
 } TerminalOptionError;
 
 TerminalOptions *terminal_options_parse (const char *working_directory,
-                                         const char *display_name,
                                          const char *startup_id,
-                                         gboolean remote_arguments,
-                                         gboolean ignore_unknown_options,
                                          int *argcp,
                                          char ***argvp,
-                                         GError **error,
-                                         ...) G_GNUC_NULL_TERMINATED;
+                                         GError **error);
 
 gboolean terminal_options_merge_config (TerminalOptions *options,
                                         GKeyFile *key_file,

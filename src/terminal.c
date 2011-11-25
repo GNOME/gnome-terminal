@@ -34,10 +34,6 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#ifdef WITH_SMCLIENT
-#include "eggsmclient.h"
-#endif
-
 #include "terminal-debug.h"
 #include "terminal-intl.h"
 #include "terminal-options.h"
@@ -68,7 +64,6 @@ enum
 static gboolean
 handle_options (TerminalFactory *factory,
                 TerminalOptions *options,
-                gboolean allow_resume,
                 GError **error)
 {
   GList *lw;
@@ -110,23 +105,21 @@ handle_options (TerminalFactory *factory,
       /* fall-through on success */
     }
 
-#ifdef WITH_SMCLIENT
-{
-  EggSMClient *sm_client;
-
-  sm_client = egg_sm_client_get ();
-
-  if (allow_resume && egg_sm_client_is_resumed (sm_client))
+  if (options->sm_client_state_file && !options->sm_client_disable)
     {
       GKeyFile *key_file;
+      gboolean result;
 
-      key_file = egg_sm_client_get_state_file (sm_client);
-      if (key_file != NULL &&
-          !terminal_options_merge_config (options, key_file, SOURCE_SESSION, error))
+      key_file = g_key_file_new ();
+      result = g_key_file_load_from_file (key_file, options->sm_client_state_file, 0, error) &&
+               terminal_options_merge_config (options, key_file, SOURCE_SESSION, error);
+      g_key_file_free (key_file);
+
+      if (!result)
         return FALSE;
+
+      /* fall-through on success */
     }
-}
-#endif
 
   /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
@@ -317,18 +310,9 @@ main (int argc, char **argv)
   working_directory = g_get_current_dir ();
 
   options = terminal_options_parse (working_directory,
-                                    NULL,
                                     startup_id,
-                                    FALSE,
-                                    FALSE,
                                     &argc, &argv,
-                                    &error,
-                                    gtk_get_option_group (TRUE),
-#ifdef WITH_SMCLIENT
-                                    egg_sm_client_get_option_group (),
-#endif
-                                    NULL);
-
+                                    &error);
   if (options == NULL) {
     g_printerr (_("Failed to parse arguments: %s\n"), error->message);
     g_error_free (error);
@@ -339,14 +323,7 @@ main (int argc, char **argv)
 
   g_set_application_name (_("Terminal"));
 
-  /* Unset the these env variables, so they doesn't end up
-   * in the factory's env and thus in the terminals' envs.
-   */
-  g_unsetenv ("DESKTOP_STARTUP_ID");
-  g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE_PID");
-  g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE");
-
- /* Do this here so that gdk_display is initialized */
+  /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
     {
       /* Create a fake one containing a timestamp that we can use */
@@ -376,7 +353,7 @@ main (int argc, char **argv)
     goto out;
   }
 
-  if (!handle_options (factory, options, TRUE /* allow resume */, &error)) {
+  if (!handle_options (factory, options, &error)) {
     g_printerr ("Failed to handle arguments: %s\n", error->message);
   } else {
     exit_code = EXIT_SUCCESS;

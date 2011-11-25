@@ -710,16 +710,11 @@ digest_options_callback (GOptionContext *context,
 /**
  * terminal_options_parse:
  * @working_directory: the default working directory
- * @display_name: the default X display name
  * @startup_id: the startup notification ID
- * @remote_arguments: whether the caller is the factory process or not
- * @ignore_unknown_options: whether to ignore unknown options when parsing
- *   the arguments
  * @argcp: (inout) address of the argument count. Changed if any arguments were handled
  * @argvp: (inout) address of the argument vector. Any parameters understood by
  *   the terminal #GOptionContext are removed
  * @error: a #GError to fill in
- * @...: a %NULL terminated list of extra #GOptionGroup<!-- -->s
  *
  * Parses the argument vector *@argvp.
  *
@@ -728,26 +723,20 @@ digest_options_callback (GOptionContext *context,
  */
 TerminalOptions *
 terminal_options_parse (const char *working_directory,
-                        const char *display_name,
                         const char *startup_id,
-                        gboolean remote_arguments,
-                        gboolean ignore_unknown_options,
                         int *argcp,
                         char ***argvp,
-                        GError **error,
-                        ...)
+                        GError **error)
 {
   TerminalOptions *options;
   GOptionContext *context;
-  GOptionGroup *extra_group;
-  va_list va_args;
   gboolean retval;
   int i;
   char **argv = *argvp;
 
   options = g_slice_new0 (TerminalOptions);
 
-  options->remote_arguments = remote_arguments;
+  options->remote_arguments = FALSE;
   options->default_window_menubar_forced = FALSE;
   options->default_window_menubar_state = TRUE;
   options->default_fullscreen = FALSE;
@@ -756,7 +745,7 @@ terminal_options_parse (const char *working_directory,
   options->use_factory = TRUE;
 
   options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
-  options->display_name = g_strdup (display_name);
+  options->display_name = NULL;
   options->initial_windows = NULL;
   options->default_role = NULL;
   options->default_geometry = NULL;
@@ -801,18 +790,6 @@ terminal_options_parse (const char *working_directory,
     }
 
   context = get_goption_context (options);
-
-  g_option_context_set_ignore_unknown_options (context, ignore_unknown_options);
-
-  va_start (va_args, error);
-  extra_group = va_arg (va_args, GOptionGroup*);
-  while (extra_group != NULL)
-    {
-      g_option_context_add_group (context, extra_group);
-      extra_group = va_arg (va_args, GOptionGroup*);
-    }
-  va_end (va_args);
-
   retval = g_option_context_parse (context, argcp, argvp, error);
   g_option_context_free (context);
 
@@ -976,6 +953,10 @@ terminal_options_free (TerminalOptions *options)
 
   g_free (options->display_name);
   g_free (options->startup_id);
+
+  g_free (options->sm_client_state_file);
+  g_free (options->sm_client_id);
+  g_free (options->sm_config_prefix);
 
   g_slice_free (TerminalOptions, options);
 }
@@ -1395,12 +1376,24 @@ get_goption_context (TerminalOptions *options)
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
+  const GOptionEntry smclient_goptions[] = {
+    { "sm-client-disable",    0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
+    { "sm-client-state-file", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &options->sm_client_state_file, NULL, NULL },
+    { "sm-client-id",         0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_client_id,         NULL, NULL },
+    { "sm-disable",           0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
+    { "sm-config-prefix",     0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_config_prefix,     NULL, NULL },
+    { NULL }
+  };
+
   GOptionContext *context;
   GOptionGroup *group;
 
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_set_description (context, N_("GNOME Terminal Emulator"));
+  g_option_context_set_ignore_unknown_options (context, FALSE);
+
+  g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   group = g_option_group_new ("gnome-terminal",
                               N_("GNOME Terminal Emulator"),
@@ -1430,7 +1423,7 @@ get_goption_context (TerminalOptions *options)
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, window_goptions);
   g_option_context_add_group (context, group);
-  
+
   group = g_option_group_new ("terminal-options",
                               N_("Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"),
                               N_("Show per-terminal options"),
@@ -1439,6 +1432,10 @@ get_goption_context (TerminalOptions *options)
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
-  
+
+  group = g_option_group_new ("sm-client", "", "", NULL, NULL);
+  g_option_group_add_entries (group, smclient_goptions);
+  g_option_context_add_group (context, group);
+
   return context;
 }
