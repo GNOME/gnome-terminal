@@ -224,11 +224,9 @@ handle_options (TerminalFactory *factory,
                                                 &err)) {
             g_printerr ("Error: %s\n", err->message);
             g_error_free (err);
-
-            /* Continue processing the remaining options! */
-            continue;
           }
 
+          g_object_unref (receiver);
         }
     }
 
