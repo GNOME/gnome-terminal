@@ -1,4 +1,8 @@
 /*
+ * Copyright © 2001, 2002 Havoc Pennington
+ * Copyright © 2002 Red Hat, Inc.
+ * Copyright © 2002 Sun Microsystems
+ * Copyright © 2003 Mariano Suarez-Alvarez
  * Copyright © 2011 Christian Persch
  *
  * This programme is free software; you can redistribute it and/or
@@ -21,7 +25,10 @@
 
 #include "terminal-client-utils.h"
 
+#include <string.h>
+
 #include <gio/gio.h>
+#include <gdk/gdkx.h>
 
 /**
  * terminal_client_append_create_instance_options:
@@ -105,4 +112,60 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
                            "cwd", g_variant_new_bytestring (working_directory));
 
   g_strfreev (envv);
+}
+
+/**
+ * terminal_client_get_fallback_startup_id:
+ * @startup_id: (inout):
+ */
+void 
+terminal_client_get_fallback_startup_id  (char **startup_id)
+{
+  Display *xdisplay;
+  Window xwindow;
+  XEvent event;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
+
+  {
+    XSetWindowAttributes attrs;
+    Atom atom_name;
+    Atom atom_type;
+    const char *name;
+
+    attrs.override_redirect = True;
+    attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
+
+    xwindow =
+      XCreateWindow (xdisplay,
+                     RootWindow (xdisplay, 0),
+                     -100, -100, 1, 1,
+                     0,
+                     CopyFromParent,
+                     CopyFromParent,
+                     (Visual *)CopyFromParent,
+                     CWOverrideRedirect | CWEventMask,
+                     &attrs);
+
+    atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
+    g_assert (atom_name != None);
+    atom_type = XInternAtom (xdisplay, "STRING", TRUE);
+    g_assert (atom_type != None);
+
+    name = "Fake Window";
+    XChangeProperty (xdisplay,
+                     xwindow, atom_name,
+                     atom_type,
+                     8, PropModeReplace, (unsigned char *)name, strlen (name));
+  }
+
+  XWindowEvent (xdisplay,
+                xwindow,
+                PropertyChangeMask,
+                &event);
+
+  XDestroyWindow(xdisplay, xwindow);
+
+  if (startup_id)
+    *startup_id = g_strdup_printf ("_TIME%lu", event.xproperty.time);
 }

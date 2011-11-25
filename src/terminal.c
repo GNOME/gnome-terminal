@@ -32,7 +32,6 @@
 #include <gio/gio.h>
 
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 
 #include "terminal-debug.h"
 #include "terminal-intl.h"
@@ -226,57 +225,6 @@ handle_options (TerminalFactory *factory,
   return TRUE;
 }
 
-/* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
- * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
- */
-static Time
-slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
-{
-  Window xwindow;
-  XEvent event;
-
-  {
-    XSetWindowAttributes attrs;
-    Atom atom_name;
-    Atom atom_type;
-    const char *name;
-
-    attrs.override_redirect = True;
-    attrs.event_mask = PropertyChangeMask | StructureNotifyMask;
-
-    xwindow =
-      XCreateWindow (xdisplay,
-                     RootWindow (xdisplay, 0),
-                     -100, -100, 1, 1,
-                     0,
-                     CopyFromParent,
-                     CopyFromParent,
-                     (Visual *)CopyFromParent,
-                     CWOverrideRedirect | CWEventMask,
-                     &attrs);
-
-    atom_name = XInternAtom (xdisplay, "WM_NAME", TRUE);
-    g_assert (atom_name != None);
-    atom_type = XInternAtom (xdisplay, "STRING", TRUE);
-    g_assert (atom_type != None);
-
-    name = "Fake Window";
-    XChangeProperty (xdisplay,
-                     xwindow, atom_name,
-                     atom_type,
-                     8, PropModeReplace, (unsigned char *)name, strlen (name));
-  }
-
-  XWindowEvent (xdisplay,
-                xwindow,
-                PropertyChangeMask,
-                &event);
-
-  XDestroyWindow(xdisplay, xwindow);
-
-  return event.xproperty.time;
-}
-
 int
 main (int argc, char **argv)
 {
@@ -325,14 +273,7 @@ main (int argc, char **argv)
 
   /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
-    {
-      /* Create a fake one containing a timestamp that we can use */
-      Time timestamp;
-
-      timestamp = slowly_and_stupidly_obtain_timestamp (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()));
-
-      options->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
-    }
+    terminal_client_get_fallback_startup_id (&options->startup_id);
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);

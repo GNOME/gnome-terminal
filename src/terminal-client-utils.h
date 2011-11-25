@@ -37,6 +37,8 @@ void terminal_client_append_create_instance_options (GVariantBuilder *builder,
 void terminal_client_append_exec_options            (GVariantBuilder *builder,
                                                      const char      *working_directory);
 
+void terminal_client_get_fallback_startup_id        (char           **startup_id);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_UTILS_H */
