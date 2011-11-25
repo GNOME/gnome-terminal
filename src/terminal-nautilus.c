@@ -453,8 +453,13 @@ terminal_nautilus_menu_item_new (TerminalNautilus *nautilus,
   const char *tooltip;
 
   if (!run_in_mc) {
-    action_name = remote_terminal ? "TerminalNautilus:OpenRemote"
-                                  : "TerminalNautilus:OpenLocal";
+    if (is_file_item) {
+      action_name = remote_terminal ? "TerminalNautilus:OpenRemote"
+                                    : "TerminalNautilus:OpenLocal";
+    } else {
+      action_name = remote_terminal ? "TerminalNautilus:OpenFolderRemote"
+                                    : "TerminalNautilus:OpenFolderLocal";
+    }
 
     switch (terminal_file_info) {
       case FILE_INFO_SFTP:
