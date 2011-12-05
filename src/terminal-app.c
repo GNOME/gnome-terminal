@@ -45,13 +45,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#ifdef WITH_SMCLIENT
-#include "eggsmclient.h"
-#ifdef GDK_WINDOWING_X11
-#include "eggdesktopfile.h"
-#endif
-#endif
-
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
@@ -1101,25 +1094,6 @@ terminal_app_manage_profiles (TerminalApp     *app,
 #endif
 }
 
-#ifdef WITH_SMCLIENT
-
-static void
-terminal_app_save_state_cb (EggSMClient *client,
-                            GKeyFile *key_file,
-                            TerminalApp *app)
-{
-  terminal_app_save_config (app, key_file);
-}
-
-static void
-terminal_app_client_quit_cb (EggSMClient *client,
-                             TerminalApp *app)
-{
-  g_signal_emit (app, signals[QUIT], 0);
-}
-
-#endif /* WITH_SMCLIENT */
-
 static void
 screen_destroy_cb (GObject *screen,
                    gpointer user_data)
@@ -1331,42 +1305,12 @@ terminal_app_init (TerminalApp *app)
 #endif
 
   terminal_accels_init ();
-
-#ifdef WITH_SMCLIENT
-{
-  EggSMClient *sm_client;
-#ifdef GDK_WINDOWING_X11
-  char *desktop_file;
-
-  desktop_file = g_build_filename (TERM_DATADIR,
-                                   "applications",
-                                   PACKAGE ".desktop",
-                                   NULL);
-  egg_set_desktop_file_without_defaults (desktop_file);
-  g_free (desktop_file);
-#endif /* GDK_WINDOWING_X11 */
-
-  sm_client = egg_sm_client_get ();
-  g_signal_connect (sm_client, "save-state",
-                    G_CALLBACK (terminal_app_save_state_cb), app);
-  g_signal_connect (sm_client, "quit",
-                    G_CALLBACK (terminal_app_client_quit_cb), app);
-}
-#endif
 }
 
 static void
 terminal_app_finalize (GObject *object)
 {
   TerminalApp *app = TERMINAL_APP (object);
-
-#ifdef WITH_SMCLIENT
-  EggSMClient *sm_client;
-
-  sm_client = egg_sm_client_get ();
-  g_signal_handlers_disconnect_matched (sm_client, G_SIGNAL_MATCH_DATA,
-                                        0, 0, NULL, NULL, app);
-#endif
 
   g_hash_table_destroy (app->encodings);
   g_signal_handlers_disconnect_by_func (app->global_settings,

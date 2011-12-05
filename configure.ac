@@ -101,37 +101,6 @@ AC_SUBST([dbusservicedir])
 
 GLIB_GSETTINGS
 
-# ********
-# smclient
-# ********
-
-SMCLIENT_PKGS=
-AC_MSG_CHECKING([which smclient backend to use])
-AC_ARG_WITH([smclient],
-  [AS_HELP_STRING([--with-smclient-backend],[which smclient backend to use (xsmp/win32/quartz)])],
-  [],
-  [case "$GDK_TARGET" in
-    x11) with_smclient=xsmp SMCLIENT_PKGS="sm ice" ;;
-    win32|quartz) with_smclient=$GDK_TARGET ;;
-    *) with_smclient=no ;;
-   esac])
-AC_MSG_RESULT([$with_smclient])
-
-if test "$with_smclient" != "no"; then
-  AC_DEFINE([WITH_SMCLIENT],[1],[Define if smclient is enabled])
-fi
-
-if test -n "$SMCLIENT_PKGS"; then
-  PKG_CHECK_MODULES([SMCLIENT],[$SMCLIENT_PKGS])
-  AC_SUBST([SMCLIENT_CFLAGS])
-  AC_SUBST([SMCLIENT_LIBS])
-fi
-
-AM_CONDITIONAL([WITH_SMCLIENT],[test "$with_smclient" != "no"])
-AM_CONDITIONAL([WITH_SMCLIENT_XSMP],[test "$with_smclient" = "xsmp"])
-AM_CONDITIONAL([WITH_SMCLIENT_WIN32],[test "$with_smclient" = "win32"])
-AM_CONDITIONAL([WITH_SMCLIENT_QUARTZ],[test "$with_smclient" = "quartz"])
-
 # *************************
 # GConf-GSettings Migration
 # *************************
@@ -255,6 +224,4 @@ gnome-terminal-$VERSION:
         DBus service dir:       ${dbusservicedir}
         Nautilus extension:     ${with_nautilus_extension}
         Nautilus extension dir: ${nautilusextensiondir}
-
-        using smclient:         ${with_smclient}
 "

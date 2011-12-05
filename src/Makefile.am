@@ -84,31 +84,6 @@ gnome_terminal_server_LDFLAGS = \
 gnome_terminal_server_LDADD = \
 	$(TERM_LIBS)
 
-if WITH_SMCLIENT
-gnome_terminal_server_SOURCES += \
-	eggsmclient.c \
-	eggsmclient.h \
-	eggsmclient-private.h \
-	$(NULL)
-gnome_terminal_server_CFLAGS += $(SMCLIENT_CFLAGS)
-gnome_terminal_server_LDADD += $(SMCLIENT_LIBS)
-
-if WITH_SMCLIENT_XSMP
-gnome_terminal_server_SOURCES += \
-	eggdesktopfile.c \
-	eggdesktopfile.h \
-	eggsmclient-xsmp.c \
-	$(NULL)
-gnome_terminal_server_CPPFLAGS += -DEGG_SM_CLIENT_BACKEND_XSMP
-endif
-if WITH_SMCLIENT_WIN32
-gnome_terminal_server_SOURCES += eggsmclient-win32.c
-endif
-if WITH_SMCLIENT_QUARTZ
-gnome_terminal_server_SOURCES += eggsmclient-osx.c
-endif
-endif
-
 TYPES_H_FILES = \
 	terminal-enums.h \
 	$(NULL)
