@@ -1192,7 +1192,7 @@ terminal_app_create_instance (TerminalFactory *factory,
   if (!g_variant_lookup (options, "profile", "&s", &profile_name))
     profile_name = NULL;
   if (!g_variant_lookup (options, "title", "&s", &title))
-    profile_name = NULL;
+    title = NULL;
 
   if (g_variant_lookup (options, "present-window", "b", &present_window)) {
     present_window_set = TRUE;
