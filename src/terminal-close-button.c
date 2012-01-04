@@ -52,20 +52,20 @@ static void
 terminal_close_button_init (TerminalCloseButton *button)
 {
 	GtkWidget *image;
-        GtkStyleContext *context;
+	GtkStyleContext *context;
+	GIcon *icon;
 
-        gtk_widget_set_name (GTK_WIDGET (button), "gnome-terminal-tab-close-button");
+	icon = g_themed_icon_new_with_default_fallbacks ("window-close-symbolic");
+	image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+	g_object_unref (icon);
 
-	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
-	                                  GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image);
-
 	gtk_container_add (GTK_CONTAINER (button), image);
 
 	context = gtk_widget_get_style_context (GTK_WIDGET (button));
 	gtk_style_context_add_provider (context,
 	                                GTK_STYLE_PROVIDER (TERMINAL_CLOSE_BUTTON_GET_CLASS (button)->priv->css),
-		                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 GtkWidget *
