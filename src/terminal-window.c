@@ -1868,7 +1868,7 @@ terminal_window_init (TerminalWindow *window)
   priv->active_screen = NULL;
   priv->menubar_visible = FALSE;
   
-  main_vbox = gtk_vbox_new (FALSE, 0);
+  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
   gtk_widget_show (main_vbox);
 
@@ -3590,7 +3590,7 @@ terminal_set_title_callback (GtkAction *action,
   message_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
   gtk_container_foreach (GTK_CONTAINER (message_area), (GtkCallback) gtk_widget_hide, NULL);
 
-  hbox = gtk_hbox_new (FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_pack_start (GTK_BOX (message_area), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic (_("_Title:"));
