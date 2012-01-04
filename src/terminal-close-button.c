@@ -85,11 +85,13 @@ static void
 terminal_close_button_init (TerminalCloseButton *button)
 {
 	GtkWidget *image;
+	GIcon *icon;
 
-	image = gtk_image_new_from_stock (GTK_STOCK_CLOSE,
-	                                  GTK_ICON_SIZE_MENU);
+	icon = g_themed_icon_new_with_default_fallbacks ("window-close-symbolic");
+	image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+	g_object_unref (icon);
+
 	gtk_widget_show (image);
-
 	gtk_container_add (GTK_CONTAINER (button), image);
 
 #if GTK_CHECK_VERSION (3, 0, 0)
