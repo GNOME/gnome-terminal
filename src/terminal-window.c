@@ -400,7 +400,12 @@ position_menu_under_widget (GtkMenu *menu,
   monitor_num = gdk_screen_get_monitor_at_window (screen, widget_window);
   if (monitor_num < 0)
           monitor_num = 0;
+
+#if GTK_CHECK_VERSION (3, 3, 5)
+  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
+#else
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+#endif
 
   gdk_window_get_origin (widget_window, x, y);
   if (!gtk_widget_get_has_window (widget))
