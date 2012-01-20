@@ -29,6 +29,7 @@
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-intl.h"
+#include "terminal-encoding.h"
 #include "terminal-profile.h"
 #include "terminal-screen.h"
 #include "terminal-type-builtins.h"
@@ -63,6 +64,7 @@ enum
   PROP_DEFAULT_SIZE_ROWS,
   PROP_DEFAULT_SHOW_MENUBAR,
   PROP_DELETE_BINDING,
+  PROP_ENCODING,
   PROP_EXIT_ACTION,
   PROP_FONT,
   PROP_FOREGROUND_COLOR,
@@ -104,6 +106,7 @@ enum
 #define KEY_DEFAULT_SIZE_ROWS "default_size_rows"
 #define KEY_DELETE_BINDING "delete_binding"
 #define KEY_EXIT_ACTION "exit_action"
+#define KEY_ENCODING "encoding"
 #define KEY_FONT "font"
 #define KEY_FOREGROUND_COLOR "foreground_color"
 #define KEY_LOGIN_SHELL "login_shell"
@@ -141,6 +144,7 @@ enum
 #define DEFAULT_DEFAULT_SIZE_COLUMNS  (80)
 #define DEFAULT_DEFAULT_SIZE_ROWS     (24)
 #define DEFAULT_DELETE_BINDING        (VTE_ERASE_DELETE_SEQUENCE)
+#define DEFAULT_ENCODING              (NULL)
 #define DEFAULT_EXIT_ACTION           (TERMINAL_EXIT_CLOSE)
 #define DEFAULT_FONT                  ("Monospace 12")
 #define DEFAULT_FOREGROUND_COLOR      ("#000000")
@@ -506,6 +510,10 @@ terminal_profile_reset_property_internal (TerminalProfile *profile,
         g_value_set_boxed (value, &DEFAULT_BACKGROUND_COLOR);
         break;
 
+      case PROP_ENCODING:
+        g_value_set_boxed (value, terminal_app_ensure_encoding (terminal_app_get (), DEFAULT_ENCODING));
+        break;
+
       case PROP_FONT:
         g_value_take_boxed (value, pango_font_description_from_string (DEFAULT_FONT));
         break;
@@ -626,6 +634,13 @@ terminal_profile_gconf_notify_cb (GConfClient *client,
         goto out;
 
       g_value_take_boxed (&value, pango_font_description_from_string (gconf_value_get_string (gconf_value)));
+    }
+  else if (G_PARAM_SPEC_VALUE_TYPE (pspec) == TERMINAL_TYPE_ENCODING)
+    {
+      if (gconf_value->type != GCONF_VALUE_STRING)
+        goto out;
+
+      g_value_set_boxed (&value, terminal_app_ensure_encoding (terminal_app_get (), gconf_value_get_string (gconf_value)));
     }
   else if (G_IS_PARAM_SPEC_DOUBLE (pspec))
     {
@@ -963,6 +978,7 @@ terminal_profile_init (TerminalProfile *profile)
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FOREGROUND_COLOR), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_BOLD_COLOR), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_BACKGROUND_COLOR), FALSE);
+  terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_ENCODING), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_FONT), FALSE);
   terminal_profile_reset_property_internal (profile, g_object_class_find_property (object_class, TERMINAL_PROFILE_PALETTE), FALSE);
 }
@@ -1308,6 +1324,7 @@ terminal_profile_class_init (TerminalProfileClass *klass)
 
   TERMINAL_PROFILE_PROPERTY_BOXED (BACKGROUND_COLOR, GDK_TYPE_COLOR, KEY_BACKGROUND_COLOR);
   TERMINAL_PROFILE_PROPERTY_BOXED (BOLD_COLOR, GDK_TYPE_COLOR, KEY_BOLD_COLOR);
+  TERMINAL_PROFILE_PROPERTY_BOXED (ENCODING, TERMINAL_TYPE_ENCODING, KEY_ENCODING);
   TERMINAL_PROFILE_PROPERTY_BOXED (FONT, PANGO_TYPE_FONT_DESCRIPTION, KEY_FONT);
   TERMINAL_PROFILE_PROPERTY_BOXED (FOREGROUND_COLOR, GDK_TYPE_COLOR, KEY_FOREGROUND_COLOR);
 
