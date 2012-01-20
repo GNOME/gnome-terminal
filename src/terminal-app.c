@@ -1998,9 +1998,14 @@ terminal_app_get_encodings (TerminalApp *app)
 /**
  * terminal_app_ensure_encoding:
  * @app:
- * @charset:
+ * @charset: (allow-none): a charset, or %NULL
  *
- * Ensures there's a #TerminalEncoding for @charset available.
+ * Ensures there's a #TerminalEncoding for @charset available. If @charset
+ * is %NULL, returns the #TerminalEncoding for the locale's charset. If
+ * @charset is not a known charset, returns a #TerminalEncoding for a 
+ * custom charset.
+ * 
+ * Returns: (transfer none): a #TerminalEncoding
  */
 TerminalEncoding *
 terminal_app_ensure_encoding (TerminalApp *app,
@@ -2008,7 +2013,7 @@ terminal_app_ensure_encoding (TerminalApp *app,
 {
   TerminalEncoding *encoding;
 
-  encoding = g_hash_table_lookup (app->encodings, charset);
+  encoding = g_hash_table_lookup (app->encodings, charset ? charset : "current");
   if (encoding == NULL)
     {
       encoding = terminal_encoding_new (charset,

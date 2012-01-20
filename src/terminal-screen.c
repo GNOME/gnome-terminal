@@ -929,6 +929,15 @@ terminal_screen_profile_notify_cb (TerminalProfile *profile,
     _terminal_screen_update_scrollbar (screen);
 
   if (!prop_name ||
+      prop_name == I_(TERMINAL_PROFILE_ENCODING))
+    {
+      TerminalEncoding *encoding;
+
+      encoding = terminal_profile_get_property_boxed (profile, TERMINAL_PROFILE_ENCODING);
+      vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
+    }
+
+  if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_TITLE_MODE) ||
       prop_name == I_(TERMINAL_PROFILE_TITLE))
     {
