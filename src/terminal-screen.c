@@ -892,6 +892,15 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY))
     _terminal_screen_update_scrollbar (screen);
 
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING))
+    {
+      TerminalEncoding *encoding;
+
+      encoding = terminal_app_ensure_encoding (terminal_app_get (),
+                                               g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING));
+      vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
+    }
+
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_TITLE_MODE_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_TITLE_KEY))
