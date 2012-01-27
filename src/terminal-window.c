@@ -1451,6 +1451,7 @@ terminal_window_realize (GtkWidget *widget)
   GtkAllocation widget_allocation;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
+
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] realize, size %d : %d at (%d, %d)\n",
                          widget,
@@ -1484,7 +1485,9 @@ terminal_window_map_event (GtkWidget    *widget,
   if (priv->clear_demands_attention)
     {
 #ifdef GDK_WINDOWING_X11
-      terminal_util_x11_clear_demands_attention (gtk_widget_get_window (widget));
+      GdkWindow *window = gtk_widget_get_window (widget);
+      if (GDK_IS_X11_WINDOW (window))
+	terminal_util_x11_clear_demands_attention (window);
 #endif
 
       priv->clear_demands_attention = FALSE;
@@ -1534,7 +1537,10 @@ terminal_window_window_manager_changed_cb (GdkScreen *screen,
   GtkAction *action;
   gboolean supports_fs;
 
-  supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
+  if (GDK_IS_X11_SCREEN (screen))
+    supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
+  else
+    supports_fs = FALSE;
 
   action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
   gtk_action_set_sensitive (action, supports_fs);

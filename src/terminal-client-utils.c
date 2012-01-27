@@ -28,7 +28,10 @@
 #include <string.h>
 
 #include <gio/gio.h>
+
+#if GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
+#endif
 
 /**
  * terminal_client_append_create_instance_options:
@@ -121,11 +124,17 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
 void 
 terminal_client_get_fallback_startup_id  (char **startup_id)
 {
+#if GDK_WINDOWING_X11
+  GdkDisplay *display;
   Display *xdisplay;
   Window xwindow;
   XEvent event;
 
-  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
+  display = gdk_display_get_default ();
+  if (!GDK_IS_X11_DISPLAY (display))
+    goto out;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   {
     XSetWindowAttributes attrs;
@@ -168,4 +177,11 @@ terminal_client_get_fallback_startup_id  (char **startup_id)
 
   if (startup_id)
     *startup_id = g_strdup_printf ("_TIME%lu", event.xproperty.time);
+
+  return;
+
+out:
+#endif
+  if (startup_id)
+    *startup_id = NULL;
 }
