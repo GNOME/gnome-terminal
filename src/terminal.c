@@ -409,6 +409,8 @@ name_lost_cb (GDBusConnection *connection,
  *
  */
 
+#ifdef GDK_WINDOWING_X11
+
 /* Copied from libnautilus/nautilus-program-choosing.c; Needed in case
  * we have no DESKTOP_STARTUP_ID (with its accompanying timestamp).
  */
@@ -459,6 +461,8 @@ slowly_and_stupidly_obtain_timestamp (Display *xdisplay)
 
   return event.xproperty.time;
 }
+
+#endif
 
 static char *
 get_factory_name_for_display (const char *display_name)
@@ -558,7 +562,9 @@ main (int argc, char **argv)
   g_unsetenv ("GIO_LAUNCHED_DESKTOP_FILE");
 
  /* Do this here so that gdk_display is initialized */
-  if (options->startup_id == NULL)
+#ifdef GDK_WINDOWING_X11
+  if (options->startup_id == NULL && GDK_IS_X11_DISPLAY (gdk_display_get_default ())
+      )
     {
       /* Create a fake one containing a timestamp that we can use */
       Time timestamp;
@@ -567,6 +573,7 @@ main (int argc, char **argv)
 
       options->startup_id = g_strdup_printf ("_TIME%lu", timestamp);
     }
+#endif
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);

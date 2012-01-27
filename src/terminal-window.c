@@ -1518,16 +1518,12 @@ terminal_window_realize (GtkWidget *widget)
 #ifdef GDK_WINDOWING_X11
   GdkScreen *screen;
   GtkAllocation widget_allocation;
-#if GTK_CHECK_VERSION (2, 90, 8)
   GdkVisual *visual;
-#else
-  GdkColormap *colormap;
-#endif
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   screen = gtk_widget_get_screen (GTK_WIDGET (window));
-#if GTK_CHECK_VERSION (2, 90, 8)
   if (gdk_screen_is_composited (screen) &&
+      GDK_IS_X11_SCREEN (screen) &&
       (visual = gdk_screen_get_rgba_visual (screen)) != NULL)
     {
       /* Set RGBA visual if possible so VTE can use real transparency */
@@ -1539,20 +1535,6 @@ terminal_window_realize (GtkWidget *widget)
       gtk_widget_set_visual (GTK_WIDGET (window), gdk_screen_get_system_visual (screen));
       priv->have_argb_visual = FALSE;
     }
-#else
-  if (gdk_screen_is_composited (screen) &&
-      (colormap = gdk_screen_get_rgba_colormap (screen)) != NULL)
-    {
-      /* Set RGBA colormap if possible so VTE can use real transparency */
-      gtk_widget_set_colormap (widget, colormap);
-      priv->have_argb_visual = TRUE;
-    }
-  else
-    {
-      gtk_widget_set_colormap (widget, gdk_screen_get_default_colormap (screen));
-      priv->have_argb_visual = FALSE;
-    }
-#endif
 #endif
 
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
@@ -1588,7 +1570,9 @@ terminal_window_map_event (GtkWidget    *widget,
   if (priv->clear_demands_attention)
     {
 #ifdef GDK_WINDOWING_X11
-      terminal_util_x11_clear_demands_attention (gtk_widget_get_window (widget));
+      GdkWindow *window = gtk_widget_get_window (widget);
+      if (GDK_IS_X11_WINDOW (window))
+	terminal_util_x11_clear_demands_attention (window);
 #endif
 
       priv->clear_demands_attention = FALSE;
@@ -1638,7 +1622,9 @@ terminal_window_window_manager_changed_cb (GdkScreen *screen,
   GtkAction *action;
   gboolean supports_fs;
 
-  supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
+  supports_fs = FALSE;
+  if (GDK_IS_X11_SCREEN (screen))
+    supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
 
   action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
   gtk_action_set_sensitive (action, supports_fs);
@@ -1655,6 +1641,7 @@ terminal_window_composited_changed_cb (GdkScreen *screen,
 
   composited = gdk_screen_is_composited (screen);
   if ((composited != priv->have_argb_visual) &&
+      GDK_IS_X11_SCREEN (screen) &&
       gtk_widget_get_realized (GTK_WIDGET (window)))
     {
       GtkWidget *widget = GTK_WIDGET (window);
