@@ -1,6 +1,6 @@
 m4_define([gt_version_major],[3])
-m4_define([gt_version_minor],[3])
-m4_define([gt_version_micro],[0])
+m4_define([gt_version_minor],[2])
+m4_define([gt_version_micro],[99])
 m4_define([gt_version_extra],[])
 m4_define([gt_version],[gt_version_major().gt_version_minor().gt_version_micro()gt_version_extra])
 
@@ -9,6 +9,8 @@ m4_define([gt_api_version],[0])
 AC_INIT([GNOME Terminal],[gt_version],[http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal],[gnome-terminal])
 AC_CONFIG_SRCDIR([src/terminal.c])
 AC_CONFIG_HEADERS([config.h])
+
+AC_MSG_ERROR([use the 'gnome-3-4' (for GNOME 3.3/3.4) or 'gnome-3-2' (stable, for GNOME 3.2) branch, not master])
 
 AM_INIT_AUTOMAKE([1.9 foreign no-dist-gzip dist-bzip2])
 
