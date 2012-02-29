@@ -8,25 +8,26 @@
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2006, 2007, 2008, 2009.
 # Mate ORY <orymate at gmail d0t com>, 2006, 2008.
-# Gabor Kelemen <kelemeng at gnome dot hu>, 2009, 2010, 2011.
+# Gabor Kelemen <kelemeng at gnome dot hu>, 2009, 2010, 2011, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-21 03:13+0200\n"
-"PO-Revision-Date: 2011-09-21 03:14+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
+"cgi?product=gnome-terminal&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2012-01-20 22:01+0000\n"
+"PO-Revision-Date: 2012-02-29 03:48+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
-"Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
-"Language: \n"
+"Language-Team: Magyar <gnome-hu-list at gnome dot org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 1.0\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:124
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:126
 #: ../src/terminal-accels.c:249 ../src/terminal.c:551
-#: ../src/terminal-profile.c:158 ../src/terminal-window.c:2018
+#: ../src/terminal-profile.c:162 ../src/terminal-window.c:2023
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -231,50 +232,63 @@ msgstr ""
 "stílusú hexa számjegyekkel vagy színnévvel, például „red” = vörös)."
 
 #: ../src/gnome-terminal.schemas.in.h:21
+#| msgid "Default size:"
+msgid "Default encoding"
+msgstr "Alapértelmezett kódolás"
+
+#: ../src/gnome-terminal.schemas.in.h:22
+msgid ""
+"Default encoding. Can be either \"current\" to use the current locale's "
+"encoding, or else any of the known encodings."
+msgstr ""
+"Alapértelmezett kódolás. Az „current” jelentése: aktuális területi beállítás "
+"kódolása, egyébként bármely ismert kódolás lehet."
+
+#: ../src/gnome-terminal.schemas.in.h:23
 msgid "Default number of columns"
 msgstr "Oszlopok alapértelmezett száma"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:24
 msgid "Default number of rows"
 msgstr "Sorok alapértelmezett száma"
 
-#: ../src/gnome-terminal.schemas.in.h:23
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Effect of the Backspace key"
 msgstr "A Backspace billentyű hatása"
 
-#: ../src/gnome-terminal.schemas.in.h:24
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "Effect of the Delete key"
 msgstr "A Delete billentyű hatása"
 
-#: ../src/gnome-terminal.schemas.in.h:25
+#: ../src/gnome-terminal.schemas.in.h:27
 msgid "Filename of a background image."
 msgstr "Egy háttérkép fájlneve."
 
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:28
 msgid "Font"
 msgstr "Betűkészlet"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "How much to darken the background image"
 msgstr "Mennyire sötétítse a háttérképet"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "Human-readable name of the profile"
 msgstr "A profil emberek által olvasható neve"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid "Human-readable name of the profile."
 msgstr "A profil emberek által olvasható neve."
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "Icon for terminal window"
 msgstr "Ikon a terminálablak számára"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "Az ezen profilt tartalmazó lapoknál/ablakoknál használandó ikon."
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -286,19 +300,20 @@ msgstr ""
 "követheti vagy helyettesítheti a beállított címet. A lehetséges értékek: "
 "„replace”, „before”, „after”, és „ignore”."
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Ha be van állítva, az alkalmazások a terminálban használhatnak félkövér "
 "szöveget."
 
-#: ../src/gnome-terminal.schemas.in.h:34
-msgid "If true, boldface text will be rendered using the same color as normal text."
+#: ../src/gnome-terminal.schemas.in.h:36
+msgid ""
+"If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
 "Ha igazra van állítva, akkor a félkövér szöveg a normál szövegével egyező "
 "színnel jelenik meg."
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid ""
 "If true, don't make a noise when applications send the escape sequence for "
 "the terminal bell."
@@ -306,7 +321,7 @@ msgstr ""
 "Ha be van állítva, nem szólal meg a terminálcsengő, ha az alkalmazások "
 "megszólaltatnák."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid ""
 "If true, newly created terminal windows will have custom size specified by "
 "default_size_columns and default_size_rows."
@@ -315,11 +330,11 @@ msgstr ""
 "default_size_columns és default_size_rows által megadott mérettel jönnek "
 "létre."
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Ha be van állítva, gombnyomásra a gördítősáv aljára ugrik."
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid ""
 "If true, scroll the background image with the foreground text; if false, "
 "keep the image in a fixed position and scroll the text above it."
@@ -327,7 +342,7 @@ msgstr ""
 "Ha be van állítva, a háttérképet az előtér szöveggel együtt görgeti, ha "
 "nincs, a kép rögzített helyen marad és a szöveg gördül fölötte."
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -338,7 +353,7 @@ msgstr ""
 "tárolva, így emiatt a rendszeren elfogyhat a szabad hely, ha túl sok a "
 "kimenet a terminálon."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -346,7 +361,7 @@ msgstr ""
 "Ha be van állítva, a terminálban lévő parancs bejelentkezési "
 "parancsértelmezőként indul. (argv[0] kötőjellel fog kezdődni.)"
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -354,7 +369,7 @@ msgstr ""
 "Ha be van állítva, a rendszer-bejelentkezési bejegyzések (utmp és wtmp) "
 "frissítve lesznek, ha a terminálban elindítja a parancsot."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid ""
 "If true, the terminal will use the desktop-global standard font if it's "
 "monospace (and the most similar font it can come up with otherwise)."
@@ -362,7 +377,7 @@ msgstr ""
 "Ha be van állítva, a terminál az asztal globális szabvány betűkészletét "
 "fogja használni, ha az monospace (és a hozzá leginkább hasonlót egyébként)."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid ""
 "If true, the theme color scheme used for text entry boxes will be used for "
 "the terminal, instead of colors provided by the user."
@@ -370,7 +385,7 @@ msgstr ""
 "Ha be van állítva, a téma szövegbeviteli dobozokra használt színsémáját "
 "használja a terminálra a felhasználó által megadottak helyett."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -378,11 +393,12 @@ msgstr ""
 "Ha be van állítva, a custom_command beállítást fogja használni a "
 "parancsértelmező futtatása helyén."
 
-#: ../src/gnome-terminal.schemas.in.h:45
-msgid "If true, whenever there's new output the terminal will scroll to the bottom."
+#: ../src/gnome-terminal.schemas.in.h:47
+msgid ""
+"If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "Ha be van állítva, a terminál új kimenet kiírásakor az aljára gördül."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid ""
 "Keyboard shortcut key for bringing up the dialog for profile creation. "
 "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -394,7 +410,7 @@ msgstr ""
 "formában. Ha ezt az opciót „disabled” értékre állítja, ehhez az akcióhoz nem "
 "lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid ""
 "Keyboard shortcut key for closing a tab. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -404,7 +420,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid ""
 "Keyboard shortcut key for closing a window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -415,7 +431,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid ""
 "Keyboard shortcut key for copying selected text to the clipboard. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -426,7 +442,7 @@ msgstr ""
 "GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az opciót "
 "„disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid ""
 "Keyboard shortcut key for launching help. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -436,7 +452,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid ""
 "Keyboard shortcut key for making font larger. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -447,7 +463,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid ""
 "Keyboard shortcut key for making font smaller. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -458,7 +474,7 @@ msgstr ""
 "+ forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid ""
 "Keyboard shortcut key for making font the normal size. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -469,7 +485,7 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid ""
 "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -480,7 +496,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid ""
 "Keyboard shortcut key for opening a new window. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -491,7 +507,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid ""
 "Keyboard shortcut key for pasting the contents of the clipboard into the "
 "terminal. Expressed as a string in the same format used for GTK+ resource "
@@ -503,7 +519,7 @@ msgstr ""
 "formában. Ha ezt az opciót „disabled” értékre állítja, ehhez az akcióhoz nem "
 "lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid ""
 "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -513,7 +529,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid ""
 "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -524,7 +540,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid ""
 "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -535,7 +551,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid ""
 "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -546,7 +562,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid ""
 "Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -556,7 +572,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid ""
 "Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -566,7 +582,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid ""
 "Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -576,7 +592,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid ""
 "Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -586,7 +602,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid ""
 "Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -596,7 +612,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid ""
 "Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -606,7 +622,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid ""
 "Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -616,7 +632,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid ""
 "Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
 "format used for GTK+ resource files. If you set the option to the special "
@@ -626,7 +642,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid ""
 "Keyboard shortcut key for toggling full screen mode. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -637,7 +653,7 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid ""
 "Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -648,7 +664,7 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid ""
 "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 "same format used for GTK+ resource files. If you set the option to the "
@@ -659,7 +675,7 @@ msgstr ""
 "GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az opciót "
 "„disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid ""
 "Keyboard shortcut key to save the current tab contents to a file. Expressed "
 "as a string in the same format used for GTK+ resource files. If you set the "
@@ -670,7 +686,7 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid ""
 "Keyboard shortcut key to set the terminal title. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -681,7 +697,7 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid ""
 "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
 "the same format used for GTK+ resource files. If you set the option to the "
@@ -692,7 +708,7 @@ msgstr ""
 "+ forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid ""
 "Keyboard shortcut key to switch to the previous tab. Expressed as a string "
 "in the same format used for GTK+ resource files. If you set the option to "
@@ -703,7 +719,7 @@ msgstr ""
 "forrásfájlokban használttal azonos formában. Ha ezt az opciót „disabled” "
 "értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid ""
 "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
 "a string in the same format used for GTK+ resource files. If you set the "
@@ -714,139 +730,139 @@ msgstr ""
 "kifejezve, a GTK+ erőforrásfájlokban használttal azonos formában. Ha ezt az "
 "opciót „disabled” értékre állítja, ehhez az akcióhoz nem lesz gyorsbillentyű."
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to close a tab"
 msgstr "Gyorsbillentyű egy lap bezárásához"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a window"
 msgstr "Gyorsbillentyű egy ablak bezárásához"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to copy text"
 msgstr "Gyorsbillentyű szöveg másolásához"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Gyorsbillentyű új profil létrehozásához"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to launch help"
 msgstr "Gyorsbillentyű a súgó elindításához"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to make font larger"
 msgstr "Gyorsbillentyű a betűméret növeléséhez"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Gyorsbillentyű a normál betűmérethez"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Gyorsbillentyű a betűméret csökkentéséhez"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Gyorsbillentyű új lap megnyitásához"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new window"
 msgstr "Gyorsbillentyű új ablak megnyitásához"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to paste text"
 msgstr "Gyorsbillentyű szöveg beillesztéséhez"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Gyorsbillentyű a terminál visszaállításához és törléséhez"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Gyorsbillentyű a terminál visszaállításához"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:92
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Gyorsbillentyű az aktuális lap tartalmának fájlba mentéséhez"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Gyorsbillentyű a terminál címsorának beállításához"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "Gyorsbillentyű az 1. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "Gyorsbillentyű a 10. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "Gyorsbillentyű a 11. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "Gyorsbillentyű a 12. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "Gyorsbillentyű a 2. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "Gyorsbillentyű a 3. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "Gyorsbillentyű a 4. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "Gyorsbillentyű az 5. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "Gyorsbillentyű a 6. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "Gyorsbillentyű a 7. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "Gyorsbillentyű a 8. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "Gyorsbillentyű a 9. lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Gyorsbillentyű a következő lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Gyorsbillentyű az előző lapra váltáshoz"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Gyorsbillentyű a teljes képernyős mód váltásához"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Gyorsbillentyű a menüsor láthatóságának átállításához"
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "Elérhető kódolások listája"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "Profilok listája"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid ""
 "List of profiles known to gnome-terminal. The list contains strings naming "
 "subdirectories relative to /apps/gnome-terminal/profiles."
@@ -855,7 +871,7 @@ msgstr ""
 "megnevező karakterláncokat tartalmaz az /apps/gnome-terminal/profiles "
 "könyvtárra vonatkozóan."
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -865,7 +881,7 @@ msgstr ""
 "gtkrc-vel (gtk-menu-bar-accel = „Akármi”). Ezt a gyorsbillentyűt itt "
 "kikapcsolhatja."
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -873,11 +889,11 @@ msgstr ""
 "Oszlopok száma újonnan létrehozott terminálablakokban. Hatástalan, ha a "
 "use_custom_default_size kulcs nincs engedélyezve."
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "A visszagörgetendő sorok száma"
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -885,7 +901,7 @@ msgstr ""
 "Sorok száma újonnan létrehozott terminálablakokban. Hatástalan, ha a "
 "use_custom_default_size kulcs nincs engedélyezve."
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -895,15 +911,15 @@ msgstr ""
 "terminálban; azon sorok, amik nem férnek bele ebbe, el lesznek dobva. Ha a "
 "scrollback_unlimited kulcs értéke igaz, akkor figyelmen kívül marad."
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "Paletta a terminálalkalmazásokhoz"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:119
 msgid "Position of the scrollbar"
 msgstr "A gördítősáv pozíciója"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -911,23 +927,24 @@ msgstr ""
 "Lehetséges értékek: „close” a terminál bezárásához és „restart” a parancs "
 "újraindításához."
 
-#: ../src/gnome-terminal.schemas.in.h:119
-msgid "Profile to be used when opening a new window or tab. Must be in profile_list."
+#: ../src/gnome-terminal.schemas.in.h:121
+msgid ""
+"Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr ""
 "Új ablak vagy lap megnyitásakor használandó profil. A profile_list eleme "
 "kell legyen."
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Profile to use for new terminals"
 msgstr "Új terminálokhoz használt profil"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Ezen parancs futtatása a parancsértelmező helyén, ha a use_custom_command "
 "engedélyezett."
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid ""
 "Sets what code the backspace key generates. Possible values are \"ascii-del"
 "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
@@ -942,7 +959,7 @@ msgstr ""
 "alapértelmezés szerint megfelelőként elfogadott beállítás a Backspace "
 "billentyűhöz."
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid ""
 "Sets what code the delete key generates. Possible values are \"ascii-del\" "
 "for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
@@ -957,7 +974,7 @@ msgstr ""
 "alapértelmezés szerint megfelelőként elfogadott beállítás a Delete "
 "billentyűhöz."
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid ""
 "Terminals have a 16-color palette that applications inside the terminal can "
 "use. This is that palette, in the form of a colon-separated list of color "
@@ -967,11 +984,11 @@ msgstr ""
 "belül használhatnak. Ez az a paletta, színnevek vesszővel elválasztott "
 "listája formájában. A színnevek hexa alakban kell legyenek, például „#FF00FF”"
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid "The cursor appearance"
 msgstr "A kurzor megjelenése"
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:129
 msgid ""
 "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
 "vertical line cursor, or \"underline\" to use an underline cursor."
@@ -979,7 +996,7 @@ msgstr ""
 "A lehetséges értékek: „block” (tömör kurzor), „ibeam” (függőleges vonal "
 "kurzor), „underline” (aláhúzás kurzor)."
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -987,11 +1004,11 @@ msgstr ""
 "A lehetséges értékek: „system” (globális kurzorvillogási beállítás "
 "használata), illetve „on” (be) vagy „off” (ki) a mód explicit beállításához."
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "Title for terminal"
 msgstr "A terminál címsora"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -1001,7 +1018,7 @@ msgstr ""
 "terminálban futó alkalmazás által beállítottal, függően a title_mode "
 "beállítástól."
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid ""
 "True if the menubar should be shown in new windows, for windows/tabs with "
 "this profile."
@@ -1009,7 +1026,7 @@ msgstr ""
 "A menüsor megjelenítésének engedélyezése az ezen profilt használó új "
 "ablakokban/lapokon."
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid ""
 "Type of terminal background. May be \"solid\" for a solid color, \"image\" "
 "for an image, or \"transparent\" for either real transparency if a "
@@ -1019,15 +1036,15 @@ msgstr ""
 "képhez, vagy „transparent” az valódi átlátszósághoz kompozit ablakkezelő "
 "használatakor, vagy ál-átlátszósághoz egyébként."
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid "What to do with dynamic title"
 msgstr "Mi a teendő a dinamikus címsorral"
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid "What to do with the terminal when the child command exits"
 msgstr "Mi a teendő a terminállal, ha a gyermek parancs kilép"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -1038,7 +1055,7 @@ msgstr ""
 "literálként, és nem a tartomány jelölésére szeretné megadni, akkor az legyen "
 "az első megadott karakter."
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid ""
 "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
 "and \"hidden\"."
@@ -1046,27 +1063,27 @@ msgstr ""
 "Hol legyen a terminál görgetősávja. A lehetőségek: „left” (balra), "
 "„right” (jobbra), és „hidden” (rejtett)."
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Végtelen számú sor tárolása a visszagörgetéshez"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether bold text should use the same color as normal text"
 msgstr "A félkövér szöveg a normállal egyező színt használjon-e"
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether the menubar has access keys"
 msgstr "A menüsornak legyenek-e gyorsbillentyűi"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "A menüsor eléréséhez a szabvány GTK gyorsbillentyű engedélyezése"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether to allow bold text"
 msgstr "Félkövér betűk engedélyezése"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid ""
 "Whether to ask for confirmation when closing a terminal window which has "
 "more than one open tab."
@@ -1074,15 +1091,15 @@ msgstr ""
 "Kérjen-e megerősítést egy egynél több megnyitott lappal rendelkező "
 "terminálablak bezárásakor."
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "Kérjen-e megerősítést terminálablak bezárásakor"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to blink the cursor"
 msgstr "Villogjon-e a kurzor"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -1091,47 +1108,48 @@ msgstr ""
 "Legyenek-e alt+betű gyorsbillentyűk a menüsorhoz. Ezek néhány, a terminálban "
 "futó alkalmazással összeütközhetnek, ezért kikapcsolhatóak."
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "A parancsot a terminálban bejelentkezési parancsértelmezőként indítsa-e"
+msgstr ""
+"A parancsot a terminálban bejelentkezési parancsértelmezőként indítsa-e"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Egyéni parancs futtatása a parancsértelmező helyett"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid "Whether to scroll background image"
 msgstr "Gördüljön-e a háttérkép"
 
-#: ../src/gnome-terminal.schemas.in.h:149
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Billentyűleütésre görgessen-e a terminál aljára"
 
-#: ../src/gnome-terminal.schemas.in.h:150
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Görgessen-e a terminál aljára ha új kimenet jelenik meg"
 
-#: ../src/gnome-terminal.schemas.in.h:151
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Mutasson-e menüsort az új ablakokban/lapokon"
 
-#: ../src/gnome-terminal.schemas.in.h:152
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to silence terminal bell"
 msgstr "Elnémítsa-e a terminálcsengőt"
 
-#: ../src/gnome-terminal.schemas.in.h:153
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to update login records when launching terminal command"
 msgstr "Frissítse-e a bejelentkezési bejegyzéseket terminálparancs indításakor"
 
-#: ../src/gnome-terminal.schemas.in.h:154
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to use custom terminal size for new windows"
 msgstr "Az új ablakok egyéni méretben jelenjenek-e meg"
 
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Használja-e a terminálelem témájának színeit"
 
-#: ../src/gnome-terminal.schemas.in.h:156
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to use the system font"
 msgstr "Használja-e a rendszer betűkészletet"
 
@@ -1141,9 +1159,14 @@ msgstr "Használja-e a rendszer betűkészletet"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:163
+#: ../src/gnome-terminal.schemas.in.h:165
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current,ISO-8859-2]"
+
+#: ../src/gnome-terminal.schemas.in.h:166
+#| msgid "[UTF-8,current]"
+msgid "current"
+msgstr "current"
 
 #: ../src/keybinding-editor.glade.h:1
 msgid "Enable the _menu shortcut key (F10 by default)"
@@ -1155,7 +1178,8 @@ msgstr "Gyorsbillentyűk"
 
 #: ../src/keybinding-editor.glade.h:3
 msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr "Me_nü-hívóbetűk engedélyezése (például Alt+F a Fájl menü megnyitásához)"
+msgstr ""
+"Me_nü-hívóbetűk engedélyezése (például Alt+F a Fájl menü megnyitásához)"
 
 #: ../src/keybinding-editor.glade.h:4
 msgid "_Shortcut keys:"
@@ -1196,16 +1220,16 @@ msgstr "A(z) „%s” profil szerkesztése"
 msgid "Custom"
 msgstr "Egyéni"
 
-#: ../src/profile-editor.c:654
+#: ../src/profile-editor.c:644
 msgid "Images"
 msgstr "Képek"
 
-#: ../src/profile-editor.c:826
+#: ../src/profile-editor.c:816
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "%d. paletta szín kiválasztása"
 
-#: ../src/profile-editor.c:830
+#: ../src/profile-editor.c:820
 #, c-format
 msgid "Palette entry %d"
 msgstr "%d. palettabejegyzés"
@@ -1614,7 +1638,7 @@ msgstr "Kicsinyítés"
 msgid "Normal Size"
 msgstr "Normál méret"
 
-#: ../src/terminal-accels.c:182 ../src/terminal-window.c:3831
+#: ../src/terminal-accels.c:182 ../src/terminal-window.c:3836
 msgid "Set Title"
 msgstr "Cím beállítása"
 
@@ -1771,7 +1795,7 @@ msgstr "Nincs „%s” nevű profil, az alapértelmezettet használom helyette\n
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "Érvénytelen geometria-karakterlánc: „%s”\n"
 
-#: ../src/terminal-app.c:2015
+#: ../src/terminal-app.c:2020
 msgid "User Defined"
 msgstr "Felhasználó által megadott"
 
@@ -1944,7 +1968,7 @@ msgstr ""
 "verziójában. Hozzon létre egy profilt a kívánt beállításokkal, és használja "
 "az új --profile kapcsolót\n"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:4062
+#: ../src/terminal-options.c:188 ../src/terminal-window.c:4067
 msgid "GNOME Terminal"
 msgstr "GNOME Terminál"
 
@@ -2016,7 +2040,8 @@ msgstr "Új ablak megnyitása az alapértelmezett profillal rendelkező lappal"
 
 #: ../src/terminal-options.c:988
 msgid "Open a new tab in the last-opened window with the default profile"
-msgstr "Új lap megnyitása az utolsó megnyitott ablakban az alapértelmezett profillal"
+msgstr ""
+"Új lap megnyitása az utolsó megnyitott ablakban az alapértelmezett profillal"
 
 #: ../src/terminal-options.c:1001
 msgid "Turn on the menubar"
@@ -2035,8 +2060,10 @@ msgid "Full-screen the window"
 msgstr "Ablak teljes méretűvé tétele"
 
 #: ../src/terminal-options.c:1037
-msgid "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
-msgstr "Ablakméret beállítása, például: 80x24, vagy 80x24+200+200 (OSZLOPxSOR+X+Y)"
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+msgstr ""
+"Ablakméret beállítása, például: 80x24, vagy 80x24+200+200 (OSZLOPxSOR+X+Y)"
 
 #: ../src/terminal-options.c:1038
 msgid "GEOMETRY"
@@ -2134,33 +2161,33 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Terminálonkénti kapcsolók megjelenítése"
 
-#: ../src/terminal-profile.c:164
+#: ../src/terminal-profile.c:168
 msgid "Unnamed"
 msgstr "Névtelen"
 
-#: ../src/terminal-screen.c:1492
+#: ../src/terminal-screen.c:1501
 msgid "_Profile Preferences"
 msgstr "_Profil beállításai"
 
-#: ../src/terminal-screen.c:1493 ../src/terminal-screen.c:1876
+#: ../src/terminal-screen.c:1502 ../src/terminal-screen.c:1885
 msgid "_Relaunch"
 msgstr "Újr_aindítás"
 
-#: ../src/terminal-screen.c:1496
+#: ../src/terminal-screen.c:1505
 msgid "There was an error creating the child process for this terminal"
 msgstr "Hiba történt a terminál gyermekfolyamatának létrehozásakor"
 
-#: ../src/terminal-screen.c:1880
+#: ../src/terminal-screen.c:1889
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "A gyermekfolyamat normálisan lépett ki a következő állapottal: %d."
 
-#: ../src/terminal-screen.c:1883
+#: ../src/terminal-screen.c:1892
 #, c-format
 msgid "The child process was terminated by signal %d."
 msgstr "A gyermekfolyamat befejeztetve %d szignállal."
 
-#: ../src/terminal-screen.c:1886
+#: ../src/terminal-screen.c:1895
 msgid "The child process was terminated."
 msgstr "A gyermekfolyamat befejeztetve."
 
@@ -2218,7 +2245,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:477
+#: ../src/terminal-window.c:482
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2227,223 +2254,223 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:488
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1809
 msgid "_File"
 msgstr "_Fájl"
 
 #. File menu
-#: ../src/terminal-window.c:1805 ../src/terminal-window.c:1817
-#: ../src/terminal-window.c:1964
+#: ../src/terminal-window.c:1810 ../src/terminal-window.c:1822
+#: ../src/terminal-window.c:1969
 msgid "Open _Terminal"
 msgstr "Új _terminálablak"
 
-#: ../src/terminal-window.c:1806 ../src/terminal-window.c:1820
-#: ../src/terminal-window.c:1967
+#: ../src/terminal-window.c:1811 ../src/terminal-window.c:1825
+#: ../src/terminal-window.c:1972
 msgid "Open Ta_b"
 msgstr "Új _lap"
 
-#: ../src/terminal-window.c:1807
+#: ../src/terminal-window.c:1812
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: ../src/terminal-window.c:1808
+#: ../src/terminal-window.c:1813
 msgid "_View"
 msgstr "_Nézet"
 
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1814
 msgid "_Search"
 msgstr "_Keresés"
 
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1815
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1816
 msgid "Ta_bs"
 msgstr "_Lapok"
 
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1817
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../src/terminal-window.c:1823
+#: ../src/terminal-window.c:1828
 msgid "New _Profile…"
 msgstr "Új _profil…"
 
-#: ../src/terminal-window.c:1826
+#: ../src/terminal-window.c:1831
 msgid "_Save Contents"
 msgstr "_Tartalom mentése"
 
-#: ../src/terminal-window.c:1829 ../src/terminal-window.c:1973
+#: ../src/terminal-window.c:1834 ../src/terminal-window.c:1978
 msgid "C_lose Tab"
 msgstr "Lap _bezárása"
 
-#: ../src/terminal-window.c:1832
+#: ../src/terminal-window.c:1837
 msgid "_Close Window"
 msgstr "_Ablak bezárása"
 
-#: ../src/terminal-window.c:1843 ../src/terminal-window.c:1961
+#: ../src/terminal-window.c:1848 ../src/terminal-window.c:1966
 msgid "Paste _Filenames"
 msgstr "_Fájlnevek beillesztése"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1854
 msgid "P_rofiles…"
 msgstr "Pro_filok…"
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1857
 msgid "_Keyboard Shortcuts…"
 msgstr "_Gyorsbillentyűk…"
 
-#: ../src/terminal-window.c:1855
+#: ../src/terminal-window.c:1860
 msgid "Pr_ofile Preferences"
 msgstr "_Profil beállításai"
 
 #. Search menu
-#: ../src/terminal-window.c:1871
+#: ../src/terminal-window.c:1876
 msgid "_Find..."
 msgstr "_Keresés…"
 
-#: ../src/terminal-window.c:1874
+#: ../src/terminal-window.c:1879
 msgid "Find Ne_xt"
 msgstr "Kö_vetkező találat"
 
-#: ../src/terminal-window.c:1877
+#: ../src/terminal-window.c:1882
 msgid "Find Pre_vious"
 msgstr "Elő_ző találat"
 
-#: ../src/terminal-window.c:1880
+#: ../src/terminal-window.c:1885
 msgid "_Clear Highlight"
 msgstr "Kiemelés _törlése"
 
-#: ../src/terminal-window.c:1884
+#: ../src/terminal-window.c:1889
 msgid "Go to _Line..."
 msgstr "Ugrá_s sorra…"
 
-#: ../src/terminal-window.c:1887
+#: ../src/terminal-window.c:1892
 msgid "_Incremental Search..."
 msgstr "_Növekményes keresés…"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1893
+#: ../src/terminal-window.c:1898
 msgid "Change _Profile"
 msgstr "_Profil megváltoztatása"
 
-#: ../src/terminal-window.c:1894
+#: ../src/terminal-window.c:1899
 msgid "_Set Title…"
 msgstr "_Cím beállítása…"
 
-#: ../src/terminal-window.c:1897
+#: ../src/terminal-window.c:1902
 msgid "Set _Character Encoding"
 msgstr "_Karakterkódolás beállítása"
 
-#: ../src/terminal-window.c:1898
+#: ../src/terminal-window.c:1903
 msgid "_Reset"
 msgstr "_Visszaállítás"
 
-#: ../src/terminal-window.c:1901
+#: ../src/terminal-window.c:1906
 msgid "Reset and C_lear"
 msgstr "Visszaállítás és _törlés"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1906
+#: ../src/terminal-window.c:1911
 msgid "_Add or Remove…"
 msgstr "Hozzá_adás vagy eltávolítás…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1911
+#: ../src/terminal-window.c:1916
 msgid "_Previous Tab"
 msgstr "_Előző lap"
 
-#: ../src/terminal-window.c:1914
+#: ../src/terminal-window.c:1919
 msgid "_Next Tab"
 msgstr "_Következő lap"
 
-#: ../src/terminal-window.c:1917
+#: ../src/terminal-window.c:1922
 msgid "Move Tab _Left"
 msgstr "Lap mozgatása _balra"
 
-#: ../src/terminal-window.c:1920
+#: ../src/terminal-window.c:1925
 msgid "Move Tab _Right"
 msgstr "Lap mozgatása j_obbra"
 
-#: ../src/terminal-window.c:1923
+#: ../src/terminal-window.c:1928
 msgid "_Detach tab"
 msgstr "_Lap leválasztása"
 
 #. Help menu
-#: ../src/terminal-window.c:1928
+#: ../src/terminal-window.c:1933
 msgid "_Contents"
 msgstr "_Tartalom"
 
-#: ../src/terminal-window.c:1931
+#: ../src/terminal-window.c:1936
 msgid "_About"
 msgstr "_Névjegy"
 
 #. Popup menu
-#: ../src/terminal-window.c:1936
+#: ../src/terminal-window.c:1941
 msgid "_Send Mail To…"
 msgstr "E-mail küldé_se…"
 
-#: ../src/terminal-window.c:1939
+#: ../src/terminal-window.c:1944
 msgid "_Copy E-mail Address"
 msgstr "_E-mail cím másolása"
 
-#: ../src/terminal-window.c:1942
+#: ../src/terminal-window.c:1947
 msgid "C_all To…"
 msgstr "_Hívás…"
 
-#: ../src/terminal-window.c:1945
+#: ../src/terminal-window.c:1950
 msgid "_Copy Call Address"
 msgstr "Hívási cím _másolása"
 
-#: ../src/terminal-window.c:1948
+#: ../src/terminal-window.c:1953
 msgid "_Open Link"
 msgstr "_Megnyitás böngészőben"
 
-#: ../src/terminal-window.c:1951
+#: ../src/terminal-window.c:1956
 msgid "_Copy Link Address"
 msgstr "_Cím másolása"
 
-#: ../src/terminal-window.c:1954
+#: ../src/terminal-window.c:1959
 msgid "P_rofiles"
 msgstr "P_rofilok"
 
-#: ../src/terminal-window.c:1970 ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:1975 ../src/terminal-window.c:3300
 msgid "C_lose Window"
 msgstr "_Ablak bezárása"
 
-#: ../src/terminal-window.c:1976
+#: ../src/terminal-window.c:1981
 msgid "L_eave Full Screen"
 msgstr "_Teljes képernyő elhagyása"
 
-#: ../src/terminal-window.c:1979
+#: ../src/terminal-window.c:1984
 msgid "_Input Methods"
 msgstr "_Beviteli mód"
 
 #. View Menu
-#: ../src/terminal-window.c:1985
+#: ../src/terminal-window.c:1990
 msgid "Show _Menubar"
 msgstr "_Menü megjelenítése"
 
-#: ../src/terminal-window.c:1989
+#: ../src/terminal-window.c:1994
 msgid "_Full Screen"
 msgstr "_Teljes képernyő"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:3287
 msgid "Close this window?"
 msgstr "Bezárja ezt az ablakot"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:3287
 msgid "Close this terminal?"
 msgstr "Bezárja ezt a terminált?"
 
-#: ../src/terminal-window.c:3286
+#: ../src/terminal-window.c:3291
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2451,7 +2478,7 @@ msgstr ""
 "Még vannak futó folyamatok ezen ablak termináljain. Az ablak bezárása ezeket "
 "mind befejezteti."
 
-#: ../src/terminal-window.c:3290
+#: ../src/terminal-window.c:3295
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2459,31 +2486,31 @@ msgstr ""
 "Még van futó folyamat ebben a terminálban. A terminál bezárása ezeket mind "
 "befejezteti."
 
-#: ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:3300
 msgid "C_lose Terminal"
 msgstr "_Terminál bezárása"
 
-#: ../src/terminal-window.c:3368
+#: ../src/terminal-window.c:3373
 msgid "Could not save contents"
 msgstr "A tartalom mentése nem sikerült"
 
-#: ../src/terminal-window.c:3392
+#: ../src/terminal-window.c:3397
 msgid "Save as..."
 msgstr "Mentés másként…"
 
-#: ../src/terminal-window.c:3854
+#: ../src/terminal-window.c:3859
 msgid "_Title:"
 msgstr "_Cím:"
 
-#: ../src/terminal-window.c:4045
+#: ../src/terminal-window.c:4050
 msgid "Contributors:"
 msgstr "Hozzájárultak:"
 
-#: ../src/terminal-window.c:4064
+#: ../src/terminal-window.c:4069
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Terminálemulátor a GNOME asztali környezethez"
 
-#: ../src/terminal-window.c:4071
+#: ../src/terminal-window.c:4076
 msgid "translator-credits"
 msgstr ""
 "Bán Szabolcs <shooby at gnome dot hu>\n"
