@@ -6,16 +6,16 @@
 # Meelad Zakaria <meelad@farsiweb.info>, 2005.
 # Elnaz Sarbar <elnaz@farsiweb.info>, 2005.
 # Mahyar Moghimi <mahyar.moqimi@gmail.com>, 2010.
-# Arash Mousavi <mousavi.arash@gmail.com>, 2011.
+# Arash Mousavi <mousavi.arash@gmail.com>, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal gnome-2-12\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-08-31 14:43+0000\n"
-"PO-Revision-Date: 2011-09-06 23:15+0330\n"
+"POT-Creation-Date: 2012-01-20 22:01+0000\n"
+"PO-Revision-Date: 2012-03-10 14:50+0330\n"
 "Last-Translator: Arash Mousavi <mousavi.arash@gmail.com>\n"
-"Language-Team: Persian <translate@ifsug.org>\n"
+"Language-Team: Persian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,11 +25,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1
-#: ../src/gnome-terminal.schemas.in.h:124
+#: ../src/gnome-terminal.schemas.in.h:126
 #: ../src/terminal-accels.c:249
 #: ../src/terminal.c:551
-#: ../src/terminal-profile.c:158
-#: ../src/terminal-window.c:2018
+#: ../src/terminal-profile.c:162
+#: ../src/terminal-window.c:2023
 msgid "Terminal"
 msgstr "پایانه"
 
@@ -188,542 +188,551 @@ msgid "Default color of text in the terminal, as a color specification (can be H
 msgstr "رنگ پیش‌فرض متن در پایانه، به شکل مشخصات رنگی (می‌تواند ارقام شانزده‌شانزدهی به سبک HTML یا نام یک رنگ مثل «قرمز» باشد)."
 
 #: ../src/gnome-terminal.schemas.in.h:21
+#| msgid "Default size:"
+msgid "Default encoding"
+msgstr "کدگذاری پیش‌فرض:"
+
+#: ../src/gnome-terminal.schemas.in.h:22
+msgid "Default encoding. Can be either \"current\" to use the current locale's encoding, or else any of the known encodings."
+msgstr "کدگذاری پیش‌فرض. هم می‌تواند «current» باشد، برای استفاده از کدگذاری فعلی، یک هر کدگذاری آشنای دیگر."
+
+#: ../src/gnome-terminal.schemas.in.h:23
 msgid "Default number of columns"
 msgstr "تعداد پیش‌فرض ستون‌ها"
 
-#: ../src/gnome-terminal.schemas.in.h:22
+#: ../src/gnome-terminal.schemas.in.h:24
 msgid "Default number of rows"
 msgstr "تعداد پیش‌فرض سطرها"
 
-#: ../src/gnome-terminal.schemas.in.h:23
+#: ../src/gnome-terminal.schemas.in.h:25
 msgid "Effect of the Backspace key"
 msgstr "تأثیر کلید پس‌بر"
 
-#: ../src/gnome-terminal.schemas.in.h:24
+#: ../src/gnome-terminal.schemas.in.h:26
 msgid "Effect of the Delete key"
 msgstr "تأثیر کلید حذف"
 
-#: ../src/gnome-terminal.schemas.in.h:25
+#: ../src/gnome-terminal.schemas.in.h:27
 msgid "Filename of a background image."
 msgstr "نام پرونده‌ی تصویر پس‌زمینه."
 
-#: ../src/gnome-terminal.schemas.in.h:26
+#: ../src/gnome-terminal.schemas.in.h:28
 msgid "Font"
 msgstr "قلم"
 
-#: ../src/gnome-terminal.schemas.in.h:27
+#: ../src/gnome-terminal.schemas.in.h:29
 msgid "How much to darken the background image"
 msgstr "مقدار تاریکی تصویر پس‌زمینه"
 
-#: ../src/gnome-terminal.schemas.in.h:28
+#: ../src/gnome-terminal.schemas.in.h:30
 msgid "Human-readable name of the profile"
 msgstr "نام انسانی مجموعه تنظیمات"
 
-#: ../src/gnome-terminal.schemas.in.h:29
+#: ../src/gnome-terminal.schemas.in.h:31
 msgid "Human-readable name of the profile."
 msgstr "نام انسانی مجموعه تنظیمات."
 
-#: ../src/gnome-terminal.schemas.in.h:30
+#: ../src/gnome-terminal.schemas.in.h:32
 msgid "Icon for terminal window"
 msgstr "شمایل پنجره‌ی پایانه"
 
-#: ../src/gnome-terminal.schemas.in.h:31
+#: ../src/gnome-terminal.schemas.in.h:33
 msgid "Icon to use for tabs/windows containing this profile."
 msgstr "شمایلی که برای زبانه/پنجره‌های حاوی این مجموعه تنظیمات استفاده می‌شود."
 
-#: ../src/gnome-terminal.schemas.in.h:32
+#: ../src/gnome-terminal.schemas.in.h:34
 msgid "If the application in the terminal sets the title (most typically people have their shell set up to do this), the dynamically-set title can erase the configured title, go before it, go after it, or replace it. The possible values are \"replace\", \"before\", \"after\", and \"ignore\"."
 msgstr "اگر برنامه‌ی داخل پایانه عنوان را تنظیم کند (اکثر آدم‌ها پوسته‌شان را برای انجام این کار تنظیم می‌کنند)، عنوان پویا می‌تواند عنوان پیکربندی شده را پاک کند، قبل از آن بیاید، بعد از آن بیاید یا به جای آن بنشیند. مقادیر ممکن عبارتند از «replace»، «before»، «after» و «ignore»."
 
-#: ../src/gnome-terminal.schemas.in.h:33
+#: ../src/gnome-terminal.schemas.in.h:35
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "اگر درست باشد، به برنامه‌های داخل پایانه اجازه داده شود که متن را سیاه کنند."
 
-#: ../src/gnome-terminal.schemas.in.h:34
+#: ../src/gnome-terminal.schemas.in.h:36
 msgid "If true, boldface text will be rendered using the same color as normal text."
 msgstr "اگر درست باشد، متن توپر با رنگ مشابه متن معمولی رسم می‌شود"
 
-#: ../src/gnome-terminal.schemas.in.h:35
+#: ../src/gnome-terminal.schemas.in.h:37
 msgid "If true, don't make a noise when applications send the escape sequence for the terminal bell."
 msgstr "اگر درست باشد، وقتی برنامه‌ها یک دنباله‌ی گریزدار برای زنگ پایانه می‌فرستند صدایی تولید نشود."
 
-#: ../src/gnome-terminal.schemas.in.h:36
+#: ../src/gnome-terminal.schemas.in.h:38
 msgid "If true, newly created terminal windows will have custom size specified by default_size_columns and default_size_rows."
 msgstr "اگر درست باشد، پنجره‌های پایانه‌ی تازه ایجاد شده، اندازه‌ی سفارشی خواهند داشت که با default_size_columns و default_size_rows مشخص شده است."
 
-#: ../src/gnome-terminal.schemas.in.h:37
+#: ../src/gnome-terminal.schemas.in.h:39
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "اگر درست باشد، فشار دادن یک کلید نوار لغزش را به ته صفحه می‌برد."
 
-#: ../src/gnome-terminal.schemas.in.h:38
+#: ../src/gnome-terminal.schemas.in.h:40
 msgid "If true, scroll the background image with the foreground text; if false, keep the image in a fixed position and scroll the text above it."
 msgstr "اگر درست باشد، تصویر پس‌زمینه همراه با متن پیش‌زمینه بلغزد؛ اگر نه، تصویر در یک موقعیت ثابت نگه داشته شود و متن روی آن بلغزد."
 
-#: ../src/gnome-terminal.schemas.in.h:39
+#: ../src/gnome-terminal.schemas.in.h:41
 msgid "If true, scrollback lines will never be discarded. The scrollback history is stored on disk temporarily, so this may cause the system to run out of disk space if there is a lot of output to the terminal."
 msgstr "اگر درست باشد، خط‌های حافظه‌ی لغزش هیچ‌وقت دورانداخته نمی‌شوند. حافظه‌ی لغزش به طور موقت روی دیسک ذخیره می‌شود، بنابراین اگر خروجی زیادی در پایانه وجود داشته باشد، ممکن است فضای خالی دیسک سیستم تمام شود."
 
-#: ../src/gnome-terminal.schemas.in.h:40
+#: ../src/gnome-terminal.schemas.in.h:42
 msgid "If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)"
 msgstr "اگر درست باشد، فرمان داخل پایانه مثل پوسته‌ی ورود به سیستم اجرا شود. (اول argv[0] یک تیره خواهد داشت.)‏"
 
-#: ../src/gnome-terminal.schemas.in.h:41
+#: ../src/gnome-terminal.schemas.in.h:43
 msgid "If true, the system login records utmp and wtmp will be updated when the command inside the terminal is launched."
 msgstr "اگر درست باشد، سوابق ورود به سیستم utmp و wtmp هنگام اجرای فرمان داخل پایانه به‌هنگام خواهند شد."
 
-#: ../src/gnome-terminal.schemas.in.h:42
+#: ../src/gnome-terminal.schemas.in.h:44
 msgid "If true, the terminal will use the desktop-global standard font if it's monospace (and the most similar font it can come up with otherwise)."
 msgstr "اگر درست باشد، پایانه در صورت متساوی‌العرض بودن قلم استاندارد رومیزی/جهانی آن را به کار خواهد برد (و در غیر این صورت از نزدیک‌ترین قلم به آن که پیدا کند استفاده خواهد کرد)."
 
-#: ../src/gnome-terminal.schemas.in.h:43
+#: ../src/gnome-terminal.schemas.in.h:45
 msgid "If true, the theme color scheme used for text entry boxes will be used for the terminal, instead of colors provided by the user."
 msgstr "اگر درست باشد، به جای رنگ‌های تعیین شده به دست کاربر، تم رنگ به کار رفته برای جعبه‌های ورود متن برای پایانه استفاده خواهد شد."
 
-#: ../src/gnome-terminal.schemas.in.h:44
+#: ../src/gnome-terminal.schemas.in.h:46
 msgid "If true, the value of the custom_command setting will be used in place of running a shell."
 msgstr "اگر درست باشد، مقدار تنظیمات custom_command به جای اجرای پوسته استفاده خواهد شد."
 
-#: ../src/gnome-terminal.schemas.in.h:45
+#: ../src/gnome-terminal.schemas.in.h:47
 msgid "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "اگر درست باشد، با هر خروجی جدید پایانه به انتهای آن خواهد لغزید."
 
-#: ../src/gnome-terminal.schemas.in.h:46
+#: ../src/gnome-terminal.schemas.in.h:48
 msgid "Keyboard shortcut key for bringing up the dialog for profile creation. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای بالا آوردن محاوره‌ی ایجاد مجموعه تنظیمات. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:47
+#: ../src/gnome-terminal.schemas.in.h:49
 msgid "Keyboard shortcut key for closing a tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای بستن زبانه. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:48
+#: ../src/gnome-terminal.schemas.in.h:50
 msgid "Keyboard shortcut key for closing a window. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای بستن پنجره. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:49
+#: ../src/gnome-terminal.schemas.in.h:51
 msgid "Keyboard shortcut key for copying selected text to the clipboard. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای نسخه‌برداری از متن انتخاب‌شده در تخته‌گیره. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:50
+#: ../src/gnome-terminal.schemas.in.h:52
 msgid "Keyboard shortcut key for launching help. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای راه‌اندازی راهنما. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:51
+#: ../src/gnome-terminal.schemas.in.h:53
 msgid "Keyboard shortcut key for making font larger. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای بزرگتر کردن قلم. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:52
+#: ../src/gnome-terminal.schemas.in.h:54
 msgid "Keyboard shortcut key for making font smaller. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای کوچکتر کردن قلم. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:53
+#: ../src/gnome-terminal.schemas.in.h:55
 msgid "Keyboard shortcut key for making font the normal size. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای برگرداندن قلم به اندازه‌ی عادی. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:54
+#: ../src/gnome-terminal.schemas.in.h:56
 msgid "Keyboard shortcut key for opening a new tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای باز کردن یک زبانه‌ی جدید. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:55
+#: ../src/gnome-terminal.schemas.in.h:57
 msgid "Keyboard shortcut key for opening a new window. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای باز کردن یک پنجره‌ی جدید. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:56
+#: ../src/gnome-terminal.schemas.in.h:58
 msgid "Keyboard shortcut key for pasting the contents of the clipboard into the terminal. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای چسباندن محتویات تخته‌گیره در پایانه. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:57
+#: ../src/gnome-terminal.schemas.in.h:59
 msgid "Keyboard shortcut key for switch to tab 1. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:58
+#: ../src/gnome-terminal.schemas.in.h:60
 msgid "Keyboard shortcut key for switch to tab 10. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۰. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:59
+#: ../src/gnome-terminal.schemas.in.h:61
 msgid "Keyboard shortcut key for switch to tab 11. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۱. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:60
+#: ../src/gnome-terminal.schemas.in.h:62
 msgid "Keyboard shortcut key for switch to tab 12. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۲. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:61
+#: ../src/gnome-terminal.schemas.in.h:63
 msgid "Keyboard shortcut key for switch to tab 2. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۲. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:62
+#: ../src/gnome-terminal.schemas.in.h:64
 msgid "Keyboard shortcut key for switch to tab 3. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۳. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:63
+#: ../src/gnome-terminal.schemas.in.h:65
 msgid "Keyboard shortcut key for switch to tab 4. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۴. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:64
+#: ../src/gnome-terminal.schemas.in.h:66
 msgid "Keyboard shortcut key for switch to tab 5. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۵. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:65
+#: ../src/gnome-terminal.schemas.in.h:67
 msgid "Keyboard shortcut key for switch to tab 6. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۶. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:66
+#: ../src/gnome-terminal.schemas.in.h:68
 msgid "Keyboard shortcut key for switch to tab 7. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۷. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:67
+#: ../src/gnome-terminal.schemas.in.h:69
 msgid "Keyboard shortcut key for switch to tab 8. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۸. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:68
+#: ../src/gnome-terminal.schemas.in.h:70
 msgid "Keyboard shortcut key for switch to tab 9. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۹. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:69
+#: ../src/gnome-terminal.schemas.in.h:71
 msgid "Keyboard shortcut key for toggling full screen mode. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای زدن ضامن حالت تمام‌صفحه. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:70
+#: ../src/gnome-terminal.schemas.in.h:72
 msgid "Keyboard shortcut key to reset and clear the terminal. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای برگرداندن پایانه به شرایط اولیه و پاک کردن آن. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:71
+#: ../src/gnome-terminal.schemas.in.h:73
 msgid "Keyboard shortcut key to reset the terminal. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای برگرداندن پایانه به شرایط اولیه. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:72
+#: ../src/gnome-terminal.schemas.in.h:74
 msgid "Keyboard shortcut key to save the current tab contents to a file. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "کلید میانبر صفحه‌کلید برای ذخیره‌ی محتوای زبانه‌ی جاری در یک پرونده. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:73
+#: ../src/gnome-terminal.schemas.in.h:75
 msgid "Keyboard shortcut key to set the terminal title. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "کلید میانبر صفحه‌کلید برای تنظیم عنوان پایانه. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:74
+#: ../src/gnome-terminal.schemas.in.h:76
 msgid "Keyboard shortcut key to switch to the next tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "کلید میانبر صفحه‌کلید برای تعویض به زبانه‌ی بعدی. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:75
+#: ../src/gnome-terminal.schemas.in.h:77
 msgid "Keyboard shortcut key to switch to the previous tab. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی قبلی. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:76
+#: ../src/gnome-terminal.schemas.in.h:78
 msgid "Keyboard shortcut key to toggle the visibility of the menubar. Expressed as a string in the same format used for GTK+ resource files. If you set the option to the special string \"disabled\", then there will be no keyboard shortcut for this action."
 msgstr "میانبر صفحه‌کلید برای زدن ضامن مرئی بودن نوار منو. به شکل یک رشته با قالبی مشابه پرونده‌های منبع GTK+‎ بیان می‌شود. اگر گزینه را روی رشته‌ی ویژه‌ی «disabled» تنظیم کنید، دیگر میانبر صفحه‌کلیدی برای این کنش وجود نخواهد داشت."
 
-#: ../src/gnome-terminal.schemas.in.h:77
+#: ../src/gnome-terminal.schemas.in.h:79
 msgid "Keyboard shortcut to close a tab"
 msgstr "میانبر صفحه‌کلید برای بستن زبانه"
 
-#: ../src/gnome-terminal.schemas.in.h:78
+#: ../src/gnome-terminal.schemas.in.h:80
 msgid "Keyboard shortcut to close a window"
 msgstr "میانبر صفحه‌کلید برای بستن پنجره"
 
-#: ../src/gnome-terminal.schemas.in.h:79
+#: ../src/gnome-terminal.schemas.in.h:81
 msgid "Keyboard shortcut to copy text"
 msgstr "میانبر صفحه‌کلید برای نسخه‌برداری از متن"
 
-#: ../src/gnome-terminal.schemas.in.h:80
+#: ../src/gnome-terminal.schemas.in.h:82
 msgid "Keyboard shortcut to create a new profile"
 msgstr "میانبر صفحه‌کلید برای ایجاد مجموعه تنظیمات جدید"
 
-#: ../src/gnome-terminal.schemas.in.h:81
+#: ../src/gnome-terminal.schemas.in.h:83
 msgid "Keyboard shortcut to launch help"
 msgstr "میانبر صفحه‌کلید برای راه‌اندازی راهنما"
 
-#: ../src/gnome-terminal.schemas.in.h:82
+#: ../src/gnome-terminal.schemas.in.h:84
 msgid "Keyboard shortcut to make font larger"
 msgstr "میانبر صفحه‌کلید برای بزرگتر کردن قلم"
 
-#: ../src/gnome-terminal.schemas.in.h:83
+#: ../src/gnome-terminal.schemas.in.h:85
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "میانبر صفحه‌کلید برای برگرداندن قلم به اندازه‌ی عادی"
 
-#: ../src/gnome-terminal.schemas.in.h:84
+#: ../src/gnome-terminal.schemas.in.h:86
 msgid "Keyboard shortcut to make font smaller"
 msgstr "میانبر صفحه‌کلید برای کوچکتر کردن قلم"
 
-#: ../src/gnome-terminal.schemas.in.h:85
+#: ../src/gnome-terminal.schemas.in.h:87
 msgid "Keyboard shortcut to open a new tab"
 msgstr "میانبر صفحه‌کلید برای باز کردن یک زبانه‌ی جدید"
 
-#: ../src/gnome-terminal.schemas.in.h:86
+#: ../src/gnome-terminal.schemas.in.h:88
 msgid "Keyboard shortcut to open a new window"
 msgstr "میانبر صفحه‌کلید برای باز کردن یک پنجره‌ی جدید"
 
-#: ../src/gnome-terminal.schemas.in.h:87
+#: ../src/gnome-terminal.schemas.in.h:89
 msgid "Keyboard shortcut to paste text"
 msgstr "میانبر صفحه‌کلید برای چسباندن متن"
 
-#: ../src/gnome-terminal.schemas.in.h:88
+#: ../src/gnome-terminal.schemas.in.h:90
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "میانبر صفحه‌کلید برای برگرداندن  تنظیمات پایانه به حالت اولیه و پاک کردن آن"
 
-#: ../src/gnome-terminal.schemas.in.h:89
+#: ../src/gnome-terminal.schemas.in.h:91
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "میانبر صفحه‌کلید برای برگرداندن تنظیمات پایانه به حالت اولیه"
 
-#: ../src/gnome-terminal.schemas.in.h:90
+#: ../src/gnome-terminal.schemas.in.h:92
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "کلید میانبر صفحه‌کلید برای ذخیره‌ی محتوای زبانه‌ی جاری در یک پرونده"
 
-#: ../src/gnome-terminal.schemas.in.h:91
+#: ../src/gnome-terminal.schemas.in.h:93
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "میانبر صفحه‌کلید برای تنظیم عنوان پایانه"
 
-#: ../src/gnome-terminal.schemas.in.h:92
+#: ../src/gnome-terminal.schemas.in.h:94
 msgid "Keyboard shortcut to switch to tab 1"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱"
 
-#: ../src/gnome-terminal.schemas.in.h:93
+#: ../src/gnome-terminal.schemas.in.h:95
 msgid "Keyboard shortcut to switch to tab 10"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۰"
 
-#: ../src/gnome-terminal.schemas.in.h:94
+#: ../src/gnome-terminal.schemas.in.h:96
 msgid "Keyboard shortcut to switch to tab 11"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۱"
 
-#: ../src/gnome-terminal.schemas.in.h:95
+#: ../src/gnome-terminal.schemas.in.h:97
 msgid "Keyboard shortcut to switch to tab 12"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۱۲"
 
-#: ../src/gnome-terminal.schemas.in.h:96
+#: ../src/gnome-terminal.schemas.in.h:98
 msgid "Keyboard shortcut to switch to tab 2"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۲"
 
-#: ../src/gnome-terminal.schemas.in.h:97
+#: ../src/gnome-terminal.schemas.in.h:99
 msgid "Keyboard shortcut to switch to tab 3"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۳"
 
-#: ../src/gnome-terminal.schemas.in.h:98
+#: ../src/gnome-terminal.schemas.in.h:100
 msgid "Keyboard shortcut to switch to tab 4"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۴"
 
-#: ../src/gnome-terminal.schemas.in.h:99
+#: ../src/gnome-terminal.schemas.in.h:101
 msgid "Keyboard shortcut to switch to tab 5"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۵"
 
-#: ../src/gnome-terminal.schemas.in.h:100
+#: ../src/gnome-terminal.schemas.in.h:102
 msgid "Keyboard shortcut to switch to tab 6"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۶"
 
-#: ../src/gnome-terminal.schemas.in.h:101
+#: ../src/gnome-terminal.schemas.in.h:103
 msgid "Keyboard shortcut to switch to tab 7"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۷"
 
-#: ../src/gnome-terminal.schemas.in.h:102
+#: ../src/gnome-terminal.schemas.in.h:104
 msgid "Keyboard shortcut to switch to tab 8"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۸"
 
-#: ../src/gnome-terminal.schemas.in.h:103
+#: ../src/gnome-terminal.schemas.in.h:105
 msgid "Keyboard shortcut to switch to tab 9"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی ۹"
 
-#: ../src/gnome-terminal.schemas.in.h:104
+#: ../src/gnome-terminal.schemas.in.h:106
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی بعدی"
 
-#: ../src/gnome-terminal.schemas.in.h:105
+#: ../src/gnome-terminal.schemas.in.h:107
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "میانبر صفحه‌کلید برای تعویض به زبانه‌ی قبلی"
 
-#: ../src/gnome-terminal.schemas.in.h:106
+#: ../src/gnome-terminal.schemas.in.h:108
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "میانبر صفحه‌کلید برای زدن ضامن حالت تمام‌صفحه"
 
-#: ../src/gnome-terminal.schemas.in.h:107
+#: ../src/gnome-terminal.schemas.in.h:109
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "میانبر صفحه‌کلید برای زدن ضامن مرئی بودن نوار منو "
 
-#: ../src/gnome-terminal.schemas.in.h:108
+#: ../src/gnome-terminal.schemas.in.h:110
 msgid "List of available encodings"
 msgstr "فهرست کدگذاری‌های موجود"
 
-#: ../src/gnome-terminal.schemas.in.h:109
+#: ../src/gnome-terminal.schemas.in.h:111
 msgid "List of profiles"
 msgstr "فهرست مجموعه‌های‌ تنظیمات"
 
-#: ../src/gnome-terminal.schemas.in.h:110
+#: ../src/gnome-terminal.schemas.in.h:112
 msgid "List of profiles known to gnome-terminal. The list contains strings naming subdirectories relative to /apps/gnome-terminal/profiles."
 msgstr "فهرست مجموعه‌های‌ تنظیماتی شناخته شده برای پایانه‌ی گنوم. فهرست شامل رشته‌هایی است که زیرشاخه‌ها را به صورت نسبی از ‎/apps/gnome-terminal/profiles معرفی می‌کند."
 
-#: ../src/gnome-terminal.schemas.in.h:111
+#: ../src/gnome-terminal.schemas.in.h:113
 msgid "Normally you can access the menubar with F10. This can also be customized via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the standard menubar accelerator to be disabled."
 msgstr "به طور طبیعی می‌توان با کلید F10 به نوار منو دسترسی یافت. این کار را می‌توان با سفارشی کردن از طریق gtkrc (gtk-menu-bar-accel = «whatever»)‎ نیز انجام داد. این گزینه همچنین از کار انداختن شتاب‌ده استاندارد نوار منو را ممکن می‌سازد."
 
-#: ../src/gnome-terminal.schemas.in.h:112
+#: ../src/gnome-terminal.schemas.in.h:114
 msgid "Number of columns in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
 msgstr "تعداد ستون‌ها در پنجره‌های پایانه‌ی تازه ایجاد شده. اگر use_custom_default_size به کار نیافتاده باشد، تاثیری ندارد."
 
-#: ../src/gnome-terminal.schemas.in.h:113
+#: ../src/gnome-terminal.schemas.in.h:115
 msgid "Number of lines to keep in scrollback"
 msgstr "تعداد سطرهایی که در حافظه‌ی لغزش نگهداری شود"
 
-#: ../src/gnome-terminal.schemas.in.h:114
+#: ../src/gnome-terminal.schemas.in.h:116
 msgid "Number of rows in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
 msgstr "تعداد سطرها در پنجره‌های پایانه‌ی تازه ایجاد شده. اگر use_custom_default_size به کار نیافتاده باشد، تاثیری ندارد."
 
-#: ../src/gnome-terminal.schemas.in.h:115
+#: ../src/gnome-terminal.schemas.in.h:117
 msgid "Number of scrollback lines to keep around. You can scroll back in the terminal by this number of lines; lines that don't fit in the scrollback are discarded. If scrollback_unlimited is true, this value is ignored."
 msgstr "تعداد سطرهای حافظه‌ی لغزش که نگه داشته می‌شوند. در پایانه می‌توان تا این تعداد سطر به عقب رفت: سطرهایی که در محدوده‌ی حافظه‌ی لغزش نیستند دور انداخته می‌شوند. اگر scrollback_unlimited درست باشد، این مقدار چشم‌پوشی می‌شود."
 
-#: ../src/gnome-terminal.schemas.in.h:116
+#: ../src/gnome-terminal.schemas.in.h:118
 msgid "Palette for terminal applications"
 msgstr "تخته‌رنگ برنامه‌های پایانه"
 
-#: ../src/gnome-terminal.schemas.in.h:117
+#: ../src/gnome-terminal.schemas.in.h:119
 msgid "Position of the scrollbar"
 msgstr "موقعیت نوار لغزش"
 
-#: ../src/gnome-terminal.schemas.in.h:118
+#: ../src/gnome-terminal.schemas.in.h:120
 msgid "Possible values are \"close\" to close the terminal, and \"restart\" to restart the command."
 msgstr "مقادیر ممکن عبارتند از «close» برای بستن پایانه، و «restart» برای آغاز مجدد فرمان."
 
-#: ../src/gnome-terminal.schemas.in.h:119
+#: ../src/gnome-terminal.schemas.in.h:121
 msgid "Profile to be used when opening a new window or tab. Must be in profile_list."
 msgstr "مجموعه‌ تنظیماتی که هنگام باز کردن یک پنجره یا زبانه‌ی جدید استفاده می‌شود. باید در profile_list باشد."
 
-#: ../src/gnome-terminal.schemas.in.h:120
+#: ../src/gnome-terminal.schemas.in.h:122
 msgid "Profile to use for new terminals"
 msgstr "مجموعه‌ تنظیماتی که برای پایانه‌های جدید استفاده می‌شود"
 
-#: ../src/gnome-terminal.schemas.in.h:121
+#: ../src/gnome-terminal.schemas.in.h:123
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "اجرای این فرمان به جای پوسته، اگر use_custom_command درست باشد."
 
-#: ../src/gnome-terminal.schemas.in.h:122
+#: ../src/gnome-terminal.schemas.in.h:124
 msgid "Sets what code the backspace key generates. Possible values are \"ascii-del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS character), \"escape-sequence\" for the escape sequence typically bound to backspace or delete. \"ascii-del\" is normally considered the correct setting for the Backspace key."
 msgstr "کدی که کلید پس‌بر تولید می‌کند را تنظیم می‌کند. مقادیر ممکن عبارتند از «ascii-del» برای نویسه‌ی ASCII DEL، «control-h» برای مهار+ا (به عنوان نویسه‌ی ASCII BS هم شناخته می‌شود)، «escape-sequence» برای دنباله‌ی گریزداری که معمولاً به پس‌بر یا حذف مقید است. در شرایط عادی «ascii-del» تنظیم درست کلید پس‌بر به شمار می‌رود."
 
-#: ../src/gnome-terminal.schemas.in.h:123
+#: ../src/gnome-terminal.schemas.in.h:125
 msgid "Sets what code the delete key generates. Possible values are \"ascii-del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS character), \"escape-sequence\" for the escape sequence typically bound to backspace or delete. \"escape-sequence\" is normally considered the correct setting for the Delete key."
 msgstr "کدی که کلید حذف تولید می‌کند را تنظیم می‌کند. مقادیر ممکن عبارتند از «ascii-del» برای نویسه‌ی ASCII DEL، «control-h» برای مهار+ا (به عنوان نویسه‌ی ASCII BS هم شناخته می‌شود)، «escape-sequence» برای دنباله‌ی گریزداری که معمولاً به پس‌بر یا حذف مقید است. در شرایط عادی «ascii-del» تنظیم درست کلید حذف به شمار می‌رود."
 
-#: ../src/gnome-terminal.schemas.in.h:125
+#: ../src/gnome-terminal.schemas.in.h:127
 msgid "Terminals have a 16-color palette that applications inside the terminal can use. This is that palette, in the form of a colon-separated list of color names. Color names should be in hex format e.g. \"#FF00FF\""
 msgstr "پایانه‌ها یک تخته‌رنگ ۱۶ رنگی دارند که برنامه‌های داخل پایانه می‌توانند استفاده کنند. این همان تخته‌رنگ است که به شکلی فهرستی از نام رنگ‌ها که با نقطه‌ویرگول از هم جدا شده‌اند، آمده است. نام رنگ‌ها باید در قالب شانزده‌شانزدهی باشد مثل «FF00FF»"
 
-#: ../src/gnome-terminal.schemas.in.h:126
+#: ../src/gnome-terminal.schemas.in.h:128
 msgid "The cursor appearance"
 msgstr "ظاهر مکان نما"
 
-#: ../src/gnome-terminal.schemas.in.h:127
+#: ../src/gnome-terminal.schemas.in.h:129
 msgid "The possible values are \"block\" to use a block cursor, \"ibeam\" to use a vertical line cursor, or \"underline\" to use an underline cursor."
 msgstr "مقادیر ممکن عبارتند از «block» برای استفاده از مکان‌نمای بلوک،  «ibeam» برای استفاده از مکان نمایش خط عمودی، یا «underline» برای استفاده از مکان‌نمای زیرخط"
 
-#: ../src/gnome-terminal.schemas.in.h:128
+#: ../src/gnome-terminal.schemas.in.h:130
 msgid "The possible values are \"system\" to use the global cursor blinking settings, or \"on\" or \"off\" to set the mode explicitly."
 msgstr "مقادیر ممکن عبارتند از «system» برای استفاده از تنظیمات سراسری چشمک‌زدن مکان‌نما، یا «on» یا «off» برای تنظیم مستقیم حالت."
 
-#: ../src/gnome-terminal.schemas.in.h:129
+#: ../src/gnome-terminal.schemas.in.h:131
 msgid "Title for terminal"
 msgstr "عنوان پایانه"
 
-#: ../src/gnome-terminal.schemas.in.h:130
+#: ../src/gnome-terminal.schemas.in.h:132
 msgid "Title to display for the terminal window or tab. This title may be replaced by or combined with the title set by the application inside the terminal, depending on the title_mode setting."
 msgstr "عنوانی که برای پنجره یا زبانه‌ی پایانه نمایش داده می‌شود. بسته به تنظیم title_mode، ممکن است عنوان تنظیم شده توسط برنامه‌های داخل این پایانه، به جای این عنوان بنشینند یا با آن ترکیب شوند."
 
-#: ../src/gnome-terminal.schemas.in.h:131
+#: ../src/gnome-terminal.schemas.in.h:133
 msgid "True if the menubar should be shown in new windows, for windows/tabs with this profile."
 msgstr "درست اگر نوار منو باید در پنجره‌های جدید، برای پنجره/زبانه‌های با این مجموعه تنظیمات، نشان داده شود."
 
-#: ../src/gnome-terminal.schemas.in.h:132
+#: ../src/gnome-terminal.schemas.in.h:134
 msgid "Type of terminal background. May be \"solid\" for a solid color, \"image\" for an image, or \"transparent\" for either real transparency if a compositing window manager is running, or pseudo-transparency otherwise."
 msgstr "نوع پس‌زمینه‌ی پایانه. می‌تواند برای رنگ یکدست «solid»، برای تصویر «image» یا «transparent» باشد برای شبه شفافیت  یا اگر مدیر پنجره‌ی ترکیب کننده در حال اجرا باشد، برای شفافیت واقعی"
 
-#: ../src/gnome-terminal.schemas.in.h:133
+#: ../src/gnome-terminal.schemas.in.h:135
 msgid "What to do with dynamic title"
 msgstr "با عنوان پویا چه‌کار باید کرد"
 
-#: ../src/gnome-terminal.schemas.in.h:134
+#: ../src/gnome-terminal.schemas.in.h:136
 msgid "What to do with the terminal when the child command exits"
 msgstr "وقتی فرمان فرزند وجود دارد با پایانه چه‌کار باید کرد"
 
-#: ../src/gnome-terminal.schemas.in.h:135
+#: ../src/gnome-terminal.schemas.in.h:137
 msgid "When selecting text by word, sequences of these characters are considered single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing a range) should be the first character given."
 msgstr "هنگام انتخاب متن بر اساس کلمه، دنباله‌هایی از این نویسه‌ها یک تک‌کلمه فرض می‌شوند. محدوده را می‌توان به صورت «ا-ی» وارد کرد. خط تیره (به جز در مشخص کردن محدوده) باید اولین نویسه‌ی داده شده باشد."
 
-#: ../src/gnome-terminal.schemas.in.h:136
+#: ../src/gnome-terminal.schemas.in.h:138
 msgid "Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", and \"hidden\"."
 msgstr "نوار لغزش پایانه کجا قرار داده شود. مقادیر ممکن عبارتند از «left»، «right» و «hidden»."
 
-#: ../src/gnome-terminal.schemas.in.h:137
+#: ../src/gnome-terminal.schemas.in.h:139
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "این‌که تعداد سطرهایی که در حافظه‌ی لغزش نگهداری شود، بدون مرز باشد"
 
-#: ../src/gnome-terminal.schemas.in.h:138
+#: ../src/gnome-terminal.schemas.in.h:140
 msgid "Whether bold text should use the same color as normal text"
 msgstr "این‌که متن توپر باید از رنگ مشابه متن معمولی استفاده کند"
 
-#: ../src/gnome-terminal.schemas.in.h:139
+#: ../src/gnome-terminal.schemas.in.h:141
 msgid "Whether the menubar has access keys"
 msgstr "این که نوار منو کلید دسترسی داشته باشد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:140
+#: ../src/gnome-terminal.schemas.in.h:142
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "این که میانبر استاندارد GTK برای دسترسی به نوار منو فعال باشد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:141
+#: ../src/gnome-terminal.schemas.in.h:143
 msgid "Whether to allow bold text"
 msgstr "این که متن سیاه مجاز باشد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:142
+#: ../src/gnome-terminal.schemas.in.h:144
 msgid "Whether to ask for confirmation when closing a terminal window which has more than one open tab."
 msgstr "این که موقع بستن پنجره‌ی پایانه‌ای که بیش از یک زبانه‌ی باز دارد تصدیق گرفته شود یا نه."
 
-#: ../src/gnome-terminal.schemas.in.h:143
+#: ../src/gnome-terminal.schemas.in.h:145
 msgid "Whether to ask for confirmation when closing terminal windows"
 msgstr "این که موقع بستن پنجره‌های پایانه تصدیق گرفته شود یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:144
+#: ../src/gnome-terminal.schemas.in.h:146
 msgid "Whether to blink the cursor"
 msgstr "این که مکان‌نما چشمک بزند یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:145
+#: ../src/gnome-terminal.schemas.in.h:147
 msgid "Whether to have Alt+letter access keys for the menubar. They may interfere with some applications run inside the terminal so it's possible to turn them off."
 msgstr "این که کلید‌های دسترسی دگرساز+حرف برای نوار منو باشند یا نه. این کلیدها ممکن است با بعضی برنامه‌ها که داخل پایانهاجرا می‌شوند تداخل داشته باشند بنابراین می‌توان خاموششان کرد."
 
-#: ../src/gnome-terminal.schemas.in.h:146
+#: ../src/gnome-terminal.schemas.in.h:148
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "این که فرمان در پایانه مثل پوسته‌ی ورود به سیستم راه‌اندازی شوند یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:147
+#: ../src/gnome-terminal.schemas.in.h:149
 msgid "Whether to run a custom command instead of the shell"
 msgstr "این که به جای پوسته یک فرمان سفارشی اجرا شود یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:148
+#: ../src/gnome-terminal.schemas.in.h:150
 msgid "Whether to scroll background image"
 msgstr "این که تصویر پس‌زمینه بلغزد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:149
+#: ../src/gnome-terminal.schemas.in.h:151
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "این که هنگام فشرده شدن یک کلید تا ته صفحه پایین بلغزد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:150
+#: ../src/gnome-terminal.schemas.in.h:152
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "این که هنگام وجود خروجی جدید تا ته صفحه پایین بلغزد یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:151
+#: ../src/gnome-terminal.schemas.in.h:153
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "این که نوار منو در پنجره/زبانه‌های جدید نشان داده بشوند یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:152
+#: ../src/gnome-terminal.schemas.in.h:154
 msgid "Whether to silence terminal bell"
 msgstr "این که زنگ پایانه ساکت شود یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:153
+#: ../src/gnome-terminal.schemas.in.h:155
 msgid "Whether to update login records when launching terminal command"
 msgstr "این که سوابق ورود به سیستم موقع راه‌اندازی فرمان پایانه به‌هنگام شود یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:154
+#: ../src/gnome-terminal.schemas.in.h:156
 msgid "Whether to use custom terminal size for new windows"
 msgstr "این که برای پنجره‌های جدید از اندازه‌ی پایانه‌ی سفارشی استفاده شود"
 
-#: ../src/gnome-terminal.schemas.in.h:155
+#: ../src/gnome-terminal.schemas.in.h:157
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "این که رنگ‌های تم برای ویجت پایانه استفاده شود یا نه"
 
-#: ../src/gnome-terminal.schemas.in.h:156
+#: ../src/gnome-terminal.schemas.in.h:158
 msgid "Whether to use the system font"
 msgstr "این که از قلم سیستم استفاده شود یا نه"
 
@@ -733,9 +742,14 @@ msgstr "این که از قلم سیستم استفاده شود یا نه"
 #. translated. This is provided for customization of the default encoding
 #. menu; see bug 144810 for an use case. In most cases, this should be
 #. left alone.
-#: ../src/gnome-terminal.schemas.in.h:163
+#: ../src/gnome-terminal.schemas.in.h:165
 msgid "[UTF-8,current]"
 msgstr "[UTF-8,current]"
+
+#: ../src/gnome-terminal.schemas.in.h:166
+#| msgid "[UTF-8,current]"
+msgid "current"
+msgstr "فعلی"
 
 #: ../src/keybinding-editor.glade.h:1
 msgid "Enable the _menu shortcut key (F10 by default)"
@@ -1197,7 +1211,7 @@ msgid "Normal Size"
 msgstr "اندازه‌ی عادی"
 
 #: ../src/terminal-accels.c:182
-#: ../src/terminal-window.c:3831
+#: ../src/terminal-window.c:3836
 msgid "Set Title"
 msgstr "تنظیم عنوان"
 
@@ -1350,7 +1364,7 @@ msgstr "مجموعه‌ تنظیماتی به نام «%s» وجود ندارد�
 msgid "Invalid geometry string \"%s\"\n"
 msgstr "رشته‌ی پیکربندی ظاهری نامعتبر «%s»\n"
 
-#: ../src/terminal-app.c:2015
+#: ../src/terminal-app.c:2020
 msgid "User Defined"
 msgstr "تعریف شده توسط کاربر"
 
@@ -1545,7 +1559,7 @@ msgid "Option \"%s\" is no longer supported in this version of gnome-terminal; y
 msgstr "گزینه‌ی \"%s\" دیگر در این نسخه‌ی پایانه‌ی گنوم پشتیبانی نمی‌شود؛ شاید بخواهید یک مجموعه تنظیمات با تنظیم‌های مورد نظر خود بسازید و از گزینه‌ی جدید  '--profile' استفاده کنید.\n"
 
 #: ../src/terminal-options.c:188
-#: ../src/terminal-window.c:4062
+#: ../src/terminal-window.c:4067
 msgid "GNOME Terminal"
 msgstr "پایانه‌ی گنوم"
 
@@ -1629,8 +1643,6 @@ msgid "Full-screen the window"
 msgstr "تمام‌صفحه کردن پنجره"
 
 #: ../src/terminal-options.c:1037
-#| msgid ""
-#| "Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"
 msgid "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr "تنظیم اندازه‌ی پنجره؛ مثلا: ۸۰x۲۴, یا ۸۰x۲۴+۲۰۰+۲۰۰  (ردیف‌هاxستون‌ها+ایکس+ایگرگ)"
 
@@ -1719,34 +1731,34 @@ msgstr "گزینه‌های پایانه؛ اگر پیش از اولین اول�
 msgid "Show per-terminal options"
 msgstr "گزینه‌های (به ازای هر) پایانه‌ نمایش داده شوند"
 
-#: ../src/terminal-profile.c:164
+#: ../src/terminal-profile.c:168
 msgid "Unnamed"
 msgstr "بدون نام"
 
-#: ../src/terminal-screen.c:1492
+#: ../src/terminal-screen.c:1501
 msgid "_Profile Preferences"
 msgstr "ترجیحات مجموعه تنظیمات"
 
-#: ../src/terminal-screen.c:1493
-#: ../src/terminal-screen.c:1876
+#: ../src/terminal-screen.c:1502
+#: ../src/terminal-screen.c:1885
 msgid "_Relaunch"
 msgstr "_راه‌اندازی مجدد"
 
-#: ../src/terminal-screen.c:1496
+#: ../src/terminal-screen.c:1505
 msgid "There was an error creating the child process for this terminal"
 msgstr "در ایجاد فراروند فرزند برای این پایانه خطایی رخ داد"
 
-#: ../src/terminal-screen.c:1880
+#: ../src/terminal-screen.c:1889
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "پردازه فرزند با وضعیت %Id معمولی خارج شد."
 
-#: ../src/terminal-screen.c:1883
+#: ../src/terminal-screen.c:1892
 #, c-format
 msgid "The child process was terminated by signal %d."
 msgstr "پردازه فرزند توسط سیگنال %Id پایان یافت"
 
-#: ../src/terminal-screen.c:1886
+#: ../src/terminal-screen.c:1895
 msgid "The child process was terminated."
 msgstr "پردازه فرزند پایان یافته شد."
 
@@ -1783,7 +1795,7 @@ msgstr "شما باید همراه با پایانه‌ی گنوم یک نسخه
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:477
+#: ../src/terminal-window.c:482
 #, c-format
 msgid "_%d. %s"
 msgstr "‏_%Id. %s"
@@ -1792,260 +1804,260 @@ msgstr "‏_%Id. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:488
 #, c-format
 msgid "_%c. %s"
 msgstr "‏_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1809
 msgid "_File"
 msgstr "_پرونده"
 
 #. File menu
-#: ../src/terminal-window.c:1805
-#: ../src/terminal-window.c:1817
-#: ../src/terminal-window.c:1964
+#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1822
+#: ../src/terminal-window.c:1969
 msgid "Open _Terminal"
 msgstr "باز کردن _پایانه"
 
-#: ../src/terminal-window.c:1806
-#: ../src/terminal-window.c:1820
-#: ../src/terminal-window.c:1967
+#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1825
+#: ../src/terminal-window.c:1972
 msgid "Open Ta_b"
 msgstr "باز کردن زبان_ه"
 
-#: ../src/terminal-window.c:1807
+#: ../src/terminal-window.c:1812
 msgid "_Edit"
 msgstr "_ویرایش"
 
-#: ../src/terminal-window.c:1808
+#: ../src/terminal-window.c:1813
 msgid "_View"
 msgstr "_نما"
 
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1814
 msgid "_Search"
 msgstr "_جستجو"
 
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1815
 msgid "_Terminal"
 msgstr "پا_یانه"
 
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1816
 msgid "Ta_bs"
 msgstr "_زبانه‌ها"
 
-#: ../src/terminal-window.c:1812
+#: ../src/terminal-window.c:1817
 msgid "_Help"
 msgstr "_راهنما"
 
-#: ../src/terminal-window.c:1823
+#: ../src/terminal-window.c:1828
 msgid "New _Profile…"
 msgstr "مجموعه _تنظیمات جدید..."
 
-#: ../src/terminal-window.c:1826
+#: ../src/terminal-window.c:1831
 msgid "_Save Contents"
 msgstr "ذخیره‌ی _محتویات"
 
-#: ../src/terminal-window.c:1829
-#: ../src/terminal-window.c:1973
+#: ../src/terminal-window.c:1834
+#: ../src/terminal-window.c:1978
 msgid "C_lose Tab"
 msgstr "ب_ستن زبانه"
 
-#: ../src/terminal-window.c:1832
+#: ../src/terminal-window.c:1837
 msgid "_Close Window"
 msgstr "بس_تن پنجره"
 
-#: ../src/terminal-window.c:1843
-#: ../src/terminal-window.c:1961
+#: ../src/terminal-window.c:1848
+#: ../src/terminal-window.c:1966
 msgid "Paste _Filenames"
 msgstr "چسباندن _نام پرونده‌ها"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1854
 msgid "P_rofiles…"
 msgstr "مجموعه‌های‌ _تنظیمات..."
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1857
 msgid "_Keyboard Shortcuts…"
 msgstr "_میانبُرهای صفحه‌کلید..."
 
-#: ../src/terminal-window.c:1855
+#: ../src/terminal-window.c:1860
 msgid "Pr_ofile Preferences"
 msgstr "تر_جیحات مجموعه تنظیمات"
 
 #. Search menu
-#: ../src/terminal-window.c:1871
+#: ../src/terminal-window.c:1876
 msgid "_Find..."
 msgstr "_پیدا کردن..."
 
-#: ../src/terminal-window.c:1874
+#: ../src/terminal-window.c:1879
 msgid "Find Ne_xt"
 msgstr "پیدا کردن _بعدی"
 
-#: ../src/terminal-window.c:1877
+#: ../src/terminal-window.c:1882
 msgid "Find Pre_vious"
 msgstr "پیدا کردن _قبلی"
 
-#: ../src/terminal-window.c:1880
+#: ../src/terminal-window.c:1885
 msgid "_Clear Highlight"
 msgstr "_پاک کردن شبرنگ"
 
-#: ../src/terminal-window.c:1884
+#: ../src/terminal-window.c:1889
 msgid "Go to _Line..."
 msgstr "برو به _خط..."
 
-#: ../src/terminal-window.c:1887
+#: ../src/terminal-window.c:1892
 msgid "_Incremental Search..."
 msgstr "جست‌وجوی _نموی..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1893
+#: ../src/terminal-window.c:1898
 msgid "Change _Profile"
 msgstr "تغییر _مجموعه تنظیمات"
 
-#: ../src/terminal-window.c:1894
+#: ../src/terminal-window.c:1899
 msgid "_Set Title…"
 msgstr "_تنظیم عنوان..."
 
-#: ../src/terminal-window.c:1897
+#: ../src/terminal-window.c:1902
 msgid "Set _Character Encoding"
 msgstr "تنظیم کدگذاری _نویسه‌ها"
 
-#: ../src/terminal-window.c:1898
+#: ../src/terminal-window.c:1903
 msgid "_Reset"
 msgstr "برگرداندن به مقادیر _اولیه"
 
-#: ../src/terminal-window.c:1901
+#: ../src/terminal-window.c:1906
 msgid "Reset and C_lear"
 msgstr "برگرداندن به مقادیر اولیه و پا_ک کردن"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1906
+#: ../src/terminal-window.c:1911
 msgid "_Add or Remove…"
 msgstr "ا_ضافه یا حذف..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1911
+#: ../src/terminal-window.c:1916
 msgid "_Previous Tab"
 msgstr "زبانه‌ی _قبلی"
 
-#: ../src/terminal-window.c:1914
+#: ../src/terminal-window.c:1919
 msgid "_Next Tab"
 msgstr "زبانه‌ی _بعدی"
 
-#: ../src/terminal-window.c:1917
+#: ../src/terminal-window.c:1922
 msgid "Move Tab _Left"
 msgstr "جابه‌جایی زبانه به _چپ"
 
-#: ../src/terminal-window.c:1920
+#: ../src/terminal-window.c:1925
 msgid "Move Tab _Right"
 msgstr "جابه‌جایی زبانه به _راست"
 
-#: ../src/terminal-window.c:1923
+#: ../src/terminal-window.c:1928
 msgid "_Detach tab"
 msgstr "جدا کردن _زبانه"
 
 #. Help menu
-#: ../src/terminal-window.c:1928
+#: ../src/terminal-window.c:1933
 msgid "_Contents"
 msgstr "_محتویات"
 
-#: ../src/terminal-window.c:1931
+#: ../src/terminal-window.c:1936
 msgid "_About"
 msgstr "_درباره"
 
 #. Popup menu
-#: ../src/terminal-window.c:1936
+#: ../src/terminal-window.c:1941
 msgid "_Send Mail To…"
 msgstr "فرستادن _نامه به ..."
 
-#: ../src/terminal-window.c:1939
+#: ../src/terminal-window.c:1944
 msgid "_Copy E-mail Address"
 msgstr "_نسخه‌برداری از نشانی رایانامه"
 
-#: ../src/terminal-window.c:1942
+#: ../src/terminal-window.c:1947
 msgid "C_all To…"
 msgstr "_تماس با..."
 
-#: ../src/terminal-window.c:1945
+#: ../src/terminal-window.c:1950
 msgid "_Copy Call Address"
 msgstr "_نسخه‌برداری از نشانی تماس"
 
-#: ../src/terminal-window.c:1948
+#: ../src/terminal-window.c:1953
 msgid "_Open Link"
 msgstr "_باز کردن پیوند"
 
-#: ../src/terminal-window.c:1951
+#: ../src/terminal-window.c:1956
 msgid "_Copy Link Address"
 msgstr "_نسخه‌برداری از نشانی پیوند"
 
-#: ../src/terminal-window.c:1954
+#: ../src/terminal-window.c:1959
 msgid "P_rofiles"
 msgstr "مجموعه‌های‌ تنظیمات"
 
-#: ../src/terminal-window.c:1970
-#: ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:1975
+#: ../src/terminal-window.c:3300
 msgid "C_lose Window"
 msgstr "_بستن پنجره"
 
-#: ../src/terminal-window.c:1976
+#: ../src/terminal-window.c:1981
 msgid "L_eave Full Screen"
 msgstr "خروج از _تمام‌صفحه"
 
-#: ../src/terminal-window.c:1979
+#: ../src/terminal-window.c:1984
 msgid "_Input Methods"
 msgstr "روش‌های _ورودی"
 
 #. View Menu
-#: ../src/terminal-window.c:1985
+#: ../src/terminal-window.c:1990
 msgid "Show _Menubar"
 msgstr "نشان دادن نوار _منو"
 
-#: ../src/terminal-window.c:1989
+#: ../src/terminal-window.c:1994
 msgid "_Full Screen"
 msgstr "_تمام‌صفحه"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:3287
 msgid "Close this window?"
 msgstr "این پنجره بسته شود؟"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:3287
 msgid "Close this terminal?"
 msgstr "این پایانه بسته شود؟"
 
-#: ../src/terminal-window.c:3286
+#: ../src/terminal-window.c:3291
 msgid "There are still processes running in some terminals in this window. Closing the window will kill all of them."
 msgstr "همچنان فرآیند‌هایی وجود دارند که در بعضی پایانه‌های داخل این پنجره در حال اجرا هستند. بستن پنجره همه‌ی آن‌ها را خواهد کشت."
 
-#: ../src/terminal-window.c:3290
+#: ../src/terminal-window.c:3295
 msgid "There is still a process running in this terminal. Closing the terminal will kill it."
 msgstr "همچنان فرآیندی وجود دارد که در داخل این پایانه در حال اجرا است. بستن پنجره آن را خواهد کشت."
 
-#: ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:3300
 msgid "C_lose Terminal"
 msgstr "_بستن پایانه"
 
-#: ../src/terminal-window.c:3368
+#: ../src/terminal-window.c:3373
 msgid "Could not save contents"
 msgstr "محتویات ذخیره نشد"
 
-#: ../src/terminal-window.c:3392
+#: ../src/terminal-window.c:3397
 msgid "Save as..."
 msgstr "ذخیره با نام..."
 
-#: ../src/terminal-window.c:3854
+#: ../src/terminal-window.c:3859
 msgid "_Title:"
 msgstr "_عنوان:"
 
-#: ../src/terminal-window.c:4045
+#: ../src/terminal-window.c:4050
 msgid "Contributors:"
 msgstr "کمک کننده‌ها:"
 
-#: ../src/terminal-window.c:4064
+#: ../src/terminal-window.c:4069
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "یک مقلد پایانه برای میزکار گنوم"
 
-#: ../src/terminal-window.c:4071
+#: ../src/terminal-window.c:4076
 msgid "translator-credits"
 msgstr ""
 "مهیار مقیمی <mahyar.moqimi@gmail.com>\n"
