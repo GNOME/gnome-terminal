@@ -63,6 +63,7 @@ enum {
 #define KEY_DEFAULT_SIZE_COLUMNS "default_size_columns"
 #define KEY_DEFAULT_SIZE_ROWS "default_size_rows"
 #define KEY_DELETE_BINDING "delete_binding"
+#define KEY_ENCODING "encoding"
 #define KEY_EXIT_ACTION "exit_action"
 #define KEY_FONT "font"
 #define KEY_FOREGROUND_COLOR "foreground_color"
@@ -403,6 +404,8 @@ migrate_profile (GConfClient *client,
   migrate_bool (client, path, KEY_USE_SYSTEM_FONT,
                 settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                 FALSE);
+  migrate_string (client, path, KEY_ENCODING,
+                  settings, TERMINAL_PROFILE_ENCODING);
 
   g_free (path);
   g_object_unref (settings);
