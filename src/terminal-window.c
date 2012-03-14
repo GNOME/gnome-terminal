@@ -2770,7 +2770,27 @@ notebook_scroll_event_cb (GtkWidget      *widget,
     case GDK_SCROLL_UP:
       gtk_notebook_prev_page (notebook);
       break;
-    }
+#if GTK_CHECK_VERSION (3, 3, 17)
+    case GDK_SCROLL_SMOOTH:
+      switch (gtk_notebook_get_tab_pos (notebook)) {
+        case GTK_POS_LEFT:
+        case GTK_POS_RIGHT:
+          if (event->delta_x > 0)
+            gtk_notebook_next_page (notebook);
+          else if (event->delta_x < 0)
+            gtk_notebook_prev_page (notebook);
+          break;
+        case GTK_POS_TOP:
+        case GTK_POS_BOTTOM:
+          if (event->delta_y > 0)
+            gtk_notebook_next_page (notebook);
+          else if (event->delta_y < 0)
+            gtk_notebook_prev_page (notebook);
+          break;
+      }
+      break;
+#endif
+  }
 
   return TRUE;
 }
