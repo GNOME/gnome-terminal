@@ -953,6 +953,7 @@ terminal_options_free (TerminalOptions *options)
 
   g_free (options->display_name);
   g_free (options->startup_id);
+  g_free (options->server_bus_name);
 
   g_free (options->sm_client_state_file);
   g_free (options->sm_client_id);
@@ -965,6 +966,15 @@ static GOptionContext *
 get_goption_context (TerminalOptions *options)
 {
   const GOptionEntry global_unique_goptions[] = {
+    {
+      "bus-name",
+      0,
+      G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_STRING,
+      &options->server_bus_name,
+      N_("Server D-Bus name"),
+      N_("NAME")
+    },
     {
       "disable-factory",
       0,

@@ -52,6 +52,7 @@ G_BEGIN_DECLS
 
 typedef struct
 {
+  char    *server_bus_name;
   gboolean remote_arguments;
   char    *startup_id;
   char    *display_name;

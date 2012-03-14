@@ -186,7 +186,8 @@ handle_options (TerminalFactory *factory,
           receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                                G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                               TERMINAL_UNIQUE_NAME,
+                                                               options->server_bus_name ? options->server_bus_name 
+                                                                                        : TERMINAL_UNIQUE_NAME,
                                                                object_path,
                                                                NULL /* cancellable */,
                                                                &err);
@@ -282,13 +283,15 @@ main (int argc, char **argv)
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     TERMINAL_UNIQUE_NAME,
+                                                     options->server_bus_name ? options->server_bus_name 
+                                                                              : TERMINAL_UNIQUE_NAME,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
     g_printerr ("Error constructing proxy for %s:%s: %s\n", 
-                TERMINAL_UNIQUE_NAME, TERMINAL_FACTORY_OBJECT_PATH,
+                options->server_bus_name ? options->server_bus_name : TERMINAL_UNIQUE_NAME,
+                TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
     g_error_free (error);
     goto out;

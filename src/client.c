@@ -139,6 +139,8 @@ modify_argv0_for_command (gint *argc, gchar **argv[], const gchar *command)
 
 typedef struct
 {
+  char       *server_bus_name;
+
   /* Window options */
   char       *startup_id;
   const char *display_name;
@@ -205,6 +207,11 @@ option_zoom_cb (const gchar *option_name,
 static GOptionContext *
 get_goption_context (OptionData *data)
 {
+  const GOptionEntry server_goptions[] = {
+    { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &data->server_bus_name, N_("Server D-Bus name"), N_("NAME") },
+    { NULL }
+  };
+
   const GOptionEntry window_goptions[] = {
     { "maximize", 0, 0, G_OPTION_ARG_NONE, &data->start_maximized,
       N_("Maximise the window"), NULL },
@@ -247,6 +254,13 @@ get_goption_context (OptionData *data)
   g_option_context_set_description (context, N_("GNOME Terminal Client"));
   g_option_context_set_ignore_unknown_options (context, FALSE);
 
+  group = g_option_group_new ("server-options", "", "",
+                              data,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, server_goptions);
+  g_option_context_add_group (context, group);
+
   group = g_option_group_new ("window-options",
                               N_("Window options:"),
                               N_("Show window options"),
@@ -284,6 +298,7 @@ option_data_free (OptionData *data)
   if (data == NULL)
     return;
 
+  g_free (data->server_bus_name);
   g_free (data->startup_id);
   g_free (data->geometry);
   g_free (data->role);
@@ -425,7 +440,8 @@ handle_open (int *argc,
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     TERMINAL_UNIQUE_NAME,
+                                                     data->server_bus_name ? data->server_bus_name 
+                                                                           : TERMINAL_UNIQUE_NAME,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
@@ -455,7 +471,8 @@ handle_open (int *argc,
 
   receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                                       TERMINAL_UNIQUE_NAME,
+                                                       data->server_bus_name ? data->server_bus_name
+                                                                             : TERMINAL_UNIQUE_NAME,
                                                        object_path,
                                                        NULL /* cancellable */,
                                                        &error);
