@@ -235,6 +235,26 @@ option_version_cb (const gchar *option_name,
 }
 
 static gboolean
+option_bus_name_callback (const gchar *option_name,
+                          const gchar *value,
+                          gpointer     data,
+                          GError     **error)
+{
+  TerminalOptions *options = data;
+
+  if (!g_dbus_is_name (value)) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "%s is not a valid D-Bus name", value);
+    return FALSE;
+  }
+
+  g_free (options->server_bus_name);
+  options->server_bus_name = g_strdup (value);
+
+  return TRUE;
+}
+
+static gboolean
 option_command_callback (const gchar *option_name,
                          const gchar *value,
                          gpointer     data,
@@ -970,8 +990,8 @@ get_goption_context (TerminalOptions *options)
       "bus-name",
       0,
       G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_STRING,
-      &options->server_bus_name,
+      G_OPTION_ARG_CALLBACK,
+      option_bus_name_callback,
       N_("Server D-Bus name"),
       N_("NAME")
     },

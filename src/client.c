@@ -204,11 +204,31 @@ option_zoom_cb (const gchar *option_name,
   return TRUE;
 }
 
+static gboolean
+option_bus_name_cb (const gchar *option_name,
+                    const gchar *value,
+                    gpointer     user_data,
+                    GError     **error)
+{
+  OptionData *data = user_data;
+
+  if (!g_dbus_is_name (value)) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "%s is not a valid D-Bus name", value);
+    return FALSE;
+  }
+
+  g_free (data->server_bus_name);
+  data->server_bus_name = g_strdup (value);
+
+  return TRUE;
+}
+
 static GOptionContext *
 get_goption_context (OptionData *data)
 {
   const GOptionEntry server_goptions[] = {
-    { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING, &data->server_bus_name, N_("Server D-Bus name"), N_("NAME") },
+    { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_bus_name_cb, N_("Server D-Bus name"), N_("NAME") },
     { NULL }
   };
 

@@ -40,6 +40,31 @@
 #include "terminal-defines.h"
 
 GDBusObjectManagerServer *object_manager;
+static char *bus_name = NULL;
+
+static gboolean
+option_bus_name_cb (const gchar *option_name,
+                    const gchar *value,
+                    gpointer     data,
+                    GError     **error)
+{
+  if (!g_dbus_is_name (value)) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "%s is not a valid D-Bus name", value);
+    return FALSE;
+  }
+
+  g_free (bus_name);
+  bus_name = g_strdup (value);
+
+  return TRUE;
+}
+
+static const GOptionEntry options[] = {
+  { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_bus_name_cb, "Server D-Bus name", "NAME" },
+  { NULL }
+};
+
 
 typedef struct {
   int exit_code;
@@ -50,10 +75,17 @@ bus_acquired_cb (GDBusConnection *connection,
                  const char *name,
                  gpointer user_data)
 {
+  TerminalObjectSkeleton *object;
 
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                          "Bus %s acquired\n", name);
 
+  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
+  terminal_object_skeleton_set_factory (object, TERMINAL_FACTORY (terminal_app_get ()));
+  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
+  g_object_unref (object);
+
+  /* And export the object */
   g_dbus_object_manager_server_set_connection (object_manager, connection);
 }
 
@@ -85,17 +117,9 @@ name_lost_cb (GDBusConnection *connection,
   gtk_main_quit ();
 }
 
-static char *bus_name = NULL;
-static const GOptionEntry options[] = {
-  { "bus-name", 0, 0, G_OPTION_ARG_STRING, &bus_name, N_("Server D-Bus name"), N_("NAME") },
-  { NULL }
-};
-
 int
 main (int argc, char **argv)
 {
-  GDBusConnection *connection;
-  TerminalObjectSkeleton *object;
   OwnData data;
   guint owner_id;
   const char *home_dir;
@@ -128,32 +152,16 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  connection = g_bus_get_sync (G_BUS_TYPE_STARTER, NULL, &error);
-  if (connection == NULL) {
-    g_printerr ("Failed to connect: %s\n", error->message);
-    g_error_free (error);
-    g_free (bus_name);
-  }
-
   object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
 
-  /* Export our interface. */
-  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
-  terminal_object_skeleton_set_factory (object, TERMINAL_FACTORY (terminal_app_get ()));
-  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
-  g_object_unref (object);
-
-  /* And export the object */
-  g_dbus_object_manager_server_set_connection (object_manager, connection);
-
   data.exit_code = EXIT_FAILURE;
-  owner_id = g_bus_own_name_on_connection (connection,
-                                           bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
-                                           G_BUS_NAME_OWNER_FLAGS_NONE,
-                                           name_acquired_cb,
-                                           name_lost_cb,
-                                           &data, NULL);
-  g_free (bus_name);
+  owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
+                             bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
+                             G_BUS_NAME_OWNER_FLAGS_NONE,
+                             bus_acquired_cb,
+                             name_acquired_cb,
+                             name_lost_cb,
+                             &data, NULL);
 
   gtk_main ();
 
@@ -161,9 +169,10 @@ main (int argc, char **argv)
 
   g_dbus_object_manager_server_unexport (object_manager, TERMINAL_FACTORY_OBJECT_PATH);
   if (data.exit_code == EXIT_SUCCESS)
-    g_dbus_connection_flush_sync (connection, NULL /* cancellable */, NULL /* error */);
-  g_clear_object (&object_manager);
-  g_clear_object (&connection);
+    g_dbus_connection_flush_sync (g_dbus_object_manager_server_get_connection (object_manager),
+                                  NULL /* cancellable */, NULL /* error */);
+  g_object_unref (object_manager);
+  object_manager = NULL;
 
   terminal_app_shutdown ();
 
