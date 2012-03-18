@@ -1339,7 +1339,6 @@ terminal_app_finalize (GObject *object)
 static void
 terminal_app_real_quit (TerminalApp *app)
 {
-  gtk_main_quit();
 }
 
 static void

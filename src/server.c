@@ -67,8 +67,10 @@ static const GOptionEntry options[] = {
 
 
 typedef struct {
-  int exit_code;
-} OwnData;
+  GMainLoop *loop;
+  GApplication *app;
+  gboolean owns_name;
+} MainData;
 
 static void
 bus_acquired_cb (GDBusConnection *connection,
@@ -94,8 +96,14 @@ name_acquired_cb (GDBusConnection *connection,
                   const char *name,
                   gpointer user_data)
 {
+  MainData *data = (MainData *) user_data;
+
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                          "Acquired the name %s on the starter bus\n", name);
+  data->owns_name = TRUE;
+
+  if (g_main_loop_is_running (data->loop))
+    g_main_loop_quit (data->loop);
 }
 
 static void
@@ -103,7 +111,7 @@ name_lost_cb (GDBusConnection *connection,
               const char *name,
               gpointer user_data)
 {
-  OwnData *data = (OwnData *) user_data;
+  MainData *data = (MainData *) user_data;
 
   if (connection) {
     _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
@@ -112,16 +120,25 @@ name_lost_cb (GDBusConnection *connection,
     g_printerr ("Failed to connect to starter bus\n");
   }
 
-  data->exit_code = EXIT_FAILURE;
+  data->owns_name = FALSE;
 
-  gtk_main_quit ();
+  if (g_main_loop_is_running (data->loop))
+    g_main_loop_quit (data->loop);
+}
+
+static void
+app_activate_cb (GApplication *app,
+                 gpointer user_data)
+{
+  /* No-op required because GApplication is stupid */
 }
 
 int
 main (int argc, char **argv)
 {
-  OwnData data;
+  MainData data;
   guint owner_id;
+  int exit_code = EXIT_FAILURE;
   const char *home_dir;
   GError *error = NULL;
 
@@ -154,7 +171,10 @@ main (int argc, char **argv)
 
   object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
 
-  data.exit_code = EXIT_FAILURE;
+  data.loop = g_main_loop_new (NULL, FALSE);
+  data.app = NULL;
+  data.owns_name = FALSE;
+
   owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
                              bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
                              G_BUS_NAME_OWNER_FLAGS_NONE,
@@ -163,18 +183,30 @@ main (int argc, char **argv)
                              name_lost_cb,
                              &data, NULL);
 
-  gtk_main ();
+  g_main_loop_run (data.loop);
+
+  g_main_loop_unref (data.loop);
+  data.loop = NULL;
+
+  if (!data.owns_name)
+    goto out;
+
+  data.app = (GApplication *) gtk_application_new (bus_name ? bus_name : TERMINAL_UNIQUE_NAME, 
+                                                   G_APPLICATION_NON_UNIQUE |
+                                                   G_APPLICATION_IS_SERVICE);
+  g_application_hold (data.app);
+  g_signal_connect (data.app, "activate", G_CALLBACK (app_activate_cb), NULL);
+  g_signal_connect_swapped (terminal_app_get (), "quit", G_CALLBACK (g_application_release), data.app);
+  exit_code = g_application_run (data.app, 0, NULL);
+  g_clear_object (&data.app);
 
   g_bus_unown_name (owner_id);
 
+out:
   g_dbus_object_manager_server_unexport (object_manager, TERMINAL_FACTORY_OBJECT_PATH);
-  if (data.exit_code == EXIT_SUCCESS)
-    g_dbus_connection_flush_sync (g_dbus_object_manager_server_get_connection (object_manager),
-                                  NULL /* cancellable */, NULL /* error */);
-  g_object_unref (object_manager);
-  object_manager = NULL;
+  g_clear_object (&object_manager);
 
   terminal_app_shutdown ();
 
-  return data.exit_code;
+  return exit_code;
 }
