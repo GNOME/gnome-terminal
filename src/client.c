@@ -32,6 +32,7 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include <gio/gio.h>
 
 #include <gtk/gtk.h>
@@ -40,6 +41,23 @@
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
+
+static gboolean quiet = FALSE;
+
+static void _printerr (const char *format, ...) G_GNUC_PRINTF (1, 2);
+
+static void 
+_printerr (const char *format, ...)
+{
+  va_list args;
+
+  if (quiet)
+    return;
+
+  va_start (args, format);
+  g_vfprintf (stderr, format, args);
+  va_end (args);
+}
 
 /* ---------------------------------------------------------------------------------------------------- */
 
@@ -112,7 +130,7 @@ usage (gint *argc, gchar **argv[], gboolean use_stdout)
   if (use_stdout)
     g_print ("%s", s);
   else
-    g_printerr ("%s", s);
+    _printerr ("%s", s);
   g_free (s);
   g_option_context_free (o);
 }
@@ -227,6 +245,11 @@ option_bus_name_cb (const gchar *option_name,
 static GOptionContext *
 get_goption_context (OptionData *data)
 {
+  const GOptionEntry global_goptions[] = {
+    { "quiet", 0, 0, G_OPTION_ARG_NONE, &quiet, N_("Be quiet"), NULL },
+    { NULL }
+  };
+
   const GOptionEntry server_goptions[] = {
     { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_bus_name_cb, N_("Server D-Bus name"), N_("NAME") },
     { NULL }
@@ -274,6 +297,13 @@ get_goption_context (OptionData *data)
   g_option_context_set_description (context, N_("GNOME Terminal Client"));
   g_option_context_set_ignore_unknown_options (context, FALSE);
 
+  group = g_option_group_new ("global-options", "", "",
+                              data,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, global_goptions);
+  g_option_context_add_group (context, group);
+
   group = g_option_group_new ("server-options", "", "",
                               data,
                               NULL);
@@ -307,6 +337,7 @@ get_goption_context (OptionData *data)
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, processing_goptions);
   g_option_context_add_group (context, group);
+
   g_option_context_add_group (context, gtk_get_option_group (TRUE));
 
   return context;
@@ -452,7 +483,7 @@ handle_open (int *argc,
 
   data = parse_arguments (argc, argv, &error);
   if (data == NULL) {
-    g_printerr ("Error parsing arguments: %s\n", error->message);
+    _printerr ("Error parsing arguments: %s\n", error->message);
     g_error_free (error);
     return FALSE;
   }
@@ -466,7 +497,7 @@ handle_open (int *argc,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
-    g_printerr ("Error constructing proxy for %s:%s: %s\n", 
+    _printerr ("Error constructing proxy for %s:%s: %s\n", 
                 TERMINAL_UNIQUE_NAME, TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
     g_error_free (error);
@@ -480,7 +511,7 @@ handle_open (int *argc,
           &object_path,
           NULL /* cancellable */,
           &error)) {
-    g_printerr ("Error creating terminal: %s\n", error->message);
+    _printerr ("Error creating terminal: %s\n", error->message);
     g_error_free (error);
     g_object_unref (factory);
     option_data_free (data);
@@ -497,7 +528,7 @@ handle_open (int *argc,
                                                        NULL /* cancellable */,
                                                        &error);
   if (receiver == NULL) {
-    g_printerr ("Failed to create proxy for terminal: %s\n", error->message);
+    _printerr ("Failed to create proxy for terminal: %s\n", error->message);
     g_error_free (error);
     g_free (object_path);
     option_data_free (data);
@@ -717,7 +748,7 @@ main (gint argc, gchar *argv[])
         }
       else
         {
-          g_printerr ("Unknown command `%s'\n", command);
+          _printerr ("Unknown command `%s'\n", command);
           usage (&argc, &argv, FALSE);
           goto out;
         }
