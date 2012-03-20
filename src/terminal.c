@@ -213,6 +213,7 @@ handle_options (TerminalFactory *factory,
           if (!terminal_receiver_call_exec_sync (receiver,
                                                  g_variant_builder_end (&builder),
                                                  g_variant_new_bytestring_array ((const char * const *) argv, argc),
+                                                 NULL /* infdlist */, NULL /* outfdlist */,
                                                 NULL /* cancellable */,
                                                 &err)) {
             g_printerr ("Error: %s\n", err->message);

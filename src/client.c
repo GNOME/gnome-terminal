@@ -34,6 +34,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gio/gio.h>
+#include <gio/gunixfdlist.h>
 
 #include <gtk/gtk.h>
 
@@ -179,6 +180,10 @@ typedef struct
   char   *title;
   double  zoom;
 
+  /* Exec options */
+  GUnixFDList *fd_list;
+  GArray *fd_array;
+
   /* Processing options */
   gboolean wait;
 
@@ -242,6 +247,72 @@ option_bus_name_cb (const gchar *option_name,
   return TRUE;
 }
 
+typedef struct {
+  int index;
+  int fd;
+} PassFdElement;
+
+static gboolean
+option_fd_cb (const gchar *option_name,
+              const gchar *value,
+              gpointer     user_data,
+              GError     **error)
+{
+  OptionData *data = user_data;
+  int fd = -1;
+  PassFdElement e;
+
+  if (strcmp (option_name, "--fd") == 0) {
+    char *end = NULL;
+    errno = 0;
+    fd = g_ascii_strtoll (value, &end, 10);
+    if (errno != 0 || end == value) {
+      g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                   "Invalid argument \"%s\" to --fd option", value);
+      return FALSE;
+    }
+
+  } else if (strcmp (option_name, "--stdin") == 0) {
+    fd = STDIN_FILENO;
+  } else if (strcmp (option_name, "--stdout") == 0) {
+    fd = STDOUT_FILENO;
+  } else if (strcmp (option_name, "--stderr") == 0) {
+    fd = STDERR_FILENO;
+  } else {
+    g_assert_not_reached ();
+  }
+
+  if (data->fd_list == NULL) {
+    data->fd_list = g_unix_fd_list_new ();
+    data->fd_array = g_array_new (FALSE, FALSE, sizeof (PassFdElement));
+  } else {
+    guint i, n;
+    n = data->fd_array->len;
+    for (i = 0; i < n; i++) {
+      e = g_array_index (data->fd_array, PassFdElement, i);
+      if (e.fd == fd) {
+        g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                     "Cannot pass FD %d twice", fd);
+        return FALSE;
+      }
+    }
+  }
+
+  e.fd = fd;
+  e.index = g_unix_fd_list_append (data->fd_list, fd, error);
+  if (e.index == -1)
+    return FALSE;
+
+  g_array_append_val (data->fd_array, e);
+
+  if (fd == STDOUT_FILENO || fd == STDERR_FILENO)
+    quiet = TRUE;
+  if (fd == STDIN_FILENO)
+    data->wait = TRUE;
+
+  return TRUE;
+}
+
 static GOptionContext *
 get_goption_context (OptionData *data)
 {
@@ -279,6 +350,18 @@ get_goption_context (OptionData *data)
     { "zoom", 0, 0, G_OPTION_ARG_CALLBACK, option_zoom_cb,
       N_("Set the terminal's zoom factor (1.0 = normal size)"),
       N_("ZOOM") },
+    { NULL, 0, 0, 0, NULL, NULL, NULL }
+  };
+
+  const GOptionEntry exec_goptions[] = {
+    { "stdin", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, option_fd_cb,
+      N_("Forward stdin"), NULL },
+    { "stdout", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, option_fd_cb,
+      N_("Forward stdout"), NULL },
+    { "stderr", 0, G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, option_fd_cb,
+      N_("Forward stderr"), NULL },
+    { "fd", 0, 0, G_OPTION_ARG_CALLBACK, option_fd_cb,
+      N_("Forward file descriptor"), N_("FD") },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };
 
@@ -329,6 +412,15 @@ get_goption_context (OptionData *data)
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
 
+  group = g_option_group_new ("exec-goptions",
+                              N_("Exec options:"),
+                              N_("Show exec options"),
+                              data,
+                              NULL);
+  g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
+  g_option_group_add_entries (group, exec_goptions);
+  g_option_context_add_group (context, group);
+
   group = g_option_group_new ("processing-goptions",
                               N_("Processing options:"),
                               N_("Show processing options"),
@@ -357,6 +449,13 @@ option_data_free (OptionData *data)
   g_free (data->working_directory);
   g_free (data->profile);
   g_free (data->title);
+
+  if (data->fd_list)
+    g_object_unref (data->fd_list);
+  if (data->fd_array)
+    g_array_free (data->fd_array, TRUE);
+
+  g_free (data);
 }
 
 static OptionData *
@@ -437,7 +536,8 @@ build_create_options_variant (OptionData *data)
  * Returns: a floating #GVariant
  */
 static GVariant *
-build_exec_options_variant (OptionData *data)
+build_exec_options_variant (OptionData *data,
+                            GUnixFDList **fd_list)
 {
   GVariantBuilder builder;
 
@@ -445,6 +545,31 @@ build_exec_options_variant (OptionData *data)
 
   terminal_client_append_exec_options (&builder,
                                        data->working_directory);
+
+  if (data->fd_array != NULL) {
+    int i, n_fds;
+
+    g_variant_builder_open (&builder, G_VARIANT_TYPE ("{sv}"));
+    g_variant_builder_add (&builder, "s", "fd-set");
+
+    g_variant_builder_open (&builder, G_VARIANT_TYPE ("v"));
+    g_variant_builder_open (&builder, G_VARIANT_TYPE ("a(ih)"));
+    n_fds = (int) data->fd_array->len;
+    for (i = 0; i < n_fds; i++) {
+      PassFdElement e =  g_array_index (data->fd_array, PassFdElement, i);
+
+      g_variant_builder_add (&builder, "(ih)", e.fd, e.index);
+    }
+    g_variant_builder_close (&builder); /* a(ih) */
+    g_variant_builder_close (&builder); /* v */
+
+    g_variant_builder_close (&builder); /* {sv} */
+
+    *fd_list = data->fd_list;
+    data->fd_list = NULL;
+  } else {
+    *fd_list = NULL;
+  }
 
   return g_variant_builder_end (&builder);
 }
@@ -478,6 +603,8 @@ handle_open (int *argc,
   TerminalReceiver *receiver;
   GError *error = NULL;
   char *object_path;
+  GVariant *arguments;
+  GUnixFDList *fd_list;
 
   modify_argv0_for_command (argc, argv, "open");
 
@@ -537,17 +664,22 @@ handle_open (int *argc,
 
   g_free (object_path);
 
+  arguments = build_exec_options_variant (data, &fd_list);
   if (!terminal_receiver_call_exec_sync (receiver,
-                                         build_exec_options_variant (data),
+                                         arguments,
                                          g_variant_new_bytestring_array ((const char * const *) data->exec_argv, data->exec_argc),
+                                         fd_list,
+                                         NULL, /* outfdlist */
                                          NULL /* cancellable */,
                                          &error)) {
-    g_printerr ("Error: %s\n", error->message);
+    _printerr ("Error: %s\n", error->message);
     g_error_free (error);
+    g_clear_object (fd_list);
     g_object_unref (receiver);
     option_data_free (data);
     return FALSE;
   }
+  g_clear_object (fd_list);
 
   if (data->wait) {
     WaitData wait_data;

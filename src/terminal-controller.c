@@ -82,6 +82,7 @@ terminal_controller_set_screen (TerminalController *controller,
 static gboolean 
 terminal_controller_exec (TerminalReceiver *receiver,
                           GDBusMethodInvocation *invocation,
+                          GUnixFDList *fd_list,
                           GVariant *options,
                           GVariant *arguments)
 {
@@ -90,6 +91,7 @@ terminal_controller_exec (TerminalReceiver *receiver,
   const char *working_directory;
   char **exec_argv, **envv;
   gsize exec_argc;
+  GVariantIter *fd_iter;
   GError *error;
 
   if (priv->screen == NULL) {
@@ -104,6 +106,8 @@ terminal_controller_exec (TerminalReceiver *receiver,
     working_directory = NULL;
   if (!g_variant_lookup (options, "environ", "^a&ay", &envv))
     envv = NULL;
+  if (!g_variant_lookup (options, "fd-set", "a(ih)", &fd_iter))
+    fd_iter = NULL;
 
   if (working_directory != NULL)
     _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
@@ -119,11 +123,13 @@ terminal_controller_exec (TerminalReceiver *receiver,
                              &error)) {
     g_dbus_method_invocation_take_error (invocation, error);
   } else {
-    terminal_receiver_complete_exec (receiver, invocation);
+    terminal_receiver_complete_exec (receiver, invocation, NULL /* outfdlist */);
   }
 
   g_free (exec_argv);
   g_free (envv);
+  if (fd_iter)
+    g_variant_iter_free (fd_iter);
 
 out:
 
