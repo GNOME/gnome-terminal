@@ -18,7 +18,7 @@
 
 #include "config.h"
 
-#include "terminal-controller.h"
+#include "terminal-gdbus.h"
 #include "terminal-debug.h"
 
 #define TERMINAL_CONTROLLER_GET_PRIVATE(controller)(G_TYPE_INSTANCE_GET_PRIVATE ((controller), TERMINAL_TYPE_CONTROLLER, TerminalControllerPrivate))

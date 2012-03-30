@@ -38,7 +38,7 @@
 #include "terminal-encoding.h"
 #include "terminal-schemas.h"
 #include "terminal-gdbus-generated.h"
-#include "terminal-controller.h"
+#include "terminal-gdbus.h"
 #include "terminal-defines.h"
 
 #include <string.h>

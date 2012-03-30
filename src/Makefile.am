@@ -32,13 +32,13 @@ gnome_terminal_server_SOURCES = \
 	terminal-app.h \
 	terminal-close-button.h \
 	terminal-close-button.c \
-	terminal-controller.c \
-	terminal-controller.h \
 	terminal-debug.c \
 	terminal-debug.h \
 	terminal-defines.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
+	terminal-gdbus.c \
+	terminal-gdbus.h \
 	terminal-info-bar.c \
 	terminal-info-bar.h \
 	terminal-intl.h \
@@ -60,7 +60,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-window.h \
 	$(NULL)
 
-nodist_gnome_terminal_server_SOURCES= $(BUILT_SOURCES)
+nodist_gnome_terminal_server_SOURCES = $(BUILT_SOURCES)
 
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
