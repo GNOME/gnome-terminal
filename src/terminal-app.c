@@ -37,7 +37,6 @@
 #include "profile-editor.h"
 #include "terminal-encoding.h"
 #include "terminal-schemas.h"
-#include "terminal-gdbus-generated.h"
 #include "terminal-gdbus.h"
 #include "terminal-defines.h"
 
@@ -48,8 +47,6 @@
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
-
-#define CONTROLLER_SKELETON_DATA_KEY  "terminal-object-skeleton"
 
 extern GDBusObjectManagerServer *object_manager;
 
@@ -63,7 +60,7 @@ extern GDBusObjectManagerServer *object_manager;
  */
 
 struct _TerminalAppClass {
-  TerminalFactorySkeletonClass parent_class;
+  GObjectClass parent_class;
 
   void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
@@ -72,7 +69,7 @@ struct _TerminalAppClass {
 
 struct _TerminalApp
 {
-  TerminalFactorySkeleton parent_instance;
+  GObject parent_instance;
 
   GList *windows;
   GtkWidget *new_profile_dialog;
@@ -113,64 +110,6 @@ enum
 static TerminalApp *global_app = NULL;
 
 /* Helper functions */
-
-static GdkScreen*
-terminal_app_get_screen_by_display_name (const char *display_name,
-                                         int screen_number)
-{
-  GdkDisplay *display = NULL;
-  GdkScreen *screen = NULL;
-
-  /* --screen=screen_number overrides --display */
-
-  if (display_name == NULL)
-    display = gdk_display_get_default ();
-  else
-    {
-      GSList *displays, *l;
-      const char *period;
-
-      period = strrchr (display_name, '.');
-      if (period)
-        {
-          gulong n;
-          char *end;
-
-          errno = 0;
-          end = NULL;
-          n = g_ascii_strtoull (period + 1, &end, 0);
-          if (errno == 0 && (period + 1) != end)
-            screen_number = n;
-        }
-
-      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-      for (l = displays; l != NULL; l = l->next)
-        {
-          GdkDisplay *disp = l->data;
-
-          /* compare without the screen number part, if present */
-          if ((period && strncmp (gdk_display_get_name (disp), display_name, period - display_name) == 0) ||
-              (period == NULL && strcmp (gdk_display_get_name (disp), display_name) == 0))
-            {
-              display = disp;
-              break;
-            }
-        }
-      g_slist_free (displays);
-
-      if (display == NULL)
-        display = gdk_display_open (display_name); /* FIXME we never close displays */
-    }
-
-  if (display == NULL)
-    return NULL;
-  if (screen_number >= 0)
-    screen = gdk_display_get_screen (display, screen_number);
-  if (screen == NULL)
-    screen = gdk_display_get_default_screen (display);
-
-  return screen;
-}
 
 #if 0
 static int
@@ -1094,178 +1033,9 @@ terminal_app_manage_profiles (TerminalApp     *app,
 #endif
 }
 
-static void
-screen_destroy_cb (GObject *screen,
-                   gpointer user_data)
-{
-  GDBusObjectSkeleton *skeleton;
-  const char *object_path;
-
-  skeleton = g_object_get_data (screen, CONTROLLER_SKELETON_DATA_KEY);
-  if (skeleton == NULL)
-    return;
-
-  object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (skeleton));
-  g_dbus_object_manager_server_unexport (object_manager, object_path);
-  g_object_set_data (screen, CONTROLLER_SKELETON_DATA_KEY, NULL);
-}
-
 /* Class implementation */
 
-static gboolean
-terminal_app_create_instance (TerminalFactory *factory,
-                              GDBusMethodInvocation *invocation,
-                              GVariant *options)
-{
-  TerminalApp *app = TERMINAL_APP (factory);
-  TerminalWindow *window;
-  TerminalScreen *screen;
-  TerminalController *controller;
-  TerminalObjectSkeleton *skeleton;
-  char *object_path;
-  GSettings *profile = NULL;
-  GdkScreen *gdk_screen;
-  const char *startup_id, *display_name;
-  char *role, *geometry, *profile_name, *title;
-  int screen_number;
-  gboolean start_maximized, start_fullscreen;
-  gboolean present_window, present_window_set = FALSE;
-  gboolean zoom_set = FALSE;
-  gdouble zoom = 1.0;
-
-  gboolean menubar_state = TRUE, menubar_state_set = FALSE;
-  gboolean active = TRUE;
-
-  if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
-    g_dbus_method_invocation_return_error (invocation, 
-                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                           "No display specified");
-    goto out;
-  }
-
-  screen_number = 0;
-  gdk_screen = terminal_app_get_screen_by_display_name (display_name, screen_number);
-  if (gdk_screen == NULL) {
-    g_dbus_method_invocation_return_error (invocation, 
-                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                           "No screen %d on display \"%s\"",
-                                           screen_number, display_name);
-    goto out;
-  }
-
-  if (!g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
-    startup_id = NULL;
-  if (!g_variant_lookup (options, "geometry", "&s", &geometry))
-    geometry = NULL;
-  if (!g_variant_lookup (options, "role", "&s", &role))
-    role = NULL;
-  if (!g_variant_lookup (options, "maximize-window", "b", &start_maximized))
-    start_maximized = FALSE;
-  if (!g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen))
-    start_fullscreen = FALSE;
-  if (!g_variant_lookup (options, "profile", "&s", &profile_name))
-    profile_name = NULL;
-  if (!g_variant_lookup (options, "title", "&s", &title))
-    title = NULL;
-
-  if (g_variant_lookup (options, "present-window", "b", &present_window)) {
-    present_window_set = TRUE;
-  }
-  if (g_variant_lookup (options, "zoom", "d", &zoom)) {
-    zoom_set = TRUE;
-  }
-
-  window = terminal_app_new_window (app, gdk_screen);
-
-  /* Restored windows shouldn't demand attention; see bug #586308. */
-  if (present_window_set && !present_window)
-    terminal_window_set_is_restored (window);
-
-  if (startup_id != NULL)
-    gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
-
-  /* Overwrite the default, unique window role set in terminal_window_init */
-  if (role)
-    gtk_window_set_role (GTK_WINDOW (window), role);
-
-  if (menubar_state_set)
-    terminal_window_set_menubar_visible (window, menubar_state);
-
-  if (start_fullscreen)
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  if (start_maximized)
-    gtk_window_maximize (GTK_WINDOW (window));
-
-  if (profile_name)
-    {
-      if (TRUE /* profile_is_id */)
-        profile = terminal_app_get_profile_by_name (app, profile_name);
-      else
-        profile = terminal_app_get_profile_by_visible_name (app, profile_name);
-
-      if (profile == NULL)
-        _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                               "No such profile \"%s\", using default profile", 
-                               profile_name);
-    }
-  if (profile == NULL)
-    profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
-  g_assert (profile);
-
-  screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
-                                zoom_set ? zoom : 1.0);
-  terminal_window_add_screen (window, screen, -1);
-  terminal_window_switch_screen (window, screen);
-  gtk_widget_grab_focus (GTK_WIDGET (screen));
-
-  // FIXMEchpe make this better!
-  object_path = g_strdup_printf (TERMINAL_CONTROLLER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
-
-  skeleton = terminal_object_skeleton_new (object_path);
-  controller = terminal_controller_new (screen);
-  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (controller));
-  g_object_unref (controller);
-
-  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (skeleton));
-  g_object_set_data_full (G_OBJECT (screen), CONTROLLER_SKELETON_DATA_KEY,
-                          skeleton, (GDestroyNotify) g_object_unref);
-  g_signal_connect (screen, "destroy",
-                    G_CALLBACK (screen_destroy_cb), app);
-
-  if (active)
-    terminal_window_switch_screen (window, screen);
-
-  if (geometry)
-    {
-      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                            "[window %p] applying geometry %s\n",
-                            window, geometry);
-
-      if (!terminal_window_parse_geometry (window, geometry))
-        _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                               "Invalid geometry string \"%s\"", geometry);
-    }
-
-  gtk_window_present (GTK_WINDOW (window));
-
-  terminal_factory_complete_create_instance (factory, invocation, object_path);
-
-  g_free (object_path);
-  g_object_unref (profile);
-
-out:
-
-  return TRUE; /* handled */
-}
-
-static void
-terminal_factory_iface_init (TerminalFactoryIface *iface)
-{
-  iface->handle_create_instance = terminal_app_create_instance;
-}
-
-G_DEFINE_TYPE_WITH_CODE (TerminalApp, terminal_app, TERMINAL_TYPE_FACTORY_SKELETON,
-                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_FACTORY, terminal_factory_iface_init))
+G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
 
 static void
 terminal_app_init (TerminalApp *app)
@@ -1538,6 +1308,33 @@ terminal_app_get_profile_by_visible_name (TerminalApp *app,
   return NULL;
 }
 
+/**
+ * FIXME
+ */
+GSettings* terminal_app_get_profile (TerminalApp *app,
+                                     const char  *profile_name)
+{
+  GSettings *profile = NULL;
+
+  if (profile_name)
+    {
+      if (TRUE /* profile_is_id */)
+        profile = terminal_app_get_profile_by_name (app, profile_name);
+      else
+        profile = terminal_app_get_profile_by_visible_name (app, profile_name);
+
+      if (profile == NULL)
+        _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+                               "No such profile \"%s\", using default profile", 
+                               profile_name);
+    }
+  if (profile == NULL)
+    profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
+
+  g_assert (profile != NULL);
+  return profile;
+}
+
 GHashTable *
 terminal_app_get_encodings (TerminalApp *app)
 {
@@ -1715,4 +1512,13 @@ terminal_app_get_system_font (TerminalApp *app)
   g_settings_get (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME, "&s", &font);
 
   return pango_font_description_from_string (font);
+}
+
+/**
+ * FIXME
+ */
+GDBusObjectManagerServer *
+terminal_app_get_object_manager (TerminalApp *app)
+{
+  return object_manager;
 }

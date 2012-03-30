@@ -58,6 +58,34 @@ TerminalScreen *terminal_controller_get_screen (TerminalController *controller);
 
 void _terminal_controller_unset_screen (TerminalController *controller);
 
+/* ------------------------------------------------------------------------- */
+
+#define TERMINAL_TYPE_FACTORY_IMPL              (terminal_factory_impl_get_type ())
+#define TERMINAL_FACTORY_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImpl))
+#define TERMINAL_FACTORY_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImplClass))
+#define TERMINAL_IS_FACTORY_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), TERMINAL_TYPE_FACTORY_IMPL))
+#define TERMINAL_IS_FACTORY_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), TERMINAL_TYPE_FACTORY_IMPL))
+#define TERMINAL_FACTORY_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImplClass))
+
+typedef struct _TerminalFactoryImpl        TerminalFactoryImpl;
+typedef struct _TerminalFactoryImplPrivate TerminalFactoryImplPrivate;
+typedef struct _TerminalFactoryImplClass   TerminalFactoryImplClass;
+
+struct _TerminalFactoryImplClass {
+  TerminalFactorySkeletonClass parent_class;
+};
+
+struct _TerminalFactoryImpl
+{
+  TerminalFactorySkeleton parent_instance;
+
+  TerminalFactoryImplPrivate *priv;
+};
+
+GType terminal_factory_impl_get_type (void);
+
+TerminalFactory *terminal_factory_impl_new (void);
+
 G_END_DECLS
 
 #endif /* !TERMINAL_CONTROLLER_H */

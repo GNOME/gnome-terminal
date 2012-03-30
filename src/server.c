@@ -34,7 +34,7 @@
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
-#include "terminal-gdbus-generated.h"
+#include "terminal-gdbus.h"
 #include "terminal-intl.h"
 #include "terminal-util.h"
 #include "terminal-defines.h"
@@ -78,12 +78,16 @@ bus_acquired_cb (GDBusConnection *connection,
                  gpointer user_data)
 {
   TerminalObjectSkeleton *object;
+  TerminalFactory *factory;
 
   _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
                          "Bus %s acquired\n", name);
 
   object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
-  terminal_object_skeleton_set_factory (object, TERMINAL_FACTORY (terminal_app_get ()));
+  factory = terminal_factory_impl_new ();
+  terminal_object_skeleton_set_factory (object, factory);
+  g_object_unref (factory);
+
   g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 

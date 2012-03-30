@@ -91,6 +91,9 @@ GSettings* terminal_app_get_profile_by_name (TerminalApp *app,
 GSettings* terminal_app_get_profile_by_visible_name (TerminalApp *app,
                                                      const char  *name);
 
+GSettings* terminal_app_get_profile (TerminalApp *app,
+                                     const char  *name);
+
 TerminalEncoding *terminal_app_ensure_encoding (TerminalApp *app,
                                                 const char *charset);
 

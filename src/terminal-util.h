@@ -76,6 +76,8 @@ void terminal_util_key_file_set_argv      (GKeyFile *key_file,
 
 void terminal_util_add_proxy_env (GHashTable *env_table);
 
+GdkScreen *terminal_util_get_screen_by_display_name (const char *display_name,
+                                                     int screen_number);
 
 gboolean terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
 					       guint32   *desktop);

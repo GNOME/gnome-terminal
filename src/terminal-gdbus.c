@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 Christian Persch
+ * Copyright © 2011, 2012 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,7 +19,14 @@
 #include "config.h"
 
 #include "terminal-gdbus.h"
+
+#include "terminal-app.h"
 #include "terminal-debug.h"
+#include "terminal-defines.h"
+#include "terminal-util.h"
+#include "terminal-window.h"
+
+/* ------------------------------------------------------------------------- */
 
 #define TERMINAL_CONTROLLER_GET_PRIVATE(controller)(G_TYPE_INSTANCE_GET_PRIVATE ((controller), TERMINAL_TYPE_CONTROLLER, TerminalControllerPrivate))
 
@@ -260,4 +267,200 @@ _terminal_controller_unset_screen (TerminalController *controller)
   g_return_if_fail (TERMINAL_IS_CONTROLLER (controller));
 
   terminal_controller_set_screen (controller, NULL);
+}
+
+/* ---------------------------------------------------------------------------
+ * TerminalFactoryImpl
+ * ---------------------------------------------------------------------------
+ */
+
+struct _TerminalFactoryImplPrivate {
+  gpointer dummy;
+};
+
+#define CONTROLLER_SKELETON_DATA_KEY  "terminal-object-skeleton"
+
+static void
+screen_destroy_cb (GObject *screen,
+                   gpointer user_data)
+{
+  GDBusObjectManagerServer *object_manager;
+  GDBusObjectSkeleton *skeleton;
+  const char *object_path;
+
+  skeleton = g_object_get_data (screen, CONTROLLER_SKELETON_DATA_KEY);
+  if (skeleton == NULL)
+    return;
+
+  object_manager = terminal_app_get_object_manager (terminal_app_get ());
+  object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (skeleton));
+  g_dbus_object_manager_server_unexport (object_manager, object_path);
+  g_object_set_data (screen, CONTROLLER_SKELETON_DATA_KEY, NULL);
+}
+
+static gboolean
+terminal_factory_impl_create_instance (TerminalFactory *factory,
+                                       GDBusMethodInvocation *invocation,
+                                       GVariant *options)
+{
+  TerminalApp *app = terminal_app_get ();
+  GDBusObjectManagerServer *object_manager;
+  TerminalWindow *window;
+  TerminalScreen *screen;
+  TerminalController *controller;
+  TerminalObjectSkeleton *skeleton;
+  char *object_path;
+  GSettings *profile = NULL;
+  GdkScreen *gdk_screen;
+  const char *startup_id, *display_name;
+  char *role, *geometry, *profile_name, *title;
+  int screen_number;
+  gboolean start_maximized, start_fullscreen;
+  gboolean present_window, present_window_set = FALSE;
+  gboolean zoom_set = FALSE;
+  gdouble zoom = 1.0;
+
+  gboolean menubar_state = TRUE, menubar_state_set = FALSE;
+  gboolean active = TRUE;
+
+  if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
+    g_dbus_method_invocation_return_error (invocation, 
+                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                           "No display specified");
+    goto out;
+  }
+
+  screen_number = 0;
+  gdk_screen = terminal_util_get_screen_by_display_name (display_name, screen_number);
+  if (gdk_screen == NULL) {
+    g_dbus_method_invocation_return_error (invocation, 
+                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                           "No screen %d on display \"%s\"",
+                                           screen_number, display_name);
+    goto out;
+  }
+
+  if (!g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
+    startup_id = NULL;
+  if (!g_variant_lookup (options, "geometry", "&s", &geometry))
+    geometry = NULL;
+  if (!g_variant_lookup (options, "role", "&s", &role))
+    role = NULL;
+  if (!g_variant_lookup (options, "maximize-window", "b", &start_maximized))
+    start_maximized = FALSE;
+  if (!g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen))
+    start_fullscreen = FALSE;
+  if (!g_variant_lookup (options, "profile", "&s", &profile_name))
+    profile_name = NULL;
+  if (!g_variant_lookup (options, "title", "&s", &title))
+    title = NULL;
+
+  if (g_variant_lookup (options, "present-window", "b", &present_window)) {
+    present_window_set = TRUE;
+  }
+  if (g_variant_lookup (options, "zoom", "d", &zoom)) {
+    zoom_set = TRUE;
+  }
+
+  window = terminal_app_new_window (app, gdk_screen);
+
+  /* Restored windows shouldn't demand attention; see bug #586308. */
+  if (present_window_set && !present_window)
+    terminal_window_set_is_restored (window);
+
+  if (startup_id != NULL)
+    gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
+
+  /* Overwrite the default, unique window role set in terminal_window_init */
+  if (role)
+    gtk_window_set_role (GTK_WINDOW (window), role);
+
+  if (menubar_state_set)
+    terminal_window_set_menubar_visible (window, menubar_state);
+
+  if (start_fullscreen)
+    gtk_window_fullscreen (GTK_WINDOW (window));
+  if (start_maximized)
+    gtk_window_maximize (GTK_WINDOW (window));
+
+  profile = terminal_app_get_profile (app, profile_name);
+  g_assert (profile);
+
+  screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
+                                zoom_set ? zoom : 1.0);
+  terminal_window_add_screen (window, screen, -1);
+  terminal_window_switch_screen (window, screen);
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
+
+  // FIXMEchpe make this better!
+  object_path = g_strdup_printf (TERMINAL_CONTROLLER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
+
+  skeleton = terminal_object_skeleton_new (object_path);
+  controller = terminal_controller_new (screen);
+  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (controller));
+  g_object_unref (controller);
+
+  object_manager = terminal_app_get_object_manager (app);
+  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (skeleton));
+  g_object_set_data_full (G_OBJECT (screen), CONTROLLER_SKELETON_DATA_KEY,
+                          skeleton, (GDestroyNotify) g_object_unref);
+  g_signal_connect (screen, "destroy",
+                    G_CALLBACK (screen_destroy_cb), app);
+
+  if (active)
+    terminal_window_switch_screen (window, screen);
+
+  if (geometry)
+    {
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                            "[window %p] applying geometry %s\n",
+                            window, geometry);
+
+      if (!terminal_window_parse_geometry (window, geometry))
+        _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                               "Invalid geometry string \"%s\"", geometry);
+    }
+
+  gtk_window_present (GTK_WINDOW (window));
+
+  terminal_factory_complete_create_instance (factory, invocation, object_path);
+
+  g_free (object_path);
+  g_object_unref (profile);
+
+out:
+
+  return TRUE; /* handled */
+}
+
+static void
+terminal_factory_impl_iface_init (TerminalFactoryIface *iface)
+{
+  iface->handle_create_instance = terminal_factory_impl_create_instance;
+}
+
+G_DEFINE_TYPE_WITH_CODE (TerminalFactoryImpl, terminal_factory_impl, TERMINAL_TYPE_FACTORY_SKELETON,
+                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_FACTORY, terminal_factory_impl_iface_init))
+
+static void
+terminal_factory_impl_init (TerminalFactoryImpl *impl)
+{
+  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl, TERMINAL_TYPE_FACTORY_IMPL, TerminalFactoryImplPrivate);
+}
+
+static void
+terminal_factory_impl_class_init (TerminalFactoryImplClass *klass)
+{
+  g_type_class_add_private (klass, sizeof (TerminalFactoryImplPrivate));
+}
+
+/**
+ * terminal_factory_impl_new:
+ *
+ * Returns: (transfer full): a new #TerminalFactoryImpl
+ */
+TerminalFactory *
+terminal_factory_impl_new (void)
+{
+  return g_object_new (TERMINAL_TYPE_FACTORY_IMPL, NULL);
 }

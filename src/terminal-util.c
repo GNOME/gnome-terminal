@@ -26,6 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <errno.h>
 
 #include <glib.h>
 
@@ -646,6 +647,64 @@ terminal_util_add_proxy_env (GHashTable *env_table)
     {
       setup_autoconfig_proxy_env (proxy_settings, env_table);
     }
+}
+
+GdkScreen*
+terminal_util_get_screen_by_display_name (const char *display_name,
+                                          int screen_number)
+{
+  GdkDisplay *display = NULL;
+  GdkScreen *screen = NULL;
+
+  /* --screen=screen_number overrides --display */
+
+  if (display_name == NULL)
+    display = gdk_display_get_default ();
+  else
+    {
+      GSList *displays, *l;
+      const char *period;
+
+      period = strrchr (display_name, '.');
+      if (period)
+        {
+          gulong n;
+          char *end;
+
+          errno = 0;
+          end = NULL;
+          n = g_ascii_strtoull (period + 1, &end, 0);
+          if (errno == 0 && (period + 1) != end)
+            screen_number = n;
+        }
+
+      displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+      for (l = displays; l != NULL; l = l->next)
+        {
+          GdkDisplay *disp = l->data;
+
+          /* compare without the screen number part, if present */
+          if ((period && strncmp (gdk_display_get_name (disp), display_name, period - display_name) == 0) ||
+              (period == NULL && strcmp (gdk_display_get_name (disp), display_name) == 0))
+            {
+              display = disp;
+              break;
+            }
+        }
+      g_slist_free (displays);
+
+      if (display == NULL)
+        display = gdk_display_open (display_name); /* FIXME we never close displays */
+    }
+
+  if (display == NULL)
+    return NULL;
+  if (screen_number >= 0)
+    screen = gdk_display_get_screen (display, screen_number);
+  if (screen == NULL)
+    screen = gdk_display_get_default_screen (display);
+
+  return screen;
 }
 
 #ifdef GDK_WINDOWING_X11
