@@ -6,7 +6,7 @@
  *  the Free Software Foundation; either version 3, or (at your option)
  *  any later version.
  *
- *  This program is distributed in the hope controller it will be useful,
+ *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
@@ -29,8 +29,8 @@ G_BEGIN_DECLS
 #define TERMINAL_FACTORY_OBJECT_PATH            TERMINAL_OBJECT_PATH_PREFIX "/Factory0"
 #define TERMINAL_FACTORY_INTERFACE_NAME         TERMINAL_OBJECT_INTERFACE_PREFIX ".Factory0"
 
-#define TERMINAL_CONTROLLER_OBJECT_PATH_PREFIX  TERMINAL_OBJECT_PATH_PREFIX "/Terminals"
-#define TEMRINAL_CONTROLLER_INTERFACE_NAME      TERMINAL_OBJECT_INTERFACE_PREFIX ".Terminal0"
+#define TERMINAL_RECEIVER_OBJECT_PATH_PREFIX    TERMINAL_OBJECT_PATH_PREFIX "/Terminals"
+#define TEMRINAL_RECEIVER_INTERFACE_NAME        TERMINAL_OBJECT_INTERFACE_PREFIX ".Terminal0"
 
 G_END_DECLS
 

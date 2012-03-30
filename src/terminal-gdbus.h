@@ -6,7 +6,7 @@
  *  the Free Software Foundation; either version 3, or (at your option)
  *  any later version.
  *
- *  This program is distributed in the hope controller it will be useful,
+ *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
@@ -16,8 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef TERMINAL_CONTROLLER_H
-#define TERMINAL_CONTROLLER_H
+#ifndef TERMINAL_RECEIVER_IMPL_H
+#define TERMINAL_RECEIVER_IMPL_H
 
 #include <glib-object.h>
 
@@ -26,37 +26,37 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_TYPE_CONTROLLER         (terminal_controller_get_type ())
-#define TERMINAL_CONTROLLER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_CONTROLLER, TerminalController))
-#define TERMINAL_CONTROLLER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_CONTROLLER, TerminalControllerClass))
-#define TERMINAL_IS_CONTROLLER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_CONTROLLER))
-#define TERMINAL_IS_CONTROLLER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_CONTROLLER))
-#define TERMINAL_CONTROLLER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_CONTROLLER, TerminalControllerClass))
+#define TERMINAL_TYPE_RECEIVER_IMPL         (terminal_receiver_impl_get_type ())
+#define TERMINAL_RECEIVER_IMPL(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImpl))
+#define TERMINAL_RECEIVER_IMPL_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImplClass))
+#define TERMINAL_IS_RECEIVER_IMPL(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_RECEIVER_IMPL))
+#define TERMINAL_IS_RECEIVER_IMPL_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_RECEIVER_IMPL))
+#define TERMINAL_RECEIVER_IMPL_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImplClass))
 
-typedef struct _TerminalController        TerminalController;
-typedef struct _TerminalControllerClass   TerminalControllerClass;
-typedef struct _TerminalControllerPrivate TerminalControllerPrivate;
+typedef struct _TerminalReceiverImpl        TerminalReceiverImpl;
+typedef struct _TerminalReceiverImplClass   TerminalReceiverImplClass;
+typedef struct _TerminalReceiverImplPrivate TerminalReceiverImplPrivate;
 
-struct _TerminalController
+struct _TerminalReceiverImpl
 {
   TerminalReceiverSkeleton parent_instance;
 
   /*< private >*/
-  TerminalControllerPrivate *priv;
+  TerminalReceiverImplPrivate *priv;
 };
 
-struct _TerminalControllerClass
+struct _TerminalReceiverImplClass
 {
   TerminalReceiverSkeletonClass parent_class;
 };
 
-GType terminal_controller_get_type (void);
+GType terminal_receiver_impl_get_type (void);
 
-TerminalController *terminal_controller_new (TerminalScreen *screen);
+TerminalReceiverImpl *terminal_receiver_impl_new (TerminalScreen *screen);
 
-TerminalScreen *terminal_controller_get_screen (TerminalController *controller);
+TerminalScreen *terminal_receiver_impl_get_screen (TerminalReceiverImpl *impl);
 
-void _terminal_controller_unset_screen (TerminalController *controller);
+void _terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl);
 
 /* ------------------------------------------------------------------------- */
 
@@ -88,4 +88,4 @@ TerminalFactory *terminal_factory_impl_new (void);
 
 G_END_DECLS
 
-#endif /* !TERMINAL_CONTROLLER_H */
+#endif /* !TERMINAL_RECEIVER_IMPL_H */

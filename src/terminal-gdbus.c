@@ -6,7 +6,7 @@
  *  the Free Software Foundation; either version 3, or (at your option)
  *  any later version.
  *
- *  This program is distributed in the hope controller it will be useful,
+ *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
@@ -28,9 +28,9 @@
 
 /* ------------------------------------------------------------------------- */
 
-#define TERMINAL_CONTROLLER_GET_PRIVATE(controller)(G_TYPE_INSTANCE_GET_PRIVATE ((controller), TERMINAL_TYPE_CONTROLLER, TerminalControllerPrivate))
+#define TERMINAL_RECEIVER_IMPL_GET_PRIVATE(impl)(G_TYPE_INSTANCE_GET_PRIVATE ((impl), TERMINAL_TYPE_RECEIVER_IMPL, TerminalReceiverImplPrivate))
 
-struct _TerminalControllerPrivate {
+struct _TerminalReceiverImplPrivate {
   TerminalScreen *screen; /* unowned! */
 };
 
@@ -53,48 +53,48 @@ child_exited_cb (VteTerminal *terminal,
 }
 
 static void
-terminal_controller_set_screen (TerminalController *controller,
+terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
                                 TerminalScreen *screen)
 {
-  TerminalControllerPrivate *priv;
+  TerminalReceiverImplPrivate *priv;
 
-  g_return_if_fail (TERMINAL_IS_CONTROLLER (controller));
+  g_return_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl));
   g_return_if_fail (screen == NULL || TERMINAL_IS_SCREEN (screen));
 
-  priv = controller->priv;
+  priv = impl->priv;
   if (priv->screen == screen)
     return;
 
   if (priv->screen) {
     g_signal_handlers_disconnect_matched (priv->screen,
                                           G_SIGNAL_MATCH_DATA,
-                                          0, 0, NULL, NULL, controller);
+                                          0, 0, NULL, NULL, impl);
   }
 
   priv->screen = screen;
   if (screen) {
     g_signal_connect (screen, "child-exited",
                       G_CALLBACK (child_exited_cb), 
-                      controller);
+                      impl);
     g_signal_connect_swapped (screen, "destroy",
-                              G_CALLBACK (_terminal_controller_unset_screen), 
-                              controller);
+                              G_CALLBACK (_terminal_receiver_impl_unset_screen), 
+                              impl);
   }
 
-  g_object_notify (G_OBJECT (controller), "screen");
+  g_object_notify (G_OBJECT (impl), "screen");
 }
 
 /* Class implementation */
 
 static gboolean 
-terminal_controller_exec (TerminalReceiver *receiver,
+terminal_receiver_impl_exec (TerminalReceiver *receiver,
                           GDBusMethodInvocation *invocation,
                           GUnixFDList *fd_list,
                           GVariant *options,
                           GVariant *arguments)
 {
-  TerminalController *controller = TERMINAL_CONTROLLER (receiver);
-  TerminalControllerPrivate *priv = controller->priv;
+  TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (receiver);
+  TerminalReceiverImplPrivate *priv = impl->priv;
   const char *working_directory;
   char **exec_argv, **envv;
   gsize exec_argc;
@@ -144,41 +144,41 @@ out:
 }
 
 static void
-terminal_controller_iface_init (TerminalReceiverIface *iface)
+terminal_receiver_impl_iface_init (TerminalReceiverIface *iface)
 {
-  iface->handle_exec = terminal_controller_exec;
+  iface->handle_exec = terminal_receiver_impl_exec;
 }
 
-G_DEFINE_TYPE_WITH_CODE (TerminalController, terminal_controller, TERMINAL_TYPE_RECEIVER_SKELETON,
-                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_RECEIVER, terminal_controller_iface_init))
+G_DEFINE_TYPE_WITH_CODE (TerminalReceiverImpl, terminal_receiver_impl, TERMINAL_TYPE_RECEIVER_SKELETON,
+                         G_IMPLEMENT_INTERFACE (TERMINAL_TYPE_RECEIVER, terminal_receiver_impl_iface_init))
 
 static void
-terminal_controller_init (TerminalController *controller)
+terminal_receiver_impl_init (TerminalReceiverImpl *impl)
 {
-  controller->priv = TERMINAL_CONTROLLER_GET_PRIVATE (controller);
-}
-
-static void
-terminal_controller_dispose (GObject *object)
-{
-  TerminalController *controller = TERMINAL_CONTROLLER (object);
-
-  terminal_controller_set_screen (controller, NULL);
-
-  G_OBJECT_CLASS (terminal_controller_parent_class)->dispose (object);
+  impl->priv = TERMINAL_RECEIVER_IMPL_GET_PRIVATE (impl);
 }
 
 static void
-terminal_controller_get_property (GObject *object,
+terminal_receiver_impl_dispose (GObject *object)
+{
+  TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (object);
+
+  terminal_receiver_impl_set_screen (impl, NULL);
+
+  G_OBJECT_CLASS (terminal_receiver_impl_parent_class)->dispose (object);
+}
+
+static void
+terminal_receiver_impl_get_property (GObject *object,
                                   guint prop_id,
                                   GValue *value,
                                   GParamSpec *pspec)
 {
-  TerminalController *controller = TERMINAL_CONTROLLER (object);
+  TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (object);
 
   switch (prop_id) {
     case PROP_SCREEN:
-      g_value_set_object (value, terminal_controller_get_screen (controller));
+      g_value_set_object (value, terminal_receiver_impl_get_screen (impl));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -187,16 +187,16 @@ terminal_controller_get_property (GObject *object,
 }
 
 static void
-terminal_controller_set_property (GObject *object,
+terminal_receiver_impl_set_property (GObject *object,
                                         guint prop_id,
                                         const GValue *value,
                                         GParamSpec *pspec)
 {
-  TerminalController *controller = TERMINAL_CONTROLLER (object);
+  TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (object);
 
   switch (prop_id) {
     case PROP_SCREEN:
-      terminal_controller_set_screen (controller, g_value_get_object (value));
+      terminal_receiver_impl_set_screen (impl, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -205,13 +205,13 @@ terminal_controller_set_property (GObject *object,
 }
 
 static void
-terminal_controller_class_init (TerminalControllerClass *klass)
+terminal_receiver_impl_class_init (TerminalReceiverImplClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->dispose = terminal_controller_dispose;
-  gobject_class->get_property = terminal_controller_get_property;
-  gobject_class->set_property = terminal_controller_set_property;
+  gobject_class->dispose = terminal_receiver_impl_dispose;
+  gobject_class->get_property = terminal_receiver_impl_get_property;
+  gobject_class->set_property = terminal_receiver_impl_set_property;
 
   g_object_class_install_property
      (gobject_class,
@@ -222,51 +222,51 @@ terminal_controller_class_init (TerminalControllerClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
-  g_type_class_add_private (gobject_class, sizeof (TerminalControllerPrivate));
+  g_type_class_add_private (gobject_class, sizeof (TerminalReceiverImplPrivate));
 }
 
 /* public API */
 
 /**
- * terminal_controller_new:
+ * terminal_receiver_impl_new:
  * @screen: a #TerminalScreen
  *
- * Returns: a new #TerminalController for @screen
+ * Returns: a new #TerminalReceiverImpl for @screen
  */
-TerminalController *
-terminal_controller_new (TerminalScreen *screen)
+TerminalReceiverImpl *
+terminal_receiver_impl_new (TerminalScreen *screen)
 {
-  return g_object_new (TERMINAL_TYPE_CONTROLLER, 
+  return g_object_new (TERMINAL_TYPE_RECEIVER_IMPL, 
                        "screen", screen, 
                        NULL);
 }
 
 /**
- * terminal_controller_get_screen:
- * @controller: a #TerminalController
+ * terminal_receiver_impl_get_screen:
+ * @impl: a #TerminalReceiverImpl
  * 
- * Returns: (transfer none): the controller's #TerminalScreen, or %NULL
+ * Returns: (transfer none): the impl's #TerminalScreen, or %NULL
  */
 TerminalScreen *
-terminal_controller_get_screen (TerminalController *controller)
+terminal_receiver_impl_get_screen (TerminalReceiverImpl *impl)
 {
-  g_return_val_if_fail (TERMINAL_IS_CONTROLLER (controller), NULL);
+  g_return_val_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl), NULL);
 
-  return controller->priv->screen;
+  return impl->priv->screen;
 }
 
 /**
- * terminal_controller_get_screen:
- * @controller: a #TerminalController
+ * terminal_receiver_impl_get_screen:
+ * @impl: a #TerminalReceiverImpl
  * 
- * Unsets the controllers #TerminalScreen.
+ * Unsets the impls #TerminalScreen.
  */
 void
-_terminal_controller_unset_screen (TerminalController *controller)
+_terminal_receiver_impl_unset_screen (TerminalReceiverImpl *impl)
 {
-  g_return_if_fail (TERMINAL_IS_CONTROLLER (controller));
+  g_return_if_fail (TERMINAL_IS_RECEIVER_IMPL (impl));
 
-  terminal_controller_set_screen (controller, NULL);
+  terminal_receiver_impl_set_screen (impl, NULL);
 }
 
 /* ---------------------------------------------------------------------------
@@ -278,7 +278,7 @@ struct _TerminalFactoryImplPrivate {
   gpointer dummy;
 };
 
-#define CONTROLLER_SKELETON_DATA_KEY  "terminal-object-skeleton"
+#define RECEIVER_IMPL_SKELETON_DATA_KEY  "terminal-object-skeleton"
 
 static void
 screen_destroy_cb (GObject *screen,
@@ -288,14 +288,14 @@ screen_destroy_cb (GObject *screen,
   GDBusObjectSkeleton *skeleton;
   const char *object_path;
 
-  skeleton = g_object_get_data (screen, CONTROLLER_SKELETON_DATA_KEY);
+  skeleton = g_object_get_data (screen, RECEIVER_IMPL_SKELETON_DATA_KEY);
   if (skeleton == NULL)
     return;
 
   object_manager = terminal_app_get_object_manager (terminal_app_get ());
   object_path = g_dbus_object_get_object_path (G_DBUS_OBJECT (skeleton));
   g_dbus_object_manager_server_unexport (object_manager, object_path);
-  g_object_set_data (screen, CONTROLLER_SKELETON_DATA_KEY, NULL);
+  g_object_set_data (screen, RECEIVER_IMPL_SKELETON_DATA_KEY, NULL);
 }
 
 static gboolean
@@ -307,7 +307,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   GDBusObjectManagerServer *object_manager;
   TerminalWindow *window;
   TerminalScreen *screen;
-  TerminalController *controller;
+  TerminalReceiverImpl *impl;
   TerminalObjectSkeleton *skeleton;
   char *object_path;
   GSettings *profile = NULL;
@@ -393,16 +393,16 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
   // FIXMEchpe make this better!
-  object_path = g_strdup_printf (TERMINAL_CONTROLLER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
+  object_path = g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
 
   skeleton = terminal_object_skeleton_new (object_path);
-  controller = terminal_controller_new (screen);
-  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (controller));
-  g_object_unref (controller);
+  impl = terminal_receiver_impl_new (screen);
+  terminal_object_skeleton_set_receiver (skeleton, TERMINAL_RECEIVER (impl));
+  g_object_unref (impl);
 
   object_manager = terminal_app_get_object_manager (app);
   g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (skeleton));
-  g_object_set_data_full (G_OBJECT (screen), CONTROLLER_SKELETON_DATA_KEY,
+  g_object_set_data_full (G_OBJECT (screen), RECEIVER_IMPL_SKELETON_DATA_KEY,
                           skeleton, (GDestroyNotify) g_object_unref);
   g_signal_connect (screen, "destroy",
                     G_CALLBACK (screen_destroy_cb), app);
