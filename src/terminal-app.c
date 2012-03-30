@@ -1206,7 +1206,7 @@ terminal_app_new_window (TerminalApp *app,
 {
   TerminalWindow *window;
 
-  window = terminal_window_new ();
+  window = terminal_window_new (G_APPLICATION (app));
 
   app->windows = g_list_append (app->windows, window);
   g_signal_connect (window, "destroy",

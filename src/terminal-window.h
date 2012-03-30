@@ -38,20 +38,19 @@ typedef struct _TerminalWindowPrivate TerminalWindowPrivate;
 
 struct _TerminalWindow
 {
-  GtkWindow parent_instance;
+  GtkApplicationWindow parent_instance;
 
   TerminalWindowPrivate *priv;
 };
 
 struct _TerminalWindowClass
 {
-  GtkWindowClass parent_class;
-
+  GtkApplicationWindowClass parent_class;
 };
 
 GType terminal_window_get_type (void) G_GNUC_CONST;
 
-TerminalWindow* terminal_window_new (void);
+TerminalWindow* terminal_window_new (GApplication *app);
 
 void terminal_window_set_is_restored (TerminalWindow *window);
 

@@ -235,7 +235,7 @@ sync_screen_icon_title (TerminalScreen *screen,
                         GParamSpec *psepc,
                         TerminalWindow *window);
 
-G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
 
 /* Menubar mnemonics & accel settings handling */
 
@@ -2113,9 +2113,11 @@ terminal_window_show (GtkWidget *widget)
 }
 
 TerminalWindow*
-terminal_window_new (void)
+terminal_window_new (GApplication *app)
 {
-  return g_object_new (TERMINAL_TYPE_WINDOW, NULL);
+  return g_object_new (TERMINAL_TYPE_WINDOW,
+                       "application", app,
+                       NULL);
 }
 
 /**
