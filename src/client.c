@@ -679,7 +679,7 @@ handle_open (int *argc,
     option_data_free (data);
     return FALSE;
   }
-  g_clear_object (fd_list);
+  g_clear_object (&fd_list);
 
   if (data->wait) {
     WaitData wait_data;
