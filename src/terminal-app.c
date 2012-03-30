@@ -48,8 +48,6 @@
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
 
-extern GDBusObjectManagerServer *object_manager;
-
 /*
  * Session state is stored entirely in the RestartCommand command line.
  *
@@ -60,7 +58,7 @@ extern GDBusObjectManagerServer *object_manager;
  */
 
 struct _TerminalAppClass {
-  GObjectClass parent_class;
+  GtkApplicationClass parent_class;
 
   void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
@@ -69,7 +67,9 @@ struct _TerminalAppClass {
 
 struct _TerminalApp
 {
-  GObject parent_instance;
+  GtkApplication parent_instance;
+
+  GDBusObjectManagerServer *object_manager;
 
   GList *windows;
   GtkWidget *new_profile_dialog;
@@ -1035,7 +1035,17 @@ terminal_app_manage_profiles (TerminalApp     *app,
 
 /* Class implementation */
 
-G_DEFINE_TYPE (TerminalApp, terminal_app, G_TYPE_OBJECT)
+G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
+
+/* GApplicationClass impl */
+
+static void
+terminal_app_activate (GApplication *gapp)
+{
+  /* No-op required because GApplication is stupid */
+}
+
+/* GObjectClass impl */
 
 static void
 terminal_app_init (TerminalApp *app)
@@ -1075,6 +1085,9 @@ terminal_app_init (TerminalApp *app)
 #endif
 
   terminal_accels_init ();
+
+  /* FIXMEchpe: find out why this is necessary... */
+  g_application_hold (G_APPLICATION (app));
 }
 
 static void
@@ -1101,6 +1114,11 @@ terminal_app_finalize (GObject *object)
 
   terminal_accels_shutdown ();
 
+  if (app->object_manager) {
+    g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
+    g_object_unref (app->object_manager);
+  }
+
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
   global_app = NULL;
@@ -1109,14 +1127,19 @@ terminal_app_finalize (GObject *object)
 static void
 terminal_app_real_quit (TerminalApp *app)
 {
+  /* Release the hold added when creating the app  */
+  g_application_release (G_APPLICATION (app));
 }
 
 static void
 terminal_app_class_init (TerminalAppClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GApplicationClass *g_application_class = G_APPLICATION_CLASS (klass);
 
   object_class->finalize = terminal_app_finalize;
+
+  g_application_class->activate = terminal_app_activate;
 
   klass->quit = terminal_app_real_quit;
 
@@ -1150,14 +1173,20 @@ terminal_app_class_init (TerminalAppClass *klass)
 
 /* Public API */
 
+GApplication *
+terminal_app_new (const char *id)
+{
+  return g_object_new (TERMINAL_TYPE_APP,
+                       "application-id", id,
+                       "flags", (glong) (G_APPLICATION_NON_UNIQUE | G_APPLICATION_IS_SERVICE),
+                       NULL);
+}
+
 TerminalApp*
 terminal_app_get (void)
 {
-  if (global_app == NULL) {
-    g_object_new (TERMINAL_TYPE_APP, NULL);
-    g_assert (global_app != NULL);
-  }
-
+  g_assert (global_app != NULL);
+  g_assert (global_app != NULL);
   return global_app;
 }
 
@@ -1169,8 +1198,6 @@ terminal_app_shutdown (void)
 
   g_object_unref (global_app);
   g_assert (global_app == NULL);
-
-  g_settings_sync ();
 }
 
 TerminalWindow *
@@ -1520,5 +1547,7 @@ terminal_app_get_system_font (TerminalApp *app)
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
-  return object_manager;
+  if (app->object_manager == NULL)
+    app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
+  return app->object_manager;
 }

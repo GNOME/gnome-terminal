@@ -39,7 +39,6 @@
 #include "terminal-util.h"
 #include "terminal-defines.h"
 
-GDBusObjectManagerServer *object_manager;
 static char *bus_name = NULL;
 
 static gboolean
@@ -67,8 +66,8 @@ static const GOptionEntry options[] = {
 
 
 typedef struct {
-  GMainLoop *loop;
   GApplication *app;
+  GMainLoop *loop;
   gboolean owns_name;
 } MainData;
 
@@ -77,6 +76,8 @@ bus_acquired_cb (GDBusConnection *connection,
                  const char *name,
                  gpointer user_data)
 {
+  MainData *data = (MainData *) user_data;
+  GDBusObjectManagerServer *object_manager;
   TerminalObjectSkeleton *object;
   TerminalFactory *factory;
 
@@ -88,6 +89,7 @@ bus_acquired_cb (GDBusConnection *connection,
   terminal_object_skeleton_set_factory (object, factory);
   g_object_unref (factory);
 
+  object_manager = terminal_app_get_object_manager (TERMINAL_APP (data->app));
   g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
   g_object_unref (object);
 
@@ -130,13 +132,6 @@ name_lost_cb (GDBusConnection *connection,
     g_main_loop_quit (data->loop);
 }
 
-static void
-app_activate_cb (GApplication *app,
-                 gpointer user_data)
-{
-  /* No-op required because GApplication is stupid */
-}
-
 int
 main (int argc, char **argv)
 {
@@ -173,10 +168,9 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
+  data.app = terminal_app_new (bus_name ? bus_name : TERMINAL_UNIQUE_NAME);
 
   data.loop = g_main_loop_new (NULL, FALSE);
-  data.app = NULL;
   data.owns_name = FALSE;
 
   owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
@@ -195,20 +189,11 @@ main (int argc, char **argv)
   if (!data.owns_name)
     goto out;
 
-  data.app = (GApplication *) gtk_application_new (bus_name ? bus_name : TERMINAL_UNIQUE_NAME, 
-                                                   G_APPLICATION_NON_UNIQUE |
-                                                   G_APPLICATION_IS_SERVICE);
-  g_application_hold (data.app);
-  g_signal_connect (data.app, "activate", G_CALLBACK (app_activate_cb), NULL);
-  g_signal_connect_swapped (terminal_app_get (), "quit", G_CALLBACK (g_application_release), data.app);
   exit_code = g_application_run (data.app, 0, NULL);
-  g_clear_object (&data.app);
 
   g_bus_unown_name (owner_id);
 
 out:
-  g_dbus_object_manager_server_unexport (object_manager, TERMINAL_FACTORY_OBJECT_PATH);
-  g_clear_object (&object_manager);
 
   terminal_app_shutdown ();
 
