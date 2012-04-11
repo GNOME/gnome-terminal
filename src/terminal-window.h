@@ -93,9 +93,7 @@ void terminal_window_set_size_force_grid (TerminalWindow *window,
                                           int             force_grid_width,
                                           int             force_grid_height);
 
-GtkWidget* terminal_window_get_notebook (TerminalWindow *window);
-
-gboolean terminal_window_uses_argb_visual (TerminalWindow *window);
+GtkWidget* terminal_window_get_mdi_container (TerminalWindow *window);
 
 void terminal_window_save_state (TerminalWindow *window,
                                  GKeyFile *key_file,

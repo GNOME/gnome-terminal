@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  *  Copyright © 2003  David Bordoley
- *  Copyright © 2003-2004 Christian Persch
+ *  Copyright © 2003-2004, 2012 Christian Persch
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,14 +18,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <config.h>
+#include "config.h"
+
+#include "terminal-tabs-menu.h"
 
 #include <string.h>
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
 
-#include "terminal-tabs-menu.h"
+#include "terminal-mdi-container.h"
 #include "terminal-screen.h"
 #include "terminal-screen-container.h"
 #include "terminal-intl.h"
@@ -178,18 +180,14 @@ sync_tab_title (TerminalScreen *screen,
 }
 
 static void
-notebook_page_added_cb (GtkNotebook *notebook,
-                        TerminalScreenContainer *container,
-			guint position,
-			TerminalTabsMenu *menu)
+mdi_screen_added_cb (TerminalMdiContainer *container,
+                     TerminalScreen *screen,
+                     TerminalTabsMenu *menu)
 {
 	TerminalTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
 	char verb[ACTION_VERB_FORMAT_LENGTH];
 	GSList *group;
-        TerminalScreen *screen;
-
-        screen = terminal_screen_container_get_screen (container);
 
 	g_snprintf (verb, sizeof (verb), ACTION_VERB_FORMAT, allocate_tab_id ());
   
@@ -226,16 +224,12 @@ notebook_page_added_cb (GtkNotebook *notebook,
 }
 
 static void
-notebook_page_removed_cb (GtkNotebook *notebook,
-                          TerminalScreenContainer *container,
-			  guint position,
-			  TerminalTabsMenu *menu)
+mdi_screen_removed_cb (TerminalMdiContainer *container,
+                       TerminalScreen *screen,
+                       TerminalTabsMenu *menu)
 {
 	TerminalTabsMenuPrivate *priv = menu->priv;
 	GtkAction *action;
-        TerminalScreen *screen;
-
-        screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
 	g_return_if_fail (action != NULL);
@@ -255,26 +249,19 @@ notebook_page_removed_cb (GtkNotebook *notebook,
 }
 
 static void
-notebook_page_reordered_cb (GtkNotebook *notebook,
-			    GtkBin *bin,
-			    guint position,
-			    TerminalTabsMenu *menu)
+mdi_screens_reordered_cb (GtkNotebook *notebook,
+                          TerminalTabsMenu *menu)
 {
 	terminal_tabs_menu_update (menu);
 }
 
 static void
-notebook_page_switch_cb (GtkNotebook *notebook,
-                         GtkWidget *page,
-                         guint position,
-                         TerminalTabsMenu *menu)
+mdi_screen_switched_cb (TerminalMdiContainer *container,
+                        TerminalScreen *old_active_screen,
+                        TerminalScreen *screen,
+                        TerminalTabsMenu *menu)
 {
-        TerminalScreenContainer *container;
-        TerminalScreen *screen;
         GtkAction *action;
-
-        container = TERMINAL_SCREEN_CONTAINER (page);
-        screen = terminal_screen_container_get_screen (container);
 
 	action = g_object_get_data (G_OBJECT (screen), DATA_KEY);
         g_signal_handlers_block_by_func (action, G_CALLBACK (tab_action_activate_cb), menu);
@@ -305,7 +292,7 @@ terminal_tabs_menu_set_window (TerminalTabsMenu *menu,
 			   TerminalWindow *window)
 {
 	TerminalTabsMenuPrivate *priv = menu->priv;
-	GtkWidget *notebook;
+	GtkWidget *mdi_container;
 	GtkUIManager *manager;
 
 	priv->window = window;
@@ -324,15 +311,15 @@ terminal_tabs_menu_set_window (TerminalTabsMenu *menu,
 	g_signal_connect (priv->action_group, "connect-proxy",
 			  G_CALLBACK (connect_proxy_cb), NULL);
 
-	notebook = terminal_window_get_notebook (window);
-	g_signal_connect_object (notebook, "page-added",
-				 G_CALLBACK (notebook_page_added_cb), menu, 0);
-	g_signal_connect_object (notebook, "page-removed",
-				 G_CALLBACK (notebook_page_removed_cb), menu, 0);
-	g_signal_connect_object (notebook, "page-reordered",
-				 G_CALLBACK (notebook_page_reordered_cb), menu, 0);
-	g_signal_connect_object (notebook, "switch-page",
-				 G_CALLBACK (notebook_page_switch_cb), menu, 0);
+	mdi_container = terminal_window_get_mdi_container (window);
+	g_signal_connect_object (mdi_container, "screen-added",
+				 G_CALLBACK (mdi_screen_added_cb), menu, 0);
+	g_signal_connect_object (mdi_container, "screen-removed",
+				 G_CALLBACK (mdi_screen_removed_cb), menu, 0);
+	g_signal_connect_object (mdi_container, "screens-reordered",
+				 G_CALLBACK (mdi_screens_reordered_cb), menu, 0);
+	g_signal_connect_object (mdi_container, "screen-switched",
+				 G_CALLBACK (mdi_screen_switched_cb), menu, 0);
 }
 
 static void

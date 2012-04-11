@@ -42,6 +42,10 @@ gnome_terminal_server_SOURCES = \
 	terminal-info-bar.c \
 	terminal-info-bar.h \
 	terminal-intl.h \
+	terminal-mdi-container.c \
+	terminal-mdi-container.h \
+	terminal-notebook.c \
+	terminal-notebook.h \
 	terminal-schemas.h \
 	terminal-screen.c \
 	terminal-screen.h \

@@ -1993,8 +1993,6 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
         TerminalScreen *moving_screen;
         TerminalWindow *source_window;
         TerminalWindow *dest_window;
-        GtkWidget *dest_notebook;
-        int page_num;
 
         container = *(GtkWidget**) selection_data_data;
         if (!GTK_IS_WIDGET (container))
@@ -2007,10 +2005,7 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
         source_window = terminal_screen_get_window (moving_screen);
         dest_window = terminal_screen_get_window (screen);
-        dest_notebook = terminal_window_get_notebook (dest_window);
-        page_num = gtk_notebook_page_num (GTK_NOTEBOOK (dest_notebook), 
-                                          GTK_WIDGET (screen));
-        terminal_window_move_screen (source_window, dest_window, moving_screen, page_num + 1);
+        terminal_window_move_screen (source_window, dest_window, moving_screen, -1);
 
         gtk_drag_finish (context, TRUE, TRUE, timestamp);
       }

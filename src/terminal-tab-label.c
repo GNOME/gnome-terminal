@@ -152,6 +152,24 @@ terminal_tab_label_finalize (GObject *object)
 }
 
 static void
+terminal_tab_label_get_property (GObject *object,
+                                 guint prop_id,
+                                 GValue *value,
+                                 GParamSpec *pspec)
+{
+  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
+
+  switch (prop_id) {
+    case PROP_SCREEN:
+      g_value_set_object (value, terminal_tab_label_get_screen (tab_label));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+  }
+}
+
+static void
 terminal_tab_label_set_property (GObject *object,
                                  guint prop_id,
                                  const GValue *value,
@@ -178,6 +196,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
 
   gobject_class->constructor = terminal_tab_label_constructor;
   gobject_class->finalize = terminal_tab_label_finalize;
+  gobject_class->get_property = terminal_tab_label_get_property;
   gobject_class->set_property = terminal_tab_label_set_property;
 
   widget_class->parent_set = terminal_tab_label_parent_set;
@@ -197,7 +216,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
      PROP_SCREEN,
      g_param_spec_object ("screen", NULL, NULL,
                           TERMINAL_TYPE_SCREEN,
-                          G_PARAM_WRITABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
+                          G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB |
                           G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (gobject_class, sizeof (TerminalTabLabelPrivate));
@@ -262,4 +281,18 @@ terminal_tab_label_set_bold (TerminalTabLabel *tab_label,
 
   if (free_list)
     pango_attr_list_unref (attr_list);
+}
+
+/**
+ * terminal_tab_label_get_screen:
+ * @tab_label: a #TerminalTabLabel
+ *
+ * Returns: (transfer none): the #TerminalScreen for @tab_label
+ */
+TerminalScreen *
+terminal_tab_label_get_screen (TerminalTabLabel *tab_label)
+{
+  g_return_val_if_fail (TERMINAL_IS_TAB_LABEL (tab_label), NULL);
+
+  return tab_label->priv->screen;
 }

@@ -246,6 +246,9 @@ terminal_screen_container_new (TerminalScreen *screen)
 TerminalScreen *
 terminal_screen_container_get_screen (TerminalScreenContainer *container)
 {
+  if (container == NULL)
+    return NULL;
+
   g_return_val_if_fail (TERMINAL_IS_SCREEN_CONTAINER (container), NULL);
 
   return container->priv->screen;
@@ -260,6 +263,9 @@ terminal_screen_container_get_screen (TerminalScreenContainer *container)
 TerminalScreenContainer *
 terminal_screen_container_get_from_screen (TerminalScreen *screen)
 {
+  if (screen == NULL)
+    return NULL;
+
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
 
   return TERMINAL_SCREEN_CONTAINER (gtk_widget_get_ancestor (GTK_WIDGET (screen), TERMINAL_TYPE_SCREEN_CONTAINER));

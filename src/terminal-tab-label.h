@@ -52,12 +52,14 @@ struct _TerminalTabLabelClass
   void (* close_button_clicked) (TerminalTabLabel *tab_label);
 };
 
-GType       terminal_tab_label_get_type   (void);
+GType           terminal_tab_label_get_type   (void);
 
-GtkWidget  *terminal_tab_label_new        (TerminalScreen *screen);
+GtkWidget *     terminal_tab_label_new        (TerminalScreen *screen);
 
-void        terminal_tab_label_set_bold   (TerminalTabLabel *tab_label,
-                                           gboolean bold);
+void            terminal_tab_label_set_bold   (TerminalTabLabel *tab_label,
+                                               gboolean bold);
+
+TerminalScreen *terminal_tab_label_get_screen (TerminalTabLabel *tab_label);
 
 G_END_DECLS
 
