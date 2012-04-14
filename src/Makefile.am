@@ -261,11 +261,6 @@ gnome_terminal_migration_LDADD = \
 	$(MIGRATOR_LIBS) \
 	$(INTLLIBS)
 
-aboutdir = $(pkgdatadir)
-about_DATA = \
-	terminal.about \
-	$(NULL)
-
 builder_in_files = \
 	encodings-dialog.glade \
 	find-dialog.glade \
@@ -290,6 +285,7 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
+	terminal.about \
 	terminal.xml \
 	terminal-appmenu.ui \
 	terminal.gresource.xml \
