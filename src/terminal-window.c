@@ -3509,83 +3509,11 @@ help_contents_callback (GtkAction *action,
   terminal_util_show_help (NULL, GTK_WINDOW (window));
 }
 
-#define ABOUT_GROUP "About"
-#define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
-
 static void
 help_about_callback (GtkAction *action,
                      TerminalWindow *window)
 {
-  static const char copyright[] =
-    "Copyright © 2002–2004 Havoc Pennington\n"
-    "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
-    "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2011 Christian Persch";
-  char *licence_text;
-  GKeyFile *key_file;
-  GError *error = NULL;
-  char **authors, **contributors, **artists, **documenters, **array_strv;
-  gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
-  GPtrArray *array;
-
-  key_file = g_key_file_new ();
-  if (!g_key_file_load_from_file (key_file, TERM_PKGDATADIR G_DIR_SEPARATOR_S "terminal.about", 0, &error))
-    {
-      g_warning ("Couldn't load about data: %s\n", error->message);
-      g_error_free (error);
-      g_key_file_free (key_file);
-      return;
-    }
-
-  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, NULL);
-  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, NULL);
-  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
-  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
-  g_key_file_free (key_file);
-
-  array = g_ptr_array_new ();
-
-  for (i = 0; i < n_authors; ++i)
-    g_ptr_array_add (array, EMAILIFY (authors[i]));
-  g_free (authors); /* strings are now owned by the array */
-
-  if (n_contributors > 0)
-  {
-    g_ptr_array_add (array, g_strdup (""));
-    g_ptr_array_add (array, g_strdup (_("Contributors:")));
-    for (i = 0; i < n_contributors; ++i)
-      g_ptr_array_add (array, EMAILIFY (contributors[i]));
-  }
-  g_free (contributors); /* strings are now owned by the array */
-  
-  g_ptr_array_add (array, NULL);
-  array_strv = (char **) g_ptr_array_free (array, FALSE);
-
-  for (i = 0; i < n_artists; ++i)
-    artists[i] = EMAILIFY (artists[i]);
-  for (i = 0; i < n_documenters; ++i)
-    documenters[i] = EMAILIFY (documenters[i]);
-
-  licence_text = terminal_util_get_licence_text ();
-
-  gtk_show_about_dialog (GTK_WINDOW (window),
-			 "program-name", _("GNOME Terminal"),
-			 "copyright", copyright,
-			 "comments", _("A terminal emulator for the GNOME desktop"),
-			 "version", VERSION,
-			 "authors", array_strv,
-                         "artists", artists,
-                         "documenters", documenters,
-			 "license", licence_text,
-			 "wrap-license", TRUE,
-			 "translator-credits", _("translator-credits"),
-			 "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
-			 NULL);
-
-  g_strfreev (array_strv);
-  g_strfreev (artists);
-  g_strfreev (documenters);
-  g_free (licence_text);
+  terminal_util_show_about (GTK_WINDOW (window));
 }
 
 GtkUIManager *

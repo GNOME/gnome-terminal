@@ -291,6 +291,7 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	terminal.xml \
+	terminal-appmenu.ui \
 	terminal.gresource.xml \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \

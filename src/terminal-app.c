@@ -1105,6 +1105,37 @@ terminal_app_manage_profiles (TerminalApp     *app,
 #endif
 }
 
+/* App menu callbacks */
+
+static void
+app_menu_preferences_cb (GSimpleAction *action,
+                         GVariant      *parameter,
+                         gpointer       user_data)
+{
+  TerminalApp *app = user_data;
+
+  terminal_app_edit_profile (app,
+                             terminal_app_get_profile_by_name (app, TERMINAL_DEFAULT_PROFILE_ID) /* FIXME */,
+                             NULL /* FIXME use last active window? */,
+                             NULL);
+}
+
+static void
+app_menu_help_cb (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  terminal_util_show_help (NULL, NULL /* FIXME use last active window? */);
+}
+
+static void
+app_menu_about_cb (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  terminal_util_show_about (NULL /* FIXME use last active window? */);
+}
+
 /* Class implementation */
 
 G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
@@ -1112,9 +1143,43 @@ G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
 /* GApplicationClass impl */
 
 static void
-terminal_app_activate (GApplication *gapp)
+terminal_app_activate (GApplication *application)
 {
   /* No-op required because GApplication is stupid */
+}
+
+static void
+terminal_app_startup (GApplication *application)
+{
+  const GActionEntry app_menu_actions[] = {
+    { "preferences", app_menu_preferences_cb,   NULL, NULL, NULL },
+    { "help",        app_menu_help_cb,          NULL, NULL, NULL },
+    { "about",       app_menu_about_cb,         NULL, NULL, NULL }
+  };
+
+  TerminalApp *app = TERMINAL_APP (application);
+  GtkBuilder *builder;
+  GError *error = NULL;
+
+  G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
+
+  /* FIXME: Is this the right place to do prefs migration from gconf->dconf? */
+
+  g_action_map_add_action_entries (G_ACTION_MAP (application),
+                                   app_menu_actions, G_N_ELEMENTS (app_menu_actions),
+                                   application);
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder,
+                                 TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal-appmenu.ui",
+                                 &error);
+  g_assert_no_error (error);
+
+  gtk_application_set_app_menu (GTK_APPLICATION (application),
+                                G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu")));
+  g_object_unref (builder);
+
+  g_print ("Done startup!\n");
 }
 
 /* GObjectClass impl */
@@ -1228,6 +1293,7 @@ terminal_app_class_init (TerminalAppClass *klass)
   object_class->finalize = terminal_app_finalize;
 
   g_application_class->activate = terminal_app_activate;
+  g_application_class->startup = terminal_app_startup;
 
   klass->quit = terminal_app_real_quit;
 

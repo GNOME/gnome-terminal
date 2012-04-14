@@ -147,42 +147,16 @@ void
 terminal_util_show_help (const char *topic, 
                          GtkWindow  *parent)
 {
+  char *uri;
   GError *error = NULL;
-  const char *lang;
-  char *uri = NULL, *url;
-  guint i;
- 
-  const char * const * langs = g_get_language_names ();
-  for (i = 0; langs[i]; i++) {
-    lang = langs[i];
-    if (strchr (lang, '.')) {
-      continue;
-    }
- 
-    uri = g_build_filename (TERM_HELPDIR,
-                            "gnome-terminal", /* DOC_MODULE */
-                            lang,
-                            "gnome-terminal.xml",
-                            NULL);
-					
-    if (g_file_test (uri, G_FILE_TEST_EXISTS)) {
-      break;
-    }
-
-    g_free (uri);
-    uri = NULL;
-  }
-
-  if (!uri)
-    return;
 
   if (topic) {
-    url = g_strdup_printf ("ghelp://%s?%s", uri, topic);
+    uri = g_strdup_printf ("help:gnome-terminal/%s", topic);
   } else {
-    url = g_strdup_printf ("ghelp://%s", uri);
+    uri = g_strdup ("help:gnome-terminal");
   }
 
-  if (!open_url (GTK_WINDOW (parent), url, gtk_get_current_event_time (), &error))
+  if (!open_url (GTK_WINDOW (parent), uri, gtk_get_current_event_time (), &error))
     {
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
                                        _("There was an error displaying help"));
@@ -190,9 +164,86 @@ terminal_util_show_help (const char *topic,
     }
 
   g_free (uri);
-  g_free (url);
 }
- 
+
+#define ABOUT_GROUP "About"
+#define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
+
+void
+terminal_util_show_about (GtkWindow *transient_parent)
+{
+  static const char copyright[] =
+    "Copyright © 2002–2004 Havoc Pennington\n"
+    "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
+    "Copyright © 2006 Guilherme de S. Pastore\n"
+    "Copyright © 2007–2012 Christian Persch";
+  char *licence_text;
+  GKeyFile *key_file;
+  GError *error = NULL;
+  char **authors, **contributors, **artists, **documenters, **array_strv;
+  gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
+  GPtrArray *array;
+
+  key_file = g_key_file_new ();
+  if (!g_key_file_load_from_file (key_file, TERM_PKGDATADIR G_DIR_SEPARATOR_S "terminal.about", 0, &error))
+    {
+      g_warning ("Couldn't load about data: %s\n", error->message);
+      g_error_free (error);
+      g_key_file_free (key_file);
+      return;
+    }
+
+  authors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Authors", &n_authors, NULL);
+  contributors = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Contributors", &n_contributors, NULL);
+  artists = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Artists", &n_artists, NULL);
+  documenters = g_key_file_get_string_list (key_file, ABOUT_GROUP, "Documenters", &n_documenters, NULL);
+  g_key_file_free (key_file);
+
+  array = g_ptr_array_new ();
+
+  for (i = 0; i < n_authors; ++i)
+    g_ptr_array_add (array, EMAILIFY (authors[i]));
+  g_free (authors); /* strings are now owned by the array */
+
+  if (n_contributors > 0)
+  {
+    g_ptr_array_add (array, g_strdup (""));
+    g_ptr_array_add (array, g_strdup (_("Contributors:")));
+    for (i = 0; i < n_contributors; ++i)
+      g_ptr_array_add (array, EMAILIFY (contributors[i]));
+  }
+  g_free (contributors); /* strings are now owned by the array */
+  
+  g_ptr_array_add (array, NULL);
+  array_strv = (char **) g_ptr_array_free (array, FALSE);
+
+  for (i = 0; i < n_artists; ++i)
+    artists[i] = EMAILIFY (artists[i]);
+  for (i = 0; i < n_documenters; ++i)
+    documenters[i] = EMAILIFY (documenters[i]);
+
+  licence_text = terminal_util_get_licence_text ();
+
+  gtk_show_about_dialog (transient_parent,
+                         "program-name", _("GNOME Terminal"),
+                         "copyright", copyright,
+                         "comments", _("A terminal emulator for the GNOME desktop"),
+                         "version", VERSION,
+                         "authors", array_strv,
+                         "artists", artists,
+                         "documenters", documenters,
+                         "license", licence_text,
+                         "wrap-license", TRUE,
+                         "translator-credits", _("translator-credits"),
+                         "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
+                         NULL);
+
+  g_strfreev (array_strv);
+  g_strfreev (artists);
+  g_strfreev (documenters);
+  g_free (licence_text);
+}
+
 /* sets accessible name and description for the widget */
 
 void

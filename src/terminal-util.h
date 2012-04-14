@@ -37,6 +37,8 @@ void terminal_util_show_error_dialog (GtkWindow *transient_parent,
 
 void terminal_util_show_help (const char *topic, GtkWindow  *transient_parent);
 
+void terminal_util_show_about (GtkWindow *transient_parent);
+
 void terminal_util_set_labelled_by          (GtkWidget  *widget,
                                              GtkLabel   *label);
 void terminal_util_set_atk_name_description (GtkWidget  *widget,
