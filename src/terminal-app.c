@@ -21,9 +21,17 @@
 
 #include <config.h>
 
-#include <errno.h>
+#ifndef WITH_DCONF
+#define WITH_DCONF
+#endif
 
 #include <glib.h>
+#include <gio/gio.h>
+
+#ifdef WITH_DCONF
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
+#endif
 
 #include "terminal-intl.h"
 
@@ -40,9 +48,15 @@
 #include "terminal-gdbus.h"
 #include "terminal-defines.h"
 
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+
+#ifdef WITH_DCONF
+#include <dconf-client.h>
+#include <dconf-paths.h>
+#endif
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
@@ -89,6 +103,10 @@ struct _TerminalApp
   GSettings *profiles_settings;
   GSettings *desktop_interface_settings;
   GSettings *system_proxy_settings;
+
+#ifdef WITH_DCONF
+  DConfClient *dconf_client;
+#endif
 };
 
 enum
@@ -108,6 +126,8 @@ enum
 };
 
 static TerminalApp *global_app = NULL;
+
+static void terminal_app_dconf_get_profile_list (TerminalApp *app);
 
 /* Helper functions */
 
@@ -627,6 +647,58 @@ find_profile_link (GList      *profiles,
   return l;
 }
 
+#endif /* 0 */
+
+static void
+terminal_app_ensure_any_profiles (TerminalApp *app)
+{
+  /* Make sure we do have at least one profile */
+  if (g_hash_table_size (app->profiles) != 0)
+    return;
+
+  g_hash_table_insert (app->profiles, 
+                       g_strdup (TERMINAL_DEFAULT_PROFILE_ID),
+                       g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, TERMINAL_DEFAULT_PROFILE_PATH));
+}
+
+#ifdef WITH_DCONF
+
+static void
+terminal_app_dconf_get_profile_list (TerminalApp *app)
+{
+  char **keys;
+  int n_keys, i;
+
+  keys = dconf_client_list (app->dconf_client, TERMINAL_PROFILES_PATH_PREFIX, &n_keys);
+  for (i = 0; i < n_keys; i++) {
+    const char *key = keys[i];
+    char *path, *id;
+    GSettings *profile;
+
+    //g_print ("key %s\n", key);
+    if (!dconf_is_rel_dir (key, NULL))
+      continue;
+    /* For future-compat with GSettingsList */
+    if (key[0] != ':')
+      continue;
+
+    path = g_strconcat (TERMINAL_PROFILES_PATH_PREFIX, key, NULL);
+    profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
+    //g_print ("new profile %p id %s with path %s\n", profile, key, path);
+    g_free (path);
+
+    id = g_strdup (key);
+    id[strlen (id) - 1] = '\0';
+    g_hash_table_insert (app->profiles, id /* adopts */, profile /* adopts */);
+  }
+  g_strfreev (keys);
+
+  terminal_app_ensure_any_profiles (app);
+}
+
+#endif /* WITH_DCONF */
+
+#if 0
 static void
 terminal_app_profiles_children_changed_cb (GSettings   *settings,
                                            TerminalApp *app)
@@ -1071,10 +1143,20 @@ terminal_app_init (TerminalApp *app)
                     app);
 
   app->profiles = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-  g_hash_table_insert (app->profiles,
-                       g_strdup ("profile0"),
-                       g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA,
-                                                 "/org/gnome/terminal/settings/profiles:/profile0/"));
+
+#ifdef WITH_DCONF
+{
+  GSettingsBackend *backend;
+
+  /* FIXME HACK! */
+  backend = g_settings_backend_get_default ();
+  if (strcmp (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend") == 0) {
+    app->dconf_client = dconf_client_new (NULL, NULL, NULL, NULL);
+    terminal_app_dconf_get_profile_list (app);
+  }
+  g_object_unref (backend);
+}
+#endif
 #if 0
   app->profiles_settings = g_settings_new (PROFILES_SETTINGS_SCHEMA_ID);
   terminal_app_profiles_children_changed_cb (app->profiles_settings, app);
@@ -1083,6 +1165,8 @@ terminal_app_init (TerminalApp *app)
                     G_CALLBACK (terminal_app_profiles_children_changed_cb),
                     app);
 #endif
+
+  terminal_app_ensure_any_profiles (app);
 
   terminal_accels_init ();
 
@@ -1094,6 +1178,10 @@ static void
 terminal_app_finalize (GObject *object)
 {
   TerminalApp *app = TERMINAL_APP (object);
+
+#ifdef WITH_DCONF
+  g_clear_object (&app->dconf_client);
+#endif
 
   g_hash_table_destroy (app->encodings);
   g_signal_handlers_disconnect_by_func (app->global_settings,
@@ -1356,7 +1444,7 @@ GSettings* terminal_app_get_profile (TerminalApp *app,
                                profile_name);
     }
   if (profile == NULL)
-    profile = g_object_ref (g_hash_table_lookup (app->profiles, "profile0"));
+    profile = g_object_ref (g_hash_table_lookup (app->profiles, TERMINAL_DEFAULT_PROFILE_ID));
 
   g_assert (profile != NULL);
   return profile;

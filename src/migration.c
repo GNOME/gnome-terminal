@@ -317,7 +317,7 @@ migrate_profile (GConfClient *client,
   if (verbose)
     g_print ("Migrating profile \"%s\"\n", gconf_id);
 
-  path = g_strdup_printf (PROFILES_PATH_PREFIX, "profile%d:/", id);
+  path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX, ":profile%d/", id);
   settings = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
   g_free (path);
 

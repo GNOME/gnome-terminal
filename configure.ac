@@ -83,6 +83,7 @@ PKG_CHECK_MODULES([TERM],
    gio-2.0 >= $GIO_REQUIRED
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
    gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
+   dconf
    $PLATFORM_DEPS])
 
 # ****

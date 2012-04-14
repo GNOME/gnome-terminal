@@ -69,7 +69,9 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
 #define TERMINAL_SETTING_ENCODINGS_KEY                  "encodings"
 
-#define PROFILES_PATH_PREFIX "/org/gnome/terminal/profiles/"
+#define TERMINAL_PROFILES_PATH_PREFIX   "/org/gnome/terminal/profiles:/"
+#define TERMINAL_DEFAULT_PROFILE_ID     ":profile0"
+#define TERMINAL_DEFAULT_PROFILE_PATH   TERMINAL_PROFILES_PATH_PREFIX TERMINAL_DEFAULT_PROFILE_ID "/"
 
 G_END_DECLS
 
