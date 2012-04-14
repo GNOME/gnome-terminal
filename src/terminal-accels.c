@@ -38,7 +38,6 @@
 #define ACCEL_CLOSE_WINDOW         "FileCloseWindow"
 #define ACCEL_COPY                 "EditCopy"
 #define ACCEL_PASTE                "EditPaste"
-#define ACCEL_TOGGLE_MENUBAR       "ViewMenubar"
 #define ACCEL_FULL_SCREEN          "ViewFullscreen"
 #define ACCEL_RESET                "TerminalReset"
 #define ACCEL_RESET_AND_CLEAR      "TerminalResetClear"
@@ -101,7 +100,6 @@ static KeyEntry edit_entries[] =
 
 static KeyEntry view_entries[] =
 {
-  { N_("Hide and Show menubar"), ACCEL_TOGGLE_MENUBAR },
   { N_("Full Screen"), ACCEL_FULL_SCREEN },
   { N_("Zoom In"), ACCEL_ZOOM_IN },
   { N_("Zoom Out"), ACCEL_ZOOM_OUT },

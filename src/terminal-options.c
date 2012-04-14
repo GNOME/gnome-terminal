@@ -142,14 +142,6 @@ apply_defaults (TerminalOptions *options,
   if (iw->geometry == NULL)
     iw->geometry = g_strdup (options->default_geometry);
 
-  if (options->default_window_menubar_forced)
-    {
-      iw->force_menubar_state = TRUE;
-      iw->menubar_state = options->default_window_menubar_state;
-
-      options->default_window_menubar_forced = FALSE;
-    }
-
   iw->start_fullscreen |= options->default_fullscreen;
   iw->start_maximized |= options->default_maximize;
 }
@@ -403,70 +395,6 @@ option_role_callback (const gchar *option_name,
       g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
                    "%s", _("Two roles given for one window"));
       return FALSE;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-option_show_menubar_callback (const gchar *option_name,
-                              const gchar *value,
-                              gpointer     data,
-                              GError     **error)
-{
-  TerminalOptions *options = data;
-  InitialWindow *iw;
-
-  if (options->initial_windows)
-    {
-      iw = g_list_last (options->initial_windows)->data;
-      if (iw->force_menubar_state && iw->menubar_state == TRUE)
-        {
-          g_printerr (_("\"%s\" option given twice for the same window\n"),
-                        "--show-menubar");
-
-          return TRUE;
-        }
-
-      iw->force_menubar_state = TRUE;
-      iw->menubar_state = TRUE;
-    }
-  else
-    {
-      options->default_window_menubar_forced = TRUE;
-      options->default_window_menubar_state = TRUE;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-option_hide_menubar_callback (const gchar *option_name,
-                              const gchar *value,
-                              gpointer     data,
-                              GError     **error)
-{
-  TerminalOptions *options = data;
-  InitialWindow *iw;
-
-  if (options->initial_windows)
-    {
-      iw = g_list_last (options->initial_windows)->data;
-
-      if (iw->force_menubar_state && iw->menubar_state == FALSE)
-        {
-          g_printerr (_("\"%s\" option given twice for the same window\n"),
-                        "--hide-menubar");
-          return TRUE;
-        }
-
-      iw->force_menubar_state = TRUE;
-      iw->menubar_state = FALSE;
-    }
-  else
-    {
-      options->default_window_menubar_forced = TRUE;
-      options->default_window_menubar_state = FALSE;
     }
 
   return TRUE;
@@ -756,8 +684,6 @@ terminal_options_parse (const char *working_directory,
   options = g_slice_new0 (TerminalOptions);
 
   options->remote_arguments = FALSE;
-  options->default_window_menubar_forced = FALSE;
-  options->default_window_menubar_state = TRUE;
   options->default_fullscreen = FALSE;
   options->default_maximize = FALSE;
   options->execute = FALSE;
@@ -887,11 +813,6 @@ terminal_options_merge_config (TerminalOptions *options,
       iw->geometry = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY, NULL);
       iw->start_fullscreen = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN, NULL);
       iw->start_maximized = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED, NULL);
-      if (g_key_file_has_key (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL))
-        {
-          iw->force_menubar_state = TRUE;
-          iw->menubar_state = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE, NULL);
-        }
 
       for (j = 0; tab_groups[j]; ++j)
         {
@@ -1049,19 +970,19 @@ get_goption_context (TerminalOptions *options)
     {
       "show-menubar",
       0,
-      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_show_menubar_callback,
-      N_("Turn on the menubar"),
+      unsupported_option_callback,
+      NULL,
       NULL
     },
     {
       "hide-menubar",
       0,
-      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_hide_menubar_callback,
-      N_("Turn off the menubar"),
+      unsupported_option_callback,
+      NULL,
       NULL
     },
     {

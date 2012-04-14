@@ -59,7 +59,6 @@ enum {
 #define KEY_CURSOR_BLINK_MODE "cursor_blink_mode"
 #define KEY_CURSOR_SHAPE "cursor_shape"
 #define KEY_CUSTOM_COMMAND "custom_command"
-#define KEY_DEFAULT_SHOW_MENUBAR "default_show_menubar"
 #define KEY_DEFAULT_SIZE_COLUMNS "default_size_columns"
 #define KEY_DEFAULT_SIZE_ROWS "default_size_rows"
 #define KEY_DELETE_BINDING "delete_binding"
@@ -438,10 +437,6 @@ migrate_profiles (GError **error)
     settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
     path = gconf_concat_dir_and_key (GCONF_PROFILES_PREFIX, default_profile);
 
-    migrate_bool (client, path, KEY_DEFAULT_SHOW_MENUBAR,
-                  settings, TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
-                  FALSE);
-
     g_free (path);
     g_object_unref (settings);
   }
@@ -480,7 +475,6 @@ migrate_accels (GError **error)
     { "close_window", "FileCloseWindow"},
     { "copy", "EditCopy" },
     { "paste", "EditPaste" },
-    { "toggle_menubar", "ViewMenubar" },
     { "full_screen", "ViewFullscreen" },
     { "zoom_in", "ViewZoomIn" },
     { "zoom_out", "ViewZoomOut" },

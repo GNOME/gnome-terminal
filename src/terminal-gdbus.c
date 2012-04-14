@@ -320,7 +320,6 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
 
-  gboolean menubar_state = TRUE, menubar_state_set = FALSE;
   gboolean active = TRUE;
 
   if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
@@ -374,9 +373,6 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   /* Overwrite the default, unique window role set in terminal_window_init */
   if (role)
     gtk_window_set_role (GTK_WINDOW (window), role);
-
-  if (menubar_state_set)
-    terminal_window_set_menubar_visible (window, menubar_state);
 
   if (start_fullscreen)
     gtk_window_fullscreen (GTK_WINDOW (window));

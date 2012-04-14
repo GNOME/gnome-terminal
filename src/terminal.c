@@ -109,10 +109,6 @@ handle_options (TerminalFactory *factory,
             g_variant_builder_add (&builder, "{sv}",
                                    "zoom", g_variant_new_double (it->zoom_set ? it->zoom : options->zoom));
 #if 0
-          if (iw->force_menubar_state)
-            terminal_window_set_menubar_visible (window, iw->menubar_state);
-#endif
-#if 0
           if (it->active)
             terminal_window_switch_screen (window, screen);
 #endif
