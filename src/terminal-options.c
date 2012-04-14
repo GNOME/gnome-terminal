@@ -208,7 +208,6 @@ add_new_window (TerminalOptions *options,
   return iw;
 }
 
-#if !TERMINAL_CHECK_VERSION (3, 0, 0)
 /* handle deprecated command line options */
 static gboolean
 unsupported_option_callback (const gchar *option_name,
@@ -216,12 +215,10 @@ unsupported_option_callback (const gchar *option_name,
                              gpointer     data,
                              GError     **error)
 {
-  g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal;"
-               " you might want to create a profile with the desired setting, and use"
-               " the new '--profile' option\n"), option_name);
+  g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal."),
+              option_name);
   return TRUE; /* we do not want to bail out here but continue */
 }
-#endif
 
 static gboolean G_GNUC_NORETURN
 option_version_cb (const gchar *option_name,
@@ -551,27 +548,29 @@ option_disable_factory_callback (const gchar *option_name,
 }
 
 static gboolean
-option_load_save_config_cb (const gchar *option_name,
-                            const gchar *value,
-                            gpointer     data,
-                            GError     **error)
+option_load_config_cb (const gchar *option_name,
+                       const gchar *value,
+                       gpointer     data,
+                       GError     **error)
 {
-#ifdef TERMINAL_SERVER
   TerminalOptions *options = data;
+  GFile *file;
+  char *config_file;
+  GKeyFile *key_file;
+  gboolean result;
 
-  if (options->config_file)
-    {
-      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_EXCLUSIVE_OPTIONS,
-                           "Options \"--load-config\" and \"--save-config\" are mutually exclusive");
-      return FALSE;
-    }
+  file = g_file_new_for_commandline_arg (value);
+  config_file = g_file_get_path (file);
+  g_object_unref (file);
 
-  options->config_file = terminal_util_resolve_relative_path (options->default_working_dir, value);
-  options->load_config = strcmp (option_name, "--load-config") == 0;
-  options->save_config = strcmp (option_name, "--save-config") == 0;
-#endif
+  key_file = g_key_file_new ();
+  result = g_key_file_load_from_file (key_file, config_file, 0, error) &&
+           terminal_options_merge_config (options, key_file, 
+                                          strcmp (option_name, "load-config") == 0 ? SOURCE_DEFAULT : SOURCE_SESSION,
+                                          error);
+  g_key_file_free (key_file);
 
-  return TRUE;
+  return result;
 }
 
 static gboolean
@@ -975,7 +974,6 @@ terminal_options_free (TerminalOptions *options)
   g_free (options->startup_id);
   g_free (options->server_bus_name);
 
-  g_free (options->sm_client_state_file);
   g_free (options->sm_client_id);
   g_free (options->sm_config_prefix);
 
@@ -1009,18 +1007,17 @@ get_goption_context (TerminalOptions *options)
       0,
       G_OPTION_FLAG_FILENAME,
       G_OPTION_ARG_CALLBACK,
-      option_load_save_config_cb,
+      option_load_config_cb,
       N_("Load a terminal configuration file"),
       N_("FILE")
     },
     {
       "save-config",
       0,
-      G_OPTION_FLAG_FILENAME,
+      G_OPTION_FLAG_FILENAME | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_load_save_config_cb,
-      N_("Save the terminal configuration to a file"),
-      N_("FILE")
+      unsupported_option_callback,
+      NULL, NULL
     },
     { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
@@ -1408,7 +1405,7 @@ get_goption_context (TerminalOptions *options)
 
   const GOptionEntry smclient_goptions[] = {
     { "sm-client-disable",    0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
-    { "sm-client-state-file", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_FILENAME, &options->sm_client_state_file, NULL, NULL },
+    { "sm-client-state-file", 0, G_OPTION_FLAG_HIDDEN | G_OPTION_FLAG_FILENAME, G_OPTION_ARG_CALLBACK, option_load_config_cb, NULL, NULL },
     { "sm-client-id",         0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_client_id,         NULL, NULL },
     { "sm-disable",           0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE,     &options->sm_client_disable,    NULL, NULL },
     { "sm-config-prefix",     0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_STRING,   &options->sm_config_prefix,     NULL, NULL },

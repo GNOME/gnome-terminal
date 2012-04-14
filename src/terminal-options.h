@@ -50,6 +50,12 @@ G_BEGIN_DECLS
 #define TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY  "WorkingDirectory"
 #define TERMINAL_CONFIG_TERMINAL_PROP_ZOOM               "Zoom"
 
+enum
+{
+  SOURCE_DEFAULT = 0,
+  SOURCE_SESSION = 1
+};
+
 typedef struct
 {
   char    *server_bus_name;
@@ -74,12 +80,7 @@ typedef struct
   gboolean  use_factory;
   double    zoom;
 
-  char    *config_file;
-  gboolean load_config;
-  gboolean save_config;
-
   gboolean sm_client_disable;
-  char *sm_client_state_file;
   char *sm_client_id;
   char *sm_config_prefix;
 

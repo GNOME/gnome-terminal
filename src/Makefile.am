@@ -68,7 +68,6 @@ nodist_gnome_terminal_server_SOURCES = $(BUILT_SOURCES)
 
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
-	-DTERMINAL_SERVER \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \

@@ -40,12 +40,6 @@
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
 
-enum
-{
-  SOURCE_DEFAULT = 0,
-  SOURCE_SESSION = 1
-};
-
 /**
  * handle_options:
  * @app:
@@ -72,53 +66,6 @@ handle_options (TerminalFactory *factory,
   gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
                                                         options->screen_number);
 #endif
-
-  if (options->save_config)
-    {
-#if 0
-      if (options->remote_arguments)
-        return terminal_app_save_config_file (app, options->config_file, error);
-
-      g_set_error_literal (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_IN_FACTORY,
-                            "Cannot use \"--save-config\" when starting the factory process");
-      return FALSE;
-#endif
-      g_set_error (error, TERMINAL_OPTION_ERROR, TERMINAL_OPTION_ERROR_NOT_SUPPORTED,
-                   "Not supported anymore");
-      return FALSE;
-    }
-
-  if (options->load_config)
-    {
-      GKeyFile *key_file;
-      gboolean result;
-
-      key_file = g_key_file_new ();
-      result = g_key_file_load_from_file (key_file, options->config_file, 0, error) &&
-               terminal_options_merge_config (options, key_file, SOURCE_DEFAULT, error);
-      g_key_file_free (key_file);
-
-      if (!result)
-        return FALSE;
-
-      /* fall-through on success */
-    }
-
-  if (options->sm_client_state_file && !options->sm_client_disable)
-    {
-      GKeyFile *key_file;
-      gboolean result;
-
-      key_file = g_key_file_new ();
-      result = g_key_file_load_from_file (key_file, options->sm_client_state_file, 0, error) &&
-               terminal_options_merge_config (options, key_file, SOURCE_SESSION, error);
-      g_key_file_free (key_file);
-
-      if (!result)
-        return FALSE;
-
-      /* fall-through on success */
-    }
 
   /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
