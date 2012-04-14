@@ -1926,14 +1926,10 @@ terminal_window_init (TerminalWindow *window)
   
   /* Load the UI */
   error = NULL;
-  priv->ui_id = gtk_ui_manager_add_ui_from_file (manager,
-                                                 TERM_PKGDATADIR G_DIR_SEPARATOR_S "terminal.xml",
-                                                 &error);
-  if (error)
-    {
-      g_printerr ("Failed to load UI: %s\n", error->message);
-      g_error_free (error);
-    }
+  priv->ui_id = gtk_ui_manager_add_ui_from_resource (manager,
+                                                     TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal.xml",
+                                                     &error);
+  g_assert_no_error (error);
 
   priv->menubar = gtk_ui_manager_get_widget (manager, "/menubar");
   gtk_box_pack_start (GTK_BOX (main_vbox),

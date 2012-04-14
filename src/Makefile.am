@@ -18,6 +18,8 @@ BUILT_SOURCES = \
 	terminal-type-builtins.h \
 	terminal-gdbus-generated.c \
 	terminal-gdbus-generated.h \
+	terminal-resources.c \
+	terminal-resources.h \
 	$(NULL)
 
 gnome_terminal_server_SOURCES = \
@@ -132,6 +134,9 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 			--c-generate-object-manager \
 			--generate-c-code terminal-gdbus-generated \
 			$<
+
+terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
+	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
 
 # Terminal client
 
@@ -261,11 +266,6 @@ about_DATA = \
 	terminal.about \
 	$(NULL)
 
-uimanagerdir = $(pkgdatadir)
-uimanager_DATA = \
-	terminal.xml \
-	$(NULL)
-
 builder_in_files = \
 	encodings-dialog.glade \
 	find-dialog.glade \
@@ -290,6 +290,8 @@ CLEANFILES = \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
+	terminal.xml \
+	terminal.gresource.xml \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \

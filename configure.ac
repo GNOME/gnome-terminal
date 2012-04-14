@@ -37,8 +37,8 @@ GNOME_DEBUG_CHECK
 
 AM_GLIB_GNU_GETTEXT
 
-GLIB_REQUIRED=2.31.0
-GIO_REQUIRED=2.27.0
+GLIB_REQUIRED=2.32.0
+GIO_REQUIRED=2.32.0
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.1.0
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
@@ -54,7 +54,7 @@ AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
-       GTK_REQUIRED=3.3.21
+       GTK_REQUIRED=3.4.0
        VTE_PC_VERSION=-2.90
        VTE_REQUIRED=0.27.3
        ;;
@@ -129,10 +129,22 @@ if test -z "$GLIB_MKENUMS"; then
   AC_MSG_ERROR([glib-mkenums not found])
 fi
 
+AC_ARG_VAR([GLIB_COMPILE_RESOURCES],[the glib-compile-resources programme])
+AC_PATH_PROG([GLIB_COMPILE_RESOURCES],[glib-compile-resources],[])
+if test -z "$GLIB_COMPILE_RESOURCES"; then
+  AC_MSG_ERROR([glib-compile-resources not found])
+fi
+
 AC_ARG_VAR([GDBUS_CODEGEN],[the gdbus-codegen programme])
 AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
 if test -z "$GDBUS_CODEGEN"; then
   AC_MSG_ERROR([gdbus-codegen not found])
+fi
+
+AC_ARG_VAR([XMLLINT],[the xmllint programme])
+AC_PATH_PROG([XMLLINT],[xmllint],[])
+if test -z "$XMLLINT"; then
+  AC_MSG_ERROR([xmllint not found])
 fi
 
 AC_ARG_VAR([GTK_BUILDER_CONVERT],[the gtk-builder-convert programme])
