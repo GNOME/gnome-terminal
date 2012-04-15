@@ -480,7 +480,7 @@ parse_arguments (int *argcp,
       data->exec_argc = argc - (i + 1);
 
       /* Truncate argv */
-      *argcp = argc = i - 1;
+      *argcp = argc = i;
       break;
     }
   }
