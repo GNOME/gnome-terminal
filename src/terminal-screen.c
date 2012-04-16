@@ -56,7 +56,7 @@
 
 typedef struct {
   GUnixFDList *fd_list;
-  int *fd_array;
+  const int *fd_array;
   gsize fd_array_len;
 } FDSetupData;
 
@@ -722,12 +722,9 @@ terminal_screen_exec (TerminalScreen *screen,
   priv->initial_working_directory = g_strdup (cwd);
 
   if (fd_list) {
-    const int *fd_array_data;
-
     data = g_new (FDSetupData, 1);
     data->fd_list = fd_list;
-    fd_array_data = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
-    data->fd_array = g_memdup (fd_array_data, data->fd_array_len * 2 * sizeof (int));
+    data->fd_array = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
   } else
     data = NULL;
 
@@ -1377,14 +1374,13 @@ info_bar_response_cb (GtkWidget *info_bar,
 static void
 free_fd_setup_data (FDSetupData *data)
 {
-  g_free (data->fd_array);
   g_free (data);
 }
 
 static void
 terminal_screen_child_setup (FDSetupData *data)
 {
-  int *fd_array = data->fd_array;
+  const int *fd_array = data->fd_array;
   gsize fd_array_len = data->fd_array_len;
   gsize i;
   int *fds, n_fds, j, r;
