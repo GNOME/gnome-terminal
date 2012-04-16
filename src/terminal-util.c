@@ -898,9 +898,6 @@ gboolean
 terminal_util_x11_window_is_minimized (GdkWindow *window)
 {
   GdkDisplay *display;
-
-  display = gdk_window_get_display (window);
-
   Atom type;
   gint format;
   gulong nitems;
@@ -908,8 +905,9 @@ terminal_util_x11_window_is_minimized (GdkWindow *window)
   guchar *data;
   Atom *atoms = NULL;
   gulong i;
-
   gboolean minimized = FALSE;
+
+  display = gdk_window_get_display (window);
 
   type = None;
   gdk_error_trap_push ();
