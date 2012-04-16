@@ -1383,7 +1383,7 @@ terminal_screen_child_setup (FDSetupData *data)
   const int *fd_array = data->fd_array;
   gsize fd_array_len = data->fd_array_len;
   gsize i;
-  int *fds, n_fds, j, r;
+  int *fds, n_fds;
 
   /* At this point, vte_pty_child_setup() has been called,
    * so all FDs are FD_CLOEXEC.
@@ -1397,48 +1397,46 @@ terminal_screen_child_setup (FDSetupData *data)
   for (i = 0; i < fd_array_len; i++) {
     int target_fd = fd_array[2 * i];
     int idx = fd_array[2 * i + 1];
-    int fd;
+    int fd, r;
 
     /* We want to move fds[idx] to target_fd */
 
-    if (target_fd == fds[idx])
-      goto next; /* noting to do */
+    if (target_fd != fds[idx]) {
+      int j;
 
-    /* First need to check if @target_fd is one of the FDs in the FD list! */
-    for (j = 0; j < n_fds; j++) {
-      if (fds[j] == target_fd) {
-        do {
-          fd = dup (fds[j]);
-        } while (fd == -1 && errno == EINTR);
-        if (fd == -1)
-          _exit (127);
-        fds[j] = fd;
-        
-        /* Need to mark the dup'd FD as FD_CLOEXEC */
-        do {
-          r = fcntl (fd, F_SETFD, FD_CLOEXEC);
-        } while (r == -1 && errno == EINTR);
-        if (r == -1)
-          _exit (127);
+      /* Need to check if @target_fd is one of the FDs in the FD list! */
+      for (j = 0; j < n_fds; j++) {
+        if (fds[j] == target_fd) {
+          do {
+            fd = fcntl (fds[j], F_DUPFD_CLOEXEC, 10);
+          } while (fd == -1 && errno == EINTR);
+          if (fd == -1)
+            _exit (127);
 
-        break;
+          fds[j] = fd;
+          break;
+        }
       }
     }
 
-    /* Check again */
-    if (target_fd == fds[idx])
-      goto next; /* noting to do */
+    if (target_fd == fds[idx]) {
+      /* Remove FD_CLOEXEC from target_fd */
+      do {
+        r = fcntl (target_fd, F_SETFD, 0 /* no FD_CLOEXEC */);
+      } while (r == -1 && errno == EINTR);
+      if (r == -1)
+        _exit (127);
+    } else {
+      /* Now we know that target_fd can be safely overwritten. */
+      errno = 0;
+      do {
+        fd = dup3 (fds[idx], target_fd, 0 /* no FD_CLOEXEC */);
+      } while (fd == -1 && errno == EINTR);
+      if (fd != target_fd)
+        _exit (127);
+    }
 
-    /* Now we know that target_fd can be safely overwritten. */
-    errno = 0;
-    do {
-      fd = dup3 (fds[idx], target_fd, 0 /* no FD_CLOEXEC */);
-    } while (fd == -1 && errno == EINTR);
-    if (fd != target_fd)
-      _exit (127);
-
-  next:
-    /* Don't need to close it here since it's FD_CLOEXEC. */
+    /* Don't need to close it here since it's FD_CLOEXEC or consumed */
     fds[idx] = -1;
   }
 }
