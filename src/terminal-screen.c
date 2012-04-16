@@ -17,11 +17,20 @@
  */
 
 #include <config.h>
+#define _GNU_SOURCE /* for dup3 */
 
+#include "terminal-screen.h"
+
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+
+#include <glib.h>
+#include <gio/gio.h>
+#include <gio/gunixfdlist.h>
 
 #include <gtk/gtk.h>
 
@@ -44,6 +53,12 @@
 #include "eggshell.h"
 
 #define URL_MATCH_CURSOR  (GDK_HAND2)
+
+typedef struct {
+  GUnixFDList *fd_list;
+  int *fd_array;
+  gsize fd_array_len;
+} FDSetupData;
 
 typedef struct
 {
@@ -116,7 +131,9 @@ static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
-static gboolean terminal_screen_do_exec (TerminalScreen *screen, GError **error);
+static gboolean terminal_screen_do_exec (TerminalScreen *screen,
+                                         FDSetupData    *data,
+                                         GError **error);
 static void terminal_screen_child_exited  (VteTerminal *terminal);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
@@ -684,9 +701,12 @@ terminal_screen_exec (TerminalScreen *screen,
                       char          **argv,
                       char          **envv,
                       const char     *cwd,
+                      GUnixFDList    *fd_list,
+                      GVariant       *fd_array,
                       GError        **error)
 {
   TerminalScreenPrivate *priv;
+  FDSetupData *data;
 
   g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
@@ -701,7 +721,17 @@ terminal_screen_exec (TerminalScreen *screen,
   g_free (priv->initial_working_directory);
   priv->initial_working_directory = g_strdup (cwd);
 
-  return terminal_screen_do_exec (screen, error);
+  if (fd_list) {
+    const int *fd_array_data;
+
+    data = g_new (FDSetupData, 1);
+    data->fd_list = fd_list;
+    fd_array_data = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
+    data->fd_array = g_memdup (fd_array_data, data->fd_array_len * 2 * sizeof (int));
+  } else
+    data = NULL;
+
+  return terminal_screen_do_exec (screen, data, error);
 }
 
 const char*
@@ -1344,9 +1374,83 @@ info_bar_response_cb (GtkWidget *info_bar,
   }
 }
 
+static void
+free_fd_setup_data (FDSetupData *data)
+{
+  g_free (data->fd_array);
+  g_free (data);
+}
+
+static void
+terminal_screen_child_setup (FDSetupData *data)
+{
+  int *fd_array = data->fd_array;
+  gsize fd_array_len = data->fd_array_len;
+  gsize i;
+  int *fds, n_fds, j, r;
+
+  /* At this point, vte_pty_child_setup() has been called,
+   * so all FDs are FD_CLOEXEC.
+   */
+
+  if (fd_array_len == 0)
+    return;
+
+  fds = g_unix_fd_list_steal_fds (data->fd_list, &n_fds);
+
+  for (i = 0; i < fd_array_len; i++) {
+    int target_fd = fd_array[2 * i];
+    int idx = fd_array[2 * i + 1];
+    int fd;
+
+    /* We want to move fds[idx] to target_fd */
+
+    if (target_fd == fds[idx])
+      goto next; /* noting to do */
+
+    /* First need to check if @target_fd is one of the FDs in the FD list! */
+    for (j = 0; j < n_fds; j++) {
+      if (fds[j] == target_fd) {
+        do {
+          fd = dup (fds[j]);
+        } while (fd == -1 && errno == EINTR);
+        if (fd == -1)
+          _exit (127);
+        fds[j] = fd;
+        
+        /* Need to mark the dup'd FD as FD_CLOEXEC */
+        do {
+          r = fcntl (fd, F_SETFD, FD_CLOEXEC);
+        } while (r == -1 && errno == EINTR);
+        if (r == -1)
+          _exit (127);
+
+        break;
+      }
+    }
+
+    /* Check again */
+    if (target_fd == fds[idx])
+      goto next; /* noting to do */
+
+    /* Now we know that target_fd can be safely overwritten. */
+    errno = 0;
+    do {
+      fd = dup3 (fds[idx], target_fd, 0 /* no FD_CLOEXEC */);
+    } while (fd == -1 && errno == EINTR);
+    if (fd != target_fd)
+      _exit (127);
+
+  next:
+    /* Don't need to close it here since it's FD_CLOEXEC. */
+    fds[idx] = -1;
+  }
+}
+
 static gboolean
 terminal_screen_do_exec (TerminalScreen *screen,
-                         GError **error)
+                         FDSetupData    *data /* adopting */,
+                         GError        **error)
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *terminal = VTE_TERMINAL (screen);
@@ -1358,6 +1462,7 @@ terminal_screen_do_exec (TerminalScreen *screen,
   VtePtyFlags pty_flags = VTE_PTY_DEFAULT;
   GSpawnFlags spawn_flags = 0;
   GPid pid;
+  gboolean result = FALSE;
 
   if (priv->child_pid != -1) {
     g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
@@ -1385,6 +1490,7 @@ terminal_screen_do_exec (TerminalScreen *screen,
   if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS_KEY))
     pty_flags |= VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP;
 
+  argv = NULL;
   if (!get_child_command (screen, shell, &spawn_flags, &argv, &err) ||
       !vte_terminal_fork_command_full (terminal,
                                        pty_flags,
@@ -1392,7 +1498,8 @@ terminal_screen_do_exec (TerminalScreen *screen,
                                        argv,
                                        env,
                                        spawn_flags,
-                                       NULL, NULL,
+                                       (GSpawnChildSetupFunc) (data ? terminal_screen_child_setup : NULL), 
+                                       data,
                                        &pid,
                                        &err)) {
     GtkWidget *info_bar;
@@ -1413,27 +1520,28 @@ terminal_screen_do_exec (TerminalScreen *screen,
     gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
     gtk_widget_show (info_bar);
 
-    g_strfreev (env);
-    g_free (shell);
-
     g_propagate_error (error, err);
-    return FALSE;
+    goto out;
   }
 
   priv->child_pid = pid;
   priv->pty_fd = vte_terminal_get_pty (terminal);
 
+  result = TRUE;
+
+out:
   g_free (shell);
   g_strfreev (argv);
   g_strfreev (env);
+  free_fd_setup_data (data);
 
-  return TRUE;
+  return result;
 }
 
 static gboolean
 terminal_screen_launch_child_cb (TerminalScreen *screen)
 {
-  terminal_screen_do_exec (screen, NULL /* don't care */);
+  terminal_screen_do_exec (screen, NULL, NULL /* don't care */);
   return FALSE; /* don't run again */
 }
 

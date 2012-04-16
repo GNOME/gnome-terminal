@@ -85,6 +85,8 @@ gboolean terminal_screen_exec (TerminalScreen *screen,
                                char          **argv,
                                char          **envv,
                                const char     *cwd,
+                               GUnixFDList    *fd_list,
+                               GVariant       *fd_array,
                                GError        **error);
 
 void _terminal_screen_launch_child_on_idle (TerminalScreen *screen);

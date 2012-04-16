@@ -280,6 +280,17 @@ option_fd_cb (const gchar *option_name,
     g_assert_not_reached ();
   }
 
+#if 1
+  if (fd == STDIN_FILENO ||
+      fd == STDOUT_FILENO ||
+      fd == STDERR_FILENO) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "FD passing of std%s is not supported",
+                 fd == STDIN_FILENO ? "in" : fd == STDOUT_FILENO ? "out" : "err");
+    return FALSE;
+  }
+#endif
+
   if (data->fd_list == NULL) {
     data->fd_list = g_unix_fd_list_new ();
     data->fd_array = g_array_new (FALSE, FALSE, sizeof (PassFdElement));

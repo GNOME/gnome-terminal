@@ -20,6 +20,9 @@
 
 #include "terminal-gdbus.h"
 
+#include <gio/gio.h>
+#include <gio/gunixfdlist.h>
+
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-defines.h"
@@ -88,17 +91,17 @@ terminal_receiver_impl_set_screen (TerminalReceiverImpl *impl,
 
 static gboolean 
 terminal_receiver_impl_exec (TerminalReceiver *receiver,
-                          GDBusMethodInvocation *invocation,
-                          GUnixFDList *fd_list,
-                          GVariant *options,
-                          GVariant *arguments)
+                             GDBusMethodInvocation *invocation,
+                             GUnixFDList *fd_list,
+                             GVariant *options,
+                             GVariant *arguments)
 {
   TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (receiver);
   TerminalReceiverImplPrivate *priv = impl->priv;
   const char *working_directory;
   char **exec_argv, **envv;
   gsize exec_argc;
-  GVariantIter *fd_iter;
+  GVariant *fd_array;
   GError *error;
 
   if (priv->screen == NULL) {
@@ -113,8 +116,48 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
     working_directory = NULL;
   if (!g_variant_lookup (options, "environ", "^a&ay", &envv))
     envv = NULL;
-  if (!g_variant_lookup (options, "fd-set", "a(ih)", &fd_iter))
-    fd_iter = NULL;
+
+  if (!g_variant_lookup (options, "fd-set", "@a(ih)", &fd_array))
+    fd_array = NULL;
+
+  /* Check FD passing */
+  if ((fd_list != NULL) ^ (fd_array != NULL)) {
+    g_dbus_method_invocation_return_error_literal (invocation,
+                                                   G_DBUS_ERROR,
+                                                   G_DBUS_ERROR_INVALID_ARGS,
+                                                   "Must pass both fd-set options and a FD list");
+    goto out;
+  }
+  if (fd_list != NULL && fd_array != NULL) {
+    const int *fd_array_data;
+    gsize fd_array_data_len, i;
+    int n_fds;
+
+    fd_array_data = g_variant_get_fixed_array (fd_array, &fd_array_data_len, 2 * sizeof (int));
+    n_fds = g_unix_fd_list_get_length (fd_list);
+    for (i = 0; i < fd_array_data_len; i++) {
+      const int fd = fd_array_data[2 * i];
+      const int idx = fd_array_data[2 * i + 1];
+
+      if (fd == STDIN_FILENO ||
+          fd == STDOUT_FILENO ||
+          fd == STDERR_FILENO) {
+        g_dbus_method_invocation_return_error (invocation,
+                                               G_DBUS_ERROR,
+                                               G_DBUS_ERROR_INVALID_ARGS,
+                                               "Passing of std%s not supported",
+                                               fd == STDIN_FILENO ? "in" : fd == STDOUT_FILENO ? "out" : "err");
+        goto out;
+      }
+      if (idx < 0 || idx >= n_fds) {
+        g_dbus_method_invocation_return_error_literal (invocation,
+                                                       G_DBUS_ERROR,
+                                                       G_DBUS_ERROR_INVALID_ARGS,
+                                                       "Handle out of range");
+        goto out;
+      }
+    }
+  }
 
   if (working_directory != NULL)
     _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
@@ -127,6 +170,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
                              exec_argc > 0 ? exec_argv : NULL,
                              envv,
                              working_directory,
+                             fd_list, fd_array,
                              &error)) {
     g_dbus_method_invocation_take_error (invocation, error);
   } else {
@@ -135,8 +179,8 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
 
   g_free (exec_argv);
   g_free (envv);
-  if (fd_iter)
-    g_variant_iter_free (fd_iter);
+  if (fd_array)
+    g_variant_unref (fd_array);
 
 out:
 
