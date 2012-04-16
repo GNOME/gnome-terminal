@@ -116,7 +116,8 @@ terminal_screen_container_constructor (GType type,
 
   priv->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  priv->vscrollbar = gtk_vscrollbar_new (gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(priv->screen)));
+  priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
+                                        gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen)));
 
   gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->hbox), priv->vscrollbar, FALSE, FALSE, 0);
