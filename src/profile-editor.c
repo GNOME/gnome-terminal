@@ -432,7 +432,7 @@ init_color_scheme_menu (GtkWidget *widget)
   GtkCellRenderer *renderer;
   GtkTreeIter iter;
   GtkListStore *store;
-  int i;
+  guint i;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   for (i = 0; i < G_N_ELEMENTS (color_schemes); ++i)
