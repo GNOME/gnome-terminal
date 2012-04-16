@@ -87,10 +87,6 @@ void terminal_window_set_size_force_grid (TerminalWindow *window,
 
 GtkWidget* terminal_window_get_mdi_container (TerminalWindow *window);
 
-void terminal_window_save_state (TerminalWindow *window,
-                                 GKeyFile *key_file,
-                                 const char *group);
-
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */

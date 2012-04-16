@@ -1579,64 +1579,6 @@ terminal_app_get_active_encodings (TerminalApp *app)
   return g_slist_sort (list, (GCompareFunc) compare_encodings);
 }
 
-#include "terminal-options.h"
-
-void
-terminal_app_save_config (TerminalApp *app,
-                          GKeyFile *key_file)
-{
-  GList *lw;
-  guint n = 0;
-  GPtrArray *window_names_array;
-  char **window_names;
-  gsize len;
-
-  g_key_file_set_comment (key_file, NULL, NULL, "Written by " PACKAGE_STRING, NULL);
-
-  g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_VERSION, TERMINAL_CONFIG_VERSION);
-  g_key_file_set_integer (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_COMPAT_VERSION, TERMINAL_CONFIG_COMPAT_VERSION);
-
-  window_names_array = g_ptr_array_sized_new (g_list_length (app->windows) + 1);
-
-  for (lw = app->windows; lw != NULL; lw = lw->next)
-    {
-      TerminalWindow *window = TERMINAL_WINDOW (lw->data);
-      char *group;
-
-      group = g_strdup_printf ("Window%u", n++);
-      g_ptr_array_add (window_names_array, group);
-
-      terminal_window_save_state (window, key_file, group);
-    }
-
-  len = window_names_array->len;
-  g_ptr_array_add (window_names_array, NULL);
-  window_names = (char **) g_ptr_array_free (window_names_array, FALSE);
-  g_key_file_set_string_list (key_file, TERMINAL_CONFIG_GROUP, TERMINAL_CONFIG_PROP_WINDOWS, (const char * const *) window_names, len);
-  g_strfreev (window_names);
-}
-
-gboolean
-terminal_app_save_config_file (TerminalApp *app,
-                               const char *file_name,
-                               GError **error)
-{
-  GKeyFile *key_file;
-  char *data;
-  gsize len;
-  gboolean result;
-
-  key_file = g_key_file_new ();
-  terminal_app_save_config (app, key_file);
-
-  data = g_key_file_to_data (key_file, &len, NULL);
-  result = g_file_set_contents (file_name, data, len, error);
-  g_free (data);
-
-  return result;
-}
-
-
 /**
  * terminal_app_get_global_settings:
  * @app: a #TerminalApp

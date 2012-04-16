@@ -105,13 +105,6 @@ GHashTable *terminal_app_get_encodings (TerminalApp *app);
 
 GSList* terminal_app_get_active_encodings (TerminalApp *app);
 
-void terminal_app_save_config (TerminalApp *app,
-                               GKeyFile *key_file);
-
-gboolean terminal_app_save_config_file (TerminalApp *app,
-                                        const char *file_name,
-                                        GError **error);
-
 /* GSettings */
 
 GSettings *terminal_app_get_global_settings (TerminalApp *app);
