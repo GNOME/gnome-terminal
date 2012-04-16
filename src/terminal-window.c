@@ -1480,9 +1480,10 @@ terminal_window_map_event (GtkWidget    *widget,
   if (priv->clear_demands_attention)
     {
 #ifdef GDK_WINDOWING_X11
-      GdkWindow *window = gtk_widget_get_window (widget);
-      if (GDK_IS_X11_WINDOW (window))
-	terminal_util_x11_clear_demands_attention (window);
+      GdkWindow *gdk_window = gtk_widget_get_window (widget);
+
+      if (GDK_IS_X11_WINDOW (gdk_window))
+	terminal_util_x11_clear_demands_attention (gdk_window);
 #endif
 
       priv->clear_demands_attention = FALSE;
