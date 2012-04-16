@@ -633,6 +633,7 @@ handle_open (int *argc,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
+    g_dbus_error_strip_remote_error (error);
     _printerr ("Error constructing proxy for %s:%s: %s\n", 
                 TERMINAL_UNIQUE_NAME, TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
@@ -647,6 +648,7 @@ handle_open (int *argc,
           &object_path,
           NULL /* cancellable */,
           &error)) {
+    g_dbus_error_strip_remote_error (error);
     _printerr ("Error creating terminal: %s\n", error->message);
     g_error_free (error);
     g_object_unref (factory);
@@ -664,6 +666,7 @@ handle_open (int *argc,
                                                        NULL /* cancellable */,
                                                        &error);
   if (receiver == NULL) {
+    g_dbus_error_strip_remote_error (error);
     _printerr ("Failed to create proxy for terminal: %s\n", error->message);
     g_error_free (error);
     g_free (object_path);
@@ -681,6 +684,7 @@ handle_open (int *argc,
                                          NULL, /* outfdlist */
                                          NULL /* cancellable */,
                                          &error)) {
+    g_dbus_error_strip_remote_error (error);
     _printerr ("Error: %s\n", error->message);
     g_error_free (error);
     g_clear_object (fd_list);

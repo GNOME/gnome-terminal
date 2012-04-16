@@ -233,6 +233,7 @@ main (int argc, char **argv)
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
+    g_dbus_error_strip_remote_error (error);
     g_printerr ("Error constructing proxy for %s:%s: %s\n", 
                 options->server_bus_name ? options->server_bus_name : TERMINAL_UNIQUE_NAME,
                 TERMINAL_FACTORY_OBJECT_PATH,
@@ -242,6 +243,7 @@ main (int argc, char **argv)
   }
 
   if (!handle_options (factory, options, &error)) {
+    g_dbus_error_strip_remote_error (error);
     g_printerr ("Failed to handle arguments: %s\n", error->message);
   } else {
     exit_code = EXIT_SUCCESS;
