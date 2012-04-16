@@ -1359,6 +1359,12 @@ terminal_screen_do_exec (TerminalScreen *screen,
   GSpawnFlags spawn_flags = 0;
   GPid pid;
 
+  if (priv->child_pid != -1) {
+    g_set_error_literal (error, G_DBUS_ERROR, G_DBUS_ERROR_FAILED,
+                         "Cannot launch a new child process while the terminal is still running another child process");
+    return FALSE;
+  }
+
   priv->launch_child_source_id = 0;
 
   _terminal_debug_print (TERMINAL_DEBUG_PROCESSES,
