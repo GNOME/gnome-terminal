@@ -2293,7 +2293,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
                                      int             force_grid_width,
                                      int             force_grid_height)
 {
-  GtkWidget *widget;
   int grid_width;
   int grid_height;
 
