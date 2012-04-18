@@ -35,6 +35,7 @@ struct _TerminalTabLabelPrivate
   GtkWidget *label;
   GtkWidget *close_button;
   gboolean bold;
+  GtkPositionType tab_pos;
 };
 
 enum
@@ -78,6 +79,32 @@ sync_tab_label (TerminalScreen *screen,
   gtk_widget_set_tooltip_text (hbox, title);
 }
 
+static void
+notify_tab_pos_cb (GtkNotebook *notebook,
+                   GParamSpec *pspec G_GNUC_UNUSED,
+                   TerminalTabLabel *label)
+{
+  TerminalTabLabelPrivate *priv = label->priv;
+  GtkPositionType pos;
+
+  pos = gtk_notebook_get_tab_pos (notebook);
+  if (pos == priv->tab_pos)
+    return;
+
+  priv->tab_pos = pos;
+
+  switch (pos) {
+    case GTK_POS_LEFT:
+    case GTK_POS_RIGHT:
+      gtk_widget_hide (priv->close_button);
+      break;
+    case GTK_POS_TOP:
+    case GTK_POS_BOTTOM:
+      gtk_widget_show (priv->close_button);
+      break;
+  }
+}
+
 /* public functions */
 
 /* Class implementation */
@@ -86,16 +113,53 @@ static void
 terminal_tab_label_parent_set (GtkWidget *widget,
                                GtkWidget *old_parent)
 {
+  GtkWidget *parent;
   void (* parent_set) (GtkWidget *, GtkWidget *) = GTK_WIDGET_CLASS (terminal_tab_label_parent_class)->parent_set;
+
+  if (GTK_IS_NOTEBOOK (old_parent)) {
+    g_signal_handlers_disconnect_by_func (old_parent, 
+                                          G_CALLBACK (notify_tab_pos_cb), 
+                                          widget);
+  }
 
   if (parent_set)
     parent_set (widget, old_parent);
+
+  parent = gtk_widget_get_parent (widget);
+  if (GTK_IS_NOTEBOOK (parent)) {
+    notify_tab_pos_cb (GTK_NOTEBOOK (parent), NULL, TERMINAL_TAB_LABEL (widget));
+    g_signal_connect (parent, "notify::tab-pos", 
+                      G_CALLBACK (notify_tab_pos_cb), widget);
+  }
+}
+
+static void
+terminal_tab_label_get_preferred_width (GtkWidget *widget,
+                                        int *minimum_width,
+                                        int *natural_width)
+{
+  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (widget);
+  TerminalTabLabelPrivate *priv = tab_label->priv;
+
+  if (priv->tab_pos == GTK_POS_LEFT || 
+      priv->tab_pos == GTK_POS_RIGHT) {
+    if (natural_width)
+      *natural_width = 160;
+    if (minimum_width)
+      *minimum_width = 160;
+  }
+  else
+    GTK_WIDGET_CLASS (terminal_tab_label_parent_class)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
 terminal_tab_label_init (TerminalTabLabel *tab_label)
 {
-  tab_label->priv = TERMINAL_TAB_LABEL_GET_PRIVATE (tab_label);
+  TerminalTabLabelPrivate *priv;
+
+  priv = tab_label->priv = TERMINAL_TAB_LABEL_GET_PRIVATE (tab_label);
+
+  priv->tab_pos = (GtkPositionType) -1; /* invalid */
 }
 
 static GObject *
@@ -200,6 +264,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   gobject_class->set_property = terminal_tab_label_set_property;
 
   widget_class->parent_set = terminal_tab_label_parent_set;
+  widget_class->get_preferred_width = terminal_tab_label_get_preferred_width;
 
   signals[CLOSE_BUTTON_CLICKED] =
     g_signal_new (I_("close-button-clicked"),
