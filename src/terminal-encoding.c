@@ -29,8 +29,6 @@
 #include "terminal-schemas.h"
 #include "terminal-util.h"
 
-#define CONF_GLOBAL_PREFIX "/" // FIXMEchpe
-
 /* Overview
  *
  * There's a list of character sets stored in gsettings, indicating
