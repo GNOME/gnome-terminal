@@ -31,12 +31,10 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
-#include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-gdbus.h"
 #include "terminal-intl.h"
-#include "terminal-util.h"
 #include "terminal-defines.h"
 
 static char *bus_name = NULL;
