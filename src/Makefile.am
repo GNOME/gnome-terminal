@@ -9,7 +9,7 @@ endif # WITH_NAUTILUS_EXTENSION
 
 # Terminal server
 
-dbusservice_DATA = org.gnome.Terminal.Factory0.service
+dbusservice_DATA = org.gnome.Terminal.service
 
 BUILT_SOURCES = \
 	terminal-marshal.c \
@@ -122,10 +122,10 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 		&& mv terminal-marshal.c.tmp terminal-marshal.c ) \
 	|| ( rm -f terminal-marshal.c.tmp && exit 1 )
 
-org.gnome.Terminal.Factory0.service: Makefile
+org.gnome.Terminal.service: Makefile
 	$(AM_V_GEN) ( echo "[D-BUS Service]"; \
-		      echo "Name=org.gnome.Terminal.Factory0"; \
-		      echo "${libexecdir}/gnome-terminal-server") > $@
+		      echo "Name=org.gnome.Terminal"; \
+		      echo "Exec=${libexecdir}/gnome-terminal-server") > $@
 
 terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
