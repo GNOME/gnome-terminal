@@ -341,7 +341,7 @@ palette_color_notify_cb (GtkColorButton *button,
   GdkRGBA color;
   guint i;
 
-  gtk_color_button_get_rgba (button, &color);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (button), &color);
   i = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "palette-entry-index"));
 
   editor = gtk_widget_get_toplevel (GTK_WIDGET (button));
@@ -376,11 +376,11 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
       g_snprintf (name, sizeof (name), "palette-colorpicker-%" G_GSIZE_FORMAT, i + 1);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
 
-      gtk_color_button_get_rgba (GTK_COLOR_BUTTON (w), &old_color);
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (w), &old_color);
       if (!rgba_equal (&old_color, &colors[i]))
         {
           g_signal_handlers_block_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
-          gtk_color_button_set_rgba (GTK_COLOR_BUTTON (w), &colors[i]);
+          gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (w), &colors[i]);
           g_signal_handlers_unblock_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
         }
     }
