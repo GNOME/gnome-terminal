@@ -687,7 +687,7 @@ handle_open (int *argc,
     g_dbus_error_strip_remote_error (error);
     _printerr ("Error: %s\n", error->message);
     g_error_free (error);
-    g_clear_object (fd_list);
+    g_clear_object (&fd_list);
     g_object_unref (receiver);
     option_data_free (data);
     return FALSE;

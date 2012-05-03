@@ -355,73 +355,82 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   TerminalObjectSkeleton *skeleton;
   char *object_path;
   GSettings *profile = NULL;
-  GdkScreen *gdk_screen;
-  const char *startup_id, *display_name;
-  char *role, *geometry, *profile_name, *title;
-  int screen_number;
-  gboolean start_maximized, start_fullscreen;
-  gboolean present_window, present_window_set = FALSE;
+  const char *profile_name, *title;
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
-
+  guint window_id;
   gboolean active = TRUE;
+  gboolean have_new_window, present_window, present_window_set;
 
-  if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
-    g_dbus_method_invocation_return_error (invocation, 
-                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                           "No display specified");
-    goto out;
+  if (g_variant_lookup (options, "window-id", "u", &window_id)) {
+    GtkWindow *win;
+
+    win = gtk_application_get_window_by_id (GTK_APPLICATION (app), window_id);
+
+    if (!TERMINAL_IS_WINDOW (win)) {
+      g_dbus_method_invocation_return_error (invocation,
+                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "Nonexisting window %u referenced",
+                                             window_id);
+      goto out;
+    }
+
+    window = TERMINAL_WINDOW (win);
+    have_new_window = FALSE;
+  } else {
+    const char *startup_id, *display_name, *role;
+    gboolean start_maximized, start_fullscreen;
+    int screen_number;
+    GdkScreen *gdk_screen;
+
+    /* Create a new window */
+
+    if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
+      g_dbus_method_invocation_return_error (invocation, 
+                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "No display specified");
+      goto out;
+    }
+
+    screen_number = 0;
+    gdk_screen = terminal_util_get_screen_by_display_name (display_name, screen_number);
+    if (gdk_screen == NULL) {
+      g_dbus_method_invocation_return_error (invocation, 
+                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                             "No screen %d on display \"%s\"",
+                                             screen_number, display_name);
+      goto out;
+    }
+
+    window = terminal_app_new_window (app, gdk_screen);
+
+    if (g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
+      gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
+
+    /* Overwrite the default, unique window role set in terminal_window_init */
+    if (g_variant_lookup (options, "role", "&s", &role))
+      gtk_window_set_role (GTK_WINDOW (window), role);
+
+    if (g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen) &&
+        start_fullscreen) {
+      gtk_window_fullscreen (GTK_WINDOW (window));
+    }
+    if (g_variant_lookup (options, "maximize-window", "b", &start_maximized) &&
+        start_maximized) {
+      gtk_window_maximize (GTK_WINDOW (window));
+    }
+
+    have_new_window = TRUE;
   }
 
-  screen_number = 0;
-  gdk_screen = terminal_util_get_screen_by_display_name (display_name, screen_number);
-  if (gdk_screen == NULL) {
-    g_dbus_method_invocation_return_error (invocation, 
-                                           G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                           "No screen %d on display \"%s\"",
-                                           screen_number, display_name);
-    goto out;
-  }
+  g_assert (window != NULL);
 
-  if (!g_variant_lookup (options, "desktop-startup-id", "^&ay", &startup_id))
-    startup_id = NULL;
-  if (!g_variant_lookup (options, "geometry", "&s", &geometry))
-    geometry = NULL;
-  if (!g_variant_lookup (options, "role", "&s", &role))
-    role = NULL;
-  if (!g_variant_lookup (options, "maximize-window", "b", &start_maximized))
-    start_maximized = FALSE;
-  if (!g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen))
-    start_fullscreen = FALSE;
   if (!g_variant_lookup (options, "profile", "&s", &profile_name))
     profile_name = NULL;
   if (!g_variant_lookup (options, "title", "&s", &title))
     title = NULL;
-
-  if (g_variant_lookup (options, "present-window", "b", &present_window)) {
-    present_window_set = TRUE;
-  }
-  if (g_variant_lookup (options, "zoom", "d", &zoom)) {
+  if (g_variant_lookup (options, "zoom", "d", &zoom))
     zoom_set = TRUE;
-  }
-
-  window = terminal_app_new_window (app, gdk_screen);
-
-  /* Restored windows shouldn't demand attention; see bug #586308. */
-  if (present_window_set && !present_window)
-    terminal_window_set_is_restored (window);
-
-  if (startup_id != NULL)
-    gtk_window_set_startup_id (GTK_WINDOW (window), startup_id);
-
-  /* Overwrite the default, unique window role set in terminal_window_init */
-  if (role)
-    gtk_window_set_role (GTK_WINDOW (window), role);
-
-  if (start_fullscreen)
-    gtk_window_fullscreen (GTK_WINDOW (window));
-  if (start_maximized)
-    gtk_window_maximize (GTK_WINDOW (window));
 
   profile = terminal_app_get_profile (app, profile_name);
   g_assert (profile);
@@ -450,18 +459,26 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   if (active)
     terminal_window_switch_screen (window, screen);
 
-  if (geometry)
-    {
+  if (g_variant_lookup (options, "present-window", "b", &present_window))
+    present_window_set = TRUE;
+  else
+    present_window_set = FALSE;
+
+  if (have_new_window) {
+    const char *geometry;
+
+    if (g_variant_lookup (options, "geometry", "&s", &geometry) &&
+        !terminal_window_parse_geometry (window, geometry))
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                            "[window %p] applying geometry %s\n",
-                            window, geometry);
+                             "Invalid geometry string \"%s\"", geometry);
 
-      if (!terminal_window_parse_geometry (window, geometry))
-        _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                               "Invalid geometry string \"%s\"", geometry);
-    }
+    /* Restored windows shouldn't demand attention; see bug #586308. */
+    if (present_window_set && !present_window)
+      terminal_window_set_is_restored (window);
+  }
 
-  gtk_window_present (GTK_WINDOW (window));
+  if (have_new_window || (present_window_set && present_window))
+    gtk_window_present (GTK_WINDOW (window));
 
   terminal_factory_complete_create_instance (factory, invocation, object_path);
 

@@ -166,8 +166,7 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  data.app = terminal_app_new (bus_name ? bus_name : TERMINAL_UNIQUE_NAME);
-
+  data.app = terminal_app_new ();
   data.loop = g_main_loop_new (NULL, FALSE);
   data.owns_name = FALSE;
 
@@ -193,6 +192,7 @@ main (int argc, char **argv)
 
 out:
 
+  g_free (bus_name);
   terminal_app_shutdown ();
 
   return exit_code;

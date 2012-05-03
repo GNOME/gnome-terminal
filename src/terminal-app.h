@@ -48,7 +48,7 @@ typedef struct _TerminalApp TerminalApp;
 
 GType terminal_app_get_type (void);
 
-GApplication *terminal_app_new (const char *id);
+GApplication *terminal_app_new (void);
 
 TerminalApp* terminal_app_get (void);
 

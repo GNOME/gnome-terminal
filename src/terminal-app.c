@@ -1325,11 +1325,14 @@ terminal_app_class_init (TerminalAppClass *klass)
 /* Public API */
 
 GApplication *
-terminal_app_new (const char *id)
+terminal_app_new (void)
 {
+  const GApplicationFlags flags = G_APPLICATION_NON_UNIQUE |
+                                  G_APPLICATION_IS_SERVICE;
+
   return g_object_new (TERMINAL_TYPE_APP,
-                       "application-id", id,
-                       "flags", (glong) (G_APPLICATION_NON_UNIQUE | G_APPLICATION_IS_SERVICE),
+                       "application-id", TERMINAL_UNIQUE_NAME,
+                       "flags", flags,
                        NULL);
 }
 
