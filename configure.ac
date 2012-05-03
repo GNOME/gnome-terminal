@@ -18,8 +18,6 @@ GETTEXT_PACKAGE=gnome-terminal
 AC_SUBST([GETTEXT_PACKAGE])
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],[Gettext package])
 
-AC_C_BIGENDIAN
-
 if test -z "$enable_maintainer_mode"; then
   enable_maintainer_mode=yes
 fi
