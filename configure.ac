@@ -160,7 +160,7 @@ fi
 AC_ARG_WITH([nautilus-extension],
   [AS_HELP_STRING([--without-nautilus-extension],[Disable nautilus extension])],
   [],
-  [with_nautilus_extension=yes])
+  [with_nautilus_extension=no])
 
 if test "$with_nautilus_extension" = "yes"; then
   NAUTILUS_REQUIRED=3.0.0
