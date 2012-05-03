@@ -74,15 +74,18 @@ handle_options (TerminalFactory *factory,
     {
       InitialWindow *iw = lw->data;
       GList *lt;
+      guint window_id;
 
       g_assert (iw->tabs);
+
+      window_id = 0;
 
       /* Now add the tabs */
       for (lt = iw->tabs; lt != NULL; lt = lt->next)
         {
           InitialTab *it = lt->data;
           GVariantBuilder builder;
-          char *object_path;
+          char *object_path, *p;
           TerminalReceiver *receiver;
           char **argv;
           int argc;
@@ -100,6 +103,10 @@ handle_options (TerminalFactory *factory,
                                                           it->title ? it->title : options->default_title,
                                                           iw->start_maximized,
                                                           iw->start_fullscreen);
+
+          if (window_id)
+            g_variant_builder_add (&builder, "{sv}",
+                                   "window-id", g_variant_new_uint32 (window_id));
 
           /* Restored windows shouldn't demand attention; see bug #586308. */
           if (iw->source_tag == SOURCE_SESSION)
@@ -124,6 +131,18 @@ handle_options (TerminalFactory *factory,
 
             /* Continue processing the remaining options! */
             continue;
+          }
+
+          p = strstr (object_path, "/window/");
+          if (p) {
+            char *end = NULL;
+            guint64 value;
+
+            errno = 0;
+            p += strlen ("/window/");
+            value = g_ascii_strtoull (p, &end, 10);
+            if (errno == 0 && end != p && *end == '/')
+              window_id = (guint) value;
           }
 
           receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,

@@ -26,6 +26,7 @@
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-defines.h"
+#include "terminal-mdi-container.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
 
@@ -441,8 +442,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
-  // FIXMEchpe make this better!
-  object_path = g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_PREFIX "/%u", (guint)g_random_int ());
+  object_path = g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_PREFIX "/window/%u/terminal/%u", 
+                                 gtk_application_window_get_id (GTK_APPLICATION_WINDOW (window)),
+                                 terminal_mdi_container_get_n_screens (TERMINAL_MDI_CONTAINER (terminal_window_get_mdi_container (window))));
 
   skeleton = terminal_object_skeleton_new (object_path);
   impl = terminal_receiver_impl_new (screen);
