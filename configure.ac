@@ -229,10 +229,10 @@ AC_OUTPUT
 echo "
 gnome-terminal-$VERSION:
 
-	prefix:                 ${prefix}
-	source code location:	${srcdir}
-	compiler:		${CC}
-        DBus service dir:       ${dbusservicedir}
-        Nautilus extension:     ${with_nautilus_extension}
-        Nautilus extension dir: ${nautilusextensiondir}
+      prefix:                 ${prefix}
+      source code location:   ${srcdir}
+      compiler:               ${CC}
+      DBus service dir:       ${dbusservicedir}
+      Nautilus extension:     ${with_nautilus_extension}
+      Nautilus extension dir: ${nautilusextensiondir}
 "
