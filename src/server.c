@@ -62,79 +62,10 @@ static const GOptionEntry options[] = {
   { NULL }
 };
 
-
-typedef struct {
-  GApplication *app;
-  GMainLoop *loop;
-  gboolean owns_name;
-} MainData;
-
-static void
-bus_acquired_cb (GDBusConnection *connection,
-                 const char *name,
-                 gpointer user_data)
-{
-  MainData *data = (MainData *) user_data;
-  GDBusObjectManagerServer *object_manager;
-  TerminalObjectSkeleton *object;
-  TerminalFactory *factory;
-
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Bus %s acquired\n", name);
-
-  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
-  factory = terminal_factory_impl_new ();
-  terminal_object_skeleton_set_factory (object, factory);
-  g_object_unref (factory);
-
-  object_manager = terminal_app_get_object_manager (TERMINAL_APP (data->app));
-  g_dbus_object_manager_server_export (object_manager, G_DBUS_OBJECT_SKELETON (object));
-  g_object_unref (object);
-
-  /* And export the object */
-  g_dbus_object_manager_server_set_connection (object_manager, connection);
-}
-
-static void
-name_acquired_cb (GDBusConnection *connection,
-                  const char *name,
-                  gpointer user_data)
-{
-  MainData *data = (MainData *) user_data;
-
-  _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                         "Acquired the name %s on the starter bus\n", name);
-  data->owns_name = TRUE;
-
-  if (g_main_loop_is_running (data->loop))
-    g_main_loop_quit (data->loop);
-}
-
-static void
-name_lost_cb (GDBusConnection *connection,
-              const char *name,
-              gpointer user_data)
-{
-  MainData *data = (MainData *) user_data;
-
-  if (connection) {
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
-                          "Lost the name %s on the starter bus\n", name);
-  } else {
-    g_printerr ("Failed to connect to starter bus\n");
-  }
-
-  data->owns_name = FALSE;
-
-  if (g_main_loop_is_running (data->loop))
-    g_main_loop_quit (data->loop);
-}
-
 int
 main (int argc, char **argv)
 {
-  MainData data;
-  guint owner_id;
+  GApplication *app;
   int exit_code = EXIT_FAILURE;
   const char *home_dir;
   GError *error = NULL;
@@ -166,33 +97,24 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  data.app = terminal_app_new ();
-  data.loop = g_main_loop_new (NULL, FALSE);
-  data.owns_name = FALSE;
+  app = terminal_app_new (bus_name);
+  g_free (bus_name);
 
-  owner_id = g_bus_own_name (G_BUS_TYPE_STARTER,
-                             bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
-                             G_BUS_NAME_OWNER_FLAGS_NONE,
-                             bus_acquired_cb,
-                             name_acquired_cb,
-                             name_lost_cb,
-                             &data, NULL);
-
-  g_main_loop_run (data.loop);
-
-  g_main_loop_unref (data.loop);
-  data.loop = NULL;
-
-  if (!data.owns_name)
+  if (!g_application_register (app, NULL, &error)) {
+    g_printerr ("Failed to register application: %s\n", error->message);
+    g_error_free (error);
     goto out;
+  }
 
-  exit_code = g_application_run (data.app, 0, NULL);
+  if (g_application_get_is_remote (app)) {
+    /* How the fuck did this happen? */
+    g_printerr ("Cannot be remote instance!\n");
+    goto out;
+  }
 
-  g_bus_unown_name (owner_id);
+  exit_code = g_application_run (app, 0, NULL);
 
 out:
-
-  g_free (bus_name);
   terminal_app_shutdown ();
 
   return exit_code;

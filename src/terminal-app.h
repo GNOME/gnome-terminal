@@ -48,7 +48,7 @@ typedef struct _TerminalApp TerminalApp;
 
 GType terminal_app_get_type (void);
 
-GApplication *terminal_app_new (void);
+GApplication *terminal_app_new (const char *bus_name);
 
 TerminalApp* terminal_app_get (void);
 
@@ -76,8 +76,6 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            const char      *working_dir,
                                            char           **child_env,
                                            double           zoom);
-
-TerminalWindow *terminal_app_get_current_window (TerminalApp *app);
 
 void terminal_app_manage_profiles (TerminalApp     *app,
                                    GtkWindow       *transient_parent);

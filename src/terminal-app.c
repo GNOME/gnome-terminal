@@ -74,7 +74,6 @@
 struct _TerminalAppClass {
   GtkApplicationClass parent_class;
 
-  void (* quit) (TerminalApp *app);
   void (* profile_list_changed) (TerminalApp *app);
   void (* encoding_list_changed) (TerminalApp *app);
 };
@@ -85,7 +84,6 @@ struct _TerminalApp
 
   GDBusObjectManagerServer *object_manager;
 
-  GList *windows;
   GtkWidget *new_profile_dialog;
   GtkWidget *manage_profiles_dialog;
   GtkWidget *manage_profiles_list;
@@ -111,7 +109,6 @@ struct _TerminalApp
 
 enum
 {
-  QUIT,
   PROFILE_LIST_CHANGED,
   ENCODING_LIST_CHANGED,
   LAST_SIGNAL
@@ -168,16 +165,6 @@ profiles_lookup_by_visible_name_foreach (gpointer key,
     info->result = value;
 }
 #endif
-
-static void
-terminal_window_destroyed (TerminalWindow *window,
-                           TerminalApp    *app)
-{
-  app->windows = g_list_remove (app->windows, window);
-
-  if (app->windows == NULL)
-    g_signal_emit (app, signals[QUIT], 0);
-}
 
 #if 0
 
@@ -1236,9 +1223,6 @@ terminal_app_init (TerminalApp *app)
   terminal_app_ensure_any_profiles (app);
 
   terminal_accels_init ();
-
-  /* FIXMEchpe: find out why this is necessary... */
-  g_application_hold (G_APPLICATION (app));
 }
 
 static void
@@ -1269,21 +1253,57 @@ terminal_app_finalize (GObject *object)
 
   terminal_accels_shutdown ();
 
-  if (app->object_manager) {
-    g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
-    g_object_unref (app->object_manager);
-  }
-
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
 
   global_app = NULL;
 }
 
-static void
-terminal_app_real_quit (TerminalApp *app)
+static gboolean
+terminal_app_dbus_register (GApplication    *application,
+                            GDBusConnection *connection,
+                            const gchar     *object_path,
+                            GError         **error)
 {
-  /* Release the hold added when creating the app  */
-  g_application_release (G_APPLICATION (app));
+  TerminalApp *app = TERMINAL_APP (application);
+  TerminalObjectSkeleton *object;
+  TerminalFactory *factory;
+
+  if (!G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_register (application,
+                                                                       connection,
+                                                                       object_path,
+                                                                       error))
+    return FALSE;
+
+  object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
+  factory = terminal_factory_impl_new ();
+  terminal_object_skeleton_set_factory (object, factory);
+  g_object_unref (factory);
+
+  app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
+  g_dbus_object_manager_server_export (app->object_manager, G_DBUS_OBJECT_SKELETON (object));
+  g_object_unref (object);
+
+  /* And export the object */
+  g_dbus_object_manager_server_set_connection (app->object_manager, connection);
+  return TRUE;
+}
+
+static void
+terminal_app_dbus_unregister (GApplication    *application,
+                              GDBusConnection *connection,
+                              const gchar     *object_path)
+{
+  TerminalApp *app = TERMINAL_APP (application);
+
+  if (app->object_manager) {
+    g_dbus_object_manager_server_unexport (app->object_manager, TERMINAL_FACTORY_OBJECT_PATH);
+    g_object_unref (app->object_manager);
+    app->object_manager = NULL;
+  }
+
+  G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_unregister (application,
+                                                                    connection,
+                                                                    object_path);
 }
 
 static void
@@ -1296,17 +1316,8 @@ terminal_app_class_init (TerminalAppClass *klass)
 
   g_application_class->activate = terminal_app_activate;
   g_application_class->startup = terminal_app_startup;
-
-  klass->quit = terminal_app_real_quit;
-
-  signals[QUIT] =
-    g_signal_new (I_("quit"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalAppClass, quit),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
+  g_application_class->dbus_register = terminal_app_dbus_register;
+  g_application_class->dbus_unregister = terminal_app_dbus_unregister;
 
   signals[PROFILE_LIST_CHANGED] =
     g_signal_new (I_("profile-list-changed"),
@@ -1330,13 +1341,12 @@ terminal_app_class_init (TerminalAppClass *klass)
 /* Public API */
 
 GApplication *
-terminal_app_new (void)
+terminal_app_new (const char *bus_name)
 {
-  const GApplicationFlags flags = G_APPLICATION_NON_UNIQUE |
-                                  G_APPLICATION_IS_SERVICE;
+  const GApplicationFlags flags = G_APPLICATION_IS_SERVICE;
 
   return g_object_new (TERMINAL_TYPE_APP,
-                       "application-id", TERMINAL_UNIQUE_NAME,
+                       "application-id", bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
                        "flags", flags,
                        NULL);
 }
@@ -1366,10 +1376,6 @@ terminal_app_new_window (TerminalApp *app,
   TerminalWindow *window;
 
   window = terminal_window_new (G_APPLICATION (app));
-
-  app->windows = g_list_append (app->windows, window);
-  g_signal_connect (window, "destroy",
-                    G_CALLBACK (terminal_window_destroyed), app);
 
   if (screen)
     gtk_window_set_screen (GTK_WINDOW (window), screen);
@@ -1426,15 +1432,6 @@ terminal_app_edit_encodings (TerminalApp     *app,
                              GtkWindow       *transient_parent)
 {
   terminal_encoding_dialog_show (transient_parent);
-}
-
-TerminalWindow *
-terminal_app_get_current_window (TerminalApp *app)
-{
-  if (app->windows == NULL)
-    return NULL;
-
-  return g_list_last (app->windows)->data;
 }
 
 /**
@@ -1648,7 +1645,6 @@ terminal_app_get_system_font (TerminalApp *app)
 GDBusObjectManagerServer *
 terminal_app_get_object_manager (TerminalApp *app)
 {
-  if (app->object_manager == NULL)
-    app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
+  g_warn_if_fail (app->object_manager != NULL);
   return app->object_manager;
 }
