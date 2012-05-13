@@ -50,9 +50,7 @@ GType terminal_app_get_type (void);
 
 GApplication *terminal_app_new (const char *bus_name);
 
-TerminalApp* terminal_app_get (void);
-
-void terminal_app_shutdown (void);
+#define terminal_app_get (TerminalApp *) g_application_get_default
 
 GDBusObjectManagerServer *terminal_app_get_object_manager (TerminalApp *app);
 

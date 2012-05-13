@@ -115,7 +115,7 @@ main (int argc, char **argv)
   exit_code = g_application_run (app, 0, NULL);
 
 out:
-  terminal_app_shutdown ();
+  g_object_unref (app);
 
   return exit_code;
 }

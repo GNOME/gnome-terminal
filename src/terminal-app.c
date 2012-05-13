@@ -122,8 +122,6 @@ enum
   NUM_COLUMNS
 };
 
-static TerminalApp *global_app = NULL;
-
 static void terminal_app_dconf_get_profile_list (TerminalApp *app);
 
 /* Helper functions */
@@ -1176,8 +1174,6 @@ terminal_app_startup (GApplication *application)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  global_app = app;
-
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
   /* Desktop proxy settings */
@@ -1254,8 +1250,6 @@ terminal_app_finalize (GObject *object)
   terminal_accels_shutdown ();
 
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
-
-  global_app = NULL;
 }
 
 static gboolean
@@ -1349,24 +1343,6 @@ terminal_app_new (const char *bus_name)
                        "application-id", bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
                        "flags", flags,
                        NULL);
-}
-
-TerminalApp*
-terminal_app_get (void)
-{
-  g_assert (global_app != NULL);
-  g_assert (global_app != NULL);
-  return global_app;
-}
-
-void
-terminal_app_shutdown (void)
-{
-  if (global_app == NULL)
-    return;
-
-  g_object_unref (global_app);
-  g_assert (global_app == NULL);
 }
 
 TerminalWindow *
