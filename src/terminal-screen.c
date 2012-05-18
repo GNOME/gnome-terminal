@@ -55,7 +55,8 @@
 #define URL_MATCH_CURSOR  (GDK_HAND2)
 
 typedef struct {
-  GUnixFDList *fd_list;
+  int *fd_list;
+  int fd_list_len;
   const int *fd_array;
   gsize fd_array_len;
 } FDSetupData;
@@ -722,8 +723,11 @@ terminal_screen_exec (TerminalScreen *screen,
   priv->initial_working_directory = g_strdup (cwd);
 
   if (fd_list) {
+    const int *fds;
+
     data = g_new (FDSetupData, 1);
-    data->fd_list = fd_list;
+    fds = g_unix_fd_list_peek_fds (fd_list, &data->fd_list_len);
+    data->fd_list = g_memdup (fds, (data->fd_list_len + 1) * sizeof (int));
     data->fd_array = g_variant_get_fixed_array (fd_array, &data->fd_array_len, 2 * sizeof (int));
   } else
     data = NULL;
@@ -1374,16 +1378,21 @@ info_bar_response_cb (GtkWidget *info_bar,
 static void
 free_fd_setup_data (FDSetupData *data)
 {
+  if (data == NULL)
+    return;
+
+  g_free (data->fd_list);
   g_free (data);
 }
 
 static void
 terminal_screen_child_setup (FDSetupData *data)
 {
+  int *fds = data->fd_list;
+  int n_fds = data->fd_list_len;
   const int *fd_array = data->fd_array;
   gsize fd_array_len = data->fd_array_len;
   gsize i;
-  int *fds, n_fds;
 
   /* At this point, vte_pty_child_setup() has been called,
    * so all FDs are FD_CLOEXEC.
@@ -1392,12 +1401,12 @@ terminal_screen_child_setup (FDSetupData *data)
   if (fd_array_len == 0)
     return;
 
-  fds = g_unix_fd_list_steal_fds (data->fd_list, &n_fds);
-
   for (i = 0; i < fd_array_len; i++) {
     int target_fd = fd_array[2 * i];
     int idx = fd_array[2 * i + 1];
     int fd, r;
+
+    g_assert (idx >= 0 && idx < n_fds);
 
     /* We want to move fds[idx] to target_fd */
 
