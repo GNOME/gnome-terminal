@@ -907,9 +907,9 @@ main (gint argc, gchar *argv[])
     if (WIFEXITED (exit_code))
       return WEXITSTATUS (exit_code);
     else if (WIFSIGNALED (exit_code))
-      raise (WTERMSIG (exit_code));
+      return 128 + (WTERMSIG (exit_code));
     else
-      return 255;
+      return 127;
   }
 
   return ret;
