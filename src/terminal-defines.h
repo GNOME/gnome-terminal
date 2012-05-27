@@ -21,7 +21,7 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_UNIQUE_NAME                    "org.gnome.Terminal"
+#define TERMINAL_APPLICATION_ID                 "org.gnome.Terminal"
 
 #define TERMINAL_OBJECT_PATH_PREFIX             "/org/gnome/Terminal"
 #define TERMINAL_OBJECT_INTERFACE_PREFIX        "org.gnome.Terminal"

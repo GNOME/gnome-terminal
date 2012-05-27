@@ -57,7 +57,7 @@ enum
 
 typedef struct
 {
-  char    *server_bus_name;
+  char    *server_app_id;
   gboolean remote_arguments;
   char    *startup_id;
   char    *display_name;

@@ -224,7 +224,7 @@ option_version_cb (const gchar *option_name,
 }
 
 static gboolean
-option_bus_name_callback (const gchar *option_name,
+option_app_id_callback (const gchar *option_name,
                           const gchar *value,
                           gpointer     data,
                           GError     **error)
@@ -237,8 +237,8 @@ option_bus_name_callback (const gchar *option_name,
     return FALSE;
   }
 
-  g_free (options->server_bus_name);
-  options->server_bus_name = g_strdup (value);
+  g_free (options->server_app_id);
+  options->server_app_id = g_strdup (value);
 
   return TRUE;
 }
@@ -893,7 +893,7 @@ terminal_options_free (TerminalOptions *options)
 
   g_free (options->display_name);
   g_free (options->startup_id);
-  g_free (options->server_bus_name);
+  g_free (options->server_app_id);
 
   g_free (options->sm_client_id);
   g_free (options->sm_config_prefix);
@@ -906,13 +906,13 @@ get_goption_context (TerminalOptions *options)
 {
   const GOptionEntry global_unique_goptions[] = {
     {
-      "bus-name",
+      "app-id",
       0,
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_bus_name_callback,
-      N_("Server D-Bus name"),
-      N_("NAME")
+      option_app_id_callback,
+      "Server application ID",
+      "ID"
     },
     {
       "disable-factory",

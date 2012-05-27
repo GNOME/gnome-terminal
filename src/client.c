@@ -158,7 +158,7 @@ modify_argv0_for_command (gint *argc, gchar **argv[], const gchar *command)
 
 typedef struct
 {
-  char       *server_bus_name;
+  char       *server_app_id;
 
   /* Window options */
   char       *startup_id;
@@ -226,7 +226,7 @@ option_zoom_cb (const gchar *option_name,
 }
 
 static gboolean
-option_bus_name_cb (const gchar *option_name,
+option_app_id_cb (const gchar *option_name,
                     const gchar *value,
                     gpointer     user_data,
                     GError     **error)
@@ -239,8 +239,8 @@ option_bus_name_cb (const gchar *option_name,
     return FALSE;
   }
 
-  g_free (data->server_bus_name);
-  data->server_bus_name = g_strdup (value);
+  g_free (data->server_app_id);
+  data->server_app_id = g_strdup (value);
 
   return TRUE;
 }
@@ -331,7 +331,7 @@ get_goption_context (OptionData *data)
   };
 
   const GOptionEntry server_goptions[] = {
-    { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_bus_name_cb, N_("Server D-Bus name"), N_("NAME") },
+    { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_app_id_cb, "Server application ID", "ID" },
     { NULL }
   };
 
@@ -450,7 +450,7 @@ option_data_free (OptionData *data)
   if (data == NULL)
     return;
 
-  g_free (data->server_bus_name);
+  g_free (data->server_app_id);
   g_free (data->startup_id);
   g_free (data->geometry);
   g_free (data->role);
@@ -627,15 +627,15 @@ handle_open (int *argc,
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     data->server_bus_name ? data->server_bus_name 
-                                                                           : TERMINAL_UNIQUE_NAME,
+                                                     data->server_app_id ? data->server_app_id
+                                                                         : TERMINAL_APPLICATION_ID,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
     g_dbus_error_strip_remote_error (error);
     _printerr ("Error constructing proxy for %s:%s: %s\n", 
-                TERMINAL_UNIQUE_NAME, TERMINAL_FACTORY_OBJECT_PATH,
+                TERMINAL_APPLICATION_ID, TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
     g_error_free (error);
     option_data_free (data);
@@ -660,8 +660,8 @@ handle_open (int *argc,
 
   receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                                       data->server_bus_name ? data->server_bus_name
-                                                                             : TERMINAL_UNIQUE_NAME,
+                                                       data->server_app_id ? data->server_app_id
+                                                                             : TERMINAL_APPLICATION_ID,
                                                        object_path,
                                                        NULL /* cancellable */,
                                                        &error);

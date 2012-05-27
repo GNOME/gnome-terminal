@@ -1335,12 +1335,12 @@ terminal_app_class_init (TerminalAppClass *klass)
 /* Public API */
 
 GApplication *
-terminal_app_new (const char *bus_name)
+terminal_app_new (const char *app_id)
 {
   const GApplicationFlags flags = G_APPLICATION_IS_SERVICE;
 
   return g_object_new (TERMINAL_TYPE_APP,
-                       "application-id", bus_name ? bus_name : TERMINAL_UNIQUE_NAME,
+                       "application-id", app_id ? app_id : TERMINAL_APPLICATION_ID,
                        "flags", flags,
                        NULL);
 }

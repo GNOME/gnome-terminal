@@ -37,28 +37,28 @@
 #include "terminal-intl.h"
 #include "terminal-defines.h"
 
-static char *bus_name = NULL;
+static char *app_id = NULL;
 
 static gboolean
-option_bus_name_cb (const gchar *option_name,
+option_app_id_cb (const gchar *option_name,
                     const gchar *value,
                     gpointer     data,
                     GError     **error)
 {
-  if (!g_dbus_is_name (value)) {
+  if (!g_application_id_is_valid (value)) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
-                 "%s is not a valid D-Bus name", value);
+                 "\"%s\" is not a valid application ID", value);
     return FALSE;
   }
 
-  g_free (bus_name);
-  bus_name = g_strdup (value);
+  g_free (app_id);
+  app_id = g_strdup (value);
 
   return TRUE;
 }
 
 static const GOptionEntry options[] = {
-  { "bus-name", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_bus_name_cb, "Server D-Bus name", "NAME" },
+  { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_app_id_cb, "Application ID", "ID" },
   { NULL }
 };
 
@@ -97,8 +97,8 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  app = terminal_app_new (bus_name);
-  g_free (bus_name);
+  app = terminal_app_new (app_id);
+  g_free (app_id);
 
   if (!g_application_register (app, NULL, &error)) {
     g_printerr ("Failed to register application: %s\n", error->message);

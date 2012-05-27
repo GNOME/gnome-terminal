@@ -148,8 +148,8 @@ handle_options (TerminalFactory *factory,
           receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                                G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                               options->server_bus_name ? options->server_bus_name 
-                                                                                        : TERMINAL_UNIQUE_NAME,
+                                                               options->server_app_id ? options->server_app_id
+                                                                                      : TERMINAL_APPLICATION_ID,
                                                                object_path,
                                                                NULL /* cancellable */,
                                                                &err);
@@ -246,15 +246,15 @@ main (int argc, char **argv)
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     options->server_bus_name ? options->server_bus_name 
-                                                                              : TERMINAL_UNIQUE_NAME,
+                                                     options->server_app_id ? options->server_app_id 
+                                                                            : TERMINAL_APPLICATION_ID,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
     g_dbus_error_strip_remote_error (error);
     g_printerr ("Error constructing proxy for %s:%s: %s\n", 
-                options->server_bus_name ? options->server_bus_name : TERMINAL_UNIQUE_NAME,
+                options->server_app_id ? options->server_app_id : TERMINAL_APPLICATION_ID,
                 TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
     g_error_free (error);
