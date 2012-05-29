@@ -1,17 +1,13 @@
-include $(top_srcdir)/gnome-doc-utils.make
-dist-hook: doc-dist-hook
+@YELP_HELP_RULES@
+HELP_ID = gnome-terminal
 
-DOC_MODULE = gnome-terminal
-DOC_ENTITIES = legal.xml
-DOC_INCLUDES = 
-DOC_FIGURES = figures/gnome-terminal-default.png \
-              figures/gnome-terminal-tabbed.png 
-#	      figures/terminal-window.png   This image is not used.
+HELP_MEDIA = figures/gnome-terminal-default.png \
+	figures/gnome-terminal-tabbed.png
 
-DOC_LINGUAS = da de ca cs el en_GB es fr gl it ko oc pt_BR ru sl sv te uk zh_CN
+HELP_FILES = \
+	index.docbook \
+	legal.xml
 
-# Move to DOC_LINGUAS in transition to gnome-doc-utils
-
-SUBDIRS = bg ro ja zh_TW
+HELP_LINGUAS = ca cs da de el en_GB es fr gl it ko oc pt_BR ru sl sv te uk zh_CN
 
 -include $(top_srcdir)/git.mk

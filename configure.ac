@@ -199,7 +199,7 @@ CC_CHECK_CFLAGS_APPEND([ \
 # Documentation
 # *************
 
-GNOME_DOC_INIT
+YELP_HELP_INIT
 
 # ****************************
 
