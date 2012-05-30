@@ -6,10 +6,10 @@
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: gnome-terminal 3.3.x\n"
+"Project-Id-Version: gnome-terminal 3.5.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-28 16:05+0100\n"
-"PO-Revision-Date: 2012-01-28 16:06+0100\n"
+"POT-Creation-Date: 2012-05-30 14:39+0200\n"
+"PO-Revision-Date: 2012-05-30 14:41+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/gnome-terminal.schemas.in.h:35
-#: ../src/terminal-accels.c:249 ../src/terminal.c:551
-#: ../src/terminal-profile.c:158 ../src/terminal-window.c:2018
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:92
+#: ../src/terminal-accels.c:146 ../src/terminal.c:236
+#: ../src/terminal-window.c:1839
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -28,34 +28,158 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Bruk kommandolinjen"
 
-#: ../src/eggsmclient.c:226
-msgid "Disable connection to session manager"
-msgstr "Slå av tilkobling til økthåndterer"
+#: ../src/client.c:116
+msgid "COMMAND"
+msgstr "KOMMANDO"
 
-#: ../src/eggsmclient.c:229
-msgid "Specify file containing saved configuration"
-msgstr "Oppgi fil som inneholder lagret konfigurasjon"
+#: ../src/client.c:121
+#, c-format
+msgid ""
+"Commands:\n"
+"  help    Shows this information\n"
+"  open    Create a new terminal\n"
+"\n"
+"Use \"%s COMMAND --help\" to get help on each command.\n"
+msgstr ""
+"Kommandoer:\n"
+"  help     Viser denne informasjonen\n"
+"  open     Lag en ny terminal\n"
+"\n"
+"Bruk «%s KOMMANDO --help» for å få hjelp for hver kommando.\n"
 
-#: ../src/eggsmclient.c:229 ../src/terminal-options.c:957
-#: ../src/terminal-options.c:966
-msgid "FILE"
-msgstr "FIL"
+#: ../src/client.c:216 ../src/terminal-options.c:589
+#, c-format
+msgid "\"%s\" is not a valid zoom factor"
+msgstr "«%s» er ikke en gyldig zoom-faktor"
 
-#: ../src/eggsmclient.c:232
-msgid "Specify session management ID"
-msgstr "Oppgi økthåndterings-ID"
+#: ../src/client.c:329
+msgid "Be quiet"
+msgstr "Vær stille"
 
-#: ../src/eggsmclient.c:232
-msgid "ID"
-msgstr "ID"
+#: ../src/client.c:340 ../src/terminal-options.c:994
+msgid "Maximise the window"
+msgstr "Maksimer vinduet"
 
-#: ../src/eggsmclient.c:253
-msgid "Session management options:"
+#: ../src/client.c:342 ../src/terminal-options.c:1003
+msgid "Full-screen the window"
+msgstr "Vis vinduet i fullskjerm"
+
+#: ../src/client.c:344 ../src/terminal-options.c:1012
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+msgstr ""
+"Sett vindustørrelse; for eksempel: 80x24 eller 80x24+200+200 (KOLONNERxRADER"
+"+X+Y)"
+
+#: ../src/client.c:345 ../src/terminal-options.c:1013
+msgid "GEOMETRY"
+msgstr "GEOMETRI"
+
+#: ../src/client.c:347 ../src/terminal-options.c:1021
+msgid "Set the window role"
+msgstr "Sett rolle for vinduet"
+
+#: ../src/client.c:347 ../src/terminal-options.c:1022
+msgid "ROLE"
+msgstr "ROLLE"
+
+#: ../src/client.c:353 ../src/terminal-options.c:1052
+msgid "Use the given profile instead of the default profile"
+msgstr "Bruk oppgitt profil i stedet for forvalgt profil"
+
+#: ../src/client.c:354 ../src/terminal-options.c:1053
+msgid "PROFILE-NAME"
+msgstr "PROFILNAVN"
+
+#: ../src/client.c:356 ../src/terminal-options.c:1061
+msgid "Set the terminal title"
+msgstr "Sett tittel på terminalen"
+
+#: ../src/client.c:356 ../src/terminal-options.c:1062
+msgid "TITLE"
+msgstr "TITTEL"
+
+#: ../src/client.c:358 ../src/terminal-options.c:1070
+msgid "Set the working directory"
+msgstr "Sett arbeidskatalog"
+
+#: ../src/client.c:358 ../src/terminal-options.c:1071
+msgid "DIRNAME"
+msgstr "KATALOG"
+
+#: ../src/client.c:360 ../src/terminal-options.c:1079
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr "Sett terminalens zoom-faktor (1.0 = normal størrelse)"
+
+#: ../src/client.c:361 ../src/terminal-options.c:1080
+msgid "ZOOM"
+msgstr "ZOOM"
+
+#: ../src/client.c:367
+msgid "Forward stdin"
+msgstr ""
+
+#: ../src/client.c:369
+msgid "Forward stdout"
+msgstr ""
+
+#: ../src/client.c:371
+msgid "Forward stderr"
+msgstr ""
+
+#: ../src/client.c:373
+msgid "Forward file descriptor"
+msgstr ""
+
+#: ../src/client.c:373
+msgid "FD"
+msgstr ""
+
+#: ../src/client.c:379
+msgid "Wait until the child exits"
+msgstr ""
+
+#: ../src/client.c:389
+msgid "GNOME Terminal Client"
+msgstr "GNOME-terminalklient"
+
+#: ../src/client.c:407
+#, fuzzy
+msgid "Window options:"
+msgstr "Vis flagg som gjelder for hvert vindu"
+
+#: ../src/client.c:408
+#, fuzzy
+msgid "Show window options"
+msgstr "Vis flagg som gjelder for hvert vindu"
+
+#: ../src/client.c:416
+#, fuzzy
+msgid "Terminal options:"
+msgstr "Vis flagg for terminal"
+
+#: ../src/client.c:417 ../src/terminal-options.c:1359
+msgid "Show terminal options"
+msgstr "Vis flagg for terminal"
+
+#: ../src/client.c:425
+msgid "Exec options:"
+msgstr ""
+
+#: ../src/client.c:426
+#, fuzzy
+msgid "Show exec options"
+msgstr "Vis flagg for terminal"
+
+#: ../src/client.c:434
+#, fuzzy
+msgid "Processing options:"
 msgstr "Alternativer for økthåndtering:"
 
-#: ../src/eggsmclient.c:254
-msgid "Show session management options"
-msgstr "Vis alternativer for økthåndtering"
+#: ../src/client.c:435
+#, fuzzy
+msgid "Show processing options"
+msgstr "Vis flagg som gjelder for hver terminal"
 
 #: ../src/encodings-dialog.glade.h:1
 msgid "Add or Remove Terminal Encodings"
@@ -68,6 +192,141 @@ msgstr "Til_gjengelige kodinger:"
 #: ../src/encodings-dialog.glade.h:3
 msgid "E_ncodings shown in menu:"
 msgstr "Kodi_nger som vises i menyen:"
+
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 3 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:24
+msgid "Automatic"
+msgstr "Automatisk"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:26
+msgid "Control-H"
+msgstr "Control-H"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:28
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:30
+msgid "Escape sequence"
+msgstr "Escape-sekvens"
+
+#. Translators: This refers to the Delete keybinding option
+#: ../src/extra-strings.c:32
+msgid "TTY Erase"
+msgstr "TTY-slett"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:35
+msgid "Block"
+msgstr "Blokk"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:37
+msgid "I-Beam"
+msgstr "I-Beam"
+
+#. Translators: Cursor shape: ...
+#: ../src/extra-strings.c:39
+msgid "Underline"
+msgstr "Understrek"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:42
+msgid "Exit the terminal"
+msgstr "Avslutt terminalen"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:44
+msgid "Restart the command"
+msgstr "Start kommandoen på nytt"
+
+#. Translators: When command exits: ...
+#: ../src/extra-strings.c:46
+msgid "Hold the terminal open"
+msgstr "Hold terminalen åpen"
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:49
+msgid "Always visible"
+msgstr ""
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:51
+msgid "Visible only when necessary"
+msgstr ""
+
+#. Translators: Scrollbar is: ...
+#: ../src/extra-strings.c:53
+msgid "Hidden"
+msgstr ""
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:56
+msgid "Replace initial title"
+msgstr "Erstatt opprinnelig tittel"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:58
+msgid "Append initial title"
+msgstr "Legg til opprinnelig tittel"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:60
+msgid "Prepend initial title"
+msgstr "Legg til foran opprinnelig tittel"
+
+#. Translators: When terminal commands set their own titles: ...
+#: ../src/extra-strings.c:62
+msgid "Keep initial title"
+msgstr "Behold opprinnelig tittel"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:65
+msgid "Tango"
+msgstr "Tango"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:67
+msgid "Linux console"
+msgstr "Linux konsoll"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:69
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:71
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#. Translators: This is the name of a colour scheme
+#: ../src/extra-strings.c:73 ../src/profile-editor.c:443
+msgid "Custom"
+msgstr "Egendefinert"
 
 #: ../src/find-dialog.glade.h:1
 msgid "Find"
@@ -97,1076 +356,6 @@ msgstr "Søk _bakover"
 msgid "_Wrap around"
 msgstr "_Brytningsmodus"
 
-#: ../src/gnome-terminal.schemas.in.h:1
-msgid "List of profiles"
-msgstr "Liste med profiler"
-
-#: ../src/gnome-terminal.schemas.in.h:2
-msgid ""
-"List of profiles known to gnome-terminal. The list contains strings naming "
-"subdirectories relative to /apps/gnome-terminal/profiles."
-msgstr ""
-"Liste med profiler som er kjent for gnome-terminal. Listen inneholder "
-"strenger som navngir underkataloger relativ til /apps/gnome-terminal/"
-"profiles."
-
-#: ../src/gnome-terminal.schemas.in.h:3
-msgid "Profile to use for new terminals"
-msgstr "Profil som brukes for nye terminaler"
-
-#: ../src/gnome-terminal.schemas.in.h:4
-msgid ""
-"Profile to be used when opening a new window or tab. Must be in profile_list."
-msgstr ""
-"Profil som skal brukes ved åpning av et nytt vindu eller fane. Må være i "
-"profillisten."
-
-#: ../src/gnome-terminal.schemas.in.h:5
-msgid "Whether the menubar has access keys"
-msgstr "Om menylinjen har snarveitaster"
-
-#: ../src/gnome-terminal.schemas.in.h:6
-msgid ""
-"Whether to have Alt+letter access keys for the menubar. They may interfere "
-"with some applications run inside the terminal so it's possible to turn them "
-"off."
-msgstr ""
-"Skal det være en Alt+«bokstav» hurtigtast for menylinjen. Det er mulig at "
-"den kan kræsje med programmer som blir kjørt inni terminalen så det er mulig "
-"å skru dem av."
-
-#: ../src/gnome-terminal.schemas.in.h:7
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Om forvalgt GTK-snarvei for tilgang til menylinjen er aktivert"
-
-#: ../src/gnome-terminal.schemas.in.h:8
-msgid ""
-"Normally you can access the menubar with F10. This can also be customized "
-"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
-"standard menubar accelerator to be disabled."
-msgstr ""
-"Normalt kan du bruke menylinjen med F10. Dette kan også bli tilpasset via "
-"gtkrc (gtk-menu-bar-accel = «whatever»). Dette valget lar den forvalgte "
-"hurtigtasten til menylinjen bli slått av."
-
-#. Translators: Please note that this has to be a list of
-#. valid encodings (which are to be taken from the list in src/encoding.c).
-#. It has to include UTF-8 and the word 'current', which is not to be
-#. translated. This is provided for customization of the default encoding
-#. menu; see bug 144810 for an use case. In most cases, this should be
-#. left alone.
-#: ../src/gnome-terminal.schemas.in.h:15
-msgid "[UTF-8,current]"
-msgstr "[UTF-8,current,ISO-8859-15]"
-
-#: ../src/gnome-terminal.schemas.in.h:16
-msgid "List of available encodings"
-msgstr "Liste med tilgjengelige kodinger"
-
-#: ../src/gnome-terminal.schemas.in.h:17
-msgid ""
-"A subset of possible encodings are presented in the Encoding submenu. This "
-"is a list of encodings to appear there. The special encoding name \"current"
-"\" means to display the encoding of the current locale."
-msgstr ""
-"Et subsett av mulige kodinger vises i undermenyen «Koding». Dette er listen "
-"med kodinger som vises der. Spesialnavnet «current» vil bruke kodingen fra "
-"aktivt locale."
-
-#: ../src/gnome-terminal.schemas.in.h:18
-msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "Om det skal spørres om bekreftelse når terminaler blir lukket"
-
-#: ../src/gnome-terminal.schemas.in.h:19
-msgid ""
-"Whether to ask for confirmation when closing a terminal window which has "
-"more than one open tab."
-msgstr ""
-"Om det skal spørres om bekreftelse når en terminal med mer enn en åpen fane "
-"lukkes."
-
-#: ../src/gnome-terminal.schemas.in.h:20
-msgid "Default"
-msgstr "Forvalgt"
-
-#: ../src/gnome-terminal.schemas.in.h:21
-msgid "Human-readable name of the profile"
-msgstr "Lesbart navn for profilen"
-
-#: ../src/gnome-terminal.schemas.in.h:22
-msgid "Human-readable name of the profile."
-msgstr "Lesbart navn for profilen."
-
-#: ../src/gnome-terminal.schemas.in.h:23
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Om menylinjen skal vises i nye vinduer/faner"
-
-#: ../src/gnome-terminal.schemas.in.h:24
-msgid ""
-"True if the menubar should be shown in new windows, for windows/tabs with "
-"this profile."
-msgstr ""
-"Sett til «true» hvis menylinjen skal bli vist i nye vinduer, for vinduer/"
-"faner med denne profilen."
-
-#: ../src/gnome-terminal.schemas.in.h:25
-msgid "Default color of text in the terminal"
-msgstr "Forvalgt farge for tekst i terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:26
-msgid ""
-"Default color of text in the terminal, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
-msgstr ""
-"Forvalgt farge for tekst i terminalen som en fargespesifikasjon (kan være "
-"HTML-type heksadesimale tall eller et fargenavn som «red»)."
-
-#: ../src/gnome-terminal.schemas.in.h:27
-msgid "Default color of terminal background"
-msgstr "Forvalgt bakgrunnsfarge for terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:28
-msgid ""
-"Default color of terminal background, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
-msgstr ""
-"Forvalgt farge for terminalens bakgrunn som en fargespesifikasjon (kan være "
-"HTML-type heksadesimale tall eller et fargenavn som «red»)."
-
-#: ../src/gnome-terminal.schemas.in.h:29
-msgid "Default color of bold text in the terminal"
-msgstr "Forvalgt farge for uthevet tekst i terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:30
-msgid ""
-"Default color of bold text in the terminal, as a color specification (can be "
-"HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
-"bold_color_same_as_fg is true."
-msgstr ""
-"Forvalgt farge for uthevet tekst i terminalen som en fargespesifikasjon (kan "
-"være HTML-type heksadesimale tall eller et fargenavn som «red»). Overses "
-"hvis bold_color_same_as_fg er true."
-
-#: ../src/gnome-terminal.schemas.in.h:31
-msgid "Whether bold text should use the same color as normal text"
-msgstr "Uthevet tekst  bruker samme farge som normal tekst"
-
-#: ../src/gnome-terminal.schemas.in.h:32
-msgid ""
-"If true, boldface text will be rendered using the same color as normal text."
-msgstr ""
-"Hvis denne er sann vil uthevet tekst vises med samme farge som normal tekst."
-
-#: ../src/gnome-terminal.schemas.in.h:33
-msgid "What to do with dynamic title"
-msgstr "Hva skal gjøres med dynamiske titler"
-
-#: ../src/gnome-terminal.schemas.in.h:34
-msgid ""
-"If the application in the terminal sets the title (most typically people "
-"have their shell set up to do this), the dynamically-set title can erase the "
-"configured title, go before it, go after it, or replace it. The possible "
-"values are \"replace\", \"before\", \"after\", and \"ignore\"."
-msgstr ""
-"Hvis programmet i terminalen setter tittelen (det er vanlig å la skallet "
-"gjøre dette), så kan den dynamiske tittelen slette den forvalgte tittelen, "
-"gå før den, gå etter den eller erstatte den. De forskjellige verdiene er "
-"«replace», «before», «after» og «ignore»."
-
-#: ../src/gnome-terminal.schemas.in.h:36
-msgid "Title for terminal"
-msgstr "Tittel for terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:37
-msgid ""
-"Title to display for the terminal window or tab. This title may be replaced "
-"by or combined with the title set by the application inside the terminal, "
-"depending on the title_mode setting."
-msgstr ""
-"Tittel som skal vises for terminalvinduet eller fanen. Denne tittelen kan "
-"erstattes av eller kombineres med tittel satt av programmet inne i "
-"terminalen avhengig av verdien i nøkkelen «title_mode»."
-
-#: ../src/gnome-terminal.schemas.in.h:38
-msgid "Whether to allow bold text"
-msgstr "Om uthevet tekst tillates"
-
-#: ../src/gnome-terminal.schemas.in.h:39
-msgid "If true, allow applications in the terminal to make text boldface."
-msgstr ""
-"Hvis denne er «true» vil programmer i terminalen kunne sette tekst til "
-"uthevet."
-
-#: ../src/gnome-terminal.schemas.in.h:40
-msgid "Whether to silence terminal bell"
-msgstr "Om systempip skal brukes eller ikke"
-
-#: ../src/gnome-terminal.schemas.in.h:41
-msgid ""
-"If true, don't make a noise when applications send the escape sequence for "
-"the terminal bell."
-msgstr ""
-"Hvis satt til «true», ikke lag lyd når programmer sender skiftesekvensen for "
-"terminalbjellen."
-
-#: ../src/gnome-terminal.schemas.in.h:42
-msgid "Characters that are considered \"part of a word\""
-msgstr "Tegn som betraktes som «del av et ord»"
-
-#: ../src/gnome-terminal.schemas.in.h:43
-msgid ""
-"When selecting text by word, sequences of these characters are considered "
-"single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
-"a range) should be the first character given."
-msgstr ""
-"Når man velger tekst etter ord kan sekvenser av disse tegnene ses på som "
-"enkelte ord. Områder kan oppgis som «A-Z». Bindestrek må oppgis som første "
-"tegn."
-
-#: ../src/gnome-terminal.schemas.in.h:44
-msgid "Whether to use custom terminal size for new windows"
-msgstr "Bruk egendefinert terminalstørrelse for nye vinduer"
-
-#: ../src/gnome-terminal.schemas.in.h:45
-msgid ""
-"If true, newly created terminal windows will have custom size specified by "
-"default_size_columns and default_size_rows."
-msgstr ""
-"Hvis satt til «true» vil nyopprettede terminalvinduer ha egendefinert "
-"størrelse oppgitt av default_size_columns og default_size_rows."
-
-#: ../src/gnome-terminal.schemas.in.h:46
-msgid "Default number of columns"
-msgstr "Forvalgt antall kolonner"
-
-#: ../src/gnome-terminal.schemas.in.h:47
-msgid ""
-"Number of columns in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"Antall kolonner i nye terminalvinduer. Har ingen effekt hvis ikke "
-"use_custom_default_size er slått på."
-
-#: ../src/gnome-terminal.schemas.in.h:48
-msgid "Default number of rows"
-msgstr "Forvalgt antall rader"
-
-#: ../src/gnome-terminal.schemas.in.h:49
-msgid ""
-"Number of rows in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"Antall rader i nye terminalvinduer. Har ingen effekt hvis ikke "
-"use_custom_default_size er slått på."
-
-#: ../src/gnome-terminal.schemas.in.h:50
-msgid "Position of the scrollbar"
-msgstr "Posisjon for rullefeltet"
-
-#: ../src/gnome-terminal.schemas.in.h:51
-msgid ""
-"Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
-"and \"hidden\"."
-msgstr ""
-"Hvor terminalens rullefelt skal plasseres. Muligheter er «left», «right», og "
-"«hidden»."
-
-#: ../src/gnome-terminal.schemas.in.h:52
-msgid "Number of lines to keep in scrollback"
-msgstr "Antall linjer tilbakerulling"
-
-#: ../src/gnome-terminal.schemas.in.h:53
-msgid ""
-"Number of scrollback lines to keep around. You can scroll back in the "
-"terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. If scrollback_unlimited is true, this value is ignored."
-msgstr ""
-"Nummer på rullelinjer å ha lagret. Du kan rulle opp i terminalen så mange "
-"linjer som dette tallet. Linjer over det tallet blir forkastet. Hvis "
-"scrollback_unlimited er sann vil denne overses."
-
-#: ../src/gnome-terminal.schemas.in.h:54
-msgid "Whether an unlimited number of lines should be kept in scrollback"
-msgstr "Ta vare på ubegrenset antall linjer med tilbakerulling"
-
-#: ../src/gnome-terminal.schemas.in.h:55
-msgid ""
-"If true, scrollback lines will never be discarded. The scrollback history is "
-"stored on disk temporarily, so this may cause the system to run out of disk "
-"space if there is a lot of output to the terminal."
-msgstr ""
-"Hvis denne er sann vil tilbakerulling aldri forkastes. Historikken lagres på "
-"disk midlertidig, så dette vil kunne forårsake at systemet går tomt for "
-"diskplass hvis store mengder tekst vises på terminalen."
-
-#: ../src/gnome-terminal.schemas.in.h:56
-msgid "Whether to scroll to the bottom when a key is pressed"
-msgstr "Om vinduet skal rulles helt ned når en tast trykkes"
-
-#: ../src/gnome-terminal.schemas.in.h:57
-msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Hvis satt til «true» så hopper "
-
-#: ../src/gnome-terminal.schemas.in.h:58
-msgid "Whether to scroll to the bottom when there's new output"
-msgstr "Om vinduet skal rulles helt ned når ved nye utdata"
-
-#: ../src/gnome-terminal.schemas.in.h:59
-msgid ""
-"If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr ""
-"Hvis satt til «true» vil terminalen rulle helt ned når det er ny utdata."
-
-#: ../src/gnome-terminal.schemas.in.h:60
-msgid "What to do with the terminal when the child command exits"
-msgstr "Hva skal gjøres med terminalen når barneprosessen avslutter"
-
-#: ../src/gnome-terminal.schemas.in.h:61
-msgid ""
-"Possible values are \"close\" to close the terminal, and \"restart\" to "
-"restart the command."
-msgstr ""
-"Mulige verdier er «close» for å lukke terminalen og «restart» for å starte "
-"kommandoen på nytt."
-
-#: ../src/gnome-terminal.schemas.in.h:62
-msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Om kommandoen i terminalen skal bli kjørt som et innloggingsskall"
-
-#: ../src/gnome-terminal.schemas.in.h:63
-msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
-msgstr ""
-"Hvis satt til «true» vil kommandoen inni terminalen ble kjørt som et "
-"innloggingsskall. (argv[0] vil ha en bindestrek foran seg.)"
-
-#: ../src/gnome-terminal.schemas.in.h:64
-msgid "Whether to update login records when launching terminal command"
-msgstr "Om pålogginsoppføringer skal oppdateres når en vanlig terminal startes"
-
-#: ../src/gnome-terminal.schemas.in.h:65
-msgid ""
-"If true, the system login records utmp and wtmp will be updated when the "
-"command inside the terminal is launched."
-msgstr ""
-"Systemets loggføring av innlogging, utmp og wtmp, vil oppdateres når "
-"kommandoen i terminalen kjøres hvis denne settes til «true»."
-
-#: ../src/gnome-terminal.schemas.in.h:66
-msgid "Whether to run a custom command instead of the shell"
-msgstr "Om en egendefinert kommando skal kjøres i stedet for skallet"
-
-#: ../src/gnome-terminal.schemas.in.h:67
-msgid ""
-"If true, the value of the custom_command setting will be used in place of "
-"running a shell."
-msgstr ""
-"Hvis satt til «true» vil verdien til «custom_command» bli brukt i stede for "
-"å kjøre et skall."
-
-#: ../src/gnome-terminal.schemas.in.h:68
-msgid "Whether to blink the cursor"
-msgstr "Om markøren skal blinke"
-
-#: ../src/gnome-terminal.schemas.in.h:69
-msgid ""
-"The possible values are \"system\" to use the global cursor blinking "
-"settings, or \"on\" or \"off\" to set the mode explicitly."
-msgstr ""
-"Mulige verdier er «system» for å bruke globale innstillinger for blinkende "
-"markør, «on» eller «off» for å sette modus eksplisitt."
-
-#: ../src/gnome-terminal.schemas.in.h:70
-msgid "The cursor appearance"
-msgstr "Utseende for markør"
-
-#: ../src/gnome-terminal.schemas.in.h:71
-msgid ""
-"The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
-"vertical line cursor, or \"underline\" to use an underline cursor."
-msgstr ""
-"Mulige verdier er «block» for å bruke en blokkmarkør, «ibeam» for å bruke en "
-"vertikal linje eller «underline» for å bruke en horisontal linje."
-
-#: ../src/gnome-terminal.schemas.in.h:72
-msgid "Custom command to use instead of the shell"
-msgstr "Egendefinert kommando i stedet for skallet"
-
-#: ../src/gnome-terminal.schemas.in.h:73
-msgid "Run this command in place of the shell, if use_custom_command is true."
-msgstr ""
-"Kjør denne kommandoen i stedet for et skall hvis «use_custom_command» er "
-"satt."
-
-#: ../src/gnome-terminal.schemas.in.h:74
-msgid "Icon for terminal window"
-msgstr "Ikon for terminalvinduet"
-
-#: ../src/gnome-terminal.schemas.in.h:75
-msgid "Icon to use for tabs/windows containing this profile."
-msgstr "Ikon som skal brukes for faner/vinduer som bruker denne profilen."
-
-#: ../src/gnome-terminal.schemas.in.h:76
-msgid "Palette for terminal applications"
-msgstr "Palett for terminalprogrammer"
-
-#: ../src/gnome-terminal.schemas.in.h:77
-msgid ""
-"Terminals have a 16-color palette that applications inside the terminal can "
-"use. This is that palette, in the form of a colon-separated list of color "
-"names. Color names should be in hex format e.g. \"#FF00FF\""
-msgstr ""
-"Terminaler har en 16-fargers palett som programmer som kjører i terminalen "
-"kan bruke. Paletten oppgis her i form av en kolon-separert liste med "
-"fargenavn. Fargenavn skal oppgis i heksadesimalt format, f.eks «#FF00FF»"
-
-#: ../src/gnome-terminal.schemas.in.h:78
-msgid "Font"
-msgstr "Skrift"
-
-#: ../src/gnome-terminal.schemas.in.h:79
-msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
-msgstr "Et Pango-skriftnavn. For eksempel «Sans 12» eller «Monospace Bold 14»."
-
-#: ../src/gnome-terminal.schemas.in.h:80
-msgid "Background type"
-msgstr "Type bakgrunn"
-
-#: ../src/gnome-terminal.schemas.in.h:81
-msgid ""
-"Type of terminal background. May be \"solid\" for a solid color, \"image\" "
-"for an image, or \"transparent\" for either real transparency if a "
-"compositing window manager is running, or pseudo-transparency otherwise."
-msgstr ""
-"Type terminalbakgrunn. Kan være «solid» for en solid farge, «image» for å "
-"bruke et bilde eller «transparent» for gjennomsiktighet hvis en compositing "
-"vindushåndterer kjører og pseudo-gjennomsiktighet ellers."
-
-#: ../src/gnome-terminal.schemas.in.h:82
-msgid "Background image"
-msgstr "Bakgrunnsbilde"
-
-#: ../src/gnome-terminal.schemas.in.h:83
-msgid "Filename of a background image."
-msgstr "Filnavn for et bakgrunnsbilde."
-
-#: ../src/gnome-terminal.schemas.in.h:84
-msgid "Whether to scroll background image"
-msgstr "Om bakgrunnsbildet skal rulles"
-
-#: ../src/gnome-terminal.schemas.in.h:85
-msgid ""
-"If true, scroll the background image with the foreground text; if false, "
-"keep the image in a fixed position and scroll the text above it."
-msgstr ""
-"Hvis satt til «true», rull bakgrunnsbildet med teksten; hvis satt til "
-"«false», hold bakgrunnsbildet stille og rull teksten over det."
-
-#: ../src/gnome-terminal.schemas.in.h:86
-msgid "How much to darken the background image"
-msgstr "Hvor mye mørkere bakgrunnsbildet skal gjøres"
-
-#: ../src/gnome-terminal.schemas.in.h:87
-msgid ""
-"A value between 0.0 and 1.0 indicating how much to darken the background "
-"image. 0.0 means no darkness, 1.0 means fully dark. In the current "
-"implementation, there are only two levels of darkness possible, so the "
-"setting behaves as a boolean, where 0.0 disables the darkening effect."
-msgstr ""
-"En verdi mellom 0.0 og 1.0 som indikerer hvor mye bagrunnen skal formørkes. "
-"0.0 gir ingen formørking og 1.0 betyr helt formørket. Det er foreløpig kun "
-"to nivåer tilgjengelig, så innstillingen fungerer som en av/på bryter."
-
-#: ../src/gnome-terminal.schemas.in.h:88
-msgid "Effect of the Backspace key"
-msgstr "Handling for Backspace-tasten"
-
-#: ../src/gnome-terminal.schemas.in.h:89
-msgid ""
-"Sets what code the backspace key generates. Possible values are \"ascii-del"
-"\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
-"BS character), \"escape-sequence\" for the escape sequence typically bound "
-"to backspace or delete. \"ascii-del\" is normally considered the correct "
-"setting for the Backspace key."
-msgstr ""
-"Setter hvilken kode rettetasten lager. Mulige verdier er «ascii-del» for "
-"ASCII DEL tegnet, «control-h» for Control-H (aka ASCII BS tegnet), «escape-"
-"sequence» for skiftesekvensen typisk bundet til rettetasten eller "
-"slettetasten. «ascii-del» er normalt den rette verdien for rettetasten."
-
-#: ../src/gnome-terminal.schemas.in.h:90
-msgid "Effect of the Delete key"
-msgstr "Handling for Delete-tasten"
-
-#: ../src/gnome-terminal.schemas.in.h:91
-msgid ""
-"Sets what code the delete key generates. Possible values are \"ascii-del\" "
-"for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
-"character), \"escape-sequence\" for the escape sequence typically bound to "
-"backspace or delete. \"escape-sequence\" is normally considered the correct "
-"setting for the Delete key."
-msgstr ""
-"Setter kode som genereres av slettetasten. Mulige verdier er «ascii-del» for "
-"ASCII-tegnet DEL, «control-h» for Control-H (alias ASCII BS-tegnet), «escape-"
-"sequence» for escape-sekvensen som typisk bindes til rettetast eller "
-"slettetast. «escape-sequence» anses normalt som den korrekte innstillingen "
-"for slettetasten."
-
-#: ../src/gnome-terminal.schemas.in.h:92
-msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr "Om farger fra systemets tema skal brukes for terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:93
-msgid ""
-"If true, the theme color scheme used for text entry boxes will be used for "
-"the terminal, instead of colors provided by the user."
-msgstr ""
-"Hvis satt til «true» vil temafargene brukt for skrivefelt bli brukt i "
-"terminalen i stede for farger definert av brukeren."
-
-#: ../src/gnome-terminal.schemas.in.h:94
-msgid "Whether to use the system font"
-msgstr "Om systemskriften skal brukes"
-
-#: ../src/gnome-terminal.schemas.in.h:95
-msgid ""
-"If true, the terminal will use the desktop-global standard font if it's "
-"monospace (and the most similar font it can come up with otherwise)."
-msgstr ""
-"Hvis satt til «true» vil terminalen bruke den forvalgte skrifttypen for "
-"skrivebordet hvis den er monospace (og hvis ikke den som er mest lik.)"
-
-#: ../src/gnome-terminal.schemas.in.h:96
-msgid "Keyboard shortcut to open a new tab"
-msgstr "Tastatursnarvei som åpner en ny fane"
-
-#: ../src/gnome-terminal.schemas.in.h:97
-msgid ""
-"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å åpne en ny fane. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:98
-msgid "Keyboard shortcut to open a new window"
-msgstr "Tastatursnarvei som åpner et nytt vindu"
-
-#: ../src/gnome-terminal.schemas.in.h:99
-msgid ""
-"Keyboard shortcut key for opening a new window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å åpne et nytt vindu. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:100
-msgid "Keyboard shortcut to create a new profile"
-msgstr "Tastatursnarvei for å lage en ny profil"
-
-#: ../src/gnome-terminal.schemas.in.h:101
-msgid ""
-"Keyboard shortcut key for bringing up the dialog for profile creation. "
-"Expressed as a string in the same format used for GTK+ resource files. If "
-"you set the option to the special string \"disabled\", then there will be no "
-"keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å hente opp dialogen for oppretting av dialoger. "
-"Uttrykkes som en streng av samme format som brukes i ressursfiler for GTK+. "
-"Hvis du setter verdien til den spesielle strengen «disabled» vil "
-"tastatursnarvei for denne handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:102
-msgid "Keyboard shortcut to save the current tab contents to file"
-msgstr "Tastatursnarvei for å lagre innhold i aktiv fane til en fil"
-
-#: ../src/gnome-terminal.schemas.in.h:103
-msgid ""
-"Keyboard shortcut key to save the current tab contents to a file. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å lagre innhold i aktiv fane til en fil. Uttrykkes som "
-"en streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
-"verdien til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:104
-msgid "Keyboard shortcut to close a tab"
-msgstr "Tastatursnarvei for å lukke en fane"
-
-#: ../src/gnome-terminal.schemas.in.h:105
-msgid ""
-"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å lukke en fane. Uttrykkes som en streng av samme format "
-"som brukes i ressursfiler for GTK+. Hvis du setter verdien til den spesielle "
-"strengen «disabled» vil tastatursnarvei for denne handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:106
-msgid "Keyboard shortcut to close a window"
-msgstr "Tastatursnarvei for å lukke et vindu"
-
-#: ../src/gnome-terminal.schemas.in.h:107
-msgid ""
-"Keyboard shortcut key for closing a window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å lukke et vindu. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:108
-msgid "Keyboard shortcut to copy text"
-msgstr "Tastatursnarvei for å kopiere tekst"
-
-#: ../src/gnome-terminal.schemas.in.h:109
-msgid ""
-"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å kopiere valgt tekst til utklippstavlen. Uttrykkes som "
-"en streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
-"verdien til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:110
-msgid "Keyboard shortcut to paste text"
-msgstr "Tastatursnarvei som limer inn kopiert tekst"
-
-#: ../src/gnome-terminal.schemas.in.h:111
-msgid ""
-"Keyboard shortcut key for pasting the contents of the clipboard into the "
-"terminal. Expressed as a string in the same format used for GTK+ resource "
-"files. If you set the option to the special string \"disabled\", then there "
-"will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å lime inn innholdet på utklippstavlen i terminalen. "
-"Uttrykkes som en streng av samme format som brukes i ressursfiler for GTK+. "
-"Hvis du setter verdien til den spesielle strengen «disabled» vil "
-"tastatursnarvei for denne handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:112
-msgid "Keyboard shortcut to toggle full screen mode"
-msgstr "Tastatursnarvei som bytter til/fra fullskjermmodus"
-
-#: ../src/gnome-terminal.schemas.in.h:113
-msgid ""
-"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fullskjermmodus. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:114
-msgid "Keyboard shortcut to toggle the visibility of the menubar"
-msgstr "Tastatursnarvei som slår av/på visning av menylinjen."
-
-#: ../src/gnome-terminal.schemas.in.h:115
-msgid ""
-"Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
-"a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å slå av/på visning av menylinjen. Uttrykkes som en "
-"streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
-"verdien til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:116
-msgid "Keyboard shortcut to set the terminal title"
-msgstr "Tastatursnarvei som setter tittelen for terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:117
-msgid ""
-"Keyboard shortcut key to set the terminal title. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å sette terminalens tittel. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:118
-msgid "Keyboard shortcut to reset the terminal"
-msgstr "Tastatursnarvei som nullstiller terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:119
-msgid ""
-"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å nullstille terminalen. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:120
-msgid "Keyboard shortcut to reset and clear the terminal"
-msgstr "Tastatursnarvei som nullstiller og tømmer terminalen"
-
-#: ../src/gnome-terminal.schemas.in.h:121
-msgid ""
-"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å nullstille og tømme terminalen. Uttrykkes som en "
-"streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
-"verdien til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:122
-msgid "Keyboard shortcut to switch to the previous tab"
-msgstr "Tastatursnarvei som bytter til forrige fane"
-
-#: ../src/gnome-terminal.schemas.in.h:123
-msgid ""
-"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til forrige fane. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:124
-msgid "Keyboard shortcut to switch to the next tab"
-msgstr "Tastatursnarvei som bytter til neste fane"
-
-#: ../src/gnome-terminal.schemas.in.h:125
-msgid ""
-"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til neste fane. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:126
-msgid "Accelerator to move the current tab to the left."
-msgstr "Hurtigtast som flytter aktiv fane til venstre."
-
-#: ../src/gnome-terminal.schemas.in.h:127
-msgid ""
-"Accelerator key to move the current tab to the left. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keybinding for this "
-"action."
-msgstr ""
-"Tastatursnarvei for å flytte aktiv fane til venstre. Uttrykkes som en streng "
-"av samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
-"til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:128
-msgid "Accelerator to move the current tab to the right."
-msgstr "Hurtigtast som flytter aktiv fane til høyre."
-
-#: ../src/gnome-terminal.schemas.in.h:129
-msgid ""
-"Accelerator key to move the current tab to the right. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keybinding for this "
-"action."
-msgstr ""
-"Tastatursnarvei for å flytte aktiv fane til høyre. Uttrykkes som en streng "
-"av samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
-"til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:130
-msgid "Accelerator to detach current tab."
-msgstr "Hurtigtast som løsriver aktiv fane."
-
-#: ../src/gnome-terminal.schemas.in.h:131
-msgid ""
-"Accelerator key to detach current tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keybinding for this action."
-msgstr ""
-"Tastatursnarvei for å løsrive denne fanen. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:132
-msgid "Keyboard shortcut to switch to tab 1"
-msgstr "Tastatursnarvei som bytter til fane 1"
-
-#: ../src/gnome-terminal.schemas.in.h:133
-msgid ""
-"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 1. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:134
-msgid "Keyboard shortcut to switch to tab 2"
-msgstr "Tastatursnarvei som bytter til fane 2"
-
-#: ../src/gnome-terminal.schemas.in.h:135
-msgid ""
-"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 2. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:136
-msgid "Keyboard shortcut to switch to tab 3"
-msgstr "Tastatursnarvei som bytter til fane 3"
-
-#: ../src/gnome-terminal.schemas.in.h:137
-msgid ""
-"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 3. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:138
-msgid "Keyboard shortcut to switch to tab 4"
-msgstr "Tastatursnarvei som bytter til fane 4"
-
-#: ../src/gnome-terminal.schemas.in.h:139
-msgid ""
-"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 4. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:140
-msgid "Keyboard shortcut to switch to tab 5"
-msgstr "Tastatursnarvei som bytter til fane 5"
-
-#: ../src/gnome-terminal.schemas.in.h:141
-msgid ""
-"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 5. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:142
-msgid "Keyboard shortcut to switch to tab 6"
-msgstr "Tastatursnarvei som bytter til fane 6"
-
-#: ../src/gnome-terminal.schemas.in.h:143
-msgid ""
-"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 6. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:144
-msgid "Keyboard shortcut to switch to tab 7"
-msgstr "Tastatursnarvei som bytter til fane 7"
-
-#: ../src/gnome-terminal.schemas.in.h:145
-msgid ""
-"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 7. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:146
-msgid "Keyboard shortcut to switch to tab 8"
-msgstr "Tastatursnarvei som bytter til fane 8"
-
-#: ../src/gnome-terminal.schemas.in.h:147
-msgid ""
-"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 8. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:148
-msgid "Keyboard shortcut to switch to tab 9"
-msgstr "Tastatursnarvei som bytter til fane 9"
-
-#: ../src/gnome-terminal.schemas.in.h:149
-msgid ""
-"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 9. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:150
-msgid "Keyboard shortcut to switch to tab 10"
-msgstr "Tastatursnarvei som bytter til fane 10"
-
-#: ../src/gnome-terminal.schemas.in.h:151
-msgid ""
-"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 10. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:152
-msgid "Keyboard shortcut to switch to tab 11"
-msgstr "Tastatursnarvei som bytter til fane 11"
-
-#: ../src/gnome-terminal.schemas.in.h:153
-msgid ""
-"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 11. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:154
-msgid "Keyboard shortcut to switch to tab 12"
-msgstr "Tastatursnarvei som bytter til fane 12"
-
-#: ../src/gnome-terminal.schemas.in.h:155
-msgid ""
-"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å bytte til fane 12. Uttrykkes som en streng av samme "
-"format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
-"spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:156
-msgid "Keyboard shortcut to launch help"
-msgstr "Tastatursnarvei for å åpne hjelp"
-
-#: ../src/gnome-terminal.schemas.in.h:157
-msgid ""
-"Keyboard shortcut key for launching help. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Tastatursnarvei for å vise hjelp. Uttrykkes som en streng av samme format "
-"som brukes i ressursfiler for GTK+. Hvis du setter verdien til den spesielle "
-"strengen «disabled» vil tastatursnarvei for denne handlingen deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:158
-msgid "Keyboard shortcut to make font larger"
-msgstr "Tastatursnarvei for å gjøre skriften større"
-
-#: ../src/gnome-terminal.schemas.in.h:159
-msgid ""
-"Keyboard shortcut key for making font larger. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å gjøre skriften større. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:160
-msgid "Keyboard shortcut to make font smaller"
-msgstr "Tastatursnarvei som gjør skriften mindre"
-
-#: ../src/gnome-terminal.schemas.in.h:161
-msgid ""
-"Keyboard shortcut key for making font smaller. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å gjøre skriften mindre. Uttrykkes som en streng av "
-"samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien til "
-"den spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
-"deaktiveres."
-
-#: ../src/gnome-terminal.schemas.in.h:162
-msgid "Keyboard shortcut to make font normal-size"
-msgstr "Tastatursnarvei som setter skriften til normal størrelse"
-
-#: ../src/gnome-terminal.schemas.in.h:163
-msgid ""
-"Keyboard shortcut key for making font the normal size. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Tastatursnarvei for å sette skriften til normal størrelse. Uttrykkes som en "
-"streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
-"verdien til den spesielle strengen «disabled» vil tastatursnarvei for denne "
-"handlingen deaktiveres."
-
 #: ../src/keybinding-editor.glade.h:1
 msgid "Keyboard Shortcuts"
 msgstr "Tastatursnarveier"
@@ -1184,51 +373,407 @@ msgstr "Slå på tast for _menyaksess (F10 er forvalgt)"
 msgid "_Shortcut keys:"
 msgstr "_Snarveitaster:"
 
-#: ../src/profile-editor.c:42
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:1
+msgid "Human-readable name of the profile"
+msgstr "Lesbart navn for profilen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:2
+msgid "Human-readable name of the profile."
+msgstr "Lesbart navn for profilen."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:3
+msgid "Default color of text in the terminal"
+msgstr "Forvalgt farge for tekst i terminalen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:4
+msgid ""
+"Default color of text in the terminal, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
+msgstr ""
+"Forvalgt farge for tekst i terminalen som en fargespesifikasjon (kan være "
+"HTML-type heksadesimale tall eller et fargenavn som «red»)."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:5
+msgid "Default color of terminal background"
+msgstr "Forvalgt bakgrunnsfarge for terminalen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:6
+msgid ""
+"Default color of terminal background, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
+msgstr ""
+"Forvalgt farge for terminalens bakgrunn som en fargespesifikasjon (kan være "
+"HTML-type heksadesimale tall eller et fargenavn som «red»)."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:7
+msgid "Default color of bold text in the terminal"
+msgstr "Forvalgt farge for uthevet tekst i terminalen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:8
+msgid ""
+"Default color of bold text in the terminal, as a color specification (can be "
+"HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
+"bold_color_same_as_fg is true."
+msgstr ""
+"Forvalgt farge for uthevet tekst i terminalen som en fargespesifikasjon (kan "
+"være HTML-type heksadesimale tall eller et fargenavn som «red»). Overses "
+"hvis bold_color_same_as_fg er true."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:9
+msgid "Whether bold text should use the same color as normal text"
+msgstr "Uthevet tekst  bruker samme farge som normal tekst"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:10
+msgid ""
+"If true, boldface text will be rendered using the same color as normal text."
+msgstr ""
+"Hvis denne er sann vil uthevet tekst vises med samme farge som normal tekst."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:11
+msgid "What to do with dynamic title"
+msgstr "Hva skal gjøres med dynamiske titler"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:12
+msgid ""
+"If the application in the terminal sets the title (most typically people "
+"have their shell set up to do this), the dynamically-set title can erase the "
+"configured title, go before it, go after it, or replace it. The possible "
+"values are \"replace\", \"before\", \"after\", and \"ignore\"."
+msgstr ""
+"Hvis programmet i terminalen setter tittelen (det er vanlig å la skallet "
+"gjøre dette), så kan den dynamiske tittelen slette den forvalgte tittelen, "
+"gå før den, gå etter den eller erstatte den. De forskjellige verdiene er "
+"«replace», «before», «after» og «ignore»."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:13
+msgid "Title for terminal"
+msgstr "Tittel for terminalen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:14
+msgid ""
+"Title to display for the terminal window or tab. This title may be replaced "
+"by or combined with the title set by the application inside the terminal, "
+"depending on the title_mode setting."
+msgstr ""
+"Tittel som skal vises for terminalvinduet eller fanen. Denne tittelen kan "
+"erstattes av eller kombineres med tittel satt av programmet inne i "
+"terminalen avhengig av verdien i nøkkelen «title_mode»."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:15
+msgid "Whether to allow bold text"
+msgstr "Om uthevet tekst tillates"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:16
+msgid "If true, allow applications in the terminal to make text boldface."
+msgstr ""
+"Hvis denne er «true» vil programmer i terminalen kunne sette tekst til "
+"uthevet."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:17
+#, fuzzy
+msgid "Whether to ring the terminal bell"
+msgstr "Om systempip skal brukes eller ikke"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:18
+msgid "Characters that are considered \"part of a word\""
+msgstr "Tegn som betraktes som «del av et ord»"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:19
+msgid ""
+"When selecting text by word, sequences of these characters are considered "
+"single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
+"a range) should be the first character given."
+msgstr ""
+"Når man velger tekst etter ord kan sekvenser av disse tegnene ses på som "
+"enkelte ord. Områder kan oppgis som «A-Z». Bindestrek må oppgis som første "
+"tegn."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:20
+msgid "Whether to show menubar in new windows/tabs"
+msgstr "Om menylinjen skal vises i nye vinduer/faner"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:21
+#, fuzzy
+msgid "True if the menubar should be shown in new window"
+msgstr ""
+"Sett til «true» hvis menylinjen skal bli vist i nye vinduer, for vinduer/"
+"faner med denne profilen."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:22
+msgid "Whether to use custom terminal size for new windows"
+msgstr "Bruk egendefinert terminalstørrelse for nye vinduer"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:23
+msgid ""
+"If true, newly created terminal windows will have custom size specified by "
+"default_size_columns and default_size_rows."
+msgstr ""
+"Hvis satt til «true» vil nyopprettede terminalvinduer ha egendefinert "
+"størrelse oppgitt av default_size_columns og default_size_rows."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:24
+msgid "Default number of columns"
+msgstr "Forvalgt antall kolonner"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:25
+msgid ""
+"Number of columns in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Antall kolonner i nye terminalvinduer. Har ingen effekt hvis ikke "
+"use_custom_default_size er slått på."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:26
+msgid "Default number of rows"
+msgstr "Forvalgt antall rader"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:27
+msgid ""
+"Number of rows in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Antall rader i nye terminalvinduer. Har ingen effekt hvis ikke "
+"use_custom_default_size er slått på."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:28
+#, fuzzy
+msgid "When to show the scrollbar"
+msgstr "Posisjon for rullefeltet"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:29
+msgid "Number of lines to keep in scrollback"
+msgstr "Antall linjer tilbakerulling"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:30
+msgid ""
+"Number of scrollback lines to keep around. You can scroll back in the "
+"terminal by this number of lines; lines that don't fit in the scrollback are "
+"discarded. If scrollback_unlimited is true, this value is ignored."
+msgstr ""
+"Nummer på rullelinjer å ha lagret. Du kan rulle opp i terminalen så mange "
+"linjer som dette tallet. Linjer over det tallet blir forkastet. Hvis "
+"scrollback_unlimited er sann vil denne overses."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:31
+msgid "Whether an unlimited number of lines should be kept in scrollback"
+msgstr "Ta vare på ubegrenset antall linjer med tilbakerulling"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:32
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"Hvis denne er sann vil tilbakerulling aldri forkastes. Historikken lagres på "
+"disk midlertidig, så dette vil kunne forårsake at systemet går tomt for "
+"diskplass hvis store mengder tekst vises på terminalen."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:33
+msgid "Whether to scroll to the bottom when a key is pressed"
+msgstr "Om vinduet skal rulles helt ned når en tast trykkes"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:34
+msgid "If true, pressing a key jumps the scrollbar to the bottom."
+msgstr "Hvis satt til «true» så hopper "
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:35
+msgid "Whether to scroll to the bottom when there's new output"
+msgstr "Om vinduet skal rulles helt ned når ved nye utdata"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:36
+msgid ""
+"If true, whenever there's new output the terminal will scroll to the bottom."
+msgstr ""
+"Hvis satt til «true» vil terminalen rulle helt ned når det er ny utdata."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:37
+msgid "What to do with the terminal when the child command exits"
+msgstr "Hva skal gjøres med terminalen når barneprosessen avslutter"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:38
+msgid ""
+"Possible values are \"close\" to close the terminal, and \"restart\" to "
+"restart the command."
+msgstr ""
+"Mulige verdier er «close» for å lukke terminalen og «restart» for å starte "
+"kommandoen på nytt."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:39
+msgid "Whether to launch the command in the terminal as a login shell"
+msgstr "Om kommandoen i terminalen skal bli kjørt som et innloggingsskall"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:40
+msgid ""
+"If true, the command inside the terminal will be launched as a login shell. "
+"(argv[0] will have a hyphen in front of it.)"
+msgstr ""
+"Hvis satt til «true» vil kommandoen inni terminalen ble kjørt som et "
+"innloggingsskall. (argv[0] vil ha en bindestrek foran seg.)"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:41
+msgid "Whether to update login records when launching terminal command"
+msgstr "Om pålogginsoppføringer skal oppdateres når en vanlig terminal startes"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:42
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr ""
+"Systemets loggføring av innlogging, utmp og wtmp, vil oppdateres når "
+"kommandoen i terminalen kjøres hvis denne settes til «true»."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:43
+msgid "Whether to run a custom command instead of the shell"
+msgstr "Om en egendefinert kommando skal kjøres i stedet for skallet"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:44
+msgid ""
+"If true, the value of the custom_command setting will be used in place of "
+"running a shell."
+msgstr ""
+"Hvis satt til «true» vil verdien til «custom_command» bli brukt i stede for "
+"å kjøre et skall."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:45
+msgid "Whether to blink the cursor"
+msgstr "Om markøren skal blinke"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:46
+msgid ""
+"The possible values are \"system\" to use the global cursor blinking "
+"settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr ""
+"Mulige verdier er «system» for å bruke globale innstillinger for blinkende "
+"markør, «on» eller «off» for å sette modus eksplisitt."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:47
+msgid "The cursor appearance"
+msgstr "Utseende for markør"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:48
+msgid "Custom command to use instead of the shell"
+msgstr "Egendefinert kommando i stedet for skallet"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:49
+msgid "Run this command in place of the shell, if use_custom_command is true."
+msgstr ""
+"Kjør denne kommandoen i stedet for et skall hvis «use_custom_command» er "
+"satt."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:50
+msgid "Palette for terminal applications"
+msgstr "Palett for terminalprogrammer"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:51
+msgid "A pango font name and size"
+msgstr ""
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:52
+#, fuzzy
+msgid "The code sequence the Backspace key generates"
+msgstr "_Slettetasten genererer:"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:53
+#, fuzzy
+msgid "The code sequence the Delete key generates"
+msgstr "Delete-tasten genererer:"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:54
+msgid "Whether to use the colors from the theme for the terminal widget"
+msgstr "Om farger fra systemets tema skal brukes for terminalen"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:55
+#, fuzzy
+msgid "Whether to use the system monospace font"
+msgstr "Om systemskriften skal brukes"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:56
+msgid "Which encoding to use"
+msgstr ""
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:57
+msgid "Whether the menubar has access keys"
+msgstr "Om menylinjen har snarveitaster"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:58
+msgid ""
+"Whether to have Alt+letter access keys for the menubar. They may interfere "
+"with some applications run inside the terminal so it's possible to turn them "
+"off."
+msgstr ""
+"Skal det være en Alt+«bokstav» hurtigtast for menylinjen. Det er mulig at "
+"den kan kræsje med programmer som blir kjørt inni terminalen så det er mulig "
+"å skru dem av."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:59
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr "Om forvalgt GTK-snarvei for tilgang til menylinjen er aktivert"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:60
+msgid ""
+"Normally you can access the menubar with F10. This can also be customized "
+"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
+"standard menubar accelerator to be disabled."
+msgstr ""
+"Normalt kan du bruke menylinjen med F10. Dette kan også bli tilpasset via "
+"gtkrc (gtk-menu-bar-accel = «whatever»). Dette valget lar den forvalgte "
+"hurtigtasten til menylinjen bli slått av."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:61
+msgid "List of available encodings"
+msgstr "Liste med tilgjengelige kodinger"
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:62
+msgid ""
+"A subset of possible encodings are presented in the Encoding submenu. This "
+"is a list of encodings to appear there. The special encoding name \"current"
+"\" means to display the encoding of the current locale."
+msgstr ""
+"Et subsett av mulige kodinger vises i undermenyen «Koding». Dette er listen "
+"med kodinger som vises der. Spesialnavnet «current» vil bruke kodingen fra "
+"aktivt locale."
+
+#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:63
+#, fuzzy
+msgid "Whether to ask for confirmation before closing a terminal"
+msgstr "Om det skal spørres om bekreftelse når terminaler blir lukket"
+
+#: ../src/profile-editor.c:45
 msgid "Black on light yellow"
 msgstr "Sort på lys gul"
 
-#: ../src/profile-editor.c:44
+#: ../src/profile-editor.c:49
 msgid "Black on white"
 msgstr "Sort på hvitt"
 
-#: ../src/profile-editor.c:46
+#: ../src/profile-editor.c:53
 msgid "Gray on black"
 msgstr "Grått på sort"
 
-#: ../src/profile-editor.c:48
+#: ../src/profile-editor.c:57
 msgid "Green on black"
 msgstr "Grønn på sort"
 
-#: ../src/profile-editor.c:50
+#: ../src/profile-editor.c:61
 msgid "White on black"
 msgstr "Hvitt på sort"
 
-#: ../src/profile-editor.c:476
+#: ../src/profile-editor.c:409
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Feil under lesing av kommando: %s"
 
-#: ../src/profile-editor.c:494
+#: ../src/profile-editor.c:524
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Redigerer profil «%s»"
 
-#. Translators: This is the name of a colour scheme
-#: ../src/profile-editor.c:525 ../src/extra-strings.c:73
-msgid "Custom"
-msgstr "Egendefinert"
-
-#: ../src/profile-editor.c:644
-msgid "Images"
-msgstr "Bilder"
-
-#: ../src/profile-editor.c:816
+#: ../src/profile-editor.c:702
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Velg palettfarge %d"
 
-#: ../src/profile-editor.c:820
+#: ../src/profile-editor.c:706
 #, c-format
 msgid "Palette entry %d"
 msgstr "Palettoppføring %d"
@@ -1241,7 +786,7 @@ msgstr "Profiler"
 msgid "_Profile used when launching a new terminal:"
 msgstr "_Profil som brukes ved start av en ny terminal:"
 
-#: ../src/profile-new-dialog.glade.h:1 ../src/terminal-accels.c:146
+#: ../src/profile-new-dialog.glade.h:1 ../src/terminal-accels.c:87
 msgid "New Profile"
 msgstr "Ny profil"
 
@@ -1258,42 +803,34 @@ msgid "_Base on:"
 msgstr "_Baser på:"
 
 #: ../src/profile-preferences.glade.h:1
-msgid "Profile Editor"
-msgstr "Profilredigering"
-
-#: ../src/profile-preferences.glade.h:2
 msgid "_Profile name:"
 msgstr "_Profilnavn:"
 
-#: ../src/profile-preferences.glade.h:3
+#: ../src/profile-preferences.glade.h:2
 msgid "_Use the system fixed width font"
 msgstr "Br_uk systemets skrift med fast bredde"
 
-#: ../src/profile-preferences.glade.h:4
+#: ../src/profile-preferences.glade.h:3
 msgid "_Font:"
 msgstr "Skri_ft:"
 
-#: ../src/profile-preferences.glade.h:5
+#: ../src/profile-preferences.glade.h:4
 msgid "Choose A Terminal Font"
 msgstr "Velg en skrift for terminalen"
 
-#: ../src/profile-preferences.glade.h:6
+#: ../src/profile-preferences.glade.h:5
 msgid "_Allow bold text"
 msgstr "Till_at uthevet tekst"
 
-#: ../src/profile-preferences.glade.h:7
-msgid "Show _menubar by default in new terminals"
-msgstr "Vis _menylinje som standard i nye terminaler"
-
-#: ../src/profile-preferences.glade.h:8
+#: ../src/profile-preferences.glade.h:6
 msgid "Terminal _bell"
 msgstr "Terminal_klokke"
 
-#: ../src/profile-preferences.glade.h:9
+#: ../src/profile-preferences.glade.h:7
 msgid "Cursor _shape:"
 msgstr "Form på _markør:"
 
-#: ../src/profile-preferences.glade.h:10
+#: ../src/profile-preferences.glade.h:8
 msgid ""
 "Block\n"
 "I-Beam\n"
@@ -1303,43 +840,43 @@ msgstr ""
 "I-Beam\n"
 "Understrek"
 
-#: ../src/profile-preferences.glade.h:13
+#: ../src/profile-preferences.glade.h:11
 msgid "Select-by-_word characters:"
 msgstr "Velg-etter-_ord tegn:"
 
-#: ../src/profile-preferences.glade.h:14
+#: ../src/profile-preferences.glade.h:12
 msgid "Use custom default terminal si_ze"
 msgstr "Bruk egendefinert forvalgt terminalst_ørrelse"
 
-#: ../src/profile-preferences.glade.h:15
+#: ../src/profile-preferences.glade.h:13
 msgid "Default size:"
 msgstr "Forvalgt størrelse:"
 
-#: ../src/profile-preferences.glade.h:16
+#: ../src/profile-preferences.glade.h:14
 msgid "columns"
 msgstr "kolonner"
 
-#: ../src/profile-preferences.glade.h:17
+#: ../src/profile-preferences.glade.h:15
 msgid "rows"
 msgstr "rader"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.glade.h:16
 msgid "General"
 msgstr "Generelt"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.glade.h:17
 msgid "<b>Title</b>"
 msgstr "<b>Tittel</b>"
 
-#: ../src/profile-preferences.glade.h:20
+#: ../src/profile-preferences.glade.h:18
 msgid "Initial _title:"
 msgstr "Opprinnelig _tittel:"
 
-#: ../src/profile-preferences.glade.h:21
+#: ../src/profile-preferences.glade.h:19
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Når detminalkommandoer setter sine e_gne titler:"
 
-#: ../src/profile-preferences.glade.h:22
+#: ../src/profile-preferences.glade.h:20
 msgid ""
 "Replace initial title\n"
 "Append initial title\n"
@@ -1351,31 +888,31 @@ msgstr ""
 "Sett inn opprinnelig tittel etter\n"
 "Behold opprinnelig tittel"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.glade.h:24
 msgid "<b>Command</b>"
 msgstr "<b>Kommando</b>"
 
-#: ../src/profile-preferences.glade.h:27
+#: ../src/profile-preferences.glade.h:25
 msgid "_Run command as a login shell"
 msgstr "Kjø_r kommando som innloggingsskall"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.glade.h:26
 msgid "_Update login records when command is launched"
 msgstr "_Oppdater påloggingsoppføringer når kommandoen startes"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.glade.h:27
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Kjør en ege_ndefinert kommando i stedet for skallet"
 
-#: ../src/profile-preferences.glade.h:30
+#: ../src/profile-preferences.glade.h:28
 msgid "Custom co_mmand:"
 msgstr "Egendefinert ko_mmando:"
 
-#: ../src/profile-preferences.glade.h:31
+#: ../src/profile-preferences.glade.h:29
 msgid "When command _exits:"
 msgstr "Når kommandoen _avslutter:"
 
-#: ../src/profile-preferences.glade.h:32
+#: ../src/profile-preferences.glade.h:30
 msgid ""
 "Exit the terminal\n"
 "Restart the command\n"
@@ -1385,59 +922,59 @@ msgstr ""
 "Start kommandoen på nytt\n"
 "Hold terminalen åpen"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.glade.h:33
 msgid "Title and Command"
 msgstr "Tittel og kommando"
 
-#: ../src/profile-preferences.glade.h:36
+#: ../src/profile-preferences.glade.h:34
 msgid "<b>Foreground, Background, Bold and Underline</b>"
 msgstr "<b>Forgrunn, bakgrunn, utheving og understreking</b>"
 
-#: ../src/profile-preferences.glade.h:37
+#: ../src/profile-preferences.glade.h:35
 msgid "_Use colors from system theme"
 msgstr "Br_uk farger fra systemtemaet"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.glade.h:36
 msgid "Built-in sche_mes:"
 msgstr "Innebygde sche_ma:"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.glade.h:37
 msgid "_Text color:"
 msgstr "Tekstfarge:"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.glade.h:38
 msgid "_Background color:"
 msgstr "_Bakgrunnsfarge:"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.glade.h:39
 msgid "Choose Terminal Background Color"
 msgstr "Velg bakgrunnsfarge for terminal"
 
-#: ../src/profile-preferences.glade.h:42
+#: ../src/profile-preferences.glade.h:40
 msgid "Choose Terminal Text Color"
 msgstr "Velg tekstfarge for terminal"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.glade.h:41
 msgid "_Underline color:"
 msgstr "Farge for _understreking:"
 
-#: ../src/profile-preferences.glade.h:44
+#: ../src/profile-preferences.glade.h:42
 msgid "_Same as text color"
 msgstr "_Samme som tekstfarge"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.glade.h:43
 msgid "Bol_d color:"
 msgstr "Ut_hevet farge:"
 
-#: ../src/profile-preferences.glade.h:46
+#: ../src/profile-preferences.glade.h:44
 msgid "<b>Palette</b>"
 msgstr "<b>Palett</b>"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.glade.h:45
 msgid "Built-in _schemes:"
 msgstr "Innebygde _schema:"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.glade.h:46
 msgid ""
 "<small><i><b>Note:</b> Terminal applications have these colors available to "
 "them.</i></small>"
@@ -1445,107 +982,51 @@ msgstr ""
 "<small><i><b>Merk:</b> Terminalprogrammer har disse fargene til disposisjon."
 "</i></small>"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.glade.h:47
 msgid "Color p_alette:"
 msgstr "Fargep_alett:"
 
-#: ../src/profile-preferences.glade.h:50
-msgid ""
-"Tango\n"
-"Linux console\n"
-"XTerm\n"
-"Rxvt\n"
-"Custom"
-msgstr ""
-"Tango\n"
-"Linux-konsoll\n"
-"XTerm\n"
-"Rxvt\n"
-"Egendefinert"
-
-#: ../src/profile-preferences.glade.h:55
+#: ../src/profile-preferences.glade.h:48
 msgid "Colors"
 msgstr "Farger"
 
-#: ../src/profile-preferences.glade.h:56
-msgid "_Solid color"
-msgstr "_Helfylt farge)"
-
-#: ../src/profile-preferences.glade.h:57
-msgid "_Background image"
-msgstr "_Bakgrunnsbilde"
-
-#: ../src/profile-preferences.glade.h:58
-msgid "Image _file:"
-msgstr "B_ildefil:"
-
-#: ../src/profile-preferences.glade.h:59
-msgid "Select Background Image"
-msgstr "Velg bakgrunnsbilde"
-
-#: ../src/profile-preferences.glade.h:60
-msgid "Background image _scrolls"
-msgstr "Bakgrunnsbildet _ruller"
-
-#: ../src/profile-preferences.glade.h:61
-msgid "_Transparent background"
-msgstr "_Gjennomsiktig bakgrunn"
-
-#: ../src/profile-preferences.glade.h:62
-msgid "S_hade transparent or image background:"
-msgstr "S_kyggelegg gjennomsiktig bakgrunn eller bakgrunn med bilde:"
-
-#: ../src/profile-preferences.glade.h:63
-msgid "<small><i>None</i></small>"
-msgstr "<small><i>Ingen</i></small>"
-
-#: ../src/profile-preferences.glade.h:64
-msgid "<small><i>Maximum</i></small>"
-msgstr "<small><i>Maksimum</i></small>"
-
-#: ../src/profile-preferences.glade.h:65
-msgid "Background"
-msgstr "Bakgrunn"
-
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.glade.h:49
 msgid "_Scrollbar is:"
 msgstr "_Rullefeltet er:"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.glade.h:50
 msgid "Scroll_back:"
 msgstr "Til_bakerulling:"
 
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.glade.h:51
 msgid "Scroll on _keystroke"
 msgstr "Rull ned ved tastetry_kk"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.glade.h:52
 msgid "Scroll on _output"
 msgstr "Rull ned ved _utdata"
 
-#: ../src/profile-preferences.glade.h:70
+#. Infinite scrollback
+#: ../src/profile-preferences.glade.h:54
 msgid "_Unlimited"
 msgstr "_Ubegrenset"
 
-#: ../src/profile-preferences.glade.h:71
+#: ../src/profile-preferences.glade.h:55
 msgid ""
-"On the left side\n"
-"On the right side\n"
-"Disabled"
+"Always visible\n"
+"Visible only when necessary\n"
+"Hidden"
 msgstr ""
-"På venstre side\n"
-"På høyre side\n"
-"Deaktivert"
 
-#: ../src/profile-preferences.glade.h:74
+#: ../src/profile-preferences.glade.h:58
 msgid "lines"
 msgstr "linjer"
 
-#: ../src/profile-preferences.glade.h:75
+#: ../src/profile-preferences.glade.h:59
 msgid "Scrolling"
 msgstr "Rulling"
 
-#: ../src/profile-preferences.glade.h:76
+#: ../src/profile-preferences.glade.h:60
 msgid ""
 "<small><i><b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1557,15 +1038,15 @@ msgstr ""
 "programmer og operativsystemer som forventer ulik terminaloppførsel.</i></"
 "small>"
 
-#: ../src/profile-preferences.glade.h:77
+#: ../src/profile-preferences.glade.h:61
 msgid "_Delete key generates:"
 msgstr "Delete-tasten genererer:"
 
-#: ../src/profile-preferences.glade.h:78
+#: ../src/profile-preferences.glade.h:62
 msgid "_Backspace key generates:"
 msgstr "_Slettetasten genererer:"
 
-#: ../src/profile-preferences.glade.h:79
+#: ../src/profile-preferences.glade.h:63
 msgid ""
 "Automatic\n"
 "Control-H\n"
@@ -1579,197 +1060,188 @@ msgstr ""
 "Escape-sekvens\n"
 "TTY-slett"
 
-#: ../src/profile-preferences.glade.h:84
+#: ../src/profile-preferences.glade.h:68
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "Sett alte_rnativer for kompatibilitet til forvalg"
 
-#: ../src/profile-preferences.glade.h:85
+#: ../src/profile-preferences.glade.h:69
 msgid "Compatibility"
 msgstr "Kompatibilitet"
 
-#: ../src/terminal-accels.c:142
+#: ../src/terminal-accels.c:85
 msgid "New Tab"
 msgstr "Ny fane"
 
-#: ../src/terminal-accels.c:144
+#: ../src/terminal-accels.c:86
 msgid "New Window"
 msgstr "Nytt vindu"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:89
 msgid "Save Contents"
 msgstr "Lagre innhold"
 
-#: ../src/terminal-accels.c:152
+#: ../src/terminal-accels.c:91
 msgid "Close Tab"
 msgstr "Lukk fane"
 
-#: ../src/terminal-accels.c:154
+#: ../src/terminal-accels.c:92
 msgid "Close Window"
 msgstr "Lukk vindu"
 
-#: ../src/terminal-accels.c:160
+#: ../src/terminal-accels.c:97
 msgid "Copy"
 msgstr "Kopier"
 
-#: ../src/terminal-accels.c:162
+#: ../src/terminal-accels.c:98
 msgid "Paste"
 msgstr "Lim inn"
 
-#: ../src/terminal-accels.c:168
-msgid "Hide and Show menubar"
-msgstr "Vis eller skjul menylinjen"
-
-#: ../src/terminal-accels.c:170
+#: ../src/terminal-accels.c:103
 msgid "Full Screen"
 msgstr "Full skjerm"
 
-#: ../src/terminal-accels.c:172
+#: ../src/terminal-accels.c:104
 msgid "Zoom In"
 msgstr "Zoom inn"
 
-#: ../src/terminal-accels.c:174
+#: ../src/terminal-accels.c:105
 msgid "Zoom Out"
 msgstr "Zoom ut"
 
-#: ../src/terminal-accels.c:176
+#: ../src/terminal-accels.c:106
 msgid "Normal Size"
 msgstr "Normal størrelse"
 
-#: ../src/terminal-accels.c:182 ../src/terminal-window.c:3831
+#: ../src/terminal-accels.c:111 ../src/terminal-window.c:3365
 msgid "Set Title"
 msgstr "Sett tittel"
 
-#: ../src/terminal-accels.c:184
+#: ../src/terminal-accels.c:112
 msgid "Reset"
 msgstr "Nullstill"
 
-#: ../src/terminal-accels.c:186
+#: ../src/terminal-accels.c:113
 msgid "Reset and Clear"
 msgstr "Nullstill og tøm"
 
-#: ../src/terminal-accels.c:192
+#: ../src/terminal-accels.c:118
 msgid "Switch to Previous Tab"
 msgstr "Bytt til forrige fane"
 
-#: ../src/terminal-accels.c:194
+#: ../src/terminal-accels.c:119
 msgid "Switch to Next Tab"
 msgstr "Bytt til neste fane"
 
-#: ../src/terminal-accels.c:196
+#: ../src/terminal-accels.c:120
 msgid "Move Tab to the Left"
 msgstr "Flytt fane til venstre"
 
-#: ../src/terminal-accels.c:198
+#: ../src/terminal-accels.c:121
 msgid "Move Tab to the Right"
 msgstr "Flytt fane til høyre"
 
-#: ../src/terminal-accels.c:200
+#: ../src/terminal-accels.c:122
 msgid "Detach Tab"
 msgstr "Riv løs fane"
 
-#: ../src/terminal-accels.c:202
+#: ../src/terminal-accels.c:123
 msgid "Switch to Tab 1"
 msgstr "Bytt til fane 1"
 
-#: ../src/terminal-accels.c:205
+#: ../src/terminal-accels.c:124
 msgid "Switch to Tab 2"
 msgstr "Bytt til fane 2"
 
-#: ../src/terminal-accels.c:208
+#: ../src/terminal-accels.c:125
 msgid "Switch to Tab 3"
 msgstr "Bytt til fane 3"
 
-#: ../src/terminal-accels.c:211
+#: ../src/terminal-accels.c:126
 msgid "Switch to Tab 4"
 msgstr "Bytt til fane 4"
 
-#: ../src/terminal-accels.c:214
+#: ../src/terminal-accels.c:127
 msgid "Switch to Tab 5"
 msgstr "Bytt til fane 5"
 
-#: ../src/terminal-accels.c:217
+#: ../src/terminal-accels.c:128
 msgid "Switch to Tab 6"
 msgstr "Bytt til fane 6"
 
-#: ../src/terminal-accels.c:220
+#: ../src/terminal-accels.c:129
 msgid "Switch to Tab 7"
 msgstr "Bytt til fane 7"
 
-#: ../src/terminal-accels.c:223
+#: ../src/terminal-accels.c:130
 msgid "Switch to Tab 8"
 msgstr "Bytt til fane 8"
 
-#: ../src/terminal-accels.c:226
+#: ../src/terminal-accels.c:131
 msgid "Switch to Tab 9"
 msgstr "Bytt til fane 9"
 
-#: ../src/terminal-accels.c:229
+#: ../src/terminal-accels.c:132
 msgid "Switch to Tab 10"
 msgstr "Bytt til fane 10"
 
-#: ../src/terminal-accels.c:232
+#: ../src/terminal-accels.c:133
 msgid "Switch to Tab 11"
 msgstr "Bytt til fane 11"
 
-#: ../src/terminal-accels.c:235
+#: ../src/terminal-accels.c:134
 msgid "Switch to Tab 12"
 msgstr "Bytt til fane 12"
 
-#: ../src/terminal-accels.c:241
+#: ../src/terminal-accels.c:138
 msgid "Contents"
 msgstr "Innhold"
 
-#: ../src/terminal-accels.c:246
+#: ../src/terminal-accels.c:143
 msgid "File"
 msgstr "Fil"
 
-#: ../src/terminal-accels.c:247
+#: ../src/terminal-accels.c:144
 msgid "Edit"
 msgstr "Rediger"
 
-#: ../src/terminal-accels.c:248
+#: ../src/terminal-accels.c:145
 msgid "View"
 msgstr "Vis"
 
-#: ../src/terminal-accels.c:250
+#: ../src/terminal-accels.c:147
 msgid "Tabs"
 msgstr "Faner"
 
-#: ../src/terminal-accels.c:251
+#: ../src/terminal-accels.c:148
 msgid "Help"
 msgstr "Hjelp"
 
-#: ../src/terminal-accels.c:720
-#, c-format
-msgid "The shortcut key “%s” is already bound to the “%s” action"
-msgstr "Snarveitasten «%s» er allerede bundet til handlingen «%s»"
-
-#: ../src/terminal-accels.c:878
+#: ../src/terminal-accels.c:452
 msgid "_Action"
 msgstr "H_andling"
 
-#: ../src/terminal-accels.c:896
+#: ../src/terminal-accels.c:470
 msgid "Shortcut _Key"
 msgstr "_Hurtigtast"
 
-#: ../src/terminal-app.c:490
+#: ../src/terminal-app.c:379
 msgid "Click button to choose profile"
 msgstr "Klikk knappen for å velge profil"
 
-#: ../src/terminal-app.c:575
+#: ../src/terminal-app.c:464
 msgid "Profile list"
 msgstr "Profilliste"
 
-#: ../src/terminal-app.c:636
+#: ../src/terminal-app.c:525
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Slett profil «%s»?"
 
-#: ../src/terminal-app.c:652
+#: ../src/terminal-app.c:541
 msgid "Delete Profile"
 msgstr "Slett profil"
 
-#: ../src/terminal-app.c:1097
+#: ../src/terminal-app.c:843
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1778,25 +1250,28 @@ msgstr ""
 "Du har allerede en profil med navn «%s». Vil du opprette en ny profil med "
 "samme navn?"
 
-#: ../src/terminal-app.c:1199
+#: ../src/terminal-app.c:948
 msgid "Choose base profile"
 msgstr "Velg basisprofil"
 
-#: ../src/terminal-app.c:1813
-#, c-format
-msgid "No such profile \"%s\", using default profile\n"
-msgstr "Ingen slik profil «%s». Bruker forvalgt profil\n"
-
-#: ../src/terminal-app.c:1837
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "Ugyldig geometristreng «%s»\n"
-
-#: ../src/terminal-app.c:2015
+#: ../src/terminal-app.c:1525
 msgid "User Defined"
 msgstr "Brukerdefinert"
 
-#: ../src/terminal.c:546
+#: ../src/terminal-appmenu.ui.h:1
+#, fuzzy
+msgid "_Preferences"
+msgstr "Brukervalg for _profil"
+
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1635
+msgid "_Help"
+msgstr "_Hjelp"
+
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1756
+msgid "_About"
+msgstr "_Om"
+
+#: ../src/terminal.c:229
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Klarte ikke å lese argumenter: %s\n"
@@ -1942,63 +1417,105 @@ msgstr "Vietnamesisk"
 msgid "Thai"
 msgstr "Thai"
 
-#: ../src/terminal-encoding.c:503 ../src/terminal-encoding.c:528
+#: ../src/terminal-encoding.c:491 ../src/terminal-encoding.c:516
 msgid "_Description"
 msgstr "_Beskrivelse"
 
-#: ../src/terminal-encoding.c:512 ../src/terminal-encoding.c:537
+#: ../src/terminal-encoding.c:500 ../src/terminal-encoding.c:525
 msgid "_Encoding"
 msgstr "_Koding"
 
-#: ../src/terminal-encoding.c:595
+#: ../src/terminal-encoding.c:583
 msgid "Current Locale"
 msgstr "Aktivt locale"
 
-#: ../src/terminal-options.c:175
-#, c-format
-msgid ""
-"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"profile' option\n"
-msgstr ""
-"Flagg «%s» er ikke støttet i denne versjonen av gnome-terminal; du kan "
-"opprette en profil med denne innstillingen og bruke det nye «--profile» "
-"flagget\n"
+#: ../src/terminal-nautilus.c:467
+#, fuzzy
+msgid "Open in _Remote Terminal"
+msgstr "Åpne _terminal"
 
-#: ../src/terminal-options.c:188 ../src/terminal-window.c:4062
+#: ../src/terminal-nautilus.c:469
+#, fuzzy
+msgid "Open in _Local Terminal"
+msgstr "Åpne _terminal"
+
+#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+msgid "Open the currently selected folder in a terminal"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:475 ../src/terminal-nautilus.c:486
+#: ../src/terminal-nautilus.c:496
+msgid "Open the currently open folder in a terminal"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
+#, fuzzy
+msgid "Open in T_erminal"
+msgstr "Åpne _terminal"
+
+#: ../src/terminal-nautilus.c:492
+#, fuzzy
+msgid "Open T_erminal"
+msgstr "Åpne _terminal"
+
+#: ../src/terminal-nautilus.c:493
+#, fuzzy
+msgid "Open a terminal"
+msgstr "Åpne _terminal"
+
+#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:524
+msgid "Open in _Midnight Commander"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:513
+msgid ""
+"Open the currently selected folder in the terminal file manager Midnight "
+"Commander"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:515 ../src/terminal-nautilus.c:525
+msgid ""
+"Open the currently open folder in the terminal file manager Midnight "
+"Commander"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:521
+msgid "Open _Midnight Commander"
+msgstr ""
+
+#: ../src/terminal-nautilus.c:522
+msgid "Open the terminal file manager Midnight Commander"
+msgstr ""
+
+#: ../src/terminal-options.c:210
+#, c-format
+msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
+msgstr ""
+
+#: ../src/terminal-options.c:221 ../src/terminal-util.c:234
 msgid "GNOME Terminal"
 msgstr "GNOME-terminal"
 
-#: ../src/terminal-options.c:208
+#: ../src/terminal-options.c:261
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Argument til «%s» er ikke en gyldig kommando: %s"
 
-#: ../src/terminal-options.c:343
+#: ../src/terminal-options.c:396
 msgid "Two roles given for one window"
 msgstr "To roller gitt for ett og samme vindu"
 
-#: ../src/terminal-options.c:364 ../src/terminal-options.c:397
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "Flagg «%s» ble gitt to ganger for samme vindu\n"
-
 #: ../src/terminal-options.c:596
-#, c-format
-msgid "\"%s\" is not a valid zoom factor"
-msgstr "«%s» er ikke en gyldig zoom-faktor"
-
-#: ../src/terminal-options.c:603
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Zoom-faktor «%g» er for liten, bruker %g\n"
 
-#: ../src/terminal-options.c:611
+#: ../src/terminal-options.c:604
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Zoom-faktor «%g» er for stor, bruker %g\n"
 
-#: ../src/terminal-options.c:646
+#: ../src/terminal-options.c:642
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -2007,15 +1524,15 @@ msgstr ""
 "Flagg «%s» krever at du oppgir kommandoen som skal kjøres på resten av "
 "kommandolinjen"
 
-#: ../src/terminal-options.c:807
+#: ../src/terminal-options.c:776
 msgid "Not a valid terminal config file."
 msgstr "Ikke en gyldig konfigurasjonsfil for terminal."
 
-#: ../src/terminal-options.c:820
+#: ../src/terminal-options.c:789
 msgid "Incompatible terminal config file version."
 msgstr "Inkompatibel versjon av konfigurasjonsfil for terminal."
 
-#: ../src/terminal-options.c:947
+#: ../src/terminal-options.c:923
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -2023,106 +1540,39 @@ msgstr ""
 "Ikke registrer hos navnetjeneren for aktivering, ikke gjenbruk en aktiv "
 "terminal"
 
-#: ../src/terminal-options.c:956
+#: ../src/terminal-options.c:932
 msgid "Load a terminal configuration file"
 msgstr "Last en konfigurasjonsfil for terminal"
 
-#: ../src/terminal-options.c:965
-msgid "Save the terminal configuration to a file"
-msgstr "Lagre konfigurasjon for terminal til en fil"
+#: ../src/terminal-options.c:933
+msgid "FILE"
+msgstr "FIL"
 
-#: ../src/terminal-options.c:979
+#: ../src/terminal-options.c:954
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Åpne et nytt vindu som inneholder en fane med forvalgt profil"
 
-#: ../src/terminal-options.c:988
+#: ../src/terminal-options.c:963
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Åpne en ny fane i det sist-åpnede vinduet med forvalgt profil"
 
-#: ../src/terminal-options.c:1001
-msgid "Turn on the menubar"
-msgstr "Slå på menylinjen"
-
-#: ../src/terminal-options.c:1010
-msgid "Turn off the menubar"
-msgstr "Slå av menylinjen"
-
-#: ../src/terminal-options.c:1019
-msgid "Maximise the window"
-msgstr "Maksimer vinduet"
-
-#: ../src/terminal-options.c:1028
-msgid "Full-screen the window"
-msgstr "Vis vinduet i fullskjerm"
-
-#: ../src/terminal-options.c:1037
-msgid ""
-"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
-msgstr ""
-"Sett vindustørrelse; for eksempel: 80x24 eller 80x24+200+200 (KOLONNERxRADER"
-"+X+Y)"
-
-#: ../src/terminal-options.c:1038
-msgid "GEOMETRY"
-msgstr "GEOMETRI"
-
-#: ../src/terminal-options.c:1046
-msgid "Set the window role"
-msgstr "Sett rolle for vinduet"
-
-#: ../src/terminal-options.c:1047
-msgid "ROLE"
-msgstr "ROLLE"
-
-#: ../src/terminal-options.c:1055
+#: ../src/terminal-options.c:1030
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Set sist oppgitte fane som aktiv i dens vindu"
 
-#: ../src/terminal-options.c:1068
+#: ../src/terminal-options.c:1043
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Kjør argumentet til dette flagget inne i terminalen"
 
-#: ../src/terminal-options.c:1077
-msgid "Use the given profile instead of the default profile"
-msgstr "Bruk oppgitt profil i stedet for forvalgt profil"
-
-#: ../src/terminal-options.c:1078
-msgid "PROFILE-NAME"
-msgstr "PROFILNAVN"
-
-#: ../src/terminal-options.c:1086
-msgid "Set the terminal title"
-msgstr "Sett tittel på terminalen"
-
-#: ../src/terminal-options.c:1087
-msgid "TITLE"
-msgstr "TITTEL"
-
-#: ../src/terminal-options.c:1095
-msgid "Set the working directory"
-msgstr "Sett arbeidskatalog"
-
-#: ../src/terminal-options.c:1096
-msgid "DIRNAME"
-msgstr "KATALOG"
-
-#: ../src/terminal-options.c:1104
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Sett terminalens zoom-faktor (1.0 = normal størrelse)"
-
-#: ../src/terminal-options.c:1105
-msgid "ZOOM"
-msgstr "ZOOM"
-
-#: ../src/terminal-options.c:1355 ../src/terminal-options.c:1358
+#: ../src/terminal-options.c:1341 ../src/terminal-options.c:1347
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME-terminalemulator"
 
-#: ../src/terminal-options.c:1359
+#: ../src/terminal-options.c:1348
 msgid "Show GNOME Terminal options"
 msgstr "Vis flagg for GNOME-terminalemulator"
 
-#: ../src/terminal-options.c:1369
+#: ../src/terminal-options.c:1358
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -2130,11 +1580,7 @@ msgstr ""
 "Alternativer for å åpne nye vinduer eller terminalfaner; mer enn en av disse "
 "kan oppgis:"
 
-#: ../src/terminal-options.c:1370
-msgid "Show terminal options"
-msgstr "Vis flagg for terminal"
-
-#: ../src/terminal-options.c:1378
+#: ../src/terminal-options.c:1367
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -2142,11 +1588,11 @@ msgstr ""
 "Alternativer for vinduer; hvis brukt før første --window eller --tab "
 "argument settes forvalg for alle vinduer:"
 
-#: ../src/terminal-options.c:1379
+#: ../src/terminal-options.c:1368
 msgid "Show per-window options"
 msgstr "Vis flagg som gjelder for hvert vindu"
 
-#: ../src/terminal-options.c:1387
+#: ../src/terminal-options.c:1376
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -2154,59 +1600,70 @@ msgstr ""
 "Terminalalternativer; hvis brukt før første --window eller --tab argument "
 "settes forvalg for alle terminaler:"
 
-#: ../src/terminal-options.c:1388
+#: ../src/terminal-options.c:1377
 msgid "Show per-terminal options"
 msgstr "Vis flagg som gjelder for hver terminal"
 
-#: ../src/terminal-profile.c:164
-msgid "Unnamed"
-msgstr "Uten navn"
-
-#: ../src/terminal-screen.c:1492
+#: ../src/terminal-screen.c:1511
 msgid "_Profile Preferences"
 msgstr "Brukervalg for _profil"
 
-#: ../src/terminal-screen.c:1493 ../src/terminal-screen.c:1876
+#: ../src/terminal-screen.c:1512 ../src/terminal-screen.c:1903
 msgid "_Relaunch"
 msgstr "Sta_rt på nytt"
 
-#: ../src/terminal-screen.c:1496
+#: ../src/terminal-screen.c:1515
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Det oppsto en feil under oppretting av underprosess for denne terminalen"
 
-#: ../src/terminal-screen.c:1880
+#: ../src/terminal-screen.c:1907
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Underprosess avsluttet normalt med status %d."
 
-#: ../src/terminal-screen.c:1883
-#, c-format
-msgid "The child process was terminated by signal %d."
+#: ../src/terminal-screen.c:1910
+#, fuzzy, c-format
+msgid "The child process was aborted by signal %d."
 msgstr "Underprosess ble terminert med signal %d."
 
-#: ../src/terminal-screen.c:1886
-msgid "The child process was terminated."
+#: ../src/terminal-screen.c:1913
+#, fuzzy
+msgid "The child process was aborted."
 msgstr "Underprosess ble terminert."
 
-#: ../src/terminal-tab-label.c:131
+#: ../src/terminal-tab-label.c:195
 msgid "Close tab"
 msgstr "Lukk fane"
 
-#: ../src/terminal-tabs-menu.c:198
+#: ../src/terminal-tabs-menu.c:196
 msgid "Switch to this tab"
 msgstr "Bytt til denne fanen"
 
-#: ../src/terminal-util.c:186
+#: ../src/terminal-util.c:162
 msgid "There was an error displaying help"
 msgstr "Det oppsto en feil under visning av hjelp"
 
-#: ../src/terminal-util.c:257
+#: ../src/terminal-util.c:217
+msgid "Contributors:"
+msgstr "Bidragsytere:"
+
+#: ../src/terminal-util.c:236
+msgid "A terminal emulator for the GNOME desktop"
+msgstr "En terminalemulator for GNOME"
+
+#: ../src/terminal-util.c:243
+msgid "translator-credits"
+msgstr ""
+"Kjartan Maraas <kmaraas@gnome.org>\n"
+"Torstein Adolf Winterseth <kvikende@fsfe.org>"
+
+#: ../src/terminal-util.c:316
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Kunne ikke åpne adressen «%s»"
 
-#: ../src/terminal-util.c:364
+#: ../src/terminal-util.c:391
 msgid ""
 "GNOME Terminal is free software; you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -2218,7 +1675,7 @@ msgstr ""
 "av Free Software Foundation; enten versjon 3 av lisensen, eller (hvis du "
 "ønsker det) enhver senere versjon."
 
-#: ../src/terminal-util.c:368
+#: ../src/terminal-util.c:395
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -2229,7 +1686,7 @@ msgstr ""
 "GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET "
 "BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
-#: ../src/terminal-util.c:372
+#: ../src/terminal-util.c:399
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
@@ -2243,7 +1700,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:477
+#: ../src/terminal-window.c:434
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -2252,223 +1709,212 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:483
+#: ../src/terminal-window.c:440
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1627
 msgid "_File"
 msgstr "_Fil"
 
 #. File menu
-#: ../src/terminal-window.c:1805 ../src/terminal-window.c:1817
-#: ../src/terminal-window.c:1964
+#: ../src/terminal-window.c:1628 ../src/terminal-window.c:1640
+#: ../src/terminal-window.c:1789
 msgid "Open _Terminal"
 msgstr "Åpne _terminal"
 
-#: ../src/terminal-window.c:1806 ../src/terminal-window.c:1820
-#: ../src/terminal-window.c:1967
+#: ../src/terminal-window.c:1629 ../src/terminal-window.c:1643
+#: ../src/terminal-window.c:1792
 msgid "Open Ta_b"
 msgstr "Åpne _fane"
 
-#: ../src/terminal-window.c:1807
+#: ../src/terminal-window.c:1630
 msgid "_Edit"
 msgstr "R_ediger"
 
-#: ../src/terminal-window.c:1808
+#: ../src/terminal-window.c:1631
 msgid "_View"
 msgstr "_Vis"
 
-#: ../src/terminal-window.c:1809
+#: ../src/terminal-window.c:1632
 msgid "_Search"
 msgstr "_Søk"
 
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1633
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1811
+#: ../src/terminal-window.c:1634
 msgid "Ta_bs"
 msgstr "_Faner"
 
-#: ../src/terminal-window.c:1812
-msgid "_Help"
-msgstr "_Hjelp"
-
-#: ../src/terminal-window.c:1823
+#: ../src/terminal-window.c:1646
 msgid "New _Profile…"
 msgstr "Ny profil …"
 
-#: ../src/terminal-window.c:1826
+#: ../src/terminal-window.c:1649
 msgid "_Save Contents"
 msgstr "_Lagre innhold"
 
-#: ../src/terminal-window.c:1829 ../src/terminal-window.c:1973
+#: ../src/terminal-window.c:1652 ../src/terminal-window.c:1798
 msgid "C_lose Tab"
 msgstr "_Lukk fane"
 
-#: ../src/terminal-window.c:1832
+#: ../src/terminal-window.c:1655
 msgid "_Close Window"
 msgstr "L_ukk vindu"
 
-#: ../src/terminal-window.c:1843 ../src/terminal-window.c:1961
+#: ../src/terminal-window.c:1666 ../src/terminal-window.c:1786
 msgid "Paste _Filenames"
 msgstr "Lim inn _filnavn"
 
-#: ../src/terminal-window.c:1849
+#: ../src/terminal-window.c:1673
 msgid "P_rofiles…"
 msgstr "P_rofiler …"
 
-#: ../src/terminal-window.c:1852
+#: ../src/terminal-window.c:1677
 msgid "_Keyboard Shortcuts…"
 msgstr "_Tastatursnarveier …"
 
-#: ../src/terminal-window.c:1855
-msgid "Pr_ofile Preferences"
-msgstr "Brukervalg for pr_ofil"
+#: ../src/terminal-window.c:1680
+#, fuzzy
+msgid "_Preferences…"
+msgstr "Brukervalg for _profil"
 
 #. Search menu
-#: ../src/terminal-window.c:1871
+#: ../src/terminal-window.c:1696
 msgid "_Find..."
 msgstr "_Finn …"
 
-#: ../src/terminal-window.c:1874
+#: ../src/terminal-window.c:1699
 msgid "Find Ne_xt"
 msgstr "Finn ne_ste"
 
-#: ../src/terminal-window.c:1877
+#: ../src/terminal-window.c:1702
 msgid "Find Pre_vious"
 msgstr "Finn forri_ge"
 
-#: ../src/terminal-window.c:1880
+#: ../src/terminal-window.c:1705
 msgid "_Clear Highlight"
 msgstr "_Tøm utheving"
 
-#: ../src/terminal-window.c:1884
+#: ../src/terminal-window.c:1709
 msgid "Go to _Line..."
 msgstr "Gå til _linje …"
 
-#: ../src/terminal-window.c:1887
+#: ../src/terminal-window.c:1712
 msgid "_Incremental Search..."
 msgstr "_Inkrementelt søk …"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1893
+#: ../src/terminal-window.c:1718
 msgid "Change _Profile"
 msgstr "Bytt _profil"
 
-#: ../src/terminal-window.c:1894
+#: ../src/terminal-window.c:1719
 msgid "_Set Title…"
 msgstr "_Sett tittel …"
 
-#: ../src/terminal-window.c:1897
+#: ../src/terminal-window.c:1722
 msgid "Set _Character Encoding"
 msgstr "Sett _tegnkoding"
 
-#: ../src/terminal-window.c:1898
+#: ../src/terminal-window.c:1723
 msgid "_Reset"
 msgstr "_Nullstill"
 
-#: ../src/terminal-window.c:1901
+#: ../src/terminal-window.c:1726
 msgid "Reset and C_lear"
 msgstr "Nu_llstill og tøm"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1906
+#: ../src/terminal-window.c:1731
 msgid "_Add or Remove…"
 msgstr "_Legg til eller fjern …"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1911
+#: ../src/terminal-window.c:1736
 msgid "_Previous Tab"
 msgstr "_Forrige fane"
 
-#: ../src/terminal-window.c:1914
+#: ../src/terminal-window.c:1739
 msgid "_Next Tab"
 msgstr "_Neste fane"
 
-#: ../src/terminal-window.c:1917
+#: ../src/terminal-window.c:1742
 msgid "Move Tab _Left"
 msgstr "Flytt fane til _venstre"
 
-#: ../src/terminal-window.c:1920
+#: ../src/terminal-window.c:1745
 msgid "Move Tab _Right"
 msgstr "Flytt fane til høy_re"
 
-#: ../src/terminal-window.c:1923
+#: ../src/terminal-window.c:1748
 msgid "_Detach tab"
 msgstr "_Riv løs fane"
 
 #. Help menu
-#: ../src/terminal-window.c:1928
+#: ../src/terminal-window.c:1753
 msgid "_Contents"
 msgstr "_Innhold"
 
-#: ../src/terminal-window.c:1931
-msgid "_About"
-msgstr "_Om"
-
 #. Popup menu
-#: ../src/terminal-window.c:1936
+#: ../src/terminal-window.c:1761
 msgid "_Send Mail To…"
 msgstr "_Send e-post til …"
 
-#: ../src/terminal-window.c:1939
+#: ../src/terminal-window.c:1764
 msgid "_Copy E-mail Address"
 msgstr "_Kopier e-postadresse"
 
-#: ../src/terminal-window.c:1942
+#: ../src/terminal-window.c:1767
 msgid "C_all To…"
 msgstr "_Ring til …"
 
-#: ../src/terminal-window.c:1945
+#: ../src/terminal-window.c:1770
 msgid "_Copy Call Address"
 msgstr "_Kopier samtaleadresse"
 
-#: ../src/terminal-window.c:1948
+#: ../src/terminal-window.c:1773
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../src/terminal-window.c:1951
+#: ../src/terminal-window.c:1776
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
-#: ../src/terminal-window.c:1954
+#: ../src/terminal-window.c:1779
 msgid "P_rofiles"
 msgstr "P_rofiler"
 
-#: ../src/terminal-window.c:1970 ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:1795 ../src/terminal-window.c:2834
 msgid "C_lose Window"
 msgstr "_Lukk vindu"
 
-#: ../src/terminal-window.c:1976
+#: ../src/terminal-window.c:1801
 msgid "L_eave Full Screen"
 msgstr "For_lat full skjerm"
 
-#: ../src/terminal-window.c:1979
+#: ../src/terminal-window.c:1804
 msgid "_Input Methods"
 msgstr "_Inndatametoder"
 
 #. View Menu
-#: ../src/terminal-window.c:1985
-msgid "Show _Menubar"
-msgstr "Vis _menylinje"
-
-#: ../src/terminal-window.c:1989
+#: ../src/terminal-window.c:1810
 msgid "_Full Screen"
 msgstr "_Full skjerm"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:2821
 msgid "Close this window?"
 msgstr "Lukk dette vinduet?"
 
-#: ../src/terminal-window.c:3282
+#: ../src/terminal-window.c:2821
 msgid "Close this terminal?"
 msgstr "Lukk denne terminalen?"
 
-#: ../src/terminal-window.c:3286
+#: ../src/terminal-window.c:2825
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2476,7 +1922,7 @@ msgstr ""
 "Prosesser kjører fremdeles i noen terminaler i dette vinduet. Hvis du lukker "
 "vinduet vil de bli terminert."
 
-#: ../src/terminal-window.c:3290
+#: ../src/terminal-window.c:2829
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2484,162 +1930,786 @@ msgstr ""
 "En prosess kjører fremdeles i denne terminalen. Hvis du lukker terminalen "
 "vil denne termineres."
 
-#: ../src/terminal-window.c:3295
+#: ../src/terminal-window.c:2834
 msgid "C_lose Terminal"
 msgstr "_Lukk terminal"
 
-#: ../src/terminal-window.c:3368
+#: ../src/terminal-window.c:2907
 msgid "Could not save contents"
 msgstr "Kunne ikke lagre innhold"
 
-#: ../src/terminal-window.c:3392
+#: ../src/terminal-window.c:2931
 msgid "Save as..."
 msgstr "Lagre som …"
 
-#: ../src/terminal-window.c:3854
+#: ../src/terminal-window.c:3382
 msgid "_Title:"
 msgstr "_Tittel:"
 
-#: ../src/terminal-window.c:4045
-msgid "Contributors:"
-msgstr "Bidragsytere:"
+#~ msgid "Disable connection to session manager"
+#~ msgstr "Slå av tilkobling til økthåndterer"
 
-#: ../src/terminal-window.c:4064
-msgid "A terminal emulator for the GNOME desktop"
-msgstr "En terminalemulator for GNOME"
+#~ msgid "Specify file containing saved configuration"
+#~ msgstr "Oppgi fil som inneholder lagret konfigurasjon"
 
-#: ../src/terminal-window.c:4071
-msgid "translator-credits"
-msgstr ""
-"Kjartan Maraas <kmaraas@gnome.org>\n"
-"Torstein Adolf Winterseth <kvikende@fsfe.org>"
+#~ msgid "Specify session management ID"
+#~ msgstr "Oppgi økthåndterings-ID"
 
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:24
-msgid "Automatic"
-msgstr "Automatisk"
+#~ msgid "ID"
+#~ msgstr "ID"
 
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:26
-msgid "Control-H"
-msgstr "Control-H"
+#~ msgid "Show session management options"
+#~ msgstr "Vis alternativer for økthåndtering"
 
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:28
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
+#~ msgid "List of profiles"
+#~ msgstr "Liste med profiler"
 
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:30
-msgid "Escape sequence"
-msgstr "Escape-sekvens"
+#~ msgid ""
+#~ "List of profiles known to gnome-terminal. The list contains strings "
+#~ "naming subdirectories relative to /apps/gnome-terminal/profiles."
+#~ msgstr ""
+#~ "Liste med profiler som er kjent for gnome-terminal. Listen inneholder "
+#~ "strenger som navngir underkataloger relativ til /apps/gnome-terminal/"
+#~ "profiles."
 
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:32
-msgid "TTY Erase"
-msgstr "TTY-slett"
+#~ msgid "Profile to use for new terminals"
+#~ msgstr "Profil som brukes for nye terminaler"
 
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
-msgid "Block"
-msgstr "Blokk"
+#~ msgid ""
+#~ "Profile to be used when opening a new window or tab. Must be in "
+#~ "profile_list."
+#~ msgstr ""
+#~ "Profil som skal brukes ved åpning av et nytt vindu eller fane. Må være i "
+#~ "profillisten."
 
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
-msgid "I-Beam"
-msgstr "I-Beam"
+#~ msgid "[UTF-8,current]"
+#~ msgstr "[UTF-8,current,ISO-8859-15]"
 
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:39
-msgid "Underline"
-msgstr "Understrek"
+#~ msgid ""
+#~ "Whether to ask for confirmation when closing a terminal window which has "
+#~ "more than one open tab."
+#~ msgstr ""
+#~ "Om det skal spørres om bekreftelse når en terminal med mer enn en åpen "
+#~ "fane lukkes."
 
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
-msgid "Exit the terminal"
-msgstr "Avslutt terminalen"
+#~ msgid "Default"
+#~ msgstr "Forvalgt"
 
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
-msgid "Restart the command"
-msgstr "Start kommandoen på nytt"
+#~ msgid ""
+#~ "If true, don't make a noise when applications send the escape sequence "
+#~ "for the terminal bell."
+#~ msgstr ""
+#~ "Hvis satt til «true», ikke lag lyd når programmer sender skiftesekvensen "
+#~ "for terminalbjellen."
 
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:46
-msgid "Hold the terminal open"
-msgstr "Hold terminalen åpen"
+#~ msgid ""
+#~ "Where to put the terminal scrollbar. Possibilities are \"left\", \"right"
+#~ "\", and \"hidden\"."
+#~ msgstr ""
+#~ "Hvor terminalens rullefelt skal plasseres. Muligheter er «left», «right», "
+#~ "og «hidden»."
 
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
-msgid "On the left side"
-msgstr "På venstre side"
+#~ msgid ""
+#~ "The possible values are \"block\" to use a block cursor, \"ibeam\" to use "
+#~ "a vertical line cursor, or \"underline\" to use an underline cursor."
+#~ msgstr ""
+#~ "Mulige verdier er «block» for å bruke en blokkmarkør, «ibeam» for å bruke "
+#~ "en vertikal linje eller «underline» for å bruke en horisontal linje."
 
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:51
-msgid "On the right side"
-msgstr "På høyre side"
+#~ msgid "Icon for terminal window"
+#~ msgstr "Ikon for terminalvinduet"
 
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:53
-msgid "Disabled"
-msgstr "Slått av"
+#~ msgid "Icon to use for tabs/windows containing this profile."
+#~ msgstr "Ikon som skal brukes for faner/vinduer som bruker denne profilen."
 
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:56
-msgid "Replace initial title"
-msgstr "Erstatt opprinnelig tittel"
+#~ msgid ""
+#~ "Terminals have a 16-color palette that applications inside the terminal "
+#~ "can use. This is that palette, in the form of a colon-separated list of "
+#~ "color names. Color names should be in hex format e.g. \"#FF00FF\""
+#~ msgstr ""
+#~ "Terminaler har en 16-fargers palett som programmer som kjører i "
+#~ "terminalen kan bruke. Paletten oppgis her i form av en kolon-separert "
+#~ "liste med fargenavn. Fargenavn skal oppgis i heksadesimalt format, f.eks "
+#~ "«#FF00FF»"
 
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:58
-msgid "Append initial title"
-msgstr "Legg til opprinnelig tittel"
+#~ msgid "Font"
+#~ msgstr "Skrift"
 
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:60
-msgid "Prepend initial title"
-msgstr "Legg til foran opprinnelig tittel"
+#~ msgid ""
+#~ "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
+#~ msgstr ""
+#~ "Et Pango-skriftnavn. For eksempel «Sans 12» eller «Monospace Bold 14»."
 
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:62
-msgid "Keep initial title"
-msgstr "Behold opprinnelig tittel"
+#~ msgid "Background type"
+#~ msgstr "Type bakgrunn"
 
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
-msgid "Tango"
-msgstr "Tango"
+#~ msgid ""
+#~ "Type of terminal background. May be \"solid\" for a solid color, \"image"
+#~ "\" for an image, or \"transparent\" for either real transparency if a "
+#~ "compositing window manager is running, or pseudo-transparency otherwise."
+#~ msgstr ""
+#~ "Type terminalbakgrunn. Kan være «solid» for en solid farge, «image» for å "
+#~ "bruke et bilde eller «transparent» for gjennomsiktighet hvis en "
+#~ "compositing vindushåndterer kjører og pseudo-gjennomsiktighet ellers."
 
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
-msgid "Linux console"
-msgstr "Linux konsoll"
+#~ msgid "Background image"
+#~ msgstr "Bakgrunnsbilde"
 
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
-msgid "XTerm"
-msgstr "XTerm"
+#~ msgid "Filename of a background image."
+#~ msgstr "Filnavn for et bakgrunnsbilde."
 
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:71
-msgid "Rxvt"
-msgstr "Rxvt"
+#~ msgid "Whether to scroll background image"
+#~ msgstr "Om bakgrunnsbildet skal rulles"
+
+#~ msgid ""
+#~ "If true, scroll the background image with the foreground text; if false, "
+#~ "keep the image in a fixed position and scroll the text above it."
+#~ msgstr ""
+#~ "Hvis satt til «true», rull bakgrunnsbildet med teksten; hvis satt til "
+#~ "«false», hold bakgrunnsbildet stille og rull teksten over det."
+
+#~ msgid "How much to darken the background image"
+#~ msgstr "Hvor mye mørkere bakgrunnsbildet skal gjøres"
+
+#~ msgid ""
+#~ "A value between 0.0 and 1.0 indicating how much to darken the background "
+#~ "image. 0.0 means no darkness, 1.0 means fully dark. In the current "
+#~ "implementation, there are only two levels of darkness possible, so the "
+#~ "setting behaves as a boolean, where 0.0 disables the darkening effect."
+#~ msgstr ""
+#~ "En verdi mellom 0.0 og 1.0 som indikerer hvor mye bagrunnen skal "
+#~ "formørkes. 0.0 gir ingen formørking og 1.0 betyr helt formørket. Det er "
+#~ "foreløpig kun to nivåer tilgjengelig, så innstillingen fungerer som en av/"
+#~ "på bryter."
+
+#~ msgid "Effect of the Backspace key"
+#~ msgstr "Handling for Backspace-tasten"
+
+#~ msgid ""
+#~ "Sets what code the backspace key generates. Possible values are \"ascii-"
+#~ "del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
+#~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
+#~ "typically bound to backspace or delete. \"ascii-del\" is normally "
+#~ "considered the correct setting for the Backspace key."
+#~ msgstr ""
+#~ "Setter hvilken kode rettetasten lager. Mulige verdier er «ascii-del» for "
+#~ "ASCII DEL tegnet, «control-h» for Control-H (aka ASCII BS tegnet), "
+#~ "«escape-sequence» for skiftesekvensen typisk bundet til rettetasten eller "
+#~ "slettetasten. «ascii-del» er normalt den rette verdien for rettetasten."
+
+#~ msgid "Effect of the Delete key"
+#~ msgstr "Handling for Delete-tasten"
+
+#~ msgid ""
+#~ "Sets what code the delete key generates. Possible values are \"ascii-del"
+#~ "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
+#~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
+#~ "typically bound to backspace or delete. \"escape-sequence\" is normally "
+#~ "considered the correct setting for the Delete key."
+#~ msgstr ""
+#~ "Setter kode som genereres av slettetasten. Mulige verdier er «ascii-del» "
+#~ "for ASCII-tegnet DEL, «control-h» for Control-H (alias ASCII BS-tegnet), "
+#~ "«escape-sequence» for escape-sekvensen som typisk bindes til rettetast "
+#~ "eller slettetast. «escape-sequence» anses normalt som den korrekte "
+#~ "innstillingen for slettetasten."
+
+#~ msgid ""
+#~ "If true, the theme color scheme used for text entry boxes will be used "
+#~ "for the terminal, instead of colors provided by the user."
+#~ msgstr ""
+#~ "Hvis satt til «true» vil temafargene brukt for skrivefelt bli brukt i "
+#~ "terminalen i stede for farger definert av brukeren."
+
+#~ msgid ""
+#~ "If true, the terminal will use the desktop-global standard font if it's "
+#~ "monospace (and the most similar font it can come up with otherwise)."
+#~ msgstr ""
+#~ "Hvis satt til «true» vil terminalen bruke den forvalgte skrifttypen for "
+#~ "skrivebordet hvis den er monospace (og hvis ikke den som er mest lik.)"
+
+#~ msgid "Keyboard shortcut to open a new tab"
+#~ msgstr "Tastatursnarvei som åpner en ny fane"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å åpne en ny fane. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to open a new window"
+#~ msgstr "Tastatursnarvei som åpner et nytt vindu"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for opening a new window. Expressed as a string in "
+#~ "the same format used for GTK+ resource files. If you set the option to "
+#~ "the special string \"disabled\", then there will be no keyboard shortcut "
+#~ "for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å åpne et nytt vindu. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to create a new profile"
+#~ msgstr "Tastatursnarvei for å lage en ny profil"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for bringing up the dialog for profile creation. "
+#~ "Expressed as a string in the same format used for GTK+ resource files. If "
+#~ "you set the option to the special string \"disabled\", then there will be "
+#~ "no keyboard shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å hente opp dialogen for oppretting av dialoger. "
+#~ "Uttrykkes som en streng av samme format som brukes i ressursfiler for GTK"
+#~ "+. Hvis du setter verdien til den spesielle strengen «disabled» vil "
+#~ "tastatursnarvei for denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to save the current tab contents to file"
+#~ msgstr "Tastatursnarvei for å lagre innhold i aktiv fane til en fil"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to save the current tab contents to a file. "
+#~ "Expressed as a string in the same format used for GTK+ resource files. If "
+#~ "you set the option to the special string \"disabled\", then there will be "
+#~ "no keyboard shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å lagre innhold i aktiv fane til en fil. Uttrykkes "
+#~ "som en streng av samme format som brukes i ressursfiler for GTK+. Hvis du "
+#~ "setter verdien til den spesielle strengen «disabled» vil tastatursnarvei "
+#~ "for denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to close a tab"
+#~ msgstr "Tastatursnarvei for å lukke en fane"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for closing a tab. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å lukke en fane. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to close a window"
+#~ msgstr "Tastatursnarvei for å lukke et vindu"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for closing a window. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å lukke et vindu. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to copy text"
+#~ msgstr "Tastatursnarvei for å kopiere tekst"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for copying selected text to the clipboard. "
+#~ "Expressed as a string in the same format used for GTK+ resource files. If "
+#~ "you set the option to the special string \"disabled\", then there will be "
+#~ "no keyboard shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å kopiere valgt tekst til utklippstavlen. Uttrykkes "
+#~ "som en streng av samme format som brukes i ressursfiler for GTK+. Hvis du "
+#~ "setter verdien til den spesielle strengen «disabled» vil tastatursnarvei "
+#~ "for denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to paste text"
+#~ msgstr "Tastatursnarvei som limer inn kopiert tekst"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for pasting the contents of the clipboard into the "
+#~ "terminal. Expressed as a string in the same format used for GTK+ resource "
+#~ "files. If you set the option to the special string \"disabled\", then "
+#~ "there will be no keyboard shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å lime inn innholdet på utklippstavlen i terminalen. "
+#~ "Uttrykkes som en streng av samme format som brukes i ressursfiler for GTK"
+#~ "+. Hvis du setter verdien til den spesielle strengen «disabled» vil "
+#~ "tastatursnarvei for denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to toggle full screen mode"
+#~ msgstr "Tastatursnarvei som bytter til/fra fullskjermmodus"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for toggling full screen mode. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no keyboard "
+#~ "shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fullskjermmodus. Uttrykkes som en streng "
+#~ "av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to toggle the visibility of the menubar"
+#~ msgstr "Tastatursnarvei som slår av/på visning av menylinjen."
+
+#~ msgid ""
+#~ "Keyboard shortcut key to toggle the visibility of the menubar. Expressed "
+#~ "as a string in the same format used for GTK+ resource files. If you set "
+#~ "the option to the special string \"disabled\", then there will be no "
+#~ "keyboard shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å slå av/på visning av menylinjen. Uttrykkes som en "
+#~ "streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to set the terminal title"
+#~ msgstr "Tastatursnarvei som setter tittelen for terminalen"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to set the terminal title. Expressed as a string in "
+#~ "the same format used for GTK+ resource files. If you set the option to "
+#~ "the special string \"disabled\", then there will be no keyboard shortcut "
+#~ "for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å sette terminalens tittel. Uttrykkes som en streng "
+#~ "av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to reset the terminal"
+#~ msgstr "Tastatursnarvei som nullstiller terminalen"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å nullstille terminalen. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to reset and clear the terminal"
+#~ msgstr "Tastatursnarvei som nullstiller og tømmer terminalen"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to reset and clear the terminal. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no keyboard "
+#~ "shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å nullstille og tømme terminalen. Uttrykkes som en "
+#~ "streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to the previous tab"
+#~ msgstr "Tastatursnarvei som bytter til forrige fane"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to switch to the previous tab. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no keyboard "
+#~ "shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til forrige fane. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to the next tab"
+#~ msgstr "Tastatursnarvei som bytter til neste fane"
+
+#~ msgid ""
+#~ "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
+#~ "the same format used for GTK+ resource files. If you set the option to "
+#~ "the special string \"disabled\", then there will be no keyboard shortcut "
+#~ "for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til neste fane. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Accelerator to move the current tab to the left."
+#~ msgstr "Hurtigtast som flytter aktiv fane til venstre."
+
+#~ msgid ""
+#~ "Accelerator key to move the current tab to the left. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no "
+#~ "keybinding for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å flytte aktiv fane til venstre. Uttrykkes som en "
+#~ "streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Accelerator to move the current tab to the right."
+#~ msgstr "Hurtigtast som flytter aktiv fane til høyre."
+
+#~ msgid ""
+#~ "Accelerator key to move the current tab to the right. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no "
+#~ "keybinding for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å flytte aktiv fane til høyre. Uttrykkes som en "
+#~ "streng av samme format som brukes i ressursfiler for GTK+. Hvis du setter "
+#~ "verdien til den spesielle strengen «disabled» vil tastatursnarvei for "
+#~ "denne handlingen deaktiveres."
+
+#~ msgid "Accelerator to detach current tab."
+#~ msgstr "Hurtigtast som løsriver aktiv fane."
+
+#~ msgid ""
+#~ "Accelerator key to detach current tab. Expressed as a string in the same "
+#~ "format used for GTK+ resource files. If you set the option to the special "
+#~ "string \"disabled\", then there will be no keybinding for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å løsrive denne fanen. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 1"
+#~ msgstr "Tastatursnarvei som bytter til fane 1"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 1. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 1. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 2"
+#~ msgstr "Tastatursnarvei som bytter til fane 2"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 2. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 2. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 3"
+#~ msgstr "Tastatursnarvei som bytter til fane 3"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 3. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 3. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 4"
+#~ msgstr "Tastatursnarvei som bytter til fane 4"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 4. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 4. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 5"
+#~ msgstr "Tastatursnarvei som bytter til fane 5"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 5. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 5. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 6"
+#~ msgstr "Tastatursnarvei som bytter til fane 6"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 6. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 6. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 7"
+#~ msgstr "Tastatursnarvei som bytter til fane 7"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 7. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 7. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 8"
+#~ msgstr "Tastatursnarvei som bytter til fane 8"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 8. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 8. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 9"
+#~ msgstr "Tastatursnarvei som bytter til fane 9"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 9. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 9. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 10"
+#~ msgstr "Tastatursnarvei som bytter til fane 10"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 10. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 11"
+#~ msgstr "Tastatursnarvei som bytter til fane 11"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 11. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to switch to tab 12"
+#~ msgstr "Tastatursnarvei som bytter til fane 12"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å bytte til fane 12. Uttrykkes som en streng av samme "
+#~ "format som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to launch help"
+#~ msgstr "Tastatursnarvei for å åpne hjelp"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for launching help. Expressed as a string in the "
+#~ "same format used for GTK+ resource files. If you set the option to the "
+#~ "special string \"disabled\", then there will be no keyboard shortcut for "
+#~ "this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å vise hjelp. Uttrykkes som en streng av samme format "
+#~ "som brukes i ressursfiler for GTK+. Hvis du setter verdien til den "
+#~ "spesielle strengen «disabled» vil tastatursnarvei for denne handlingen "
+#~ "deaktiveres."
+
+#~ msgid "Keyboard shortcut to make font larger"
+#~ msgstr "Tastatursnarvei for å gjøre skriften større"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for making font larger. Expressed as a string in "
+#~ "the same format used for GTK+ resource files. If you set the option to "
+#~ "the special string \"disabled\", then there will be no keyboard shortcut "
+#~ "for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å gjøre skriften større. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to make font smaller"
+#~ msgstr "Tastatursnarvei som gjør skriften mindre"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for making font smaller. Expressed as a string in "
+#~ "the same format used for GTK+ resource files. If you set the option to "
+#~ "the special string \"disabled\", then there will be no keyboard shortcut "
+#~ "for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å gjøre skriften mindre. Uttrykkes som en streng av "
+#~ "samme format som brukes i ressursfiler for GTK+. Hvis du setter verdien "
+#~ "til den spesielle strengen «disabled» vil tastatursnarvei for denne "
+#~ "handlingen deaktiveres."
+
+#~ msgid "Keyboard shortcut to make font normal-size"
+#~ msgstr "Tastatursnarvei som setter skriften til normal størrelse"
+
+#~ msgid ""
+#~ "Keyboard shortcut key for making font the normal size. Expressed as a "
+#~ "string in the same format used for GTK+ resource files. If you set the "
+#~ "option to the special string \"disabled\", then there will be no keyboard "
+#~ "shortcut for this action."
+#~ msgstr ""
+#~ "Tastatursnarvei for å sette skriften til normal størrelse. Uttrykkes som "
+#~ "en streng av samme format som brukes i ressursfiler for GTK+. Hvis du "
+#~ "setter verdien til den spesielle strengen «disabled» vil tastatursnarvei "
+#~ "for denne handlingen deaktiveres."
+
+#~ msgid "Images"
+#~ msgstr "Bilder"
+
+#~ msgid "Profile Editor"
+#~ msgstr "Profilredigering"
+
+#~ msgid "Show _menubar by default in new terminals"
+#~ msgstr "Vis _menylinje som standard i nye terminaler"
+
+#~ msgid ""
+#~ "Tango\n"
+#~ "Linux console\n"
+#~ "XTerm\n"
+#~ "Rxvt\n"
+#~ "Custom"
+#~ msgstr ""
+#~ "Tango\n"
+#~ "Linux-konsoll\n"
+#~ "XTerm\n"
+#~ "Rxvt\n"
+#~ "Egendefinert"
+
+#~ msgid "_Solid color"
+#~ msgstr "_Helfylt farge)"
+
+#~ msgid "_Background image"
+#~ msgstr "_Bakgrunnsbilde"
+
+#~ msgid "Image _file:"
+#~ msgstr "B_ildefil:"
+
+#~ msgid "Select Background Image"
+#~ msgstr "Velg bakgrunnsbilde"
+
+#~ msgid "Background image _scrolls"
+#~ msgstr "Bakgrunnsbildet _ruller"
+
+#~ msgid "_Transparent background"
+#~ msgstr "_Gjennomsiktig bakgrunn"
+
+#~ msgid "S_hade transparent or image background:"
+#~ msgstr "S_kyggelegg gjennomsiktig bakgrunn eller bakgrunn med bilde:"
+
+#~ msgid "<small><i>None</i></small>"
+#~ msgstr "<small><i>Ingen</i></small>"
+
+#~ msgid "<small><i>Maximum</i></small>"
+#~ msgstr "<small><i>Maksimum</i></small>"
+
+#~ msgid "Background"
+#~ msgstr "Bakgrunn"
+
+#~ msgid ""
+#~ "On the left side\n"
+#~ "On the right side\n"
+#~ "Disabled"
+#~ msgstr ""
+#~ "På venstre side\n"
+#~ "På høyre side\n"
+#~ "Deaktivert"
+
+#~ msgid "Hide and Show menubar"
+#~ msgstr "Vis eller skjul menylinjen"
+
+#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
+#~ msgstr "Snarveitasten «%s» er allerede bundet til handlingen «%s»"
+
+#~ msgid "No such profile \"%s\", using default profile\n"
+#~ msgstr "Ingen slik profil «%s». Bruker forvalgt profil\n"
+
+#~ msgid "Invalid geometry string \"%s\"\n"
+#~ msgstr "Ugyldig geometristreng «%s»\n"
+
+#~ msgid ""
+#~ "Option \"%s\" is no longer supported in this version of gnome-terminal; "
+#~ "you might want to create a profile with the desired setting, and use the "
+#~ "new '--profile' option\n"
+#~ msgstr ""
+#~ "Flagg «%s» er ikke støttet i denne versjonen av gnome-terminal; du kan "
+#~ "opprette en profil med denne innstillingen og bruke det nye «--profile» "
+#~ "flagget\n"
+
+#~ msgid "\"%s\" option given twice for the same window\n"
+#~ msgstr "Flagg «%s» ble gitt to ganger for samme vindu\n"
+
+#~ msgid "Save the terminal configuration to a file"
+#~ msgstr "Lagre konfigurasjon for terminal til en fil"
+
+#~ msgid "Turn on the menubar"
+#~ msgstr "Slå på menylinjen"
+
+#~ msgid "Turn off the menubar"
+#~ msgstr "Slå av menylinjen"
+
+#~ msgid "Unnamed"
+#~ msgstr "Uten navn"
+
+#~ msgid "Pr_ofile Preferences"
+#~ msgstr "Brukervalg for pr_ofil"
+
+#~ msgid "Show _Menubar"
+#~ msgstr "Vis _menylinje"
+
+#~ msgid "On the left side"
+#~ msgstr "På venstre side"
+
+#~ msgid "On the right side"
+#~ msgstr "På høyre side"
+
+#~ msgid "Disabled"
+#~ msgstr "Slått av"
