@@ -216,10 +216,6 @@ gnome-terminal.desktop.in
 src/Makefile
 src/terminal-version.h
 help/Makefile
-help/bg/Makefile
-help/ro/Makefile
-help/ja/Makefile
-help/zh_TW/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT
