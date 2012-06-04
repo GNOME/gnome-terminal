@@ -1273,6 +1273,7 @@ get_child_command (TerminalScreen *screen,
 
 static char**
 get_child_environment (TerminalScreen *screen,
+                       const char *cwd,
                        char **shell)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -1337,6 +1338,12 @@ get_child_environment (TerminalScreen *screen,
   g_ptr_array_add (retval, NULL);
 
   *shell = g_strdup (g_hash_table_lookup (env_table, "SHELL"));
+
+  /* We need to put the working directory also in PWD, so that
+   * e.g. bash starts in the right directory if @cwd is a symlink.
+   * See bug #502146.
+   */
+  g_hash_table_replace (env_table, g_strdup ("PWD"), g_strdup (cwd));
 
   g_hash_table_destroy (env_table);
   return (char **) g_ptr_array_free (retval, FALSE);
@@ -1481,12 +1488,12 @@ terminal_screen_do_exec (TerminalScreen *screen,
 
   profile = priv->profile;
 
-  env = get_child_environment (screen, &shell);
-
   if (priv->initial_working_directory)
     working_dir = priv->initial_working_directory;
   else
     working_dir = g_get_home_dir ();
+
+  env = get_child_environment (screen, working_dir, &shell);
 
   if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY))
     pty_flags |= VTE_PTY_NO_LASTLOG;
