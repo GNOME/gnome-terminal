@@ -19,7 +19,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
+#define _GNU_SOURCE
 
 #include <errno.h>
 #include <locale.h>
@@ -193,7 +194,7 @@ int
 main (int argc, char **argv)
 {
   int i;
-  char **argv_copy;
+  char **argv_copy, *cwd;
   const char *startup_id, *display_name;
   GdkDisplay *display;
   TerminalOptions *options;
@@ -219,7 +220,14 @@ main (int argc, char **argv)
   argv_copy [i] = NULL;
 
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  working_directory = g_get_current_dir ();
+
+  /* We use get_current_dir_name() here instead of getcwd / g_get_current_dir()
+   * because we want to use the value from PWD (if it is correct).
+   * See bug 502146.
+   */
+  cwd = get_current_dir_name ();
+  working_directory = g_strdup (cwd);
+  free (cwd);
 
   options = terminal_options_parse (working_directory,
                                     startup_id,
