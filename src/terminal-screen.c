@@ -1329,6 +1329,12 @@ get_child_environment (TerminalScreen *screen,
     }
 #endif
 
+  /* We need to put the working directory also in PWD, so that
+   * e.g. bash starts in the right directory if @cwd is a symlink.
+   * See bug #502146.
+   */
+  g_hash_table_replace (env_table, g_strdup ("PWD"), g_strdup (cwd));
+
   terminal_util_add_proxy_env (env_table);
 
   retval = g_ptr_array_sized_new (g_hash_table_size (env_table));
@@ -1338,12 +1344,6 @@ get_child_environment (TerminalScreen *screen,
   g_ptr_array_add (retval, NULL);
 
   *shell = g_strdup (g_hash_table_lookup (env_table, "SHELL"));
-
-  /* We need to put the working directory also in PWD, so that
-   * e.g. bash starts in the right directory if @cwd is a symlink.
-   * See bug #502146.
-   */
-  g_hash_table_replace (env_table, g_strdup ("PWD"), g_strdup (cwd));
 
   g_hash_table_destroy (env_table);
   return (char **) g_ptr_array_free (retval, FALSE);
