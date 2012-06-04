@@ -102,10 +102,17 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
   char **envv;
 
   envv = g_get_environ ();
+  envv = g_environ_unsetenv (envv, "COLORTERM");
+  envv = g_environ_unsetenv (envv, "COLUMNS");
   envv = g_environ_unsetenv (envv, "DESKTOP_STARTUP_ID");
+  envv = g_environ_unsetenv (envv, "DISPLAY");
   envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE_PID");
   envv = g_environ_unsetenv (envv, "GIO_LAUNCHED_DESKTOP_FILE");
+  envv = g_environ_unsetenv (envv, "GNOME_DESKTOP_ICON");
+  envv = g_environ_unsetenv (envv, "LINES");
   envv = g_environ_unsetenv (envv, "PWD");
+  envv = g_environ_unsetenv (envv, "TERM");
+  envv = g_environ_unsetenv (envv, "WINDOWID");
 
   g_variant_builder_add (builder, "{sv}",
                          "environ",
