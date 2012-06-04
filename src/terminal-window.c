@@ -2702,7 +2702,7 @@ file_new_window_callback (GtkAction *action,
 
   new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
-  new_working_directory = terminal_screen_get_current_dir_with_fallback (priv->active_screen);
+  new_working_directory = terminal_screen_get_current_dir (priv->active_screen);
   terminal_app_new_terminal (app, new_window, profile,
                              NULL, NULL,
                              new_working_directory,
@@ -2729,7 +2729,7 @@ file_new_tab_callback (GtkAction *action,
   if (!profile)
     return;
 
-  new_working_directory = terminal_screen_get_current_dir_with_fallback (priv->active_screen);
+  new_working_directory = terminal_screen_get_current_dir (priv->active_screen);
   terminal_app_new_terminal (app, window, profile,
                              NULL, NULL,
                              new_working_directory,

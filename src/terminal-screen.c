@@ -188,59 +188,6 @@ static guint n_url_regexes;
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
-static char *
-cwd_of_pid (int pid)
-{
-  static const char patterns[][18] = {
-    "/proc/%d/cwd",         /* Linux */
-    "/proc/%d/path/cwd",    /* Solaris >= 10 */
-  };
-  guint i;
-  
-  if (pid == -1)
-    return NULL;
-
-  /* Try to get the working directory using various OS-specific mechanisms */
-  for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
-    {
-      char cwd_file[64];
-      char buf[PATH_MAX + 1];
-      int len;
-
-      g_snprintf (cwd_file, sizeof (cwd_file), patterns[i], pid);
-      len = readlink (cwd_file, buf, sizeof (buf) - 1);
-
-      if (len > 0 && buf[0] == '/')
-        return g_strndup (buf, len);
-
-      /* If that didn't do it, try this hack */
-      if (len <= 0)
-        {
-          char *cwd, *working_dir = NULL;
-
-          cwd = g_get_current_dir ();
-          if (cwd != NULL)
-            {
-              /* On Solaris, readlink returns an empty string, but the
-               * link can be used as a directory, including as a target
-               * of chdir().
-               */
-              if (chdir (cwd_file) == 0)
-                {
-                  working_dir = g_get_current_dir ();
-                  (void) chdir (cwd);
-                }
-              g_free (cwd);
-            }
-
-          if (working_dir)
-            return working_dir;
-        }
-    }
-
-  return NULL;
-}
-
 static void
 free_tag_data (TagData *tagdata)
 {
@@ -1781,49 +1728,19 @@ terminal_screen_get_dynamic_icon_title (TerminalScreen *screen)
  * Returns: a newly allocated string containing the current working directory,
  *   or %NULL on failure
  */
-char*
+char *
 terminal_screen_get_current_dir (TerminalScreen *screen)
 {
-  TerminalScreenPrivate *priv = screen->priv;
-  char *cwd;
+  const char *uri;
 
-  if (priv->pty_fd != -1) {
-#if 0
-    /* Get the foreground process ID */
-    cwd = cwd_of_pid (tcgetpgrp (priv->pty_fd));
-    if (cwd != NULL)
-      return cwd;
-#endif
+  uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (screen));
+  if (uri != NULL)
+    return g_filename_from_uri (uri, NULL, NULL);
 
-    /* If that didn't work, try falling back to the primary child. See bug #575184. */
-    cwd = cwd_of_pid (priv->child_pid);
-    if (cwd != NULL)
-      return cwd;
-  }
+  if (screen->priv->initial_working_directory)
+    return g_strdup (screen->priv->initial_working_directory);
 
   return NULL;
-}
-
-/**
- * terminal_screen_get_current_dir_with_fallback:
- * @screen:
- *
- * Like terminal_screen_get_current_dir(), but falls back to returning
- * @screen's initial working directory, with a further fallback to the
- * user's home directory.
- * 
- * Returns: a newly allocated string containing the current working directory,
- *   or %NULL on failure
- */
-char*
-terminal_screen_get_current_dir_with_fallback (TerminalScreen *screen)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-
-  if (priv->pty_fd == -1)
-    return g_strdup (priv->initial_working_directory);
-
-  return terminal_screen_get_current_dir (screen);
 }
 
 void
