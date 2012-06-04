@@ -390,14 +390,18 @@ get_goption_context (OptionData *data)
   g_option_context_set_description (context, N_("GNOME Terminal Client"));
   g_option_context_set_ignore_unknown_options (context, FALSE);
 
-  group = g_option_group_new ("global-options", "", "",
+  group = g_option_group_new ("global-options",
+                              N_("Global options:"),
+                              N_("Show global options"),
                               data,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
   g_option_group_add_entries (group, global_goptions);
   g_option_context_add_group (context, group);
 
-  group = g_option_group_new ("server-options", "", "",
+  group = g_option_group_new ("server-options",
+                              N_("Server options:"),
+                              N_("Show server options"),
                               data,
                               NULL);
   g_option_group_set_translation_domain (group, GETTEXT_PACKAGE);
