@@ -23,7 +23,8 @@
  *  * Author: David Zeuthen <davidz@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
+#define _GNU_SOURCE
 
 #include <errno.h>
 #include <locale.h>
@@ -507,8 +508,17 @@ parse_arguments (int *argcp,
   }
   g_option_context_free (context);
 
-  if (data->working_directory == NULL)
-    data->working_directory = g_get_current_dir ();
+  if (data->working_directory == NULL) {
+    char *cwd;
+
+    /* We use get_current_dir_name() here instead of getcwd / g_get_current_dir()
+     * because we want to use the value from PWD (if it is correct).
+     * See bug 502146.
+     */
+    cwd = get_current_dir_name ();
+    data->working_directory = g_strdup (cwd);
+    free (cwd);
+  }
 
   /* Do this here so that gdk_display is initialized */
   if (data->startup_id == NULL)
