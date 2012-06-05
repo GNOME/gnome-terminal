@@ -20,8 +20,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-03 20:01+0000\n"
-"PO-Revision-Date: 2012-05-04 17:04+0200\n"
+"POT-Creation-Date: 2012-06-04 20:45+0000\n"
+"PO-Revision-Date: 2012-06-05 14:01+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:161
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:92
 #: ../src/terminal-accels.c:146 ../src/terminal.c:236
 #: ../src/terminal-window.c:1839
 msgid "Terminal"
@@ -40,11 +40,11 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Use la línea de comandos"
 
-#: ../src/client.c:116
+#: ../src/client.c:117
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../src/client.c:121
+#: ../src/client.c:122
 #, c-format
 msgid ""
 "Commands:\n"
@@ -59,148 +59,152 @@ msgstr ""
 "\n"
 "Use «%s COMANDO --help» para obtener ayuda sobre cada comando.\n"
 
-#: ../src/client.c:216 ../src/terminal-options.c:589
+#: ../src/client.c:217 ../src/terminal-options.c:589
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "«%s» no es un factor de ampliación válido"
 
-#: ../src/client.c:329
+#: ../src/client.c:330
 msgid "Be quiet"
 msgstr "Estarse quieto"
 
-#: ../src/client.c:334 ../src/terminal-options.c:914
-msgid "Server D-Bus name"
-msgstr "Nombre del servidor D-Bus"
-
-#: ../src/client.c:334 ../src/terminal-options.c:915
-#| msgid "DIRNAME"
-msgid "NAME"
-msgstr "NOMBRE"
-
-#: ../src/client.c:340 ../src/terminal-options.c:994
+#: ../src/client.c:341 ../src/terminal-options.c:994
 msgid "Maximise the window"
 msgstr "Maximizar la ventana"
 
-#: ../src/client.c:342 ../src/terminal-options.c:1003
+#: ../src/client.c:343 ../src/terminal-options.c:1003
 msgid "Full-screen the window"
 msgstr "Ventana a pantalla completa"
 
-#: ../src/client.c:344 ../src/terminal-options.c:1012
+#: ../src/client.c:345 ../src/terminal-options.c:1012
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Establecer el tamaño de la ventana; por ejemplo: 80x24, u 80x24+200+200 "
 "(FILASxCOLUMNAS+X+Y)"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1013
+#: ../src/client.c:346 ../src/terminal-options.c:1013
 msgid "GEOMETRY"
 msgstr "GEOMETRÍA"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1021
+#: ../src/client.c:348 ../src/terminal-options.c:1021
 msgid "Set the window role"
 msgstr "Establece el rol de la ventana"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1022
+#: ../src/client.c:348 ../src/terminal-options.c:1022
 msgid "ROLE"
 msgstr "ROL"
 
-#: ../src/client.c:353 ../src/terminal-options.c:1052
+#: ../src/client.c:354 ../src/terminal-options.c:1052
 msgid "Use the given profile instead of the default profile"
 msgstr "Usa el perfil proporcionado en lugar del perfil predeterminado"
 
-#: ../src/client.c:354 ../src/terminal-options.c:1053
+#: ../src/client.c:355 ../src/terminal-options.c:1053
 msgid "PROFILE-NAME"
 msgstr "NOMBRE-DEL-PERFIL"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1061
+#: ../src/client.c:357 ../src/terminal-options.c:1061
 msgid "Set the terminal title"
 msgstr "Establece el título de la terminal"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1062
+#: ../src/client.c:357 ../src/terminal-options.c:1062
 msgid "TITLE"
 msgstr "TITULO"
 
-#: ../src/client.c:358 ../src/terminal-options.c:1070
+#: ../src/client.c:359 ../src/terminal-options.c:1070
 msgid "Set the working directory"
 msgstr "Establece el directorio de trabajo"
 
-#: ../src/client.c:358 ../src/terminal-options.c:1071
+#: ../src/client.c:359 ../src/terminal-options.c:1071
 msgid "DIRNAME"
 msgstr "NOMBREDIR"
 
-#: ../src/client.c:360 ../src/terminal-options.c:1079
+#: ../src/client.c:361 ../src/terminal-options.c:1079
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr ""
 "Establecer el factor de ampliación de la terminal (1.0 = tamaño normal)"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1080
+#: ../src/client.c:362 ../src/terminal-options.c:1080
 msgid "ZOOM"
 msgstr "AMPLIACIÓN"
 
-#: ../src/client.c:367
+#: ../src/client.c:368
 msgid "Forward stdin"
 msgstr "Redireccionar entrada estándar (stdin)"
 
-#: ../src/client.c:369
+#: ../src/client.c:370
 msgid "Forward stdout"
 msgstr "Redireccionar salida estándar (stdout)"
 
-#: ../src/client.c:371
+#: ../src/client.c:372
 msgid "Forward stderr"
 msgstr "Redireccionar salida de error estándar (stderror)"
 
-#: ../src/client.c:373
+#: ../src/client.c:374
 msgid "Forward file descriptor"
 msgstr "Redireccionar el descriptor del archivo"
 
-#: ../src/client.c:373
+#: ../src/client.c:374
 msgid "FD"
 msgstr "Descriptor"
 
-#: ../src/client.c:379
+#: ../src/client.c:380
 msgid "Wait until the child exits"
 msgstr "Esperar a que el hijo termine"
 
-#: ../src/client.c:389
-#| msgid "GNOME Terminal"
+#: ../src/client.c:390
 msgid "GNOME Terminal Client"
 msgstr "Cliente de terminal de GNOME"
 
-#: ../src/client.c:407
-#| msgid "Show per-window options"
+#: ../src/client.c:394
+#| msgid "Terminal options:"
+msgid "Global options:"
+msgstr "Opciones globales:"
+
+#: ../src/client.c:395
+#| msgid "Show terminal options"
+msgid "Show global options"
+msgstr "Mostrar las opciones globales"
+
+#: ../src/client.c:403
+#| msgid "Exec options:"
+msgid "Server options:"
+msgstr "Opciones del servidor:"
+
+#: ../src/client.c:404
+#| msgid "Show exec options"
+msgid "Show server options"
+msgstr "Mostrar opciones del servidor"
+
+#: ../src/client.c:412
 msgid "Window options:"
 msgstr "Opciones de la ventana:"
 
-#: ../src/client.c:408
-#| msgid "Show per-window options"
+#: ../src/client.c:413
 msgid "Show window options"
 msgstr "Mostrar las opciones de la ventana"
 
-#: ../src/client.c:416
-#| msgid "Show terminal options"
+#: ../src/client.c:421
 msgid "Terminal options:"
 msgstr "Opciones de la terminal:"
 
-#: ../src/client.c:417 ../src/terminal-options.c:1359
+#: ../src/client.c:422 ../src/terminal-options.c:1359
 msgid "Show terminal options"
 msgstr "Mostrar las opciones de la terminal"
 
-#: ../src/client.c:425
+#: ../src/client.c:430
 msgid "Exec options:"
 msgstr "Opciones de ejecución:"
 
-#: ../src/client.c:426
-#| msgid "Show terminal options"
+#: ../src/client.c:431
 msgid "Show exec options"
 msgstr "Mostrar las opciones de ejecución"
 
-#: ../src/client.c:434
-#| msgid "Session management options:"
+#: ../src/client.c:439
 msgid "Processing options:"
 msgstr "Opciones de procesado:"
 
-#: ../src/client.c:435
-#| msgid "Show per-terminal options"
+#: ../src/client.c:440
 msgid "Show processing options"
 msgstr "Mostrar las opciones de procesado"
 
@@ -390,7 +394,8 @@ msgstr ""
 
 #: ../src/keybinding-editor.glade.h:3
 msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "Activar la tecla de acceso rápido al _menú (F10 por omisión)"
+msgstr ""
+"Activar la tecla de acceso rápido al _menú (F10 de manera predeterminada)"
 
 #: ../src/keybinding-editor.glade.h:4
 msgid "_Shortcut keys:"
@@ -500,7 +505,6 @@ msgstr ""
 "texto."
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:17
-#| msgid "Whether to silence terminal bell"
 msgid "Whether to ring the terminal bell"
 msgstr "Indica si debe sonar la campana de la terminal"
 
@@ -524,9 +528,6 @@ msgstr ""
 "Indica si se deben mostrar la barra de menú en las ventanas/pestañas nuevas"
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:21
-#| msgid ""
-#| "True if the menubar should be shown in new windows, for windows/tabs with "
-#| "this profile."
 msgid "True if the menubar should be shown in new window"
 msgstr "Cierto si la barra de menús debe mostrarse en las ventanas nuevas"
 
@@ -569,7 +570,6 @@ msgstr ""
 "efecto si use_custom_default_size no está activado."
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:28
-#| msgid "Position of the scrollbar"
 msgid "When to show the scrollbar"
 msgstr "Cuándo mostrar la barra de desplazamiento"
 
@@ -714,12 +714,10 @@ msgid "A pango font name and size"
 msgstr "Un nombre y tamaño de tipografía Pango"
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:52
-#| msgid "_Backspace key generates:"
 msgid "The code sequence the Backspace key generates"
 msgstr "El código de secuencia que genera la tecla Retroceso"
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:53
-#| msgid "_Delete key generates:"
 msgid "The code sequence the Delete key generates"
 msgstr "El código de secuencia que genera la tecla Suprimir"
 
@@ -730,7 +728,6 @@ msgstr ""
 "terminal"
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:55
-#| msgid "Whether to use the system font"
 msgid "Whether to use the system monospace font"
 msgstr "Indica si se debe usar la tipografía monoespaciada del sistema"
 
@@ -785,7 +782,6 @@ msgstr ""
 "codificación de la configuración regional actual."
 
 #: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:63
-#| msgid "Whether to ask for confirmation when closing terminal windows"
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Indica si se debe preguntar antes de una terminal"
 
@@ -1279,24 +1275,24 @@ msgstr "_Acción"
 msgid "Shortcut _Key"
 msgstr "Combinación de _teclas"
 
-#: ../src/terminal-app.c:394
+#: ../src/terminal-app.c:379
 msgid "Click button to choose profile"
 msgstr "Pulse el botón para seleccionar un perfil"
 
-#: ../src/terminal-app.c:479
+#: ../src/terminal-app.c:464
 msgid "Profile list"
 msgstr "Lista de perfiles"
 
-#: ../src/terminal-app.c:540
+#: ../src/terminal-app.c:525
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "¿Borrar el perfil «%s»?"
 
-#: ../src/terminal-app.c:556
+#: ../src/terminal-app.c:541
 msgid "Delete Profile"
 msgstr "Borrar perfil"
 
-#: ../src/terminal-app.c:858
+#: ../src/terminal-app.c:843
 #, c-format
 msgid ""
 "You already have a profile called “%s”. Do you want to create another "
@@ -1305,16 +1301,15 @@ msgstr ""
 "Ya tiene un perfil llamado «%s». ¿Quiere crear otro perfil con el mismo "
 "nombre?"
 
-#: ../src/terminal-app.c:963
+#: ../src/terminal-app.c:948
 msgid "Choose base profile"
 msgstr "Seleccione el perfil base"
 
-#: ../src/terminal-app.c:1552
+#: ../src/terminal-app.c:1525
 msgid "User Defined"
 msgstr "Definido por el usuario"
 
 #: ../src/terminal-appmenu.ui.h:1
-#| msgid "_Profile Preferences"
 msgid "_Preferences"
 msgstr "_Preferencias"
 
@@ -1485,12 +1480,10 @@ msgid "Current Locale"
 msgstr "Configuración regional actual"
 
 #: ../src/terminal-nautilus.c:467
-#| msgid "Open _Terminal"
 msgid "Open in _Remote Terminal"
 msgstr "Abrir en una terminal _remota"
 
 #: ../src/terminal-nautilus.c:469
-#| msgid "Open _Terminal"
 msgid "Open in _Local Terminal"
 msgstr "Abrir en una terminal _local"
 
@@ -1504,17 +1497,14 @@ msgid "Open the currently open folder in a terminal"
 msgstr "Abrir la carpeta abierta actualmente en una terminal"
 
 #: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
-#| msgid "Open _Terminal"
 msgid "Open in T_erminal"
 msgstr "Abrir en una t_erminal"
 
 #: ../src/terminal-nautilus.c:492
-#| msgid "Open _Terminal"
 msgid "Open T_erminal"
 msgstr "Abrir t_erminal"
 
 #: ../src/terminal-nautilus.c:493
-#| msgid "Open _Terminal"
 msgid "Open a terminal"
 msgstr "Abrir una terminal"
 
@@ -1666,31 +1656,29 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Muestra las opciones por terminal"
 
-#: ../src/terminal-screen.c:1502
+#: ../src/terminal-screen.c:1518
 msgid "_Profile Preferences"
 msgstr "_Preferencias del perfil"
 
-#: ../src/terminal-screen.c:1503 ../src/terminal-screen.c:1894
+#: ../src/terminal-screen.c:1519 ../src/terminal-screen.c:1910
 msgid "_Relaunch"
 msgstr "_Relanzar"
 
-#: ../src/terminal-screen.c:1506
+#: ../src/terminal-screen.c:1522
 msgid "There was an error creating the child process for this terminal"
 msgstr "Hubo un error al crear el proceso hijo para este terminal"
 
-#: ../src/terminal-screen.c:1898
+#: ../src/terminal-screen.c:1914
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "El proceso hijo finalizó correctamente con el estado %d."
 
-#: ../src/terminal-screen.c:1901
+#: ../src/terminal-screen.c:1917
 #, c-format
-#| msgid "The child process was terminated by signal %d."
 msgid "The child process was aborted by signal %d."
 msgstr "Se interrumpió el proceso hijo con la señal %d."
 
-#: ../src/terminal-screen.c:1904
-#| msgid "The child process was terminated."
+#: ../src/terminal-screen.c:1920
 msgid "The child process was aborted."
 msgstr "Se interrumpió el proceso hijo."
 
@@ -1844,7 +1832,6 @@ msgid "_Keyboard Shortcuts…"
 msgstr "Com_binaciones de teclas…"
 
 #: ../src/terminal-window.c:1680
-#| msgid "_Profile Preferences"
 msgid "_Preferences…"
 msgstr "_Preferencias…"
 
@@ -2010,6 +1997,13 @@ msgstr "Guardar como…"
 #: ../src/terminal-window.c:3382
 msgid "_Title:"
 msgstr "_Título:"
+
+#~ msgid "Server D-Bus name"
+#~ msgstr "Nombre del servidor D-Bus"
+
+#~| msgid "DIRNAME"
+#~ msgid "NAME"
+#~ msgstr "NOMBRE"
 
 #~ msgid "Disable connection to session manager"
 #~ msgstr "Desactivar la conexión con el gestor de sesiones"
