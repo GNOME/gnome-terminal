@@ -278,11 +278,11 @@ static void
 terminal_screen_init (TerminalScreen *screen)
 {
   const GtkTargetEntry target_table[] = {
-    { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
-    { "application/x-color", 0, TARGET_COLOR },
-    { "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
-    { "text/x-moz-url",  0, TARGET_MOZ_URL },
-    { "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
+    { (char *) "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, TARGET_TAB },
+    { (char *) "application/x-color", 0, TARGET_COLOR },
+    { (char *) "x-special/gnome-reset-background", 0, TARGET_RESET_BG },
+    { (char *) "text/x-moz-url",  0, TARGET_MOZ_URL },
+    { (char *) "_NETSCAPE_URL", 0, TARGET_NETSCAPE_URL }
   };
   VteTerminal *terminal = VTE_TERMINAL (screen);
   TerminalScreenPrivate *priv;
