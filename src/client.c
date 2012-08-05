@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -168,6 +169,7 @@ typedef struct
   char       *geometry;
   char       *role;
 
+  gboolean    menubar_state;
   gboolean    start_fullscreen;
   gboolean    start_maximized;
 
@@ -188,6 +190,7 @@ typedef struct
   gboolean wait;
 
   /* Flags */
+  guint menubar_state_set : 1;
   guint zoom_set          : 1;
   guint active            : 1;
 } OptionData;

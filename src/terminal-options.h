@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN       "Fullscreen"
 #define TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY         "Geometry"
 #define TERMINAL_CONFIG_WINDOW_PROP_MAXIMIZED        "Maximized"
+#define TERMINAL_CONFIG_WINDOW_PROP_MENUBAR_VISIBLE  "MenubarVisible"
 #define TERMINAL_CONFIG_WINDOW_PROP_ROLE             "Role"
 #define TERMINAL_CONFIG_WINDOW_PROP_TABS             "Terminals"
 
@@ -63,6 +64,8 @@ typedef struct
   char    *display_name;
   int      screen_number;
   GList   *initial_windows;
+  gboolean default_window_menubar_forced;
+  gboolean default_window_menubar_state;
   gboolean default_fullscreen;
   gboolean default_maximize;
   char    *default_role;
@@ -101,6 +104,9 @@ typedef struct
   guint source_tag;
 
   GList *tabs; /* list of InitialTab */
+
+  gboolean force_menubar_state;
+  gboolean menubar_state;
 
   gboolean start_fullscreen;
   gboolean start_maximized;

@@ -72,6 +72,9 @@ struct _TerminalWindowPrivate
   GtkWidget *confirm_close_dialog;
   GtkWidget *search_find_dialog;
 
+  guint menubar_visible : 1;
+  guint use_default_menubar_visibility : 1;
+
   /* Used to clear stray "demands attention" flashing on our window when we
    * unmap and map it to switch to an ARGB visual.
    */
@@ -170,6 +173,8 @@ static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
 #endif
 static void edit_current_profile_callback     (GtkAction *action,
+                                               TerminalWindow *window);
+static void view_menubar_toggled_callback     (GtkToggleAction *action,
                                                TerminalWindow *window);
 static void view_fullscreen_toggled_callback  (GtkToggleAction *action,
                                                TerminalWindow *window);
@@ -1807,6 +1812,10 @@ terminal_window_init (TerminalWindow *window)
   const GtkToggleActionEntry toggle_menu_entries[] =
     {
       /* View Menu */
+      { "ViewMenubar", NULL, N_("Show _Menubar"), NULL,
+        NULL,
+        G_CALLBACK (view_menubar_toggled_callback),
+        FALSE },
       { "ViewFullscreen", NULL, N_("_Full Screen"), NULL,
         NULL,
         G_CALLBACK (view_fullscreen_toggled_callback),
@@ -1842,6 +1851,7 @@ terminal_window_init (TerminalWindow *window)
 #endif
 
   priv->active_screen = NULL;
+  priv->menubar_visible = FALSE;
 
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
@@ -1941,6 +1951,9 @@ terminal_window_init (TerminalWindow *window)
   terminal_window_encoding_list_changed_cb (app, window);
   g_signal_connect (app, "encoding-list-changed",
                     G_CALLBACK (terminal_window_encoding_list_changed_cb), window);
+
+  terminal_window_set_menubar_visible (window, TRUE);
+  priv->use_default_menubar_visibility = TRUE;
 
   terminal_window_update_size_to_menu (window);
 
@@ -2270,6 +2283,47 @@ terminal_window_list_screen_containers (TerminalWindow *window)
   return terminal_mdi_container_list_screen_containers (priv->mdi_container);
 }
 
+void
+terminal_window_set_menubar_visible (TerminalWindow *window,
+                                     gboolean        setting)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+
+  /* it's been set now, so don't override when adding a screen.
+   * this side effect must happen before we short-circuit below.
+   */
+  priv->use_default_menubar_visibility = FALSE;
+  
+  if (setting == priv->menubar_visible)
+    return;
+
+  priv->menubar_visible = setting;
+
+  action = gtk_action_group_get_action (priv->action_group, "ViewMenubar");
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), setting);
+  
+  g_object_set (priv->menubar, "visible", setting, NULL);
+
+  /* FIXMEchpe: use gtk_widget_get_realized instead? */
+  if (priv->active_screen)
+    {
+      _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
+                             "[window %p] setting size after toggling menubar visibility\n",
+                             window);
+
+      terminal_window_set_size (window, priv->active_screen);
+    }
+}
+
+gboolean
+terminal_window_get_menubar_visible (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  
+  return priv->menubar_visible;
+}
+
 GtkWidget *
 terminal_window_get_mdi_container (TerminalWindow *window)
 {
@@ -2422,6 +2476,16 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
   }
 
   priv->active_screen = screen;
+
+  /* Override menubar setting if it wasn't restored from session */
+  if (priv->use_default_menubar_visibility)
+    {
+      gboolean setting =
+        g_settings_get_boolean (terminal_app_get_global_settings (terminal_app_get ()),
+                                TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY);
+
+      terminal_window_set_menubar_visible (window, setting);
+    }
 
   sync_screen_icon_title_set (screen, NULL, window);
   sync_screen_icon_title (screen, NULL, window);
@@ -3110,6 +3174,13 @@ edit_profiles_callback (GtkAction *action,
                                 GTK_WINDOW (window));
 }
 #endif
+
+static void
+view_menubar_toggled_callback (GtkToggleAction *action,
+                               TerminalWindow *window)
+{
+  terminal_window_set_menubar_visible (window, gtk_toggle_action_get_active (action));
+}
 
 static void
 view_fullscreen_toggled_callback (GtkToggleAction *action,

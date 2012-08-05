@@ -360,6 +360,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
   guint window_id;
+  gboolean show_menubar;
   gboolean active = TRUE;
   gboolean have_new_window, present_window, present_window_set;
 
@@ -411,6 +412,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     /* Overwrite the default, unique window role set in terminal_window_init */
     if (g_variant_lookup (options, "role", "&s", &role))
       gtk_window_set_role (GTK_WINDOW (window), role);
+
+    if (g_variant_lookup (options, "show-menubar", "b", &show_menubar))
+      terminal_window_set_menubar_visible (window, show_menubar);
 
     if (g_variant_lookup (options, "fullscreen-window", "b", &start_fullscreen) &&
         start_fullscreen) {
