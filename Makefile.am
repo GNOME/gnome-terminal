@@ -19,8 +19,6 @@ EXTRA_DIST = 			\
 	ChangeLog.pre-2-23	\
 	ChangeLog.README	\
 	HACKING			\
-	xmldocs.make		\
-	omf.make		\
 	$(NULL)
 
 CLEANFILES = \
@@ -41,15 +39,8 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/ltmain.sh \
 	$(srcdir)/missing \
 	$(srcdir)/mkinstalldirs \
-	$(srcdir)/omf.make \
-	$(srcdir)/xmldocs.make \
 	`find "$(srcdir)" -type f -name Makefile.in -print` \
 	$(NULL)
-
-# hack from sound-juicer to get around scrollkeeper's leaving a big
-# mess behind.
-distuninstallcheck_listfiles = 	\
-        find -regex '.*/var/scrollkeeper/.*' -prune -or -type f -print
 
 # Build ChangeLog from GIT  history
 ChangeLog:
