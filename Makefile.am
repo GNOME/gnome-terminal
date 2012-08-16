@@ -17,9 +17,6 @@ EXTRA_DIST = 			\
 	ChangeLog.pre-2-23	\
 	ChangeLog.README	\
 	HACKING			\
-	gnome-doc-utils.make	\
-	xmldocs.make		\
-	omf.make		\
 	$(NULL)
 
 CLEANFILES = \
@@ -40,9 +37,6 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/ltmain.sh \
 	$(srcdir)/missing \
 	$(srcdir)/mkinstalldirs \
-	$(srcdir)/omf.make \
-	$(srcdir)/xmldocs.make \
-	$(srcdir)/gnome-doc-utils.make	\
 	`find "$(srcdir)" -type f -name Makefile.in -print` \
 	$(NULL)
 

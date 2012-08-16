@@ -175,9 +175,9 @@ terminal_util_show_help (const char *topic,
     return;
 
   if (topic) {
-    url = g_strdup_printf ("ghelp://%s?%s", uri, topic);
+    url = g_strdup_printf ("help:%s/%s", uri, topic);
   } else {
-    url = g_strdup_printf ("ghelp://%s", uri);
+    url = g_strdup_printf ("help:%s", uri);
   }
 
   if (!open_url (GTK_WINDOW (parent), url, gtk_get_current_event_time (), &error))

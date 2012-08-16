@@ -32,7 +32,9 @@ AC_HEADER_STDC
 AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([0.40.0])
 
-GNOME_COMMON_INIT
+# User documentation
+YELP_HELP_INIT
+
 GNOME_DEBUG_CHECK
 
 AM_GLIB_GNU_GETTEXT
@@ -173,10 +175,6 @@ gnome-terminal.desktop.in
 src/Makefile
 src/terminal-version.h
 help/Makefile
-help/bg/Makefile
-help/ro/Makefile
-help/ja/Makefile
-help/zh_TW/Makefile
 po/Makefile.in
 ])
 AC_OUTPUT
