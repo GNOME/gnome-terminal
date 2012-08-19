@@ -54,8 +54,7 @@
 #include <time.h>
 
 #ifdef WITH_DCONF
-#include <dconf-client.h>
-#include <dconf-paths.h>
+#include <dconf.h>
 #endif
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
@@ -1201,7 +1200,7 @@ terminal_app_init (TerminalApp *app)
   /* FIXME HACK! */
   backend = g_settings_backend_get_default ();
   if (strcmp (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend") == 0) {
-    app->dconf_client = dconf_client_new (NULL, NULL, NULL, NULL);
+    app->dconf_client = dconf_client_new ();
     terminal_app_dconf_get_profile_list (app);
   }
   g_object_unref (backend);
