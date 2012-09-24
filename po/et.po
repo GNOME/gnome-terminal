@@ -8,21 +8,21 @@
 # Tõivo Leedjärv <toivo linux ee>, 2002.
 # Priit Laes <amd store20 com>, 2004–2006.
 # Ivar Smolin <okul linux ee>, 2005–2010.
-# Mattias Põldaru <mahfiaz@gmail.com>, 2010, 2011.
+# Mattias Põldaru <mahfiaz@gmail.com>, 2010, 2011, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2011-10-23 22:36+0000\n"
-"PO-Revision-Date: 2011-11-06 11:37+0200\n"
+"POT-Creation-Date: 2012-09-22 15:09+0000\n"
+"PO-Revision-Date: 2012-09-23 10:19+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 msgid "Terminal"
@@ -31,38 +31,259 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Käsurea kasutamine"
 
-msgid "Disable connection to session manager"
-msgstr "Seansihalduriga ühendumise keelamine"
+msgid "COMMAND"
+msgstr "KÄSK"
 
-msgid "Specify file containing saved configuration"
-msgstr "Salvestatud seadistusi sisaldava faili määramine"
+#, c-format
+msgid ""
+"Commands:\n"
+"  help    Shows this information\n"
+"  open    Create a new terminal\n"
+"\n"
+"Use \"%s COMMAND --help\" to get help on each command.\n"
+msgstr ""
+"Käsud:\n"
+"  help    Kuvab selle info\n"
+"  open    Loob uue terminali\n"
+"\n"
+"Kasuta \"%s KÄSK --help\", et saada iga käsu kohta abi.\n"
 
-msgid "FILE"
-msgstr "FAIL"
+#, c-format
+msgid "\"%s\" is not a valid zoom factor"
+msgstr "\"%s\" pole korrektne suurendustegur"
 
-msgid "Specify session management ID"
-msgstr "Seansihalduse ID määramine"
+msgid "Be quiet"
+msgstr "Ole vait"
 
-msgid "ID"
-msgstr "ID"
+msgid "Maximise the window"
+msgstr "Akna suurendamine"
 
-msgid "Session management options:"
-msgstr "Seansihalduse valikud:"
+msgid "Full-screen the window"
+msgstr "Akna suurendamine üle ekraani"
 
-msgid "Show session management options"
-msgstr "Seansihalduse valikute näitamine"
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+msgstr "Akna suurus, näiteks 80x24 või 80x24+200+200 (VEERUDxREAD+X+Y)"
 
-msgid "A_vailable encodings:"
-msgstr "_Saadaolevad kooditabelid:"
+msgid "GEOMETRY"
+msgstr "GEOMEETRIA"
+
+msgid "Set the window role"
+msgstr "Akna rolli määramine"
+
+msgid "ROLE"
+msgstr "ROLL"
+
+msgid "Use the given profile instead of the default profile"
+msgstr "Määratud profiili kasutamine vaikimisi profiili asemel"
+
+msgid "PROFILE-NAME"
+msgstr "PROFIILI-NIMI"
+
+msgid "Set the terminal title"
+msgstr "Terminali pealkirja määramine"
+
+msgid "TITLE"
+msgstr "PEALKIRI"
+
+msgid "Set the working directory"
+msgstr "Töökataloogi määramine"
+
+msgid "DIRNAME"
+msgstr "KATALOOGINIMI"
+
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr "Terminali suurendusteguri määramine (tavasuurus on 1.0)"
+
+msgid "ZOOM"
+msgstr "SUURENDUS"
+
+msgid "Forward stdin"
+msgstr "Edasta stdin"
+
+msgid "Forward stdout"
+msgstr "Edasta stdout"
+
+msgid "Forward stderr"
+msgstr "Edasta stderr"
+
+msgid "Forward file descriptor"
+msgstr "Edasta failikirjeldus (FD)"
+
+msgid "FD"
+msgstr "FD"
+
+msgid "Wait until the child exits"
+msgstr "Oota, kuni alamprotsess väljub"
+
+msgid "GNOME Terminal Client"
+msgstr "GNOME terminaliklient"
+
+msgid "Global options:"
+msgstr "Globaalsed valikud:"
+
+msgid "Show global options"
+msgstr "Globaalsete valikute kuvamine"
+
+msgid "Server options:"
+msgstr "Serveri valikud:"
+
+msgid "Show server options"
+msgstr "Serveri valikute kuvamine"
+
+msgid "Window options:"
+msgstr "Aknapõhised valikud:"
+
+msgid "Show window options"
+msgstr "Aknapõhiste valikute kuvamine"
+
+msgid "Terminal options:"
+msgstr "Terminali valikud:"
+
+msgid "Show terminal options"
+msgstr "Terminali valikute näitamine"
+
+msgid "Exec options:"
+msgstr "Käivitamise valikud:"
+
+msgid "Show exec options"
+msgstr "Käivitusvalikute näitamine"
+
+msgid "Processing options:"
+msgstr "Töötlemisvalikud:"
+
+msgid "Show processing options"
+msgstr "Töötlemisvalikute näitamine"
 
 msgid "Add or Remove Terminal Encodings"
 msgstr "Terminali kooditabelite lisamine või eemaldamine"
 
+msgid "A_vailable encodings:"
+msgstr "_Saadaolevad kooditabelid:"
+
 msgid "E_ncodings shown in menu:"
 msgstr "_Menüüs kuvatavad kooditabelid:"
 
+#.
+#. * Copyright © 2009 Christian Persch
+#. *
+#. * Gnome-terminal is free software; you can redistribute it and/or modify
+#. * it under the terms of the GNU General Public License as published by
+#. * the Free Software Foundation; either version 3 of the License, or
+#. * (at your option) any later version.
+#. *
+#. * Gnome-terminal is distributed in the hope that it will be useful,
+#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#. * GNU General Public License for more details.
+#. *
+#. * You should have received a copy of the GNU General Public License
+#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#.
+#. This file contains extra strings that need to be translated, but
+#. * can't be extracted by intltool since the ui files aren't in git, and
+#. * the glade files don't contain them in the right form. See bug #553357.
+#.
+#. Translators: This refers to the Delete keybinding option
+msgid "Automatic"
+msgstr "Automaatne"
+
+#. Translators: This refers to the Delete keybinding option
+msgid "Control-H"
+msgstr "Control-H"
+
+#. Translators: This refers to the Delete keybinding option
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. Translators: This refers to the Delete keybinding option
+msgid "Escape sequence"
+msgstr "Paojada"
+
+#. Translators: This refers to the Delete keybinding option
+msgid "TTY Erase"
+msgstr "TTY puhastamine"
+
+#. Translators: Cursor shape: ...
+msgid "Block"
+msgstr "Kast"
+
+#. Translators: Cursor shape: ...
+msgid "I-Beam"
+msgstr "Püstkriips"
+
+#. Translators: Cursor shape: ...
+msgid "Underline"
+msgstr "Allkriips"
+
+#. Translators: When command exits: ...
+msgid "Exit the terminal"
+msgstr "Väljutakse terminalist"
+
+#. Translators: When command exits: ...
+msgid "Restart the command"
+msgstr "Käivitatakse käsk uuesti"
+
+#. Translators: When command exits: ...
+msgid "Hold the terminal open"
+msgstr "Jäetakse terminal avatuks"
+
+#. Translators: Scrollbar is: ...
+msgid "Always visible"
+msgstr "Alati nähtav"
+
+#. Translators: Scrollbar is: ...
+msgid "Visible only when necessary"
+msgstr "Nähtav ainult vajadusel"
+
+#. Translators: Scrollbar is: ...
+msgid "Hidden"
+msgstr "Varjatud"
+
+#. Translators: When terminal commands set their own titles: ...
+msgid "Replace initial title"
+msgstr "Asendab algse pealkirja"
+
+#. Translators: When terminal commands set their own titles: ...
+msgid "Append initial title"
+msgstr "Paigutatakse algse pealkirja järele"
+
+#. Translators: When terminal commands set their own titles: ...
+msgid "Prepend initial title"
+msgstr "Paigutatakse algse pealkirja ette"
+
+#. Translators: When terminal commands set their own titles: ...
+msgid "Keep initial title"
+msgstr "Jäetakse kuvamata"
+
+#. Translators: This is the name of a colour scheme
+msgid "Tango"
+msgstr "Tango"
+
+#. Translators: This is the name of a colour scheme
+msgid "Linux console"
+msgstr "Linuxi konsool"
+
+#. Translators: This is the name of a colour scheme
+msgid "XTerm"
+msgstr "XTerm"
+
+#. Translators: This is the name of a colour scheme
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#. Translators: This is the name of a colour scheme
+msgid "Custom"
+msgstr "Oma"
+
 msgid "Find"
 msgstr "Otsi"
+
+msgid "_Search for:"
+msgstr "_Otsitav tekst:"
+
+msgid "_Match case"
+msgstr "_Tõstutundlik"
 
 msgid "Match _entire word only"
 msgstr "Kogu sõ_na peab vastavuses olema"
@@ -73,90 +294,47 @@ msgstr "Vastavus _regulaaravaldisele"
 msgid "Search _backwards"
 msgstr "Otsitakse tagantpoolt _ettepoole"
 
-msgid "_Match case"
-msgstr "_Tõstutundlik"
-
-msgid "_Search for:"
-msgstr "_Otsitav tekst:"
-
 msgid "_Wrap around"
 msgstr "_Lõppu (või algusese) jõudmisel otsingut ei katkestata"
 
-msgid ""
-"A subset of possible encodings are presented in the Encoding submenu. This "
-"is a list of encodings to appear there. The special encoding name \"current"
-"\" means to display the encoding of the current locale."
-msgstr ""
-"Võimalike kooditabelite alamhulk, mis on kasutatav \"Kodeering\" "
-"alammenüüst. Siinkirjeldatud loend ilmub selles alammenüüs. Kooditabelite "
-"erinimi \"current\" tähendab käesoleva lokaadi vaikimisi kooditabelit."
+msgid "Keyboard Shortcuts"
+msgstr "Kiirklahvid"
 
-msgid ""
-"A value between 0.0 and 1.0 indicating how much to darken the background "
-"image. 0.0 means no darkness, 1.0 means fully dark. In the current "
-"implementation, there are only two levels of darkness possible, so the "
-"setting behaves as a boolean, where 0.0 disables the darkening effect."
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
 msgstr ""
-"0.0 ja 1.0 vahel olev väärtus, mille abil määratakse taustapildi tumendamise "
-"aste. 1.0 tähendab täielikku tumendust. Käesoleva teostuse puhul on võimalik "
-"ainult 2 tumendusastme väärtust, seega käsitletakse seda kui tõeväärtust, "
-"kus 0.0 keelab tumendusefekti."
+"Kõik _menüü liikumisklahvid on lubatud (näiteks Alt-F failimenüü jaoks)"
 
-msgid ""
-"Accelerator key to detach current tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keybinding for this action."
-msgstr ""
-"Klaviatuuri kiirklahv käesoleva kaardi lahtihaakimiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "M_enüü kiirklahv on lubatud (vaikimisi F10)"
+
+msgid "_Shortcut keys:"
+msgstr "_Kiirklahvid:"
+
+msgid "Human-readable name of the profile"
+msgstr "Profiili inimloetav nimi"
+
+msgid "Human-readable name of the profile."
+msgstr "Profiili inimloetav nimi."
+
+msgid "Default color of text in the terminal"
+msgstr "Terminali teksti vaikimisi värv"
 
 msgid ""
-"Accelerator key to move the current tab to the left. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keybinding for this "
-"action."
+"Default color of text in the terminal, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
 msgstr ""
-"Klaviatuuri kiirklahv käesoleva kaardi liigutamiseks vasakule. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
+"Terminali teksti vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
+"stiilis kuueteistkümnendarve kui ingliskeelseid värvinimetusi nagu \"red\")"
+
+msgid "Default color of terminal background"
+msgstr "Terminali vaikimisi taustavärv"
 
 msgid ""
-"Accelerator key to move the current tab to the right. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keybinding for this "
-"action."
+"Default color of terminal background, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
 msgstr ""
-"Klaviatuuri kiirklahv käesoleva kaardi liigutamiseks paremale. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid "Accelerator to detach current tab."
-msgstr "Kiirklahv käesoleva kaardi lahtihaakimiseks"
-
-msgid "Accelerator to move the current tab to the left."
-msgstr "Kiirklahv käesoleva kaardi liigutamiseks vasakule"
-
-msgid "Accelerator to move the current tab to the right."
-msgstr "Kiirklahv käesoleva kaardi liigutamiseks paremale"
-
-msgid "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
-msgstr "Pango kirjatüübi nimi. Näiteks \"Sans 12\" või \"Monospace Bold 14\"."
-
-msgid "Background image"
-msgstr "Taustapilt"
-
-msgid "Background type"
-msgstr "Tausta tüüp"
-
-msgid "Characters that are considered \"part of a word\""
-msgstr "Märgid, mida arvestatakse kui \"sõna osa\""
-
-msgid "Custom command to use instead of the shell"
-msgstr "Kestprogrammi käivitamise asemel kasutatav käsk"
-
-msgid "Default"
-msgstr "Vaikimisi"
+"Terminali tausta vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
+"stiilis kuueteistkümnendarve kui ingliskeelseid värvinimetusi nagu \"red\")"
 
 msgid "Default color of bold text in the terminal"
 msgstr "Terminali rasvase kirja vaikimisi värv"
@@ -170,58 +348,17 @@ msgstr ""
 "HTML-stiilis kuueteistkümnendarve kui ingliskeelseid värvinimetusi nagu \"red"
 "\"). Kui bold_color_same_as_fg on märgitud, siis seda väärtust eiratakse."
 
-msgid "Default color of terminal background"
-msgstr "Terminali vaikimisi taustavärv"
+msgid "Whether bold text should use the same color as normal text"
+msgstr "Kas rasvast kirja peab näitama sama värviga kui tavalist kirja"
 
 msgid ""
-"Default color of terminal background, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
+"If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
-"Terminali tausta vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
-"stiilis kuueteistkümnendarve kui ingliskeelseid värvinimetusi nagu \"red\")"
+"Kui märgitud, siis renderdatakse rasvast kirja sama värviga, mida "
+"kasutatakse tavalise kirja puhul."
 
-msgid "Default color of text in the terminal"
-msgstr "Terminali teksti vaikimisi värv"
-
-msgid ""
-"Default color of text in the terminal, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
-msgstr ""
-"Terminali teksti vaikimisi värv värvikirjeldusena (võib kasutada nii HTML-"
-"stiilis kuueteistkümnendarve kui ingliskeelseid värvinimetusi nagu \"red\")"
-
-msgid "Default number of columns"
-msgstr "Vaikimisi veergude arv"
-
-msgid "Default number of rows"
-msgstr "Vaikimisi ridade arv"
-
-msgid "Effect of the Backspace key"
-msgstr "Backspace klahvi toime"
-
-msgid "Effect of the Delete key"
-msgstr "Delete klahvi toime"
-
-msgid "Filename of a background image."
-msgstr "Taustapildi faili nimi."
-
-msgid "Font"
-msgstr "Kirjatüüp"
-
-msgid "How much to darken the background image"
-msgstr "Kui palju peab taustapilti tumendama"
-
-msgid "Human-readable name of the profile"
-msgstr "Profiili inimloetav nimi"
-
-msgid "Human-readable name of the profile."
-msgstr "Profiili inimloetav nimi."
-
-msgid "Icon for terminal window"
-msgstr "Terminaliakna ikoon"
-
-msgid "Icon to use for tabs/windows containing this profile."
-msgstr "Ikoon, mida selle profiili puhul kasutatakse kaartidel ja akendel"
+msgid "What to do with dynamic title"
+msgstr "Mida teha dünaamilise pealkirjaga"
 
 msgid ""
 "If the application in the terminal sets the title (most typically people "
@@ -235,618 +372,6 @@ msgstr ""
 "ette), \"after\" (dünaamiline pealkiri asetatakse määratud pealkirja "
 "järele), ja \"ignore\" (dünaamilist pealkirja eiratakse)."
 
-msgid "If true, allow applications in the terminal to make text boldface."
-msgstr ""
-"Kui märgitud, siis on terminalis töötavatel rakendustel võimalik jämedat "
-"kirja väljastada."
-
-msgid ""
-"If true, boldface text will be rendered using the same color as normal text."
-msgstr ""
-"Kui märgitud, siis renderdatakse rasvast kirja sama värviga, mida "
-"kasutatakse tavalise kirja puhul."
-
-msgid ""
-"If true, don't make a noise when applications send the escape sequence for "
-"the terminal bell."
-msgstr ""
-"Kui märgitud, siis terminal ei reageeri piiksu tegemiseks mõeldud "
-"koodijadale."
-
-msgid ""
-"If true, newly created terminal windows will have custom size specified by "
-"default_size_columns and default_size_rows."
-msgstr ""
-"Kui märgitud, siis luuakse uued terminaliaknad võtmetes default_size_columns "
-"ja default_size_rows määratud suurusega."
-
-msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Kui märgitud, siis klahvivajutusel hüpatakse kerimisriba allaossa."
-
-msgid ""
-"If true, scroll the background image with the foreground text; if false, "
-"keep the image in a fixed position and scroll the text above it."
-msgstr ""
-"Kui märgitud, siis keritakse taustapilti koos tekstiga, vastasel juhul "
-"taustapilt teksti kerimisel kaasa ei liigu."
-
-msgid ""
-"If true, scrollback lines will never be discarded. The scrollback history is "
-"stored on disk temporarily, so this may cause the system to run out of disk "
-"space if there is a lot of output to the terminal."
-msgstr ""
-"Kui märgitud, siis ei kustutata tagasikerimise puhvrist ühtegi rida. "
-"Tagasikerimise ajalugu salvestatakse ajutiselt kettale ja kui terminalis "
-"tekib väga palju ridu, siis võib kettaruum otsa saada."
-
-msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
-msgstr ""
-"Kui märgitud, siis terminalis käivitatav käsk käivitatakse kestprogrammina "
-"(argv[0] ette lisatakse sidekriips)."
-
-msgid ""
-"If true, the system login records utmp and wtmp will be updated when the "
-"command inside the terminal is launched."
-msgstr ""
-"Kui märgitud, siis terminalis käsu käivitamisel uuendatakse süsteemi "
-"sisselogimiskirjeid utmp ja wtmp."
-
-msgid ""
-"If true, the terminal will use the desktop-global standard font if it's "
-"monospace (and the most similar font it can come up with otherwise)."
-msgstr ""
-"Kui märgitud, siis kasutab terminal desktop-global standardset kirjatüüpi "
-"juhul, kui see on täheruut (vastasel juhul aga sellele kõige sarnasemat "
-"kirjatüüpi)."
-
-msgid ""
-"If true, the theme color scheme used for text entry boxes will be used for "
-"the terminal, instead of colors provided by the user."
-msgstr ""
-"Määramise korral kasutatakse terminali tekstisisestuskastides kasutaja poolt "
-"määratud värvuste asemel teema värviskeemi."
-
-msgid ""
-"If true, the value of the custom_command setting will be used in place of "
-"running a shell."
-msgstr ""
-"Kui märgitud, siis custom_command võtme väärtust kasutatakse kestprogrammi "
-"käivitamiseks."
-
-msgid ""
-"If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr ""
-"Kui märgitud, siis uue väljundi tekkimisel keritakse terminali sisu kõige "
-"alumisse otsa."
-
-msgid ""
-"Keyboard shortcut key for bringing up the dialog for profile creation. "
-"Expressed as a string in the same format used for GTK+ resource files. If "
-"you set the option to the special string \"disabled\", then there will be no "
-"keyboard shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv profiili loomise dialoogi käivitamiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for closing a tab. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv kaardi sulgemiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for closing a window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv akna sulgemiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Kui seada selle valiku väärtuseks "
-"\"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for copying selected text to the clipboard. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv valitud teksti lõikelauale kopeerimiseks. "
-"Väljendatakse samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui "
-"seada selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks "
-"kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for launching help. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv abiteabe kuvamiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for making font larger. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv kirjatüübi suuruse suurendamiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for making font smaller. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv kirjatüübi suuruse vähendamiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for making font the normal size. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv kirjatüübi suuruse algsele suurusele viimiseks. "
-"Väljendatakse samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui "
-"seada selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks "
-"kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for opening a new tab. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv uue kaardi avamiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for opening a new window. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv uue akna avamiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for pasting the contents of the clipboard into the "
-"terminal. Expressed as a string in the same format used for GTK+ resource "
-"files. If you set the option to the special string \"disabled\", then there "
-"will be no keyboard shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv lõikelaua sisu terminali asetamiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 1. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 1. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Kiirklahv 10. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Kiirklahv 11. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Kiirklahv 12. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 2. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 2. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 3. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 3. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 4. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 4. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 5. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 5. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 6. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 6. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 7. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 7. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 8. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 8. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for switch to tab 9. Expressed as a string in the same "
-"format used for GTK+ resource files. If you set the option to the special "
-"string \"disabled\", then there will be no keyboard shortcut for this action."
-msgstr ""
-"Kiirklahv 9. kaardi aktiveerimiseks. Väljendatakse samasuguses vormingus "
-"nagu GTK+ abifailides kasutatakse. Selle tegevuse kiirklahvi keelamiseks "
-"tuleb väärtuseks määrata \"disabled\"."
-
-msgid ""
-"Keyboard shortcut key for toggling full screen mode. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv täisekraanirežiimi sisse- ja väljalülitamiseks. "
-"Väljendatakse samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui "
-"seada selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks "
-"kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to reset and clear the terminal. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv terminali tühjendamiseks ja lähtestamiseks. "
-"Väljendatakse samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui "
-"seada selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks "
-"kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-"same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv terminali lähtestamiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to save the current tab contents to a file. Expressed "
-"as a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv avatud kaardi sisu salvestamiseks faili. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to set the terminal title. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv teminali tiitli määramiseks. Väljendatakse samasuguses "
-"vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle valiku "
-"väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to switch to the next tab. Expressed as a string in "
-"the same format used for GTK+ resource files. If you set the option to the "
-"special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv järgmise kaardi aktiveerimiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to switch to the previous tab. Expressed as a string "
-"in the same format used for GTK+ resource files. If you set the option to "
-"the special string \"disabled\", then there will be no keyboard shortcut for "
-"this action."
-msgstr ""
-"Klaviatuuri kiirklahv eelmise kaardi aktiveerimiseks. Väljendatakse "
-"samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui seada selle "
-"valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks kiirklahvi ei ole."
-
-msgid ""
-"Keyboard shortcut key to toggle the visibility of the menubar. Expressed as "
-"a string in the same format used for GTK+ resource files. If you set the "
-"option to the special string \"disabled\", then there will be no keyboard "
-"shortcut for this action."
-msgstr ""
-"Klaviatuuri kiirklahv menüüriba peitmiseks või nähtavale toomiseks. "
-"Väljendatakse samasuguses vormingus nagu GTK+ abifailides kasutatakse. Kui "
-"seada selle valiku väärtuseks \"keelatud\", siis selle tegevuse jaoks "
-"kiirklahvi ei ole."
-
-msgid "Keyboard shortcut to close a tab"
-msgstr "Kiirklahv kaardi sulgemiseks"
-
-msgid "Keyboard shortcut to close a window"
-msgstr "Kiirklahv akna sulgemiseks"
-
-msgid "Keyboard shortcut to copy text"
-msgstr "Kiirklahv teksti kopeerimiseks"
-
-msgid "Keyboard shortcut to create a new profile"
-msgstr "Kiirklahv uue profiili loomiseks"
-
-msgid "Keyboard shortcut to launch help"
-msgstr "Kiirklahv abi kuvamiseks"
-
-msgid "Keyboard shortcut to make font larger"
-msgstr "Kiirklahv kirjasuuruse suurendamiseks"
-
-msgid "Keyboard shortcut to make font normal-size"
-msgstr "Kiirklahv kirjatüübi tavasuurusele viimiseks"
-
-msgid "Keyboard shortcut to make font smaller"
-msgstr "Kiirklahv kirjasuuruse vähendamiseks"
-
-msgid "Keyboard shortcut to open a new tab"
-msgstr "Kiirklahv uue kaardi avamiseks"
-
-msgid "Keyboard shortcut to open a new window"
-msgstr "Kiirklahv uue akna avamiseks"
-
-msgid "Keyboard shortcut to paste text"
-msgstr "Kiirklahv teksti asetamiseks"
-
-msgid "Keyboard shortcut to reset and clear the terminal"
-msgstr "Kiirklahv terminali tühjendamiseks ja algsätete taastamiseks"
-
-msgid "Keyboard shortcut to reset the terminal"
-msgstr "Kiirklahv terminali algsätete taastamiseks"
-
-msgid "Keyboard shortcut to save the current tab contents to file"
-msgstr "Kiirklahv avatud kaardi sisu salvestamiseks faili"
-
-msgid "Keyboard shortcut to set the terminal title"
-msgstr "Kiirklahv terminali pealkirja seadmiseks"
-
-msgid "Keyboard shortcut to switch to tab 1"
-msgstr "Kiirklahv 1. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 10"
-msgstr "Kiirklahv 10. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 11"
-msgstr "Kiirklahv 11. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 12"
-msgstr "Kiirklahv 12. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 2"
-msgstr "Kiirklahv 2. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 3"
-msgstr "Kiirklahv 3. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 4"
-msgstr "Kiirklahv 4. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 5"
-msgstr "Kiirklahv 5. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 6"
-msgstr "Kiirklahv 6. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 7"
-msgstr "Kiirklahv 7. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 8"
-msgstr "Kiirklahv 8. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to tab 9"
-msgstr "Kiirklahv 9. kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to the next tab"
-msgstr "Kiirklahv järgmisele kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to switch to the previous tab"
-msgstr "Kiirklahv eelmisele kaardile lülitumiseks"
-
-msgid "Keyboard shortcut to toggle full screen mode"
-msgstr "Kiirklahv täisekraanivaate sisse- ja väljalülitamiseks"
-
-msgid "Keyboard shortcut to toggle the visibility of the menubar"
-msgstr "Kiirklahv menüüriba peitmiseks ja nähtavale toomiseks"
-
-msgid "List of available encodings"
-msgstr "Saadaolevate kooditabelite loend"
-
-msgid "List of profiles"
-msgstr "Profiilide nimekiri"
-
-msgid ""
-"List of profiles known to gnome-terminal. The list contains strings naming "
-"subdirectories relative to /apps/gnome-terminal/profiles."
-msgstr ""
-"Gnome terminalile teadaolevate profiilide loend. Sisaldab alamkataloogide "
-"nimesid kataloogi /apps/gnome-terminal/profiles suhtes."
-
-msgid ""
-"Normally you can access the menubar with F10. This can also be customized "
-"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
-"standard menubar accelerator to be disabled."
-msgstr ""
-"Tavaliselt saab menüüribale ligi F10 klahvi abil. Seda saab ka kohandada "
-"gtkrc abil (gtk-menu-bar-accel = \"misiganes\"). Selle võtme abil saab "
-"standardset menüüriba kiirklahvi keelata."
-
-msgid ""
-"Number of columns in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"Uute akende veergude arv. Toimib ainult juhul, kui use_custom_default_size "
-"on lubatud."
-
-msgid "Number of lines to keep in scrollback"
-msgstr "Tagasikerimise puhvri ridade arv"
-
-msgid ""
-"Number of rows in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"Uute akende ridade arv. Toimib ainult juhul, kui use_custom_default_size on "
-"lubatud."
-
-msgid ""
-"Number of scrollback lines to keep around. You can scroll back in the "
-"terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. If scrollback_unlimited is true, this value is ignored."
-msgstr ""
-"Ridade arv, mida hoitakse tagasikerimiseks. Selle arvu võrra on terminalilt "
-"läbijooksnud ridu võimalik tagasi kerida. Kõik sellest puhvrist väljapoole "
-"jäävad read kustutatakse mälust. Kui scrollback_unlimited on märgitud, siis "
-"seda väärtust eiratakse."
-
-msgid "Palette for terminal applications"
-msgstr "Palett terminalirakenduste jaoks"
-
-msgid "Position of the scrollbar"
-msgstr "Kerimisriba asukoht"
-
-msgid ""
-"Possible values are \"close\" to close the terminal, and \"restart\" to "
-"restart the command."
-msgstr ""
-"Võimalikud väärtused on \"close\" terminali sulgemiseks ja \"restart\" käsu "
-"taaskäivitamiseks."
-
-msgid ""
-"Profile to be used when opening a new window or tab. Must be in profile_list."
-msgstr ""
-"Uue akna või kaardi avamisel kasutatav profiil. See peab olema võtmes "
-"profile_list loetletud."
-
-msgid "Profile to use for new terminals"
-msgstr "Profiil, mida kasutada uutes terminalides"
-
-msgid "Run this command in place of the shell, if use_custom_command is true."
-msgstr ""
-"Kui use_custom_command on märgitud, siis käivitatakse kestprogrammi asemel "
-"see käsk."
-
-msgid ""
-"Sets what code the backspace key generates. Possible values are \"ascii-del"
-"\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII "
-"BS character), \"escape-sequence\" for the escape sequence typically bound "
-"to backspace or delete. \"ascii-del\" is normally considered the correct "
-"setting for the Backspace key."
-msgstr ""
-"Backspace klahvi poolt genereeritava koodi määramine. Võimalikud väärtused "
-"on \"ascii-del\" ASCII DEL koodi jaoks, \"control-h\" Control-H (ehk ASCII "
-"BackSpace kood), \"escape-sequence\" BackSpace või Delete klahvi tüüpilise "
-"paojada jaoks. Üldjuhul tagab normaalse käitumise väärtus \"ascii-del\"."
-
-msgid ""
-"Sets what code the delete key generates. Possible values are \"ascii-del\" "
-"for the ASCII DEL character, \"control-h\" for Control-H (AKA the ASCII BS "
-"character), \"escape-sequence\" for the escape sequence typically bound to "
-"backspace or delete. \"escape-sequence\" is normally considered the correct "
-"setting for the Delete key."
-msgstr ""
-"Delete klahvi poolt genereeritava koodi määramine. Võimalikud väärtused on "
-"\"ascii-del\" ASCII DEL koodi jaoks, \"control-h\" Control-H (ehk ASCII "
-"BackSpace kood), \"escape-sequence\" BackSpace või Delete klahvi tüüpilise "
-"paojada jaoks. Üldjuhul tagab normaalse käitumise väärtus \"escape-sequence"
-"\"."
-
-msgid ""
-"Terminals have a 16-color palette that applications inside the terminal can "
-"use. This is that palette, in the form of a colon-separated list of color "
-"names. Color names should be in hex format e.g. \"#FF00FF\""
-msgstr ""
-"Terminalides töötavate rakenduste käsutuses on on 16-värvusega palett, mis "
-"on kirjeldatud koolonitega eraldatud nimekirjana. Värvuste nimed võivad olla "
-"ka kuueteistkümnendkujul (näiteks \"#FF00FF\")."
-
-msgid "The cursor appearance"
-msgstr "Kursori kuju"
-
-msgid ""
-"The possible values are \"block\" to use a block cursor, \"ibeam\" to use a "
-"vertical line cursor, or \"underline\" to use an underline cursor."
-msgstr ""
-"Võimalikud väärtused on \"block\" kastikujulise kursori, \"ibeam\" "
-"püstkriipsukujulise kursori ja \"underline\" allkriipsukujulise kursori "
-"jaoks."
-
-msgid ""
-"The possible values are \"system\" to use the global cursor blinking "
-"settings, or \"on\" or \"off\" to set the mode explicitly."
-msgstr ""
-"Võimalikud väärtused on \"system\" globaalsete kursorivilkumise sätete "
-"kasutamiseks, \"on\" vilkumise sisselülitamiseks ja \"off\" "
-"väljalülitamiseks."
-
 msgid "Title for terminal"
 msgstr "Terminali pealkiri"
 
@@ -859,27 +384,19 @@ msgstr ""
 "või kombineerida terminalis töötava rakenduse poolt seatud pealkirjaga, "
 "sõltuvalt title_mode võtme väärtusest."
 
-msgid ""
-"True if the menubar should be shown in new windows, for windows/tabs with "
-"this profile."
+msgid "Whether to allow bold text"
+msgstr "Kas paks kiri on lubatud"
+
+msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
-"Kui märgitud, siis selle profiili akende/kaartide uutel akendel tuleb "
-"menüüriba näidata."
+"Kui märgitud, siis on terminalis töötavatel rakendustel võimalik jämedat "
+"kirja väljastada."
 
-msgid ""
-"Type of terminal background. May be \"solid\" for a solid color, \"image\" "
-"for an image, or \"transparent\" for either real transparency if a "
-"compositing window manager is running, or pseudo-transparency otherwise."
-msgstr ""
-"Terminali tausta liik. Võimalikud väärtused on \"solid\" ühtlase värvuse "
-"jaoks, \"image\" pildi jaoks ja \"transparent\" läbipaistvuse jaoks (kui ei "
-"kasutata komposiitaknahaldurit, siis pseudoläbipaistvuse jaoks)."
+msgid "Whether to ring the terminal bell"
+msgstr "Kas kasutada terminali kellaheli"
 
-msgid "What to do with dynamic title"
-msgstr "Mida teha dünaamilise pealkirjaga"
-
-msgid "What to do with the terminal when the child command exits"
-msgstr "Mida peab terminal alamkäsu lõpetamise korral ette võtma"
+msgid "Characters that are considered \"part of a word\""
+msgstr "Märgid, mida arvestatakse kui \"sõna osa\""
 
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
@@ -890,40 +407,173 @@ msgstr ""
 "Vahemikku saab määrata vormingus \"A-Ü\". Poolitusmärk (mida ei kasutata "
 "vahemiku määramiseks) peab olema esimese märgina."
 
-msgid ""
-"Where to put the terminal scrollbar. Possibilities are \"left\", \"right\", "
-"and \"hidden\"."
+msgid "Whether to show menubar in new windows/tabs"
+msgstr "Kas uutel akendel ja kaartidel näidatakse menüüriba või mitte"
+
+msgid "True if the menubar should be shown in new window"
+msgstr "Kui märgitud, siis uutel akendel tuleb menüüriba näidata"
+
+msgid "Whether to use custom terminal size for new windows"
 msgstr ""
-"Terminali kerimisriba asukoht. Võimalikud asukohad on \"left\" (vasakul), "
-"\"right\" (paremal) ja \"hidden\" (peidus)."
+"Kas uutel akendel ja kaartidel kasutatakse terminalile kohandatud suurust "
+"või mitte"
+
+msgid ""
+"If true, newly created terminal windows will have custom size specified by "
+"default_size_columns and default_size_rows."
+msgstr ""
+"Kui märgitud, siis luuakse uued terminaliaknad võtmetes default_size_columns "
+"ja default_size_rows määratud suurusega."
+
+msgid "Default number of columns"
+msgstr "Vaikimisi veergude arv"
+
+msgid ""
+"Number of columns in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Uute akende veergude arv. Toimib ainult juhul, kui use_custom_default_size "
+"on lubatud."
+
+msgid "Default number of rows"
+msgstr "Vaikimisi ridade arv"
+
+msgid ""
+"Number of rows in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"Uute akende ridade arv. Toimib ainult juhul, kui use_custom_default_size on "
+"lubatud."
+
+msgid "When to show the scrollbar"
+msgstr "Millal kerimisriba kuvatakse"
+
+msgid "Number of lines to keep in scrollback"
+msgstr "Tagasikerimise puhvri ridade arv"
+
+msgid ""
+"Number of scrollback lines to keep around. You can scroll back in the "
+"terminal by this number of lines; lines that don't fit in the scrollback are "
+"discarded. If scrollback_unlimited is true, this value is ignored."
+msgstr ""
+"Ridade arv, mida hoitakse tagasikerimiseks. Selle arvu võrra on terminalilt "
+"läbijooksnud ridu võimalik tagasi kerida. Kõik sellest puhvrist väljapoole "
+"jäävad read kustutatakse mälust. Kui scrollback_unlimited on märgitud, siis "
+"seda väärtust eiratakse."
 
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Kas tagasikerimise puhvris hoitakse piiramatut arvu ridu või mitte"
 
-msgid "Whether bold text should use the same color as normal text"
-msgstr "Kas rasvast kirja peab näitama sama värviga kui tavalist kirja"
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"Kui märgitud, siis ei kustutata tagasikerimise puhvrist ühtegi rida. "
+"Tagasikerimise ajalugu salvestatakse ajutiselt kettale ja kui terminalis "
+"tekib väga palju ridu, siis võib kettaruum otsa saada."
 
-msgid "Whether the menubar has access keys"
-msgstr "Kas menüüribal on ligipääsuklahv"
+msgid "Whether to scroll to the bottom when a key is pressed"
+msgstr "Kas klahvivajutuse puhul tuleb kerida alla või mitte"
 
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Kast standardne GTK kiirklahv menüüriba kasutamiseks on lubatud"
+msgid "If true, pressing a key jumps the scrollbar to the bottom."
+msgstr "Kui märgitud, siis klahvivajutusel hüpatakse kerimisriba allaossa."
 
-msgid "Whether to allow bold text"
-msgstr "Kas paks kiri on lubatud"
+msgid "Whether to scroll to the bottom when there's new output"
+msgstr "Kas uue väljundi puhul tuleb kerida alla või mitte"
 
 msgid ""
-"Whether to ask for confirmation when closing a terminal window which has "
-"more than one open tab."
+"If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
-"Kas rohkem kui ühte kaarti omava terminaliakna sulgemisel peab kasutajalt "
-"kinnitust küsima."
+"Kui märgitud, siis uue väljundi tekkimisel keritakse terminali sisu kõige "
+"alumisse otsa."
 
-msgid "Whether to ask for confirmation when closing terminal windows"
-msgstr "Kas terminaliakende sulgemisel peab kinnitust küsima"
+msgid "What to do with the terminal when the child command exits"
+msgstr "Mida peab terminal alamkäsu lõpetamise korral ette võtma"
+
+msgid ""
+"Possible values are \"close\" to close the terminal, and \"restart\" to "
+"restart the command."
+msgstr ""
+"Võimalikud väärtused on \"close\" terminali sulgemiseks ja \"restart\" käsu "
+"taaskäivitamiseks."
+
+msgid "Whether to launch the command in the terminal as a login shell"
+msgstr "Kas terminali käsk käivitatakse sisselogimise kestana või mitte"
+
+msgid ""
+"If true, the command inside the terminal will be launched as a login shell. "
+"(argv[0] will have a hyphen in front of it.)"
+msgstr ""
+"Kui märgitud, siis terminalis käivitatav käsk käivitatakse kestprogrammina "
+"(argv[0] ette lisatakse sidekriips)."
+
+msgid "Whether to update login records when launching terminal command"
+msgstr ""
+"Kas terminalikäsu käivitamisel uuendatakse sisselogimise kirjeid või mitte"
+
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr ""
+"Kui märgitud, siis terminalis käsu käivitamisel uuendatakse süsteemi "
+"sisselogimiskirjeid utmp ja wtmp."
+
+msgid "Whether to run a custom command instead of the shell"
+msgstr "_Oma käsu käivitamine kesta asemel"
+
+msgid ""
+"If true, the value of the custom_command setting will be used in place of "
+"running a shell."
+msgstr ""
+"Kui märgitud, siis custom_command võtme väärtust kasutatakse kestprogrammi "
+"käivitamiseks."
 
 msgid "Whether to blink the cursor"
 msgstr "Kas kursor plingib"
+
+msgid ""
+"The possible values are \"system\" to use the global cursor blinking "
+"settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr ""
+"Võimalikud väärtused on \"system\" globaalsete kursorivilkumise sätete "
+"kasutamiseks, \"on\" vilkumise sisselülitamiseks ja \"off\" "
+"väljalülitamiseks."
+
+msgid "The cursor appearance"
+msgstr "Kursori kuju"
+
+msgid "Custom command to use instead of the shell"
+msgstr "Kestprogrammi käivitamise asemel kasutatav käsk"
+
+msgid "Run this command in place of the shell, if use_custom_command is true."
+msgstr ""
+"Kui use_custom_command on märgitud, siis käivitatakse kestprogrammi asemel "
+"see käsk."
+
+msgid "Palette for terminal applications"
+msgstr "Palett terminalirakenduste jaoks"
+
+msgid "A pango font name and size"
+msgstr "Pango fondi nimi ja suurus"
+
+msgid "The code sequence the Backspace key generates"
+msgstr "Backspace klahv genereerib"
+
+msgid "The code sequence the Delete key generates"
+msgstr "Delete klahv genereerib"
+
+msgid "Whether to use the colors from the theme for the terminal widget"
+msgstr "Kas terminalividina jaoks kasutatakse teemast võetud värve või mitte"
+
+msgid "Whether to use the system monospace font"
+msgstr "Kas kasutada süsteemi püsisammkirja või mitte"
+
+msgid "Which encoding to use"
+msgstr "Millist kodeeringut kasutada"
+
+msgid "Whether the menubar has access keys"
+msgstr "Kas menüüribal on ligipääsuklahv"
 
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
@@ -934,63 +584,32 @@ msgstr ""
 "takistada mõne terminalis töötava rakenduse kasutamist ja seetõttu on seda "
 "võimalik välja lülitada."
 
-msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Kas terminali käsk käivitatakse sisselogimise kestana või mitte"
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr "Kast standardne GTK kiirklahv menüüriba kasutamiseks on lubatud"
 
-msgid "Whether to run a custom command instead of the shell"
-msgstr "_Oma käsu käivitamine kesta asemel"
-
-msgid "Whether to scroll background image"
-msgstr "Kas taustapilti kerida või mitte"
-
-msgid "Whether to scroll to the bottom when a key is pressed"
-msgstr "Kas klahvivajutuse puhul tuleb kerida alla või mitte"
-
-msgid "Whether to scroll to the bottom when there's new output"
-msgstr "Kas uue väljundi puhul tuleb kerida alla või mitte"
-
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Kas uutel akendel ja kaartidel näidatakse menüüriba või mitte"
-
-msgid "Whether to silence terminal bell"
-msgstr "Kas vaigistada terminali kellaheli"
-
-msgid "Whether to update login records when launching terminal command"
+msgid ""
+"Normally you can access the menubar with F10. This can also be customized "
+"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
+"standard menubar accelerator to be disabled."
 msgstr ""
-"Kas terminalikäsu käivitamisel uuendatakse sisselogimise kirjeid või mitte"
+"Tavaliselt saab menüüribale ligi F10 klahvi abil. Seda saab ka kohandada "
+"gtkrc abil (gtk-menu-bar-accel = \"misiganes\"). Selle võtme abil saab "
+"standardset menüüriba kiirklahvi keelata."
 
-msgid "Whether to use custom terminal size for new windows"
+msgid "List of available encodings"
+msgstr "Saadaolevate kooditabelite loend"
+
+msgid ""
+"A subset of possible encodings are presented in the Encoding submenu. This "
+"is a list of encodings to appear there. The special encoding name \"current"
+"\" means to display the encoding of the current locale."
 msgstr ""
-"Kas uutel akendel ja kaartidel kasutatakse terminalile kohandatud suurust "
-"või mitte"
+"Võimalike kooditabelite alamhulk, mis on kasutatav \"Kodeering\" "
+"alammenüüst. Siinkirjeldatud loend ilmub selles alammenüüs. Kooditabelite "
+"erinimi \"current\" tähendab käesoleva lokaadi vaikimisi kooditabelit."
 
-msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr "Kas terminalividina jaoks kasutatakse teemast võetud värve või mitte"
-
-msgid "Whether to use the system font"
-msgstr "Kas kasutada süsteemset kirjatüüpi või mitte"
-
-#. Translators: Please note that this has to be a list of
-#. valid encodings (which are to be taken from the list in src/encoding.c).
-#. It has to include UTF-8 and the word 'current', which is not to be
-#. translated. This is provided for customization of the default encoding
-#. menu; see bug 144810 for an use case. In most cases, this should be
-#. left alone.
-msgid "[UTF-8,current]"
-msgstr "[UTF-8,current]"
-
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "M_enüü kiirklahv on lubatud (vaikimisi F10)"
-
-msgid "Keyboard Shortcuts"
-msgstr "Kiirklahvid"
-
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr ""
-"Kõik _menüü liikumisklahvid on lubatud (näiteks Alt-F failimenüü jaoks)"
-
-msgid "_Shortcut keys:"
-msgstr "_Kiirklahvid:"
+msgid "Whether to ask for confirmation before closing a terminal"
+msgstr "Kas terminaliakna sulgemisel peab kinnitust küsima"
 
 msgid "Black on light yellow"
 msgstr "Must helekollasel"
@@ -1015,13 +634,6 @@ msgstr "Viga käsu analüüsimisel: %s"
 msgid "Editing Profile “%s”"
 msgstr "Profiili „%s“ redigeerimine"
 
-#. Translators: This is the name of a colour scheme
-msgid "Custom"
-msgstr "Oma"
-
-msgid "Images"
-msgstr "Pildid"
-
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Paletivärvi %d valimine"
@@ -1036,11 +648,11 @@ msgstr "Profiilid"
 msgid "_Profile used when launching a new terminal:"
 msgstr "Uue terminali avamisel _kasutatav profiil:"
 
-msgid "C_reate"
-msgstr "L_oo"
-
 msgid "New Profile"
 msgstr "Uus profiil"
+
+msgid "C_reate"
+msgstr "L_oo"
 
 msgid "Profile _name:"
 msgstr "Profiili _nimi:"
@@ -1048,17 +660,139 @@ msgstr "Profiili _nimi:"
 msgid "_Base on:"
 msgstr "_Põhineb mallil:"
 
+msgid "_Profile name:"
+msgstr "Profiili _nimi:"
+
+msgid "_Use the system fixed width font"
+msgstr "Kasutatakse süsteemis kirjeldatud _terminali kirjatüüpi"
+
+msgid "_Font:"
+msgstr "_Kirjatüüp:"
+
+msgid "Choose A Terminal Font"
+msgstr "Terminali kirjatüübi valimine"
+
+msgid "_Allow bold text"
+msgstr "_Rasvane kiri lubatud"
+
+msgid "Terminal _bell"
+msgstr "Terminali kõ_ll"
+
+msgid "Cursor _shape:"
+msgstr "K_ursori kuju:"
+
+msgid ""
+"Block\n"
+"I-Beam\n"
+"Underline"
+msgstr ""
+"Kast\n"
+"Püstkriips\n"
+"Allkriips"
+
+msgid "Select-by-_word characters:"
+msgstr "_Sõnahaaval valimise märgid:"
+
+msgid "Use custom default terminal si_ze"
+msgstr "Terminali vaikimisi suuruse _kohandamine"
+
+msgid "Default size:"
+msgstr "Vaikimisi suurus:"
+
+msgid "columns"
+msgstr "tulpa"
+
+msgid "rows"
+msgstr "rida"
+
+msgid "General"
+msgstr "Üldine"
+
+msgid "<b>Title</b>"
+msgstr "<b>Pealkiri</b>"
+
+msgid "Initial _title:"
+msgstr "_Algne pealkiri:"
+
+msgid "When terminal commands set their o_wn titles:"
+msgstr "Kui terminalikäsud määravad oma _pealkirju:"
+
+msgid ""
+"Replace initial title\n"
+"Append initial title\n"
+"Prepend initial title\n"
+"Keep initial title"
+msgstr ""
+"Asendab algse pealkirja\n"
+"Paigutatakse algse pealkirja järele\n"
+"Paigutatakse algse pealkirja ette\n"
+"Jäetakse kuvamata"
+
 msgid "<b>Command</b>"
 msgstr "<b>Käsk</b>"
+
+msgid "_Run command as a login shell"
+msgstr "_Käsk käivitatakse login kestana"
+
+msgid "_Update login records when command is launched"
+msgstr "Käsu käivitamisel _uuendatakse sisselogimiskirjeid"
+
+msgid "Ru_n a custom command instead of my shell"
+msgstr "Kesta asemel käivitatakse o_ma käsk"
+
+msgid "Custom co_mmand:"
+msgstr "_Oma käsk:"
+
+msgid "When command _exits:"
+msgstr "Käsu _lõpetamisel:"
+
+msgid ""
+"Exit the terminal\n"
+"Restart the command\n"
+"Hold the terminal open"
+msgstr ""
+"Terminal suletakse\n"
+"Käivitatakse käsk uuesti\n"
+"Jäetakse terminal avatuks"
+
+msgid "Title and Command"
+msgstr "Pealkiri ja käsk"
 
 msgid "<b>Foreground, Background, Bold and Underline</b>"
 msgstr "<b>Tekst, taust ja allajoonitud ning rasvane kiri</b>"
 
+msgid "_Use colors from system theme"
+msgstr "_Kasutatakse süsteemi teema värve"
+
+msgid "Built-in sche_mes:"
+msgstr "_Sisseehitatud teemad:"
+
+msgid "_Text color:"
+msgstr "_Teksti värv:"
+
+msgid "_Background color:"
+msgstr "Ta_ustavärv:"
+
+msgid "Choose Terminal Background Color"
+msgstr "Terminali taustavärvi valimine"
+
+msgid "Choose Terminal Text Color"
+msgstr "Terminali tekstivärvi valimine"
+
+msgid "_Underline color:"
+msgstr "_Allajoonimise värvus:"
+
+msgid "_Same as text color"
+msgstr "Tekstiga sama _värv"
+
+msgid "Bol_d color:"
+msgstr "_Rasvase kirja värv:"
+
 msgid "<b>Palette</b>"
 msgstr "<b>Palett</b>"
 
-msgid "<b>Title</b>"
-msgstr "<b>Pealkiri</b>"
+msgid "Built-in _schemes:"
+msgstr "Sisse_ehitatud teemad:"
 
 msgid ""
 "<small><i><b>Note:</b> Terminal applications have these colors available to "
@@ -1066,6 +800,43 @@ msgid ""
 msgstr ""
 "<small><i><b>Märkus:</b> Terminaliprogrammide käsutuses on järgnevad värvid."
 "</i></small>"
+
+msgid "Color p_alette:"
+msgstr "Värvi_palett:"
+
+msgid "Colors"
+msgstr "Värvid"
+
+msgid "_Scrollbar is:"
+msgstr "_Kerimisriba asukoht:"
+
+msgid "Scroll_back:"
+msgstr "Kerimis_puhver:"
+
+msgid "Scroll on _keystroke"
+msgstr "Kerimine k_lahvivajutuse puhul"
+
+msgid "Scroll on _output"
+msgstr "Kerimine _väljundi saamisel"
+
+#. Infinite scrollback
+msgid "_Unlimited"
+msgstr "Pii_ramatu"
+
+msgid ""
+"Always visible\n"
+"Visible only when necessary\n"
+"Hidden"
+msgstr ""
+"Alati nähtav\n"
+"Nähtav ainult vajadusel\n"
+"Varjatud"
+
+msgid "lines"
+msgstr "rida"
+
+msgid "Scrolling"
+msgstr "Kerimine"
 
 msgid ""
 "<small><i><b>Note:</b> These options may cause some applications to behave "
@@ -1078,11 +849,11 @@ msgstr ""
 "ja operatsioonisüsteemide erinevast käitumisest põhjustatud probleeme "
 "vältida.</i></small>"
 
-msgid "<small><i>Maximum</i></small>"
-msgstr "<small><i>Suurim</i></small>"
+msgid "_Delete key generates:"
+msgstr "_Delete klahv põhjustab:"
 
-msgid "<small><i>None</i></small>"
-msgstr "<small><i>Puudub</i></small>"
+msgid "_Backspace key generates:"
+msgstr "_Backspace klahv põhjustab:"
 
 msgid ""
 "Automatic\n"
@@ -1097,218 +868,11 @@ msgstr ""
 "Paojada\n"
 "TTY kustutamine"
 
-msgid "Background"
-msgstr "Taust"
-
-msgid "Background image _scrolls"
-msgstr "Taustapilt _kerib"
-
-msgid ""
-"Block\n"
-"I-Beam\n"
-"Underline"
-msgstr ""
-"Kast\n"
-"Püstkriips\n"
-"Allkriips"
-
-msgid "Bol_d color:"
-msgstr "_Rasvase kirja värv:"
-
-msgid "Built-in _schemes:"
-msgstr "Sisse_ehitatud teemad:"
-
-msgid "Built-in sche_mes:"
-msgstr "_Sisseehitatud teemad:"
-
-msgid "Choose A Terminal Font"
-msgstr "Terminali kirjatüübi valimine"
-
-msgid "Choose Terminal Background Color"
-msgstr "Terminali taustavärvi valimine"
-
-msgid "Choose Terminal Text Color"
-msgstr "Terminali tekstivärvi valimine"
-
-msgid "Color p_alette:"
-msgstr "Värvi_palett:"
-
-msgid "Colors"
-msgstr "Värvid"
-
-msgid "Compatibility"
-msgstr "Ühilduvus"
-
-msgid "Cursor _shape:"
-msgstr "K_ursori kuju:"
-
-msgid "Custom co_mmand:"
-msgstr "_Oma käsk:"
-
-msgid "Default size:"
-msgstr "Vaikimisi suurus:"
-
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"Terminal suletakse\n"
-"Käivitatakse käsk uuesti\n"
-"Jäetakse terminal avatuks"
-
-msgid "General"
-msgstr "Üldine"
-
-msgid "Image _file:"
-msgstr "_Pildifail:"
-
-msgid "Initial _title:"
-msgstr "_Algne pealkiri:"
-
-msgid ""
-"On the left side\n"
-"On the right side\n"
-"Disabled"
-msgstr ""
-"Vasakus servas\n"
-"Paremas servas\n"
-"Puudub"
-
-msgid "Profile Editor"
-msgstr "Profiiliredaktor"
-
-msgid ""
-"Replace initial title\n"
-"Append initial title\n"
-"Prepend initial title\n"
-"Keep initial title"
-msgstr ""
-"Asendab algse pealkirja\n"
-"Paigutatakse algse pealkirja järele\n"
-"Paigutatakse algse pealkirja ette\n"
-"Jäetakse kuvamata"
-
-msgid "Ru_n a custom command instead of my shell"
-msgstr "Kesta asemel käivitatakse o_ma käsk"
-
-msgid "S_hade transparent or image background:"
-msgstr "Läbipaistvus või taustapildi _varjutus:"
-
-msgid "Scroll on _keystroke"
-msgstr "Kerimine k_lahvivajutuse puhul"
-
-msgid "Scroll on _output"
-msgstr "Kerimine _väljundi saamisel"
-
-msgid "Scroll_back:"
-msgstr "Kerimis_puhver:"
-
-msgid "Scrolling"
-msgstr "Kerimine"
-
-msgid "Select Background Image"
-msgstr "Taustapildi valimine"
-
-msgid "Select-by-_word characters:"
-msgstr "_Sõnahaaval valimise märgid:"
-
-msgid "Show _menubar by default in new terminals"
-msgstr "Vaikimisi näidatakse uutes terminalides _menüüriba"
-
-msgid ""
-"Tango\n"
-"Linux console\n"
-"XTerm\n"
-"Rxvt\n"
-"Custom"
-msgstr ""
-"Tango\n"
-"Linuxi konsool\n"
-"XTerm\n"
-"Rxvt\n"
-"Kohandatud"
-
-msgid "Terminal _bell"
-msgstr "Terminali kõ_ll"
-
-msgid "Title and Command"
-msgstr "Pealkiri ja käsk"
-
-msgid "Use custom default terminal si_ze"
-msgstr "Terminali vaikimisi suuruse _kohandamine"
-
-msgid "When command _exits:"
-msgstr "Käsu _lõpetamisel:"
-
-msgid "When terminal commands set their o_wn titles:"
-msgstr "Kui terminalikäsud määravad oma _pealkirju:"
-
-msgid "_Allow bold text"
-msgstr "_Rasvane kiri lubatud"
-
-msgid "_Background color:"
-msgstr "Ta_ustavärv:"
-
-msgid "_Background image"
-msgstr "_Taustapilt"
-
-msgid "_Backspace key generates:"
-msgstr "_Backspace klahv põhjustab:"
-
-msgid "_Delete key generates:"
-msgstr "_Delete klahv põhjustab:"
-
-msgid "_Font:"
-msgstr "_Kirjatüüp:"
-
-msgid "_Profile name:"
-msgstr "Profiili _nimi:"
-
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "Taasta ühilduvusvalikute _algväärtused"
 
-msgid "_Run command as a login shell"
-msgstr "_Käsk käivitatakse login kestana"
-
-msgid "_Same as text color"
-msgstr "Tekstiga sama _värv"
-
-msgid "_Scrollbar is:"
-msgstr "_Kerimisriba asukoht:"
-
-msgid "_Solid color"
-msgstr "Ü_htlane värv"
-
-msgid "_Text color:"
-msgstr "_Teksti värv:"
-
-msgid "_Transparent background"
-msgstr "_Läbipaistev taust"
-
-msgid "_Underline color:"
-msgstr "_Allajoonimise värvus:"
-
-msgid "_Unlimited"
-msgstr "Pii_ramatu"
-
-msgid "_Update login records when command is launched"
-msgstr "Käsu käivitamisel _uuendatakse sisselogimiskirjeid"
-
-msgid "_Use colors from system theme"
-msgstr "_Kasutatakse süsteemi teema värve"
-
-msgid "_Use the system fixed width font"
-msgstr "Kasutatakse süsteemis kirjeldatud _terminali kirjatüüpi"
-
-msgid "columns"
-msgstr "tulpa"
-
-msgid "lines"
-msgstr "rida"
-
-msgid "rows"
-msgstr "rida"
+msgid "Compatibility"
+msgstr "Ühilduvus"
 
 msgid "New Tab"
 msgstr "Uus kaart"
@@ -1330,9 +894,6 @@ msgstr "Kopeerimine"
 
 msgid "Paste"
 msgstr "Asetamine"
-
-msgid "Hide and Show menubar"
-msgstr "Menüüriba peitmine ja näitamine"
 
 msgid "Full Screen"
 msgstr "Täisekraan"
@@ -1424,10 +985,6 @@ msgstr "Kaardid"
 msgid "Help"
 msgstr "Abi"
 
-#, c-format
-msgid "The shortcut key “%s” is already bound to the “%s” action"
-msgstr "Kiirklahv „%s“ on juba seotud toiminguga „%s“"
-
 msgid "_Action"
 msgstr "_Tegevus"
 
@@ -1458,16 +1015,17 @@ msgstr ""
 msgid "Choose base profile"
 msgstr "Vali põhiprofiil"
 
-#, c-format
-msgid "No such profile \"%s\", using default profile\n"
-msgstr "Profiili \"%s\" pole, kasutatakse vaikimisi profiili\n"
-
-#, c-format
-msgid "Invalid geometry string \"%s\"\n"
-msgstr "Lubamatu geomeetriastring \"%s\"\n"
-
 msgid "User Defined"
 msgstr "Kasutaja kirjeldatud"
+
+msgid "_Preferences"
+msgstr "_Eelistused"
+
+msgid "_Help"
+msgstr "A_bi"
+
+msgid "_About"
+msgstr "_Programmist lähemalt"
 
 #, c-format
 msgid "Failed to parse arguments: %s\n"
@@ -1576,15 +1134,51 @@ msgstr "_Kooditabel"
 msgid "Current Locale"
 msgstr "Käesolev lokaat"
 
-#, c-format
+msgid "Open in _Remote Terminal"
+msgstr "Ava _kaugterminalis"
+
+msgid "Open in _Local Terminal"
+msgstr "Ava k_ohalikus terminalis"
+
+msgid "Open the currently selected folder in a terminal"
+msgstr "Praegu valitud kataloogi avamine terminalis"
+
+msgid "Open the currently open folder in a terminal"
+msgstr "Praeguse kataloogi avamine terminalis"
+
+msgid "Open in T_erminal"
+msgstr "Ava t_erminalis"
+
+msgid "Open T_erminal"
+msgstr "Ava t_erminal"
+
+msgid "Open a terminal"
+msgstr "Ava terminal"
+
+msgid "Open in _Midnight Commander"
+msgstr "Ava _Midnight Commanderiga"
+
 msgid ""
-"Option \"%s\" is no longer supported in this version of gnome-terminal; you "
-"might want to create a profile with the desired setting, and use the new '--"
-"profile' option\n"
+"Open the currently selected folder in the terminal file manager Midnight "
+"Commander"
 msgstr ""
-"Võti \"%s\" pole selles gnome-terminal'i versioonis enam toetatud. Võib-olla "
-"on sul kasulik luua uus profiil koos soovitud sätetega ja kasutada seda koos "
-"uue võtmega '--profile'\n"
+"Praegu valitud kataloogi avamine terminali failihalduriga Midnight Commander"
+
+msgid ""
+"Open the currently open folder in the terminal file manager Midnight "
+"Commander"
+msgstr ""
+"Praegu avatud kataloogi avamine terminali failihalduriga Midnight Commander"
+
+msgid "Open _Midnight Commander"
+msgstr "Ava _Midnight Commander"
+
+msgid "Open the terminal file manager Midnight Commander"
+msgstr "Terminali failihalduri Midnight Commander avamine"
+
+#, c-format
+msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
+msgstr "Valik \"%s\" ei ole selles gnome-terminali versioonis enam toetatud."
 
 msgid "GNOME Terminal"
 msgstr "GNOME Terminal"
@@ -1595,14 +1189,6 @@ msgstr "\"%s\" argument on vigane käsk: %s"
 
 msgid "Two roles given for one window"
 msgstr "Ühele aknale on määratud kaks rolli"
-
-#, c-format
-msgid "\"%s\" option given twice for the same window\n"
-msgstr "Võtit \"%s\" on ühele aknale määratud kaks korda\n"
-
-#, c-format
-msgid "\"%s\" is not a valid zoom factor"
-msgstr "\"%s\" pole korrektne suurendustegur"
 
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
@@ -1636,8 +1222,8 @@ msgstr ""
 msgid "Load a terminal configuration file"
 msgstr "Terminali sätete faili laadimine"
 
-msgid "Save the terminal configuration to a file"
-msgstr "Terminali sätete salvestamine faili"
+msgid "FILE"
+msgstr "FAIL"
 
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Uue akna avamine, mis sisaldab vaikimisi profiiliga kaarti"
@@ -1645,60 +1231,11 @@ msgstr "Uue akna avamine, mis sisaldab vaikimisi profiiliga kaarti"
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Uue vaikimisi profiiliga kaardi avamine viimati avatud aknas"
 
-msgid "Turn on the menubar"
-msgstr "Menüüriba näitamise sisselülitamine"
-
-msgid "Turn off the menubar"
-msgstr "Menüüriba näitamise väljalülitamine"
-
-msgid "Maximise the window"
-msgstr "Akna suurendamine"
-
-msgid "Full-screen the window"
-msgstr "Akna suurendamine üle ekraani"
-
-msgid ""
-"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
-msgstr "Akna suurus, näiteks 80x24 või 80x24+200+200 (VEERUDxREAD+X+Y)"
-
-msgid "GEOMETRY"
-msgstr "GEOMEETRIA"
-
-msgid "Set the window role"
-msgstr "Akna rolli määramine"
-
-msgid "ROLE"
-msgstr "ROLL"
-
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Viimasena kirjeldatud kaardi määramine omas aknas aktiivseks"
 
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Selle võtme argumendi käivitamine terminalis"
-
-msgid "Use the given profile instead of the default profile"
-msgstr "Määratud profiili kasutamine vaikimisi profiili asemel"
-
-msgid "PROFILE-NAME"
-msgstr "PROFIILI-NIMI"
-
-msgid "Set the terminal title"
-msgstr "Terminali pealkirja määramine"
-
-msgid "TITLE"
-msgstr "PEALKIRI"
-
-msgid "Set the working directory"
-msgstr "Töökataloogi määramine"
-
-msgid "DIRNAME"
-msgstr "KATALOOGINIMI"
-
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Terminali suurendusteguri määramine (tavasuurus on 1.0)"
-
-msgid "ZOOM"
-msgstr "SUURENDUS"
 
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Terminaliemulaator"
@@ -1712,9 +1249,6 @@ msgid ""
 msgstr ""
 "Uute akende või terminalikaartide avamise valikud. Neid võib korraga "
 "kirjeldada mitu tükki:"
-
-msgid "Show terminal options"
-msgstr "Terminali valikute näitamine"
 
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
@@ -1736,9 +1270,6 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Terminalipõhiste valikute näitamine"
 
-msgid "Unnamed"
-msgstr "Nimetu"
-
 msgid "_Profile Preferences"
 msgstr "Profiili _eelistused"
 
@@ -1753,11 +1284,11 @@ msgid "The child process exited normally with status %d."
 msgstr "Alamprotsess lõpetas normaalselt signaaliga %d."
 
 #, c-format
-msgid "The child process was terminated by signal %d."
-msgstr "Alamprotsess lõpetati signaaliga %d."
+msgid "The child process was aborted by signal %d."
+msgstr "Alamprotsess katkestati signaaliga %d."
 
-msgid "The child process was terminated."
-msgstr "Alamprotsess lõpetati."
+msgid "The child process was aborted."
+msgstr "Alamprotsess katkestati."
 
 msgid "Close tab"
 msgstr "Kaardi sulgemine"
@@ -1767,6 +1298,19 @@ msgstr "Liikumine sellele kaardile"
 
 msgid "There was an error displaying help"
 msgstr "Abiteabe kuvamisel tekkis viga"
+
+msgid "Contributors:"
+msgstr "Kaasautorid:"
+
+msgid "A terminal emulator for the GNOME desktop"
+msgstr "Terminaliemulaator GNOME töölauale"
+
+msgid "translator-credits"
+msgstr ""
+"Tõivo Leedjärv <toivo linux ee>, 2002.\n"
+"Priit Laes <amd store20 com>, 2004–2006.\n"
+"Ivar Smolin <okul linux ee>, 2005–2010.\n"
+"Mattias Põldaru <mahfiaz gmail com>, 2010."
 
 #, c-format
 msgid "Could not open the address “%s”"
@@ -1845,9 +1389,6 @@ msgstr "_Terminal"
 msgid "Ta_bs"
 msgstr "_Kaardid"
 
-msgid "_Help"
-msgstr "A_bi"
-
 msgid "New _Profile…"
 msgstr "Uus _profiil…"
 
@@ -1869,8 +1410,8 @@ msgstr "P_rofiilid…"
 msgid "_Keyboard Shortcuts…"
 msgstr "_Kiirklahvid…"
 
-msgid "Pr_ofile Preferences"
-msgstr "Profiili _eelistused"
+msgid "_Preferences…"
+msgstr "_Eelistused…"
 
 #. Search menu
 msgid "_Find..."
@@ -1931,9 +1472,6 @@ msgstr "_Haagi kaart lahti"
 msgid "_Contents"
 msgstr "_Sisukord"
 
-msgid "_About"
-msgstr "_Programmist lähemalt"
-
 #. Popup menu
 msgid "_Send Mail To…"
 msgstr "_Saada e-sõnum…"
@@ -1966,9 +1504,6 @@ msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
 
 #. View Menu
-msgid "Show _Menubar"
-msgstr "Näita m_enüüriba"
-
 msgid "_Full Screen"
 msgstr "_Täisekraan"
 
@@ -2003,150 +1538,3 @@ msgstr "Salvesta kui..."
 
 msgid "_Title:"
 msgstr "_Pealkiri:"
-
-msgid "Contributors:"
-msgstr "Kaasautorid:"
-
-msgid "A terminal emulator for the GNOME desktop"
-msgstr "Terminaliemulaator GNOME töölauale"
-
-msgid "translator-credits"
-msgstr ""
-"Tõivo Leedjärv <toivo linux ee>, 2002.\n"
-"Priit Laes <amd store20 com>, 2004–2006.\n"
-"Ivar Smolin <okul linux ee>, 2005–2010.\n"
-"Mattias Põldaru <mahfiaz gmail com>, 2010."
-
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-msgid "Automatic"
-msgstr "Automaatne"
-
-#. Translators: This refers to the Delete keybinding option
-msgid "Control-H"
-msgstr "Control-H"
-
-#. Translators: This refers to the Delete keybinding option
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
-
-#. Translators: This refers to the Delete keybinding option
-msgid "Escape sequence"
-msgstr "Paojada"
-
-#. Translators: This refers to the Delete keybinding option
-msgid "TTY Erase"
-msgstr "TTY puhastamine"
-
-#. Translators: Cursor shape: ...
-msgid "Block"
-msgstr "Kast"
-
-#. Translators: Cursor shape: ...
-msgid "I-Beam"
-msgstr "Püstkriips"
-
-#. Translators: Cursor shape: ...
-msgid "Underline"
-msgstr "Allkriips"
-
-#. Translators: When command exits: ...
-msgid "Exit the terminal"
-msgstr "Väljutakse terminalist"
-
-#. Translators: When command exits: ...
-msgid "Restart the command"
-msgstr "Käivitatakse käsk uuesti"
-
-#. Translators: When command exits: ...
-msgid "Hold the terminal open"
-msgstr "Jäetakse terminal avatuks"
-
-#. Translators: Scrollbar is: ...
-msgid "On the left side"
-msgstr "Vasakus servas"
-
-#. Translators: Scrollbar is: ...
-msgid "On the right side"
-msgstr "Paremas servas"
-
-#. Translators: Scrollbar is: ...
-msgid "Disabled"
-msgstr "Keelatud"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Replace initial title"
-msgstr "Asendab algse pealkirja"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Append initial title"
-msgstr "Paigutatakse algse pealkirja järele"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Prepend initial title"
-msgstr "Paigutatakse algse pealkirja ette"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Keep initial title"
-msgstr "Jäetakse kuvamata"
-
-#. Translators: This is the name of a colour scheme
-msgid "Tango"
-msgstr "Tango"
-
-#. Translators: This is the name of a colour scheme
-msgid "Linux console"
-msgstr "Linuxi konsool"
-
-#. Translators: This is the name of a colour scheme
-msgid "XTerm"
-msgstr "XTerm"
-
-#. Translators: This is the name of a colour scheme
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#~ msgid "Highlight S/Key challenges"
-#~ msgstr "S/Key väljakutsete esiletõstmine"
-
-#~ msgid ""
-#~ "Popup a dialog when an S/Key challenge response query is detected and "
-#~ "clicked on. Typing a password into the dialog will send it to the "
-#~ "terminal."
-#~ msgstr ""
-#~ "Dialoogiakna avamine, kui S/Key väljakutse vastus on tuvastatud ja "
-#~ "sellele on klõpsatud. Dialoogiaknasse sisestatud parool saadetakse "
-#~ "terminalile."
-
-#~ msgid "S/Key Challenge Response"
-#~ msgstr "S/Key väljakutse vastus"
-
-#~ msgid "_Password:"
-#~ msgstr "_Parool:"
-
-#~ msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
-#~ msgstr ""
-#~ "Sinu poolt klõpsatud tekst ei paista olevat korrektne S/Key väljakutse."
-
-#~ msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
-#~ msgstr ""
-#~ "Sinu poolt klõpsatud tekst ei paista olevat korrektne OTP väljakutse."
