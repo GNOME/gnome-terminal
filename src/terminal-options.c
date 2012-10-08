@@ -991,7 +991,7 @@ get_goption_context (TerminalOptions *options)
       G_OPTION_FLAG_NO_ARG,
       G_OPTION_ARG_CALLBACK,
       option_maximize_callback,
-      N_("Maximise the window"),
+      N_("Maximize the window"),
       NULL
     },
     {

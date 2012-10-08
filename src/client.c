@@ -338,7 +338,7 @@ get_goption_context (OptionData *data)
 
   const GOptionEntry window_goptions[] = {
     { "maximize", 0, 0, G_OPTION_ARG_NONE, &data->start_maximized,
-      N_("Maximise the window"), NULL },
+      N_("Maximize the window"), NULL },
     { "fullscreen", 0, 0, G_OPTION_ARG_NONE, &data->start_fullscreen,
       N_("Full-screen the window"), NULL },
     { "geometry", 0, 0, G_OPTION_ARG_STRING, &data->geometry,
