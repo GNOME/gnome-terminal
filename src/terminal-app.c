@@ -1147,6 +1147,9 @@ terminal_app_startup (GApplication *application)
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
+  /* Need to set the WM class (bug #685742) */
+  gdk_set_program_class("Gnome-terminal");
+
   /* FIXME: Is this the right place to do prefs migration from gconf->dconf? */
 
   g_object_get (gtk_settings_get_for_screen (gdk_screen_get_default ()), "gtk-shell-shows-app-menu", &shell_shows_app_menu, NULL);

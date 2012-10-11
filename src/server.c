@@ -97,9 +97,6 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
-  /* Need to set the WM class (bug #685742) */
-  gdk_set_program_class("Gnome-terminal");
-
   app = terminal_app_new (app_id);
   g_free (app_id);
 
