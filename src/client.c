@@ -925,6 +925,12 @@ main (gint argc, gchar *argv[])
       return WEXITSTATUS (exit_code);
     else if (WIFSIGNALED (exit_code))
       return 128 + (WTERMSIG (exit_code));
+    else if (WIFSTOPPED (exit_code))
+      return 128 + (WSTOPSIG (exit_code));
+    else if (WCOREDUMP (exit_code)) {
+      g_printerr ("Core dumped\n");
+      return 127;
+    }
     else
       return 127;
   }
