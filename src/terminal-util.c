@@ -207,7 +207,7 @@ terminal_util_open_url (GtkWidget *parent,
   switch (flavor)
     {
     case FLAVOR_DEFAULT_TO_HTTP:
-      uri = g_strdup_printf ("http:%s", orig_url);
+      uri = g_strdup_printf ("http://%s", orig_url);
       break;
     case FLAVOR_EMAIL:
       if (g_ascii_strncasecmp ("mailto:", orig_url, 7) != 0)
