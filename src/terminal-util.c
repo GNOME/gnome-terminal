@@ -52,7 +52,7 @@ terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
 {
   char *role;
 
-  role = g_strdup_printf ("%s-%d-%d-%d", prefix, getpid (), g_random_int (), (int) time (NULL));
+  role = g_strdup_printf ("%s-%d-%u-%d", prefix, getpid (), (guint) g_random_int (), (int) time (NULL));
   gtk_window_set_role (window, role);
   g_free (role);
 }
