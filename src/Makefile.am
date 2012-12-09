@@ -274,7 +274,7 @@ builder_in_files = \
 builderdir = $(pkgdatadir)
 builder_DATA =  $(builder_in_files:.glade=.ui)
 
-gsettingsschema_in_files = org.gnome.Terminal.Preferences.gschema.xml.in
+gsettingsschema_in_files = org.gnome.Terminal.gschema.xml.in
 gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)
 
 CLEANFILES = \

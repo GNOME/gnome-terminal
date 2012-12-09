@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_PROFILE_SCHEMA         "org.gnome.Terminal.Profile"
+#define TERMINAL_PROFILE_SCHEMA         "org.gnome.Terminal.Legacy.Profile"
 #define TERMINAL_SETTING_SCHEMA         "org.gnome.Terminal.Settings"
 
 #define TERMINAL_PROFILE_ALLOW_BOLD_KEY                 "allow-bold"
@@ -69,7 +69,7 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
 #define TERMINAL_SETTING_ENCODINGS_KEY                  "encodings"
 
-#define TERMINAL_PROFILES_PATH_PREFIX   "/org/gnome/terminal/profiles:/"
+#define TERMINAL_PROFILES_PATH_PREFIX   "/org/gnome/terminal/legacy/profiles:/"
 #define TERMINAL_DEFAULT_PROFILE_ID     ":profile0"
 #define TERMINAL_DEFAULT_PROFILE_PATH   TERMINAL_PROFILES_PATH_PREFIX TERMINAL_DEFAULT_PROFILE_ID "/"
 
