@@ -1,7 +1,7 @@
 NULL =
 
 bin_PROGRAMS = gnome-terminal
-libexec_PROGRAMS = gnome-terminal-server
+libexec_PROGRAMS = gnome-terminal-server gnome-terminal-migration
 noinst_PROGRAMS = gnome-terminal-client
 
 if WITH_NAUTILUS_EXTENSION
@@ -76,6 +76,7 @@ gnome_terminal_server_CPPFLAGS = \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
+	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
 	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
@@ -240,9 +241,6 @@ libterminal_nautilus_la_LIBADD = \
 	$(NAUTILUS_LIBS)
 
 # Pref migrator
-
-migrationdir = $(libexecdir)/GConf/gsettings
-migration_PROGRAMS = gnome-terminal-migration
 
 gnome_terminal_migration_SOURCES = \
 	migration.c \

@@ -24,6 +24,8 @@
 
 G_BEGIN_DECLS
 
+#define TERMINAL_SCHEMA_VERSION         (1u)
+
 #define TERMINAL_PROFILE_SCHEMA         "org.gnome.Terminal.Legacy.Profile"
 #define TERMINAL_SETTING_SCHEMA         "org.gnome.Terminal.Settings"
 
@@ -68,6 +70,7 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY      "menu-accelerator-enabled"
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
 #define TERMINAL_SETTING_ENCODINGS_KEY                  "encodings"
+#define TERMINAL_SETTING_SCHEMA_VERSION                 "schema-version"
 
 #define TERMINAL_PROFILES_PATH_PREFIX   "/org/gnome/terminal/legacy/profiles:/"
 #define TERMINAL_DEFAULT_PROFILE_ID     ":profile0"

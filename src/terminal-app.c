@@ -125,6 +125,47 @@ static void terminal_app_dconf_get_profile_list (TerminalApp *app);
 
 /* Helper functions */
 
+static void
+maybe_migrate_settings (TerminalApp *app)
+{
+  const char * const argv[] = { 
+    TERM_LIBEXECDIR "/gnome-terminal-migration",
+#ifdef GNOME_ENABLE_DEBUG
+    "--verbose", 
+#endif
+    NULL 
+  };
+  guint version;
+  int status;
+  GError *error = NULL;
+
+  version = g_settings_get_uint (terminal_app_get_global_settings (app), TERMINAL_SETTING_SCHEMA_VERSION);
+  if (version >= TERMINAL_SCHEMA_VERSION) {
+    g_printerr ("Version %d, already migrated\n", version);
+    return;
+  }
+
+  if (!g_spawn_sync (NULL /* our home directory */,
+                     (char **) argv,
+                     NULL /* envv */,
+                     0,
+                     NULL, NULL,
+                     NULL, NULL,
+                     &status,
+                     &error)) {
+    g_printerr ("Failed to migrate settings: %s\n", error->message);
+    g_error_free (error);
+    return;
+  }
+
+  if (WIFEXITED (status)) {
+    if (WEXITSTATUS (status) != 0)
+      g_printerr ("Profile migrator exited with status %d\n", WEXITSTATUS (status));
+  } else {
+    g_printerr ("Profile migrator exited abnormally.\n");
+  }
+}
+
 #if 0
 static int
 profiles_alphabetic_cmp (gconstpointer pa,
@@ -1141,6 +1182,7 @@ terminal_app_startup (GApplication *application)
     { "about",       app_menu_about_cb,         NULL, NULL, NULL }
   };
 
+  TerminalApp *app = TERMINAL_APP (application);
   GtkBuilder *builder;
   GError *error = NULL;
   gboolean shell_shows_app_menu;
@@ -1150,8 +1192,10 @@ terminal_app_startup (GApplication *application)
   /* Need to set the WM class (bug #685742) */
   gdk_set_program_class("Gnome-terminal");
 
-  /* FIXME: Is this the right place to do prefs migration from gconf->dconf? */
+  /* Check if we need to migrate from gconf to dconf */
+  maybe_migrate_settings (app);
 
+  /* Only install the app menu if it's going to be shown */
   g_object_get (gtk_settings_get_for_screen (gdk_screen_get_default ()), "gtk-shell-shows-app-menu", &shell_shows_app_menu, NULL);
   if (!shell_shows_app_menu)
     return;

@@ -559,6 +559,19 @@ migrate (GError **error)
          migrate_accels (error);
 }
 
+static void
+update_schema_version (void)
+{
+  GSettings *settings;
+
+  if (verbose)
+    g_printerr ("Updating schema version\n");
+
+  settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
+  g_settings_set_uint (settings, TERMINAL_SETTING_SCHEMA_VERSION, TERMINAL_SCHEMA_VERSION);
+  g_object_unref (settings);
+}
+
 int
 main (int argc,
       char *argv[])
@@ -587,7 +600,15 @@ main (int argc,
     return EXIT_FAILURE;
   }
 
+  update_schema_version ();
+
+  if (verbose)
+    g_printerr ("Syncing gsettings...\n");
+
   g_settings_sync ();
+
+  if (verbose)
+    g_printerr ("Migration successful!\n");
 
   return EXIT_SUCCESS;
 }
