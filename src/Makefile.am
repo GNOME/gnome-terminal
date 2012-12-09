@@ -1,7 +1,8 @@
 NULL =
 
-bin_PROGRAMS = gnome-terminal-client gnome-terminal
+bin_PROGRAMS = gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
+noinst_PROGRAMS = gnome-terminal-client
 
 if WITH_NAUTILUS_EXTENSION
 nautilusextension_LTLIBRARIES = libterminal-nautilus.la
