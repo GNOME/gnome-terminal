@@ -20,10 +20,7 @@
  */
 
 #include <config.h>
-
-#ifndef WITH_DCONF
 #define WITH_DCONF
-#endif
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -700,7 +697,7 @@ terminal_app_dconf_get_profile_list (TerminalApp *app)
     char *path, *id;
     GSettings *profile;
 
-    //g_print ("key %s\n", key);
+    g_print ("key %s\n", key);
     if (!dconf_is_rel_dir (key, NULL))
       continue;
     /* For future-compat with GSettingsList */
@@ -709,7 +706,7 @@ terminal_app_dconf_get_profile_list (TerminalApp *app)
 
     path = g_strconcat (TERMINAL_PROFILES_PATH_PREFIX, key, NULL);
     profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
-    //g_print ("new profile %p id %s with path %s\n", profile, key, path);
+    g_print ("new profile %p id %s with path %s\n", profile, key, path);
     g_free (path);
 
     id = g_strdup (key);
@@ -1249,6 +1246,8 @@ terminal_app_init (TerminalApp *app)
   if (strcmp (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend") == 0) {
     app->dconf_client = dconf_client_new ();
     terminal_app_dconf_get_profile_list (app);
+  } else {
+    g_printerr ("Running with settings backend %s, multi-profile disabled.\n", G_OBJECT_TYPE_NAME (backend));
   }
   g_object_unref (backend);
 }
