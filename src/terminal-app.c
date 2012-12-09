@@ -1189,9 +1189,6 @@ terminal_app_startup (GApplication *application)
   /* Need to set the WM class (bug #685742) */
   gdk_set_program_class("Gnome-terminal");
 
-  /* Check if we need to migrate from gconf to dconf */
-  maybe_migrate_settings (app);
-
   /* Only install the app menu if it's going to be shown */
   g_object_get (gtk_settings_get_for_screen (gdk_screen_get_default ()), "gtk-shell-shows-app-menu", &shell_shows_app_menu, NULL);
   if (!shell_shows_app_menu)
@@ -1227,6 +1224,9 @@ terminal_app_init (TerminalApp *app)
 
   /* Terminal global settings */
   app->global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
+
+  /* Check if we need to migrate from gconf to dconf */
+  maybe_migrate_settings (app);
 
   app->encodings = terminal_encodings_get_builtins ();
   terminal_app_encoding_list_notify_cb (app->global_settings, "encodings", app);
