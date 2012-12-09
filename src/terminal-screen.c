@@ -1262,7 +1262,7 @@ get_child_environment (TerminalScreen *screen,
   g_hash_table_remove (env_table, "COLUMNS");
   g_hash_table_remove (env_table, "LINES");
   g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
-  
+ 
   g_hash_table_replace (env_table, g_strdup ("COLORTERM"), g_strdup (EXECUTABLE_NAME));
   
 #ifdef GDK_WINDOWING_X11
@@ -1417,7 +1417,7 @@ terminal_screen_do_exec (TerminalScreen *screen,
   GError *err = NULL;
   const char *working_dir;
   VtePtyFlags pty_flags = VTE_PTY_DEFAULT;
-  GSpawnFlags spawn_flags = 0;
+  GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP;
   GPid pid;
   gboolean result = FALSE;
 
