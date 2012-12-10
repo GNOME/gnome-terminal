@@ -1177,7 +1177,6 @@ terminal_app_startup (GApplication *application)
     { "about",       app_menu_about_cb,         NULL, NULL, NULL }
   };
 
-  TerminalApp *app = TERMINAL_APP (application);
   GtkBuilder *builder;
   GError *error = NULL;
   gboolean shell_shows_app_menu;
