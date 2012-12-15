@@ -236,22 +236,99 @@ profiles_alphabetic_cmp (gconstpointer pa,
 
 static GSettings * /* ref */
 profile_clone (TerminalApp *app,
-               GSettings *base_profile G_GNUC_UNUSED,//FIXME
-               char *visible_name)
+               GSettings *base_profile)
 {
   GSettings *profile;
   uuid_t u;
   char str[37];
-  char *path;
+  char *new_path;
   char **profiles;
 
   uuid_generate (u);
   uuid_unparse (u, str);
-  path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
-  profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
-  g_free (path);
+  new_path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
 
-  g_settings_set_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, visible_name);
+  if (base_profile)
+    {
+      static const char * const keys[] = {
+        TERMINAL_PROFILE_ALLOW_BOLD_KEY,
+        TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
+        TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
+        TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
+        TERMINAL_PROFILE_BOLD_COLOR_KEY,
+        TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
+        TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
+        TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
+        TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
+        TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY,
+        TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY,
+        TERMINAL_PROFILE_DELETE_BINDING_KEY,
+        TERMINAL_PROFILE_ENCODING,
+        TERMINAL_PROFILE_EXIT_ACTION_KEY,
+        TERMINAL_PROFILE_FONT_KEY,
+        TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
+        TERMINAL_PROFILE_LOGIN_SHELL_KEY,
+        TERMINAL_PROFILE_NAME_KEY,
+        TERMINAL_PROFILE_PALETTE_KEY,
+        TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
+        TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
+        TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
+        TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
+        TERMINAL_PROFILE_SCROLL_ON_OUTPUT_KEY,
+        TERMINAL_PROFILE_TITLE_MODE_KEY,
+        TERMINAL_PROFILE_TITLE_KEY,
+        TERMINAL_PROFILE_UPDATE_RECORDS_KEY,
+        TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
+        TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
+        TERMINAL_PROFILE_USE_SKEY_KEY,
+        TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
+        TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
+        /* TERMINAL_PROFILE_VISIBLE_NAME_KEY, */
+        TERMINAL_PROFILE_WORD_CHARS_KEY,
+      };
+      DConfClient *client;
+      char *base_path;
+      guint i;
+
+      g_object_get (base_profile, "path", &base_path, NULL);
+
+      client = dconf_client_new (NULL, NULL, NULL, NULL);
+
+      for (i = 0; i < G_N_ELEMENTS (keys); i++)
+        {
+          GVariant *value;
+          char *p;
+
+          p = g_strconcat (base_path, keys[i], NULL);
+          value = dconf_client_read_no_default (client, p);
+          g_free (p);
+
+          if (value)
+            {
+              p = g_strconcat (new_path, keys[i], NULL);
+              dconf_client_write (client, p, value, NULL, NULL, NULL);
+              g_free (p);
+              g_variant_unref (value);
+            }
+        }
+
+      g_object_unref (client);
+      g_free (base_path);
+    }
+
+  profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, new_path);
+  g_free (new_path);
+
+  if (base_profile)
+    {
+      const char *base_name;
+      char *new_name;
+
+      g_settings_get (base_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &base_name);
+      new_name = g_strdup_printf ("%s (Cloned)", base_name);
+      g_settings_set_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, new_name);
+      g_free (new_name);
+    }
 
   /* Store the new UUID in the list of profiles, and add the profile to the hash table.
    * We'll get a changed signal for the profile list key, but that will result in a no-op.
@@ -632,13 +709,28 @@ profile_list_new_button_clicked_cb (GtkWidget   *button,
 }
 
 static void
-profile_list_clone_button_clicked_cb (GtkWidget   *button,
-                                      gpointer data)
+profile_list_clone_button_clicked_cb (GtkWidget *button,
+                                      GtkWidget *widget)
 {
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  GSettings *selected_profile;
   TerminalApp *app;
 
   app = terminal_app_get ();
-  terminal_app_new_profile (app, NULL /* FIXME! */, GTK_WINDOW (app->manage_profiles_dialog));
+
+  model = gtk_tree_view_get_model (tree_view);
+  selection = gtk_tree_view_get_selection (tree_view);
+
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+
+  gtk_tree_model_get (model, &iter, (int) COL_PROFILE, &selected_profile, (int) -1);
+
+  terminal_app_new_profile (app, selected_profile, GTK_WINDOW (app->manage_profiles_dialog));
+  g_object_unref (selected_profile);
 }
 
 static void
@@ -858,7 +950,7 @@ terminal_app_new_profile (TerminalApp *app,
 {
   GSettings *new_profile;
 
-  new_profile = profile_clone (app, base_profile, _("Unnamed"));
+  new_profile = profile_clone (app, base_profile);
   terminal_profile_edit (new_profile, transient_parent, "profile-name-entry");
   g_object_unref (new_profile);
 }
@@ -872,7 +964,7 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
   selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
 
   gtk_widget_set_sensitive (app->manage_profiles_edit_button, selected);
-  gtk_widget_set_sensitive (app->manage_profiles_clone_button, /* selected */ FALSE);
+  gtk_widget_set_sensitive (app->manage_profiles_clone_button, selected);
   gtk_widget_set_sensitive (app->manage_profiles_delete_button,
                             selected &&
                             g_hash_table_size (app->profiles_hash) > 1);
