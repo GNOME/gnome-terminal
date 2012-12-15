@@ -92,12 +92,14 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
  * terminal_client_append_exec_options:
  * @builder: a #GVariantBuilder of #GVariantType "a{sv}"
  * @working_directory: (allow-none): the cwd, or %NULL
+ * @shell:
  *
  * Appends the environment and the working directory to @builder.
  */
 void 
 terminal_client_append_exec_options (GVariantBuilder *builder,
-                                     const char      *working_directory)
+                                     const char      *working_directory,
+                                     gboolean         shell)
 {
   char **envv;
 
@@ -121,6 +123,11 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
   if (working_directory)
     g_variant_builder_add (builder, "{sv}", 
                            "cwd", g_variant_new_bytestring (working_directory));
+
+  if (shell)
+    g_variant_builder_add (builder, "{sv}",
+                           "shell",
+                           g_variant_new_boolean (TRUE));
 
   g_strfreev (envv);
 }

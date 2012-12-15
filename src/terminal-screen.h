@@ -84,6 +84,7 @@ TerminalScreen *terminal_screen_new (GSettings       *profile,
 gboolean terminal_screen_exec (TerminalScreen *screen,
                                char          **argv,
                                char          **envv,
+                               gboolean        shell,
                                const char     *cwd,
                                GUnixFDList    *fd_list,
                                GVariant       *fd_array,
@@ -94,10 +95,6 @@ void _terminal_screen_launch_child_on_idle (TerminalScreen *screen);
 void terminal_screen_set_profile (TerminalScreen *screen,
                                   GSettings      *profile);
 GSettings* terminal_screen_get_profile (TerminalScreen *screen);
-
-void         terminal_screen_set_override_command (TerminalScreen  *screen,
-                                                   char           **argv);
-const char** terminal_screen_get_override_command (TerminalScreen  *screen);
 
 void         terminal_screen_set_initial_environment (TerminalScreen  *screen,
                                                       char           **argv);

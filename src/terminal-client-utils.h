@@ -35,7 +35,8 @@ void terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                      gboolean         fullscreen_window);
 
 void terminal_client_append_exec_options            (GVariantBuilder *builder,
-                                                     const char      *working_directory);
+                                                     const char      *working_directory,
+                                                     gboolean         shell);
 
 void terminal_client_get_fallback_startup_id        (char           **startup_id);
 

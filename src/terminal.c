@@ -169,12 +169,13 @@ handle_options (TerminalFactory *factory,
 
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
-          terminal_client_append_exec_options (&builder,
-                                               it->working_dir ? it->working_dir 
-                                                               : options->default_working_dir);
-
           argv = it->exec_argv ? it->exec_argv : options->exec_argv,
           argc = argv ? g_strv_length (argv) : 0;
+
+          terminal_client_append_exec_options (&builder,
+                                               it->working_dir ? it->working_dir 
+                                                               : options->default_working_dir,
+                                               argc == 0);
 
           if (!terminal_receiver_call_exec_sync (receiver,
                                                  g_variant_builder_end (&builder),

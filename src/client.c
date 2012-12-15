@@ -122,7 +122,8 @@ usage (gint *argc, gchar **argv[], gboolean use_stdout)
   program_name = g_path_get_basename ((*argv)[0]);
   s = g_strdup_printf (_("Commands:\n"
                          "  help    Shows this information\n"
-                         "  open    Create a new terminal\n"
+                         "  run     Create a new terminal running the specified command\n"
+                         "  shell   Create a new terminal running the user shell\n"
                          "\n"
                          "Use \"%s COMMAND --help\" to get help on each command.\n"),
                        program_name);
@@ -563,6 +564,7 @@ build_create_options_variant (OptionData *data)
  */
 static GVariant *
 build_exec_options_variant (OptionData *data,
+                            gboolean shell,
                             GUnixFDList **fd_list)
 {
   GVariantBuilder builder;
@@ -570,7 +572,8 @@ build_exec_options_variant (OptionData *data,
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
   terminal_client_append_exec_options (&builder,
-                                       data->working_directory);
+                                       data->working_directory,
+                                       shell);
 
   if (data->fd_array != NULL) {
     int i, n_fds;
@@ -619,6 +622,7 @@ receiver_child_exited_cb (TerminalReceiver *receiver,
 static gboolean
 handle_open (int *argc,
              char ***argv,
+             const char *command,
              gboolean request_completion,
              const gchar *completion_cur,
              const gchar *completion_prev,
@@ -632,12 +636,17 @@ handle_open (int *argc,
   GVariant *arguments;
   GUnixFDList *fd_list;
 
-  modify_argv0_for_command (argc, argv, "open");
+  modify_argv0_for_command (argc, argv, command);
 
   data = parse_arguments (argc, argv, &error);
   if (data == NULL) {
     _printerr ("Error parsing arguments: %s\n", error->message);
     g_error_free (error);
+    return FALSE;
+  }
+
+  if (g_strcmp0 (command, "run") == 0 && data->exec_argc == 0) {
+     _printerr ("\"run\" needs the command to run as arguments after --\n");
     return FALSE;
   }
 
@@ -693,7 +702,7 @@ handle_open (int *argc,
 
   g_free (object_path);
 
-  arguments = build_exec_options_variant (data, &fd_list);
+  arguments = build_exec_options_variant (data, g_strcmp0 (command, "shell") == 0, &fd_list);
   if (!terminal_receiver_call_exec_sync (receiver,
                                          arguments,
                                          g_variant_new_bytestring_array ((const char * const *) data->exec_argv, data->exec_argc),
@@ -824,10 +833,12 @@ main (gint argc, gchar *argv[])
         }
       goto out;
     }
-  else if (g_strcmp0 (command, "open") == 0)
+  else if (g_strcmp0 (command, "run") == 0 ||
+           g_strcmp0 (command, "shell") == 0)
     {
       if (handle_open (&argc,
                        &argv,
+                       command,
                        request_completion,
                        completion_cur,
                        completion_prev,

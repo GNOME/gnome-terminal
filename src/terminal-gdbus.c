@@ -100,6 +100,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   TerminalReceiverImpl *impl = TERMINAL_RECEIVER_IMPL (receiver);
   TerminalReceiverImplPrivate *priv = impl->priv;
   const char *working_directory;
+  gboolean shell;
   char **exec_argv, **envv;
   gsize exec_argc;
   GVariant *fd_array;
@@ -115,6 +116,8 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
 
   if (!g_variant_lookup (options, "cwd", "^&ay", &working_directory))
     working_directory = NULL;
+  if (!g_variant_lookup (options, "shell", "b", &shell))
+    shell = FALSE;
   if (!g_variant_lookup (options, "environ", "^a&ay", &envv))
     envv = NULL;
 
@@ -170,6 +173,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   if (!terminal_screen_exec (priv->screen,
                              exec_argc > 0 ? exec_argv : NULL,
                              envv,
+                             shell,
                              working_directory,
                              fd_list, fd_array,
                              &error)) {

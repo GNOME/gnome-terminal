@@ -79,6 +79,7 @@ struct _TerminalScreenPrivate
   char *initial_working_directory;
   char **initial_env;
   char **override_command;
+  gboolean shell;
   int child_pid;
   int pty_fd;
   double font_scale;
@@ -101,7 +102,6 @@ enum {
   PROP_PROFILE,
   PROP_ICON_TITLE,
   PROP_ICON_TITLE_SET,
-  PROP_OVERRIDE_COMMAND,
   PROP_TITLE,
   PROP_INITIAL_ENVIRONMENT
 };
@@ -153,6 +153,10 @@ static char* terminal_screen_check_match       (TerminalScreen            *scree
                                                 int                   column,
                                                 int                   row,
                                                 int                  *flavor);
+
+static void terminal_screen_set_override_command (TerminalScreen  *screen,
+                                                  char           **argv,
+                                                  gboolean         shell);
 
 static guint signals[LAST_SIGNAL];
 
@@ -376,9 +380,6 @@ terminal_screen_get_property (GObject *object,
       case PROP_ICON_TITLE_SET:
         g_value_set_boolean (value, terminal_screen_get_icon_title_set (screen));
         break;
-      case PROP_OVERRIDE_COMMAND:
-        g_value_set_boxed (value, terminal_screen_get_override_command (screen));
-        break;
       case PROP_INITIAL_ENVIRONMENT:
         g_value_set_boxed (value, terminal_screen_get_initial_environment (screen));
         break;
@@ -403,9 +404,6 @@ terminal_screen_set_property (GObject *object,
     {
       case PROP_PROFILE:
         terminal_screen_set_profile (screen, g_value_get_object (value));
-        break;
-      case PROP_OVERRIDE_COMMAND:
-        terminal_screen_set_override_command (screen, g_value_get_boxed (value));
         break;
       case PROP_INITIAL_ENVIRONMENT:
         terminal_screen_set_initial_environment (screen, g_value_get_boxed (value));
@@ -503,13 +501,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
      g_param_spec_boolean ("icon-title-set", NULL, NULL,
                            FALSE,
                            G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property
-    (object_class,
-     PROP_OVERRIDE_COMMAND,
-     g_param_spec_boxed ("override-command", NULL, NULL,
-                         G_TYPE_STRV,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   g_object_class_install_property
     (object_class,
@@ -633,7 +624,9 @@ terminal_screen_new (GSettings       *profile,
   priv->initial_working_directory = g_strdup (working_dir);
 
   if (override_command)
-    terminal_screen_set_override_command (screen, override_command);
+    terminal_screen_set_override_command (screen, override_command, FALSE);
+  else
+    terminal_screen_set_override_command (screen, NULL, TRUE);
 
   if (child_env)
     terminal_screen_set_initial_environment (screen, child_env);
@@ -648,6 +641,7 @@ gboolean
 terminal_screen_exec (TerminalScreen *screen,
                       char          **argv,
                       char          **envv,
+                      gboolean        shell,
                       const char     *cwd,
                       GUnixFDList    *fd_list,
                       GVariant       *fd_array,
@@ -662,9 +656,7 @@ terminal_screen_exec (TerminalScreen *screen,
   priv = screen->priv;
 
   terminal_screen_set_initial_environment (screen, envv);
-
-  if (argv)
-    terminal_screen_set_override_command (screen, argv);
+  terminal_screen_set_override_command (screen, argv, shell);
 
   g_free (priv->initial_working_directory);
   priv->initial_working_directory = g_strdup (cwd);
@@ -1086,9 +1078,10 @@ terminal_screen_get_profile (TerminalScreen *screen)
   return priv->profile;
 }
 
-void
+static void
 terminal_screen_set_override_command (TerminalScreen *screen,
-                                      char          **argv)
+                                      char          **argv,
+                                      gboolean        shell)
 {
   TerminalScreenPrivate *priv;
 
@@ -1096,15 +1089,11 @@ terminal_screen_set_override_command (TerminalScreen *screen,
 
   priv = screen->priv;
   g_strfreev (priv->override_command);
-  priv->override_command = g_strdupv (argv);
-}
-
-const char**
-terminal_screen_get_override_command (TerminalScreen *screen)
-{
-  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
-
-  return (const char**) screen->priv->override_command;
+  if (argv)
+    priv->override_command = g_strdupv (argv);
+  else
+    priv->override_command = NULL;
+  priv->shell = shell;
 }
 
 void
@@ -1143,23 +1132,7 @@ get_child_command (TerminalScreen *screen,
 
   *argv_p = argv = NULL;
 
-  if (priv->override_command)
-    {
-      argv = g_strdupv (priv->override_command);
-
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
-    }
-  else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
-    {
-      const char *argv_str;
-
-      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
-      if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
-        return FALSE;
-
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
-    }
-  else
+  if (priv->shell)
     {
       const char *only_name;
       char *shell;
@@ -1185,6 +1158,28 @@ get_child_command (TerminalScreen *screen,
       argv[argc++] = NULL;
 
       *spawn_flags_p |= G_SPAWN_FILE_AND_ARGV_ZERO;
+    }
+  else if (priv->override_command)
+    {
+      argv = g_strdupv (priv->override_command);
+
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+    }
+  else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
+    {
+      const char *argv_str;
+
+      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
+      if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
+        return FALSE;
+
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+    }
+  else
+    {
+      g_set_error_literal (err, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                           _("No command supplied nor shell requested"));
+      return FALSE;
     }
 
   *argv_p = argv;
