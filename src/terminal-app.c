@@ -257,6 +257,7 @@ profile_clone (TerminalApp *app,
    * We'll get a changed signal for the profile list key, but that will result in a no-op.
    */
   g_hash_table_insert (app->profiles_hash, g_strdup (str) /* adopted */, profile /* adopted */);
+  g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
 
   g_settings_get (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, "^a&s", &profiles);
   profiles = strv_insert (profiles, str);
