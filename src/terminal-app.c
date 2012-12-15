@@ -45,6 +45,7 @@
 #include <time.h>
 
 #include <uuid.h>
+#include <dconf.h>
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
@@ -173,16 +174,15 @@ static char **
 strv_remove (char **strv,
              char *str)
 {
-  guint i;
+  char **a, **b;
 
-  for (i = 0; strv[i]; i++) {
-    if (strcmp (strv[i], str) != 0)
-      continue;
-
-    for ( ; strv[i]; i++)
-      strv[i] = strv[i+1];
-    strv[i-1] = NULL;
+  a = b = strv;
+  while (*a) {
+    if (strcmp (*a, str) != 0)
+      *b++ = *a;
+    a++;
   }
+  *b = NULL;
 
   return strv;
 }
@@ -271,19 +271,25 @@ static void
 profile_remove (TerminalApp *app,
                 GSettings *profile)
 {
-  char *uuid;
+  char *uuid, *path;
   char **profiles;
+  DConfClient *client;
 
   uuid = profile_get_uuid (profile);
+  g_object_get (profile, "path", &path, NULL);
 
   g_settings_get (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, "^a&s", &profiles);
   profiles = strv_remove (profiles, uuid);
   g_settings_set_strv (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, (const char * const *) profiles);
   g_free (profiles);
 
-  g_free (uuid);
+  /* unset all keys under the profile's path */
+  client = dconf_client_new (NULL, NULL, NULL, NULL);
+  dconf_client_write (client, path, NULL, NULL, NULL, NULL);
+  g_object_unref (client);
 
-  /* FIXME: recursively unset all keys under the profile's path? */
+  g_free (uuid);
+  g_free (path);
 }
 
 static void
