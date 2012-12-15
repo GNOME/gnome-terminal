@@ -355,7 +355,7 @@ get_goption_context (OptionData *data)
   const GOptionEntry terminal_goptions[] = {
     { "profile", 0, 0, G_OPTION_ARG_STRING, &data->profile,
       N_("Use the given profile instead of the default profile"),
-      N_("PROFILE-NAME") },
+      N_("UUID") },
     { "title", 0, 0, G_OPTION_ARG_STRING, &data->title,
       N_("Set the terminal title"), N_("TITLE") },
     { "cwd", 0, 0, G_OPTION_ARG_FILENAME, &data->working_directory,

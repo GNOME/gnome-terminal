@@ -168,10 +168,8 @@ static void edit_select_all_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_keybindings_callback         (GtkAction *action,
                                                TerminalWindow *window);
-#if 0
 static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
-#endif
 static void edit_current_profile_callback     (GtkAction *action,
                                                TerminalWindow *window);
 static void view_menubar_toggled_callback     (GtkToggleAction *action,
@@ -1674,11 +1672,9 @@ terminal_window_init (TerminalWindow *window)
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, NULL,
         NULL,
         G_CALLBACK (edit_select_all_callback) },
-#if 0
       { "EditProfiles", NULL, N_("P_rofiles…"), NULL,
         NULL,
         G_CALLBACK (edit_profiles_callback) },
-#endif
       { "EditKeybindings", NULL, N_("_Keyboard Shortcuts…"), NULL,
         NULL,
         G_CALLBACK (edit_keybindings_callback) },
@@ -3165,7 +3161,6 @@ file_new_profile_callback (GtkAction *action,
                             GTK_WINDOW (window));
 }
 
-#if 0
 static void
 edit_profiles_callback (GtkAction *action,
                         TerminalWindow *window)
@@ -3173,7 +3168,6 @@ edit_profiles_callback (GtkAction *action,
   terminal_app_manage_profiles (terminal_app_get (),
                                 GTK_WINDOW (window));
 }
-#endif
 
 static void
 view_menubar_toggled_callback (GtkToggleAction *action,

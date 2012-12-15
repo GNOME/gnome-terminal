@@ -356,13 +356,26 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   TerminalObjectSkeleton *skeleton;
   char *object_path;
   GSettings *profile = NULL;
-  const char *profile_name, *title;
+  const char *profile_uuid, *title;
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
   guint window_id;
   gboolean show_menubar;
   gboolean active = TRUE;
   gboolean have_new_window, present_window, present_window_set;
+  GError *err = NULL;
+
+  /* Look up the profile */
+  if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
+    profile_uuid = NULL;
+
+  profile = terminal_app_ref_profile_by_uuid (app, profile_uuid, &err);
+  if (profile == NULL) 
+    {
+      g_dbus_method_invocation_return_gerror (invocation, err);
+      g_error_free (err);
+      goto out;
+    }
 
   if (g_variant_lookup (options, "window-id", "u", &window_id)) {
     GtkWindow *win;
@@ -388,9 +401,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
     /* Create a new window */
 
     if (!g_variant_lookup (options, "display", "^&ay", &display_name)) {
-      g_dbus_method_invocation_return_error (invocation, 
-                                             G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                                             "No display specified");
+      g_dbus_method_invocation_return_error_literal (invocation, 
+                                                     G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                                                     "No display specified");
       goto out;
     }
 
@@ -430,15 +443,10 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   g_assert (window != NULL);
 
-  if (!g_variant_lookup (options, "profile", "&s", &profile_name))
-    profile_name = NULL;
   if (!g_variant_lookup (options, "title", "&s", &title))
     title = NULL;
   if (g_variant_lookup (options, "zoom", "d", &zoom))
     zoom_set = TRUE;
-
-  profile = terminal_app_get_profile (app, profile_name);
-  g_assert (profile);
 
   screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
                                 zoom_set ? zoom : 1.0);
@@ -489,9 +497,10 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   terminal_factory_complete_create_instance (factory, invocation, object_path);
 
   g_free (object_path);
-  g_object_unref (profile);
 
 out:
+  if (profile)
+    g_object_unref (profile);
 
   return TRUE; /* handled */
 }

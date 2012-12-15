@@ -70,7 +70,7 @@
 
   <schema id="org.gnome.Terminal.Legacy.Profile">
     <key name="visible-name" type="s">
-      <default l10n="messages" context="visible-name">'Default'</default>
+      <default l10n="messages" context="visible-name">'Unnamed'</default>
       <_summary>Human-readable name of the profile</_summary>
       <_description>Human-readable name of the profile.</_description>
     </key>
@@ -371,17 +371,17 @@
       <_summary>Whether to show the menubar in new windows</_summary>
     </key>
 
+    <key name="legacy-profiles" type="as">
+      <default>['b1dcc9dd-5262-4d8d-a863-c897e6d979b9']</default>
+    </key>
+
+    <key name="legacy-default-profile" type="s">
+      <default>'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'</default>
+    </key>
+
     <key name="schema-version" type="u">
       <default>0</default>
     </key>
-
-    <!--
-    <child name="profiles:" schema="org.gnome.Terminal.Profiles" >
-      <child name="profile0" schema="org.gnome.Terminal.Profile">
-        <override name="visible-name">"Default Profile"</override>
-      </child>
-    </child>
-    -->
 
   </schema>
 

@@ -1040,19 +1040,6 @@ terminal_screen_change_font (TerminalScreen *screen)
   terminal_window_set_size (window, screen);
 }
 
-#if 0
-static void
-profile_forgotten_callback (GSettings *profile,
-                            TerminalScreen  *screen)
-{
-  TerminalProfile *new_profile;
-
-  new_profile = terminal_app_get_profile_for_new_term (terminal_app_get ());
-  g_assert (new_profile != NULL);
-  terminal_screen_set_profile (screen, new_profile);
-}
-#endif
-
 void
 terminal_screen_set_profile (TerminalScreen *screen,
                              GSettings *profile)
@@ -1071,13 +1058,6 @@ terminal_screen_set_profile (TerminalScreen *screen,
       priv->profile_changed_id = 0;
     }
 
-/*  if (priv->profile_forgotten_id)
-    {
-      g_signal_handler_disconnect (G_OBJECT (priv->profile),
-                                   priv->profile_forgotten_id);
-      priv->profile_forgotten_id = 0;
-    }*/
-
   priv->profile = profile;
   if (profile)
     {
@@ -1086,12 +1066,6 @@ terminal_screen_set_profile (TerminalScreen *screen,
         g_signal_connect (profile, "changed",
                           G_CALLBACK (terminal_screen_profile_changed_cb),
                           screen);
-//       priv->profile_forgotten_id =
-//         g_signal_connect (G_OBJECT (profile),
-//                           "forgotten",
-//                           G_CALLBACK (profile_forgotten_callback),
-//                           screen);
-
       terminal_screen_profile_changed_cb (profile, NULL, screen);
 
       g_signal_emit (G_OBJECT (screen), signals[PROFILE_SET], 0, old_profile);

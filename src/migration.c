@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <gconf/gconf-client.h>
 #include <vte/vte.h>
+#include <uuid.h>
 
 #include "terminal-schemas.h"
 #include "terminal-type-builtins.h"
@@ -305,19 +306,25 @@ migrate_global_prefs (GError **error)
   return TRUE;
 }
 
-static void
+static char *
 migrate_profile (GConfClient *client,
+                 GSettings *global_settings,
                  const char *gconf_id,
-                 int id,
-                 GError **error)
+                 gboolean is_default)
 {
   GSettings *settings;
   char *path;
+  const char *name;
+  uuid_t u;
+  char str[37];
 
+  uuid_generate (u);
+  uuid_unparse (u, str);
+
+  path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
   if (verbose)
-    g_print ("Migrating profile \"%s\"\n", gconf_id);
+    g_print ("Migrating profile \"%s\" to \"%s\"\n", gconf_id, path);
 
-  path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":profile%d/", id);
   settings = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
   g_free (path);
 
@@ -325,6 +332,11 @@ migrate_profile (GConfClient *client,
 
   migrate_string (client, path, KEY_VISIBLE_NAME,
                   settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+
+  g_settings_get (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &name);
+  if (strlen (name) == 0)
+    g_settings_set_string (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, _("Unnamed"));
+
   migrate_string (client, path, KEY_FOREGROUND_COLOR,
                   settings, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY);
   migrate_string (client, path, KEY_BACKGROUND_COLOR,
@@ -409,44 +421,34 @@ migrate_profile (GConfClient *client,
 
   g_free (path);
   g_object_unref (settings);
+
+  if (is_default)
+    g_settings_set_string (global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, str);
+
+  return g_strdup (str);
 }
 
 static gboolean
 migrate_profiles (GError **error)
 {
-  GSettings *settings;
+  GSettings *global_settings;
   GConfClient *client;
   GConfValue *value, *dvalue;
   GSList *l;
-  char *path;
-  const char *profile, *default_profile = NULL;
-  int profile_nr;
+  GPtrArray *profile_uuids;
+  const char *profile, *default_profile;
 
+  global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
   client = gconf_client_get_default ();
+
+  profile_uuids = g_ptr_array_new_with_free_func ((GDestroyNotify) g_free);
 
   dvalue = gconf_client_get_without_default (client, GCONF_GLOBAL_PREFIX "/default_profile", NULL);
   if (dvalue != NULL &&
       dvalue->type == GCONF_VALUE_STRING)
     default_profile = gconf_value_get_string (dvalue);
-  if (default_profile) {
-    migrate_profile (client, default_profile, 0, error);
-
-    /* Some settings used to be per-profile but are now global;
-     * take these from the default profile.
-     */
-
-    settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
-    path = gconf_concat_dir_and_key (GCONF_PROFILES_PREFIX, default_profile);
-
-    migrate_bool (client, path, KEY_DEFAULT_SHOW_MENUBAR,
-                  settings, TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
-                  FALSE);
-
-    g_free (path);
-    g_object_unref (settings);
-  }
-
-  profile_nr = 0;
+  else
+    default_profile = NULL;
 
   value = gconf_client_get (client, GCONF_GLOBAL_PREFIX "/profile_list", NULL);
   if (value != NULL &&
@@ -455,9 +457,34 @@ migrate_profiles (GError **error)
     for (l = gconf_value_get_list (value); l != NULL; l = l->next) {
       profile = gconf_value_get_string (l->data);
 
-      if (g_strcmp0 (profile, default_profile) != 0)
-        migrate_profile (client, profile, profile_nr++, error);
+      g_ptr_array_add (profile_uuids,
+                       migrate_profile (client, 
+                                        global_settings,
+                                        profile, 
+                                        g_strcmp0 (profile, default_profile) == 0));
     }
+  }
+
+  /* Some settings used to be per-profile but are now global;
+   * take these from the default profile.
+   */
+  if (default_profile) {
+    char *path;
+
+    path = gconf_concat_dir_and_key (GCONF_PROFILES_PREFIX, default_profile);
+
+    migrate_bool (client, path, KEY_DEFAULT_SHOW_MENUBAR,
+                  global_settings, TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
+                  FALSE);
+
+    g_free (path);
+  }
+
+  /* Only write profile list if there were any profiles migrated */
+  if (profile_uuids->len) {
+    g_ptr_array_add (profile_uuids, NULL);
+    g_settings_set_strv (global_settings, TERMINAL_SETTING_PROFILES_KEY,
+                         (const char * const *) profile_uuids->pdata);
   }
 
   if (value)
@@ -465,6 +492,8 @@ migrate_profiles (GError **error)
   if (dvalue)
     gconf_value_free (dvalue);
   g_object_unref (client);
+  g_object_unref (global_settings);
+  g_ptr_array_free (profile_uuids, TRUE);
 
   return TRUE;
 }

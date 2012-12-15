@@ -85,14 +85,9 @@ void terminal_app_edit_encodings   (TerminalApp     *app,
 
 GList* terminal_app_get_profile_list (TerminalApp *app);
 
-GSettings* terminal_app_get_profile_by_name (TerminalApp *app,
-                                             const char  *name);
-
-GSettings* terminal_app_get_profile_by_visible_name (TerminalApp *app,
-                                                     const char  *name);
-
-GSettings* terminal_app_get_profile (TerminalApp *app,
-                                     const char  *name);
+GSettings* terminal_app_ref_profile_by_uuid (TerminalApp *app,
+                                             const char  *uuid,
+                                             GError **error);
 
 TerminalEncoding *terminal_app_ensure_encoding (TerminalApp *app,
                                                 const char *charset);

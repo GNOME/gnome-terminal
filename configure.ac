@@ -53,9 +53,9 @@ AC_MSG_RESULT([$with_gtk])
 
 case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
-       GTK_REQUIRED=3.5.3
+       GTK_REQUIRED=3.6.0
        VTE_PC_VERSION=-2.90
-       VTE_REQUIRED=0.33.0
+       VTE_REQUIRED=0.34.0
        ;;
 esac
 
@@ -82,6 +82,7 @@ PKG_CHECK_MODULES([TERM],
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
    gsettings-desktop-schemas >= $GSETTINGS_DESKTOP_SCHEMAS_REQUIRED
    dconf >= $DCONF_REQUIRED
+   uuid
    $PLATFORM_DEPS])
 
 # ****
@@ -109,7 +110,8 @@ GCONF_REQUIRED=2.31.3
 PKG_CHECK_MODULES([MIGRATOR],[
   gio-2.0 >= $GIO_REQUIRED
   vte$VTE_PC_VERSION >= $VTE_REQUIRED
-  gconf-2.0 >= $GCONF_REQUIRED])
+  gconf-2.0 >= $GCONF_REQUIRED
+  uuid])
 
 # ***********
 # Build tools

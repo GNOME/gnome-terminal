@@ -265,7 +265,6 @@ builder_in_files = \
 	find-dialog.glade \
 	keybinding-editor.glade \
 	profile-manager.glade \
-	profile-new-dialog.glade \
 	profile-preferences.glade \
 	$(NULL)
 
