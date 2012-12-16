@@ -72,9 +72,7 @@ nodist_gnome_terminal_server_SOURCES = $(BUILT_SOURCES)
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DEXECUTABLE_NAME=\"gnome-terminal\" \
-	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
 	-DSN_API_NOT_YET_FROZEN \
@@ -260,15 +258,6 @@ gnome_terminal_migration_LDADD = \
 	$(MIGRATOR_LIBS) \
 	$(INTLLIBS)
 
-builderdir = $(pkgdatadir)
-builder_DATA = \
-	encodings-dialog.ui \
-	find-dialog.ui \
-	keybinding-editor.ui \
-	profile-manager.ui \
-	profile-preferences.ui \
-	$(NULL)
-
 gsettingsschema_in_files = org.gnome.Terminal.gschema.xml.in
 gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)
 
@@ -288,6 +277,11 @@ EXTRA_DIST = \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
 	nautilus.symbols \
+	encodings-dialog.ui \
+	find-dialog.ui \
+	keybinding-editor.ui \
+	profile-manager.ui \
+	profile-preferences.ui \
 	$(about_DATA) \
 	$(uimanager_DATA) \
 	$(builder_DATA) \

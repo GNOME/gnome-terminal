@@ -1018,16 +1018,16 @@ terminal_app_manage_profiles (TerminalApp     *app,
       return;
     }
 
-  if (!terminal_util_load_builder_file ("profile-manager.ui",
-                                        "profile-manager", &dialog,
-                                        "profiles-treeview-container", &tree_view_container,
-                                        "new-profile-button", &new_button,
-                                        "edit-profile-button", &edit_button,
-                                        "clone-profile-button", &clone_button,
-                                        "delete-profile-button", &remove_button,
-                                        "default-profile-hbox", &default_hbox,
-                                        "default-profile-label", &default_label,
-                                        NULL))
+  if (!terminal_util_load_builder_resource ("/org/gnome/terminal/ui/profile-manager.ui",
+                                            "profile-manager", &dialog,
+                                            "profiles-treeview-container", &tree_view_container,
+                                            "new-profile-button", &new_button,
+                                            "edit-profile-button", &edit_button,
+                                            "clone-profile-button", &clone_button,
+                                            "delete-profile-button", &remove_button,
+                                            "default-profile-hbox", &default_hbox,
+                                            "default-profile-label", &default_label,
+                                            NULL))
     return;
 
   app->manage_profiles_dialog = GTK_WIDGET (dialog);

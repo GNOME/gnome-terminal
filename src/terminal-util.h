@@ -57,9 +57,9 @@ char *terminal_util_concat_uris (char **uris,
 
 char *terminal_util_get_licence_text (void);
 
-gboolean terminal_util_load_builder_file (const char *filename,
-                                          const char *object_name,
-                                          ...);
+gboolean terminal_util_load_builder_resource (const char *path,
+                                              const char *object_name,
+                                              ...);
 
 gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);
 

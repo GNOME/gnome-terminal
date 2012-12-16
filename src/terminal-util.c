@@ -405,25 +405,17 @@ terminal_util_get_licence_text (void)
 }
 
 gboolean
-terminal_util_load_builder_file (const char *filename,
-                                 const char *object_name,
-                                 ...)
+terminal_util_load_builder_resource (const char *path,
+                                     const char *object_name,
+                                     ...)
 {
-  char *path;
   GtkBuilder *builder;
   GError *error = NULL;
   va_list args;
 
-  path = g_build_filename (TERM_PKGDATADIR, filename, NULL);
   builder = gtk_builder_new ();
-  if (!gtk_builder_add_from_file (builder, path, &error)) {
-    g_warning ("Failed to load %s: %s\n", filename, error->message);
-    g_error_free (error);
-    g_free (path);
-    g_object_unref (builder);
-    return FALSE;
-  }
-  g_free (path);
+  gtk_builder_add_from_resource (builder, path, &error);
+  g_assert_no_error (error);
 
   va_start (args, object_name);
 

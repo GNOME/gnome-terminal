@@ -703,7 +703,6 @@ terminal_profile_edit (GSettings  *profile,
                        GtkWindow  *transient_parent,
                        const char *widget_name)
 {
-  char *path;
   GtkBuilder *builder;
   GError *error = NULL;
   GtkWidget *editor, *w;
@@ -720,16 +719,9 @@ terminal_profile_edit (GSettings  *profile,
       return;
     }
 
-  path = g_build_filename (TERM_PKGDATADIR, "profile-preferences.ui", NULL);
   builder = gtk_builder_new ();
-  if (!gtk_builder_add_from_file (builder, path, &error)) {
-    g_warning ("Failed to load %s: %s\n", path, error->message);
-    g_error_free (error);
-    g_free (path);
-    g_object_unref (builder);
-    return;
-  }
-  g_free (path);
+  gtk_builder_add_from_resource (builder, "/org/gnome/terminal/ui/profile-preferences.ui", &error);
+  g_assert_no_error (error);
 
   editor = (GtkWidget *) gtk_builder_get_object  (builder, "profile-editor-dialog");
   g_object_set_data_full (G_OBJECT (editor), "builder",

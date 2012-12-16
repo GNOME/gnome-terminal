@@ -83,16 +83,16 @@ terminal_search_dialog_new (GtkWindow   *parent)
 
   priv = g_new0 (TerminalSearchDialogPrivate, 1);
 
-  if (!terminal_util_load_builder_file ("find-dialog.ui",
-					"find-dialog", &dialog,
-					"search-label", &priv->search_label,
-					"search-entry", &priv->search_entry,
-					"match-case-checkbutton", &priv->match_case_checkbutton,
-					"entire-word-checkbutton", &priv->entire_word_checkbutton,
-					"regex-checkbutton", &priv->regex_checkbutton,
-					"search-backwards-checkbutton", &priv->backwards_checkbutton,
-					"wrap-around-checkbutton", &priv->wrap_around_checkbutton,
-					NULL))
+  if (!terminal_util_load_builder_resource ("/org/gnome/terminal/ui/find-dialog.ui",
+                                            "find-dialog", &dialog,
+                                            "search-label", &priv->search_label,
+                                            "search-entry", &priv->search_entry,
+                                            "match-case-checkbutton", &priv->match_case_checkbutton,
+                                            "entire-word-checkbutton", &priv->entire_word_checkbutton,
+                                            "regex-checkbutton", &priv->regex_checkbutton,
+                                            "search-backwards-checkbutton", &priv->backwards_checkbutton,
+                                            "wrap-around-checkbutton", &priv->wrap_around_checkbutton,
+                                            NULL))
   {
     g_free (priv);
     return NULL;
