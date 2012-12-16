@@ -480,6 +480,70 @@ profile_editor_destroyed (GtkWidget *editor,
   g_object_set_data (G_OBJECT (editor), "builder", NULL);
 }
 
+
+/* Tab scrolling was removed from GtkNotebook in gtk 3, so reimplement it here */
+static gboolean
+scroll_event_cb (GtkWidget      *widget,
+                 GdkEventScroll *event,
+                 gpointer        user_data)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
+  GtkWidget *child, *event_widget, *action_widget;
+
+  child = gtk_notebook_get_nth_page (notebook, gtk_notebook_get_current_page (notebook));
+  if (child == NULL)
+    return FALSE;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  /* Ignore scroll events from the content of the page */
+  if (event_widget == NULL ||
+      event_widget == child ||
+      gtk_widget_is_ancestor (event_widget, child))
+    return FALSE;
+
+  /* And also from the action widgets */
+  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_START);
+  if (event_widget == action_widget ||
+      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
+    return FALSE;
+  action_widget = gtk_notebook_get_action_widget (notebook, GTK_PACK_END);
+  if (event_widget == action_widget ||
+      (action_widget != NULL && gtk_widget_is_ancestor (event_widget, action_widget)))
+    return FALSE;
+
+  switch (event->direction) {
+    case GDK_SCROLL_RIGHT:
+    case GDK_SCROLL_DOWN:
+      gtk_notebook_next_page (notebook);
+      return TRUE;
+    case GDK_SCROLL_LEFT:
+    case GDK_SCROLL_UP:
+      gtk_notebook_prev_page (notebook);
+      return TRUE;
+    case GDK_SCROLL_SMOOTH:
+      switch (gtk_notebook_get_tab_pos (notebook)) {
+        case GTK_POS_LEFT:
+        case GTK_POS_RIGHT:
+          if (event->delta_y > 0)
+            gtk_notebook_next_page (notebook);
+          else if (event->delta_y < 0)
+            gtk_notebook_prev_page (notebook);
+          break;
+        case GTK_POS_TOP:
+        case GTK_POS_BOTTOM:
+          if (event->delta_x > 0)
+            gtk_notebook_next_page (notebook);
+          else if (event->delta_x < 0)
+            gtk_notebook_prev_page (notebook);
+          break;
+      }
+      return TRUE;
+  }
+
+  return FALSE;
+}
+
 static void
 terminal_profile_editor_focus_widget (GtkWidget *editor,
                                       const char *widget_name)
@@ -683,6 +747,10 @@ terminal_profile_edit (GSettings  *profile,
   g_signal_connect (editor, "response",
                     G_CALLBACK (editor_response_cb),
                     NULL);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "profile-editor-notebook");
+  gtk_widget_add_events (w, GDK_BUTTON_PRESS_MASK | GDK_SCROLL_MASK);
+  g_signal_connect (w, "scroll-event", G_CALLBACK (scroll_event_cb), NULL);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
