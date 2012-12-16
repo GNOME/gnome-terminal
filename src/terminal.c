@@ -213,7 +213,9 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+#if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();
+#endif
 
   _terminal_debug_init ();
 

@@ -800,13 +800,13 @@ main (gint argc, gchar *argv[])
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+#if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();
+#endif
 
   ret = EXIT_FAILURE;
   completion_cur = NULL;
   completion_prev = NULL;
-
-  g_type_init ();
 
   if (argc < 2)
     {

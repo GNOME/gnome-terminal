@@ -610,7 +610,9 @@ main (int argc,
 
   setlocale (LC_ALL, "");
 
+#if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();
+#endif
 
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, options, NULL);
