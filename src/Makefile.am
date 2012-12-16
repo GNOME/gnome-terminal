@@ -260,16 +260,14 @@ gnome_terminal_migration_LDADD = \
 	$(MIGRATOR_LIBS) \
 	$(INTLLIBS)
 
-builder_in_files = \
-	encodings-dialog.glade \
-	find-dialog.glade \
-	keybinding-editor.glade \
-	profile-manager.glade \
-	profile-preferences.glade \
-	$(NULL)
-
 builderdir = $(pkgdatadir)
-builder_DATA =  $(builder_in_files:.glade=.ui)
+builder_DATA = \
+	encodings-dialog.ui \
+	find-dialog.ui \
+	keybinding-editor.ui \
+	profile-manager.ui \
+	profile-preferences.ui \
+	$(NULL)
 
 gsettingsschema_in_files = org.gnome.Terminal.gschema.xml.in
 gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)
@@ -278,7 +276,6 @@ CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
-	$(builder_DATA) \
 	$(gsettings_SCHEMAS) \
 	$(BUILT_SOURCES)
 
@@ -290,18 +287,12 @@ EXTRA_DIST = \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
-	extra-strings.c \
 	nautilus.symbols \
 	$(about_DATA) \
 	$(uimanager_DATA) \
-	$(builder_in_files) \
+	$(builder_DATA) \
 	$(gsettingsschema_in_files) \
 	$(NULL)
 
 @INTLTOOL_XML_NOMERGE_RULE@
 @GSETTINGS_RULES@
-
-%.ui: %.glade
-	$(AM_V_GEN) $(GTK_BUILDER_CONVERT) $< $@
-
--include $(top_srcdir)/git.mk

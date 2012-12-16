@@ -147,12 +147,6 @@ if test -z "$XMLLINT"; then
   AC_MSG_ERROR([xmllint not found])
 fi
 
-AC_ARG_VAR([GTK_BUILDER_CONVERT],[the gtk-builder-convert programme])
-AC_PATH_PROG([GTK_BUILDER_CONVERT],[gtk-builder-convert],[])
-if test -z "$GTK_BUILDER_CONVERT"; then
-  AC_MSG_ERROR([gtk-builder-convert not found])
-fi
-
 # ******************
 # Nautilus extension
 # ******************
