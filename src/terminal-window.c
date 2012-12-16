@@ -1828,9 +1828,7 @@ terminal_window_init (TerminalWindow *window)
 #endif
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
-#if GTK_CHECK_VERSION (3, 3, 6)
   gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window), TRUE);
-#endif
 
   priv->active_screen = NULL;
   priv->menubar_visible = FALSE;

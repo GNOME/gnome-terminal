@@ -354,7 +354,6 @@ terminal_notebook_scroll_event (GtkWidget      *widget,
     case GDK_SCROLL_UP:
       gtk_notebook_prev_page (notebook);
       return TRUE;
-#if GTK_CHECK_VERSION (3, 3, 17)
     case GDK_SCROLL_SMOOTH:
       switch (gtk_notebook_get_tab_pos (notebook)) {
         case GTK_POS_LEFT:
@@ -373,7 +372,6 @@ terminal_notebook_scroll_event (GtkWidget      *widget,
           break;
       }
       return TRUE;
-#endif
   }
 
 chain_up:
