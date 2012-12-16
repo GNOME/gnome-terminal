@@ -1,5 +1,5 @@
 ((c-mode . ((c-file-style . "GNU")
             (indent-tabs-mode . nil)
-            (c-basic-offset . 8)
+            (c-basic-offset . 2)
             (tab-width . 8)
             (show-trailing-whitespace . t))))
