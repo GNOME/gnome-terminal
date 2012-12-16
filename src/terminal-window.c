@@ -1242,7 +1242,6 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   GtkWidget *popup_menu, *im_menu, *im_menu_item;
   GtkAction *action;
   gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
-  int n_pages;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
@@ -1254,8 +1253,6 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   remove_popup_info (window);
 
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
-
-  n_pages = terminal_mdi_container_get_n_screens (priv->mdi_container);
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
@@ -1275,11 +1272,6 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_visible (action, show_link);
   action = gtk_action_group_get_action (priv->action_group, "PopupCopyLinkAddress");
   gtk_action_set_visible (action, show_link);
-
-  action = gtk_action_group_get_action (priv->action_group, "PopupCloseWindow");
-  gtk_action_set_visible (action, n_pages <= 1);
-  action = gtk_action_group_get_action (priv->action_group, "PopupCloseTab");
-  gtk_action_set_visible (action, n_pages > 1);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
   gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
@@ -1793,12 +1785,6 @@ terminal_window_init (TerminalWindow *window)
       { "PopupNewTab", NULL, N_("Open Ta_b"), NULL,
         NULL,
         G_CALLBACK (file_new_tab_callback) },
-      { "PopupCloseWindow", NULL, N_("C_lose Window"), NULL,
-        NULL,
-        G_CALLBACK (file_close_window_callback) },
-      { "PopupCloseTab", NULL, N_("C_lose Tab"), NULL,
-        NULL,
-        G_CALLBACK (file_close_tab_callback) },
       { "PopupLeaveFullscreen", NULL, N_("L_eave Full Screen"), NULL,
         NULL,
         G_CALLBACK (popup_leave_fullscreen_callback) },
