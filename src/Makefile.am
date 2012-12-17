@@ -269,6 +269,7 @@ CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
+	org.gnome.Terminal.service \
 	$(gsettings_SCHEMAS) \
 	$(BUILT_SOURCES)
 
