@@ -1,3 +1,17 @@
+3.7.0
+=====
+
+ * Terminal now uses GSettings and DConf instead of GConf. The existing
+   profiles and settings will be automatically migrated from GConf when
+   first running this version.
+ * To make new tabs opened within Terminal have the same same working
+   directory as the current tab, it is necessary for the shell running in the
+   terminal to cooperate. For this, vte installs a bash shell script that you
+   must use in your bash PS1 prompt. For example, you can put this at the end
+   of your ~/.bashrc: export PS1='\[$(__vte_ps1)\]'$PS1
+ * Many bugs fixed
+ * Many translations updated
+
 3.0.0
 =====
 
