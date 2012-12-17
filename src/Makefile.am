@@ -244,6 +244,9 @@ libterminal_nautilus_la_LIBADD = \
 gnome_terminal_migration_SOURCES = \
 	migration.c \
 	terminal-schemas.h \
+	$(NULL)
+
+nodist_gnome_terminal_migration_SOURCES = \
 	terminal-type-builtins.c \
 	terminal-type-builtins.h \
 	$(NULL)
