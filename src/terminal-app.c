@@ -287,12 +287,20 @@ profile_clone (TerminalApp *app,
         TERMINAL_PROFILE_WORD_CHARS_KEY,
       };
       DConfClient *client;
+#ifndef HAVE_DCONF_1_2
+      DConfChangeset *changeset;
+#endif
       char *base_path;
       guint i;
 
       g_object_get (base_profile, "path", &base_path, NULL);
 
+#ifdef HAVE_DCONF_1_2
       client = dconf_client_new (NULL, NULL, NULL, NULL);
+#else
+      client = dconf_client_new ();
+      changeset = dconf_changeset_new ();
+#endif
 
       for (i = 0; i < G_N_ELEMENTS (keys); i++)
         {
@@ -300,18 +308,30 @@ profile_clone (TerminalApp *app,
           char *p;
 
           p = g_strconcat (base_path, keys[i], NULL);
+#ifdef HAVE_DCONF_1_2
           value = dconf_client_read_no_default (client, p);
+#else
+          value = dconf_client_read (client, p);
+#endif
           g_free (p);
 
           if (value)
             {
               p = g_strconcat (new_path, keys[i], NULL);
+#ifdef HAVE_DCONF_1_2
               dconf_client_write (client, p, value, NULL, NULL, NULL);
+#else
+              dconf_changeset_set (changeset, p, value);
+#endif
               g_free (p);
               g_variant_unref (value);
             }
         }
 
+#ifndef HAVE_DCONF_1_2
+      dconf_client_change_sync (client, changeset, NULL, NULL, NULL);
+      g_object_unref (changeset);
+#endif
       g_object_unref (client);
       g_free (base_path);
     }
@@ -361,8 +381,13 @@ profile_remove (TerminalApp *app,
   g_free (profiles);
 
   /* unset all keys under the profile's path */
+#ifdef HAVE_DCONF_1_2
   client = dconf_client_new (NULL, NULL, NULL, NULL);
   dconf_client_write (client, path, NULL, NULL, NULL, NULL);
+#else /* modern DConf */
+  client = dconf_client_new ();
+  dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
+#endif
   g_object_unref (client);
 
   g_free (uuid);

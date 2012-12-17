@@ -85,6 +85,15 @@ PKG_CHECK_MODULES([TERM],
    uuid
    $PLATFORM_DEPS])
 
+# DConf broke API without changing the pkgconfig name
+AC_MSG_CHECKING([old DConf])
+PKG_CHECK_EXISTS([dconf >= 0.14],[have_old_dconf=no],[have_old_dconf=yes])
+AC_MSG_RESULT([$have_old_dconf])
+
+if test "$have_old_dconf" = "yes"; then
+  AC_DEFINE([HAVE_DCONF_1_2],[1],[Define to 1 if DConf is version 1.2])
+fi
+
 # ****
 # DBus
 # ****
