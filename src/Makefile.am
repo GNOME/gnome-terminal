@@ -38,6 +38,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-debug.c \
 	terminal-debug.h \
 	terminal-defines.h \
+	terminal-enums.h \
 	terminal-encoding.c \
 	terminal-encoding.h \
 	terminal-gdbus.c \
@@ -276,6 +277,7 @@ EXTRA_DIST = \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \
 	terminal-type-builtins.h.template \
+	org.gnome.Terminal.xml \
 	nautilus.symbols \
 	encodings-dialog.ui \
 	find-dialog.ui \
