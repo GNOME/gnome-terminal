@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-22 15:09+0000\n"
-"PO-Revision-Date: 2012-09-23 10:19+0300\n"
+"POT-Creation-Date: 2012-12-19 14:18+0000\n"
+"PO-Revision-Date: 2012-12-19 18:21+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <>\n"
 "Language: et\n"
@@ -31,6 +31,9 @@ msgstr "Terminal"
 msgid "Use the command line"
 msgstr "Käsurea kasutamine"
 
+msgid "shell;prompt;command;commandline;"
+msgstr "shell;kest;käsuviip;käsk;käsurida;terminal;"
+
 msgid "COMMAND"
 msgstr "KÄSK"
 
@@ -38,13 +41,15 @@ msgstr "KÄSK"
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
-"  open    Create a new terminal\n"
+"  run     Create a new terminal running the specified command\n"
+"  shell   Create a new terminal running the user shell\n"
 "\n"
 "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgstr ""
 "Käsud:\n"
 "  help    Kuvab selle info\n"
-"  open    Loob uue terminali\n"
+"  run     Loob uue terminali, käivitades antud käsu\n"
+"  shell   Loob uue terminali, käivitades kasutaja kestprogrammi.\n"
 "\n"
 "Kasuta \"%s KÄSK --help\", et saada iga käsu kohta abi.\n"
 
@@ -55,8 +60,8 @@ msgstr "\"%s\" pole korrektne suurendustegur"
 msgid "Be quiet"
 msgstr "Ole vait"
 
-msgid "Maximise the window"
-msgstr "Akna suurendamine"
+msgid "Maximize the window"
+msgstr "Akna maksimeerimine"
 
 msgid "Full-screen the window"
 msgstr "Akna suurendamine üle ekraani"
@@ -77,8 +82,8 @@ msgstr "ROLL"
 msgid "Use the given profile instead of the default profile"
 msgstr "Määratud profiili kasutamine vaikimisi profiili asemel"
 
-msgid "PROFILE-NAME"
-msgstr "PROFIILI-NIMI"
+msgid "UUID"
+msgstr "UUID"
 
 msgid "Set the terminal title"
 msgstr "Terminali pealkirja määramine"
@@ -155,160 +160,43 @@ msgstr "Töötlemisvalikud:"
 msgid "Show processing options"
 msgstr "Töötlemisvalikute näitamine"
 
-msgid "Add or Remove Terminal Encodings"
-msgstr "Terminali kooditabelite lisamine või eemaldamine"
+msgid "Unnamed"
+msgstr "Nimetu"
 
-msgid "A_vailable encodings:"
-msgstr "_Saadaolevad kooditabelid:"
+msgid "Black on light yellow"
+msgstr "Must helekollasel"
 
-msgid "E_ncodings shown in menu:"
-msgstr "_Menüüs kuvatavad kooditabelid:"
+msgid "Black on white"
+msgstr "Must valgel"
 
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-msgid "Automatic"
-msgstr "Automaatne"
+msgid "Gray on black"
+msgstr "Hall mustal"
 
-#. Translators: This refers to the Delete keybinding option
-msgid "Control-H"
-msgstr "Control-H"
+msgid "Green on black"
+msgstr "Roheline mustal"
 
-#. Translators: This refers to the Delete keybinding option
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
+msgid "White on black"
+msgstr "Valge mustal"
 
-#. Translators: This refers to the Delete keybinding option
-msgid "Escape sequence"
-msgstr "Paojada"
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Viga käsu analüüsimisel: %s"
 
-#. Translators: This refers to the Delete keybinding option
-msgid "TTY Erase"
-msgstr "TTY puhastamine"
-
-#. Translators: Cursor shape: ...
-msgid "Block"
-msgstr "Kast"
-
-#. Translators: Cursor shape: ...
-msgid "I-Beam"
-msgstr "Püstkriips"
-
-#. Translators: Cursor shape: ...
-msgid "Underline"
-msgstr "Allkriips"
-
-#. Translators: When command exits: ...
-msgid "Exit the terminal"
-msgstr "Väljutakse terminalist"
-
-#. Translators: When command exits: ...
-msgid "Restart the command"
-msgstr "Käivitatakse käsk uuesti"
-
-#. Translators: When command exits: ...
-msgid "Hold the terminal open"
-msgstr "Jäetakse terminal avatuks"
-
-#. Translators: Scrollbar is: ...
-msgid "Always visible"
-msgstr "Alati nähtav"
-
-#. Translators: Scrollbar is: ...
-msgid "Visible only when necessary"
-msgstr "Nähtav ainult vajadusel"
-
-#. Translators: Scrollbar is: ...
-msgid "Hidden"
-msgstr "Varjatud"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Replace initial title"
-msgstr "Asendab algse pealkirja"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Append initial title"
-msgstr "Paigutatakse algse pealkirja järele"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Prepend initial title"
-msgstr "Paigutatakse algse pealkirja ette"
-
-#. Translators: When terminal commands set their own titles: ...
-msgid "Keep initial title"
-msgstr "Jäetakse kuvamata"
-
-#. Translators: This is the name of a colour scheme
-msgid "Tango"
-msgstr "Tango"
-
-#. Translators: This is the name of a colour scheme
-msgid "Linux console"
-msgstr "Linuxi konsool"
-
-#. Translators: This is the name of a colour scheme
-msgid "XTerm"
-msgstr "XTerm"
-
-#. Translators: This is the name of a colour scheme
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#. Translators: This is the name of a colour scheme
+#. This is the name of a colour scheme
 msgid "Custom"
 msgstr "Oma"
 
-msgid "Find"
-msgstr "Otsi"
+#, c-format
+msgid "Editing Profile “%s”"
+msgstr "Profiili „%s“ redigeerimine"
 
-msgid "_Search for:"
-msgstr "_Otsitav tekst:"
+#, c-format
+msgid "Choose Palette Color %d"
+msgstr "Paletivärvi %d valimine"
 
-msgid "_Match case"
-msgstr "_Tõstutundlik"
-
-msgid "Match _entire word only"
-msgstr "Kogu sõ_na peab vastavuses olema"
-
-msgid "Match as _regular expression"
-msgstr "Vastavus _regulaaravaldisele"
-
-msgid "Search _backwards"
-msgstr "Otsitakse tagantpoolt _ettepoole"
-
-msgid "_Wrap around"
-msgstr "_Lõppu (või algusese) jõudmisel otsingut ei katkestata"
-
-msgid "Keyboard Shortcuts"
-msgstr "Kiirklahvid"
-
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr ""
-"Kõik _menüü liikumisklahvid on lubatud (näiteks Alt-F failimenüü jaoks)"
-
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "M_enüü kiirklahv on lubatud (vaikimisi F10)"
-
-msgid "_Shortcut keys:"
-msgstr "_Kiirklahvid:"
+#, c-format
+msgid "Palette entry %d"
+msgstr "Paletikirje nr %d"
 
 msgid "Human-readable name of the profile"
 msgstr "Profiili inimloetav nimi"
@@ -554,7 +442,7 @@ msgstr ""
 msgid "Palette for terminal applications"
 msgstr "Palett terminalirakenduste jaoks"
 
-msgid "A pango font name and size"
+msgid "A Pango font name and size"
 msgstr "Pango fondi nimi ja suurus"
 
 msgid "The code sequence the Backspace key generates"
@@ -611,36 +499,42 @@ msgstr ""
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Kas terminaliakna sulgemisel peab kinnitust küsima"
 
-msgid "Black on light yellow"
-msgstr "Must helekollasel"
+msgid "Whether to show the menubar in new windows"
+msgstr "Kas uutel akendel ja kaartidel näidatakse menüüriba või mitte"
 
-msgid "Black on white"
-msgstr "Must valgel"
+msgid "Find"
+msgstr "Otsi"
 
-msgid "Gray on black"
-msgstr "Hall mustal"
+msgid "_Search for:"
+msgstr "_Otsitav tekst:"
 
-msgid "Green on black"
-msgstr "Roheline mustal"
+msgid "_Match case"
+msgstr "_Tõstutundlik"
 
-msgid "White on black"
-msgstr "Valge mustal"
+msgid "Match _entire word only"
+msgstr "Kogu sõ_na peab vastavuses olema"
 
-#, c-format
-msgid "Error parsing command: %s"
-msgstr "Viga käsu analüüsimisel: %s"
+msgid "Match as _regular expression"
+msgstr "Vastavus _regulaaravaldisele"
 
-#, c-format
-msgid "Editing Profile “%s”"
-msgstr "Profiili „%s“ redigeerimine"
+msgid "Search _backwards"
+msgstr "Otsitakse tagantpoolt _ettepoole"
 
-#, c-format
-msgid "Choose Palette Color %d"
-msgstr "Paletivärvi %d valimine"
+msgid "_Wrap around"
+msgstr "_Lõppu (või algusese) jõudmisel otsingut ei katkestata"
 
-#, c-format
-msgid "Palette entry %d"
-msgstr "Paletikirje nr %d"
+msgid "Keyboard Shortcuts"
+msgstr "Kiirklahvid"
+
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+msgstr ""
+"Kõik _menüü liikumisklahvid on lubatud (näiteks Alt-F failimenüü jaoks)"
+
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "M_enüü kiirklahv on lubatud (vaikimisi F10)"
+
+msgid "_Shortcut keys:"
+msgstr "_Kiirklahvid:"
 
 msgid "Profiles"
 msgstr "Profiilid"
@@ -648,17 +542,96 @@ msgstr "Profiilid"
 msgid "_Profile used when launching a new terminal:"
 msgstr "Uue terminali avamisel _kasutatav profiil:"
 
-msgid "New Profile"
-msgstr "Uus profiil"
+#. Cursor shape
+msgid "Block"
+msgstr "Kast"
 
-msgid "C_reate"
-msgstr "L_oo"
+#. Cursor shape
+msgid "I-Beam"
+msgstr "Püstkriips"
 
-msgid "Profile _name:"
-msgstr "Profiili _nimi:"
+#. Cursor shape
+msgid "Underline"
+msgstr "Allkriips"
 
-msgid "_Base on:"
-msgstr "_Põhineb mallil:"
+#. When terminal commands set their own titles
+msgid "Replace initial title"
+msgstr "Asendab algse pealkirja"
+
+#. When terminal commands set their own titles
+msgid "Append initial title"
+msgstr "Paigutatakse algse pealkirja järele"
+
+#. When terminal commands set their own titles
+msgid "Prepend initial title"
+msgstr "Paigutatakse algse pealkirja ette"
+
+#. When terminal commands set their own titles
+msgid "Keep initial title"
+msgstr "Jäetakse kuvamata"
+
+#. When command exits
+msgid "Exit the terminal"
+msgstr "Väljutakse terminalist"
+
+#. When command exits
+msgid "Restart the command"
+msgstr "Käivitatakse käsk uuesti"
+
+#. When command exits
+msgid "Hold the terminal open"
+msgstr "Jäetakse terminal avatuks"
+
+#. This is the name of a colour scheme
+msgid "Tango"
+msgstr "Tango"
+
+#. This is the name of a colour scheme
+msgid "Linux console"
+msgstr "Linuxi konsool"
+
+#. This is the name of a colour scheme
+msgid "XTerm"
+msgstr "XTerm"
+
+#. This is the name of a colour scheme
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#. Scrollbar is
+msgid "Always visible"
+msgstr "Alati nähtav"
+
+#. Scrollbar is
+msgid "Visible only when necessary"
+msgstr "Nähtav ainult vajadusel"
+
+#. Scrollbar is
+msgid "Hidden"
+msgstr "Varjatud"
+
+#. This refers to the Delete keybinding option
+msgid "Automatic"
+msgstr "Automaatne"
+
+#. This refers to the Delete keybinding option
+msgid "Control-H"
+msgstr "Control-H"
+
+#. This refers to the Delete keybinding option
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. This refers to the Delete keybinding option
+msgid "Escape sequence"
+msgstr "Paojada"
+
+#. This refers to the Delete keybinding option
+msgid "TTY Erase"
+msgstr "TTY puhastamine"
+
+msgid "Profile Editor"
+msgstr "Profiiliredaktor"
 
 msgid "_Profile name:"
 msgstr "Profiili _nimi:"
@@ -681,15 +654,6 @@ msgstr "Terminali kõ_ll"
 msgid "Cursor _shape:"
 msgstr "K_ursori kuju:"
 
-msgid ""
-"Block\n"
-"I-Beam\n"
-"Underline"
-msgstr ""
-"Kast\n"
-"Püstkriips\n"
-"Allkriips"
-
 msgid "Select-by-_word characters:"
 msgstr "_Sõnahaaval valimise märgid:"
 
@@ -708,8 +672,8 @@ msgstr "rida"
 msgid "General"
 msgstr "Üldine"
 
-msgid "<b>Title</b>"
-msgstr "<b>Pealkiri</b>"
+msgid "Title"
+msgstr "Pealkiri"
 
 msgid "Initial _title:"
 msgstr "_Algne pealkiri:"
@@ -717,19 +681,8 @@ msgstr "_Algne pealkiri:"
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Kui terminalikäsud määravad oma _pealkirju:"
 
-msgid ""
-"Replace initial title\n"
-"Append initial title\n"
-"Prepend initial title\n"
-"Keep initial title"
-msgstr ""
-"Asendab algse pealkirja\n"
-"Paigutatakse algse pealkirja järele\n"
-"Paigutatakse algse pealkirja ette\n"
-"Jäetakse kuvamata"
-
-msgid "<b>Command</b>"
-msgstr "<b>Käsk</b>"
+msgid "Command"
+msgstr "Käsk"
 
 msgid "_Run command as a login shell"
 msgstr "_Käsk käivitatakse login kestana"
@@ -746,20 +699,11 @@ msgstr "_Oma käsk:"
 msgid "When command _exits:"
 msgstr "Käsu _lõpetamisel:"
 
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"Terminal suletakse\n"
-"Käivitatakse käsk uuesti\n"
-"Jäetakse terminal avatuks"
-
 msgid "Title and Command"
 msgstr "Pealkiri ja käsk"
 
-msgid "<b>Foreground, Background, Bold and Underline</b>"
-msgstr "<b>Tekst, taust ja allajoonitud ning rasvane kiri</b>"
+msgid "Foreground, Background, Bold and Underline"
+msgstr "Tekst, taust ja allajoonitud ning rasvane kiri"
 
 msgid "_Use colors from system theme"
 msgstr "_Kasutatakse süsteemi teema värve"
@@ -788,18 +732,14 @@ msgstr "Tekstiga sama _värv"
 msgid "Bol_d color:"
 msgstr "_Rasvase kirja värv:"
 
-msgid "<b>Palette</b>"
-msgstr "<b>Palett</b>"
+msgid "Palette"
+msgstr "Palett"
 
 msgid "Built-in _schemes:"
 msgstr "Sisse_ehitatud teemad:"
 
-msgid ""
-"<small><i><b>Note:</b> Terminal applications have these colors available to "
-"them.</i></small>"
-msgstr ""
-"<small><i><b>Märkus:</b> Terminaliprogrammide käsutuses on järgnevad värvid."
-"</i></small>"
+msgid "<b>Note:</b> Terminal applications have these colors available to them."
+msgstr "<b>Märkus:</b> Terminaliprogrammide käsutuses on järgnevad värvid."
 
 msgid "Color p_alette:"
 msgstr "Värvi_palett:"
@@ -819,18 +759,8 @@ msgstr "Kerimine k_lahvivajutuse puhul"
 msgid "Scroll on _output"
 msgstr "Kerimine _väljundi saamisel"
 
-#. Infinite scrollback
 msgid "_Unlimited"
 msgstr "Pii_ramatu"
-
-msgid ""
-"Always visible\n"
-"Visible only when necessary\n"
-"Hidden"
-msgstr ""
-"Alati nähtav\n"
-"Nähtav ainult vajadusel\n"
-"Varjatud"
 
 msgid "lines"
 msgstr "rida"
@@ -839,15 +769,14 @@ msgid "Scrolling"
 msgstr "Kerimine"
 
 msgid ""
-"<small><i><b>Note:</b> These options may cause some applications to behave "
+"<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior.</"
-"i></small>"
+"applications and operating systems that expect different terminal behavior."
 msgstr ""
-"<small><i><b>Märkus:</b> Need valikud võivad põhjustada mõne rakenduse väära "
+"<b>Märkus:</b> Need valikud võivad põhjustada mõne rakenduse väära "
 "käitumist.  Need on siin ainult selleks, et oleks võimalik teatud rakenduste "
 "ja operatsioonisüsteemide erinevast käitumisest põhjustatud probleeme "
-"vältida.</i></small>"
+"vältida."
 
 msgid "_Delete key generates:"
 msgstr "_Delete klahv põhjustab:"
@@ -855,30 +784,29 @@ msgstr "_Delete klahv põhjustab:"
 msgid "_Backspace key generates:"
 msgstr "_Backspace klahv põhjustab:"
 
-msgid ""
-"Automatic\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Escape sequence\n"
-"TTY Erase"
-msgstr ""
-"Automaatne\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Paojada\n"
-"TTY kustutamine"
-
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "Taasta ühilduvusvalikute _algväärtused"
 
 msgid "Compatibility"
 msgstr "Ühilduvus"
 
+msgid "_Preferences"
+msgstr "_Eelistused"
+
+msgid "_Help"
+msgstr "A_bi"
+
+msgid "_About"
+msgstr "_Programmist lähemalt"
+
 msgid "New Tab"
 msgstr "Uus kaart"
 
 msgid "New Window"
 msgstr "Uus aken"
+
+msgid "New Profile"
+msgstr "Uus profiil"
 
 msgid "Save Contents"
 msgstr "Sisu salvestamine"
@@ -894,6 +822,9 @@ msgstr "Kopeerimine"
 
 msgid "Paste"
 msgstr "Asetamine"
+
+msgid "Hide and Show menubar"
+msgstr "Menüüriba peitmine ja kuvamine"
 
 msgid "Full Screen"
 msgstr "Täisekraan"
@@ -1004,28 +935,8 @@ msgstr "Kas kustutada profiil „%s“?"
 msgid "Delete Profile"
 msgstr "Profiili kustutamine"
 
-#, c-format
-msgid ""
-"You already have a profile called “%s”. Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"Profiil nimega „%s“ on juba olemas. Kas soovid teha veel ühe sama nimega "
-"profiili?"
-
-msgid "Choose base profile"
-msgstr "Vali põhiprofiil"
-
 msgid "User Defined"
 msgstr "Kasutaja kirjeldatud"
-
-msgid "_Preferences"
-msgstr "_Eelistused"
-
-msgid "_Help"
-msgstr "A_bi"
-
-msgid "_About"
-msgstr "_Programmist lähemalt"
 
 #, c-format
 msgid "Failed to parse arguments: %s\n"
@@ -1191,6 +1102,10 @@ msgid "Two roles given for one window"
 msgstr "Ühele aknale on määratud kaks rolli"
 
 #, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "\"%s\" valik anti sama akna jaoks kaks korda\n"
+
+#, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Suurendustegur \"%g\" on liiga väike, kasutatakse %g\n"
 
@@ -1231,11 +1146,20 @@ msgstr "Uue akna avamine, mis sisaldab vaikimisi profiiliga kaarti"
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Uue vaikimisi profiiliga kaardi avamine viimati avatud aknas"
 
+msgid "Turn on the menubar"
+msgstr "Menüüriba sisselülitamine"
+
+msgid "Turn off the menubar"
+msgstr "Menüüriba väljalülitamine"
+
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Viimasena kirjeldatud kaardi määramine omas aknas aktiivseks"
 
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Selle võtme argumendi käivitamine terminalis"
+
+msgid "PROFILE-NAME"
+msgstr "PROFIILI-NIMI"
 
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Terminaliemulaator"
@@ -1269,6 +1193,9 @@ msgstr ""
 
 msgid "Show per-terminal options"
 msgstr "Terminalipõhiste valikute näitamine"
+
+msgid "No command supplied nor shell requested"
+msgstr "Ühtegi käsku ei antud ega vajatud kesta"
 
 msgid "_Profile Preferences"
 msgstr "Profiili _eelistused"
@@ -1494,9 +1421,6 @@ msgstr "Kopeeri _lingi asukoht"
 msgid "P_rofiles"
 msgstr "P_rofiilid"
 
-msgid "C_lose Window"
-msgstr "Su_lge aken"
-
 msgid "L_eave Full Screen"
 msgstr "_Lahku täisekraanist"
 
@@ -1504,6 +1428,9 @@ msgid "_Input Methods"
 msgstr "_Sisestusmeetodid"
 
 #. View Menu
+msgid "Show _Menubar"
+msgstr "_Menüüriba näitamine"
+
 msgid "_Full Screen"
 msgstr "_Täisekraan"
 
@@ -1527,6 +1454,9 @@ msgstr ""
 "Terminalis töötab siiamaani vähemalt üks protsess. Terminali sulgemine "
 "kõrvaldab ka selle protsessi."
 
+msgid "C_lose Window"
+msgstr "Su_lge aken"
+
 msgid "C_lose Terminal"
 msgstr "Sul_ge terminal"
 
@@ -1538,3 +1468,85 @@ msgstr "Salvesta kui..."
 
 msgid "_Title:"
 msgstr "_Pealkiri:"
+
+#~ msgid "Add or Remove Terminal Encodings"
+#~ msgstr "Terminali kooditabelite lisamine või eemaldamine"
+
+#~ msgid "A_vailable encodings:"
+#~ msgstr "_Saadaolevad kooditabelid:"
+
+#~ msgid "E_ncodings shown in menu:"
+#~ msgstr "_Menüüs kuvatavad kooditabelid:"
+
+#~ msgid "C_reate"
+#~ msgstr "L_oo"
+
+#~ msgid "Profile _name:"
+#~ msgstr "Profiili _nimi:"
+
+#~ msgid "_Base on:"
+#~ msgstr "_Põhineb mallil:"
+
+#~ msgid ""
+#~ "Block\n"
+#~ "I-Beam\n"
+#~ "Underline"
+#~ msgstr ""
+#~ "Kast\n"
+#~ "Püstkriips\n"
+#~ "Allkriips"
+
+#~ msgid "<b>Title</b>"
+#~ msgstr "<b>Pealkiri</b>"
+
+#~ msgid ""
+#~ "Replace initial title\n"
+#~ "Append initial title\n"
+#~ "Prepend initial title\n"
+#~ "Keep initial title"
+#~ msgstr ""
+#~ "Asendab algse pealkirja\n"
+#~ "Paigutatakse algse pealkirja järele\n"
+#~ "Paigutatakse algse pealkirja ette\n"
+#~ "Jäetakse kuvamata"
+
+#~ msgid ""
+#~ "Exit the terminal\n"
+#~ "Restart the command\n"
+#~ "Hold the terminal open"
+#~ msgstr ""
+#~ "Terminal suletakse\n"
+#~ "Käivitatakse käsk uuesti\n"
+#~ "Jäetakse terminal avatuks"
+
+#~ msgid ""
+#~ "Always visible\n"
+#~ "Visible only when necessary\n"
+#~ "Hidden"
+#~ msgstr ""
+#~ "Alati nähtav\n"
+#~ "Nähtav ainult vajadusel\n"
+#~ "Varjatud"
+
+#~ msgid ""
+#~ "Automatic\n"
+#~ "Control-H\n"
+#~ "ASCII DEL\n"
+#~ "Escape sequence\n"
+#~ "TTY Erase"
+#~ msgstr ""
+#~ "Automaatne\n"
+#~ "Control-H\n"
+#~ "ASCII DEL\n"
+#~ "Paojada\n"
+#~ "TTY kustutamine"
+
+#~ msgid ""
+#~ "You already have a profile called “%s”. Do you want to create another "
+#~ "profile with the same name?"
+#~ msgstr ""
+#~ "Profiil nimega „%s“ on juba olemas. Kas soovid teha veel ühe sama nimega "
+#~ "profiili?"
+
+#~ msgid "Choose base profile"
+#~ msgstr "Vali põhiprofiil"
