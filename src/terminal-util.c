@@ -404,7 +404,7 @@ terminal_util_get_licence_text (void)
   return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
 }
 
-gboolean
+void
 terminal_util_load_builder_resource (const char *path,
                                      const char *object_name,
                                      ...)
@@ -424,10 +424,8 @@ terminal_util_load_builder_resource (const char *path,
 
     objectptr = va_arg (args, GObject**);
     *objectptr = gtk_builder_get_object (builder, object_name);
-    if (!*objectptr) {
-      g_warning ("Failed to fetch object \"%s\"\n", object_name);
-      break;
-    }
+    if (!*objectptr)
+      g_error ("Failed to fetch object \"%s\" from resource \"%s\"\n", object_name, path);
 
     object_name = va_arg (args, const char*);
   }
@@ -435,7 +433,6 @@ terminal_util_load_builder_resource (const char *path,
   va_end (args);
 
   g_object_unref (builder);
-  return object_name == NULL;
 }
 
 gboolean

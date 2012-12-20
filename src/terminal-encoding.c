@@ -459,17 +459,13 @@ terminal_encoding_dialog_show (GtkWindow *transient_parent)
 
   data = g_new (EncodingDialogData, 1);
 
-  if (!terminal_util_load_builder_resource ("/org/gnome/terminal/ui/encodings-dialog.ui",
-                                            "encodings-dialog", &data->dialog,
-                                            "add-button", &data->add_button,
-                                            "remove-button", &data->remove_button,
-                                            "available-treeview", &data->available_tree_view,
-                                            "displayed-treeview", &data->active_tree_view,
-                                            NULL))
-    {
-      g_free (data);
-      return;
-    }
+  terminal_util_load_builder_resource ("/org/gnome/terminal/ui/encodings-dialog.ui",
+                                       "encodings-dialog", &data->dialog,
+                                       "add-button", &data->add_button,
+                                       "remove-button", &data->remove_button,
+                                       "available-treeview", &data->available_tree_view,
+                                       "displayed-treeview", &data->active_tree_view,
+                                       NULL);
 
   g_object_set_data_full (G_OBJECT (data->dialog), "GT::Data", data, (GDestroyNotify) encoding_dialog_data_free);
 

@@ -427,13 +427,12 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   if (edit_keys_dialog != NULL)
     goto done;
 
-  if (!terminal_util_load_builder_resource ("/org/gnome/terminal/ui/keybinding-editor.ui",
-                                            "keybindings-dialog", &dialog,
-                                            "disable-mnemonics-checkbutton", &disable_mnemonics_button,
-                                            "disable-menu-accel-checkbutton", &disable_menu_accel_button,
-                                            "accelerators-treeview", &tree_view,
-                                            NULL))
-    return;
+  terminal_util_load_builder_resource ("/org/gnome/terminal/ui/keybinding-editor.ui",
+                                       "keybindings-dialog", &dialog,
+                                       "disable-mnemonics-checkbutton", &disable_mnemonics_button,
+                                       "disable-menu-accel-checkbutton", &disable_menu_accel_button,
+                                       "accelerators-treeview", &tree_view,
+                                       NULL);
 
   terminal_util_bind_mnemonic_label_sensitivity (dialog);
 
