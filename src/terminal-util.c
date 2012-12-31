@@ -5,12 +5,12 @@
  * Copyright © 2003 Mariano Suarez-Alvarez
  * Copyright © 2008, 2011 Christian Persch
  *
- * Gnome-terminal is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * Gnome-terminal is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -388,17 +388,16 @@ char *
 terminal_util_get_licence_text (void)
 {
   const gchar *license[] = {
-    N_("GNOME Terminal is free software; you can redistribute it and/or modify "
+    N_("GNOME Terminal is free software: you can redistribute it and/or modify "
        "it under the terms of the GNU General Public License as published by "
-       "the Free Software Foundation; either version 3 of the License, or "
+       "the Free Software Foundation, either version 3 of the License, or "
        "(at your option) any later version."),
     N_("GNOME Terminal is distributed in the hope that it will be useful, "
        "but WITHOUT ANY WARRANTY; without even the implied warranty of "
        "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the "
        "GNU General Public License for more details."),
     N_("You should have received a copy of the GNU General Public License "
-       "along with GNOME Terminal; if not, write to the Free Software Foundation, "
-       "Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA")
+       "along with GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>.")
   };
 
   return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
