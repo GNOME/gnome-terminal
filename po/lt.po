@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-07-05 14:31+0000\n"
-"PO-Revision-Date: 2012-07-22 21:07+0300\n"
+"POT-Creation-Date: 2012-12-17 11:34+0000\n"
+"PO-Revision-Date: 2013-01-02 23:01+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lithuanian <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -23,10 +23,10 @@ msgstr ""
 "X-Generator: Virtaal 0.6.1\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1
-#: ../src/server.c:92
-#: ../src/terminal-accels.c:146
-#: ../src/terminal.c:244
-#: ../src/terminal-window.c:1839
+#: ../src/server.c:94
+#: ../src/terminal-accels.c:148
+#: ../src/terminal.c:250
+#: ../src/terminal-window.c:1830
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -34,646 +34,198 @@ msgstr "Terminalas"
 msgid "Use the command line"
 msgstr "Naudoti komandų eilutę"
 
-#: ../src/client.c:117
+#: ../gnome-terminal.desktop.in.in.h:3
+msgid "shell;prompt;command;commandline;"
+msgstr "apvalkalas;eilutė;komanda;komandų eilutė;"
+
+#: ../src/client.c:118
 msgid "COMMAND"
 msgstr "KOMANDA"
 
-#: ../src/client.c:122
+#: ../src/client.c:123
 #, c-format
+#| msgid ""
+#| "Commands:\n"
+#| "  help    Shows this information\n"
+#| "  open    Create a new terminal\n"
+#| "\n"
+#| "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
-"  open    Create a new terminal\n"
+"  run     Create a new terminal running the specified command\n"
+"  shell   Create a new terminal running the user shell\n"
 "\n"
 "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgstr ""
 "Komandos:\n"
 "  help    Parodo šią informaciją\n"
-"  open    Sukuria naują terminalą\n"
+"  run     Sukurti naują terminalą, vykdantį nurodytą komandą\n"
+"  shell   Sukurti naują terminalą, vykdantį naudotojo apvalkalą\n"
 "\n"
 "Naudokite „%s KOMANDA --help“ pagalbai apie kiekvieną komandą.\n"
 
-#: ../src/client.c:217
-#: ../src/terminal-options.c:589
+#: ../src/client.c:221
+#: ../src/terminal-options.c:661
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "„%s“ nėra tinkama mastelio reikšmė"
 
-#: ../src/client.c:330
+#: ../src/client.c:334
 msgid "Be quiet"
 msgstr "Būti tyliu"
 
-#: ../src/client.c:341
-#: ../src/terminal-options.c:994
-msgid "Maximise the window"
+#: ../src/client.c:345
+#: ../src/terminal-options.c:1073
+#| msgid "Maximise the window"
+msgid "Maximize the window"
 msgstr "Išdidinti langą"
 
-#: ../src/client.c:343
-#: ../src/terminal-options.c:1003
+#: ../src/client.c:347
+#: ../src/terminal-options.c:1082
 msgid "Full-screen the window"
 msgstr "Rodyti langą visame ekrane"
 
-#: ../src/client.c:345
-#: ../src/terminal-options.c:1012
+#: ../src/client.c:349
+#: ../src/terminal-options.c:1091
 msgid "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr "Nustatyti lango dydį; pavyzdžiui: 80x24, arba 80x24+200+200 (STULPELIAIxEILUTĖS+X+Y)"
 
-#: ../src/client.c:346
-#: ../src/terminal-options.c:1013
+#: ../src/client.c:350
+#: ../src/terminal-options.c:1092
 msgid "GEOMETRY"
 msgstr "GEOMETRIJA"
 
-#: ../src/client.c:348
-#: ../src/terminal-options.c:1021
+#: ../src/client.c:352
+#: ../src/terminal-options.c:1100
 msgid "Set the window role"
 msgstr "Nustatyti lango vaidmenį"
 
-#: ../src/client.c:348
-#: ../src/terminal-options.c:1022
+#: ../src/client.c:352
+#: ../src/terminal-options.c:1101
 msgid "ROLE"
 msgstr "PASKIRTIS"
 
-#: ../src/client.c:354
-#: ../src/terminal-options.c:1052
+#: ../src/client.c:358
+#: ../src/terminal-options.c:1131
 msgid "Use the given profile instead of the default profile"
 msgstr "Naudoti nurodytą profilį vietoje numatytojo"
 
-#: ../src/client.c:355
-#: ../src/terminal-options.c:1053
-msgid "PROFILE-NAME"
-msgstr "PROFILIO-PAVADINIMAS"
+#: ../src/client.c:359
+msgid "UUID"
+msgstr "UUID"
 
-#: ../src/client.c:357
-#: ../src/terminal-options.c:1061
+#: ../src/client.c:361
+#: ../src/terminal-options.c:1140
 msgid "Set the terminal title"
 msgstr "Nustatyti terminalo antraštę"
 
-#: ../src/client.c:357
-#: ../src/terminal-options.c:1062
+#: ../src/client.c:361
+#: ../src/terminal-options.c:1141
 msgid "TITLE"
 msgstr "ANTRAŠTĖ"
 
-#: ../src/client.c:359
-#: ../src/terminal-options.c:1070
+#: ../src/client.c:363
+#: ../src/terminal-options.c:1149
 msgid "Set the working directory"
 msgstr "Nustatyti terminalo darbinį aplanką"
 
-#: ../src/client.c:359
-#: ../src/terminal-options.c:1071
+#: ../src/client.c:363
+#: ../src/terminal-options.c:1150
 msgid "DIRNAME"
 msgstr "APLANKAS"
 
-#: ../src/client.c:361
-#: ../src/terminal-options.c:1079
+#: ../src/client.c:365
+#: ../src/terminal-options.c:1158
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Nustatyti terminalo mastelį (1,0 = normalus dydis)"
 
-#: ../src/client.c:362
-#: ../src/terminal-options.c:1080
+#: ../src/client.c:366
+#: ../src/terminal-options.c:1159
 msgid "ZOOM"
 msgstr "DIDINIMAS"
 
-#: ../src/client.c:368
+#: ../src/client.c:372
 msgid "Forward stdin"
 msgstr "Perduoti stdin"
 
-#: ../src/client.c:370
+#: ../src/client.c:374
 msgid "Forward stdout"
 msgstr "Perduoti stdout"
 
-#: ../src/client.c:372
+#: ../src/client.c:376
 msgid "Forward stderr"
 msgstr "Perduoti stderr"
 
-#: ../src/client.c:374
+#: ../src/client.c:378
 msgid "Forward file descriptor"
 msgstr "Perduoti failo deskriptorių"
 
-#: ../src/client.c:374
+#: ../src/client.c:378
 msgid "FD"
 msgstr "FD"
 
-#: ../src/client.c:380
+#: ../src/client.c:384
 msgid "Wait until the child exits"
 msgstr "Laukti, kol vaikas baigs darbą"
 
-#: ../src/client.c:390
-#| msgid "GNOME Terminal"
+#: ../src/client.c:394
 msgid "GNOME Terminal Client"
 msgstr "GNOME terminalo klientas"
 
-#: ../src/client.c:394
-#| msgid "Show terminal options"
+#: ../src/client.c:398
 msgid "Global options:"
 msgstr "Visuotinės parinktys:"
 
-#: ../src/client.c:395
-#| msgid "Show terminal options"
+#: ../src/client.c:399
 msgid "Show global options"
 msgstr "Rodyti visuotines parinktis"
 
-#: ../src/client.c:403
-#| msgid "Show per-terminal options"
+#: ../src/client.c:407
 msgid "Server options:"
 msgstr "Serverio parinktys:"
 
-#: ../src/client.c:404
-#| msgid "Show per-terminal options"
+#: ../src/client.c:408
 msgid "Show server options"
 msgstr "Rodyti serverio parinktis"
 
-#: ../src/client.c:412
-#| msgid "Show per-window options"
+#: ../src/client.c:416
 msgid "Window options:"
 msgstr "Lango parinktys:"
 
-#: ../src/client.c:413
-#| msgid "Show per-window options"
+#: ../src/client.c:417
 msgid "Show window options"
 msgstr "Rodyti lango parinktis"
 
-#: ../src/client.c:421
-#| msgid "Show terminal options"
+#: ../src/client.c:425
 msgid "Terminal options:"
 msgstr "Terminalo parinktys:"
 
-#: ../src/client.c:422
-#: ../src/terminal-options.c:1359
+#: ../src/client.c:426
+#: ../src/terminal-options.c:1438
 msgid "Show terminal options"
 msgstr "Rodyti terminalo parinktis"
 
-#: ../src/client.c:430
+#: ../src/client.c:434
 msgid "Exec options:"
 msgstr "Exec parinktys:"
 
-#: ../src/client.c:431
-#| msgid "Show terminal options"
+#: ../src/client.c:435
 msgid "Show exec options"
 msgstr "Rodyti exec parinktis"
 
-#: ../src/client.c:439
-#| msgid "Session management options:"
+#: ../src/client.c:443
 msgid "Processing options:"
 msgstr "Apdorojimo parinktys:"
 
-#: ../src/client.c:440
-#| msgid "Show per-terminal options"
+#: ../src/client.c:444
 msgid "Show processing options"
 msgstr "Rodyti apdorojimo parinktis"
 
-#: ../src/encodings-dialog.glade.h:1
-msgid "Add or Remove Terminal Encodings"
-msgstr "Pridėti arba pašalinti terminalo koduotes"
-
-#: ../src/encodings-dialog.glade.h:2
-msgid "A_vailable encodings:"
-msgstr "Prieina_mos koduotės:"
-
-#: ../src/encodings-dialog.glade.h:3
-msgid "E_ncodings shown in menu:"
-msgstr "Koduotės, rodomos me_niu:"
-
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:24
-msgid "Automatic"
-msgstr "Automatinis"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:26
-msgid "Control-H"
-msgstr "Vald-H"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:28
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:30
-msgid "Escape sequence"
-msgstr "„Escape“ seka"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:32
-msgid "TTY Erase"
-msgstr "TTY trynimas"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
-msgid "Block"
-msgstr "Blokinis"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
-msgid "I-Beam"
-msgstr "I"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:39
-msgid "Underline"
-msgstr "Linija apačioje"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
-msgid "Exit the terminal"
-msgstr "Išeiti iš terminalo"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
-msgid "Restart the command"
-msgstr "Paleisti komandą iš naujo"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:46
-msgid "Hold the terminal open"
-msgstr "Laikyti terminalą atvertą"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
-msgid "Always visible"
-msgstr "Visada matoma"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:51
-msgid "Visible only when necessary"
-msgstr "Matoma, kai reikia"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:53
-msgid "Hidden"
-msgstr "Paslėpta"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:56
-msgid "Replace initial title"
-msgstr "Pakeisti antraštės priedą"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:58
-msgid "Append initial title"
-msgstr "Pridėti antraštės priedą prie pabaigos"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:60
-msgid "Prepend initial title"
-msgstr "Pridėti antraštės priedą prie pradžios"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:62
-msgid "Keep initial title"
-msgstr "Palikti pradinę antraštę"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
-msgid "Tango"
-msgstr "Tango"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
-msgid "Linux console"
-msgstr "Linux konsolė"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
-msgid "XTerm"
-msgstr "XTerm"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:71
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:73
-#: ../src/profile-editor.c:443
-msgid "Custom"
-msgstr "Pasirinktinė"
-
-#: ../src/find-dialog.glade.h:1
-msgid "Find"
-msgstr "Ieškoti"
-
-#: ../src/find-dialog.glade.h:2
-msgid "_Search for:"
-msgstr "_Ieškoti ko: "
-
-#: ../src/find-dialog.glade.h:3
-msgid "_Match case"
-msgstr "Skirti raidžių _dydį"
-
-#: ../src/find-dialog.glade.h:4
-msgid "Match _entire word only"
-msgstr "Tenkina tik _visas žodis"
-
-#: ../src/find-dialog.glade.h:5
-msgid "Match as _regular expression"
-msgstr "Tenkina _reguliarioji išraiška"
-
-#: ../src/find-dialog.glade.h:6
-msgid "Search _backwards"
-msgstr "Ieškoti pradžios _link"
-
-#: ../src/find-dialog.glade.h:7
-msgid "_Wrap around"
-msgstr "_Priėjus pabaigą, ieškoti nuo pradžios"
-
-#: ../src/keybinding-editor.glade.h:1
-msgid "Keyboard Shortcuts"
-msgstr "Spartieji klavišai"
-
-#: ../src/keybinding-editor.glade.h:2
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr "_Įjungti me_niu prieigos klavišus (pvz., Alt-F – meniu Failas)"
-
-#: ../src/keybinding-editor.glade.h:3
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "Išjungti m_eniu prieigos klavišą (numatytasis klavišas – F10)"
-
-#: ../src/keybinding-editor.glade.h:4
-msgid "_Shortcut keys:"
-msgstr "_Klavišų kombinacijos:"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:1
-msgid "Human-readable name of the profile"
-msgstr "Skaitomas profilio pavadinimas"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:2
-msgid "Human-readable name of the profile."
-msgstr "Skaitomas profilio pavadinimas."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:3
-msgid "Default color of text in the terminal"
-msgstr "Numatytoji terminalo teksto spalva"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:4
-msgid "Default color of text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as \"red\")."
-msgstr "Numatytoji terminalo teksto spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:5
-msgid "Default color of terminal background"
-msgstr "Numatytoji terminalo fono spalva"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:6
-msgid "Default color of terminal background, as a color specification (can be HTML-style hex digits, or a color name such as \"red\")."
-msgstr "Numatytoji terminalo fono spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:7
-msgid "Default color of bold text in the terminal"
-msgstr "Numatytoji paryškinto teksto spalva"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:8
-msgid "Default color of bold text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as \"red\"). This is ignored if bold_color_same_as_fg is true."
-msgstr "Numatytoji paryškinto teksto spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:9
-msgid "Whether bold text should use the same color as normal text"
-msgstr "Ar paryškinto teksto spalva turėtų būti tokia pati kaip paprasto teksto"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:10
-msgid "If true, boldface text will be rendered using the same color as normal text."
-msgstr "Jei TRUE, paryškintas tekstas bus tokios pačios spalvos kaip ir paprastas tekstas."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:11
-msgid "What to do with dynamic title"
-msgstr "Kaip elgtis su kintama antrašte"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:12
-msgid "If the application in the terminal sets the title (most typically people have their shell set up to do this), the dynamically-set title can erase the configured title, go before it, go after it, or replace it. The possible values are \"replace\", \"before\", \"after\", and \"ignore\"."
-msgstr "Jei programa terminale nustato antraštę (paprastai tai apliekama aplinkos nustatymuose), kintama antraštė gali pašalinti nustatytą lango antraštę, būti įrašyta prieš ją, eiti po jos arba ją pakeisti. Galimos reikšmės yra \"replace\", \"before\", \"after\", ir \"ignore\"."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:13
-msgid "Title for terminal"
-msgstr "Terminalo antraštė"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:14
-msgid "Title to display for the terminal window or tab. This title may be replaced by or combined with the title set by the application inside the terminal, depending on the title_mode setting."
-msgstr "Antraštė, išvedama terminalo lange arba kortelėje. Ši antraštė gali būti pakeista arba sujungta su terminale veikiančios programos nustatoma antrašte, priklausomai nuo title_mode nustatymo."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:15
-msgid "Whether to allow bold text"
-msgstr "Ar leisti pastorintą tekstą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:16
-msgid "If true, allow applications in the terminal to make text boldface."
-msgstr "Jei teigiama, programos gali terminale išvedinėti pastorintą tekstą."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:17
-#| msgid "Whether to silence terminal bell"
-msgid "Whether to ring the terminal bell"
-msgstr "Ar įjungti terminalo garsinį signalą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:18
-msgid "Characters that are considered \"part of a word\""
-msgstr "Simboliai, kurie yra laikomi „žodžio dalimi“"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:19
-msgid "When selecting text by word, sequences of these characters are considered single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing a range) should be the first character given."
-msgstr "Pažymint žodžius, šių simbolių sekos bus laikomos atskiru žodžiu. Diapazoną galima nurodyti kaip  \"A-Z\". Minusas, kuris nenurodo diapazono, turi būti pirmas nurodytas simbolis."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:20
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "Ar rodyti meniu juostą naujuose languose/kortelėse"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:21
-#| msgid ""
-#| "True if the menubar should be shown in new windows, for windows/tabs with "
-#| "this profile."
-msgid "True if the menubar should be shown in new window"
-msgstr "Reikšmė teigiama, jei meniu juosta turi būti rodomas naujuose languose"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:22
-msgid "Whether to use custom terminal size for new windows"
-msgstr "Ar naudoti pasirinktinį terminalo dydį naujiems langams"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:23
-msgid "If true, newly created terminal windows will have custom size specified by default_size_columns and default_size_rows."
-msgstr "Jei teigiama, naujai sukurti terminalo langai bus pasirinktinio dydžio, kurį nurodo default_size_columns ir default_size_rows raktai."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:24
-msgid "Default number of columns"
-msgstr "Numatytasis stulpelių skaičius"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:25
-msgid "Number of columns in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
-msgstr "Stulpelių skaičius naujai sukurtuose terminalo languose. Neturi poveikio, jei use_custom_default_size nenustatytas."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:26
-msgid "Default number of rows"
-msgstr "Numatytasis eilučių skaičius"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:27
-msgid "Number of rows in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
-msgstr "Eilučių skaičius naujai sukurtuose terminalo languose. Neturi poveikio, jei use_custom_default_size nenustatytas."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:28
-#| msgid "Position of the scrollbar"
-msgid "When to show the scrollbar"
-msgstr "Kada rodyti slinkties juostą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:29
-msgid "Number of lines to keep in scrollback"
-msgstr "Saugomų teksto eilučių kiekis"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:30
-msgid "Number of scrollback lines to keep around. You can scroll back in the terminal by this number of lines; lines that don't fit in the scrollback are discarded. If scrollback_unlimited is true, this value is ignored."
-msgstr "Išsaugomų teksto eilučių kiekis. Galite grįžti terminale per pasirinktą eilučių skaičių; sistema nesaugos eilučių, kurios viršys nurodytą skaičių. Jei scrollback_unlimited pasirinktas, ši reikšmė ignoruojama."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:31
-msgid "Whether an unlimited number of lines should be kept in scrollback"
-msgstr "Ar saugoti neribotą eilučių skaičių"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:32
-msgid "If true, scrollback lines will never be discarded. The scrollback history is stored on disk temporarily, so this may cause the system to run out of disk space if there is a lot of output to the terminal."
-msgstr "Jei teigiama, retrospektyvos eilutės niekada nebus šalinamos. Retrospektyva saugoma laikinoje saugykloje diske, todėl jei į terminalą išvedama daug teksto, gali pasibaigti vieta diske."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:33
-msgid "Whether to scroll to the bottom when a key is pressed"
-msgstr "Ar pereiti į terminalo apačią, paspaudus klavišą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:34
-msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "Jei teigiama, paspaudus klavišą nuslenkama į terminalo apačią."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:35
-msgid "Whether to scroll to the bottom when there's new output"
-msgstr "Ar pereiti į terminalo apačią, jei ten išvedami nauji duomenys"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:36
-msgid "If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr "Jei teigiama, bet kokia nauja išvestis terminale nukels į terminalo apačią."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:37
-msgid "What to do with the terminal when the child command exits"
-msgstr "Ką daryti su terminalu, jei susijęs procesas baigia darbą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:38
-msgid "Possible values are \"close\" to close the terminal, and \"restart\" to restart the command."
-msgstr "Galimos reikšmės yra „close“ (užveria terminalą) ir „restart“ (pakartoja komandą)."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:39
-msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "Ar paleisti programą terminale naudojant prisijungimo aplinkos parametrus"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:40
-msgid "If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)"
-msgstr "Jei teigiama, terminale paleista komanda naudos prisijungimo aplinkos nustatymus (prieš argv[0] bus įrašytas minusas)."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:41
-msgid "Whether to update login records when launching terminal command"
-msgstr "Ar atnaujinti prisijungimo įrašus, paleidus komandą terminale"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:42
-msgid "If true, the system login records utmp and wtmp will be updated when the command inside the terminal is launched."
-msgstr "Jei teigiama, sistemos prisijungimo įrašai utmp ir wtmp bus atnaujinti, kai terminale bus paleista komanda."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:43
-msgid "Whether to run a custom command instead of the shell"
-msgstr "Paleisti kitą komandą vietoj įprastos aplinkos"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:44
-msgid "If true, the value of the custom_command setting will be used in place of running a shell."
-msgstr "Jei teigiama, custom_command nustatymo reikšmė bus panaudota vietoj darbinės aplinkos."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:45
-msgid "Whether to blink the cursor"
-msgstr "Ar kursorius mirksi"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:46
-msgid "The possible values are \"system\" to use the global cursor blinking settings, or \"on\" or \"off\" to set the mode explicitly."
-msgstr "Galimos reikšmės: „system“ – naudoti globalius žymiklio mirksėjimo nustatymus, „on“ / „off“ – išreikštinai nustatyti mirksėjimą."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:47
-msgid "The cursor appearance"
-msgstr "Kursoriaus vaizdas"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:48
-msgid "Custom command to use instead of the shell"
-msgstr "Komanda naudojama vietoj standartinės aplinkos"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:49
-msgid "Run this command in place of the shell, if use_custom_command is true."
-msgstr "Jei use_custom_command reikšmė yra teigiama, naudoti šią komandą vietoj įprastos aplinkos."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:50
-msgid "Palette for terminal applications"
-msgstr "Terminalo programų paletė"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:51
-msgid "A pango font name and size"
-msgstr "Pango šrifto pavadinimas ir dydis"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:52
-#| msgid "_Backspace key generates:"
-msgid "The code sequence the Backspace key generates"
-msgstr "„_Backspace“ klavišo generuojama kodų seka"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:53
-#| msgid "_Delete key generates:"
-msgid "The code sequence the Delete key generates"
-msgstr "„_Delete“ klavišo generuojama kodų seka"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:54
-msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr "Ar terminalas turi naudoti temos spalvas"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:55
-#| msgid "Whether to use the system font"
-msgid "Whether to use the system monospace font"
-msgstr "Ar naudoti sisteminį lygiaplotį šriftą"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:56
-#| msgid "Add encoding to menu."
-msgid "Which encoding to use"
-msgstr "Kokią koduotę naudoti"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:57
-msgid "Whether the menubar has access keys"
-msgstr "Ar meniu juosta palaiko sparčiuosius klavišus"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:58
-msgid "Whether to have Alt+letter access keys for the menubar. They may interfere with some applications run inside the terminal so it's possible to turn them off."
-msgstr "Ar naudoti Alt-raidė sparčiuosius klavišus tarp meniu. Šie spartieji klavišai gali sutrikdyti dalies programų, paleistų terminale darbą, todėl galima juos atjungti."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:59
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Ar įjungtas standartinis GTK meniu prieigos klavišų susiejimas"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:60
-msgid "Normally you can access the menubar with F10. This can also be customized via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the standard menubar accelerator to be disabled."
-msgstr "Paprastai Jūs galite pasiekti meniu juostą klavišu F10. Tai gali būti pakeista per gtkrc (gtk-menu-bar-accel = \"kažkas\"). Šis nustatymas leidžia atjungti įprastą meniu juostos susiejimo klavišą."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:61
-msgid "List of available encodings"
-msgstr "Galimų koduočių sąrašas"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:62
-msgid "A subset of possible encodings are presented in the Encoding submenu. This is a list of encodings to appear there. The special encoding name \"current\" means to display the encoding of the current locale."
-msgstr "Galimų koduočių porūšis yra nurodytas Koduočių meniu. Ten turėtumėte rasti koduočių sąrašą. Specialus vardas „current“ nurodo esamos lokalės koduotę."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:63
-#| msgid "Whether to ask for confirmation when closing terminal windows"
-msgid "Whether to ask for confirmation before closing a terminal"
-msgstr "Ar klausti patvirtinimo prieš užveriant terminalą"
+#: ../src/migration.c:338
+#: ../src/terminal-app.c:391
+msgid "Unnamed"
+msgstr "Nepavadinta"
 
 #: ../src/profile-editor.c:45
 msgid "Black on light yellow"
@@ -700,506 +252,865 @@ msgstr "Balta ant juodo"
 msgid "Error parsing command: %s"
 msgstr "Klaida apdorojant komandą: %s"
 
-#: ../src/profile-editor.c:524
+#. This is the name of a colour scheme
+#: ../src/profile-editor.c:443
+#: ../src/profile-preferences.ui.h:30
+msgid "Custom"
+msgstr "Pasirinktinė"
+
+#: ../src/profile-editor.c:588
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Keičiamas profilis „%s“"
 
-#: ../src/profile-editor.c:702
+#: ../src/profile-editor.c:762
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Pasirinkite %d-ą paletės spalvą"
 
-#: ../src/profile-editor.c:706
+#: ../src/profile-editor.c:766
 #, c-format
 msgid "Palette entry %d"
 msgstr "Paletės %d-a spalva"
 
-#: ../src/profile-manager.glade.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
+msgid "Human-readable name of the profile"
+msgstr "Skaitomas profilio pavadinimas"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
+msgid "Human-readable name of the profile."
+msgstr "Skaitomas profilio pavadinimas."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
+msgid "Default color of text in the terminal"
+msgstr "Numatytoji terminalo teksto spalva"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
+msgid "Default color of text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as \"red\")."
+msgstr "Numatytoji terminalo teksto spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
+msgid "Default color of terminal background"
+msgstr "Numatytoji terminalo fono spalva"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
+msgid "Default color of terminal background, as a color specification (can be HTML-style hex digits, or a color name such as \"red\")."
+msgstr "Numatytoji terminalo fono spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
+msgid "Default color of bold text in the terminal"
+msgstr "Numatytoji paryškinto teksto spalva"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
+msgid "Default color of bold text in the terminal, as a color specification (can be HTML-style hex digits, or a color name such as \"red\"). This is ignored if bold_color_same_as_fg is true."
+msgstr "Numatytoji paryškinto teksto spalva, nurodyta pagal spalvų specifikacijas (gali būti HTML stiliaus šešioliktainiai kodai arba spalvos vardas, pvz. „red“)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
+msgid "Whether bold text should use the same color as normal text"
+msgstr "Ar paryškinto teksto spalva turėtų būti tokia pati kaip paprasto teksto"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
+msgid "If true, boldface text will be rendered using the same color as normal text."
+msgstr "Jei TRUE, paryškintas tekstas bus tokios pačios spalvos kaip ir paprastas tekstas."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
+msgid "What to do with dynamic title"
+msgstr "Kaip elgtis su kintama antrašte"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
+msgid "If the application in the terminal sets the title (most typically people have their shell set up to do this), the dynamically-set title can erase the configured title, go before it, go after it, or replace it. The possible values are \"replace\", \"before\", \"after\", and \"ignore\"."
+msgstr "Jei programa terminale nustato antraštę (paprastai tai apliekama aplinkos nustatymuose), kintama antraštė gali pašalinti nustatytą lango antraštę, būti įrašyta prieš ją, eiti po jos arba ją pakeisti. Galimos reikšmės yra \"replace\", \"before\", \"after\", ir \"ignore\"."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
+msgid "Title for terminal"
+msgstr "Terminalo antraštė"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
+msgid "Title to display for the terminal window or tab. This title may be replaced by or combined with the title set by the application inside the terminal, depending on the title_mode setting."
+msgstr "Antraštė, išvedama terminalo lange arba kortelėje. Ši antraštė gali būti pakeista arba sujungta su terminale veikiančios programos nustatoma antrašte, priklausomai nuo title_mode nustatymo."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
+msgid "Whether to allow bold text"
+msgstr "Ar leisti pastorintą tekstą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
+msgid "If true, allow applications in the terminal to make text boldface."
+msgstr "Jei teigiama, programos gali terminale išvedinėti pastorintą tekstą."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
+msgid "Whether to ring the terminal bell"
+msgstr "Ar įjungti terminalo garsinį signalą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
+msgid "Characters that are considered \"part of a word\""
+msgstr "Simboliai, kurie yra laikomi „žodžio dalimi“"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
+msgid "When selecting text by word, sequences of these characters are considered single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing a range) should be the first character given."
+msgstr "Pažymint žodžius, šių simbolių sekos bus laikomos atskiru žodžiu. Diapazoną galima nurodyti kaip  \"A-Z\". Minusas, kuris nenurodo diapazono, turi būti pirmas nurodytas simbolis."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
+msgid "Whether to show menubar in new windows/tabs"
+msgstr "Ar rodyti meniu juostą naujuose languose/kortelėse"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
+msgid "True if the menubar should be shown in new window"
+msgstr "Reikšmė teigiama, jei meniu juosta turi būti rodomas naujuose languose"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
+msgid "Whether to use custom terminal size for new windows"
+msgstr "Ar naudoti pasirinktinį terminalo dydį naujiems langams"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
+msgid "If true, newly created terminal windows will have custom size specified by default_size_columns and default_size_rows."
+msgstr "Jei teigiama, naujai sukurti terminalo langai bus pasirinktinio dydžio, kurį nurodo default_size_columns ir default_size_rows raktai."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
+msgid "Default number of columns"
+msgstr "Numatytasis stulpelių skaičius"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
+msgid "Number of columns in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
+msgstr "Stulpelių skaičius naujai sukurtuose terminalo languose. Neturi poveikio, jei use_custom_default_size nenustatytas."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
+msgid "Default number of rows"
+msgstr "Numatytasis eilučių skaičius"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
+msgid "Number of rows in newly created terminal windows. Has no effect if use_custom_default_size is not enabled."
+msgstr "Eilučių skaičius naujai sukurtuose terminalo languose. Neturi poveikio, jei use_custom_default_size nenustatytas."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
+msgid "When to show the scrollbar"
+msgstr "Kada rodyti slinkties juostą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
+msgid "Number of lines to keep in scrollback"
+msgstr "Saugomų teksto eilučių kiekis"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
+msgid "Number of scrollback lines to keep around. You can scroll back in the terminal by this number of lines; lines that don't fit in the scrollback are discarded. If scrollback_unlimited is true, this value is ignored."
+msgstr "Išsaugomų teksto eilučių kiekis. Galite grįžti terminale per pasirinktą eilučių skaičių; sistema nesaugos eilučių, kurios viršys nurodytą skaičių. Jei scrollback_unlimited pasirinktas, ši reikšmė ignoruojama."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
+msgid "Whether an unlimited number of lines should be kept in scrollback"
+msgstr "Ar saugoti neribotą eilučių skaičių"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
+msgid "If true, scrollback lines will never be discarded. The scrollback history is stored on disk temporarily, so this may cause the system to run out of disk space if there is a lot of output to the terminal."
+msgstr "Jei teigiama, retrospektyvos eilutės niekada nebus šalinamos. Retrospektyva saugoma laikinoje saugykloje diske, todėl jei į terminalą išvedama daug teksto, gali pasibaigti vieta diske."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
+msgid "Whether to scroll to the bottom when a key is pressed"
+msgstr "Ar pereiti į terminalo apačią, paspaudus klavišą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
+msgid "If true, pressing a key jumps the scrollbar to the bottom."
+msgstr "Jei teigiama, paspaudus klavišą nuslenkama į terminalo apačią."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
+msgid "Whether to scroll to the bottom when there's new output"
+msgstr "Ar pereiti į terminalo apačią, jei ten išvedami nauji duomenys"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
+msgid "If true, whenever there's new output the terminal will scroll to the bottom."
+msgstr "Jei teigiama, bet kokia nauja išvestis terminale nukels į terminalo apačią."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
+msgid "What to do with the terminal when the child command exits"
+msgstr "Ką daryti su terminalu, jei susijęs procesas baigia darbą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
+msgid "Possible values are \"close\" to close the terminal, and \"restart\" to restart the command."
+msgstr "Galimos reikšmės yra „close“ (užveria terminalą) ir „restart“ (pakartoja komandą)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
+msgid "Whether to launch the command in the terminal as a login shell"
+msgstr "Ar paleisti programą terminale naudojant prisijungimo aplinkos parametrus"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
+msgid "If true, the command inside the terminal will be launched as a login shell. (argv[0] will have a hyphen in front of it.)"
+msgstr "Jei teigiama, terminale paleista komanda naudos prisijungimo aplinkos nustatymus (prieš argv[0] bus įrašytas minusas)."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
+msgid "Whether to update login records when launching terminal command"
+msgstr "Ar atnaujinti prisijungimo įrašus, paleidus komandą terminale"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
+msgid "If true, the system login records utmp and wtmp will be updated when the command inside the terminal is launched."
+msgstr "Jei teigiama, sistemos prisijungimo įrašai utmp ir wtmp bus atnaujinti, kai terminale bus paleista komanda."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
+msgid "Whether to run a custom command instead of the shell"
+msgstr "Paleisti kitą komandą vietoj įprastos aplinkos"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
+msgid "If true, the value of the custom_command setting will be used in place of running a shell."
+msgstr "Jei teigiama, custom_command nustatymo reikšmė bus panaudota vietoj darbinės aplinkos."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
+msgid "Whether to blink the cursor"
+msgstr "Ar kursorius mirksi"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
+msgid "The possible values are \"system\" to use the global cursor blinking settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr "Galimos reikšmės: „system“ – naudoti globalius žymiklio mirksėjimo nustatymus, „on“ / „off“ – išreikštinai nustatyti mirksėjimą."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
+msgid "The cursor appearance"
+msgstr "Kursoriaus vaizdas"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
+msgid "Custom command to use instead of the shell"
+msgstr "Komanda naudojama vietoj standartinės aplinkos"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
+msgid "Run this command in place of the shell, if use_custom_command is true."
+msgstr "Jei use_custom_command reikšmė yra teigiama, naudoti šią komandą vietoj įprastos aplinkos."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
+msgid "Palette for terminal applications"
+msgstr "Terminalo programų paletė"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
+#| msgid "A pango font name and size"
+msgid "A Pango font name and size"
+msgstr "Pango šrifto pavadinimas ir dydis"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
+msgid "The code sequence the Backspace key generates"
+msgstr "„_Backspace“ klavišo generuojama kodų seka"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
+msgid "The code sequence the Delete key generates"
+msgstr "„_Delete“ klavišo generuojama kodų seka"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
+msgid "Whether to use the colors from the theme for the terminal widget"
+msgstr "Ar terminalas turi naudoti temos spalvas"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
+msgid "Whether to use the system monospace font"
+msgstr "Ar naudoti sisteminį lygiaplotį šriftą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
+msgid "Which encoding to use"
+msgstr "Kokią koduotę naudoti"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+msgid "Whether the menubar has access keys"
+msgstr "Ar meniu juosta palaiko sparčiuosius klavišus"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+msgid "Whether to have Alt+letter access keys for the menubar. They may interfere with some applications run inside the terminal so it's possible to turn them off."
+msgstr "Ar naudoti Alt-raidė sparčiuosius klavišus tarp meniu. Šie spartieji klavišai gali sutrikdyti dalies programų, paleistų terminale darbą, todėl galima juos atjungti."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr "Ar įjungtas standartinis GTK meniu prieigos klavišų susiejimas"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+msgid "Normally you can access the menubar with F10. This can also be customized via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the standard menubar accelerator to be disabled."
+msgstr "Paprastai Jūs galite pasiekti meniu juostą klavišu F10. Tai gali būti pakeista per gtkrc (gtk-menu-bar-accel = \"kažkas\"). Šis nustatymas leidžia atjungti įprastą meniu juostos susiejimo klavišą."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+msgid "List of available encodings"
+msgstr "Galimų koduočių sąrašas"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+msgid "A subset of possible encodings are presented in the Encoding submenu. This is a list of encodings to appear there. The special encoding name \"current\" means to display the encoding of the current locale."
+msgstr "Galimų koduočių porūšis yra nurodytas Koduočių meniu. Ten turėtumėte rasti koduočių sąrašą. Specialus vardas „current“ nurodo esamos lokalės koduotę."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+msgid "Whether to ask for confirmation before closing a terminal"
+msgstr "Ar klausti patvirtinimo prieš užveriant terminalą"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#| msgid "Whether to show menubar in new windows/tabs"
+msgid "Whether to show the menubar in new windows"
+msgstr "Ar rodyti meniu juostą naujuose languose"
+
+#: ../src/find-dialog.ui.h:1
+msgid "Find"
+msgstr "Ieškoti"
+
+#: ../src/find-dialog.ui.h:2
+msgid "_Search for:"
+msgstr "_Ieškoti ko: "
+
+#: ../src/find-dialog.ui.h:3
+msgid "_Match case"
+msgstr "Skirti raidžių _dydį"
+
+#: ../src/find-dialog.ui.h:4
+msgid "Match _entire word only"
+msgstr "Tenkina tik _visas žodis"
+
+#: ../src/find-dialog.ui.h:5
+msgid "Match as _regular expression"
+msgstr "Tenkina _reguliarioji išraiška"
+
+#: ../src/find-dialog.ui.h:6
+msgid "Search _backwards"
+msgstr "Ieškoti pradžios _link"
+
+#: ../src/find-dialog.ui.h:7
+msgid "_Wrap around"
+msgstr "_Priėjus pabaigą, ieškoti nuo pradžios"
+
+#: ../src/keybinding-editor.ui.h:1
+msgid "Keyboard Shortcuts"
+msgstr "Spartieji klavišai"
+
+#: ../src/keybinding-editor.ui.h:2
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+msgstr "_Įjungti me_niu prieigos klavišus (pvz., Alt-F – meniu Failas)"
+
+#: ../src/keybinding-editor.ui.h:3
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "Išjungti m_eniu prieigos klavišą (numatytasis klavišas – F10)"
+
+#: ../src/keybinding-editor.ui.h:4
+msgid "_Shortcut keys:"
+msgstr "_Klavišų kombinacijos:"
+
+#: ../src/profile-manager.ui.h:1
 msgid "Profiles"
 msgstr "Profiliai"
 
-#: ../src/profile-manager.glade.h:2
+#: ../src/profile-manager.ui.h:2
 msgid "_Profile used when launching a new terminal:"
 msgstr "Profilis, na_udojamas paleidžiant naują terminalą:"
 
-#: ../src/profile-new-dialog.glade.h:1
-#: ../src/terminal-accels.c:87
-msgid "New Profile"
-msgstr "Naujas profilis"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:2
+msgid "Block"
+msgstr "Blokinis"
 
-#: ../src/profile-new-dialog.glade.h:2
-msgid "C_reate"
-msgstr "Suku_rti"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:4
+msgid "I-Beam"
+msgstr "I"
 
-#: ../src/profile-new-dialog.glade.h:3
-msgid "Profile _name:"
-msgstr "_Profilio pavadinimas:"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:6
+msgid "Underline"
+msgstr "Linija apačioje"
 
-#: ../src/profile-new-dialog.glade.h:4
-msgid "_Base on:"
-msgstr "_Nukopijuoti profilį nuo:"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:8
+msgid "Replace initial title"
+msgstr "Pakeisti antraštės priedą"
 
-#: ../src/profile-preferences.glade.h:1
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:10
+msgid "Append initial title"
+msgstr "Pridėti antraštės priedą prie pabaigos"
+
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:12
+msgid "Prepend initial title"
+msgstr "Pridėti antraštės priedą prie pradžios"
+
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:14
+msgid "Keep initial title"
+msgstr "Palikti pradinę antraštę"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:16
+msgid "Exit the terminal"
+msgstr "Išeiti iš terminalo"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:18
+msgid "Restart the command"
+msgstr "Paleisti komandą iš naujo"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:20
+msgid "Hold the terminal open"
+msgstr "Laikyti terminalą atvertą"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:22
+msgid "Tango"
+msgstr "Tango"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:24
+msgid "Linux console"
+msgstr "Linux konsolė"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:26
+msgid "XTerm"
+msgstr "XTerm"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:28
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:32
+msgid "Always visible"
+msgstr "Visada matoma"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:34
+msgid "Visible only when necessary"
+msgstr "Matoma, kai reikia"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:36
+msgid "Hidden"
+msgstr "Paslėpta"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:38
+msgid "Automatic"
+msgstr "Automatinis"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:40
+msgid "Control-H"
+msgstr "Vald-H"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:42
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:44
+msgid "Escape sequence"
+msgstr "„Escape“ seka"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:46
+msgid "TTY Erase"
+msgstr "TTY trynimas"
+
+#: ../src/profile-preferences.ui.h:47
+#| msgid "Profile list"
+msgid "Profile Editor"
+msgstr "Profilių redaktorius"
+
+#: ../src/profile-preferences.ui.h:48
 msgid "_Profile name:"
 msgstr "_Profilio pavadinimas:"
 
-#: ../src/profile-preferences.glade.h:2
+#: ../src/profile-preferences.ui.h:49
 msgid "_Use the system fixed width font"
 msgstr "Na_udoti sistemos fiksuoto pločio šriftą"
 
-#: ../src/profile-preferences.glade.h:3
+#: ../src/profile-preferences.ui.h:50
 msgid "_Font:"
 msgstr "Šri_ftas:"
 
-#: ../src/profile-preferences.glade.h:4
+#: ../src/profile-preferences.ui.h:51
 msgid "Choose A Terminal Font"
 msgstr "Pasirinkite terminalo šriftą"
 
-#: ../src/profile-preferences.glade.h:5
+#: ../src/profile-preferences.ui.h:52
 msgid "_Allow bold text"
 msgstr "Leisti p_astorintą tekstą"
 
-#: ../src/profile-preferences.glade.h:6
+#: ../src/profile-preferences.ui.h:53
 msgid "Terminal _bell"
 msgstr "Terminalo skam_butis"
 
-#: ../src/profile-preferences.glade.h:7
+#: ../src/profile-preferences.ui.h:54
 msgid "Cursor _shape:"
 msgstr "Kursoriaus _forma:"
 
-#: ../src/profile-preferences.glade.h:8
-msgid ""
-"Block\n"
-"I-Beam\n"
-"Underline"
-msgstr ""
-"Blokas\n"
-"I-linija\n"
-"Pabraukimas"
-
-#: ../src/profile-preferences.glade.h:11
+#: ../src/profile-preferences.ui.h:55
 msgid "Select-by-_word characters:"
 msgstr "Žymint ž_odį įtraukiami simboliai:"
 
-#: ../src/profile-preferences.glade.h:12
+#: ../src/profile-preferences.ui.h:56
 msgid "Use custom default terminal si_ze"
 msgstr "Naudoti pasirinktinį numatytąjį terminalo _dydį"
 
-#: ../src/profile-preferences.glade.h:13
+#: ../src/profile-preferences.ui.h:57
 msgid "Default size:"
 msgstr "Numatytasis dydis:"
 
-#: ../src/profile-preferences.glade.h:14
+#: ../src/profile-preferences.ui.h:58
 msgid "columns"
 msgstr "stulpelių"
 
-#: ../src/profile-preferences.glade.h:15
+#: ../src/profile-preferences.ui.h:59
 msgid "rows"
 msgstr "eilučių"
 
-#: ../src/profile-preferences.glade.h:16
+#: ../src/profile-preferences.ui.h:60
 msgid "General"
 msgstr "Bendrieji"
 
-#: ../src/profile-preferences.glade.h:17
-msgid "<b>Title</b>"
-msgstr "<b>Pavadinimas</b>"
+#: ../src/profile-preferences.ui.h:61
+#| msgid "_Title:"
+msgid "Title"
+msgstr "Pavadinimas"
 
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.ui.h:62
 msgid "Initial _title:"
 msgstr "Pradinis pa_vadinimas:"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.ui.h:63
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Kai terminalo komandos nustato _savo pavadinimus:"
 
-#: ../src/profile-preferences.glade.h:20
-msgid ""
-"Replace initial title\n"
-"Append initial title\n"
-"Prepend initial title\n"
-"Keep initial title"
-msgstr ""
-"Pakeičia pradinę antraštę\n"
-"Rodoma po pradinės antraštės\n"
-"Rodoma prieš pradinę antraštę\n"
-"Paliekama pradinė antraštė"
+#: ../src/profile-preferences.ui.h:64
+#| msgid "<b>Command</b>"
+msgid "Command"
+msgstr "Komanda"
 
-#: ../src/profile-preferences.glade.h:24
-msgid "<b>Command</b>"
-msgstr "<b>Komanda</b>"
-
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.ui.h:65
 msgid "_Run command as a login shell"
 msgstr "Paleisti komandą kaip p_risijungimo aplinką"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.ui.h:66
 msgid "_Update login records when command is launched"
 msgstr "Atna_ujinti prisijungimų žurnalo įrašus, kai paleidžiama komanda"
 
-#: ../src/profile-preferences.glade.h:27
+#: ../src/profile-preferences.ui.h:67
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Vietoje mano aplinkos paleisti kitą koma_ndą"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.ui.h:68
 msgid "Custom co_mmand:"
 msgstr "Pasirinktinė ko_manda:"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.ui.h:69
 msgid "When command _exits:"
 msgstr "Kai komanda _baigia darbą:"
 
-#: ../src/profile-preferences.glade.h:30
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"Uždaryti terminalą\n"
-"Perleisti komandą\n"
-"Palikti terminalą atvertą"
-
-#: ../src/profile-preferences.glade.h:33
+#: ../src/profile-preferences.ui.h:70
 msgid "Title and Command"
 msgstr "Pavadinimas ir komanda"
 
-#: ../src/profile-preferences.glade.h:34
-msgid "<b>Foreground, Background, Bold and Underline</b>"
-msgstr "<b>Tekstas, fonas, paryškinimas ir pabraukimas</b>"
+#: ../src/profile-preferences.ui.h:71
+#| msgid "<b>Foreground, Background, Bold and Underline</b>"
+msgid "Foreground, Background, Bold and Underline"
+msgstr "Tekstas, fonas, paryškinimas ir pabraukimas"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.ui.h:72
 msgid "_Use colors from system theme"
 msgstr "Imti spalvas iš s_isteminės temos"
 
-#: ../src/profile-preferences.glade.h:36
+#: ../src/profile-preferences.ui.h:73
 msgid "Built-in sche_mes:"
 msgstr "Vid_inės schemos:"
 
-#: ../src/profile-preferences.glade.h:37
+#: ../src/profile-preferences.ui.h:74
 msgid "_Text color:"
 msgstr "_Teksto spalva:"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.ui.h:75
 msgid "_Background color:"
 msgstr "_Fono spalva:"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.ui.h:76
 msgid "Choose Terminal Background Color"
 msgstr "Pasirinkite terminalo fono spalvą"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.ui.h:77
 msgid "Choose Terminal Text Color"
 msgstr "Pasirinkite terminalo teksto spalvą"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.ui.h:78
 msgid "_Underline color:"
 msgstr "_Pabraukimo spalva:"
 
-#: ../src/profile-preferences.glade.h:42
+#: ../src/profile-preferences.ui.h:79
 msgid "_Same as text color"
 msgstr "_Tokia pat kaip teksto spalva"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.ui.h:80
 msgid "Bol_d color:"
 msgstr "_Paryškinto teksto spalva"
 
-#: ../src/profile-preferences.glade.h:44
-msgid "<b>Palette</b>"
-msgstr "<b>Paletė</b>"
+#: ../src/profile-preferences.ui.h:81
+#| msgid "<b>Palette</b>"
+msgid "Palette"
+msgstr "Paletė"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.ui.h:82
 msgid "Built-in _schemes:"
 msgstr "Vidinės _schemos:"
 
-#: ../src/profile-preferences.glade.h:46
-msgid "<small><i><b>Note:</b> Terminal applications have these colors available to them.</i></small>"
-msgstr "<small><i><b>Pastaba:</b> Terminalinėms programoms yra prieinamos šios spalvos.</i></small>"
+#: ../src/profile-preferences.ui.h:83
+#| msgid ""
+#| "<small><i><b>Note:</b> Terminal applications have these colors available "
+#| "to them.</i></small>"
+msgid "<b>Note:</b> Terminal applications have these colors available to them."
+msgstr "<b>Pastaba:</b> Terminalinėms programoms yra prieinamos šios spalvos."
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.ui.h:84
 msgid "Color p_alette:"
 msgstr "Spalvų _paletė:"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.ui.h:85
 msgid "Colors"
 msgstr "Spalvos"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.ui.h:86
 msgid "_Scrollbar is:"
 msgstr "_Slankiklis yra:"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.ui.h:87
 msgid "Scroll_back:"
 msgstr "_Slinktis:"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.ui.h:88
 msgid "Scroll on _keystroke"
 msgstr "Slin_kti nuspaudus klavišą"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.ui.h:89
 msgid "Scroll on _output"
 msgstr "Slinkti išve_dant"
 
-#. Infinite scrollback
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.ui.h:90
 msgid "_Unlimited"
 msgstr "_Neribota"
 
-#: ../src/profile-preferences.glade.h:55
-msgid ""
-"Always visible\n"
-"Visible only when necessary\n"
-"Hidden"
-msgstr ""
-"Visada matoma\n"
-"Matoma, kai reikia\n"
-"Paslėpta"
-
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.ui.h:91
 msgid "lines"
 msgstr "eilutės"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.ui.h:92
 msgid "Scrolling"
 msgstr "Slinkimas"
 
-#: ../src/profile-preferences.glade.h:60
-msgid "<small><i><b>Note:</b> These options may cause some applications to behave incorrectly.  They are only here to allow you to work around certain applications and operating systems that expect different terminal behavior.</i></small>"
-msgstr "<small><i><b>Pastaba:</b> Dėl šių nuostatų kai kurios programos gali elgtis nekorektiškai. Jos čia yra tik dėl to, kad būtų galima apeiti kai kurių programų ir operacinių sistemų, kurios tikisi kitokio terminalo veikimo, elgseną.</i></small>"
+#: ../src/profile-preferences.ui.h:93
+#| msgid ""
+#| "<small><i><b>Note:</b> These options may cause some applications to "
+#| "behave incorrectly.  They are only here to allow you to work around "
+#| "certain applications and operating systems that expect different terminal "
+#| "behavior.</i></small>"
+msgid "<b>Note:</b> These options may cause some applications to behave incorrectly.  They are only here to allow you to work around certain applications and operating systems that expect different terminal behavior."
+msgstr "<b>Pastaba:</b> Dėl šių nuostatų kai kurios programos gali elgtis nekorektiškai. Jos čia yra tik dėl to, kad būtų galima apeiti kai kurių programų ir operacinių sistemų, kurios tikisi kitokio terminalo veikimo, elgseną."
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.ui.h:94
 msgid "_Delete key generates:"
 msgstr "„_Delete“ klavišas siunčia:"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.ui.h:95
 msgid "_Backspace key generates:"
 msgstr "„_Backspace“ klavišas siunčia:"
 
-#: ../src/profile-preferences.glade.h:63
-msgid ""
-"Automatic\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Escape sequence\n"
-"TTY Erase"
-msgstr ""
-"Automatinis\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Kaitos seka\n"
-"TTY trynimas"
-
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.ui.h:96
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Atstatyti suderinamumo nustatymus į numatytuosius"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.ui.h:97
 msgid "Compatibility"
 msgstr "Suderinamumas"
 
-#: ../src/terminal-accels.c:85
-msgid "New Tab"
-msgstr "Nauja kortelė"
-
-#: ../src/terminal-accels.c:86
-msgid "New Window"
-msgstr "Naujas langas"
-
-#: ../src/terminal-accels.c:89
-msgid "Save Contents"
-msgstr "Įrašyti turinį"
-
-#: ../src/terminal-accels.c:91
-msgid "Close Tab"
-msgstr "Užverti kortelę"
-
-#: ../src/terminal-accels.c:92
-msgid "Close Window"
-msgstr "Užverti langą"
-
-#: ../src/terminal-accels.c:97
-msgid "Copy"
-msgstr "Kopijuoti"
-
-#: ../src/terminal-accels.c:98
-msgid "Paste"
-msgstr "Įdėti"
-
-#: ../src/terminal-accels.c:103
-msgid "Full Screen"
-msgstr "Visame ekrane"
-
-#: ../src/terminal-accels.c:104
-msgid "Zoom In"
-msgstr "Padidinti"
-
-#: ../src/terminal-accels.c:105
-msgid "Zoom Out"
-msgstr "Sumažinti"
-
-#: ../src/terminal-accels.c:106
-msgid "Normal Size"
-msgstr "Normalus dydis"
-
-#: ../src/terminal-accels.c:111
-#: ../src/terminal-window.c:3365
-msgid "Set Title"
-msgstr "Nustatyti pavadinimą"
-
-#: ../src/terminal-accels.c:112
-msgid "Reset"
-msgstr "Atstatyti"
-
-#: ../src/terminal-accels.c:113
-msgid "Reset and Clear"
-msgstr "Atstatyti ir išvalyti"
-
-#: ../src/terminal-accels.c:118
-msgid "Switch to Previous Tab"
-msgstr "Pereiti į ankstesnę kortelę"
-
-#: ../src/terminal-accels.c:119
-msgid "Switch to Next Tab"
-msgstr "Pereiti į kitą kortelę"
-
-#: ../src/terminal-accels.c:120
-msgid "Move Tab to the Left"
-msgstr "Perkelti kortelę kairėn"
-
-#: ../src/terminal-accels.c:121
-msgid "Move Tab to the Right"
-msgstr "Perkelti kortelę dešinėn"
-
-#: ../src/terminal-accels.c:122
-msgid "Detach Tab"
-msgstr "Atkabinti kortelę"
-
-#: ../src/terminal-accels.c:123
-msgid "Switch to Tab 1"
-msgstr "Pereiti į 1-ą kortelę"
-
-#: ../src/terminal-accels.c:124
-msgid "Switch to Tab 2"
-msgstr "Pereiti į 2-ą kortelę"
-
-#: ../src/terminal-accels.c:125
-msgid "Switch to Tab 3"
-msgstr "Pereiti į 3-ą kortelę"
-
-#: ../src/terminal-accels.c:126
-msgid "Switch to Tab 4"
-msgstr "Pereiti į 4-ą kortelę"
-
-#: ../src/terminal-accels.c:127
-msgid "Switch to Tab 5"
-msgstr "Pereiti į 5-ą kortelę"
-
-#: ../src/terminal-accels.c:128
-msgid "Switch to Tab 6"
-msgstr "Pereiti į 6-ą kortelę"
-
-#: ../src/terminal-accels.c:129
-msgid "Switch to Tab 7"
-msgstr "Pereiti į 7-ą kortelę"
-
-#: ../src/terminal-accels.c:130
-msgid "Switch to Tab 8"
-msgstr "Pereiti į 8-ą kortelę"
-
-#: ../src/terminal-accels.c:131
-msgid "Switch to Tab 9"
-msgstr "Pereiti į 9-ą kortelę"
-
-#: ../src/terminal-accels.c:132
-msgid "Switch to Tab 10"
-msgstr "Pereiti į 10-ą kortelę"
-
-#: ../src/terminal-accels.c:133
-msgid "Switch to Tab 11"
-msgstr "Pereiti į 11-ą kortelę"
-
-#: ../src/terminal-accels.c:134
-msgid "Switch to Tab 12"
-msgstr "Pereiti į 12-ą kortelę"
-
-#: ../src/terminal-accels.c:138
-msgid "Contents"
-msgstr "Turinys"
-
-#: ../src/terminal-accels.c:143
-msgid "File"
-msgstr "Failas"
-
-#: ../src/terminal-accels.c:144
-msgid "Edit"
-msgstr "Keisti"
-
-#: ../src/terminal-accels.c:145
-msgid "View"
-msgstr "Rodyti"
-
-#: ../src/terminal-accels.c:147
-msgid "Tabs"
-msgstr "Kortelės"
-
-#: ../src/terminal-accels.c:148
-msgid "Help"
-msgstr "Pagalba"
-
-#: ../src/terminal-accels.c:452
-msgid "_Action"
-msgstr "Veiksm_as"
-
-#: ../src/terminal-accels.c:470
-msgid "Shortcut _Key"
-msgstr "Spartusis _klavišas"
-
-#: ../src/terminal-app.c:379
-msgid "Click button to choose profile"
-msgstr "Spragtelėkite, norėdami pasirinkti profilį"
-
-#: ../src/terminal-app.c:464
-msgid "Profile list"
-msgstr "Profilių sąrašas"
-
-#: ../src/terminal-app.c:525
-#, c-format
-msgid "Delete profile “%s”?"
-msgstr "Ištrinti profilį „%s“?"
-
-#: ../src/terminal-app.c:541
-msgid "Delete Profile"
-msgstr "Pašalinti profilį"
-
-#: ../src/terminal-app.c:843
-#, c-format
-msgid "You already have a profile called “%s”. Do you want to create another profile with the same name?"
-msgstr "Jau yra profilis pavadinimu „%s“. Ar norite sukurti kitą profilį tokiu pat pavadinimu?"
-
-#: ../src/terminal-app.c:948
-msgid "Choose base profile"
-msgstr "Pasirinkite pagrindinį profilį"
-
-#: ../src/terminal-app.c:1525
-msgid "User Defined"
-msgstr "Nurodyta naudotojo"
-
 #: ../src/terminal-appmenu.ui.h:1
-#| msgid "_Profile Preferences"
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
 #: ../src/terminal-appmenu.ui.h:2
-#: ../src/terminal-window.c:1635
+#: ../src/terminal-window.c:1630
 msgid "_Help"
 msgstr "_Žinynas"
 
 #: ../src/terminal-appmenu.ui.h:3
-#: ../src/terminal-window.c:1756
+#: ../src/terminal-window.c:1749
 msgid "_About"
 msgstr "_Apie"
 
-#: ../src/terminal.c:237
+#: ../src/terminal-accels.c:86
+msgid "New Tab"
+msgstr "Nauja kortelė"
+
+#: ../src/terminal-accels.c:87
+msgid "New Window"
+msgstr "Naujas langas"
+
+#: ../src/terminal-accels.c:88
+msgid "New Profile"
+msgstr "Naujas profilis"
+
+#: ../src/terminal-accels.c:90
+msgid "Save Contents"
+msgstr "Įrašyti turinį"
+
+#: ../src/terminal-accels.c:92
+msgid "Close Tab"
+msgstr "Užverti kortelę"
+
+#: ../src/terminal-accels.c:93
+msgid "Close Window"
+msgstr "Užverti langą"
+
+#: ../src/terminal-accels.c:98
+msgid "Copy"
+msgstr "Kopijuoti"
+
+#: ../src/terminal-accels.c:99
+msgid "Paste"
+msgstr "Įdėti"
+
+#: ../src/terminal-accels.c:104
+msgid "Hide and Show menubar"
+msgstr "Rodyti ir slėpti meniu juostą"
+
+#: ../src/terminal-accels.c:105
+msgid "Full Screen"
+msgstr "Visame ekrane"
+
+#: ../src/terminal-accels.c:106
+msgid "Zoom In"
+msgstr "Padidinti"
+
+#: ../src/terminal-accels.c:107
+msgid "Zoom Out"
+msgstr "Sumažinti"
+
+#: ../src/terminal-accels.c:108
+msgid "Normal Size"
+msgstr "Normalus dydis"
+
+#: ../src/terminal-accels.c:113
+#: ../src/terminal-window.c:3414
+msgid "Set Title"
+msgstr "Nustatyti pavadinimą"
+
+#: ../src/terminal-accels.c:114
+msgid "Reset"
+msgstr "Atstatyti"
+
+#: ../src/terminal-accels.c:115
+msgid "Reset and Clear"
+msgstr "Atstatyti ir išvalyti"
+
+#: ../src/terminal-accels.c:120
+msgid "Switch to Previous Tab"
+msgstr "Pereiti į ankstesnę kortelę"
+
+#: ../src/terminal-accels.c:121
+msgid "Switch to Next Tab"
+msgstr "Pereiti į kitą kortelę"
+
+#: ../src/terminal-accels.c:122
+msgid "Move Tab to the Left"
+msgstr "Perkelti kortelę kairėn"
+
+#: ../src/terminal-accels.c:123
+msgid "Move Tab to the Right"
+msgstr "Perkelti kortelę dešinėn"
+
+#: ../src/terminal-accels.c:124
+msgid "Detach Tab"
+msgstr "Atkabinti kortelę"
+
+#: ../src/terminal-accels.c:125
+msgid "Switch to Tab 1"
+msgstr "Pereiti į 1-ą kortelę"
+
+#: ../src/terminal-accels.c:126
+msgid "Switch to Tab 2"
+msgstr "Pereiti į 2-ą kortelę"
+
+#: ../src/terminal-accels.c:127
+msgid "Switch to Tab 3"
+msgstr "Pereiti į 3-ą kortelę"
+
+#: ../src/terminal-accels.c:128
+msgid "Switch to Tab 4"
+msgstr "Pereiti į 4-ą kortelę"
+
+#: ../src/terminal-accels.c:129
+msgid "Switch to Tab 5"
+msgstr "Pereiti į 5-ą kortelę"
+
+#: ../src/terminal-accels.c:130
+msgid "Switch to Tab 6"
+msgstr "Pereiti į 6-ą kortelę"
+
+#: ../src/terminal-accels.c:131
+msgid "Switch to Tab 7"
+msgstr "Pereiti į 7-ą kortelę"
+
+#: ../src/terminal-accels.c:132
+msgid "Switch to Tab 8"
+msgstr "Pereiti į 8-ą kortelę"
+
+#: ../src/terminal-accels.c:133
+msgid "Switch to Tab 9"
+msgstr "Pereiti į 9-ą kortelę"
+
+#: ../src/terminal-accels.c:134
+msgid "Switch to Tab 10"
+msgstr "Pereiti į 10-ą kortelę"
+
+#: ../src/terminal-accels.c:135
+msgid "Switch to Tab 11"
+msgstr "Pereiti į 11-ą kortelę"
+
+#: ../src/terminal-accels.c:136
+msgid "Switch to Tab 12"
+msgstr "Pereiti į 12-ą kortelę"
+
+#: ../src/terminal-accels.c:140
+msgid "Contents"
+msgstr "Turinys"
+
+#: ../src/terminal-accels.c:145
+msgid "File"
+msgstr "Failas"
+
+#: ../src/terminal-accels.c:146
+msgid "Edit"
+msgstr "Keisti"
+
+#: ../src/terminal-accels.c:147
+msgid "View"
+msgstr "Rodyti"
+
+#: ../src/terminal-accels.c:149
+msgid "Tabs"
+msgstr "Kortelės"
+
+#: ../src/terminal-accels.c:150
+msgid "Help"
+msgstr "Pagalba"
+
+#: ../src/terminal-accels.c:454
+msgid "_Action"
+msgstr "Veiksm_as"
+
+#: ../src/terminal-accels.c:472
+msgid "Shortcut _Key"
+msgstr "Spartusis _klavišas"
+
+#: ../src/terminal-app.c:519
+msgid "Click button to choose profile"
+msgstr "Spragtelėkite, norėdami pasirinkti profilį"
+
+#: ../src/terminal-app.c:609
+msgid "Profile list"
+msgstr "Profilių sąrašas"
+
+#: ../src/terminal-app.c:672
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "Ištrinti profilį „%s“?"
+
+#: ../src/terminal-app.c:688
+msgid "Delete Profile"
+msgstr "Pašalinti profilį"
+
+#: ../src/terminal-app.c:1472
+msgid "User Defined"
+msgstr "Nurodyta naudotojo"
+
+#: ../src/terminal.c:243
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Nepavyko apdoroti argumentų: %s\n"
@@ -1385,12 +1296,10 @@ msgid "Current Locale"
 msgstr "Esama lokalė"
 
 #: ../src/terminal-nautilus.c:467
-#| msgid "Open _Terminal"
 msgid "Open in _Remote Terminal"
 msgstr "Atverti nutolusiame te_rminale"
 
 #: ../src/terminal-nautilus.c:469
-#| msgid "Open _Terminal"
 msgid "Open in _Local Terminal"
 msgstr "Atverti _vietiniame _terminale"
 
@@ -1407,17 +1316,14 @@ msgstr "Atverti šiuo metu atvertą aplanką terminale"
 
 #: ../src/terminal-nautilus.c:481
 #: ../src/terminal-nautilus.c:495
-#| msgid "Open _Terminal"
 msgid "Open in T_erminal"
 msgstr "Atverti t_erminale"
 
 #: ../src/terminal-nautilus.c:492
-#| msgid "Open _Terminal"
 msgid "Open T_erminal"
 msgstr "Atverti t_erminalą"
 
 #: ../src/terminal-nautilus.c:493
-#| msgid "Open _Terminal"
 msgid "Open a terminal"
 msgstr "Atverti terminalą"
 
@@ -1443,131 +1349,151 @@ msgstr "Atverti _Midnight Commander"
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Atverti terminalo failų tvarkyklę Midnight Commander"
 
-#: ../src/terminal-options.c:210
+#: ../src/terminal-options.c:218
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "Parinktis „%s“ nebepalaikoma šioje gnome-terminal versijoje."
 
-#: ../src/terminal-options.c:221
+#: ../src/terminal-options.c:229
 #: ../src/terminal-util.c:234
 msgid "GNOME Terminal"
 msgstr "GNOME terminalas"
 
-#: ../src/terminal-options.c:261
+#: ../src/terminal-options.c:269
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "„%s“ pateiktas argumentas nėra tinkama komanda: %s"
 
-#: ../src/terminal-options.c:396
+#: ../src/terminal-options.c:404
 msgid "Two roles given for one window"
 msgstr "Vienam langui suteiktos dvi rolės"
 
-#: ../src/terminal-options.c:596
+#: ../src/terminal-options.c:425
+#: ../src/terminal-options.c:458
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "Parametras „%s“ pateiktas du kartus tam pačiam langui\n"
+
+#: ../src/terminal-options.c:668
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Mastelis „%g“ yra per mažas, naudojamas %g\n"
 
-#: ../src/terminal-options.c:604
+#: ../src/terminal-options.c:676
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Mastelis „%g“ yra per didelis, naudojamas %g\n"
 
-#: ../src/terminal-options.c:642
+#: ../src/terminal-options.c:714
 #, c-format
 msgid "Option \"%s\" requires specifying the command to run on the rest of the command line"
 msgstr "Nustatymo „%s“ gale turi būti nurodyta komanda, kurią reikės paleisti"
 
-#: ../src/terminal-options.c:776
+#: ../src/terminal-options.c:850
 msgid "Not a valid terminal config file."
 msgstr "Netaisyklingas terminalo konfigūracijos failas"
 
-#: ../src/terminal-options.c:789
+#: ../src/terminal-options.c:863
 msgid "Incompatible terminal config file version."
 msgstr "Nesuderinama terminalo konfigūracijos failo versija."
 
-#: ../src/terminal-options.c:923
+#: ../src/terminal-options.c:1002
 msgid "Do not register with the activation nameserver, do not re-use an active terminal"
 msgstr "Nesiregistruoti aktyvavimo vardų serveryje, nenaudoti jau esančio terminalo"
 
-#: ../src/terminal-options.c:932
+#: ../src/terminal-options.c:1011
 msgid "Load a terminal configuration file"
 msgstr "Įkelti terminalo konfigūracijos failą"
 
-#: ../src/terminal-options.c:933
+#: ../src/terminal-options.c:1012
 msgid "FILE"
 msgstr "FAILAS"
 
-#: ../src/terminal-options.c:954
+#: ../src/terminal-options.c:1033
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Paleisti naują langą su kortele, naudojančia numatytąjį profilį"
 
-#: ../src/terminal-options.c:963
+#: ../src/terminal-options.c:1042
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Atverti naują kortelę paskutiniame atvertame lange, naudojant numatytąjį profilį."
 
-#: ../src/terminal-options.c:1030
+#: ../src/terminal-options.c:1055
+msgid "Turn on the menubar"
+msgstr "Įjungti meniu juostą"
+
+#: ../src/terminal-options.c:1064
+msgid "Turn off the menubar"
+msgstr "Išjunti meniu juostą"
+
+#: ../src/terminal-options.c:1109
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Aktyvuoti paskutinę nurodytą kortelę jos naudojamame lange"
 
-#: ../src/terminal-options.c:1043
+#: ../src/terminal-options.c:1122
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Įvykdyti šio parametro argumentą terminale"
 
-#: ../src/terminal-options.c:1341
-#: ../src/terminal-options.c:1347
+#: ../src/terminal-options.c:1132
+msgid "PROFILE-NAME"
+msgstr "PROFILIO-PAVADINIMAS"
+
+#: ../src/terminal-options.c:1420
+#: ../src/terminal-options.c:1426
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME terminalo emuliatorius"
 
-#: ../src/terminal-options.c:1348
+#: ../src/terminal-options.c:1427
 msgid "Show GNOME Terminal options"
 msgstr "Rodyti GNOME terminalo parinktis"
 
-#: ../src/terminal-options.c:1358
+#: ../src/terminal-options.c:1437
 msgid "Options to open new windows or terminal tabs; more than one of these may be specified:"
 msgstr "Nustatymai naujiems langams ar terminalų kortelėms; gali būti nurodyta daugiau negu vienas iš jų:"
 
-#: ../src/terminal-options.c:1367
+#: ../src/terminal-options.c:1446
 msgid "Window options; if used before the first --window or --tab argument, sets the default for all windows:"
 msgstr "Lango nustatymai; jei naudojama prieš pirmąjį --window arba --tab argumentą, nustato numatytąją parinktį visiems langams:"
 
-#: ../src/terminal-options.c:1368
+#: ../src/terminal-options.c:1447
 msgid "Show per-window options"
 msgstr "Rodyti lango parinktis"
 
-#: ../src/terminal-options.c:1376
+#: ../src/terminal-options.c:1455
 msgid "Terminal options; if used before the first --window or --tab argument, sets the default for all terminals:"
 msgstr "Terminalo nustatymai; jei naudojama prieš pirmąjį --window arba --tab argumentą, nustato numatytąją parinktį visiems langams:"
 
-#: ../src/terminal-options.c:1377
+#: ../src/terminal-options.c:1456
 msgid "Show per-terminal options"
 msgstr "Rodyti terminalo nustatymus"
 
-#: ../src/terminal-screen.c:1465
+#: ../src/terminal-screen.c:1181
+msgid "No command supplied nor shell requested"
+msgstr "Nepateikta komanda bei neprašyta apvalkalo"
+
+#: ../src/terminal-screen.c:1434
 msgid "_Profile Preferences"
 msgstr "Profilio _nustatymai"
 
-#: ../src/terminal-screen.c:1466
-#: ../src/terminal-screen.c:1827
+#: ../src/terminal-screen.c:1435
+#: ../src/terminal-screen.c:1796
 msgid "_Relaunch"
 msgstr "_Paleisti iš naujo"
 
-#: ../src/terminal-screen.c:1469
+#: ../src/terminal-screen.c:1438
 msgid "There was an error creating the child process for this terminal"
 msgstr "Klaida bandant sukurti šio terminalo antrinį procesą"
 
-#: ../src/terminal-screen.c:1831
+#: ../src/terminal-screen.c:1800
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Antrinis procesas baigtas įprastai grąžinant būsena %d."
 
-#: ../src/terminal-screen.c:1834
+#: ../src/terminal-screen.c:1803
 #, c-format
-#| msgid "The child process was terminated by signal %d."
 msgid "The child process was aborted by signal %d."
 msgstr "Vaikinis procesas nutrauktas signalu %d."
 
-#: ../src/terminal-screen.c:1837
-#| msgid "The child process was terminated."
+#: ../src/terminal-screen.c:1806
 msgid "The child process was aborted."
 msgstr "Vaikinis procesas buvo nutrauktas."
 
@@ -1623,7 +1549,7 @@ msgstr "GNU Bendrosios viešosios licencijos kopiją turėjote gauti su GNOME te
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:434
+#: ../src/terminal-window.c:437
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1632,237 +1558,238 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:440
+#: ../src/terminal-window.c:443
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1622
 msgid "_File"
 msgstr "_Failas"
 
 #. File menu
-#: ../src/terminal-window.c:1628
-#: ../src/terminal-window.c:1640
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1623
+#: ../src/terminal-window.c:1635
+#: ../src/terminal-window.c:1782
 msgid "Open _Terminal"
 msgstr "Naujas _terminalas"
 
-#: ../src/terminal-window.c:1629
-#: ../src/terminal-window.c:1643
-#: ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:1624
+#: ../src/terminal-window.c:1638
+#: ../src/terminal-window.c:1785
 msgid "Open Ta_b"
 msgstr "Nauja _kortelė"
 
-#: ../src/terminal-window.c:1630
+#: ../src/terminal-window.c:1625
 msgid "_Edit"
 msgstr "K_eisti"
 
-#: ../src/terminal-window.c:1631
+#: ../src/terminal-window.c:1626
 msgid "_View"
 msgstr "R_odymas"
 
-#: ../src/terminal-window.c:1632
+#: ../src/terminal-window.c:1627
 msgid "_Search"
 msgstr "_Paieška"
 
-#: ../src/terminal-window.c:1633
+#: ../src/terminal-window.c:1628
 msgid "_Terminal"
 msgstr "_Terminalas"
 
-#: ../src/terminal-window.c:1634
+#: ../src/terminal-window.c:1629
 msgid "Ta_bs"
 msgstr "_Kortelės"
 
-#: ../src/terminal-window.c:1646
+#: ../src/terminal-window.c:1641
 msgid "New _Profile…"
 msgstr "Naujas _profilis…"
 
-#: ../src/terminal-window.c:1649
+#: ../src/terminal-window.c:1644
 msgid "_Save Contents"
 msgstr "Į_rašyti turinį"
 
-#: ../src/terminal-window.c:1652
-#: ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1647
 msgid "C_lose Tab"
 msgstr "Už_verti kortelę"
 
-#: ../src/terminal-window.c:1655
+#: ../src/terminal-window.c:1650
 msgid "_Close Window"
 msgstr "_Užverti langą"
 
-#: ../src/terminal-window.c:1666
-#: ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1661
+#: ../src/terminal-window.c:1779
 msgid "Paste _Filenames"
 msgstr "Įdėti _failų vardus"
 
-#: ../src/terminal-window.c:1673
+#: ../src/terminal-window.c:1667
 msgid "P_rofiles…"
 msgstr "P_rofiliai…"
 
-#: ../src/terminal-window.c:1677
+#: ../src/terminal-window.c:1670
 msgid "_Keyboard Shortcuts…"
 msgstr "_Spartieji klavišai…"
 
-#: ../src/terminal-window.c:1680
-#| msgid "_Profile Preferences"
+#: ../src/terminal-window.c:1673
 msgid "_Preferences…"
 msgstr "_Nustatymai..."
 
 #. Search menu
-#: ../src/terminal-window.c:1696
+#: ../src/terminal-window.c:1689
 msgid "_Find..."
 msgstr "_Ieškoti..."
 
-#: ../src/terminal-window.c:1699
+#: ../src/terminal-window.c:1692
 msgid "Find Ne_xt"
 msgstr "Ieškoti _kito"
 
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:1695
 msgid "Find Pre_vious"
 msgstr "Ieškoti a_nkstesnio"
 
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1698
 msgid "_Clear Highlight"
 msgstr "Iš_valyti paryškinimą"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1702
 msgid "Go to _Line..."
 msgstr "Eiti į ei_lutę..."
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1705
 msgid "_Incremental Search..."
 msgstr "_Prieauginė paieška..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:1711
 msgid "Change _Profile"
 msgstr "_Pakeisti profilį"
 
-#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1712
 msgid "_Set Title…"
 msgstr "_Nustatyti pavadinimą…"
 
-#: ../src/terminal-window.c:1722
+#: ../src/terminal-window.c:1715
 msgid "Set _Character Encoding"
 msgstr "N_ustatyti simbolių koduotę"
 
-#: ../src/terminal-window.c:1723
+#: ../src/terminal-window.c:1716
 msgid "_Reset"
 msgstr "_Atstatyti"
 
-#: ../src/terminal-window.c:1726
+#: ../src/terminal-window.c:1719
 msgid "Reset and C_lear"
 msgstr "Atstatyti ir išva_lyti"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1731
+#: ../src/terminal-window.c:1724
 msgid "_Add or Remove…"
 msgstr "_Pridėti arba pašalinti…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1736
+#: ../src/terminal-window.c:1729
 msgid "_Previous Tab"
 msgstr "_Ankstesnė kortelė"
 
-#: ../src/terminal-window.c:1739
+#: ../src/terminal-window.c:1732
 msgid "_Next Tab"
 msgstr "_Kita kortelė"
 
-#: ../src/terminal-window.c:1742
+#: ../src/terminal-window.c:1735
 msgid "Move Tab _Left"
 msgstr "Perkelti kortelę kai_rėn"
 
-#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:1738
 msgid "Move Tab _Right"
 msgstr "Perkelti kortelę _dešinėn"
 
-#: ../src/terminal-window.c:1748
+#: ../src/terminal-window.c:1741
 msgid "_Detach tab"
 msgstr "Atka_binti kortelę"
 
 #. Help menu
-#: ../src/terminal-window.c:1753
+#: ../src/terminal-window.c:1746
 msgid "_Contents"
 msgstr "_Turinys"
 
 #. Popup menu
-#: ../src/terminal-window.c:1761
+#: ../src/terminal-window.c:1754
 msgid "_Send Mail To…"
 msgstr "_Siųsti laišką…"
 
-#: ../src/terminal-window.c:1764
+#: ../src/terminal-window.c:1757
 msgid "_Copy E-mail Address"
 msgstr "_Kopijuoti el. pašto adresą"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1760
 msgid "C_all To…"
 msgstr "_Skambinti…"
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1763
 msgid "_Copy Call Address"
 msgstr "_Kopijuoti skambučio adresą"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:1766
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:1769
 msgid "_Copy Link Address"
 msgstr "_Kopijuoti nuorodos adresą"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1772
 msgid "P_rofiles"
 msgstr "P_rofiliai"
 
-#: ../src/terminal-window.c:1795
-#: ../src/terminal-window.c:2834
-msgid "C_lose Window"
-msgstr "_Užverti langą"
-
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1788
 msgid "L_eave Full Screen"
 msgstr "_Palikti visą ekraną"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1791
 msgid "_Input Methods"
 msgstr "Įved_imo metodai"
 
 #. View Menu
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1797
+msgid "Show _Menubar"
+msgstr "Rodyti _meniu juostą"
+
+#: ../src/terminal-window.c:1801
 msgid "_Full Screen"
 msgstr "_Visame ekrane"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2865
 msgid "Close this window?"
 msgstr "Užverti langą?"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2865
 msgid "Close this terminal?"
 msgstr "Užverti terminalą?"
 
-#: ../src/terminal-window.c:2825
+#: ../src/terminal-window.c:2869
 msgid "There are still processes running in some terminals in this window. Closing the window will kill all of them."
 msgstr "Yra procesų, veikiančių šio lango terminaluose. Jei uždarysite langą, jie visi bus nutraukti."
 
-#: ../src/terminal-window.c:2829
+#: ../src/terminal-window.c:2873
 msgid "There is still a process running in this terminal. Closing the terminal will kill it."
 msgstr "Šiame terminale vis dar veikia procesas. Jei uždarysite terminalą, jis bus nutrauktas."
 
-#: ../src/terminal-window.c:2834
+#: ../src/terminal-window.c:2878
+msgid "C_lose Window"
+msgstr "_Užverti langą"
+
+#: ../src/terminal-window.c:2878
 msgid "C_lose Terminal"
 msgstr "_Užverti terminalą"
 
-#: ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:2951
 msgid "Could not save contents"
 msgstr "Nepavyko įrašyti turinio"
 
-#: ../src/terminal-window.c:2931
+#: ../src/terminal-window.c:2975
 msgid "Save as..."
 msgstr "Įrašyti taip..."
 
-#: ../src/terminal-window.c:3382
+#: ../src/terminal-window.c:3431
 msgid "_Title:"
 msgstr "_Pavadinimas:"
 
