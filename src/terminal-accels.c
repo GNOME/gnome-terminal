@@ -193,7 +193,7 @@ save_cb (gpointer data)
   char *path;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
-                         "saving accel map");
+                         "saving accel map\n");
 
   save_id = 0;
 
