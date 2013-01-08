@@ -323,7 +323,8 @@ migrate_profile (GConfClient *client,
 
   path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
   if (verbose)
-    g_print ("Migrating profile \"%s\" to \"%s\"\n", gconf_id, path);
+    g_print ("Migrating profile \"%s\" to \"%s\" is-default %s\n",
+             gconf_id, path, is_default ? "true" : "false");
 
   settings = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
   g_free (path);
@@ -422,9 +423,6 @@ migrate_profile (GConfClient *client,
   g_free (path);
   g_object_unref (settings);
 
-  if (is_default)
-    g_settings_set_string (global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, str);
-
   return g_strdup (str);
 }
 
@@ -436,7 +434,9 @@ migrate_profiles (GError **error)
   GConfValue *value, *dvalue;
   GSList *l;
   GPtrArray *profile_uuids;
-  const char *profile, *default_profile;
+  char *uuid;
+  const char *profile, *default_profile, *default_uuid;
+  gboolean is_default;
 
   global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
   client = gconf_client_get_default ();
@@ -450,6 +450,7 @@ migrate_profiles (GError **error)
   else
     default_profile = NULL;
 
+  default_uuid = NULL;
   value = gconf_client_get (client, GCONF_GLOBAL_PREFIX "/profile_list", NULL);
   if (value != NULL &&
       value->type == GCONF_VALUE_LIST &&
@@ -457,11 +458,11 @@ migrate_profiles (GError **error)
     for (l = gconf_value_get_list (value); l != NULL; l = l->next) {
       profile = gconf_value_get_string (l->data);
 
-      g_ptr_array_add (profile_uuids,
-                       migrate_profile (client, 
-                                        global_settings,
-                                        profile, 
-                                        g_strcmp0 (profile, default_profile) == 0));
+      is_default = g_strcmp0 (profile, default_profile) == 0;
+      uuid = migrate_profile (client, global_settings, profile, is_default);
+      g_ptr_array_add (profile_uuids, uuid);
+      if (is_default)
+        default_uuid = uuid;
     }
   }
 
@@ -485,6 +486,14 @@ migrate_profiles (GError **error)
     g_ptr_array_add (profile_uuids, NULL);
     g_settings_set_strv (global_settings, TERMINAL_SETTING_PROFILES_KEY,
                          (const char * const *) profile_uuids->pdata);
+
+    /* The GConf setting might be corrupt, with the default profile pointing to a profile
+     * that doesn't actually exist. In this case, just pick the first profile as default.
+     */
+    if (default_uuid == NULL)
+      default_uuid = (const char *) profile_uuids->pdata[0];
+
+    g_settings_set_string (global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, default_uuid);
   }
 
   if (value)
