@@ -323,8 +323,8 @@ migrate_profile (GConfClient *client,
 
   path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
   if (verbose)
-    g_print ("Migrating profile \"%s\" to \"%s\" is-default %s\n",
-             gconf_id, path, is_default ? "true" : "false");
+    g_printerr ("Migrating profile \"%s\" to \"%s\" is-default %s\n",
+                gconf_id, path, is_default ? "true" : "false");
 
   settings = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
   g_free (path);
