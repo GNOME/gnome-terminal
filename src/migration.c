@@ -31,10 +31,12 @@
 #include "terminal-type-builtins.h"
 
 static gboolean dry_run = FALSE;
+static gboolean force = FALSE;
 static gboolean verbose = FALSE;
 
 static const GOptionEntry options[] = {
   { "dry-run", 0, 0, G_OPTION_ARG_NONE, &dry_run, NULL, NULL },
+  { "force", 0, 0, G_OPTION_ARG_NONE, &force, NULL, NULL },
   { "verbose", 0, 0, G_OPTION_ARG_NONE, &verbose, NULL, NULL },
   { NULL }
 };
@@ -280,12 +282,11 @@ migrate_genum (GConfClient *client,
 }
 
 static gboolean
-migrate_global_prefs (GError **error)
+migrate_global_prefs (GSettings *settings,
+                      GError **error)
 {
   GConfClient *client;
-  GSettings *settings;
 
-  settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
   client = gconf_client_get_default ();
 
   migrate_bool (client, GCONF_GLOBAL_PREFIX, "confirm_window_close",
@@ -300,7 +301,6 @@ migrate_global_prefs (GError **error)
   migrate_string_list (client, GCONF_GLOBAL_PREFIX, "active_encodings",
                        settings, TERMINAL_SETTING_ENCODINGS_KEY);
 
-  g_object_unref (settings);
   g_object_unref (client);
 
   return TRUE;
@@ -427,9 +427,9 @@ migrate_profile (GConfClient *client,
 }
 
 static gboolean
-migrate_profiles (GError **error)
+migrate_profiles (GSettings *global_settings,
+                  GError **error)
 {
-  GSettings *global_settings;
   GConfClient *client;
   GConfValue *value, *dvalue;
   GSList *l;
@@ -438,7 +438,6 @@ migrate_profiles (GError **error)
   const char *profile, *default_profile, *default_uuid;
   gboolean is_default;
 
-  global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
   client = gconf_client_get_default ();
 
   profile_uuids = g_ptr_array_new_with_free_func ((GDestroyNotify) g_free);
@@ -501,7 +500,6 @@ migrate_profiles (GError **error)
   if (dvalue)
     gconf_value_free (dvalue);
   g_object_unref (client);
-  g_object_unref (global_settings);
   g_ptr_array_free (profile_uuids, TRUE);
 
   return TRUE;
@@ -590,11 +588,12 @@ migrate_accels (GError **error)
 }
 
 static gboolean
-migrate (GError **error)
+migrate (GSettings *global_settings,
+         GError **error)
 {
-  return migrate_global_prefs (error) &&
-         migrate_profiles (error) &&
-         migrate_accels (error);
+  return migrate_global_prefs (global_settings, error) &&
+    migrate_profiles (global_settings, error) &&
+    migrate_accels (error);
 }
 
 static void
@@ -616,6 +615,7 @@ main (int argc,
 {
   GOptionContext *context;
   GError *error = NULL;
+  GSettings *global_settings;
 
   setlocale (LC_ALL, "");
 
@@ -634,10 +634,19 @@ main (int argc,
   }
   g_option_context_free (context);
 
-  if (!migrate (&error)) {
+  global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
+
+  if (g_settings_get_uint (global_settings, TERMINAL_SETTING_SCHEMA_VERSION) >= TERMINAL_SCHEMA_VERSION) {
+    if (verbose)
+      g_printerr ("Already migrated.\n");
+    if (!force)
+      goto out;
+  }
+
+  if (!migrate (global_settings, &error)) {
     g_printerr ("Error: %s\n", error->message);
     g_error_free (error);
-    return EXIT_FAILURE;
+    goto out;
   }
 
   update_schema_version ();
@@ -649,6 +658,9 @@ main (int argc,
 
   if (verbose)
     g_printerr ("Migration successful!\n");
+
+ out:
+  g_object_unref (global_settings);
 
   return EXIT_SUCCESS;
 }
