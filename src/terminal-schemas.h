@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define TERMINAL_KEYBINDINGS_SCHEMA     "org.gnome.Terminal.Legacy.Keybindings"
 #define TERMINAL_PROFILE_SCHEMA         "org.gnome.Terminal.Legacy.Profile"
-#define TERMINAL_SETTING_SCHEMA         "org.gnome.Terminal.Settings"
+#define TERMINAL_SETTING_SCHEMA         "org.gnome.Terminal.Legacy.Settings"
 
 #define TERMINAL_PROFILE_ALLOW_BOLD_KEY                 "allow-bold"
 #define TERMINAL_PROFILE_AUDIBLE_BELL_KEY               "audible-bell"
@@ -66,17 +66,15 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_WORD_CHARS_KEY                 "word-chars"
 
 #define TERMINAL_SETTING_CONFIRM_CLOSE_KEY              "confirm-close"
-#define TERMINAL_SETTING_DEFAULT_PROFILE_KEY            "legacy-default-profile"
+#define TERMINAL_SETTING_DEFAULT_PROFILE_KEY            "default-profile"
 #define TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY       "default-show-menubar"
 #define TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY      "menu-accelerator-enabled"
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
-#define TERMINAL_SETTING_PROFILES_KEY                   "legacy-profiles"
+#define TERMINAL_SETTING_PROFILES_KEY                   "profiles"
 #define TERMINAL_SETTING_ENCODINGS_KEY                  "encodings"
 #define TERMINAL_SETTING_SCHEMA_VERSION                 "schema-version"
 
 #define TERMINAL_PROFILES_PATH_PREFIX   "/org/gnome/terminal/legacy/profiles:/"
-#define TERMINAL_DEFAULT_PROFILE_ID     ":profile0"
-#define TERMINAL_DEFAULT_PROFILE_PATH   TERMINAL_PROFILES_PATH_PREFIX TERMINAL_DEFAULT_PROFILE_ID "/"
 
 G_END_DECLS
 
