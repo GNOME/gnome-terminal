@@ -3484,7 +3484,6 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
                               TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkWidgetClass *klass;
   const char *name;
   guint keyval = 0;
 
@@ -3495,12 +3494,10 @@ tabs_next_or_previous_tab_cb (GtkAction *action,
     keyval = GDK_KEY_Page_Up;
   }
 
-  /* FIXMEchpe GtkNotebook specific? */
-  klass = GTK_WIDGET_GET_CLASS (GTK_WIDGET (priv->mdi_container));
-  gtk_binding_set_activate (gtk_binding_set_by_class (klass),
-                            keyval,
-                            GDK_CONTROL_MASK,
-                            G_OBJECT (priv->mdi_container));
+  /* FIXMEchpe this is GtkNotebook specific */
+  gtk_bindings_activate (G_OBJECT (priv->mdi_container),
+                         keyval,
+                         GDK_CONTROL_MASK);
 }
 
 static void
