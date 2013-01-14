@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 Christian Persch
+ * Copyright © 2011, 2012, 2013 Christian Persch
  *
  * Gnome-terminal is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -508,80 +508,65 @@ migrate_profiles (GSettings *global_settings,
 static gboolean
 migrate_accels (GError **error)
 {
-  static const struct { const char *key; const char *path; } data[] = {
-    { "new_tab", "FileNewTab" },
-    { "new_window", "FileNewWindow" },
-    { "new_profile", "FileNewProfile" },
-    { "close_tab", "FileCloseTab" },
-    { "close_window", "FileCloseWindow"},
-    { "copy", "EditCopy" },
-    { "paste", "EditPaste" },
-    { "toggle_menubar", "ViewMenubar" },
-    { "full_screen", "ViewFullscreen" },
-    { "zoom_in", "ViewZoomIn" },
-    { "zoom_out", "ViewZoomOut" },
-    { "zoom_normal", "ViewZoom100" },
-    { "set_window_title", "TerminalSetTitle" },
-    { "reset", "TerminalReset" },
-    { "reset_and_clear", "TerminalResetClear" },
-    { "prev_tab", "TabsPrevious" },
-    { "next_tab", "TabsNext" },
-    { "move_tab_left", "TabsMoveLeft" },
-    { "move_tab_right", "TabsMoveRight" },
-    { "detach_tab", "TabsDetach" },
-    { "switch_to_tab_1", "TabsSwitch1" },
-    { "switch_to_tab_2", "TabsSwitch2" },
-    { "switch_to_tab_3", "TabsSwitch3" },
-    { "switch_to_tab_4", "TabsSwitch4" },
-    { "switch_to_tab_5", "TabsSwitch5" },
-    { "switch_to_tab_6", "TabsSwitch6" },
-    { "switch_to_tab_7", "TabsSwitch7" },
-    { "switch_to_tab_8", "TabsSwitch8" },
-    { "switch_to_tab_9", "TabsSwitch9" },
-    { "switch_to_tab_10", "TabsSwitch10" },
-    { "switch_to_tab_11", "TabsSwitch11" },
-    { "switch_to_tab_12", "TabsSwitch12" },
-    { "help", "HelpContents" }
+  static const const struct { const char *gconf_key; const char *settings_key; } const data[] = {
+    { "new_tab",          "new-tab"            },
+    { "new_window",       "new-window"         },
+    { "new_profile",      "new-profile"        },
+    { "close_tab",        "close-tab"          },
+    { "close_window",     "close-window"       },
+    { "copy",             "copy"               },
+    { "paste",            "paste"              },
+    { "toggle_menubar",   "toggle-menubar"     },
+    { "full_screen",      "full-screen"        },
+    { "zoom_in",          "zoom-in"            },
+    { "zoom_out",         "zoom-out"           },
+    { "zoom_normal",      "zoom-normal"        },
+    { "set_window_title", "set-terminal-title" },
+    { "reset",            "reset"              },
+    { "reset_and_clear",  "reset-and-clear"    },
+    { "prev_tab",         "prev-tab"           },
+    { "next_tab",         "next-tab"           },
+    { "move_tab_left",    "move-tab-left"      },
+    { "move_tab_right",   "move-tab-right"     },
+    { "detach_tab",       "detach-tab"         },
+    { "switch_to_tab_1",  "switch-to-tab-1"    },
+    { "switch_to_tab_2",  "switch-to-tab-2"    },
+    { "switch_to_tab_3",  "switch-to-tab-3"    },
+    { "switch_to_tab_4",  "switch-to-tab-4"    },
+    { "switch_to_tab_5",  "switch-to-tab-5"    },
+    { "switch_to_tab_6",  "switch-to-tab-6"    },
+    { "switch_to_tab_7",  "switch-to-tab-7"    },
+    { "switch_to_tab_8",  "switch-to-tab-8"    },
+    { "switch_to_tab_9",  "switch-to-tab-9"    },
+    { "switch_to_tab_10", "switch-to-tab-10"   },
+    { "switch_to_tab_11", "switch-to-tab-11"   },
+    { "switch_to_tab_12", "switch-to-tab-12"   },
+    { "help",             "help"               }
   };
   GConfClient *client;
+  GSettings *settings;
   guint i;
-  char *key, *path;
+  char *gconf_path;
   GConfValue *value;
-  GString *str;
 
   client = gconf_client_get_default ();
-  str = g_string_sized_new (1024);
+  settings = g_settings_new (TERMINAL_KEYBINDINGS_SCHEMA);
 
   for (i = 0; i < G_N_ELEMENTS (data); ++i) {
-    key = g_strdup_printf ("/apps/gnome-terminal/keybindings/%s", data[i].key);
-    path = g_strdup_printf ("<Actions>/Main/%s", data[i].path);
+    gconf_path = g_strdup_printf ("/apps/gnome-terminal/keybindings/%s", data[i].gconf_key);
 
-    if ((value = gconf_client_get_without_default (client, key, NULL)) != NULL &&
-        value->type == GCONF_VALUE_STRING)
-      g_string_append_printf (str,
-                              "(gtk_accel_path \"%s\" \"%s\")\n",
-                              path, gconf_value_get_string (value));
+    value = gconf_client_get_without_default (client, gconf_path, NULL);
+    g_free (gconf_path);
+    if (value == NULL)
+      continue;
 
-    g_free (key);
-    g_free (path);
-    if (value)
-      gconf_value_free (value);
+    if (value->type == GCONF_VALUE_STRING)
+      g_settings_set_string (settings, data[i].settings_key, gconf_value_get_string (value));
+
+    gconf_value_free (value);
   }
 
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-terminal",
-                           NULL);
-  g_mkdir_with_parents (path, 0700);
-  g_free (path);
-
-  path = g_build_filename (g_get_user_config_dir (),
-                           "gnome-terminal",
-                           "accels",
-                           NULL);
-  g_file_set_contents (path, str->str, str->len, NULL);
-  g_free (path);
-
-  g_string_free (str, TRUE);
+  g_object_unref (settings);
   g_object_unref (client);
 
   return TRUE;
