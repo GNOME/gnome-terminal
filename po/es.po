@@ -13,26 +13,26 @@
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010.
 # 
 # Jorge González <jorgegonz@svn.gnome.org>, 2011.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011., 2012.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011., 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-17 12:29+0000\n"
-"PO-Revision-Date: 2012-12-31 11:48+0100\n"
+"POT-Creation-Date: 2013-01-14 19:54+0000\n"
+"PO-Revision-Date: 2013-01-15 12:35+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 2.91.5\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:94
-#: ../src/terminal-accels.c:148 ../src/terminal.c:250
+#: ../src/terminal-accels.c:246 ../src/terminal.c:250
 #: ../src/terminal-window.c:1830
 msgid "Terminal"
 msgstr "Terminal"
@@ -211,7 +211,7 @@ msgstr "Opciones de procesado:"
 msgid "Show processing options"
 msgstr "Mostrar las opciones de procesado"
 
-#: ../src/migration.c:338 ../src/terminal-app.c:391
+#: ../src/migration.c:339 ../src/terminal-app.c:416
 msgid "Unnamed"
 msgstr "Sin nombre"
 
@@ -336,8 +336,7 @@ msgstr ""
 "mayoría de la gente deja que su intérprete haga esto), el título definido "
 "dinámicamente puede eliminar el título configurado, puede ir antes de éste, "
 "después de éste, o reemplazarlo. Los valores posibles son "
-"«replace» (reemplazar), «before» (antes), «after» (después) e "
-"«ignore» (ignorar)."
+"«replace» (reemplazar), «before» (antes), «after» (después) e «ignore» (ignorar)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:13
 msgid "Title for terminal"
@@ -596,10 +595,151 @@ msgid "Which encoding to use"
 msgstr "Qué codificación usar"
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+msgid "Keyboard shortcut to open a new tab"
+msgstr "Combinación de teclas para abrir una pestaña nueva"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+msgid "Keyboard shortcut to open a new window"
+msgstr "Combinación de teclas para abrir una ventana nueva"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+msgid "Keyboard shortcut to create a new profile"
+msgstr "Combinación de teclas para crear un perfil nuevo"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr ""
+"Combinación de teclas para guardar el contenido actual de las pestaña a un "
+"archivo"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+msgid "Keyboard shortcut to close a tab"
+msgstr "Combinación de teclas para cerrar una pestaña"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+msgid "Keyboard shortcut to close a window"
+msgstr "Combinación de teclas para cerrar una ventana"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+msgid "Keyboard shortcut to copy text"
+msgstr "Combinación de teclas para copiar texto"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+msgid "Keyboard shortcut to paste text"
+msgstr "Combinación de teclas para pegar texto"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr "Combinación de teclas para cambiar al modo de pantalla completa"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "Combinación de teclas para cambiar la visibilidad de la barra de menús"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+msgid "Keyboard shortcut to set the terminal title"
+msgstr "Combinación de teclas para establecer el título de la terminal"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "Combinación de teclas para reiniciar la terminal"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr "Combinación de teclas para reiniciar y limpiar la terminal"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "Combinación de teclas para cambiar a la pestaña anterior"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "Combinación de teclas para cambiar a la pestaña siguiente"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+#| msgid "Keyboard shortcut to save the current tab contents to file"
+msgid "Keyboard shortcut to move the current tab to the left"
+msgstr "Atajo de teclado para mover la pestaña actual a la izquierda"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+#| msgid "Accelerator to move the current tab to the right."
+msgid "Keyboard shortbut to move the current tab to the right"
+msgstr "Atajo de teclado para mover la pestaña actual a la derecha"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+#| msgid "Keyboard shortcut to switch to tab 1"
+msgid "Keyboard shortbut to detach current tab"
+msgstr "Atajo de teclado para desacoplar la pestaña actual"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "Combinación de teclas para cambiar a la pestaña 1"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "Combinación de teclas para cambiar a la pestaña 2"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "Combinación de teclas para cambiar a la pestaña 3"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "Combinación de teclas para cambiar a la pestaña 4"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "Combinación de teclas para cambiar a la pestaña 5"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "Combinación de teclas para cambiar a la pestaña 6"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "Combinación de teclas para cambiar a la pestaña 7"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "Combinación de teclas para cambiar a la pestaña 8"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "Combinación de teclas para cambiar a la pestaña 9"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "Combinación de teclas para cambiar a la pestaña 10"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "Combinación de teclas para cambiar a la pestaña 11"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "Combinación de teclas para cambiar a la pestaña 12"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+msgid "Keyboard shortcut to launch help"
+msgstr "Combinación de teclas para lanzar la ayuda"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:88
+msgid "Keyboard shortcut to make font larger"
+msgstr "Combinación de teclas para agrandar la tipografía"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:89
+msgid "Keyboard shortcut to make font smaller"
+msgstr "Combinación de teclas para reducir la tipografía"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:90
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "Combinación de teclas para establecer la tipografía a su tamaño normal"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:91
 msgid "Whether the menubar has access keys"
 msgstr "Define si la barra de menús tiene teclas de acceso"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:92
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -609,13 +749,13 @@ msgstr ""
 "de menús. Éstas podrían interferir con algunas aplicaciones ejecutadas "
 "dentro de la terminal así que es posible desactivarlas."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:93
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Define si la combinación de teclas estándar de GTK+ para acceder a la barra "
 "de menús está activada"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:94
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -626,26 +766,26 @@ msgstr ""
 "Esta opción permite deshabilitar la combinación de teclas estándar de acceso "
 "a la barra de menús."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:95
 msgid "List of available encodings"
 msgstr "Lista de las codificaciones disponibles"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:96
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
 "\" means to display the encoding of the current locale."
 msgstr ""
 "Un subconjunto de codificaciones posibles están presentes en el submenú "
-"«Codificaciones». Esta es una lista de las codificaciones que aparecerán "
-"ahí. El nombre de codificación especial \"current\" significa que se "
-"mostrará la codificación de la configuración regional actual."
+"«Codificaciones». Esta es una lista de las codificaciones que aparecerán ahí. "
+"El nombre de codificación especial \"current\" significa que se mostrará la "
+"codificación de la configuración regional actual."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:97
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Indica si se debe preguntar antes de una terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:98
 msgid "Whether to show the menubar in new windows"
 msgstr "Indica si se debe mostrar la barra de menú en las ventanas nuevas"
 
@@ -1039,188 +1179,193 @@ msgstr "Ay_uda"
 msgid "_About"
 msgstr "Acerca _de"
 
-#: ../src/terminal-accels.c:86
+#: ../src/terminal-accels.c:139
 msgid "New Tab"
 msgstr "Pestaña nueva"
 
-#: ../src/terminal-accels.c:87
+#: ../src/terminal-accels.c:141
 msgid "New Window"
 msgstr "Ventana nueva"
 
-#: ../src/terminal-accels.c:88
+#: ../src/terminal-accels.c:143
 msgid "New Profile"
 msgstr "Perfil nuevo"
 
-#: ../src/terminal-accels.c:90
+#: ../src/terminal-accels.c:146
 msgid "Save Contents"
 msgstr "Guardar contenido"
 
-#: ../src/terminal-accels.c:92
+#: ../src/terminal-accels.c:149
 msgid "Close Tab"
 msgstr "Cerrar pestaña"
 
-#: ../src/terminal-accels.c:93
+#: ../src/terminal-accels.c:151
 msgid "Close Window"
 msgstr "Cerrar ventana"
 
-#: ../src/terminal-accels.c:98
+#: ../src/terminal-accels.c:157
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../src/terminal-accels.c:99
+#: ../src/terminal-accels.c:159
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../src/terminal-accels.c:104
+#: ../src/terminal-accels.c:165
 msgid "Hide and Show menubar"
 msgstr "Ocultar y mostrar la barra de menú"
 
-#: ../src/terminal-accels.c:105
+#: ../src/terminal-accels.c:167
 msgid "Full Screen"
 msgstr "Pantalla completa"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:169
 msgid "Zoom In"
 msgstr "Ampliar"
 
-#: ../src/terminal-accels.c:107
+#: ../src/terminal-accels.c:171
 msgid "Zoom Out"
 msgstr "Reducir"
 
-#: ../src/terminal-accels.c:108
+#: ../src/terminal-accels.c:173
 msgid "Normal Size"
 msgstr "Tamaño normal"
 
-#: ../src/terminal-accels.c:113 ../src/terminal-window.c:3414
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3414
 msgid "Set Title"
 msgstr "Establecer título"
 
-#: ../src/terminal-accels.c:114
+#: ../src/terminal-accels.c:181
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: ../src/terminal-accels.c:115
+#: ../src/terminal-accels.c:183
 msgid "Reset and Clear"
 msgstr "Reiniciar y limpiar"
 
-#: ../src/terminal-accels.c:120
+#: ../src/terminal-accels.c:189
 msgid "Switch to Previous Tab"
 msgstr "Cambiar a la pestaña anterior"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:191
 msgid "Switch to Next Tab"
 msgstr "Cambiar a la pestaña siguiente"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:193
 msgid "Move Tab to the Left"
 msgstr "Mover la pestaña a la izquierda"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:195
 msgid "Move Tab to the Right"
 msgstr "Mover la pestaña a la derecha"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:197
 msgid "Detach Tab"
 msgstr "Desacoplar pestaña"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 1"
 msgstr "Cambiar a la pestaña 1"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 2"
 msgstr "Cambiar a la pestaña 2"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 3"
 msgstr "Cambiar a la pestaña 3"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 4"
 msgstr "Cambiar a la pestaña 4"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 5"
 msgstr "Cambiar a la pestaña 5"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 6"
 msgstr "Cambiar a la pestaña 6"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:217
 msgid "Switch to Tab 7"
 msgstr "Cambiar a la pestaña 7"
 
-#: ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:220
 msgid "Switch to Tab 8"
 msgstr "Cambiar a la pestaña 8"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:223
 msgid "Switch to Tab 9"
 msgstr "Cambiar a la pestaña 9"
 
-#: ../src/terminal-accels.c:134
+#: ../src/terminal-accels.c:226
 msgid "Switch to Tab 10"
 msgstr "Cambiar a la pestaña 10"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:229
 msgid "Switch to Tab 11"
 msgstr "Cambiar a la pestaña 11"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:232
 msgid "Switch to Tab 12"
 msgstr "Cambiar a la pestaña 12"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:238
 msgid "Contents"
 msgstr "Índice"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:243
 msgid "File"
 msgstr "Archivo"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:244
 msgid "Edit"
 msgstr "Editar"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:245
 msgid "View"
 msgstr "Ver"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:247
 msgid "Tabs"
 msgstr "Pestañas"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:248
 msgid "Help"
 msgstr "Ayuda"
 
-#: ../src/terminal-accels.c:454
+#: ../src/terminal-accels.c:620
+#, c-format
+msgid "The shortcut key “%s” is already bound to the “%s” action"
+msgstr "La combinación de teclas «%s» ya está asignada a la acción «%s»"
+
+#: ../src/terminal-accels.c:774
 msgid "_Action"
 msgstr "_Acción"
 
-#: ../src/terminal-accels.c:472
+#: ../src/terminal-accels.c:792
 msgid "Shortcut _Key"
 msgstr "Combinación de _teclas"
 
-#: ../src/terminal-app.c:519
+#: ../src/terminal-app.c:544
 msgid "Click button to choose profile"
 msgstr "Pulse el botón para seleccionar un perfil"
 
-#: ../src/terminal-app.c:609
+#: ../src/terminal-app.c:634
 msgid "Profile list"
 msgstr "Lista de perfiles"
 
-#: ../src/terminal-app.c:672
+#: ../src/terminal-app.c:697
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "¿Eliminar el perfil «%s»?"
 
-#: ../src/terminal-app.c:688
+#: ../src/terminal-app.c:713
 msgid "Delete Profile"
 msgstr "Eliminar perfil"
 
-#: ../src/terminal-app.c:1472
+#: ../src/terminal-app.c:1496
 msgid "User Defined"
 msgstr "Definido por el usuario"
 
@@ -1370,52 +1515,52 @@ msgstr "Vietnamita"
 msgid "Thai"
 msgstr "Tailandés"
 
-#: ../src/terminal-encoding.c:491 ../src/terminal-encoding.c:516
+#: ../src/terminal-encoding.c:487 ../src/terminal-encoding.c:512
 msgid "_Description"
 msgstr "_Descripción"
 
-#: ../src/terminal-encoding.c:500 ../src/terminal-encoding.c:525
+#: ../src/terminal-encoding.c:496 ../src/terminal-encoding.c:521
 msgid "_Encoding"
 msgstr "_Codificación"
 
-#: ../src/terminal-encoding.c:583
+#: ../src/terminal-encoding.c:579
 msgid "Current Locale"
 msgstr "Configuración regional actual"
 
-#: ../src/terminal-nautilus.c:467
+#: ../src/terminal-nautilus.c:465
 msgid "Open in _Remote Terminal"
 msgstr "Abrir en una terminal _remota"
 
-#: ../src/terminal-nautilus.c:469
+#: ../src/terminal-nautilus.c:467
 msgid "Open in _Local Terminal"
 msgstr "Abrir en una terminal _local"
 
-#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
 msgid "Open the currently selected folder in a terminal"
 msgstr "Abrir la carpeta seleccionada en una terminal"
 
-#: ../src/terminal-nautilus.c:475 ../src/terminal-nautilus.c:486
-#: ../src/terminal-nautilus.c:496
+#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:494
 msgid "Open the currently open folder in a terminal"
 msgstr "Abrir la carpeta abierta actualmente en una terminal"
 
-#: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
+#: ../src/terminal-nautilus.c:479 ../src/terminal-nautilus.c:493
 msgid "Open in T_erminal"
 msgstr "Abrir en una t_erminal"
 
-#: ../src/terminal-nautilus.c:492
+#: ../src/terminal-nautilus.c:490
 msgid "Open T_erminal"
 msgstr "Abrir t_erminal"
 
-#: ../src/terminal-nautilus.c:493
+#: ../src/terminal-nautilus.c:491
 msgid "Open a terminal"
 msgstr "Abrir una terminal"
 
-#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:524
+#: ../src/terminal-nautilus.c:509 ../src/terminal-nautilus.c:522
 msgid "Open in _Midnight Commander"
 msgstr "Abrir en _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:513
+#: ../src/terminal-nautilus.c:511
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
@@ -1423,7 +1568,7 @@ msgstr ""
 "Abrir la carpeta actualmente seleccionada en el gestor de archivos de la "
 "terminal Midnight Commander"
 
-#: ../src/terminal-nautilus.c:515 ../src/terminal-nautilus.c:525
+#: ../src/terminal-nautilus.c:513 ../src/terminal-nautilus.c:523
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
@@ -1431,11 +1576,11 @@ msgstr ""
 "Abrir la carpeta actualmente abierta en el gestor de archivos de la terminal "
 "Midnight Commander"
 
-#: ../src/terminal-nautilus.c:521
+#: ../src/terminal-nautilus.c:519
 msgid "Open _Midnight Commander"
 msgstr "Abrir _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:522
+#: ../src/terminal-nautilus.c:520
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Abrir el gestor de archivos de la terminal Midnight Commander"
 
@@ -1606,11 +1751,11 @@ msgstr "Se interrumpió el proceso hijo con la señal %d."
 msgid "The child process was aborted."
 msgstr "Se interrumpió el proceso hijo."
 
-#: ../src/terminal-tab-label.c:195
+#: ../src/terminal-tab-label.c:194
 msgid "Close tab"
 msgstr "Cerrar pestaña"
 
-#: ../src/terminal-tabs-menu.c:196
+#: ../src/terminal-tabs-menu.c:195
 msgid "Switch to this tab"
 msgstr "Cambiar a esta pestaña"
 
@@ -1640,10 +1785,15 @@ msgid "Could not open the address “%s”"
 msgstr "No se pudo abrir la dirección «%s»"
 
 #: ../src/terminal-util.c:391
+#| msgid ""
+#| "GNOME Terminal is free software; you can redistribute it and/or modify it "
+#| "under the terms of the GNU General Public License as published by the "
+#| "Free Software Foundation; either version 3 of the License, or (at your "
+#| "option) any later version."
 msgid ""
-"GNOME Terminal is free software; you can redistribute it and/or modify it "
+"GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 3 of the License, or (at your option) "
+"Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 msgstr ""
 "GNOME Terminal es software libre; puede redistribuirlo y/o modificarlo bajo "
@@ -1664,14 +1814,16 @@ msgstr ""
 "para más detalles."
 
 #: ../src/terminal-util.c:399
+#| msgid ""
+#| "You should have received a copy of the GNU General Public License along "
+#| "with GNOME Terminal; if not, write to the Free Software Foundation, Inc., "
+#| "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
-"GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+"GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 "Debería haber recibido una copia de la Licencia pública General de GNU junto "
-"con GNOME Terminal; si no, escriba a la Free Software Foundation, Inc, 51 "
-"Franklin St, Fifth Floor, Boston, MA  02110-1301 EE. UU."
+"con GNOME Terminal; si no, consulte <http://www.gnu.org/licenses/>."
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
@@ -2060,8 +2212,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Tecla aceleradora para mover la pestaña actual a la izquierda. Expresada "
 #~ "como una cadena en el mismo formato que usan los archivos de recursos de "
-#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces "
-#~ "no habrá una combinación para esta acción."
+#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces no "
+#~ "habrá una combinación para esta acción."
 
 #~ msgid ""
 #~ "Accelerator key to move the current tab to the right. Expressed as a "
@@ -2071,17 +2223,14 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Tecla aceleradora para mover la pestaña actual a la derecha. Expresada "
 #~ "como una cadena en el mismo formato que usan los archivos de recursos de "
-#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces "
-#~ "no habrá una combinación para esta acción."
+#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces no "
+#~ "habrá una combinación para esta acción."
 
 #~ msgid "Accelerator to detach current tab."
 #~ msgstr "Acelerador para desacoplar la pestaña actual."
 
 #~ msgid "Accelerator to move the current tab to the left."
 #~ msgstr "Acelerador para mover la pestaña actual a la izquierda."
-
-#~ msgid "Accelerator to move the current tab to the right."
-#~ msgstr "Acelerador para mover la pestaña actual a la derecha."
 
 #~ msgid ""
 #~ "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
@@ -2132,8 +2281,8 @@ msgstr "_Título:"
 #~ "keep the image in a fixed position and scroll the text above it."
 #~ msgstr ""
 #~ "Si es verdadero, se desplaza la imagen de fondo junto con el texto del "
-#~ "frente, si es «false» (falso) se mantiene la imagen en una posición fija "
-#~ "y se desplaza el texto por encima de ésta."
+#~ "frente, si es «false» (falso) se mantiene la imagen en una posición fija y "
+#~ "se desplaza el texto por encima de ésta."
 
 #~ msgid ""
 #~ "If true, the terminal will use the desktop-global standard font if it's "
@@ -2236,8 +2385,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Combinación de teclas para dejar a tamaño normal la tipografía. Expresado "
 #~ "como una cadena en el mismo formato usado por los archivos de recursos de "
-#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces "
-#~ "no habrá una combinación para esta acción."
+#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces no "
+#~ "habrá una combinación para esta acción."
 
 #~ msgid ""
 #~ "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
@@ -2412,8 +2561,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Combinación de teclas para cambiar al modo de pantalla completa. "
 #~ "Expresado como una cadena en el mismo formato usado por los archivos de "
-#~ "recursos de GTK+. Si define esta opción con la cadena especial "
-#~ "«disabled», entonces no habrá una combinación para esta acción."
+#~ "recursos de GTK+. Si define esta opción con la cadena especial «disabled», "
+#~ "entonces no habrá una combinación para esta acción."
 
 #~ msgid ""
 #~ "Keyboard shortcut key to reset and clear the terminal. Expressed as a "
@@ -2423,8 +2572,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Combinación de teclas para reiniciar y limpiar la terminal. Expresado "
 #~ "como una cadena en el mismo formato usado por los archivos de recursos de "
-#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces "
-#~ "no habrá una combinación para esta acción."
+#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces no "
+#~ "habrá una combinación para esta acción."
 
 #~ msgid ""
 #~ "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
@@ -2456,8 +2605,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Combinación de teclas para definir el título de la terminal. Expresado "
 #~ "como una cadena en el mismo formato usado por los archivos de recursos de "
-#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces "
-#~ "no habrá una combinación para esta acción."
+#~ "GTK+. Si define esta opción con la cadena especial «disabled», entonces no "
+#~ "habrá una combinación para esta acción."
 
 #~ msgid ""
 #~ "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
@@ -2489,105 +2638,8 @@ msgstr "_Título:"
 #~ msgstr ""
 #~ "Combinación de teclas para cambiar la visibilidad de la barra de menús. "
 #~ "Expresado como una cadena en el mismo formato usado por los archivos de "
-#~ "recursos de GTK+. Si define esta opción con la cadena especial "
-#~ "«disabled», entonces no habrá una combinación para esta acción."
-
-#~ msgid "Keyboard shortcut to close a tab"
-#~ msgstr "Combinación de teclas para cerrar una pestaña"
-
-#~ msgid "Keyboard shortcut to close a window"
-#~ msgstr "Combinación de teclas para cerrar una ventana"
-
-#~ msgid "Keyboard shortcut to copy text"
-#~ msgstr "Combinación de teclas para copiar texto"
-
-#~ msgid "Keyboard shortcut to create a new profile"
-#~ msgstr "Combinación de teclas para crear un perfil nuevo"
-
-#~ msgid "Keyboard shortcut to launch help"
-#~ msgstr "Combinación de teclas para lanzar la ayuda"
-
-#~ msgid "Keyboard shortcut to make font larger"
-#~ msgstr "Combinación de teclas para agrandar la tipografía"
-
-#~ msgid "Keyboard shortcut to make font normal-size"
-#~ msgstr ""
-#~ "Combinación de teclas para establecer la tipografía a su tamaño normal"
-
-#~ msgid "Keyboard shortcut to make font smaller"
-#~ msgstr "Combinación de teclas para reducir la tipografía"
-
-#~ msgid "Keyboard shortcut to open a new tab"
-#~ msgstr "Combinación de teclas para abrir una pestaña nueva"
-
-#~ msgid "Keyboard shortcut to open a new window"
-#~ msgstr "Combinación de teclas para abrir una ventana nueva"
-
-#~ msgid "Keyboard shortcut to paste text"
-#~ msgstr "Combinación de teclas para pegar texto"
-
-#~ msgid "Keyboard shortcut to reset and clear the terminal"
-#~ msgstr "Combinación de teclas para reiniciar y limpiar la terminal"
-
-#~ msgid "Keyboard shortcut to reset the terminal"
-#~ msgstr "Combinación de teclas para reiniciar la terminal"
-
-#~ msgid "Keyboard shortcut to save the current tab contents to file"
-#~ msgstr ""
-#~ "Combinación de teclas para guardar el contenido actual de las pestaña a "
-#~ "un archivo"
-
-#~ msgid "Keyboard shortcut to set the terminal title"
-#~ msgstr "Combinación de teclas para establecer el título de la terminal"
-
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 1"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 10"
-
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 11"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 12"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 2"
-
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 3"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 4"
-
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 5"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 6"
-
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 7"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 8"
-
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña 9"
-
-#~ msgid "Keyboard shortcut to switch to the next tab"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña siguiente"
-
-#~ msgid "Keyboard shortcut to switch to the previous tab"
-#~ msgstr "Combinación de teclas para cambiar a la pestaña anterior"
-
-#~ msgid "Keyboard shortcut to toggle full screen mode"
-#~ msgstr "Combinación de teclas para cambiar al modo de pantalla completa"
-
-#~ msgid "Keyboard shortcut to toggle the visibility of the menubar"
-#~ msgstr ""
-#~ "Combinación de teclas para cambiar la visibilidad de la barra de menús"
+#~ "recursos de GTK+. Si define esta opción con la cadena especial «disabled», "
+#~ "entonces no habrá una combinación para esta acción."
 
 #~ msgid "List of profiles"
 #~ msgstr "Lista de perfiles"
@@ -2673,8 +2725,7 @@ msgstr "_Título:"
 #~ "\", and \"hidden\"."
 #~ msgstr ""
 #~ "Indica dónde colocar la barra de desplazamiento de la terminal. Las "
-#~ "posibilidades son «left» (izquierda), «right» (derecha), y "
-#~ "«hidden» (oculta)."
+#~ "posibilidades son «left» (izquierda), «right» (derecha), y «hidden» (oculta)."
 
 #~ msgid ""
 #~ "Whether to ask for confirmation when closing a terminal window which has "
@@ -2747,9 +2798,6 @@ msgstr "_Título:"
 #~ msgid "_Transparent background"
 #~ msgstr "Fondo _transparente"
 
-#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
-#~ msgstr "La combinación de teclas «%s» ya está asignada a la acción «%s»"
-
 #~ msgid "No such profile \"%s\", using default profile\n"
 #~ msgstr "No existe el perfil «%s», usando el perfil predeterminado\n"
 
@@ -2821,8 +2869,8 @@ msgstr "_Título:"
 #~ "the \"X\" man page for more information"
 #~ msgstr ""
 #~ "Establece la geometría de la ventana para la especificación de geometría "
-#~ "X proporcionada; consulte la página del manual de las «X» para obtener "
-#~ "más información"
+#~ "X proporcionada; consulte la página del manual de las «X» para obtener más "
+#~ "información"
 
 #~ msgid "(about %s)"
 #~ msgstr "(aproximadamente %s)"
