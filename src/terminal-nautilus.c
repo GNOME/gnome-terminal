@@ -46,7 +46,6 @@ typedef struct _TerminalNautilusClass TerminalNautilusClass;
 struct _TerminalNautilus {
         GObject parent_instance;
 
-        GSettings *nautilus_prefs;
         GSettings *lockdown_prefs;
         gboolean have_mc;
 };
@@ -159,8 +158,7 @@ display_mc_item (TerminalNautilus *nautilus)
 static inline gboolean
 desktop_is_home_dir (TerminalNautilus *nautilus)
 {
-  return g_settings_get_boolean (nautilus->nautilus_prefs,
-                                 "desktop-is-home-dir");
+  return FALSE;
 }
 
 /* a very simple URI parsing routine from Launchpad #333462, until GLib supports URI parsing (GNOME #489862) */
@@ -720,12 +718,7 @@ G_DEFINE_DYNAMIC_TYPE_EXTENDED (TerminalNautilus, terminal_nautilus, G_TYPE_OBJE
 static void 
 terminal_nautilus_init (TerminalNautilus *nautilus)
 {
-  GSettings *settings;
   char *path;
-
-  settings = g_settings_new (NAUTILUS_SETTINGS_SCHEMA);
-  nautilus->nautilus_prefs = g_settings_get_child (settings, "preferences");
-  g_object_unref (settings);
 
   nautilus->lockdown_prefs = g_settings_new (GNOME_DESKTOP_LOCKDOWN_SETTINGS_SCHEMA);
 
@@ -739,14 +732,7 @@ terminal_nautilus_dispose (GObject *object)
 {
   TerminalNautilus *nautilus = TERMINAL_NAUTILUS (object);
 
-  if (nautilus->nautilus_prefs != NULL) {
-    g_object_unref (nautilus->nautilus_prefs);
-    nautilus->nautilus_prefs = NULL;
-  }
-  if (nautilus->lockdown_prefs != NULL) {
-    g_object_unref (nautilus->lockdown_prefs);
-    nautilus->lockdown_prefs = NULL;
-  }
+  g_clear_object (&nautilus->lockdown_prefs);
 
   G_OBJECT_CLASS (terminal_nautilus_parent_class)->dispose (object);
 }
