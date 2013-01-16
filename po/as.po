@@ -5,14 +5,14 @@
 # Amitakhya Phukan <aphukan@redhat.com>, 2007.
 # Amitakhya Phukan <amitakhya@svn.gnome.org>, 2007.
 # Amitakhya Phukan <aphukan@fedoraproject.org>, 2009.
-# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012.
+# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-17 11:34+0000\n"
-"PO-Revision-Date: 2012-12-18 17:12+0530\n"
+"POT-Creation-Date: 2013-01-14 19:54+0000\n"
+"PO-Revision-Date: 2013-01-16 13:10+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
@@ -23,7 +23,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:94
-#: ../src/terminal-accels.c:148 ../src/terminal.c:250
+#: ../src/terminal-accels.c:246 ../src/terminal.c:250
 #: ../src/terminal-window.c:1830
 msgid "Terminal"
 msgstr "টাৰ্মিনেল"
@@ -200,7 +200,7 @@ msgstr "প্ৰক্ৰিয়াকৰণ বিকল্পসমূহ:"
 msgid "Show processing options"
 msgstr "প্ৰক্ৰিয়াকৰণ বিকল্পসমূহ দেখুৱাওক"
 
-#: ../src/migration.c:338 ../src/terminal-app.c:391
+#: ../src/migration.c:339 ../src/terminal-app.c:416
 msgid "Unnamed"
 msgstr "নামবিহীন"
 
@@ -555,7 +555,6 @@ msgid "Palette for terminal applications"
 msgstr "টাৰ্মিনেলৰ অনুপ্ৰয়োগৰ বাবে ব্যৱহাৰযোগ্য পেলেট"
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:51
-#| msgid "A pango font name and size"
 msgid "A Pango font name and size"
 msgstr "এটা Pango ফন্ট নাম আৰু আকাৰ"
 
@@ -580,10 +579,151 @@ msgid "Which encoding to use"
 msgstr "কোন এনক'ডিং ব্যৱহাৰ কৰা হব"
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+msgid "Keyboard shortcut to open a new tab"
+msgstr "এটা নতুন টেব খোলাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+msgid "Keyboard shortcut to open a new window"
+msgstr "এটা নতুন উইন্ডো খোলাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+msgid "Keyboard shortcut to create a new profile"
+msgstr "এখন নতুন আলেখ্য সৃষ্টি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "নথিপত্ৰলে বৰ্তমান টেব সমলসমূহ সংৰক্ষণ কৰিবলে কিবৰ্ড চৰ্টকাট"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+msgid "Keyboard shortcut to close a tab"
+msgstr "এটা টেব বন্ধ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+msgid "Keyboard shortcut to close a window"
+msgstr "এটা উইন্ডো বন্ধ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+msgid "Keyboard shortcut to copy text"
+msgstr "লিখনী কপি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+msgid "Keyboard shortcut to paste text"
+msgstr "লিখনী পেইস্ট কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr ""
+"সম্পূৰ্ণ পৰ্দাত প্ৰদৰ্শন ব্যৱস্থা সামৰ্থবান বা নিষ্ক্ৰিয় কৰিবলৈ ব্যৱহৃত "
+"কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "মেনু-বাৰ প্ৰদৰ্শন বা লুকাবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+msgid "Keyboard shortcut to set the terminal title"
+msgstr "টাৰ্মিনেলৰ শীৰ্ষক নিৰ্ধাৰণৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "টাৰ্মিনেল পুনৰসংহতি কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr "টাৰ্মিনেল পুনৰসংহতি আৰু পৰিষ্কাৰ কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "পূৰ্ববৰ্তী টেব পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "পৰবৰ্তী টেব পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+#| msgid "Keyboard shortcut to save the current tab contents to file"
+msgid "Keyboard shortcut to move the current tab to the left"
+msgstr "বৰ্তমান টেবক বাঁওফালে স্থানান্তৰ কৰিবলে কি'বৰ্ড চৰ্টকাট"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+#| msgid "Accelerator to move the current tab to the right."
+msgid "Keyboard shortbut to move the current tab to the right"
+msgstr "বৰ্তমান টেবক সোঁফালে স্থানান্তৰ কৰিবলে কি'বৰ্ড চৰ্টকাট"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+#| msgid "Keyboard shortcut to switch to tab 1"
+msgid "Keyboard shortbut to detach current tab"
+msgstr "বৰ্তমান টেব অসংলগ্ন কৰিবলে কি'বৰ্ড চৰ্টকাট"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "টেব ১ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "টেব ২ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "টেব ৩ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "টেব ৪ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "টেব ৫ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "টেব ৬ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "টেব ৭ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "টেব ৮ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "টেব ৯ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "টেব ১০ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "টেব ১১ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "টেব ১২ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+msgid "Keyboard shortcut to launch help"
+msgstr "সহায় প্ৰদৰ্শন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:88
+msgid "Keyboard shortcut to make font larger"
+msgstr "ফন্টৰ আকাৰ ডাঙৰ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:89
+msgid "Keyboard shortcut to make font smaller"
+msgstr "ফন্টৰ আকাৰ হ্ৰাস কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:90
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "ফন্টৰ আকাৰ স্বাভাৱিক কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:91
 msgid "Whether the menubar has access keys"
 msgstr "মেনু-বাৰত অভিগম কি' উপস্থিত আছে নে"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:92
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -595,11 +735,11 @@ msgstr ""
 "নিষ্ক্ৰিয় কৰা "
 "যাব।"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:93
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "মেনু-বাৰ ব্যৱহাৰৰ বাবে প্ৰামাণিক GTK চৰ্টকাট সামৰ্থবান কৰা হৈছে নে"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:94
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -611,11 +751,11 @@ msgstr ""
 "ফলত "
 "মেনু-বাৰৰ প্ৰামাণিক গতিবৰ্ধকসমূহ নিষ্ক্ৰিয় কৰক।"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:95
 msgid "List of available encodings"
 msgstr "উপস্থিত এনক'ডিং ৰ তালিকা"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:96
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -627,11 +767,11 @@ msgstr ""
 "স্থানীয়ৰ "
 "এনক'ডিং প্ৰদৰ্শন কৰে।"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:97
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "এটা টাৰ্মিনেল বন্ধ কৰাৰ পূৰ্বে নিশ্চিতকৰণৰ বাবে সোধা হব নে"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:98
 msgid "Whether to show the menubar in new windows"
 msgstr "নতুন উইন্ডোসমূহত মেনু-বাৰ প্ৰদৰ্শন কৰা হব নে"
 
@@ -856,7 +996,6 @@ msgid "General"
 msgstr "সাধাৰণ"
 
 #: ../src/profile-preferences.ui.h:61
-#| msgid "_Title:"
 msgid "Title"
 msgstr "শীৰ্ষক"
 
@@ -869,7 +1008,6 @@ msgid "When terminal commands set their o_wn titles:"
 msgstr "টাৰ্মিনেল কমান্ড দ্বাৰা নিজস্ব শীৰ্ষক যদি নিৰ্ধাৰণ কৰা হয়: (_w)"
 
 #: ../src/profile-preferences.ui.h:64
-#| msgid "<b>Command</b>"
 msgid "Command"
 msgstr "কমান্ড"
 
@@ -898,7 +1036,6 @@ msgid "Title and Command"
 msgstr "শীৰ্ষক আৰু কমান্ড"
 
 #: ../src/profile-preferences.ui.h:71
-#| msgid "<b>Foreground, Background, Bold and Underline</b>"
 msgid "Foreground, Background, Bold and Underline"
 msgstr "পুৰভূমি, পটভূমি, ডাঠ আৰু নিম্নৰেখিত"
 
@@ -939,7 +1076,6 @@ msgid "Bol_d color:"
 msgstr "ডাঠ ৰঙ (_d):"
 
 #: ../src/profile-preferences.ui.h:81
-#| msgid "<b>Palette</b>"
 msgid "Palette"
 msgstr "পেলেট"
 
@@ -948,9 +1084,6 @@ msgid "Built-in _schemes:"
 msgstr "অন্তৰ্ভুক্ত আঁচনিসমূহ (_s)"
 
 #: ../src/profile-preferences.ui.h:83
-#| msgid ""
-#| "<small><i><b>Note:</b> Terminal applications have these colors available "
-#| "to them.</i></small>"
 msgid "<b>Note:</b> Terminal applications have these colors available to them."
 msgstr ""
 "<b>টোকা:</b> টাৰ্মিনেল এপ্লিকেচনসমূহৰ বাবে নিম্নলিখিত ৰংসমূহ ব্যৱহাৰ কৰা "
@@ -993,19 +1126,15 @@ msgid "Scrolling"
 msgstr "স্ক্ৰল ব্যৱস্থা"
 
 #: ../src/profile-preferences.ui.h:93
-#| msgid ""
-#| "<small><i><b>Note:</b> These options may cause some applications to "
-#| "behave incorrectly.  They are only here to allow you to work around "
-#| "certain applications and operating systems that expect different terminal "
-#| "behavior.</i></small>"
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
 "applications and operating systems that expect different terminal behavior."
 msgstr ""
 "<b>উল্লেখ্য:</b> এই বিকল্পসমূহ ব্যৱহাৰৰ কাৰণে কিছুমান এপ্লিকেচন সঠিকভাবে "
-"চলিবলৈ সক্ষম নহব পাৰে। টাৰ্মিনেলৰ ভিন্ন আচৰণ প্ৰত্যাশাকাৰী কিছুমান এপ্লিকেচন "
-"আৰু কাৰ্য্যকৰ "
+"চলিবলৈ "
+"সক্ষম নহব পাৰে। টাৰ্মিনেলৰ ভিন্ন আচৰণ প্ৰত্যাশাকাৰী কিছুমান এপ্লিকেচন আৰু "
+"কাৰ্য্যকৰ "
 "চিস্টেমৰ সৈতে ব্যৱহাৰৰ বাবে এই বিকল্পসমূহৰ সাহায্য লোৱা হয়।"
 
 #: ../src/profile-preferences.ui.h:94
@@ -1036,188 +1165,193 @@ msgstr "সাহায্য(_H)"
 msgid "_About"
 msgstr "বিষয়ে (_A)"
 
-#: ../src/terminal-accels.c:86
+#: ../src/terminal-accels.c:139
 msgid "New Tab"
 msgstr "নতুন টেব"
 
-#: ../src/terminal-accels.c:87
+#: ../src/terminal-accels.c:141
 msgid "New Window"
 msgstr "নতুন উইন্ডো"
 
-#: ../src/terminal-accels.c:88
+#: ../src/terminal-accels.c:143
 msgid "New Profile"
 msgstr "নতুন আলেখ্য"
 
-#: ../src/terminal-accels.c:90
+#: ../src/terminal-accels.c:146
 msgid "Save Contents"
 msgstr "সমলসমূহ সংৰক্ষণ কৰক"
 
-#: ../src/terminal-accels.c:92
+#: ../src/terminal-accels.c:149
 msgid "Close Tab"
 msgstr "টেব বন্ধ কৰক"
 
-#: ../src/terminal-accels.c:93
+#: ../src/terminal-accels.c:151
 msgid "Close Window"
 msgstr "উইন্ডো বন্ধ কৰক"
 
-#: ../src/terminal-accels.c:98
+#: ../src/terminal-accels.c:157
 msgid "Copy"
 msgstr "কপি কৰক"
 
-#: ../src/terminal-accels.c:99
+#: ../src/terminal-accels.c:159
 msgid "Paste"
 msgstr "পেইস্ট কৰক"
 
-#: ../src/terminal-accels.c:104
+#: ../src/terminal-accels.c:165
 msgid "Hide and Show menubar"
 msgstr "মেনু-বাৰ লুকাওক আৰু প্ৰদৰ্শন কৰক"
 
-#: ../src/terminal-accels.c:105
+#: ../src/terminal-accels.c:167
 msgid "Full Screen"
 msgstr "সম্পূৰ্ণ পৰ্দাত প্ৰদৰ্শন"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:169
 msgid "Zoom In"
 msgstr "ডাঙৰ কৰি প্ৰদৰ্শন"
 
-#: ../src/terminal-accels.c:107
+#: ../src/terminal-accels.c:171
 msgid "Zoom Out"
 msgstr "সৰু কৰি প্ৰদৰ্শন"
 
-#: ../src/terminal-accels.c:108
+#: ../src/terminal-accels.c:173
 msgid "Normal Size"
 msgstr "স্বাভাবিক আকাৰ"
 
-#: ../src/terminal-accels.c:113 ../src/terminal-window.c:3414
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3414
 msgid "Set Title"
 msgstr "শীৰ্ষক নিৰ্ধাৰণ কৰক"
 
-#: ../src/terminal-accels.c:114
+#: ../src/terminal-accels.c:181
 msgid "Reset"
 msgstr "পুনৰসংহতি কৰক"
 
-#: ../src/terminal-accels.c:115
+#: ../src/terminal-accels.c:183
 msgid "Reset and Clear"
 msgstr "পুনৰসংহতি কৰক আৰু আঁতৰাওক"
 
-#: ../src/terminal-accels.c:120
+#: ../src/terminal-accels.c:189
 msgid "Switch to Previous Tab"
 msgstr "পূৰ্ববৰ্তী টেবলৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:191
 msgid "Switch to Next Tab"
 msgstr "পৰবৰ্তী টেবলৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:193
 msgid "Move Tab to the Left"
 msgstr "টেব বাওঁফালে নিয়ক"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:195
 msgid "Move Tab to the Right"
 msgstr "টেব সোঁফালে নিয়ক"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:197
 msgid "Detach Tab"
 msgstr "টেব বিচ্ছিন্ন কৰক"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 1"
 msgstr "টেব ১ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 2"
 msgstr "টেব ২ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 3"
 msgstr "টেব ৩ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 4"
 msgstr "টেব ৪ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 5"
 msgstr "টেব ৫ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 6"
 msgstr "টেব ৬ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:217
 msgid "Switch to Tab 7"
 msgstr "টেব ৭ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:220
 msgid "Switch to Tab 8"
 msgstr "টেব ৮ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:223
 msgid "Switch to Tab 9"
 msgstr "টেব ৯ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:134
+#: ../src/terminal-accels.c:226
 msgid "Switch to Tab 10"
 msgstr "টেব ১০ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:135
+#: ../src/terminal-accels.c:229
 msgid "Switch to Tab 11"
 msgstr "টেব ১১ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:232
 msgid "Switch to Tab 12"
 msgstr "টেব ১২ লৈ স্থানান্তৰ কৰক"
 
-#: ../src/terminal-accels.c:140
+#: ../src/terminal-accels.c:238
 msgid "Contents"
 msgstr "সমলসমূহ"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:243
 msgid "File"
 msgstr "নথিপত্ৰ"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:244
 msgid "Edit"
 msgstr "সম্পাদনা"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:245
 msgid "View"
 msgstr "দৰ্শন"
 
-#: ../src/terminal-accels.c:149
+#: ../src/terminal-accels.c:247
 msgid "Tabs"
 msgstr "টেবসমূহ"
 
-#: ../src/terminal-accels.c:150
+#: ../src/terminal-accels.c:248
 msgid "Help"
 msgstr "সাহায্য"
 
-#: ../src/terminal-accels.c:454
+#: ../src/terminal-accels.c:620
+#, c-format
+msgid "The shortcut key “%s” is already bound to the “%s” action"
+msgstr "“%s” কিবৰ্ড চৰ্টকাট কি বৰ্তমানে “%s” কামৰ সৈতে যুক্ত হৈছে"
+
+#: ../src/terminal-accels.c:774
 msgid "_Action"
 msgstr "কৰ্ম (_A)"
 
-#: ../src/terminal-accels.c:472
+#: ../src/terminal-accels.c:792
 msgid "Shortcut _Key"
 msgstr "চৰ্টকাট কি (_K)"
 
-#: ../src/terminal-app.c:519
+#: ../src/terminal-app.c:544
 msgid "Click button to choose profile"
 msgstr "বুটাম ক্লিক কৰি আলেখ্য বাছক"
 
-#: ../src/terminal-app.c:609
+#: ../src/terminal-app.c:634
 msgid "Profile list"
 msgstr "আলেখ্য তালিকা"
 
-#: ../src/terminal-app.c:672
+#: ../src/terminal-app.c:697
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "“%s” আলেখ্য আঁতৰুৱা হ'ব নেকি ?"
 
-#: ../src/terminal-app.c:688
+#: ../src/terminal-app.c:713
 msgid "Delete Profile"
 msgstr "আলেখ্য আঁতৰাওক"
 
-#: ../src/terminal-app.c:1472
+#: ../src/terminal-app.c:1496
 msgid "User Defined"
 msgstr "ব্যৱহাৰকাৰীৰ দ্বাৰা নিৰ্দিষ্ট"
 
@@ -1367,52 +1501,52 @@ msgstr "ভিয়েতনামিছ"
 msgid "Thai"
 msgstr "থাই"
 
-#: ../src/terminal-encoding.c:491 ../src/terminal-encoding.c:516
+#: ../src/terminal-encoding.c:487 ../src/terminal-encoding.c:512
 msgid "_Description"
 msgstr "বিৱৰণ (_D)"
 
-#: ../src/terminal-encoding.c:500 ../src/terminal-encoding.c:525
+#: ../src/terminal-encoding.c:496 ../src/terminal-encoding.c:521
 msgid "_Encoding"
 msgstr "এনক'ডিং (_E)"
 
-#: ../src/terminal-encoding.c:583
+#: ../src/terminal-encoding.c:579
 msgid "Current Locale"
 msgstr "বৰ্তমান স্থানীয়"
 
-#: ../src/terminal-nautilus.c:467
+#: ../src/terminal-nautilus.c:465
 msgid "Open in _Remote Terminal"
 msgstr "দূৰৱৰ্তী টাৰ্মিনেলত খোলক (_R)"
 
-#: ../src/terminal-nautilus.c:469
+#: ../src/terminal-nautilus.c:467
 msgid "Open in _Local Terminal"
 msgstr "স্থানীয় টাৰ্মিনেলত খোলক (_L)"
 
-#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
 msgid "Open the currently selected folder in a terminal"
 msgstr "বৰ্তমানে নিৰ্বাচন কৰা ফোল্ডাৰ এটা টাৰ্মিনেলত খোলক"
 
-#: ../src/terminal-nautilus.c:475 ../src/terminal-nautilus.c:486
-#: ../src/terminal-nautilus.c:496
+#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:494
 msgid "Open the currently open folder in a terminal"
 msgstr "বৰ্তমানে খোলা ফোল্ডাৰ এটা টাৰ্মিনেলত খোলক"
 
-#: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
+#: ../src/terminal-nautilus.c:479 ../src/terminal-nautilus.c:493
 msgid "Open in T_erminal"
 msgstr "টাৰ্মিনেলত খোলক (_e)"
 
-#: ../src/terminal-nautilus.c:492
+#: ../src/terminal-nautilus.c:490
 msgid "Open T_erminal"
 msgstr "টাৰ্মিনেল খোলক (_e)"
 
-#: ../src/terminal-nautilus.c:493
+#: ../src/terminal-nautilus.c:491
 msgid "Open a terminal"
 msgstr "এটা টাৰ্মিনেল খোলক"
 
-#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:524
+#: ../src/terminal-nautilus.c:509 ../src/terminal-nautilus.c:522
 msgid "Open in _Midnight Commander"
 msgstr "মিডনাইট কমান্ডাৰত খোলক (_M)"
 
-#: ../src/terminal-nautilus.c:513
+#: ../src/terminal-nautilus.c:511
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
@@ -1420,18 +1554,18 @@ msgstr ""
 "বৰ্তমানে নিৰ্বাচিত ফোল্ডাৰক টাৰ্মিনেল নথিপত্ৰ ব্যৱস্থাপক মিডনাইট কমান্ডাৰত "
 "খোলক"
 
-#: ../src/terminal-nautilus.c:515 ../src/terminal-nautilus.c:525
+#: ../src/terminal-nautilus.c:513 ../src/terminal-nautilus.c:523
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
 msgstr ""
 "বৰ্তমানে খোলা ফোল্ডাৰক টাৰ্মিনেল নথিপত্ৰ ব্যৱস্থাপক মিডনাইট কমান্ডাৰত খোলক"
 
-#: ../src/terminal-nautilus.c:521
+#: ../src/terminal-nautilus.c:519
 msgid "Open _Midnight Commander"
 msgstr "মিডনাইট কমান্ডাৰ খোলক (_M)"
 
-#: ../src/terminal-nautilus.c:522
+#: ../src/terminal-nautilus.c:520
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "টাৰ্মিনেল নথিপত্ৰ ব্যৱস্থাপক মিডনাইট কমান্ডাৰ খোলক"
 
@@ -1598,11 +1732,11 @@ msgstr "সন্তান প্ৰক্ৰিয়া সংকেত %d দ্
 msgid "The child process was aborted."
 msgstr "সন্তান প্ৰক্ৰিয়া বাতিল কৰা হৈছিল।"
 
-#: ../src/terminal-tab-label.c:195
+#: ../src/terminal-tab-label.c:194
 msgid "Close tab"
 msgstr "টেব বন্ধ কৰক"
 
-#: ../src/terminal-tabs-menu.c:196
+#: ../src/terminal-tabs-menu.c:195
 msgid "Switch to this tab"
 msgstr "এই টেবলৈ যাওক"
 
@@ -1631,13 +1765,18 @@ msgid "Could not open the address “%s”"
 msgstr "“%s” ঠিকনা খোলা নাযায়"
 
 #: ../src/terminal-util.c:391
+#| msgid ""
+#| "GNOME Terminal is free software; you can redistribute it and/or modify it "
+#| "under the terms of the GNU General Public License as published by the "
+#| "Free Software Foundation; either version 3 of the License, or (at your "
+#| "option) any later version."
 msgid ""
-"GNOME Terminal is free software; you can redistribute it and/or modify it "
+"GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 3 of the License, or (at your option) "
+"Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 msgstr ""
-"GNOME টাৰ্মিনেল এটা বিনামুলিয়া চফ্টৱেৰ; আপুনি Free Software Foundation ৰ "
+"GNOME টাৰ্মিনেল এটা বিনামুলিয়া চফ্টৱেৰ: আপুনি Free Software Foundation ৰ "
 "দ্বাৰা "
 "প্ৰকাশিত GNU General Public License ৰ চুক্তিসমূহৰ অন্তৰ্গত ইয়াক পুনৰ বিলাব "
 "পাৰিব "
@@ -1657,15 +1796,17 @@ msgstr ""
 "নথকাকৈ। অধিক যানিবলৈ  GNU General Public License চাওক।"
 
 #: ../src/terminal-util.c:399
+#| msgid ""
+#| "You should have received a copy of the GNU General Public License along "
+#| "with GNOME Terminal; if not, write to the Free Software Foundation, Inc., "
+#| "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
-"GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+"GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
-"আপুনি GNOME টাৰ্মিনেলৰ সৈতে GNU General Public License ৰ এটা কপি পাব লাগে; "
+"আপুনি GNOME টাৰ্মিনেলৰ সৈতে GNU General Public License ৰ এটা কপি পাব লাগে।  "
 "যদি "
-"নাই পোৱা, Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, "
-"Boston, MA 02110-1301   USA লে লিখক"
+"নাই পোৱা, <http://www.gnu.org/licenses/> চাওক।"
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
@@ -2196,9 +2337,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "অবিকল্পিত এনক'ডিং। বৰ্তমান স্থানীয়ৰ এনক'ডিং ব্যৱহাৰ কৰিবলে \"current\" হব "
 #~ "পাৰে, নহলে জ্ঞাত এনক'ডিংসমূহৰ যিকোনো এটা।"
 
-#~ msgid "Keyboard shortcut to open a new tab"
-#~ msgstr "এটা নতুন টেব খোলাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2208,9 +2346,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "নতুন টেব খোলাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত বিন্যাস "
 #~ "অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি "
 #~ "কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to open a new window"
-#~ msgstr "এটা নতুন উইন্ডো খোলাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for opening a new window. Expressed as a string in "
@@ -2222,9 +2357,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to create a new profile"
-#~ msgstr "এখন নতুন আলেখ্য সৃষ্টি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for bringing up the dialog for profile creation. "
 #~ "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -2234,9 +2366,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "আলেখ্য সৃষ্টিৰ ডাইলগ প্ৰদৰ্শনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট। GTK+ সম্পদ নথিপত্ৰত "
 #~ "ব্যৱহৃত বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং "
 #~ "\"disabled\" লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to save the current tab contents to file"
-#~ msgstr "নথিপত্ৰলে বৰ্তমান টেব সমলসমূহ সংৰক্ষণ কৰিবলে কিবৰ্ড চৰ্টকাট"
 
 #~ msgid ""
 #~ "Keyboard shortcut key to save the current tab contents to a file. "
@@ -2249,9 +2378,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি কৰে, তেতিয়া এই কাৰ্য্যৰ বাবে "
 #~ "কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to close a tab"
-#~ msgstr "এটা টেব বন্ধ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for closing a tab. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2261,9 +2387,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব বন্ধ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত বিন্যাস অনুযায়ী "
 #~ "স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি কৰিলে "
 #~ "এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to close a window"
-#~ msgstr "এটা উইন্ডো বন্ধ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for closing a window. Expressed as a string in the "
@@ -2275,9 +2398,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি "
 #~ "কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to copy text"
-#~ msgstr "লিখনী কপি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for copying selected text to the clipboard. "
 #~ "Expressed as a string in the same format used for GTK+ resource files. If "
@@ -2287,9 +2407,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "নিৰ্বাচিত লিখনী ক্লিপবোৰ্ডলৈ কপি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ "
 #~ "নথিপত্ৰত ব্যৱহৃত বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং "
 #~ "\"disabled\" লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to paste text"
-#~ msgstr "লিখনী পেইস্ট কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for pasting the contents of the clipboard into the "
@@ -2302,10 +2419,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "স্ট্ৰিং \"disabled\" লে সংহতি কৰিলে কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট যুক্ত কৰা "
 #~ "নহব।"
 
-#~ msgid "Keyboard shortcut to toggle full screen mode"
-#~ msgstr ""
-#~ "সম্পূৰ্ণ পৰ্দাত প্ৰদৰ্শন ব্যৱস্থা সামৰ্থবান বা নিষ্ক্ৰিয় কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for toggling full screen mode. Expressed as a "
 #~ "string in the same format used for GTK+ resource files. If you set the "
@@ -2317,9 +2430,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিকল্পক  বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি কৰিলে কাৰ্য্যৰ বাবে কোনো কিবৰ্ড "
 #~ "চৰ্টকাট যুক্ত কৰা নহব।"
 
-#~ msgid "Keyboard shortcut to toggle the visibility of the menubar"
-#~ msgstr "মেনু-বাৰ প্ৰদৰ্শন বা লুকাবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key to toggle the visibility of the menubar. Expressed "
 #~ "as a string in the same format used for GTK+ resource files. If you set "
@@ -2329,9 +2439,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "মেনুবাৰ প্ৰদৰ্শন বা লুকাবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to set the terminal title"
-#~ msgstr "টাৰ্মিনেলৰ শীৰ্ষক নিৰ্ধাৰণৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key to set the terminal title. Expressed as a string in "
@@ -2343,9 +2450,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "ব্যৱহৃত বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং "
 #~ "\"disabled\" লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to reset the terminal"
-#~ msgstr "টাৰ্মিনেল পুনৰসংহতি কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2355,9 +2459,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টাৰ্মিনেল পুনৰসংহতি কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to reset and clear the terminal"
-#~ msgstr "টাৰ্মিনেল পুনৰসংহতি আৰু পৰিষ্কাৰ কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key to reset and clear the terminal. Expressed as a "
@@ -2369,9 +2470,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "নথিপত্ৰত ব্যৱহৃত বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং "
 #~ "\"disabled\" লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to the previous tab"
-#~ msgstr "পূৰ্ববৰ্তী টেব পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key to switch to the previous tab. Expressed as a "
 #~ "string in the same format used for GTK+ resource files. If you set the "
@@ -2381,9 +2479,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "পূৰ্ববৰ্তী টেব পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to the next tab"
-#~ msgstr "পৰবৰ্তী টেব পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
@@ -2408,9 +2503,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "ব্যৱহৃত বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং "
 #~ "\"disabled\" লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Accelerator to move the current tab to the right."
-#~ msgstr "বৰ্তমান টেব সোঁফালে স্থানান্তৰ কৰিবলৈ ব্যৱহৃত গতিবৰ্ধক।"
-
 #~ msgid ""
 #~ "Accelerator key to move the current tab to the right. Expressed as a "
 #~ "string in the same format used for GTK+ resource files. If you set the "
@@ -2433,9 +2525,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে কাৰ্য্যৰ বাবে কোনো কি'বান্ধণী যুক্ত নকৰিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "টেব ১ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 1. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2445,9 +2534,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ১ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "টেব ২ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 2. Expressed as a string in the "
@@ -2459,9 +2545,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "টেব ৩ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 3. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2471,9 +2554,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ৩ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "টেব ৪ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 4. Expressed as a string in the "
@@ -2485,9 +2565,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "টেব ৫ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 5. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2497,9 +2574,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ৫ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "টেব ৬ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 6. Expressed as a string in the "
@@ -2511,9 +2585,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "টেব ৭ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 7. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2523,9 +2594,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ৭ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "টেব ৮ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 8. Expressed as a string in the "
@@ -2537,9 +2605,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "টেব ৯ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 9. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2549,9 +2614,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ৯ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "টেব ১০ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
@@ -2563,9 +2625,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লেসংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "টেব ১১ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2575,9 +2634,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "টেব ১১ লৈ পৰিবৰ্তন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লেসংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "টেব ১২ লৈ পৰিবৰ্তনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
@@ -2589,9 +2645,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লেসংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to launch help"
-#~ msgstr "সহায় প্ৰদৰ্শন কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for launching help. Expressed as a string in the "
 #~ "same format used for GTK+ resource files. If you set the option to the "
@@ -2601,9 +2654,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "সহায় প্ৰদৰ্শনৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত বিন্যাস "
 #~ "অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" লে সংহতি "
 #~ "কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to make font larger"
-#~ msgstr "ফন্টৰ আকাৰ ডাঙৰ কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for making font larger. Expressed as a string in "
@@ -2615,9 +2665,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
 
-#~ msgid "Keyboard shortcut to make font smaller"
-#~ msgstr "ফন্টৰ আকাৰ হ্ৰাস কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
-
 #~ msgid ""
 #~ "Keyboard shortcut key for making font smaller. Expressed as a string in "
 #~ "the same format used for GTK+ resource files. If you set the option to "
@@ -2627,9 +2674,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "ফন্টৰ আকাৰ হ্ৰাস কৰাৰ বাবে ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি। GTK+ সম্পদ নথিপত্ৰত ব্যৱহৃত "
 #~ "বিন্যাস অনুযায়ী স্ট্ৰিংৰূপে অভিব্যক্ত হয়। আপুনি বিকল্পক বিশেষ স্ট্ৰিং \"disabled\" "
 #~ "লে সংহতি কৰিলে এই কাৰ্য্যৰ বাবে কোনো কিবৰ্ড চৰ্টকাট নাথাকিব।"
-
-#~ msgid "Keyboard shortcut to make font normal-size"
-#~ msgstr "ফন্টৰ আকাৰ স্বাভাৱিক কৰিবলৈ ব্যৱহৃত কিবৰ্ড চৰ্টকাট কি"
 
 #~ msgid ""
 #~ "Keyboard shortcut key for making font the normal size. Expressed as a "
@@ -2698,9 +2742,6 @@ msgstr "শীৰ্ষক (_T):"
 #~ "বাওঁফালে\n"
 #~ "সোঁফালে\n"
 #~ "অসামৰ্থবান"
-
-#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
-#~ msgstr "“%s” কিবৰ্ড চৰ্টকাট কি বৰ্তমানে “%s” কামৰ সৈতে যুক্ত হৈছে"
 
 #~ msgid "No such profile \"%s\", using default profile\n"
 #~ msgstr "\"%s\" নামক কোনো আলেখ্য উপস্থিত নাই, অবিকল্পিত আলেখ্য ব্যৱহাৰ কৰক\n"
