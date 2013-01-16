@@ -2572,6 +2572,10 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
   int grid_width;
   int grid_height;
 
+  /* Only update the geometry from the active screen. */
+  if (window->priv->active_screen != screen)
+    return;
+
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
 
