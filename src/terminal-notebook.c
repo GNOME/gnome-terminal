@@ -318,8 +318,11 @@ terminal_notebook_scroll_event (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   gboolean (* scroll_event) (GtkWidget *, GdkEventScroll *) =
-    GTK_WIDGET_GET_CLASS (widget)->scroll_event;
+    GTK_WIDGET_GET_CLASS (terminal_notebook_parent_class)->scroll_event;
   GtkWidget *child, *event_widget, *action_widget;
+
+  if ((event->state & gtk_accelerator_get_default_mod_mask ()) != 0)
+    goto chain_up;
 
   child = gtk_notebook_get_nth_page (notebook, gtk_notebook_get_current_page (notebook));
   if (child == NULL)
