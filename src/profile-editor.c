@@ -490,6 +490,9 @@ scroll_event_cb (GtkWidget      *widget,
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkWidget *child, *event_widget, *action_widget;
 
+  if ((event->state & gtk_accelerator_get_default_mod_mask ()) != 0)
+    return FALSE;
+
   child = gtk_notebook_get_nth_page (notebook, gtk_notebook_get_current_page (notebook));
   if (child == NULL)
     return FALSE;
