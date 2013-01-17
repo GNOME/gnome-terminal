@@ -318,7 +318,7 @@ terminal_notebook_scroll_event (GtkWidget      *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   gboolean (* scroll_event) (GtkWidget *, GdkEventScroll *) =
-    GTK_WIDGET_GET_CLASS (terminal_notebook_parent_class)->scroll_event;
+    GTK_WIDGET_CLASS (terminal_notebook_parent_class)->scroll_event;
   GtkWidget *child, *event_widget, *action_widget;
 
   if ((event->state & gtk_accelerator_get_default_mod_mask ()) != 0)
