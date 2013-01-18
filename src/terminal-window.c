@@ -233,11 +233,6 @@ sync_screen_icon_title (TerminalScreen *screen,
 static void terminal_window_set_size (TerminalWindow *window,
                                       TerminalScreen *screen);
 
-static void terminal_window_set_size_force_grid (TerminalWindow *window,
-                                                 TerminalScreen *screen,
-                                                 int force_grid_width,
-                                                 int force_grid_height);
-
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
 
 /* Menubar mnemonics & accel settings handling */
@@ -868,7 +863,7 @@ terminal_size_to_cb (GtkAction *action,
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), width, height);
 
-  terminal_window_set_size_force_grid (window, priv->active_screen, -1, -1);
+  terminal_window_set_size (window, priv->active_screen);
 }
 
 static void
@@ -1058,7 +1053,7 @@ screen_resize_window_cb (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return;
 
-  terminal_window_set_size_force_grid (window, screen, -1, -1); //grid_width, grid_height);
+  terminal_window_set_size (window, screen);
 }
 
 static void
@@ -2342,27 +2337,10 @@ static void
 terminal_window_set_size (TerminalWindow *window,
                           TerminalScreen *screen)
 {
-  terminal_window_set_size_force_grid (window, screen, -1, -1);
-}
-
-static void
-terminal_window_set_size_force_grid (TerminalWindow *window,
-                                     TerminalScreen *screen,
-                                     int             force_grid_width,
-                                     int             force_grid_height)
-{
-  int grid_width;
-  int grid_height;
-
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);
 
   terminal_screen_get_size (screen, &grid_width, &grid_height);
-
-  if (force_grid_width >= 0)
-    grid_width = force_grid_width;
-  if (force_grid_height >= 0)
-    grid_height = force_grid_height;
 
   gtk_window_resize_to_geometry (GTK_WINDOW (window), grid_width, grid_height);
 }
