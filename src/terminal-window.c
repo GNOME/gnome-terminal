@@ -230,7 +230,7 @@ sync_screen_icon_title (TerminalScreen *screen,
                         GParamSpec *psepc,
                         TerminalWindow *window);
 
-static void terminal_window_set_size (TerminalWindow *window);
+static void terminal_window_update_size (TerminalWindow *window);
 
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
 
@@ -862,7 +862,7 @@ terminal_size_to_cb (GtkAction *action,
 
   vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), width, height);
 
-  terminal_window_set_size (window);
+  terminal_window_update_size (window);
 }
 
 static void
@@ -1050,7 +1050,7 @@ screen_resize_window_cb (TerminalScreen *screen,
   vte_terminal_set_size (terminal, grid_width, grid_height);
 
   if (screen == priv->active_screen)
-    terminal_window_set_size (window);
+    terminal_window_update_size (window);
 }
 
 static void
@@ -1960,7 +1960,7 @@ terminal_window_style_updated (GtkWidget *widget)
   if (priv->active_screen != NULL)
     terminal_screen_update_style (priv->active_screen);
 
-  terminal_window_set_size (window);
+  terminal_window_update_size (window);
 }
 
 static void
@@ -2084,7 +2084,7 @@ terminal_window_show (GtkWidget *widget)
     {
       /* At this point, we have our GdkScreen, and hence the right
        * font size, so we can go ahead and size the window. */
-      terminal_window_set_size (window);
+      terminal_window_update_size (window);
     }
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->show (widget);
@@ -2307,7 +2307,7 @@ terminal_window_set_menubar_visible (TerminalWindow *window,
                              "[window %p] setting size after toggling menubar visibility\n",
                              window);
 
-      terminal_window_set_size (window);
+      terminal_window_update_size (window);
     }
 }
 
@@ -2330,7 +2330,7 @@ terminal_window_get_mdi_container (TerminalWindow *window)
 }
 
 static void
-terminal_window_set_size (TerminalWindow *window)
+terminal_window_update_size (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
   int grid_width, grid_height;
@@ -2475,7 +2475,7 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
   _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                          "[window %p] setting size after flipping notebook pages\n",
                          window);
-  terminal_window_set_size (window);
+  terminal_window_update_size (window);
 
   terminal_window_update_tabs_menu_sensitivity (window);
   terminal_window_update_encoding_menu_active_encoding (window);
@@ -2604,7 +2604,7 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
   pages = terminal_mdi_container_get_n_screens (container);
   if (pages == 1)
     {
-      terminal_window_set_size (window);
+      terminal_window_update_size (window);
     }
   else if (pages == 0)
     {
@@ -2628,7 +2628,7 @@ terminal_window_parse_geometry (TerminalWindow *window,
     return FALSE;
 
   /* We won't actually get allocated at the size parsed out of the
-   * geometry until the window is shown. If terminal_window_set_size()
+   * geometry until the window is shown. If terminal_window_update_size()
    * is called between now and then, that could result in us getting
    * snapped back to the old grid size. So we need to immediately
    * update the size of the active terminal to grid size from the
