@@ -126,7 +126,7 @@ maybe_migrate_settings (TerminalApp *app)
 
   version = g_settings_get_uint (terminal_app_get_global_settings (app), TERMINAL_SETTING_SCHEMA_VERSION);
   if (version >= TERMINAL_SCHEMA_VERSION) {
-     _terminal_debug_print (TERMINAL_DEBUG_FACTORY | TERMINAL_DEBUG_PROFILE,
+     _terminal_debug_print (TERMINAL_DEBUG_SERVER | TERMINAL_DEBUG_PROFILE,
                             "Schema version is %d, already migrated.\n", version);
     return;
   }

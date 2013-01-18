@@ -163,7 +163,7 @@ terminal_receiver_impl_exec (TerminalReceiver *receiver,
   }
 
   if (working_directory != NULL)
-    _terminal_debug_print (TERMINAL_DEBUG_FACTORY,
+    _terminal_debug_print (TERMINAL_DEBUG_SERVER,
                            "CWD is '%s'\n", working_directory);
 
   exec_argv = (char **) g_variant_get_bytestring_array (arguments, &exec_argc);
