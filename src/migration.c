@@ -442,7 +442,7 @@ migrate_profiles (GSettings *global_settings,
 
   profile_uuids = g_ptr_array_new_with_free_func ((GDestroyNotify) g_free);
 
-  dvalue = gconf_client_get_without_default (client, GCONF_GLOBAL_PREFIX "/default_profile", NULL);
+  dvalue = gconf_client_get (client, GCONF_GLOBAL_PREFIX "/default_profile", NULL);
   if (dvalue != NULL &&
       dvalue->type == GCONF_VALUE_STRING)
     default_profile = gconf_value_get_string (dvalue);
