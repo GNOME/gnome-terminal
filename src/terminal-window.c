@@ -230,6 +230,14 @@ sync_screen_icon_title (TerminalScreen *screen,
                         GParamSpec *psepc,
                         TerminalWindow *window);
 
+static void terminal_window_set_size (TerminalWindow *window,
+                                      TerminalScreen *screen);
+
+static void terminal_window_set_size_force_grid (TerminalWindow *window,
+                                                 TerminalScreen *screen,
+                                                 int force_grid_width,
+                                                 int force_grid_height);
+
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
 
 /* Menubar mnemonics & accel settings handling */
@@ -1950,6 +1958,21 @@ terminal_window_init (TerminalWindow *window)
 }
 
 static void
+terminal_window_style_updated (GtkWidget *widget)
+{
+  TerminalWindow *window = TERMINAL_WINDOW (widget);
+  TerminalWindowPrivate *priv = window->priv;
+
+  GTK_WIDGET_CLASS (terminal_window_parent_class)->style_updated (widget);
+
+  if (priv->active_screen != NULL)
+    {
+      terminal_screen_update_style (priv->active_screen);
+      terminal_window_set_size (window, priv->active_screen);
+    }
+}
+
+static void
 terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -1963,6 +1986,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->map_event = terminal_window_map_event;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
+  widget_class->style_updated = terminal_window_style_updated;
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 }
@@ -2314,14 +2338,14 @@ terminal_window_get_mdi_container (TerminalWindow *window)
   return GTK_WIDGET (priv->mdi_container);
 }
 
-void
+static void
 terminal_window_set_size (TerminalWindow *window,
                           TerminalScreen *screen)
 {
   terminal_window_set_size_force_grid (window, screen, -1, -1);
 }
 
-void
+static void
 terminal_window_set_size_force_grid (TerminalWindow *window,
                                      TerminalScreen *screen,
                                      int             force_grid_width,
@@ -2329,10 +2353,6 @@ terminal_window_set_size_force_grid (TerminalWindow *window,
 {
   int grid_width;
   int grid_height;
-
-  /* Only update the geometry from the active screen. */
-  if (window->priv->active_screen != screen)
-    return;
 
   /* be sure our geometry is up-to-date */
   terminal_window_update_geometry (window);

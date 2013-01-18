@@ -128,7 +128,6 @@ static void terminal_screen_drag_data_received (GtkWidget        *widget,
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
                                                     TerminalScreen *screen);
-static void terminal_screen_change_font (TerminalScreen *screen);
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
@@ -245,17 +244,11 @@ terminal_screen_realize (GtkWidget *widget)
   terminal_screen_set_font (screen);
 }
 
-static void
-terminal_screen_style_updated (GtkWidget *widget)
+void
+terminal_screen_update_style (TerminalScreen *screen)
 {
-  TerminalScreen *screen = TERMINAL_SCREEN (widget);
-
-  GTK_WIDGET_CLASS (terminal_screen_parent_class)->style_updated (widget);
-
   update_color_scheme (screen);
-
-  if (gtk_widget_get_realized (widget))
-    terminal_screen_change_font (screen);
+  terminal_screen_set_font (screen);
 }
 
 #ifdef GNOME_ENABLE_DEBUG
@@ -433,7 +426,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->set_property = terminal_screen_set_property;
 
   widget_class->realize = terminal_screen_realize;
-  widget_class->style_updated = terminal_screen_style_updated;
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
@@ -883,7 +875,7 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       (!prop_name ||
        prop_name == I_(TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY) ||
        prop_name == I_(TERMINAL_PROFILE_FONT_KEY)))
-    terminal_screen_change_font (screen);
+    terminal_screen_set_font (screen);
 
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS_KEY) ||
@@ -1018,18 +1010,7 @@ terminal_screen_system_font_changed_cb (GSettings      *settings,
   if (!g_settings_get_boolean (settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY))
     return;
 
-  terminal_screen_change_font (screen);
-}
-
-static void
-terminal_screen_change_font (TerminalScreen *screen)
-{
-  TerminalWindow *window;
-
   terminal_screen_set_font (screen);
-
-  window = terminal_screen_get_window (screen);
-  terminal_window_set_size (window, screen);
 }
 
 void
@@ -1730,7 +1711,7 @@ terminal_screen_set_font_scale (TerminalScreen *screen,
   if (gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
       /* Update the font */
-      terminal_screen_change_font (screen);
+      terminal_screen_set_font (screen);
     }
 }
 

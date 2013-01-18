@@ -132,6 +132,8 @@ void terminal_screen_save_config (TerminalScreen *screen,
                                   GKeyFile *key_file,
                                   const char *group);
 
+void terminal_screen_update_style (TerminalScreen *screen);
+
 gboolean terminal_screen_has_foreground_process (TerminalScreen *screen);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */

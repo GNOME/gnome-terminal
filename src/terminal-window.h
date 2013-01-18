@@ -84,12 +84,6 @@ gboolean terminal_window_parse_geometry (TerminalWindow *window,
 					 const char     *geometry);
 
 void terminal_window_update_geometry  (TerminalWindow *window);
-void terminal_window_set_size         (TerminalWindow *window,
-                                       TerminalScreen *screen);
-void terminal_window_set_size_force_grid (TerminalWindow *window,
-                                          TerminalScreen *screen,
-                                          int             force_grid_width,
-                                          int             force_grid_height);
 
 GtkWidget* terminal_window_get_mdi_container (TerminalWindow *window);
 
