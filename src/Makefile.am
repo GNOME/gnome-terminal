@@ -296,3 +296,5 @@ EXTRA_DIST = \
 
 @INTLTOOL_XML_NOMERGE_RULE@
 @GSETTINGS_RULES@
+
+-include $(top_srcdir)/git.mk
