@@ -187,7 +187,7 @@ AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes
 # Compilation
 # ***********
 
-CC_CHECK_CFLAGS_APPEND([ \
+CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -Wall -Wextra \
   -Wformat-nonliteral -Werror=format-security \
   -Wsign-compare -Werror=implicit-function-declaration \
@@ -212,6 +212,9 @@ AC_SUBST([TERMINAL_MAJOR_VERSION],[gt_version_major])
 AC_SUBST([TERMINAL_MINOR_VERSION],[gt_version_minor])
 AC_SUBST([TERMINAL_MICRO_VERSION],[gt_version_micro])
 AC_SUBST([TERMINAL_API_VERSION],[gt_api_version])
+AC_SUBST([AM_CPPFLAGS])
+AC_SUBST([AM_CFLAGS])
+AC_SUBST([AM_LDFLAGS])
 
 # ****************************
 
