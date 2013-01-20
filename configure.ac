@@ -188,22 +188,29 @@ AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes
 # ***********
 
 CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
+  -pipe \
   -Waggregate-return \
   -Wall \
   -Wcast-align \
+  -Wendif-labels \
   -Werror=declaration-after-statement \
-  -Werror=format-security \
   -Werror=format=2 \
+  -Werror=format-nonliteral \
+  -Werror=format-security \
   -Werror=implicit-function-declaration \
   -Werror=init-self \
   -Werror=missing-include-dirs \
   -Werror=missing-prototypes \
   -Werror=pointer-arith \
   -Wextra \
+  -Wfloat-equal \
   -Wformat-nonliteral \
   -Wimplicit \
+  -Wlogical-op \
   -Wmissing-declarations \
+  -Wmissing-include-dirs \
   -Wmissing-format-attribute \
+  -Wmissing-noreturn \
   -Wnested-externs \
   -Wno-missing-field-initializers \
   -Wno-switch-enum \
@@ -214,10 +221,15 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -Wsign-compare \
   -Wstrict-aliasing=2 \
   -Wstrict-prototypes \
+  -Wundef \
   -Wuninitialized \
   -Wunsafe-loop-optimizations \
   -Wwrite-strings \
   -fno-common \
+  -fdiagnostics-show-option \
+  -fno-strict-aliasing \
+  -fvisibility=hidden \
+  -fstack-protector \
 ])
 
 # *************
