@@ -1113,7 +1113,23 @@ get_child_command (TerminalScreen *screen,
 
   *argv_p = argv = NULL;
 
-  if (priv->shell)
+  if (priv->override_command)
+    {
+      argv = g_strdupv (priv->override_command);
+
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+    }
+  else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
+    {
+      const char *argv_str;
+
+      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
+      if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
+        return FALSE;
+
+      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
+    }
+  else if (priv->shell)
     {
       const char *only_name;
       char *shell;
@@ -1140,22 +1156,7 @@ get_child_command (TerminalScreen *screen,
 
       *spawn_flags_p |= G_SPAWN_FILE_AND_ARGV_ZERO;
     }
-  else if (priv->override_command)
-    {
-      argv = g_strdupv (priv->override_command);
 
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
-    }
-  else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
-    {
-      const char *argv_str;
-
-      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
-      if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
-        return FALSE;
-
-      *spawn_flags_p |= G_SPAWN_SEARCH_PATH;
-    }
   else
     {
       g_set_error_literal (err, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
