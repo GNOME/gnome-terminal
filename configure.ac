@@ -188,17 +188,37 @@ AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes
 # ***********
 
 CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
-  -Wall -Wextra \
-  -Wformat-nonliteral -Werror=format-security \
-  -Wsign-compare -Werror=implicit-function-declaration \
-  -Wpointer-arith -Wwrite-strings -Wstrict-prototypes \
-  -Waggregate-return -Wcast-align -Wimplicit -Wuninitialized \
-  -Wmissing-prototypes -Wmissing-declarations -Wnested-externs \
-  -Wpacked -Wmissing-format-attribute -Wshadow \
-  -Wstrict-aliasing=2 -Winit-self -Wunsafe-loop-optimizations \
-  -Wdeclaration-after-statement -Wold-style-definition \
-  -Wno-missing-field-initializers -Wno-unused-parameter \
-  -fno-common -Wno-switch-enum])
+  -Waggregate-return \
+  -Wall \
+  -Wcast-align \
+  -Werror=declaration-after-statement \
+  -Werror=format-security \
+  -Werror=format=2 \
+  -Werror=implicit-function-declaration \
+  -Werror=init-self \
+  -Werror=missing-include-dirs \
+  -Werror=missing-prototypes \
+  -Werror=pointer-arith \
+  -Wextra \
+  -Wformat-nonliteral \
+  -Wimplicit \
+  -Wmissing-declarations \
+  -Wmissing-format-attribute \
+  -Wnested-externs \
+  -Wno-missing-field-initializers \
+  -Wno-switch-enum \
+  -Wno-unused-parameter \
+  -Wold-style-definition \
+  -Wpacked \
+  -Wshadow \
+  -Wsign-compare \
+  -Wstrict-aliasing=2 \
+  -Wstrict-prototypes \
+  -Wuninitialized \
+  -Wunsafe-loop-optimizations \
+  -Wwrite-strings \
+  -fno-common \
+])
 
 # *************
 # Documentation
