@@ -1014,24 +1014,6 @@ terminal_profile_edit (GSettings  *profile,
                             "sensitive",
                             FALSE);
 
-#if 0
-  if (!prop_name ||
-    prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_KEY) ||
-    prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) ||
-    prop_name == I_(TERMINAL_PROFILE_USE_THEME_COLORS_KEY))
-  {
-    gboolean bold_locked, bold_same_as_fg_locked, bold_same_as_fg, use_theme_colors;
-    
-    bold_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY);
-    bold_same_as_fg_locked = terminal_profile_property_locked (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY);
-    bold_same_as_fg = terminal_profile_get_property_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY);
-    
-    SET_SENSITIVE ("bold-color-same-as-fg-checkbox", !bold_same_as_fg_locked);
-    SET_SENSITIVE ("bold-colorpicker", !bold_locked && !bold_same_as_fg);
-    SET_SENSITIVE ("bold-colorpicker-label", ((!bold_same_as_fg && !bold_locked) || !bold_same_as_fg_locked));
-  }
-#endif
-
   terminal_util_bind_mnemonic_label_sensitivity (editor);
 
   terminal_profile_editor_focus_widget (editor, widget_name);
