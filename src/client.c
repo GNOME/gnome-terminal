@@ -63,39 +63,6 @@ _printerr (const char *format, ...)
   va_end (args);
 }
 
-/* ---------------------------------------------------------------------------------------------------- */
-
-G_GNUC_UNUSED static void completion_debug (const gchar *format, ...);
-
-/* Uncomment to get debug traces in /tmp/gdbus-completion-debug.txt (nice
- * to not have it interfere with stdout/stderr)
- */
-#if 0
-G_GNUC_UNUSED static void
-completion_debug (const gchar *format, ...)
-{
-  va_list var_args;
-  gchar *s;
-  static FILE *f = NULL;
-
-  va_start (var_args, format);
-  s = g_strdup_vprintf (format, var_args);
-  if (f == NULL)
-    {
-      f = fopen ("/tmp/gdbus-completion-debug.txt", "a+");
-    }
-  fprintf (f, "%s\n", s);
-  g_free (s);
-}
-#else
-static void
-completion_debug (const gchar *format, ...)
-{
-}
-#endif
-
-/* ---------------------------------------------------------------------------------------------------- */
-
 static void
 remove_arg (gint num, gint *argc, gchar **argv[])
 {
@@ -642,9 +609,6 @@ static gboolean
 handle_open (int *argc,
              char ***argv,
              const char *command,
-             gboolean request_completion,
-             const gchar *completion_cur,
-             const gchar *completion_prev,
              int *exit_code)
 {
   OptionData *data;
@@ -765,42 +729,21 @@ handle_open (int *argc,
   return TRUE;
 }
 
-/* ---------------------------------------------------------------------------------------------------- */
-
-static gchar *
-pick_word_at (const gchar  *s,
-              gint          cursor,
-              gint         *out_word_begins_at)
+static void
+complete (int *argc,
+          char ***argv)
 {
-  gint begin;
-  gint end;
+}
 
-  if (s[0] == '\0')
-    {
-      if (out_word_begins_at != NULL)
-        *out_word_begins_at = -1;
-      return NULL;
-    }
-
-  if (g_ascii_isspace (s[cursor]) && ((cursor > 0 && g_ascii_isspace(s[cursor-1])) || cursor == 0))
-    {
-      if (out_word_begins_at != NULL)
-        *out_word_begins_at = cursor;
-      return g_strdup ("");
-    }
-
-  while (!g_ascii_isspace (s[cursor - 1]) && cursor > 0)
-    cursor--;
-  begin = cursor;
-
-  end = begin;
-  while (!g_ascii_isspace (s[end]) && s[end] != '\0')
-    end++;
-
-  if (out_word_begins_at != NULL)
-    *out_word_begins_at = begin;
-
-  return g_strndup (s + begin, end - begin);
+static int
+mangle_exit_code (int status)
+{
+  if (WIFEXITED (status))
+    return WEXITSTATUS (status);
+  else if (WIFSIGNALED (status))
+    return 128 + (WTERMSIG (status));
+  else
+    return 127;
 }
 
 gint
@@ -809,9 +752,6 @@ main (gint argc, gchar *argv[])
   int ret;
   int exit_code = 0;
   const gchar *command;
-  gboolean request_completion;
-  gchar *completion_cur;
-  gchar *completion_prev;
 
   setlocale (LC_ALL, "");
 
@@ -824,8 +764,6 @@ main (gint argc, gchar *argv[])
 #endif
 
   ret = EXIT_FAILURE;
-  completion_cur = NULL;
-  completion_prev = NULL;
 
   if (argc < 2)
     {
@@ -833,24 +771,11 @@ main (gint argc, gchar *argv[])
       goto out;
     }
 
-  request_completion = FALSE;
-
-  //completion_debug ("---- argc=%d --------------------------------------------------------", argc);
-
- again:
   command = argv[1];
   if (g_strcmp0 (command, "help") == 0)
     {
-      if (request_completion)
-        {
-          /* do nothing */
-        }
-      else
-        {
-          usage (&argc, &argv, TRUE);
-          ret = EXIT_SUCCESS;
-        }
-      goto out;
+      usage (&argc, &argv, TRUE);
+      ret = EXIT_SUCCESS;
     }
   else if (g_strcmp0 (command, "run") == 0 ||
            g_strcmp0 (command, "shell") == 0)
@@ -858,106 +783,21 @@ main (gint argc, gchar *argv[])
       if (handle_open (&argc,
                        &argv,
                        command,
-                       request_completion,
-                       completion_cur,
-                       completion_prev,
                        &exit_code))
-        ret = EXIT_SUCCESS;
-      goto out;
+        ret = mangle_exit_code (exit_code);
+      else
+        ret = 127;
     }
-  else if (g_strcmp0 (command, "complete") == 0 && argc == 4 && !request_completion)
+  else if (g_strcmp0 (command, "complete") == 0)
     {
-      const gchar *completion_line;
-      gchar **completion_argv;
-      gint completion_argc;
-      gint completion_point;
-      gchar *endp;
-      gint cur_begin;
-
-      request_completion = TRUE;
-
-      completion_line = argv[2];
-      completion_point = strtol (argv[3], &endp, 10);
-      if (endp == argv[3] || *endp != '\0')
-        goto out;
-
-#if 0
-      completion_debug ("completion_point=%d", completion_point);
-      completion_debug ("----");
-      completion_debug (" 0123456789012345678901234567890123456789012345678901234567890123456789");
-      completion_debug ("`%s'", completion_line);
-      completion_debug (" %*s^",
-                         completion_point, "");
-      completion_debug ("----");
-#endif
-
-      if (!g_shell_parse_argv (completion_line,
-                               &completion_argc,
-                               &completion_argv,
-                               NULL))
-        {
-          /* it's very possible the command line can't be parsed (for
-           * example, missing quotes etc) - in that case, we just
-           * don't autocomplete at all
-           */
-          goto out;
-        }
-
-      /* compute cur and prev */
-      completion_prev = NULL;
-      completion_cur = pick_word_at (completion_line, completion_point, &cur_begin);
-      if (cur_begin > 0)
-        {
-          gint prev_end;
-          for (prev_end = cur_begin - 1; prev_end >= 0; prev_end--)
-            {
-              if (!g_ascii_isspace (completion_line[prev_end]))
-                {
-                  completion_prev = pick_word_at (completion_line, prev_end, NULL);
-                  break;
-                }
-            }
-        }
-#if 0
-      completion_debug (" cur=`%s'", completion_cur);
-      completion_debug ("prev=`%s'", completion_prev);
-#endif
-
-      argc = completion_argc;
-      argv = completion_argv;
-
-      ret = EXIT_SUCCESS;
-
-      goto again;
+      complete (&argc, &argv);
     }
   else
     {
-      if (request_completion)
-        {
-          g_print ("help \nopen \n");
-          ret = EXIT_SUCCESS;
-          goto out;
-        }
-      else
-        {
-          _printerr ("Unknown command `%s'\n", command);
-          usage (&argc, &argv, FALSE);
-          goto out;
-        }
+      _printerr ("Unknown command `%s'\n", command);
+      usage (&argc, &argv, FALSE);
     }
 
  out:
-  g_free (completion_cur);
-  g_free (completion_prev);
-
-  if (ret == 0 && exit_code != 0) {
-    if (WIFEXITED (exit_code))
-      return WEXITSTATUS (exit_code);
-    else if (WIFSIGNALED (exit_code))
-      return 128 + (WTERMSIG (exit_code));
-    else
-      return 127;
-  }
-
   return ret;
 }
