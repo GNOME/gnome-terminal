@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+char **terminal_profile_util_list_profiles (void);
+
 char **terminal_profile_util_get_profiles (GSettings *settings);
 
 char *terminal_profile_util_get_profile_by_uuid (const char *uuid,

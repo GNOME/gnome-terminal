@@ -85,8 +85,13 @@ terminal_profile_util_get_profiles (GSettings *settings)
                                 map_profiles_list, NULL);
 }
 
-static char **
-get_profiles (void)
+/**
+ * terminal_profile_util_list_profiles:
+ *
+ * Returns: (transfer full): the list of profile UUIDs, or %NULL
+ */
+char **
+terminal_profile_util_list_profiles (void)
 {
   GSettings *settings;
   char **profiles;
@@ -152,7 +157,7 @@ terminal_profile_util_get_profile_by_uuid (const char *uuid,
   char **profiles;
   guint n;
 
-  profiles = get_profiles ();
+  profiles = terminal_profile_util_list_profiles ();
   n = strv_contains (profiles, uuid);
   g_strfreev (profiles);
 
@@ -178,7 +183,7 @@ terminal_profile_util_get_profile_by_uuid_or_name (const char *uuid_or_name,
   char **profiles, **profile_names;
   guint n;
 
-  profiles = get_profiles ();
+  profiles = terminal_profile_util_list_profiles ();
   n = strv_contains (profiles, uuid_or_name);
 
   if (n != 0) {

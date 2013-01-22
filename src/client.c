@@ -729,10 +729,36 @@ handle_open (int *argc,
   return TRUE;
 }
 
-static void
-complete (int *argc,
-          char ***argv)
+static gboolean
+complete (int *argcp,
+          char ***argvp)
 {
+  char *thing;
+
+  modify_argv0_for_command (argcp, argvp, "complete");
+
+  if (*argcp != 2)
+    {
+      _printerr ("Usage: %s THING\n", (*argvp)[0]);
+      return FALSE;
+    }
+
+  thing = (*argvp)[1];
+  if (g_str_equal (thing, "profiles"))
+    {
+      char **profiles, **p;
+
+      profiles = terminal_profile_util_list_profiles ();
+      if (profiles == NULL)
+        return FALSE;
+
+      for (p = profiles; *p; p++)
+        g_print ("%s\n", *p);
+      g_strfreev (profiles);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static int
@@ -790,7 +816,8 @@ main (gint argc, gchar *argv[])
     }
   else if (g_strcmp0 (command, "complete") == 0)
     {
-      complete (&argc, &argv);
+      if (complete (&argc, &argv))
+        ret = EXIT_SUCCESS;
     }
   else
     {
