@@ -22,6 +22,9 @@
 
 G_BEGIN_DECLS
 
+char *terminal_client_get_profile (const char *name_or_id,
+                                   GError **error);
+
 void terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                      const char      *display_name,
                                                      const char      *startup_id,

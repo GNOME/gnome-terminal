@@ -31,6 +31,7 @@
 #include "terminal-screen.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
+#include "terminal-profile-utils.h"
 #include "terminal-util.h"
 #include "terminal-version.h"
 
@@ -296,19 +297,24 @@ option_profile_cb (const gchar *option_name,
                    GError     **error)
 {
   TerminalOptions *options = data;
+  char *profile;
+
+  profile = terminal_profile_util_get_profile_by_uuid_or_name (value, error);
+  if (profile == NULL)
+    return FALSE;
 
   if (options->initial_windows)
     {
       InitialTab *it = ensure_top_tab (options);
 
       g_free (it->profile);
-      it->profile = g_strdup (value);
+      it->profile = profile;
       it->profile_is_id = FALSE;
     }
   else
     {
       g_free (options->default_profile);
-      options->default_profile = g_strdup (value);
+      options->default_profile = profile;
       options->default_profile_is_id = FALSE;
     }
 
@@ -322,19 +328,25 @@ option_profile_id_cb (const gchar *option_name,
                       GError     **error)
 {
   TerminalOptions *options = data;
+  char *profile;
+
+  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  if (profile == NULL)
+    return FALSE;
+
 
   if (options->initial_windows)
     {
       InitialTab *it = ensure_top_tab (options);
 
       g_free (it->profile);
-      it->profile = g_strdup (value);
+      it->profile = profile;
       it->profile_is_id = TRUE;
     }
   else
     {
       g_free (options->default_profile);
-      options->default_profile = g_strdup (value);
+      options->default_profile = profile;
       options->default_profile_is_id = TRUE;
     }
 

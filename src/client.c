@@ -44,6 +44,7 @@
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
+#include "terminal-profile-utils.h"
 
 static gboolean quiet = FALSE;
 
@@ -327,6 +328,24 @@ option_fd_cb (const gchar *option_name,
   return TRUE;
 }
 
+static gboolean
+option_profile_cb (const gchar *option_name,
+                   const gchar *value,
+                   gpointer     user_data,
+                   GError     **error)
+{
+  OptionData *data = user_data;
+
+  if (data->profile != NULL) {
+    g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+                 "May only use option %s once", option_name);
+    return FALSE;
+  }
+
+  data->profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  return data->profile != NULL;
+}
+
 static GOptionContext *
 get_goption_context (OptionData *data)
 {
@@ -354,7 +373,7 @@ get_goption_context (OptionData *data)
   };
 
   const GOptionEntry terminal_goptions[] = {
-    { "profile", 0, 0, G_OPTION_ARG_STRING, &data->profile,
+    { "profile", 0, 0, G_OPTION_ARG_CALLBACK, option_profile_cb,
       N_("Use the given profile instead of the default profile"),
       N_("UUID") },
     { "title", 0, 0, G_OPTION_ARG_STRING, &data->title,

@@ -50,6 +50,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-mdi-container.h \
 	terminal-notebook.c \
 	terminal-notebook.h \
+	terminal-profile-utils.c \
+	terminal-profile-utils.h \
 	terminal-schemas.h \
 	terminal-screen.c \
 	terminal-screen.h \
@@ -147,6 +149,9 @@ gnome_terminal_client_SOURCES = \
 	terminal-client-utils.h \
 	terminal-defines.h \
 	terminal-intl.h \
+	terminal-profile-utils.c \
+	terminal-profile-utils.h \
+	terminal-schemas.h \
 	$(NULL)
 
 nodist_gnome_terminal_client_SOURCES = \
@@ -186,6 +191,9 @@ gnome_terminal_SOURCES = \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
+	terminal-profile-utils.c \
+	terminal-profile-utils.h \
+	terminal-schemas.h \
 	$(NULL)
 
 nodist_gnome_terminal_SOURCES = \

@@ -32,6 +32,7 @@
 #include "terminal-screen.h"
 #include "terminal-screen-container.h"
 #include "terminal-window.h"
+#include "terminal-profile-utils.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
 #include "terminal-encoding.h"
@@ -811,46 +812,6 @@ profile_list_row_activated_cb (GtkTreeView       *tree_view,
   g_object_unref (selected_profile);
 }
 
-static gboolean
-validate_profile_name (const char *name)
-{
-  uuid_t u;
-
-  return uuid_parse ((char *) name, u) == 0;
-}
-
-static gboolean
-validate_profile_list (char **profiles)
-{
-  guint i;
-
-  g_assert (profiles != NULL);
-
-  for (i = 0; profiles[i]; i++) {
-    if (!validate_profile_name (profiles[i]))
-      return FALSE;
-  }
-
-  return i > 0;
-}
-
-static gboolean
-map_profiles_list (GVariant *value,
-                   gpointer *result,
-                   gpointer user_data G_GNUC_UNUSED)
-{
-  char **profiles;
-
-  g_variant_get (value, "^a&s", &profiles);
-  if (validate_profile_list (profiles)) {
-    *result = profiles;
-    return TRUE;
-  }
-
-  g_free (profiles);
-  return FALSE;
-}
-
 static void
 terminal_app_profile_list_changed_cb (GSettings *settings,
                                       const char *key,
@@ -864,8 +825,7 @@ terminal_app_profile_list_changed_cb (GSettings *settings,
   /* Use get_mapped so we can be sure never to get valid profile names, and
    * never an empty profile list, since the schema defines one profile.
    */
-  profiles = g_settings_get_mapped (app->global_settings, TERMINAL_SETTING_PROFILES_KEY,
-                                    map_profiles_list, NULL);
+  profiles = terminal_profile_util_get_profiles (app->global_settings);
   g_settings_get (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY,
                   "&s", &default_profile);
 
@@ -895,7 +855,7 @@ terminal_app_profile_list_changed_cb (GSettings *settings,
 
     g_hash_table_insert (new_profiles, g_strdup (name) /* adopted */, profile /* adopted */);
   }
-  g_free (profiles);
+  g_strfreev (profiles);
 
   g_assert (g_hash_table_size (new_profiles) > 0);
 
