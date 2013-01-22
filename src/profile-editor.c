@@ -849,6 +849,13 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder,
                                            "bold-color-same-as-fg-checkbox"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
+                   gtk_builder_get_object (builder,
+                                           "bold-colorpicker-box"),
+                   "sensitive", 
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_INVERT_BOOLEAN |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY,
                                 gtk_builder_get_object (builder,
                                                         "bold-colorpicker"),
