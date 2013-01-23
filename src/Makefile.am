@@ -249,6 +249,8 @@ libterminal_nautilus_la_LIBADD = \
 
 # Pref migrator
 
+if ENABLE_MIGRATION
+
 gnome_terminal_migration_SOURCES = \
 	migration.c \
 	terminal-schemas.h \
@@ -269,6 +271,8 @@ gnome_terminal_migration_LDFLAGS = \
 gnome_terminal_migration_LDADD = \
 	$(MIGRATOR_LIBS) \
 	$(INTLLIBS)
+
+endif # ENABLE_MIGRATION
 
 gsettingsschema_in_files = org.gnome.Terminal.gschema.xml.in
 gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)

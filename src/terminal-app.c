@@ -114,6 +114,7 @@ enum
 static void
 maybe_migrate_settings (TerminalApp *app)
 {
+#ifdef ENABLE_MIGRATION
   const char * const argv[] = { 
     TERM_LIBEXECDIR "/gnome-terminal-migration",
 #ifdef GNOME_ENABLE_DEBUG
@@ -151,6 +152,11 @@ maybe_migrate_settings (TerminalApp *app)
   } else {
     g_printerr ("Profile migrator exited abnormally.\n");
   }
+#else
+  g_settings_set_uint (terminal_app_get_global_settings (app),
+                       TERMINAL_SETTING_SCHEMA_VERSION,
+                       TERMINAL_SCHEMA_VERSION);
+#endif /* ENABLE_MIGRATION */
 }
 
 static char **
