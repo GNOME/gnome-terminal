@@ -758,6 +758,7 @@ complete (int *argcp,
       return TRUE;
     }
 
+  _printerr ("Unknown completion requested\n");
   return FALSE;
 }
 
