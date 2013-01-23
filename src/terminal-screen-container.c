@@ -43,7 +43,9 @@ enum
   PROP_0,
   PROP_SCREEN,
   PROP_HSCROLLBAR_POLICY,
-  PROP_VSCROLLBAR_POLICY
+  PROP_VSCROLLBAR_POLICY,
+  PROP_WINDOW_PLACEMENT,
+  PROP_WINDOW_PLACEMENT_SET
 };
 
 G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_VBOX)
@@ -60,6 +62,46 @@ size_request_cb (GtkWidget *widget,
                          "[screen %p] scrolled-window size req %d : %d\n",
                          container->priv->screen, req->width, req->height);
 }
+#endif
+
+/* Widget class implementation */
+
+#ifndef USE_SCROLLED_WINDOW
+
+static void
+terminal_screen_container_style_updated (GtkWidget *widget)
+{
+  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (widget);
+  TerminalScreenContainerPrivate *priv = container->priv;
+  glong corner;
+  gboolean set;  
+
+  GTK_WIDGET_CLASS (terminal_screen_container_parent_class)->style_updated (widget);
+
+  gtk_widget_style_get (widget,
+                        "window-placement", &corner,
+                        "window-placement-set", &set,
+                        NULL);
+
+  if (!set)
+    g_object_get (gtk_widget_get_settings (widget),
+                  "gtk-scrolled-window-placement", &corner,
+                  NULL);
+
+  switch (corner) {
+    case GTK_CORNER_TOP_LEFT:
+    case GTK_CORNER_BOTTOM_LEFT:
+      gtk_box_reorder_child (GTK_BOX (priv->hbox), priv->vscrollbar, -1);
+      break;
+    case GTK_CORNER_TOP_RIGHT:
+    case GTK_CORNER_BOTTOM_RIGHT:
+      gtk_box_reorder_child (GTK_BOX (priv->hbox), priv->vscrollbar, 0);
+      break;
+    default:
+      g_assert_not_reached ();
+  }
+}
+
 #endif
 
 /* Class implementation */
@@ -93,8 +135,12 @@ terminal_screen_container_constructor (GType type,
   g_assert (priv->screen != NULL);
 
 #ifdef USE_SCROLLED_WINDOW
+#if GTK_CHECK_VERSION (2, 91, 2)
   priv->scrolled_window = gtk_scrolled_window_new (gtk_scrollable_get_hadjustment(GTK_SCROLLABLE(priv->screen)),
                                                    gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(priv->screen)));
+#else
+  priv->scrolled_window = gtk_scrolled_window_new (NULL, vte_terminal_get_adjustment (VTE_TERMINAL (priv->screen)));
+#endif
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
                                   priv->hscrollbar_policy,
@@ -186,12 +232,19 @@ static void
 terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+#ifndef USE_SCROLLED_WINDOW
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+#endif
 
   g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
 
   gobject_class->constructor = terminal_screen_container_constructor;
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;
+
+#ifndef USE_SCROLLED_WINDOW
+  widget_class->style_updated = terminal_screen_container_style_updated;
+#endif
 
   g_object_class_install_property
     (gobject_class,
@@ -218,6 +271,20 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                         GTK_POLICY_AUTOMATIC,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS));
+
+#ifndef USE_SCROLLED_WINDOW
+   gtk_widget_class_install_style_property (widget_class,
+                                            g_param_spec_enum ("window-placement", NULL, NULL,
+                                                               GTK_TYPE_CORNER_TYPE,
+                                                               GTK_CORNER_BOTTOM_RIGHT,
+                                                               G_PARAM_READWRITE |
+                                                               G_PARAM_STATIC_STRINGS));
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("window-placement-set", NULL, NULL,
+                                                                 FALSE,
+                                                                 G_PARAM_READWRITE |
+                                                                 G_PARAM_STATIC_STRINGS));
+#endif
 }
 
 /* public API */
