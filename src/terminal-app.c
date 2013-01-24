@@ -1164,6 +1164,8 @@ terminal_app_startup (GApplication *application)
   gtk_application_set_app_menu (GTK_APPLICATION (application),
                                 G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu")));
   g_object_unref (builder);
+
+  _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
 
 /* GObjectClass impl */
