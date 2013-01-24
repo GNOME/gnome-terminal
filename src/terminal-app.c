@@ -1139,17 +1139,11 @@ terminal_app_startup (GApplication *application)
 
   GtkBuilder *builder;
   GError *error = NULL;
-  gboolean shell_shows_app_menu;
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
   /* Need to set the WM class (bug #685742) */
   gdk_set_program_class("Gnome-terminal");
-
-  /* Only install the app menu if it's going to be shown */
-  g_object_get (gtk_settings_get_for_screen (gdk_screen_get_default ()), "gtk-shell-shows-app-menu", &shell_shows_app_menu, NULL);
-  if (!shell_shows_app_menu)
-    return;
 
   g_action_map_add_action_entries (G_ACTION_MAP (application),
                                    app_menu_actions, G_N_ELEMENTS (app_menu_actions),
