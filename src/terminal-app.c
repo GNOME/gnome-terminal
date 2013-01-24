@@ -194,21 +194,6 @@ strv_remove (char **strv,
   return strv;
 }
 
-static char *
-profile_get_uuid (GSettings *profile)
-{
-  char *path, *uuid;
-
-  g_object_get (profile, "path", &path, NULL);
-  g_assert (g_str_has_prefix (path, TERMINAL_PROFILES_PATH_PREFIX ":"));
-  uuid = g_strdup (path + strlen (TERMINAL_PROFILES_PATH_PREFIX ":"));
-  g_free (path);
-
-  g_assert (strlen (uuid) == 37);
-  uuid[36] = '\0';
-  return uuid;
-}
-
 static int
 profiles_alphabetic_cmp (gconstpointer pa,
                          gconstpointer pb)
@@ -379,7 +364,7 @@ profile_remove (TerminalApp *app,
   char **profiles;
   DConfClient *client;
 
-  uuid = profile_get_uuid (profile);
+  uuid = terminal_profile_util_get_profile_uuid (profile);
   g_object_get (profile, "path", &path, NULL);
 
   g_settings_get (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, "^a&s", &profiles);
@@ -415,7 +400,7 @@ terminal_app_profile_cell_data_func (GtkTreeViewColumn *tree_column,
 
   gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
   g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &text);
-  uuid = profile_get_uuid (profile);
+  uuid = terminal_profile_util_get_profile_uuid (profile);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_take_string (&value,
@@ -588,7 +573,7 @@ profile_combo_box_changed_cb (GtkWidget *widget,
   if (!profile)
     return;
 
-  uuid = profile_get_uuid (profile);
+  uuid = terminal_profile_util_get_profile_uuid (profile);
   g_settings_set_string (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, uuid);
 
   g_free (uuid);

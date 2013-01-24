@@ -31,6 +31,7 @@
 #include "terminal-schemas.h"
 #include "terminal-type-builtins.h"
 #include "terminal-util.h"
+#include "terminal-profile-utils.h"
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -709,6 +710,7 @@ terminal_profile_edit (GSettings  *profile,
   GtkBuilder *builder;
   GError *error = NULL;
   GtkWidget *editor, *w;
+  char *uuid;
   guint i;
 
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
@@ -746,6 +748,11 @@ terminal_profile_edit (GSettings  *profile,
   w = (GtkWidget *) gtk_builder_get_object  (builder, "profile-editor-notebook");
   gtk_widget_add_events (w, GDK_BUTTON_PRESS_MASK | GDK_SCROLL_MASK);
   g_signal_connect (w, "scroll-event", G_CALLBACK (scroll_event_cb), NULL);
+
+  uuid = terminal_profile_util_get_profile_uuid (profile);
+  gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (builder, "profile-uuid")),
+                      uuid);
+  g_free (uuid);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);

@@ -210,3 +210,24 @@ terminal_profile_util_get_profile_by_uuid_or_name (const char *uuid_or_name,
 
   return g_strdup (uuid_or_name);
 }
+
+/**
+ * terminal_profile_util_get_profile_uuid:
+ * @profile: a #GSettings for the %TERMINAL_PROFILE_SCHEMA schema
+ *
+ * Returns: (transfer full): the profile's UUID
+ */
+char *
+terminal_profile_util_get_profile_uuid (GSettings *profile)
+{
+  char *path, *uuid;
+
+  g_object_get (profile, "path", &path, NULL);
+  g_assert (g_str_has_prefix (path, TERMINAL_PROFILES_PATH_PREFIX ":"));
+  uuid = g_strdup (path + strlen (TERMINAL_PROFILES_PATH_PREFIX ":"));
+  g_free (path);
+
+  g_assert (strlen (uuid) == 37);
+  uuid[36] = '\0';
+  return uuid;
+}

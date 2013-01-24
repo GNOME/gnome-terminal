@@ -33,6 +33,8 @@ char *terminal_profile_util_get_profile_by_uuid (const char *uuid,
 char *terminal_profile_util_get_profile_by_uuid_or_name (const char *uuid_or_name,
                                                          GError **error);
 
+char *terminal_profile_util_get_profile_uuid (GSettings *profile);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_UTILS_H */
