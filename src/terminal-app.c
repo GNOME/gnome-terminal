@@ -1417,7 +1417,7 @@ terminal_app_ref_profile_by_uuid (TerminalApp *app,
   GSettings *profile = NULL;
 
   if (uuid == NULL)
-    uuid = g_settings_get_string (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY);
+    g_settings_get (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, "&s", &uuid);
 
   profile = g_hash_table_lookup (app->profiles_hash, uuid);
 
