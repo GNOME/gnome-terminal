@@ -30,7 +30,7 @@ _terminal_debug_init(void)
   const GDebugKey keys[] = {
     { "accels",    TERMINAL_DEBUG_ACCELS    },
     { "encodings", TERMINAL_DEBUG_ENCODINGS },
-    { "factory",   TERMINAL_DEBUG_SERVER   },
+    { "server",    TERMINAL_DEBUG_SERVER   },
     { "geometry",  TERMINAL_DEBUG_GEOMETRY  },
     { "mdi",       TERMINAL_DEBUG_MDI       },
     { "processes", TERMINAL_DEBUG_PROCESSES },
