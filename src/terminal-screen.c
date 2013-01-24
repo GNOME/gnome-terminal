@@ -857,9 +857,10 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING))
     {
       TerminalEncoding *encoding;
+      const char *str;
 
-      encoding = terminal_app_ensure_encoding (terminal_app_get (),
-                                               g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING));
+      g_settings_get (profile, TERMINAL_PROFILE_ENCODING, "&s", &str);
+      encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
       vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
     }
 
