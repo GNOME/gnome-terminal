@@ -2095,6 +2095,7 @@ terminal_window_new (GApplication *app)
 {
   return g_object_new (TERMINAL_TYPE_WINDOW,
                        "application", app,
+                       "show-menubar", FALSE,
                        NULL);
 }
 
