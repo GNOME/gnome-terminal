@@ -80,15 +80,13 @@ terminal_util_key_file_get_argv (GKeyFile *key_file,
 }
 
 static InitialTab*
-initial_tab_new (const char *profile,
-                 gboolean    is_id)
+initial_tab_new (char *profile /* adopts */)
 {
   InitialTab *it;
 
   it = g_slice_new (InitialTab);
 
-  it->profile = g_strdup (profile);
-  it->profile_is_id = is_id;
+  it->profile = profile;
   it->exec_argv = NULL;
   it->title = NULL;
   it->working_dir = NULL;
@@ -163,7 +161,7 @@ ensure_top_window (TerminalOptions *options)
   if (options->initial_windows == NULL)
     {
       iw = initial_window_new (0);
-      iw->tabs = g_list_append (NULL, initial_tab_new (NULL, FALSE));
+      iw->tabs = g_list_append (NULL, initial_tab_new (NULL));
       apply_defaults (options, iw);
 
       options->initial_windows = g_list_append (options->initial_windows, iw);
@@ -195,13 +193,12 @@ ensure_top_tab (TerminalOptions *options)
 
 static InitialWindow*
 add_new_window (TerminalOptions *options,
-                const char           *profile,
-                gboolean              is_id)
+                char            *profile /* adopts */)
 {
   InitialWindow *iw;
 
   iw = initial_window_new (0);
-  iw->tabs = g_list_prepend (NULL, initial_tab_new (profile, is_id));
+  iw->tabs = g_list_prepend (NULL, initial_tab_new (profile));
   apply_defaults (options, iw);
 
   options->initial_windows = g_list_append (options->initial_windows, iw);
@@ -309,13 +306,11 @@ option_profile_cb (const gchar *option_name,
 
       g_free (it->profile);
       it->profile = profile;
-      it->profile_is_id = FALSE;
     }
   else
     {
       g_free (options->default_profile);
       options->default_profile = profile;
-      options->default_profile_is_id = FALSE;
     }
 
   return TRUE;
@@ -334,20 +329,17 @@ option_profile_id_cb (const gchar *option_name,
   if (profile == NULL)
     return FALSE;
 
-
   if (options->initial_windows)
     {
       InitialTab *it = ensure_top_tab (options);
 
       g_free (it->profile);
       it->profile = profile;
-      it->profile_is_id = TRUE;
     }
   else
     {
       g_free (options->default_profile);
       options->default_profile = profile;
-      options->default_profile_is_id = TRUE;
     }
 
   return TRUE;
@@ -361,11 +353,13 @@ option_window_callback (const gchar *option_name,
                         GError     **error)
 {
   TerminalOptions *options = data;
-  gboolean is_profile_id;
+  char *profile;
 
-  is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
+  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  if (profile == NULL)
+    return FALSE;
 
-  add_new_window (options, value, is_profile_id);
+  add_new_window (options, profile /* adopts */);
 
   return TRUE;
 }
@@ -377,19 +371,21 @@ option_tab_callback (const gchar *option_name,
                      GError     **error)
 {
   TerminalOptions *options = data;
-  gboolean is_profile_id;
+  char *profile;
 
-  is_profile_id = g_str_has_suffix (option_name, "-with-profile-internal-id");
+  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  if (profile == NULL)
+    return FALSE;
 
   if (options->initial_windows)
     {
       InitialWindow *iw;
 
       iw = g_list_last (options->initial_windows)->data;
-      iw->tabs = g_list_append (iw->tabs, initial_tab_new (value, is_profile_id));
+      iw->tabs = g_list_append (iw->tabs, initial_tab_new (profile /* adopts */));
     }
   else
-    add_new_window (options, value, is_profile_id);
+    add_new_window (options, profile /* adopts */);
 
   return TRUE;
 }
@@ -912,7 +908,7 @@ terminal_options_merge_config (TerminalOptions *options,
           char *profile;
 
           profile = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, NULL);
-          it = initial_tab_new (profile, TRUE);
+          it = initial_tab_new (profile /* adopts */);
           g_free (profile);
 
           iw->tabs = g_list_append (iw->tabs, it);
