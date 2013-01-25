@@ -73,7 +73,7 @@ terminal_screen_container_style_updated (GtkWidget *widget)
 {
   TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (widget);
   TerminalScreenContainerPrivate *priv = container->priv;
-  glong corner;
+  GtkCornerType corner;
   gboolean set;  
 
   GTK_WIDGET_CLASS (terminal_screen_container_parent_class)->style_updated (widget);
