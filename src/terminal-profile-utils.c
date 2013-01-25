@@ -128,17 +128,22 @@ get_profile_names (char **profiles)
 /* Counts occurrences of @str in @strv */
 static guint
 strv_contains (char **strv,
-               const char *str)
+               const char *str,
+               guint *idx)
 {
-  guint n;
+  guint n, i;
 
   if (strv == NULL)
     return 0;
 
   n = 0;
-  for ( ; *strv; strv++)
-    if (strcmp (*strv, str) == 0)
+  for (i = 0; strv[i]; i++) {
+    if (strcmp (strv[i], str) == 0) {
       n++;
+      if (idx)
+        *idx = i;
+    }
+  }
 
   return n;
 }
@@ -158,7 +163,7 @@ terminal_profile_util_get_profile_by_uuid (const char *uuid,
   guint n;
 
   profiles = terminal_profile_util_list_profiles ();
-  n = strv_contains (profiles, uuid);
+  n = strv_contains (profiles, uuid, NULL);
   g_strfreev (profiles);
 
   if (n != 0)
@@ -181,34 +186,39 @@ terminal_profile_util_get_profile_by_uuid_or_name (const char *uuid_or_name,
                                                    GError **error)
 {
   char **profiles, **profile_names;
-  guint n;
+  char *rv;
+  guint n, i;
+
+  rv = NULL;
 
   profiles = terminal_profile_util_list_profiles ();
-  n = strv_contains (profiles, uuid_or_name);
+  profile_names = NULL;
+  n = strv_contains (profiles, uuid_or_name, &i);
 
-  if (n != 0) {
-    g_strfreev (profiles);
-    return g_strdup (uuid_or_name);
-  }
+  if (n != 0)
+    goto found;
 
   /* Not found as UUID; try finding a profile with this string as 'visible-name' */
   profile_names = get_profile_names (profiles);
-  g_strfreev (profiles);
-
-  n = strv_contains (profile_names, uuid_or_name);
-  g_strfreev (profile_names);
+  n = strv_contains (profile_names, uuid_or_name, &i);
 
   if (n == 0) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                  "No profile with UUID or name \"%s\" exists", uuid_or_name);
-    return NULL;
+    goto out;
   } else if (n != 1) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
                  "No profile with UUID \"%s\" found and name is ambiguous", uuid_or_name);
-    return NULL;
+    goto out;
   }
 
-  return g_strdup (uuid_or_name);
+ found:
+  rv = g_strdup (profiles[i]);
+
+ out:
+  g_strfreev (profiles);
+  g_strfreev (profile_names);
+  return rv;
 }
 
 /**
