@@ -1,7 +1,7 @@
 NULL =
 
 bin_PROGRAMS = gnome-terminal
-libexec_PROGRAMS = gnome-terminal-server gnome-terminal-migration
+libexec_PROGRAMS = gnome-terminal-server
 noinst_PROGRAMS = gnome-terminal-client
 
 if WITH_NAUTILUS_EXTENSION
@@ -250,6 +250,7 @@ libterminal_nautilus_la_LIBADD = \
 # Pref migrator
 
 if ENABLE_MIGRATION
+libexec_PROGRAMS += gnome-terminal-migration
 
 gnome_terminal_migration_SOURCES = \
 	migration.c \
