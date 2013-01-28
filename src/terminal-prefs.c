@@ -49,7 +49,8 @@ prefs_dialog_response_cb (GtkWidget *editor,
 void
 terminal_prefs_show_preferences (GtkWindow *transient_parent)
 {
-  GtkWidget *dialog, *tree_view, *disable_mnemonics_button, *disable_menu_accel_button;
+  GtkWidget *dialog, *tree_view;
+  GtkWidget *show_menubar_button, *disable_mnemonics_button, *disable_menu_accel_button;
   GSettings *settings;
 
   if (prefs_dialog != NULL)
@@ -57,6 +58,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent)
 
   terminal_util_load_builder_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog", &dialog,
+                                       "default-show-menubar-checkbutton", &show_menubar_button,
                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
                                        "accelerators-treeview", &tree_view,
@@ -65,6 +67,13 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent)
   terminal_util_bind_mnemonic_label_sensitivity (dialog);
 
   settings = terminal_app_get_global_settings (terminal_app_get ());
+
+  g_settings_bind (settings,
+                   TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
+                   show_menubar_button,
+                   "active",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
   g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
                    disable_mnemonics_button,
