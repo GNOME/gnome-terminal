@@ -76,7 +76,7 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
 void terminal_app_manage_profiles (TerminalApp     *app,
                                    GtkWindow       *transient_parent);
 
-void terminal_app_edit_keybindings (TerminalApp     *app,
+void terminal_app_edit_preferences (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 void terminal_app_edit_encodings   (TerminalApp     *app,
                                     GtkWindow       *transient_parent);

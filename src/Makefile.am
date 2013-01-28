@@ -50,6 +50,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-mdi-container.h \
 	terminal-notebook.c \
 	terminal-notebook.h \
+	terminal-prefs.c \
+	terminal-prefs.h \
 	terminal-profile-utils.c \
 	terminal-profile-utils.h \
 	terminal-schemas.h \
@@ -298,7 +300,7 @@ EXTRA_DIST = \
 	nautilus.symbols \
 	encodings-dialog.ui \
 	find-dialog.ui \
-	keybinding-editor.ui \
+	preferences.ui \
 	profile-manager.ui \
 	profile-preferences.ui \
 	$(about_DATA) \

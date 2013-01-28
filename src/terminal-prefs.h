@@ -1,5 +1,5 @@
 /*
- * Copyright © 2001 Havoc Pennington
+ * Copyright © 2013 Christian Persch
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,19 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_ACCELS_H
-#define TERMINAL_ACCELS_H
+#ifndef TERMINAL_PREFS_H
+#define TERMINAL_PREFS_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void terminal_accels_init (void);
- 
-void terminal_accels_shutdown (void);
-
-void terminal_accels_fill_treeview (GtkWidget *treeview);
+void terminal_prefs_show_preferences (GtkWindow *transient_parent);
 
 G_END_DECLS
 
-#endif /* TERMINAL_ACCELS_H */
+#endif /* TERMINAL_PREFS_H */

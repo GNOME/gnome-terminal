@@ -39,6 +39,7 @@
 #include "terminal-schemas.h"
 #include "terminal-gdbus.h"
 #include "terminal-defines.h"
+#include "terminal-prefs.h"
 
 #include <errno.h>
 #include <string.h>
@@ -1353,10 +1354,10 @@ terminal_app_edit_profile (TerminalApp     *app,
 }
 
 void
-terminal_app_edit_keybindings (TerminalApp     *app,
+terminal_app_edit_preferences (TerminalApp     *app,
                                GtkWindow       *transient_parent)
 {
-  terminal_edit_keys_dialog_show (transient_parent);
+  terminal_prefs_show_preferences (transient_parent);
 }
 
 void

@@ -271,7 +271,6 @@ static guint sync_idle_id = 0;
 static GtkAccelGroup *notification_group = NULL;
 /* never set settings keys in response to receiving a settings notify. */
 static int inside_settings_notify = 0;
-static GtkWidget *edit_keys_dialog = NULL;
 static GtkTreeStore *edit_keys_store = NULL;
 static GHashTable *settings_key_to_entry;
 static GSettings *keybinding_settings = NULL;
@@ -701,26 +700,11 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
 }
 
 static void
-edit_keys_dialog_destroy_cb (GtkWidget *widget,
-                             gpointer user_data)
+treeview_destroy_cb (GtkWidget *tree_view,
+                     gpointer user_data)
 {
   g_signal_handlers_disconnect_by_func (notification_group, G_CALLBACK (treeview_accel_changed_cb), user_data);
-  edit_keys_dialog = NULL;
   edit_keys_store = NULL;
-}
-
-static void
-edit_keys_dialog_response_cb (GtkWidget *editor,
-                              int response,
-                              gpointer use_data)
-{  
-  if (response == GTK_RESPONSE_HELP)
-    {
-      terminal_util_show_help ("gnome-terminal-shortcuts", GTK_WINDOW (editor));
-      return;
-    }
-    
-  gtk_widget_destroy (editor);
 }
 
 #ifdef GNOME_ENABLE_DEBUG
@@ -736,38 +720,12 @@ row_changed (GtkTreeModel *tree_model,
 #endif
 
 void
-terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
+terminal_accels_fill_treeview (GtkWidget *tree_view)
 {
-  GtkWidget *dialog, *tree_view, *disable_mnemonics_button, *disable_menu_accel_button;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell_renderer;
   GtkTreeStore *tree;
   guint i;
-  GSettings *settings;
-
-  if (edit_keys_dialog != NULL)
-    goto done;
-
-  terminal_util_load_builder_resource ("/org/gnome/terminal/ui/keybinding-editor.ui",
-                                       "keybindings-dialog", &dialog,
-                                       "disable-mnemonics-checkbutton", &disable_mnemonics_button,
-                                       "disable-menu-accel-checkbutton", &disable_menu_accel_button,
-                                       "accelerators-treeview", &tree_view,
-                                       NULL);
-
-  terminal_util_bind_mnemonic_label_sensitivity (dialog);
-
-  settings = terminal_app_get_global_settings (terminal_app_get ());
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_MNEMONICS_KEY,
-                   disable_mnemonics_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
-                   disable_menu_accel_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   /* Column 1 */
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -833,15 +791,6 @@ terminal_edit_keys_dialog_show (GtkWindow *transient_parent)
   g_signal_connect (notification_group, "accel-changed",
                     G_CALLBACK (treeview_accel_changed_cb), tree);
 
-  edit_keys_dialog = dialog;
-  g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (edit_keys_dialog_destroy_cb), tree);
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (edit_keys_dialog_response_cb),
-                    NULL);
-  gtk_window_set_default_size (GTK_WINDOW (dialog), -1, 350);
-
-done:
-  gtk_window_set_transient_for (GTK_WINDOW (edit_keys_dialog), transient_parent);
-  gtk_window_present (GTK_WINDOW (edit_keys_dialog));
+  g_signal_connect (tree_view, "destroy",
+                    G_CALLBACK (treeview_destroy_cb), tree);
 }

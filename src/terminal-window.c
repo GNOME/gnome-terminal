@@ -26,7 +26,6 @@
 #include <gdk/gdkx.h>
 #endif
 
-#include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-enums.h"
@@ -166,7 +165,7 @@ static void edit_paste_callback               (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_select_all_callback          (GtkAction *action,
                                                TerminalWindow *window);
-static void edit_keybindings_callback         (GtkAction *action,
+static void edit_preferences_callback         (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_profiles_callback            (GtkAction *action,
                                                TerminalWindow *window);
@@ -1667,10 +1666,10 @@ terminal_window_init (TerminalWindow *window)
       { "EditProfiles", NULL, N_("P_rofiles…"), NULL,
         NULL,
         G_CALLBACK (edit_profiles_callback) },
-      { "EditKeybindings", NULL, N_("_Keyboard Shortcuts…"), NULL,
+      { "EditPreferences", NULL, N_("Pre_ferences…"), NULL,
         NULL,
-        G_CALLBACK (edit_keybindings_callback) },
-      { "EditCurrentProfile", GTK_STOCK_PREFERENCES, N_("_Preferences…"), NULL,
+        G_CALLBACK (edit_preferences_callback) },
+      { "EditCurrentProfile", GTK_STOCK_PREFERENCES, N_("_Profile Preferences…"), NULL,
         NULL,
         G_CALLBACK (edit_current_profile_callback) },
 
@@ -3116,11 +3115,10 @@ edit_select_all_callback (GtkAction *action,
 }
       
 static void
-edit_keybindings_callback (GtkAction *action,
+edit_preferences_callback (GtkAction *action,
                            TerminalWindow *window)
 {
-  terminal_app_edit_keybindings (terminal_app_get (),
-                                 GTK_WINDOW (window));
+  terminal_app_edit_preferences (terminal_app_get (), GTK_WINDOW (window));
 }
 
 static void
