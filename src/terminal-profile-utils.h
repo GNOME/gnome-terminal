@@ -35,6 +35,9 @@ char *terminal_profile_util_get_profile_by_uuid_or_name (const char *uuid_or_nam
 
 char *terminal_profile_util_get_profile_uuid (GSettings *profile);
 
+int terminal_profile_util_profiles_compare (gconstpointer pa,
+                                            gconstpointer pb);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_UTILS_H */

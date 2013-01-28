@@ -82,6 +82,7 @@ terminal_search_dialog_new (GtkWindow   *parent)
   priv = g_new0 (TerminalSearchDialogPrivate, 1);
 
   terminal_util_load_builder_resource ("/org/gnome/terminal/ui/find-dialog.ui",
+                                       NULL,
                                        "find-dialog", &dialog,
                                        "search-label", &priv->search_label,
                                        "search-entry", &priv->search_entry,

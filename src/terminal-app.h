@@ -61,6 +61,12 @@ void terminal_app_new_profile (TerminalApp *app,
                                GSettings   *default_base_profile,
                                GtkWindow   *transient_parent);
 
+gboolean terminal_app_can_remove_profile (TerminalApp *app,
+                                          GSettings *profile);
+
+void terminal_app_remove_profile (TerminalApp *app,
+                                  GSettings *profile);
+
 TerminalWindow * terminal_app_new_window   (TerminalApp *app,
                                             GdkScreen *screen);
 
@@ -73,15 +79,15 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            char           **child_env,
                                            double           zoom);
 
-void terminal_app_manage_profiles (TerminalApp     *app,
-                                   GtkWindow       *transient_parent);
-
 void terminal_app_edit_preferences (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 void terminal_app_edit_encodings   (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 
 GList* terminal_app_get_profile_list (TerminalApp *app);
+
+void terminal_app_get_profiles_iter (TerminalApp *app,
+                                     GHashTableIter *iter);
 
 GSettings* terminal_app_ref_profile_by_uuid (TerminalApp *app,
                                              const char  *uuid,

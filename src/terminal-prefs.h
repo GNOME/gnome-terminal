@@ -22,7 +22,8 @@
 
 G_BEGIN_DECLS
 
-void terminal_prefs_show_preferences (GtkWindow *transient_parent);
+void terminal_prefs_show_preferences (GtkWindow *transient_parent,
+                                      const char *page);
 
 G_END_DECLS
 

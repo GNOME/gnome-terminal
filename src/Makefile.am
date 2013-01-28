@@ -301,7 +301,6 @@ EXTRA_DIST = \
 	encodings-dialog.ui \
 	find-dialog.ui \
 	preferences.ui \
-	profile-manager.ui \
 	profile-preferences.ui \
 	$(about_DATA) \
 	$(uimanager_DATA) \

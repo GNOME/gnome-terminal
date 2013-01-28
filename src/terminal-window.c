@@ -167,8 +167,6 @@ static void edit_select_all_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_preferences_callback         (GtkAction *action,
                                                TerminalWindow *window);
-static void edit_profiles_callback            (GtkAction *action,
-                                               TerminalWindow *window);
 static void edit_current_profile_callback     (GtkAction *action,
                                                TerminalWindow *window);
 static void view_menubar_toggled_callback     (GtkToggleAction *action,
@@ -1663,9 +1661,6 @@ terminal_window_init (TerminalWindow *window)
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, NULL,
         NULL,
         G_CALLBACK (edit_select_all_callback) },
-      { "EditProfiles", NULL, N_("P_rofiles…"), NULL,
-        NULL,
-        G_CALLBACK (edit_profiles_callback) },
       { "EditPreferences", NULL, N_("Pre_ferences…"), NULL,
         NULL,
         G_CALLBACK (edit_preferences_callback) },
@@ -3142,14 +3137,6 @@ file_new_profile_callback (GtkAction *action,
   terminal_app_new_profile (terminal_app_get (),
                             terminal_screen_get_profile (priv->active_screen),
                             GTK_WINDOW (window));
-}
-
-static void
-edit_profiles_callback (GtkAction *action,
-                        TerminalWindow *window)
-{
-  terminal_app_manage_profiles (terminal_app_get (),
-                                GTK_WINDOW (window));
 }
 
 static void

@@ -548,39 +548,6 @@ scroll_event_cb (GtkWidget      *widget,
   return FALSE;
 }
 
-static void
-terminal_profile_editor_focus_widget (GtkWidget *editor,
-                                      const char *widget_name)
-{
-  GtkBuilder *builder;
-  GtkWidget *widget, *page, *page_parent;
-
-  if (widget_name == NULL)
-    return;
-
-  builder = g_object_get_data (G_OBJECT (editor), "builder");
-  widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
-  if (widget == NULL)
-    return;
-
-  page = widget;
-  while (page != NULL &&
-         (page_parent = gtk_widget_get_parent (page)) != NULL &&
-         !GTK_IS_NOTEBOOK (page_parent))
-    page = page_parent;
-
-  page_parent = gtk_widget_get_parent (page);
-  if (page != NULL && GTK_IS_NOTEBOOK (page_parent)) {
-    GtkNotebook *notebook;
-
-    notebook = GTK_NOTEBOOK (page_parent);
-    gtk_notebook_set_current_page (notebook, gtk_notebook_page_num (notebook, page));
-  }
-
-  if (gtk_widget_is_sensitive (widget))
-    gtk_widget_grab_focus (widget);
-}
-
 static gboolean
 string_to_window_title (GValue *value,
                         GVariant *variant,
@@ -716,7 +683,7 @@ terminal_profile_edit (GSettings  *profile,
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
   if (editor)
     {
-      terminal_profile_editor_focus_widget (editor, widget_name);
+      terminal_util_dialog_focus_widget (editor, widget_name);
 
       gtk_window_set_transient_for (GTK_WINDOW (editor),
                                     GTK_WINDOW (transient_parent));
@@ -1023,7 +990,7 @@ terminal_profile_edit (GSettings  *profile,
 
   terminal_util_bind_mnemonic_label_sensitivity (editor);
 
-  terminal_profile_editor_focus_widget (editor, widget_name);
+  terminal_util_dialog_focus_widget (editor, widget_name);
 
   gtk_window_set_transient_for (GTK_WINDOW (editor),
                                 GTK_WINDOW (transient_parent));

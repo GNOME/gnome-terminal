@@ -241,3 +241,36 @@ terminal_profile_util_get_profile_uuid (GSettings *profile)
   uuid[36] = '\0';
   return uuid;
 }
+
+int 
+terminal_profile_util_profiles_compare (gconstpointer pa,
+                                        gconstpointer pb)
+{
+  GSettings *a = (GSettings *) pa;
+  GSettings *b = (GSettings *) pb;
+  const char *na, *nb;
+  char *patha, *pathb;
+  int result;
+
+  if (pa == pb)
+    return 0;
+  if (pa == NULL)
+    return 1;
+  if (pb == NULL)
+    return -1;
+
+  g_settings_get (a, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &na);
+  g_settings_get (b, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &nb);
+  result =  g_utf8_collate (na, nb);
+  if (result != 0)
+    return result;
+
+  g_object_get (a, "path", &patha, NULL);
+  g_object_get (b, "path", &pathb, NULL);
+  result = strcmp (patha, pathb);
+  g_free (patha);
+  g_free (pathb);
+
+  return result;
+}
+

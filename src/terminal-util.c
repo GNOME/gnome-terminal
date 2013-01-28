@@ -403,8 +403,15 @@ terminal_util_get_licence_text (void)
   return g_strjoin ("\n\n", _(license[0]), _(license[1]), _(license[2]), NULL);
 }
 
+static void
+main_object_destroy_cb (GtkWidget *widget)
+{
+  g_object_set_data (G_OBJECT (widget), "builder", NULL);
+}
+
 void
 terminal_util_load_builder_resource (const char *path,
+                                     const char *main_object_name,
                                      const char *object_name,
                                      ...)
 {
@@ -431,7 +438,15 @@ terminal_util_load_builder_resource (const char *path,
 
   va_end (args);
 
-  g_object_unref (builder);
+  if (main_object_name) {
+    GObject *main_object;
+
+    main_object = gtk_builder_get_object (builder, main_object_name);
+    g_object_set_data_full (main_object, "builder", builder, (GDestroyNotify) g_object_unref);
+    g_signal_connect (main_object, "destroy", G_CALLBACK (main_object_destroy_cb), NULL);
+  } else {
+    g_object_unref (builder);
+  }
 }
 
 gboolean
@@ -439,6 +454,39 @@ terminal_util_dialog_response_on_delete (GtkWindow *widget)
 {
   gtk_dialog_response (GTK_DIALOG (widget), GTK_RESPONSE_DELETE_EVENT);
   return TRUE;
+}
+
+void
+terminal_util_dialog_focus_widget (GtkWidget *dialog,
+                                   const char *widget_name)
+{
+  GtkBuilder *builder;
+  GtkWidget *widget, *page, *page_parent;
+
+  if (widget_name == NULL)
+    return;
+
+  builder = g_object_get_data (G_OBJECT (dialog), "builder");
+  widget = GTK_WIDGET (gtk_builder_get_object (builder, widget_name));
+  if (widget == NULL)
+    return;
+
+  page = widget;
+  while (page != NULL &&
+         (page_parent = gtk_widget_get_parent (page)) != NULL &&
+         !GTK_IS_NOTEBOOK (page_parent))
+    page = page_parent;
+
+  page_parent = gtk_widget_get_parent (page);
+  if (page != NULL && GTK_IS_NOTEBOOK (page_parent)) {
+    GtkNotebook *notebook;
+
+    notebook = GTK_NOTEBOOK (page_parent);
+    gtk_notebook_set_current_page (notebook, gtk_notebook_page_num (notebook, page));
+  }
+
+  if (gtk_widget_is_sensitive (widget))
+    gtk_widget_grab_focus (widget);
 }
 
 /* Like g_key_file_set_string, but escapes characters so that
