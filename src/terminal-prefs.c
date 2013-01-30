@@ -553,7 +553,6 @@ encoding_active_cell_data_func (GtkTreeViewColumn *tree_column,
   TerminalEncoding *encoding;
 
   gtk_tree_model_get (tree_model, iter, (int) COLUMN_DATA, &encoding, -1);
-  g_print ("encoding %s active %d cell-data-func\n", encoding->name, encoding->is_active);
   g_object_set (G_OBJECT (cell), "active", encoding->is_active, NULL);
   terminal_encoding_unref (encoding);
 }
