@@ -47,14 +47,8 @@ typedef struct {
   GtkWidget *manage_profiles_default_menu;
 
   GtkListStore *encoding_base_store;
-  GtkTreeView *encoding_available_tree_view;
-  GtkTreeSelection *encoding_available_selection;
-  GtkTreeModel *encoding_available_model;
-  GtkTreeView *encoding_active_tree_view;
-  GtkTreeSelection *encoding_active_selection;
-  GtkTreeModel *encoding_active_model;
-  GtkWidget *encoding_add_button;
-  GtkWidget *encoding_remove_button;
+  GtkTreeModel *encodings_model;
+  GtkTreeView *encodings_tree_view;
 } PrefData;
 
 static GtkWidget *prefs_dialog = NULL;
@@ -110,7 +104,6 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
 
   g_object_unref (profile);
 }
-
 
 static int
 profile_sort_func (GtkTreeModel *model,
@@ -523,119 +516,53 @@ enum
 };
 
 static void
-selection_changed_cb (GtkTreeSelection *selection,
-                      PrefData *data)
+encoding_active_toggled_cb (GtkCellRendererToggle *cell,
+                            gchar *path_as_string,
+                            PrefData *data)
 {
-  GtkWidget *button;
-  gboolean have_selection;
-
-  if (selection == data->encoding_available_selection)
-    button = data->encoding_add_button;
-  else if (selection == data->encoding_active_selection)
-    button = data->encoding_remove_button;
-  else
-    g_assert_not_reached ();
-
-  have_selection = gtk_tree_selection_get_selected (selection, NULL, NULL);
-  gtk_widget_set_sensitive (button, have_selection);
-}
-
-static void
-button_clicked_cb (GtkWidget *button,
-                   PrefData *data)
-{
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter filter_iter, iter;
+  GtkTreePath *path;
+  GtkTreeIter iter;
   TerminalEncoding *encoding;
 
-  if (button == data->encoding_add_button)
-    selection = data->encoding_available_selection;
-  else if (button == data->encoding_remove_button)
-    selection = data->encoding_active_selection;
-  else
-    g_assert_not_reached ();
+  path = gtk_tree_path_new_from_string (path_as_string);
+  if (!gtk_tree_model_get_iter (data->encodings_model, &iter, path))
+    goto out;
 
-  if (!gtk_tree_selection_get_selected (selection, &model, &filter_iter))
-    return;
-
-  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model),
-                                                    &iter,
-                                                    &filter_iter);
-
-  model = GTK_TREE_MODEL (data->encoding_base_store);
-  gtk_tree_model_get (model, &iter, COLUMN_DATA, &encoding, -1);
+  gtk_tree_model_get (data->encodings_model, &iter, COLUMN_DATA, &encoding, -1);
   g_assert (encoding != NULL);
 
-  if (button == data->encoding_add_button)
-    encoding->is_active = TRUE;
-  else if (button == data->encoding_remove_button)
-    encoding->is_active = FALSE;
-  else
-    g_assert_not_reached ();
-
+  encoding->is_active = !encoding->is_active;
   terminal_encoding_unref (encoding);
 
-  /* We don't need to emit row-changed here, since updating the pref
-   * will update the models.
-   */
+  gtk_tree_model_row_changed (GTK_TREE_MODEL (data->encodings_model), path, &iter);
+
+  /* Persist the change */
   update_active_encodings_setting ();
+
+ out:
+  gtk_tree_path_free (path);
 }
 
 static void
-liststore_insert_encoding (gpointer key,
-                           TerminalEncoding *encoding,
-                           GtkListStore *store)
-{
-  GtkTreeIter iter;
-
-  if (!terminal_encoding_is_valid (encoding))
-    return;
-
-  gtk_list_store_insert_with_values (store, &iter, -1,
-                                     COLUMN_CHARSET, terminal_encoding_get_charset (encoding),
-                                     COLUMN_NAME, encoding->name,
-                                     COLUMN_DATA, encoding,
-                                     -1);
-}
-
-static gboolean
-filter_active_encodings (GtkTreeModel *child_model,
-                         GtkTreeIter *child_iter,
-                         gpointer data)
+encoding_active_cell_data_func (GtkTreeViewColumn *tree_column,
+                                GtkCellRenderer *cell,
+                                GtkTreeModel *tree_model,
+                                GtkTreeIter *iter,
+                                PrefData *data)
 {
   TerminalEncoding *encoding;
-  gboolean active = GPOINTER_TO_UINT (data);
-  gboolean visible;
 
-  gtk_tree_model_get (child_model, child_iter, COLUMN_DATA, &encoding, -1);
-  visible = active ? encoding->is_active : !encoding->is_active;
+  gtk_tree_model_get (tree_model, iter, (int) COLUMN_DATA, &encoding, -1);
+  g_print ("encoding %s active %d cell-data-func\n", encoding->name, encoding->is_active);
+  g_object_set (G_OBJECT (cell), "active", encoding->is_active, NULL);
   terminal_encoding_unref (encoding);
-
-  return visible;
-}
-
-static GtkTreeModel *
-encodings_create_treemodel (GtkListStore *base_store,
-                            gboolean active)
-{
-  GtkTreeModel *model;
-
-  model = gtk_tree_model_filter_new (GTK_TREE_MODEL (base_store), NULL);
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (model),
-                                          filter_active_encodings,
-                                          GUINT_TO_POINTER (active), NULL);
-
-  return model;
 }
 
 static void
 encodings_list_changed_cb (PrefData *data)
 {
-  gtk_list_store_clear (data->encoding_base_store);
-
-  g_hash_table_foreach (terminal_app_get_encodings (terminal_app_get ()),
-                        (GHFunc) liststore_insert_encoding, data->encoding_base_store);
+  /* We just queue a redraw here which will take care of everything */
+  gtk_widget_queue_draw (GTK_WIDGET (data->encodings_tree_view));
 }
 
 /* misc */
@@ -668,7 +595,9 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   GSettings *settings;
   GtkCellRenderer *cell_renderer;
   GtkTreeViewColumn *column;
-  GtkTreeModel *model;
+  GtkListStore *list_store;
+  GHashTableIter ht_iter;
+  gpointer key, value;
 
   if (prefs_dialog != NULL)
     goto done;
@@ -690,10 +619,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        "delete-profile-button", &remove_button,
                                        "default-profile-hbox", &default_hbox,
                                        "default-profile-label", &default_label,
-                                       "add-button", &data->encoding_add_button,
-                                       "remove-button", &data->encoding_remove_button,
-                                       "available-treeview", &data->encoding_available_tree_view,
-                                       "displayed-treeview", &data->encoding_active_tree_view,
+                                       "encodings-treeview", &data->encodings_tree_view,
                                        NULL);
 
   data->dialog = dialog;
@@ -766,89 +692,70 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   // FIXMEchpe
   gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), data->manage_profiles_default_menu);
 
-  //  gtk_widget_grab_focus (app->manage_profiles_list);
-
   /* Encodings tab */
 
-  /* buttons */
-  g_signal_connect (data->encoding_add_button, "clicked",
-                    G_CALLBACK (button_clicked_cb), data);
+  selection = gtk_tree_view_get_selection (data->encodings_tree_view);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  g_signal_connect (data->encoding_remove_button, "clicked",
-                    G_CALLBACK (button_clicked_cb), data);
-  
-  /* Tree view of available encodings */
   /* Column 1 */
-  cell_renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("_Description"),
-						     cell_renderer,
-						     "text", COLUMN_NAME,
-						     NULL);
-  gtk_tree_view_append_column (data->encoding_available_tree_view, column);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
-  
+  cell_renderer = gtk_cell_renderer_toggle_new ();
+  g_object_set (cell_renderer, "xalign", 0.0, NULL);
+  g_signal_connect (cell_renderer, "toggled",
+                    G_CALLBACK (encoding_active_toggled_cb), data);
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Show"));
+  gtk_tree_view_column_pack_start (column, cell_renderer, FALSE);
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column),
+                                      cell_renderer,
+                                      (GtkCellLayoutDataFunc) encoding_active_cell_data_func,
+                                      data, NULL);
+
+  gtk_tree_view_append_column (data->encodings_tree_view, column);
+
   /* Column 2 */
   cell_renderer = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (_("_Encoding"),
 						     cell_renderer,
-						     "text", COLUMN_CHARSET,
+						     "markup", COLUMN_NAME,
 						     NULL);
-  gtk_tree_view_append_column (data->encoding_available_tree_view, column);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);  
-
-  data->encoding_available_selection = gtk_tree_view_get_selection (data->encoding_available_tree_view);
-  gtk_tree_selection_set_mode (data->encoding_available_selection, GTK_SELECTION_BROWSE);
-
-  g_signal_connect (data->encoding_available_selection, "changed",
-                    G_CALLBACK (selection_changed_cb), data);
-
-  /* Tree view of selected encodings */
-  /* Column 1 */
-  cell_renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("_Description"),
-						     cell_renderer,
-						     "text", COLUMN_NAME,
-						     NULL);
-  gtk_tree_view_append_column (data->encoding_active_tree_view, column);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
-  
-  /* Column 2 */
-  cell_renderer = gtk_cell_renderer_text_new ();
-  column = gtk_tree_view_column_new_with_attributes (_("_Encoding"),
-						     cell_renderer,
-						     "text", COLUMN_CHARSET,
-						     NULL);
-  gtk_tree_view_append_column (data->encoding_active_tree_view, column);
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);  
+  gtk_tree_view_append_column (data->encodings_tree_view, column);
+  gtk_tree_view_column_set_sort_column_id (column, COLUMN_CHARSET);
 
   /* Add the data */
 
-  data->encoding_active_selection = gtk_tree_view_get_selection (data->encoding_active_tree_view);
-  gtk_tree_selection_set_mode (data->encoding_active_selection, GTK_SELECTION_BROWSE);
+  list_store = gtk_list_store_new (N_ENCODING_COLUMNS,
+                                   G_TYPE_STRING,
+                                   G_TYPE_STRING,
+                                   TERMINAL_TYPE_ENCODING);
+  data->encodings_model = GTK_TREE_MODEL (list_store);
 
-  g_signal_connect (data->encoding_active_selection, "changed",
-                    G_CALLBACK (selection_changed_cb), data);
+  g_hash_table_iter_init (&ht_iter, terminal_app_get_encodings (app));
+  while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
+    TerminalEncoding *encoding = value;
+    GtkTreeIter iter;
+    char *name;
 
-  data->encoding_base_store = gtk_list_store_new (N_ENCODING_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, TERMINAL_TYPE_ENCODING);
-
-  encodings_list_changed_cb (data);
-  g_signal_connect_swapped (app, "encoding-list-changed",
-                            G_CALLBACK (encodings_list_changed_cb), data);
+    name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
+                                    terminal_encoding_get_charset (encoding),
+                                    encoding->name);
+    gtk_list_store_insert_with_values (list_store, &iter, -1,
+                                       COLUMN_NAME, name,
+                                       COLUMN_CHARSET, terminal_encoding_get_charset (encoding),
+                                       COLUMN_DATA, encoding,
+                                       -1);
+    g_free (name);
+  }
 
   /* Now turn on sorting */
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (data->encoding_base_store),
-                                        COLUMN_NAME,
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (data->encodings_model),
+                                        COLUMN_CHARSET,
                                         GTK_SORT_ASCENDING);
-  
-  model = encodings_create_treemodel (data->encoding_base_store, FALSE);
-  gtk_tree_view_set_model (data->encoding_available_tree_view, model);
-  g_object_unref (model);
 
-  model = encodings_create_treemodel (data->encoding_base_store, TRUE);
-  gtk_tree_view_set_model (data->encoding_active_tree_view, model);
-  g_object_unref (model);
+  gtk_tree_view_set_model (data->encodings_tree_view, data->encodings_model);
+  g_object_unref (data->encodings_model);
 
-  g_object_unref (data->encoding_base_store);
+  g_signal_connect_swapped (app, "encoding-list-changed",
+                            G_CALLBACK (encodings_list_changed_cb), data);
 
   /* misc */
 
