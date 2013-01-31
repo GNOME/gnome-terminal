@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-27 17:52+0000\n"
-"PO-Revision-Date: 2013-01-27 21:54+0100\n"
+"POT-Creation-Date: 2013-01-31 17:01+0000\n"
+"PO-Revision-Date: 2013-01-31 22:19+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -26,7 +26,7 @@ msgstr ""
 
 #: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:94
 #: ../src/terminal-accels.c:246 ../src/terminal.c:250
-#: ../src/terminal-window.c:1830
+#: ../src/terminal-window.c:1824
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -203,54 +203,37 @@ msgstr "Možnosti opravil:"
 msgid "Show processing options"
 msgstr "Prikaže možnosti opravil"
 
-#: ../src/migration.c:339 ../src/terminal-app.c:408
+#: ../src/find-dialog.ui.h:1
+msgid "Find"
+msgstr "Najdi"
+
+#: ../src/find-dialog.ui.h:2
+msgid "_Search for:"
+msgstr "_Poišči:"
+
+#: ../src/find-dialog.ui.h:3
+msgid "_Match case"
+msgstr "_Upoštevaj velikost črk"
+
+#: ../src/find-dialog.ui.h:4
+msgid "Match _entire word only"
+msgstr "Poišči le _cele besede"
+
+#: ../src/find-dialog.ui.h:5
+msgid "Match as _regular expression"
+msgstr "Poišči kot _logični izraz"
+
+#: ../src/find-dialog.ui.h:6
+msgid "Search _backwards"
+msgstr "Poišči _nazaj"
+
+#: ../src/find-dialog.ui.h:7
+msgid "_Wrap around"
+msgstr "_Prelomi vrstice"
+
+#: ../src/migration.c:339 ../src/terminal-prefs.c:99
 msgid "Unnamed"
 msgstr "Neimenovan"
-
-#: ../src/profile-editor.c:46
-msgid "Black on light yellow"
-msgstr "Črno na svetlo rumenem"
-
-#: ../src/profile-editor.c:50
-msgid "Black on white"
-msgstr "Črno na belem"
-
-#: ../src/profile-editor.c:54
-msgid "Gray on black"
-msgstr "Sivo na črnem"
-
-#: ../src/profile-editor.c:58
-msgid "Green on black"
-msgstr "Zeleno na črnem"
-
-#: ../src/profile-editor.c:62
-msgid "White on black"
-msgstr "Belo na črnem"
-
-#: ../src/profile-editor.c:410
-#, c-format
-msgid "Error parsing command: %s"
-msgstr "Napaka med razčlenjevanjem ukaza: %s"
-
-#. This is the name of a colour scheme
-#: ../src/profile-editor.c:444 ../src/profile-preferences.ui.h:30
-msgid "Custom"
-msgstr "Po meri"
-
-#: ../src/profile-editor.c:592
-#, c-format
-msgid "Editing Profile “%s”"
-msgstr "Urejanje profila “%s”"
-
-#: ../src/profile-editor.c:772
-#, c-format
-msgid "Choose Palette Color %d"
-msgstr "Izbor barve palete %d"
-
-#: ../src/profile-editor.c:776
-#, c-format
-msgid "Palette entry %d"
-msgstr "Vnos palete %d"
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:1
 msgid "Human-readable name of the profile"
@@ -750,57 +733,94 @@ msgstr "Ali naj se ob zapiranju oken terminala zahteva potrditev"
 msgid "Whether to show the menubar in new windows"
 msgstr "Ali naj bo v novih oknih vidna menijska vrstica"
 
-#: ../src/find-dialog.ui.h:1
-msgid "Find"
-msgstr "Najdi"
+#: ../src/preferences.ui.h:1
+msgid "Preferences"
+msgstr "Možnosti"
 
-#: ../src/find-dialog.ui.h:2
-msgid "_Search for:"
-msgstr "_Poišči:"
+#: ../src/preferences.ui.h:2
+msgid "Show _menubar by default in new terminals"
+msgstr "V novih terminalih privzeto pokaži _menijsko vrstico"
 
-#: ../src/find-dialog.ui.h:3
-msgid "_Match case"
-msgstr "_Upoštevaj velikost črk"
+#: ../src/preferences.ui.h:3 ../src/profile-preferences.ui.h:61
+msgid "General"
+msgstr "Splošno"
 
-#: ../src/find-dialog.ui.h:4
-msgid "Match _entire word only"
-msgstr "Poišči le _cele besede"
-
-#: ../src/find-dialog.ui.h:5
-msgid "Match as _regular expression"
-msgstr "Poišči kot _logični izraz"
-
-#: ../src/find-dialog.ui.h:6
-msgid "Search _backwards"
-msgstr "Poišči _nazaj"
-
-#: ../src/find-dialog.ui.h:7
-msgid "_Wrap around"
-msgstr "_Prelomi vrstice"
-
-#: ../src/keybinding-editor.ui.h:1
-msgid "Keyboard Shortcuts"
-msgstr "Tipkovne bližnjice"
-
-#: ../src/keybinding-editor.ui.h:2
+#: ../src/preferences.ui.h:4
 msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
 msgstr "Omogoči bližnjice _menijev (kot je Alt+D za odprtje menija Datoteka)"
 
-#: ../src/keybinding-editor.ui.h:3
+#: ../src/preferences.ui.h:5
 msgid "Enable the _menu shortcut key (F10 by default)"
 msgstr "Omogoči _tipko za dostop do menija (privzeto F10)"
 
-#: ../src/keybinding-editor.ui.h:4
+#: ../src/preferences.ui.h:6
 msgid "_Shortcut keys:"
 msgstr "_Bližnjice tipk:"
 
-#: ../src/profile-manager.ui.h:1
+#: ../src/preferences.ui.h:7
+msgid "Keybindings"
+msgstr "Tipkovne bližnjice"
+
+#: ../src/preferences.ui.h:8
+msgid "_Profile used when launching a new terminal:"
+msgstr "Profil, ki naj se _uporabi ob zagonu novega terminala:"
+
+#: ../src/preferences.ui.h:9
 msgid "Profiles"
 msgstr "Profili"
 
-#: ../src/profile-manager.ui.h:2
-msgid "_Profile used when launching a new terminal:"
-msgstr "Profil, ki naj se _uporabi ob zagonu novega terminala:"
+#: ../src/preferences.ui.h:10
+msgid "E_ncodings shown in menu:"
+msgstr "Nabori _prikazani v meniju:"
+
+#: ../src/preferences.ui.h:11
+msgid "Encodings"
+msgstr "Kodiranja"
+
+#: ../src/profile-editor.c:46
+msgid "Black on light yellow"
+msgstr "Črno na svetlo rumenem"
+
+#: ../src/profile-editor.c:50
+msgid "Black on white"
+msgstr "Črno na belem"
+
+#: ../src/profile-editor.c:54
+msgid "Gray on black"
+msgstr "Sivo na črnem"
+
+#: ../src/profile-editor.c:58
+msgid "Green on black"
+msgstr "Zeleno na črnem"
+
+#: ../src/profile-editor.c:62
+msgid "White on black"
+msgstr "Belo na črnem"
+
+#: ../src/profile-editor.c:410
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Napaka med razčlenjevanjem ukaza: %s"
+
+#. This is the name of a colour scheme
+#: ../src/profile-editor.c:444 ../src/profile-preferences.ui.h:30
+msgid "Custom"
+msgstr "Po meri"
+
+#: ../src/profile-editor.c:559
+#, c-format
+msgid "Editing Profile “%s”"
+msgstr "Urejanje profila “%s”"
+
+#: ../src/profile-editor.c:739
+#, c-format
+msgid "Choose Palette Color %d"
+msgstr "Izbor barve palete %d"
+
+#: ../src/profile-editor.c:743
+#, c-format
+msgid "Palette entry %d"
+msgstr "Vnos palete %d"
 
 #. Cursor shape
 #: ../src/profile-preferences.ui.h:2
@@ -968,10 +988,6 @@ msgstr "stolpci"
 msgid "rows"
 msgstr "vrstice"
 
-#: ../src/profile-preferences.ui.h:61
-msgid "General"
-msgstr "Splošno"
-
 #: ../src/profile-preferences.ui.h:62
 msgid "Title"
 msgstr "Naslov"
@@ -1126,18 +1142,6 @@ msgstr "_Povrni možnosti združljivosti na privzeto"
 msgid "Compatibility"
 msgstr "Skladnost"
 
-#: ../src/terminal-appmenu.ui.h:1
-msgid "_Preferences"
-msgstr "_Možnosti"
-
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1630
-msgid "_Help"
-msgstr "Pomo_č"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1749
-msgid "_About"
-msgstr "_O programu"
-
 #: ../src/terminal-accels.c:139
 msgid "New Tab"
 msgstr "Nov zavihek"
@@ -1190,7 +1194,7 @@ msgstr "Oddalji"
 msgid "Normal Size"
 msgstr "Običajna velikost"
 
-#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3415
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3400
 msgid "Set Title"
 msgstr "Določitev naziva okna"
 
@@ -1294,39 +1298,34 @@ msgstr "Zavihki"
 msgid "Help"
 msgstr "Pomoč"
 
-#: ../src/terminal-accels.c:620
+#: ../src/terminal-accels.c:619
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Tipkovna bližnjica  “%s” je že povezana z dejanjem “%s”"
 
-#: ../src/terminal-accels.c:774
+#: ../src/terminal-accels.c:732
 msgid "_Action"
 msgstr "_Dejanje"
 
-#: ../src/terminal-accels.c:792
+#: ../src/terminal-accels.c:750
 msgid "Shortcut _Key"
 msgstr "_Tipkovna bližnjica"
 
-#: ../src/terminal-app.c:536
-msgid "Click button to choose profile"
-msgstr "Kliknite gumb za izbiro profila"
-
-#: ../src/terminal-app.c:626
-msgid "Profile list"
-msgstr "Seznam profilov"
-
-#: ../src/terminal-app.c:689
-#, c-format
-msgid "Delete profile “%s”?"
-msgstr "Ali naj se izbriše profil “%s”?"
-
-#: ../src/terminal-app.c:705
-msgid "Delete Profile"
-msgstr "Izbriši profil"
-
-#: ../src/terminal-app.c:1443
+#: ../src/terminal-app.c:868
 msgid "User Defined"
 msgstr "Prikrojeno"
+
+#: ../src/terminal-appmenu.ui.h:1
+msgid "_Preferences"
+msgstr "_Možnosti"
+
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1627
+msgid "_Help"
+msgstr "Pomo_č"
+
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1743
+msgid "_About"
+msgstr "_O programu"
 
 #: ../src/terminal.c:243
 #, c-format
@@ -1474,16 +1473,7 @@ msgstr "Vietnamski"
 msgid "Thai"
 msgstr "Tajski"
 
-# Ukaz
-#: ../src/terminal-encoding.c:487 ../src/terminal-encoding.c:512
-msgid "_Description"
-msgstr "_Opis"
-
-#: ../src/terminal-encoding.c:496 ../src/terminal-encoding.c:521
-msgid "_Encoding"
-msgstr "_Nabor znakov"
-
-#: ../src/terminal-encoding.c:579
+#: ../src/terminal-encoding.c:272
 msgid "Current Locale"
 msgstr "Trenutne jezikovne nastavitve"
 
@@ -1674,6 +1664,31 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Pokaži možnosti za vsak terminal"
 
+#: ../src/terminal-prefs.c:224
+msgid "Click button to choose profile"
+msgstr "Kliknite gumb za izbiro profila"
+
+#: ../src/terminal-prefs.c:340
+msgid "Profile list"
+msgstr "Seznam profilov"
+
+#: ../src/terminal-prefs.c:395
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "Ali naj se izbriše profil “%s”?"
+
+#: ../src/terminal-prefs.c:411
+msgid "Delete Profile"
+msgstr "Izbriši profil"
+
+#: ../src/terminal-prefs.c:705
+msgid "Show"
+msgstr "Pokaži"
+
+#: ../src/terminal-prefs.c:716
+msgid "_Encoding"
+msgstr "_Nabor znakov"
+
 #: ../src/terminal-screen.c:1164
 msgid "No command supplied nor shell requested"
 msgstr "Ni navedenega ukaza niti zahteve lupine"
@@ -1769,7 +1784,7 @@ msgstr ""
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:439
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1778,211 +1793,207 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:445
+#: ../src/terminal-window.c:442
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1622
+#: ../src/terminal-window.c:1619
 msgid "_File"
 msgstr "_Datoteka"
 
 #. File menu
-#: ../src/terminal-window.c:1623 ../src/terminal-window.c:1635
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:1620 ../src/terminal-window.c:1632
+#: ../src/terminal-window.c:1776
 msgid "Open _Terminal"
 msgstr "Odpri _terminal"
 
-#: ../src/terminal-window.c:1624 ../src/terminal-window.c:1638
-#: ../src/terminal-window.c:1785
+#: ../src/terminal-window.c:1621 ../src/terminal-window.c:1635
+#: ../src/terminal-window.c:1779
 msgid "Open Ta_b"
 msgstr "Odpri za_vihek"
 
-#: ../src/terminal-window.c:1625
+#: ../src/terminal-window.c:1622
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: ../src/terminal-window.c:1626
+#: ../src/terminal-window.c:1623
 msgid "_View"
 msgstr "Po_gled"
 
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1624
 msgid "_Search"
 msgstr "_Poišči"
 
-#: ../src/terminal-window.c:1628
+#: ../src/terminal-window.c:1625
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1626
 msgid "Ta_bs"
 msgstr "_Zavihki"
 
-#: ../src/terminal-window.c:1641
+#: ../src/terminal-window.c:1638
 msgid "New _Profile…"
 msgstr "Nov _profil ..."
 
-#: ../src/terminal-window.c:1644
+#: ../src/terminal-window.c:1641
 msgid "_Save Contents"
 msgstr "_Shrani vsebino"
 
-#: ../src/terminal-window.c:1647
+#: ../src/terminal-window.c:1644
 msgid "C_lose Tab"
 msgstr "Zapri _zavihek"
 
-#: ../src/terminal-window.c:1650
+#: ../src/terminal-window.c:1647
 msgid "_Close Window"
 msgstr "_Zapri okno"
 
-#: ../src/terminal-window.c:1661 ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1658 ../src/terminal-window.c:1773
 msgid "Paste _Filenames"
 msgstr "Kopiraj _datotečna imena"
 
-#: ../src/terminal-window.c:1667
-msgid "P_rofiles…"
-msgstr "Profili ..."
-
-#: ../src/terminal-window.c:1670
-msgid "_Keyboard Shortcuts…"
-msgstr "_Tipkovne bližnjice ..."
-
-#: ../src/terminal-window.c:1673
-msgid "_Preferences…"
+#: ../src/terminal-window.c:1664
+msgid "Pre_ferences…"
 msgstr "_Možnosti ..."
 
+#: ../src/terminal-window.c:1667
+msgid "_Profile Preferences…"
+msgstr "Možnosti _profila ..."
+
 #. Search menu
-#: ../src/terminal-window.c:1689
+#: ../src/terminal-window.c:1683
 msgid "_Find..."
 msgstr "_Najdi ..."
 
-#: ../src/terminal-window.c:1692
+#: ../src/terminal-window.c:1686
 msgid "Find Ne_xt"
 msgstr "Najdi _naslednje"
 
-#: ../src/terminal-window.c:1695
+#: ../src/terminal-window.c:1689
 msgid "Find Pre_vious"
 msgstr "Najdi _predhodne"
 
-#: ../src/terminal-window.c:1698
+#: ../src/terminal-window.c:1692
 msgid "_Clear Highlight"
 msgstr "_Počisti poudarjanje"
 
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:1696
 msgid "Go to _Line..."
 msgstr "Skoči v _vrstico ..."
 
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1699
 msgid "_Incremental Search..."
 msgstr "_Postopno iskanje ..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1711
+#: ../src/terminal-window.c:1705
 msgid "Change _Profile"
 msgstr "Zamenjaj _profil"
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1706
 msgid "_Set Title…"
 msgstr "_Določi naziv okna ..."
 
-#: ../src/terminal-window.c:1715
+#: ../src/terminal-window.c:1709
 msgid "Set _Character Encoding"
 msgstr "Določi nabor _znakov"
 
-#: ../src/terminal-window.c:1716
+#: ../src/terminal-window.c:1710
 msgid "_Reset"
 msgstr "_Ponastavi"
 
-#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1713
 msgid "Reset and C_lear"
 msgstr "Ponastavi in _počisti"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:1718
 msgid "_Add or Remove…"
 msgstr "_Dodaj ali odstrani ..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1729
+#: ../src/terminal-window.c:1723
 msgid "_Previous Tab"
 msgstr "_Predhodni zavihek"
 
-#: ../src/terminal-window.c:1732
+#: ../src/terminal-window.c:1726
 msgid "_Next Tab"
 msgstr "_Naslednji zavihek"
 
-#: ../src/terminal-window.c:1735
+#: ../src/terminal-window.c:1729
 msgid "Move Tab _Left"
 msgstr "Premakni zavihek _levo"
 
-#: ../src/terminal-window.c:1738
+#: ../src/terminal-window.c:1732
 msgid "Move Tab _Right"
 msgstr "Premakni zavihek _desno"
 
-#: ../src/terminal-window.c:1741
+#: ../src/terminal-window.c:1735
 msgid "_Detach tab"
 msgstr "_Odpni zavihek"
 
 #. Help menu
-#: ../src/terminal-window.c:1746
+#: ../src/terminal-window.c:1740
 msgid "_Contents"
 msgstr "_Vsebina"
 
 #. Popup menu
-#: ../src/terminal-window.c:1754
+#: ../src/terminal-window.c:1748
 msgid "_Send Mail To…"
 msgstr "_Pošlji pošto za ..."
 
-#: ../src/terminal-window.c:1757
+#: ../src/terminal-window.c:1751
 msgid "_Copy E-mail Address"
 msgstr "_Kopiraj e-poštni naslov"
 
-#: ../src/terminal-window.c:1760
+#: ../src/terminal-window.c:1754
 msgid "C_all To…"
 msgstr "Klic za ..."
 
-#: ../src/terminal-window.c:1763
+#: ../src/terminal-window.c:1757
 msgid "_Copy Call Address"
 msgstr "_Kopiraj klicni naslov"
 
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:1760
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
-#: ../src/terminal-window.c:1769
+#: ../src/terminal-window.c:1763
 msgid "_Copy Link Address"
 msgstr "_Kopiraj naslov povezave"
 
-#: ../src/terminal-window.c:1772
+#: ../src/terminal-window.c:1766
 msgid "P_rofiles"
 msgstr "P_rofili"
 
-#: ../src/terminal-window.c:1788
+#: ../src/terminal-window.c:1782
 msgid "L_eave Full Screen"
 msgstr "_Zapusti celozaslonski način"
 
-#: ../src/terminal-window.c:1791
+#: ../src/terminal-window.c:1785
 msgid "_Input Methods"
 msgstr "_Načini vnosa"
 
 #. View Menu
-#: ../src/terminal-window.c:1797
+#: ../src/terminal-window.c:1791
 msgid "Show _Menubar"
 msgstr "Pokaži _menijsko vrstico"
 
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1795
 msgid "_Full Screen"
 msgstr "_Celozaslonski način"
 
-#: ../src/terminal-window.c:2866
+#: ../src/terminal-window.c:2860
 msgid "Close this window?"
 msgstr "Zapri to okno?"
 
-#: ../src/terminal-window.c:2866
+#: ../src/terminal-window.c:2860
 msgid "Close this terminal?"
 msgstr "Ali naj se okno terminala zapre?"
 
-#: ../src/terminal-window.c:2870
+#: ../src/terminal-window.c:2864
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1990,7 +2001,7 @@ msgstr ""
 "Še vedno so dejavna opravila v terminalih tega okna. Z zapiranjem okna se "
 "vstavijo tudi nedokončana."
 
-#: ../src/terminal-window.c:2874
+#: ../src/terminal-window.c:2868
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -1998,770 +2009,25 @@ msgstr ""
 "Še vedno so dejavna opravila v terminalu. Z zapiranjem terminala se vstavijo "
 "tudi nedokončana."
 
-#: ../src/terminal-window.c:2879
+#: ../src/terminal-window.c:2873
 msgid "C_lose Window"
 msgstr "_Zapri okno"
 
-#: ../src/terminal-window.c:2879
+#: ../src/terminal-window.c:2873
 msgid "C_lose Terminal"
 msgstr "_Zapri terminal"
 
-#: ../src/terminal-window.c:2952
+#: ../src/terminal-window.c:2946
 msgid "Could not save contents"
 msgstr "Ni mogoče shraniti vsebine"
 
-#: ../src/terminal-window.c:2976
+#: ../src/terminal-window.c:2970
 msgid "Save as..."
 msgstr "Shrani kot ..."
 
-#: ../src/terminal-window.c:3432
+#: ../src/terminal-window.c:3417
 msgid "_Title:"
 msgstr "_Naziv:"
 
-#~ msgid "Add or Remove Terminal Encodings"
-#~ msgstr "Dodaj ali odstrani kodni nabor znakov terminala"
-
-#~ msgid "A_vailable encodings:"
-#~ msgstr "Podprti _nabori:"
-
-#~ msgid "E_ncodings shown in menu:"
-#~ msgstr "Nabori _prikazani v meniju:"
-
-#~ msgid "C_reate"
-#~ msgstr "Ustva_ri"
-
-#~ msgid "Profile _name:"
-#~ msgstr "Ime _profila:"
-
-#~ msgid "_Base on:"
-#~ msgstr "_Temelji na:"
-
-#~ msgid ""
-#~ "Block\n"
-#~ "I-Beam\n"
-#~ "Underline"
-#~ msgstr ""
-#~ "Pravokotnik\n"
-#~ "Navpičnica\n"
-#~ "Podčrtaj"
-
-#~ msgid "<b>Title</b>"
-#~ msgstr "<b>Naziv</b>"
-
-#~ msgid ""
-#~ "Replace initial title\n"
-#~ "Append initial title\n"
-#~ "Prepend initial title\n"
-#~ "Keep initial title"
-#~ msgstr ""
-#~ "Zamenjaj začetni naslov\n"
-#~ "Na koncu pripni začetni naslov\n"
-#~ "Na začetku pripni začetni naslov\n"
-#~ "Ohrani prvotni naslov"
-
-#~ msgid ""
-#~ "Exit the terminal\n"
-#~ "Restart the command\n"
-#~ "Hold the terminal open"
-#~ msgstr ""
-#~ "Izhod iz terminala\n"
-#~ "Ponoven zagon ukaza\n"
-#~ "Obdrži terminal odprt"
-
-#~ msgid ""
-#~ "Always visible\n"
-#~ "Visible only when necessary\n"
-#~ "Hidden"
-#~ msgstr ""
-#~ "Vedno vidno\n"
-#~ "Vidno po potrebi\n"
-#~ "Skrito"
-
-#~ msgid ""
-#~ "Automatic\n"
-#~ "Control-H\n"
-#~ "ASCII DEL\n"
-#~ "Escape sequence\n"
-#~ "TTY Erase"
-#~ msgstr ""
-#~ "Samodejno\n"
-#~ "Control-H\n"
-#~ "ASCII DEL\n"
-#~ "Ubežno zaporedje\n"
-#~ "TTY izbris"
-
-#~ msgid ""
-#~ "You already have a profile called “%s”. Do you want to create another "
-#~ "profile with the same name?"
-#~ msgstr ""
-#~ "Profil z imenom “%s” že obstaja. Ali želite ustvariti nov profil z istim "
-#~ "imenom?"
-
-#~ msgid "Choose base profile"
-#~ msgstr "Izberi osnovni profil"
-
-#~ msgid "Server D-Bus name"
-#~ msgstr "Ime strežnika D-Bus"
-
-#~ msgid "NAME"
-#~ msgstr "IME"
-
-#~ msgid "Disable connection to session manager"
-#~ msgstr "Onemogoči povezavo z upravljalnikom seje"
-
-#~ msgid "Specify file containing saved configuration"
-#~ msgstr "Določi datoteko s shranjenimi nastavitvami"
-
-#~ msgid "Specify session management ID"
-#~ msgstr "Določi ID upravljanja seje"
-
-#~ msgid "ID"
-#~ msgstr "ID"
-
-#~ msgid "Show session management options"
-#~ msgstr "Pokaži možnosti upravljanja seje"
-
-#~ msgid ""
-#~ "A value between 0.0 and 1.0 indicating how much to darken the background "
-#~ "image. 0.0 means no darkness, 1.0 means fully dark. In the current "
-#~ "implementation, there are only two levels of darkness possible, so the "
-#~ "setting behaves as a boolean, where 0.0 disables the darkening effect."
-#~ msgstr ""
-#~ "Vrednost med 0.0 in 1.0 določa zatemnitev slike ozadja. Število 0.0 "
-#~ "pomeni brez, 1.0 pa popolno zatemnitev. V trenutni izvedbi je mogoče "
-#~ "uporabiti le dve ravni zatemnitve, zato se nastavitev obnaša kot logična "
-#~ "vrednost, kjer 0.0 pomeni brez zatemnitve."
-
-#~ msgid ""
-#~ "Accelerator key to detach current tab. Expressed as a string in the same "
-#~ "format used for GTK+ resource files. If you set the option to the special "
-#~ "string \"disabled\", then there will be no keybinding for this action."
-#~ msgstr ""
-#~ "Bližnjica za odcepitev trenutnega zavihka, določena kot niz v obliki, kot "
-#~ "je uporabljen v datotekah virov GTK+. V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Accelerator key to move the current tab to the left. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no "
-#~ "keybinding for this action."
-#~ msgstr ""
-#~ "Bližnjica za premik trenutnega zavihka v levo, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Accelerator key to move the current tab to the right. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no "
-#~ "keybinding for this action."
-#~ msgstr ""
-#~ "Bližnjica za premik trenutnega zavihka v desno, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid "Accelerator to detach current tab."
-#~ msgstr "Bližnjica za odcepitev trenutnega zavihka."
-
-#~ msgid "Accelerator to move the current tab to the left."
-#~ msgstr "Bližnjica za premik trenutnega zavihka levo."
-
-#~ msgid ""
-#~ "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
-#~ msgstr "Ime pisave Pango. Primera sta \"Sans 12\" ali \"Monospace Bold 14\""
-
-#~ msgid "Background image"
-#~ msgstr "Slika ozadja"
-
-#~ msgid "Background type"
-#~ msgstr "Vrsta ozadja"
-
-#~ msgid "Default"
-#~ msgstr "Privzeto"
-
-#~ msgid "Effect of the Backspace key"
-#~ msgstr "Delovanje tipke vračalke."
-
-#~ msgid "Effect of the Delete key"
-#~ msgstr "Delovanje tipke izbriši."
-
-#~ msgid "Filename of a background image."
-#~ msgstr "Ime datoteke slike v ozadju."
-
-#~ msgid "Font"
-#~ msgstr "Pisava"
-
-#~ msgid "How much to darken the background image"
-#~ msgstr "Kako močno naj se zatemni barva ozadja?"
-
-#~ msgid "Icon for terminal window"
-#~ msgstr "Ikona terminalnega okna"
-
-#~ msgid "Icon to use for tabs/windows containing this profile."
-#~ msgstr "Ikona zavihkov in oken s tem profilom."
-
-#~ msgid ""
-#~ "If true, don't make a noise when applications send the escape sequence "
-#~ "for the terminal bell."
-#~ msgstr ""
-#~ "Izbrana možnost omogoča, da ni piska, kadar programi pošljejo ubežno "
-#~ "zaporedje zvoncu terminala."
-
-#~ msgid ""
-#~ "If true, scroll the background image with the foreground text; if false, "
-#~ "keep the image in a fixed position and scroll the text above it."
-#~ msgstr ""
-#~ "Izbrana možnost omogoča, da slika v ozadju drsi skupaj z besedilom; "
-#~ "neizbrana možnost pa, da je slika negibna in besedilo drsi nad njo."
-
-#~ msgid ""
-#~ "If true, the terminal will use the desktop-global standard font if it's "
-#~ "monospace (and the most similar font it can come up with otherwise)."
-#~ msgstr ""
-#~ "Izbrana možnost omogoča, da bo terminal uporabil običajno pisavo namizja, "
-#~ "če je ta eno-presledna (sicer bo uporabljena najbolj podobna najdena "
-#~ "pisava)."
-
-#~ msgid ""
-#~ "If true, the theme color scheme used for text entry boxes will be used "
-#~ "for the terminal, instead of colors provided by the user."
-#~ msgstr ""
-#~ "Izbrana možnost omogoča, da bo za vpisovanje besedila uporabljena barvna "
-#~ "shema teme sistema, namesto tistih barv, ki jih je določil uporabnik."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for bringing up the dialog for profile creation. "
-#~ "Expressed as a string in the same format used for GTK+ resource files. If "
-#~ "you set the option to the special string \"disabled\", then there will be "
-#~ "no keyboard shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za prikaz pogovornega okna za ustvarjanje profilov, določena "
-#~ "kot niz v enaki obliki kot je uporabljen v datotekah virov GTK+. V "
-#~ "kolikor je določena vrednost \"onemogočeno\", za to dejanje ne bo "
-#~ "razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for closing a tab. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za zapiranje zavihka, določena kot niz v enaki obliki kot je "
-#~ "uporabljen v datotekah virov GTK+. V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for closing a window. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za zapiranje okna, določena kot niz v enaki obliki kot je "
-#~ "uporabljen v datotekah virov GTK+.V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for copying selected text to the clipboard. "
-#~ "Expressed as a string in the same format used for GTK+ resource files. If "
-#~ "you set the option to the special string \"disabled\", then there will be "
-#~ "no keyboard shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za kopiranje izbranega besedila na odložišče, določena kot niz "
-#~ "v enaki obliki kot je uporabljen v datotekah virov GTK+. V kolikor je "
-#~ "določena vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive "
-#~ "tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for launching help. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za zagon pomoči, določena kot niz v enaki obliki kot je "
-#~ "uporabljen v datotekah virov GTK+.V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for making font larger. Expressed as a string in "
-#~ "the same format used for GTK+ resource files. If you set the option to "
-#~ "the special string \"disabled\", then there will be no keyboard shortcut "
-#~ "for this action."
-#~ msgstr ""
-#~ "Bližnjica za povečevanje pisave, določena kot niz v enaki obliki kot je "
-#~ "uporabljen v datotekah virov GTK+. V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for making font smaller. Expressed as a string in "
-#~ "the same format used for GTK+ resource files. If you set the option to "
-#~ "the special string \"disabled\", then there will be no keyboard shortcut "
-#~ "for this action."
-#~ msgstr ""
-#~ "Bližnjica za zmanjševanje pisave, določena kot niz v enaki obliki kot je "
-#~ "uporabljen v datotekah virov GTK+. V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for making font the normal size. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no keyboard "
-#~ "shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za nastavitev običajne velikosti pisave, določena kot niz v "
-#~ "enaki obliki kot je uporabljen v datotekah virov GTK+.V kolikor je "
-#~ "določena vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive "
-#~ "tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for opening a new tab. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za odpiranje novega zavihka, določena kot niz v enaki obliki "
-#~ "kot je uporabljen v datotekah virov GTK+.V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for opening a new window. Expressed as a string in "
-#~ "the same format used for GTK+ resource files. If you set the option to "
-#~ "the special string \"disabled\", then there will be no keyboard shortcut "
-#~ "for this action."
-#~ msgstr ""
-#~ "Bližnjica za odpiranje novega okna, določena kot niz v enaki obliki kot "
-#~ "je uporabljen v datotekah virov GTK+.V kolikor je določena vrednost "
-#~ "\"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for pasting the contents of the clipboard into the "
-#~ "terminal. Expressed as a string in the same format used for GTK+ resource "
-#~ "files. If you set the option to the special string \"disabled\", then "
-#~ "there will be no keyboard shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za prilepljenje vsebine odložišča v terminal, določena kot niz "
-#~ "v enaki obliki kot je uporabljen v datotekah virov GTK+.V kolikor je "
-#~ "določena vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive "
-#~ "tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 1. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 1, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 10. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 10, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 11. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 11, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 12. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 12, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 2. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 2, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 3. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 3, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 4. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 4, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 5. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 5, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 6. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 6, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 7. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 7, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 8. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 8, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for switch to tab 9. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na zavihek 9, določena v obliki kot je zapisano v "
-#~ "datotekah virov GTK+. V kolikor je določena vrednost \"onemogočeno\", za "
-#~ "to dejanje ne bo razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key for toggling full screen mode. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no keyboard "
-#~ "shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na celozaslonski način, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to reset and clear the terminal. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no keyboard "
-#~ "shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na ponovno nastavitev in očiščenje terminala, "
-#~ "določena kot niz v enaki obliki kot je uporabljen v datotekah virov GTK+. "
-#~ "V kolikor je določena vrednost \"onemogočeno\", za to dejanje ne bo "
-#~ "razpoložljive tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to reset the terminal. Expressed as a string in the "
-#~ "same format used for GTK+ resource files. If you set the option to the "
-#~ "special string \"disabled\", then there will be no keyboard shortcut for "
-#~ "this action."
-#~ msgstr ""
-#~ "Bližnjica za ponovno nastavitev terminala, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to save the current tab contents to a file. "
-#~ "Expressed as a string in the same format used for GTK+ resource files. If "
-#~ "you set the option to the special string \"disabled\", then there will be "
-#~ "no keyboard shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za shranjevanje vsebine zavihka v datoteko, določena kot niz v "
-#~ "enaki obliki kot je uporabljen v datotekah virov GTK+. V kolikor je "
-#~ "določena vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive "
-#~ "tipkovne bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to set the terminal title. Expressed as a string in "
-#~ "the same format used for GTK+ resource files. If you set the option to "
-#~ "the special string \"disabled\", then there will be no keyboard shortcut "
-#~ "for this action."
-#~ msgstr ""
-#~ "Bližnjica za nastavitev naslova terminala, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to switch to the next tab. Expressed as a string in "
-#~ "the same format used for GTK+ resource files. If you set the option to "
-#~ "the special string \"disabled\", then there will be no keyboard shortcut "
-#~ "for this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na naslednji zavihek, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to switch to the previous tab. Expressed as a "
-#~ "string in the same format used for GTK+ resource files. If you set the "
-#~ "option to the special string \"disabled\", then there will be no keyboard "
-#~ "shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop na predhodni zavihek, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid ""
-#~ "Keyboard shortcut key to toggle the visibility of the menubar. Expressed "
-#~ "as a string in the same format used for GTK+ resource files. If you set "
-#~ "the option to the special string \"disabled\", then there will be no "
-#~ "keyboard shortcut for this action."
-#~ msgstr ""
-#~ "Bližnjica za preklop vidnosti menijske vrstice, določena kot niz v enaki "
-#~ "obliki kot je uporabljen v datotekah virov GTK+. V kolikor je določena "
-#~ "vrednost \"onemogočeno\", za to dejanje ne bo razpoložljive tipkovne "
-#~ "bližnjice."
-
-#~ msgid "List of profiles"
-#~ msgstr "Seznam profilov"
-
-#~ msgid ""
-#~ "List of profiles known to gnome-terminal. The list contains strings "
-#~ "naming subdirectories relative to /apps/gnome-terminal/profiles."
-#~ msgstr ""
-#~ "Seznam profilov poznanih gnome-terminalu. Seznam vsebuje nize za "
-#~ "poimenovanje podrejenih map v mapi /apps/gnome-terminal/profiles."
-
-#~ msgid ""
-#~ "Profile to be used when opening a new window or tab. Must be in "
-#~ "profile_list."
-#~ msgstr ""
-#~ "Profil, ki naj bo uporabljen med odpiranjem novega okna ali zavihka. "
-#~ "Profil mora biti naveden v seznamu profile_list."
-
-#~ msgid "Profile to use for new terminals"
-#~ msgstr "Profil, ki naj bo uporabljen za nove terminale:"
-
-#~ msgid ""
-#~ "Sets what code the backspace key generates. Possible values are \"ascii-"
-#~ "del\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
-#~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
-#~ "typically bound to backspace or delete. \"ascii-del\" is normally "
-#~ "considered the correct setting for the Backspace key."
-#~ msgstr ""
-#~ "Ukaz, ki naj ga ustvari tipka vračalka. Mogoče vrednosti so \"ascii-del\" "
-#~ "za znak ASCII DEL, \"control-h\" za Control-H (oziroma znak ASCII BS), "
-#~ "\"escape-sequence\" za ubežno zaporedje, ki običajno pomeni skok en znak "
-#~ "nazaj ali izbris. Običajno je ustrezna izbira \"ascii-del\"."
-
-#~ msgid ""
-#~ "Sets what code the delete key generates. Possible values are \"ascii-del"
-#~ "\" for the ASCII DEL character, \"control-h\" for Control-H (AKA the "
-#~ "ASCII BS character), \"escape-sequence\" for the escape sequence "
-#~ "typically bound to backspace or delete. \"escape-sequence\" is normally "
-#~ "considered the correct setting for the Delete key."
-#~ msgstr ""
-#~ "Ukaz, ki naj ga ustvari tipka izbriši. Mogoče vrednosti so \"ascii-del\" "
-#~ "za znak ASCII DEL, \"control-h\" za Control-H (oziroma znak ASCII BS), "
-#~ "\"escape-sequence\" za ubežnico, ki običajno pomeni skok en znak nazaj "
-#~ "ali izbris. Običajno je ustrezna izbira \"escape-sequence\"."
-
-#~ msgid ""
-#~ "Terminals have a 16-color palette that applications inside the terminal "
-#~ "can use. This is that palette, in the form of a colon-separated list of "
-#~ "color names. Color names should be in hex format e.g. \"#FF00FF\""
-#~ msgstr ""
-#~ "Terminal podpira paleto 16 barv, ki jo lahko uporabijo programi znotraj "
-#~ "terminala. To je paleta v obliki seznama imen barv, ločenega s podpičji. "
-#~ "Imena barv morajo biti v šestnajstiški obliki, na primer: \"#FF00FF\""
-
-#~ msgid ""
-#~ "The possible values are \"block\" to use a block cursor, \"ibeam\" to use "
-#~ "a vertical line cursor, or \"underline\" to use an underline cursor."
-#~ msgstr ""
-#~ "Ustrezne vrednosti so \"pravokotnik\" za prikaz kazalke v obliki "
-#~ "pravokotnika, \"navpičnica\" za kazalko v obliki navpične črte, ali pa "
-#~ "\"podčrtaj\" za kazalko v obliki podčrtaja."
-
-#~ msgid ""
-#~ "Type of terminal background. May be \"solid\" for a solid color, \"image"
-#~ "\" for an image, or \"transparent\" for either real transparency if a "
-#~ "compositing window manager is running, or pseudo-transparency otherwise."
-#~ msgstr ""
-#~ "Vrsta ozadja terminala. Lahko je \"polno\" za polno barvo, \"slika\" za "
-#~ "sliko ali \"prosojno\" za pravo ali delno prosojnost."
-
-#~ msgid ""
-#~ "Where to put the terminal scrollbar. Possibilities are \"left\", \"right"
-#~ "\", and \"hidden\"."
-#~ msgstr ""
-#~ "Kam postaviti drsnik terminala. Možnosti so \"left\" (levo), \"right"
-#~ "\" (desno) in \"hidden\" (skrito)."
-
-#~ msgid ""
-#~ "Whether to ask for confirmation when closing a terminal window which has "
-#~ "more than one open tab."
-#~ msgstr ""
-#~ "Ali želite vprašanje za potrditev pri zapiranju okna terminala, ki ima "
-#~ "odprt več kot en zavihek."
-
-#~ msgid "Whether to scroll background image"
-#~ msgstr "Ali naj slika v ozadju drsi"
-
-#~ msgid "[UTF-8,current]"
-#~ msgstr "[UTF-8,current]"
-
-#~ msgid "Images"
-#~ msgstr "Slike"
-
-#~ msgid "<small><i>Maximum</i></small>"
-#~ msgstr "<small><i>Največ</i></small>"
-
-#~ msgid "<small><i>None</i></small>"
-#~ msgstr "<small><i>Brez</i></small>"
-
-#~ msgid "Background"
-#~ msgstr "Ozadje"
-
-#~ msgid "Background image _scrolls"
-#~ msgstr "Slika ozadja _drsi"
-
-#~ msgid "Image _file:"
-#~ msgstr "S_likovna datoteka:"
-
-#~ msgid ""
-#~ "On the left side\n"
-#~ "On the right side\n"
-#~ "Disabled"
-#~ msgstr ""
-#~ "Na levi strani\n"
-#~ "Na desni strani\n"
-#~ "Onemogočeno"
-
-#~ msgid "S_hade transparent or image background:"
-#~ msgstr "_Senči prosojna ali slikovna ozadja:"
-
-#~ msgid "Select Background Image"
-#~ msgstr "Izberi sliko za ozadje"
-
-#~ msgid "Show _menubar by default in new terminals"
-#~ msgstr "V novih terminalih privzeto pokaži _menijsko vrstico"
-
-#~ msgid ""
-#~ "Tango\n"
-#~ "Linux console\n"
-#~ "XTerm\n"
-#~ "Rxvt\n"
-#~ "Custom"
-#~ msgstr ""
-#~ "Tango\n"
-#~ "Linux konzola\n"
-#~ "XTerm\n"
-#~ "Rxvt\n"
-#~ "Po meri"
-
-#~ msgid "_Background image"
-#~ msgstr "_Slika ozadja"
-
-#~ msgid "_Solid color"
-#~ msgstr "_Enobarvno"
-
-#~ msgid "_Transparent background"
-#~ msgstr "_Prosojno ozadje"
-
-#~ msgid "No such profile \"%s\", using default profile\n"
-#~ msgstr "Profil \"%s\" ne obstaja, uporabljen bo privzeti profil\n"
-
-#~ msgid "Invalid geometry string \"%s\"\n"
-#~ msgstr "Neveljaven geometrijski niz \"%s\"\n"
-
-#~ msgid ""
-#~ "Option \"%s\" is no longer supported in this version of gnome-terminal; "
-#~ "you might want to create a profile with the desired setting, and use the "
-#~ "new '--profile' option\n"
-#~ msgstr ""
-#~ "Možnost \"%s\" v tej različici gnome-terminal ni več podprta; morda boste "
-#~ "želeli ustvariti profil z želeno nastavitvijo in uporabiti novo možnost "
-#~ "'--profile'\n"
-
-#~ msgid "Save the terminal configuration to a file"
-#~ msgstr "Shrani nastavitve terminala v datoteko"
-
-#~ msgid "Pr_ofile Preferences"
-#~ msgstr "_Lastnosti profila"
-
-#~ msgid "On the left side"
-#~ msgstr "Na levi strani"
-
-#~ msgid "On the right side"
-#~ msgstr "Na desni strani"
-
-#~ msgid "Disabled"
-#~ msgstr "Onemogočeno"
-
-#~ msgid "Highlight S/Key challenges"
-#~ msgstr "Poudari spremembe S/Key"
-
-#~ msgid ""
-#~ "Popup a dialog when an S/Key challenge response query is detected and "
-#~ "clicked on. Typing a password into the dialog will send it to the "
-#~ "terminal."
-#~ msgstr ""
-#~ "Pokaži pogovorno okno ob kliku izzvanega odziva S/Key. Z vnosom gesla v "
-#~ "ustrezno polje pogovornega okna, se program izvede v terminalu."
-
-#~ msgid "S/Key Challenge Response"
-#~ msgstr "Izzvan odziv S/Key"
-
-#~ msgid "_Password:"
-#~ msgstr "_Geslo:"
-
-#~ msgid "The text you clicked on doesn't seem to be a valid S/Key challenge."
-#~ msgstr "Besedilo, na katerega ste kliknili, ni veljaven izziv S/Key."
-
-#~ msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
-#~ msgstr "Besedilo, na katerega ste kliknili, ni veljaven izziv OTP."
-
-#~ msgid "Could not open link"
-#~ msgstr "Ni mogoče odprti povezave"
-
-#~ msgid "Incompatible factory version; creating a new instance.\n"
-#~ msgstr "Nepodprta različica tovarne; ustvarjano bo novo okno.\n"
-
-#~ msgid "Factory error: %s\n"
-#~ msgstr "Napaka tovarne: %s\n"
-
-#~ msgid "There was a problem with the command for this terminal"
-#~ msgstr "Ukaz za ta terminal je povzročil napako"
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "Tipkovne bližnjice"
