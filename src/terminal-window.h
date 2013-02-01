@@ -50,8 +50,6 @@ GType terminal_window_get_type (void) G_GNUC_CONST;
 
 TerminalWindow* terminal_window_new (GApplication *app);
 
-void terminal_window_set_is_restored (TerminalWindow *window);
-
 GtkUIManager *terminal_window_get_ui_manager (TerminalWindow *window);
 
 void terminal_window_add_screen (TerminalWindow *window,

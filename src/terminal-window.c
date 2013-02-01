@@ -78,11 +78,6 @@ struct _TerminalWindowPrivate
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
 
-  /* Used to clear stray "demands attention" flashing on our window when we
-   * unmap and map it to switch to an ARGB visual.
-   */
-  guint clear_demands_attention : 1;
-
   guint disposed : 1;
   guint present_on_insert : 1;
 
@@ -1457,42 +1452,6 @@ terminal_window_realize (GtkWidget *widget)
 }
 
 static gboolean
-terminal_window_map_event (GtkWidget    *widget,
-			   GdkEventAny  *event)
-{
-  TerminalWindow *window = TERMINAL_WINDOW (widget);
-  TerminalWindowPrivate *priv = window->priv;
-  gboolean (* map_event) (GtkWidget *, GdkEventAny *) =
-      GTK_WIDGET_CLASS (terminal_window_parent_class)->map_event;
-  GtkAllocation widget_allocation;
-
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
-                         "[window %p] map-event, size %d : %d at (%d, %d)\n",
-                         widget,
-                         widget_allocation.width, widget_allocation.height,
-                         widget_allocation.x, widget_allocation.y);
-
-  if (priv->clear_demands_attention)
-    {
-#ifdef GDK_WINDOWING_X11
-      GdkWindow *gdk_window = gtk_widget_get_window (widget);
-
-      if (GDK_IS_X11_WINDOW (gdk_window))
-	terminal_util_x11_clear_demands_attention (gdk_window);
-#endif
-
-      priv->clear_demands_attention = FALSE;
-    }
-
-  if (map_event)
-    return map_event (widget, event);
-
-  return FALSE;
-}
-
-    
-static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
 {
@@ -1987,7 +1946,6 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
-  widget_class->map_event = terminal_window_map_event;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
   widget_class->style_updated = terminal_window_style_updated;
@@ -2121,21 +2079,6 @@ terminal_window_new (GApplication *app)
                        "application", app,
                        "show-menubar", FALSE,
                        NULL);
-}
-
-/**
- * terminal_window_set_is_restored:
- * @window:
- *
- * Marks the window as restored from session.
- */
-void
-terminal_window_set_is_restored (TerminalWindow *window)
-{
-  g_return_if_fail (TERMINAL_IS_WINDOW (window));
-  g_return_if_fail (!gtk_widget_get_mapped (GTK_WIDGET (window)));
-
-  window->priv->clear_demands_attention = TRUE;
 }
 
 static void

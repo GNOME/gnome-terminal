@@ -887,43 +887,6 @@ terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
   XFlush (xdisplay);
 }
 
-/* Asks the window manager to turn off the "demands attention" state on the window.
- *
- * This only works for windows that are currently window managed; if the window
- * is unmapped (in the withdrawn state) it would be necessary to change _NET_WM_STATE
- * directly.
- */
-void
-terminal_util_x11_clear_demands_attention (GdkWindow *window)
-{
-  GdkScreen *screen;
-  GdkDisplay *display;
-  XClientMessageEvent xclient;
-
-  screen = gdk_window_get_screen (window);
-  display = gdk_screen_get_display (screen);
-
-  memset (&xclient, 0, sizeof (xclient));
-  xclient.type = ClientMessage;
-  xclient.serial = 0;
-  xclient.send_event = True;
-  xclient.window = GDK_WINDOW_XID (window);
-  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE");
-  xclient.format = 32;
-
-  xclient.data.l[0] = 0; /* _NET_WM_STATE_REMOVE */
-  xclient.data.l[1] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_DEMANDS_ATTENTION");
-  xclient.data.l[2] = 0;
-  xclient.data.l[3] = 0;
-  xclient.data.l[4] = 0;
-
-  XSendEvent (GDK_DISPLAY_XDISPLAY (display),
-              GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
-	      False,
-	      SubstructureRedirectMask | SubstructureNotifyMask,
-	      (XEvent *)&xclient);
-}
-
 /* Check if a GdkWindow is minimized. This is a workaround for a
  * GDK bug/misfeature. gdk_window_get_state (window) has the
  * GDK_WINDOW_STATE_ICONIFIED bit for all unmapped windows,

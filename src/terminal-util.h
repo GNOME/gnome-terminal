@@ -85,8 +85,6 @@ gboolean terminal_util_x11_get_net_wm_desktop (GdkWindow *window,
 void     terminal_util_x11_set_net_wm_desktop (GdkWindow *window,
 					       guint32    desktop);
 
-void terminal_util_x11_clear_demands_attention (GdkWindow *window);
-
 gboolean terminal_util_x11_window_is_minimized (GdkWindow *window);
 
 const GdkRGBA *terminal_g_settings_get_rgba (GSettings  *settings,
