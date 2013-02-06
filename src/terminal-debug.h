@@ -25,13 +25,14 @@
 G_BEGIN_DECLS
 
 typedef enum {
-  TERMINAL_DEBUG_ACCELS     = 1 << 0,
-  TERMINAL_DEBUG_ENCODINGS  = 1 << 1,
-  TERMINAL_DEBUG_SERVER    = 1 << 2,
-  TERMINAL_DEBUG_GEOMETRY   = 1 << 3,
-  TERMINAL_DEBUG_MDI        = 1 << 4,
-  TERMINAL_DEBUG_PROCESSES  = 1 << 5,
-  TERMINAL_DEBUG_PROFILE    = 1 << 6
+  TERMINAL_DEBUG_ACCELS        = 1 << 0,
+  TERMINAL_DEBUG_ENCODINGS     = 1 << 1,
+  TERMINAL_DEBUG_SERVER        = 1 << 2,
+  TERMINAL_DEBUG_GEOMETRY      = 1 << 3,
+  TERMINAL_DEBUG_MDI           = 1 << 4,
+  TERMINAL_DEBUG_PROCESSES     = 1 << 5,
+  TERMINAL_DEBUG_PROFILE       = 1 << 6,
+  TERMINAL_DEBUG_SETTINGS_LIST = 1 << 7
 } TerminalDebugFlags;
 
 void _terminal_debug_init(void);

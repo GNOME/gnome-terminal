@@ -65,6 +65,26 @@
     <value nick='underline' value='2'/>
   </enum>
 
+  <!-- SettingsList base schema -->
+
+  <schema id="org.gnome.Terminal.SettingsList">
+    <key name="list" type="as">
+      <default>[]</default>
+    </key>
+    <key name="default" type="s">
+      <default>''</default>
+    </key>
+  </schema>
+
+  <!-- Profiles list schema -->
+
+  <schema id="org.gnome.Terminal.ProfilesList" 
+          extends="org.gnome.Terminal.SettingsList"
+          path="/org/gnome/terminal/legacy/profiles:/">
+    <override name="list">['b1dcc9dd-5262-4d8d-a863-c897e6d979b9']</override>
+    <override name="default">'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'</override>
+  </schema>
+
   <!-- A terminal profile -->
 
   <schema id="org.gnome.Terminal.Legacy.Profile">
@@ -505,13 +525,7 @@
       <_summary>Whether to show the menubar in new windows</_summary>
     </key>
 
-    <key name="profiles" type="as">
-      <default>['b1dcc9dd-5262-4d8d-a863-c897e6d979b9']</default>
-    </key>
-
-    <key name="default-profile" type="s">
-      <default>'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'</default>
-    </key>
+   <!-- <child name="profiles" schema="org.gnome.Terminal.ProfilesList" /> -->
 
     <key name="schema-version" type="u">
       <default>0</default>

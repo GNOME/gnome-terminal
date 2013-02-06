@@ -44,9 +44,11 @@
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
-#include "terminal-profile-utils.h"
+#include "terminal-profiles-list.h"
+#include "terminal-debug.h"
 
 static gboolean quiet = FALSE;
+static TerminalSettingsList *profiles_list = NULL;
 
 static void _printerr (const char *format, ...) G_GNUC_PRINTF (1, 2);
 
@@ -125,6 +127,15 @@ modify_argv0_for_command (gint *argc, gchar **argv[], const gchar *command)
   s = g_strdup_printf ("%s %s", (*argv)[0], command);
   (*argv)[0] = s;
   g_free (program_name);
+}
+
+static TerminalSettingsList *
+ensure_profiles_list (void)
+{
+  if (profiles_list == NULL)
+    profiles_list = terminal_profiles_list_new ();
+
+  return profiles_list;
 }
 
 typedef struct
@@ -309,7 +320,7 @@ option_profile_cb (const gchar *option_name,
     return FALSE;
   }
 
-  data->profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  data->profile = terminal_profiles_list_dup_uuid (ensure_profiles_list (), value, error);
   return data->profile != NULL;
 }
 
@@ -748,9 +759,9 @@ complete (int *argcp,
     {
       char **profiles, **p;
 
-      profiles = terminal_profile_util_list_profiles ();
+      profiles = terminal_settings_list_dupv_children (ensure_profiles_list ());
       if (profiles == NULL)
-        return FALSE;
+        return TRUE;
 
       for (p = profiles; *p; p++)
         g_print ("%s\n", *p);
@@ -790,6 +801,8 @@ main (gint argc, gchar *argv[])
   g_type_init ();
 #endif
 
+  _terminal_debug_init ();
+
   ret = EXIT_FAILURE;
 
   if (argc < 2)
@@ -827,5 +840,8 @@ main (gint argc, gchar *argv[])
     }
 
  out:
+
+  g_clear_object (&profiles_list);
+
   return ret;
 }

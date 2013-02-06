@@ -23,6 +23,7 @@
 
 #include "terminal-encoding.h"
 #include "terminal-screen.h"
+#include "terminal-profiles-list.h"
 
 G_BEGIN_DECLS
 
@@ -84,14 +85,7 @@ void terminal_app_edit_preferences (TerminalApp     *app,
 void terminal_app_edit_encodings   (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 
-GList* terminal_app_get_profile_list (TerminalApp *app);
-
-void terminal_app_get_profiles_iter (TerminalApp *app,
-                                     GHashTableIter *iter);
-
-GSettings* terminal_app_ref_profile_by_uuid (TerminalApp *app,
-                                             const char  *uuid,
-                                             GError **error);
+TerminalSettingsList *terminal_app_get_profiles_list (TerminalApp *app);
 
 TerminalEncoding *terminal_app_ensure_encoding (TerminalApp *app,
                                                 const char *charset);

@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+#include "terminal-profiles-list.h"
+
 G_BEGIN_DECLS
 
 #define TERMINAL_CONFIG_VERSION             (1) /* Bump this for any changes */
@@ -58,6 +60,8 @@ enum
 
 typedef struct
 {
+  TerminalSettingsList *profiles_list; /* may be NULL */
+
   char    *server_app_id;
   gboolean remote_arguments;
   char    *startup_id;

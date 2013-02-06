@@ -511,6 +511,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   GSettings *active_profile;
   GtkActionGroup *action_group;
   GtkAction *action;
+  TerminalSettingsList *profiles_list;
   GList *profiles, *p;
   GSList *group;
   guint n;
@@ -531,11 +532,13 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
       priv->profiles_action_group = NULL;
     }
 
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
+  profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
+  profiles = terminal_profiles_list_ref_children (profiles_list);
 
   action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
   single_profile = !profiles || profiles->next == NULL; /* list length <= 1 */
   gtk_action_set_sensitive (action, !single_profile);
+
   if (profiles == NULL)
     return;
 
@@ -595,7 +598,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
                              GTK_UI_MANAGER_MENUITEM, FALSE);
     }
 
-  g_list_free (profiles);
+  g_list_free_full (profiles, (GDestroyNotify) g_object_unref);
 }
 
 static void
@@ -629,6 +632,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
   TerminalWindowPrivate *priv = window->priv;
   GtkActionGroup *action_group;
   GtkAction *action;
+  TerminalSettingsList *profiles_list;
   GList *profiles, *p;
   guint n;
   gboolean have_single_profile;
@@ -648,7 +652,9 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       priv->new_terminal_action_group = NULL;
     }
 
-  profiles = terminal_app_get_profile_list (terminal_app_get ());
+  profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
+  profiles = terminal_profiles_list_ref_children (profiles_list);
+
   have_single_profile = !profiles || !profiles->next;
 
   action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
@@ -658,7 +664,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
 
   if (have_single_profile)
     {
-      g_list_free (profiles);
+      g_list_free_full (profiles, (GDestroyNotify) g_object_unref);
       return;
     }
 
@@ -703,7 +709,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
       ++n;
     }
 
-  g_list_free (profiles);
+  g_list_free_full (profiles, (GDestroyNotify) g_object_unref);
 }
 
 static void
@@ -1596,7 +1602,7 @@ terminal_window_screen_changed (GtkWidget *widget,
 }
 
 static void
-terminal_window_profile_list_changed_cb (TerminalApp *app,
+terminal_window_profile_list_changed_cb (TerminalSettingsList *profiles_list,
                                          TerminalWindow *window)
 {
   terminal_window_update_set_profile_menu (window);
@@ -1799,6 +1805,7 @@ terminal_window_init (TerminalWindow *window)
     };
   TerminalWindowPrivate *priv;
   TerminalApp *app;
+  TerminalSettingsList *profiles_list;
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *manager;
@@ -1916,8 +1923,9 @@ terminal_window_init (TerminalWindow *window)
   priv->tabs_menu = terminal_tabs_menu_new (window);
 
   app = terminal_app_get ();
-  terminal_window_profile_list_changed_cb (app, window);
-  g_signal_connect (app, "profile-list-changed",
+  profiles_list = terminal_app_get_profiles_list (app);
+  terminal_window_profile_list_changed_cb (profiles_list, window);
+  g_signal_connect (profiles_list, "children-changed",
                     G_CALLBACK (terminal_window_profile_list_changed_cb), window);
   
   terminal_window_encoding_list_changed_cb (app, window);

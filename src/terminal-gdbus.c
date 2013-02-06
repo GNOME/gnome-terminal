@@ -352,6 +352,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
                                        GVariant *options)
 {
   TerminalApp *app = terminal_app_get ();
+  TerminalSettingsList *profiles_list;
   GDBusObjectManagerServer *object_manager;
   TerminalWindow *window;
   TerminalScreen *screen;
@@ -372,8 +373,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
     profile_uuid = NULL;
 
-  profile = terminal_app_ref_profile_by_uuid (app, profile_uuid, &err);
-  if (profile == NULL) 
+  profiles_list = terminal_app_get_profiles_list (app);
+  profile = terminal_profiles_list_ref_profile_by_uuid (profiles_list, profile_uuid, &err);
+  if (profile == NULL)
     {
       g_dbus_method_invocation_return_gerror (invocation, err);
       g_error_free (err);

@@ -52,9 +52,11 @@ gnome_terminal_server_SOURCES = \
 	terminal-notebook.h \
 	terminal-prefs.c \
 	terminal-prefs.h \
-	terminal-profile-utils.c \
-	terminal-profile-utils.h \
+	terminal-profiles-list.c \
+	terminal-profiles-list.h \
 	terminal-schemas.h \
+	terminal-settings-list.c \
+	terminal-settings-list.h \
 	terminal-screen.c \
 	terminal-screen.h \
 	terminal-screen-container.c \
@@ -149,16 +151,22 @@ gnome_terminal_client_SOURCES = \
 	client.c \
 	terminal-client-utils.c \
 	terminal-client-utils.h \
+	terminal-debug.c \
+	terminal-debug.h \
 	terminal-defines.h \
 	terminal-intl.h \
-	terminal-profile-utils.c \
-	terminal-profile-utils.h \
+	terminal-profiles-list.c \
+	terminal-profiles-list.h \
 	terminal-schemas.h \
+	terminal-settings-list.c \
+	terminal-settings-list.h \
 	$(NULL)
 
 nodist_gnome_terminal_client_SOURCES = \
 	terminal-gdbus-generated.c \
 	terminal-gdbus-generated.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
 	$(NULL)
 
 gnome_terminal_client_CPPFLAGS = \
@@ -193,14 +201,18 @@ gnome_terminal_SOURCES = \
 	terminal-intl.h \
 	terminal-options.c \
 	terminal-options.h \
-	terminal-profile-utils.c \
-	terminal-profile-utils.h \
+	terminal-profiles-list.c \
+	terminal-profiles-list.h \
 	terminal-schemas.h \
+	terminal-settings-list.c \
+	terminal-settings-list.h \
 	$(NULL)
 
 nodist_gnome_terminal_SOURCES = \
 	terminal-gdbus-generated.c \
 	terminal-gdbus-generated.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
 	$(NULL)
 
 gnome_terminal_CPPFLAGS = \
@@ -256,7 +268,13 @@ libexec_PROGRAMS += gnome-terminal-migration
 
 gnome_terminal_migration_SOURCES = \
 	migration.c \
+	terminal-debug.c \
+	terminal-debug.h \
+	terminal-profiles-list.c \
+	terminal-profiles-list.h \
 	terminal-schemas.h \
+	terminal-settings-list.c \
+	terminal-settings-list.h \
 	$(NULL)
 
 nodist_gnome_terminal_migration_SOURCES = \

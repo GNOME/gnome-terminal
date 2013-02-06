@@ -25,13 +25,14 @@
 #include <glib.h>
 #include <gio/gio.h>
 
+#include "terminal-app.h"
 #include "terminal-enums.h"
 #include "terminal-intl.h"
 #include "profile-editor.h"
 #include "terminal-schemas.h"
 #include "terminal-type-builtins.h"
 #include "terminal-util.h"
-#include "terminal-profile-utils.h"
+#include "terminal-profiles-list.h"
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -674,6 +675,7 @@ terminal_profile_edit (GSettings  *profile,
                        GtkWindow  *transient_parent,
                        const char *widget_name)
 {
+  TerminalSettingsList *profiles_list;
   GtkBuilder *builder;
   GError *error = NULL;
   GtkWidget *editor, *w;
@@ -690,6 +692,8 @@ terminal_profile_edit (GSettings  *profile,
       gtk_window_present (GTK_WINDOW (editor));
       return;
     }
+
+  profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/org/gnome/terminal/ui/profile-preferences.ui", &error);
@@ -716,7 +720,7 @@ terminal_profile_edit (GSettings  *profile,
   gtk_widget_add_events (w, GDK_BUTTON_PRESS_MASK | GDK_SCROLL_MASK);
   g_signal_connect (w, "scroll-event", G_CALLBACK (scroll_event_cb), NULL);
 
-  uuid = terminal_profile_util_get_profile_uuid (profile);
+  uuid = terminal_settings_list_dup_uuid_from_child (profiles_list, profile);
   gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (builder, "profile-uuid")),
                       uuid);
   g_free (uuid);

@@ -24,17 +24,21 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gconf/gconf-client.h>
+#include <dconf.h>
 #include <vte/vte.h>
-#include <uuid.h>
 
 #include "terminal-schemas.h"
+#include "terminal-profiles-list.h"
 #include "terminal-type-builtins.h"
+#include "terminal-debug.h"
 
+static gboolean clean = FALSE;
 static gboolean dry_run = FALSE;
 static gboolean force = FALSE;
 static gboolean verbose = FALSE;
 
 static const GOptionEntry options[] = {
+  { "clean", 0, 0, G_OPTION_ARG_NONE, &clean, NULL, NULL },
   { "dry-run", 0, 0, G_OPTION_ARG_NONE, &dry_run, NULL, NULL },
   { "force", 0, 0, G_OPTION_ARG_NONE, &force, NULL, NULL },
   { "verbose", 0, 0, G_OPTION_ARG_NONE, &verbose, NULL, NULL },
@@ -42,6 +46,8 @@ static const GOptionEntry options[] = {
 };
 
 #define ERROR_DOMAIN (g_intern_static_string ("gnome-terminal-migration-error"))
+
+#define TERMINAL_PATH_PREFIX "/org/gnome/terminal/"
 
 enum {
   ERROR_GENERIC
@@ -306,28 +312,42 @@ migrate_global_prefs (GSettings *settings,
   return TRUE;
 }
 
-static char *
-migrate_profile (GConfClient *client,
-                 GSettings *global_settings,
+static void
+do_clean (void)
+{
+  DConfClient *client;
+
+  if (verbose)
+    g_printerr ("Cleaning...\n");
+
+#ifdef HAVE_DCONF_1_2
+  client = dconf_client_new (NULL, NULL, NULL, NULL);
+  dconf_client_write (client, TERMINAL_PATH_PREFIX, NULL, NULL, NULL, NULL);
+#else /* modern DConf */
+  client = dconf_client_new ();
+  dconf_client_write_sync (client, TERMINAL_PATH_PREFIX, NULL, NULL, NULL, NULL);
+#endif
+  g_object_unref (client);
+}
+
+static void
+migrate_profile (TerminalSettingsList *list,
+                 GConfClient *client,
                  const char *gconf_id,
-                 gboolean is_default)
+                 const char *default_gconf_id)
 {
   GSettings *settings;
-  char *path;
+  char *child_name, *path;
   const char *name;
-  uuid_t u;
-  char str[37];
 
-  uuid_generate (u);
-  uuid_unparse (u, str);
-
-  path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
-  if (verbose)
-    g_printerr ("Migrating profile \"%s\" to \"%s\" is-default %s\n",
-                gconf_id, path, is_default ? "true" : "false");
-
-  settings = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
-  g_free (path);
+  if (g_strcmp0 (gconf_id, default_gconf_id) == 0) {
+    /* Re-use the default list child */
+    settings = terminal_settings_list_ref_default_child (list);
+  } else {
+    child_name = terminal_settings_list_add_child (list);
+    settings = terminal_settings_list_ref_child (list, child_name);
+    g_free (child_name);
+  }
 
   path = gconf_concat_dir_and_key (GCONF_PROFILES_PREFIX, gconf_id);
 
@@ -422,25 +442,19 @@ migrate_profile (GConfClient *client,
 
   g_free (path);
   g_object_unref (settings);
-
-  return g_strdup (str);
 }
 
 static gboolean
 migrate_profiles (GSettings *global_settings,
                   GError **error)
 {
+  TerminalSettingsList *list;
   GConfClient *client;
   GConfValue *value, *dvalue;
   GSList *l;
-  GPtrArray *profile_uuids;
-  char *uuid;
-  const char *profile, *default_profile, *default_uuid;
-  gboolean is_default;
+  const char *default_profile;
 
   client = gconf_client_get_default ();
-
-  profile_uuids = g_ptr_array_new_with_free_func ((GDestroyNotify) g_free);
 
   dvalue = gconf_client_get (client, GCONF_GLOBAL_PREFIX "/default_profile", NULL);
   if (dvalue != NULL &&
@@ -449,19 +463,16 @@ migrate_profiles (GSettings *global_settings,
   else
     default_profile = NULL;
 
-  default_uuid = NULL;
+  list = terminal_profiles_list_new ();
+
   value = gconf_client_get (client, GCONF_GLOBAL_PREFIX "/profile_list", NULL);
   if (value != NULL &&
       value->type == GCONF_VALUE_LIST &&
       gconf_value_get_list_type (value) == GCONF_VALUE_STRING) {
     for (l = gconf_value_get_list (value); l != NULL; l = l->next) {
-      profile = gconf_value_get_string (l->data);
-
-      is_default = g_strcmp0 (profile, default_profile) == 0;
-      uuid = migrate_profile (client, global_settings, profile, is_default);
-      g_ptr_array_add (profile_uuids, uuid);
-      if (is_default)
-        default_uuid = uuid;
+      migrate_profile (list, client,
+                       gconf_value_get_string (l->data),
+                       default_profile);
     }
   }
 
@@ -480,27 +491,13 @@ migrate_profiles (GSettings *global_settings,
     g_free (path);
   }
 
-  /* Only write profile list if there were any profiles migrated */
-  if (profile_uuids->len) {
-    g_ptr_array_add (profile_uuids, NULL);
-    g_settings_set_strv (global_settings, TERMINAL_SETTING_PROFILES_KEY,
-                         (const char * const *) profile_uuids->pdata);
-
-    /* The GConf setting might be corrupt, with the default profile pointing to a profile
-     * that doesn't actually exist. In this case, just pick the first profile as default.
-     */
-    if (default_uuid == NULL)
-      default_uuid = (const char *) profile_uuids->pdata[0];
-
-    g_settings_set_string (global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, default_uuid);
-  }
-
   if (value)
     gconf_value_free (value);
   if (dvalue)
     gconf_value_free (dvalue);
   g_object_unref (client);
-  g_ptr_array_free (profile_uuids, TRUE);
+
+  g_object_unref (list);
 
   return TRUE;
 }
@@ -608,6 +605,8 @@ main (int argc,
   g_type_init ();
 #endif
 
+  _terminal_debug_init ();
+
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, options, NULL);
 
@@ -627,6 +626,9 @@ main (int argc,
     if (!force)
       goto out;
   }
+
+  if (clean)
+    do_clean ();
 
   if (!migrate (global_settings, &error)) {
     g_printerr ("Error: %s\n", error->message);

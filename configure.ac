@@ -127,6 +127,7 @@ if test "$enable_migration" = "yes"; then
    gio-2.0 >= $GIO_REQUIRED
    vte$VTE_PC_VERSION >= $VTE_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
+   dconf >= $DCONF_REQUIRED
    uuid])
   AC_DEFINE([ENABLE_MIGRATION],[1],[Define to 1 to enable prefs migration from GConf to GSettings])
 fi

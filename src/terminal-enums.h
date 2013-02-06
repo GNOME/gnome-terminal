@@ -39,6 +39,12 @@ typedef enum
   TERMINAL_EXIT_HOLD
 } TerminalExitAction;
 
+typedef enum {
+  TERMINAL_SETTINGS_LIST_FLAG_NONE = 0,
+  TERMINAL_SETTINGS_LIST_FLAG_HAS_DEFAULT = 1 << 0,
+  TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY = 1 << 1
+} TerminalSettingsListFlags;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */

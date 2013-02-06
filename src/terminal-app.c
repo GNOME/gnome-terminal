@@ -32,7 +32,7 @@
 #include "terminal-screen.h"
 #include "terminal-screen-container.h"
 #include "terminal-window.h"
-#include "terminal-profile-utils.h"
+#include "terminal-profiles-list.h"
 #include "terminal-util.h"
 #include "profile-editor.h"
 #include "terminal-encoding.h"
@@ -45,9 +45,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-
-#include <uuid.h>
-#include <dconf.h>
 
 #define DESKTOP_INTERFACE_SETTINGS_SCHEMA       "org.gnome.desktop.interface"
 
@@ -65,7 +62,6 @@
 struct _TerminalAppClass {
   GtkApplicationClass parent_class;
 
-  void (* profile_list_changed) (TerminalApp *app);
   void (* encoding_list_changed) (TerminalApp *app);
 };
 
@@ -75,22 +71,18 @@ struct _TerminalApp
 
   GDBusObjectManagerServer *object_manager;
 
-  GtkWidget *new_profile_dialog;
-
-  GHashTable *profiles_hash;
+  TerminalSettingsList *profiles_list;
 
   GHashTable *encodings;
   gboolean encodings_locked;
 
   GSettings *global_settings;
-  GSettings *profiles_settings;
   GSettings *desktop_interface_settings;
   GSettings *system_proxy_settings;
 };
 
 enum
 {
-  PROFILE_LIST_CHANGED,
   ENCODING_LIST_CHANGED,
   LAST_SIGNAL
 };
@@ -147,272 +139,50 @@ maybe_migrate_settings (TerminalApp *app)
 #endif /* ENABLE_MIGRATION */
 }
 
-static char **
-strv_insert (char **strv,
-             char *str)
-{
-  guint i;
-
-  for (i = 0; strv[i]; i++)
-    if (strcmp (strv[i], str) == 0)
-      return strv;
-
-  /* Not found; append */
-  strv = g_realloc_n (strv, i + 2, sizeof (char *));
-  strv[i++] = str;
-  strv[i] = NULL;
-
-  return strv;
-}
-
-static char **
-strv_remove (char **strv,
-             char *str)
-{
-  char **a, **b;
-
-  a = b = strv;
-  while (*a) {
-    if (strcmp (*a, str) != 0)
-      *b++ = *a;
-    a++;
-  }
-  *b = NULL;
-
-  return strv;
-}
-
-static GSettings * /* ref */
-profile_clone (TerminalApp *app,
-               GSettings *base_profile)
+void
+terminal_app_new_profile (TerminalApp *app,
+                          GSettings   *base_profile,
+                          GtkWindow   *transient_parent)
 {
   GSettings *profile;
-  uuid_t u;
-  char str[37];
-  char *new_path;
-  char **profiles;
+  char *base_uuid, *uuid;
 
-  uuid_generate (u);
-  uuid_unparse (u, str);
-  new_path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", str);
+  if (base_profile) {
+    base_uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, base_profile);
+    uuid = terminal_settings_list_clone_child (app->profiles_list, base_uuid);
+    g_free (base_uuid);
+  } else {
+    uuid = terminal_settings_list_add_child (app->profiles_list);
+  }
 
-  if (base_profile)
-    {
-      static const char * const keys[] = {
-        TERMINAL_PROFILE_ALLOW_BOLD_KEY,
-        TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
-        TERMINAL_PROFILE_BACKGROUND_COLOR_KEY,
-        TERMINAL_PROFILE_BACKSPACE_BINDING_KEY,
-        TERMINAL_PROFILE_BOLD_COLOR_KEY,
-        TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
-        TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
-        TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
-        TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
-        TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY,
-        TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY,
-        TERMINAL_PROFILE_DELETE_BINDING_KEY,
-        TERMINAL_PROFILE_ENCODING,
-        TERMINAL_PROFILE_EXIT_ACTION_KEY,
-        TERMINAL_PROFILE_FONT_KEY,
-        TERMINAL_PROFILE_FOREGROUND_COLOR_KEY,
-        TERMINAL_PROFILE_LOGIN_SHELL_KEY,
-        TERMINAL_PROFILE_NAME_KEY,
-        TERMINAL_PROFILE_PALETTE_KEY,
-        TERMINAL_PROFILE_SCROLLBACK_LINES_KEY,
-        TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
-        TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
-        TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
-        TERMINAL_PROFILE_SCROLL_ON_OUTPUT_KEY,
-        TERMINAL_PROFILE_TITLE_MODE_KEY,
-        TERMINAL_PROFILE_TITLE_KEY,
-        TERMINAL_PROFILE_UPDATE_RECORDS_KEY,
-        TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
-        TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
-        TERMINAL_PROFILE_USE_SKEY_KEY,
-        TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
-        TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
-        /* TERMINAL_PROFILE_VISIBLE_NAME_KEY, */
-        TERMINAL_PROFILE_WORD_CHARS_KEY,
-      };
-      DConfClient *client;
-#ifndef HAVE_DCONF_1_2
-      DConfChangeset *changeset;
-#endif
-      char *base_path;
-      guint i;
+  if (uuid == NULL)
+    return;
 
-      g_object_get (base_profile, "path", &base_path, NULL);
+  profile = terminal_settings_list_ref_child (app->profiles_list, uuid);
+  g_free (uuid);
+  if (profile == NULL)
+    return;
 
-#ifdef HAVE_DCONF_1_2
-      client = dconf_client_new (NULL, NULL, NULL, NULL);
-#else
-      client = dconf_client_new ();
-      changeset = dconf_changeset_new ();
-#endif
-
-      for (i = 0; i < G_N_ELEMENTS (keys); i++)
-        {
-          GVariant *value;
-          char *p;
-
-          p = g_strconcat (base_path, keys[i], NULL);
-#ifdef HAVE_DCONF_1_2
-          value = dconf_client_read_no_default (client, p);
-#else
-          value = dconf_client_read (client, p);
-#endif
-          g_free (p);
-
-          if (value)
-            {
-              p = g_strconcat (new_path, keys[i], NULL);
-#ifdef HAVE_DCONF_1_2
-              dconf_client_write (client, p, value, NULL, NULL, NULL);
-#else
-              dconf_changeset_set (changeset, p, value);
-#endif
-              g_free (p);
-              g_variant_unref (value);
-            }
-        }
-
-#ifndef HAVE_DCONF_1_2
-      dconf_client_change_sync (client, changeset, NULL, NULL, NULL);
-      g_object_unref (changeset);
-#endif
-      g_object_unref (client);
-      g_free (base_path);
-    }
-
-  profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, new_path);
-  g_free (new_path);
-
-  if (base_profile)
-    {
-      const char *base_name;
-      char *new_name;
-
-      g_settings_get (base_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &base_name);
-      new_name = g_strdup_printf ("%s (Cloned)", base_name);
-      g_settings_set_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, new_name);
-      g_free (new_name);
-    }
-
-  /* Store the new UUID in the list of profiles, and add the profile to the hash table.
-   * We'll get a changed signal for the profile list key, but that will result in a no-op.
-   */
-  g_hash_table_insert (app->profiles_hash, g_strdup (str) /* adopted */, profile /* adopted */);
-  g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
-
-  g_settings_get (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, "^a&s", &profiles);
-  profiles = strv_insert (profiles, str);
-  g_settings_set_strv (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, (const char * const *) profiles);
-  g_free (profiles);
-
-  return g_object_ref (profile);
+  terminal_profile_edit (profile, transient_parent, "profile-name-entry");
+  g_object_unref (profile);
 }
 
 void
 terminal_app_remove_profile (TerminalApp *app,
                              GSettings *profile)
 {
-  char *uuid, *path;
-  char **profiles;
-  DConfClient *client;
+  char *uuid;
 
-  uuid = terminal_profile_util_get_profile_uuid (profile);
-  g_object_get (profile, "path", &path, NULL);
-
-  g_settings_get (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, "^a&s", &profiles);
-  profiles = strv_remove (profiles, uuid);
-  g_settings_set_strv (app->global_settings, TERMINAL_SETTING_PROFILES_KEY, (const char * const *) profiles);
-  g_free (profiles);
-
-  /* unset all keys under the profile's path */
-#ifdef HAVE_DCONF_1_2
-  client = dconf_client_new (NULL, NULL, NULL, NULL);
-  dconf_client_write (client, path, NULL, NULL, NULL, NULL);
-#else /* modern DConf */
-  client = dconf_client_new ();
-  dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
-#endif
-  g_object_unref (client);
-
+  uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
+  terminal_settings_list_remove_child (app->profiles_list, uuid);
   g_free (uuid);
-  g_free (path);
 }
 
 gboolean
 terminal_app_can_remove_profile (TerminalApp *app,
                                  GSettings *profile)
 {
-  return g_hash_table_size (app->profiles_hash) > 1;
-}
-
-void
-terminal_app_get_profiles_iter (TerminalApp *app,
-                                GHashTableIter *iter)
-{
-  g_hash_table_iter_init (iter, app->profiles_hash);
-}
-
-static void
-terminal_app_profile_list_changed_cb (GSettings *settings,
-                                      const char *key,
-                                      TerminalApp *app)
-{
-  char **profiles, *default_profile;
-  guint i;
-  GHashTable *new_profiles;
-  gboolean changed = FALSE;
-
-  /* Use get_mapped so we can be sure never to get valid profile names, and
-   * never an empty profile list, since the schema defines one profile.
-   */
-  profiles = terminal_profile_util_get_profiles (app->global_settings);
-  g_settings_get (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY,
-                  "&s", &default_profile);
-
-  new_profiles = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                        (GDestroyNotify) g_free,
-                                        (GDestroyNotify) g_object_unref);
-
-  for (i = 0; profiles[i] != NULL; i++) {
-    const char *name = profiles[i];
-    GSettings *profile;
-
-    if (app->profiles_hash)
-      profile = g_hash_table_lookup (app->profiles_hash, name);
-    else
-      profile = NULL;
-
-    if (profile) {
-      g_object_ref (profile);
-      g_hash_table_remove (app->profiles_hash, name);
-    } else {
-      char *path;
-      path = g_strdup_printf (TERMINAL_PROFILES_PATH_PREFIX ":%s/", name);
-      profile = g_settings_new_with_path (TERMINAL_PROFILE_SCHEMA, path);
-      g_free (path);
-      changed = TRUE;
-    }
-
-    g_hash_table_insert (new_profiles, g_strdup (name) /* adopted */, profile /* adopted */);
-  }
-  g_strfreev (profiles);
-
-  g_assert (g_hash_table_size (new_profiles) > 0);
-
-  if (app->profiles_hash == NULL ||
-      g_hash_table_size (app->profiles_hash) > 0)
-    changed = TRUE;
-
-  if (app->profiles_hash != NULL)
-    g_hash_table_unref (app->profiles_hash);
-  app->profiles_hash = new_profiles;
-
-  if (changed)
-    g_signal_emit (app, signals[PROFILE_LIST_CHANGED], 0);
+  return TRUE;
 }
 
 static int
@@ -470,18 +240,6 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
   g_free (encodings);
 
   g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
-}
-
-void
-terminal_app_new_profile (TerminalApp *app,
-                          GSettings   *base_profile,
-                          GtkWindow   *transient_parent)
-{
-  GSettings *new_profile;
-
-  new_profile = profile_clone (app, base_profile);
-  terminal_profile_edit (new_profile, transient_parent, "profile-name-entry");
-  g_object_unref (new_profile);
 }
 
 /* App menu callbacks */
@@ -592,11 +350,7 @@ terminal_app_init (TerminalApp *app)
   maybe_migrate_settings (app);
 
   /* Get the profiles */
-  terminal_app_profile_list_changed_cb (app->global_settings, NULL, app);
-  g_signal_connect (app->global_settings,
-                    "changed::" TERMINAL_SETTING_PROFILES_KEY,
-                    G_CALLBACK (terminal_app_profile_list_changed_cb),
-                    app);
+  app->profiles_list = terminal_profiles_list_new ();
 
   /* Get the encodings */
   app->encodings = terminal_encodings_get_builtins ();
@@ -618,11 +372,6 @@ terminal_app_finalize (GObject *object)
                                         G_CALLBACK (terminal_app_encoding_list_notify_cb),
                                         app);
   g_hash_table_destroy (app->encodings);
-
-  g_signal_handlers_disconnect_by_func (app->global_settings,
-                                        G_CALLBACK (terminal_app_profile_list_changed_cb),
-                                        app);
-  g_hash_table_unref (app->profiles_hash);
 
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
@@ -694,20 +443,11 @@ terminal_app_class_init (TerminalAppClass *klass)
   g_application_class->dbus_register = terminal_app_dbus_register;
   g_application_class->dbus_unregister = terminal_app_dbus_unregister;
 
-  signals[PROFILE_LIST_CHANGED] =
-    g_signal_new (I_("profile-list-changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalAppClass, profile_list_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-
   signals[ENCODING_LIST_CHANGED] =
     g_signal_new (I_("encoding-list-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (TerminalAppClass, profile_list_changed),
+                  G_STRUCT_OFFSET (TerminalAppClass, encoding_list_changed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
@@ -792,49 +532,14 @@ terminal_app_edit_encodings (TerminalApp     *app,
 }
 
 /**
- * terminal_profile_get_list:
+ * terminal_app_get_profiles_list:
  *
- * Returns: a #GList containing all profile #GSettings objects.
- *   The content of the list is owned by the backend and
- *   should not be modified or freed. Use g_list_free() when done
- *   using the list.
+ * Returns: (transfer none): returns the singleton profiles list #TerminalSettingsList
  */
-GList*
-terminal_app_get_profile_list (TerminalApp *app)
+TerminalSettingsList *
+terminal_app_get_profiles_list (TerminalApp *app)
 {
-  g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
-
-  return g_list_sort (g_hash_table_get_values (app->profiles_hash), terminal_profile_util_profiles_compare);
-}
-
-/**
- * terminal_app_get_profile_by_uuid:
- * @app:
- * @uuid:
- * @error:
- *
- * Returns: (transfer none): the #GSettings for the profile identified by @uuid
- */
-GSettings *
-terminal_app_ref_profile_by_uuid (TerminalApp *app,
-                                  const char  *uuid,
-                                  GError **error)
-{
-  GSettings *profile = NULL;
-
-  if (uuid == NULL)
-    g_settings_get (app->global_settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, "&s", &uuid);
-
-  profile = g_hash_table_lookup (app->profiles_hash, uuid);
-
-  if (profile == NULL)
-    {
-      g_set_error (error, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
-                   "Profile \"%s\" does not exist", uuid);
-      return NULL;
-    }
-
-  return g_object_ref (profile);
+  return app->profiles_list;
 }
 
 GHashTable *

@@ -31,11 +31,19 @@
 #include "terminal-screen.h"
 #include "terminal-app.h"
 #include "terminal-intl.h"
-#include "terminal-profile-utils.h"
 #include "terminal-util.h"
 #include "terminal-version.h"
 
 static GOptionContext *get_goption_context (TerminalOptions *options);
+
+static TerminalSettingsList *
+terminal_options_ensure_profiles_list (TerminalOptions *options)
+{
+  if (options->profiles_list == NULL)
+    options->profiles_list = terminal_profiles_list_new ();
+
+  return options->profiles_list;
+}
 
 static char *
 terminal_util_key_file_get_string_unescape (GKeyFile *key_file,
@@ -296,7 +304,8 @@ option_profile_cb (const gchar *option_name,
   TerminalOptions *options = data;
   char *profile;
 
-  profile = terminal_profile_util_get_profile_by_uuid_or_name (value, error);
+  profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
+                                                     value, error);
   if (profile == NULL)
     return FALSE;
 
@@ -325,7 +334,8 @@ option_profile_id_cb (const gchar *option_name,
   TerminalOptions *options = data;
   char *profile;
 
-  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  profile = terminal_profiles_list_dup_uuid (terminal_options_ensure_profiles_list (options),
+                                             value, error);
   if (profile == NULL)
     return FALSE;
 
@@ -355,7 +365,8 @@ option_window_callback (const gchar *option_name,
   TerminalOptions *options = data;
   char *profile;
 
-  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  profile = terminal_profiles_list_dup_uuid (terminal_options_ensure_profiles_list (options),
+                                             value, error);
   if (profile == NULL)
     return FALSE;
 
@@ -373,7 +384,8 @@ option_tab_callback (const gchar *option_name,
   TerminalOptions *options = data;
   char *profile;
 
-  profile = terminal_profile_util_get_profile_by_uuid (value, error);
+  profile = terminal_profiles_list_dup_uuid (terminal_options_ensure_profiles_list (options),
+                                             value, error);
   if (profile == NULL)
     return FALSE;
 
@@ -984,6 +996,8 @@ terminal_options_free (TerminalOptions *options)
 
   g_free (options->sm_client_id);
   g_free (options->sm_config_prefix);
+
+  g_clear_object (&options->profiles_list);
 
   g_slice_free (TerminalOptions, options);
 }

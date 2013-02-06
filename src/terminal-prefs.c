@@ -32,10 +32,11 @@
 #include "terminal-intl.h"
 #include "terminal-schemas.h"
 #include "terminal-util.h"
-#include "terminal-profile-utils.h"
+#include "terminal-profiles-list.h"
 #include "terminal-encoding.h"
 
 typedef struct {
+  TerminalSettingsList *profiles_list;
   GtkWidget *dialog;
   GtkWindow *parent;
 
@@ -44,7 +45,7 @@ typedef struct {
   GtkWidget *manage_profiles_edit_button;
   GtkWidget *manage_profiles_clone_button;
   GtkWidget *manage_profiles_delete_button;
-  GtkWidget *manage_profiles_default_menu;
+  GtkWidget *profiles_default_combo;
 
   GtkListStore *encoding_base_store;
   GtkTreeModel *encodings_model;
@@ -82,7 +83,7 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
                         GtkCellRenderer *cell,
                         GtkTreeModel *tree_model,
                         GtkTreeIter *iter,
-                        gpointer user_data)
+                        PrefData *data)
 {
   GSettings *profile;
   const char *text;
@@ -91,7 +92,7 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
 
   gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
   g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &text);
-  uuid = terminal_profile_util_get_profile_uuid (profile);
+  uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_take_string (&value,
@@ -117,7 +118,7 @@ profile_sort_func (GtkTreeModel *model,
   gtk_tree_model_get (model, a, (int) COL_PROFILE, &profile_a, (int) -1);
   gtk_tree_model_get (model, b, (int) COL_PROFILE, &profile_b, (int) -1);
 
-  retval = terminal_profile_util_profiles_compare (profile_a, profile_b);
+  retval = terminal_profiles_compare (profile_a, profile_b);
 
   g_object_unref (profile_a);
   g_object_unref (profile_b);
@@ -126,14 +127,14 @@ profile_sort_func (GtkTreeModel *model,
 }
 
 static /* ref */ GtkTreeModel *
-profile_liststore_new (GSettings *selected_profile,
+profile_liststore_new (PrefData *data,
+                       GSettings *selected_profile,
                        GtkTreeIter *selected_profile_iter,
                        gboolean *selected_profile_iter_set)
 {
   GtkListStore *store;
   GtkTreeIter iter;
-  GHashTableIter ht_iter;
-  gpointer value;
+  GList *list, *l;
 
   G_STATIC_ASSERT (NUM_PROFILE_COLUMNS == 1);
   store = gtk_list_store_new (NUM_PROFILE_COLUMNS, G_TYPE_SETTINGS);
@@ -141,10 +142,10 @@ profile_liststore_new (GSettings *selected_profile,
   if (selected_profile_iter)
     *selected_profile_iter_set = FALSE;
 
-  terminal_app_get_profiles_iter (terminal_app_get (), &ht_iter);
-  while (g_hash_table_iter_next (&ht_iter, NULL, &value))
+  list = terminal_settings_list_ref_children (data->profiles_list);
+  for (l = list; l != NULL; l = l->next)
     {
-      GSettings *profile = (GSettings *) value;
+      GSettings *profile = (GSettings *) l->data;
 
       gtk_list_store_insert_with_values (store, &iter, 0,
                                          (int) COL_PROFILE, profile,
@@ -156,6 +157,8 @@ profile_liststore_new (GSettings *selected_profile,
           *selected_profile_iter_set = TRUE;
         }
     }
+
+  g_list_free_full (list, (GDestroyNotify) g_object_unref);
 
   /* Now turn on sorting */
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
@@ -169,9 +172,8 @@ profile_liststore_new (GSettings *selected_profile,
 }
 
 static /* ref */ GSettings*
-profile_combo_box_ref_selected (GtkWidget *widget)
+profile_combo_box_ref_selected (GtkComboBox *combo)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (widget);
   GSettings *profile;
   GtkTreeIter iter;
 
@@ -185,17 +187,18 @@ profile_combo_box_ref_selected (GtkWidget *widget)
 }
 
 static void
-profile_combo_box_refill (GtkWidget *combo_widget)
+profile_combo_box_refill (PrefData *data)
 {
-  GtkComboBox *combo = GTK_COMBO_BOX (combo_widget);
+  GtkComboBox *combo = GTK_COMBO_BOX (data->profiles_default_combo);
   GtkTreeIter iter;
   gboolean iter_set;
   GSettings *selected_profile;
   GtkTreeModel *model;
 
-  selected_profile = profile_combo_box_ref_selected (combo_widget);
+  selected_profile = profile_combo_box_ref_selected (combo);
 
-  model = profile_liststore_new (selected_profile,
+  model = profile_liststore_new (data,
+                                 selected_profile,
                                  &iter,
                                  &iter_set);
   gtk_combo_box_set_model (combo, model);
@@ -227,10 +230,11 @@ profile_combo_box_new (PrefData *data)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo), renderer,
                                       (GtkCellLayoutDataFunc) profile_cell_data_func,
-                                      NULL, NULL);
+                                      data, NULL);
 
-  default_profile = terminal_app_ref_profile_by_uuid (terminal_app_get (), NULL, NULL);
-  model = profile_liststore_new (default_profile,
+  default_profile = terminal_settings_list_ref_default_child (data->profiles_list);
+  model = profile_liststore_new (data,
+                                 default_profile,
                                  &iter,
                                  &iter_set);
   gtk_combo_box_set_model (combo, model);
@@ -242,9 +246,6 @@ profile_combo_box_new (PrefData *data)
   if (default_profile)
     g_object_unref (default_profile);
 
-  g_signal_connect (terminal_app_get (), "profile-list-changed",
-                    G_CALLBACK (profile_combo_box_refill), combo);
-
   gtk_widget_show (combo_widget);
   return combo_widget;
 }
@@ -253,19 +254,18 @@ static void
 profile_combo_box_changed_cb (GtkWidget *widget,
                               PrefData *data)
 {
-  GSettings *profile, *settings;
+  GSettings *profile;
   char *uuid;
 
-  profile = profile_combo_box_ref_selected (widget);
+  profile = profile_combo_box_ref_selected (GTK_COMBO_BOX (data->profiles_default_combo));
   if (!profile)
     return;
 
-  uuid = terminal_profile_util_get_profile_uuid (profile);
-  settings = terminal_app_get_global_settings (terminal_app_get ());
-  g_settings_set_string (settings, TERMINAL_SETTING_DEFAULT_PROFILE_KEY, uuid);
-
-  g_free (uuid);
+  uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
   g_object_unref (profile);
+
+  terminal_settings_list_set_default_child (data->profiles_list, uuid);
+  g_free (uuid);
 }
 
 static GSettings *
@@ -295,7 +295,8 @@ profile_list_treeview_refill (PrefData *data)
   GtkTreeModel *model;
 
   selected_profile = profile_list_ref_selected (data);
-  model = profile_liststore_new (selected_profile,
+  model = profile_liststore_new (data,
+                                 selected_profile,
                                  &iter,
                                  &iter_set);
   gtk_tree_view_set_model (tree_view, model);
@@ -349,7 +350,7 @@ profile_list_treeview_new (PrefData *data)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), renderer, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), renderer,
                                       (GtkCellLayoutDataFunc) profile_cell_data_func,
-                                      NULL, NULL);
+                                      data, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
                                GTK_TREE_VIEW_COLUMN (column));
 
@@ -572,10 +573,12 @@ prefs_dialog_destroy_cb (GtkWidget *widget,
 {
   TerminalApp *app = terminal_app_get ();
 
-  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_list_treeview_refill), data);
-  g_signal_handlers_disconnect_by_func (app, G_CALLBACK (profile_combo_box_refill), data);
+  g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_combo_box_refill), data);
+  g_signal_handlers_disconnect_by_func (data->profiles_list, G_CALLBACK (profile_list_treeview_refill), data);
+
   g_signal_handlers_disconnect_by_func (app, G_CALLBACK (encodings_list_changed_cb), data);
 
+  /* Don't run this handler again */
   g_signal_handlers_disconnect_by_func (widget, G_CALLBACK (prefs_dialog_destroy_cb), data);
   g_free (data);
 }
@@ -603,6 +606,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
 
   data = g_new0 (PrefData, 1);
   data->parent = transient_parent;
+  data->profiles_list = terminal_app_get_profiles_list (app);
 
   terminal_util_load_builder_resource ("/org/gnome/terminal/ui/preferences.ui",
                                        "preferences-dialog",
@@ -662,7 +666,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   g_signal_connect (selection, "changed", G_CALLBACK (profile_list_selection_changed_cb), data);
 
   profile_list_treeview_refill (data);
-  g_signal_connect_swapped (app, "profile-list-changed",
+  g_signal_connect_swapped (data->profiles_list, "children-changed",
                             G_CALLBACK (profile_list_treeview_refill), data);
 
   gtk_container_add (GTK_CONTAINER (tree_view_container), GTK_WIDGET (data->manage_profiles_list));
@@ -681,15 +685,17 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                     G_CALLBACK (profile_list_delete_button_clicked_cb),
                     data);
 
-  data->manage_profiles_default_menu = profile_combo_box_new (data);
-  g_signal_connect (data->manage_profiles_default_menu, "changed",
+  data->profiles_default_combo = profile_combo_box_new (data);
+  g_signal_connect_swapped (data->profiles_list, "children-changed",
+                            G_CALLBACK (profile_combo_box_refill), data);
+  g_signal_connect (data->profiles_default_combo, "changed",
                     G_CALLBACK (profile_combo_box_changed_cb), data);
 
-  gtk_box_pack_start (GTK_BOX (default_hbox), data->manage_profiles_default_menu, FALSE, FALSE, 0);
-  gtk_widget_show (data->manage_profiles_default_menu);
+  gtk_box_pack_start (GTK_BOX (default_hbox), data->profiles_default_combo, FALSE, FALSE, 0);
+  gtk_widget_show (data->profiles_default_combo);
 
   // FIXMEchpe
-  gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), data->manage_profiles_default_menu);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (default_label), data->profiles_default_combo);
 
   /* Encodings tab */
 

@@ -28,13 +28,14 @@ _terminal_debug_init(void)
 {
 #ifdef GNOME_ENABLE_DEBUG
   const GDebugKey keys[] = {
-    { "accels",    TERMINAL_DEBUG_ACCELS    },
-    { "encodings", TERMINAL_DEBUG_ENCODINGS },
-    { "server",    TERMINAL_DEBUG_SERVER   },
-    { "geometry",  TERMINAL_DEBUG_GEOMETRY  },
-    { "mdi",       TERMINAL_DEBUG_MDI       },
-    { "processes", TERMINAL_DEBUG_PROCESSES },
-    { "profile",   TERMINAL_DEBUG_PROFILE   }
+    { "accels",        TERMINAL_DEBUG_ACCELS        },
+    { "encodings",     TERMINAL_DEBUG_ENCODINGS     },
+    { "server",        TERMINAL_DEBUG_SERVER        },
+    { "geometry",      TERMINAL_DEBUG_GEOMETRY      },
+    { "mdi",           TERMINAL_DEBUG_MDI           },
+    { "processes",     TERMINAL_DEBUG_PROCESSES     },
+    { "profile",       TERMINAL_DEBUG_PROFILE       },
+    { "settings-list", TERMINAL_DEBUG_SETTINGS_LIST },
   };
 
   _terminal_debug_flags = g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),
