@@ -21,39 +21,55 @@
 
   </info>
 
-  <title>Change font</title>
+  <title>Change font and style</title>
 
-  <p>If you prefer to use a different font from the default <app>Terminal</app>
-  font, you can change it to any other font that is installed on your
-  computer.</p>
+  <p>If you prefer to use a font or font size other than the default
+  <app>Terminal</app>font, you have the following options...</p>
 
-  <steps>
+  <terms>
     <item>
-      <p><!--Select the option from the menu.--></p>
+      <title>Set custom font</title>
+      <p>To set a font of your choice...</p>
+        <steps>
+          <item><p>Select <guiseq><gui style="menu">Edit</gui>
+          <gui style="tab">General</gui></guiseq></p>
+        </item>
+          <!--It's very difficult to describe the button next to "Font" label as it behaves like a button but shows the previous set custom font for label. this label is subject to change upon user selection of font.-->
+          <item><p>Click on the button next to <gui>Font</gui>.</p>
+          </item>
+          <item><p>You now can type to search the desired font by name or
+          browse from the list.</p>
+          </item>
+          <item><p>Drag the slide rule to set the font size. Alternatively, you
+          can click on <gui style="button">+</gui> to increase font size or
+          <gui style="button">-</gui> to decrease selected font size.</p>
+        </item>
+        <item><p>Click <gui style="button">Select</gui> to apply changes.</p>
+        </item>
+        <item><p>To discard changes and go back to previous dialog, click
+        <gui style="button">Cancel</gui>.</p>
+        </item>
+       </steps>
+    </item>
+        <item>
+      <title>System fixed width font</title>
+      <p>To use system default fonts in <app>Terminal</app>, go to <guiseq><gui
+      style="menu">Edit</gui><gui style="menuitem">Profile Preferences</gui><gui
+      style="tab">General</gui></guiseq> and select <gui style="checkbox">Use
+      the system fixed width font</gui>.</p>
     </item>
     <item>
-      <p><!--Explain the two options--></p>
-      <list>
-        <item>
-          <p><!--system fonts--></p>
-        </item>
-        <item>
-          <p><!--custom fonts--></p>
-        </item>
-      </list>
+      <title>Bold text</title>
+      <note style="important"><p><gui style="checkbox">Allow bold text</gui> is
+      a shell specific feature. If you are using a shell other than Bash, then
+      the described behaviour may not be similar.</p></note>
+      <p><app>Terminal</app> allows your shell to process text such as the
+      prompt, directory names, man page headings to appear in bold style. To set
+      this feature, navigate to <guiseq><gui style="menu">Edit</gui><gui
+      style="menuitem">Profile Preferences</gui><gui
+      style="tab">General</gui></guiseq> and select <gui>Allow bold
+      text</gui>.</p>
     </item>
-  </steps>
-
-<!-- The following should not be on this page unless the title is updated to
-     reflect this section -->
-
-  <p>Select <gui>allow bold text</gui> to display your <app>Terminal</app> text
-  output in bold. <guiseq><gui style="menu">Edit</gui>
-  <gui style="menuitem">Profile Preferences</gui>
-  <gui style="tab">Background</gui></guiseq> or press
-  <keyseq><key>Alt</key><key>E</key><key>P</key></keyseq>.</p>
-
-<!-- Allow bold text does not dispay text in bold, but allows it to be
-     displayed. Alt+E+P does not do anything for me.-->
+  </terms>
 
 </page>
