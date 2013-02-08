@@ -1822,10 +1822,8 @@ terminal_window_init (TerminalWindow *window)
 #endif
 
   gtk_window_set_title (GTK_WINDOW (window), _("Terminal"));
-  gtk_window_set_hide_titlebar_when_maximized (GTK_WINDOW (window), TRUE);
 
   priv->active_screen = NULL;
-  priv->menubar_visible = FALSE;
 
   main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
