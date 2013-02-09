@@ -335,6 +335,8 @@ terminal_app_startup (GApplication *application)
 static void
 terminal_app_init (TerminalApp *app)
 {
+  GSettings *settings;
+
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
   /* Desktop proxy settings */
@@ -360,7 +362,9 @@ terminal_app_init (TerminalApp *app)
                     G_CALLBACK (terminal_app_encoding_list_notify_cb),
                     app);
 
-  terminal_accels_init ();
+  settings = g_settings_get_child (app->global_settings, "keybindings");
+  terminal_accels_init (settings);
+  g_object_unref (settings);
 }
 
 static void

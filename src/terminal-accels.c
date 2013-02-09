@@ -310,11 +310,11 @@ map_keybinding (GVariant *variant,
 }
 
 void
-terminal_accels_init (void)
+terminal_accels_init (GSettings *settings)
 {
   guint i, j;
 
-  keybinding_settings = g_settings_new (TERMINAL_KEYBINDINGS_SCHEMA);
+  keybinding_settings = g_object_ref (settings);
   g_signal_connect (keybinding_settings, "changed", G_CALLBACK (keys_change_notify), NULL);
 
   settings_key_to_entry = g_hash_table_new (g_str_hash, g_str_equal);

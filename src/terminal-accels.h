@@ -18,11 +18,12 @@
 #ifndef TERMINAL_ACCELS_H
 #define TERMINAL_ACCELS_H
 
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void terminal_accels_init (void);
+void terminal_accels_init (GSettings *settings);
  
 void terminal_accels_shutdown (void);
 

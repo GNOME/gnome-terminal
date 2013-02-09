@@ -503,7 +503,8 @@ migrate_profiles (GSettings *global_settings,
 }
 
 static gboolean
-migrate_accels (GError **error)
+migrate_accels (GSettings *global_settings,
+                GError **error)
 {
   static const const struct { const char *gconf_key; const char *settings_key; } const data[] = {
     { "new_tab",          "new-tab"            },
@@ -547,7 +548,7 @@ migrate_accels (GError **error)
   GConfValue *value;
 
   client = gconf_client_get_default ();
-  settings = g_settings_new (TERMINAL_KEYBINDINGS_SCHEMA);
+  settings = g_settings_get_child (global_settings, "keybindings");
 
   for (i = 0; i < G_N_ELEMENTS (data); ++i) {
     gconf_path = g_strdup_printf ("/apps/gnome-terminal/keybindings/%s", data[i].gconf_key);
@@ -575,7 +576,7 @@ migrate (GSettings *global_settings,
 {
   return migrate_global_prefs (global_settings, error) &&
     migrate_profiles (global_settings, error) &&
-    migrate_accels (error);
+    migrate_accels (global_settings, error);
 }
 
 static void
