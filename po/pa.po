@@ -5,28 +5,28 @@
 #
 # Amanpreet Singh Alam <amanlinux@netscape.net>, 2004.
 # A S Alam <aalam@users.sf.net>, 2004,2005, 2006, 2007, 2009, 2010.
-# Amanpreet Singh Alam <aalam@users.sf.net>, 2008, 2009, 2012.
+# Amanpreet Singh Alam <aalam@users.sf.net>, 2008, 2009, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-05-06 23:03+0000\n"
-"PO-Revision-Date: 2012-05-22 07:37+0530\n"
+"POT-Creation-Date: 2013-01-31 17:01+0000\n"
+"PO-Revision-Date: 2013-02-11 00:01+0000\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
+"Language: pa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "\n"
 "\n"
-"Language: pa\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:161
-#: ../src/terminal-accels.c:146 ../src/terminal.c:236
-#: ../src/terminal-window.c:1839
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:94
+#: ../src/terminal-accels.c:246 ../src/terminal.c:250
+#: ../src/terminal-window.c:1824
 msgid "Terminal"
 msgstr "ਟਰਮੀਨਲ"
 
@@ -34,373 +34,229 @@ msgstr "ਟਰਮੀਨਲ"
 msgid "Use the command line"
 msgstr "ਕਮਾਂਡ ਲਾਇਨ ਵਰਤੋਂ"
 
-#: ../src/client.c:116
+#: ../gnome-terminal.desktop.in.in.h:3
+msgid "shell;prompt;command;commandline;"
+msgstr "ਸ਼ੈਲ;ਪਰੌਂਟ;ਕਮਾਂਡ;ਕਮਾਂਡ-ਲਾਈਨ;shell;prompt;command;commandline;"
+
+#: ../src/client.c:86
 msgid "COMMAND"
 msgstr "ਕਮਾਂਡ"
 
-#: ../src/client.c:121
+#: ../src/client.c:91
 #, c-format
+#| msgid ""
+#| "Commands:\n"
+#| "  help    Shows this information\n"
+#| "  open    Create a new terminal\n"
+#| "\n"
+#| "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
-"  open    Create a new terminal\n"
+"  run     Create a new terminal running the specified command\n"
+"  shell   Create a new terminal running the user shell\n"
 "\n"
 "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgstr ""
-"ਕਮਾਂਡ:\n"
-"  help         ਇਹ ਜਾਣਕਾਰੀ ਵੇਖਾਓ\n"
-"  open        ਨਵਾਂ ਟਰਮੀਨਲ ਬਣਾਓ\n"
+"ਕਮਾਂਡਾਂ:\n"
+"  help    Shows this information\n"
+"  run     Create a new terminal running the specified command\n"
+"  shell   Create a new terminal running the user shell\n"
 "\n"
-"ਹਰੇਕ ਕਮਾਂਡ ਬਾਰੇ ਮੱਦਦ ਲਈ ਲੈਣ ਲਈ \"%s COMMAND --help\" ਵਰਤੋਂ।\n"
+"Use \"%s COMMAND --help\" to get help on each command.\n"
 
-#: ../src/client.c:216 ../src/terminal-options.c:589
+#: ../src/client.c:189 ../src/terminal-options.c:669
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" ਇੱਕ ਜਾਇਜ਼ ਜ਼ੂਮ ਫੈਕਟਰ ਨਹੀਂ ਹੈ।"
 
-#: ../src/client.c:329
+#: ../src/client.c:320
 msgid "Be quiet"
 msgstr "ਸ਼ਾਂਤ"
 
-#: ../src/client.c:334 ../src/terminal-options.c:914
-msgid "Server D-Bus name"
-msgstr "ਸਰਵਰ D-Bus ਨਾਂ"
-
-#: ../src/client.c:334 ../src/terminal-options.c:915
-#| msgid "DIRNAME"
-msgid "NAME"
-msgstr "ਨਾਂ"
-
-#: ../src/client.c:340 ../src/terminal-options.c:994
-msgid "Maximise the window"
+#: ../src/client.c:331 ../src/terminal-options.c:1081
+#| msgid "Maximise the window"
+msgid "Maximize the window"
 msgstr "ਵਿੰਡੋ ਵੱਧੋ-ਵੱਧ ਕਰੋ"
 
-#: ../src/client.c:342 ../src/terminal-options.c:1003
+#: ../src/client.c:333 ../src/terminal-options.c:1090
 msgid "Full-screen the window"
 msgstr "ਵਿੰਡੋ ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ"
 
-#: ../src/client.c:344 ../src/terminal-options.c:1012
-#| msgid ""
-#| "Set the window size; for example: 80x24, or 80x24+200+200 (ROWSxCOLS+X+Y)"
+#: ../src/client.c:335 ../src/terminal-options.c:1099
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr "ਵਿੰਡੋ ਆਕਾਰ ਸੈੱਟ ਕਰੋ, ਉਦਾਹਰਨ: 80x24, ਜਾਂ 80x24+200+200 (COLSxROWS+X+Y)"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1013
+#: ../src/client.c:336 ../src/terminal-options.c:1100
 msgid "GEOMETRY"
 msgstr "ਜੁਮੈਟਰੀ"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1021
+#: ../src/client.c:338 ../src/terminal-options.c:1108
 msgid "Set the window role"
 msgstr "ਵਿੰਡੋ ਰੋਲ ਦਿਓ"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1022
+#: ../src/client.c:338 ../src/terminal-options.c:1109
 msgid "ROLE"
 msgstr "ਰੋਲ"
 
-#: ../src/client.c:353 ../src/terminal-options.c:1052
+#: ../src/client.c:344 ../src/terminal-options.c:1139
 msgid "Use the given profile instead of the default profile"
 msgstr "ਡਿਫਾਲਟ ਪਰੋਫਾਇਲ ਦੀ ਬਜਾਏ ਦਿੱਤਾ ਪਰੋਫਾਇਲ ਵਰਤੋਂ"
 
-#: ../src/client.c:354 ../src/terminal-options.c:1053
-msgid "PROFILE-NAME"
-msgstr "ਪਰੋਫਾਇਲ-ਨਾਂ"
+#: ../src/client.c:345
+msgid "UUID"
+msgstr "UUID"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1061
+#: ../src/client.c:347 ../src/terminal-options.c:1148
 msgid "Set the terminal title"
 msgstr "ਟਰਮੀਨਲ ਟਾਈਟਲ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1062
+#: ../src/client.c:347 ../src/terminal-options.c:1149
 msgid "TITLE"
 msgstr "ਟਾਈਟਲ"
 
-#: ../src/client.c:358 ../src/terminal-options.c:1070
+#: ../src/client.c:349 ../src/terminal-options.c:1157
 msgid "Set the working directory"
 msgstr "ਵਰਕਿੰਗ ਡਾਇਰੈਕਟਰੀ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/client.c:358 ../src/terminal-options.c:1071
+#: ../src/client.c:349 ../src/terminal-options.c:1158
 msgid "DIRNAME"
 msgstr "ਡਾਇ ਨਾਂ"
 
-#: ../src/client.c:360 ../src/terminal-options.c:1079
+#: ../src/client.c:351 ../src/terminal-options.c:1166
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "ਟਰਮੀਨਲ ਦਾ ਜ਼ੂਮ ਫੈਕਟਰ ਦਿਓ (੧.੦=ਸਧਾਰਨ ਅਕਾਰ)"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1080
+#: ../src/client.c:352 ../src/terminal-options.c:1167
 msgid "ZOOM"
 msgstr "ਜ਼ੂਮ"
 
-#: ../src/client.c:367
+#: ../src/client.c:358
 msgid "Forward stdin"
 msgstr "ਫਾਰਵਰਡ stdin"
 
-#: ../src/client.c:369
+#: ../src/client.c:360
 msgid "Forward stdout"
 msgstr "ਫਾਰਵਰਡ stdout"
 
-#: ../src/client.c:371
+#: ../src/client.c:362
 msgid "Forward stderr"
 msgstr "ਫਾਰਵਰਡ stderr"
 
-#: ../src/client.c:373
+#: ../src/client.c:364
 msgid "Forward file descriptor"
 msgstr "ਫਾਰਵਰਡ ਫਾਇਲ ਡਿਸਕ੍ਰਿਪਟਰ"
 
-#: ../src/client.c:373
+#: ../src/client.c:364
 msgid "FD"
 msgstr "FD"
 
-#: ../src/client.c:379
+#: ../src/client.c:370
 msgid "Wait until the child exits"
 msgstr "ਚਲਾਈਡ ਦੇ ਖਤਮ ਹੋਣ ਤੱਕ ਉਡੀਕੋ"
 
-#: ../src/client.c:389
-#| msgid "GNOME Terminal"
+#: ../src/client.c:380
 msgid "GNOME Terminal Client"
 msgstr "ਗਨੋਮ ਟਰਮੀਨਲ ਕਲਾਇਟ"
 
-#: ../src/client.c:407
-#| msgid "Show per-window options"
+#: ../src/client.c:384
+#| msgid "Terminal options:"
+msgid "Global options:"
+msgstr "ਗਲੋਬਲ ਚੋਣਾਂ:"
+
+#: ../src/client.c:385
+#| msgid "Show terminal options"
+msgid "Show global options"
+msgstr "ਗਲੋਬਲ ਚੋਣਾਂ ਵੇਖੋ"
+
+#: ../src/client.c:393
+#| msgid "Exec options:"
+msgid "Server options:"
+msgstr "ਸਰਵਰ ਚੋਣਾਂ:"
+
+#: ../src/client.c:394
+#| msgid "Show exec options"
+msgid "Show server options"
+msgstr "ਸਰਵਰ ਚੋਣਾਂ ਵੇਖੋ"
+
+#: ../src/client.c:402
 msgid "Window options:"
 msgstr "ਵਿੰਡੋ ਚੋਣਾਂ:"
 
-#: ../src/client.c:408
-#| msgid "Show per-window options"
+#: ../src/client.c:403
 msgid "Show window options"
 msgstr "ਵਿੰਡੋ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/client.c:416
-#| msgid "Show terminal options"
+#: ../src/client.c:411
 msgid "Terminal options:"
 msgstr "ਟਰਮੀਨਲ ਚੋਣਾਂ:"
 
-#: ../src/client.c:417 ../src/terminal-options.c:1359
+#: ../src/client.c:412 ../src/terminal-options.c:1446
 msgid "Show terminal options"
 msgstr "ਟਰਮੀਨਲ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/client.c:425
+#: ../src/client.c:420
 msgid "Exec options:"
 msgstr "exec ਚੋਣਾਂ:"
 
-#: ../src/client.c:426
-#| msgid "Show terminal options"
+#: ../src/client.c:421
 msgid "Show exec options"
 msgstr "exec ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/client.c:434
-#| msgid "Session management options:"
+#: ../src/client.c:429
 msgid "Processing options:"
 msgstr "ਪਰੋਸੈਸ ਕਰਨ ਚੋਣਾਂ:"
 
-#: ../src/client.c:435
-#| msgid "Show per-terminal options"
+#: ../src/client.c:430
 msgid "Show processing options"
 msgstr "ਪਰੋਸੈਸ ਕਰਨ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/encodings-dialog.glade.h:1
-msgid "Add or Remove Terminal Encodings"
-msgstr "ਟਰਮੀਨਲ ਇੰਕੋਡਿੰਗ ਲਿਆਉ ਜਾਂ ਹਟਾਓ"
-
-#: ../src/encodings-dialog.glade.h:2
-msgid "A_vailable encodings:"
-msgstr "ਉਪਲੱਬਧ ਇੰਕੋਡਿੰਗ(_V):"
-
-#: ../src/encodings-dialog.glade.h:3
-msgid "E_ncodings shown in menu:"
-msgstr "ਮੇਨੂ ਵਿੱਚ ਵੇਖਾਈ ਇੰਕੋਡਿੰਗ(_N):"
-
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:24
-msgid "Automatic"
-msgstr "ਆਟੋਮੈਟਿਕ"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:26
-msgid "Control-H"
-msgstr "ਕੰਟਰੋਲ-H"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:28
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:30
-msgid "Escape sequence"
-msgstr "ਇਸਕੇਪ ਕ੍ਰਮ"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:32
-msgid "TTY Erase"
-msgstr "TTY ਸਾਫ਼ ਕਰੋ"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
-msgid "Block"
-msgstr "ਬਲਾਕ"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
-msgid "I-Beam"
-msgstr "I-ਬੀਮ"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:39
-msgid "Underline"
-msgstr "ਹੇਠਾਂ ਲਾਈਨ"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
-msgid "Exit the terminal"
-msgstr "ਟਰਮੀਨਲ ਬੰਦ ਕਰੋ"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
-msgid "Restart the command"
-msgstr "ਕਮਾਂਡ ਮੁੜ-ਚਾਲੂ ਕਰੋ"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:46
-msgid "Hold the terminal open"
-msgstr "ਟਰਮੀਨਲ ਖੁੱਲ੍ਹਾ ਰੱਖੋ"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
-msgid "Always visible"
-msgstr "ਹਮੇਸ਼ਾ ਵੇਖਾਓ"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:51
-msgid "Visible only when necessary"
-msgstr "ਜਦੋਂ ਲੋੜ ਹੋਵੇ ਉਦੋਂ ਹੀ ਵੇਖਾਓ"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:53
-msgid "Hidden"
-msgstr "ਲੁਕਵਾਂ"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:56
-msgid "Replace initial title"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਬਦਲੋ"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:58
-msgid "Append initial title"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਜੋੜੋ"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:60
-msgid "Prepend initial title"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਸ਼ੁਰੂ 'ਚ ਜੋੜੋ"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:62
-msgid "Keep initial title"
-msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਰੱਖੋ"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
-msgid "Tango"
-msgstr "ਟਾਂਗੋ"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
-msgid "Linux console"
-msgstr "ਲੀਨਕਸ ਕਨਸੋਲ"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
-msgid "XTerm"
-msgstr "X-ਟਰਮ"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:71
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:73 ../src/profile-editor.c:443
-msgid "Custom"
-msgstr "ਪਸੰਦੀਦਾ"
-
-#: ../src/find-dialog.glade.h:1
+#: ../src/find-dialog.ui.h:1
 msgid "Find"
 msgstr "ਖੋਜ"
 
-#: ../src/find-dialog.glade.h:2
+#: ../src/find-dialog.ui.h:2
 msgid "_Search for:"
 msgstr "ਇਸ ਦੀ ਖੋਜ(_S): "
 
-#: ../src/find-dialog.glade.h:3
+#: ../src/find-dialog.ui.h:3
 msgid "_Match case"
 msgstr "ਮੇਲ ਸਥਿਤੀ(_M)"
 
-#: ../src/find-dialog.glade.h:4
+#: ../src/find-dialog.ui.h:4
 msgid "Match _entire word only"
 msgstr "ਸਿਰਫ ਪੂਰਾ ਸ਼ਬਦ ਹੀ ਮਿਲਾਓ(_e)"
 
-#: ../src/find-dialog.glade.h:5
+#: ../src/find-dialog.ui.h:5
 msgid "Match as _regular expression"
 msgstr "ਨਿਯਮਤ ਸਮੀਕਰਨ ਨਾਲ ਮਿਲਾਓ(_r)"
 
-#: ../src/find-dialog.glade.h:6
+#: ../src/find-dialog.ui.h:6
 msgid "Search _backwards"
 msgstr "ਪਿੱਛੇ ਖੋਜ(_b)"
 
-#: ../src/find-dialog.glade.h:7
+#: ../src/find-dialog.ui.h:7
 msgid "_Wrap around"
 msgstr "ਪਾਸੇ ਸਮੇਟੋ(_W)"
 
-#: ../src/keybinding-editor.glade.h:1
-msgid "Keyboard Shortcuts"
-msgstr "ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+#: ../src/migration.c:339 ../src/terminal-prefs.c:99
+msgid "Unnamed"
+msgstr "ਬਿਨਾਂ-ਨਾਂ"
 
-#: ../src/keybinding-editor.glade.h:2
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr "ਸਭ ਮੇਨੂ ਸਵਿੱਚਾਂ ਆਯੋਗ (ਜਿਵੇਂ ਕਿ ਫਾਇਲ ਖੋਲ੍ਹਣ ਲਈ Alt+F)(_E)"
-
-#: ../src/keybinding-editor.glade.h:3
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "ਮੇਨੂ ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚ ਆਯੋਗ ਕਰੋ (F10 ਡਿਫਾਲਟ)(_m)"
-
-#: ../src/keybinding-editor.glade.h:4
-msgid "_Shortcut keys:"
-msgstr "ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚਾਂ(_S):"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
 msgid "Human-readable name of the profile"
 msgstr "ਪਰੋਫਾਇਲ ਦਾ ਮਾਨਵ-ਪਡ਼ਨ ਯੋਗ ਨਾਂ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:2
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
 msgid "Human-readable name of the profile."
 msgstr "ਪਰੋਫਾਇਲ ਦਾ ਮਾਨਵ-ਪਡ਼ਨ ਯੋਗ ਨਾਂ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:3
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
 msgid "Default color of text in the terminal"
 msgstr "ਟਰਮੀਨਲ ਵਿੱਚ ਟੈਕਸਟ ਲਈ ਡਿਫਾਲਟ ਰੰਗ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:4
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -409,11 +265,11 @@ msgstr ""
 "ਵੀ ਹੋ "
 "ਸਕਦਾ ਹੈ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ ਵੀ ਜਿਵੇਂ ਕਿ \"red\")।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:5
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
 msgid "Default color of terminal background"
 msgstr "ਟਰਮੀਨਲ ਬੈਕਗਰਾਊਂਡ ਲਈ ਡਿਫਾਲਟ ਰੰਗ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:6
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -422,11 +278,11 @@ msgstr ""
 "ਵੀ ਹੋ ਸਕਦਾ "
 "ਹੈ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ ਵੀ ਜਿਵੇਂ ਕਿ \"red\")।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:7
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
 msgid "Default color of bold text in the terminal"
 msgstr "ਟਰਮੀਨਲ ਵਿੱਚ ਗੂੜ੍ਹੇ ਟੈਕਸਟ ਲਈ ਡਿਫਾਲਟ ਰੰਗ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:8
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
@@ -438,21 +294,21 @@ msgstr ""
 "ਜੇ "
 "bold_color_same_as_fg ਸੈੱਟ ਹੋਇਆ ਤਾਂ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:9
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
 msgid "Whether bold text should use the same color as normal text"
 msgstr "ਕੀ ਗੂੜ੍ਹਾ ਟੈਕਸਟ ਸਧਾਰਨ ਟੈਕਸਟ ਵਾਲੇ ਰੰਗ ਹੀ ਵਰਤੇ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:10
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
 msgid ""
 "If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
 "ਜੇ ਸਹੀਂ ਕੀਤਾ ਤਾਂ ਗੂੜ੍ਹੇ ਟੈਕਸਟ ਨੂੰ ਸਧਾਰਨ ਟੈਕਸਟ ਦੇ ਰੰਗ ਨਾਲ ਹੀ ਰੈਂਡਰ ਕੀਤਾ ਜਾਵੇਗਾ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:11
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
 msgid "What to do with dynamic title"
 msgstr "ਡਾਇਨਾਮਿਕ ਟਾਈਟਲ ਦਾ ਕੀ ਕਰਨਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:12
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
@@ -465,11 +321,11 @@ msgstr ""
 "ਜਾਂ ਤਬਦੀਲ। ਸੰਭਵ "
 "ਮੁੱਲ ਹਨ \"replace\", \"before\", \"after\", ਅਤੇ \"ignore\"।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:13
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
 msgid "Title for terminal"
 msgstr "ਟਰਮੀਨਲ ਲਈ ਟਾਈਟਲ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:14
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -481,24 +337,23 @@ msgstr ""
 "ਮੁੱਲ ਕੀ ਹੈ।"
 "(_M)"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
 msgid "Whether to allow bold text"
 msgstr "ਕੀ ਭਾਰੇ ਅੱਖਰ ਯੋਗ ਕਰਨੇ ਹਨ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:16
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "ਜੇ ਸੱਚ ਹੈ ਤਾਂ ਟਰਮੀਨਲ ਵਿੱਚ ਐਪਲੀਕੇਸ਼ਨ ਦੇ ਟੈਕਸਟ ਬੋਲਡ ਫੇਸ ਕਰ ਦਿੱਤੇ ਜਾਣਗੇ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:17
-#| msgid "Whether to silence terminal bell"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
 msgid "Whether to ring the terminal bell"
 msgstr " ਟਰਮੀਨਲ ਘੰਟੀ ਨੂੰ ਵਜਾਉਣਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:18
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
 msgid "Characters that are considered \"part of a word\""
 msgstr "ਅੱਖਰ ਜੋ ਕਿ \"ਸ਼ਬਦ ਦਾ ਹਿੱਸਾ\" ਹੀ ਮੰਨੇ ਜਾਣ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:19
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -510,22 +365,19 @@ msgstr ""
 "ਰਿਹਾ ਹੈ) "
 "ਪਹਿਲਾਂ ਅੱਖਰ ਦੇਵੇਗਾ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:20
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "ਕੀ ਨਵੀਆਂ ਵਿੰਡੋਜ਼/ਟੈਬਾਂ ਵਿੱਚ ਮੇਨੂ-ਪੱਟੀ ਵੇਖਾਉਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:21
-#| msgid ""
-#| "True if the menubar should be shown in new windows, for windows/tabs with "
-#| "this profile."
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
 msgid "True if the menubar should be shown in new window"
 msgstr "ਸਹੀਂ ਹੈ ਤਾਂ, ਨਵੀ ਵਿੰਡੋ ਵਿੱਚ ਮੇਨੂ-ਪੱਟੀ ਵੇਖਾਈ ਜਾਵੇਗੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:22
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
 msgid "Whether to use custom terminal size for new windows"
 msgstr "ਕੀ ਨਵੀਆਂ ਵਿੰਡੋਜ਼ ਲਈ ਪਸੰਦੀਦਾ ਟਰਮੀਨਲ ਸਾਈਜ਼ ਵਰਤਣਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:23
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
 msgid ""
 "If true, newly created terminal windows will have custom size specified by "
 "default_size_columns and default_size_rows."
@@ -534,11 +386,11 @@ msgstr ""
 "default_size_rows "
 "ਰਾਹੀਂ ਦਿੱਤੇ ਆਕਾਰ ਦੀ ਹੋਵੇਗੀ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:24
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
 msgid "Default number of columns"
 msgstr "ਕਾਲਮਾਂ ਦੀ ਡਿਫਾਲਟ ਗਿਣਤੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:25
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -547,11 +399,11 @@ msgstr ""
 "ਕੀਤੀ ਗਈ "
 "ਹੋਵੇ ਤਾਂ ਕੋਈ ਪਰਭਾਵ ਨਹੀਂ ਹੋਵੇਗਾ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:26
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
 msgid "Default number of rows"
 msgstr "ਕਤਾਰਾਂ ਦੀ ਡਿਫਾਲਟ ਗਿਣਤੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:27
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -560,16 +412,15 @@ msgstr ""
 "ਨਾ ਕੀਤੀ "
 "ਗਈ ਹੋਵੇ ਤਾਂ ਇਸ ਦਾ ਕੋਈ ਪਰਭਾਵ ਨਹੀਂ ਹੋਵੇਗਾ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:28
-#| msgid "Position of the scrollbar"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
 msgid "When to show the scrollbar"
 msgstr "ਸਕਰੋਲ-ਪੱਟੀ ਕਦੋਂ ਵੇਖਾਉਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
 msgid "Number of lines to keep in scrollback"
 msgstr "ਸਕਰੋਲਬੈਕ ਵਿੱਚ ਰੱਖਣ ਲਈ ਲਾਇਨਾਂ ਦੀ ਗਿਣਤੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -581,11 +432,11 @@ msgstr ""
 "ਹੈ। ਜੇ "
 "scrollback_unlimited ਸਹੀਂ ਹੋਇਆ ਤਾਂ ਇਹ ਮੁੱਲ ਅਣਡਿੱਠਾ ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "ਕੀ ਸਕਰੋਲਬੈਕ ਵਿੱਚ ਬੇਅੰਤ ਲਾਈਨਾਂ ਦੀ ਗਿਣਤੀ ਰੱਖਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -597,28 +448,28 @@ msgstr ""
 "ਬਣ ਸਕਦਾ ਹੈ, "
 "ਜੇ ਟਰਮੀਨਲ ਵਿੱਚ ਬਹੁਤ ਆਉਟਪੁੱਟ ਮਿਲੇ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "ਕੀ ਇੱਕ ਸਵਿੱਚ ਦਬਾਉਣ ਨਾਲ ਹੇਠਾਂ ਵੱਲ ਜਾਣਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "ਜੇ ਸੱਚ ਹੈ ਤਾਂ, ਇੱਕ ਕੀ ਦਬਾਉਣ ਨਾਲ ਸਕਰੋਲ-ਪੱਟੀ ਹੇਠਾਂ ਚਲੀ ਜਾਵੇਗੀ "
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "ਕੀ ਨਵੀਂ ਆਉਟਪੁੱਟ ਨਾਲ ਹੇਠਾਂ ਵੱਲ ਜਾਣਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "ਜੇਕਰ ਸੱਚ ਹੈ ਤਾਂ, ਜਦੋਂ ਵੀ ਟਰਮੀਨਲ ਤੇ ਆਉਟਪੁੱਟ ਆਵੇ ਤਾਂ ਹੇਠਾਂ ਜਾਉ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
 msgid "What to do with the terminal when the child command exits"
 msgstr "ਡਾਇਨਾਮਿਕ ਟਾਈਟਲ ਦਾ ਕੀ ਕਰਨਾ ਹੈ, ਜਦੋਂ ਕਿ ਚਲਾਇਡ ਕਮਾਂਡ ਮੌਜੂਦ ਹੋਵੇ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -626,11 +477,11 @@ msgstr ""
 "ਸੰਭਵ ਮੁੱਲ ਹਨ \"ਬੰਦ ਕਰੋ\" ਟਰਮੀਨਲ ਨੂੰ ਬੰਦ ਕਰਨ ਲਈ ਅਤੇ \"ਮੁਡ਼ ਚਾਲੂ\" ਕਮਾਂਡ ਨੂੰ "
 "ਮੁਡ਼ ਚਾਲੂ ਕਰਨ ਲਈ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "ਕੀ ਟਰਮੀਨਲ ਵਿੱਚ ਲਾਗਇਨ ਸ਼ੈਲ ਵਾਂਗ ਕਮਾਂਡ ਚਾਲੂ ਕਰਨੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell. "
 "(argv[0] will have a hyphen in front of it.)"
@@ -639,11 +490,11 @@ msgstr ""
 "ਜਾਵੇਗੀ। (argv[0] "
 "ਵਿੱਚ ਇਸ ਦੇ ਅੱਗੇ ਹਾਈਫਨ ਹੋਵੇਗਾ)"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
 msgid "Whether to update login records when launching terminal command"
 msgstr "ਜਦੋਂ ਕਿ ਟਰਮੀਨਲ ਕਮਾਂਡ ਚਾਲੂ ਹੋਵੇ, ਤਾਂ ਲਾਗਇਨ ਰਿਕਾਰਡ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -652,22 +503,22 @@ msgstr ""
 "ਟਰਮੀਨਲ "
 "ਚਾਲੂ ਹੋਵੇ।।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
 msgid "Whether to run a custom command instead of the shell"
 msgstr "ਕੀ ਸ਼ੈਲ ਦੀ ਬਜਾਏ ਸੋਧੀ ਕਮਾਂਡ ਚਲਾਉਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
 "ਜੇਕਰ ਇਹ ਸਹੀ ਹੈ ਤਾਂ, ਸੋਧ ਕਮਾਂਡ ਦਾ ਮੁੱਲ ਸ਼ੈਲ ਦੀ ਥਾਂ ਸੈੱਟ ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ(_C)"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
 msgid "Whether to blink the cursor"
 msgstr "ਕੀ ਕਰਸਰ ਝਪਕਦੀ ਰੱਖਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -676,54 +527,191 @@ msgstr ""
 "\"off "
 "(ਬੰਦ)\" ਖਾਸ ਮੋਡ ਸੈੱਟ ਕਰਨ ਵਾਸਤੇ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
 msgid "The cursor appearance"
 msgstr "ਕਰਸਰ ਦਿੱਖ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
 msgid "Custom command to use instead of the shell"
 msgstr "ਸ਼ੈਲ ਦੀ ਬਜਾਏ ਸੋਧ ਕਮਾਂਡ ਵਰਤੋਂ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "ਸ਼ੈਲ ਦੀ ਬਜਾਏ ਇਹ ਕਮਾਂਡ ਚਲਾਉ, ਜੇਕਰ ਸੋਧ-ਕਮਾਂਡ ਚਲਾਉਣ ਯੋਗ ਹੈ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
 msgid "Palette for terminal applications"
 msgstr "ਟਰਮੀਨਲ ਕਾਰਜਾਂ ਲਈ ਰੰਗ-ਪੱਟੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:51
-msgid "A pango font name and size"
-msgstr "ਪੈਂਗੋ ਫੋਂਟ ਫੈਮਲੀ ਅਤੇ ਸਾਈਜ਼"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
+#| msgid "A pango font name and size"
+msgid "A Pango font name and size"
+msgstr "ਪੈਂਗੋ ਫੋਂਟ ਨਾਂ ਅਤੇ ਆਕਾਰ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:52
-#| msgid "_Backspace key generates:"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
 msgid "The code sequence the Backspace key generates"
 msgstr "ਬੈਕਸਪੇਸ ਸਵਿੱਚ ਪੈਦਾਵਾਰ ਲਈ ਕੋਡ ਲੜੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:53
-#| msgid "_Delete key generates:"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
 msgid "The code sequence the Delete key generates"
 msgstr "ਹਟਾਉ ਸਵਿੱਚ ਪੈਦਾਵਾਰ ਲਈ ਕੋਡ ਲੜੀ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "ਕੀ ਟਰਮੀਨਲ ਵਿਦਜੈੱਟ ਲਈ ਸਰੂਪ ਤੋਂ ਰੰਗ ਵਰਤਣੇ ਹਨ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:55
-#| msgid "Whether to use the system font"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
 msgid "Whether to use the system monospace font"
 msgstr "ਕੀ ਸਿਸਟਮ ਮੋਨੋ-ਸਪੇਸ ਫੋਂਟ ਵਰਤਣੇ ਹਨ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
 msgid "Which encoding to use"
 msgstr "ਕਿਹੜੀ ਇੰਕੋਡਿੰਗ ਵਰਤਣੀ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+msgid "Keyboard shortcut to open a new tab"
+msgstr "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+msgid "Keyboard shortcut to open a new window"
+msgstr "ਨਵਾਂ ਵਿੰਡੋ ਖੋਲ੍ਹਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+msgid "Keyboard shortcut to create a new profile"
+msgstr "ਨਵਾਂ ਪਰੋਫਾਇਲ ਬਣਾਉਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr "ਮੌਜੂਦਾ ਟੈਬ ਦੀ ਸਮੱਗਰੀ ਫਾਇਲ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+msgid "Keyboard shortcut to close a tab"
+msgstr "ਇੱਕ ਟੈਬ ਬੰਦ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+msgid "Keyboard shortcut to close a window"
+msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+msgid "Keyboard shortcut to copy text"
+msgstr "ਟੈਕਸਟ ਕਾਪੀ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+msgid "Keyboard shortcut to paste text"
+msgstr "ਟੈਕਸਟ ਚੇਪਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr "ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ ਸਵਿੱਚ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "ਮੇਨੂ-ਪੱਟੀ ਦੀ ਦਿੱਖ ਤਬਦੀਲ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+msgid "Keyboard shortcut to set the terminal title"
+msgstr "ਟਰਮੀਨਲ ਦਾ ਟਾਈਟਲ ਦੇਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "ਟਰਮੀਨਲ ਨੂੰ ਮੁਡ਼-ਸੈੱਟ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr "ਟਰਮੀਨਲ ਨੂੰ ਮੁਡ਼-ਸੈੱਟ ਅਤੇ ਸਾਫ਼ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "ਟੈਬ ਪਿਛਲੀ ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "ਟੈਬ ਅਗਲੀ ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+#| msgid "Keyboard shortcut to save the current tab contents to file"
+msgid "Keyboard shortcut to move the current tab to the left"
+msgstr "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਮੌਜੂਦਾ ਟੈਬ ਦੇ ਖੱਬੇ ਭੇਜਣ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+#| msgid "Accelerator to move the current tab to the right."
+msgid "Keyboard shortbut to move the current tab to the right"
+msgstr "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਮੌਜੂਦਾ ਟੈਬ ਦੇ ਸੱਜੇ ਭੇਜਣ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+#| msgid "Keyboard shortcut to switch to tab 1"
+msgid "Keyboard shortbut to detach current tab"
+msgstr "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਵੱਖ ਕਰਨ (ਡੀਟੈਚ) ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "ਟੈਬ 1 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "ਟੈਬ 2 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "ਟੈਬ 3 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "ਟੈਬ 4 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "ਟੈਬ 5 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "ਟੈਬ 6 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "ਟੈਬ 7 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "ਟੈਬ 8 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "ਟੈਬ 9 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "ਟੈਬ 10 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "ਟੈਬ 11 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "ਟੈਬ 12 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+msgid "Keyboard shortcut to launch help"
+msgstr "ਮੱਦਦ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:88
+msgid "Keyboard shortcut to make font larger"
+msgstr "ਫੋਂਟ ਵੱਡੇ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:89
+msgid "Keyboard shortcut to make font smaller"
+msgstr "ਫੋਂਟ ਛੋਟੇ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:90
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "ਫੋਂਟ ਸਧਾਰਨ ਅਕਾਰ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:91
 msgid "Whether the menubar has access keys"
 msgstr "ਕੀ ਮੇਨੂ-ਪੱਟੀ ਵਿੱਚ ਪਹੁੰਚ ਸਵਿੱਚ ਹੋਣ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:92
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -733,11 +721,11 @@ msgstr ""
 "ਰਹੇ ਕੁਝ "
 "ਕਾਰਜਾਂ ਨਾਲ ਟਕਰਾ ਪੈਦਾ ਕਰ ਸਕਦੀਆ ਹਨ, ਸੋ ਇਹਨਾਂ ਨੂੰ ਬੰਦ ਵੀ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:93
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "ਕੀ ਮੇਨੂ-ਪੱਟੀ ਪਹੁੰਚ ਲਈ ਸਟੈਂਡਰਡ GTK ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਯੋਗ ਕਰਨਾ ਹੈ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:94
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -749,11 +737,11 @@ msgstr ""
 "ਕਰਨ ਦੀ ਆਗਿਆ "
 "ਦਿੰਦੀ ਹੈ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:95
 msgid "List of available encodings"
 msgstr "ਉਪਲੱਬਧ ਇੰਕੋਡਿੰਗ ਦੀ ਲਿਸਟ"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:96
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -764,548 +752,626 @@ msgstr ""
 "ਹੈ। ਖਾਸ ਇੰਕੋਡਿੰਗ ਨਾਂ \"ਮੌਜੂਦਾ\" ਦਾ ਅਰਥ ਹੈ ਕਿ ਮੌਜੂਦਾ ਲੋਕੇਲ ਲਈ ਇੰਕੋਡਿੰਗ ਵੇਖਾਉਣ "
 "ਤੋਂ ਹੈ।"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:63
-#| msgid "Whether to ask for confirmation when closing terminal windows"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:97
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "ਕੀ ਟਰਮੀਨਲ ਵਿੰਡੋ ਬੰਦ ਕਰਨ ਸਮੇਂ ਪੁੱਛਣਾ ਹੈ"
 
-#: ../src/profile-editor.c:45
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:98
+#| msgid "Whether to show menubar in new windows/tabs"
+msgid "Whether to show the menubar in new windows"
+msgstr "ਕੀ ਨਵੀਆਂ ਵਿੰਡੋਜ਼ ਵਿੱਚ ਮੇਨੂ-ਪੱਟੀ ਵੇਖਾਉਣੀ ਹੈ"
+
+#: ../src/preferences.ui.h:1
+#| msgid "_Preferences"
+msgid "Preferences"
+msgstr "ਮੇਰੀ ਪਸੰਦ"
+
+#: ../src/preferences.ui.h:2
+msgid "Show _menubar by default in new terminals"
+msgstr "ਨਵੇਂ ਟਰਮੀਨਲਾਂ ਵਿੱਚ ਮੇਨੂ-ਪੱਟੀ ਡਿਫਾਲਟ ਹੀ ਵੇਖੋ(_m)"
+
+#: ../src/preferences.ui.h:3 ../src/profile-preferences.ui.h:61
+msgid "General"
+msgstr "ਸਧਾਰਨ"
+
+#: ../src/preferences.ui.h:4
+msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+msgstr "ਸਭ ਮੇਨੂ ਸਵਿੱਚਾਂ ਆਯੋਗ (ਜਿਵੇਂ ਕਿ ਫਾਇਲ ਖੋਲ੍ਹਣ ਲਈ Alt+F)(_E)"
+
+#: ../src/preferences.ui.h:5
+msgid "Enable the _menu shortcut key (F10 by default)"
+msgstr "ਮੇਨੂ ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚ ਆਯੋਗ ਕਰੋ (F10 ਡਿਫਾਲਟ)(_m)"
+
+#: ../src/preferences.ui.h:6
+msgid "_Shortcut keys:"
+msgstr "ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚਾਂ(_S):"
+
+#: ../src/preferences.ui.h:7
+msgid "Keybindings"
+msgstr "ਕੀਬਾਈਡਿੰਗ"
+
+#: ../src/preferences.ui.h:8
+msgid "_Profile used when launching a new terminal:"
+msgstr "ਨਵਾਂ ਟਰਮੀਨਲ ਖੋਲ੍ਹਣਾ ਸਮੇਂ ਵਰਤਣ ਲਈ ਪਰੋਫਾਇਲ(_P):"
+
+#: ../src/preferences.ui.h:9
+msgid "Profiles"
+msgstr "ਪਰੋਫਾਇਲ"
+
+#: ../src/preferences.ui.h:10
+msgid "E_ncodings shown in menu:"
+msgstr "ਮੇਨੂ ਵਿੱਚ ਵੇਖਾਈ ਇੰਕੋਡਿੰਗ(_N):"
+
+#: ../src/preferences.ui.h:11
+#| msgid "_Encoding"
+msgid "Encodings"
+msgstr "ਇੰਕੋਡਿੰਗ"
+
+#: ../src/profile-editor.c:46
 msgid "Black on light yellow"
 msgstr "ਫਿੱਕੇ ਪੀਲੇ ਉੱਤੇ ਕਾਲਾ"
 
-#: ../src/profile-editor.c:49
+#: ../src/profile-editor.c:50
 msgid "Black on white"
 msgstr "ਚਿੱਟੇ ਉੱਤੇ ਕਾਲਾ"
 
-#: ../src/profile-editor.c:53
+#: ../src/profile-editor.c:54
 msgid "Gray on black"
 msgstr "ਕਾਲੇ ਉੱਤੇ ਸਲੇਟੀ"
 
-#: ../src/profile-editor.c:57
+#: ../src/profile-editor.c:58
 msgid "Green on black"
 msgstr "ਕਾਲੇ ਉੱਤੇ ਹਰਾ"
 
-#: ../src/profile-editor.c:61
+#: ../src/profile-editor.c:62
 msgid "White on black"
 msgstr "ਕਾਲੇ ਉੱਤੇ ਚਿੱਟਾ"
 
-#: ../src/profile-editor.c:409
+#: ../src/profile-editor.c:410
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "ਕਮਾਂਡ ਪਾਰਸ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ: %s"
 
-#: ../src/profile-editor.c:524
+#. This is the name of a colour scheme
+#: ../src/profile-editor.c:444 ../src/profile-preferences.ui.h:30
+msgid "Custom"
+msgstr "ਪਸੰਦੀਦਾ"
+
+#: ../src/profile-editor.c:559
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "ਪਰੋਫਾਇਲ “%s” ਸੋਧ"
 
-#: ../src/profile-editor.c:702
+#: ../src/profile-editor.c:739
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "%d ਰੰਗ-ਪੱਟੀ ਰੰਗ ਚੁਣੋ"
 
-#: ../src/profile-editor.c:706
+#: ../src/profile-editor.c:743
 #, c-format
 msgid "Palette entry %d"
 msgstr "ਰੰਗ-ਪੱਟੀ ਐਂਟਰੀ %d"
 
-#: ../src/profile-manager.glade.h:1
-msgid "Profiles"
-msgstr "ਪਰੋਫਾਇਲ"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:2
+msgid "Block"
+msgstr "ਬਲਾਕ"
 
-#: ../src/profile-manager.glade.h:2
-msgid "_Profile used when launching a new terminal:"
-msgstr "ਨਵਾਂ ਟਰਮੀਨਲ ਖੋਲ੍ਹਣਾ ਸਮੇਂ ਵਰਤਣ ਲਈ ਪਰੋਫਾਇਲ(_P):"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:4
+msgid "I-Beam"
+msgstr "I-ਬੀਮ"
 
-#: ../src/profile-new-dialog.glade.h:1 ../src/terminal-accels.c:87
-msgid "New Profile"
-msgstr "ਨਵਾਂ ਪਰੋਫਾਇਲ"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:6
+msgid "Underline"
+msgstr "ਹੇਠਾਂ ਲਾਈਨ"
 
-#: ../src/profile-new-dialog.glade.h:2
-msgid "C_reate"
-msgstr "ਬਣਾਓ(_R)"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:8
+msgid "Replace initial title"
+msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਬਦਲੋ"
 
-#: ../src/profile-new-dialog.glade.h:3
-msgid "Profile _name:"
-msgstr "ਪਰੋਫਾਇਲ ਨਾਂ(_N):"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:10
+msgid "Append initial title"
+msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਜੋੜੋ"
 
-#: ../src/profile-new-dialog.glade.h:4
-msgid "_Base on:"
-msgstr "ਆਧਾਰ ਉੱਤੇ(_B):"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:12
+msgid "Prepend initial title"
+msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਸ਼ੁਰੂ 'ਚ ਜੋੜੋ"
 
-#: ../src/profile-preferences.glade.h:1
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:14
+msgid "Keep initial title"
+msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਰੱਖੋ"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:16
+msgid "Exit the terminal"
+msgstr "ਟਰਮੀਨਲ ਬੰਦ ਕਰੋ"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:18
+msgid "Restart the command"
+msgstr "ਕਮਾਂਡ ਮੁੜ-ਚਾਲੂ ਕਰੋ"
+
+#. When command exits
+#: ../src/profile-preferences.ui.h:20
+msgid "Hold the terminal open"
+msgstr "ਟਰਮੀਨਲ ਖੁੱਲ੍ਹਾ ਰੱਖੋ"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:22
+msgid "Tango"
+msgstr "ਟਾਂਗੋ"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:24
+msgid "Linux console"
+msgstr "ਲੀਨਕਸ ਕਨਸੋਲ"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:26
+msgid "XTerm"
+msgstr "X-ਟਰਮ"
+
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:28
+msgid "Rxvt"
+msgstr "Rxvt"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:32
+msgid "Always visible"
+msgstr "ਹਮੇਸ਼ਾ ਵੇਖਾਓ"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:34
+msgid "Visible only when necessary"
+msgstr "ਜਦੋਂ ਲੋੜ ਹੋਵੇ ਉਦੋਂ ਹੀ ਵੇਖਾਓ"
+
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:36
+msgid "Hidden"
+msgstr "ਲੁਕਵਾਂ"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:38
+msgid "Automatic"
+msgstr "ਆਟੋਮੈਟਿਕ"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:40
+msgid "Control-H"
+msgstr "ਕੰਟਰੋਲ-H"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:42
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:44
+msgid "Escape sequence"
+msgstr "ਇਸਕੇਪ ਕ੍ਰਮ"
+
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:46
+msgid "TTY Erase"
+msgstr "TTY ਸਾਫ਼ ਕਰੋ"
+
+#: ../src/profile-preferences.ui.h:47
+msgid "Profile Editor"
+msgstr "ਪਰੋਫਾਇਲ ਸੰਪਾਦਕ"
+
+#: ../src/profile-preferences.ui.h:48
 msgid "_Profile name:"
 msgstr "ਪਰੋਫਾਇਲ ਨਾਂ(_P):"
 
-#: ../src/profile-preferences.glade.h:2
+#: ../src/profile-preferences.ui.h:49
+#| msgid "Profiles"
+msgid "Profile ID:"
+msgstr "ਪਰੋਫਾਇਲ ID:"
+
+#: ../src/profile-preferences.ui.h:50
 msgid "_Use the system fixed width font"
 msgstr "ਸਿਸਟਮ ਸਥਿਰ ਚੌੜਾਈ ਫੋਂਟ ਵਰਤੋਂ(_U)"
 
-#: ../src/profile-preferences.glade.h:3
+#: ../src/profile-preferences.ui.h:51
 msgid "_Font:"
 msgstr "ਫੋਂਟ(_F):"
 
-#: ../src/profile-preferences.glade.h:4
+#: ../src/profile-preferences.ui.h:52
 msgid "Choose A Terminal Font"
 msgstr "ਇੱਕ ਟਰਮੀਨਲ ਫੋਂਟ ਚੁਣੋ"
 
-#: ../src/profile-preferences.glade.h:5
+#: ../src/profile-preferences.ui.h:53
 msgid "_Allow bold text"
 msgstr "ਗੂੜ੍ਹਾ ਟੈਕਸਟ ਮਨਜ਼ੂਰ(_A)"
 
-#: ../src/profile-preferences.glade.h:6
+#: ../src/profile-preferences.ui.h:54
 msgid "Terminal _bell"
 msgstr "ਟਰਮੀਨਲ ਘੰਟੀ(_B)"
 
-#: ../src/profile-preferences.glade.h:7
+#: ../src/profile-preferences.ui.h:55
 msgid "Cursor _shape:"
 msgstr "ਕਰਸਰ ਸ਼ਕਲ(_s):"
 
-#: ../src/profile-preferences.glade.h:8
-msgid ""
-"Block\n"
-"I-Beam\n"
-"Underline"
-msgstr ""
-"ਬਲਾਕ\n"
-"ਆਈ-ਬੀਮ\n"
-"ਹੇਠਾਂ-ਲਾਈਨ"
-
-#: ../src/profile-preferences.glade.h:11
+#: ../src/profile-preferences.ui.h:56
 msgid "Select-by-_word characters:"
 msgstr "ਸ਼ਬਦ ਅੱਖਰਾਂ ਨਾਲ ਚੋਣ(_W):"
 
-#: ../src/profile-preferences.glade.h:12
+#: ../src/profile-preferences.ui.h:57
 msgid "Use custom default terminal si_ze"
 msgstr "ਪਸੰਦੀਦਾ ਡਿਫਾਲਟ ਟਰਮੀਨਲ ਸਾਈਜ਼ ਵਰਤੋਂ(_z)"
 
-#: ../src/profile-preferences.glade.h:13
+#: ../src/profile-preferences.ui.h:58
 msgid "Default size:"
 msgstr "ਡਿਫਾਲਟ ਸਾਈਜ਼:"
 
-#: ../src/profile-preferences.glade.h:14
+#: ../src/profile-preferences.ui.h:59
 msgid "columns"
 msgstr "ਕਾਲਮ"
 
-#: ../src/profile-preferences.glade.h:15
+#: ../src/profile-preferences.ui.h:60
 msgid "rows"
 msgstr "ਕਤਾਰਾਂ"
 
-#: ../src/profile-preferences.glade.h:16
-msgid "General"
-msgstr "ਸਧਾਰਨ"
+#: ../src/profile-preferences.ui.h:62
+#| msgid "_Title:"
+msgid "Title"
+msgstr "ਟਾਈਟਲ"
 
-#: ../src/profile-preferences.glade.h:17
-msgid "<b>Title</b>"
-msgstr "<b>ਟਾਈਟਲ</b>"
-
-#: ../src/profile-preferences.glade.h:18
+#: ../src/profile-preferences.ui.h:63
 msgid "Initial _title:"
 msgstr "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ(_T):"
 
-#: ../src/profile-preferences.glade.h:19
+#: ../src/profile-preferences.ui.h:64
 msgid "When terminal commands set their o_wn titles:"
 msgstr "ਜਦੋਂ ਟਰਮੀਨਲ ਕਮਾਂਡਾਂ ਆਪਣਾ ਖੁਦ ਟਾਈਟਲ ਸੈੱਟ ਕਰ(_w):"
 
-#: ../src/profile-preferences.glade.h:20
-msgid ""
-"Replace initial title\n"
-"Append initial title\n"
-"Prepend initial title\n"
-"Keep initial title"
-msgstr ""
-"ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਤਬਦੀਲ\n"
-"ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਸ਼ਾਮਲ ਕਰੋ\n"
-"ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਪਹਿਲਾਂ ਸ਼ਾਮਲ ਕਰੋ\n"
-"ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਰੱਖੋ"
+#: ../src/profile-preferences.ui.h:65
+#| msgid "<b>Command</b>"
+msgid "Command"
+msgstr "ਕਮਾਂਡ"
 
-#: ../src/profile-preferences.glade.h:24
-msgid "<b>Command</b>"
-msgstr "<b>ਕਮਾਂਡ</b>"
-
-#: ../src/profile-preferences.glade.h:25
+#: ../src/profile-preferences.ui.h:66
 msgid "_Run command as a login shell"
 msgstr "ਲਾਗਇਨ ਸ਼ੈਲ ਵਾਂਗ ਕਮਾਂਡ ਚਲਾਉ(_R)"
 
-#: ../src/profile-preferences.glade.h:26
+#: ../src/profile-preferences.ui.h:67
 msgid "_Update login records when command is launched"
 msgstr "ਜਦੋਂ ਕਿ ਕਮਾਂਡ ਸ਼ੁਰੂ ਹੋਵੇ ਤਾਂ ਲਾਗਇਨ ਰਿਕਾਰਡ ਅੱਪਡੇਟ ਕਰੋ(_U)"
 
-#: ../src/profile-preferences.glade.h:27
+#: ../src/profile-preferences.ui.h:68
 msgid "Ru_n a custom command instead of my shell"
 msgstr "ਮੇਰੀ ਸੈਲ ਦੀ ਬਜਾਏ ਪਸੰਦੀਦਾ ਕਮਾਂਡ ਚਲਾਓ(_N)"
 
-#: ../src/profile-preferences.glade.h:28
+#: ../src/profile-preferences.ui.h:69
 msgid "Custom co_mmand:"
 msgstr "ਪਸੰਦੀਦਾ ਕਮਾਂਡ(_M):"
 
-#: ../src/profile-preferences.glade.h:29
+#: ../src/profile-preferences.ui.h:70
 msgid "When command _exits:"
 msgstr "ਜਦੋਂ ਕਮਾਂਡ ਬੰਦ ਹੋਵੇ(_E):"
 
-#: ../src/profile-preferences.glade.h:30
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"ਟਰਮੀਨਲ ਬੰਦ ਕਰੋ\n"
-"ਕਮਾਂਡ ਮੁੜ-ਚਲਾਓ\n"
-"ਟਰਮੀਨਲ ਖੁੱਲ੍ਹਾ ਰੱਖੋ"
-
-#: ../src/profile-preferences.glade.h:33
+#: ../src/profile-preferences.ui.h:71
 msgid "Title and Command"
 msgstr "ਟਾਈਟਲ ਅਤੇ ਕਮਾਂਡ"
 
-#: ../src/profile-preferences.glade.h:34
-msgid "<b>Foreground, Background, Bold and Underline</b>"
-msgstr "<b>ਫਾਰ-ਗਰਾਊਂਡ, ਬੈਕਗਰਾਊਂਡ ਗੂੜ੍ਹਾ ਤੇ ਹੇਠਾਂ ਲਾਈਨ</b>"
+#: ../src/profile-preferences.ui.h:72
+#| msgid "<b>Foreground, Background, Bold and Underline</b>"
+msgid "Foreground, Background, Bold and Underline"
+msgstr "ਫਾਰ-ਗਰਾਊਂਡ, ਬੈਕਗਰਾਊਂਡ ਗੂੜ੍ਹਾ ਤੇ ਹੇਠਾਂ ਲਾਈਨ"
 
-#: ../src/profile-preferences.glade.h:35
+#: ../src/profile-preferences.ui.h:73
 msgid "_Use colors from system theme"
 msgstr "ਸਿਸਟਮ ਸਰੂਪ ਤੋਂ ਰੰਗ ਵਰਤੋਂ(_U)"
 
-#: ../src/profile-preferences.glade.h:36
+#: ../src/profile-preferences.ui.h:74
 msgid "Built-in sche_mes:"
 msgstr "ਵਿੱਚ ਉਪਲੱਬਧ ਸਕੀਮ(_m):"
 
-#: ../src/profile-preferences.glade.h:37
+#: ../src/profile-preferences.ui.h:75
 msgid "_Text color:"
 msgstr "ਟੈਕਸਟ ਰੰਗ(_T):"
 
-#: ../src/profile-preferences.glade.h:38
+#: ../src/profile-preferences.ui.h:76
 msgid "_Background color:"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ(_B):"
 
-#: ../src/profile-preferences.glade.h:39
+#: ../src/profile-preferences.ui.h:77
 msgid "Choose Terminal Background Color"
 msgstr "ਟਰਮੀਨਲ ਬੈਕਗਰਾਊਂਡ ਰੰਗ ਚੁਣੋ"
 
-#: ../src/profile-preferences.glade.h:40
+#: ../src/profile-preferences.ui.h:78
 msgid "Choose Terminal Text Color"
 msgstr "ਟਰਮੀਨਲ ਟੈਕਸਟ ਰੰਗ ਚੁਣੋ"
 
-#: ../src/profile-preferences.glade.h:41
+#: ../src/profile-preferences.ui.h:79
 msgid "_Underline color:"
 msgstr "ਹੇਠਾਂ ਲਾਈਨ ਰੰਗ(_U):"
 
-#: ../src/profile-preferences.glade.h:42
+#: ../src/profile-preferences.ui.h:80
 msgid "_Same as text color"
 msgstr "ਟੈਕਸਟ ਰੰਗ ਵਰਗਾ ਹੀ(_S)"
 
-#: ../src/profile-preferences.glade.h:43
+#: ../src/profile-preferences.ui.h:81
 msgid "Bol_d color:"
 msgstr "ਇੱਕ ਰੰਗ ਵਰਤੋਂ(_d):"
 
-#: ../src/profile-preferences.glade.h:44
-msgid "<b>Palette</b>"
-msgstr "<b>ਰੰਗ-ਪੱਟੀ</b>"
+#: ../src/profile-preferences.ui.h:82
+#| msgid "<b>Palette</b>"
+msgid "Palette"
+msgstr "ਰੰਗ-ਪੱਟੀ"
 
-#: ../src/profile-preferences.glade.h:45
+#: ../src/profile-preferences.ui.h:83
 msgid "Built-in _schemes:"
 msgstr "ਵਿੱਚ ਉਪਲੱਬਧ ਸਕੀਮ(_S):"
 
-#: ../src/profile-preferences.glade.h:46
-msgid ""
-"<small><i><b>Note:</b> Terminal applications have these colors available to "
-"them.</i></small>"
-msgstr ""
-"<small><i><b>ਸੂਚਨਾ:</b> ਟਰਮੀਨਲ ਐਪਲੀਕੇਸ਼ਨਾਂ ਲਈ ਇਹ ਰੰਗ ਉਪਲੱਬਧ ਹਨ।</i></small>"
+#: ../src/profile-preferences.ui.h:84
+#| msgid ""
+#| "<small><i><b>Note:</b> Terminal applications have these colors available "
+#| "to them.</i></small>"
+msgid "<b>Note:</b> Terminal applications have these colors available to them."
+msgstr "<b>ਸੂਚਨਾ:</b> ਟਰਮੀਨਲ ਐਪਲੀਕੇਸ਼ਨਾਂ ਲਈ ਇਹ ਰੰਗ ਉਪਲੱਬਧ ਹਨ।"
 
-#: ../src/profile-preferences.glade.h:47
+#: ../src/profile-preferences.ui.h:85
 msgid "Color p_alette:"
 msgstr "ਰੰਗ-ਪੱਟੀ(_a):"
 
-#: ../src/profile-preferences.glade.h:48
+#: ../src/profile-preferences.ui.h:86
 msgid "Colors"
 msgstr "ਰੰਗ"
 
-#: ../src/profile-preferences.glade.h:49
+#: ../src/profile-preferences.ui.h:87
 msgid "_Scrollbar is:"
 msgstr "ਸਕਰੋਲ-ਪੱਟੀ ਹੈ(_S):"
 
-#: ../src/profile-preferences.glade.h:50
+#: ../src/profile-preferences.ui.h:88
 msgid "Scroll_back:"
 msgstr "ਸਕਰੋਲਬੈਕ(_b):"
 
-#: ../src/profile-preferences.glade.h:51
+#: ../src/profile-preferences.ui.h:89
 msgid "Scroll on _keystroke"
 msgstr "ਕੀ-ਦਬਾਉਣ ਉੱਤੇ ਸਕਰੋਲ(_K)"
 
-#: ../src/profile-preferences.glade.h:52
+#: ../src/profile-preferences.ui.h:90
 msgid "Scroll on _output"
 msgstr "ਆਉਟਪੁੱਟ ਉੱਤੇ ਸਕਰੋਲ(_O)"
 
-#. Infinite scrollback
-#: ../src/profile-preferences.glade.h:54
+#: ../src/profile-preferences.ui.h:91
 msgid "_Unlimited"
 msgstr "ਬੇਅੰਤ(_U)"
 
-#: ../src/profile-preferences.glade.h:55
-msgid ""
-"Always visible\n"
-"Visible only when necessary\n"
-"Hidden"
-msgstr ""
-"ਹਮੇਸ਼ਾ ਵੇਖਾਓ\n"
-"ਜਦੋਂ ਲੋੜ ਹੋਵੇ ਉਦੋਂ ਹੀ ਵੇਖਾਓ\n"
-"ਲੁਕਵਾਂ"
-
-#: ../src/profile-preferences.glade.h:58
+#: ../src/profile-preferences.ui.h:92
 msgid "lines"
 msgstr "ਲਾਈਨਾਂ"
 
-#: ../src/profile-preferences.glade.h:59
+#: ../src/profile-preferences.ui.h:93
 msgid "Scrolling"
 msgstr "ਸਕਰੋਲਿੰਗ"
 
-#: ../src/profile-preferences.glade.h:60
+#: ../src/profile-preferences.ui.h:94
+#| msgid ""
+#| "<small><i><b>Note:</b> These options may cause some applications to "
+#| "behave incorrectly.  They are only here to allow you to work around "
+#| "certain applications and operating systems that expect different terminal "
+#| "behavior.</i></small>"
 msgid ""
-"<small><i><b>Note:</b> These options may cause some applications to behave "
+"<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior.</"
-"i></small>"
+"applications and operating systems that expect different terminal behavior."
 msgstr ""
-"<small><i><b>ਸੂਚਨਾ:</b> ਇਹ ਚੋਣ ਕੁਝ ਐਪਲੀਕੇਸ਼ਨਾਂ ਨੂੰ ਗਲਤ ਤਰੀਕੇ ਨਾਲ ਕੰਮ ਰਵੱਈਆ ਕਰ "
-"ਲਾ ਸਕਦੀ "
+"<b>ਸੂਚਨਾ:</b> ਇਹ ਚੋਣ ਕੁਝ ਐਪਲੀਕੇਸ਼ਨਾਂ ਨੂੰ ਗਲਤ ਤਰੀਕੇ ਨਾਲ ਕੰਮ ਰਵੱਈਆ ਕਰ ਲਾ ਸਕਦੀ "
 "ਹੈ। ਇਹ ਇੱਥੇ ਤਾਂ ਹਨ ਕਿ ਕੁਝ ਐਪਲੀਕੇਸ਼ਨ ਤੁਹਾਡੇ ਲਈ ਸਹੀ ਤਰੀਕੇ ਨਾਲ ਚੱਲ ਸਕਣ ਅਤੇ "
 "ਓਪਰੇਟਿੰਗ ਸਿਸਟਮ ਜੋ "
-"ਕਿ ਵੱਖਰਾ ਟਰਮੀਨਲ ਰਵੱਈਆ ਚਾਹੰਦਾ ਹੈ।</i></small>"
+"ਕਿ ਵੱਖਰਾ ਟਰਮੀਨਲ ਰਵੱਈਆ ਚਾਹੰਦਾ ਹੈ।"
 
-#: ../src/profile-preferences.glade.h:61
+#: ../src/profile-preferences.ui.h:95
 msgid "_Delete key generates:"
 msgstr "ਹਟਾਉ ਸਵਿੱਚ ਪੈਦਾਵਾਰ(_D):"
 
-#: ../src/profile-preferences.glade.h:62
+#: ../src/profile-preferences.ui.h:96
 msgid "_Backspace key generates:"
 msgstr "ਬੈਕਸਪੇਸ ਸਵਿੱਚ ਪੈਦਾਵਾਰ(_B):"
 
-#: ../src/profile-preferences.glade.h:63
-msgid ""
-"Automatic\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Escape sequence\n"
-"TTY Erase"
-msgstr ""
-"Automatic\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Escape sequence\n"
-"TTY Erase"
-
-#: ../src/profile-preferences.glade.h:68
+#: ../src/profile-preferences.ui.h:97
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "ਅਨੁਕੂਲਤਾ ਚੋਣ ਮੂਲ ਰੂਪ ਵਿੱਚ ਮੁੜ-ਸੈੱਟ ਕਰੋ(_R)"
 
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.ui.h:98
 msgid "Compatibility"
 msgstr "ਅਨੁਕੂਲਤਾ"
 
-#: ../src/terminal-accels.c:85
+#: ../src/terminal-accels.c:139
 msgid "New Tab"
 msgstr "ਨਵੀਂ ਟੈਬ"
 
-#: ../src/terminal-accels.c:86
+#: ../src/terminal-accels.c:141
 msgid "New Window"
 msgstr "ਨਵੀਂ ਵਿੰਡੋ"
 
-#: ../src/terminal-accels.c:89
+#: ../src/terminal-accels.c:143
+msgid "New Profile"
+msgstr "ਨਵਾਂ ਪਰੋਫਾਇਲ"
+
+#: ../src/terminal-accels.c:146
 msgid "Save Contents"
 msgstr "ਸਮੱਗਰੀ ਸੰਭਾਲੋ"
 
-#: ../src/terminal-accels.c:91
+#: ../src/terminal-accels.c:149
 msgid "Close Tab"
 msgstr "ਟੈਬ ਬੰਦ ਕਰੋ"
 
-#: ../src/terminal-accels.c:92
+#: ../src/terminal-accels.c:151
 msgid "Close Window"
 msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰੋ"
 
-#: ../src/terminal-accels.c:97
+#: ../src/terminal-accels.c:157
 msgid "Copy"
 msgstr "ਕਾਪੀ ਕਰੋ"
 
-#: ../src/terminal-accels.c:98
+#: ../src/terminal-accels.c:159
 msgid "Paste"
 msgstr "ਚੇਪੋ"
 
-#: ../src/terminal-accels.c:103
+#: ../src/terminal-accels.c:165
+msgid "Hide and Show menubar"
+msgstr "ਮੇਨੂ-ਪੱਟੀ ਓਹਲੇ ਅਤੇ ਵੇਖਾਓ"
+
+#: ../src/terminal-accels.c:167
 msgid "Full Screen"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ"
 
-#: ../src/terminal-accels.c:104
+#: ../src/terminal-accels.c:169
 msgid "Zoom In"
 msgstr "ਜ਼ੂਮ ਇਨ"
 
-#: ../src/terminal-accels.c:105
+#: ../src/terminal-accels.c:171
 msgid "Zoom Out"
 msgstr "ਜ਼ੂਮ ਆਉਟ"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:173
 msgid "Normal Size"
 msgstr "ਸਧਾਰਨ ਆਕਾਰ"
 
-#: ../src/terminal-accels.c:111 ../src/terminal-window.c:3365
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3400
 msgid "Set Title"
 msgstr "ਟਾਈਟਲ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/terminal-accels.c:112
+#: ../src/terminal-accels.c:181
 msgid "Reset"
 msgstr "ਮੁੜ-ਸੈੱਟ"
 
-#: ../src/terminal-accels.c:113
+#: ../src/terminal-accels.c:183
 msgid "Reset and Clear"
 msgstr "ਮੁੜ-ਸੈੱਟ ਤੇ ਸਾਫ਼ ਕਰੋ"
 
-#: ../src/terminal-accels.c:118
+#: ../src/terminal-accels.c:189
 msgid "Switch to Previous Tab"
 msgstr "ਪਿਛਲੀ ਟੈਬ ਉੱਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:191
 msgid "Switch to Next Tab"
 msgstr "ਅਗਲੀ ਟੈਬ ਉੱਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:120
+#: ../src/terminal-accels.c:193
 msgid "Move Tab to the Left"
 msgstr "ਟੈਬ ਨੂੰ ਖੱਬੇ ਭੇਜੋ"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:195
 msgid "Move Tab to the Right"
 msgstr "ਟੈਬ ਨੂੰ ਸੱਜੇ ਭੇਜੋ"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:197
 msgid "Detach Tab"
 msgstr "ਟੈਬ ਵੱਖ"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 1"
 msgstr "ਟੈਬ 1 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 2"
 msgstr "ਟੈਬ 2 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 3"
 msgstr "ਟੈਬ 3 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 4"
 msgstr "ਟੈਬ 4 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 5"
 msgstr "ਟੈਬ 5 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 6"
 msgstr "ਟੈਬ 6 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:217
 msgid "Switch to Tab 7"
 msgstr "ਟੈਬ 7 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:220
 msgid "Switch to Tab 8"
 msgstr "ਟੈਬ 8 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:223
 msgid "Switch to Tab 9"
 msgstr "ਟੈਬ 9 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:226
 msgid "Switch to Tab 10"
 msgstr "ਟੈਬ 10 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:229
 msgid "Switch to Tab 11"
 msgstr "ਟੈਬ 11 ਉਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:134
+#: ../src/terminal-accels.c:232
 msgid "Switch to Tab 12"
 msgstr "ਟੈਬ 12 ਉੱਤੇ ਜਾਓ"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:238
 msgid "Contents"
 msgstr "ਸਮੱਗਰੀ"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:243
 msgid "File"
 msgstr "ਫਾਇਲ"
 
-#: ../src/terminal-accels.c:144
+#: ../src/terminal-accels.c:244
 msgid "Edit"
 msgstr "ਸੋਧ"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:245
 msgid "View"
 msgstr "ਵੇਖੋ"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:247
 msgid "Tabs"
 msgstr "ਟੈਬਾਂ"
 
-#: ../src/terminal-accels.c:148
+#: ../src/terminal-accels.c:248
 msgid "Help"
 msgstr "ਮੱਦਦ"
 
-#: ../src/terminal-accels.c:452
+#: ../src/terminal-accels.c:619
+#, c-format
+msgid "The shortcut key “%s” is already bound to the “%s” action"
+msgstr "ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚ “%s” ਪਹਿਲਾਂ ਹੀ ਕਾਰਵਾਈ  “%s” ਨਾਲ ਸਬੰਧਿਤ ਹੈ"
+
+#: ../src/terminal-accels.c:732
 msgid "_Action"
 msgstr "ਕਾਰਵਾਈ(_A)"
 
-#: ../src/terminal-accels.c:470
+#: ../src/terminal-accels.c:750
 msgid "Shortcut _Key"
 msgstr "ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚ(_K)"
 
-#: ../src/terminal-app.c:394
-msgid "Click button to choose profile"
-msgstr "ਪਰੋਫਾਇਲ ਚੁਣਨ ਲਈ ਬਟਨ ਦਬਾਓ"
-
-#: ../src/terminal-app.c:479
-msgid "Profile list"
-msgstr "ਪਰੋਫਾਇਲ ਲਿਸਟ"
-
-#: ../src/terminal-app.c:540
-#, c-format
-msgid "Delete profile “%s”?"
-msgstr "ਕੀ ਪਰੋਫਾਇਲ “%s” ਹਟਾਉਣਾ ਹੈ?"
-
-#: ../src/terminal-app.c:556
-msgid "Delete Profile"
-msgstr "ਪਰੋਫਾਇਲ ਹਟਾਓ"
-
-#: ../src/terminal-app.c:858
-#, c-format
-msgid ""
-"You already have a profile called “%s”. Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"ਤੁਹਾਡੇ ਕੋਲ ਪਹਿਲਾਂ ਹੀ “%s” ਪਰੋਫਾਇਲ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸੇ ਨਾਂ ਨਾਲ ਹੋਰ ਪਰੋਫਾਇਲ ਬਣਾਉਣਾ "
-"ਚਾਹੁੰਦੇ ਹੋ?"
-
-#: ../src/terminal-app.c:963
-msgid "Choose base profile"
-msgstr "ਬੇਸ ਪਰੋਫਾਇਲ ਚੁਣੋ"
-
-#: ../src/terminal-app.c:1552
+#: ../src/terminal-app.c:868
 msgid "User Defined"
 msgstr "ਯੂਜ਼ਰ ਪਰਭਾਸ਼ਿਤ"
 
 #: ../src/terminal-appmenu.ui.h:1
-#| msgid "_Profile Preferences"
 msgid "_Preferences"
 msgstr "_ਮੇਰੀ ਪਸੰਦ"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1635
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1627
 msgid "_Help"
 msgstr "ਮੱਦਦ(_H)"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1756
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1743
 msgid "_About"
 msgstr "ਇਸ ਬਾਰੇ(_A)"
 
-#: ../src/terminal.c:229
+#: ../src/terminal.c:243
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "ਆਰਗੂਮੈਂਟ ਪਾਰਸ ਕਰਨ ਲਈ ਫੇਲ੍ਹ: %s\n"
@@ -1451,159 +1517,163 @@ msgstr "ਵੀਅਤਨਾਮੀ"
 msgid "Thai"
 msgstr "ਥਾਈ"
 
-#: ../src/terminal-encoding.c:491 ../src/terminal-encoding.c:516
-msgid "_Description"
-msgstr "ਵੇਰਵਾ(_D)"
-
-#: ../src/terminal-encoding.c:500 ../src/terminal-encoding.c:525
-msgid "_Encoding"
-msgstr "ਇੰਕੋਡਿੰਗ(_E)"
-
-#: ../src/terminal-encoding.c:583
+#: ../src/terminal-encoding.c:272
 msgid "Current Locale"
 msgstr "ਮੌਜੂਦ ਲੋਕੇਲ"
 
-#: ../src/terminal-nautilus.c:467
-#| msgid "Open _Terminal"
+#: ../src/terminal-nautilus.c:463
 msgid "Open in _Remote Terminal"
 msgstr "_ਰਿਮੋਟ ਟਰਮੀਨਲ ਵਿੱਚ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:469
-#| msgid "Open _Terminal"
+#: ../src/terminal-nautilus.c:465
 msgid "Open in _Local Terminal"
 msgstr "_ਲੋਕਲ ਟਰਮੀਨਲ ਵਿੱਚ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:469 ../src/terminal-nautilus.c:480
 msgid "Open the currently selected folder in a terminal"
 msgstr "ਮੌਜੂਦਾ ਚੁਣੇ ਫੋਲਡਰ ਨੂੰ ਟਰਮੀਨਲ ਵਿੱਚ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:475 ../src/terminal-nautilus.c:486
-#: ../src/terminal-nautilus.c:496
+#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
+#: ../src/terminal-nautilus.c:492
 msgid "Open the currently open folder in a terminal"
 msgstr "ਮੌਜੂਦਾ ਖੁੱਲ੍ਹੇ ਫੋਲਡਰ ਨੂੰ ਟਰਮੀਨਲ ਨਾਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
-#| msgid "Open _Terminal"
+#: ../src/terminal-nautilus.c:477 ../src/terminal-nautilus.c:491
 msgid "Open in T_erminal"
 msgstr "_ਟਰਮੀਨਲ ਵਿੱਚ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:492
-#| msgid "Open _Terminal"
+#: ../src/terminal-nautilus.c:488
 msgid "Open T_erminal"
 msgstr "_ਟਰਮੀਨਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:493
-#| msgid "Open _Terminal"
+#: ../src/terminal-nautilus.c:489
 msgid "Open a terminal"
 msgstr "ਇੱਕ ਟਰਮੀਨਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:524
+#: ../src/terminal-nautilus.c:507 ../src/terminal-nautilus.c:520
 msgid "Open in _Midnight Commander"
 msgstr "ਮਿਡ-ਨਾਈਟ ਕਮਾਂਡਰ ਵਿੱਚ ਖੋਲ੍ਹੋ(_M)"
 
-#: ../src/terminal-nautilus.c:513
+#: ../src/terminal-nautilus.c:509
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
 msgstr "ਇਸ ਸਮੇਂ ਚੁਣੇ ਫੋਲਡਰ ਨੂੰ ਟਰਮੀਨਲ ਫਾਇਲ ਮੈਨੇਜਰ ਮਿਡ-ਨਾਈਟ ਕਮਾਂਡਰ ਨਾਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:515 ../src/terminal-nautilus.c:525
+#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:521
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
 msgstr ""
 "ਇਸ ਸਮੇਂ ਖੁੱਲ੍ਹੇ ਫੋਲਡਰ ਨੂੰ ਟਰਮੀਨਲ ਫਾਇਲ ਮੈਨੇਜਰ ਮਿਡ-ਨਾਈਟ ਕਮਾਂਡਰ ਨਾਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-nautilus.c:521
+#: ../src/terminal-nautilus.c:517
 msgid "Open _Midnight Commander"
 msgstr "ਮਿਡ-ਨਾਈਟ ਕਮਾਂਡਰ ਖੋਲ੍ਹੋ(_M)"
 
-#: ../src/terminal-nautilus.c:522
+#: ../src/terminal-nautilus.c:518
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "ਟਰਮੀਨਲ ਫਾਇਲ ਮੈਨੇਜਰ ਮਿਡਨਾਈਟ ਕਮਾਂਡਰ ਨਾਲ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-options.c:210
+#: ../src/terminal-options.c:216
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "ਚੋਣ \"%s\" ਗਨੋਮ-ਟਰਮੀਨਲ ਦੇ ਇਹ ਵਰਜਨ ਰਾਹੀਂ ਸਹਾਇਕ ਨਹੀਂ ਹੈ।"
 
-#: ../src/terminal-options.c:221 ../src/terminal-util.c:234
+#: ../src/terminal-options.c:227 ../src/terminal-util.c:234
 msgid "GNOME Terminal"
 msgstr "ਗਨੋਮ ਟਰਮੀਨਲ"
 
-#: ../src/terminal-options.c:261
+#: ../src/terminal-options.c:267
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "\"%s\" ਲਈ ਆਰਗੂਮੈਂਟ ਇੱਕ ਠੀਕ ਕਮਾਂਡ ਨਹੀਂ ਹੈ: %s"
 
-#: ../src/terminal-options.c:396
+#: ../src/terminal-options.c:412
 msgid "Two roles given for one window"
 msgstr "ਇਕੋ ਵਿੰਡੋ ਲਈ ਦੋ ਰੋਲ ਦਿੱਤੇ ਗਏ ਹਨ"
 
-#: ../src/terminal-options.c:596
+#: ../src/terminal-options.c:433 ../src/terminal-options.c:466
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "ਇੱਕੋ ਵਿੰਡੋ ਲਈ ਚੋਣ \"%s\" ਦੋ ਵਾਰ ਕੀਤੀ ਗਈ\n"
+
+#: ../src/terminal-options.c:676
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "ਜ਼ੂਮ ਫੈਕਟਰ \"%g\" ਬਹੁਤ ਛੋਟਾ ਹੈ, %g ਦੀ ਵਰਤੋਂ ਨਾਲ\n"
 
-#: ../src/terminal-options.c:604
+#: ../src/terminal-options.c:684
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "ਜ਼ੂਮ ਫੈਕਟਰ \"%g\" ਬਹੁਤ ਵੱਧ ਹੈ, %g ਦੀ ਵਰਤੋਂ ਨਾਲ\n"
 
-#: ../src/terminal-options.c:642
+#: ../src/terminal-options.c:722
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
 "command line"
 msgstr "ਚੋਣ \"%s\" ਲਈ ਇੱਕ ਕਮਾਂਡ ਲੋਡ਼ੀਦੀ ਹੈ, ਜੋ ਬਾਕੀ ਕਮਾਂਡ ਲਾਈਨਾਂ ਤੇ ਚੱਲੇ"
 
-#: ../src/terminal-options.c:776
+#: ../src/terminal-options.c:858
 msgid "Not a valid terminal config file."
 msgstr "ਇੱਕ ਢੁੱਕਵੀਂ ਟਰਮੀਨਲ ਸੰਰਚਨਾ ਫਾਇਲ ਨਹੀਂ ਹੈ।"
 
-#: ../src/terminal-options.c:789
+#: ../src/terminal-options.c:871
 msgid "Incompatible terminal config file version."
 msgstr "ਅਢੁੱਕਵਾਂ ਟਰਮੀਨਲ ਸੰਰਚਨਾ ਫਾਇਲ ਵਰਜਨ ਹੈ।"
 
-#: ../src/terminal-options.c:923
+#: ../src/terminal-options.c:1010
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr "ਸਰਗਰਮ ਨਾਂ-ਸਰਵਰ ਨਾਲ ਰਜਿਸਟਰ ਨਾ ਕਰੋ, ਨਾ ਹੀ ਮੁਡ਼ ਸਰਗਰਮ ਟਰਮੀਨਲ ਵਰਤੋਂ"
 
-#: ../src/terminal-options.c:932
+#: ../src/terminal-options.c:1019
 msgid "Load a terminal configuration file"
 msgstr "ਟਰਮੀਨਲ ਸੰਰਚਨਾ ਫਾਇਲ ਲੋਡ ਕਰੋ"
 
-#: ../src/terminal-options.c:933
+#: ../src/terminal-options.c:1020
 msgid "FILE"
 msgstr "ਫਾਇਲ"
 
-#: ../src/terminal-options.c:954
+#: ../src/terminal-options.c:1041
 msgid "Open a new window containing a tab with the default profile"
 msgstr "ਡਿਫਾਲਟ ਪਰੋਫਾਇਲ ਰੱਖਣ ਵਾਲੀ ਇੱਕ ਟੈਬ ਇੱਕ ਨਵੀਂ ਵਿੰਡੋ ਵਿੱਚ ਖੋਲ੍ਹੋ"
 
-#: ../src/terminal-options.c:963
+#: ../src/terminal-options.c:1050
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "ਆਖਰੀ-ਖੁੱਲੀ ਵਿੰਡੋ ਵਿੱਚ ਦਿੱਤੇ ਡਿਫਾਲਟ ਪਰੋਫਾਇਲ ਨਾਲ ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ।"
 
-#: ../src/terminal-options.c:1030
+#: ../src/terminal-options.c:1063
+msgid "Turn on the menubar"
+msgstr "ਮੇਨੂ-ਪੱਟੀ ਵੇਖੋ"
+
+#: ../src/terminal-options.c:1072
+msgid "Turn off the menubar"
+msgstr "ਮੇਨੂਪੱਟੀ ਓਹਲੇ"
+
+#: ../src/terminal-options.c:1117
 msgid "Set the last specified tab as the active one in its window"
 msgstr "ਆਖਰੀ ਦਿੱਤੀ ਟੈਬ ਇਸ ਦੇ ਇੱਕ ਝਰੋਖੇ ਵਿੱਚ ਸਰਗਰਮ ਸੈੱਟ ਕਰੋ"
 
-#: ../src/terminal-options.c:1043
+#: ../src/terminal-options.c:1130
 msgid "Execute the argument to this option inside the terminal"
 msgstr "ਟਰਮੀਨਲ ਵਿੱਚ ਇਹ ਚੋਣ ਲਈ ਆਰਗੂਮੈਂਟ ਚਲਾਓ"
 
-#: ../src/terminal-options.c:1341 ../src/terminal-options.c:1347
+#: ../src/terminal-options.c:1140
+msgid "PROFILE-NAME"
+msgstr "ਪਰੋਫਾਇਲ-ਨਾਂ"
+
+#: ../src/terminal-options.c:1428 ../src/terminal-options.c:1434
 msgid "GNOME Terminal Emulator"
 msgstr "ਗਨੋਮ ਟਰਮੀਨਲ ਈਮੂਲੇਟਰ"
 
-#: ../src/terminal-options.c:1348
+#: ../src/terminal-options.c:1435
 msgid "Show GNOME Terminal options"
 msgstr "ਗਨੋਮ ਟਰਮੀਨਲ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/terminal-options.c:1358
+#: ../src/terminal-options.c:1445
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1611,7 +1681,7 @@ msgstr ""
 "ਨਵੀਆਂ ਵਿੰਡੋਜ਼ ਜਾਂ ਟਰਮੀਨਲ ਟੈਬਾਂ ਖੋਲ੍ਹਣ ਲਈ ਚੋਣਾਂ; ਇੱਕ ਤੋਂ ਵੱਧ ਵੀ ਦਿੱਤੀਆਂ ਜਾ "
 "ਸਕਦੀਆਂ ਹਨ: "
 
-#: ../src/terminal-options.c:1367
+#: ../src/terminal-options.c:1454
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1620,11 +1690,11 @@ msgstr ""
 "ਵਿੰਡੋਜ਼ ਲਈ ਡਿਫਾਲਟ "
 "ਸੈੱਟ ਹੋਵੇਗਾ।"
 
-#: ../src/terminal-options.c:1368
+#: ../src/terminal-options.c:1455
 msgid "Show per-window options"
 msgstr "ਹਰੇਕ-ਵਿੰਡੋ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/terminal-options.c:1376
+#: ../src/terminal-options.c:1463
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1633,43 +1703,70 @@ msgstr ""
 "ਤਾਂ ਸਭ ਟਰਮੀਨਲਾਂ "
 "ਲਈ ਡਿਫਾਲਟ ਸੈੱਟ ਹੋਵੇਗਾ।"
 
-#: ../src/terminal-options.c:1377
+#: ../src/terminal-options.c:1464
 msgid "Show per-terminal options"
 msgstr "ਹਰ-ਟਰਮੀਨਲ ਚੋਣਾਂ ਵੇਖੋ"
 
-#: ../src/terminal-screen.c:1502
+#: ../src/terminal-prefs.c:224
+msgid "Click button to choose profile"
+msgstr "ਪਰੋਫਾਇਲ ਚੁਣਨ ਲਈ ਬਟਨ ਦਬਾਓ"
+
+#: ../src/terminal-prefs.c:340
+msgid "Profile list"
+msgstr "ਪਰੋਫਾਇਲ ਲਿਸਟ"
+
+#: ../src/terminal-prefs.c:395
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "ਕੀ ਪਰੋਫਾਇਲ “%s” ਹਟਾਉਣਾ ਹੈ?"
+
+#: ../src/terminal-prefs.c:411
+msgid "Delete Profile"
+msgstr "ਪਰੋਫਾਇਲ ਹਟਾਓ"
+
+#: ../src/terminal-prefs.c:705
+msgid "Show"
+msgstr "ਵੇਖਾਓ"
+
+#: ../src/terminal-prefs.c:716
+msgid "_Encoding"
+msgstr "ਇੰਕੋਡਿੰਗ(_E)"
+
+#: ../src/terminal-screen.c:1164
+msgid "No command supplied nor shell requested"
+msgstr "ਕੋਈ ਕਮਾਂਡ ਨਹੀਂ ਦਿੱਤੀ ਨਾ ਕੋਈ ਸ਼ੈੱਲ ਮੰਗ ਕੀਤੀ"
+
+#: ../src/terminal-screen.c:1417
 msgid "_Profile Preferences"
 msgstr "ਪਰੋਫਾਇਲ ਪਸੰਦ(_P)"
 
-#: ../src/terminal-screen.c:1503 ../src/terminal-screen.c:1894
+#: ../src/terminal-screen.c:1418 ../src/terminal-screen.c:1779
 msgid "_Relaunch"
 msgstr "ਮੁੜ-ਚਲਾਓ(_R)"
 
-#: ../src/terminal-screen.c:1506
+#: ../src/terminal-screen.c:1421
 msgid "There was an error creating the child process for this terminal"
 msgstr "ਇਸ ਟਰਮੀਨਲ ਲਈ ਚਲਾਇਡ ਕਾਰਜ ਬਣਾਉਣ ਵਿੱਚ ਗਲਤੀ ਆਈ ਹੈ"
 
-#: ../src/terminal-screen.c:1898
+#: ../src/terminal-screen.c:1783
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "ਚਲਾਈਡ ਪਰੋਸੈਸ ਅਚਾਨਕ ਹੀ %d ਹਾਲਤ ਨਾਲ ਬੰਦ ਹੋ ਗਿਆ।"
 
-#: ../src/terminal-screen.c:1901
+#: ../src/terminal-screen.c:1786
 #, c-format
-#| msgid "The child process was terminated by signal %d."
 msgid "The child process was aborted by signal %d."
 msgstr "ਚਲਾਈਡ ਪਰੋਸੈੱਸ ਨੂੰ ਸਿਗਨਲ %d ਵਲੋਂ ਅਧੂਰਾ ਛੱਡਿਆ ਗਿਆ।"
 
-#: ../src/terminal-screen.c:1904
-#| msgid "The child process was terminated."
+#: ../src/terminal-screen.c:1789
 msgid "The child process was aborted."
 msgstr "ਚਲਾਈਡ ਪਰੋਸੈੱਸ ਅਧੂਰਾ ਛੱਡਿਆ ਗਿਆ।"
 
-#: ../src/terminal-tab-label.c:195
+#: ../src/terminal-tab-label.c:194
 msgid "Close tab"
 msgstr "ਟੈਬ ਬੰਦ ਕਰੋ"
 
-#: ../src/terminal-tabs-menu.c:196
+#: ../src/terminal-tabs-menu.c:195
 msgid "Switch to this tab"
 msgstr "ਅਗਲੀ ਟੈਬ ਉੱਤੇ ਜਾਓ"
 
@@ -1698,10 +1795,15 @@ msgid "Could not open the address “%s”"
 msgstr "ਐਡਰੈੱਸ “%s” ਖੁੱਲ ਨਹੀਂ ਸਕਿਆ"
 
 #: ../src/terminal-util.c:391
+#| msgid ""
+#| "GNOME Terminal is free software; you can redistribute it and/or modify it "
+#| "under the terms of the GNU General Public License as published by the "
+#| "Free Software Foundation; either version 3 of the License, or (at your "
+#| "option) any later version."
 msgid ""
-"GNOME Terminal is free software; you can redistribute it and/or modify it "
+"GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 3 of the License, or (at your option) "
+"Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 msgstr ""
 "ਗਨੋਮ ਟਰਮੀਨਲ ਇੱਕ ਮੁਫਤ ਸਾਫਟਵੇਅਰ ਹੈ, ਜਿਸ ਨੂੰ ਤੁਸੀਂ ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਾਈਸੈਂਸ,ਜਿਸ "
@@ -1724,22 +1826,23 @@ msgstr ""
 "ਹੋਰ ਵੇਰਵੇ ਲਈ ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਾਇਸੈਂਸ ਨੂੰ ਪੜ੍ਹੋ।"
 
 #: ../src/terminal-util.c:399
+#| msgid ""
+#| "You should have received a copy of the GNU General Public License along "
+#| "with GNOME Terminal; if not, write to the Free Software Foundation, Inc., "
+#| "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
-"GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+"GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 "ਗਨੋਮ ਟਰਮੀਨਲ ਨਾਲ ਤੁਸੀਂ ਗਨੂ ਜਰਨਲ ਪਬਲਿਕ ਲਾਇਸੈਂਸ ਦੀ ਕਾਪੀ ਪ੍ਰਾਪਤ ਕਰੋਗੇ, ਜੇਕਰ "
 "ਤੁਹਾਨੂੰ ਨਹੀਂ ਮਿਲੀ "
-"ਹੈ ਤਾਂ ਫਰੀ ਸਾਫਟਵੇਅਰ ਫਾਊਨਡੇਸ਼ਨ, ੫੧ ਫਰਾਕਲਿੰਨ ਸਟਰੀਟ, ਪੰਜਵੀਂ ਮੰਜ਼ਲ, ਬੋਸਟਨ, ਐਮ ਏ "
-"੦੨੧੧੨-੧੩੦੧, "
-"ਅਮਰੀਕਾ ਨੂੰ ਲਿਖੋ।"
+"ਹੈ ਤਾਂ <http://www.gnu.org/licenses/> ਵੇਖੋ।"
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:434
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1748,212 +1851,209 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:440
+#: ../src/terminal-window.c:442
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1619
 msgid "_File"
 msgstr "ਫਾਇਲ(_F)"
 
 #. File menu
-#: ../src/terminal-window.c:1628 ../src/terminal-window.c:1640
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1620 ../src/terminal-window.c:1632
+#: ../src/terminal-window.c:1776
 msgid "Open _Terminal"
 msgstr "ਟਰਮੀਨਲ ਖੋਲ੍ਹੋ(_T)"
 
-#: ../src/terminal-window.c:1629 ../src/terminal-window.c:1643
-#: ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:1621 ../src/terminal-window.c:1635
+#: ../src/terminal-window.c:1779
 msgid "Open Ta_b"
 msgstr "ਟੈਬ ਖੋਲ੍ਹੋ(_B)"
 
-#: ../src/terminal-window.c:1630
+#: ../src/terminal-window.c:1622
 msgid "_Edit"
 msgstr "ਸੋਧ(_E)"
 
-#: ../src/terminal-window.c:1631
+#: ../src/terminal-window.c:1623
 msgid "_View"
 msgstr "ਵੇਖੋ(_V)"
 
-#: ../src/terminal-window.c:1632
+#: ../src/terminal-window.c:1624
 msgid "_Search"
 msgstr "ਖੋਜ(_S)"
 
-#: ../src/terminal-window.c:1633
+#: ../src/terminal-window.c:1625
 msgid "_Terminal"
 msgstr "ਟਰਮੀਨਲ(_T)"
 
-#: ../src/terminal-window.c:1634
+#: ../src/terminal-window.c:1626
 msgid "Ta_bs"
 msgstr "ਟੈਬ(_b)"
 
-#: ../src/terminal-window.c:1646
+#: ../src/terminal-window.c:1638
 msgid "New _Profile…"
 msgstr "ਨਵਾਂ ਪਰੋਫਾਇਲ(_P)..."
 
-#: ../src/terminal-window.c:1649
+#: ../src/terminal-window.c:1641
 msgid "_Save Contents"
 msgstr "ਸਮੱਗਰੀ ਸੰਭਾਲੋ(_S)"
 
-#: ../src/terminal-window.c:1652 ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1644
 msgid "C_lose Tab"
 msgstr "ਟੈਬ ਬੰਦ ਕਰੋ(_L)"
 
-#: ../src/terminal-window.c:1655
+#: ../src/terminal-window.c:1647
 msgid "_Close Window"
 msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰੋ(_C)"
 
-#: ../src/terminal-window.c:1666 ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1658 ../src/terminal-window.c:1773
 msgid "Paste _Filenames"
 msgstr "ਫਾਇਲ-ਨਾਂ ਚੇਪੋ(_F)"
 
-#: ../src/terminal-window.c:1673
-msgid "P_rofiles…"
-msgstr "ਪਰੋਫਾਇਲ(_r)..."
+#: ../src/terminal-window.c:1664
+#| msgid "_Preferences…"
+msgid "Pre_ferences…"
+msgstr "…ਮੇਰੀ ਪਸੰਦ(_f)"
 
-#: ../src/terminal-window.c:1677
-msgid "_Keyboard Shortcuts…"
-msgstr "ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ(_K)..."
-
-#: ../src/terminal-window.c:1680
+#: ../src/terminal-window.c:1667
 #| msgid "_Profile Preferences"
-msgid "_Preferences…"
-msgstr "..._ਮੇਰੀ ਪਸੰਦ"
+msgid "_Profile Preferences…"
+msgstr "…ਪਰੋਫਾਇਲ ਪਸੰਦ(_P)"
 
 #. Search menu
-#: ../src/terminal-window.c:1696
+#: ../src/terminal-window.c:1683
 msgid "_Find..."
 msgstr "ਖੋਜ(_F)..."
 
-#: ../src/terminal-window.c:1699
+#: ../src/terminal-window.c:1686
 msgid "Find Ne_xt"
 msgstr "ਅੱਗੇ ਖੋਜ(_X)"
 
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:1689
 msgid "Find Pre_vious"
 msgstr "ਪਿੱਛੇ ਖੋਜ(_V)"
 
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1692
 msgid "_Clear Highlight"
 msgstr "ਹਾਈਲਾਈਟ ਸਾਫ਼ ਕਰੋ(_C)"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1696
 msgid "Go to _Line..."
 msgstr "ਲਾਈਨ ਉੱਤੇ ਜਾਓ(_L)..."
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1699
 msgid "_Incremental Search..."
 msgstr "ਵਾਧਾ ਖੋਜ(_I)..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:1705
 msgid "Change _Profile"
 msgstr "ਪਰੋਫਾਇਲ ਬਦਲੋ(_P)"
 
-#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1706
 msgid "_Set Title…"
 msgstr "ਟਾਈਟਲ ਦਿਓ(_S)..."
 
-#: ../src/terminal-window.c:1722
+#: ../src/terminal-window.c:1709
 msgid "Set _Character Encoding"
 msgstr "ਅੱਖਰ ਇੰਕੋਡਿੰਗ ਦਿਓ(_C)"
 
-#: ../src/terminal-window.c:1723
+#: ../src/terminal-window.c:1710
 msgid "_Reset"
 msgstr "ਮੁਡ਼-ਸੈੱਟ(_R)"
 
-#: ../src/terminal-window.c:1726
+#: ../src/terminal-window.c:1713
 msgid "Reset and C_lear"
 msgstr "ਮੁੜ-ਸੈੱਟ ਅਤੇ ਸਾਫ਼ ਕਰੋ(_L)"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1731
+#: ../src/terminal-window.c:1718
 msgid "_Add or Remove…"
 msgstr "ਸ਼ਾਮਲ ਜਾਂ ਹਟਾਓ(_A)..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1736
+#: ../src/terminal-window.c:1723
 msgid "_Previous Tab"
 msgstr "ਪਿਛਲੀ ਟੈਬ(_P)"
 
-#: ../src/terminal-window.c:1739
+#: ../src/terminal-window.c:1726
 msgid "_Next Tab"
 msgstr "ਅਗਲੀ ਟੈਬ(_N)"
 
-#: ../src/terminal-window.c:1742
+#: ../src/terminal-window.c:1729
 msgid "Move Tab _Left"
 msgstr "ਟੈਬ ਨੂੰ ਖੱਬੇ ਭੇਜੋ(_L)"
 
-#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:1732
 msgid "Move Tab _Right"
 msgstr "ਟੈਬ ਨੂੰ ਸੱਜੇ ਭੇਜੋ(_R)"
 
-#: ../src/terminal-window.c:1748
+#: ../src/terminal-window.c:1735
 msgid "_Detach tab"
 msgstr "ਟੈਬ ਵੱਖ ਕਰੋ(_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:1753
+#: ../src/terminal-window.c:1740
 msgid "_Contents"
 msgstr "ਸਮੱਗਰੀ(_C)"
 
 #. Popup menu
-#: ../src/terminal-window.c:1761
+#: ../src/terminal-window.c:1748
 msgid "_Send Mail To…"
 msgstr "ਮੇਲ ਭੇਜੋ(_S)..."
 
-#: ../src/terminal-window.c:1764
+#: ../src/terminal-window.c:1751
 msgid "_Copy E-mail Address"
 msgstr "ਈ-ਮੇਲ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_C)"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1754
 msgid "C_all To…"
 msgstr "ਕਾਲ ਕਰੋ(_a)..."
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1757
 msgid "_Copy Call Address"
 msgstr "ਕਾਲ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_C)"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:1760
 msgid "_Open Link"
 msgstr "ਲਿੰਕ ਖੋਲ੍ਹੋ(_O)"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:1763
 msgid "_Copy Link Address"
 msgstr "ਲਿੰਕ ਐਡਰੈੱਸ ਕਾਪੀ ਕਰੋ(_C)"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1766
 msgid "P_rofiles"
 msgstr "ਪਰੋਫਾਇਲ(_r)"
 
-#: ../src/terminal-window.c:1795 ../src/terminal-window.c:2834
-msgid "C_lose Window"
-msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰੋ(_l)"
-
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1782
 msgid "L_eave Full Screen"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ(_e)"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1785
 msgid "_Input Methods"
 msgstr "ਇੰਪੁੱਟ ਢੰਗ(_I)"
 
 #. View Menu
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:1791
+msgid "Show _Menubar"
+msgstr "ਮੇਨੂ-ਪੱਟੀ ਵੇਖੋ(_M)"
+
+#: ../src/terminal-window.c:1795
 msgid "_Full Screen"
 msgstr "ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ(_F)"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2860
 msgid "Close this window?"
 msgstr "ਇਹ ਵਿੰਡੋ ਬੰਦ ਕਰਨੀ?"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2860
 msgid "Close this terminal?"
 msgstr "ਇਹ ਟਰਮੀਨਲ ਬੰਦ ਕਰਨਾ?"
 
-#: ../src/terminal-window.c:2825
+#: ../src/terminal-window.c:2864
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1962,7 +2062,7 @@ msgstr ""
 "ਨੂੰ ਖਤਮ "
 "(kill) ਕਰ ਦਿੱਤਾ ਜਾਵੇਗਾ।"
 
-#: ../src/terminal-window.c:2829
+#: ../src/terminal-window.c:2868
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -1971,21 +2071,122 @@ msgstr ""
 "(kill) ਕਰ "
 "ਦਿੱਤਾ ਜਾਵੇਗਾ।"
 
-#: ../src/terminal-window.c:2834
+#: ../src/terminal-window.c:2873
+msgid "C_lose Window"
+msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰੋ(_l)"
+
+#: ../src/terminal-window.c:2873
 msgid "C_lose Terminal"
 msgstr "ਟਰਮੀਨਲ ਬੰਦ ਕਰੋ(_l)"
 
-#: ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:2946
 msgid "Could not save contents"
 msgstr "ਸਮੱਗਰੀ ਸੰਭਾਲੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
-#: ../src/terminal-window.c:2931
+#: ../src/terminal-window.c:2970
 msgid "Save as..."
 msgstr "...ਵਜੋਂ ਸੰਭਾਲੋ"
 
-#: ../src/terminal-window.c:3382
+#: ../src/terminal-window.c:3417
 msgid "_Title:"
 msgstr "ਟਾਈਟਲ(_T):"
+
+#~ msgid "Server D-Bus name"
+#~ msgstr "ਸਰਵਰ D-Bus ਨਾਂ"
+
+#~| msgid "DIRNAME"
+#~ msgid "NAME"
+#~ msgstr "ਨਾਂ"
+
+#~ msgid "Add or Remove Terminal Encodings"
+#~ msgstr "ਟਰਮੀਨਲ ਇੰਕੋਡਿੰਗ ਲਿਆਉ ਜਾਂ ਹਟਾਓ"
+
+#~ msgid "A_vailable encodings:"
+#~ msgstr "ਉਪਲੱਬਧ ਇੰਕੋਡਿੰਗ(_V):"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
+
+#~ msgid "C_reate"
+#~ msgstr "ਬਣਾਓ(_R)"
+
+#~ msgid "Profile _name:"
+#~ msgstr "ਪਰੋਫਾਇਲ ਨਾਂ(_N):"
+
+#~ msgid "_Base on:"
+#~ msgstr "ਆਧਾਰ ਉੱਤੇ(_B):"
+
+#~ msgid ""
+#~ "Block\n"
+#~ "I-Beam\n"
+#~ "Underline"
+#~ msgstr ""
+#~ "ਬਲਾਕ\n"
+#~ "ਆਈ-ਬੀਮ\n"
+#~ "ਹੇਠਾਂ-ਲਾਈਨ"
+
+#~ msgid "<b>Title</b>"
+#~ msgstr "<b>ਟਾਈਟਲ</b>"
+
+#~ msgid ""
+#~ "Replace initial title\n"
+#~ "Append initial title\n"
+#~ "Prepend initial title\n"
+#~ "Keep initial title"
+#~ msgstr ""
+#~ "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਤਬਦੀਲ\n"
+#~ "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਸ਼ਾਮਲ ਕਰੋ\n"
+#~ "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਪਹਿਲਾਂ ਸ਼ਾਮਲ ਕਰੋ\n"
+#~ "ਸ਼ੁਰੂਆਤੀ ਟਾਈਟਲ ਰੱਖੋ"
+
+#~ msgid ""
+#~ "Exit the terminal\n"
+#~ "Restart the command\n"
+#~ "Hold the terminal open"
+#~ msgstr ""
+#~ "ਟਰਮੀਨਲ ਬੰਦ ਕਰੋ\n"
+#~ "ਕਮਾਂਡ ਮੁੜ-ਚਲਾਓ\n"
+#~ "ਟਰਮੀਨਲ ਖੁੱਲ੍ਹਾ ਰੱਖੋ"
+
+#~ msgid ""
+#~ "Always visible\n"
+#~ "Visible only when necessary\n"
+#~ "Hidden"
+#~ msgstr ""
+#~ "ਹਮੇਸ਼ਾ ਵੇਖਾਓ\n"
+#~ "ਜਦੋਂ ਲੋੜ ਹੋਵੇ ਉਦੋਂ ਹੀ ਵੇਖਾਓ\n"
+#~ "ਲੁਕਵਾਂ"
+
+#~ msgid ""
+#~ "Automatic\n"
+#~ "Control-H\n"
+#~ "ASCII DEL\n"
+#~ "Escape sequence\n"
+#~ "TTY Erase"
+#~ msgstr ""
+#~ "Automatic\n"
+#~ "Control-H\n"
+#~ "ASCII DEL\n"
+#~ "Escape sequence\n"
+#~ "TTY Erase"
+
+#~ msgid ""
+#~ "You already have a profile called “%s”. Do you want to create another "
+#~ "profile with the same name?"
+#~ msgstr ""
+#~ "ਤੁਹਾਡੇ ਕੋਲ ਪਹਿਲਾਂ ਹੀ “%s” ਪਰੋਫਾਇਲ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸੇ ਨਾਂ ਨਾਲ ਹੋਰ ਪਰੋਫਾਇਲ ਬਣਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
+
+#~ msgid "Choose base profile"
+#~ msgstr "ਬੇਸ ਪਰੋਫਾਇਲ ਚੁਣੋ"
+
+#~ msgid "_Description"
+#~ msgstr "ਵੇਰਵਾ(_D)"
+
+#~ msgid "P_rofiles…"
+#~ msgstr "ਪਰੋਫਾਇਲ(_r)..."
+
+#~ msgid "_Keyboard Shortcuts…"
+#~ msgstr "ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ(_K)..."
 
 #~ msgid "Disable connection to session manager"
 #~ msgstr "ਸ਼ੈਸ਼ਨ ਮੈਨੇਜਰ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਬੰਦ ਕਰੋ"
@@ -2046,9 +2247,6 @@ msgstr "ਟਾਈਟਲ(_T):"
 
 #~ msgid "Accelerator to move the current tab to the left."
 #~ msgstr "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਖੱਬੇ ਭੇਜਣ ਲਈ ਐਕਸਲੇਟਰ ਹੈ।"
-
-#~ msgid "Accelerator to move the current tab to the right."
-#~ msgstr "ਮੌਜੂਦਾ ਟੈਬ ਨੂੰ ਸੱਜੇ ਭੇਜਣ ਲਈ ਐਕਸਲੇਟਰ ਹੈ।"
 
 #~ msgid ""
 #~ "An Pango font name. Examples are \"Sans 12\" or \"Monospace Bold 14\"."
@@ -2383,8 +2581,8 @@ msgstr "ਟਾਈਟਲ(_T):"
 #~ "no keyboard shortcut for this action."
 #~ msgstr ""
 #~ "ਟਰਮੀਨਲ ਦੀ ਮੌਜੂਦਾ ਸਮਗੱਰੀ ਨੂੰ ਫਾਇਲ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ। ਉਸੇ ਫਾਰਮੈਟ ਵਿੱਚ ਲਿਖੋ, "
-#~ "ਜਿਸ ਵਿੱਚ GTK+ ਸਰੋਤ ਫਾਇਲ ਵਿੱਚ ਵਰਤੀਆਂ ਹਨ, ਜੇਕਰ ਤੁਸੀਂ ਚੋਣ ਸਮੇਂ ਖਾਸ ਸਤਰ \"disabled (ਆਯੋਗ)"
-#~ "\" ਦਿੱਤੀ, ਤਾਂ ਇਸ ਕਾਰਵਾਈ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ ਨਹੀਂ ਹੋਵੇਗਾ।"
+#~ "ਜਿਸ ਵਿੱਚ GTK+ ਸਰੋਤ ਫਾਇਲ ਵਿੱਚ ਵਰਤੀਆਂ ਹਨ, ਜੇਕਰ ਤੁਸੀਂ ਚੋਣ ਸਮੇਂ ਖਾਸ ਸਤਰ \"disabled "
+#~ "(ਆਯੋਗ)\" ਦਿੱਤੀ, ਤਾਂ ਇਸ ਕਾਰਵਾਈ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ ਨਹੀਂ ਹੋਵੇਗਾ।"
 
 #~ msgid ""
 #~ "Keyboard shortcut key to set the terminal title. Expressed as a string in "
@@ -2425,99 +2623,6 @@ msgstr "ਟਾਈਟਲ(_T):"
 #~ "ਮੇਨੂ-ਪੱਟੀ ਦੀ ਦਿੱਖ ਤਬਦੀਲ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ। ਉਸੇ ਫਾਰਮੈਟ ਵਿੱਚ ਲਿਖੋ, ਜਿਸ ਵਿੱਚ GTK+ "
 #~ "ਸਰੋਤ ਫਾਇਲ ਵਿੱਚ ਵਰਤੀਆਂ ਹਨ, ਜੇਕਰ ਤੁਸੀ ਚੋਣ ਸਮੇਂ ਖਾਸ ਸਤਰ \"disabled (ਆਯੋਗ)\" ਦਿੱਤੀ, ਤਾਂ "
 #~ "ਇਸ ਕਾਰਵਾਈ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ ਨਹੀਂ ਹੋਵੇਗਾ।"
-
-#~ msgid "Keyboard shortcut to close a tab"
-#~ msgstr "ਇੱਕ ਟੈਬ ਬੰਦ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to close a window"
-#~ msgstr "ਵਿੰਡੋ ਬੰਦ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to copy text"
-#~ msgstr "ਟੈਕਸਟ ਕਾਪੀ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to create a new profile"
-#~ msgstr "ਨਵਾਂ ਪਰੋਫਾਇਲ ਬਣਾਉਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to launch help"
-#~ msgstr "ਮੱਦਦ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to make font larger"
-#~ msgstr "ਫੋਂਟ ਵੱਡੇ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to make font normal-size"
-#~ msgstr "ਫੋਂਟ ਸਧਾਰਨ ਅਕਾਰ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to make font smaller"
-#~ msgstr "ਫੋਂਟ ਛੋਟੇ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to open a new tab"
-#~ msgstr "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to open a new window"
-#~ msgstr "ਨਵਾਂ ਵਿੰਡੋ ਖੋਲ੍ਹਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to paste text"
-#~ msgstr "ਟੈਕਸਟ ਚੇਪਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to reset and clear the terminal"
-#~ msgstr "ਟਰਮੀਨਲ ਨੂੰ ਮੁਡ਼-ਸੈੱਟ ਅਤੇ ਸਾਫ਼ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to reset the terminal"
-#~ msgstr "ਟਰਮੀਨਲ ਨੂੰ ਮੁਡ਼-ਸੈੱਟ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to save the current tab contents to file"
-#~ msgstr "ਮੌਜੂਦਾ ਟੈਬ ਦੀ ਸਮੱਗਰੀ ਫਾਇਲ ਵਿੱਚ ਸੰਭਾਲਣ ਲਈ ਕੀਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to set the terminal title"
-#~ msgstr "ਟਰਮੀਨਲ ਦਾ ਟਾਈਟਲ ਦੇਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "ਟੈਬ 1 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "ਟੈਬ 10 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "ਟੈਬ 11 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "ਟੈਬ 12 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "ਟੈਬ 2 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "ਟੈਬ 3 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "ਟੈਬ 4 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "ਟੈਬ 5 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "ਟੈਬ 6 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "ਟੈਬ 7 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "ਟੈਬ 8 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "ਟੈਬ 9 ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to the next tab"
-#~ msgstr "ਟੈਬ ਅਗਲੀ ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to switch to the previous tab"
-#~ msgstr "ਟੈਬ ਪਿਛਲੀ ਵਿੱਚ ਜਾਣ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to toggle full screen mode"
-#~ msgstr "ਪੂਰੀ ਸਕਰੀਨ ਉੱਤੇ ਸਵਿੱਚ ਕਰਨ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
-
-#~ msgid "Keyboard shortcut to toggle the visibility of the menubar"
-#~ msgstr "ਮੇਨੂ-ਪੱਟੀ ਦੀ ਦਿੱਖ ਤਬਦੀਲ ਲਈ ਕੀ-ਬੋਰਡ ਸ਼ਾਰਟਕੱਟ"
 
 #~ msgid "List of profiles"
 #~ msgstr "ਪਰੋਫਾਇਲਾਂ ਦੀ ਲਿਸਟ"
@@ -2642,17 +2747,11 @@ msgstr "ਟਾਈਟਲ(_T):"
 #~ "ਸੱਜੇ ਪਾਸੇ\n"
 #~ "ਆਯੋਗ"
 
-#~ msgid "Profile Editor"
-#~ msgstr "ਪਰੋਫਾਇਲ ਸੰਪਾਦਕ"
-
 #~ msgid "S_hade transparent or image background:"
 #~ msgstr "ਪਾਰਦਰਸ਼ੀ ਜਾਂ ਚਿੱਤਰ ਬੈਕਗਰਾਊਂਡ ਬਣਾਓ(_H):"
 
 #~ msgid "Select Background Image"
 #~ msgstr "ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ ਚੁਣੋ"
-
-#~ msgid "Show _menubar by default in new terminals"
-#~ msgstr "ਨਵੇਂ ਟਰਮੀਨਲਾਂ ਵਿੱਚ ਮੇਨੂ-ਪੱਟੀ ਡਿਫਾਲਟ ਹੀ ਵੇਖੋ(_M)"
 
 #~ msgid ""
 #~ "Tango\n"
@@ -2688,14 +2787,8 @@ msgstr "ਟਾਈਟਲ(_T):"
 #~ msgid "The text you clicked on doesn't seem to be a valid OTP challenge."
 #~ msgstr "ਪਾਠ, ਜੋ ਤੁਸੀਂ ਦਬਾਇਆ  ਹੈ, ਇੱਕ ਜਾਇਜ OTP ਜਵਾਬ ਨਹੀਂ ਜਾਪਦਾ ਹੈ।"
 
-#~ msgid "Hide and Show menubar"
-#~ msgstr "ਮੇਨੂ-ਪੱਟੀ ਓਹਲੇ ਅਤੇ ਵੇਖਾਓ"
-
 #~ msgid "Disabled"
 #~ msgstr "ਆਯੋਗ"
-
-#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
-#~ msgstr "ਸ਼ਾਰਟਕੱਟ ਸਵਿੱਚ “%s” ਪਹਿਲਾਂ ਹੀ ਕਾਰਵਾਈ  “%s” ਨਾਲ ਸਬੰਧਿਤ ਹੈ"
 
 #~ msgid "No such profile \"%s\", using default profile\n"
 #~ msgstr "ਇੰਜ ਦਾ ਕੋਈ ਪਰੋਫਾਇਲ \"%s\" ਨਹੀਂ, ਮੂਲ ਪਰੋਫਾਇਲ ਹੀ ਵਰਤ ਰਿਹਾ ਹੈ\n"
@@ -2711,26 +2804,11 @@ msgstr "ਟਾਈਟਲ(_T):"
 #~ "ਚੋਣ \"%s\" ਇਸ ਗਨੋਮ ਟਰਮੀਨਲ ਦੇ ਵਰਜਨ ਵਿੱਚ ਸਹਾਇਕ ਨਹੀਂ ਹੈ; ਤੁਹਾਨੂੰ ਲੋਡ਼ੀਦੀ ਸੈਟਿੰਗ ਨਾਲ "
 #~ "ਪਰੋਫਾਇਲ ਬਣਾਉਣਾ ਚਾਹੀਦਾ ਹੈ, ਅਤੇ ਨਵੀਂ '--profile' ਚੋਣ ਦੀ ਵਰਤੋਂ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ।\n"
 
-#~ msgid "\"%s\" option given twice for the same window\n"
-#~ msgstr "ਇੱਕੋ ਵਿੰਡੋ ਲਈ ਚੋਣ \"%s\" ਦੋ ਵਾਰ ਕੀਤੀ ਗਈ\n"
-
 #~ msgid "Save the terminal configuration to a file"
 #~ msgstr "ਟਰਮੀਨਲ ਸੰਰਚਨਾ ਫਾਇਲ ਵਿੱਚ ਸੰਭਾਲੋ"
 
-#~ msgid "Turn on the menubar"
-#~ msgstr "ਮੇਨੂ-ਪੱਟੀ ਵੇਖੋ"
-
-#~ msgid "Turn off the menubar"
-#~ msgstr "ਮੇਨੂਪੱਟੀ ਓਹਲੇ"
-
-#~ msgid "Unnamed"
-#~ msgstr "ਬਿਨਾਂ-ਨਾਂ"
-
 #~ msgid "Pr_ofile Preferences"
 #~ msgstr "ਪਰੋਫਾਇਲ ਪਸੰਦ(_o)"
-
-#~ msgid "Show _Menubar"
-#~ msgstr "ਮੇਨੂ-ਪੱਟੀ ਵੇਖੋ(_M)"
 
 #~ msgid "On the left side"
 #~ msgstr "ਖੱਬੇ ਪਾਸੇ"
