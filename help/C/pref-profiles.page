@@ -22,35 +22,157 @@
 
   <title>Manage profiles</title>
 
-  <p>A profile is a collection of <gui>Terminal</gui> settings. The default
-  profile is loaded when a new terminal is opened unless you have selected
-  another profile and any changes that you make to the settings will be stored
-  in the selected profile.</p>
+  <p>A profile is a collection of <app>Terminal</app> settings. The default
+  profile is loaded when a new <app>Terminal</app> is opened unless you have
+  selected another profile and any changes that you make to the settings will be
+  stored in the current profile selected for the <app>Terminal</app> tab or
+  window.</p>
 
-<!-- Use lists for instructions. Do not give keyboard shortcut instructions
-     unless the keyboard shortcut will take you directly to the desired dialog.
-     You may want to consider using sections here. -->
+  <p><app>Terminal</app> settings peculiar to a profile include <gui
+  style="input">Profile name</gui>, <app>Terminal</app> <gui
+  style="tab">Colors</gui>, <gui style="tab">Compatibility</gui>, <gui
+  style="tab">Scrolling</gui> etc.</p>
 
-  <p>Create New Profile: Menu: File > New Profile. Or use keyboard sequence of
-  Alt + F, then press P. In the Profile Name textbox type a name for your new
-  profile and select base settings from available profiles. This means your new
-  profile will be populated /filled with settings from existing profile up on
-  which you can make changes. Changes will be stored in your new profile and
-  will not affect settings of existing profiles.</p>
+  <section id="select-profile" style="task">
+  <title>Select a profile</title>
 
-  <p>Edit profiles : by going to Edit >> Profile Preferences option or Edit >>
-  Profiles , select profile you want to edit and click Edit button, which will
-  open the Profile Preferences window for profile you had selected to edit.</p>
+    <p>You can change the profile in your current <app>Terminal</app> tab or
+    window by selecting a profile from <guiseq> <gui
+    style="menu">Terminal</gui><gui style="menuitem">Change
+    Profile</gui></guiseq>.</p>
 
-  <p>Delete profile: by going to Edit >> Profiles option. Select profile you
-  want to delete and hit Delete button. Exit this window using close or X mark
-  button</p>
+  </section>
 
-  <p>Set default profile: by going to Edit >> Profiles and selecting Profile in
-  the dropdown menu of "Profile used when launching a new terminal"</p>
+  <section id="new-profile" style="task">
+  <title>Create a new profile</title>
 
-  <p>Change profile in currently using terminal: Go to Menu:Terminal > Change
-  Profile, select profile you'd like. This will change your existing Terminal
-  window to use the profile you have selected.</p>
+    <p>Select <guiseq><gui style="menu">File</gui><gui style="menuitem">New
+    Profile</gui></guiseq>.</p>
+
+  <steps>
+    <item>
+      <p>In <gui style="input">Profile name</gui>, input a name for your new
+      profile.</p>
+    </item>
+    <item>
+      <p>Select <link xref="app-fonts">font</link>, <link xref="app-
+      cursor">cursor shapes</link> and <link xref="app-terminal-
+      size"><app>Terminal</app> size</link>.</p>
+    </item>
+    <item>
+      <p>You may also change behaviour of <app>Terminal</app> upon <link xref
+      ="pref-custom-exit">command exit</link>, set a <link xref="pref-login-
+      shell">custom login shell</link> and set <link xref="pref-
+      scrolling">scrolling preferences</link>.</p>
+    </item>
+    <item>
+      <p>To change the <app>Terminal</app> theme and colors, see <link xref
+      ="app-colors">Setting <app>Terminal</app> color scheme</link>.</p>
+    </item>
+    <item>
+      <p>Changes to profile are saved immediately. To return to
+      <app>Terminal</app>, click <gui style="button">Close</gui>.</p>
+    </item>
+  </steps>
+
+  </section>
+
+  <section id="create-profile-from-existing" style="task">
+  <title>Create a new profile based on existing profile</title>
+
+  <p>You can create a new profile based on settings from an existing
+  profile.</p>
+
+    <steps>
+      <item>
+        <p>Select the existing profile from <guiseq><gui
+        style="menu">File</gui><gui style="menuitem">Open
+        Terminal</gui></guiseq> or <gui style="menuitem">Open Tab</gui> and
+        choose existing profile.</p>
+      </item>
+      <item>
+        <p>From the newly opened <app>Terminal</app> tab or window choose
+        <guiseq><gui style="menu">File</gui><gui style="menuitem">New
+        Profile</gui></guiseq> to create new profile and <link xref="edit-
+        profile">edit profile</link>.</p>
+      </item>
+    </steps>
+
+  <p>Alternatively, you can create a copy of the existing profile first and then
+  edit the profile. Go to <guiseq><gui style="menu">Edit</gui><gui
+  style="menuitem">Preferences</gui><gui style="tab">Profiles</gui></guiseq>,
+  select the desired profile and click <gui style="button">Clone</gui>.</p>
+
+  <note style="tip">
+    <p>Creating a new profile from existing profile will not affect settings
+      in existing profile. Any changes to settings will be stored on the new
+      profile.</p>
+  </note>
+
+  </section>
+
+  <section id="edit-profile" style="task">
+  <title>Edit a profile</title>
+
+  <p>You can make changes to existing profiles. To edit a profile, go to
+  <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+  Preferences</gui></guiseq>.</p>
+
+  <note style="important">
+    <p>To make sure you are editing the desired profile, select the profile from
+    <guiseq><gui style="menu">Terminal</gui><gui style="menuitem">Change
+    Profile</gui></guiseq>.</p>
+  </note>
+
+  </section>
+
+  <section id="delete-profile" style="task">
+  <title>Delete a Profile</title>
+    <p>To delete a profile, go to <guiseq><gui style="menu">Edit</gui><gui
+    style="menuitem">Preferences</gui><gui style="tab">Profiles</gui></guiseq>.
+    Select the profile you wish to delete and click <gui
+    style="button">Delete</gui>.</p>
+
+  </section>
+
+  <section id="set-default" style="task">
+  <title>Set a default profile</title>
+    <p>Default profile is a collection of profile settings applied on launch of
+    every <app>Terminal</app> tab or window.</p>
+
+   <steps>
+    <item>
+      <p>Go to <guiseq><gui style="menu">Edit</gui><gui
+      style="menuitem">Preferences</gui><gui
+      style="tab">Profiles</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>Select the profile to be set as default from <gui>Profile used when
+      launching a new terminal</gui>.</p>
+    </item>
+   </steps>
+
+  </section>
+
+  <section id="rename-profile" style="task">
+  <title>Rename an existing profile</title>
+    <p>You can rename existing profiles, including the default profile.</p>
+      <steps>
+        <item>
+          <p>Go to <guiseq><gui style="menu">Edit</gui><gui
+          style="menuitem">Preferences</gui><gui
+          style="tab">Profiles</gui></guiseq>.</p>
+        </item>
+        <item>
+          <p>Select the profile you wish to rename and click <gui
+          style="button">Edit</gui>. This will open the profile preferences
+          dialog for the selected profile.</p>
+        </item>
+        <item>
+          <p>Type desired profile name and click <gui style="button">Close</gui> to return.</p>
+        </item>
+      </steps>
+
+  </section>
 
 </page>
