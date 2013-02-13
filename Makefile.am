@@ -2,7 +2,7 @@ SUBDIRS = src po help
 
 NULL =
 
-ACLOCAL_AMFLAGS = ${ACLOCAL_FLAGS}
+ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	--disable-scrollkeeper \

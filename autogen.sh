@@ -1,19 +1,15 @@
 #!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
+set -e
+
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-REQUIRED_AUTOMAKE_VERSION=1.9
-REQUIRED_INTLTOOL_VERSION=0.40.4
-REQUIRED_YELP_TOOLS_VERSION=3.1.1
+pushd "$srcdir"
+mkdir -p m4 &>/dev/null || true
+autoreconf --verbose --force --install
+intltoolize --force
+popd
 
-PKG_NAME="gnome-terminal"
-
-which gnome-autogen.sh || {
-    echo "You need to install gnome-common from the GNOME SVN"
-    exit 1
-}
-USE_COMMON_DOC_BUILD=yes
-
-. gnome-autogen.sh
+test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
