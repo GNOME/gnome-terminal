@@ -9,7 +9,7 @@
       <email>sindhus@live.in</email>
       <years>2013</years>
     </credit>
-    <credit type="editor">
+    <credit type="copyright editor">
       <name>Ekaterina Gerasimova</name>
       <email>kittykat3756@gmail.com</email>
       <years>2013</years>
@@ -23,53 +23,92 @@
 
   <title>Change font and style</title>
 
-  <p>If you prefer to use a font or font size other than the default
-  <app>Terminal</app>font, you have the following options...</p>
+<!-- Rewrite intro -->
 
-  <terms>
+  <p>If you prefer to use a font or font size other than the default
+  <app>Terminal</app> font, you have the following options:</p>
+
+<!-- Make sure that you always use elipsis (…), not three dots (...), but don't
+use either in prose when writing help. -->
+
+  <section id="system-font">
+  <title>System fixed width font</title>
+
+  <p>To use system default fonts:</p>
+
+<!-- TODO: convert the text below to steps. -->
+
+  <steps>
     <item>
-      <title>Set custom font</title>
-      <p>To set a font of your choice...</p>
-        <steps>
-          <item><p>Select <guiseq><gui style="menu">Edit</gui>
-          <gui style="tab">General</gui></guiseq></p>
-        </item>
-          <!--It's very difficult to describe the button next to "Font" label as it behaves like a button but shows the previous set custom font for label. this label is subject to change upon user selection of font.-->
-          <item><p>Click on the button next to <gui>Font</gui>.</p>
-          </item>
-          <item><p>You now can type to search the desired font by name or
-          browse from the list.</p>
-          </item>
-          <item><p>Drag the slide rule to set the font size. Alternatively, you
-          can click on <gui style="button">+</gui> to increase font size or
-          <gui style="button">-</gui> to decrease selected font size.</p>
-        </item>
-        <item><p>Click <gui style="button">Select</gui> to apply changes.</p>
-        </item>
-        <item><p>To discard changes and go back to previous dialog, click
-        <gui style="button">Cancel</gui>.</p>
-        </item>
-       </steps>
-    </item>
-        <item>
-      <title>System fixed width font</title>
-      <p>To use system default fonts in <app>Terminal</app>, go to <guiseq><gui
-      style="menu">Edit</gui><gui style="menuitem">Profile Preferences</gui><gui
-      style="tab">General</gui></guiseq> and select <gui style="checkbox">Use
+      <p>go to <guiseq><gui style="menu">Edit</gui>
+      <gui style="menuitem">Profile Preferences</gui>
+      <gui style="tab">General</gui></guiseq> and select <gui style="checkbox">Use
       the system fixed width font</gui>.</p>
     </item>
     <item>
-      <title>Bold text</title>
-      <note style="important"><p><gui style="checkbox">Allow bold text</gui> is
-      a shell specific feature. If you are using a shell other than Bash, then
-      the described behaviour may not be similar.</p></note>
-      <p><app>Terminal</app> allows your shell to process text such as the
-      prompt, directory names, man page headings to appear in bold style. To set
-      this feature, navigate to <guiseq><gui style="menu">Edit</gui><gui
-      style="menuitem">Profile Preferences</gui><gui
-      style="tab">General</gui></guiseq> and select <gui>Allow bold
-      text</gui>.</p>
+      <p></p>
     </item>
-  </terms>
+  </steps>
+
+  </section>
+
+  <section id="custom-font">
+  <title>Set a custom font</title>
+
+  <p>To set a custom font:</p>
+
+  <steps>
+    <item>
+      <p>Select <guiseq><gui style="menu">Edit</gui>
+      <gui style="menuitem">Profile Preferences…</gui>
+      <gui style="tab">General</gui></guiseq>.</p>
+    </item>
+    <!--It's very difficult to describe the button next to "Font" label as it
+    behaves like a button but shows the previous set custom font for label.
+    this label is subject to change upon user selection of font.-->
+    <item>
+      <p>Ensure that <gui>Use the system fixed width font</gui> option is
+      unchecked.</p>
+    </item>
+    <item>
+      <p>Click on the button next to <gui>Font</gui>.</p>
+    </item>
+    <item>
+      <p>Type the name of your desired font into the search field or browse the
+      list of fonts.</p>
+    </item>
+    <item>
+      <p>Drag the slider that is below the font list to set the font size.
+      Alternatively, you can type in the font size into the field next to the
+      slider, or click on <gui style="button">+</gui> to increase font size or
+      <gui style="button">-</gui> to decrease selected font size.</p>
+    </item>
+    <item>
+      <p>Click <gui style="button">Select</gui> to apply your changes. To
+      discard changes and go back to previous dialog, click
+      <gui style="button">Cancel</gui>.</p>
+    </item>
+  </steps>
+
+  </section>
+
+  <section id="bold-fonts">
+  <title>Bold text</title>
+
+  <note style="important">
+    <p><gui style="checkbox">Allow bold text</gui> is a shell specific feature.
+    If you are using a shell other than Bash, then the described behaviour may
+    not be similar.</p>
+  </note>
+
+<!-- TODO: convert instructions into steps. Even if there are only two steps, always use a steps list. -->
+
+  <p><app>Terminal</app> allows your shell to process text such as the prompt,
+  directory names, man page headings to appear in bold style. To set this
+  feature, navigate to <guiseq><gui style="menu">Edit</gui><gui
+  style="menuitem">Profile Preferences</gui><gui
+  style="tab">General</gui></guiseq> and select <gui>Allow bold text</gui>.</p>
+
+  </section>
 
 </page>
