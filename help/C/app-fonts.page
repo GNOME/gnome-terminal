@@ -17,36 +17,29 @@
 
     <link type="guide" xref="index#appearence"/>
 
-    <desc>Use system fonts or chose a custom font for your terminal.</desc>
+    <desc>Use system fonts or choose a custom font for your terminal.</desc>
 
   </info>
 
   <title>Change font and style</title>
 
-<!-- Rewrite intro -->
-
-  <p>If you prefer to use a font or font size other than the default
-  <app>Terminal</app> font, you have the following options:</p>
-
-<!-- Make sure that you always use elipsis (…), not three dots (...), but don't
-use either in prose when writing help. -->
+  <p>When you work with a lot of <app>Terminal</app> text, for readibilty
+  purposes you might want to change the defaut font to your preference. You have
+  the following options:</p>
 
   <section id="system-font">
   <title>System fixed width font</title>
 
   <p>To use system default fonts:</p>
 
-<!-- TODO: convert the text below to steps. -->
-
   <steps>
     <item>
-      <p>go to <guiseq><gui style="menu">Edit</gui>
+      <p>Go to <guiseq><gui style="menu">Edit</gui>
       <gui style="menuitem">Profile Preferences</gui>
-      <gui style="tab">General</gui></guiseq> and select <gui style="checkbox">Use
-      the system fixed width font</gui>.</p>
+      <gui style="tab">General</gui></guiseq>.</p>
     </item>
     <item>
-      <p></p>
+      <p>Select <gui style="checkbox">Use the system fixed width font</gui>.</p>
     </item>
   </steps>
 
@@ -55,7 +48,7 @@ use either in prose when writing help. -->
   <section id="custom-font">
   <title>Set a custom font</title>
 
-  <p>To set a custom font:</p>
+  <p>To set a custom font and size:</p>
 
   <steps>
     <item>
@@ -63,9 +56,6 @@ use either in prose when writing help. -->
       <gui style="menuitem">Profile Preferences…</gui>
       <gui style="tab">General</gui></guiseq>.</p>
     </item>
-    <!--It's very difficult to describe the button next to "Font" label as it
-    behaves like a button but shows the previous set custom font for label.
-    this label is subject to change upon user selection of font.-->
     <item>
       <p>Ensure that <gui>Use the system fixed width font</gui> option is
       unchecked.</p>
@@ -95,19 +85,24 @@ use either in prose when writing help. -->
   <section id="bold-fonts">
   <title>Bold text</title>
 
+  <p><app>Terminal</app> allows your shell to process text such as the prompt,
+  directory names, man page headings to appear in bold style.</p>
+
+  <steps>
+    <item>
+      <p>Go to <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+  Preferences</gui><gui style="tab">General</gui></guiseq></p>
+    </item>
+    <item>
+      <p>Select <gui style="checkbox">Allow bold text</gui>.</p>
+    </item>
+  </steps>
+
   <note style="important">
     <p><gui style="checkbox">Allow bold text</gui> is a shell specific feature.
     If you are using a shell other than Bash, then the described behaviour may
     not be similar.</p>
   </note>
-
-<!-- TODO: convert instructions into steps. Even if there are only two steps, always use a steps list. -->
-
-  <p><app>Terminal</app> allows your shell to process text such as the prompt,
-  directory names, man page headings to appear in bold style. To set this
-  feature, navigate to <guiseq><gui style="menu">Edit</gui><gui
-  style="menuitem">Profile Preferences</gui><gui
-  style="tab">General</gui></guiseq> and select <gui>Allow bold text</gui>.</p>
 
   </section>
 
