@@ -1,0 +1,53 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="pref-login-shell">
+
+  <info>
+    <revision version="0.1" date="2013-01-09" status="draft"/>
+    <link type="guide" xref="index#advanced"/>
+
+    <credit type="author copyright">
+      <name>Sindhu S</name>
+      <email>sindhus@live.in</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Start a login shell in <app>Terminal</app>.</desc>
+  </info>
+
+  <title>Login Shells</title>
+
+  <p>Shells in UNIX based systems are classified into two types:</p>
+
+    <terms>
+      <item>
+        <title>Login shell</title>
+        <p>Login Shell is a shell given to user upon his login to her user account. This login shell is defined at the time of the user account creation by the root user. It is initiated by using the --login option with bash. It starts after a successful login using /bin/login and by reading the /etc/passwd file.</p>
+
+        <p>The other general cases for having a login shell include:</p>
+            <list>
+              <item>
+                 <p>accessing your computer remotely via ssh (or connecting locally with ssh localhost)</p>
+              </item>
+              <item>
+                <p>simulating an initial login shell with bash -l (or sh -l)</p>
+              </item>
+              <item>
+                <p>simulating an initial root login shell with sudo -i or sudo -u username -i for another non-root user.</p>
+              </item>
+              <item>
+                <p>authenticating as another non-root user with su - username (and their password) using the sudo login command to switch user</p>
+              </item>
+          </list>
+  </item>
+      <item>
+        <title>Sub shell</title>
+        <p>Sub shell also called a non-login shell is a shell started after the login process without the --login option. Configuring gnome-terminal to start bash as a login shell means it will start bash using the --login option.</p>
+      </item>
+    </terms>
+
+  <p>To start a login shell:</p>
+
+  <!--TODO: write how to start a login shell -->
+
+</page>
