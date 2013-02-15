@@ -1213,15 +1213,8 @@ static void
 popup_menu_deactivate_callback (GtkWidget *popup,
                                 TerminalWindow *window)
 {
-  TerminalWindowPrivate *priv = window->priv;
-  GtkWidget *im_menu_item;
-
   g_signal_handlers_disconnect_by_func
     (popup, G_CALLBACK (popup_menu_deactivate_callback), window);
-
-  im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
-                                            "/Popup/PopupInputMethods");
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), NULL);
 
   unset_popup_info (window);
 }
@@ -1235,9 +1228,9 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   TerminalWindow *window = info->window;
   TerminalWindowPrivate *priv = window->priv;
   TerminalScreen *screen = info->screen;
-  GtkWidget *popup_menu, *im_menu, *im_menu_item;
+  GtkWidget *popup_menu;
   GtkAction *action;
-  gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_input_method_menu;
+  gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
@@ -1275,29 +1268,6 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_sensitive (action, can_paste);
   action = gtk_action_group_get_action (priv->action_group, "PopupPasteURIPaths");
   gtk_action_set_visible (action, can_paste_uris);
-  
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                "gtk-show-input-method-menu", &show_input_method_menu,
-                NULL);
-
-  action = gtk_action_group_get_action (priv->action_group, "PopupInputMethods");
-  gtk_action_set_visible (action, show_input_method_menu);
-
-  im_menu_item = gtk_ui_manager_get_widget (priv->ui_manager,
-                                            "/Popup/PopupInputMethods");
-  /* FIXME: fix this when gtk+ bug #500065 is done, use vte_terminal_im_merge_ui */
-  if (show_input_method_menu)
-    {
-      im_menu = gtk_menu_new ();
-      vte_terminal_im_append_menuitems (VTE_TERMINAL (screen),
-                                        GTK_MENU_SHELL (im_menu));
-      gtk_widget_show (im_menu);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), im_menu);
-    }
-  else
-    {
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (im_menu_item), NULL);
-    }
 
   popup_menu = gtk_ui_manager_get_widget (priv->ui_manager, "/Popup");
   g_signal_connect (popup_menu, "deactivate",
@@ -1760,7 +1730,6 @@ terminal_window_init (TerminalWindow *window)
       { "PopupLeaveFullscreen", NULL, N_("L_eave Full Screen"), NULL,
         NULL,
         G_CALLBACK (popup_leave_fullscreen_callback) },
-      { "PopupInputMethods", NULL, N_("_Input Methods") }
     };
   
   const GtkToggleActionEntry toggle_menu_entries[] =
