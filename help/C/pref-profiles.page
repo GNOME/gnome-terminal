@@ -17,17 +17,18 @@
       <years>2013</years>
     </credit>
 
-    <desc>Create, edit and delete <app>Terminal</app> profiles</desc>
+    <desc>Create, edit and delete <app>Terminal</app> profiles.</desc>
   </info>
 
   <title>Manage profiles</title>
 
   <p>A profile is a collection of <app>Terminal</app> settings. The default
-  profile is loaded when a new <app>Terminal</app> is opened unless you have
-  selected another profile and any changes that you make to the settings will be
-  stored in the current profile selected for the <app>Terminal</app> tab or
+  profile is loaded when a new <app>Terminal</app> is opened, unless you have
+  selected another profile, and any changes that you make to the settings will
+  be stored in the selected profile for the <app>Terminal</app> tab or
   window.</p>
 
+  <!-- Reword, use a list if you like. -->
   <p><app>Terminal</app> settings peculiar to a profile include <gui
   style="input">Profile name</gui>, <app>Terminal</app> <gui
   style="tab">Colors</gui>, <gui style="tab">Compatibility</gui>, <gui
@@ -37,17 +38,22 @@
   <title>Select a profile</title>
 
     <p>You can change the profile in your current <app>Terminal</app> tab or
-    window by selecting a profile from <guiseq> <gui
-    style="menu">Terminal</gui><gui style="menuitem">Change
-    Profile</gui></guiseq>.</p>
+    window by selecting a profile from
+    <guiseq><gui style="menu">Terminal</gui>
+    <gui style="menuitem">Change Profile</gui></guiseq>.</p>
+    <!-- What happens if there is no other saved profile? Also, consider the
+    following order for sections as this would be the normal workflow: create,
+    edit, delete. -->
 
   </section>
 
   <section id="new-profile" style="task">
   <title>Create a new profile</title>
 
-    <p>Select <guiseq><gui style="menu">File</gui><gui style="menuitem">New
-    Profile</gui></guiseq>.</p>
+    <!-- This should be the first step. 'New Profile…' has an elipsis after
+    it. -->
+    <p>Select <guiseq><gui style="menu">File</gui>
+    <gui style="menuitem">New Profile…</gui></guiseq>.</p>
 
   <steps>
     <item>
@@ -55,19 +61,23 @@
       profile.</p>
     </item>
     <item>
-      <p>Select <link xref="app-fonts">font</link>, <link xref="app-
-      cursor">cursor shapes</link> and <link xref="app-terminal-
-      size"><app>Terminal</app> size</link>.</p>
+      <!-- I'm pretty sure that links won't work if you have a line break half
+      way through them. Also, it's possible to link using
+      <link xref="app-fonts" />, see if this is any better for these. -->
+      <p>Select <link xref="app-fonts">font</link>,
+      <link xref="app-cursor">cursor shapes</link> and
+      <link xref="app-terminal-size"><app>Terminal</app> size</link>.</p>
     </item>
     <item>
-      <p>You may also change behaviour of <app>Terminal</app> upon <link xref
-      ="pref-custom-exit">command exit</link>, set a <link xref="pref-login-
-      shell">custom login shell</link> and set <link xref="pref-
-      scrolling">scrolling preferences</link>.</p>
+      <p>You may also change behaviour of <app>Terminal</app> on
+      <link xref="pref-custom-exit">command exit</link>, set a
+      <link xref="pref-login-shell">custom login shell</link> and set
+      <link xref="pref-scrolling">scrolling preferences</link>.</p>
     </item>
     <item>
-      <p>To change the <app>Terminal</app> theme and colors, see <link xref
-      ="app-colors">Setting <app>Terminal</app> color scheme</link>.</p>
+      <p>To change the <app>Terminal</app> theme and colors, see
+      <link xref="app-colors">Setting <app>Terminal</app> color
+      scheme</link>.</p>
     </item>
     <item>
       <p>Changes to profile are saved immediately. To return to
@@ -81,16 +91,20 @@
   <title>Create a new profile based on existing profile</title>
 
   <p>You can create a new profile based on settings from an existing
-  profile.</p>
+  profile:</p>
 
     <steps>
       <item>
-        <p>Select the existing profile from <guiseq><gui
-        style="menu">File</gui><gui style="menuitem">Open
-        Terminal</gui></guiseq> or <gui style="menuitem">Open Tab</gui> and
-        choose existing profile.</p>
+	<!-- Try not to break <gui> tags half way through. -->
+        <p>Select the existing profile from
+	<guiseq><gui style="menu">File</gui>
+	<gui style="menuitem">Open Terminal</gui></guiseq> or
+	<!-- Use full <guiseq> for the second option too. -->
+	<gui style="menuitem">Open Tab</gui> and choose existing profile.</p>
       </item>
       <item>
+	<!-- Pay attention to elipsis. Any menuitem that opens a dialog should
+	end with one. -->
         <p>From the newly opened <app>Terminal</app> tab or window choose
         <guiseq><gui style="menu">File</gui><gui style="menuitem">New
         Profile</gui></guiseq> to create new profile and <link xref="edit-
@@ -104,9 +118,9 @@
   select the desired profile and click <gui style="button">Clone</gui>.</p>
 
   <note style="tip">
-    <p>Creating a new profile from existing profile will not affect settings
-      in existing profile. Any changes to settings will be stored on the new
-      profile.</p>
+    <p>Creating a new profile fromi an existing profile will not affect
+    settings in an existing profile. Any changes to settings will be stored in
+    the new profile.</p>
   </note>
 
   </section>
@@ -114,7 +128,9 @@
   <section id="edit-profile" style="task">
   <title>Edit a profile</title>
 
-  <p>You can make changes to existing profiles. To edit a profile, go to
+<!-- Menuitems are always 'select', not 'go to'. -->
+
+  <p>You can make changes to existing profiles. To edit a profile, select
   <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
   Preferences</gui></guiseq>.</p>
 
