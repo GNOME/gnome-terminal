@@ -1686,7 +1686,7 @@ terminal_window_init (TerminalWindow *window)
         G_CALLBACK (view_zoom_normal_callback) },
 
       /* Search menu */
-      { "SearchFind", GTK_STOCK_FIND, N_("_Find..."), "<shift><control>F",
+      { "SearchFind", GTK_STOCK_FIND, N_("_Find…"), "<shift><control>F",
 	NULL,
 	G_CALLBACK (search_find_callback) },
       { "SearchFindNext", NULL, N_("Find Ne_xt"), "<shift><control>H",
@@ -2973,7 +2973,7 @@ file_save_contents_callback (GtkAction *action,
   terminal = VTE_TERMINAL (priv->active_screen);
   g_return_if_fail (VTE_IS_TERMINAL (terminal));
 
-  dialog = gtk_file_chooser_dialog_new (_("Save as..."),
+  dialog = gtk_file_chooser_dialog_new (_("Save as…"),
                                         GTK_WINDOW(window),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,

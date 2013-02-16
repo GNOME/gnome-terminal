@@ -318,7 +318,7 @@ do_clean (void)
   DConfClient *client;
 
   if (verbose)
-    g_printerr ("Cleaning...\n");
+    g_printerr ("Cleaning…\n");
 
 #ifdef HAVE_DCONF_1_2
   client = dconf_client_new (NULL, NULL, NULL, NULL);
@@ -640,7 +640,7 @@ main (int argc,
   update_schema_version ();
 
   if (verbose)
-    g_printerr ("Syncing gsettings...\n");
+    g_printerr ("Syncing gsettings…\n");
 
   g_settings_sync ();
 
