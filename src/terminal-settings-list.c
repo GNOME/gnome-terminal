@@ -317,7 +317,7 @@ clone_child (TerminalSettingsList *list,
 
 #ifndef HAVE_DCONF_1_2
   dconf_client_change_sync (client, changeset, NULL, NULL, NULL);
-  g_object_unref (changeset);
+  dconf_changeset_unref (changeset);
 #endif
   g_object_unref (client);
   g_free (path);
