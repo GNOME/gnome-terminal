@@ -25,23 +25,22 @@
   <title><app>Terminal</app> title</title>
 
   <p><app>Terminal</app> can allow commands to set the name of your
-  <app>Terminal</app> tab or window.</p>
+  <app>Terminal</app> tab or window. The title of <app>Terminal</app>tab or
+  window by default displays information about the computer. You can override
+  this by setting your own initial title.</p>
 
   <steps>
     <item>
-      <!-- Make sure that you copy <gui> strings precisely. -->
       <p>Select <guiseq><gui style="menu">Edit</gui>
       <gui style="menuitem">Profile Preferences…</gui>
       <gui style="tab">Title and Command</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Enter the title that you wish the terminal to display at startup or
-      on opening a new tab next to <gui>Initial title:</gui>.</p>
+      <p>Enter the title that you wish the <app>Terminal</app> to display at
+      startup or on opening a new tab next to <gui>Initial title:</gui>.</p>
     </item>
     <item>
       <p>Select one of the following options:</p>
-      <!-- Keep items form drop down lists in the same order as they appear in
-      the UI. -->
       <terms>
         <item>
           <title><gui>Replace initial title</gui></title>
@@ -56,9 +55,12 @@
         <item>
           <title><gui>Prepend initial title</gui></title>
           <p>The title will consist of the initial title followed by the title
-	  set by the currently executing command.</p>
+    set by the currently executing command.</p>
         </item>
-	<!-- You are missing the fourth item. -->
+        <item>
+          <title><gui>Keep initial title</gui></title>
+          <p>The initial title set by the user will be retained.</p>
+        </item>
       </terms>
       <p>Your selection will be saved and applied immediately.</p>
     </item>
@@ -67,16 +69,5 @@
       <app>Terminal</app>.</p>
     </item>
   </steps>
-
-  <note>
-    <!-- We should not include this because it varied depending on the default
-    configuration of each distribution. For example, my laptop displays
-    'user@host ~/file $' while my testing machine uses '[user@host ~/file]$',
-    both of which are different to what you get. -->
-    <p>The initial title of a <app>Terminal</app> tab or window by default is
-    of the format username@hostname: pwd where username is your username in the
-    computer, hostname is the name of your computer and pwd is the present
-    working directory.</p>
-  </note>
 
 </page>
