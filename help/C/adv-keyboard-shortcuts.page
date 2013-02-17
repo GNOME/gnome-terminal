@@ -1,4 +1,5 @@
 <page xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/"
       type="task"
       id="adv-keyboard-shortcuts">
 
@@ -36,15 +37,9 @@
   <steps>
     <item>
       <p>Select <guiseq><gui style="menu">Edit</gui>
-      <!-- Preferences has an elipsis on th end, make sure that you cope GUI
-      strings as they are in the UI. -->
       <gui style="menuitem">Preferences…</gui>
       <gui style="tab">Keybindings</gui></guiseq>.</p>
     </item>
-    <!-- Be more precise, it is not a double click but two single clicks. This
-    is important because a double click on the action will have no effect, a
-    double click on a focused item will not allow editing and touch screens do
-    not allow double clicks. -->
     <item>
       <p>Select the shortcut that you wish to edit by clicking on it.</p>
     </item>
@@ -53,165 +48,364 @@
       it.</p>
     </item>
     <item>
-      <!-- In full: Ctrl, Shift and/or Alt (Gr) + letter/number OR return/space
-      OR letter/number. -->
       <p>Type in your desired shortcut key combination as you would enter it to
       use it. The keys that you can use include <key>Alt</key>, <key>Alt
       Gr</key>, <key>Ctrl</key>, <key>Shift</key>, number and letter keys.</p>
     </item>
     <item>
-      <p>Once you have entered your new shortcut, it will automatically be
-      saved and you should see it in the list, next to the action that it
-      corresponds to.</p>
+      <p>Once you have entered your new shortcut, it will automatically be saved
+      and you should see it in the list, next to the action that it corresponds
+      to.</p>
     </item>
   </steps>
 
-  <note>
-    <p>It is not possible to reset shortcuts automatically back to the default
-    settings. This means that once you have set a shortcut for an action that
-    is disabled by default, you cannot disable it again.</p>
+  <note style="tip">
+    <p>You can reset shortcuts that were disabled by default. Select the
+    shortcut and press the <key>Backspace</key> or <key>Delete</key> key.</p>
   </note>
 
-<!-- Make your tables consistent with the current style in gnome-user-help, as
-I have done for the first one. -->
+  <section id="file-shortcuts">
+    <title><gui style="menu">File</gui> shortcuts</title>
+    <p>The default shortcuts for options under <gui style="menu">File</gui> menu
+    are:</p>
 
-  <table rules="rows" frame="top bottom">
-    <title><gui style="menu">File</gui></title>
-    <tr>
-      <td><p>Action</p></td>
-      <td><p>Keyboard Shortcuts</p></td>
-    </tr>
-    <tr>
-      <td><p>New Tab</p></td>
-      <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>T</key></keyseq></p></td>
-    </tr>
-    <tr>
-      <td><p>New Window</p></td>
-      <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>N</key></keyseq></p></td>
-    </tr>
-    <tr>
-      <td><p>Close Tab</p></td>
-      <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>W</key></keyseq></p></td>
-    </tr>
-    <tr>
-      <td><p>Close Window</p></td>
-      <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>Q</key></keyseq></p></td>
-    </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="yes">
+      <thead>
+        <tr>
+          <td><p>Action</p></td>
+          <td><p>Keyboard Shortcuts</p></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>New Tab</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>T</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>New Window</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>N</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Close Tab</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>W</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Close Window</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>Q</key></keyseq></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <p>The default shortcuts for options in the <gui style="menu">Edit</gui> menu
-  are:</p>
+  <section id="edit-shortcuts">
+    <title><gui style="menu">Edit</gui> shortcuts</title>
+    <p>The default shortcuts for options under <gui style="menu">Edit</gui> menu
+    are:</p>
 
-  <table frame="all" rules="rows cols">
-  <tr>
-    <td><p>Action</p></td>  <td><p>Keyboard Shortcuts</p></td>
-  </tr>
-  <tr>
-    <td><p>Copy</p></td> <td><p><keyseq><key>Ctrl</key><key>Shift</key><key>C</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Paste</p></td>  <td><p><keyseq><key>Ctrl</key><key>Shift</key><key>V</key></keyseq></p></td>
-  </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="no">
+      <thead>
+        <tr>
+          <td>
+            <p>Action</p>
+          </td>
+          <td>
+            <p>Keyboard Shortcuts</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Copy</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>Shift</key><key>C</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Paste</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>Shift</key><key>V</key></keyseq></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <p>The default shortcuts for options in the <gui style="menu">View</gui> menu
-  are:</p>
+  <section id="view-shortcuts">
+    <title><gui style="menu">View</gui> shortcuts</title>
+    <p>The default shortcuts for options under the <gui style="menu">View</gui>
+    menu are:</p>
 
-    <table frame="all" rules="rows cols">
-  <tr>
-    <td><p>Action</p></td>  <td><p>Keyboard Shortcuts</p></td>
-  </tr>
-  <tr>
-    <td><p>Full Screen</p></td> <td><p><keyseq><key>F11</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Zoom in</p></td>  <td><p><keyseq><key>Ctrl</key><key>+</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Zoom Out</p></td>  <td><p><keyseq><key>Ctrl</key><key>-</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Normal Size</p></td>  <td><p><keyseq><key>Ctrl</key><key>0</key></keyseq></p></td>
-  </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="no">
+      <thead>
+        <tr>
+          <td>
+            <p>Action</p>
+          </td>
+          <td>
+            <p>Keyboard Shortcuts</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Full Screen</p>
+          </td>
+          <td>
+            <p><keyseq><key>F11</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Zoom in</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>+</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Zoom Out</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>-</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Normal Size</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>0</key></keyseq></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <!-- Do not capitalise nouns unless they are proper nouns. -->
-  <p>The default shortcuts for working with tabs are:</p>
+  <section id="tab-shortcuts">
+    <title>Tab shortcuts</title>
+    <p>The default shortcuts for working with tabs are:</p>
 
-  <table frame="all" rules="rows cols">
-  <tr>
-    <td><p>Action</p></td>  <td><p>Keyboard Shortcuts</p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Previous Tab</p></td> <td><p><keyseq><key>Ctrl</key><key>Page Up</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Next Tab</p></td>  <td><p><keyseq><key>Ctrl</key><key>Page Down</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Move Tab to the Left</p></td>  <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>Page Up</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Move Tab to the Right</p></td>  <td><p><keyseq><key>Shift</key><key>Ctrl</key><key>Page Down</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 1</p></td>  <td><p><keyseq><key>Alt</key><key>1</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 2</p></td>  <td><p><keyseq><key>Alt</key><key>2</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 3</p></td>  <td><p><keyseq><key>Alt</key><key>3</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 4</p></td>  <td><p><keyseq><key>Alt</key><key>4</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 5</p></td>  <td><p><keyseq><key>Alt</key><key>5</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 6</p></td>  <td><p><keyseq><key>Alt</key><key>6</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 7</p></td>  <td><p><keyseq><key>Alt</key><key>7</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 8</p></td>  <td><p><keyseq><key>Alt</key><key>8</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 9</p></td>  <td><p><keyseq><key>Alt</key><key>9</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Switch to Tab 0</p></td>  <td><p><keyseq><key>Alt</key><key>0</key></keyseq></p></td>
-  </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="no">
+      <thead>
+        <tr>
+          <td>
+            <p>Action</p>
+          </td>
+          <td>
+            <p>Keyboard Shortcuts</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Switch to Previous Tab</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>Page Up</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Next Tab</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>Page Down</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Move Tab to the Left</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>Page Up</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Move Tab to the Right</p>
+          </td>
+          <td>
+            <p><keyseq><key>Shift</key><key>Ctrl</key><key>Page Down</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 1</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>1</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 2</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>2</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 3</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>3</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 4</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>4</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 5</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>5</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 6</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>6</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 7</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>7</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 8</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>8</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 9</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>9</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Switch to Tab 0</p>
+          </td>
+          <td>
+            <p><keyseq><key>Alt</key><key>0</key></keyseq></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-  <p>The default shortcuts for accessing items in the
-  <gui style="menu">Help</gui> menu are:</p>
+  <section id="help-shortcuts">
+    <title>Help shortcuts</title>
+    <p>The default shortcuts for accessing items in the <gui
+    style="menu">Help</gui> menu are:</p>
 
-  <table>
-  <tr>
-    <td><p>Contents</p></td>  <td><p><keyseq><key>F1</key></keyseq></p></td>
-  </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="no">
+      <thead>
+        <tr>
+          <td>
+            <p>Action</p>
+          </td>
+          <td>
+            <p>Keyboard Shortcuts</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Contents</p>
+          </td>
+          <td>
+            <p><keyseq><key>F1</key></keyseq></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
-<!-- This warrants a section of its own. Are you planning to include all
-shortcuts here? -->
-  <p>Shell specific keyboard shortcuts:</p>
+  <section id="shell-shortcuts">
+    <title>Shell shortcuts</title>
+    <p><gui>Bash</gui> shell specific keyboard shortcuts:</p>
 
-    <table frame="all" rules="rows cols">
-  <tr>
-    <td><p>Action</p></td>  <td><p>Keyboard shortcut</p></td>
-  </tr>
-  <tr>
-    <td><p>Erase a word</p></td>  <td><p><keyseq><key>Ctrl</key><key>W</key></keyseq></p></td>
-  </tr>
-  <tr>
-    <td><p>Erase a line</p></td>  <td><p><keyseq><key>Ctrl</key><key>U</key></keyseq></p></td> 
-  </tr>
-  <tr>
-    <td><p>Bring up search tool</p></td>  <td><p><keyseq><key>Ctrl</key><key>R</key></keyseq></p></td> 
-  </tr>
-  </table>
+    <table rules="rows" frame="top bottom" ui:expanded="no">
+      <thead>
+        <tr>
+          <td>
+            <p>Action</p>
+          </td>
+          <td>
+            <p>Keyboard shortcut</p>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <p>Erase a word</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>W</key></keyseq></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Erase a line</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>U</key></keyseq></p>
+          </td> 
+        </tr>
+        <tr>
+          <td>
+            <p>Bring up search tool</p>
+          </td>
+          <td>
+            <p><keyseq><key>Ctrl</key><key>R</key></keyseq></p>
+          </td> 
+        </tr>
+      </tbody>
+    </table>
+  </section>
 
 </page>
