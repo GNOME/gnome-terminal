@@ -9,10 +9,16 @@
       <email>sindhus@live.in</email>
       <years>2013</years>
     </credit>
+    <credit type="copyright editor">
+      <name>Ekaterina Gerasimova</name>
+      <email>kittykat3756@gmail.com</email>
+      <years>2013</years>
+    </credit>
 
     <link type="guide" xref="index#preferences"/>
 
-    <desc>Allow commands to set the title for a <app>Terminal</app> tab or window.</desc>
+    <desc>Allow commands to set the title for a <app>Terminal</app> tab or
+    window.</desc>
 
   </info>
 
@@ -23,37 +29,54 @@
 
   <steps>
     <item>
-      <p>Go to <guiseq><gui style="menu">Edit</gui><gui
-  style="menuitem">Profile Preferences</gui><gui style="tab">Title and
-  Command</gui></guiseq>.</p>
+      <!-- Make sure that you copy <gui> strings precisely. -->
+      <p>Select <guiseq><gui style="menu">Edit</gui>
+      <gui style="menuitem">Profile Preferences…</gui>
+      <gui style="tab">Title and Command</gui></guiseq>.</p>
     </item>
     <item>
-      <p>Enter your desired title in input box for <gui>Initial title</gui>.</p>
+      <p>Enter the title that you wish the terminal to display at startup or
+      on opening a new tab next to <gui>Initial title:</gui>.</p>
     </item>
     <item>
-      <p>You can now choose from the following options…</p>
+      <p>Select one of the following options:</p>
+      <!-- Keep items form drop down lists in the same order as they appear in
+      the UI. -->
       <terms>
         <item>
-          <title><gui>Prepend to initial title</gui></title>
-          <p>Command executed in <app>Terminal</app> can be set to attach their title before the existing <app>Terminal</app> title.</p>
-        </item>
-        <item>
-          <title><gui>Append to initial title</gui></title>
-          <p>Command executed in <app>Terminal</app> can be set to append that is attach it's title to the end of the existing <app>Terminal</app> title.</p>
-        </item>
-        <item>
           <title><gui>Replace initial title</gui></title>
-          <p>Commands executed in <app>Terminal</app>can be allowed to replace the initial <app>Terminal</app> title.</p>
+          <p>Currently executing commands in <app>Terminal</app> will replace
+          the initial title.</p>
         </item>
+        <item>
+          <title><gui>Append initial title</gui></title>
+          <p>The title will consist of the title set by the currently executing
+          command, followed by the initial title.</p>
+        </item>
+        <item>
+          <title><gui>Prepend initial title</gui></title>
+          <p>The title will consist of the initial title followed by the title
+	  set by the currently executing command.</p>
+        </item>
+	<!-- You are missing the fourth item. -->
       </terms>
+      <p>Your selection will be saved and applied immediately.</p>
     </item>
     <item>
-      <p>Select your desired choice. This setting will be applied to your existing <app>Terminal</app> tabs and windows immediately. Click <gui style="button">Close</gui> to return to <app>Terminal</app>.</p>
+      <p>Click <gui style="button">Close</gui> to return to
+      <app>Terminal</app>.</p>
     </item>
   </steps>
 
   <note>
-    <p>The initial title of a <app>Terminal</app> tab or window by default is of the format username@hostname: pwd where username is your username in the computer, hostname is the name of your computer and pwd is the present working directory.</p>
+    <!-- We should not include this because it varied depending on the default
+    configuration of each distribution. For example, my laptop displays
+    'user@host ~/file $' while my testing machine uses '[user@host ~/file]$',
+    both of which are different to what you get. -->
+    <p>The initial title of a <app>Terminal</app> tab or window by default is
+    of the format username@hostname: pwd where username is your username in the
+    computer, hostname is the name of your computer and pwd is the present
+    working directory.</p>
   </note>
 
 </page>
