@@ -2091,42 +2091,6 @@ terminal_screen_check_match (TerminalScreen *screen,
   return NULL;
 }
 
-#include "terminal-options.h"
-
-void
-terminal_screen_save_config (TerminalScreen *screen,
-                             GKeyFile *key_file,
-                             const char *group)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  VteTerminal *terminal = VTE_TERMINAL (screen);
-  const char *profile_id;
-  char *working_directory;
-
-  g_settings_get (priv->profile, TERMINAL_PROFILE_NAME_KEY, "&s", &profile_id);
-  g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, profile_id);
-
-  if (priv->override_command)
-    terminal_util_key_file_set_argv (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND,
-                                     -1, priv->override_command);
-
-  if (priv->override_title)
-    g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, priv->override_title);
-
-  /* FIXMEchpe: use the initial_working_directory instead?? */
-  working_directory = terminal_screen_get_current_dir (screen);
-  if (working_directory)
-    terminal_util_key_file_set_string_escape (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, working_directory);
-  g_free (working_directory);
-
-  g_key_file_set_double (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_ZOOM, priv->font_scale);
-
-  g_key_file_set_integer (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH,
-                          vte_terminal_get_column_count (terminal));
-  g_key_file_set_integer (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT,
-                          vte_terminal_get_row_count (terminal));
-}
-
 /**
  * terminal_screen_has_foreground_process:
  * @screen:
