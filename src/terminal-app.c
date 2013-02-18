@@ -267,9 +267,7 @@ app_menu_help_cb (GSimpleAction *action,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-        GtkApplication *application = user_data;
-
-        terminal_util_show_help (NULL, gtk_application_get_active_window (application));
+  terminal_util_show_help (NULL, NULL);
 }
 
 static void
@@ -277,9 +275,7 @@ app_menu_about_cb (GSimpleAction *action,
                    GVariant      *parameter,
                    gpointer       user_data)
 {
-  GtkApplication *application = user_data;
-
-  terminal_util_show_about (gtk_application_get_active_window (application));
+  terminal_util_show_about (NULL);
 }
 
 static void
