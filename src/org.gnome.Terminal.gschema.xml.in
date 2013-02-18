@@ -31,6 +31,11 @@
     <value nick='ignore' value='3'/>
   </enum>
 
+   <enum id='org.gnome.Terminal.NewTerminalMode'>
+    <value nick='window' value='0'/>
+    <value nick='tab' value='1'/>
+  </enum>
+
    <enum id='org.gnome.Terminal.ScrollbarPolicy'>
     <value nick='always' value='0'/>
     <value nick='automatic' value='1'/>
@@ -620,6 +625,11 @@
     <key name="dark-theme" type="b">
       <default>false</default>
       <_summary>Whether to use a dark theme variant</_summary>
+    </key>
+
+    <key name="new-terminal-mode" enum="org.gnome.Terminal.NewTerminalMode">
+      <default>'window'</default>
+      <_summary>Whether to open new terminals as windows or tabs</_summary>
     </key>
 
    <!-- <child name="profiles" schema="org.gnome.Terminal.ProfilesList" /> -->

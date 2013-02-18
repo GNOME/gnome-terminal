@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="new-terminal-mode-liststore">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="Open new terminal in new window">Window</col>
+        <col id="1" translatable="no">window</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="Open new terminal in new tab">Tab</col>
+        <col id="1" translatable="no">tab</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="preferences-dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -136,6 +153,47 @@
                     <property name="fill">True</property>
                     <property name="position">3</property>
                   </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="hbox140">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="spacing">12</property>
+                    <property name="orientation">horizontal</property>
+                    <child>
+                      <object class="GtkLabel" id="label480">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Open _new terminals in:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">new-terminal-mode-combobox</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="new-terminal-mode-combobox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">new-terminal-mode-liststore</property>
+                        <property name="id-column">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
                 </child>
               </object>
             </child>

@@ -71,6 +71,7 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY      "menu-accelerator-enabled"
 #define TERMINAL_SETTING_ENABLE_MNEMONICS_KEY           "mnemonics-enabled"
 #define TERMINAL_SETTING_ENCODINGS_KEY                  "encodings"
+#define TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY          "new-terminal-mode"
 #define TERMINAL_SETTING_SCHEMA_VERSION                 "schema-version"
 
 #define TERMINAL_SETTINGS_LIST_LIST_KEY                 "list"
