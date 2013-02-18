@@ -84,7 +84,6 @@ gnome_terminal_server_CPPFLAGS = \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
-	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
@@ -178,7 +177,6 @@ gnome_terminal_client_CPPFLAGS = \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
-	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
@@ -225,7 +223,6 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
-	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
