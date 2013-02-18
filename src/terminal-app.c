@@ -361,6 +361,10 @@ terminal_app_init (TerminalApp *app)
 
   /* Terminal global settings */
   app->global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
+  g_settings_bind (app->global_settings, TERMINAL_SETTING_DARK_THEME_KEY,
+                   gtk_settings_get_default (),
+                   "gtk-application-prefer-dark-theme",
+                   G_SETTINGS_BIND_GET);
 
   /* Check if we need to migrate from gconf to dconf */
   maybe_migrate_settings (app);
