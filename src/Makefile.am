@@ -84,7 +84,6 @@ gnome_terminal_server_CPPFLAGS = \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
-	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_server_CFLAGS = \
@@ -177,7 +176,6 @@ gnome_terminal_client_CPPFLAGS = \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
-	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_client_CFLAGS = \
@@ -223,7 +221,6 @@ gnome_terminal_CPPFLAGS = \
 	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
-	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_CFLAGS = \
@@ -257,7 +254,6 @@ nodist_libterminal_nautilus_la_SOURCES = \
 libterminal_nautilus_la_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
 libterminal_nautilus_la_CFLAGS = \
