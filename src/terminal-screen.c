@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <uuid.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -70,6 +71,8 @@ typedef struct
 
 struct _TerminalScreenPrivate
 {
+  char *uuid;
+
   GSettings *profile; /* never NULL */
   guint profile_changed_id;
   guint profile_forgotten_id;
@@ -305,8 +308,14 @@ terminal_screen_init (TerminalScreen *screen)
   GtkTargetEntry *targets;
   int n_targets;
   guint i;
+  uuid_t u;
+  char uuidstr[37];
 
   priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
+
+  uuid_generate (u);
+  uuid_unparse (u, uuidstr);
+  priv->uuid = g_strdup (uuidstr);
 
   vte_terminal_set_mouse_autohide (terminal, TRUE);
   vte_terminal_set_background_image (terminal, NULL);
@@ -2139,4 +2148,12 @@ terminal_screen_has_foreground_process (TerminalScreen *screen)
 
   return TRUE;
 #endif
+}
+
+const char *
+terminal_screen_get_uuid (TerminalScreen *screen)
+{
+  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), NULL);
+
+  return screen->priv->uuid;
 }

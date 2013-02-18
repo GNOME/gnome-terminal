@@ -44,6 +44,17 @@ enum {
 
 /* helper functions */
 
+static char *
+get_object_path_for_screen (TerminalWindow *window,
+                            TerminalScreen *screen)
+{
+  return g_strdelimit (g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_FORMAT,
+                                        gtk_application_window_get_id (GTK_APPLICATION_WINDOW (window)),
+                                        terminal_screen_get_uuid (screen)),
+                       "-", '_');
+
+}
+
 static void
 child_exited_cb (VteTerminal *terminal,
                  TerminalReceiver *receiver)
@@ -459,9 +470,8 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   terminal_window_switch_screen (window, screen);
   gtk_widget_grab_focus (GTK_WIDGET (screen));
 
-  object_path = g_strdup_printf (TERMINAL_RECEIVER_OBJECT_PATH_PREFIX "/window/%u/terminal/%u", 
-                                 gtk_application_window_get_id (GTK_APPLICATION_WINDOW (window)),
-                                 terminal_mdi_container_get_n_screens (TERMINAL_MDI_CONTAINER (terminal_window_get_mdi_container (window))));
+  object_path = get_object_path_for_screen (window, screen);
+  g_assert (g_variant_is_object_path (object_path));
 
   skeleton = terminal_object_skeleton_new (object_path);
   impl = terminal_receiver_impl_new (screen);

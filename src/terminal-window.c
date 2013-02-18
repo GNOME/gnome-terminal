@@ -29,6 +29,7 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
+#include <uuid.h>
 
 #include "terminal-app.h"
 #include "terminal-debug.h"
@@ -47,6 +48,8 @@
 
 struct _TerminalWindowPrivate
 {
+  char *uuid;
+
   GtkActionGroup *action_group;
   GtkUIManager *ui_manager;
   guint ui_id;
@@ -1755,8 +1758,14 @@ terminal_window_init (TerminalWindow *window)
   GtkWindowGroup *window_group;
   GtkAccelGroup *accel_group;
   GtkClipboard *clipboard;
+  uuid_t u;
+  char uuidstr[37];
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
+
+  uuid_generate (u);
+  uuid_unparse (u, uuidstr);
+  priv->uuid = g_strdup (uuidstr);
 
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
@@ -1998,6 +2007,8 @@ terminal_window_finalize (GObject *object)
   if (priv->search_find_dialog)
     gtk_dialog_response (GTK_DIALOG (priv->search_find_dialog),
                          GTK_RESPONSE_DELETE_EVENT);
+
+  g_free (priv->uuid);
 
   G_OBJECT_CLASS (terminal_window_parent_class)->finalize (object);
 }
@@ -3535,4 +3546,20 @@ terminal_window_request_close (TerminalWindow *window)
     return;
 
   gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+GtkActionGroup *
+terminal_window_get_main_action_group (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  return priv->action_group;
+}
+
+const char *
+terminal_window_get_uuid (TerminalWindow *window)
+{
+  g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
+
+  return window->priv->uuid;
 }
