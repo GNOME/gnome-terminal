@@ -76,6 +76,14 @@ main (int argc, char **argv)
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  /* Set some env vars to disable ubuntu crap. They'll certainly patch this
+   * out in their package, but anyone running from git will get the right
+   * behaviour.
+   */
+  g_setenv ("LIBOVERLAY_SCROLLBAR", "0", TRUE);
+  g_setenv ("UBUNTU_MENUPROXY", "0", TRUE);
+  g_setenv ("NO_UNITY_GTK_MODULE", "1", TRUE);
+
 #if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();
 #endif
