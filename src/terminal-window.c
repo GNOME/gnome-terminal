@@ -1667,10 +1667,10 @@ terminal_window_init (TerminalWindow *window)
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, NULL,
         NULL,
         G_CALLBACK (edit_select_all_callback) },
-      { "EditPreferences", NULL, N_("Pre_ferences…"), NULL,
+      { "EditPreferences", NULL, N_("Pre_ferences"), NULL,
         NULL,
         G_CALLBACK (edit_preferences_callback) },
-      { "EditCurrentProfile", GTK_STOCK_PREFERENCES, N_("_Profile Preferences…"), NULL,
+      { "EditCurrentProfile", GTK_STOCK_PREFERENCES, N_("_Profile Preferences"), NULL,
         NULL,
         G_CALLBACK (edit_current_profile_callback) },
 
