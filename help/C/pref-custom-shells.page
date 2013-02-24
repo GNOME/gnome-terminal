@@ -16,6 +16,7 @@
     </credit>
 
     <link type="guide" xref="index#preferences"/>
+    <link type="seealso" xref="gs-execute-commands"/>
 
     <desc>Start your <app>Terminal</app> with a command or a different shell</desc>
 
@@ -23,34 +24,32 @@
 
   <title>Custom shells</title>
 
-  <!-- Reflow. Launch does not need to be in quotes, run is more apropriate
-  than either term. Check with Christian if one can actually run a "custom
-  command" or whether the UI means just run another shell and is referring only
-  to commands that run a shell. -->
-  <p>A shell is software that provides an interface for users of an operating system to invoke or "launch" another program; however, shells frequently have additional capabilities such as viewing the contents of directories.</p>
+  <p>A shell is software that provides an interface for users of an operating
+  system to run programs and view the contents of directories.
+  The default shell is <app>Bash</app>.</p>
 
-  <p>To start <app>Terminal</app> to run a command or a shell other than <gui>Bash</gui>:</p>
-  <!-- Bash is an app more than a GUI. Check if gnome-user-help mentions it and
-  if yes, how it is marked up. -->
+  <p><app>Terminal</app> can be set to run a custom shell or the default shell with additional parameters such a configuration file other than the default. A shell is a type of program and hence <app>Terminal</app> can also be exclusively set to run standalone programs such as <code>ls</code>, <code>top</code>, <code>iwconfig</code> etc.</p>
 
-  <!-- Indent steps only by two spaces as they are on the same "level" as
-  paragraphs. -->
-    <steps>
-      <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile Preferences…</gui><gui style="tab">Title and Command</gui></guiseq></p>
-      </item>
-      <item>
-        <p>Select <gui>Run a command instead of my shell</gui>.</p>
-      </item>
-      <item>
-        <p>In the input box, type the name of the command or the desired shell.</p>
-      </item>
-    </steps>
+  <p>Programs that are executed in the command line environment are also referred to as commands.</p>
+
+  <p>To start <app>Terminal</app> to run a command or a shell:</p>
+  <steps>
+    <item>
+      <p>Select <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile Preferences…</gui><gui style="tab">Title and Command</gui></guiseq></p>
+    </item>
+    <item>
+      <p>Select <gui>Run a command instead of my shell</gui>.</p>
+    </item>
+    <item>
+      <p>In the input box, type the name of the command or the desired shell.</p>
+    </item>
+    <item>
+      <p>Open a new <app>Terminal</app> tab or window to view the execution of your custom shell or command.</p>
+    </item>
+  </steps>
 
   <note style="important">
-    <p>You may have to enter full path to the command or shell in case you have not added the directory where the command or shell resides to the system's PATH variable.</p>
-  <!-- Do not use possessive for inanimate objects. the PATH should be marked
-  up. -->
+    <p>You may have to enter full path to the command or the shell in case you have not added the directory where the command or shell resides in the <code>PATH</code> variable of your your system.</p>
   </note>
 
 </page>
