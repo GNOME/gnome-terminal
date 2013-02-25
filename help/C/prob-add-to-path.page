@@ -1,0 +1,56 @@
+<page xmlns="http://projectmallard.org/1.0/"
+      type="guide"
+      id="prob-add-to-path">
+
+  <info>
+    <revision version="0.1" date="2013-01-10" status="draft"/>
+    <link type="guide" xref="index#troubleshooting"/>
+
+    <credit type="author copyright">
+      <name>Sindhu S</name>
+      <email>sindhus@live.in</email>
+      <years>2013</years>
+    </credit>
+
+    <desc>Add directories to system <code>PATH</code>.</desc>
+  </info>
+
+  <title><code>PATH</code> variable</title>
+
+  <note style="important">
+    <p>This page assumes you are using the default shell <app>Bash</app>. If you
+    are using any other shell, the name and location of the configuration file
+    may vary.</p>
+  </note>
+
+  <p><code>PATH</code> is a system variable that has address of locations where
+  programs have been installed. Often, <app>Terminal</app> is unable to find
+  programs to run whose locations are not included in the <code>PATH</code>
+  variable.</p>
+
+  <p>To add locations where programs are installed:</p>
+
+  <steps>
+    <item>
+      <p>With your preferred text editor, open the file <input>.bashrc</input>
+      located in your HOME directory.</p>
+    </item>
+    <item>
+      <p>In the <input>PATH</input> variable line, add the desired location
+      prepended by <input>:</input> (colon).</p>
+    </item>
+    <item>
+      <p>Save the file and exit the editor.</p>
+    </item>
+    <item>
+      <p>In a <app>Terminal</app> prompt, type <input>source ~/.bashrc</input>
+      to reload your shell configuration file.</p>
+    </item>
+    <item>
+      <p>You can now check the location of the desired program or command by
+      typing <input>which</input> followed by a space and program or command
+      name.</p>
+    </item>
+  </steps>
+
+</page>
