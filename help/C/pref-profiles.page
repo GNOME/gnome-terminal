@@ -3,7 +3,7 @@
       id="pref-profiles">
 
   <info>
-    <revision version="0.1" date="2013-01-09" status="draft"/>
+    <revision version="0.1" date="2013-02-25" status="draft"/>
     <link type="guide" xref="index#preferences"/>
 
     <credit type="author copyright">
@@ -34,9 +34,13 @@
     </item>
     <item>
       <p><gui style="tab">Keystroke Compatibility</gui></p>
+      <!-- I cannot see a gui tab with that string anywhere, but it also does
+      not help me understand what the compatibility is. Use
+      "<gui>Compatibility</gui> with *something*" -->
     </item>
     <item>
       <p><gui style="tab">Scrolling</gui> and so on.</p>
+      <!-- Either use full stops for all items or none. -->
     </item>
   </list>
 
@@ -45,28 +49,27 @@
 
     <p>The default profile is loaded when a new terminal is opened, unless you
     have selected another profile, and any changes that you make to the
-    settings will be stored in the default profile for the <app>Terminal</app>
-    tab or window.</p>
+    settings will be stored in the default profile.</p>
 
   </section>
 
   <section id="set-default" style="task">
     <title>Set a default profile</title>
 
-  <p>The default profile is a collection of profile settings applied on launch
-  of every <app>Terminal</app> tab or window.</p>
+    <p>The default profile is a collection of profile settings applied on the
+    launch of every <app>Terminal</app> tab or window.</p>
 
-  <steps>
-    <item>
-      <p>Select <guiseq><gui style="menu">Edit</gui>
-      <gui style="menuitem">Preferences</gui>
-      <gui style="tab">Profiles</gui></guiseq>.</p>
-    </item>
-    <item>
-      <p>Select the profile to be set as default from <gui>Profile used when
-      launching a new terminal</gui>.</p>
-    </item>
-   </steps>
+    <steps>
+      <item>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
+        <gui style="menuitem">Preferences</gui>
+        <gui style="tab">Profiles</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Select the profile to be set as default from <gui>Profile used when
+        launching a new terminal</gui>.</p>
+      </item>
+    </steps>
 
   </section>
 
@@ -101,20 +104,24 @@
         <gui style="tab">General</gui> tab.</p>
       </item>
       <item>
-        <p>Set your preferred terminal behaviour for
-        <link xref="pref-custom-exit">command <cmd>exit</cmd></link> and set
+        <p>Set your preferred terminal behaviour for the
+        <link xref="pref-custom-exit"><cmd>exit</cmd> command</link> and set
+	<!-- No <gui> option to do the following. Stick to the gui and talk
+	about custom commands, including login shells instead of login shells
+	themselves. -->
         a <link xref="pref-login-shell">custom login shell</link> in the
         <gui style="tab">Title and Command</gui> tab.</p>
       </item>
       <item>
-        <p><link xref="app-colors">Change the theme and colors</link> in the
-        <gui style="tab">Colors</gui> tab.</p>
+        <p><link xref="app-colors">Set your preferred theme and colors</link>
+	in the <gui style="tab">Colors</gui> tab.</p>
       </item>
       <item>
         <p><link xref="pref-scrolling">Set your scrolling preference</link> in
         the <gui style="tab">Scrolling</gui> tab.</p>
       </item>
     </steps>
+
   </section>
 
   <section id="create-profile-from-existing" style="task">
@@ -135,7 +142,7 @@
       <item>
         <p>Select <guiseq><gui style="menu">File</gui>
         <gui style="menuitem">New Profile…</gui></guiseq> to clone the profile
-        that you have selected.</p>
+        that is currently selected.</p>
       </item>
       <item>
         <p>Set your <link xref="#edit-profile">desired profile
@@ -150,12 +157,12 @@
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui><gui
-        style="menuitem">Preferences</gui><gui
-        style="tab">Profiles</gui></guiseq>.</p>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
+	<gui style="menuitem">Preferences</gui>
+	<gui style="tab">Profiles</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Select the desired profile</p>
+        <p>Select your desired profile.</p>
       </item>
       <item>
         <p>Click <gui style="button">Clone</gui>.</p>
@@ -207,8 +214,8 @@
 
     <note style="important">
       <p>To make sure you are editing the desired profile, select the profile
-      from <guiseq><gui style="menu">Terminal</gui><gui style="menuitem">Change
-      Profile</gui></guiseq>.</p>
+      from <guiseq><gui style="menu">Terminal</gui>
+      <gui style="menuitem">Change Profile</gui></guiseq>.</p>
     </note>
 
   </section>
@@ -216,11 +223,11 @@
   <section id="rename-profile" style="task">
     <title>Rename an existing profile</title>
 
-    <p>You can rename existing profiles, including the default profile.</p>
+    <p>You can rename existing profiles, including the default profile:</p>
 
     <steps>
       <item>
-        <p>Go to <guiseq><gui style="menu">Edit</gui>
+        <p>Select <guiseq><gui style="menu">Edit</gui>
         <gui style="menuitem">Preferences</gui>
         <gui style="tab">Profiles</gui></guiseq>.</p>
       </item>
@@ -232,7 +239,7 @@
         profile preferences dialog for the selected profile.</p>
       </item>
       <item>
-        <p>In the input box for <gui>Profile name:</gui>, type the new profile
+        <p>In the text box for <gui>Profile name</gui>, type the new profile
         name.</p>
       </item>
       <item>
