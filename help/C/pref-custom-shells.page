@@ -1,8 +1,11 @@
 <page xmlns="http://projectmallard.org/1.0/"
       type="task"
-      id="pref-customshells">
+      id="pref-custom-shells">
   <info>
-    <revision version="0.1" date="2013-01-10" status="draft"/>
+    <link type="guide" xref="index#preferences"/>
+    <link type="seealso" xref="gs-execute-commands"/>
+
+    <revision version="0.1" date="2013-02-25" status="review"/>
 
     <credit type="author copyright">
       <name>Sindhu S</name>
@@ -15,41 +18,53 @@
       <years>2013</years>
     </credit>
 
-    <link type="guide" xref="index#preferences"/>
-    <link type="seealso" xref="gs-execute-commands"/>
-
-    <desc>Start your <app>Terminal</app> with a command or a different shell</desc>
+    <desc>Set <app>Terminal</app> to run a command or a different shell on startup.</desc>
 
   </info>
 
-  <title>Custom shells</title>
+  <title>Custom shells and commands</title>
 
-  <p>A shell is software that provides an interface for users of an operating
-  system to run programs and view the contents of directories.
-  The default shell is <app>Bash</app>.</p>
+  <p>A <em>shell</em> is software that provides an interface for users of an
+  operating system to run programs and view the contents of directories. The
+  default shell is <app>Bash</app>.</p>
 
-  <p><app>Terminal</app> can be set to run a custom shell or the default shell with additional parameters such a configuration file other than the default. A shell is a type of program and hence <app>Terminal</app> can also be exclusively set to run standalone programs such as <code>ls</code>, <code>top</code>, <code>iwconfig</code> etc.</p>
+  <p><app>Terminal</app> can be set to run a command, custom shell or the
+  default shell with additional parameters such a configuration file other than
+  the default. A shell is a type of program, so <app>Terminal</app> can also be
+  exclusively set to run standalone programs such as <code>ls</code>,
+  <code>top</code>, <code>iwconfig</code> and so on.</p>
+  <!-- Don't use Latin! -->
 
-  <p>Programs that are executed in the command line environment are also referred to as commands.</p>
+  <p>Programs that are executed in the command line environment are also
+  referred to as <em>commands</em>.</p>
 
-  <p>To start <app>Terminal</app> to run a command or a shell:</p>
+  <p>Set a custom command or a shell:</p>
   <steps>
     <item>
-      <p>Select <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile Preferences</gui><gui style="tab">Title and Command</gui></guiseq></p>
+      <p>Select <guiseq><gui style="menu">Edit</gui>
+      <gui style="menuitem">Profile Preferences</gui>
+      <gui style="tab">Title and Command</gui></guiseq>.</p>
+      <!-- Don't forget full stops after <guiseq>! -->
     </item>
     <item>
       <p>Select <gui>Run a command instead of my shell</gui>.</p>
     </item>
     <item>
-      <p>In the input box, type the name of the command or the desired shell.</p>
+      <p>In the text box, type the the command or the desired shell.</p>
     </item>
     <item>
-      <p>Open a new <app>Terminal</app> tab or window to view the execution of your custom shell or command.</p>
+      <p>Open a new <app>Terminal</app> tab or window to see the custom shell
+      or command be executed.</p>
     </item>
   </steps>
 
   <note style="important">
-    <p>You may have to enter full path to the command or the shell in case you have not added the directory where the command or shell resides in the <code>PATH</code> variable of your your system.</p>
+    <p>You may have to enter full path to the command or the shell in case you
+    have not added the directory where the command or shell resides in the
+    <code>PATH</code> variable of your your system.</p>
   </note>
+
+  <p>You can also <link xref="gs-execute-commands">set the behaviour</link> of
+  the terminal once the command finishes executing.</p>
 
 </page>
