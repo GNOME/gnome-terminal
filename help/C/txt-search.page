@@ -2,7 +2,7 @@
       type="task"
       id="txt-search">
   <info>
-    <revision version="0.1" date="2013-01-10" status="draft"/>
+    <revision version="0.1" date="2013-02-25" status="draft"/>
 
     <credit type="author copyright">
       <name>Sindhu S</name>
@@ -23,26 +23,29 @@
 
   <title>Find</title>
 
-  <p>You can search for text in  the <app>Terminal</app> output.</p>
+  <p>You can search for text in the <app>Terminal</app> output:</p>
 
   <steps>
     <item>
-      <p>Select <guiseq><gui style="menu">Search</gui> <gui
-      style="menuitem">Find</gui></guiseq>.</p>
+      <p>Select <guiseq><gui style="menu">Search</gui>
+      <gui style="menuitem">Find</gui></guiseq>.</p>
+      <!-- TODO: check UI -->
     </item>
     <item>
-      <p>Type in the search keyword and press <gui style="button">Find</gui>. To
-      cancel, press <gui style="button">Close</gui>.</p>
+      <p>Type in the search keyword and press <gui style="button">Find</gui>.
+      To cancel, press <gui style="button">Close</gui>.</p>
     </item>
   </steps>
 
-  <p>You can search using the following options to narrow down your results:</p>
+  <p>You can search using the following options to narrow down your
+  results:</p>
 
   <terms>
     <item>
       <title><gui style="checkbox">Match case</gui></title>
       <p>Restrict results to only those that match the case of your given
-      keyword for search, that is, the search is set to be case sensitive.</p>
+      keyword for search. In other words, the search is set to be case
+      sensitive.</p>
     </item>
     <item>
       <title><gui style="checkbox">Match entire word only</gui></title>
@@ -54,28 +57,31 @@
     </item>
     <item>
       <title><gui style="checkbox">Match as regular expression</gui></title>
-      <p>You can use regex strings in your search keywords. <app>Terminal</app>
-      will search accordingly.</p>
+      <p>You can use regular expression patterns, also known as regex
+      patterns, in your search keywords. <app>Terminal</app> will dispay
+      the results that match these search terms.</p>
     </item>
     <item>
       <title><gui style="checkbox">Search backwards</gui></title>
       <p><app>Terminal</app> will search for the keyword from the latest
-      <app>Terminal</app> output and continue the search upwards. This option is
-      advised when you are looking for the keyword that could have occured
-      recently, thus enabling you to find the keyword quickly.</p>
+      <app>Terminal</app> output and continue the search upwards. This option
+      is recommended when you are looking for the keyword that could have
+      occured recently, thus enabling you to find the keyword quickly.</p>
     </item>
     <item>
       <title><gui style="checkbox">Wrap around</gui></title>
-      <p><app>Terminal</app> searches from the current location of your
-      <app>Terminal</app> up to the end of available terminal output and then
+      <p><app>Terminal</app> searches from your current location in
+      <app>Terminal</app> to the end of available terminal output and then
       restarts search from the top.</p>
     </item>
   </terms>
 
   <note style="tip">
     <p>If you expect to work with a lot of <app>Terminal</app> output, you
-    should set <link xref="pref-scrolling"><gui>scrollback lines</gui></link> to
-    unlimited to allow <app>Terminal</app> to search more efficiently.</p>
+    should set <link xref="pref-scrolling">scrollback lines</link> to a high
+    limit to allow <app>Terminal</app> to search more efficiently.</p>
+    <!-- Setting scrollback lines to unlimmited can result in all sorts of
+    problems starting with running out of disk space. -->
   </note>
 
 </page>
