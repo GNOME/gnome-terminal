@@ -22,25 +22,28 @@
 
   <title>Manage profiles</title>
 
-  <p>A profile is a collection of <app>Terminal</app> settings. These
-  include:</p>
+  <p>A profile is a collection of <app>Terminal</app> settings.
+  <app>Terminal</app> supports multiple profiles. You can configure
+  <app>Terminal</app> profiles to <link xref="pref-custom-shells">run custom
+  command or shell</link>, set a profile exclusively to connect to remote
+  computers using SSH or set a profile that launches a <app>GNU Screen</app>
+  session.</p>
+
+  <p>The available <app>Terminal</app> settings include:</p>
 
   <list>
     <item>
-      <p><gui style="input">Profile name</gui></p>
+      <p>Profile name</p>
     </item>
     <item>
-      <p>Font and backgrounf colors</p>
+      <p>Font and backgrounf colors.</p>
     </item>
     <item>
-      <p><gui style="tab">Keystroke Compatibility</gui></p>
-      <!-- I cannot see a gui tab with that string anywhere, but it also does
-      not help me understand what the compatibility is. Use
-      "<gui>Compatibility</gui> with *something*" -->
+      <p><gui style="tab">Compatibility</gui> with Backspace and Delete
+      keys.</p>
     </item>
     <item>
       <p><gui style="tab">Scrolling</gui> and so on.</p>
-      <!-- Either use full stops for all items or none. -->
     </item>
   </list>
 
@@ -48,8 +51,8 @@
     <title>Default profile</title>
 
     <p>The default profile is loaded when a new terminal is opened, unless you
-    have selected another profile, and any changes that you make to the
-    settings will be stored in the default profile.</p>
+    have selected another profile, and any changes that you make to the settings
+    will be stored in the default profile.</p>
 
   </section>
 
@@ -79,7 +82,7 @@
     <p>You can change the profile in your current <app>Terminal</app> tab or
     window by selecting a profile from <guiseq><gui style="menu">Terminal</gui>
     <gui style="menuitem">Change Profile</gui></guiseq>.</p>
-    
+
   </section>
 
   <section id="new-profile" style="task">
@@ -104,20 +107,17 @@
         <gui style="tab">General</gui> tab.</p>
       </item>
       <item>
-        <p>Set your preferred terminal behaviour for the
-        <link xref="pref-custom-exit"><cmd>exit</cmd> command</link> and set
-	<!-- No <gui> option to do the following. Stick to the gui and talk
-	about custom commands, including login shells instead of login shells
-	themselves. -->
-        a <link xref="pref-login-shell">custom login shell</link> in the
+        <p>Set your preferred behaviour for the
+        <link xref="pref-custom-exit"><cmd>exit</cmd> command</link>.
+        You can also set a
+        <link xref="pref-custom-shell">custom shell</link> in the
         <gui style="tab">Title and Command</gui> tab.</p>
       </item>
       <item>
-        <p><link xref="app-colors">Set your preferred theme and colors</link>
-	in the <gui style="tab">Colors</gui> tab.</p>
+        <p>Set your preferred <link xref="app-colors">theme and colors</link> in the <gui style="tab">Colors</gui> tab.</p>
       </item>
       <item>
-        <p><link xref="pref-scrolling">Set your scrolling preference</link> in
+        <p>Set your <link xref="pref-scrolling">scrolling preference</link> in
         the <gui style="tab">Scrolling</gui> tab.</p>
       </item>
     </steps>
@@ -132,21 +132,19 @@
 
     <steps>
       <item>
-        <p>Select the profile that you wish to edit from
-        <guiseq><gui style="menu">Terminal</gui>
+        <p>Select the profile that you wish to edit from <guiseq>
+        <gui style="menu">Terminal</gui>
         <gui style="menuitem">Change Profile</gui>
         <gui style="menuitem"><var>Profile name</var></gui></guiseq> where
         <var>Profile name</var> is the name of the profile that you wish to
-        edit.</p>
-      </item>
-      <item>
-        <p>Select <guiseq><gui style="menu">File</gui>
+        edit. Alternatively, you can select <guiseq>
+        <gui style="menu">File</gui>
         <gui style="menuitem">New Profile…</gui></guiseq> to clone the profile
         that is currently selected.</p>
       </item>
       <item>
-        <p>Set your <link xref="#edit-profile">desired profile
-        prefrences</link>, these will be saved automatically. If you do not
+        <p>Set your desired <link xref="#edit-profile">profile
+        preferences</link>, these will be saved automatically. If you do not
         update the profile name, the new profile will not overwrite the profile
         that it is based on.</p>
       </item>
@@ -158,8 +156,8 @@
     <steps>
       <item>
         <p>Select <guiseq><gui style="menu">Edit</gui>
-	<gui style="menuitem">Preferences</gui>
-	<gui style="tab">Profiles</gui></guiseq>.</p>
+        <gui style="menuitem">Preferences</gui>
+        <gui style="tab">Profiles</gui></guiseq>.</p>
       </item>
       <item>
         <p>Select your desired profile.</p>
@@ -169,7 +167,7 @@
       </item>
       <item>
         <p>Set your <link xref="#edit-profile">desired profile
-        prefrences</link>, these will be saved automatically. If you do not
+        preferences</link>, these will be saved automatically. If you do not
         update the profile name, the new profile will not overwrite the profile
         that it is based on.</p>
       </item>
@@ -177,8 +175,7 @@
 
     <note>
       <p>Creating a new profile from an existing profile will not affect
-      settings in an existing profile. Any changes to settings will be stored
-      in the new profile.</p>
+      settings in an existing profile. Any changes to settings will be stored in the new profile.</p>
     </note>
 
   </section>
@@ -203,7 +200,7 @@
         <link xref="pref-scrolling">scrollbar preferences</link>.</p>
       </item>
       <item>
-        <p>To change the <app>Terminal</app> theme and colors, see
+        <p>To change the <app>Terminal</app> background and text colors, see
         <link xref="app-colors"><app>Terminal</app> color schemes</link>.</p>
       </item>
       <item>
