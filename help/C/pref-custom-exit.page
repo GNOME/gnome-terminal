@@ -16,23 +16,27 @@
     </credit>
 
     <link type="guide" xref="index#preferences"/>
+    <link type="seealso" xref="prob-recover-default-profile"/>
 
     <desc><app>Terminal</app> settings when a command exits</desc>
 
   </info>
 
-  <!-- Fix validation errors. -->
-
   <title>Behaviour on command exit</title>
 
-  <!-- Reflow. -->
-  <p><app>Terminal</app> can perform the following operations when a command or a shell exits.</p>
+  <p><app>Terminal</app> can perform some operations on the terminal window when
+  a command or a shell exits. To set the behaviour on command exit:</p>
 
-  <!-- Steps should go like 1) open this dialog, 2) chose the opiton (list
-  options), 3) save changes/close dialog. -->
   <steps>
     <item>
-      <p>You have the following options to choose from:</p>
+      <p>Select <guiseq>
+        <gui style="menu">Edit</gui>
+        <gui style="menuitem">Preferences</gui>
+        <gui style="tab">Title and Command</gui></guiseq>.</p>
+    </item>
+    <item>
+      <p>From <gui style="menu">When command exits</gui>, select from the
+      following options:</p>
       <list>
         <item>
           <p><gui>Exit the terminal</gui></p>
@@ -46,17 +50,17 @@
       </list>
     </item>
     <item>
-      <!-- Don't break tags half way through: it messes up the strings for
-      translators. Break the line before <guiseq>, between <gui> tags and
-      after </guiseq>, but not between <guiseq> and <gui>. -->
-      <p>To set any of these options, select <guiseq><gui
-      style="menu">Edit</gui><gui style="menuitem">Preferences</gui><gui
-      style="tab">Title and Command</gui></guiseq>.</p>
-    </item>
-    <item>
-      <p>From <gui
-      stye="menu">When command exits</gui>, select the desired behaviour.</p>
+      <p>Click <gui style="button">Close</gui> to quit the dialog and return to
+      <app>Terminal</app>.</p>
     </item>
   </steps>
+
+  <note style="important">
+    <p>If you have <link xref="pref-custom-shells">set a custom command or
+    shell</link> and have set the exit behaviour as <gui>Exit the
+    terminal</gui>, you will not be able to see the result of the execution. It
+    is advised you select <gui>Hold the terminal open</gui> as the exit
+    behaviour.</p>
+  </note>
 
 </page>
