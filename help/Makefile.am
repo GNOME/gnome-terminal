@@ -6,6 +6,7 @@ HELP_ID = gnome-terminal
 
 HELP_MEDIA = \
 	figures/gnome-terminal.png \
+	figures/gnome-terminal-icon.png \
 	$(NULL)
 
 HELP_FILES = \
