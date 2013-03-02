@@ -1641,7 +1641,7 @@ terminal_window_init (TerminalWindow *window)
       { "FileNewTab", STOCK_NEW_TAB, N_("Open Ta_b"), "<shift><control>T",
         NULL,
         G_CALLBACK (file_new_tab_callback) },
-      { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile…"), "",
+      { "FileNewProfile", GTK_STOCK_OPEN, N_("New _Profile"), "",
         NULL,
         G_CALLBACK (file_new_profile_callback) },
       { "FileSaveContents", GTK_STOCK_SAVE, N_("_Save Contents"), "",
