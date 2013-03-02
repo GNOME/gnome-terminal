@@ -40,7 +40,6 @@ HELP_FILES = \
 	txt-copy-paste.page \
 	txt-links.page \
 	txt-search.page \
-	txt-select-text.page \
 	$(NULL)
 
 HELP_LINGUAS = ca cs da de el en_GB es fr gl it ko oc pt_BR ro ru sl sv te uk zh_CN
