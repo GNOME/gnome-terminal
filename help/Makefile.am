@@ -28,7 +28,6 @@ HELP_FILES = \
 	pref-custom-shells.page \
 	pref-encoding.page \
 	pref-keyboard-access.page \
-	pref-login-shell.page \
 	pref-menubar.page \
 	pref-profiles.page \
 	pref-reset.page \
