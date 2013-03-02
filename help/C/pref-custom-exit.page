@@ -1,8 +1,8 @@
 <page xmlns="http://projectmallard.org/1.0/"
-      type="task"
+      type="topic"
       id="pref-custom-exit">
   <info>
-    <revision version="0.1" date="2013-01-10" status="draft"/>
+    <revision version="0.1" date="2013-03-02" status="review"/>
 
     <credit type="author copyright">
       <name>Sindhu S</name>
@@ -18,14 +18,14 @@
     <link type="guide" xref="index#preferences"/>
     <link type="seealso" xref="prob-recover-default-profile"/>
 
-    <desc><app>Terminal</app> settings when a command exits</desc>
+    <desc>Set the behaviour of <app>Terminal</app> when a custom command or the default shell exits.</desc>
 
   </info>
 
-  <title>Behaviour on command exit</title>
+  <title>Set behaviour on command exit</title>
 
-  <p><app>Terminal</app> can perform some operations on the terminal window when
-  a command or a shell exits. To set the behaviour on command exit:</p>
+  <p>You can set the terminal to exit, restart or remain open when the shell or
+  a custom command exits:</p>
 
   <steps>
     <item>
@@ -35,7 +35,7 @@
         <gui style="tab">Title and Command</gui></guiseq>.</p>
     </item>
     <item>
-      <p>From <gui style="menu">When command exits</gui>, select from the
+      <p>From <gui>When command exits</gui> drop down list, select one of the
       following options:</p>
       <list>
         <item>
@@ -48,19 +48,16 @@
           <p><gui>Hold the terminal open</gui></p>
         </item>
       </list>
-    </item>
-    <item>
-      <p>Click <gui style="button">Close</gui> to quit the dialog and return to
-      <app>Terminal</app>.</p>
+      <p>The setting will be saved automatically when you select it.</p>
     </item>
   </steps>
 
   <note style="important">
-    <p>If you have <link xref="pref-custom-shells">set a custom command or
-    shell</link> and have set the exit behaviour as <gui>Exit the
-    terminal</gui>, you will not be able to see the result of the execution. It
-    is advised you select <gui>Hold the terminal open</gui> as the exit
-    behaviour.</p>
+    <p>If you have <link xref="pref-custom-shells">set a custom command</link>
+    that non-interactive, have set the exit behaviour to <gui>Exit the
+    terminal</gui> and have set the profile to be the default profile,
+    <app>Terminal</app> may exit before you can see the output of the
+    command.</p>
   </note>
 
 </page>
