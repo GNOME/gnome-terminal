@@ -24,7 +24,6 @@ HELP_FILES = \
 	legal.xml \
 	overview.page \
 	pref-bell.page \
-	pref-compatibility.page \
 	pref-custom-exit.page \
 	pref-custom-shells.page \
 	pref-encoding.page \
