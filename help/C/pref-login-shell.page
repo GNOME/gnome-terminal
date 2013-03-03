@@ -33,41 +33,40 @@
 
   <terms>
     <item>
-        <title>Login shell</title>
-        <p>A login shell is a shell given to a user upon login to their user
-        account. This login shell is defined at the time of creation of the user
-        account by the super user. It is initiated by using the
-        <code>--login</code> option with bash. It starts after a successful
-        login using <code>/bin/login</code> and by reading the
-        <code>/etc/passwd</code> file.</p>
-      </item>
-      <item>
-        <title>Sub shell</title>
-        <p>Sub shell, also called a non-login shell is a shell started after the
-      login process without the --login option.</p>
-      </item>
-    </terms>
+      <title>Login shell</title>
+      <p>A login shell is a shell given to a user upon login into their user
+      account. This login shell is defined at the time of creation of the user
+      account by the super user. It is initiated by using the
+      <cmd>--login</cmd> option with bash. It starts after a successful login
+      using <file>/bin/login</file> and by reading the <file>/etc/passwd</file>
+      file.</p>
+    </item>
+    <item>
+      <title>Sub shell</title>
+      <p>Sub shell, also called a non-login shell is a shell started after
+      the login process without the <cmd>--login</cmd> option.</p>
+    </item>
+  </terms>
 
-    <p>The general cases for having a login shell include:</p>
-        <list>
-          <item>
-            <p>Accessing your computer remotely using <app>ssh</app>.</p>
-          </item>
-          <item>
-            <p>Simulating an initial login shell with <code>bash -l</code> or
-            <code>sh -l</code>.</p>
-          </item>
-          <item>
-            <p>Simulating an initial root login shell with
-            <code>sudo -i</code>.</p>
-          </item>
-        </list>
+  <p>The general cases for having a login shell include:</p>
+  <list>
+    <item>
+      <p>Accessing your computer remotely using <app>ssh</app>.</p>
+    </item>
+    <item>
+      <p>Simulating an initial login shell with <cmd>bash -l</cmd> or
+      <cmd>sh -l</cmd>.</p>
+    </item>
+    <item>
+      <p>Simulating an initial root login shell with <cmd>sudo -i</cmd>.</p>
+    </item>
+  </list>
 
   <section id="login-shell-howto">
     <title>Start a login shell</title>
 
     <p>You can allow <app>Terminal</app> to start a login shell. The
-    <code>--login</code> will be passed to <app>Bash</app> or your
+    <cmd>--login</cmd> will be passed to <app>Bash</app> or your
     <link xref="pref-custom-shells">custom shell</link>.</p>
 
     <steps>
@@ -77,6 +76,10 @@
         <gui style="tab">General</gui></guiseq>.</p>
       </item>
       <item>
+        <comment>
+          <cite href="mailto:kittykat3756@gmail.com">Kat</cite>
+          <p>TODO: test when this takes effect.</p>
+        </comment>
         <p>Under the <gui>Command</gui> label, select
         <gui style="checkbox">Run command as a login shell</gui>.</p>
       </item>
@@ -92,13 +95,8 @@
     <title>Update login records</title>
 
     <p>UNIX based systems maintain files to keep information about user logins
-    and sessions. They are called login records. To allow <app>Terminal</app> to
-    write an entry of your login in these records:</p>
-
-    <!--Kat: Should I include these?
-      /var/run/utmp : List of current login sessions.
-      /var/log/wtmp : Database of past user logins / previous login sessions.
-      /var/log/lastlog : Last logins information about users -->
+    and sessions. They are called login records. To allow <app>Terminal</app>
+    to write an entry of your login in these records:</p>
 
     <steps>
       <item>
@@ -107,18 +105,14 @@
         <gui style="tab">General</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Under the <gui>Command</gui> label, select
+        <p>Under the <gui>Command</gui> label, check
         <gui style="checkbox">Update login records when command is
-        launched</gui>.</p>
-      </item>
-      <item>
-        <p>Click <gui style="button">Close</gui> to quit the dialog and return
-        to <app>Terminal</app>.</p>
+        launched</gui>. Your change will be applied automatically.</p>
       </item>
     </steps>
 
     <note style="tip">
-      <p>The command <app>last</app> followed by a username in your computer
+      <p>The command <cmd>last</cmd> followed by a username in your computer
       shows the login records for a particular user.</p>
     </note>
 
