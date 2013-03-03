@@ -31,7 +31,6 @@ HELP_FILES = \
 	pref-menubar.page \
 	pref-scrolling.page \
 	pref-title.page \
-	prob-add-to-path.page \
 	prob-recover-default-profile.page \
 	txt-copy-paste.page \
 	txt-links.page \
