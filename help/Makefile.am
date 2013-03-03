@@ -29,7 +29,6 @@ HELP_FILES = \
 	pref-encoding.page \
 	pref-keyboard-access.page \
 	pref-menubar.page \
-	pref-reset.page \
 	pref-scrolling.page \
 	pref-title.page \
 	prob-add-to-path.page \
