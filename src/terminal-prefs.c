@@ -61,9 +61,7 @@ prefs_dialog_response_cb (GtkWidget *editor,
 {
   if (response == GTK_RESPONSE_HELP)
     {
-      terminal_util_show_help ("gnome-terminal-shortcuts", GTK_WINDOW (data->dialog));
-      //      terminal_util_show_help ("gnome-terminal-manage-profiles", GTK_WINDOW (data->dialog));
-      //    terminal_util_show_help ("gnome-terminal-encoding-add", GTK_WINDOW (window));
+      terminal_util_show_help ("pref", GTK_WINDOW (data->dialog));
       return;
     }
 

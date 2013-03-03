@@ -23,6 +23,7 @@ HELP_FILES = \
 	introduction.page \
 	legal.xml \
 	overview.page \
+	pref.page \
 	pref-bell.page \
 	pref-custom-exit.page \
 	pref-custom-shells.page \
