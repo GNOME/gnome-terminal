@@ -3,7 +3,7 @@
       id="txt-select-text">
 
   <info>
-    <revision version="0.1" date="2013-03-02" status="draft"/>
+    <revision version="0.1" date="2013-03-03" status="review"/>
     <link type="guide" xref="index#textoutput"/>
     <link type="seelaso" xref="txt-copy-paste"/>
 
@@ -20,41 +20,16 @@
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>Selecting text in <app>Terminal</app>.</desc>
+    <desc>Specify which characters should be considered as part of a word.</desc>
 
   </info>
 
   <title>Text selection</title>
 
-  <p>Before you can copy text from <app>Terminal</app>, you have mark your
-  selection. You can select text in <app>Terminal</app> in two different ways.
-  You can also set the selection criteria.</p>
-
-  <section id="select-text">
-    <title>Select text by word or line</title>
-
-    <p>To select a word in <app>Terminal</app> output:</p>
-
-    <steps>
-      <item>
-        <p>Double click on the desired word.</p>
-      </item>
-    </steps>
-
-    <p>To select a line in <app>Terminal</app> output:</p>
-
-    <steps>
-      <item>
-        <p>Triple click on the desired line.</p>
-      </item>
-    </steps>
-
-  </section>
-
-  <section id="selection-range">
-    <title>Change selection range</title>
-
-    <p>You can define selection criteria for text in <app>Terminal</app>. You can allow <app>Terminal</app> to select only alphabets in words or words with combinations of numbers and special characters. To specify the range of characters that can be selected:</p>
+  <p>You can define selection criteria for text in <app>Terminal</app>. You can
+  allow <app>Terminal</app> to select only words consisting of letters or words
+  with combinations of letters, numbers and special characters. To specify the
+  range of characters that can be selected:</p>
 
     <steps>
       <item>
@@ -63,13 +38,31 @@
         <gui style="tab">General</gui></guiseq>.</p>
       </item>
       <item>
-        <p>In the input box for <gui>Select-by-word characters</gui> edit the
-        default range to suit your requirements. By default, text selection
-        includes all characters with numbers and special characters. Your
-        preferences will be saved automatically.</p>
+        <p>Specify the characters or ranges that you wish to be considered part
+        of words in the <gui>Select-by-word characters</gui> entry field. By
+        default, text selection includes all characters with numbers and some
+        special characters: <var>-A-Za-z0-9,./?%&amp;#:_=+@~</var></p>
+        <p>Your preferences will be saved automatically.</p>
       </item>
     </steps>
 
-  </section>
+  <p>Once you have set your selection preference, you can select text in
+  <app>Terminal</app> in two different ways.</p>
+
+  <p>To select a word in <app>Terminal</app> output:</p>
+
+  <steps>
+    <item>
+      <p>Double click on the desired word.</p>
+    </item>
+  </steps>
+
+  <p>To select a line in <app>Terminal</app> output:</p>
+
+  <steps>
+    <item>
+      <p>Triple click on the desired line.</p>
+    </item>
+  </steps>
 
 </page>
