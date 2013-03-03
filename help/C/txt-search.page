@@ -2,7 +2,7 @@
       type="task"
       id="txt-search">
   <info>
-    <revision version="0.1" date="2013-02-25" status="draft"/>
+    <revision version="0.1" date="2013-03-03" status="review"/>
 
     <credit type="author copyright">
       <name>Sindhu S</name>
@@ -21,15 +21,14 @@
 
   </info>
 
-  <title>Find</title>
+  <title>Use <gui style="menuitem">Find</gui></title>
 
-  <p>You can search for text in the <app>Terminal</app> output:</p>
+  <p>You can search text in the <app>Terminal</app> output:</p>
 
   <steps>
     <item>
       <p>Select <guiseq><gui style="menu">Search</gui>
-      <gui style="menuitem">Find</gui></guiseq>.</p>
-      <!-- TODO: check UI -->
+      <gui style="menuitem">Find…</gui></guiseq>.</p>
     </item>
     <item>
       <p>Type in the search keyword and press <gui style="button">Find</gui>.
@@ -43,45 +42,42 @@
   <terms>
     <item>
       <title><gui style="checkbox">Match case</gui></title>
-      <p>Restrict results to only those that match the case of your given
-      keyword for search. In other words, the search is set to be case
-      sensitive.</p>
+      <p>Make the search case sensitive: this restricts results to only those
+      that match the case of your search keyword.</p>
     </item>
     <item>
       <title><gui style="checkbox">Match entire word only</gui></title>
       <p><app>Terminal</app> will look for the entire keyword and will ignore
-      results that partially match your given search keyword. For example, if
-      you have searched for "rhythmbox", <app>Terminal</app> will show only
+      results that partially match your search keyword. For example, if
+      you have searched for "gnome", <app>Terminal</app> will show only
       results that match this keyword exactly and omit results such as
-      "rhythmbox-client".</p>
+      "gnome-terminal".</p>
     </item>
     <item>
       <title><gui style="checkbox">Match as regular expression</gui></title>
       <p>You can use regular expression patterns, also known as regex
-      patterns, in your search keywords. <app>Terminal</app> will dispay
+      patterns, in your search keywords. <app>Terminal</app> will display
       the results that match these search terms.</p>
     </item>
     <item>
       <title><gui style="checkbox">Search backwards</gui></title>
-      <p><app>Terminal</app> will search for the keyword from the latest
-      <app>Terminal</app> output and continue the search upwards. This option
-      is recommended when you are looking for the keyword that could have
-      occured recently, thus enabling you to find the keyword quickly.</p>
+      <p><app>Terminal</app> will search for the keyword from the latest output
+      and continue the search upwards. This option is recommended when you are
+      looking for the keyword that could have occurred recently, thus enabling
+      you to find the keyword quickly.</p>
     </item>
     <item>
       <title><gui style="checkbox">Wrap around</gui></title>
-      <p><app>Terminal</app> searches from your current location in
-      <app>Terminal</app> to the end of available terminal output and then
-      restarts search from the top.</p>
+      <p><app>Terminal</app> searches from your current location in the
+      scrollback to the end of available terminal output and then restarts
+      search from the top.</p>
     </item>
   </terms>
 
   <note style="tip">
     <p>If you expect to work with a lot of <app>Terminal</app> output, you
-    should set <link xref="pref-scrolling">scrollback lines</link> to a high
-    limit to allow <app>Terminal</app> to search more efficiently.</p>
-    <!-- Setting scrollback lines to unlimmited can result in all sorts of
-    problems starting with running out of disk space. -->
+    increase the <link xref="pref-scrolling">scrollback lines</link> to a
+    higher limit to allow <app>Terminal</app> to search further back.</p>
   </note>
 
 </page>
