@@ -460,7 +460,7 @@ editor_response_cb (GtkWidget *editor,
 {  
   if (response == GTK_RESPONSE_HELP)
     {
-      terminal_util_show_help ("gnome-terminal-prefs", GTK_WINDOW (editor));
+      terminal_util_show_help ("profile", GTK_WINDOW (editor));
       return;
     }
 

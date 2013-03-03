@@ -32,6 +32,7 @@ HELP_FILES = \
 	pref-profiles.page \
 	pref-scrolling.page \
 	pref-title.page \
+	profile.page \
 	txt-copy-paste.page \
 	txt-links.page \
 	txt-search.page \
