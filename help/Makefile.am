@@ -30,7 +30,6 @@ HELP_FILES = \
 	pref-keyboard-access.page \
 	pref-menubar.page \
 	pref-profiles.page \
-	pref-reset.page \
 	pref-scrolling.page \
 	pref-title.page \
 	txt-copy-paste.page \
