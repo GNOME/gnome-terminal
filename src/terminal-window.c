@@ -2195,6 +2195,22 @@ sync_screen_icon_title_set (TerminalScreen *screen,
   /* Re-setting the right title will be done by the notify::title handler which comes after this one */
 }
 
+static void
+screen_font_desc_changed_cb (TerminalScreen *screen,
+                             GParamSpec *psepc,
+                             TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+    return;
+
+  if (screen != priv->active_screen)
+    return;
+
+  terminal_window_update_size (window);
+}
+
 /* MDI container callbacks */
 
 static void
@@ -2509,6 +2525,8 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
                     G_CALLBACK (sync_screen_icon_title), window);
   g_signal_connect (screen, "notify::icon-title-set",
                     G_CALLBACK (sync_screen_icon_title_set), window);
+  g_signal_connect (screen, "notify::font-desc",
+                    G_CALLBACK (screen_font_desc_changed_cb), window);
   g_signal_connect (screen, "selection-changed",
                     G_CALLBACK (terminal_window_update_copy_sensitivity), window);
 
@@ -2578,6 +2596,10 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
                                         G_CALLBACK (sync_screen_icon_title_set),
+                                        window);
+
+  g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
+                                        G_CALLBACK (screen_font_desc_changed_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
