@@ -316,7 +316,6 @@ EXTRA_DIST = \
 	terminal-type-builtins.h.template \
 	org.gnome.Terminal.xml \
 	nautilus.symbols \
-	encodings-dialog.ui \
 	find-dialog.ui \
 	preferences.ui \
 	profile-preferences.ui \
