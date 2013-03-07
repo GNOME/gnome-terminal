@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-14 19:54+0000\n"
+"POT-Creation-Date: 2013-03-03 20:22+0000\n"
 "PO-Revision-Date: 2012-07-15 14:21+0300\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n-bel-gnome@googlegroups.com>\n"
@@ -18,9 +18,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:94
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:102
 #: ../src/terminal-accels.c:246 ../src/terminal.c:250
-#: ../src/terminal-window.c:1830
+#: ../src/terminal-window.c:1831
 msgid "Terminal"
 msgstr "Тэрмінал"
 
@@ -32,11 +32,12 @@ msgstr "Загадны радок"
 msgid "shell;prompt;command;commandline;"
 msgstr "абалонка;загадны радок;загад;"
 
-#: ../src/client.c:118
+#: ../src/client.c:88
 msgid "COMMAND"
 msgstr "ЗАГАД"
 
-#: ../src/client.c:123
+#: ../src/client.c:93
+#, c-format
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
@@ -52,197 +53,180 @@ msgstr ""
 "\n"
 "Ужыйце \"%s ЗАГАД --help\", каб атрымаць даведку для пэўнага загаду.\n"
 
-#: ../src/client.c:221 ../src/terminal-options.c:661
+#: ../src/client.c:200 ../src/terminal-options.c:681
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" не з'яўляецца магчымай ступенню павелічэння"
 
-#: ../src/client.c:334
+#: ../src/client.c:331
 msgid "Be quiet"
 msgstr "Не замінаць паведамленнямі"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1073
+#: ../src/client.c:342 ../src/terminal-options.c:1095
 msgid "Maximize the window"
 msgstr "Максімалізаваць акно"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1082
+#: ../src/client.c:344 ../src/terminal-options.c:1104
 msgid "Full-screen the window"
 msgstr "Расцягнуць акно на ўвесь экран"
 
-#: ../src/client.c:349 ../src/terminal-options.c:1091
+#: ../src/client.c:346 ../src/terminal-options.c:1113
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Вызначыць памер акна. Напрыклад: 80x24 або 80x24+200+200 (СЛУПКІxРАДКІ+X+Y)"
 
-#: ../src/client.c:350 ../src/terminal-options.c:1092
+#: ../src/client.c:347 ../src/terminal-options.c:1114
 msgid "GEOMETRY"
 msgstr "ГЕАМЕТРЫЯ"
 
-#: ../src/client.c:352 ../src/terminal-options.c:1100
+#: ../src/client.c:349 ../src/terminal-options.c:1122
 msgid "Set the window role"
 msgstr "Прызначыць акну ролю"
 
-#: ../src/client.c:352 ../src/terminal-options.c:1101
+#: ../src/client.c:349 ../src/terminal-options.c:1123
 msgid "ROLE"
 msgstr "РОЛЯ"
 
-#: ../src/client.c:358 ../src/terminal-options.c:1131
+#: ../src/client.c:355 ../src/terminal-options.c:1153
 msgid "Use the given profile instead of the default profile"
 msgstr "Ужыць азначаны профіль замест прадвызначанага"
 
-#: ../src/client.c:359
+#: ../src/client.c:356
 msgid "UUID"
 msgstr "UUID"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1140
+#: ../src/client.c:358 ../src/terminal-options.c:1162
 msgid "Set the terminal title"
 msgstr "Прызначыць загаловак тэрмінала"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1141
+#: ../src/client.c:358 ../src/terminal-options.c:1163
 msgid "TITLE"
 msgstr "ЗАГАЛОВАК"
 
-#: ../src/client.c:363 ../src/terminal-options.c:1149
+#: ../src/client.c:360 ../src/terminal-options.c:1171
 msgid "Set the working directory"
 msgstr "Прызначыць рабочы каталог"
 
-#: ../src/client.c:363 ../src/terminal-options.c:1150
+#: ../src/client.c:360 ../src/terminal-options.c:1172
 msgid "DIRNAME"
 msgstr "КАТАЛОГ"
 
-#: ../src/client.c:365 ../src/terminal-options.c:1158
+#: ../src/client.c:362 ../src/terminal-options.c:1180
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Прызначыць ступень павелічэння тэксту тэрмінала (1.0 = звычайны памер)"
 
-#: ../src/client.c:366 ../src/terminal-options.c:1159
+#: ../src/client.c:363 ../src/terminal-options.c:1181
 msgid "ZOOM"
 msgstr "СТУПЕНЬ"
 
-#: ../src/client.c:372
+#: ../src/client.c:369
 msgid "Forward stdin"
 msgstr "Перанакіраваць стандартны ўваход"
 
-#: ../src/client.c:374
+#: ../src/client.c:371
 msgid "Forward stdout"
 msgstr "Перанакіраваць стандартны выхад"
 
-#: ../src/client.c:376
+#: ../src/client.c:373
 msgid "Forward stderr"
 msgstr "Перанакіраваць стандартны выхад для памылак"
 
-#: ../src/client.c:378
+#: ../src/client.c:375
 msgid "Forward file descriptor"
 msgstr "Перанакіраваць файлавы дэскрыптар"
 
-#: ../src/client.c:378
+#: ../src/client.c:375
 msgid "FD"
 msgstr "FD"
 
-#: ../src/client.c:384
+#: ../src/client.c:381
 msgid "Wait until the child exits"
 msgstr "Чакаць заканчэння працы нашчадка"
 
-#: ../src/client.c:394
+#: ../src/client.c:391
 msgid "GNOME Terminal Client"
 msgstr "Кліент тэрмінала GNOME"
 
-#: ../src/client.c:398
+#: ../src/client.c:395
 msgid "Global options:"
 msgstr "Глабальныя опцыі:"
 
-#: ../src/client.c:399
+#: ../src/client.c:396
 msgid "Show global options"
 msgstr "Паказаць глабальныя опцыі"
 
-#: ../src/client.c:407
+#: ../src/client.c:404
 msgid "Server options:"
 msgstr "Опцыі сервера:"
 
-#: ../src/client.c:408
+#: ../src/client.c:405
 msgid "Show server options"
 msgstr "Паказаць опцыі сервера"
 
-#: ../src/client.c:416
+#: ../src/client.c:413
 msgid "Window options:"
 msgstr "Опцыі акна:"
 
-#: ../src/client.c:417
+#: ../src/client.c:414
 msgid "Show window options"
 msgstr "Паказаць опцыі акна"
 
-#: ../src/client.c:425
+#: ../src/client.c:422
 msgid "Terminal options:"
 msgstr "Опцыі тэрмінала:"
 
-#: ../src/client.c:426 ../src/terminal-options.c:1438
+#: ../src/client.c:423 ../src/terminal-options.c:1460
 msgid "Show terminal options"
 msgstr "Паказаць опцыі тэрмінала"
 
-#: ../src/client.c:434
+#: ../src/client.c:431
 msgid "Exec options:"
 msgstr "Опцыі запуску:"
 
-#: ../src/client.c:435
+#: ../src/client.c:432
 msgid "Show exec options"
 msgstr "Паказаць опцыі запуску"
 
-#: ../src/client.c:443
+#: ../src/client.c:440
 msgid "Processing options:"
 msgstr "Опцыі апрацавання:"
 
-#: ../src/client.c:444
+#: ../src/client.c:441
 msgid "Show processing options"
 msgstr "Паказаць опцыі апрацавання"
 
-#: ../src/migration.c:339 ../src/terminal-app.c:416
+#: ../src/find-dialog.ui.h:1
+msgid "Find"
+msgstr "Пошук"
+
+#: ../src/find-dialog.ui.h:2
+msgid "_Search for:"
+msgstr "_Шукаць:"
+
+#: ../src/find-dialog.ui.h:3
+msgid "_Match case"
+msgstr "_Улічваць рэгістр літар"
+
+#: ../src/find-dialog.ui.h:4
+msgid "Match _entire word only"
+msgstr "_Шукаць толькі поўныя адпаведнікі"
+
+#: ../src/find-dialog.ui.h:5
+msgid "Match as _regular expression"
+msgstr "Параўноўваць з _рэгулярным выразам"
+
+#: ../src/find-dialog.ui.h:6
+msgid "Search _backwards"
+msgstr "Шукаць у _адваротным кірунку"
+
+#: ../src/find-dialog.ui.h:7
+msgid "_Wrap around"
+msgstr "_Аўтаматычна працягваць пошук з адваротнага боку"
+
+#: ../src/migration.c:359 ../src/terminal-prefs.c:100
 msgid "Unnamed"
 msgstr "Без назвы"
-
-#: ../src/profile-editor.c:45
-msgid "Black on light yellow"
-msgstr "Чорны тэкст на светла-жоўтым фоне"
-
-#: ../src/profile-editor.c:49
-msgid "Black on white"
-msgstr "Чорны тэкст на белым фоне"
-
-#: ../src/profile-editor.c:53
-msgid "Gray on black"
-msgstr "Шэры тэкст на чорным фоне"
-
-#: ../src/profile-editor.c:57
-msgid "Green on black"
-msgstr "Зялёны тэкст на чорным фоне"
-
-#: ../src/profile-editor.c:61
-msgid "White on black"
-msgstr "Белы тэкст на чорным фоне"
-
-#: ../src/profile-editor.c:409
-#, c-format
-msgid "Error parsing command: %s"
-msgstr "Памылка разбору загаду: %s"
-
-#. This is the name of a colour scheme
-#: ../src/profile-editor.c:443 ../src/profile-preferences.ui.h:30
-msgid "Custom"
-msgstr "Уласная"
-
-#: ../src/profile-editor.c:588
-#, c-format
-msgid "Editing Profile “%s”"
-msgstr "Рэдагаванне профіля \"%s\""
-
-#: ../src/profile-editor.c:762
-#, c-format
-msgid "Choose Palette Color %d"
-msgstr "Выбраць колер палітры %d"
-
-#: ../src/profile-editor.c:766
-#, c-format
-msgid "Palette entry %d"
-msgstr "Складнік палітры %d"
 
 #: ../src/org.gnome.Terminal.gschema.xml.in.h:1
 msgid "Human-readable name of the profile"
@@ -742,57 +726,90 @@ msgstr "Ці трэба пытацца пацвярджэння перад за�
 msgid "Whether to show the menubar in new windows"
 msgstr "Ці трэба паказваць стужку меню ў новых вокнах"
 
-#: ../src/find-dialog.ui.h:1
-msgid "Find"
-msgstr "Пошук"
+#: ../src/preferences.ui.h:1
+msgid "Preferences"
+msgstr "Настройкі"
 
-#: ../src/find-dialog.ui.h:2
-msgid "_Search for:"
-msgstr "_Шукаць:"
+#: ../src/preferences.ui.h:2
+msgid "Show _menubar by default in new terminals"
+msgstr "Пр_адвызначана паказваць стужку меню для новых тэрміналаў"
 
-#: ../src/find-dialog.ui.h:3
-msgid "_Match case"
-msgstr "_Улічваць рэгістр літар"
+#: ../src/preferences.ui.h:3
+msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
+msgstr "_Уключыць мнеманічныя скароты (напрыклад, Alt+Ф для меню \"Файл\")"
 
-#: ../src/find-dialog.ui.h:4
-msgid "Match _entire word only"
-msgstr "_Шукаць толькі поўныя адпаведнікі"
+#: ../src/preferences.ui.h:4
+msgid "Enable the _menu accelerator key (F10 by default)"
+msgstr "Уключыць _клавіятурны скарот для доступу да меню (звычайна F10)"
 
-#: ../src/find-dialog.ui.h:5
-msgid "Match as _regular expression"
-msgstr "Параўноўваць з _рэгулярным выразам"
+#: ../src/preferences.ui.h:5 ../src/profile-preferences.ui.h:61
+msgid "General"
+msgstr "Агульнае"
 
-#: ../src/find-dialog.ui.h:6
-msgid "Search _backwards"
-msgstr "Шукаць у _адваротным кірунку"
-
-#: ../src/find-dialog.ui.h:7
-msgid "_Wrap around"
-msgstr "_Аўтаматычна працягваць пошук з адваротнага боку"
-
-#: ../src/keybinding-editor.ui.h:1
-msgid "Keyboard Shortcuts"
+#: ../src/preferences.ui.h:6
+msgid "Shortcuts"
 msgstr "Клавіятурныя скароты"
 
-#: ../src/keybinding-editor.ui.h:2
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr "_Уключыць клавішы доступу да меню (напрыклад, Alt+Ф для меню \"Файл\")"
+#: ../src/preferences.ui.h:7
+msgid "_Profile used when launching a new terminal:"
+msgstr "_Профіль для новага тэрмінала:"
 
-#: ../src/keybinding-editor.ui.h:3
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "_Уключыць клавіятурны скарот для доступу да стужкі меню (звычайна F10)"
-
-#: ../src/keybinding-editor.ui.h:4
-msgid "_Shortcut keys:"
-msgstr "_Клавіятурныя скароты:"
-
-#: ../src/profile-manager.ui.h:1
+#: ../src/preferences.ui.h:8
 msgid "Profiles"
 msgstr "Профілі"
 
-#: ../src/profile-manager.ui.h:2
-msgid "_Profile used when launching a new terminal:"
-msgstr "_Профіль для новага тэрмінала:"
+#: ../src/preferences.ui.h:9
+msgid "E_ncodings shown in menu:"
+msgstr "_Кадаванні, якія паказваюцца ў меню:"
+
+#: ../src/preferences.ui.h:10
+msgid "Encodings"
+msgstr "Кадаванні"
+
+#: ../src/profile-editor.c:47
+msgid "Black on light yellow"
+msgstr "Чорны тэкст на светла-жоўтым фоне"
+
+#: ../src/profile-editor.c:51
+msgid "Black on white"
+msgstr "Чорны тэкст на белым фоне"
+
+#: ../src/profile-editor.c:55
+msgid "Gray on black"
+msgstr "Шэры тэкст на чорным фоне"
+
+#: ../src/profile-editor.c:59
+msgid "Green on black"
+msgstr "Зялёны тэкст на чорным фоне"
+
+#: ../src/profile-editor.c:63
+msgid "White on black"
+msgstr "Белы тэкст на чорным фоне"
+
+#: ../src/profile-editor.c:411
+#, c-format
+msgid "Error parsing command: %s"
+msgstr "Памылка разбору загаду: %s"
+
+#. This is the name of a colour scheme
+#: ../src/profile-editor.c:445 ../src/profile-preferences.ui.h:30
+msgid "Custom"
+msgstr "Уласная"
+
+#: ../src/profile-editor.c:560
+#, c-format
+msgid "Editing Profile “%s”"
+msgstr "Рэдагаванне профіля \"%s\""
+
+#: ../src/profile-editor.c:743
+#, c-format
+msgid "Choose Palette Color %d"
+msgstr "Выбраць колер палітры %d"
+
+#: ../src/profile-editor.c:747
+#, c-format
+msgid "Palette entry %d"
+msgstr "Складнік палітры %d"
 
 #. Cursor shape
 #: ../src/profile-preferences.ui.h:2
@@ -913,220 +930,207 @@ msgid "_Profile name:"
 msgstr "_Назва профіля:"
 
 #: ../src/profile-preferences.ui.h:49
+msgid "Profile ID:"
+msgstr "Ідэнтыфікатар профілю:"
+
+#: ../src/profile-preferences.ui.h:50
 msgid "_Use the system fixed width font"
 msgstr "_Ужыць сістэмны роўнашырокі шрыфт"
 
-#: ../src/profile-preferences.ui.h:50
+#: ../src/profile-preferences.ui.h:51
 msgid "_Font:"
 msgstr "_Шрыфт:"
 
-#: ../src/profile-preferences.ui.h:51
+#: ../src/profile-preferences.ui.h:52
 msgid "Choose A Terminal Font"
 msgstr "Выбраць шрыфт тэрмінала"
 
-#: ../src/profile-preferences.ui.h:52
+#: ../src/profile-preferences.ui.h:53
 msgid "_Allow bold text"
 msgstr "_Дазволіць тоўсты тэкст"
 
-#: ../src/profile-preferences.ui.h:53
+#: ../src/profile-preferences.ui.h:54
 msgid "Terminal _bell"
 msgstr "_Сігнал тэрмінала"
 
-#: ../src/profile-preferences.ui.h:54
+#: ../src/profile-preferences.ui.h:55
 msgid "Cursor _shape:"
 msgstr "_Форма курсора:"
 
-#: ../src/profile-preferences.ui.h:55
+#: ../src/profile-preferences.ui.h:56
 msgid "Select-by-_word characters:"
 msgstr "_Знакі слоў для непадзельнага вылучэння:"
 
-#: ../src/profile-preferences.ui.h:56
+#: ../src/profile-preferences.ui.h:57
 msgid "Use custom default terminal si_ze"
 msgstr "_Ужыць уласны прадвызначаны памер для тэрміналаў"
 
-#: ../src/profile-preferences.ui.h:57
+#: ../src/profile-preferences.ui.h:58
 msgid "Default size:"
 msgstr "Прадвызначаны памер:"
 
-#: ../src/profile-preferences.ui.h:58
+#: ../src/profile-preferences.ui.h:59
 msgid "columns"
 msgstr "слупкоў"
 
-#: ../src/profile-preferences.ui.h:59
+#: ../src/profile-preferences.ui.h:60
 msgid "rows"
 msgstr "радкоў"
 
-#: ../src/profile-preferences.ui.h:60
-msgid "General"
-msgstr "Агульнае"
-
-#: ../src/profile-preferences.ui.h:61
+#: ../src/profile-preferences.ui.h:62
 msgid "Title"
 msgstr "Загаловак"
 
-#: ../src/profile-preferences.ui.h:62
+#: ../src/profile-preferences.ui.h:63
 msgid "Initial _title:"
 msgstr "_Пачатковы загаловак:"
 
-#: ../src/profile-preferences.ui.h:63
+#: ../src/profile-preferences.ui.h:64
 msgid "When terminal commands set their o_wn titles:"
 msgstr "Пры прызначэнні _загадам свайго загалоўка:"
 
-#: ../src/profile-preferences.ui.h:64
+#: ../src/profile-preferences.ui.h:65
 msgid "Command"
 msgstr "Загад"
 
-#: ../src/profile-preferences.ui.h:65
+#: ../src/profile-preferences.ui.h:66
 msgid "_Run command as a login shell"
 msgstr "_Запускаць загад як уваходную загадную абалонку"
 
-#: ../src/profile-preferences.ui.h:66
+#: ../src/profile-preferences.ui.h:67
 msgid "_Update login records when command is launched"
 msgstr "_Абнаўляць запісы аб уваходзе пры запуску загаду"
 
-#: ../src/profile-preferences.ui.h:67
+#: ../src/profile-preferences.ui.h:68
 msgid "Ru_n a custom command instead of my shell"
 msgstr "_Выканаць іншы загад замест загаднай абалонкі"
 
-#: ../src/profile-preferences.ui.h:68
+#: ../src/profile-preferences.ui.h:69
 msgid "Custom co_mmand:"
 msgstr "_Уласны загад:"
 
-#: ../src/profile-preferences.ui.h:69
+#: ../src/profile-preferences.ui.h:70
 msgid "When command _exits:"
 msgstr "Пры _заканчэнні працы загаду:"
 
-#: ../src/profile-preferences.ui.h:70
+#: ../src/profile-preferences.ui.h:71
 msgid "Title and Command"
 msgstr "Загаловак і запуск загадаў"
 
-#: ../src/profile-preferences.ui.h:71
-msgid "Foreground, Background, Bold and Underline"
-msgstr "Тэкст і фон, падкрэсленне і таўшчыня шрыфту"
-
 #: ../src/profile-preferences.ui.h:72
+msgid "Text and Background Color"
+msgstr "Колер фону і тэксту"
+
+#: ../src/profile-preferences.ui.h:73
 msgid "_Use colors from system theme"
 msgstr "Ужыць колеры сістэмнага _матыва аздаблення"
 
-#: ../src/profile-preferences.ui.h:73
+#: ../src/profile-preferences.ui.h:74
 msgid "Built-in sche_mes:"
 msgstr "_Убудаваныя схемы:"
 
-#: ../src/profile-preferences.ui.h:74
+#: ../src/profile-preferences.ui.h:75
 msgid "_Text color:"
 msgstr "Колер _тэксту:"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/profile-preferences.ui.h:76
 msgid "_Background color:"
 msgstr "_Фонавы колер:"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/profile-preferences.ui.h:77
 msgid "Choose Terminal Background Color"
 msgstr "Выбраць фонавы колер тэрмінала"
 
-#: ../src/profile-preferences.ui.h:77
+#: ../src/profile-preferences.ui.h:78
 msgid "Choose Terminal Text Color"
 msgstr "Выбраць колер тэксту тэрмінала"
 
-#: ../src/profile-preferences.ui.h:78
+#: ../src/profile-preferences.ui.h:79
 msgid "_Underline color:"
 msgstr "Колер падкр_эслівання:"
 
-#: ../src/profile-preferences.ui.h:79
+#: ../src/profile-preferences.ui.h:80
 msgid "_Same as text color"
 msgstr "_Як колер тэксту"
 
-#: ../src/profile-preferences.ui.h:80
+#: ../src/profile-preferences.ui.h:81
 msgid "Bol_d color:"
 msgstr "_Колер тоўстых літар:"
 
-#: ../src/profile-preferences.ui.h:81
+#: ../src/profile-preferences.ui.h:82
 msgid "Palette"
 msgstr "Палітра"
 
-#: ../src/profile-preferences.ui.h:82
+#: ../src/profile-preferences.ui.h:83
 msgid "Built-in _schemes:"
 msgstr "_Убудаваныя схемы:"
 
-#: ../src/profile-preferences.ui.h:83
-msgid "<b>Note:</b> Terminal applications have these colors available to them."
-msgstr ""
-"<b>Увага:</b> праграмы ў тэрмінале маюць доступ да наступных колераў."
-
 #: ../src/profile-preferences.ui.h:84
+msgid "<b>Note:</b> Terminal applications have these colors available to them."
+msgstr "<b>Увага:</b> праграмы ў тэрмінале маюць доступ да наступных колераў."
+
+#: ../src/profile-preferences.ui.h:85
 msgid "Color p_alette:"
 msgstr "_Палітра колераў:"
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:86
 msgid "Colors"
 msgstr "Колеры"
 
-#: ../src/profile-preferences.ui.h:86
+#: ../src/profile-preferences.ui.h:87
 msgid "_Scrollbar is:"
 msgstr "_Панэль пракруткі:"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:88
 msgid "Scroll_back:"
 msgstr "Па_мер памяці пракруткі:"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:89
 msgid "Scroll on _keystroke"
 msgstr "Пра_кручваць пры націску клавішы"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:90
 msgid "Scroll on _output"
 msgstr "Пракручваць пры новым _вывадзе"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:91
 msgid "_Unlimited"
 msgstr "_Неабмежавана"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:92
 msgid "lines"
 msgstr "радкоў"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:93
 msgid "Scrolling"
 msgstr "Пракрутка"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:94
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
 "applications and operating systems that expect different terminal behavior."
 msgstr ""
-"<b>Увага:</b> наступныя опцыі могуць прывесці да няспраўнай "
-"дзейнасці некаторых праграм. Яны прапанаваныя тут толькі дзеля магчымасці "
-"працы з пэўнымі праграмамі і аперацыйнымі сістэмамі, якія чакаюць незвычайных "
+"<b>Увага:</b> наступныя опцыі могуць прывесці да няспраўнай дзейнасці "
+"некаторых праграм. Яны прапанаваныя тут толькі дзеля магчымасці працы з "
+"пэўнымі праграмамі і аперацыйнымі сістэмамі, якія чакаюць незвычайных "
 "паводзін тэрмінала."
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:95
 msgid "_Delete key generates:"
 msgstr "Клавіша Delete _генеруе:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:96
 msgid "_Backspace key generates:"
 msgstr "_Клавіша Backspace генеруе:"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:97
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Вярнуць прадвызначаныя настройкі опцый сумяшчальнасці"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/profile-preferences.ui.h:98
 msgid "Compatibility"
 msgstr "Сумяшчальнасць"
-
-#: ../src/terminal-appmenu.ui.h:1
-msgid "_Preferences"
-msgstr "_Настройкі"
-
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1630
-msgid "_Help"
-msgstr "_Дапамога"
-
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1749
-msgid "_About"
-msgstr "_Аб праграме"
 
 #: ../src/terminal-accels.c:139
 msgid "New Tab"
@@ -1180,7 +1184,7 @@ msgstr "Паменшыць"
 msgid "Normal Size"
 msgstr "Звычайны памер"
 
-#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3414
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3406
 msgid "Set Title"
 msgstr "Прызначыць загаловак"
 
@@ -1284,39 +1288,34 @@ msgstr "Карткі"
 msgid "Help"
 msgstr "Дапамога"
 
-#: ../src/terminal-accels.c:620
+#: ../src/terminal-accels.c:619
 #, c-format
 msgid "The shortcut key “%s” is already bound to the “%s” action"
 msgstr "Клавіятурны скарот \"%s\" ужо прывязаны да дзеяння \"%s\""
 
-#: ../src/terminal-accels.c:774
+#: ../src/terminal-accels.c:732
 msgid "_Action"
 msgstr "_Дзеянне"
 
-#: ../src/terminal-accels.c:792
+#: ../src/terminal-accels.c:750
 msgid "Shortcut _Key"
 msgstr "_Клавіятурны скарот"
 
-#: ../src/terminal-app.c:544
-msgid "Click button to choose profile"
-msgstr "Пстрыкніце ў гэту кнопку, каб выбраць профіль"
-
-#: ../src/terminal-app.c:634
-msgid "Profile list"
-msgstr "Спіс профіляў"
-
-#: ../src/terminal-app.c:697
-#, c-format
-msgid "Delete profile “%s”?"
-msgstr "Выдаліць профіль \"%s\"?"
-
-#: ../src/terminal-app.c:713
-msgid "Delete Profile"
-msgstr "Выдаленне профіля"
-
-#: ../src/terminal-app.c:1496
+#: ../src/terminal-app.c:577
 msgid "User Defined"
 msgstr "Вызначана карыстальнікам"
+
+#: ../src/terminal-appmenu.ui.h:1
+msgid "_Preferences"
+msgstr "_Настройкі"
+
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1633
+msgid "_Help"
+msgstr "_Дапамога"
+
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1749
+msgid "_About"
+msgstr "_Аб праграме"
 
 #: ../src/terminal.c:243
 #, c-format
@@ -1464,106 +1463,98 @@ msgstr "В'етнамскае"
 msgid "Thai"
 msgstr "Тайскае"
 
-#: ../src/terminal-encoding.c:487 ../src/terminal-encoding.c:512
-msgid "_Description"
-msgstr "_Апісанне"
-
-#: ../src/terminal-encoding.c:496 ../src/terminal-encoding.c:521
-msgid "_Encoding"
-msgstr "_Кадаванне"
-
-#: ../src/terminal-encoding.c:579
+#: ../src/terminal-encoding.c:272
 msgid "Current Locale"
 msgstr "Дзейная лакальнасць"
 
-#: ../src/terminal-nautilus.c:465
+#: ../src/terminal-nautilus.c:463
 msgid "Open in _Remote Terminal"
 msgstr "Адкрыць _аддалены тэрмінал"
 
-#: ../src/terminal-nautilus.c:467
+#: ../src/terminal-nautilus.c:465
 msgid "Open in _Local Terminal"
 msgstr "Адкрыць _мясцовы тэрмінал"
 
-#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
+#: ../src/terminal-nautilus.c:469 ../src/terminal-nautilus.c:480
 msgid "Open the currently selected folder in a terminal"
 msgstr "Адкрыць вылучаную папку ў тэрмінале"
 
-#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
-#: ../src/terminal-nautilus.c:494
+#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
+#: ../src/terminal-nautilus.c:492
 msgid "Open the currently open folder in a terminal"
 msgstr "Адкрыць гэтую папку ў тэрмінале"
 
-#: ../src/terminal-nautilus.c:479 ../src/terminal-nautilus.c:493
+#: ../src/terminal-nautilus.c:477 ../src/terminal-nautilus.c:491
 msgid "Open in T_erminal"
 msgstr "Адкрыць у _тэрмінале"
 
-#: ../src/terminal-nautilus.c:490
+#: ../src/terminal-nautilus.c:488
 msgid "Open T_erminal"
 msgstr "Адкрыць _тэрмінал"
 
-#: ../src/terminal-nautilus.c:491
+#: ../src/terminal-nautilus.c:489
 msgid "Open a terminal"
 msgstr "Адкрыць тэрмінал"
 
-#: ../src/terminal-nautilus.c:509 ../src/terminal-nautilus.c:522
+#: ../src/terminal-nautilus.c:507 ../src/terminal-nautilus.c:520
 msgid "Open in _Midnight Commander"
 msgstr "Ад_крыць у Midnight Commander"
 
-#: ../src/terminal-nautilus.c:511
+#: ../src/terminal-nautilus.c:509
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
 msgstr ""
 "Адкрыць вылучаную папку ў тэрмінальным кіраўніку файлаў Midnight Commander"
 
-#: ../src/terminal-nautilus.c:513 ../src/terminal-nautilus.c:523
+#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:521
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
 msgstr "Адкрыць гэтую папку ў тэрмінальным кіраўніку файлаў Midnight Commander"
 
-#: ../src/terminal-nautilus.c:519
+#: ../src/terminal-nautilus.c:517
 msgid "Open _Midnight Commander"
 msgstr "Ад_крыць Midnight Commander"
 
-#: ../src/terminal-nautilus.c:520
+#: ../src/terminal-nautilus.c:518
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Адкрыць тэрмінальны кіраўнік файлаў Midnight Commander"
 
-#: ../src/terminal-options.c:218
+#: ../src/terminal-options.c:224
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "Гэта версія gnome-terminal больш не падтрымлівае опцыю \"%s\"."
 
-#: ../src/terminal-options.c:229 ../src/terminal-util.c:234
+#: ../src/terminal-options.c:235 ../src/terminal-util.c:234
 msgid "GNOME Terminal"
 msgstr "Тэрмінал GNOME"
 
-#: ../src/terminal-options.c:269
+#: ../src/terminal-options.c:275
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Аргумент да \"%s\" не з'яўляецца прыдатным загадам: %s"
 
-#: ../src/terminal-options.c:404
+#: ../src/terminal-options.c:424
 msgid "Two roles given for one window"
 msgstr "Для аднаго акна прызначаны дзве ролі"
 
-#: ../src/terminal-options.c:425 ../src/terminal-options.c:458
+#: ../src/terminal-options.c:445 ../src/terminal-options.c:478
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "Опцыя \"%s\" двойчы вызначана для аднаго акна\n"
 
-#: ../src/terminal-options.c:668
+#: ../src/terminal-options.c:688
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Ступень павелічэння \"%g\" надта малая, таму ўжыта %g\n"
 
-#: ../src/terminal-options.c:676
+#: ../src/terminal-options.c:696
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Ступень павелічэння \"%g\" надта вялікая, таму ўжыта %g\n"
 
-#: ../src/terminal-options.c:714
+#: ../src/terminal-options.c:734
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1572,15 +1563,15 @@ msgstr ""
 "Опцыя \"%s\" патрабуе азначэння загаду для запуску ў астатняй частцы "
 "загаднага радка"
 
-#: ../src/terminal-options.c:850
+#: ../src/terminal-options.c:870
 msgid "Not a valid terminal config file."
 msgstr "Гэта не файл настроек тэрмінала."
 
-#: ../src/terminal-options.c:863
+#: ../src/terminal-options.c:883
 msgid "Incompatible terminal config file version."
 msgstr "Несумяшчальная версія файла настроек тэрмінала."
 
-#: ../src/terminal-options.c:1002
+#: ../src/terminal-options.c:1024
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1588,52 +1579,52 @@ msgstr ""
 "Не рэгістравацца з дапамогай актывацыйнага сервера назваў, не ўжываць "
 "паўторна актыўны тэрмінал"
 
-#: ../src/terminal-options.c:1011
+#: ../src/terminal-options.c:1033
 msgid "Load a terminal configuration file"
 msgstr "Загрузіць файл настроек тэрмінала"
 
-#: ../src/terminal-options.c:1012
+#: ../src/terminal-options.c:1034
 msgid "FILE"
 msgstr "ФАЙЛ"
 
-#: ../src/terminal-options.c:1033
+#: ../src/terminal-options.c:1055
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Адкрыць новае акно з карткай для прадвызначанага профіля"
 
-#: ../src/terminal-options.c:1042
+#: ../src/terminal-options.c:1064
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr ""
 "Адкрыць новую картку ў апошнім адкрытым акне для прадвызначанага профіля"
 
-#: ../src/terminal-options.c:1055
+#: ../src/terminal-options.c:1077
 msgid "Turn on the menubar"
 msgstr "Уключыць стужку меню"
 
-#: ../src/terminal-options.c:1064
+#: ../src/terminal-options.c:1086
 msgid "Turn off the menubar"
 msgstr "Выключыць стужку меню"
 
-#: ../src/terminal-options.c:1109
+#: ../src/terminal-options.c:1131
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Зрабіць апошнюю азначаную картку акна актыўнай"
 
-#: ../src/terminal-options.c:1122
+#: ../src/terminal-options.c:1144
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Выканаць аргумент гэтай опцыі ў тэрмінале"
 
-#: ../src/terminal-options.c:1132
+#: ../src/terminal-options.c:1154
 msgid "PROFILE-NAME"
 msgstr "ПРОФІЛЬ"
 
-#: ../src/terminal-options.c:1420 ../src/terminal-options.c:1426
+#: ../src/terminal-options.c:1442 ../src/terminal-options.c:1448
 msgid "GNOME Terminal Emulator"
 msgstr "Сімулятар тэрмінала GNOME"
 
-#: ../src/terminal-options.c:1427
+#: ../src/terminal-options.c:1449
 msgid "Show GNOME Terminal options"
 msgstr "Паказаць опцыі тэрмінала GNOME"
 
-#: ../src/terminal-options.c:1437
+#: ../src/terminal-options.c:1459
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1641,7 +1632,7 @@ msgstr ""
 "Опцыі для адкрыцця новых вокнаў і картак тэрмінала. Можна падаць адразу "
 "некалькі такіх опцый:"
 
-#: ../src/terminal-options.c:1446
+#: ../src/terminal-options.c:1468
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1649,11 +1640,11 @@ msgstr ""
 "Опцыі акна. Калі ўжыты перад першым аргументам --window ці --tab, "
 "прызначаюць настройкі для ўсіх вокнаў:"
 
-#: ../src/terminal-options.c:1447
+#: ../src/terminal-options.c:1469
 msgid "Show per-window options"
 msgstr "Паказаць опцыі для асобных вокнаў"
 
-#: ../src/terminal-options.c:1455
+#: ../src/terminal-options.c:1477
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1661,37 +1652,62 @@ msgstr ""
 "Опцыі тэрмінала. Калі ўжыты перад першым аргументам --window ці --tab, "
 "прызначаюць настройкі для ўсіх тэрміналаў:"
 
-#: ../src/terminal-options.c:1456
+#: ../src/terminal-options.c:1478
 msgid "Show per-terminal options"
 msgstr "Паказаць опцыі для асобных тэрміналаў"
 
-#: ../src/terminal-screen.c:1181
+#: ../src/terminal-prefs.c:227
+msgid "Click button to choose profile"
+msgstr "Пстрыкніце ў гэту кнопку, каб выбраць профіль"
+
+#: ../src/terminal-prefs.c:341
+msgid "Profile list"
+msgstr "Спіс профіляў"
+
+#: ../src/terminal-prefs.c:396
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "Выдаліць профіль \"%s\"?"
+
+#: ../src/terminal-prefs.c:412
+msgid "Delete Profile"
+msgstr "Выдаленне профіля"
+
+#: ../src/terminal-prefs.c:711
+msgid "Show"
+msgstr "Паказаць"
+
+#: ../src/terminal-prefs.c:722
+msgid "_Encoding"
+msgstr "_Кадаванне"
+
+#: ../src/terminal-screen.c:1164
 msgid "No command supplied nor shell requested"
 msgstr "Загад не пададзены, загадная абалонка не вызначана"
 
-#: ../src/terminal-screen.c:1434
+#: ../src/terminal-screen.c:1417 ../src/terminal-window.c:1673
 msgid "_Profile Preferences"
 msgstr "_Настройкі профіля"
 
-#: ../src/terminal-screen.c:1435 ../src/terminal-screen.c:1796
+#: ../src/terminal-screen.c:1418 ../src/terminal-screen.c:1779
 msgid "_Relaunch"
 msgstr "_Перазапусціць"
 
-#: ../src/terminal-screen.c:1438
+#: ../src/terminal-screen.c:1421
 msgid "There was an error creating the child process for this terminal"
 msgstr "Падчас утварэння працэсу-нашчадка для гэтага тэрмінала ўзнікла памылка"
 
-#: ../src/terminal-screen.c:1800
+#: ../src/terminal-screen.c:1783
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Працэс-нашчадак скончыў працу належным чынам, вярнуўшы код стану %d."
 
-#: ../src/terminal-screen.c:1803
+#: ../src/terminal-screen.c:1786
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Працэс-нашчадак быў гвалтоўна перарваны сігналам %d."
 
-#: ../src/terminal-screen.c:1806
+#: ../src/terminal-screen.c:1789
 msgid "The child process was aborted."
 msgstr "Працэс-нашчадак быў гвалтоўна перарваны."
 
@@ -1756,13 +1772,14 @@ msgid ""
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
 "Вы павінны былі атрымаць копію Агульнай Грамадскай Ліцэнзіі GNU (GPL) разам "
-"з Тэрміналам GNOME. Калі вы не атрымалі яе, прачытайце <http://www.gnu.org/licenses/>."
+"з Тэрміналам GNOME. Калі вы не атрымалі яе, прачытайце <http://www.gnu.org/"
+"licenses/>."
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:437
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1771,83 +1788,75 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:443
+#: ../src/terminal-window.c:442
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1622
+#: ../src/terminal-window.c:1625
 msgid "_File"
 msgstr "_Файл"
 
 #. File menu
-#: ../src/terminal-window.c:1623 ../src/terminal-window.c:1635
+#: ../src/terminal-window.c:1626 ../src/terminal-window.c:1638
 #: ../src/terminal-window.c:1782
 msgid "Open _Terminal"
 msgstr "Адкрыць _тэрмінал"
 
-#: ../src/terminal-window.c:1624 ../src/terminal-window.c:1638
+#: ../src/terminal-window.c:1627 ../src/terminal-window.c:1641
 #: ../src/terminal-window.c:1785
 msgid "Open Ta_b"
 msgstr "Адкрыць _картку"
 
-#: ../src/terminal-window.c:1625
+#: ../src/terminal-window.c:1628
 msgid "_Edit"
 msgstr "_Праўка"
 
-#: ../src/terminal-window.c:1626
+#: ../src/terminal-window.c:1629
 msgid "_View"
 msgstr "_Від"
 
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1630
 msgid "_Search"
 msgstr "По_шук"
 
-#: ../src/terminal-window.c:1628
+#: ../src/terminal-window.c:1631
 msgid "_Terminal"
 msgstr "_Тэрмінал"
 
-#: ../src/terminal-window.c:1629
+#: ../src/terminal-window.c:1632
 msgid "Ta_bs"
 msgstr "_Карткі"
 
-#: ../src/terminal-window.c:1641
-msgid "New _Profile…"
-msgstr "Новы _профіль..."
-
 #: ../src/terminal-window.c:1644
+msgid "New _Profile"
+msgstr "Н_овы профіль"
+
+#: ../src/terminal-window.c:1647
 msgid "_Save Contents"
 msgstr "_Захаваць змесціва"
 
-#: ../src/terminal-window.c:1647
+#: ../src/terminal-window.c:1650
 msgid "C_lose Tab"
 msgstr "_Закрыць картку"
 
-#: ../src/terminal-window.c:1650
+#: ../src/terminal-window.c:1653
 msgid "_Close Window"
 msgstr "За_крыць акно"
 
-#: ../src/terminal-window.c:1661 ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1664 ../src/terminal-window.c:1779
 msgid "Paste _Filenames"
 msgstr "Уставіць _назвы файлаў"
 
-#: ../src/terminal-window.c:1667
-msgid "P_rofiles…"
-msgstr "Пр_офілі..."
-
 #: ../src/terminal-window.c:1670
-msgid "_Keyboard Shortcuts…"
-msgstr "_Клавіятурныя скароты..."
-
-#: ../src/terminal-window.c:1673
-msgid "_Preferences…"
-msgstr "_Настройкі..."
+msgid "Pre_ferences"
+msgstr "_Настройкі"
 
 #. Search menu
 #: ../src/terminal-window.c:1689
-msgid "_Find..."
-msgstr "_Пошук..."
+msgid "_Find…"
+msgstr "По_шук..."
 
 #: ../src/terminal-window.c:1692
 msgid "Find Ne_xt"
@@ -1967,15 +1976,15 @@ msgstr "Паказаць стужку _меню"
 msgid "_Full Screen"
 msgstr "Поўна_экранны рэжым"
 
-#: ../src/terminal-window.c:2865
+#: ../src/terminal-window.c:2866
 msgid "Close this window?"
 msgstr "Закрыць гэта акно?"
 
-#: ../src/terminal-window.c:2865
+#: ../src/terminal-window.c:2866
 msgid "Close this terminal?"
 msgstr "Закрыць гэты тэрмінал?"
 
-#: ../src/terminal-window.c:2869
+#: ../src/terminal-window.c:2870
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1983,30 +1992,30 @@ msgstr ""
 "У некаторых тэрміналах гэтага акна дагэтуль выконваюцца працэсы. Закрыццё "
 "гэтага акна прывядзе да іх забойства."
 
-#: ../src/terminal-window.c:2873
+#: ../src/terminal-window.c:2874
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
 "У гэтым тэрмінале дагэтуль выконваецца працэс. Закрыццё тэрмінала заб'е яго."
 
-#: ../src/terminal-window.c:2878
+#: ../src/terminal-window.c:2879
 msgid "C_lose Window"
 msgstr "_Закрыць акно"
 
-#: ../src/terminal-window.c:2878
+#: ../src/terminal-window.c:2879
 msgid "C_lose Terminal"
 msgstr "_Закрыць тэрмінал"
 
-#: ../src/terminal-window.c:2951
+#: ../src/terminal-window.c:2952
 msgid "Could not save contents"
 msgstr "Не ўдалося захаваць змесціва"
 
-#: ../src/terminal-window.c:2975
-msgid "Save as..."
+#: ../src/terminal-window.c:2976
+msgid "Save as…"
 msgstr "Захаваць як..."
 
-#: ../src/terminal-window.c:3431
+#: ../src/terminal-window.c:3423
 msgid "_Title:"
 msgstr "_Загаловак:"
 
