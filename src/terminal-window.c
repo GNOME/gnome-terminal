@@ -242,13 +242,7 @@ enable_menubar_accel_changed_cb (GSettings *settings,
 
   /* FIXME: Once gtk+ bug 507398 is fixed, use that to reset the property instead */
   /* Now this is a bad hack on so many levels. */
-  saved_menubar_accel = g_object_get_data (G_OBJECT (settings), "GT::gtk-menu-bar-accel");
-  if (!saved_menubar_accel)
-    {
-      g_object_get (gtk_settings, "gtk-menu-bar-accel", &saved_menubar_accel, NULL);
-      g_object_set_data_full (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel",
-                              saved_menubar_accel, (GDestroyNotify) g_free);
-    }
+  saved_menubar_accel = g_object_get_data (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel");
 
   if (g_settings_get_boolean (settings, key))
     g_object_set (gtk_settings, "gtk-menu-bar-accel", saved_menubar_accel, NULL);
@@ -1546,6 +1540,7 @@ terminal_window_screen_update (TerminalWindow *window,
 {
   GSettings *settings;
   GtkSettings *gtk_settings;
+  char *value;
 
   terminal_window_window_manager_changed_cb (screen, window);
   g_signal_connect (screen, "window-manager-changed",
@@ -1567,6 +1562,12 @@ terminal_window_screen_update (TerminalWindow *window,
                    "gtk-enable-mnemonics",
                    G_SETTINGS_BIND_GET);
 
+  g_object_get (gtk_settings, "gtk-menu-bar-accel", &value, NULL);
+  g_object_set_data_full (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel",
+                          value, (GDestroyNotify) g_free);
+  enable_menubar_accel_changed_cb (settings, 
+                                   TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
+                                   gtk_settings);
   g_signal_connect (settings, "changed::" TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                     G_CALLBACK (enable_menubar_accel_changed_cb),
                     gtk_settings);
