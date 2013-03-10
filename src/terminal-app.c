@@ -251,17 +251,12 @@ app_menu_preferences_cb (GSimpleAction *action,
 {
   TerminalApp *app = user_data;
   GtkWindow *window;
-  TerminalScreen *screen;
 
   window = gtk_application_get_active_window (GTK_APPLICATION (app));
   if (!TERMINAL_IS_WINDOW (window))
     return;
 
-  screen = terminal_window_get_active (TERMINAL_WINDOW (window));
-  if (!TERMINAL_IS_SCREEN (screen))
-    return;
-
-  terminal_app_edit_profile (app, terminal_screen_get_profile (screen), window, NULL);
+  terminal_app_edit_preferences (app, window);
 }
 
 static void
