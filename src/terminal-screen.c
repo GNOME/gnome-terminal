@@ -1006,7 +1006,6 @@ terminal_screen_system_font_changed_cb (GSettings      *settings,
                                         TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  GSettings *profile = priv->profile;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
     return;
