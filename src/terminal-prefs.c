@@ -627,7 +627,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
 
   terminal_util_bind_mnemonic_label_sensitivity (dialog);
 
-  settings = terminal_app_get_global_settings (terminal_app_get ());
+  settings = terminal_app_get_global_settings (app);
 
   /* General tab */
 
