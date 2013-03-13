@@ -623,6 +623,7 @@ main (int argc,
   GOptionContext *context;
   GError *error = NULL;
   GSettings *global_settings;
+  int rv = EXIT_SUCCESS;
 
   setlocale (LC_ALL, "");
 
@@ -645,15 +646,22 @@ main (int argc,
 
   global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
 
+  if (clean) {
+    if (!force) {
+      g_printerr ("--clean requires --force\n");
+      rv = EXIT_FAILURE;
+      goto out;
+    }
+
+    do_clean ();
+  }
+ 
   if (g_settings_get_uint (global_settings, TERMINAL_SETTING_SCHEMA_VERSION) >= TERMINAL_SCHEMA_VERSION) {
     if (verbose)
       g_printerr ("Already migrated.\n");
     if (!force)
       goto out;
   }
-
-  if (clean)
-    do_clean ();
 
   if (!migrate (global_settings, &error)) {
     g_printerr ("Error: %s\n", error->message);
@@ -674,5 +682,5 @@ main (int argc,
  out:
   g_object_unref (global_settings);
 
-  return EXIT_SUCCESS;
+  return rv;
 }
