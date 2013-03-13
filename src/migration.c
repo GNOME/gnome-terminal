@@ -287,6 +287,31 @@ migrate_genum (GConfClient *client,
     gconf_value_free (value);
 }
 
+static void
+migrate_palette (GConfClient *client,
+                 const char *gconf_path,
+                 GSettings *settings)
+{
+  GConfValue *value;
+  char *key;
+  char **strv;
+
+  key = gconf_concat_dir_and_key (gconf_path, KEY_PALETTE);
+  value = gconf_client_get_without_default (client, key, NULL);
+  g_free (key);
+
+  if (value != NULL &&
+      value->type == GCONF_VALUE_STRING) {
+    strv = g_strsplit (gconf_value_get_string (value), ":", -1);
+    g_settings_set_strv (settings, TERMINAL_PROFILE_PALETTE_KEY,
+                         (const char * const *) strv);
+    g_strfreev (strv);
+  }
+
+  if (value)
+    gconf_value_free (value);
+}
+
 static gboolean
 migrate_global_prefs (GSettings *settings,
                       GError **error)
@@ -423,8 +448,7 @@ migrate_profile (TerminalSettingsList *list,
   migrate_genum (client, path, KEY_CURSOR_SHAPE,
                  settings, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                  VTE_TYPE_TERMINAL_CURSOR_SHAPE);
-  migrate_string_list (client, path, KEY_PALETTE,
-                       settings, TERMINAL_PROFILE_PALETTE_KEY);
+  migrate_palette (client, path, settings);
   migrate_string (client, path, KEY_FONT,
                   settings, TERMINAL_PROFILE_FONT_KEY);
   migrate_enum (client, path, KEY_BACKSPACE_BINDING, erase_binding_pairs,

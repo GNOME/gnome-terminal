@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-#define TERMINAL_SCHEMA_VERSION         (2u)
+#define TERMINAL_SCHEMA_VERSION         (3u)
 
 #define TERMINAL_KEYBINDINGS_SCHEMA     "org.gnome.Terminal.Legacy.Keybindings"
 #define TERMINAL_PROFILE_SCHEMA         "org.gnome.Terminal.Legacy.Profile"
