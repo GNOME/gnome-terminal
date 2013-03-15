@@ -26,7 +26,7 @@ HELP_FILES = \
 	pref.page \
 	pref-bell.page \
 	pref-custom-exit.page \
-	pref-custom-shells.page \
+	pref-custom-command.page \
 	pref-encoding.page \
 	pref-keyboard-access.page \
 	pref-menubar.page \
