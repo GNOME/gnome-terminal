@@ -1389,7 +1389,8 @@ terminal_screen_do_exec (TerminalScreen *screen,
 
   profile = priv->profile;
 
-  if (priv->initial_working_directory)
+  if (priv->initial_working_directory &&
+      !g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
     working_dir = priv->initial_working_directory;
   else
     working_dir = g_get_home_dir ();
