@@ -101,7 +101,7 @@ main (int argc, char **argv)
 
   g_set_application_name (_("Terminal"));
 
-  if (!gtk_init_with_args (&argc, &argv, "", options, NULL, &error)) {
+  if (!gtk_init_with_args (&argc, &argv, NULL, options, NULL, &error)) {
     g_printerr ("Failed to parse arguments: %s\n", error->message);
     g_error_free (error);
     exit (EXIT_FAILURE);
