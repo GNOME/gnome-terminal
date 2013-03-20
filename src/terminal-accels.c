@@ -196,43 +196,34 @@ static KeyEntry tabs_entries[] =
     KEY_MOVE_TAB_RIGHT, ACCEL_PATH_MOVE_TAB_RIGHT, { GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_KEY_Page_Down }, NULL, FALSE, TRUE },
   { N_("Detach Tab"),
     KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, { 0, 0 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 1"),
-    KEY_SWITCH_TAB_PREFIX "1",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "1", { GDK_MOD1_MASK, GDK_KEY_1 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 2"),
-    KEY_SWITCH_TAB_PREFIX "2",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "2", { GDK_MOD1_MASK, GDK_KEY_2 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 3"),
-    KEY_SWITCH_TAB_PREFIX "3",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "3", { GDK_MOD1_MASK, GDK_KEY_3 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 4"),
-    KEY_SWITCH_TAB_PREFIX "4",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "4", { GDK_MOD1_MASK, GDK_KEY_4 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 5"),
-    KEY_SWITCH_TAB_PREFIX "5",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "5", { GDK_MOD1_MASK, GDK_KEY_5 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 6"),
-    KEY_SWITCH_TAB_PREFIX "6",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "6", { GDK_MOD1_MASK, GDK_KEY_6 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 7"),
-    KEY_SWITCH_TAB_PREFIX "7",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "7", { GDK_MOD1_MASK, GDK_KEY_7 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 8"),
-    KEY_SWITCH_TAB_PREFIX "8",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "8", { GDK_MOD1_MASK, GDK_KEY_8 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 9"),
-    KEY_SWITCH_TAB_PREFIX "9",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "9", { GDK_MOD1_MASK, GDK_KEY_9 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 10"),
-    KEY_SWITCH_TAB_PREFIX "10",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "10", { GDK_MOD1_MASK, GDK_KEY_0}, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 11"),
-    KEY_SWITCH_TAB_PREFIX "11",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "11", { 0, 0 }, NULL, FALSE, TRUE },
-  { N_("Switch to Tab 12"),
-    KEY_SWITCH_TAB_PREFIX "12",
-    ACCEL_PATH_SWITCH_TAB_PREFIX "12", { 0, 0 }, NULL, FALSE, TRUE }
+
+#define SWITCH_TAB_ACCEL(num, modifier, key)    \
+  { NULL, \
+    KEY_SWITCH_TAB_PREFIX # num, \
+    ACCEL_PATH_SWITCH_TAB_PREFIX # num, \
+    { modifier, key }, \
+    NULL, \
+    FALSE, \
+    TRUE \
+  }
+#define SWITCH_TAB_ACCEL_NO_DEFAULT(num) SWITCH_TAB_ACCEL (num, 0, 0)
+
+  SWITCH_TAB_ACCEL (1,  GDK_MOD1_MASK, GDK_KEY_1),
+  SWITCH_TAB_ACCEL (2,  GDK_MOD1_MASK, GDK_KEY_2),
+  SWITCH_TAB_ACCEL (3,  GDK_MOD1_MASK, GDK_KEY_3),
+  SWITCH_TAB_ACCEL (4,  GDK_MOD1_MASK, GDK_KEY_4),
+  SWITCH_TAB_ACCEL (5,  GDK_MOD1_MASK, GDK_KEY_5),
+  SWITCH_TAB_ACCEL (6,  GDK_MOD1_MASK, GDK_KEY_6),
+  SWITCH_TAB_ACCEL (7,  GDK_MOD1_MASK, GDK_KEY_7),
+  SWITCH_TAB_ACCEL (8,  GDK_MOD1_MASK, GDK_KEY_8),
+  SWITCH_TAB_ACCEL (9,  GDK_MOD1_MASK, GDK_KEY_9),
+  SWITCH_TAB_ACCEL (10, GDK_MOD1_MASK, GDK_KEY_0),
+  SWITCH_TAB_ACCEL_NO_DEFAULT (11),
+  SWITCH_TAB_ACCEL_NO_DEFAULT (12),
 };
+
+#undef SWITCH_TAB_ACCEL
+#undef SWITCH_TAB_ACCEL_NO_DEFAULT
 
 static KeyEntry help_entries[] = {
   { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, { 0, GDK_KEY_F1 }, NULL, FALSE, TRUE }
@@ -320,6 +311,20 @@ terminal_accels_init (GSettings *settings)
   settings_key_to_entry = g_hash_table_new (g_str_hash, g_str_equal);
 
   notification_group = gtk_accel_group_new ();
+
+  /* Initialise names of tab_switch_entries */
+  j = 1;
+  for (i = 0; i < G_N_ELEMENTS (tabs_entries); i++)
+    {
+      char *name;
+
+      if (tabs_entries[i].user_visible_name != NULL)
+        continue;
+
+      name = g_strdup_printf (N_("Switch to Tab %d"), j++);
+      tabs_entries[i].user_visible_name = g_intern_string (name);
+      g_free (name);
+    }
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
     {
