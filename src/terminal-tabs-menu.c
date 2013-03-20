@@ -31,7 +31,7 @@
 #include "terminal-screen-container.h"
 #include "terminal-intl.h"
 
-#define TERMINAL_ACCELS_N_TABS_SWITCH (12)
+#define TERMINAL_ACCELS_N_TABS_SWITCH (35) /* keep in sync with terminal-accels.c */
 
 #define LABEL_WIDTH_CHARS 32
 #define ACTION_VERB_FORMAT_PREFIX       "JmpTab"

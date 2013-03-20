@@ -197,7 +197,7 @@ static KeyEntry tabs_entries[] =
   { N_("Detach Tab"),
     KEY_DETACH_TAB, ACCEL_PATH_DETACH_TAB, { 0, 0 }, NULL, FALSE, TRUE },
 
-#define SWITCH_TAB_ACCEL(name, num, modifier, key)       \
+#define SWITCH_TAB_ACCEL(name, num, modifier, key) \
   { name, \
     KEY_SWITCH_TAB_PREFIX # num, \
     ACCEL_PATH_SWITCH_TAB_PREFIX # num, \
@@ -206,6 +206,7 @@ static KeyEntry tabs_entries[] =
     FALSE, \
     TRUE \
   }
+#define SWITCH_TAB_ACCEL_HIDDEN(num) SWITCH_TAB_ACCEL (NULL, num, 0, 0)
 
   SWITCH_TAB_ACCEL (N_("Switch to Tab 1"), 1, GDK_MOD1_MASK, GDK_KEY_1),
   SWITCH_TAB_ACCEL (N_("Switch to Tab 2"), 2,  GDK_MOD1_MASK, GDK_KEY_2),
@@ -218,11 +219,34 @@ static KeyEntry tabs_entries[] =
   SWITCH_TAB_ACCEL (N_("Switch to Tab 9"), 9,  GDK_MOD1_MASK, GDK_KEY_9),
   SWITCH_TAB_ACCEL (N_("Switch to Tab 10"), 10, GDK_MOD1_MASK, GDK_KEY_0),
   SWITCH_TAB_ACCEL (N_("Switch to Tab 11"), 11, 0, 0),
-  SWITCH_TAB_ACCEL (N_("Switch to Tab 12"), 12, 0, 0)
+  SWITCH_TAB_ACCEL (N_("Switch to Tab 12"), 12, 0, 0),
+  SWITCH_TAB_ACCEL_HIDDEN (13),
+  SWITCH_TAB_ACCEL_HIDDEN (14),
+  SWITCH_TAB_ACCEL_HIDDEN (15),
+  SWITCH_TAB_ACCEL_HIDDEN (16),
+  SWITCH_TAB_ACCEL_HIDDEN (17),
+  SWITCH_TAB_ACCEL_HIDDEN (18),
+  SWITCH_TAB_ACCEL_HIDDEN (19),
+  SWITCH_TAB_ACCEL_HIDDEN (20),
+  SWITCH_TAB_ACCEL_HIDDEN (21),
+  SWITCH_TAB_ACCEL_HIDDEN (22),
+  SWITCH_TAB_ACCEL_HIDDEN (23),
+  SWITCH_TAB_ACCEL_HIDDEN (24),
+  SWITCH_TAB_ACCEL_HIDDEN (25),
+  SWITCH_TAB_ACCEL_HIDDEN (26),
+  SWITCH_TAB_ACCEL_HIDDEN (27),
+  SWITCH_TAB_ACCEL_HIDDEN (28),
+  SWITCH_TAB_ACCEL_HIDDEN (29),
+  SWITCH_TAB_ACCEL_HIDDEN (30),
+  SWITCH_TAB_ACCEL_HIDDEN (31),
+  SWITCH_TAB_ACCEL_HIDDEN (32),
+  SWITCH_TAB_ACCEL_HIDDEN (33),
+  SWITCH_TAB_ACCEL_HIDDEN (34),
+  SWITCH_TAB_ACCEL_HIDDEN (35)
 };
 
 #undef SWITCH_TAB_ACCEL
-#undef SWITCH_TAB_ACCEL_NO_DEFAULT
+#undef SWITCH_TAB_ACCEL_HIDDEN
 
 static KeyEntry help_entries[] = {
   { N_("Contents"), KEY_HELP, ACCEL_PATH_HELP, { 0, GDK_KEY_F1 }, NULL, FALSE, TRUE }
@@ -765,6 +789,9 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
 	{
 	  KeyEntry *key_entry = &(all_entries[i].key_entry[j]);
 	  GtkTreeIter iter;
+
+          if (key_entry->user_visible_name == NULL)
+            continue;
 
           gtk_tree_store_insert_with_values (tree, &iter, &parent_iter, -1,
                                              ACTION_COLUMN, _(key_entry->user_visible_name),
