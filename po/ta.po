@@ -7,7 +7,7 @@
 # Dinesh Nadarajah <n_dinesh@yahoo.com>, 2003.
 # Jayaradha N <jaya@pune.redhat.com>, 2004.
 # Felix <ifelix@redhat.com>, 2006.
-# Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2009, 2010, 2011, 2012.
+# Dr.T.Vasudevan <agnihot3@gmail.com>, 2007, 2009, 2010, 2011, 2012, 2013.
 # Dr.T.vasudevan <agnihot3@gmail.com>, 2009.
 # I. Felix <ifelix@redhat.com>, 2009.
 # Dr,T,Vasudevan <agnihot3@gmail.com>, 2010.
@@ -15,15 +15,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.master.ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-19 19:49+0530\n"
-"PO-Revision-Date: 2012-09-19 21:35+0530\n"
-"Last-Translator: Dr.T.Vasudevan <agnihot3@gmail.com>\n"
-"Language-Team: Tamil <ubuntu-tam@lists.ubuntu.com>\n"
+"POT-Creation-Date: 2013-03-21 19:48+0530\n"
+"PO-Revision-Date: 2013-03-21 20:00+0530\n"
+"Last-Translator: Dr.T.Vasudevan <drtvasudevan@gmail.com>\n"
+"Language-Team: Tamil <<gnome-tamil-translation@googlegroups.com>>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.1\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\\n"
 "\n"
 "\n"
@@ -33,9 +33,9 @@ msgstr ""
 "\n"
 "\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:92
-#: ../src/terminal-accels.c:146 ../src/terminal.c:244
-#: ../src/terminal-window.c:1839
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:102
+#: ../src/terminal-accels.c:246 ../src/terminal.c:250
+#: ../src/terminal-window.c:1840
 msgid "Terminal"
 msgstr "முனையம்"
 
@@ -43,605 +43,315 @@ msgstr "முனையம்"
 msgid "Use the command line"
 msgstr "கட்டளை வரியை பயன்படுத்து"
 
-#: ../src/client.c:117
+#: ../gnome-terminal.desktop.in.in.h:3
+msgid "shell;prompt;command;commandline;"
+msgstr "ஷெல்;தூண்டி;கட்டளை;கட்டளை வரி;"
+
+#: ../src/client.c:88
 msgid "COMMAND"
 msgstr "COMMAND"
 
-#: ../src/client.c:122
+#: ../src/client.c:93
 #, c-format
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
-"  open    Create a new terminal\n"
+"  run     Create a new terminal running the specified command\n"
+"  shell   Create a new terminal running the user shell\n"
 "\n"
 "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgstr ""
 "கட்டளைகள்:\n"
-"  உதவி  இந்த தகவலை காட்டுகிறது\n"
-"  திற    புதிய முனையத்தை உருவாக்குகிறது\n"
+"   help  இந்த தகவலை காட்டுகிறது\n"
+"  run    புதிய முனையத்தை உருவாக்குகிறது\n"
+" shell   பயனர் shell ஐ இயக்கும் புதிய முனையத்தை உருவாக்குகிறது \n"
 "\n"
 " \"%s COMMAND --help\" ஐ ஒவ்வொரு கட்டளைக்கும் உதவி பெற காட்டவும்.\n"
 
-#: ../src/client.c:217 ../src/terminal-options.c:589
+#: ../src/client.c:200 ../src/terminal-options.c:681
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" செல்லாத பெரிதாக்க விகிதம் "
 
-#: ../src/client.c:330
+#: ../src/client.c:331
 msgid "Be quiet"
 msgstr "சும்மா இரு"
 
-#: ../src/client.c:341 ../src/terminal-options.c:994
-msgid "Maximise the window"
+#: ../src/client.c:342 ../src/terminal-options.c:1095
+msgid "Maximize the window"
 msgstr "சாளரத்தை பெரிதாக்கு"
 
-#: ../src/client.c:343 ../src/terminal-options.c:1003
+#: ../src/client.c:344 ../src/terminal-options.c:1104
 msgid "Full-screen the window"
 msgstr "முழுதிரை சாளரம்"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1012
-msgid "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+#: ../src/client.c:346 ../src/terminal-options.c:1113
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
-"சாளரத்தின் அளவை அமைக்கவும். எடுத்துக்காட்டு: 80x24, அல்லது 80x24+200+200 (COLSxROWS+X"
+"சாளரத்தின் அளவை அமைக்கவும். எடுத்துக்காட்டு: 80x24, அல்லது 80x24+200+200 "
+"(COLSxROWS+X"
 "+Y)"
 
-#: ../src/client.c:346 ../src/terminal-options.c:1013
+#: ../src/client.c:347 ../src/terminal-options.c:1114
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: ../src/client.c:348 ../src/terminal-options.c:1021
+#: ../src/client.c:349 ../src/terminal-options.c:1122
 msgid "Set the window role"
 msgstr "சாளரத்தின் செயலை அமைக்கவும்"
 
-#: ../src/client.c:348 ../src/terminal-options.c:1022
+#: ../src/client.c:349 ../src/terminal-options.c:1123
 msgid "ROLE"
 msgstr "ROLE"
 
-#: ../src/client.c:354 ../src/terminal-options.c:1052
+#: ../src/client.c:355 ../src/terminal-options.c:1153
 msgid "Use the given profile instead of the default profile"
 msgstr "கொடுத்த வரியுருவை முன்னிருப்பு வரியுருக்கு பதில் பயன்படுத்துக "
 
-#: ../src/client.c:355 ../src/terminal-options.c:1053
-msgid "PROFILE-NAME"
-msgstr "PROFILE-NAME"
+#: ../src/client.c:356
+msgid "UUID"
+msgstr "யூயூஐடி"
 
-#: ../src/client.c:357 ../src/terminal-options.c:1061
+#: ../src/client.c:358 ../src/terminal-options.c:1162
 msgid "Set the terminal title"
 msgstr "முனையத்தின் தலைப்பை அமைக்கவும்"
 
-#: ../src/client.c:357 ../src/terminal-options.c:1062
+#: ../src/client.c:358 ../src/terminal-options.c:1163
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1070
+#: ../src/client.c:360 ../src/terminal-options.c:1171
 msgid "Set the working directory"
 msgstr "முனையத்தின் பணி அடைவை அமை"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1071
+#: ../src/client.c:360 ../src/terminal-options.c:1172
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1079
+#: ../src/client.c:362 ../src/terminal-options.c:1180
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "முனையத்தின் அளவு மாற்ற விகிதத்தை அமை (1.0 = இயல்பான அளவு)"
 
-#: ../src/client.c:362 ../src/terminal-options.c:1080
+#: ../src/client.c:363 ../src/terminal-options.c:1181
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ../src/client.c:368
+#: ../src/client.c:369
 msgid "Forward stdin"
 msgstr "பார்வேர்ட் stdin"
 
-#: ../src/client.c:370
+#: ../src/client.c:371
 msgid "Forward stdout"
 msgstr "பார்வேர்ட் stdout"
 
-#: ../src/client.c:372
+#: ../src/client.c:373
 msgid "Forward stderr"
 msgstr "பார்வேர்ட் stderr"
 
-#: ../src/client.c:374
+#: ../src/client.c:375
 msgid "Forward file descriptor"
 msgstr "முன் கோப்பு விவரணம்"
 
-#: ../src/client.c:374
+#: ../src/client.c:375
 msgid "FD"
 msgstr "FD"
 
-#: ../src/client.c:380
+#: ../src/client.c:381
 msgid "Wait until the child exits"
 msgstr "சேய் வெளியேறும் வரை காத்திருக்கவும்"
 
-#: ../src/client.c:390
+#: ../src/client.c:391
 msgid "GNOME Terminal Client"
 msgstr "க்னோம் முனையம் சார்ந்தோன்"
 
-#: ../src/client.c:394
+#: ../src/client.c:395
 msgid "Global options:"
 msgstr "உலகளாவிய தேர்வுகள்:"
 
-#: ../src/client.c:395
+#: ../src/client.c:396
 msgid "Show global options"
 msgstr "உலகளாவிய தேர்வுகளை காட்டுக"
 
-#: ../src/client.c:403
+#: ../src/client.c:404
 msgid "Server options:"
 msgstr "சேவையக தேர்வுகள்:"
 
-#: ../src/client.c:404
+#: ../src/client.c:405
 msgid "Show server options"
 msgstr "சேவையக தேர்வுகளை காட்டுக"
 
-#: ../src/client.c:412
+#: ../src/client.c:413
 msgid "Window options:"
 msgstr "சாளர தேர்வுகள்:"
 
-#: ../src/client.c:413
+#: ../src/client.c:414
 msgid "Show window options"
 msgstr "சாளர தேர்வுகளை காட்டுக"
 
-#: ../src/client.c:421
+#: ../src/client.c:422
 msgid "Terminal options:"
 msgstr "முனைய தேர்வுகள்:"
 
-#: ../src/client.c:422 ../src/terminal-options.c:1359
+#: ../src/client.c:423 ../src/terminal-options.c:1460
 msgid "Show terminal options"
 msgstr "முனைய தேர்வுகளை காட்டுக"
 
-#: ../src/client.c:430
+#: ../src/client.c:431
 msgid "Exec options:"
 msgstr "செயலாக்க தேர்வுகள்:"
 
-#: ../src/client.c:431
+#: ../src/client.c:432
 msgid "Show exec options"
 msgstr "செயலாக்க தேர்வுகளை காட்டுக"
 
-#: ../src/client.c:439
+#: ../src/client.c:440
 msgid "Processing options:"
 msgstr "செயலாக்க தேர்வுகள்:"
 
-#: ../src/client.c:440
+#: ../src/client.c:441
 msgid "Show processing options"
 msgstr "செயலாக்க தேர்வுகளை காட்டுக"
 
-#: ../src/encodings-dialog.glade.h:1
-msgid "A_vailable encodings:"
-msgstr "(_v)கிடைக்கும் குறியாக்கம்:"
-
-#: ../src/encodings-dialog.glade.h:2
-msgid "Add or Remove Terminal Encodings"
-msgstr "முனைய எழுத்துருவை சேர் அல்லது நீக்கு"
-
-#: ../src/encodings-dialog.glade.h:3
-msgid "E_ncodings shown in menu:"
-msgstr "(_n)மெனுவில் உள்ள குறிமுறை:"
-
-#.
-#. * Copyright © 2009 Christian Persch
-#. *
-#. * Gnome-terminal is free software; you can redistribute it and/or modify
-#. * it under the terms of the GNU General Public License as published by
-#. * the Free Software Foundation; either version 3 of the License, or
-#. * (at your option) any later version.
-#. *
-#. * Gnome-terminal is distributed in the hope that it will be useful,
-#. * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#. * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#. * GNU General Public License for more details.
-#. *
-#. * You should have received a copy of the GNU General Public License
-#. * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#.
-#. This file contains extra strings that need to be translated, but
-#. * can't be extracted by intltool since the ui files aren't in git, and
-#. * the glade files don't contain them in the right form. See bug #553357.
-#.
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:24
-msgid "Automatic"
-msgstr "தானாக"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:26
-msgid "Control-H"
-msgstr "கட்டுத்து-H"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:28
-msgid "ASCII DEL"
-msgstr "ASCII DEL"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:30
-msgid "Escape sequence"
-msgstr "எஸ்கேப் வரிசை"
-
-#. Translators: This refers to the Delete keybinding option
-#: ../src/extra-strings.c:32
-msgid "TTY Erase"
-msgstr "டிடிஒய் எரேஸ்"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:35
-msgid "Block"
-msgstr "தடுப்பு"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:37
-msgid "I-Beam"
-msgstr "I-பீம்"
-
-#. Translators: Cursor shape: ...
-#: ../src/extra-strings.c:39
-msgid "Underline"
-msgstr "அடிக்கோடு"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:42
-msgid "Exit the terminal"
-msgstr "முனையத்திலிருந்து வெளியேறு"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:44
-msgid "Restart the command"
-msgstr "கட்டளையை மறுதுவக்கு"
-
-#. Translators: When command exits: ...
-#: ../src/extra-strings.c:46
-msgid "Hold the terminal open"
-msgstr "முனையத்தின் திறப்பை பிடி"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:49
-msgid "Always visible"
-msgstr "எப்போதும் தெரியும்"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:51
-msgid "Visible only when necessary"
-msgstr "தேவையானபோது மட்டும் தெரியும்"
-
-#. Translators: Scrollbar is: ...
-#: ../src/extra-strings.c:53
-msgid "Hidden"
-msgstr "மறைந்த"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:56
-msgid "Replace initial title"
-msgstr "தொடக்க தலைப்பை மாற்று"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:58
-msgid "Append initial title"
-msgstr "தொடக்க தலைப்பை சேர்"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:60
-msgid "Prepend initial title"
-msgstr "தொடக்க தலைப்பை முன்சேர்"
-
-#. Translators: When terminal commands set their own titles: ...
-#: ../src/extra-strings.c:62
-msgid "Keep initial title"
-msgstr "தொடக்க தலைப்பு வை"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:65
-msgid "Tango"
-msgstr "டாங்கோ"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:67
-msgid "Linux console"
-msgstr "Linux பணியகம்"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:69
-msgid "XTerm"
-msgstr "Xமுனையம்"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:71
-msgid "Rxvt"
-msgstr "Rxvt"
-
-#. Translators: This is the name of a colour scheme
-#: ../src/extra-strings.c:73 ../src/profile-editor.c:443
-msgid "Custom"
-msgstr "தனிப்பயன்"
-
-#: ../src/find-dialog.glade.h:1
+#: ../src/find-dialog.ui.h:1
 msgid "Find"
 msgstr "தேடு"
 
-#: ../src/find-dialog.glade.h:2
-msgid "Match _entire word only"
-msgstr "_ம உள்ளிடும் வார்தையை மட்டும் பொருத்து"
-
-#: ../src/find-dialog.glade.h:3
-msgid "Match as _regular expression"
-msgstr "(_r) இயல்பான கூற்று ஆக பொருத்துக"
-
-#: ../src/find-dialog.glade.h:4
-msgid "Search _backwards"
-msgstr "_ப தேடல் பின்னே"
-
-#: ../src/find-dialog.glade.h:5
-msgid "_Match case"
-msgstr "_ந பொருத்த நிலை"
-
-#: ../src/find-dialog.glade.h:6
+#: ../src/find-dialog.ui.h:2
 msgid "_Search for:"
 msgstr "_த தேடு: "
 
-#: ../src/find-dialog.glade.h:7
+#: ../src/find-dialog.ui.h:3
+msgid "_Match case"
+msgstr "_ந பொருத்த நிலை"
+
+#: ../src/find-dialog.ui.h:4
+msgid "Match _entire word only"
+msgstr "_ம உள்ளிடும் வார்தையை மட்டும் பொருத்து"
+
+#: ../src/find-dialog.ui.h:5
+msgid "Match as _regular expression"
+msgstr "(_r) இயல்பான கூற்று ஆக பொருத்துக"
+
+#: ../src/find-dialog.ui.h:6
+msgid "Search _backwards"
+msgstr "_ப தேடல் பின்னே"
+
+#: ../src/find-dialog.ui.h:7
 msgid "_Wrap around"
 msgstr "_மடிந்து வருதல்"
 
-#: ../src/keybinding-editor.glade.h:1
-msgid "Enable the _menu shortcut key (F10 by default)"
-msgstr "(_m) பட்டியல் குறுக்கு விசைகளை செயல்படுத்து (F10 இயல்பாக)"
+#: ../src/migration.c:384 ../src/terminal-prefs.c:98
+msgid "Unnamed"
+msgstr "பெயரில்லாத"
 
-#: ../src/keybinding-editor.glade.h:2
-msgid "Keyboard Shortcuts"
-msgstr "விசைப்பலகை குறுக்கு விசை"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
+msgid "Human-readable name of the profile"
+msgstr "மனிதனால் படிக்ககூடிய பெயர் விவரம்"
 
-#: ../src/keybinding-editor.glade.h:3
-msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
-msgstr "(_E) மெனு அணுகல் விசைகளை செயல் படுத்துக (அதாவது Alt+F கோப்பை திறப்பது போல)"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
+msgid "Human-readable name of the profile."
+msgstr "மனிதனால் படிக்ககூடிய பெயர் விவரம்"
 
-#: ../src/keybinding-editor.glade.h:4
-msgid "_Shortcut keys:"
-msgstr "குறுக்கு விசைகள்: (_S)"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
+msgid "Default color of text in the terminal"
+msgstr "முனையத்தில் உரையில் இயல்பான வண்ணம்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:1
-msgid "A pango font name and size"
-msgstr "ஒரு  பாங்கோ எழுத்துரு பெயரும் அளவும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:2
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
 msgid ""
-"A subset of possible encodings are presented in the Encoding submenu. This "
-"is a list of encodings to appear there. The special encoding name \"current"
-"\" means to display the encoding of the current locale."
+"Default color of text in the terminal, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
 msgstr ""
-"துணைப்பட்டியலில் எல்லா குறியாக்க முறைகளும் தரப்பட்டுள்ளது. இது குறிகளின் பட்டியல் "
-"\"தற்போது\" என்பதை தேர்வு செய்தால் தற்போது உங்கள் கணினி பயன்படுத்தும் மொழியின் குறிமுறை "
-"தேர்வு செய்யப்படும்."
+"முனையத்தின் இயல்பான உரையில் வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணிலோ அல்லது "
+"எண்ம "
+"மதிப்பாகவோ அல்லது நிறத்தின் பெயர் \"red\" ஆகவோ இருக்கலாம்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:3
-msgid "Characters that are considered \"part of a word\""
-msgstr "\"வார்த்தையின் பகுதிகளாக\" எழுத்துக்கள் ஏற்கப்பட்டன"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
+msgid "Default color of terminal background"
+msgstr "முனையத்தின் இயல்பான பின்னணி வண்ணம்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:4
-msgid "Custom command to use instead of the shell"
-msgstr "செல் கட்டளைக்கு பதிலாக பயன்படுத்த வேண்டிய தனி கட்டளை"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
+msgid ""
+"Default color of terminal background, as a color specification (can be HTML-"
+"style hex digits, or a color name such as \"red\")."
+msgstr ""
+"முனையத்தின் இயல்பான பின்னணி வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணிலோ அல்லது "
+"எண்ம "
+"மதிப்பாகவோ அல்லது நிறத்தின் பெயர் \"red\" ஆகவோ இருக்கலாம்)."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:5
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
 msgid "Default color of bold text in the terminal"
 msgstr "முனையத்தில் தடித்த உரையில் இயல்பான வண்ணம்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:6
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
 "bold_color_same_as_fg is true."
 msgstr ""
-"முனையத்தின் தடித்த உரையில் வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணி அறும எண்ணாகவோ  அல்லது "
-"நிறத்தின் பெயர் -\"red\" போல - ஆகவோ இருக்கலாம். bold_color_same_as_fg என்பது உண்மை "
+"முனையத்தின் தடித்த உரையில் வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணி அறும "
+"எண்ணாகவோ  அல்லது "
+"நிறத்தின் பெயர் -\"red\" போல - ஆகவோ இருக்கலாம். bold_color_same_as_fg என்பது "
+"உண்மை "
 "என்ற பட்சத்தில் இதை உதாசீனம் செய்யலாம்."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:7
-msgid "Default color of terminal background"
-msgstr "முனையத்தின் இயல்பான பின்னணி வண்ணம்"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
+msgid "Whether bold text should use the same color as normal text"
+msgstr "சாதாரண உரையின் வண்னத்திலேயே தடிமனான உரையும் இருக்க வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:8
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
 msgid ""
-"Default color of terminal background, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
-msgstr ""
-"முனையத்தின் இயல்பான பின்னணி வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணிலோ அல்லது எண்ம "
-"மதிப்பாகவோ அல்லது நிறத்தின் பெயர் \"red\" ஆகவோ இருக்கலாம்)."
+"If true, boldface text will be rendered using the same color as normal text."
+msgstr "உண்மை எனில் தடித்த உரை சாதாரண உரையின் வண்னத்திலேயே அமைக்கப்படும்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:9
-msgid "Default color of text in the terminal"
-msgstr "முனையத்தில் உரையில் இயல்பான வண்ணம்"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
+msgid "What to do with dynamic title"
+msgstr "செயல்பாட்டு தலைப்பை கொண்டு என்ன செய்வது"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:10
-msgid ""
-"Default color of text in the terminal, as a color specification (can be HTML-"
-"style hex digits, or a color name such as \"red\")."
-msgstr ""
-"முனையத்தின் இயல்பான உரையில் வண்ணம், வண்ண குறிப்புகள் ( HTML- பாணிலோ அல்லது எண்ம "
-"மதிப்பாகவோ அல்லது நிறத்தின் பெயர் \"red\" ஆகவோ இருக்கலாம்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:11
-msgid "Default number of columns"
-msgstr "முன்னிருப்பு நெடு வரிசைகளின் எண்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:12
-msgid "Default number of rows"
-msgstr "முன்னிருப்பு வரிசைகளின் எண்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:13
-msgid "Human-readable name of the profile"
-msgstr "மனிதனால் படிக்ககூடிய பெயர் விவரம்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:14
-msgid "Human-readable name of the profile."
-msgstr "மனிதனால் படிக்ககூடிய பெயர் விவரம்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
 msgid ""
 "If the application in the terminal sets the title (most typically people "
 "have their shell set up to do this), the dynamically-set title can erase the "
 "configured title, go before it, go after it, or replace it. The possible "
 "values are \"replace\", \"before\", \"after\", and \"ignore\"."
 msgstr ""
-"முனையத்தில் உள்ள பயன்பட்டுக்கு தலைப்பு அமைக்கப்பட்டால்(இதை செல்லை பயன்படுத்தி செய்ய "
-"முடியும்), நீங்கள் தலைப்பை அமைக்கும் போது ஏற்கெனவே அமைக்கப்பட்ட தலைப்பு அழிக்கப்படும். "
+"முனையத்தில் உள்ள பயன்பட்டுக்கு தலைப்பு அமைக்கப்பட்டால்(இதை செல்லை பயன்படுத்தி "
+"செய்ய "
+"முடியும்), நீங்கள் தலைப்பை அமைக்கும் போது ஏற்கெனவே அமைக்கப்பட்ட தலைப்பு "
+"அழிக்கப்படும். "
 "மதிப்புகள் \"மாற்று\",\"முன்\",\"பின்\" மற்றும் \"தவிர்\""
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:16
-msgid "If true, allow applications in the terminal to make text boldface."
-msgstr "உண்மை எனில், முனையத்தில் உள்ள பயன்பாடுகளின் உரையை தடித்த எழுத்தாக்கு"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:17
-msgid "If true, boldface text will be rendered using the same color as normal text."
-msgstr "உண்மை எனில் தடித்த உரை சாதாரண உரையின் வண்னத்திலேயே அமைக்கப்படும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:18
-msgid ""
-"If true, newly created terminal windows will have custom size specified by "
-"default_size_columns and default_size_rows."
-msgstr ""
-"உண்மை எனில் புதிதாக உருவாக்கப்பட்ட முனைய சாளரங்கள் முன்னிருப்பு பத்தி அளவு, முன்னிருப்பு "
-"வரி அளவு ஆகியவை குறிக்கும் தனிப்பயன் அளவில் இருக்கும்."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:19
-msgid "If true, pressing a key jumps the scrollbar to the bottom."
-msgstr "உண்மையெனில், கீழே உள்ள பயன்பாடு மெனுவுக்காக விசையை அழுத்தவும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:20
-msgid ""
-"If true, scrollback lines will never be discarded. The scrollback history is "
-"stored on disk temporarily, so this may cause the system to run out of disk "
-"space if there is a lot of output to the terminal."
-msgstr ""
-"உண்மை எனில் பின் உருளும் வரிகள் எப்போதும் எரியப்பட மாட்டாது. பின் உருளல் வரலாறு வட்டில் "
-"தற்காலிகமாக சேமிக்கப்படும். ஆகவே இதனால் முனையத்தில் நிறைய வெளிப்பாடு இருப்பின் கணினி "
-"வட்டு இடத்தை முழுதும் இழக்கலாம்."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:21
-msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
-msgstr ""
-"உண்மையெனில், முனைய்த்தில் உள்ள கட்டளை உள்நுழை செல்லில் துவங்கும் (argv[0] யில் சிறப்பு "
-"குறி இருக்கும்)"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:22
-msgid ""
-"If true, the system login records utmp and wtmp will be updated when the "
-"command inside the terminal is launched."
-msgstr "உண்மையெனில் கணினி உள்நுழைதல் utmp மற்றும் wtmp ஆகிய தகவல்களை கணினி பதிவு செய்யும்."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:23
-msgid ""
-"If true, the value of the custom_command setting will be used in place of "
-"running a shell."
-msgstr ""
-"உண்மையெனில், செல்லில் இயக்குவதற்கு பதில் தனிப்பயன்_கட்டளையில் மதிப்பு பயன்படுத்தப்படும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:24
-msgid "If true, whenever there's new output the terminal will scroll to the bottom."
-msgstr "உண்மையெனில், புதிய விளைவின் போது முனையம் கீழே நகரும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:25
-msgid "List of available encodings"
-msgstr "கிடைக்கக்கூடிய குறியீடுகளின் பட்டியல்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:26
-msgid ""
-"Normally you can access the menubar with F10. This can also be customized "
-"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
-"standard menubar accelerator to be disabled."
-msgstr ""
-"பொதுவாக F10 ஐ பயன்படுத்தி உங்களால் மெனு பாரை அனுக முடியும். gtkrc(gtk-menu-bar-"
-"accel = \"whatever\") ஐ கொண்டு இதை தனிப்பயனாக்க முடியும். இந்த தேர்வு நிலையான மெனு "
-"பட்டியலை செயலிழக்கச்செய்யும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:27
-msgid ""
-"Number of columns in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"புதிதாக உருவாக்கிய முனைய சாளரங்களில் நெடு வரிசைகளின் எண்ணிக்கை. தனிப்பயன் முன்னிருப்பு "
-"அளவை பயன்படுத்து ஐ செயலாக்கி இராவிடில் இதனால் பயனில்லை."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:28
-msgid "Number of lines to keep in scrollback"
-msgstr "உருள்பட்டியில் உள்ள வரிகளின் எண்ணிக்கை"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:29
-msgid ""
-"Number of rows in newly created terminal windows. Has no effect if "
-"use_custom_default_size is not enabled."
-msgstr ""
-"புதிதாக உருவாக்கிய முனைய சாளரங்களில் வரிகளின் எண்ணிக்கை.  தனிப்பயன் முன்னிருப்பு அளவை "
-"பயன்படுத்து ஐ செயலாக்கி இராவிடில் இதனால் பயனில்லை."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:30
-msgid ""
-"Number of scrollback lines to keep around. You can scroll back in the "
-"terminal by this number of lines; lines that don't fit in the scrollback are "
-"discarded. If scrollback_unlimited is true, this value is ignored."
-msgstr ""
-"உருள்பட்டியில் பின் பார்வைக்கு வைக்க வேண்டிய வரிகளின் எண்ணிக்கை. முனையத்தில் இந்த எண்கள் வரை "
-"பின் நோக்கி  உங்களால் நகர முடியும் . இந்த எண்ணுக்குள் அடங்கா வரிகள் எறியப்படும். "
-"scrollback_unlimited தேர்வு உண்மையானால் இந்த மதிப்பு உதாசீனம் செய்யப்படும். "
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:31
-msgid "Palette for terminal applications"
-msgstr "முனைய பயன்பாடுகளுக்கான வண்ணப்பெட்டி"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:32
-msgid ""
-"Possible values are \"close\" to close the terminal, and \"restart\" to "
-"restart the command."
-msgstr " \"மூடு\" எனில் முனையம் மூடப்படும், மற்றும் \"மீண்டும்\" முனையம் மீண்டும் துவங்கும்."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:33
-msgid "Run this command in place of the shell, if use_custom_command is true."
-msgstr "use_custom_command உண்மையெனில் இந்த கட்டளையை இயக்கவும்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:34
-msgid "The code sequence the Backspace key generates"
-msgstr "பின்வெளி விசை உருவாக்கும் கோட் வரிசை"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:35
-msgid "The code sequence the Delete key generates"
-msgstr "நீக்கு விசை உருவாக்கும் கோட் வரிசை"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:36
-msgid "The cursor appearance"
-msgstr "நிலைக்காட்டி தோற்றம்"
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:37
-msgid ""
-"The possible values are \"system\" to use the global cursor blinking "
-"settings, or \"on\" or \"off\" to set the mode explicitly."
-msgstr ""
-"முழு நிலைக்காட்டி அமைவுகள் வாய்ப்புள்ள மதிப்புகள் \"system\", அல்லது \"on\" அல்லது "
-"\"off\" முறைமையை அமைக்கிறது."
-
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
 msgid "Title for terminal"
 msgstr "முனையத்தின் தலைப்பு"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
 "depending on the title_mode setting."
 msgstr ""
-"முனைய சாளரத்தில் காட்டப்பட வேண்டிய தலைப்பு. தலைப்பை நீங்களாகவோ அல்லது முனையத்தின் "
+"முனைய சாளரத்தில் காட்டப்பட வேண்டிய தலைப்பு. தலைப்பை நீங்களாகவோ அல்லது "
+"முனையத்தின் "
 "பயன்பாட்டை பொருத்து தானாகவோ மாற்றலாம்."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:40
-msgid "True if the menubar should be shown in new window"
-msgstr "மெனுபட்டி தனி சாளரத்தில் காட்டப்பட வேண்டுமெனில், உண்மை."
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
+msgid "Whether to allow bold text"
+msgstr "எல்லா தடித்த உரைகளையும் அனுமதிக்கவா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:41
-msgid "What to do with dynamic title"
-msgstr "செயல்பாட்டு தலைப்பை கொண்டு என்ன செய்வது"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
+msgid "If true, allow applications in the terminal to make text boldface."
+msgstr "உண்மை எனில், முனையத்தில் உள்ள பயன்பாடுகளின் உரையை தடித்த எழுத்தாக்கு"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:42
-msgid "What to do with the terminal when the child command exits"
-msgstr "சேய் கட்டளை இருக்கும் போது முனையத்தை கொண்டு என்ன செய்வது"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
+msgid "Whether to ring the terminal bell"
+msgstr "முனைய மணியை ஒலிக்க வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
+msgid "Characters that are considered \"part of a word\""
+msgstr "\"வார்த்தையின் பகுதிகளாக\" எழுத்துக்கள் ஏற்கப்பட்டன"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -651,614 +361,997 @@ msgstr ""
 "எடுத்துக்கொள்ளப்படும்.வரம்புகள்  \"A-Z\" வரை இருக்கு,. மேல்கோள் குறி (வரம்பை "
 "குறிக்கவில்லை) ."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
+msgid "Whether to show menubar in new windows/tabs"
+msgstr "புதிய சாளரம் அல்லது கீற்று  இல் மெனுபட்டியை காட்ட வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
+msgid "True if the menubar should be shown in new window"
+msgstr "மெனுபட்டி தனி சாளரத்தில் காட்டப்பட வேண்டுமெனில், உண்மை."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
+msgid "Whether to use custom terminal size for new windows"
+msgstr "புதிய சாளரங்களுக்கு  தனிப்பயன் முனைய அளவை பயன்படுத்த வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
+msgid ""
+"If true, newly created terminal windows will have custom size specified by "
+"default_size_columns and default_size_rows."
+msgstr ""
+"உண்மை எனில் புதிதாக உருவாக்கப்பட்ட முனைய சாளரங்கள் முன்னிருப்பு பத்தி அளவு, "
+"முன்னிருப்பு "
+"வரி அளவு ஆகியவை குறிக்கும் தனிப்பயன் அளவில் இருக்கும்."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
+msgid "Default number of columns"
+msgstr "முன்னிருப்பு நெடு வரிசைகளின் எண்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
+msgid ""
+"Number of columns in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"புதிதாக உருவாக்கிய முனைய சாளரங்களில் நெடு வரிசைகளின் எண்ணிக்கை. தனிப்பயன் "
+"முன்னிருப்பு "
+"அளவை பயன்படுத்து ஐ செயலாக்கி இராவிடில் இதனால் பயனில்லை."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
+msgid "Default number of rows"
+msgstr "முன்னிருப்பு வரிசைகளின் எண்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
+msgid ""
+"Number of rows in newly created terminal windows. Has no effect if "
+"use_custom_default_size is not enabled."
+msgstr ""
+"புதிதாக உருவாக்கிய முனைய சாளரங்களில் வரிகளின் எண்ணிக்கை.  தனிப்பயன் "
+"முன்னிருப்பு அளவை "
+"பயன்படுத்து ஐ செயலாக்கி இராவிடில் இதனால் பயனில்லை."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
 msgid "When to show the scrollbar"
 msgstr "உருள்பட்டியை காட்ட வேன்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
+msgid "Number of lines to keep in scrollback"
+msgstr "உருள்பட்டியில் உள்ள வரிகளின் எண்ணிக்கை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
+msgid ""
+"Number of scrollback lines to keep around. You can scroll back in the "
+"terminal by this number of lines; lines that don't fit in the scrollback are "
+"discarded. If scrollback_unlimited is true, this value is ignored."
+msgstr ""
+"உருள்பட்டியில் பின் பார்வைக்கு வைக்க வேண்டிய வரிகளின் எண்ணிக்கை. முனையத்தில் "
+"இந்த எண்கள் வரை "
+"பின் நோக்கி  உங்களால் நகர முடியும் . இந்த எண்ணுக்குள் அடங்கா வரிகள் "
+"எறியப்படும். "
+"scrollback_unlimited தேர்வு உண்மையானால் இந்த மதிப்பு உதாசீனம் செய்யப்படும். "
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "உருள்பட்டியில் பின் செல்ல வரையரை இல்லா வரிகள் இருக்க வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:46
-msgid "Whether bold text should use the same color as normal text"
-msgstr "சாதாரண உரையின் வண்னத்திலேயே தடிமனான உரையும் இருக்க வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
+msgid ""
+"If true, scrollback lines will never be discarded. The scrollback history is "
+"stored on disk temporarily, so this may cause the system to run out of disk "
+"space if there is a lot of output to the terminal."
+msgstr ""
+"உண்மை எனில் பின் உருளும் வரிகள் எப்போதும் எரியப்பட மாட்டாது. பின் உருளல் "
+"வரலாறு வட்டில் "
+"தற்காலிகமாக சேமிக்கப்படும். ஆகவே இதனால் முனையத்தில் நிறைய வெளிப்பாடு "
+"இருப்பின் கணினி "
+"வட்டு இடத்தை முழுதும் இழக்கலாம்."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:47
-msgid "Whether the menubar has access keys"
-msgstr "மெனுபட்டியில் செயல்பாட்டி விசைகள் உள்ளதா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
+msgid "Whether to scroll to the bottom when a key is pressed"
+msgstr "விசையை நகர்த்தும் போது பட்டனை சுழற்ற வேண்டுமா?"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:48
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "GTK குறுக்கு விசைகள் மெனு பட்டியில் செயல்படுத்தப்பட்டதா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
+msgid "If true, pressing a key jumps the scrollbar to the bottom."
+msgstr "உண்மையெனில், கீழே உள்ள பயன்பாடு மெனுவுக்காக விசையை அழுத்தவும்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:49
-msgid "Whether to allow bold text"
-msgstr "எல்லா தடித்த உரைகளையும் அனுமதிக்கவா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
+msgid "Whether to scroll to the bottom when there's new output"
+msgstr "புதிய விளைவுகள் வரும் போது பட்டனை உருட்ட வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:50
-msgid "Whether to ask for confirmation before closing a terminal"
-msgstr "முனையத்தை மூடு முன் உறுதிப்படுத்தல் தேவையா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
+msgid ""
+"If true, whenever there's new output the terminal will scroll to the bottom."
+msgstr "உண்மையெனில், புதிய விளைவின் போது முனையம் கீழே நகரும்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
+msgid "What to do with the terminal when the child command exits"
+msgstr "சேய் கட்டளை இருக்கும் போது முனையத்தை கொண்டு என்ன செய்வது"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
+msgid ""
+"Possible values are \"close\" to close the terminal, and \"restart\" to "
+"restart the command."
+msgstr ""
+" \"மூடு\" எனில் முனையம் மூடப்படும், மற்றும் \"மீண்டும்\" முனையம் மீண்டும் "
+"துவங்கும்."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
+msgid "Whether to launch the command in the terminal as a login shell"
+msgstr "முனையத்தில் நுழையும் போது சில கட்டளைகளை துவக்க வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
+msgid ""
+"If true, the command inside the terminal will be launched as a login shell. "
+"(argv[0] will have a hyphen in front of it.)"
+msgstr ""
+"உண்மையெனில், முனைய்த்தில் உள்ள கட்டளை உள்நுழை செல்லில் துவங்கும் (argv[0] "
+"யில் சிறப்பு "
+"குறி இருக்கும்)"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
+msgid "Whether to update login records when launching terminal command"
+msgstr "முனையத்தை துவக்கும் போது உள்நுழைந்த தகவலை பதிவு செய்ய வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
+msgid ""
+"If true, the system login records utmp and wtmp will be updated when the "
+"command inside the terminal is launched."
+msgstr ""
+"உண்மையெனில் கணினி உள்நுழைதல் utmp மற்றும் wtmp ஆகிய தகவல்களை கணினி பதிவு "
+"செய்யும்."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
+msgid "Whether to run a custom command instead of the shell"
+msgstr "செல் கட்டளைக்கு பதில் தனி கட்டளைகளை இயக்க வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
+msgid ""
+"If true, the value of the custom_command setting will be used in place of "
+"running a shell."
+msgstr ""
+"உண்மையெனில், செல்லில் இயக்குவதற்கு பதில் தனிப்பயன்_கட்டளையில் மதிப்பு "
+"பயன்படுத்தப்படும்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
 msgid "Whether to blink the cursor"
 msgstr "கர்சர் சிமிட்ட வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
+msgid ""
+"The possible values are \"system\" to use the global cursor blinking "
+"settings, or \"on\" or \"off\" to set the mode explicitly."
+msgstr ""
+"முழு நிலைக்காட்டி அமைவுகள் வாய்ப்புள்ள மதிப்புகள் \"system\", அல்லது \"on\" "
+"அல்லது "
+"\"off\" முறைமையை அமைக்கிறது."
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
+msgid "The cursor appearance"
+msgstr "நிலைக்காட்டி தோற்றம்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
+msgid "Custom command to use instead of the shell"
+msgstr "செல் கட்டளைக்கு பதிலாக பயன்படுத்த வேண்டிய தனி கட்டளை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
+msgid "Run this command in place of the shell, if use_custom_command is true."
+msgstr "use_custom_command உண்மையெனில் இந்த கட்டளையை இயக்கவும்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
+msgid "Palette for terminal applications"
+msgstr "முனைய பயன்பாடுகளுக்கான வண்ணப்பெட்டி"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
+msgid "A Pango font name and size"
+msgstr "ஒரு  பாங்கோ எழுத்துரு பெயரும் அளவும்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
+msgid "The code sequence the Backspace key generates"
+msgstr "பின்வெளி விசை உருவாக்கும் கோட் வரிசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
+msgid "The code sequence the Delete key generates"
+msgstr "நீக்கு விசை உருவாக்கும் கோட் வரிசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
+msgid "Whether to use the colors from the theme for the terminal widget"
+msgstr "முனைய சிறுசாளரத்தில் உள்ள நிரலை பயன்படுத்த வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
+msgid "Whether to use the system monospace font"
+msgstr "கணினி  மோனோஸ்பேஸ் எழுத்துருவை பயன்படுத்த வேண்டுமா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
+msgid "Which encoding to use"
+msgstr "எந்த குறியாக்க முறையை பயன்படுத்த வேண்டும்?"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+msgid "Keyboard shortcut to open a new tab"
+msgstr "புதிய கீற்று பை திறக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+msgid "Keyboard shortcut to open a new window"
+msgstr "புதிய சாளரத்தை திறக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+msgid "Keyboard shortcut to create a new profile"
+msgstr "புதிய விவரங்களை உருவாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+msgid "Keyboard shortcut to save the current tab contents to file"
+msgstr ""
+"நடப்பு கீற்றின் உள்ளடக்கத்தை கோப்புக்கு எழுத பயன்படும் விசைப்பலகை குறுக்கு "
+"விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+msgid "Keyboard shortcut to close a tab"
+msgstr "டாபை மூட பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+msgid "Keyboard shortcut to close a window"
+msgstr "சாளரத்தை மூட பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+msgid "Keyboard shortcut to copy text"
+msgstr "உரையை நகலெடுக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+msgid "Keyboard shortcut to paste text"
+msgstr "உரையை ஒட்ட பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+msgid "Keyboard shortcut to toggle full screen mode"
+msgstr "முழு திரை காட்சிக்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+msgid "Keyboard shortcut to toggle the visibility of the menubar"
+msgstr "மெனுபார் காட்சிக்கு குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+msgid "Keyboard shortcut to set the terminal title"
+msgstr "முனையத்தின் தலைப்பை அமைக்க உதவும் விசைப்பலகை குறுக்குவிசைகள்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+msgid "Keyboard shortcut to reset the terminal"
+msgstr "முனையத்தை மீட்டமைக்க பயன்படும் விசைப்பலகை குறுக்கு விசைகள்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+msgid "Keyboard shortcut to reset and clear the terminal"
+msgstr ""
+"முனையத்தை மீட்டமைக்க தூய்மைப்படுத்த பயன்படும் விசைப்பலகை குறுக்கு விசைகள்"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+msgid "Keyboard shortcut to switch to the previous tab"
+msgstr "முந்தைய கீற்றுக்கு  நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+msgid "Keyboard shortcut to switch to the next tab"
+msgstr "அடுத்த கீற்றுக்கு  நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+msgid "Keyboard shortcut to move the current tab to the left"
+msgstr "நடப்பு கீற்றை இடப்பக்கம் நகர்த்த  பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+msgid "Keyboard shortcut to move the current tab to the right"
+msgstr "நடப்பு கீற்றை வலப்பக்கம் நகர்த்த  பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+msgid "Keyboard shortcut to detach current tab"
+msgstr "நடப்பு கீற்றை பிரிக்க குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
+msgid "Keyboard shortcut to switch to tab 1"
+msgstr "கீற்று 1 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+msgid "Keyboard shortcut to switch to tab 2"
+msgstr "கீற்று 2 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+msgid "Keyboard shortcut to switch to tab 3"
+msgstr "கீற்று 3 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+msgid "Keyboard shortcut to switch to tab 4"
+msgstr "கீற்று 4 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+msgid "Keyboard shortcut to switch to tab 5"
+msgstr "கீற்று 5 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+msgid "Keyboard shortcut to switch to tab 6"
+msgstr "கீற்று 6 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+msgid "Keyboard shortcut to switch to tab 7"
+msgstr "கீற்று 7 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+msgid "Keyboard shortcut to switch to tab 8"
+msgstr "கீற்று 8 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+msgid "Keyboard shortcut to switch to tab 9"
+msgstr "கீற்று 9 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+msgid "Keyboard shortcut to switch to tab 10"
+msgstr "கீற்று 10 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+msgid "Keyboard shortcut to switch to tab 11"
+msgstr "கீற்று 11 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+msgid "Keyboard shortcut to switch to tab 12"
+msgstr "கீற்று 12 க்கு நகர குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+msgid "Keyboard shortcut to launch help"
+msgstr "உதவியை துவக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:88
+msgid "Keyboard shortcut to make font larger"
+msgstr "எழுத்துருவை பெரிதாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:89
+msgid "Keyboard shortcut to make font smaller"
+msgstr "எழுத்துரு அளவை சிறிதாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:90
+msgid "Keyboard shortcut to make font normal-size"
+msgstr "எழுத்துரு அளவை இயல்பாக பயன்படும் விசைப்பலகை குறுக்கு விசை"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:91
+msgid "Whether the menubar has access keys"
+msgstr "மெனுபட்டியில் செயல்பாட்டி விசைகள் உள்ளதா"
+
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:92
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
 "off."
 msgstr ""
-"Alt+letter அனுமதி விசைகள் மெனுபட்டியை செயல்படுத்த தேவையா.இது சேவகனில் உள்ள சில "
+"Alt+letter அனுமதி விசைகள் மெனுபட்டியை செயல்படுத்த தேவையா.இது சேவகனில் உள்ள "
+"சில "
 "செயல்பாடுகளில் குறுக்கிட்டு அவைகளை நிறுத்தி வைக்கும்."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:53
-msgid "Whether to launch the command in the terminal as a login shell"
-msgstr "முனையத்தில் நுழையும் போது சில கட்டளைகளை துவக்க வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:93
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr "GTK குறுக்கு விசைகள் மெனு பட்டியில் செயல்படுத்தப்பட்டதா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:54
-msgid "Whether to ring the terminal bell"
-msgstr "முனைய மணியை ஒலிக்க வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:94
+msgid ""
+"Normally you can access the menubar with F10. This can also be customized "
+"via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
+"standard menubar accelerator to be disabled."
+msgstr ""
+"பொதுவாக F10 ஐ பயன்படுத்தி உங்களால் மெனு பாரை அனுக முடியும். "
+"gtkrc(gtk-menu-bar-"
+"accel = \"whatever\") ஐ கொண்டு இதை தனிப்பயனாக்க முடியும். இந்த தேர்வு நிலையான "
+"மெனு "
+"பட்டியலை செயலிழக்கச்செய்யும்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:55
-msgid "Whether to run a custom command instead of the shell"
-msgstr "செல் கட்டளைக்கு பதில் தனி கட்டளைகளை இயக்க வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:95
+msgid "List of available encodings"
+msgstr "கிடைக்கக்கூடிய குறியீடுகளின் பட்டியல்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:56
-msgid "Whether to scroll to the bottom when a key is pressed"
-msgstr "விசையை நகர்த்தும் போது பட்டனை சுழற்ற வேண்டுமா?"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:96
+msgid ""
+"A subset of possible encodings are presented in the Encoding submenu. This "
+"is a list of encodings to appear there. The special encoding name \"current"
+"\" means to display the encoding of the current locale."
+msgstr ""
+"துணைப்பட்டியலில் எல்லா குறியாக்க முறைகளும் தரப்பட்டுள்ளது. இது குறிகளின் "
+"பட்டியல் "
+"\"தற்போது\" என்பதை தேர்வு செய்தால் தற்போது உங்கள் கணினி பயன்படுத்தும் "
+"மொழியின் குறிமுறை "
+"தேர்வு செய்யப்படும்."
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:57
-msgid "Whether to scroll to the bottom when there's new output"
-msgstr "புதிய விளைவுகள் வரும் போது பட்டனை உருட்ட வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:97
+msgid "Whether to ask for confirmation before closing a terminal"
+msgstr "முனையத்தை மூடு முன் உறுதிப்படுத்தல் தேவையா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:58
-msgid "Whether to show menubar in new windows/tabs"
-msgstr "புதிய சாளரம் அல்லது கீற்று  இல் மெனுபட்டியை காட்ட வேண்டுமா"
+#: ../src/org.gnome.Terminal.gschema.xml.in.h:98
+msgid "Whether to show the menubar in new windows"
+msgstr "புதிய சாளரங்களில்  மெனுபட்டியை காட்ட வேண்டுமா"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:59
-msgid "Whether to update login records when launching terminal command"
-msgstr "முனையத்தை துவக்கும் போது உள்நுழைந்த தகவலை பதிவு செய்ய வேண்டுமா"
+#: ../src/preferences.ui.h:1
+msgid "Preferences"
+msgstr "விருப்பங்கள்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:60
-msgid "Whether to use custom terminal size for new windows"
-msgstr "புதிய சாளரங்களுக்கு  தனிப்பயன் முனைய அளவை பயன்படுத்த வேண்டுமா"
+#: ../src/preferences.ui.h:2
+msgid "Show _menubar by default in new terminals"
+msgstr "_m புதிய முனையங்களில், கொடா நிலையாக, பட்டி-பட்டையைக் காண்பிக்கவும்"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:61
-msgid "Whether to use the colors from the theme for the terminal widget"
-msgstr "முனைய சிறுசாளரத்தில் உள்ள நிரலை பயன்படுத்த வேண்டுமா"
+#: ../src/preferences.ui.h:3
+msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
+msgstr ""
+"(_E) நினைவுக்குறியீட்டை  செயல் படுத்துக (அதாவது Alt+F கோப்பு மெனுவை திறப்பது "
+"போல)"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:62
-msgid "Whether to use the system monospace font"
-msgstr "கணினி  மோனோஸ்பேஸ் எழுத்துருவை பயன்படுத்த வேண்டுமா"
+#: ../src/preferences.ui.h:4
+msgid "Enable the _menu accelerator key (F10 by default)"
+msgstr "(_m) பட்டியல்முடுக்க விசையை செயல்படுத்து (F10 இயல்பாக)"
 
-#: ../src/org.gnome.Terminal.Preferences.gschema.xml.in.h:63
-msgid "Which encoding to use"
-msgstr "எந்த குறியாக்க முறையை பயன்படுத்த வேண்டும்?"
+#: ../src/preferences.ui.h:5 ../src/profile-preferences.ui.h:61
+msgid "General"
+msgstr "பொது"
 
-#: ../src/profile-editor.c:45
+#: ../src/preferences.ui.h:6
+msgid "Shortcuts"
+msgstr "குறுக்கு வழிகள்"
+
+#: ../src/preferences.ui.h:7
+msgid "_Profile used when launching a new terminal:"
+msgstr "(_P) புதிய முனையத்தை துவக்கும்போது பயன்படுத்த வேண்டிய வரையுரு:"
+
+#: ../src/preferences.ui.h:8
+msgid "Profiles"
+msgstr "விவரங்கள்:"
+
+#: ../src/preferences.ui.h:9
+msgid "E_ncodings shown in menu:"
+msgstr "(_n)மெனுவில் உள்ள குறிமுறை:"
+
+#: ../src/preferences.ui.h:10
+msgid "Encodings"
+msgstr "குறியீடுகள்"
+
+#: ../src/profile-editor.c:47
 msgid "Black on light yellow"
 msgstr "மென்மஞ்சள் மேல் கறுப்பு"
 
-#: ../src/profile-editor.c:49
+#: ../src/profile-editor.c:51
 msgid "Black on white"
 msgstr "வெள்ளையில் கறுப்பு"
 
-#: ../src/profile-editor.c:53
+#: ../src/profile-editor.c:55
 msgid "Gray on black"
 msgstr "வெள்ளையில் சாம்பல்"
 
-#: ../src/profile-editor.c:57
+#: ../src/profile-editor.c:59
 msgid "Green on black"
 msgstr "கறுப்பில் பச்சை"
 
-#: ../src/profile-editor.c:61
+#: ../src/profile-editor.c:63
 msgid "White on black"
 msgstr "கறுப்பில் வெள்ளை"
 
-#: ../src/profile-editor.c:409
+#: ../src/profile-editor.c:411
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "பிழை அலகிடும் கட்டளை:%s"
 
-#: ../src/profile-editor.c:524
+#. This is the name of a colour scheme
+#: ../src/profile-editor.c:445 ../src/profile-preferences.ui.h:30
+msgid "Custom"
+msgstr "தனிப்பயன்"
+
+#: ../src/profile-editor.c:560
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "விபரங்களை தொகுக்கவும் “%s”"
 
-#: ../src/profile-editor.c:702
+#: ../src/profile-editor.c:743
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "நிறத்தட்டு நிறத்தை தேர்வு செய் %d"
 
-#: ../src/profile-editor.c:706
+#: ../src/profile-editor.c:747
 #, c-format
 msgid "Palette entry %d"
 msgstr "நிறத்தட்டு உள்ளீடு %d"
 
-#: ../src/profile-manager.glade.h:1
-msgid "Profiles"
-msgstr "விவரங்கள்:"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:2
+msgid "Block"
+msgstr "தடுப்பு"
 
-#: ../src/profile-manager.glade.h:2
-msgid "_Profile used when launching a new terminal:"
-msgstr "(_P) புதிய முனையத்தை துவக்கும்போது பயன்படுத்த வேண்டிய வரையுரு:"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:4
+msgid "I-Beam"
+msgstr "I-பீம்"
 
-#: ../src/profile-new-dialog.glade.h:1
-msgid "C_reate"
-msgstr "உருவாக்கு (_r)"
+#. Cursor shape
+#: ../src/profile-preferences.ui.h:6
+msgid "Underline"
+msgstr "அடிக்கோடு"
 
-#: ../src/profile-new-dialog.glade.h:2 ../src/terminal-accels.c:87
-msgid "New Profile"
-msgstr "புதிய விபரம்"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:8
+msgid "Replace initial title"
+msgstr "தொடக்க தலைப்பை மாற்று"
 
-#: ../src/profile-new-dialog.glade.h:3
-msgid "Profile _name:"
-msgstr "_n விபரம் பெயர்:"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:10
+msgid "Append initial title"
+msgstr "தொடக்க தலைப்பை சேர்"
 
-#: ../src/profile-new-dialog.glade.h:4
-msgid "_Base on:"
-msgstr "_B இதைக் கொண்டு:"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:12
+msgid "Prepend initial title"
+msgstr "தொடக்க தலைப்பை முன்சேர்"
 
-#: ../src/profile-preferences.glade.h:1
-msgid "<b>Command</b>"
-msgstr "<b>கட்டளை</b>"
+#. When terminal commands set their own titles
+#: ../src/profile-preferences.ui.h:14
+msgid "Keep initial title"
+msgstr "தொடக்க தலைப்பு வை"
 
-#: ../src/profile-preferences.glade.h:2
-msgid "<b>Foreground, Background, Bold and Underline</b>"
-msgstr "<b>முன்னணி, பின்னணி, தடித்த மற்றும் அடிகோடிட்ட</b>"
+#. When command exits
+#: ../src/profile-preferences.ui.h:16
+msgid "Exit the terminal"
+msgstr "முனையத்திலிருந்து வெளியேறு"
 
-#: ../src/profile-preferences.glade.h:3
-msgid "<b>Palette</b>"
-msgstr "<b>வண்ண த்தட்டு</b>"
+#. When command exits
+#: ../src/profile-preferences.ui.h:18
+msgid "Restart the command"
+msgstr "கட்டளையை மறுதுவக்கு"
 
-#: ../src/profile-preferences.glade.h:4
-msgid "<b>Title</b>"
-msgstr "<b>தலைப்பு</b>"
+#. When command exits
+#: ../src/profile-preferences.ui.h:20
+msgid "Hold the terminal open"
+msgstr "முனையத்தின் திறப்பை பிடி"
 
-#: ../src/profile-preferences.glade.h:5
-msgid ""
-"<small><i><b>Note:</b> Terminal applications have these colors available to "
-"them.</i></small>"
-msgstr ""
-"<small><i><b>குறிப்பு:</b> முனைய பயன்பாடுகள் அவைகளுக்கு இருக்கும் இந்த நிறங்களை "
-"கொண்டிருக்கும்.</i></small>"
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:22
+msgid "Tango"
+msgstr "டாங்கோ"
 
-#: ../src/profile-preferences.glade.h:6
-msgid ""
-"<small><i><b>Note:</b> These options may cause some applications to behave "
-"incorrectly.  They are only here to allow you to work around certain "
-"applications and operating systems that expect different terminal behavior.</"
-"i></small>"
-msgstr ""
-"<small><i><b>குறிப்பு:</b> இந்த தேர்வு சில பயன்பாடுகளை தவறாக செயல்படுத்தச்செய்யும்.  "
-"வேறு முனைய நடத்தையை எதிர்பார்க்கும் பயன்பாடுகள் இயக்க முறைமைகளை ஆகியவற்றை ஏமாற்றி இது "
-"சில பயன்பாடுகளை வேறு வழியில் செய்ய உதவும்.</i></small>"
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:24
+msgid "Linux console"
+msgstr "Linux பணியகம்"
 
-#: ../src/profile-preferences.glade.h:7
-msgid ""
-"Always visible\n"
-"Visible only when necessary\n"
-"Hidden"
-msgstr ""
-"எப்போதும் தெரியும்\n"
-"தேவையானபோது மட்டும் தெரியும்\n"
-"மறைக்கப்பட்ட"
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:26
+msgid "XTerm"
+msgstr "Xமுனையம்"
 
-#: ../src/profile-preferences.glade.h:10
-msgid ""
-"Automatic\n"
-"Control-H\n"
-"ASCII DEL\n"
-"Escape sequence\n"
-"TTY Erase"
-msgstr ""
-"தானியங்கி \n"
-"கன்ட்ரோல் -H\n"
-"ஆஸ்கி-டெல்\n"
-"விடுபடு வரிசை\n"
-"டிடிஒய் எரேஸ்"
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:28
+msgid "Rxvt"
+msgstr "Rxvt"
 
-#: ../src/profile-preferences.glade.h:15
-msgid ""
-"Block\n"
-"I-Beam\n"
-"Underline"
-msgstr ""
-"தொகுதி\n"
-"ஐபீம்\n"
-"அடிக்கோடு"
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:32
+msgid "Always visible"
+msgstr "எப்போதும் தெரியும்"
 
-#: ../src/profile-preferences.glade.h:18
-msgid "Bol_d color:"
-msgstr "(_d) தடித்த வண்ணம்"
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:34
+msgid "Visible only when necessary"
+msgstr "தேவையானபோது மட்டும் தெரியும்"
 
-#: ../src/profile-preferences.glade.h:19
-msgid "Built-in _schemes:"
-msgstr "_s உள்ளமைத் திட்டமுறைகள்:"
+#. Scrollbar is
+#: ../src/profile-preferences.ui.h:36
+msgid "Hidden"
+msgstr "மறைந்த"
 
-#: ../src/profile-preferences.glade.h:20
-msgid "Built-in sche_mes:"
-msgstr "(_m) உள்ளமைத் திட்டமுறைகள்:"
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:38
+msgid "Automatic"
+msgstr "தானாக"
 
-#: ../src/profile-preferences.glade.h:21
-msgid "Choose A Terminal Font"
-msgstr "ஒரு முனைய எழுத்துருவை தேர்வு செய்யவும்"
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:40
+msgid "Control-H"
+msgstr "கட்டுத்து-H"
 
-#: ../src/profile-preferences.glade.h:22
-msgid "Choose Terminal Background Color"
-msgstr "முனையத்தின் பின்னணி நிறத்தை தேர்வு செய்யவும்"
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:42
+msgid "ASCII DEL"
+msgstr "ASCII DEL"
 
-#: ../src/profile-preferences.glade.h:23
-msgid "Choose Terminal Text Color"
-msgstr "முனைய உரை நிறத்தை தேர்ந்தெடு"
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:44
+msgid "Escape sequence"
+msgstr "எஸ்கேப் வரிசை"
 
-#: ../src/profile-preferences.glade.h:24
-msgid "Color p_alette:"
-msgstr "(_a) வண்ணத் தட்டு:"
+#. This refers to the Delete keybinding option
+#: ../src/profile-preferences.ui.h:46
+msgid "TTY Erase"
+msgstr "டிடிஒய் எரேஸ்"
 
-#: ../src/profile-preferences.glade.h:25
-msgid "Colors"
-msgstr "வண்ணங்கள்"
+#: ../src/profile-preferences.ui.h:47
+msgid "Profile Editor"
+msgstr "விபரம் பதிப்பான்"
 
-#: ../src/profile-preferences.glade.h:26
-msgid "Compatibility"
-msgstr "ஏற்புடைமை"
-
-#: ../src/profile-preferences.glade.h:27
-msgid "Cursor _shape:"
-msgstr "_s நிலைக்காட்டி வடிவம்:"
-
-#: ../src/profile-preferences.glade.h:28
-msgid "Custom co_mmand:"
-msgstr "_m தனிப்பயன் கட்டளை:"
-
-#: ../src/profile-preferences.glade.h:29
-msgid "Default size:"
-msgstr "முன்னிருப்பு அளவு:"
-
-#: ../src/profile-preferences.glade.h:30
-msgid ""
-"Exit the terminal\n"
-"Restart the command\n"
-"Hold the terminal open"
-msgstr ""
-"முனையத்தை விட்டு வெளியேறு\n"
-"கட்டளையை மீண்டும் தொடங்கு\n"
-"முனையத்தை திறந்ததாக வைக்கவும்"
-
-#: ../src/profile-preferences.glade.h:33
-msgid "General"
-msgstr "பொது"
-
-#: ../src/profile-preferences.glade.h:34
-msgid "Initial _title:"
-msgstr "_t தொடக்க தலைப்பு:"
-
-#: ../src/profile-preferences.glade.h:35
-msgid ""
-"Replace initial title\n"
-"Append initial title\n"
-"Prepend initial title\n"
-"Keep initial title"
-msgstr ""
-"ஆரம்ப தலைப்பினை மாற்றுகிறது\n"
-"ஆரம்ப தலைப்புக்கு பின் ஒட்டு\n"
-"ஆரம்ப தலைப்புக்கு முன் ஒட்டு\n"
-"ஆரம்ப தலைப்பினை வைத்துக்கொள்"
-
-#: ../src/profile-preferences.glade.h:39
-msgid "Ru_n a custom command instead of my shell"
-msgstr "(_n) செல்லுக்கு பதில் தனிகட்டளைகளை இயக்கவும்"
-
-#: ../src/profile-preferences.glade.h:40
-msgid "Scroll on _keystroke"
-msgstr "(_k)விசைகளுக்கு ஏற்ப உருளவும்"
-
-#: ../src/profile-preferences.glade.h:41
-msgid "Scroll on _output"
-msgstr "(_o) வெளியீடும் போது உருளவும்"
-
-#: ../src/profile-preferences.glade.h:42
-msgid "Scroll_back:"
-msgstr "(_b) பின் உருளல்:"
-
-#: ../src/profile-preferences.glade.h:43
-msgid "Scrolling"
-msgstr "திரை உருளல்"
-
-#: ../src/profile-preferences.glade.h:44
-msgid "Select-by-_word characters:"
-msgstr "_w சொற்கள்-படி-செய்ய வரியுருகள்:"
-
-#: ../src/profile-preferences.glade.h:45
-msgid "Terminal _bell"
-msgstr "_b முனையம் மணி"
-
-#: ../src/profile-preferences.glade.h:46
-msgid "Title and Command"
-msgstr "தலைப்பும் கட்டளையும்"
-
-#: ../src/profile-preferences.glade.h:47
-msgid "Use custom default terminal si_ze"
-msgstr "_z தனிப்பயன் முனைய அளவை பயன்படுத்து"
-
-#: ../src/profile-preferences.glade.h:48
-msgid "When command _exits:"
-msgstr "_e கட்டளை வெளியேறும்போது:"
-
-#: ../src/profile-preferences.glade.h:49
-msgid "When terminal commands set their o_wn titles:"
-msgstr "(_w) முனைய கட்டளைகள் தாமே தம் பெயர் அமைக்கும்போது"
-
-#: ../src/profile-preferences.glade.h:50
-msgid "_Allow bold text"
-msgstr "_A தடிப்பு எழுத்துகளை அனுமதி"
-
-#: ../src/profile-preferences.glade.h:51
-msgid "_Background color:"
-msgstr "_B பின்னணி வண்ணம்: "
-
-#: ../src/profile-preferences.glade.h:52
-msgid "_Backspace key generates:"
-msgstr "_B பின்வெளி விசை உருவாக்குவது:"
-
-#: ../src/profile-preferences.glade.h:53
-msgid "_Delete key generates:"
-msgstr "_D நீக்கு விசை உருவாக்குவது:"
-
-#: ../src/profile-preferences.glade.h:54
-msgid "_Font:"
-msgstr "_F எழுத்துரு:"
-
-#: ../src/profile-preferences.glade.h:55
+#: ../src/profile-preferences.ui.h:48
 msgid "_Profile name:"
 msgstr "_P விபரம் பெயர்:"
 
-#: ../src/profile-preferences.glade.h:56
-msgid "_Reset Compatibility Options to Defaults"
-msgstr "பொருத்த விருப்பங்களை முன்னிருப்பாக மறு அமை (_R)"
+#: ../src/profile-preferences.ui.h:49
+msgid "Profile ID:"
+msgstr "வரிவுரு ஐடி:"
 
-#: ../src/profile-preferences.glade.h:57
-msgid "_Run command as a login shell"
-msgstr "_R கட்டளையை உள்நுழைவு ஷெல் இல் இயக்கவும்"
-
-#: ../src/profile-preferences.glade.h:58
-msgid "_Same as text color"
-msgstr "_S உரை வண்ணம் போலவே"
-
-#: ../src/profile-preferences.glade.h:59
-msgid "_Scrollbar is:"
-msgstr "_S திரை உருளல் பட்டை:"
-
-#: ../src/profile-preferences.glade.h:60
-msgid "_Text color:"
-msgstr "_T உரை வண்ணம்:"
-
-#: ../src/profile-preferences.glade.h:61
-msgid "_Underline color:"
-msgstr "_U அடிக்கோட்டின் வண்ணம்:"
-
-#. Infinite scrollback
-#: ../src/profile-preferences.glade.h:63
-msgid "_Unlimited"
-msgstr "_U வரையரை இல்லாத"
-
-#: ../src/profile-preferences.glade.h:64
-msgid "_Update login records when command is launched"
-msgstr "(_U) கட்டளையை துவக்கும் போது உள்நுழை தகவல்களை புதுப்பிக்கவும்"
-
-#: ../src/profile-preferences.glade.h:65
-msgid "_Use colors from system theme"
-msgstr "(_U) அமைப்பின் வண்ணத் திட்டத்தை பயன்படுத்தவும்"
-
-#: ../src/profile-preferences.glade.h:66
+#: ../src/profile-preferences.ui.h:50
 msgid "_Use the system fixed width font"
 msgstr "(_U) கணினியின் நிலை அகல எழுத்துருவை பயன்படுத்தவும்"
 
-#: ../src/profile-preferences.glade.h:67
+#: ../src/profile-preferences.ui.h:51
+msgid "_Font:"
+msgstr "_F எழுத்துரு:"
+
+#: ../src/profile-preferences.ui.h:52
+msgid "Choose A Terminal Font"
+msgstr "ஒரு முனைய எழுத்துருவை தேர்வு செய்யவும்"
+
+#: ../src/profile-preferences.ui.h:53
+msgid "_Allow bold text"
+msgstr "_A தடிப்பு எழுத்துகளை அனுமதி"
+
+#: ../src/profile-preferences.ui.h:54
+msgid "Terminal _bell"
+msgstr "_b முனையம் மணி"
+
+#: ../src/profile-preferences.ui.h:55
+msgid "Cursor _shape:"
+msgstr "_s நிலைக்காட்டி வடிவம்:"
+
+#: ../src/profile-preferences.ui.h:56
+msgid "Select-by-_word characters:"
+msgstr "_w சொற்கள்-படி-செய்ய வரியுருகள்:"
+
+#: ../src/profile-preferences.ui.h:57
+msgid "Use custom default terminal si_ze"
+msgstr "_z தனிப்பயன் முனைய அளவை பயன்படுத்து"
+
+#: ../src/profile-preferences.ui.h:58
+msgid "Default size:"
+msgstr "முன்னிருப்பு அளவு:"
+
+#: ../src/profile-preferences.ui.h:59
 msgid "columns"
 msgstr "நெடு வரிசைகள்"
 
-#: ../src/profile-preferences.glade.h:68
-msgid "lines"
-msgstr "வரிகள்"
-
-#: ../src/profile-preferences.glade.h:69
+#: ../src/profile-preferences.ui.h:60
 msgid "rows"
 msgstr "வரிசைகள்"
 
-#: ../src/terminal-accels.c:85
+#: ../src/profile-preferences.ui.h:62
+msgid "Title"
+msgstr "தலைப்பு"
+
+#: ../src/profile-preferences.ui.h:63
+msgid "Initial _title:"
+msgstr "_t தொடக்க தலைப்பு:"
+
+#: ../src/profile-preferences.ui.h:64
+msgid "When terminal commands set their o_wn titles:"
+msgstr "(_w) முனைய கட்டளைகள் தாமே தம் பெயர் அமைக்கும்போது"
+
+#: ../src/profile-preferences.ui.h:65
+msgid "Command"
+msgstr "கட்டளை"
+
+#: ../src/profile-preferences.ui.h:66
+msgid "_Run command as a login shell"
+msgstr "_R கட்டளையை உள்நுழைவு ஷெல் இல் இயக்கவும்"
+
+#: ../src/profile-preferences.ui.h:67
+msgid "_Update login records when command is launched"
+msgstr "(_U) கட்டளையை துவக்கும் போது உள்நுழை தகவல்களை புதுப்பிக்கவும்"
+
+#: ../src/profile-preferences.ui.h:68
+msgid "Ru_n a custom command instead of my shell"
+msgstr "(_n) செல்லுக்கு பதில் தனிகட்டளைகளை இயக்கவும்"
+
+#: ../src/profile-preferences.ui.h:69
+msgid "Custom co_mmand:"
+msgstr "_m தனிப்பயன் கட்டளை:"
+
+#: ../src/profile-preferences.ui.h:70
+msgid "When command _exits:"
+msgstr "_e கட்டளை வெளியேறும்போது:"
+
+#: ../src/profile-preferences.ui.h:71
+msgid "Title and Command"
+msgstr "தலைப்பும் கட்டளையும்"
+
+#: ../src/profile-preferences.ui.h:72
+msgid "Text and Background Color"
+msgstr "உரை மற்றும் பின்னணி நிறம்"
+
+#: ../src/profile-preferences.ui.h:73
+msgid "_Use colors from system theme"
+msgstr "(_U) அமைப்பின் வண்ணத் திட்டத்தை பயன்படுத்தவும்"
+
+#: ../src/profile-preferences.ui.h:74
+msgid "Built-in sche_mes:"
+msgstr "(_m) உள்ளமைத் திட்டமுறைகள்:"
+
+#: ../src/profile-preferences.ui.h:75
+msgid "_Text color:"
+msgstr "_T உரை வண்ணம்:"
+
+#: ../src/profile-preferences.ui.h:76
+msgid "_Background color:"
+msgstr "_B பின்னணி வண்ணம்: "
+
+#: ../src/profile-preferences.ui.h:77
+msgid "Choose Terminal Background Color"
+msgstr "முனையத்தின் பின்னணி நிறத்தை தேர்வு செய்யவும்"
+
+#: ../src/profile-preferences.ui.h:78
+msgid "Choose Terminal Text Color"
+msgstr "முனைய உரை நிறத்தை தேர்ந்தெடு"
+
+#: ../src/profile-preferences.ui.h:79
+msgid "_Underline color:"
+msgstr "_U அடிக்கோட்டின் வண்ணம்:"
+
+#: ../src/profile-preferences.ui.h:80
+msgid "_Same as text color"
+msgstr "_S உரை வண்ணம் போலவே"
+
+#: ../src/profile-preferences.ui.h:81
+msgid "Bol_d color:"
+msgstr "(_d) தடித்த வண்ணம்"
+
+#: ../src/profile-preferences.ui.h:82
+msgid "Palette"
+msgstr "வண்ணத்தட்டு"
+
+#: ../src/profile-preferences.ui.h:83
+msgid "Built-in _schemes:"
+msgstr "_s உள்ளமைத் திட்டமுறைகள்:"
+
+#: ../src/profile-preferences.ui.h:84
+msgid "<b>Note:</b> Terminal applications have these colors available to them."
+msgstr ""
+"<b>குறிப்பு:</b> முனைய பயன்பாடுகள் அவைகளுக்கு இருக்கும் இந்த நிறங்களை "
+"கொண்டிருக்கும்."
+
+#: ../src/profile-preferences.ui.h:85
+msgid "Color p_alette:"
+msgstr "(_a) வண்ணத் தட்டு:"
+
+#: ../src/profile-preferences.ui.h:86
+msgid "Colors"
+msgstr "வண்ணங்கள்"
+
+#: ../src/profile-preferences.ui.h:87
+msgid "_Scrollbar is:"
+msgstr "_S திரை உருளல் பட்டை:"
+
+#: ../src/profile-preferences.ui.h:88
+msgid "Scroll_back:"
+msgstr "(_b) பின் உருளல்:"
+
+#: ../src/profile-preferences.ui.h:89
+msgid "Scroll on _keystroke"
+msgstr "(_k)விசைகளுக்கு ஏற்ப உருளவும்"
+
+#: ../src/profile-preferences.ui.h:90
+msgid "Scroll on _output"
+msgstr "(_o) வெளியீடும் போது உருளவும்"
+
+#: ../src/profile-preferences.ui.h:91
+msgid "_Unlimited"
+msgstr "_U வரையரை இல்லாத"
+
+#: ../src/profile-preferences.ui.h:92
+msgid "lines"
+msgstr "வரிகள்"
+
+#: ../src/profile-preferences.ui.h:93
+msgid "Scrolling"
+msgstr "திரை உருளல்"
+
+#: ../src/profile-preferences.ui.h:94
+msgid ""
+"<b>Note:</b> These options may cause some applications to behave "
+"incorrectly.  They are only here to allow you to work around certain "
+"applications and operating systems that expect different terminal behavior."
+msgstr ""
+"<b>குறிப்பு:</b> இந்த தேர்வு சில பயன்பாடுகளை தவறாக செயல்படுத்தச்செய்யும்.  "
+"வேறு முனைய நடத்தையை எதிர்பார்க்கும் பயன்பாடுகள் இயக்க முறைமைகளை ஆகியவற்றை "
+"ஏமாற்றி இது "
+"சில பயன்பாடுகளை வேறு வழியில் செய்ய உதவும்."
+
+#: ../src/profile-preferences.ui.h:95
+msgid "_Delete key generates:"
+msgstr "_D நீக்கு விசை உருவாக்குவது:"
+
+#: ../src/profile-preferences.ui.h:96
+msgid "_Backspace key generates:"
+msgstr "_B பின்வெளி விசை உருவாக்குவது:"
+
+#: ../src/profile-preferences.ui.h:97
+msgid "_Reset Compatibility Options to Defaults"
+msgstr "பொருத்த விருப்பங்களை முன்னிருப்பாக மறு அமை (_R)"
+
+#: ../src/profile-preferences.ui.h:98
+msgid "Compatibility"
+msgstr "ஏற்புடைமை"
+
+#: ../src/terminal-accels.c:139
 msgid "New Tab"
 msgstr "புதிய கீற்று"
 
-#: ../src/terminal-accels.c:86
+#: ../src/terminal-accels.c:141
 msgid "New Window"
 msgstr "புதிய சாளரம்"
 
-#: ../src/terminal-accels.c:89
+#: ../src/terminal-accels.c:143
+msgid "New Profile"
+msgstr "புதிய விபரம்"
+
+#: ../src/terminal-accels.c:146
 msgid "Save Contents"
 msgstr "உள்ளடக்கங்களை சேமி"
 
-#: ../src/terminal-accels.c:91
+#: ../src/terminal-accels.c:149
 msgid "Close Tab"
 msgstr "கீற்று  மூடவும்"
 
-#: ../src/terminal-accels.c:92
+#: ../src/terminal-accels.c:151
 msgid "Close Window"
 msgstr "சாளரம் மூடவும்"
 
-#: ../src/terminal-accels.c:97
+#: ../src/terminal-accels.c:157
 msgid "Copy"
 msgstr "நகல்"
 
-#: ../src/terminal-accels.c:98
+#: ../src/terminal-accels.c:159
 msgid "Paste"
 msgstr "ஒட்டு"
 
-#: ../src/terminal-accels.c:103
+#: ../src/terminal-accels.c:165
+msgid "Hide and Show menubar"
+msgstr "பட்டி-பட்டையை மறை/காட்டுக"
+
+#: ../src/terminal-accels.c:167
 msgid "Full Screen"
 msgstr "முழு-திரையிலும் காண்பி"
 
-#: ../src/terminal-accels.c:104
+#: ../src/terminal-accels.c:169
 msgid "Zoom In"
 msgstr "சிறிதாக்கு"
 
-#: ../src/terminal-accels.c:105
+#: ../src/terminal-accels.c:171
 msgid "Zoom Out"
 msgstr "பெரிதாக்கு"
 
-#: ../src/terminal-accels.c:106
+#: ../src/terminal-accels.c:173
 msgid "Normal Size"
 msgstr "சாதாரண அளவு"
 
-#: ../src/terminal-accels.c:111 ../src/terminal-window.c:3365
+#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3439
 msgid "Set Title"
 msgstr "தலைப்பை அமைக்க"
 
-#: ../src/terminal-accels.c:112
+#: ../src/terminal-accels.c:181
 msgid "Reset"
 msgstr "நிலை மீள்"
 
-#: ../src/terminal-accels.c:113
+#: ../src/terminal-accels.c:183
 msgid "Reset and Clear"
 msgstr "நிலை மீட்டி துப்புரவு செய்"
 
-#: ../src/terminal-accels.c:118
+#: ../src/terminal-accels.c:189
 msgid "Switch to Previous Tab"
 msgstr "முந்தைய கீற்று க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:119
+#: ../src/terminal-accels.c:191
 msgid "Switch to Next Tab"
 msgstr "அடுத்த கீற்று க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:120
+#: ../src/terminal-accels.c:193
 msgid "Move Tab to the Left"
 msgstr "கீற்றை இடப்பக்கம் நகர்த்து"
 
-#: ../src/terminal-accels.c:121
+#: ../src/terminal-accels.c:195
 msgid "Move Tab to the Right"
 msgstr "கீற்றை வலப்பக்கம் நகர்த்து"
 
-#: ../src/terminal-accels.c:122
+#: ../src/terminal-accels.c:197
 msgid "Detach Tab"
 msgstr "கீற்றை நீக்கு"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:199
 msgid "Switch to Tab 1"
 msgstr " கீற்று 1 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:124
+#: ../src/terminal-accels.c:202
 msgid "Switch to Tab 2"
 msgstr "கீற்று 2 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:125
+#: ../src/terminal-accels.c:205
 msgid "Switch to Tab 3"
 msgstr "கீற்று 3 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:126
+#: ../src/terminal-accels.c:208
 msgid "Switch to Tab 4"
 msgstr "கீற்று 4 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:211
 msgid "Switch to Tab 5"
 msgstr "கீற்று 5 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:214
 msgid "Switch to Tab 6"
 msgstr "கீற்று 6 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:217
 msgid "Switch to Tab 7"
 msgstr "கீற்று 7க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:220
 msgid "Switch to Tab 8"
 msgstr "கீற்று 8 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:223
 msgid "Switch to Tab 9"
 msgstr "கீற்று 9 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:226
 msgid "Switch to Tab 10"
 msgstr "கீற்று10 க்கு்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:133
+#: ../src/terminal-accels.c:229
 msgid "Switch to Tab 11"
 msgstr "கீற்று 11 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:134
+#: ../src/terminal-accels.c:232
 msgid "Switch to Tab 12"
 msgstr "கீற்று 12 க்கு மாற்றவும்"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:238
 msgid "Contents"
 msgstr "உள்ளடக்கங்கள்"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:243
 msgid "File"
 msgstr "கோப்பு"
 
-#: ../src/terminal-accels.c:144
+#: ../src/terminal-accels.c:244
 msgid "Edit"
 msgstr "தொகு"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:245
 msgid "View"
 msgstr "காட்சி"
 
-#: ../src/terminal-accels.c:147
+#: ../src/terminal-accels.c:247
 msgid "Tabs"
 msgstr "கீற்றுகள்"
 
-#: ../src/terminal-accels.c:148
+#: ../src/terminal-accels.c:248
 msgid "Help"
 msgstr "உதவி"
 
-#: ../src/terminal-accels.c:452
+#: ../src/terminal-accels.c:619
+#, c-format
+msgid "The shortcut key “%s” is already bound to the “%s” action"
+msgstr "குறுக்கு விசை “%s” ஏற்கெனவே “%s” செயலுக்கு பிணைக்கப்பட்டது"
+
+#: ../src/terminal-accels.c:732
 msgid "_Action"
 msgstr "செயல் (_A)"
 
-#: ../src/terminal-accels.c:470
+#: ../src/terminal-accels.c:750
 msgid "Shortcut _Key"
 msgstr "குறுக்கு விசை (_K)"
 
-#: ../src/terminal-app.c:378
-msgid "Click button to choose profile"
-msgstr "விபரத்தை தெரிவு செய்த பொத்தானை அமுத்தவும்"
-
-#: ../src/terminal-app.c:463
-msgid "Profile list"
-msgstr "விபரம் பட்டி"
-
-#: ../src/terminal-app.c:524
-#, c-format
-msgid "Delete profile “%s”?"
-msgstr "“%s” விவரங்களை நீக்க வேண்டுமா?"
-
-#: ../src/terminal-app.c:540
-msgid "Delete Profile"
-msgstr "விபரத்தை அழிக்கவும்"
-
-#: ../src/terminal-app.c:842
-#, c-format
-msgid ""
-"You already have a profile called “%s”. Do you want to create another "
-"profile with the same name?"
-msgstr ""
-"நீங்கள் இந்த “%s” விவரக்குறிப்பினை ஏற்கனவே கொண்டுள்ளீர்கள். அதே பெயரில் வேறு "
-"விவரக்குறிப்பினை உருவாக்க வேண்டுமா?"
-
-#: ../src/terminal-app.c:947
-msgid "Choose base profile"
-msgstr "விவரத்தை தேர்வு செய்"
-
-#: ../src/terminal-app.c:1524
+#: ../src/terminal-app.c:572
 msgid "User Defined"
 msgstr "உபயோகிப்பாளர் அமைப்புகள்"
 
-#: ../src/terminal.c:237
+#: ../src/terminal-appmenu.ui.h:1
+msgid "_Preferences"
+msgstr "_P முன்னுரிமைகள்"
+
+#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1642
+msgid "_Help"
+msgstr "_H உதவி"
+
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1758
+msgid "_About"
+msgstr "_A பற்றி"
+
+#: ../src/terminal.c:243
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "துணையலகுகளை பகுக்க முடியவில்லை: %s\n"
@@ -1404,100 +1497,100 @@ msgstr "வியட்னாமீஸ் "
 msgid "Thai"
 msgstr "தாய்"
 
-#: ../src/terminal-encoding.c:491 ../src/terminal-encoding.c:516
-msgid "_Description"
-msgstr "_D விவரணம்"
-
-#: ../src/terminal-encoding.c:500 ../src/terminal-encoding.c:525
-msgid "_Encoding"
-msgstr "_E குறியிடுகள்"
-
-#: ../src/terminal-encoding.c:583
+#: ../src/terminal-encoding.c:272
 msgid "Current Locale"
 msgstr "தற்போதைய மொழி"
 
-#: ../src/terminal-nautilus.c:467
+#: ../src/terminal-nautilus.c:463
 msgid "Open in _Remote Terminal"
 msgstr "(_R) தொலை முனையத்தில் திற"
 
-#: ../src/terminal-nautilus.c:469
+#: ../src/terminal-nautilus.c:465
 msgid "Open in _Local Terminal"
 msgstr "(_L) உள்ளமை முனையத்தில் திற"
 
-#: ../src/terminal-nautilus.c:473 ../src/terminal-nautilus.c:484
+#: ../src/terminal-nautilus.c:469 ../src/terminal-nautilus.c:480
 msgid "Open the currently selected folder in a terminal"
 msgstr "இப்போது தேர்ந்தெடுத்த அடைவை ஒரு முனையத்தில் திற"
 
-#: ../src/terminal-nautilus.c:475 ../src/terminal-nautilus.c:486
-#: ../src/terminal-nautilus.c:496
+#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
+#: ../src/terminal-nautilus.c:492
 msgid "Open the currently open folder in a terminal"
 msgstr "இப்போது திறந்துள்ள அடைவை ஒரு முனையத்தில் திற"
 
-#: ../src/terminal-nautilus.c:481 ../src/terminal-nautilus.c:495
+#: ../src/terminal-nautilus.c:477 ../src/terminal-nautilus.c:491
 msgid "Open in T_erminal"
 msgstr "(_e) முனையத்தில் திற"
 
-#: ../src/terminal-nautilus.c:492
+#: ../src/terminal-nautilus.c:488
 msgid "Open T_erminal"
 msgstr "(_e) முனையத்தை திற"
 
-#: ../src/terminal-nautilus.c:493
+#: ../src/terminal-nautilus.c:489
 msgid "Open a terminal"
 msgstr "ஒரு முனையத்தை திற"
 
-#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:524
+#: ../src/terminal-nautilus.c:507 ../src/terminal-nautilus.c:520
 msgid "Open in _Midnight Commander"
 msgstr "(_M) மிட்நைட் கமாண்டரில் திறக்கவும்"
 
-#: ../src/terminal-nautilus.c:513
+#: ../src/terminal-nautilus.c:509
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
-msgstr "இப்போது தேர்ந்தெடுத்த அடைவை மிட்நைட் கமாண்டர் முனைய கோப்பு மேலாளரில் திறக்கவும்"
+msgstr ""
+"இப்போது தேர்ந்தெடுத்த அடைவை மிட்நைட் கமாண்டர் முனைய கோப்பு மேலாளரில் "
+"திறக்கவும்"
 
-#: ../src/terminal-nautilus.c:515 ../src/terminal-nautilus.c:525
+#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:521
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
-msgstr "இப்போது திறந்துள்ள அடைவை மிட்நைட் கமாண்டர் முனைய கோப்பு மேலாளரில் திறக்கவும்"
+msgstr ""
+"இப்போது திறந்துள்ள அடைவை மிட்நைட் கமாண்டர் முனைய கோப்பு மேலாளரில் திறக்கவும்"
 
-#: ../src/terminal-nautilus.c:521
+#: ../src/terminal-nautilus.c:517
 msgid "Open _Midnight Commander"
 msgstr "(_M) மிட்நைட் கமாண்டர் ஐ திறக்கவும்"
 
-#: ../src/terminal-nautilus.c:522
+#: ../src/terminal-nautilus.c:518
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "மிட்நைட் கமாண்டர் முனைய கோப்பு மேலாளரை திறக்கவும்"
 
-#: ../src/terminal-options.c:210
+#: ../src/terminal-options.c:224
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "தேர்வு \"%s\" இந்த பதிப்பு க்னோம் முனையத்தில் ஆதரிக்கப்படவில்லை."
 
-#: ../src/terminal-options.c:221 ../src/terminal-util.c:234
+#: ../src/terminal-options.c:235 ../src/terminal-util.c:234
 msgid "GNOME Terminal"
 msgstr "கனோம் முனையம்"
 
-#: ../src/terminal-options.c:261
+#: ../src/terminal-options.c:275
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "அளவுரு \"%s\"செல்லாத கட்டளை: %s"
 
-#: ../src/terminal-options.c:396
+#: ../src/terminal-options.c:424
 msgid "Two roles given for one window"
 msgstr "ஒரு சாளரத்துக்கு 2 பங்களிப்பு தரப்பட்டுள்ளது"
 
-#: ../src/terminal-options.c:596
+#: ../src/terminal-options.c:445 ../src/terminal-options.c:478
+#, c-format
+msgid "\"%s\" option given twice for the same window\n"
+msgstr "\"%s\" தேர்வு ஒரே சாளரத்தில் இரண்டு முறை தரப்பட்டது\n"
+
+#: ../src/terminal-options.c:688
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "பெரிதாக்க விகிதம் \"%g\" மிகவும் சிறிதாக உள்ளது %g பயனாகிறது\n"
 
-#: ../src/terminal-options.c:604
+#: ../src/terminal-options.c:696
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "பெரிதாக்க விகிதம் \"%g\" மிகவும் பெரிதாக உள்ளது %g பயனாகிறது\n"
 
-#: ../src/terminal-options.c:642
+#: ../src/terminal-options.c:734
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1506,115 +1599,161 @@ msgstr ""
 "தேர்வு \"%s\" இயங்க  கட்டளை வரியில் மீதி கட்டளை இயங்க  தேவையான கட்டளையை "
 "குறிப்பிடவேண்டும்"
 
-#: ../src/terminal-options.c:776
+#: ../src/terminal-options.c:870
 msgid "Not a valid terminal config file."
 msgstr "செல்லுபடியாகும் முனைய அமைப்பு கோப்பு அல்ல"
 
-#: ../src/terminal-options.c:789
+#: ../src/terminal-options.c:883
 msgid "Incompatible terminal config file version."
 msgstr "ஒத்திசைவில்லா முனைய அமைப்பு கோப்பு பதிப்பு"
 
-#: ../src/terminal-options.c:923
+#: ../src/terminal-options.c:1024
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
 msgstr ""
-"செயல்பாட்டு பெயர் சேவகனை பதிவு செய்ய வேண்டாம், செயல்பாட்டு முனையத்தை மீண்டும் பயன்படுத்தாதே"
+"செயல்பாட்டு பெயர் சேவகனை பதிவு செய்ய வேண்டாம், செயல்பாட்டு முனையத்தை மீண்டும் "
+"பயன்படுத்தாதே"
 
-#: ../src/terminal-options.c:932
+#: ../src/terminal-options.c:1033
 msgid "Load a terminal configuration file"
 msgstr "முனைய அமைப்பு கோப்பு ஒன்றை ஏற்றவும்"
 
-#: ../src/terminal-options.c:933
+#: ../src/terminal-options.c:1034
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/terminal-options.c:954
+#: ../src/terminal-options.c:1055
 msgid "Open a new window containing a tab with the default profile"
-msgstr "இயல்பான விவரத்துடன் கூடிய தத்தல் விசை ஒன்றை புதிய சாளரத்தில் உருவாக்கு."
+msgstr ""
+"இயல்பான விவரத்துடன் கூடிய தத்தல் விசை ஒன்றை புதிய சாளரத்தில் உருவாக்கு."
 
-#: ../src/terminal-options.c:963
+#: ../src/terminal-options.c:1064
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "முன்னிருப்பு விவரத்துடன் கடைசியாக திறந்த சாளரத்தில் புதிய கீற்றை திற."
 
-#: ../src/terminal-options.c:1030
+#: ../src/terminal-options.c:1077
+msgid "Turn on the menubar"
+msgstr "பட்டி-பட்டையை காட்டுக"
+
+#: ../src/terminal-options.c:1086
+msgid "Turn off the menubar"
+msgstr "பட்டி-பட்டையை காட்டாதே"
+
+#: ../src/terminal-options.c:1131
 msgid "Set the last specified tab as the active one in its window"
 msgstr "கடைசியாக குறிப்பிட்ட கீற்று  ஐ செயல்பாட்டு சாளரத்தில் அமைக்கவும்"
 
-#: ../src/terminal-options.c:1043
+#: ../src/terminal-options.c:1144
 msgid "Execute the argument to this option inside the terminal"
 msgstr "இந்த தேர்வை முனையத்தில் இயக்கவும்"
 
-#: ../src/terminal-options.c:1341 ../src/terminal-options.c:1347
+#: ../src/terminal-options.c:1154
+msgid "PROFILE-NAME"
+msgstr "PROFILE-NAME"
+
+#: ../src/terminal-options.c:1442 ../src/terminal-options.c:1448
 msgid "GNOME Terminal Emulator"
 msgstr "க்னோம் முனைய போன்றி"
 
-#: ../src/terminal-options.c:1348
+#: ../src/terminal-options.c:1449
 msgid "Show GNOME Terminal options"
 msgstr "க்னோம் முனைய தேர்வுகளை காட்டுக"
 
-#: ../src/terminal-options.c:1358
+#: ../src/terminal-options.c:1459
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr ""
-"புதிய முனைய கீற்று அல்லது சாளரத்தை திறக்க  தேர்வுகள், ஒன்றுக்கு மேற்பட்டவை குறிக்கப்படலாம்"
+"புதிய முனைய கீற்று அல்லது சாளரத்தை திறக்க  தேர்வுகள், ஒன்றுக்கு மேற்பட்டவை "
+"குறிக்கப்படலாம்"
 
-#: ../src/terminal-options.c:1367
+#: ../src/terminal-options.c:1468
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
 msgstr ""
-"சாளர தேர்வுகள்: முதல் --window அல்லது --tab துணையலகுக்கு முன் பயன்படுத்தினால் அனைத்து "
+"சாளர தேர்வுகள்: முதல் --window அல்லது --tab துணையலகுக்கு முன் பயன்படுத்தினால் "
+"அனைத்து "
 "சாளரங்களுக்கும் முன்னிருப்பாக அமைக்கும்:"
 
-#: ../src/terminal-options.c:1368
+#: ../src/terminal-options.c:1469
 msgid "Show per-window options"
 msgstr "ஒவ்வொரு   தனி சாளர தேர்வுகளை காட்டுக"
 
-#: ../src/terminal-options.c:1376
+#: ../src/terminal-options.c:1477
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
 msgstr ""
-"சாளர தேர்வுகள்: முதல் --window அல்லது --tab துணையலகுக்கு முன் பயன்படுத்தினால் அனைத்து "
+"சாளர தேர்வுகள்: முதல் --window அல்லது --tab துணையலகுக்கு முன் பயன்படுத்தினால் "
+"அனைத்து "
 "முனையங்களுக்கும் முன்னிருப்பாக அமைக்கும்:"
 
-#: ../src/terminal-options.c:1377
+#: ../src/terminal-options.c:1478
 msgid "Show per-terminal options"
 msgstr "ஒவ்வொரு   தனி  முனைய தேர்வுகளை காட்டுக"
 
-#: ../src/terminal-screen.c:1465
+#: ../src/terminal-prefs.c:225
+msgid "Click button to choose profile"
+msgstr "விபரத்தை தெரிவு செய்த பொத்தானை அமுத்தவும்"
+
+#: ../src/terminal-prefs.c:339
+msgid "Profile list"
+msgstr "விபரம் பட்டி"
+
+#: ../src/terminal-prefs.c:394
+#, c-format
+msgid "Delete profile “%s”?"
+msgstr "“%s” விவரங்களை நீக்க வேண்டுமா?"
+
+#: ../src/terminal-prefs.c:410
+msgid "Delete Profile"
+msgstr "விபரத்தை அழிக்கவும்"
+
+#: ../src/terminal-prefs.c:709
+msgid "Show"
+msgstr "காட்டு"
+
+#: ../src/terminal-prefs.c:720
+msgid "_Encoding"
+msgstr "_E குறியிடுகள்"
+
+#: ../src/terminal-screen.c:1166
+msgid "No command supplied nor shell requested"
+msgstr "ஒரு கட்டளையும் தரப்படவில்லை; ஷெல்லும் தேவையில்லை"
+
+#: ../src/terminal-screen.c:1420 ../src/terminal-window.c:1682
 msgid "_Profile Preferences"
 msgstr "(_P) வரியுரு விருப்பங்கள்"
 
-#: ../src/terminal-screen.c:1466 ../src/terminal-screen.c:1827
+#: ../src/terminal-screen.c:1421 ../src/terminal-screen.c:1782
 msgid "_Relaunch"
 msgstr "_R மீள்துவக்கு "
 
-#: ../src/terminal-screen.c:1469
+#: ../src/terminal-screen.c:1424
 msgid "There was an error creating the child process for this terminal"
 msgstr "சேய் செயலை முனையத்தில் உருவாக்குவதில் பிழை நேர்ந்தது."
 
-#: ../src/terminal-screen.c:1831
+#: ../src/terminal-screen.c:1786
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "குழந்தை செயல் சரியாக வெளியேறியது. நிலை %d. "
 
-#: ../src/terminal-screen.c:1834
+#: ../src/terminal-screen.c:1789
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "சேய் செயல்  %d சமிக்ஞையால் கைவிடப்பட்டது."
 
-#: ../src/terminal-screen.c:1837
+#: ../src/terminal-screen.c:1792
 msgid "The child process was aborted."
 msgstr "சேய் செயல் கைவிடப்பட்டது. "
 
-#: ../src/terminal-tab-label.c:195
+#: ../src/terminal-tab-label.c:194
 msgid "Close tab"
 msgstr "கீற்றை மூடவும்"
 
-#: ../src/terminal-tabs-menu.c:196
+#: ../src/terminal-tabs-menu.c:195
 msgid "Switch to this tab"
 msgstr "இந்த கீற்றுக்கு மாற்றவும்"
 
@@ -1641,12 +1780,13 @@ msgstr "“%s” முகவரியை திறக்க முடியவ�
 
 #: ../src/terminal-util.c:391
 msgid ""
-"GNOME Terminal is free software; you can redistribute it and/or modify it "
+"GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
-"Software Foundation; either version 3 of the License, or (at your option) "
+"Software Foundation, either version 3 of the License, or (at your option) "
 "any later version."
 msgstr ""
-"க்னோம் முனையம்  இலவச மென் பொருளாகும்.நீங்கள்  இலவச மென் பொருள் அமைப்பினால் வெளியிடப்பட்ட "
+"க்னோம் முனையம்  இலவச மென் பொருளாகும். நீங்கள்  இலவச மென் பொருள் அமைப்பினால் "
+"வெளியிடப்பட்ட "
 "ஜிஎன்யு பொது அனுமதிக்கான விதிகளின் படி இந்த 3 ஆம் பதிப்பையோ அல்லது அடுத்த "
 "பதிப்புகளையோ நீங்கள் (விருப்பப்படி) மாற்றலாம். அல்லது மீண்டும் பறிமாறலாம்."
 
@@ -1657,25 +1797,26 @@ msgid ""
 "or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for "
 "more details."
 msgstr ""
-"க்னோம் முனையம் உபயோகப்படும் என்ற எதிர்பார்ப்புடன் வெளியிடப்படுகிறது. ஆனால் விற்க தகுதி,"
-"குறிப்பிட்ட  செயலுக்கான தகுதி உள்பட எந்த உத்திரவாதமும் அளிக்கப்படவில்லை. மேற் கொண்டு "
+"க்னோம் முனையம் உபயோகப்படும் என்ற எதிர்பார்ப்புடன் வெளியிடப்படுகிறது. ஆனால் "
+"விற்க தகுதி,"
+"குறிப்பிட்ட  செயலுக்கான தகுதி உள்பட எந்த உத்திரவாதமும் அளிக்கப்படவில்லை. மேற் "
+"கொண்டு "
 "விவரங்களுக்கு ஜிஎன்யு பொது அனுமதிக்கான விதிகளை பார்க்கவும்."
 
 #: ../src/terminal-util.c:399
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
-"GNOME Terminal; if not, write to the Free Software Foundation, Inc., 51 "
-"Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+"GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 msgstr ""
-" இத்துடன் ஜிஎன்யு பொது அனுமதிக்கான விதிகளின் பிரதி உங்களுக்கு கிடைத்திருக்கவேண்டும். "
-"இல்லையானால்  கீழ் கண்ட முகவரிக்கு கடிதம் எழுதவும். Free Software Foundation, Inc., "
-"59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
+" இத்துடன் ஜிஎன்யு பொது அனுமதிக்கான விதிகளின் பிரதி உங்களுக்கு "
+"கிடைத்திருக்கவேண்டும். "
+"இல்லையானால்  இங்கு காணவும்: <http://www.gnu.org/licenses/>."
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:434
+#: ../src/terminal-window.c:430
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1684,249 +1825,339 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:440
+#: ../src/terminal-window.c:436
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1627
+#: ../src/terminal-window.c:1634
 msgid "_File"
 msgstr "_கோப்பு"
 
 #. File menu
-#: ../src/terminal-window.c:1628 ../src/terminal-window.c:1640
-#: ../src/terminal-window.c:1789
+#: ../src/terminal-window.c:1635 ../src/terminal-window.c:1647
+#: ../src/terminal-window.c:1791
 msgid "Open _Terminal"
 msgstr "(_T)முனையத்தை திற"
 
-#: ../src/terminal-window.c:1629 ../src/terminal-window.c:1643
-#: ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:1636 ../src/terminal-window.c:1650
+#: ../src/terminal-window.c:1794
 msgid "Open Ta_b"
 msgstr "(_b)கீற்றை திற"
 
-#: ../src/terminal-window.c:1630
+#: ../src/terminal-window.c:1637
 msgid "_Edit"
 msgstr "_E தொகு"
 
-#: ../src/terminal-window.c:1631
+#: ../src/terminal-window.c:1638
 msgid "_View"
 msgstr "_V காட்சி"
 
-#: ../src/terminal-window.c:1632
+#: ../src/terminal-window.c:1639
 msgid "_Search"
 msgstr "_த தேடு"
 
-#: ../src/terminal-window.c:1633
+#: ../src/terminal-window.c:1640
 msgid "_Terminal"
 msgstr "_Tமுனையம்"
 
-#: ../src/terminal-window.c:1634
+#: ../src/terminal-window.c:1641
 msgid "Ta_bs"
 msgstr "_b கீற்றுகள்"
 
-#: ../src/terminal-window.c:1635
-msgid "_Help"
-msgstr "_H உதவி"
+#: ../src/terminal-window.c:1653
+msgid "New _Profile"
+msgstr "_P புதிய வரியுரு"
 
-#: ../src/terminal-window.c:1646
-msgid "New _Profile…"
-msgstr "(_P) புதிய வரியுரு..."
-
-#: ../src/terminal-window.c:1649
+#: ../src/terminal-window.c:1656
 msgid "_Save Contents"
 msgstr "_உள்ளடக்கங்களை சேமி"
 
-#: ../src/terminal-window.c:1652 ../src/terminal-window.c:1798
+#: ../src/terminal-window.c:1659
 msgid "C_lose Tab"
 msgstr "_l கீற்றை மூடுக"
 
-#: ../src/terminal-window.c:1655
+#: ../src/terminal-window.c:1662
 msgid "_Close Window"
 msgstr "_C சாளரத்தை மூடுக"
 
-#: ../src/terminal-window.c:1666 ../src/terminal-window.c:1786
+#: ../src/terminal-window.c:1673 ../src/terminal-window.c:1788
 msgid "Paste _Filenames"
 msgstr "(_F) கோப்பு பெயர்களை ஒட்டு"
 
-#: ../src/terminal-window.c:1673
-msgid "P_rofiles…"
-msgstr "(_r) வரியுருக்கள்..."
-
-#: ../src/terminal-window.c:1677
-msgid "_Keyboard Shortcuts…"
-msgstr "(_K) விசைப்பலகை குறுக்கு விசைகள்..."
-
-#: ../src/terminal-window.c:1680
-msgid "_Preferences…"
-msgstr "_P முன்னுரிமைகள்..."
+#: ../src/terminal-window.c:1679
+msgid "Pre_ferences"
+msgstr "_f முன்னுரிமைகள்"
 
 #. Search menu
-#: ../src/terminal-window.c:1696
-msgid "_Find..."
-msgstr "_த கண்டுபிடி..."
+#: ../src/terminal-window.c:1698
+msgid "_Find…"
+msgstr "(_F) தேடுக..."
 
-#: ../src/terminal-window.c:1699
+#: ../src/terminal-window.c:1701
 msgid "Find Ne_xt"
 msgstr "_அடுத்ததை தேடுக"
 
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:1704
 msgid "Find Pre_vious"
 msgstr "_ம முந்தையதை தேடுக"
 
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:1707
 msgid "_Clear Highlight"
 msgstr "_C சிறப்புச் சுட்டுதலை துடைக்கவும்"
 
-#: ../src/terminal-window.c:1709
+#: ../src/terminal-window.c:1711
 msgid "Go to _Line..."
 msgstr "_L  இந்த வரிசைக்குப் போகவும்..."
 
-#: ../src/terminal-window.c:1712
+#: ../src/terminal-window.c:1714
 msgid "_Incremental Search..."
 msgstr "_I அதிகரிப்பு தேடல்..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:1720
 msgid "Change _Profile"
 msgstr "(_P)விவரத்தை மாற்று"
 
-#: ../src/terminal-window.c:1719
+#: ../src/terminal-window.c:1721
 msgid "_Set Title…"
 msgstr "(_S) தலைப்பை அமைக்க..."
 
-#: ../src/terminal-window.c:1722
+#: ../src/terminal-window.c:1724
 msgid "Set _Character Encoding"
 msgstr "(_C)எழுத்துரு குறிமுறையை அமை"
 
-#: ../src/terminal-window.c:1723
+#: ../src/terminal-window.c:1725
 msgid "_Reset"
 msgstr "நிலை மீள் "
 
-#: ../src/terminal-window.c:1726
+#: ../src/terminal-window.c:1728
 msgid "Reset and C_lear"
 msgstr "_l நிலை மீட்டு துப்புரவு செய்"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1731
+#: ../src/terminal-window.c:1733
 msgid "_Add or Remove…"
 msgstr "(_A) சேர் அல்லது நீக்கு..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:1736
+#: ../src/terminal-window.c:1738
 msgid "_Previous Tab"
 msgstr "முந்தைய கீற்று (_P)"
 
-#: ../src/terminal-window.c:1739
+#: ../src/terminal-window.c:1741
 msgid "_Next Tab"
 msgstr "அடுத்த கீற்று (_N)"
 
-#: ../src/terminal-window.c:1742
+#: ../src/terminal-window.c:1744
 msgid "Move Tab _Left"
 msgstr "இடப்பக்கம் கீற்றை நகர்த்து (_L)"
 
-#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:1747
 msgid "Move Tab _Right"
 msgstr "வலப்பக்கம் கீற்றை நகர்த்து (_R)"
 
-#: ../src/terminal-window.c:1748
+#: ../src/terminal-window.c:1750
 msgid "_Detach tab"
 msgstr "கீற்றை பிரிக்கவும். (_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:1753
+#: ../src/terminal-window.c:1755
 msgid "_Contents"
 msgstr "_உள்ளடக்கங்கள்"
 
-#: ../src/terminal-window.c:1756
-msgid "_About"
-msgstr "_A பற்றி"
-
 #. Popup menu
-#: ../src/terminal-window.c:1761
+#: ../src/terminal-window.c:1763
 msgid "_Send Mail To…"
 msgstr "இவருக்கு அஞ்சல் அனுப்பு... (_S)"
 
-#: ../src/terminal-window.c:1764
+#: ../src/terminal-window.c:1766
 msgid "_Copy E-mail Address"
 msgstr "மின்னஞ்சல் முகவரியை நகலெடு (_C)"
 
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:1769
 msgid "C_all To…"
 msgstr "(_a) இவருக்கு அழைப்பு...."
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:1772
 msgid "_Copy Call Address"
 msgstr "அழைப்பு முகவரியை நகலெடு (_C)"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:1775
 msgid "_Open Link"
 msgstr "_O இணைப்பை திறக்கவும்"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:1778
 msgid "_Copy Link Address"
 msgstr "_C இணைப்பு முகவரியை நகல் செய்"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:1781
 msgid "P_rofiles"
 msgstr "(_r) வரியுருக்கள்:"
 
-#: ../src/terminal-window.c:1795 ../src/terminal-window.c:2834
-msgid "C_lose Window"
-msgstr "_l சாளரத்தை மூடவும்"
-
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:1797
 msgid "L_eave Full Screen"
 msgstr "முழுத்திரை விட்டு விலகு (_e)"
 
-#: ../src/terminal-window.c:1804
+#: ../src/terminal-window.c:1800
 msgid "_Input Methods"
 msgstr "உள்ளீடு முறைகள் (_I)"
 
 #. View Menu
+#: ../src/terminal-window.c:1806
+msgid "Show _Menubar"
+msgstr "பட்டி-பட்டையைக் காட்டுக (_M)"
+
 #: ../src/terminal-window.c:1810
 msgid "_Full Screen"
 msgstr "முழுத்திரை (_F)"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2899
 msgid "Close this window?"
 msgstr "சாளரம் மூடவா?"
 
-#: ../src/terminal-window.c:2821
+#: ../src/terminal-window.c:2899
 msgid "Close this terminal?"
 msgstr "முனையத்தை மூடவா?"
 
-#: ../src/terminal-window.c:2825
+#: ../src/terminal-window.c:2903
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
-"இந்த சாளரத்தில்  இன்னும் சில நடப்புகள் சில முனையங்களில் இயங்கிக்கொண்டு உள்ளன. சாளரத்தை "
+"இந்த சாளரத்தில்  இன்னும் சில நடப்புகள் சில முனையங்களில் இயங்கிக்கொண்டு உள்ளன. "
+"சாளரத்தை "
 "மூடினால் அனைத்தும் செயலிழக்கும்."
 
-#: ../src/terminal-window.c:2829
+#: ../src/terminal-window.c:2907
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr ""
-"இந்த முனையத்தில் இன்னும் ஒரு நடப்பு இயங்கிக்கொண்டு உள்ளது. சாளரத்தை மூடினால் அது "
+"இந்த முனையத்தில் இன்னும் ஒரு நடப்பு இயங்கிக்கொண்டு உள்ளது. சாளரத்தை மூடினால் "
+"அது "
 "செயலிழக்கும்."
 
-#: ../src/terminal-window.c:2834
+#: ../src/terminal-window.c:2912
+msgid "C_lose Window"
+msgstr "_l சாளரத்தை மூடவும்"
+
+#: ../src/terminal-window.c:2912
 msgid "C_lose Terminal"
 msgstr "முனையம் மூடு (_l)"
 
-#: ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:2985
 msgid "Could not save contents"
 msgstr "உள்ளடக்கங்களை சேமிக்க முடியவில்லை"
 
-#: ../src/terminal-window.c:2931
-msgid "Save as..."
+#: ../src/terminal-window.c:3009
+msgid "Save as…"
 msgstr "இப்படி சேமி..."
 
-#: ../src/terminal-window.c:3382
+#: ../src/terminal-window.c:3456
 msgid "_Title:"
 msgstr "_T தலைப்பு:"
+
+#~ msgid "A_vailable encodings:"
+#~ msgstr "(_v)கிடைக்கும் குறியாக்கம்:"
+
+#~ msgid "Add or Remove Terminal Encodings"
+#~ msgstr "முனைய எழுத்துருவை சேர் அல்லது நீக்கு"
+
+#~ msgid "Keyboard Shortcuts"
+#~ msgstr "விசைப்பலகை குறுக்கு விசை"
+
+#~ msgid "C_reate"
+#~ msgstr "உருவாக்கு (_r)"
+
+#~ msgid "Profile _name:"
+#~ msgstr "_n விபரம் பெயர்:"
+
+#~ msgid "_Base on:"
+#~ msgstr "_B இதைக் கொண்டு:"
+
+#~ msgid "<b>Foreground, Background, Bold and Underline</b>"
+#~ msgstr "<b>முன்னணி, பின்னணி, தடித்த மற்றும் அடிகோடிட்ட</b>"
+
+#~ msgid "<b>Title</b>"
+#~ msgstr "<b>தலைப்பு</b>"
+
+#~ msgid ""
+#~ "Always visible\n"
+#~ "Visible only when necessary\n"
+#~ "Hidden"
+#~ msgstr ""
+#~ "எப்போதும் தெரியும்\n"
+#~ "தேவையானபோது மட்டும் தெரியும்\n"
+#~ "மறைக்கப்பட்ட"
+
+#~ msgid ""
+#~ "Automatic\n"
+#~ "Control-H\n"
+#~ "ASCII DEL\n"
+#~ "Escape sequence\n"
+#~ "TTY Erase"
+#~ msgstr ""
+#~ "தானியங்கி \n"
+#~ "கன்ட்ரோல் -H\n"
+#~ "ஆஸ்கி-டெல்\n"
+#~ "விடுபடு வரிசை\n"
+#~ "டிடிஒய் எரேஸ்"
+
+#~ msgid ""
+#~ "Block\n"
+#~ "I-Beam\n"
+#~ "Underline"
+#~ msgstr ""
+#~ "தொகுதி\n"
+#~ "ஐபீம்\n"
+#~ "அடிக்கோடு"
+
+#~ msgid ""
+#~ "Exit the terminal\n"
+#~ "Restart the command\n"
+#~ "Hold the terminal open"
+#~ msgstr ""
+#~ "முனையத்தை விட்டு வெளியேறு\n"
+#~ "கட்டளையை மீண்டும் தொடங்கு\n"
+#~ "முனையத்தை திறந்ததாக வைக்கவும்"
+
+#~ msgid ""
+#~ "Replace initial title\n"
+#~ "Append initial title\n"
+#~ "Prepend initial title\n"
+#~ "Keep initial title"
+#~ msgstr ""
+#~ "ஆரம்ப தலைப்பினை மாற்றுகிறது\n"
+#~ "ஆரம்ப தலைப்புக்கு பின் ஒட்டு\n"
+#~ "ஆரம்ப தலைப்புக்கு முன் ஒட்டு\n"
+#~ "ஆரம்ப தலைப்பினை வைத்துக்கொள்"
+
+#~ msgid ""
+#~ "You already have a profile called “%s”. Do you want to create another "
+#~ "profile with the same name?"
+#~ msgstr ""
+#~ "நீங்கள் இந்த “%s” விவரக்குறிப்பினை ஏற்கனவே கொண்டுள்ளீர்கள். அதே பெயரில் வேறு "
+#~ "விவரக்குறிப்பினை உருவாக்க வேண்டுமா?"
+
+#~ msgid "Choose base profile"
+#~ msgstr "விவரத்தை தேர்வு செய்"
+
+#~ msgid "_Description"
+#~ msgstr "_D விவரணம்"
+
+#~ msgid "New _Profile…"
+#~ msgstr "(_P) புதிய வரியுரு..."
+
+#~ msgid "P_rofiles…"
+#~ msgstr "(_r) வரியுருக்கள்..."
+
+#~ msgid "_Keyboard Shortcuts…"
+#~ msgstr "(_K) விசைப்பலகை குறுக்கு விசைகள்..."
+
+#~ msgid "_Find..."
+#~ msgstr "_த கண்டுபிடி..."
 
 #~ msgid "Disable connection to session manager"
 #~ msgstr "அமர்வு மேலாளருக்கு இணைப்பை செயல் நீக்கு"
@@ -2362,99 +2593,6 @@ msgstr "_T தலைப்பு:"
 #~ "பயன்படுத்தப்பட்ட ஒழுங்கில் சரம் பயன்படுத்தப்படும். சிறப்பு சரங்களை \"மறை\" என்ற தேர்வை "
 #~ "நீங்கள் பயன்படுத்தி இருந்தால் குறுக்கு விசைகள் செயல்படாது"
 
-#~ msgid "Keyboard shortcut to close a tab"
-#~ msgstr "டாபை மூட பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to close a window"
-#~ msgstr "சாளரத்தை மூட பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to copy text"
-#~ msgstr "உரையை நகலெடுக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to create a new profile"
-#~ msgstr "புதிய விவரங்களை உருவாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to launch help"
-#~ msgstr "உதவியை துவக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to make font larger"
-#~ msgstr "எழுத்துருவை பெரிதாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to make font normal-size"
-#~ msgstr "எழுத்துரு அளவை இயல்பாக பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to make font smaller"
-#~ msgstr "எழுத்துரு அளவை சிறிதாக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to open a new tab"
-#~ msgstr "புதிய கீற்று பை திறக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to open a new window"
-#~ msgstr "புதிய சாளரத்தை திறக்க பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to paste text"
-#~ msgstr "உரையை ஒட்ட பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to reset and clear the terminal"
-#~ msgstr "முனையத்தை மீட்டமைக்க தூய்மைப்படுத்த பயன்படும் விசைப்பலகை குறுக்கு விசைகள்"
-
-#~ msgid "Keyboard shortcut to reset the terminal"
-#~ msgstr "முனையத்தை மீட்டமைக்க பயன்படும் விசைப்பலகை குறுக்கு விசைகள்"
-
-#~ msgid "Keyboard shortcut to save the current tab contents to file"
-#~ msgstr "நடப்பு கீற்றின் உள்ளடக்கத்தை கோப்புக்கு எழுத பயன்படும் விசைப்பலகை குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to set the terminal title"
-#~ msgstr "முனையத்தின் தலைப்பை அமைக்க உதவும் விசைப்பலகை குறுக்குவிசைகள்"
-
-#~ msgid "Keyboard shortcut to switch to tab 1"
-#~ msgstr "கீற்று 1 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 10"
-#~ msgstr "கீற்று 10 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 11"
-#~ msgstr "கீற்று 11 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 12"
-#~ msgstr "கீற்று 12 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 2"
-#~ msgstr "கீற்று 2 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 3"
-#~ msgstr "கீற்று 3 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 4"
-#~ msgstr "கீற்று 4 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 5"
-#~ msgstr "கீற்று 5 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 6"
-#~ msgstr "கீற்று 6 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 7"
-#~ msgstr "கீற்று 7 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 8"
-#~ msgstr "கீற்று 8 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to tab 9"
-#~ msgstr "கீற்று 9 க்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to the next tab"
-#~ msgstr "அடுத்த கீற்றுக்கு  நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to switch to the previous tab"
-#~ msgstr "முந்தைய கீற்றுக்கு  நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to toggle full screen mode"
-#~ msgstr "முழு திரை காட்சிக்கு நகர குறுக்கு விசை"
-
-#~ msgid "Keyboard shortcut to toggle the visibility of the menubar"
-#~ msgstr "மெனுபார் காட்சிக்கு குறுக்கு விசை"
-
 #~ msgid "List of profiles"
 #~ msgstr "விவரங்களின்பட்டியல்"
 
@@ -2569,17 +2707,11 @@ msgstr "_T தலைப்பு:"
 #~ "வலப்பக்கம்\n"
 #~ "செயல்நீக்கப்பட்டது"
 
-#~ msgid "Profile Editor"
-#~ msgstr "விபரம் பதிப்பான்"
-
 #~ msgid "S_hade transparent or image background:"
 #~ msgstr "நிழலிட்ட ஊடுருவல் அல்லது பட பின்னணி: (_h)"
 
 #~ msgid "Select Background Image"
 #~ msgstr "பின்னணி படத்தை தேர்ந்தெடு"
-
-#~ msgid "Show _menubar by default in new terminals"
-#~ msgstr "_m புதிய முனையங்களில், கொடா நிலையாக, பட்டி-பட்டையைக் காண்பிக்கவும்"
 
 #~ msgid ""
 #~ "Tango\n"
@@ -2603,12 +2735,6 @@ msgstr "_T தலைப்பு:"
 #~ msgid "_Transparent background"
 #~ msgstr "_T புலப்பாடு பின்னணி"
 
-#~ msgid "Hide and Show menubar"
-#~ msgstr "பட்டி-பட்டையை மறை/காட்டுக"
-
-#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
-#~ msgstr "குறுக்கு விசை “%s” ஏற்கெனவே “%s” செயலுக்கு பிணைக்கப்பட்டது"
-
 #~ msgid "No such profile \"%s\", using default profile\n"
 #~ msgstr "\"%s\" என்ற வரியுரு கிடையாது, முன்னிருப்பு வரியுரு பயன்படுத்தப்படும்\n"
 
@@ -2624,26 +2750,11 @@ msgstr "_T தலைப்பு:"
 #~ "நீங்கள் விவரக்குறிப்பை உருவாக்க வேண்டும் எனில் மேலும் புதிய சாளர --new '--"
 #~ "profile'தேர்வை பயன்படுத்தவும்\n"
 
-#~ msgid "\"%s\" option given twice for the same window\n"
-#~ msgstr "\"%s\" தேர்வு ஒரே சாளரத்தில் இரண்டு முறை தரப்பட்டது\n"
-
 #~ msgid "Save the terminal configuration to a file"
 #~ msgstr "முனையத்தின் அமைப்பை கோப்புக்கு சேமிக்கவும்."
 
-#~ msgid "Turn on the menubar"
-#~ msgstr "பட்டி-பட்டையை காட்டுக"
-
-#~ msgid "Turn off the menubar"
-#~ msgstr "பட்டி-பட்டையை காட்டாதே"
-
-#~ msgid "Unnamed"
-#~ msgstr "பெயரில்லாத"
-
 #~ msgid "Pr_ofile Preferences"
 #~ msgstr "(_o) வரியுரு தேர்வுகள்"
-
-#~ msgid "Show _Menubar"
-#~ msgstr "பட்டி-பட்டையைக் காட்டுக (_M)"
 
 #~ msgid "On the left side"
 #~ msgstr "இடது பக்கத்தில்"
