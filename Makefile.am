@@ -15,6 +15,13 @@ desktop_in_files = @PACKAGE@.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
+desktop-file-validate: $(desktop_DATA)
+	for f in $^; do \
+		$(DESKTOP_FILE_VALIDATE) $$f; \
+	done
+
+check-local: desktop-file-validate
+
 EXTRA_DIST = 			\
 	ChangeLog.pre-2-23	\
 	ChangeLog.README	\
