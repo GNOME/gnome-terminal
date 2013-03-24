@@ -772,7 +772,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
 done:
   gtk_window_set_transient_for (GTK_WINDOW (prefs_dialog), transient_parent);
 
-  terminal_util_dialog_focus_widget (dialog, page);
+  terminal_util_dialog_focus_widget (prefs_dialog, page);
 
   gtk_window_present (GTK_WINDOW (prefs_dialog));
 }
