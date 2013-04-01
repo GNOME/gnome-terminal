@@ -41,6 +41,7 @@
 #include "terminal-defines.h"
 #include "terminal-prefs.h"
 
+#include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
