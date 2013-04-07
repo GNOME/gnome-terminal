@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 #include <libnautilus-extension/nautilus-menu-provider.h>
+#include <libnautilus-extension/nautilus-extension-types.h>
 
 #include <errno.h>
 #include <fcntl.h>
@@ -755,14 +756,11 @@ terminal_nautilus_class_finalize (TerminalNautilusClass *class)
 
 /* Nautilus extension */
 
-void nautilus_module_initialize (GTypeModule *module);
-void nautilus_module_shutdown   (void);
-void nautilus_module_list_types (const GType **types, 
-                                 int *num_types);
-
 static GType type_list[1];
 
-void
+#define EXPORT __attribute__((__visibility__("default"))) extern
+
+EXPORT void
 nautilus_module_initialize (GTypeModule *module)
 {
   terminal_nautilus_register_type (module);
@@ -771,12 +769,12 @@ nautilus_module_initialize (GTypeModule *module)
   type_list[0] = TERMINAL_TYPE_NAUTILUS;
 }
 
-void
+EXPORT void
 nautilus_module_shutdown (void)
 {
 }
 
-void 
+EXPORT void
 nautilus_module_list_types (const GType **types,
                             int          *num_types)
 {
