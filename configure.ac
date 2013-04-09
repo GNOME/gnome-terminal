@@ -179,7 +179,7 @@ fi
 # ******************
 
 AC_ARG_WITH([nautilus-extension],
-  [AS_HELP_STRING([--without-nautilus-extension],[Disable nautilus extension])],
+  [AS_HELP_STRING([--with-nautilus-extension],[Enable nautilus extension])],
   [],
   [with_nautilus_extension=no])
 
