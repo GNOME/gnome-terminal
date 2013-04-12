@@ -1999,6 +1999,15 @@ terminal_window_dispose (GObject *object)
   TerminalApp *app;
   GdkScreen *screen;
   GtkClipboard *clipboard;
+  GSList *list, *l;
+
+  /* Deactivate open popup menus. This fixes a crash if the window is closed
+   * while the context menu is open.
+   */
+  list = gtk_ui_manager_get_toplevels (priv->ui_manager, GTK_UI_MANAGER_POPUP);
+  for (l = list; l != NULL; l = l->next)
+    if (GTK_IS_MENU (l->data))
+      gtk_menu_popdown (GTK_MENU (l->data));
 
   remove_popup_info (window);
 
