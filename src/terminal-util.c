@@ -167,6 +167,7 @@ terminal_util_show_help (const char *topic,
 }
 
 #define ABOUT_GROUP "About"
+#define ABOUT_URL "https://live.gnome.org/Terminal"
 #define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
 
 void
@@ -240,6 +241,7 @@ terminal_util_show_about (GtkWindow *transient_parent)
                          "documenters", documenters,
                          "license", licence_text,
                          "wrap-license", TRUE,
+                         "website", ABOUT_URL,
                          "translator-credits", _("translator-credits"),
                          "logo-icon-name", GNOME_TERMINAL_ICON_NAME,
                          NULL);
