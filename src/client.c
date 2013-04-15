@@ -617,6 +617,12 @@ receiver_child_exited_cb (TerminalReceiver *receiver,
     g_main_loop_quit (data->loop);
 }
 
+static const char *
+get_app_id (OptionData *data)
+{
+  return data->server_app_id ? data->server_app_id : TERMINAL_APPLICATION_ID;
+}
+
 static gboolean
 handle_open (int *argc,
              char ***argv,
@@ -648,22 +654,21 @@ handle_open (int *argc,
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     data->server_app_id ? data->server_app_id
-                                                                         : TERMINAL_APPLICATION_ID,
+                                                     get_app_id (data),
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
     g_dbus_error_strip_remote_error (error);
-    _printerr ("Error constructing proxy for %s:%s: %s\n", 
-                TERMINAL_APPLICATION_ID, TERMINAL_FACTORY_OBJECT_PATH,
-                error->message);
+    _printerr ("Error constructing proxy for %s:%s: %s\n",
+               get_app_id (data), TERMINAL_FACTORY_OBJECT_PATH,
+               error->message);
     g_error_free (error);
     option_data_free (data);
     return FALSE;
   }
 
-  if (!terminal_factory_call_create_instance_sync 
+  if (!terminal_factory_call_create_instance_sync
          (factory,
           build_create_options_variant (data),
           &object_path,
@@ -681,8 +686,7 @@ handle_open (int *argc,
 
   receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                                       data->server_app_id ? data->server_app_id
-                                                                             : TERMINAL_APPLICATION_ID,
+                                                       get_app_id (data),
                                                        object_path,
                                                        NULL /* cancellable */,
                                                        &error);
