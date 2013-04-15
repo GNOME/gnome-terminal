@@ -24,12 +24,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "terminal-mdi-container.h"
 #include "terminal-screen.h"
 #include "terminal-screen-container.h"
-#include "terminal-intl.h"
 
 #define TERMINAL_ACCELS_N_TABS_SWITCH (35) /* keep in sync with terminal-accels.c */
 

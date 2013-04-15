@@ -15,15 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_INTL_H
-#define TERMINAL_INTL_H
+#include "config.h"
+#include "terminal-i18n.h"
 
-#include <glib.h>
+#include <libintl.h>
 
-G_BEGIN_DECLS
+void
+terminal_i18n_init (gboolean set_default)
+{
+  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
-#define I_(string) g_intern_static_string (string)
-
-G_END_DECLS
-
-#endif /* TERMINAL_INTL_H */
+  if (set_default)
+    textdomain (GETTEXT_PACKAGE);
+}

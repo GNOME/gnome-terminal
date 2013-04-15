@@ -22,10 +22,10 @@
 #include <config.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 
 #include "terminal-intl.h"
-
 #include "terminal-debug.h"
 #include "terminal-app.h"
 #include "terminal-accels.h"

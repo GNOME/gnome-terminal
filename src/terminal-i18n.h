@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TERMINAL_INTL_H
-#define TERMINAL_INTL_H
+#ifndef TERMINAL_I18N_H
+#define TERMINAL_I18N_H
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-#define I_(string) g_intern_static_string (string)
+void terminal_i18n_init (gboolean set_default);
 
 G_END_DECLS
 
-#endif /* TERMINAL_INTL_H */
+#endif /* TERMINAL_I18N_H */

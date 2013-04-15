@@ -26,11 +26,11 @@
 #include <stdlib.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include "terminal-options.h"
 #include "terminal-screen.h"
 #include "terminal-app.h"
-#include "terminal-intl.h"
 #include "terminal-util.h"
 #include "terminal-version.h"
 

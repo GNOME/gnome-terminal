@@ -16,16 +16,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <string.h>
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-encoding.h"
-#include "terminal-intl.h"
 #include "terminal-schemas.h"
 #include "terminal-util.h"
 

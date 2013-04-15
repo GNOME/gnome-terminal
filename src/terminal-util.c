@@ -19,7 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -29,6 +29,7 @@
 #include <errno.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>

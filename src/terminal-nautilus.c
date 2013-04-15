@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "terminal-i18n.h"
+
 /* Nautilus extension class */
 
 #define TERMINAL_TYPE_NAUTILUS         (terminal_nautilus_get_type ())
@@ -745,8 +747,7 @@ terminal_nautilus_class_init (TerminalNautilusClass *klass)
 
   gobject_class->dispose = terminal_nautilus_dispose;
 
-  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+  terminal_i18n_init (FALSE);
 }
 
 static void

@@ -23,13 +23,14 @@
 #include <uuid.h>
 #include <dconf.h>
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include "terminal-prefs.h"
 #include "terminal-accels.h"
 #include "terminal-app.h"
 #include "terminal-debug.h"
-#include "terminal-intl.h"
 #include "terminal-schemas.h"
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
