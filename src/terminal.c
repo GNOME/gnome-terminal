@@ -31,11 +31,12 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
+#include <glib/gi18n.h>
 
 #include <gtk/gtk.h>
 
 #include "terminal-debug.h"
-#include "terminal-intl.h"
+#include "terminal-i18n.h"
 #include "terminal-options.h"
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
@@ -209,9 +210,7 @@ main (int argc, char **argv)
 
   setlocale (LC_ALL, "");
 
-  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
+  terminal_i18n_init (TRUE);
 
 #if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();

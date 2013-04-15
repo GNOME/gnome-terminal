@@ -34,17 +34,18 @@
 #include <sys/wait.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib/gprintf.h>
 #include <gio/gio.h>
 #include <gio/gunixfdlist.h>
 
 #include <gtk/gtk.h>
 
-#include "terminal-intl.h"
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
 #include "terminal-profiles-list.h"
+#include "terminal-i18n.h"
 #include "terminal-debug.h"
 
 static gboolean quiet = FALSE;
@@ -793,9 +794,7 @@ main (gint argc, gchar *argv[])
 
   setlocale (LC_ALL, "");
 
-  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
+  terminal_i18n_init (TRUE);
 
 #if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();

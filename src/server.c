@@ -28,13 +28,14 @@
 #include <unistd.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
 #include "terminal-app.h"
 #include "terminal-debug.h"
 #include "terminal-gdbus.h"
-#include "terminal-intl.h"
+#include "terminal-i18n.h"
 #include "terminal-defines.h"
 
 static char *app_id = NULL;
@@ -72,9 +73,7 @@ main (int argc, char **argv)
 
   setlocale (LC_ALL, "");
 
-  bindtextdomain (GETTEXT_PACKAGE, TERM_LOCALEDIR);
-  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-  textdomain (GETTEXT_PACKAGE);
+  terminal_i18n_init (TRUE);
 
   /* Set some env vars to disable ubuntu crap. They'll certainly patch this
    * out in their package, but anyone running from git will get the right

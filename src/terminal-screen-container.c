@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "terminal-screen-container.h"
 #include "terminal-debug.h"
-#include "terminal-intl.h"
 
 #include <gtk/gtk.h>
 

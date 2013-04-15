@@ -23,11 +23,11 @@
 #include <math.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gio/gio.h>
 
 #include "terminal-app.h"
 #include "terminal-enums.h"
-#include "terminal-intl.h"
 #include "profile-editor.h"
 #include "terminal-schemas.h"
 #include "terminal-type-builtins.h"
