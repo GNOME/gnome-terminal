@@ -72,7 +72,7 @@ typedef struct _TerminalNautilusMenuItem      TerminalNautilusMenuItem;
 typedef struct _TerminalNautilusMenuItemClass TerminalNautilusMenuItemClass;
 
 struct _TerminalNautilusMenuItem {
-  GObject parent_instance;
+  NautilusMenuItem parent_instance;
 
   TerminalNautilus *nautilus;
   GdkScreen *screen;
@@ -82,7 +82,7 @@ struct _TerminalNautilusMenuItem {
 };
 
 struct _TerminalNautilusMenuItemClass {
-  GObjectClass parent_class;
+  NautilusMenuItemClass parent_class;
 };
 
 static GType terminal_nautilus_menu_item_get_type (void);
