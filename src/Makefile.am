@@ -242,16 +242,24 @@ gnome_terminal_LDADD = \
 # Nautilus extension
 
 libterminal_nautilus_la_SOURCES = \
+	terminal-client-utils.c \
+	terminal-client-utils.h \
+	terminal-defines.h \
 	terminal-i18n.c \
 	terminal-i18n.h \
 	terminal-nautilus.c \
 	$(NULL)
 
+nodist_libterminal_nautilus_la_SOURCES = \
+	terminal-gdbus-generated.c \
+	terminal-gdbus-generated.h \
+	terminal-type-builtins.c \
+	terminal-type-builtins.h \
+	$(NULL)
+
 libterminal_nautilus_la_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
-	-DTERM_DATADIR="\"$(datadir)\"" \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DTERM_BINDIR="\"$(bindir)\"" \
 	-DGDK_MULTIHEAD_SAFE \
 	$(AM_CPPFLAGS)
 
