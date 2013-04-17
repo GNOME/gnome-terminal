@@ -40,6 +40,6 @@ HELP_FILES = \
 	txt-select-text.page \
 	$(NULL)
 
-HELP_LINGUAS = ca de el es gl
+HELP_LINGUAS = de el es gl
 
 -include $(top_srcdir)/git.mk
