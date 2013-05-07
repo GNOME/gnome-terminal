@@ -50,6 +50,18 @@ strv_contains (char **strv,
   return n;
 }
 
+static gboolean
+valid_uuid (const char *str,
+            GError **error)
+{
+  if (terminal_settings_list_valid_uuid (str))
+    return TRUE;
+
+  g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
+               "\"%s\" is not a valid UUID", str);
+  return FALSE;
+}
+
 /**
  * terminal_profiles_list_new:
  *
@@ -119,7 +131,8 @@ terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
     if (rv == NULL)
       goto err;
     return rv;
-  }
+  } else if (!valid_uuid (uuid, error))
+    return NULL;
 
   if (terminal_settings_list_has_child (list, uuid))
     return g_strdup (uuid);

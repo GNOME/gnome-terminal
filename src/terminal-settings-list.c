@@ -165,8 +165,8 @@ strv_dupv_remove (char **strv,
   return nstrv;
 }
 
-static gboolean
-is_valid_uuid (const char *str)
+gboolean
+terminal_settings_list_valid_uuid (const char *str)
 {
   uuid_t u;
 
@@ -199,7 +199,7 @@ validate_list (TerminalSettingsList *list,
     return allow_empty;
 
   for (i = 0; entries[i]; i++) {
-    if (!is_valid_uuid (entries[i]))
+    if (!terminal_settings_list_valid_uuid (entries[i]))
       return FALSE;
   }
 
@@ -701,7 +701,7 @@ terminal_settings_list_has_child (TerminalSettingsList *list,
                                   const char *uuid)
 {
   g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), FALSE);
-  g_return_val_if_fail (is_valid_uuid (uuid), FALSE);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), FALSE);
 
   return strv_find (list->uuids, uuid) != -1;
 }
@@ -721,7 +721,7 @@ terminal_settings_list_ref_child (TerminalSettingsList *list,
                                   const char *uuid)
 {
   g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
-  g_return_val_if_fail (is_valid_uuid (uuid), NULL);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), NULL);
 
   return terminal_settings_list_ref_child_internal (list, uuid);
 }
@@ -806,7 +806,7 @@ terminal_settings_list_clone_child (TerminalSettingsList *list,
                                     const char *uuid)
 {
   g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
-  g_return_val_if_fail (is_valid_uuid (uuid), NULL);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (uuid), NULL);
 
   return terminal_settings_list_add_child_internal (list, uuid);
 }
@@ -823,7 +823,7 @@ terminal_settings_list_remove_child (TerminalSettingsList *list,
                                      const char *uuid)
 {
   g_return_if_fail (TERMINAL_IS_SETTINGS_LIST (list));
-  g_return_if_fail (is_valid_uuid (uuid));
+  g_return_if_fail (terminal_settings_list_valid_uuid (uuid));
 
   terminal_settings_list_remove_child_internal (list, uuid);
 }
@@ -853,7 +853,7 @@ terminal_settings_list_dup_uuid_from_child (TerminalSettingsList *list,
   p++;
   g_return_val_if_fail (strlen (p) == 37, NULL);
   p[36] = '\0';
-  g_return_val_if_fail (is_valid_uuid (p), NULL);
+  g_return_val_if_fail (terminal_settings_list_valid_uuid (p), NULL);
 
   p = g_strdup (p);
   g_free (path);
@@ -872,7 +872,7 @@ terminal_settings_list_set_default_child (TerminalSettingsList *list,
                                           const char *uuid)
 {
   g_return_if_fail (TERMINAL_IS_SETTINGS_LIST (list));
-  g_return_if_fail (is_valid_uuid (uuid));
+  g_return_if_fail (terminal_settings_list_valid_uuid (uuid));
 
   if (!terminal_settings_list_has_child (list, uuid))
     return;
