@@ -69,6 +69,8 @@ char *terminal_settings_list_dup_default_child (TerminalSettingsList *list);
 void terminal_settings_list_set_default_child (TerminalSettingsList *list,
                                                const char *uuid);
 
+gboolean terminal_settings_list_valid_uuid (const char *str);
+
 G_END_DECLS
 
 #endif /* TERMINAL_SETTINGS_LIST_H */
