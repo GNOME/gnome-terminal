@@ -98,6 +98,7 @@ main (int argc, char **argv)
   if (home_dir == NULL || chdir (home_dir) < 0)
     (void) chdir ("/");
 
+  g_set_prgname ("gnome-terminal-server");
   g_set_application_name (_("Terminal"));
 
   if (!gtk_init_with_args (&argc, &argv, NULL, options, NULL, &error)) {
