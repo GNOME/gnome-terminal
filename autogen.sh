@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Run this to generate all the initial makefiles, etc.
 
 set -e
@@ -6,10 +6,10 @@ set -e
 srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
-pushd "$srcdir"
-mkdir -p m4 &>/dev/null || true
+cd "$srcdir"
+mkdir -p m4 >/dev/null 2>&1 || true
 autoreconf --verbose --force --install
 intltoolize --force
-popd
+cd -
 
 test -n "$NOCONFIGURE" || "$srcdir/configure" "$@"
