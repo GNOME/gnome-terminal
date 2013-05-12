@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-void terminal_accels_init (GSettings *settings);
+void terminal_accels_init (GApplication *application,
+                           GSettings *settings);
  
 void terminal_accels_shutdown (void);
 

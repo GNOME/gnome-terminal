@@ -377,7 +377,7 @@ terminal_app_init (TerminalApp *app)
                     app);
 
   settings = g_settings_get_child (app->global_settings, "keybindings");
-  terminal_accels_init (settings);
+  terminal_accels_init (G_APPLICATION (app), settings);
   g_object_unref (settings);
 }
 
