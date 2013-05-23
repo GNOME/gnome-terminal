@@ -490,10 +490,6 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
         !terminal_window_parse_geometry (window, geometry))
       _terminal_debug_print (TERMINAL_DEBUG_GEOMETRY,
                              "Invalid geometry string \"%s\"", geometry);
-
-    /* Restored windows shouldn't demand attention; see bug #586308. */
-    if (present_window_set && !present_window)
-      terminal_window_set_is_restored (window);
   }
 
   if (have_new_window || (present_window_set && present_window))
