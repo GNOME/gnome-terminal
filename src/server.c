@@ -75,13 +75,17 @@ main (int argc, char **argv)
 
   terminal_i18n_init (TRUE);
 
-  /* Set some env vars to disable ubuntu crap. They'll certainly patch this
-   * out in their package, but anyone running from git will get the right
-   * behaviour.
+#ifndef ENABLE_DISTRO_PACKAGING
+#ifdef HAVE_UBUNTU
+  /* Set some env vars to disable the ubuntu modules. Their package will be 
+   * built using --enable-distro-packaging, but anyone running from git will
+   * get the right behaviour.
    */
   g_setenv ("LIBOVERLAY_SCROLLBAR", "0", TRUE);
   g_setenv ("UBUNTU_MENUPROXY", "0", TRUE);
   g_setenv ("NO_UNITY_GTK_MODULE", "1", TRUE);
+#endif
+#endif
 
 #if !GLIB_CHECK_VERSION (2, 35, 3)
   g_type_init ();
