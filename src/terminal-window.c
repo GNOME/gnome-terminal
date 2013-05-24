@@ -2001,6 +2001,7 @@ terminal_window_dispose (GObject *object)
   TerminalWindow *window = TERMINAL_WINDOW (object);
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app;
+  TerminalSettingsList *profiles_list;
   GdkScreen *screen;
   GtkClipboard *clipboard;
   GSList *list, *l;
@@ -2029,7 +2030,8 @@ terminal_window_dispose (GObject *object)
     disconnect_profiles_from_actions_in_group (priv->new_terminal_action_group);
 
   app = terminal_app_get ();
-  g_signal_handlers_disconnect_by_func (app,
+  profiles_list = terminal_app_get_profiles_list (app);
+  g_signal_handlers_disconnect_by_func (profiles_list,
                                         G_CALLBACK (terminal_window_profile_list_changed_cb),
                                         window);
   g_signal_handlers_disconnect_by_func (app,
