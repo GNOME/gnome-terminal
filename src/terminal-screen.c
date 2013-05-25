@@ -1210,13 +1210,6 @@ get_child_environment (TerminalScreen *screen,
 
   env_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-  /* First take the factory's environment */
-  env = g_listenv ();
-  for (i = 0; env[i]; ++i)
-    g_hash_table_insert (env_table, env[i], g_strdup (g_getenv (env[i])));
-  g_free (env); /* the strings themselves are now owned by the hash table */
-
-  /* and then merge the child environment, if any */
   env = priv->initial_env;
   if (env)
     {
