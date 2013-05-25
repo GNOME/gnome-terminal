@@ -1381,7 +1381,8 @@ terminal_screen_do_exec (TerminalScreen *screen,
   GError *err = NULL;
   const char *working_dir;
   VtePtyFlags pty_flags = VTE_PTY_DEFAULT;
-  GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP;
+  GSpawnFlags spawn_flags = G_SPAWN_SEARCH_PATH_FROM_ENVP |
+                            VTE_SPAWN_NO_PARENT_ENVV;
   GPid pid;
   gboolean result = FALSE;
 
