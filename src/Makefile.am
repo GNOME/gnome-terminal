@@ -317,6 +317,7 @@ EXTRA_DIST = \
 	terminal.about \
 	terminal.xml \
 	terminal-appmenu.ui \
+	terminal-window.ui \
 	terminal.gresource.xml \
 	terminal-marshal.list \
 	terminal-type-builtins.c.template \

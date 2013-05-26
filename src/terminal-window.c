@@ -1749,6 +1749,8 @@ terminal_window_init (TerminalWindow *window)
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
+  gtk_widget_init_template (GTK_WIDGET (window));
+
   uuid_generate (u);
   uuid_unparse (u, uuidstr);
   priv->uuid = g_strdup (uuidstr);
@@ -1768,9 +1770,7 @@ terminal_window_init (TerminalWindow *window)
 
   priv->active_screen = NULL;
 
-  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), main_vbox);
-  gtk_widget_show (main_vbox);
+  main_vbox = gtk_bin_get_child (GTK_BIN (window));
 
   priv->mdi_container = TERMINAL_MDI_CONTAINER (terminal_notebook_new ());
 
@@ -1905,7 +1905,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  
+
   object_class->dispose = terminal_window_dispose;
   object_class->finalize = terminal_window_finalize;
 
@@ -1916,6 +1916,8 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->style_updated = terminal_window_style_updated;
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/window.ui");
 }
 
 static void
