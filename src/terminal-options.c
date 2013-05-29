@@ -1482,7 +1482,7 @@ get_goption_context (TerminalOptions *options)
   g_option_group_add_entries (group, terminal_goptions);
   g_option_context_add_group (context, group);
 
-  group = g_option_group_new ("sm-client", "", "", NULL, NULL);
+  group = g_option_group_new ("sm-client", "", "", options, NULL);
   g_option_group_add_entries (group, smclient_goptions);
   g_option_context_add_group (context, group);
 
