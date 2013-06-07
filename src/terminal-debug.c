@@ -36,6 +36,7 @@ _terminal_debug_init(void)
     { "processes",     TERMINAL_DEBUG_PROCESSES     },
     { "profile",       TERMINAL_DEBUG_PROFILE       },
     { "settings-list", TERMINAL_DEBUG_SETTINGS_LIST },
+    { "appmenu",       TERMINAL_DEBUG_APPMENU       },
   };
 
   _terminal_debug_flags = g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),

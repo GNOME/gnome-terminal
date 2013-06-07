@@ -2048,7 +2048,11 @@ terminal_window_new (GApplication *app)
 {
   return g_object_new (TERMINAL_TYPE_WINDOW,
                        "application", app,
+#ifdef GNOME_ENABLE_DEBUG
+                       "show-menubar", _terminal_debug_on (TERMINAL_DEBUG_APPMENU),
+#else
                        "show-menubar", FALSE,
+#endif
                        NULL);
 }
 
