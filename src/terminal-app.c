@@ -102,9 +102,10 @@ maybe_migrate_settings (TerminalApp *app)
 #endif
     NULL 
   };
-  guint version;
   int status;
   GError *error = NULL;
+#endif /* ENABLE_MIGRATION */
+  guint version;
 
   version = g_settings_get_uint (terminal_app_get_global_settings (app), TERMINAL_SETTING_SCHEMA_VERSION);
   if (version >= TERMINAL_SCHEMA_VERSION) {
@@ -113,6 +114,7 @@ maybe_migrate_settings (TerminalApp *app)
     return;
   }
 
+#ifdef ENABLE_MIGRATION
   if (!g_spawn_sync (NULL /* our home directory */,
                      (char **) argv,
                      NULL /* envv */,
