@@ -2860,10 +2860,7 @@ static void
 file_close_window_callback (GtkAction *action,
                             TerminalWindow *window)
 {
-  if (confirm_close_window_or_tab (window, NULL))
-    return;
-
-  gtk_widget_destroy (GTK_WIDGET (window));
+  terminal_window_request_close (window);
 }
 
 #ifdef ENABLE_SAVE
@@ -3523,4 +3520,15 @@ terminal_window_get_ui_manager (TerminalWindow *window)
   TerminalWindowPrivate *priv = window->priv;
 
   return priv->ui_manager;
+}
+
+void
+terminal_window_request_close (TerminalWindow *window)
+{
+  g_return_if_fail (TERMINAL_IS_WINDOW (window));
+
+  if (confirm_close_window_or_tab (window, NULL))
+    return;
+
+  gtk_widget_destroy (GTK_WIDGET (window));
 }

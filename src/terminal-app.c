@@ -282,6 +282,21 @@ app_menu_about_cb (GSimpleAction *action,
   terminal_util_show_about (gtk_application_get_active_window (application));
 }
 
+static void
+app_menu_quit_cb (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GtkApplication *application = user_data;
+  GtkWindow *window;
+
+  window = gtk_application_get_active_window (application);
+  if (TERMINAL_IS_WINDOW (window))
+    terminal_window_request_close (TERMINAL_WINDOW (window));
+  else /* a dialogue */
+    gtk_widget_destroy (GTK_WIDGET (window));
+}
+
 /* Class implementation */
 
 G_DEFINE_TYPE (TerminalApp, terminal_app, GTK_TYPE_APPLICATION)
@@ -300,7 +315,8 @@ terminal_app_startup (GApplication *application)
   const GActionEntry app_menu_actions[] = {
     { "preferences", app_menu_preferences_cb,   NULL, NULL, NULL },
     { "help",        app_menu_help_cb,          NULL, NULL, NULL },
-    { "about",       app_menu_about_cb,         NULL, NULL, NULL }
+    { "about",       app_menu_about_cb,         NULL, NULL, NULL },
+    { "quit",        app_menu_quit_cb,          NULL, NULL, NULL }
   };
 
   GtkBuilder *builder;

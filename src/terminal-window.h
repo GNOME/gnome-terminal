@@ -85,6 +85,8 @@ void terminal_window_update_geometry  (TerminalWindow *window);
 
 GtkWidget* terminal_window_get_mdi_container (TerminalWindow *window);
 
+void terminal_window_request_close (TerminalWindow *window);
+
 G_END_DECLS
 
 #endif /* TERMINAL_WINDOW_H */
