@@ -364,14 +364,17 @@ migrate_profile (TerminalSettingsList *list,
   GSettings *settings;
   char *child_name, *path;
   const char *name;
+  gboolean is_default;
 
   if (g_strcmp0 (gconf_id, default_gconf_id) == 0) {
     /* Re-use the default list child */
     settings = terminal_settings_list_ref_default_child (list);
+    is_default = TRUE;
   } else {
     child_name = terminal_settings_list_add_child (list);
     settings = terminal_settings_list_ref_child (list, child_name);
     g_free (child_name);
+    is_default = FALSE;
   }
 
   path = gconf_concat_dir_and_key (GCONF_PROFILES_PREFIX, gconf_id);
@@ -381,7 +384,8 @@ migrate_profile (TerminalSettingsList *list,
 
   g_settings_get (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &name);
   if (strlen (name) == 0)
-    g_settings_set_string (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, _("Unnamed"));
+    g_settings_set_string (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY,
+                           is_default ? _("Default") : _("Unnamed"));
 
   migrate_string (client, path, KEY_FOREGROUND_COLOR,
                   settings, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY);
