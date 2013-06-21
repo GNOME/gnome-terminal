@@ -24,13 +24,6 @@
 -->
 <schemalist gettext-domain="gnome-terminal">
 
-  <enum id='org.gnome.Terminal.TitleMode'>
-    <value nick='replace' value='0'/>
-    <value nick='before' value='1'/>
-    <value nick='after' value='2'/>
-    <value nick='ignore' value='3'/>
-  </enum>
-
    <enum id='org.gnome.Terminal.NewTerminalMode'>
     <value nick='window' value='0'/>
     <value nick='tab' value='1'/>
@@ -117,11 +110,6 @@
       <default>true</default>
       <_summary>Whether bold text should use the same color as normal text</_summary>
       <_description>If true, boldface text will be rendered using the same color as normal text.</_description>
-    </key>
-    <key name="title-mode" enum="org.gnome.Terminal.TitleMode">
-      <default>'replace'</default>
-      <_summary>What to do with dynamic title</_summary>
-      <_description>If the application in the terminal sets the title (most typically people have their shell set up to do this), the dynamically-set title can erase the configured title, go before it, go after it, or replace it. The possible values are "replace", "before", "after", and "ignore".</_description>
     </key>
     <key name="title" type="s">
       <default l10n="messages" context="title">'Terminal'</default>

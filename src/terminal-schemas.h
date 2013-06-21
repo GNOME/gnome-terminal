@@ -54,7 +54,6 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY           "scrollbar-policy"
 #define TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY        "scroll-on-keystroke"
 #define TERMINAL_PROFILE_SCROLL_ON_OUTPUT_KEY           "scroll-on-output"
-#define TERMINAL_PROFILE_TITLE_MODE_KEY                 "title-mode"
 #define TERMINAL_PROFILE_TITLE_KEY                      "title"
 #define TERMINAL_PROFILE_UPDATE_RECORDS_KEY             "update-records"
 #define TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY         "use-custom-command"

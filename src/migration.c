@@ -85,7 +85,6 @@ enum {
 #define KEY_SCROLL_ON_KEYSTROKE "scroll_on_keystroke"
 #define KEY_SCROLL_ON_OUTPUT "scroll_on_output"
 #define KEY_SILENT_BELL "silent_bell"
-#define KEY_TITLE_MODE "title_mode"
 #define KEY_TITLE "title"
 #define KEY_UPDATE_RECORDS "update_records"
 #define KEY_USE_CUSTOM_COMMAND "use_custom_command"
@@ -396,9 +395,6 @@ migrate_profile (TerminalSettingsList *list,
   migrate_bool (client, path, KEY_BOLD_COLOR_SAME_AS_FG,
                 settings, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                 FALSE);
-  migrate_genum (client, path, KEY_TITLE_MODE,
-                 settings, TERMINAL_PROFILE_TITLE_MODE_KEY,
-                 TERMINAL_TYPE_TITLE_MODE);
   migrate_string (client, path, KEY_TITLE,
                   settings, TERMINAL_PROFILE_TITLE_KEY);
   migrate_bool (client, path, KEY_ALLOW_BOLD,
