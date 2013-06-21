@@ -43,16 +43,6 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 
-void
-terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
-{
-  char *role;
-
-  role = g_strdup_printf ("%s-%d-%u-%d", prefix, getpid (), (guint) g_random_int (), (int) time (NULL));
-  gtk_window_set_role (window, role);
-  g_free (role);
-}
-
 /**
  * terminal_util_show_error_dialog:
  * @transient_parent: parent of the future dialog window;
