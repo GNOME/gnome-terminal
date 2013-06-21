@@ -178,6 +178,15 @@ terminal_notebook_get_active_screen_num (TerminalMdiContainer *container)
 }
 
 static void
+terminal_notebook_set_active_screen_num (TerminalMdiContainer *container,
+                                         int position)
+{
+  GtkNotebook *gtk_notebook = GTK_NOTEBOOK (container);
+
+  gtk_notebook_set_current_page (gtk_notebook, position);
+}
+
+static void
 terminal_notebook_reorder_screen (TerminalMdiContainer *container,
                                   TerminalScreen *screen,
                                   int new_position)
@@ -193,7 +202,7 @@ terminal_notebook_reorder_screen (TerminalMdiContainer *container,
   pos = gtk_notebook_page_num (notebook, child);
 
   pos += new_position;
-  gtk_notebook_reorder_child (notebook, child, 
+  gtk_notebook_reorder_child (notebook, child,
                               pos < 0 ? n - 1 : pos < n ? pos : 0);
 }
 
@@ -208,6 +217,7 @@ terminal_notebook_mdi_iface_init (TerminalMdiContainerInterface *iface)
   iface->list_screen_containers = terminal_notebook_list_screen_containers;
   iface->get_n_screens = terminal_notebook_get_n_screens;
   iface->get_active_screen_num = terminal_notebook_get_active_screen_num;
+  iface->set_active_screen_num = terminal_notebook_set_active_screen_num;
   iface->reorder_screen = terminal_notebook_reorder_screen;
 }
 

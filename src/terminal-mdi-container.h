@@ -47,6 +47,8 @@ struct _TerminalMdiContainerInterface {
   GList *               (* list_screen_containers)  (TerminalMdiContainer *container);
   int                   (* get_n_screens)           (TerminalMdiContainer *container);
   int                   (* get_active_screen_num)   (TerminalMdiContainer *container);
+  void                  (* set_active_screen_num)   (TerminalMdiContainer *container,
+                                                     int position);
   void                  (* reorder_screen)          (TerminalMdiContainer *container,
                                                      TerminalScreen *screen,
                                                      int new_position);
@@ -77,6 +79,9 @@ TerminalScreen *terminal_mdi_container_get_active_screen (TerminalMdiContainer *
 void terminal_mdi_container_set_active_screen (TerminalMdiContainer *container,
                                                TerminalScreen *screen);
 
+void terminal_mdi_container_set_active_screen_num (TerminalMdiContainer *container,
+                                                   int position);
+
 GList *terminal_mdi_container_list_screens (TerminalMdiContainer *container);
 
 GList *terminal_mdi_container_list_screen_containers (TerminalMdiContainer *container);
@@ -88,6 +93,9 @@ int terminal_mdi_container_get_active_screen_num (TerminalMdiContainer *containe
 void terminal_mdi_container_reorder_screen (TerminalMdiContainer *container,
                                             TerminalScreen *screen,
                                             int new_position);
+
+void terminal_mdi_container_change_screen (TerminalMdiContainer *container,
+                                           int change);
 
 G_END_DECLS
 

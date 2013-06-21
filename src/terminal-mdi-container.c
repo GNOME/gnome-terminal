@@ -166,7 +166,16 @@ terminal_mdi_container_get_active_screen_num (TerminalMdiContainer *container)
   return TERMINAL_MDI_CONTAINER_GET_IFACE (container)->get_active_screen_num (container);
 }
 
-void 
+void
+terminal_mdi_container_set_active_screen_num (TerminalMdiContainer *container,
+                                              int position)
+{
+  g_return_if_fail (TERMINAL_IS_MDI_CONTAINER (container));
+
+  TERMINAL_MDI_CONTAINER_GET_IFACE (container)->set_active_screen_num (container, position);
+}
+
+void
 terminal_mdi_container_reorder_screen (TerminalMdiContainer *container,
                                        TerminalScreen *screen,
                                        int new_position)
@@ -174,4 +183,25 @@ terminal_mdi_container_reorder_screen (TerminalMdiContainer *container,
   g_return_if_fail (TERMINAL_IS_MDI_CONTAINER (container));
 
   return TERMINAL_MDI_CONTAINER_GET_IFACE (container)->reorder_screen (container, screen, new_position);
+}
+
+void
+terminal_mdi_container_change_screen (TerminalMdiContainer *container,
+                                      int change)
+{
+  int active, n;
+
+  g_return_if_fail (TERMINAL_IS_MDI_CONTAINER (container));
+  g_return_if_fail (change == -1 || change == 1);
+
+  n = terminal_mdi_container_get_n_screens (container);
+  active = terminal_mdi_container_get_active_screen_num (container);
+
+  active += change;
+  if (active < 0)
+    active = n - 1;
+  else if (active >= n)
+    active = 0;
+
+  terminal_mdi_container_set_active_screen_num (container, active);
 }
