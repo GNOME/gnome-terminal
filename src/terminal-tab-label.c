@@ -53,7 +53,7 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (TerminalTabLabel, terminal_tab_label, GTK_TYPE_HBOX);
+G_DEFINE_TYPE (TerminalTabLabel, terminal_tab_label, GTK_TYPE_BOX);
 
 /* helper functions */
 
@@ -300,6 +300,7 @@ GtkWidget *
 terminal_tab_label_new (TerminalScreen *screen)
 {
   return g_object_new (TERMINAL_TYPE_TAB_LABEL,
+                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                        "screen", screen,
                        NULL);
 }

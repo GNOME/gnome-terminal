@@ -47,7 +47,7 @@ enum
   PROP_WINDOW_PLACEMENT_SET
 };
 
-G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_VBOX)
+G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_BOX)
 
 /* helper functions */
 
@@ -298,6 +298,7 @@ GtkWidget *
 terminal_screen_container_new (TerminalScreen *screen)
 {
   return g_object_new (TERMINAL_TYPE_SCREEN_CONTAINER,
+                       "orientation", GTK_ORIENTATION_VERTICAL,
                        "screen", screen,
                        NULL);
 }
