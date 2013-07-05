@@ -921,7 +921,6 @@ terminal_options_merge_config (TerminalOptions *options,
 
           profile = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, NULL);
           it = initial_tab_new (profile /* adopts */);
-          g_free (profile);
 
           iw->tabs = g_list_append (iw->tabs, it);
 
