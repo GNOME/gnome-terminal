@@ -585,10 +585,11 @@ option_load_config_cb (const gchar *option_name,
 
   key_file = g_key_file_new ();
   result = g_key_file_load_from_file (key_file, config_file, 0, error) &&
-           terminal_options_merge_config (options, key_file, 
+           terminal_options_merge_config (options, key_file,
                                           strcmp (option_name, "load-config") == 0 ? SOURCE_DEFAULT : SOURCE_SESSION,
                                           error);
   g_key_file_free (key_file);
+  g_free (config_file);
 
   return result;
 }
