@@ -396,9 +396,9 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
                                    name);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          GTK_STOCK_CANCEL,
+                          _("_Cancel"),
                           GTK_RESPONSE_REJECT,
-                          GTK_STOCK_DELETE,
+                          _("_Delete"),
                           GTK_RESPONSE_ACCEPT,
                           NULL);
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
