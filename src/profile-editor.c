@@ -398,15 +398,16 @@ custom_command_entry_changed_cb (GtkEntry *entry)
 
   command = gtk_entry_get_text (entry);
 
-  if (g_shell_parse_argv (command, NULL, NULL, &error))
+  if (command[0] == '\0' ||
+      g_shell_parse_argv (command, NULL, NULL, &error))
     {
-      gtk_entry_set_icon_from_stock (entry, GTK_PACK_END, NULL);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_PACK_END, NULL);
     }
   else
     {
       char *tooltip;
 
-      gtk_entry_set_icon_from_stock (entry, GTK_PACK_END, GTK_STOCK_DIALOG_WARNING);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_PACK_END, "dialog-warning");
 
       tooltip = g_strdup_printf (_("Error parsing command: %s"), error->message);
       gtk_entry_set_icon_tooltip_text (entry, GTK_PACK_END, tooltip);
