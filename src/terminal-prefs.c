@@ -86,20 +86,18 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
 {
   GSettings *profile;
   const char *text;
-  char *uuid;
   GValue value = { 0, };
 
   gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
   g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &text);
-  uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
 
   g_value_init (&value, G_TYPE_STRING);
-  g_value_take_string (&value,
-                       g_markup_printf_escaped ("%s\n<span size=\"small\" font_family=\"monospace\">%s</span>",
-                                                strlen (text) > 0 ? text : _("Unnamed"), 
-                                                uuid));
-  g_free (uuid);
-  g_object_set_property (G_OBJECT (cell), "markup", &value);
+  if (text[0])
+    g_value_set_string (&value, text);
+  else
+    g_value_set_static_string (&value, _("Unnamed"));
+
+  g_object_set_property (G_OBJECT (cell), "text", &value);
   g_value_unset (&value);
 
   g_object_unref (profile);
