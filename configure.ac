@@ -267,6 +267,7 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -fno-strict-aliasing \
   -fvisibility=hidden \
   -fstack-protector \
+  -Wno-deprecated-declarations \
 ])
 
 # *************
