@@ -60,21 +60,16 @@ case "$with_gtk" in
        ;;
 esac
 
-AC_MSG_CHECKING([for GDK target])
-case "$with_gtk" in
-  3.0) for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
-         GDK_TARGET="$target"
-         break
-       done
-       ;;
-esac
-AC_MSG_RESULT([$GDK_TARGET])
-
-case "$GDK_TARGET" in
-  x11) PLATFORM_DEPS="x11" ;;
-  win32|quartz) PLATFORM_DEPS="" ;;
-  *) AC_MSG_ERROR([unknown gdk target]) ;;
-esac
+PLATFORM_DEPS=
+for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
+  case "$target" in
+    x11) PLATFORM_DEPS="$PLATFORM_DEPS x11" ;;
+    broadway) ;;
+    wayland) ;;
+    win32|quartz) AC_MSG_WARN([unsupported GDK backend $target]) ;;
+    *) AC_MSG_WARN([unknown GDK backend $target]) ;;
+  esac
+done
 
 PKG_CHECK_MODULES([TERM],
   [vte$VTE_PC_VERSION >= $VTE_REQUIRED
