@@ -1715,11 +1715,19 @@ static void
 update_edit_menu_cb (GtkClipboard *clipboard,
                      GdkAtom *targets,
                      int n_targets,
-                     TerminalWindow *window)
+                     GWeakRef *ref)
 {
-  TerminalWindowPrivate *priv = window->priv;
+  TerminalWindow *window;
+  TerminalWindowPrivate *priv;
   GtkAction *action;
   gboolean can_paste, can_paste_uris;
+
+  window = g_weak_ref_get (ref);
+  if (window == NULL)
+    goto out;
+
+  /* Now we know the window is still alive */
+  priv = window->priv;
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
   can_paste_uris = targets != NULL && gtk_targets_include_uri (targets, n_targets);
@@ -1730,8 +1738,9 @@ update_edit_menu_cb (GtkClipboard *clipboard,
   gtk_action_set_visible (action, can_paste_uris);
   gtk_action_set_sensitive (action, can_paste_uris);
 
-  /* Ref was added in gtk_clipboard_request_targets below */
   g_object_unref (window);
+ out:
+  g_slice_free (GWeakRef, ref);
 }
 
 static void
@@ -1739,9 +1748,13 @@ update_edit_menu (GtkClipboard *clipboard,
                   GdkEvent *event G_GNUC_UNUSED,
                   TerminalWindow *window)
 {
+  GWeakRef *ref;
+
+  ref = g_slice_new0 (GWeakRef);
+  g_weak_ref_init (ref, window);
   gtk_clipboard_request_targets (clipboard,
                                  (GtkClipboardTargetsReceivedFunc) update_edit_menu_cb,
-                                 g_object_ref (window));
+                                 ref);
 }
 
 static void
@@ -1964,22 +1977,25 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
                                      int n_targets,
                                      TerminalScreenPopupInfo *info)
 {
-  TerminalWindow *window = info->window;
-  TerminalWindowPrivate *priv = window->priv;
+  TerminalWindow *window;
+  TerminalWindowPrivate *priv;
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu;
   GtkAction *action;
   gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link;
 
-  if (!gtk_widget_get_realized (GTK_WIDGET (screen)))
+  window = terminal_screen_popup_info_ref_window (info);
+  if (window == NULL ||
+      !gtk_widget_get_realized (GTK_WIDGET (screen)))
     {
       terminal_screen_popup_info_unref (info);
       return;
     }
 
-  /* Now we know that the screen is realized, we know that the window is still alive */
-  remove_popup_info (window);
+  /* Now we know that the window is still alive */
+  priv = window->priv;
 
+  remove_popup_info (window);
   priv->popup_info = info; /* adopt the ref added when requesting the clipboard */
 
   can_paste = targets != NULL && gtk_targets_include_text (targets, n_targets);
@@ -2024,6 +2040,8 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
                   NULL, NULL, 
                   info->button,
                   info->timestamp);
+
+  g_object_unref (window);
 }
 
 static void
@@ -2032,8 +2050,6 @@ screen_show_popup_menu_callback (TerminalScreen *screen,
                                  TerminalWindow *window)
 {
   GtkClipboard *clipboard;
-
-  g_return_if_fail (info->window == window);
 
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_request_targets (clipboard,

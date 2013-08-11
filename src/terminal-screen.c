@@ -1368,7 +1368,8 @@ terminal_screen_popup_info_new (TerminalScreen *screen)
   info = g_slice_new0 (TerminalScreenPopupInfo);
   info->ref_count = 1;
   info->screen = g_object_ref (screen);
-  info->window = terminal_screen_get_window (screen);
+
+  g_weak_ref_init (&info->window_weak_ref, terminal_screen_get_window (screen));
 
   return info;
 }
@@ -1391,8 +1392,23 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
     return;
 
   g_object_unref (info->screen);
+  g_weak_ref_clear (&info->window_weak_ref);
   g_free (info->string);
   g_slice_free (TerminalScreenPopupInfo, info);
+}
+
+/**
+ * terminal_screen_popup_info_ref_window:
+ * @info: a #TerminalScreenPopupInfo
+ *
+ * Returns: the window, or %NULL
+ */
+TerminalWindow *
+terminal_screen_popup_info_ref_window (TerminalScreenPopupInfo *info)
+{
+  g_return_val_if_fail (info != NULL, NULL);
+
+  return g_weak_ref_get (&info->window_weak_ref);
 }
 
 static gboolean
