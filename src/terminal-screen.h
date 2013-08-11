@@ -148,7 +148,7 @@ gboolean terminal_screen_has_foreground_process (TerminalScreen *screen);
 
 struct _TerminalScreenPopupInfo {
   int ref_count;
-  TerminalWindow *window;
+  GWeakRef window_weak_ref;
   TerminalScreen *screen;
   char *string;
   TerminalURLFlavour flavour;
@@ -160,6 +160,8 @@ struct _TerminalScreenPopupInfo {
 TerminalScreenPopupInfo *terminal_screen_popup_info_ref (TerminalScreenPopupInfo *info);
 
 void terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info);
+
+TerminalWindow *terminal_screen_popup_info_ref_window (TerminalScreenPopupInfo *info);
 
 G_END_DECLS
 
