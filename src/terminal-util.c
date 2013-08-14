@@ -153,7 +153,7 @@ terminal_util_show_help (const char *topic,
 }
 
 #define ABOUT_GROUP "About"
-#define ABOUT_URL "https://live.gnome.org/Terminal"
+#define ABOUT_URL "https://wiki.gnome.org/Apps/Terminal"
 #define EMAILIFY(string) (g_strdelimit ((string), "%", '@'))
 
 void
