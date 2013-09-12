@@ -131,6 +131,7 @@ handle_options (TerminalFactory *factory,
                   &object_path,
                   NULL /* cancellable */,
                   &err)) {
+            g_dbus_error_strip_remote_error (err);
             g_printerr ("Error creating terminal: %s\n", err->message);
             g_error_free (err);
 
@@ -159,6 +160,7 @@ handle_options (TerminalFactory *factory,
                                                                NULL /* cancellable */,
                                                                &err);
           if (receiver == NULL) {
+            g_dbus_error_strip_remote_error (err);
             g_printerr ("Failed to create proxy for terminal: %s\n", err->message);
             g_error_free (err);
             g_free (object_path);
@@ -184,6 +186,7 @@ handle_options (TerminalFactory *factory,
                                                  NULL /* infdlist */, NULL /* outfdlist */,
                                                 NULL /* cancellable */,
                                                 &err)) {
+            g_dbus_error_strip_remote_error (err);
             g_printerr ("Error: %s\n", err->message);
             g_error_free (err);
           }
