@@ -302,15 +302,15 @@ gnome_terminal_migration_LDADD = \
 
 endif # ENABLE_MIGRATION
 
-gsettingsschema_in_files = org.gnome.Terminal.gschema.xml.in
-gsettings_SCHEMAS = $(gsettingsschema_in_files:.gschema.xml.in=.gschema.xml)
+gsettings_SCHEMAS = \
+	org.gnome.Terminal.gschema.xml \
+	$(NULL)
 
 CLEANFILES = \
 	stamp-terminal-type-builtins.h \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
 	org.gnome.Terminal.service \
-	$(gsettings_SCHEMAS) \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
@@ -330,10 +330,9 @@ EXTRA_DIST = \
 	$(about_DATA) \
 	$(uimanager_DATA) \
 	$(builder_DATA) \
-	$(gsettingsschema_in_files) \
+	$(gsettings_SCHEMAS) \
 	$(NULL)
 
-@INTLTOOL_XML_NOMERGE_RULE@
 @GSETTINGS_RULES@
 
 -include $(top_srcdir)/git.mk
