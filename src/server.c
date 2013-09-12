@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/types.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -70,6 +71,14 @@ main (int argc, char **argv)
   int exit_code = EXIT_FAILURE;
   const char *home_dir;
   GError *error = NULL;
+
+  if (G_UNLIKELY (getuid () != geteuid () ||
+                  getgid () != getegid () ||
+                  geteuid () == 0 || 
+                  getegid () == 0)) {
+    g_printerr ("Wrong euid/egid, exiting.\n");
+    return EXIT_FAILURE;
+  }
 
   setlocale (LC_ALL, "");
 
