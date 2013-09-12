@@ -223,8 +223,22 @@ unsupported_option_callback (const gchar *option_name,
 {
   g_printerr (_("Option \"%s\" is no longer supported in this version of gnome-terminal."),
               option_name);
+  g_printerr ("\n");
   return TRUE; /* we do not want to bail out here but continue */
 }
+
+static gboolean
+unsupported_option_fatal_callback (const gchar *option_name,
+                                   const gchar *value,
+                                   gpointer     data,
+                                   GError     **error)
+{
+  g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_UNKNOWN_OPTION,
+               _("Option \"%s\" is no longer supported in this version of gnome-terminal."),
+               option_name);
+  return FALSE;
+}
+
 
 static gboolean G_GNUC_NORETURN
 option_version_cb (const gchar *option_name,
@@ -555,19 +569,6 @@ option_geometry_callback (const gchar *option_name,
 }
 
 static gboolean
-option_disable_factory_callback (const gchar *option_name,
-                                 const gchar *value,
-                                 gpointer     data,
-                                 GError     **error)
-{
-  TerminalOptions *options = data;
-
-  options->use_factory = FALSE;
-
-  return TRUE;
-}
-
-static gboolean
 option_load_config_cb (const gchar *option_name,
                        const gchar *value,
                        gpointer     data,
@@ -782,7 +783,6 @@ terminal_options_parse (const char *working_directory,
   options->default_fullscreen = FALSE;
   options->default_maximize = FALSE;
   options->execute = FALSE;
-  options->use_factory = TRUE;
 
   options->startup_id = g_strdup (startup_id && startup_id[0] ? startup_id : NULL);
   options->display_name = NULL;
@@ -1018,9 +1018,9 @@ get_goption_context (TerminalOptions *options)
     {
       "disable-factory",
       0,
-      G_OPTION_FLAG_NO_ARG,
+      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      option_disable_factory_callback,
+      unsupported_option_fatal_callback,
       N_("Do not register with the activation nameserver, do not re-use an active terminal"),
       NULL
     },
@@ -1235,9 +1235,9 @@ get_goption_context (TerminalOptions *options)
     {
       "use-factory",
       0,
-      G_OPTION_FLAG_HIDDEN,
-      G_OPTION_ARG_NONE,
-      &options->use_factory,
+      G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN,
+      G_OPTION_ARG_CALLBACK,
+      unsupported_option_callback,
       NULL, NULL
     },
     {

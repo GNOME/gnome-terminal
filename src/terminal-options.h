@@ -81,7 +81,6 @@ typedef struct
   gboolean default_profile_is_id;
 
   gboolean  execute;
-  gboolean  use_factory;
   double    zoom;
 
   gboolean sm_client_disable;
