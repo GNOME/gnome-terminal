@@ -2527,7 +2527,7 @@ terminal_window_init (TerminalWindow *window)
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *manager;
-  GtkWidget *main_vbox, *toolbar;
+  GtkWidget *main_vbox;
   GError *error;
   GtkWindowGroup *window_group;
   GtkAccelGroup *accel_group;
