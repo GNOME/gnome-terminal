@@ -75,6 +75,11 @@ main (int argc, char **argv)
 
   terminal_i18n_init (TRUE);
 
+  if (!g_get_charset (NULL)) {
+    g_printerr ("Non UTF-8 locale is not supported!\n");
+    return EXIT_FAILURE;
+  }
+
 #ifndef ENABLE_DISTRO_PACKAGING
 #ifdef HAVE_UBUNTU
   /* Set some env vars to disable the ubuntu modules. Their package will be 
