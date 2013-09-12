@@ -1999,6 +1999,7 @@ terminal_window_dispose (GObject *object)
   for (l = list; l != NULL; l = l->next)
     if (GTK_IS_MENU (l->data))
       gtk_menu_popdown (GTK_MENU (l->data));
+  g_slist_free (list);
 
   remove_popup_info (window);
 
