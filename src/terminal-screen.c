@@ -605,6 +605,8 @@ terminal_screen_finalize (GObject *object)
   g_slist_foreach (priv->match_tags, (GFunc) free_tag_data, NULL);
   g_slist_free (priv->match_tags);
 
+  g_free (priv->uuid);
+
   G_OBJECT_CLASS (terminal_screen_parent_class)->finalize (object);
 }
 
