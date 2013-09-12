@@ -108,14 +108,14 @@ typedef struct
   { name, key, "win." action, (const GVariantType *) type, parameter, NULL, FALSE }
 
 static KeyEntry file_entries[] = {
-  ENTRY (N_("New Tab"),       KEY_NEW_TAB,       "new-terminal",  "s",  "'tab'"   ),
-  ENTRY (N_("New Window"),    KEY_NEW_WINDOW,    "new-terminal",  "s",  "'window'"),
-  ENTRY (N_("New Profile"),   KEY_NEW_PROFILE,   "new-profile",   NULL, NULL      ),
+  ENTRY (N_("New Terminal in New Tab"),    KEY_NEW_TAB,       "new-terminal",  "s",  "'tab'"   ),
+  ENTRY (N_("New Terminal in New Window"), KEY_NEW_WINDOW,    "new-terminal",  "s",  "'window'"),
+  ENTRY (N_("New Profile"),                KEY_NEW_PROFILE,   "new-profile",   NULL, NULL      ),
 #ifdef ENABLE_SAVE
-  ENTRY (N_("Save Contents"), KEY_SAVE_CONTENTS, "save-contents", NULL, NULL      ),
+  ENTRY (N_("Save Contents"),              KEY_SAVE_CONTENTS, "save-contents", NULL, NULL      ),
 #endif
-  ENTRY (N_("Close Tab"),     KEY_CLOSE_TAB,     "close",         "s",  "'tab'"   ),
-  ENTRY (N_("Close Window"),  KEY_CLOSE_WINDOW,  "close",         "s",  "'window'"),
+  ENTRY (N_("Close Terminal"),             KEY_CLOSE_TAB,     "close",         "s",  "'tab'"   ),
+  ENTRY (N_("Close All Terminals"),        KEY_CLOSE_WINDOW,  "close",         "s",  "'window'"),
 };
 
 static KeyEntry edit_entries[] = {

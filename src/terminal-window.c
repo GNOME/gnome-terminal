@@ -2367,10 +2367,10 @@ terminal_window_init (TerminalWindow *window)
       { "FileSaveContents", GTK_STOCK_SAVE, N_("_Save Contents"), "",
         NULL,
         G_CALLBACK (file_save_contents_callback) },
-      { "FileCloseTab", GTK_STOCK_CLOSE, N_("C_lose Tab"), "<shift><control>W",
+      { "FileCloseTab", GTK_STOCK_CLOSE, N_("C_lose Terminal"), "<shift><control>W",
         NULL,
         G_CALLBACK (file_close_tab_callback) },
-      { "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close Window"), "<shift><control>Q",
+      { "FileCloseWindow", GTK_STOCK_CLOSE, N_("_Close All Terminals"), "<shift><control>Q",
         NULL,
         G_CALLBACK (file_close_window_callback) },
 
