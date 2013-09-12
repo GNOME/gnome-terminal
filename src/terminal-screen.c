@@ -1223,8 +1223,16 @@ terminal_screen_child_setup (FDSetupData *data)
 
     if (target_fd == fds[idx]) {
       /* Remove FD_CLOEXEC from target_fd */
+      int flags;
+
       do {
-        r = fcntl (target_fd, F_SETFD, 0 /* no FD_CLOEXEC */);
+        flags = fcntl (target_fd, F_GETFD);
+      } while (flags == -1 && errno == EINTR);
+      if (flags == -1)
+        _exit (127);
+
+      do {
+        r = fcntl (target_fd, F_SETFD, flags & ~FD_CLOEXEC);
       } while (r == -1 && errno == EINTR);
       if (r == -1)
         _exit (127);
