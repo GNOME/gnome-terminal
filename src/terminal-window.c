@@ -1740,6 +1740,7 @@ update_edit_menu_cb (GtkClipboard *clipboard,
 
   g_object_unref (window);
  out:
+  g_weak_ref_clear (ref);
   g_slice_free (GWeakRef, ref);
 }
 
