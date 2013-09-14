@@ -77,7 +77,6 @@ main (int argc, char **argv)
 
   if (!g_get_charset (NULL)) {
     g_printerr ("Non UTF-8 locale is not supported!\n");
-    return EXIT_FAILURE;
   }
 
 #ifndef ENABLE_DISTRO_PACKAGING
