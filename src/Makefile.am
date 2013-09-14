@@ -86,6 +86,7 @@ gnome_terminal_server_CPPFLAGS = \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
 	-DSN_API_NOT_YET_FROZEN \
 	-DGDK_MULTIHEAD_SAFE \
+	-DGDK_DISABLE_DEPRECATION_WARNINGS \
 	$(AM_CPPFLAGS)
 
 gnome_terminal_server_CFLAGS = \
