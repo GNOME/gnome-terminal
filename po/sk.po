@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-26 20:32+0000\n"
-"PO-Revision-Date: 2013-08-23 13:28+0100\n"
+"POT-Creation-Date: 2013-09-16 12:08+0000\n"
+"PO-Revision-Date: 2013-09-16 17:35+0200\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -23,10 +23,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
 
 # desktop entry name
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:106
-#: ../src/terminal-accels.c:178 ../src/terminal.c:249
-#: ../src/terminal-screen.c:722 ../src/terminal-screen.c:1526
-#: ../src/terminal-window.c:2556 ../src/terminal-window.c:2880
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:120
+#: ../src/terminal-accels.c:178 ../src/terminal.c:252
+#: ../src/terminal-screen.c:724 ../src/terminal-screen.c:1536
+#: ../src/terminal-window.c:2555 ../src/terminal-window.c:2880
 msgid "Terminal"
 msgstr "Terminál"
 
@@ -62,7 +62,7 @@ msgstr ""
 "Viac informácii o jednotlivých príkazoch získate pomocou „%s PRÍKAZ --"
 "help“.\n"
 
-#: ../src/client.c:201 ../src/terminal-options.c:682
+#: ../src/client.c:201 ../src/terminal-options.c:683
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "„%s“ nie je platný násobok zväčšenia"
@@ -205,7 +205,7 @@ msgid "Terminal options:"
 msgstr "Voľby terminálu:"
 
 # cmd desc
-#: ../src/client.c:424 ../src/terminal-options.c:1460
+#: ../src/client.c:424 ../src/terminal-options.c:1287
 msgid "Show terminal options"
 msgstr "Zobrazí voľby terminálu"
 
@@ -275,23 +275,29 @@ msgstr "Predvolený"
 msgid "Unnamed"
 msgstr "Bez názvu"
 
+# profil
+#: ../src/org.gnome.Terminal.gschema.xml.h:1
+msgctxt "visible-name"
+msgid "'Unnamed'"
+msgstr "„Bez názvu“"
+
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.h:2
 msgid "Human-readable name of the profile"
 msgstr "Čitateľný názov profilu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
+#: ../src/org.gnome.Terminal.gschema.xml.h:3
 msgid "Human-readable name of the profile."
 msgstr "Čitateľný názov profilu."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
+#: ../src/org.gnome.Terminal.gschema.xml.h:4
 msgid "Default color of text in the terminal"
 msgstr "Predvolená farba textu v termináli"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
+#: ../src/org.gnome.Terminal.gschema.xml.h:5
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -300,12 +306,12 @@ msgstr ""
 "šestnáskových číslic alebo názvu farby ako napr. „red“)."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
+#: ../src/org.gnome.Terminal.gschema.xml.h:6
 msgid "Default color of terminal background"
 msgstr "Predvolená farba pozadia terminálu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
+#: ../src/org.gnome.Terminal.gschema.xml.h:7
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -314,12 +320,12 @@ msgstr ""
 "šestnáskových číslic alebo názvu farby ako napr. „red“)."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
+#: ../src/org.gnome.Terminal.gschema.xml.h:8
 msgid "Default color of bold text in the terminal"
 msgstr "Predvolená farba tučného textu v termináli"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
+#: ../src/org.gnome.Terminal.gschema.xml.h:9
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
@@ -330,24 +336,30 @@ msgstr ""
 "ak je príznak bold_color_same_as_fg nastavený na hodnotu true."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
+#: ../src/org.gnome.Terminal.gschema.xml.h:10
 msgid "Whether bold text should use the same color as normal text"
 msgstr "Či by mal tučný text používať rovnakú farbu ako normálny"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
+#: ../src/org.gnome.Terminal.gschema.xml.h:11
 msgid ""
 "If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
 "Ak je true, tučný text bude vykreslený rovnakou farbou ako normálny text."
 
+# desktop entry name
+#: ../src/org.gnome.Terminal.gschema.xml.h:12
+msgctxt "title"
+msgid "'Terminal'"
+msgstr "„Terminál“"
+
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
+#: ../src/org.gnome.Terminal.gschema.xml.h:13
 msgid "Title for terminal"
 msgstr "Titulok terminálu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
+#: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -358,29 +370,29 @@ msgstr ""
 "hodnote title_mode."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
+#: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to allow bold text"
 msgstr "Či povoliť tučný text"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
+#: ../src/org.gnome.Terminal.gschema.xml.h:16
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr "Ak je true, aplikácie môžu používať tučné písmo."
 
 # PK: co je toto?
 # PM: typujem ze to súvisí s týmto http://en.wikipedia.org/wiki/Bell_character, každopádne preklad je dobrý
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Whether to ring the terminal bell"
 msgstr "Či zvoniť terminálovým zvončekom"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
+#: ../src/org.gnome.Terminal.gschema.xml.h:18
 msgid "Characters that are considered \"part of a word\""
 msgstr "Znaky, ktoré sa považujú za „súčasť slova“"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
+#: ../src/org.gnome.Terminal.gschema.xml.h:19
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -391,22 +403,22 @@ msgstr ""
 "byť zadaný ako prvý znak."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
+#: ../src/org.gnome.Terminal.gschema.xml.h:20
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Či sa má zobrazovať ponuka v nových oknách alebo kartách"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
+#: ../src/org.gnome.Terminal.gschema.xml.h:21
 msgid "True if the menubar should be shown in new window"
 msgstr "True, ak sa má ponuka zobraziť v nových oknách"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
+#: ../src/org.gnome.Terminal.gschema.xml.h:22
 msgid "Whether to use custom terminal size for new windows"
 msgstr "Či sa má používať vlastná veľkosť terminálu pre nové okná"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
+#: ../src/org.gnome.Terminal.gschema.xml.h:23
 msgid ""
 "If true, newly created terminal windows will have custom size specified by "
 "default_size_columns and default_size_rows."
@@ -415,12 +427,12 @@ msgstr ""
 "default_size_columns a default_size_rows."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
+#: ../src/org.gnome.Terminal.gschema.xml.h:24
 msgid "Default number of columns"
 msgstr "Predvolený počet stĺpcov"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
+#: ../src/org.gnome.Terminal.gschema.xml.h:25
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -429,12 +441,12 @@ msgstr ""
 "use_custom_default_size nie je povolené."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
+#: ../src/org.gnome.Terminal.gschema.xml.h:26
 msgid "Default number of rows"
 msgstr "Predvolený počet riadkov"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
+#: ../src/org.gnome.Terminal.gschema.xml.h:27
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -443,17 +455,17 @@ msgstr ""
 "use_custom_default_size nie je povolené."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
+#: ../src/org.gnome.Terminal.gschema.xml.h:28
 msgid "When to show the scrollbar"
 msgstr "Kedy zobraziť posuvník"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
+#: ../src/org.gnome.Terminal.gschema.xml.h:29
 msgid "Number of lines to keep in scrollback"
 msgstr "Počet riadkov uchovávanej histórie"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -465,12 +477,12 @@ msgstr ""
 "ktorú terminál používa."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "Či má byť v histórii uchovávaný neobmedzený počet riadkov"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.h:32
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -481,33 +493,33 @@ msgstr ""
 "pokiaľ bude veľa výstupu na terminál."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Či sa má posunúť obsah okna na koniec pri stlačení klávesu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "Ak je true, stlačením klávesu sa posuvník presunie na koniec."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Či sa má posunúť obsah okna na koniec pri novom výstupe"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr "Ak je true, pri novom výstupe sa presunie obsah terminálu na koniec."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "What to do with the terminal when the child command exits"
 msgstr "Čo robiť s terminálom po ukončení potomka"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -515,27 +527,26 @@ msgstr ""
 "Možné hodnoty sú „close“ pre zatvorenie terminálu a „restart“ pre reštart."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Či sa má príkaz v termináli spustiť ako prihlasovací shell"
 
-# * https://bugzilla.gnome.org/show_bug.cgi?id=706656
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
+"If true, the command inside the terminal will be launched as a login shell "
+"(argv[0] will have a hyphen in front of it)."
 msgstr ""
-"Ak je true, príkaz v termináli bude spustený ako prihlasovací shell. (argv"
-"[0] bude mať pred sebou spojovník)"
+"Ak je true, príkaz v termináli bude spustený ako prihlasovací shell (argv[0] "
+"bude mať pred sebou spojovník)."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid "Whether to update login records when launching terminal command"
 msgstr "Či aktualizovať záznamy o prihlásení pri spustení príkazu terminálu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -544,12 +555,12 @@ msgstr ""
 "príkazu v termináli."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Či sa má spustiť vlastný program namiesto shellu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -558,12 +569,12 @@ msgstr ""
 "shellu."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid "Whether to blink the cursor"
 msgstr "Či má kurzor blikať"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -573,178 +584,178 @@ msgstr ""
 "explicitne."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid "The cursor appearance"
 msgstr "Vzhľad kurzora"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Custom command to use instead of the shell"
 msgstr "Vlastný príkaz na spustenie namiesto shellu"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Spustí tento príkaz namiesto shellu, ak má use_custom_command hodnotu true."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Palette for terminal applications"
 msgstr "Paleta pre terminálové aplikácie"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid "A Pango font name and size"
 msgstr "Názov a veľkosť písma pre Pango"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "The code sequence the Backspace key generates"
 msgstr "Sekvencia kódov, ktorú generuje kláves Backspace"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid "The code sequence the Delete key generates"
 msgstr "Sekvencia kódov, ktorú generuje kláves Delete"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "Či použiť farby z témy pre prvok terminálu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid "Whether to use the system monospace font"
 msgstr "Či použiť systémové neproporcionálne písmo"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Which encoding to use"
 msgstr "Ktoré kódovanie použiť"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Klávesová skratka na otvorenie novej karty"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Keyboard shortcut to open a new window"
 msgstr "Klávesová skratka na otvorenie nového okna"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Klávesová skratka na vytvorenie nového profilu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "Klávesová skratka na uloženie aktuálneho obsahu karty do súboru"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "Keyboard shortcut to close a tab"
 msgstr "Klávesová skratka na zatvorenie karty"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Keyboard shortcut to close a window"
 msgstr "Klávesová skratka na zatvorenie okna"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Keyboard shortcut to copy text"
 msgstr "Klávesová skratka na skopírovanie textu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Keyboard shortcut to paste text"
 msgstr "Klávesová skratka na vloženie textu zo schránky"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Klávesová skratka na prepnutie do celoobrazovkového režimu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Klávesová skratka na prepnutie zobrazenia ponuky"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Klávesová skratka na nastavenie titulku terminálu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Klávesová skratka na reštart terminálu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Klávesová skratka na vyčistenie terminálu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Klávesová skratka na prepnutie na predchádzajúcu kartu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Klávesová skratka na prepnutie na nasledujúcu kartu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Klávesová skratka na posunutie aktuálnej karty doľava"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Klávesová skratka na posunutie aktuálnej karty doprava"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Klávesová skratka na odpojenie aktuálnej karty"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Klávesová skratka na prepnutie na očíslovanú kartu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to launch help"
 msgstr "Klávesová skratka na spustenie pomocníka"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to make font larger"
 msgstr "Klávesová skratka na zväčšenie písma"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Klávesová skratka na zmenšenie písma"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Klávesová skratka na použitie písma normálnej veľkosti"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Whether the menubar has access keys"
 msgstr "Či má ponuka obsahovať akcelerátory"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -755,13 +766,13 @@ msgstr ""
 "vypnúť."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Či má byť povolená štandardná klávesová skratka GTK pre aktiváciu ponuky"
 
 # gsetting description
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -773,11 +784,11 @@ msgstr ""
 
 # PM: k tejto položke je v zdrojáku zle zapísaný komentár pre prekladateľov, ktorý sa tu nezobrazuje, treba nahlásiť bug
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "List of available encodings"
 msgstr "Zoznam dostupných kódovaní"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -788,22 +799,22 @@ msgstr ""
 "kódovanie pre aktuálne lokálne nastavenie."
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Či si pýtať potvrdenie pri zatváraní terminálu"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to show the menubar in new windows"
 msgstr "Či sa má zobrazovať ponuka v nových oknách"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Whether to use a dark theme variant"
 msgstr "Či použiť tmavú verziu témy"
 
 # gsetting summary
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Či sa majú nové terminály otvárať ako okná alebo ako karty"
 
@@ -1328,14 +1339,13 @@ msgstr "_Obnoviť predvolené hodnoty pre voľby kompatibility"
 msgid "Compatibility"
 msgstr "Kompatibilita"
 
-# Nasledujú akcie pre klávesové skratky
 #: ../src/terminal-accels.c:111
-msgid "New Tab"
-msgstr "Nová karta"
+msgid "New Terminal in New Tab"
+msgstr "Nový terminál na novej karte"
 
 #: ../src/terminal-accels.c:112
-msgid "New Window"
-msgstr "Nové okno"
+msgid "New Terminal in New Window"
+msgstr "Nový terminál v novom okne"
 
 #: ../src/terminal-accels.c:113
 msgid "New Profile"
@@ -1346,12 +1356,12 @@ msgid "Save Contents"
 msgstr "Uložiť obsah"
 
 #: ../src/terminal-accels.c:117
-msgid "Close Tab"
-msgstr "Zavrieť kartu"
+msgid "Close Terminal"
+msgstr "Zavrieť terminál"
 
 #: ../src/terminal-accels.c:118
-msgid "Close Window"
-msgstr "Zavrieť okno"
+msgid "Close All Terminals"
+msgstr "Zavrieť všetky terminály"
 
 #: ../src/terminal-accels.c:122
 msgid "Copy"
@@ -1472,7 +1482,7 @@ msgid "_About Terminal"
 msgstr "_O programe Terminál"
 
 # menu item
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2351
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2350
 msgid "_Help"
 msgstr "_Pomocník"
 
@@ -1480,7 +1490,7 @@ msgstr "_Pomocník"
 msgid "_Quit"
 msgstr "U_končiť"
 
-#: ../src/terminal.c:242
+#: ../src/terminal.c:245
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Nepodarilo sa analyzovať parametre: %s\n"
@@ -1694,41 +1704,41 @@ msgstr "Otvoriť _Midnight Commander"
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Otvorí terminálového správcu súborov Midnight Commander"
 
-#: ../src/terminal-options.c:224
+#: ../src/terminal-options.c:224 ../src/terminal-options.c:237
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "Voľba „%s“ už nie je dostupná v tejto verzii programu gnome-terminal."
 
 # PM: Terminál pre GNOME/ Terminál prostredia GNOME
-#: ../src/terminal-options.c:235 ../src/terminal-util.c:221
+#: ../src/terminal-options.c:249 ../src/terminal-util.c:221
 msgid "GNOME Terminal"
 msgstr "Terminál pre GNOME"
 
-#: ../src/terminal-options.c:275
+#: ../src/terminal-options.c:289
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Parameter pre „%s“ nie je platný príkaz: %s"
 
-#: ../src/terminal-options.c:424
+#: ../src/terminal-options.c:438
 msgid "Two roles given for one window"
 msgstr "Dve role dané jednému oknu"
 
-#: ../src/terminal-options.c:445 ../src/terminal-options.c:478
+#: ../src/terminal-options.c:459 ../src/terminal-options.c:492
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "Voľba „%s“ zadaná dvakrát pre jedno okno\n"
 
-#: ../src/terminal-options.c:689
+#: ../src/terminal-options.c:690
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Násobok zväčšenia „%g“ je príliš malý, použije sa %g\n"
 
-#: ../src/terminal-options.c:697
+#: ../src/terminal-options.c:698
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Násobok zväčšenia „%g“ je príliš veľký, použije sa %g\n"
 
-#: ../src/terminal-options.c:735
+#: ../src/terminal-options.c:736
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1798,23 +1808,23 @@ msgstr "NÁZOV-PROFILU"
 
 # PM: Emulátor terminálu pre GNOME / prostredia GNOME
 # MŠ: opravene
-#: ../src/terminal-options.c:1442 ../src/terminal-options.c:1448
+#: ../src/terminal-options.c:1269 ../src/terminal-options.c:1275
 msgid "GNOME Terminal Emulator"
 msgstr "Emulátor terminálu pre GNOME"
 
 # cmd desc
-#: ../src/terminal-options.c:1449
+#: ../src/terminal-options.c:1276
 msgid "Show GNOME Terminal options"
 msgstr "Zobraziť voľby GNOME terminálu"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1286
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr ""
 "Voľby na otvorenie nových okien alebo kariet; určených ich môže byť viac:"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1295
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1822,11 +1832,11 @@ msgstr ""
 "Voľby okna; pokiaľ je použité pred prvým parametrom --window alebo --tab, "
 "nastavuje predvolené vlastnosti pre všetky okná:"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1296
 msgid "Show per-window options"
 msgstr "Zobrazí voľby jednotlivých okien"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1304
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1835,7 +1845,7 @@ msgstr ""
 "tab, nastavuje predvolené vlastnosti pre všetky terminály:"
 
 #  cmd desc
-#: ../src/terminal-options.c:1478
+#: ../src/terminal-options.c:1305
 msgid "Show per-terminal options"
 msgstr "Zobrazí voľby jednotlivých terminálov"
 
@@ -1877,33 +1887,33 @@ msgstr "Zobraziť"
 msgid "_Encoding"
 msgstr "_Kódovanie"
 
-#: ../src/terminal-screen.c:1058
+#: ../src/terminal-screen.c:1060
 msgid "No command supplied nor shell requested"
 msgstr "Nebol zadaný príkaz ani požadovaný shell"
 
-#: ../src/terminal-screen.c:1306 ../src/terminal-window.c:2394
+#: ../src/terminal-screen.c:1316 ../src/terminal-window.c:2393
 msgid "_Profile Preferences"
 msgstr "Nas_tavenia profilu"
 
-#: ../src/terminal-screen.c:1307 ../src/terminal-screen.c:1635
+#: ../src/terminal-screen.c:1317 ../src/terminal-screen.c:1645
 msgid "_Relaunch"
 msgstr "_Spustiť znovu"
 
-#: ../src/terminal-screen.c:1310
+#: ../src/terminal-screen.c:1320
 msgid "There was an error creating the child process for this terminal"
 msgstr "Nastala chyba pri vytváraní dcérskeho procesu pre tento terminál"
 
-#: ../src/terminal-screen.c:1639
+#: ../src/terminal-screen.c:1649
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Dcérsky proces sa normálne ukončil so stavom %d."
 
-#: ../src/terminal-screen.c:1642
+#: ../src/terminal-screen.c:1652
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Dcérsky proces bol ukončený signálom %d."
 
-#: ../src/terminal-screen.c:1645
+#: ../src/terminal-screen.c:1655
 msgid "The child process was aborted."
 msgstr "Dcérsky proces bol ukončený."
 
@@ -2001,188 +2011,188 @@ msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2344
+#: ../src/terminal-window.c:2343
 msgid "_File"
 msgstr "_Súbor"
 
 #. File menu
-#: ../src/terminal-window.c:2345 ../src/terminal-window.c:2356
-#: ../src/terminal-window.c:2362 ../src/terminal-window.c:2503
+#: ../src/terminal-window.c:2344 ../src/terminal-window.c:2355
+#: ../src/terminal-window.c:2361 ../src/terminal-window.c:2502
 msgid "Open _Terminal"
 msgstr "Otvoriť _terminál"
 
-#: ../src/terminal-window.c:2346
+#: ../src/terminal-window.c:2345
 msgid "_Edit"
 msgstr "_Upraviť"
 
-#: ../src/terminal-window.c:2347
+#: ../src/terminal-window.c:2346
 msgid "_View"
 msgstr "_Zobraziť"
 
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2347
 msgid "_Search"
 msgstr "_Nájsť"
 
-#: ../src/terminal-window.c:2349
+#: ../src/terminal-window.c:2348
 msgid "_Terminal"
 msgstr "_Terminál"
 
-#: ../src/terminal-window.c:2350
+#: ../src/terminal-window.c:2349
 msgid "Ta_bs"
 msgstr "_Karty"
 
-#: ../src/terminal-window.c:2359
+#: ../src/terminal-window.c:2358
 msgid "Open Ta_b"
 msgstr "Otvoriť k_artu"
 
-#: ../src/terminal-window.c:2365
+#: ../src/terminal-window.c:2364
 msgid "New _Profile"
 msgstr "Nový _profil"
 
-#: ../src/terminal-window.c:2368
+#: ../src/terminal-window.c:2367
 msgid "_Save Contents"
 msgstr "O_bsah"
 
-#: ../src/terminal-window.c:2371
-msgid "C_lose Tab"
-msgstr "_Zavrieť kartu"
+#: ../src/terminal-window.c:2370 ../src/terminal-window.c:3582
+msgid "C_lose Terminal"
+msgstr "Za_vrieť terminál"
 
-#: ../src/terminal-window.c:2374
-msgid "_Close Window"
-msgstr "Za_vrieť okno"
+#: ../src/terminal-window.c:2373
+msgid "_Close All Terminals"
+msgstr "_Zavrieť všetky terminály"
 
-#: ../src/terminal-window.c:2385 ../src/terminal-window.c:2500
+#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2499
 msgid "Paste _Filenames"
 msgstr "Prilepiť názvy _súborov"
 
-#: ../src/terminal-window.c:2391
+#: ../src/terminal-window.c:2390
 msgid "Pre_ferences"
 msgstr "Nas_tavenia"
 
 #. Search menu
-#: ../src/terminal-window.c:2410
+#: ../src/terminal-window.c:2409
 msgid "_Find…"
 msgstr "_Nájsť…"
 
 # PM: Nájsť nasledujúce
-#: ../src/terminal-window.c:2413
+#: ../src/terminal-window.c:2412
 msgid "Find Ne_xt"
 msgstr "Nájsť na_sledujúce"
 
-#: ../src/terminal-window.c:2416
+#: ../src/terminal-window.c:2415
 msgid "Find Pre_vious"
 msgstr "Nájsť pre_dchádzajúce"
 
 # PM: asi len zvýraznenie
-#: ../src/terminal-window.c:2419
+#: ../src/terminal-window.c:2418
 msgid "_Clear Highlight"
 msgstr "_Zrušiť zvýraznenie"
 
-#: ../src/terminal-window.c:2423
+#: ../src/terminal-window.c:2422
 msgid "Go to _Line..."
 msgstr "Prejsť na _riadok…"
 
-#: ../src/terminal-window.c:2426
+#: ../src/terminal-window.c:2425
 msgid "_Incremental Search..."
 msgstr "Prírastkové hľadan_ie…"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2432
+#: ../src/terminal-window.c:2431
 msgid "Change _Profile"
 msgstr "Zmeniť _profil"
 
-#: ../src/terminal-window.c:2433
+#: ../src/terminal-window.c:2432
 msgid "_Set Title…"
 msgstr "_Nastaviť titulok…"
 
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2435
 msgid "Set _Character Encoding"
 msgstr "Nastaviť _kódovanie znakov"
 
-#: ../src/terminal-window.c:2437
+#: ../src/terminal-window.c:2436
 msgid "_Reset"
 msgstr "_Reštartovať"
 
-#: ../src/terminal-window.c:2440
+#: ../src/terminal-window.c:2439
 msgid "Reset and C_lear"
 msgstr "Reštartovať a _vymazať"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2445
+#: ../src/terminal-window.c:2444
 msgid "_Add or Remove…"
 msgstr "_Pridať alebo odstrániť…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2450
+#: ../src/terminal-window.c:2449
 msgid "_Previous Tab"
 msgstr "Pr_edchádzajúca karta"
 
-#: ../src/terminal-window.c:2453
+#: ../src/terminal-window.c:2452
 msgid "_Next Tab"
 msgstr "_Nasledujúca karta"
 
-#: ../src/terminal-window.c:2456
+#: ../src/terminal-window.c:2455
 msgid "Move Tab _Left"
 msgstr "Presunúť kartu _doľava"
 
-#: ../src/terminal-window.c:2459
+#: ../src/terminal-window.c:2458
 msgid "Move Tab _Right"
 msgstr "Presunúť kartu dop_rava"
 
-#: ../src/terminal-window.c:2462
+#: ../src/terminal-window.c:2461
 msgid "_Detach tab"
 msgstr "_Odpojiť kartu"
 
 #. Help menu
-#: ../src/terminal-window.c:2467
+#: ../src/terminal-window.c:2466
 msgid "_Contents"
 msgstr "Ob_sah"
 
 # menu item
-#: ../src/terminal-window.c:2470
+#: ../src/terminal-window.c:2469
 msgid "_About"
 msgstr "_O programe"
 
 #. Popup menu
-#: ../src/terminal-window.c:2475
+#: ../src/terminal-window.c:2474
 msgid "_Send Mail To…"
 msgstr "_Odoslať email…"
 
-#: ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:2477
 msgid "_Copy E-mail Address"
 msgstr "_Kopírovať emailovú adresu"
 
-#: ../src/terminal-window.c:2481
+#: ../src/terminal-window.c:2480
 msgid "C_all To…"
 msgstr "Za_volať…"
 
-#: ../src/terminal-window.c:2484
+#: ../src/terminal-window.c:2483
 msgid "_Copy Call Address"
 msgstr "_Kopírovať adresu volania"
 
-#: ../src/terminal-window.c:2487
+#: ../src/terminal-window.c:2486
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
-#: ../src/terminal-window.c:2490
+#: ../src/terminal-window.c:2489
 msgid "_Copy Link Address"
 msgstr "_Kopírovať adresu odkazu"
 
-#: ../src/terminal-window.c:2493
+#: ../src/terminal-window.c:2492
 msgid "P_rofiles"
 msgstr "_Profily"
 
 # viď vyjadrenie juls
-#: ../src/terminal-window.c:2506
+#: ../src/terminal-window.c:2505
 msgid "L_eave Full Screen"
 msgstr "Opustiť _celoobrazovkový režim"
 
 #. View Menu
-#: ../src/terminal-window.c:2514
+#: ../src/terminal-window.c:2513
 msgid "Show _Menubar"
 msgstr "Z_obraziť ponuku"
 
-#: ../src/terminal-window.c:2518
+#: ../src/terminal-window.c:2517
 msgid "_Full Screen"
 msgstr "Na _celú obrazovku"
 
@@ -2212,6 +2222,21 @@ msgstr "V tomto termináli stále beží proces. Zatvorenie terminálu ho ukonč
 msgid "C_lose Window"
 msgstr "_Zavrieť okno"
 
-#: ../src/terminal-window.c:3582
-msgid "C_lose Terminal"
-msgstr "Za_vrieť terminál"
+# Nasledujú akcie pre klávesové skratky
+#~ msgid "New Tab"
+#~ msgstr "Nová karta"
+
+#~ msgid "New Window"
+#~ msgstr "Nové okno"
+
+#~ msgid "Close Tab"
+#~ msgstr "Zavrieť kartu"
+
+#~ msgid "Close Window"
+#~ msgstr "Zavrieť okno"
+
+#~ msgid "C_lose Tab"
+#~ msgstr "_Zavrieť kartu"
+
+#~ msgid "_Close Window"
+#~ msgstr "Za_vrieť okno"
