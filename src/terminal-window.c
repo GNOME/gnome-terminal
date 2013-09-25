@@ -352,7 +352,6 @@ find_smaller_zoom_factor (double  current,
 
 /* GAction callbacks */
 
-// FIXMEchpe: profile as parameter too
 static void
 action_new_terminal_cb (GSimpleAction *action,
                         GVariant *parameter,
@@ -361,22 +360,19 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalWindow *window = user_data;
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app;
+  TerminalSettingsList *profiles_list;
   GSettings *profile;
   char *new_working_directory;
-  const char *mode_str;
+  const char *mode_str, *uuid_str;
   TerminalNewTerminalMode mode;
   GdkModifierType modifiers;
 
   g_assert (TERMINAL_IS_WINDOW (window));
 
   app = terminal_app_get ();
-  profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
-  if (!profile)
-    profile = terminal_screen_get_profile (priv->active_screen);
-  if (!profile)
-    return;
 
-  g_variant_get (parameter, "&s", &mode_str);
+  g_variant_get (parameter, "(&s&s)", &mode_str, &uuid_str);
+
   if (g_str_equal (mode_str, "tab"))
     mode = TERMINAL_NEW_TERMINAL_MODE_TAB;
   else if (g_str_equal (mode_str, "window"))
@@ -394,6 +390,17 @@ action_new_terminal_cb (GSimpleAction *action,
     }
   }
 
+  profiles_list = terminal_app_get_profiles_list (app);
+  if (g_str_equal (uuid_str, "current"))
+    profile = terminal_screen_ref_profile (priv->active_screen);
+  else if (g_str_equal (uuid_str, "default"))
+    profile = terminal_settings_list_ref_default_child (profiles_list);
+  else
+    profile = terminal_settings_list_ref_child (profiles_list, uuid_str);
+
+  if (profile == NULL)
+    return;
+
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
     window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
@@ -407,22 +414,34 @@ action_new_terminal_cb (GSimpleAction *action,
 
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
     gtk_window_present (GTK_WINDOW (window));
+
+  g_object_unref (profile);
 }
 
 static void
 file_new_terminal_callback (GtkAction *action,
                             TerminalWindow *window)
 {
+  GSettings *profile;
+  char *uuid;
   const char *name;
   GVariant *param;
 
+  profile = g_object_get_data (G_OBJECT (action), PROFILE_DATA_KEY);
+  if (profile)
+    uuid = terminal_settings_list_dup_uuid_from_child (terminal_app_get_profiles_list (terminal_app_get ()), profile);
+  else
+    uuid = g_strdup ("current");
+
   name = gtk_action_get_name (action);
   if (g_str_has_prefix (name, "FileNewTab"))
-    param = g_variant_new_string ("tab");
+    param = g_variant_new ("(ss)", "tab", uuid);
   else if (g_str_has_prefix (name, "FileNewWindow"))
-    param = g_variant_new_string ("window");
+    param = g_variant_new ("(ss)", "window", uuid);
   else
-    param = g_variant_new_string ("default");
+    param = g_variant_new ("(ss)", "default", uuid);
+
+  g_free (uuid);
 
   g_action_activate (g_action_map_lookup_action (G_ACTION_MAP (window), "new-terminal"),
                      param);
@@ -2316,23 +2335,24 @@ static void
 terminal_window_init (TerminalWindow *window)
 {
   const GActionEntry gaction_entries[] = {
-    { "new-terminal",        action_new_terminal_cb,   "s",  NULL, NULL },
-    { "new-profile",         action_new_profile_cb,    NULL, NULL, NULL },
-    { "save-contents",       action_save_contents_cb,  NULL, NULL, NULL },
-    { "close",               action_close_cb,          "s",  NULL, NULL },
-    { "copy",                action_copy_cb,           NULL, NULL, NULL },
-    { "paste",               action_paste_cb,          "s",  NULL, NULL },
-    { "select-all",          action_select_all_cb,     NULL, NULL, NULL },
-    { "reset",               action_reset_cb,          "b",  NULL, NULL },
-    { "switch-tab",          action_switch_tab_cb,     "i",  NULL, NULL },
-    { "move-tab",            action_move_tab_cb,       "i",  NULL, NULL },
-    { "set-title",           action_set_title_cb,      NULL, NULL, NULL },
-    { "zoom",                action_zoom_cb,           "i",  NULL, NULL },
-    { "detach-tab",          action_detach_tab_cb,     NULL, NULL, NULL },
-    { "help",                action_help_cb,           NULL, NULL, NULL },
-    { "about",               action_about_cb,          NULL, NULL, NULL },
-    { "preferences",         action_preferences_cb,    NULL, NULL, NULL },
-    { "edit-profile",        action_edit_profile_cb,   "s",  NULL, NULL },
+    { "new-terminal",        action_new_terminal_cb,   "(ss)", NULL, NULL },
+    { "new-profile",         action_new_profile_cb,    NULL,   NULL, NULL },
+    { "save-contents",       action_save_contents_cb,  NULL,   NULL, NULL },
+    { "close",               action_close_cb,          "s",    NULL, NULL },
+    { "copy",                action_copy_cb,           NULL,   NULL, NULL },
+    { "paste",               action_paste_cb,          "s",    NULL, NULL },
+    { "select-all",          action_select_all_cb,     NULL,   NULL, NULL },
+    { "reset",               action_reset_cb,          "b",    NULL, NULL },
+    { "switch-tab",          action_switch_tab_cb,     "i",    NULL, NULL },
+    { "move-tab",            action_move_tab_cb,       "i",    NULL, NULL },
+    { "set-title",           action_set_title_cb,      NULL,   NULL, NULL },
+    { "zoom",                action_zoom_cb,           "i",    NULL, NULL },
+    { "detach-tab",          action_detach_tab_cb,     NULL,   NULL, NULL },
+    { "help",                action_help_cb,           NULL,   NULL, NULL },
+    { "about",               action_about_cb,          NULL,   NULL, NULL },
+    { "preferences",         action_preferences_cb,    NULL,   NULL, NULL },
+    { "edit-profile",        action_edit_profile_cb,   "s",    NULL, NULL },
+
     { "show-menubar",        action_toggle_state_cb,   NULL, "true",  action_show_menubar_state_cb },
     { "fullscreen",          action_toggle_state_cb,   NULL, "false", action_fullscreen_state_cb   },
   };

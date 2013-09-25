@@ -956,6 +956,15 @@ terminal_screen_get_profile (TerminalScreen *screen)
   return priv->profile;
 }
 
+GSettings*
+terminal_screen_ref_profile (TerminalScreen *screen)
+{
+  TerminalScreenPrivate *priv = screen->priv;
+
+  g_assert (priv->profile != NULL);
+  return g_object_ref (priv->profile);
+}
+
 static void
 terminal_screen_set_override_command (TerminalScreen *screen,
                                       char          **argv,
