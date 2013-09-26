@@ -959,6 +959,7 @@ update_color_scheme (TerminalScreen *screen)
   GdkRGBA *colors;
   gsize n_colors;
   GdkRGBA fg, bg, bold, theme_fg, theme_bg;
+  GdkRGBA *boldp;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
@@ -973,14 +974,16 @@ update_color_scheme (TerminalScreen *screen)
       bg = theme_bg;
     }
 
-  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) ||
-      !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold))
-    bold = fg;
+  if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) &&
+      terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold))
+    boldp = &bold;
+  else
+    boldp = NULL;
 
   colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
   vte_terminal_set_colors_rgba (VTE_TERMINAL (screen), &fg, &bg,
                                 colors, n_colors);
-  vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), &bold);
+  vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), boldp);
   g_free (colors);
 }
 
