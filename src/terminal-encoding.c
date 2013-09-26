@@ -231,7 +231,7 @@ terminal_encoding_is_valid (TerminalEncoding *encoding)
                                " input  \"%s\"\n",
                                ascii_sample);
         _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
-                               " output \"%s\" bytes read %u written %u\n",
+                               " output \"%s\" bytes read %" G_GSIZE_FORMAT " written %" G_GSIZE_FORMAT "\n",
                                converted ? converted : "(null)", bytes_read, bytes_written);
         if (error)
           _terminal_debug_print (TERMINAL_DEBUG_ENCODINGS,
