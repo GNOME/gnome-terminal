@@ -40,6 +40,6 @@ HELP_FILES = \
 	txt-select-text.page \
 	$(NULL)
 
-HELP_LINGUAS = cs de el es gl hu pt_BR
+HELP_LINGUAS = ca cs da de el en_GB es fr gl hu it ko oc pt_BR ro ru sl sv te uk zh_CN
 
 -include $(top_srcdir)/git.mk
