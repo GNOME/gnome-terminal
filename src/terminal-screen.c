@@ -1220,7 +1220,7 @@ terminal_screen_child_setup (FDSetupData *data)
       for (j = 0; j < n_fds; j++) {
         if (fds[j] == target_fd) {
           do {
-            fd = fcntl (fds[j], F_DUPFD_CLOEXEC, 10);
+            fd = fcntl (fds[j], F_DUPFD_CLOEXEC, 3);
           } while (fd == -1 && errno == EINTR);
           if (fd == -1)
             _exit (127);
