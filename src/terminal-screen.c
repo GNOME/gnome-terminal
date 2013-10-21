@@ -51,6 +51,7 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 #include "terminal-info-bar.h"
+#include "terminal-libgsystem.h"
 
 #include "eggshell.h"
 
@@ -548,11 +549,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
       url_regexes[i] = g_regex_new (url_regex_patterns[i].pattern,
                                     url_regex_patterns[i].flags | G_REGEX_OPTIMIZE,
                                     0, &error);
-      if (error)
-        {
-          g_message ("%s", error->message);
-          g_error_free (error);
-        }
+      g_assert_no_error (error);
 
       url_regex_flavors[i] = url_regex_patterns[i].flavor;
     }
@@ -832,7 +829,7 @@ update_color_scheme (TerminalScreen *screen)
   GtkWidget *widget = GTK_WIDGET (screen);
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
-  GdkRGBA *colors;
+  gs_free GdkRGBA *colors;
   gsize n_colors;
   GdkRGBA fg, bg, bold, theme_fg, theme_bg;
   GdkRGBA *boldp;
@@ -860,7 +857,6 @@ update_color_scheme (TerminalScreen *screen)
   vte_terminal_set_colors_rgba (VTE_TERMINAL (screen), &fg, &bg,
                                 colors, n_colors);
   vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), boldp);
-  g_free (colors);
 }
 
 void
@@ -1722,8 +1718,8 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
   if (gtk_targets_include_uri (&selection_data_target, 1))
     {
-      char **uris;
-      char *text;
+      gs_strfreev char **uris;
+      gs_free char *text = NULL;
       gsize len;
 
       uris = gtk_selection_data_get_uris (selection_data);
@@ -1734,18 +1730,14 @@ terminal_screen_drag_data_received (GtkWidget        *widget,
 
       text = terminal_util_concat_uris (uris, &len);
       vte_terminal_feed_child (VTE_TERMINAL (screen), text, len);
-      g_free (text);
-
-      g_strfreev (uris);
     }
   else if (gtk_targets_include_text (&selection_data_target, 1))
     {
-      char *text;
+      gs_free char *text;
 
       text = (char *) gtk_selection_data_get_text (selection_data);
       if (text && text[0])
         vte_terminal_feed_child (VTE_TERMINAL (screen), text, strlen (text));
-      g_free (text);
     }
   else switch (info)
     {
