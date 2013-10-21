@@ -35,6 +35,7 @@
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
 #include "terminal-encoding.h"
+#include "terminal-libgsystem.h"
 
 typedef struct {
   TerminalSettingsList *profiles_list;
@@ -84,7 +85,7 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
                         GtkTreeIter *iter,
                         PrefData *data)
 {
-  GSettings *profile;
+  gs_unref_object GSettings *profile;
   const char *text;
   GValue value = { 0, };
 
@@ -99,8 +100,6 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
 
   g_object_set_property (G_OBJECT (cell), "text", &value);
   g_value_unset (&value);
-
-  g_object_unref (profile);
 }
 
 static int
@@ -109,18 +108,13 @@ profile_sort_func (GtkTreeModel *model,
                    GtkTreeIter *b,
                    gpointer user_data)
 {
-  GSettings *profile_a, *profile_b;
-  int retval;
+  gs_unref_object GSettings *profile_a;
+  gs_unref_object GSettings *profile_b;
 
   gtk_tree_model_get (model, a, (int) COL_PROFILE, &profile_a, (int) -1);
   gtk_tree_model_get (model, b, (int) COL_PROFILE, &profile_b, (int) -1);
 
-  retval = terminal_profiles_compare (profile_a, profile_b);
-
-  g_object_unref (profile_a);
-  g_object_unref (profile_b);
-
-  return retval;
+  return terminal_profiles_compare (profile_a, profile_b);
 }
 
 static /* ref */ GtkTreeModel *
@@ -189,8 +183,8 @@ profile_combo_box_refill (PrefData *data)
   GtkComboBox *combo = GTK_COMBO_BOX (data->profiles_default_combo);
   GtkTreeIter iter;
   gboolean iter_set;
-  GSettings *selected_profile;
-  GtkTreeModel *model;
+  gs_unref_object GSettings *selected_profile;
+  gs_unref_object GtkTreeModel *model;
 
   selected_profile = profile_combo_box_ref_selected (combo);
 
@@ -199,13 +193,9 @@ profile_combo_box_refill (PrefData *data)
                                  &iter,
                                  &iter_set);
   gtk_combo_box_set_model (combo, model);
-  g_object_unref (model);
 
   if (iter_set)
     gtk_combo_box_set_active_iter (combo, &iter);
-
-  if (selected_profile)
-    g_object_unref (selected_profile);
 }
 
 static GtkWidget*
@@ -216,8 +206,8 @@ profile_combo_box_new (PrefData *data)
   GtkCellRenderer *renderer;
   GtkTreeIter iter;
   gboolean iter_set;
-  GSettings *default_profile;
-  GtkTreeModel *model;
+  gs_unref_object GSettings *default_profile;
+  gs_unref_object GtkTreeModel *model;
 
   combo_widget = gtk_combo_box_new ();
   combo = GTK_COMBO_BOX (combo_widget);
@@ -235,13 +225,9 @@ profile_combo_box_new (PrefData *data)
                                  &iter,
                                  &iter_set);
   gtk_combo_box_set_model (combo, model);
-  g_object_unref (model);
 
   if (iter_set)
     gtk_combo_box_set_active_iter (combo, &iter);
-
-  if (default_profile)
-    g_object_unref (default_profile);
 
   gtk_widget_show (combo_widget);
   return combo_widget;
@@ -251,18 +237,15 @@ static void
 profile_combo_box_changed_cb (GtkWidget *widget,
                               PrefData *data)
 {
-  GSettings *profile;
-  char *uuid;
+  gs_unref_object GSettings *profile;
+  gs_free char *uuid = NULL;
 
   profile = profile_combo_box_ref_selected (GTK_COMBO_BOX (data->profiles_default_combo));
   if (!profile)
     return;
 
   uuid = terminal_settings_list_dup_uuid_from_child (data->profiles_list, profile);
-  g_object_unref (profile);
-
   terminal_settings_list_set_default_child (data->profiles_list, uuid);
-  g_free (uuid);
 }
 
 static GSettings *
@@ -288,8 +271,8 @@ profile_list_treeview_refill (PrefData *data)
   GtkTreeView *tree_view = data->manage_profiles_list;
   GtkTreeIter iter;
   gboolean iter_set;
-  GSettings *selected_profile;
-  GtkTreeModel *model;
+  gs_unref_object GSettings *selected_profile;
+  gs_unref_object GtkTreeModel *model;
 
   selected_profile = profile_list_ref_selected (data);
   model = profile_liststore_new (data,
@@ -297,16 +280,12 @@ profile_list_treeview_refill (PrefData *data)
                                  &iter,
                                  &iter_set);
   gtk_tree_view_set_model (tree_view, model);
-  g_object_unref (model);
 
   if (!iter_set)
     iter_set = gtk_tree_model_get_iter_first (model, &iter);
 
   if (iter_set)
     gtk_tree_selection_select_iter (gtk_tree_view_get_selection (tree_view), &iter);
-
-  if (selected_profile)
-    g_object_unref (selected_profile);
 }
 
 static void
@@ -315,7 +294,7 @@ profile_list_row_activated_cb (GtkTreeView *tree_view,
                                GtkTreeViewColumn *column,
                                PrefData *data)
 {
-  GSettings *selected_profile;
+  gs_unref_object GSettings *selected_profile;
 
   selected_profile = profile_list_ref_selected (data);
   if (selected_profile == NULL)
@@ -323,7 +302,6 @@ profile_list_row_activated_cb (GtkTreeView *tree_view,
 
   terminal_app_edit_profile (terminal_app_get (),
                              selected_profile, GTK_WINDOW (data->dialog), NULL);
-  g_object_unref (selected_profile);
 }
 
 static GtkTreeView *
@@ -378,7 +356,7 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
                                        PrefData *data)
 {
   GtkWidget *dialog;
-  GSettings *selected_profile;
+  gs_unref_object GSettings *selected_profile;
   const char *name;
 
   selected_profile = profile_list_ref_selected (data);
@@ -409,8 +387,7 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
   gtk_window_set_title (GTK_WINDOW (dialog), _("Delete Profile"));
   gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-  /* Transfer refcount of |selected_profile|, so no unref below */
-  g_object_set_data_full (G_OBJECT (dialog), "profile", selected_profile, g_object_unref);
+  g_object_set_data_full (G_OBJECT (dialog), "profile", g_object_ref (selected_profile), g_object_unref);
 
   g_signal_connect (dialog, "response",
                     G_CALLBACK (profile_list_delete_confirm_response_cb),
@@ -430,21 +407,20 @@ static void
 profile_list_clone_button_clicked_cb (GtkWidget *button,
                                       PrefData *data)
 {
-  GSettings *selected_profile;
+  gs_unref_object GSettings *selected_profile;
 
   selected_profile = profile_list_ref_selected (data);
   if (selected_profile == NULL)
     return;
 
   terminal_app_new_profile (terminal_app_get (), selected_profile, GTK_WINDOW (data->parent));
-  g_object_unref (selected_profile);
 }
 
 static void
 profile_list_edit_button_clicked_cb (GtkWidget *button,
                                      PrefData *data)
 {
-  GSettings *selected_profile;
+  gs_unref_object GSettings *selected_profile;
 
   selected_profile = profile_list_ref_selected (data);
   if (selected_profile == NULL)
@@ -452,7 +428,6 @@ profile_list_edit_button_clicked_cb (GtkWidget *button,
 
   terminal_app_edit_profile (terminal_app_get (), selected_profile,
                              GTK_WINDOW (data->dialog), NULL);
-  g_object_unref (selected_profile);
 }
 
 static void
@@ -460,7 +435,7 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
                                    PrefData *data)
 {
   gboolean selected;
-  GSettings *selected_profile;
+  gs_unref_object GSettings *selected_profile;
 
   selected = gtk_tree_selection_get_selected (selection, NULL, NULL);
   selected_profile = profile_list_ref_selected (data);
@@ -470,9 +445,6 @@ profile_list_selection_changed_cb (GtkTreeSelection *selection,
   gtk_widget_set_sensitive (data->manage_profiles_delete_button,
                             selected && 
                             terminal_app_can_remove_profile (terminal_app_get (), selected_profile));
-
-  if (selected_profile)
-    g_object_unref (selected_profile);
 }
 
 /* Keybindings tab */
@@ -750,7 +722,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
     TerminalEncoding *encoding = value;
     GtkTreeIter iter;
-    char *name;
+    gs_free char *name;
 
     name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
                                     terminal_encoding_get_charset (encoding),
@@ -760,7 +732,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        COLUMN_CHARSET, terminal_encoding_get_charset (encoding),
                                        COLUMN_DATA, encoding,
                                        -1);
-    g_free (name);
   }
 
   /* Now turn on sorting */
