@@ -48,6 +48,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-intl.h \
 	terminal-i18n.c \
 	terminal-i18n.h \
+	terminal-libgsystem.h \
 	terminal-mdi-container.c \
 	terminal-mdi-container.h \
 	terminal-notebook.c \
@@ -159,6 +160,7 @@ gnome_terminal_client_SOURCES = \
 	terminal-defines.h \
 	terminal-i18n.c \
 	terminal-i18n.h \
+	terminal-libgsystem.h \
 	terminal-profiles-list.c \
 	terminal-profiles-list.h \
 	terminal-schemas.h \
@@ -204,6 +206,7 @@ gnome_terminal_SOURCES = \
 	terminal-defines.h \
 	terminal-i18n.c \
 	terminal-i18n.h \
+	terminal-libgsystem.h \
 	terminal-options.c \
 	terminal-options.h \
 	terminal-profiles-list.c \
@@ -248,6 +251,7 @@ libterminal_nautilus_la_SOURCES = \
 	terminal-defines.h \
 	terminal-i18n.c \
 	terminal-i18n.h \
+	terminal-libgsystem.h \
 	terminal-nautilus.c \
 	$(NULL)
 
@@ -285,6 +289,7 @@ gnome_terminal_migration_SOURCES = \
 	migration.c \
 	terminal-debug.c \
 	terminal-debug.h \
+	terminal-libgsystem.h \
 	terminal-profiles-list.c \
 	terminal-profiles-list.h \
 	terminal-schemas.h \
