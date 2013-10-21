@@ -45,6 +45,7 @@
 #include "terminal-tabs-menu.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+#include "terminal-libgsystem.h"
 
 struct _TerminalWindowPrivate
 {
@@ -243,7 +244,7 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
                             /* const */ char **uris,
                             PasteData *data)
 {
-  char *text;
+  gs_free char *text = NULL;
   gsize len;
 
   if (!uris) {
@@ -258,7 +259,6 @@ clipboard_uris_received_cb (GtkClipboard *clipboard,
 
   text = terminal_util_concat_uris (uris, &len);
   vte_terminal_feed_child (VTE_TERMINAL (data->screen), text, len);
-  g_free (text);
 
   g_object_unref (data->screen);
   g_slice_free (PasteData, data);
@@ -361,8 +361,8 @@ action_new_terminal_cb (GSimpleAction *action,
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
-  GSettings *profile;
-  char *new_working_directory;
+  gs_unref_object GSettings *profile = NULL;
+  gs_free char *new_working_directory = NULL;
   const char *mode_str, *uuid_str;
   TerminalNewTerminalMode mode;
   GdkModifierType modifiers;
@@ -410,12 +410,9 @@ action_new_terminal_cb (GSimpleAction *action,
                              new_working_directory,
                              terminal_screen_get_initial_environment (priv->active_screen),
                              1.0);
-  g_free (new_working_directory);
 
   if (mode == TERMINAL_NEW_TERMINAL_MODE_WINDOW)
     gtk_window_present (GTK_WINDOW (window));
-
-  g_object_unref (profile);
 }
 
 static void
@@ -423,7 +420,7 @@ file_new_terminal_callback (GtkAction *action,
                             TerminalWindow *window)
 {
   GSettings *profile;
-  char *uuid;
+  gs_free char *uuid;
   const char *name;
   GVariant *param;
 
@@ -440,8 +437,6 @@ file_new_terminal_callback (GtkAction *action,
     param = g_variant_new ("(ss)", "window", uuid);
   else
     param = g_variant_new ("(ss)", "default", uuid);
-
-  g_free (uuid);
 
   g_action_activate (g_action_map_lookup_action (G_ACTION_MAP (window), "new-terminal"),
                      param);
@@ -466,10 +461,10 @@ static void
 save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer terminal)
 {
   GtkWindow *parent;
-  gchar *filename_uri = NULL;
-  GFile *file;
+  gs_free gchar *filename_uri = NULL;
+  gs_unref_object GFile *file = NULL;
   GOutputStream *stream;
-  GError *error = NULL;
+  gs_free_error GError *error = NULL;
 
   if (response_id != GTK_RESPONSE_ACCEPT)
     {
@@ -505,11 +500,7 @@ save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer 
     {
       terminal_util_show_error_dialog (parent, NULL, error,
 				       "%s", _("Could not save contents"));
-      g_error_free (error);
     }
-
-  g_object_unref(file);
-  g_free(filename_uri);
 }
 #endif /* ENABLE_SAVE */
 
@@ -882,7 +873,7 @@ action_detach_tab_cb (GSimpleAction *action,
   TerminalApp *app;
   TerminalWindow *new_window;
   TerminalScreen *screen;
-  char *geometry;
+  char geometry[32];
   int width, height;
 
   app = terminal_app_get ();
@@ -891,14 +882,13 @@ action_detach_tab_cb (GSimpleAction *action,
 
   /* FIXME: this seems wrong if tabs are shown in the window */
   terminal_screen_get_size (screen, &width, &height);
-  geometry = g_strdup_printf ("%dx%d", width, height);
+  g_snprintf (geometry, sizeof (geometry), "%dx%d", width, height);
 
   new_window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   terminal_window_move_screen (window, new_window, screen, -1);
 
   terminal_window_parse_geometry (new_window, geometry);
-  g_free (geometry);
 
   gtk_window_present_with_time (GTK_WINDOW (new_window), gtk_get_current_event_time ());
 }
@@ -961,11 +951,10 @@ action_toggle_state_cb (GSimpleAction *saction,
                         gpointer user_data)
 {
   GAction *action = G_ACTION (saction);
-  GVariant *state;
+  gs_unref_variant GVariant *state;
 
   state = g_action_get_state (action);
   g_action_change_state (action, g_variant_new_boolean (!g_variant_get_boolean (state)));
-  g_variant_unref (state);
 }
 
 static void
@@ -1175,7 +1164,8 @@ profile_visible_name_notify_cb (GSettings  *profile,
                                 GtkAction  *action)
 {
   const char *visible_name;
-  char *dot, *display_name;
+  char *dot;
+  gs_free char *display_name;
   guint num;
 
   g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &visible_name);
@@ -1184,7 +1174,7 @@ profile_visible_name_notify_cb (GSettings  *profile,
   dot = strchr (gtk_action_get_name (action), '.');
   if (dot != NULL)
     {
-      char *free_me;
+      gs_free char *free_me;
 
       num = g_ascii_strtoll (dot + 1, NULL, 10);
 
@@ -1203,12 +1193,9 @@ profile_visible_name_notify_cb (GSettings  *profile,
         display_name = g_strdup_printf (_("_%c. %s"), ('A' + num - 10), display_name);
       else
         free_me = NULL;
-
-      g_free (free_me);
     }
 
   g_object_set (action, "label", display_name, NULL);
-  g_free (display_name);
 }
 
 static void
@@ -1319,7 +1306,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
   for (p = profiles; p != NULL; p = p->next)
     {
       GSettings *profile = (GSettings *) p->data;
-      GtkRadioAction *profile_action;
+      gs_unref_object GtkRadioAction *profile_action;
       char name[32];
 
       g_snprintf (name, sizeof (name), "TerminalSetProfile%u", n++);
@@ -1347,7 +1334,6 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
                         G_CALLBACK (terminal_set_profile_toggled_callback), window);
 
       gtk_action_group_add_action (action_group, GTK_ACTION (profile_action));
-      g_object_unref (profile_action);
 
       gtk_ui_manager_add_ui (priv->ui_manager, priv->profiles_ui_id,
                              PROFILES_UI_PATH,
@@ -1370,7 +1356,7 @@ terminal_window_create_new_terminal_action (TerminalWindow *window,
                                             GCallback callback)
 {
   TerminalWindowPrivate *priv = window->priv;
-  GtkAction *action;
+  gs_unref_object GtkAction *action;
 
   action = gtk_action_new (name, NULL, NULL, NULL);
 
@@ -1384,7 +1370,6 @@ terminal_window_create_new_terminal_action (TerminalWindow *window,
   g_signal_connect (action, "activate", callback, window);
 
   gtk_action_group_add_action (priv->new_terminal_action_group, action);
-  g_object_unref (action);
 }
 
 static void
@@ -1533,10 +1518,10 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   for (l = encodings; l != NULL; l = l->next)
     {
       TerminalEncoding *e = (TerminalEncoding *) l->data;
-      GtkRadioAction *encoding_action;
+      gs_unref_object GtkRadioAction *encoding_action;
       char name[128];
-      char *display_name;
-      
+      gs_free char *display_name;
+
       g_snprintf (name, sizeof (name), SET_ENCODING_ACTION_NAME_PREFIX "%s", terminal_encoding_get_id (e));
       display_name = g_strdup_printf ("%s (%s)", e->name, terminal_encoding_get_charset (e));
 
@@ -1545,7 +1530,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
                                               NULL,
                                               NULL,
                                               n);
-      g_free (display_name);
 
       gtk_radio_action_set_group (encoding_action, group);
       group = gtk_radio_action_get_group (encoding_action);
@@ -1561,7 +1545,6 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
                               (GDestroyNotify) terminal_encoding_unref);
 
       gtk_action_group_add_action (action_group, GTK_ACTION (encoding_action));
-      g_object_unref (encoding_action);
 
       gtk_ui_manager_add_ui (priv->ui_manager, priv->encodings_ui_id,
                              SET_ENCODING_UI_PATH,
@@ -1642,26 +1625,23 @@ terminal_window_update_size_to_menu (TerminalWindow *window)
     {
       guint grid_width = predefined_sizes[i].grid_width;
       guint grid_height = predefined_sizes[i].grid_height;
-      GtkAction *action;
+      gs_unref_object GtkAction *action;
       char name[40];
-      char *display_name;
-      
+      gs_free char *display_name;
+
       g_snprintf (name, sizeof (name), SIZE_TO_ACTION_NAME_PREFIX "%ux%u",
                   grid_width, grid_height);
 
       /* If there are ever more than 9 of these, extend this to use A..Z as mnemonics,
        * like we do for the profiles menu.
        */
-      display_name = g_strdup_printf ("_%u. %ux%u", i + 1, grid_width, grid_height);
+      display_name = g_strdup_printf ("_%u. %u×%u", i + 1, grid_width, grid_height);
 
       action = gtk_action_new (name, display_name, NULL, NULL);
-      g_free (display_name);
-
       g_signal_connect (action, "activate",
                         G_CALLBACK (terminal_size_to_cb), window);
 
       gtk_action_group_add_action (priv->action_group, action);
-      g_object_unref (action);
 
       gtk_ui_manager_add_ui (priv->ui_manager, priv->ui_id,
                              SIZE_TO_UI_PATH,
