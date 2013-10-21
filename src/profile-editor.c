@@ -33,6 +33,7 @@
 #include "terminal-type-builtins.h"
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
+#include "terminal-libgsystem.h"
 
 typedef struct _TerminalColorScheme TerminalColorScheme;
 
@@ -228,7 +229,7 @@ modify_palette_entry (GSettings       *profile,
                       guint            i,
                       const GdkRGBA   *color)
 {
-  GdkRGBA *colors;
+  gs_free GdkRGBA *colors;
   gsize n_colors;
 
   /* FIXMEchpe: this can be optimised, don't really need to parse the colours! */
@@ -241,8 +242,6 @@ modify_palette_entry (GSettings       *profile,
       terminal_g_settings_set_rgba_palette (profile, TERMINAL_PROFILE_PALETTE_KEY,
                                             colors, n_colors);
     }
-
-  g_free (colors);
 }
 
 static void
@@ -316,7 +315,7 @@ profile_palette_notify_scheme_combo_cb (GSettings *profile,
                                         const char *key,
                                         GtkComboBox *combo)
 {
-  GdkRGBA *colors;
+  gs_free GdkRGBA *colors;
   gsize n_colors;
   guint i;
 
@@ -330,8 +329,6 @@ profile_palette_notify_scheme_combo_cb (GSettings *profile,
   g_signal_handlers_block_by_func (combo, G_CALLBACK (palette_scheme_combo_changed_cb), profile);
   gtk_combo_box_set_active (combo, i);
   g_signal_handlers_unblock_by_func (combo, G_CALLBACK (palette_scheme_combo_changed_cb), profile);
-
-  g_free (colors);
 }
 
 static void
@@ -359,7 +356,7 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
 {
   GtkWidget *w;
   GtkBuilder *builder;
-  GdkRGBA *colors;
+  gs_free GdkRGBA *colors;
   gsize n_colors, i;
 
   g_assert (strcmp (key, TERMINAL_PROFILE_PALETTE_KEY) == 0);
@@ -386,15 +383,13 @@ profile_palette_notify_colorpickers_cb (GSettings *profile,
           g_signal_handlers_unblock_by_func (w, G_CALLBACK (palette_color_notify_cb), profile);
         }
     }
-
-  g_free (colors);
 }
 
 static void
 custom_command_entry_changed_cb (GtkEntry *entry)
 {
   const char *command;
-  GError *error = NULL;
+  gs_free_error GError *error = NULL;
 
   command = gtk_entry_get_text (entry);
 
@@ -405,15 +400,12 @@ custom_command_entry_changed_cb (GtkEntry *entry)
     }
   else
     {
-      char *tooltip;
+      gs_free char *tooltip;
 
       gtk_entry_set_icon_from_icon_name (entry, GTK_PACK_END, "dialog-warning");
 
       tooltip = g_strdup_printf (_("Error parsing command: %s"), error->message);
       gtk_entry_set_icon_tooltip_text (entry, GTK_PACK_END, tooltip);
-      g_free (tooltip);
-
-      g_error_free (error);
     }
 }
 
@@ -434,7 +426,7 @@ init_color_scheme_menu (GtkWidget *widget)
 {
   GtkCellRenderer *renderer;
   GtkTreeIter iter;
-  GtkListStore *store;
+  gs_unref_object GtkListStore *store;
   guint i;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
@@ -447,7 +439,6 @@ init_color_scheme_menu (GtkWidget *widget)
                                       -1);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
-  g_object_unref (store);
 
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
@@ -458,7 +449,7 @@ static void
 editor_response_cb (GtkWidget *editor,
                     int response,
                     gpointer use_data)
-{  
+{
   if (response == GTK_RESPONSE_HELP)
     {
       terminal_util_show_help ("profile", GTK_WINDOW (editor));
@@ -586,18 +577,14 @@ rgba_to_s (const GValue *value,
            gpointer user_data)
 {
   GdkRGBA *color;
-  char *s;
-  GVariant *variant;
+  gs_free char *s;
 
   color = g_value_get_boxed (value);
   if (color == NULL)
     return NULL;
 
   s = gdk_rgba_to_string (color);
-  variant = g_variant_new_string (s);
-  g_free (s);
-
-  return variant;
+  return g_variant_new_string (s);
 }
 
 static gboolean
@@ -680,7 +667,7 @@ terminal_profile_edit (GSettings  *profile,
   GtkBuilder *builder;
   GError *error = NULL;
   GtkWidget *editor, *w;
-  char *uuid;
+  gs_free char *uuid = NULL;
   guint i;
 
   editor = g_object_get_data (G_OBJECT (profile), "editor-window");
@@ -724,7 +711,6 @@ terminal_profile_edit (GSettings  *profile,
   uuid = terminal_settings_list_dup_uuid_from_child (profiles_list, profile);
   gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (builder, "profile-uuid")),
                       uuid);
-  g_free (uuid);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
