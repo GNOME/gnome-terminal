@@ -477,50 +477,6 @@ terminal_util_dialog_focus_widget (GtkWidget *dialog,
     gtk_widget_grab_focus (widget);
 }
 
-/* Like g_key_file_set_string, but escapes characters so that
- * the stored string is ASCII. Use when the input string may not
- * be UTF-8.
- */
-void
-terminal_util_key_file_set_string_escape (GKeyFile *key_file,
-                                          const char *group,
-                                          const char *key,
-                                          const char *string)
-{
-  char *escaped;
-
-  /* FIXMEchpe: be more intelligent and only escape characters that aren't UTF-8 */
-  escaped = g_strescape (string, NULL);
-  g_key_file_set_string (key_file, group, key, escaped);
-  g_free (escaped);
-}
-
-void
-terminal_util_key_file_set_argv (GKeyFile *key_file,
-                                 const char *group,
-                                 const char *key,
-                                 int argc,
-                                 char **argv)
-{
-  char **quoted_argv;
-  char *flat;
-  int i;
-
-  if (argc < 0)
-    argc = g_strv_length (argv);
-
-  quoted_argv = g_new (char*, argc + 1);
-  for (i = 0; i < argc; ++i)
-    quoted_argv[i] = g_shell_quote (argv[i]);
-  quoted_argv[argc] = NULL;
-
-  flat = g_strjoinv (" ", quoted_argv);
-  terminal_util_key_file_set_string_escape (key_file, group, key, flat);
-
-  g_free (flat);
-  g_strfreev (quoted_argv);
-}
-
 /* Proxy stuff */
 
 /*

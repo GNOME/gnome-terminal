@@ -63,16 +63,6 @@ void terminal_util_dialog_focus_widget (GtkWidget *dialog,
 
 gboolean terminal_util_dialog_response_on_delete (GtkWindow *widget);
 
-void terminal_util_key_file_set_string_escape    (GKeyFile *key_file,
-                                                  const char *group,
-                                                  const char *key,
-                                                  const char *string);
-void terminal_util_key_file_set_argv      (GKeyFile *key_file,
-                                           const char *group,
-                                           const char *key,
-                                           int argc,
-                                           char **argv);
-
 void terminal_util_add_proxy_env (GHashTable *env_table);
 
 GdkScreen *terminal_util_get_screen_by_display_name (const char *display_name,
