@@ -18,6 +18,7 @@
 #include <config.h>
 
 #include "terminal-info-bar.h"
+#include "terminal-libgsystem.h"
 
 #include <gtk/gtk.h>
 
@@ -94,7 +95,7 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
                                ...)
 {
   TerminalInfoBarPrivate *priv;
-  char *text;
+  gs_free char *text;
   GtkWidget *label;
   va_list args;
 
@@ -107,8 +108,7 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
   va_end (args);
 
   label = gtk_label_new (text);
-  g_free (text);
-  
+
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
