@@ -42,6 +42,7 @@
 #include "terminal-screen.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+#include "terminal-libgsystem.h"
 
 /**
  * terminal_util_show_error_dialog:
@@ -63,7 +64,7 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
                                  const char *message_format, 
                                  ...) 
 {
-  char *message;
+  gs_free char *message;
   va_list args;
 
   if (message_format)
@@ -109,8 +110,6 @@ terminal_util_show_error_dialog (GtkWindow *transient_parent,
 
       gtk_window_present (GTK_WINDOW (*weak_ptr));
     }
-
-  g_free (message);
 }
 
 static gboolean
@@ -133,8 +132,8 @@ void
 terminal_util_show_help (const char *topic, 
                          GtkWindow  *parent)
 {
-  char *uri;
-  GError *error = NULL;
+  gs_free_error GError *error = NULL;
+  gs_free char *uri;
 
   if (topic) {
     uri = g_strdup_printf ("help:gnome-terminal/%s", topic);
@@ -146,10 +145,7 @@ terminal_util_show_help (const char *topic,
     {
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
                                        _("There was an error displaying help"));
-      g_error_free (error);
     }
-
-  g_free (uri);
 }
 
 #define ABOUT_GROUP "About"
@@ -273,8 +269,8 @@ terminal_util_open_url (GtkWidget *parent,
                         TerminalURLFlavour flavor,
                         guint32 user_time)
 {
-  GError *error = NULL;
-  char *uri;
+  gs_free_error GError *error = NULL;
+  gs_free char *uri = NULL;
 
   g_return_if_fail (orig_url != NULL);
 
@@ -303,11 +299,7 @@ terminal_util_open_url (GtkWidget *parent,
       terminal_util_show_error_dialog (GTK_WINDOW (parent), NULL, error,
                                        _("Could not open the address “%s”"),
                                        uri);
-
-      g_error_free (error);
     }
-
-  g_free (uri);
 }
 
 /**
@@ -327,23 +319,21 @@ terminal_util_transform_uris_to_quoted_fuse_paths (char **uris)
 
   for (i = 0; uris[i]; ++i)
     {
-      GFile *file;
-      char *path;
+      gs_unref_object GFile *file;
+      gs_free char *path;
 
       file = g_file_new_for_uri (uris[i]);
 
-      if ((path = g_file_get_path (file)))
+      path = g_file_get_path (file);
+      if (path)
         {
           char *quoted;
 
           quoted = g_shell_quote (path);
           g_free (uris[i]);
-          g_free (path);
 
           uris[i] = quoted;
         }
-
-      g_object_unref (file);
     }
 }
 
@@ -403,7 +393,7 @@ terminal_util_load_builder_resource (const char *path,
                                      const char *object_name,
                                      ...)
 {
-  GtkBuilder *builder;
+  gs_unref_object GtkBuilder *builder;
   GError *error = NULL;
   va_list args;
 
@@ -430,10 +420,8 @@ terminal_util_load_builder_resource (const char *path,
     GObject *main_object;
 
     main_object = gtk_builder_get_object (builder, main_object_name);
-    g_object_set_data_full (main_object, "builder", builder, (GDestroyNotify) g_object_unref);
+    g_object_set_data_full (main_object, "builder", g_object_ref (builder), (GDestroyNotify) g_object_unref);
     g_signal_connect (main_object, "destroy", G_CALLBACK (main_object_destroy_cb), NULL);
-  } else {
-    g_object_unref (builder);
   }
 }
 
@@ -534,7 +522,7 @@ setup_proxy_env (GSettings  *proxy_settings,
                  const char *env_name,
                  GHashTable *env_table)
 {
-  GSettings *child_settings;
+  gs_unref_object GSettings *child_settings;
   GString *buf;
   const char *host;
   int port;
@@ -547,7 +535,7 @@ setup_proxy_env (GSettings  *proxy_settings,
   g_settings_get (child_settings, "host", "&s", &host);
   port = g_settings_get_int (child_settings, "port");
   if (host[0] == '\0' || port == 0)
-    goto out;
+    return;
 
   buf = g_string_sized_new (64);
 
@@ -577,9 +565,6 @@ setup_proxy_env (GSettings  *proxy_settings,
 
   g_string_append_printf (buf, "%s:%d/", host, port);
   set_proxy_env (env_table, env_name, g_string_free (buf, FALSE));
-
-out:
-  g_object_unref (child_settings);
 }
 
 static void
@@ -604,7 +589,7 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
                         GHashTable *env_table)
 {
   GString *buf;
-  char **ignore;
+  gs_free char **ignore; /* the strings themselves are const */
   int i;
 
   g_settings_get (proxy_settings, "ignore-hosts", "^a&s", &ignore);
@@ -618,7 +603,6 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
         g_string_append_c (buf, ',');
       g_string_append (buf, ignore[i]);
     }
-  g_free (ignore);
 
   set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
 }
@@ -769,11 +753,10 @@ terminal_g_settings_set_rgba (GSettings  *settings,
                               const char *key,
                               const GdkRGBA *color)
 {
-  char *str;
+  gs_free char *str;
 
   str = gdk_rgba_to_string (color);
   g_settings_set_string (settings, key, str);
-  g_free (str);
 }
 
 static gboolean
@@ -782,18 +765,15 @@ as_to_rgba_palette (GVariant *variant,
                     gpointer user_data)
 {
   gsize *n_colors = user_data;
-  gsize n, i;
-  GdkRGBA *colors;
+  gs_free GdkRGBA *colors = NULL;
+  gsize n = 0;
   GVariantIter iter;
   const char *str;
+  gsize i;
 
   /* Fallback */
-  if (variant == NULL) {
-    *result = NULL;
-    if (n_colors)
-      *n_colors = 0;
-    return TRUE;
-  }
+  if (variant == NULL)
+    goto out;
 
   g_variant_iter_init (&iter, variant);
   n = g_variant_iter_n_children (&iter);
@@ -807,7 +787,8 @@ as_to_rgba_palette (GVariant *variant,
     }
   }
 
-  *result = colors;
+ out:
+  gs_transfer_out_value (result, &colors);
   if (n_colors)
     *n_colors = n;
 
@@ -838,7 +819,7 @@ terminal_g_settings_set_rgba_palette (GSettings      *settings,
                                       const GdkRGBA  *colors,
                                       gsize           n_colors)
 {
-  char **strv;
+  gs_strfreev char **strv;
   gsize i;
 
   strv = g_new (char *, n_colors + 1);
@@ -847,7 +828,6 @@ terminal_g_settings_set_rgba_palette (GSettings      *settings,
   strv[n_colors] = NULL;
 
   g_settings_set (settings, key, "^as", strv);
-  g_strfreev (strv);
 }
 
 static void
