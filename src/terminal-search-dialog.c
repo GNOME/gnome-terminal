@@ -22,6 +22,7 @@
 
 #include "terminal-search-dialog.h"
 #include "terminal-util.h"
+#include "terminal-libgsystem.h"
 
 #define HISTORY_MIN_ITEM_LEN 3
 #define HISTORY_LENGTH 10
@@ -195,17 +196,14 @@ remove_item (GtkListStore *store,
     return FALSE;
 
   do {
-    gchar *item_text;
+    gs_free gchar *item_text;
 
     gtk_tree_model_get (GTK_TREE_MODEL (store), &iter, 0, &item_text, -1);
 
     if (item_text != NULL && strcmp (item_text, text) == 0) {
       gtk_list_store_remove (store, &iter);
-      g_free (item_text);
       return TRUE;
     }
-
-    g_free (item_text);
   } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
 
   return FALSE;
