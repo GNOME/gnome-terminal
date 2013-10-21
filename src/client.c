@@ -47,6 +47,7 @@
 #include "terminal-profiles-list.h"
 #include "terminal-i18n.h"
 #include "terminal-debug.h"
+#include "terminal-libgsystem.h"
 
 static gboolean quiet = FALSE;
 static TerminalSettingsList *profiles_list = NULL;
@@ -83,30 +84,29 @@ static void
 usage (gint *argc, gchar **argv[], gboolean use_stdout)
 {
   GOptionContext *o;
-  gchar *s;
-  gchar *program_name;
+  gs_free char *program_name;
+  gs_free char *summary;
+  gs_free char *help;
 
   o = g_option_context_new (_("COMMAND"));
   g_option_context_set_help_enabled (o, FALSE);
   /* Ignore parsing result */
   g_option_context_parse (o, argc, argv, NULL);
   program_name = g_path_get_basename ((*argv)[0]);
-  s = g_strdup_printf (_("Commands:\n"
-                         "  help    Shows this information\n"
-                         "  run     Create a new terminal running the specified command\n"
-                         "  shell   Create a new terminal running the user shell\n"
-                         "\n"
-                         "Use \"%s COMMAND --help\" to get help on each command.\n"),
-                       program_name);
-  g_free (program_name);
-  g_option_context_set_description (o, s);
-  g_free (s);
-  s = g_option_context_get_help (o, FALSE, NULL);
+  summary = g_strdup_printf (_("Commands:\n"
+                               "  help    Shows this information\n"
+                               "  run     Create a new terminal running the specified command\n"
+                               "  shell   Create a new terminal running the user shell\n"
+                               "\n"
+                               "Use \"%s COMMAND --help\" to get help on each command.\n"),
+                             program_name);
+  g_option_context_set_description (o, summary);
+  help = g_option_context_get_help (o, FALSE, NULL);
   if (use_stdout)
-    g_print ("%s", s);
+    g_print ("%s", help);
   else
-    _printerr ("%s", s);
-  g_free (s);
+    _printerr ("%s", help);
+
   g_option_context_free (o);
 }
 
@@ -114,7 +114,7 @@ static void
 modify_argv0_for_command (gint *argc, gchar **argv[], const gchar *command)
 {
   gchar *s;
-  gchar *program_name;
+  gs_free gchar *program_name;
 
   /* TODO:
    *  1. get a g_set_prgname() ?; or
@@ -127,7 +127,6 @@ modify_argv0_for_command (gint *argc, gchar **argv[], const gchar *command)
   program_name = g_path_get_basename ((*argv)[0]);
   s = g_strdup_printf ("%s %s", (*argv)[0], command);
   (*argv)[0] = s;
-  g_free (program_name);
 }
 
 static TerminalSettingsList *
@@ -474,13 +473,19 @@ option_data_free (OptionData *data)
   g_free (data);
 }
 
+GS_DEFINE_CLEANUP_FUNCTION0(GOptionContext*, _terminal_local_option_context_free, g_option_context_free)
+#define terminal_free_option_context __attribute__ ((__cleanup__(_terminal_local_option_context_free)))
+
+GS_DEFINE_CLEANUP_FUNCTION0(OptionData*, _terminal_local_option_data_free, option_data_free)
+#define terminal_free_option_data __attribute__((__cleanup__(_terminal_local_option_data_free)))
+
 static OptionData *
 parse_arguments (int *argcp,
                  char ***argvp,
                  GError **error)
 {
   OptionData *data;
-  GOptionContext *context;
+  terminal_free_option_context GOptionContext *context;
   int argc = *argcp;
   char **argv = *argvp;
   int i;
@@ -509,10 +514,8 @@ parse_arguments (int *argcp,
   context = get_goption_context (data);
   if (!g_option_context_parse (context, argcp, argvp, error)) {
     option_data_free (data);
-    g_option_context_free (context);
     return NULL;
   }
-  g_option_context_free (context);
 
   if (data->working_directory == NULL) {
     char *cwd;
@@ -629,20 +632,19 @@ handle_open (int *argc,
              const char *command,
              int *exit_code)
 {
-  OptionData *data;
-  TerminalFactory *factory;
-  TerminalReceiver *receiver;
-  GError *error = NULL;
-  char *object_path;
+  terminal_free_option_data OptionData *data;
+  gs_unref_object TerminalFactory *factory = NULL;
+  gs_unref_object TerminalReceiver *receiver = NULL;
+  gs_free_error GError *error = NULL;
+  gs_free char *object_path = NULL;
+  gs_unref_object GUnixFDList *fd_list = NULL;
   GVariant *arguments;
-  GUnixFDList *fd_list;
 
   modify_argv0_for_command (argc, argv, command);
 
   data = parse_arguments (argc, argv, &error);
   if (data == NULL) {
     _printerr ("Error parsing arguments: %s\n", error->message);
-    g_error_free (error);
     return FALSE;
   }
 
@@ -663,8 +665,6 @@ handle_open (int *argc,
     _printerr ("Error constructing proxy for %s:%s: %s\n",
                get_app_id (data), TERMINAL_FACTORY_OBJECT_PATH,
                error->message);
-    g_error_free (error);
-    option_data_free (data);
     return FALSE;
   }
 
@@ -676,13 +676,8 @@ handle_open (int *argc,
           &error)) {
     g_dbus_error_strip_remote_error (error);
     _printerr ("Error creating terminal: %s\n", error->message);
-    g_error_free (error);
-    g_object_unref (factory);
-    option_data_free (data);
     return FALSE;
   }
-
-  g_object_unref (factory);
 
   receiver = terminal_receiver_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
@@ -693,13 +688,8 @@ handle_open (int *argc,
   if (receiver == NULL) {
     g_dbus_error_strip_remote_error (error);
     _printerr ("Failed to create proxy for terminal: %s\n", error->message);
-    g_error_free (error);
-    g_free (object_path);
-    option_data_free (data);
     return FALSE;
   }
-
-  g_free (object_path);
 
   arguments = build_exec_options_variant (data, g_strcmp0 (command, "shell") == 0, &fd_list);
   if (!terminal_receiver_call_exec_sync (receiver,
@@ -711,13 +701,8 @@ handle_open (int *argc,
                                          &error)) {
     g_dbus_error_strip_remote_error (error);
     _printerr ("Error: %s\n", error->message);
-    g_error_free (error);
-    g_clear_object (&fd_list);
-    g_object_unref (receiver);
-    option_data_free (data);
     return FALSE;
   }
-  g_clear_object (&fd_list);
 
   if (data->wait) {
     WaitData wait_data;
@@ -737,10 +722,6 @@ handle_open (int *argc,
 
     *exit_code = wait_data.exit_code;
   }
-
-  option_data_free (data);
-
-  g_object_unref (receiver);
 
   return TRUE;
 }
@@ -762,7 +743,8 @@ complete (int *argcp,
   thing = (*argvp)[1];
   if (g_str_equal (thing, "profiles"))
     {
-      char **profiles, **p;
+      gs_strfreev char **profiles;
+      char **p;
 
       profiles = terminal_settings_list_dupv_children (ensure_profiles_list ());
       if (profiles == NULL)
@@ -770,7 +752,6 @@ complete (int *argcp,
 
       for (p = profiles; *p; p++)
         g_print ("%s\n", *p);
-      g_strfreev (profiles);
       return TRUE;
     }
 
