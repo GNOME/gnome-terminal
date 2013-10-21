@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "terminal-client-utils.h"
+#include "terminal-libgsystem.h"
 
 #include <string.h>
 
@@ -100,7 +101,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
                                      const char      *working_directory,
                                      gboolean         shell)
 {
-  char **envv;
+  gs_strfreev char **envv;
 
   envv = g_get_environ ();
   envv = g_environ_unsetenv (envv, "COLORTERM");
@@ -127,8 +128,6 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
     g_variant_builder_add (builder, "{sv}",
                            "shell",
                            g_variant_new_boolean (TRUE));
-
-  g_strfreev (envv);
 }
 
 /**
