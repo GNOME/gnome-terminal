@@ -21,6 +21,7 @@
 #include <config.h>
 
 #include "terminal-close-button.h"
+#include "terminal-libgsystem.h"
 
 struct _TerminalCloseButtonClassPrivate {
 	GtkCssProvider *css;
@@ -53,11 +54,10 @@ terminal_close_button_init (TerminalCloseButton *button)
 {
 	GtkWidget *image;
 	GtkStyleContext *context;
-	GIcon *icon;
+	gs_unref_object GIcon *icon;
 
 	icon = g_themed_icon_new_with_default_fallbacks ("window-close-symbolic");
 	image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
-	g_object_unref (icon);
 
 	gtk_widget_show (image);
 	gtk_container_add (GTK_CONTAINER (button), image);
