@@ -30,6 +30,7 @@
 #include "terminal-schemas.h"
 #include "terminal-intl.h"
 #include "terminal-util.h"
+#include "terminal-libgsystem.h"
 
 /* NOTES
  *
@@ -190,6 +191,9 @@ enum
 static GHashTable *settings_key_to_entry;
 static GSettings *keybinding_settings = NULL;
 
+GS_DEFINE_CLEANUP_FUNCTION(GtkTreePath*, _terminal_local_free_tree_path, gtk_tree_path_free)
+#define terminal_free_tree_path __attribute__((__cleanup__(_terminal_local_free_tree_path)))
+
 static char*
 binding_name (guint            keyval,
               GdkModifierType  mask)
@@ -253,14 +257,13 @@ terminal_accels_init (GApplication *application,
   j = 1;
   for (i = 0; i < G_N_ELEMENTS (tabs_entries); i++)
     {
-      char *name;
+      gs_free char *name = NULL;
 
       if (tabs_entries[i].user_visible_name != NULL)
         continue;
 
       name = g_strdup_printf (N_("Switch to Tab %d"), j++);
       tabs_entries[i].user_visible_name = g_intern_string (name);
-      g_free (name);
     }
 
   for (i = 0; i < G_N_ELEMENTS (all_entries); ++i)
@@ -391,10 +394,10 @@ accel_edited_callback (GtkCellRendererAccel *cell,
                        GtkTreeView          *view)
 {
   GtkTreeModel *model;
-  GtkTreePath *path;
+  terminal_free_tree_path GtkTreePath *path = NULL;
   GtkTreeIter iter;
   KeyEntry *ke;
-  char *str;
+  gs_free char *str = NULL;
 
   model = gtk_tree_view_get_model (view);
 
@@ -402,11 +405,8 @@ accel_edited_callback (GtkCellRendererAccel *cell,
   if (!path)
     return;
 
-  if (!gtk_tree_model_get_iter (model, &iter, path)) {
-    gtk_tree_path_free (path);
+  if (!gtk_tree_model_get_iter (model, &iter, path))
     return;
-  }
-  gtk_tree_path_free (path);
 
   gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
 
@@ -416,7 +416,6 @@ accel_edited_callback (GtkCellRendererAccel *cell,
 
   str = binding_name (keyval, mask);
   g_settings_set_string (keybinding_settings, ke->settings_key, str);
-  g_free (str);
 }
 
 static void
@@ -425,10 +424,10 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
                         GtkTreeView          *view)
 {
   GtkTreeModel *model;
-  GtkTreePath *path;
+  terminal_free_tree_path GtkTreePath *path = NULL;
   GtkTreeIter iter;
   KeyEntry *ke;
-  char *str;
+  gs_free char *str = NULL;
 
   model = gtk_tree_view_get_model (view);
 
@@ -436,11 +435,8 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
   if (!path)
     return;
 
-  if (!gtk_tree_model_get_iter (model, &iter, path)) {
-    gtk_tree_path_free (path);
+  if (!gtk_tree_model_get_iter (model, &iter, path))
     return;
-  }
-  gtk_tree_path_free (path);
 
   gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
 
@@ -450,7 +446,6 @@ accel_cleared_callback (GtkCellRendererAccel *cell,
 
   str = binding_name (0, 0);
   g_settings_set_string (keybinding_settings, ke->settings_key, str);
-  g_free (str);
 }
 
 static void
@@ -479,7 +474,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell_renderer;
-  GtkTreeStore *tree;
+  gs_unref_object GtkTreeStore *tree = NULL;
   guint i;
 
   /* Column 1 */
@@ -539,7 +534,6 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
     }
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (tree));
-  g_object_unref (tree);
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (tree_view));
 
