@@ -40,6 +40,7 @@
 #include "terminal-gdbus.h"
 #include "terminal-defines.h"
 #include "terminal-prefs.h"
+#include "terminal-libgsystem.h"
 
 #include <sys/wait.h>
 #include <errno.h>
@@ -104,7 +105,7 @@ maybe_migrate_settings (TerminalApp *app)
     NULL 
   };
   int status;
-  GError *error = NULL;
+  gs_free_error GError *error = NULL;
 #endif /* ENABLE_MIGRATION */
   guint version;
 
@@ -125,7 +126,6 @@ maybe_migrate_settings (TerminalApp *app)
                      &status,
                      &error)) {
     g_printerr ("Failed to migrate settings: %s\n", error->message);
-    g_error_free (error);
     return;
   }
 
@@ -147,13 +147,14 @@ terminal_app_new_profile (TerminalApp *app,
                           GSettings   *base_profile,
                           GtkWindow   *transient_parent)
 {
-  GSettings *profile;
-  char *base_uuid, *uuid;
+  gs_unref_object GSettings *profile = NULL;
+  gs_free char *uuid;
 
   if (base_profile) {
+    gs_free char *base_uuid;
+
     base_uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, base_profile);
     uuid = terminal_settings_list_clone_child (app->profiles_list, base_uuid);
-    g_free (base_uuid);
   } else {
     uuid = terminal_settings_list_add_child (app->profiles_list);
   }
@@ -162,23 +163,20 @@ terminal_app_new_profile (TerminalApp *app,
     return;
 
   profile = terminal_settings_list_ref_child (app->profiles_list, uuid);
-  g_free (uuid);
   if (profile == NULL)
     return;
 
   terminal_profile_edit (profile, transient_parent, "profile-name-entry");
-  g_object_unref (profile);
 }
 
 void
 terminal_app_remove_profile (TerminalApp *app,
                              GSettings *profile)
 {
-  char *uuid;
+  gs_free char *uuid;
 
   uuid = terminal_settings_list_dup_uuid_from_child (app->profiles_list, profile);
   terminal_settings_list_remove_child (app->profiles_list, uuid);
-  g_free (uuid);
 }
 
 gboolean
@@ -211,7 +209,7 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
                                       const char  *key,
                                       TerminalApp *app)
 {
-  char **encodings;
+  gs_free char **encodings = NULL;
   int i;
   TerminalEncoding *encoding;
 
@@ -240,7 +238,6 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
 
       encoding->is_active = TRUE;
     }
-  g_free (encodings);
 
   g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
 }
@@ -315,7 +312,7 @@ terminal_app_startup (GApplication *application)
     { "quit",        app_menu_quit_cb,          NULL, NULL, NULL }
   };
 
-  GtkBuilder *builder;
+  gs_unref_object GtkBuilder *builder;
   GError *error = NULL;
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
@@ -335,7 +332,6 @@ terminal_app_startup (GApplication *application)
 
   gtk_application_set_app_menu (GTK_APPLICATION (application),
                                 G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu")));
-  g_object_unref (builder);
 
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }
@@ -345,7 +341,7 @@ terminal_app_startup (GApplication *application)
 static void
 terminal_app_init (TerminalApp *app)
 {
-  GSettings *settings;
+  gs_unref_object GSettings *settings;
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
@@ -378,7 +374,6 @@ terminal_app_init (TerminalApp *app)
 
   settings = g_settings_get_child (app->global_settings, "keybindings");
   terminal_accels_init (G_APPLICATION (app), settings);
-  g_object_unref (settings);
 }
 
 static void
@@ -407,8 +402,8 @@ terminal_app_dbus_register (GApplication    *application,
                             GError         **error)
 {
   TerminalApp *app = TERMINAL_APP (application);
-  TerminalObjectSkeleton *object;
-  TerminalFactory *factory;
+  gs_unref_object TerminalObjectSkeleton *object = NULL;
+  gs_unref_object TerminalFactory *factory = NULL;
 
   if (!G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_register (application,
                                                                        connection,
@@ -419,11 +414,9 @@ terminal_app_dbus_register (GApplication    *application,
   object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
   factory = terminal_factory_impl_new ();
   terminal_object_skeleton_set_factory (object, factory);
-  g_object_unref (factory);
 
   app->object_manager = g_dbus_object_manager_server_new (TERMINAL_OBJECT_PATH_PREFIX);
   g_dbus_object_manager_server_export (app->object_manager, G_DBUS_OBJECT_SKELETON (object));
-  g_object_unref (object);
 
   /* And export the object */
   g_dbus_object_manager_server_set_connection (app->object_manager, connection);
