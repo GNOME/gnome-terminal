@@ -95,7 +95,7 @@ terminal_info_bar_format_text (TerminalInfoBar *bar,
                                ...)
 {
   TerminalInfoBarPrivate *priv;
-  gs_free char *text;
+  gs_free char *text = NULL;
   GtkWidget *label;
   va_list args;
 

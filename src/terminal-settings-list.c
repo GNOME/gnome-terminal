@@ -754,7 +754,7 @@ terminal_settings_list_ref_children (TerminalSettingsList *list)
 GSettings *
 terminal_settings_list_ref_default_child (TerminalSettingsList *list)
 {
-  gs_free char *uuid;
+  gs_free char *uuid = NULL;
 
   g_return_val_if_fail (TERMINAL_IS_SETTINGS_LIST (list), NULL);
 

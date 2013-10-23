@@ -577,7 +577,7 @@ rgba_to_s (const GValue *value,
            gpointer user_data)
 {
   GdkRGBA *color;
-  gs_free char *s;
+  gs_free char *s = NULL;
 
   color = g_value_get_boxed (value);
   if (color == NULL)
