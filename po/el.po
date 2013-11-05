@@ -3,13 +3,14 @@
 # Μάριος Ζηντίλης <m.zindilis@dmajor.org>, 2009.
 # Simos Xenitellis <simos@gnome.org>, 2010.
 # Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>, 2013.
+# Efstathios Iosifidis <iosifidis@opensuse.org>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-HEAD-help-el-5250\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-04-24 17:14+0000\n"
-"PO-Revision-Date: 2013-04-25 08:29+0300\n"
+"POT-Creation-Date: 2013-10-25 15:41+0000\n"
+"PO-Revision-Date: 2013-11-05 10:43+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -20,9 +21,10 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:101
-#: ../src/terminal-accels.c:262 ../src/terminal.c:249
-#: ../src/terminal-window.c:1844
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:120
+#: ../src/terminal-accels.c:179 ../src/terminal.c:252
+#: ../src/terminal-screen.c:721 ../src/terminal-screen.c:1544
+#: ../src/terminal-window.c:2555 ../src/terminal-window.c:2880
 msgid "Terminal"
 msgstr "Τερματικό"
 
@@ -34,11 +36,11 @@ msgstr "Χρήση της γραμμής εντολών"
 msgid "shell;prompt;command;commandline;"
 msgstr "κέλυφος;προτροπή;εντολή;γραμμή εντολών;"
 
-#: ../src/client.c:89
+#: ../src/client.c:91
 msgid "COMMAND"
 msgstr "COMMAND"
 
-#: ../src/client.c:94
+#: ../src/client.c:96
 #, c-format
 msgid ""
 "Commands:\n"
@@ -55,147 +57,147 @@ msgstr ""
 "\n"
 "Χρησιμοποιήστε \"%s COMMAND --help\" για να λάβετε βοήθεια για κάθε εντολή.\n"
 
-#: ../src/client.c:201 ../src/terminal-options.c:681
+#: ../src/client.c:200 ../src/terminal-options.c:683
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "Το \"%s\" δεν είναι έγκυρος συντελεστής μεγέθυνσης"
 
-#: ../src/client.c:332
+#: ../src/client.c:331
 msgid "Be quiet"
 msgstr "Σίγαση"
 
-#: ../src/client.c:343 ../src/terminal-options.c:1095
+#: ../src/client.c:342 ../src/terminal-options.c:1095
 msgid "Maximize the window"
 msgstr "Μεγιστοποίηση του παραθύρου"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1104
+#: ../src/client.c:344 ../src/terminal-options.c:1104
 msgid "Full-screen the window"
 msgstr "Πλήρης οθόνη του παραθύρου"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1113
+#: ../src/client.c:346 ../src/terminal-options.c:1113
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Ορίστε το μεγέθους του παραθύρου· για παράδειγμα: 80x24, ή 80x24+200+200 "
 "(COLSxROWS+X+Y)"
 
-#: ../src/client.c:348 ../src/terminal-options.c:1114
+#: ../src/client.c:347 ../src/terminal-options.c:1114
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: ../src/client.c:350 ../src/terminal-options.c:1122
+#: ../src/client.c:349 ../src/terminal-options.c:1122
 msgid "Set the window role"
 msgstr "Ορισμός του ρόλου του παραθύρου"
 
-#: ../src/client.c:350 ../src/terminal-options.c:1123
+#: ../src/client.c:349 ../src/terminal-options.c:1123
 msgid "ROLE"
 msgstr "ROLE"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1153
+#: ../src/client.c:355 ../src/terminal-options.c:1153
 msgid "Use the given profile instead of the default profile"
 msgstr "Χρήση της δοσμένης κατατομής αντί της προεπιλεγμένης κατατομής"
 
-#: ../src/client.c:357
+#: ../src/client.c:356
 msgid "UUID"
 msgstr "UUID"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1162
+#: ../src/client.c:358 ../src/terminal-options.c:1162
 msgid "Set the terminal title"
 msgstr "Ορισμός του τίτλου του τερματικού"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1163
+#: ../src/client.c:358 ../src/terminal-options.c:1163
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1171
+#: ../src/client.c:360 ../src/terminal-options.c:1171
 msgid "Set the working directory"
 msgstr "Ορισμός του καταλόγου εργασίας"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1172
+#: ../src/client.c:360 ../src/terminal-options.c:1172
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/client.c:363 ../src/terminal-options.c:1180
+#: ../src/client.c:362 ../src/terminal-options.c:1180
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Ορισμός του συντελεστή μεγέθυνσης τερματικού (1.0 = κανονικό μέγεθος)"
 
-#: ../src/client.c:364 ../src/terminal-options.c:1181
+#: ../src/client.c:363 ../src/terminal-options.c:1181
 msgid "ZOOM"
 msgstr "ZOOM"
 
-#: ../src/client.c:370
+#: ../src/client.c:369
 msgid "Forward stdin"
 msgstr "Προώθηση stdin"
 
-#: ../src/client.c:372
+#: ../src/client.c:371
 msgid "Forward stdout"
 msgstr "Προώθηση stdout"
 
-#: ../src/client.c:374
+#: ../src/client.c:373
 msgid "Forward stderr"
 msgstr "Προώθηση stderr"
 
-#: ../src/client.c:376
+#: ../src/client.c:375
 msgid "Forward file descriptor"
 msgstr "Προώθηση του περιγραφέα αρχείου"
 
-#: ../src/client.c:376
+#: ../src/client.c:375
 msgid "FD"
 msgstr "FD"
 
-#: ../src/client.c:382
+#: ../src/client.c:381
 msgid "Wait until the child exits"
 msgstr "Περιμένετε μέχρι να τελειώσει η θυγατρική διεργασία"
 
-#: ../src/client.c:392
+#: ../src/client.c:391
 msgid "GNOME Terminal Client"
 msgstr "Πελάτης τερματικού GNOME"
 
-#: ../src/client.c:396
+#: ../src/client.c:395
 msgid "Global options:"
 msgstr "Καθολικές επιλογές:"
 
-#: ../src/client.c:397
+#: ../src/client.c:396
 msgid "Show global options"
 msgstr "Προβολή καθολικών επιλογών"
 
-#: ../src/client.c:405
+#: ../src/client.c:404
 msgid "Server options:"
 msgstr "Επιλογές εξυπηρετητή:"
 
-#: ../src/client.c:406
+#: ../src/client.c:405
 msgid "Show server options"
 msgstr "Προβολή επιλογών εξυπηρετητή"
 
-#: ../src/client.c:414
+#: ../src/client.c:413
 msgid "Window options:"
 msgstr "Επιλογές παραθύρου:"
 
-#: ../src/client.c:415
+#: ../src/client.c:414
 msgid "Show window options"
 msgstr "Προβολή επιλογών παραθύρου"
 
-#: ../src/client.c:423
+#: ../src/client.c:422
 msgid "Terminal options:"
 msgstr "Επιλογές τερματικού:"
 
-#: ../src/client.c:424 ../src/terminal-options.c:1460
+#: ../src/client.c:423 ../src/terminal-options.c:1287
 msgid "Show terminal options"
 msgstr "Προβολή επιλογών τερματικού"
 
-#: ../src/client.c:432
+#: ../src/client.c:431
 msgid "Exec options:"
 msgstr "Επιλογές εκτέλεσης:"
 
-#: ../src/client.c:433
+#: ../src/client.c:432
 msgid "Show exec options"
 msgstr "Εμφάνιση επιλογών εκτέλεσης"
 
-#: ../src/client.c:441
+#: ../src/client.c:440
 msgid "Processing options:"
 msgstr "Επιλογές διεργασιών:"
 
-#: ../src/client.c:442
+#: ../src/client.c:441
 msgid "Show processing options"
 msgstr "Εμφάνιση επιλογών διεργασιών"
 
@@ -227,23 +229,32 @@ msgstr "Αναζήτηση προς τα _πίσω"
 msgid "_Wrap around"
 msgstr "_Αναδίπλωση"
 
-#: ../src/migration.c:384 ../src/terminal-prefs.c:99
+#: ../src/migration.c:387
+msgid "Default"
+msgstr "Προεπιλογή"
+
+#: ../src/migration.c:387 ../src/terminal-prefs.c:99
 msgid "Unnamed"
 msgstr "Ανώνυμο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.h:1
+msgctxt "visible-name"
+msgid "'Unnamed'"
+msgstr "'Ανώνυμο'"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:2
 msgid "Human-readable name of the profile"
 msgstr "Όνομα κατατομής για ανάγνωση από ανθρώπους"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
+#: ../src/org.gnome.Terminal.gschema.xml.h:3
 msgid "Human-readable name of the profile."
 msgstr "Όνομα κατατομής για ανάγνωση από ανθρώπους."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
+#: ../src/org.gnome.Terminal.gschema.xml.h:4
 msgid "Default color of text in the terminal"
 msgstr "Προεπιλεγμένο χρώμα κειμένου για το τερματικό"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
+#: ../src/org.gnome.Terminal.gschema.xml.h:5
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -252,11 +263,11 @@ msgstr ""
 "(μπορεί να είναι δεκαεξαδικό αριθμητικό τύπου HTML ή όνομα χρώματος όπως "
 "\"red\")."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
+#: ../src/org.gnome.Terminal.gschema.xml.h:6
 msgid "Default color of terminal background"
 msgstr "Προεπιλεγμένο χρώμα παρασκηνίου τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
+#: ../src/org.gnome.Terminal.gschema.xml.h:7
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -264,11 +275,11 @@ msgstr ""
 "Προεπιλεγμένο χρώμα παρασκηνίου τερματικού, ως προδιαγραφή χρώματος (μπορεί "
 "να είναι δεκαεξαδικό αριθμητικό τύπου HTML ή όνομα χρώματος όπως \"red\")."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
+#: ../src/org.gnome.Terminal.gschema.xml.h:8
 msgid "Default color of bold text in the terminal"
 msgstr "Προεπιλεγμένο χρώμα έντονου κειμένου για το τερματικό"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
+#: ../src/org.gnome.Terminal.gschema.xml.h:9
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
@@ -279,40 +290,28 @@ msgstr ""
 "όπως \"red\"). Το χρώμα παραβλέπεται αν το bold_color_same_as_fg είναι "
 "ορισμένο ως αληθές."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
+#: ../src/org.gnome.Terminal.gschema.xml.h:10
 msgid "Whether bold text should use the same color as normal text"
 msgstr ""
 "Αν το έντονο κείμενο θα χρησιμοποιεί το ίδιο χρώμα με το κανονικό κείμενο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
+#: ../src/org.gnome.Terminal.gschema.xml.h:11
 msgid ""
 "If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
 "Εάν είναι αληθές, το έντονο κείμενο θα χρησιμοποιεί το ίδιο χρώμα με το "
 "κανονικό κείμενο."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
-msgid "What to do with dynamic title"
-msgstr "Τι να γίνει με δυναμικό τίτλο"
+#: ../src/org.gnome.Terminal.gschema.xml.h:12
+msgctxt "title"
+msgid "'Terminal'"
+msgstr "'Τερματικό'"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
-msgid ""
-"If the application in the terminal sets the title (most typically people "
-"have their shell set up to do this), the dynamically-set title can erase the "
-"configured title, go before it, go after it, or replace it. The possible "
-"values are \"replace\", \"before\", \"after\", and \"ignore\"."
-msgstr ""
-"Εάν η εφαρμογή στο τερματικό ορίζει τον τίτλο του τερματικού (οι "
-"περισσότεροι χρήστες χρησιμοποιούν αυτή την επιλογή), ο δυναμικά ορισμένος "
-"τίτλος μπορεί να σβήσει τον αρχικό τίτλο, να εμφανιστεί πριν ή μετά από "
-"αυτόν, ή να τον αντικαταστήσει. Οι πιθανές τιμές είναι \"replace\", \"before"
-"\", \"after\", και\"ignore\"."
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
+#: ../src/org.gnome.Terminal.gschema.xml.h:13
 msgid "Title for terminal"
 msgstr "Τίτλος για το τερματικό"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
+#: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -322,25 +321,25 @@ msgstr ""
 "τίτλος μπορεί να αντικατασταθεί ή να συνδυαστεί με τον τίτλο που ορίζεται "
 "από την εφαρμογή του τερματικού ανάλογα με τη ρύθμιση του title_mode."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to allow bold text"
 msgstr "Εάν θα επιτρέπεται έντονο κείμενο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
+#: ../src/org.gnome.Terminal.gschema.xml.h:16
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "Αν είναι αληθές, θα επιτρέπεται στις εφαρμογές να χρησιμοποιούν έντονο "
 "κείμενο."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
+#: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Whether to ring the terminal bell"
 msgstr "Αν θα ηχήσει το κουδούνι τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
+#: ../src/org.gnome.Terminal.gschema.xml.h:18
 msgid "Characters that are considered \"part of a word\""
 msgstr "Χαρακτήρες που θεωρούνται \"μέρος μιας λέξης\""
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
+#: ../src/org.gnome.Terminal.gschema.xml.h:19
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -351,20 +350,20 @@ msgstr ""
 "Κυριολεκτικό ενωτικό (όχι έκφραση περιοχής) πρέπει να είναι ο πρώτος "
 "δοσμένος χαρακτήρας."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
+#: ../src/org.gnome.Terminal.gschema.xml.h:20
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "Αν θα εμφανίζεται η γραμμή μενού στα νέα παράθυρα/καρτέλες"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
+#: ../src/org.gnome.Terminal.gschema.xml.h:21
 msgid "True if the menubar should be shown in new window"
 msgstr "Αληθές, αν επιθυμείτε η γραμμή μενού να εμφανίζεται σε νέο παράθυρο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
+#: ../src/org.gnome.Terminal.gschema.xml.h:22
 msgid "Whether to use custom terminal size for new windows"
 msgstr ""
 "Αν θα χρησιμοποιείται προσαρμοσμένο μέγεθος τερματικού για τα νέα παράθυρα"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
+#: ../src/org.gnome.Terminal.gschema.xml.h:23
 msgid ""
 "If true, newly created terminal windows will have custom size specified by "
 "default_size_columns and default_size_rows."
@@ -372,11 +371,11 @@ msgstr ""
 "Αν είναι αληθές, τα καινούρια παράθυρα τερματικού θα έχουν προσαρμοσμένο "
 "μέγεθος που καθορίζεται από το default_size_columns και το default_size_rows."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
+#: ../src/org.gnome.Terminal.gschema.xml.h:24
 msgid "Default number of columns"
 msgstr "Προεπιλεγμένος αριθμός στηλών"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
+#: ../src/org.gnome.Terminal.gschema.xml.h:25
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -384,11 +383,11 @@ msgstr ""
 "Αριθμός στηλών σε νέα παράθυρα τερματικού. Δεν έχει αποτέλεσμα αν δεν είναι "
 "ενεργοποιημένο το use_custom_default_size."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
+#: ../src/org.gnome.Terminal.gschema.xml.h:26
 msgid "Default number of rows"
 msgstr "Προεπιλεγμένος αριθμός γραμμών"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
+#: ../src/org.gnome.Terminal.gschema.xml.h:27
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -396,15 +395,15 @@ msgstr ""
 "Αριθμός γραμμών σε νέα παράθυρα τερματικού. Δεν έχει αποτέλεσμα αν δεν είναι "
 "ενεργοποιημένο το use_custom_default_size."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
+#: ../src/org.gnome.Terminal.gschema.xml.h:28
 msgid "When to show the scrollbar"
 msgstr "Πότε θα εμφανίζεται η γραμμή κύλισης"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.h:29
 msgid "Number of lines to keep in scrollback"
 msgstr "Αριθμός γραμμών που εμφανίζονται κατά την οπισθοκύλιση"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -415,13 +414,13 @@ msgstr ""
 "στην οπισθοκύλιση απορρίπτονται. Εάν το scrollback_unlimited είναι αληθές, "
 "αυτή η τιμή παραβλέπεται."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr ""
 "Αν θα διατηρείται απεριόριστος αριθμός γραμμών που εμφανίζονται κατά την "
 "οπισθοκύλιση"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.h:32
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -432,32 +431,32 @@ msgstr ""
 "κάνει το σύστημα να ξεμείνει από ελεύθερο χώρο στο δίσκο, αν υπάρχουν πολλά "
 "αποτελέσματα στο τερματικό."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "Αν θα γίνεται κύλιση μέχρι το τέλος όταν πατιέται ένα πλήκτρο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr ""
 "Αν είναι αληθές, το πάτημα ενός πλήκτρου αναγκάζει τη γραμμή κύλισης να "
 "μεταβεί στο τέλος."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "Αν θα γίνεται κύλιση μέχρι το τέλος όταν υπάρχει νέα έξοδος"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "Αν είναι αληθές, όποτε υπάρχει νέα έξοδος το τερματικό θα μεταβαίνει στο "
 "τέλος."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "What to do with the terminal when the child command exits"
 msgstr "Τι κάνει το τερματικό όταν εξέρχεται η θυγατρική εντολή"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -465,24 +464,24 @@ msgstr ""
 "Οι πιθανές τιμές είναι \"close\" για κλείσιμο του τερματικού και \"restart\" "
 "για επανεκκίνηση της εντολής."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Αν η εντολή στο τερματικό θα εκκινείται ως κέλυφος εισόδου"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
 msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
+"If true, the command inside the terminal will be launched as a login shell "
+"(argv[0] will have a hyphen in front of it)."
 msgstr ""
-"Αν είναι αληθές, η εντολή στο τερματικό θα εκκινείται ως κέλυφος εισόδου. "
-"(το argv[0] θα έχει ένα ενωτικό (-) μπροστά του.)"
+"Αν είναι αληθές, η εντολή στο τερματικό θα εκκινείται ως κέλυφος εισόδου (το "
+"argv[0] θα έχει ένα ενωτικό (-) μπροστά του)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid "Whether to update login records when launching terminal command"
 msgstr ""
 "Αν θα ενημερώνεται το ιστορικό εγγραφών, όταν εκκινείται η εντολή τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -490,11 +489,11 @@ msgstr ""
 "Αν είναι αληθές, θα ενημερώνονται οι εγγραφές σύνδεσης του συστήματος utmp "
 "και wtmp, όταν εκκινείται η εντολή στο τερματικό."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "Whether to run a custom command instead of the shell"
 msgstr "Αν θα εκτελείται μια προσαρμοσμένη εντολή αντί για το κέλυφος"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
@@ -502,11 +501,11 @@ msgstr ""
 "Αν είναι αληθές, θα χρησιμοποιείται η τιμή της ρύθμισης custom_command αντί "
 "να εκτελείται το κέλυφος."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid "Whether to blink the cursor"
 msgstr "Αν θα αναβοσβήνει ο δρομέας"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -515,155 +514,154 @@ msgstr ""
 "αναβόσβησμα του δρομέα, ή \"on\" και \"off\" για ρητό καθορισμό της "
 "λειτουργίας."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid "The cursor appearance"
 msgstr "Η εμφάνιση του δρομέα"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Custom command to use instead of the shell"
 msgstr "Η προσαρμοσμένη εντολή που χρησιμοποιείται αντί για το κέλυφος"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr ""
 "Εκτέλεση αυτής της εντολής αντί του κελύφους, αν είναι αληθές το "
 "use_custom_command."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Palette for terminal applications"
 msgstr "Παλέτα για τις εφαρμογές τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid "A Pango font name and size"
 msgstr "Μέγεθος και όνομα γραμματοσειράς pango"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "The code sequence the Backspace key generates"
 msgstr "Η ακολουθία κώδικα που δημιουργεί το πλήκτρο οπισθοδρόμησης"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid "The code sequence the Delete key generates"
 msgstr "Η ακολουθία κώδικα που δημιουργεί το πλήκτρο διαγραφής"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr ""
 "Αν θα γίνεται χρήση των χρωμάτων του θέματος στο γραφικό συστατικό του "
 "τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid "Whether to use the system monospace font"
 msgstr "Αν θα χρησιμοποιείται η γραμματοσειρά monospace του συστήματος"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
 msgid "Which encoding to use"
 msgstr "Ποια κωδικοποίηση θα χρησιμοποιηθεί"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Συντόμευση για το άνοιγμα νέας καρτέλας"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Keyboard shortcut to open a new window"
 msgstr "Συντόμευση πληκτρολογίου για το άνοιγμα νέου παραθύρου"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Συντόμευση πληκτρολογίου για τη δημιουργία νέας κατατομής"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr ""
 "Συντόμευση πληκτρολογίου για την αποθήκευση των περιεχομένων της τρέχουσας "
 "καρτέλας σε αρχείο"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "Keyboard shortcut to close a tab"
 msgstr "Συντόμευση πληκτρολογίου για το κλείσιμο καρτέλας"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Keyboard shortcut to close a window"
 msgstr "Συντόμευση πληκτρολογίου για το κλείσιμο παραθύρου"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Keyboard shortcut to copy text"
 msgstr "Συντόμευση πληκτρολογίου για την αντιγραφή κειμένου"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Keyboard shortcut to paste text"
 msgstr "Συντόμευση πληκτρολογίου για την επικόλληση κειμένου"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "Συντόμευση πληκτρολογίου για εναλλαγή της λειτουργίας πλήρους οθόνης"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Συντόμευση πληκτρολογίου για εναλλαγή της προβολής της γραμμής μενού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Συντόμευση πληκτρολογίου για τον ορισμό του τίτλου του τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Συντόμευση πληκτρολογίου για την επαναφορά του τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr ""
 "Συντόμευση πληκτρολογίου για την επαναφορά και τον καθαρισμό του τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Συντόμευση πληκτρολογίου για μετάβαση στην προηγούμενη καρτέλα"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Συντόμευση πληκτρολογίου για μετάβαση στην επόμενη καρτέλα"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr ""
 "Συντόμευση πληκτρολογίου για την μετακίνηση της τρέχουσας καρτέλας αριστερά"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr ""
 "Συντόμευση πληκτρολογίου για την μετακίνηση της τρέχουσας καρτέλας δεξιά"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Συντόμευση πληκτρολογίου για την απόσπαση της τρέχουσας καρτέλας"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
-#| msgid "Keyboard shortcut to switch to the next tab"
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Συντόμευση πληκτρολογίου για μετάβαση στην επόμενη καρτέλα"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to launch help"
 msgstr "Συντόμευση πληκτρολογίου για την εκκίνηση της βοήθειας"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to make font larger"
 msgstr "Συντόμευση πληκτρολογίου για τη μεγέθυνση της γραμματοσειράς"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Συντόμευση πληκτρολογίου για τη σμίκρυνση της γραμματοσειράς"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to make font normal-size"
 msgstr ""
 "Συντόμευση πληκτρολογίου για την επαναφορά της γραμματοσειράς στο κανονικό "
 "μέγεθος"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Whether the menubar has access keys"
 msgstr "Αν η γραμμή μενού θα διαθέτει πλήκτρα πρόσβασης"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -673,13 +671,13 @@ msgstr ""
 "απενεργοποίησή τους επιτρέπεται, γιατί υπάρχει κίνδυνος συγκρούσεων με "
 "εφαρμογές που εκτελούνται μέσα στο τερματικό."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Αν θα είναι ενεργοποιημένη η κανονική συντόμευση του GTK για πρόσβαση στη "
 "γραμμή μενού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -689,11 +687,11 @@ msgstr ""
 "προσαρμοστεί και μέσω του gtkrc (gtk-menu-bar-accel = \"whatever\"). Αυτή η "
 "επιλογή επιτρέπει την απενεργοποίηση της κανονικής συντόμευσης."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "List of available encodings"
 msgstr "Λίστα διαθέσιμων κωδικοποιήσεων"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -704,99 +702,125 @@ msgstr ""
 "στο υπομενού αυτό. Το όνομα κωδικοποίησης \"current\" αντιστοιχεί στην "
 "κωδικοποίηση της τρέχουσας εντοπιότητας."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Αν θα γίνεται ερώτηση επιβεβαίωσης πριν το κλείσιμο ενός τερματικού"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to show the menubar in new windows"
 msgstr "Αν θα εμφανίζεται η γραμμή μενού στα νέα παράθυρα"
 
-#: ../src/preferences.ui.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
+msgid "Whether to use a dark theme variant"
+msgstr "Εάν θα χρησιμοποιεί παραλλαγή σκοτεινού θέματος"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
+msgid "Whether to open new terminals as windows or tabs"
+msgstr "Εάν θα ανοίγουν νέα τερματικά ως παράθυρα ή καρτέλες"
+
+#. Open new terminal in new window
+#: ../src/preferences.ui.h:2
+msgid "Window"
+msgstr "Παράθυρο"
+
+#. Open new terminal in new tab
+#: ../src/preferences.ui.h:4
+msgid "Tab"
+msgstr "Καρτέλα"
+
+#: ../src/preferences.ui.h:5
 msgid "Preferences"
 msgstr "Προτιμήσεις"
 
-#: ../src/preferences.ui.h:2
+#: ../src/preferences.ui.h:6
 msgid "Show _menubar by default in new terminals"
 msgstr "Εμφάνιση της γραμμής _μενού σε νέα τερματικά"
 
-#: ../src/preferences.ui.h:3
+#: ../src/preferences.ui.h:7
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
 msgstr "_Ενεργοποίηση μνημονικών (όπως Alt+F για άνοιγμα του μενού αρχείου)"
 
-#: ../src/preferences.ui.h:4
+#: ../src/preferences.ui.h:8
 msgid "Enable the _menu accelerator key (F10 by default)"
 msgstr "Ενεργοποίηση του πλήκτρου επιταχυντή _μενού (από προεπιλογή F10)"
 
-#: ../src/preferences.ui.h:5 ../src/profile-preferences.ui.h:61
+#: ../src/preferences.ui.h:9
+msgid "Use _dark theme variant"
+msgstr "Χρήση παραλλαγής _σκοτεινού θέματος"
+
+#: ../src/preferences.ui.h:10
+msgid "Open _new terminals in:"
+msgstr "Άνοιγμα _νέων τερματικών σε:"
+
+#: ../src/preferences.ui.h:11 ../src/profile-preferences.ui.h:61
 msgid "General"
 msgstr "Γενικά"
 
-#: ../src/preferences.ui.h:6
+#: ../src/preferences.ui.h:12
 msgid "Shortcuts"
 msgstr "Συντομεύσεις"
 
-#: ../src/preferences.ui.h:7
+#: ../src/preferences.ui.h:13
 msgid "_Clone"
 msgstr "_Κλωνοποίηση"
 
-#: ../src/preferences.ui.h:8
+#: ../src/preferences.ui.h:14
 msgid "_Profile used when launching a new terminal:"
 msgstr "_Κατατομή που χρησιμοποιείται κατά την εκκίνηση νέου τερματικού:"
 
-#: ../src/preferences.ui.h:9
+#: ../src/preferences.ui.h:15
 msgid "Profiles"
 msgstr "Κατατομές"
 
-#: ../src/preferences.ui.h:10
+#: ../src/preferences.ui.h:16
 msgid "E_ncodings shown in menu:"
 msgstr "Κω_δικοποιήσεις που εμφανίζονται στο μενού:"
 
-#: ../src/preferences.ui.h:11
+#: ../src/preferences.ui.h:17
 msgid "Encodings"
 msgstr "Κωδικοποιήσεις"
 
-#: ../src/profile-editor.c:47
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "Μαύρο σε ανοιχτό κίτρινο"
 
-#: ../src/profile-editor.c:51
+#: ../src/profile-editor.c:52
 msgid "Black on white"
 msgstr "Μαύρο σε λευκό"
 
-#: ../src/profile-editor.c:55
+#: ../src/profile-editor.c:56
 msgid "Gray on black"
 msgstr "Γκρίζο σε μαύρο"
 
-#: ../src/profile-editor.c:59
+#: ../src/profile-editor.c:60
 msgid "Green on black"
 msgstr "Πράσινο σε μαύρο"
 
-#: ../src/profile-editor.c:63
+#: ../src/profile-editor.c:64
 msgid "White on black"
 msgstr "Λευκό σε μαύρο"
 
-#: ../src/profile-editor.c:411
+#: ../src/profile-editor.c:407
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Σφάλμα ανάλυσης της εντολής: %s"
 
 #. This is the name of a colour scheme
-#: ../src/profile-editor.c:445 ../src/profile-preferences.ui.h:30
+#: ../src/profile-editor.c:438 ../src/profile-preferences.ui.h:30
 msgid "Custom"
 msgstr "Προσαρμογή"
 
-#: ../src/profile-editor.c:560
+#: ../src/profile-editor.c:552
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Επεξεργασία κατατομής “%s”"
 
-#: ../src/profile-editor.c:743
+#: ../src/profile-editor.c:730
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Επιλογή χρώματος παλέτας %d"
 
-#: ../src/profile-editor.c:747
+#: ../src/profile-editor.c:734
 #, c-format
 msgid "Palette entry %d"
 msgstr "Καταχώριση παλέτας %d"
@@ -971,133 +995,129 @@ msgstr "γραμμές"
 msgid "Title"
 msgstr "Τίτλος"
 
-#: ../src/profile-preferences.ui.h:63
-msgid "Initial _title:"
-msgstr "Αρχικός _τίτλος:"
+#: ../src/profile-preferences.ui.h:63 ../src/terminal-window.c:781
+msgid "_Title:"
+msgstr "_Τίτλος:"
 
 #: ../src/profile-preferences.ui.h:64
-msgid "When terminal commands set their o_wn titles:"
-msgstr "Όταν οι εντολές τερματικού ορίζουν _δικούς τους τίτλους:"
-
-#: ../src/profile-preferences.ui.h:65
 msgid "Command"
 msgstr "Εντολή"
 
-#: ../src/profile-preferences.ui.h:66
+#: ../src/profile-preferences.ui.h:65
 msgid "_Run command as a login shell"
 msgstr "_Εκτέλεση εντολής ως κελύφους εισόδου"
 
-#: ../src/profile-preferences.ui.h:67
+#: ../src/profile-preferences.ui.h:66
 msgid "_Update login records when command is launched"
 msgstr "Ε_νημέρωση εγγραφών σύνδεσης κατά την εκκίνηση εντολής"
 
-#: ../src/profile-preferences.ui.h:68
+#: ../src/profile-preferences.ui.h:67
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Εκτέ_λεση προσαρμοσμένης εντολής αντί για το κέλυφος"
 
-#: ../src/profile-preferences.ui.h:69
+#: ../src/profile-preferences.ui.h:68
 msgid "Custom co_mmand:"
 msgstr "Προσαρμοσμένη εντο_λή:"
 
-#: ../src/profile-preferences.ui.h:70
+#: ../src/profile-preferences.ui.h:69
 msgid "When command _exits:"
 msgstr "Κατά την έ_ξοδο της εντολής:"
 
-#: ../src/profile-preferences.ui.h:71
+#: ../src/profile-preferences.ui.h:70
 msgid "Title and Command"
 msgstr "Τίτλος και εντολή"
 
-#: ../src/profile-preferences.ui.h:72
+#: ../src/profile-preferences.ui.h:71
 msgid "Text and Background Color"
 msgstr "Χρώμα παρασκηνίου κειμένου"
 
-#: ../src/profile-preferences.ui.h:73
+#: ../src/profile-preferences.ui.h:72
 msgid "_Use colors from system theme"
 msgstr "_Χρήση χρωμάτων από το θέμα του συστήματος"
 
-#: ../src/profile-preferences.ui.h:74
+#: ../src/profile-preferences.ui.h:73
 msgid "Built-in sche_mes:"
 msgstr "_Ενσωματωμένα θέματα:"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/profile-preferences.ui.h:74
 msgid "_Text color:"
 msgstr "Χρώμα _κειμένου:"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/profile-preferences.ui.h:75
 msgid "_Background color:"
 msgstr "Χρώμα _παρασκηνίου:"
 
-#: ../src/profile-preferences.ui.h:77
+#: ../src/profile-preferences.ui.h:76
 msgid "Choose Terminal Background Color"
 msgstr "Επιλογή χρώματος παρασκηνίου τερματικού"
 
-#: ../src/profile-preferences.ui.h:78
+#: ../src/profile-preferences.ui.h:77
 msgid "Choose Terminal Text Color"
 msgstr "Επιλογή χρώματος κειμένου τερματικού"
 
-#: ../src/profile-preferences.ui.h:79
+#: ../src/profile-preferences.ui.h:78
 msgid "_Underline color:"
 msgstr "Χρώμα _Υπογράμμισης:"
 
-#: ../src/profile-preferences.ui.h:80
+#: ../src/profile-preferences.ui.h:79
 msgid "_Same as text color"
 msgstr "Ί_διο με χρώμα κειμένου"
 
-#: ../src/profile-preferences.ui.h:81
+#: ../src/profile-preferences.ui.h:80
 msgid "Bol_d color:"
 msgstr "Χρώμα έ_ντονου κειμένου:"
 
-#: ../src/profile-preferences.ui.h:82
+#: ../src/profile-preferences.ui.h:81
 msgid "Palette"
 msgstr "Παλέτα"
 
-#: ../src/profile-preferences.ui.h:83
+#: ../src/profile-preferences.ui.h:82
 msgid "Built-in _schemes:"
 msgstr "Ενσωματωμένα _θέματα:"
 
-#: ../src/profile-preferences.ui.h:84
+#: ../src/profile-preferences.ui.h:83
 msgid "<b>Note:</b> Terminal applications have these colors available to them."
 msgstr ""
 "<b>Σημείωση:</b> Αυτά τα χρώματα θα είναι διαθέσιμα για τις εφαρμογές "
 "τερματικού."
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:84
 msgid "Color p_alette:"
 msgstr "Πα_λέτα χρωμάτων:"
 
-#: ../src/profile-preferences.ui.h:86
+#: ../src/profile-preferences.ui.h:85
 msgid "Colors"
 msgstr "Χρώματα"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:86
 msgid "_Scrollbar is:"
 msgstr "Η _γραμμή κύλισης είναι:"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:87
 msgid "Scroll_back:"
 msgstr "_Οπισθοκύλιση:"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:88
 msgid "Scroll on _keystroke"
 msgstr "Κύλιση κατά την _πληκτρολόγηση"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:89
 msgid "Scroll on _output"
 msgstr "Κύλιση στην έ_ξοδο"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:90
 msgid "_Unlimited"
 msgstr "_Απεριόριστο"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:91
 msgid "lines"
 msgstr "γραμμές"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:92
 msgid "Scrolling"
 msgstr "Κύλιση"
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:93
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1108,166 +1128,168 @@ msgstr ""
 "προβλημάτων σε εφαρμογές και λειτουργικά συστήματα που αναμένουν διαφορετική "
 "συμπεριφορά τερματικού."
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:94
 msgid "_Delete key generates:"
 msgstr "Το πλήκτρο _διαγραφής προκαλεί:"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:95
 msgid "_Backspace key generates:"
 msgstr "Το πλήκτρο _οπισθοδρόμησης προκαλεί:"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/profile-preferences.ui.h:96
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Επαναφορά επιλογών συμβατότητας στις προεπιλεγμένες"
 
-#: ../src/profile-preferences.ui.h:98
+#: ../src/profile-preferences.ui.h:97
 msgid "Compatibility"
 msgstr "Συμβατότητα"
 
-#: ../src/terminal-accels.c:141
-msgid "New Tab"
-msgstr "Νέα καρτέλα"
+#: ../src/terminal-accels.c:112
+msgid "New Terminal in New Tab"
+msgstr "Νέο Τερματικό σε Νέα Καρτέλα"
 
-#: ../src/terminal-accels.c:143
-msgid "New Window"
-msgstr "Νέο παράθυρο"
+#: ../src/terminal-accels.c:113
+msgid "New Terminal in New Window"
+msgstr "Νέο Τερματικό σε Νέο Παράθυρο"
 
-#: ../src/terminal-accels.c:145
+#: ../src/terminal-accels.c:114
 msgid "New Profile"
 msgstr "Νέα κατατομή"
 
-#: ../src/terminal-accels.c:148
+#: ../src/terminal-accels.c:116
 msgid "Save Contents"
 msgstr "Αποθήκευση περιεχομένων"
 
-#: ../src/terminal-accels.c:151
-msgid "Close Tab"
-msgstr "Κλείσιμο καρτέλας"
+#: ../src/terminal-accels.c:118
+msgid "Close Terminal"
+msgstr "Κλείσιμο Τερματικού"
 
-#: ../src/terminal-accels.c:153
-msgid "Close Window"
-msgstr "Κλείσιμο παραθύρου"
+#: ../src/terminal-accels.c:119
+msgid "Close All Terminals"
+msgstr "Κλείσιμο Όλων των Τερματικών"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:123
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: ../src/terminal-accels.c:161
+#: ../src/terminal-accels.c:124
 msgid "Paste"
 msgstr "Επικόλληση"
 
-#: ../src/terminal-accels.c:167
-msgid "Hide and Show menubar"
-msgstr "Απόκρυψη και προβολή γραμμής μενού"
+#: ../src/terminal-accels.c:128
+msgid "Hide and Show toolbar"
+msgstr "Απόκρυψη και προβολή εργαλειοθήκης"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:129
 msgid "Full Screen"
 msgstr "Πλήρης οθόνη"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:130
 msgid "Zoom In"
 msgstr "Μεγέθυνση"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:131
 msgid "Zoom Out"
 msgstr "Σμίκρυνση"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:132
 msgid "Normal Size"
 msgstr "Κανονικό μέγεθος"
 
-#: ../src/terminal-accels.c:181 ../src/terminal-window.c:3452
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:764
 msgid "Set Title"
 msgstr "Ορισμός τίτλου"
 
-#: ../src/terminal-accels.c:183
+#: ../src/terminal-accels.c:137
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: ../src/terminal-accels.c:185
+#: ../src/terminal-accels.c:138
 msgid "Reset and Clear"
 msgstr "Επαναφορά και καθαρισμός"
 
-#: ../src/terminal-accels.c:191
+#: ../src/terminal-accels.c:142
 msgid "Switch to Previous Tab"
 msgstr "Μετάβαση στην προηγούμενη καρτέλα"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:143
 msgid "Switch to Next Tab"
 msgstr "Μετάβαση στην επόμενη καρτέλα"
 
-#: ../src/terminal-accels.c:195
+#: ../src/terminal-accels.c:144
 msgid "Move Tab to the Left"
 msgstr "Μετακίνηση καρτέλας στα αριστερά"
 
-#: ../src/terminal-accels.c:197
+#: ../src/terminal-accels.c:145
 msgid "Move Tab to the Right"
 msgstr "Μετακίνηση καρτέλας στα δεξιά"
 
-#: ../src/terminal-accels.c:199
+#: ../src/terminal-accels.c:146
 msgid "Detach Tab"
 msgstr "Απόσπαση καρτέλας"
 
-#: ../src/terminal-accels.c:254
+#: ../src/terminal-accels.c:169
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
-#: ../src/terminal-accels.c:259
+#: ../src/terminal-accels.c:176
 msgid "File"
 msgstr "Αρχείο"
 
-#: ../src/terminal-accels.c:260
+#: ../src/terminal-accels.c:177
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: ../src/terminal-accels.c:261
+#: ../src/terminal-accels.c:178
 msgid "View"
 msgstr "Προβολή"
 
-#: ../src/terminal-accels.c:263
+#: ../src/terminal-accels.c:180
 msgid "Tabs"
 msgstr "Καρτέλες"
 
-#: ../src/terminal-accels.c:264
+#: ../src/terminal-accels.c:181
 msgid "Help"
 msgstr "Βοήθεια"
 
-#: ../src/terminal-accels.c:349
+#: ../src/terminal-accels.c:265
 #, c-format
-#| msgid "Switch to Tab 1"
 msgid "Switch to Tab %d"
 msgstr "Μετάβαση στην καρτέλα %d"
 
-#: ../src/terminal-accels.c:649
-#, c-format
-msgid "The shortcut key “%s” is already bound to the “%s” action"
-msgstr "Το πλήκτρο συντόμευσης “%s” χρησιμοποιείται ήδη για την ενέργεια “%s”"
-
-#: ../src/terminal-accels.c:762
+#: ../src/terminal-accels.c:482
 msgid "_Action"
 msgstr "_Ενέργεια"
 
-#: ../src/terminal-accels.c:780
+#: ../src/terminal-accels.c:500
 msgid "Shortcut _Key"
 msgstr "_Πλήκτρο συντόμευσης"
 
-#: ../src/terminal-app.c:573
+#: ../src/terminal-app.c:584
 msgid "User Defined"
 msgstr "Ορισμένο από τον χρήστη"
 
 #: ../src/terminal-appmenu.ui.h:1
+msgid "_New Terminal"
+msgstr "_Νέο Τερματικό"
+
+#: ../src/terminal-appmenu.ui.h:2
 msgid "_Preferences"
 msgstr "_Προτιμήσεις"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1646
+#: ../src/terminal-appmenu.ui.h:3
+msgid "_About Terminal"
+msgstr "_Περί Τερματικό"
+
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2350
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1762
-msgid "_About"
-msgstr "_Περί"
+#: ../src/terminal-appmenu.ui.h:5
+msgid "_Quit"
+msgstr "_Τερματισμός"
 
-#: ../src/terminal.c:242
+#: ../src/terminal.c:245
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Απέτυχε η ανάλυση των ορισμάτων: %s\n"
@@ -1474,44 +1496,44 @@ msgstr "Άνοιγ_μα Midnight Commander"
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Άνοιγμα του διαχειριστή αρχείων τερματικού σε Midnight Commander"
 
-#: ../src/terminal-options.c:224
+#: ../src/terminal-options.c:224 ../src/terminal-options.c:237
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr ""
 "Δεν υποστηρίζεται πλέον η επιλογή \"%s\" σε αυτή την έκδοση του τερματικού "
 "GNOME."
 
-#: ../src/terminal-options.c:235 ../src/terminal-util.c:236
+#: ../src/terminal-options.c:249 ../src/terminal-util.c:217
 msgid "GNOME Terminal"
 msgstr "Τερματικό GNOME"
 
-#: ../src/terminal-options.c:275
+#: ../src/terminal-options.c:289
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Το όρισμα του \"%s\" δεν είναι έγκυρη εντολή: %s"
 
-#: ../src/terminal-options.c:424
+#: ../src/terminal-options.c:438
 msgid "Two roles given for one window"
 msgstr "Δόθηκαν δύο ρόλοι στο ίδιο παράθυρο"
 
-#: ../src/terminal-options.c:445 ../src/terminal-options.c:478
+#: ../src/terminal-options.c:459 ../src/terminal-options.c:492
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "Η επιλογή \"%s\" έχει δοθεί δύο φορές για το ίδιο παράθυρο\n"
 
-#: ../src/terminal-options.c:688
+#: ../src/terminal-options.c:690
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr ""
 "Ο συντελεστής μεγέθυνσης \"%g\" είναι πολύ μικρός, θα χρησιμοποιηθεί το %g\n"
 
-#: ../src/terminal-options.c:696
+#: ../src/terminal-options.c:698
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr ""
 "Ο συντελεστής μεγέθυνσης \"%g\" είναι πολύ μεγάλος, θα χρησιμοποιηθεί το %g\n"
 
-#: ../src/terminal-options.c:734
+#: ../src/terminal-options.c:736
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1520,11 +1542,11 @@ msgstr ""
 "Η επιλογή \"%s\" απαιτεί να οριστεί η εντολή που θα εκτελεστεί στο υπόλοιπο "
 "της γραμμής εντολών"
 
-#: ../src/terminal-options.c:870
+#: ../src/terminal-options.c:871
 msgid "Not a valid terminal config file."
 msgstr "Μη έγκυρο αρχείο ρυθμίσεων τερματικού."
 
-#: ../src/terminal-options.c:883
+#: ../src/terminal-options.c:884
 msgid "Incompatible terminal config file version."
 msgstr "Ασύμβατη έκδοση αρχείου ρυθμίσεων τερματικού."
 
@@ -1577,15 +1599,15 @@ msgstr "Εκτέλεση του ορίσματος αυτής της επιλο�
 msgid "PROFILE-NAME"
 msgstr "PROFILE-NAME"
 
-#: ../src/terminal-options.c:1442 ../src/terminal-options.c:1448
+#: ../src/terminal-options.c:1269 ../src/terminal-options.c:1275
 msgid "GNOME Terminal Emulator"
 msgstr "Προσομοίωση τερματικού GNOME"
 
-#: ../src/terminal-options.c:1449
+#: ../src/terminal-options.c:1276
 msgid "Show GNOME Terminal options"
 msgstr "Προβολή επιλογών τερματικού GNOME"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1286
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1593,7 +1615,7 @@ msgstr ""
 "Επιλογές για το άνοιγμα νέων παραθύρων ή καρτελών τερματικού· επιτρέπεται ο "
 "ορισμός πολλαπλών επιλογών:"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1295
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1601,11 +1623,11 @@ msgstr ""
 "Επιλογές παραθύρων· εάν προηγούνται του πρώτου ορίσματος --window ή --tab, "
 "ορίζονται ως προεπιλογές για όλα τα παράθυρα:"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1296
 msgid "Show per-window options"
 msgstr "Προβολή επιλογών ανά παράθυρο"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1304
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1613,63 +1635,71 @@ msgstr ""
 "Επιλογές τερματικών· εάν προηγούνται του πρώτου ορίσματος --window ή --tab, "
 "ορίζονται ως προεπιλογές για όλα τα τερματικά:"
 
-#: ../src/terminal-options.c:1478
+#: ../src/terminal-options.c:1305
 msgid "Show per-terminal options"
 msgstr "Προβολή επιλογών ανά τερματικό"
 
-#: ../src/terminal-prefs.c:226
+#: ../src/terminal-prefs.c:214
 msgid "Click button to choose profile"
 msgstr "Πατήστε το κουμπί για να επιλέξετε κατατομή"
 
-#: ../src/terminal-prefs.c:340
+#: ../src/terminal-prefs.c:316
 msgid "Profile list"
 msgstr "Λίστα κατατομής"
 
-#: ../src/terminal-prefs.c:395
+#: ../src/terminal-prefs.c:371
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Διαγραφή κατατομής “%s”;"
 
-#: ../src/terminal-prefs.c:411
+#: ../src/terminal-prefs.c:375
+msgid "_Cancel"
+msgstr "_Ακύρωση"
+
+#: ../src/terminal-prefs.c:377
+msgid "_Delete"
+msgstr "_Διαγραφή"
+
+#: ../src/terminal-prefs.c:387
 msgid "Delete Profile"
 msgstr "Διαγραφή κατατομής"
 
-#: ../src/terminal-prefs.c:710
+#: ../src/terminal-prefs.c:695
 msgid "Show"
 msgstr "Εμφάνιση"
 
-#: ../src/terminal-prefs.c:721
+#: ../src/terminal-prefs.c:706
 msgid "_Encoding"
 msgstr "Κω_δικοποίηση"
 
-#: ../src/terminal-screen.c:1183
+#: ../src/terminal-screen.c:1068
 msgid "No command supplied nor shell requested"
 msgstr "Δε δόθηκε εντολή ούτε απαιτήθηκε κέλυφος"
 
-#: ../src/terminal-screen.c:1437 ../src/terminal-window.c:1686
+#: ../src/terminal-screen.c:1324 ../src/terminal-window.c:2393
 msgid "_Profile Preferences"
 msgstr "_Προτιμήσεις κατατομής"
 
-#: ../src/terminal-screen.c:1438 ../src/terminal-screen.c:1799
+#: ../src/terminal-screen.c:1325 ../src/terminal-screen.c:1653
 msgid "_Relaunch"
 msgstr "Επα_νεκκίνηση"
 
-#: ../src/terminal-screen.c:1441
+#: ../src/terminal-screen.c:1328
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "Σφάλμα κατά τη δημιουργία της θυγατρικής διεργασίας για αυτό το τερματικό"
 
-#: ../src/terminal-screen.c:1803
+#: ../src/terminal-screen.c:1657
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Η θυγατρική διεργασία τερματίσθηκε κανονικά με κατάσταση %d."
 
-#: ../src/terminal-screen.c:1806
+#: ../src/terminal-screen.c:1660
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Η θυγατρική διεργασία τερματίστηκε από το σήμα %d."
 
-#: ../src/terminal-screen.c:1809
+#: ../src/terminal-screen.c:1663
 msgid "The child process was aborted."
 msgstr "Η θυγατρική διεργασία εγκαταλείφθηκε."
 
@@ -1681,28 +1711,30 @@ msgstr "Κλείσιμο καρτέλας"
 msgid "Switch to this tab"
 msgstr "Μετάβαση στην επόμενη καρτέλα"
 
-#: ../src/terminal-util.c:163
+#: ../src/terminal-util.c:147
 msgid "There was an error displaying help"
 msgstr "Σφάλμα κατά την εμφάνιση της βοήθειας"
 
-#: ../src/terminal-util.c:219
+#: ../src/terminal-util.c:200
 msgid "Contributors:"
 msgstr "Συντελεστές:"
 
-#: ../src/terminal-util.c:238
+#: ../src/terminal-util.c:219
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Προσομοιωτής τερματικού για την επιφάνεια εργασίας του GNOME"
 
-#: ../src/terminal-util.c:246
+#: ../src/terminal-util.c:227
 msgid "translator-credits"
-msgstr "Δημήτρης Σπίγγος <dmtrs32@gmail.com>, 2013"
+msgstr ""
+"Δημήτρης Σπίγγος <dmtrs32@gmail.com>, 2013\n"
+"Ευστάθιος Ιωσηφίδης <iosifidis@opensuse.org>, 2013"
 
-#: ../src/terminal-util.c:319
+#: ../src/terminal-util.c:300
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Αδυναμία ανοίγματος της διεύθυνσης “%s”"
 
-#: ../src/terminal-util.c:394
+#: ../src/terminal-util.c:369
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1715,7 +1747,7 @@ msgstr ""
 "Λογισμικού -Free Software Foundation- είτε της έκδοσης 3 της άδειας, είτε "
 "(κατ' επιλογήν) οποιασδήποτε μεταγενέστερης έκδοσης."
 
-#: ../src/terminal-util.c:398
+#: ../src/terminal-util.c:373
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1727,7 +1759,7 @@ msgstr ""
 "ή ΚΑΤΑΛΛΗΛΟΤΗΤΑΣ ΓΙΑ ΣΥΓΚΕΚΡΙΜΕΝΟ ΣΚΟΠΟ. Δείτε για περισσότερες λεπτομέρειες "
 "τη Γενική Άδεια Δημόσιας Χρήσης GNU."
 
-#: ../src/terminal-util.c:402
+#: ../src/terminal-util.c:377
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -1736,11 +1768,19 @@ msgstr ""
 "GNU μαζί με αυτό το τερματικό GNOME. Εάν όχι, επισκεφθείτε το <http://www."
 "gnu.org/licenses/>."
 
+#: ../src/terminal-window.c:502
+msgid "Could not save contents"
+msgstr "Αδυναμία αποθήκευσης περιεχομένων"
+
+#: ../src/terminal-window.c:524
+msgid "Save as…"
+msgstr "Αποθήκευση ως…"
+
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:434
+#: ../src/terminal-window.c:1187
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1749,203 +1789,202 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:440
+#: ../src/terminal-window.c:1193
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1638
+#: ../src/terminal-window.c:2343
 msgid "_File"
 msgstr "_Αρχείο"
 
 #. File menu
-#: ../src/terminal-window.c:1639 ../src/terminal-window.c:1651
-#: ../src/terminal-window.c:1795
+#: ../src/terminal-window.c:2344 ../src/terminal-window.c:2355
+#: ../src/terminal-window.c:2361 ../src/terminal-window.c:2502
 msgid "Open _Terminal"
 msgstr "Άνοιγμα _τερματικού"
 
-#: ../src/terminal-window.c:1640 ../src/terminal-window.c:1654
-#: ../src/terminal-window.c:1798
-msgid "Open Ta_b"
-msgstr "Άνοιγμα _καρτέλας"
-
-#: ../src/terminal-window.c:1641
+#: ../src/terminal-window.c:2345
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: ../src/terminal-window.c:1642
+#: ../src/terminal-window.c:2346
 msgid "_View"
 msgstr "_Προβολή"
 
-#: ../src/terminal-window.c:1643
+#: ../src/terminal-window.c:2347
 msgid "_Search"
 msgstr "_Αναζήτηση"
 
-#: ../src/terminal-window.c:1644
+#: ../src/terminal-window.c:2348
 msgid "_Terminal"
 msgstr "_Τερματικό"
 
-#: ../src/terminal-window.c:1645
+#: ../src/terminal-window.c:2349
 msgid "Ta_bs"
 msgstr "_Καρτέλες"
 
-#: ../src/terminal-window.c:1657
+#: ../src/terminal-window.c:2358
+msgid "Open Ta_b"
+msgstr "Άνοιγμα _καρτέλας"
+
+#: ../src/terminal-window.c:2364
 msgid "New _Profile"
 msgstr "Νέα _κατατομή"
 
-#: ../src/terminal-window.c:1660
+#: ../src/terminal-window.c:2367
 msgid "_Save Contents"
 msgstr "_Αποθήκευση περιεχομένων"
 
-#: ../src/terminal-window.c:1663
-msgid "C_lose Tab"
-msgstr "Κ_λείσιμο καρτέλας"
+#: ../src/terminal-window.c:2370 ../src/terminal-window.c:3582
+msgid "C_lose Terminal"
+msgstr "Κλείσιμο τε_ρματικού"
 
-#: ../src/terminal-window.c:1666
-msgid "_Close Window"
-msgstr "_Κλείσιμο παραθύρου"
+#: ../src/terminal-window.c:2373
+msgid "_Close All Terminals"
+msgstr "_Κλείσιμο Όλων των Τερματικών"
 
-#: ../src/terminal-window.c:1677 ../src/terminal-window.c:1792
+#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2499
 msgid "Paste _Filenames"
 msgstr "Επικόλληση _ονομάτων αρχείων"
 
-#: ../src/terminal-window.c:1683
+#: ../src/terminal-window.c:2390
 msgid "Pre_ferences"
 msgstr "Π_ροτιμήσεις"
 
 #. Search menu
-#: ../src/terminal-window.c:1702
+#: ../src/terminal-window.c:2409
 msgid "_Find…"
 msgstr "_Εύρεση…"
 
-#: ../src/terminal-window.c:1705
+#: ../src/terminal-window.c:2412
 msgid "Find Ne_xt"
 msgstr "Εύρεση ε_πόμενου"
 
-#: ../src/terminal-window.c:1708
+#: ../src/terminal-window.c:2415
 msgid "Find Pre_vious"
 msgstr "Εύρεση προη_γούμενου"
 
-#: ../src/terminal-window.c:1711
+#: ../src/terminal-window.c:2418
 msgid "_Clear Highlight"
 msgstr "Εκκα_θάριση επισήμανσης"
 
-#: ../src/terminal-window.c:1715
+#: ../src/terminal-window.c:2422
 msgid "Go to _Line..."
 msgstr "Μετά_βαση στη γραμμή..."
 
-#: ../src/terminal-window.c:1718
+#: ../src/terminal-window.c:2425
 msgid "_Incremental Search..."
 msgstr "Αυ_ξητική αναζήτηση..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:2431
 msgid "Change _Profile"
 msgstr "Αλλαγή _κατατομής"
 
-#: ../src/terminal-window.c:1725
+#: ../src/terminal-window.c:2432
 msgid "_Set Title…"
 msgstr "_Ορισμός τίτλου…"
 
-#: ../src/terminal-window.c:1728
+#: ../src/terminal-window.c:2435
 msgid "Set _Character Encoding"
 msgstr "Ορισμός κωδικοποίησης _χαρακτήρων"
 
-#: ../src/terminal-window.c:1729
+#: ../src/terminal-window.c:2436
 msgid "_Reset"
 msgstr "_Επαναφορά"
 
-#: ../src/terminal-window.c:1732
+#: ../src/terminal-window.c:2439
 msgid "Reset and C_lear"
 msgstr "Επαναφορά και καθαρι_σμός"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1737
+#: ../src/terminal-window.c:2444
 msgid "_Add or Remove…"
 msgstr "_Προσθήκη ή αφαίρεση…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1742
+#: ../src/terminal-window.c:2449
 msgid "_Previous Tab"
 msgstr "_Προηγούμενη καρτέλα"
 
-#: ../src/terminal-window.c:1745
+#: ../src/terminal-window.c:2452
 msgid "_Next Tab"
 msgstr "_Επόμενη καρτέλα"
 
-#: ../src/terminal-window.c:1748
+#: ../src/terminal-window.c:2455
 msgid "Move Tab _Left"
 msgstr "Μετακίνηση καρτέλας α_ριστερά"
 
-#: ../src/terminal-window.c:1751
+#: ../src/terminal-window.c:2458
 msgid "Move Tab _Right"
 msgstr "Μετακίνηση καρτέλας _δεξιά"
 
-#: ../src/terminal-window.c:1754
+#: ../src/terminal-window.c:2461
 msgid "_Detach tab"
 msgstr "_Απόσπαση καρτέλας"
 
 #. Help menu
-#: ../src/terminal-window.c:1759
+#: ../src/terminal-window.c:2466
 msgid "_Contents"
 msgstr "_Περιεχόμενα"
 
+#: ../src/terminal-window.c:2469
+msgid "_About"
+msgstr "_Περί"
+
 #. Popup menu
-#: ../src/terminal-window.c:1767
+#: ../src/terminal-window.c:2474
 msgid "_Send Mail To…"
 msgstr "_Αποστολή μηνύματος προς…"
 
-#: ../src/terminal-window.c:1770
+#: ../src/terminal-window.c:2477
 msgid "_Copy E-mail Address"
 msgstr "Αντιγρα_φή ηλεκτρονικής διεύθυνσης"
 
-#: ../src/terminal-window.c:1773
+#: ../src/terminal-window.c:2480
 msgid "C_all To…"
 msgstr "_Κλήση…"
 
-#: ../src/terminal-window.c:1776
+#: ../src/terminal-window.c:2483
 msgid "_Copy Call Address"
 msgstr "_Αντιγραφή διεύθυνσης κλήσης"
 
-#: ../src/terminal-window.c:1779
+#: ../src/terminal-window.c:2486
 msgid "_Open Link"
 msgstr "Ά_νοιγμα συνδέσμου"
 
-#: ../src/terminal-window.c:1782
+#: ../src/terminal-window.c:2489
 msgid "_Copy Link Address"
 msgstr "_Αντιγραφή διεύθυνσης συνδέσμου"
 
-#: ../src/terminal-window.c:1785
+#: ../src/terminal-window.c:2492
 msgid "P_rofiles"
 msgstr "_Κατατομές"
 
-#: ../src/terminal-window.c:1801
+#: ../src/terminal-window.c:2505
 msgid "L_eave Full Screen"
 msgstr "Έ_ξοδος από την πλήρη οθόνη"
 
-#: ../src/terminal-window.c:1804
-msgid "_Input Methods"
-msgstr "_Μέθοδοι εισαγωγής"
-
 #. View Menu
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:2513
 msgid "Show _Menubar"
 msgstr "Εμφάνιση γραμμής _μενού"
 
-#: ../src/terminal-window.c:1814
+#: ../src/terminal-window.c:2517
 msgid "_Full Screen"
 msgstr "_Πλήρης οθόνη"
 
-#: ../src/terminal-window.c:2912
+#: ../src/terminal-window.c:3569
 msgid "Close this window?"
 msgstr "Κλείσιμο παραθύρου;"
 
-#: ../src/terminal-window.c:2912
+#: ../src/terminal-window.c:3569
 msgid "Close this terminal?"
 msgstr "Κλείσιμο αυτού του τερματικού;"
 
-#: ../src/terminal-window.c:2916
+#: ../src/terminal-window.c:3573
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1953,7 +1992,7 @@ msgstr ""
 "Εκτελούνται ακόμη διεργασίες σε κάποια τερματικά αυτού του παραθύρου. Αν "
 "κλείσετε το τερματικό, θα τερματιστούν όλες οι διεργασίες."
 
-#: ../src/terminal-window.c:2920
+#: ../src/terminal-window.c:3577
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -1961,25 +2000,52 @@ msgstr ""
 "Εκτελείται ακόμα μία διεργασία σε αυτό το τερματικό. Αν κλείσετε το "
 "τερματικό, η διεργασία θα τερματιστεί."
 
-#: ../src/terminal-window.c:2925
+#: ../src/terminal-window.c:3582
 msgid "C_lose Window"
 msgstr "Κ_λείσιμο παραθύρου"
 
-#: ../src/terminal-window.c:2925
-msgid "C_lose Terminal"
-msgstr "Κλείσιμο τε_ρματικού"
+#~ msgid "What to do with dynamic title"
+#~ msgstr "Τι να γίνει με δυναμικό τίτλο"
 
-#: ../src/terminal-window.c:2998
-msgid "Could not save contents"
-msgstr "Αδυναμία αποθήκευσης περιεχομένων"
+#~ msgid ""
+#~ "If the application in the terminal sets the title (most typically people "
+#~ "have their shell set up to do this), the dynamically-set title can erase "
+#~ "the configured title, go before it, go after it, or replace it. The "
+#~ "possible values are \"replace\", \"before\", \"after\", and \"ignore\"."
+#~ msgstr ""
+#~ "Εάν η εφαρμογή στο τερματικό ορίζει τον τίτλο του τερματικού (οι "
+#~ "περισσότεροι χρήστες χρησιμοποιούν αυτή την επιλογή), ο δυναμικά "
+#~ "ορισμένος τίτλος μπορεί να σβήσει τον αρχικό τίτλο, να εμφανιστεί πριν ή "
+#~ "μετά από αυτόν, ή να τον αντικαταστήσει. Οι πιθανές τιμές είναι \"replace"
+#~ "\", \"before\", \"after\", και\"ignore\"."
 
-#: ../src/terminal-window.c:3022
-msgid "Save as…"
-msgstr "Αποθήκευση ως…"
+#~ msgid "Initial _title:"
+#~ msgstr "Αρχικός _τίτλος:"
 
-#: ../src/terminal-window.c:3469
-msgid "_Title:"
-msgstr "_Τίτλος:"
+#~ msgid "When terminal commands set their o_wn titles:"
+#~ msgstr "Όταν οι εντολές τερματικού ορίζουν _δικούς τους τίτλους:"
+
+#~ msgid "New Tab"
+#~ msgstr "Νέα καρτέλα"
+
+#~ msgid "Close Tab"
+#~ msgstr "Κλείσιμο καρτέλας"
+
+#~ msgid "Close Window"
+#~ msgstr "Κλείσιμο παραθύρου"
+
+#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
+#~ msgstr ""
+#~ "Το πλήκτρο συντόμευσης “%s” χρησιμοποιείται ήδη για την ενέργεια “%s”"
+
+#~ msgid "C_lose Tab"
+#~ msgstr "Κ_λείσιμο καρτέλας"
+
+#~ msgid "_Close Window"
+#~ msgstr "_Κλείσιμο παραθύρου"
+
+#~ msgid "_Input Methods"
+#~ msgstr "_Μέθοδοι εισαγωγής"
 
 #~| msgid "Keyboard shortcuts"
 #~ msgid "Keyboard shortcut to switch to tab 1"
@@ -4885,9 +4951,6 @@ msgstr "_Τίτλος:"
 #~ msgid "Example of a Default GNOME Terminal Window"
 #~ msgstr ""
 #~ "Παράδειγμα παραθύρου Τερματικού του GNOME με το προεπιλεγμένο προφίλ"
-
-#~ msgid "GNOME Terminal default window"
-#~ msgstr "Παράθυρο του Τερματικού του GNOME (προεπιλεγμένο)"
 
 #~ msgid ""
 #~ "<imageobject> <imagedata fileref=\"figures/gnome-terminal-default.png\" "
