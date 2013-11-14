@@ -648,6 +648,27 @@ enum_to_string (const GValue *value,
   return variant;
 }
 
+static gboolean
+scrollbar_policy_to_bool (GValue *value,
+                          GVariant *variant,
+                          gpointer user_data)
+{
+  const char *str;
+
+  g_variant_get (variant, "&s", &str);
+  g_value_set_boolean (value, g_str_equal (str, "always"));
+
+  return TRUE;
+}
+
+static GVariant *
+bool_to_scrollbar_policy (const GValue *value,
+                          const GVariantType *expected_type,
+                          gpointer user_data)
+{
+  return g_variant_new_string (g_value_get_boolean (value) ? "always" : "never");
+}
+
 /**
  * terminal_profile_edit:
  * @profile: a #GSettings
@@ -907,12 +928,12 @@ terminal_profile_edit (GSettings  *profile,
   g_settings_bind_with_mapping (profile,
                                 TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY,
                                 gtk_builder_get_object (builder,
-                                                        "scrollbar-policy-combobox"),
+                                                        "scrollbar-checkbutton"),
                                 "active",
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
-                                (GSettingsBindGetMapping) string_to_enum,
-                                (GSettingsBindSetMapping) enum_to_string,
-                                gtk_policy_type_get_type, NULL);
+                                (GSettingsBindGetMapping) scrollbar_policy_to_bool,
+                                (GSettingsBindSetMapping) bool_to_scrollbar_policy,
+                                NULL, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY,
                    gtk_builder_get_object (builder,
                                            "scroll-on-keystroke-checkbutton"),
