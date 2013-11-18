@@ -1472,7 +1472,7 @@ terminal_screen_button_press (GtkWidget      *widget,
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
   int char_width, char_height, row, col;
-  char *matched_string;
+  gs_free char *matched_string = NULL;
   int matched_flavor = 0;
   guint state;
   GtkBorder *inner_border = NULL;
@@ -1501,10 +1501,7 @@ terminal_screen_button_press (GtkWidget      *widget,
                      state,
                      &handled);
       if (handled)
-        {
-          g_free (matched_string);
-          return TRUE; /* don't do anything else such as select with the click */
-        }
+        return TRUE; /* don't do anything else such as select with the click */
     }
 
   if (event->type == GDK_BUTTON_PRESS && event->button == 3)
@@ -1514,22 +1511,20 @@ terminal_screen_button_press (GtkWidget      *widget,
           /* on right-click, we should first try to send the mouse event to
            * the client, and popup only if that's not handled. */
           if (button_press_event && button_press_event (widget, event))
-            {
-              g_free (matched_string);
-              return TRUE;
-            }
+            return TRUE;
+
           terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
+          matched_string = NULL; /* adopted to the popup info */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
           terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
+          matched_string = NULL; /* adopted to the popup info */
           return TRUE;
         }
     }
-
-  g_free (matched_string);
 
   /* default behavior is to let the terminal widget deal with it */
   if (button_press_event)
