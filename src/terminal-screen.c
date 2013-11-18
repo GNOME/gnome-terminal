@@ -1445,6 +1445,25 @@ terminal_screen_popup_menu (GtkWidget *widget)
   return TRUE;
 }
 
+static void
+terminal_screen_do_popup (TerminalScreen *screen,
+                          GdkEventButton *event,
+                          char *matched_string,
+                          int matched_flavor)
+{
+  TerminalScreenPopupInfo *info;
+
+  info = terminal_screen_popup_info_new (screen);
+  info->button = event->button;
+  info->state = event->state & gtk_accelerator_get_default_mod_mask ();
+  info->timestamp = event->time;
+  info->string = matched_string; /* adopted */
+  info->flavour = matched_flavor;
+
+  g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
+  terminal_screen_popup_info_unref (info);
+}
+
 static gboolean
 terminal_screen_button_press (GtkWidget      *widget,
                               GdkEventButton *event)
@@ -1488,22 +1507,26 @@ terminal_screen_button_press (GtkWidget      *widget,
         }
     }
 
-  if (event->button == 3 &&
-      (state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) == 0)
+  if (event->type == GDK_BUTTON_PRESS && event->button == 3)
     {
-      TerminalScreenPopupInfo *info;
-
-      info = terminal_screen_popup_info_new (screen);
-      info->button = event->button;
-      info->state = state;
-      info->timestamp = event->time;
-      info->string = matched_string; /* adopted */
-      info->flavour = matched_flavor;
-
-      g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
-      terminal_screen_popup_info_unref (info);
-
-      return TRUE;
+      if (!(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)))
+        {
+          /* on right-click, we should first try to send the mouse event to
+           * the client, and popup only if that's not handled. */
+          if (button_press_event && button_press_event (widget, event))
+            {
+              g_free (matched_string);
+              return TRUE;
+            }
+          terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
+          return TRUE;
+        }
+      else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
+        {
+          /* do popup on shift+right-click */
+          terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
+          return TRUE;
+        }
     }
 
   g_free (matched_string);
