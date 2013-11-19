@@ -217,9 +217,9 @@ option_app_id_cb (const gchar *option_name,
 {
   OptionData *data = user_data;
 
-  if (!g_dbus_is_name (value)) {
+  if (!g_application_id_is_valid (value)) {
     g_set_error (error, G_OPTION_ERROR, G_OPTION_ERROR_BAD_VALUE,
-                 "%s is not a valid D-Bus name", value);
+                 "\"%s\" is not a valid application ID", value);
     return FALSE;
   }
 
