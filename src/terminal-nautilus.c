@@ -238,9 +238,10 @@ ssh_argv (const char *uri,
 
   g_assert (uri != NULL);
 
-  argv = g_new0 (char *, 8);
+  argv = g_new0 (char *, 9);
   argc = 0;
   argv[argc++] = g_strdup ("ssh");
+  argv[argc++] = g_strdup ("-t");
 
   file = g_file_new_for_uri (uri);
   parse_sftp_uri (file, &user_name, &host_name, &host_port, &path);
