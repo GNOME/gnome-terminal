@@ -209,7 +209,7 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
                                       const char  *key,
                                       TerminalApp *app)
 {
-  gs_free char **encodings = NULL;
+  gs_strfreev char **encodings = NULL;
   int i;
   TerminalEncoding *encoding;
 
@@ -230,7 +230,7 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
   if (terminal_encoding_is_valid (encoding))
     encoding->is_active = TRUE;
 
-  g_settings_get (settings, key, "^a&s", &encodings);
+  g_settings_get (settings, key, "^as", &encodings);
   for (i = 0; encodings[i] != NULL; ++i) {
       encoding = terminal_app_ensure_encoding (app, encodings[i]);
       if (!terminal_encoding_is_valid (encoding))
@@ -665,11 +665,11 @@ terminal_app_get_proxy_settings (TerminalApp *app)
 PangoFontDescription *
 terminal_app_get_system_font (TerminalApp *app)
 {
-  const char *font;
+  gs_free char *font = NULL;
 
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
 
-  g_settings_get (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME, "&s", &font);
+  font = g_settings_get_string (app->desktop_interface_settings, MONOSPACE_FONT_KEY_NAME);
 
   return pango_font_description_from_string (font);
 }

@@ -211,7 +211,7 @@ key_changed_cb (GSettings *settings,
 {
   GtkApplication *application = user_data;
   KeyEntry *key_entry;
-  const char *value;
+  gs_free char *value = NULL;
 
   _terminal_debug_print (TERMINAL_DEBUG_ACCELS,
                          "key %s changed\n",
@@ -226,7 +226,7 @@ key_changed_cb (GSettings *settings,
       return;
     }
 
-  g_settings_get (settings, settings_key, "&s", &value);
+  value = g_settings_get_string (settings, settings_key);
 
   if (g_str_equal (value, "disabled")) {
     if (key_entry->installed)
@@ -365,12 +365,12 @@ accel_set_func (GtkTreeViewColumn *tree_column,
                   "visible", FALSE,
 		  NULL);
   } else {
-    const char *value;
+    gs_free char *value;
     guint key;
     GdkModifierType mods;
     gboolean writable;
 
-    g_settings_get (keybinding_settings, ke->settings_key, "&s", &value);
+    value = g_settings_get_string (keybinding_settings, ke->settings_key);
     gtk_accelerator_parse (value, &key, &mods);
 
     writable = g_settings_is_writable (keybinding_settings, ke->settings_key);

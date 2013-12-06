@@ -709,13 +709,14 @@ char *
 terminal_screen_get_description (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
+  gs_free char *title_string = NULL;
   const char *title;
 
   /* use --title argument if one was supplied, otherwise ask the profile */
   if (priv->title)
     title = priv->title;
   else
-    g_settings_get (priv->profile, TERMINAL_PROFILE_TITLE_KEY, "&s", &title);
+    title = title_string = g_settings_get_string (priv->profile, TERMINAL_PROFILE_TITLE_KEY);
 
   return g_strdup_printf ("%s — %d",
                           title && title[0] ? title : _("Terminal"),
@@ -749,9 +750,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING))
     {
       TerminalEncoding *encoding;
-      const char *str;
+      gs_free char *str;
 
-      g_settings_get (profile, TERMINAL_PROFILE_ENCODING, "&s", &str);
+      str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING);
       encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
       vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
     }
@@ -782,7 +783,8 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHARS_KEY))
     {
-      g_settings_get (profile, TERMINAL_PROFILE_WORD_CHARS_KEY, "&s", &string);
+      gs_free char *word_chars;
+      word_chars = g_settings_get_string (profile, TERMINAL_PROFILE_WORD_CHARS_KEY);
       vte_terminal_set_word_chars (vte_terminal, string);
     }
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY))
@@ -864,7 +866,6 @@ terminal_screen_set_font (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
-  const char *font;
   PangoFontDescription *desc;
   int size;
 
@@ -874,7 +875,8 @@ terminal_screen_set_font (TerminalScreen *screen)
     }
   else
     {
-      g_settings_get (profile, TERMINAL_PROFILE_FONT_KEY, "&s", &font);
+      gs_free char *font;
+      font = g_settings_get_string (profile, TERMINAL_PROFILE_FONT_KEY);
       desc = pango_font_description_from_string (font);
     }
 
@@ -1026,9 +1028,9 @@ get_child_command (TerminalScreen *screen,
     }
   else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
     {
-      const char *argv_str;
+      gs_free char *argv_str;
 
-      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
+      argv_str = g_settings_get_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
       if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
         return FALSE;
 
