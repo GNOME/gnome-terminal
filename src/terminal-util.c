@@ -47,6 +47,7 @@
 #include "terminal-screen.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+#include "terminal-libgsystem.h"
 
 void
 terminal_util_set_unique_role (GtkWindow *window, const char *prefix)
@@ -595,7 +596,7 @@ setup_proxy_env (GSettings  *proxy_settings,
 {
   GSettings *child_settings;
   GString *buf;
-  const char *host;
+  gs_free char *host;
   int port;
   gboolean is_http;
 
@@ -603,7 +604,7 @@ setup_proxy_env (GSettings  *proxy_settings,
 
   child_settings = g_settings_get_child (proxy_settings, child_schema_id);
 
-  g_settings_get (child_settings, "host", "&s", &host);
+  host = g_settings_get_string (child_settings, "host");
   port = g_settings_get_int (child_settings, "port");
   if (host[0] == '\0' || port == 0)
     goto out;
@@ -615,16 +616,16 @@ setup_proxy_env (GSettings  *proxy_settings,
   if (is_http &&
       g_settings_get_boolean (child_settings, "use-authentication"))
     {
-      const char *user, *password;
+      gs_free char *user;
 
-      g_settings_get (child_settings, "authentication-user", "&s", &user);
-
+      user = g_settings_get_string (child_settings, "authentication-user");
       if (user[0])
         {
+          gs_free char *password;
+
           g_string_append_uri_escaped (buf, user, NULL, TRUE);
 
-          g_settings_get (child_settings, "authentication-password", "&s", &password);
-
+          password = g_settings_get_string (child_settings, "authentication-password");
           if (password[0])
             {
               g_string_append_c (buf, ':');
@@ -646,9 +647,9 @@ setup_autoconfig_proxy_env (GSettings *proxy_settings,
                             GHashTable *env_table)
 {
   /* XXX  Not sure what to do with this.  See bug #596688.
-  const char *url;
+  gs_free char *url;
 
-  g_settings_get (proxy_settings, "autoconfig-url", "&s", &url);
+  url = g_settings_get_string (proxy_settings, "autoconfig-url");
   if (url[0])
     {
       char *proxy;
@@ -663,10 +664,10 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
                         GHashTable *env_table)
 {
   GString *buf;
-  char **ignore;
+  gs_strfreev char **ignore;
   int i;
 
-  g_settings_get (proxy_settings, "ignore-hosts", "^a&s", &ignore);
+  g_settings_get (proxy_settings, "ignore-hosts", "^as", &ignore);
   if (ignore == NULL)
     return;
 
@@ -677,7 +678,6 @@ setup_ignore_proxy_env (GSettings *proxy_settings,
         g_string_append_c (buf, ',');
       g_string_append (buf, ignore[i]);
     }
-  g_free (ignore);
 
   set_proxy_env (env_table, "no_proxy", g_string_free (buf, FALSE));
 }

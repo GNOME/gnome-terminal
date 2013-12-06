@@ -50,6 +50,7 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 #include "terminal-info-bar.h"
+#include "terminal-libgsystem.h"
 
 #include "eggshell.h"
 
@@ -771,6 +772,7 @@ terminal_screen_format_title (TerminalScreen *screen,
   const char *static_title = NULL;
   GString *title;
   gboolean add_sep = FALSE;
+  gs_free char *title_string = NULL;
 
   g_assert (titleptr);
 
@@ -778,7 +780,7 @@ terminal_screen_format_title (TerminalScreen *screen,
   if (priv->override_title)
     static_title = priv->override_title;
   else
-    g_settings_get (priv->profile, TERMINAL_PROFILE_TITLE_KEY, "&s", &static_title);
+    static_title = title_string = g_settings_get_string (priv->profile, TERMINAL_PROFILE_TITLE_KEY);
 
   title = g_string_sized_new (128);
 
@@ -856,7 +858,6 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   GObject *object = G_OBJECT (screen);
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   TerminalWindow *window;
-  const char *string;
 
   g_object_freeze_notify (object);
 
@@ -874,9 +875,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING))
     {
       TerminalEncoding *encoding;
-      const char *str;
+      gs_free char *str;
 
-      g_settings_get (profile, TERMINAL_PROFILE_ENCODING, "&s", &str);
+      str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING);
       encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
       vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
     }
@@ -909,8 +910,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHARS_KEY))
     {
-      g_settings_get (profile, TERMINAL_PROFILE_WORD_CHARS_KEY, "&s", &string);
-      vte_terminal_set_word_chars (vte_terminal, string);
+      gs_free char *word_chars;
+      word_chars = g_settings_get_string (profile, TERMINAL_PROFILE_WORD_CHARS_KEY);
+      vte_terminal_set_word_chars (vte_terminal, word_chars);
     }
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY))
     vte_terminal_set_scroll_on_keystroke (vte_terminal,
@@ -989,7 +991,6 @@ terminal_screen_set_font (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
   GSettings *profile = priv->profile;
-  const char *font;
   PangoFontDescription *desc;
   int size;
 
@@ -999,7 +1000,8 @@ terminal_screen_set_font (TerminalScreen *screen)
     }
   else
     {
-      g_settings_get (profile, TERMINAL_PROFILE_FONT_KEY, "&s", &font);
+      gs_free char *font;
+      font = g_settings_get_string (profile, TERMINAL_PROFILE_FONT_KEY);
       desc = pango_font_description_from_string (font);
     }
 
@@ -1141,9 +1143,9 @@ get_child_command (TerminalScreen *screen,
     }
   else if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY))
     {
-      const char *argv_str;
+      gs_free char *argv_str;
 
-      g_settings_get (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY, "&s", &argv_str);
+      argv_str = g_settings_get_string (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
       if (!g_shell_parse_argv (argv_str, NULL, &argv, err))
         return FALSE;
 
@@ -2116,10 +2118,10 @@ terminal_screen_save_config (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
   VteTerminal *terminal = VTE_TERMINAL (screen);
-  const char *profile_id;
+  gs_free char *profile_id;
   char *working_directory;
 
-  g_settings_get (priv->profile, TERMINAL_PROFILE_NAME_KEY, "&s", &profile_id);
+  profile_id = g_settings_get_string (priv->profile, TERMINAL_PROFILE_NAME_KEY);
   g_key_file_set_string (key_file, group, TERMINAL_CONFIG_TERMINAL_PROP_PROFILE_ID, profile_id);
 
   if (priv->override_command)

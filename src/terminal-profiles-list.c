@@ -23,6 +23,7 @@
 
 #include "terminal-profiles-list.h"
 #include "terminal-schemas.h"
+#include "terminal-libgsystem.h"
 
 #include <string.h>
 #include <uuid.h>
@@ -244,8 +245,10 @@ terminal_profiles_compare (gconstpointer pa,
 {
   GSettings *a = (GSettings *) pa;
   GSettings *b = (GSettings *) pb;
-  const char *na, *nb;
-  char *patha, *pathb;
+  gs_free char *na = NULL;
+  gs_free char *nb = NULL;
+  gs_free char *patha = NULL;
+  gs_free char *pathb = NULL;
   int result;
 
   if (pa == pb)
@@ -255,17 +258,13 @@ terminal_profiles_compare (gconstpointer pa,
   if (pb == NULL)
     return -1;
 
-  g_settings_get (a, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &na);
-  g_settings_get (b, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &nb);
+  na = g_settings_get_string (a, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
+  nb = g_settings_get_string (b, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
   result =  g_utf8_collate (na, nb);
   if (result != 0)
     return result;
 
   g_object_get (a, "path", &patha, NULL);
   g_object_get (b, "path", &pathb, NULL);
-  result = strcmp (patha, pathb);
-  g_free (patha);
-  g_free (pathb);
-
-  return result;
+  return strcmp (patha, pathb);
 }

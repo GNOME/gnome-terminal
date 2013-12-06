@@ -31,6 +31,7 @@
 #include "terminal-profiles-list.h"
 #include "terminal-type-builtins.h"
 #include "terminal-debug.h"
+#include "terminal-libgsystem.h"
 
 static gboolean clean = FALSE;
 static gboolean dry_run = FALSE;
@@ -363,7 +364,8 @@ migrate_profile (TerminalSettingsList *list,
 {
   GSettings *settings;
   char *child_name, *path;
-  const char *name;
+  gs_free char *name;
+  gboolean is_default;
 
   if (g_strcmp0 (gconf_id, default_gconf_id) == 0) {
     /* Re-use the default list child */
@@ -379,8 +381,8 @@ migrate_profile (TerminalSettingsList *list,
   migrate_string (client, path, KEY_VISIBLE_NAME,
                   settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
 
-  g_settings_get (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &name);
-  if (strlen (name) == 0)
+  g_settings_get (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "s", &name);
+  if (name[0] == '\0')
     g_settings_set_string (settings, TERMINAL_PROFILE_VISIBLE_NAME_KEY, _("Unnamed"));
 
   migrate_string (client, path, KEY_FOREGROUND_COLOR,

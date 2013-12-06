@@ -35,6 +35,7 @@
 #include "terminal-util.h"
 #include "terminal-profiles-list.h"
 #include "terminal-encoding.h"
+#include "terminal-libgsystem.h"
 
 typedef struct {
   TerminalSettingsList *profiles_list;
@@ -85,11 +86,11 @@ profile_cell_data_func (GtkTreeViewColumn *tree_column,
                         PrefData *data)
 {
   GSettings *profile;
-  const char *text;
+  gs_free char *text;
   GValue value = { 0, };
 
   gtk_tree_model_get (tree_model, iter, (int) COL_PROFILE, &profile, (int) -1);
-  g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &text);
+  text = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
 
   g_value_init (&value, G_TYPE_STRING);
   if (text[0])
@@ -379,13 +380,13 @@ profile_list_delete_button_clicked_cb (GtkWidget *button,
 {
   GtkWidget *dialog;
   GSettings *selected_profile;
-  const char *name;
+  gs_free char *name = NULL;
 
   selected_profile = profile_list_ref_selected (data);
   if (selected_profile == NULL)
     return;
 
-  g_settings_get (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &name);
+  name = g_settings_get_string (selected_profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
   dialog = gtk_message_dialog_new (GTK_WINDOW (data->dialog),
                                    GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_QUESTION,
