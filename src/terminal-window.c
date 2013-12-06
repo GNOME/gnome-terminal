@@ -44,6 +44,7 @@
 #include "terminal-tabs-menu.h"
 #include "terminal-util.h"
 #include "terminal-window.h"
+#include "terminal-libgsystem.h"
 
 struct _TerminalWindowPrivate
 {
@@ -411,11 +412,11 @@ profile_visible_name_notify_cb (GSettings  *profile,
                                 const char *key,
                                 GtkAction  *action)
 {
-  const char *visible_name;
+  gs_free char *visible_name;
   char *dot, *display_name;
   guint num;
 
-  g_settings_get (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY, "&s", &visible_name);
+  visible_name = g_settings_get_string (profile, TERMINAL_PROFILE_VISIBLE_NAME_KEY);
   display_name = escape_underscores (visible_name);
 
   dot = strchr (gtk_action_get_name (action), '.');
