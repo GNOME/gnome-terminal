@@ -732,7 +732,6 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   GObject *object = G_OBJECT (screen);
   VteTerminal *vte_terminal = VTE_TERMINAL (screen);
   TerminalWindow *window;
-  const char *string;
 
   g_object_freeze_notify (object);
 
@@ -785,7 +784,7 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
     {
       gs_free char *word_chars;
       word_chars = g_settings_get_string (profile, TERMINAL_PROFILE_WORD_CHARS_KEY);
-      vte_terminal_set_word_chars (vte_terminal, string);
+      vte_terminal_set_word_chars (vte_terminal, word_chars);
     }
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY))
     vte_terminal_set_scroll_on_keystroke (vte_terminal,
