@@ -517,17 +517,8 @@ parse_arguments (int *argcp,
     return NULL;
   }
 
-  if (data->working_directory == NULL) {
-    char *cwd;
-
-    /* We use get_current_dir_name() here instead of getcwd / g_get_current_dir()
-     * because we want to use the value from PWD (if it is correct).
-     * See bug 502146.
-     */
-    cwd = get_current_dir_name ();
-    data->working_directory = g_strdup (cwd);
-    free (cwd);
-  }
+  if (data->working_directory == NULL)
+    data->working_directory = g_get_current_dir ();
 
   /* Do this here so that gdk_display is initialized */
   if (data->startup_id == NULL)
