@@ -1960,6 +1960,7 @@ terminal_screen_check_match (TerminalScreen *screen,
  * terminal_screen_has_foreground_process:
  * @screen:
  * @process_name: (out) (allow-none): the basename of the program, or %NULL
+ * @cmdline: (out) (allow-none): the full command line, or %NULL
  *
  * Checks whether there's a foreground process running in
  * this terminal.
@@ -1968,13 +1969,16 @@ terminal_screen_check_match (TerminalScreen *screen,
  */
 gboolean
 terminal_screen_has_foreground_process (TerminalScreen *screen,
-                                        char           **process_name)
+                                        char           **process_name,
+                                        char           **cmdline)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  gs_free char *cmdline = NULL;
+  gs_free char *command = NULL;
+  gs_free char *data = NULL;
   gs_free char *basename = NULL;
   gs_free char *name = NULL;
   char filename[64];
+  gsize i;
   gsize len;
   int fgpid;
 
@@ -1986,10 +1990,10 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
     return FALSE;
 
   g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
-  if (!g_file_get_contents (filename, &cmdline, &len, NULL))
+  if (!g_file_get_contents (filename, &data, &len, NULL))
     return TRUE;
 
-  basename = g_path_get_basename (cmdline);
+  basename = g_path_get_basename (data);
   if (!basename)
     return TRUE;
 
@@ -1997,8 +2001,24 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (!name)
     return TRUE;
 
+  if (!process_name && !cmdline)
+    return TRUE;
+
   if (process_name)
     gs_transfer_out_value (process_name, &name);
+
+  for (i = 0; i < len - 1; i++)
+    {
+      if (data[i] == '\0')
+        data[i] = ' ';
+    }
+
+  command = g_filename_to_utf8 (data, -1, NULL, NULL, NULL);
+  if (!command)
+    return TRUE;
+
+  if (cmdline)
+    gs_transfer_out_value (cmdline, &command);
 
   return TRUE;
 }

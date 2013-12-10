@@ -134,7 +134,8 @@ void terminal_screen_save_config (TerminalScreen *screen,
 void terminal_screen_update_style (TerminalScreen *screen);
 
 gboolean terminal_screen_has_foreground_process (TerminalScreen *screen,
-                                                 char           **process_name);
+                                                 char           **process_name,
+                                                 char           **cmdline);
 
 /* Allow scales a bit smaller and a bit larger than the usual pango ranges */
 #define TERMINAL_SCALE_XXX_SMALL   (PANGO_SCALE_XX_SMALL/1.2)

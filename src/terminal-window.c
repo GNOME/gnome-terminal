@@ -3532,7 +3532,7 @@ confirm_close_window_or_tab (TerminalWindow *window,
 
   if (screen)
     {
-      do_confirm = terminal_screen_has_foreground_process (screen, NULL);
+      do_confirm = terminal_screen_has_foreground_process (screen, NULL, NULL);
       n_tabs = 1;
     }
   else
@@ -3549,7 +3549,7 @@ confirm_close_window_or_tab (TerminalWindow *window,
           TerminalScreen *terminal_screen;
 
           terminal_screen = terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (t->data));
-          if (terminal_screen_has_foreground_process (terminal_screen, NULL))
+          if (terminal_screen_has_foreground_process (terminal_screen, NULL, NULL))
             {
               do_confirm = TRUE;
               break;
