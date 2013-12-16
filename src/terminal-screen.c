@@ -821,6 +821,10 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
     vte_terminal_set_cursor_shape (vte_terminal,
                                    g_settings_get_enum (priv->profile, TERMINAL_PROFILE_CURSOR_SHAPE_KEY));
 
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY))
+    vte_terminal_set_rewrap_on_resize (vte_terminal,
+                                       g_settings_get_boolean (profile, TERMINAL_PROFILE_REWRAP_ON_RESIZE_KEY));
+
   g_object_thaw_notify (object);
 }
 
