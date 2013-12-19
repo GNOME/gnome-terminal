@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: te\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-24 08:23+0000\n"
-"PO-Revision-Date: 2013-03-25 19:29+0530\n"
+"POT-Creation-Date: 2013-12-19 10:14+0000\n"
+"PO-Revision-Date: 2013-12-19 20:58+0630\n"
 "Last-Translator: Krishnababu Krothapalli <kkrothap@redhat.com>\n"
 "Language-Team: Telugu <Fedora-trans-te@redhat.com>\n"
 "Language: telugu\n"
@@ -24,9 +24,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:102
-#: ../src/terminal-accels.c:246 ../src/terminal.c:250
-#: ../src/terminal-window.c:1840
+#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:120
+#: ../src/terminal-accels.c:179 ../src/terminal.c:246
+#: ../src/terminal-screen.c:722 ../src/terminal-screen.c:1567
+#: ../src/terminal-window.c:2555 ../src/terminal-window.c:2880
 msgid "Terminal"
 msgstr "టెర్మినల్"
 
@@ -38,18 +39,12 @@ msgstr "ఆదేశ లైనును ఉపయోగించండి"
 msgid "shell;prompt;command;commandline;"
 msgstr "షెల్;ప్రామ్ట్;కమాండ్;కమాండ్‌లైన్;"
 
-#: ../src/client.c:88
+#: ../src/client.c:91
 msgid "COMMAND"
 msgstr "ఆదేశం"
 
-#: ../src/client.c:93
+#: ../src/client.c:96
 #, c-format
-#| msgid ""
-#| "Commands:\n"
-#| "  help    Shows this information\n"
-#| "  open    Create a new terminal\n"
-#| "\n"
-#| "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgid ""
 "Commands:\n"
 "  help    Shows this information\n"
@@ -58,14 +53,14 @@ msgid ""
 "\n"
 "Use \"%s COMMAND --help\" to get help on each command.\n"
 msgstr ""
-"Commands:\n"
-"  help    Shows this information\n"
-"  run     Create a new terminal running the specified command\n"
-"  shell   Create a new terminal running the user shell\n"
+"ఆదేశాలు:\n"
+"  help    ఈ సమాచారం చూపును\n"
+"  run     తెలిపిన ఆదేశం నడుపుతూ కొత్త టెర్మినల్ సృష్టించును\n"
+"  shell   వాడుకరి షెల్ నడుపుతూ కొత్త టెర్మినల్ సృష్టించును\n"
 "\n"
-"Use \"%s COMMAND --help\" to get help on each command.\n"
+"ప్రతి ఆదేశం పైన సహాయం పొందుటకు \"%s COMMAND --help\" ఉపయోగించండి.\n"
 
-#: ../src/client.c:200 ../src/terminal-options.c:681
+#: ../src/client.c:200 ../src/terminal-options.c:683
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" విలువైన జూమ్ గుణకం కాదు"
@@ -75,7 +70,6 @@ msgid "Be quiet"
 msgstr "నిశబ్దం"
 
 #: ../src/client.c:342 ../src/terminal-options.c:1095
-#| msgid "Maximise the window"
 msgid "Maximize the window"
 msgstr "విండోను గరిష్ఠీకరించు"
 
@@ -189,7 +183,7 @@ msgstr "కిటికీ ఐచ్చికాలను చూపించు"
 msgid "Terminal options:"
 msgstr "టెర్మినల్ ఐచ్చికాలు:"
 
-#: ../src/client.c:423 ../src/terminal-options.c:1460
+#: ../src/client.c:423 ../src/terminal-options.c:1287
 msgid "Show terminal options"
 msgstr "టెర్మినల్ ఐచ్చికాలను చూపుము"
 
@@ -237,23 +231,34 @@ msgstr "వెనుకకు వెతుకు(_b)"
 msgid "_Wrap around"
 msgstr "చుట్టూతా అమర్చు(_W)"
 
-#: ../src/migration.c:384 ../src/terminal-prefs.c:98
+#: ../src/migration.c:388
+msgid "Default"
+msgstr "అప్రమేయం"
+
+#: ../src/migration.c:388 ../src/terminal-prefs.c:99
 msgid "Unnamed"
 msgstr "పేరుపెట్టనిది"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:1
+#: ../src/org.gnome.Terminal.gschema.xml.h:1
+#, fuzzy
+#| msgid "Unnamed"
+msgctxt "visible-name"
+msgid "'Unnamed'"
+msgstr "పేరుపెట్టనిది"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:2
 msgid "Human-readable name of the profile"
 msgstr "మనిషి-చదవగలిగిన ప్రవర పేరు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:2
+#: ../src/org.gnome.Terminal.gschema.xml.h:3
 msgid "Human-readable name of the profile."
 msgstr "మనిషి-చదవగలిగిన ప్రవర పేరు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:3
+#: ../src/org.gnome.Terminal.gschema.xml.h:4
 msgid "Default color of text in the terminal"
 msgstr "టెర్మినల్ నందలి పాఠ్యపు అప్రమేయ రంగు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:4
+#: ../src/org.gnome.Terminal.gschema.xml.h:5
 msgid ""
 "Default color of text in the terminal, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -262,11 +267,11 @@ msgstr ""
 "కావచ్చు, లేదా "
 "\"ఎరుపు\" వంటి వర్ణనామము కావచ్చు)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:5
+#: ../src/org.gnome.Terminal.gschema.xml.h:6
 msgid "Default color of terminal background"
 msgstr "టెర్మినల్ నేపథ్యము యొక్క అప్రమేయ రంగు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:6
+#: ../src/org.gnome.Terminal.gschema.xml.h:7
 msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
@@ -275,11 +280,11 @@ msgstr ""
 "కావచ్చు, లేదా "
 "\"ఎరుపు\" వంటి వర్ణనామము కావచ్చు)."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:7
+#: ../src/org.gnome.Terminal.gschema.xml.h:8
 msgid "Default color of bold text in the terminal"
 msgstr "టెర్మినల్ నందలి లావుపాటి పాఠ్యము యొక్క అప్రమేయ రంగు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:8
+#: ../src/org.gnome.Terminal.gschema.xml.h:9
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
@@ -291,41 +296,29 @@ msgstr ""
 "true అయితే "
 "యిది వదిలివేయబడును."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:9
+#: ../src/org.gnome.Terminal.gschema.xml.h:10
 msgid "Whether bold text should use the same color as normal text"
 msgstr "సాధారణ ఫాఠ్యము వుపయోగించు రంగునే లావుపాటి పాఠ్యము కూడా వుపయోగించవలెనా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:10
+#: ../src/org.gnome.Terminal.gschema.xml.h:11
 msgid ""
 "If true, boldface text will be rendered using the same color as normal text."
 msgstr ""
 "true అయితే, సాధారణ పాఠ్యము రంగు వుపయోగించే బోల్డ్‌ఫేస్ పాఠ్యము "
 "ప్రస్పుటింటబడుతుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:11
-msgid "What to do with dynamic title"
-msgstr "యాంత్రిక శీర్షిక తో ఏమిచేయాలి"
+#: ../src/org.gnome.Terminal.gschema.xml.h:12
+#, fuzzy
+#| msgid "Terminal"
+msgctxt "title"
+msgid "'Terminal'"
+msgstr "టెర్మినల్"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:12
-msgid ""
-"If the application in the terminal sets the title (most typically people "
-"have their shell set up to do this), the dynamically-set title can erase the "
-"configured title, go before it, go after it, or replace it. The possible "
-"values are \"replace\", \"before\", \"after\", and \"ignore\"."
-msgstr ""
-"టెర్మినల్ నందలి అనువర్తనము శీర్షికను అమర్చినట్లైతే ( సాధారణంగా వినియోగదారులు "
-"ఇది చేయుటకు వారి షెల్ "
-"అమర్పును కలిగిఉంటారు), యాత్రికంగా-అమర్చు శీర్షిక ఆకృతీకరించిన శీర్షికను "
-"చెరిపివేస్తుంది,ముందుకు "
-"వెళ్ళు, తరువాతకి వెళ్ళు, లేదా పునఃస్థాపించు.సాద్యమగు విలువలు "
-"\"పునఃస్థాపించు\", \"ముందుకి\", "
-"\"తరువాత\", మరియు \"వదిలివేయు\"."
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:13
+#: ../src/org.gnome.Terminal.gschema.xml.h:13
 msgid "Title for terminal"
 msgstr "టెర్మినల్ కు శీర్షిక"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:14
+#: ../src/org.gnome.Terminal.gschema.xml.h:14
 msgid ""
 "Title to display for the terminal window or tab. This title may be replaced "
 "by or combined with the title set by the application inside the terminal, "
@@ -335,24 +328,24 @@ msgstr ""
 "నందు తెరిచిన అనువర్తనము శీర్షికతో "
 "జతచేయడంకాని లేదా పునఃస్థాపించడం కాని జరుగుతుంది, title_mode అమరిక పై ఆధారపడి."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:15
+#: ../src/org.gnome.Terminal.gschema.xml.h:15
 msgid "Whether to allow bold text"
 msgstr "బోల్డ్ పాఠ్యమును అనుమతించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:16
+#: ../src/org.gnome.Terminal.gschema.xml.h:16
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
 "నిజమైతే, టెర్మినల్ నందు అనువర్తనాలను పాఠ్యమును బోల్డ్ ఫేస్ చేయుటకు అనుమతించు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:17
+#: ../src/org.gnome.Terminal.gschema.xml.h:17
 msgid "Whether to ring the terminal bell"
 msgstr "టెర్మినల్ గంటను నిశ్శబ్దంగా ఉంచాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:18
+#: ../src/org.gnome.Terminal.gschema.xml.h:18
 msgid "Characters that are considered \"part of a word\""
 msgstr "\"పదము నందలి బాగము\" గా తలచిన అక్షరములు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:19
+#: ../src/org.gnome.Terminal.gschema.xml.h:19
 msgid ""
 "When selecting text by word, sequences of these characters are considered "
 "single words. Ranges can be given as \"A-Z\". Literal hyphen (not expressing "
@@ -363,20 +356,20 @@ msgstr ""
 "హద్దులు ఇలా ఇవ్వబడినవి \"A-Z\". అక్షరం హైఫన్(హద్దును తెలుపదు) ఇవ్వబడిన మొదటి "
 "అక్షరం."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:20
+#: ../src/org.gnome.Terminal.gschema.xml.h:20
 msgid "Whether to show menubar in new windows/tabs"
 msgstr "మెనూ‌బార్ ను కొత్త కిటికీల/ట్యాబ్‌ల నందు మెనూబార్ చూపించవలెనా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:21
+#: ../src/org.gnome.Terminal.gschema.xml.h:21
 msgid "True if the menubar should be shown in new window"
 msgstr ""
 "ఈ ప్రవరతో ఉన్న కిటికీలకు/ట్యాబ్‌లకు, కొత్త కిటికీలో మెనూబార్ చూపించితే నిజము."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:22
+#: ../src/org.gnome.Terminal.gschema.xml.h:22
 msgid "Whether to use custom terminal size for new windows"
 msgstr "కొత్త కిటికీల కొరకు కావలసిన టెర్మినల్ పరిమాణమును ఉపయోగించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:23
+#: ../src/org.gnome.Terminal.gschema.xml.h:23
 msgid ""
 "If true, newly created terminal windows will have custom size specified by "
 "default_size_columns and default_size_rows."
@@ -385,11 +378,11 @@ msgstr ""
 "default_size_rows "
 "ద్వారా తెలుపబడిన మలచుకొనిన పరిమాణమును కలిగివుంటాయి."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:24
+#: ../src/org.gnome.Terminal.gschema.xml.h:24
 msgid "Default number of columns"
 msgstr "నిలువువరుసల యొక్క అప్రమేయ సంఖ్య"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:25
+#: ../src/org.gnome.Terminal.gschema.xml.h:25
 msgid ""
 "Number of columns in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -398,11 +391,11 @@ msgstr ""
 "use_custom_default_size చేతనము "
 "కాకపోతే యెటువంటి ప్రభావాన్ని కలిగివుండవు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:26
+#: ../src/org.gnome.Terminal.gschema.xml.h:26
 msgid "Default number of rows"
 msgstr "అడ్డువరుసల యొక్క అప్రమేయ సంఖ్య"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:27
+#: ../src/org.gnome.Terminal.gschema.xml.h:27
 msgid ""
 "Number of rows in newly created terminal windows. Has no effect if "
 "use_custom_default_size is not enabled."
@@ -411,15 +404,15 @@ msgstr ""
 "use_custom_default_size చేతనము "
 "కాకపోతే యెటువంటి ప్రభావాన్ని కలిగివుండదు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:28
+#: ../src/org.gnome.Terminal.gschema.xml.h:28
 msgid "When to show the scrollbar"
 msgstr "స్క్రాల్‌బార్ యొక్క స్థానం"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:29
+#: ../src/org.gnome.Terminal.gschema.xml.h:29
 msgid "Number of lines to keep in scrollback"
 msgstr "స్క్రాల్‌బార్ నందు ఉంచవలిసిన వరుసల సంఖ్య"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:30
+#: ../src/org.gnome.Terminal.gschema.xml.h:30
 msgid ""
 "Number of scrollback lines to keep around. You can scroll back in the "
 "terminal by this number of lines; lines that don't fit in the scrollback are "
@@ -431,11 +424,11 @@ msgstr ""
 "scrollback_unlimited అనునది "
 "true అయితే, ఈ విలువ వదిలివేయబడును."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:31
+#: ../src/org.gnome.Terminal.gschema.xml.h:31
 msgid "Whether an unlimited number of lines should be kept in scrollback"
 msgstr "పరిమితంకాని వరుసులు స్క్రాల్‌బ్యాక్ నందు వుంచవలెనా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:32
+#: ../src/org.gnome.Terminal.gschema.xml.h:32
 msgid ""
 "If true, scrollback lines will never be discarded. The scrollback history is "
 "stored on disk temporarily, so this may cause the system to run out of disk "
@@ -447,30 +440,30 @@ msgstr ""
 "డిస్కు జాగా అయిపోవుటకు యిది "
 "కారణం కావచ్చును."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:33
+#: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Whether to scroll to the bottom when a key is pressed"
 msgstr "కీ వత్తినప్పుడు క్రిందవరకు స్క్రాలు కావాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:34
+#: ../src/org.gnome.Terminal.gschema.xml.h:34
 msgid "If true, pressing a key jumps the scrollbar to the bottom."
 msgstr "నిజమైతే, కీ వత్తుట ద్వారా స్క్రాల్‌బార్ క్రిందకు దూకుతుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:35
+#: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "Whether to scroll to the bottom when there's new output"
 msgstr "కొత్త అవుట్‌పుట్ వచ్చనప్పుడు క్రిందివరకు స్క్రాల్ కావాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:36
+#: ../src/org.gnome.Terminal.gschema.xml.h:36
 msgid ""
 "If true, whenever there's new output the terminal will scroll to the bottom."
 msgstr ""
 "నిజమైతే, ఎప్పుడైతే కొత్త అవుట్‌పుట్ ఉంటుందో టెర్మినల్ క్రిందికి స్క్రాల్ "
 "అవుతుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:37
+#: ../src/org.gnome.Terminal.gschema.xml.h:37
 msgid "What to do with the terminal when the child command exits"
 msgstr "చైల్డ్ ఆదేశం ఉన్నప్పుడు టెర్మినల్ తో ఏమిచేయాలి"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:38
+#: ../src/org.gnome.Terminal.gschema.xml.h:38
 msgid ""
 "Possible values are \"close\" to close the terminal, and \"restart\" to "
 "restart the command."
@@ -479,24 +472,28 @@ msgstr ""
 "ఆదేశాన్ని "
 "పునఃప్రారంభించుటకు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:39
+#: ../src/org.gnome.Terminal.gschema.xml.h:39
 msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "ఆదేశాన్ని టెర్నినల్ నందు లాగిన్ షెల్ లాగా దించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:40
+#: ../src/org.gnome.Terminal.gschema.xml.h:40
+#, fuzzy
+#| msgid ""
+#| "If true, the command inside the terminal will be launched as a login "
+#| "shell. (argv[0] will have a hyphen in front of it.)"
 msgid ""
-"If true, the command inside the terminal will be launched as a login shell. "
-"(argv[0] will have a hyphen in front of it.)"
+"If true, the command inside the terminal will be launched as a login shell "
+"(argv[0] will have a hyphen in front of it)."
 msgstr ""
 "నిజమైతే, టెర్మినల్ లోపల ఉన్న ఆదేశం లాగిన్ షెల్‌లాగా దించబడుతుంది. (argv[0] "
 "దానికి ముందు ఒక హైఫన్ ను "
 "కలిగిఉండబోతోంది.)"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:41
+#: ../src/org.gnome.Terminal.gschema.xml.h:41
 msgid "Whether to update login records when launching terminal command"
 msgstr "టెర్మినల్ ఆదేశాన్ని దించినప్పుడు లాగిన్ రికార్డులను నవీకరించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:42
+#: ../src/org.gnome.Terminal.gschema.xml.h:42
 msgid ""
 "If true, the system login records utmp and wtmp will be updated when the "
 "command inside the terminal is launched."
@@ -505,22 +502,22 @@ msgstr ""
 "లోపలి ఆదేశం దించబడుతుందో "
 "అప్పుడు నవీకరించబడతాయి."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:43
+#: ../src/org.gnome.Terminal.gschema.xml.h:43
 msgid "Whether to run a custom command instead of the shell"
 msgstr "షెల్ కు బదులుగా వినియోగదారుని ఆదేశాన్ని నడుపవలెనా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:44
+#: ../src/org.gnome.Terminal.gschema.xml.h:44
 msgid ""
 "If true, the value of the custom_command setting will be used in place of "
 "running a shell."
 msgstr ""
 "నిజమైతే, custom_command అమరిక యొక్క విలువ షెల్ ను నడుపుస్థానంలో ఉపయోగిస్తుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:45
+#: ../src/org.gnome.Terminal.gschema.xml.h:45
 msgid "Whether to blink the cursor"
 msgstr "కర్సర్ బ్లింక్ కావాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:46
+#: ../src/org.gnome.Terminal.gschema.xml.h:46
 msgid ""
 "The possible values are \"system\" to use the global cursor blinking "
 "settings, or \"on\" or \"off\" to set the mode explicitly."
@@ -529,191 +526,151 @@ msgstr ""
 "\"on\" లేదా \"off\" "
 "బహిర్గతముగా మోడ్ అమర్చుటకు."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:47
+#: ../src/org.gnome.Terminal.gschema.xml.h:47
 msgid "The cursor appearance"
 msgstr "కర్సర్ కనిపించువిధానం"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:48
+#: ../src/org.gnome.Terminal.gschema.xml.h:48
 msgid "Custom command to use instead of the shell"
 msgstr "షెల్ కు బదులుగా ఉపయోగించుటకు వాడుకరి ఆదేశం"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:49
+#: ../src/org.gnome.Terminal.gschema.xml.h:49
 msgid "Run this command in place of the shell, if use_custom_command is true."
 msgstr "షెల్ స్థానమునందు ఈ ఆదేశాన్ని నడుపుము, use_custom_command నిజమైతే."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:50
+#: ../src/org.gnome.Terminal.gschema.xml.h:50
 msgid "Palette for terminal applications"
 msgstr "టెర్మినల్ అనువర్తనాల కొరకు పాలెట్"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:51
-#| msgid "A pango font name and size"
+#: ../src/org.gnome.Terminal.gschema.xml.h:51
 msgid "A Pango font name and size"
 msgstr "ప్యాంగో ఫాంట్ పేరు మరియు పరిమాణం"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:52
+#: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "The code sequence the Backspace key generates"
 msgstr "బ్యక్‌స్పేస్ కీ సంభవములు(_B):"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:53
+#: ../src/org.gnome.Terminal.gschema.xml.h:53
 msgid "The code sequence the Delete key generates"
 msgstr "కీ సంభవాలను తొలగించు(_D):"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:54
+#: ../src/org.gnome.Terminal.gschema.xml.h:54
 msgid "Whether to use the colors from the theme for the terminal widget"
 msgstr "టెర్మినల్ విడ్జట్‌కు థీమ్ నుండి రంగులను ఉపయోగించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:55
+#: ../src/org.gnome.Terminal.gschema.xml.h:55
 msgid "Whether to use the system monospace font"
 msgstr "వ్యవస్థ ఫాంటును ఉపయోగించాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:56
+#: ../src/org.gnome.Terminal.gschema.xml.h:56
+#, fuzzy
+#| msgid "Whether to use custom terminal size for new windows"
+msgid "Whether to rewrap the terminal contents on window resize"
+msgstr "కొత్త కిటికీల కొరకు కావలసిన టెర్మినల్ పరిమాణమును ఉపయోగించాలా"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Which encoding to use"
 msgstr "ఏ సంకేతరచన వాడాలి"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Keyboard shortcut to open a new tab"
 msgstr "కొత్త టాబ్ ను తెరుచుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Keyboard shortcut to open a new window"
 msgstr "కొత్త విండోను తెరుచుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Keyboard shortcut to create a new profile"
 msgstr "కొత్త ప్రొఫైల్ ను సృష్టించుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr "ప్రస్తుత టాబ్ సారములను ఫైలునకు దాయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Keyboard shortcut to close a tab"
 msgstr "టాబ్ ను మసివేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Keyboard shortcut to close a window"
 msgstr "విండోను మూసివేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Keyboard shortcut to copy text"
 msgstr "పాఠ్యమును నకలుతీయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Keyboard shortcut to paste text"
 msgstr "పాఠ్యమును అతికించుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr "పూర్తితెర రీతి కి మారుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "మెనూబార్ కనిపించునట్లు చేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "టెర్మినల్ శీర్షికను అమర్చుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "టెర్మినల్ ను తిరిగిఅమర్చుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "టెర్మినల్ ను తుడిచివేయుటకు మరియు తిరిగిఅమర్చుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "మునుపటి టాబ్ నుకు మారుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "తరువాతి టాబ్ నకు మారుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:72
-#| msgid "Keyboard shortcut to save the current tab contents to file"
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "ప్రస్తుత టాబ్‌ను ఎడమకు కదల్చుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:73
-#| msgid "Keyboard shortcut to save the current tab contents to file"
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "ప్రస్తుత టాబ్‌ను కుడికి కదల్చుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:74
-#| msgid "Keyboard shortcut to switch to tab 1"
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to detach current tab"
 msgstr "ప్రస్తుత టాబ్‌ను వేరుచేయుటకు కీబోర్డు లఘవు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:75
-msgid "Keyboard shortcut to switch to tab 1"
-msgstr "టాబ్ 1 కు మారుటకు కీబోర్డు లఘువు"
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#, fuzzy
+#| msgid "Keyboard shortcut to switch to the next tab"
+msgid "Keyboard shortcut to switch to the numbered tab"
+msgstr "తరువాతి టాబ్ నకు మారుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:76
-msgid "Keyboard shortcut to switch to tab 2"
-msgstr "టాబ్ 2 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:77
-msgid "Keyboard shortcut to switch to tab 3"
-msgstr "టాబ్ 3 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:78
-msgid "Keyboard shortcut to switch to tab 4"
-msgstr "టాబ్ 4 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:79
-msgid "Keyboard shortcut to switch to tab 5"
-msgstr "టాబ్ 5 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:80
-msgid "Keyboard shortcut to switch to tab 6"
-msgstr "టాబ్ 6 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:81
-msgid "Keyboard shortcut to switch to tab 7"
-msgstr "టాబ్ 7 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:82
-msgid "Keyboard shortcut to switch to tab 8"
-msgstr "టాబ్ 8 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:83
-msgid "Keyboard shortcut to switch to tab 9"
-msgstr "టాబ్ 9 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:84
-msgid "Keyboard shortcut to switch to tab 10"
-msgstr "టాబ్ 10 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:85
-msgid "Keyboard shortcut to switch to tab 11"
-msgstr "టాబ్ 11 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:86
-msgid "Keyboard shortcut to switch to tab 12"
-msgstr "టాబ్ 12 కు మారుటకు కీబోర్డు లఘువు"
-
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to launch help"
 msgstr "సహాయంను దించుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to make font larger"
 msgstr "ఫాంటు పెద్దదిగా చేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to make font smaller"
 msgstr "ఫాంటును చిన్నిదిగా చేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:90
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "ఫాంటును సాదారణ-పరిమాణం చేయుటకు కీబోర్డు లఘువు"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:91
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Whether the menubar has access keys"
 msgstr "మెనూబార్ ఎక్సిస్ కీలను కలిగిఉండాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:92
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -723,11 +680,11 @@ msgstr ""
 "నడుపబడే కొన్ని అనువర్తనము‌లతో "
 "కల్పించుకొనవచ్చు కనుక వాటిని ఆపివేయుటకు సాద్యమవుతుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:93
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "ప్రామాణిక GTK లఘువు మెనూబార్ ఎక్సిస్ కొరకు చేతనంచేయాలా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:94
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -738,11 +695,11 @@ msgstr ""
 "\") ద్వరా మలుచుకొనవచ్చు. ఈ ఐచ్చికం ప్రామాణిక మెనూబార్ ఏగ్జలరేషన్ ను అచేతంనంకు "
 "అనుమతిస్తుంది."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:95
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "List of available encodings"
 msgstr "అందుబాటులో ఉన్న సంకేతరచనల జాబితా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:96
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -753,101 +710,135 @@ msgstr ""
 "ప్రత్యేక సంకేతరచన నామము \"ప్రస్తుత\" అంటే ప్రస్తుత స్థానికం యొక్క సంకేతరచనను "
 "ప్రదర్శించమని."
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:97
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "టెర్మినల్ కిటికీలను మూయుచున్నప్పుడు నిర్దారణ కొరకు అడగవలెనా"
 
-#: ../src/org.gnome.Terminal.gschema.xml.in.h:98
-#| msgid "Whether to show menubar in new windows/tabs"
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Whether to show the menubar in new windows"
 msgstr "కొత్త విండోల నందు మెనూపట్టీ చూపాలా"
 
-#: ../src/preferences.ui.h:1
-#| msgid "_Preferences"
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#, fuzzy
+#| msgid "Whether to use the system monospace font"
+msgid "Whether to use a dark theme variant"
+msgstr "వ్యవస్థ ఫాంటును ఉపయోగించాలా"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
+#, fuzzy
+#| msgid "Whether to show menubar in new windows/tabs"
+msgid "Whether to open new terminals as windows or tabs"
+msgstr "మెనూ‌బార్ ను కొత్త కిటికీల/ట్యాబ్‌ల నందు మెనూబార్ చూపించవలెనా"
+
+#. Open new terminal in new window
+#: ../src/preferences.ui.h:2
+#, fuzzy
+#| msgid "New Window"
+msgid "Window"
+msgstr "కొత్త కిటికీ"
+
+#. Open new terminal in new tab
+#: ../src/preferences.ui.h:4
+#, fuzzy
+#| msgid "Tabs"
+msgid "Tab"
+msgstr "ట్యాబ్‌లు"
+
+#: ../src/preferences.ui.h:5
 msgid "Preferences"
 msgstr "అభీష్టాలు"
 
-#: ../src/preferences.ui.h:2
+#: ../src/preferences.ui.h:6
 msgid "Show _menubar by default in new terminals"
 msgstr "కొత్త టెర్మినల్ నందు మెనూపట్టీని అప్రమేయంగా చూపుము(_m)"
 
-#: ../src/preferences.ui.h:3
-#| msgid "_Enable menu access keys (such as Alt+F to open the File menu)"
+#: ../src/preferences.ui.h:7
 msgid "_Enable mnemonics (such as Alt+F to open the File menu)"
 msgstr "నిమోనిక్స్ చేతనం చేయి (ఫైలు మెనూ తెరువుటకు Alt+F వలె) (_E)"
 
-#: ../src/preferences.ui.h:4
-#| msgid "Enable the _menu shortcut key (F10 by default)"
+#: ../src/preferences.ui.h:8
 msgid "Enable the _menu accelerator key (F10 by default)"
 msgstr "మెనూ ఏగ్జలరేటర్ కీ చేతనం చేయి(F10 అప్రమేయంగా) (_m)"
 
-#: ../src/preferences.ui.h:5 ../src/profile-preferences.ui.h:61
+#: ../src/preferences.ui.h:9
+msgid "Use _dark theme variant"
+msgstr ""
+
+#: ../src/preferences.ui.h:10
+#, fuzzy
+#| msgid "Open a terminal"
+msgid "Open _new terminals in:"
+msgstr "ఒక టెర్మినల్‌ను తెరువు"
+
+#: ../src/preferences.ui.h:11 ../src/profile-preferences.ui.h:56
 msgid "General"
 msgstr "సాధారణం"
 
-#: ../src/preferences.ui.h:6
-#| msgid "_Shortcut keys:"
+#: ../src/preferences.ui.h:12
 msgid "Shortcuts"
 msgstr "లఘవులు"
 
-#: ../src/preferences.ui.h:7
+#: ../src/preferences.ui.h:13
+msgid "_Clone"
+msgstr ""
+
+#: ../src/preferences.ui.h:14
 msgid "_Profile used when launching a new terminal:"
 msgstr "కొత్త టెర్మినల్ ను దించునప్పుడు ఉపయోగించే ప్రవర (_P):"
 
-#: ../src/preferences.ui.h:8
+#: ../src/preferences.ui.h:15
 msgid "Profiles"
 msgstr "ప్రవరలు"
 
-#: ../src/preferences.ui.h:9
+#: ../src/preferences.ui.h:16
 msgid "E_ncodings shown in menu:"
 msgstr "మెనూ నందు చూపించు సంకేతరచనలు(_n):"
 
-#: ../src/preferences.ui.h:10
-#| msgid "_Encoding"
+#: ../src/preferences.ui.h:17
 msgid "Encodings"
 msgstr "ఎన్‌కోడింగ్లు"
 
-#: ../src/profile-editor.c:47
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "లేత పసుపుపై నలుపు"
 
-#: ../src/profile-editor.c:51
+#: ../src/profile-editor.c:52
 msgid "Black on white"
 msgstr "తెలుపు పై నలుపు"
 
-#: ../src/profile-editor.c:55
+#: ../src/profile-editor.c:56
 msgid "Gray on black"
 msgstr "నలుపు పై ఊదారంగు"
 
-#: ../src/profile-editor.c:59
+#: ../src/profile-editor.c:60
 msgid "Green on black"
 msgstr "నలుపు పై పచ్చరంగు"
 
-#: ../src/profile-editor.c:63
+#: ../src/profile-editor.c:64
 msgid "White on black"
 msgstr "నలుపు పై తెలుపురంగు"
 
-#: ../src/profile-editor.c:411
+#: ../src/profile-editor.c:407
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "ఆదేశము పార్సింగ్ చేయుటలో దోషము: %s"
 
 #. This is the name of a colour scheme
-#: ../src/profile-editor.c:445 ../src/profile-preferences.ui.h:30
+#: ../src/profile-editor.c:438 ../src/profile-preferences.ui.h:30
 msgid "Custom"
 msgstr "అనురూపితం"
 
-#: ../src/profile-editor.c:560
+#: ../src/profile-editor.c:552
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "ప్రవర “%s” సరికూర్చుతున్నది"
 
-#: ../src/profile-editor.c:743
+#: ../src/profile-editor.c:751
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "పాలెట్ రంగు %d ను ఎంచుకొనుము"
 
-#: ../src/profile-editor.c:747
+#: ../src/profile-editor.c:755
 #, c-format
 msgid "Palette entry %d"
 msgstr "పాలెట్ ప్రవేశం %d"
@@ -922,520 +913,469 @@ msgstr "ఎక్స్‍టెర్మ్"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:32
-msgid "Always visible"
-msgstr "ఎల్లప్పుడూ కనిపించు"
-
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:34
-msgid "Visible only when necessary"
-msgstr "అవసరమైనప్పుడు మాత్రమే కనిపించు"
-
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:36
-msgid "Hidden"
-msgstr "దాయబడిన"
-
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:38
+#: ../src/profile-preferences.ui.h:32
 msgid "Automatic"
 msgstr "స్వయంచాలకం"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:40
+#: ../src/profile-preferences.ui.h:34
 msgid "Control-H"
 msgstr "Control-H"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:42
+#: ../src/profile-preferences.ui.h:36
 msgid "ASCII DEL"
 msgstr "ASCII DEL"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:44
+#: ../src/profile-preferences.ui.h:38
 msgid "Escape sequence"
 msgstr "ఎస్కేప్ క్రమము"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:46
+#: ../src/profile-preferences.ui.h:40
 msgid "TTY Erase"
 msgstr "TTY ఎరేజ్"
 
-#: ../src/profile-preferences.ui.h:47
+#: ../src/profile-preferences.ui.h:41
 msgid "Profile Editor"
 msgstr "ప్రవర కూర్పకం"
 
-#: ../src/profile-preferences.ui.h:48
+#: ../src/profile-preferences.ui.h:42
 msgid "_Profile name:"
 msgstr "ప్రవర పేరు (_P):"
 
-#: ../src/profile-preferences.ui.h:49
-#| msgid "Profiles"
+#: ../src/profile-preferences.ui.h:43
 msgid "Profile ID:"
 msgstr "ప్రొఫైల్ ఐడి:"
 
-#: ../src/profile-preferences.ui.h:50
+#: ../src/profile-preferences.ui.h:44
 msgid "_Use the system fixed width font"
 msgstr "వ్యవస్థ యొక్క స్థిర వెడల్పు గలిగిన ఖతిని ఉపయోగించు (_U)"
 
-#: ../src/profile-preferences.ui.h:51
+#: ../src/profile-preferences.ui.h:45
 msgid "_Font:"
 msgstr "ఖతి (_F):"
 
-#: ../src/profile-preferences.ui.h:52
+#: ../src/profile-preferences.ui.h:46
 msgid "Choose A Terminal Font"
 msgstr "టెర్మినల్ ఖతిని ఎంచుకోండి"
 
-#: ../src/profile-preferences.ui.h:53
+#: ../src/profile-preferences.ui.h:47
 msgid "_Allow bold text"
 msgstr "బొద్దు పాఠ్యమును అనుమతించు (_A)"
 
-#: ../src/profile-preferences.ui.h:54
+#: ../src/profile-preferences.ui.h:48
 msgid "Terminal _bell"
 msgstr "టెర్మినల్ గంట(_b)"
 
-#: ../src/profile-preferences.ui.h:55
+#: ../src/profile-preferences.ui.h:49
 msgid "Cursor _shape:"
 msgstr "కర్సర్ ఆకారము (_s):"
 
-#: ../src/profile-preferences.ui.h:56
+#: ../src/profile-preferences.ui.h:50
 msgid "Select-by-_word characters:"
 msgstr "పదము అక్షరముల ద్వారా ఎంచుకోండి (_w):"
 
-#: ../src/profile-preferences.ui.h:57
+#: ../src/profile-preferences.ui.h:51
 msgid "Use custom default terminal si_ze"
 msgstr "మలచుకొనిన అప్రమేయ టెర్మినల్ పరిమాణమును వుపయోగించుము (_z)"
 
-#: ../src/profile-preferences.ui.h:58
+#: ../src/profile-preferences.ui.h:52
 msgid "Default size:"
 msgstr "అప్రమేయ పరిమాణం:"
 
-#: ../src/profile-preferences.ui.h:59
+#: ../src/profile-preferences.ui.h:53
 msgid "columns"
 msgstr "నిలువువరుసలు"
 
-#: ../src/profile-preferences.ui.h:60
+#: ../src/profile-preferences.ui.h:54
 msgid "rows"
 msgstr "అడ్డువరుసలు"
 
-#: ../src/profile-preferences.ui.h:62
-#| msgid "_Title:"
+#: ../src/profile-preferences.ui.h:55
+msgid "_Rewrap on resize"
+msgstr ""
+
+#: ../src/profile-preferences.ui.h:57
 msgid "Title"
 msgstr "శీర్షిక:"
 
-#: ../src/profile-preferences.ui.h:63
-msgid "Initial _title:"
-msgstr "ప్రారంభ శీర్షిక(_t):"
+#: ../src/profile-preferences.ui.h:58 ../src/terminal-window.c:781
+msgid "_Title:"
+msgstr "శీర్షిక (_T):"
 
-#: ../src/profile-preferences.ui.h:64
-msgid "When terminal commands set their o_wn titles:"
-msgstr "టెర్మినల్ ఆదేశములు వాటి స్వంత శీర్షికలకు అమర్చినప్పుడు (_w):"
-
-#: ../src/profile-preferences.ui.h:65
-#| msgid "<b>Command</b>"
+#: ../src/profile-preferences.ui.h:59
 msgid "Command"
 msgstr "ఆదేశం"
 
-#: ../src/profile-preferences.ui.h:66
+#: ../src/profile-preferences.ui.h:60
 msgid "_Run command as a login shell"
 msgstr "ఆదేశాన్ని లాగిన్ షెల్ వలె నడుపు (_R)"
 
-#: ../src/profile-preferences.ui.h:67
+#: ../src/profile-preferences.ui.h:61
 msgid "_Update login records when command is launched"
 msgstr "ఎప్పుడైతే ఆదేశం దించబడుతుందో లాగిన్ రికార్డులను నవీకరించు(_U)"
 
-#: ../src/profile-preferences.ui.h:68
+#: ../src/profile-preferences.ui.h:62
 msgid "Ru_n a custom command instead of my shell"
 msgstr "నా షెల్ కు బదులుగా వినియోగదారుని ఆదేశాన్ని నడుపుము(_n)"
 
-#: ../src/profile-preferences.ui.h:69
+#: ../src/profile-preferences.ui.h:63
 msgid "Custom co_mmand:"
 msgstr "అనురూపిత ఆదేశం (_m):"
 
-#: ../src/profile-preferences.ui.h:70
+#: ../src/profile-preferences.ui.h:64
 msgid "When command _exits:"
 msgstr "ఆదేశం ఉన్నప్పుడు(_e):"
 
-#: ../src/profile-preferences.ui.h:71
+#: ../src/profile-preferences.ui.h:65
 msgid "Title and Command"
 msgstr "శీర్షిక మరియు ఆదేశం"
 
-#: ../src/profile-preferences.ui.h:72
-#| msgid "Choose Terminal Background Color"
+#: ../src/profile-preferences.ui.h:66
 msgid "Text and Background Color"
 msgstr "పాఠం మరియు బ్యాక్‌గ్రౌండ్ రంగు"
 
-#: ../src/profile-preferences.ui.h:73
+#: ../src/profile-preferences.ui.h:67
 msgid "_Use colors from system theme"
 msgstr "వ్యవస్థ ఇతివృత్తము నుండి రంగులను ఉపయోగించు (_U)"
 
-#: ../src/profile-preferences.ui.h:74
+#: ../src/profile-preferences.ui.h:68
 msgid "Built-in sche_mes:"
-msgstr "Built-in sche_mes:"
+msgstr "అంతర-నిర్మిత స్కీమాలు (_m):"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/profile-preferences.ui.h:69
 msgid "_Text color:"
 msgstr "పాఠ్యం రంగు (_T):"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/profile-preferences.ui.h:70
 msgid "_Background color:"
 msgstr "నేపథ్యం రంగు (_B):"
 
-#: ../src/profile-preferences.ui.h:77
+#: ../src/profile-preferences.ui.h:71
 msgid "Choose Terminal Background Color"
 msgstr "టెర్మినల్ నేపథ్య రంగును ఎంచుకొనండి"
 
-#: ../src/profile-preferences.ui.h:78
+#: ../src/profile-preferences.ui.h:72
 msgid "Choose Terminal Text Color"
 msgstr "టెర్మినల్ పాఠ్యపు రంగును ఎంచుకొను"
 
-#: ../src/profile-preferences.ui.h:79
+#: ../src/profile-preferences.ui.h:73
 msgid "_Underline color:"
 msgstr "క్రిందిగీత రంగు (_U):"
 
-#: ../src/profile-preferences.ui.h:80
+#: ../src/profile-preferences.ui.h:74
 msgid "_Same as text color"
 msgstr "పాఠ్యము రంగు వలెనే (_S)"
 
-#: ../src/profile-preferences.ui.h:81
+#: ../src/profile-preferences.ui.h:75
 msgid "Bol_d color:"
 msgstr "బొద్దు రంగు (_d):"
 
-#: ../src/profile-preferences.ui.h:82
-#| msgid "<b>Palette</b>"
+#: ../src/profile-preferences.ui.h:76
 msgid "Palette"
 msgstr "రంగుఫలకం"
 
-#: ../src/profile-preferences.ui.h:83
+#: ../src/profile-preferences.ui.h:77
 msgid "Built-in _schemes:"
 msgstr "బుల్ట్ -ఇన్ పధకాలు(_s):"
 
-#: ../src/profile-preferences.ui.h:84
-#| msgid ""
-#| "<small><i><b>Note:</b> Terminal applications have these colors available "
-#| "to them.</i></small>"
+#: ../src/profile-preferences.ui.h:78
 msgid "<b>Note:</b> Terminal applications have these colors available to them."
 msgstr "<b>గమనిక:</b> టెర్మినల్ అనువర్తనములు  వాటికొరకు ఈ రంగులను కలిగఉన్నాయ."
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:79
 msgid "Color p_alette:"
 msgstr "వర్ణ ఫలకం (_a):"
 
-#: ../src/profile-preferences.ui.h:86
+#: ../src/profile-preferences.ui.h:80
 msgid "Colors"
 msgstr "రంగులు"
 
-#: ../src/profile-preferences.ui.h:87
-msgid "_Scrollbar is:"
-msgstr "స్క్రాల్‌పట్టీ(_S):"
-
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:81
 msgid "Scroll_back:"
 msgstr "వెనుకకు స్క్రాల్అవు (_b):"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:82
 msgid "Scroll on _keystroke"
 msgstr "కీనొక్కుతో స్క్రాల్ అవు(_k)"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:83
 msgid "Scroll on _output"
 msgstr "అవుట్‌పుట్ పై స్క్రాల్అవు (_o)"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:84
 msgid "_Unlimited"
 msgstr "అపరిమితమైన (_U)"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:85
 msgid "lines"
 msgstr "వరుసలు"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:86
+#, fuzzy
+#| msgid "_Scrollbar is:"
+msgid "_Show scrollbar"
+msgstr "స్క్రాల్‌పట్టీ(_S):"
+
+#: ../src/profile-preferences.ui.h:87
 msgid "Scrolling"
 msgstr "స్క్రాలింగ్"
 
-#: ../src/profile-preferences.ui.h:94
-#| msgid ""
-#| "<small><i><b>Note:</b> These options may cause some applications to "
-#| "behave incorrectly.  They are only here to allow you to work around "
-#| "certain applications and operating systems that expect different terminal "
-#| "behavior.</i></small>"
+#: ../src/profile-preferences.ui.h:88
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
 "applications and operating systems that expect different terminal behavior."
 msgstr ""
 "<b>గమనిక:</b> ఈ ఐచ్చికాలు కొన్ని అనువర్తనములు తప్పుగా ప్రవర్తించుటకు "
-"కారణమవుతాయి.  "
-"భిన్నమైన టెర్మినల్ ప్రవర్తనను ఆశించే ఆపరేటింగ్ సిస్టమ్ మరియు ప్రత్యేకమయిన "
-"అనువర్తనముల చుట్టూ "
-"పనిచేయుటకు మిమ్ముల్ని అనుమతించుటకు మాత్రమే అవి ఉన్నాయి."
+"కారణమవుతాయి.  భిన్నమైన "
+"టెర్మినల్ ప్రవర్తనను ఆశించే ఆపరేటింగ్ సిస్టమ్ మరియు ప్రత్యేకమయిన అనువర్తనముల "
+"చుట్టూ పనిచేయుటకు "
+"మిమ్ముల్ని అనుమతించుటకు మాత్రమే అవి ఉన్నాయి."
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:89
 msgid "_Delete key generates:"
 msgstr "కీ సంభవాలను తొలగించు(_D):"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:90
 msgid "_Backspace key generates:"
 msgstr "బ్యక్‌స్పేస్ కీ సంభవములు(_B):"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/profile-preferences.ui.h:91
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "సారూప్యమైన ఐచ్చికాలను అప్రమేయాలకు తిరిగిఉంచు(_R)"
 
-#: ../src/profile-preferences.ui.h:98
+#: ../src/profile-preferences.ui.h:92
 msgid "Compatibility"
 msgstr "సారూప్యమైన"
 
-#: ../src/terminal-accels.c:139
-msgid "New Tab"
-msgstr "కొత్త ట్యాబ్"
+#: ../src/terminal-accels.c:112
+msgid "New Terminal in New Tab"
+msgstr ""
 
-#: ../src/terminal-accels.c:141
-msgid "New Window"
-msgstr "కొత్త కిటికీ"
+#: ../src/terminal-accels.c:113
+#, fuzzy
+#| msgid "Icon for terminal window"
+msgid "New Terminal in New Window"
+msgstr "టెర్మినల్ విండో కొరకు ప్రతిమ"
 
-#: ../src/terminal-accels.c:143
+#: ../src/terminal-accels.c:114
 msgid "New Profile"
 msgstr "కొత్త ప్రవర"
 
-#: ../src/terminal-accels.c:146
+#: ../src/terminal-accels.c:116
 msgid "Save Contents"
 msgstr "విషయములను భద్రపరుచు"
 
-#: ../src/terminal-accels.c:149
-msgid "Close Tab"
-msgstr "ట్యాబ్‌ను మూసివేయి"
+#: ../src/terminal-accels.c:118
+#, fuzzy
+#| msgid "C_lose Terminal"
+msgid "Close Terminal"
+msgstr "టెర్మినల్ మూసివేయి (_l)"
 
-#: ../src/terminal-accels.c:151
-msgid "Close Window"
-msgstr "కిటికీని మూసివేయి"
+#: ../src/terminal-accels.c:119
+#, fuzzy
+#| msgid "C_lose Terminal"
+msgid "Close All Terminals"
+msgstr "టెర్మినల్ మూసివేయి (_l)"
 
-#: ../src/terminal-accels.c:157
+#. Edit menu
+#: ../src/terminal-accels.c:123 ../src/terminal-window.c:2378
+#: ../src/terminal-window.c:2493
 msgid "Copy"
 msgstr "నకలు"
 
-#: ../src/terminal-accels.c:159
+#: ../src/terminal-accels.c:124 ../src/terminal-window.c:2381
+#: ../src/terminal-window.c:2496
 msgid "Paste"
 msgstr "అతికించు"
 
-#: ../src/terminal-accels.c:165
-msgid "Hide and Show menubar"
+#: ../src/terminal-accels.c:128
+#, fuzzy
+#| msgid "Hide and Show menubar"
+msgid "Hide and Show toolbar"
 msgstr "మెనూబార్ ను మరుగుపరచు మరియు చూపించు"
 
-#: ../src/terminal-accels.c:167
+#: ../src/terminal-accels.c:129
 msgid "Full Screen"
 msgstr "పూర్తి తెర"
 
-#: ../src/terminal-accels.c:169
+#. View menu
+#: ../src/terminal-accels.c:130 ../src/terminal-window.c:2398
 msgid "Zoom In"
 msgstr "అతిరూపించు"
 
-#: ../src/terminal-accels.c:171
+#: ../src/terminal-accels.c:131 ../src/terminal-window.c:2401
 msgid "Zoom Out"
 msgstr "అవరూపించు"
 
-#: ../src/terminal-accels.c:173
+#: ../src/terminal-accels.c:132 ../src/terminal-window.c:2404
 msgid "Normal Size"
 msgstr "సాధారణ పరిమాణం"
 
-#: ../src/terminal-accels.c:179 ../src/terminal-window.c:3439
+#: ../src/terminal-accels.c:136 ../src/terminal-window.c:764
 msgid "Set Title"
 msgstr "శీర్షికను అమర్చు"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:137
 msgid "Reset"
 msgstr "తిరిగిఅమర్చు"
 
-#: ../src/terminal-accels.c:183
+#: ../src/terminal-accels.c:138
 msgid "Reset and Clear"
 msgstr "తిరిగిఅమర్చు మరియు తుడుచివేయి"
 
-#: ../src/terminal-accels.c:189
+#: ../src/terminal-accels.c:142
 msgid "Switch to Previous Tab"
 msgstr "మునుపటి ట్యాబ్ నకు మారుము"
 
-#: ../src/terminal-accels.c:191
+#: ../src/terminal-accels.c:143
 msgid "Switch to Next Tab"
 msgstr "తరువాతి ట్యాబ్ నకు మారుము"
 
-#: ../src/terminal-accels.c:193
+#: ../src/terminal-accels.c:144
 msgid "Move Tab to the Left"
 msgstr "ట్యాబ్‌ను ఎడమవైపునకు కదుపుము"
 
-#: ../src/terminal-accels.c:195
+#: ../src/terminal-accels.c:145
 msgid "Move Tab to the Right"
 msgstr "ట్యాబ్‌ను కుడివైపునకు కదుపుము"
 
-#: ../src/terminal-accels.c:197
+#: ../src/terminal-accels.c:146
 msgid "Detach Tab"
 msgstr "ట్యాబ్‌ను వేరుచేయి"
 
-#: ../src/terminal-accels.c:199
-msgid "Switch to Tab 1"
-msgstr "ట్యాబ్ 1 కు మారు"
-
-#: ../src/terminal-accels.c:202
-msgid "Switch to Tab 2"
-msgstr "ట్యాబ్ 2 కు మారు"
-
-#: ../src/terminal-accels.c:205
-msgid "Switch to Tab 3"
-msgstr "ట్యాబ్ 3 కు మారు"
-
-#: ../src/terminal-accels.c:208
-msgid "Switch to Tab 4"
-msgstr "ట్యాబ్ 4 కు మారు"
-
-#: ../src/terminal-accels.c:211
-msgid "Switch to Tab 5"
-msgstr "ట్యాబ్ 5 కు మారు"
-
-#: ../src/terminal-accels.c:214
-msgid "Switch to Tab 6"
-msgstr "ట్యాబ్ 6 కు మారు"
-
-#: ../src/terminal-accels.c:217
-msgid "Switch to Tab 7"
-msgstr "ట్యాబ్ 7 కు మారు"
-
-#: ../src/terminal-accels.c:220
-msgid "Switch to Tab 8"
-msgstr "ట్యాబ్ 8 కు మారు"
-
-#: ../src/terminal-accels.c:223
-msgid "Switch to Tab 9"
-msgstr "ట్యాబ్ 9 కు మారు"
-
-#: ../src/terminal-accels.c:226
-msgid "Switch to Tab 10"
-msgstr "ట్యాబ్ 10 కు మారు"
-
-#: ../src/terminal-accels.c:229
-msgid "Switch to Tab 11"
-msgstr "ట్యాబ్ 11 కు మారు"
-
-#: ../src/terminal-accels.c:232
-msgid "Switch to Tab 12"
-msgstr "ట్యాబ్ 12 కు మారు"
-
-#: ../src/terminal-accels.c:238
+#: ../src/terminal-accels.c:169
 msgid "Contents"
 msgstr "విషయసూచిక"
 
-#: ../src/terminal-accels.c:243
+#: ../src/terminal-accels.c:176
 msgid "File"
 msgstr "దస్త్రం"
 
-#: ../src/terminal-accels.c:244
+#: ../src/terminal-accels.c:177
 msgid "Edit"
 msgstr "సవరించు"
 
-#: ../src/terminal-accels.c:245
+#: ../src/terminal-accels.c:178
 msgid "View"
 msgstr "వీక్షణం"
 
-#: ../src/terminal-accels.c:247
+#: ../src/terminal-accels.c:180
 msgid "Tabs"
 msgstr "ట్యాబ్‌లు"
 
-#: ../src/terminal-accels.c:248
+#: ../src/terminal-accels.c:181
 msgid "Help"
 msgstr "సహాయం"
 
-#: ../src/terminal-accels.c:619
-#, c-format
-msgid "The shortcut key “%s” is already bound to the “%s” action"
-msgstr "లఘువు కీ “%s” ఇప్పటికే “%s” చర్యకు బద్దమైఉంది"
+#: ../src/terminal-accels.c:265
+#, fuzzy, c-format
+#| msgid "Switch to Tab 1"
+msgid "Switch to Tab %d"
+msgstr "ట్యాబ్ 1 కు మారు"
 
-#: ../src/terminal-accels.c:732
+#: ../src/terminal-accels.c:482
 msgid "_Action"
 msgstr "చర్య (_A)"
 
-#: ../src/terminal-accels.c:750
+#: ../src/terminal-accels.c:500
 msgid "Shortcut _Key"
 msgstr "లఘువు కీ(_K)"
 
-#: ../src/terminal-app.c:572
+#: ../src/terminal-app.c:584
 msgid "User Defined"
 msgstr "వాడుకరి నిర్వచించినది"
 
 #: ../src/terminal-appmenu.ui.h:1
+#, fuzzy
+#| msgid "_Terminal"
+msgid "_New Terminal"
+msgstr "టెర్మినల్ (_T)"
+
+#: ../src/terminal-appmenu.ui.h:2
 msgid "_Preferences"
 msgstr "ప్రాధాన్యతలు (_P)"
 
-#: ../src/terminal-appmenu.ui.h:2 ../src/terminal-window.c:1642
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2350
 msgid "_Help"
 msgstr "సహాయం (_H)"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:1758
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2469
 msgid "_About"
 msgstr "గురించి (_A)"
 
-#: ../src/terminal.c:243
+#: ../src/terminal-appmenu.ui.h:5
+msgid "_Quit"
+msgstr ""
+
+#: ../src/terminal.c:239
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "ఆర్గుమెంట్లను పార్శ్ చేయుటకు విఫలమైంది: %s\n"
 
-#: ../src/terminal-encoding.c:51 ../src/terminal-encoding.c:64
-#: ../src/terminal-encoding.c:78 ../src/terminal-encoding.c:100
-#: ../src/terminal-encoding.c:111
+#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:65
+#: ../src/terminal-encoding.c:79 ../src/terminal-encoding.c:101
+#: ../src/terminal-encoding.c:112
 msgid "Western"
 msgstr "పాశ్చాచ్య"
 
-#: ../src/terminal-encoding.c:52 ../src/terminal-encoding.c:79
-#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:109
+#: ../src/terminal-encoding.c:53 ../src/terminal-encoding.c:80
+#: ../src/terminal-encoding.c:91 ../src/terminal-encoding.c:110
 msgid "Central European"
 msgstr "సెంట్రల్ యూరోపియన్"
 
-#: ../src/terminal-encoding.c:53
+#: ../src/terminal-encoding.c:54
 msgid "South European"
 msgstr "సౌత్ యీరోపియన్"
 
-#: ../src/terminal-encoding.c:54 ../src/terminal-encoding.c:62
-#: ../src/terminal-encoding.c:116
+#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:63
+#: ../src/terminal-encoding.c:117
 msgid "Baltic"
 msgstr "బాల్టిక్"
 
-#: ../src/terminal-encoding.c:55 ../src/terminal-encoding.c:80
-#: ../src/terminal-encoding.c:86 ../src/terminal-encoding.c:87
-#: ../src/terminal-encoding.c:92 ../src/terminal-encoding.c:110
+#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:81
+#: ../src/terminal-encoding.c:87 ../src/terminal-encoding.c:88
+#: ../src/terminal-encoding.c:93 ../src/terminal-encoding.c:111
 msgid "Cyrillic"
 msgstr "సిరిల్లిక్"
 
-#: ../src/terminal-encoding.c:56 ../src/terminal-encoding.c:83
-#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:115
+#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:84
+#: ../src/terminal-encoding.c:90 ../src/terminal-encoding.c:116
 msgid "Arabic"
 msgstr "అరబిక్"
 
-#: ../src/terminal-encoding.c:57 ../src/terminal-encoding.c:95
-#: ../src/terminal-encoding.c:112
+#: ../src/terminal-encoding.c:58 ../src/terminal-encoding.c:96
+#: ../src/terminal-encoding.c:113
 msgid "Greek"
 msgstr "గ్రీక్"
 
-#: ../src/terminal-encoding.c:58
+#: ../src/terminal-encoding.c:59
 msgid "Hebrew Visual"
 msgstr "హెబ్రూ విజువల్"
 
-#: ../src/terminal-encoding.c:59 ../src/terminal-encoding.c:82
-#: ../src/terminal-encoding.c:98 ../src/terminal-encoding.c:114
+#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:83
+#: ../src/terminal-encoding.c:99 ../src/terminal-encoding.c:115
 msgid "Hebrew"
 msgstr "హెబ్రూ"
 
-#: ../src/terminal-encoding.c:60 ../src/terminal-encoding.c:81
-#: ../src/terminal-encoding.c:102 ../src/terminal-encoding.c:113
+#: ../src/terminal-encoding.c:61 ../src/terminal-encoding.c:82
+#: ../src/terminal-encoding.c:103 ../src/terminal-encoding.c:114
 msgid "Turkish"
 msgstr "టర్కిష్"
 
-#: ../src/terminal-encoding.c:61
+#: ../src/terminal-encoding.c:62
 msgid "Nordic"
 msgstr "నార్డిక్"
 
-#: ../src/terminal-encoding.c:63
+#: ../src/terminal-encoding.c:64
 msgid "Celtic"
 msgstr "సెల్టిక్"
 
-#: ../src/terminal-encoding.c:65 ../src/terminal-encoding.c:101
+#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:102
 msgid "Romanian"
 msgstr "రొమానియన్"
 
@@ -1443,119 +1383,119 @@ msgstr "రొమానియన్"
 #. * FIXME: why are they in this table; or rather why do we need
 #. * the ASCII pass-through requirement?
 #.
-#: ../src/terminal-encoding.c:66 ../src/terminal-encoding.c:123
-#: ../src/terminal-encoding.c:124 ../src/terminal-encoding.c:125
-#: ../src/terminal-encoding.c:126
+#: ../src/terminal-encoding.c:67 ../src/terminal-encoding.c:124
+#: ../src/terminal-encoding.c:125 ../src/terminal-encoding.c:126
+#: ../src/terminal-encoding.c:127
 msgid "Unicode"
 msgstr "యూనికోడ్"
 
-#: ../src/terminal-encoding.c:67
+#: ../src/terminal-encoding.c:68
 msgid "Armenian"
 msgstr "అర్మేనియన్"
 
-#: ../src/terminal-encoding.c:68 ../src/terminal-encoding.c:69
-#: ../src/terminal-encoding.c:73
+#: ../src/terminal-encoding.c:69 ../src/terminal-encoding.c:70
+#: ../src/terminal-encoding.c:74
 msgid "Chinese Traditional"
 msgstr "చైనీస్ ట్రెడిషనల్"
 
-#: ../src/terminal-encoding.c:70
+#: ../src/terminal-encoding.c:71
 msgid "Cyrillic/Russian"
 msgstr "సిరిల్లిక్/రష్యన్"
 
-#: ../src/terminal-encoding.c:71 ../src/terminal-encoding.c:84
-#: ../src/terminal-encoding.c:104
+#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
+#: ../src/terminal-encoding.c:105
 msgid "Japanese"
 msgstr "జపనీస్"
 
-#: ../src/terminal-encoding.c:72 ../src/terminal-encoding.c:85
-#: ../src/terminal-encoding.c:107 ../src/terminal-encoding.c:127
+#: ../src/terminal-encoding.c:73 ../src/terminal-encoding.c:86
+#: ../src/terminal-encoding.c:108 ../src/terminal-encoding.c:128
 msgid "Korean"
 msgstr "కొరియన్"
 
-#: ../src/terminal-encoding.c:74 ../src/terminal-encoding.c:75
-#: ../src/terminal-encoding.c:76
+#: ../src/terminal-encoding.c:75 ../src/terminal-encoding.c:76
+#: ../src/terminal-encoding.c:77
 msgid "Chinese Simplified"
 msgstr "చైనీస్ సింప్లిఫైడ్"
 
-#: ../src/terminal-encoding.c:77
+#: ../src/terminal-encoding.c:78
 msgid "Georgian"
 msgstr "జార్జియన్"
 
-#: ../src/terminal-encoding.c:88 ../src/terminal-encoding.c:103
+#: ../src/terminal-encoding.c:89 ../src/terminal-encoding.c:104
 msgid "Cyrillic/Ukrainian"
 msgstr "సిరిల్లిక్/యుక్రైనియన్"
 
-#: ../src/terminal-encoding.c:91
+#: ../src/terminal-encoding.c:92
 msgid "Croatian"
 msgstr "క్రొటైన్"
 
-#: ../src/terminal-encoding.c:93
+#: ../src/terminal-encoding.c:94
 msgid "Hindi"
 msgstr "హిందీ"
 
-#: ../src/terminal-encoding.c:94
+#: ../src/terminal-encoding.c:95
 msgid "Persian"
 msgstr "పర్షియన్"
 
-#: ../src/terminal-encoding.c:96
+#: ../src/terminal-encoding.c:97
 msgid "Gujarati"
 msgstr "గుజరాతి"
 
-#: ../src/terminal-encoding.c:97
+#: ../src/terminal-encoding.c:98
 msgid "Gurmukhi"
 msgstr "గుర్ముఖి"
 
-#: ../src/terminal-encoding.c:99
+#: ../src/terminal-encoding.c:100
 msgid "Icelandic"
 msgstr "ఐలాండిక్"
 
-#: ../src/terminal-encoding.c:105 ../src/terminal-encoding.c:108
-#: ../src/terminal-encoding.c:117
+#: ../src/terminal-encoding.c:106 ../src/terminal-encoding.c:109
+#: ../src/terminal-encoding.c:118
 msgid "Vietnamese"
 msgstr "వియత్నామీస్"
 
-#: ../src/terminal-encoding.c:106
+#: ../src/terminal-encoding.c:107
 msgid "Thai"
 msgstr "థాయి"
 
-#: ../src/terminal-encoding.c:272
+#: ../src/terminal-encoding.c:273
 msgid "Current Locale"
 msgstr "ప్రస్తుత స్థానికం"
 
-#: ../src/terminal-nautilus.c:463
+#: ../src/terminal-nautilus.c:600
 msgid "Open in _Remote Terminal"
 msgstr "దూరస్థ టెర్మినల్‌ను తెరువు (_R)"
 
-#: ../src/terminal-nautilus.c:465
+#: ../src/terminal-nautilus.c:602
 msgid "Open in _Local Terminal"
 msgstr "స్థానిక టెర్మినల్లో తెరువు (_L)"
 
-#: ../src/terminal-nautilus.c:469 ../src/terminal-nautilus.c:480
+#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:617
 msgid "Open the currently selected folder in a terminal"
 msgstr "ప్రస్తుతం ఎంపికచేసిన సంచయాన్ని టెర్మినల్లో తెరువు"
 
-#: ../src/terminal-nautilus.c:471 ../src/terminal-nautilus.c:482
-#: ../src/terminal-nautilus.c:492
+#: ../src/terminal-nautilus.c:608 ../src/terminal-nautilus.c:619
+#: ../src/terminal-nautilus.c:629
 msgid "Open the currently open folder in a terminal"
 msgstr "ప్రస్తుతం తెరవబడిన సంచయాన్ని టెర్మినల్లో తెరువు"
 
-#: ../src/terminal-nautilus.c:477 ../src/terminal-nautilus.c:491
+#: ../src/terminal-nautilus.c:614 ../src/terminal-nautilus.c:628
 msgid "Open in T_erminal"
 msgstr "టెర్మినల్లో తెరువు (_e)"
 
-#: ../src/terminal-nautilus.c:488
+#: ../src/terminal-nautilus.c:625
 msgid "Open T_erminal"
 msgstr "టెర్మినల్‌ను తెరువు (_e)"
 
-#: ../src/terminal-nautilus.c:489
+#: ../src/terminal-nautilus.c:626
 msgid "Open a terminal"
 msgstr "ఒక టెర్మినల్‌ను తెరువు"
 
-#: ../src/terminal-nautilus.c:507 ../src/terminal-nautilus.c:520
+#: ../src/terminal-nautilus.c:644 ../src/terminal-nautilus.c:657
 msgid "Open in _Midnight Commander"
 msgstr "మిడ్‌నైట్ కమాండర్‌లో తెరువు (_M)"
 
-#: ../src/terminal-nautilus.c:509
+#: ../src/terminal-nautilus.c:646
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
@@ -1563,7 +1503,7 @@ msgstr ""
 "ప్రస్తుతం ఎంపికచేయబడిన సంచయాన్ని టెర్మినల్ దస్త్ర నిర్వాహక మిడ్‌నైట్ "
 "కమాండరులో తెరువు"
 
-#: ../src/terminal-nautilus.c:511 ../src/terminal-nautilus.c:521
+#: ../src/terminal-nautilus.c:648 ../src/terminal-nautilus.c:658
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
@@ -1571,48 +1511,48 @@ msgstr ""
 "ప్రస్తుతం తెరవబడివున్న సంచయాన్ని టెర్మినల్ దస్త్ర నిర్వాహక మిడ్‌నైట్ "
 "కమాండరులో తెరువు"
 
-#: ../src/terminal-nautilus.c:517
+#: ../src/terminal-nautilus.c:654
 msgid "Open _Midnight Commander"
 msgstr "మిడ్‌నైట్ కమాండర్ తెరువు (_M)"
 
-#: ../src/terminal-nautilus.c:518
+#: ../src/terminal-nautilus.c:655
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "టెర్మినల్ దస్త్ర నిర్వాహకమయిన మిడ్‌నైట్ కమాండరును తెరువు"
 
-#: ../src/terminal-options.c:224
+#: ../src/terminal-options.c:224 ../src/terminal-options.c:237
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "\"%s\" ఐచ్చికము గ్నోమ్-టెర్మినల్ యొక్క ఈ రూపాంతరములో తోడ్పాటులేదు."
 
-#: ../src/terminal-options.c:235 ../src/terminal-util.c:234
+#: ../src/terminal-options.c:249 ../src/terminal-util.c:217
 msgid "GNOME Terminal"
 msgstr "గ్నోమ్ టెర్మినల్"
 
-#: ../src/terminal-options.c:275
+#: ../src/terminal-options.c:289
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "\"%s\" కు ఆర్గుమెంటు విలువైన ఆదేశంకాదు: %s"
 
-#: ../src/terminal-options.c:424
+#: ../src/terminal-options.c:438
 msgid "Two roles given for one window"
 msgstr "ఒక కిటికీ కొరకు రెండు పాత్రలు యివ్వబడినవి"
 
-#: ../src/terminal-options.c:445 ../src/terminal-options.c:478
+#: ../src/terminal-options.c:459 ../src/terminal-options.c:492
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "\"%s\" ఐచ్చికం ఒకే విండోకొరకు రెండు సార్లు ఇవ్వబడింది\n"
 
-#: ../src/terminal-options.c:688
+#: ../src/terminal-options.c:690
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "జూమ్ కారకం \"%g\" చాలాచిన్నది, %g ఉపయోగించి\n"
 
-#: ../src/terminal-options.c:696
+#: ../src/terminal-options.c:698
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "జూమ్ కారకం \"%g\" చాలా పెద్దది, %g ఉపయోగించి\n"
 
-#: ../src/terminal-options.c:734
+#: ../src/terminal-options.c:736
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1621,11 +1561,11 @@ msgstr ""
 "మిగిలిన ఆదేశ వరుస పై ఆదేశాన్ని నడుపుటకు ఐచ్చికం \"%s\" ఆదేశాన్ని "
 "తెలుపవలిసిఉన్నది"
 
-#: ../src/terminal-options.c:870
+#: ../src/terminal-options.c:871
 msgid "Not a valid terminal config file."
 msgstr "చెల్లునటువంటి టెర్మినల్ స్వరూపణ దస్త్రము కాదు."
 
-#: ../src/terminal-options.c:883
+#: ../src/terminal-options.c:884
 msgid "Incompatible terminal config file version."
 msgstr "సారూప్యతలేని టెర్మినల్ ఆకృతీకరణ దస్త్రము వర్షన్."
 
@@ -1673,15 +1613,15 @@ msgstr "టెర్మినల్ లోపల ఆర్గుమెంటు�
 msgid "PROFILE-NAME"
 msgstr "ప్రవర-పేరు"
 
-#: ../src/terminal-options.c:1442 ../src/terminal-options.c:1448
+#: ../src/terminal-options.c:1269 ../src/terminal-options.c:1275
 msgid "GNOME Terminal Emulator"
 msgstr "గ్నోమ్ టెర్మినల్ ఎమ్యులేటర్"
 
-#: ../src/terminal-options.c:1449
+#: ../src/terminal-options.c:1276
 msgid "Show GNOME Terminal options"
 msgstr "గ్నోమ్ టెర్మినల్ ఐచ్చికాలను చూపించు"
 
-#: ../src/terminal-options.c:1459
+#: ../src/terminal-options.c:1286
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1689,7 +1629,7 @@ msgstr ""
 "కొత్త కిటికీలను లేదా టెర్మినల్ ట్యాబ్‌లను తెరుచుటకు ఐచ్చికములు; వీటిలో వొకటి "
 "కంటేయెక్కువ తెలుపవలెను:"
 
-#: ../src/terminal-options.c:1468
+#: ../src/terminal-options.c:1295
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1697,11 +1637,11 @@ msgstr ""
 "కిటికీ ఐచ్చికములు; ముందు వుంపయోగించిన --window లేదా --tab, అన్ని కిటికీలకు "
 "అప్రమేయం అవుతుంది:"
 
-#: ../src/terminal-options.c:1469
+#: ../src/terminal-options.c:1296
 msgid "Show per-window options"
 msgstr "ఒక్కో-కిటికీకు ఐచ్చికాలను చూపుము"
 
-#: ../src/terminal-options.c:1477
+#: ../src/terminal-options.c:1304
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1710,102 +1650,105 @@ msgstr ""
 "అన్ని కిటికీలకు "
 "అప్రమేయం చేయబడుతుంది:"
 
-#: ../src/terminal-options.c:1478
+#: ../src/terminal-options.c:1305
 msgid "Show per-terminal options"
 msgstr "ఒక్కో-టెర్మినల్ ఐచ్చికాలను చూపుతుంది"
 
-#: ../src/terminal-prefs.c:225
+#: ../src/terminal-prefs.c:214
 msgid "Click button to choose profile"
 msgstr "ప్రవరను ఎంచుకొనుటకు బటన్ ను నొక్కండి"
 
-#: ../src/terminal-prefs.c:339
+#: ../src/terminal-prefs.c:316
 msgid "Profile list"
 msgstr "ప్రవర జాబితా"
 
-#: ../src/terminal-prefs.c:394
+#: ../src/terminal-prefs.c:371
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "ప్రవర “%s” ను తొలగించాలా?"
 
-#: ../src/terminal-prefs.c:410
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:527
+msgid "_Cancel"
+msgstr ""
+
+#: ../src/terminal-prefs.c:377
+msgid "_Delete"
+msgstr ""
+
+#: ../src/terminal-prefs.c:387
 msgid "Delete Profile"
 msgstr "ప్రవరను తొలగించు"
 
-#: ../src/terminal-prefs.c:709
+#: ../src/terminal-prefs.c:695
 msgid "Show"
 msgstr "చూపు"
 
-#: ../src/terminal-prefs.c:720
+#: ../src/terminal-prefs.c:706
 msgid "_Encoding"
 msgstr "ఎన్‌కోడింగ్(_E)"
 
-#: ../src/terminal-screen.c:1166
+#: ../src/terminal-screen.c:1073
 msgid "No command supplied nor shell requested"
 msgstr "ఏ కమాండ్ యివ్వలేదు షెల్ అభ్యర్ధించలేదు"
 
-#: ../src/terminal-screen.c:1420 ../src/terminal-window.c:1682
+#: ../src/terminal-screen.c:1329 ../src/terminal-window.c:2393
 msgid "_Profile Preferences"
 msgstr "ప్రవర ప్రాధాన్యతలు (_P)"
 
-#: ../src/terminal-screen.c:1421 ../src/terminal-screen.c:1782
+#: ../src/terminal-screen.c:1330 ../src/terminal-screen.c:1676
 msgid "_Relaunch"
 msgstr "తిరిగిఆరంభించు (_R)"
 
-#: ../src/terminal-screen.c:1424
+#: ../src/terminal-screen.c:1333
 msgid "There was an error creating the child process for this terminal"
 msgstr "ఈ టెర్మినల్ కొరకు చైల్డు ప్రొసెస్ సృష్టించుటలో దోషం ఉంది"
 
-#: ../src/terminal-screen.c:1786
+#: ../src/terminal-screen.c:1680
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "సాధారణంగా స్థితి %d తో నిష్క్రమించిన చైల్డ్ కార్యక్రమము."
 
-#: ../src/terminal-screen.c:1789
+#: ../src/terminal-screen.c:1683
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "శిశు కార్యక్రమము సంకేతం %dతో అంతంచేయబడెను."
 
-#: ../src/terminal-screen.c:1792
+#: ../src/terminal-screen.c:1686
 msgid "The child process was aborted."
 msgstr "శిశు కార్యక్రమము అంతముచేయబడెను."
 
-#: ../src/terminal-tab-label.c:194
+#: ../src/terminal-tab-label.c:196
 msgid "Close tab"
 msgstr "ట్యాబ్‌ను మూసివేయి"
 
-#: ../src/terminal-tabs-menu.c:195
+#: ../src/terminal-tabs-menu.c:196
 msgid "Switch to this tab"
 msgstr "ఈ ట్యాబ్‌నకు మారు"
 
-#: ../src/terminal-util.c:162
+#: ../src/terminal-util.c:147
 msgid "There was an error displaying help"
 msgstr "సహాయమును ప్రదర్శించుటలో అక్కడ వొక దోషము వుంది"
 
-#: ../src/terminal-util.c:217
+#: ../src/terminal-util.c:200
 msgid "Contributors:"
 msgstr "సహాయకులు:"
 
-#: ../src/terminal-util.c:236
+#: ../src/terminal-util.c:219
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "గ్నోమ్ డెస్క్‍టాప్ కొరకు టెర్మినల్ ఎమ్యులేటర్"
 
-#: ../src/terminal-util.c:243
+#: ../src/terminal-util.c:227
 msgid "translator-credits"
 msgstr ""
-"KrishnaBabu K <kkrothap@redhat.com> 2008.\n"
+"KrishnaBabu K <kkrothap@redhat.com> 2008-2013.\n"
 "Praveen Illa <mail2ipn@gmail.com> 2011-12."
 
-#: ../src/terminal-util.c:316
+#: ../src/terminal-util.c:300
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "చిరునామా “%s” తెరువలేక పోయింది"
 
-#: ../src/terminal-util.c:391
-#| msgid ""
-#| "GNOME Terminal is free software; you can redistribute it and/or modify it "
-#| "under the terms of the GNU General Public License as published by the "
-#| "Free Software Foundation; either version 3 of the License, or (at your "
-#| "option) any later version."
+#: ../src/terminal-util.c:369
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1818,7 +1761,7 @@ msgstr ""
 "వెర్షన్ ౩ లైసెన్స్, లేదా (మీ "
 "ఐచ్చికాన్ని బట్టి) ఏదైనా తరువాత వెర్షన్."
 
-#: ../src/terminal-util.c:395
+#: ../src/terminal-util.c:373
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1831,11 +1774,7 @@ msgstr ""
 "జనరల్ పబ్లిక్ "
 "లైసెన్సును చూడండి."
 
-#: ../src/terminal-util.c:399
-#| msgid ""
-#| "You should have received a copy of the GNU General Public License along "
-#| "with GNOME Terminal; if not, write to the Free Software Foundation, Inc., "
-#| "51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA"
+#: ../src/terminal-util.c:377
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -1844,11 +1783,23 @@ msgstr ""
 "పొందివుంటారు; ఒకవేళ పొందక "
 "పోతే,<http://www.gnu.org/licenses/> చూడండి."
 
+#: ../src/terminal-window.c:502
+msgid "Could not save contents"
+msgstr "సారములను దాయలేకపోయినది"
+
+#: ../src/terminal-window.c:524
+msgid "Save as…"
+msgstr "ఇలా భద్రపరుచు..."
+
+#: ../src/terminal-window.c:528
+msgid "_Save"
+msgstr ""
+
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:430
+#: ../src/terminal-window.c:1187
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1857,206 +1808,204 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:436
+#: ../src/terminal-window.c:1193
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:1634
+#: ../src/terminal-window.c:2343
 msgid "_File"
 msgstr "దస్త్రం (_F)"
 
 #. File menu
-#: ../src/terminal-window.c:1635 ../src/terminal-window.c:1647
-#: ../src/terminal-window.c:1791
+#: ../src/terminal-window.c:2344 ../src/terminal-window.c:2355
+#: ../src/terminal-window.c:2361 ../src/terminal-window.c:2502
 msgid "Open _Terminal"
 msgstr "టెర్మినల్‌ను తెరువు (_T)"
 
-#: ../src/terminal-window.c:1636 ../src/terminal-window.c:1650
-#: ../src/terminal-window.c:1794
-msgid "Open Ta_b"
-msgstr "ట్యాబ్‌ను తెరువు (_b)"
-
-#: ../src/terminal-window.c:1637
+#: ../src/terminal-window.c:2345
 msgid "_Edit"
 msgstr "సవరణ (_E)"
 
-#: ../src/terminal-window.c:1638
+#: ../src/terminal-window.c:2346
 msgid "_View"
 msgstr "వీక్షణం (_V)"
 
-#: ../src/terminal-window.c:1639
+#: ../src/terminal-window.c:2347
 msgid "_Search"
 msgstr "శోధించు (_S)"
 
-#: ../src/terminal-window.c:1640
+#: ../src/terminal-window.c:2348
 msgid "_Terminal"
 msgstr "టెర్మినల్ (_T)"
 
-#: ../src/terminal-window.c:1641
+#: ../src/terminal-window.c:2349
 msgid "Ta_bs"
 msgstr "ట్యాబ్‌లు (_b)"
 
-#: ../src/terminal-window.c:1653
-#| msgid "New Profile"
+#: ../src/terminal-window.c:2358
+msgid "Open Ta_b"
+msgstr "ట్యాబ్‌ను తెరువు (_b)"
+
+#: ../src/terminal-window.c:2364
 msgid "New _Profile"
 msgstr "కొత్త ప్రొఫైల్ (_P)"
 
-#: ../src/terminal-window.c:1656
+#: ../src/terminal-window.c:2367
 msgid "_Save Contents"
 msgstr "విషయములను భద్రపరుచు (_S)"
 
-#: ../src/terminal-window.c:1659
-msgid "C_lose Tab"
-msgstr "ట్యాబ్‌ను మూసివేయి (_l)"
+#: ../src/terminal-window.c:2370 ../src/terminal-window.c:3582
+msgid "C_lose Terminal"
+msgstr "టెర్మినల్ మూసివేయి (_l)"
 
-#: ../src/terminal-window.c:1662
-msgid "_Close Window"
-msgstr "కిటికీని మూసివేయి (_C)"
+#: ../src/terminal-window.c:2373
+#, fuzzy
+#| msgid "C_lose Terminal"
+msgid "_Close All Terminals"
+msgstr "టెర్మినల్ మూసివేయి (_l)"
 
-#: ../src/terminal-window.c:1673 ../src/terminal-window.c:1788
+#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2499
 msgid "Paste _Filenames"
 msgstr "దస్త్రపుపేరులను అతికించు (_F)"
 
-#: ../src/terminal-window.c:1679
-#| msgid "_Preferences"
+#: ../src/terminal-window.c:2387
+msgid "Select All"
+msgstr ""
+
+#: ../src/terminal-window.c:2390
 msgid "Pre_ferences"
 msgstr "అభీష్టాలు (_f)"
 
 #. Search menu
-#: ../src/terminal-window.c:1698
-#| msgid "Find"
+#: ../src/terminal-window.c:2409
 msgid "_Find…"
 msgstr "కనిపెట్టు... (_F)"
 
-#: ../src/terminal-window.c:1701
+#: ../src/terminal-window.c:2412
 msgid "Find Ne_xt"
 msgstr "తదుపరిది కనుగొను (_x)"
 
-#: ../src/terminal-window.c:1704
+#: ../src/terminal-window.c:2415
 msgid "Find Pre_vious"
 msgstr "మునుపటిది కనుగొను (_v)"
 
-#: ../src/terminal-window.c:1707
+#: ../src/terminal-window.c:2418
 msgid "_Clear Highlight"
 msgstr "ఉద్దీపనమును తీసివేయి (_C)"
 
-#: ../src/terminal-window.c:1711
+#: ../src/terminal-window.c:2422
 msgid "Go to _Line..."
 msgstr "ఈ వరుసకు వెళ్లు... (_L)"
 
-#: ../src/terminal-window.c:1714
+#: ../src/terminal-window.c:2425
 msgid "_Incremental Search..."
 msgstr "పురోగమన శోధన... (_I)"
 
 #. Terminal menu
-#: ../src/terminal-window.c:1720
+#: ../src/terminal-window.c:2431
 msgid "Change _Profile"
 msgstr "ప్రవరను మార్చు (_P)"
 
-#: ../src/terminal-window.c:1721
+#: ../src/terminal-window.c:2432
 msgid "_Set Title…"
 msgstr "శీర్షికను అమర్చు... (_S)"
 
-#: ../src/terminal-window.c:1724
+#: ../src/terminal-window.c:2435
 msgid "Set _Character Encoding"
 msgstr "అక్షర సంకేతరచనను అమర్చు (_C)"
 
-#: ../src/terminal-window.c:1725
+#: ../src/terminal-window.c:2436
 msgid "_Reset"
 msgstr "తిరిగిఅమర్చు (_R)"
 
-#: ../src/terminal-window.c:1728
+#: ../src/terminal-window.c:2439
 msgid "Reset and C_lear"
 msgstr "తిరిగిఅమర్చు మరియు తుడిచివేయి (_l)"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:1733
+#: ../src/terminal-window.c:2444
 msgid "_Add or Remove…"
 msgstr "జతచేయి లేదా తీసివేయి...(_A)"
 
 #. Tabs menu
-#: ../src/terminal-window.c:1738
+#: ../src/terminal-window.c:2449
 msgid "_Previous Tab"
 msgstr "మునుపటి ట్యాబ్(_P)"
 
-#: ../src/terminal-window.c:1741
+#: ../src/terminal-window.c:2452
 msgid "_Next Tab"
 msgstr "తరువాతి ట్యాబ్(_N)"
 
-#: ../src/terminal-window.c:1744
+#: ../src/terminal-window.c:2455
 msgid "Move Tab _Left"
 msgstr "ట్యాబ్‌ను ఎడమవైపు జరుపు (_L)"
 
-#: ../src/terminal-window.c:1747
+#: ../src/terminal-window.c:2458
 msgid "Move Tab _Right"
 msgstr "ట్యాబ్‌ను కుడివైపుకు జరుపు (_R)"
 
-#: ../src/terminal-window.c:1750
+#: ../src/terminal-window.c:2461
 msgid "_Detach tab"
 msgstr "ట్యాబ్‌ను వేరుచేయి (_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:1755
+#: ../src/terminal-window.c:2466
 msgid "_Contents"
 msgstr "విషయసూచిక (_C)"
 
 #. Popup menu
-#: ../src/terminal-window.c:1763
+#: ../src/terminal-window.c:2474
 msgid "_Send Mail To…"
 msgstr "మెయిల్ ద్వారా పంపు...(_S)"
 
-#: ../src/terminal-window.c:1766
+#: ../src/terminal-window.c:2477
 msgid "_Copy E-mail Address"
 msgstr "ఈమెయిల్ చిరునామాను నకలుతీయి (_C)"
 
-#: ../src/terminal-window.c:1769
+#: ../src/terminal-window.c:2480
 msgid "C_all To…"
 msgstr "దీనికి కాల్‌చేయి...(_a)"
 
-#: ../src/terminal-window.c:1772
+#: ../src/terminal-window.c:2483
 msgid "_Copy Call Address"
 msgstr "అన్ని చిరునామాలను నకలుతీయుము (_C)"
 
-#: ../src/terminal-window.c:1775
+#: ../src/terminal-window.c:2486
 msgid "_Open Link"
 msgstr "లంకెను తెరువు (_O)"
 
-#: ../src/terminal-window.c:1778
+#: ../src/terminal-window.c:2489
 msgid "_Copy Link Address"
 msgstr "లంకె చిరునామాను నకలుతీయి (_C)"
 
-#: ../src/terminal-window.c:1781
+#: ../src/terminal-window.c:2492
 msgid "P_rofiles"
 msgstr "ప్రవరలు (_r)"
 
-#: ../src/terminal-window.c:1797
+#: ../src/terminal-window.c:2505
 msgid "L_eave Full Screen"
 msgstr "పూర్తితెరను వదిలివెళ్ళు (_e)"
 
-#: ../src/terminal-window.c:1800
-msgid "_Input Methods"
-msgstr "ఇన్‌పుట్ పద్దతులు (_I)"
-
 #. View Menu
-#: ../src/terminal-window.c:1806
+#: ../src/terminal-window.c:2513
 msgid "Show _Menubar"
 msgstr "మెనూబార్‌ను చూపించు (_M)"
 
-#: ../src/terminal-window.c:1810
+#: ../src/terminal-window.c:2517
 msgid "_Full Screen"
 msgstr "పూర్తితెర(_F)"
 
-#: ../src/terminal-window.c:2899
+#: ../src/terminal-window.c:3569
 msgid "Close this window?"
 msgstr "ఈ కిటికీని మూసివేయాలా?"
 
-#: ../src/terminal-window.c:2899
+#: ../src/terminal-window.c:3569
 msgid "Close this terminal?"
 msgstr "ఈ టెర్మినల్‌ను మూసివేయాలా?"
 
-#: ../src/terminal-window.c:2903
+#: ../src/terminal-window.c:3573
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2065,7 +2014,7 @@ msgstr ""
 "కిటికీలను మూసివేస్తే అవన్నీ అంతము "
 "చేయబడతాయి."
 
-#: ../src/terminal-window.c:2907
+#: ../src/terminal-window.c:3577
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2073,26 +2022,128 @@ msgstr ""
 "ఈ టెర్మినల్ నందు ఇంకా ఒక ప్రక్రియ నడుస్తోంది. టెర్మినల్‌ను మూసివేస్తే అది "
 "అంతము చేయబడుతుంది."
 
-#: ../src/terminal-window.c:2912
+#: ../src/terminal-window.c:3582
 msgid "C_lose Window"
 msgstr "కిటికీని మూసివేయి (_l)"
 
-#: ../src/terminal-window.c:2912
-msgid "C_lose Terminal"
-msgstr "టెర్మినల్ మూసివేయి (_l)"
+#~ msgid "What to do with dynamic title"
+#~ msgstr "యాంత్రిక శీర్షిక తో ఏమిచేయాలి"
 
-#: ../src/terminal-window.c:2985
-msgid "Could not save contents"
-msgstr "సారములను దాయలేకపోయినది"
+#~ msgid ""
+#~ "If the application in the terminal sets the title (most typically people "
+#~ "have their shell set up to do this), the dynamically-set title can erase "
+#~ "the configured title, go before it, go after it, or replace it. The "
+#~ "possible values are \"replace\", \"before\", \"after\", and \"ignore\"."
+#~ msgstr ""
+#~ "టెర్మినల్ నందలి అనువర్తనము శీర్షికను అమర్చినట్లైతే ( సాధారణంగా వినియోగదారులు ఇది చేయుటకు వారి షెల్ "
+#~ "అమర్పును కలిగిఉంటారు), యాత్రికంగా-అమర్చు శీర్షిక ఆకృతీకరించిన శీర్షికను చెరిపివేస్తుంది,ముందుకు "
+#~ "వెళ్ళు, తరువాతకి వెళ్ళు, లేదా పునఃస్థాపించు.సాద్యమగు విలువలు \"పునఃస్థాపించు\", \"ముందుకి"
+#~ "\", \"తరువాత\", మరియు \"వదిలివేయు\"."
 
-#: ../src/terminal-window.c:3009
-#| msgid "Save as..."
-msgid "Save as…"
-msgstr "ఇలా భద్రపరుచు..."
+#~ msgid "Keyboard shortcut to switch to tab 1"
+#~ msgstr "టాబ్ 1 కు మారుటకు కీబోర్డు లఘువు"
 
-#: ../src/terminal-window.c:3456
-msgid "_Title:"
-msgstr "శీర్షిక (_T):"
+#~ msgid "Keyboard shortcut to switch to tab 2"
+#~ msgstr "టాబ్ 2 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 3"
+#~ msgstr "టాబ్ 3 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 4"
+#~ msgstr "టాబ్ 4 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 5"
+#~ msgstr "టాబ్ 5 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 6"
+#~ msgstr "టాబ్ 6 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 7"
+#~ msgstr "టాబ్ 7 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 8"
+#~ msgstr "టాబ్ 8 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 9"
+#~ msgstr "టాబ్ 9 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 10"
+#~ msgstr "టాబ్ 10 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 11"
+#~ msgstr "టాబ్ 11 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Keyboard shortcut to switch to tab 12"
+#~ msgstr "టాబ్ 12 కు మారుటకు కీబోర్డు లఘువు"
+
+#~ msgid "Always visible"
+#~ msgstr "ఎల్లప్పుడూ కనిపించు"
+
+#~ msgid "Visible only when necessary"
+#~ msgstr "అవసరమైనప్పుడు మాత్రమే కనిపించు"
+
+#~ msgid "Hidden"
+#~ msgstr "దాయబడిన"
+
+#~ msgid "Initial _title:"
+#~ msgstr "ప్రారంభ శీర్షిక(_t):"
+
+#~ msgid "When terminal commands set their o_wn titles:"
+#~ msgstr "టెర్మినల్ ఆదేశములు వాటి స్వంత శీర్షికలకు అమర్చినప్పుడు (_w):"
+
+#~ msgid "New Tab"
+#~ msgstr "కొత్త ట్యాబ్"
+
+#~ msgid "Close Tab"
+#~ msgstr "ట్యాబ్‌ను మూసివేయి"
+
+#~ msgid "Close Window"
+#~ msgstr "కిటికీని మూసివేయి"
+
+#~ msgid "Switch to Tab 2"
+#~ msgstr "ట్యాబ్ 2 కు మారు"
+
+#~ msgid "Switch to Tab 3"
+#~ msgstr "ట్యాబ్ 3 కు మారు"
+
+#~ msgid "Switch to Tab 4"
+#~ msgstr "ట్యాబ్ 4 కు మారు"
+
+#~ msgid "Switch to Tab 5"
+#~ msgstr "ట్యాబ్ 5 కు మారు"
+
+#~ msgid "Switch to Tab 6"
+#~ msgstr "ట్యాబ్ 6 కు మారు"
+
+#~ msgid "Switch to Tab 7"
+#~ msgstr "ట్యాబ్ 7 కు మారు"
+
+#~ msgid "Switch to Tab 8"
+#~ msgstr "ట్యాబ్ 8 కు మారు"
+
+#~ msgid "Switch to Tab 9"
+#~ msgstr "ట్యాబ్ 9 కు మారు"
+
+#~ msgid "Switch to Tab 10"
+#~ msgstr "ట్యాబ్ 10 కు మారు"
+
+#~ msgid "Switch to Tab 11"
+#~ msgstr "ట్యాబ్ 11 కు మారు"
+
+#~ msgid "Switch to Tab 12"
+#~ msgstr "ట్యాబ్ 12 కు మారు"
+
+#~ msgid "The shortcut key “%s” is already bound to the “%s” action"
+#~ msgstr "లఘువు కీ “%s” ఇప్పటికే “%s” చర్యకు బద్దమైఉంది"
+
+#~ msgid "C_lose Tab"
+#~ msgstr "ట్యాబ్‌ను మూసివేయి (_l)"
+
+#~ msgid "_Close Window"
+#~ msgstr "కిటికీని మూసివేయి (_C)"
+
+#~ msgid "_Input Methods"
+#~ msgstr "ఇన్‌పుట్ పద్దతులు (_I)"
 
 #~ msgid "Add or Remove Terminal Encodings"
 #~ msgstr "టెర్మినల్ సంకేతరచనలను కలుపుము లేదా తీసివేయుము"
@@ -2247,9 +2298,6 @@ msgstr "శీర్షిక (_T):"
 #~ msgstr ""
 #~ "ఒకటి కన్నా ఎక్కువ టాబ్‌లు తేరిచిఉన్న టెర్మినల్ విండోను మూయుచున్నప్పుడు నిర్ధారణ కొరకు అడగవలెనా."
 
-#~ msgid "Default"
-#~ msgstr "అప్రమేయం"
-
 #~ msgid ""
 #~ "If true, don't make a noise when applications send the escape sequence "
 #~ "for the terminal bell."
@@ -2267,9 +2315,6 @@ msgstr "శీర్షిక (_T):"
 #~ msgstr ""
 #~ "సాధ్యమగు విలువలు \"block\" బ్లాక్ కర్సర్ కొరకు, \"ibeam\" నిలువు లైను కర్సర్ కొరకు లేదా "
 #~ "\"underline\" క్రిందిగీత కర్సర్ కొరకు."
-
-#~ msgid "Icon for terminal window"
-#~ msgstr "టెర్మినల్ విండో కొరకు ప్రతిమ"
 
 #~ msgid "Icon to use for tabs/windows containing this profile."
 #~ msgstr "ఈ ప్రొఫైల్ ను కలిగిఉన్న టాబ్‌ల/విండోల ఉపయోగం కొరకు ప్రతిమ"
