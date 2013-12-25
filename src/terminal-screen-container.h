@@ -36,7 +36,7 @@ typedef struct _TerminalScreenContainerPrivate TerminalScreenContainerPrivate;
 
 struct _TerminalScreenContainer
 {
-  GtkVBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   TerminalScreenContainerPrivate *priv;
@@ -44,7 +44,7 @@ struct _TerminalScreenContainer
 
 struct _TerminalScreenContainerClass
 {
-  GtkVBoxClass parent_class;
+  GtkBoxClass parent_class;
 };
 
 GType terminal_screen_container_get_type (void);
