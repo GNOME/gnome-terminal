@@ -772,10 +772,6 @@ main (gint argc, gchar *argv[])
 
   terminal_i18n_init (TRUE);
 
-#if !GLIB_CHECK_VERSION (2, 35, 3)
-  g_type_init ();
-#endif
-
   _terminal_debug_init ();
 
   ret = EXIT_FAILURE;

@@ -101,10 +101,6 @@ main (int argc, char **argv)
 #endif
 #endif
 
-#if !GLIB_CHECK_VERSION (2, 35, 3)
-  g_type_init ();
-#endif
-
   _terminal_debug_init ();
 
   // FIXMEchpe: just use / here but make sure #565328 doesn't regress
