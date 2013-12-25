@@ -1336,8 +1336,10 @@ terminal_screen_do_exec (TerminalScreen *screen,
     g_signal_connect (info_bar, "response",
                       G_CALLBACK (info_bar_response_cb), screen);
 
-    gtk_box_pack_start (GTK_BOX (terminal_screen_container_get_from_screen (screen)),
-                        info_bar, FALSE, FALSE, 0);
+    gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
+    gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
+    gtk_overlay_add_overlay (GTK_OVERLAY (terminal_screen_container_get_from_screen (screen)),
+                             info_bar);
     gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), GTK_RESPONSE_CANCEL);
     gtk_widget_show (info_bar);
 
@@ -1688,8 +1690,10 @@ terminal_screen_child_exited (VteTerminal *terminal)
       g_signal_connect (info_bar, "response",
                         G_CALLBACK (info_bar_response_cb), screen);
 
-      gtk_box_pack_start (GTK_BOX (terminal_screen_container_get_from_screen (screen)),
-                          info_bar, FALSE, FALSE, 0);
+      gtk_widget_set_halign (info_bar, GTK_ALIGN_FILL);
+      gtk_widget_set_valign (info_bar, GTK_ALIGN_START);
+      gtk_overlay_add_overlay (GTK_OVERLAY (terminal_screen_container_get_from_screen (screen)),
+                               info_bar);
       gtk_info_bar_set_default_response (GTK_INFO_BAR (info_bar), RESPONSE_RELAUNCH);
       gtk_widget_show (info_bar);
       break;

@@ -43,7 +43,7 @@ enum
   PROP_WINDOW_PLACEMENT_SET
 };
 
-G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_BOX)
+G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY)
 
 /* helper functions */
 
@@ -98,8 +98,8 @@ terminal_screen_container_init (TerminalScreenContainer *container)
 
 static GObject *
 terminal_screen_container_constructor (GType type,
-                                guint n_construct_properties,
-                                GObjectConstructParam *construct_params)
+                                       guint n_construct_properties,
+                                       GObjectConstructParam *construct_params)
 {
   GObject *object;
   TerminalScreenContainer *container;
@@ -121,7 +121,7 @@ terminal_screen_container_constructor (GType type,
   gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->hbox), priv->vscrollbar, FALSE, FALSE, 0);
 
-  gtk_box_pack_end (GTK_BOX (container), priv->hbox, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (container), priv->hbox);
   gtk_widget_show_all (priv->hbox);
 
   _terminal_screen_update_scrollbar (priv->screen);
@@ -247,7 +247,6 @@ GtkWidget *
 terminal_screen_container_new (TerminalScreen *screen)
 {
   return g_object_new (TERMINAL_TYPE_SCREEN_CONTAINER,
-                       "orientation", GTK_ORIENTATION_VERTICAL,
                        "screen", screen,
                        NULL);
 }
