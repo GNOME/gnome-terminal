@@ -39,7 +39,7 @@ AM_GLIB_GNU_GETTEXT
 GLIB_REQUIRED=2.39.2
 GIO_REQUIRED=2.33.2
 GSETTINGS_DESKTOP_SCHEMAS_REQUIRED=0.1.0
-DCONF_REQUIRED=0.12.0
+DCONF_REQUIRED=0.14.0
 
 AC_MSG_CHECKING([which gtk+ version to compile against])
 AC_ARG_WITH([gtk],
@@ -80,15 +80,6 @@ PKG_CHECK_MODULES([TERM],
    dconf >= $DCONF_REQUIRED
    uuid
    $PLATFORM_DEPS])
-
-# DConf broke API without changing the pkgconfig name
-AC_MSG_CHECKING([old DConf])
-PKG_CHECK_EXISTS([dconf >= 0.14],[have_old_dconf=no],[have_old_dconf=yes])
-AC_MSG_RESULT([$have_old_dconf])
-
-if test "$have_old_dconf" = "yes"; then
-  AC_DEFINE([HAVE_DCONF_1_2],[1],[Define to 1 if DConf is version 1.2])
-fi
 
 # ****
 # DBus

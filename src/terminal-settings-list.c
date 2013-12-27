@@ -267,9 +267,7 @@ clone_child (TerminalSettingsList *list,
   char **keys;
   guint i;
   gs_unref_object DConfClient *client;
-#ifndef HAVE_DCONF_1_2
   DConfChangeset *changeset;
-#endif
 
   new_uuid = new_list_entry ();
 
@@ -279,12 +277,8 @@ clone_child (TerminalSettingsList *list,
   path = path_new (list, uuid);
   new_path = path_new (list, new_uuid);
 
-#ifdef HAVE_DCONF_1_2
-  client = dconf_client_new (NULL, NULL, NULL, NULL);
-#else
   client = dconf_client_new ();
   changeset = dconf_changeset_new ();
-#endif
 
   /* FIXME: this is beyond ugly. Need API on GSettingsSchema to list all the keys! */
   {
@@ -297,27 +291,17 @@ clone_child (TerminalSettingsList *list,
     gs_unref_variant GVariant *value;
 
     rkey = g_strconcat (path, keys[i], NULL);
-#ifdef HAVE_DCONF_1_2
-    value = dconf_client_read_no_default (client, rkey);
-#else
     value = dconf_client_read (client, rkey);
-#endif
 
     if (value) {
       gs_free char *wkey;
       wkey = g_strconcat (new_path, keys[i], NULL);
-#ifdef HAVE_DCONF_1_2
-      dconf_client_write (client, wkey, value, NULL, NULL, NULL);
-#else
       dconf_changeset_set (changeset, wkey, value);
-#endif
     }
   }
 
-#ifndef HAVE_DCONF_1_2
   dconf_client_change_sync (client, changeset, NULL, NULL, NULL);
   dconf_changeset_unref (changeset);
-#endif
 
   return new_uuid;
 }
@@ -370,13 +354,8 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
   /* Now we unset all keys under the child */
   path = path_new (list, uuid);
 
-#ifdef HAVE_DCONF_1_2
-  client = dconf_client_new (NULL, NULL, NULL, NULL);
-  dconf_client_write (client, path, NULL, NULL, NULL, NULL);
-#else /* modern DConf */
   client = dconf_client_new ();
   dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
-#endif
 }
 
 static void
