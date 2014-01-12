@@ -71,10 +71,11 @@ static const TerminalColorScheme color_schemes[] = {
 
 enum
 {
-  TERMINAL_PALETTE_TANGO = 0,
-  TERMINAL_PALETTE_LINUX = 1,
-  TERMINAL_PALETTE_XTERM = 2,
-  TERMINAL_PALETTE_RXVT  = 3,
+  TERMINAL_PALETTE_TANGO     = 0,
+  TERMINAL_PALETTE_LINUX     = 1,
+  TERMINAL_PALETTE_XTERM     = 2,
+  TERMINAL_PALETTE_RXVT      = 3,
+  TERMINAL_PALETTE_SOLARIZED = 4,
   TERMINAL_PALETTE_N_BUILTINS
 };
 
@@ -158,7 +159,27 @@ static const GdkRGBA terminal_palettes[TERMINAL_PALETTE_N_BUILTINS][TERMINAL_PAL
     { 1, 0, 1, 1 },
     { 0, 1, 1, 1 },
     { 1, 1, 1, 1 },
-  }
+  },
+
+  /* Solarized palette (1.0.0beta2): http://ethanschoonover.com/solarized */
+  {
+    { 0.02745,  0.211764, 0.258823, 1 },
+    { 0.862745, 0.196078, 0.184313, 1 },
+    { 0.521568, 0.6,      0,        1 },
+    { 0.709803, 0.537254, 0,        1 },
+    { 0.149019, 0.545098, 0.823529, 1 },
+    { 0.82745,  0.211764, 0.509803, 1 },
+    { 0.164705, 0.631372, 0.596078, 1 },
+    { 0.933333, 0.909803, 0.835294, 1 },
+    { 0,        0.168627, 0.211764, 1 },
+    { 0.796078, 0.294117, 0.086274, 1 },
+    { 0.345098, 0.431372, 0.458823, 1 },
+    { 0.396078, 0.482352, 0.513725, 1 },
+    { 0.513725, 0.580392, 0.588235, 1 },
+    { 0.423529, 0.443137, 0.768627, 1 },
+    { 0.57647,  0.631372, 0.631372, 1 },
+    { 0.992156, 0.964705, 0.890196, 1 },
+  },
 };
 
 static void profile_colors_notify_scheme_combo_cb (GSettings *profile,
