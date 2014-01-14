@@ -997,16 +997,25 @@ terminal_profile_edit (GSettings  *profile,
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_CUSTOM_COMMAND_KEY,
                    gtk_builder_get_object (builder, "custom-command-box"),
-                   "sensitive", G_SETTINGS_BIND_GET);
+                   "sensitive",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    gtk_builder_get_object (builder, "font-hbox"),
                    "sensitive",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN);
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
                    gtk_builder_get_object (builder, "default-size-hbox"),
-                   "sensitive", G_SETTINGS_BIND_GET);
+                   "sensitive",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind (profile,
+                   TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
+                   gtk_builder_get_object (builder, "colors-box"),
+                   "sensitive",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind_writable (profile,
                             TERMINAL_PROFILE_PALETTE_KEY,
                             gtk_builder_get_object (builder, "palette-box"),
