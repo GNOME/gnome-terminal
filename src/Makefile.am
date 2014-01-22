@@ -307,6 +307,32 @@ gnome_terminal_migration_LDADD = \
 
 endif # ENABLE_MIGRATION
 
+# GNOME Shell search provider
+
+if ENABLE_SEARCH_PROVIDER
+
+searchproviderdir = $(datadir)/gnome-shell/search-providers
+dist_searchprovider_DATA = gnome-terminal-search-provider.ini
+
+BUILT_SOURCES += \
+	terminal-search-provider-gdbus-generated.c \
+	terminal-search-provider-gdbus-generated.h \
+	$(NULL)
+
+gnome_terminal_server_SOURCES += \
+	terminal-search-provider.c \
+	terminal-search-provider.h \
+	$(NULL)
+
+endif # ENABLE_SEARCH_PROVIDER
+
+terminal-search-provider-gdbus-generated.c terminal-search-provider-gdbus-generated.h: $(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml Makefile
+	$(AM_V_GEN) $(GDBUS_CODEGEN) \
+			--interface-prefix=org.gnome.Shell \
+			--c-namespace=Terminal \
+			--generate-c-code terminal-search-provider-gdbus-generated \
+			$<
+
 gsettings_SCHEMAS = \
 	org.gnome.Terminal.gschema.xml \
 	$(NULL)

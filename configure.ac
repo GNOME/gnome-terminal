@@ -85,6 +85,12 @@ PKG_CHECK_MODULES([TERM],
 # DBus
 # ****
 
+AC_ARG_WITH([dbus-interface-dir],
+  [AS_HELP_STRING([--with-dbus-interface-dir=PATH],[dbus interace file directory])],
+  [dbusinterfacedir="$withval"],
+  [dbusinterfacedir='${datadir}/dbus-1/interfaces'])
+AC_SUBST([dbusinterfacedir])
+
 AC_ARG_WITH([dbus-service-dir],
   [AS_HELP_STRING([--with-dbus-service-dir=PATH],[dbus service file directory])],
   [dbusservicedir="$withval"],
@@ -154,6 +160,22 @@ AC_PATH_PROG([XMLLINT],[xmllint],[])
 if test -z "$XMLLINT"; then
   AC_MSG_ERROR([xmllint not found])
 fi
+
+# ***************************
+# GNOME Shell search provider
+# ***************************
+
+AC_MSG_CHECKING([whether to build the gnome-shell search provider])
+AC_ARG_ENABLE([search-provider],
+  [AS_HELP_STRING([--disable-search-provider],[Disable gnome-shell search provider])],
+  [],[enable_search_provider=yes])
+AC_MSG_RESULT([$enable_search_provider])
+
+if test "$enable_search_provider" = "yes"; then
+  AC_DEFINE([ENABLE_SEARCH_PROVIDER],[1],[Define to enable gnome-shell search provider])
+fi
+
+AM_CONDITIONAL([ENABLE_SEARCH_PROVIDER],[test "$enable_search_provider" = "yes"])
 
 # ******************
 # Nautilus extension
@@ -292,8 +314,10 @@ gnome-terminal-$VERSION:
       prefix:                 ${prefix}
       source code location:   ${srcdir}
       compiler:               ${CC}
+      DBus interface dir:     ${dbusinterfacedir}
       DBus service dir:       ${dbusservicedir}
       Prefs migration:        ${enable_migration}
+      Search provider:        ${enable_search_provider}
       Nautilus extension:     ${with_nautilus_extension}
       Nautilus extension dir: ${nautilusextensiondir}
 "
