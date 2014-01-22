@@ -80,6 +80,15 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            char           **child_env,
                                            double           zoom);
 
+TerminalScreen *terminal_app_get_screen_by_uuid (TerminalApp *app,
+                                                 const char  *uuid);
+
+void terminal_app_register_screen (TerminalApp *app,
+                                   TerminalScreen *screen);
+
+void terminal_app_unregister_screen (TerminalApp *app,
+                                     TerminalScreen *screen);
+
 void terminal_app_edit_preferences (TerminalApp     *app,
                                     GtkWindow       *transient_parent);
 void terminal_app_edit_encodings   (TerminalApp     *app,

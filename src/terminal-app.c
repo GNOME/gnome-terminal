@@ -78,6 +78,8 @@ struct _TerminalApp
   GHashTable *encodings;
   gboolean encodings_locked;
 
+  GHashTable *screen_map;
+
   GSettings *global_settings;
   GSettings *desktop_interface_settings;
   GSettings *system_proxy_settings;
@@ -372,6 +374,8 @@ terminal_app_init (TerminalApp *app)
                     G_CALLBACK (terminal_app_encoding_list_notify_cb),
                     app);
 
+  app->screen_map = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
   settings = g_settings_get_child (app->global_settings, "keybindings");
   terminal_accels_init (G_APPLICATION (app), settings);
 }
@@ -385,6 +389,7 @@ terminal_app_finalize (GObject *object)
                                         G_CALLBACK (terminal_app_encoding_list_notify_cb),
                                         app);
   g_hash_table_destroy (app->encodings);
+  g_hash_table_destroy (app->screen_map);
 
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
@@ -517,6 +522,35 @@ terminal_app_new_terminal (TerminalApp     *app,
   _terminal_screen_launch_child_on_idle (screen);
 
   return screen;
+}
+
+TerminalScreen *
+terminal_app_get_screen_by_uuid (TerminalApp *app,
+                                 const char  *uuid)
+{
+  return g_hash_table_lookup (app->screen_map, uuid);
+}
+
+void
+terminal_app_register_screen (TerminalApp *app,
+                              TerminalScreen *screen)
+{
+  const char *uuid;
+
+  uuid = terminal_screen_get_uuid (screen);
+  g_hash_table_insert (app->screen_map, g_strdup (uuid), screen);
+}
+
+void
+terminal_app_unregister_screen (TerminalApp *app,
+                                TerminalScreen *screen)
+{
+  gboolean found;
+  const char *uuid;
+
+  uuid = terminal_screen_get_uuid (screen);
+  found = g_hash_table_remove (app->screen_map, uuid);
+  g_assert (found == TRUE);
 }
 
 void

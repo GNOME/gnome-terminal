@@ -118,6 +118,7 @@ enum
   TARGET_TAB
 };
 
+static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
 static void terminal_screen_drag_data_received (GtkWidget        *widget,
@@ -440,6 +441,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GSettings *settings;
   guint i;
 
+  object_class->constructed = terminal_screen_constructed;
   object_class->dispose = terminal_screen_dispose;
   object_class->finalize = terminal_screen_finalize;
   object_class->get_property = terminal_screen_get_property;
@@ -562,6 +564,18 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 }
 
 static void
+terminal_screen_constructed (GObject *object)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (object);
+  TerminalApp *app;
+
+  G_OBJECT_CLASS (terminal_screen_parent_class)->constructed (object);
+
+  app = terminal_app_get ();
+  terminal_app_register_screen (app, screen);
+}
+
+static void
 terminal_screen_dispose (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
@@ -587,6 +601,10 @@ terminal_screen_finalize (GObject *object)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (object);
   TerminalScreenPrivate *priv = screen->priv;
+  TerminalApp *app;
+
+  app = terminal_app_get ();
+  terminal_app_unregister_screen (app, screen);
 
   g_signal_handlers_disconnect_by_func (terminal_app_get_desktop_interface_settings (terminal_app_get ()),
                                         G_CALLBACK (terminal_screen_system_font_changed_cb),
