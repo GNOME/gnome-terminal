@@ -41,87 +41,21 @@ struct _TerminalSearchProviderClass
 
 G_DEFINE_TYPE (TerminalSearchProvider, terminal_search_provider, G_TYPE_OBJECT)
 
-/* Copied from tracker/src/libtracker-fts/tracker-parser-glib.c under LGPLv2+
- * And then from gnome-shell/src/shell-util.c under GPLv2+
- *
- * Originally written by Aleksander Morgado <aleksander@gnu.org>
- */
-
-/* Combining diacritical mark?
- *  Basic range: [0x0300,0x036F]
- *  Supplement:  [0x1DC0,0x1DFF]
- *  For Symbols: [0x20D0,0x20FF]
- *  Half marks:  [0xFE20,0xFE2F]
- */
-#define IS_CDM_UCS4(c) (((c) >= 0x0300 && (c) <= 0x036F)  || \
-                        ((c) >= 0x1DC0 && (c) <= 0x1DFF)  || \
-                        ((c) >= 0x20D0 && (c) <= 0x20FF)  || \
-                        ((c) >= 0xFE20 && (c) <= 0xFE2F))
-
 static char *
 normalize_casefold_and_unaccent (const char *str)
 {
-  gs_free char *normalized = NULL;
-  char *tmp;
-  int i = 0, j = 0, ilen;
+  gs_free char *casefolded = NULL, *normalized = NULL;
+  char *retval = NULL;
 
   if (str == NULL)
-    return NULL;
+    goto out;
 
-  /* NOTE: 'ALL' is equivalent to 'NFKD'. If this is ever updated, please
-   * update the unaccenting mechanism as well. */
-  normalized = g_utf8_normalize (str, -1, G_NORMALIZE_ALL);
-  tmp = g_utf8_casefold (normalized, -1);
+  normalized = g_utf8_normalize (str, -1, G_NORMALIZE_ALL_COMPOSE);
+  casefolded = g_utf8_casefold (normalized, -1);
+  retval = g_str_to_ascii (casefolded, NULL);
 
-  ilen = strlen (tmp);
-
-  while (i < ilen)
-    {
-      gunichar unichar;
-      char *next_utf8;
-      gint utf8_len;
-
-      /* Get next character of the word as UCS4 */
-      unichar = g_utf8_get_char_validated (&tmp[i], -1);
-
-      /* Invalid UTF-8 character or end of original string. */
-      if (unichar == (gunichar) -1 ||
-          unichar == (gunichar) -2)
-        {
-          break;
-        }
-
-      /* Find next UTF-8 character */
-      next_utf8 = g_utf8_next_char (&tmp[i]);
-      utf8_len = next_utf8 - &tmp[i];
-
-      if (IS_CDM_UCS4 ((guint32) unichar))
-        {
-          /* If the given unichar is a combining diacritical mark,
-           * just update the original index, not the output one */
-          i += utf8_len;
-          continue;
-        }
-
-      /* If already found a previous combining
-       * diacritical mark, indexes are different so
-       * need to copy characters. As output and input
-       * buffers may overlap, need to use memmove
-       * instead of memcpy */
-      if (i != j)
-        {
-          memmove (&tmp[j], &tmp[i], utf8_len);
-        }
-
-      /* Update both indexes */
-      i += utf8_len;
-      j += utf8_len;
-    }
-
-  /* Force proper string end */
-  tmp[j] = '\0';
-
-  return tmp;
+ out:
+  return retval;
 }
 
 static char **
