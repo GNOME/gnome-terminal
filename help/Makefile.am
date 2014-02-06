@@ -34,6 +34,7 @@ HELP_FILES = \
 	pref-scrolling.page \
 	pref-title.page \
 	profile.page \
+	prob-reset.page \
 	txt-copy-paste.page \
 	txt-links.page \
 	txt-search.page \
