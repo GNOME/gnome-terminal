@@ -172,6 +172,9 @@ AC_ARG_ENABLE([search-provider],
 AC_MSG_RESULT([$enable_search_provider])
 
 if test "$enable_search_provider" = "yes"; then
+  AC_CHECK_FILE([$(eval echo $(eval echo $(eval echo ${dbusinterfacedir})))/org.gnome.ShellSearchProvider2.xml],[],
+    [AC_MSG_ERROR([gnome-shell search provider requested but interface definition file not found])])
+
   AC_DEFINE([ENABLE_SEARCH_PROVIDER],[1],[Define to enable gnome-shell search provider])
 fi
 
