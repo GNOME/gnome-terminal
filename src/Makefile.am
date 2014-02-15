@@ -324,7 +324,10 @@ gnome_terminal_server_SOURCES += \
 	terminal-search-provider.h \
 	$(NULL)
 
-endif # ENABLE_SEARCH_PROVIDER
+nodist_gnome_terminal_server_SOURCES += \
+	terminal-search-provider-gdbus-generated.c \
+	terminal-search-provider-gdbus-generated.h \
+	$(NULL)
 
 terminal-search-provider-gdbus-generated.c terminal-search-provider-gdbus-generated.h: $(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
@@ -332,6 +335,8 @@ terminal-search-provider-gdbus-generated.c terminal-search-provider-gdbus-genera
 			--c-namespace=Terminal \
 			--generate-c-code terminal-search-provider-gdbus-generated \
 			$<
+
+endif # ENABLE_SEARCH_PROVIDER
 
 gsettings_SCHEMAS = \
 	org.gnome.Terminal.gschema.xml \
