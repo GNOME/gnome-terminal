@@ -355,10 +355,6 @@ terminal_app_init (TerminalApp *app)
 
   gtk_window_set_default_icon_name (GNOME_TERMINAL_ICON_NAME);
 
-#ifdef ENABLE_SEARCH_PROVIDER
-  app->search_provider = terminal_search_provider_new ();
-#endif /* ENABLE_SEARCH_PROVIDER */
-
   /* Desktop proxy settings */
   app->system_proxy_settings = g_settings_new (SYSTEM_PROXY_SETTINGS_SCHEMA);
 
@@ -407,10 +403,6 @@ terminal_app_finalize (GObject *object)
   g_object_unref (app->desktop_interface_settings);
   g_object_unref (app->system_proxy_settings);
 
-#ifdef ENABLE_SEARCH_PROVIDER
-  g_object_unref (app->search_provider);
-#endif /* ENABLE_SEARCH_PROVIDER */
-
   terminal_accels_shutdown ();
 
   G_OBJECT_CLASS (terminal_app_parent_class)->finalize (object);
@@ -433,11 +425,19 @@ terminal_app_dbus_register (GApplication    *application,
     return FALSE;
 
 #ifdef ENABLE_SEARCH_PROVIDER
-  if (!terminal_search_provider_dbus_register (app->search_provider,
-                                               connection,
-                                               TERMINAL_SEARCH_PROVIDER_PATH,
-                                               error))
-    return FALSE;
+  if (g_settings_get_boolean (app->global_settings, TERMINAL_SETTING_SHELL_INTEGRATION_KEY)) {
+    gs_unref_object TerminalSearchProvider *search_provider;
+
+    search_provider = terminal_search_provider_new ();
+
+    if (!terminal_search_provider_dbus_register (app->search_provider,
+                                                 connection,
+                                                 TERMINAL_SEARCH_PROVIDER_PATH,
+                                                 error))
+      return FALSE;
+
+    gs_transfer_out_value (&app->search_provider, &search_provider);
+  }
 #endif /* ENABLE_SEARCH_PROVIDER */
 
   object = terminal_object_skeleton_new (TERMINAL_FACTORY_OBJECT_PATH);
@@ -466,7 +466,11 @@ terminal_app_dbus_unregister (GApplication    *application,
   }
 
 #ifdef ENABLE_SEARCH_PROVIDER
-  terminal_search_provider_dbus_unregister (app->search_provider, connection, TERMINAL_SEARCH_PROVIDER_PATH);
+  if (app->search_provider) {
+    terminal_search_provider_dbus_unregister (app->search_provider, connection, TERMINAL_SEARCH_PROVIDER_PATH);
+    g_object_unref (app->search_provider);
+    app->search_provider = NULL;
+  }
 #endif /* ENABLE_SEARCH_PROVIDER */
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->dbus_unregister (application,
