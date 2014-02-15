@@ -89,6 +89,9 @@ main (int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  /* Don't use ARGB visual by default */
+  g_setenv ("GDK_RGBA", "0", TRUE);
+
 #ifndef ENABLE_DISTRO_PACKAGING
 #ifdef HAVE_UBUNTU
   /* Set some env vars to disable the ubuntu modules. Their package will be 
