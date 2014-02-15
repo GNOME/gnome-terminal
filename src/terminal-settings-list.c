@@ -289,7 +289,7 @@ clone_child (TerminalSettingsList *list,
 
   /* FIXME: this is beyond ugly. Need API on GSettingsSchema to list all the keys! */
   {
-    GSettings *dummy = g_settings_new_with_path (list->child_schema_id, "/foo");
+    GSettings *dummy = g_settings_new_with_path (list->child_schema_id, "/foo/");
     keys = g_settings_list_keys (dummy);
     g_object_unref (dummy);
   }
