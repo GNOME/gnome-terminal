@@ -53,6 +53,10 @@
 #define KEY_CLOSE_WINDOW        "close-window"
 #define KEY_COPY                "copy"
 #define KEY_DETACH_TAB          "detach-tab"
+#define KEY_FIND                "find"
+#define KEY_FIND_CLEAR          "find-clear"
+#define KEY_FIND_PREV           "find-previous"
+#define KEY_FIND_NEXT           "find-next"
 #define KEY_FULL_SCREEN         "full-screen"
 #define KEY_HELP                "help"
 #define KEY_MOVE_TAB_LEFT       "move-tab-left"
@@ -124,6 +128,13 @@ static KeyEntry edit_entries[] = {
   ENTRY (N_("Paste"), KEY_PASTE, "paste", "s",  "'normal'"),
 };
 
+static KeyEntry find_entries[] = {
+  ENTRY (N_("Find"),                 KEY_FIND,       "find", "s", "'find'"    ),
+  ENTRY (N_("Find Next"),            KEY_FIND_NEXT,  "find", "s", "'next'"    ),
+  ENTRY (N_("Find Previous"),        KEY_FIND_PREV,  "find", "s", "'previous'"),
+  ENTRY (N_("Clear Find Highlight"), KEY_FIND_CLEAR, "find", "s", "'clear'"   )
+};
+
 static KeyEntry view_entries[] = {
   ENTRY (N_("Hide and Show toolbar"), KEY_TOGGLE_MENUBAR, "show-menubar", NULL, NULL),
   ENTRY (N_("Full Screen"),           KEY_FULL_SCREEN,    "fullscreen",   NULL, NULL),
@@ -176,6 +187,7 @@ static KeyEntryList all_entries[] =
   { file_entries, G_N_ELEMENTS (file_entries), N_("File") },
   { edit_entries, G_N_ELEMENTS (edit_entries), N_("Edit") },
   { view_entries, G_N_ELEMENTS (view_entries), N_("View") },
+  { find_entries, G_N_ELEMENTS (find_entries), N_("Find") },
   { terminal_entries, G_N_ELEMENTS (terminal_entries), N_("Terminal") },
   { tabs_entries, G_N_ELEMENTS (tabs_entries), N_("Tabs") },
   { help_entries, G_N_ELEMENTS (help_entries), N_("Help") }

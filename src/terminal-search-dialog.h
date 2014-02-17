@@ -24,11 +24,17 @@
 
 G_BEGIN_DECLS
 
+#define TERMINAL_TYPE_SEARCH_DIALOG         (terminal_search_dialog_get_type ())
+#define TERMINAL_SEARCH_DIALOG(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), TERMINAL_TYPE_SEARCH_DIALOG, TerminalSearchDialog))
+#define TERMINAL_SEARCH_DIALOG_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), TERMINAL_TYPE_SEARCH_DIALOG, TerminalSearchDialogClass))
+#define TERMINAL_IS_SEARCH_DIALOG(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), TERMINAL_TYPE_SEARCH_DIALOG))
+#define TERMINAL_IS_SEARCH_DIALOG_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), TERMINAL_TYPE_SEARCH_DIALOG))
+#define TERMINAL_SEARCH_DIALOG_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), TERMINAL_TYPE_SEARCH_DIALOG, TerminalSearchDialogClass))
+
 typedef enum _TerminalSearchFlags {
   TERMINAL_SEARCH_FLAG_BACKWARDS	= 1 << 0,
   TERMINAL_SEARCH_FLAG_WRAP_AROUND	= 1 << 1
 } TerminalSearchFlags;
-
 
 GtkWidget	*terminal_search_dialog_new		(GtkWindow   *parent);
 
