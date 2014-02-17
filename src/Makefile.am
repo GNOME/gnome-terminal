@@ -1,5 +1,7 @@
 NULL =
 
+BUILT_SOURCES =
+
 bin_PROGRAMS = gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
 noinst_PROGRAMS = gnome-terminal-client
@@ -12,7 +14,7 @@ endif # WITH_NAUTILUS_EXTENSION
 
 dbusservice_DATA = org.gnome.Terminal.service
 
-BUILT_SOURCES = \
+gnome_terminal_server_built = \
 	terminal-marshal.c \
 	terminal-marshal.h \
 	terminal-type-builtins.c \
@@ -22,6 +24,7 @@ BUILT_SOURCES = \
 	terminal-resources.c \
 	terminal-resources.h \
 	$(NULL)
+BUILT_SOURCES += $(gnome_terminal_server_built)
 
 gnome_terminal_server_SOURCES = \
 	eggshell.c \
@@ -77,7 +80,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-window.h \
 	$(NULL)
 
-nodist_gnome_terminal_server_SOURCES = $(BUILT_SOURCES)
+nodist_gnome_terminal_server_SOURCES = $(gnome_terminal_server_built)
 
 gnome_terminal_server_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
@@ -314,7 +317,7 @@ if ENABLE_SEARCH_PROVIDER
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = gnome-terminal-search-provider.ini
 
-BUILT_SOURCES += \
+gnome_terminal_server_built += \
 	terminal-search-provider-gdbus-generated.c \
 	terminal-search-provider-gdbus-generated.h \
 	$(NULL)
@@ -322,11 +325,6 @@ BUILT_SOURCES += \
 gnome_terminal_server_SOURCES += \
 	terminal-search-provider.c \
 	terminal-search-provider.h \
-	$(NULL)
-
-nodist_gnome_terminal_server_SOURCES += \
-	terminal-search-provider-gdbus-generated.c \
-	terminal-search-provider-gdbus-generated.h \
 	$(NULL)
 
 terminal-search-provider-gdbus-generated.c terminal-search-provider-gdbus-generated.h: $(dbusinterfacedir)/org.gnome.ShellSearchProvider2.xml Makefile
