@@ -3854,7 +3854,7 @@ static void
 help_about_callback (GtkAction *action,
                      TerminalWindow *window)
 {
-  terminal_util_show_about (GTK_WINDOW (window));
+  terminal_util_show_about (NULL);
 }
 
 GtkUIManager *
