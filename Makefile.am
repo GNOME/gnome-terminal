@@ -5,10 +5,13 @@ NULL =
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 
 DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-debug \
 	--disable-scrollkeeper \
 	--disable-schemas-install \
 	--disable-silent-rules \
-	--with-gtk=3.0
+	--disable-search-provider
+	--without-nautilus-extension \
+	$(NULL)
 
 desktopdir = $(datadir)/applications
 desktop_in_files = @PACKAGE@.desktop.in.in
