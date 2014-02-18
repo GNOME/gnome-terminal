@@ -285,7 +285,7 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
 # Documentation
 # *************
 
-YELP_HELP_INIT
+YELP_HELP_INIT([no-lc-media-links no-lc-dist])
 
 # ****************************
 
