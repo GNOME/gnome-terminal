@@ -430,7 +430,7 @@ terminal_app_dbus_register (GApplication    *application,
 
     search_provider = terminal_search_provider_new ();
 
-    if (!terminal_search_provider_dbus_register (app->search_provider,
+    if (!terminal_search_provider_dbus_register (search_provider,
                                                  connection,
                                                  TERMINAL_SEARCH_PROVIDER_PATH,
                                                  error))
