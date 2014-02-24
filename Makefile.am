@@ -18,7 +18,13 @@ desktop_in_files = @PACKAGE@.desktop.in.in
 desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
+appdatadir = $(datadir)/appdata
+appdata_in_files = gnome-terminal.appdata.xml.in
+nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+@INTLTOOL_XML_RULE@
+
 EXTRA_DIST = 			\
+	$(appdata_in_files)	\
 	ChangeLog.pre-2-23	\
 	ChangeLog.README	\
 	HACKING			\
