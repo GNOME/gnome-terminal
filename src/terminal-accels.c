@@ -150,11 +150,11 @@ static KeyEntry terminal_entries[] = {
 };
 
 static KeyEntry tabs_entries[] = {
-  ENTRY (N_("Switch to Previous Tab"), KEY_PREV_TAB,       "switch-tab", "i",  "-2"),
-  ENTRY (N_("Switch to Next Tab"),     KEY_NEXT_TAB,       "switch-tab", "i",  "-1"),
-  ENTRY (N_("Move Tab to the Left"),   KEY_MOVE_TAB_LEFT,  "move-tab",   "i",  "-1"),
-  ENTRY (N_("Move Tab to the Right"),  KEY_MOVE_TAB_RIGHT, "move-tab",   "i",  "1" ),
-  ENTRY (N_("Detach Tab"),             KEY_DETACH_TAB,     "detach-tab", NULL, NULL),
+  ENTRY (N_("Switch to Previous Terminal"), KEY_PREV_TAB,       "switch-tab", "i",  "-2"),
+  ENTRY (N_("Switch to Next Terminal"),     KEY_NEXT_TAB,       "switch-tab", "i",  "-1"),
+  ENTRY (N_("Move Terminal to the Left"),   KEY_MOVE_TAB_LEFT,  "move-tab",   "i",  "-1"),
+  ENTRY (N_("Move Terminal to the Right"),  KEY_MOVE_TAB_RIGHT, "move-tab",   "i",  "1" ),
+  ENTRY (N_("Detach Terminal"),             KEY_DETACH_TAB,     "detach-tab", NULL, NULL),
 
 #define SWITCH_TAB_ENTRY(num) \
   ENTRY (NULL, \
