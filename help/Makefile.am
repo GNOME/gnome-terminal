@@ -32,6 +32,7 @@ HELP_FILES = \
 	pref-menubar.page \
 	pref-profiles.page \
 	pref-scrolling.page \
+	pref-tab-window.page \
 	pref-title.page \
 	profile.page \
 	prob-reset.page \
