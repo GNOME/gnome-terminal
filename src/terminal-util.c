@@ -782,7 +782,6 @@ as_to_rgba_palette (GVariant *variant,
   i = 0;
   while (g_variant_iter_next (&iter, "&s", &str)) {
     if (!gdk_rgba_parse (&colors[i++], str)) {
-      g_free (colors);
       return FALSE;
     }
   }
