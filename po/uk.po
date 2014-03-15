@@ -6,31 +6,46 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terninal\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
-"terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-02-10 20:45+0000\n"
-"PO-Revision-Date: 2014-02-11 10:57+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-03-15 22:05+0200\n"
+"PO-Revision-Date: 2014-03-15 22:17+0300\n"
 "Last-Translator: Daniel Korostil <ted.korostiled@gmail.com>\n"
 "Language-Team: linux.org.ua\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:116
-#: ../src/terminal-accels.c:179 ../src/terminal.c:242
+#: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
+#: ../src/server.c:116 ../src/terminal-accels.c:191 ../src/terminal.c:242
 #: ../src/terminal-screen.c:740 ../src/terminal-screen.c:1587
-#: ../src/terminal-window.c:2555 ../src/terminal-window.c:2880
+#: ../src/terminal-window.c:2652 ../src/terminal-window.c:2977
 msgid "Terminal"
 msgstr "Термінал"
 
-#: ../gnome-terminal.desktop.in.in.h:2
+#: ../gnome-terminal.appdata.xml.in.h:2 ../gnome-terminal.desktop.in.in.h:2
 msgid "Use the command line"
 msgstr "Командний рядок"
+
+#: ../gnome-terminal.appdata.xml.in.h:3
+msgid ""
+"GNOME Terminal is a terminal emulator application for accessing a UNIX shell "
+"environment which can be used to run programs available on your system."
+msgstr ""
+"GNOME Terminal — програма для емулювання терміналу, щоб доступитись до "
+"оболонки UNIX, яку можна використати для запускання програм, що доступні на "
+"вашій системі."
+
+#: ../gnome-terminal.appdata.xml.in.h:4
+msgid ""
+"It supports several profiles, multiple tabs and implements several keyboard "
+"shortcuts."
+msgstr ""
+"Підтримуються кілька профілів, кілька вкладок і різні клавіатурні скорочення."
 
 #: ../gnome-terminal.desktop.in.in.h:3
 msgid "shell;prompt;command;commandline;"
@@ -200,7 +215,8 @@ msgstr "Параметри оброблення:"
 msgid "Show processing options"
 msgstr "Показати параметри оброблення"
 
-#: ../src/find-dialog.ui.h:1
+#: ../src/find-dialog.ui.h:1 ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:190
 msgid "Find"
 msgstr "Знайти"
 
@@ -237,7 +253,6 @@ msgid "Unnamed"
 msgstr "Без назви"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:1
-#| msgid "Unnamed"
 msgctxt "visible-name"
 msgid "'Unnamed'"
 msgstr "'Без назви'"
@@ -301,7 +316,6 @@ msgstr ""
 "текст."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:12
-#| msgid "Terminal"
 msgctxt "title"
 msgid "'Terminal'"
 msgstr "'Термінал'"
@@ -462,9 +476,6 @@ msgid "Whether to launch the command in the terminal as a login shell"
 msgstr "Чи запускати команди у терміналі як реєстраційну оболонку"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:40
-#| msgid ""
-#| "If true, the command inside the terminal will be launched as a login "
-#| "shell. (argv[0] will have a hyphen in front of it.)"
 msgid ""
 "If true, the command inside the terminal will be launched as a login shell "
 "(argv[0] will have a hyphen in front of it)."
@@ -547,7 +558,6 @@ msgid "Whether to use the system monospace font"
 msgstr "Чи використовувати системний моноширинний шрифт"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:56
-#| msgid "Whether to use custom terminal size for new windows"
 msgid "Whether to rewrap the terminal contents on window resize"
 msgstr "Чи перерозташовувати вміст, коли змінюєте розмір терміналу"
 
@@ -610,50 +620,66 @@ msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Комбінація клавіш для повторної ініціалізації та очищення терміналу"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:71
+msgid "Keyboard shortcut to open the search dialog"
+msgstr "Клавіатурне скорочення для відкриття вікна пошуку"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
+msgid "Keyboard shortcut to find the next occurrence of the search term"
+msgstr "Клавіатурне скорочення для пошуку наступного збігу шуканого терміна"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
+msgid "Keyboard shortcut to find the previous occurrence of the search term"
+msgstr "Клавіатурне скорочення для пошуку попереднього збігу шуканого терміна"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
+msgid "Keyboard shortcut to clear the find highlighting"
+msgstr "Клавіатурне скорочення для очищення підсвічування знайденого"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Комбінація клавіш для перемикання на попередню вкладку"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Комбінація клавіш для перемикання на наступну вкладку"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Клавіатурне скорочення для перенесення поточної вкладки вліво"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Клавіатурне скорочення для перенесення поточної вкладки вправо"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Клавіатурне скорочення для відокремлення поточної вкладки"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Клавіатурне скорочення для переходу до нумерованої вкладки"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to launch help"
 msgstr "Комбінація клавіш для відкривання довідки"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to make font larger"
 msgstr "Комбінація клавіш для збільшення шрифту."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Комбінація клавіш для зменшення шрифту"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to make font normal-size"
 msgstr "Комбінація клавіш для встановлення шрифту звичайного розміру"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Whether the menubar has access keys"
 msgstr "Чи ввімкнено клавішу швидкого доступу до панелі меню"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -663,11 +689,11 @@ msgstr ""
 "збігатись з комбінаціями клавіш запущених у терміналі програм, тому їх можна "
 "вимкнути."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "Чи вмикати стандартну для GTK комбінацію клавіш переходу до меню"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -677,11 +703,15 @@ msgstr ""
 "налаштувати у файлі gtkrc (gtk-menu-bar-accel = \"будь-що\"). Цей параметр "
 "дозволяє вимкнути клавішу швидкого доступу до меню."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
+msgid "Whether the shell integration is enabled"
+msgstr "Чи інтеграцію з оболонкою ввімкнено"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "List of available encodings"
 msgstr "Перелік наявних кодувань"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -691,33 +721,29 @@ msgstr ""
 "Спеціальна назва кодування \"Поточна локалізація\" означає кодування "
 "поточної встановленої локалізації."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Чи прохати підтвердження перед закриттям термінала"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Whether to show the menubar in new windows"
 msgstr "Чи показувати панель меню у нових вікнах"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
-#| msgid "Whether to use the system monospace font"
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Whether to use a dark theme variant"
 msgstr "Чи використовувати темний варіант теми"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:90
-#| msgid "Whether to show menubar in new windows/tabs"
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Чи відкривати нові термінали як вікно, чи як вкладки"
 
 #. Open new terminal in new window
 #: ../src/preferences.ui.h:2
-#| msgid "New Window"
 msgid "Window"
 msgstr "Вікні"
 
 #. Open new terminal in new tab
 #: ../src/preferences.ui.h:4
-#| msgid "Tabs"
 msgid "Tab"
 msgstr "Вкладці"
 
@@ -742,7 +768,6 @@ msgid "Use _dark theme variant"
 msgstr "Використовувати _темний варіант теми"
 
 #: ../src/preferences.ui.h:10
-#| msgid "Open a terminal"
 msgid "Open _new terminals in:"
 msgstr "Відкрити _новий термінал у:"
 
@@ -983,7 +1008,7 @@ msgstr "Пере_розташовувати під час зміни розмі�
 msgid "Title"
 msgstr "Заголовок"
 
-#: ../src/profile-preferences.ui.h:60 ../src/terminal-window.c:781
+#: ../src/profile-preferences.ui.h:60 ../src/terminal-window.c:775
 msgid "_Title:"
 msgstr "За_головок:"
 
@@ -1096,7 +1121,6 @@ msgid "lines"
 msgstr "рядків"
 
 #: ../src/profile-preferences.ui.h:88
-#| msgid "_Scrollbar is:"
 msgid "_Show scrollbar"
 msgstr "По_казувати смужку прокручування"
 
@@ -1131,141 +1155,148 @@ msgstr "С_кинути параметри сумісності в початк�
 msgid "Compatibility"
 msgstr "Сумісність"
 
-#: ../src/terminal-accels.c:112
+#: ../src/terminal-accels.c:116
 msgid "New Terminal in New Tab"
 msgstr "Новий термінал у новій вкладці"
 
-#: ../src/terminal-accels.c:113
-#| msgid "Icon for terminal window"
+#: ../src/terminal-accels.c:117
 msgid "New Terminal in New Window"
 msgstr "Новий термінал у новому вікні"
 
-#: ../src/terminal-accels.c:114
+#: ../src/terminal-accels.c:118
 msgid "New Profile"
 msgstr "Створення профілю"
 
-#: ../src/terminal-accels.c:116
+#: ../src/terminal-accels.c:120
 msgid "Save Contents"
 msgstr "Зберегти вміст"
 
-#: ../src/terminal-accels.c:118
-#| msgid "C_lose Terminal"
+#: ../src/terminal-accels.c:122
 msgid "Close Terminal"
 msgstr "Закрити термінал"
 
-#: ../src/terminal-accels.c:119
-#| msgid "C_lose Terminal"
+#: ../src/terminal-accels.c:123
 msgid "Close All Terminals"
 msgstr "Закрити всі термінали"
 
 #. Edit menu
-#: ../src/terminal-accels.c:123 ../src/terminal-window.c:2378
-#: ../src/terminal-window.c:2493
+#: ../src/terminal-accels.c:127 ../src/terminal-window.c:2475
+#: ../src/terminal-window.c:2590
 msgid "Copy"
 msgstr "Копіювати"
 
-#: ../src/terminal-accels.c:124 ../src/terminal-window.c:2381
-#: ../src/terminal-window.c:2496
+#: ../src/terminal-accels.c:128 ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:2593
 msgid "Paste"
 msgstr "Вставити"
 
-#: ../src/terminal-accels.c:128
-#| msgid "Hide and Show menubar"
+#: ../src/terminal-accels.c:133
+msgid "Find Next"
+msgstr "Знайти наступне"
+
+#: ../src/terminal-accels.c:134
+msgid "Find Previous"
+msgstr "Знайти попереднє"
+
+#: ../src/terminal-accels.c:135
+msgid "Clear Find Highlight"
+msgstr "Очистити підсвічування знайденого"
+
+#: ../src/terminal-accels.c:139
 msgid "Hide and Show toolbar"
 msgstr "Сховати чи показати панель інструментів"
 
-#: ../src/terminal-accels.c:129
+#: ../src/terminal-accels.c:140
 msgid "Full Screen"
 msgstr "На весь екран"
 
 #. View menu
-#: ../src/terminal-accels.c:130 ../src/terminal-window.c:2398
+#: ../src/terminal-accels.c:141 ../src/terminal-window.c:2495
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: ../src/terminal-accels.c:131 ../src/terminal-window.c:2401
+#: ../src/terminal-accels.c:142 ../src/terminal-window.c:2498
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: ../src/terminal-accels.c:132 ../src/terminal-window.c:2404
+#: ../src/terminal-accels.c:143 ../src/terminal-window.c:2501
 msgid "Normal Size"
 msgstr "Звичайний розмір"
 
-#: ../src/terminal-accels.c:136 ../src/terminal-window.c:764
+#: ../src/terminal-accels.c:147 ../src/terminal-window.c:758
 msgid "Set Title"
 msgstr "Встановлення заголовка"
 
-#: ../src/terminal-accels.c:137
+#: ../src/terminal-accels.c:148
 msgid "Reset"
 msgstr "Скинути"
 
-#: ../src/terminal-accels.c:138
+#: ../src/terminal-accels.c:149
 msgid "Reset and Clear"
 msgstr "Скинути та очистити"
 
-#: ../src/terminal-accels.c:142
-msgid "Switch to Previous Tab"
-msgstr "До попередньої вкладки"
+#: ../src/terminal-accels.c:153
+msgid "Switch to Previous Terminal"
+msgstr "Перейти до попереднього терміналу"
 
-#: ../src/terminal-accels.c:143
-msgid "Switch to Next Tab"
-msgstr "До наступної вкладки"
+#: ../src/terminal-accels.c:154
+msgid "Switch to Next Terminal"
+msgstr "Перейти до наступного терміналу"
 
-#: ../src/terminal-accels.c:144
-msgid "Move Tab to the Left"
-msgstr "Перемістити вкладку ліворуч"
+#: ../src/terminal-accels.c:155
+msgid "Move Terminal to the Left"
+msgstr "Перенести термінал ліворуч"
 
-#: ../src/terminal-accels.c:145
-msgid "Move Tab to the Right"
-msgstr "Перемістити вкладку праворуч"
+#: ../src/terminal-accels.c:156
+msgid "Move Terminal to the Right"
+msgstr "Перенести термінал праворуч"
 
-#: ../src/terminal-accels.c:146
-msgid "Detach Tab"
-msgstr "Від'єднати вкладку"
+#: ../src/terminal-accels.c:157
+msgid "Detach Terminal"
+msgstr "Від'єднати термінал"
 
-#: ../src/terminal-accels.c:169
+#: ../src/terminal-accels.c:180
 msgid "Contents"
 msgstr "Зміст"
 
-#: ../src/terminal-accels.c:176
+#: ../src/terminal-accels.c:187
 msgid "File"
 msgstr "Файл"
 
-#: ../src/terminal-accels.c:177
+#: ../src/terminal-accels.c:188
 msgid "Edit"
 msgstr "Зміни"
 
-#: ../src/terminal-accels.c:178
+#: ../src/terminal-accels.c:189
 msgid "View"
 msgstr "Перегляд"
 
-#: ../src/terminal-accels.c:180
+#: ../src/terminal-accels.c:192
 msgid "Tabs"
 msgstr "Вкладки"
 
-#: ../src/terminal-accels.c:181
+#: ../src/terminal-accels.c:193
 msgid "Help"
 msgstr "Довідка"
 
-#: ../src/terminal-accels.c:265
+#: ../src/terminal-accels.c:277
 #, c-format
 msgid "Switch to Tab %d"
 msgstr "Перйти до вкладки %d"
 
-#: ../src/terminal-accels.c:482
+#: ../src/terminal-accels.c:494
 msgid "_Action"
 msgstr "Д_ія"
 
-#: ../src/terminal-accels.c:500
+#: ../src/terminal-accels.c:512
 msgid "Shortcut _Key"
 msgstr "Комбінація к_лавіш"
 
-#: ../src/terminal-app.c:646
+#: ../src/terminal-app.c:650
 msgid "User Defined"
 msgstr "Визначене користувачем"
 
 #: ../src/terminal-appmenu.ui.h:1
-#| msgid "_Terminal"
 msgid "_New Terminal"
 msgstr "_Створити термінал"
 
@@ -1273,11 +1304,11 @@ msgstr "_Створити термінал"
 msgid "_Preferences"
 msgstr "_Параметри"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2350
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2447
 msgid "_Help"
 msgstr "_Довідка"
 
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2469
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2566
 msgid "_About"
 msgstr "_Про програму"
 
@@ -1641,7 +1672,7 @@ msgstr "Список профілів"
 msgid "Delete profile “%s”?"
 msgstr "Вилучити профіль \"%s\"?"
 
-#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:527
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:521
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -1665,7 +1696,7 @@ msgstr "_Кодування"
 msgid "No command supplied nor shell requested"
 msgstr "Ні команди не надано, ні оболочки не вимагається"
 
-#: ../src/terminal-screen.c:1347 ../src/terminal-window.c:2393
+#: ../src/terminal-screen.c:1347 ../src/terminal-window.c:2490
 msgid "_Profile Preferences"
 msgstr "_Параметри профілю"
 
@@ -1691,7 +1722,7 @@ msgstr "Підпроцес скасовано за сигналом %d."
 msgid "The child process was aborted."
 msgstr "Підпроцес скасовано."
 
-#: ../src/terminal-tab-label.c:196
+#: ../src/terminal-tab-label.c:197
 msgid "Close tab"
 msgstr "Закрити вкладку"
 
@@ -1755,15 +1786,15 @@ msgstr ""
 "Ви мали одержати копію GNU General Public License разом з термінало GNOME. "
 "Якщо цього не сталося, дивіться <http://www.gnu.org/licenses/>."
 
-#: ../src/terminal-window.c:502
+#: ../src/terminal-window.c:496
 msgid "Could not save contents"
 msgstr "Не вдалось зберегти зміст"
 
-#: ../src/terminal-window.c:524
+#: ../src/terminal-window.c:518
 msgid "Save as…"
 msgstr "Зберегти як…"
 
-#: ../src/terminal-window.c:528
+#: ../src/terminal-window.c:522
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -1771,7 +1802,7 @@ msgstr "З_берегти"
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1187
+#: ../src/terminal-window.c:1283
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1780,203 +1811,202 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1193
+#: ../src/terminal-window.c:1289
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2343
+#: ../src/terminal-window.c:2440
 msgid "_File"
 msgstr "_Файл"
 
 #. File menu
-#: ../src/terminal-window.c:2344 ../src/terminal-window.c:2355
-#: ../src/terminal-window.c:2361 ../src/terminal-window.c:2502
+#: ../src/terminal-window.c:2441 ../src/terminal-window.c:2452
+#: ../src/terminal-window.c:2458 ../src/terminal-window.c:2599
 msgid "Open _Terminal"
 msgstr "Відкрити _термінал"
 
-#: ../src/terminal-window.c:2345
+#: ../src/terminal-window.c:2442
 msgid "_Edit"
 msgstr "З_міни"
 
-#: ../src/terminal-window.c:2346
+#: ../src/terminal-window.c:2443
 msgid "_View"
 msgstr "П_ерегляд"
 
-#: ../src/terminal-window.c:2347
+#: ../src/terminal-window.c:2444
 msgid "_Search"
 msgstr "По_шук"
 
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2445
 msgid "_Terminal"
 msgstr "_Термінал"
 
-#: ../src/terminal-window.c:2349
+#: ../src/terminal-window.c:2446
 msgid "Ta_bs"
 msgstr "В_кладки"
 
-#: ../src/terminal-window.c:2358
+#: ../src/terminal-window.c:2455
 msgid "Open Ta_b"
 msgstr "Відкрити вк_ладку"
 
-#: ../src/terminal-window.c:2364
+#: ../src/terminal-window.c:2461
 msgid "New _Profile"
 msgstr "Створити _профіль"
 
-#: ../src/terminal-window.c:2367
+#: ../src/terminal-window.c:2464
 msgid "_Save Contents"
 msgstr "_Зберегти вміст"
 
-#: ../src/terminal-window.c:2370 ../src/terminal-window.c:3582
+#: ../src/terminal-window.c:2467 ../src/terminal-window.c:3679
 msgid "C_lose Terminal"
 msgstr "_Закрити термінал"
 
-#: ../src/terminal-window.c:2373
-#| msgid "C_lose Terminal"
+#: ../src/terminal-window.c:2470
 msgid "_Close All Terminals"
 msgstr "_Закрити всі термінали"
 
-#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2499
+#: ../src/terminal-window.c:2481 ../src/terminal-window.c:2596
 msgid "Paste _Filenames"
 msgstr "Вставити _імена файлів"
 
-#: ../src/terminal-window.c:2387
+#: ../src/terminal-window.c:2484
 msgid "Select All"
 msgstr "Вибрати все"
 
-#: ../src/terminal-window.c:2390
+#: ../src/terminal-window.c:2487
 msgid "Pre_ferences"
 msgstr "_Параметри"
 
 #. Search menu
-#: ../src/terminal-window.c:2409
+#: ../src/terminal-window.c:2506
 msgid "_Find…"
 msgstr "З_найти…"
 
-#: ../src/terminal-window.c:2412
+#: ../src/terminal-window.c:2509
 msgid "Find Ne_xt"
 msgstr "Зна_йти далі"
 
-#: ../src/terminal-window.c:2415
+#: ../src/terminal-window.c:2512
 msgid "Find Pre_vious"
 msgstr "Знайти _попередній"
 
-#: ../src/terminal-window.c:2418
+#: ../src/terminal-window.c:2515
 msgid "_Clear Highlight"
 msgstr "_Очистити підсвічування"
 
-#: ../src/terminal-window.c:2422
+#: ../src/terminal-window.c:2519
 msgid "Go to _Line..."
 msgstr "Перейти до _рядка…"
 
-#: ../src/terminal-window.c:2425
+#: ../src/terminal-window.c:2522
 msgid "_Incremental Search..."
 msgstr "_Доповнювальний пошук…"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2431
+#: ../src/terminal-window.c:2528
 msgid "Change _Profile"
 msgstr "Змінити _профіль"
 
-#: ../src/terminal-window.c:2432
+#: ../src/terminal-window.c:2529
 msgid "_Set Title…"
 msgstr "_Встановити заголовок…"
 
-#: ../src/terminal-window.c:2435
+#: ../src/terminal-window.c:2532
 msgid "Set _Character Encoding"
 msgstr "Встановити _кодування символів"
 
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2533
 msgid "_Reset"
 msgstr "_Скинути"
 
-#: ../src/terminal-window.c:2439
+#: ../src/terminal-window.c:2536
 msgid "Reset and C_lear"
 msgstr "Скинути і о_чистити"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2444
+#: ../src/terminal-window.c:2541
 msgid "_Add or Remove…"
 msgstr "_Додати або вилучити…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2449
-msgid "_Previous Tab"
-msgstr "_Попередня вкладка"
+#: ../src/terminal-window.c:2546
+msgid "_Previous Terminal"
+msgstr "_Попередній термінал"
 
-#: ../src/terminal-window.c:2452
-msgid "_Next Tab"
-msgstr "_Наступна вкладка"
+#: ../src/terminal-window.c:2549
+msgid "_Next Terminal"
+msgstr "_Наступний термінал"
 
-#: ../src/terminal-window.c:2455
-msgid "Move Tab _Left"
-msgstr "Перемістити вкладку _ліворуч"
+#: ../src/terminal-window.c:2552
+msgid "Move Terminal _Left"
+msgstr "Перемістити термінал _ліворуч"
 
-#: ../src/terminal-window.c:2458
-msgid "Move Tab _Right"
-msgstr "Перемістити вкладку _праворуч"
+#: ../src/terminal-window.c:2555
+msgid "Move Terminal _Right"
+msgstr "Перемістити термінал _праворуч"
 
-#: ../src/terminal-window.c:2461
-msgid "_Detach tab"
-msgstr "Від'_єднати вкладку"
+#: ../src/terminal-window.c:2558
+msgid "_Detach Terminal"
+msgstr "_Від'єднати термінал"
 
 #. Help menu
-#: ../src/terminal-window.c:2466
+#: ../src/terminal-window.c:2563
 msgid "_Contents"
 msgstr "_Зміст"
 
 #. Popup menu
-#: ../src/terminal-window.c:2474
+#: ../src/terminal-window.c:2571
 msgid "_Send Mail To…"
 msgstr "_Надіслати листа…"
 
-#: ../src/terminal-window.c:2477
+#: ../src/terminal-window.c:2574
 msgid "_Copy E-mail Address"
 msgstr "_Копіювати E-mail адресу"
 
-#: ../src/terminal-window.c:2480
+#: ../src/terminal-window.c:2577
 msgid "C_all To…"
 msgstr "_Подзвонити…"
 
-#: ../src/terminal-window.c:2483
+#: ../src/terminal-window.c:2580
 msgid "_Copy Call Address"
 msgstr "_Копіювати адресу E-mail"
 
-#: ../src/terminal-window.c:2486
+#: ../src/terminal-window.c:2583
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: ../src/terminal-window.c:2489
+#: ../src/terminal-window.c:2586
 msgid "_Copy Link Address"
 msgstr "_Копіювати адресу посилання"
 
-#: ../src/terminal-window.c:2492
+#: ../src/terminal-window.c:2589
 msgid "P_rofiles"
 msgstr "П_рофілі"
 
-#: ../src/terminal-window.c:2505
+#: ../src/terminal-window.c:2602
 msgid "L_eave Full Screen"
 msgstr "_Лишити на весь екран"
 
 #. View Menu
-#: ../src/terminal-window.c:2513
+#: ../src/terminal-window.c:2610
 msgid "Show _Menubar"
 msgstr "Показати _панель меню"
 
-#: ../src/terminal-window.c:2517
+#: ../src/terminal-window.c:2614
 msgid "_Full Screen"
 msgstr "_На весь екран"
 
-#: ../src/terminal-window.c:3569
+#: ../src/terminal-window.c:3666
 msgid "Close this window?"
 msgstr "Закрити вікно?"
 
-#: ../src/terminal-window.c:3569
+#: ../src/terminal-window.c:3666
 msgid "Close this terminal?"
 msgstr "Закрити цей термінал?"
 
-#: ../src/terminal-window.c:3573
+#: ../src/terminal-window.c:3670
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1984,7 +2014,7 @@ msgstr ""
 "У деяких терміналах цього вікна запущені процеси. Закриття вікна призведе до "
 "переривання усіх цих процесів."
 
-#: ../src/terminal-window.c:3577
+#: ../src/terminal-window.c:3674
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -1992,9 +2022,15 @@ msgstr ""
 "У терміналі запущено процес.  Закриття терміналу призведе до переривання "
 "процесу."
 
-#: ../src/terminal-window.c:3582
+#: ../src/terminal-window.c:3679
 msgid "C_lose Window"
 msgstr "Закр_ити вікно"
+
+#~ msgid "_Next Tab"
+#~ msgstr "_Наступна вкладка"
+
+#~ msgid "_Detach tab"
+#~ msgstr "Від'_єднати вкладку"
 
 #~ msgid "What to do with dynamic title"
 #~ msgstr "Що робити з динамічним заголовком"
