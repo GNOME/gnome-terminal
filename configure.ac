@@ -55,8 +55,8 @@ AC_MSG_RESULT([$with_gtk])
 case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.9.9
-       VTE_PC_VERSION=-2.90
-       VTE_REQUIRED=0.36.0
+       VTE_API_VERSION=2.91
+       VTE_REQUIRED=0.37.0
        ;;
 esac
 
@@ -72,7 +72,7 @@ for target in $($PKG_CONFIG --variable targets gdk-$GTK_API_VERSION); do
 done
 
 PKG_CHECK_MODULES([TERM],
-  [vte$VTE_PC_VERSION >= $VTE_REQUIRED
+  [vte-$VTE_API_VERSION >= $VTE_REQUIRED
    glib-2.0 >= $GLIB_REQUIRED
    gio-2.0 >= $GIO_REQUIRED
    gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
@@ -118,7 +118,7 @@ AC_MSG_RESULT([$enable_migration])
 if test "$enable_migration" = "yes"; then
  PKG_CHECK_MODULES([MIGRATOR],[
    gio-2.0 >= $GIO_REQUIRED
-   vte$VTE_PC_VERSION >= $VTE_REQUIRED
+   vte-$VTE_API_VERSION >= $VTE_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
    dconf >= $DCONF_REQUIRED
    uuid])
