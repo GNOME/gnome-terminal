@@ -313,7 +313,6 @@ terminal_screen_init (TerminalScreen *screen)
   vte_terminal_set_mouse_autohide (terminal, TRUE);
   vte_terminal_set_background_image (terminal, NULL);
   vte_terminal_set_scroll_background (terminal, FALSE);
-  vte_terminal_set_background_transparent (terminal, FALSE);
 
   priv->child_pid = -1;
 
