@@ -45,7 +45,8 @@ EXTRA_DIST = 			\
 	$(NULL)
 
 CLEANFILES = \
-	$(desktop_DATA)	\
+	$(nodist_appdata_DATA) \
+	$(nodist_desktop_DATA) \
 	$(NULL)
 
 MAINTAINERCLEANFILES = \
