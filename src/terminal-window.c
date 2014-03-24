@@ -958,7 +958,7 @@ find_response_cb (GtkWidget *dialog,
   regex = terminal_search_dialog_get_regex (dialog);
   flags = terminal_search_dialog_get_search_flags (dialog);
 
-  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex);
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex, 0);
   vte_terminal_search_set_wrap_around (VTE_TERMINAL (priv->active_screen),
 				       (flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND));
 
@@ -1004,7 +1004,7 @@ action_find_cb (GSimpleAction *action,
   } else if (g_str_equal (mode, "previous")) {
     vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen));
   } else if (g_str_equal (mode, "clear")) {
-    vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), NULL);
+    vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), NULL, 0);
   } else
     return;
 }
