@@ -83,7 +83,6 @@ struct _TerminalScreenPrivate
   char **override_command;
   gboolean shell;
   int child_pid;
-  int pty_fd;
   double font_scale;
   GSList *match_tags;
   guint launch_child_source_id;
@@ -317,7 +316,6 @@ terminal_screen_init (TerminalScreen *screen)
   vte_terminal_set_background_transparent (terminal, FALSE);
 
   priv->child_pid = -1;
-  priv->pty_fd = -1;
 
   priv->font_scale = PANGO_SCALE_MEDIUM;
 
@@ -1366,7 +1364,6 @@ terminal_screen_do_exec (TerminalScreen *screen,
   }
 
   priv->child_pid = pid;
-  priv->pty_fd = vte_terminal_get_pty (terminal);
 
   result = TRUE;
 
@@ -1672,7 +1669,6 @@ terminal_screen_child_exited (VteTerminal *terminal)
                          screen);
 
   priv->child_pid = -1;
-  priv->pty_fd = -1;
   
   g_object_notify (G_OBJECT (screen), "description");
 
@@ -1995,15 +1991,22 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   gs_free char *data = NULL;
   gs_free char *basename = NULL;
   gs_free char *name = NULL;
+  VtePty *pty;
+  int fd;
   char filename[64];
   gsize i;
   gsize len;
   int fgpid;
 
-  if (priv->pty_fd == -1)
+  pty = vte_terminal_get_pty_object (VTE_TERMINAL (screen));
+  if (pty == NULL)
     return FALSE;
 
-  fgpid = tcgetpgrp (priv->pty_fd);
+  fd = vte_pty_get_fd (pty);
+  if (fd == -1)
+    return FALSE;
+
+  fgpid = tcgetpgrp (fd);
   if (fgpid == -1 || fgpid == priv->child_pid)
     return FALSE;
 
