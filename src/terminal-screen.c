@@ -1335,7 +1335,7 @@ terminal_screen_do_exec (TerminalScreen *screen,
 
   argv = NULL;
   if (!get_child_command (screen, shell, &spawn_flags, &argv, &err) ||
-      !vte_terminal_fork_command_full (terminal,
+      !vte_terminal_fork_command_sync (terminal,
                                        pty_flags,
                                        working_dir,
                                        argv,
@@ -1344,6 +1344,7 @@ terminal_screen_do_exec (TerminalScreen *screen,
                                        (GSpawnChildSetupFunc) (data ? terminal_screen_child_setup : NULL), 
                                        data,
                                        &pid,
+                                       NULL /* cancellable */,
                                        &err)) {
     GtkWidget *info_bar;
 
