@@ -145,8 +145,7 @@ static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal
 static void update_color_scheme                      (TerminalScreen *screen);
 
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
-                                                int                   column,
-                                                int                   row,
+                                                GdkEvent                  *event,
                                                 int                  *flavor);
 
 static void terminal_screen_set_override_command (TerminalScreen  *screen,
@@ -828,9 +827,9 @@ update_color_scheme (TerminalScreen *screen)
     boldp = NULL;
 
   colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
-  vte_terminal_set_colors_rgba (VTE_TERMINAL (screen), &fg, &bg,
-                                colors, n_colors);
-  vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), boldp);
+  vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
+                           colors, n_colors);
+  vte_terminal_set_color_bold (VTE_TERMINAL (screen), boldp);
 }
 
 static void
@@ -1444,25 +1443,13 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  int char_width, char_height, row, col;
   gs_free char *matched_string = NULL;
   int matched_flavor = 0;
   guint state;
-  GtkBorder padding;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  terminal_screen_get_cell_size (screen, &char_width, &char_height);
-
-  gtk_style_context_get_padding(gtk_widget_get_style_context(widget),
-                                gtk_widget_get_state_flags(widget),
-                                &padding);
-
-  row = (event->x - padding.left) / char_width;
-  col = (event->y - padding.top) / char_height;
-
-  /* FIXMEchpe: add vte API to do this check by widget coords instead of grid coords */
-  matched_string = terminal_screen_check_match (screen, row, col, &matched_flavor);
+  matched_string = terminal_screen_check_match (screen, (GdkEvent*)event, &matched_flavor);
 
   if (matched_string != NULL &&
       (event->button == 1 || event->button == 2) &&
@@ -1835,8 +1822,7 @@ terminal_screen_get_cell_size (TerminalScreen *screen,
 
 static char*
 terminal_screen_check_match (TerminalScreen *screen,
-			     int        column,
-			     int        row,
+                             GdkEvent       *event,
                              int       *flavor)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -1844,7 +1830,7 @@ terminal_screen_check_match (TerminalScreen *screen,
   int tag;
   char *match;
 
-  match = vte_terminal_match_check (VTE_TERMINAL (screen), column, row, &tag);
+  match = vte_terminal_match_check_event (VTE_TERMINAL (screen), event, &tag);
   for (tags = priv->match_tags; tags != NULL; tags = tags->next)
     {
       TagData *tag_data = (TagData*) tags->data;
