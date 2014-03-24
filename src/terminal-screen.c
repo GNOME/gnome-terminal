@@ -311,8 +311,6 @@ terminal_screen_init (TerminalScreen *screen)
   priv->uuid = g_strdup (uuidstr);
 
   vte_terminal_set_mouse_autohide (terminal, TRUE);
-  vte_terminal_set_background_image (terminal, NULL);
-  vte_terminal_set_scroll_background (terminal, FALSE);
 
   priv->child_pid = -1;
 
