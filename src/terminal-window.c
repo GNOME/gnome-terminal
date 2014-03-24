@@ -1864,8 +1864,8 @@ screen_resize_window_cb (TerminalScreen *screen,
   GtkWidget *widget = GTK_WIDGET (screen);
   guint grid_width, grid_height;
   int char_width, char_height;
-  GtkBorder *inner_border = NULL;
   GtkAllocation widget_allocation;
+  GtkBorder padding;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   /* Don't do anything if we're maximised or fullscreened */
@@ -1886,10 +1886,12 @@ screen_resize_window_cb (TerminalScreen *screen,
   char_width = vte_terminal_get_char_width (terminal);
   char_height = vte_terminal_get_char_height (terminal);
 
-  gtk_widget_style_get (GTK_WIDGET (terminal), "inner-border", &inner_border, NULL);
-  grid_width = (width - (inner_border ? (inner_border->left + inner_border->right) : 0)) / char_width;
-  grid_height = (height - (inner_border ? (inner_border->top + inner_border->bottom) : 0)) / char_height;
-  gtk_border_free (inner_border);
+  gtk_style_context_get_padding(gtk_widget_get_style_context(GTK_WIDGET(terminal)),
+                                gtk_widget_get_state_flags(widget),
+                                &padding);
+
+  grid_width = (width - padding.left) / char_width;
+  grid_height = (height - padding.top) / char_height;
 
   vte_terminal_set_size (terminal, grid_width, grid_height);
 
@@ -3531,18 +3533,18 @@ terminal_window_update_geometry (TerminalWindow *window)
       char_height != priv->old_char_height ||
       widget != (GtkWidget*) priv->old_geometry_widget)
     {
-      GtkBorder *inner_border = NULL;
+      GtkBorder padding;
       
       /* FIXME Since we're using xthickness/ythickness to compute
        * padding we need to change the hints when the theme changes.
        */
 
-      gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
+      gtk_style_context_get_padding(gtk_widget_get_style_context(widget),
+                                    gtk_widget_get_state_flags(widget),
+                                    &padding);
 
-      hints.base_width = (inner_border ? (inner_border->left + inner_border->right) : 0);
-      hints.base_height = (inner_border ? (inner_border->top + inner_border->bottom) : 0);
-
-      gtk_border_free (inner_border);
+      hints.base_width = padding.left + padding.right;
+      hints.base_height = padding.top + padding.bottom;
 
 #define MIN_WIDTH_CHARS 4
 #define MIN_HEIGHT_CHARS 1

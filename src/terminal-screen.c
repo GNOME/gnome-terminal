@@ -1494,16 +1494,18 @@ terminal_screen_button_press (GtkWidget      *widget,
   gs_free char *matched_string = NULL;
   int matched_flavor = 0;
   guint state;
-  GtkBorder *inner_border = NULL;
+  GtkBorder padding;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   terminal_screen_get_cell_size (screen, &char_width, &char_height);
 
-  gtk_widget_style_get (widget, "inner-border", &inner_border, NULL);
-  row = (event->x - (inner_border ? inner_border->left : 0)) / char_width;
-  col = (event->y - (inner_border ? inner_border->top : 0)) / char_height;
-  gtk_border_free (inner_border);
+  gtk_style_context_get_padding(gtk_widget_get_style_context(widget),
+                                gtk_widget_get_state_flags(widget),
+                                &padding);
+
+  row = (event->x - padding.left) / char_width;
+  col = (event->y - padding.top) / char_height;
 
   /* FIXMEchpe: add vte API to do this check by widget coords instead of grid coords */
   matched_string = terminal_screen_check_match (screen, row, col, &matched_flavor);
