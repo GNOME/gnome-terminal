@@ -136,7 +136,8 @@ static gboolean terminal_screen_button_press (GtkWidget *widget,
 static gboolean terminal_screen_do_exec (TerminalScreen *screen,
                                          FDSetupData    *data,
                                          GError **error);
-static void terminal_screen_child_exited  (VteTerminal *terminal);
+static void terminal_screen_child_exited  (VteTerminal *terminal,
+                                           int status);
 
 static void terminal_screen_window_title_changed      (VteTerminal *vte_terminal,
                                                        TerminalScreen *screen);
@@ -1655,7 +1656,8 @@ terminal_screen_icon_title_changed (VteTerminal *vte_terminal,
 }
 
 static void
-terminal_screen_child_exited (VteTerminal *terminal)
+terminal_screen_child_exited (VteTerminal *terminal,
+                              int status)
 {
   TerminalScreen *screen = TERMINAL_SCREEN (terminal);
   TerminalScreenPrivate *priv = screen->priv;
@@ -1683,9 +1685,6 @@ terminal_screen_child_exited (VteTerminal *terminal)
       break;
     case TERMINAL_EXIT_HOLD: {
       GtkWidget *info_bar;
-      int status;
-
-      status = vte_terminal_get_child_exit_status (terminal);
 
       info_bar = terminal_info_bar_new (GTK_MESSAGE_INFO,
                                         _("_Relaunch"), RESPONSE_RELAUNCH,

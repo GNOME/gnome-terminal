@@ -57,12 +57,9 @@ get_object_path_for_screen (TerminalWindow *window,
 
 static void
 child_exited_cb (VteTerminal *terminal,
+                 int exit_code,
                  TerminalReceiver *receiver)
 {
-  int exit_code;
-
-  exit_code = vte_terminal_get_child_exit_status (terminal);;
-
   terminal_receiver_emit_child_exited (receiver, exit_code);
 }
 
