@@ -1333,17 +1333,17 @@ terminal_screen_do_exec (TerminalScreen *screen,
 
   argv = NULL;
   if (!get_child_command (screen, shell, &spawn_flags, &argv, &err) ||
-      !vte_terminal_fork_command_sync (terminal,
-                                       pty_flags,
-                                       working_dir,
-                                       argv,
-                                       env,
-                                       spawn_flags,
-                                       (GSpawnChildSetupFunc) (data ? terminal_screen_child_setup : NULL), 
-                                       data,
-                                       &pid,
-                                       NULL /* cancellable */,
-                                       &err)) {
+      !vte_terminal_spawn_sync (terminal,
+                                pty_flags,
+                                working_dir,
+                                argv,
+                                env,
+                                spawn_flags,
+                                (GSpawnChildSetupFunc) (data ? terminal_screen_child_setup : NULL), 
+                                data,
+                                &pid,
+                                NULL /* cancellable */,
+                                &err)) {
     GtkWidget *info_bar;
 
     info_bar = terminal_info_bar_new (GTK_MESSAGE_ERROR,
