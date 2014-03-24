@@ -1771,45 +1771,18 @@ update_edit_menu (GtkClipboard *clipboard,
 
 static void
 screen_resize_window_cb (TerminalScreen *screen,
-                         guint width,
-                         guint height,
+                         guint columns,
+                         guint rows,
                          TerminalWindow* window)
 {
   TerminalWindowPrivate *priv = window->priv;
-  VteTerminal *terminal = VTE_TERMINAL (screen);
   GtkWidget *widget = GTK_WIDGET (screen);
-  guint grid_width, grid_height;
-  int char_width, char_height;
-  GtkAllocation widget_allocation;
-  GtkBorder padding;
 
-  gtk_widget_get_allocation (widget, &widget_allocation);
-  /* Don't do anything if we're maximised or fullscreened */
-  // FIXME: realized && ... instead? 
-  if (!gtk_widget_get_realized (widget) ||
+  if (gtk_widget_get_realized (widget) &&
       (gdk_window_get_state (gtk_widget_get_window (widget)) & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN)) != 0)
     return;
 
-  /* NOTE: width and height already include the VteTerminal's padding! */
-
-  /* Short-circuit */
-  if (((int) width) == widget_allocation.width &&
-      ((int) height) == widget_allocation.height)
-    return;
-
-  /* The resize-window signal sucks. Re-compute grid widths */
-
-  char_width = vte_terminal_get_char_width (terminal);
-  char_height = vte_terminal_get_char_height (terminal);
-
-  gtk_style_context_get_padding(gtk_widget_get_style_context(GTK_WIDGET(terminal)),
-                                gtk_widget_get_state_flags(widget),
-                                &padding);
-
-  grid_width = (width - padding.left) / char_width;
-  grid_height = (height - padding.top) / char_height;
-
-  vte_terminal_set_size (terminal, grid_width, grid_height);
+  vte_terminal_set_size (VTE_TERMINAL (priv->active_screen), columns, rows);
 
   if (screen == priv->active_screen)
     terminal_window_update_size (window);
