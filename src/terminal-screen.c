@@ -2004,7 +2004,7 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   gsize len;
   int fgpid;
 
-  pty = vte_terminal_get_pty_object (VTE_TERMINAL (screen));
+  pty = vte_terminal_get_object (VTE_TERMINAL (screen));
   if (pty == NULL)
     return FALSE;
 
