@@ -442,10 +442,10 @@ migrate_profile (TerminalSettingsList *list,
                   settings, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY);
   migrate_genum (client, path, KEY_CURSOR_BLINK_MODE,
                  settings, TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY,
-                 VTE_TYPE_TERMINAL_CURSOR_BLINK_MODE);
+                 VTE_TYPE_CURSOR_BLINK_MODE);
   migrate_genum (client, path, KEY_CURSOR_SHAPE,
                  settings, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
-                 VTE_TYPE_TERMINAL_CURSOR_SHAPE);
+                 VTE_TYPE_CURSOR_SHAPE);
   migrate_palette (client, path, settings);
   migrate_string (client, path, KEY_FONT,
                   settings, TERMINAL_PROFILE_FONT_KEY);

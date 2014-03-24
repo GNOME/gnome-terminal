@@ -485,7 +485,7 @@ save_contents_dialog_on_response (GtkDialog *dialog, gint response_id, gpointer 
        * Should be replaced with the async version when vte implements that.
        */
       vte_terminal_write_contents (terminal, stream,
-				   VTE_TERMINAL_WRITE_DEFAULT,
+				   VTE_WRITE_DEFAULT,
 				   NULL, &error);
       g_object_unref (stream);
     }

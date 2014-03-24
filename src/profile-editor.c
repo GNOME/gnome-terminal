@@ -898,7 +898,7 @@ terminal_profile_edit (GSettings  *profile,
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
-                                vte_terminal_erase_binding_get_type, NULL);
+                                vte_erase_binding_get_type, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    gtk_builder_get_object (builder,
                                            "bold-color-same-as-fg-checkbox"),
@@ -925,7 +925,7 @@ terminal_profile_edit (GSettings  *profile,
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
-                                vte_terminal_cursor_shape_get_type, NULL);
+                                vte_cursor_shape_get_type, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_CUSTOM_COMMAND_KEY,
                    gtk_builder_get_object (builder, "custom-command-entry"),
                    "text", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
@@ -948,7 +948,7 @@ terminal_profile_edit (GSettings  *profile,
                                 G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
                                 (GSettingsBindGetMapping) string_to_enum,
                                 (GSettingsBindSetMapping) enum_to_string,
-                                vte_terminal_erase_binding_get_type, NULL);
+                                vte_erase_binding_get_type, NULL);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_EXIT_ACTION_KEY,
                                 gtk_builder_get_object (builder,
                                                         "exit-action-combobox"),
