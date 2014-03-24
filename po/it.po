@@ -6,16 +6,17 @@
 # Lorenzo Travaglio <ltrav02@yahoo.it>, 2008.
 # Davide Falanga <davide.falanga@alice.it>, 2009, 2010.
 # Milo Casagrande <milo@ubuntu.com>, 2009, 2011, 2012.
-# Claudio Arseni <claudio.arseni@ubuntu.com>, 2010, 2012, 2013.
+# Claudio Arseni <claudio.arseni@ubuntu.com>, 2010, 2012, 2013, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-16 08:57+0200\n"
-"PO-Revision-Date: 2013-09-16 08:57+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
+"terminal&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2014-03-24 14:17+0000\n"
+"PO-Revision-Date: 2014-03-24 16:48+0100\n"
 "Last-Translator: Claudio Arseni <claudio.arseni@ubuntu.com>\n"
-"Language-Team: Italian <tp@lists.linux.it>\n"
+"Language-Team: Italian <tp@lists.lunux.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,26 +24,43 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: ../gnome-terminal.desktop.in.in.h:1 ../src/server.c:120
-#: ../src/terminal-accels.c:178 ../src/terminal.c:252
-#: ../src/terminal-screen.c:724 ../src/terminal-screen.c:1536
-#: ../src/terminal-window.c:2555 ../src/terminal-window.c:2880
+#: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
+#: ../src/server.c:116 ../src/terminal-accels.c:191 ../src/terminal.c:242
+#: ../src/terminal-screen.c:740 ../src/terminal-screen.c:1587
+#: ../src/terminal-window.c:2652 ../src/terminal-window.c:2977
 msgid "Terminal"
 msgstr "Terminale"
 
-#: ../gnome-terminal.desktop.in.in.h:2
+#: ../gnome-terminal.appdata.xml.in.h:2 ../gnome-terminal.desktop.in.in.h:2
 msgid "Use the command line"
 msgstr "Usa la riga di comando"
+
+#: ../gnome-terminal.appdata.xml.in.h:3
+msgid ""
+"GNOME Terminal is a terminal emulator application for accessing a UNIX shell "
+"environment which can be used to run programs available on your system."
+msgstr ""
+"Il terminale di GNOME è un emulatore di terminale per accedere all'ambiente "
+"shell UNIX che può essere usato per eseguire programmi disponibili nel "
+"proprio sistema ."
+
+#: ../gnome-terminal.appdata.xml.in.h:4
+msgid ""
+"It supports several profiles, multiple tabs and implements several keyboard "
+"shortcuts."
+msgstr ""
+"Supporta molteplici profili, schede multiple e implementa molte scorciatoie "
+"da tastiera."
 
 #: ../gnome-terminal.desktop.in.in.h:3
 msgid "shell;prompt;command;commandline;"
 msgstr "shell;prompt;terminale;rigadicomando;comando;"
 
-#: ../src/client.c:89
+#: ../src/client.c:91
 msgid "COMMAND"
 msgstr "COMANDO"
 
-#: ../src/client.c:94
+#: ../src/client.c:96
 #, c-format
 msgid ""
 "Commands:\n"
@@ -59,152 +77,153 @@ msgstr ""
 "\n"
 "Uso \"%s COMANDO --help\" per ottenere informazioni su ogni comando.\n"
 
-#: ../src/client.c:201 ../src/terminal-options.c:683
+#: ../src/client.c:200 ../src/terminal-options.c:683
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "«%s» non è un fattore di ingrandimento valido"
 
-#: ../src/client.c:332
+#: ../src/client.c:331
 msgid "Be quiet"
 msgstr "Silenzioso"
 
-#: ../src/client.c:343 ../src/terminal-options.c:1095
+#: ../src/client.c:342 ../src/terminal-options.c:1095
 msgid "Maximize the window"
 msgstr "Massimizza la finestra"
 
-#: ../src/client.c:345 ../src/terminal-options.c:1104
+#: ../src/client.c:344 ../src/terminal-options.c:1104
 msgid "Full-screen the window"
 msgstr "Porta la finestra a schermo intero"
 
-#: ../src/client.c:347 ../src/terminal-options.c:1113
+#: ../src/client.c:346 ../src/terminal-options.c:1113
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Imposta la dimensione della finestra; ad esempio: 80x24 o 80x24+200+200 "
 "(COLONNExRIGHE+X+Y)"
 
-#: ../src/client.c:348 ../src/terminal-options.c:1114
+#: ../src/client.c:347 ../src/terminal-options.c:1114
 msgid "GEOMETRY"
 msgstr "GEOMETRIA"
 
-#: ../src/client.c:350 ../src/terminal-options.c:1122
+#: ../src/client.c:349 ../src/terminal-options.c:1122
 msgid "Set the window role"
 msgstr "Imposta il ruolo della finestra"
 
-#: ../src/client.c:350 ../src/terminal-options.c:1123
+#: ../src/client.c:349 ../src/terminal-options.c:1123
 msgid "ROLE"
 msgstr "RUOLO"
 
-#: ../src/client.c:356 ../src/terminal-options.c:1153
+#: ../src/client.c:355 ../src/terminal-options.c:1153
 msgid "Use the given profile instead of the default profile"
 msgstr "Usa il profilo fornito al posto di quello predefinito"
 
-#: ../src/client.c:357
+#: ../src/client.c:356
 msgid "UUID"
 msgstr "UUID"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1162
+#: ../src/client.c:358 ../src/terminal-options.c:1162
 msgid "Set the terminal title"
 msgstr "Imposta il titolo del terminale"
 
-#: ../src/client.c:359 ../src/terminal-options.c:1163
+#: ../src/client.c:358 ../src/terminal-options.c:1163
 msgid "TITLE"
 msgstr "TITOLO"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1171
+#: ../src/client.c:360 ../src/terminal-options.c:1171
 msgid "Set the working directory"
 msgstr "Imposta la directory di lavoro"
 
-#: ../src/client.c:361 ../src/terminal-options.c:1172
+#: ../src/client.c:360 ../src/terminal-options.c:1172
 msgid "DIRNAME"
 msgstr "NOME_DIRECTORY"
 
-#: ../src/client.c:363 ../src/terminal-options.c:1180
+#: ../src/client.c:362 ../src/terminal-options.c:1180
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr ""
 "Imposta il fattore d'ingrandimento del terminale (1.0 = dimensione normale)"
 
-#: ../src/client.c:364 ../src/terminal-options.c:1181
+#: ../src/client.c:363 ../src/terminal-options.c:1181
 msgid "ZOOM"
 msgstr "INGRANDIMENTO"
 
-#: ../src/client.c:370
+#: ../src/client.c:369
 msgid "Forward stdin"
 msgstr "Inoltra stdin"
 
-#: ../src/client.c:372
+#: ../src/client.c:371
 msgid "Forward stdout"
 msgstr "Inoltra stdout"
 
-#: ../src/client.c:374
+#: ../src/client.c:373
 msgid "Forward stderr"
 msgstr "Inoltra stderr"
 
-#: ../src/client.c:376
+#: ../src/client.c:375
 msgid "Forward file descriptor"
 msgstr "Inoltra il descrittore di file"
 
-#: ../src/client.c:376
+#: ../src/client.c:375
 msgid "FD"
 msgstr "DF"
 
-#: ../src/client.c:382
+#: ../src/client.c:381
 msgid "Wait until the child exits"
 msgstr "Attende fino all'uscita del figlio"
 
-#: ../src/client.c:392
+#: ../src/client.c:391
 msgid "GNOME Terminal Client"
 msgstr "Terminal Client di GNOME"
 
-#: ../src/client.c:396
+#: ../src/client.c:395
 msgid "Global options:"
 msgstr "Opzioni globali:"
 
-#: ../src/client.c:397
+#: ../src/client.c:396
 msgid "Show global options"
 msgstr "Mostra le opzioni globali"
 
-#: ../src/client.c:405
+#: ../src/client.c:404
 msgid "Server options:"
 msgstr "Opzioni del server:"
 
-#: ../src/client.c:406
+#: ../src/client.c:405
 msgid "Show server options"
 msgstr "Mostra le opzioni del server"
 
-#: ../src/client.c:414
+#: ../src/client.c:413
 msgid "Window options:"
 msgstr "Opzioni della finestra:"
 
-#: ../src/client.c:415
+#: ../src/client.c:414
 msgid "Show window options"
 msgstr "Mostra le opzioni della finestra"
 
-#: ../src/client.c:423
+#: ../src/client.c:422
 msgid "Terminal options:"
 msgstr "Opzioni del terminale:"
 
-#: ../src/client.c:424 ../src/terminal-options.c:1287
+#: ../src/client.c:423 ../src/terminal-options.c:1287
 msgid "Show terminal options"
 msgstr "Mostra le opzioni del terminale"
 
-#: ../src/client.c:432
+#: ../src/client.c:431
 msgid "Exec options:"
 msgstr "Opzioni di esecuzione:"
 
-#: ../src/client.c:433
+#: ../src/client.c:432
 msgid "Show exec options"
 msgstr "Mostra le opzioni di esecuzione"
 
-#: ../src/client.c:441
+#: ../src/client.c:440
 msgid "Processing options:"
 msgstr "Opzioni di elaborazione:"
 
-#: ../src/client.c:442
+#: ../src/client.c:441
 msgid "Show processing options"
 msgstr "Mostra le opzioni di elaborazione"
 
-#: ../src/find-dialog.ui.h:1
+#: ../src/find-dialog.ui.h:1 ../src/terminal-accels.c:132
+#: ../src/terminal-accels.c:190
 msgid "Find"
 msgstr "Trova"
 
@@ -232,11 +251,11 @@ msgstr "Cercare all'in_dietro"
 msgid "_Wrap around"
 msgstr "_Ricominciare dall'inizio"
 
-#: ../src/migration.c:387
+#: ../src/migration.c:388
 msgid "Default"
 msgstr "Predefinito"
 
-#: ../src/migration.c:387 ../src/terminal-prefs.c:98
+#: ../src/migration.c:388 ../src/terminal-prefs.c:99
 msgid "Unnamed"
 msgstr "Senza nome"
 
@@ -556,112 +575,139 @@ msgid "Whether to use the system monospace font"
 msgstr "Indica se usare il tipo di carattere a spaziatura fissa di sistema"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:56
+msgid "Whether to rewrap the terminal contents on window resize"
+msgstr ""
+"Indica se riadattare automaticamente i contenuti del terminale al "
+"ridimensionamento della finestra"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "Which encoding to use"
 msgstr "Codifica da usare"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:57
+#: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "Keyboard shortcut to open a new tab"
 msgstr "Scorciatoia da tastiera per aprire una nuova scheda"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:58
+#: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Keyboard shortcut to open a new window"
 msgstr "Scorciatoia da tastiera per aprire una nuova finestra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:59
+#: ../src/org.gnome.Terminal.gschema.xml.h:60
 msgid "Keyboard shortcut to create a new profile"
 msgstr "Scorciatoia da tastiera per creare un nuovo profilo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:60
+#: ../src/org.gnome.Terminal.gschema.xml.h:61
 msgid "Keyboard shortcut to save the current tab contents to file"
 msgstr ""
 "Scorciatoia da tastiera per salvare i contenuti della scheda attuale in un "
 "file"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:61
+#: ../src/org.gnome.Terminal.gschema.xml.h:62
 msgid "Keyboard shortcut to close a tab"
 msgstr "Scorciatoia da tastiera per chiudere una scheda"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:62
+#: ../src/org.gnome.Terminal.gschema.xml.h:63
 msgid "Keyboard shortcut to close a window"
 msgstr "Scorciatoia da tastiera per chiudere una finestra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:63
+#: ../src/org.gnome.Terminal.gschema.xml.h:64
 msgid "Keyboard shortcut to copy text"
 msgstr "Scorciatoia da tastiera per copiare il testo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:64
+#: ../src/org.gnome.Terminal.gschema.xml.h:65
 msgid "Keyboard shortcut to paste text"
 msgstr "Scorciatoia da tastiera per incollare il testo"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:65
+#: ../src/org.gnome.Terminal.gschema.xml.h:66
 msgid "Keyboard shortcut to toggle full screen mode"
 msgstr ""
 "Scorciatoia da tastiera per attivare/disattivare la modalità schermo intero"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:66
+#: ../src/org.gnome.Terminal.gschema.xml.h:67
 msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr ""
 "Scorciatoia da tastiera per attivare/diattivare la visibilità della barra "
 "dei menù"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:67
+#: ../src/org.gnome.Terminal.gschema.xml.h:68
 msgid "Keyboard shortcut to set the terminal title"
 msgstr "Scorciatoia da tatiera per impostare il titolo del terminale"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:68
+#: ../src/org.gnome.Terminal.gschema.xml.h:69
 msgid "Keyboard shortcut to reset the terminal"
 msgstr "Scorciatoia da tastiera per ripristinare il terminale"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:69
+#: ../src/org.gnome.Terminal.gschema.xml.h:70
 msgid "Keyboard shortcut to reset and clear the terminal"
 msgstr "Scorciatoia da tastiera per ripristinare e pulire il terminale"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:70
+#: ../src/org.gnome.Terminal.gschema.xml.h:71
+msgid "Keyboard shortcut to open the search dialog"
+msgstr "Scorciatoia da tastiera per aprire il dialogo di ricerca"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:72
+msgid "Keyboard shortcut to find the next occurrence of the search term"
+msgstr ""
+"Scorciatoia da tastiera per trovare l'occorrenza successiva del termine "
+"ricercato"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:73
+msgid "Keyboard shortcut to find the previous occurrence of the search term"
+msgstr ""
+"Scorciatoia da tastiera per trovare l'occorrenza precedente del termine "
+"ricercato"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:74
+msgid "Keyboard shortcut to clear the find highlighting"
+msgstr ""
+"Scorciatoia da tastiera per pulire l'evidenziazione dei risultati di ricerca"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:75
 msgid "Keyboard shortcut to switch to the previous tab"
 msgstr "Scorciatoia da tastiera per spostarsi alla scheda precedente"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:71
+#: ../src/org.gnome.Terminal.gschema.xml.h:76
 msgid "Keyboard shortcut to switch to the next tab"
 msgstr "Scorciatoia da tastiera per spostarsi alla scheda successiva"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:72
+#: ../src/org.gnome.Terminal.gschema.xml.h:77
 msgid "Keyboard shortcut to move the current tab to the left"
 msgstr "Scorciatoia da tastiera per spostare la scheda attuale a sinistra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:73
+#: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Keyboard shortcut to move the current tab to the right"
 msgstr "Scorciatoia da tastiera per spostare la scheda attuale a destra"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:74
+#: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid "Keyboard shortcut to detach current tab"
 msgstr "Scorciatoia da tastiera per staccare la scheda attuale"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:75
+#: ../src/org.gnome.Terminal.gschema.xml.h:80
 msgid "Keyboard shortcut to switch to the numbered tab"
 msgstr "Scorciatoia da tastiera per spostarsi alla scheda numerata"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:76
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid "Keyboard shortcut to launch help"
 msgstr "Scorciatoia da tastiera per aprire la guida"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:77
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Keyboard shortcut to make font larger"
 msgstr "Scorciatoia da tastiera per aumentare la dimensione del carattere"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:78
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid "Keyboard shortcut to make font smaller"
 msgstr "Scorciatoia da tastiera per ridurre la dimensione del carattere"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:79
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Keyboard shortcut to make font normal-size"
 msgstr ""
 "Scorciatoia da tastiera per impostare il carattere alla dimensione normale"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:80
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "Whether the menubar has access keys"
 msgstr "Indica se la la barra dei menù ha tasti acceleratori"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "Whether to have Alt+letter access keys for the menubar. They may interfere "
 "with some applications run inside the terminal so it's possible to turn them "
@@ -671,13 +717,13 @@ msgstr ""
 "Questo potrebbe interferire con alcune applicazioni che girano all'interno "
 "del terminale così è possibile disabilitarle."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr ""
 "Indica se la scorciatoia predefinita di GTK per accedere alla barra dei menù "
 "è abilitata"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -688,11 +734,15 @@ msgstr ""
 "Questa opzione permette di disabilitare l'acceleratore predefinito per la "
 "barra dei menù."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
+msgid "Whether the shell integration is enabled"
+msgstr "Indica se l'integrazione della shell è abilitata"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "List of available encodings"
 msgstr "Lista delle codifiche disponibili"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there. The special encoding name \"current"
@@ -703,19 +753,19 @@ msgstr ""
 "speciale \"current\" indica di mostrare la codifica della localizzazione in "
 "uso."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:92
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Indica se chiedere conferma prima che vengano chiusi i terminali"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:93
 msgid "Whether to show the menubar in new windows"
 msgstr "Indica se mostrare la barra dei menù nelle nuove finestre"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:94
 msgid "Whether to use a dark theme variant"
 msgstr "Indica se usare una variante scura del tema"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:89
+#: ../src/org.gnome.Terminal.gschema.xml.h:95
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Indica se aprire i nuovi terminali come finestre o schede"
 
@@ -754,7 +804,7 @@ msgstr "Usare variante scura _del tema"
 msgid "Open _new terminals in:"
 msgstr "Aprire i _nuovi terminali in:"
 
-#: ../src/preferences.ui.h:11 ../src/profile-preferences.ui.h:61
+#: ../src/preferences.ui.h:11 ../src/profile-preferences.ui.h:58
 msgid "General"
 msgstr "Generale"
 
@@ -782,47 +832,47 @@ msgstr "Codifiche _mostrate nel menù:"
 msgid "Encodings"
 msgstr "Codifiche"
 
-#: ../src/profile-editor.c:47
+#: ../src/profile-editor.c:48
 msgid "Black on light yellow"
 msgstr "Nero su giallo chiaro"
 
-#: ../src/profile-editor.c:51
+#: ../src/profile-editor.c:52
 msgid "Black on white"
 msgstr "Nero su bianco"
 
-#: ../src/profile-editor.c:55
+#: ../src/profile-editor.c:56
 msgid "Gray on black"
 msgstr "Grigio su nero"
 
-#: ../src/profile-editor.c:59
+#: ../src/profile-editor.c:60
 msgid "Green on black"
 msgstr "Verde su nero"
 
-#: ../src/profile-editor.c:63
+#: ../src/profile-editor.c:64
 msgid "White on black"
 msgstr "Bianco su nero"
 
-#: ../src/profile-editor.c:412
+#: ../src/profile-editor.c:428
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Errore nell'analizzare il comando: %s"
 
 #. This is the name of a colour scheme
-#: ../src/profile-editor.c:446 ../src/profile-preferences.ui.h:30
+#: ../src/profile-editor.c:459 ../src/profile-preferences.ui.h:32
 msgid "Custom"
 msgstr "Personalizzato"
 
-#: ../src/profile-editor.c:561
+#: ../src/profile-editor.c:573
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Modifica del profilo «%s»"
 
-#: ../src/profile-editor.c:744
+#: ../src/profile-editor.c:772
 #, c-format
 msgid "Choose Palette Color %d"
 msgstr "Scelta colore %d della tavolozza"
 
-#: ../src/profile-editor.c:748
+#: ../src/profile-editor.c:776
 #, c-format
 msgid "Palette entry %d"
 msgstr "Elemento %d della tavolozza"
@@ -897,227 +947,221 @@ msgstr "XTerm"
 msgid "Rxvt"
 msgstr "Rxvt"
 
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:32
-msgid "Always visible"
-msgstr "Sempre visibile"
-
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:34
-msgid "Visible only when necessary"
-msgstr "Visibile solo quando necessaria"
-
-#. Scrollbar is
-#: ../src/profile-preferences.ui.h:36
-msgid "Hidden"
-msgstr "Nascosta"
+#. This is the name of a colour scheme
+#: ../src/profile-preferences.ui.h:30
+msgid "Solarized"
+msgstr "Solarized"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:38
+#: ../src/profile-preferences.ui.h:34
 msgid "Automatic"
 msgstr "Automatico"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:40
+#: ../src/profile-preferences.ui.h:36
 msgid "Control-H"
 msgstr "Control-H"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:42
+#: ../src/profile-preferences.ui.h:38
 msgid "ASCII DEL"
 msgstr "ASCII DEL"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:44
+#: ../src/profile-preferences.ui.h:40
 msgid "Escape sequence"
 msgstr "Sequenza di escape"
 
 #. This refers to the Delete keybinding option
-#: ../src/profile-preferences.ui.h:46
+#: ../src/profile-preferences.ui.h:42
 msgid "TTY Erase"
 msgstr "Cancella TTY"
 
-#: ../src/profile-preferences.ui.h:47
+#: ../src/profile-preferences.ui.h:43
 msgid "Profile Editor"
 msgstr "Modifica dei profili"
 
-#: ../src/profile-preferences.ui.h:48
+#: ../src/profile-preferences.ui.h:44
 msgid "_Profile name:"
 msgstr "Nome del _profilo:"
 
-#: ../src/profile-preferences.ui.h:49
+#: ../src/profile-preferences.ui.h:45
 msgid "Profile ID:"
 msgstr "ID profilo"
 
-#: ../src/profile-preferences.ui.h:50
+#: ../src/profile-preferences.ui.h:46
 msgid "_Use the system fixed width font"
 msgstr "_Usare il tipo di carattere a larghezza fissa di sistema"
 
-#: ../src/profile-preferences.ui.h:51
+#: ../src/profile-preferences.ui.h:47
 msgid "_Font:"
 msgstr "Tipo di _carattere:"
 
-#: ../src/profile-preferences.ui.h:52
+#: ../src/profile-preferences.ui.h:48
 msgid "Choose A Terminal Font"
 msgstr "Scegliere un carattere"
 
-#: ../src/profile-preferences.ui.h:53
+#: ../src/profile-preferences.ui.h:49
 msgid "_Allow bold text"
 msgstr "Consentire il testo in gr_assetto"
 
-#: ../src/profile-preferences.ui.h:54
+#: ../src/profile-preferences.ui.h:50
 msgid "Terminal _bell"
 msgstr "Avviso acust_ico"
 
-#: ../src/profile-preferences.ui.h:55
+#: ../src/profile-preferences.ui.h:51
 msgid "Cursor _shape:"
 msgstr "Forma del cur_sore:"
 
-#: ../src/profile-preferences.ui.h:56
+#: ../src/profile-preferences.ui.h:52
 msgid "Select-by-_word characters:"
 msgstr "Cara_tteri selezionabili come parola:"
 
-#: ../src/profile-preferences.ui.h:57
+#: ../src/profile-preferences.ui.h:53
 msgid "Use custom default terminal si_ze"
 msgstr "Utili_zzare dimensione del terminale predefinita personalizzata"
 
-#: ../src/profile-preferences.ui.h:58
+#: ../src/profile-preferences.ui.h:54
 msgid "Default size:"
 msgstr "Dimensione predefinita:"
 
-#: ../src/profile-preferences.ui.h:59
+#: ../src/profile-preferences.ui.h:55
 msgid "columns"
 msgstr "colonne"
 
-#: ../src/profile-preferences.ui.h:60
+#: ../src/profile-preferences.ui.h:56
 msgid "rows"
 msgstr "righe"
 
-#: ../src/profile-preferences.ui.h:62
+#: ../src/profile-preferences.ui.h:57
+msgid "_Rewrap on resize"
+msgstr "_Riadattare al ridimensionamento"
+
+#: ../src/profile-preferences.ui.h:59
 msgid "Title"
 msgstr "Titolo"
 
-#: ../src/profile-preferences.ui.h:63 ../src/terminal-window.c:771
+#: ../src/profile-preferences.ui.h:60 ../src/terminal-window.c:775
 msgid "_Title:"
 msgstr "_Titolo:"
 
-#: ../src/profile-preferences.ui.h:64
+#: ../src/profile-preferences.ui.h:61
 msgid "Command"
 msgstr "Comando"
 
-#: ../src/profile-preferences.ui.h:65
+#: ../src/profile-preferences.ui.h:62
 msgid "_Run command as a login shell"
 msgstr "_Eseguire il comando come una shell di login"
 
-#: ../src/profile-preferences.ui.h:66
+#: ../src/profile-preferences.ui.h:63
 msgid "_Update login records when command is launched"
 msgstr "_Aggiornare i record di login quando il comando viene eseguito"
 
-#: ../src/profile-preferences.ui.h:67
+#: ../src/profile-preferences.ui.h:64
 msgid "Ru_n a custom command instead of my shell"
 msgstr "Ese_guire un comando personalizzato invece della shell"
 
-#: ../src/profile-preferences.ui.h:68
+#: ../src/profile-preferences.ui.h:65
 msgid "Custom co_mmand:"
 msgstr "Co_mando personalizzato:"
 
-#: ../src/profile-preferences.ui.h:69
+#: ../src/profile-preferences.ui.h:66
 msgid "When command _exits:"
 msgstr "_Quando il comando termina:"
 
-#: ../src/profile-preferences.ui.h:70
+#: ../src/profile-preferences.ui.h:67
 msgid "Title and Command"
 msgstr "Titolo e comando"
 
-#: ../src/profile-preferences.ui.h:71
+#: ../src/profile-preferences.ui.h:68
 msgid "Text and Background Color"
 msgstr "Colore dello sfondo e del testo"
 
-#: ../src/profile-preferences.ui.h:72
+#: ../src/profile-preferences.ui.h:69
 msgid "_Use colors from system theme"
 msgstr "Usare i colori del te_ma di sistema"
 
-#: ../src/profile-preferences.ui.h:73
+#: ../src/profile-preferences.ui.h:70
 msgid "Built-in sche_mes:"
 msgstr "Schemi i_ncorporati:"
 
-#: ../src/profile-preferences.ui.h:74
+#: ../src/profile-preferences.ui.h:71
 msgid "_Text color:"
 msgstr "Colore del _testo:"
 
-#: ../src/profile-preferences.ui.h:75
+#: ../src/profile-preferences.ui.h:72
 msgid "_Background color:"
 msgstr "Colore dello _sfondo:"
 
-#: ../src/profile-preferences.ui.h:76
+#: ../src/profile-preferences.ui.h:73
 msgid "Choose Terminal Background Color"
 msgstr "Scelta colore dello sfondo del terminale"
 
-#: ../src/profile-preferences.ui.h:77
+#: ../src/profile-preferences.ui.h:74
 msgid "Choose Terminal Text Color"
 msgstr "Scelta colore del testo del terminale"
 
-#: ../src/profile-preferences.ui.h:78
+#: ../src/profile-preferences.ui.h:75
 msgid "_Underline color:"
 msgstr "Colore so_ttolineato:"
 
-#: ../src/profile-preferences.ui.h:79
+#: ../src/profile-preferences.ui.h:76
 msgid "_Same as text color"
 msgstr "Stesso colore del _testo:"
 
-#: ../src/profile-preferences.ui.h:80
+#: ../src/profile-preferences.ui.h:77
 msgid "Bol_d color:"
 msgstr "Colore _grassetto:"
 
-#: ../src/profile-preferences.ui.h:81
+#: ../src/profile-preferences.ui.h:78
 msgid "Palette"
 msgstr "Tavolozza"
 
-#: ../src/profile-preferences.ui.h:82
+#: ../src/profile-preferences.ui.h:79
 msgid "Built-in _schemes:"
 msgstr "_Schemi incorporati:"
 
-#: ../src/profile-preferences.ui.h:83
+#: ../src/profile-preferences.ui.h:80
 msgid "<b>Note:</b> Terminal applications have these colors available to them."
 msgstr "<b>Nota:</b> colori disponibili per le applicazioni da terminale."
 
-#: ../src/profile-preferences.ui.h:84
+#: ../src/profile-preferences.ui.h:81
 msgid "Color p_alette:"
 msgstr "Tavolo_zza dei colori:"
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:82
 msgid "Colors"
 msgstr "Colori"
 
-#: ../src/profile-preferences.ui.h:86
-msgid "_Scrollbar is:"
-msgstr "Barra di _scorrimento:"
-
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:83
 msgid "Scroll_back:"
 msgstr "Sc_orrimento all'indietro:"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _keystroke"
 msgstr "S_correre alla pressione dei tasti"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:85
 msgid "Scroll on _output"
 msgstr "Sco_rrere in presenza di output"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:86
 msgid "_Unlimited"
 msgstr "_Illimitato"
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:87
 msgid "lines"
 msgstr "righe"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:88
+msgid "_Show scrollbar"
+msgstr "Mo_stra barra di scorrimento"
+
+#: ../src/profile-preferences.ui.h:89
 msgid "Scrolling"
 msgstr "Scorrimento"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:90
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1128,144 +1172,160 @@ msgstr ""
 "applicazioni e sistemi operativi che si aspettano un diverso funzionamento "
 "del terminale."
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:91
 msgid "_Delete key generates:"
 msgstr "Il tasto _Canc genera:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:92
 msgid "_Backspace key generates:"
 msgstr "Il tasto _Backspace genera:"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:93
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Ripristina valori predefiniti per opzioni di compatibilità"
 
-#: ../src/profile-preferences.ui.h:97
+#: ../src/profile-preferences.ui.h:94
 msgid "Compatibility"
 msgstr "Compatibilità"
 
-#: ../src/terminal-accels.c:111
+#: ../src/terminal-accels.c:116
 msgid "New Terminal in New Tab"
 msgstr "Nuovo terminale in nuova scheda"
 
-#: ../src/terminal-accels.c:112
+#: ../src/terminal-accels.c:117
 msgid "New Terminal in New Window"
 msgstr "Nuovo terminale in nuova finestra"
 
-#: ../src/terminal-accels.c:113
+#: ../src/terminal-accels.c:118
 msgid "New Profile"
 msgstr "Nuovo profilo"
 
-#: ../src/terminal-accels.c:115
+#: ../src/terminal-accels.c:120
 msgid "Save Contents"
 msgstr "Salva i contenuti"
 
-#: ../src/terminal-accels.c:117
+#: ../src/terminal-accels.c:122
 msgid "Close Terminal"
 msgstr "Chiudi il terminale"
 
-#: ../src/terminal-accels.c:118
+#: ../src/terminal-accels.c:123
 msgid "Close All Terminals"
 msgstr "Chiudi tutti i terminali"
 
-#: ../src/terminal-accels.c:122
+#. Edit menu
+#: ../src/terminal-accels.c:127 ../src/terminal-window.c:2475
+#: ../src/terminal-window.c:2590
 msgid "Copy"
 msgstr "Copia"
 
-#: ../src/terminal-accels.c:123
+#: ../src/terminal-accels.c:128 ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:2593
 msgid "Paste"
 msgstr "Incolla"
 
-#: ../src/terminal-accels.c:127
+#: ../src/terminal-accels.c:133
+msgid "Find Next"
+msgstr "Trova successivo"
+
+#: ../src/terminal-accels.c:134
+msgid "Find Previous"
+msgstr "Trova precedente"
+
+#: ../src/terminal-accels.c:135
+msgid "Clear Find Highlight"
+msgstr "Pulisci evidenziazione"
+
+#: ../src/terminal-accels.c:139
 msgid "Hide and Show toolbar"
 msgstr "Nascondi e mostra la barra degli strumenti"
 
-#: ../src/terminal-accels.c:128
+#: ../src/terminal-accels.c:140
 msgid "Full Screen"
 msgstr "Schermo intero"
 
-#: ../src/terminal-accels.c:129
+#. View menu
+#: ../src/terminal-accels.c:141 ../src/terminal-window.c:2495
 msgid "Zoom In"
 msgstr "Aumenta ingrandimento"
 
-#: ../src/terminal-accels.c:130
+#: ../src/terminal-accels.c:142 ../src/terminal-window.c:2498
 msgid "Zoom Out"
 msgstr "Riduci ingrandimento"
 
-#: ../src/terminal-accels.c:131
+#: ../src/terminal-accels.c:143 ../src/terminal-window.c:2501
 msgid "Normal Size"
 msgstr "Dimensione normale"
 
-#: ../src/terminal-accels.c:135 ../src/terminal-window.c:754
+#: ../src/terminal-accels.c:147 ../src/terminal-window.c:758
 msgid "Set Title"
 msgstr "Imposta titolo"
 
-#: ../src/terminal-accels.c:136
+#: ../src/terminal-accels.c:148
 msgid "Reset"
 msgstr "Ripristina"
 
-#: ../src/terminal-accels.c:137
+#: ../src/terminal-accels.c:149
 msgid "Reset and Clear"
 msgstr "Ripristina e pulisci"
 
-#: ../src/terminal-accels.c:141
-msgid "Switch to Previous Tab"
-msgstr "Passa alla scheda precedente"
+#: ../src/terminal-accels.c:153
+msgid "Switch to Previous Terminal"
+msgstr "Passa al terminale precedente"
 
-#: ../src/terminal-accels.c:142
-msgid "Switch to Next Tab"
-msgstr "Passa alla scheda successiva"
+#: ../src/terminal-accels.c:154
+msgid "Switch to Next Terminal"
+msgstr "Passa al terminale successivo"
 
-#: ../src/terminal-accels.c:143
-msgid "Move Tab to the Left"
-msgstr "Sposta scheda a sinistra"
+#: ../src/terminal-accels.c:155
+msgid "Move Terminal to the Left"
+msgstr "Sposta il terminale a sinistra"
 
-#: ../src/terminal-accels.c:144
-msgid "Move Tab to the Right"
-msgstr "Sposta scheda a destra"
+#: ../src/terminal-accels.c:156
+msgid "Move Terminal to the Right"
+msgstr "Sposta il terminale a destra"
 
-#: ../src/terminal-accels.c:145
-msgid "Detach Tab"
-msgstr "Stacca scheda"
+#: ../src/terminal-accels.c:157
+msgid "Detach Terminal"
+msgstr "Stacca il terminale"
 
-#: ../src/terminal-accels.c:168
+#: ../src/terminal-accels.c:180
 msgid "Contents"
 msgstr "Sommario"
 
-#: ../src/terminal-accels.c:175
+#: ../src/terminal-accels.c:187
 msgid "File"
 msgstr "File"
 
-#: ../src/terminal-accels.c:176
+#: ../src/terminal-accels.c:188
 msgid "Edit"
 msgstr "Modifica"
 
-#: ../src/terminal-accels.c:177
+#: ../src/terminal-accels.c:189
 msgid "View"
 msgstr "Visualizza"
 
-#: ../src/terminal-accels.c:179
+#: ../src/terminal-accels.c:192
 msgid "Tabs"
 msgstr "Schede"
 
-#: ../src/terminal-accels.c:180
+#: ../src/terminal-accels.c:193
 msgid "Help"
 msgstr "Aiuto"
 
-#: ../src/terminal-accels.c:261
+#: ../src/terminal-accels.c:277
 #, c-format
 msgid "Switch to Tab %d"
 msgstr "Passa alla scheda %d"
 
-#: ../src/terminal-accels.c:487
+#: ../src/terminal-accels.c:494
 msgid "_Action"
 msgstr "_Azione"
 
-#: ../src/terminal-accels.c:505
+#: ../src/terminal-accels.c:512
 msgid "Shortcut _Key"
 msgstr "Tasto s_corciatoia"
 
-#: ../src/terminal-app.c:591
+#: ../src/terminal-app.c:650
 msgid "User Defined"
 msgstr "Definito dall'utente"
 
@@ -1277,19 +1337,19 @@ msgstr "_Nuovo terminale"
 msgid "_Preferences"
 msgstr "_Preferenze"
 
-#: ../src/terminal-appmenu.ui.h:3
-msgid "_About Terminal"
-msgstr "I_nformazioni su Terminale"
-
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2350
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2447
 msgid "_Help"
 msgstr "A_iuto"
+
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2566
+msgid "_About"
+msgstr "I_nformazioni"
 
 #: ../src/terminal-appmenu.ui.h:5
 msgid "_Quit"
 msgstr "_Esci"
 
-#: ../src/terminal.c:245
+#: ../src/terminal.c:235
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Analisi degli argomenti non riuscita: %s\n"
@@ -1440,40 +1500,40 @@ msgstr "Tailandese"
 msgid "Current Locale"
 msgstr "Localizzazione in uso"
 
-#: ../src/terminal-nautilus.c:599
+#: ../src/terminal-nautilus.c:600
 msgid "Open in _Remote Terminal"
 msgstr "Apri nel terminale _remoto"
 
-#: ../src/terminal-nautilus.c:601
+#: ../src/terminal-nautilus.c:602
 msgid "Open in _Local Terminal"
 msgstr "Apri nel terminale _locale"
 
-#: ../src/terminal-nautilus.c:605 ../src/terminal-nautilus.c:616
+#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:617
 msgid "Open the currently selected folder in a terminal"
 msgstr "Apre la cartella attualmente selezionata in un terminale"
 
-#: ../src/terminal-nautilus.c:607 ../src/terminal-nautilus.c:618
-#: ../src/terminal-nautilus.c:628
+#: ../src/terminal-nautilus.c:608 ../src/terminal-nautilus.c:619
+#: ../src/terminal-nautilus.c:629
 msgid "Open the currently open folder in a terminal"
 msgstr "Apre la cartella attualmente in uso in un terminale"
 
-#: ../src/terminal-nautilus.c:613 ../src/terminal-nautilus.c:627
+#: ../src/terminal-nautilus.c:614 ../src/terminal-nautilus.c:628
 msgid "Open in T_erminal"
 msgstr "Apri nel _terminale"
 
-#: ../src/terminal-nautilus.c:624
+#: ../src/terminal-nautilus.c:625
 msgid "Open T_erminal"
 msgstr "Apri _terminale"
 
-#: ../src/terminal-nautilus.c:625
+#: ../src/terminal-nautilus.c:626
 msgid "Open a terminal"
 msgstr "Apre un terminale"
 
-#: ../src/terminal-nautilus.c:643 ../src/terminal-nautilus.c:656
+#: ../src/terminal-nautilus.c:644 ../src/terminal-nautilus.c:657
 msgid "Open in _Midnight Commander"
 msgstr "Apri in _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:645
+#: ../src/terminal-nautilus.c:646
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
@@ -1481,7 +1541,7 @@ msgstr ""
 "Apre la cartella attualmente selezionata nel gestore di file da terminale "
 "Midnight Commander"
 
-#: ../src/terminal-nautilus.c:647 ../src/terminal-nautilus.c:657
+#: ../src/terminal-nautilus.c:648 ../src/terminal-nautilus.c:658
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
@@ -1489,11 +1549,11 @@ msgstr ""
 "Apre la cartella attualmente in uso nel gestore di file da terminale "
 "Midnight Commander"
 
-#: ../src/terminal-nautilus.c:653
+#: ../src/terminal-nautilus.c:654
 msgid "Open _Midnight Commander"
 msgstr "Apri _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:654
+#: ../src/terminal-nautilus.c:655
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Apre il gestore di file da terminale Midnight Commander"
 
@@ -1504,7 +1564,7 @@ msgstr ""
 "L'opzione \"%s\" non è più disponibile in questa versione del terminale di "
 "GNOME."
 
-#: ../src/terminal-options.c:249 ../src/terminal-util.c:221
+#: ../src/terminal-options.c:249 ../src/terminal-util.c:217
 msgid "GNOME Terminal"
 msgstr "Terminale di GNOME"
 
@@ -1633,70 +1693,70 @@ msgstr ""
 msgid "Show per-terminal options"
 msgstr "Mostra le opzioni per ogni terminale"
 
-#: ../src/terminal-prefs.c:224
+#: ../src/terminal-prefs.c:214
 msgid "Click button to choose profile"
 msgstr "Fare clic sul pulsante per scegliere il profilo"
 
-#: ../src/terminal-prefs.c:338
+#: ../src/terminal-prefs.c:316
 msgid "Profile list"
 msgstr "Elenco dei profili"
 
-#: ../src/terminal-prefs.c:393
+#: ../src/terminal-prefs.c:371
 #, c-format
 msgid "Delete profile “%s”?"
 msgstr "Eliminare il profilo «%s»?"
 
-#: ../src/terminal-prefs.c:397
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:521
 msgid "_Cancel"
 msgstr "A_nnulla"
 
-#: ../src/terminal-prefs.c:399
+#: ../src/terminal-prefs.c:377
 msgid "_Delete"
 msgstr "Eli_mina"
 
-#: ../src/terminal-prefs.c:409
+#: ../src/terminal-prefs.c:387
 msgid "Delete Profile"
 msgstr "Elimina il profilo"
 
-#: ../src/terminal-prefs.c:723
+#: ../src/terminal-prefs.c:695
 msgid "Show"
 msgstr "Mostra"
 
-#: ../src/terminal-prefs.c:734
+#: ../src/terminal-prefs.c:706
 msgid "_Encoding"
 msgstr "C_odifica"
 
-#: ../src/terminal-screen.c:1060
+#: ../src/terminal-screen.c:1091
 msgid "No command supplied nor shell requested"
 msgstr "Non è stato fornito alcun comando nè richiesta di shell"
 
-#: ../src/terminal-screen.c:1316 ../src/terminal-window.c:2393
+#: ../src/terminal-screen.c:1347 ../src/terminal-window.c:2490
 msgid "_Profile Preferences"
 msgstr "_Preferenze del profilo"
 
-#: ../src/terminal-screen.c:1317 ../src/terminal-screen.c:1645
+#: ../src/terminal-screen.c:1348 ../src/terminal-screen.c:1696
 msgid "_Relaunch"
 msgstr "_Riavvia"
 
-#: ../src/terminal-screen.c:1320
+#: ../src/terminal-screen.c:1351
 msgid "There was an error creating the child process for this terminal"
 msgstr "Errore nel creare il processo figlio per questo terminale"
 
-#: ../src/terminal-screen.c:1649
+#: ../src/terminal-screen.c:1700
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Il processo figlio si è concluso normalmente con lo stato %d."
 
-#: ../src/terminal-screen.c:1652
+#: ../src/terminal-screen.c:1703
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Il processo figlio è stato interrotto dal segnale %d."
 
-#: ../src/terminal-screen.c:1655
+#: ../src/terminal-screen.c:1706
 msgid "The child process was aborted."
 msgstr "Il processo figlio è stato interrotto."
 
-#: ../src/terminal-tab-label.c:196
+#: ../src/terminal-tab-label.c:197
 msgid "Close tab"
 msgstr "Chiude la scheda"
 
@@ -1704,19 +1764,19 @@ msgstr "Chiude la scheda"
 msgid "Switch to this tab"
 msgstr "Passa a questa scheda"
 
-#: ../src/terminal-util.c:148
+#: ../src/terminal-util.c:147
 msgid "There was an error displaying help"
 msgstr "Errore nel mostrare l'aiuto"
 
-#: ../src/terminal-util.c:204
+#: ../src/terminal-util.c:200
 msgid "Contributors:"
 msgstr "Contributi da:"
 
-#: ../src/terminal-util.c:223
+#: ../src/terminal-util.c:219
 msgid "A terminal emulator for the GNOME desktop"
 msgstr "Un emulatore di terminale per l'ambiente GNOME"
 
-#: ../src/terminal-util.c:231
+#: ../src/terminal-util.c:227
 msgid "translator-credits"
 msgstr ""
 "Claudio Arseni <claudio.arseni@ubuntu.com>\n"
@@ -1726,12 +1786,12 @@ msgstr ""
 "Luca Ferretti <elle.uca@infinito.it>\n"
 "Stefano Canepa <sc@linux.it>"
 
-#: ../src/terminal-util.c:304
+#: ../src/terminal-util.c:300
 #, c-format
 msgid "Could not open the address “%s”"
 msgstr "Impossibile aprire l'indirizzo «%s»"
 
-#: ../src/terminal-util.c:379
+#: ../src/terminal-util.c:369
 msgid ""
 "GNOME Terminal is free software: you can redistribute it and/or modify it "
 "under the terms of the GNU General Public License as published by the Free "
@@ -1743,7 +1803,7 @@ msgstr ""
 "come pubblicata dalla Free Software Foundation, versione 3 della Licenza o "
 "(a scelta) una versione più recente."
 
-#: ../src/terminal-util.c:383
+#: ../src/terminal-util.c:373
 msgid ""
 "GNOME Terminal is distributed in the hope that it will be useful, but "
 "WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY "
@@ -1755,7 +1815,7 @@ msgstr ""
 "APPLICABILITÀ PER UNO SCOPO PARTICOLARE. Per maggiori dettagli consultare la "
 "GNU General Public License."
 
-#: ../src/terminal-util.c:387
+#: ../src/terminal-util.c:377
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
@@ -1764,19 +1824,23 @@ msgstr ""
 "questo programma. In caso contrario consultare la pagina <http://www.gnu.org/"
 "licenses/>."
 
-#: ../src/terminal-window.c:488
+#: ../src/terminal-window.c:496
 msgid "Could not save contents"
 msgstr "Impossibile salvare i contenuti"
 
-#: ../src/terminal-window.c:514
+#: ../src/terminal-window.c:518
 msgid "Save as…"
 msgstr "Salva come…"
+
+#: ../src/terminal-window.c:522
+msgid "_Save"
+msgstr "_Salva"
 
 #. Translators: This is the label of a menu item to choose a profile.
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1178
+#: ../src/terminal-window.c:1283
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1785,202 +1849,202 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1184
+#: ../src/terminal-window.c:1289
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2343
+#: ../src/terminal-window.c:2440
 msgid "_File"
 msgstr "_File"
 
 #. File menu
-#: ../src/terminal-window.c:2344 ../src/terminal-window.c:2355
-#: ../src/terminal-window.c:2361 ../src/terminal-window.c:2502
+#: ../src/terminal-window.c:2441 ../src/terminal-window.c:2452
+#: ../src/terminal-window.c:2458 ../src/terminal-window.c:2599
 msgid "Open _Terminal"
 msgstr "Apri _terminale"
 
-#: ../src/terminal-window.c:2345
+#: ../src/terminal-window.c:2442
 msgid "_Edit"
 msgstr "_Modifica"
 
-#: ../src/terminal-window.c:2346
+#: ../src/terminal-window.c:2443
 msgid "_View"
 msgstr "_Visualizza"
 
-#: ../src/terminal-window.c:2347
+#: ../src/terminal-window.c:2444
 msgid "_Search"
 msgstr "_Cerca"
 
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2445
 msgid "_Terminal"
 msgstr "_Terminale"
 
-#: ../src/terminal-window.c:2349
+#: ../src/terminal-window.c:2446
 msgid "Ta_bs"
 msgstr "Sc_hede"
 
-#: ../src/terminal-window.c:2358
+#: ../src/terminal-window.c:2455
 msgid "Open Ta_b"
 msgstr "Apri sch_eda"
 
-#: ../src/terminal-window.c:2364
+#: ../src/terminal-window.c:2461
 msgid "New _Profile"
 msgstr "Nuovo _profilo"
 
-#: ../src/terminal-window.c:2367
+#: ../src/terminal-window.c:2464
 msgid "_Save Contents"
 msgstr "_Salva contenuti"
 
-#: ../src/terminal-window.c:2370 ../src/terminal-window.c:3582
+#: ../src/terminal-window.c:2467 ../src/terminal-window.c:3679
 msgid "C_lose Terminal"
 msgstr "Chiudi _terminale"
 
-#: ../src/terminal-window.c:2373
+#: ../src/terminal-window.c:2470
 msgid "_Close All Terminals"
 msgstr "_Chiudi tutti i terminali"
 
-#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2499
+#: ../src/terminal-window.c:2481 ../src/terminal-window.c:2596
 msgid "Paste _Filenames"
 msgstr "Incolla nomi _file"
 
-#: ../src/terminal-window.c:2390
+#: ../src/terminal-window.c:2484
+msgid "Select All"
+msgstr "Seleziona tutto"
+
+#: ../src/terminal-window.c:2487
 msgid "Pre_ferences"
 msgstr "Pre_ferenze"
 
 #. Search menu
-#: ../src/terminal-window.c:2409
+#: ../src/terminal-window.c:2506
 msgid "_Find…"
 msgstr "Tro_va…"
 
-#: ../src/terminal-window.c:2412
+#: ../src/terminal-window.c:2509
 msgid "Find Ne_xt"
 msgstr "Trova successi_vo"
 
-#: ../src/terminal-window.c:2415
+#: ../src/terminal-window.c:2512
 msgid "Find Pre_vious"
 msgstr "Trova pr_ecedente"
 
-#: ../src/terminal-window.c:2418
+#: ../src/terminal-window.c:2515
 msgid "_Clear Highlight"
 msgstr "Pulis_ci evidenziazione"
 
-#: ../src/terminal-window.c:2422
+#: ../src/terminal-window.c:2519
 msgid "Go to _Line..."
 msgstr "Vai a_lla riga..."
 
-#: ../src/terminal-window.c:2425
+#: ../src/terminal-window.c:2522
 msgid "_Incremental Search..."
 msgstr "Ricerca _incrementale..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:2431
+#: ../src/terminal-window.c:2528
 msgid "Change _Profile"
 msgstr "Cambia _profilo"
 
-#: ../src/terminal-window.c:2432
+#: ../src/terminal-window.c:2529
 msgid "_Set Title…"
 msgstr "_Imposta titolo…"
 
-#: ../src/terminal-window.c:2435
+#: ../src/terminal-window.c:2532
 msgid "Set _Character Encoding"
 msgstr "Imposta _codifica dei caratteri"
 
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2533
 msgid "_Reset"
 msgstr "_Ripristina"
 
-#: ../src/terminal-window.c:2439
+#: ../src/terminal-window.c:2536
 msgid "Reset and C_lear"
 msgstr "Ripristina e pu_lisci"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2444
+#: ../src/terminal-window.c:2541
 msgid "_Add or Remove…"
 msgstr "A_ggiungi o rimuovi…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2449
-msgid "_Previous Tab"
-msgstr "Scheda _precedente"
+#: ../src/terminal-window.c:2546
+msgid "_Previous Terminal"
+msgstr "Terminale _precedente"
 
-#: ../src/terminal-window.c:2452
-msgid "_Next Tab"
-msgstr "Scheda _successiva"
+#: ../src/terminal-window.c:2549
+msgid "_Next Terminal"
+msgstr "Termi_nale successivo"
 
-#: ../src/terminal-window.c:2455
-msgid "Move Tab _Left"
-msgstr "Sposta la scheda a s_inistra"
+#: ../src/terminal-window.c:2552
+msgid "Move Terminal _Left"
+msgstr "Sposta termina_le a sinistra"
 
-#: ../src/terminal-window.c:2458
-msgid "Move Tab _Right"
-msgstr "Sposta la scheda a _destra"
+#: ../src/terminal-window.c:2555
+msgid "Move Terminal _Right"
+msgstr "Sposta te_rminale a destra"
 
-#: ../src/terminal-window.c:2461
-msgid "_Detach tab"
-msgstr "St_acca scheda"
+#: ../src/terminal-window.c:2558
+msgid "_Detach Terminal"
+msgstr "Sta_cca terminale"
 
 #. Help menu
-#: ../src/terminal-window.c:2466
+#: ../src/terminal-window.c:2563
 msgid "_Contents"
 msgstr "_Sommario"
 
-#: ../src/terminal-window.c:2469
-msgid "_About"
-msgstr "I_nformazioni"
-
 #. Popup menu
-#: ../src/terminal-window.c:2474
+#: ../src/terminal-window.c:2571
 msgid "_Send Mail To…"
 msgstr "In_via un'email a…"
 
-#: ../src/terminal-window.c:2477
+#: ../src/terminal-window.c:2574
 msgid "_Copy E-mail Address"
 msgstr "_Copia indirizzo email"
 
-#: ../src/terminal-window.c:2480
+#: ../src/terminal-window.c:2577
 msgid "C_all To…"
 msgstr "C_hiamata a…"
 
-#: ../src/terminal-window.c:2483
+#: ../src/terminal-window.c:2580
 msgid "_Copy Call Address"
 msgstr "_Copia indirizzo di chiamata"
 
-#: ../src/terminal-window.c:2486
+#: ../src/terminal-window.c:2583
 msgid "_Open Link"
 msgstr "_Apri collegamento"
 
-#: ../src/terminal-window.c:2489
+#: ../src/terminal-window.c:2586
 msgid "_Copy Link Address"
 msgstr "Copia indirizzo co_llegamento"
 
-#: ../src/terminal-window.c:2492
+#: ../src/terminal-window.c:2589
 msgid "P_rofiles"
 msgstr "_Profili"
 
-#: ../src/terminal-window.c:2505
+#: ../src/terminal-window.c:2602
 msgid "L_eave Full Screen"
 msgstr "Finestra nor_male"
 
 #. View Menu
-#: ../src/terminal-window.c:2513
+#: ../src/terminal-window.c:2610
 msgid "Show _Menubar"
 msgstr "_Mostra barra dei menù"
 
-#: ../src/terminal-window.c:2517
+#: ../src/terminal-window.c:2614
 msgid "_Full Screen"
 msgstr "Scher_mo intero"
 
-#: ../src/terminal-window.c:3569
+#: ../src/terminal-window.c:3666
 msgid "Close this window?"
 msgstr "Chiudere questa finestra?"
 
-#: ../src/terminal-window.c:3569
+#: ../src/terminal-window.c:3666
 msgid "Close this terminal?"
 msgstr "Chiudere questo terminale?"
 
-#: ../src/terminal-window.c:3573
+#: ../src/terminal-window.c:3670
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -1988,7 +2052,7 @@ msgstr ""
 "Alcuni processi all'interno dei terminali di questa finestra sono ancora in "
 "esecuzione. Chiudendo la finestra verranno terminati tutti i processi."
 
-#: ../src/terminal-window.c:3577
+#: ../src/terminal-window.c:3674
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -1996,6 +2060,24 @@ msgstr ""
 "Un processo in questo terminale è ancora in esecuzione. Chiudendo il "
 "terminale verrà interrotto il processo."
 
-#: ../src/terminal-window.c:3582
+#: ../src/terminal-window.c:3679
 msgid "C_lose Window"
 msgstr "Chiudi _finestra"
+
+#~ msgid "Always visible"
+#~ msgstr "Sempre visibile"
+
+#~ msgid "Visible only when necessary"
+#~ msgstr "Visibile solo quando necessaria"
+
+#~ msgid "Hidden"
+#~ msgstr "Nascosta"
+
+#~ msgid "_About Terminal"
+#~ msgstr "I_nformazioni su Terminale"
+
+#~ msgid "_Next Tab"
+#~ msgstr "Scheda _successiva"
+
+#~ msgid "_Detach tab"
+#~ msgstr "St_acca scheda"
