@@ -254,7 +254,6 @@
     </key>
     <key name="encoding" type="s">
       <choices>
-        <choice value="current" />
         <choice value="ISO-8859-1" />
         <choice value="ISO-8859-2" />
         <choice value="ISO-8859-3" />
@@ -323,7 +322,7 @@
         <choice value="WINDOWS-1257" />
         <choice value="WINDOWS-1258" />
       </choices>
-      <default>'current'</default>
+      <default>'UTF-8'</default>
       <summary>Which encoding to use</summary>
     </key>
   </schema>
@@ -610,18 +609,17 @@
     <key name="encodings" type="as">
       <!-- Translators: Please note that this has to be a list of
            valid encodings (which are to be taken from the list in src/encoding.c).
-           It has to include UTF-8 and the word 'current', which is not to be
+           It has to include UTF-8 the list entries themselves are not to be
            translated. This is provided for customization of the default encoding
            menu; see bug 144810 for an use case. In most cases, this should be
            left alone.
       -->
-      <default>["UTF-8", "current"]</default>
+      <default>["UTF-8"]</default>
       <summary>List of available encodings</summary>
       <description>
         A subset of possible encodings are presented in
         the Encoding submenu. This is a list of encodings
-        to appear there. The special encoding name "current"
-        means to display the encoding of the current locale.
+        to appear there.
       </description>
     </key>
 

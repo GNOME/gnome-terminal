@@ -141,7 +141,7 @@ terminal_encoding_new (const char *charset,
   encoding->refcount = 1;
   encoding->id = g_strdup (charset);
   encoding->name = g_strdup (display_name);
-  encoding->valid = encoding->validity_checked = force_valid;
+  encoding->valid = encoding->validity_checked = force_valid || g_str_equal (charset, "UTF-8");
   encoding->is_custom = is_custom;
   encoding->is_active = FALSE;
 
@@ -180,14 +180,6 @@ const char *
 terminal_encoding_get_charset (TerminalEncoding *encoding)
 {
   g_return_val_if_fail (encoding != NULL, NULL);
-
-  if (strcmp (encoding->id, "current") == 0)
-    {
-      const char *charset;
-
-      g_get_charset (&charset);
-      return charset;
-    }
 
   return encoding->id;
 }
@@ -266,16 +258,6 @@ terminal_encodings_get_builtins (void)
   encodings_hashtable = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                NULL,
                                                (GDestroyNotify) terminal_encoding_unref);
-
-
-  /* Placeholder entry for the current locale's charset */
-  encoding = terminal_encoding_new ("current",
-                                    _("Current Locale"),
-                                    FALSE,
-                                    TRUE);
-  g_hash_table_insert (encodings_hashtable,
-                       (gpointer) terminal_encoding_get_id (encoding),
-                       encoding);
 
   for (i = 0; i < G_N_ELEMENTS (encodings); ++i)
     {

@@ -228,17 +228,11 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
   /* Mark all as non-active, then re-enable the active ones */
   g_hash_table_foreach (app->encodings, (GHFunc) encoding_mark_active, GUINT_TO_POINTER (FALSE));
 
-  /* First add the locale's charset */
-  encoding = g_hash_table_lookup (app->encodings, "current");
-  g_assert (encoding);
-  if (terminal_encoding_is_valid (encoding))
-    encoding->is_active = TRUE;
-
   /* Also always make UTF-8 available */
   encoding = g_hash_table_lookup (app->encodings, "UTF-8");
   g_assert (encoding);
-  if (terminal_encoding_is_valid (encoding))
-    encoding->is_active = TRUE;
+  g_assert (terminal_encoding_is_valid (encoding));
+  encoding->is_active = TRUE;
 
   g_settings_get (settings, key, "^as", &encodings);
   for (i = 0; encodings[i] != NULL; ++i) {
@@ -643,7 +637,7 @@ terminal_app_ensure_encoding (TerminalApp *app,
 {
   TerminalEncoding *encoding;
 
-  encoding = g_hash_table_lookup (app->encodings, charset ? charset : "current");
+  encoding = g_hash_table_lookup (app->encodings, charset ? charset : "UTF-8");
   if (encoding == NULL)
     {
       encoding = terminal_encoding_new (charset,

@@ -1599,7 +1599,7 @@ terminal_window_update_encoding_menu (TerminalWindow *window)
   if (priv->active_screen)
     charset = vte_terminal_get_encoding (VTE_TERMINAL (priv->active_screen));
   else
-    charset = "current";
+    charset = "UTF-8";
 
   app = terminal_app_get ();
   active_encoding = terminal_app_ensure_encoding (app, charset);

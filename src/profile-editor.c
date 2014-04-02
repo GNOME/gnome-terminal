@@ -478,13 +478,13 @@ init_encodings_combo (GtkWidget *widget)
   GHashTableIter ht_iter;
   gpointer key, value;
   gs_unref_object GtkListStore *store;
-  GtkTreeIter iter;
 
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
   g_hash_table_iter_init (&ht_iter, terminal_app_get_encodings (terminal_app_get ()));
   while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
     TerminalEncoding *encoding = value;
+    GtkTreeIter iter;
     gs_free char *name;
 
     name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
@@ -495,11 +495,6 @@ init_encodings_combo (GtkWidget *widget)
                                        ENCODINGS_COLUMN_ID, terminal_encoding_get_charset (encoding),
                                        -1);
   }
-
-  gtk_list_store_insert_with_values (store, &iter, -1,
-                                     ENCODINGS_COLUMN_MARKUP, _("Default"),
-                                     ENCODINGS_COLUMN_ID, "current",
-                                     -1);
 
   /* Now turn on sorting */
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
