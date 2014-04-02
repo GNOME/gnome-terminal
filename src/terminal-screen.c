@@ -760,12 +760,12 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLLBAR_POLICY_KEY))
     _terminal_screen_update_scrollbar (screen);
 
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING))
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_ENCODING_KEY))
     {
       TerminalEncoding *encoding;
       gs_free char *str;
 
-      str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING);
+      str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
       encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
       vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
     }

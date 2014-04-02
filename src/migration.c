@@ -463,7 +463,7 @@ migrate_profile (TerminalSettingsList *list,
                 settings, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                 FALSE);
   migrate_string (client, path, KEY_ENCODING,
-                  settings, TERMINAL_PROFILE_ENCODING);
+                  settings, TERMINAL_PROFILE_ENCODING_KEY);
 
   g_free (path);
   g_object_unref (settings);

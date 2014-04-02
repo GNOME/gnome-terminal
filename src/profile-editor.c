@@ -466,6 +466,56 @@ init_color_scheme_menu (GtkWidget *widget)
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer, "text", 0, NULL);
 }
 
+enum {
+  ENCODINGS_COLUMN_ID,
+  ENCODINGS_COLUMN_MARKUP
+};
+
+static void
+init_encodings_combo (GtkWidget *widget)
+{
+  GtkCellRenderer *renderer;
+  GHashTableIter ht_iter;
+  gpointer key, value;
+  gs_unref_object GtkListStore *store;
+  GtkTreeIter iter;
+
+  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+
+  g_hash_table_iter_init (&ht_iter, terminal_app_get_encodings (terminal_app_get ()));
+  while (g_hash_table_iter_next (&ht_iter, &key, &value)) {
+    TerminalEncoding *encoding = value;
+    gs_free char *name;
+
+    name = g_markup_printf_escaped ("%s <span size=\"small\">%s</span>",
+                                    terminal_encoding_get_charset (encoding),
+                                    encoding->name);
+    gtk_list_store_insert_with_values (store, &iter, -1,
+                                       ENCODINGS_COLUMN_MARKUP, name,
+                                       ENCODINGS_COLUMN_ID, terminal_encoding_get_charset (encoding),
+                                       -1);
+  }
+
+  gtk_list_store_insert_with_values (store, &iter, -1,
+                                     ENCODINGS_COLUMN_MARKUP, _("Default"),
+                                     ENCODINGS_COLUMN_ID, "current",
+                                     -1);
+
+  /* Now turn on sorting */
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+                                        ENCODINGS_COLUMN_MARKUP,
+                                        GTK_SORT_ASCENDING);
+
+  gtk_combo_box_set_id_column (GTK_COMBO_BOX (widget), ENCODINGS_COLUMN_ID);
+  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+
+  /* Cell renderer */
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), renderer,
+                                  "markup", ENCODINGS_COLUMN_MARKUP, NULL);
+}
+
 static void
 editor_response_cb (GtkWidget *editor,
                     int response,
@@ -1026,6 +1076,15 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder, "rewrap-on-resize-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
+  /* Compatibility options */
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "encoding-combobox");
+  init_encodings_combo (w);
+  g_settings_bind (profile,
+                   TERMINAL_PROFILE_ENCODING_KEY,
+                   w,
+                   "active-id", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  /* Finished! */
   terminal_util_bind_mnemonic_label_sensitivity (editor);
 
   terminal_util_dialog_focus_widget (editor, widget_name);
