@@ -436,6 +436,7 @@ reset_compat_defaults_cb (GtkWidget *button,
 {
   g_settings_reset (profile, TERMINAL_PROFILE_DELETE_BINDING_KEY);
   g_settings_reset (profile, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY);
+  g_settings_reset (profile, TERMINAL_PROFILE_ENCODING_KEY);
 }
 
 /*
