@@ -27,7 +27,7 @@
 typedef struct
 {
   int   refcount;
-  char *id;
+  const char *charset; /* interned */
   char *name;
   guint valid            : 1;
   guint validity_checked : 1;
@@ -47,8 +47,6 @@ TerminalEncoding *terminal_encoding_ref (TerminalEncoding *encoding);
 void terminal_encoding_unref (TerminalEncoding *encoding);
 
 gboolean terminal_encoding_is_valid (TerminalEncoding *encoding);
-
-const char *terminal_encoding_get_id (TerminalEncoding *encoding);
 
 const char *terminal_encoding_get_charset (TerminalEncoding *encoding);
 

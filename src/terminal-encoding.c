@@ -139,7 +139,7 @@ terminal_encoding_new (const char *charset,
 
   encoding = g_slice_new (TerminalEncoding);
   encoding->refcount = 1;
-  encoding->id = g_strdup (charset);
+  encoding->charset = g_intern_static_string (charset);
   encoding->name = g_strdup (display_name);
   encoding->valid = encoding->validity_checked = force_valid || g_str_equal (charset, "UTF-8");
   encoding->is_custom = is_custom;
@@ -164,16 +164,7 @@ terminal_encoding_unref (TerminalEncoding *encoding)
     return;
 
   g_free (encoding->name);
-  g_free (encoding->id);
   g_slice_free (TerminalEncoding, encoding);
-}
-
-const char *
-terminal_encoding_get_id (TerminalEncoding *encoding)
-{
-  g_return_val_if_fail (encoding != NULL, NULL);
-
-  return encoding->id;
 }
 
 const char *
@@ -181,7 +172,7 @@ terminal_encoding_get_charset (TerminalEncoding *encoding)
 {
   g_return_val_if_fail (encoding != NULL, NULL);
 
-  return encoding->id;
+  return encoding->charset;
 }
 
 gboolean
@@ -266,7 +257,7 @@ terminal_encodings_get_builtins (void)
                                         FALSE,
                                         FALSE);
       g_hash_table_insert (encodings_hashtable,
-                           (gpointer) terminal_encoding_get_id (encoding),
+                           (gpointer) terminal_encoding_get_charset (encoding),
                            encoding);
     }
 

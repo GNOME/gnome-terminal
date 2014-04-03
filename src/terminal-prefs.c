@@ -468,7 +468,7 @@ update_active_encodings_setting (void)
     {
       TerminalEncoding *encoding = (TerminalEncoding *) l->data;
 
-      g_variant_builder_add (&builder, "s", terminal_encoding_get_id (encoding));
+      g_variant_builder_add (&builder, "s", terminal_encoding_get_charset (encoding));
     }
   g_slist_foreach (list, (GFunc) terminal_encoding_unref, NULL);
   g_slist_free (list);

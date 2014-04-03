@@ -645,7 +645,7 @@ terminal_app_ensure_encoding (TerminalApp *app,
                                         TRUE,
                                         TRUE /* scary! */);
       g_hash_table_insert (app->encodings,
-                          (gpointer) terminal_encoding_get_id (encoding),
+                          (gpointer) terminal_encoding_get_charset (encoding),
                           encoding);
     }
 
