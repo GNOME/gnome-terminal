@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_BACKSPACE_BINDING_KEY          "backspace-binding"
 #define TERMINAL_PROFILE_BOLD_COLOR_KEY                 "bold-color"
 #define TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY      "bold-color-same-as-fg"
+#define TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY   "cjk-utf8-ambiguous-width"
 #define TERMINAL_PROFILE_CURSOR_BLINK_MODE_KEY          "cursor-blink-mode"
 #define TERMINAL_PROFILE_CURSOR_SHAPE_KEY               "cursor-shape"
 #define TERMINAL_PROFILE_CUSTOM_COMMAND_KEY             "custom-command"

@@ -770,6 +770,14 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
     }
 
+  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY))
+    {
+      TerminalCJKWidth width;
+
+      width = g_settings_get_enum (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
+      vte_terminal_set_cjk_ambiguous_width (vte_terminal, (int) width);
+    }
+
   if (!prop_name ||
       prop_name == I_(TERMINAL_PROFILE_TITLE_KEY))
     {

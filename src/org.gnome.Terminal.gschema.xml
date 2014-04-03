@@ -41,6 +41,11 @@
     <value nick='hold' value='2'/>
   </enum>
 
+   <enum id='org.gnome.Terminal.CJKWidth'>
+    <value nick='narrow' value='1'/>
+    <value nick='wide'   value='2'/>
+  </enum>
+
   <!-- These really belong into some vte-built enums file, but
         using enums from other modules still has some
         problems. Just include a copy here for now.
@@ -324,6 +329,10 @@
       </choices>
       <default>'UTF-8'</default>
       <summary>Which encoding to use</summary>
+    </key>
+    <key name="cjk-utf8-ambiguous-width" enum="org.gnome.Terminal.CJKWidth">
+      <default>'narrow'</default>
+      <summary>Whether ambiguous-width characters are narrow or wide when using UTF-8 encoding</summary>
     </key>
   </schema>
 

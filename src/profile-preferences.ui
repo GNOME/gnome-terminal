@@ -126,6 +126,23 @@
       </row>
     </data>
   </object>
+  <object class="GtkListStore" id="cjk-ambiguous-width-model">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Narrow</col>
+        <col id="1" translatable="no">narrow</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Wide</col>
+        <col id="1" translatable="no">wide</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkDialog" id="profile-editor-dialog">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1839,7 +1856,7 @@
                   <object class="GtkTable" id="table30">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">3</property>
+                    <property name="n_rows">4</property>
                     <property name="n_columns">3</property>
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
@@ -1940,6 +1957,45 @@
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="cjk-ambiguous-width-label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Ambiguous-_width characters:</property>
+                        <property name="use_underline">True</property>
+                        <property name="justify">center</property>
+                        <property name="mnemonic_widget">cjk-ambiguous-width-combobox</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"/>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="cjk-ambiguous-width-combobox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">cjk-ambiguous-width-model</property>
+                        <property name="id-column">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cjk-ambiguous-width-renderer"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="x_options">GTK_FILL</property>
                         <property name="y_options">GTK_FILL</property>
                       </packing>

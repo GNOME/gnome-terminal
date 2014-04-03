@@ -437,6 +437,7 @@ reset_compat_defaults_cb (GtkWidget *button,
   g_settings_reset (profile, TERMINAL_PROFILE_DELETE_BINDING_KEY);
   g_settings_reset (profile, TERMINAL_PROFILE_BACKSPACE_BINDING_KEY);
   g_settings_reset (profile, TERMINAL_PROFILE_ENCODING_KEY);
+  g_settings_reset (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
 }
 
 /*
@@ -1079,6 +1080,12 @@ terminal_profile_edit (GSettings  *profile,
                    TERMINAL_PROFILE_ENCODING_KEY,
                    w,
                    "active-id", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "cjk-ambiguous-width-combobox");
+  g_settings_bind (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY,
+                   w,
+                   "active-id",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
   /* Finished! */
   terminal_util_bind_mnemonic_label_sensitivity (editor);

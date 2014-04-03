@@ -42,6 +42,11 @@ typedef enum {
   TERMINAL_SETTINGS_LIST_FLAG_ALLOW_EMPTY = 1 << 1
 } TerminalSettingsListFlags;
 
+typedef enum {
+  TERMINAL_CJK_WIDTH_NARROW = 1,
+  TERMINAL_CJK_WIDTH_WIDE   = 2
+} TerminalCJKWidth;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */
