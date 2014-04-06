@@ -113,11 +113,6 @@ void terminal_screen_set_user_title (TerminalScreen *screen,
 
 char *terminal_screen_get_current_dir (TerminalScreen *screen);
 
-void        terminal_screen_set_font (TerminalScreen *screen);
-void        terminal_screen_set_font_scale    (TerminalScreen *screen,
-                                               double          factor);
-double      terminal_screen_get_font_scale    (TerminalScreen *screen);
-
 void       terminal_screen_get_size (TerminalScreen *screen,
                                      int *width_chars,
                                      int *height_chars);

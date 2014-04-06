@@ -819,17 +819,17 @@ action_zoom_cb (GSimpleAction *action,
   if (value == 0) {
     zoom = PANGO_SCALE_MEDIUM;
   } else if (value == 1) {
-    zoom = terminal_screen_get_font_scale (priv->active_screen);
+    zoom = vte_terminal_get_font_scale (VTE_TERMINAL (priv->active_screen));
     if (!find_larger_zoom_factor (zoom, &zoom))
       return;
   } else if (value == -1) {
-    zoom = terminal_screen_get_font_scale (priv->active_screen);
+    zoom = vte_terminal_get_font_scale (VTE_TERMINAL (priv->active_screen));
     if (!find_smaller_zoom_factor (zoom, &zoom))
       return;
   } else
     g_assert_not_reached ();
 
-  terminal_screen_set_font_scale (priv->active_screen, zoom);
+  vte_terminal_set_font_scale (VTE_TERMINAL (priv->active_screen), zoom);
   terminal_window_update_zoom_sensitivity (window);
 }
 
@@ -1777,7 +1777,7 @@ terminal_window_update_zoom_sensitivity (TerminalWindow *window)
   if (screen == NULL)
     return;
 
-  current = terminal_screen_get_font_scale (screen);
+  current = vte_terminal_get_font_scale (VTE_TERMINAL (screen));
 
   action = gtk_action_group_get_action (priv->action_group, "ViewZoomOut");
   gtk_action_set_sensitive (action, find_smaller_zoom_factor (current, &zoom));
@@ -3032,9 +3032,9 @@ sync_screen_icon_title_set (TerminalScreen *screen,
 }
 
 static void
-screen_font_desc_changed_cb (TerminalScreen *screen,
-                             GParamSpec *psepc,
-                             TerminalWindow *window)
+screen_font_any_changed_cb (TerminalScreen *screen,
+                            GParamSpec *psepc,
+                            TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
 
@@ -3362,7 +3362,9 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
   g_signal_connect (screen, "notify::icon-title-set",
                     G_CALLBACK (sync_screen_icon_title_set), window);
   g_signal_connect (screen, "notify::font-desc",
-                    G_CALLBACK (screen_font_desc_changed_cb), window);
+                    G_CALLBACK (screen_font_any_changed_cb), window);
+  g_signal_connect (screen, "notify::font-scale",
+                    G_CALLBACK (screen_font_any_changed_cb), window);
   g_signal_connect (screen, "selection-changed",
                     G_CALLBACK (terminal_window_update_copy_sensitivity), window);
 
@@ -3435,7 +3437,7 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),
-                                        G_CALLBACK (screen_font_desc_changed_cb),
+                                        G_CALLBACK (screen_font_any_changed_cb),
                                         window);
 
   g_signal_handlers_disconnect_by_func (G_OBJECT (screen),

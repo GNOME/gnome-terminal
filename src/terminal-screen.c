@@ -83,7 +83,6 @@ struct _TerminalScreenPrivate
   char **override_command;
   gboolean shell;
   int child_pid;
-  double font_scale;
   GSList *match_tags;
   guint launch_child_source_id;
 };
@@ -127,6 +126,7 @@ static void terminal_screen_drag_data_received (GtkWidget        *widget,
                                                 GtkSelectionData *selection_data,
                                                 guint             info,
                                                 guint             time);
+static void terminal_screen_set_font (TerminalScreen *screen);
 static void terminal_screen_system_font_changed_cb (GSettings *,
                                                     const char*,
                                                     TerminalScreen *screen);
@@ -314,8 +314,6 @@ terminal_screen_init (TerminalScreen *screen)
   vte_terminal_set_mouse_autohide (terminal, TRUE);
 
   priv->child_pid = -1;
-
-  priv->font_scale = PANGO_SCALE_MEDIUM;
 
   for (i = 0; i < n_url_regexes; ++i)
     {
@@ -658,7 +656,7 @@ terminal_screen_new (GSettings       *profile,
   if (child_env)
     terminal_screen_set_initial_environment (screen, child_env);
 
-  terminal_screen_set_font_scale (screen, zoom);
+  vte_terminal_set_font_scale (VTE_TERMINAL (screen), zoom);
   terminal_screen_set_font (screen);
 
   return screen;
@@ -886,7 +884,7 @@ update_color_scheme (TerminalScreen *screen)
   vte_terminal_set_color_bold_rgba (VTE_TERMINAL (screen), boldp);
 }
 
-void
+static void
 terminal_screen_set_font (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
@@ -906,13 +904,13 @@ terminal_screen_set_font (TerminalScreen *screen)
     }
 
   size = pango_font_description_get_size (desc);
-  if (size == 0)
-    size = 10;
-
-  if (pango_font_description_get_size_is_absolute (desc))
-    pango_font_description_set_absolute_size (desc, priv->font_scale * size);
-  else
-    pango_font_description_set_size (desc, priv->font_scale * size);
+  /* Sanity check */
+  if (size == 0) {
+    if (pango_font_description_get_size_is_absolute (desc))
+      pango_font_description_set_absolute_size (desc, 10);
+    else
+      pango_font_description_set_size (desc, 10);
+  }
 
   vte_terminal_set_font (VTE_TERMINAL (screen), desc);
 
@@ -1617,36 +1615,6 @@ terminal_screen_get_current_dir (TerminalScreen *screen)
     return g_strdup (screen->priv->initial_working_directory);
 
   return NULL;
-}
-
-void
-terminal_screen_set_font_scale (TerminalScreen *screen,
-                                double          factor)
-{
-  TerminalScreenPrivate *priv = screen->priv;
-  
-  g_return_if_fail (TERMINAL_IS_SCREEN (screen));
-
-  if (factor < TERMINAL_SCALE_MINIMUM)
-    factor = TERMINAL_SCALE_MINIMUM;
-  if (factor > TERMINAL_SCALE_MAXIMUM)
-    factor = TERMINAL_SCALE_MAXIMUM;
-  
-  priv->font_scale = factor;
-  
-  if (gtk_widget_get_realized (GTK_WIDGET (screen)))
-    {
-      /* Update the font */
-      terminal_screen_set_font (screen);
-    }
-}
-
-double
-terminal_screen_get_font_scale (TerminalScreen *screen)
-{
-  g_return_val_if_fail (TERMINAL_IS_SCREEN (screen), 1.0);
-  
-  return screen->priv->font_scale;
 }
 
 static void
