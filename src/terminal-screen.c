@@ -800,12 +800,6 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_AUDIBLE_BELL_KEY))
       vte_terminal_set_audible_bell (vte_terminal, g_settings_get_boolean (profile, TERMINAL_PROFILE_AUDIBLE_BELL_KEY));
 
-  if (!prop_name || prop_name == I_(TERMINAL_PROFILE_WORD_CHARS_KEY))
-    {
-      gs_free char *word_chars;
-      word_chars = g_settings_get_string (profile, TERMINAL_PROFILE_WORD_CHARS_KEY);
-      vte_terminal_set_word_chars (vte_terminal, word_chars);
-    }
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY))
     vte_terminal_set_scroll_on_keystroke (vte_terminal,
                                           g_settings_get_boolean (profile, TERMINAL_PROFILE_SCROLL_ON_KEYSTROKE_KEY));

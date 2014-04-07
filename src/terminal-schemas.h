@@ -64,7 +64,6 @@ G_BEGIN_DECLS
 #define TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY            "use-system-font"
 #define TERMINAL_PROFILE_USE_THEME_COLORS_KEY           "use-theme-colors"
 #define TERMINAL_PROFILE_VISIBLE_NAME_KEY               "visible-name"
-#define TERMINAL_PROFILE_WORD_CHARS_KEY                 "word-chars"
 
 #define TERMINAL_SETTING_CONFIRM_CLOSE_KEY              "confirm-close"
 #define TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY       "default-show-menubar"

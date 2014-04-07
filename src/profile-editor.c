@@ -1033,9 +1033,6 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder,
                                            "use-theme-colors-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-  g_settings_bind (profile, TERMINAL_PROFILE_WORD_CHARS_KEY,
-                   gtk_builder_get_object (builder, "word-chars-entry"),
-                   "text", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
                    gtk_builder_get_object (builder, "bell-checkbutton"),
                    "active",

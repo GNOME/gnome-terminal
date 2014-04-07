@@ -93,7 +93,6 @@ enum {
 #define KEY_USE_SYSTEM_FONT "use_system_font"
 #define KEY_USE_THEME_COLORS "use_theme_colors"
 #define KEY_VISIBLE_NAME "visible_name"
-#define KEY_WORD_CHARS "word_chars"
 
 static const GConfEnumStringPair erase_binding_pairs[] = {
   { VTE_ERASE_AUTO, "auto" },
@@ -404,8 +403,6 @@ migrate_profile (TerminalSettingsList *list,
   migrate_bool (client, path, KEY_SILENT_BELL,
                 settings, TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
                 TRUE);
-  migrate_string (client, path, KEY_WORD_CHARS,
-                 settings, TERMINAL_PROFILE_WORD_CHARS_KEY);
   migrate_bool (client, path, KEY_USE_CUSTOM_DEFAULT_SIZE,
                 settings, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
                 FALSE);
