@@ -259,7 +259,6 @@ nodist_libterminal_nautilus_la_SOURCES = \
 	$(NULL)
 
 libterminal_nautilus_la_CPPFLAGS = \
-	-DTERMINAL_COMPILATION \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	$(AM_CPPFLAGS)
 

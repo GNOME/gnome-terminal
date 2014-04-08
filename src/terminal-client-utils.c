@@ -29,7 +29,7 @@
 #include <gio/gio.h>
 
 #include <gdk/gdk.h>
-#ifdef GDK_WINDOWING_X11
+#if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
 #include <gdk/gdkx.h>
 #endif
 
@@ -137,7 +137,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
 void 
 terminal_client_get_fallback_startup_id  (char **startup_id)
 {
-#ifdef GDK_WINDOWING_X11
+#if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
   GdkDisplay *display;
   Display *xdisplay;
   Window xwindow;
