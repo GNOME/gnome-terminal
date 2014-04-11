@@ -622,7 +622,6 @@ terminal_screen_finalize (GObject *object)
 TerminalScreen *
 terminal_screen_new (GSettings       *profile,
                      char           **override_command,
-                     const char      *title,
                      const char      *working_dir,
                      char           **child_env,
                      double           zoom)
@@ -642,9 +641,6 @@ terminal_screen_new (GSettings       *profile,
 			   g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),
 			   g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY));
   }
-
-  if (title)
-    terminal_screen_set_user_title (screen, title);
 
   priv->initial_working_directory = g_strdup (working_dir);
 

@@ -368,7 +368,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   TerminalObjectSkeleton *skeleton;
   char *object_path;
   GSettings *profile = NULL;
-  const char *profile_uuid, *title;
+  const char *profile_uuid;
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
   guint window_id;
@@ -456,12 +456,10 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
 
   g_assert (window != NULL);
 
-  if (!g_variant_lookup (options, "title", "&s", &title))
-    title = NULL;
   if (g_variant_lookup (options, "zoom", "d", &zoom))
     zoom_set = TRUE;
 
-  screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
+  screen = terminal_screen_new (profile, NULL, NULL, NULL,
                                 zoom_set ? zoom : 1.0);
   terminal_window_add_screen (window, screen, -1);
   terminal_window_switch_screen (window, screen);

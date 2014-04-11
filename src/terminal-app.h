@@ -75,7 +75,6 @@ TerminalScreen *terminal_app_new_terminal (TerminalApp     *app,
                                            TerminalWindow  *window,
                                            GSettings       *profile,
                                            char           **override_command,
-                                           const char      *title,
                                            const char      *working_dir,
                                            char           **child_env,
                                            double           zoom);
