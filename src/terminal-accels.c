@@ -398,12 +398,11 @@ accel_set_func (GtkTreeViewColumn *tree_column,
 }
 
 static void
-accel_edited_callback (GtkCellRendererAccel *cell,
-                       gchar                *path_string,
-                       guint                 keyval,
-                       GdkModifierType       mask,
-                       guint                 hardware_keycode,
-                       GtkTreeView          *view)
+accel_update (GtkTreeView          *view,
+              GtkCellRendererAccel *cell,
+              gchar                *path_string,
+              guint                 keyval,
+              GdkModifierType       mask)
 {
   GtkTreeModel *model;
   terminal_free_tree_path GtkTreePath *path = NULL;
@@ -431,33 +430,22 @@ accel_edited_callback (GtkCellRendererAccel *cell,
 }
 
 static void
+accel_edited_callback (GtkCellRendererAccel *cell,
+                       gchar                *path_string,
+                       guint                 keyval,
+                       GdkModifierType       mask,
+                       guint                 hardware_keycode,
+                       GtkTreeView          *view)
+{
+  accel_update (view, cell, path_string, keyval, mask);
+}
+
+static void
 accel_cleared_callback (GtkCellRendererAccel *cell,
                         gchar                *path_string,
                         GtkTreeView          *view)
 {
-  GtkTreeModel *model;
-  terminal_free_tree_path GtkTreePath *path = NULL;
-  GtkTreeIter iter;
-  KeyEntry *ke;
-  gs_free char *str = NULL;
-
-  model = gtk_tree_view_get_model (view);
-
-  path = gtk_tree_path_new_from_string (path_string);
-  if (!path)
-    return;
-
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    return;
-
-  gtk_tree_model_get (model, &iter, KEYVAL_COLUMN, &ke, -1);
-
-  /* sanity check */
-  if (ke == NULL)
-    return;
-
-  str = binding_name (0, 0);
-  g_settings_set_string (keybinding_settings, ke->settings_key, str);
+  accel_update (view, cell, path_string, 0, 0);
 }
 
 static void
