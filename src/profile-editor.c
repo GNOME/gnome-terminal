@@ -1014,9 +1014,6 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder,
                                            "system-font-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-  g_settings_bind (profile, TERMINAL_PROFILE_TITLE_KEY,
-                   gtk_builder_get_object (builder, "title-entry"), "text",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_UPDATE_RECORDS_KEY,
                    gtk_builder_get_object (builder,
                                            "update-records-checkbutton"),

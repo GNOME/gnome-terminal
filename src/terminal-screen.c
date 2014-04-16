@@ -717,14 +717,11 @@ char *
 terminal_screen_get_description (TerminalScreen *screen)
 {
   TerminalScreenPrivate *priv = screen->priv;
-  gs_free char *title_string = NULL;
   const char *title;
 
   /* use --title argument if one was supplied, otherwise ask the profile */
   if (priv->title)
     title = priv->title;
-  else
-    title = title_string = g_settings_get_string (priv->profile, TERMINAL_PROFILE_TITLE_KEY);
 
   return g_strdup_printf ("%s — %d",
                           title && title[0] ? title : _("Terminal"),
@@ -770,12 +767,6 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
       width = g_settings_get_enum (profile, TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY);
       vte_terminal_set_cjk_ambiguous_width (vte_terminal, (int) width);
-    }
-
-  if (!prop_name ||
-      prop_name == I_(TERMINAL_PROFILE_TITLE_KEY))
-    {
-      g_object_notify (object, "description");
     }
 
   if (gtk_widget_get_realized (GTK_WIDGET (screen)) &&
