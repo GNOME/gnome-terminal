@@ -431,6 +431,14 @@ custom_command_entry_changed_cb (GtkEntry *entry)
 }
 
 static void
+default_size_reset_cb (GtkWidget *button,
+                       GSettings *profile)
+{
+  g_settings_reset (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY);
+  g_settings_reset (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY);
+}
+
+static void
 reset_compat_defaults_cb (GtkWidget *button,
                           GSettings *profile)
 {
@@ -801,6 +809,11 @@ terminal_profile_edit (GSettings  *profile,
   gtk_label_set_text (GTK_LABEL (gtk_builder_get_object (builder, "profile-uuid")),
                       uuid);
 
+  g_signal_connect (gtk_builder_get_object  (builder, "default-size-reset-button"),
+                    "clicked",
+                    G_CALLBACK (default_size_reset_cb),
+                    profile);
+
   w = (GtkWidget *) gtk_builder_get_object  (builder, "color-scheme-combobox");
   init_color_scheme_menu (w);
 
@@ -1022,10 +1035,6 @@ terminal_profile_edit (GSettings  *profile,
                    gtk_builder_get_object (builder,
                                            "use-custom-command-checkbutton"),
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-  g_settings_bind (profile, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
-                   gtk_builder_get_object (builder,
-                                           "use-custom-default-size-checkbutton"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
                    gtk_builder_get_object (builder,
                                            "use-theme-colors-checkbutton"),
@@ -1046,11 +1055,6 @@ terminal_profile_edit (GSettings  *profile,
                    "sensitive",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
-  g_settings_bind (profile,
-                   TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
-                   gtk_builder_get_object (builder, "default-size-hbox"),
-                   "sensitive",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_THEME_COLORS_KEY,
                    gtk_builder_get_object (builder, "colors-box"),

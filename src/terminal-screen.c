@@ -621,12 +621,9 @@ terminal_screen_new (GSettings       *profile,
   priv = screen->priv;
 
   terminal_screen_set_profile (screen, profile);
-
-  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY)) {
-    vte_terminal_set_size (VTE_TERMINAL (screen),
-			   g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),
-			   g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY));
-  }
+  vte_terminal_set_size (VTE_TERMINAL (screen),
+                         g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),
+                         g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY));
 
   priv->initial_working_directory = g_strdup (working_dir);
 

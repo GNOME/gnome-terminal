@@ -88,7 +88,6 @@ enum {
 #define KEY_SILENT_BELL "silent_bell"
 #define KEY_UPDATE_RECORDS "update_records"
 #define KEY_USE_CUSTOM_COMMAND "use_custom_command"
-#define KEY_USE_CUSTOM_DEFAULT_SIZE "use_custom_default_size"
 #define KEY_USE_SYSTEM_FONT "use_system_font"
 #define KEY_USE_THEME_COLORS "use_theme_colors"
 #define KEY_VISIBLE_NAME "visible_name"
@@ -400,9 +399,6 @@ migrate_profile (TerminalSettingsList *list,
   migrate_bool (client, path, KEY_SILENT_BELL,
                 settings, TERMINAL_PROFILE_AUDIBLE_BELL_KEY,
                 TRUE);
-  migrate_bool (client, path, KEY_USE_CUSTOM_DEFAULT_SIZE,
-                settings, TERMINAL_PROFILE_USE_CUSTOM_DEFAULT_SIZE_KEY,
-                FALSE);
   migrate_int (client, path, KEY_DEFAULT_SIZE_COLUMNS,
                settings, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY);
   migrate_int (client, path, KEY_DEFAULT_SIZE_ROWS,
