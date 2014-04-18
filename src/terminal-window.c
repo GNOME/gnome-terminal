@@ -185,6 +185,8 @@ static void terminal_reset_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void terminal_reset_clear_callback     (GtkAction *action,
                                                TerminalWindow *window);
+static void terminal_readonly_toggled_callback(GtkToggleAction *action,
+                                               TerminalWindow *window);
 static void tabs_next_or_previous_tab_cb      (GtkAction *action,
                                                TerminalWindow *window);
 static void tabs_move_left_callback           (GtkAction *action,
@@ -1592,6 +1594,22 @@ terminal_window_update_encoding_menu_active_encoding (TerminalWindow *window)
 }
 
 static void
+terminal_window_update_terminal_menu (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkAction *action;
+
+  if (!priv->active_screen)
+    return;
+
+  action = gtk_action_group_get_action(priv->action_group, "TerminalReadOnly");
+  g_signal_handlers_block_by_func (action, G_CALLBACK (terminal_readonly_toggled_callback), window);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action),
+                                !vte_terminal_get_input_enabled (VTE_TERMINAL (priv->active_screen)));
+  g_signal_handlers_unblock_by_func (action, G_CALLBACK (terminal_readonly_toggled_callback), window);
+}
+
+static void
 terminal_size_to_cb (GtkAction *action,
                      TerminalWindow *window)
 {
@@ -2501,6 +2519,11 @@ terminal_window_init (TerminalWindow *window)
       { "ViewFullscreen", NULL, N_("_Full Screen"), NULL,
         NULL,
         G_CALLBACK (view_fullscreen_toggled_callback),
+        FALSE },
+      /* Terminal menu */
+      { "TerminalReadOnly", NULL, N_("Read-_Only"), NULL,
+        NULL,
+        G_CALLBACK (terminal_readonly_toggled_callback),
         FALSE }
     };
   TerminalWindowPrivate *priv;
@@ -3217,6 +3240,7 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
 
   terminal_window_update_tabs_menu_sensitivity (window);
   terminal_window_update_encoding_menu_active_encoding (window);
+  terminal_window_update_terminal_menu (window);
   terminal_window_update_set_profile_menu_active_profile (window);
   terminal_window_update_copy_sensitivity (screen, window);
   terminal_window_update_zoom_sensitivity (window);
@@ -3687,6 +3711,19 @@ terminal_reset_clear_callback (GtkAction *action,
     return;
       
   vte_terminal_reset (VTE_TERMINAL (priv->active_screen), TRUE, TRUE);
+}
+
+static void
+terminal_readonly_toggled_callback (GtkToggleAction *action,
+                                    TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (priv->active_screen == NULL)
+    return;
+
+  vte_terminal_set_input_enabled(VTE_TERMINAL(priv->active_screen),
+                                 !gtk_toggle_action_get_active (action));
 }
 
 static void
