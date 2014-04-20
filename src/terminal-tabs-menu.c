@@ -176,7 +176,9 @@ sync_tab_title (TerminalScreen *screen,
 
 	title = terminal_screen_get_title (screen);
 
-	g_object_set (action, "label", title, NULL);
+	g_object_set (action,
+		      "label", title && title[0] ? title : _("Terminal"),
+		      NULL);
 }
 
 static void
