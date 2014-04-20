@@ -75,8 +75,9 @@ sync_tab_label (TerminalScreen *screen,
   title = terminal_screen_get_title (screen);
   hbox = gtk_widget_get_parent (label);
 
-  gtk_label_set_text (GTK_LABEL (label), title);
-  
+  gtk_label_set_text (GTK_LABEL (label),
+                      title && title[0] ? title : _("Terminal"));
+
   gtk_widget_set_tooltip_text (hbox, title);
 }
 
