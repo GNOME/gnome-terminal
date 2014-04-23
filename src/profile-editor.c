@@ -64,17 +64,7 @@ static const TerminalColorScheme color_schemes[] = {
   { N_("White on black"),
     { 1, 1, 1, 1 },
     { 0, 0, 0, 1 }
-  },
-  /* Translators: "Solarized" is the name of a colour scheme, "light" can be translated */
-  { N_("Solarized light"),
-    { 0.396078, 0.482352, 0.513725, 1 },
-    { 0.992156, 0.964705, 0.890196, 1 }
-  },
-  /* Translators: "Solarized" is the name of a colour scheme, "dark" can be translated */
-  { N_("Solarized dark"),
-    { 0.513725, 0.580392, 0.588235, 1 },
-    { 0,        0.168627, 0.211764, 1 }
-  },
+  }
 };
 
 #define TERMINAL_PALETTE_SIZE (16)
