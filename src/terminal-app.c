@@ -386,6 +386,13 @@ terminal_app_init (TerminalApp *app)
 
   settings = g_settings_get_child (app->global_settings, "keybindings");
   terminal_accels_init (G_APPLICATION (app), settings);
+
+#if 1
+  /* Legacy gtkuimanager menu accelerator */
+  /* Disallow in-place menu accel changes. Only needed on gtk 3.8,
+   * it's unused and ignored from 3.10 onward. */
+  g_object_set (gtk_settings_get_default (), "gtk-can-change-accels", FALSE, NULL);
+#endif
 }
 
 static void

@@ -77,6 +77,36 @@
 #define KEY_ZOOM_OUT            "zoom-out"
 #define KEY_SWITCH_TAB_PREFIX   "switch-to-tab-"
 
+/* Accel paths for the gtkuimanager based menus */
+#define ACCEL_PATH_ROOT "<Actions>/Main/"
+#define ACCEL_PATH_KEY_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
+#define ACCEL_PATH_KEY_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
+#define ACCEL_PATH_KEY_COPY                 ACCEL_PATH_ROOT "EditCopy"
+#define ACCEL_PATH_KEY_DETACH_TAB           ACCEL_PATH_ROOT "TabsDetach"
+#define ACCEL_PATH_KEY_FIND                 ACCEL_PATH_ROOT "SearchFind"
+#define ACCEL_PATH_KEY_FIND_CLEAR           ACCEL_PATH_ROOT "SearchClearHighlight"
+#define ACCEL_PATH_KEY_FIND_PREV            ACCEL_PATH_ROOT "SearchFindPrevious"
+#define ACCEL_PATH_KEY_FIND_NEXT            ACCEL_PATH_ROOT "SearchFindNext"
+#define ACCEL_PATH_KEY_FULL_SCREEN          ACCEL_PATH_ROOT "ViewFullscreen"
+#define ACCEL_PATH_KEY_HELP                 ACCEL_PATH_ROOT "HelpContents"
+#define ACCEL_PATH_KEY_MOVE_TAB_LEFT        ACCEL_PATH_ROOT "TabsMoveLeft"
+#define ACCEL_PATH_KEY_MOVE_TAB_RIGHT       ACCEL_PATH_ROOT "TabsMoveRight"
+#define ACCEL_PATH_KEY_NEW_PROFILE          ACCEL_PATH_ROOT "FileNewProfile"
+#define ACCEL_PATH_KEY_NEW_TAB              ACCEL_PATH_ROOT "FileNewTab"
+#define ACCEL_PATH_KEY_NEW_WINDOW           ACCEL_PATH_ROOT "FileNewWindow"
+#define ACCEL_PATH_KEY_NEXT_TAB             ACCEL_PATH_ROOT "TabsNext"
+#define ACCEL_PATH_KEY_PASTE                ACCEL_PATH_ROOT "EditPaste"
+#define ACCEL_PATH_KEY_PREV_TAB             ACCEL_PATH_ROOT "TabsPrevious"
+#define ACCEL_PATH_KEY_RESET                ACCEL_PATH_ROOT "TerminalReset"
+#define ACCEL_PATH_KEY_RESET_AND_CLEAR      ACCEL_PATH_ROOT "TerminalResetClear"
+#define ACCEL_PATH_KEY_SAVE_CONTENTS        ACCEL_PATH_ROOT "FileSaveContents"
+#define ACCEL_PATH_KEY_SET_TERMINAL_TITLE   ACCEL_PATH_ROOT "TerminalSetTitle"
+#define ACCEL_PATH_KEY_TOGGLE_MENUBAR       ACCEL_PATH_ROOT "ViewMenubar"
+#define ACCEL_PATH_KEY_ZOOM_IN              ACCEL_PATH_ROOT "ViewZoomIn"
+#define ACCEL_PATH_KEY_ZOOM_NORMAL          ACCEL_PATH_ROOT "ViewZoom100"
+#define ACCEL_PATH_KEY_ZOOM_OUT             ACCEL_PATH_ROOT "ViewZoomOut"
+#define ACCEL_PATH_KEY_SWITCH_TAB_PREFIX    ACCEL_PATH_ROOT "TabsSwitch"
+
 #if 1
 /*
 * We don't want to enable content saving until vte supports it async.
@@ -100,6 +130,10 @@ typedef struct
   const char *action_parameter;
   GVariant *parameter;
   gboolean installed;
+#if 1
+  /* Legacy gtkuimanager menu accelerator */
+  const char *legacy_accel_path;
+#endif
 } KeyEntry;
 
 typedef struct
@@ -109,8 +143,8 @@ typedef struct
   const char *user_visible_name;
 } KeyEntryList;
 
-#define ENTRY(name, key, action, type, parameter)       \
-  { name, key, "win." action, (const GVariantType *) type, parameter, NULL, FALSE }
+#define ENTRY(name, key, action, type, parameter) \
+  { name, key, "win." action, (const GVariantType *) type, parameter, NULL, FALSE, ACCEL_PATH_##key }
 
 static KeyEntry file_entries[] = {
   ENTRY (N_("New Terminal in New Tab"),    KEY_NEW_TAB,       "new-terminal",  "(ss)",  "('tab','current')"   ),
@@ -253,6 +287,19 @@ key_changed_cb (GSettings *settings,
                                      key_entry->parameter);
     key_entry->installed = TRUE;
   }
+
+#if 1
+  /* Legacy gtkuimanager menu accelerator */
+  {
+    GdkModifierType mods = 0;
+    guint key = 0;
+
+    if (!g_str_equal (value, "disabled"))
+      gtk_accelerator_parse (value, &key, &mods);
+
+    gtk_accel_map_change_entry (key_entry->legacy_accel_path, key, mods, TRUE);
+  }
+#endif
 }
 
 void
