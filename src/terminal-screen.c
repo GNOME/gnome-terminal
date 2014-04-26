@@ -1084,8 +1084,6 @@ get_child_environment (TerminalScreen *screen,
   g_hash_table_remove (env_table, "LINES");
   g_hash_table_remove (env_table, "GNOME_DESKTOP_ICON");
  
-  g_hash_table_replace (env_table, g_strdup ("COLORTERM"), g_strdup (EXECUTABLE_NAME));
-  
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_SCREEN (gtk_widget_get_screen (window)))
     {
