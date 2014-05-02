@@ -216,7 +216,7 @@
                   <object class="GtkTable" id="general-table">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="n_rows">8</property>
+                    <property name="n_rows">9</property>
                     <property name="n_columns">4</property>
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
@@ -436,14 +436,15 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="allow-bold-checkbutton">
-                        <property name="label" translatable="yes">_Allow bold text</property>
+                      <object class="GtkLabel" id="text-appearance-heading">
+                        <property name="margin_top">12</property>
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="xalign">0.5</property>
-                        <property name="draw_indicator">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">Text Appearance</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -453,8 +454,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="rewrap-on-resize-checkbutton">
-                        <property name="label" translatable="yes">_Rewrap on resize</property>
+                      <object class="GtkCheckButton" id="allow-bold-checkbutton">
+                        <property name="label" translatable="yes">_Allow bold text</property>
+                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -470,8 +472,9 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="custom-font-checkbutton">
-                        <property name="label" translatable="yes">_Custom font</property>
+                      <object class="GtkCheckButton" id="rewrap-on-resize-checkbutton">
+                        <property name="label" translatable="yes">_Rewrap on resize</property>
+                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -487,6 +490,24 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkCheckButton" id="custom-font-checkbutton">
+                        <property name="label" translatable="yes">_Custom font</property>
+                        <property name="margin_left">12</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="right_attach">1</property>
+                        <property name="top_attach">8</property>
+                        <property name="bottom_attach">9</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkFontButton" id="font-selector">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -499,8 +520,8 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">7</property>
-                        <property name="bottom_attach">8</property>
+                        <property name="top_attach">8</property>
+                        <property name="bottom_attach">9</property>
                       </packing>
                     </child>
                   </object>
