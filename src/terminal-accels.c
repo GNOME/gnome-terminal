@@ -501,7 +501,7 @@ treeview_destroy_cb (GtkWidget *tree_view,
                                         tree_view);
 }
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
 static void
 row_changed (GtkTreeModel *tree_model,
              GtkTreePath  *path,
@@ -550,7 +550,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
 
   tree = gtk_tree_store_new (N_COLUMNS, G_TYPE_STRING, G_TYPE_POINTER);
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_ACCELS)
     g_signal_connect (tree, "row-changed", G_CALLBACK (row_changed), NULL);
 #endif

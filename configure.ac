@@ -31,8 +31,6 @@ AC_HEADER_STDC
 AM_PROG_LIBTOOL
 IT_PROG_INTLTOOL([0.50.0])
 
-GNOME_DEBUG_CHECK
-
 AM_GLIB_GNU_GETTEXT
 
 GLIB_REQUIRED=2.40.0
@@ -293,6 +291,20 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -Wno-deprecated-declarations \
 ])
 
+# *********
+# Debugging
+# *********
+
+AC_MSG_CHECKING([whether to enable special debug support])
+AC_ARG_ENABLE([debug],
+        [AS_HELP_STRING([--enable-debug],[Enable special debug support])],
+        [],[enable_debug=no])
+AC_MSG_RESULT([$enable_debug])
+
+if test "$enable_debug" = "yes"; then
+   AC_DEFINE([ENABLE_DEBUG],[1],[Define to 1 to enable special debug support])
+fi
+
 # *************
 # Documentation
 # *************
@@ -331,6 +343,7 @@ gnome-terminal-$VERSION:
       compiler:               ${CC}
       DBus interface dir:     ${dbusinterfacedir}
       DBus service dir:       ${dbusservicedir}
+      Debug:                  ${enable_debug}
       Prefs migration:        ${enable_migration}
       Search provider:        ${enable_search_provider}
       Nautilus extension:     ${with_nautilus_extension}

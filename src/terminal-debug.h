@@ -17,8 +17,8 @@
 
 /* The interfaces in this file are subject to change at any time. */
 
-#ifndef GNOME_ENABLE_DEBUG_H
-#define GNOME_ENABLE_DEBUG_H
+#ifndef ENABLE_DEBUG_H
+#define ENABLE_DEBUG_H
 
 #include <glib.h>
 
@@ -48,7 +48,7 @@ _terminal_debug_on (TerminalDebugFlags flags)
   return (_terminal_debug_flags & flags) == flags;
 }
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
 #define _TERMINAL_DEBUG_IF(flags) if (G_UNLIKELY (_terminal_debug_on (flags)))
 #else
 #define _TERMINAL_DEBUG_IF(flags) if (0)
@@ -73,4 +73,4 @@ static void _terminal_debug_print (guint flags, const char *fmt, ...)
 
 G_END_DECLS
 
-#endif /* !GNOME_ENABLE_DEBUG_H */
+#endif /* !ENABLE_DEBUG_H */

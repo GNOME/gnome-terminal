@@ -26,7 +26,7 @@ TerminalDebugFlags _terminal_debug_flags;
 void
 _terminal_debug_init(void)
 {
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
   const GDebugKey keys[] = {
     { "accels",        TERMINAL_DEBUG_ACCELS        },
     { "encodings",     TERMINAL_DEBUG_ENCODINGS     },
@@ -42,6 +42,6 @@ _terminal_debug_init(void)
 
   _terminal_debug_flags = g_parse_debug_string (g_getenv ("GNOME_TERMINAL_DEBUG"),
                                                 keys, G_N_ELEMENTS (keys));
-#endif /* GNOME_ENABLE_DEBUG */
+#endif /* ENABLE_DEBUG */
 }
 

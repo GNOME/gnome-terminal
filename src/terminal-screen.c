@@ -262,7 +262,7 @@ terminal_screen_update_style (TerminalScreen *screen)
   terminal_screen_set_font (screen);
 }
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
 static void
 size_request (GtkWidget *widget,
               GtkRequisition *req)
@@ -353,7 +353,7 @@ terminal_screen_init (TerminalScreen *screen)
   g_signal_connect (terminal_app_get_desktop_interface_settings (app), "changed::" MONOSPACE_FONT_KEY_NAME,
                     G_CALLBACK (terminal_screen_system_font_changed_cb), screen);
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
     {
       g_signal_connect_after (screen, "size-request", G_CALLBACK (size_request), NULL);

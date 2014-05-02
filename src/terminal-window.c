@@ -2135,7 +2135,7 @@ terminal_window_accel_activate_cb (GtkAccelGroup  *accel_group,
 
 /*****************************************/
 
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
 static void
 terminal_window_size_request_cb (GtkWidget *widget,
                                  GtkRequisition *req)
@@ -2155,7 +2155,7 @@ terminal_window_size_allocate_cb (GtkWidget *widget,
                          allocation->width, allocation->height,
                          allocation->x, allocation->y);
 }
-#endif /* GNOME_ENABLE_DEBUG */
+#endif /* ENABLE_DEBUG */
 
 static void
 terminal_window_realize (GtkWidget *widget)
@@ -2551,7 +2551,7 @@ terminal_window_init (TerminalWindow *window)
   g_signal_connect (G_OBJECT (window), "delete_event",
                     G_CALLBACK(terminal_window_delete_event),
                     NULL);
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
   _TERMINAL_DEBUG_IF (TERMINAL_DEBUG_GEOMETRY)
     {
       g_signal_connect_after (window, "size-request", G_CALLBACK (terminal_window_size_request_cb), NULL);
@@ -2847,7 +2847,7 @@ terminal_window_new (GApplication *app)
 {
   return g_object_new (TERMINAL_TYPE_WINDOW,
                        "application", app,
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
                        "show-menubar", _terminal_debug_on (TERMINAL_DEBUG_APPMENU),
 #else
                        "show-menubar", FALSE,

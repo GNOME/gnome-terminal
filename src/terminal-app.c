@@ -109,7 +109,7 @@ maybe_migrate_settings (TerminalApp *app)
 #ifdef ENABLE_MIGRATION
   const char * const argv[] = { 
     TERM_LIBEXECDIR "/gnome-terminal-migration",
-#ifdef GNOME_ENABLE_DEBUG
+#ifdef ENABLE_DEBUG
     "--verbose", 
 #endif
     NULL 
