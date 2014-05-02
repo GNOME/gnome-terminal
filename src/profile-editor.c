@@ -1035,8 +1035,10 @@ terminal_profile_edit (GSettings  *profile,
                    "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
                    gtk_builder_get_object (builder,
-                                           "system-font-checkbutton"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+                                           "custom-font-checkbutton"),
+                   "active",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET |
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (profile, TERMINAL_PROFILE_UPDATE_RECORDS_KEY,
                    gtk_builder_get_object (builder,
                                            "update-records-checkbutton"),
@@ -1061,7 +1063,7 @@ terminal_profile_edit (GSettings  *profile,
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
   g_settings_bind (profile,
                    TERMINAL_PROFILE_USE_SYSTEM_FONT_KEY,
-                   gtk_builder_get_object (builder, "font-hbox"),
+                   gtk_builder_get_object (builder, "font-selector"),
                    "sensitive",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_INVERT_BOOLEAN |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
