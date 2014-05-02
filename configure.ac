@@ -251,9 +251,7 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -Wcast-align \
   -Wendif-labels \
   -Werror=declaration-after-statement \
-  -Werror=format=2 \
-  -Werror=format-nonliteral \
-  -Werror=format-security \
+  "-Werror=format=2 -Werror=format-nonliteral -Werror=format-security" \
   -Werror=implicit-function-declaration \
   -Werror=init-self \
   -Werror=missing-include-dirs \
@@ -261,7 +259,6 @@ CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
   -Werror=pointer-arith \
   -Wextra \
   -Wfloat-equal \
-  -Wformat-nonliteral \
   -Wimplicit \
   -Wlogical-op \
   -Wmissing-declarations \
