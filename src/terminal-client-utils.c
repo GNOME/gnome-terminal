@@ -99,6 +99,8 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
 void 
 terminal_client_append_exec_options (GVariantBuilder *builder,
                                      const char      *working_directory,
+                                     PassFdElement   *fd_array,
+                                     gsize            fd_array_len,
                                      gboolean         shell)
 {
   gs_strfreev char **envv;
@@ -121,21 +123,39 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
                          g_variant_new_bytestring_array ((const char * const *) envv, -1));
 
   if (working_directory)
-    g_variant_builder_add (builder, "{sv}", 
+    g_variant_builder_add (builder, "{sv}",
                            "cwd", g_variant_new_bytestring (working_directory));
 
   if (shell)
     g_variant_builder_add (builder, "{sv}",
                            "shell",
                            g_variant_new_boolean (TRUE));
+
+  if (fd_array_len) {
+    gsize i;
+
+    g_variant_builder_open (builder, G_VARIANT_TYPE ("{sv}"));
+    g_variant_builder_add (builder, "s", "fd-set");
+
+    g_variant_builder_open (builder, G_VARIANT_TYPE ("v"));
+    g_variant_builder_open (builder, G_VARIANT_TYPE ("a(ih)"));
+    for (i = 0; i < fd_array_len; i++) {
+      g_variant_builder_add (builder, "(ih)", fd_array[i].fd, fd_array[i].index);
+    }
+    g_variant_builder_close (builder); /* a(ih) */
+    g_variant_builder_close (builder); /* v */
+
+    g_variant_builder_close (builder); /* {sv} */
+  }
 }
 
 /**
  * terminal_client_get_fallback_startup_id:
- * @startup_id: (inout):
+ *
+ * Returns: a fallback startup ID, or %NULL
  */
-void 
-terminal_client_get_fallback_startup_id  (char **startup_id)
+char *
+terminal_client_get_fallback_startup_id  (void)
 {
 #if defined(TERMINAL_COMPILATION) && defined(GDK_WINDOWING_X11)
   GdkDisplay *display;
@@ -188,13 +208,8 @@ terminal_client_get_fallback_startup_id  (char **startup_id)
 
   XDestroyWindow(xdisplay, xwindow);
 
-  if (startup_id)
-    *startup_id = g_strdup_printf ("_TIME%lu", event.xproperty.time);
-
-  return;
-
+  return g_strdup_printf ("_TIME%lu", event.xproperty.time);
 out:
 #endif
-  if (startup_id)
-    *startup_id = NULL;
+  return NULL;
 }

@@ -1295,7 +1295,7 @@ terminal_window_update_set_profile_menu (TerminalWindow *window)
     }
 
   profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
-  profiles = terminal_profiles_list_ref_children (profiles_list);
+  profiles = terminal_profiles_list_ref_children_sorted (profiles_list);
 
   action = gtk_action_group_get_action (priv->action_group, "TerminalProfiles");
   single_profile = !profiles || profiles->next == NULL; /* list length <= 1 */
@@ -1413,7 +1413,7 @@ terminal_window_update_new_terminal_menus (TerminalWindow *window)
     }
 
   profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
-  profiles = terminal_profiles_list_ref_children (profiles_list);
+  profiles = terminal_profiles_list_ref_children_sorted (profiles_list);
 
   have_single_profile = !profiles || !profiles->next;
 

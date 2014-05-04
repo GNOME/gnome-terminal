@@ -424,6 +424,7 @@ create_terminal (ExecData *data /* transfer full */)
 
   terminal_client_append_exec_options (&builder,
                                        data->path,
+                                       NULL, 0, /* FD array */
                                        TRUE /* shell */);
 
   if (data->info == FILE_INFO_SFTP &&

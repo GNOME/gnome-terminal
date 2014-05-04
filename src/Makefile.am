@@ -4,7 +4,7 @@ BUILT_SOURCES =
 
 bin_PROGRAMS = gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
-noinst_PROGRAMS = gnome-terminal-client
+noinst_PROGRAMS =
 
 if WITH_NAUTILUS_EXTENSION
 nautilusextension_LTLIBRARIES = libterminal-nautilus.la
@@ -91,6 +91,7 @@ gnome_terminal_server_CPPFLAGS = \
 
 gnome_terminal_server_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
 gnome_terminal_server_LDFLAGS = \
@@ -150,47 +151,64 @@ terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(she
 
 # Terminal client
 
-gnome_terminal_client_SOURCES = \
-	client.c \
+if WITH_VALA
+
+noinst_PROGRAMS += gterminal
+
+gterminal_SOURCES = \
+	gterminal.vala \
+	client.vapi \
+	config.vapi \
+	profiles.vapi \
 	terminal-client-utils.c \
 	terminal-client-utils.h \
 	terminal-debug.c \
 	terminal-debug.h \
-	terminal-defines.h \
-	terminal-i18n.c \
-	terminal-i18n.h \
-	terminal-libgsystem.h \
 	terminal-profiles-list.c \
 	terminal-profiles-list.h \
-	terminal-schemas.h \
 	terminal-settings-list.c \
 	terminal-settings-list.h \
 	$(NULL)
 
-nodist_gnome_terminal_client_SOURCES = \
-	terminal-gdbus-generated.c \
-	terminal-gdbus-generated.h \
+nodist_gterminal_SOURCES = \
 	terminal-type-builtins.c \
 	terminal-type-builtins.h \
 	$(NULL)
 
-gnome_terminal_client_CPPFLAGS = \
+gterminal_VALAFLAGS = \
+	--vapidir . \
+	--pkg glib-2.0 \
+	--pkg gio-2.0 \
+	--pkg gio-unix-2.0 \
+	--pkg posix \
+	--pkg gtk+-$(GTK_API_VERSION) \
+	$(GTERMINAL_VALAFLAGS) \
+	$(AM_VALAFLAGS)
+gterminal_CPPFLAGS = \
+	-I$(top_builddir) \
 	-DTERMINAL_COMPILATION \
 	-DTERMINAL_CLIENT \
-	-DTERM_DATADIR="\"$(datadir)\"" \
-	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
-	-DTERM_PKGDATADIR="\"$(pkgdatadir)\"" \
+	-DLOCALEDIR="\"$(datadir)/locale\"" \
 	$(AM_CPPFLAGS)
-
-gnome_terminal_client_CFLAGS = \
-	$(TERM_CFLAGS) \
-	$(AM_CFLAGS)
-
-gnome_terminal_client_LDFLAGS = \
+# See bug #710862 about -Wsuggest-attribute=format
+gterminal_CFLAGS = \
+	$(GTERMINAL_CFLAGS) \
+	$(AM_CFLAGS) \
+	$(WARN_CFLAGS) \
+	-Wno-cast-qual \
+	-Wno-suggest-attribute=format \
+	-Wno-unused-but-set-variable \
+	-Wno-unused-function \
+	-Wno-unused-variable \
+	-Wno-write-strings \
+	$(NULL)
+gterminal_LDFLAGS = \
 	$(AM_LDFLAGS)
+gterminal_LDADD = \
+	$(GTERMINAL_LIBS) \
+	$(NULL)
 
-gnome_terminal_client_LDADD = \
-	$(TERM_LIBS)
+endif # WITH_VALA
 
 # Legacy terminal client
 
@@ -230,6 +248,7 @@ gnome_terminal_CPPFLAGS = \
 
 gnome_terminal_CFLAGS = \
 	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
 gnome_terminal_LDFLAGS = \
@@ -263,6 +282,7 @@ libterminal_nautilus_la_CPPFLAGS = \
 
 libterminal_nautilus_la_CFLAGS = \
 	$(NAUTILUS_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
 libterminal_nautilus_la_LDFLAGS = \
@@ -299,6 +319,7 @@ gnome_terminal_migration_CPPFLAGS = \
 	$(AM_CPPFLAGS)
 gnome_terminal_migration_CFLAGS = \
 	$(MIGRATOR_CFLAGS) \
+	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 gnome_terminal_migration_LDFLAGS = \
 	$(AM_LDFLAGS)

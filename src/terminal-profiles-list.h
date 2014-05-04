@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 TerminalSettingsList *terminal_profiles_list_new (void);
 
-GList *terminal_profiles_list_ref_children (TerminalSettingsList *list);
+GList *terminal_profiles_list_ref_children_sorted (TerminalSettingsList *list);
 
 char *terminal_profiles_list_dup_uuid (TerminalSettingsList *list,
                                        const char *uuid,

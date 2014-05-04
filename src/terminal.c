@@ -178,6 +178,7 @@ handle_options (TerminalFactory *factory,
           terminal_client_append_exec_options (&builder,
                                                it->working_dir ? it->working_dir 
                                                                : options->default_working_dir,
+                                               NULL, 0, /* FD array */
                                                argc == 0);
 
           if (!terminal_receiver_call_exec_sync (receiver,
@@ -243,7 +244,7 @@ main (int argc, char **argv)
 
   /* Do this here so that gdk_display is initialized */
   if (options->startup_id == NULL)
-    terminal_client_get_fallback_startup_id (&options->startup_id);
+    options->startup_id = terminal_client_get_fallback_startup_id ();
 
   display = gdk_display_get_default ();
   display_name = gdk_display_get_name (display);

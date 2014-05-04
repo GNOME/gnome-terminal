@@ -100,13 +100,13 @@ get_profile_names (TerminalSettingsList *list,
 }
 
 /**
- * terminal_profiles_list_get_children:
+ * terminal_profiles_list_ref_children_sorted:
  * @list:
  *
  * Returns: (transfer full):
  */
 GList *
-terminal_profiles_list_ref_children (TerminalSettingsList *list)
+terminal_profiles_list_ref_children_sorted (TerminalSettingsList *list)
 {
   return g_list_sort (terminal_settings_list_ref_children (list),
                       terminal_profiles_compare);

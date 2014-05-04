@@ -19,11 +19,9 @@
 #define TERMINAL_CLIENT_UTILS_H
 
 #include <gio/gio.h>
+#include <gio/gunixfdlist.h>
 
 G_BEGIN_DECLS
-
-char *terminal_client_get_profile (const char *name_or_id,
-                                   GError **error);
 
 void terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                      const char      *display_name,
@@ -35,11 +33,18 @@ void terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                      gboolean         maximise_window,
                                                      gboolean         fullscreen_window);
 
+typedef struct {
+  int index;
+  int fd;
+} PassFdElement;
+
 void terminal_client_append_exec_options            (GVariantBuilder *builder,
                                                      const char      *working_directory,
+                                                     PassFdElement   *fd_array,
+                                                     gsize            fd_array_len,
                                                      gboolean         shell);
 
-void terminal_client_get_fallback_startup_id        (char           **startup_id);
+char * terminal_client_get_fallback_startup_id      (void);
 
 G_END_DECLS
 

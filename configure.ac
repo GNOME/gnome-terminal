@@ -79,6 +79,31 @@ PKG_CHECK_MODULES([TERM],
    $PLATFORM_DEPS])
 
 # ****
+# Vala
+# ****
+
+AC_MSG_CHECKING([whether vala is requested])
+AC_ARG_WITH([vala],[AS_HELP_STRING([--without-vala],[Disable vala programmes])],
+  [],[with_vala=yes])
+AC_MSG_RESULT([$with_vala])
+
+if test "$with_vala" = "yes"; then
+  AM_PROG_VALAC([0.24])
+
+  VALA_CHECK_PACKAGES([glib-2.0 gio-2.0 gio-unix-2.0 linux posix])
+  PKG_CHECK_MODULES([GTERMINAL],
+    [glib-2.0 >= $GLIB_REQUIRED
+     gio-2.0 >= $GIO_REQUIRED
+     gio-unix-2.0 >= $GIO_REQUIRED
+     gtk+-$GTK_API_VERSION >= $GTK_REQUIRED
+     dconf >= $DCONF_REQUIRED
+     uuid
+     $PLATFORM_DEPS])
+fi
+
+AM_CONDITIONAL([WITH_VALA],[test "$with_vala" = "yes"])
+
+# ****
 # DBus
 # ****
 
@@ -244,7 +269,8 @@ fi
 # Compilation
 # ***********
 
-CC_CHECK_FLAGS_APPEND([AM_CFLAGS],[CFLAGS],[ \
+WARN_CFLAGS=
+CC_CHECK_FLAGS_APPEND([WARN_CFLAGS],[CFLAGS],[ \
   -pipe \
   -Waggregate-return \
   -Wall \
@@ -314,6 +340,8 @@ AC_SUBST([TERMINAL_MAJOR_VERSION],[gt_version_major])
 AC_SUBST([TERMINAL_MINOR_VERSION],[gt_version_minor])
 AC_SUBST([TERMINAL_MICRO_VERSION],[gt_version_micro])
 AC_SUBST([TERMINAL_API_VERSION],[gt_api_version])
+AC_SUBST([GTK_API_VERSION])
+AC_SUBST([WARN_CFLAGS])
 AC_SUBST([AM_CPPFLAGS])
 AC_SUBST([AM_CFLAGS])
 AC_SUBST([AM_LDFLAGS])
@@ -338,6 +366,7 @@ gnome-terminal-$VERSION:
       prefix:                 ${prefix}
       source code location:   ${srcdir}
       compiler:               ${CC}
+      Vala:                   ${with_vala}
       DBus interface dir:     ${dbusinterfacedir}
       DBus service dir:       ${dbusservicedir}
       Debug:                  ${enable_debug}
