@@ -2004,6 +2004,26 @@ terminal_window_realize (GtkWidget *widget)
 }
 
 static gboolean
+terminal_window_draw (GtkWidget *widget,
+                      cairo_t   *cr)
+{
+  if (gtk_widget_get_app_paintable (widget))
+    {
+      GtkStyleContext *context;
+      int width;
+      int height;
+
+      context = gtk_widget_get_style_context (widget);
+      width = gtk_widget_get_allocated_width (widget);
+      height = gtk_widget_get_allocated_height (widget);
+      gtk_render_background (context, cr, 0, 0, width, height);
+      gtk_render_frame (context, cr, 0, 0, width, height);
+    }
+
+  return GTK_WIDGET_CLASS (terminal_window_parent_class)->draw (widget, cr);
+}
+
+static gboolean
 terminal_window_state_event (GtkWidget            *widget,
                              GdkEventWindowState  *event)
 {
@@ -2173,6 +2193,8 @@ terminal_window_init (TerminalWindow *window)
   };
   TerminalWindowPrivate *priv;
   TerminalApp *app;
+  GdkScreen *screen;
+  GdkVisual *visual;
   GSettings *gtk_debug_settings;
   GtkWindowGroup *window_group;
   //  GtkAccelGroup *accel_group;
@@ -2187,6 +2209,11 @@ terminal_window_init (TerminalWindow *window)
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
   gtk_widget_init_template (GTK_WIDGET (window));
+
+  screen = gtk_widget_get_screen (GTK_WIDGET (window));
+  visual = gdk_screen_get_rgba_visual (screen);
+  if (visual != NULL)
+    gtk_widget_set_visual (GTK_WIDGET (window), visual);
 
   uuid_generate (u);
   uuid_unparse (u, uuidstr);
@@ -2361,6 +2388,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
   widget_class->show = terminal_window_show;
   widget_class->realize = terminal_window_realize;
+  widget_class->draw = terminal_window_draw;
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
   widget_class->style_updated = terminal_window_style_updated;

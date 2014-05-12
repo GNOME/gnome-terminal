@@ -672,6 +672,14 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
+  gtk_widget_class_install_style_property (widget_class,
+     g_param_spec_float ("background-darkness", NULL, NULL, -1, 1, -1,
+                         GParamFlags(G_PARAM_READABLE |
+				     G_PARAM_STATIC_NAME |
+				     G_PARAM_STATIC_NICK |
+				     G_PARAM_STATIC_BLURB)));
+
+
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
   n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
@@ -1066,7 +1074,10 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY) ||
-      prop_name == I_(TERMINAL_PROFILE_PALETTE_KEY))
+      prop_name == I_(TERMINAL_PROFILE_PALETTE_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_USE_TRANSPARENT_BACKGROUND) ||
+      prop_name == I_(TERMINAL_PROFILE_BACKGROUND_TRANSPARENCY_PERCENT) ||
+      prop_name == I_(TERMINAL_PROFILE_USE_THEME_TRANSPARENCY))
     update_color_scheme (screen);
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_AUDIBLE_BELL_KEY))
@@ -1152,6 +1163,9 @@ update_color_scheme (TerminalScreen *screen)
   GdkRGBA *highlight_bgp = nullptr, *highlight_fgp = nullptr;
   GtkStyleContext *context;
   gboolean use_theme_colors;
+  GtkWidget *toplevel;
+  gboolean transparent, theme_transparent;
+  gfloat style_darkness;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &theme_fg);
@@ -1194,6 +1208,31 @@ update_color_scheme (TerminalScreen *screen)
     }
 
   colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
+  theme_transparent = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_TRANSPARENCY);
+  transparent = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_TRANSPARENT_BACKGROUND);
+
+  gtk_widget_style_get (GTK_WIDGET (screen),
+                        "background-darkness", &style_darkness,
+                        NULL);
+
+  if (theme_transparent && style_darkness >= 0)
+    {
+      bg.alpha = style_darkness;
+    }
+  else if (transparent)
+    {
+      gint transparency_percent;
+
+      transparency_percent = g_settings_get_int (profile, TERMINAL_PROFILE_BACKGROUND_TRANSPARENCY_PERCENT);
+      bg.alpha = (100 - transparency_percent) / 100.0;
+    }
+  else
+      bg.alpha = 1.0;
+
+  /* If this gets out of range, let's not crash */
+  if (bg.alpha < 0.0 || bg.alpha > 1.0)
+      bg.alpha = 1.0;
+
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
   vte_terminal_set_color_bold (VTE_TERMINAL (screen), boldp);
@@ -1201,6 +1240,10 @@ update_color_scheme (TerminalScreen *screen)
   vte_terminal_set_color_cursor_foreground (VTE_TERMINAL (screen), cursor_fgp);
   vte_terminal_set_color_highlight (VTE_TERMINAL (screen), highlight_bgp);
   vte_terminal_set_color_highlight_foreground (VTE_TERMINAL (screen), highlight_fgp);
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
+  if (toplevel != NULL && gtk_widget_is_toplevel (toplevel))
+    gtk_widget_set_app_paintable (toplevel, transparent);
 }
 
 static void
