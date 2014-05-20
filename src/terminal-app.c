@@ -632,6 +632,23 @@ terminal_app_get_encodings (TerminalApp *app)
   return app->encodings;
 }
 
+static const char *
+charset_validated (const char *charset)
+{
+  gsize i;
+
+  if (charset == NULL)
+    return "current"; 
+
+  for (i = 0; charset[i] != '\0'; i++) {
+    char c = charset[i];
+    if (!(g_ascii_isalnum(c) || c == '_' || c == '-'))
+      return "UTF-8";
+  }
+
+  return charset;
+}
+
 /**
  * terminal_app_ensure_encoding:
  * @app:
@@ -642,7 +659,7 @@ terminal_app_get_encodings (TerminalApp *app)
  * @charset is not a known charset, returns a #TerminalEncoding for a
  * custom charset.
  *
- * Returns: (transfer none): a #TerminalEncoding
+ * Returns: (transfer none): a #TerminalEncoding, or %NULL
  */
 TerminalEncoding *
 terminal_app_ensure_encoding (TerminalApp *app,
@@ -650,7 +667,11 @@ terminal_app_ensure_encoding (TerminalApp *app,
 {
   TerminalEncoding *encoding;
 
+<<<<<<< HEAD
   encoding = g_hash_table_lookup (app->encodings, charset ? charset : "current");
+=======
+  encoding = g_hash_table_lookup (app->encodings, charset_validated (charset));
+>>>>>>> b0bdd47... app: Only allow valid charsets
   if (encoding == NULL)
     {
       encoding = terminal_encoding_new (charset,
