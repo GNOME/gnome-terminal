@@ -139,7 +139,7 @@ terminal_encoding_new (const char *charset,
 
   encoding = g_slice_new (TerminalEncoding);
   encoding->refcount = 1;
-  encoding->charset = g_intern_static_string (charset);
+  encoding->charset = g_intern_string (charset);
   encoding->name = g_strdup (display_name);
   encoding->valid = encoding->validity_checked = force_valid || g_str_equal (charset, "UTF-8");
   encoding->is_custom = is_custom;
