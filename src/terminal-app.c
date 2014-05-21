@@ -235,7 +235,12 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
   encoding->is_active = TRUE;
 
   g_settings_get (settings, key, "^as", &encodings);
-  for (i = 0; encodings[i] != NULL; ++i) {
+  for (i = 0; encodings[i] != NULL; ++i)
+    {
+      /* Pre-3.13, not supported anymore */
+      if (g_str_equal (encodings[i], "current"))
+        continue;
+
       encoding = terminal_app_ensure_encoding (app, encodings[i]);
       if (!terminal_encoding_is_valid (encoding))
         continue;
