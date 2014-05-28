@@ -82,12 +82,12 @@ PKG_CHECK_MODULES([TERM],
 # Vala
 # ****
 
-AC_MSG_CHECKING([whether vala is requested])
-AC_ARG_WITH([vala],[AS_HELP_STRING([--without-vala],[Disable vala programmes])],
-  [],[with_vala=yes])
-AC_MSG_RESULT([$with_vala])
+AC_MSG_CHECKING([whether gterminal is requested])
+AC_ARG_ENABLE([gterminal],[AS_HELP_STRING([--disable-gterminal],[Disable gterminal])],
+  [],[enable_gterminal=yes])
+AC_MSG_RESULT([$enable_gterminal])
 
-if test "$with_vala" = "yes"; then
+AS_IF([test "$enable_gterminal" = "yes"],[
   AM_PROG_VALAC([0.24])
 
   VALA_CHECK_PACKAGES([glib-2.0 gio-2.0 gio-unix-2.0 linux posix])
@@ -99,9 +99,9 @@ if test "$with_vala" = "yes"; then
      dconf >= $DCONF_REQUIRED
      uuid
      $PLATFORM_DEPS])
-fi
+])
 
-AM_CONDITIONAL([WITH_VALA],[test "$with_vala" = "yes"])
+AM_CONDITIONAL([ENABLE_GTERMINAL],[test "$enable_gterminal" = "yes"])
 
 # ****
 # DBus
@@ -366,7 +366,7 @@ gnome-terminal-$VERSION:
       prefix:                 ${prefix}
       source code location:   ${srcdir}
       compiler:               ${CC}
-      Vala:                   ${with_vala}
+      gterminal:              ${enable_gterminal}
       DBus interface dir:     ${dbusinterfacedir}
       DBus service dir:       ${dbusservicedir}
       Debug:                  ${enable_debug}

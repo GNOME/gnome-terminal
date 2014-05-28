@@ -151,7 +151,7 @@ terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(she
 
 # Terminal client
 
-if WITH_VALA
+if ENABLE_GTERMINAL
 
 noinst_PROGRAMS += gterminal
 
@@ -184,6 +184,7 @@ gterminal_VALAFLAGS = \
 	--pkg gtk+-$(GTK_API_VERSION) \
 	$(GTERMINAL_VALAFLAGS) \
 	$(AM_VALAFLAGS)
+
 gterminal_CPPFLAGS = \
 	-I$(top_builddir) \
 	-DTERMINAL_COMPILATION \
@@ -208,7 +209,7 @@ gterminal_LDADD = \
 	$(GTERMINAL_LIBS) \
 	$(NULL)
 
-endif # WITH_VALA
+endif # ENABLE_GTERMINAL
 
 # Legacy terminal client
 
