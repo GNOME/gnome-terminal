@@ -176,12 +176,12 @@ nodist_gterminal_SOURCES = \
 	$(NULL)
 
 gterminal_VALAFLAGS = \
-	--vapidir . \
-	--pkg glib-2.0 \
-	--pkg gio-2.0 \
-	--pkg gio-unix-2.0 \
-	--pkg posix \
-	--pkg gtk+-$(GTK_API_VERSION) \
+	--vapidir=. \
+	--pkg=glib-2.0 \
+	--pkg=gio-2.0 \
+	--pkg=gio-unix-2.0 \
+	--pkg=posix \
+	--pkg=gtk+-$(GTK_API_VERSION) \
 	$(GTERMINAL_VALAFLAGS) \
 	$(AM_VALAFLAGS)
 
