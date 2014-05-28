@@ -149,67 +149,6 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
 	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
 
-# Terminal client
-
-if WITH_VALA
-
-noinst_PROGRAMS += gterminal
-
-gterminal_SOURCES = \
-	gterminal.vala \
-	client.vapi \
-	config.vapi \
-	profiles.vapi \
-	terminal-client-utils.c \
-	terminal-client-utils.h \
-	terminal-debug.c \
-	terminal-debug.h \
-	terminal-profiles-list.c \
-	terminal-profiles-list.h \
-	terminal-settings-list.c \
-	terminal-settings-list.h \
-	$(NULL)
-
-nodist_gterminal_SOURCES = \
-	terminal-type-builtins.c \
-	terminal-type-builtins.h \
-	$(NULL)
-
-gterminal_VALAFLAGS = \
-	--vapidir . \
-	--pkg glib-2.0 \
-	--pkg gio-2.0 \
-	--pkg gio-unix-2.0 \
-	--pkg posix \
-	--pkg gtk+-$(GTK_API_VERSION) \
-	$(GTERMINAL_VALAFLAGS) \
-	$(AM_VALAFLAGS)
-gterminal_CPPFLAGS = \
-	-I$(top_builddir) \
-	-DTERMINAL_COMPILATION \
-	-DTERMINAL_CLIENT \
-	-DLOCALEDIR="\"$(datadir)/locale\"" \
-	$(AM_CPPFLAGS)
-# See bug #710862 about -Wsuggest-attribute=format
-gterminal_CFLAGS = \
-	$(GTERMINAL_CFLAGS) \
-	$(AM_CFLAGS) \
-	$(WARN_CFLAGS) \
-	-Wno-cast-qual \
-	-Wno-suggest-attribute=format \
-	-Wno-unused-but-set-variable \
-	-Wno-unused-function \
-	-Wno-unused-variable \
-	-Wno-write-strings \
-	$(NULL)
-gterminal_LDFLAGS = \
-	$(AM_LDFLAGS)
-gterminal_LDADD = \
-	$(GTERMINAL_LIBS) \
-	$(NULL)
-
-endif # WITH_VALA
-
 # Legacy terminal client
 
 gnome_terminal_SOURCES = \
