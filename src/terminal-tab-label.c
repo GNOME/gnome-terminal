@@ -212,11 +212,8 @@ terminal_tab_label_constructor (GType type,
 static void
 terminal_tab_label_finalize (GObject *object)
 {
-  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
+//   TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
 
-  g_signal_handlers_disconnect_by_func (tab_label->priv->screen,
-                                        G_CALLBACK (sync_tab_label),
-                                        tab_label->priv->label);
   G_OBJECT_CLASS (terminal_tab_label_parent_class)->finalize (object);
 }
 
