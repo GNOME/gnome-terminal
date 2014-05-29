@@ -3342,6 +3342,7 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
                      TerminalWindow  *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  int pages;
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: screen %p inserted\n",
@@ -3398,6 +3399,12 @@ mdi_screen_added_cb (TerminalMdiContainer *container,
     {
       gtk_window_present_with_time (GTK_WINDOW (window), gtk_get_current_event_time ());
       priv->present_on_insert = FALSE;
+    }
+
+  pages = terminal_mdi_container_get_n_screens (container);
+  if (pages == 2)
+    {
+      terminal_window_update_size (window);
     }
 }
 
