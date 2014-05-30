@@ -210,6 +210,23 @@ terminal_tab_label_constructor (GType type,
 }
 
 static void
+terminal_tab_label_dispose (GObject *object)
+{
+  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
+  TerminalTabLabelPrivate *priv = tab_label->priv;
+
+  if (priv->screen != NULL) {
+    g_signal_handlers_disconnect_by_func (priv->screen,
+                                          G_CALLBACK (sync_tab_label),
+                                          priv->label);
+    g_object_unref (priv->screen);
+    priv->screen = NULL;
+  }
+
+  G_OBJECT_CLASS (terminal_tab_label_parent_class)->dispose (object);
+}
+
+static void
 terminal_tab_label_finalize (GObject *object)
 {
 //   TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
@@ -246,7 +263,7 @@ terminal_tab_label_set_property (GObject *object,
 
   switch (prop_id) {
     case PROP_SCREEN:
-      priv->screen = g_value_get_object (value);
+      priv->screen = g_value_dup_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -261,6 +278,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->constructor = terminal_tab_label_constructor;
+  gobject_class->dispose = terminal_tab_label_dispose;
   gobject_class->finalize = terminal_tab_label_finalize;
   gobject_class->get_property = terminal_tab_label_get_property;
   gobject_class->set_property = terminal_tab_label_set_property;
