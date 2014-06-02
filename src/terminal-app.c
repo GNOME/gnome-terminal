@@ -667,11 +667,7 @@ terminal_app_ensure_encoding (TerminalApp *app,
 {
   TerminalEncoding *encoding;
 
-<<<<<<< HEAD
-  encoding = g_hash_table_lookup (app->encodings, charset ? charset : "current");
-=======
   encoding = g_hash_table_lookup (app->encodings, charset_validated (charset));
->>>>>>> b0bdd47... app: Only allow valid charsets
   if (encoding == NULL)
     {
       encoding = terminal_encoding_new (charset,
