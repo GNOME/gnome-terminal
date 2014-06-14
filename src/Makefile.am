@@ -190,7 +190,6 @@ gterminal_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DTERMINAL_CLIENT \
 	-DLOCALEDIR="\"$(datadir)/locale\"" \
-	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	$(AM_CPPFLAGS)
 # See bug #710862 about -Wsuggest-attribute=format
 gterminal_CFLAGS = \

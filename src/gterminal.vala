@@ -26,9 +26,9 @@ namespace GTerminal
 
     private static const OptionEntry[] entries = {
       { "quiet",   0,   OptionFlags.HIDDEN, OptionArg.NONE, ref quiet,
-        N_("Suppress output"), null },
+        "Suppress output", null },
       { "verbose", 'v', OptionFlags.HIDDEN, OptionArg.NONE, ref verbose,
-        N_("Verbose output"), null },
+        "Verbose output", null },
       { null, 0, 0, 0, null, null, null }
     };
 
@@ -40,8 +40,8 @@ namespace GTerminal
     public GLib.OptionGroup get_option_group ()
     {
       var group = new GLib.OptionGroup ("output",
-                                        N_("Output options:"),
-                                        N_("Show output options"),
+                                        "Output options:",
+                                        "Show output options",
                                         null, null);
       group.add_entries (entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -81,7 +81,7 @@ namespace GTerminal
                                        void *unused_user_data) throws OptionError
     {
       if (!GLib.Application.id_is_valid (value))
-        throw new OptionError.BAD_VALUE (_("\"%s\" is not a valid application ID"), value);
+        throw new OptionError.BAD_VALUE ("\"%s\" is not a valid application ID", value);
       app_id = value;
       return true;
     }
@@ -93,15 +93,15 @@ namespace GTerminal
 
     private static const OptionEntry[] entries = {
       { "app-id", 0, OptionFlags.HIDDEN, OptionArg.CALLBACK, (void*) option_app_id,
-        N_("Server application ID"), N_("ID") },
+        "Server application ID", "ID" },
       { null, 0, 0, 0, null, null, null }
     };
 
     public static GLib.OptionGroup get_option_group ()
     {
       var group = new GLib.OptionGroup ("global",
-                                        N_("Global options:"),
-                                        N_("Show global options"),
+                                        "Global options:",
+                                        "Show global options",
                                         null, null);
       group.add_entries (entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -124,9 +124,8 @@ namespace GTerminal
                                     void *unused_user_data) throws Error
     {
       if (pass_stdin || pass_stdout || pass_stderr)
-        throw new OptionError.BAD_VALUE (pass_stdin  ? _("FD passing of stdin is not supported") :
-                                         pass_stdout ? _("FD passing of stdout is not supported") :
-                                                       _("FD passing of stderr is not supported"));
+        throw new OptionError.BAD_VALUE ("FD passing of std%s is not supported",
+                                         pass_stdin ? "in" : pass_stdout ? "out" : "err");
 
       if (pass_fds == null)
         return true;
@@ -138,20 +137,20 @@ namespace GTerminal
         int64 v;
         if (!int64.try_parse (pass_fds[i], out v) ||
             v == -1 || v < int.MIN || v > int.MAX)
-          throw new OptionError.BAD_VALUE (_("Invalid argument \"%s\" to --fd option"), pass_fds[i]);
+          throw new OptionError.BAD_VALUE ("Invalid argument \"%s\" to --fd option", pass_fds[i]);
 
         int fd = (int) v;
 
         if (fd == Posix.STDIN_FILENO ||
             fd == Posix.STDOUT_FILENO ||
             fd == Posix.STDERR_FILENO)
-          throw new OptionError.BAD_VALUE (fd == Posix.STDIN_FILENO  ? _("FD passing of stdin is not supported") :
-                                           fd == Posix.STDOUT_FILENO ? _("FD passing of stdout is not supported") :
-                                                                       _("FD passing of stderr is not supported"));
+          throw new OptionError.BAD_VALUE ("FD passing of std%s is not supported",
+                                           fd == Posix.STDIN_FILENO ? "in" :
+                                           fd == Posix.STDOUT_FILENO ? "out" : "err");
 
         for (uint j = 0; j < arr.length; j++) {
           if (arr[j].fd == fd)
-            throw new OptionError.BAD_VALUE (_("Cannot pass FD %d twice"), fd);
+            throw new OptionError.BAD_VALUE ("Cannot pass FD %d twice", fd);
         }
 
         var idx = fd_list.append (fd);
@@ -174,21 +173,21 @@ namespace GTerminal
 
     private static const OptionEntry[] exec_entries = {
       { "stdin", 0, OptionFlags.HIDDEN, OptionArg.NONE, ref pass_stdin,
-        N_("Forward stdin"), null },
+        "Forward stdin", null },
       { "stdout", 0, OptionFlags.HIDDEN, OptionArg.NONE, ref pass_stdout,
-        N_("Forward stdout"), null },
+        "Forward stdout", null },
       { "stderr", 0, OptionFlags.HIDDEN, OptionArg.NONE, ref pass_stderr,
-        N_("Forward stderr"), null },
+        "Forward stderr", null },
       { "fd", 0, 0, OptionArg.STRING_ARRAY, ref pass_fds,
-        N_("Forward file descriptor"), N_("FD") },
+        "Forward file descriptor", "FD" },
       { null, 0, 0, 0, null, null, null }
     };
 
     public static GLib.OptionGroup get_exec_option_group ()
     {
       var group = new GLib.OptionGroup ("exec",
-                                        N_("Exec options:"),
-                                        N_("Show exec options"),
+                                        "Exec options:",
+                                        "Show exec options",
                                         null, null);
       group.add_entries (exec_entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -207,22 +206,22 @@ namespace GTerminal
 
     private static const OptionEntry[] window_entries = {
       { "maximise", 0, 0, OptionArg.NONE, ref maximise,
-        N_("Maximise the window"), null },
+        "Maximise the window", null },
       { "fullscreen", 0, 0, OptionArg.NONE, ref fullscreen,
-        N_("Full-screen the window"), null },
+        "Full-screen the window", null },
       { "geometry", 0, 0, OptionArg.STRING, ref geometry,
-        N_("Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"),
-        N_("GEOMETRY") },
+        "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)",
+        "GEOMETRY" },
       { "role", 0, 0, OptionArg.STRING, ref role,
-        N_("Set the window role"), N_("ROLE") },
+        "Set the window role", "ROLE" },
       { null, 0, 0, 0, null, null, null }
     };
 
     public static GLib.OptionGroup get_window_option_group()
     {
       var group = new GLib.OptionGroup ("window",
-                                        N_("Window options:"),
-                                        N_("Show window options"),
+                                        "Window options:",
+                                        "Show window options",
                                         null, null);
       group.add_entries (window_entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -241,7 +240,7 @@ namespace GTerminal
                                         void *unused_user_data) throws Error
     {
       if (profile != null)
-        throw new OptionError.BAD_VALUE (_("May only use option %s once"), option_name);
+        throw new OptionError.BAD_VALUE ("May only use option %s once", option_name);
 
         var profiles = new Terminal.ProfilesList ();
         profile = profiles.dup_uuid (value);
@@ -254,11 +253,11 @@ namespace GTerminal
     {
       double v;
       if (!double.try_parse (value, out v))
-        throw new OptionError.BAD_VALUE (_("\"%s\" is not a valid zoom factor"),
+        throw new OptionError.BAD_VALUE ("\"%s\" is not a valid zoom factor",
                                          value);
 
       if (v < 0.25 || v > 4.0)
-        throw new OptionError.BAD_VALUE (_("Zoom value \"%s\" is outside allowed range"),
+        throw new OptionError.BAD_VALUE ("Zoom value \"%s\" is outside allowed range",
                                          value);
 
       zoom = v;
@@ -267,23 +266,23 @@ namespace GTerminal
 
     private static const OptionEntry[] terminal_entries = {
       { "profile", 0, 0, OptionArg.CALLBACK, (void*) option_profile,
-        N_("Use the given profile instead of the default profile"),
-        N_("UUID") },
+        "Use the given profile instead of the default profile",
+        "UUID" },
       { "title", 0, 0, OptionArg.STRING, ref title,
-        N_("Set the terminal title"), N_("TITLE") },
+        "Set the terminal title", "TITLE" },
       { "cwd", 0, 0, OptionArg.FILENAME, ref working_directory,
-        N_("Set the working directory"), N_("DIRNAME") },
+        "Set the working directory", "DIRNAME" },
       { "zoom", 0, 0, OptionArg.CALLBACK, (void*) option_zoom,
-        N_("Set the terminal's zoom factor (1.0 = normal size)"),
-        N_("ZOOM") },
+        "Set the terminal's zoom factor (1.0 = normal size)",
+        "ZOOM" },
       { null, 0, 0, 0, null, null, null }
     };
 
     public static GLib.OptionGroup get_terminal_option_group ()
     {
       var group = new GLib.OptionGroup ("terminal",
-                                        N_("Terminal options:"),
-                                        N_("Show terminal options"),
+                                        "Terminal options:",
+                                        "Show terminal options",
                                         null, null);
       group.add_entries (terminal_entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -296,15 +295,15 @@ namespace GTerminal
 
     private static const OptionEntry[] processing_entries = {
     { "wait", 0, 0, OptionArg.NONE, ref wait_for_remote,
-      N_("Wait until the child exits"), null },
+      "Wait until the child exits", null },
       { null, 0, 0, 0, null, null, null }
     };
 
     public static GLib.OptionGroup get_processing_option_group ()
     {
       var group = new GLib.OptionGroup ("processing",
-                                        N_("Processing options:"),
-                                        N_("Show processing options"),
+                                        "Processing options:",
+                                        "Show processing options",
                                         null, null);
       group.add_entries (processing_entries);
       group.set_translation_domain(Config.GETTEXT_PACKAGE);
@@ -474,7 +473,7 @@ namespace GTerminal
     OpenOptions.parse_argv (argv);
 
     if (argv[0] == "run" && OpenOptions.argv_post == null)
-      throw new OptionError.BAD_VALUE (_("'%s' needs the command to run as arguments after '--'"),
+      throw new OptionError.BAD_VALUE ("'%s' needs the command to run as arguments after '--'",
                                        argv[0]);
 
     var receiver = create_terminal ();
@@ -508,7 +507,7 @@ namespace GTerminal
   private int complete (string[] argv) throws Error
   {
     if (argv.length < 2)
-      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+      throw new OptionError.UNKNOWN_OPTION ("Missing argument");
 
     if (argv[1] == "commands") {
       string? prefix = argv.length > 2 ? argv[2] : null;
@@ -532,7 +531,7 @@ namespace GTerminal
       return Posix.EXIT_SUCCESS;
     }
 
-    throw new OptionError.UNKNOWN_OPTION (_("Unknown completion request for \"%s\""), argv[0]);
+    throw new OptionError.UNKNOWN_OPTION ("Unknown completion request for \"%s\"", argv[0]);
   }
 
   private delegate int CommandFunc (string[] args) throws Error;
@@ -553,15 +552,15 @@ namespace GTerminal
   {
     Environment.set_prgname ("gterminal");
 
-    Intl.setlocale (LocaleCategory.ALL, "");
-    Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.LOCALEDIR);
-    Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
-    Intl.textdomain (Config.GETTEXT_PACKAGE);
-    Environment.set_application_name (_("GTerminal"));
+    //Intl.setlocale (LocaleCategory.ALL, "");
+    //Intl.bindtextdomain (Config.GETTEXT_PACKAGE, Config.LOCALEDIR);
+    //Intl.bind_textdomain_codeset (Config.GETTEXT_PACKAGE, "UTF-8");
+    //Intl.textdomain (Config.GETTEXT_PACKAGE);
+    Environment.set_application_name ("GTerminal");
 
     try {
       if (argv.length == 1) {
-        throw new OptionError.FAILED (_("Missing command"));
+        throw new OptionError.FAILED ("Missing command");
       }
 
       for (uint i = 0; i < commands.length; i++) {
@@ -570,11 +569,11 @@ namespace GTerminal
         }
       }
 
-      throw new OptionError.FAILED (_("Unknown command \"%s\""), argv[1]);
+      throw new OptionError.FAILED ("Unknown command \"%s\"", argv[1]);
     } catch (Error e) {
       DBusError.strip_remote_error (e);
 
-      printerr (_("Error processing arguments: %s\n"), e.message);
+      printerr ("Error processing arguments: %s\n", e.message);
       return Posix.EXIT_FAILURE;
     }
   }
