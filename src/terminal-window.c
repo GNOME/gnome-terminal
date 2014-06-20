@@ -3028,6 +3028,7 @@ terminal_window_move_screen (TerminalWindow *source_window,
   g_object_unref (screen_container);
 
   terminal_window_add_screen (dest_window, screen, dest_position);
+  terminal_mdi_container_set_active_screen (dest_window->priv->mdi_container, screen);
   g_object_unref (screen);
 }
 
