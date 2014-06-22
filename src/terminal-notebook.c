@@ -58,13 +58,21 @@ update_tab_visibility (GtkNotebook *notebook,
 
 static void
 close_button_clicked_cb (TerminalTabLabel *tab_label,
-                         TerminalNotebook *notebook)
+                         gpointer user_data)
 {
   TerminalScreen *screen;
+  TerminalNotebook *notebook;
 
   screen = terminal_tab_label_get_screen (tab_label);
 
-  g_signal_emit_by_name (notebook, "screen-close-request", screen);
+  /* notebook is not passed as user_data because it can change during DND
+   * and the close button is not notified about that, see bug 731998.
+   */
+  notebook = TERMINAL_NOTEBOOK (gtk_widget_get_ancestor (GTK_WIDGET (screen),
+                                                         TERMINAL_TYPE_NOTEBOOK));
+
+  if (notebook != NULL)
+    g_signal_emit_by_name (notebook, "screen-close-request", screen);
 }
 
 
@@ -88,7 +96,7 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
 
   tab_label = terminal_tab_label_new (screen);
   g_signal_connect (tab_label, "close-button-clicked",
-                    G_CALLBACK (close_button_clicked_cb), notebook);
+                    G_CALLBACK (close_button_clicked_cb), NULL);
 
   gtk_notebook_insert_page (gtk_notebook,
                             screen_container,
