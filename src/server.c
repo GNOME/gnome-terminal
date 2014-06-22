@@ -64,6 +64,11 @@ static const GOptionEntry options[] = {
   { NULL }
 };
 
+enum {
+  _EXIT_FAILURE_WRONG_ID = 7,
+  _EXIT_FAILURE_NO_UTF8 = 8,
+};
+
 int
 main (int argc, char **argv)
 {
@@ -77,7 +82,7 @@ main (int argc, char **argv)
                   geteuid () == 0 &&
                   getegid () == 0)) {
     g_printerr ("Wrong euid/egid, exiting.\n");
-    return EXIT_FAILURE;
+    return _EXIT_FAILURE_WRONG_ID;
   }
 
   setlocale (LC_ALL, "");
@@ -86,7 +91,7 @@ main (int argc, char **argv)
 
   if (!g_get_charset (NULL)) {
     g_printerr ("Non UTF-8 locale is not supported!\n");
-    return EXIT_FAILURE;
+    return _EXIT_FAILURE_NO_UTF8;
   }
 
 #ifndef ENABLE_DISTRO_PACKAGING
