@@ -74,7 +74,7 @@ main (int argc, char **argv)
 {
   GApplication *app;
   int exit_code = EXIT_FAILURE;
-  const char *home_dir;
+  const char *home_dir, *charset;
   GError *error = NULL;
 
   if (G_UNLIKELY ((getuid () != geteuid () ||
@@ -89,8 +89,8 @@ main (int argc, char **argv)
 
   terminal_i18n_init (TRUE);
 
-  if (!g_get_charset (NULL)) {
-    g_printerr ("Non UTF-8 locale is not supported!\n");
+  if (!g_get_charset (&charset)) {
+    g_printerr ("Non UTF-8 locale (%s) is not supported!\n", charset);
     return _EXIT_FAILURE_NO_UTF8;
   }
 
