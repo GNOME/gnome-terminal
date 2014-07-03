@@ -85,6 +85,35 @@ void terminal_g_settings_set_rgba_palette (GSettings      *settings,
 
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
+void terminal_util_object_class_undeprecate_property (GObjectClass *klass,
+                                                      const char *prop);
+
+#define TERMINAL_UTIL_OBJECT_CLASS_UNDEPRECATE_PROPERTY(klass, prop) \
+  { \
+    static volatile gsize once = 0; \
+    \
+    if (g_once_init_enter (&once)) { \
+      GParamSpec *pspec; \
+      \
+      pspec = g_object_class_find_property (klass, prop); \
+      g_warn_if_fail (pspec != NULL); \
+      if (pspec) { \
+        g_warn_if_fail (pspec->flags & G_PARAM_DEPRECATED); \
+        pspec->flags &= ~G_PARAM_DEPRECATED; \
+      } \
+      g_once_init_leave (&once, 1); \
+    } \
+  }
+
+#define TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY(type, prop) \
+  { \
+    GObjectClass *klass; \
+    \
+    klass = g_type_class_ref (type); \
+    TERMINAL_UTIL_OBJECT_CLASS_UNDEPRECATE_PROPERTY (klass, prop); \
+    g_type_class_unref (klass); \
+  }
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */
