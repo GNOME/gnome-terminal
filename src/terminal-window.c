@@ -2737,9 +2737,14 @@ terminal_window_class_init (TerminalWindowClass *klass)
 
 #if GTK_CHECK_VERSION (3, 13, 4)
 {
-  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
+  GtkWindowClass *window_klass;
+  GtkBindingSet *binding_set;
 
-  window_class->toggle_debugging = NULL;
+  window_klass = g_type_class_ref (GTK_TYPE_WINDOW);
+  binding_set = gtk_binding_set_by_class (window_klass);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK);
+  gtk_binding_entry_skip (binding_set, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK);
+  g_type_class_unref (window_klass);
 }
 #endif
 
