@@ -120,6 +120,10 @@ struct _TerminalWindowPrivate
 #endif
 #endif
 
+#if defined (ENABLE_DEBUG) && GTK_CHECK_VERSION (3, 13, 4)
+#define ENABLE_INSPECTOR
+#endif
+
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
@@ -199,6 +203,10 @@ static void help_contents_callback        (GtkAction *action,
                                            TerminalWindow *window);
 static void help_about_callback           (GtkAction *action,
                                            TerminalWindow *window);
+#ifdef ENABLE_INSPECTOR
+static void help_inspector_callback       (GtkAction *action,
+                                           TerminalWindow *window);
+#endif
 
 static gboolean find_larger_zoom_factor  (double  current,
                                           double *found);
@@ -2471,6 +2479,11 @@ terminal_window_init (TerminalWindow *window)
       { "HelpAbout", "help-about", N_("_About"), NULL,
         NULL,
         G_CALLBACK (help_about_callback) },
+#ifdef ENABLE_INSPECTOR
+      { "HelpInspector", NULL, N_("_Inspector"), NULL,
+        NULL,
+        G_CALLBACK (help_inspector_callback) },
+#endif
 
       /* Popup menu */
       { "PopupSendEmail", NULL, N_("_Send Mail To…"), NULL,
@@ -2648,6 +2661,15 @@ terminal_window_init (TerminalWindow *window)
                                                      &error);
   g_assert_no_error (error);
 
+#ifdef ENABLE_INSPECTOR
+  gtk_ui_manager_add_ui (manager, priv->ui_id,
+                         "/menubar/Help", NULL, NULL,
+                         GTK_UI_MANAGER_SEPARATOR, FALSE);
+  gtk_ui_manager_add_ui (manager, priv->ui_id,
+                         "/menubar/Help", "HelpInspector", "HelpInspector",
+                         GTK_UI_MANAGER_MENUITEM, FALSE);
+#endif
+
   priv->menubar = gtk_ui_manager_get_widget (manager, "/menubar");
   gtk_box_pack_start (GTK_BOX (main_vbox),
 		      priv->menubar,
@@ -2712,6 +2734,14 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->window_state_event = terminal_window_state_event;
   widget_class->screen_changed = terminal_window_screen_changed;
   widget_class->style_updated = terminal_window_style_updated;
+
+#if GTK_CHECK_VERSION (3, 13, 4)
+{
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
+
+  window_class->toggle_debugging = NULL;
+}
+#endif
 
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
@@ -3790,6 +3820,15 @@ help_about_callback (GtkAction *action,
 {
   terminal_util_show_about (NULL);
 }
+
+#ifdef ENABLE_INSPECTOR
+static void
+help_inspector_callback (GtkAction *action,
+                         TerminalWindow *window)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+#endif
 
 GtkUIManager *
 terminal_window_get_ui_manager (TerminalWindow *window)
