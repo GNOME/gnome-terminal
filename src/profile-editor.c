@@ -1007,8 +1007,10 @@ terminal_profile_edit (GSettings  *profile,
                    "value", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
                    gtk_builder_get_object (builder,
-                                           "scrollback-unlimited-checkbutton"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+                                           "scrollback-limited-checkbutton"),
+                   "active",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET |
+                   G_SETTINGS_BIND_INVERT_BOOLEAN);
   g_settings_bind (profile, TERMINAL_PROFILE_SCROLLBACK_UNLIMITED_KEY,
                    gtk_builder_get_object (builder,
                                            "scrollback-box"),
