@@ -100,20 +100,13 @@ terminal_screen_container_init (TerminalScreenContainer *container)
   priv->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
 }
 
-static GObject *
-terminal_screen_container_constructor (GType type,
-                                       guint n_construct_properties,
-                                       GObjectConstructParam *construct_params)
+static void
+terminal_screen_container_constructed (GObject *object)
 {
-  GObject *object;
-  TerminalScreenContainer *container;
-  TerminalScreenContainerPrivate *priv;
+  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+  TerminalScreenContainerPrivate *priv = container->priv;
 
-  object = G_OBJECT_CLASS (terminal_screen_container_parent_class)->constructor
-             (type, n_construct_properties, construct_params);
-
-  container = TERMINAL_SCREEN_CONTAINER (object);
-  priv = container->priv;
+  G_OBJECT_CLASS (terminal_screen_container_parent_class)->constructed (object);
 
   g_assert (priv->screen != NULL);
 
@@ -129,8 +122,6 @@ terminal_screen_container_constructor (GType type,
   gtk_widget_show_all (priv->hbox);
 
   _terminal_screen_update_scrollbar (priv->screen);
-
-  return object;
 }
 
 static void
@@ -194,7 +185,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 
   g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
 
-  gobject_class->constructor = terminal_screen_container_constructor;
+  gobject_class->constructed = terminal_screen_container_constructed;
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;
 

@@ -164,22 +164,16 @@ terminal_tab_label_init (TerminalTabLabel *tab_label)
   priv->tab_pos = (GtkPositionType) -1; /* invalid */
 }
 
-static GObject *
-terminal_tab_label_constructor (GType type,
-                                guint n_construct_properties,
-                                GObjectConstructParam *construct_params)
+static void
+terminal_tab_label_constructed (GObject *object)
 {
-  GObject *object;
-  TerminalTabLabel *tab_label;
-  TerminalTabLabelPrivate *priv;
+  TerminalTabLabel *tab_label = TERMINAL_TAB_LABEL (object);
+  TerminalTabLabelPrivate *priv = tab_label->priv;
   GtkWidget *hbox, *label, *close_button;
 
-  object = G_OBJECT_CLASS (terminal_tab_label_parent_class)->constructor
-             (type, n_construct_properties, construct_params);
+  G_OBJECT_CLASS (terminal_tab_label_parent_class)->constructed (object);
 
-  tab_label = TERMINAL_TAB_LABEL (object);
   hbox = GTK_WIDGET (tab_label);
-  priv = tab_label->priv;
 
   g_assert (priv->screen != NULL);
   
@@ -206,8 +200,6 @@ terminal_tab_label_constructor (GType type,
 		    G_CALLBACK (close_button_clicked_cb), tab_label);
 
   gtk_widget_show_all (hbox);
-
-  return object;
 }
 
 static void
@@ -278,7 +270,7 @@ terminal_tab_label_class_init (TerminalTabLabelClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gobject_class->constructor = terminal_tab_label_constructor;
+  gobject_class->constructed = terminal_tab_label_constructed;
   gobject_class->dispose = terminal_tab_label_dispose;
   gobject_class->finalize = terminal_tab_label_finalize;
   gobject_class->get_property = terminal_tab_label_get_property;
