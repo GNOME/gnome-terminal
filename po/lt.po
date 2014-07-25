@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-06-22 12:43+0000\n"
-"PO-Revision-Date: 2014-06-22 16:12+0300\n"
+"POT-Creation-Date: 2014-07-25 19:49+0000\n"
+"PO-Revision-Date: 2014-07-25 23:10+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
 #: ../src/server.c:121 ../src/terminal-accels.c:222 ../src/terminal.c:243
 #: ../src/terminal-tab-label.c:79 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2562 ../src/terminal-window.c:2887
+#: ../src/terminal-window.c:2575 ../src/terminal-window.c:2925
 msgid "Terminal"
 msgstr "Terminalas"
 
@@ -94,28 +94,23 @@ msgid "Verbose output"
 msgstr "Išsami išvestis"
 
 #: ../src/gterminal.vala:43
-#| msgid "Exec options:"
 msgid "Output options:"
 msgstr "Išvesties parametrai:"
 
 #: ../src/gterminal.vala:44
-#| msgid "Show window options"
 msgid "Show output options"
 msgstr "Rodyti išvesties parametrus"
 
 #: ../src/gterminal.vala:84
 #, c-format
-#| msgid "\"%s\" is not a valid zoom factor"
 msgid "\"%s\" is not a valid application ID"
 msgstr "„%s“ nėra tinkamas programos ID"
 
 #: ../src/gterminal.vala:96
-#| msgid "Server options:"
 msgid "Server application ID"
 msgstr "Serverio programos ID"
 
 #: ../src/gterminal.vala:96
-#| msgid "UUID"
 msgid "ID"
 msgstr "ID"
 
@@ -178,7 +173,6 @@ msgid "Show exec options"
 msgstr "Rodyti exec parinktis"
 
 #: ../src/gterminal.vala:210
-#| msgid "Maximize the window"
 msgid "Maximise the window"
 msgstr "Išdidinti langą"
 
@@ -295,12 +289,10 @@ msgid "Unknown completion request for \"%s\""
 msgstr "Nežinomas užbaigimo prašymas „%s“"
 
 #: ../src/gterminal.vala:560
-#| msgid "Terminal"
 msgid "GTerminal"
 msgstr "GTerminal"
 
 #: ../src/gterminal.vala:564
-#| msgid "Error parsing command: %s"
 msgid "Missing command"
 msgstr "Trūksta komandos"
 
@@ -311,7 +303,6 @@ msgstr "Nežinoma komanda „%s“"
 
 #: ../src/gterminal.vala:577
 #, c-format
-#| msgid "Error parsing command: %s"
 msgid "Error processing arguments: %s\n"
 msgstr "Klaida apdorojant argumentus: %s\n"
 
@@ -1011,37 +1002,40 @@ msgstr "stulpelių"
 msgid "rows"
 msgstr "eilučių"
 
-#: ../src/profile-preferences.ui.h:53 ../src/terminal-accels.c:179
-msgid "Reset"
-msgstr "Atstatyti"
+#: ../src/profile-preferences.ui.h:53
+#| msgid "Reset"
+msgid "Rese_t"
+msgstr "A_tstatyti"
 
 #: ../src/profile-preferences.ui.h:54
 msgid "Cursor _shape:"
 msgstr "Kursoriaus _forma:"
 
 #: ../src/profile-preferences.ui.h:55
-msgid "_Use the system fixed width font"
-msgstr "Na_udoti sistemos fiksuoto pločio šriftą"
-
-#: ../src/profile-preferences.ui.h:56
-msgid "_Font:"
-msgstr "Šri_ftas:"
-
-#: ../src/profile-preferences.ui.h:57
-msgid "Choose A Terminal Font"
-msgstr "Pasirinkite terminalo šriftą"
-
-#: ../src/profile-preferences.ui.h:58
-msgid "_Allow bold text"
-msgstr "Leisti p_astorintą tekstą"
-
-#: ../src/profile-preferences.ui.h:59
 msgid "Terminal _bell"
 msgstr "Terminalo skam_butis"
 
-#: ../src/profile-preferences.ui.h:60
+#: ../src/profile-preferences.ui.h:56
+#| msgid "The cursor appearance"
+msgid "Text Appearance"
+msgstr "Teksto išvaizda"
+
+#: ../src/profile-preferences.ui.h:57
+msgid "_Allow bold text"
+msgstr "Leisti p_astorintą tekstą"
+
+#: ../src/profile-preferences.ui.h:58
 msgid "_Rewrap on resize"
 msgstr "_Laužyti pakeitus dydį"
+
+#: ../src/profile-preferences.ui.h:59
+#| msgid "Custom"
+msgid "_Custom font"
+msgstr "_Pasirinktinis šriftas"
+
+#: ../src/profile-preferences.ui.h:60
+msgid "Choose A Terminal Font"
+msgstr "Pasirinkite terminalo šriftą"
 
 #: ../src/profile-preferences.ui.h:62
 msgid "Command"
@@ -1128,34 +1122,31 @@ msgid "Colors"
 msgstr "Spalvos"
 
 #: ../src/profile-preferences.ui.h:83
-msgid "Scroll_back:"
-msgstr "_Slinktis:"
-
-#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _keystroke"
 msgstr "Slin_kti nuspaudus klavišą"
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _output"
 msgstr "Slinkti išve_dant"
 
-#: ../src/profile-preferences.ui.h:86
-msgid "_Unlimited"
-msgstr "_Neribota"
+#: ../src/profile-preferences.ui.h:85
+#| msgid "Scroll_back:"
+msgid "_Limit scrollback to:"
+msgstr "_Riboti atgalinį slinkimą iki:"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:86
 msgid "lines"
 msgstr "eilutės"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:87
 msgid "_Show scrollbar"
 msgstr "Rodyti _slankiklį"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:88
 msgid "Scrolling"
 msgstr "Slinkimas"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:89
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1166,27 +1157,27 @@ msgstr ""
 "programų ir operacinių sistemų, kurios tikisi kitokio terminalo veikimo, "
 "elgseną."
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:90
 msgid "_Delete key generates:"
 msgstr "„_Delete“ klavišas siunčia:"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:91
 msgid "_Backspace key generates:"
 msgstr "„_Backspace“ klavišas siunčia:"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:92
 msgid "_Encoding:"
 msgstr "_Koduotė:"
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:93
 msgid "Ambiguous-_width characters:"
 msgstr "Neaiškaus _pločio simboliai:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:94
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "_Atstatyti suderinamumo nustatymus į numatytuosius"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:95
 msgid "Compatibility"
 msgstr "Suderinamumas"
 
@@ -1215,13 +1206,13 @@ msgid "Close All Terminals"
 msgstr "Užverti visus terminalus"
 
 #. Edit menu
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2383
-#: ../src/terminal-window.c:2495
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2391
+#: ../src/terminal-window.c:2508
 msgid "Copy"
 msgstr "Kopijuoti"
 
-#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2386
-#: ../src/terminal-window.c:2498
+#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2394
+#: ../src/terminal-window.c:2511
 msgid "Paste"
 msgstr "Įdėti"
 
@@ -1246,17 +1237,21 @@ msgid "Full Screen"
 msgstr "Visame ekrane"
 
 #. View menu
-#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2403
+#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2411
 msgid "Zoom In"
 msgstr "Padidinti"
 
-#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2406
+#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2414
 msgid "Zoom Out"
 msgstr "Sumažinti"
 
-#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2409
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2417
 msgid "Normal Size"
 msgstr "Normalus dydis"
+
+#: ../src/terminal-accels.c:179
+msgid "Reset"
+msgstr "Atstatyti"
 
 #: ../src/terminal-accels.c:180
 msgid "Reset and Clear"
@@ -1319,7 +1314,7 @@ msgstr "Veiksm_as"
 msgid "Shortcut _Key"
 msgstr "Spartusis _klavišas"
 
-#: ../src/terminal-app.c:674
+#: ../src/terminal-app.c:677
 msgid "User Defined"
 msgstr "Nurodyta naudotojo"
 
@@ -1331,11 +1326,11 @@ msgstr "_Naujas terminalas"
 msgid "_Preferences"
 msgstr "_Nustatymai"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2355
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2363
 msgid "_Help"
 msgstr "_Žinynas"
 
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2471
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2479
 msgid "_About"
 msgstr "_Apie"
 
@@ -1696,7 +1691,7 @@ msgstr "Profilių sąrašas"
 msgid "Delete profile “%s”?"
 msgstr "Ištrinti profilį „%s“?"
 
-#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:521
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:529
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -1720,7 +1715,7 @@ msgstr "_Koduotė"
 msgid "No command supplied nor shell requested"
 msgstr "Nepateikta komanda bei neprašyta apvalkalo"
 
-#: ../src/terminal-screen.c:1295 ../src/terminal-window.c:2398
+#: ../src/terminal-screen.c:1295 ../src/terminal-window.c:2406
 msgid "_Profile Preferences"
 msgstr "Profilio _nustatymai"
 
@@ -1814,15 +1809,15 @@ msgstr ""
 "GNU bendrosios viešos licencijos kopiją turėjote gauti su GNOME terminalo "
 "programa. Jei negavote, žiūrėkite <http://www.gnu.org/licenses/>."
 
-#: ../src/terminal-window.c:496
+#: ../src/terminal-window.c:504
 msgid "Could not save contents"
 msgstr "Nepavyko įrašyti turinio"
 
-#: ../src/terminal-window.c:518
+#: ../src/terminal-window.c:526
 msgid "Save as…"
 msgstr "Įrašyti taip…"
 
-#: ../src/terminal-window.c:522
+#: ../src/terminal-window.c:530
 msgid "_Save"
 msgstr "Į_rašyti"
 
@@ -1830,7 +1825,7 @@ msgstr "Į_rašyti"
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1201
+#: ../src/terminal-window.c:1209
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1839,203 +1834,207 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1207
+#: ../src/terminal-window.c:1215
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2356
 msgid "_File"
 msgstr "_Failas"
 
 #. File menu
-#: ../src/terminal-window.c:2349 ../src/terminal-window.c:2360
-#: ../src/terminal-window.c:2366 ../src/terminal-window.c:2504
+#: ../src/terminal-window.c:2357 ../src/terminal-window.c:2368
+#: ../src/terminal-window.c:2374 ../src/terminal-window.c:2517
 msgid "Open _Terminal"
 msgstr "Naujas _terminalas"
 
-#: ../src/terminal-window.c:2350
+#: ../src/terminal-window.c:2358
 msgid "_Edit"
 msgstr "K_eisti"
 
-#: ../src/terminal-window.c:2351
+#: ../src/terminal-window.c:2359
 msgid "_View"
 msgstr "R_odymas"
 
-#: ../src/terminal-window.c:2352
+#: ../src/terminal-window.c:2360
 msgid "_Search"
 msgstr "_Paieška"
 
-#: ../src/terminal-window.c:2353
+#: ../src/terminal-window.c:2361
 msgid "_Terminal"
 msgstr "_Terminalas"
 
-#: ../src/terminal-window.c:2354
+#: ../src/terminal-window.c:2362
 msgid "Ta_bs"
 msgstr "_Kortelės"
 
-#: ../src/terminal-window.c:2363
+#: ../src/terminal-window.c:2371
 msgid "Open Ta_b"
 msgstr "Nauja _kortelė"
 
-#: ../src/terminal-window.c:2369
+#: ../src/terminal-window.c:2377
 msgid "New _Profile"
 msgstr "Naujas _profilis"
 
-#: ../src/terminal-window.c:2372
+#: ../src/terminal-window.c:2380
 msgid "_Save Contents"
 msgstr "Į_rašyti turinį"
 
-#: ../src/terminal-window.c:2375 ../src/terminal-window.c:3600
+#: ../src/terminal-window.c:2383 ../src/terminal-window.c:3638
 msgid "C_lose Terminal"
 msgstr "_Užverti terminalą"
 
-#: ../src/terminal-window.c:2378
+#: ../src/terminal-window.c:2386
 msgid "_Close All Terminals"
 msgstr "_Užverti visus terminalus"
 
-#: ../src/terminal-window.c:2389 ../src/terminal-window.c:2501
+#: ../src/terminal-window.c:2397 ../src/terminal-window.c:2514
 msgid "Paste _Filenames"
 msgstr "Įdėti _failų vardus"
 
-#: ../src/terminal-window.c:2392
+#: ../src/terminal-window.c:2400
 msgid "Select All"
 msgstr "Pažymėti viską"
 
-#: ../src/terminal-window.c:2395
+#: ../src/terminal-window.c:2403
 msgid "Pre_ferences"
 msgstr "_Nustatymai"
 
 #. Search menu
-#: ../src/terminal-window.c:2414
+#: ../src/terminal-window.c:2422
 msgid "_Find…"
 msgstr "_Rasi…"
 
-#: ../src/terminal-window.c:2417
+#: ../src/terminal-window.c:2425
 msgid "Find Ne_xt"
 msgstr "Ieškoti _kito"
 
-#: ../src/terminal-window.c:2420
+#: ../src/terminal-window.c:2428
 msgid "Find Pre_vious"
 msgstr "Ieškoti a_nkstesnio"
 
-#: ../src/terminal-window.c:2423
+#: ../src/terminal-window.c:2431
 msgid "_Clear Highlight"
 msgstr "Iš_valyti paryškinimą"
 
-#: ../src/terminal-window.c:2427
+#: ../src/terminal-window.c:2435
 msgid "Go to _Line..."
 msgstr "Eiti į ei_lutę..."
 
-#: ../src/terminal-window.c:2430
+#: ../src/terminal-window.c:2438
 msgid "_Incremental Search..."
 msgstr "_Prieauginė paieška..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2444
 msgid "Change _Profile"
 msgstr "_Pakeisti profilį"
 
-#: ../src/terminal-window.c:2437
+#: ../src/terminal-window.c:2445
 msgid "Set _Character Encoding"
 msgstr "N_ustatyti simbolių koduotę"
 
-#: ../src/terminal-window.c:2438
+#: ../src/terminal-window.c:2446
 msgid "_Reset"
 msgstr "_Atstatyti"
 
-#: ../src/terminal-window.c:2441
+#: ../src/terminal-window.c:2449
 msgid "Reset and C_lear"
 msgstr "Atstatyti ir išva_lyti"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2446
+#: ../src/terminal-window.c:2454
 msgid "_Add or Remove…"
 msgstr "_Pridėti arba pašalinti…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2451
+#: ../src/terminal-window.c:2459
 msgid "_Previous Terminal"
 msgstr "_Ankstesnis terminalas"
 
-#: ../src/terminal-window.c:2454
+#: ../src/terminal-window.c:2462
 msgid "_Next Terminal"
 msgstr "_Kitas terminalas"
 
-#: ../src/terminal-window.c:2457
+#: ../src/terminal-window.c:2465
 msgid "Move Terminal _Left"
 msgstr "Perkelti terminalą _kairėn"
 
-#: ../src/terminal-window.c:2460
+#: ../src/terminal-window.c:2468
 msgid "Move Terminal _Right"
 msgstr "Perkelti terminalą _dešinėn"
 
-#: ../src/terminal-window.c:2463
+#: ../src/terminal-window.c:2471
 msgid "_Detach Terminal"
 msgstr "_Atkabinti terminalą"
 
 #. Help menu
-#: ../src/terminal-window.c:2468
+#: ../src/terminal-window.c:2476
 msgid "_Contents"
 msgstr "_Turinys"
 
+#: ../src/terminal-window.c:2483
+msgid "_Inspector"
+msgstr "_Inspektorius"
+
 #. Popup menu
-#: ../src/terminal-window.c:2476
+#: ../src/terminal-window.c:2489
 msgid "_Send Mail To…"
 msgstr "_Siųsti laišką…"
 
-#: ../src/terminal-window.c:2479
+#: ../src/terminal-window.c:2492
 msgid "_Copy E-mail Address"
 msgstr "_Kopijuoti el. pašto adresą"
 
-#: ../src/terminal-window.c:2482
+#: ../src/terminal-window.c:2495
 msgid "C_all To…"
 msgstr "_Skambinti…"
 
-#: ../src/terminal-window.c:2485
+#: ../src/terminal-window.c:2498
 msgid "_Copy Call Address"
 msgstr "_Kopijuoti skambučio adresą"
 
-#: ../src/terminal-window.c:2488
+#: ../src/terminal-window.c:2501
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
-#: ../src/terminal-window.c:2491
+#: ../src/terminal-window.c:2504
 msgid "_Copy Link Address"
 msgstr "_Kopijuoti nuorodos adresą"
 
-#: ../src/terminal-window.c:2494
+#: ../src/terminal-window.c:2507
 msgid "P_rofiles"
 msgstr "P_rofiliai"
 
-#: ../src/terminal-window.c:2507
+#: ../src/terminal-window.c:2520
 msgid "L_eave Full Screen"
 msgstr "_Palikti visą ekraną"
 
 #. View Menu
-#: ../src/terminal-window.c:2515
+#: ../src/terminal-window.c:2528
 msgid "Show _Menubar"
 msgstr "Rodyti _meniu juostą"
 
-#: ../src/terminal-window.c:2519
+#: ../src/terminal-window.c:2532
 msgid "_Full Screen"
 msgstr "_Visame ekrane"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2524
+#: ../src/terminal-window.c:2537
 msgid "Read-_Only"
 msgstr "Tik _skaitymui"
 
-#: ../src/terminal-window.c:3587
+#: ../src/terminal-window.c:3625
 msgid "Close this window?"
 msgstr "Užverti langą?"
 
-#: ../src/terminal-window.c:3587
+#: ../src/terminal-window.c:3625
 msgid "Close this terminal?"
 msgstr "Užverti terminalą?"
 
-#: ../src/terminal-window.c:3591
+#: ../src/terminal-window.c:3629
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2043,7 +2042,7 @@ msgstr ""
 "Yra procesų, veikiančių šio lango terminaluose. Jei uždarysite langą, jie "
 "visi bus nutraukti."
 
-#: ../src/terminal-window.c:3595
+#: ../src/terminal-window.c:3633
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2051,7 +2050,7 @@ msgstr ""
 "Šiame terminale vis dar veikia procesas. Jei uždarysite terminalą, jis bus "
 "nutrauktas."
 
-#: ../src/terminal-window.c:3600
+#: ../src/terminal-window.c:3638
 msgid "C_lose Window"
 msgstr "_Užverti langą"
 
