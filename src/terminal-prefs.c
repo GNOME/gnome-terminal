@@ -560,6 +560,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   PrefData *data;
   GtkWidget *dialog, *tree_view;
   GtkWidget *show_menubar_button, *disable_mnemonics_button, *disable_menu_accel_button;
+  GtkWidget *disable_shortcuts_button;
   GtkWidget *tree_view_container, *new_button, *edit_button, *clone_button, *remove_button;
   GtkWidget *dark_theme_button, *new_terminal_mode_combo;
   GtkWidget *default_hbox, *default_label;
@@ -585,6 +586,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        "dark-theme-checkbutton", &dark_theme_button,
                                        "new-terminal-mode-combobox", &new_terminal_mode_combo,
                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
+                                       "disable-shortcuts-checkbutton", &disable_shortcuts_button,
                                        "disable-menu-accel-checkbutton", &disable_menu_accel_button,
                                        "accelerators-treeview", &tree_view,
                                        "profiles-treeview-container", &tree_view_container,
@@ -631,12 +633,17 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
   g_settings_bind (settings,
+                   TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
+                   disable_shortcuts_button,
+                   "active",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  g_settings_bind (settings,
                    TERMINAL_SETTING_ENABLE_MENU_BAR_ACCEL_KEY,
                    disable_menu_accel_button,
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
-  terminal_accels_fill_treeview (tree_view);
+  terminal_accels_fill_treeview (tree_view, disable_shortcuts_button);
 
   /* Profiles tab */
 

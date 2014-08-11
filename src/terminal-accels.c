@@ -425,11 +425,13 @@ accel_set_func (GtkTreeViewColumn *tree_column,
     guint key;
     GdkModifierType mods;
     gboolean writable;
+    GtkWidget *button = data;
 
     value = g_settings_get_string (keybinding_settings, ke->settings_key);
     gtk_accelerator_parse (value, &key, &mods);
 
-    writable = g_settings_is_writable (keybinding_settings, ke->settings_key);
+    writable = g_settings_is_writable (keybinding_settings, ke->settings_key) &&
+               gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
     g_object_set (cell,
                   "visible", TRUE,
@@ -514,7 +516,8 @@ row_changed (GtkTreeModel *tree_model,
 #endif
 
 void
-terminal_accels_fill_treeview (GtkWidget *tree_view)
+terminal_accels_fill_treeview (GtkWidget *tree_view,
+                               GtkWidget *disable_shortcuts_button)
 {
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell_renderer;
@@ -535,6 +538,7 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
                 "editable", TRUE,
                 "accel-mode", GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                 NULL);
+
   g_signal_connect (cell_renderer, "accel-edited",
                     G_CALLBACK (accel_edited_callback), tree_view);
   g_signal_connect (cell_renderer, "accel-cleared",
@@ -543,7 +547,8 @@ terminal_accels_fill_treeview (GtkWidget *tree_view)
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, _("Shortcut _Key"));
   gtk_tree_view_column_pack_start (column, cell_renderer, TRUE);
-  gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func, NULL, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, cell_renderer, accel_set_func,
+                                           disable_shortcuts_button, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
   /* Add the data */

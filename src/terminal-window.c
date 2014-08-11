@@ -2268,6 +2268,12 @@ terminal_window_screen_update (TerminalWindow *window,
                    "gtk-enable-mnemonics",
                    G_SETTINGS_BIND_GET);
 
+  g_settings_bind (settings,
+                   TERMINAL_SETTING_ENABLE_SHORTCUTS_KEY,
+                   gtk_settings,
+                   "gtk-enable-accels",
+                   G_SETTINGS_BIND_GET);
+
   g_object_get (gtk_settings, "gtk-menu-bar-accel", &value, NULL);
   g_object_set_data_full (G_OBJECT (gtk_settings), "GT::gtk-menu-bar-accel",
                           value, (GDestroyNotify) g_free);

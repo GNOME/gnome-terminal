@@ -28,7 +28,8 @@ void terminal_accels_init (GApplication *application,
  
 void terminal_accels_shutdown (void);
 
-void terminal_accels_fill_treeview (GtkWidget *treeview);
+void terminal_accels_fill_treeview (GtkWidget *treeview,
+                                    GtkWidget *disable_shortcuts_button);
 
 G_END_DECLS
 
