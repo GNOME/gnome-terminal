@@ -21,10 +21,10 @@ namespace GTerminal
 
   public struct Output
   {
-    private static bool quiet = false;
-    private static bool verbose = false;
+    public static bool quiet = false;
+    public static bool verbose = false;
 
-    private static const OptionEntry[] entries = {
+    public static const OptionEntry[] entries = {
       { "quiet",   0,   OptionFlags.HIDDEN, OptionArg.NONE, ref quiet,
         N_("Suppress output"), null },
       { "verbose", 'v', OptionFlags.HIDDEN, OptionArg.NONE, ref verbose,
