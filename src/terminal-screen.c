@@ -725,7 +725,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 
       str = g_settings_get_string (profile, TERMINAL_PROFILE_ENCODING_KEY);
       encoding = terminal_app_ensure_encoding (terminal_app_get (), str);
-      vte_terminal_set_encoding (vte_terminal, terminal_encoding_get_charset (encoding));
+      vte_terminal_set_encoding (vte_terminal,
+                                 terminal_encoding_get_charset (encoding),
+                                 NULL);
     }
 
   if (!prop_name || prop_name == I_(TERMINAL_PROFILE_CJK_UTF8_AMBIGUOUS_WIDTH_KEY))

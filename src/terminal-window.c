@@ -1487,7 +1487,8 @@ terminal_set_encoding_callback (GtkToggleAction *action,
   g_assert (encoding);
 
   vte_terminal_set_encoding (VTE_TERMINAL (priv->active_screen),
-                             terminal_encoding_get_charset (encoding));
+                             terminal_encoding_get_charset (encoding),
+                             NULL);
 }
 
 static void
