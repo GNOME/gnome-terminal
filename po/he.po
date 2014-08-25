@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-28 23:11+0300\n"
-"PO-Revision-Date: 2014-06-28 23:16+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2014-08-25 22:06+0300\n"
+"PO-Revision-Date: 2014-08-25 22:11+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
 #: ../src/server.c:121 ../src/terminal-accels.c:222 ../src/terminal.c:243
 #: ../src/terminal-tab-label.c:79 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2562 ../src/terminal-window.c:2887
+#: ../src/terminal-window.c:2582 ../src/terminal-window.c:2932
 msgid "Terminal"
 msgstr "מסוף"
 
@@ -692,11 +692,23 @@ msgstr ""
 "off."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:80
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
-msgstr "Whether the standard GTK shortcut for menubar access is enabled"
+msgid "Whether shortcuts are enabled"
+msgstr "Whether shortcuts are enabled"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:81
 msgid ""
+"Whether shortcuts are enabled. They may interfere with some applications run "
+"inside the terminal so it's possible to turn them off."
+msgstr ""
+"Whether shortcuts are enabled. They may interfere with some applications run "
+"inside the terminal so it's possible to turn them off."
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr "Whether the standard GTK shortcut for menubar access is enabled"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
+msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
 "standard menubar accelerator to be disabled."
@@ -705,15 +717,15 @@ msgstr ""
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
 "standard menubar accelerator to be disabled."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Whether the shell integration is enabled"
 msgstr "Whether the shell integration is enabled"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "List of available encodings"
 msgstr "List of available encodings"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there."
@@ -721,19 +733,19 @@ msgstr ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Whether to ask for confirmation before closing a terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Whether to show the menubar in new windows"
 msgstr "Whether to show the menubar in new windows"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Whether to use a dark theme variant"
 msgstr "Whether to use a dark theme variant"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Whether to open new terminals as windows or tabs"
 
@@ -776,26 +788,30 @@ msgid "General"
 msgstr "כללי"
 
 #: ../src/preferences.ui.h:12
+msgid "_Enable shortcuts"
+msgstr "ה_פעלת מקשי קיצור"
+
+#: ../src/preferences.ui.h:13
 msgid "Shortcuts"
 msgstr "מקשי קיצור"
 
-#: ../src/preferences.ui.h:13
+#: ../src/preferences.ui.h:14
 msgid "_Clone"
 msgstr "_שכפול"
 
-#: ../src/preferences.ui.h:14
+#: ../src/preferences.ui.h:15
 msgid "_Profile used when launching a new terminal:"
 msgstr "פרופיל _לשימוש בעת הפעלת מסוף חדש:"
 
-#: ../src/preferences.ui.h:15
+#: ../src/preferences.ui.h:16
 msgid "Profiles"
 msgstr "פרופילים"
 
-#: ../src/preferences.ui.h:16
+#: ../src/preferences.ui.h:17
 msgid "E_ncodings shown in menu:"
 msgstr "ק_ידודים המוצגים בתפריט:"
 
-#: ../src/preferences.ui.h:17
+#: ../src/preferences.ui.h:18
 msgid "Encodings"
 msgstr "קידודים"
 
@@ -988,37 +1004,37 @@ msgstr "עמודות"
 msgid "rows"
 msgstr "שורות"
 
-#: ../src/profile-preferences.ui.h:53 ../src/terminal-accels.c:179
-msgid "Reset"
-msgstr "איפוס"
+#: ../src/profile-preferences.ui.h:53
+msgid "Rese_t"
+msgstr "_איפוס"
 
 #: ../src/profile-preferences.ui.h:54
 msgid "Cursor _shape:"
 msgstr "_צורת הסמן:"
 
 #: ../src/profile-preferences.ui.h:55
-msgid "_Use the system fixed width font"
-msgstr "_שימוש בגופן הרוחב הקבוע של המערכת"
-
-#: ../src/profile-preferences.ui.h:56
-msgid "_Font:"
-msgstr "_גופן:"
-
-#: ../src/profile-preferences.ui.h:57
-msgid "Choose A Terminal Font"
-msgstr "בחירת גופן המסוף"
-
-#: ../src/profile-preferences.ui.h:58
-msgid "_Allow bold text"
-msgstr "ה_פעלת טקסט מודגש"
-
-#: ../src/profile-preferences.ui.h:59
 msgid "Terminal _bell"
 msgstr "_פעמון מסוף"
 
-#: ../src/profile-preferences.ui.h:60
+#: ../src/profile-preferences.ui.h:56
+msgid "Text Appearance"
+msgstr "מראה הטקסט"
+
+#: ../src/profile-preferences.ui.h:57
+msgid "_Allow bold text"
+msgstr "ה_פעלת טקסט מודגש"
+
+#: ../src/profile-preferences.ui.h:58
 msgid "_Rewrap on resize"
 msgstr "לע_טוף מחדש עם שינוי גודל"
+
+#: ../src/profile-preferences.ui.h:59
+msgid "_Custom font"
+msgstr "גופן _מותאם"
+
+#: ../src/profile-preferences.ui.h:60
+msgid "Choose A Terminal Font"
+msgstr "בחירת גופן המסוף"
 
 #: ../src/profile-preferences.ui.h:62
 msgid "Command"
@@ -1105,34 +1121,30 @@ msgid "Colors"
 msgstr "צבעים"
 
 #: ../src/profile-preferences.ui.h:83
-msgid "Scroll_back:"
-msgstr "גל_ילה אחורה:"
-
-#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _keystroke"
 msgstr "גלילה בלחיצת _מקש"
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _output"
 msgstr "גל_ילה בפלט"
 
-#: ../src/profile-preferences.ui.h:86
-msgid "_Unlimited"
-msgstr "_ללא הגבלה"
+#: ../src/profile-preferences.ui.h:85
+msgid "_Limit scrollback to:"
+msgstr "ה_גבלת גלילה:"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:86
 msgid "lines"
 msgstr "שורות"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:87
 msgid "_Show scrollbar"
 msgstr "הצגת _פס גלילה"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:88
 msgid "Scrolling"
 msgstr "גלילה"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:89
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1142,27 +1154,27 @@ msgstr ""
 "נכון.  הן כאן רק כדי לאפשר לך לעבוד עם יישומים מסוימים ומערכות הפעלה שמצפות "
 "להתנהגות מסוף שונה."
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:90
 msgid "_Delete key generates:"
 msgstr "מקש ה_מחיקה מייצר:"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:91
 msgid "_Backspace key generates:"
 msgstr "מקש ה_החזרה מייצר:"
 
-#: ../src/profile-preferences.ui.h:93
+#: ../src/profile-preferences.ui.h:92
 msgid "_Encoding:"
 msgstr "_קידוד:"
 
-#: ../src/profile-preferences.ui.h:94
+#: ../src/profile-preferences.ui.h:93
 msgid "Ambiguous-_width characters:"
 msgstr "_רוחב תווים מעורפלים:"
 
-#: ../src/profile-preferences.ui.h:95
+#: ../src/profile-preferences.ui.h:94
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "ה_חזרת אפשרויות ההתאמה לבררת המחדל"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:95
 msgid "Compatibility"
 msgstr "התאמה"
 
@@ -1191,13 +1203,13 @@ msgid "Close All Terminals"
 msgstr "סגירת _כל המסופים"
 
 #. Edit menu
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2383
-#: ../src/terminal-window.c:2495
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2398
+#: ../src/terminal-window.c:2515
 msgid "Copy"
 msgstr "העתקה"
 
-#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2386
-#: ../src/terminal-window.c:2498
+#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2401
+#: ../src/terminal-window.c:2518
 msgid "Paste"
 msgstr "הדבקה"
 
@@ -1222,17 +1234,21 @@ msgid "Full Screen"
 msgstr "מסך מלא"
 
 #. View menu
-#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2403
+#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2418
 msgid "Zoom In"
 msgstr "התקרבות"
 
-#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2406
+#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2421
 msgid "Zoom Out"
 msgstr "התרחקות"
 
-#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2409
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2424
 msgid "Normal Size"
 msgstr "גודל רגיל"
+
+#: ../src/terminal-accels.c:179
+msgid "Reset"
+msgstr "איפוס"
 
 #: ../src/terminal-accels.c:180
 msgid "Reset and Clear"
@@ -1287,15 +1303,15 @@ msgstr "עזרה"
 msgid "Switch to Tab %d"
 msgstr "מעבר ללשונית %d"
 
-#: ../src/terminal-accels.c:526
+#: ../src/terminal-accels.c:529
 msgid "_Action"
 msgstr "_פעולה"
 
-#: ../src/terminal-accels.c:544
+#: ../src/terminal-accels.c:548
 msgid "Shortcut _Key"
 msgstr "_מקש קיצור"
 
-#: ../src/terminal-app.c:674
+#: ../src/terminal-app.c:677
 msgid "User Defined"
 msgstr "בהגדרת המשתמש"
 
@@ -1307,11 +1323,11 @@ msgstr "מסוף _חדש"
 msgid "_Preferences"
 msgstr "ה_עדפות"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2355
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2370
 msgid "_Help"
 msgstr "ע_זרה"
 
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2471
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2486
 msgid "_About"
 msgstr "על _אודות"
 
@@ -1671,7 +1687,7 @@ msgstr "רשימת פרופילים"
 msgid "Delete profile “%s”?"
 msgstr "האם למחוק את הפרופיל \"%s\"?"
 
-#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:521
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:529
 msgid "_Cancel"
 msgstr "_ביטול"
 
@@ -1683,45 +1699,45 @@ msgstr "מ_חיקה"
 msgid "Delete Profile"
 msgstr "מחיקת פרופיל"
 
-#: ../src/terminal-prefs.c:695
+#: ../src/terminal-prefs.c:702
 msgid "Show"
 msgstr "הצגה"
 
-#: ../src/terminal-prefs.c:706
+#: ../src/terminal-prefs.c:713
 msgid "_Encoding"
 msgstr "_קידוד"
 
-#: ../src/terminal-screen.c:1040
+#: ../src/terminal-screen.c:1042
 msgid "No command supplied nor shell requested"
 msgstr "לא סופקה פקודה או שהתבקשה מעטפת"
 
-#: ../src/terminal-screen.c:1295 ../src/terminal-window.c:2398
+#: ../src/terminal-screen.c:1297 ../src/terminal-window.c:2413
 msgid "_Profile Preferences"
 msgstr "העדפות ה_פרופיל"
 
-#: ../src/terminal-screen.c:1296 ../src/terminal-screen.c:1567
+#: ../src/terminal-screen.c:1298 ../src/terminal-screen.c:1569
 msgid "_Relaunch"
 msgstr "טעינה _מחדש"
 
-#: ../src/terminal-screen.c:1299
+#: ../src/terminal-screen.c:1301
 msgid "There was an error creating the child process for this terminal"
 msgstr "ארעה שגיאה ביצירת תהליך בן במסוף זה"
 
-#: ../src/terminal-screen.c:1571
+#: ../src/terminal-screen.c:1573
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "תהליך הצאצא הסתיים כרגיל עם מצב %d."
 
-#: ../src/terminal-screen.c:1574
+#: ../src/terminal-screen.c:1576
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "תהליך הצאצא בוטל עם האות %d."
 
-#: ../src/terminal-screen.c:1577
+#: ../src/terminal-screen.c:1579
 msgid "The child process was aborted."
 msgstr "תהליך הצאצא בוטל."
 
-#: ../src/terminal-tab-label.c:198
+#: ../src/terminal-tab-label.c:192
 msgid "Close tab"
 msgstr "סגירת הלשונית"
 
@@ -1786,15 +1802,15 @@ msgstr ""
 "You should have received a copy of the GNU General Public License along with "
 "GNOME Terminal.  If not, see <http://www.gnu.org/licenses/>."
 
-#: ../src/terminal-window.c:496
+#: ../src/terminal-window.c:504
 msgid "Could not save contents"
 msgstr "לא ניתן לשמור את התכנים"
 
-#: ../src/terminal-window.c:518
+#: ../src/terminal-window.c:526
 msgid "Save as…"
 msgstr "שמירה בשם…"
 
-#: ../src/terminal-window.c:522
+#: ../src/terminal-window.c:530
 msgid "_Save"
 msgstr "_שמירה"
 
@@ -1802,7 +1818,7 @@ msgstr "_שמירה"
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1201
+#: ../src/terminal-window.c:1209
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1811,218 +1827,231 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1207
+#: ../src/terminal-window.c:1215
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2363
 msgid "_File"
 msgstr "_קובץ"
 
 #. File menu
-#: ../src/terminal-window.c:2349 ../src/terminal-window.c:2360
-#: ../src/terminal-window.c:2366 ../src/terminal-window.c:2504
+#: ../src/terminal-window.c:2364 ../src/terminal-window.c:2375
+#: ../src/terminal-window.c:2381 ../src/terminal-window.c:2524
 msgid "Open _Terminal"
 msgstr "פתיחת _מסוף"
 
-#: ../src/terminal-window.c:2350
+#: ../src/terminal-window.c:2365
 msgid "_Edit"
 msgstr "ע_ריכה"
 
-#: ../src/terminal-window.c:2351
+#: ../src/terminal-window.c:2366
 msgid "_View"
 msgstr "_תצוגה"
 
-#: ../src/terminal-window.c:2352
+#: ../src/terminal-window.c:2367
 msgid "_Search"
 msgstr "_חיפוש"
 
-#: ../src/terminal-window.c:2353
+#: ../src/terminal-window.c:2368
 msgid "_Terminal"
 msgstr "_מסוף"
 
-#: ../src/terminal-window.c:2354
+#: ../src/terminal-window.c:2369
 msgid "Ta_bs"
 msgstr "_לשוניות"
 
-#: ../src/terminal-window.c:2363
+#: ../src/terminal-window.c:2378
 msgid "Open Ta_b"
 msgstr "פתיחת _לשונית"
 
-#: ../src/terminal-window.c:2369
+#: ../src/terminal-window.c:2384
 msgid "New _Profile"
 msgstr "פרופיל _חדש"
 
-#: ../src/terminal-window.c:2372
+#: ../src/terminal-window.c:2387
 msgid "_Save Contents"
 msgstr "שמירת ה_תכנים"
 
-#: ../src/terminal-window.c:2375 ../src/terminal-window.c:3600
+#: ../src/terminal-window.c:2390 ../src/terminal-window.c:3645
 msgid "C_lose Terminal"
 msgstr "_סגירת המסוף"
 
-#: ../src/terminal-window.c:2378
+#: ../src/terminal-window.c:2393
 msgid "_Close All Terminals"
 msgstr "סגירת _כל המסופים"
 
-#: ../src/terminal-window.c:2389 ../src/terminal-window.c:2501
+#: ../src/terminal-window.c:2404 ../src/terminal-window.c:2521
 msgid "Paste _Filenames"
 msgstr "הדבקת שמות _קבצים"
 
-#: ../src/terminal-window.c:2392
+#: ../src/terminal-window.c:2407
 msgid "Select All"
 msgstr "בחירת ה_כול"
 
-#: ../src/terminal-window.c:2395
+#: ../src/terminal-window.c:2410
 msgid "Pre_ferences"
 msgstr "ה_עדפות"
 
 #. Search menu
-#: ../src/terminal-window.c:2414
+#: ../src/terminal-window.c:2429
 msgid "_Find…"
 msgstr "_חיפוש…"
 
-#: ../src/terminal-window.c:2417
+#: ../src/terminal-window.c:2432
 msgid "Find Ne_xt"
 msgstr "חיפוש ה_בא"
 
-#: ../src/terminal-window.c:2420
+#: ../src/terminal-window.c:2435
 msgid "Find Pre_vious"
 msgstr "חיפוש ה_קודם"
 
-#: ../src/terminal-window.c:2423
+#: ../src/terminal-window.c:2438
 msgid "_Clear Highlight"
 msgstr "מחיקת הה_דגשה..."
 
-#: ../src/terminal-window.c:2427
+#: ../src/terminal-window.c:2442
 msgid "Go to _Line..."
 msgstr "מעבר ל_שורה..."
 
-#: ../src/terminal-window.c:2430
+#: ../src/terminal-window.c:2445
 msgid "_Incremental Search..."
 msgstr "חיפוש מ_צטבר..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2451
 msgid "Change _Profile"
 msgstr "החלפת _פרופיל"
 
-#: ../src/terminal-window.c:2437
+#: ../src/terminal-window.c:2452
 msgid "Set _Character Encoding"
 msgstr "הגדרת קידוד _תווים"
 
-#: ../src/terminal-window.c:2438
+#: ../src/terminal-window.c:2453
 msgid "_Reset"
 msgstr "_איפוס"
 
-#: ../src/terminal-window.c:2441
+#: ../src/terminal-window.c:2456
 msgid "Reset and C_lear"
 msgstr "איפוס ו_ניקוי"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2446
+#: ../src/terminal-window.c:2461
 msgid "_Add or Remove…"
 msgstr "_הוספה או הסרה..."
 
 #. Tabs menu
-#: ../src/terminal-window.c:2451
+#: ../src/terminal-window.c:2466
 msgid "_Previous Terminal"
 msgstr "המסוף ה_קודם"
 
-#: ../src/terminal-window.c:2454
+#: ../src/terminal-window.c:2469
 msgid "_Next Terminal"
 msgstr "המסוף ה_בא"
 
-#: ../src/terminal-window.c:2457
+#: ../src/terminal-window.c:2472
 msgid "Move Terminal _Left"
 msgstr "העברת המסוף _שמאלה"
 
-#: ../src/terminal-window.c:2460
+#: ../src/terminal-window.c:2475
 msgid "Move Terminal _Right"
 msgstr "העברת המסוף _ימינה"
 
-#: ../src/terminal-window.c:2463
+#: ../src/terminal-window.c:2478
 msgid "_Detach Terminal"
 msgstr "_ניתוק המסוף"
 
 #. Help menu
-#: ../src/terminal-window.c:2468
+#: ../src/terminal-window.c:2483
 msgid "_Contents"
 msgstr "_תוכן"
 
+#: ../src/terminal-window.c:2490
+msgid "_Inspector"
+msgstr "_מפקח"
+
 #. Popup menu
-#: ../src/terminal-window.c:2476
+#: ../src/terminal-window.c:2496
 msgid "_Send Mail To…"
 msgstr "שליחת _דוא״ל אל…"
 
-#: ../src/terminal-window.c:2479
+#: ../src/terminal-window.c:2499
 msgid "_Copy E-mail Address"
 msgstr "העתקת כתוב_ת דוא״ל"
 
-#: ../src/terminal-window.c:2482
+#: ../src/terminal-window.c:2502
 msgid "C_all To…"
 msgstr "ה_תקשרות אל…"
 
-#: ../src/terminal-window.c:2485
+#: ../src/terminal-window.c:2505
 msgid "_Copy Call Address"
 msgstr "העתקת כתוב_ת ההתקשרות"
 
-#: ../src/terminal-window.c:2488
+#: ../src/terminal-window.c:2508
 msgid "_Open Link"
 msgstr "_פתיחת הקישור"
 
-#: ../src/terminal-window.c:2491
+#: ../src/terminal-window.c:2511
 msgid "_Copy Link Address"
 msgstr "ה_עתקת כתובת הקישור"
 
-#: ../src/terminal-window.c:2494
+#: ../src/terminal-window.c:2514
 msgid "P_rofiles"
 msgstr "פרופי_לים"
 
-#: ../src/terminal-window.c:2507
+#: ../src/terminal-window.c:2527
 msgid "L_eave Full Screen"
 msgstr "י_ציאה ממסך מלא"
 
 #. View Menu
-#: ../src/terminal-window.c:2515
+#: ../src/terminal-window.c:2535
 msgid "Show _Menubar"
 msgstr "הצגת _סרגל התפריטים"
 
-#: ../src/terminal-window.c:2519
+#: ../src/terminal-window.c:2539
 msgid "_Full Screen"
 msgstr "_מסך מלא"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2524
+#: ../src/terminal-window.c:2544
 msgid "Read-_Only"
 msgstr "קריאה _בלבד"
 
-#: ../src/terminal-window.c:3587
+#: ../src/terminal-window.c:3632
 msgid "Close this window?"
 msgstr "האם לסגור חלון זה?"
 
-#: ../src/terminal-window.c:3587
+#: ../src/terminal-window.c:3632
 msgid "Close this terminal?"
 msgstr "האם לסגור מסוף זה?"
 
-#: ../src/terminal-window.c:3591
+#: ../src/terminal-window.c:3636
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "עדיין ישנם תהליכים הפעילים דרך כמה מסופים בחלון זה. סגירת החלון תחסל את כולם."
 
-#: ../src/terminal-window.c:3595
+#: ../src/terminal-window.c:3640
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "עדיין ישנו תהליך הפעיל דרך מסוף זה. סגירת המסוף תחסל אותו."
 
-#: ../src/terminal-window.c:3600
+#: ../src/terminal-window.c:3645
 msgid "C_lose Window"
 msgstr "סגירת ה_חלון"
+
+#~ msgid "_Use the system fixed width font"
+#~ msgstr "_שימוש בגופן הרוחב הקבוע של המערכת"
+
+#~ msgid "_Font:"
+#~ msgstr "_גופן:"
+
+#~ msgid "_Unlimited"
+#~ msgstr "_ללא הגבלה"
 
 #~ msgid "COMMAND"
 #~ msgstr "COMMAND"
