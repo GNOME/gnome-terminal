@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal 3.1.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-08-18 19:51+0000\n"
-"PO-Revision-Date: 2014-08-19 20:24+0800\n"
+"POT-Creation-Date: 2014-08-23 19:50+0000\n"
+"PO-Revision-Date: 2014-08-25 14:11+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: zh_TW\n"
@@ -25,7 +25,7 @@ msgstr ""
 #: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
 #: ../src/server.c:121 ../src/terminal-accels.c:222 ../src/terminal.c:243
 #: ../src/terminal-tab-label.c:79 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2576 ../src/terminal-window.c:2926
+#: ../src/terminal-window.c:2582 ../src/terminal-window.c:2932
 msgid "Terminal"
 msgstr "終端機"
 
@@ -96,12 +96,10 @@ msgstr "顯示輸出選項"
 
 #: ../src/gterminal.vala:84
 #, c-format
-#| msgid "\"%s\" is not a valid zoom factor"
 msgid "\"%s\" is not a valid application ID"
 msgstr "「%s」是無效的應用程式 ID"
 
 #: ../src/gterminal.vala:96
-#| msgid "Server options:"
 msgid "Server application ID"
 msgstr "伺服器應用程式 ID"
 
@@ -282,7 +280,6 @@ msgid "Unknown completion request for \"%s\""
 msgstr "來自「%s」的不明補齊要求"
 
 #: ../src/gterminal.vala:560
-#| msgid "Terminal"
 msgid "GTerminal"
 msgstr "GTerminal"
 
@@ -655,7 +652,7 @@ msgstr "用來讓字型變成一般大小的快捷鍵"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:78
 msgid "Whether the menubar has access keys"
-msgstr "選單列有沒有捷徑鏈"
+msgstr "選單列有沒有快捷鍵"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:79
 msgid ""
@@ -665,47 +662,58 @@ msgid ""
 msgstr "是否使用 Alt + 字母來使用選單列中的項目。終端機執行程式時，某些程式可能需要使用這些按鍵組合，因此允許終端機不截取這類按鍵。"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:80
+#| msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgid "Whether shortcuts are enabled"
+msgstr "快捷鍵是否啟用"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#| msgid ""
+#| "Whether to have Alt+letter access keys for the menubar. They may "
+#| "interfere with some applications run inside the terminal so it's possible "
+#| "to turn them off."
+msgid ""
+"Whether shortcuts are enabled. They may interfere with some applications run "
+"inside the terminal so it's possible to turn them off."
+msgstr "快捷鍵是否啟用。它們可能與終端機內執行的某些程式衝突，因此不可能將它們關閉。"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
 msgstr "選單列可否通過標準的 GTK 快捷鍵來使用"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:81
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
 "standard menubar accelerator to be disabled."
 msgstr "在正常情況下按 F10 可使用選單列。該設定也可以通過 gtkrc 更改 (gtk-menu-bar-accel = \"whatever\")。本選項可以令正常的選單列快捷鍵失效。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Whether the shell integration is enabled"
 msgstr "是否啟用 shell 整合"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "List of available encodings"
 msgstr "可供使用的編碼的清單"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
-#| msgid ""
-#| "A subset of possible encodings are presented in the Encoding submenu. "
-#| "This is a list of encodings to appear there. The special encoding name "
-#| "\"current\" means to display the encoding of the current locale."
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there."
 msgstr "可用編碼的子集會出現在編碼子選單中。這裏是會出現在那裏的編碼清單。"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "關閉終端機視窗時是否詢問以作確定"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Whether to show the menubar in new windows"
 msgstr "新的視窗中是否顯示選單列"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Whether to use a dark theme variant"
 msgstr "是否使用暗色系布景主題變體"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "是否以新的視窗或分頁開啟新的終端機"
 
@@ -748,26 +756,31 @@ msgid "General"
 msgstr "一般"
 
 #: ../src/preferences.ui.h:12
+#| msgid "Shortcuts"
+msgid "_Enable shortcuts"
+msgstr "啟用快捷鍵(_E)"
+
+#: ../src/preferences.ui.h:13
 msgid "Shortcuts"
 msgstr "快捷鍵"
 
-#: ../src/preferences.ui.h:13
+#: ../src/preferences.ui.h:14
 msgid "_Clone"
 msgstr "重製(_C)"
 
-#: ../src/preferences.ui.h:14
+#: ../src/preferences.ui.h:15
 msgid "_Profile used when launching a new terminal:"
 msgstr "當開啟新的終端機時使用的設定組合(_P):"
 
-#: ../src/preferences.ui.h:15
+#: ../src/preferences.ui.h:16
 msgid "Profiles"
 msgstr "設定組合"
 
-#: ../src/preferences.ui.h:16
+#: ../src/preferences.ui.h:17
 msgid "E_ncodings shown in menu:"
 msgstr "在選單中顯示的編碼(_N):"
 
-#: ../src/preferences.ui.h:17
+#: ../src/preferences.ui.h:18
 msgid "Encodings"
 msgstr "編碼"
 
@@ -953,7 +966,6 @@ msgid "Profile ID:"
 msgstr "設定組合 ID"
 
 #: ../src/profile-preferences.ui.h:50
-#| msgid "Initial _title:"
 msgid "Initial terminal si_ze:"
 msgstr "初始終端機大小(_Z):"
 
@@ -966,7 +978,6 @@ msgid "rows"
 msgstr "列"
 
 #: ../src/profile-preferences.ui.h:53
-#| msgid "Reset"
 msgid "Rese_t"
 msgstr "重設(_T)"
 
@@ -979,7 +990,6 @@ msgid "Terminal _bell"
 msgstr "終端機會發出響聲(_B)"
 
 #: ../src/profile-preferences.ui.h:56
-#| msgid "The cursor appearance"
 msgid "Text Appearance"
 msgstr "文字外觀"
 
@@ -992,7 +1002,6 @@ msgid "_Rewrap on resize"
 msgstr "調整大小時調整內容(_R)"
 
 #: ../src/profile-preferences.ui.h:59
-#| msgid "Custom"
 msgid "_Custom font"
 msgstr "自選字型(_C)"
 
@@ -1093,7 +1102,6 @@ msgid "Scroll on _output"
 msgstr "輸出時捲動(_O)"
 
 #: ../src/profile-preferences.ui.h:85
-#| msgid "Scroll_back:"
 msgid "_Limit scrollback to:"
 msgstr "限制捲回到(_L):"
 
@@ -1129,7 +1137,6 @@ msgid "_Encoding:"
 msgstr "編碼(_E)："
 
 #: ../src/profile-preferences.ui.h:93
-#| msgid "Select-by-_word characters:"
 msgid "Ambiguous-_width characters:"
 msgstr "不確定闊度字符(_W):"
 
@@ -1166,13 +1173,13 @@ msgid "Close All Terminals"
 msgstr "關閉全部終端機"
 
 #. Edit menu
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2392
-#: ../src/terminal-window.c:2509
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2398
+#: ../src/terminal-window.c:2515
 msgid "Copy"
 msgstr "複製"
 
-#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2395
-#: ../src/terminal-window.c:2512
+#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2401
+#: ../src/terminal-window.c:2518
 msgid "Paste"
 msgstr "貼上"
 
@@ -1197,15 +1204,15 @@ msgid "Full Screen"
 msgstr "全螢幕"
 
 #. View menu
-#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2412
+#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2418
 msgid "Zoom In"
 msgstr "拉近"
 
-#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2415
+#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2421
 msgid "Zoom Out"
 msgstr "拉遠"
 
-#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2418
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2424
 msgid "Normal Size"
 msgstr "原來大小"
 
@@ -1266,11 +1273,11 @@ msgstr "求助"
 msgid "Switch to Tab %d"
 msgstr "切換到分頁 %d"
 
-#: ../src/terminal-accels.c:526
+#: ../src/terminal-accels.c:529
 msgid "_Action"
 msgstr "動作(_A)"
 
-#: ../src/terminal-accels.c:544
+#: ../src/terminal-accels.c:548
 msgid "Shortcut _Key"
 msgstr "快捷鍵(_K)"
 
@@ -1286,11 +1293,11 @@ msgstr "新增終端機(_N)"
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2364
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2370
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2480
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2486
 msgid "_About"
 msgstr "關於(_A)"
 
@@ -1652,11 +1659,11 @@ msgstr "刪除(_D)"
 msgid "Delete Profile"
 msgstr "刪除設定組合"
 
-#: ../src/terminal-prefs.c:695
+#: ../src/terminal-prefs.c:702
 msgid "Show"
 msgstr "顯示"
 
-#: ../src/terminal-prefs.c:706
+#: ../src/terminal-prefs.c:713
 msgid "_Encoding"
 msgstr "編碼(_E)"
 
@@ -1664,7 +1671,7 @@ msgstr "編碼(_E)"
 msgid "No command supplied nor shell requested"
 msgstr "不支援指令或 shell 要求"
 
-#: ../src/terminal-screen.c:1297 ../src/terminal-window.c:2407
+#: ../src/terminal-screen.c:1297 ../src/terminal-window.c:2413
 msgid "_Profile Preferences"
 msgstr "設定組合偏好設定(_P)"
 
@@ -1779,213 +1786,213 @@ msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2357
+#: ../src/terminal-window.c:2363
 msgid "_File"
 msgstr "檔案(_F)"
 
 #. File menu
-#: ../src/terminal-window.c:2358 ../src/terminal-window.c:2369
-#: ../src/terminal-window.c:2375 ../src/terminal-window.c:2518
+#: ../src/terminal-window.c:2364 ../src/terminal-window.c:2375
+#: ../src/terminal-window.c:2381 ../src/terminal-window.c:2524
 msgid "Open _Terminal"
 msgstr "開啟視窗(_T)"
 
-#: ../src/terminal-window.c:2359
+#: ../src/terminal-window.c:2365
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../src/terminal-window.c:2360
+#: ../src/terminal-window.c:2366
 msgid "_View"
 msgstr "檢視(_V)"
 
-#: ../src/terminal-window.c:2361
+#: ../src/terminal-window.c:2367
 msgid "_Search"
 msgstr "搜尋(_S)"
 
-#: ../src/terminal-window.c:2362
+#: ../src/terminal-window.c:2368
 msgid "_Terminal"
 msgstr "終端機(_T)"
 
-#: ../src/terminal-window.c:2363
+#: ../src/terminal-window.c:2369
 msgid "Ta_bs"
 msgstr "分頁(_B)"
 
-#: ../src/terminal-window.c:2372
+#: ../src/terminal-window.c:2378
 msgid "Open Ta_b"
 msgstr "開啟分頁(_B)"
 
-#: ../src/terminal-window.c:2378
+#: ../src/terminal-window.c:2384
 msgid "New _Profile"
 msgstr "新增設定組合(_P)"
 
-#: ../src/terminal-window.c:2381
+#: ../src/terminal-window.c:2387
 msgid "_Save Contents"
 msgstr "儲存內容(_S)"
 
-#: ../src/terminal-window.c:2384 ../src/terminal-window.c:3639
+#: ../src/terminal-window.c:2390 ../src/terminal-window.c:3645
 msgid "C_lose Terminal"
 msgstr "關閉終端機(_L)"
 
-#: ../src/terminal-window.c:2387
+#: ../src/terminal-window.c:2393
 msgid "_Close All Terminals"
 msgstr "關閉全部終端機(_C)"
 
-#: ../src/terminal-window.c:2398 ../src/terminal-window.c:2515
+#: ../src/terminal-window.c:2404 ../src/terminal-window.c:2521
 msgid "Paste _Filenames"
 msgstr "貼上檔案名稱(_F)"
 
-#: ../src/terminal-window.c:2401
+#: ../src/terminal-window.c:2407
 msgid "Select All"
 msgstr "選擇全部"
 
-#: ../src/terminal-window.c:2404
+#: ../src/terminal-window.c:2410
 msgid "Pre_ferences"
 msgstr "偏好設定(_F)"
 
 #. Search menu
-#: ../src/terminal-window.c:2423
+#: ../src/terminal-window.c:2429
 msgid "_Find…"
 msgstr "尋找(_F)…"
 
-#: ../src/terminal-window.c:2426
+#: ../src/terminal-window.c:2432
 msgid "Find Ne_xt"
 msgstr "找下一個(_X)"
 
-#: ../src/terminal-window.c:2429
+#: ../src/terminal-window.c:2435
 msgid "Find Pre_vious"
 msgstr "找上一個(_V)"
 
-#: ../src/terminal-window.c:2432
+#: ../src/terminal-window.c:2438
 msgid "_Clear Highlight"
 msgstr "清除標示(_C)"
 
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2442
 msgid "Go to _Line..."
 msgstr "前往列號(_L)…"
 
-#: ../src/terminal-window.c:2439
+#: ../src/terminal-window.c:2445
 msgid "_Incremental Search..."
 msgstr "漸進式搜尋(_I)…"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2445
+#: ../src/terminal-window.c:2451
 msgid "Change _Profile"
 msgstr "更改設定組合(_P)"
 
-#: ../src/terminal-window.c:2446
+#: ../src/terminal-window.c:2452
 msgid "Set _Character Encoding"
 msgstr "設定字符編碼(_C)"
 
-#: ../src/terminal-window.c:2447
+#: ../src/terminal-window.c:2453
 msgid "_Reset"
 msgstr "重設(_R)"
 
-#: ../src/terminal-window.c:2450
+#: ../src/terminal-window.c:2456
 msgid "Reset and C_lear"
 msgstr "重設並清除畫面(_L)"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2455
+#: ../src/terminal-window.c:2461
 msgid "_Add or Remove…"
 msgstr "加入或移除(_A)…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2460
+#: ../src/terminal-window.c:2466
 msgid "_Previous Terminal"
 msgstr "上一個終端機(_P)"
 
-#: ../src/terminal-window.c:2463
+#: ../src/terminal-window.c:2469
 msgid "_Next Terminal"
 msgstr "下一個終端機(_N)"
 
-#: ../src/terminal-window.c:2466
+#: ../src/terminal-window.c:2472
 msgid "Move Terminal _Left"
 msgstr "將終端機左移(_L)"
 
-#: ../src/terminal-window.c:2469
+#: ../src/terminal-window.c:2475
 msgid "Move Terminal _Right"
 msgstr "將終端機右移(_R)"
 
-#: ../src/terminal-window.c:2472
+#: ../src/terminal-window.c:2478
 msgid "_Detach Terminal"
 msgstr "脫離終端機(_D)"
 
 #. Help menu
-#: ../src/terminal-window.c:2477
+#: ../src/terminal-window.c:2483
 msgid "_Contents"
 msgstr "內容(_C)"
 
-#: ../src/terminal-window.c:2484
+#: ../src/terminal-window.c:2490
 msgid "_Inspector"
 msgstr "檢查器(_I)"
 
 #. Popup menu
-#: ../src/terminal-window.c:2490
+#: ../src/terminal-window.c:2496
 msgid "_Send Mail To…"
 msgstr "傳送郵件給(_S)…"
 
-#: ../src/terminal-window.c:2493
+#: ../src/terminal-window.c:2499
 msgid "_Copy E-mail Address"
 msgstr "複製電郵地址(_C)"
 
-#: ../src/terminal-window.c:2496
+#: ../src/terminal-window.c:2502
 msgid "C_all To…"
 msgstr "呼叫到(_A)…"
 
-#: ../src/terminal-window.c:2499
+#: ../src/terminal-window.c:2505
 msgid "_Copy Call Address"
 msgstr "複製呼叫位址(_C)"
 
-#: ../src/terminal-window.c:2502
+#: ../src/terminal-window.c:2508
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
-#: ../src/terminal-window.c:2505
+#: ../src/terminal-window.c:2511
 msgid "_Copy Link Address"
 msgstr "複製連結位址(_C)"
 
-#: ../src/terminal-window.c:2508
+#: ../src/terminal-window.c:2514
 msgid "P_rofiles"
 msgstr "設定組合(_R)"
 
-#: ../src/terminal-window.c:2521
+#: ../src/terminal-window.c:2527
 msgid "L_eave Full Screen"
 msgstr "離開全螢幕(_E)"
 
 #. View Menu
-#: ../src/terminal-window.c:2529
+#: ../src/terminal-window.c:2535
 msgid "Show _Menubar"
 msgstr "顯示選單列(_M)"
 
-#: ../src/terminal-window.c:2533
+#: ../src/terminal-window.c:2539
 msgid "_Full Screen"
 msgstr "全螢幕(_F)"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2538
+#: ../src/terminal-window.c:2544
 msgid "Read-_Only"
 msgstr "唯讀(_O)"
 
-#: ../src/terminal-window.c:3626
+#: ../src/terminal-window.c:3632
 msgid "Close this window?"
 msgstr "是否關閉這個視窗？"
 
-#: ../src/terminal-window.c:3626
+#: ../src/terminal-window.c:3632
 msgid "Close this terminal?"
 msgstr "是否關閉這個終端機？"
 
-#: ../src/terminal-window.c:3630
+#: ../src/terminal-window.c:3636
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr "在這個視窗的部分終端機還有程序在執行。關閉視窗會終結它們。"
 
-#: ../src/terminal-window.c:3634
+#: ../src/terminal-window.c:3640
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "在這個終端機還有程序在執行。關閉終端機會終結它們。"
 
-#: ../src/terminal-window.c:3639
+#: ../src/terminal-window.c:3645
 msgid "C_lose Window"
 msgstr "關閉視窗(_L)"
 
