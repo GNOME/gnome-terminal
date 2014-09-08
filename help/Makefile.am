@@ -31,7 +31,6 @@ HELP_FILES = \
 	pref-keyboard-access.page \
 	pref-menubar.page \
 	pref-profiles.page \
-	pref-profile-encoding.page \
 	pref-scrolling.page \
 	pref-tab-window.page \
 	pref-theme.page \
