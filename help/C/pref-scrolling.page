@@ -3,7 +3,8 @@
       id="pref-scrolling">
 
   <info>
-    <revision version="0.1" date="2013-02-25" status="draft"/>
+    <revision pkgversion="3.8" date="2013-02-25" status="draft"/>
+    <revision pkgversion="3.12" date="2014-09-08" status="review"/>
     <link type="guide" xref="index#preferences"/>
     <link type="guide" xref="profile"/>
 
@@ -15,78 +16,93 @@
     <credit type="copyright editor">
       <name>Ekaterina Gerasimova</name>
       <email>kittykat3756@gmail.com</email>
-      <years>2013</years>
+      <years>2013–2014</years>
     </credit>
 
     <include href="legal.xml" xmlns="http://www.w3.org/2001/XInclude"/>
 
-    <desc>Set scroll output and scrollbar behavior.</desc>
+    <desc>Change the scroll output and scrollbar behavior.</desc>
   </info>
 
   <title>Scrollbar preferences</title>
 
-  <p>A scrollbar is a part of the graphical user interface (GUI) which allows
-  anything continuous and exceeding the visible screen space such as text to be
-  viewable by the user by scrolling up or down to the parts hidden from current
-  view.</p>
+  <p>When a lot of output is printed to your terminal screen, it can be helpful
+  to have your terminal behave in a specific manner so that it is easier to
+  work with.</p>
 
-  <!-- Note to self: check UI. -->
-
-  <section id="scrollbar-visibility">
+  <section id="visibility">
     <title>Scrollbar visibility</title>
 
-    <p>You can set the location of the scrollbar, or disable it, in
-    <app>Terminal</app>:</p>
+    <p>You can disable the scrollbar:</p>
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Profile Preferences</gui>
-        <gui style="tab">Scrolling</gui></guiseq>.</p>
+        <p>Select
+        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+        Preferences</gui><gui style="tab">Scrolling</gui></guiseq>.</p>
       </item>
       <item>
-        <p>You can choose from the following options:</p>
-        <list>
-          <item>
-            <p><gui style="menuitem">Always visible</gui>: Scrollbar is
-            visible at all times.</p>
-            <!-- Scrollbar is not a proper noun, so do not capitalise it
-            unless it is at the start of a sentence. -->
-          </item>
-          <item>
-            <p><gui style="menuitem">Visible only when necessary</gui>:
-            Scrollbar is visible only when terminal output exceeds the length
-            of <app>Terminal</app> window size.</p>
-          </item>
-          <item>
-            <p><gui style="menuitem">Hidden</gui>: Scrollbar is always hidden
-            from view.</p>
-          </item>
-        </list>
+        <p>Uncheck <gui>Show scrollbar</gui>.</p>
+      </item>
+    </steps>
+
+    <p>Your preference is saved immediately.</p>
+
+  </section>
+
+  <section id="on-output">
+    <title>Scroll on output</title>
+
+    <p>You can lock scrolling so that it always shows the newest output while a
+    command executes.</p>
+
+    <steps>
+      <item>
+        <p>Select
+        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+        Preferences</gui><gui style="tab">Scrolling</gui></guiseq>.</p>
       </item>
       <item>
-        <p>Your preference is saved immediately. Click
-        <gui style="button">Close</gui> to return to <app>Terminal</app>.</p>
+        <p>Check <gui style="checkbox">Scroll on output</gui>.</p>
       </item>
     </steps>
 
   </section>
 
-  <section id="scrollback-lines">
-    <title>Scrollback lines</title>
+  <section id="on-keystroke">
+    <title>Scroll on input</title>
 
-    <p><gui>Scrollback</gui> lines indicate the number of <app>Terminal</app>
-    output lines stored in memory for scrolling.</p>
+    <p>You can set the terminal to automatically scroll to the bottom of the
+    window when you input text into the prompt.</p>
 
     <steps>
       <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Profile Preferences</gui>
-        <gui style="tab">Scrolling</gui></guiseq>.</p>
+        <p>Select
+        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+        Preferences</gui><gui style="tab">Scrolling</gui></guiseq>.</p>
       </item>
       <item>
-        <p>In the input box next to <gui>Scrollback</gui>, input a number
-        greater than 0 to set the number of scrollback lines.</p>
+        <p>Check <gui style="checkbox">Scroll on keystroke</gui>.</p>
+      </item>
+    </steps>
+  </section>
+
+  <section id="lines">
+    <title>Scrollback lines</title>
+
+    <p>You can limit the number of lines of terminal output which are stored in
+    memory. You may want to do this if you rarely restart your terminal so that
+    there is a limit to how much memory the scrollback can use.</p>
+
+    <steps>
+      <item>
+        <p>Select
+        <guiseq><gui style="menu">Edit</gui><gui style="menuitem">Profile
+        Preferences</gui><gui style="tab">Scrolling</gui></guiseq>.</p>
+      </item>
+      <item>
+        <p>Check <gui>Limit scrollback to</gui> and enter a number of lines
+        which is greater than 0 to limit scrollback.</p>
       </item>
       <item>
         <p>Optionally, you can click on <gui style="button">+</gui> to
@@ -94,53 +110,11 @@
       </item>
     </steps>
 
-    <p>To have unlimited scrollback lines, check
-    <gui style="checkbox">Unlimited</gui> as your option.</p>
-
     <note style="warning">
-      <p><gui style="checkbox">Unlimited</gui> scrollback lines could
-      potentially overburden your computer's memory and make
-      <app>Terminal</app> sluggish during scrolling!</p>
+      <p>Using unlimited scrollback can make your <app>Terminal</app> sluggish
+      during scrolling!</p>
     </note>
 
-  </section>
-
-  <section id="scroll-on-output">
-    <title>Scroll on output</title>
-
-    <p><app>Terminal</app> can automatically scroll down to the latest output
-    as a command executes.</p>
-
-    <steps>
-      <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Profile Preferences</gui>
-        <gui style="tab">Scrolling</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Select <gui style="checkbox">Scroll on output</gui>.</p>
-      </item>
-    </steps>
-
-  </section>
-
-  <section id="scroll-on-keystroke">
-    <title>Scroll on keystroke</title>
-
-    <p><gui style="checkbox">Scroll on keystroke</gui>, when enabled allows
-    the <app>Terminal</app> to scroll down to prompt, on press of any key that
-    can be an input to prompt, such as an alphabet, numbers, tab key etc.</p>
-
-    <steps>
-      <item>
-        <p>Select <guiseq><gui style="menu">Edit</gui>
-        <gui style="menuitem">Profile Preferences</gui>
-        <gui style="tab">Scrolling</gui></guiseq>.</p>
-      </item>
-      <item>
-        <p>Select <gui style="checkbox">Scroll on keystroke</gui>.</p>
-      </item>
-    </steps>
   </section>
 
 </page>
