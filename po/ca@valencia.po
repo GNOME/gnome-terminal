@@ -5,25 +5,26 @@
 # Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006, 2007.
 # Joan Duran <jodufi@gmail.com>, 2009-2013.
 # Jordi Serratosa <jordis@softcatala.cat>, 2012.
+# Gil Forcada <gilforcada@guifi.net>, 2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-09 00:16+0200\n"
-"PO-Revision-Date: 2014-03-01 09:41+0100\n"
-"Last-Translator: Pau Iranzo <paugnu@gmail.com>\n"
+"POT-Creation-Date: 2014-09-14 23:53+0200\n"
+"PO-Revision-Date: 2014-08-18 00:32+0200\n"
+"Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca-XV\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bits\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
-#: ../src/server.c:116 ../src/terminal-accels.c:222 ../src/terminal.c:242
+#: ../src/server.c:121 ../src/terminal-accels.c:222 ../src/terminal.c:243
 #: ../src/terminal-tab-label.c:79 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2562 ../src/terminal-window.c:2887
+#: ../src/terminal-window.c:2582 ../src/terminal-window.c:2932
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -51,171 +52,6 @@ msgstr ""
 #: ../gnome-terminal.desktop.in.in.h:3
 msgid "shell;prompt;command;commandline;"
 msgstr "intèrpret d'ordes;indicador;orde;línia d'ordes;"
-
-#: ../src/client.c:91
-msgid "COMMAND"
-msgstr "ORDRE"
-
-#: ../src/client.c:96
-#, c-format
-msgid ""
-"Commands:\n"
-"  help    Shows this information\n"
-"  run     Create a new terminal running the specified command\n"
-"  shell   Create a new terminal running the user shell\n"
-"\n"
-"Use \"%s COMMAND --help\" to get help on each command.\n"
-msgstr ""
-"Ordes:\n"
-"  help    Mostra esta informació\n"
-"  run     Crea un terminal nou executant l'orde especificada\n"
-"  shell   Crea un terminal nou executant l'intèrpret d'ordes de l'usuari\n"
-"\n"
-"Utilitzeu «%s ORDRE --help» per obtindre ajuda de cada orde.\n"
-
-#: ../src/client.c:200 ../src/terminal-options.c:683
-#, c-format
-msgid "\"%s\" is not a valid zoom factor"
-msgstr "«%s» no és un factor d'ampliació vàlid"
-
-#: ../src/client.c:331
-msgid "Be quiet"
-msgstr "Tranquil"
-
-#: ../src/client.c:342 ../src/terminal-options.c:1095
-msgid "Maximize the window"
-msgstr "Maximitza la finestra"
-
-#: ../src/client.c:344 ../src/terminal-options.c:1104
-msgid "Full-screen the window"
-msgstr "Mostra la finestra a pantalla completa"
-
-#: ../src/client.c:346 ../src/terminal-options.c:1113
-msgid ""
-"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
-msgstr ""
-"Establiu la mida de la finestra; per exemple 80x24 or 80x24+200+200 "
-"(COLUMNESxFILES+X+Y)"
-
-#: ../src/client.c:347 ../src/terminal-options.c:1114
-msgid "GEOMETRY"
-msgstr "GEOMETRIA"
-
-#: ../src/client.c:349 ../src/terminal-options.c:1122
-msgid "Set the window role"
-msgstr "Estableix el rol de la finestra"
-
-#: ../src/client.c:349 ../src/terminal-options.c:1123
-msgid "ROLE"
-msgstr "ROL"
-
-#: ../src/client.c:355 ../src/terminal-options.c:1153
-msgid "Use the given profile instead of the default profile"
-msgstr "Utilitza el perfil especificat en lloc del predeterminat"
-
-#: ../src/client.c:356
-msgid "UUID"
-msgstr "UUID"
-
-#: ../src/client.c:358 ../src/terminal-options.c:1162
-msgid "Set the terminal title"
-msgstr "Estableix el títol del terminal"
-
-#: ../src/client.c:358 ../src/terminal-options.c:1163
-msgid "TITLE"
-msgstr "TÍTOL"
-
-#: ../src/client.c:360 ../src/terminal-options.c:1171
-msgid "Set the working directory"
-msgstr "Estableix el directori de treball"
-
-#: ../src/client.c:360 ../src/terminal-options.c:1172
-msgid "DIRNAME"
-msgstr "DIRECTORI"
-
-#: ../src/client.c:362 ../src/terminal-options.c:1180
-msgid "Set the terminal's zoom factor (1.0 = normal size)"
-msgstr "Estableix el factor d'ampliació del terminal (1.0 = mida normal)"
-
-#: ../src/client.c:363 ../src/terminal-options.c:1181
-msgid "ZOOM"
-msgstr "AMPLIACIÓ"
-
-#: ../src/client.c:369
-msgid "Forward stdin"
-msgstr "Redirecciona l'entrada estàndard (stdin)"
-
-#: ../src/client.c:371
-msgid "Forward stdout"
-msgstr "Redirecciona l'eixida estàndard (stdout)"
-
-#: ../src/client.c:373
-msgid "Forward stderr"
-msgstr "Redirecciona l'eixida d'errors (stderr)"
-
-#: ../src/client.c:375
-msgid "Forward file descriptor"
-msgstr "Redirecciona el descriptor de fitxers"
-
-#: ../src/client.c:375
-msgid "FD"
-msgstr "FD"
-
-#: ../src/client.c:381
-msgid "Wait until the child exits"
-msgstr "Espera fins que el subprocés isca"
-
-#: ../src/client.c:391
-msgid "GNOME Terminal Client"
-msgstr "Client de terminal del GNOME"
-
-#: ../src/client.c:395
-msgid "Global options:"
-msgstr "Opcions globals:"
-
-#: ../src/client.c:396
-msgid "Show global options"
-msgstr "Mostra les opcions globals"
-
-#: ../src/client.c:404
-msgid "Server options:"
-msgstr "Opcions del servidor:"
-
-#: ../src/client.c:405
-msgid "Show server options"
-msgstr "Mostra les opcions del servidor"
-
-#: ../src/client.c:413
-msgid "Window options:"
-msgstr "Opcions de la finestra:"
-
-#: ../src/client.c:414
-msgid "Show window options"
-msgstr "Mostra les opcions de la finestra"
-
-#: ../src/client.c:422
-msgid "Terminal options:"
-msgstr "Opcions del terminal:"
-
-#: ../src/client.c:423 ../src/terminal-options.c:1287
-msgid "Show terminal options"
-msgstr "Mostra les opcions del terminal"
-
-#: ../src/client.c:431
-msgid "Exec options:"
-msgstr "Opcions d'execució:"
-
-#: ../src/client.c:432
-msgid "Show exec options"
-msgstr "Mostra les opcions d'execució"
-
-#: ../src/client.c:440
-msgid "Processing options:"
-msgstr "Opcions de processat:"
-
-#: ../src/client.c:441
-msgid "Show processing options"
-msgstr "Mostra les opcions de processat"
 
 #: ../src/find-dialog.ui.h:1 ../src/terminal-accels.c:164
 #: ../src/terminal-accels.c:221
@@ -245,6 +81,227 @@ msgstr "Cerca cap en_rere"
 #: ../src/find-dialog.ui.h:7
 msgid "_Wrap around"
 msgstr "Continua des de l'_inici"
+
+#: ../src/gterminal.vala:29
+msgid "Suppress output"
+msgstr "Suprimeix l'eixida"
+
+#: ../src/gterminal.vala:31
+msgid "Verbose output"
+msgstr "Eixida detallada"
+
+#: ../src/gterminal.vala:43
+msgid "Output options:"
+msgstr "Opcions d'eixida:"
+
+#: ../src/gterminal.vala:44
+msgid "Show output options"
+msgstr "Mostra les opcions d'eixida"
+
+#: ../src/gterminal.vala:84
+#, c-format
+msgid "\"%s\" is not a valid application ID"
+msgstr "«%s» no és un identificador d'aplicació vàlid"
+
+#: ../src/gterminal.vala:96
+msgid "Server application ID"
+msgstr "Identificador de l'aplicació de servidor"
+
+#: ../src/gterminal.vala:96
+msgid "ID"
+msgstr "Identificador"
+
+#: ../src/gterminal.vala:103
+msgid "Global options:"
+msgstr "Opcions globals:"
+
+#: ../src/gterminal.vala:104
+msgid "Show global options"
+msgstr "Mostra les opcions globals"
+
+#: ../src/gterminal.vala:127 ../src/gterminal.vala:148
+msgid "FD passing of stdin is not supported"
+msgstr "No es permet passar el descriptor de fitxer de l'entrada estàndard"
+
+#: ../src/gterminal.vala:128 ../src/gterminal.vala:149
+msgid "FD passing of stdout is not supported"
+msgstr "No es permet passar el descriptor de fitxer de l'eixida estàndard"
+
+#: ../src/gterminal.vala:129 ../src/gterminal.vala:150
+msgid "FD passing of stderr is not supported"
+msgstr "No es permet passar el descriptor de fitxer de l'eixida d'errades"
+
+#: ../src/gterminal.vala:141
+#, c-format
+msgid "Invalid argument \"%s\" to --fd option"
+msgstr "L'argument «%s» per l'opció «--fd» no és vàlid"
+
+#: ../src/gterminal.vala:154
+#, c-format
+msgid "Cannot pass FD %d twice"
+msgstr "No es pot passar dues vegades el descriptor de fitxer %d"
+
+#: ../src/gterminal.vala:177
+msgid "Forward stdin"
+msgstr "Redirecciona l'entrada estàndard (stdin)"
+
+#: ../src/gterminal.vala:179
+msgid "Forward stdout"
+msgstr "Redirecciona l'eixida estàndard (stdout)"
+
+#: ../src/gterminal.vala:181
+msgid "Forward stderr"
+msgstr "Redirecciona l'eixida d'errors (stderr)"
+
+#: ../src/gterminal.vala:183
+msgid "Forward file descriptor"
+msgstr "Redirecciona el descriptor de fitxers"
+
+#: ../src/gterminal.vala:183
+msgid "FD"
+msgstr "FD"
+
+#: ../src/gterminal.vala:190
+msgid "Exec options:"
+msgstr "Opcions d'execució:"
+
+#: ../src/gterminal.vala:191
+msgid "Show exec options"
+msgstr "Mostra les opcions d'execució"
+
+#: ../src/gterminal.vala:210
+msgid "Maximise the window"
+msgstr "Maximitza la finestra"
+
+#: ../src/gterminal.vala:212 ../src/terminal-options.c:1104
+msgid "Full-screen the window"
+msgstr "Mostra la finestra a pantalla completa"
+
+#: ../src/gterminal.vala:214 ../src/terminal-options.c:1113
+msgid ""
+"Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
+msgstr ""
+"Establiu la mida de la finestra; per exemple 80x24 or 80x24+200+200 "
+"(COLUMNESxFILES+X+Y)"
+
+#: ../src/gterminal.vala:215 ../src/terminal-options.c:1114
+msgid "GEOMETRY"
+msgstr "GEOMETRIA"
+
+#: ../src/gterminal.vala:217 ../src/terminal-options.c:1122
+msgid "Set the window role"
+msgstr "Estableix el rol de la finestra"
+
+#: ../src/gterminal.vala:217 ../src/terminal-options.c:1123
+msgid "ROLE"
+msgstr "ROL"
+
+#: ../src/gterminal.vala:224
+msgid "Window options:"
+msgstr "Opcions de la finestra:"
+
+#: ../src/gterminal.vala:225
+msgid "Show window options"
+msgstr "Mostra les opcions de la finestra"
+
+#: ../src/gterminal.vala:244
+#, c-format
+msgid "May only use option %s once"
+msgstr "Potser només s'utilitzarà l'opció %s una vegada"
+
+#: ../src/gterminal.vala:257 ../src/terminal-options.c:683
+#, c-format
+msgid "\"%s\" is not a valid zoom factor"
+msgstr "«%s» no és un factor d'ampliació vàlid"
+
+#: ../src/gterminal.vala:261
+#, c-format
+msgid "Zoom value \"%s\" is outside allowed range"
+msgstr "El valor d'ampliació «%s» està fora del rang permés"
+
+#: ../src/gterminal.vala:270 ../src/terminal-options.c:1153
+msgid "Use the given profile instead of the default profile"
+msgstr "Utilitza el perfil especificat en lloc del predeterminat"
+
+#: ../src/gterminal.vala:271
+msgid "UUID"
+msgstr "UUID"
+
+#: ../src/gterminal.vala:273 ../src/terminal-options.c:1162
+msgid "Set the terminal title"
+msgstr "Estableix el títol del terminal"
+
+#: ../src/gterminal.vala:273 ../src/terminal-options.c:1163
+msgid "TITLE"
+msgstr "TÍTOL"
+
+#: ../src/gterminal.vala:275 ../src/terminal-options.c:1171
+msgid "Set the working directory"
+msgstr "Estableix el directori de treball"
+
+#: ../src/gterminal.vala:275 ../src/terminal-options.c:1172
+msgid "DIRNAME"
+msgstr "DIRECTORI"
+
+#: ../src/gterminal.vala:277 ../src/terminal-options.c:1180
+msgid "Set the terminal's zoom factor (1.0 = normal size)"
+msgstr "Estableix el factor d'ampliació del terminal (1.0 = mida normal)"
+
+#: ../src/gterminal.vala:278 ../src/terminal-options.c:1181
+msgid "ZOOM"
+msgstr "AMPLIACIÓ"
+
+#: ../src/gterminal.vala:285
+msgid "Terminal options:"
+msgstr "Opcions del terminal:"
+
+#: ../src/gterminal.vala:286 ../src/terminal-options.c:1287
+msgid "Show terminal options"
+msgstr "Mostra les opcions del terminal"
+
+#: ../src/gterminal.vala:299
+msgid "Wait until the child exits"
+msgstr "Espera fins que el subprocés isca"
+
+#: ../src/gterminal.vala:306
+msgid "Processing options:"
+msgstr "Opcions de processat:"
+
+#: ../src/gterminal.vala:307
+msgid "Show processing options"
+msgstr "Mostra les opcions de processat"
+
+#: ../src/gterminal.vala:477
+#, c-format
+msgid "'%s' needs the command to run as arguments after '--'"
+msgstr "«%s» necessita l'orde a executar com a argument després de «--»"
+
+#: ../src/gterminal.vala:511
+msgid "Missing argument"
+msgstr "Manca l'argument"
+
+#: ../src/gterminal.vala:535
+#, c-format
+msgid "Unknown completion request for \"%s\""
+msgstr "Es desconeix la sol·licitud de compleció per «%s»"
+
+#: ../src/gterminal.vala:560
+msgid "GTerminal"
+msgstr "GTerminal"
+
+#: ../src/gterminal.vala:564
+msgid "Missing command"
+msgstr "Manca l'orde"
+
+#: ../src/gterminal.vala:573
+#, c-format
+msgid "Unknown command \"%s\""
+msgstr "Es desconeix l'orde «%s»"
+
+#: ../src/gterminal.vala:577
+#, c-format
+msgid "Error processing arguments: %s\n"
+msgstr "S'ha produït un error en processar els arguments: %s\n"
 
 #: ../src/migration.c:385
 msgid "Default"
@@ -537,6 +594,8 @@ msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr ""
+"Si els caràcters d'amplada incerta són estrets o amples quan s'utilitze la "
+"codificació UTF-8"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Keyboard shortcut to open a new tab"
@@ -658,11 +717,27 @@ msgstr ""
 "inhabilitar-les."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:80
-msgid "Whether the standard GTK shortcut for menubar access is enabled"
+#, fuzzy
+msgid "Whether shortcuts are enabled"
 msgstr ""
 "Si la drecera estàndard de GTK per accedir a les barres de menú està activada"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:81
+#, fuzzy
+msgid ""
+"Whether shortcuts are enabled. They may interfere with some applications run "
+"inside the terminal so it's possible to turn them off."
+msgstr ""
+"Si s'han de tindre dreceres Alt+lletra per a la barra de menú. Poden "
+"interferir amb algunes aplicacions dins del terminal així doncs és possible "
+"inhabilitar-les."
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:82
+msgid "Whether the standard GTK shortcut for menubar access is enabled"
+msgstr ""
+"Si la drecera estàndard de GTK per accedir a les barres de menú està activada"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:83
 msgid ""
 "Normally you can access the menubar with F10. This can also be customized "
 "via gtkrc (gtk-menu-bar-accel = \"whatever\"). This option allows the "
@@ -673,38 +748,35 @@ msgstr ""
 "siga»). Esta opció permet que l'accelerador de barra de menú estàndard es "
 "puga inhabilitar."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:82
+#: ../src/org.gnome.Terminal.gschema.xml.h:84
 msgid "Whether the shell integration is enabled"
 msgstr "Si s'habilita la integració amb l'intèrpret d'ordes"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:83
+#: ../src/org.gnome.Terminal.gschema.xml.h:85
 msgid "List of available encodings"
 msgstr "Llista de codificacions disponibles"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:84
-#, fuzzy
+#: ../src/org.gnome.Terminal.gschema.xml.h:86
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there."
 msgstr ""
-"Es presenta un subconjunt de codificacions possibles al submenú "
-"Codificacions. Esta és una llista de codificacions que apareixen allí. El "
-"nom de codificació especial «current» vol dir que s'ha de mostrar la "
-"codificació de la localització actual."
+"En el submenú Codificacions es mostra un subconjunt de les codificacions "
+"possibles. Esta és la llista de codificacions que apareixen allí."
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:85
+#: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to ask for confirmation before closing a terminal"
 msgstr "Si s'ha de demanar confirmació abans de tancar el terminal"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:86
+#: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Whether to show the menubar in new windows"
 msgstr "Si s'ha de mostrar la barra de menú a les finestres noves"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:87
+#: ../src/org.gnome.Terminal.gschema.xml.h:89
 msgid "Whether to use a dark theme variant"
 msgstr "Si s'ha d'utilitzar la variant de tema fosc"
 
-#: ../src/org.gnome.Terminal.gschema.xml.h:88
+#: ../src/org.gnome.Terminal.gschema.xml.h:90
 msgid "Whether to open new terminals as windows or tabs"
 msgstr "Si s'han d'obrir els terminals nous a finestres o a pestanyes"
 
@@ -749,26 +821,32 @@ msgstr "General"
 
 # Tot i que sembli estrany, aquesta és la millor traducció (Josep)
 #: ../src/preferences.ui.h:12
+#, fuzzy
+msgid "_Enable shortcuts"
+msgstr "Dreceres"
+
+# Tot i que sembli estrany, aquesta és la millor traducció (Josep)
+#: ../src/preferences.ui.h:13
 msgid "Shortcuts"
 msgstr "Dreceres"
 
-#: ../src/preferences.ui.h:13
+#: ../src/preferences.ui.h:14
 msgid "_Clone"
 msgstr "_Clona"
 
-#: ../src/preferences.ui.h:14
+#: ../src/preferences.ui.h:15
 msgid "_Profile used when launching a new terminal:"
 msgstr "Perfil _emprat quan es llanci un terminal nou:"
 
-#: ../src/preferences.ui.h:15
+#: ../src/preferences.ui.h:16
 msgid "Profiles"
 msgstr "Perfils"
 
-#: ../src/preferences.ui.h:16
+#: ../src/preferences.ui.h:17
 msgid "E_ncodings shown in menu:"
 msgstr "Codificacio_ns mostrades al menú:"
 
-#: ../src/preferences.ui.h:17
+#: ../src/preferences.ui.h:18
 msgid "Encodings"
 msgstr "Codificacions"
 
@@ -794,15 +872,13 @@ msgstr "Blanc sobre negre"
 
 #. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
 #: ../src/profile-editor.c:69
-#, fuzzy
 msgid "Solarized light"
-msgstr "Solarized"
+msgstr "Solarized clar"
 
 #. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
 #: ../src/profile-editor.c:74
-#, fuzzy
 msgid "Solarized dark"
-msgstr "Solarized"
+msgstr "Solarized fosc"
 
 #: ../src/profile-editor.c:438
 #, c-format
@@ -932,12 +1008,12 @@ msgstr "Esborrat TTY"
 #. ambiguous-width characers are
 #: ../src/profile-preferences.ui.h:44
 msgid "Narrow"
-msgstr ""
+msgstr "Estret"
 
 #. ambiguous-width characers are
 #: ../src/profile-preferences.ui.h:46
 msgid "Wide"
-msgstr ""
+msgstr "Ample"
 
 #: ../src/profile-preferences.ui.h:47
 msgid "Profile Editor"
@@ -952,9 +1028,8 @@ msgid "Profile ID:"
 msgstr "Identificador del perfil:"
 
 #: ../src/profile-preferences.ui.h:50
-#, fuzzy
 msgid "Initial terminal si_ze:"
-msgstr "Utilit_za la mida de terminal personalitzada predeterminada"
+msgstr "_Mida inicial del terminal:"
 
 #: ../src/profile-preferences.ui.h:51
 msgid "columns"
@@ -964,37 +1039,37 @@ msgstr "columnes"
 msgid "rows"
 msgstr "files"
 
-#: ../src/profile-preferences.ui.h:53 ../src/terminal-accels.c:179
-msgid "Reset"
-msgstr "Reinicia"
+#: ../src/profile-preferences.ui.h:53
+msgid "Rese_t"
+msgstr "R_einicia"
 
 #: ../src/profile-preferences.ui.h:54
 msgid "Cursor _shape:"
 msgstr "_Forma del cursor:"
 
 #: ../src/profile-preferences.ui.h:55
-msgid "_Use the system fixed width font"
-msgstr "_Utilitza el tipus de lletra d'amplada fixa del sistema"
-
-#: ../src/profile-preferences.ui.h:56
-msgid "_Font:"
-msgstr "Tipus de _lletra:"
-
-#: ../src/profile-preferences.ui.h:57
-msgid "Choose A Terminal Font"
-msgstr "Trieu un tipus de lletra de terminal"
-
-#: ../src/profile-preferences.ui.h:58
-msgid "_Allow bold text"
-msgstr "Permet text en _negreta"
-
-#: ../src/profile-preferences.ui.h:59
 msgid "Terminal _bell"
 msgstr "_Avís sonor del terminal"
 
-#: ../src/profile-preferences.ui.h:60
+#: ../src/profile-preferences.ui.h:56
+msgid "Text Appearance"
+msgstr "Aparença del text"
+
+#: ../src/profile-preferences.ui.h:57
+msgid "_Allow bold text"
+msgstr "Permet text en _negreta"
+
+#: ../src/profile-preferences.ui.h:58
 msgid "_Rewrap on resize"
 msgstr "_Reajusta en redimensionar"
+
+#: ../src/profile-preferences.ui.h:59
+msgid "_Custom font"
+msgstr "Tipus de lletra _personalitzat"
+
+#: ../src/profile-preferences.ui.h:60
+msgid "Choose A Terminal Font"
+msgstr "Trieu un tipus de lletra de terminal"
 
 #: ../src/profile-preferences.ui.h:62
 msgid "Command"
@@ -1082,34 +1157,30 @@ msgid "Colors"
 msgstr "Colors"
 
 #: ../src/profile-preferences.ui.h:83
-msgid "Scroll_back:"
-msgstr "Desplaçament cap _enrere:"
-
-#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _keystroke"
 msgstr "Desplaçament en _prémer una tecla"
 
-#: ../src/profile-preferences.ui.h:85
+#: ../src/profile-preferences.ui.h:84
 msgid "Scroll on _output"
 msgstr "Desplaçament en ei_xida"
 
-#: ../src/profile-preferences.ui.h:86
-msgid "_Unlimited"
-msgstr "_Il·limitat"
+#: ../src/profile-preferences.ui.h:85
+msgid "_Limit scrollback to:"
+msgstr "_Limita el desplaçament cap arrere a:"
 
-#: ../src/profile-preferences.ui.h:87
+#: ../src/profile-preferences.ui.h:86
 msgid "lines"
 msgstr "línies"
 
-#: ../src/profile-preferences.ui.h:88
+#: ../src/profile-preferences.ui.h:87
 msgid "_Show scrollbar"
 msgstr "Mo_stra la barra de desplaçament"
 
-#: ../src/profile-preferences.ui.h:89
+#: ../src/profile-preferences.ui.h:88
 msgid "Scrolling"
 msgstr "Desplaçament"
 
-#: ../src/profile-preferences.ui.h:90
+#: ../src/profile-preferences.ui.h:89
 msgid ""
 "<b>Note:</b> These options may cause some applications to behave "
 "incorrectly.  They are only here to allow you to work around certain "
@@ -1120,29 +1191,27 @@ msgstr ""
 "aplicacions i sistemes operatius que esperen un comportament diferent del "
 "terminal."
 
-#: ../src/profile-preferences.ui.h:91
+#: ../src/profile-preferences.ui.h:90
 msgid "_Delete key generates:"
 msgstr "La tecla de _suprimir genera:"
 
-#: ../src/profile-preferences.ui.h:92
+#: ../src/profile-preferences.ui.h:91
 msgid "_Backspace key generates:"
 msgstr "La tecla de _retrocés genera:"
 
-#: ../src/profile-preferences.ui.h:93
-#, fuzzy
+#: ../src/profile-preferences.ui.h:92
 msgid "_Encoding:"
-msgstr "_Codificació"
+msgstr "_Codificació:"
+
+#: ../src/profile-preferences.ui.h:93
+msgid "Ambiguous-_width characters:"
+msgstr "Caràcters d'_amplada incerta:"
 
 #: ../src/profile-preferences.ui.h:94
-#, fuzzy
-msgid "Ambiguous-_width characters:"
-msgstr "Caràcters de _selecció per paraula:"
-
-#: ../src/profile-preferences.ui.h:95
 msgid "_Reset Compatibility Options to Defaults"
 msgstr "Reinicia les _opcions de compatibilitat a aquelles per defecte"
 
-#: ../src/profile-preferences.ui.h:96
+#: ../src/profile-preferences.ui.h:95
 msgid "Compatibility"
 msgstr "Compatibilitat"
 
@@ -1171,13 +1240,13 @@ msgid "Close All Terminals"
 msgstr "Tanca tots els terminals"
 
 #. Edit menu
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2383
-#: ../src/terminal-window.c:2495
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2398
+#: ../src/terminal-window.c:2515
 msgid "Copy"
 msgstr "Copia"
 
-#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2386
-#: ../src/terminal-window.c:2498
+#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2401
+#: ../src/terminal-window.c:2518
 msgid "Paste"
 msgstr "Apega"
 
@@ -1202,17 +1271,21 @@ msgid "Full Screen"
 msgstr "Pantalla completa"
 
 #. View menu
-#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2403
+#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2418
 msgid "Zoom In"
 msgstr "Amplia el zoom"
 
-#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2406
+#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2421
 msgid "Zoom Out"
 msgstr "Redueix el zoom"
 
-#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2409
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2424
 msgid "Normal Size"
 msgstr "Mida normal"
+
+#: ../src/terminal-accels.c:179
+msgid "Reset"
+msgstr "Reinicia"
 
 #: ../src/terminal-accels.c:180
 msgid "Reset and Clear"
@@ -1268,15 +1341,15 @@ msgstr "Ajuda"
 msgid "Switch to Tab %d"
 msgstr "Canvia a la pestanya %d"
 
-#: ../src/terminal-accels.c:526
+#: ../src/terminal-accels.c:529
 msgid "_Action"
 msgstr "_Acció"
 
-#: ../src/terminal-accels.c:544
+#: ../src/terminal-accels.c:548
 msgid "Shortcut _Key"
 msgstr "_Tecla de drecera"
 
-#: ../src/terminal-app.c:650
+#: ../src/terminal-app.c:677
 msgid "User Defined"
 msgstr "Definit per l'usuari"
 
@@ -1288,11 +1361,11 @@ msgstr "Terminal _nou"
 msgid "_Preferences"
 msgstr "_Preferències"
 
-#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2355
+#: ../src/terminal-appmenu.ui.h:3 ../src/terminal-window.c:2370
 msgid "_Help"
 msgstr "A_juda"
 
-#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2471
+#: ../src/terminal-appmenu.ui.h:4 ../src/terminal-window.c:2486
 msgid "_About"
 msgstr "_Quant a"
 
@@ -1300,7 +1373,7 @@ msgstr "_Quant a"
 msgid "_Quit"
 msgstr "I_x"
 
-#: ../src/terminal.c:235
+#: ../src/terminal.c:236
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Ha fallat l'anàlisi dels arguments: %s\n"
@@ -1446,40 +1519,40 @@ msgstr "Vietnamita"
 msgid "Thai"
 msgstr "Tailandés"
 
-#: ../src/terminal-nautilus.c:600
+#: ../src/terminal-nautilus.c:601
 msgid "Open in _Remote Terminal"
 msgstr "Obri en un terminal _remot"
 
-#: ../src/terminal-nautilus.c:602
+#: ../src/terminal-nautilus.c:603
 msgid "Open in _Local Terminal"
 msgstr "Obri en un terminal _local"
 
-#: ../src/terminal-nautilus.c:606 ../src/terminal-nautilus.c:617
+#: ../src/terminal-nautilus.c:607 ../src/terminal-nautilus.c:618
 msgid "Open the currently selected folder in a terminal"
 msgstr "Obri la carpeta seleccionada actualment en un terminal"
 
-#: ../src/terminal-nautilus.c:608 ../src/terminal-nautilus.c:619
-#: ../src/terminal-nautilus.c:629
+#: ../src/terminal-nautilus.c:609 ../src/terminal-nautilus.c:620
+#: ../src/terminal-nautilus.c:630
 msgid "Open the currently open folder in a terminal"
 msgstr "Obri la carpeta oberta actualment en un terminal"
 
-#: ../src/terminal-nautilus.c:614 ../src/terminal-nautilus.c:628
+#: ../src/terminal-nautilus.c:615 ../src/terminal-nautilus.c:629
 msgid "Open in T_erminal"
 msgstr "Obri en un t_erminal"
 
-#: ../src/terminal-nautilus.c:625
+#: ../src/terminal-nautilus.c:626
 msgid "Open T_erminal"
 msgstr "Obri un t_erminal"
 
-#: ../src/terminal-nautilus.c:626
+#: ../src/terminal-nautilus.c:627
 msgid "Open a terminal"
 msgstr "Obri un terminal"
 
-#: ../src/terminal-nautilus.c:644 ../src/terminal-nautilus.c:657
+#: ../src/terminal-nautilus.c:645 ../src/terminal-nautilus.c:658
 msgid "Open in _Midnight Commander"
 msgstr "Obri en el _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:646
+#: ../src/terminal-nautilus.c:647
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
@@ -1487,7 +1560,7 @@ msgstr ""
 "Obri la carpeta seleccionada actualment en el gestor de fitxers del terminal "
 "Midnight Commander"
 
-#: ../src/terminal-nautilus.c:648 ../src/terminal-nautilus.c:658
+#: ../src/terminal-nautilus.c:649 ../src/terminal-nautilus.c:659
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
@@ -1495,11 +1568,11 @@ msgstr ""
 "Obri la carpeta oberta actualment en el gestor de fitxers del terminal "
 "Midnight Commander"
 
-#: ../src/terminal-nautilus.c:654
+#: ../src/terminal-nautilus.c:655
 msgid "Open _Midnight Commander"
 msgstr "Obri el _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:655
+#: ../src/terminal-nautilus.c:656
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "Obri el gestor de fitxers del terminal Midnight Commander"
 
@@ -1587,6 +1660,10 @@ msgstr "Activa la barra de menú"
 msgid "Turn off the menubar"
 msgstr "Desactiva la barra de menú"
 
+#: ../src/terminal-options.c:1095
+msgid "Maximize the window"
+msgstr "Maximitza la finestra"
+
 #: ../src/terminal-options.c:1131
 msgid "Set the last specified tab as the active one in its window"
 msgstr ""
@@ -1653,7 +1730,7 @@ msgstr "Llista de perfils"
 msgid "Delete profile “%s”?"
 msgstr "Voleu suprimir el perfil «%s»?"
 
-#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:521
+#: ../src/terminal-prefs.c:375 ../src/terminal-window.c:529
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -1665,45 +1742,45 @@ msgstr "_Suprimeix"
 msgid "Delete Profile"
 msgstr "Suprimeix el perfil"
 
-#: ../src/terminal-prefs.c:695
+#: ../src/terminal-prefs.c:702
 msgid "Show"
 msgstr "Mostra"
 
-#: ../src/terminal-prefs.c:706
+#: ../src/terminal-prefs.c:713
 msgid "_Encoding"
 msgstr "_Codificació"
 
-#: ../src/terminal-screen.c:1040
+#: ../src/terminal-screen.c:1042
 msgid "No command supplied nor shell requested"
 msgstr "No s'ha especificat cap orde ni s'ha indicat l'intèrpret d'ordes"
 
-#: ../src/terminal-screen.c:1295 ../src/terminal-window.c:2398
+#: ../src/terminal-screen.c:1297 ../src/terminal-window.c:2413
 msgid "_Profile Preferences"
 msgstr "_Preferències del perfil"
 
-#: ../src/terminal-screen.c:1296 ../src/terminal-screen.c:1567
+#: ../src/terminal-screen.c:1298 ../src/terminal-screen.c:1569
 msgid "_Relaunch"
 msgstr "_Torna a executar"
 
-#: ../src/terminal-screen.c:1299
+#: ../src/terminal-screen.c:1301
 msgid "There was an error creating the child process for this terminal"
 msgstr "S'ha produït un error en crear el subprocés per este terminal"
 
-#: ../src/terminal-screen.c:1571
+#: ../src/terminal-screen.c:1573
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "El subprocés ha finalitzat normalment amb l'estat %d."
 
-#: ../src/terminal-screen.c:1574
+#: ../src/terminal-screen.c:1576
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "La senyal %d ha interromput el subprocés."
 
-#: ../src/terminal-screen.c:1577
+#: ../src/terminal-screen.c:1579
 msgid "The child process was aborted."
 msgstr "S'ha interromput el subprocés."
 
-#: ../src/terminal-tab-label.c:198
+#: ../src/terminal-tab-label.c:192
 msgid "Close tab"
 msgstr "Tanca la pestanya"
 
@@ -1770,15 +1847,15 @@ msgstr ""
 "juntament amb el terminal del GNOME. En cas contrari, vegeu <http://www.gnu."
 "org/licenses/>."
 
-#: ../src/terminal-window.c:496
+#: ../src/terminal-window.c:504
 msgid "Could not save contents"
 msgstr "No s'ha pogut guardar el contingut"
 
-#: ../src/terminal-window.c:518
+#: ../src/terminal-window.c:526
 msgid "Save as…"
 msgstr "Anomena i guarda…"
 
-#: ../src/terminal-window.c:522
+#: ../src/terminal-window.c:530
 msgid "_Save"
 msgstr "Al_ça"
 
@@ -1786,7 +1863,7 @@ msgstr "Al_ça"
 #. * _%d is used as the accelerator (with d between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1201
+#: ../src/terminal-window.c:1209
 #, c-format
 msgid "_%d. %s"
 msgstr "_%d. %s"
@@ -1795,207 +1872,211 @@ msgstr "_%d. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1207
+#: ../src/terminal-window.c:1215
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2348
+#: ../src/terminal-window.c:2363
 msgid "_File"
 msgstr "_Fitxer"
 
 #. File menu
-#: ../src/terminal-window.c:2349 ../src/terminal-window.c:2360
-#: ../src/terminal-window.c:2366 ../src/terminal-window.c:2504
+#: ../src/terminal-window.c:2364 ../src/terminal-window.c:2375
+#: ../src/terminal-window.c:2381 ../src/terminal-window.c:2524
 msgid "Open _Terminal"
 msgstr "Obri un _terminal"
 
-#: ../src/terminal-window.c:2350
+#: ../src/terminal-window.c:2365
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../src/terminal-window.c:2351
+#: ../src/terminal-window.c:2366
 msgid "_View"
 msgstr "_Visualitza"
 
-#: ../src/terminal-window.c:2352
+#: ../src/terminal-window.c:2367
 msgid "_Search"
 msgstr "_Cerca"
 
-#: ../src/terminal-window.c:2353
+#: ../src/terminal-window.c:2368
 msgid "_Terminal"
 msgstr "_Terminal"
 
 #
-#: ../src/terminal-window.c:2354
+#: ../src/terminal-window.c:2369
 msgid "Ta_bs"
 msgstr "_Pestanyes"
 
-#: ../src/terminal-window.c:2363
+#: ../src/terminal-window.c:2378
 msgid "Open Ta_b"
 msgstr "Obri una _pestanya"
 
-#: ../src/terminal-window.c:2369
+#: ../src/terminal-window.c:2384
 msgid "New _Profile"
 msgstr "_Perfil nou"
 
-#: ../src/terminal-window.c:2372
+#: ../src/terminal-window.c:2387
 msgid "_Save Contents"
 msgstr "Al_ça el contingut"
 
-#: ../src/terminal-window.c:2375 ../src/terminal-window.c:3592
+#: ../src/terminal-window.c:2390 ../src/terminal-window.c:3645
 msgid "C_lose Terminal"
 msgstr "_Tanca el terminal"
 
-#: ../src/terminal-window.c:2378
+#: ../src/terminal-window.c:2393
 msgid "_Close All Terminals"
 msgstr "_Tanca tots els terminals"
 
-#: ../src/terminal-window.c:2389 ../src/terminal-window.c:2501
+#: ../src/terminal-window.c:2404 ../src/terminal-window.c:2521
 msgid "Paste _Filenames"
 msgstr "Apega els _noms de fitxers"
 
-#: ../src/terminal-window.c:2392
+#: ../src/terminal-window.c:2407
 msgid "Select All"
 msgstr "Selecciona-ho tot"
 
-#: ../src/terminal-window.c:2395
+#: ../src/terminal-window.c:2410
 msgid "Pre_ferences"
 msgstr "Pre_ferències"
 
 #. Search menu
-#: ../src/terminal-window.c:2414
+#: ../src/terminal-window.c:2429
 msgid "_Find…"
 msgstr "_Cerca…"
 
-#: ../src/terminal-window.c:2417
+#: ../src/terminal-window.c:2432
 msgid "Find Ne_xt"
 msgstr "Cerca el _següent"
 
-#: ../src/terminal-window.c:2420
+#: ../src/terminal-window.c:2435
 msgid "Find Pre_vious"
 msgstr "Cerca l'_anterior"
 
-#: ../src/terminal-window.c:2423
+#: ../src/terminal-window.c:2438
 msgid "_Clear Highlight"
 msgstr "_Neteja el realçat"
 
-#: ../src/terminal-window.c:2427
+#: ../src/terminal-window.c:2442
 msgid "Go to _Line..."
 msgstr "Vés a la _línia..."
 
-#: ../src/terminal-window.c:2430
+#: ../src/terminal-window.c:2445
 msgid "_Incremental Search..."
 msgstr "Cerca _incremental..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:2436
+#: ../src/terminal-window.c:2451
 msgid "Change _Profile"
 msgstr "Canvia de _perfil"
 
-#: ../src/terminal-window.c:2437
+#: ../src/terminal-window.c:2452
 msgid "Set _Character Encoding"
 msgstr "Estableix la _codificació dels caràcters"
 
-#: ../src/terminal-window.c:2438
+#: ../src/terminal-window.c:2453
 msgid "_Reset"
 msgstr "_Reinicia"
 
-#: ../src/terminal-window.c:2441
+#: ../src/terminal-window.c:2456
 msgid "Reset and C_lear"
 msgstr "Reinicia i _neteja"
 
 #
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2446
+#: ../src/terminal-window.c:2461
 msgid "_Add or Remove…"
 msgstr "_Afig o suprimeix…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2451
+#: ../src/terminal-window.c:2466
 msgid "_Previous Terminal"
 msgstr "Terminal _anterior"
 
-#: ../src/terminal-window.c:2454
+#: ../src/terminal-window.c:2469
 msgid "_Next Terminal"
 msgstr "Terminal _següent"
 
 #
-#: ../src/terminal-window.c:2457
+#: ../src/terminal-window.c:2472
 msgid "Move Terminal _Left"
 msgstr "Mou el terminal a l'_esquerra"
 
 #
-#: ../src/terminal-window.c:2460
+#: ../src/terminal-window.c:2475
 msgid "Move Terminal _Right"
 msgstr "Mou el terminal a la _dreta"
 
-#: ../src/terminal-window.c:2463
+#: ../src/terminal-window.c:2478
 msgid "_Detach Terminal"
 msgstr "_Separa el terminal"
 
 #. Help menu
-#: ../src/terminal-window.c:2468
+#: ../src/terminal-window.c:2483
 msgid "_Contents"
 msgstr "_Continguts"
 
+#: ../src/terminal-window.c:2490
+msgid "_Inspector"
+msgstr "_Inspector"
+
 #. Popup menu
-#: ../src/terminal-window.c:2476
+#: ../src/terminal-window.c:2496
 msgid "_Send Mail To…"
 msgstr "En_via un correu a…"
 
-#: ../src/terminal-window.c:2479
+#: ../src/terminal-window.c:2499
 msgid "_Copy E-mail Address"
 msgstr "_Copia l'adreça electrònica"
 
-#: ../src/terminal-window.c:2482
+#: ../src/terminal-window.c:2502
 msgid "C_all To…"
 msgstr "Truc_a a…"
 
-#: ../src/terminal-window.c:2485
+#: ../src/terminal-window.c:2505
 msgid "_Copy Call Address"
 msgstr "_Copia l'adreça de trucada"
 
-#: ../src/terminal-window.c:2488
+#: ../src/terminal-window.c:2508
 msgid "_Open Link"
 msgstr "_Obri l'enllaç"
 
-#: ../src/terminal-window.c:2491
+#: ../src/terminal-window.c:2511
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: ../src/terminal-window.c:2494
+#: ../src/terminal-window.c:2514
 msgid "P_rofiles"
 msgstr "Pe_rfils"
 
-#: ../src/terminal-window.c:2507
+#: ../src/terminal-window.c:2527
 msgid "L_eave Full Screen"
 msgstr "I_x de la pantalla completa"
 
 #. View Menu
-#: ../src/terminal-window.c:2515
+#: ../src/terminal-window.c:2535
 msgid "Show _Menubar"
 msgstr "Mostra la _barra del menú"
 
-#: ../src/terminal-window.c:2519
+#: ../src/terminal-window.c:2539
 msgid "_Full Screen"
 msgstr "_Pantalla completa"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2524
+#: ../src/terminal-window.c:2544
 msgid "Read-_Only"
-msgstr ""
+msgstr "Només _lectura"
 
-#: ../src/terminal-window.c:3579
+#: ../src/terminal-window.c:3632
 msgid "Close this window?"
 msgstr "Voleu tancar esta finestra?"
 
-#: ../src/terminal-window.c:3579
+#: ../src/terminal-window.c:3632
 msgid "Close this terminal?"
 msgstr "Voleu tancar este terminal?"
 
-#: ../src/terminal-window.c:3583
+#: ../src/terminal-window.c:3636
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2003,7 +2084,7 @@ msgstr ""
 "Encara s'estan executant processos en alguns terminals d'esta finestra. Si "
 "la tanqueu es mataran tots."
 
-#: ../src/terminal-window.c:3587
+#: ../src/terminal-window.c:3640
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2011,72 +2092,6 @@ msgstr ""
 "Encara s'està executant un procés en este terminal. Si el tanqueu es matarà "
 "este procés."
 
-#: ../src/terminal-window.c:3592
+#: ../src/terminal-window.c:3645
 msgid "C_lose Window"
 msgstr "Tanca la _finestra"
-
-#~ msgctxt "title"
-#~ msgid "'Terminal'"
-#~ msgstr "«Terminal»"
-
-#~ msgid "Title for terminal"
-#~ msgstr "Títol pel terminal"
-
-#~ msgid ""
-#~ "Title to display for the terminal window or tab. This title may be "
-#~ "replaced by or combined with the title set by the application inside the "
-#~ "terminal, depending on the title_mode setting."
-#~ msgstr ""
-#~ "El títol a mostrar per a la finestra o pestanya del terminal. Aquest "
-#~ "títol es pot reemplaçar o combinar amb el títol establert per l'aplicació "
-#~ "dins del terminal, depenent de la configuració «title_mode»."
-
-#~ msgid "Characters that are considered \"part of a word\""
-#~ msgstr "Caràcters que es consideren «part d'una paraula»"
-
-#~ msgid ""
-#~ "When selecting text by word, sequences of these characters are considered "
-#~ "single words. Ranges can be given as \"A-Z\". Literal hyphen (not "
-#~ "expressing a range) should be the first character given."
-#~ msgstr ""
-#~ "Una seqüència formada per aquests caràcters es considerarà una paraula "
-#~ "quan se seleccioni text per paraules. Es poden donar rangs com «A-Z». El "
-#~ "guió literal (que no expressi un rang) ha de ser el primer caràcter donat."
-
-#~ msgid "Whether to use custom terminal size for new windows"
-#~ msgstr ""
-#~ "Si s'ha d'utilitzar una mida de terminal personalitzada a les finestres "
-#~ "noves"
-
-#~ msgid ""
-#~ "If true, newly created terminal windows will have custom size specified "
-#~ "by default_size_columns and default_size_rows."
-#~ msgstr ""
-#~ "Si és «True» (cert) les finestres noves del terminal tindran la mida "
-#~ "especificada per «default_size_columns» (amplada i "
-#~ "«default_size_rows» (alçada)."
-
-#~ msgid "Keyboard shortcut to set the terminal title"
-#~ msgstr "La drecera per establir el títol del terminal"
-
-#~ msgid "Default size:"
-#~ msgstr "Mida predeterminada:"
-
-#~ msgid "Title"
-#~ msgstr "Títol"
-
-#~ msgid "_Title:"
-#~ msgstr "Tít_ol:"
-
-#~ msgid "Title and Command"
-#~ msgstr "Títol i ordre"
-
-#~ msgid "Set Title"
-#~ msgstr "Estableix el títol"
-
-#~ msgid "Current Locale"
-#~ msgstr "Localització actual"
-
-#
-#~ msgid "_Set Title…"
-#~ msgstr "_Estableix el títol…"
