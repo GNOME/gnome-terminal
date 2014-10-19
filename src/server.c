@@ -23,9 +23,11 @@
 
 #include <errno.h>
 #include <locale.h>
+#include <pthread.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <sys/resource.h>
 #include <sys/types.h>
 
 #include <glib.h>
@@ -63,6 +65,37 @@ static const GOptionEntry options[] = {
   { "app-id", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_app_id_cb, "Application ID", "ID" },
   { NULL }
 };
+
+/* We use up to 8 FDs per terminal, so let's bump the limit way up.
+ * However we need to restore the original limit for the child processes.
+ */
+
+static struct rlimit sv_rlimit_nofile;
+
+static void
+atfork_child_restore_rlimit_nofile (void)
+{
+  if (setrlimit (RLIMIT_NOFILE, &sv_rlimit_nofile) < 0)
+    _exit (127);
+}
+
+static gboolean
+increase_rlimit_nofile (void)
+{
+  struct rlimit l;
+
+  if (getrlimit (RLIMIT_NOFILE, &sv_rlimit_nofile) < 0)
+    return FALSE;
+
+  l.rlim_cur = l.rlim_max = sv_rlimit_nofile.rlim_max;
+  if (setrlimit (RLIMIT_NOFILE, &l) < 0)
+    return FALSE;
+
+  if (pthread_atfork (NULL, NULL, atfork_child_restore_rlimit_nofile) != 0)
+    return FALSE;
+
+  return TRUE;
+}
 
 enum {
   _EXIT_FAILURE_WRONG_ID = 7,
@@ -126,6 +159,11 @@ main (int argc, char **argv)
     exit (EXIT_FAILURE);
   }
 
+  if (!increase_rlimit_nofile ()) {
+    g_printerr ("Failed to increase RLIMIT_NOFILE: %m\n");
+  }
+
+  /* Now we can create the app */
   app = terminal_app_new (app_id);
   g_free (app_id);
 
