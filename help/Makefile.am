@@ -36,6 +36,7 @@ HELP_FILES = \
 	pref-scrolling.page \
 	pref-tab-window.page \
 	pref-theme.page \
+	pref-user-input.page \
 	profile.page \
 	prob-reset.page \
 	txt-copy-paste.page \
