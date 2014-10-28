@@ -116,6 +116,7 @@ terminal_client_append_exec_options (GVariantBuilder *builder,
   envv = g_environ_unsetenv (envv, "LINES");
   envv = g_environ_unsetenv (envv, "PWD");
   envv = g_environ_unsetenv (envv, "TERM");
+  envv = g_environ_unsetenv (envv, "VTE_VERSION");
   envv = g_environ_unsetenv (envv, "WINDOWID");
 
   g_variant_builder_add (builder, "{sv}",
