@@ -87,11 +87,11 @@ increase_rlimit_nofile (void)
   if (getrlimit (RLIMIT_NOFILE, &sv_rlimit_nofile) < 0)
     return FALSE;
 
-  l.rlim_cur = l.rlim_max = sv_rlimit_nofile.rlim_max;
-  if (setrlimit (RLIMIT_NOFILE, &l) < 0)
+  if (pthread_atfork (NULL, NULL, atfork_child_restore_rlimit_nofile) != 0)
     return FALSE;
 
-  if (pthread_atfork (NULL, NULL, atfork_child_restore_rlimit_nofile) != 0)
+  l.rlim_cur = l.rlim_max = sv_rlimit_nofile.rlim_max;
+  if (setrlimit (RLIMIT_NOFILE, &l) < 0)
     return FALSE;
 
   return TRUE;
