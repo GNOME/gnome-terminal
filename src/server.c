@@ -127,6 +127,9 @@ main (int argc, char **argv)
     return _EXIT_FAILURE_NO_UTF8;
   }
 
+  /* Sanitise environment */
+  g_unsetenv ("DBUS_STARTER_BUS_TYPE");
+
 #ifndef ENABLE_DISTRO_PACKAGING
 #ifdef HAVE_UBUNTU
   /* Set some env vars to disable the ubuntu modules. Their package will be 
