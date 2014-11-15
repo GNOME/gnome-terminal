@@ -233,7 +233,6 @@ namespace GTerminal
 
     public static string? working_directory = null;
     public static string? profile = null;
-    public static string? title = null;
     public static double zoom = 1.0;
 
     private static bool option_profile (string option_name,
@@ -269,8 +268,6 @@ namespace GTerminal
       { "profile", 0, 0, OptionArg.CALLBACK, (void*) option_profile,
         N_("Use the given profile instead of the default profile"),
         N_("UUID") },
-      { "title", 0, 0, OptionArg.STRING, ref title,
-        N_("Set the terminal title"), N_("TITLE") },
       { "cwd", 0, 0, OptionArg.FILENAME, ref working_directory,
         N_("Set the working directory"), N_("DIRNAME") },
       { "zoom", 0, 0, OptionArg.CALLBACK, (void*) option_zoom,
@@ -418,7 +415,7 @@ namespace GTerminal
                                                     OpenOptions.geometry,
                                                     OpenOptions.role,
                                                     OpenOptions.profile,
-                                                    OpenOptions.title,
+                                                    null /* title */,
                                                     OpenOptions.maximise,
                                                     OpenOptions.fullscreen);
     if (OpenOptions.show_menubar_set)
