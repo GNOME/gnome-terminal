@@ -169,6 +169,8 @@ terminal_util_show_about (GtkWindow *transient_parent)
   char **authors, **contributors, **artists, **documenters, **array_strv;
   gsize n_authors = 0, n_contributors = 0, n_artists = 0, n_documenters = 0 , i;
   GPtrArray *array;
+  gs_free char *comment;
+  gs_free char *vte_version;
 
   bytes = g_resources_lookup_data (TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal.about", 
                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
@@ -213,10 +215,16 @@ terminal_util_show_about (GtkWindow *transient_parent)
 
   licence_text = terminal_util_get_licence_text ();
 
+  vte_version = g_strdup_printf (_("Using VTE version %d.%d.%d"),
+				 VTE_MAJOR_VERSION, VTE_MINOR_VERSION, VTE_MICRO_VERSION);
+  comment = g_strdup_printf("%s\n%s",
+                            _("A terminal emulator for the GNOME desktop"),
+                            vte_version);
+
   gtk_show_about_dialog (transient_parent,
                          "program-name", _("GNOME Terminal"),
                          "copyright", copyright,
-                         "comments", _("A terminal emulator for the GNOME desktop"),
+                         "comments", comment,
                          "version", VERSION,
                          "authors", array_strv,
                          "artists", artists,
