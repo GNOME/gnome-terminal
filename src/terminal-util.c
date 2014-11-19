@@ -216,7 +216,9 @@ terminal_util_show_about (GtkWindow *transient_parent)
   licence_text = terminal_util_get_licence_text ();
 
   vte_version = g_strdup_printf (_("Using VTE version %d.%d.%d"),
-				 VTE_MAJOR_VERSION, VTE_MINOR_VERSION, VTE_MICRO_VERSION);
+                                 vte_get_major_version (),
+                                 vte_get_minor_version (),
+                                 vte_get_micro_version ());
   comment = g_strdup_printf("%s\n%s",
                             _("A terminal emulator for the GNOME desktop"),
                             vte_version);
