@@ -25,6 +25,7 @@
 #include "terminal-intl.h"
 #include "terminal-tab-label.h"
 #include "terminal-close-button.h"
+#include "terminal-window.h"
 
 #define TERMINAL_TAB_LABEL_GET_PRIVATE(tab_label)(G_TYPE_INSTANCE_GET_PRIVATE ((tab_label), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelPrivate))
 
@@ -71,6 +72,7 @@ sync_tab_label (TerminalScreen *screen,
 {
   GtkWidget *hbox;
   const char *title;
+  TerminalWindow *window;
 
   title = terminal_screen_get_title (screen);
   hbox = gtk_widget_get_parent (label);
@@ -79,6 +81,14 @@ sync_tab_label (TerminalScreen *screen,
                       title && title[0] ? title : _("Terminal"));
 
   gtk_widget_set_tooltip_text (hbox, title);
+
+  /* This call updates the window size: bug 732588.
+   * FIXMEchpe: This is probably a GTK+ bug, should get them fix it.
+   */
+  window = TERMINAL_WINDOW (gtk_widget_get_ancestor (GTK_WIDGET (label),
+                                                     TERMINAL_TYPE_WINDOW));
+  if (window != NULL)
+    terminal_window_update_size (window);
 }
 
 static void

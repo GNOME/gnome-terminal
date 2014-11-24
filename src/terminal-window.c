@@ -230,8 +230,6 @@ sync_screen_icon_title (TerminalScreen *screen,
                         GParamSpec *psepc,
                         TerminalWindow *window);
 
-static void terminal_window_update_size (TerminalWindow *window);
-
 G_DEFINE_TYPE (TerminalWindow, terminal_window, GTK_TYPE_APPLICATION_WINDOW)
 
 /* Clipboard helpers */
@@ -3136,7 +3134,7 @@ terminal_window_get_mdi_container (TerminalWindow *window)
   return GTK_WIDGET (priv->mdi_container);
 }
 
-static void
+void
 terminal_window_update_size (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
