@@ -246,7 +246,7 @@ AM_CONDITIONAL([WITH_NAUTILUS_EXTENSION],[test "$with_nautilus_extension" = "yes
 # **********************
 
 if test -f /etc/os-release; then
-  DISTRO="$(source /etc/os-release && echo $ID)"
+  DISTRO="$(. /etc/os-release && echo $ID)"
 else
   DISTRO="unknown"
 fi
