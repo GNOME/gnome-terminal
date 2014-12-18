@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-terminal-help\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 07:51+0000\n"
-"PO-Revision-Date: 2014-09-12 13:23+0200\n"
+"POT-Creation-Date: 2014-12-18 08:52+0000\n"
+"PO-Revision-Date: 2014-12-18 13:06+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -79,9 +79,9 @@ msgstr "2013"
 #: C/pref-keyboard-access.page:17 C/pref-menubar.page:18
 #: C/pref-profiles.page:17 C/pref-profile-char-width.page:11
 #: C/pref-profile-encoding.page:11 C/pref-scrolling.page:17
-#: C/pref-tab-window.page:12 C/pref-theme.page:11 C/profile.page:9
-#: C/prob-reset.page:16 C/txt-copy-paste.page:16 C/txt-links.page:15
-#: C/txt-search.page:15 C/txt-select-text.page:17
+#: C/pref-tab-window.page:12 C/pref-theme.page:11 C/pref-user-input.page:10
+#: C/profile.page:9 C/prob-reset.page:16 C/txt-copy-paste.page:16
+#: C/txt-links.page:15 C/txt-search.page:15 C/txt-select-text.page:17
 msgid "Ekaterina Gerasimova"
 msgstr "Ekaterina Gerasimova"
 
@@ -923,7 +923,7 @@ msgstr ""
 "su cursos preferido:"
 
 #. (itstool) path: item/p
-#: C/app-cursor.page:39 C/app-fonts.page:62 C/txt-select-text.page:37
+#: C/app-cursor.page:39 C/app-fonts.page:62
 msgid ""
 "Select <guiseq><gui style=\"menu\">Edit</gui> <gui style=\"menuitem"
 "\">Profile Preferences</gui> <gui style=\"tab\">General</gui></guiseq>."
@@ -2074,9 +2074,6 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/pref-custom-exit.page:41 C/pref-custom-command.page:47
-#| msgid ""
-#| "Select <guiseq><gui style=\"menu\">Edit</gui> <gui style=\"menuitem"
-#| "\">Profile Preferences</gui> <gui style=\"tab\">Colors</gui></guiseq>."
 msgid ""
 "Select <guiseq><gui style=\"menu\">Edit</gui><gui style=\"menuitem\">Profile "
 "Preferences</gui><gui style=\"tab\">Command</gui></guiseq>."
@@ -2652,11 +2649,6 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/pref-profiles.page:120
-#| msgid ""
-#| "Set your preferred behavior for the <link xref=\"pref-custom-exit"
-#| "\"><cmd>exit</cmd> command</link>. You can also set a <link xref=\"pref-"
-#| "custom-command\">custom shell</link> in the <gui style=\"tab\">Title and "
-#| "Command</gui> tab."
 msgid ""
 "Set your preferred behavior for the <link xref=\"pref-custom-exit"
 "\"><cmd>exit</cmd> command</link>. You can also set a <link xref=\"pref-"
@@ -2921,7 +2913,7 @@ msgstr "Pulse <gui style=\"button\">Eliminar</gui>."
 
 #. (itstool) path: credit/years
 #: C/pref-profile-char-width.page:13 C/pref-profile-encoding.page:13
-#: C/pref-tab-window.page:14 C/pref-theme.page:13
+#: C/pref-tab-window.page:14 C/pref-theme.page:13 C/pref-user-input.page:12
 msgid "2014"
 msgstr "2014"
 
@@ -2929,6 +2921,8 @@ msgstr "2014"
 #: C/pref-profile-char-width.page:23
 msgid "Display ambiguous-width characters as wide instead of narrow."
 msgstr ""
+"Mostrar los caracteres con anchura ambigua como anchos en lugar de como "
+"estrechos"
 
 #. (itstool) path: page/title
 #: C/pref-profile-char-width.page:27
@@ -2946,12 +2940,17 @@ msgid ""
 "can change your profile preferences to display ambiguous characters as wide, "
 "which can be better if you are reading running prose."
 msgstr ""
+"Algunos caracteres, como las letras griegas o los logogramas asiáticos "
+"pueden ocupar dos celdas en la ventana de la terminal. Habitualmente, estos "
+"caracteres se refieren a <em>caracteres ambiguos</em>. De manera "
+"predeterminada, estos caracteres se muestran con anchura ancha en la "
+"<app>Terminal</app>, para que se vean mejor en situaciones donde la perfecta "
+"distribución del idioma es importante, tales como en el arte ASCII. Puede "
+"cambiar las preferencias de su perfil para mostrar los caracteres ambiguos "
+"como caracteres anchos, lo que puede ser mejor si está leyendo prosa."
 
 #. (itstool) path: item/p
 #: C/pref-profile-char-width.page:39 C/pref-profile-encoding.page:37
-#| msgid ""
-#| "Select <guiseq><gui style=\"menu\">Edit</gui> <gui style=\"menuitem"
-#| "\">Preferences</gui> <gui style=\"tab\">Profiles</gui></guiseq>."
 msgid ""
 "Open <guiseq><gui style=\"menu\">Edit</gui><gui style=\"menuitem"
 "\">Preferences</gui><gui style=\"tab\">Profiles</gui></guiseq>."
@@ -2961,9 +2960,6 @@ msgstr ""
 
 #. (itstool) path: item/p
 #: C/pref-profile-char-width.page:43 C/pref-profile-encoding.page:41
-#| msgid ""
-#| "Click <gui style=\"button\">Edit</gui>. This will open the profile "
-#| "preferences dialog for the selected profile."
 msgid ""
 "Select the profile that you want to edit and press <gui style=\"button"
 "\">Edit</gui> to open the profile preferences for editing."
@@ -2977,15 +2973,16 @@ msgid ""
 "Open the <gui style=\"tab\">Compatibility</gui> tab and set the ambiguous-"
 "width characters to <gui>Wide</gui>."
 msgstr ""
+"Abra la pestaña <gui style=\"tab\">Compatibilidad</gui> y establezca los "
+"caracteres con anchura ambigua a <gui>Anchos</gui>."
 
 #. (itstool) path: info/desc
 #: C/pref-profile-encoding.page:23
 msgid "Set a different encoding for each saved profile."
-msgstr ""
+msgstr "Establecer una codificación diferente para cada perfil guardado."
 
 #. (itstool) path: page/title
 #: C/pref-profile-encoding.page:27
-#| msgid "Change the default character encoding"
 msgid "Change profile character encoding"
 msgstr "Cambiar la codificación de caracteres del perfil"
 
@@ -2997,6 +2994,11 @@ msgid ""
 "different character encoding for a specific task, you can <link xref=\"pref-"
 "profiles#new-profile\">create a new profile</link> with a different encoding."
 msgstr ""
+"Normalmente debería poder usarla codificación predeterminada, la UTF-8, para "
+"todo lo que necesite en la terminal. Si habitualmente necesita usar una "
+"codificación de caracteres diferente para una tarea en concreto, puede <link "
+"xref=\"pref-profiles#new-profile\">crear un perfil nuevo</link> con otra "
+"codificación."
 
 #. (itstool) path: item/p
 #: C/pref-profile-encoding.page:46
@@ -3004,10 +3006,11 @@ msgid ""
 "Open the <gui style=\"tab\">Compatibility</gui> tab and set the character "
 "encoding."
 msgstr ""
+"Abra la pestaña de <gui style=\"tab\">Compatibilidad</gui> y establezca la "
+"codificación de caracteres."
 
 #. (itstool) path: info/desc
 #: C/pref-scrolling.page:24
-#| msgid "Set scroll output and scrollbar behavior."
 msgid "Change the scroll output and scrollbar behavior."
 msgstr ""
 "Cambiar el comportamiento del desplazamiento de la salida y de la barra de "
@@ -3025,6 +3028,9 @@ msgid ""
 "to have your terminal behave in a specific manner so that it is easier to "
 "work with."
 msgstr ""
+"Cuando se muestra mucha salida en la pantalla de la terminal, puede ser útil "
+"hacer que la terminal se comporte de una manera específica, para que sea más "
+"fácil trabajar con ella."
 
 #. (itstool) path: section/title
 #: C/pref-scrolling.page:34
@@ -3054,7 +3060,6 @@ msgstr "Desmarque <gui>Mostrar barra de desplazamiento</gui>."
 
 #. (itstool) path: section/p
 #: C/pref-scrolling.page:49
-#| msgid "Your preferences will be saved automatically."
 msgid "Your preference is saved immediately."
 msgstr "Sus preferencias se guardarán automáticamente."
 
@@ -3065,7 +3070,6 @@ msgstr "Desplazar en salida"
 
 #. (itstool) path: section/p
 #: C/pref-scrolling.page:56
-#, fuzzy
 #| msgid ""
 #| "<app>Terminal</app> can automatically scroll down to the latest output as "
 #| "a command executes."
@@ -3073,8 +3077,8 @@ msgid ""
 "You can lock scrolling so that it always shows the newest output while a "
 "command executes."
 msgstr ""
-"La <app>Terminal</app> se puede desplazar automáticamente hasta la última "
-"salida cuando se ejecuta un comando."
+"Puede bloquear el desplazamiento para que siempre se muestre la salida nueva "
+"cuando se ejecute un comando."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:66
@@ -3092,6 +3096,8 @@ msgid ""
 "You can set the terminal to automatically scroll to the bottom of the window "
 "when you input text into the prompt."
 msgstr ""
+"Puede configurar la terminal para que se desplace automáticamente a la parte "
+"inferior de la ventana cuando introduce texto en el símbolo del sistema."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:85
@@ -3110,6 +3116,10 @@ msgid ""
 "memory. You may want to do this if you rarely restart your terminal so that "
 "there is a limit to how much memory the scrollback can use."
 msgstr ""
+"Puede limitar el número de líneas de la salida de la terminal que se guardan "
+"en memoria. Puede querer hacer esto si raramente reinicia la terminal, para "
+"que haya un límite en la memoria que el desplazamiento hacia atrás puede "
+"usar."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:104
@@ -3117,6 +3127,8 @@ msgid ""
 "Check <gui>Limit scrollback to</gui> and enter a number of lines which is "
 "greater than 0 to limit scrollback."
 msgstr ""
+"Marque la opción <gui>Limitar desplazamiento a</gui> e introduzca el número "
+"de líneas superior a 0 para limitar el desplazamiento."
 
 #. (itstool) path: item/p
 #: C/pref-scrolling.page:108
@@ -3129,7 +3141,6 @@ msgstr ""
 
 #. (itstool) path: note/p
 #: C/pref-scrolling.page:114
-#, fuzzy
 #| msgid ""
 #| "<gui style=\"checkbox\">Unlimited</gui> scrollback lines could "
 #| "potentially overburden your computer's memory and make <app>Terminal</"
@@ -3138,9 +3149,8 @@ msgid ""
 "Using unlimited scrollback can make your <app>Terminal</app> sluggish during "
 "scrolling!"
 msgstr ""
-"Las lineas de desplazamiento hacia atrás <gui style=\"checkbox\">ilimitadas</"
-"gui> pueden sobrecargar la memoria de su equipo y ralentizar la "
-"<app>Terminal</app> durante el desplazamiento."
+"Usar un desplazamiento hacia atrás ilimitado puede hacer que la "
+"<app>Terminal</app> vaya lenta al desplazarse."
 
 #. (itstool) path: info/desc
 #: C/pref-tab-window.page:24
@@ -3223,6 +3233,69 @@ msgid "To use the dark theme, select <gui>Use dark theme variant</gui>."
 msgstr ""
 "Para usar el tema oscuro, seleccione <gui>Usar la variante oscura del tema</"
 "gui>."
+
+#. (itstool) path: info/desc
+#: C/pref-user-input.page:17
+msgid "Do not send user input to the application running in the terminal."
+msgstr ""
+"No enviar la entrada del usuario a la aplicación que se está ejecutando en "
+"la terminal."
+
+#. (itstool) path: page/title
+#: C/pref-user-input.page:22
+msgid "Disble user input"
+msgstr "Desactivar la entrada del usuario"
+
+#. (itstool) path: page/p
+#: C/pref-user-input.page:24
+msgid ""
+"You can prevent user input into the terminal from being passed to the "
+"application which is currently running in the terminal. This will prevent "
+"any keypresses, mouse clicks and mouse movement from affecting the "
+"application. You will still be able to interact with the terminal itself "
+"using the keyboard for scrolling and your mouse for selecting text. You will "
+"also be able to copy selected text from the terminal, but you will not be "
+"able to paste text into the terminal."
+msgstr ""
+"Puede evitar que la entrada introducida por el usuario en la terminal se "
+"pase a la aplicación que se esté ejecutando actualmente en dicha terminal. "
+"Esto evitará que las pulsaciones de las teclas o del ratón (incluídos sus "
+"movimientos) afecten a la aplicación. Seguirá pudiendo interactuar con la "
+"propia terminal usando el teclado para desplazarse y el ratón para "
+"seleccionar texto. También podrá copiar el texto seleccionado de la "
+"terminal, pero no podrá pegarlo en la misma."
+
+#. (itstool) path: page/p
+#: C/pref-user-input.page:32
+msgid "To use the read only mode:"
+msgstr "Para usar el modo de solo lectura:"
+
+#. (itstool) path: item/p
+#: C/pref-user-input.page:36
+#| msgid ""
+#| "Right click in <app>Terminal</app> and select <gui style=\"menuitem"
+#| "\">Show Menubar</gui>."
+msgid ""
+"Right click in the <app>Terminal</app> window or select the <gui style=\"menu"
+"\">Terminal</gui> menu."
+msgstr ""
+"Pulse con el botón derecho en la ventana de la <app>Terminal</app> y elija "
+"el menú <gui style=\"menu\">Terminal</gui>."
+
+#. (itstool) path: item/p
+#: C/pref-user-input.page:40
+#| msgid "Select <gui style=\"menuitem\">Open Link</gui>."
+msgid "Select <gui style=\"menuitem\">Read-Only</gui> so that it is checked."
+msgstr "Marque <gui style=\"menuitem\">Sólo lectura</gui>."
+
+#. (itstool) path: page/p
+#: C/pref-user-input.page:44
+msgid ""
+"You can disable the read only mode by unchecking <gui style=\"menuitem"
+"\">Read-Only</gui>."
+msgstr ""
+"Puede desactivar el modo de solo lectura desmarcando la opcion <gui style="
+"\"menuitem\">Solo lectura</gui>."
 
 #. (itstool) path: page/title
 #: C/profile.page:18
@@ -3647,65 +3720,62 @@ msgstr "Selección de texto"
 
 #. (itstool) path: page/p
 #: C/txt-select-text.page:30
-msgid ""
-"You can define selection criteria for text in <app>Terminal</app>. You can "
-"allow <app>Terminal</app> to select only words consisting of letters or "
-"words with combinations of letters, numbers and special characters. To "
-"specify the range of characters that can be selected:"
-msgstr ""
-"Puede definir el criterio de selección de texto en la <app>Terminal</app>. "
-"Puede permitir que la <app>Terminal</app> sólo seleccione palabras "
-"consistentes en letras o palabras con combinaciones de letras, números y "
-"caracteres especiales. Para especificar un rango de caracteres que se pueden "
-"seleccionar:"
-
-#. (itstool) path: item/p
-#: C/txt-select-text.page:42
-msgid ""
-"Specify the characters or ranges that you wish to be considered part of "
-"words in the <gui>Select-by-word characters</gui> entry field. By default, "
-"text selection includes all characters with numbers and some special "
-"characters: <var>-A-Za-z0-9,./?%&amp;#:_=+@~</var>"
-msgstr ""
-"Especifique los caracteres o rangos que quiere que se consideren parte de "
-"las palabras en el campo de entrada <gui>Caracteres para selección por "
-"palabra</gui>. De manera predeterminada, la selección del texto incluye "
-"todos los caracteres con números y algunos caracteres especiales: <var>-A-Za-"
-"z0-9,./?%&amp;#:_=+@~</var>"
-
-#. (itstool) path: item/p
-#: C/txt-select-text.page:46
-msgid "Your preferences will be saved automatically."
-msgstr "Sus preferencias se guardarán automáticamente"
+msgid "You can select a word or a sentence from your terminal output."
+msgstr "Puede seleccionar una palabra o una frase en la salida de la terminal."
 
 #. (itstool) path: page/p
-#: C/txt-select-text.page:50
-msgid ""
-"Once you have set your selection preference, you can select text in "
-"<app>Terminal</app> in two different ways."
-msgstr ""
-"Una vez que haya establecido su selección, podrá seleccionar texto "
-"<app>Terminal</app> de dos maneras diferentes."
-
-#. (itstool) path: page/p
-#: C/txt-select-text.page:53
+#: C/txt-select-text.page:32
 msgid "To select a word in <app>Terminal</app> output:"
 msgstr "Para seleccionar una palabra en la salida de la <app>Terminal</app>:"
 
 #. (itstool) path: item/p
-#: C/txt-select-text.page:57
+#: C/txt-select-text.page:36
 msgid "Double click on the desired word."
 msgstr "Pulse dos veces sobre la palabra que quiere."
 
 #. (itstool) path: page/p
-#: C/txt-select-text.page:61
+#: C/txt-select-text.page:40
 msgid "To select a line in <app>Terminal</app> output:"
 msgstr "Para seleccionar una línea en la salida de la <app>Terminal</app>:"
 
 #. (itstool) path: item/p
-#: C/txt-select-text.page:65
+#: C/txt-select-text.page:44
 msgid "Triple click on the desired line."
 msgstr "Pulse tres veces en la línea que quiere"
+
+#~ msgid ""
+#~ "You can define selection criteria for text in <app>Terminal</app>. You "
+#~ "can allow <app>Terminal</app> to select only words consisting of letters "
+#~ "or words with combinations of letters, numbers and special characters. To "
+#~ "specify the range of characters that can be selected:"
+#~ msgstr ""
+#~ "Puede definir el criterio de selección de texto en la <app>Terminal</"
+#~ "app>. Puede permitir que la <app>Terminal</app> sólo seleccione palabras "
+#~ "consistentes en letras o palabras con combinaciones de letras, números y "
+#~ "caracteres especiales. Para especificar un rango de caracteres que se "
+#~ "pueden seleccionar:"
+
+#~ msgid ""
+#~ "Specify the characters or ranges that you wish to be considered part of "
+#~ "words in the <gui>Select-by-word characters</gui> entry field. By "
+#~ "default, text selection includes all characters with numbers and some "
+#~ "special characters: <var>-A-Za-z0-9,./?%&amp;#:_=+@~</var>"
+#~ msgstr ""
+#~ "Especifique los caracteres o rangos que quiere que se consideren parte de "
+#~ "las palabras en el campo de entrada <gui>Caracteres para selección por "
+#~ "palabra</gui>. De manera predeterminada, la selección del texto incluye "
+#~ "todos los caracteres con números y algunos caracteres especiales: <var>-A-"
+#~ "Za-z0-9,./?%&amp;#:_=+@~</var>"
+
+#~ msgid "Your preferences will be saved automatically."
+#~ msgstr "Sus preferencias se guardarán automáticamente"
+
+#~ msgid ""
+#~ "Once you have set your selection preference, you can select text in "
+#~ "<app>Terminal</app> in two different ways."
+#~ msgstr ""
+#~ "Una vez que haya establecido su selección, podrá seleccionar texto "
+#~ "<app>Terminal</app> de dos maneras diferentes."
 
 #~ msgid ""
 #~ "Select <guiseq> <gui style=\"menu\">Edit</gui> <gui style=\"menuitem"
