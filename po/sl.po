@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-14 18:32+0000\n"
-"PO-Revision-Date: 2014-09-14 21:49+0100\n"
+"POT-Creation-Date: 2014-12-25 08:46+0000\n"
+"PO-Revision-Date: 2014-12-25 19:34+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -84,7 +84,6 @@ msgid "_Wrap around"
 msgstr "_Prelomi vrstice"
 
 #: ../src/gterminal.vala:29
-#, fuzzy
 msgid "Suppress output"
 msgstr "Prepreči odvajanje"
 
@@ -97,14 +96,13 @@ msgid "Output options:"
 msgstr "Možnosti izpisa:"
 
 #: ../src/gterminal.vala:44
-#, fuzzy
 msgid "Show output options"
-msgstr "Prikaže možnosti Cluttra"
+msgstr "Prikaže možnosti odvoda"
 
 #: ../src/gterminal.vala:84
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid application ID"
-msgstr "“%s” ni veljaven ID stika"
+msgstr "“%s” ni veljaven ID programa"
 
 #: ../src/gterminal.vala:96
 msgid "Server application ID"
@@ -124,15 +122,15 @@ msgstr "Pokaže splošne možnosti"
 
 #: ../src/gterminal.vala:127 ../src/gterminal.vala:148
 msgid "FD passing of stdin is not supported"
-msgstr ""
+msgstr "Sklic FD na standardni vhod ni podprt"
 
 #: ../src/gterminal.vala:128 ../src/gterminal.vala:149
 msgid "FD passing of stdout is not supported"
-msgstr ""
+msgstr "Sklic FD na standardni izhod ni podprt"
 
 #: ../src/gterminal.vala:129 ../src/gterminal.vala:150
 msgid "FD passing of stderr is not supported"
-msgstr ""
+msgstr "Sklic FD na standardno napako ni podprt"
 
 #: ../src/gterminal.vala:141
 #, c-format
@@ -140,9 +138,9 @@ msgid "Invalid argument \"%s\" to --fd option"
 msgstr "Neveljaven argument \"%s\" za možnost --fd"
 
 #: ../src/gterminal.vala:154
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot pass FD %d twice"
-msgstr "Ni mogoč dostop do sporočila %u za prenos v %s"
+msgstr "Ni mogoče izvesti FD %d dvakrat"
 
 #: ../src/gterminal.vala:177
 msgid "Forward stdin"
@@ -173,30 +171,29 @@ msgid "Show exec options"
 msgstr "Prikaže možnosti izvajanja"
 
 #: ../src/gterminal.vala:210
-#, fuzzy
 msgid "Maximise the window"
 msgstr "Razpni okno"
 
-#: ../src/gterminal.vala:212 ../src/terminal-options.c:1104
+#: ../src/gterminal.vala:212 ../src/terminal-options.c:1075
 msgid "Full-screen the window"
 msgstr "Celozaslonsko okno"
 
-#: ../src/gterminal.vala:214 ../src/terminal-options.c:1113
+#: ../src/gterminal.vala:214 ../src/terminal-options.c:1084
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Določitev velikosti okna; primer: 80x24 ali 80x24+200+200 (VRSTICExSTOLPCI+X"
 "+Y)"
 
-#: ../src/gterminal.vala:215 ../src/terminal-options.c:1114
+#: ../src/gterminal.vala:215 ../src/terminal-options.c:1085
 msgid "GEOMETRY"
 msgstr "GEOMETRIJA"
 
-#: ../src/gterminal.vala:217 ../src/terminal-options.c:1122
+#: ../src/gterminal.vala:217 ../src/terminal-options.c:1093
 msgid "Set the window role"
 msgstr "Nastavi vlogo okna"
 
-#: ../src/gterminal.vala:217 ../src/terminal-options.c:1123
+#: ../src/gterminal.vala:217 ../src/terminal-options.c:1094
 msgid "ROLE"
 msgstr "VLOGA"
 
@@ -208,105 +205,96 @@ msgstr "Možnosti okna:"
 msgid "Show window options"
 msgstr "Pokaži možnosti okna"
 
-#: ../src/gterminal.vala:244
-#, fuzzy, c-format
+#: ../src/gterminal.vala:243
+#, c-format
 msgid "May only use option %s once"
-msgstr "Podrejen ukaz %s je lahko naveden le enkrat."
+msgstr "Možnost %s je dovoljeno uporabiti le enkrat"
 
-#: ../src/gterminal.vala:257 ../src/terminal-options.c:683
+#: ../src/gterminal.vala:256 ../src/terminal-options.c:657
 #, c-format
 msgid "\"%s\" is not a valid zoom factor"
 msgstr "\"%s\" ni veljavna vrednost približanja"
 
-#: ../src/gterminal.vala:261
-#, fuzzy, c-format
+#: ../src/gterminal.vala:260
+#, c-format
 msgid "Zoom value \"%s\" is outside allowed range"
-msgstr "Ponujena vrednost je izven veljavnega območja\n"
+msgstr "Vrednost približanja \"%s\" je izven veljavnega območja"
 
-#: ../src/gterminal.vala:270 ../src/terminal-options.c:1153
+#: ../src/gterminal.vala:269 ../src/terminal-options.c:1124
 msgid "Use the given profile instead of the default profile"
 msgstr "Uporabi podan profil namesto privzetega"
 
-#: ../src/gterminal.vala:271
+#: ../src/gterminal.vala:270
 msgid "UUID"
 msgstr "UUID"
 
-#: ../src/gterminal.vala:273 ../src/terminal-options.c:1162
-msgid "Set the terminal title"
-msgstr "Nastavi naziv terminala"
-
-#: ../src/gterminal.vala:273 ../src/terminal-options.c:1163
-msgid "TITLE"
-msgstr "NAZIV"
-
-#: ../src/gterminal.vala:275 ../src/terminal-options.c:1171
+#: ../src/gterminal.vala:272 ../src/terminal-options.c:1141
 msgid "Set the working directory"
 msgstr "Nastavi delovni imenik terminala"
 
-#: ../src/gterminal.vala:275 ../src/terminal-options.c:1172
+#: ../src/gterminal.vala:272 ../src/terminal-options.c:1142
 msgid "DIRNAME"
 msgstr "IMEIMENIKA"
 
-#: ../src/gterminal.vala:277 ../src/terminal-options.c:1180
+#: ../src/gterminal.vala:274 ../src/terminal-options.c:1150
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Nastavi približanje terminala (1.0 = običajna velikost)"
 
-#: ../src/gterminal.vala:278 ../src/terminal-options.c:1181
+#: ../src/gterminal.vala:275 ../src/terminal-options.c:1151
 msgid "ZOOM"
 msgstr "Približanje"
 
-#: ../src/gterminal.vala:285
+#: ../src/gterminal.vala:282
 msgid "Terminal options:"
 msgstr "Možnosti terminala:"
 
-#: ../src/gterminal.vala:286 ../src/terminal-options.c:1287
+#: ../src/gterminal.vala:283 ../src/terminal-options.c:1257
 msgid "Show terminal options"
 msgstr "Pokaži možnosti terminala"
 
-#: ../src/gterminal.vala:299
+#: ../src/gterminal.vala:296
 msgid "Wait until the child exits"
 msgstr "Počakajte na končanje podrejenega opravila"
 
-#: ../src/gterminal.vala:306
+#: ../src/gterminal.vala:303
 msgid "Processing options:"
 msgstr "Možnosti opravil:"
 
-#: ../src/gterminal.vala:307
+#: ../src/gterminal.vala:304
 msgid "Show processing options"
 msgstr "Prikaže možnosti opravil"
 
-#: ../src/gterminal.vala:477
+#: ../src/gterminal.vala:474
 #, c-format
 msgid "'%s' needs the command to run as arguments after '--'"
-msgstr ""
+msgstr "'%s' zahteva ukaz za zagon ukaza kot argument za '--'"
 
-#: ../src/gterminal.vala:511
-#, fuzzy
+#: ../src/gterminal.vala:508
 msgid "Missing argument"
 msgstr "Manjka argument"
 
-#: ../src/gterminal.vala:535
-#, fuzzy, c-format
+#: ../src/gterminal.vala:532
+#, c-format
 msgid "Unknown completion request for \"%s\""
-msgstr "Najmanjše število znakov za dopolnjevanje"
+msgstr "Neznana zahteva za dokončanje \"%s\""
 
-#: ../src/gterminal.vala:560
+#: ../src/gterminal.vala:557
 msgid "GTerminal"
 msgstr "GTerminal"
 
-#: ../src/gterminal.vala:564
+#: ../src/gterminal.vala:561
 msgid "Missing command"
 msgstr "Manjka ukaz"
 
-#: ../src/gterminal.vala:573
+#: ../src/gterminal.vala:570
 #, c-format
 msgid "Unknown command \"%s\""
 msgstr "Neznan ukaz \"%s\""
 
-#: ../src/gterminal.vala:577
-#, fuzzy, c-format
+#: ../src/gterminal.vala:574
+#, c-format
 msgid "Error processing arguments: %s\n"
-msgstr "Napaka med obdelavo slike"
+msgstr "Napaka med obdelavo argumentov: %s\n"
 
 #: ../src/migration.c:385
 msgid "Default"
@@ -588,6 +576,8 @@ msgid ""
 "Whether ambiguous-width characters are narrow or wide when using UTF-8 "
 "encoding"
 msgstr ""
+"Ali so nedoločljivo-široki znaki dovolj ozki oziroma široki, ko je "
+"uporabljeno kodiranje UTF-8."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:52
 msgid "Keyboard shortcut to open a new tab"
@@ -708,19 +698,17 @@ msgstr ""
 "zato lahko te bližnjice izklopite."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:80
-#, fuzzy
 msgid "Whether shortcuts are enabled"
-msgstr "Ali je meta omogočena"
+msgstr "Ali so tipkovne bližnice omogočene"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:81
-#, fuzzy
 msgid ""
 "Whether shortcuts are enabled. They may interfere with some applications run "
 "inside the terminal so it's possible to turn them off."
 msgstr ""
-"Ali naj bo menijska vrstica dosegljiva preko bližnjic tipk Alt+črka. To "
-"lahko povzroči nezdružljivost s programi, ki so zagnani znotraj terminala, "
-"zato lahko te bližnjice izklopite."
+"Ali so tipkovne bližnjice omogočene. Neustrezne nastavitve lahko vplivajo na "
+"delovanje programov, ki so zagnani znotraj, zato je mogoče te bližnjice tudi "
+"izklopiti."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:82
 msgid "Whether the standard GTK shortcut for menubar access is enabled"
@@ -745,14 +733,12 @@ msgid "List of available encodings"
 msgstr "Seznam razpoložljivih znakovnih naborov"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:86
-#, fuzzy
 msgid ""
 "A subset of possible encodings are presented in the Encoding submenu. This "
 "is a list of encodings to appear there."
 msgstr ""
 "Podrejeni izbor razpoložljivih naborov znakov je prikazan v podmeniju "
-"kodiranja. Nabor \"current\" (trenutno) pokaže kodiranje kot ga določajo "
-"trenutne jezikovne nastavitve."
+"kodiranja. Seznam je prikazan spodaj."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Whether to ask for confirmation before closing a terminal"
@@ -809,9 +795,8 @@ msgid "General"
 msgstr "Splošno"
 
 #: ../src/preferences.ui.h:12
-#, fuzzy
 msgid "_Enable shortcuts"
-msgstr "Omogoči tipkovne bližnjice"
+msgstr "_Omogoči tipkovne bližnjice"
 
 #: ../src/preferences.ui.h:13
 msgid "Shortcuts"
@@ -859,15 +844,13 @@ msgstr "Belo na črnem"
 
 #. Translators: "Solarized" is the name of a colour scheme, "light" can be translated
 #: ../src/profile-editor.c:69
-#, fuzzy
 msgid "Solarized light"
-msgstr "svetlobna leta"
+msgstr "Svetli Solarized"
 
 #. Translators: "Solarized" is the name of a colour scheme, "dark" can be translated
 #: ../src/profile-editor.c:74
-#, fuzzy
 msgid "Solarized dark"
-msgstr "temo vijolična"
+msgstr "Temni Solarized"
 
 #: ../src/profile-editor.c:438
 #, c-format
@@ -1017,9 +1000,8 @@ msgid "Profile ID:"
 msgstr "ID profila:"
 
 #: ../src/profile-preferences.ui.h:50
-#, fuzzy
 msgid "Initial terminal si_ze:"
-msgstr "Privzeto uporabi velikost terminala po meri"
+msgstr "Začetna velikost terminala:"
 
 #: ../src/profile-preferences.ui.h:51
 msgid "columns"
@@ -1192,9 +1174,8 @@ msgid "_Encoding:"
 msgstr "_Kodiranje:"
 
 #: ../src/profile-preferences.ui.h:93
-#, fuzzy
 msgid "Ambiguous-_width characters:"
-msgstr "Širina (število znakov)"
+msgstr "Znaki z _nedoločljivo-širino:"
 
 #: ../src/profile-preferences.ui.h:94
 msgid "_Reset Compatibility Options to Defaults"
@@ -1560,40 +1541,40 @@ msgstr "Odpri program _Midnight Commander"
 msgid "Open the terminal file manager Midnight Commander"
 msgstr "V terminalu odpri program Midnight Commander"
 
-#: ../src/terminal-options.c:224 ../src/terminal-options.c:237
+#: ../src/terminal-options.c:222 ../src/terminal-options.c:235
 #, c-format
 msgid "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgstr "V tej različici terminala možnost \"%s\" ni več podprta."
 
-#: ../src/terminal-options.c:249 ../src/terminal-util.c:217
+#: ../src/terminal-options.c:247 ../src/terminal-util.c:217
 msgid "GNOME Terminal"
 msgstr "GNOME terminal"
 
-#: ../src/terminal-options.c:289
+#: ../src/terminal-options.c:287
 #, c-format
 msgid "Argument to \"%s\" is not a valid command: %s"
 msgstr "Argument za \"%s\" ni veljaven ukaz: %s"
 
-#: ../src/terminal-options.c:438
+#: ../src/terminal-options.c:436
 msgid "Two roles given for one window"
 msgstr "Dani sta dve vlogi za eno okno"
 
-#: ../src/terminal-options.c:459 ../src/terminal-options.c:492
+#: ../src/terminal-options.c:457 ../src/terminal-options.c:490
 #, c-format
 msgid "\"%s\" option given twice for the same window\n"
 msgstr "Možnost \"%s\" je za isto okno podana dvakrat\n"
 
-#: ../src/terminal-options.c:690
+#: ../src/terminal-options.c:664
 #, c-format
 msgid "Zoom factor \"%g\" is too small, using %g\n"
 msgstr "Določilo približanja \"%g\" je premajhno, zato bo uporabljeno %g\n"
 
-#: ../src/terminal-options.c:698
+#: ../src/terminal-options.c:672
 #, c-format
 msgid "Zoom factor \"%g\" is too large, using %g\n"
 msgstr "Določilo približanja \"%g\" je preveliko, zato bo uporabljeno %g\n"
 
-#: ../src/terminal-options.c:736
+#: ../src/terminal-options.c:710
 #, c-format
 msgid ""
 "Option \"%s\" requires specifying the command to run on the rest of the "
@@ -1602,15 +1583,15 @@ msgstr ""
 "Možnost \"%s\" zahteva navedbo ukaza, ki se požene na preostanku ukazne "
 "vrstice"
 
-#: ../src/terminal-options.c:871
+#: ../src/terminal-options.c:844
 msgid "Not a valid terminal config file."
 msgstr "Ni veljavna datoteka nastavitev terminala."
 
-#: ../src/terminal-options.c:884
+#: ../src/terminal-options.c:857
 msgid "Incompatible terminal config file version."
 msgstr "Nepodprta različica nastavitvene datoteke terminala."
 
-#: ../src/terminal-options.c:1024
+#: ../src/terminal-options.c:995
 msgid ""
 "Do not register with the activation nameserver, do not re-use an active "
 "terminal"
@@ -1618,55 +1599,55 @@ msgstr ""
 "Ne vpiši se pri aktivacijskem imenskem strežniku in ne uporabi ponovno "
 "dejavnega terminala"
 
-#: ../src/terminal-options.c:1033
+#: ../src/terminal-options.c:1004
 msgid "Load a terminal configuration file"
 msgstr "Naloži nastavitveno datoteko terminala"
 
-#: ../src/terminal-options.c:1034
+#: ../src/terminal-options.c:1005
 msgid "FILE"
 msgstr "DATOTEKA"
 
-#: ../src/terminal-options.c:1055
+#: ../src/terminal-options.c:1026
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Odpri novo okno, ki vsebuje zavihek s privzetim profilom"
 
-#: ../src/terminal-options.c:1064
+#: ../src/terminal-options.c:1035
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Odpri nov zavihek v zadnje odprtem oknu s privzetim profilom"
 
-#: ../src/terminal-options.c:1077
+#: ../src/terminal-options.c:1048
 msgid "Turn on the menubar"
 msgstr "Pokaži menijsko vrstico"
 
-#: ../src/terminal-options.c:1086
+#: ../src/terminal-options.c:1057
 msgid "Turn off the menubar"
 msgstr "Skrij menijsko vrstico"
 
-#: ../src/terminal-options.c:1095
+#: ../src/terminal-options.c:1066
 msgid "Maximize the window"
 msgstr "Razpni okno"
 
-#: ../src/terminal-options.c:1131
+#: ../src/terminal-options.c:1102
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Nastavi zadnji naveden zavihek kot dejaven v tem oknu"
 
-#: ../src/terminal-options.c:1144
+#: ../src/terminal-options.c:1115
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Izvedi argument možnosti znotraj terminala"
 
-#: ../src/terminal-options.c:1154
+#: ../src/terminal-options.c:1125
 msgid "PROFILE-NAME"
 msgstr "IME-PROFILA"
 
-#: ../src/terminal-options.c:1269 ../src/terminal-options.c:1275
+#: ../src/terminal-options.c:1239 ../src/terminal-options.c:1245
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME posnemovalnik terminala"
 
-#: ../src/terminal-options.c:1276
+#: ../src/terminal-options.c:1246
 msgid "Show GNOME Terminal options"
 msgstr "Pokaži možnosti GNOME terminala"
 
-#: ../src/terminal-options.c:1286
+#: ../src/terminal-options.c:1256
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
@@ -1674,7 +1655,7 @@ msgstr ""
 "Možnosti za odpiranje novih oken ali zavihkov terminala; določiti je mogoče "
 "več kot en predmet:"
 
-#: ../src/terminal-options.c:1295
+#: ../src/terminal-options.c:1265
 msgid ""
 "Window options; if used before the first --window or --tab argument, sets "
 "the default for all windows:"
@@ -1682,11 +1663,11 @@ msgstr ""
 "Možnosti okna; v primeru, da je uporabljena pred prvim --window ali --tab "
 "argumentom, je določilo privzeto za vsa okna:"
 
-#: ../src/terminal-options.c:1296
+#: ../src/terminal-options.c:1266
 msgid "Show per-window options"
 msgstr "Pokaži možnosti za vsako okno terminala"
 
-#: ../src/terminal-options.c:1304
+#: ../src/terminal-options.c:1274
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1694,7 +1675,7 @@ msgstr ""
 "Možnosti terminala; v primeru, da je uporabljena pred prvim --window ali --"
 "tab argumentom, je določilo privzeto za vse terminale:"
 
-#: ../src/terminal-options.c:1305
+#: ../src/terminal-options.c:1275
 msgid "Show per-terminal options"
 msgstr "Pokaži možnosti za vsak terminal"
 
@@ -2066,6 +2047,12 @@ msgstr ""
 #: ../src/terminal-window.c:3645
 msgid "C_lose Window"
 msgstr "_Zapri okno"
+
+#~ msgid "Set the terminal title"
+#~ msgstr "Nastavi naziv terminala"
+
+#~ msgid "TITLE"
+#~ msgstr "NAZIV"
 
 #~ msgid "_Use the system fixed width font"
 #~ msgstr "_Uporabi sistemsko pisavo določene širine"
