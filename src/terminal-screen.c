@@ -1904,7 +1904,9 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (process_name)
     gs_transfer_out_value (process_name, &name);
 
-  for (i = 0; i < len - 1; i++)
+  if (len > 0 && data[len - 1] == '\0')
+    len--;
+  for (i = 0; i < len; i++)
     {
       if (data[i] == '\0')
         data[i] = ' ';
