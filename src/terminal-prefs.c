@@ -562,7 +562,7 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   GtkWidget *show_menubar_button, *disable_mnemonics_button, *disable_menu_accel_button;
   GtkWidget *disable_shortcuts_button;
   GtkWidget *tree_view_container, *new_button, *edit_button, *clone_button, *remove_button;
-  GtkWidget *dark_theme_button, *new_terminal_mode_combo;
+  GtkWidget *new_terminal_mode_combo;
   GtkWidget *default_hbox, *default_label;
   GtkTreeSelection *selection;
   GSettings *settings;
@@ -583,7 +583,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
                                        "preferences-dialog",
                                        "preferences-dialog", &dialog,
                                        "default-show-menubar-checkbutton", &show_menubar_button,
-                                       "dark-theme-checkbutton", &dark_theme_button,
                                        "new-terminal-mode-combobox", &new_terminal_mode_combo,
                                        "disable-mnemonics-checkbutton", &disable_mnemonics_button,
                                        "disable-shortcuts-checkbutton", &disable_shortcuts_button,
@@ -610,12 +609,6 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
   g_settings_bind (settings,
                    TERMINAL_SETTING_DEFAULT_SHOW_MENUBAR_KEY,
                    show_menubar_button,
-                   "active",
-                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
-
-  g_settings_bind (settings,
-                   TERMINAL_SETTING_DARK_THEME_KEY,
-                   dark_theme_button,
                    "active",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
 
