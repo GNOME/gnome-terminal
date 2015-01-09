@@ -3425,6 +3425,9 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
   pages = terminal_mdi_container_get_n_screens (container);
   if (pages == 1)
     {
+      TerminalScreen *active_screen = terminal_mdi_container_get_active_screen (container);
+      gtk_widget_grab_focus (GTK_WIDGET(active_screen));  /* bug 742422 */
+
       terminal_window_update_size (window);
     }
   else if (pages == 0)
