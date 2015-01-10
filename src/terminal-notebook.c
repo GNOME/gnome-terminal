@@ -137,7 +137,9 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
                            "tab-fill", TRUE,
                            NULL);
   gtk_notebook_set_tab_reorderable (gtk_notebook, screen_container, TRUE);
+#if 0
   gtk_notebook_set_tab_detachable (gtk_notebook, screen_container, TRUE);
+#endif
 }
 
 static void
