@@ -204,7 +204,7 @@ terminal_util_show_about (GtkWindow *transient_parent)
       g_ptr_array_add (array, EMAILIFY (contributors[i]));
   }
   g_free (contributors); /* strings are now owned by the array */
-  
+
   g_ptr_array_add (array, NULL);
   array_strv = (char **) g_ptr_array_free (array, FALSE);
 
@@ -219,9 +219,11 @@ terminal_util_show_about (GtkWindow *transient_parent)
                                  vte_get_major_version (),
                                  vte_get_minor_version (),
                                  vte_get_micro_version ());
-  comment = g_strdup_printf("%s\n%s",
+
+  comment = g_strdup_printf("%s\n%s %s",
                             _("A terminal emulator for the GNOME desktop"),
-                            vte_version);
+                            vte_version,
+                            vte_get_features ());
 
   gtk_show_about_dialog (transient_parent,
                          "program-name", _("GNOME Terminal"),
