@@ -380,7 +380,7 @@ AC_DEFINE_UNQUOTED([GDK_VERSION_MAX_ALLOWED],[GDK_VERSION_[]AS_TR_SH([$GTK_MAX_A
 
 AC_CONFIG_FILES([
 Makefile
-gnome-terminal.desktop.in
+org.gnome.Terminal.desktop.in
 src/Makefile
 src/terminal-version.h
 help/Makefile

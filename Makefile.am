@@ -14,7 +14,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	$(NULL)
 
 desktopdir = $(datadir)/applications
-desktop_in_files = @PACKAGE@.desktop.in.in
+desktop_in_files = org.gnome.Terminal.desktop.in.in
 nodist_desktop_DATA = $(desktop_in_files:.desktop.in.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
@@ -25,7 +25,7 @@ desktop-file-validate: $(nodist_desktop_DATA)
 	done
 
 appdatadir = $(datadir)/appdata
-appdata_in_files = gnome-terminal.appdata.xml.in
+appdata_in_files = org.gnome.Terminal.appdata.xml.in
 nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
 
