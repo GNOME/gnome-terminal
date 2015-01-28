@@ -38,7 +38,7 @@ typedef struct _TerminalTabLabelPrivate TerminalTabLabelPrivate;
 
 struct _TerminalTabLabel
 {
-  GtkHBox parent_instance;
+  GtkBox parent_instance;
 
   /*< private >*/
   TerminalTabLabelPrivate *priv;
@@ -46,7 +46,7 @@ struct _TerminalTabLabel
 
 struct _TerminalTabLabelClass
 {
-  GtkHBoxClass parent_class;
+  GtkBoxClass parent_class;
 
   /* Signals */
   void (* close_button_clicked) (TerminalTabLabel *tab_label);
