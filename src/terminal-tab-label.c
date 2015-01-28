@@ -196,7 +196,11 @@ terminal_tab_label_constructed (GObject *object)
   gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
 
+#if GTK_CHECK_VERSION (3, 12, 0)
+  gtk_box_set_center_widget (GTK_BOX (hbox), label);
+#else
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+#endif
 
   priv->close_button = close_button = terminal_close_button_new ();
   gtk_widget_set_tooltip_text (close_button, _("Close tab"));
