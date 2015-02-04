@@ -170,21 +170,8 @@ main (int argc, char **argv)
   app = terminal_app_new (app_id);
   g_free (app_id);
 
-  if (!g_application_register (app, NULL, &error)) {
-    g_printerr ("Failed to register application: %s\n", error->message);
-    g_error_free (error);
-    goto out;
-  }
-
-  if (g_application_get_is_remote (app)) {
-    /* How the fuck did this happen? */
-    g_printerr ("Cannot be remote instance!\n");
-    goto out;
-  }
-
   exit_code = g_application_run (app, 0, NULL);
 
-out:
   g_object_unref (app);
 
   return exit_code;
