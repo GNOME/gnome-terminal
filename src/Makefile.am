@@ -192,11 +192,11 @@ gterminal_CPPFLAGS = \
 	-DLOCALEDIR="\"$(datadir)/locale\"" \
 	-DGETTEXT_PACKAGE=\"$(GETTEXT_PACKAGE)\" \
 	$(AM_CPPFLAGS)
+
 # See bug #710862 about -Wsuggest-attribute=format
 gterminal_CFLAGS = \
 	$(GTERMINAL_CFLAGS) \
 	$(AM_CFLAGS) \
-	$(WARN_CFLAGS) \
 	-Wno-cast-qual \
 	-Wno-format-nonliteral \
 	-Wno-suggest-attribute=format \

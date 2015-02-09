@@ -75,6 +75,7 @@ namespace GTerminal
 
   public struct GlobalOptions {
     public static string? app_id = null;
+    public static bool complete = false;
 
     private static bool option_app_id (string option_name,
                                        string value,
@@ -91,9 +92,16 @@ namespace GTerminal
       return app_id != null ? app_id : "org.gnome.Terminal";
     }
 
+    public static bool get_complete ()
+    {
+      return complete;
+    }
+
     private static const OptionEntry[] entries = {
       { "app-id", 0, OptionFlags.HIDDEN, OptionArg.CALLBACK, (void*) option_app_id,
         N_("Server application ID"), N_("ID") },
+      { "complete", 0, OptionFlags.HIDDEN, OptionArg.NONE, ref complete,
+        N_("Show completions"), null },
       { null, 0, 0, 0, null, null, null }
     };
 
@@ -450,6 +458,43 @@ namespace GTerminal
 
   /* Verbs */
 
+  private delegate int VerbFunc (string[] args) throws Error;
+
+  private struct Verb {
+    string verb;
+    unowned VerbFunc func;
+
+    public Verb (string verb, VerbFunc func) { this.verb = verb; this.func = func; }
+  }
+
+  private static int apply_map (Verb[] commands,
+                                string[] argv) throws Error
+  {
+    if (!GlobalOptions.get_complete () && argv.length == 0)
+      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+
+    if (argv.length != 0) {
+      for (uint i = 0; i < commands.length; i++) {
+        if (commands[i].verb == argv[0]) {
+          return commands[i].func (argv);
+        }
+      }
+    }
+
+    if (GlobalOptions.get_complete ()) {
+      /* Try to complete */
+      string? prefix = argv.length > 2 ? argv[2] : null;
+      for (uint i = 0; i < commands.length; i++) {
+        if (prefix == null || commands[i].verb.has_prefix (prefix))
+          print ("%s\n", commands[i].verb);
+      }
+    } else {
+      throw new OptionError.FAILED (_("Unknown command \"%s\""), argv[0]);
+    }
+
+    return Posix.EXIT_SUCCESS;
+  }
+
   private int run (Receiver receiver)
   {
     int status = 0;
@@ -502,49 +547,128 @@ namespace GTerminal
     return Posix.EXIT_SUCCESS;
   }
 
-  private int complete (string[] argv) throws Error
+  private int profile__list (string[] argv) throws Error
+  {
+    var service = new Terminal.ProfilesList ();
+    var def = service.ref_default_child ();
+    if (def == null)
+      throw new OptionError.FAILED ("");
+
+    var keys = def.list_keys ();
+    for (uint i = 0; i < keys.length; i++) {
+      print ("%s\n", keys[i]);
+    }
+
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profile_get (string[] argv) throws Error
+  {
+    if (argv.length < 3)
+      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+
+    var uuid = argv[1];
+    var key = argv[2];
+
+    if (!Terminal.SettingsList.valid_uuid (uuid))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile UUID", uuid);
+
+    var service = new Terminal.ProfilesList ();
+    var profile = service.ref_child (uuid);
+    if (profile == null)
+      throw new OptionError.BAD_VALUE ("No profile with UUID \"%s\" exists", uuid);
+
+    if (!profile.settings_schema.has_key (key))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile key name", key);
+
+    print ("%s\n", profile.get_value (key).print (true));
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profile_set (string[] argv) throws Error
+  {
+    if (argv.length < 4)
+      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+
+    var uuid = argv[1];
+    var key = argv[2];
+    var value = argv[3];
+
+    if (!Terminal.SettingsList.valid_uuid (uuid))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile UUID", uuid);
+
+    var service = new Terminal.ProfilesList ();
+    var profile = service.ref_child (uuid);
+    if (profile == null)
+      throw new OptionError.BAD_VALUE ("No profile with UUID \"%s\" exists", uuid);
+
+    var schema = profile.settings_schema;
+    if (!schema.has_key (key))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile key name", key);
+
+    var v = Variant.parse (schema.get_key (key).get_value_type (), value, null, null);
+    profile.set_value (key, v);
+    Settings.sync ();
+
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profile (string[] argv) throws Error
+  {
+    var map = new Verb[] {
+      Verb ("_list", profile__list),
+      Verb ("get", profile_get),
+      Verb ("set", profile_set)
+    };
+
+    return apply_map (map, argv[1:argv.length]);
+  }
+
+  private int profiles_list (string[] argv) throws Error
+  {
+    var service = new Terminal.ProfilesList ();
+    var profiles = service.dupv_children ();
+    string? prefix = argv.length > 1 ? argv[1] : null;
+    for (uint i = 0; i < profiles.length; i++) {
+      if (prefix == null || profiles[i].has_prefix (prefix))
+        print ("%s\n", profiles[i]);
+    }
+
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profiles_get_default (string[] argv) throws Error
+  {
+    var service = new Terminal.ProfilesList ();
+    print ("%s\n", service.dup_default_child ());
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profiles_set_default (string[] argv) throws Error
   {
     if (argv.length < 2)
       throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
 
-    if (argv[1] == "commands") {
-      string? prefix = argv.length > 2 ? argv[2] : null;
-      for (uint i = 0; i < commands.length; i++) {
-        if (commands[i].verb.has_prefix ("_"))
-          continue;
-        if (prefix == null || commands[i].verb.has_prefix (prefix))
-          print ("%s\n", commands[i].verb);
-      }
+    var uuid = argv[1];
+    if (!Terminal.SettingsList.valid_uuid (uuid))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile UUID", uuid);
 
-      return Posix.EXIT_SUCCESS;
-    } else if (argv[1] == "profiles") {
-      var service = new Terminal.ProfilesList ();
-      var profiles = service.dupv_children ();
-      string? prefix = argv.length > 2 ? argv[2] : null;
-      for (uint i = 0; i < profiles.length; i++) {
-        if (prefix == null || profiles[i].has_prefix (prefix))
-          print ("%s\n", profiles[i]);
-      }
-
-      return Posix.EXIT_SUCCESS;
-    }
-
-    throw new OptionError.UNKNOWN_OPTION (_("Unknown completion request for \"%s\""), argv[0]);
+    var service = new Terminal.ProfilesList ();
+    service.set_default_child (uuid);
+    Settings.sync ();
+    return Posix.EXIT_SUCCESS;
   }
 
-  private delegate int CommandFunc (string[] args) throws Error;
+  private int profiles (string[] argv) throws Error
+  {
+    var map = new Verb[] {
+      Verb ("list", profiles_list),
+      Verb ("get-default", profiles_get_default),
+      Verb ("set-default", profiles_set_default)
+    };
 
-  private struct CommandMap {
-    unowned string verb;
-    unowned CommandFunc func;
+    return apply_map (map, argv[1:argv.length]);
   }
-
-  private static const CommandMap[] commands = {
-    { "help", help },
-    { "open", open },
-    { "shell", open },
-    { "_complete", complete },
-  };
 
   public static int main (string[] argv)
   {
@@ -556,24 +680,25 @@ namespace GTerminal
     Intl.textdomain (Config.GETTEXT_PACKAGE);
     Environment.set_application_name (_("GTerminal"));
 
+    int status;
     try {
-      if (argv.length == 1) {
-        throw new OptionError.FAILED (_("Missing command"));
-      }
+      var map = new Verb[] {
+        Verb ("help", help),
+        Verb ("open", open),
+        Verb ("shell", open),
+        Verb ("profile", profile),
+        Verb ("profiles", profiles)
+      };
 
-      for (uint i = 0; i < commands.length; i++) {
-        if (commands[i].verb == argv[1]) {
-          return commands[i].func (argv[1:argv.length]);
-        }
-      }
-
-      throw new OptionError.FAILED (_("Unknown command \"%s\""), argv[1]);
+      status = apply_map (map, argv[1:argv.length]);
     } catch (Error e) {
       DBusError.strip_remote_error (e);
 
       printerr (_("Error processing arguments: %s\n"), e.message);
-      return Posix.EXIT_FAILURE;
+      status = Posix.EXIT_FAILURE;
     }
+
+    return status;
   }
 
 } /* namespace GTerminal */
