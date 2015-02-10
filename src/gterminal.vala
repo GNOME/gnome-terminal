@@ -49,22 +49,22 @@ namespace GTerminal
     }
 
     [PrintfFormat]
-    public void print(string format,
-                      ...)
+    public static void print(string format,
+                             ...)
     {
       if (!quiet)
         stdout.vprintf (format, va_list());
     }
 
     [PrintfFormat]
-    public void printerr(string format, ...)
+    public static void printerr(string format, ...)
     {
       if (!quiet)
         stderr.vprintf (format, va_list());
     }
 
     [PrintfFormat]
-    public void info(string format, ...)
+    public static void info(string format, ...)
     {
       if (verbose)
         stderr.vprintf (format, va_list());
@@ -486,7 +486,7 @@ namespace GTerminal
       string? prefix = argv.length > 2 ? argv[2] : null;
       for (uint i = 0; i < commands.length; i++) {
         if (prefix == null || commands[i].verb.has_prefix (prefix))
-          print ("%s\n", commands[i].verb);
+          Output.print ("%s\n", commands[i].verb);
       }
     } else {
       throw new OptionError.FAILED (_("Unknown command \"%s\""), argv[0]);
@@ -556,7 +556,7 @@ namespace GTerminal
 
     var keys = def.list_keys ();
     for (uint i = 0; i < keys.length; i++) {
-      print ("%s\n", keys[i]);
+      Output.print ("%s\n", keys[i]);
     }
 
     return Posix.EXIT_SUCCESS;
@@ -581,7 +581,7 @@ namespace GTerminal
     if (!profile.settings_schema.has_key (key))
       throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile key name", key);
 
-    print ("%s\n", profile.get_value (key).print (true));
+    Output.print ("%s\n", profile.get_value (key).print (true));
     return Posix.EXIT_SUCCESS;
   }
 
@@ -631,7 +631,7 @@ namespace GTerminal
     string? prefix = argv.length > 1 ? argv[1] : null;
     for (uint i = 0; i < profiles.length; i++) {
       if (prefix == null || profiles[i].has_prefix (prefix))
-        print ("%s\n", profiles[i]);
+        Output.print ("%s\n", profiles[i]);
     }
 
     return Posix.EXIT_SUCCESS;
@@ -640,7 +640,7 @@ namespace GTerminal
   private int profiles_get_default (string[] argv) throws Error
   {
     var service = new Terminal.ProfilesList ();
-    print ("%s\n", service.dup_default_child ());
+    Output.print ("%s\n", service.dup_default_child ());
     return Posix.EXIT_SUCCESS;
   }
 
@@ -659,11 +659,66 @@ namespace GTerminal
     return Posix.EXIT_SUCCESS;
   }
 
+  private int profiles_add (string[] argv) throws Error
+  {
+    var service = new Terminal.ProfilesList ();
+    var new_uuid = service.add_child ();
+    if (new_uuid == null)
+      throw new OptionError.FAILED ("Failed to create new profile");
+
+    Output.print ("%s\n", new_uuid);
+    Settings.sync ();
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profiles_clone (string[] argv) throws Error
+  {
+    if (argv.length < 2)
+      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+
+    var uuid = argv[1];
+    if (!Terminal.SettingsList.valid_uuid (uuid))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile UUID", uuid);
+
+    var service = new Terminal.ProfilesList ();
+    if (!service.has_child (uuid))
+      throw new OptionError.BAD_VALUE ("No profile with UUID \"%s\" exists", uuid);
+
+    var new_uuid = service.clone_child (uuid);
+    if (new_uuid == null)
+      throw new OptionError.FAILED ("Failed to clone profile \"%s\"", uuid);
+
+    Output.print ("%s\n", new_uuid);
+    Settings.sync ();
+    return Posix.EXIT_SUCCESS;
+  }
+
+  private int profiles_remove (string[] argv) throws Error
+  {
+    if (argv.length < 2)
+      throw new OptionError.UNKNOWN_OPTION (_("Missing argument"));
+
+    var uuid = argv[1];
+    if (!Terminal.SettingsList.valid_uuid (uuid))
+      throw new OptionError.BAD_VALUE ("\"%s\" is not a valid profile UUID", uuid);
+
+    var service = new Terminal.ProfilesList ();
+    if (!service.has_child (uuid))
+      throw new OptionError.BAD_VALUE ("No profile with UUID \"%s\" exists", uuid);
+
+    service.remove_child (uuid);
+    Settings.sync ();
+    return Posix.EXIT_SUCCESS;
+  }
+
   private int profiles (string[] argv) throws Error
   {
     var map = new Verb[] {
-      Verb ("list", profiles_list),
+      Verb ("add", profiles_add),
+      Verb ("clone", profiles_clone),
       Verb ("get-default", profiles_get_default),
+      Verb ("list", profiles_list),
+      Verb ("remove", profiles_remove),
       Verb ("set-default", profiles_set_default)
     };
 
