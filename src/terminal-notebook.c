@@ -24,10 +24,12 @@
 #include <gtk/gtk.h>
 
 #include "terminal-debug.h"
+#include "terminal-app.h"
 #include "terminal-intl.h"
 #include "terminal-mdi-container.h"
 #include "terminal-screen-container.h"
 #include "terminal-tab-label.h"
+#include "terminal-schemas.h"
 
 #define TERMINAL_NOTEBOOK_GET_PRIVATE(notebook)(G_TYPE_INSTANCE_GET_PRIVATE ((notebook), TERMINAL_TYPE_NOTEBOOK, TerminalNotebookPrivate))
 
@@ -419,6 +421,12 @@ terminal_notebook_constructed (GObject *object)
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
 
   G_OBJECT_CLASS (terminal_notebook_parent_class)->constructed (object);
+
+  g_settings_bind (terminal_app_get_global_settings (terminal_app_get ()),
+                   TERMINAL_SETTING_TAB_POSITION_KEY,
+                   object,
+                   "tab-pos",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
 
   gtk_notebook_set_show_tabs (notebook, FALSE);
   gtk_notebook_set_scrollable (notebook, TRUE);

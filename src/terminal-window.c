@@ -2600,6 +2600,9 @@ terminal_window_init (TerminalWindow *window)
                          G_CALLBACK (terminal_window_update_tabs_menu_sensitivity),
                          window, NULL, G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
+  g_signal_connect_swapped (priv->mdi_container, "notify::tab-pos",
+                            G_CALLBACK (terminal_window_update_geometry), window);
+
   /* FIXME hack hack! */
   if (GTK_IS_NOTEBOOK (priv->mdi_container)) {
   g_signal_connect (priv->mdi_container, "button-press-event",

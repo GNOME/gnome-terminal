@@ -46,6 +46,14 @@
     <value nick='wide'   value='2'/>
   </enum>
 
+  <!-- From gtk+ -->
+  <enum id="org.gnome.Terminal.TabPosition">
+    <!-- <value nick="left"   value="0" /> -->
+    <!-- <value nick="right"  value="1" /> -->
+    <value nick="top"    value="2" />
+    <value nick="bottom" value="3" />
+  </enum>
+
   <!-- These really belong into some vte-built enums file, but
         using enums from other modules still has some
         problems. Just include a copy here for now.
@@ -641,6 +649,11 @@
     <key name="new-terminal-mode" enum="org.gnome.Terminal.NewTerminalMode">
       <default>'window'</default>
       <summary>Whether to open new terminals as windows or tabs</summary>
+    </key>
+
+    <key name="tab-position" enum="org.gnome.Terminal.TabPosition">
+      <default>'top'</default>
+      <summary>The position of the tab bar</summary>
     </key>
 
    <!-- <child name="profiles" schema="org.gnome.Terminal.ProfilesList" /> -->

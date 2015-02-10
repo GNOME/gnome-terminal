@@ -73,6 +73,7 @@ G_BEGIN_DECLS
 #define TERMINAL_SETTING_NEW_TERMINAL_MODE_KEY          "new-terminal-mode"
 #define TERMINAL_SETTING_SCHEMA_VERSION                 "schema-version"
 #define TERMINAL_SETTING_SHELL_INTEGRATION_KEY          "shell-integration-enabled"
+#define TERMINAL_SETTING_TAB_POSITION_KEY               "tab-position"
 
 #define TERMINAL_SETTINGS_LIST_LIST_KEY                 "list"
 #define TERMINAL_SETTINGS_LIST_DEFAULT_KEY              "default"
