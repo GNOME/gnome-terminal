@@ -29,12 +29,6 @@ appdata_in_files = gnome-terminal.appdata.xml.in
 nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
 
-APPDATA_VALIDATE_FLAGS = --nonet
-appdata-validate: $(nodist_appdata_DATA)
-	for f in $^; do \
-		$(APPDATA_VALIDATE) $(APPDATA_VALIDATE_FLAGS) $$f; \
-	done
-
 check-local: desktop-file-validate
 
 EXTRA_DIST = 			\
