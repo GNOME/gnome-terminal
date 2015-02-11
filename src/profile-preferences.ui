@@ -549,137 +549,75 @@
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
                     <child>
-                      <object class="GtkLabel" id="label36">
+                      <object class="GtkVBox" id="vbox81">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">Command</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"/>
-                        </attributes>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkAlignment" id="alignment10107">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="left_padding">12</property>
                         <child>
-                          <object class="GtkVBox" id="vbox81">
+                          <object class="GtkVBox" id="vbox92">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkVBox" id="vbox92">
+                              <object class="GtkCheckButton" id="login-shell-checkbutton">
+                                <property name="label" translatable="yes">_Run command as a login shell</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="update-records-checkbutton">
+                                <property name="label" translatable="yes">_Update login records when command is launched</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkCheckButton" id="use-custom-command-checkbutton">
+                                <property name="label" translatable="yes">Ru_n a custom command instead of my shell</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="custom-command-box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
+                                <property name="left_padding">12</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="login-shell-checkbutton">
-                                    <property name="label" translatable="yes">_Run command as a login shell</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="update-records-checkbutton">
-                                    <property name="label" translatable="yes">_Update login records when command is launched</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="use-custom-command-checkbutton">
-                                    <property name="label" translatable="yes">Ru_n a custom command instead of my shell</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="use_underline">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkAlignment" id="custom-command-box">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="left_padding">12</property>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox134">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="spacing">12</property>
-                                        <child>
-                                          <object class="GtkLabel" id="custom-command-entry-label">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Custom co_mmand:</property>
-                                            <property name="use_underline">True</property>
-                                            <property name="justify">center</property>
-                                            <property name="mnemonic_widget">custom-command-entry</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="fill">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkEntry" id="custom-command-entry">
-                                            <property name="visible">True</property>
-                                            <property name="can_focus">True</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHBox" id="hbox27">
+                                  <object class="GtkHBox" id="hbox134">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="spacing">12</property>
                                     <child>
-                                      <object class="GtkLabel" id="exit-action-combobox-label">
+                                      <object class="GtkLabel" id="custom-command-entry-label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">When command _exits:</property>
+                                        <property name="label" translatable="yes">Custom co_mmand:</property>
                                         <property name="use_underline">True</property>
                                         <property name="justify">center</property>
-                                        <property name="mnemonic_widget">exit-action-combobox</property>
+                                        <property name="mnemonic_widget">custom-command-entry</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -688,45 +626,79 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBox" id="exit-action-combobox">
+                                      <object class="GtkEntry" id="custom-command-entry">
                                         <property name="visible">True</property>
-                                        <property name="can_focus">False</property>
-                                        <property name="model">model3</property>
-                                        <child>
-                                          <object class="GtkCellRendererText" id="renderer3"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
+                                        <property name="can_focus">True</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
+                                        <property name="expand">True</property>
                                         <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkHBox" id="hbox27">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="exit-action-combobox-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">When command _exits:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="justify">center</property>
+                                    <property name="mnemonic_widget">exit-action-combobox</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkComboBox" id="exit-action-combobox">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="model">model3</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="renderer3"/>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
                                   <packing>
                                     <property name="expand">False</property>
                                     <property name="fill">True</property>
-                                    <property name="position">4</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
                                 <property name="fill">True</property>
-                                <property name="position">0</property>
+                                <property name="position">4</property>
                               </packing>
                             </child>
                           </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>
