@@ -299,6 +299,7 @@ CC_CHECK_FLAGS_APPEND([WARN_CFLAGS],[CFLAGS],[ \
   -Wuninitialized \
   -Wunsafe-loop-optimizations \
   -Wwrite-strings \
+  -Wformat-signedness \
   -fno-common \
   -fdiagnostics-show-option \
   -fno-strict-aliasing \
