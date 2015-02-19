@@ -257,7 +257,7 @@ ssh_argv (const char *uri,
 
   if (host_port != 0) {
     argv[argc++] = g_strdup ("-p");
-    argv[argc++] = g_strdup_printf ("%d", host_port);
+    argv[argc++] = g_strdup_printf ("%u", host_port);
   }
 
   /* FIXME to we have to consider the remote file encoding? */

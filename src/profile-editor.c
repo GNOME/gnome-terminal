@@ -839,11 +839,11 @@ terminal_profile_edit (GSettings  *profile,
 
       g_object_set_data (G_OBJECT (w), "palette-entry-index", GUINT_TO_POINTER (i));
 
-      text = g_strdup_printf (_("Choose Palette Color %d"), i + 1);
+      text = g_strdup_printf (_("Choose Palette Color %u"), i + 1);
       gtk_color_button_set_title (GTK_COLOR_BUTTON (w), text);
       g_free (text);
 
-      text = g_strdup_printf (_("Palette entry %d"), i + 1);
+      text = g_strdup_printf (_("Palette entry %u"), i + 1);
       gtk_widget_set_tooltip_text (w, text);
       g_free (text);
 

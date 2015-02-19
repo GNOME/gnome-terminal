@@ -318,7 +318,7 @@ terminal_accels_init (GApplication *application,
       if (tabs_entries[i].user_visible_name != NULL)
         continue;
 
-      name = g_strdup_printf (_("Switch to Tab %d"), j++);
+      name = g_strdup_printf (_("Switch to Tab %u"), j++);
       tabs_entries[i].user_visible_name = g_intern_string (name);
     }
 
