@@ -1209,10 +1209,10 @@ profile_visible_name_notify_cb (GSettings  *profile,
         display_name = g_strdup_printf (_("_%u. %s"), num, display_name);
       else if (num < 36)
         /* Translators: This is the label of a menu item to choose a profile.
-         * _%u is used as the accelerator (it will be a character between A and Z),
+         * _%c is used as the accelerator (it will be a character between A and Z),
          * and the %s is the name of the terminal profile.
          */
-        display_name = g_strdup_printf (_("_%u. %s"), ('A' + num - 10), display_name);
+        display_name = g_strdup_printf (_("_%c. %s"), (guchar)('A' + num - 10), display_name);
       else
         free_me = NULL;
     }
