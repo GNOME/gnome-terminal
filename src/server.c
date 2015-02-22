@@ -40,6 +40,7 @@
 #include "terminal-gdbus.h"
 #include "terminal-i18n.h"
 #include "terminal-defines.h"
+#include "terminal-libgsystem.h"
 
 static char *app_id = NULL;
 
@@ -105,8 +106,7 @@ enum {
 int
 main (int argc, char **argv)
 {
-  GApplication *app;
-  int exit_code = EXIT_FAILURE;
+  gs_unref_object GApplication *app = NULL;
   const char *home_dir, *charset;
   GError *error = NULL;
 
@@ -170,9 +170,5 @@ main (int argc, char **argv)
   app = terminal_app_new (app_id);
   g_free (app_id);
 
-  exit_code = g_application_run (app, 0, NULL);
-
-  g_object_unref (app);
-
-  return exit_code;
+  return g_application_run (app, 0, NULL);
 }
