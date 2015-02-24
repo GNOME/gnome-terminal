@@ -326,8 +326,8 @@ terminal_app_startup (GApplication *application)
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
-  /* Set the WM class to the app ID (see bug #685742) */
-  gdk_set_program_class (g_application_get_application_id (application));
+  /* Need to set the WM class (bug #685742) */
+  gdk_set_program_class("Gnome-terminal");
 
   g_action_map_add_action_entries (G_ACTION_MAP (application),
                                    app_menu_actions, G_N_ELEMENTS (app_menu_actions),
