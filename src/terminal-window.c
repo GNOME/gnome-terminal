@@ -2672,7 +2672,7 @@ terminal_window_init (TerminalWindow *window)
   /* Load the UI */
   error = NULL;
   priv->ui_id = gtk_ui_manager_add_ui_from_resource (manager,
-                                                     TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal.xml",
+                                                     TERMINAL_RESOURCES_PATH_PREFIX "/ui/terminal.xml",
                                                      &error);
   g_assert_no_error (error);
 

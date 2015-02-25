@@ -321,8 +321,7 @@ terminal_app_startup (GApplication *application)
     { "quit",        app_menu_quit_cb,          NULL, NULL, NULL }
   };
 
-  gs_unref_object GtkBuilder *builder;
-  GError *error = NULL;
+  g_application_set_resource_base_path (application, TERMINAL_RESOURCES_PATH_PREFIX);
 
   G_APPLICATION_CLASS (terminal_app_parent_class)->startup (application);
 
@@ -332,15 +331,6 @@ terminal_app_startup (GApplication *application)
   g_action_map_add_action_entries (G_ACTION_MAP (application),
                                    app_menu_actions, G_N_ELEMENTS (app_menu_actions),
                                    application);
-
-  builder = gtk_builder_new ();
-  gtk_builder_add_from_resource (builder,
-                                 TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal-appmenu.ui",
-                                 &error);
-  g_assert_no_error (error);
-
-  gtk_application_set_app_menu (GTK_APPLICATION (application),
-                                G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu")));
 
   _terminal_debug_print (TERMINAL_DEBUG_SERVER, "Startup complete\n");
 }

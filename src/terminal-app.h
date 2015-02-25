@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #define GNOME_TERMINAL_ICON_NAME "utilities-terminal"
 
-#define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal/"
+#define TERMINAL_RESOURCES_PATH_PREFIX "/org/gnome/terminal"
 
 #define MONOSPACE_FONT_KEY_NAME                 "monospace-font-name"
 

@@ -373,7 +373,7 @@ CLEANFILES = \
 EXTRA_DIST = \
 	terminal.about \
 	terminal.xml \
-	terminal-appmenu.ui \
+	terminal-menus.ui \
 	terminal-window.ui \
 	terminal.gresource.xml \
 	terminal-marshal.list \

@@ -172,7 +172,7 @@ terminal_util_show_about (GtkWindow *transient_parent)
   gs_free char *comment;
   gs_free char *vte_version;
 
-  bytes = g_resources_lookup_data (TERMINAL_RESOURCES_PATH_PREFIX "ui/terminal.about", 
+  bytes = g_resources_lookup_data (TERMINAL_RESOURCES_PATH_PREFIX "/ui/terminal.about",
                                    G_RESOURCE_LOOKUP_FLAGS_NONE,
                                    &error);
   g_assert_no_error (error);
