@@ -59,9 +59,6 @@ void terminal_screen_container_set_policy (TerminalScreenContainer *container,
                                            GtkPolicyType hpolicy,
                                            GtkPolicyType vpolicy);
 
-void terminal_screen_container_set_placement (TerminalScreenContainer *container,
-                                              GtkCornerType corner);
-
 G_END_DECLS
 
 #endif /* TERMINAL_SCREEN_CONTAINER_H */
