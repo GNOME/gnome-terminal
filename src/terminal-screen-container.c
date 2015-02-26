@@ -290,7 +290,7 @@ terminal_screen_container_get_from_screen (TerminalScreen *screen)
  */
 void
 terminal_screen_container_set_policy (TerminalScreenContainer *container,
-                                      GtkPolicyType hpolicy G_GNUC_UNUSED,
+                                      GtkPolicyType hpolicy,
                                       GtkPolicyType vpolicy)
 {
   TerminalScreenContainerPrivate *priv;
