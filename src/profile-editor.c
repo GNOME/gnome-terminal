@@ -798,6 +798,13 @@ terminal_profile_edit (GSettings  *profile,
   g_object_set_data_full (G_OBJECT (editor), "builder",
                           builder, (GDestroyNotify) g_object_unref);
 
+  /* Fixup dialogue padding, #735242 */
+  w = (GtkWidget *) gtk_builder_get_object (builder, "dialog-action-area");
+  gtk_widget_set_margin_left   (w, 5);
+  gtk_widget_set_margin_right  (w, 5);
+  gtk_widget_set_margin_top    (w, 5);
+  gtk_widget_set_margin_bottom (w, 5);
+
   /* Store the dialogue on the profile, so we can acccess it above to check if
    * there's already a profile editor for this profile.
    */
