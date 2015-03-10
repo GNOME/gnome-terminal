@@ -865,6 +865,7 @@ terminal_options_merge_config (TerminalOptions *options,
   for (i = 0; groups[i]; ++i)
     {
       const char *window_group = groups[i];
+      char *active_terminal;
       char **tab_groups;
       InitialWindow *iw;
       guint j;
@@ -877,6 +878,7 @@ terminal_options_merge_config (TerminalOptions *options,
       initial_windows = g_list_append (initial_windows, iw);
       apply_defaults (options, iw);
 
+      active_terminal = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ACTIVE_TAB, NULL);
       iw->role = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_ROLE, NULL);
       iw->geometry = g_key_file_get_string (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_GEOMETRY, NULL);
       iw->start_fullscreen = g_key_file_get_boolean (key_file, window_group, TERMINAL_CONFIG_WINDOW_PROP_FULLSCREEN, NULL);
@@ -898,6 +900,9 @@ terminal_options_merge_config (TerminalOptions *options,
 
           iw->tabs = g_list_append (iw->tabs, it);
 
+          if (g_strcmp0 (active_terminal, tab_group) == 0)
+            it->active = TRUE;
+
 /*          it->width = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH, NULL);
           it->height = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT, NULL);*/
           it->working_dir = terminal_util_key_file_get_string_unescape (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, NULL);
@@ -910,6 +915,7 @@ terminal_options_merge_config (TerminalOptions *options,
             }
         }
 
+      g_free (active_terminal);
       g_strfreev (tab_groups);
 
       if (have_error)

@@ -30,6 +30,7 @@ void terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                      const char      *role,
                                                      const char      *profile,
                                                      const char      *title,
+                                                     gboolean         active,
                                                      gboolean         maximise_window,
                                                      gboolean         fullscreen_window);
 

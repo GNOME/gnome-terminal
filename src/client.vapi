@@ -25,6 +25,7 @@ namespace Terminal.Client {
                                               string? role,
                                               string? profile,
                                               string? title,
+                                              bool active,
                                               bool maximise_window,
                                               bool fullscreen_window);
 

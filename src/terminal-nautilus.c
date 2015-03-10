@@ -383,6 +383,7 @@ create_terminal (ExecData *data /* transfer full */)
                                                   NULL /* role */,
                                                   NULL /* use default profile */,
                                                   NULL /* title */,
+                                                  TRUE, /* active */
                                                   FALSE /* maximised */,
                                                   FALSE /* fullscreen */);
 
