@@ -103,6 +103,7 @@ handle_options (TerminalFactory *factory,
                                                           iw->role,
                                                           it->profile ? it->profile : options->default_profile,
                                                           NULL /* title */,
+                                                          it->active,
                                                           iw->start_maximized,
                                                           iw->start_fullscreen);
 
@@ -120,10 +121,6 @@ handle_options (TerminalFactory *factory,
           if (iw->force_menubar_state)
             g_variant_builder_add (&builder, "{sv}",
                                    "show-menubar", g_variant_new_boolean (iw->menubar_state));
-#if 0
-          if (it->active)
-            terminal_window_switch_screen (window, screen);
-#endif
 
           if (!terminal_factory_call_create_instance_sync 
                  (factory,

@@ -373,7 +373,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   gdouble zoom = 1.0;
   guint window_id;
   gboolean show_menubar;
-  gboolean active = TRUE;
+  gboolean active;
   gboolean have_new_window, present_window, present_window_set;
   GError *err = NULL;
 
@@ -462,8 +462,6 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   screen = terminal_screen_new (profile, NULL, NULL, NULL,
                                 zoom_set ? zoom : 1.0);
   terminal_window_add_screen (window, screen, -1);
-  terminal_window_switch_screen (window, screen);
-  gtk_widget_grab_focus (GTK_WIDGET (screen));
 
   object_path = get_object_path_for_screen (window, screen);
   g_assert (g_variant_is_object_path (object_path));
@@ -480,8 +478,11 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   g_signal_connect (screen, "destroy",
                     G_CALLBACK (screen_destroy_cb), app);
 
-  if (active)
+  if (g_variant_lookup (options, "active", "b", &active) &&
+      active) {
     terminal_window_switch_screen (window, screen);
+    gtk_widget_grab_focus (GTK_WIDGET (screen));
+  }
 
   if (g_variant_lookup (options, "present-window", "b", &present_window))
     present_window_set = TRUE;

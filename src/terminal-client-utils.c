@@ -55,6 +55,7 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
                                                 const char      *role,
                                                 const char      *profile,
                                                 const char      *title,
+                                                gboolean         active,
                                                 gboolean         maximise_window,
                                                 gboolean         fullscreen_window)
 {
@@ -80,6 +81,10 @@ terminal_client_append_create_instance_options (GVariantBuilder *builder,
                            "role", g_variant_new_string (role));
 
   /* Boolean options */
+  if (active)
+    g_variant_builder_add (builder, "{sv}",
+                           "active", g_variant_new_boolean (active));
+
   if (maximise_window)
     g_variant_builder_add (builder, "{sv}", 
                            "maximize-window", g_variant_new_boolean (TRUE));
