@@ -829,8 +829,8 @@ update_color_scheme (TerminalScreen *screen)
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &theme_fg);
-  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &theme_bg);
+  gtk_style_context_get_color (context, gtk_style_context_get_state (context), &theme_fg);
+  gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &theme_bg);
 
   if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY) ||
       (!terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg) ||
