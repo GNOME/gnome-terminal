@@ -2725,12 +2725,8 @@ static void
 terminal_window_style_updated (GtkWidget *widget)
 {
   TerminalWindow *window = TERMINAL_WINDOW (widget);
-  TerminalWindowPrivate *priv = window->priv;
 
   GTK_WIDGET_CLASS (terminal_window_parent_class)->style_updated (widget);
-
-  if (priv->active_screen != NULL)
-    terminal_screen_update_style (priv->active_screen);
 
   terminal_window_update_size (window);
 }

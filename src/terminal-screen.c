@@ -255,11 +255,21 @@ terminal_screen_realize (GtkWidget *widget)
   terminal_screen_set_font (screen);
 }
 
-void
+static void
 terminal_screen_update_style (TerminalScreen *screen)
 {
   update_color_scheme (screen);
   terminal_screen_set_font (screen);
+}
+
+static void
+terminal_screen_style_updated (GtkWidget *widget)
+{
+  TerminalScreen *screen = TERMINAL_SCREEN (widget);
+
+  GTK_WIDGET_CLASS (terminal_screen_parent_class)->style_updated (widget);
+
+  terminal_screen_update_style (screen);
 }
 
 #ifdef ENABLE_DEBUG
@@ -435,6 +445,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   object_class->set_property = terminal_screen_set_property;
 
   widget_class->realize = terminal_screen_realize;
+  widget_class->style_updated = terminal_screen_style_updated;
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
