@@ -360,6 +360,15 @@ terminal_notebook_create_window (GtkNotebook       *notebook,
 
 /* GtkWidgetClass impl */
 
+static void
+terminal_notebook_grab_focus (GtkWidget *widget)
+{
+  TerminalScreen *screen;
+
+  screen = terminal_mdi_container_get_active_screen (TERMINAL_MDI_CONTAINER (widget));
+  gtk_widget_grab_focus (GTK_WIDGET (screen));
+}
+
 /* Tab scrolling was removed from GtkNotebook in gtk 3, so reimplement it here */
 static gboolean
 terminal_notebook_scroll_event (GtkWidget      *widget,
@@ -533,6 +542,7 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
 
   g_object_class_override_property (gobject_class, PROP_ACTIVE_SCREEN, "active-screen");
 
+  widget_class->grab_focus = terminal_notebook_grab_focus;
   widget_class->scroll_event = terminal_notebook_scroll_event;
 
   notebook_class->switch_page = terminal_notebook_switch_page;
