@@ -88,7 +88,7 @@ AC_ARG_ENABLE([gterminal],[AS_HELP_STRING([--disable-gterminal],[Disable gtermin
 AC_MSG_RESULT([$enable_gterminal])
 
 AS_IF([test "$enable_gterminal" = "yes"],[
-  AM_PROG_VALAC([0.24])
+  AM_PROG_VALAC([0.26])
 
   VALA_CHECK_PACKAGES([glib-2.0 gio-2.0 gio-unix-2.0 linux posix])
   PKG_CHECK_MODULES([GTERMINAL],
