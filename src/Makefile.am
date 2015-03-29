@@ -195,6 +195,7 @@ gterminal_CPPFLAGS = \
 
 # See bug #710862 about -Wsuggest-attribute=format
 gterminal_CFLAGS = \
+	--include config.h \
 	$(GTERMINAL_CFLAGS) \
 	$(AM_CFLAGS) \
 	-Wno-cast-qual \
