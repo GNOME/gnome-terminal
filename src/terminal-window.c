@@ -122,7 +122,7 @@ struct _TerminalWindowPrivate
 #endif
 #endif
 
-#if defined (ENABLE_DEBUG) && GTK_CHECK_VERSION (3, 13, 4)
+#if defined (ENABLE_DEBUG) && GTK_CHECK_VERSION (3, 14, 0)
 #define ENABLE_INSPECTOR
 #endif
 
@@ -2746,7 +2746,7 @@ terminal_window_class_init (TerminalWindowClass *klass)
   widget_class->screen_changed = terminal_window_screen_changed;
   widget_class->style_updated = terminal_window_style_updated;
 
-#if GTK_CHECK_VERSION (3, 13, 4)
+#if GTK_CHECK_VERSION (3, 14, 0)
 {
   GtkWindowClass *window_klass;
   GtkBindingSet *binding_set;
