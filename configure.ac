@@ -55,7 +55,7 @@ AC_MSG_RESULT([$with_gtk])
 case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.10.0
-       GTK_MIN_REQUIRED=3.10
+       GTK_MIN_REQUIRED=3.8
        GTK_MAX_ALLOWED=3.14
        VTE_API_VERSION=2.91
        VTE_REQUIRED=0.40.0
@@ -310,8 +310,7 @@ CC_CHECK_FLAGS_APPEND([WARN_CFLAGS],[CFLAGS],[ \
   -fno-strict-aliasing \
   -fvisibility=hidden \
   -fstack-protector \
-  -fstack-protector-strong\
-  -Wno-deprecated-declarations \
+  -fstack-protector-strong \
 ])
 
 # *********
