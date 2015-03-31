@@ -1291,11 +1291,6 @@ terminal_screen_do_exec (TerminalScreen *screen,
 
   env = get_child_environment (screen, working_dir, &shell);
 
-  if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_LOGIN_SHELL_KEY))
-    pty_flags |= VTE_PTY_NO_LASTLOG;
-  if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_UPDATE_RECORDS_KEY))
-    pty_flags |= VTE_PTY_NO_UTMP | VTE_PTY_NO_WTMP;
-
   argv = NULL;
   if (!get_child_command (screen, shell, &spawn_flags, &argv, &err) ||
       !vte_terminal_spawn_sync (terminal,
