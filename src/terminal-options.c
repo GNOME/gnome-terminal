@@ -319,7 +319,16 @@ option_profile_cb (const gchar *option_name,
   profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                      value, error);
   if (profile == NULL)
-    return FALSE;
+  {
+      g_printerr ("Profile '%s' specified but not found. Attempting to fall back "
+                  "to the default profile.\n", value);
+      g_clear_error (error);
+      profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
+                                                         NULL, error);
+  }
+
+  if (profile == NULL)
+      return FALSE;
 
   if (options->initial_windows)
     {
@@ -379,6 +388,16 @@ option_window_callback (const gchar *option_name,
 
   profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
                                                      value, error);
+
+  if (value && profile == NULL)
+  {
+      g_printerr ("Profile '%s' specified but not found. Attempting to fall back "
+                  "to the default profile.\n", value);
+      g_clear_error (error);
+      profile = terminal_profiles_list_dup_uuid_or_name (terminal_options_ensure_profiles_list (options),
+                                                         NULL, error);
+  }
+
   if (profile == NULL)
     return FALSE;
 
