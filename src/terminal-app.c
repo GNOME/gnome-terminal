@@ -374,11 +374,20 @@ terminal_app_init (TerminalApp *app)
 
 #if 1
 {
+  /* Not interested in silly debug spew polluting the journal */
   /* Legacy gtkuimanager menu accelerator */
   /* Disallow in-place menu accel changes. Only needed on gtk 3.8,
    * it's unused and ignored from 3.10 onward. */
   TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_SETTINGS, "gtk-can-change-accels");
   g_object_set (gtk_settings_get_default (), "gtk-can-change-accels", FALSE, NULL);
+
+  /* Our dialogues cause these */
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_BUTTON, "use-stock");
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_BUTTON, "xalign");
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_WIDGET, "margin-left");
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_WIDGET, "margin-right");
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_SETTINGS, "gtk-button-images");
+  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_TREE_VIEW, "rules-hint");
 }
 #endif
 }
