@@ -300,8 +300,7 @@ profile_list_row_activated_cb (GtkTreeView *tree_view,
   if (selected_profile == NULL)
     return;
 
-  terminal_app_edit_profile (terminal_app_get (),
-                             selected_profile, GTK_WINDOW (data->dialog), NULL);
+  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL, NULL);
 }
 
 static GtkTreeView *
@@ -426,8 +425,7 @@ profile_list_edit_button_clicked_cb (GtkWidget *button,
   if (selected_profile == NULL)
     return;
 
-  terminal_app_edit_profile (terminal_app_get (), selected_profile,
-                             GTK_WINDOW (data->dialog), NULL);
+  terminal_app_edit_profile (terminal_app_get (), selected_profile, NULL, NULL);
 }
 
 static void
