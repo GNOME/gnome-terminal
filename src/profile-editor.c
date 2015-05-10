@@ -532,16 +532,16 @@ init_encodings_combo (GtkWidget *widget)
 }
 
 static void
-editor_response_cb (GtkWidget *editor,
-                    int response,
-                    gpointer use_data)
+editor_help_button_clicked_cb (GtkWidget *button,
+                               GtkWidget *editor)
 {
-  if (response == GTK_RESPONSE_HELP)
-    {
-      terminal_util_show_help ("profile", GTK_WINDOW (editor));
-      return;
-    }
+  terminal_util_show_help ("profile", GTK_WINDOW (editor));
+}
 
+static void
+editor_close_button_clicked_cb (GtkWidget *button,
+                                GtkWidget *editor)
+{
   gtk_widget_destroy (editor);
 }
 
@@ -798,13 +798,6 @@ terminal_profile_edit (GSettings  *profile,
   g_object_set_data_full (G_OBJECT (editor), "builder",
                           builder, (GDestroyNotify) g_object_unref);
 
-  /* Fixup dialogue padding, #735242 */
-  w = (GtkWidget *) gtk_builder_get_object (builder, "dialog-action-area");
-  gtk_widget_set_margin_left   (w, 5);
-  gtk_widget_set_margin_right  (w, 5);
-  gtk_widget_set_margin_top    (w, 5);
-  gtk_widget_set_margin_bottom (w, 5);
-
   /* Store the dialogue on the profile, so we can acccess it above to check if
    * there's already a profile editor for this profile.
    */
@@ -814,9 +807,11 @@ terminal_profile_edit (GSettings  *profile,
                     G_CALLBACK (profile_editor_destroyed),
                     profile);
 
-  g_signal_connect (editor, "response",
-                    G_CALLBACK (editor_response_cb),
-                    NULL);
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "close-button");
+  g_signal_connect (w, "clicked", G_CALLBACK (editor_close_button_clicked_cb), editor);
+
+  w = (GtkWidget *) gtk_builder_get_object  (builder, "help-button");
+  g_signal_connect (w, "clicked", G_CALLBACK (editor_help_button_clicked_cb), editor);
 
   w = (GtkWidget *) gtk_builder_get_object  (builder, "profile-editor-notebook");
   gtk_widget_add_events (w, GDK_BUTTON_PRESS_MASK | GDK_SCROLL_MASK);
