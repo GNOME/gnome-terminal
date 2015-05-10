@@ -130,6 +130,10 @@ main (int argc, char **argv)
   /* Sanitise environment */
   g_unsetenv ("DBUS_STARTER_BUS_TYPE");
 
+  /* Not interested in silly debug spew polluting the journal, bug #749195 */
+  if (g_getenv ("G_ENABLE_DIAGNOSTIC") == NULL)
+    g_setenv ("G_ENABLE_DIAGNOSTIC", "0", TRUE);
+
 #ifndef ENABLE_DISTRO_PACKAGING
 #ifdef HAVE_UBUNTU
   /* Set some env vars to disable the ubuntu modules. Their package will be 

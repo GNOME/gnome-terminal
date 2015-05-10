@@ -2630,9 +2630,6 @@ terminal_window_init (TerminalWindow *window)
                                    gaction_entries, G_N_ELEMENTS (gaction_entries),
                                    window);
 
-  /* The GtkAction/GtkUIManager menus access this from inside gtk+, so suppress the warning */
-  TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_SETTINGS, "gtk-menu-images");
-
   /* Create the UI manager */
   manager = priv->ui_manager = gtk_ui_manager_new ();
 

@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "terminal-screen-container.h"
-#include "terminal-util.h"
 #include "terminal-debug.h"
 
 #include <gtk/gtk.h>
@@ -66,8 +65,6 @@ terminal_screen_container_style_updated (GtkWidget *widget)
                         NULL);
 
   if (!set) {
-    TERMINAL_UTIL_OBJECT_TYPE_UNDEPRECATE_PROPERTY (GTK_TYPE_SETTINGS,
-                                                    "gtk-scrolled-window-placement");
     g_object_get (gtk_widget_get_settings (widget),
                   "gtk-scrolled-window-placement", &corner,
                   NULL);
