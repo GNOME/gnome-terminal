@@ -363,6 +363,63 @@ terminal_screen_clear_exec_data (TerminalScreen *screen,
 
 G_DEFINE_TYPE (TerminalScreen, terminal_screen, VTE_TYPE_TERMINAL)
 
+static char *
+cwd_of_pid (int pid)
+{
+  static const char patterns[][18] = {
+    "/proc/%d/cwd",         /* Linux */
+    "/proc/%d/path/cwd",    /* Solaris >= 10 */
+  };
+  guint i;
+
+  if (pid == -1)
+    return nullptr;
+
+  /* Try to get the working directory using various OS-specific mechanisms */
+  for (i = 0; i < G_N_ELEMENTS (patterns); ++i)
+    {
+      char cwd_file[64];
+      char buf[PATH_MAX + 1];
+      int len;
+
+      /* disable "format not a string literal" error, we know what we are doing */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
+      g_snprintf (cwd_file, sizeof (cwd_file), patterns[i], pid);
+#pragma GCC diagnostic pop
+      len = readlink (cwd_file, buf, sizeof (buf) - 1);
+
+      if (len > 0 && buf[0] == '/')
+        return g_strndup (buf, len);
+
+      /* If that didn't do it, try this hack */
+      if (len <= 0)
+        {
+          char *cwd, *working_dir = NULL;
+
+          cwd = g_get_current_dir ();
+          if (cwd != NULL)
+            {
+              /* On Solaris, readlink returns an empty string, but the
+               * link can be used as a directory, including as a target
+               * of chdir().
+               */
+              if (chdir (cwd_file) == 0)
+                {
+                  working_dir = g_get_current_dir ();
+                  (void) chdir (cwd);
+                }
+              g_free (cwd);
+            }
+
+          if (working_dir)
+            return working_dir;
+        }
+    }
+
+  return nullptr;
+}
+
 static void
 free_tag_data (TagData *tagdata)
 {
@@ -1918,11 +1975,20 @@ terminal_screen_button_press (GtkWidget      *widget,
 char *
 terminal_screen_get_current_dir (TerminalScreen *screen)
 {
+  TerminalScreenPrivate *priv = screen->priv;
   const char *uri;
 
   uri = vte_terminal_get_current_directory_uri (VTE_TERMINAL (screen));
   if (uri != nullptr)
     return g_filename_from_uri (uri, nullptr, nullptr);
+
+  if (priv->child_pid > 0) {
+    char *cwd = cwd_of_pid (priv->child_pid);
+    if (cwd != NULL) {
+      g_debug ("terminal_screen_get_current_dir: VTE current dir n/a, reading from /proc: %s", cwd);
+      return cwd;
+    }
+  }
 
   ExecData *data = screen->priv->exec_data;
   if (data && data->cwd)
