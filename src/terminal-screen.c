@@ -29,6 +29,10 @@
 #include <fcntl.h>
 #include <uuid.h>
 
+#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__)
+#include <sys/sysctl.h>
+#endif
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
@@ -1877,12 +1881,17 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
 {
   TerminalScreenPrivate *priv = screen->priv;
   gs_free char *command = NULL;
-  gs_free char *data = NULL;
+  gs_free char *data_buf = NULL;
   gs_free char *basename = NULL;
   gs_free char *name = NULL;
   VtePty *pty;
   int fd;
+#if defined(__FreeBSD__) || defined(__DragonFly__) || defined(__OpenBSD__)
+  int mib[4];
+#else
   char filename[64];
+#endif
+  char *data;
   gsize i;
   gsize len;
   int fgpid;
@@ -1899,9 +1908,36 @@ terminal_screen_has_foreground_process (TerminalScreen *screen,
   if (fgpid == -1 || fgpid == priv->child_pid)
     return FALSE;
 
+#if defined(__FreeBSD__) || defined(__DragonFly__)
+  mib[0] = CTL_KERN;
+  mib[1] = KERN_PROC;
+  mib[2] = KERN_PROC_ARGS;
+  mib[3] = fgpid;
+  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+      return TRUE;
+
+  data_buf = g_malloc0 (len);
+  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, NULL, 0) == -1)
+      return TRUE;
+  data = data_buf;
+#elif defined(__OpenBSD__)
+  mib[0] = CTL_KERN;
+  mib[1] = KERN_PROC_ARGS;
+  mib[2] = fgpid;
+  mib[3] = KERN_PROC_ARGV;
+  if (sysctl (mib, G_N_ELEMENTS (mib), NULL, &len, NULL, 0) == -1)
+      return TRUE;
+
+  data_buf = g_malloc0 (len);
+  if (sysctl (mib, G_N_ELEMENTS (mib), data_buf, &len, NULL, 0) == -1)
+      return TRUE;
+  data = ((char**)data_buf)[0];
+#else
   g_snprintf (filename, sizeof (filename), "/proc/%d/cmdline", fgpid);
-  if (!g_file_get_contents (filename, &data, &len, NULL))
+  if (!g_file_get_contents (filename, &data_buf, &len, NULL))
     return TRUE;
+  data = data_buf;
+#endif
 
   basename = g_path_get_basename (data);
   if (!basename)
