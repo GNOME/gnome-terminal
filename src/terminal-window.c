@@ -45,6 +45,8 @@
 #include "terminal-util.h"
 #include "terminal-window.h"
 
+static char gCopy2Data[1024];
+
 struct _TerminalWindowPrivate
 {
   GtkActionGroup *action_group;
@@ -176,8 +178,12 @@ static void file_close_tab_callback           (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_copy_callback                (GtkAction *action,
                                                TerminalWindow *window);
+static void edit_copy_callback2               (GtkAction *action,
+                                               TerminalWindow *window);                                               
 static void edit_paste_callback               (GtkAction *action,
                                                TerminalWindow *window);
+static void edit_paste_callback2              (GtkAction *action,
+                                               TerminalWindow *window);                                               
 static void edit_select_all_callback          (GtkAction *action,
                                                TerminalWindow *window);
 static void edit_keybindings_callback         (GtkAction *action,
@@ -1835,6 +1841,12 @@ terminal_window_init (TerminalWindow *window)
       { "EditPasteURIPaths", GTK_STOCK_PASTE, N_("Paste _Filenames"), "",
         NULL,
         G_CALLBACK (edit_paste_callback) },
+      { "EditCopy2", GTK_STOCK_COPY, N_("_Copy2"), "<shift><control>J",
+        NULL,
+        G_CALLBACK (edit_copy_callback2) },
+      { "EditPaste2", GTK_STOCK_PASTE, N_("_Paste2"), "<shift><control>V",
+        NULL,
+        G_CALLBACK (edit_paste_callback2) },
       { "EditSelectAll", GTK_STOCK_SELECT_ALL, NULL, NULL,
         NULL,
         G_CALLBACK (edit_select_all_callback) },
@@ -3461,6 +3473,34 @@ typedef struct {
 } PasteData;
 
 static void
+clipboard_received_cb_text (GtkClipboard *clipboard,
+                             const  char *text,
+                            PasteData *data)
+{
+  if (text != NULL){
+    strncpy(gCopy2Data,text,sizeof(gCopy2Data)-1);
+  }
+}
+
+static void
+edit_copy_callback2 (GtkAction *action,
+                    TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkClipboard *clipboard;
+  const char *name;
+
+  if (!priv->active_screen)
+    return;
+
+  vte_terminal_copy_primary (VTE_TERMINAL (priv->active_screen));
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_PRIMARY );
+  gtk_clipboard_request_text (clipboard,
+                                (GtkClipboardURIReceivedFunc) clipboard_received_cb_text,
+                                NULL);
+}
+
+static void
 clipboard_uris_received_cb (GtkClipboard *clipboard,
                             /* const */ char **uris,
                             PasteData *data)
@@ -3533,6 +3573,19 @@ edit_paste_callback (GtkAction *action,
   gtk_clipboard_request_targets (clipboard,
                                  (GtkClipboardTargetsReceivedFunc) clipboard_targets_received_cb,
                                  data);
+}
+
+static void
+edit_paste_callback2 (GtkAction *action,
+                     TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkClipboard *clipboard;
+
+  if (!priv->active_screen)
+    return;
+  if (gCopy2Data != NULL)
+    vte_terminal_feed_child (VTE_TERMINAL (priv->active_screen),gCopy2Data,strlen(gCopy2Data));
 }
 
 static void
