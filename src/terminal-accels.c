@@ -61,7 +61,9 @@
 #define ACCEL_PATH_CLOSE_TAB            ACCEL_PATH_ROOT "FileCloseTab"
 #define ACCEL_PATH_CLOSE_WINDOW         ACCEL_PATH_ROOT "FileCloseWindow"
 #define ACCEL_PATH_COPY                 ACCEL_PATH_ROOT "EditCopy"
+#define ACCEL_PATH_COPY2                ACCEL_PATH_ROOT "EditCopy2"
 #define ACCEL_PATH_PASTE                ACCEL_PATH_ROOT "EditPaste"
+#define ACCEL_PATH_PASTE2               ACCEL_PATH_ROOT "EditPaste2"
 #define ACCEL_PATH_TOGGLE_MENUBAR       ACCEL_PATH_ROOT "ViewMenubar"
 #define ACCEL_PATH_FULL_SCREEN          ACCEL_PATH_ROOT "ViewFullscreen"
 #define ACCEL_PATH_RESET                ACCEL_PATH_ROOT "TerminalReset"
@@ -81,6 +83,7 @@
 #define KEY_CLOSE_TAB           CONF_KEYS_PREFIX "/close_tab"
 #define KEY_CLOSE_WINDOW        CONF_KEYS_PREFIX "/close_window"
 #define KEY_COPY                CONF_KEYS_PREFIX "/copy"
+#define KEY_COPY2               CONF_KEYS_PREFIX "/copy2"
 #define KEY_DETACH_TAB          CONF_KEYS_PREFIX "/detach_tab"
 #define KEY_FULL_SCREEN         CONF_KEYS_PREFIX "/full_screen"
 #define KEY_HELP                CONF_KEYS_PREFIX "/help"
@@ -91,6 +94,7 @@
 #define KEY_NEW_WINDOW          CONF_KEYS_PREFIX "/new_window"
 #define KEY_NEXT_TAB            CONF_KEYS_PREFIX "/next_tab"
 #define KEY_PASTE               CONF_KEYS_PREFIX "/paste"
+#define KEY_PASTE2              CONF_KEYS_PREFIX "/paste2"
 #define KEY_PREV_TAB            CONF_KEYS_PREFIX "/prev_tab"
 #define KEY_RESET_AND_CLEAR     CONF_KEYS_PREFIX "/reset_and_clear"
 #define KEY_RESET               CONF_KEYS_PREFIX "/reset"
@@ -161,6 +165,10 @@ static KeyEntry edit_entries[] =
     KEY_COPY, ACCEL_PATH_COPY, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_KEY (c), NULL, FALSE, TRUE },
   { N_("Paste"),
     KEY_PASTE, ACCEL_PATH_PASTE, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_KEY (v), NULL, FALSE, TRUE },
+  { N_("Copy2"),
+    KEY_COPY2, ACCEL_PATH_COPY2, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_KEY (j), NULL, FALSE, TRUE },
+  { N_("Paste2"),
+    KEY_PASTE2, ACCEL_PATH_PASTE2, GDK_SHIFT_MASK | GDK_CONTROL_MASK, GDK_KEY (k), NULL, FALSE, TRUE },
 };
 
 static KeyEntry view_entries[] =
