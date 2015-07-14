@@ -443,13 +443,19 @@ terminal_notebook_constructed (GObject *object)
 
   settings = terminal_app_get_global_settings (terminal_app_get ());
 
+  update_tab_visibility (TERMINAL_NOTEBOOK (notebook), 0);
+  g_settings_bind (settings,
+                   TERMINAL_SETTING_TAB_POLICY_KEY,
+                   object,
+                   "tab-policy",
+                   G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
+
   g_settings_bind (settings,
                    TERMINAL_SETTING_TAB_POSITION_KEY,
                    object,
                    "tab-pos",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
 
-  update_tab_visibility (TERMINAL_NOTEBOOK (notebook), 0);
   gtk_notebook_set_scrollable (notebook, TRUE);
   gtk_notebook_set_show_border (notebook, FALSE);
   gtk_notebook_set_group_name (notebook, I_("gnome-terminal-window"));

@@ -2605,6 +2605,8 @@ terminal_window_init (TerminalWindow *window)
 
   g_signal_connect_swapped (priv->mdi_container, "notify::tab-pos",
                             G_CALLBACK (terminal_window_update_geometry), window);
+  g_signal_connect_swapped (priv->mdi_container, "notify::show-tabs",
+                            G_CALLBACK (terminal_window_update_geometry), window);
 
   /* FIXME hack hack! */
   if (GTK_IS_NOTEBOOK (priv->mdi_container)) {
