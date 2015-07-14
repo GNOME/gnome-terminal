@@ -36,26 +36,41 @@
 struct _TerminalNotebookPrivate
 {
   TerminalScreen *active_screen;
+  GtkPolicyType policy;
 };
 
 enum
 {
   PROP_0,
-  PROP_ACTIVE_SCREEN
+  PROP_ACTIVE_SCREEN,
+  PROP_TAB_POLICY
 };
 
 /* helper functions */
 
 static void
-update_tab_visibility (GtkNotebook *notebook,
+update_tab_visibility (TerminalNotebook *notebook,
                        int change)
 {
+  TerminalNotebookPrivate *priv = notebook->priv;
+  GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook);
   gboolean show_tabs;
-  guint num;
 
-  num = gtk_notebook_get_n_pages (notebook);
-  show_tabs = (num + change) > 1;
-  gtk_notebook_set_show_tabs (notebook, show_tabs);
+  switch (priv->policy) {
+  case GTK_POLICY_ALWAYS:
+    show_tabs = TRUE;
+    break;
+  case GTK_POLICY_AUTOMATIC:
+    show_tabs = (gtk_notebook_get_n_pages (gtk_notebook) + change) > 1;
+    break;
+  case GTK_POLICY_NEVER:
+  case GTK_POLICY_EXTERNAL:
+  default:
+    show_tabs = FALSE;
+    break;
+  }
+
+  gtk_notebook_set_show_tabs (gtk_notebook, show_tabs);
 }
 
 static void
@@ -94,7 +109,7 @@ terminal_notebook_add_screen (TerminalMdiContainer *container,
   screen_container = terminal_screen_container_new (screen);
   gtk_widget_show (screen_container);
 
-  update_tab_visibility (gtk_notebook, +1);
+  update_tab_visibility (notebook, +1);
 
   tab_label = terminal_tab_label_new (screen);
   g_signal_connect (tab_label, "close-button-clicked",
@@ -122,7 +137,7 @@ terminal_notebook_remove_screen (TerminalMdiContainer *container,
 
   g_warn_if_fail (gtk_widget_is_ancestor (GTK_WIDGET (screen), GTK_WIDGET (notebook)));
 
-  update_tab_visibility (GTK_NOTEBOOK (notebook), -1);
+  update_tab_visibility (notebook, -1);
 
   screen_container = terminal_screen_container_get_from_screen (screen);
   gtk_container_remove (GTK_CONTAINER (notebook),
@@ -275,34 +290,36 @@ terminal_notebook_switch_page (GtkNotebook     *gtk_notebook,
 }
 
 static void
-terminal_notebook_page_added (GtkNotebook     *notebook,
+terminal_notebook_page_added (GtkNotebook     *gtk_notebook,
                               GtkWidget       *child,
                               guint            page_num)
 {
+  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (gtk_notebook);
   void (* page_added) (GtkNotebook *, GtkWidget *, guint) =
     GTK_NOTEBOOK_CLASS (terminal_notebook_parent_class)->page_added;
 
   if (page_added)
-    page_added (notebook, child, page_num);
+    page_added (gtk_notebook, child, page_num);
 
   update_tab_visibility (notebook, 0);
-  g_signal_emit_by_name (notebook, "screen-added", 
+  g_signal_emit_by_name (gtk_notebook, "screen-added",
                          terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
 }
 
 static void
-terminal_notebook_page_removed (GtkNotebook     *notebook,
+terminal_notebook_page_removed (GtkNotebook     *gtk_notebook,
                                 GtkWidget       *child,
                                 guint            page_num)
 {
+  TerminalNotebook *notebook = TERMINAL_NOTEBOOK (gtk_notebook);
   void (* page_removed) (GtkNotebook *, GtkWidget *, guint) =
     GTK_NOTEBOOK_CLASS (terminal_notebook_parent_class)->page_removed;
 
   if (page_removed)
-    page_removed (notebook, child, page_num);
+    page_removed (gtk_notebook, child, page_num);
 
   update_tab_visibility (notebook, 0);
-  g_signal_emit_by_name (notebook, "screen-removed",
+  g_signal_emit_by_name (gtk_notebook, "screen-removed",
                          terminal_screen_container_get_screen (TERMINAL_SCREEN_CONTAINER (child)));
 }
 
@@ -412,23 +429,27 @@ terminal_notebook_init (TerminalNotebook *notebook)
   priv = notebook->priv = TERMINAL_NOTEBOOK_GET_PRIVATE (notebook);
 
   priv->active_screen = NULL;
+  priv->policy = GTK_POLICY_AUTOMATIC;
 }
 
 static void
 terminal_notebook_constructed (GObject *object)
 {
+  GSettings *settings;
   GtkWidget *widget = GTK_WIDGET (object);
   GtkNotebook *notebook = GTK_NOTEBOOK (object);
 
   G_OBJECT_CLASS (terminal_notebook_parent_class)->constructed (object);
 
-  g_settings_bind (terminal_app_get_global_settings (terminal_app_get ()),
+  settings = terminal_app_get_global_settings (terminal_app_get ());
+
+  g_settings_bind (settings,
                    TERMINAL_SETTING_TAB_POSITION_KEY,
                    object,
                    "tab-pos",
                    G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
 
-  gtk_notebook_set_show_tabs (notebook, FALSE);
+  update_tab_visibility (TERMINAL_NOTEBOOK (notebook), 0);
   gtk_notebook_set_scrollable (notebook, TRUE);
   gtk_notebook_set_show_border (notebook, FALSE);
   gtk_notebook_set_group_name (notebook, I_("gnome-terminal-window"));
@@ -449,6 +470,9 @@ terminal_notebook_get_property (GObject *object,
     case PROP_ACTIVE_SCREEN:
       g_value_set_object (value, terminal_notebook_get_active_screen (mdi_container));
       break;
+    case PROP_TAB_POLICY:
+      g_value_set_enum (value, terminal_notebook_get_tab_policy (TERMINAL_NOTEBOOK (mdi_container)));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -466,6 +490,9 @@ terminal_notebook_set_property (GObject *object,
   switch (prop_id) {
     case PROP_ACTIVE_SCREEN:
       terminal_notebook_set_active_screen (mdi_container, g_value_get_object (value));
+      break;
+    case PROP_TAB_POLICY:
+      terminal_notebook_set_tab_policy (TERMINAL_NOTEBOOK (mdi_container), g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -495,6 +522,14 @@ terminal_notebook_class_init (TerminalNotebookClass *klass)
   notebook_class->page_added = terminal_notebook_page_added;
   notebook_class->page_removed = terminal_notebook_page_removed;
   notebook_class->page_reordered = terminal_notebook_page_reordered;
+
+  g_object_class_install_property
+    (gobject_class,
+     PROP_TAB_POLICY,
+     g_param_spec_enum ("tab-policy", NULL, NULL,
+                        GTK_TYPE_POLICY_TYPE,
+                        GTK_POLICY_AUTOMATIC,
+                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /* public API */
@@ -508,4 +543,25 @@ GtkWidget *
 terminal_notebook_new (void)
 {
   return g_object_new (TERMINAL_TYPE_NOTEBOOK, NULL);
+}
+
+void
+terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
+                                  GtkPolicyType policy)
+{
+  TerminalNotebookPrivate *priv = notebook->priv;
+
+  if (priv->policy == policy)
+    return;
+
+  priv->policy = policy;
+  update_tab_visibility (notebook, 0);
+
+  g_object_notify (G_OBJECT (notebook), "tab-policy");
+}
+
+GtkPolicyType
+terminal_notebook_get_tab_policy (TerminalNotebook *notebook)
+{
+  return notebook->priv->policy;
 }

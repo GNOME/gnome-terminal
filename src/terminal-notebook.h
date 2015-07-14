@@ -50,6 +50,10 @@ GType terminal_notebook_get_type (void);
 
 GtkWidget *terminal_notebook_new (void);
 
+void terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
+                                       GtkPolicyType policy);
+GtkPolicyType terminal_notebook_get_tab_policy (TerminalNotebook *notebook);
+
 G_END_DECLS
 
 #endif /* TERMINAL_NOTEBOOK_H */
