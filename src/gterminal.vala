@@ -484,8 +484,10 @@ namespace GTerminal
 
     if (GlobalOptions.get_complete ()) {
       /* Try to complete */
-      string? prefix = argv.length > 2 ? argv[2] : null;
+      string? prefix = argv.length > 0 ? argv[0] : null;
       for (uint i = 0; i < commands.length; i++) {
+        if (commands[i].verb[0] == '_')
+          continue; /* skip hidden commands */
         if (prefix == null || commands[i].verb.has_prefix (prefix))
           Output.print ("%s\n", commands[i].verb);
       }
@@ -519,8 +521,8 @@ namespace GTerminal
     if (argv[0] == "run" && OpenOptions.argv_post == null)
       throw new OptionError.BAD_VALUE (_("'%s' needs the command to run as arguments after '--'"),
                                        argv[0]);
-
-    var receiver = create_terminal ();
+    else if (argv[0] == "shell" && OpenOptions.argv_post != null)
+      throw new OptionError.BAD_VALUE (_("Extraneous arguments after '--'"));
 
     var builder = new GLib.VariantBuilder (VariantType.TUPLE);
     builder.open (VariantType.VARDICT); {
@@ -531,6 +533,7 @@ namespace GTerminal
     } builder.close ();
     builder.add_value (new Variant.bytestring_array (OpenOptions.argv_post));
 
+    var receiver = create_terminal ();
     receiver.call_with_unix_fd_list_sync ("Exec" /* (a{sv}aay) */,
                                           builder.end (),
                                           DBusCallFlags.NO_AUTO_START, -1,
