@@ -30,6 +30,7 @@
 #include "terminal-screen-container.h"
 #include "terminal-tab-label.h"
 #include "terminal-schemas.h"
+#include "terminal-libgsystem.h"
 
 #define TERMINAL_NOTEBOOK_GET_PRIVATE(notebook)(G_TYPE_INSTANCE_GET_PRIVATE ((notebook), TERMINAL_TYPE_NOTEBOOK, TerminalNotebookPrivate))
 
@@ -45,6 +46,9 @@ enum
   PROP_ACTIVE_SCREEN,
   PROP_TAB_POLICY
 };
+
+#define ACTION_AREA_BORDER_WIDTH (2)
+#define ACTION_BUTTON_SPACING (6)
 
 /* helper functions */
 
@@ -570,4 +574,47 @@ GtkPolicyType
 terminal_notebook_get_tab_policy (TerminalNotebook *notebook)
 {
   return notebook->priv->policy;
+}
+
+GtkWidget *
+terminal_notebook_get_action_box (TerminalNotebook *notebook,
+                                  GtkPackType pack_type)
+{
+  GtkNotebook *gtk_notebook;
+  GtkWidget *box, *inner_box;
+
+  g_return_val_if_fail (TERMINAL_IS_NOTEBOOK (notebook), NULL);
+
+  gtk_notebook = GTK_NOTEBOOK (notebook);
+  box = gtk_notebook_get_action_widget (gtk_notebook, pack_type);
+  if (box != NULL) {
+    gs_free_list GList *list;
+
+    list = gtk_container_get_children (GTK_CONTAINER (box));
+    g_assert (list->data != NULL);
+    return list->data;
+  }
+
+  /* Create container for the buttons */
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (box), ACTION_AREA_BORDER_WIDTH);
+
+  inner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, ACTION_BUTTON_SPACING);
+  gtk_box_pack_start (GTK_BOX (box), inner_box, TRUE, FALSE, 0);
+  gtk_widget_show (inner_box);
+
+  gtk_notebook_set_action_widget (gtk_notebook, box, pack_type);
+  gtk_widget_show (box);
+
+  /* FIXME: this appears to be necessary to make the icon buttons contained
+   * in the action area render the same way as buttons in the tab labels (e.g.
+   * the close button). gtk+ bug?
+   */
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_style_context_add_region (gtk_widget_get_style_context (box),
+                                GTK_STYLE_REGION_TAB,
+                                pack_type == GTK_PACK_START ? GTK_REGION_FIRST : GTK_REGION_LAST);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
+  return inner_box;
 }

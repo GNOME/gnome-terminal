@@ -53,6 +53,7 @@ GS_DEFINE_CLEANUP_FUNCTION0(GBytes*, gs_local_bytes_unref, g_bytes_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GChecksum*, gs_local_checksum_free, g_checksum_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GError*, gs_local_free_error, g_error_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_unref)
+GS_DEFINE_CLEANUP_FUNCTION0(GList*, gs_local_list_free, g_list_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GObject*, gs_local_obj_unref, g_object_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GPtrArray*, gs_local_ptrarray_unref, g_ptr_array_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariant*, gs_local_variant_unref, g_variant_unref)
@@ -163,6 +164,13 @@ GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
  * Call g_error_free() on a variable location when it goes out of scope.
  */
 #define gs_free_error __attribute__ ((cleanup(gs_local_free_error)))
+
+/**
+ * gs_free_list:
+ *
+ * Call g_list_free() on a variable location when it goes out of scope.
+ */
+#define gs_free_list __attribute__ ((cleanup(gs_local_list_free)))
 
 G_END_DECLS
 

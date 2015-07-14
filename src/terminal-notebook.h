@@ -54,6 +54,9 @@ void terminal_notebook_set_tab_policy (TerminalNotebook *notebook,
                                        GtkPolicyType policy);
 GtkPolicyType terminal_notebook_get_tab_policy (TerminalNotebook *notebook);
 
+GtkWidget *terminal_notebook_get_action_box (TerminalNotebook *notebook,
+                                             GtkPackType pack_type);
+
 G_END_DECLS
 
 #endif /* TERMINAL_NOTEBOOK_H */
