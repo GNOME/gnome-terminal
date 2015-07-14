@@ -44,7 +44,7 @@
 #define ACCEL_PATH_FORMAT_LENGTH	strlen (ACCEL_PATH_FORMAT) + 14 + 1
 #define DATA_KEY			"TerminalTabsMenu::Action"
 
-#define UI_PATH                         "/menubar/Tabs"
+#define UI_PATH                         "/TabsPopup"
 
 #define TERMINAL_TABS_MENU_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE ((object), TERMINAL_TYPE_TABS_MENU, TerminalTabsMenuPrivate))
 

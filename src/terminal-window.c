@@ -2152,6 +2152,7 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window)
   TerminalWindowPrivate *priv = window->priv;
   GtkWidget *box, *button;
   GtkAction *action;
+  GtkWidget *menu;
 
   box = terminal_notebook_get_action_box (TERMINAL_NOTEBOOK (priv->mdi_container), GTK_PACK_END);
 
@@ -2161,6 +2162,19 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window)
   button = terminal_icon_button_new ("list-add");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button), action);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+  gtk_widget_show (button);
+
+  /* Create Tabs menu button */
+  menu = gtk_ui_manager_get_widget (priv->ui_manager, "/TabsPopup");
+  gtk_widget_set_halign (menu, GTK_ALIGN_END);
+
+  button = gtk_menu_button_new ();
+  gtk_button_set_relief (GTK_BUTTON (button), FALSE);
+  gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
+  gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
+
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+  gtk_menu_button_set_align_widget (GTK_MENU_BUTTON (button), box);
   gtk_widget_show (button);
 }
 
@@ -2392,6 +2406,7 @@ terminal_window_init (TerminalWindow *window)
       { "Help", NULL, N_("_Help") },
       { "Popup", NULL, NULL },
       { "NotebookPopup", NULL, "" },
+      { "TabsPopup", NULL, "" },
 
       /* File menu */
       { "FileNewWindow", STOCK_NEW_WINDOW, N_("Open _Terminal"), "<shift><control>N",
