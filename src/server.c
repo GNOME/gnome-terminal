@@ -101,6 +101,7 @@ increase_rlimit_nofile (void)
 enum {
   _EXIT_FAILURE_WRONG_ID = 7,
   _EXIT_FAILURE_NO_UTF8 = 8,
+  _EXIT_FAILURE_UNSUPPORTED_LOCALE = 9
 };
 
 int
@@ -118,7 +119,10 @@ main (int argc, char **argv)
     return _EXIT_FAILURE_WRONG_ID;
   }
 
-  setlocale (LC_ALL, "");
+  if (setlocale (LC_ALL, "") == NULL) {
+    g_printerr ("Locale not supported.\n");
+    return _EXIT_FAILURE_UNSUPPORTED_LOCALE;
+  }
 
   terminal_i18n_init (TRUE);
 
