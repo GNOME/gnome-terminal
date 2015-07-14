@@ -68,6 +68,10 @@ void terminal_util_add_proxy_env (GHashTable *env_table);
 GdkScreen *terminal_util_get_screen_by_display_name (const char *display_name,
                                                      int screen_number);
 
+char **terminal_util_get_etc_shells (void);
+
+gboolean terminal_util_get_is_shell (const char *command);
+
 const GdkRGBA *terminal_g_settings_get_rgba (GSettings  *settings,
                                              const char *key,
                                              GdkRGBA    *rgba);

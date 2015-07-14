@@ -718,6 +718,64 @@ terminal_util_get_screen_by_display_name (const char *display_name,
   return screen;
 }
 
+/**
+ * terminal_util_get_etc_shells:
+ *
+ * Returns: (transfer full) the contents of /etc/shells
+ */
+char **
+terminal_util_get_etc_shells (void)
+{
+  GError *err = NULL;
+  gsize len;
+  gs_free char *contents = NULL;
+  char *str, *nl, *end;
+  GPtrArray *arr;
+
+  if (!g_file_get_contents ("/etc/shells", &contents, &len, &err) || len == 0)
+    return NULL;
+
+  arr = g_ptr_array_new ();
+  str = contents;
+  end = contents + len;
+  while (str < end && (nl = strchr (str, '\n')) != NULL) {
+    if (str != nl) /* non-empty? */
+      g_ptr_array_add (arr, g_strndup (str, nl - str));
+    str = nl + 1;
+  }
+  /* Anything non-empty left? */
+  if (str < end && str[0])
+    g_ptr_array_add (arr, g_strdup (str));
+
+  g_ptr_array_add (arr, NULL);
+  return (char **) g_ptr_array_free (arr, FALSE);
+}
+
+/**
+ * terminal_util_get_is_shell:
+ * @command: a string
+ *
+ * Returns wether @command is a valid shell as defined by the contents of /etc/shells.
+ *
+ * Returns: whether @command is a shell
+ */
+gboolean
+terminal_util_get_is_shell (const char *command)
+{
+  gs_strfreev char **shells;
+  guint i;
+
+  shells = terminal_util_get_etc_shells ();
+  if (shells == NULL)
+    return FALSE;
+
+  for (i = 0; shells[i]; i++)
+    if (g_str_equal (command, shells[i]))
+      return TRUE;
+
+  return FALSE;
+}
+
 static gboolean
 s_to_rgba (GVariant *variant,
            gpointer *result,
