@@ -44,6 +44,8 @@
 
 static char *app_id = NULL;
 
+#define INACTIVITY_TIMEOUT (100 /* ms */)
+
 static gboolean
 option_app_id_cb (const gchar *option_name,
                     const gchar *value,
@@ -177,6 +179,9 @@ main (int argc, char **argv)
   /* Now we can create the app */
   app = terminal_app_new (app_id);
   g_free (app_id);
+
+  /* We stay around a bit after the last window closed */
+  g_application_set_inactivity_timeout (app, INACTIVITY_TIMEOUT);
 
   return g_application_run (app, 0, NULL);
 }
