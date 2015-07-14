@@ -26,8 +26,8 @@
 
 G_BEGIN_DECLS
 
-void terminal_util_show_error_dialog (GtkWindow *transient_parent, 
-                                      GtkWidget **weap_ptr, 
+void terminal_util_show_error_dialog (GtkWindow *transient_parent,
+                                      GtkWidget **weap_ptr,
                                       GError *error,
                                       const char *message_format, ...) G_GNUC_PRINTF(4, 5);
 
@@ -88,9 +88,6 @@ void terminal_g_settings_set_rgba_palette (GSettings      *settings,
                                            gsize           n_colors);
 
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
-
-void terminal_util_object_class_undeprecate_property (GObjectClass *klass,
-                                                      const char *prop);
 
 G_END_DECLS
 
