@@ -35,6 +35,7 @@
 #include "terminal-debug.h"
 #include "terminal-enums.h"
 #include "terminal-encoding.h"
+#include "terminal-icon-button.h"
 #include "terminal-intl.h"
 #include "terminal-mdi-container.h"
 #include "terminal-notebook.h"
@@ -2145,6 +2146,24 @@ terminal_window_accel_activate_cb (GtkAccelGroup  *accel_group,
   return retval;
 }
 
+static void
+terminal_window_fill_notebook_action_box (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GtkWidget *box, *button;
+  GtkAction *action;
+
+  box = terminal_notebook_get_action_box (TERMINAL_NOTEBOOK (priv->mdi_container), GTK_PACK_END);
+
+  /* Create the NewTerminal button */
+  action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
+
+  button = terminal_icon_button_new ("list-add");
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button), action);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
+  gtk_widget_show (button);
+}
+
 /*****************************************/
 
 #ifdef ENABLE_DEBUG
@@ -2709,6 +2728,8 @@ terminal_window_init (TerminalWindow *window)
   priv->use_default_menubar_visibility = TRUE;
 
   terminal_window_update_size_to_menu (window);
+
+  terminal_window_fill_notebook_action_box (window);
 
   /* We have to explicitly call this, since screen-changed is NOT
    * emitted for the toplevel the first time!
