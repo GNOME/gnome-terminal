@@ -24,7 +24,7 @@
 
 #include "terminal-intl.h"
 #include "terminal-tab-label.h"
-#include "terminal-close-button.h"
+#include "terminal-icon-button.h"
 #include "terminal-window.h"
 
 #define TERMINAL_TAB_LABEL_GET_PRIVATE(tab_label)(G_TYPE_INSTANCE_GET_PRIVATE ((tab_label), TERMINAL_TYPE_TAB_LABEL, TerminalTabLabelPrivate))

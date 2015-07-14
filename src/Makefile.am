@@ -36,8 +36,6 @@ gnome_terminal_server_SOURCES = \
 	terminal-accels.h \
 	terminal-app.c \
 	terminal-app.h \
-	terminal-close-button.h \
-	terminal-close-button.c \
 	terminal-debug.c \
 	terminal-debug.h \
 	terminal-defines.h \
@@ -46,6 +44,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-encoding.h \
 	terminal-gdbus.c \
 	terminal-gdbus.h \
+	terminal-icon-button.h \
+	terminal-icon-button.c \
 	terminal-info-bar.c \
 	terminal-info-bar.h \
 	terminal-intl.h \
