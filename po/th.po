@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-06-29 08:20+0000\n"
-"PO-Revision-Date: 2015-07-01 11:12+0700\n"
+"POT-Creation-Date: 2015-07-17 20:19+0000\n"
+"PO-Revision-Date: 2015-07-29 12:39+0700\n"
 "Last-Translator: Akom Chotiphantawanon <knight2000@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -25,9 +25,9 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gnome-terminal.appdata.xml.in.h:1 ../gnome-terminal.desktop.in.in.h:1
-#: ../src/server.c:161 ../src/terminal-accels.c:222 ../src/terminal.c:240
+#: ../src/server.c:167 ../src/terminal-accels.c:222 ../src/terminal.c:240
 #: ../src/terminal-tab-label.c:81 ../src/terminal-tabs-menu.c:180
-#: ../src/terminal-window.c:2585 ../src/terminal-window.c:2933
+#: ../src/terminal-window.c:2619 ../src/terminal-window.c:2971
 msgid "Terminal"
 msgstr "เทอร์มินัล"
 
@@ -265,27 +265,31 @@ msgstr "ตัวเลือกสำหรับการประมวลผ
 msgid "Show processing options"
 msgstr "แสดงตัวเลือกสำหรับการประมวลผล"
 
-#: ../src/gterminal.vala:475 ../src/gterminal.vala:569
-#: ../src/gterminal.vala:592 ../src/gterminal.vala:651
-#: ../src/gterminal.vala:678 ../src/gterminal.vala:700
+#: ../src/gterminal.vala:475 ../src/gterminal.vala:572
+#: ../src/gterminal.vala:595 ../src/gterminal.vala:654
+#: ../src/gterminal.vala:681 ../src/gterminal.vala:703
 msgid "Missing argument"
 msgstr "ขาดอาร์กิวเมนต์"
 
-#: ../src/gterminal.vala:493
+#: ../src/gterminal.vala:495
 #, c-format
 msgid "Unknown command \"%s\""
 msgstr "ไม่รู้จักคำสั่ง \"%s\""
 
-#: ../src/gterminal.vala:520
+#: ../src/gterminal.vala:522
 #, c-format
 msgid "'%s' needs the command to run as arguments after '--'"
 msgstr "'%s' ต้องการอาร์กิวเมนต์หลัง '--' เป็นคำสั่งที่จะเรียกทำงาน"
 
-#: ../src/gterminal.vala:737
+#: ../src/gterminal.vala:525
+msgid "Extraneous arguments after '--'"
+msgstr "มีอาร์กิวเมนต์ส่วนเกินหลัง '--'"
+
+#: ../src/gterminal.vala:740
 msgid "GTerminal"
 msgstr "GTerminal"
 
-#: ../src/gterminal.vala:753
+#: ../src/gterminal.vala:756
 #, c-format
 msgid "Error processing arguments: %s\n"
 msgstr "เกิดข้อผิดพลาดขณะประมวลผลอาร์กิวเมนต์: %s\n"
@@ -720,6 +724,10 @@ msgid "Whether to open new terminals as windows or tabs"
 msgstr "เปิดเทอร์มินัลใหม่เป็นหน้าต่างหรือแท็บ"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:90
+msgid "When to show the tabs bar"
+msgstr "เมื่อไรจะแสดงแถบแท็บ"
+
+#: ../src/org.gnome.Terminal.gschema.xml.h:91
 msgid "The position of the tab bar"
 msgstr "ตำแหน่งของแถบแท็บ"
 
@@ -1169,13 +1177,13 @@ msgid "Close All Terminals"
 msgstr "ปิดทุกเทอร์มินัล"
 
 #. Edit menu
-#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2401
-#: ../src/terminal-window.c:2518
+#: ../src/terminal-accels.c:159 ../src/terminal-window.c:2435
+#: ../src/terminal-window.c:2552
 msgid "Copy"
 msgstr "คัดลอก"
 
-#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2404
-#: ../src/terminal-window.c:2521
+#: ../src/terminal-accels.c:160 ../src/terminal-window.c:2438
+#: ../src/terminal-window.c:2555
 msgid "Paste"
 msgstr "แปะ"
 
@@ -1200,15 +1208,15 @@ msgid "Full Screen"
 msgstr "เต็มหน้าจอ"
 
 #. View menu
-#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2421
+#: ../src/terminal-accels.c:173 ../src/terminal-window.c:2455
 msgid "Zoom In"
 msgstr "ขยาย"
 
-#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2424
+#: ../src/terminal-accels.c:174 ../src/terminal-window.c:2458
 msgid "Zoom Out"
 msgstr "ย่อ"
 
-#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2427
+#: ../src/terminal-accels.c:175 ../src/terminal-window.c:2461
 msgid "Normal Size"
 msgstr "ขนาดปกติ"
 
@@ -1277,7 +1285,7 @@ msgstr "การ_ทำงาน"
 msgid "Shortcut _Key"
 msgstr "ปุ่ม_ลัด"
 
-#: ../src/terminal-app.c:653
+#: ../src/terminal-app.c:710
 msgid "User Defined"
 msgstr "ผู้ใช้กำหนดเอง"
 
@@ -1435,11 +1443,11 @@ msgstr "เทอร์มินัลให_ม่"
 msgid "_Preferences"
 msgstr "_ปรับแต่ง"
 
-#: ../src/terminal-menus.ui.h:3 ../src/terminal-window.c:2373
+#: ../src/terminal-menus.ui.h:3 ../src/terminal-window.c:2406
 msgid "_Help"
 msgstr "_วิธีใช้"
 
-#: ../src/terminal-menus.ui.h:4 ../src/terminal-window.c:2489
+#: ../src/terminal-menus.ui.h:4 ../src/terminal-window.c:2523
 msgid "_About"
 msgstr "เ_กี่ยวกับ"
 
@@ -1647,7 +1655,7 @@ msgstr "รายการโพรไฟล์"
 msgid "Delete profile “%s”?"
 msgstr "ลบโพรไฟล์ “%s” หรือไม่?"
 
-#: ../src/terminal-prefs.c:374 ../src/terminal-window.c:529
+#: ../src/terminal-prefs.c:374 ../src/terminal-window.c:530
 msgid "_Cancel"
 msgstr "_ยกเลิก"
 
@@ -1671,7 +1679,7 @@ msgstr "_รหัสอักขระ"
 msgid "No command supplied nor shell requested"
 msgstr "ไม่ได้ระบุคำสั่งหรือร้องขอเชลล์ใดๆ"
 
-#: ../src/terminal-screen.c:1314 ../src/terminal-window.c:2416
+#: ../src/terminal-screen.c:1314 ../src/terminal-window.c:2450
 msgid "_Profile Preferences"
 msgstr "_ปรับแต่งโพรไฟล์"
 
@@ -1765,15 +1773,15 @@ msgstr ""
 "คุณควรจะได้รับสำเนาของ GNU General Public License มาพร้อมกับเทอร์มินัล GNOME  "
 "ถ้าคุณไม่ได้รับ กรุณาดูที่ <http://www.gnu.org/licenses/>"
 
-#: ../src/terminal-window.c:504
+#: ../src/terminal-window.c:505
 msgid "Could not save contents"
 msgstr "ไม่สามารถบันทึกเนื้อหา"
 
-#: ../src/terminal-window.c:526
+#: ../src/terminal-window.c:527
 msgid "Save as…"
 msgstr "บันทึกเป็น…"
 
-#: ../src/terminal-window.c:530
+#: ../src/terminal-window.c:531
 msgid "_Save"
 msgstr "_บันทึก"
 
@@ -1781,7 +1789,7 @@ msgstr "_บันทึก"
 #. * _%u is used as the accelerator (with u between 1 and 9), and
 #. * the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1209
+#: ../src/terminal-window.c:1210
 #, c-format
 msgid "_%u. %s"
 msgstr "_%u. %s"
@@ -1790,220 +1798,220 @@ msgstr "_%u. %s"
 #. * _%c is used as the accelerator (it will be a character between A and Z),
 #. * and the %s is the name of the terminal profile.
 #.
-#: ../src/terminal-window.c:1215
+#: ../src/terminal-window.c:1216
 #, c-format
 msgid "_%c. %s"
 msgstr "_%c. %s"
 
 #. Toplevel
-#: ../src/terminal-window.c:2366
+#: ../src/terminal-window.c:2399
 msgid "_File"
 msgstr "แ_ฟ้ม"
 
 #. File menu
-#: ../src/terminal-window.c:2367 ../src/terminal-window.c:2378
-#: ../src/terminal-window.c:2384 ../src/terminal-window.c:2527
+#: ../src/terminal-window.c:2400 ../src/terminal-window.c:2412
+#: ../src/terminal-window.c:2418 ../src/terminal-window.c:2561
 msgid "Open _Terminal"
 msgstr "เปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:2368
+#: ../src/terminal-window.c:2401
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../src/terminal-window.c:2369
+#: ../src/terminal-window.c:2402
 msgid "_View"
 msgstr "มุ_มมอง"
 
-#: ../src/terminal-window.c:2370
+#: ../src/terminal-window.c:2403
 msgid "_Search"
 msgstr "_ค้นหา"
 
-#: ../src/terminal-window.c:2371
+#: ../src/terminal-window.c:2404
 msgid "_Terminal"
 msgstr "เ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:2372
+#: ../src/terminal-window.c:2405
 msgid "Ta_bs"
 msgstr "แท็_บ"
 
-#: ../src/terminal-window.c:2381
+#: ../src/terminal-window.c:2415
 msgid "Open Ta_b"
 msgstr "แท็_บใหม่"
 
-#: ../src/terminal-window.c:2387
+#: ../src/terminal-window.c:2421
 msgid "New _Profile"
 msgstr "โ_พรไฟล์ใหม่"
 
-#: ../src/terminal-window.c:2390
+#: ../src/terminal-window.c:2424
 msgid "_Save Contents"
 msgstr "บันทึกเนื้อ_หา"
 
-#: ../src/terminal-window.c:2393 ../src/terminal-window.c:3656
+#: ../src/terminal-window.c:2427 ../src/terminal-window.c:3694
 msgid "C_lose Terminal"
 msgstr "ปิดเ_ทอร์มินัล"
 
-#: ../src/terminal-window.c:2396
+#: ../src/terminal-window.c:2430
 msgid "_Close All Terminals"
 msgstr "ปิ_ดทุกเทอร์มินัล"
 
-#: ../src/terminal-window.c:2407 ../src/terminal-window.c:2524
+#: ../src/terminal-window.c:2441 ../src/terminal-window.c:2558
 msgid "Paste _Filenames"
 msgstr "แปะ_ชื่อแฟ้ม"
 
-#: ../src/terminal-window.c:2410
+#: ../src/terminal-window.c:2444
 msgid "Select All"
 msgstr "เลือกทั้งหมด"
 
-#: ../src/terminal-window.c:2413
+#: ../src/terminal-window.c:2447
 msgid "Pre_ferences"
 msgstr "_ปรับแต่ง"
 
 #. Search menu
-#: ../src/terminal-window.c:2432
+#: ../src/terminal-window.c:2466
 msgid "_Find…"
 msgstr "_หา…"
 
-#: ../src/terminal-window.c:2435
+#: ../src/terminal-window.c:2469
 msgid "Find Ne_xt"
 msgstr "หา_ต่อ"
 
-#: ../src/terminal-window.c:2438
+#: ../src/terminal-window.c:2472
 msgid "Find Pre_vious"
 msgstr "หา_ก่อนหน้า"
 
-#: ../src/terminal-window.c:2441
+#: ../src/terminal-window.c:2475
 msgid "_Clear Highlight"
 msgstr "เ_ลิกเน้น"
 
-#: ../src/terminal-window.c:2445
+#: ../src/terminal-window.c:2479
 msgid "Go to _Line..."
 msgstr "ไปที่_บรรทัด..."
 
-#: ../src/terminal-window.c:2448
+#: ../src/terminal-window.c:2482
 msgid "_Incremental Search..."
 msgstr "_ค้นหาแบบคืบหน้าทีละส่วน..."
 
 #. Terminal menu
-#: ../src/terminal-window.c:2454
+#: ../src/terminal-window.c:2488
 msgid "Change _Profile"
 msgstr "เปลี่ยนโ_พรไฟล์"
 
-#: ../src/terminal-window.c:2455
+#: ../src/terminal-window.c:2489
 msgid "Set _Character Encoding"
 msgstr "ตั้งค่า_รหัสอักขระ"
 
-#: ../src/terminal-window.c:2456
+#: ../src/terminal-window.c:2490
 msgid "_Reset"
 msgstr "_คืนค่าเดิม"
 
-#: ../src/terminal-window.c:2459
+#: ../src/terminal-window.c:2493
 msgid "Reset and C_lear"
 msgstr "คืนค่าเดิมและ_ลบจอ"
 
 #. Terminal/Encodings menu
-#: ../src/terminal-window.c:2464
+#: ../src/terminal-window.c:2498
 msgid "_Add or Remove…"
 msgstr "เ_พิ่มหรือลด…"
 
 #. Tabs menu
-#: ../src/terminal-window.c:2469
+#: ../src/terminal-window.c:2503
 msgid "_Previous Terminal"
 msgstr "เทอร์มินัล_ก่อน"
 
-#: ../src/terminal-window.c:2472
+#: ../src/terminal-window.c:2506
 msgid "_Next Terminal"
 msgstr "เทอร์มินัล_ถัดไป"
 
-#: ../src/terminal-window.c:2475
+#: ../src/terminal-window.c:2509
 msgid "Move Terminal _Left"
 msgstr "ย้ายเทอร์มินัลไปทางซ้า_ย"
 
-#: ../src/terminal-window.c:2478
+#: ../src/terminal-window.c:2512
 msgid "Move Terminal _Right"
 msgstr "ย้ายเทอร์มินัลไปทาง_ขวา"
 
-#: ../src/terminal-window.c:2481
+#: ../src/terminal-window.c:2515
 msgid "_Detach Terminal"
 msgstr "_ดึงเทอร์มินัลออกมา"
 
 #. Help menu
-#: ../src/terminal-window.c:2486
+#: ../src/terminal-window.c:2520
 msgid "_Contents"
 msgstr "เนื้อ_หา"
 
-#: ../src/terminal-window.c:2493
+#: ../src/terminal-window.c:2527
 msgid "_Inspector"
 msgstr "ช่องเ_ฝ้ามอง"
 
 #. Popup menu
-#: ../src/terminal-window.c:2499
+#: ../src/terminal-window.c:2533
 msgid "_Send Mail To…"
 msgstr "ส่งเ_มลถึง…"
 
-#: ../src/terminal-window.c:2502
+#: ../src/terminal-window.c:2536
 msgid "_Copy E-mail Address"
 msgstr "คัดลอก_ที่อยู่อีเมล"
 
-#: ../src/terminal-window.c:2505
+#: ../src/terminal-window.c:2539
 msgid "C_all To…"
 msgstr "เ_รียกสายไปยัง…"
 
-#: ../src/terminal-window.c:2508
+#: ../src/terminal-window.c:2542
 msgid "_Copy Call Address"
 msgstr "คัดลอก_ที่อยู่เรียกสาย"
 
-#: ../src/terminal-window.c:2511
+#: ../src/terminal-window.c:2545
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
 
-#: ../src/terminal-window.c:2514
+#: ../src/terminal-window.c:2548
 msgid "_Copy Link Address"
 msgstr "คัด_ลอกที่อยู่ลิงก์"
 
-#: ../src/terminal-window.c:2517
+#: ../src/terminal-window.c:2551
 msgid "P_rofiles"
 msgstr "โ_พรไฟล์ "
 
-#: ../src/terminal-window.c:2530
+#: ../src/terminal-window.c:2564
 msgid "L_eave Full Screen"
 msgstr "เ_ลิกแสดงผลเต็มจอ"
 
 #. View Menu
-#: ../src/terminal-window.c:2538
+#: ../src/terminal-window.c:2572
 msgid "Show _Menubar"
 msgstr "แสดงแถบเ_มนู"
 
-#: ../src/terminal-window.c:2542
+#: ../src/terminal-window.c:2576
 msgid "_Full Screen"
 msgstr "เ_ต็มจอ"
 
 #. Terminal menu
-#: ../src/terminal-window.c:2547
+#: ../src/terminal-window.c:2581
 msgid "Read-_Only"
 msgstr "_อ่านอย่างเดียว"
 
-#: ../src/terminal-window.c:3643
+#: ../src/terminal-window.c:3681
 msgid "Close this window?"
 msgstr "จะปิดหน้าต่างนี้หรือไม่?"
 
-#: ../src/terminal-window.c:3643
+#: ../src/terminal-window.c:3681
 msgid "Close this terminal?"
 msgstr "จะปิดเทอร์มินัลนี้หรือไม่?"
 
-#: ../src/terminal-window.c:3647
+#: ../src/terminal-window.c:3685
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 msgstr ""
 "ยังมีโพรเซสทำงานอยู่ในบางเทอร์มินัลในหน้าต่างนี้ ถ้าปิดหน้าต่าง ก็จะเป็นการฆ่าโพรเซสเหล่านั้นทั้งหมด"
 
-#: ../src/terminal-window.c:3651
+#: ../src/terminal-window.c:3689
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 msgstr "ยังมีโพรเซสหนึ่งทำงานอยู่ในเทอร์มินัลนี้ ถ้าปิดเทอร์มินัล ก็จะเป็นการฆ่าโพรเซสดังกล่าว"
 
-#: ../src/terminal-window.c:3656
+#: ../src/terminal-window.c:3694
 msgid "C_lose Window"
 msgstr "ปิ_ดหน้าต่าง"
 
