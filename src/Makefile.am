@@ -384,6 +384,7 @@ EXTRA_DIST = \
 	find-dialog.ui \
 	preferences.ui \
 	profile-preferences.ui \
+	terminal.common.css \
 	$(about_DATA) \
 	$(uimanager_DATA) \
 	$(builder_DATA) \
