@@ -23,6 +23,9 @@
 #include <uuid.h>
 #include <dconf.h>
 
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
+
 #include "terminal-type-builtins.h"
 #include "terminal-schemas.h"
 #include "terminal-debug.h"
@@ -177,6 +180,16 @@ terminal_settings_list_valid_uuid (const char *str)
   return uuid_parse ((char *) str, u) == 0;
 }
 
+static gboolean
+settings_backend_is_dconf (void)
+{
+  gs_unref_object GSettingsBackend *backend;
+
+  backend = g_settings_backend_get_default ();
+
+  return g_str_equal (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend");
+}
+
 static char *
 new_list_entry (void)
 {
@@ -313,7 +326,7 @@ terminal_settings_list_add_child_internal (TerminalSettingsList *list,
   char *new_uuid;
   gs_strfreev char **new_uuids;
 
-  if (uuid)
+  if (uuid && settings_backend_is_dconf ())
     new_uuid = clone_child (list, uuid);
   else
     new_uuid = new_list_entry ();
@@ -333,8 +346,6 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
                                               const char *uuid)
 {
   gs_strfreev char **new_uuids;
-  gs_free char *path = NULL;
-  gs_unref_object DConfClient *client = NULL;
 
   _terminal_debug_print (TERMINAL_DEBUG_SETTINGS_LIST,
                          "%s UUID %s\n", G_STRFUNC, uuid);
@@ -352,10 +363,14 @@ terminal_settings_list_remove_child_internal (TerminalSettingsList *list,
     g_settings_set_string (&list->parent, TERMINAL_SETTINGS_LIST_DEFAULT_KEY, "");
 
   /* Now we unset all keys under the child */
-  path = path_new (list, uuid);
+  if (settings_backend_is_dconf ()) {
+    gs_free char *path;
+    gs_unref_object DConfClient *client;
 
-  client = dconf_client_new ();
-  dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
+    path = path_new (list, uuid);
+    client = dconf_client_new ();
+    dconf_client_write_sync (client, path, NULL, NULL, NULL, NULL);
+  }
 }
 
 static void

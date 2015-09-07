@@ -27,6 +27,9 @@
 #include <dconf.h>
 #include <vte/vte.h>
 
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
+
 #include "terminal-schemas.h"
 #include "terminal-profiles-list.h"
 #include "terminal-type-builtins.h"
@@ -333,10 +336,26 @@ migrate_global_prefs (GSettings *settings,
   return TRUE;
 }
 
+static gboolean
+settings_backend_is_dconf (void)
+{
+  gs_unref_object GSettingsBackend *backend;
+
+  backend = g_settings_backend_get_default ();
+
+  return g_str_equal (G_OBJECT_TYPE_NAME (backend), "DConfSettingsBackend");
+}
+
 static void
 do_clean (void)
 {
   DConfClient *client;
+
+  if (!settings_backend_is_dconf ()) {
+    if (verbose)
+      g_printerr ("Not using DConf settings backend; not cleaning.\n");
+    return;
+  }
 
   if (verbose)
     g_printerr ("Cleaning…\n");
