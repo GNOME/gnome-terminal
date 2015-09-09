@@ -98,6 +98,37 @@ terminal_screen_container_init (TerminalScreenContainer *container)
 }
 
 static void
+update_container_background_color (TerminalScreenContainer *container)
+{
+  GtkCssProvider *css_provider;
+  GtkStyleContext* style_ctx;
+  gchar *css_string, *bg_color;
+  TerminalScreenContainerPrivate *priv = container->priv;
+
+  css_provider = gtk_css_provider_new ();
+
+  bg_color = gdk_rgba_to_string (terminal_screen_get_bg_color (priv->screen));
+  css_string = g_strdup_printf ("* { background-color: %s; }", bg_color);
+  gtk_css_provider_load_from_data (css_provider, css_string, -1, NULL);
+
+  style_ctx = gtk_widget_get_style_context (GTK_WIDGET (priv->hbox));
+  gtk_style_context_add_provider (style_ctx, GTK_STYLE_PROVIDER (css_provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+  g_free (css_string);
+  g_free (bg_color);
+  g_object_unref (css_provider);
+}
+
+static void
+screen_bg_color_changed_cb (TerminalScreen *screen,
+                            GParamSpec *pspec,
+                            TerminalScreenContainer *container)
+{
+  update_container_background_color (container);
+}
+
+static void
 terminal_screen_container_constructed (GObject *object)
 {
   TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
@@ -119,6 +150,11 @@ terminal_screen_container_constructed (GObject *object)
   gtk_widget_show_all (priv->hbox);
 
   _terminal_screen_update_scrollbar (priv->screen);
+
+  g_signal_connect (priv->screen, "notify::bg-color",
+                    G_CALLBACK (screen_bg_color_changed_cb), container);
+
+  update_container_background_color (container);
 }
 
 static void
