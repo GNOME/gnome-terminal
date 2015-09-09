@@ -103,6 +103,8 @@ char **      terminal_screen_get_initial_environment (TerminalScreen  *screen);
 const char* terminal_screen_get_title          (TerminalScreen *screen);
 const char* terminal_screen_get_icon_title     (TerminalScreen *screen);
 gboolean    terminal_screen_get_icon_title_set (TerminalScreen *screen);
+GdkRGBA*    terminal_screen_get_bg_color       (TerminalScreen *screen);
+GdkRGBA*    terminal_screen_get_fg_color       (TerminalScreen *screen);
 
 char *terminal_screen_get_current_dir (TerminalScreen *screen);
 
