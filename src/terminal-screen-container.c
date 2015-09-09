@@ -111,7 +111,7 @@ update_container_background_color (TerminalScreenContainer *container)
   css_string = g_strdup_printf ("* { background-color: %s; }", bg_color);
   gtk_css_provider_load_from_data (css_provider, css_string, -1, NULL);
 
-  style_ctx = gtk_widget_get_style_context (GTK_WIDGET (priv->hbox));
+  style_ctx = gtk_widget_get_style_context (priv->vscrollbar);
   gtk_style_context_add_provider (style_ctx, GTK_STYLE_PROVIDER (css_provider),
                                   GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
 
@@ -131,6 +131,7 @@ screen_bg_color_changed_cb (TerminalScreen *screen,
 static void
 terminal_screen_container_constructed (GObject *object)
 {
+  GtkWidget *scrollbar;
   TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
   TerminalScreenContainerPrivate *priv = container->priv;
 
@@ -139,9 +140,11 @@ terminal_screen_container_constructed (GObject *object)
   g_assert (priv->screen != NULL);
 
   priv->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->vscrollbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
-  priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
-                                        gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen)));
+  scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
+                                 gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen)));
+  gtk_box_pack_start (GTK_BOX (priv->vscrollbar), scrollbar, TRUE, TRUE, 0);
 
   gtk_box_pack_start (GTK_BOX (priv->hbox), GTK_WIDGET (priv->screen), TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (priv->hbox), priv->vscrollbar, FALSE, FALSE, 0);
