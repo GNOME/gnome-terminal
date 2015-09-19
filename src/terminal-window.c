@@ -3468,20 +3468,30 @@ mdi_screen_removed_cb (TerminalMdiContainer *container,
                                         G_CALLBACK (screen_close_cb),
                                         window);
 
+  /* We already got a switch-page signal whose handler sets the active tab to the
+   * new active tab, unless this screen was the only one in the notebook, so
+   * priv->active_tab is valid here.
+   */
+
+  pages = terminal_mdi_container_get_n_screens (container);
+  if (pages == 0)
+    {
+      priv->active_screen = NULL;
+
+      /* That was the last tab in the window; close it. */
+      gtk_widget_destroy (GTK_WIDGET (window));
+      return;
+    }
+
   terminal_window_update_tabs_menu_sensitivity (window);
   terminal_window_update_search_sensitivity (screen, window);
 
-  pages = terminal_mdi_container_get_n_screens (container);
   if (pages == 1)
     {
       TerminalScreen *active_screen = terminal_mdi_container_get_active_screen (container);
       gtk_widget_grab_focus (GTK_WIDGET(active_screen));  /* bug 742422 */
 
       terminal_window_update_size (window);
-    }
-  else if (pages == 0)
-    {
-      gtk_widget_destroy (GTK_WIDGET (window));
     }
 }
 
