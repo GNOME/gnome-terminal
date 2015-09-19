@@ -58,14 +58,20 @@ update_tab_visibility (TerminalNotebook *notebook,
 {
   TerminalNotebookPrivate *priv = notebook->priv;
   GtkNotebook *gtk_notebook = GTK_NOTEBOOK (notebook);
+  int new_n_pages;
   gboolean show_tabs;
+
+  new_n_pages = gtk_notebook_get_n_pages (gtk_notebook) + change;
+  /* Don't do anything if we're going to have zero pages (and thus close the window) */
+  if (new_n_pages == 0)
+    return;
 
   switch (priv->policy) {
   case GTK_POLICY_ALWAYS:
     show_tabs = TRUE;
     break;
   case GTK_POLICY_AUTOMATIC:
-    show_tabs = (gtk_notebook_get_n_pages (gtk_notebook) + change) > 1;
+    show_tabs = new_n_pages > 1;
     break;
   case GTK_POLICY_NEVER:
 #if GTK_CHECK_VERSION (3, 16, 0)
