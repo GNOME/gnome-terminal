@@ -41,7 +41,7 @@
 #include "terminal-notebook.h"
 #include "terminal-schemas.h"
 #include "terminal-screen-container.h"
-#include "terminal-search-dialog.h"
+#include "terminal-search-popover.h"
 #include "terminal-tab-label.h"
 #include "terminal-tabs-menu.h"
 #include "terminal-util.h"
@@ -80,7 +80,7 @@ struct _TerminalWindowPrivate
   void *old_geometry_widget; /* only used for pointer value as it may be freed */
 
   GtkWidget *confirm_close_dialog;
-  GtkWidget *search_find_dialog;
+  TerminalSearchPopover *search_popover;
 
   guint menubar_visible : 1;
   guint use_default_menubar_visibility : 1;
@@ -867,34 +867,83 @@ action_edit_profile_cb (GSimpleAction *action,
 }
 
 static void
-find_response_cb (GtkWidget *dialog,
-                  int        response,
-                  gpointer   user_data)
+search_popover_search_cb (TerminalSearchPopover *popover,
+                          gboolean backward,
+                          TerminalWindow *window)
 {
-  TerminalWindow *window = TERMINAL_WINDOW (user_data);
   TerminalWindowPrivate *priv = window->priv;
-  TerminalSearchFlags flags;
-  GRegex *regex;
 
-  if (response != GTK_RESPONSE_ACCEPT)
+  if (G_UNLIKELY (priv->active_screen == NULL))
     return;
 
-  if (G_UNLIKELY (!priv->active_screen))
-    return;
-
-  regex = terminal_search_dialog_get_regex (dialog);
-  flags = terminal_search_dialog_get_search_flags (dialog);
-
-  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex, 0);
-  vte_terminal_search_set_wrap_around (VTE_TERMINAL (priv->active_screen),
-				       (flags & TERMINAL_SEARCH_FLAG_WRAP_AROUND));
-
-  if (flags & TERMINAL_SEARCH_FLAG_BACKWARDS)
+  if (backward)
     vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen));
   else
     vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen));
+}
+
+static void
+search_popover_notify_regex_cb (TerminalSearchPopover *popover,
+                                GParamSpec *pspec G_GNUC_UNUSED,
+                                TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  GRegex *regex;
+
+  if (G_UNLIKELY (priv->active_screen == NULL))
+    return;
+
+  regex = terminal_search_popover_get_regex (popover);
+  vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex, 0);
 
   terminal_window_update_search_sensitivity (priv->active_screen, window);
+}
+
+static void
+search_popover_notify_wrap_around_cb (TerminalSearchPopover *popover,
+                                      GParamSpec *pspec G_GNUC_UNUSED,
+                                      TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+  gboolean wrap;
+
+  if (G_UNLIKELY (priv->active_screen == NULL))
+    return;
+
+  wrap = terminal_search_popover_get_wrap_around (popover);
+  vte_terminal_search_set_wrap_around (VTE_TERMINAL (priv->active_screen), wrap);
+}
+
+static void
+terminal_window_ensure_search_popover (TerminalWindow *window)
+{
+  TerminalWindowPrivate *priv = window->priv;
+
+  if (G_UNLIKELY(priv->active_screen == NULL))
+    return;
+
+  if (priv->search_popover != NULL) {
+    search_popover_notify_regex_cb (priv->search_popover, NULL, window);
+    search_popover_notify_wrap_around_cb (priv->search_popover, NULL, window);
+
+    gtk_widget_show (GTK_WIDGET (priv->search_popover));
+    return;
+  }
+
+  if (priv->active_screen == NULL)
+    return;
+
+  priv->search_popover = terminal_search_popover_new (GTK_WIDGET (priv->menubar));
+
+  g_signal_connect (priv->search_popover, "search", G_CALLBACK (search_popover_search_cb), window);
+
+  search_popover_notify_regex_cb (priv->search_popover, NULL, window);
+  g_signal_connect (priv->search_popover, "notify::regex", G_CALLBACK (search_popover_notify_regex_cb), window);
+
+  search_popover_notify_wrap_around_cb (priv->search_popover, NULL, window);
+  g_signal_connect (priv->search_popover, "notify::wrap-around", G_CALLBACK (search_popover_notify_wrap_around_cb), window);
+
+  gtk_widget_show (GTK_WIDGET (priv->search_popover));
 }
 
 static void
@@ -912,20 +961,7 @@ action_find_cb (GSimpleAction *action,
   g_variant_get (parameter, "&s", &mode);
 
   if (g_str_equal (mode, "find")) {
-    if (!priv->search_find_dialog) {
-      GtkWidget *dialog;
-
-      dialog = priv->search_find_dialog = terminal_search_dialog_new (GTK_WINDOW (window));
-
-      g_signal_connect (dialog, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &priv->search_find_dialog);
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (find_response_cb), window);
-      /* prevent destruction */
-      g_signal_connect (dialog, "delete-event", G_CALLBACK (gtk_true), NULL);
-    }
-
-    terminal_search_dialog_present (priv->search_find_dialog);
+    terminal_window_ensure_search_popover (window);
   } else if (g_str_equal (mode, "next")) {
     vte_terminal_search_find_next (VTE_TERMINAL (priv->active_screen));
   } else if (g_str_equal (mode, "previous")) {
@@ -2813,6 +2849,8 @@ terminal_window_dispose (GObject *object)
   GtkClipboard *clipboard;
   GSList *list, *l;
 
+  priv->disposed = TRUE;
+
   /* Deactivate open popup menus. This fixes a crash if the window is closed
    * while the context menu is open.
    */
@@ -2824,7 +2862,13 @@ terminal_window_dispose (GObject *object)
 
   remove_popup_info (window);
 
-  priv->disposed = TRUE;
+  if (priv->search_popover != NULL)
+    {
+      g_signal_handlers_disconnect_matched (priv->search_popover, G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL, window);
+      gtk_widget_destroy (GTK_WIDGET (priv->search_popover));
+      priv->search_popover = NULL;
+    }
 
   if (priv->tabs_menu)
     {
@@ -2874,10 +2918,6 @@ terminal_window_finalize (GObject *object)
 
   if (priv->confirm_close_dialog)
     gtk_dialog_response (GTK_DIALOG (priv->confirm_close_dialog),
-                         GTK_RESPONSE_DELETE_EVENT);
-
-  if (priv->search_find_dialog)
-    gtk_dialog_response (GTK_DIALOG (priv->search_find_dialog),
                          GTK_RESPONSE_DELETE_EVENT);
 
   g_free (priv->uuid);
@@ -3297,6 +3337,9 @@ mdi_screen_switched_cb (TerminalMdiContainer *container,
 
   if (screen == NULL || old_active_screen == screen)
     return;
+
+  if (priv->search_popover != NULL)
+    gtk_widget_hide (GTK_WIDGET (priv->search_popover));
 
   _terminal_debug_print (TERMINAL_DEBUG_MDI,
                          "[window %p] MDI: setting active tab to screen %p (old active screen %p)\n",

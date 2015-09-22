@@ -67,8 +67,8 @@ gnome_terminal_server_SOURCES = \
 	terminal-screen.h \
 	terminal-screen-container.c \
 	terminal-screen-container.h \
-	terminal-search-dialog.c \
-	terminal-search-dialog.h \
+	terminal-search-popover.c \
+	terminal-search-popover.h \
 	terminal-tab-label.c \
 	terminal-tab-label.h \
 	terminal-tabs-menu.c \
@@ -381,7 +381,7 @@ EXTRA_DIST = \
 	terminal-type-builtins.h.template \
 	org.gnome.Terminal.xml \
 	nautilus.symbols \
-	find-dialog.ui \
+	search-popover.ui \
 	preferences.ui \
 	profile-preferences.ui \
 	terminal.common.css \
