@@ -888,13 +888,21 @@ search_popover_notify_regex_cb (TerminalSearchPopover *popover,
                                 TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+#ifdef WITH_PCRE2
+  VteRegex *regex;
+#else
   GRegex *regex;
+#endif
 
   if (G_UNLIKELY (priv->active_screen == NULL))
     return;
 
   regex = terminal_search_popover_get_regex (popover);
+#ifdef WITH_PCRE2
+  vte_terminal_search_set_regex (VTE_TERMINAL (priv->active_screen), regex, 0);
+#else
   vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), regex, 0);
+#endif
 
   terminal_window_update_search_sensitivity (priv->active_screen, window);
 }
@@ -967,7 +975,11 @@ action_find_cb (GSimpleAction *action,
   } else if (g_str_equal (mode, "previous")) {
     vte_terminal_search_find_previous (VTE_TERMINAL (priv->active_screen));
   } else if (g_str_equal (mode, "clear")) {
+#ifdef WITH_PCRE2
+    vte_terminal_search_set_regex (VTE_TERMINAL (priv->active_screen), NULL, 0);
+#else
     vte_terminal_search_set_gregex (VTE_TERMINAL (priv->active_screen), NULL, 0);
+#endif
   } else
     return;
 }
@@ -1776,7 +1788,11 @@ terminal_window_update_search_sensitivity (TerminalScreen *screen,
   if (screen != priv->active_screen)
     return;
 
+#ifdef WITH_PCRE2
+  can_search = vte_terminal_search_get_regex (VTE_TERMINAL (screen)) != NULL;
+#else
   can_search = vte_terminal_search_get_gregex (VTE_TERMINAL (screen)) != NULL;
+#endif
 
   action = gtk_action_group_get_action (priv->action_group, "SearchFindNext");
   gtk_action_set_sensitive (action, can_search);

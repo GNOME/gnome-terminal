@@ -39,7 +39,12 @@ GType terminal_search_popover_get_type (void);
 
 TerminalSearchPopover *terminal_search_popover_new (GtkWidget *relative_to_widget);
 
-GRegex *terminal_search_popover_get_regex (TerminalSearchPopover *popover);
+#ifdef WITH_PCRE2
+VteRegex *
+#else
+GRegex *
+#endif
+          terminal_search_popover_get_regex (TerminalSearchPopover *popover);
 
 gboolean terminal_search_popover_get_wrap_around (TerminalSearchPopover *popover);
 
