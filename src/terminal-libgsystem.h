@@ -56,7 +56,6 @@ GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_
 GS_DEFINE_CLEANUP_FUNCTION0(GList*, gs_local_list_free, g_list_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GObject*, gs_local_obj_unref, g_object_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GPtrArray*, gs_local_ptrarray_unref, g_ptr_array_unref)
-GS_DEFINE_CLEANUP_FUNCTION0(GRegex*, gs_local_regex_unref, g_regex_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariant*, gs_local_variant_unref, g_variant_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantBuilder*, gs_local_variant_builder_unref, g_variant_builder_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantIter*, gs_local_variant_iter_free, g_variant_iter_free)
@@ -79,15 +78,6 @@ GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
  * %NULL.
  */
 #define gs_unref_object __attribute__ ((cleanup(gs_local_obj_unref)))
-
-/**
- * gs_unref_regex:
- *
- * Call g_regex_unref() on a variable location when it goes out of
- * scope.  Note that unlike g_regex_unref(), the variable may be
- * %NULL.
- */
-#define gs_unref_regex __attribute__ ((cleanup(gs_local_regex_unref)))
 
 /**
  * gs_unref_variant:
