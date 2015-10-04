@@ -317,7 +317,7 @@ terminal_app_theme_variant_changed_cb (GSettings   *settings,
 
   theme = g_settings_get_enum (settings, key);
   if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
-    gtk_settings_reset (gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
+    gtk_settings_reset_property (gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
   else
     g_object_set (gtk_settings,
                   GTK_SETTING_PREFER_DARK_THEME,
