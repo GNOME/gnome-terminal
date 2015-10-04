@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.19.0 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkListStore" id="new-terminal-mode-liststore">
     <columns>
-      <!-- column-name gchararray -->
+      <!-- column-name label -->
       <column type="gchararray"/>
+      <!-- column-name id -->
       <column type="gchararray"/>
     </columns>
     <data>
       <row>
         <col id="0" translatable="yes" comments="Open new terminal in new window">Window</col>
-        <col id="1" translatable="no">window</col>
+        <col id="1">window</col>
       </row>
       <row>
         <col id="0" translatable="yes" comments="Open new terminal in new tab">Tab</col>
-        <col id="1" translatable="no">tab</col>
+        <col id="1">tab</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="theme-variant-liststore">
+    <columns>
+      <!-- column-name label -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" context="theme variant">Default</col>
+        <col id="1">system</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="theme variant">Light</col>
+        <col id="1">light</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" context="theme variant">Dark</col>
+        <col id="1">dark</col>
       </row>
     </data>
   </object>
@@ -23,7 +47,6 @@
     <property name="border_width">0</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="role">gnome-terminal-preferences</property>
-    <property name="type_hint">normal</property>
     <child>
       <object class="GtkBox" id="dialogue-content-box">
         <property name="visible">True</property>
@@ -44,8 +67,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
-                <property name="spacing">6</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkCheckButton" id="default-show-menubar-checkbutton">
                     <property name="label" translatable="yes">Show _menubar by default in new terminals</property>
@@ -69,7 +92,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -87,7 +109,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
@@ -99,11 +120,25 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="hbox140">
+                  <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">12</property>
-                    <property name="orientation">horizontal</property>
+                    <property name="row_spacing">6</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkLabel" id="theme-variant-label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Theme _variant:</property>
+                        <property name="use_underline">True</property>
+                        <property name="ellipsize">middle</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkLabel" id="label480">
                         <property name="visible">True</property>
@@ -113,17 +148,16 @@
                         <property name="mnemonic_widget">new-terminal-mode-combobox</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
-                        <property name="position">0</property>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="new-terminal-mode-combobox">
+                      <object class="GtkComboBox" id="theme-variant-combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="model">new-terminal-mode-liststore</property>
-                        <property name="id-column">1</property>
+                        <property name="model">theme-variant-liststore</property>
+                        <property name="id_column">1</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer1"/>
                           <attributes>
@@ -132,12 +166,34 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="new-terminal-mode-combobox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="model">new-terminal-mode-liststore</property>
+                        <property name="id_column">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer2"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">1</property>
                       </packing>
                     </child>
                   </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -156,11 +212,9 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">12</property>
+                <property name="n_rows">2</property>
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
-                <property name="n_rows">2</property>
-                <property name="n_columns">1</property>
-                <property name="homogeneous">False</property>
                 <child>
                   <object class="GtkCheckButton" id="disable-shortcuts-checkbutton">
                     <property name="label" translatable="yes">_Enable shortcuts</property>
@@ -168,17 +222,12 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
                     <property name="xalign">0</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="bottom_attach">1</property>
-                    <property name="y_options">fill</property>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -199,11 +248,8 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options">expand|fill</property>
                   </packing>
                 </child>
               </object>
@@ -272,7 +318,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="clone-profile-button">
-                            <property name="label" translatable="yes">_Clone</property>
+                            <property name="label">_Clone</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
@@ -338,9 +384,9 @@
                       <object class="GtkLabel" id="default-profile-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Profile used when launching a new terminal:</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -385,10 +431,10 @@
                   <object class="GtkLabel" id="encodings-label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">E_ncodings shown in menu:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">encodings-treeview</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -412,12 +458,12 @@
                         <property name="headers_clickable">False</property>
                         <property name="rules_hint">True</property>
                         <property name="enable_search">False</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="encodings-label"/>
-                        </accessibility>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection" id="treeview-selection1"/>
                         </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="encodings-label"/>
+                        </accessibility>
                       </object>
                     </child>
                   </object>
@@ -468,9 +514,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">start</property>
                 <property name="position">0</property>
-                <property name="secondary">False</property>
               </packing>
             </child>
             <child>

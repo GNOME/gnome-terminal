@@ -47,6 +47,12 @@ typedef enum {
   TERMINAL_CJK_WIDTH_WIDE   = 2
 } TerminalCJKWidth;
 
+typedef enum {
+  TERMINAL_THEME_VARIANT_SYSTEM = 0,
+  TERMINAL_THEME_VARIANT_LIGHT  = 1,
+  TERMINAL_THEME_VARIANT_DARK   = 2
+} TerminalThemeVariant;
+
 G_END_DECLS
 
 #endif /* TERMINAL_ENUMS_H */

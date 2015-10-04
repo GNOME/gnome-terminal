@@ -41,6 +41,12 @@
     <!-- <value nick='never' value='2'/> -->
   </enum>
 
+   <enum id='org.gnome.Terminal.ThemeVariant'>
+    <value nick='system' value='0'/>
+    <value nick='light'  value='1'/>
+    <value nick='dark'   value='2'/>
+  </enum>
+
   <enum id='org.gnome.Terminal.ExitAction'>
     <value nick='close' value='0'/>
     <value nick='restart' value='1'/>
@@ -661,6 +667,11 @@
     <key name="tab-position" enum="org.gnome.Terminal.TabPosition">
       <default>'top'</default>
       <summary>The position of the tab bar</summary>
+    </key>
+
+    <key name="theme-variant" enum="org.gnome.Terminal.ThemeVariant">
+      <default>'system'</default>
+      <summary>Which theme variant to use</summary>
     </key>
 
    <!-- <child name="profiles" schema="org.gnome.Terminal.ProfilesList" /> -->

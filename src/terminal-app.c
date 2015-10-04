@@ -56,6 +56,8 @@
 
 #define SYSTEM_PROXY_SETTINGS_SCHEMA            "org.gnome.system.proxy"
 
+#define GTK_SETTING_PREFER_DARK_THEME           "gtk-application-prefer-dark-theme"
+
 /*
  * Session state is stored entirely in the RestartCommand command line.
  *
@@ -305,6 +307,25 @@ terminal_app_encoding_list_notify_cb (GSettings   *settings,
   g_signal_emit (app, signals[ENCODING_LIST_CHANGED], 0);
 }
 
+#if GTK_CHECK_VERSION (3, 19, 0)
+static void
+terminal_app_theme_variant_changed_cb (GSettings   *settings,
+                                       const char  *key,
+                                       GtkSettings *gtk_settings)
+{
+  TerminalThemeVariant theme;
+
+  theme = g_settings_get_enum (settings, key);
+  if (theme == TERMINAL_THEME_VARIANT_SYSTEM)
+    gtk_settings_reset (gtk_settings, GTK_SETTING_PREFER_DARK_THEME);
+  else
+    g_object_set (gtk_settings,
+                  GTK_SETTING_PREFER_DARK_THEME,
+                  theme == TERMINAL_THEME_VARIANT_DARK,
+                  NULL);
+}
+#endif /* GTK+ 3.19 */
+
 /* App menu callbacks */
 
 static void
@@ -409,6 +430,20 @@ terminal_app_init (TerminalApp *app)
 
   /* Terminal global settings */
   app->global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
+
+#if GTK_CHECK_VERSION (3, 19, 0)
+  {
+  GtkSettings *gtk_settings;
+
+  gtk_settings = gtk_settings_get_default ();
+  terminal_app_theme_variant_changed_cb (app->global_settings,
+                                         TERMINAL_SETTING_THEME_VARIANT_KEY, gtk_settings);
+  g_signal_connect (app->global_settings,
+                    "changed::" TERMINAL_SETTING_THEME_VARIANT_KEY,
+                    G_CALLBACK (terminal_app_theme_variant_changed_cb),
+                    gtk_settings);
+  }
+#endif /* GTK+ 3.19 */
 
   /* Check if we need to migrate from gconf to dconf */
   maybe_migrate_settings (app);
