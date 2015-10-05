@@ -1820,6 +1820,7 @@ static void
 terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
 {
   TerminalWindowPrivate *priv = window->priv;
+  GAction *gaction;
   GtkActionGroup *action_group = priv->action_group;
   GtkAction *action;
   int num_pages, page_num;
@@ -1855,6 +1856,9 @@ terminal_window_update_tabs_menu_sensitivity (TerminalWindow *window)
   action = gtk_action_group_get_action (action_group, "TabsNext");
   gtk_action_set_sensitive (action, not_last);
 #endif
+
+  gaction = g_action_map_lookup_action (G_ACTION_MAP (window), "switch-tab");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (gaction), num_pages > 1);
 
   action = gtk_action_group_get_action (action_group, "TabsMoveLeft");
   gtk_action_set_sensitive (action, not_first);
