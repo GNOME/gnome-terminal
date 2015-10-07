@@ -755,6 +755,44 @@ bool_to_scrollbar_policy (const GValue *value,
   return g_variant_new_string (g_value_get_boolean (value) ? "always" : "never");
 }
 
+/* ATTENTION: HACK HACK HACK!
+ * GtkColorButton usability is broken. It always pops up the
+ * GtkColorChooserDialog with show-editor=FALSE, which brings
+ * up the dialogue in palette mode, when all we want is pick
+ * a colour. Since there is no way to get to the colour
+ * dialogue of the button, and the dialogue always sets
+ * show-editor=FALSE in its map anyway, we need to override
+ * the map implementation, set show-editor=TRUE and chain to
+ * the parent's map. This is reasonably safe to do since that's
+ * all the map functiondoes, and we can change this for _all_
+ * colour chooser buttons, since they are used only in our
+ * profile preferences dialogue.
+ */
+
+static void
+fixup_color_chooser_dialog_map (GtkWidget *widget)
+{
+  g_object_set (GTK_COLOR_CHOOSER_DIALOG (widget), "show-editor", TRUE, NULL);
+
+  GTK_WIDGET_CLASS (g_type_class_peek_parent (GTK_COLOR_CHOOSER_DIALOG_GET_CLASS (widget)))->map (widget);
+}
+
+static void
+fixup_color_chooser_button (void)
+{
+  static gboolean done = FALSE;
+
+  if (!done) {
+    GtkColorChooserDialogClass *klass;
+    klass = g_type_class_ref (GTK_TYPE_COLOR_CHOOSER_DIALOG);
+    g_assert (klass != NULL);
+    GTK_WIDGET_CLASS (klass)->map = fixup_color_chooser_dialog_map;
+    g_type_class_unref (klass);
+    done = TRUE;
+  }
+}
+/* END HACK */
+
 /**
  * terminal_profile_edit:
  * @profile: a #GSettings
@@ -787,6 +825,8 @@ terminal_profile_edit (GSettings  *profile,
       gtk_window_present (GTK_WINDOW (editor));
       return;
     }
+
+  fixup_color_chooser_button ();
 
   profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
 
