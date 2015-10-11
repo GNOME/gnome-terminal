@@ -37,7 +37,9 @@
 
 #include "terminal-app.h"
 #include "terminal-debug.h"
+#include "terminal-gdbus.h"
 #include "terminal-i18n.h"
+#include "terminal-defines.h"
 #include "terminal-libgsystem.h"
 
 static char *app_id = NULL;
