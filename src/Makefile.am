@@ -5,16 +5,17 @@ BUILT_SOURCES =
 bin_PROGRAMS = gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
 noinst_PROGRAMS =
+noinst_LTLIBRARIES = libterminalserver.la
 
 if WITH_NAUTILUS_EXTENSION
 nautilusextension_LTLIBRARIES = libterminal-nautilus.la
 endif # WITH_NAUTILUS_EXTENSION
 
-# Terminal server
+# Terminal server library
 
 dbusservice_DATA = org.gnome.Terminal.service
 
-gnome_terminal_server_built = \
+libterminalserver_la_built = \
 	terminal-marshal.c \
 	terminal-marshal.h \
 	terminal-type-builtins.c \
@@ -24,14 +25,13 @@ gnome_terminal_server_built = \
 	terminal-resources.c \
 	terminal-resources.h \
 	$(NULL)
-BUILT_SOURCES += $(gnome_terminal_server_built)
+BUILT_SOURCES += $(libterminalserver_la_built)
 
-gnome_terminal_server_SOURCES = \
+libterminalserver_la_SOURCES = \
 	eggshell.c \
 	eggshell.h \
 	profile-editor.c \
 	profile-editor.h \
-	server.c \
 	terminal-accels.c \
 	terminal-accels.h \
 	terminal-app.c \
@@ -80,24 +80,24 @@ gnome_terminal_server_SOURCES = \
 	terminal-window.h \
 	$(NULL)
 
-nodist_gnome_terminal_server_SOURCES = $(gnome_terminal_server_built)
+nodist_libterminalserver_la_SOURCES = $(libterminalserver_la_built)
 
-gnome_terminal_server_CPPFLAGS = \
+libterminalserver_la_CPPFLAGS = \
 	-DTERMINAL_COMPILATION \
 	-DTERM_LOCALEDIR="\"$(datadir)/locale\"" \
 	-DTERM_HELPDIR="\"$(HELP_DIR)\"" \
 	-DTERM_LIBEXECDIR="\"$(libexecdir)\"" \
 	$(AM_CPPFLAGS)
 
-gnome_terminal_server_CFLAGS = \
+libterminalserver_la_CFLAGS = \
 	$(TERM_CFLAGS) \
 	$(WARN_CFLAGS) \
 	$(AM_CFLAGS)
 
-gnome_terminal_server_LDFLAGS = \
+libterminalserver_la_LDFLAGS = \
 	$(AM_LDFLAGS)
 
-gnome_terminal_server_LDADD = \
+libterminalserver_la_LIBADD = \
 	$(TERM_LIBS)
 
 TYPES_H_FILES = \
@@ -148,6 +148,32 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 
 terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
 	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
+
+# Terminal server
+
+gnome_terminal_server_SOURCES = \
+	terminal-app.h \
+	terminal-debug.h \
+	terminal-i18n.h\
+	terminal-libgsystem.h \
+	server.c \
+	$(NULL)
+
+gnome_terminal_server_CPPFLAGS = \
+	-DTERMINAL_COMPILATION \
+	$(AM_CPPFLAGS)
+
+gnome_terminal_server_CFLAGS = \
+	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
+	$(AM_CFLAGS)
+
+gnome_terminal_server_LDFLAGS = \
+	$(AM_LDFLAGS)
+
+gnome_terminal_server_LDADD = \
+	libterminalserver.la \
+	$(TERM_LIBS)
 
 # Terminal client
 
@@ -340,12 +366,12 @@ if ENABLE_SEARCH_PROVIDER
 searchproviderdir = $(datadir)/gnome-shell/search-providers
 dist_searchprovider_DATA = gnome-terminal-search-provider.ini
 
-gnome_terminal_server_built += \
+libterminalserver_la_built += \
 	terminal-search-provider-gdbus-generated.c \
 	terminal-search-provider-gdbus-generated.h \
 	$(NULL)
 
-gnome_terminal_server_SOURCES += \
+libterminalserver_la_SOURCES += \
 	terminal-search-provider.c \
 	terminal-search-provider.h \
 	$(NULL)
