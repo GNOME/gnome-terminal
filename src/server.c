@@ -103,7 +103,8 @@ increase_rlimit_nofile (void)
 enum {
   _EXIT_FAILURE_WRONG_ID = 7,
   _EXIT_FAILURE_NO_UTF8 = 8,
-  _EXIT_FAILURE_UNSUPPORTED_LOCALE = 9
+  _EXIT_FAILURE_UNSUPPORTED_LOCALE = 9,
+  _EXIT_FAILURE_GTK_INIT = 10
 };
 
 int
@@ -169,7 +170,7 @@ main (int argc, char **argv)
   if (!gtk_init_with_args (&argc, &argv, NULL, options, NULL, &error)) {
     g_printerr ("Failed to parse arguments: %s\n", error->message);
     g_error_free (error);
-    exit (EXIT_FAILURE);
+    exit (_EXIT_FAILURE_GTK_INIT);
   }
 
   if (!increase_rlimit_nofile ()) {
