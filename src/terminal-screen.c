@@ -221,6 +221,53 @@ free_tag_data (TagData *tagdata)
 }
 
 static void
+precompile_regexes (const TerminalRegexPattern *regex_patterns,
+                    guint n_regexes,
+#ifdef WITH_PCRE2
+                    VteRegex ***regexes,
+#else
+                    GRegex ***regexes,
+#endif
+                    TerminalURLFlavour **regex_flavors)
+{
+  guint i;
+
+#ifdef WITH_PCRE2
+  *regexes = g_new0 (VteRegex*, n_regexes);
+#else
+  *regexes = g_new0 (GRegex*, n_regexes);
+#endif
+  *regex_flavors = g_new0 (TerminalURLFlavour, n_regexes);
+
+  for (i = 0; i < n_regexes; ++i)
+    {
+      GError *error = NULL;
+
+#ifdef WITH_PCRE2
+      (*regexes)[i] = vte_regex_new (regex_patterns[i].pattern, -1,
+                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK |
+                                     (regex_patterns[i].caseless ? PCRE2_CASELESS : 0),
+                                     &error);
+      g_assert_no_error (error);
+
+      if (!vte_regex_jit ((*regexes)[i], PCRE2_JIT_COMPLETE, &error) ||
+          !vte_regex_jit ((*regexes)[i], PCRE2_JIT_PARTIAL_SOFT, &error)) {
+        g_printerr ("Failed to JIT regex '%s': %s\n", regex_patterns[i].pattern, error->message);
+        g_clear_error (&error);
+      }
+#else
+      (*regexes)[i] = g_regex_new (regex_patterns[i].pattern,
+                                   G_REGEX_OPTIMIZE |
+                                   (regex_patterns[i].caseless ? G_REGEX_CASELESS : 0),
+                                   0, &error);
+      g_assert_no_error (error);
+#endif
+
+      (*regex_flavors)[i] = regex_patterns[i].flavor;
+    }
+}
+
+static void
 terminal_screen_class_enable_menu_bar_accel_notify_cb (GSettings *settings,
                                                        const char *key,
                                                        TerminalScreenClass *klass)
@@ -452,7 +499,6 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
   VteTerminalClass *terminal_class = VTE_TERMINAL_CLASS (klass);
   GSettings *settings;
-  guint i;
 
   object_class->constructed = terminal_screen_constructed;
   object_class->dispose = terminal_screen_dispose;
@@ -546,41 +592,8 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   g_type_class_add_private (object_class, sizeof (TerminalScreenPrivate));
 
-  /* Precompile the regexes */
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
-#ifdef WITH_PCRE2
-  url_regexes = g_new0 (VteRegex*, n_url_regexes);
-#else
-  url_regexes = g_new0 (GRegex*, n_url_regexes);
-#endif
-  url_regex_flavors = g_new0 (TerminalURLFlavour, n_url_regexes);
-
-  for (i = 0; i < n_url_regexes; ++i)
-    {
-      GError *error = NULL;
-
-#ifdef WITH_PCRE2
-      url_regexes[i] = vte_regex_new (url_regex_patterns[i].pattern, -1,
-                                      PCRE2_UTF | PCRE2_NO_UTF_CHECK |
-                                      (url_regex_patterns[i].caseless ? PCRE2_CASELESS : 0),
-                                      &error);
-      g_assert_no_error (error);
-
-      if (!vte_regex_jit (url_regexes[i], PCRE2_JIT_COMPLETE, &error) ||
-          !vte_regex_jit (url_regexes[i], PCRE2_JIT_PARTIAL_SOFT, &error)) {
-        g_printerr ("Failed to JIT regex '%s': %s\n", url_regex_patterns[i].pattern, error->message);
-        g_clear_error (&error);
-      }
-#else
-      url_regexes[i] = g_regex_new (url_regex_patterns[i].pattern,
-                                    G_REGEX_OPTIMIZE |
-                                    (url_regex_patterns[i].caseless ? G_REGEX_CASELESS : 0),
-                                    0, &error);
-      g_assert_no_error (error);
-#endif
-
-      url_regex_flavors[i] = url_regex_patterns[i].flavor;
-    }
+  precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
 
   /* This fixes bug #329827 */
   settings = terminal_app_get_global_settings (terminal_app_get ());
