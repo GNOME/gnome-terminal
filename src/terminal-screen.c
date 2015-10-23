@@ -75,7 +75,7 @@ typedef struct {
 typedef struct
 {
   int tag;
-  TerminalURLFlavour flavor;
+  TerminalURLFlavor flavor;
 } TagData;
 
 struct _TerminalScreenPrivate
@@ -176,7 +176,7 @@ static guint signals[LAST_SIGNAL];
 
 typedef struct {
   const char *pattern;
-  TerminalURLFlavour flavor;
+  TerminalURLFlavor flavor;
   gboolean caseless;
 } TerminalRegexPattern;
 
@@ -193,7 +193,7 @@ static VteRegex **url_regexes;
 #else
 static GRegex **url_regexes;
 #endif
-static TerminalURLFlavour *url_regex_flavors;
+static TerminalURLFlavor *url_regex_flavors;
 static guint n_url_regexes;
 
 /* See bug #697024 */
@@ -228,7 +228,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 #else
                     GRegex ***regexes,
 #endif
-                    TerminalURLFlavour **regex_flavors)
+                    TerminalURLFlavor **regex_flavors)
 {
   guint i;
 
@@ -237,7 +237,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 #else
   *regexes = g_new0 (GRegex*, n_regexes);
 #endif
-  *regex_flavors = g_new0 (TerminalURLFlavour, n_regexes);
+  *regex_flavors = g_new0 (TerminalURLFlavor, n_regexes);
 
   for (i = 0; i < n_regexes; ++i)
     {
@@ -1444,7 +1444,7 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
 
   g_object_unref (info->screen);
   g_weak_ref_clear (&info->window_weak_ref);
-  g_free (info->string);
+  g_free (info->url);
   g_slice_free (TerminalScreenPopupInfo, info);
 }
 
@@ -1481,8 +1481,8 @@ terminal_screen_popup_menu (GtkWidget *widget)
 static void
 terminal_screen_do_popup (TerminalScreen *screen,
                           GdkEventButton *event,
-                          char *matched_string,
-                          int matched_flavor)
+                          char *url,
+                          int url_flavor)
 {
   TerminalScreenPopupInfo *info;
 
@@ -1490,8 +1490,8 @@ terminal_screen_do_popup (TerminalScreen *screen,
   info->button = event->button;
   info->state = event->state & gtk_accelerator_get_default_mod_mask ();
   info->timestamp = event->time;
-  info->string = matched_string; /* adopted */
-  info->flavour = matched_flavor;
+  info->url = url; /* adopted */
+  info->url_flavor = url_flavor;
 
   g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
   terminal_screen_popup_info_unref (info);
@@ -1504,23 +1504,23 @@ terminal_screen_button_press (GtkWidget      *widget,
   TerminalScreen *screen = TERMINAL_SCREEN (widget);
   gboolean (* button_press_event) (GtkWidget*, GdkEventButton*) =
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
-  gs_free char *matched_string = NULL;
-  int matched_flavor = 0;
+  gs_free char *url = NULL;
+  int url_flavor = 0;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-  matched_string = terminal_screen_check_match (screen, (GdkEvent*)event, &matched_flavor);
+  url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
 
-  if (matched_string != NULL &&
+  if (url != NULL &&
       (event->button == 1 || event->button == 2) &&
       (state & GDK_CONTROL_MASK))
     {
       gboolean handled = FALSE;
 
       g_signal_emit (screen, signals[MATCH_CLICKED], 0,
-                     matched_string,
-                     matched_flavor,
+                     url,
+                     url_flavor,
                      state,
                      &handled);
       if (handled)
@@ -1536,15 +1536,15 @@ terminal_screen_button_press (GtkWidget      *widget,
           if (button_press_event && button_press_event (widget, event))
             return TRUE;
 
-          terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
-          matched_string = NULL; /* adopted to the popup info */
+          terminal_screen_do_popup (screen, event, url, url_flavor);
+          url = NULL; /* adopted to the popup info */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
-          terminal_screen_do_popup (screen, event, matched_string, matched_flavor);
-          matched_string = NULL; /* adopted to the popup info */
+          terminal_screen_do_popup (screen, event, url, url_flavor);
+          url = NULL; /* adopted to the popup info */
           return TRUE;
         }
     }

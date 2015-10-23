@@ -278,7 +278,7 @@ terminal_util_set_atk_name_description (GtkWidget  *widget,
 void
 terminal_util_open_url (GtkWidget *parent,
                         const char *orig_url,
-                        TerminalURLFlavour flavor,
+                        TerminalURLFlavor flavor,
                         guint32 user_time)
 {
   gs_free_error GError *error = NULL;
