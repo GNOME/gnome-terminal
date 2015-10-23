@@ -26,6 +26,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <langinfo.h>
 #include <errno.h>
 
 #include <glib.h>
@@ -950,4 +951,115 @@ terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget)
     gtk_container_foreach (GTK_CONTAINER (widget),
                            (GtkCallback) terminal_util_bind_mnemonic_label_sensitivity,
                            NULL);
+}
+
+/*
+ * "1234567", "'", 3 -> "1'234'567"
+ */
+static char *
+add_separators (const char *in, const char *sep, int groupby)
+{
+  int inlen, outlen, seplen, firstgrouplen;
+  char *out, *ret;
+
+  if (in[0] == '\0')
+    return g_strdup("");
+
+  inlen = strlen(in);
+  seplen = strlen(sep);
+  outlen = inlen + (inlen - 1) / groupby * seplen;
+  ret = out = g_malloc(outlen + 1);
+
+  firstgrouplen = (inlen - 1) % groupby + 1;
+  strncpy(out, in, firstgrouplen);
+  in += firstgrouplen;
+  out += firstgrouplen;
+
+  while (*in != '\0') {
+    strncpy(out, sep, seplen);
+    out += seplen;
+    strncpy(out, in, groupby);
+    in += groupby;
+    out += groupby;
+  }
+
+  g_assert(out - ret == outlen);
+  *out = '\0';
+  return ret;
+}
+
+/**
+ * terminal_util_number_info:
+ * @str: a dec or hex number as string
+ *
+ * Returns: (transfer full): Useful info about @str, or %NULL if it's too large
+ */
+char *
+terminal_util_number_info (const char *str)
+{
+  gs_free char *decstr = NULL;
+  gs_free char *hextmp = NULL;
+  gs_free char *hexstr = NULL;
+  gs_free char *magnitudestr = NULL;
+  unsigned long long num;
+  gboolean exact = TRUE;
+  gboolean hex = FALSE;
+  const char *thousep;
+
+  errno = 0;
+  /* Deliberately not handle octal */
+  if (str[1] == 'x' || str[1] == 'X') {
+    num = strtoull(str + 2, NULL, 16);
+    hex = TRUE;
+  } else {
+    num = strtoull(str, NULL, 10);
+  }
+  if (errno) {
+    return NULL;
+  }
+
+  /* No use in dec-hex conversion for so small numbers */
+  if (num < 10) {
+    return NULL;
+  }
+
+  /* Group the decimal digits */
+  thousep = nl_langinfo(THOUSEP);
+  if (thousep[0] != '\0') {
+    /* If thousep is nonempty, use printf's magic which can handle
+       more complex separating logics, e.g. 2+2+2+3 for some locales */
+    decstr = g_strdup_printf("%'llu", num);
+  } else {
+    /* If, however, thousep is empty, override it with a space so that we
+       do always group the digits (that's the whole point of this feature;
+       the choice of space guarantees not conflicting with the decimal separator) */
+    gs_free char *tmp = g_strdup_printf("%llu", num);
+    thousep = " ";
+    decstr = add_separators(tmp, thousep, 3);
+  }
+
+  /* Group the hex digits by 4 using the same nonempty separator */
+  hextmp = g_strdup_printf("%llx", num);
+  hexstr = add_separators(hextmp, thousep, 4);
+
+  /* Find out the human-readable magnitude, e.g. 15.99 Mi */
+  if (num >= 1024) {
+    int power = 0;
+    while (num >= 1024 * 1024) {
+      power++;
+      if (num % 1024 != 0)
+        exact = FALSE;
+      num /= 1024;
+    }
+    /* Show 2 fraction digits, always rounding downwards. Printf rounds floats to the nearest representable value,
+       so do the calculation with integers until we get 100-fold the desired value, and then switch to float. */
+    if (100 * num % 1024 != 0)
+      exact = FALSE;
+    num = 100 * num / 1024;
+    magnitudestr = g_strdup_printf(" %s %.2f %ci", exact ? "=" : "≈", (double) num / 100, "KMGTPE"[power]);
+  } else {
+    magnitudestr = g_strdup("");
+  }
+
+  return g_strdup_printf(hex ? "0x%2$s = %1$s%3$s" : "%s = 0x%s%s", decstr, hexstr, magnitudestr);
 }

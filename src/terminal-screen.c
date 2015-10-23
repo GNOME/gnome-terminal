@@ -152,6 +152,9 @@ static void terminal_screen_icon_title_changed        (VteTerminal *vte_terminal
 
 static void update_color_scheme                      (TerminalScreen *screen);
 
+static void terminal_screen_check_extra (TerminalScreen *screen,
+                                         GdkEvent       *event,
+                                         char           **number_info);
 static char* terminal_screen_check_match       (TerminalScreen            *screen,
                                                 GdkEvent                  *event,
                                                 int                  *flavor);
@@ -188,13 +191,21 @@ static const TerminalRegexPattern url_regex_patterns[] = {
   { "(?:news:|man:|info:)[-[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, TRUE },
 };
 
+static const TerminalRegexPattern extra_regex_patterns[] = {
+  { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER, FALSE },
+};
+
 #ifdef WITH_PCRE2
 static VteRegex **url_regexes;
+static VteRegex **extra_regexes;
 #else
 static GRegex **url_regexes;
+static GRegex **extra_regexes;
 #endif
 static TerminalURLFlavor *url_regex_flavors;
+static TerminalURLFlavor *extra_regex_flavors;
 static guint n_url_regexes;
+static guint n_extra_regexes;
 
 /* See bug #697024 */
 #ifndef __linux__
@@ -594,6 +605,8 @@ terminal_screen_class_init (TerminalScreenClass *klass)
 
   n_url_regexes = G_N_ELEMENTS (url_regex_patterns);
   precompile_regexes (url_regex_patterns, n_url_regexes, &url_regexes, &url_regex_flavors);
+  n_extra_regexes = G_N_ELEMENTS (extra_regex_patterns);
+  precompile_regexes (extra_regex_patterns, n_extra_regexes, &extra_regexes, &extra_regex_flavors);
 
   /* This fixes bug #329827 */
   settings = terminal_app_get_global_settings (terminal_app_get ());
@@ -1445,6 +1458,7 @@ terminal_screen_popup_info_unref (TerminalScreenPopupInfo *info)
   g_object_unref (info->screen);
   g_weak_ref_clear (&info->window_weak_ref);
   g_free (info->url);
+  g_free (info->number_info);
   g_slice_free (TerminalScreenPopupInfo, info);
 }
 
@@ -1482,7 +1496,8 @@ static void
 terminal_screen_do_popup (TerminalScreen *screen,
                           GdkEventButton *event,
                           char *url,
-                          int url_flavor)
+                          int url_flavor,
+                          char *number_info)
 {
   TerminalScreenPopupInfo *info;
 
@@ -1492,6 +1507,7 @@ terminal_screen_do_popup (TerminalScreen *screen,
   info->timestamp = event->time;
   info->url = url; /* adopted */
   info->url_flavor = url_flavor;
+  info->number_info = number_info; /* adopted */
 
   g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
   terminal_screen_popup_info_unref (info);
@@ -1506,11 +1522,13 @@ terminal_screen_button_press (GtkWidget      *widget,
     GTK_WIDGET_CLASS (terminal_screen_parent_class)->button_press_event;
   gs_free char *url = NULL;
   int url_flavor = 0;
+  gs_free char *number_info = NULL;
   guint state;
 
   state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   url = terminal_screen_check_match (screen, (GdkEvent*)event, &url_flavor);
+  terminal_screen_check_extra (screen, (GdkEvent*)event, &number_info);
 
   if (url != NULL &&
       (event->button == 1 || event->button == 2) &&
@@ -1536,15 +1554,17 @@ terminal_screen_button_press (GtkWidget      *widget,
           if (button_press_event && button_press_event (widget, event))
             return TRUE;
 
-          terminal_screen_do_popup (screen, event, url, url_flavor);
+          terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
           url = NULL; /* adopted to the popup info */
+          number_info = NULL; /* detto */
           return TRUE;
         }
       else if (!(event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)))
         {
           /* do popup on shift+right-click */
-          terminal_screen_do_popup (screen, event, url, url_flavor);
+          terminal_screen_do_popup (screen, event, url, url_flavor, number_info);
           url = NULL; /* adopted to the popup info */
+          number_info = NULL; /* detto */
           return TRUE;
         }
     }
@@ -1904,6 +1924,55 @@ terminal_screen_check_match (TerminalScreen *screen,
     }
 
   g_free (match);
+  return NULL;
+}
+
+static void
+terminal_screen_check_extra (TerminalScreen *screen,
+                             GdkEvent       *event,
+                             char           **number_info)
+{
+  guint i;
+  char **matches;
+  gboolean flavor_number_found = FALSE;
+
+  matches = g_newa (char *, n_extra_regexes);
+
+  if (
+#ifdef WITH_PCRE2
+      vte_terminal_event_check_regex_simple(
+#else
+      vte_terminal_event_check_gregex_simple(
+#endif
+                                             VTE_TERMINAL (screen),
+                                             event,
+                                             extra_regexes,
+                                             n_extra_regexes,
+                                             0,
+                                             matches))
+    {
+      for (i = 0; i < n_extra_regexes; i++)
+        {
+          if (matches[i] != NULL)
+            {
+              /* Store the first match for each flavor, free all the others */
+              switch (extra_regex_flavors[i])
+                {
+                case FLAVOR_NUMBER:
+                  if (!flavor_number_found)
+                    {
+                      *number_info = terminal_util_number_info (matches[i]);
+                      flavor_number_found = TRUE;
+                    }
+                  g_free (matches[i]);
+                  break;
+                default:
+                  g_free (matches[i]);
+                }
+            }
+        }
+    }
+
   return NULL;
 }
 

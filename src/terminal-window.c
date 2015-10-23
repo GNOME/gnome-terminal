@@ -2051,7 +2051,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   TerminalScreen *screen = info->screen;
   GtkWidget *popup_menu;
   GtkAction *action;
-  gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link;
+  gboolean can_paste, can_paste_uris, show_link, show_email_link, show_call_link, show_number_info;
 
   window = terminal_screen_popup_info_ref_window (info);
   if (window == NULL ||
@@ -2072,6 +2072,7 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   show_link = info->url != NULL && (info->url_flavor == FLAVOR_AS_IS || info->url_flavor == FLAVOR_DEFAULT_TO_HTTP);
   show_email_link = info->url != NULL && info->url_flavor == FLAVOR_EMAIL;
   show_call_link = info->url != NULL && info->url_flavor == FLAVOR_VOIP_CALL;
+  show_number_info = info->number_info != NULL;
 
   action = gtk_action_group_get_action (priv->action_group, "PopupSendEmail");
   gtk_action_set_visible (action, show_email_link);
@@ -2085,6 +2086,10 @@ popup_clipboard_targets_received_cb (GtkClipboard *clipboard,
   gtk_action_set_visible (action, show_link);
   action = gtk_action_group_get_action (priv->action_group, "PopupCopyLinkAddress");
   gtk_action_set_visible (action, show_link);
+  action = gtk_action_group_get_action (priv->action_group, "PopupNumberInfo");
+  gtk_action_set_label (action, info->number_info);
+  gtk_action_set_sensitive (action, FALSE);
+  gtk_action_set_visible (action, show_number_info);
 
   action = gtk_action_group_get_action (priv->action_group, "PopupCopy");
   gtk_action_set_sensitive (action, vte_terminal_get_has_selection (VTE_TERMINAL (screen)));
@@ -2604,6 +2609,9 @@ terminal_window_init (TerminalWindow *window)
       { "PopupCopyLinkAddress", NULL, N_("_Copy Link Address"), NULL,
         NULL,
         G_CALLBACK (popup_copy_url_callback) },
+      { "PopupNumberInfo", NULL, "", NULL,
+        NULL,
+        NULL },
       { "PopupTerminalProfiles", NULL, N_("P_rofiles") },
       { "PopupCopy", "edit-copy", N_("Copy"), "",
         NULL,

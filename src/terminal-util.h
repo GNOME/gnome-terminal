@@ -89,6 +89,8 @@ void terminal_g_settings_set_rgba_palette (GSettings      *settings,
 
 void terminal_util_bind_mnemonic_label_sensitivity (GtkWidget *widget);
 
+char *terminal_util_number_info (const char *str);
+
 G_END_DECLS
 
 #endif /* TERMINAL_UTIL_H */

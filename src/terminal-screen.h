@@ -30,7 +30,8 @@ typedef enum {
   FLAVOR_AS_IS,
   FLAVOR_DEFAULT_TO_HTTP,
   FLAVOR_VOIP_CALL,
-  FLAVOR_EMAIL
+  FLAVOR_EMAIL,
+  FLAVOR_NUMBER,
 } TerminalURLFlavor;
 
 /* Forward decls */
@@ -139,6 +140,7 @@ struct _TerminalScreenPopupInfo {
   TerminalScreen *screen;
   char *url;
   TerminalURLFlavor url_flavor;
+  char *number_info;
   guint button;
   guint state;
   guint32 timestamp;
