@@ -56,6 +56,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-mdi-container.h \
 	terminal-notebook.c \
 	terminal-notebook.h \
+	terminal-pcre2.h \
 	terminal-prefs.c \
 	terminal-prefs.h \
 	terminal-profiles-list.c \
