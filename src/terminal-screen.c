@@ -1972,8 +1972,6 @@ terminal_screen_check_extra (TerminalScreen *screen,
             }
         }
     }
-
-  return NULL;
 }
 
 /**
