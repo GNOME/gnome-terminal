@@ -66,10 +66,14 @@
 #define KEY_NEW_WINDOW          "new-window"
 #define KEY_NEXT_TAB            "next-tab"
 #define KEY_PASTE               "paste"
+#define KEY_PREFERENCES         "preferences"
 #define KEY_PREV_TAB            "prev-tab"
+#define KEY_PROFILE_PREFERENCES "profile-preferences"
+#define KEY_READ_ONLY           "read-only"
 #define KEY_RESET_AND_CLEAR     "reset-and-clear"
 #define KEY_RESET               "reset"
 #define KEY_SAVE_CONTENTS       "save-contents"
+#define KEY_SELECT_ALL          "select-all"
 #define KEY_TOGGLE_MENUBAR      "toggle-menubar"
 #define KEY_ZOOM_IN             "zoom-in"
 #define KEY_ZOOM_NORMAL         "zoom-normal"
@@ -95,10 +99,14 @@
 #define ACCEL_PATH_KEY_NEW_WINDOW           ACCEL_PATH_ROOT "FileNewWindow"
 #define ACCEL_PATH_KEY_NEXT_TAB             ACCEL_PATH_ROOT "TabsNext"
 #define ACCEL_PATH_KEY_PASTE                ACCEL_PATH_ROOT "EditPaste"
+#define ACCEL_PATH_KEY_PREFERENCES          ACCEL_PATH_ROOT "EditPreferences"
 #define ACCEL_PATH_KEY_PREV_TAB             ACCEL_PATH_ROOT "TabsPrevious"
+#define ACCEL_PATH_KEY_PROFILE_PREFERENCES  ACCEL_PATH_ROOT "EditCurrentProfile"
+#define ACCEL_PATH_KEY_READ_ONLY            ACCEL_PATH_ROOT "TerminalReadOnly"
 #define ACCEL_PATH_KEY_RESET                ACCEL_PATH_ROOT "TerminalReset"
 #define ACCEL_PATH_KEY_RESET_AND_CLEAR      ACCEL_PATH_ROOT "TerminalResetClear"
 #define ACCEL_PATH_KEY_SAVE_CONTENTS        ACCEL_PATH_ROOT "FileSaveContents"
+#define ACCEL_PATH_KEY_SELECT_ALL           ACCEL_PATH_ROOT "EditSelectAll"
 #define ACCEL_PATH_KEY_TOGGLE_MENUBAR       ACCEL_PATH_ROOT "ViewMenubar"
 #define ACCEL_PATH_KEY_ZOOM_IN              ACCEL_PATH_ROOT "ViewZoomIn"
 #define ACCEL_PATH_KEY_ZOOM_NORMAL          ACCEL_PATH_ROOT "ViewZoom100"
@@ -156,8 +164,11 @@ static KeyEntry file_entries[] = {
 };
 
 static KeyEntry edit_entries[] = {
-  ENTRY (N_("Copy"),  KEY_COPY,  "copy",  NULL, NULL      ),
-  ENTRY (N_("Paste"), KEY_PASTE, "paste", "s",  "'normal'"),
+  ENTRY (N_("Copy"),                KEY_COPY,                "copy",         NULL, NULL      ),
+  ENTRY (N_("Paste"),               KEY_PASTE,               "paste",        "s",  "'normal'"),
+  ENTRY (N_("Select All"),          KEY_SELECT_ALL,          "select-all",   NULL, NULL      ),
+  ENTRY (N_("Preferences"),         KEY_PREFERENCES,         "preferences",  NULL, NULL      ),
+  ENTRY (N_("Profile Preferences"), KEY_PROFILE_PREFERENCES, "edit-profile", NULL, NULL      ),
 };
 
 static KeyEntry find_entries[] = {
@@ -176,6 +187,7 @@ static KeyEntry view_entries[] = {
 };
 
 static KeyEntry terminal_entries[] = {
+  ENTRY (N_("Read-Only"),       KEY_READ_ONLY,          "read-only", NULL, NULL   ),
   ENTRY (N_("Reset"),           KEY_RESET,              "reset",     "b",  "false"),
   ENTRY (N_("Reset and Clear"), KEY_RESET_AND_CLEAR,    "reset",     "b",  "true" ),
 };
