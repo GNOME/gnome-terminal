@@ -158,6 +158,8 @@ static void terminal_screen_system_font_changed_cb (GSettings *,
 static gboolean terminal_screen_popup_menu (GtkWidget *widget);
 static gboolean terminal_screen_button_press (GtkWidget *widget,
                                               GdkEventButton *event);
+static void terminal_screen_hierarchy_changed (GtkWidget *widget,
+                                               GtkWidget *previous_toplevel);
 static void terminal_screen_child_exited  (VteTerminal *terminal,
                                            int status);
 
@@ -606,6 +608,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
   widget_class->drag_data_received = terminal_screen_drag_data_received;
   widget_class->button_press_event = terminal_screen_button_press;
   widget_class->popup_menu = terminal_screen_popup_menu;
+  widget_class->hierarchy_changed = terminal_screen_hierarchy_changed;
 
   terminal_class->child_exited = terminal_screen_child_exited;
 
@@ -1148,6 +1151,32 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
 }
 
 static void
+update_toplevel_transparency (TerminalScreen *screen)
+{
+  GtkWidget *widget = GTK_WIDGET (screen);
+  TerminalScreenPrivate *priv = screen->priv;
+  GSettings *profile = priv->profile;
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (toplevel != NULL && gtk_widget_is_toplevel (toplevel))
+    {
+      gboolean transparent;
+
+      transparent = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_TRANSPARENT_BACKGROUND);
+      if (gtk_widget_get_app_paintable (toplevel) != transparent)
+        {
+          gtk_widget_set_app_paintable (toplevel, transparent);
+
+          /* The opaque region of the toplevel isn't updated until the toplevel is allocated;
+           * set_app_paintable() doesn't force an allocation, so do that manually.
+           */
+          gtk_widget_queue_resize (toplevel);
+        }
+    }
+}
+
+static void
 update_color_scheme (TerminalScreen *screen)
 {
   GtkWidget *widget = GTK_WIDGET (screen);
@@ -1241,9 +1270,7 @@ update_color_scheme (TerminalScreen *screen)
   vte_terminal_set_color_highlight (VTE_TERMINAL (screen), highlight_bgp);
   vte_terminal_set_color_highlight_foreground (VTE_TERMINAL (screen), highlight_fgp);
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (screen));
-  if (toplevel != NULL && gtk_widget_is_toplevel (toplevel))
-    gtk_widget_set_app_paintable (toplevel, transparent);
+  update_toplevel_transparency (screen);
 }
 
 static void
@@ -1783,6 +1810,13 @@ terminal_screen_do_popup (TerminalScreen *screen,
 
   g_signal_emit (screen, signals[SHOW_POPUP_MENU], 0, info);
   terminal_screen_popup_info_unref (info);
+}
+
+static void
+terminal_screen_hierarchy_changed (GtkWidget *widget,
+                                   GtkWidget *previous_toplevel)
+{
+  update_toplevel_transparency (TERMINAL_SCREEN (widget));
 }
 
 static gboolean

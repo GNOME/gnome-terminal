@@ -2009,15 +2009,21 @@ terminal_window_draw (GtkWidget *widget,
 {
   if (gtk_widget_get_app_paintable (widget))
     {
+      GtkAllocation child_allocation;
       GtkStyleContext *context;
-      int width;
-      int height;
+      GtkWidget *child;
+
+      /* Get the *child* allocation, so we don't overwrite window borders */
+      child = gtk_bin_get_child (GTK_BIN (widget));
+      gtk_widget_get_allocation (child, &child_allocation);
 
       context = gtk_widget_get_style_context (widget);
-      width = gtk_widget_get_allocated_width (widget);
-      height = gtk_widget_get_allocated_height (widget);
-      gtk_render_background (context, cr, 0, 0, width, height);
-      gtk_render_frame (context, cr, 0, 0, width, height);
+      gtk_render_background (context, cr,
+                             child_allocation.x, child_allocation.y,
+                             child_allocation.width, child_allocation.height);
+      gtk_render_frame (context, cr,
+                        child_allocation.x, child_allocation.y,
+                        child_allocation.width, child_allocation.height);
     }
 
   return GTK_WIDGET_CLASS (terminal_window_parent_class)->draw (widget, cr);
