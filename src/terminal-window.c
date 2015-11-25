@@ -26,9 +26,6 @@
 #include <glib/gi18n.h>
 
 #include <gtk/gtk.h>
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
 #include <uuid.h>
 
 #include "terminal-app.h"
@@ -2314,25 +2311,6 @@ terminal_window_state_event (GtkWidget            *widget,
   return FALSE;
 }
 
-#ifdef GDK_WINDOWING_X11
-static void
-terminal_window_window_manager_changed_cb (GdkScreen *screen,
-                                           TerminalWindow *window)
-{
-  TerminalWindowPrivate *priv = window->priv;
-  GtkAction *action;
-  gboolean supports_fs;
-
-  if (GDK_IS_X11_SCREEN (screen))
-    supports_fs = gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_WM_STATE_FULLSCREEN", FALSE));
-  else
-    supports_fs = FALSE;
-
-  action = gtk_action_group_get_action (priv->action_group, "ViewFullscreen");
-  gtk_action_set_sensitive (action, supports_fs);
-}
-#endif /* GDK_WINDOWING_X11 */
-
 static void
 terminal_window_screen_update (TerminalWindow *window,
                                GdkScreen *screen)
@@ -2340,14 +2318,6 @@ terminal_window_screen_update (TerminalWindow *window,
   GSettings *settings;
   GtkSettings *gtk_settings;
   char *value;
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SCREEN (screen)) {
-    terminal_window_window_manager_changed_cb (screen, window);
-    g_signal_connect (screen, "window-manager-changed",
-                      G_CALLBACK (terminal_window_window_manager_changed_cb), window);
-  }
-#endif
 
   if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (screen), "GT::HasSettingsConnection")))
     return;
@@ -2397,15 +2367,6 @@ terminal_window_screen_changed (GtkWidget *widget,
   screen = gtk_widget_get_screen (widget);
   if (previous_screen == screen)
     return;
-
-#ifdef GDK_WINDOWING_X11
-  if (previous_screen && GDK_IS_X11_SCREEN (previous_screen))
-    {
-      g_signal_handlers_disconnect_by_func (previous_screen,
-                                            G_CALLBACK (terminal_window_window_manager_changed_cb),
-                                            window);
-    }
-#endif
 
   if (!screen)
     return;
@@ -2873,7 +2834,6 @@ terminal_window_dispose (GObject *object)
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
-  GdkScreen *screen;
   GtkClipboard *clipboard;
   GSList *list, *l;
 
@@ -2922,16 +2882,6 @@ terminal_window_dispose (GObject *object)
   g_signal_handlers_disconnect_by_func (clipboard,
                                         G_CALLBACK (update_edit_menu),
                                         window);
-
-  screen = gtk_widget_get_screen (GTK_WIDGET (object));
-#ifdef GDK_WINDOWING_X11
-  if (screen && GDK_IS_X11_SCREEN (screen))
-    {
-      g_signal_handlers_disconnect_by_func (screen,
-                                            G_CALLBACK (terminal_window_window_manager_changed_cb),
-                                            window);
-    }
-#endif
 
   G_OBJECT_CLASS (terminal_window_parent_class)->dispose (object);
 }
