@@ -222,20 +222,6 @@ handle_get_subsearch_result_set_cb (TerminalSearchProvider2  *skeleton,
 }
 
 static gboolean
-text_is_selected_cb (VteTerminal *terminal,
-                     glong        column,
-                     glong        row,
-                     gpointer     user_data)
-{
-  glong cursor_row;
-
-  vte_terminal_get_cursor_position (terminal, NULL, &cursor_row);
-  if (cursor_row - 1 <= row && row <= cursor_row + 1)
-    return TRUE;
-  return FALSE;
-}
-
-static gboolean
 handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
                             GDBusMethodInvocation    *invocation,
                             const char *const        *results,
@@ -265,8 +251,18 @@ handle_get_result_metas_cb (TerminalSearchProvider2  *skeleton,
         }
 
       title = terminal_screen_get_title (screen);
-      if (terminal_screen_has_foreground_process (screen, NULL, NULL))
-        text = vte_terminal_get_text (VTE_TERMINAL (screen), text_is_selected_cb, NULL, NULL);
+      if (terminal_screen_has_foreground_process (screen, NULL, NULL)) {
+        VteTerminal *terminal = VTE_TERMINAL (screen);
+        long cursor_row;
+
+        vte_terminal_get_cursor_position (terminal, NULL, &cursor_row);
+        text = vte_terminal_get_text_range (terminal,
+                                            MAX(0, cursor_row - 1),
+                                            0,
+                                            cursor_row + 1,
+                                            vte_terminal_get_column_count (terminal) - 1,
+                                            NULL, NULL, NULL);
+      }
 
       g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
       g_variant_builder_add (&builder, "{sv}", "id", g_variant_new_string (results[i]));
