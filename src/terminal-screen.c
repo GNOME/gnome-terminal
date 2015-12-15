@@ -1937,6 +1937,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
   gboolean flavor_number_found = FALSE;
 
   matches = g_newa (char *, n_extra_regexes);
+  memset(matches, 0, sizeof(char*) * n_extra_regexes);
 
   if (
 #ifdef WITH_PCRE2
