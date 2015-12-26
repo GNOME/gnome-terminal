@@ -269,6 +269,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 #else
       (*regexes)[i] = g_regex_new (regex_patterns[i].pattern,
                                    G_REGEX_OPTIMIZE |
+                                   G_REGEX_MULTILINE |
                                    (regex_patterns[i].caseless ? G_REGEX_CASELESS : 0),
                                    0, &error);
       g_assert_no_error (error);
