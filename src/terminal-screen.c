@@ -256,7 +256,7 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 
 #ifdef WITH_PCRE2
       (*regexes)[i] = vte_regex_new (regex_patterns[i].pattern, -1,
-                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK |
+                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE |
                                      (regex_patterns[i].caseless ? PCRE2_CASELESS : 0),
                                      &error);
       g_assert_no_error (error);
