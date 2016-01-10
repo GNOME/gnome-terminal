@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2001 Havoc Pennington
  * Copyright © 2002 Red Hat, Inc.
@@ -2217,7 +2218,7 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window)
   /* Create the NewTerminal button */
   action = gtk_action_group_get_action (priv->action_group, "FileNewTab");
 
-  button = terminal_icon_button_new ("list-add");
+  button = terminal_icon_button_new ("tab-new-symbolic");
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button), action);
   gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
   gtk_widget_show (button);
