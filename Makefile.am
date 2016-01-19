@@ -25,7 +25,10 @@ desktop-file-validate: $(nodist_desktop_DATA)
 	done
 
 appdatadir = $(datadir)/appdata
-appdata_in_files = org.gnome.Terminal.appdata.xml.in
+appdata_in_files = \
+	org.gnome.Terminal.appdata.xml.in \
+	org.gnome.Terminal.Nautilus.appdata.xml.in \
+	$(NULL)
 nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
 
