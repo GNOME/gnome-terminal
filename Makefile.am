@@ -24,12 +24,20 @@ desktop-file-validate: $(nodist_desktop_DATA)
 		$(DESKTOP_FILE_VALIDATE) $(DESKTOP_FILE_VALIDATE_FLAGS) $$f; \
 	done
 
-appdatadir = $(datadir)/appdata
 appdata_in_files = \
 	org.gnome.Terminal.appdata.xml.in \
 	org.gnome.Terminal.Nautilus.appdata.xml.in \
 	$(NULL)
-nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+
+appdatadir = $(datadir)/appdata
+nodist_appdata_DATA = \
+	org.gnome.Terminal.appdata.xml \
+	$(NULL)
+
+if WITH_NAUTILUS_EXTENSION
+nodist_appdata_DATA += org.gnome.Terminal.Nautilus.appdata.xml
+endif
+
 @INTLTOOL_XML_RULE@
 
 check-local: desktop-file-validate
