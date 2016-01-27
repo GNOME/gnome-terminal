@@ -755,6 +755,8 @@ bool_to_scrollbar_policy (const GValue *value,
   return g_variant_new_string (g_value_get_boolean (value) ? "always" : "never");
 }
 
+#if !GTK_CHECK_VERSION (3, 19, 6)
+
 /* ATTENTION: HACK HACK HACK!
  * GtkColorButton usability is broken. It always pops up the
  * GtkColorChooserDialog with show-editor=FALSE, which brings
@@ -791,7 +793,8 @@ fixup_color_chooser_button (void)
     done = TRUE;
   }
 }
-/* END HACK */
+
+#endif /* GTK+ < 3.19.6 HACK */
 
 /**
  * terminal_profile_edit:
@@ -826,7 +829,9 @@ terminal_profile_edit (GSettings  *profile,
       return;
     }
 
+#if !GTK_CHECK_VERSION (3, 19, 6)
   fixup_color_chooser_button ();
+#endif
 
   profiles_list = terminal_app_get_profiles_list (terminal_app_get ());
 
@@ -878,6 +883,10 @@ terminal_profile_edit (GSettings  *profile,
 
       g_snprintf (name, sizeof (name), "palette-colorpicker-%u", i + 1);
       w = (GtkWidget *) gtk_builder_get_object  (builder, name);
+
+#if GTK_CHECK_VERSION (3, 19, 6)
+      g_object_set (w, "show-editor", TRUE, NULL);
+#endif
 
       g_object_set_data (G_OBJECT (w), "palette-entry-index", GUINT_TO_POINTER (i));
 
