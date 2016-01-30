@@ -992,6 +992,38 @@ terminal_profile_edit (GSettings  *profile,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
+  g_settings_bind (profile, TERMINAL_PROFILE_SET_CURSOR_COLORS_KEY,
+                   gtk_builder_get_object (builder,
+                                           "set-cursor-colors-checkbutton"),
+                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  g_settings_bind (profile, TERMINAL_PROFILE_SET_CURSOR_COLORS_KEY,
+                   gtk_builder_get_object (builder,
+                                           "cursor-background-colorpicker-box"),
+                   "sensitive", 
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind (profile, TERMINAL_PROFILE_SET_CURSOR_COLORS_KEY,
+                   gtk_builder_get_object (builder,
+                                           "cursor-foreground-colorpicker-box"),
+                   "sensitive", 
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY,
+                                gtk_builder_get_object (builder,
+                                                        "cursor-background-colorpicker"),
+                                "rgba",
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
+                                NULL, NULL);
+  g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY,
+                                gtk_builder_get_object (builder,
+                                                        "cursor-foreground-colorpicker"),
+                                "rgba",
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
+                                NULL, NULL);
   g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_SHAPE_KEY,
                                 gtk_builder_get_object (builder,
                                                         "cursor-shape-combobox"),

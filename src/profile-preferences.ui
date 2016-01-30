@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun Feb  1 10:28:05 2015 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="lower">16</property>
     <property name="upper">256</property>
@@ -22,6 +22,24 @@
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">100</property>
+  </object>
+  <object class="GtkListStore" id="cjk-ambiguous-width-model">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Narrow</col>
+        <col id="1">narrow</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Wide</col>
+        <col id="1">wide</col>
+      </row>
+    </data>
   </object>
   <object class="GtkListStore" id="model1">
     <columns>
@@ -126,31 +144,12 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="cjk-ambiguous-width-model">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" comments="ambiguous-width characers are">Narrow</col>
-        <col id="1" translatable="no">narrow</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" comments="ambiguous-width characers are">Wide</col>
-        <col id="1" translatable="no">wide</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkWindow" id="profile-editor-dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="border_width">0</property>
     <property name="title" translatable="yes">Profile Editor</property>
     <property name="role">gnome-terminal-profile-editor</property>
     <property name="resizable">False</property>
-    <property name="type_hint">normal</property>
     <child>
       <object class="GtkBox" id="dialogue-content-box">
         <property name="visible">True</property>
@@ -181,6 +180,33 @@
                     <property name="column_spacing">12</property>
                     <property name="row_spacing">6</property>
                     <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
                       <object class="GtkEntry" id="profile-name-entry">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
@@ -189,23 +215,19 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">0</property>
-                        <property name="bottom_attach">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="profile-name-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Profile name:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">profile-name-entry</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="top_attach">0</property>
-                        <property name="bottom_attach">1</property>
                         <property name="x_options">GTK_FILL</property>
                       </packing>
                     </child>
@@ -213,12 +235,10 @@
                       <object class="GtkLabel" id="profile-uuid-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Profile ID:</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                       </packing>
@@ -227,8 +247,8 @@
                       <object class="GtkLabel" id="profile-uuid">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="selectable">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -241,14 +261,12 @@
                       <object class="GtkLabel" id="default-size-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Initial terminal si_ze:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">default-size-columns-spinbutton</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                       </packing>
@@ -334,6 +352,7 @@
                         <property name="label" translatable="yes">Rese_t</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
                       </object>
                       <packing>
@@ -347,14 +366,12 @@
                       <object class="GtkLabel" id="label480">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Cursor _shape:</property>
                         <property name="use_underline">True</property>
                         <property name="mnemonic_widget">cursor-shape-combobox</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
                       </packing>
@@ -385,9 +402,10 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
                         <property name="right_attach">4</property>
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
@@ -395,18 +413,16 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="text-appearance-heading">
-                        <property name="margin_top">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
+                        <property name="margin_top">12</property>
                         <property name="label" translatable="yes">Text Appearance</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
                       </packing>
@@ -414,15 +430,15 @@
                     <child>
                       <object class="GtkCheckButton" id="allow-bold-checkbutton">
                         <property name="label" translatable="yes">_Allow bold text</property>
-                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">6</property>
                         <property name="bottom_attach">7</property>
                       </packing>
@@ -430,15 +446,15 @@
                     <child>
                       <object class="GtkCheckButton" id="rewrap-on-resize-checkbutton">
                         <property name="label" translatable="yes">_Rewrap on resize</property>
-                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">7</property>
                         <property name="bottom_attach">8</property>
                       </packing>
@@ -446,15 +462,15 @@
                     <child>
                       <object class="GtkCheckButton" id="custom-font-checkbutton">
                         <property name="label" translatable="yes">_Custom font</property>
-                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">False</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">8</property>
                         <property name="bottom_attach">9</property>
                       </packing>
@@ -465,6 +481,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="focus_on_click">False</property>
+                        <property name="font">Sans 12</property>
                         <property name="title" translatable="yes">Choose A Terminal Font</property>
                         <property name="use_font">True</property>
                         <property name="use_size">True</property>
@@ -524,6 +541,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -538,6 +557,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -559,11 +580,11 @@
                                       <object class="GtkLabel" id="custom-command-entry-label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Custom co_mmand:</property>
                                         <property name="use_underline">True</property>
                                         <property name="justify">center</property>
                                         <property name="mnemonic_widget">custom-command-entry</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -600,11 +621,11 @@
                                   <object class="GtkLabel" id="exit-action-combobox-label">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="xalign">0</property>
                                     <property name="label" translatable="yes">When command _exits:</property>
                                     <property name="use_underline">True</property>
                                     <property name="justify">center</property>
                                     <property name="mnemonic_widget">exit-action-combobox</property>
+                                    <property name="xalign">0</property>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -645,6 +666,11 @@
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -686,8 +712,8 @@
                       <object class="GtkLabel" id="label39">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Text and Background Color</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -715,6 +741,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">False</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -737,11 +765,11 @@
                                       <object class="GtkLabel" id="color-scheme-combobox-label">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Built-in sche_mes:</property>
                                         <property name="use_underline">True</property>
                                         <property name="justify">center</property>
                                         <property name="mnemonic_widget">color-scheme-combobox</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -784,11 +812,11 @@
                                           <object class="GtkLabel" id="foreground-colorpicker-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">_Text color:</property>
                                             <property name="use_underline">True</property>
                                             <property name="justify">center</property>
                                             <property name="mnemonic_widget">foreground-colorpicker</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_FILL</property>
@@ -799,11 +827,11 @@
                                           <object class="GtkLabel" id="background-colorpicker-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">_Background color:</property>
                                             <property name="use_underline">True</property>
                                             <property name="justify">center</property>
                                             <property name="mnemonic_widget">background-colorpicker</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -860,10 +888,10 @@
                                         <child>
                                           <object class="GtkLabel" id="label481">
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">_Underline color:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">underline-colorpicker</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="top_attach">1</property>
@@ -878,7 +906,9 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
+                                            <property name="xalign">0.5</property>
                                             <property name="active">True</property>
+                                            <property name="draw_indicator">False</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -893,10 +923,10 @@
                                           <object class="GtkLabel" id="bold-colorpicker-label">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
-                                            <property name="xalign">0</property>
                                             <property name="label" translatable="yes">Bol_d color:</property>
                                             <property name="use_underline">True</property>
                                             <property name="mnemonic_widget">bold-colorpicker</property>
+                                            <property name="xalign">0</property>
                                           </object>
                                           <packing>
                                             <property name="x_options">GTK_SHRINK | GTK_FILL</property>
@@ -910,7 +940,9 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
+                                            <property name="xalign">0.5</property>
                                             <property name="active">True</property>
+                                            <property name="draw_indicator">False</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -1000,6 +1032,151 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkLabel" id="label1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Cursor Color</property>
+                        <property name="ellipsize">end</property>
+                        <property name="xalign">0</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkAlignment" id="alignment1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <object class="GtkVBox" id="vbox1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkCheckButton" id="set-cursor-colors-checkbutton">
+                                <property name="label" translatable="yes">Set _cursor colors</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">False</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkHBox" id="hbox1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="cursor-background-colorpicker-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Cursor bac_kground color:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="justify">center</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="cursor-background-colorpicker-box">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkColorButton" id="cursor-background-colorpicker">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="title" translatable="yes">Choose Cursor Background Color</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="cursor-foreground-colorpicker-label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">end</property>
+                                    <property name="label" translatable="yes">Cursor _foreground color:</property>
+                                    <property name="use_underline">True</property>
+                                    <property name="justify">center</property>
+                                    <property name="xalign">0</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox" id="cursor-foreground-colorpicker-box">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkColorButton" id="cursor-foreground-colorpicker">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="title" translatable="yes">Choose Cursor Foreground Color</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1016,8 +1193,8 @@
                       <object class="GtkLabel" id="label42">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Palette</property>
+                        <property name="xalign">0</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -1045,11 +1222,11 @@
                               <object class="GtkLabel" id="palette-optionmenu-label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Built-in _schemes:</property>
                                 <property name="use_underline">True</property>
                                 <property name="justify">center</property>
                                 <property name="mnemonic_widget">palette-combobox</property>
+                                <property name="xalign">0</property>
                               </object>
                               <packing>
                                 <property name="top_attach">1</property>
@@ -1316,9 +1493,9 @@
                               <object class="GtkLabel" id="label44">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
                                 <property name="label" translatable="yes">&lt;b&gt;Note:&lt;/b&gt; Terminal applications have these colors available to them.</property>
                                 <property name="justify">center</property>
+                                <property name="xalign">0</property>
                                 <attributes>
                                   <attribute name="style" value="italic"/>
                                   <attribute name="size" value="0"/>
@@ -1334,12 +1511,12 @@
                               <object class="GtkLabel" id="label43">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="yalign">0</property>
                                 <property name="label" translatable="yes">Color p_alette:</property>
                                 <property name="use_underline">True</property>
                                 <property name="justify">center</property>
                                 <property name="mnemonic_widget">palette-colorpicker-1</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
                               </object>
                               <packing>
                                 <property name="top_attach">2</property>
@@ -1413,16 +1590,22 @@
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
                 <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="scroll-on-keystroke-checkbutton">
                     <property name="label" translatable="yes">Scroll on _keystroke</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
@@ -1436,10 +1619,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
@@ -1453,10 +1636,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
@@ -1486,10 +1669,10 @@
                       <object class="GtkLabel" id="scrollback-lines-spinbutton-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">lines</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">scrollback-lines-spinbutton</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1503,9 +1686,14 @@
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="x_options">GTK_EXPAND | GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="scrollbar-checkbutton">
@@ -1514,12 +1702,10 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">False</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="bottom_attach">1</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
                     <property name="y_options"/>
                   </packing>
@@ -1551,10 +1737,10 @@
                   <object class="GtkLabel" id="label51">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="xalign">0</property>
-                    <property name="yalign">7.4505801528346183e-09</property>
                     <property name="label" translatable="yes">&lt;b&gt;Note:&lt;/b&gt; These options may cause some applications to behave incorrectly.  They are only here to allow you to work around certain applications and operating systems that expect different terminal behavior.</property>
                     <property name="wrap">True</property>
+                    <property name="xalign">0</property>
+                    <property name="yalign">7.4505801528346183e-09</property>
                     <attributes>
                       <attribute name="style" value="italic"/>
                       <attribute name="size" value="0"/>
@@ -1578,11 +1764,11 @@
                       <object class="GtkLabel" id="delete-binding-combobox-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Delete key generates:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">delete-binding-combobox</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="top_attach">1</property>
@@ -1595,11 +1781,11 @@
                       <object class="GtkLabel" id="backspace-binding-combobox-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Backspace key generates:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">backspace-binding-combobox</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
@@ -1650,9 +1836,9 @@
                       <object class="GtkLabel" id="encoding-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">_Encoding:</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="top_attach">2</property>
@@ -1679,11 +1865,11 @@
                       <object class="GtkLabel" id="cjk-ambiguous-width-label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Ambiguous-_width characters:</property>
                         <property name="use_underline">True</property>
                         <property name="justify">center</property>
                         <property name="mnemonic_widget">cjk-ambiguous-width-combobox</property>
+                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="top_attach">3</property>
@@ -1697,7 +1883,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">cjk-ambiguous-width-model</property>
-                        <property name="id-column">1</property>
+                        <property name="id_column">1</property>
                         <child>
                           <object class="GtkCellRendererText" id="cjk-ambiguous-width-renderer"/>
                           <attributes>
@@ -1790,9 +1976,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">start</property>
                 <property name="position">0</property>
-                <property name="secondary">False</property>
               </packing>
             </child>
             <child>
