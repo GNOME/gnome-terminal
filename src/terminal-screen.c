@@ -823,6 +823,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       prop_name == I_(TERMINAL_PROFILE_BACKGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_BOLD_COLOR_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_SET_CURSOR_COLORS_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_PALETTE_KEY))
     update_color_scheme (screen);
 
@@ -886,8 +889,8 @@ update_color_scheme (TerminalScreen *screen)
   GSettings *profile = priv->profile;
   gs_free GdkRGBA *colors;
   gsize n_colors;
-  GdkRGBA fg, bg, bold, theme_fg, theme_bg;
-  GdkRGBA *boldp;
+  GdkRGBA fg, bg, bold, theme_fg, theme_bg, cursor_bg, cursor_fg;
+  GdkRGBA *boldp, *cursor_bgp = NULL, *cursor_fgp = NULL;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
@@ -908,10 +911,20 @@ update_color_scheme (TerminalScreen *screen)
   else
     boldp = NULL;
 
+  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_SET_CURSOR_COLORS_KEY))
+    {
+      if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY, &cursor_bg))
+        cursor_bgp = &cursor_bg;
+      if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY, &cursor_fg))
+        cursor_fgp = &cursor_fg;
+    }
+
   colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
   vte_terminal_set_color_bold (VTE_TERMINAL (screen), boldp);
+  vte_terminal_set_color_cursor (VTE_TERMINAL (screen), cursor_bgp);
+  vte_terminal_set_color_cursor_foreground (VTE_TERMINAL (screen), cursor_fgp);
 }
 
 static void
