@@ -654,6 +654,7 @@ s_to_rgba (GValue *value,
   if (!gdk_rgba_parse (&color, s))
     return FALSE;
 
+  color.alpha = 1.0;
   g_value_set_boxed (value, &color);
   return TRUE;
 }
