@@ -1,3 +1,4 @@
+
 /*
  * Copyright © 2002 Havoc Pennington
  * Copyright © 2002 Mathias Hasselmann
@@ -975,12 +976,15 @@ terminal_profile_edit (GSettings  *profile,
                                 vte_erase_binding_get_type, NULL);
   g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    gtk_builder_get_object (builder,
-                                           "bold-color-same-as-fg-checkbox"),
-                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+                                           "bold-color-checkbutton"),
+                   "active",
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_INVERT_BOOLEAN |
+                   G_SETTINGS_BIND_SET);
   g_settings_bind (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY,
                    gtk_builder_get_object (builder,
-                                           "bold-colorpicker-box"),
-                   "sensitive", 
+                                           "bold-colorpicker"),
+                   "sensitive",
                    G_SETTINGS_BIND_GET |
                    G_SETTINGS_BIND_INVERT_BOOLEAN |
                    G_SETTINGS_BIND_NO_SENSITIVITY);
@@ -988,7 +992,39 @@ terminal_profile_edit (GSettings  *profile,
                                 gtk_builder_get_object (builder,
                                                         "bold-colorpicker"),
                                 "rgba",
-                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET,
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
+                                NULL, NULL);
+  g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
+                   gtk_builder_get_object (builder,
+                                           "cursor-colors-checkbutton"),
+                   "active", G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET);
+  g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
+                   gtk_builder_get_object (builder,
+                                           "cursor-foreground-colorpicker"),
+                   "sensitive",
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY,
+                   gtk_builder_get_object (builder,
+                                           "cursor-background-colorpicker"),
+                   "sensitive",
+                   G_SETTINGS_BIND_GET |
+                   G_SETTINGS_BIND_NO_SENSITIVITY);
+  g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY,
+                                gtk_builder_get_object (builder,
+                                                        "cursor-foreground-colorpicker"),
+                                "rgba",
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
+                                (GSettingsBindGetMapping) s_to_rgba,
+                                (GSettingsBindSetMapping) rgba_to_s,
+                                NULL, NULL);
+  g_settings_bind_with_mapping (profile, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY,
+                                gtk_builder_get_object (builder,
+                                                        "cursor-background-colorpicker"),
+                                "rgba",
+                                G_SETTINGS_BIND_GET | G_SETTINGS_BIND_SET | G_SETTINGS_BIND_NO_SENSITIVITY,
                                 (GSettingsBindGetMapping) s_to_rgba,
                                 (GSettingsBindSetMapping) rgba_to_s,
                                 NULL, NULL);
