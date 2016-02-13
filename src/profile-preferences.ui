@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun Feb  1 10:28:05 2015 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkAdjustment" id="adjustment1">
@@ -22,6 +21,24 @@
     <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">100</property>
+  </object>
+  <object class="GtkListStore" id="cjk-ambiguous-width-model">
+    <columns>
+      <!-- column-name gchararray -->
+      <column type="gchararray"/>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Narrow</col>
+        <col id="1">narrow</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes" comments="ambiguous-width characers are">Wide</col>
+        <col id="1">wide</col>
+      </row>
+    </data>
   </object>
   <object class="GtkListStore" id="model1">
     <columns>
@@ -126,31 +143,11 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="cjk-ambiguous-width-model">
-    <columns>
-      <!-- column-name gchararray -->
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" comments="ambiguous-width characers are">Narrow</col>
-        <col id="1" translatable="no">narrow</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" comments="ambiguous-width characers are">Wide</col>
-        <col id="1" translatable="no">wide</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkWindow" id="profile-editor-dialog">
-    <property name="visible">False</property>
     <property name="can_focus">False</property>
-    <property name="border_width">0</property>
     <property name="title" translatable="yes">Profile Editor</property>
     <property name="role">gnome-terminal-profile-editor</property>
     <property name="resizable">False</property>
-    <property name="type_hint">normal</property>
     <child>
       <object class="GtkBox" id="dialogue-content-box">
         <property name="visible">True</property>
@@ -165,7 +162,6 @@
           <object class="GtkNotebook" id="profile-editor-notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">0</property>
             <child>
               <object class="GtkVBox" id="vbox3">
                 <property name="visible">True</property>
@@ -189,8 +185,6 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">4</property>
-                        <property name="top_attach">0</property>
-                        <property name="bottom_attach">1</property>
                       </packing>
                     </child>
                     <child>
@@ -204,8 +198,6 @@
                         <property name="mnemonic_widget">profile-name-entry</property>
                       </object>
                       <packing>
-                        <property name="top_attach">0</property>
-                        <property name="bottom_attach">1</property>
                         <property name="x_options">GTK_FILL</property>
                       </packing>
                     </child>
@@ -217,8 +209,6 @@
                         <property name="label" translatable="yes">Profile ID:</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                       </packing>
@@ -247,8 +237,6 @@
                         <property name="mnemonic_widget">default-size-columns-spinbutton</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
                       </packing>
@@ -289,6 +277,7 @@
                         <property name="right_attach">2</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
@@ -327,20 +316,7 @@
                         <property name="right_attach">3</property>
                         <property name="top_attach">2</property>
                         <property name="bottom_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="default-size-reset-button">
-                        <property name="label" translatable="yes">Rese_t</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="right_attach">4</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
+                        <property name="x_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
@@ -353,8 +329,6 @@
                         <property name="mnemonic_widget">cursor-shape-combobox</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
                       </packing>
@@ -364,6 +338,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model1</property>
+                        <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer1"/>
                           <attributes>
@@ -376,6 +351,8 @@
                         <property name="right_attach">4</property>
                         <property name="top_attach">3</property>
                         <property name="bottom_attach">4</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options">GTK_FILL</property>
                       </packing>
                     </child>
                     <child>
@@ -385,9 +362,10 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0.5</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
                         <property name="right_attach">4</property>
                         <property name="top_attach">4</property>
                         <property name="bottom_attach">5</property>
@@ -395,9 +373,9 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="text-appearance-heading">
-                        <property name="margin_top">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="margin_top">12</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Text Appearance</property>
                         <attributes>
@@ -405,8 +383,7 @@
                         </attributes>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
+                        <property name="right_attach">4</property>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
                       </packing>
@@ -414,15 +391,16 @@
                     <child>
                       <object class="GtkCheckButton" id="allow-bold-checkbutton">
                         <property name="label" translatable="yes">_Allow bold text</property>
-                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
+                        <property name="right_attach">4</property>
                         <property name="top_attach">6</property>
                         <property name="bottom_attach">7</property>
                       </packing>
@@ -430,31 +408,32 @@
                     <child>
                       <object class="GtkCheckButton" id="rewrap-on-resize-checkbutton">
                         <property name="label" translatable="yes">_Rewrap on resize</property>
-                        <property name="margin_left">12</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
+                        <property name="right_attach">4</property>
                         <property name="top_attach">7</property>
                         <property name="bottom_attach">8</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="custom-font-checkbutton">
-                        <property name="label" translatable="yes">_Custom font</property>
-                        <property name="margin_left">12</property>
+                        <property name="label" translatable="yes">_Custom font:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="margin_left">12</property>
                         <property name="use_underline">True</property>
+                        <property name="xalign">0</property>
+                        <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="left_attach">0</property>
-                        <property name="right_attach">1</property>
                         <property name="top_attach">8</property>
                         <property name="bottom_attach">9</property>
                       </packing>
@@ -466,8 +445,6 @@
                         <property name="receives_default">False</property>
                         <property name="focus_on_click">False</property>
                         <property name="title" translatable="yes">Choose A Terminal Font</property>
-                        <property name="use_font">True</property>
-                        <property name="use_size">True</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -476,9 +453,37 @@
                         <property name="bottom_attach">9</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkButtonBox" id="buttonbox1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="layout_style">end</property>
+                        <child>
+                          <object class="GtkButton" id="default-size-reset-button">
+                            <property name="label" translatable="yes">Rese_t</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="use_underline">True</property>
+                            <property name="focus_on_click">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="right_attach">4</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
@@ -524,6 +529,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -538,6 +545,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -617,6 +626,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="model">model3</property>
+                                    <property name="focus_on_click">False</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="renderer3"/>
                                       <attributes>
@@ -645,6 +655,11 @@
                           </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
@@ -715,6 +730,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
+                                <property name="xalign">0.5</property>
+                                <property name="draw_indicator">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -753,6 +770,7 @@
                                       <object class="GtkComboBox" id="color-scheme-combobox">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
+                                        <property name="focus_on_click">False</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -878,7 +896,9 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
+                                            <property name="xalign">0.5</property>
                                             <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -910,7 +930,9 @@
                                             <property name="can_focus">True</property>
                                             <property name="receives_default">False</property>
                                             <property name="use_underline">True</property>
+                                            <property name="xalign">0.5</property>
                                             <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
                                           </object>
                                           <packing>
                                             <property name="left_attach">2</property>
@@ -1353,6 +1375,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">model4</property>
+                                <property name="focus_on_click">False</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="renderer4"/>
                                   <attributes>
@@ -1419,14 +1442,15 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
+                    <property name="right_attach">2</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options">GTK_SHRINK | GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -1436,14 +1460,15 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
+                    <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options">GTK_SHRINK | GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -1453,14 +1478,14 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options">GTK_SHRINK | GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -1503,8 +1528,7 @@
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
-                    <property name="x_options">GTK_EXPAND | GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options">GTK_SHRINK | GTK_FILL</property>
                   </packing>
                 </child>
                 <child>
@@ -1514,14 +1538,13 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="use_underline">True</property>
+                    <property name="xalign">0.5</property>
+                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
-                    <property name="left_attach">0</property>
-                    <property name="right_attach">1</property>
-                    <property name="top_attach">0</property>
-                    <property name="bottom_attach">1</property>
+                    <property name="right_attach">2</property>
                     <property name="x_options">GTK_SHRINK | GTK_FILL</property>
-                    <property name="y_options"/>
+                    <property name="y_options">GTK_FILL</property>
                   </packing>
                 </child>
               </object>
@@ -1611,6 +1634,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model6</property>
+                        <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer6"/>
                           <attributes>
@@ -1630,6 +1654,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">model6</property>
+                        <property name="focus_on_click">False</property>
                         <child>
                           <object class="GtkCellRendererText" id="renderer7"/>
                           <attributes>
@@ -1665,6 +1690,7 @@
                       <object class="GtkComboBox" id="encoding-combobox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -1697,7 +1723,8 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">cjk-ambiguous-width-model</property>
-                        <property name="id-column">1</property>
+                        <property name="focus_on_click">False</property>
+                        <property name="id_column">1</property>
                         <child>
                           <object class="GtkCellRendererText" id="cjk-ambiguous-width-renderer"/>
                           <attributes>
@@ -1733,6 +1760,7 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
+                        <property name="focus_on_click">False</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1790,9 +1818,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="pack_type">start</property>
                 <property name="position">0</property>
-                <property name="secondary">False</property>
               </packing>
             </child>
             <child>
