@@ -795,6 +795,7 @@ s_to_rgba (GVariant *variant,
   if (!gdk_rgba_parse (color, str))
     return FALSE;
 
+  color.alpha = 1.0;
   *result = color;
   return TRUE;
 }
