@@ -211,14 +211,13 @@ static gboolean
 rgba_equal (const GdkRGBA *a,
             const GdkRGBA *b)
 {
-  gdouble dr, dg, db, da;
+  gdouble dr, dg, db;
 
   dr = a->red - b->red;
   dg = a->green - b->green;
   db = a->blue - b->blue;
-  da = a->alpha - b->alpha;
 
-  return (dr * dr + dg * dg + db * db + da * da) < 1e-4;
+  return (dr * dr + dg * dg + db * db) < 1e-4;
 }
 
 static gboolean
