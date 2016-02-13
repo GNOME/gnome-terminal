@@ -892,12 +892,14 @@ update_color_scheme (TerminalScreen *screen)
   GdkRGBA fg, bg, bold, theme_fg, theme_bg, cursor_bg, cursor_fg;
   GdkRGBA *boldp, *cursor_bgp = NULL, *cursor_fgp = NULL;
   GtkStyleContext *context;
+  gboolean use_theme_colors;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, gtk_style_context_get_state (context), &theme_fg);
   gtk_style_context_get_background_color (context, gtk_style_context_get_state (context), &theme_bg);
 
-  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY) ||
+  use_theme_colors = g_settings_get_boolean (profile, TERMINAL_PROFILE_USE_THEME_COLORS_KEY);
+  if (use_theme_colors ||
       (!terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_FOREGROUND_COLOR_KEY, &fg) ||
        !terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BACKGROUND_COLOR_KEY, &bg)))
     {
@@ -906,12 +908,14 @@ update_color_scheme (TerminalScreen *screen)
     }
 
   if (!g_settings_get_boolean (profile, TERMINAL_PROFILE_BOLD_COLOR_SAME_AS_FG_KEY) &&
+      !use_theme_colors &&
       terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_BOLD_COLOR_KEY, &bold))
     boldp = &bold;
   else
     boldp = NULL;
 
-  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY))
+  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY) &&
+      !use_theme_colors)
     {
       if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY, &cursor_bg))
         cursor_bgp = &cursor_bg;
