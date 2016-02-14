@@ -50,6 +50,8 @@ struct _TerminalWindowPrivate
 {
   char *uuid;
 
+  GtkClipboard *clipboard;
+
   GtkActionGroup *action_group;
   GtkUIManager *ui_manager;
   guint ui_id;
@@ -2619,7 +2621,6 @@ terminal_window_init (TerminalWindow *window)
   GError *error;
   GtkWindowGroup *window_group;
   GtkAccelGroup *accel_group;
-  GtkClipboard *clipboard;
   uuid_t u;
   char uuidstr[37], role[64];
 
@@ -2717,9 +2718,9 @@ terminal_window_init (TerminalWindow *window)
   gtk_ui_manager_insert_action_group (manager, action_group, 0);
   g_object_unref (action_group);
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
-  update_edit_menu (clipboard, NULL, window);
-  g_signal_connect (clipboard, "owner-change",
+  priv->clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
+  update_edit_menu (priv->clipboard, NULL, window);
+  g_signal_connect (priv->clipboard, "owner-change",
                     G_CALLBACK (update_edit_menu), window);
 
   /* Idem for this action, since the window is not fullscreen. */
@@ -2835,7 +2836,6 @@ terminal_window_dispose (GObject *object)
   TerminalWindowPrivate *priv = window->priv;
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
-  GtkClipboard *clipboard;
   GSList *list, *l;
 
   priv->disposed = TRUE;
@@ -2879,8 +2879,7 @@ terminal_window_dispose (GObject *object)
                                         G_CALLBACK (terminal_window_encoding_list_changed_cb),
                                         window);
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (window), GDK_SELECTION_CLIPBOARD);
-  g_signal_handlers_disconnect_by_func (clipboard,
+  g_signal_handlers_disconnect_by_func (priv->clipboard,
                                         G_CALLBACK (update_edit_menu),
                                         window);
 
