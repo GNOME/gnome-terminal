@@ -680,6 +680,7 @@ terminal_screen_finalize (GObject *object)
 TerminalScreen *
 terminal_screen_new (GSettings       *profile,
                      char           **override_command,
+                     const char      *title,
                      const char      *working_dir,
                      char           **child_env,
                      double           zoom)
@@ -696,6 +697,29 @@ terminal_screen_new (GSettings       *profile,
   vte_terminal_set_size (VTE_TERMINAL (screen),
                          g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),
                          g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY));
+
+  /* If given an initial title, strip it of control characters and
+   * feed it to the terminal.
+   */
+  if (title != NULL) {
+    GString *seq;
+    const char *p;
+
+    seq = g_string_new ("\033]0;");
+    for (p = title; *p; p = g_utf8_next_char (p)) {
+      gunichar c = g_utf8_get_char (p);
+      if (c < 0x20 || (c >= 0x7f && c <= 0x9f))
+        continue;
+      else if (c == ';')
+        break;
+
+      g_string_append_unichar (seq, c);
+    }
+    g_string_append (seq, "\033\\");
+
+    vte_terminal_feed (VTE_TERMINAL (screen), seq->str, seq->len);
+    g_string_free (seq, TRUE);
+  }
 
   priv->initial_working_directory = g_strdup (working_dir);
 

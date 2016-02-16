@@ -102,7 +102,7 @@ handle_options (TerminalFactory *factory,
                                                           iw->geometry,
                                                           iw->role,
                                                           it->profile ? it->profile : options->default_profile,
-                                                          NULL /* title */,
+                                                          it->title ? it->title : options->default_title,
                                                           it->active,
                                                           iw->start_maximized,
                                                           iw->start_fullscreen);

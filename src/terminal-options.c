@@ -96,6 +96,7 @@ initial_tab_new (char *profile /* adopts */)
 
   it->profile = profile;
   it->exec_argv = NULL;
+  it->title = NULL;
   it->working_dir = NULL;
   it->zoom = 1.0;
   it->zoom_set = FALSE;
@@ -109,6 +110,7 @@ initial_tab_free (InitialTab *it)
 {
   g_free (it->profile);
   g_strfreev (it->exec_argv);
+  g_free (it->title);
   g_free (it->working_dir);
   g_slice_free (InitialTab, it);
 }
@@ -213,6 +215,15 @@ add_new_window (TerminalOptions *options,
 }
 
 /* handle deprecated command line options */
+
+static void
+deprecated_option_warning (const gchar *option_name)
+{
+  g_printerr (_("Option \"%s\" is deprecated and might be removed in a later version of gnome-terminal."),
+              option_name);
+  g_printerr ("\n");
+}
+
 static gboolean
 unsupported_option_callback (const gchar *option_name,
                              const gchar *value,
@@ -617,6 +628,32 @@ option_load_config_cb (const gchar *option_name,
 }
 
 static gboolean
+option_title_callback (const gchar *option_name,
+                       const gchar *value,
+                       gpointer     data,
+                       GError     **error)
+{
+  TerminalOptions *options = data;
+
+  deprecated_option_warning (option_name);
+
+  if (options->initial_windows)
+    {
+      InitialTab *it = ensure_top_tab (options);
+
+      g_free (it->title);
+      it->title = g_strdup (value);
+    }
+  else
+    {
+      g_free (options->default_title);
+      options->default_title = g_strdup (value);
+    }
+
+  return TRUE;
+}
+
+static gboolean
 option_working_directory_callback (const gchar *option_name,
                                    const gchar *value,
                                    gpointer     data,
@@ -786,6 +823,7 @@ terminal_options_parse (const char *working_directory,
   options->initial_windows = NULL;
   options->default_role = NULL;
   options->default_geometry = NULL;
+  options->default_title = NULL;
   options->zoom = 1.0;
   options->zoom_set = FALSE;
 
@@ -929,6 +967,7 @@ terminal_options_merge_config (TerminalOptions *options,
 /*          it->width = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WIDTH, NULL);
           it->height = g_key_file_get_integer (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_HEIGHT, NULL);*/
           it->working_dir = terminal_util_key_file_get_string_unescape (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_WORKING_DIRECTORY, NULL);
+          it->title = g_key_file_get_string (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_TITLE, NULL);
 
           if (g_key_file_has_key (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL) &&
               !(it->exec_argv = terminal_util_key_file_get_argv (key_file, tab_group, TERMINAL_CONFIG_TERMINAL_PROP_COMMAND, NULL, error)))
@@ -986,6 +1025,7 @@ terminal_options_free (TerminalOptions *options)
   g_free (options->default_role);
   g_free (options->default_geometry);
   g_free (options->default_working_dir);
+  g_free (options->default_title);
   g_free (options->default_profile);
 
   g_strfreev (options->exec_argv);
@@ -1158,8 +1198,9 @@ get_goption_context (TerminalOptions *options)
       't',
       G_OPTION_FLAG_HIDDEN,
       G_OPTION_ARG_CALLBACK,
-      unsupported_option_callback,
-      NULL, NULL
+      option_title_callback,
+      N_("Set the initial terminal title"),
+      N_("TITLE")
     },
     {
       "working-directory",

@@ -610,6 +610,7 @@ terminal_app_new_terminal (TerminalApp     *app,
                            TerminalWindow  *window,
                            GSettings       *profile,
                            char           **override_command,
+                           const char      *title,
                            const char      *working_dir,
                            char           **child_env,
                            double           zoom)
@@ -619,7 +620,7 @@ terminal_app_new_terminal (TerminalApp     *app,
   g_return_val_if_fail (TERMINAL_IS_APP (app), NULL);
   g_return_val_if_fail (TERMINAL_IS_WINDOW (window), NULL);
 
-  screen = terminal_screen_new (profile, override_command,
+  screen = terminal_screen_new (profile, override_command, title,
                                 working_dir, child_env, zoom);
 
   terminal_window_add_screen (window, screen, -1);
