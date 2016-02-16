@@ -850,6 +850,9 @@ terminal_screen_profile_changed_cb (GSettings     *profile,
       prop_name == I_(TERMINAL_PROFILE_CURSOR_COLORS_SET_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_CURSOR_BACKGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_CURSOR_FOREGROUND_COLOR_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY) ||
+      prop_name == I_(TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY) ||
       prop_name == I_(TERMINAL_PROFILE_PALETTE_KEY))
     update_color_scheme (screen);
 
@@ -913,8 +916,12 @@ update_color_scheme (TerminalScreen *screen)
   GSettings *profile = priv->profile;
   gs_free GdkRGBA *colors;
   gsize n_colors;
-  GdkRGBA fg, bg, bold, theme_fg, theme_bg, cursor_bg, cursor_fg;
-  GdkRGBA *boldp, *cursor_bgp = NULL, *cursor_fgp = NULL;
+  GdkRGBA fg, bg, bold, theme_fg, theme_bg;
+  GdkRGBA cursor_bg, cursor_fg;
+  GdkRGBA highlight_bg, highlight_fg;
+  GdkRGBA *boldp;
+  GdkRGBA *cursor_bgp = NULL, *cursor_fgp = NULL;
+  GdkRGBA *highlight_bgp = NULL, *highlight_fgp = NULL;
   GtkStyleContext *context;
   gboolean use_theme_colors;
 
@@ -947,12 +954,23 @@ update_color_scheme (TerminalScreen *screen)
         cursor_fgp = &cursor_fg;
     }
 
+  if (g_settings_get_boolean (profile, TERMINAL_PROFILE_HIGHLIGHT_COLORS_SET_KEY) &&
+      !use_theme_colors)
+    {
+      if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_HIGHLIGHT_BACKGROUND_COLOR_KEY, &highlight_bg))
+        highlight_bgp = &highlight_bg;
+      if (terminal_g_settings_get_rgba (profile, TERMINAL_PROFILE_HIGHLIGHT_FOREGROUND_COLOR_KEY, &highlight_fg))
+        highlight_fgp = &highlight_fg;
+    }
+
   colors = terminal_g_settings_get_rgba_palette (priv->profile, TERMINAL_PROFILE_PALETTE_KEY, &n_colors);
   vte_terminal_set_colors (VTE_TERMINAL (screen), &fg, &bg,
                            colors, n_colors);
   vte_terminal_set_color_bold (VTE_TERMINAL (screen), boldp);
   vte_terminal_set_color_cursor (VTE_TERMINAL (screen), cursor_bgp);
   vte_terminal_set_color_cursor_foreground (VTE_TERMINAL (screen), cursor_fgp);
+  vte_terminal_set_color_highlight (VTE_TERMINAL (screen), highlight_bgp);
+  vte_terminal_set_color_highlight_foreground (VTE_TERMINAL (screen), highlight_fgp);
 }
 
 static void
