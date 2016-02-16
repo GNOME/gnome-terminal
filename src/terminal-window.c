@@ -951,6 +951,8 @@ terminal_window_ensure_search_popover (TerminalWindow *window)
   search_popover_notify_wrap_around_cb (priv->search_popover, NULL, window);
   g_signal_connect (priv->search_popover, "notify::wrap-around", G_CALLBACK (search_popover_notify_wrap_around_cb), window);
 
+  g_signal_connect (priv->search_popover, "destroy", G_CALLBACK (gtk_widget_destroyed), &priv->search_popover);
+
   gtk_widget_show (GTK_WIDGET (priv->search_popover));
 }
 

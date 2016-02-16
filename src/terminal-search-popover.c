@@ -37,12 +37,12 @@ typedef struct _TerminalSearchPopoverPrivate TerminalSearchPopoverPrivate;
 
 struct _TerminalSearchPopover
 {
-  GtkPopover parent_instance;
+  GtkWindow parent_instance;
 };
 
 struct _TerminalSearchPopoverClass
 {
-  GtkPopoverClass parent_class;
+  GtkWindowClass parent_class;
 
   /* Signals */
   void (* search) (TerminalSearchPopover *popover,
@@ -91,7 +91,7 @@ static guint signals[LAST_SIGNAL];
 static GParamSpec *pspecs[LAST_PROP];
 static GtkListStore *history_store;
 
-G_DEFINE_TYPE_WITH_PRIVATE (TerminalSearchPopover, terminal_search_popover, GTK_TYPE_POPOVER)
+G_DEFINE_TYPE_WITH_PRIVATE (TerminalSearchPopover, terminal_search_popover, GTK_TYPE_WINDOW)
 
 #define PRIV(obj) ((TerminalSearchPopoverPrivate *) terminal_search_popover_get_instance_private ((TerminalSearchPopover *)(obj)))
 
@@ -392,10 +392,12 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
     gtk_entry_set_completion (GTK_ENTRY (priv->search_entry), completion);
   }
 
-#if GTK_CHECK_VERSION (3, 17, 2)
+#if 0 // GTK_CHECK_VERSION (3, 17, 2)
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_popover_set_default_widget (GTK_POPOVER (popover), priv->search_next_button);
   G_GNUC_END_IGNORE_DEPRECATIONS
+#else
+  gtk_window_set_default (GTK_WINDOW (popover), priv->search_next_button);
 #endif
 
 #if GTK_CHECK_VERSION (3, 16, 0)
@@ -540,7 +542,11 @@ TerminalSearchPopover *
 terminal_search_popover_new (GtkWidget *relative_to_widget)
 {
   return g_object_new (TERMINAL_TYPE_SEARCH_POPOVER,
+#if 0
                        "relative-to", relative_to_widget,
+#else
+                       "transient-for", gtk_widget_get_toplevel (relative_to_widget),
+#endif
                        NULL);
 }
 
