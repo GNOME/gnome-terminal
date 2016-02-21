@@ -19,6 +19,7 @@
 #include "config.h"
 #define _GNU_SOURCE /* for dup3 */
 
+#include "terminal-regex.h"
 #include "terminal-screen.h"
 
 #include <errno.h>
@@ -158,30 +159,18 @@ static void terminal_screen_set_override_command (TerminalScreen  *screen,
 
 static guint signals[LAST_SIGNAL];
 
-#define USERCHARS "-[:alnum:]"
-#define USERCHARS_CLASS "[" USERCHARS "]"
-#define PASSCHARS_CLASS "[-[:alnum:]\\Q,?;.:/!%$^*&~\"#'\\E]"
-#define HOSTCHARS_CLASS "[-[:alnum:]]"
-#define HOST HOSTCHARS_CLASS "+(\\." HOSTCHARS_CLASS "+)*"
-#define PORT "(?:\\:[[:digit:]]{1,5})?"
-#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,:;@&=?/~#%\\E]"
-#define PATHTERM_CLASS "[^\\Q]'.:}>) \t\r\n,\"\\E]"
-#define SCHEME "(?:news:|telnet:|nntp:|file:\\/|https?:|ftps?:|sftp:|webcal:)"
-#define USERPASS USERCHARS_CLASS "+(?:" PASSCHARS_CLASS "+)?"
-#define URLPATH   "(?:(/"PATHCHARS_CLASS"+(?:[(]"PATHCHARS_CLASS"*[)])*"PATHCHARS_CLASS"*)*"PATHTERM_CLASS")?"
-
 typedef struct {
   const char *pattern;
   TerminalURLFlavour flavor;
-  GRegexCompileFlags flags;
 } TerminalRegexPattern;
 
 static const TerminalRegexPattern url_regex_patterns[] = {
-  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT URLPATH, FLAVOR_AS_IS, G_REGEX_CASELESS },
-  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT URLPATH , FLAVOR_DEFAULT_TO_HTTP, G_REGEX_CASELESS  },
-  { "(?:callto:|h323:|sip:)" USERCHARS_CLASS "[" USERCHARS ".]*(?:" PORT "/[a-z0-9]+)?\\@" HOST, FLAVOR_VOIP_CALL, G_REGEX_CASELESS  },
-  { "(?:mailto:)?" USERCHARS_CLASS "[" USERCHARS ".]*\\@" HOSTCHARS_CLASS "+\\." HOST, FLAVOR_EMAIL, G_REGEX_CASELESS  },
-  { "(?:news:|man:|info:)[-[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, G_REGEX_CASELESS  },
+  { REGEX_URL_AS_IS, FLAVOR_AS_IS },
+  { REGEX_URL_HTTP,  FLAVOR_DEFAULT_TO_HTTP },
+  { REGEX_URL_FILE,  FLAVOR_AS_IS },
+  { REGEX_URL_VOIP,  FLAVOR_VOIP_CALL },
+  { REGEX_EMAIL,     FLAVOR_EMAIL },
+  { REGEX_NEWS_MAN,  FLAVOR_AS_IS },
 };
 
 static GRegex **url_regexes;
@@ -544,7 +533,7 @@ terminal_screen_class_init (TerminalScreenClass *klass)
       GError *error = NULL;
 
       url_regexes[i] = g_regex_new (url_regex_patterns[i].pattern,
-                                    url_regex_patterns[i].flags | G_REGEX_OPTIMIZE,
+                                    G_REGEX_OPTIMIZE,
                                     0, &error);
       g_assert_no_error (error);
 

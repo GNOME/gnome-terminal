@@ -6,6 +6,8 @@ bin_PROGRAMS = gnome-terminal
 libexec_PROGRAMS = gnome-terminal-server
 noinst_PROGRAMS =
 
+check_PROGRAMS = terminal-regex
+
 if WITH_NAUTILUS_EXTENSION
 nautilusextension_LTLIBRARIES = libterminal-nautilus.la
 endif # WITH_NAUTILUS_EXTENSION
@@ -60,6 +62,7 @@ gnome_terminal_server_SOURCES = \
 	terminal-prefs.h \
 	terminal-profiles-list.c \
 	terminal-profiles-list.h \
+	terminal-regex.h \
 	terminal-schemas.h \
 	terminal-settings-list.c \
 	terminal-settings-list.h \
@@ -148,6 +151,30 @@ terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Ma
 
 terminal-resources.h terminal-resources.c: terminal.gresource.xml Makefile $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir $(srcdir) $(srcdir)/terminal.gresource.xml)
 	$(AM_V_GEN) XMLLINT=$(XMLLINT) $(GLIB_COMPILE_RESOURCES) --target $@ --sourcedir $(srcdir) --generate --c-name terminal $<
+
+# Checks
+
+TESTS = \
+	terminal-regex \
+	$(NULL)
+
+# Check programmes
+
+terminal_regex_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+terminal_regex_SOURCES = \
+	terminal-regex.c \
+	terminal-regex.h \
+	$(NULL)
+terminal_regex_CFLAGS = \
+	-DTERMINAL_REGEX_MAIN \
+	$(TERM_CFLAGS) \
+	$(WARN_CFLAGS) \
+	$(AM_CFLAGS)
+terminal_regex_LDFLAGS = \
+	$(AM_LDFLAGS)
+terminal_regex_LDADD = \
+	$(TERM_LIBS)
 
 # Terminal client
 
