@@ -382,6 +382,7 @@ create_terminal (ExecData *data /* transfer full */)
                                                   NULL /* geometry */,
                                                   NULL /* role */,
                                                   NULL /* use default profile */,
+                                                  NULL /* use profile encoding */,
                                                   NULL /* title */,
                                                   TRUE, /* active */
                                                   FALSE /* maximised */,

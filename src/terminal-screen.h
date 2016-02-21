@@ -76,6 +76,7 @@ GType terminal_screen_get_type (void) G_GNUC_CONST;
 const char *terminal_screen_get_uuid (TerminalScreen *screen);
 
 TerminalScreen *terminal_screen_new (GSettings       *profile,
+                                     const char      *encoding,
                                      char           **override_command,
                                      const char      *title,
                                      const char      *working_dir,

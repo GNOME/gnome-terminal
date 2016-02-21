@@ -63,11 +63,10 @@ handle_options (TerminalFactory *factory,
 {
   GList *lw;
   GError *err;
+  const char *encoding;
 
-#if 0
-  gdk_screen = terminal_app_get_screen_by_display_name (options->display_name,
-                                                        options->screen_number);
-#endif
+  /* We need to forward the locale encoding to the server, see bug #732128 */
+  g_get_charset (&encoding);
 
   /* Make sure we open at least one window */
   terminal_options_ensure_window (options);
@@ -102,6 +101,7 @@ handle_options (TerminalFactory *factory,
                                                           iw->geometry,
                                                           iw->role,
                                                           it->profile ? it->profile : options->default_profile,
+                                                          encoding,
                                                           it->title ? it->title : options->default_title,
                                                           it->active,
                                                           iw->start_maximized,

@@ -368,7 +368,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   TerminalObjectSkeleton *skeleton;
   char *object_path;
   GSettings *profile = NULL;
-  const char *profile_uuid, *title;
+  const char *profile_uuid, *title, *encoding;
   gboolean zoom_set = FALSE;
   gdouble zoom = 1.0;
   guint window_id;
@@ -380,6 +380,9 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   /* Look up the profile */
   if (!g_variant_lookup (options, "profile", "&s", &profile_uuid))
     profile_uuid = NULL;
+
+  if (!g_variant_lookup (options, "encoding", "&s", &encoding))
+    encoding = NULL; /* use profile encoding */
 
   profiles_list = terminal_app_get_profiles_list (app);
   profile = terminal_profiles_list_ref_profile_by_uuid (profiles_list, profile_uuid, &err);
@@ -461,7 +464,7 @@ terminal_factory_impl_create_instance (TerminalFactory *factory,
   if (g_variant_lookup (options, "zoom", "d", &zoom))
     zoom_set = TRUE;
 
-  screen = terminal_screen_new (profile, NULL, title, NULL, NULL, 
+  screen = terminal_screen_new (profile, encoding, NULL, title, NULL, NULL,
                                 zoom_set ? zoom : 1.0);
   terminal_window_add_screen (window, screen, -1);
 

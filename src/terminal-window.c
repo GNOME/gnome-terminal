@@ -408,7 +408,7 @@ action_new_terminal_cb (GSimpleAction *action,
     window = terminal_app_new_window (app, gtk_widget_get_screen (GTK_WIDGET (window)));
 
   new_working_directory = terminal_screen_get_current_dir (priv->active_screen);
-  terminal_app_new_terminal (app, window, profile,
+  terminal_app_new_terminal (app, window, profile, NULL /* use profile encoding */,
                              NULL, NULL,
                              new_working_directory,
                              terminal_screen_get_initial_environment (priv->active_screen),

@@ -416,6 +416,9 @@ namespace GTerminal
   {
     var server = get_server ();
 
+    string encoding;
+    GLib.get_charset (out encoding);
+
     var builder = new GLib.VariantBuilder (VariantType.VARDICT);
     Terminal.Client.append_create_instance_options (builder,
                                                     OpenOptions.display_name,
@@ -423,6 +426,7 @@ namespace GTerminal
                                                     OpenOptions.geometry,
                                                     OpenOptions.role,
                                                     OpenOptions.profile,
+                                                    encoding,
                                                     null /* title */,
                                                     true,
                                                     OpenOptions.maximise,

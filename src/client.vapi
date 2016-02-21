@@ -24,6 +24,7 @@ namespace Terminal.Client {
                                               string? geometry,
                                               string? role,
                                               string? profile,
+                                              string? encoding,
                                               string? title,
                                               bool active,
                                               bool maximise_window,

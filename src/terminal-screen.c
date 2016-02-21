@@ -679,6 +679,7 @@ terminal_screen_finalize (GObject *object)
 
 TerminalScreen *
 terminal_screen_new (GSettings       *profile,
+                     const char      *encoding,
                      char           **override_command,
                      const char      *title,
                      const char      *working_dir,
@@ -694,6 +695,20 @@ terminal_screen_new (GSettings       *profile,
   priv = screen->priv;
 
   terminal_screen_set_profile (screen, profile);
+
+  /* If we got an encoding together with an override command,
+   * override the profile encoding; otherwise use the profile
+   * encoding.
+   */
+  if (encoding != NULL && override_command != NULL) {
+    TerminalEncoding *enc;
+
+    enc = terminal_app_ensure_encoding (terminal_app_get (), encoding);
+    vte_terminal_set_encoding (VTE_TERMINAL (screen),
+                               terminal_encoding_get_charset (enc),
+                               NULL);
+  }
+
   vte_terminal_set_size (VTE_TERMINAL (screen),
                          g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_COLUMNS_KEY),
                          g_settings_get_int (profile, TERMINAL_PROFILE_DEFAULT_SIZE_ROWS_KEY));
