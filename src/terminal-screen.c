@@ -23,7 +23,6 @@
 #include "terminal-pcre2.h"
 #endif
 
-#include "terminal-regex.h"
 #include "terminal-screen.h"
 
 #include <errno.h>
@@ -166,22 +165,34 @@ static void terminal_screen_set_override_command (TerminalScreen  *screen,
 
 static guint signals[LAST_SIGNAL];
 
+#define USERCHARS "-[:alnum:]"
+#define USERCHARS_CLASS "[" USERCHARS "]"
+#define PASSCHARS_CLASS "[-[:alnum:]\\Q,?;.:/!%$^*&~\"#'\\E]"
+#define HOSTCHARS_CLASS "[-[:alnum:]]"
+#define HOST HOSTCHARS_CLASS "+(\\." HOSTCHARS_CLASS "+)*"
+#define PORT "(?:\\:[[:digit:]]{1,5})?"
+#define PATHCHARS_CLASS "[-[:alnum:]\\Q_$.+!*,:;@&=?/~#%\\E]"
+#define PATHTERM_CLASS "[^\\Q]'.:}>) \t\r\n,\"\\E]"
+#define SCHEME "(?:news:|telnet:|nntp:|file:\\/|https?:|ftps?:|sftp:|webcal:)"
+#define USERPASS USERCHARS_CLASS "+(?:" PASSCHARS_CLASS "+)?"
+#define URLPATH   "(?:(/"PATHCHARS_CLASS"+(?:[(]"PATHCHARS_CLASS"*[)])*"PATHCHARS_CLASS"*)*"PATHTERM_CLASS")?"
+
 typedef struct {
   const char *pattern;
   TerminalURLFlavor flavor;
+  gboolean caseless;
 } TerminalRegexPattern;
 
 static const TerminalRegexPattern url_regex_patterns[] = {
-  { REGEX_URL_AS_IS, FLAVOR_AS_IS },
-  { REGEX_URL_HTTP,  FLAVOR_DEFAULT_TO_HTTP },
-  { REGEX_URL_FILE,  FLAVOR_AS_IS },
-  { REGEX_URL_VOIP,  FLAVOR_VOIP_CALL },
-  { REGEX_EMAIL,     FLAVOR_EMAIL },
-  { REGEX_NEWS_MAN,  FLAVOR_AS_IS },
+  { SCHEME "//(?:" USERPASS "\\@)?" HOST PORT URLPATH, FLAVOR_AS_IS, TRUE },
+  { "(?:www|ftp)" HOSTCHARS_CLASS "*\\." HOST PORT URLPATH , FLAVOR_DEFAULT_TO_HTTP, TRUE  },
+  { "(?:callto:|h323:|sip:)" USERCHARS_CLASS "[" USERCHARS ".]*(?:" PORT "/[a-z0-9]+)?\\@" HOST, FLAVOR_VOIP_CALL, TRUE },
+  { "(?:mailto:)?" USERCHARS_CLASS "[" USERCHARS ".]*\\@" HOSTCHARS_CLASS "+\\." HOST, FLAVOR_EMAIL, TRUE },
+  { "(?:news:|man:|info:)[-[:alnum:]\\Q^_{|}~!\"#$%&'()*+,./;:=?`\\E]+", FLAVOR_AS_IS, TRUE },
 };
 
 static const TerminalRegexPattern extra_regex_patterns[] = {
-  { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER },
+  { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER, FALSE },
 };
 
 #ifdef WITH_PCRE2
@@ -245,7 +256,8 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 
 #ifdef WITH_PCRE2
       (*regexes)[i] = vte_regex_new (regex_patterns[i].pattern, -1,
-                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
+                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE |
+                                     (regex_patterns[i].caseless ? PCRE2_CASELESS : 0),
                                      &error);
       g_assert_no_error (error);
 
@@ -257,7 +269,8 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
 #else
       (*regexes)[i] = g_regex_new (regex_patterns[i].pattern,
                                    G_REGEX_OPTIMIZE |
-                                   G_REGEX_MULTILINE,
+                                   G_REGEX_MULTILINE |
+                                   (regex_patterns[i].caseless ? G_REGEX_CASELESS : 0),
                                    0, &error);
       g_assert_no_error (error);
 #endif
