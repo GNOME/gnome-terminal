@@ -41,6 +41,10 @@
 #include "terminal-gdbus-generated.h"
 #include "terminal-defines.h"
 #include "terminal-client-utils.h"
+#include "terminal-libgsystem.h"
+
+GS_DEFINE_CLEANUP_FUNCTION0(TerminalOptions*, gs_local_options_free, terminal_options_free)
+#define gs_free_options __attribute__ ((cleanup(gs_local_options_free)))
 
 /**
  * handle_options:
@@ -62,7 +66,6 @@ handle_options (TerminalFactory *factory,
                 GError **error)
 {
   GList *lw;
-  GError *err;
   const char *encoding;
 
   /* We need to forward the locale encoding to the server, see bug #732128 */
@@ -86,12 +89,12 @@ handle_options (TerminalFactory *factory,
         {
           InitialTab *it = lt->data;
           GVariantBuilder builder;
-          char *object_path, *p;
-          TerminalReceiver *receiver;
           char **argv;
           int argc;
-
-          err = NULL;
+          char *p;
+          gs_free_error GError *err = NULL;
+          gs_free char *object_path = NULL;
+          gs_unref_object TerminalReceiver *receiver = NULL;
 
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
@@ -130,7 +133,6 @@ handle_options (TerminalFactory *factory,
                   &err)) {
             g_dbus_error_strip_remote_error (err);
             g_printerr ("Error creating terminal: %s\n", err->message);
-            g_error_free (err);
 
             /* Continue processing the remaining options! */
             continue;
@@ -159,13 +161,10 @@ handle_options (TerminalFactory *factory,
           if (receiver == NULL) {
             g_dbus_error_strip_remote_error (err);
             g_printerr ("Failed to create proxy for terminal: %s\n", err->message);
-            g_error_free (err);
-            g_free (object_path);
 
             /* Continue processing the remaining options! */
             continue;
           }
-          g_free (object_path);
 
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
 
@@ -186,10 +185,7 @@ handle_options (TerminalFactory *factory,
                                                 &err)) {
             g_dbus_error_strip_remote_error (err);
             g_printerr ("Error: %s\n", err->message);
-            g_error_free (err);
           }
-
-          g_object_unref (receiver);
         }
     }
 
@@ -200,13 +196,13 @@ int
 main (int argc, char **argv)
 {
   int i;
-  char **argv_copy;
+  gs_free char **argv_copy = NULL;
   const char *startup_id, *display_name;
   GdkDisplay *display;
-  TerminalOptions *options;
-  TerminalFactory *factory;
-  GError *error = NULL;
-  char *working_directory;
+  gs_free_options TerminalOptions *options = NULL;
+  gs_unref_object TerminalFactory *factory = NULL;
+  gs_free_error GError *error = NULL;
+  gs_free char *working_directory = NULL;
   int exit_code = EXIT_FAILURE;
 
   setlocale (LC_ALL, "");
@@ -231,10 +227,7 @@ main (int argc, char **argv)
                                     &error);
   if (options == NULL) {
     g_printerr (_("Failed to parse arguments: %s\n"), error->message);
-    g_error_free (error);
-    g_free (working_directory);
-    g_free (argv_copy);
-    exit (EXIT_FAILURE);
+    goto out;
   }
 
   g_set_application_name (_("Terminal"));
@@ -261,7 +254,6 @@ main (int argc, char **argv)
                 options->server_app_id ? options->server_app_id : TERMINAL_APPLICATION_ID,
                 TERMINAL_FACTORY_OBJECT_PATH,
                 error->message);
-    g_error_free (error);
     goto out;
   }
 
@@ -272,12 +264,6 @@ main (int argc, char **argv)
     exit_code = EXIT_SUCCESS;
   }
 
-  g_object_unref (factory);
-
-out:
-  terminal_options_free (options);
-  g_free (working_directory);
-  g_free (argv_copy);
-
+ out:
   return exit_code;
 }
