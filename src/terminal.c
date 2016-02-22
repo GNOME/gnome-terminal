@@ -46,6 +46,109 @@
 GS_DEFINE_CLEANUP_FUNCTION0(TerminalOptions*, gs_local_options_free, terminal_options_free)
 #define gs_free_options __attribute__ ((cleanup(gs_local_options_free)))
 
+static gboolean
+get_factory_exit_status (const char *message,
+                         const char *service_name,
+                         int *exit_status)
+{
+  gs_free char *pattern = NULL, *number = NULL;
+  gs_unref_regex GRegex *regex = NULL;
+  gs_free_match_info GMatchInfo *match_info = NULL;
+  gint64 v;
+  char *end;
+  GError *err = NULL;
+
+  pattern = g_strdup_printf ("org.freedesktop.DBus.Error.Spawn.ChildExited: Process %s exited with status (\\d+)$", service_name);
+  regex = g_regex_new (pattern, 0, 0, &err);
+  g_assert_no_error (err);
+
+  if (!g_regex_match (regex, message, 0, &match_info))
+    return FALSE;
+
+  number = g_match_info_fetch (match_info, 1);
+  g_assert_true (number != NULL);
+
+  errno = 0;
+  v = g_ascii_strtoll (number, &end, 10);
+  if (errno || end == number || *end != '\0' || v < 0 || v > G_MAXINT)
+    return FALSE;
+
+  *exit_status = (int)v;
+  return TRUE;
+}
+
+static gboolean
+handle_factory_error (GError *error,
+                      const char *service_name)
+{
+  int exit_status;
+
+  if (!g_dbus_error_is_remote_error (error) ||
+      !g_error_matches (error, G_DBUS_ERROR, G_DBUS_ERROR_SPAWN_CHILD_EXITED) ||
+      !get_factory_exit_status (error->message, service_name, &exit_status))
+    return FALSE;
+
+  g_dbus_error_strip_remote_error (error);
+  g_printerr ("%s\n\n", error->message);
+
+  switch (exit_status) {
+  case _EXIT_FAILURE_WRONG_ID:
+    g_printerr ("You tried to run gnome-terminal-server with elevated privileged. This is not supported.\n");
+    break;
+  case _EXIT_FAILURE_NO_UTF8:
+    g_printerr ("The environment that gnome-terminal-server was launched with specified a non-UTF-8 locale. This is not supported.\n");
+    break;
+  case _EXIT_FAILURE_UNSUPPORTED_LOCALE:
+    g_printerr ("The environment that gnome-terminal-server was launched with specified an unsupported locale.\n");
+    break;
+  case _EXIT_FAILURE_GTK_INIT:
+    g_printerr ("The environment that gnome-terminal-server was launched with most likely contained an incorrect or unset \"DISPLAY\" variable.\n");
+    break;
+  default:
+    break;
+  }
+  g_printerr ("See https://wiki.gnome.org/Apps/Terminal/FAQ#Exit_status_%d for more information.\n", exit_status);
+
+  return TRUE;
+}
+
+static gboolean
+handle_create_instance_error (GError *error,
+                              const char *service_name)
+{
+  if (handle_factory_error (error, service_name))
+    return TRUE;
+
+  g_dbus_error_strip_remote_error (error);
+  g_printerr ("Error creating terminal: %s\n", error->message);
+  return FALSE; /* don't abort */
+}
+
+static gboolean
+handle_create_receiver_proxy_error (GError *error,
+                                    const char *service_name,
+                                    const char *object_path)
+{
+  if (handle_factory_error (error, service_name))
+    return TRUE;
+
+  g_dbus_error_strip_remote_error (error);
+  g_printerr ("Failed to create proxy for terminal: %s\n", error->message);
+  return FALSE; /* don't abort */
+}
+
+static gboolean
+handle_exec_error (GError *error,
+                   const char *service_name)
+{
+  if (handle_factory_error (error, service_name))
+    return TRUE;
+
+  g_dbus_error_strip_remote_error (error);
+  g_printerr ("Error: %s\n", error->message);
+  return FALSE; /* don't abort */
+}
+
 /**
  * handle_options:
  * @app:
@@ -62,8 +165,8 @@ GS_DEFINE_CLEANUP_FUNCTION0(TerminalOptions*, gs_local_options_free, terminal_op
  */
 static gboolean
 handle_options (TerminalFactory *factory,
-                TerminalOptions *options,
-                GError **error)
+                const char *service_name,
+                TerminalOptions *options)
 {
   GList *lw;
   const char *encoding;
@@ -131,11 +234,10 @@ handle_options (TerminalFactory *factory,
                   &object_path,
                   NULL /* cancellable */,
                   &err)) {
-            g_dbus_error_strip_remote_error (err);
-            g_printerr ("Error creating terminal: %s\n", err->message);
-
-            /* Continue processing the remaining options! */
-            continue;
+            if (handle_create_instance_error (err, service_name))
+              return FALSE;
+            else
+              continue; /* Continue processing the remaining options! */
           }
 
           p = strstr (object_path, "/window/");
@@ -159,11 +261,10 @@ handle_options (TerminalFactory *factory,
                                                                NULL /* cancellable */,
                                                                &err);
           if (receiver == NULL) {
-            g_dbus_error_strip_remote_error (err);
-            g_printerr ("Failed to create proxy for terminal: %s\n", err->message);
-
-            /* Continue processing the remaining options! */
-            continue;
+            if (handle_create_receiver_proxy_error (err, service_name, object_path))
+              return FALSE;
+            else
+              continue; /* Continue processing the remaining options! */
           }
 
           g_variant_builder_init (&builder, G_VARIANT_TYPE ("a{sv}"));
@@ -183,8 +284,10 @@ handle_options (TerminalFactory *factory,
                                                  NULL /* infdlist */, NULL /* outfdlist */,
                                                 NULL /* cancellable */,
                                                 &err)) {
-            g_dbus_error_strip_remote_error (err);
-            g_printerr ("Error: %s\n", err->message);
+            if (handle_exec_error (err, service_name))
+              return FALSE;
+            else
+              continue; /* Continue processing the remaining options! */
           }
         }
     }
@@ -204,6 +307,7 @@ main (int argc, char **argv)
   gs_free_error GError *error = NULL;
   gs_free char *working_directory = NULL;
   int exit_code = EXIT_FAILURE;
+  const char *service_name;
 
   setlocale (LC_ALL, "");
 
@@ -240,29 +344,25 @@ main (int argc, char **argv)
   display_name = gdk_display_get_name (display);
   options->display_name = g_strdup (display_name);
 
+  service_name = options->server_app_id ? options->server_app_id : TERMINAL_APPLICATION_ID;
+
   factory = terminal_factory_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES |
                                                      G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS,
-                                                     options->server_app_id ? options->server_app_id 
-                                                                            : TERMINAL_APPLICATION_ID,
+                                                     service_name,
                                                      TERMINAL_FACTORY_OBJECT_PATH,
                                                      NULL /* cancellable */,
                                                      &error);
   if (factory == NULL) {
-    g_dbus_error_strip_remote_error (error);
-    g_printerr ("Error constructing proxy for %s:%s: %s\n", 
-                options->server_app_id ? options->server_app_id : TERMINAL_APPLICATION_ID,
-                TERMINAL_FACTORY_OBJECT_PATH,
-                error->message);
+    if (!handle_factory_error (error, service_name))
+      g_printerr ("Error constructing proxy for %s:%s: %s\n",
+                  service_name, TERMINAL_FACTORY_OBJECT_PATH, error->message);
+
     goto out;
   }
 
-  if (!handle_options (factory, options, &error)) {
-    g_dbus_error_strip_remote_error (error);
-    g_printerr ("Failed to handle arguments: %s\n", error->message);
-  } else {
+  if (handle_options (factory, service_name, options))
     exit_code = EXIT_SUCCESS;
-  }
 
  out:
   return exit_code;

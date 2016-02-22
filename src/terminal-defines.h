@@ -20,6 +20,13 @@
 
 G_BEGIN_DECLS
 
+enum {
+  _EXIT_FAILURE_WRONG_ID = 7,
+  _EXIT_FAILURE_NO_UTF8 = 8,
+  _EXIT_FAILURE_UNSUPPORTED_LOCALE = 9,
+  _EXIT_FAILURE_GTK_INIT = 10
+};
+
 #define TERMINAL_APPLICATION_ID                 "org.gnome.Terminal"
 
 #define TERMINAL_OBJECT_PATH_PREFIX             "/org/gnome/Terminal"

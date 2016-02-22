@@ -54,8 +54,10 @@ GS_DEFINE_CLEANUP_FUNCTION0(GChecksum*, gs_local_checksum_free, g_checksum_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GError*, gs_local_free_error, g_error_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GHashTable*, gs_local_hashtable_unref, g_hash_table_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GList*, gs_local_list_free, g_list_free)
+GS_DEFINE_CLEANUP_FUNCTION0(GMatchInfo*, gs_local_match_info_free, g_match_info_free)
 GS_DEFINE_CLEANUP_FUNCTION0(GObject*, gs_local_obj_unref, g_object_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GPtrArray*, gs_local_ptrarray_unref, g_ptr_array_unref)
+GS_DEFINE_CLEANUP_FUNCTION0(GRegex*, gs_local_regex_unref, g_regex_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariant*, gs_local_variant_unref, g_variant_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantBuilder*, gs_local_variant_builder_unref, g_variant_builder_unref)
 GS_DEFINE_CLEANUP_FUNCTION0(GVariantIter*, gs_local_variant_iter_free, g_variant_iter_free)
@@ -171,6 +173,27 @@ GS_DEFINE_CLEANUP_FUNCTION(void*, gs_local_free, g_free)
  * Call g_list_free() on a variable location when it goes out of scope.
  */
 #define gs_free_list __attribute__ ((cleanup(gs_local_list_free)))
+
+/**
+ * gs_unref_regex:
+ *
+ * Call g_regex_unref() on a variable location when it goes out of
+ * scope.  Note that unlike g_regex_unref(), the variable may be
+ * %NULL.
+
+ */
+#define gs_unref_regex __attribute__ ((cleanup(gs_local_regex_unref)))
+
+
+/**
+ * gs_unref_regex:
+ *
+ * Call g_regex_unref() on a variable location when it goes out of
+ * scope.  Note that unlike g_regex_unref(), the variable may be
+ * %NULL.
+
+ */
+#define gs_free_match_info __attribute__ ((cleanup(gs_local_match_info_free)))
 
 G_END_DECLS
 
