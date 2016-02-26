@@ -218,6 +218,9 @@ main (int argc, char **argv)
   assert_match (REGEX_URL_AS_IS, "<http://foo.bar/asdf.qwer.html>",             "http://foo.bar/asdf.qwer.html");
   assert_match (REGEX_URL_AS_IS, "Go to http://192.168.1.1.",                   "http://192.168.1.1");
   assert_match (REGEX_URL_AS_IS, "If not, see <http://www.gnu.org/licenses/>.", "http://www.gnu.org/licenses/");
+  assert_match (REGEX_URL_AS_IS, "<a href=\"http://foo/bar\">foo</a>",          "http://foo/bar");
+  assert_match (REGEX_URL_AS_IS, "<a href='http://foo/bar'>foo</a>",            "http://foo/bar");
+  assert_match (REGEX_URL_AS_IS, "<url>http://foo/bar</url>",                   "http://foo/bar");
 
   assert_match (REGEX_URL_AS_IS, "http://",          NULL);
   assert_match (REGEX_URL_AS_IS, "http://a",         ENTIRE);
@@ -293,6 +296,9 @@ main (int argc, char **argv)
   assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.4]",       "foo@[1.2.3.4]");
   assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.456]",     NULL);
   assert_match (REGEX_EMAIL, "Write to foo@[1::2345]",       "foo@[1::2345]");
+  assert_match (REGEX_EMAIL, "<baz email=\"foo@bar.com\"/>", "foo@bar.com");
+  assert_match (REGEX_EMAIL, "<baz email='foo@bar.com'/>",   "foo@bar.com");
+  assert_match (REGEX_EMAIL, "<email>foo@bar.com</email>",   "foo@bar.com");
 
   /* Sip, examples from rfc 3261 */
   assert_match (REGEX_URL_VOIP, "sip:alice@atlanta.com;maddr=239.255.255.1;ttl=15",           ENTIRE);
