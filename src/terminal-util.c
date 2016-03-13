@@ -160,7 +160,7 @@ terminal_util_show_about (GtkWindow *transient_parent)
     "Copyright © 2002–2004 Havoc Pennington\n"
     "Copyright © 2003–2004, 2007 Mariano Suárez-Alvarez\n"
     "Copyright © 2006 Guilherme de S. Pastore\n"
-    "Copyright © 2007–2015 Christian Persch";
+    "Copyright © 2007–2016 Christian Persch";
   char *licence_text;
   GKeyFile *key_file;
   GBytes *bytes;
