@@ -244,9 +244,9 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
       GError *error = NULL;
 
 #ifdef WITH_PCRE2
-      (*regexes)[i] = vte_regex_new (regex_patterns[i].pattern, -1,
-                                     PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
-                                     &error);
+      (*regexes)[i] = vte_regex_new_for_match (regex_patterns[i].pattern, -1,
+                                               PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
+                                               &error);
       g_assert_no_error (error);
 
       if (!vte_regex_jit ((*regexes)[i], PCRE2_JIT_COMPLETE, &error) ||

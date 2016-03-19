@@ -303,7 +303,7 @@ update_regex (TerminalSearchPopover *popover)
     if (multiline)
       compile_flags |= PCRE2_MULTILINE;
 
-    priv->regex = vte_regex_new (pattern, -1, compile_flags, &error);
+    priv->regex = vte_regex_new_for_search (pattern, -1, compile_flags, &error);
     if (priv->regex != NULL &&
         (!vte_regex_jit (priv->regex, PCRE2_JIT_COMPLETE, NULL) ||
          !vte_regex_jit (priv->regex, PCRE2_JIT_PARTIAL_SOFT, NULL))) {
