@@ -59,7 +59,7 @@ case "$with_gtk" in
        GTK_MIN_REQUIRED=3.8
        GTK_MAX_ALLOWED=3.14
        VTE_API_VERSION=2.91
-       VTE_REQUIRED=0.44.0
+       VTE_REQUIRED=0.45.0
        ;;
 esac
 
@@ -87,7 +87,6 @@ AC_MSG_RESULT([$with_pcre2])
 PCRE2_PKGS=
 if test "$with_pcre2" = "yes"; then
   PCRE2_PKGS="libpcre2-8 >= $PCRE2_REQUIRED"
-  VTE_REQUIRED=0.45.0
 
   PKG_CHECK_MODULES([PCRE2],[$PCRE2_PKGS],,
     [AC_MSG_ERROR([PCRE2 requested but libpcre2-8 not found. Use --without-pcre2 to disable PCRE2])])
