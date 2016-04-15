@@ -17,10 +17,17 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include "terminal-libgsystem.h"
 #include "terminal-screen-container.h"
 #include "terminal-debug.h"
 
 #include <gtk/gtk.h>
+
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/gdkwayland.h>
+#endif
 
 #define TERMINAL_SCREEN_CONTAINER_GET_PRIVATE(screen_container)(G_TYPE_INSTANCE_GET_PRIVATE ((screen_container), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainerPrivate))
 
@@ -28,9 +35,15 @@ struct _TerminalScreenContainerPrivate
 {
   TerminalScreen *screen;
   GtkWidget *hbox;
+  GtkWidget *resize_popup;
   GtkWidget *vscrollbar;
   GtkPolicyType hscrollbar_policy;
   GtkPolicyType vscrollbar_policy;
+  int old_grid_height;
+  int old_grid_width;
+  unsigned int connect_toplevel_id;
+  unsigned long motion_notify_id;
+  unsigned long size_allocate_id;
 };
 
 enum
@@ -45,9 +58,125 @@ enum
 
 G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY)
 
+static gboolean is_wayland = FALSE;
+
 /* helper functions */
 
 /* Widget class implementation */
+
+static gboolean
+terminal_screen_container_key_press_event (TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+
+  gtk_widget_hide (priv->resize_popup);
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+terminal_screen_container_motion_notify_event (TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+
+  gtk_widget_hide (priv->resize_popup);
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+terminal_screen_container_size_allocate (TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+  gs_free char *text = NULL;
+  int grid_height;
+  int grid_width;
+
+  if (priv->screen == NULL)
+    goto out;
+
+  terminal_screen_get_size (priv->screen, &grid_width, &grid_height);
+  if (grid_height == priv->old_grid_height && grid_width == priv->old_grid_width)
+    goto out;
+
+  text = g_strdup_printf (_("%d x %d"), grid_width, grid_height);
+  gtk_label_set_text (GTK_LABEL (priv->resize_popup), text);
+  gtk_widget_show (priv->resize_popup);
+
+  priv->old_grid_height = grid_height;
+  priv->old_grid_width = grid_width;
+
+ out:
+  return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+terminal_screen_container_connect_toplevel (TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+  GtkWidget *toplevel;
+
+  priv->connect_toplevel_id = 0;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
+  if (gtk_widget_is_toplevel (toplevel))
+    {
+      priv->motion_notify_id = g_signal_connect_object (toplevel,
+                                                        "motion-notify-event",
+                                                        G_CALLBACK (terminal_screen_container_motion_notify_event),
+                                                        container,
+                                                        G_CONNECT_SWAPPED);
+
+      priv->size_allocate_id = g_signal_connect_object (toplevel,
+                                                        "size-allocate",
+                                                        G_CALLBACK (terminal_screen_container_size_allocate),
+                                                        container,
+                                                        G_CONNECT_SWAPPED);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+terminal_screen_container_remove_idle (TerminalScreenContainer *container)
+{
+  TerminalScreenContainerPrivate *priv = container->priv;
+
+  if (priv->connect_toplevel_id != 0)
+    {
+      g_source_remove (priv->connect_toplevel_id);
+      priv->connect_toplevel_id = 0;
+    }
+}
+
+static void
+terminal_screen_container_parent_set (GtkWidget *widget, GtkWidget *old_parent)
+{
+  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (widget);
+  TerminalScreenContainerPrivate *priv = container->priv;
+  GtkWidget *toplevel;
+
+  if (!is_wayland)
+    return;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (gtk_widget_is_toplevel (toplevel))
+    {
+      if (priv->motion_notify_id != 0)
+        {
+          g_signal_handler_disconnect (old_parent, priv->motion_notify_id);
+          priv->motion_notify_id = 0;
+        }
+
+      if (priv->size_allocate_id != 0)
+        {
+          g_signal_handler_disconnect (old_parent, priv->size_allocate_id);
+          priv->size_allocate_id = 0;
+        }
+
+      terminal_screen_container_remove_idle (container);
+      priv->connect_toplevel_id = g_idle_add ((GSourceFunc) terminal_screen_container_connect_toplevel,
+                                              container);
+    }
+}
 
 static void
 terminal_screen_container_style_updated (GtkWidget *widget)
@@ -93,6 +222,12 @@ terminal_screen_container_init (TerminalScreenContainer *container)
 
   priv = container->priv = TERMINAL_SCREEN_CONTAINER_GET_PRIVATE (container);
 
+  priv->resize_popup = gtk_label_new (NULL);
+  gtk_widget_set_halign (priv->resize_popup, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (priv->resize_popup, GTK_ALIGN_CENTER);
+  gtk_widget_set_no_show_all (priv->resize_popup, TRUE);
+  gtk_overlay_add_overlay (GTK_OVERLAY (container), priv->resize_popup);
+
   priv->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
   priv->vscrollbar_policy = GTK_POLICY_AUTOMATIC;
 }
@@ -106,6 +241,11 @@ terminal_screen_container_constructed (GObject *object)
   G_OBJECT_CLASS (terminal_screen_container_parent_class)->constructed (object);
 
   g_assert (priv->screen != NULL);
+
+  g_signal_connect_swapped (priv->screen,
+                            "key-press-event",
+                            G_CALLBACK (terminal_screen_container_key_press_event),
+                            container);
 
   priv->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
@@ -175,6 +315,16 @@ terminal_screen_container_set_property (GObject *object,
 }
 
 static void
+terminal_screen_container_dispose (GObject *object)
+{
+  TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (object);
+
+  terminal_screen_container_remove_idle (container);
+
+  G_OBJECT_CLASS (terminal_screen_container_parent_class)->dispose (object);
+}
+
+static void
 terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -183,9 +333,11 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
 
   gobject_class->constructed = terminal_screen_container_constructed;
+  gobject_class->dispose = terminal_screen_container_dispose;
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;
 
+  widget_class->parent_set = terminal_screen_container_parent_set;
   widget_class->style_updated = terminal_screen_container_style_updated;
 
   g_object_class_install_property
@@ -225,6 +377,16 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                                                                  FALSE,
                                                                  G_PARAM_READWRITE |
                                                                  G_PARAM_STATIC_STRINGS));
+
+#ifdef GDK_WINDOWING_WAYLAND
+  {
+    GdkDisplay *display;
+
+    display = gdk_display_get_default ();
+    if (GDK_IS_WAYLAND_DISPLAY (display))
+      is_wayland = TRUE;
+  }
+#endif
 }
 
 /* public API */
