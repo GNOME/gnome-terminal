@@ -16,6 +16,11 @@ endif # WITH_NAUTILUS_EXTENSION
 
 dbusservice_DATA = org.gnome.Terminal.service
 
+# It is correct for this to be in ${prefix}/lib, even on systems where that
+# does not match ${libdir}. This is what systemd uses on such platforms.
+systemduserdir = $(prefix)/lib/systemd/user
+nodist_systemduser_DATA = gnome-terminal-server.service
+
 gnome_terminal_server_built = \
 	terminal-marshal.c \
 	terminal-marshal.h \
@@ -140,7 +145,17 @@ terminal-marshal.c: $(srcdir)/terminal-marshal.list
 org.gnome.Terminal.service: Makefile
 	$(AM_V_GEN) ( echo "[D-BUS Service]"; \
 		      echo "Name=org.gnome.Terminal"; \
+		      echo "SystemdService=gnome-terminal-server.service"; \
 		      echo "Exec=${libexecdir}/gnome-terminal-server") > $@
+
+gnome-terminal-server.service: Makefile
+	$(AM_V_GEN) ( echo "[Unit]"; \
+		      echo "Description=GNOME Terminal Server"; \
+		      echo "[Service]"; \
+		      echo "KillMode=process"; \
+		      echo "Type=dbus"; \
+		      echo "BusName=org.gnome.Terminal"; \
+		      echo "ExecStart=${libexecdir}/gnome-terminal-server") > $@
 
 terminal-gdbus-generated.c terminal-gdbus-generated.h: org.gnome.Terminal.xml Makefile
 	$(AM_V_GEN) $(GDBUS_CODEGEN) \
@@ -396,6 +411,7 @@ CLEANFILES = \
 	gnome-terminal.schemas \
 	stamp-terminal-type-builtins.h \
 	org.gnome.Terminal.service \
+	gnome-terminal-server.service \
 	$(BUILT_SOURCES)
 
 EXTRA_DIST = \
