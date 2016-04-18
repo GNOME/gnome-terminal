@@ -58,7 +58,7 @@ case "$with_gtk" in
   3.0) GTK_API_VERSION=3.0
        GTK_REQUIRED=3.12.0
        GTK_MIN_REQUIRED=3.8
-       GTK_MAX_ALLOWED=3.14
+       GTK_MAX_ALLOWED=3.20
        VTE_API_VERSION=2.91
        VTE_REQUIRED=0.45.0
        ;;
