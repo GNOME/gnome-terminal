@@ -187,39 +187,51 @@ AM_CONDITIONAL([ENABLE_MIGRATION],[test "$enable_migration" = "yes"])
 # ***********
 
 AC_ARG_VAR([GLIB_GENMARSHAL],[the glib-genmarschal programme])
-AC_PATH_PROG([GLIB_GENMARSHAL],[glib-genmarshal],[])
 if test -z "$GLIB_GENMARSHAL"; then
-  AC_MSG_ERROR([glib-genmarshal not found])
+  AC_PATH_PROG([GLIB_GENMARSHAL],[glib-genmarshal],[])
+  if test -z "$GLIB_GENMARSHAL"; then
+    AC_MSG_ERROR([glib-genmarshal not found])
+  fi
 fi
 
 AC_ARG_VAR([GLIB_MKENUMS],[the glib-mkenums programme])
-AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums],[])
 if test -z "$GLIB_MKENUMS"; then
-  AC_MSG_ERROR([glib-mkenums not found])
+  AC_PATH_PROG([GLIB_MKENUMS],[glib-mkenums],[])
+  if test -z "$GLIB_MKENUMS"; then
+    AC_MSG_ERROR([glib-mkenums not found])
+  fi
 fi
 
 AC_ARG_VAR([GLIB_COMPILE_RESOURCES],[the glib-compile-resources programme])
-AC_PATH_PROG([GLIB_COMPILE_RESOURCES],[glib-compile-resources],[])
 if test -z "$GLIB_COMPILE_RESOURCES"; then
-  AC_MSG_ERROR([glib-compile-resources not found])
+  AC_PATH_PROG([GLIB_COMPILE_RESOURCES],[glib-compile-resources],[])
+  if test -z "$GLIB_COMPILE_RESOURCES"; then
+    AC_MSG_ERROR([glib-compile-resources not found])
+  fi
 fi
 
 AC_ARG_VAR([GDBUS_CODEGEN],[the gdbus-codegen programme])
-AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
 if test -z "$GDBUS_CODEGEN"; then
-  AC_MSG_ERROR([gdbus-codegen not found])
+  AC_PATH_PROG([GDBUS_CODEGEN],[gdbus-codegen],[])
+  if test -z "$GDBUS_CODEGEN"; then
+    AC_MSG_ERROR([gdbus-codegen not found])
+  fi
 fi
 
 AC_ARG_VAR([XMLLINT],[the xmllint programme])
-AC_PATH_PROG([XMLLINT],[xmllint],[])
 if test -z "$XMLLINT"; then
-  AC_MSG_ERROR([xmllint not found])
+  AC_PATH_PROG([XMLLINT],[xmllint],[])
+  if test -z "$XMLLINT"; then
+    AC_MSG_ERROR([xmllint not found])
+  fi
 fi
 
 AC_ARG_VAR([DESKTOP_FILE_VALIDATE],[the desktop-file-validate programme])
-AC_PATH_PROG([DESKTOP_FILE_VALIDATE],[desktop-file-validate],[])
 if test -z "$DESKTOP_FILE_VALIDATE"; then
-  AC_MSG_ERROR([desktop-file-validate not found])
+  AC_PATH_PROG([DESKTOP_FILE_VALIDATE],[desktop-file-validate],[])
+  if test -z "$DESKTOP_FILE_VALIDATE"; then
+    AC_MSG_ERROR([desktop-file-validate not found])
+  fi
 fi
 
 # ***************************
