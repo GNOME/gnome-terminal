@@ -296,6 +296,11 @@ main (int argc, char **argv)
   assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.4]",       "foo@[1.2.3.4]");
   assert_match (REGEX_EMAIL, "Write to foo@[1.2.3.456]",     NULL);
   assert_match (REGEX_EMAIL, "Write to foo@[1::2345]",       "foo@[1::2345]");
+  assert_match (REGEX_EMAIL, "Write to foo@[dead::beef]",    "foo@[dead::beef]");
+  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.4",         NULL);
+  assert_match (REGEX_EMAIL, "Write to foo@1.2.3.456",       NULL);
+  assert_match (REGEX_EMAIL, "Write to foo@1::2345",         NULL);
+  assert_match (REGEX_EMAIL, "Write to foo@dead::beef",      NULL);
   assert_match (REGEX_EMAIL, "<baz email=\"foo@bar.com\"/>", "foo@bar.com");
   assert_match (REGEX_EMAIL, "<baz email='foo@bar.com'/>",   "foo@bar.com");
   assert_match (REGEX_EMAIL, "<email>foo@bar.com</email>",   "foo@bar.com");
