@@ -233,7 +233,7 @@ ssh_argv (const char *uri,
   GFile *file;
   char **argv;
   int argc;
-  char *host_name, *path, *user_name, *unescaped_path, *quoted_path;
+  char *host_name, *path, *user_name, *quoted_path;
   guint host_port;
 
   g_assert (uri != NULL);
@@ -261,8 +261,7 @@ ssh_argv (const char *uri,
   }
 
   /* FIXME to we have to consider the remote file encoding? */
-  unescaped_path = g_uri_unescape_string (path, NULL);
-  quoted_path = g_shell_quote (unescaped_path);
+  quoted_path = g_shell_quote (path);
 
   if (run_in_mc) {
     argv[argc++] = g_strdup_printf ("cd %s && exec %s", quoted_path, "mc");
@@ -272,7 +271,6 @@ ssh_argv (const char *uri,
   }
 
   g_free (path);
-  g_free (unescaped_path);
   g_free (quoted_path);
 
   *argcp = argc;
