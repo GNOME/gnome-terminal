@@ -2234,7 +2234,7 @@ terminal_window_fill_notebook_action_box (TerminalWindow *window)
   gtk_widget_set_halign (menu, GTK_ALIGN_END);
 
   button = gtk_menu_button_new ();
-  gtk_button_set_relief (GTK_BUTTON (button), FALSE);
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
   gtk_menu_button_set_popup (GTK_MENU_BUTTON (button), menu);
 
