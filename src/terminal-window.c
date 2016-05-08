@@ -92,6 +92,8 @@ struct _TerminalWindowPrivate
   guint icon_title_set : 1;
 };
 
+#define TERMINAL_WINDOW_CSS_NAME "terminal-window"
+
 #define PROFILE_DATA_KEY "GT::Profile"
 
 #define FILE_NEW_TERMINAL_UI_PATH         "/menubar/File/FileNewTerminalProfiles"
@@ -2829,6 +2831,13 @@ terminal_window_class_init (TerminalWindowClass *klass)
   g_type_class_add_private (object_class, sizeof (TerminalWindowPrivate));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/terminal/ui/window.ui");
+
+#if GTK_CHECK_VERSION(3, 19, 5)
+  gtk_widget_class_set_css_name(widget_class, TERMINAL_WINDOW_CSS_NAME);
+#else
+  if (gtk_check_version(3, 19, 5) == NULL)
+    g_printerr("gnome-terminal needs to be recompiled against a newer gtk+ version.\n");
+#endif
 }
 
 static void
