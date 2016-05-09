@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-02-18 10:39+0000\n"
-"PO-Revision-Date: 2016-03-04 16:32+0200\n"
+"POT-Creation-Date: 2016-04-29 10:09+0000\n"
+"PO-Revision-Date: 2016-05-08 18:55+0200\n"
 "Last-Translator: Cédric Valmary (totenoc.eu) <cvalmary@yahoo.fr>\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -24,8 +24,8 @@ msgstr ""
 "X-Launchpad-Export-Date: 2015-05-20 16:52+0000\n"
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
-#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:168
-#: ../src/terminal-accels.c:234 ../src/terminal.c:240
+#: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:161
+#: ../src/terminal-accels.c:234 ../src/terminal.c:337
 #: ../src/terminal-tab-label.c:81 ../src/terminal-tabs-menu.c:180
 #: ../src/terminal-window.c:2648 ../src/terminal-window.c:2991
 msgid "Terminal"
@@ -54,12 +54,10 @@ msgstr ""
 "acorchi de clavièr."
 
 #: ../org.gnome.Terminal.Nautilus.appdata.xml.in.h:1
-#| msgid "Terminal options:"
 msgid "Terminal plugin for Files"
 msgstr ""
 
 #: ../org.gnome.Terminal.Nautilus.appdata.xml.in.h:2
-#| msgid "Open a terminal"
 msgid "Open a terminal from Files"
 msgstr ""
 
@@ -70,7 +68,6 @@ msgid ""
 msgstr ""
 
 #: ../org.gnome.Terminal.desktop.in.in.h:3
-#| msgid "shell;prompt;command;commandline;"
 msgid "shell;prompt;command;commandline;cmd;"
 msgstr "shell;prompt;comanda;linha de comanda;"
 
@@ -263,33 +260,32 @@ msgstr "Opcions de tractament :"
 msgid "Show processing options"
 msgstr "Afichar las opcions de tractament"
 
-#: ../src/gterminal.vala:475 ../src/gterminal.vala:572
-#: ../src/gterminal.vala:595 ../src/gterminal.vala:654
-#: ../src/gterminal.vala:681 ../src/gterminal.vala:703
+#: ../src/gterminal.vala:479 ../src/gterminal.vala:576
+#: ../src/gterminal.vala:599 ../src/gterminal.vala:658
+#: ../src/gterminal.vala:685 ../src/gterminal.vala:707
 msgid "Missing argument"
 msgstr "Argument mancant"
 
-#: ../src/gterminal.vala:495
+#: ../src/gterminal.vala:499
 #, c-format
 msgid "Unknown command \"%s\""
 msgstr "Comanda « %s » desconeguda"
 
-#: ../src/gterminal.vala:522
+#: ../src/gterminal.vala:526
 #, c-format
 msgid "'%s' needs the command to run as arguments after '--'"
 msgstr ""
 "« %s » a besonh de la comanda per s'executar coma argument aprèp « -- »"
 
-#: ../src/gterminal.vala:525
-#| msgid "'%s' needs the command to run as arguments after '--'"
+#: ../src/gterminal.vala:529
 msgid "Extraneous arguments after '--'"
 msgstr ""
 
-#: ../src/gterminal.vala:740
+#: ../src/gterminal.vala:744
 msgid "GTerminal"
 msgstr "GTerminal"
 
-#: ../src/gterminal.vala:756
+#: ../src/gterminal.vala:760
 #, c-format
 msgid "Error processing arguments: %s\n"
 msgstr "Error de tractament dels arguments : %s\n"
@@ -338,19 +334,15 @@ msgid ""
 "Default color of terminal background, as a color specification (can be HTML-"
 "style hex digits, or a color name such as \"red\")."
 msgstr ""
-"Color per defaut del rèireplan del terminal. Coma en HTML, aquesta color "
-"pòt èsser indicada per un nom (« red ») o per de valors exadecimalas (« "
-"#FF003F »)."
+"Color per defaut del rèireplan del terminal. Coma en HTML, aquesta color pòt "
+"èsser indicada per un nom (« red ») o per de valors exadecimalas (« #FF003F "
+"»)."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:9
 msgid "Default color of bold text in the terminal"
 msgstr "Color per defaut del tèxte gras dins lo terminal"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:10
-#| msgid ""
-#| "Default color of bold text in the terminal, as a color specification (can "
-#| "be HTML-style hex digits, or a color name such as \"red\"). This is "
-#| "ignored if bold_color_same_as_fg is true."
 msgid ""
 "Default color of bold text in the terminal, as a color specification (can be "
 "HTML-style hex digits, or a color name such as \"red\"). This is ignored if "
@@ -370,7 +362,6 @@ msgstr ""
 "normal."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:13
-#| msgid "Whether to use custom terminal size for new windows"
 msgid "Whether to use custom cursor colors"
 msgstr ""
 
@@ -379,15 +370,10 @@ msgid "If true, use the cursor colors from the profile."
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:15
-#| msgid "_Background color:"
 msgid "Cursor background color"
 msgstr "Color del cursor de _rèireplan :"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:16
-#| msgid ""
-#| "Default color of bold text in the terminal, as a color specification (can "
-#| "be HTML-style hex digits, or a color name such as \"red\"). This is "
-#| "ignored if bold_color_same_as_fg is true."
 msgid ""
 "Custom color of the background of the terminal's cursor, as a color "
 "specification (can be HTML-style hex digits, or a color name such as \"red"
@@ -399,10 +385,6 @@ msgid "Cursor foreground colour"
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:18
-#| msgid ""
-#| "Default color of bold text in the terminal, as a color specification (can "
-#| "be HTML-style hex digits, or a color name such as \"red\"). This is "
-#| "ignored if bold_color_same_as_fg is true."
 msgid ""
 "Custom color for the foreground of the text character at the terminal's "
 "cursor position, as a color specification (can be HTML-style hex digits, or "
@@ -410,7 +392,6 @@ msgid ""
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:19
-#| msgid "Whether to use custom terminal size for new windows"
 msgid "Whether to use custom highlight colors"
 msgstr ""
 
@@ -419,15 +400,10 @@ msgid "If true, use the highlight colors from the profile."
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:21
-#| msgid "_Background color:"
 msgid "Highlight background color"
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:22
-#| msgid ""
-#| "Default color of bold text in the terminal, as a color specification (can "
-#| "be HTML-style hex digits, or a color name such as \"red\"). This is "
-#| "ignored if bold_color_same_as_fg is true."
 msgid ""
 "Custom color of the background of the terminal's highlight, as a color "
 "specification (can be HTML-style hex digits, or a color name such as \"red"
@@ -439,10 +415,6 @@ msgid "Highlight foreground colour"
 msgstr ""
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:24
-#| msgid ""
-#| "Default color of bold text in the terminal, as a color specification (can "
-#| "be HTML-style hex digits, or a color name such as \"red\"). This is "
-#| "ignored if bold_color_same_as_fg is true."
 msgid ""
 "Custom color for the foreground of the text character at the terminal's "
 "highlight position, as a color specification (can be HTML-style hex digits, "
@@ -457,7 +429,7 @@ msgstr "Indica se cal autorizar lo tèxte en gras"
 #: ../src/org.gnome.Terminal.gschema.xml.h:26
 msgid "If true, allow applications in the terminal to make text boldface."
 msgstr ""
-"Se verai, las aplicacions seràn autorizadas a utilizar de tèxte en gras."
+"Se verai, las aplicacions seràn autorizadas d'utilizar de tèxte en gras."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:27
 msgid "Whether to ring the terminal bell"
@@ -468,7 +440,7 @@ msgid ""
 "List of ASCII punctuation characters that are not to be treated as part of a "
 "word when doing word-wise selection"
 msgstr ""
-"Lista de caractèrs de ponctuacion ASCII de considerar pas coma fasent "
+"Lista de caractèrs de pontuacion ASCII de considerar pas coma fasent "
 "partida d'un mot al moment d'una seleccion per mots"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:29
@@ -491,7 +463,7 @@ msgid ""
 "use_custom_default_size is not enabled."
 msgstr ""
 "Nombre de colomnas dins una fenèstra del terminal creada novèlament. Pas cap "
-"d'efièch se use_custom_default_size es pas activat."
+"d'efèit se use_custom_default_size es pas activat."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:33
 msgid "Default number of rows"
@@ -503,7 +475,7 @@ msgid ""
 "use_custom_default_size is not enabled."
 msgstr ""
 "Nombre de linhas dins una fenèstra del terminal creada novèlament. Pas cap "
-"d'efièch se use_custom_default_size es pas activat."
+"d'efèit se use_custom_default_size es pas activat."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:35
 msgid "When to show the scrollbar"
@@ -565,9 +537,6 @@ msgid "What to do with the terminal when the child command exits"
 msgstr "Indica de qué far quand la comanda aviada s'acaba"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:45
-#| msgid ""
-#| "Possible values are \"close\" to close the terminal, and \"restart\" to "
-#| "restart the command."
 msgid ""
 "Possible values are \"close\" to close the terminal, \"restart\" to restart "
 "the command, and \"hold\" to keep the terminal open with no command running "
@@ -634,11 +603,11 @@ msgstr "Un nom de poliça Pango e sa talha "
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:57
 msgid "The code sequence the Backspace key generates"
-msgstr "Indica la sequéncia de còde que la tòca Retorn arrièr emet"
+msgstr "Indica la sequéncia de còdi que la tòca Retorn arrièr emet"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:58
 msgid "The code sequence the Delete key generates"
-msgstr "Indica la sequéncia de còde que la tòca Supr emet"
+msgstr "Indica la sequéncia de còdi que la tòca Supr emet"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:59
 msgid "Whether to use the colors from the theme for the terminal widget"
@@ -701,17 +670,14 @@ msgid "Keyboard shortcut to paste text"
 msgstr "Acorchi de clavièr per pegar de tèxte"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:72
-#| msgid "Keyboard shortcut to paste text"
 msgid "Keyboard shortcut to select all text"
 msgstr "Acorchi de clavièr per seleccionar de tèxte"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:73
-#| msgid "Keyboard shortcut to open the search dialog"
 msgid "Keyboard shortcut to open the Preferences dialog"
 msgstr "Acorchi de clavièr per dobrir las preferéncias de la bóstia de dialòg"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:74
-#| msgid "Keyboard shortcut to open the search dialog"
 msgid "Keyboard shortcut to open the current profile's Preferences dialog"
 msgstr ""
 "Acorchi de clavièr per dobrir las preferéncias del perfil actual de la "
@@ -726,7 +692,6 @@ msgid "Keyboard shortcut to toggle the visibility of the menubar"
 msgstr "Acorchi de clavièr per modificar la visibilitat de la barra de menú"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:77
-#| msgid "Keyboard shortcut to set the terminal title"
 msgid "Keyboard shortcut to toggle the read-only state"
 msgstr "Acorchi de clavièr per definir l'estat de lectura sola"
 
@@ -769,7 +734,7 @@ msgstr "Acorchi de clavièr per desplaçar l'onglet actual cap a esquèrra"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:87
 msgid "Keyboard shortcut to move the current tab to the right"
-msgstr "Acorchi de clavièr per desplaçar l'onglet actual cap a drecha"
+msgstr "Acorchi de clavièr per desplaçar l'onglet actual cap a dreita"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:88
 msgid "Keyboard shortcut to detach current tab"
@@ -869,7 +834,6 @@ msgstr ""
 "Indica se cal dobrir los novèls terminals dins de fenèstras o d'onglets"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:106
-#| msgid "When to show the scrollbar"
 msgid "When to show the tabs bar"
 msgstr ""
 
@@ -878,7 +842,6 @@ msgid "The position of the tab bar"
 msgstr "Posicion de la barra de desfilament"
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:108
-#| msgid "Which encoding to use"
 msgid "Which theme variant to use"
 msgstr ""
 
@@ -893,7 +856,6 @@ msgid "Tab"
 msgstr "Onglet"
 
 #: ../src/preferences.ui.h:5
-#| msgid "Default"
 msgctxt "theme variant"
 msgid "Default"
 msgstr "Per defaut"
@@ -925,7 +887,6 @@ msgid "Enable the _menu accelerator key (F10 by default)"
 msgstr "Activar la tòca d'accès al _menú (F10 per defaut)"
 
 #: ../src/preferences.ui.h:12
-#| msgid "Use _dark theme variant"
 msgid "Theme _variant:"
 msgstr "_Variante del tèma :"
 
@@ -995,30 +956,28 @@ msgstr "Solarizat clar"
 msgid "Solarized dark"
 msgstr "Solarizat escur"
 
-#: ../src/profile-editor.c:438
+#: ../src/profile-editor.c:442
 #, c-format
 msgid "Error parsing command: %s"
 msgstr "Error a l'analisi de la comanda : %s"
 
 #. This is the name of a colour scheme
-#: ../src/profile-editor.c:479 ../src/profile-preferences.ui.h:36
+#: ../src/profile-editor.c:483 ../src/profile-preferences.ui.h:36
 msgid "Custom"
 msgstr "Personalizada"
 
-#: ../src/profile-editor.c:638
+#: ../src/profile-editor.c:642
 #, c-format
 msgid "Editing Profile “%s”"
 msgstr "Edicion del perfil « %s »"
 
-#: ../src/profile-editor.c:894
+#: ../src/profile-editor.c:898
 #, c-format
-#| msgid "Choose Palette Color %d"
 msgid "Choose Palette Color %u"
 msgstr "Causissètz la paleta de colors %u"
 
-#: ../src/profile-editor.c:898
+#: ../src/profile-editor.c:902
 #, c-format
-#| msgid "Palette entry %d"
 msgid "Palette entry %u"
 msgstr "Entrada de paleta %u"
 
@@ -1045,7 +1004,7 @@ msgstr "Barra verticala"
 #. Cursor shape
 #: ../src/profile-preferences.ui.h:10
 msgid "Underline"
-msgstr "Solinhat"
+msgstr "Soslinhat"
 
 #. When terminal commands set their own titles
 #: ../src/profile-preferences.ui.h:12
@@ -1177,7 +1136,6 @@ msgid "_Rewrap on resize"
 msgstr "_Realinhar aprèp redimensionament"
 
 #: ../src/profile-preferences.ui.h:58
-#| msgid "_Custom font"
 msgid "_Custom font:"
 msgstr "Poliça p_ersonalizada :"
 
@@ -1232,7 +1190,6 @@ msgid "Background"
 msgstr "Fons"
 
 #: ../src/profile-preferences.ui.h:72
-#| msgid "_Text color:"
 msgid "_Default color:"
 msgstr "Color per _defaut :"
 
@@ -1245,27 +1202,22 @@ msgid "Choose Terminal Background Color"
 msgstr "Causissètz la color del rèireplan del terminal"
 
 #: ../src/profile-preferences.ui.h:75
-#| msgid "Choose Terminal Text Color"
 msgid "Choose Terminal Bold Text Color"
 msgstr ""
 
 #: ../src/profile-preferences.ui.h:76
-#| msgid "Choose Terminal Text Color"
 msgid "Choose Terminal Underlined Text Color"
 msgstr ""
 
 #: ../src/profile-preferences.ui.h:77
-#| msgid "_Background color:"
 msgid "Cu_rsor color:"
 msgstr "Color del cu_rsor :"
 
 #: ../src/profile-preferences.ui.h:78
-#| msgid "Choose Terminal Background Color"
 msgid "Choose Terminal Cursor Foreground Color"
 msgstr ""
 
 #: ../src/profile-preferences.ui.h:79
-#| msgid "Choose Terminal Background Color"
 msgid "Choose Terminal Cursor Background Color"
 msgstr ""
 
@@ -1274,17 +1226,14 @@ msgid "_Underline color:"
 msgstr "Color del solin_hament :"
 
 #: ../src/profile-preferences.ui.h:81
-#| msgid "Bol_d color:"
 msgid "Bo_ld color:"
 msgstr "Color del _gras :"
 
 #: ../src/profile-preferences.ui.h:82
-#| msgid "_Text color:"
 msgid "_Highlight color:"
 msgstr ""
 
 #: ../src/profile-preferences.ui.h:83
-#| msgid "Paleta"
 msgid "Palette"
 msgstr "Paleta"
 
@@ -1365,7 +1314,6 @@ msgid "Compatibility"
 msgstr "Compatibilitat"
 
 #: ../src/search-popover.ui.h:1
-#| msgid "_Search"
 msgid "Search"
 msgstr "Recercar"
 
@@ -1378,7 +1326,6 @@ msgid "Search for next occurrence"
 msgstr ""
 
 #: ../src/search-popover.ui.h:4
-#| msgid "Show exec options"
 msgid "Toggle search options"
 msgstr "Afichar las opcions de recèrca"
 
@@ -1438,7 +1385,6 @@ msgid "Select All"
 msgstr "Seleccionar tot"
 
 #: ../src/terminal-accels.c:171
-#| msgid "_Profile Preferences"
 msgid "Profile Preferences"
 msgstr "Preferéncias del perfil"
 
@@ -1480,7 +1426,6 @@ msgid "Normal Size"
 msgstr "Talha normala"
 
 #: ../src/terminal-accels.c:190
-#| msgid "Read-_Only"
 msgid "Read-Only"
 msgstr "Lectura sola"
 
@@ -1506,7 +1451,7 @@ msgstr "Desplaçar lo terminal cap a esquèrra"
 
 #: ../src/terminal-accels.c:199
 msgid "Move Terminal to the Right"
-msgstr "Desplaçar lo terminal cap a drecha"
+msgstr "Desplaçar lo terminal cap a dreita"
 
 #: ../src/terminal-accels.c:200
 msgid "Detach Terminal"
@@ -1550,11 +1495,11 @@ msgstr "_Accion"
 msgid "Shortcut _Key"
 msgstr "A_corchi de clavièr"
 
-#: ../src/terminal-app.c:746
+#: ../src/terminal-app.c:747
 msgid "User Defined"
 msgstr "Definit per l'utilizaire"
 
-#: ../src/terminal.c:233
+#: ../src/terminal.c:333
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Impossible d'analisar los paramètres : %s\n"
@@ -1720,72 +1665,61 @@ msgstr "A _prepaus"
 msgid "_Quit"
 msgstr "_Quitar"
 
-#: ../src/terminal-nautilus.c:602
+#: ../src/terminal-nautilus.c:603
 msgid "Open in _Remote Terminal"
 msgstr "Dobrir dins un terminal _distant"
 
-#: ../src/terminal-nautilus.c:604
+#: ../src/terminal-nautilus.c:605
 msgid "Open in _Local Terminal"
 msgstr "Dobrir dins un terminal _local"
 
-#: ../src/terminal-nautilus.c:608 ../src/terminal-nautilus.c:619
+#: ../src/terminal-nautilus.c:609 ../src/terminal-nautilus.c:620
 msgid "Open the currently selected folder in a terminal"
 msgstr "Dobrir lo dorsièr actualament seleccionat dins un terminal"
 
-#: ../src/terminal-nautilus.c:610 ../src/terminal-nautilus.c:621
-#: ../src/terminal-nautilus.c:631
+#: ../src/terminal-nautilus.c:611 ../src/terminal-nautilus.c:622
+#: ../src/terminal-nautilus.c:632
 msgid "Open the currently open folder in a terminal"
 msgstr "Dobrir lo dorsièr actualament dobèrt dins un terminal"
 
-#: ../src/terminal-nautilus.c:616 ../src/terminal-nautilus.c:630
+#: ../src/terminal-nautilus.c:617 ../src/terminal-nautilus.c:631
 msgid "Open in T_erminal"
 msgstr "Dobrir dins un _terminal"
 
-#: ../src/terminal-nautilus.c:627
+#: ../src/terminal-nautilus.c:628
 msgid "Open T_erminal"
 msgstr "Dobrir un t_erminal"
 
-#: ../src/terminal-nautilus.c:628
+#: ../src/terminal-nautilus.c:629
 msgid "Open a terminal"
 msgstr "Dobrir un terminal"
 
-#: ../src/terminal-nautilus.c:646 ../src/terminal-nautilus.c:659
-#| msgid "Open in _Midnight Comandar"
+#: ../src/terminal-nautilus.c:647 ../src/terminal-nautilus.c:660
 msgid "Open in _Midnight Commander"
 msgstr "Dobrir dins _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:648
-#| msgid ""
-#| "Open the currently selected folder in the terminal file manager Midnight "
-#| "Comandar"
+#: ../src/terminal-nautilus.c:649
 msgid ""
 "Open the currently selected folder in the terminal file manager Midnight "
 "Commander"
 msgstr ""
 
-#: ../src/terminal-nautilus.c:650 ../src/terminal-nautilus.c:660
-#| msgid ""
-#| "Open the currently open folder in the terminal file manager Midnight "
-#| "Comandar"
+#: ../src/terminal-nautilus.c:651 ../src/terminal-nautilus.c:661
 msgid ""
 "Open the currently open folder in the terminal file manager Midnight "
 "Commander"
 msgstr ""
 
-#: ../src/terminal-nautilus.c:656
-#| msgid "Open _Midnight Comandar"
+#: ../src/terminal-nautilus.c:657
 msgid "Open _Midnight Commander"
 msgstr "Dobrir _Midnight Commander"
 
-#: ../src/terminal-nautilus.c:657
-#| msgid "Open the terminal file manager Midnight Comandar"
+#: ../src/terminal-nautilus.c:658
 msgid "Open the terminal file manager Midnight Commander"
 msgstr ""
 
 #: ../src/terminal-options.c:222
 #, c-format
-#| msgid ""
-#| "Option \"%s\" is no longer supported in this version of gnome-terminal."
 msgid ""
 "Option \"%s\" is deprecated and might be removed in a later version of gnome-"
 "terminal."
@@ -1895,7 +1829,6 @@ msgid "PROFILE-NAME"
 msgstr "NOMDELPERFIL"
 
 #: ../src/terminal-options.c:1202
-#| msgid "Set the terminal title"
 msgid "Set the initial terminal title"
 msgstr ""
 
@@ -1976,35 +1909,35 @@ msgstr "Afichar"
 msgid "_Encoding"
 msgstr "_Encodatge"
 
-#: ../src/terminal-screen.c:1181
+#: ../src/terminal-screen.c:1183
 msgid "No command supplied nor shell requested"
 msgstr "Cap de comanda pas provesida ni shell demandat"
 
-#: ../src/terminal-screen.c:1431 ../src/terminal-window.c:2477
+#: ../src/terminal-screen.c:1433 ../src/terminal-window.c:2477
 msgid "_Profile Preferences"
 msgstr "Preferéncias del _perfil"
 
-#: ../src/terminal-screen.c:1432 ../src/terminal-screen.c:1710
+#: ../src/terminal-screen.c:1434 ../src/terminal-screen.c:1712
 msgid "_Relaunch"
 msgstr "_Reaviar"
 
-#: ../src/terminal-screen.c:1435
+#: ../src/terminal-screen.c:1437
 msgid "There was an error creating the child process for this terminal"
 msgstr ""
 "I a agut una error al moment de la creacion del processus filh per aqueste "
 "terminal"
 
-#: ../src/terminal-screen.c:1714
+#: ../src/terminal-screen.c:1716
 #, c-format
 msgid "The child process exited normally with status %d."
 msgstr "Lo processus filh a quitat normalament amb l'estatut %d."
 
-#: ../src/terminal-screen.c:1717
+#: ../src/terminal-screen.c:1719
 #, c-format
 msgid "The child process was aborted by signal %d."
 msgstr "Lo processus filh es estat abandonat pel senhal %d."
 
-#: ../src/terminal-screen.c:1720
+#: ../src/terminal-screen.c:1722
 msgid "The child process was aborted."
 msgstr "Lo processus filh es estat abandonat."
 
@@ -2018,7 +1951,7 @@ msgstr "Activar aqueste onglet"
 
 #: ../src/terminal-util.c:148
 msgid "There was an error displaying help"
-msgstr "Una error s'es producha al moment de l'afichatge de l'ajuda"
+msgstr "Una error s'es produita al moment de l'afichatge de l'ajuda"
 
 #: ../src/terminal-util.c:203
 msgid "Contributors:"
@@ -2228,7 +2161,7 @@ msgstr "Desplaçar lo terminal cap a es_quèrra"
 
 #: ../src/terminal-window.c:2539
 msgid "Move Terminal _Right"
-msgstr "Desplaçar lo terminal cap a _drecha"
+msgstr "Desplaçar lo terminal cap a _dreita"
 
 #: ../src/terminal-window.c:2542
 msgid "_Detach Terminal"
@@ -2363,7 +2296,7 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "Comanda mancanta"
 
 #~ msgid "Whether to use a dark theme variant"
-#~ msgstr "Indica se cal utilizar una variante de tèma foncée"
+#~ msgstr "Indica se cal utilizar una varianta de tèma foncée"
 
 #~ msgid "New Terminal"
 #~ msgstr "Terminal Novèl"
@@ -2507,7 +2440,7 @@ msgstr "Tampar _la fenèstra"
 #~ "de rèireplan. 0.0 significa pas cap d'enfoscament, 1.0 significa un "
 #~ "enfoscament total. Dins l'implementacion actuala, i a pas que dos nivèls "
 #~ "d'enfoscament possibles, e mai los paramètres se compòrtan d'un biais "
-#~ "binari amb 0.0 que correspond pas a cap d'efièch d'enfoscament."
+#~ "binari amb 0.0 que correspond pas a cap d'efèit d'enfoscament."
 
 #~ msgid ""
 #~ "Accelerator key to move the current tab to the left. Expressed as a "
@@ -2539,13 +2472,13 @@ msgstr "Tampar _la fenèstra"
 #~ "option to the special string \"disabled\", then there will be no "
 #~ "keybinding for this action."
 #~ msgstr ""
-#~ "Acorchi de clavièr per desplaçar l'onglet actual cap a drecha. Exprimit "
+#~ "Acorchi de clavièr per desplaçar l'onglet actual cap a dreita. Exprimit "
 #~ "en tant que cadena dins lo meteis format utilizat dins los fichièrs de "
 #~ "ressorsas GTK+. Se definissètz l'opcion a la cadena especiala « disabled "
 #~ "», alara i aurà pas d'acorchi per aquesta accion."
 
 #~ msgid "Accelerator to move the current tab to the right."
-#~ msgstr "Acorchi per desplaçar l'onglet actual cap a drecha."
+#~ msgstr "Acorchi per desplaçar l'onglet actual cap a dreita."
 
 #~ msgid "Accelerator to move the current tab to the left."
 #~ msgstr "Acorchi per desplaçar l'onglet actual cap a esquèrra."
@@ -2568,10 +2501,10 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "Nom de fichièr de l'imatge de rèireplan."
 
 #~ msgid "Effect of the Delete key"
-#~ msgstr "Efièch de la tòca « suprimir »"
+#~ msgstr "Efèit de la tòca « suprimir »"
 
 #~ msgid "Effect of the Backspace key"
-#~ msgstr "Efièch de la tòca « retorn en arrièr »"
+#~ msgstr "Efèit de la tòca « retorn en arrièr »"
 
 #~ msgid "How much to darken the background image"
 #~ msgstr "Gra d'escuretat de l'imatge de rèireplan"
@@ -2581,7 +2514,7 @@ msgstr "Tampar _la fenèstra"
 #~ "keep the image in a fixed position and scroll the text above it."
 #~ msgstr ""
 #~ "Se VERAI, l'imatge de rèireplan desfilarà en meteis temps que lo tèxte. "
-#~ "Se FALS, l'imatge aurà una posicion fixa e lo tèxte desfilarà sur elle."
+#~ "Se FALS, l'imatge aurà una posicion fixa e lo tèxte desfilarà sus elle."
 
 #~ msgid ""
 #~ "If true, don't make a noise when applications send the escape sequence "
@@ -2608,7 +2541,7 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "Sul costat esquèrre"
 
 #~ msgid "On the right side"
-#~ msgstr "Sul costat drech"
+#~ msgstr "Sul costat dreit"
 
 #~ msgid "_Input Methods"
 #~ msgstr "_Metòdes de picada"
@@ -2620,7 +2553,7 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "_Títol :"
 
 #~ msgid "Move Tab _Right"
-#~ msgstr "Desplaçar l'onglet cap a _drecha"
+#~ msgstr "Desplaçar l'onglet cap a _dreita"
 
 #~ msgid "Move Tab _Left"
 #~ msgstr "Desplaçar l'onglet cap a _esquèrra"
@@ -2933,10 +2866,10 @@ msgstr "Tampar _la fenèstra"
 #~ "\" for an image, or \"transparent\" for either real transparency if a "
 #~ "compositing window manager is running, or pseudo-transparency otherwise."
 #~ msgstr ""
-#~ "Tipe de rèireplan del terminal. Las valors possiblas son « solid "
-#~ "» (color unifòrma), « image » (imatge) o « transparent » (transparéncia "
-#~ "reala se un gestionari de fenèstras compositor d'imatge es present, o "
-#~ "pseudo-transparéncia autrament)."
+#~ "Tipe de rèireplan del terminal. Las valors possiblas son « solid » (color "
+#~ "unifòrma), « image » (imatge) o « transparent » (transparéncia reala se "
+#~ "un gestionari de fenèstras compositor d'imatge es present, o pseudo-"
+#~ "transparéncia autrament)."
 
 #~ msgid "What to do with dynamic title"
 #~ msgstr "Mòdes pel títol dinamic"
@@ -3024,7 +2957,7 @@ msgstr "Tampar _la fenèstra"
 #~ "Disabled"
 #~ msgstr ""
 #~ "Sul costat d'esquèrra\n"
-#~ "Sul costat de drecha\n"
+#~ "Sul costat de dreita\n"
 #~ "Desactivada"
 
 #~ msgid ""
@@ -3099,7 +3032,7 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "Desplaçar l'onglet cap a esquèrra"
 
 #~ msgid "Move Tab to the Right"
-#~ msgstr "Desplaçar l'onglet cap a drecha"
+#~ msgstr "Desplaçar l'onglet cap a dreita"
 
 #~ msgid "Detach Tab"
 #~ msgstr "Destacar l'onglet"
@@ -3353,7 +3286,7 @@ msgstr "Tampar _la fenèstra"
 #~ "by default_size_columns and default_size_rows."
 #~ msgstr ""
 #~ "Se verai, las fenèstras de terminal creadas novèlament auràn la talha "
-#~ "personalizada definida par default_size_columns e default_size_rows."
+#~ "personalizada definida per default_size_columns e default_size_rows."
 
 #~ msgid "Use custom default terminal si_ze"
 #~ msgstr "Utilizar una talha de terminal _personalizada per defaut"
@@ -3362,7 +3295,7 @@ msgstr "Tampar _la fenèstra"
 #~ msgstr "Lo processus filh es estat interromput."
 
 #~ msgid "The child process was terminated by signal %d."
-#~ msgstr "Le processus filh es estat interromput pel senhal %d."
+#~ msgstr "Lo processus filh es estat interromput pel senhal %d."
 
 #~ msgid ""
 #~ "<small><i><b>Note:</b> These options may cause some applications to "
@@ -3380,7 +3313,7 @@ msgstr "Tampar _la fenèstra"
 #~ "\", and \"hidden\"."
 #~ msgstr ""
 #~ "Ont plaçar la barra de desfilament. Las valors possiblas son « left "
-#~ "» (esquèrra), « right » (drecha), e « hidden » (amagada)."
+#~ "» (esquèrra), « right » (dreita), e « hidden » (amagada)."
 
 #~ msgid ""
 #~ "GNOME Terminal is free software; you can redistribute it and/or modify it "
