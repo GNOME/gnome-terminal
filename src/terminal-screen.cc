@@ -139,6 +139,8 @@ enum
   TARGET_TAB
 };
 
+#define TERMINAL_SCREEN_STYLE_CLASS "terminal-screen"
+
 static void terminal_screen_constructed (GObject             *object);
 static void terminal_screen_dispose     (GObject             *object);
 static void terminal_screen_finalize    (GObject             *object);
@@ -484,8 +486,13 @@ terminal_screen_init (TerminalScreen *screen)
   guint i;
   uuid_t u;
   char uuidstr[37];
+  GtkStyleContext *context;
 
   priv = screen->priv = G_TYPE_INSTANCE_GET_PRIVATE (screen, TERMINAL_TYPE_SCREEN, TerminalScreenPrivate);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (screen));
+
+  gtk_style_context_add_class (context, TERMINAL_SCREEN_STYLE_CLASS);
 
   uuid_generate (u);
   uuid_unparse (u, uuidstr);
