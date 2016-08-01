@@ -20,6 +20,10 @@
 #include "terminal-screen-container.h"
 #include "terminal-debug.h"
 
+#if 0
+#define USE_SCROLLED_WINDOW
+#endif
+
 #include <gtk/gtk.h>
 
 #define TERMINAL_SCREEN_CONTAINER_GET_PRIVATE(screen_container)(G_TYPE_INSTANCE_GET_PRIVATE ((screen_container), TERMINAL_TYPE_SCREEN_CONTAINER, TerminalScreenContainerPrivate))
@@ -27,8 +31,12 @@
 struct _TerminalScreenContainerPrivate
 {
   TerminalScreen *screen;
+#ifdef USE_SCROLLED_WINDOW
+  GtkWidget *scrolled_window;
+#else
   GtkWidget *hbox;
   GtkWidget *vscrollbar;
+#endif
   GtkPolicyType hscrollbar_policy;
   GtkPolicyType vscrollbar_policy;
 };
@@ -38,9 +46,7 @@ enum
   PROP_0,
   PROP_SCREEN,
   PROP_HSCROLLBAR_POLICY,
-  PROP_VSCROLLBAR_POLICY,
-  PROP_WINDOW_PLACEMENT,
-  PROP_WINDOW_PLACEMENT_SET
+  PROP_VSCROLLBAR_POLICY
 };
 
 G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVERLAY)
@@ -49,13 +55,15 @@ G_DEFINE_TYPE (TerminalScreenContainer, terminal_screen_container, GTK_TYPE_OVER
 
 /* Widget class implementation */
 
+#ifndef USE_SCROLLED_WINDOW
+
 static void
 terminal_screen_container_style_updated (GtkWidget *widget)
 {
   TerminalScreenContainer *container = TERMINAL_SCREEN_CONTAINER (widget);
   TerminalScreenContainerPrivate *priv = container->priv;
   GtkCornerType corner;
-  gboolean set;  
+  gboolean set;
 
   GTK_WIDGET_CLASS (terminal_screen_container_parent_class)->style_updated (widget);
 
@@ -84,6 +92,8 @@ terminal_screen_container_style_updated (GtkWidget *widget)
   }
 }
 
+#endif /* !USE_SCROLLED_WINDOW */
+
 /* Class implementation */
 
 static void
@@ -107,6 +117,25 @@ terminal_screen_container_constructed (GObject *object)
 
   g_assert (priv->screen != NULL);
 
+#ifdef USE_SCROLLED_WINDOW
+{
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+
+  hadjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (priv->screen));
+  vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->screen));
+
+  priv->scrolled_window = gtk_scrolled_window_new (hadjustment, vadjustment);
+  gtk_scrolled_window_set_overlay_scrolling (GTK_SCROLLED_WINDOW (priv->scrolled_window), FALSE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
+                                  priv->hscrollbar_policy,
+                                  priv->vscrollbar_policy);
+  gtk_container_add (GTK_CONTAINER (priv->scrolled_window), GTK_WIDGET (priv->screen));
+
+  gtk_container_add (GTK_CONTAINER (container), priv->scrolled_window);
+  gtk_widget_show_all (priv->scrolled_window);
+}
+#else
   priv->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL,
@@ -117,6 +146,7 @@ terminal_screen_container_constructed (GObject *object)
 
   gtk_container_add (GTK_CONTAINER (container), priv->hbox);
   gtk_widget_show_all (priv->hbox);
+#endif
 
   _terminal_screen_update_scrollbar (priv->screen);
 }
@@ -178,7 +208,9 @@ static void
 terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+#ifndef USE_SCROLLED_WINDOW
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+#endif
 
   g_type_class_add_private (gobject_class, sizeof (TerminalScreenContainerPrivate));
 
@@ -186,7 +218,9 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
   gobject_class->get_property = terminal_screen_container_get_property;
   gobject_class->set_property = terminal_screen_container_set_property;
 
+#ifndef USE_SCROLLED_WINDOW
   widget_class->style_updated = terminal_screen_container_style_updated;
+#endif
 
   g_object_class_install_property
     (gobject_class,
@@ -214,6 +248,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS));
 
+#ifndef USE_SCROLLED_WINDOW
    gtk_widget_class_install_style_property (widget_class,
                                             g_param_spec_enum ("window-placement", NULL, NULL,
                                                                GTK_TYPE_CORNER_TYPE,
@@ -225,6 +260,7 @@ terminal_screen_container_class_init (TerminalScreenContainerClass *klass)
                                                                  FALSE,
                                                                  G_PARAM_READWRITE |
                                                                  G_PARAM_STATIC_STRINGS));
+#endif
 }
 
 /* public API */
@@ -309,6 +345,21 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
     g_object_notify (object, "vscrollbar-policy");
   }
 
+#ifdef USE_SCROLLED_WINDOW
+  switch (vpolicy) {
+  case GTK_POLICY_NEVER:
+    vpolicy = GTK_POLICY_EXTERNAL;
+    break;
+  case GTK_POLICY_AUTOMATIC:
+  case GTK_POLICY_ALWAYS:
+    vpolicy = GTK_POLICY_ALWAYS;
+    break;
+  default:
+    g_assert_not_reached ();
+  }
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window), hpolicy, vpolicy);
+#else
   switch (vpolicy) {
     case GTK_POLICY_NEVER:
       gtk_widget_hide (priv->vscrollbar);
@@ -320,6 +371,7 @@ terminal_screen_container_set_policy (TerminalScreenContainer *container,
     default:
       g_assert_not_reached ();
   }
+#endif /* USE_SCROLLED_WINDOW */
 
   g_object_thaw_notify (object);
 }
