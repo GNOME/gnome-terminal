@@ -583,10 +583,6 @@ option_geometry_callback (const gchar *option_name,
 {
   TerminalOptions *options = data;
 
-  /* See https://bugzilla.gnome.org/show_bug.cgi?id=760944 */
-  if (gtk_check_version (3, 19, 5) == NULL)
-    return unsupported_option_callback (option_name, value, data, error);
-
   if (options->initial_windows)
     {
       InitialWindow *iw;
