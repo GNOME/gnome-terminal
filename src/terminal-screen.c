@@ -19,10 +19,7 @@
 #include "config.h"
 #define _GNU_SOURCE /* for dup3 */
 
-#ifdef WITH_PCRE2
 #include "terminal-pcre2.h"
-#endif
-
 #include "terminal-regex.h"
 #include "terminal-screen.h"
 
@@ -184,13 +181,8 @@ static const TerminalRegexPattern extra_regex_patterns[] = {
   { "(0[Xx][[:xdigit:]]+|[[:digit:]]+)", FLAVOR_NUMBER },
 };
 
-#ifdef WITH_PCRE2
 static VteRegex **url_regexes;
 static VteRegex **extra_regexes;
-#else
-static GRegex **url_regexes;
-static GRegex **extra_regexes;
-#endif
 static TerminalURLFlavor *url_regex_flavors;
 static TerminalURLFlavor *extra_regex_flavors;
 static guint n_url_regexes;
@@ -223,27 +215,18 @@ free_tag_data (TagData *tagdata)
 static void
 precompile_regexes (const TerminalRegexPattern *regex_patterns,
                     guint n_regexes,
-#ifdef WITH_PCRE2
                     VteRegex ***regexes,
-#else
-                    GRegex ***regexes,
-#endif
                     TerminalURLFlavor **regex_flavors)
 {
   guint i;
 
-#ifdef WITH_PCRE2
   *regexes = g_new0 (VteRegex*, n_regexes);
-#else
-  *regexes = g_new0 (GRegex*, n_regexes);
-#endif
   *regex_flavors = g_new0 (TerminalURLFlavor, n_regexes);
 
   for (i = 0; i < n_regexes; ++i)
     {
       GError *error = NULL;
 
-#ifdef WITH_PCRE2
       (*regexes)[i] = vte_regex_new_for_match (regex_patterns[i].pattern, -1,
                                                PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE,
                                                &error);
@@ -254,13 +237,6 @@ precompile_regexes (const TerminalRegexPattern *regex_patterns,
         g_printerr ("Failed to JIT regex '%s': %s\n", regex_patterns[i].pattern, error->message);
         g_clear_error (&error);
       }
-#else
-      (*regexes)[i] = g_regex_new (regex_patterns[i].pattern,
-                                   G_REGEX_OPTIMIZE |
-                                   G_REGEX_MULTILINE,
-                                   0, &error);
-      g_assert_no_error (error);
-#endif
 
       (*regex_flavors)[i] = regex_patterns[i].flavor;
     }
@@ -386,11 +362,7 @@ terminal_screen_init (TerminalScreen *screen)
 
       tag_data = g_slice_new (TagData);
       tag_data->flavor = url_regex_flavors[i];
-#ifdef WITH_PCRE2
       tag_data->tag = vte_terminal_match_add_regex (terminal, url_regexes[i], 0);
-#else
-      tag_data->tag = vte_terminal_match_add_gregex (terminal, url_regexes[i], 0);
-#endif
       vte_terminal_match_set_cursor_type (terminal, tag_data->tag, URL_MATCH_CURSOR);
 
       priv->match_tags = g_slist_prepend (priv->match_tags, tag_data);
@@ -2002,12 +1974,7 @@ terminal_screen_check_extra (TerminalScreen *screen,
   memset(matches, 0, sizeof(char*) * n_extra_regexes);
 
   if (
-#ifdef WITH_PCRE2
-      vte_terminal_event_check_regex_simple(
-#else
-      vte_terminal_event_check_gregex_simple(
-#endif
-                                             VTE_TERMINAL (screen),
+      vte_terminal_event_check_regex_simple (VTE_TERMINAL (screen),
                                              event,
                                              extra_regexes,
                                              n_extra_regexes,
