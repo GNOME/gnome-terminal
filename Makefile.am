@@ -26,7 +26,7 @@ desktop-file-validate: $(nodist_desktop_DATA)
 
 appdata_in_files = \
 	org.gnome.Terminal.appdata.xml.in \
-	org.gnome.Terminal.Nautilus.appdata.xml.in \
+	org.gnome.Terminal.Nautilus.metainfo.xml.in \
 	$(NULL)
 
 appdatadir = $(datadir)/appdata
@@ -35,7 +35,7 @@ nodist_appdata_DATA = \
 	$(NULL)
 
 if WITH_NAUTILUS_EXTENSION
-nodist_appdata_DATA += org.gnome.Terminal.Nautilus.appdata.xml
+nodist_appdata_DATA += org.gnome.Terminal.Nautilus.metainfo.xml
 endif
 
 @INTLTOOL_XML_RULE@
