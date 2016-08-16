@@ -843,6 +843,8 @@ terminal_profile_edit (GSettings  *profile,
   g_object_set_data_full (G_OBJECT (editor), "builder",
                           builder, (GDestroyNotify) g_object_unref);
 
+  gtk_window_set_application (GTK_WINDOW (editor), GTK_APPLICATION (terminal_app_get ()));
+
   /* Store the dialogue on the profile, so we can acccess it above to check if
    * there's already a profile editor for this profile.
    */

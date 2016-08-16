@@ -603,6 +603,8 @@ terminal_prefs_show_preferences (GtkWindow *transient_parent,
 
   data->dialog = dialog;
 
+  gtk_window_set_application (GTK_WINDOW (data->dialog), GTK_APPLICATION (terminal_app_get ()));
+
   terminal_util_bind_mnemonic_label_sensitivity (dialog);
 
   settings = terminal_app_get_global_settings (app);
