@@ -1077,6 +1077,7 @@ get_goption_context (TerminalOptions *options)
       unsupported_option_callback,
       NULL, NULL
     },
+    { "preferences", 0, 0, G_OPTION_ARG_NONE, &options->show_preferences, N_("Show preferences window"), NULL },
     { "version", 0, G_OPTION_FLAG_NO_ARG | G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_CALLBACK, option_version_cb, NULL, NULL },
     { NULL, 0, 0, 0, NULL, NULL, NULL }
   };

@@ -149,6 +149,49 @@ handle_exec_error (GError *error,
   return FALSE; /* don't abort */
 }
 
+static void
+handle_show_preferences (const char *service_name)
+{
+  gs_free_error GError *error = NULL;
+  gs_unref_object GDBusConnection *bus = NULL;
+  gs_free char *object_path = NULL;
+  GVariantBuilder builder;
+
+  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+  if (bus == NULL) {
+    g_printerr ("Failed to get session bus: %s\n", error->message);
+    return;
+  }
+
+  /* For reasons (!?), the org.gtk.Actions interface's object path
+   * is derived from the service name, i.e. for service name
+   * "foo.bar.baz" the object path is "/foo/bar/baz".
+   */
+  object_path = g_strdelimit (g_strdup_printf (".%s", service_name), ".", '/');
+
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("(sava{sv})"));
+  g_variant_builder_add (&builder, "s", "preferences");
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("av"));
+  g_variant_builder_close (&builder);
+  g_variant_builder_open (&builder, G_VARIANT_TYPE ("a{sv}"));
+  g_variant_builder_close (&builder);
+
+  if (!g_dbus_connection_call_sync (bus,
+                                    service_name,
+                                    object_path,
+                                    "org.gtk.Actions",
+                                    "Activate",
+                                    g_variant_builder_end (&builder),
+                                    G_VARIANT_TYPE ("()"),
+                                    G_DBUS_CALL_FLAGS_NO_AUTO_START,
+                                    30 * 1000 /* ms timeout */,
+                                    NULL /* cancelleable */,
+                                    &error)) {
+    g_printerr ("Activate call failed: %s\n", error->message);
+    return;
+  }
+}
+
 /**
  * handle_options:
  * @app:
@@ -174,8 +217,12 @@ handle_options (TerminalFactory *factory,
   /* We need to forward the locale encoding to the server, see bug #732128 */
   g_get_charset (&encoding);
 
-  /* Make sure we open at least one window */
-  terminal_options_ensure_window (options);
+  if (options->show_preferences) {
+    handle_show_preferences (service_name);
+  } else {
+    /* Make sure we open at least one window */
+    terminal_options_ensure_window (options);
+  }
 
   for (lw = options->initial_windows;  lw != NULL; lw = lw->next)
     {
