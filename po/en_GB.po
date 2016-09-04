@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gnome-terminal\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-"
 "terminal&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2016-08-15 18:23+0000\n"
-"PO-Revision-Date: 2016-08-16 13:21+0200\n"
+"POT-Creation-Date: 2016-09-03 09:36+0000\n"
+"PO-Revision-Date: 2016-09-04 15:34+0200\n"
 "Last-Translator: David King <amigadave@amigadave.com>\n"
 "Language-Team: British English <en@li.org>\n"
 "Language: en_GB\n"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: ../org.gnome.Terminal.appdata.xml.in.h:1
 #: ../org.gnome.Terminal.desktop.in.in.h:1 ../src/server.c:161
-#: ../src/terminal-accels.c:234 ../src/terminal.c:337
+#: ../src/terminal-accels.c:234 ../src/terminal.c:384
 #: ../src/terminal-tab-label.c:81 ../src/terminal-tabs-menu.c:180
 #: ../src/terminal-window.c:2660 ../src/terminal-window.c:3016
 msgid "Terminal"
@@ -166,25 +166,25 @@ msgstr "Show exec options"
 msgid "Maximise the window"
 msgstr "Maximise the window"
 
-#: ../src/gterminal.vala:220 ../src/terminal-options.c:1140
+#: ../src/gterminal.vala:220 ../src/terminal-options.c:1141
 msgid "Full-screen the window"
 msgstr "Full-screen the window"
 
-#: ../src/gterminal.vala:222 ../src/terminal-options.c:1149
+#: ../src/gterminal.vala:222 ../src/terminal-options.c:1150
 msgid ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 msgstr ""
 "Set the window size; for example: 80x24, or 80x24+200+200 (COLSxROWS+X+Y)"
 
-#: ../src/gterminal.vala:223 ../src/terminal-options.c:1150
+#: ../src/gterminal.vala:223 ../src/terminal-options.c:1151
 msgid "GEOMETRY"
 msgstr "GEOMETRY"
 
-#: ../src/gterminal.vala:225 ../src/terminal-options.c:1158
+#: ../src/gterminal.vala:225 ../src/terminal-options.c:1159
 msgid "Set the window role"
 msgstr "Set the window role"
 
-#: ../src/gterminal.vala:225 ../src/terminal-options.c:1159
+#: ../src/gterminal.vala:225 ../src/terminal-options.c:1160
 msgid "ROLE"
 msgstr "ROLE"
 
@@ -211,7 +211,7 @@ msgstr "\"%s\" is not a valid zoom factor"
 msgid "Zoom value \"%s\" is outside allowed range"
 msgstr "Zoom value \"%s\" is outside allowed range"
 
-#: ../src/gterminal.vala:277 ../src/terminal-options.c:1189
+#: ../src/gterminal.vala:277 ../src/terminal-options.c:1190
 msgid "Use the given profile instead of the default profile"
 msgstr "Use the given profile instead of the default profile"
 
@@ -219,19 +219,19 @@ msgstr "Use the given profile instead of the default profile"
 msgid "UUID"
 msgstr "UUID"
 
-#: ../src/gterminal.vala:280 ../src/terminal-options.c:1207
+#: ../src/gterminal.vala:280 ../src/terminal-options.c:1208
 msgid "Set the working directory"
 msgstr "Set the working directory"
 
-#: ../src/gterminal.vala:280 ../src/terminal-options.c:1208
+#: ../src/gterminal.vala:280 ../src/terminal-options.c:1209
 msgid "DIRNAME"
 msgstr "DIRNAME"
 
-#: ../src/gterminal.vala:282 ../src/terminal-options.c:1216
+#: ../src/gterminal.vala:282 ../src/terminal-options.c:1217
 msgid "Set the terminal's zoom factor (1.0 = normal size)"
 msgstr "Set the terminal's zoom factor (1.0 = normal size)"
 
-#: ../src/gterminal.vala:283 ../src/terminal-options.c:1217
+#: ../src/gterminal.vala:283 ../src/terminal-options.c:1218
 msgid "ZOOM"
 msgstr "ZOOM"
 
@@ -239,7 +239,7 @@ msgstr "ZOOM"
 msgid "Terminal options:"
 msgstr "Terminal options:"
 
-#: ../src/gterminal.vala:291 ../src/terminal-options.c:1323
+#: ../src/gterminal.vala:291 ../src/terminal-options.c:1324
 msgid "Show terminal options"
 msgstr "Show terminal options"
 
@@ -426,8 +426,8 @@ msgid ""
 msgstr ""
 "Custom colour for the foreground of the text character at the terminal's "
 "highlight position, as a colour specification (can be HTML-style hex digits, "
-"or a colour name such as \"red\"). This is ignored if highlight-colors-set is "
-"false."
+"or a colour name such as \"red\"). This is ignored if highlight-colors-set "
+"is false."
 
 #: ../src/org.gnome.Terminal.gschema.xml.h:25
 msgid "Whether to allow bold text"
@@ -960,11 +960,12 @@ msgstr "Custom"
 msgid "Editing Profile “%s”"
 msgstr "Editing Profile “%s”"
 
-#: ../src/profile-editor.c:893
+#: ../src/profile-editor.c:895
+#, c-format
 msgid "Choose Palette Color %u"
 msgstr "Choose Palette Colour %u"
 
-#: ../src/profile-editor.c:897
+#: ../src/profile-editor.c:899
 #, c-format
 msgid "Palette entry %u"
 msgstr "Palette entry %u"
@@ -1479,11 +1480,11 @@ msgstr "_Action"
 msgid "Shortcut _Key"
 msgstr "Shortcut _Key"
 
-#: ../src/terminal-app.c:747
+#: ../src/terminal-app.c:742
 msgid "User Defined"
 msgstr "User Defined"
 
-#: ../src/terminal.c:333
+#: ../src/terminal.c:380
 #, c-format
 msgid "Failed to parse arguments: %s\n"
 msgstr "Failed to parse arguments: %s\n"
@@ -1782,75 +1783,79 @@ msgstr "Load a terminal configuration file"
 msgid "FILE"
 msgstr "FILE"
 
-#: ../src/terminal-options.c:1091
+#: ../src/terminal-options.c:1080
+msgid "Show preferences window"
+msgstr "Show preferences window"
+
+#: ../src/terminal-options.c:1092
 msgid "Open a new window containing a tab with the default profile"
 msgstr "Open a new window containing a tab with the default profile"
 
-#: ../src/terminal-options.c:1100
+#: ../src/terminal-options.c:1101
 msgid "Open a new tab in the last-opened window with the default profile"
 msgstr "Open a new tab in the last-opened window with the default profile"
 
-#: ../src/terminal-options.c:1113
+#: ../src/terminal-options.c:1114
 msgid "Turn on the menubar"
 msgstr "Turn on the menubar"
 
-#: ../src/terminal-options.c:1122
+#: ../src/terminal-options.c:1123
 msgid "Turn off the menubar"
 msgstr "Turn off the menubar"
 
-#: ../src/terminal-options.c:1131
+#: ../src/terminal-options.c:1132
 msgid "Maximize the window"
 msgstr "Maximise the window"
 
-#: ../src/terminal-options.c:1167
+#: ../src/terminal-options.c:1168
 msgid "Set the last specified tab as the active one in its window"
 msgstr "Set the last specified tab as the active one in its window"
 
-#: ../src/terminal-options.c:1180
+#: ../src/terminal-options.c:1181
 msgid "Execute the argument to this option inside the terminal"
 msgstr "Execute the argument to this option inside the terminal"
 
-#: ../src/terminal-options.c:1190
+#: ../src/terminal-options.c:1191
 msgid "PROFILE-NAME"
 msgstr "PROFILE-NAME"
 
-#: ../src/terminal-options.c:1198
+#: ../src/terminal-options.c:1199
 msgid "Set the initial terminal title"
 msgstr "Set the initial terminal title"
 
-#: ../src/terminal-options.c:1199
+#: ../src/terminal-options.c:1200
 msgid "TITLE"
 msgstr "TITLE"
 
-#: ../src/terminal-options.c:1305 ../src/terminal-options.c:1311
+#: ../src/terminal-options.c:1306 ../src/terminal-options.c:1312
 msgid "GNOME Terminal Emulator"
 msgstr "GNOME Terminal Emulator"
 
-#: ../src/terminal-options.c:1312
+#: ../src/terminal-options.c:1313
 msgid "Show GNOME Terminal options"
 msgstr "Show GNOME Terminal options"
 
-#: ../src/terminal-options.c:1322
+#: ../src/terminal-options.c:1323
 msgid ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
 msgstr ""
 "Options to open new windows or terminal tabs; more than one of these may be "
 "specified:"
-
-#: ../src/terminal-options.c:1331
-msgid ""
-"Window options; if used before the first --window or --tab argument, sets "
-"the default for all windows:"
-msgstr ""
-"Window options; if used before the first --window or --tab argument, sets "
-"the default for all windows:"
 
 #: ../src/terminal-options.c:1332
+msgid ""
+"Window options; if used before the first --window or --tab argument, sets "
+"the default for all windows:"
+msgstr ""
+"Window options; if used before the first --window or --tab argument, sets "
+"the default for all windows:"
+
+#: ../src/terminal-options.c:1333
 msgid "Show per-window options"
 msgstr "Show per-window options"
 
-#: ../src/terminal-options.c:1340
+#: ../src/terminal-options.c:1341
 msgid ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
@@ -1858,7 +1863,7 @@ msgstr ""
 "Terminal options; if used before the first --window or --tab argument, sets "
 "the default for all terminals:"
 
-#: ../src/terminal-options.c:1341
+#: ../src/terminal-options.c:1342
 msgid "Show per-terminal options"
 msgstr "Show per-terminal options"
 
@@ -1887,11 +1892,11 @@ msgstr "_Delete"
 msgid "Delete Profile"
 msgstr "Delete Profile"
 
-#: ../src/terminal-prefs.c:709
+#: ../src/terminal-prefs.c:711
 msgid "Show"
 msgstr "Show"
 
-#: ../src/terminal-prefs.c:720
+#: ../src/terminal-prefs.c:722
 msgid "_Encoding"
 msgstr "_Encoding"
 
@@ -2071,7 +2076,7 @@ msgstr "New _Profile"
 msgid "_Save Contents"
 msgstr "_Save Contents"
 
-#: ../src/terminal-window.c:2467 ../src/terminal-window.c:3849
+#: ../src/terminal-window.c:2467 ../src/terminal-window.c:3839
 msgid "C_lose Terminal"
 msgstr "C_lose Terminal"
 
@@ -2211,15 +2216,15 @@ msgstr "_Full Screen"
 msgid "Read-_Only"
 msgstr "Read-_Only"
 
-#: ../src/terminal-window.c:3836
+#: ../src/terminal-window.c:3826
 msgid "Close this window?"
 msgstr "Close this window?"
 
-#: ../src/terminal-window.c:3836
+#: ../src/terminal-window.c:3826
 msgid "Close this terminal?"
 msgstr "Close this terminal?"
 
-#: ../src/terminal-window.c:3840
+#: ../src/terminal-window.c:3830
 msgid ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
@@ -2227,7 +2232,7 @@ msgstr ""
 "There are still processes running in some terminals in this window. Closing "
 "the window will kill all of them."
 
-#: ../src/terminal-window.c:3844
+#: ../src/terminal-window.c:3834
 msgid ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
@@ -2235,7 +2240,7 @@ msgstr ""
 "There is still a process running in this terminal. Closing the terminal will "
 "kill it."
 
-#: ../src/terminal-window.c:3849
+#: ../src/terminal-window.c:3839
 msgid "C_lose Window"
 msgstr "C_lose Window"
 
