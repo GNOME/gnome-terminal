@@ -58,6 +58,10 @@
 
 #define GTK_SETTING_PREFER_DARK_THEME           "gtk-application-prefer-dark-theme"
 
+#define GTK_DEBUG_SETTING_SCHEMA                "org.gtk.Settings.Debug"
+#define GTK_DEBUG_ENABLE_INSPECTOR_KEY          "enable-inspector-keybinding"
+#define GTK_DEBUG_ENABLE_INSPECTOR_TYPE         G_VARIANT_TYPE_BOOLEAN
+
 /*
  * Session state is stored entirely in the RestartCommand command line.
  *
@@ -89,6 +93,7 @@ struct _TerminalApp
   GSettings *global_settings;
   GSettings *desktop_interface_settings;
   GSettings *system_proxy_settings;
+  GSettings *gtk_debug_settings;
 
 #ifdef ENABLE_SEARCH_PROVIDER
   TerminalSearchProvider *search_provider;
@@ -426,6 +431,11 @@ terminal_app_init (TerminalApp *app)
   /* Terminal global settings */
   app->global_settings = g_settings_new (TERMINAL_SETTING_SCHEMA);
 
+  /* Gtk debug settings */
+  app->gtk_debug_settings = terminal_g_settings_new (GTK_DEBUG_SETTING_SCHEMA,
+                                                     GTK_DEBUG_ENABLE_INSPECTOR_KEY,
+                                                     GTK_DEBUG_ENABLE_INSPECTOR_TYPE);
+
 #if GTK_CHECK_VERSION (3, 19, 0)
   {
   GtkSettings *gtk_settings;
@@ -474,6 +484,7 @@ terminal_app_finalize (GObject *object)
   g_object_unref (app->global_settings);
   g_object_unref (app->desktop_interface_settings);
   g_object_unref (app->system_proxy_settings);
+  g_clear_object (&app->gtk_debug_settings);
 
   terminal_accels_shutdown ();
 
@@ -810,6 +821,12 @@ GSettings *
 terminal_app_get_proxy_settings (TerminalApp *app)
 {
   return app->system_proxy_settings;
+}
+
+GSettings *
+terminal_app_get_gtk_debug_settings (TerminalApp *app)
+{
+  return app->gtk_debug_settings;
 }
 
 /**

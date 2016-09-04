@@ -146,10 +146,6 @@ struct _TerminalWindowPrivate
 #endif
 #endif
 
-#if defined (ENABLE_DEBUG) && GTK_CHECK_VERSION (3, 14, 0)
-#define ENABLE_INSPECTOR
-#endif
-
 static void terminal_window_dispose     (GObject             *object);
 static void terminal_window_finalize    (GObject             *object);
 static gboolean terminal_window_state_event (GtkWidget            *widget,
@@ -229,10 +225,8 @@ static void help_contents_callback        (GtkAction *action,
                                            TerminalWindow *window);
 static void help_about_callback           (GtkAction *action,
                                            TerminalWindow *window);
-#ifdef ENABLE_INSPECTOR
 static void help_inspector_callback       (GtkAction *action,
                                            TerminalWindow *window);
-#endif
 
 static gboolean find_larger_zoom_factor  (double  current,
                                           double *found);
@@ -2563,11 +2557,9 @@ terminal_window_init (TerminalWindow *window)
       { "HelpAbout", "help-about", N_("_About"), NULL,
         NULL,
         G_CALLBACK (help_about_callback) },
-#ifdef ENABLE_INSPECTOR
       { "HelpInspector", NULL, N_("_Inspector"), NULL,
         NULL,
         G_CALLBACK (help_inspector_callback) },
-#endif
 
       /* Popup menu */
       { "PopupSendEmail", NULL, N_("_Send Mail To…"), NULL,
@@ -2629,6 +2621,7 @@ terminal_window_init (TerminalWindow *window)
   TerminalWindowPrivate *priv;
   TerminalApp *app;
   TerminalSettingsList *profiles_list;
+  GSettings *gtk_debug_settings;
   GtkActionGroup *action_group;
   GtkAction *action;
   GtkUIManager *manager;
@@ -2637,6 +2630,8 @@ terminal_window_init (TerminalWindow *window)
   GtkAccelGroup *accel_group;
   uuid_t u;
   char uuidstr[37], role[64];
+
+  app = terminal_app_get ();
 
   priv = window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, TERMINAL_TYPE_WINDOW, TerminalWindowPrivate);
 
@@ -2759,24 +2754,27 @@ terminal_window_init (TerminalWindow *window)
                                                      &error);
   g_assert_no_error (error);
 
-#ifdef ENABLE_INSPECTOR
-  gtk_ui_manager_add_ui (manager, priv->ui_id,
-                         "/menubar/Help", NULL, NULL,
-                         GTK_UI_MANAGER_SEPARATOR, FALSE);
-  gtk_ui_manager_add_ui (manager, priv->ui_id,
-                         "/menubar/Help", "HelpInspector", "HelpInspector",
-                         GTK_UI_MANAGER_MENUITEM, FALSE);
-#endif
-
   priv->menubar = gtk_ui_manager_get_widget (manager, "/menubar");
   gtk_box_pack_start (GTK_BOX (priv->main_vbox),
 		      priv->menubar,
 		      FALSE, FALSE, 0);
 
+
+  /* Maybe make Inspector available */
+  action = gtk_action_group_get_action (priv->action_group, "HelpInspector");
+  gtk_debug_settings = terminal_app_get_gtk_debug_settings (app);
+  if (gtk_debug_settings != NULL)
+    g_settings_bind (gtk_debug_settings,
+                     "enable-inspector-keybinding",
+                     action,
+                     "visible",
+                     G_SETTINGS_BIND_GET | G_SETTINGS_BIND_NO_SENSITIVITY);
+  else
+    gtk_action_set_visible (action, FALSE);
+
   /* Add tabs menu */
   priv->tabs_menu = terminal_tabs_menu_new (window);
 
-  app = terminal_app_get ();
   profiles_list = terminal_app_get_profiles_list (app);
   terminal_window_profile_list_changed_cb (profiles_list, window);
   g_signal_connect (profiles_list, "children-changed",
@@ -4030,14 +4028,12 @@ help_about_callback (GtkAction *action,
   terminal_util_show_about (NULL);
 }
 
-#ifdef ENABLE_INSPECTOR
 static void
 help_inspector_callback (GtkAction *action,
                          TerminalWindow *window)
 {
   gtk_window_set_interactive_debugging (TRUE);
 }
-#endif
 
 GtkUIManager *
 terminal_window_get_ui_manager (TerminalWindow *window)

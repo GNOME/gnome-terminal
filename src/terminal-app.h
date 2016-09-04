@@ -112,6 +112,8 @@ GSettings *terminal_app_get_desktop_interface_settings (TerminalApp *app);
 
 GSettings *terminal_app_get_proxy_settings (TerminalApp *app);
 
+GSettings *terminal_app_get_gtk_debug_settings (TerminalApp *app);
+
 PangoFontDescription *terminal_app_get_system_font (TerminalApp *app);
 
 G_END_DECLS

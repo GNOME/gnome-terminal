@@ -801,6 +801,46 @@ s_to_rgba (GVariant *variant,
 }
 
 /**
+ * terminal_g_settings_new:
+ * @schema_id: a settings schema ID
+ * @mandatory_key: the name of a key that must exist in the schema
+ * @mandatory_key_type: the expected value type of @mandatory_key
+ *
+ * Creates a #GSettings for @schema_id, if this schema exists and
+ * has a key named @mandatory_key (if non-%NULL) with the value type
+ * @mandatory_key_type.
+ *
+ * Returns: (transfer full): a new #GSettings, or %NULL
+ */
+GSettings *
+terminal_g_settings_new (const char *schema_id,
+                         const char *mandatory_key,
+                         const GVariantType *mandatory_key_type)
+{
+  gs_unref_settings_schema GSettingsSchema *schema;
+
+  schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                            schema_id,
+                                            TRUE);
+  if (schema == NULL)
+    return NULL;
+
+  if (mandatory_key) {
+    gs_unref_settings_schema_key GSettingsSchemaKey *key;
+
+    key = g_settings_schema_get_key (schema, mandatory_key);
+    if (key == NULL)
+      return NULL;
+
+    if (!g_variant_type_equal (g_settings_schema_key_get_value_type (key),
+                               mandatory_key_type))
+      return NULL;
+  }
+
+  return g_settings_new_full (schema, NULL, NULL);
+}
+
+/**
  * terminal_g_settings_get_rgba:
  * @settings: a #GSettings
  * @key: a valid key in @settings of type "s"
