@@ -63,7 +63,6 @@ struct _TerminalSearchPopoverPrivate
 
   /* Cached regex */
   gboolean regex_caseless;
-  gboolean regex_multiline;
   char *regex_pattern;
   VteRegex *regex;
 };
@@ -248,7 +247,7 @@ update_regex (TerminalSearchPopover *popover)
 {
   TerminalSearchPopoverPrivate *priv = PRIV (popover);
   const char *search_text;
-  gboolean caseless, multiline = FALSE;
+  gboolean caseless;
   gs_free char *pattern;
   gs_free_error GError *error = NULL;
 
@@ -258,7 +257,6 @@ update_regex (TerminalSearchPopover *popover)
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->regex_checkbutton))) {
     pattern = g_strdup (search_text);
-    multiline = TRUE;
   } else {
     pattern = g_regex_escape_string (search_text, -1);
   }
@@ -271,7 +269,6 @@ update_regex (TerminalSearchPopover *popover)
   }
 
   if (priv->regex_caseless == caseless &&
-      priv->regex_multiline == multiline &&
       g_strcmp0 (priv->regex_pattern, pattern) == 0)
     return;
 
@@ -285,11 +282,9 @@ update_regex (TerminalSearchPopover *popover)
   if (search_text[0] != '\0') {
     guint32 compile_flags;
 
-    compile_flags = PCRE2_UTF | PCRE2_NO_UTF_CHECK;
+    compile_flags = PCRE2_UTF | PCRE2_NO_UTF_CHECK | PCRE2_MULTILINE;
     if (caseless)
       compile_flags |= PCRE2_CASELESS;
-    if (multiline)
-      compile_flags |= PCRE2_MULTILINE;
 
     priv->regex = vte_regex_new_for_search (pattern, -1, compile_flags, &error);
     if (priv->regex != NULL &&
@@ -343,7 +338,7 @@ terminal_search_popover_init (TerminalSearchPopover *popover)
   GtkWidget *widget = GTK_WIDGET (popover);
 
   priv->regex_pattern = 0;
-  priv->regex_caseless = priv->regex_multiline = FALSE;
+  priv->regex_caseless = FALSE;
 
   gtk_widget_init_template (widget);
 
